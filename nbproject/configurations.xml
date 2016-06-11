@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
+      <logicalFolder name="boards" displayName="boards" projectFiles="true">
+        <itemPath>cores/fastarduino/boards/ATmega328P.hh</itemPath>
+        <itemPath>cores/fastarduino/boards/ATtinyX4.hh</itemPath>
+        <itemPath>cores/fastarduino/boards/Mega.hh</itemPath>
+        <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
+      </logicalFolder>
+      <itemPath>cores/fastarduino/Board.hh</itemPath>
+      <itemPath>cores/fastarduino/FastPin.hh</itemPath>
+      <itemPath>cores/fastarduino/main.cpp</itemPath>
+      <itemPath>cores/fastarduino/utilities.hh</itemPath>
+    </logicalFolder>
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>cores/fastarduino</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="UNO-Release" type="3">
+      <toolsSet>
+        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>0</developmentMode>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>0</developmentMode>
+          <incDir>
+            <pElem>cores</pElem>
+          </incDir>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a</output>
+        </archiverTool>
+      </compileType>
+      <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/FastPin.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATmega328P.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATtinyX4.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="ATmega328-Release" type="3">
+      <toolsSet>
+        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>0</developmentMode>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>0</developmentMode>
+          <standard>8</standard>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a</output>
+        </archiverTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/FastPin.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATmega328P.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATtinyX4.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="ATtiny84-Release" type="3">
+      <toolsSet>
+        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>0</developmentMode>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>0</developmentMode>
+          <standard>8</standard>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a</output>
+        </archiverTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/FastPin.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATmega328P.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATtinyX4.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="MEGA-Release" type="3">
+      <toolsSet>
+        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>0</developmentMode>
+          <standard>10</standard>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>0</developmentMode>
+          <standard>8</standard>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a</output>
+        </archiverTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/FastPin.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATmega328P.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATtinyX4.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
