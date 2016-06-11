@@ -15,46 +15,39 @@
 #include <util/delay.h>
 #include <fastarduino/FastPin.hh>
 
+static inline uint8_t calculate_pattern(uint16_t model, uint8_t shift)
+{
+	//FIXME this does not work when eg pattern is 0xF
+	return (model << shift) >> 4;
+}
+
+static inline uint16_t calculate_model(uint8_t pattern)
+{
+	//TODO change model to use pattern as the number of bits to light?
+	uint16_t model = (1 << (pattern + 1)) - 1;
+	return model | (model << 8);
+//	return pattern | (pattern << 8);
+}
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
-	// Read settings for pattern
-	FastPort<_SFR_IO_ADDR(PINC)> PortC{0x00, 0x0F};
-//	PortC.set_DDR(0x00);
-//	PortC.set_PORT(0x0F);
-	
-	uint8_t pattern = PortC.get_PIN() & 0x0F;
-	// Read settings for direction
-	FastPin<Board::D8> PinDirection{PinMode::INPUT_PULLUP};
-	bool direction = PinDirection.value();
-
-	// Set Port D direction to all outputs
+	// Prepare ports to read settings and write to LEDs
+	FastPort<_SFR_IO_ADDR(PINC)> PortC{0x00, 0x1F};
 	FastPort<_SFR_IO_ADDR(PIND)> PortD{0xFF};
-//	PortD.set_DDR(0xFF);
 	
-	//DEBUG show pattern and direction on LEDs during 5 seconds
-	PortD.set_PORT((pattern << 4) | direction);
-	for (uint8_t i = 0; i < 20; i++)
-		_delay_ms(250.0);
-	
-	uint8_t value = 0;
 	// Loop of the LED chaser
-	//FIXME improve pattern rotation
 	while (true)
 	{
-		if (value == 0)
-			value = (direction ? 0x80 : 0x01);
-//			value = pattern;
-		else if (direction)
-			value >>= 1;
-		else
-			value <<= 1;
-//		PortD.set_PORT(pattern);
-		PortD.set_PORT(value);
-		_delay_ms(250.0);
-//		PortD.set_PORT(0);
-//		_delay_ms(250.0);
+		volatile uint8_t settings = PortC.get_PIN();
+		uint16_t model = calculate_model(settings & 0x07);
+		bool direction = settings & 0x10;
+		for (uint8_t i = 0; i < 8; ++i)
+		{
+			PortD.set_PORT(calculate_pattern(model, (direction ? i : 7 - i)));
+			_delay_ms(250.0);
+		}
 	}
 	return 0;
 }
