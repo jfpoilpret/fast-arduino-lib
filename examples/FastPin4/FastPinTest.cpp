@@ -36,6 +36,7 @@ int main()
 	// Loop of the LED chaser
 	while (true)
 	{
+		// Read settings everytime a LED chasing loop is about to start
 		uint8_t settings = PortC.get_PIN();
 		uint8_t pattern = calculate_pattern(settings & 0x07);
 		bool direction = settings & 0x08;

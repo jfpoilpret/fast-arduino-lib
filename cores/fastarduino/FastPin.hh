@@ -5,6 +5,8 @@
 #include <fastarduino/utilities.hh>
 
 //TODO similar class with MASK to handle only a part of the pins in the port
+//TODO rename classes and possibly add namespace
+//TODO do we need a "slow" version of pins
 
 // This class maps to a PORT and handles it all 8 bits at a time
 // SRAM size supposed to be 0

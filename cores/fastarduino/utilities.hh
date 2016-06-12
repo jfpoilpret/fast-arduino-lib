@@ -3,6 +3,8 @@
 
 #include <avr/sfr_defs.h>
 
+//TODO check if templates are really needed for each asm code
+
 template<uint8_t IOREG, uint8_t BIT>
 inline void set_ioreg_bit()
 {
