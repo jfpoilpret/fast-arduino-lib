@@ -41,17 +41,5 @@ inline bool ioreg_bit_value(uint8_t IOREG, uint8_t BIT)
 	return result;
 }
 
-inline void set_ioreg_byte(uint8_t IOREG, uint8_t value)
-{
-	asm volatile("OUT %[IOREG], %[VALUE]\n\t"::[IOREG] "I" (IOREG), [VALUE] "r" (value));
-}
-
-inline uint8_t get_ioreg_byte(uint8_t IOREG)
-{
-	uint8_t value = 0;
-	asm volatile("IN %[VALUE], %[IOREG]\n\t":[VALUE] "+r" (value):[IOREG] "I" (IOREG));
-	return value;
-}
-
 #endif	/* UTILITIES_HH */
 

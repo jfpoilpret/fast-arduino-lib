@@ -4,39 +4,39 @@
 #include <fastarduino/Board.hh>
 #include <fastarduino/utilities.hh>
 
-//TODO similar class with MASK to handle only a part of the pins in the port
+//TODO complete implemetation of MaskedPort
 //TODO rename classes and possibly add namespace
-
+//TODO find out how to optimize generated code (IN/OUT Vs STS/LDS) when possible
 class AbstractPort
 {
 public:
-	AbstractPort(uint8_t PIN ) __attribute__((always_inline)) : _PIN(PIN) {}
+	AbstractPort(volatile uint8_t* PIN) __attribute__((always_inline)) : _PIN(PIN) {}
 	
 protected:
 	volatile uint8_t* PIN() __attribute__((always_inline))
 	{
-		return (volatile uint8_t*) (uint16_t) _PIN;
+		return _PIN;
 	}
 	volatile uint8_t* DDR() __attribute__((always_inline))
 	{
-		return (volatile uint8_t*) (uint16_t) (_PIN + 1);
+		return _PIN + 1;
 	}
 	volatile uint8_t* PORT() __attribute__((always_inline))
 	{
-		return (volatile uint8_t*) (uint16_t) (_PIN + 2);
+		return _PIN + 2;
 	}
 	
 private:
-	const uint8_t _PIN;
+	volatile uint8_t* const _PIN;
 };
 
 // This class maps to a PORT and handles it all 8 bits at a time
-// SRAM size supposed is 1 byte
+// SRAM size is 2 bytes
 class FastPort: public AbstractPort
 {
 public:
-	FastPort(uint8_t PIN ) __attribute__((always_inline)) : AbstractPort(PIN) {}
-	FastPort(uint8_t PIN, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) : AbstractPort(PIN)
+	FastPort(volatile uint8_t* PIN) __attribute__((always_inline)) : AbstractPort(PIN) {}
+	FastPort(volatile uint8_t* PIN, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) : AbstractPort(PIN)
 	{
 		set_DDR(ddr);
 		set_PORT(port);
@@ -67,6 +67,94 @@ public:
 	}
 };
 
+// This class maps to a portion of a PORT (according to provided mask) and handles all its bits at a time
+// SRAM size is 3 bytes
+class MaskedPort: public AbstractPort
+{
+public:
+	MaskedPort(volatile uint8_t* PIN, uint8_t mask) __attribute__((always_inline))
+	: AbstractPort(PIN), _MASK(mask) {}
+	MaskedPort(volatile uint8_t* PIN, uint8_t mask, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) 
+	: AbstractPort(PIN), _MASK(mask)
+	{
+		set_DDR(ddr);
+		set_PORT(port);
+	}
+	void set_PORT(uint8_t port) __attribute__((always_inline))
+	{
+		MASK_VALUE(*PORT(), port);
+	}
+	uint8_t get_PORT() __attribute__((always_inline))
+	{
+		return VALUE(*PORT());
+	}
+	void set_DDR(uint8_t ddr) __attribute__((always_inline))
+	{
+		MASK_VALUE(*DDR(), ddr);
+	}
+	uint8_t get_DDR() __attribute__((always_inline))
+	{
+		return VALUE(*DDR());
+	}
+	void set_PIN(uint8_t pin) __attribute__((always_inline))
+	{
+		MASK_VALUE(*PIN(), pin);
+	}
+	uint8_t get_PIN() __attribute__((always_inline))
+	{
+		return *PIN() & MASK();
+	}
+	
+	// All methods starting with _ are synchronized, ie they are interrupt-safe
+	void _set_PORT(uint8_t port) __attribute__((always_inline))
+	{
+		ClearInterrupt clint;
+		set_PORT(port);
+	}
+	uint8_t _get_PORT() __attribute__((always_inline))
+	{
+		ClearInterrupt clint;
+		return get_PORT();
+	}
+	void _set_DDR(uint8_t ddr) __attribute__((always_inline))
+	{
+		ClearInterrupt clint;
+		set_DDR(ddr);
+	}
+	uint8_t _get_DDR() __attribute__((always_inline))
+	{
+		ClearInterrupt clint;
+		return get_DDR();
+	}
+	void _set_PIN(uint8_t pin) __attribute__((always_inline))
+	{
+		ClearInterrupt clint;
+		set_PIN(pin);
+	}
+	uint8_t _get_PIN() __attribute__((always_inline))
+	{
+		ClearInterrupt clint;
+		return get_PIN();
+	}
+	
+protected:
+	uint8_t MASK() __attribute__((always_inline))
+	{
+		return _MASK;
+	}
+	void MASK_VALUE(volatile uint8_t& reg, uint8_t value) __attribute__((always_inline))
+	{
+		reg = (reg & ~MASK()) | (value & MASK());
+	}
+	uint8_t VALUE(uint8_t reg) __attribute__((always_inline))
+	{
+		return reg & MASK();
+	}
+	
+private:
+	const uint8_t _MASK;
+};
+
 enum class PinMode
 {
 	INPUT,
@@ -75,7 +163,7 @@ enum class PinMode
 };
 
 // This class maps to a specific pin
-// SRAM size supposed is 2 bytes
+// SRAM size supposed is 3 bytes
 class FastPin: public AbstractPort
 {
 public:

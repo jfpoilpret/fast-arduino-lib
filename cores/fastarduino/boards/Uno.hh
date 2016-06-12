@@ -1,6 +1,8 @@
 #ifndef BOARDS_UNO_HH
 #define BOARDS_UNO_HH
 
+#include <avr/io.h>
+
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
 
@@ -48,9 +50,13 @@
  */
 namespace Board
 {
-	static constexpr uint8_t PIN(uint8_t pin)
+	volatile uint8_t* const PORT_B = &PINB;
+	volatile uint8_t* const PORT_C = &PINC;
+	volatile uint8_t* const PORT_D = &PIND;
+
+	static volatile uint8_t* PIN(uint8_t pin)
 	{
-		return _SFR_IO_ADDR(pin < 8  ? PIND : pin < 14 ? PINB : PINC);
+		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
 	}
 
 	static constexpr uint8_t BIT(uint8_t pin)
@@ -58,10 +64,6 @@ namespace Board
 		return (pin < 8  ? pin : pin < 14 ? pin - 8 : pin - 14);
 	}
 	
-	const constexpr uint8_t PORT_B = (uint8_t) _SFR_IO_ADDR(PINB);
-	const constexpr uint8_t PORT_C = (uint8_t) _SFR_IO_ADDR(PINC);
-	const constexpr uint8_t PORT_D = (uint8_t) _SFR_IO_ADDR(PIND);
-
 	/**
 	 * Digital pin symbols
 	 */
