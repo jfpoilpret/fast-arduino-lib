@@ -16,7 +16,7 @@ int main()
 	sei();
 
 	// Set Port D direction to all outputs
-	FastPort<_SFR_IO_ADDR(PIND)> PortD;
+	FastPort PortD{Board::PORT_D};
 	PortD.set_DDR(0xFF);
 	uint8_t value = 0;
 	// Loop of the LED chaser

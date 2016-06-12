@@ -7,11 +7,10 @@
 #include <util/delay.h>
 #include <fastarduino/FastPin.hh>
 
-static FastPin<Board::LED> PinLED{PinMode::OUTPUT};
-
 int main()
 {
 	sei();
+	FastPin PinLED{Board::LED, PinMode::OUTPUT};
 	while (true)
 	{
 		PinLED.toggle();
