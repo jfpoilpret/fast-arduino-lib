@@ -1,10 +1,9 @@
-#ifndef FASTPIN_HH
-#define	FASTPIN_HH
+#ifndef IO_HH
+#define	IO_HH
 
 #include <fastarduino/Board.hh>
 #include <fastarduino/utilities.hh>
 
-//TODO rename classes and possibly add namespace
 class AbstractPort
 {
 public:
@@ -176,4 +175,4 @@ private:
 	const uint8_t _BIT;
 };
 
-#endif	/* FASTPIN_HH */
+#endif	/* IO_HH */
