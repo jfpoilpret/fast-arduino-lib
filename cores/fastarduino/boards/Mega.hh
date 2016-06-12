@@ -1,6 +1,10 @@
 #ifndef BOARDS_MEGA_HH
 #define BOARDS_MEGA_HH
 
+#include <avr/io.h>
+
+#include "Uno.hh"
+
 /* This board is based on ATmega1280/2560 */
 #if defined(ARDUINO_MEGA2560)
 # define BOARD_ATMEGA2560
@@ -25,25 +29,36 @@
  */
 namespace Board
 {
-	static constexpr uint8_t PIN(uint8_t pin)
+	volatile uint8_t* const PORT_A = &PINA;
+	volatile uint8_t* const PORT_B = &PINB;
+	volatile uint8_t* const PORT_C = &PINC;
+	volatile uint8_t* const PORT_D = &PIND;
+	volatile uint8_t* const PORT_E = &PINE;
+	volatile uint8_t* const PORT_F = &PINF;
+	volatile uint8_t* const PORT_G = &PING;
+	volatile uint8_t* const PORT_H = &PINH;
+	volatile uint8_t* const PORT_J = &PINJ;
+	volatile uint8_t* const PORT_K = &PINK;
+	volatile uint8_t* const PORT_L = &PINL;
+	
+	static volatile uint8_t* PIN(uint8_t pin)
 	{
-		return _SFR_IO_ADDR(pin < 8  ? PINE :
-							pin < 16 ? PINH :
-							pin < 24 ? PINB :
-							pin < 32 ? PINA :
-							pin < 40 ? PINC :
-							pin < 48 ? PIND :
-							pin < 56 ? PINL :
-							pin < 64 ? PINF :
-							pin < 72 ? PINK :
-							pin < 80 ? PINJ :
-							PING);
+		return (pin < 8  ? PORT_E :
+				pin < 16 ? PORT_H :
+				pin < 24 ? PORT_B :
+				pin < 32 ? PORT_A :
+				pin < 40 ? PORT_C :
+				pin < 48 ? PORT_D :
+				pin < 56 ? PORT_L :
+				pin < 64 ? PORT_F :
+				pin < 72 ? PORT_K :
+				pin < 80 ? PORT_J :
+				PORT_G);
 	}
 
 	static constexpr uint8_t BIT(uint8_t pin)
 	{
 		return (pin & 0x7);
-		return (pin < 8  ? pin : pin < 14 ? pin - 8 : pin - 14);
 	}
 
 	/**

@@ -4,9 +4,7 @@
 #include <fastarduino/Board.hh>
 #include <fastarduino/utilities.hh>
 
-//TODO complete implemetation of MaskedPort
 //TODO rename classes and possibly add namespace
-//TODO find out how to optimize generated code (IN/OUT Vs STS/LDS) when possible
 class AbstractPort
 {
 public:
