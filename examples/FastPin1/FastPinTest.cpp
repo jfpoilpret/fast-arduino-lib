@@ -5,11 +5,11 @@
 
 #include <fastarduino/FastPin.hh>
 
-static FastPort<_SFR_IO_ADDR(PINB)> PortB;
+static FastPort PortB{Board::PORT_B};
 
-static FastPin<Board::D0> PinD0{PinMode::INPUT};
-static FastPin<Board::D1> PinD1{PinMode::INPUT_PULLUP};
-static FastPin<Board::D2> PinD2{PinMode::OUTPUT};
+static FastPin PinD0{Board::D0, PinMode::INPUT};
+static FastPin PinD1{Board::D1, PinMode::INPUT_PULLUP};
+static FastPin PinD2{Board::D2, PinMode::OUTPUT};
 
 bool f()
 {

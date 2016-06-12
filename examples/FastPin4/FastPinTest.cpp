@@ -30,8 +30,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to read settings and write to LEDs
-	FastPort<_SFR_IO_ADDR(PINC)> PortC{0x00, 0x0F};
-	FastPort<_SFR_IO_ADDR(PIND)> PortD{0xFF};
+	FastPort PortC{Board::PORT_C, 0x00, 0x0F};
+	FastPort PortD{Board::PORT_D, 0xFF};
 	
 	// Loop of the LED chaser
 	while (true)

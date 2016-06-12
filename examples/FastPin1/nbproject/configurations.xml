@@ -70,7 +70,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
-          <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map -Wl,-verbose</commandLine>
+          <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map</commandLine>
         </linkerTool>
       </compileType>
       <item path="FastPinTest.cpp" ex="false" tool="1" flavor2="0">
@@ -119,7 +119,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
-          <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map -Wl,-verbose</commandLine>
+          <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map</commandLine>
         </linkerTool>
       </compileType>
       <item path="FastPinTest.cpp" ex="false" tool="1" flavor2="0">
@@ -171,7 +171,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
-          <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map -Wl,-verbose</commandLine>
+          <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map</commandLine>
         </linkerTool>
       </compileType>
       <item path="FastPinTest.cpp" ex="false" tool="1" flavor2="0">

@@ -57,6 +57,10 @@ namespace Board
 	{
 		return (pin < 8  ? pin : pin < 14 ? pin - 8 : pin - 14);
 	}
+	
+	const constexpr uint8_t PORT_B = (uint8_t) _SFR_IO_ADDR(PINB);
+	const constexpr uint8_t PORT_C = (uint8_t) _SFR_IO_ADDR(PINC);
+	const constexpr uint8_t PORT_D = (uint8_t) _SFR_IO_ADDR(PIND);
 
 	/**
 	 * Digital pin symbols

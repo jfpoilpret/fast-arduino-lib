@@ -1,24 +1,35 @@
 #ifndef UTILITIES_HH
 #define	UTILITIES_HH
 
-#include <avr/sfr_defs.h>
+#include <avr/io.h>
 
-//TODO check if templates are really needed for each asm code
+class ClearInterrupt
+{
+public:
+	ClearInterrupt() __attribute__((always_inline)) : _sreg(SREG)
+	{
+		cli();
+	}
+	~ClearInterrupt() __attribute__((always_inline))
+	{
+		SREG = _sreg;
+	}
 
-template<uint8_t IOREG, uint8_t BIT>
-inline void set_ioreg_bit()
+private:
+	const uint8_t _sreg;
+};
+
+inline void set_ioreg_bit(uint8_t IOREG, uint8_t BIT)
 {
 	asm volatile("SBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG), [BIT] "I" (BIT));
 }
 
-template<uint8_t IOREG, uint8_t BIT>
-inline void clear_ioreg_bit()
+inline void clear_ioreg_bit(uint8_t IOREG, uint8_t BIT)
 {
 	asm volatile("CBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG), [BIT] "I" (BIT));
 }
 
-template<uint8_t IOREG, uint8_t BIT>
-inline bool ioreg_bit_value()
+inline bool ioreg_bit_value(uint8_t IOREG, uint8_t BIT)
 {
 	bool result = false;
 	asm volatile(
@@ -30,14 +41,12 @@ inline bool ioreg_bit_value()
 	return result;
 }
 
-template<uint8_t IOREG>
-inline void set_ioreg_byte(uint8_t value)
+inline void set_ioreg_byte(uint8_t IOREG, uint8_t value)
 {
 	asm volatile("OUT %[IOREG], %[VALUE]\n\t"::[IOREG] "I" (IOREG), [VALUE] "r" (value));
 }
 
-template<uint8_t IOREG>
-inline uint8_t get_ioreg_byte()
+inline uint8_t get_ioreg_byte(uint8_t IOREG)
 {
 	uint8_t value = 0;
 	asm volatile("IN %[VALUE], %[IOREG]\n\t":[VALUE] "+r" (value):[IOREG] "I" (IOREG));
