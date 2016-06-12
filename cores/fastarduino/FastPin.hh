@@ -30,11 +30,11 @@ private:
 
 // This class maps to a PORT and handles it all 8 bits at a time
 // SRAM size is 2 bytes
-class FastPort: public AbstractPort
+class IOPort: public AbstractPort
 {
 public:
-	FastPort(volatile uint8_t* PIN) __attribute__((always_inline)) : AbstractPort(PIN) {}
-	FastPort(volatile uint8_t* PIN, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) : AbstractPort(PIN)
+	IOPort(volatile uint8_t* PIN) __attribute__((always_inline)) : AbstractPort(PIN) {}
+	IOPort(volatile uint8_t* PIN, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) : AbstractPort(PIN)
 	{
 		set_DDR(ddr);
 		set_PORT(port);
@@ -103,38 +103,6 @@ public:
 		return *PIN() & MASK();
 	}
 	
-	// All methods starting with _ are synchronized, ie they are interrupt-safe
-	void _set_PORT(uint8_t port) __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		set_PORT(port);
-	}
-	uint8_t _get_PORT() __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		return get_PORT();
-	}
-	void _set_DDR(uint8_t ddr) __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		set_DDR(ddr);
-	}
-	uint8_t _get_DDR() __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		return get_DDR();
-	}
-	void _set_PIN(uint8_t pin) __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		set_PIN(pin);
-	}
-	uint8_t _get_PIN() __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		return get_PIN();
-	}
-	
 protected:
 	uint8_t MASK() __attribute__((always_inline))
 	{
@@ -162,10 +130,10 @@ enum class PinMode
 
 // This class maps to a specific pin
 // SRAM size supposed is 3 bytes
-class FastPin: public AbstractPort
+class IOPin: public AbstractPort
 {
 public:
-	FastPin(Board::DigitalPin DPIN, PinMode mode, bool value = false) __attribute__((always_inline))
+	IOPin(Board::DigitalPin DPIN, PinMode mode, bool value = false) __attribute__((always_inline))
 	: AbstractPort(Board::PIN(DPIN)), _BIT(1 << Board::BIT(DPIN))
 	{
 		pin_mode(mode, value);
@@ -198,33 +166,6 @@ public:
 		return *PIN() & BIT();
 	}
 	
-	// All methods starting with _ are synchronized, ie they are interrupt-safe
-	void _pin_mode(PinMode mode, bool value = false) __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		pin_mode(mode, value);
-	}
-	void _set() __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		set();
-	}
-	void _clear() __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		clear();
-	}
-	void _toggle() __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		toggle();
-	}
-	bool _value() __attribute__((always_inline))
-	{
-		ClearInterrupt clint;
-		return value();
-	}
-
 protected:
 	uint8_t BIT() __attribute__((always_inline))
 	{

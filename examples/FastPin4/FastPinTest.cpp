@@ -30,8 +30,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to read settings and write to LEDs
-	FastPort PortC{Board::PORT_C, 0x00, 0x0F};
-	FastPort PortD{Board::PORT_D, 0xFF};
+	IOPort PortC{Board::PORT_C, 0x00, 0x0F};
+	IOPort PortD{Board::PORT_D, 0xFF};
 	
 	// Loop of the LED chaser
 	while (true)

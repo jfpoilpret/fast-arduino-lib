@@ -10,7 +10,7 @@
 int main()
 {
 	sei();
-	FastPin PinLED{Board::LED, PinMode::OUTPUT};
+	IOPin PinLED{Board::LED, PinMode::OUTPUT};
 	while (true)
 	{
 		PinLED.toggle();
