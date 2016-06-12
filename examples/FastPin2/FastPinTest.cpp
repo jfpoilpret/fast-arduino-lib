@@ -5,7 +5,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/FastPin.hh>
+#include <fastarduino/IO.hh>
 
 int main()
 {

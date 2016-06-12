@@ -3,7 +3,7 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <fastarduino/FastPin.hh>
+#include <fastarduino/IO.hh>
 
 static IOPort PortB{Board::PORT_B};
 

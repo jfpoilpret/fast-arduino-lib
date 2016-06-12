@@ -11,7 +11,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/FastPin.hh>
+#include <fastarduino/IO.hh>
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)
 {
