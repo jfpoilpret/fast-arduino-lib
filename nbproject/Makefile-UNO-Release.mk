@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/cores/fastarduino/Events.o \
+	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
 	${OBJECTDIR}/cores/fastarduino/main.o
 
 
@@ -64,10 +66,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a: ${OBJECTFILES}
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a
 
+${OBJECTDIR}/cores/fastarduino/Events.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/Events.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/Events.o cores/fastarduino/Events.cpp
+
+${OBJECTDIR}/cores/fastarduino/LinkedList.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/LinkedList.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/LinkedList.o cores/fastarduino/LinkedList.cpp
+
 ${OBJECTDIR}/cores/fastarduino/main.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -Icores -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/main.o cores/fastarduino/main.cpp
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/main.o cores/fastarduino/main.cpp
 
 # Subprojects
 .build-subprojects:

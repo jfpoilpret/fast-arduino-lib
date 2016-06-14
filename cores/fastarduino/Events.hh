@@ -2,18 +2,21 @@
 #define	EVENTS_HH
 
 #include <stddef.h>
+#include "Queue.hh"
+#include "LinkedList.hh"
 
 namespace Event
 {
 	enum Type
 	{
-		WDT_TIMER
+		NO_EVENT = 0,
+		WDT_TIMER = 1
 	} __attribute__((packed));
 
 	class Event
 	{
 	public:
-		Event(Type type, uint16_t value = 0) __attribute__((always_inline)) : _type{type}, _value{value} {}
+		Event(Type type = NO_EVENT, uint16_t value = 0) __attribute__((always_inline)) : _type{type}, _value{value} {}
 		Type type() const __attribute__((always_inline))
 		{
 			return _type;
@@ -29,31 +32,19 @@ namespace Event
 	};
 
 	class Handler;
-	template<typename T> class Queue;
-	
-	//TODO avoid template at this level
-	// Create a Queue also without a template
-	class Dispatcher
+
+	// Dispatcher should be used only from non-interrupt code
+	class Dispatcher: public LinkedList<Handler>
 	{
 	public:
-		Dispatcher(Queue<Event>& queue) __attribute__((always_inline)) : _queue{queue}, _handler{0} {};
-		bool push(const Event& event);
-		void add_handler(Handler* handler);
-		void remove_handler(Handler* handler);
-		bool dispatch();
-
-	private:
-		// Events Queue
-		Queue<Event>& _queue;
-		// Handlers linked list
-		Handler* _handler;
+		void dispatch(const Event& event);
 	};
 
-	class Handler
+	class Handler: public Link<Handler>
 	{
 	public:
 		Handler(Type type) __attribute__((always_inline)) : _type{type}, _next{0} {}
-		virtual bool on_event(const Event& event) = 0;
+		virtual void on_event(const Event& event) = 0;
 		
 	private:
 		const Type _type;

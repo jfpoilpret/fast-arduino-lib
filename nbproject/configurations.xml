@@ -9,15 +9,18 @@
         <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
       </logicalFolder>
       <itemPath>cores/fastarduino/Board.hh</itemPath>
+      <itemPath>cores/fastarduino/Events.cpp</itemPath>
+      <itemPath>cores/fastarduino/Events.hh</itemPath>
       <itemPath>cores/fastarduino/IO.hh</itemPath>
+      <itemPath>cores/fastarduino/LinkedList.cpp</itemPath>
+      <itemPath>cores/fastarduino/LinkedList.hh</itemPath>
+      <itemPath>cores/fastarduino/Queue.hh</itemPath>
       <itemPath>cores/fastarduino/main.cpp</itemPath>
       <itemPath>cores/fastarduino/utilities.hh</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>cores/fastarduino/Events.hh</itemPath>
-      <itemPath>cores/fastarduino/Queue.hh</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -57,6 +60,7 @@
         </cTool>
         <ccTool>
           <developmentMode>0</developmentMode>
+          <standard>8</standard>
           <incDir>
             <pElem>cores</pElem>
           </incDir>
@@ -75,9 +79,15 @@
       </compileType>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -141,9 +151,15 @@
       </packaging>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -207,9 +223,15 @@
       </packaging>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -274,9 +296,15 @@
       </packaging>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
