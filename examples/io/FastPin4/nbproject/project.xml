@@ -3,13 +3,13 @@
     <type>org.netbeans.modules.cnd.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>FastPin1</name>
+            <name>FastPin4</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
             <header-extensions/>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects>
-                <make-dep-project>../..</make-dep-project>
+                <make-dep-project>../../..</make-dep-project>
             </make-dep-projects>
             <sourceRootList>
                 <sourceRootElem>.</sourceRootElem>

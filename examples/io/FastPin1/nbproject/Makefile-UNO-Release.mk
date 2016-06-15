@@ -52,35 +52,35 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../dist/UNO-Release/Arduino-1.6.9-Windows/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/UNO-Release/Arduino-1.6.9-Windows/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin4.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin4.exe: ../../dist/UNO-Release/Arduino-1.6.9-Windows/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ../../../dist/UNO-Release/Arduino-1.6.9-Windows/libfastarduino.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin4.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin4 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
 
 ${OBJECTDIR}/FastPinTest.o: FastPinTest.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -DARDUINO_UNO -I../../cores -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FastPinTest.o FastPinTest.cpp
+	$(COMPILE.cc) -Wall -DARDUINO_UNO -I../../../cores -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FastPinTest.o FastPinTest.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../.. && ${MAKE}  -f Makefile CONF=UNO-Release
+	cd ../../.. && ${MAKE}  -f Makefile CONF=UNO-Release
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin4.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe
 
 # Subprojects
 .clean-subprojects:
-	cd ../.. && ${MAKE}  -f Makefile CONF=UNO-Release clean
+	cd ../../.. && ${MAKE}  -f Makefile CONF=UNO-Release clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

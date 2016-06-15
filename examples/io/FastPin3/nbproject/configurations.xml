@@ -39,7 +39,7 @@
           <developmentMode>0</developmentMode>
           <commandlineTool>avr-g++</commandlineTool>
           <incDir>
-            <pElem>../../cores</pElem>
+            <pElem>../../../cores</pElem>
           </incDir>
           <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
           <preprocessorList>
@@ -58,12 +58,12 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin3</output>
           <linkerLibItems>
             <linkerLibProjectItem>
-              <makeArtifact PL="../.."
+              <makeArtifact PL="../../.."
                             CT="3"
                             CN="UNO-Release"
                             AC="true"
                             BL="true"
-                            WD="../.."
+                            WD="../../.."
                             BC="${MAKE}  -f Makefile CONF=UNO-Release"
                             CC="${MAKE}  -f Makefile CONF=UNO-Release clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a">
@@ -92,7 +92,7 @@
           <developmentMode>0</developmentMode>
           <standard>8</standard>
           <incDir>
-            <pElem>../../cores</pElem>
+            <pElem>../../../cores</pElem>
           </incDir>
           <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
           <warningLevel>2</warningLevel>
@@ -107,12 +107,12 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1</output>
           <linkerLibItems>
             <linkerLibProjectItem>
-              <makeArtifact PL="../.."
+              <makeArtifact PL="../../.."
                             CT="3"
                             CN="ATmega328-Release"
                             AC="false"
                             BL="true"
-                            WD="../.."
+                            WD="../../.."
                             BC="${MAKE}  -f Makefile CONF=ATmega328-Release"
                             CC="${MAKE}  -f Makefile CONF=ATmega328-Release clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a">
@@ -143,7 +143,7 @@
           <standard>8</standard>
           <commandlineTool>avr-g++</commandlineTool>
           <incDir>
-            <pElem>../../cores</pElem>
+            <pElem>../../../cores</pElem>
           </incDir>
           <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
           <warningLevel>2</warningLevel>
@@ -159,12 +159,12 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1</output>
           <linkerLibItems>
             <linkerLibProjectItem>
-              <makeArtifact PL="../.."
+              <makeArtifact PL="../../.."
                             CT="3"
                             CN="MEGA-Release"
                             AC="false"
                             BL="true"
-                            WD="../.."
+                            WD="../../.."
                             BC="${MAKE}  -f Makefile CONF=MEGA-Release"
                             CC="${MAKE}  -f Makefile CONF=MEGA-Release clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a">

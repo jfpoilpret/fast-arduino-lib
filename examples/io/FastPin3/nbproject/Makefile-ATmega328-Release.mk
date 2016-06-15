@@ -23,7 +23,7 @@ AS=avr-as
 # Macros
 CND_PLATFORM=Arduino-1.6.9-Windows
 CND_DLIB_EXT=dll
-CND_CONF=MEGA-Release
+CND_CONF=ATmega328-Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -52,13 +52,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../dist/MEGA-Release/Arduino-1.6.9-Windows/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/ATmega328-Release/Arduino-1.6.9-Windows/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ../../dist/MEGA-Release/Arduino-1.6.9-Windows/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ../../../dist/ATmega328-Release/Arduino-1.6.9-Windows/libfastarduino.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -67,11 +67,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ${OBJECTFILES}
 ${OBJECTDIR}/FastPinTest.o: FastPinTest.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -I../../cores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FastPinTest.o FastPinTest.cpp
+	$(COMPILE.cc) -Wall -I../../../cores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FastPinTest.o FastPinTest.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../.. && ${MAKE}  -f Makefile CONF=MEGA-Release
+	cd ../../.. && ${MAKE}  -f Makefile CONF=ATmega328-Release
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -80,7 +80,7 @@ ${OBJECTDIR}/FastPinTest.o: FastPinTest.cpp
 
 # Subprojects
 .clean-subprojects:
-	cd ../.. && ${MAKE}  -f Makefile CONF=MEGA-Release clean
+	cd ../../.. && ${MAKE}  -f Makefile CONF=ATmega328-Release clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl
