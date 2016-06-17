@@ -26,11 +26,11 @@ public:
 	}
 	
 private:
-	Queue(T* buffer, uint8_t size): _buffer{buffer}, _mask{size - 1}, _head{0}, _tail{0} {}
+	Queue(T* buffer, uint8_t size): _buffer{buffer}, _mask{(uint8_t)(size - 1)}, _head{0}, _tail{0} {}
 	T* const _buffer;
 	const uint8_t _mask;
-	uint8_t _head;
-	uint8_t _tail;
+	volatile uint8_t _head;
+	volatile uint8_t _tail;
 };
 
 template<typename T>

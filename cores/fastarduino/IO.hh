@@ -7,7 +7,7 @@
 class AbstractPort
 {
 public:
-	AbstractPort(volatile uint8_t* PIN) __attribute__((always_inline)) : _PIN(PIN) {}
+	AbstractPort(volatile uint8_t* PIN = 0) __attribute__((always_inline)) : _PIN{PIN} {}
 	
 protected:
 	volatile uint8_t* PIN() __attribute__((always_inline))
@@ -24,7 +24,7 @@ protected:
 	}
 	
 private:
-	volatile uint8_t* const _PIN;
+	volatile uint8_t* _PIN;
 };
 
 // This class maps to a PORT and handles it all 8 bits at a time
@@ -32,12 +32,13 @@ private:
 class IOPort: public AbstractPort
 {
 public:
-	IOPort(volatile uint8_t* PIN) __attribute__((always_inline)) : AbstractPort(PIN) {}
-	IOPort(volatile uint8_t* PIN, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) : AbstractPort(PIN)
+	IOPort(volatile uint8_t* PIN = 0) __attribute__((always_inline)) : AbstractPort{PIN} {}
+	IOPort(volatile uint8_t* PIN, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) : AbstractPort{PIN}
 	{
 		set_DDR(ddr);
 		set_PORT(port);
 	}
+	
 	void set_PORT(uint8_t port) __attribute__((always_inline))
 	{
 		*PORT() = port;
@@ -69,7 +70,7 @@ public:
 class MaskedPort: public AbstractPort
 {
 public:
-	MaskedPort(volatile uint8_t* PIN, uint8_t mask) __attribute__((always_inline))
+	MaskedPort(volatile uint8_t* PIN = 0, uint8_t mask = 0) __attribute__((always_inline))
 	: AbstractPort(PIN), _MASK(mask) {}
 	MaskedPort(volatile uint8_t* PIN, uint8_t mask, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) 
 	: AbstractPort(PIN), _MASK(mask)
@@ -117,7 +118,7 @@ protected:
 	}
 	
 private:
-	const uint8_t _MASK;
+	uint8_t _MASK;
 };
 
 enum class PinMode
@@ -132,6 +133,7 @@ enum class PinMode
 class IOPin: public AbstractPort
 {
 public:
+	IOPin() __attribute__((always_inline)) : AbstractPort(0), _BIT{0} {}
 	IOPin(Board::DigitalPin DPIN, PinMode mode, bool value = false) __attribute__((always_inline))
 	: AbstractPort(Board::PIN(DPIN)), _BIT(1 << Board::BIT(DPIN))
 	{
@@ -172,7 +174,7 @@ protected:
 	}
 	
 private:
-	const uint8_t _BIT;
+	uint8_t _BIT;
 };
 
 #endif	/* IO_HH */

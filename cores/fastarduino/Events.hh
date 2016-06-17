@@ -10,7 +10,9 @@ namespace Event
 	enum Type
 	{
 		NO_EVENT = 0,
-		WDT_TIMER = 1
+		WDT_TIMER = 1,
+		
+		USER_EVENT = 128
 	} __attribute__((packed));
 
 	class Event
@@ -27,8 +29,8 @@ namespace Event
 		}
 
 	private:
-		const Type _type;
-		const uint16_t _value;
+		Type _type;
+		uint16_t _value;
 	};
 
 	class Handler;
@@ -43,11 +45,11 @@ namespace Event
 	class Handler: public Link<Handler>
 	{
 	public:
-		Handler(Type type) __attribute__((always_inline)) : _type{type}, _next{0} {}
+		Handler(Type type = NO_EVENT) __attribute__((always_inline)) : _type{type}, _next{0} {}
 		virtual void on_event(const Event& event) = 0;
 		
 	private:
-		const Type _type;
+		Type _type;
 		Handler* _next;
 		
 		friend class Dispatcher;

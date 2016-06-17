@@ -9,7 +9,7 @@ public:
 		handler.on_event(_event);
 	}
 private:
-	const Event::Event& _event;
+	const Event::Event _event;
 };
 
 void Event::Dispatcher::dispatch(const Event& event)

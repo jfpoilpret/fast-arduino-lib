@@ -4,6 +4,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#define UNUSED(arg) ((void)(arg))
+
 class ClearInterrupt
 {
 public:
