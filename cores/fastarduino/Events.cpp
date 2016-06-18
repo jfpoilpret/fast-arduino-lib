@@ -7,7 +7,8 @@ public:
 	HandlerCaller(const Event::Event& event) __attribute__((always_inline)) : _event{event} {}
 	void operator()(Event::AbstractHandler& handler) __attribute__((always_inline))
 	{
-		handler.handle(_event);
+		if (handler.type() == _event.type())
+			handler.handle(_event);
 	}
 private:
 	const Event::Event _event;
