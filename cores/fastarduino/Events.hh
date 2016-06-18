@@ -7,6 +7,7 @@
 
 namespace Event
 {
+	//TODO remove name "Type" to allow usage as uint8_t anywhere...
 	enum Type
 	{
 		NO_EVENT = 0,
@@ -33,28 +34,69 @@ namespace Event
 		uint16_t _value;
 	};
 
-	class Handler;
+	class AbstractHandler;
 
 	// Dispatcher should be used only from non-interrupt code
-	class Dispatcher: public LinkedList<Handler>
+	class Dispatcher: public LinkedList<AbstractHandler>
 	{
 	public:
 		void dispatch(const Event& event);
 	};
 
-	class Handler: public Link<Handler>
+	// AbstractHandler used on more specific handlers types below
+	// This class should normally never be used directly by developers
+	class AbstractHandler: public Link<AbstractHandler>
 	{
 	public:
-		Handler(Type type = NO_EVENT) __attribute__((always_inline)) : _type{type}, _next{0} {}
-		virtual void on_event(const Event& event) = 0;
+		//TODO make it private? (only Dispatcher should call it)
+		void handle(const Event& event)
+		{
+			_f(_env, event);
+		}
+
+	//TODO make it private and define all other classes as friends as we don't want app developers to subclass Handler
+	protected:
+		typedef void (*F)(void* env, const Event& event);
+		AbstractHandler(Type type = NO_EVENT, void* env = 0, F f = 0): _type{type}, _f{f}, _env{env} {}
 		
 	private:
 		Type _type;
-		Handler* _next;
+		F _f;
+		void* _env;
 		
 		friend class Dispatcher;
 	};
 	
-	//TODO define different kinds of Handlers here
+	// Derive this class to define event handlers based on a virtual method.
+	class VirtualHandler: public AbstractHandler
+	{
+	protected:
+		VirtualHandler(Type type = NO_EVENT): AbstractHandler{type, this, apply} {}
+		virtual void on_event(const Event& event) = 0;
+		
+	private:
+		static void apply(void* env, const Event& event)
+		{
+			((VirtualHandler*) env)->on_event(event);
+		}
+	};
+
+	// Instantiate this template with a Functor when a functor is applicable.
+	// FUNCTOR must be a class defining:
+	// void operator()(const Event&);
+	// This approach generally gives smaller code and data than VirtualHandler approach
+	template<typename FUNCTOR>
+	class FunctorHandler: public AbstractHandler
+	{
+	public:
+		FunctorHandler(): AbstractHandler{} {}
+		FunctorHandler(Type type, FUNCTOR f): AbstractHandler{type, this, apply}, _f{f} {}
+	private:
+		static void apply(void* env, const Event& event)
+		{
+			((FunctorHandler<FUNCTOR>*) env)->_f(event);
+		}
+		FUNCTOR _f;
+	};
 };
 #endif	/* EVENTS_HH */

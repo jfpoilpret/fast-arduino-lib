@@ -22,28 +22,22 @@
 static const uint8_t EVENT_QUEUE_SIZE = 64;
 static const uint8_t NUM_LEDS = 8;
 
-class LedHandler: public Event::Handler
+class LedHandler: private IOPin
 {
 public:
-	LedHandler() : Event::Handler{}, _led{} {}
-	LedHandler(Event::Type event, Board::DigitalPin led) : Event::Handler{event}, _led{led, PinMode::OUTPUT} {}
-	virtual void on_event(const Event::Event& event)
+	LedHandler() {}
+	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT} {}
+	void operator()(const Event::Event& event)
 	{
 		UNUSED(event);
-		_led.toggle();
+		toggle();
 	}
-
-private:
-	//TODO use private inheritance instead?
-	IOPin _led;
 };
 
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
-	// Prepare port to write to LEDs (debug)
-//	IOPort PortD{Board::PORT_D, 0xFF};
 
 	// Prepare event queue
 	Event::Event buffer[EVENT_QUEUE_SIZE];
@@ -51,17 +45,23 @@ int main()
 	
 	// Prepare Dispatcher and Handlers
 	Event::Dispatcher dispatcher;
-	LedHandler handlers[NUM_LEDS];
+	Event::FunctorHandler<LedHandler> handlers[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		handlers[i] = LedHandler{(Event::Type) (Event::USER_EVENT + i), Board::D0};
+		handlers[i] = Event::FunctorHandler<LedHandler>{(Event::Type) (Event::USER_EVENT + i), LedHandler{Board::D0}};
 		dispatcher.insert(handlers[i]);
 	}
 	
+	// push some events for a start
+	for (uint8_t i = 0; i < NUM_LEDS; ++i)
+		event_queue.push(Event::Event{(Event::Type) (Event::USER_EVENT + i)});
+
 	// Event Loop
+	//FIXME it seems no code is generated for the following code! Why?
 	while (true)
 	{
 		dispatcher.dispatch(event_queue.pull());
+		_delay_ms(200);
 	}
 	return 0;
 }
