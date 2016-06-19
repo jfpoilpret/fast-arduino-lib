@@ -5,7 +5,7 @@
 #include "Queue.hh"
 #include "LinkedList.hh"
 
-namespace Event
+namespace Events
 {
 	namespace Type
 	{

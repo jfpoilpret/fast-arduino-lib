@@ -14,11 +14,7 @@
 #include <fastarduino/IO.hh>
 #include <fastarduino/Events.hh>
 
-//using namespace ::Event;
-//using ::Event::Type;
-//using ::Event::Dispatcher;
-//using ::Event::Handler;
-//using ::Event::Event;
+using namespace ::Events;
 
 static const uint8_t EVENT_QUEUE_SIZE = 64;
 static const uint8_t NUM_LEDS = 8;
@@ -28,7 +24,7 @@ class LedHandler: private IOPin
 public:
 	LedHandler() {}
 	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT} {}
-	void operator()(const Event::Event& event)
+	void operator()(const Event& event)
 	{
 		UNUSED(event);
 		toggle();
@@ -41,21 +37,21 @@ int main()
 	sei();
 
 	// Prepare event queue
-	Event::Event buffer[EVENT_QUEUE_SIZE];
-	Queue<Event::Event> event_queue = Queue<Event::Event>::create<EVENT_QUEUE_SIZE>(buffer);
+	Event buffer[EVENT_QUEUE_SIZE];
+	Queue<Event> event_queue = Queue<Event>::create<EVENT_QUEUE_SIZE>(buffer);
 	
 	// Prepare Dispatcher and Handlers
-	Event::Dispatcher dispatcher;
-	Event::FunctorHandler<LedHandler> handlers[NUM_LEDS];
+	Dispatcher dispatcher;
+	FunctorHandler<LedHandler> handlers[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		handlers[i] = Event::FunctorHandler<LedHandler>{uint8_t(Event::Type::USER_EVENT + i), LedHandler{Board::D0}};
+		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), LedHandler{Board::D0}};
 		dispatcher.insert(handlers[i]);
 	}
 	
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
-		event_queue.push(Event::Event{uint8_t(Event::Type::USER_EVENT + i)});
+		event_queue.push(Event{uint8_t(Type::USER_EVENT + i)});
 
 	// Event Loop
 	//FIXME it seems no code is generated for the following code! Why?
