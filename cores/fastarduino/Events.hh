@@ -7,20 +7,22 @@
 
 namespace Event
 {
-	//TODO remove name "Type" to allow usage as uint8_t anywhere...
-	enum Type
+	namespace Type
 	{
-		NO_EVENT = 0,
-		WDT_TIMER = 1,
-		
-		USER_EVENT = 128
-	} __attribute__((packed));
+		// Library-defined event types
+		const uint8_t NO_EVENT = 0;
+		const uint8_t WDT_TIMER = 1;
+
+		// User-defined events start here (in range [128-255]))
+		const uint8_t USER_EVENT = 128;
+	};
 
 	class Event
 	{
 	public:
-		Event(Type type = NO_EVENT, uint16_t value = 0) __attribute__((always_inline)) : _type{type}, _value{value} {}
-		Type type() const __attribute__((always_inline))
+		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) __attribute__((always_inline))
+			: _type{type}, _value{value} {}
+		uint8_t type() const __attribute__((always_inline))
 		{
 			return _type;
 		}
@@ -30,7 +32,7 @@ namespace Event
 		}
 
 	private:
-		Type _type;
+		uint8_t _type;
 		uint16_t _value;
 	};
 
@@ -43,39 +45,47 @@ namespace Event
 		void dispatch(const Event& event);
 	};
 
+	//TODO enable broader filter of events for handlers?
+	//TODO Let handlers decide if they forward events or not?
 	// AbstractHandler used on more specific handlers types below
 	// This class should normally never be used directly by developers
 	class AbstractHandler: public Link<AbstractHandler>
 	{
 	public:
 		//TODO make it private? (only Dispatcher should call it)
-		void handle(const Event& event)
+		void handle(const Event& event) __attribute__((always_inline))
 		{
 			_f(_env, event);
 		}
+		uint8_t type() const __attribute__((always_inline))
+		{
+			return _type;
+		}
 
-	//TODO make it private and define all other classes as friends as we don't want app developers to subclass Handler
-	protected:
-		typedef void (*F)(void* env, const Event& event);
-		AbstractHandler(Type type = NO_EVENT, void* env = 0, F f = 0): _type{type}, _f{f}, _env{env} {}
-		
 	private:
-		Type _type;
+		typedef void (*F)(void* env, const Event& event);
+		AbstractHandler(uint8_t type = Type::NO_EVENT, void* env = 0, F f = 0) __attribute__((always_inline))
+			: _type{type}, _f{f}, _env{env} {}
+		
+		uint8_t _type;
 		F _f;
 		void* _env;
 		
-		friend class Dispatcher;
+		friend class VirtualHandler;
+		template<typename FUNCTOR>
+		friend class FunctorHandler;
 	};
 	
 	// Derive this class to define event handlers based on a virtual method.
 	class VirtualHandler: public AbstractHandler
 	{
 	protected:
-		VirtualHandler(Type type = NO_EVENT): AbstractHandler{type, this, apply} {}
+		VirtualHandler(uint8_t type = Type::NO_EVENT) __attribute__((always_inline))
+			: AbstractHandler{type, this, apply} {}
 		virtual void on_event(const Event& event) = 0;
 		
 	private:
-		static void apply(void* env, const Event& event)
+		static void apply(void* env, const Event& event) __attribute__((always_inline))
 		{
 			((VirtualHandler*) env)->on_event(event);
 		}
@@ -89,10 +99,11 @@ namespace Event
 	class FunctorHandler: public AbstractHandler
 	{
 	public:
-		FunctorHandler(): AbstractHandler{} {}
-		FunctorHandler(Type type, FUNCTOR f): AbstractHandler{type, this, apply}, _f{f} {}
+		FunctorHandler() __attribute__((always_inline)) : AbstractHandler{} {}
+		FunctorHandler(uint8_t type, FUNCTOR f) __attribute__((always_inline))
+			: AbstractHandler{type, this, apply}, _f{f} {}
 	private:
-		static void apply(void* env, const Event& event)
+		static void apply(void* env, const Event& event) __attribute__((always_inline))
 		{
 			((FunctorHandler<FUNCTOR>*) env)->_f(event);
 		}

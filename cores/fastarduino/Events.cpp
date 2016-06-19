@@ -1,6 +1,5 @@
 #include "Events.hh"
 
-//TODO should it be inlined in header?
 class HandlerCaller
 {
 public:

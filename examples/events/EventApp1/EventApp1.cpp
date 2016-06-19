@@ -14,6 +14,7 @@
 #include <fastarduino/IO.hh>
 #include <fastarduino/Events.hh>
 
+//using namespace ::Event;
 //using ::Event::Type;
 //using ::Event::Dispatcher;
 //using ::Event::Handler;
@@ -48,13 +49,13 @@ int main()
 	Event::FunctorHandler<LedHandler> handlers[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		handlers[i] = Event::FunctorHandler<LedHandler>{(Event::Type) (Event::USER_EVENT + i), LedHandler{Board::D0}};
+		handlers[i] = Event::FunctorHandler<LedHandler>{uint8_t(Event::Type::USER_EVENT + i), LedHandler{Board::D0}};
 		dispatcher.insert(handlers[i]);
 	}
 	
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
-		event_queue.push(Event::Event{(Event::Type) (Event::USER_EVENT + i)});
+		event_queue.push(Event::Event{uint8_t(Event::Type::USER_EVENT + i)});
 
 	// Event Loop
 	//FIXME it seems no code is generated for the following code! Why?
