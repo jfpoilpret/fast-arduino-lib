@@ -17,7 +17,8 @@
 
 using namespace ::Events;
 
-static const uint8_t EVENT_QUEUE_SIZE = 64;
+//static const uint8_t EVENT_QUEUE_SIZE = 64;
+static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
 static IOPin debug{Board::LED, PinMode::OUTPUT, 0};
@@ -48,8 +49,8 @@ public:
 	LedHandler(): _bit{0} {}
 	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT}, _bit{uint8_t(led)} 
 	{
-		debug_blink(1 + _bit);
-		debug_delay(16);
+//		debug_blink(1 + _bit);
+//		debug_delay(16);
 	}
 	void operator()(const Event& event)
 	{
@@ -85,11 +86,14 @@ int main()
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
+	LedHandler led_handlers[NUM_LEDS];
 	FunctorHandler<LedHandler> handlers[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		LedHandler handler{(Board::DigitalPin)(Board::D0 + i)};
-		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), handler};
+		led_handlers[i] = LedHandler{(Board::DigitalPin)(Board::D0 + i)};
+//		LedHandler handler{(Board::DigitalPin)(Board::D0 + i)};
+//		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), handler};
+		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), led_handlers[i]};
 		dispatcher.insert(handlers[i]);
 	}
 	
