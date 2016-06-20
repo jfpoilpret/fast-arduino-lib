@@ -45,24 +45,22 @@ namespace Events
 		void dispatch(const Event& event);
 	};
 
-	//TODO enable broader filter of events for handlers?
-	//TODO Let handlers decide if they forward events or not?
 	// AbstractHandler used on more specific handlers types below
 	// This class should normally never be used directly by developers
 	class AbstractHandler: public Link<AbstractHandler>
 	{
 	public:
-		//TODO make it private? (only Dispatcher should call it)
-		void handle(const Event& event) __attribute__((always_inline))
-		{
-			_f(_env, event);
-		}
 		uint8_t type() const __attribute__((always_inline))
 		{
 			return _type;
 		}
 
 	private:
+		void handle(const Event& event) __attribute__((always_inline))
+		{
+			_f(_env, event);
+		}
+		
 		typedef void (*F)(void* env, const Event& event);
 		AbstractHandler(uint8_t type = Type::NO_EVENT, void* env = 0, F f = 0) __attribute__((always_inline))
 			: _type{type}, _f{f}, _env{env} {}
@@ -70,7 +68,9 @@ namespace Events
 		uint8_t _type;
 		F _f;
 		void* _env;
-		
+
+		friend class Dispatcher;
+		friend class HandlerCaller;
 		friend class VirtualHandler;
 		template<typename FUNCTOR>
 		friend class FunctorHandler;

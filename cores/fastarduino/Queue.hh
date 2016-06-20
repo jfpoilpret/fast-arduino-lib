@@ -58,10 +58,12 @@ template<typename T>
 bool Queue<T>::pull(T& item)
 {
 	ClearInterrupt clint;
-	if ((_tail - _head) & _mask)
+//	if ((_tail - _head) & _mask)
+	if (_tail != _head)
 	{
 		item = _buffer[_head];
 		_head = (_head + 1) & _mask;
+		return true;
 	}
 	return false;
 }
