@@ -67,12 +67,12 @@ public:
 
 // This class maps to a portion of a PORT (according to provided mask) and handles all its bits at a time
 // SRAM size is 3 bytes
-class MaskedPort: public AbstractPort
+class IOMaskedPort: public AbstractPort
 {
 public:
-	MaskedPort(volatile uint8_t* PIN = 0, uint8_t mask = 0) __attribute__((always_inline))
+	IOMaskedPort(volatile uint8_t* PIN = 0, uint8_t mask = 0) __attribute__((always_inline))
 	: AbstractPort(PIN), _MASK(mask) {}
-	MaskedPort(volatile uint8_t* PIN, uint8_t mask, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) 
+	IOMaskedPort(volatile uint8_t* PIN, uint8_t mask, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) 
 	: AbstractPort(PIN), _MASK(mask)
 	{
 		set_DDR(ddr);
