@@ -11,6 +11,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
+
 #include <fastarduino/IO.hh>
 #include <fastarduino/Events.hh>
 
@@ -19,17 +20,59 @@ using namespace ::Events;
 static const uint8_t EVENT_QUEUE_SIZE = 64;
 static const uint8_t NUM_LEDS = 8;
 
-class LedHandler: private IOPin
+static IOPin debug{Board::LED, PinMode::OUTPUT, 0};
+
+static void debug_delay(uint8_t times = 4)
+{
+	for (uint8_t i = 0; i < times; ++i)
+		_delay_ms(250);
+}
+
+static void debug_blink(uint8_t times = 1)
+{
+	for (uint8_t i = 0; i < times; ++i)
+	{
+		debug.set();
+		_delay_ms(250);
+		_delay_ms(250);
+		debug.clear();
+		_delay_ms(250);
+		_delay_ms(250);
+	}
+}
+
+//class LedHandler: private IOPin
+class LedHandler: public IOPin
 {
 public:
-	LedHandler() {}
-	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT} {}
+	LedHandler(): _bit{0} {}
+	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT}, _bit{uint8_t(led)} 
+	{
+		debug_blink(1 + _bit);
+		debug_delay(16);
+	}
 	void operator()(const Event& event)
 	{
-		UNUSED(event);
+//		UNUSED(event);
+//		debug_blink(1 + event.type() - Type::USER_EVENT);
 		toggle();
 	}
+private:
+	uint8_t _bit;
 };
+
+//class DebugHandler
+//{
+//public:
+//	void operator()(AbstractHandler& handler)
+//	{
+//		if (handler.type() == Type::USER_EVENT + 1)
+//		{
+//			debug.toggle();
+//			debug_delay();
+//		}
+//	}
+//};
 
 int main()
 {
@@ -45,20 +88,40 @@ int main()
 	FunctorHandler<LedHandler> handlers[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), LedHandler{Board::D0}};
+		LedHandler handler{(Board::DigitalPin)(Board::D0 + i)};
+		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), handler};
 		dispatcher.insert(handlers[i]);
 	}
+	
+	// Debug number of handlers in dispatcher
+//	dispatcher.traverse(DebugHandler());
 	
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 		event_queue.push(Event{uint8_t(Type::USER_EVENT + i)});
+	// Debug number of items in queue
+//	uint8_t size = event_queue.items();
+//	while (size--)
+//	{
+//		debug.set();
+//		debug_delay();
+//		debug.clear();
+//		debug_delay();
+//	}
+//	debug_delay(20);
 
 	// Event Loop
-	//FIXME it seems no code is generated for the following code! Why?
 	while (true)
 	{
-		dispatcher.dispatch(event_queue.pull());
-		_delay_ms(200);
+		Event event = event_queue.pull();
+		// Debug event type
+//		debug_blink(1 + event.type() - Type::USER_EVENT);
+		dispatcher.dispatch(event);
+//		debug.set();
+//		debug_delay();
+//		debug.clear();
+//		debug_delay();
+		debug_delay();
 	}
 	return 0;
 }
