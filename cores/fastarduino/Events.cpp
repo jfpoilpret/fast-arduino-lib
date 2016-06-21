@@ -12,7 +12,7 @@ namespace Events
 				handler.handle(_event);
 		}
 	private:
-		const Event& _event;
+		const Event _event;
 	};
 
 	void Dispatcher::dispatch(const Event& event)

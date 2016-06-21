@@ -15,9 +15,8 @@
 #include <fastarduino/IO.hh>
 #include <fastarduino/Events.hh>
 
-using namespace ::Events;
+using namespace Events;
 
-//static const uint8_t EVENT_QUEUE_SIZE = 64;
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
@@ -29,51 +28,17 @@ static void debug_delay(uint8_t times = 4)
 		_delay_ms(250);
 }
 
-static void debug_blink(uint8_t times = 1)
-{
-	for (uint8_t i = 0; i < times; ++i)
-	{
-		debug.set();
-		_delay_ms(250);
-		_delay_ms(250);
-		debug.clear();
-		_delay_ms(250);
-		_delay_ms(250);
-	}
-}
-
-//class LedHandler: private IOPin
-class LedHandler: public IOPin
+class LedHandler: private IOPin
 {
 public:
-	LedHandler(): _bit{0} {}
-	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT}, _bit{uint8_t(led)} 
-	{
-//		debug_blink(1 + _bit);
-//		debug_delay(16);
-	}
+	LedHandler() {}
+	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT} {}
 	void operator()(const Event& event)
 	{
-//		UNUSED(event);
-//		debug_blink(1 + event.type() - Type::USER_EVENT);
+		UNUSED(event);
 		toggle();
 	}
-private:
-	uint8_t _bit;
 };
-
-//class DebugHandler
-//{
-//public:
-//	void operator()(AbstractHandler& handler)
-//	{
-//		if (handler.type() == Type::USER_EVENT + 1)
-//		{
-//			debug.toggle();
-//			debug_delay();
-//		}
-//	}
-//};
 
 int main()
 {
@@ -86,46 +51,31 @@ int main()
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	LedHandler led_handlers[NUM_LEDS];
-	FunctorHandler<LedHandler> handlers[NUM_LEDS];
-	for (uint8_t i = 0; i < NUM_LEDS; ++i)
+	FunctorHandler<LedHandler> handlers[NUM_LEDS]
 	{
-		led_handlers[i] = LedHandler{(Board::DigitalPin)(Board::D0 + i)};
-//		LedHandler handler{(Board::DigitalPin)(Board::D0 + i)};
-//		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), handler};
-		handlers[i] = FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + i), led_handlers[i]};
+		FunctorHandler<LedHandler>{Type::USER_EVENT, LedHandler{Board::D0}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 1), LedHandler{Board::D1}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 2), LedHandler{Board::D2}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 3), LedHandler{Board::D3}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 4), LedHandler{Board::D4}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 5), LedHandler{Board::D5}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 6), LedHandler{Board::D6}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 7), LedHandler{Board::D7}}
+	};
+	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 		dispatcher.insert(handlers[i]);
-	}
-	
-	// Debug number of handlers in dispatcher
-//	dispatcher.traverse(DebugHandler());
 	
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 		event_queue.push(Event{uint8_t(Type::USER_EVENT + i)});
-	// Debug number of items in queue
-//	uint8_t size = event_queue.items();
-//	while (size--)
-//	{
-//		debug.set();
-//		debug_delay();
-//		debug.clear();
-//		debug_delay();
-//	}
-//	debug_delay(20);
 
 	// Event Loop
 	while (true)
 	{
+		// The following does not work: it seems to always call the last handler added to the Dispatcher...
 		Event event = event_queue.pull();
-		// Debug event type
-//		debug_blink(1 + event.type() - Type::USER_EVENT);
 		dispatcher.dispatch(event);
-//		debug.set();
-//		debug_delay();
-//		debug.clear();
-//		debug_delay();
-		debug_delay();
+		debug_delay(1);
 	}
 	return 0;
 }

@@ -55,12 +55,12 @@ namespace Events
 			return _type;
 		}
 
-	private:
 		void handle(const Event& event) __attribute__((always_inline))
 		{
 			_f(_env, event);
 		}
 		
+	private:
 		typedef void (*F)(void* env, const Event& event);
 		AbstractHandler(uint8_t type = Type::NO_EVENT, void* env = 0, F f = 0) __attribute__((always_inline))
 			: _type{type}, _f{f}, _env{env} {}
