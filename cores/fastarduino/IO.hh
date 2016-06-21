@@ -160,7 +160,7 @@ public:
 	}
 	void toggle() __attribute__((always_inline))
 	{
-		*PIN() |= BIT();
+		*PIN() = BIT();
 	}
 	bool value() __attribute__((always_inline))
 	{

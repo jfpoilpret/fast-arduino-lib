@@ -67,12 +67,14 @@ int main()
 	
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
+	{
 		event_queue.push(Event{uint8_t(Type::USER_EVENT + i)});
+		event_queue.push(Event{uint8_t(Type::USER_EVENT + i)});
+	}
 
 	// Event Loop
 	while (true)
 	{
-		// The following does not work: it seems to always call the last handler added to the Dispatcher...
 		Event event = event_queue.pull();
 		dispatcher.dispatch(event);
 		debug_delay(1);
