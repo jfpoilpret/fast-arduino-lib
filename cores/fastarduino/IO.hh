@@ -96,7 +96,7 @@ public:
 	}
 	void set_PIN(uint8_t pin) __attribute__((always_inline))
 	{
-		MASK_VALUE(*PIN(), pin);
+		*PIN() = pin & MASK();
 	}
 	uint8_t get_PIN() __attribute__((always_inline))
 	{
