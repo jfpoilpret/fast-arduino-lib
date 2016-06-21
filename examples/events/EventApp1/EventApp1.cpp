@@ -20,8 +20,6 @@ using namespace Events;
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
-static IOPin debug{Board::LED, PinMode::OUTPUT, 0};
-
 static void debug_delay(uint8_t times = 4)
 {
 	for (uint8_t i = 0; i < times; ++i)
