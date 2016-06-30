@@ -37,7 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/Events.o \
 	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
-	${OBJECTDIR}/cores/fastarduino/main.o
+	${OBJECTDIR}/cores/fastarduino/main.o \
+	${OBJECTDIR}/cores/fastarduino/watchdog.o
 
 
 # C Compiler Flags
@@ -80,6 +81,11 @@ ${OBJECTDIR}/cores/fastarduino/main.o: nbproject/Makefile-${CND_CONF}.mk cores/f
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/main.o cores/fastarduino/main.cpp
+
+${OBJECTDIR}/cores/fastarduino/watchdog.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/watchdog.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/watchdog.o cores/fastarduino/watchdog.cpp
 
 # Subprojects
 .build-subprojects:

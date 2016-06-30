@@ -50,16 +50,16 @@
  */
 namespace Board
 {
-	volatile uint8_t* const PORT_B = &PINB;
-	volatile uint8_t* const PORT_C = &PINC;
-	volatile uint8_t* const PORT_D = &PIND;
+	constexpr volatile uint8_t* const PORT_B = &PINB;
+	constexpr volatile uint8_t* const PORT_C = &PINC;
+	constexpr volatile uint8_t* const PORT_D = &PIND;
 
-	static volatile uint8_t* PIN(uint8_t pin)
+	constexpr volatile uint8_t* PIN(uint8_t pin)
 	{
 		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
 	}
 
-	static constexpr uint8_t BIT(uint8_t pin)
+	constexpr uint8_t BIT(uint8_t pin)
 	{
 		return (pin < 8  ? pin : pin < 14 ? pin - 8 : pin - 14);
 	}
