@@ -38,7 +38,7 @@ private:
 	uint8_t _value;
 };
 
-int main()
+int main(void)
 {
 	// Enable interrupts at startup time
 	sei();
@@ -53,8 +53,8 @@ int main()
 	dispatcher.insert(handler);
 	
 	// Start watchdog
-	Watchdog::set_event_queue(event_queue);
-	Watchdog::begin(Watchdog::TO_1s);
+	Watchdog watchdog{event_queue};
+	watchdog.begin(Watchdog::TO_250ms);
 	
 	// Event Loop
 	while (true)
@@ -62,5 +62,4 @@ int main()
 		Event event = event_queue.pull();
 		dispatcher.dispatch(event);
 	}
-	return 0;
 }

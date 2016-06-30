@@ -24,36 +24,35 @@ public:
 		TO_8s
 	} __attribute__((packed));
 	
-	static void set_event_queue(Queue<Events::Event>& event_queue)
+	Watchdog(Queue<Events::Event>& event_queue)
+		:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue)
 	{
-		ClearInterrupt clint;
-		_event_queue = &event_queue;
+		Watchdog::_singleton = this;
 	}
+	Watchdog(const Watchdog&) = delete;
 	
-	static void begin(TimeOut timeout = TO_16ms);
-	static void end()
+	void begin(TimeOut timeout = TO_16ms);
+	void end()
 	{
 		ClearInterrupt clint;
 		WDTCSR = _BV(WDCE) | _BV(WDE);
 		WDTCSR = 0;
 	}
 	
-	static uint32_t millis()
+	uint32_t millis()
 	{
 		ClearInterrupt clint;
 		return _millis;
 	}
-	static void delay(uint32_t ms);
-	static void await();
+	void delay(uint32_t ms);
+	void await();
 	
 private:
-	// This class is not instantiable
-	Watchdog() {}
-
-	static uint16_t _millis_per_tick;
-	static volatile uint32_t _millis;
-	static Queue<Events::Event>* _event_queue;
+	volatile uint32_t _millis;
+	uint16_t _millis_per_tick;
+	Queue<Events::Event>& _event_queue;
 	
+	static Watchdog *_singleton;
 	friend void WDT_vect(void);
 };
 

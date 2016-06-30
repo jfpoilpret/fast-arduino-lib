@@ -7,8 +7,8 @@
 #define UNUSED(x) (void) (x)
 
 
-int main(void) __attribute__((weak));
-int main(void)
+int main() __attribute__((weak));
+int main()
 {
 	return 0;
 }

@@ -1,9 +1,7 @@
 #include "watchdog.hh"
 #include "utilities.hh"
 
-uint16_t Watchdog::_millis_per_tick = 0;
-volatile uint32_t Watchdog::_millis = 0;
-Queue<Events::Event>* Watchdog::_event_queue = 0;
+Watchdog* Watchdog::_singleton = 0;
 
 void Watchdog::begin(TimeOut timeout)
 {
@@ -33,9 +31,10 @@ void Watchdog::delay(uint32_t ms)
 
 ISR(WDT_vect)
 {
-	// Introduce timing somehow in the event (or outside)
-	Watchdog::_millis += Watchdog::_millis_per_tick;
-	// Just send a timeout event
-	if (Watchdog::_event_queue)
-		Watchdog::_event_queue->push(Events::Event{Events::Type::WDT_TIMER});
+	Watchdog* watchdog = Watchdog::_singleton;
+	if (watchdog)
+	{
+		watchdog->_millis += watchdog->_millis_per_tick;
+		watchdog->_event_queue.push(Events::Event{Events::Type::WDT_TIMER});
+	}
 }
