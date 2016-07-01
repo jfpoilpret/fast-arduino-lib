@@ -18,8 +18,6 @@
 
 using namespace Events;
 
-static const uint8_t EVENT_QUEUE_SIZE = 32;
-
 class LedHandler: private IOPort
 {
 public:
@@ -38,15 +36,17 @@ private:
 	uint8_t _value;
 };
 
-int main(void)
+static const uint8_t EVENT_QUEUE_SIZE = 32;
+
+// Prepare event queue
+static Event buffer[EVENT_QUEUE_SIZE];
+static Queue<Event> event_queue = Queue<Event>::create<EVENT_QUEUE_SIZE>(buffer);
+	
+int main()
 {
 	// Enable interrupts at startup time
 	sei();
 
-	// Prepare event queue
-	Event buffer[EVENT_QUEUE_SIZE];
-	Queue<Event> event_queue = Queue<Event>::create<EVENT_QUEUE_SIZE>(buffer);
-	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
 	FunctorHandler<LedHandler> handler{Type::WDT_TIMER, LedHandler{}};
@@ -54,7 +54,7 @@ int main(void)
 	
 	// Start watchdog
 	Watchdog watchdog{event_queue};
-	watchdog.begin(Watchdog::TO_250ms);
+	watchdog.begin(Watchdog::TO_64ms);
 	
 	// Event Loop
 	while (true)
