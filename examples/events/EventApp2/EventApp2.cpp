@@ -25,11 +25,13 @@ public:
 	void operator()(const Event& event)
 	{
 		UNUSED(event);
-		if (_value == 0)
-			_value = 0x01;
+		uint8_t value = _value;
+		if (value == 0)
+			value = 0x01;
 		else
-			_value <<= 1;
-		set_PORT(_value);
+			value <<= 1;
+		set_PORT(value);
+		_value = value;
 	}
 	
 private:
