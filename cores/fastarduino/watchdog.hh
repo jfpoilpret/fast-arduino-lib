@@ -39,7 +39,7 @@ public:
 		WDTCSR = 0;
 	}
 	
-	uint32_t millis()
+	uint32_t millis() const
 	{
 		ClearInterrupt clint;
 		return _millis;

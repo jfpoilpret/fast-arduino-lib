@@ -45,6 +45,7 @@ namespace Events
 		void dispatch(const Event& event);
 	};
 
+	//TODO maybe rename as EventHandler (or just Handler to avoid "Abstract" everywhere...)
 	// AbstractHandler used on more specific handlers types below
 	// This class should normally never be used directly by developers
 	class AbstractHandler: public Link<AbstractHandler>
@@ -61,6 +62,7 @@ namespace Events
 		}
 		
 	private:
+		//TODO refactor to make it used everywhere we need this pattern!
 		typedef void (*F)(void* env, const Event& event);
 		AbstractHandler(uint8_t type = Type::NO_EVENT, void* env = 0, F f = 0) __attribute__((always_inline))
 			: _type{type}, _f{f}, _env{env} {}
@@ -102,6 +104,12 @@ namespace Events
 		FunctorHandler() __attribute__((always_inline)) : AbstractHandler{} {}
 		FunctorHandler(uint8_t type, FUNCTOR f) __attribute__((always_inline))
 			: AbstractHandler{type, this, apply}, _f{f} {}
+	protected:
+		FUNCTOR& functor() __attribute__((always_inline))
+		{
+			return _f;
+		}
+		
 	private:
 		static void apply(void* env, const Event& event) __attribute__((always_inline))
 		{

@@ -10,7 +10,6 @@ void Watchdog::begin(TimeOut timeout)
 	
 	ClearInterrupt clint;
 	wdt_reset();
-	//TODO Check generated assembly!!!
 	MCUSR |= 1 << WDRF;
 	WDTCSR = _BV(WDCE) | _BV(WDE);
 	WDTCSR = config;

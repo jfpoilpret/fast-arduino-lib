@@ -40,8 +40,10 @@ public:
 		T* current = head();
 		while (current != 0)
 		{
-			f(*current);
-			current = current->next();
+			T* next = current->next();
+			if (f(*current))
+				remove(*current);
+			current = next;
 		}
 	}
 	

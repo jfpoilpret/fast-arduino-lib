@@ -6,10 +6,11 @@ namespace Events
 	{
 	public:
 		HandlerCaller(const Event& event) __attribute__((always_inline)) : _event{event} {}
-		void operator()(AbstractHandler& handler) __attribute__((always_inline))
+		bool operator()(AbstractHandler& handler) __attribute__((always_inline))
 		{
 			if (handler.type() == _event.type())
 				handler.handle(_event);
+			return false;
 		}
 	private:
 		const Event _event;
