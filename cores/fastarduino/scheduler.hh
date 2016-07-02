@@ -121,7 +121,7 @@ template<typename CLOCK>
 bool SchedulerHandler<CLOCK>::operator()(AbstractJob& job)
 {
 	uint32_t now = _clock.millis();
-	if (job.next_time() >= now)
+	if (job.next_time() <= now)
 	{
 		job.handle(now);
 		if (!job.is_periodic())
