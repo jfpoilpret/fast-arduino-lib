@@ -26,11 +26,12 @@ The project has just started, hence it does not cover much yet.
 
 What the project already has:
 
-- Utilities (queue, list)
+- Utilities (queue, list, timing)
 - Fast IO support (ATmega328 and ATtinyX4) with examples for UNO
 - Events handling with examples for UNO
 - Watchdog timer
 - Timed (periodic or not) jobs scheduling with examples for UNO
+- Power sleep
 
 Roadmap
 -------
@@ -40,7 +41,7 @@ The roadmap of supported features is the following:
 1. Fast IO support (done)
 2. Multiple boards variants support (UNO, MEGA, ATtinyX4, ATtinyX5)
 3. Watchdog and events support (done)
-4. Power management
+4. Power management (done)
 5. Hardware UART support
 6. Trace support
 7. Real Time Timer support
