@@ -19,6 +19,8 @@
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.hh</itemPath>
       <itemPath>cores/fastarduino/scheduler.hh</itemPath>
+      <itemPath>cores/fastarduino/time.cpp</itemPath>
+      <itemPath>cores/fastarduino/time.hh</itemPath>
       <itemPath>cores/fastarduino/utilities.hh</itemPath>
       <itemPath>cores/fastarduino/watchdog.cpp</itemPath>
       <itemPath>cores/fastarduino/watchdog.hh</itemPath>
@@ -118,6 +120,10 @@
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
@@ -199,6 +205,10 @@
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -282,6 +292,10 @@
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
@@ -364,6 +378,10 @@
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>

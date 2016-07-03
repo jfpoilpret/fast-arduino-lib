@@ -50,7 +50,7 @@ static const uint32_t PERIOD = 1000;
 int main()
 {
 	// Set power settings
-//	Power::set_default_mode(Board::SleepMode::POWER_DOWN);
+	Power::set_default_mode(Board::SleepMode::POWER_DOWN);
 	// Enable interrupts at startup time
 	sei();
 
@@ -69,7 +69,7 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Event event = event_queue.pull();
+		Event event = pull(event_queue);
 		dispatcher.dispatch(event);
 	}
 }

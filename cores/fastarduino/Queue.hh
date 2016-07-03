@@ -2,6 +2,7 @@
 #define	QUEUE_HH
 
 #include "utilities.hh"
+#include "time.hh"
 
 template<typename T>
 class Queue
@@ -12,7 +13,6 @@ public:
 	
 	bool push(const T& item);
 	bool pull(T& item);
-	T pull();
 	
 	uint8_t items() const __attribute__((always_inline))
 	{
@@ -67,13 +67,13 @@ bool Queue<T>::pull(T& item)
 	return false;
 }
 
+// Utility method that waits until a Queue has an item available
 template<typename T>
-T Queue<T>::pull()
+T pull(Queue<T>& queue)
 {
 	T item;
-	while (!pull(item))
-		// TODO replace with better method (yield or sleep)
-		;
+	while (!queue.pull(item))
+		Time::yield();
 	return item;
 }
 

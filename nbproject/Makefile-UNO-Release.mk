@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
 	${OBJECTDIR}/cores/fastarduino/main.o \
 	${OBJECTDIR}/cores/fastarduino/power.o \
+	${OBJECTDIR}/cores/fastarduino/time.o \
 	${OBJECTDIR}/cores/fastarduino/watchdog.o
 
 
@@ -87,6 +88,11 @@ ${OBJECTDIR}/cores/fastarduino/power.o: nbproject/Makefile-${CND_CONF}.mk cores/
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/power.o cores/fastarduino/power.cpp
+
+${OBJECTDIR}/cores/fastarduino/time.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/time.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/time.o cores/fastarduino/time.cpp
 
 ${OBJECTDIR}/cores/fastarduino/watchdog.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/watchdog.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
