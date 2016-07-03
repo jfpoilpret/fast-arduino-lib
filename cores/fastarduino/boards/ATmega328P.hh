@@ -2,22 +2,23 @@
 #define BOARDS_ATMEGA328P_HH
 
 #include <avr/io.h>
+#include <avr/sleep.h>
 
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
 
 namespace Board
 {
-	volatile uint8_t* const PORT_B = &PINB;
-	volatile uint8_t* const PORT_C = &PINC;
-	volatile uint8_t* const PORT_D = &PIND;
+	constexpr volatile uint8_t* const PORT_B = &PINB;
+	constexpr volatile uint8_t* const PORT_C = &PINC;
+	constexpr volatile uint8_t* const PORT_D = &PIND;
 
-	static volatile uint8_t* PIN(uint8_t pin)
+	constexpr volatile uint8_t* PIN(uint8_t pin)
 	{
 		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
 	}
 
-	static constexpr uint8_t BIT(uint8_t pin)
+	constexpr uint8_t BIT(uint8_t pin)
 	{
 		return (pin < 8  ? pin : pin < 14 ? pin - 8 : pin - 14);
 	}
@@ -98,6 +99,16 @@ namespace Board
 		PCI_PIN_MAX = 20,
 		PWM_PIN_MAX = 6
 	};
+	
+	enum class SleepMode
+	{
+		IDLE = SLEEP_MODE_IDLE,
+		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
+		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
+		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
+		STANDBY = SLEEP_MODE_STANDBY,
+		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY
+	} __attribute__((packed));
 };
 
 /**

@@ -45,7 +45,6 @@ public:
 		return _millis;
 	}
 	void delay(uint32_t ms);
-	void await();
 	
 private:
 	volatile uint32_t _millis;

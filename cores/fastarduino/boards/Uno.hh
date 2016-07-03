@@ -2,6 +2,7 @@
 #define BOARDS_UNO_HH
 
 #include <avr/io.h>
+#include <avr/sleep.h>
 
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
@@ -139,6 +140,28 @@ namespace Board
 		EXT_PIN_MAX = 2,
 		PCI_PIN_MAX = 20,
 		PWM_PIN_MAX = 6
+	};
+	
+	enum class SleepMode: uint8_t
+	{
+		IDLE = SLEEP_MODE_IDLE,
+		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
+		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
+		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
+		STANDBY = SLEEP_MODE_STANDBY,
+		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY,
+		
+		DEFAULT_MODE = 0xFF
+	};
+	
+	enum class Circuits
+	{
+		TIMER_0,
+		TIMER_1,
+		TIMER_2,
+		USART_0,
+		SPI_0,
+		TWI_0
 	};
 };
 

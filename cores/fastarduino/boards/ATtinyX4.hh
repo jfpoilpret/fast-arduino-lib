@@ -2,6 +2,7 @@
 #define BOARDS_ATTINYX4_HH
 
 #include <avr/io.h>
+#include <avr/sleep.h>
 
 /* This board is based on ATtinyX4/ATtiny */
 #define BOARDS_ATTINYX4
@@ -35,15 +36,15 @@
  */
 namespace Board
 {
-	volatile uint8_t* const PORT_A = &PINA;
-	volatile uint8_t* const PORT_B = &PINB;
+	constexpr volatile uint8_t* const PORT_A = &PINA;
+	constexpr volatile uint8_t* const PORT_B = &PINB;
 
-	static volatile uint8_t* PIN(uint8_t pin)
+	constexpr volatile uint8_t* PIN(uint8_t pin)
 	{
-		return (pin < 8 ? &PINA : &PINB);
+		return pin < 8 ? PORT_A : PORT_B;
 	}
 
-	static constexpr uint8_t BIT(uint8_t pin)
+	constexpr uint8_t BIT(uint8_t pin)
 	{
 		return (pin < 8 ? pin : pin - 8);
 	}
@@ -105,6 +106,20 @@ namespace Board
 		PCI_PIN_MAX = 11,
 		PWM_PIN_MAX = 4
 	};
+
+    #define SLEEP_MODE_IDLE         0
+    #define SLEEP_MODE_ADC          _BV(SM0)
+    #define SLEEP_MODE_PWR_DOWN     _BV(SM1)
+    #define SLEEP_MODE_PWR_SAVE     (_BV(SM0) | _BV(SM1))
+	enum class SleepMode
+	{
+		IDLE = SLEEP_MODE_IDLE,
+		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
+		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
+		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
+		STANDBY = SLEEP_MODE_PWR_SAVE,
+		EXTENDED_STANDBY = SLEEP_MODE_PWR_SAVE
+	} __attribute__((packed));
 };
 
 /**

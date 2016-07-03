@@ -2,8 +2,7 @@
 #define BOARDS_MEGA_HH
 
 #include <avr/io.h>
-
-#include "Uno.hh"
+#include <avr/sleep.h>
 
 /* This board is based on ATmega1280/2560 */
 #if defined(ARDUINO_MEGA2560)
@@ -29,19 +28,19 @@
  */
 namespace Board
 {
-	volatile uint8_t* const PORT_A = &PINA;
-	volatile uint8_t* const PORT_B = &PINB;
-	volatile uint8_t* const PORT_C = &PINC;
-	volatile uint8_t* const PORT_D = &PIND;
-	volatile uint8_t* const PORT_E = &PINE;
-	volatile uint8_t* const PORT_F = &PINF;
-	volatile uint8_t* const PORT_G = &PING;
-	volatile uint8_t* const PORT_H = &PINH;
-	volatile uint8_t* const PORT_J = &PINJ;
-	volatile uint8_t* const PORT_K = &PINK;
-	volatile uint8_t* const PORT_L = &PINL;
+	constexpr volatile uint8_t* const PORT_A = &PINA;
+	constexpr volatile uint8_t* const PORT_B = &PINB;
+	constexpr volatile uint8_t* const PORT_C = &PINC;
+	constexpr volatile uint8_t* const PORT_D = &PIND;
+	constexpr volatile uint8_t* const PORT_E = &PINE;
+	constexpr volatile uint8_t* const PORT_F = &PINF;
+	constexpr volatile uint8_t* const PORT_G = &PING;
+	constexpr volatile uint8_t* const PORT_H = &PINH;
+	constexpr volatile uint8_t* const PORT_J = &PINJ;
+	constexpr volatile uint8_t* const PORT_K = &PINK;
+	constexpr volatile uint8_t* const PORT_L = &PINL;
 	
-	static volatile uint8_t* PIN(uint8_t pin)
+	constexpr volatile uint8_t* PIN(uint8_t pin)
 	{
 		return (pin < 8  ? PORT_E :
 				pin < 16 ? PORT_H :
@@ -56,7 +55,7 @@ namespace Board
 				PORT_G);
 	}
 
-	static constexpr uint8_t BIT(uint8_t pin)
+	constexpr uint8_t BIT(uint8_t pin)
 	{
 		return (pin & 0x7);
 	}
@@ -187,6 +186,16 @@ namespace Board
 		PCI_PIN_MAX = 24,
 		PWM_PIN_MAX = 13
 	};
+	
+	enum class SleepMode
+	{
+		IDLE = SLEEP_MODE_IDLE,
+		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
+		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
+		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
+		STANDBY = SLEEP_MODE_STANDBY,
+		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY
+	} __attribute__((packed));
 };
 
 /**
