@@ -17,18 +17,30 @@ This comes at a cost:
 1. Template usage is often more complex in applications. The provided examples are here to help.
 2. Build times are increased as most code is inside C++ headers
 
-In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are built through netbeans, which was hard to intially setup, but much more friendly to use once setup is done. Also netbeans automatically provides makefiles that make it possible to build projects in command line.
+In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are built through netbeans, which was hard to initially setup, but much more friendly to use once setup is done. Also netbeans automatically provides makefiles that make it possible to build projects in command line.
+
+Status
+------
+
+The project has just started, hence it does not cover much yet.
+
+What the project already has:
+
+- Utilities (queue, list)
+- Fast IO support (ATmega328 and ATtinyX4) with examples for UNO
+- Events handling with examples for UNO
+- Watchdog timer
+- Timed (periodic or not) jobs scheduling with examples for UNO
 
 Roadmap
 -------
 
-The project has just started, hence it does not cover much yet.
+The roadmap of supported features is the following:
 
-The roadmap is the following:
-
-1. Fast IO support (ATmega328 first)
+1. Fast IO support (done)
 2. Multiple boards variants support (UNO, MEGA, ATtinyX4, ATtinyX5)
-3. Watchdog and events support
+3. Watchdog and events support (done)
+4. Power management
 5. Hardware UART support
 6. Trace support
 7. Real Time Timer support
