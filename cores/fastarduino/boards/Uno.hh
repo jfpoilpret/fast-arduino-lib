@@ -135,6 +135,7 @@ namespace Board
 	 */
 	enum
 	{
+		USART_MAX = 1,
 		ANALOG_PIN_MAX = 8,
 		DIGITAL_PIN_MAX = 20,
 		EXT_PIN_MAX = 2,
@@ -154,6 +155,38 @@ namespace Board
 		DEFAULT_MODE = 0xFF
 	};
 	
+	enum class USART: uint8_t
+	{
+		USART_0 = 0
+	};
+	
+	//TODO try to change into volatile uint8_t&
+	constexpr volatile uint8_t* UCSRA(__attribute__((unused)) USART usart)
+	{
+		return &UCSR0A;
+	}
+
+	constexpr volatile uint8_t* UCSRB(__attribute__((unused)) USART usart)
+	{
+		return &UCSR0B;
+	}
+
+	constexpr volatile uint8_t* UCSRC(__attribute__((unused)) USART usart)
+	{
+		return &UCSR0C;
+	}
+
+	constexpr volatile uint8_t* UDR(__attribute__((unused)) USART usart)
+	{
+		return &UDR0;
+	}
+
+	constexpr volatile uint16_t * UBRR(__attribute__((unused)) USART usart)
+	{
+		return &UBRR0;
+	}
+
+	//TODO maybe useless?
 	enum class Circuits
 	{
 		TIMER_0,
