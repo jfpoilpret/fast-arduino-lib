@@ -9,14 +9,18 @@ class Queue
 {
 public:
 	template<uint8_t SIZE>
-	Queue(T buffer[SIZE]): _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
+	static Queue<T> create(T buffer[SIZE])
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+		return Queue<T>(buffer, SIZE);
 	}
-	
-	//FIXME don't need this method, make ctor itself a template!
+
+	//FIXME why can't this ctor be invoked without errors? Try to make it work the way I want...
 //	template<uint8_t SIZE>
-//	static Queue<T> create(T buffer[SIZE]);
+//	Queue(T buffer[SIZE]): _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
+//	{
+//		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+//	}
 	
 	bool push(const T& item);
 	bool pull(T& item);
@@ -32,21 +36,15 @@ public:
 		return (_head - _tail - 1) & _mask;
 	}
 	
-private:
+protected:
 	Queue(T* buffer, uint8_t size): _buffer{buffer}, _mask{(uint8_t)(size - 1)}, _head{0}, _tail{0} {}
+
+private:
 	T* const _buffer;
 	const uint8_t _mask;
 	volatile uint8_t _head;
 	volatile uint8_t _tail;
 };
-
-//template<typename T>
-//template<uint8_t SIZE>
-//Queue<T> Queue<T>::create(T buffer[SIZE])
-//{
-//	static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
-//	return Queue<T>(buffer, SIZE);
-//}
 
 template<typename T>
 bool Queue<T>::push(const T& item)

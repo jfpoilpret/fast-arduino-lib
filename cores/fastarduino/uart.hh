@@ -13,7 +13,11 @@ class OutputBuffer:public Queue<char>
 {
 public:
 	template<uint8_t SIZE>
-	OutputBuffer(char buffer[SIZE]): Queue<char>(buffer) {}
+	static OutputBuffer create(char buffer[SIZE])
+	{
+		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+		return OutputBuffer(buffer, SIZE);
+	}
 
 	void flush()
 	{
@@ -34,6 +38,7 @@ public:
 //	void puts_P();
 
 protected:
+	OutputBuffer(char* buffer, uint8_t size): Queue<char>(buffer, size) {}
 	// Listeners of events on the buffer
 	virtual void on_overflow(__attribute__((unused)) char c) {}
 	virtual void on_flush() {}
@@ -44,13 +49,18 @@ class InputBuffer: public Queue<char>
 {
 public:
 	template<uint8_t SIZE>
-	InputBuffer(char buffer[SIZE]): Queue<char>(buffer) {}
+	static InputBuffer create(char buffer[SIZE])
+	{
+		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+		return InputBuffer(buffer, SIZE);
+	}
 
 	int available() const;
 	int get();
 	int gets(char* str, size_t max);
 	
 protected:
+	InputBuffer(char* buffer, uint8_t size): Queue<char>(buffer, size) {}
 	// Listeners of events on the buffer
 	virtual void on_empty() {}
 	virtual void on_get(__attribute__((unused)) char c) {}
@@ -71,12 +81,13 @@ public:
 		ONE = 0x00,
 		TWO = _BV(USBS0)
 	};
-	
+
 	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-	AbstractUART(Board::USART usart, char input[SIZE_RX], char output[SIZE_TX])
-		:InputBuffer{input}, OutputBuffer{output}, _usart(usart), _transmitting(false)
+	static AbstractUART create(Board::USART usart, char input[SIZE_RX], char output[SIZE_TX])
 	{
-		_uart[(uint8_t) usart] = this;
+		static_assert(SIZE_RX && !(SIZE_RX & (SIZE_RX - 1)), "SIZE_RX must be a power of 2");
+		static_assert(SIZE_TX && !(SIZE_TX & (SIZE_TX - 1)), "SIZE_TX must be a power of 2");
+		return AbstractUART{usart, input, SIZE_RX, output, SIZE_TX};
 	}
 	
 	void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE);
@@ -93,6 +104,13 @@ public:
 	}
 	
 protected:
+	AbstractUART(Board::USART usart, char* input, uint8_t size_rx, char* output, uint8_t size_tx)
+	:	InputBuffer{input, size_rx}, OutputBuffer{output, size_tx}, 
+		_usart(usart), _transmitting(false)
+	{
+		_uart[(uint8_t) usart] = this;
+	}
+	
 	// Listeners of events on the buffer
 	virtual void on_flush();
 	
