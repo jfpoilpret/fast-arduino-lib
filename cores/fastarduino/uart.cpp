@@ -18,18 +18,37 @@ void AbstractUART::end()
 	*Board::UCSRB(_usart) = 0;
 }
 
+void AbstractUART::on_flush()
+{
+	ClearInterrupt clint;
+	// Check if TX is not currently active, if so, activate it
+	if (!_transmitting)
+	{
+		// Yes, trigger TX
+		char value;
+		if (OutputBuffer::pull(value))
+		{
+			*Board::UDR(_usart) = value;
+			_transmitting = true;
+		}
+	}
+}
+
 void UART_DataRegisterEmpty(Board::USART usart)
 {
-	Queue<char>& buffer = AbstractUART::_uart[(uint8_t) usart]->_output.buffer();
+	AbstractUART* uart = AbstractUART::_uart[(uint8_t) usart];
+	Queue<char>& buffer = uart->out();
 	char value;
 	if (buffer.pull(value))
 		*Board::UDR(usart) = value;
+	else
+		uart->_transmitting = false;
 }
 
 void UART_ReceiveComplete(Board::USART usart)
 {
 	char value = *Board::UDR(usart);
-	AbstractUART::_uart[(uint8_t) usart]->_input.buffer().push(value);
+	AbstractUART::_uart[(uint8_t) usart]->in().push(value);
 }
 
 ISR(USART_RX_vect)

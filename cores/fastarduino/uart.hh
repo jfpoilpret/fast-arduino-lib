@@ -6,48 +6,58 @@
 #include "Queue.hh"
 #include "Board.hh"
 
-//FIXME issue here is to START transmission to UART somehow...
-// But don't know how to do it (without template or virtual method)
-// Possible solution, have AbstractUART implement both methods for HW and SW UART?
-class OutputBuffer
+//TODO check if inheritance can be made private (or protected) rather than public without defining a zillion friends...
+//TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
+//TODO Improve on_flush somehow to make it automatic, ie as soon as a char is added to the queue
+class OutputBuffer:public Queue<char>
 {
 public:
-	OutputBuffer(Queue<char>& buffer):_buffer(buffer) {}
-	void put(char c);
-	void puts(const char* str);
-//	void puts_P();
-	bool overflow() const;
+	template<uint8_t SIZE>
+	OutputBuffer(char buffer[SIZE]): Queue<char>(buffer) {}
 
-	Queue<char>& buffer()
+	void flush()
 	{
-		return _buffer;
+		on_flush();
 	}
-	
-private:
-	//TODO better subclass Queue<char> no?
-	Queue<char>& _buffer;
+	void put(char c)
+	{
+		if (!push(c)) on_overflow(c);
+	}
+	void put(const char* content, size_t size)
+	{
+		while (size--) put(*content++);
+	}
+	void puts(const char* str)
+	{
+		while (*str) put(*str++);
+	}
+//	void puts_P();
+
+protected:
+	// Listeners of events on the buffer
+	virtual void on_overflow(__attribute__((unused)) char c) {}
+	virtual void on_flush() {}
 };
 
-class InputBuffer
+//TODO Handle generic errors coming from UART RX (eg Parity...)
+class InputBuffer: public Queue<char>
 {
 public:
-	InputBuffer(Queue<char>& buffer):_buffer(buffer) {}
+	template<uint8_t SIZE>
+	InputBuffer(char buffer[SIZE]): Queue<char>(buffer) {}
+
 	int available() const;
 	int get();
 	int gets(char* str, size_t max);
 	
-	Queue<char>& buffer()
-	{
-		return _buffer;
-	}
-	
-private:
-	Queue<char>& _buffer;
+protected:
+	// Listeners of events on the buffer
+	virtual void on_empty() {}
+	virtual void on_get(__attribute__((unused)) char c) {}
 };
 
-//TODO directly embed InputBuffer/OutputBuffer and provide in() and out() methods
 //TODO improve performance and size (data and maybe code) by templatizing AFTER debug is done
-class AbstractUART
+class AbstractUART: private InputBuffer, private OutputBuffer
 {
 public:
 	enum class Parity
@@ -61,18 +71,34 @@ public:
 		ONE = 0x00,
 		TWO = _BV(USBS0)
 	};
-	AbstractUART(Board::USART usart, InputBuffer& input, OutputBuffer& output)
-		:_usart(usart), _input(input), _output(output)
+	
+	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+	AbstractUART(Board::USART usart, char input[SIZE_RX], char output[SIZE_TX])
+		:InputBuffer{input}, OutputBuffer{output}, _usart(usart), _transmitting(false)
 	{
 		_uart[(uint8_t) usart] = this;
 	}
+	
 	void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE);
 	void end();
 	
+	InputBuffer& in()
+	{
+		return (InputBuffer&) *this;
+	}
+	
+	OutputBuffer& out()
+	{
+		return (OutputBuffer&) *this;
+	}
+	
+protected:
+	// Listeners of events on the buffer
+	virtual void on_flush();
+	
 private:
 	const Board::USART _usart;
-	InputBuffer& _input;
-	OutputBuffer& _output;
+	bool _transmitting;
 	
 	//TODO replace with global InputBuffer/OutputBuffer ?
 	static AbstractUART* _uart[Board::USART_MAX];

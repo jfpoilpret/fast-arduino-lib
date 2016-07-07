@@ -9,7 +9,14 @@ class Queue
 {
 public:
 	template<uint8_t SIZE>
-	static Queue<T> create(T buffer[SIZE]);
+	Queue(T buffer[SIZE]): _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
+	{
+		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+	}
+	
+	//FIXME don't need this method, make ctor itself a template!
+//	template<uint8_t SIZE>
+//	static Queue<T> create(T buffer[SIZE]);
 	
 	bool push(const T& item);
 	bool pull(T& item);
@@ -33,13 +40,13 @@ private:
 	volatile uint8_t _tail;
 };
 
-template<typename T>
-template<uint8_t SIZE>
-Queue<T> Queue<T>::create(T buffer[SIZE])
-{
-	static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
-	return Queue<T>(buffer, SIZE);
-}
+//template<typename T>
+//template<uint8_t SIZE>
+//Queue<T> Queue<T>::create(T buffer[SIZE])
+//{
+//	static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+//	return Queue<T>(buffer, SIZE);
+//}
 
 template<typename T>
 bool Queue<T>::push(const T& item)
