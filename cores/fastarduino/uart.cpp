@@ -7,7 +7,7 @@ AbstractUART* AbstractUART::_uart[Board::USART_MAX];
 void AbstractUART::begin(uint32_t rate, Parity parity, StopBits stop_bits)
 {
 	ClearInterrupt clint;
-	*Board::UBRR(_usart) = F_CPU / 16 / rate - 1;
+	*Board::UBRR(_usart) = (F_CPU / 8 / rate - 1) / 2;
 	*Board::UCSRB(_usart) = _BV(RXCIE0) | _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
 	*Board::UCSRC(_usart) = ((uint8_t) parity) | ((uint8_t) stop_bits) | _BV(UCSZ00) | _BV(UCSZ01);
 }

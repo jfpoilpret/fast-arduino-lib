@@ -3,7 +3,7 @@
  */
 
 #include <avr/interrupt.h>
-#include <util/delay.h>
+#include <util/delay_basic.h>
 
 #include <fastarduino/uart.hh>
 
@@ -12,6 +12,15 @@ static const uint8_t INPUT_BUFFER_SIZE = 64;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char input_buffer[INPUT_BUFFER_SIZE];
 static char output_buffer[OUTPUT_BUFFER_SIZE];
+
+static inline void delay_millis(uint16_t millis)
+{
+	const uint16_t LOOP_COUNT = F_CPU / 4 / 1000;
+	for (uint16_t i = 0; i < millis; ++i)
+	{
+		_delay_loop_2(LOOP_COUNT);
+	}
+}
 
 //FIXME WHY doesn't compiler find out template parameters alone????
 //static AbstractUART uart = AbstractUART::create<INPUT_BUFFER_SIZE, OUTPUT_BUFFER_SIZE>(
@@ -25,7 +34,8 @@ int main()
 	// Start UART
 	AbstractUART uart = AbstractUART::create<INPUT_BUFFER_SIZE, OUTPUT_BUFFER_SIZE>(
 		Board::USART::USART_0, input_buffer, output_buffer);
-	uart.begin(230400);
+	uart.begin(115200);
+//	uart.begin(230400);
 	InputBuffer& in = uart.in();
 	OutputBuffer& out = uart.out();
 
@@ -34,6 +44,8 @@ int main()
 	{
 		out.puts("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
 		out.flush();
-		_delay_ms(1000);
+		//FIXME Why does it seem to take 20-40 times longer than expected (namely more than 20s instead of 1s)
+		// Measured time 1'25" !!!
+		delay_millis(1000);
 	}
 }
