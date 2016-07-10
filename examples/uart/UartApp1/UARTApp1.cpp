@@ -42,10 +42,16 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		out.puts("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
+		out.puts("Enter a letter: ");
+		out.flush();
+		int input;
+		while ((input = in.get()) == InputBuffer::EOF)
+			;
+		out.put(input);
+		out.put('\n');
 		out.flush();
 		//FIXME Why does it seem to take 20-40 times longer than expected (namely more than 20s instead of 1s)
 		// Measured time 1'25" !!!
-		delay_millis(1000);
+//		delay_millis(1000);
 	}
 }

@@ -8,6 +8,7 @@
 
 //TODO check if inheritance can be made private (or protected) rather than public without defining a zillion friends...
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
+
 //TODO Improve on_flush somehow to make it automatic, ie as soon as a char is added to the queue
 class OutputBuffer:public Queue<char>
 {
@@ -48,6 +49,8 @@ protected:
 class InputBuffer: public Queue<char>
 {
 public:
+	static const int EOF = -1;
+	
 	template<uint8_t SIZE>
 	static InputBuffer create(char buffer[SIZE])
 	{
@@ -55,8 +58,17 @@ public:
 		return InputBuffer(buffer, SIZE);
 	}
 
-	int available() const;
-	int get();
+	int available() const
+	{
+		return items();
+	}
+	int get()
+	{
+		char value;
+		if (pull(value)) return value;
+		return EOF;
+	}
+	//TODO
 	int gets(char* str, size_t max);
 	
 protected:
