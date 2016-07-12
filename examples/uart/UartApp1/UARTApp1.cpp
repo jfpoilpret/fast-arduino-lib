@@ -32,7 +32,7 @@ int main()
 	uart.begin(115200);
 //	uart.begin(230400);
 	InputBuffer& in = uart.in();
-	OutputBuffer& out = uart.out();
+	FormattedOutput<OutputBuffer> out = uart.out();
 
 	// Event Loop
 	while (true)

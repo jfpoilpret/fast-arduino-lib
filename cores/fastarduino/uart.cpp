@@ -43,56 +43,10 @@ void AbstractUART::on_flush()
 	}
 }
 
-//OutputBuffer& OutputBuffer::operator << (bool b)
-//{
-//	put(b ? '1' : '0');
-//	return *this;
-//}
-//OutputBuffer& OutputBuffer::operator << (char c)
-//{
-//	put(c);
-//	return *this;
-//}
-OutputBuffer& OutputBuffer::operator << (const char* s)
-{
-	puts(s);
-	return *this;
-}
-OutputBuffer& OutputBuffer::operator << (int d)
-{
-	char s[8 * sizeof(int) + 1];
-	puts(itoa(d, s, 10));
-	return *this;
-}
-OutputBuffer& OutputBuffer::operator << (unsigned int d)
-{
-	char s[8 * sizeof(int) + 1];
-	puts(utoa(d, s, 10));
-	return *this;
-}
-OutputBuffer& OutputBuffer::operator << (long d)
-{
-	char s[8 * sizeof(long) + 1];
-	puts(ltoa(d, s, 10));
-	return *this;
-}
-OutputBuffer& OutputBuffer::operator << (unsigned long d)
-{
-	char s[8 * sizeof(long) + 1];
-	puts(ultoa(d, s, 10));
-	return *this;
-}
-OutputBuffer& OutputBuffer::operator << (double f)
-{
-	char s[64];
-	puts(dtostrf(f, 6, 4, s));
-	return *this;
-}
-
 void UART_DataRegisterEmpty(Board::USART usart)
 {
 	AbstractUART* uart = AbstractUART::_uart[(uint8_t) usart];
-	Queue<char>& buffer = uart->out();
+	Queue<char>& buffer = uart->outqueue();
 	char value;
 	if (buffer.pull(value))
 		*Board::UDR(usart) = value;
@@ -103,7 +57,7 @@ void UART_DataRegisterEmpty(Board::USART usart)
 void UART_ReceiveComplete(Board::USART usart)
 {
 	char value = *Board::UDR(usart);
-	AbstractUART::_uart[(uint8_t) usart]->in().push(value);
+	AbstractUART::_uart[(uint8_t) usart]->inqueue().push(value);
 }
 
 ISR(USART_RX_vect)

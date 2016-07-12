@@ -19,6 +19,7 @@
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.hh</itemPath>
       <itemPath>cores/fastarduino/scheduler.hh</itemPath>
+      <itemPath>cores/fastarduino/streams.hh</itemPath>
       <itemPath>cores/fastarduino/time.cpp</itemPath>
       <itemPath>cores/fastarduino/time.hh</itemPath>
       <itemPath>cores/fastarduino/uart.cpp</itemPath>
@@ -122,6 +123,8 @@
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.hh" ex="false" tool="3" flavor2="0">
@@ -211,6 +214,8 @@
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -302,6 +307,8 @@
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.hh" ex="false" tool="3" flavor2="0">
@@ -392,6 +399,8 @@
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
