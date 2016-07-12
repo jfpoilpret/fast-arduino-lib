@@ -6,13 +6,24 @@
 #include "Queue.hh"
 #include "Board.hh"
 
+//TODO Externalize buffers to their own header file
+
+//TODO Introduce FormattedStream (Input/Output) to encapsulate a real Stream (templated)
+//TODO Add formatting operators >> and <<
+//TODO Introduce base IOS with formatting flags and errors?
+
 //TODO check if inheritance can be made private (or protected) rather than public without defining a zillion friends...
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
 
-//TODO Improve on_flush somehow to make it automatic, ie as soon as a char is added to the queue
 class OutputBuffer:public Queue<char>
 {
 public:
+	template<uint8_t SIZE>
+	OutputBuffer(char (&buffer)[SIZE]): Queue<char>(buffer, SIZE)
+	{
+		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+	}
+	
 	template<uint8_t SIZE>
 	static OutputBuffer create(char buffer[SIZE])
 	{
@@ -24,19 +35,32 @@ public:
 	{
 		on_flush();
 	}
-	void put(char c)
+	void put(char c, bool flush = true)
 	{
 		if (!push(c)) on_overflow(c);
+		if (flush) on_flush();
 	}
 	void put(const char* content, size_t size)
 	{
-		while (size--) put(*content++);
+		while (size--) put(*content++, false);
+		on_flush();
 	}
 	void puts(const char* str)
 	{
-		while (*str) put(*str++);
+		while (*str) put(*str++, false);
+		on_flush();
 	}
 //	void puts_P();
+	
+//	OutputBuffer& operator << (bool b);
+//	OutputBuffer& operator << (char c);
+	OutputBuffer& operator << (const char* s);
+	OutputBuffer& operator << (int d);
+	OutputBuffer& operator << (unsigned int d);
+	OutputBuffer& operator << (long d);
+	OutputBuffer& operator << (unsigned long d);
+	OutputBuffer& operator << (double f);
+	//TODO others? eg void*, Manipulator...
 
 protected:
 	OutputBuffer(char* buffer, uint8_t size): Queue<char>(buffer, size) {}
@@ -51,6 +75,12 @@ class InputBuffer: public Queue<char>
 public:
 	static const int EOF = -1;
 	
+	template<uint8_t SIZE>
+	InputBuffer(char (&buffer)[SIZE]): Queue<char>(buffer, SIZE)
+	{
+		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+	}
+
 	template<uint8_t SIZE>
 	static InputBuffer create(char buffer[SIZE])
 	{
@@ -70,6 +100,16 @@ public:
 	}
 	//TODO
 	int gets(char* str, size_t max);
+	
+//	InputBuffer& operator >> (bool& b);
+//	InputBuffer& operator >> (char& c);
+//	InputBuffer& operator >> (char* s);
+//	InputBuffer& operator >> (int& d);
+//	InputBuffer& operator >> (unsigned int& d);
+//	InputBuffer& operator >> (long& d);
+//	InputBuffer& operator >> (unsigned long& d);
+//	InputBuffer& operator >> (float& f);
+//	InputBuffer& operator >> (double& f);
 	
 protected:
 	InputBuffer(char* buffer, uint8_t size): Queue<char>(buffer, size) {}
@@ -94,6 +134,16 @@ public:
 		TWO = _BV(USBS0)
 	};
 
+	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+	AbstractUART(Board::USART usart, char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+	:	InputBuffer{input, SIZE_RX}, OutputBuffer{output, SIZE_TX},
+		_usart(usart), _transmitting(false)
+	{
+		static_assert(SIZE_RX && !(SIZE_RX & (SIZE_RX - 1)), "SIZE_RX must be a power of 2");
+		static_assert(SIZE_TX && !(SIZE_TX & (SIZE_TX - 1)), "SIZE_TX must be a power of 2");
+		_uart[(uint8_t) usart] = this;
+	}
+	
 	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 	static AbstractUART create(Board::USART usart, char input[SIZE_RX], char output[SIZE_TX])
 	{

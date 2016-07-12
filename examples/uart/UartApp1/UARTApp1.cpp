@@ -32,8 +32,9 @@ int main()
 	sei();
 	
 	// Start UART
-	AbstractUART uart = AbstractUART::create<INPUT_BUFFER_SIZE, OUTPUT_BUFFER_SIZE>(
-		Board::USART::USART_0, input_buffer, output_buffer);
+	AbstractUART uart{Board::USART::USART_0, input_buffer, output_buffer};
+//	AbstractUART uart = AbstractUART::create<INPUT_BUFFER_SIZE, OUTPUT_BUFFER_SIZE>(
+//		Board::USART::USART_0, input_buffer, output_buffer);
 	uart.begin(115200);
 //	uart.begin(230400);
 	InputBuffer& in = uart.in();

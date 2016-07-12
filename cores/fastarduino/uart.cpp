@@ -1,4 +1,5 @@
 #include <util/delay.h>
+#include <stdlib.h>
 
 #include "uart.hh"
 
@@ -40,6 +41,52 @@ void AbstractUART::on_flush()
 			_transmitting = true;
 		}
 	}
+}
+
+//OutputBuffer& OutputBuffer::operator << (bool b)
+//{
+//	put(b ? '1' : '0');
+//	return *this;
+//}
+//OutputBuffer& OutputBuffer::operator << (char c)
+//{
+//	put(c);
+//	return *this;
+//}
+OutputBuffer& OutputBuffer::operator << (const char* s)
+{
+	puts(s);
+	return *this;
+}
+OutputBuffer& OutputBuffer::operator << (int d)
+{
+	char s[8 * sizeof(int) + 1];
+	puts(itoa(d, s, 10));
+	return *this;
+}
+OutputBuffer& OutputBuffer::operator << (unsigned int d)
+{
+	char s[8 * sizeof(int) + 1];
+	puts(utoa(d, s, 10));
+	return *this;
+}
+OutputBuffer& OutputBuffer::operator << (long d)
+{
+	char s[8 * sizeof(long) + 1];
+	puts(ltoa(d, s, 10));
+	return *this;
+}
+OutputBuffer& OutputBuffer::operator << (unsigned long d)
+{
+	char s[8 * sizeof(long) + 1];
+	puts(ultoa(d, s, 10));
+	return *this;
+}
+OutputBuffer& OutputBuffer::operator << (double f)
+{
+	char s[64];
+	puts(dtostrf(f, 6, 4, s));
+	return *this;
 }
 
 void UART_DataRegisterEmpty(Board::USART usart)
