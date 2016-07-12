@@ -22,10 +22,6 @@ static inline void delay_millis(uint16_t millis)
 	}
 }
 
-//FIXME WHY doesn't compiler find out template parameters alone????
-//static AbstractUART uart = AbstractUART::create<INPUT_BUFFER_SIZE, OUTPUT_BUFFER_SIZE>(
-//	Board::USART::USART_0, input_buffer, output_buffer);
-
 int main()
 {
 	// Enable interrupts at startup time
@@ -33,8 +29,6 @@ int main()
 	
 	// Start UART
 	AbstractUART uart{Board::USART::USART_0, input_buffer, output_buffer};
-//	AbstractUART uart = AbstractUART::create<INPUT_BUFFER_SIZE, OUTPUT_BUFFER_SIZE>(
-//		Board::USART::USART_0, input_buffer, output_buffer);
 	uart.begin(115200);
 //	uart.begin(230400);
 	InputBuffer& in = uart.in();
@@ -50,7 +44,8 @@ int main()
 			;
 		out.put(input);
 		out.put('\n');
-		out.flush();
+		out << input << " " << 123 << " " << 123L << " " << -12 << " " << -12.123 << "\n";
+//		out.flush();
 		//FIXME Why does it seem to take 20-40 times longer than expected (namely more than 20s instead of 1s)
 		// Measured time 1'25" !!!
 //		delay_millis(1000);
