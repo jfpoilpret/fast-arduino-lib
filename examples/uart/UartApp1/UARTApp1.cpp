@@ -31,8 +31,8 @@ int main()
 	AbstractUART uart{Board::USART::USART_0, input_buffer, output_buffer};
 	uart.begin(115200);
 //	uart.begin(230400);
-	InputBuffer& in = uart.in();
-	FormattedOutput<OutputBuffer> out = uart.out();
+	InputBuffer& in = uart.fin();
+	FormattedOutput<OutputBuffer> out = uart.fout();
 
 	// Event Loop
 	while (true)
@@ -44,7 +44,7 @@ int main()
 			;
 		out.put(input);
 		out.put('\n');
-		out << input << " " << 123 << " " << 123L << " " << -12 << " " << -12.123 << "\n";
+		out << hex << input << " " << dec << 123 << " " << oct << 123 << " " << hex << 123 << " " << bin << 123 << endl;
 //		out.flush();
 		//FIXME Why does it seem to take 20-40 times longer than expected (namely more than 20s instead of 1s)
 		// Measured time 1'25" !!!

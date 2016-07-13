@@ -49,7 +49,18 @@ public:
 		return (InputBuffer&) *this;
 	}
 	
-	FormattedOutput<OutputBuffer> out()
+	//TODO Add FormattedInput
+	InputBuffer& fin()
+	{
+		return (InputBuffer&) *this;
+	}
+	
+	OutputBuffer& out()
+	{
+		return (OutputBuffer&) *this;
+	}
+	
+	FormattedOutput<OutputBuffer> fout()
 	{
 		return FormattedOutput<OutputBuffer>(*this);
 	}
@@ -64,17 +75,6 @@ protected:
 	
 	// Listeners of events on the buffer
 	virtual void on_flush();
-	
-private:
-	InputBuffer& inqueue()
-	{
-		return (InputBuffer&) *this;
-	}
-	
-	OutputBuffer& outqueue()
-	{
-		return (OutputBuffer&) *this;
-	}
 	
 private:
 	const Board::USART _usart;

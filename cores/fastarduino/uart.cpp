@@ -46,7 +46,7 @@ void AbstractUART::on_flush()
 void UART_DataRegisterEmpty(Board::USART usart)
 {
 	AbstractUART* uart = AbstractUART::_uart[(uint8_t) usart];
-	Queue<char>& buffer = uart->outqueue();
+	Queue<char>& buffer = uart->out();
 	char value;
 	if (buffer.pull(value))
 		*Board::UDR(usart) = value;
@@ -57,7 +57,7 @@ void UART_DataRegisterEmpty(Board::USART usart)
 void UART_ReceiveComplete(Board::USART usart)
 {
 	char value = *Board::UDR(usart);
-	AbstractUART::_uart[(uint8_t) usart]->inqueue().push(value);
+	AbstractUART::_uart[(uint8_t) usart]->in().push(value);
 }
 
 ISR(USART_RX_vect)

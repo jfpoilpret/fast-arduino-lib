@@ -134,9 +134,67 @@ public:
 		return *this;
 	}
 	
+	typedef FormattedOutput<STREAM>& (*Manipulator)(FormattedOutput<STREAM>&);
+	FormattedOutput<STREAM>& operator << (Manipulator f)
+	{
+		return f(*this);
+	}
+	
 private:
-	STREAM& _stream;	
+	STREAM& _stream;
+	
+	friend FormattedOutput<STREAM>& bin(FormattedOutput<STREAM>&);
+	friend FormattedOutput<STREAM>& oct(FormattedOutput<STREAM>&);
+	friend FormattedOutput<STREAM>& dec(FormattedOutput<STREAM>&);
+	friend FormattedOutput<STREAM>& hex(FormattedOutput<STREAM>&);
+
+	//TODO other parameters here
+	
+	friend FormattedOutput<STREAM>& flush(FormattedOutput<STREAM>&);
+	friend FormattedOutput<STREAM>& endl(FormattedOutput<STREAM>&);
 };
+
+template<typename STREAM>
+inline FormattedOutput<STREAM>& bin(FormattedOutput<STREAM>& stream)
+{
+	stream.base(FormatBase::Base::bin);
+	return stream;
+}
+
+template<typename STREAM>
+inline FormattedOutput<STREAM>& oct(FormattedOutput<STREAM>& stream)
+{
+	stream.base(FormatBase::Base::oct);
+	return stream;
+}
+
+template<typename STREAM>
+inline FormattedOutput<STREAM>& dec(FormattedOutput<STREAM>& stream)
+{
+	stream.base(FormatBase::Base::dec);
+	return stream;
+}
+
+template<typename STREAM>
+inline FormattedOutput<STREAM>& hex(FormattedOutput<STREAM>& stream)
+{
+	stream.base(FormatBase::Base::hex);
+	return stream;
+}
+
+template<typename STREAM>
+inline FormattedOutput<STREAM>& flush(FormattedOutput<STREAM>& stream)
+{
+	stream.flush();
+	return stream;
+}
+
+template<typename STREAM>
+inline FormattedOutput<STREAM>& endl(FormattedOutput<STREAM>& stream)
+{
+	stream.put('\n');
+	return stream;
+}
 
 class OutputBuffer:public Queue<char>
 {
