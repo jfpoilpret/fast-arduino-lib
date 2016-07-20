@@ -18,7 +18,9 @@
       <itemPath>cores/fastarduino/main.cpp</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.hh</itemPath>
+      <itemPath>cores/fastarduino/ring_array.hh</itemPath>
       <itemPath>cores/fastarduino/scheduler.hh</itemPath>
+      <itemPath>cores/fastarduino/streams.cpp</itemPath>
       <itemPath>cores/fastarduino/streams.hh</itemPath>
       <itemPath>cores/fastarduino/time.cpp</itemPath>
       <itemPath>cores/fastarduino/time.hh</itemPath>
@@ -59,7 +61,7 @@
   <confs>
     <conf name="UNO-Release" type="3">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR8-GNU-Toolchain-3.5.3|Cygwin_4.x</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>true</rebuildPropChanged>
       </toolsSet>
@@ -121,7 +123,11 @@
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -213,7 +219,11 @@
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -305,7 +315,11 @@
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -398,7 +412,11 @@
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
       </item>

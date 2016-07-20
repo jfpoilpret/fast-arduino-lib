@@ -15,7 +15,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 static inline void delay_millis(uint16_t millis)
 {
-	const uint16_t LOOP_COUNT = F_CPU / 4 / 1000;
+	const uint16_t LOOP_COUNT = F_CPU / 4L / 1000L;
 	for (uint16_t i = 0; i < millis; ++i)
 	{
 		_delay_loop_2(LOOP_COUNT);
@@ -31,7 +31,8 @@ int main()
 	AbstractUART uart{Board::USART::USART_0, input_buffer, output_buffer};
 	uart.begin(115200);
 //	uart.begin(230400);
-	InputBuffer& in = uart.fin();
+	InputBuffer& in = uart.in();
+//	FormattedInput<InputBuffer> in = uart.fin();
 	FormattedOutput<OutputBuffer> out = uart.fout();
 
 	// Event Loop
@@ -39,9 +40,12 @@ int main()
 	{
 		out.puts("Enter a letter: ");
 		out.flush();
-		int input;
-		while ((input = in.get()) == InputBuffer::EOF)
-			;
+		char toto[32];
+//		in.gets(toto, sizeof toto);
+		int input = 125;
+//		int input = in.get();
+//		while ((input = in.get()) == InputBuffer::EOF)
+//			;
 		out.put(input);
 		out.put('\n');
 		out << hex << input << " " << dec << 123 << " " << oct << 123 << " " << hex << 123 << " " << bin << 123 << endl;

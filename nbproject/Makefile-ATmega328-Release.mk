@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
 	${OBJECTDIR}/cores/fastarduino/main.o \
 	${OBJECTDIR}/cores/fastarduino/power.o \
+	${OBJECTDIR}/cores/fastarduino/streams.o \
 	${OBJECTDIR}/cores/fastarduino/time.o \
 	${OBJECTDIR}/cores/fastarduino/uart.o \
 	${OBJECTDIR}/cores/fastarduino/watchdog.o
@@ -89,6 +90,11 @@ ${OBJECTDIR}/cores/fastarduino/power.o: nbproject/Makefile-${CND_CONF}.mk cores/
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -Wall -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/power.o cores/fastarduino/power.cpp
+
+${OBJECTDIR}/cores/fastarduino/streams.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/streams.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/streams.o cores/fastarduino/streams.cpp
 
 ${OBJECTDIR}/cores/fastarduino/time.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/time.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino

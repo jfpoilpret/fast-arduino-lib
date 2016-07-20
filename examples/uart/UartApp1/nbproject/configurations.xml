@@ -25,7 +25,7 @@
   <confs>
     <conf name="UNO-Release" type="1">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR8-GNU-Toolchain-3.5.3|Cygwin_4.x</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>

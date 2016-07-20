@@ -9,18 +9,11 @@ class OutputBuffer:public Queue<char>
 {
 public:
 	template<uint8_t SIZE>
-	OutputBuffer(char (&buffer)[SIZE]): Queue<char>(buffer, SIZE)
+	OutputBuffer(char (&buffer)[SIZE]): Queue<char>(buffer)
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
 	
-	template<uint8_t SIZE>
-	static OutputBuffer create(char buffer[SIZE])
-	{
-		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
-		return OutputBuffer(buffer, SIZE);
-	}
-
 	void flush()
 	{
 		on_flush();
@@ -43,49 +36,41 @@ public:
 //	void puts_P();
 	
 protected:
-	OutputBuffer(char* buffer, uint8_t size): Queue<char>(buffer, size) {}
 	// Listeners of events on the buffer
 	virtual void on_overflow(__attribute__((unused)) char c) {}
 	virtual void on_flush() {}
 };
 
 //TODO Handle generic errors coming from UART RX (eg Parity...)
+//TODO allow blocking input somehow
 class InputBuffer: public Queue<char>
 {
 public:
 	static const int EOF = -1;
 	
 	template<uint8_t SIZE>
-	InputBuffer(char (&buffer)[SIZE]): Queue<char>(buffer, SIZE)
+	InputBuffer(char (&buffer)[SIZE], bool blocking = false): Queue<char>(buffer), _blocking(blocking)
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
-	}
-
-	template<uint8_t SIZE>
-	static InputBuffer create(char buffer[SIZE])
-	{
-		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
-		return InputBuffer(buffer, SIZE);
 	}
 
 	int available() const
 	{
 		return items();
 	}
-	int get()
-	{
-		char value;
-		if (pull(value)) return value;
-		return EOF;
-	}
-	//TODO
+	int get();
+	int get(char* content, size_t size);
 	int gets(char* str, size_t max);
 	
 protected:
-	InputBuffer(char* buffer, uint8_t size): Queue<char>(buffer, size) {}
 	// Listeners of events on the buffer
 	virtual void on_empty() {}
 	virtual void on_get(__attribute__((unused)) char c) {}
+	
+	void scan(char* str, size_t max);
+
+private:
+	const bool _blocking;
 };
 
 class FormatBase
@@ -128,8 +113,52 @@ public:
 	}
 	
 protected:
-	//TODO inverted conversions (from string to value)
+	// conversions from string to numeric value
+	bool convert(const char* token, double& v)
+	{
+		char* endptr;
+		double value = strtod(token, &endptr);
+		if (endptr == token)
+			return false;
+		v = value;
+		return true;
+	}
+	bool convert(const char* token, long& v)
+	{
+		char* endptr;
+		long value = strtol(token, &endptr, (uint8_t) _base);
+		if (endptr == token)
+			return false;
+		v = value;
+		return true;
+	}
+	bool convert(const char* token, unsigned long& v)
+	{
+		char* endptr;
+		unsigned long value = strtoul(token, &endptr, (uint8_t) _base);
+		if (endptr == token)
+			return false;
+		v = value;
+		return true;
+	}
+	bool convert(const char* token, int& v)
+	{
+		long value;
+		if (!convert(token, value))
+			return false;
+		v = (int) value;
+		return true;
+	}
+	bool convert(const char* token, unsigned int& v)
+	{
+		unsigned long value;
+		if (!convert(token, value))
+			return false;
+		v = (unsigned int) value;
+		return true;
+	}
 	
+	// conversions from numeric value to string
 	const char* convert(int v)
 	{
 		char s[8 * sizeof(int) + 1];
@@ -156,8 +185,9 @@ protected:
 		return dtostrf(v, _width, _precision, s);
 	}
 
-private:
 	static const uint8_t MAX_BUF_LEN = 64;
+	
+private:
 	int8_t _width;
 	uint8_t _precision;
 	Base _base;
@@ -191,6 +221,7 @@ public:
 	//TODO others? eg void*, PSTR, Manipulator...
 	FormattedOutput<STREAM>& operator << (const char* s)
 	{
+		//TODO Add justify with width if <0
 		_stream.puts(s);
 		return *this;
 	}
@@ -220,10 +251,11 @@ public:
 		return *this;
 	}
 	
-	typedef FormattedOutput<STREAM>& (*Manipulator)(FormattedOutput<STREAM>&);
+	typedef void (*Manipulator)(FormattedOutput<STREAM>&);
 	FormattedOutput<STREAM>& operator << (Manipulator f)
 	{
-		return f(*this);
+		f(*this);
+		return *this;
 	}
 	
 private:
@@ -234,8 +266,6 @@ private:
 	template<typename FSTREAM> friend FSTREAM& dec(FSTREAM&);
 	template<typename FSTREAM> friend FSTREAM& hex(FSTREAM&);
 
-	//TODO other parameters here
-	
 	template<typename FSTREAM> friend FSTREAM& flush(FSTREAM&);
 	template<typename FSTREAM> friend FSTREAM& endl(FSTREAM&);
 };
@@ -254,98 +284,96 @@ public:
 	{
 		return _stream.get();
 	}
+	int get(char* content, size_t size)
+	{
+		return _stream.get(content, size);
+	}
 	int gets(char* str, size_t max)
 	{
 		return _stream.gets(str, max);
 	}
 	
-	//TODO others? eg void*, PSTR, Manipulator...
-	FormattedInput<STREAM>& operator >> (char* s)
-	{
-		//TODO look for next token (until space)
-		return *this;
-	}
 	FormattedInput<STREAM>& operator >> (int& v)
 	{
+		char buffer[sizeof(int) * 8 + 1];
+		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (unsigned int& v)
 	{
+		char buffer[sizeof(int) * 8 + 1];
+		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (long& v)
 	{
+		char buffer[sizeof(long) * 8 + 1];
+		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (unsigned long& v)
 	{
+		char buffer[sizeof(long) * 8 + 1];
+		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (double& v)
 	{
+		char buffer[MAX_BUF_LEN];
+		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	
-	typedef FormattedInput<STREAM>& (*Manipulator)(FormattedInput<STREAM>&);
+	typedef void (*Manipulator)(FormattedInput<STREAM>&);
 	FormattedInput<STREAM>& operator >> (Manipulator f)
 	{
-		return f(*this);
+		f(*this);
+		return *this;
 	}
 	
 private:
 	STREAM& _stream;
 	
-	friend FormattedInput<STREAM>& bin(FormattedInput<STREAM>&);
-	friend FormattedInput<STREAM>& oct(FormattedInput<STREAM>&);
-	friend FormattedInput<STREAM>& dec(FormattedInput<STREAM>&);
-	friend FormattedInput<STREAM>& hex(FormattedInput<STREAM>&);
-
-	//TODO other parameters here
-	
-	friend FormattedInput<STREAM>& flush(FormattedInput<STREAM>&);
-	friend FormattedInput<STREAM>& endl(FormattedInput<STREAM>&);
+	template<typename FSTREAM> friend FSTREAM& bin(FSTREAM&);
+	template<typename FSTREAM> friend FSTREAM& oct(FSTREAM&);
+	template<typename FSTREAM> friend FSTREAM& dec(FSTREAM&);
+	template<typename FSTREAM> friend FSTREAM& hex(FSTREAM&);
 };
 
 template<typename FSTREAM>
-inline FSTREAM& bin(FSTREAM& stream)
+inline void bin(FSTREAM& stream)
 {
 	stream.base(FormatBase::Base::bin);
-	return stream;
 }
 
 template<typename FSTREAM>
-inline FSTREAM& oct(FSTREAM& stream)
+inline void oct(FSTREAM& stream)
 {
 	stream.base(FormatBase::Base::oct);
-	return stream;
 }
 
 template<typename FSTREAM>
-inline FSTREAM& dec(FSTREAM& stream)
+inline void dec(FSTREAM& stream)
 {
 	stream.base(FormatBase::Base::dec);
-	return stream;
 }
 
 template<typename FSTREAM>
-inline FSTREAM& hex(FSTREAM& stream)
+inline void hex(FSTREAM& stream)
 {
 	stream.base(FormatBase::Base::hex);
-	return stream;
 }
 
 template<typename FSTREAM>
-inline FSTREAM& flush(FSTREAM& stream)
+inline void flush(FSTREAM& stream)
 {
 	stream.flush();
-	return stream;
 }
 
 template<typename FSTREAM>
-inline FSTREAM& endl(FSTREAM& stream)
+inline void endl(FSTREAM& stream)
 {
 	stream.put('\n');
-	return stream;
 }
 
 #endif	/* STREAMS_HH */

@@ -25,20 +25,10 @@ public:
 
 	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 	AbstractUART(Board::USART usart, char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-	:	InputBuffer{input, SIZE_RX}, OutputBuffer{output, SIZE_TX},
+	:	InputBuffer{input, true}, OutputBuffer{output},
 		_usart(usart), _transmitting(false)
 	{
-		static_assert(SIZE_RX && !(SIZE_RX & (SIZE_RX - 1)), "SIZE_RX must be a power of 2");
-		static_assert(SIZE_TX && !(SIZE_TX & (SIZE_TX - 1)), "SIZE_TX must be a power of 2");
 		_uart[(uint8_t) usart] = this;
-	}
-	
-	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-	static AbstractUART create(Board::USART usart, char input[SIZE_RX], char output[SIZE_TX])
-	{
-		static_assert(SIZE_RX && !(SIZE_RX & (SIZE_RX - 1)), "SIZE_RX must be a power of 2");
-		static_assert(SIZE_TX && !(SIZE_TX & (SIZE_TX - 1)), "SIZE_TX must be a power of 2");
-		return AbstractUART{usart, input, SIZE_RX, output, SIZE_TX};
 	}
 	
 	void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE);
@@ -49,10 +39,9 @@ public:
 		return (InputBuffer&) *this;
 	}
 	
-	//TODO Add FormattedInput
-	InputBuffer& fin()
+	FormattedInput<InputBuffer> fin()
 	{
-		return (InputBuffer&) *this;
+		return FormattedInput<InputBuffer>(*this);
 	}
 	
 	OutputBuffer& out()
@@ -66,13 +55,6 @@ public:
 	}
 	
 protected:
-	AbstractUART(Board::USART usart, char* input, uint8_t size_rx, char* output, uint8_t size_tx)
-	:	InputBuffer{input, size_rx}, OutputBuffer{output, size_tx}, 
-		_usart(usart), _transmitting(false)
-	{
-		_uart[(uint8_t) usart] = this;
-	}
-	
 	// Listeners of events on the buffer
 	virtual void on_flush();
 	

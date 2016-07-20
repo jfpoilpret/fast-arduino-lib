@@ -1,45 +1,50 @@
-#ifndef QUEUE_HH
-#define	QUEUE_HH
+#ifndef ARRAY_HH
+#define	ARRAY_HH
 
-#include "utilities.hh"
-#include "time.hh"
-
-//TODO imprvoe code size by creating a non-template base class with all common stuff
-//TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?
+/*
+// Circular array of fixed size
 template<typename T>
-class Queue
+class RingArray
 {
 public:
 	template<uint8_t SIZE>
-	Queue(T (&buffer)[SIZE]): _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
+	RingArray(T (&buffer)[SIZE]): _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
-	
-	bool push(const T& item);
-	bool pull(T& item);
-	
-	bool peek(T& item) const;
-	uint8_t peek(T* buffer, uint8_t size) const;
+
 	template<uint8_t SIZE>
-	uint8_t peek(T (&buffer)[SIZE]) const;
+	RingArray<T> clone(T (&buffer)[SIZE])
+	{
+		RingArray<T> copy{buffer};
+		//TODO copy buffer content
+		return copy;
+	}
+
+	bool insert(const T& item);
+	bool remove(T& item);
+	
+	T& operator [] (uint8_t index);
+	const T& operator [] (uint8_t index) const;
 	
 	uint8_t items() const __attribute__((always_inline))
 	{
-		ClearInterrupt clint;
 		return (_tail - _head) & _mask;
 	}
 	uint8_t free() const __attribute__((always_inline))
 	{
-		ClearInterrupt clint;
 		return (_head - _tail - 1) & _mask;
 	}
 	
+protected:
+	//TODO can we ultimately remove this factory API? (now that template ctor works...)
+	RingArray(T* buffer, uint8_t size): _buffer{buffer}, _mask{(uint8_t)(size - 1)}, _head{0}, _tail{0} {}
+
 private:
 	T* const _buffer;
 	const uint8_t _mask;
-	volatile uint8_t _head;
-	volatile uint8_t _tail;
+	uint8_t _head;
+	uint8_t _tail;
 };
 
 template<typename T>
@@ -57,14 +62,11 @@ uint8_t Queue<T>::peek(T* buffer, uint8_t size) const
 	ClearInterrupt clint;
 	uint8_t actual = (_tail - _head) & _mask;
 	if (size > actual) size = actual;
-	//TODO optimize copy (index calculation is simple if split in 2 parts)
-	for (uint8_t i = 0; i < size; ++i)
-		buffer[i] = _buffer[(_head + i) & _mask];
-	return size;
+	//TODO copy 
 }
 
-template<typename T>
 template<uint8_t SIZE>
+template<typename T>
 uint8_t Queue<T>::peek(T (&buffer)[SIZE]) const
 {
 	return peek(&buffer, SIZE);
@@ -105,5 +107,6 @@ T pull(Queue<T>& queue)
 		Time::yield();
 	return item;
 }
+*/
 
-#endif	/* QUEUE_HH */
+#endif	/* ARRAY_HH */
