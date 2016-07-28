@@ -21,8 +21,8 @@ FC=gfortran
 AS=avr-as
 
 # Macros
-CND_PLATFORM=Arduino-1.6.9-Windows
-CND_DLIB_EXT=dll
+CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_DLIB_EXT=so
 CND_CONF=MEGA-Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -52,15 +52,15 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../../dist/MEGA-Release/Arduino-1.6.9-Windows/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1.exe: ../../../dist/MEGA-Release/Arduino-1.6.9-Windows/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1: ../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
 
@@ -76,7 +76,7 @@ ${OBJECTDIR}/UARTApp1.o: UARTApp1.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1
 
 # Subprojects
 .clean-subprojects:

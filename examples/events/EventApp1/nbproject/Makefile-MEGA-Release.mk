@@ -52,13 +52,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../../dist/MEGA-Release/Arduino-1.6.9-Windows/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp1.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp1.exe: ../../../dist/MEGA-Release/Arduino-1.6.9-Windows/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp1.exe: ../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp1.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}

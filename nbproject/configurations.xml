@@ -61,7 +61,7 @@
   <confs>
     <conf name="UNO-Release" type="3">
       <toolsSet>
-        <compilerSet>AVR8-GNU-Toolchain-3.5.3|Cygwin_4.x</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>true</rebuildPropChanged>
       </toolsSet>
@@ -148,7 +148,7 @@
     </conf>
     <conf name="ATmega328-Release" type="3">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>true</rebuildPropChanged>
       </toolsSet>
@@ -160,6 +160,9 @@
         <ccTool>
           <developmentMode>0</developmentMode>
           <standard>8</standard>
+          <incDir>
+            <pElem>cores</pElem>
+          </incDir>
           <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
@@ -244,7 +247,7 @@
     </conf>
     <conf name="ATtiny84-Release" type="3">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>true</rebuildPropChanged>
       </toolsSet>
@@ -256,6 +259,9 @@
         <ccTool>
           <developmentMode>0</developmentMode>
           <standard>8</standard>
+          <incDir>
+            <pElem>cores</pElem>
+          </incDir>
           <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
@@ -340,19 +346,21 @@
     </conf>
     <conf name="MEGA-Release" type="3">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>true</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <cTool>
           <developmentMode>0</developmentMode>
-          <standard>10</standard>
           <warningLevel>2</warningLevel>
         </cTool>
         <ccTool>
           <developmentMode>0</developmentMode>
           <standard>8</standard>
+          <incDir>
+            <pElem>cores</pElem>
+          </incDir>
           <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>

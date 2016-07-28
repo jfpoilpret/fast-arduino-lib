@@ -51,7 +51,7 @@ CCADMIN=CCadmin
 
 # JFP BEGIN special variables stuff
 # set variables based on each configuration
-ARDUINO=166
+#ARDUINO=166
 
 ifeq ($(findstring UNO,${CONF}),UNO)
 	VARIANT=ARDUINO_UNO
@@ -79,7 +79,8 @@ endif
 ifeq (${PROGRAMMER},)
 	PROGRAMMER=UNO
 endif
-AVRDUDE_OPTIONS=-C ${AVRDUDE_CONF} -p ${MCU}
+#AVRDUDE_OPTIONS=-C ${AVRDUDE_CONF} -p ${MCU}
+AVRDUDE_OPTIONS=-p ${MCU}
 ifeq (${PROGRAMMER},ISP)
         AVRDUDE_OPTIONS+= -c arduinoisp 
 endif
@@ -107,6 +108,10 @@ build: .build-post
 	avr-nm --synthetic -S -C --size-sort ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.nm.txt
 	avr-objdump -m ${ARCH} -x -d -C ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.dump.txt
 	avr-size -C --mcu=${MCU} ${CND_ARTIFACT_PATH_${CONF}}
+#	/home/osboxes/avr8-gnu-toolchain-linux_x86_64/bin/avr-objcopy -O ihex ${CND_ARTIFACT_PATH_${CONF}} ${CND_ARTIFACT_PATH_${CONF}}.hex
+#	/home/osboxes/avr8-gnu-toolchain-linux_x86_64/bin/avr-nm --synthetic -S -C --size-sort ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.nm.txt
+#	/home/osboxes/avr8-gnu-toolchain-linux_x86_64/bin/avr-objdump -m ${ARCH} -x -d -C ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.dump.txt
+#	/home/osboxes/avr8-gnu-toolchain-linux_x86_64/bin/avr-size -C --mcu=${MCU} ${CND_ARTIFACT_PATH_${CONF}}
 
 # JFP BEGIN upload target
 #upload: .build-post

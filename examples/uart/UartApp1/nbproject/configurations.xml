@@ -25,7 +25,7 @@
   <confs>
     <conf name="UNO-Release" type="1">
       <toolsSet>
-        <compilerSet>AVR8-GNU-Toolchain-3.5.3|Cygwin_4.x</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -37,7 +37,7 @@
         </cTool>
         <ccTool>
           <developmentMode>0</developmentMode>
-          <commandlineTool>avr-g++</commandlineTool>
+          <standard>8</standard>
           <incDir>
             <pElem>../../../cores</pElem>
           </incDir>
@@ -78,7 +78,7 @@
     </conf>
     <conf name="ATmega328-Release" type="1">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -101,7 +101,8 @@
           <developmentMode>5</developmentMode>
         </fortranCompilerTool>
         <asmTool>
-          <developmentMode>5</developmentMode>
+          <developmentMode>0</developmentMode>
+          <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp1</output>
@@ -127,21 +128,19 @@
     </conf>
     <conf name="MEGA-Release" type="1">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <cTool>
           <developmentMode>0</developmentMode>
-          <standard>10</standard>
           <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -DARDUINO=${ARDUINO} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
           <warningLevel>2</warningLevel>
         </cTool>
         <ccTool>
           <developmentMode>0</developmentMode>
           <standard>8</standard>
-          <commandlineTool>avr-g++</commandlineTool>
           <incDir>
             <pElem>../../../cores</pElem>
           </incDir>

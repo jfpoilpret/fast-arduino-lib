@@ -52,13 +52,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../../dist/UNO-Release/AVR8-GNU-Toolchain-3.5.3-Windows/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ../../../dist/UNO-Release/AVR8-GNU-Toolchain-3.5.3-Windows/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}

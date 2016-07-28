@@ -21,8 +21,8 @@ FC=gfortran
 AS=avr-as
 
 # Macros
-CND_PLATFORM=AVR8-GNU-Toolchain-3.5.3-Windows
-CND_DLIB_EXT=dll
+CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_DLIB_EXT=so
 CND_CONF=UNO-Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build

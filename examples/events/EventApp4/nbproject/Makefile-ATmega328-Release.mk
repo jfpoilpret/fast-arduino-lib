@@ -52,13 +52,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../../dist/ATmega328-Release/Arduino-1.6.9-Windows/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp4.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp4.exe: ../../../dist/ATmega328-Release/Arduino-1.6.9-Windows/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp4.exe: ../../../dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp4.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
