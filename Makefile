@@ -51,7 +51,6 @@ CCADMIN=CCadmin
 
 # JFP BEGIN special variables stuff
 # set variables based on each configuration
-#ARDUINO=166
 ifeq ($(findstring UNO,${CONF}),UNO)
 	VARIANT=ARDUINO_UNO
 	MCU=atmega328p

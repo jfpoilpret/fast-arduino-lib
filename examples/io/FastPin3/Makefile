@@ -68,7 +68,7 @@ ifeq ($(findstring MEGA,${CONF}),MEGA)
 	MCU=atmega2560
 	ARCH=avr6
 	F_CPU=16000000L
-#TODO Add other targets here (Mega, Leonardo, ATtiny)
+#TODO Add other targets here (Leonardo, ATtiny)
 endif
 endif
 endif
