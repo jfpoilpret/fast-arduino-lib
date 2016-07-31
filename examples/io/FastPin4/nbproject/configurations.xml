@@ -37,6 +37,7 @@
         </cTool>
         <ccTool>
           <developmentMode>0</developmentMode>
+          <standard>8</standard>
           <commandlineTool>avr-g++</commandlineTool>
           <incDir>
             <pElem>../../../cores</pElem>

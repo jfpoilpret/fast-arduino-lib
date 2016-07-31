@@ -67,7 +67,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2: ${OBJECTFILES}
 ${OBJECTDIR}/EventApp2.o: EventApp2.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -DARDUINO_UNO -I../../../cores -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/EventApp2.o EventApp2.cpp
+	$(COMPILE.cc) -Wall -DARDUINO_UNO -I../../../cores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/EventApp2.o EventApp2.cpp
 
 # Subprojects
 .build-subprojects:

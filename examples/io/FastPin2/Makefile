@@ -79,7 +79,7 @@ endif
 ifeq (${PROGRAMMER},)
 	PROGRAMMER=UNO
 endif
-AVRDUDE_OPTIONS=-C ${AVRDUDE_CONF} -p ${MCU}
+AVRDUDE_OPTIONS=-p ${MCU}
 ifeq (${PROGRAMMER},ISP)
         AVRDUDE_OPTIONS+= -c arduinoisp 
 endif
