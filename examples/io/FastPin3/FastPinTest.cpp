@@ -10,14 +10,22 @@
 #include <util/delay.h>
 #include <fastarduino/IO.hh>
 
+#if defined(ARDUINO_UNO)
+constexpr volatile uint8_t* const LED_PORT = Board::PORT_D;
+#elif defined (ARDUINO_MEGA)
+constexpr volatile uint8_t* const LED_PORT = Board::PORT_A;
+#else
+#error "Current target is not yet supported!"
+#endif
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 
 	// Set Port D direction to all outputs
-	IOPort PortD{Board::PORT_D};
-	PortD.set_DDR(0xFF);
+	IOPort LedPort{LED_PORT};
+	LedPort.set_DDR(0xFF);
 	uint8_t value = 0;
 	// Loop of the LED chaser
 	while (true)
@@ -26,7 +34,7 @@ int main()
 			value = 0x01;
 		else
 			value <<= 1;
-		PortD.set_PORT(value);
+		LedPort.set_PORT(value);
 		
 		_delay_ms(250.0);
 	}

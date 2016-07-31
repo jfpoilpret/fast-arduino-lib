@@ -180,6 +180,7 @@ namespace Board
 	 */
 	enum
 	{
+		USART_MAX = 4,
 		ANALOG_PIN_MAX = 16,
 		DIGITAL_PIN_MAX = 70,
 		EXT_PIN_MAX = 6,
@@ -187,15 +188,52 @@ namespace Board
 		PWM_PIN_MAX = 13
 	};
 	
-	enum class SleepMode
+	enum class SleepMode: uint8_t
 	{
 		IDLE = SLEEP_MODE_IDLE,
 		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
 		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
 		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
 		STANDBY = SLEEP_MODE_STANDBY,
-		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY
-	} __attribute__((packed));
+		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY,
+		
+		DEFAULT_MODE = 0xFF
+	};
+	
+	enum class USART: uint8_t
+	{
+		USART_0 = 0,
+		USART_1 = 1,
+		USART_2 = 2,
+		USART_3 = 3
+	};
+	
+	//TODO try to change into volatile uint8_t&
+	constexpr volatile uint8_t* UCSRA(__attribute__((unused)) USART usart)
+	{
+		return &UCSR0A;
+	}
+
+	constexpr volatile uint8_t* UCSRB(__attribute__((unused)) USART usart)
+	{
+		return &UCSR0B;
+	}
+
+	constexpr volatile uint8_t* UCSRC(__attribute__((unused)) USART usart)
+	{
+		return &UCSR0C;
+	}
+
+	constexpr volatile uint8_t* UDR(__attribute__((unused)) USART usart)
+	{
+		return &UDR0;
+	}
+
+	constexpr volatile uint16_t * UBRR(__attribute__((unused)) USART usart)
+	{
+		return &UBRR0;
+	}
+
 };
 
 /**
