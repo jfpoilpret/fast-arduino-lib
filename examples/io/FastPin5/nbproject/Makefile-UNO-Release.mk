@@ -21,8 +21,8 @@ FC=gfortran
 AS=avr-as
 
 # Macros
-CND_PLATFORM=Arduino-1.6.9-Windows
-CND_DLIB_EXT=dll
+CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_DLIB_EXT=so
 CND_CONF=UNO-Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -56,11 +56,11 @@ LDLIBSOPTIONS=../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfas
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5.exe: ../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5: ../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
 
@@ -76,7 +76,7 @@ ${OBJECTDIR}/FastPinTest.o: FastPinTest.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin5
 
 # Subprojects
 .clean-subprojects:

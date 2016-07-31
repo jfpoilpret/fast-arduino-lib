@@ -45,7 +45,7 @@ int main()
 
 	// Prepare event queue
 	Event buffer[EVENT_QUEUE_SIZE];
-	Queue<Event> event_queue = Queue<Event>::create<EVENT_QUEUE_SIZE>(buffer);
+	Queue<Event> event_queue{buffer};
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
@@ -73,7 +73,7 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Event event = event_queue.pull();
+		Event event = pull(event_queue);
 		dispatcher.dispatch(event);
 		debug_delay(1);
 	}

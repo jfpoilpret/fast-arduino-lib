@@ -43,7 +43,7 @@ private:
 // Define event queue
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static Event buffer[EVENT_QUEUE_SIZE];
-static Queue<Event> event_queue = Queue<Event>::create<EVENT_QUEUE_SIZE>(buffer);
+static Queue<Event> event_queue{buffer};
 
 static const uint32_t PERIOD = 1000;
 

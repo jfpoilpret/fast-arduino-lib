@@ -7,13 +7,13 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # UNO-Release configuration
-CND_PLATFORM_UNO-Release=Arduino-1.6.9-Windows
-CND_ARTIFACT_DIR_UNO-Release=dist/UNO-Release/Arduino-1.6.9-Windows
+CND_PLATFORM_UNO-Release=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_ARTIFACT_DIR_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86
 CND_ARTIFACT_NAME_UNO-Release=fastpin1
-CND_ARTIFACT_PATH_UNO-Release=dist/UNO-Release/Arduino-1.6.9-Windows/fastpin1
-CND_PACKAGE_DIR_UNO-Release=dist/UNO-Release/Arduino-1.6.9-Windows/package
+CND_ARTIFACT_PATH_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/fastpin1
+CND_PACKAGE_DIR_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package
 CND_PACKAGE_NAME_UNO-Release=fastpin1.tar
-CND_PACKAGE_PATH_UNO-Release=dist/UNO-Release/Arduino-1.6.9-Windows/package/fastpin1.tar
+CND_PACKAGE_PATH_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package/fastpin1.tar
 # ATmega328-Release configuration
 CND_PLATFORM_ATmega328-Release=Arduino-1.6.9-Windows
 CND_ARTIFACT_DIR_ATmega328-Release=dist/ATmega328-Release/Arduino-1.6.9-Windows
