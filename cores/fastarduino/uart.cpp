@@ -59,13 +59,3 @@ void UART_ReceiveComplete(Board::USART usart)
 	char value = *Board::UDR(usart);
 	AbstractUART::_uart[(uint8_t) usart]->in().push(value);
 }
-
-ISR(USART_RX_vect)
-{
-	UART_ReceiveComplete(Board::USART::USART_0);
-}
-
-ISR(USART_UDRE_vect)
-{
-	UART_DataRegisterEmpty(Board::USART::USART_0);
-}

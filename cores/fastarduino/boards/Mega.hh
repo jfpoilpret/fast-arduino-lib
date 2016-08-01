@@ -209,31 +209,36 @@ namespace Board
 		USART_3 = 3
 	};
 	
-	//FIXME adapt to MEGA
+#define SELECT_UART_REG(UART, REG0, REG1, REG2, REG3)	\
+	(	UART == USART::USART_0 ? &REG0 :				\
+		UART == USART::USART_1 ? &REG1 :				\
+		UART == USART::USART_2 ? &REG2 :				\
+		&REG3)
+	
 	//TODO try to change into volatile uint8_t&
-	constexpr volatile uint8_t* UCSRA(__attribute__((unused)) USART usart)
+	constexpr volatile uint8_t* UCSRA(USART usart)
 	{
-		return &UCSR0A;
+		return SELECT_UART_REG(usart, UCSR0A, UCSR1A, UCSR2A, UCSR3A);
 	}
 
-	constexpr volatile uint8_t* UCSRB(__attribute__((unused)) USART usart)
+	constexpr volatile uint8_t* UCSRB(USART usart)
 	{
-		return &UCSR0B;
+		return SELECT_UART_REG(usart, UCSR0B, UCSR1B, UCSR2B, UCSR3B);
 	}
 
-	constexpr volatile uint8_t* UCSRC(__attribute__((unused)) USART usart)
+	constexpr volatile uint8_t* UCSRC(USART usart)
 	{
-		return &UCSR0C;
+		return SELECT_UART_REG(usart, UCSR0C, UCSR1C, UCSR2C, UCSR3C);
 	}
 
-	constexpr volatile uint8_t* UDR(__attribute__((unused)) USART usart)
+	constexpr volatile uint8_t* UDR(USART usart)
 	{
-		return &UDR0;
+		return SELECT_UART_REG(usart, UDR0, UDR1, UDR2, UDR3);
 	}
 
-	constexpr volatile uint16_t * UBRR(__attribute__((unused)) USART usart)
+	constexpr volatile uint16_t * UBRR(USART usart)
 	{
-		return &UBRR0;
+		return SELECT_UART_REG(usart, UBRR0, UBRR1, UBRR2, UBRR3);
 	}
 
 };
@@ -269,9 +274,9 @@ extern "C" {
 	void TIMER2_OVF_vect(void) __attribute__ ((signal));
 	void TWI_vect(void) __attribute__ ((signal));
 	void WDT_vect(void) __attribute__ ((signal));
-	void USART_UDRE_vect(void) __attribute__ ((signal));
-	void USART_RX_vect(void) __attribute__ ((signal));
-	void USART_TX_vect(void) __attribute__ ((signal));
+	void USART0_UDRE_vect(void) __attribute__ ((signal));
+	void USART0_RX_vect(void) __attribute__ ((signal));
+	void USART0_TX_vect(void) __attribute__ ((signal));
 	void USART1_UDRE_vect(void) __attribute__ ((signal));
 	void USART1_RX_vect(void) __attribute__ ((signal));
 	void USART1_TX_vect(void) __attribute__ ((signal));

@@ -69,6 +69,9 @@ private:
 	friend void UART_ReceiveComplete(Board::USART usart);
 };
 
+void UART_DataRegisterEmpty(Board::USART usart);
+void UART_ReceiveComplete(Board::USART usart);
+
 //Not sure we need a template...
 //template<Board::USART USART>
 //class UART: private AbstractUART

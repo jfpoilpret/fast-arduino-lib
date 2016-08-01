@@ -107,7 +107,6 @@ build: .build-post
 	avr-size -C --mcu=${MCU} ${CND_ARTIFACT_PATH_${CONF}}
 
 # JFP BEGIN upload target
-#upload: .build-post
 upload:
 	avrdude ${AVRDUDE_OPTIONS} -Uflash:w:${CND_ARTIFACT_PATH_${CONF}}.hex:i 
 # JFP END upload target

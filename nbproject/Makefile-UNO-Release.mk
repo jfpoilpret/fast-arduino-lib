@@ -42,6 +42,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/streams.o \
 	${OBJECTDIR}/cores/fastarduino/time.o \
 	${OBJECTDIR}/cores/fastarduino/uart.o \
+	${OBJECTDIR}/cores/fastarduino/uart0.o \
+	${OBJECTDIR}/cores/fastarduino/uart1.o \
+	${OBJECTDIR}/cores/fastarduino/uart2.o \
+	${OBJECTDIR}/cores/fastarduino/uart3.o \
 	${OBJECTDIR}/cores/fastarduino/watchdog.o
 
 
@@ -105,6 +109,26 @@ ${OBJECTDIR}/cores/fastarduino/uart.o: nbproject/Makefile-${CND_CONF}.mk cores/f
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/uart.o cores/fastarduino/uart.cpp
+
+${OBJECTDIR}/cores/fastarduino/uart0.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/uart0.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/uart0.o cores/fastarduino/uart0.cpp
+
+${OBJECTDIR}/cores/fastarduino/uart1.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/uart1.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/uart1.o cores/fastarduino/uart1.cpp
+
+${OBJECTDIR}/cores/fastarduino/uart2.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/uart2.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/uart2.o cores/fastarduino/uart2.cpp
+
+${OBJECTDIR}/cores/fastarduino/uart3.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/uart3.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/uart3.o cores/fastarduino/uart3.cpp
 
 ${OBJECTDIR}/cores/fastarduino/watchdog.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/watchdog.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
