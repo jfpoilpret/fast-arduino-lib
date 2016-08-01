@@ -51,8 +51,6 @@ CCADMIN=CCadmin
 
 # JFP BEGIN special variables stuff
 # set variables based on each configuration
-ARDUINO=166
-
 ifeq ($(findstring UNO,${CONF}),UNO)
 	VARIANT=ARDUINO_UNO
 	MCU=atmega328p
@@ -70,7 +68,7 @@ ifeq ($(findstring MEGA,${CONF}),MEGA)
 	MCU=atmega2560
 	ARCH=avr6
 	F_CPU=16000000L
-#TODO Add other targets here (Mega, Leonardo, ATtiny)
+#TODO Add other targets here (Leonardo, ATtiny)
 endif
 endif
 endif
@@ -79,7 +77,7 @@ endif
 ifeq (${PROGRAMMER},)
 	PROGRAMMER=UNO
 endif
-AVRDUDE_OPTIONS=-C ${AVRDUDE_CONF} -p ${MCU}
+AVRDUDE_OPTIONS=-p ${MCU}
 ifeq (${PROGRAMMER},ISP)
         AVRDUDE_OPTIONS+= -c arduinoisp 
 endif
@@ -92,7 +90,7 @@ endif
 ifeq (${PROGRAMMER},MEGA)
         AVRDUDE_OPTIONS+= -c wiring -b 115200 -P ${COM}
 endif
-#TODO need to add options for other programmers: leonardo, mega...
+#TODO need to add options for other programmers: leonardo...
 # JFP END special variables stuff
 
 # build
@@ -109,7 +107,6 @@ build: .build-post
 	avr-size -C --mcu=${MCU} ${CND_ARTIFACT_PATH_${CONF}}
 
 # JFP BEGIN upload target
-#upload: .build-post
 upload:
 	avrdude ${AVRDUDE_OPTIONS} -Uflash:w:${CND_ARTIFACT_PATH_${CONF}}.hex:i 
 # JFP END upload target

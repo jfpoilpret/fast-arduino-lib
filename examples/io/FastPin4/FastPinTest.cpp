@@ -25,24 +25,34 @@ static inline uint8_t calculate_pattern(uint8_t num_bits)
 	return pattern;
 }
 
+#if defined(ARDUINO_UNO)
+constexpr volatile uint8_t* const LED_PORT = Board::PORT_D;
+constexpr volatile uint8_t* const SWITCH_PORT = Board::PORT_C;
+#elif defined (ARDUINO_MEGA)
+constexpr volatile uint8_t* const LED_PORT = Board::PORT_A;
+constexpr volatile uint8_t* const SWITCH_PORT = Board::PORT_D;
+#else
+#error "Current target is not yet supported!"
+#endif
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to read settings and write to LEDs
-	IOPort PortC{Board::PORT_C, 0x00, 0x0F};
-	IOPort PortD{Board::PORT_D, 0xFF};
+	IOPort switchPort{SWITCH_PORT, 0x00, 0x0F};
+	IOPort ledPort{LED_PORT, 0xFF};
 	
 	// Loop of the LED chaser
 	while (true)
 	{
 		// Read settings everytime a LED chasing loop is about to start
-		uint8_t settings = PortC.get_PIN();
+		uint8_t settings = switchPort.get_PIN();
 		uint8_t pattern = calculate_pattern(settings & 0x07);
 		bool direction = settings & 0x08;
 		for (uint8_t i = 0; i < 8; ++i)
 		{
-			PortD.set_PORT(shift_pattern(pattern, (direction ? i : 7 - i)));
+			ledPort.set_PORT(shift_pattern(pattern, (direction ? i : 7 - i)));
 			_delay_ms(250.0);
 		}
 	}

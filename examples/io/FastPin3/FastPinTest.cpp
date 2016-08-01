@@ -24,8 +24,8 @@ int main()
 	sei();
 
 	// Set Port D direction to all outputs
-	IOPort LedPort{LED_PORT};
-	LedPort.set_DDR(0xFF);
+	IOPort ledPort{LED_PORT};
+	ledPort.set_DDR(0xFF);
 	uint8_t value = 0;
 	// Loop of the LED chaser
 	while (true)
@@ -34,7 +34,7 @@ int main()
 			value = 0x01;
 		else
 			value <<= 1;
-		LedPort.set_PORT(value);
+		ledPort.set_PORT(value);
 		
 		_delay_ms(250.0);
 	}

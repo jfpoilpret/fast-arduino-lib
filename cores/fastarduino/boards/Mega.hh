@@ -5,6 +5,7 @@
 #include <avr/sleep.h>
 
 /* This board is based on ATmega1280/2560 */
+//FIXME currently support is only for 2560!
 #if defined(ARDUINO_MEGA2560)
 # define BOARD_ATMEGA2560
 #else
@@ -208,6 +209,7 @@ namespace Board
 		USART_3 = 3
 	};
 	
+	//FIXME adapt to MEGA
 	//TODO try to change into volatile uint8_t&
 	constexpr volatile uint8_t* UCSRA(__attribute__((unused)) USART usart)
 	{
