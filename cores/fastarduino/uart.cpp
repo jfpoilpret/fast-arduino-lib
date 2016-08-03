@@ -3,6 +3,7 @@
 
 #include "uart.hh"
 
+#if defined(UCSR0A)
 AbstractUART* AbstractUART::_uart[Board::USART_MAX];
 
 void AbstractUART::begin(uint32_t rate, Parity parity, StopBits stop_bits)
@@ -59,3 +60,5 @@ void UART_ReceiveComplete(Board::USART usart)
 	char value = *Board::UDR(usart);
 	AbstractUART::_uart[(uint8_t) usart]->in().push(value);
 }
+
+#endif

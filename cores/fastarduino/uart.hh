@@ -4,6 +4,7 @@
 #include "streams.hh"
 #include "Board.hh"
 
+#if defined(UCSR0A)
 //TODO check if inheritance can be made private (or protected) rather than public without defining a zillion friends...
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
 
@@ -88,5 +89,7 @@ void UART_ReceiveComplete(Board::USART usart);
 //	static const constexpr volatile uint8_t& UBRR = *Board::UBRR(USART);
 //	static const constexpr volatile uint8_t& UDR = *Board::UDR(USART);
 //};
+
+#endif
 
 #endif	/* UART_HH */

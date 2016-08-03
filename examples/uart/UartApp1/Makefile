@@ -58,9 +58,15 @@ ifeq ($(findstring UNO,${CONF}),UNO)
 	F_CPU=16000000L
 else
 ifeq ($(findstring ATmega328,${CONF}),ATmega328)
-	VARIANT=arduino/atmega328p
+	VARIANT=BREADBOARD_ATMEGA328P
 	MCU=atmega328p
 	ARCH=avr5
+	F_CPU=8000000L
+else
+ifeq ($(findstring ATtiny84,${CONF}),ATtiny84)
+	VARIANT=BREADBOARD_ATTINYX4
+	MCU=attiny84
+	ARCH=avr25
 	F_CPU=8000000L
 else
 ifeq ($(findstring MEGA,${CONF}),MEGA)
@@ -68,7 +74,8 @@ ifeq ($(findstring MEGA,${CONF}),MEGA)
 	MCU=atmega2560
 	ARCH=avr6
 	F_CPU=16000000L
-#TODO Add other targets here (Leonardo, ATtiny)
+# Add other targets here
+endif
 endif
 endif
 endif
@@ -90,7 +97,7 @@ endif
 ifeq (${PROGRAMMER},MEGA)
         AVRDUDE_OPTIONS+= -c wiring -b 115200 -P ${COM}
 endif
-#TODO need to add options for other programmers someday
+# Add options for other programmers here if needed
 # JFP END special variables stuff
 
 # build

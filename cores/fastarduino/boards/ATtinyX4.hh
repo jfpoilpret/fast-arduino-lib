@@ -100,6 +100,7 @@ namespace Board
 	 */
 	enum
 	{
+		USART_MAX = 0,
 		ANALOG_PIN_MAX = 8,
 		DIGITAL_PIN_MAX = 11,
 		EXT_PIN_MAX = 1,
@@ -107,19 +108,25 @@ namespace Board
 		PWM_PIN_MAX = 4
 	};
 
-    #define SLEEP_MODE_IDLE         0
-    #define SLEEP_MODE_ADC          _BV(SM0)
-    #define SLEEP_MODE_PWR_DOWN     _BV(SM1)
+//    #define SLEEP_MODE_IDLE         0
+//    #define SLEEP_MODE_ADC          _BV(SM0)
+//    #define SLEEP_MODE_PWR_DOWN     _BV(SM1)
     #define SLEEP_MODE_PWR_SAVE     (_BV(SM0) | _BV(SM1))
-	enum class SleepMode
+	enum class SleepMode: uint8_t
 	{
 		IDLE = SLEEP_MODE_IDLE,
 		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
 		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
 		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
 		STANDBY = SLEEP_MODE_PWR_SAVE,
-		EXTENDED_STANDBY = SLEEP_MODE_PWR_SAVE
-	} __attribute__((packed));
+		EXTENDED_STANDBY = SLEEP_MODE_PWR_SAVE,
+		
+		DEFAULT_MODE = 0xFF
+	};
+
+	enum class USART: uint8_t
+	{
+	};
 };
 
 /**
