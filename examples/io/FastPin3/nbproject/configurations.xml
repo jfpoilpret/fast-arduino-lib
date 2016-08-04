@@ -49,7 +49,7 @@
           <developmentMode>5</developmentMode>
         </fortranCompilerTool>
         <asmTool>
-          <developmentMode>0</developmentMode>
+          <developmentMode>5</developmentMode>
           <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
@@ -76,7 +76,7 @@
     </conf>
     <conf name="ATmega328-Release" type="1">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -92,7 +92,7 @@
           <incDir>
             <pElem>../../../cores</pElem>
           </incDir>
-          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <fortranCompilerTool>
@@ -100,9 +100,10 @@
         </fortranCompilerTool>
         <asmTool>
           <developmentMode>5</developmentMode>
+          <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin3</output>
           <linkerLibItems>
             <linkerLibProjectItem>
               <makeArtifact PL="../../.."
@@ -150,11 +151,11 @@
           <developmentMode>5</developmentMode>
         </fortranCompilerTool>
         <asmTool>
-          <developmentMode>0</developmentMode>
+          <developmentMode>5</developmentMode>
           <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin3</output>
           <linkerLibItems>
             <linkerLibProjectItem>
               <makeArtifact PL="../../.."
@@ -201,7 +202,7 @@
           <developmentMode>5</developmentMode>
         </fortranCompilerTool>
         <asmTool>
-          <developmentMode>0</developmentMode>
+          <developmentMode>5</developmentMode>
           <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
