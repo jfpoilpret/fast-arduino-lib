@@ -10,7 +10,7 @@
 #include <util/delay.h>
 #include <fastarduino/IO.hh>
 
-#if defined(ARDUINO_UNO)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr volatile uint8_t* const LED_PORT = Board::PORT_D;
 #elif defined (ARDUINO_MEGA)
 constexpr volatile uint8_t* const LED_PORT = Board::PORT_A;
