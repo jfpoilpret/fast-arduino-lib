@@ -56,24 +56,42 @@ ifeq ($(findstring UNO,${CONF}),UNO)
 	MCU=atmega328p
 	ARCH=avr5
 	F_CPU=16000000L
+	ifeq (${PROGRAMMER},)
+		PROGRAMMER=UNO
+	endif
+	ifeq (${COM},)
+		PROGRAMMER=/dev/ttyACM0
+	endif
 else
 ifeq ($(findstring ATmega328,${CONF}),ATmega328)
 	VARIANT=BREADBOARD_ATMEGA328P
 	MCU=atmega328p
 	ARCH=avr5
 	F_CPU=8000000L
+	ifeq (${PROGRAMMER},)
+		PROGRAMMER=ISP
+	endif
 else
 ifeq ($(findstring ATtiny84,${CONF}),ATtiny84)
 	VARIANT=BREADBOARD_ATTINYX4
 	MCU=attiny84
 	ARCH=avr25
 	F_CPU=8000000L
+	ifeq (${PROGRAMMER},)
+		PROGRAMMER=ISP
+	endif
 else
 ifeq ($(findstring MEGA,${CONF}),MEGA)
 	VARIANT=ARDUINO_MEGA
 	MCU=atmega2560
 	ARCH=avr6
 	F_CPU=16000000L
+	ifeq (${PROGRAMMER},)
+		PROGRAMMER=MEGA
+	endif
+	ifeq (${COM},)
+		PROGRAMMER=/dev/ttyACM0
+	endif
 # Add other targets here
 endif
 endif
