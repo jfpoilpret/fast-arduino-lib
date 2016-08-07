@@ -5,6 +5,25 @@
 #include <avr/sfr_defs.h>
 #include <avr/io.h>
 
+//TODO MAYBE ALSO CHANGE ALL Board methods to return REGISTER?
+// Useful class to handler register defined by constant address; those can be used in constexpr variables
+class REGISTER
+{
+public:
+	constexpr REGISTER(const REGISTER& rhs):ADDR(rhs.ADDR) {}
+	constexpr REGISTER(uint8_t ADDR):ADDR(ADDR) {}
+	operator volatile uint8_t& () const
+	{
+		return *((volatile uint8_t*) (uint16_t) ADDR);
+	}
+	operator volatile uint16_t& () const
+	{
+		return *((volatile uint16_t*) (uint16_t) ADDR);
+	}
+private:	
+	const uint8_t ADDR;
+};
+
 // Arduino Boards
 #if defined(ARDUINO_MEGA)
 #include <fastarduino/boards/Mega.hh>

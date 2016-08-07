@@ -4,13 +4,7 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
 
-/* This board is based on ATmega1280/2560 */
-//FIXME currently support is only for 2560!
-//#if defined(ARDUINO_MEGA2560)
-//# define BOARD_ATMEGA2560
-//#else
-//# define BOARD_ATMEG1280
-//#endif
+/* This board is based on ATmega1280/2560 but only ATmega2560 is supported */
 
 /**
  * Cosa MEGA Board pin symbol definitions for the ATmega1280 and
@@ -203,44 +197,43 @@ namespace Board
 	
 	enum class USART: uint8_t
 	{
-		USART_0 = 0,
-		USART_1 = 1,
-		USART_2 = 2,
-		USART_3 = 3
+		USART0 = 0,
+		USART1 = 1,
+		USART2 = 2,
+		USART3 = 3
 	};
 	
-#define SELECT_UART_REG(UART, REG0, REG1, REG2, REG3)	\
-	(	UART == USART::USART_0 ? &REG0 :				\
-		UART == USART::USART_1 ? &REG1 :				\
-		UART == USART::USART_2 ? &REG2 :				\
-		&REG3)
+#define _SELECT_UART_REG(UART, REG0, REG1, REG2, REG3)	\
+	(	(uint8_t)(uint16_t)								\
+		(	UART == USART::USART0 ? &REG0 :				\
+			UART == USART::USART1 ? &REG1 :				\
+			UART == USART::USART2 ? &REG2 :				\
+			&REG3))
 	
-	//TODO try to change into volatile uint8_t&
-	constexpr volatile uint8_t* UCSRA(USART usart)
+	constexpr REGISTER UCSRA(USART usart)
 	{
-		return SELECT_UART_REG(usart, UCSR0A, UCSR1A, UCSR2A, UCSR3A);
+		return REGISTER(_SELECT_UART_REG(usart, UCSR0A, UCSR1A, UCSR2A, UCSR3A));
 	}
 
-	constexpr volatile uint8_t* UCSRB(USART usart)
+	constexpr REGISTER UCSRB(USART usart)
 	{
-		return SELECT_UART_REG(usart, UCSR0B, UCSR1B, UCSR2B, UCSR3B);
+		return REGISTER(_SELECT_UART_REG(usart, UCSR0B, UCSR1B, UCSR2B, UCSR3B));
 	}
 
-	constexpr volatile uint8_t* UCSRC(USART usart)
+	constexpr REGISTER UCSRC(USART usart)
 	{
-		return SELECT_UART_REG(usart, UCSR0C, UCSR1C, UCSR2C, UCSR3C);
+		return REGISTER(_SELECT_UART_REG(usart, UCSR0C, UCSR1C, UCSR2C, UCSR3C));
 	}
 
-	constexpr volatile uint8_t* UDR(USART usart)
+	constexpr REGISTER UDR(USART usart)
 	{
-		return SELECT_UART_REG(usart, UDR0, UDR1, UDR2, UDR3);
+		return REGISTER(_SELECT_UART_REG(usart, UDR0, UDR1, UDR2, UDR3));
 	}
 
-	constexpr volatile uint16_t * UBRR(USART usart)
+	constexpr REGISTER UBRR(USART usart)
 	{
-		return SELECT_UART_REG(usart, UBRR0, UBRR1, UBRR2, UBRR3);
+		return REGISTER(_SELECT_UART_REG(usart, UBRR0, UBRR1, UBRR2, UBRR3));
 	}
-
 };
 
 /**

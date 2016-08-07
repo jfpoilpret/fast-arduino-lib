@@ -157,33 +157,32 @@ namespace Board
 	
 	enum class USART: uint8_t
 	{
-		USART_0 = 0
+		USART0 = 0
 	};
 	
-	//TODO try to change into volatile uint8_t&
-	constexpr volatile uint8_t* UCSRA(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRA(__attribute__((unused)) USART usart)
 	{
-		return &UCSR0A;
+		return REGISTER((uint8_t)(uint16_t)&UCSR0A);
 	}
 
-	constexpr volatile uint8_t* UCSRB(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRB(__attribute__((unused)) USART usart)
 	{
-		return &UCSR0B;
+		return REGISTER((uint8_t)(uint16_t)&UCSR0B);
 	}
 
-	constexpr volatile uint8_t* UCSRC(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRC(__attribute__((unused)) USART usart)
 	{
-		return &UCSR0C;
+		return REGISTER((uint8_t)(uint16_t)&UCSR0C);
 	}
 
-	constexpr volatile uint8_t* UDR(__attribute__((unused)) USART usart)
+	constexpr REGISTER UDR(__attribute__((unused)) USART usart)
 	{
-		return &UDR0;
+		return REGISTER((uint8_t)(uint16_t)&UDR0);
 	}
 
-	constexpr volatile uint16_t * UBRR(__attribute__((unused)) USART usart)
+	constexpr REGISTER UBRR(__attribute__((unused)) USART usart)
 	{
-		return &UBRR0;
+		return REGISTER((uint8_t)(uint16_t)&UBRR0);
 	}
 
 	//TODO maybe useless?

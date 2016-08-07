@@ -4,9 +4,9 @@
 #include "uart.hh"
 
 #if defined(UCSR0A)
-AbstractUART* AbstractUART::_uart[Board::USART_MAX];
-
-void AbstractUART::begin(uint32_t rate, Parity parity, StopBits stop_bits)
+void AbstractUART::_begin(	uint32_t rate, Parity parity, StopBits stop_bits,
+							volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
+							volatile uint8_t& UCSRB, volatile uint8_t& UCSRC)
 {
 	bool u2x = true;
 	uint16_t ubrr = (F_CPU / 4 / rate - 1) / 2;
@@ -16,19 +16,19 @@ void AbstractUART::begin(uint32_t rate, Parity parity, StopBits stop_bits)
 		u2x = false;
 	}
 	ClearInterrupt clint;
-	*Board::UBRR(_usart) = ubrr;
-	*Board::UCSRA(_usart) = (u2x ? _BV(U2X0) : 0);
-	*Board::UCSRB(_usart) = _BV(RXCIE0) | _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
-	*Board::UCSRC(_usart) = ((uint8_t) parity) | ((uint8_t) stop_bits) | _BV(UCSZ00) | _BV(UCSZ01);
+	UBRR = ubrr;
+	UCSRA = (u2x ? _BV(U2X0) : 0);
+	UCSRB = _BV(RXCIE0) | _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
+	UCSRC = ((uint8_t) parity) | ((uint8_t) stop_bits) | _BV(UCSZ00) | _BV(UCSZ01);
 }
 
-void AbstractUART::end()
+void AbstractUART::_end(volatile uint8_t& UCSRB)
 {
 	ClearInterrupt clint;
-	*Board::UCSRB(_usart) = 0;
+	UCSRB = 0;
 }
 
-void AbstractUART::on_flush()
+void AbstractUART::_on_flush(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 {
 	ClearInterrupt clint;
 	// Check if TX is not currently active, if so, activate it
@@ -39,32 +39,31 @@ void AbstractUART::on_flush()
 		if (OutputBuffer::pull(value))
 		{
 			// Set UDR interrupt to be notified when we can send the next character
-			*Board::UCSRB(_usart) |= _BV(UDRIE0);
-			*Board::UDR(_usart) = value;
+			UCSRB |= _BV(UDRIE0);
+			UDR = value;
 			_transmitting = true;
 		}
 	}
 }
 
-void UART_DataRegisterEmpty(Board::USART usart)
+void AbstractUART::_data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 {
-	AbstractUART* uart = AbstractUART::_uart[(uint8_t) usart];
-	Queue<char>& buffer = uart->out();
+	Queue<char>& buffer = out();
 	char value;
 	if (buffer.pull(value))
-		*Board::UDR(usart) = value;
+		UDR = value;
 	else
 	{
-		uart->_transmitting = false;
+		_transmitting = false;
 		// Clear UDRIE to prevent UDR interrupt to go on forever
-		*Board::UCSRB(usart) &= ~_BV(UDRIE0);
+		UCSRB &= ~_BV(UDRIE0);
 	}
 }
 
-void UART_ReceiveComplete(Board::USART usart)
+void AbstractUART::_data_receive_complete(volatile uint8_t& UDR)
 {
-	char value = *Board::UDR(usart);
-	AbstractUART::_uart[(uint8_t) usart]->in().push(value);
+	char value = UDR;
+	in().push(value);
 }
 
 #endif

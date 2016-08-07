@@ -22,16 +22,14 @@ int main()
 	sei();
 	
 	// Start UART
-	AbstractUART uart{Board::USART::USART_0, input_buffer, output_buffer};
+//	AbstractUART uart{Board::USART::USART0, input_buffer, output_buffer};
+	UART<Board::USART::USART0> uart{input_buffer, output_buffer};
 	uart.begin(115200);
 //	uart.begin(230400);
 	InputBuffer& in = uart.in();
 //	FormattedInput<InputBuffer> in = uart.fin();
 	FormattedOutput<OutputBuffer> out = uart.fout();
 
-	// Trace information about CPU speed and clock configuration TODO
-	out << "F_CPU = " << F_CPU << endl;
-	out << "CLKPR = " << bin << CLKPR << endl;
 	// Event Loop
 	while (true)
 	{

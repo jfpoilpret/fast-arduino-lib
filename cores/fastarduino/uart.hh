@@ -8,53 +8,48 @@
 #if defined(UCSR0A)
 
 // This macro is internally used in further macros and should not be used in your programs
-#define _USE_UART(NAME, INDEX)		\
-ISR(NAME ## _RX_vect)				\
-{									\
-	UART_ReceiveComplete(INDEX);	\
-}									\
-ISR(NAME ## _UDRE_vect)				\
-{									\
-	UART_DataRegisterEmpty(INDEX);	\
+#define _USE_UART(NAME)												\
+ISR(USART ## NAME ## _RX_vect)												\
+{																	\
+	UART<Board::USART::USART ## NAME>::_uart->data_receive_complete();	\
+}																	\
+ISR(USART ## NAME ## _UDRE_vect)												\
+{																	\
+	UART<Board::USART::USART ## NAME>::_uart->data_register_empty();		\
 }
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
 // use a given UART in your program hence you need the proper ISR vector correctly defined
-#define USE_UART0()	_USE_UART(USART0, Board::USART::USART_0)
-#define USE_UART1()	_USE_UART(USART1, Board::USART::USART_1)
-#define USE_UART2()	_USE_UART(USART2, Board::USART::USART_2)
-#define USE_UART3()	_USE_UART(USART3, Board::USART::USART_3)
+#define USE_UART0()	_USE_UART(0)
+#define USE_UART1()	_USE_UART(1)
+#define USE_UART2()	_USE_UART(2)
+#define USE_UART3()	_USE_UART(3)
 
-//TODO check if inheritance can be made private (or protected) rather than public without defining a zillion friends...
+// Internal macros to simplify friends declaration
+#define _FRIEND_RX_VECT(NAME) friend void NAME ## _RX_vect()
+#define _FRIEND_UDRE_VECT(NAME) friend void NAME ## _UDRE_vect()
+#define _FRIENDS(NAME)		\
+	_FRIEND_RX_VECT(NAME);	\
+	_FRIEND_UDRE_VECT(NAME);
+
+//TODO replace flush with blocking flush
+//TODO ensure all put are "pushed" to UART immediately (don't wait for flush...)
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
-
-//TODO improve performance and size (data and maybe code) by templatizing AFTER debug is done
 class AbstractUART: private InputBuffer, private OutputBuffer
 {
 public:
-	enum class Parity
+	enum class Parity: uint8_t
 	{
 		NONE = 0x00,
 		EVEN = _BV(UPM00),
 		ODD = _BV(UPM00) | _BV(UPM01)
 	};
-	enum class StopBits
+	enum class StopBits: uint8_t
 	{
 		ONE = 0x00,
 		TWO = _BV(USBS0)
 	};
 
-	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-	AbstractUART(Board::USART usart, char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-	:	InputBuffer{input, true}, OutputBuffer{output},
-		_usart(usart), _transmitting(false)
-	{
-		_uart[(uint8_t) usart] = this;
-	}
-	
-	void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE);
-	void end();
-	
 	InputBuffer& in()
 	{
 		return (InputBuffer&) *this;
@@ -76,40 +71,83 @@ public:
 	}
 	
 protected:
-	// Listeners of events on the buffer
-	virtual void on_flush();
+	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+	AbstractUART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+		:InputBuffer{input, true}, OutputBuffer{output}, _transmitting(false) {}
 	
+	void _begin(uint32_t rate, Parity parity, StopBits stop_bits,
+				volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
+				volatile uint8_t& UCSRB, volatile uint8_t& UCSRC);
+	void _end(volatile uint8_t& UCSRB);
+	
+	void _on_flush(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
+	
+	void _data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
+	void _data_receive_complete(volatile uint8_t& UDR);
+
 private:
-	const Board::USART _usart;
 	bool _transmitting;
-	
-	//TODO replace with global InputBuffer/OutputBuffer ?
-	static AbstractUART* _uart[Board::USART_MAX];
-	//TODO and then remove those stupid friends from here
-	friend void UART_DataRegisterEmpty(Board::USART usart);
-	friend void UART_ReceiveComplete(Board::USART usart);
 };
 
-void UART_DataRegisterEmpty(Board::USART usart);
-void UART_ReceiveComplete(Board::USART usart);
+template<Board::USART USART>
+class UART: public AbstractUART
+{
+public:
+	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+	UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+		:AbstractUART(input, output)
+	{
+		_uart = this;
+	}
+	
+	void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+	{
+		_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC);
+	}
+	void end()
+	{
+		_end(UCSRC);
+	}
 
-//Not sure we need a template...
-//template<Board::USART USART>
-//class UART: private AbstractUART
-//{
-//public:
-//	UART(InputBuffer& input, OutputBuffer& output):AbstractUART(input, output) {}
-//	void begin();
-//	void end();
-//	
-//private:
-//	static const constexpr volatile uint8_t& UCSRA = *Board::UCSRA(USART);
-//	static const constexpr volatile uint8_t& UCSRB = *Board::UCSRB(USART);
-//	static const constexpr volatile uint8_t& UCSRC = *Board::UCSRC(USART);
-//	static const constexpr volatile uint8_t& UBRR = *Board::UBRR(USART);
-//	static const constexpr volatile uint8_t& UDR = *Board::UDR(USART);
-//};
+protected:	
+	// Listeners of events on the buffer
+	virtual void on_flush()
+	{
+		_on_flush(UCSRB, UDR);
+	}
+	
+private:
+	void data_register_empty()
+	{
+		_data_register_empty(UCSRB, UDR);
+	}
+	void data_receive_complete()
+	{
+		_data_receive_complete(UDR);
+	}
+	
+	static UART<USART>* _uart;
+	
+	static const constexpr REGISTER UCSRA = Board::UCSRA(USART);
+	static const constexpr REGISTER UCSRB = Board::UCSRB(USART);
+	static const constexpr REGISTER UCSRC = Board::UCSRC(USART);
+	static const constexpr REGISTER UBRR = Board::UBRR(USART);
+	static const constexpr REGISTER UDR = Board::UDR(USART);
+	
+	_FRIENDS(USART0)
+#if defined(UCSR1A)
+	_FRIENDS(USART1)
+#endif
+#if defined(UCSR2A)
+	_FRIENDS(USART2)
+#endif
+#if defined(UCSR3A)
+	_FRIENDS(USART3)
+#endif
+};
 
+template<Board::USART USART>
+UART<USART>* UART<USART>::_uart = 0;
 #endif
 
 #endif	/* UART_HH */
