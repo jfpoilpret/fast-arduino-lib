@@ -6,11 +6,11 @@
 
 /* This board is based on ATmega1280/2560 */
 //FIXME currently support is only for 2560!
-#if defined(ARDUINO_MEGA2560)
-# define BOARD_ATMEGA2560
-#else
-# define BOARD_ATMEG1280
-#endif
+//#if defined(ARDUINO_MEGA2560)
+//# define BOARD_ATMEGA2560
+//#else
+//# define BOARD_ATMEG1280
+//#endif
 
 /**
  * Cosa MEGA Board pin symbol definitions for the ATmega1280 and
