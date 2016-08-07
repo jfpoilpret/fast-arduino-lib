@@ -4,7 +4,27 @@
 #include "streams.hh"
 #include "Board.hh"
 
+// Only MCU with physical USART are supported (not ATtiny then)
 #if defined(UCSR0A)
+
+// This macro is internally used in further macros and should not be used in your programs
+#define _USE_UART(NAME, INDEX)		\
+ISR(NAME ## _RX_vect)				\
+{									\
+	UART_ReceiveComplete(INDEX);	\
+}									\
+ISR(NAME ## _UDRE_vect)				\
+{									\
+	UART_DataRegisterEmpty(INDEX);	\
+}
+
+// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
+// use a given UART in your program hence you need the proper ISR vector correctly defined
+#define USE_UART0()	_USE_UART(USART0, Board::USART::USART_0)
+#define USE_UART1()	_USE_UART(USART1, Board::USART::USART_1)
+#define USE_UART2()	_USE_UART(USART2, Board::USART::USART_2)
+#define USE_UART3()	_USE_UART(USART3, Board::USART::USART_3)
+
 //TODO check if inheritance can be made private (or protected) rather than public without defining a zillion friends...
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
 

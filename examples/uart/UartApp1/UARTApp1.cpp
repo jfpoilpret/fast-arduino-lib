@@ -3,24 +3,18 @@
  */
 
 #include <avr/interrupt.h>
-#include <util/delay_basic.h>
+#include <util/delay.h>
 
 #include <fastarduino/uart.hh>
+
+// Define vectors we need in the example
+USE_UART0()
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char input_buffer[INPUT_BUFFER_SIZE];
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-
-static inline void delay_millis(uint16_t millis)
-{
-	const uint16_t LOOP_COUNT = F_CPU / 4L / 1000L;
-	for (uint16_t i = 0; i < millis; ++i)
-	{
-		_delay_loop_2(LOOP_COUNT);
-	}
-}
 
 int main()
 {
@@ -35,23 +29,28 @@ int main()
 //	FormattedInput<InputBuffer> in = uart.fin();
 	FormattedOutput<OutputBuffer> out = uart.fout();
 
+	// Trace information about CPU speed and clock configuration TODO
+	out << "F_CPU = " << F_CPU << endl;
+	out << "CLKPR = " << bin << CLKPR << endl;
 	// Event Loop
 	while (true)
 	{
 		out.puts("Enter a letter: ");
 		out.flush();
-		char toto[32];
-//		in.gets(toto, sizeof toto);
-		int input = 125;
-//		int input = in.get();
-//		while ((input = in.get()) == InputBuffer::EOF)
-//			;
+//		int input = 123;
+		int input = in.get();
 		out.put(input);
 		out.put('\n');
-		out << hex << input << " " << dec << 123 << " " << oct << 123 << " " << hex << 123 << " " << bin << 123 << endl;
-//		out.flush();
-		//FIXME Why does it seem to take 20-40 times longer than expected (namely more than 20s instead of 1s)
-		// Measured time 1'25" !!!
-//		delay_millis(1000);
+		out << (char) input << " " << dec << input << " " << oct << input << " " << hex << input << " " << bin << input << endl;
+		out.flush();
+		//FIXME Why does this delay last ~2'30" instead of just 1"?
+//		_delay_ms(1000.0);
+		// The following shall take 100,000 cycles x 160 = 1 second
+		//TODO Add LED traces here to understand what happens really
+		// What i might be: a forever occurring interrupt that was not cleared?
+		// That seems confirmed by ATmega328P datasheet, p178, $20.6.3, bug seems to be inside 
+		// UART_DataRegisterEmpty method that does not clear DRE interrupt...
+		for (int i = 0; i < 160; ++i)
+			_delay_loop_2(25000);
 	}
 }

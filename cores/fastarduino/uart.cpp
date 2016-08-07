@@ -38,6 +38,8 @@ void AbstractUART::on_flush()
 		char value;
 		if (OutputBuffer::pull(value))
 		{
+			// Set UDR interrupt to be notified when we can send the next character
+			*Board::UCSRB(_usart) |= _BV(UDRIE0);
 			*Board::UDR(_usart) = value;
 			_transmitting = true;
 		}
@@ -52,7 +54,11 @@ void UART_DataRegisterEmpty(Board::USART usart)
 	if (buffer.pull(value))
 		*Board::UDR(usart) = value;
 	else
+	{
 		uart->_transmitting = false;
+		// Clear UDRIE to prevent UDR interrupt to go on forever
+		*Board::UCSRB(usart) &= ~_BV(UDRIE0);
+	}
 }
 
 void UART_ReceiveComplete(Board::USART usart)

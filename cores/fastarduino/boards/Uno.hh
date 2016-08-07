@@ -226,4 +226,9 @@ extern "C" {
 	void USART_TX_vect(void) __attribute__ ((signal));
 	void USART_UDRE_vect(void) __attribute__ ((signal));
 }
+
+#define USART0_RX_vect USART_RX_vect
+#define USART0_TX_vect USART_TX_vect
+#define USART0_UDRE_vect USART_UDRE_vect
+
 #endif /* BOARDS_UNO_HH */
