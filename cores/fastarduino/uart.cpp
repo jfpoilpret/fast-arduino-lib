@@ -28,7 +28,7 @@ void AbstractUART::_end(volatile uint8_t& UCSRB)
 	UCSRB = 0;
 }
 
-void AbstractUART::_on_flush(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
+void AbstractUART::_on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 {
 	ClearInterrupt clint;
 	// Check if TX is not currently active, if so, activate it

@@ -16,29 +16,30 @@ public:
 	
 	void flush()
 	{
-		on_flush();
+		while (items())
+			Time::yield();
 	}
-	void put(char c, bool flush = true)
+	void put(char c, bool call_on_put = true)
 	{
 		if (!push(c)) on_overflow(c);
-		if (flush) on_flush();
+		if (call_on_put) on_put();
 	}
 	void put(const char* content, size_t size)
 	{
 		while (size--) put(*content++, false);
-		on_flush();
+		on_put();
 	}
 	void puts(const char* str)
 	{
 		while (*str) put(*str++, false);
-		on_flush();
+		on_put();
 	}
 //	void puts_P();
 	
 protected:
 	// Listeners of events on the buffer
 	virtual void on_overflow(__attribute__((unused)) char c) {}
-	virtual void on_flush() {}
+	virtual void on_put() {}
 };
 
 //TODO Handle generic errors coming from UART RX (eg Parity...)
@@ -113,6 +114,12 @@ public:
 	}
 	
 protected:
+	void reset()
+	{
+		_width = 6;
+		_precision = 4;
+		_base = Base::dec;
+	}
 	// conversions from string to numeric value
 	bool convert(const char* token, double& v)
 	{
@@ -193,6 +200,7 @@ private:
 	Base _base;
 };
 
+//TODO Add reset of latest format used
 template<typename STREAM>
 class FormattedOutput: public FormatBase
 {
@@ -218,7 +226,12 @@ public:
 	//TODO Handle PROGMEM strings output
 //	void puts_P();
 	
-	//TODO others? eg void*, PSTR, Manipulator...
+	//TODO add support for char, void* (address), PSTR
+	FormattedOutput<STREAM>& operator << (char c)
+	{
+		_stream.put(c);
+		return *this;
+	}
 	FormattedOutput<STREAM>& operator << (const char* s)
 	{
 		//TODO Add justify with width if <0

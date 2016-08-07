@@ -37,7 +37,7 @@ int main()
 		int input = in.get();
 		out.put(input);
 		out.put('\n');
-		out << (char) input << " " << dec << input << " " << oct << input << " " << hex << input << " " << bin << input << endl;
+		out << (char) input << ' ' << dec << input << ' ' << oct << input << ' ' << hex << input << ' ' << bin << input << endl;
 		out.flush();
 		_delay_ms(1000.0);
 	}

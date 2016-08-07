@@ -32,8 +32,6 @@ ISR(USART ## NAME ## _UDRE_vect)										\
 	_FRIEND_RX_VECT(NAME);	\
 	_FRIEND_UDRE_VECT(NAME);
 
-//TODO replace flush with blocking flush
-//TODO ensure all put are "pushed" to UART immediately (don't wait for flush...)
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
 class AbstractUART: private InputBuffer, private OutputBuffer
 {
@@ -80,7 +78,7 @@ protected:
 				volatile uint8_t& UCSRB, volatile uint8_t& UCSRC);
 	void _end(volatile uint8_t& UCSRB);
 	
-	void _on_flush(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
+	void _on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
 	
 	void _data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
 	void _data_receive_complete(volatile uint8_t& UDR);
@@ -111,9 +109,9 @@ public:
 
 protected:	
 	// Listeners of events on the buffer
-	virtual void on_flush()
+	virtual void on_put()
 	{
-		_on_flush(UCSRB, UDR);
+		_on_put(UCSRB, UDR);
 	}
 	
 private:
