@@ -8,14 +8,14 @@
 #if defined(UCSR0A)
 
 // This macro is internally used in further macros and should not be used in your programs
-#define _USE_UART(NAME)												\
-ISR(USART ## NAME ## _RX_vect)												\
-{																	\
+#define _USE_UART(NAME)													\
+ISR(USART ## NAME ## _RX_vect)											\
+{																		\
 	UART<Board::USART::USART ## NAME>::_uart->data_receive_complete();	\
-}																	\
-ISR(USART ## NAME ## _UDRE_vect)												\
-{																	\
-	UART<Board::USART::USART ## NAME>::_uart->data_register_empty();		\
+}																		\
+ISR(USART ## NAME ## _UDRE_vect)										\
+{																		\
+	UART<Board::USART::USART ## NAME>::_uart->data_register_empty();	\
 }
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you

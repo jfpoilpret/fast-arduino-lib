@@ -1,6 +1,8 @@
 #ifndef TIME_HH
 #define	TIME_HH
 
+#include <stdint.h>
+
 namespace Time
 {
 	void yield();

@@ -1,3 +1,4 @@
+#include "time.hh"
 #include "watchdog.hh"
 #include "utilities.hh"
 
@@ -19,12 +20,10 @@ void Watchdog::begin(TimeOut timeout)
 
 void Watchdog::delay(uint32_t ms)
 {
-	//TODO
 	uint32_t limit = millis() + ms;
 	while (millis() < limit)
 	{
-		//TODO yield...
-		;
+		Time::yield();
 	}
 }
 
