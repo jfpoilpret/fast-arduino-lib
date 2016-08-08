@@ -14,6 +14,8 @@
       <itemPath>cores/fastarduino/IO.hh</itemPath>
       <itemPath>cores/fastarduino/LinkedList.cpp</itemPath>
       <itemPath>cores/fastarduino/LinkedList.hh</itemPath>
+      <itemPath>cores/fastarduino/PCI.cpp</itemPath>
+      <itemPath>cores/fastarduino/PCI.hh</itemPath>
       <itemPath>cores/fastarduino/Queue.hh</itemPath>
       <itemPath>cores/fastarduino/main.cpp</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
@@ -100,6 +102,10 @@
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/PCI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -200,6 +206,10 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/PCI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATmega328P.hh"
@@ -299,6 +309,10 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/PCI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATmega328P.hh"
@@ -397,6 +411,10 @@
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/PCI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>

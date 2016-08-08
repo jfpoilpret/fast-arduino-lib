@@ -126,11 +126,11 @@ private:
 	
 	static UART<USART>* _uart;
 	
-	static const constexpr REGISTER UCSRA = Board::UCSRA(USART);
-	static const constexpr REGISTER UCSRB = Board::UCSRB(USART);
-	static const constexpr REGISTER UCSRC = Board::UCSRC(USART);
-	static const constexpr REGISTER UBRR = Board::UBRR(USART);
-	static const constexpr REGISTER UDR = Board::UDR(USART);
+	static const constexpr REGISTER UCSRA = Board::UCSRA_REG(USART);
+	static const constexpr REGISTER UCSRB = Board::UCSRB_REG(USART);
+	static const constexpr REGISTER UCSRC = Board::UCSRC_REG(USART);
+	static const constexpr REGISTER UBRR = Board::UBRR_REG(USART);
+	static const constexpr REGISTER UDR = Board::UDR_REG(USART);
 	
 	_FRIENDS(USART0)
 #if defined(UCSR1A)

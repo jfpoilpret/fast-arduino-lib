@@ -210,27 +210,27 @@ namespace Board
 			UART == USART::USART2 ? &REG2 :				\
 			&REG3))
 	
-	constexpr REGISTER UCSRA(USART usart)
+	constexpr REGISTER UCSRA_REG(USART usart)
 	{
 		return REGISTER(_SELECT_UART_REG(usart, UCSR0A, UCSR1A, UCSR2A, UCSR3A));
 	}
 
-	constexpr REGISTER UCSRB(USART usart)
+	constexpr REGISTER UCSRB_REG(USART usart)
 	{
 		return REGISTER(_SELECT_UART_REG(usart, UCSR0B, UCSR1B, UCSR2B, UCSR3B));
 	}
 
-	constexpr REGISTER UCSRC(USART usart)
+	constexpr REGISTER UCSRC_REG(USART usart)
 	{
 		return REGISTER(_SELECT_UART_REG(usart, UCSR0C, UCSR1C, UCSR2C, UCSR3C));
 	}
 
-	constexpr REGISTER UDR(USART usart)
+	constexpr REGISTER UDR_REG(USART usart)
 	{
 		return REGISTER(_SELECT_UART_REG(usart, UDR0, UDR1, UDR2, UDR3));
 	}
 
-	constexpr REGISTER UBRR(USART usart)
+	constexpr REGISTER UBRR_REG(USART usart)
 	{
 		return REGISTER(_SELECT_UART_REG(usart, UBRR0, UBRR1, UBRR2, UBRR3));
 	}

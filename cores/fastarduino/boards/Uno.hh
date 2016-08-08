@@ -51,10 +51,15 @@
  */
 namespace Board
 {
+#define _SELECT_REG(REG) REGISTER((uint8_t)(uint16_t)&REG)
+
+	//TODO Replace `volatile uintx*` with REGISTER everywhere?
+	
 	constexpr volatile uint8_t* const PORT_B = &PINB;
 	constexpr volatile uint8_t* const PORT_C = &PINC;
 	constexpr volatile uint8_t* const PORT_D = &PIND;
 
+	//TODO Make stronger types for pins (enum class)?
 	constexpr volatile uint8_t* PIN(uint8_t pin)
 	{
 		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
@@ -84,12 +89,12 @@ namespace Board
 		D11,			// PB3
 		D12,			// PB4
 		D13,			// PB5
-		D14,			// PC0
-		D15,			// PC1
-		D16,			// PC2
-		D17,			// PC3
-		D18,			// PC4
-		D19,			// PC5
+		D14,			// PC0-A0
+		D15,			// PC1-A1
+		D16,			// PC2-A2
+		D17,			// PC3-A3
+		D18,			// PC4-A4
+		D19,			// PC5-A5
 		LED = D13
 	} __attribute__((packed));
 
@@ -106,7 +111,13 @@ namespace Board
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	enum InterruptPin
+	enum class PCIPort: uint8_t
+	{
+		PCI0 = 0,			// D8-D13, PB0-5 (PB6 & PB7 are for XTAL on Arduino UNO)
+		PCI1 = 1,			// A0-A5, PC0-5 (PC6 used for RESET)
+		PCI2 = 2			// D0-D7, PD0-7
+	};
+	enum class InterruptPin: uint8_t
 	{
 		PCI0 = D0,			// PD0
 		PCI1 = D1,			// PD1
@@ -128,7 +139,41 @@ namespace Board
 		PCI17 = D17,		// PC3
 		PCI18 = D18,		// PC4
 		PCI19 = D19			// PC5
-	} __attribute__((packed));
+	};
+
+#define _SELECT_PCI_REG(PORT, REG0, REG1, REG2)		\
+	REGISTER(	(uint8_t)(uint16_t)					\
+				(	PORT == PCIPort::PCI0 ? &REG0 :	\
+					PORT == PCIPort::PCI1 ? &REG1 :	\
+					&REG2))
+	
+#define _SELECT_PCI_MSK(PORT, MSK0, MSK1, MSK2)	\
+	_BV(PORT == PCIPort::PCI0 ? MSK0 :			\
+		PORT == PCIPort::PCI1 ? MSK1 :			\
+		MSK2)
+	
+	constexpr REGISTER PCICR_REG()
+	{
+		return _SELECT_REG(PCICR);
+	}
+	constexpr uint8_t PCIE_MSK(PCIPort PORT)
+	{
+		return _SELECT_PCI_MSK(PORT, PCIE0, PCIE1, PCIE2);
+	}
+	
+	constexpr REGISTER PCIFR_REG()
+	{
+		return _SELECT_REG(PCIFR);
+	}
+	constexpr uint8_t PCIFR_MSK(PCIPort PORT)
+	{
+		return _SELECT_PCI_MSK(PORT, PCIF0, PCIF1, PCIF2);
+	}
+	
+	constexpr REGISTER PCMSK_REG(PCIPort PORT)
+	{
+		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1, PCMSK2);
+	}
 
 	/**
 	 * Size of pin maps.
@@ -160,32 +205,32 @@ namespace Board
 		USART0 = 0
 	};
 	
-	constexpr REGISTER UCSRA(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRA_REG(__attribute__((unused)) USART usart)
 	{
-		return REGISTER((uint8_t)(uint16_t)&UCSR0A);
+		return _SELECT_REG(UCSR0A);
 	}
 
-	constexpr REGISTER UCSRB(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRB_REG(__attribute__((unused)) USART usart)
 	{
-		return REGISTER((uint8_t)(uint16_t)&UCSR0B);
+		return _SELECT_REG(UCSR0B);
 	}
 
-	constexpr REGISTER UCSRC(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRC_REG(__attribute__((unused)) USART usart)
 	{
-		return REGISTER((uint8_t)(uint16_t)&UCSR0C);
+		return _SELECT_REG(UCSR0C);
 	}
 
-	constexpr REGISTER UDR(__attribute__((unused)) USART usart)
+	constexpr REGISTER UDR_REG(__attribute__((unused)) USART usart)
 	{
-		return REGISTER((uint8_t)(uint16_t)&UDR0);
+		return _SELECT_REG(UDR0);
 	}
 
-	constexpr REGISTER UBRR(__attribute__((unused)) USART usart)
+	constexpr REGISTER UBRR_REG(__attribute__((unused)) USART usart)
 	{
-		return REGISTER((uint8_t)(uint16_t)&UBRR0);
+		return _SELECT_REG(UBRR0);
 	}
 
-	//TODO maybe useless?
+	//TODO maybe useless? BETTER DEFINE MACROS FOR DIRECT USE IN SPECIALIZED HEADERS uart.hh, pci.hh...
 	enum class Circuits
 	{
 		TIMER_0,
