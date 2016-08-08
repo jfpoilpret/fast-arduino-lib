@@ -13,6 +13,15 @@
 // Define vectors we need in the example
 USE_PCI1()
 
+static constexpr const uint8_t LED1 = _BV(Board::BIT(Board::DigitalPin::D1));
+static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D3));
+static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D5));
+static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D7));
+
+static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D14));
+static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D16));
+static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D17));
+
 class PinChangeHandler
 {
 public:
@@ -21,10 +30,10 @@ public:
 	void operator() ()
 	{
 		uint8_t switches = _switches.get_PIN();
-		uint8_t leds = (_leds.get_PIN() & 0x80) ^ 0x80;
-		if (!(switches & 0x01)) leds |= 0x02;
-		if (!(switches & 0x04)) leds |= 0x08;
-		if (!(switches & 0x08)) leds |= 0x20;
+		uint8_t leds = (_leds.get_PIN() & LED4) ^ LED4;
+		if (!(switches & SW1)) leds |= LED1;
+		if (!(switches & SW2)) leds |= LED2;
+		if (!(switches & SW3)) leds |= LED3;
 		_leds.set_PORT(leds);
 	}
 	
@@ -41,7 +50,7 @@ int main()
 	FunctorPCIHandler<PinChangeHandler> handler{PinChangeHandler{}};
 	PCI<Board::PCIPort::PCI1> pci{handler};
 	
-	pci.enable(0x01 | 0x04 | 0x08);
+	pci.enable(SW1 | SW2 | SW3);
 	pci.enable();
 
 	// Event Loop
