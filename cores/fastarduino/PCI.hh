@@ -31,14 +31,14 @@ ISR(PCINT ## PORT ## _vect)								\
 class AbstractPCI
 {
 protected:
-	void _enable_all(volatile uint8_t& pcicr, uint8_t port);
-	void _disable_all(volatile uint8_t& pcicr, uint8_t port);
-	void _clear(volatile uint8_t& pcifr, uint8_t port);
+	static void _enable_all(volatile uint8_t& pcicr, uint8_t port);
+	static void _disable_all(volatile uint8_t& pcicr, uint8_t port);
+	static void _clear(volatile uint8_t& pcifr, uint8_t port);
 	
-	void _enable(volatile uint8_t& pcmsk, uint8_t mask);
+	static void _enable(volatile uint8_t& pcmsk, uint8_t mask);
 	
-	void _enable(volatile uint8_t& pcmsk, Board::InterruptPin pin);
-	void _disable(volatile uint8_t& pcmsk, Board::InterruptPin pin);
+	static void _enable(volatile uint8_t& pcmsk, Board::InterruptPin pin);
+	static void _disable(volatile uint8_t& pcmsk, Board::InterruptPin pin);
 };
 
 class AbstractPCIHandler

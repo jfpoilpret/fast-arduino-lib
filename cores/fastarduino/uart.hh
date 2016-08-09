@@ -73,10 +73,10 @@ protected:
 	AbstractUART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
 		:InputBuffer{input, true}, OutputBuffer{output}, _transmitting(false) {}
 	
-	void _begin(uint32_t rate, Parity parity, StopBits stop_bits,
-				volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
-				volatile uint8_t& UCSRB, volatile uint8_t& UCSRC);
-	void _end(volatile uint8_t& UCSRB);
+	static void _begin(	uint32_t rate, Parity parity, StopBits stop_bits,
+						volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
+						volatile uint8_t& UCSRB, volatile uint8_t& UCSRC);
+	static void _end(volatile uint8_t& UCSRB);
 	
 	void _on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
 	
