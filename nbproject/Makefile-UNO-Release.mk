@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/PCI.o \
 	${OBJECTDIR}/cores/fastarduino/main.o \
 	${OBJECTDIR}/cores/fastarduino/power.o \
+	${OBJECTDIR}/cores/fastarduino/softuart.o \
 	${OBJECTDIR}/cores/fastarduino/streams.o \
 	${OBJECTDIR}/cores/fastarduino/time.o \
 	${OBJECTDIR}/cores/fastarduino/uart.o \
@@ -96,6 +97,11 @@ ${OBJECTDIR}/cores/fastarduino/power.o: nbproject/Makefile-${CND_CONF}.mk cores/
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/power.o cores/fastarduino/power.cpp
+
+${OBJECTDIR}/cores/fastarduino/softuart.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/softuart.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/softuart.o cores/fastarduino/softuart.cpp
 
 ${OBJECTDIR}/cores/fastarduino/streams.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/streams.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino

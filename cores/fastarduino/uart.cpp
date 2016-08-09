@@ -1,6 +1,3 @@
-#include <util/delay.h>
-#include <stdlib.h>
-
 #include "uart.hh"
 
 #if defined(UCSR0A)
