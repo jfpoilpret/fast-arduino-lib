@@ -22,10 +22,11 @@ int main()
 	sei();
 	
 	// Start UART
-	Soft::UAT uart{output_buffer, Board::DigitalPin::D2};
+	Soft::UAT<Board::DigitalPin::D1> uart{output_buffer};
+//	Soft::UAT uart{output_buffer, Board::DigitalPin::D2};
 //	uart.begin(115200);
-	uart.begin(9600);
-//	uart.begin(230400);
+//	uart.begin(9600);
+	uart.begin(230400);
 //	InputBuffer& in = uart.in();
 //	FormattedInput<InputBuffer> in = uart.fin();
 	FormattedOutput<OutputBuffer> out = uart.fout();

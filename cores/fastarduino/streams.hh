@@ -211,9 +211,9 @@ public:
 	{
 		_stream.flush();
 	}
-	void put(char c, bool flush = true)
+	void put(char c, bool call_on_put = true)
 	{
-		_stream.put(c, flush);
+		_stream.put(c, call_on_put);
 	}
 	void put(const char* content, size_t size)
 	{

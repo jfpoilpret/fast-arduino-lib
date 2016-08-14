@@ -4,7 +4,11 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include "Board.hh"
+
+#ifndef UNUSED
 #define UNUSED(arg) ((void)(arg))
+#endif
 
 class ClearInterrupt
 {
@@ -22,27 +26,43 @@ private:
 	const uint8_t _sreg;
 };
 
-inline void set_ioreg_bit(uint8_t IOREG, uint8_t BIT)
+//inline void set_bit(volatile uint8_t* MEM, uint8_t BIT)
+//{
+//	asm volatile("SBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG), [BIT] "I" (BIT));
+//}
+
+inline void set_ioreg_bit(REGISTER IOREG, uint8_t BIT)
 {
-	asm volatile("SBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG), [BIT] "I" (BIT));
+	asm volatile("SBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG.io_addr()), [BIT] "I" (BIT));
 }
 
-inline void clear_ioreg_bit(uint8_t IOREG, uint8_t BIT)
+inline void clear_ioreg_bit(REGISTER IOREG, uint8_t BIT)
 {
-	asm volatile("CBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG), [BIT] "I" (BIT));
+	asm volatile("CBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG.io_addr()), [BIT] "I" (BIT));
 }
 
-inline bool ioreg_bit_value(uint8_t IOREG, uint8_t BIT)
+inline bool ioreg_bit_value(REGISTER IOREG, uint8_t BIT)
 {
 	bool result = false;
 	asm volatile(
 		"SBIC %[IOREG], %[BIT] \n\t"
 		"LDI %[RESULT], 1\n\t"			// Bit is set, set result value accordingly
 		:[RESULT] "+r" (result)
-		:[IOREG] "I" (IOREG), [BIT] "I" (BIT)
+		:[IOREG] "I" (IOREG.io_addr()), [BIT] "I" (BIT)
 	);
 	return result;
 }
 
-#endif	/* UTILITIES_HH */
+inline void set_ioreg_byte(REGISTER IOREG, uint8_t value)
+{
+	asm volatile("OUT %[IOREG], %[VALUE]\n\t"::[IOREG] "I" (IOREG.io_addr()), [VALUE] "r" (value));
+}
 
+inline uint8_t get_ioreg_byte(REGISTER IOREG)
+{
+	uint8_t value = 0;
+	asm volatile("IN %[VALUE], %[IOREG]\n\t":[VALUE] "+r" (value):[IOREG] "I" (IOREG.io_addr()));
+	return value;
+}
+
+#endif	/* UTILITIES_HH */

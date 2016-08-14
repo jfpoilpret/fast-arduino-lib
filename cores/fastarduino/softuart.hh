@@ -3,12 +3,11 @@
 
 #include "streams.hh"
 #include "Board.hh"
-#include "IO.hh"
+#include "FastIO.hh"
 
 namespace Soft
 {
-	// IOPin is much inefficient in this context, try to opt for a template version...
-	class UAT: private OutputBuffer
+	class AbstractUAT
 	{
 	public:
 		enum class Parity: uint8_t
@@ -23,35 +22,44 @@ namespace Soft
 			TWO = 2
 		};
 
-		template<uint8_t SIZE_TX>
-		UAT(char (&output)[SIZE_TX], Board::DigitalPin tx)
-		:	OutputBuffer{output}, 
-			_tx{tx, PinMode::OUTPUT}
+	protected:
+		AbstractUAT() {}
 			//TODO do we really need these initializations?
 //			_parity{Parity::NONE},
 //			_stop_bits{StopBits::ONE},
 //			_interbit_tx_time{0},
 //			_start_bit_tx_time{0},
 //			_stop_bit_tx_time{0}
+		
+		void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
+		Parity calculate_parity(uint8_t value);
+
+		// Check if we can further refactor here, eg adding parity and stop bits as field members,
+		// as well as time calculations?
+		// various timing constants based on rate
+		Parity _parity;
+		StopBits _stop_bits;
+		uint16_t _interbit_tx_time;
+		uint16_t _start_bit_tx_time;
+		uint16_t _stop_bit_tx_time;
+	};
+	
+	// IOPin is much inefficient in this context, try to opt for a template version...
+	template<Board::DigitalPin DPIN>
+	class UAT: public AbstractUAT, private OutputBuffer
+	{
+	public:
+		template<uint8_t SIZE_TX>
+		UAT(char (&output)[SIZE_TX])
+		:	OutputBuffer{output}, 
+			_tx{PinMode::OUTPUT}
 			{}
 		
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
-			_parity = parity;
-			_stop_bits = stop_bits;
-			// Calculate timing for TX
-			// Timing is based on number of times to count 4 cycles, because we use _delay_loop_2()
-			_interbit_tx_time = uint16_t(F_CPU / 4UL / rate);
-			// For start bit we shorten the duration of 50% to guarantee alignment of RX side on edges
-			_start_bit_tx_time = _interbit_tx_time / 2;
-			// For stop bit we lengthten the duration of 25% to guarantee alignment of RX side on stop duration
-			_stop_bit_tx_time = 5 * _interbit_tx_time / 4;
-			//TODO Now we adjust each time with the actual number of cycles used within write() method
-			_interbit_tx_time -= 24 /4;
-
+			_begin(rate, parity, stop_bits);
 			// We set high level on TX (not busy)
 			_tx.set();
-			
 			//FIXME if queue is not empty, we should process it until everything is written...
 		}
 		void end()
@@ -77,20 +85,50 @@ namespace Soft
 			char value;
 			if (pull(value)) write(value);
 		}
-		static bool calculate_parity(uint8_t value, Parity parity);
 		
 	private:
 		void write(uint8_t value);
 		
-		IOPin _tx;
-		// various timing constants based on rate
-		Parity _parity;
-		StopBits _stop_bits;
-		uint16_t _interbit_tx_time;
-		uint16_t _start_bit_tx_time;
-		uint16_t _stop_bit_tx_time;
+		FastPin<DPIN> _tx;
 	};
-	
+
+	//TODO THAT SHOULD BELONG TO AbstractUAT but should be passed TX as a parameter (template method) 
+	// or just clear/set as FP or sth like that... but that might imply extra timing not so good...
+	template<Board::DigitalPin DPIN>
+	void UAT<DPIN>::write(uint8_t value)
+	{
+		// Pre-calculate all what we need: parity bit
+		Parity parity_bit = calculate_parity(value);
+
+		// Write start bit
+		_tx.clear();
+		// Wait before starting actual value transmission
+		_delay_loop_2(_start_bit_tx_time);
+		for (uint8_t bit = 0; bit < 8; ++bit)
+		{
+			if (value & 0x01) 
+				_tx.set(); 
+			else
+			{
+				// Additional NOP to ensure set/clear are executed exactly at the same time (cycle)
+				asm volatile("NOP");
+				_tx.clear();
+			}
+			value >>= 1;
+			_delay_loop_2(_interbit_tx_time);
+		}
+		// Add parity if needed
+		//TODO NOT CHECKED YET, NEED DEBUG!!!
+		if (parity_bit != Parity::NONE)
+		{
+			if (parity_bit == _parity) _tx.clear(); else _tx.set();
+			_delay_loop_2(_interbit_tx_time);
+		}
+		// Add stop bit
+		_tx.set();
+		_delay_loop_2(_stop_bit_tx_time);
+	}
+
 //class AbstractUART: private InputBuffer, private OutputBuffer
 //{
 //public:

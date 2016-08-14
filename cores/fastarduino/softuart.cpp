@@ -2,42 +2,30 @@
 
 #include "softuart.hh"
 
-void Soft::UAT::write(uint8_t value)
+void Soft::AbstractUAT::_begin(uint32_t rate, Parity parity, StopBits stop_bits)
 {
-	// Pre-calculate all what we need: num bits, parity bit
-	uint8_t bits = 8 + 1;
-	bool has_parity = (_parity != Parity::NONE);
-	//TODO optimize by computing parity only if needed
-	bool parity_bit = calculate_parity(value, _parity);
-
-	// Write start bit
-	_tx.clear();
-	// Wait before starting actual value transmission
-	_delay_loop_2(_start_bit_tx_time);
-	while (--bits)
-	{
-		if (value & 0x01) _tx.set(); else _tx.clear();
-		value >>= 1;
-		_delay_loop_2(_interbit_tx_time);
-	}
-	// Add parity if needed
-	if (has_parity)
-	{
-		if (parity_bit) _tx.set(); else _tx.clear();
-		_delay_loop_2(_interbit_tx_time);
-	}
-	// Add stop bit
-	_tx.set();
-	_delay_loop_2(_stop_bit_tx_time);
+	_parity = parity;
+	_stop_bits = stop_bits;
+	// Calculate timing for TX in number of cycles
+	uint16_t bit_time = uint16_t(F_CPU / rate);
+	// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2()
+	// 11 or 12 cycles + delay counted from start bit (cbi) to first bit (sbi or cbi)
+	_interbit_tx_time = (bit_time - 12) / 4;
+	// 11 or 12 cycles + delay counted from first bit (sbi or cbi) to second bit (sbi or cbi)
+	_start_bit_tx_time = (bit_time - 12) / 4;
+	// For stop bit we lengthten the bit duration of 25% to guarantee alignment of RX side on stop duration
+	_stop_bit_tx_time = (bit_time / 4) * 5 / 4;
 }
 
-bool Soft::UAT::calculate_parity(uint8_t value, Parity parity)
+Soft::AbstractUAT::Parity Soft::AbstractUAT::calculate_parity(uint8_t value)
 {
+	if (_parity == Parity::NONE) return Parity::NONE;
 	bool odd = false;
 	while (value)
 	{
 		if (value & 0x01) odd = !odd;
 		value >>= 1;
 	}
-	return (parity == Parity::ODD ? !odd : odd);
+	return (odd ? Parity::ODD : Parity::EVEN);
 }
+

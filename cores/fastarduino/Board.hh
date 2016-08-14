@@ -12,6 +12,14 @@ class REGISTER
 public:
 	constexpr REGISTER(const REGISTER& rhs):ADDR(rhs.ADDR) {}
 	constexpr REGISTER(uint8_t ADDR):ADDR(ADDR) {}
+	uint8_t io_addr() const
+	{
+		return ADDR - __SFR_OFFSET;
+	}
+	uint8_t mem_addr() const
+	{
+		return ADDR;
+	}
 	operator volatile uint8_t& () const
 	{
 		return *((volatile uint8_t*) (uint16_t) ADDR);

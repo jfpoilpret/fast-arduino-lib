@@ -59,7 +59,27 @@ namespace Board
 	constexpr volatile uint8_t* const PORT_C = &PINC;
 	constexpr volatile uint8_t* const PORT_D = &PIND;
 
-	//TODO Make stronger types for pins (enum class)?
+#define _SELECT_PIN_REG(DPIN, REG0, REG1, REG2)		\
+	REGISTER(	(uint8_t)(uint16_t)					\
+				(	DPIN < 8 ? &REG0 :	\
+					DPIN < 14 ? &REG1 :	\
+					&REG2))
+
+	constexpr REGISTER PIN_REG(uint8_t pin)
+	{
+		return _SELECT_PIN_REG(pin, PIND, PINB, PINC);
+	}
+
+	constexpr REGISTER DDR_REG(uint8_t pin)
+	{
+		return _SELECT_PIN_REG(pin, DDRD, DDRB, DDRC);
+	}
+
+	constexpr REGISTER PORT_REG(uint8_t pin)
+	{
+		return _SELECT_PIN_REG(pin, PORTD, PORTB, PORTC);
+	}
+
 	constexpr volatile uint8_t* PIN(uint8_t pin)
 	{
 		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
@@ -73,6 +93,7 @@ namespace Board
 	/**
 	 * Digital pin symbols
 	 */
+	//TODO Make stronger types for pins (enum class)?
 	enum DigitalPin
 	{
 		D0 = 0,			// PD0
