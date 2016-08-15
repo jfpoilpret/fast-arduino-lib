@@ -15,6 +15,7 @@ void Soft::AbstractUAT::_begin(uint32_t rate, Parity parity, StopBits stop_bits)
 	_start_bit_tx_time = (bit_time - 12) / 4;
 	// For stop bit we lengthten the bit duration of 25% to guarantee alignment of RX side on stop duration
 	_stop_bit_tx_time = (bit_time / 4) * 5 / 4;
+	if (stop_bits == StopBits::TWO) _stop_bit_tx_time *= 2;
 }
 
 Soft::AbstractUAT::Parity Soft::AbstractUAT::calculate_parity(uint8_t value)

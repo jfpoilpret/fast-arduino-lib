@@ -23,10 +23,14 @@ int main()
 	
 	// Start UART
 	Soft::UAT<Board::DigitalPin::D1> uart{output_buffer};
-//	Soft::UAT uart{output_buffer, Board::DigitalPin::D2};
+	// Following configurations have been tested successfully
 //	uart.begin(115200);
 //	uart.begin(9600);
-	uart.begin(230400);
+//	uart.begin(230400);
+	uart.begin(230400, Soft::AbstractUAT::Parity::NONE, Soft::AbstractUAT::StopBits::TWO);
+//	uart.begin(115200, Soft::AbstractUAT::Parity::EVEN);
+//	uart.begin(115200, Soft::AbstractUAT::Parity::ODD);
+	_delay_ms(1000.0);
 //	InputBuffer& in = uart.in();
 //	FormattedInput<InputBuffer> in = uart.fin();
 	FormattedOutput<OutputBuffer> out = uart.fout();
@@ -34,15 +38,21 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		out.put('A');
-//		out.puts("Enter a letter: ");
-//		out.flush();
-//		int input = 123;
-//		int input = in.get();
-//		out.put(input);
-//		out.put('\n');
-//		out << (char) input << ' ' << dec << input << ' ' << oct << input << ' ' << hex << input << ' ' << bin << input << endl;
-//		out.flush();
+		out.puts("Jean-Francois Poilpret @ Renens (Switzerland)\n");
 		_delay_ms(10000.0);
+//		for (char c = 'A'; c <= 'Z'; ++c)
+//		{
+//			out.put(c);
+////			out.put('A');
+////			out.puts("Enter a letter: ");
+////			out.flush();
+////			int input = 123;
+////			int input = in.get();
+////			out.put(input);
+////			out.put('\n');
+////			out << (char) input << ' ' << dec << input << ' ' << oct << input << ' ' << hex << input << ' ' << bin << input << endl;
+////			out.flush();
+//			_delay_ms(10000.0);
+//		}
 	}
 }

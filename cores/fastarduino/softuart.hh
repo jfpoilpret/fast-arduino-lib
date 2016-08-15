@@ -38,6 +38,7 @@ namespace Soft
 		// as well as time calculations?
 		// various timing constants based on rate
 		Parity _parity;
+		//TODO Double-check if this flag is needed afterwards (currently not))
 		StopBits _stop_bits;
 		uint16_t _interbit_tx_time;
 		uint16_t _start_bit_tx_time;
@@ -52,20 +53,20 @@ namespace Soft
 		template<uint8_t SIZE_TX>
 		UAT(char (&output)[SIZE_TX])
 		:	OutputBuffer{output}, 
-			_tx{PinMode::OUTPUT}
+			_tx{PinMode::OUTPUT, true}
 			{}
 		
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			_begin(rate, parity, stop_bits);
-			// We set high level on TX (not busy)
-			_tx.set();
+//			// We set high level on TX (not busy)
+//			_tx.set();
 			//FIXME if queue is not empty, we should process it until everything is written...
 		}
 		void end()
 		{
-			// We restore TX level to 0
-			_tx.clear();
+//			// We restore TX level to 0
+//			_tx.clear();
 		}
 		
 		OutputBuffer& out()
@@ -83,7 +84,7 @@ namespace Soft
 		{
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			char value;
-			if (pull(value)) write(value);
+			while (pull(value)) write(value);
 		}
 		
 	private:
