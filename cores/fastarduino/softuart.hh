@@ -24,12 +24,6 @@ namespace Soft
 
 	protected:
 		AbstractUAT() {}
-			//TODO do we really need these initializations?
-//			_parity{Parity::NONE},
-//			_stop_bits{StopBits::ONE},
-//			_interbit_tx_time{0},
-//			_start_bit_tx_time{0},
-//			_stop_bit_tx_time{0}
 		
 		void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
 		Parity calculate_parity(uint8_t value);
@@ -38,8 +32,6 @@ namespace Soft
 		// as well as time calculations?
 		// various timing constants based on rate
 		Parity _parity;
-		//TODO Double-check if this flag is needed afterwards (currently not))
-		StopBits _stop_bits;
 		uint16_t _interbit_tx_time;
 		uint16_t _start_bit_tx_time;
 		uint16_t _stop_bit_tx_time;
@@ -59,14 +51,14 @@ namespace Soft
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			_begin(rate, parity, stop_bits);
-//			// We set high level on TX (not busy)
-//			_tx.set();
 			//FIXME if queue is not empty, we should process it until everything is written...
 		}
 		void end()
 		{
-//			// We restore TX level to 0
-//			_tx.clear();
+			//FIXME if queue not empty we should:
+			// - prevent pushing to it (how?)
+			// - flush it completely
+			// - enable pushing again
 		}
 		
 		OutputBuffer& out()

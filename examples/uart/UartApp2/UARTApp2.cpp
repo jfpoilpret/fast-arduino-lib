@@ -26,11 +26,10 @@ int main()
 	// Following configurations have been tested successfully
 //	uart.begin(115200);
 //	uart.begin(9600);
-//	uart.begin(230400);
-	uart.begin(230400, Soft::AbstractUAT::Parity::NONE, Soft::AbstractUAT::StopBits::TWO);
+	uart.begin(230400);
+//	uart.begin(230400, Soft::AbstractUAT::Parity::NONE, Soft::AbstractUAT::StopBits::TWO);
 //	uart.begin(115200, Soft::AbstractUAT::Parity::EVEN);
 //	uart.begin(115200, Soft::AbstractUAT::Parity::ODD);
-	_delay_ms(1000.0);
 //	InputBuffer& in = uart.in();
 //	FormattedInput<InputBuffer> in = uart.fin();
 	FormattedOutput<OutputBuffer> out = uart.fout();

@@ -5,7 +5,6 @@
 void Soft::AbstractUAT::_begin(uint32_t rate, Parity parity, StopBits stop_bits)
 {
 	_parity = parity;
-	_stop_bits = stop_bits;
 	// Calculate timing for TX in number of cycles
 	uint16_t bit_time = uint16_t(F_CPU / rate);
 	// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2()
@@ -29,4 +28,3 @@ Soft::AbstractUAT::Parity Soft::AbstractUAT::calculate_parity(uint8_t value)
 	}
 	return (odd ? Parity::ODD : Parity::EVEN);
 }
-
