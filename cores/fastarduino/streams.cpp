@@ -26,16 +26,21 @@ int InputBuffer::get(char* content, size_t size)
 	return size;
 }
 
-int InputBuffer::gets(char* str, size_t max)
+int InputBuffer::gets(char* str, size_t max, char end)
 {
 	size_t size = 0;
 	while (size < max - 1)
 	{
 		char value;
-		if (!pull(value))
+		if (pull(value))
+		{
+			*str++ = value;
+			++size;
+			if (value == end)
+				break;
+		} 
+		else if (!_blocking)
 			break;
-		*str++ = value;
-		++size;
 	}
 	*str = 0;
 	return ++size;

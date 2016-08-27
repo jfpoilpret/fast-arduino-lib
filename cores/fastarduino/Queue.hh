@@ -6,7 +6,7 @@
 
 //TODO imprvoe code size by creating a non-template base class with all common stuff
 //TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?
-template<typename T>
+template<typename T, typename TREF = const T&>
 class Queue
 {
 public:
@@ -15,24 +15,52 @@ public:
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
-	
-	bool push(const T& item);
-	bool pull(T& item);
-	
-	bool peek(T& item) const;
-	uint8_t peek(T* buffer, uint8_t size) const;
+
+	// Those methods are not interrupt-safe hence must be called only from an ISR
+	bool _push(TREF item);
+	bool _pull(T& item);
+	bool _peek(T& item) const;
+	uint8_t _peek(T* buffer, uint8_t size) const;
 	template<uint8_t SIZE>
-	uint8_t peek(T (&buffer)[SIZE]) const;
-	
-	uint8_t items() const __attribute__((always_inline))
+	uint8_t _peek(T (&buffer)[SIZE]) const;
+	inline uint8_t _items() const
 	{
-		ClearInterrupt clint;
 		return (_tail - _head) & _mask;
 	}
-	uint8_t free() const __attribute__((always_inline))
+	inline uint8_t _free() const
 	{
-		ClearInterrupt clint;
 		return (_head - _tail - 1) & _mask;
+	}
+
+	// Those methods are interrupt-safe hence can be called outside any ISR
+	inline bool push(TREF item)
+	{
+		synchronized return _push(item);
+	}
+	inline bool pull(T& item)
+	{
+		synchronized return _pull(item);
+	}
+	inline bool peek(T& item) const
+	{
+		synchronized return _peek(item);
+	}
+	inline uint8_t peek(T* buffer, uint8_t size) const
+	{
+		synchronized return _peek(buffer, size);
+	}
+	template<uint8_t SIZE>
+	inline uint8_t peek(T (&buffer)[SIZE]) const
+	{
+		synchronized return _peek(buffer);
+	}
+	inline uint8_t items() const
+	{
+		synchronized return _items();
+	}
+	inline uint8_t free() const
+	{
+		synchronized return _free();
 	}
 	
 private:
@@ -42,19 +70,17 @@ private:
 	volatile uint8_t _tail;
 };
 
-template<typename T>
-bool Queue<T>::peek(T& item) const
+template<typename T, typename TREF>
+bool Queue<T, TREF>::_peek(T& item) const
 {
-	ClearInterrupt clint;
 	if (_tail == _head) return false;
 	item = _buffer[_head];
 	return true;
 }
 
-template<typename T>
-uint8_t Queue<T>::peek(T* buffer, uint8_t size) const
+template<typename T, typename TREF>
+uint8_t Queue<T, TREF>::_peek(T* buffer, uint8_t size) const
 {
-	ClearInterrupt clint;
 	uint8_t actual = (_tail - _head) & _mask;
 	if (size > actual) size = actual;
 	//TODO optimize copy (index calculation is simple if split in 2 parts)
@@ -63,17 +89,16 @@ uint8_t Queue<T>::peek(T* buffer, uint8_t size) const
 	return size;
 }
 
-template<typename T>
+template<typename T, typename TREF>
 template<uint8_t SIZE>
-uint8_t Queue<T>::peek(T (&buffer)[SIZE]) const
+uint8_t Queue<T, TREF>::_peek(T (&buffer)[SIZE]) const
 {
-	return peek(&buffer, SIZE);
+	return _peek(&buffer, SIZE);
 }
 
-template<typename T>
-bool Queue<T>::push(const T& item)
+template<typename T, typename TREF>
+bool Queue<T, TREF>::_push(TREF item)
 {
-	ClearInterrupt clint;
 	if ((_head - _tail - 1) & _mask)
 	{
 		_buffer[_tail] = item;
@@ -83,10 +108,9 @@ bool Queue<T>::push(const T& item)
 	return false;
 }
 
-template<typename T>
-bool Queue<T>::pull(T& item)
+template<typename T, typename TREF>
+bool Queue<T, TREF>::_pull(T& item)
 {
-	ClearInterrupt clint;
 	if (_tail != _head)
 	{
 		item = _buffer[_head];
@@ -97,8 +121,8 @@ bool Queue<T>::pull(T& item)
 }
 
 // Utility method that waits until a Queue has an item available
-template<typename T>
-T pull(Queue<T>& queue)
+template<typename T, typename TREF>
+T pull(Queue<T, TREF>& queue)
 {
 	T item;
 	while (!queue.pull(item))

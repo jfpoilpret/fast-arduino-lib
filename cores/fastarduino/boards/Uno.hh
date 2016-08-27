@@ -80,11 +80,13 @@ namespace Board
 		return _SELECT_PIN_REG(pin, PORTD, PORTB, PORTC);
 	}
 
+	//TODO REMNOVE AFTER REPLACING WITH PIN_REG
 	constexpr volatile uint8_t* PIN(uint8_t pin)
 	{
 		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
 	}
 
+	//TODO Replace arg with string type (enum class)
 	constexpr uint8_t BIT(uint8_t pin)
 	{
 		return (pin < 8  ? pin : pin < 14 ? pin - 8 : pin - 14);
@@ -162,6 +164,9 @@ namespace Board
 		PCI19 = D19			// PC5
 	};
 
+#define _SELECT_PCI_PORT(PIN)						\
+	((PIN) < 8 ? PCIPort::PCI2 : (PIN) < 14 ? PCIPort::PCI0 : PCIPort::PCI1)
+	
 #define _SELECT_PCI_REG(PORT, REG0, REG1, REG2)		\
 	REGISTER(	(uint8_t)(uint16_t)					\
 				(	PORT == PCIPort::PCI0 ? &REG0 :	\
@@ -172,7 +177,11 @@ namespace Board
 	_BV(PORT == PCIPort::PCI0 ? MSK0 :			\
 		PORT == PCIPort::PCI1 ? MSK1 :			\
 		MSK2)
-	
+
+	constexpr PCIPort PCI_PORT(InterruptPin pin)
+	{
+		return _SELECT_PCI_PORT((uint8_t) pin);
+	}
 	constexpr REGISTER PCICR_REG()
 	{
 		return _SELECT_REG(PCICR);

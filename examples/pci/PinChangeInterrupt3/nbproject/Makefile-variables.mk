@@ -11,9 +11,9 @@ CND_PLATFORM_UNO-Release=AVR-GNU-Toolchain-3.5.3-Linux-x86
 CND_ARTIFACT_DIR_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86
 CND_ARTIFACT_NAME_UNO-Release=pinchangeinterrupt3
 CND_ARTIFACT_PATH_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/pinchangeinterrupt3
-CND_PACKAGE_DIR_UNO-Release=
-CND_PACKAGE_NAME_UNO-Release=
-CND_PACKAGE_PATH_UNO-Release=
+CND_PACKAGE_DIR_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package
+CND_PACKAGE_NAME_UNO-Release=pinchangeinterrupt3.tar
+CND_PACKAGE_PATH_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package/pinchangeinterrupt3.tar
 # ATmega328-Release configuration
 CND_PLATFORM_ATmega328-Release=AVR-GNU-Toolchain-3.5.3-Linux-x86
 CND_ARTIFACT_DIR_ATmega328-Release=dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86

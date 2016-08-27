@@ -59,9 +59,9 @@ int main()
 	FunctorPCIHandler<PinChangeHandler> handler{PinChangeHandler{}};
 	PCI<Board::PCIPort::PCI1> pci{handler};
 	
-	pci.enable(Board::InterruptPin::PCI14);
-	pci.enable(Board::InterruptPin::PCI16);
-	pci.enable(Board::InterruptPin::PCI17);
+	pci.enable_pins(Board::InterruptPin::PCI14);
+	pci.enable_pins(Board::InterruptPin::PCI16);
+	pci.enable_pins(Board::InterruptPin::PCI17);
 	pci.enable();
 
 	// Event Loop

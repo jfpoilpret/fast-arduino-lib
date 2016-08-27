@@ -50,7 +50,7 @@ int main()
 	FunctorPCIHandler<PinChangeHandler> handler{PinChangeHandler{}};
 	PCI<Board::PCIPort::PCI1> pci{handler};
 	
-	pci.enable(SW1 | SW2 | SW3);
+	pci.enable_pins(SW1 | SW2 | SW3);
 	pci.enable();
 
 	// Event Loop

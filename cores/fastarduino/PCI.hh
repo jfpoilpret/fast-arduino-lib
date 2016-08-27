@@ -3,21 +3,25 @@
 
 #include <avr/interrupt.h>
 
+#include "utilities.hh"
 #include "Board.hh"
+
+//TODO Abandon the idea of doing without virtual, that complicates things too much.
+// Just limit usage of virtual to the minimum, ie event/interrupt handlers
 
 // Principles:
 // One PCI<> instance for each PCINT vector
-// Handling is delegared by PCI<> to a AbstractPCIHandler instance
-// Several AbstractPCIHandler subclasses exist to:
+// Handling is delegared by PCI<> to a PCIHandler instance
+// Several PCIHandler subclasses exist to:
 // - handle only one call (most efficient)
 // - handle a linked list of handlers
 // - support exact changes modes (store port state) of PINs
 
 // This macro is internally used in further macros and should not be used in your programs
-#define _USE_PCI(PORT)									\
-ISR(PCINT ## PORT ## _vect)								\
-{														\
-	PCI<Board::PCIPort::PCI ## PORT>::_pci->handle();	\
+#define _USE_PCI(PORT)											\
+ISR(PCINT ## PORT ## _vect)										\
+{																\
+	PCI<Board::PCIPort::PCI ## PORT>::_handler->pin_change();	\
 }
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
@@ -28,89 +32,82 @@ ISR(PCINT ## PORT ## _vect)								\
 
 #define _FRIEND_PCI_VECT(PORT) friend void PCINT ## PORT ## _vect();
 
-class AbstractPCI
-{
-protected:
-	static void _enable_all(volatile uint8_t& pcicr, uint8_t port);
-	static void _disable_all(volatile uint8_t& pcicr, uint8_t port);
-	static void _clear(volatile uint8_t& pcifr, uint8_t port);
-	
-	static void _enable(volatile uint8_t& pcmsk, uint8_t mask);
-	
-	static void _enable(volatile uint8_t& pcmsk, Board::InterruptPin pin);
-	static void _disable(volatile uint8_t& pcmsk, Board::InterruptPin pin);
-};
-
-class AbstractPCIHandler
-{
-public:
-	void handle() __attribute__((always_inline))
-	{
-		_f(_env);
-	}
-
-private:
-	//TODO refactor to make it used everywhere we need this pattern!
-	typedef void (*F)(void* env);
-	AbstractPCIHandler(void* env = 0, F f = 0) __attribute__((always_inline))
-		:_f{f}, _env{env} {}
-
-	F _f;
-	void* _env;
-	
-	friend class VirtualPCIHandler;
-	template<typename FUNCTOR> friend class FunctorPCIHandler;
-};
+class PCIHandler;
 
 template<Board::PCIPort PORT>
-class PCI:public AbstractPCI
+class PCI
 {
 public:
-	PCI(AbstractPCIHandler& handler):_handler(handler)
+	PCI(PCIHandler* handler = 0)
 	{
-		_pci = this;
+		_handler = handler;
 	}
 	
-	void enable()
+	inline void set_handler(PCIHandler* handler)
 	{
-		_enable_all(_PCICR, _PCIE);
+		_handler = handler;
 	}
-	void disable()
+	
+	inline void enable()
 	{
-		_disable_all(_PCICR, _PCIE);
+		synchronized set_mask<_PCICR, _PCIE>();
 	}
-	void clear()
+	inline void disable()
 	{
-		_clear(_PCIFR, _PCIF);
+		synchronized clear_mask<_PCICR, _PCIE>();
 	}
-	void enable(uint8_t mask)
+	inline void clear()
 	{
-		_enable(_PCMSK, mask);
+		synchronized set_mask<_PCIFR, _PCIF>();
 	}
-	void enable(Board::InterruptPin pin)
+	inline void enable_pins(uint8_t mask)
 	{
-		_enable(_PCMSK, pin);
+		synchronized set_mask<_PCMSK>(mask);
 	}
-	void disable(Board::InterruptPin pin)
+	inline void enable_pin(Board::InterruptPin pin)
 	{
-		_disable(_PCMSK, pin);
+		enable_pins(_BV(Board::BIT((uint8_t) pin)));
+	}
+	inline void disable_pin(Board::InterruptPin pin)
+	{
+		const uint8_t mask = _BV(Board::BIT((uint8_t) pin));
+		synchronized clear_mask<_PCMSK>(mask);
+	}
+	
+	inline void _enable()
+	{
+		set_mask<_PCICR, _PCIE>();
+	}
+	inline void _disable()
+	{
+		clear_mask<_PCICR, _PCIE>();
+	}
+	inline void _clear()
+	{
+		set_mask<_PCIFR, _PCIF>();
+	}
+	inline void _enable_pins(uint8_t mask)
+	{
+		set_mask<_PCMSK>(mask);
+	}
+	inline void _enable_pin(Board::InterruptPin pin)
+	{
+		_enable_pins(_BV(Board::BIT((uint8_t) pin)));
+	}
+	inline void _disable_pin(Board::InterruptPin pin)
+	{
+		const uint8_t mask = _BV(Board::BIT((uint8_t) pin));
+		clear_mask<_PCMSK>(mask);
 	}
 	
 private:
-	void handle()
-	{
-		_handler.handle();
-	}
-	
 	static const constexpr REGISTER	_PCICR = Board::PCICR_REG();
 	static const constexpr uint8_t	_PCIE = Board::PCIE_MSK(PORT);
 	static const constexpr REGISTER	_PCIFR = Board::PCIFR_REG();
 	static const constexpr uint8_t	_PCIF = Board::PCIFR_MSK(PORT);
 	static const constexpr REGISTER _PCMSK = Board::PCMSK_REG(PORT);
 	
-	static PCI<PORT>* _pci;
-	
-	AbstractPCIHandler& _handler;
+	static PCIHandler* _handler;
 	
 	_FRIEND_PCI_VECT(0);
 #if defined(PCIE1)
@@ -125,39 +122,12 @@ private:
 };
 
 template<Board::PCIPort PORT>
-PCI<PORT>* PCI<PORT>::_pci = 0;
+PCIHandler* PCI<PORT>::_handler = 0;
 
-class VirtualPCIHandler: public AbstractPCIHandler
-{
-protected:
-	VirtualPCIHandler() __attribute__((always_inline))
-		: AbstractPCIHandler{this, apply} {}
-	virtual void execute() = 0;
-
-private:
-	static void apply(void* env) __attribute__((always_inline))
-	{
-		((VirtualPCIHandler*) env)->execute();
-	}
-};
-	
-// Instantiate this template with a Functor when a functor is applicable.
-// FUNCTOR must be a class defining:
-// void operator()();
-// This approach generally gives smaller code and data than VirtualPCIHandler approach
-template<typename FUNCTOR>
-class FunctorPCIHandler: public AbstractPCIHandler
+class PCIHandler
 {
 public:
-	FunctorPCIHandler() __attribute__((always_inline)) : AbstractPCIHandler{} {}
-	FunctorPCIHandler(FUNCTOR f) __attribute__((always_inline))
-		: AbstractPCIHandler{this, apply}, _f{f} {}
-private:
-	static void apply(void* env) __attribute__((always_inline))
-	{
-		((FunctorPCIHandler<FUNCTOR>*) env)->_f();
-	}
-	FUNCTOR _f;
+	virtual bool pin_change() = 0;
 };
 
 //TODO More functional subclasses to:

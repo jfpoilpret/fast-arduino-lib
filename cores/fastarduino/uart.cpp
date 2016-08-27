@@ -43,9 +43,10 @@ void AbstractUART::_on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 	}
 }
 
+//TODO Improve perf by using _push/_pull
 void AbstractUART::_data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 {
-	Queue<char>& buffer = out();
+	Queue<char, char>& buffer = out();
 	char value;
 	if (buffer.pull(value))
 		UDR = value;

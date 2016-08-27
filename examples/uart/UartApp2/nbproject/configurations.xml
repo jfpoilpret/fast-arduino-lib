@@ -36,7 +36,6 @@
           <warningLevel>2</warningLevel>
         </cTool>
         <ccTool>
-          <developmentMode>0</developmentMode>
           <standard>8</standard>
           <incDir>
             <pElem>../../../cores</pElem>

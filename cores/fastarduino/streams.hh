@@ -5,11 +5,13 @@
 #include <stdlib.h>
 #include "Queue.hh"
 
-class OutputBuffer:public Queue<char>
+//TODO Add operator out << in; to unstack all input and push it to output (optimization possible?)
+//TODO Maybe add operator in >> out; question is when should the redirection be finished?
+class OutputBuffer:public Queue<char, char>
 {
 public:
 	template<uint8_t SIZE>
-	OutputBuffer(char (&buffer)[SIZE]): Queue<char>(buffer)
+	OutputBuffer(char (&buffer)[SIZE]): Queue<char, char>(buffer)
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
@@ -44,13 +46,13 @@ protected:
 
 //TODO Handle generic errors coming from UART RX (eg Parity...)
 //TODO allow blocking input somehow
-class InputBuffer: public Queue<char>
+class InputBuffer: public Queue<char, char>
 {
 public:
 	static const int EOF = -1;
 	
 	template<uint8_t SIZE>
-	InputBuffer(char (&buffer)[SIZE], bool blocking = false): Queue<char>(buffer), _blocking(blocking)
+	InputBuffer(char (&buffer)[SIZE], bool blocking = false): Queue<char, char>(buffer), _blocking(blocking)
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
@@ -61,7 +63,7 @@ public:
 	}
 	int get();
 	int get(char* content, size_t size);
-	int gets(char* str, size_t max);
+	int gets(char* str, size_t max, char end = 0);
 	
 protected:
 	// Listeners of events on the buffer
@@ -71,6 +73,7 @@ protected:
 	void scan(char* str, size_t max);
 
 private:
+	//FIXME this does not belong here externalize use just like ::pull() for queues
 	const bool _blocking;
 };
 
