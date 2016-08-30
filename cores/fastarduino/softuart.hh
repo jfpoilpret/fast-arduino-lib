@@ -1,31 +1,22 @@
 #ifndef SOFTUART_HH
 #define	SOFTUART_HH
 
+#include "uartcommons.hh"
 #include "streams.hh"
 #include "Board.hh"
 #include "FastIO.hh"
 #include "PCI.hh"
 
+//TODO Handle parity check in UARX
+//FIXME Handle begin/end properly in relation to current queue content
+//TODO Create a complete UART (UATX+UARX)
+//TODO Create AbstractUART which would be parent of all (virtual inheritance) and include Parity as field
+//TODO Find out why netbeans shows an error on in()._push() and out().pull()
+//TODO When all methods complete, recheck assembly and adapt calculation of TX/RX delays
+//TODO Infer about using Doxygen comments everywhere
 namespace Soft
 {
-	namespace Serial
-	{
-		enum class Parity: uint8_t
-		{
-			NONE = 0,
-			EVEN = 1,
-			ODD = 3
-		};
-		enum class StopBits: uint8_t
-		{
-			ONE = 1,
-			TWO = 2
-		};
-	}
-
-	//TODO Create AbstractUART which would be parent of all (virtual inheritance) and include Parity as field
-	
-	class AbstractUATX: private OutputBuffer
+	class AbstractUATX: virtual public Serial::UARTErrors, private OutputBuffer
 	{
 	public:
 		OutputBuffer& out()
@@ -37,11 +28,15 @@ namespace Soft
 		{
 			return FormattedOutput<OutputBuffer>(*this);
 		}
-		
-	protected:
+
+		// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
+		// Fixed in 4.9.4 (currently using 4.9.2 only)
+		// We have to make the constructor public to allow virtual inheritance...
+//	protected:
 		template<uint8_t SIZE_TX>
 		AbstractUATX(char (&output)[SIZE_TX]):OutputBuffer{output} {}
 		
+	protected:
 		void _begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits);
 		static Serial::Parity calculate_parity(Serial::Parity parity, uint8_t value);
 
@@ -82,6 +77,10 @@ namespace Soft
 			char value;
 			while (out().pull(value)) write(value);
 		}
+		virtual void on_overflow(__attribute__((unused)) char c)
+		{
+			_errors.all_errors.queue_overflow = true;
+		}
 		
 	private:
 		inline void write(uint8_t value)
@@ -93,8 +92,6 @@ namespace Soft
 		FastPin<DPIN> _tx;
 	};
 
-	//TODO THAT SHOULD BELONG TO AbstractUAT but should be passed TX as a parameter (template method) 
-	// or just clear/set as FP or sth like that... but that might imply extra timing not so good...
 	template<Board::DigitalPin DPIN>
 	void UATX<DPIN>::_write(uint8_t value)
 	{
@@ -129,7 +126,7 @@ namespace Soft
 		_delay_loop_2(_stop_bit_tx_time);
 	}
 
-	class AbstractUARX: private InputBuffer
+	class AbstractUARX: virtual public Serial::UARTErrors, private InputBuffer
 	{
 	public:
 		InputBuffer& in()
@@ -144,13 +141,13 @@ namespace Soft
 
 	protected:
 		template<uint8_t SIZE_RX>
-		AbstractUARX(char (&input)[SIZE_RX], bool blocking):InputBuffer{input, blocking} {}
-//		AbstractUARX(char (&input)[SIZE_RX]):InputBuffer{input, true} {}
+		AbstractUARX(char (&input)[SIZE_RX]):InputBuffer{input} {}
 
-		void _begin(uint32_t rate, Soft::Serial::Parity parity, Soft::Serial::StopBits stop_bits);
+		void _begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits);
 
 		// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
 		Serial::Parity _parity;
+		bool _two_stop_bits;
 		// Various timing constants based on rate
 		uint16_t _interbit_rx_time;
 		uint16_t _start_bit_rx_time;
@@ -165,12 +162,12 @@ namespace Soft
 		static const constexpr Board::PCIPort PCIPORT = Board::PCI_PORT(RX);
 
 		template<uint8_t SIZE_RX>
-		UARX(char (&input)[SIZE_RX], bool blocking = false):AbstractUARX(input, blocking), _rx{PinMode::INPUT} {}
+		UARX(char (&input)[SIZE_RX]):AbstractUARX(input), _rx{PinMode::INPUT} {}
 		
 		void begin(	PCI<PCIPORT>& pci,
 					uint32_t rate, 
-					Soft::Serial::Parity parity = Soft::Serial::Parity::NONE, 
-					Soft::Serial::StopBits stop_bits = Soft::Serial::StopBits::ONE)
+					Serial::Parity parity = Serial::Parity::NONE, 
+					Serial::StopBits stop_bits = Serial::StopBits::ONE)
 		{
 			_pci = &pci;
 			_begin(rate, parity, stop_bits);
@@ -184,10 +181,9 @@ namespace Soft
 	protected:
 		virtual bool pin_change()
 		{
-			return _pin_change(*this);
+			return _pin_change();
 		}
-		//TODO Recheck if static is needed
-		static bool _pin_change(UARX<RX>& uarx);
+		bool _pin_change();
 
 	private:
 		FastPin<DPIN> _rx;
@@ -195,31 +191,65 @@ namespace Soft
 	};
 
 	template<Board::InterruptPin RX>
-	bool UARX<RX>::_pin_change(UARX<RX>& uarx)
+	bool UARX<RX>::_pin_change()
 	{
 		// Check RX is low (start bit)
-		if (uarx._rx.value()) return false;
+		if (_rx.value()) return false;
 		uint8_t value = 0;
+		bool odd = false;
+		Serial::_UARTErrors errors;
+		errors.has_errors = 0;
 		// Wait for start bit to finish
-		_delay_loop_2(uarx._start_bit_rx_time);
+		_delay_loop_2(_start_bit_rx_time);
 		// Read first 7 bits
 		for (uint8_t i = 0; i < 7; ++i)
 		{
-			if (uarx._rx.value()) value |= 0x80;
+			if (_rx.value())
+			{
+				value |= 0x80;
+				odd = !odd;
+			}
 			value >>= 1;
-			_delay_loop_2(uarx._interbit_rx_time);
+			_delay_loop_2(_interbit_rx_time);
 		}
 		// Read last bit
-		if (uarx._rx.value()) value |= 0x80;
-		//TODO if parity calculate and check it
+		if (_rx.value())
+		{
+			value |= 0x80;
+			odd = !odd;
+		}
 		
-		// Push value (TODO and check if overflow)
-		uarx.in()._push(value);
-		_delay_loop_2(uarx._stop_bit_rx_time);
+		if (_parity != Serial::Parity::NONE)
+		{
+			// Wait for parity bit
+			_delay_loop_2(_interbit_rx_time);
+			bool parity_bit = (_parity == Serial::Parity::ODD ? !odd : odd);
+			// Check parity bit
+			errors.all_errors.parity_error = (_rx.value() != parity_bit);
+		}
+		
+		// Wait for 1st stop bit
+//		_delay_loop_2(_two_stop_bits ? _interbit_rx_time : _stop_bit_rx_time);
+		_delay_loop_2(_interbit_rx_time);
+		if (!_rx.value())
+			errors.all_errors.frame_error = true;
+		if (_two_stop_bits)
+		{
+//			_delay_loop_2(_stop_bit_rx_time);
+			_delay_loop_2(_interbit_rx_time);
+			if (!_rx.value())
+				errors.all_errors.frame_error = true;
+		}	
+		// Push value if no error
+		if (!errors.has_errors)
+			errors.all_errors.queue_overflow = !in()._push(value);
+		if (errors.has_errors)
+			_errors = errors;
 		// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
-		uarx._pci->_clear();
+		_pci->_clear();
 		return true;
 	}
+
 }
 
 #endif	/* SOFTUART_HH */

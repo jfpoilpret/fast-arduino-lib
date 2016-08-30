@@ -10,21 +10,21 @@
 #define UNUSED(arg) ((void)(arg))
 #endif
 
-class ClearInterrupt
-{
-public:
-	ClearInterrupt() __attribute__((always_inline)) : _sreg(SREG)
-	{
-		cli();
-	}
-	~ClearInterrupt() __attribute__((always_inline))
-	{
-		SREG = _sreg;
-	}
-
-private:
-	const uint8_t _sreg;
-};
+//class ClearInterrupt
+//{
+//public:
+//	ClearInterrupt() __attribute__((always_inline)) : _sreg(SREG)
+//	{
+//		cli();
+//	}
+//	~ClearInterrupt() __attribute__((always_inline))
+//	{
+//		SREG = _sreg;
+//	}
+//
+//private:
+//	const uint8_t _sreg;
+//};
 
 inline uint8_t _lock() __attribute__((always_inline));
 inline uint8_t _lock()
@@ -66,11 +66,6 @@ inline void clear_mask(uint8_t mask)
 {
 	((volatile uint8_t&) REG) &= ~mask;
 }
-
-//inline void set_bit(volatile uint8_t* MEM, uint8_t BIT)
-//{
-//	asm volatile("SBI %[IOREG], %[BIT] \n\t"::[IOREG] "I" (IOREG), [BIT] "I" (BIT));
-//}
 
 inline void set_ioreg_bit(REGISTER IOREG, uint8_t BIT) __attribute__((always_inline));
 inline void set_ioreg_bit(REGISTER IOREG, uint8_t BIT)

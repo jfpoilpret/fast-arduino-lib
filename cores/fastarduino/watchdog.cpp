@@ -9,13 +9,15 @@ void Watchdog::begin(TimeOut timeout)
 	uint16_t ms_per_tick = 1 << (timeout + 4);
 	uint8_t config = _BV(WDIE) | (timeout & 0x07) | (timeout & 0x08 ? _BV(WDP3) : 0);
 	
-	ClearInterrupt clint;
-	wdt_reset();
-	MCUSR |= 1 << WDRF;
-	WDTCSR = _BV(WDCE) | _BV(WDE);
-	WDTCSR = config;
-	_millis_per_tick = ms_per_tick;
-	_millis = 0;
+	synchronized
+	{
+		wdt_reset();
+		MCUSR |= 1 << WDRF;
+		WDTCSR = _BV(WDCE) | _BV(WDE);
+		WDTCSR = config;
+		_millis_per_tick = ms_per_tick;
+		_millis = 0;
+	}
 }
 
 void Watchdog::delay(uint32_t ms)

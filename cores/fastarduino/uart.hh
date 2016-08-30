@@ -1,6 +1,7 @@
 #ifndef UART_HH
 #define	UART_HH
 
+#include "uartcommons.hh"
 #include "streams.hh"
 #include "Board.hh"
 
@@ -33,21 +34,9 @@ ISR(USART ## NAME ## _UDRE_vect)										\
 	_FRIEND_UDRE_VECT(NAME);
 
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
-class AbstractUART: private InputBuffer, private OutputBuffer
+class AbstractUART: public Serial::UARTErrors, private InputBuffer, private OutputBuffer
 {
 public:
-	enum class Parity: uint8_t
-	{
-		NONE = 0x00,
-		EVEN = _BV(UPM00),
-		ODD = _BV(UPM00) | _BV(UPM01)
-	};
-	enum class StopBits: uint8_t
-	{
-		ONE = 0x00,
-		TWO = _BV(USBS0)
-	};
-
 	InputBuffer& in()
 	{
 		return (InputBuffer&) *this;
@@ -71,9 +60,9 @@ public:
 protected:
 	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 	AbstractUART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		:InputBuffer{input, true}, OutputBuffer{output}, _transmitting(false) {}
+		:InputBuffer{input}, OutputBuffer{output}, _transmitting(false) {}
 	
-	static void _begin(	uint32_t rate, Parity parity, StopBits stop_bits,
+	static void _begin(	uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits,
 						volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
 						volatile uint8_t& UCSRB, volatile uint8_t& UCSRC);
 	static void _end(volatile uint8_t& UCSRB);
@@ -81,7 +70,7 @@ protected:
 	void _on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
 	
 	void _data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
-	void _data_receive_complete(volatile uint8_t& UDR);
+	void _data_receive_complete(volatile uint8_t& UCSRA, volatile uint8_t& UDR);
 
 private:
 	bool _transmitting;
@@ -98,7 +87,9 @@ public:
 		_uart = this;
 	}
 	
-	void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+	void begin(	uint32_t rate,
+				Serial::Parity parity = Serial::Parity::NONE, 
+				Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
 		_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC);
 	}
@@ -113,6 +104,10 @@ protected:
 	{
 		_on_put(UCSRB, UDR);
 	}
+	virtual void on_overflow(__attribute__((unused)) char c)
+	{
+		_errors.all_errors.queue_overflow = true;
+	}
 	
 private:
 	void data_register_empty()
@@ -121,7 +116,7 @@ private:
 	}
 	void data_receive_complete()
 	{
-		_data_receive_complete(UDR);
+		_data_receive_complete(UCSRA, UDR);
 	}
 	
 	static UART<USART>* _uart;

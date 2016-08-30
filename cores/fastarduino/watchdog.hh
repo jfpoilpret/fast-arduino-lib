@@ -34,15 +34,16 @@ public:
 	void begin(TimeOut timeout = TO_16ms);
 	void end()
 	{
-		ClearInterrupt clint;
-		WDTCSR = _BV(WDCE) | _BV(WDE);
-		WDTCSR = 0;
+		synchronized
+		{
+			WDTCSR = _BV(WDCE) | _BV(WDE);
+			WDTCSR = 0;
+		}
 	}
 	
 	uint32_t millis() const
 	{
-		ClearInterrupt clint;
-		return _millis;
+		synchronized return _millis;
 	}
 	void delay(uint32_t ms);
 	

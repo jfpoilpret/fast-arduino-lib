@@ -52,7 +52,7 @@ public:
 	static const int EOF = -1;
 	
 	template<uint8_t SIZE>
-	InputBuffer(char (&buffer)[SIZE], bool blocking = false): Queue<char, char>(buffer), _blocking(blocking)
+	InputBuffer(char (&buffer)[SIZE]): Queue<char, char>(buffer)
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
@@ -61,9 +61,12 @@ public:
 	{
 		return items();
 	}
-	int get();
-	int get(char* content, size_t size);
-	int gets(char* str, size_t max, char end = 0);
+	int get()
+	{
+		char value;
+		if (pull(value)) return value;
+		return EOF;
+	}
 	
 protected:
 	// Listeners of events on the buffer
@@ -71,11 +74,12 @@ protected:
 	virtual void on_get(__attribute__((unused)) char c) {}
 	
 	void scan(char* str, size_t max);
-
-private:
-	//FIXME this does not belong here externalize use just like ::pull() for queues
-	const bool _blocking;
 };
+
+// The following functions are blocking until input is satisfied
+char get(InputBuffer& in);
+char* get(InputBuffer& in, char* content, size_t size);
+int gets(InputBuffer& in, char* str, size_t max, char end = 0);
 
 class FormatBase
 {

@@ -30,6 +30,7 @@
       <itemPath>cores/fastarduino/time.hh</itemPath>
       <itemPath>cores/fastarduino/uart.cpp</itemPath>
       <itemPath>cores/fastarduino/uart.hh</itemPath>
+      <itemPath>cores/fastarduino/uartcommons.hh</itemPath>
       <itemPath>cores/fastarduino/utilities.hh</itemPath>
       <itemPath>cores/fastarduino/watchdog.cpp</itemPath>
       <itemPath>cores/fastarduino/watchdog.hh</itemPath>
@@ -150,6 +151,8 @@
       </item>
       <item path="cores/fastarduino/uart.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/uartcommons.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
@@ -256,6 +259,8 @@
       <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/uartcommons.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -364,6 +369,8 @@
       </item>
       <item path="cores/fastarduino/uart.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/uartcommons.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
@@ -470,6 +477,8 @@
       <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/uartcommons.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
       </item>
