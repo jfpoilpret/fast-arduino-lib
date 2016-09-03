@@ -39,14 +39,16 @@ Roadmap
 The roadmap of supported features is the following:
 
 1. Fast IO support (done)
-2. Multiple boards variants support (UNO, MEGA, ATtinyX4, ATtinyX5)
-3. Watchdog and events support (done)
-4. Power management (done)
-5. Hardware UART support
-6. Trace support
-7. Real Time Timer support
-8. Software UART support
+2. Watchdog and events support (done)
+3. Power management (done)
+4. Hardware UART support (done)
+5. Pin Change Interrupt support (done)
+6. Software UART support (done)
+7. Trace support
+8. Real Time Timer support
 9. SPI support (ATmega328 first)
 10. SPI support (ATtinyX4)
-11. NRF24L01P support
-12. ... To be determined later
+11. Pin Interrupt support
+12. NRF24L01P support
+13. Multiple boards variants support (UNO, MEGA, ATtinyX4, ATtinyX5)
+14. ... To be determined later
