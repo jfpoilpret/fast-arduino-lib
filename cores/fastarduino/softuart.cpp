@@ -19,18 +19,19 @@ void Soft::AbstractUATX::_begin(uint32_t rate, Serial::Parity parity, Serial::St
 	if (stop_bits == Serial::StopBits::TWO) _stop_bit_tx_time *= 2;
 }
 
-//TODO Can this really be cosidered constexpr?
+//TODO Can this really be considered constexpr?
 constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 {
+	// We add 3 cycles to allow rounding
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
 }
 
 void Soft::AbstractUARX::_begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits)
 {
-	//TODO
 	_parity = parity;
 	// Calculate timing for RX in number of cycles
 	uint16_t bit_time = uint16_t(F_CPU / rate);
+	
 	// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2()
 	// 87 cycles (+4N delay) elapse until start bit is detected from PCI interrupt and 1st bit is sampled:
 	// - 3 cycles to generate the PCI interrupt
@@ -41,30 +42,40 @@ void Soft::AbstractUARX::_begin(uint32_t rate, Serial::Parity parity, Serial::St
 	// - 4N + 4 in delay
 	// - 18 cycles until first bit sample read
 	// For sampling of first bit we wait until middle of first bit
-	// We add 3 cycles to allow rounding
 	_start_bit_rx_time = compute_delay(3 * bit_time / 2, 3+2+4+2+50+4+4+18);
 	
-	// 22+4N cycles elapse between processing of each bit
-//	_interbit_rx_time = compute_delay(bit_time, 12);
-	_interbit_rx_time = compute_delay(bit_time, 22);
+	// 16+4N cycles elapse between processing of each bit
+	_interbit_rx_time = compute_delay(bit_time, 16);
 	
-	//TODO recount cycles, but many situations here:
-	// - 1 or 2 stops
-	// - error (=> no push) or no error
-	// If no parity, 64+4N cycles elapse until stop bit, we only want to be sure we got the stop bit edge before
-	// re-enabling PCINT
-	// - 11 cycles to call _push
-	// - 41 cycles in _push
-	// - 4+4N cycles in delay
-	// - 5 cycles to re-enable PCI
-	// - 5 additional cycles to make sure we passed the edge of stop bit
-	_stop_bit_rx_time = compute_delay(bit_time / 2, 66);
-	_two_stop_bits = (stop_bits == Serial::StopBits::TWO);
-//	_stop_bit_rx_time = compute_delay(bit_time / 2, 61);
+	if (parity != Serial::Parity::NONE)
+	{
+		// When parity must be checked, the number of cycles between last data bit sampled and parity bit sample is:
+		// - 20 cycles + 4n delay
+		_parity_bit_rx_time = compute_delay(bit_time, 20);
+		// If no error (push) then the following cycles will get executed until we re-enable PCI
+		// - 21 cycles before delay loop
+		// - 41 cycles in _push
+		// - 4N cycles in delay loop
+		// - 5 additional cycles to make sure we passed the edge of stop bit
+		_stop_bit_rx_time_push = compute_delay(bit_time / 2, 21+41+5);
+		// If an error occurred (no push) then the following cycles will get executed until we re-enable PCI
+		// - 26 cycles before delay loop
+		// - 4N cycles in delay loop
+		// - 5 additional cycles to make sure we passed the edge of stop bit
+		_stop_bit_rx_time_no_push = compute_delay(bit_time / 2, 26+5);
+	}
+	else
+	{
+		// If no error (push) then the following cycles will get executed until we re-enable PCI
+		// - 24 cycles before delay loop
+		// - 41 cycles in _push
+		// - 4N cycles in delay loop
+		// - 5 additional cycles to make sure we passed the edge of stop bit
+		_stop_bit_rx_time_push = compute_delay(bit_time / 2, 24+41+5);
+	}
 	
-	// We don't care about actual stop bit time, we just ensure we are raeady for PCI before the end on stop bit
+	// We don't care about actual stop bit time, we just ensure we are ready for PCI before the end on stop bit
 	// Additionally, 49 cycles elapse until next PCI can be handled
-	
 }
 
 Serial::Parity Soft::AbstractUATX::calculate_parity(Serial::Parity parity, uint8_t value)

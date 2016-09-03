@@ -7,7 +7,6 @@
 #include "FastIO.hh"
 #include "PCI.hh"
 
-//TODO Handle parity check in UARX
 //FIXME Handle begin/end properly in relation to current queue content
 //TODO Create a complete UART (UATX+UARX)
 //TODO Create AbstractUART which would be parent of all (virtual inheritance) and include Parity as field
@@ -151,7 +150,9 @@ namespace Soft
 		// Various timing constants based on rate
 		uint16_t _interbit_rx_time;
 		uint16_t _start_bit_rx_time;
-		uint16_t _stop_bit_rx_time;
+		uint16_t _parity_bit_rx_time;
+		uint16_t _stop_bit_rx_time_push;
+		uint16_t _stop_bit_rx_time_no_push;
 	};
 
 	template<Board::InterruptPin RX>
@@ -221,30 +222,26 @@ namespace Soft
 		
 		if (_parity != Serial::Parity::NONE)
 		{
-			// Wait for parity bit
-			_delay_loop_2(_interbit_rx_time);
+			// Wait for parity bit TODO NEED SPECIFIC DELAY HERE
+			_delay_loop_2(_parity_bit_rx_time);
 			bool parity_bit = (_parity == Serial::Parity::ODD ? !odd : odd);
 			// Check parity bit
 			errors.all_errors.parity_error = (_rx.value() != parity_bit);
 		}
-		
-		// Wait for 1st stop bit
-//		_delay_loop_2(_two_stop_bits ? _interbit_rx_time : _stop_bit_rx_time);
-		_delay_loop_2(_interbit_rx_time);
-		if (!_rx.value())
-			errors.all_errors.frame_error = true;
-		if (_two_stop_bits)
-		{
-//			_delay_loop_2(_stop_bit_rx_time);
-			_delay_loop_2(_interbit_rx_time);
-			if (!_rx.value())
-				errors.all_errors.frame_error = true;
-		}	
+
 		// Push value if no error
 		if (!errors.has_errors)
+		{
 			errors.all_errors.queue_overflow = !in()._push(value);
-		if (errors.has_errors)
+			// Wait for 1st stop bit
+			_delay_loop_2(_stop_bit_rx_time_push);
+		}
+		else
+		{
 			_errors = errors;
+			// Wait for 1st stop bit
+			_delay_loop_2(_stop_bit_rx_time_no_push);
+		}
 		// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 		_pci->_clear();
 		return true;

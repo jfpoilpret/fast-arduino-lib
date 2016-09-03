@@ -22,42 +22,47 @@ int main()
 {
 	// Enable interrupts at startup time
 	sei();
-	// Start UART
+	
+	// Setup UART
 	Soft::UATX<Board::DigitalPin::D1> uatx{output_buffer};
 	Soft::UARX<Board::InterruptPin::PCI0> uarx{input_buffer};
-	// Following configurations have been tested successfully
-//	uatx.begin(9600);
-//	uatx.begin(115200);
-//	uatx.begin(230400);
-//	uatx.begin(230400, Serial::Parity::NONE, Serial::StopBits::TWO);
-	uatx.begin(115200, Serial::Parity::EVEN);
-//	uatx.begin(115200, Serial::Parity::ODD);
 	PCI<uarx.PCIPORT> pci{&uarx};
 	pci.enable();
+
+	// Start UART
+	// Following configurations have been tested successfully
+//	uatx.begin(9600);
 //	uarx.begin(pci, 9600);
+
+//	uatx.begin(115200);
 //	uarx.begin(pci, 115200);
-	uarx.begin(pci, 115200, Serial::Parity::EVEN);
+	
+//	uatx.begin(230400);
 //	uarx.begin(pci, 230400);
+	
+//	uatx.begin(230400, Serial::Parity::NONE, Serial::StopBits::TWO);
+//	uarx.begin(pci, 230400, Serial::Parity::NONE, Serial::StopBits::TWO);
+	
+//	uatx.begin(230400, Serial::Parity::EVEN, Serial::StopBits::TWO);
+//	uarx.begin(pci, 230400, Serial::Parity::EVEN, Serial::StopBits::TWO);
+	
+//	uatx.begin(230400, Serial::Parity::EVEN);
+//	uarx.begin(pci, 230400, Serial::Parity::EVEN);
+	
+//	uatx.begin(115200, Serial::Parity::ODD);
+//	uarx.begin(pci, 115200, Serial::Parity::ODD);
+	
+	uatx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
+	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 
 	InputBuffer& in = uarx.in();
-//	FormattedInput<InputBuffer> in = uarx.fin();
 	FormattedOutput<OutputBuffer> out = uatx.fout();
 
-	// Event Loop
-//	while (true)
-//	{
-//		char line[INPUT_BUFFER_SIZE];
-//		if (::gets(in, line, INPUT_BUFFER_SIZE, '\n'))
-//			out.puts(line);
-////		_delay_ms(100.0);
-//	}
-	
 	while (true)
 	{
 		int value = in.get();
 		if (value != InputBuffer::EOF)
 			out.put(value);
-//		out.put(::get(in));
 		if (uarx.has_errors())
 		{
 			out.put(' ');
@@ -68,6 +73,6 @@ int main()
 			out.put('\n');
 			uarx.clear_errors();
 		}
-		_delay_ms(1.0);
+		_delay_ms(10.0);
 	}
 }
