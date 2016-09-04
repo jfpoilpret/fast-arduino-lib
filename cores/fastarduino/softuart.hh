@@ -39,7 +39,6 @@ namespace Soft
 		void _begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits);
 		static Serial::Parity calculate_parity(Serial::Parity parity, uint8_t value);
 
-		// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
 		Serial::Parity _parity;
 		// Various timing constants based on rate
 		uint16_t _interbit_tx_time;
@@ -47,7 +46,7 @@ namespace Soft
 		uint16_t _stop_bit_tx_time;
 	};
 	
-	template<Board::DigitalPin DPIN>
+	template<Board::DigitalPin TX>
 	class UATX: public AbstractUATX
 	{
 	public:
@@ -88,7 +87,7 @@ namespace Soft
 		}
 		void _write(uint8_t value);
 		
-		FastPin<DPIN> _tx;
+		FastPin<TX> _tx;
 	};
 
 	template<Board::DigitalPin DPIN>
@@ -146,7 +145,6 @@ namespace Soft
 
 		// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
 		Serial::Parity _parity;
-		bool _two_stop_bits;
 		// Various timing constants based on rate
 		uint16_t _interbit_rx_time;
 		uint16_t _start_bit_rx_time;
@@ -246,7 +244,28 @@ namespace Soft
 		_pci->_clear();
 		return true;
 	}
-
+	
+	template<Board::InterruptPin RX, Board::DigitalPin TX>
+	class UART: public UARX<RX>, public UATX<TX>
+	{
+	public:
+		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+		:UARX<RX>{input}, UATX<TX>{output} {}
+		
+		void begin(	PCI<UARX<RX>::PCIPORT>& pci,
+					uint32_t rate, 
+					Serial::Parity parity = Serial::Parity::NONE, 
+					Serial::StopBits stop_bits = Serial::StopBits::ONE)
+		{
+			UARX<RX>::begin(pci, rate, parity, stop_bits);
+			UATX<TX>::begin(rate, parity, stop_bits);
+		}
+//		void end()
+//		{
+//			
+//		}
+	};
 }
 
 #endif	/* SOFTUART_HH */

@@ -2,8 +2,6 @@
 
 #include "softuart.hh"
 
-//TODO Use static constants to compute TX/RX time with one dedicated constant per function or code part
-// that will make it easier to change later when code changes slightly...
 void Soft::AbstractUATX::_begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits)
 {
 	_parity = parity;
@@ -26,7 +24,9 @@ constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
 }
 
-void Soft::AbstractUARX::_begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits)
+void Soft::AbstractUARX::_begin(
+	uint32_t rate, Serial::Parity parity, 
+	__attribute__((unused)) Serial::StopBits stop_bits)
 {
 	_parity = parity;
 	// Calculate timing for RX in number of cycles

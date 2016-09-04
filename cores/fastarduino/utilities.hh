@@ -43,6 +43,7 @@ inline void _unlock(uint8_t* key)
 
 #define synchronized for (uint8_t __key __attribute__((__cleanup__(_unlock))) = _lock(), i = 1; i != 0; i--)
 
+//TODO Check if templates are absolutely needed here (as this reduces the utilization scope of those methods)
 template<const REGISTER& REG, uint8_t MASK>
 inline void set_mask()
 {
