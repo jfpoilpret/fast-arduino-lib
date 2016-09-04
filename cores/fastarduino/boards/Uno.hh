@@ -49,15 +49,19 @@
  *                  +--------------------------+
  * @endcode
  */
+//TODO Use REGISTER everywhere instead of volatile uint8_t*
+//TODO Use enum class as much as possible
+//TODO Same for all boards: MEGA, ATmega328, ATtinyX4
 namespace Board
 {
 #define _SELECT_REG(REG) REGISTER((uint8_t)(uint16_t)&REG)
 
-	//TODO Replace `volatile uintx*` with REGISTER everywhere?
-	
-	constexpr volatile uint8_t* const PORT_B = &PINB;
-	constexpr volatile uint8_t* const PORT_C = &PINC;
-	constexpr volatile uint8_t* const PORT_D = &PIND;
+//	constexpr volatile uint8_t* const PORT_B = &PINB;
+//	constexpr volatile uint8_t* const PORT_C = &PINC;
+//	constexpr volatile uint8_t* const PORT_D = &PIND;
+	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
+	constexpr const REGISTER PORT_C = _SELECT_REG(PINC);
+	constexpr const REGISTER PORT_D = _SELECT_REG(PIND);
 
 #define _SELECT_PIN_REG(DPIN, REG0, REG1, REG2)		\
 	REGISTER(	(uint8_t)(uint16_t)					\
@@ -80,11 +84,11 @@ namespace Board
 		return _SELECT_PIN_REG(pin, PORTD, PORTB, PORTC);
 	}
 
-	//TODO REMNOVE AFTER REPLACING WITH PIN_REG
-	constexpr volatile uint8_t* PIN(uint8_t pin)
-	{
-		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
-	}
+	//TODO REMOVE AFTER REPLACING WITH PIN_REG
+//	constexpr volatile uint8_t* PIN(uint8_t pin)
+//	{
+//		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
+//	}
 
 	//TODO Replace arg with string type (enum class)
 	constexpr uint8_t BIT(uint8_t pin)

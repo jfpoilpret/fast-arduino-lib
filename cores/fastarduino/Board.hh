@@ -10,6 +10,7 @@
 class REGISTER
 {
 public:
+	constexpr REGISTER():ADDR(0) {}
 	constexpr REGISTER(const REGISTER& rhs):ADDR(rhs.ADDR) {}
 	constexpr REGISTER(uint8_t ADDR):ADDR(ADDR) {}
 	uint8_t io_addr() const
@@ -28,8 +29,17 @@ public:
 	{
 		return *((volatile uint16_t*) (uint16_t) ADDR);
 	}
+	void set(uint8_t value) const
+	{
+		*((volatile uint8_t*) (uint16_t) ADDR) = value;
+	}
+	uint8_t get() const
+	{
+		return *((volatile uint8_t*) (uint16_t) ADDR);
+	}
+
 private:	
-	const uint8_t ADDR;
+	uint8_t ADDR;
 };
 
 // Arduino Boards

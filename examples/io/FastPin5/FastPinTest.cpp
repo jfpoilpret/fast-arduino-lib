@@ -35,7 +35,7 @@ int main()
 	IOMaskedPort pins[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		pins[i] = IOMaskedPort{Board::PORT_D, (1 << i), 0xFF};
+		pins[i] = IOMaskedPort{Board::PORT_D, _BV(i), 0xFF};
 	}
 	
 	// Loop of the LED chaser

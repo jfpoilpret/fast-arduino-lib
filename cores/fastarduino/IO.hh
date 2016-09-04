@@ -7,24 +7,25 @@
 class AbstractPort
 {
 public:
-	AbstractPort(volatile uint8_t* PIN = 0) __attribute__((always_inline)) : _PIN{PIN} {}
+	AbstractPort() INLINE {}
+	AbstractPort(REGISTER PIN) INLINE : _PIN{PIN} {}
 	
 protected:
-	volatile uint8_t* PIN() __attribute__((always_inline))
+	REGISTER PIN() INLINE
 	{
 		return _PIN;
 	}
-	volatile uint8_t* DDR() __attribute__((always_inline))
+	REGISTER DDR() INLINE
 	{
-		return _PIN + 1;
+		return REGISTER(_PIN.mem_addr() + 1);
 	}
-	volatile uint8_t* PORT() __attribute__((always_inline))
+	REGISTER PORT() INLINE
 	{
-		return _PIN + 2;
+		return REGISTER(_PIN.mem_addr() + 2);
 	}
 	
 private:
-	volatile uint8_t* _PIN;
+	REGISTER _PIN;
 };
 
 // This class maps to a PORT and handles it all 8 bits at a time
@@ -32,36 +33,37 @@ private:
 class IOPort: public AbstractPort
 {
 public:
-	IOPort(volatile uint8_t* PIN = 0) __attribute__((always_inline)) : AbstractPort{PIN} {}
-	IOPort(volatile uint8_t* PIN, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) : AbstractPort{PIN}
+	IOPort() INLINE {}
+	IOPort(REGISTER PIN) INLINE : AbstractPort{PIN} {}
+	IOPort(REGISTER PIN, uint8_t ddr, uint8_t port = 0) INLINE : AbstractPort{PIN}
 	{
 		set_DDR(ddr);
 		set_PORT(port);
 	}
 	
-	void set_PORT(uint8_t port) __attribute__((always_inline))
+	void set_PORT(uint8_t port) INLINE
 	{
-		*PORT() = port;
+		PORT().set(port);
 	}
-	uint8_t get_PORT() __attribute__((always_inline))
+	uint8_t get_PORT() INLINE
 	{
-		return *PORT();
+		return PORT().get();
 	}
-	void set_DDR(uint8_t ddr) __attribute__((always_inline))
+	void set_DDR(uint8_t ddr) INLINE
 	{
-		*DDR() = ddr;
+		DDR().set(ddr);
 	}
-	uint8_t get_DDR() __attribute__((always_inline))
+	uint8_t get_DDR() INLINE
 	{
-		return *DDR();
+		return DDR().get();
 	}
-	void set_PIN(uint8_t pin) __attribute__((always_inline))
+	void set_PIN(uint8_t pin) INLINE
 	{
-		*PIN() = pin;
+		PIN().set(pin);
 	}
-	uint8_t get_PIN() __attribute__((always_inline))
+	uint8_t get_PIN() INLINE
 	{
-		return *PIN();
+		return PIN().get();
 	}
 };
 
@@ -70,49 +72,50 @@ public:
 class IOMaskedPort: public AbstractPort
 {
 public:
-	IOMaskedPort(volatile uint8_t* PIN = 0, uint8_t mask = 0) __attribute__((always_inline))
+	IOMaskedPort() INLINE {}
+	IOMaskedPort(REGISTER PIN, uint8_t mask = 0) INLINE
 	: AbstractPort(PIN), _MASK(mask) {}
-	IOMaskedPort(volatile uint8_t* PIN, uint8_t mask, uint8_t ddr, uint8_t port = 0) __attribute__((always_inline)) 
+	IOMaskedPort(REGISTER PIN, uint8_t mask, uint8_t ddr, uint8_t port = 0) INLINE 
 	: AbstractPort(PIN), _MASK(mask)
 	{
 		set_DDR(ddr);
 		set_PORT(port);
 	}
-	void set_PORT(uint8_t port) __attribute__((always_inline))
+	void set_PORT(uint8_t port) INLINE
 	{
-		MASK_VALUE(*PORT(), port);
+		MASK_VALUE(PORT(), port);
 	}
-	uint8_t get_PORT() __attribute__((always_inline))
+	uint8_t get_PORT() INLINE
 	{
-		return VALUE(*PORT());
+		return VALUE(PORT());
 	}
-	void set_DDR(uint8_t ddr) __attribute__((always_inline))
+	void set_DDR(uint8_t ddr) INLINE
 	{
-		MASK_VALUE(*DDR(), ddr);
+		MASK_VALUE(DDR(), ddr);
 	}
-	uint8_t get_DDR() __attribute__((always_inline))
+	uint8_t get_DDR() INLINE
 	{
-		return VALUE(*DDR());
+		return VALUE(DDR());
 	}
-	void set_PIN(uint8_t pin) __attribute__((always_inline))
+	void set_PIN(uint8_t pin) INLINE
 	{
-		*PIN() = pin & MASK();
+		PIN().set(pin & MASK());
 	}
-	uint8_t get_PIN() __attribute__((always_inline))
+	uint8_t get_PIN() INLINE
 	{
-		return *PIN() & MASK();
+		return PIN().get() & MASK();
 	}
 	
 protected:
-	uint8_t MASK() __attribute__((always_inline))
+	uint8_t MASK() INLINE
 	{
 		return _MASK;
 	}
-	void MASK_VALUE(volatile uint8_t& reg, uint8_t value) __attribute__((always_inline))
+	void MASK_VALUE(volatile uint8_t& reg, uint8_t value) INLINE
 	{
 		reg = (reg & ~MASK()) | (value & MASK());
 	}
-	uint8_t VALUE(uint8_t reg) __attribute__((always_inline))
+	uint8_t VALUE(uint8_t reg) INLINE
 	{
 		return reg & MASK();
 	}
@@ -133,42 +136,42 @@ enum class PinMode
 class IOPin: public AbstractPort
 {
 public:
-	IOPin() __attribute__((always_inline)) : AbstractPort(0), _BIT{0} {}
-	IOPin(Board::DigitalPin DPIN, PinMode mode, bool value = false) __attribute__((always_inline))
-	: AbstractPort(Board::PIN(DPIN)), _BIT(1 << Board::BIT(DPIN))
+	IOPin() INLINE : _BIT{0} {}
+	IOPin(Board::DigitalPin DPIN, PinMode mode, bool value = false) INLINE
+	: AbstractPort{Board::PIN_REG(DPIN)}, _BIT(_BV(Board::BIT(DPIN)))
 	{
 		pin_mode(mode, value);
 	}
-	void pin_mode(PinMode mode, bool value = false) __attribute__((always_inline))
+	void pin_mode(PinMode mode, bool value = false) INLINE
 	{
 		if (mode == PinMode::OUTPUT)
-			*DDR() |= BIT();
+			set_mask(DDR(), BIT());
 		else
-			*DDR() ^= ~BIT();
+			clear_mask(DDR(), BIT());
 		if (value || mode == PinMode::INPUT_PULLUP)
-			*PORT() |= BIT();
+			set_mask(PORT(), BIT());
 		else
-			*PORT() &= ~BIT();
+			clear_mask(PORT(), BIT());
 	}
-	void set() __attribute__((always_inline))
+	void set() INLINE
 	{
-		*PORT() |= BIT();
+		set_mask(PORT(), BIT());
 	}
-	void clear() __attribute__((always_inline))
+	void clear() INLINE
 	{
-		*PORT() &= ~BIT();
+		clear_mask(PORT(), BIT());
 	}
-	void toggle() __attribute__((always_inline))
+	void toggle() INLINE
 	{
-		*PIN() = BIT();
+		PIN().set(BIT());
 	}
-	bool value() __attribute__((always_inline))
+	bool value() INLINE
 	{
-		return *PIN() & BIT();
+		return PIN().get() & BIT();
 	}
 	
 protected:
-	uint8_t BIT() __attribute__((always_inline))
+	uint8_t BIT() INLINE
 	{
 		return _BIT;
 	}

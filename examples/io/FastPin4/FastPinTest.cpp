@@ -26,11 +26,11 @@ static inline uint8_t calculate_pattern(uint8_t num_bits)
 }
 
 #if defined(ARDUINO_UNO)
-constexpr volatile uint8_t* const LED_PORT = Board::PORT_D;
-constexpr volatile uint8_t* const SWITCH_PORT = Board::PORT_C;
+constexpr const REGISTER LED_PORT = Board::PORT_D;
+constexpr const REGISTER SWITCH_PORT = Board::PORT_C;
 #elif defined (ARDUINO_MEGA)
-constexpr volatile uint8_t* const LED_PORT = Board::PORT_A;
-constexpr volatile uint8_t* const SWITCH_PORT = Board::PORT_D;
+constexpr const REGISTER LED_PORT = Board::PORT_A;
+constexpr const REGISTER SWITCH_PORT = Board::PORT_D;
 #else
 #error "Current target is not yet supported!"
 #endif

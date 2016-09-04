@@ -11,11 +11,11 @@
 #include <fastarduino/IO.hh>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr volatile uint8_t* const LED_PORT = Board::PORT_D;
+constexpr const REGISTER LED_PORT = Board::PORT_D;
 #elif defined (ARDUINO_MEGA)
-constexpr volatile uint8_t* const LED_PORT = Board::PORT_A;
+constexpr const REGISTER LED_PORT = Board::PORT_A;
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr volatile uint8_t* const LED_PORT = Board::PORT_A;
+constexpr const REGISTER LED_PORT = Board::PORT_A;
 #else
 #error "Current target is not yet supported!"
 #endif

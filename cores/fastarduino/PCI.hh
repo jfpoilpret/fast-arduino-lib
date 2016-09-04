@@ -50,19 +50,19 @@ public:
 	
 	inline void enable()
 	{
-		synchronized set_mask<_PCICR, _PCIE>();
+		synchronized set_mask(_PCICR, _PCIE);
 	}
 	inline void disable()
 	{
-		synchronized clear_mask<_PCICR, _PCIE>();
+		synchronized clear_mask(_PCICR, _PCIE);
 	}
 	inline void clear()
 	{
-		synchronized set_mask<_PCIFR, _PCIF>();
+		synchronized set_mask(_PCIFR, _PCIF);
 	}
 	inline void enable_pins(uint8_t mask)
 	{
-		synchronized set_mask<_PCMSK>(mask);
+		synchronized set_mask(_PCMSK, mask);
 	}
 	inline void enable_pin(Board::InterruptPin pin)
 	{
@@ -71,24 +71,24 @@ public:
 	inline void disable_pin(Board::InterruptPin pin)
 	{
 		const uint8_t mask = _BV(Board::BIT((uint8_t) pin));
-		synchronized clear_mask<_PCMSK>(mask);
+		synchronized clear_mask(_PCMSK, mask);
 	}
 	
 	inline void _enable()
 	{
-		set_mask<_PCICR, _PCIE>();
+		set_mask(_PCICR, _PCIE);
 	}
 	inline void _disable()
 	{
-		clear_mask<_PCICR, _PCIE>();
+		clear_mask(_PCICR, _PCIE);
 	}
 	inline void _clear()
 	{
-		set_mask<_PCIFR, _PCIF>();
+		set_mask(_PCIFR, _PCIF);
 	}
 	inline void _enable_pins(uint8_t mask)
 	{
-		set_mask<_PCMSK>(mask);
+		set_mask(_PCMSK, mask);
 	}
 	inline void _enable_pin(Board::InterruptPin pin)
 	{
@@ -97,7 +97,7 @@ public:
 	inline void _disable_pin(Board::InterruptPin pin)
 	{
 		const uint8_t mask = _BV(Board::BIT((uint8_t) pin));
-		clear_mask<_PCMSK>(mask);
+		clear_mask(_PCMSK, mask);
 	}
 	
 private:
