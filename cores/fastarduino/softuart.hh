@@ -8,11 +8,7 @@
 #include "PCI.hh"
 
 //FIXME Handle begin/end properly in relation to current queue content
-//TODO Create a complete UART (UATX+UARX)
-//TODO Create AbstractUART which would be parent of all (virtual inheritance) and include Parity as field
 //TODO Find out why netbeans shows an error on in()._push() and out().pull()
-//TODO When all methods complete, recheck assembly and adapt calculation of TX/RX delays
-//TODO Infer about using Doxygen comments everywhere
 namespace Soft
 {
 	class AbstractUATX: virtual public Serial::UARTErrors, private OutputBuffer
