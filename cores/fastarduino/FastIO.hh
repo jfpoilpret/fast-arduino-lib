@@ -11,32 +11,32 @@ class FastPort
 {
 public:
 	FastPort() {}
-	FastPort(uint8_t ddr, uint8_t port = 0) __attribute__((always_inline))
+	FastPort(uint8_t ddr, uint8_t port = 0) INLINE
 	{
 		set_DDR(ddr);
 		set_PORT(port);
 	}
-	void set_PORT(uint8_t port) __attribute__((always_inline))
+	void set_PORT(uint8_t port) INLINE
 	{
 		set_ioreg_byte(_PORT, port);
 	}
-	uint8_t get_PORT() __attribute__((always_inline))
+	uint8_t get_PORT() INLINE
 	{
 		return get_ioreg_byte(_PORT);
 	}
-	void set_DDR(uint8_t ddr) __attribute__((always_inline))
+	void set_DDR(uint8_t ddr) INLINE
 	{
 		set_ioreg_byte(_DDR, ddr);
 	}
-	uint8_t get_DDR() __attribute__((always_inline))
+	uint8_t get_DDR() INLINE
 	{
 		return get_ioreg_byte(_DDR);
 	}
-	void set_PIN(uint8_t pin) __attribute__((always_inline))
+	void set_PIN(uint8_t pin) INLINE
 	{
 		set_ioreg_byte(_PIN, pin);
 	}
-	uint8_t get_PIN() __attribute__((always_inline))
+	uint8_t get_PIN() INLINE
 	{
 		return get_ioreg_byte(_PIN);
 	}
@@ -71,19 +71,19 @@ public:
 		else
 			clear_ioreg_bit(_PORT, _BIT);
 	}
-	void set() __attribute__((always_inline))
+	void set() INLINE
 	{
 		set_ioreg_bit(_PORT, _BIT);
 	}
-	void clear() __attribute__((always_inline))
+	void clear() INLINE
 	{
 		clear_ioreg_bit(_PORT, _BIT);
 	}
-	void toggle() __attribute__((always_inline))
+	void toggle() INLINE
 	{
 		set_ioreg_bit(_PIN, _BIT);
 	}
-	bool value() __attribute__((always_inline))
+	bool value() INLINE
 	{
 		return ioreg_bit_value(_PIN, _BIT);
 	}

@@ -12,7 +12,7 @@
 // Define vectors we need in the example
 USE_PCI1()
 
-class PinChangeHandler
+class PinChangeHandler: public PCIHandler
 {
 public:
 	PinChangeHandler()
@@ -20,12 +20,13 @@ public:
 		_led{Board::DigitalPin::LED, PinMode::OUTPUT}
 	{}
 	
-	void operator() ()
+	virtual bool pin_change()
 	{
 		if (_switch.value())
 			_led.clear();
 		else
 			_led.set();
+		return true;
 	}
 	
 private:
@@ -38,10 +39,10 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	FunctorPCIHandler<PinChangeHandler> handler{PinChangeHandler{}};
-	PCI<Board::PCIPort::PCI1> pci{handler};
+	PinChangeHandler handler;
+	PCI<Board::PCIPort::PCI1> pci{&handler};
 	
-	pci.enable_pins(Board::InterruptPin::PCI14);
+	pci.enable_pin(Board::InterruptPin::PCI14);
 	pci.enable();
 
 	// Event Loop

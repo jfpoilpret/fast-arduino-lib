@@ -31,9 +31,8 @@ class LedHandler: private IOPin
 public:
 	LedHandler() {}
 	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT} {}
-	void operator()(const Event& event)
+	void operator()(const Event& event UNUSED)
 	{
-		UNUSED(event);
 		toggle();
 	}
 };
@@ -51,14 +50,14 @@ int main()
 	Dispatcher dispatcher;
 	FunctorHandler<LedHandler> handlers[NUM_LEDS]
 	{
-		FunctorHandler<LedHandler>{Type::USER_EVENT, LedHandler{Board::D0}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 1), LedHandler{Board::D1}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 2), LedHandler{Board::D2}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 3), LedHandler{Board::D3}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 4), LedHandler{Board::D4}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 5), LedHandler{Board::D5}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 6), LedHandler{Board::D6}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 7), LedHandler{Board::D7}}
+		FunctorHandler<LedHandler>{Type::USER_EVENT, LedHandler{Board::DigitalPin::D0}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 1), LedHandler{Board::DigitalPin::D1}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 2), LedHandler{Board::DigitalPin::D2}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 3), LedHandler{Board::DigitalPin::D3}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 4), LedHandler{Board::DigitalPin::D4}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 5), LedHandler{Board::DigitalPin::D5}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 6), LedHandler{Board::DigitalPin::D6}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 7), LedHandler{Board::DigitalPin::D7}}
 	};
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 		dispatcher.insert(handlers[i]);

@@ -4,11 +4,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "Board.hh"
+//#include "Board.hh"
 
-//FIXME replace with __attribute__((unused))
 #ifndef UNUSED
-#define UNUSED(arg) ((void)(arg))
+#define UNUSED __attribute__((unused))
 #endif
 
 #ifndef INLINE
@@ -31,6 +30,42 @@ inline void _unlock(uint8_t* key)
 }
 
 #define synchronized for (uint8_t __key __attribute__((__cleanup__(_unlock))) = _lock(), i = 1; i != 0; i--)
+
+class REGISTER
+{
+public:
+	constexpr REGISTER():ADDR(0) {}
+	constexpr REGISTER(const REGISTER& rhs):ADDR(rhs.ADDR) {}
+	constexpr REGISTER(uint8_t ADDR):ADDR(ADDR) {}
+	uint8_t io_addr() const
+	{
+		return ADDR - __SFR_OFFSET;
+	}
+	uint8_t mem_addr() const
+	{
+		return ADDR;
+	}
+	operator volatile uint8_t& () const
+	{
+		return *((volatile uint8_t*) (uint16_t) ADDR);
+	}
+	operator volatile uint16_t& () const
+	{
+		return *((volatile uint16_t*) (uint16_t) ADDR);
+	}
+	//TODO small enhancement: use operators () instead
+	void set(uint8_t value) const
+	{
+		*((volatile uint8_t*) (uint16_t) ADDR) = value;
+	}
+	uint8_t get() const
+	{
+		return *((volatile uint8_t*) (uint16_t) ADDR);
+	}
+
+private:	
+	uint8_t ADDR;
+};
 
 //TODO Add optimized versions for IOREG registers: set_ioreg_mask, clear_ioreg_mask
 inline void set_mask(REGISTER REG, uint8_t MASK) INLINE;

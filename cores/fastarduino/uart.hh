@@ -104,7 +104,7 @@ protected:
 	{
 		_on_put(UCSRB, UDR);
 	}
-	virtual void on_overflow(__attribute__((unused)) char c)
+	virtual void on_overflow(UNUSED char c)
 	{
 		_errors.all_errors.queue_overflow = true;
 	}

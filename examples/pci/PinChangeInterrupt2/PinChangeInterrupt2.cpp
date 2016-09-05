@@ -14,7 +14,7 @@
 USE_PCI1()
 
 //TODO example 3 with IOPort instead of IOPin (more size efficient?))
-class PinChangeHandler
+class PinChangeHandler: public PCIHandler
 {
 public:
 	PinChangeHandler()
@@ -34,7 +34,7 @@ public:
 	{
 	}
 	
-	void operator() ()
+	virtual bool pin_change()
 	{
 		for (uint8_t i = 0; i < 3; ++i)
 		{
@@ -44,6 +44,7 @@ public:
 				_leds[i].set();
 		}
 		_leds[3].toggle();
+		return true;
 	}
 	
 private:
@@ -56,12 +57,12 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	FunctorPCIHandler<PinChangeHandler> handler{PinChangeHandler{}};
-	PCI<Board::PCIPort::PCI1> pci{handler};
+	PinChangeHandler handler;
+	PCI<Board::PCIPort::PCI1> pci{&handler};
 	
-	pci.enable_pins(Board::InterruptPin::PCI14);
-	pci.enable_pins(Board::InterruptPin::PCI16);
-	pci.enable_pins(Board::InterruptPin::PCI17);
+	pci.enable_pin(Board::InterruptPin::PCI14);
+	pci.enable_pin(Board::InterruptPin::PCI16);
+	pci.enable_pin(Board::InterruptPin::PCI17);
 	pci.enable();
 
 	// Event Loop

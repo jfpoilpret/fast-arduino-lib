@@ -40,7 +40,7 @@ public:
 	
 protected:
 	// Listeners of events on the buffer
-	virtual void on_overflow(__attribute__((unused)) char c) {}
+	virtual void on_overflow(UNUSED char c) {}
 	virtual void on_put() {}
 };
 
@@ -71,7 +71,7 @@ public:
 protected:
 	// Listeners of events on the buffer
 	virtual void on_empty() {}
-	virtual void on_get(__attribute__((unused)) char c) {}
+	virtual void on_get(UNUSED char c) {}
 	
 	void scan(char* str, size_t max);
 };

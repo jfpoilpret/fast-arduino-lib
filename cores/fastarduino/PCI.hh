@@ -66,11 +66,11 @@ public:
 	}
 	inline void enable_pin(Board::InterruptPin pin)
 	{
-		enable_pins(_BV(Board::BIT((uint8_t) pin)));
+		enable_pins(_BV(Board::BIT(pin)));
 	}
 	inline void disable_pin(Board::InterruptPin pin)
 	{
-		const uint8_t mask = _BV(Board::BIT((uint8_t) pin));
+		const uint8_t mask = _BV(Board::BIT(pin));
 		synchronized clear_mask(_PCMSK, mask);
 	}
 	
@@ -92,11 +92,11 @@ public:
 	}
 	inline void _enable_pin(Board::InterruptPin pin)
 	{
-		_enable_pins(_BV(Board::BIT((uint8_t) pin)));
+		_enable_pins(_BV(Board::BIT(pin)));
 	}
 	inline void _disable_pin(Board::InterruptPin pin)
 	{
-		const uint8_t mask = _BV(Board::BIT((uint8_t) pin));
+		const uint8_t mask = _BV(Board::BIT(pin));
 		clear_mask(_PCMSK, mask);
 	}
 	

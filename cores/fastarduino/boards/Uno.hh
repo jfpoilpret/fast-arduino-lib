@@ -54,53 +54,14 @@
 //TODO Same for all boards: MEGA, ATmega328, ATtinyX4
 namespace Board
 {
-#define _SELECT_REG(REG) REGISTER((uint8_t)(uint16_t)&REG)
-
-//	constexpr volatile uint8_t* const PORT_B = &PINB;
-//	constexpr volatile uint8_t* const PORT_C = &PINC;
-//	constexpr volatile uint8_t* const PORT_D = &PIND;
 	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
 	constexpr const REGISTER PORT_C = _SELECT_REG(PINC);
 	constexpr const REGISTER PORT_D = _SELECT_REG(PIND);
 
-#define _SELECT_PIN_REG(DPIN, REG0, REG1, REG2)		\
-	REGISTER(	(uint8_t)(uint16_t)					\
-				(	DPIN < 8 ? &REG0 :	\
-					DPIN < 14 ? &REG1 :	\
-					&REG2))
-
-	constexpr REGISTER PIN_REG(uint8_t pin)
-	{
-		return _SELECT_PIN_REG(pin, PIND, PINB, PINC);
-	}
-
-	constexpr REGISTER DDR_REG(uint8_t pin)
-	{
-		return _SELECT_PIN_REG(pin, DDRD, DDRB, DDRC);
-	}
-
-	constexpr REGISTER PORT_REG(uint8_t pin)
-	{
-		return _SELECT_PIN_REG(pin, PORTD, PORTB, PORTC);
-	}
-
-	//TODO REMOVE AFTER REPLACING WITH PIN_REG
-//	constexpr volatile uint8_t* PIN(uint8_t pin)
-//	{
-//		return pin < 8  ? PORT_D : pin < 14 ? PORT_B : PORT_C;
-//	}
-
-	//TODO Replace arg with string type (enum class)
-	constexpr uint8_t BIT(uint8_t pin)
-	{
-		return (pin < 8  ? pin : pin < 14 ? pin - 8 : pin - 14);
-	}
-	
 	/**
 	 * Digital pin symbols
 	 */
-	//TODO Make stronger types for pins (enum class)?
-	enum DigitalPin
+	enum class DigitalPin: uint8_t
 	{
 		D0 = 0,			// PD0
 		D1,				// PD1
@@ -123,17 +84,48 @@ namespace Board
 		D18,			// PC4-A4
 		D19,			// PC5-A5
 		LED = D13
-	} __attribute__((packed));
+	};
 
+#define _SELECT_PIN(DPIN, ARG0, ARG1, ARG2)		\
+	(	DPIN < DigitalPin::D8 ? ARG0 :	\
+		DPIN < DigitalPin::D14 ? ARG1 :	\
+		ARG2)
+	
+#define _SELECT_PIN_REG(DPIN, REG0, REG1, REG2)		\
+	_SELECT_REG(_SELECT_PIN(DPIN, REG0, REG1, REG2))
+
+	constexpr REGISTER PIN_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, PIND, PINB, PINC);
+	}
+
+	constexpr REGISTER DDR_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, DDRD, DDRB, DDRC);
+	}
+
+	constexpr REGISTER PORT_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, PORTD, PORTB, PORTC);
+	}
+
+	constexpr uint8_t BIT(DigitalPin pin)
+	{
+		return _SELECT_PIN(	pin, 
+							(uint8_t) pin, 
+							(uint8_t) pin - (uint8_t) DigitalPin::D8, 
+							(uint8_t) pin - (uint8_t) DigitalPin::D14);
+	}
+	
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
 	 */
-	enum ExternalInterruptPin
+	enum class ExternalInterruptPin: uint8_t
 	{
-		EXT0 = D2,			// PD2
-		EXT1 = D3			// PD3
-	} __attribute__((packed));
+		EXT0 = DigitalPin::D2,		// PD2
+		EXT1 = DigitalPin::D3		// PD3
+	};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
@@ -146,45 +138,56 @@ namespace Board
 	};
 	enum class InterruptPin: uint8_t
 	{
-		PCI0 = D0,			// PD0
-		PCI1 = D1,			// PD1
-		PCI2 = D2,			// PD2
-		PCI3 = D3,			// PD3
-		PCI4 = D4,			// PD4
-		PCI5 = D5,			// PD5
-		PCI6 = D6,			// PD6
-		PCI7 = D7,			// PD7
-		PCI8 = D8,			// PB0
-		PCI9 = D9,			// PB1
-		PCI10 = D10,		// PB2
-		PCI11 = D11,		// PB3
-		PCI12 = D12,		// PB4
-		PCI13 = D13,		// PB5
-		PCI14 = D14,		// PC0
-		PCI15 = D15,		// PC1
-		PCI16 = D16,		// PC2
-		PCI17 = D17,		// PC3
-		PCI18 = D18,		// PC4
-		PCI19 = D19			// PC5
+		PCI0 = DigitalPin::D0,			// PD0
+		PCI1 = DigitalPin::D1,			// PD1
+		PCI2 = DigitalPin::D2,			// PD2
+		PCI3 = DigitalPin::D3,			// PD3
+		PCI4 = DigitalPin::D4,			// PD4
+		PCI5 = DigitalPin::D5,			// PD5
+		PCI6 = DigitalPin::D6,			// PD6
+		PCI7 = DigitalPin::D7,			// PD7
+		PCI8 = DigitalPin::D8,			// PB0
+		PCI9 = DigitalPin::D9,			// PB1
+		PCI10 = DigitalPin::D10,		// PB2
+		PCI11 = DigitalPin::D11,		// PB3
+		PCI12 = DigitalPin::D12,		// PB4
+		PCI13 = DigitalPin::D13,		// PB5
+		PCI14 = DigitalPin::D14,		// PC0
+		PCI15 = DigitalPin::D15,		// PC1
+		PCI16 = DigitalPin::D16,		// PC2
+		PCI17 = DigitalPin::D17,		// PC3
+		PCI18 = DigitalPin::D18,		// PC4
+		PCI19 = DigitalPin::D19			// PC5
 	};
 
-#define _SELECT_PCI_PORT(PIN)						\
-	((PIN) < 8 ? PCIPort::PCI2 : (PIN) < 14 ? PCIPort::PCI0 : PCIPort::PCI1)
+#define _SELECT_PCI_PIN(PIN, ARG0, ARG1, ARG2)	\
+	(PIN < InterruptPin::PCI8 ? ARG0 : PIN < InterruptPin::PCI14 ? ARG1 : ARG2)
 	
-#define _SELECT_PCI_REG(PORT, REG0, REG1, REG2)		\
-	REGISTER(	(uint8_t)(uint16_t)					\
-				(	PORT == PCIPort::PCI0 ? &REG0 :	\
-					PORT == PCIPort::PCI1 ? &REG1 :	\
-					&REG2))
+#define _SELECT_PCI_PORT(PIN)					\
+	_SELECT_PCI_PIN(PIN, PCIPort::PCI2, PCIPort::PCI0, PCIPort::PCI1)
+	
+#define _SELECT_PCI(PORT, ARG0, ARG1, ARG2)	\
+	(	PORT == PCIPort::PCI0 ? ARG0 :		\
+		PORT == PCIPort::PCI1 ? ARG1 :		\
+		ARG2)
+	
+#define _SELECT_PCI_REG(PORT, REG0, REG1, REG2)	\
+	_SELECT_REG(_SELECT_PCI(PORT, REG0, REG1, REG2))
 	
 #define _SELECT_PCI_MSK(PORT, MSK0, MSK1, MSK2)	\
-	_BV(PORT == PCIPort::PCI0 ? MSK0 :			\
-		PORT == PCIPort::PCI1 ? MSK1 :			\
-		MSK2)
+	_BV(_SELECT_PCI(PORT, MSK0, MSK1, MSK2))
 
+	constexpr uint8_t BIT(InterruptPin pin)
+	{
+		return _SELECT_PCI_PIN(	pin, 
+								(uint8_t) pin, 
+								(uint8_t) pin - (uint8_t) InterruptPin::PCI8, 
+								(uint8_t) pin - (uint8_t) InterruptPin::PCI14);
+	}
+	
 	constexpr PCIPort PCI_PORT(InterruptPin pin)
 	{
-		return _SELECT_PCI_PORT((uint8_t) pin);
+		return _SELECT_PCI_PORT(pin);
 	}
 	constexpr REGISTER PCICR_REG()
 	{
@@ -239,27 +242,27 @@ namespace Board
 		USART0 = 0
 	};
 	
-	constexpr REGISTER UCSRA_REG(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRA_REG(UNUSED USART usart)
 	{
 		return _SELECT_REG(UCSR0A);
 	}
 
-	constexpr REGISTER UCSRB_REG(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRB_REG(UNUSED USART usart)
 	{
 		return _SELECT_REG(UCSR0B);
 	}
 
-	constexpr REGISTER UCSRC_REG(__attribute__((unused)) USART usart)
+	constexpr REGISTER UCSRC_REG(UNUSED USART usart)
 	{
 		return _SELECT_REG(UCSR0C);
 	}
 
-	constexpr REGISTER UDR_REG(__attribute__((unused)) USART usart)
+	constexpr REGISTER UDR_REG(UNUSED USART usart)
 	{
 		return _SELECT_REG(UDR0);
 	}
 
-	constexpr REGISTER UBRR_REG(__attribute__((unused)) USART usart)
+	constexpr REGISTER UBRR_REG(UNUSED USART usart)
 	{
 		return _SELECT_REG(UBRR0);
 	}

@@ -27,11 +27,11 @@ public:
 	T& operator [] (uint8_t index);
 	const T& operator [] (uint8_t index) const;
 	
-	uint8_t items() const __attribute__((always_inline))
+	uint8_t items() const INLINE
 	{
 		return (_tail - _head) & _mask;
 	}
-	uint8_t free() const __attribute__((always_inline))
+	uint8_t free() const INLINE
 	{
 		return (_head - _tail - 1) & _mask;
 	}

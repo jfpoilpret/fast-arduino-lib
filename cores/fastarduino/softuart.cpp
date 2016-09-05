@@ -26,7 +26,7 @@ constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 
 void Soft::AbstractUARX::_begin(
 	uint32_t rate, Serial::Parity parity, 
-	__attribute__((unused)) Serial::StopBits stop_bits)
+	UNUSED Serial::StopBits stop_bits)
 {
 	_parity = parity;
 	// Calculate timing for RX in number of cycles

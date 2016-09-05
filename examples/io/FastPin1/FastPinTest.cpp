@@ -7,9 +7,9 @@
 
 static IOPort PortB{Board::PORT_B};
 
-static IOPin PinD0{Board::D0, PinMode::INPUT};
-static IOPin PinD1{Board::D1, PinMode::INPUT_PULLUP};
-static IOPin PinD2{Board::D2, PinMode::OUTPUT};
+static IOPin PinD0{Board::DigitalPin::D0, PinMode::INPUT};
+static IOPin PinD1{Board::DigitalPin::D1, PinMode::INPUT_PULLUP};
+static IOPin PinD2{Board::DigitalPin::D2, PinMode::OUTPUT};
 
 bool f()
 {

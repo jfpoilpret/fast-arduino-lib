@@ -5,8 +5,8 @@ namespace Events
 	class HandlerCaller
 	{
 	public:
-		HandlerCaller(const Event& event) __attribute__((always_inline)) : _event{event} {}
-		bool operator()(AbstractHandler& handler) __attribute__((always_inline))
+		HandlerCaller(const Event& event) INLINE : _event{event} {}
+		bool operator()(AbstractHandler& handler) INLINE
 		{
 			if (handler.type() == _event.type())
 				handler.handle(_event);

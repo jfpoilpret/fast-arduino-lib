@@ -24,9 +24,8 @@ class LedHandler: private IOPort
 {
 public:
 	LedHandler() : IOPort{Board::PORT_D, 0xFF}, _value{0} {}
-	void operator()(uint32_t millis)
+	void operator()(uint32_t millis UNUSED)
 	{
-		UNUSED(millis);
 		uint8_t value = _value;
 		if (value == 0)
 			value = 0x01;

@@ -1,10 +1,12 @@
 #ifndef LINKEDLIST_HH
 #define	LINKEDLIST_HH
 
+#include "utilities.hh"
+
 class LinkImpl
 {
 public:
-	LinkImpl() __attribute__((always_inline)) : _next{0} {}
+	LinkImpl() INLINE : _next{0} {}
 	
 protected:
 	LinkImpl* _next;	
@@ -14,7 +16,7 @@ protected:
 class LinkedListImpl
 {
 public:
-	LinkedListImpl() __attribute__((always_inline)) : _head{0} {}
+	LinkedListImpl() INLINE : _head{0} {}
 	void insert(LinkImpl* item);
 	bool remove(LinkImpl* item);
 	template<typename F> void traverse(F f);
@@ -27,11 +29,11 @@ template<typename T>
 class LinkedList: private LinkedListImpl
 {
 public:	
-	void insert(T& item) __attribute__((always_inline))
+	void insert(T& item) INLINE
 	{
 		LinkedListImpl::insert(&item);
 	}
-	bool remove(T& item) __attribute__((always_inline))
+	bool remove(T& item) INLINE
 	{
 		return LinkedListImpl::remove(&item);
 	}
@@ -48,7 +50,7 @@ public:
 	}
 	
 private:
-	T *head() __attribute__((always_inline))
+	T *head() INLINE
 	{
 		return (T*) _head;
 	}
@@ -58,7 +60,7 @@ template<typename T>
 class Link: private LinkImpl
 {
 private:
-	T *next() __attribute__((always_inline))
+	T *next() INLINE
 	{
 		return (T*) _next;
 	}

@@ -20,13 +20,13 @@ namespace Events
 	class Event
 	{
 	public:
-		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) __attribute__((always_inline))
+		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) INLINE
 			: _type{type}, _value{value} {}
-		uint8_t type() const __attribute__((always_inline))
+		uint8_t type() const INLINE
 		{
 			return _type;
 		}
-		uint16_t value() const __attribute__((always_inline))
+		uint16_t value() const INLINE
 		{
 			return _value;
 		}
@@ -51,12 +51,12 @@ namespace Events
 	class AbstractHandler: public Link<AbstractHandler>
 	{
 	public:
-		uint8_t type() const __attribute__((always_inline))
+		uint8_t type() const INLINE
 		{
 			return _type;
 		}
 
-		void handle(const Event& event) __attribute__((always_inline))
+		void handle(const Event& event) INLINE
 		{
 			_f(_env, event);
 		}
@@ -64,7 +64,7 @@ namespace Events
 	private:
 		//TODO refactor to make it used everywhere we need this pattern!
 		typedef void (*F)(void* env, const Event& event);
-		AbstractHandler(uint8_t type = Type::NO_EVENT, void* env = 0, F f = 0) __attribute__((always_inline))
+		AbstractHandler(uint8_t type = Type::NO_EVENT, void* env = 0, F f = 0) INLINE
 			: _type{type}, _f{f}, _env{env} {}
 		
 		uint8_t _type;
@@ -82,12 +82,12 @@ namespace Events
 	class VirtualHandler: public AbstractHandler
 	{
 	protected:
-		VirtualHandler(uint8_t type = Type::NO_EVENT) __attribute__((always_inline))
+		VirtualHandler(uint8_t type = Type::NO_EVENT) INLINE
 			: AbstractHandler{type, this, apply} {}
 		virtual void on_event(const Event& event) = 0;
 		
 	private:
-		static void apply(void* env, const Event& event) __attribute__((always_inline))
+		static void apply(void* env, const Event& event) INLINE
 		{
 			((VirtualHandler*) env)->on_event(event);
 		}
@@ -101,17 +101,17 @@ namespace Events
 	class FunctorHandler: public AbstractHandler
 	{
 	public:
-		FunctorHandler() __attribute__((always_inline)) : AbstractHandler{} {}
-		FunctorHandler(uint8_t type, FUNCTOR f) __attribute__((always_inline))
+		FunctorHandler() INLINE : AbstractHandler{} {}
+		FunctorHandler(uint8_t type, FUNCTOR f) INLINE
 			: AbstractHandler{type, this, apply}, _f{f} {}
 	protected:
-		FUNCTOR& functor() __attribute__((always_inline))
+		FUNCTOR& functor() INLINE
 		{
 			return _f;
 		}
 		
 	private:
-		static void apply(void* env, const Event& event) __attribute__((always_inline))
+		static void apply(void* env, const Event& event) INLINE
 		{
 			((FunctorHandler<FUNCTOR>*) env)->_f(event);
 		}

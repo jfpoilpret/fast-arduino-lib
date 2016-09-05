@@ -4,7 +4,7 @@
 /**
  * Compiler warning on unused varable.
  */
-#define UNUSED(x) (void) (x)
+#define UNUSED __attribute__((unused))
 
 
 int main() __attribute__((weak, OS_main));
@@ -14,9 +14,8 @@ int main()
 }
 
 void exit(int status) __attribute__((weak));
-void exit(int status)
+void exit(int status UNUSED)
 {
-  UNUSED(status);
 }
 
 /**
@@ -26,20 +25,17 @@ namespace __cxxabiv1
 {
 	typedef int __guard;
 
-	extern "C" int __cxa_guard_acquire(__guard *g)
+	extern "C" int __cxa_guard_acquire(__guard *g UNUSED)
 	{
-		UNUSED(g);
 		return (0);
 	}
 
-	extern "C" void __cxa_guard_release(__guard *g)
+	extern "C" void __cxa_guard_release(__guard *g UNUSED)
 	{
-		UNUSED(g);
 	}
 
-	extern "C" void __cxa_guard_abort(__guard *g)
+	extern "C" void __cxa_guard_abort(__guard *g UNUSED)
 	{
-		UNUSED(g);
 	}
 
 	extern "C" void __cxa_pure_virtual(void)
@@ -48,16 +44,12 @@ namespace __cxxabiv1
 
 	void* __dso_handle = 0;
 
-	extern "C" int __cxa_atexit(void (*destructor)(void*), void* arg, void* dso)
+	extern "C" int __cxa_atexit(void (*destructor)(void*) UNUSED, void* arg UNUSED, void* dso UNUSED)
 	{
-		UNUSED(destructor);
-		UNUSED(arg);
-		UNUSED(dso);
 		return 0;
 	}
 
-	extern "C" void __cxa_finalize(void* f)
+	extern "C" void __cxa_finalize(void* f UNUSED)
 	{
-		UNUSED(f);
 	}
 }

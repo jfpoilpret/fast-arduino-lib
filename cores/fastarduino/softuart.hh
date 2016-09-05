@@ -71,7 +71,7 @@ namespace Soft
 			char value;
 			while (out().pull(value)) write(value);
 		}
-		virtual void on_overflow(__attribute__((unused)) char c)
+		virtual void on_overflow(UNUSED char c)
 		{
 			_errors.all_errors.queue_overflow = true;
 		}

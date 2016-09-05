@@ -12,10 +12,9 @@ template<typename CLOCK>
 class SchedulerHandler: public LinkedList<AbstractJob>
 {
 public:
-	SchedulerHandler(const CLOCK& clock) __attribute__((always_inline)): _clock(clock) {}
-	void operator()(const Event& event) __attribute__((always_inline))
+	SchedulerHandler(const CLOCK& clock) INLINE: _clock(clock) {}
+	void operator()(const Event& event UNUSED) INLINE
 	{
-		UNUSED(event);
 		traverse(*this);
 	}
 	bool operator()(AbstractJob& job);
@@ -28,13 +27,13 @@ template<typename CLOCK>
 class Scheduler: public FunctorHandler<SchedulerHandler<CLOCK>>
 {
 public:
-	Scheduler(const CLOCK& clock, uint8_t type) __attribute__((always_inline))
+	Scheduler(const CLOCK& clock, uint8_t type) INLINE
 		:FunctorHandler<SchedulerHandler<CLOCK>>{type, SchedulerHandler<CLOCK>{clock}} {}
-	void schedule(AbstractJob& job) __attribute__((always_inline))
+	void schedule(AbstractJob& job) INLINE
 	{
 		this->functor().insert(job);
 	}
-	void unschedule(AbstractJob& job) __attribute__((always_inline))
+	void unschedule(AbstractJob& job) INLINE
 	{
 		this->functor().remove(job);
 	}
@@ -43,25 +42,25 @@ public:
 class AbstractJob: public Link<AbstractJob>
 {
 public:
-	bool is_periodic() const __attribute__((always_inline))
+	bool is_periodic() const INLINE
 	{
 		return _period != 0;
 	}
-	uint32_t next_time() const __attribute__((always_inline))
+	uint32_t next_time() const INLINE
 	{
 		return _next_time;
 	}
-	uint32_t period() const __attribute__((always_inline))
+	uint32_t period() const INLINE
 	{
 		return _period;
 	}
-	void reschedule(uint32_t when) __attribute__((always_inline))
+	void reschedule(uint32_t when) INLINE
 	{
 		_next_time = when;
 	}
 
 	//TODO shouldn't this method be private only?
-	void handle(uint32_t millis) __attribute__((always_inline))
+	void handle(uint32_t millis) INLINE
 	{
 		_f(_env, millis);
 	}
@@ -69,7 +68,7 @@ public:
 private:
 	//TODO refactor to make it used everywhere we need this pattern!
 	typedef void (*F)(void* env, uint32_t millis);
-	AbstractJob(uint32_t next = 0, uint32_t period = 0, void* env = 0, F f = 0) __attribute__((always_inline))
+	AbstractJob(uint32_t next = 0, uint32_t period = 0, void* env = 0, F f = 0) INLINE
 		:_next_time(next), _period(period), _f{f}, _env{env} {}
 
 	uint32_t _next_time;
@@ -86,13 +85,13 @@ private:
 class VirtualJob: public AbstractJob
 {
 protected:
-	VirtualJob() __attribute__((always_inline)) : AbstractJob{} {}
-	VirtualJob(uint32_t next, uint32_t period) __attribute__((always_inline))
+	VirtualJob() INLINE : AbstractJob{} {}
+	VirtualJob(uint32_t next, uint32_t period) INLINE
 		: AbstractJob{next, period, this, apply} {}
 	virtual void execute(uint32_t millis) = 0;
 
 private:
-	static void apply(void* env, uint32_t millis) __attribute__((always_inline))
+	static void apply(void* env, uint32_t millis) INLINE
 	{
 		((VirtualJob*) env)->execute(millis);
 	}
@@ -106,11 +105,11 @@ template<typename FUNCTOR>
 class FunctorJob: public AbstractJob
 {
 public:
-	FunctorJob() __attribute__((always_inline)) : AbstractJob{} {}
-	FunctorJob(uint32_t next, uint32_t period, FUNCTOR f) __attribute__((always_inline))
+	FunctorJob() INLINE : AbstractJob{} {}
+	FunctorJob(uint32_t next, uint32_t period, FUNCTOR f) INLINE
 		: AbstractJob{next, period, this, apply}, _f{f} {}
 private:
-	static void apply(void* env, uint32_t millis) __attribute__((always_inline))
+	static void apply(void* env, uint32_t millis) INLINE
 	{
 		((FunctorJob<FUNCTOR>*) env)->_f(millis);
 	}

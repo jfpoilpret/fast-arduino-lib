@@ -10,7 +10,7 @@
 int main()
 {
 	sei();
-	IOPin PinLED{Board::LED, PinMode::OUTPUT};
+	IOPin PinLED{Board::DigitalPin::LED, PinMode::OUTPUT};
 	while (true)
 	{
 		PinLED.toggle();

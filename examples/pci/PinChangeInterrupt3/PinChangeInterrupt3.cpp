@@ -22,12 +22,12 @@ static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D14));
 static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D16));
 static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D17));
 
-class PinChangeHandler
+class PinChangeHandler: public PCIHandler
 {
 public:
 	PinChangeHandler():_switches{Board::PORT_C, 0x00, 0xFF}, _leds{Board::PORT_D, 0xFF} {}
 	
-	void operator() ()
+	virtual bool pin_change()
 	{
 		uint8_t switches = _switches.get_PIN();
 		uint8_t leds = (_leds.get_PIN() & LED4) ^ LED4;
@@ -35,6 +35,7 @@ public:
 		if (!(switches & SW2)) leds |= LED2;
 		if (!(switches & SW3)) leds |= LED3;
 		_leds.set_PORT(leds);
+		return true;
 	}
 	
 private:
@@ -47,8 +48,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	FunctorPCIHandler<PinChangeHandler> handler{PinChangeHandler{}};
-	PCI<Board::PCIPort::PCI1> pci{handler};
+	PinChangeHandler handler;
+	PCI<Board::PCIPort::PCI1> pci{&handler};
 	
 	pci.enable_pins(SW1 | SW2 | SW3);
 	pci.enable();

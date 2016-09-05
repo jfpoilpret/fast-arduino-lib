@@ -22,9 +22,8 @@ class LedHandler: private IOPort
 {
 public:
 	LedHandler() : IOPort{Board::PORT_D, 0xFF}, _value{0} {}
-	void operator()(const Event& event)
+	void operator()(const Event& event UNUSED)
 	{
-		UNUSED(event);
 		uint8_t value = _value;
 		if (value == 0)
 			value = 0x01;
