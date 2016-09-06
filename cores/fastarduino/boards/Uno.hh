@@ -49,7 +49,6 @@
  *                  +--------------------------+
  * @endcode
  */
-//TODO Same for all boards: MEGA, ATmega328, ATtinyX4
 namespace Board
 {
 	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);

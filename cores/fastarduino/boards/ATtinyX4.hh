@@ -36,23 +36,13 @@
  */
 namespace Board
 {
-	constexpr volatile uint8_t* const PORT_A = &PINA;
-	constexpr volatile uint8_t* const PORT_B = &PINB;
+	constexpr const REGISTER PORT_A = _SELECT_REG(PINA);
+	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
 
-	constexpr volatile uint8_t* PIN(uint8_t pin)
-	{
-		return pin < 8 ? PORT_A : PORT_B;
-	}
-
-	constexpr uint8_t BIT(uint8_t pin)
-	{
-		return (pin < 8 ? pin : pin - 8);
-	}
-	
 	/**
 	 * Digital pin symbols
 	 */
-	enum DigitalPin
+	enum class DigitalPin: uint8_t
 	{
 		D0 = 0,			// PA0
 		D1,				// PA1
@@ -66,51 +56,118 @@ namespace Board
 		D9,				// PB1
 		D10,			// PB2
 		LED = D7
-	} __attribute__((packed));
+	};
+
+#define _SELECT_PIN(DPIN, ARG0, ARG1)	\
+	(DPIN < DigitalPin::D8 ? ARG0 :	ARG1)
+	
+#define _SELECT_PIN_REG(DPIN, REG0, REG1)	\
+	_SELECT_REG(_SELECT_PIN(DPIN, REG0, REG1))
+	
+	constexpr REGISTER PIN_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, PINA, PINB);
+	}
+
+	constexpr REGISTER DDR_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, DDRA, DDRB);
+	}
+
+	constexpr REGISTER PORT_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, PORTA, PORTB);
+	}
+
+	constexpr uint8_t BIT(DigitalPin pin)
+	{
+		return _SELECT_PIN(	pin, 
+							(uint8_t) pin, 
+							(uint8_t) pin - (uint8_t) DigitalPin::D8);
+	}
 
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
 	 */
-	enum ExternalInterruptPin
+	enum class ExternalInterruptPin: uint8_t
 	{
-		EXT0 = D10			// PB2
-	} __attribute__((packed));
+		EXT0 = DigitalPin::D10			// PB2
+	};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	enum InterruptPin
+	enum class PCIPort: uint8_t
 	{
-		PCI0 = D0,			// PA0
-		PCI1 = D1,			// PA1
-		PCI2 = D2,			// PA2
-		PCI3 = D3,			// PA3
-		PCI4 = D4,			// PA4
-		PCI5 = D5,			// PA5
-		PCI6 = D6,			// PA6
-		PCI7 = D7,			// PA7
-		PCI8 = D8,			// PB0
-		PCI9 = D9,			// PB1
-		PCI10 = D10			// PB2
-	} __attribute__((packed));
-
-	/**
-	 * Size of pin maps.
-	 */
-	enum
-	{
-		USART_MAX = 0,
-		ANALOG_PIN_MAX = 8,
-		DIGITAL_PIN_MAX = 11,
-		EXT_PIN_MAX = 1,
-		PCI_PIN_MAX = 11,
-		PWM_PIN_MAX = 4
+		PCI0 = 0,			// D0-D7, PA0-7
+		PCI1 = 1			// D8-D10, PB0-2 (PB3 used for RESET)
 	};
 
-//    #define SLEEP_MODE_IDLE         0
-//    #define SLEEP_MODE_ADC          _BV(SM0)
-//    #define SLEEP_MODE_PWR_DOWN     _BV(SM1)
+	enum class InterruptPin: uint8_t
+	{
+		PCI0 = DigitalPin::D0,			// PA0
+		PCI1 = DigitalPin::D1,			// PA1
+		PCI2 = DigitalPin::D2,			// PA2
+		PCI3 = DigitalPin::D3,			// PA3
+		PCI4 = DigitalPin::D4,			// PA4
+		PCI5 = DigitalPin::D5,			// PA5
+		PCI6 = DigitalPin::D6,			// PA6
+		PCI7 = DigitalPin::D7,			// PA7
+		PCI8 = DigitalPin::D8,			// PB0
+		PCI9 = DigitalPin::D9,			// PB1
+		PCI10 = DigitalPin::D10			// PB2
+	};
+
+#define _SELECT_PCI_PIN(PIN, ARG0, ARG1)	\
+	(PIN < InterruptPin::PCI8 ? ARG0 : ARG1)
+	
+#define _SELECT_PCI_PORT(PIN)					\
+	_SELECT_PCI_PIN(PIN, PCIPort::PCI0, PCIPort::PCI1)
+	
+#define _SELECT_PCI(PORT, ARG0, ARG1)	\
+	(PORT == PCIPort::PCI0 ? ARG0 :	ARG1)
+	
+#define _SELECT_PCI_REG(PORT, REG0, REG1)	\
+	_SELECT_REG(_SELECT_PCI(PORT, REG0, REG1))
+	
+#define _SELECT_PCI_MSK(PORT, MSK0, MSK1)	\
+	_BV(_SELECT_PCI(PORT, MSK0, MSK1))
+	
+	constexpr uint8_t BIT(InterruptPin pin)
+	{
+		return _SELECT_PCI_PIN(	pin, 
+								(uint8_t) pin, 
+								(uint8_t) pin - (uint8_t) InterruptPin::PCI8);
+	}
+	
+	constexpr PCIPort PCI_PORT(InterruptPin pin)
+	{
+		return _SELECT_PCI_PORT(pin);
+	}
+	constexpr REGISTER PCICR_REG()
+	{
+		return _SELECT_REG(GIMSK);
+	}
+	constexpr uint8_t PCIE_MSK(PCIPort PORT)
+	{
+		return _SELECT_PCI_MSK(PORT, PCIE0, PCIE1);
+	}
+	
+	constexpr REGISTER PCIFR_REG()
+	{
+		return _SELECT_REG(GIFR);
+	}
+	constexpr uint8_t PCIFR_MSK(PCIPort PORT)
+	{
+		return _SELECT_PCI_MSK(PORT, PCIF0, PCIF1);
+	}
+	
+	constexpr REGISTER PCMSK_REG(PCIPort PORT)
+	{
+		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1);
+	}
+
     #define SLEEP_MODE_PWR_SAVE     (_BV(SM0) | _BV(SM1))
 	enum class SleepMode: uint8_t
 	{
