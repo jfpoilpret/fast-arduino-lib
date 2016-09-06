@@ -6,9 +6,6 @@
 #include "utilities.hh"
 #include "Board.hh"
 
-//TODO Abandon the idea of doing without virtual, that complicates things too much.
-// Just limit usage of virtual to the minimum, ie event/interrupt handlers
-
 // Principles:
 // One PCI<> instance for each PCINT vector
 // Handling is delegared by PCI<> to a PCIHandler instance

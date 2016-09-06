@@ -49,8 +49,6 @@
  *                  +--------------------------+
  * @endcode
  */
-//TODO Use REGISTER everywhere instead of volatile uint8_t*
-//TODO Use enum class as much as possible
 //TODO Same for all boards: MEGA, ATmega328, ATtinyX4
 namespace Board
 {
@@ -212,19 +210,6 @@ namespace Board
 		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1, PCMSK2);
 	}
 
-	/**
-	 * Size of pin maps.
-	 */
-	enum
-	{
-		USART_MAX = 1,
-		ANALOG_PIN_MAX = 8,
-		DIGITAL_PIN_MAX = 20,
-		EXT_PIN_MAX = 2,
-		PCI_PIN_MAX = 20,
-		PWM_PIN_MAX = 6
-	};
-	
 	enum class SleepMode: uint8_t
 	{
 		IDLE = SLEEP_MODE_IDLE,
@@ -266,17 +251,6 @@ namespace Board
 	{
 		return _SELECT_REG(UBRR0);
 	}
-
-	//TODO maybe useless? BETTER DEFINE MACROS FOR DIRECT USE IN SPECIALIZED HEADERS uart.hh, pci.hh...
-	enum class Circuits
-	{
-		TIMER_0,
-		TIMER_1,
-		TIMER_2,
-		USART_0,
-		SPI_0,
-		TWI_0
-	};
 };
 
 /**

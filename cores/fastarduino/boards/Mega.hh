@@ -23,45 +23,25 @@
  */
 namespace Board
 {
-	constexpr volatile uint8_t* const PORT_A = &PINA;
-	constexpr volatile uint8_t* const PORT_B = &PINB;
-	constexpr volatile uint8_t* const PORT_C = &PINC;
-	constexpr volatile uint8_t* const PORT_D = &PIND;
-	constexpr volatile uint8_t* const PORT_E = &PINE;
-	constexpr volatile uint8_t* const PORT_F = &PINF;
-	constexpr volatile uint8_t* const PORT_G = &PING;
-	constexpr volatile uint8_t* const PORT_H = &PINH;
-	constexpr volatile uint8_t* const PORT_J = &PINJ;
-	constexpr volatile uint8_t* const PORT_K = &PINK;
-	constexpr volatile uint8_t* const PORT_L = &PINL;
+	constexpr const REGISTER PORT_A = _SELECT_REG(PINA);
+	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
+	constexpr const REGISTER PORT_C = _SELECT_REG(PINC);
+	constexpr const REGISTER PORT_D = _SELECT_REG(PIND);
+	constexpr const REGISTER PORT_E = _SELECT_REG(PINE);
+	constexpr const REGISTER PORT_F = _SELECT_REG(PINF);
+	constexpr const REGISTER PORT_G = _SELECT_REG(PING);
+	constexpr const REGISTER PORT_H = _SELECT_REG(PINH);
+	constexpr const REGISTER PORT_J = _SELECT_REG(PINJ);
+	constexpr const REGISTER PORT_K = _SELECT_REG(PINK);
+	constexpr const REGISTER PORT_L = _SELECT_REG(PINL);
 	
-	constexpr volatile uint8_t* PIN(uint8_t pin)
-	{
-		return (pin < 8  ? PORT_E :
-				pin < 16 ? PORT_H :
-				pin < 24 ? PORT_B :
-				pin < 32 ? PORT_A :
-				pin < 40 ? PORT_C :
-				pin < 48 ? PORT_D :
-				pin < 56 ? PORT_L :
-				pin < 64 ? PORT_F :
-				pin < 72 ? PORT_K :
-				pin < 80 ? PORT_J :
-				PORT_G);
-	}
-
-	constexpr uint8_t BIT(uint8_t pin)
-	{
-		return (pin & 0x7);
-	}
-
 	/**
 	 * Digital pin symbols
 	 */
-	enum DigitalPin
+	enum class DigitalPin: uint8_t
 	{
-		D0 = 0,			// PE0
-		D1 = 1,			// PE1
+		D0 = 0,			// PE0/RX0
+		D1 = 1,			// PE1/TX0
 		D2 = 4,			// PE4
 		D3 = 5,			// PE5
 		D4 = 85,		// PG5
@@ -74,15 +54,15 @@ namespace Board
 		D11 = 21,		// PB5
 		D12 = 22,		// PB6
 		D13 = 23,		// PB7
-		D14 = 73,		// PJ1
-		D15 = 72,		// PJ0
-		D16 = 9,		// PH1
-		D17 = 8,		// PH0
-		D18 = 43,		// PD3
-		D19 = 42,		// PD2
-		D20 = 41,		// PD1
-		D21 = 40,		// PD0
-		D22 = 24,		// PA0
+		D14 = 73,		// PJ1/TX3
+		D15 = 72,		// PJ0/RX3
+		D16 = 9,		// PH1/TX2
+		D17 = 8,		// PH0/RX2
+		D18 = 43,		// PD3/TX1
+		D19 = 42,		// PD2/RX1
+		D20 = 41,		// PD1/SDA
+		D21 = 40,		// PD0/SCL
+		D22 = 24,		// PA0/AD0
 		D23 = 25,		// PA1
 		D24 = 26,		// PA2
 		D25 = 27,		// PA3
@@ -131,58 +111,138 @@ namespace Board
 		D68 = 70,		// PK6/A14
 		D69 = 71,		// PK7/A15
 		LED = D13
-	} __attribute__((packed));
+	};
+
+#define _SELECT_PIN(DPIN, ARG_E, ARG_H, ARG_B, ARG_A, ARG_C, ARG_D, ARG_L, ARG_F, ARG_K, ARG_J, ARG_G)	\
+	(	(uint8_t) DPIN < 8 ? ARG_E :		\
+		(uint8_t) DPIN < 16 ? ARG_H :		\
+		(uint8_t) DPIN < 24 ? ARG_B :		\
+		(uint8_t) DPIN < 32 ? ARG_A :		\
+		(uint8_t) DPIN < 40 ? ARG_C :		\
+		(uint8_t) DPIN < 48 ? ARG_D :		\
+		(uint8_t) DPIN < 56 ? ARG_L :		\
+		(uint8_t) DPIN < 64 ? ARG_F :		\
+		(uint8_t) DPIN < 72 ? ARG_K :		\
+		(uint8_t) DPIN < 80 ? ARG_J :		\
+		ARG_G)
+	
+//TODO Could that be simplified by using REG ## E, REG## H, ...?
+#define _SELECT_PIN_REG(DPIN, REG_E, REG_H, REG_B, REG_A, REG_C, REG_D, REG_L, REG_F, REG_K, REG_J, REG_G)	\
+	_SELECT_REG(_SELECT_PIN(DPIN, REG_E, REG_H, REG_B, REG_A, REG_C, REG_D, REG_L, REG_F, REG_K, REG_J, REG_G))
+
+	constexpr REGISTER PIN_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, PINE, PINH, PINB, PINA, PINC, PIND, PINL, PINF, PINK, PINJ, PING);
+	}
+
+	constexpr REGISTER DDR_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, DDRE, DDRH, DDRB, DDRA, DDRC, DDRD, DDRL, DDRF, DDRK, DDRJ, DDRG);
+	}
+
+	constexpr REGISTER PORT_REG(DigitalPin pin)
+	{
+		return _SELECT_PIN_REG(pin, PORTE, PORTH, PORTB, PORTA, PORTC, PORTD, PORTL, PORTF, PORTK, PORTJ, PORTG);
+	}
+
+	constexpr uint8_t BIT(DigitalPin pin)
+	{
+		return ((uint8_t) pin) & 0x7;
+	}
 
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
 	 */
-	enum ExternalInterruptPin
+	enum class ExternalInterruptPin: uint8_t
 	{
-		EXT0 = D21,			// PD0
-		EXT1 = D20,			// PD1
-		EXT2 = D19,			// PD2
-		EXT3 = D18,			// PD3
-		EXT4 = D2,			// PE4
-		EXT5 = D3			// PE5
-	} __attribute__((packed));
+		EXT0 = DigitalPin::D21,			// PD0
+		EXT1 = DigitalPin::D20,			// PD1
+		EXT2 = DigitalPin::D19,			// PD2
+		EXT3 = DigitalPin::D18,			// PD3
+		EXT4 = DigitalPin::D2,			// PE4
+		EXT5 = DigitalPin::D3			// PE5
+	};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	enum InterruptPin
+	enum class PCIPort: uint8_t
 	{
-		PCI0 = D10,			// PB4
-		PCI1 = D11,			// PB5
-		PCI2 = D12,			// PB6
-		PCI3 = D13,			// PB7
-		PCI4 = D50,			// PB3
-		PCI5 = D51,			// PB2
-		PCI6 = D52,			// PB1
-		PCI7 = D53,			// PB0
-		PCI8 = D62,			// PK0/A8
-		PCI9 = D63,			// PK1/A9
-		PCI10 = D64,		// PK2/A10
-		PCI11 = D65,		// PK3/A11
-		PCI12 = D66,		// PK4/A12
-		PCI13 = D67,		// PK5/A13
-		PCI14 = D68,		// PK6/A14
-		PCI15 = D69			// PK7/A15
-	} __attribute__((packed));
-
-	/**
-	 * Size of pin maps.
-	 */
-	enum
+		PCI0 = 0,			// PB0-7
+		PCI1 = 1,			// PJ0-1
+		PCI2 = 2			// PK0-7
+	};
+	enum class InterruptPin: uint8_t
 	{
-		USART_MAX = 4,
-		ANALOG_PIN_MAX = 16,
-		DIGITAL_PIN_MAX = 70,
-		EXT_PIN_MAX = 6,
-		PCI_PIN_MAX = 24,
-		PWM_PIN_MAX = 13
+		PCI0 = DigitalPin::D53,			// PB0
+		PCI1 = DigitalPin::D52,			// PB1
+		PCI2 = DigitalPin::D51,			// PB2
+		PCI3 = DigitalPin::D50,			// PB3
+		PCI4 = DigitalPin::D10,			// PB4
+		PCI5 = DigitalPin::D11,			// PB5
+		PCI6 = DigitalPin::D12,			// PB6
+		PCI7 = DigitalPin::D13,			// PB7
+		
+		PCI9 = DigitalPin::D15,			// PJ0
+		PCI10 = DigitalPin::D14,		// PJ1
+		
+		PCI16 = DigitalPin::D62,		// PK0
+		PCI17 = DigitalPin::D63,		// PK1
+		PCI18 = DigitalPin::D64,		// PK2
+		PCI19 = DigitalPin::D65,		// PK3
+		PCI20 = DigitalPin::D66,		// PK4
+		PCI21 = DigitalPin::D67,		// PK5
+		PCI22 = DigitalPin::D68,		// PK6
+		PCI23 = DigitalPin::D69			// PK7
 	};
 	
+#define _SELECT_PCI_PORT(PIN)					\
+	((uint8_t) PIN < 24 ? PCIPort::PCI0 : (uint8_t) PIN < 72 ? PCIPort::PCI2 : PCIPort::PCI1)
+	
+#define _SELECT_PCI(PORT, ARG0, ARG1, ARG2)	\
+	(	PORT == PCIPort::PCI0 ? ARG0 :		\
+		PORT == PCIPort::PCI1 ? ARG1 :		\
+		ARG2)
+	
+#define _SELECT_PCI_REG(PORT, REG0, REG1, REG2)	\
+	_SELECT_REG(_SELECT_PCI(PORT, REG0, REG1, REG2))
+	
+#define _SELECT_PCI_MSK(PORT, MSK0, MSK1, MSK2)	\
+	_BV(_SELECT_PCI(PORT, MSK0, MSK1, MSK2))
+
+	constexpr uint8_t BIT(InterruptPin pin)
+	{
+		return ((uint8_t) pin) & 0x7;
+	}
+	
+	constexpr PCIPort PCI_PORT(InterruptPin pin)
+	{
+		return _SELECT_PCI_PORT(pin);
+	}
+	constexpr REGISTER PCICR_REG()
+	{
+		return _SELECT_REG(PCICR);
+	}
+	constexpr uint8_t PCIE_MSK(PCIPort PORT)
+	{
+		return _SELECT_PCI_MSK(PORT, PCIE0, PCIE1, PCIE2);
+	}
+	
+	constexpr REGISTER PCIFR_REG()
+	{
+		return _SELECT_REG(PCIFR);
+	}
+	constexpr uint8_t PCIFR_MSK(PCIPort PORT)
+	{
+		return _SELECT_PCI_MSK(PORT, PCIF0, PCIF1, PCIF2);
+	}
+	
+	constexpr REGISTER PCMSK_REG(PCIPort PORT)
+	{
+		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1, PCMSK2);
+	}
+
 	enum class SleepMode: uint8_t
 	{
 		IDLE = SLEEP_MODE_IDLE,

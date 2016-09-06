@@ -3,7 +3,6 @@
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
-        <itemPath>cores/fastarduino/boards/ATmega328P.hh</itemPath>
         <itemPath>cores/fastarduino/boards/ATtinyX4.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Mega.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
@@ -111,11 +110,6 @@
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/ATmega328P.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -219,11 +213,6 @@
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/ATmega328P.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -329,11 +318,6 @@
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/ATmega328P.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -437,11 +421,6 @@
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/ATmega328P.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
