@@ -32,7 +32,7 @@
       <compileType>
         <cTool>
           <developmentMode>0</developmentMode>
-          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -DARDUINO=${ARDUINO} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
           <warningLevel>2</warningLevel>
         </cTool>
         <ccTool>
@@ -81,7 +81,7 @@
       <compileType>
         <cTool>
           <developmentMode>0</developmentMode>
-          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -DARDUINO=${ARDUINO} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
           <warningLevel>2</warningLevel>
         </cTool>
         <ccTool>
@@ -142,7 +142,7 @@
       <compileType>
         <cTool>
           <developmentMode>0</developmentMode>
-          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -DARDUINO=${ARDUINO} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
           <warningLevel>2</warningLevel>
         </cTool>
         <ccTool>
@@ -203,7 +203,7 @@
       <compileType>
         <cTool>
           <developmentMode>0</developmentMode>
-          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -DARDUINO=${ARDUINO} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
           <warningLevel>2</warningLevel>
         </cTool>
         <ccTool>
