@@ -14,8 +14,7 @@ int main()
 	while (true)
 	{
 		PinLED.toggle();
-		_delay_ms(200.0);
-		_delay_ms(200.0);
+		_delay_ms(400.0);
 	}
 	return 0;
 }

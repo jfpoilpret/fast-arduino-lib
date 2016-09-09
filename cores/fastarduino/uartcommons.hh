@@ -1,7 +1,7 @@
 #ifndef UARTCOMMONS_HH
 #define	UARTCOMMONS_HH
 
-#include <avr/io.h>
+#include "Board.hh"
 
 namespace Serial
 {
@@ -16,7 +16,8 @@ namespace Serial
 		ONE = 1,
 		TWO = 2
 	};
-
+	
+#ifdef USART0_RX_vect
 	constexpr uint8_t AVR_USART_PARITY(Parity parity)
 	{
 		return (parity == Parity::EVEN ? _BV(UPM00) : parity == Parity::ODD ? _BV(UPM00) | _BV(UPM01) : 0x00);
@@ -26,6 +27,7 @@ namespace Serial
 	{
 		return (stopbits == StopBits::ONE ? 0x00 : _BV(USBS0));
 	}
+#endif
 	
 	union _UARTErrors
 	{

@@ -8,8 +8,24 @@
 #include <fastarduino/softuart.hh>
 #include <fastarduino/utilities.hh>
 
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
+constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
 // Define vectors we need in the example
 USE_PCI2()
+#elif defined (ARDUINO_MEGA)
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
+constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+// Define vectors we need in the example
+USE_PCI0()
+#elif defined (BREADBOARD_ATTINYX4)
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
+constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+// Define vectors we need in the example
+USE_PCI0()
+#else
+#error "Current target is not yet supported!"
+#endif
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;
@@ -24,7 +40,7 @@ int main()
 	sei();
 	
 	// Setup UART
-	Soft::UART<Board::InterruptPin::PCI0, Board::DigitalPin::D1> uart{input_buffer, output_buffer};
+	Soft::UART<RX, TX> uart{input_buffer, output_buffer};
 	PCI<uart.PCIPORT> pci{&uart};
 	pci.enable();
 

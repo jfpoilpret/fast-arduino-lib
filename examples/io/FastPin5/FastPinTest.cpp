@@ -13,6 +13,16 @@
 #include <util/delay.h>
 #include <fastarduino/IO.hh>
 
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+constexpr const REGISTER LED_PORT = Board::PORT_D;
+#elif defined (ARDUINO_MEGA)
+constexpr const REGISTER LED_PORT = Board::PORT_A;
+#elif defined (BREADBOARD_ATTINYX4)
+constexpr const REGISTER LED_PORT = Board::PORT_A;
+#else
+#error "Current target is not yet supported!"
+#endif
+
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)
 {
 	uint16_t result = (pattern << shift);
@@ -35,7 +45,7 @@ int main()
 	IOMaskedPort pins[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		pins[i] = IOMaskedPort{Board::PORT_D, _BV(i), 0xFF};
+		pins[i] = IOMaskedPort{LED_PORT, _BV(i), 0xFF};
 	}
 	
 	// Loop of the LED chaser

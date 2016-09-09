@@ -67,7 +67,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/uartapp3: ${OBJECTFILES}
 ${OBJECTDIR}/UARTApp3.o: UARTApp3.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I../../../cores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/UARTApp3.o UARTApp3.cpp
+	$(COMPILE.cc) -O2 -Wall -I../../../cores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/UARTApp3.o UARTApp3.cpp
 
 # Subprojects
 .build-subprojects:

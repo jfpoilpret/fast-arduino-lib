@@ -10,8 +10,45 @@
 #include <fastarduino/PCI.hh>
 #include <fastarduino/power.hh>
 
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D14;
+constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D16;
+constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D17;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
+constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
 USE_PCI1()
+
+#elif defined (ARDUINO_MEGA)
+constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D53;
+constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D52;
+constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D51;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
+constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
+// Define vectors we need in the example
+USE_PCI0()
+
+#elif defined (BREADBOARD_ATTINYX4)
+constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D0;
+constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D1;
+constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D2;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D3;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D4;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D6;
+constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
+// Define vectors we need in the example
+USE_PCI0()
+
+#else
+#error "Current target is not yet supported!"
+#endif
 
 //TODO example 3 with IOPort instead of IOPin (more size efficient?))
 class PinChangeHandler: public PCIHandler
@@ -20,16 +57,16 @@ public:
 	PinChangeHandler()
 	:_switches
 	{
-		IOPin{Board::DigitalPin::D14, PinMode::INPUT_PULLUP}, 
-		IOPin{Board::DigitalPin::D16, PinMode::INPUT_PULLUP}, 
-		IOPin{Board::DigitalPin::D17, PinMode::INPUT_PULLUP}
+		IOPin{SWITCH1, PinMode::INPUT_PULLUP}, 
+		IOPin{SWITCH2, PinMode::INPUT_PULLUP}, 
+		IOPin{SWITCH3, PinMode::INPUT_PULLUP}
 	},
 	_leds
 	{
-		IOPin{Board::DigitalPin::D1, PinMode::OUTPUT}, 
-		IOPin{Board::DigitalPin::D3, PinMode::OUTPUT}, 
-		IOPin{Board::DigitalPin::D5, PinMode::OUTPUT}, 
-		IOPin{Board::DigitalPin::D7, PinMode::OUTPUT}
+		IOPin{LED1, PinMode::OUTPUT}, 
+		IOPin{LED2, PinMode::OUTPUT}, 
+		IOPin{LED3, PinMode::OUTPUT}, 
+		IOPin{LED4, PinMode::OUTPUT}
 	}
 	{
 	}
@@ -58,11 +95,14 @@ int main()
 	sei();
 
 	PinChangeHandler handler;
-	PCI<Board::PCIPort::PCI1> pci{&handler};
+	PCI<PCI_PORT> pci{&handler};
 	
-	pci.enable_pin(Board::InterruptPin::PCI14);
-	pci.enable_pin(Board::InterruptPin::PCI16);
-	pci.enable_pin(Board::InterruptPin::PCI17);
+	pci.enable_pin((Board::InterruptPin) SWITCH1);
+	pci.enable_pin((Board::InterruptPin) SWITCH2);
+	pci.enable_pin((Board::InterruptPin) SWITCH3);
+//	pci.enable_pin(Board::InterruptPin::PCI14);
+//	pci.enable_pin(Board::InterruptPin::PCI16);
+//	pci.enable_pin(Board::InterruptPin::PCI17);
 	pci.enable();
 
 	// Event Loop

@@ -211,12 +211,12 @@
             <linkerLibProjectItem>
               <makeArtifact PL="../../.."
                             CT="3"
-                            CN="UNO-Release"
-                            AC="true"
+                            CN="ATtiny84-Release"
+                            AC="false"
                             BL="true"
                             WD="../../.."
-                            BC="${MAKE}  -f Makefile CONF=UNO-Release"
-                            CC="${MAKE}  -f Makefile CONF=UNO-Release clean"
+                            BC="${MAKE}  -f Makefile CONF=ATtiny84-Release"
+                            CC="${MAKE}  -f Makefile CONF=ATtiny84-Release clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a">
               </makeArtifact>
             </linkerLibProjectItem>

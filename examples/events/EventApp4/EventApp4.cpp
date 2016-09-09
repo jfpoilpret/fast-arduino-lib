@@ -20,10 +20,20 @@
 
 using namespace Events;
 
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+constexpr const REGISTER LED_PORT = Board::PORT_D;
+#elif defined (ARDUINO_MEGA)
+constexpr const REGISTER LED_PORT = Board::PORT_A;
+#elif defined (BREADBOARD_ATTINYX4)
+constexpr const REGISTER LED_PORT = Board::PORT_A;
+#else
+#error "Current target is not yet supported!"
+#endif
+
 class LedHandler: private IOPort
 {
 public:
-	LedHandler() : IOPort{Board::PORT_D, 0xFF}, _value{0} {}
+	LedHandler() : IOPort{LED_PORT, 0xFF}, _value{0} {}
 	void operator()(uint32_t millis UNUSED)
 	{
 		uint8_t value = _value;

@@ -79,7 +79,7 @@
     </conf>
     <conf name="ATmega328-Release" type="1">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -128,7 +128,7 @@
     </conf>
     <conf name="MEGA-Release" type="1">
       <toolsSet>
-        <compilerSet>Arduino-1.6.9|Unknown</compilerSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -176,6 +176,55 @@
         </linkerTool>
       </compileType>
       <item path="EventApp2.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="ATtiny84-Release" type="1">
+      <toolsSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>0</developmentMode>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -DARDUINO=${ARDUINO} -Wextra -flto -g -Os -ffunction-sections -fdata-sections</commandLine>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>0</developmentMode>
+          <standard>8</standard>
+          <incDir>
+            <pElem>../../../cores</pElem>
+          </incDir>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -DARDUINO=${ARDUINO} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2</output>
+          <linkerLibItems>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../.."
+                            CT="3"
+                            CN="ATtiny84-Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../.."
+                            BC="${MAKE}  -f Makefile CONF=ATtiny84-Release"
+                            CC="${MAKE}  -f Makefile CONF=ATtiny84-Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+          </linkerLibItems>
+          <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="EventApp2.cpp" ex="false" tool="1" flavor2="8">
       </item>
     </conf>
   </confs>

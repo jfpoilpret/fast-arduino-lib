@@ -15,21 +15,29 @@ CND_PACKAGE_DIR_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/p
 CND_PACKAGE_NAME_UNO-Release=eventapp2.tar
 CND_PACKAGE_PATH_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package/eventapp2.tar
 # ATmega328-Release configuration
-CND_PLATFORM_ATmega328-Release=Arduino-1.6.9-Windows
-CND_ARTIFACT_DIR_ATmega328-Release=dist/ATmega328-Release/Arduino-1.6.9-Windows
+CND_PLATFORM_ATmega328-Release=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_ARTIFACT_DIR_ATmega328-Release=dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86
 CND_ARTIFACT_NAME_ATmega328-Release=eventapp2
-CND_ARTIFACT_PATH_ATmega328-Release=dist/ATmega328-Release/Arduino-1.6.9-Windows/eventapp2
-CND_PACKAGE_DIR_ATmega328-Release=dist/ATmega328-Release/Arduino-1.6.9-Windows/package
+CND_ARTIFACT_PATH_ATmega328-Release=dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/eventapp2
+CND_PACKAGE_DIR_ATmega328-Release=dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package
 CND_PACKAGE_NAME_ATmega328-Release=eventapp2.tar
-CND_PACKAGE_PATH_ATmega328-Release=dist/ATmega328-Release/Arduino-1.6.9-Windows/package/eventapp2.tar
+CND_PACKAGE_PATH_ATmega328-Release=dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package/eventapp2.tar
 # MEGA-Release configuration
-CND_PLATFORM_MEGA-Release=Arduino-1.6.9-Windows
-CND_ARTIFACT_DIR_MEGA-Release=dist/MEGA-Release/Arduino-1.6.9-Windows
+CND_PLATFORM_MEGA-Release=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_ARTIFACT_DIR_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86
 CND_ARTIFACT_NAME_MEGA-Release=eventapp2
-CND_ARTIFACT_PATH_MEGA-Release=dist/MEGA-Release/Arduino-1.6.9-Windows/eventapp2
-CND_PACKAGE_DIR_MEGA-Release=dist/MEGA-Release/Arduino-1.6.9-Windows/package
+CND_ARTIFACT_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/eventapp2
+CND_PACKAGE_DIR_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package
 CND_PACKAGE_NAME_MEGA-Release=eventapp2.tar
-CND_PACKAGE_PATH_MEGA-Release=dist/MEGA-Release/Arduino-1.6.9-Windows/package/eventapp2.tar
+CND_PACKAGE_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package/eventapp2.tar
+# ATtiny84-Release configuration
+CND_PLATFORM_ATtiny84-Release=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_ARTIFACT_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_ARTIFACT_NAME_ATtiny84-Release=eventapp2
+CND_ARTIFACT_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/eventapp2
+CND_PACKAGE_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package
+CND_PACKAGE_NAME_ATtiny84-Release=eventapp2.tar
+CND_PACKAGE_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/package/eventapp2.tar
 #
 # include compiler specific variables
 #

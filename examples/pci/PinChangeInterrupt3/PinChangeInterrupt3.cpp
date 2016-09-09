@@ -10,22 +10,56 @@
 #include <fastarduino/PCI.hh>
 #include <fastarduino/power.hh>
 
-// Define vectors we need in the example
-USE_PCI1()
-
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const uint8_t LED1 = _BV(Board::BIT(Board::DigitalPin::D1));
 static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D3));
 static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D5));
 static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D7));
-
+static constexpr const REGISTER LED_PORT = Board::PORT_D;
 static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D14));
 static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D16));
 static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D17));
+static constexpr const REGISTER SWITCH_PORT = Board::PORT_C;
+static constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
+// Define vectors we need in the example
+USE_PCI1()
+
+#elif defined (ARDUINO_MEGA)
+static constexpr const uint8_t LED1 = _BV(Board::BIT(Board::DigitalPin::D0));
+static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D1));
+static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D2));
+static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D3));
+static constexpr const REGISTER LED_PORT = Board::PORT_E;
+static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D53));
+static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D52));
+static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D51));
+static constexpr const REGISTER SWITCH_PORT = Board::PORT_B;
+static constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
+// Define vectors we need in the example
+USE_PCI0()
+
+#elif defined (BREADBOARD_ATTINYX4)
+static constexpr const uint8_t LED1 = _BV(Board::BIT(Board::DigitalPin::D0));
+static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D1));
+static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D2));
+static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D3));
+static constexpr const REGISTER LED_PORT = Board::PORT_A;
+static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D8));
+static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D9));
+static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D10));
+static constexpr const REGISTER SWITCH_PORT = Board::PORT_B;
+static constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
+// Define vectors we need in the example
+USE_PCI1()
+
+#else
+#error "Current target is not yet supported!"
+#endif
 
 class PinChangeHandler: public PCIHandler
 {
 public:
-	PinChangeHandler():_switches{Board::PORT_C, 0x00, 0xFF}, _leds{Board::PORT_D, 0xFF} {}
+	PinChangeHandler():_switches{SWITCH_PORT, 0x00, 0xFF}, _leds{LED_PORT, 0xFF} {}
 	
 	virtual bool pin_change()
 	{
@@ -49,7 +83,7 @@ int main()
 	sei();
 
 	PinChangeHandler handler;
-	PCI<Board::PCIPort::PCI1> pci{&handler};
+	PCI<PCI_PORT> pci{&handler};
 	
 	pci.enable_pins(SW1 | SW2 | SW3);
 	pci.enable();

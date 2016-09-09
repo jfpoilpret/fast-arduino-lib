@@ -67,7 +67,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1: ${OBJECTFILES}
 ${OBJECTDIR}/FastPinTest.o: FastPinTest.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -DARDUINO_UNO -I../../../cores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FastPinTest.o FastPinTest.cpp
+	$(COMPILE.cc) -Wall -I../../../cores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FastPinTest.o FastPinTest.cpp
 
 # Subprojects
 .build-subprojects:

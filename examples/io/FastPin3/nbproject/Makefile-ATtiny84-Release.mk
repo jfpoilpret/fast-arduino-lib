@@ -52,13 +52,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin3
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin3: ../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin3: ../../../dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin3: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -71,7 +71,7 @@ ${OBJECTDIR}/FastPinTest.o: FastPinTest.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../../.. && ${MAKE}  -f Makefile CONF=UNO-Release
+	cd ../../.. && ${MAKE}  -f Makefile CONF=ATtiny84-Release
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -80,7 +80,7 @@ ${OBJECTDIR}/FastPinTest.o: FastPinTest.cpp
 
 # Subprojects
 .clean-subprojects:
-	cd ../../.. && ${MAKE}  -f Makefile CONF=UNO-Release clean
+	cd ../../.. && ${MAKE}  -f Makefile CONF=ATtiny84-Release clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

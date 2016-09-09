@@ -23,7 +23,12 @@ constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
 // Define vectors we need in the example
 USE_PCI0()
 
-//#elif defined (BREADBOARD_ATTINYX4)
+#elif defined (BREADBOARD_ATTINYX4)
+constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D0;
+constexpr const Board::InterruptPin PCI_SWITCH = Board::InterruptPin::PCI0;
+constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
+// Define vectors we need in the example
+USE_PCI0()
 
 #else
 #error "Current target is not yet supported!"

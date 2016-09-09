@@ -21,8 +21,8 @@ FC=gfortran
 AS=avr-as
 
 # Macros
-CND_PLATFORM=Arduino-1.6.9-Windows
-CND_DLIB_EXT=dll
+CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_DLIB_EXT=so
 CND_CONF=MEGA-Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -56,11 +56,11 @@ LDLIBSOPTIONS=../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfa
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2.exe: ../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2: ../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
 
@@ -76,7 +76,7 @@ ${OBJECTDIR}/EventApp2.o: EventApp2.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2.exe
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/eventapp2
 
 # Subprojects
 .clean-subprojects:
