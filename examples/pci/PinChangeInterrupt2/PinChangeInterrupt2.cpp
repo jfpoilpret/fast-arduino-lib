@@ -26,10 +26,10 @@ USE_PCI1()
 constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D53;
 constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D52;
 constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D51;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D22;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25;
 constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
 // Define vectors we need in the example
 USE_PCI0()

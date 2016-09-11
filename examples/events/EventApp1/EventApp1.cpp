@@ -20,6 +20,37 @@ using namespace Events;
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0;
+static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
+static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2;
+static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3;
+static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4;
+static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5;
+static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6;
+static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
+#elif defined (ARDUINO_MEGA)
+static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D22;
+static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D23;
+static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D24;
+static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D25;
+static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D26;
+static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D27;
+static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D28;
+static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D29;
+#elif defined (BREADBOARD_ATTINYX4)
+static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0;
+static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
+static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2;
+static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3;
+static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4;
+static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5;
+static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6;
+static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
+#else
+#error "Current target is not yet supported!"
+#endif
+
 class LedHandler: private IOPin
 {
 public:
@@ -44,14 +75,14 @@ int main()
 	Dispatcher dispatcher;
 	FunctorHandler<LedHandler> handlers[NUM_LEDS]
 	{
-		FunctorHandler<LedHandler>{Type::USER_EVENT, LedHandler{Board::DigitalPin::D0}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 1), LedHandler{Board::DigitalPin::D1}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 2), LedHandler{Board::DigitalPin::D2}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 3), LedHandler{Board::DigitalPin::D3}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 4), LedHandler{Board::DigitalPin::D4}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 5), LedHandler{Board::DigitalPin::D5}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 6), LedHandler{Board::DigitalPin::D6}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 7), LedHandler{Board::DigitalPin::D7}}
+		FunctorHandler<LedHandler>{Type::USER_EVENT, LedHandler{LED0}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 1), LedHandler{LED1}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 2), LedHandler{LED2}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 3), LedHandler{LED3}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 4), LedHandler{LED4}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 5), LedHandler{LED5}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 6), LedHandler{LED6}},
+		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 7), LedHandler{LED7}}
 	};
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 		dispatcher.insert(handlers[i]);

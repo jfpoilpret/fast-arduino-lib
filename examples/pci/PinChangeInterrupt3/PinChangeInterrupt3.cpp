@@ -27,11 +27,11 @@ static constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 USE_PCI1()
 
 #elif defined (ARDUINO_MEGA)
-static constexpr const uint8_t LED1 = _BV(Board::BIT(Board::DigitalPin::D0));
-static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D1));
-static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D2));
-static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D3));
-static constexpr const REGISTER LED_PORT = Board::PORT_E;
+static constexpr const uint8_t LED1 = _BV(Board::BIT(Board::DigitalPin::D22));
+static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D23));
+static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D24));
+static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D25));
+static constexpr const REGISTER LED_PORT = Board::PORT_A;
 static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D53));
 static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D52));
 static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D51));
