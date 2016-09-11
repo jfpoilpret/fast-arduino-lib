@@ -2,6 +2,8 @@
  * Pin Change Interrupt test sample.
  * Takes PCI input from 3 switches and lights one of 3 LEDs (1 LED per button).
  * Also toggles a 4th LED on each PCI interrupt.
+ * This is similar to PinChangeInterrupt2 except it used IOPort instead of IOPin,
+ * which is more size-efficient.
  */
 
 #include <avr/interrupt.h>

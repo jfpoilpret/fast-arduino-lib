@@ -20,12 +20,6 @@ using namespace Events;
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
-static void debug_delay(uint8_t times = 4)
-{
-	for (uint8_t i = 0; i < times; ++i)
-		_delay_ms(250);
-}
-
 class LedHandler: private IOPin
 {
 public:
@@ -74,7 +68,7 @@ int main()
 	{
 		Event event = pull(event_queue);
 		dispatcher.dispatch(event);
-		debug_delay(1);
+		_delay_ms(250);
 	}
 	return 0;
 }

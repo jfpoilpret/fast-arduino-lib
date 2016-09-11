@@ -50,7 +50,6 @@ USE_PCI0()
 #error "Current target is not yet supported!"
 #endif
 
-//TODO example 3 with IOPort instead of IOPin (more size efficient?))
 class PinChangeHandler: public PCIHandler
 {
 public:

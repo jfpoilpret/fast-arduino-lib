@@ -14,28 +14,16 @@
 #include <fastarduino/IO.hh>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const REGISTER LED_PORT = Board::PORT_D;
+static constexpr const REGISTER LED_PORT = Board::PORT_D;
 #elif defined (ARDUINO_MEGA)
-constexpr const REGISTER LED_PORT = Board::PORT_A;
+static constexpr const REGISTER LED_PORT = Board::PORT_A;
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const REGISTER LED_PORT = Board::PORT_A;
+static constexpr const REGISTER LED_PORT = Board::PORT_A;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)
-{
-	uint16_t result = (pattern << shift);
-	return result | (result >> 8);
-}
-
-static inline uint8_t calculate_pattern(uint8_t num_bits)
-{
-	uint16_t pattern = (1 << (num_bits + 1)) - 1;
-	return pattern;
-}
-
-const uint8_t NUM_LEDS = 8;
+static const uint8_t NUM_LEDS = 8;
 
 int main()
 {

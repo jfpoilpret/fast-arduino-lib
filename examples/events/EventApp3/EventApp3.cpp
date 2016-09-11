@@ -20,11 +20,11 @@
 using namespace Events;
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const REGISTER LED_PORT = Board::PORT_D;
+static constexpr const REGISTER LED_PORT = Board::PORT_D;
 #elif defined (ARDUINO_MEGA)
-constexpr const REGISTER LED_PORT = Board::PORT_A;
+static constexpr const REGISTER LED_PORT = Board::PORT_A;
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const REGISTER LED_PORT = Board::PORT_A;
+static constexpr const REGISTER LED_PORT = Board::PORT_A;
 #else
 #error "Current target is not yet supported!"
 #endif

@@ -34,7 +34,8 @@ int main()
 	{
 		out.puts("Enter a letter: ");
 		out.flush();
-		int input = in.get();
+//		int input = in.get();
+		int input = ::get(in);
 		out.put(input);
 		out.put('\n');
 		out << (char) input << ' ' << dec << input << ' ' << oct << input << ' ' << hex << input << ' ' << bin << input << endl;

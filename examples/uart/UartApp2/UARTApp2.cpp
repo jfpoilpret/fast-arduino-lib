@@ -51,8 +51,8 @@ int main()
 //	uatx.begin(9600);
 //	uarx.begin(pci, 9600);
 
-//	uatx.begin(115200);
-//	uarx.begin(pci, 115200);
+	uatx.begin(115200);
+	uarx.begin(pci, 115200);
 	
 //	uatx.begin(230400);
 //	uarx.begin(pci, 230400);
@@ -69,8 +69,8 @@ int main()
 //	uatx.begin(115200, Serial::Parity::ODD);
 //	uarx.begin(pci, 115200, Serial::Parity::ODD);
 	
-	uatx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
-	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
+//	uatx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
+//	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 
 	InputBuffer& in = uarx.in();
 	FormattedOutput<OutputBuffer> out = uatx.fout();
