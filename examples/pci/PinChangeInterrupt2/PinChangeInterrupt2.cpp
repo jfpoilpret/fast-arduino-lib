@@ -35,16 +35,16 @@ constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
 USE_PCI0()
 
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D0;
-constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D2;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D3;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D4;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D6;
-constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
+constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D8;
+constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D9;
+constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D10;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D0;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3;
+constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
-USE_PCI0()
+USE_PCI1()
 
 #else
 #error "Current target is not yet supported!"
@@ -99,9 +99,6 @@ int main()
 	pci.enable_pin((Board::InterruptPin) SWITCH1);
 	pci.enable_pin((Board::InterruptPin) SWITCH2);
 	pci.enable_pin((Board::InterruptPin) SWITCH3);
-//	pci.enable_pin(Board::InterruptPin::PCI14);
-//	pci.enable_pin(Board::InterruptPin::PCI16);
-//	pci.enable_pin(Board::InterruptPin::PCI17);
 	pci.enable();
 
 	// Event Loop
