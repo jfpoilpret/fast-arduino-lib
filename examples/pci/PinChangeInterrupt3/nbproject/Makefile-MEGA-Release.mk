@@ -21,7 +21,7 @@ FC=gfortran
 AS=avr-as
 
 # Macros
-CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux
 CND_DLIB_EXT=so
 CND_CONF=MEGA-Release
 CND_DISTDIR=dist
@@ -52,13 +52,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
+LDLIBSOPTIONS=../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pinchangeinterrupt3
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pinchangeinterrupt3: ../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux-x86/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pinchangeinterrupt3: ../../../dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/pinchangeinterrupt3: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}

@@ -21,7 +21,7 @@ FC=gfortran
 AS=avr-as
 
 # Macros
-CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux-x86
+CND_PLATFORM=AVR-GNU-Toolchain-3.5.3-Linux
 CND_DLIB_EXT=so
 CND_CONF=UNO-Release
 CND_DISTDIR=dist
