@@ -36,19 +36,16 @@ namespace Events
 		uint16_t _value;
 	};
 
-	class AbstractHandler;
+	class EventHandler;
 
 	// Dispatcher should be used only from non-interrupt code
-	class Dispatcher: public LinkedList<AbstractHandler>
+	class Dispatcher: public LinkedList<EventHandler>
 	{
 	public:
 		void dispatch(const Event& event);
 	};
 
-	//TODO maybe rename as EventHandler (or just Handler to avoid "Abstract" everywhere...)
-	// AbstractHandler used on more specific handlers types below
-	// This class should normally never be used directly by developers
-	class AbstractHandler: public Link<AbstractHandler>
+	class EventHandler: public Link<EventHandler>
 	{
 	public:
 		uint8_t type() const INLINE
@@ -56,66 +53,15 @@ namespace Events
 			return _type;
 		}
 
-		void handle(const Event& event) INLINE
-		{
-			_f(_env, event);
-		}
-		
-	private:
-		//TODO refactor to make it used everywhere we need this pattern!
-		typedef void (*F)(void* env, const Event& event);
-		AbstractHandler(uint8_t type = Type::NO_EVENT, void* env = 0, F f = 0) INLINE
-			: _type{type}, _f{f}, _env{env} {}
-		
-		uint8_t _type;
-		F _f;
-		void* _env;
-
-		friend class Dispatcher;
-		friend class HandlerCaller;
-		friend class VirtualHandler;
-		template<typename FUNCTOR>
-		friend class FunctorHandler;
-	};
-	
-	// Derive this class to define event handlers based on a virtual method.
-	class VirtualHandler: public AbstractHandler
-	{
-	protected:
-		VirtualHandler(uint8_t type = Type::NO_EVENT) INLINE
-			: AbstractHandler{type, this, apply} {}
 		virtual void on_event(const Event& event) = 0;
 		
-	private:
-		static void apply(void* env, const Event& event) INLINE
-		{
-			((VirtualHandler*) env)->on_event(event);
-		}
-	};
-
-	// Instantiate this template with a Functor when a functor is applicable.
-	// FUNCTOR must be a class defining:
-	// void operator()(const Event&);
-	// This approach generally gives smaller code and data than VirtualHandler approach
-	template<typename FUNCTOR>
-	class FunctorHandler: public AbstractHandler
-	{
-	public:
-		FunctorHandler() INLINE : AbstractHandler{} {}
-		FunctorHandler(uint8_t type, FUNCTOR f) INLINE
-			: AbstractHandler{type, this, apply}, _f{f} {}
 	protected:
-		FUNCTOR& functor() INLINE
-		{
-			return _f;
-		}
+		EventHandler(uint8_t type = Type::NO_EVENT) INLINE
+			: _type{type} {}
 		
-	private:
-		static void apply(void* env, const Event& event) INLINE
-		{
-			((FunctorHandler<FUNCTOR>*) env)->_f(event);
-		}
-		FUNCTOR _f;
+		uint8_t _type;
+		//TODO is this really needed?
+		friend class Dispatcher;
 	};
 };
 #endif	/* EVENTS_HH */

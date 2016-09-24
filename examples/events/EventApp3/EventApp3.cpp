@@ -29,11 +29,13 @@ static constexpr const REGISTER LED_PORT = Board::PORT_A;
 #error "Current target is not yet supported!"
 #endif
 
-class LedHandler: private IOPort
+static const uint32_t PERIOD = 1000;
+
+class LedHandler: public Job, private IOPort
 {
 public:
-	LedHandler() : IOPort{LED_PORT, 0xFF}, _value{0} {}
-	void operator()(uint32_t millis UNUSED)
+	LedHandler() : Job{0, PERIOD}, IOPort{LED_PORT, 0xFF}, _value{0} {}
+	virtual void on_schedule(uint32_t millis UNUSED) override
 	{
 		uint8_t value = _value;
 		if (value == 0)
@@ -53,8 +55,6 @@ static const uint8_t EVENT_QUEUE_SIZE = 32;
 static Event buffer[EVENT_QUEUE_SIZE];
 static Queue<Event> event_queue{buffer};
 
-static const uint32_t PERIOD = 1000;
-
 int main()
 {
 	// Enable interrupts at startup time
@@ -66,7 +66,7 @@ int main()
 	Scheduler<Watchdog> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
-	FunctorJob<LedHandler> job{0, PERIOD, LedHandler{}};
+	LedHandler job;
 	scheduler.schedule(job);
 	
 	// Start watchdog

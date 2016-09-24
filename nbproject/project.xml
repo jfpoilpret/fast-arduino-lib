@@ -11,6 +11,7 @@
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>cores/fastarduino</sourceRootElem>
+                <sourceRootElem>cores/fastarduino</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

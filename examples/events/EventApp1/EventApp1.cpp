@@ -51,12 +51,12 @@ static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
 #error "Current target is not yet supported!"
 #endif
 
-class LedHandler: private IOPin
+class LedHandler: public EventHandler, private IOPin
 {
 public:
 	LedHandler() {}
-	LedHandler(Board::DigitalPin led) : IOPin{led, PinMode::OUTPUT} {}
-	void operator()(const Event& event UNUSED)
+	LedHandler(uint8_t type, Board::DigitalPin led) : EventHandler{type}, IOPin{led, PinMode::OUTPUT} {}
+	virtual void on_event(const Event& event UNUSED)
 	{
 		toggle();
 	}
@@ -73,16 +73,16 @@ int main()
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	FunctorHandler<LedHandler> handlers[NUM_LEDS]
+	LedHandler handlers[NUM_LEDS]
 	{
-		FunctorHandler<LedHandler>{Type::USER_EVENT, LedHandler{LED0}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 1), LedHandler{LED1}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 2), LedHandler{LED2}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 3), LedHandler{LED3}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 4), LedHandler{LED4}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 5), LedHandler{LED5}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 6), LedHandler{LED6}},
-		FunctorHandler<LedHandler>{uint8_t(Type::USER_EVENT + 7), LedHandler{LED7}}
+		LedHandler{Type::USER_EVENT, LED0},
+		LedHandler{uint8_t(Type::USER_EVENT + 1), LED1},
+		LedHandler{uint8_t(Type::USER_EVENT + 2), LED2},
+		LedHandler{uint8_t(Type::USER_EVENT + 3), LED3},
+		LedHandler{uint8_t(Type::USER_EVENT + 4), LED4},
+		LedHandler{uint8_t(Type::USER_EVENT + 5), LED5},
+		LedHandler{uint8_t(Type::USER_EVENT + 6), LED6},
+		LedHandler{uint8_t(Type::USER_EVENT + 7), LED7}
 	};
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 		dispatcher.insert(handlers[i]);

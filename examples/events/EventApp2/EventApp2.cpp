@@ -28,11 +28,11 @@ static constexpr const REGISTER LED_PORT = Board::PORT_A;
 #error "Current target is not yet supported!"
 #endif
 
-class LedHandler: private IOPort
+class LedHandler: public EventHandler, private IOPort
 {
 public:
-	LedHandler() : IOPort{LED_PORT, 0xFF}, _value{0} {}
-	void operator()(const Event& event UNUSED)
+	LedHandler() : EventHandler{Type::WDT_TIMER}, IOPort{LED_PORT, 0xFF}, _value{0} {}
+	virtual void on_event(const Event& event UNUSED)
 	{
 		uint8_t value = _value;
 		if (value == 0)
@@ -60,7 +60,7 @@ int main()
 
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	FunctorHandler<LedHandler> handler{Type::WDT_TIMER, LedHandler{}};
+	LedHandler handler;
 	dispatcher.insert(handler);
 	
 	// Start watchdog
