@@ -10,7 +10,7 @@ After usage of Cosa libraries for several projects on ATmega328 and ATtiny84, I 
 
 From my viewpoint, the main source of those drawbacks is essentially heavy usage of `virtual` methods, which quickly increases code size when you start to define deep classes hierarchies; this also can have a slight impact on speed due to additional indirection when calling methods.
 
-FastArduino tries to favour C++ templates rather than virtual methods whenever possible.
+FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers).
 
 This comes at a cost: 
 
@@ -18,6 +18,8 @@ This comes at a cost:
 2. Build times are increased as most code is inside C++ headers
 
 In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are built through netbeans, which was hard to initially setup, but much more friendly to use once setup is done. Also netbeans automatically provides makefiles that make it possible to build projects in command line.
+
+My special setup (I work on Windows but compile everything on an Ubuntu virtual machine) is described in ArduinoDevSetup.docx. This document also described how I setup netbeans for my projects.
 
 Status
 ------
@@ -27,11 +29,22 @@ The project has just started, hence it does not cover much yet.
 What the project already has:
 
 - Utilities (queue, list, timing)
-- Fast IO support (ATmega328 and ATtinyX4) with examples for UNO
-- Events handling with examples for UNO
+- IO support: this comes in 2 flavors, one standard implementation and one template-based, optimized for speed and size. It is possible to mix both flavors in one program.
+- General Events handling
 - Watchdog timer
-- Timed (periodic or not) jobs scheduling with examples for UNO
+- Timed (periodic or not) jobs scheduling
 - Power sleep
+- Pin Change Interrupt (PCI) handling
+- Hardware UART support (for MCU that support it, ie not for ATtiny)
+- Software UART support (for all MCU)
+- "C++ like" Input/Output streams (used by UART implementations)
+
+As of now, the following platforms are supported (and tested):
+
+- Arduino UNO
+- Arduino MEGA
+- Breadboard ATmega328 at 8MHz
+- Breadboard ATtiny84 at 8MHz
 
 Roadmap
 -------
@@ -44,11 +57,12 @@ The roadmap of supported features is the following:
 4. Hardware UART support (done)
 5. Pin Change Interrupt support (done)
 6. Software UART support (done)
-7. Trace support
-8. Real Time Timer support
-9. SPI support (ATmega328 first)
-10. SPI support (ATtinyX4)
-11. Pin Interrupt support
-12. NRF24L01P support
-13. Multiple boards variants support (UNO, MEGA, ATtinyX4, ATtinyX5)
+
+7. External Pin Interrupt support
+8. SPI support (ATmega328 first)
+9. Real Time Timer support
+10. NRF24L01P support
+11. SPI support (ATtinyX4)
+12. Trace support (including PROGMEM strings support)
+13. More boards variants support (Leonardo, ATtinyX5)
 14. ... To be determined later
