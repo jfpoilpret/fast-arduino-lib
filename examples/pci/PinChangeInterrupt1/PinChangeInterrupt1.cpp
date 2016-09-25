@@ -42,7 +42,7 @@ public:
 		_led{Board::DigitalPin::LED, PinMode::OUTPUT}
 	{}
 	
-	virtual bool pin_change()
+	virtual bool on_pin_change() override
 	{
 		if (_switch.value())
 			_led.clear();

@@ -70,7 +70,7 @@ public:
 	{
 	}
 	
-	virtual bool pin_change()
+	virtual bool on_pin_change() override
 	{
 		for (uint8_t i = 0; i < 3; ++i)
 		{

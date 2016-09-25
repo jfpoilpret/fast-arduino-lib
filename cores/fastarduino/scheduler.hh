@@ -14,7 +14,7 @@ class Scheduler: public EventHandler, public LinkedList<Job>
 public:
 	Scheduler(const CLOCK& clock, uint8_t type) INLINE: EventHandler{type}, _clock(clock) {}
 	
-	virtual void on_event(const Event& event UNUSED) INLINE
+	virtual void on_event(UNUSED const Event& event) override INLINE
 	{
 		traverse(*this);
 	}

@@ -56,7 +56,7 @@ class LedHandler: public EventHandler, private IOPin
 public:
 	LedHandler() {}
 	LedHandler(uint8_t type, Board::DigitalPin led) : EventHandler{type}, IOPin{led, PinMode::OUTPUT} {}
-	virtual void on_event(const Event& event UNUSED)
+	virtual void on_event(UNUSED const Event& event) override
 	{
 		toggle();
 	}

@@ -18,7 +18,7 @@
 #define _USE_PCI(PORT)											\
 ISR(PCINT ## PORT ## _vect)										\
 {																\
-	PCI<Board::PCIPort::PCI ## PORT>::_handler->pin_change();	\
+	PCI<Board::PCIPort::PCI ## PORT>::_handler->on_pin_change();\
 }
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
@@ -124,7 +124,7 @@ PCIHandler* PCI<PORT>::_handler = 0;
 class PCIHandler
 {
 public:
-	virtual bool pin_change() = 0;
+	virtual bool on_pin_change() = 0;
 };
 
 //TODO More functional subclasses to:

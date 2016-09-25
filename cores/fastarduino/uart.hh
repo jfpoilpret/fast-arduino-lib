@@ -100,11 +100,11 @@ public:
 
 protected:	
 	// Listeners of events on the buffer
-	virtual void on_put()
+	virtual void on_put() override
 	{
 		_on_put(UCSRB, UDR);
 	}
-	virtual void on_overflow(UNUSED char c)
+	virtual void on_overflow(UNUSED char c) override
 	{
 		_errors.all_errors.queue_overflow = true;
 	}

@@ -65,13 +65,13 @@ namespace Soft
 		}
 		
 	protected:
-		virtual void on_put()
+		virtual void on_put() override
 		{
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			char value;
 			while (out().pull(value)) write(value);
 		}
-		virtual void on_overflow(UNUSED char c)
+		virtual void on_overflow(UNUSED char c) override
 		{
 			_errors.all_errors.queue_overflow = true;
 		}
@@ -174,7 +174,7 @@ namespace Soft
 	//	}
 		
 	protected:
-		virtual bool pin_change()
+		virtual bool on_pin_change() override
 		{
 			return _pin_change();
 		}

@@ -32,7 +32,7 @@ class LedHandler: public EventHandler, private IOPort
 {
 public:
 	LedHandler() : EventHandler{Type::WDT_TIMER}, IOPort{LED_PORT, 0xFF}, _value{0} {}
-	virtual void on_event(const Event& event UNUSED)
+	virtual void on_event(UNUSED const Event& event) override
 	{
 		uint8_t value = _value;
 		if (value == 0)

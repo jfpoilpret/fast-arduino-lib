@@ -63,7 +63,7 @@ class PinChangeHandler: public PCIHandler
 public:
 	PinChangeHandler():_switches{SWITCH_PORT, 0x00, 0xFF}, _leds{LED_PORT, 0xFF} {}
 	
-	virtual bool pin_change()
+	virtual bool on_pin_change() override
 	{
 		uint8_t switches = _switches.get_PIN();
 		uint8_t leds = (_leds.get_PIN() & LED4) ^ LED4;

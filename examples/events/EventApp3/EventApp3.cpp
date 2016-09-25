@@ -35,7 +35,7 @@ class LedHandler: public Job, private IOPort
 {
 public:
 	LedHandler() : Job{0, PERIOD}, IOPort{LED_PORT, 0xFF}, _value{0} {}
-	virtual void on_schedule(uint32_t millis UNUSED) override
+	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		uint8_t value = _value;
 		if (value == 0)
