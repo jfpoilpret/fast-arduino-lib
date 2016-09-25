@@ -1,9 +1,46 @@
 # Generic Makefile for FastArduino library, FastArduino examples and any FastArduino-based program.
-# To use you must include it in your project Makefile by adding the following line (without the '#' comment prefix):
+# To use it, you must include it in your project Makefile by adding the following line 
+# (without the '#' comment prefix):
 #
-# include <path-tofastarduino>/Makefile-FastArduino.mk
+# include <relative-path-to-fastarduino>/Makefile-FastArduino.mk
 #
-# TODO More descriptions here
+# This Makefile expects configurations names TARGET[-TYPE-][-FREQ]
+# Where:
+# - TARGET is one of:
+#   - UNO
+#   - MEGA
+#   - ATmega328
+#   - ATtiny84
+#
+# - TYPE is optional and can be anything you want to set different settings, e.g.
+#   - Release
+#   - Debug
+#
+# - FREQ is optional and allows changing default frequency values for TARGET; can be one of:
+#   - 8MHz (default for ATtiny and ATmega configurations)
+#   - 16MHZ
+#   - 20MHz
+# NB: FREQ should not be changed for standard ARduino boards, only for breadboard AVR MCU.
+#
+# Additional parameters are expected for uploading programs to the MCU:
+# - PROGRAMMER sets the programmer used for upload, can be one of:
+#   - UNO	use default UNO bootloader through USB (default for Arduino UNO)
+#   - MEGA	use default MEGA bootloader through USB (default for Arduino MEGA)
+#   - ISP	use ArduinoISP breakout connected to PC through USB (used by default for breadboard configs)
+#   - SHIELD	use AVR ISP shield coupled with an Arduino UNO
+#
+# - COM sets the USB device to use to connect to a board (defaults to /dev/ttyACM0). Note that ArduinoISP
+# does not need to be defined any USB device as its drivers automatically find it.
+#
+# This Makefile provides additional make targets that you can use from NetBeans or in command line):
+# - flash	upload already built program to TARGET flash memory
+# - fuses	upload fuses to TARGET (fuses are set by default based on TARGET and FREQ)
+# - eeprom	upload data to TARGET eeprom memory (NOT YET IMPLEMENTED)
+#
+# TODO set default FUSES for TARGETS, allow FUSES as parameters
+
+# TODO Infer reuse of Arduino setup (programmers, frequencies, architecture...)
+
 # .build-post: .build-impl .build-exe
 #
 # 
@@ -18,7 +55,7 @@ ifeq ($(findstring UNO,${CONF}),UNO)
 		PROGRAMMER=UNO
 	endif
 	ifeq (${COM},)
-		PROGRAMMER=/dev/ttyACM0
+		COM=/dev/ttyACM0
 	endif
 else
 ifeq ($(findstring ATmega328,${CONF}),ATmega328)
@@ -48,10 +85,23 @@ ifeq ($(findstring MEGA,${CONF}),MEGA)
 		PROGRAMMER=MEGA
 	endif
 	ifeq (${COM},)
-		PROGRAMMER=/dev/ttyACM0
+		COM=/dev/ttyACM0
 	endif
 # Add other targets here
 endif
+endif
+endif
+endif
+
+# set F_CPU if config name includes it (eg 8MHz, 16MHz)
+ifeq ($(findstring 16MHz,${CONF}),16MHz)
+    F_CPU=16000000L
+else
+ifeq ($(findstring 8MHz,${CONF}),8MHz)
+    F_CPU=8000000L
+else
+ifeq ($(findstring 20MHz,${CONF}),20MHz)
+    F_CPU=20000000L
 endif
 endif
 endif
@@ -85,5 +135,7 @@ endif
 
 upload:
 	avrdude ${AVRDUDE_OPTIONS} -Uflash:w:${CND_ARTIFACT_PATH_${CONF}}.hex:i 
+
+flash: upload
 
 #TODO target to upload fuses (TODO: define default fuses for each configuration)

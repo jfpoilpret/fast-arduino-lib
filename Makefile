@@ -49,75 +49,6 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
-# JFP BEGIN special variables stuff
-# set variables based on each configuration
-ifeq ($(findstring UNO,${CONF}),UNO)
-	VARIANT=ARDUINO_UNO
-	MCU=atmega328p
-	ARCH=avr5
-	F_CPU=16000000L
-	ifeq (${PROGRAMMER},)
-		PROGRAMMER=UNO
-	endif
-	ifeq (${COM},)
-		PROGRAMMER=/dev/ttyACM0
-	endif
-else
-ifeq ($(findstring ATmega328,${CONF}),ATmega328)
-	VARIANT=BREADBOARD_ATMEGA328P
-	MCU=atmega328p
-	ARCH=avr5
-	F_CPU=8000000L
-	ifeq (${PROGRAMMER},)
-		PROGRAMMER=ISP
-	endif
-else
-ifeq ($(findstring ATtiny84,${CONF}),ATtiny84)
-	VARIANT=BREADBOARD_ATTINYX4
-	MCU=attiny84
-	ARCH=avr25
-	F_CPU=8000000L
-	ifeq (${PROGRAMMER},)
-		PROGRAMMER=ISP
-	endif
-else
-ifeq ($(findstring MEGA,${CONF}),MEGA)
-	VARIANT=ARDUINO_MEGA
-	MCU=atmega2560
-	ARCH=avr6
-	F_CPU=16000000L
-	ifeq (${PROGRAMMER},)
-		PROGRAMMER=MEGA
-	endif
-	ifeq (${COM},)
-		PROGRAMMER=/dev/ttyACM0
-	endif
-# Add other targets here
-endif
-endif
-endif
-endif
-
-# Set upload options
-ifeq (${PROGRAMMER},)
-	PROGRAMMER=UNO
-endif
-AVRDUDE_OPTIONS=-p ${MCU}
-ifeq (${PROGRAMMER},ISP)
-        AVRDUDE_OPTIONS+= -c arduinoisp 
-endif
-ifeq (${PROGRAMMER},SHIELD)
-        AVRDUDE_OPTIONS+= -c stk500v1 -b 19200 -P ${COM}
-endif
-ifeq (${PROGRAMMER},UNO)
-        AVRDUDE_OPTIONS+= -c arduino -b 115200 -P ${COM}
-endif
-ifeq (${PROGRAMMER},MEGA)
-        AVRDUDE_OPTIONS+= -c wiring -b 115200 -P ${COM}
-endif
-# Add options for other programmers here if needed
-# JFP END special variables stuff
-
 # build
 build: .build-post
 
@@ -194,3 +125,6 @@ include nbproject/Makefile-impl.mk
 
 # include project make variables
 include nbproject/Makefile-variables.mk
+
+# include FastArduino make
+include Makefile-FastArduino.mk
