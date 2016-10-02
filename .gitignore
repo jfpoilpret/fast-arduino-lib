@@ -3,3 +3,5 @@
 **/.dep.inc
 **/nbproject/*.bash
 **/nbproject/private
+**/*.BAK
+**/*.OLD
