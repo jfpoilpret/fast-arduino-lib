@@ -20,7 +20,7 @@
 #   - 8MHz (default for ATtiny and ATmega configurations)
 #   - 16MHZ
 #   - 20MHz
-# NB: FREQ should not be changed for standard ARduino boards, only for breadboard AVR MCU.
+# NB: FREQ should not be changed for standard Arduino boards, only for breadboard AVR MCU.
 #
 # Additional parameters are expected for uploading programs to the MCU:
 # - PROGRAMMER sets the programmer used for upload, can be one of:
@@ -37,7 +37,31 @@
 # - fuses	upload fuses to TARGET (fuses are set by default based on TARGET and FREQ)
 # - eeprom	upload data to TARGET eeprom memory (NOT YET IMPLEMENTED)
 #
-# TODO set default FUSES for TARGETS, allow FUSES as parameters
+# Fuses are set by default for each configuration but may be changed directly through additional parameters
+# passed to make:
+# - HFUSE
+# - LFUSE
+# - EFUSE
+# Values are set in hexadecimal notation e.g. 0xff
+#
+# Default fuses configuration for ATmega328 (8MHz)
+# - Internal RC clock 8MHz, startup time PWRDWN/RESET 6CK/14CK + 65ms
+# - Boot reset vector enabled (no bootloader)
+# - Reset enabled
+# - SPI programming enabled
+# - BOD enabled at 2.7V
+# - WDT off
+# For other frequencies, only the following setting changes:
+# - External crystal oscillator (freq 8.0+), startup time PWRDWN/RESET 16CK/14CK +65ms
+#
+# Default fuses configuration for ATtiny84 (8MHz)
+# - Internal RC clock 8MHz, startup time PWRDWN/RESET 6CK/14CK + 64ms
+# - Reset enabled
+# - SPI programming enabled
+# - BOD enabled at 2.7V
+# - WDT off
+# For other frequencies, only the following setting changes:
+# - External crystal oscillator (freq 8.0+), startup time PWRDWN/RESET 16CK/14CK +65ms
 
 # TODO Infer reuse of Arduino setup (programmers, frequencies, architecture...)
 
@@ -66,6 +90,16 @@ ifeq ($(findstring ATmega328,${CONF}),ATmega328)
 	ifeq (${PROGRAMMER},)
 		PROGRAMMER=ISP
 	endif
+	# Internal RC 8MHz, BOD 2.7V, SPI enabled, no bootloader
+	DEF_LFUSE=0xe2
+	DEF_HFUSE=0xde
+	DEF_EFUSE=0x05
+	# If external clock, crystal-based above 8MHz (FREQ != 8MHz)
+	ifeq ($(findstring MHz,${CONF}),MHz)
+	    ifeq ($(findstring 8MHz,${CONF}),)
+		DEF_LFUSE=0xff
+	    endif
+	endif
 else
 ifeq ($(findstring ATtiny84,${CONF}),ATtiny84)
 	VARIANT=BREADBOARD_ATTINYX4
@@ -74,6 +108,16 @@ ifeq ($(findstring ATtiny84,${CONF}),ATtiny84)
 	F_CPU=8000000L
 	ifeq (${PROGRAMMER},)
 		PROGRAMMER=ISP
+	endif
+	# Internal RC 8MHz, BOD 2.7V, SPI enabled
+	DEF_LFUSE=0xe2
+	DEF_HFUSE=0xdd
+	DEF_EFUSE=0x01
+	# If external clock, crystal-based above 8MHz (FREQ != 8MHz)
+	ifeq ($(findstring MHz,${CONF}),MHz)
+	    ifeq ($(findstring 8MHz,${CONF}),)
+		DEF_LFUSE=0xff
+	    endif
 	endif
 else
 ifeq ($(findstring MEGA,${CONF}),MEGA)
@@ -106,6 +150,17 @@ endif
 endif
 endif
 
+# Set fuses option if not defined manually
+ifeq (${LFUSE},)
+	LFUSE=${DEF_LFUSE}
+endif
+ifeq (${HFUSE},)
+	HFUSE=${DEF_HFUSE}
+endif
+ifeq (${EFUSE},)
+	EFUSE=${DEF_EFUSE}
+endif
+
 # Set upload options
 ifeq (${PROGRAMMER},)
 	PROGRAMMER=UNO
@@ -133,9 +188,13 @@ endif
 	avr-objdump -m ${ARCH} -x -d -C ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.dump.txt
 	avr-size -C --mcu=${MCU} ${CND_ARTIFACT_PATH_${CONF}}
 
-upload:
+#TODO remove eventually (deprecated in favor of flash target)
+upload: flash
+
+flash:
 	avrdude ${AVRDUDE_OPTIONS} -Uflash:w:${CND_ARTIFACT_PATH_${CONF}}.hex:i 
 
-flash: upload
+fuses:
+	avrdude ${AVRDUDE_OPTIONS} -U lfuse:w:${LFUSE}:m -U hfuse:w:${HFUSE}:m -U efuse:w:${EFUSE}:m
 
-#TODO target to upload fuses (TODO: define default fuses for each configuration)
+#TODO eeprom target to infer

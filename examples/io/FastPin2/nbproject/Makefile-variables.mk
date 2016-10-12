@@ -38,6 +38,14 @@ CND_ARTIFACT_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3
 CND_PACKAGE_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_ATtiny84-Release=fastpin2.tar
 CND_PACKAGE_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/fastpin2.tar
+# ATmega328-16MHz-Release configuration
+CND_PLATFORM_ATmega328-16MHz-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_ATmega328-16MHz-Release=fastpin1
+CND_ARTIFACT_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/fastpin1
+CND_PACKAGE_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_ATmega328-16MHz-Release=fastpin2.tar
+CND_PACKAGE_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/fastpin2.tar
 #
 # include compiler specific variables
 #

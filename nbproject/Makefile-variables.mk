@@ -38,6 +38,14 @@ CND_ARTIFACT_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/l
 CND_PACKAGE_DIR_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_MEGA-Release=FastArduino.tar
 CND_PACKAGE_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/FastArduino.tar
+# ATmega328-16MHz-Release configuration
+CND_PLATFORM_ATmega328-16MHz-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_ATmega328-16MHz-Release=libfastarduino.a
+CND_ARTIFACT_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a
+CND_PACKAGE_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_ATmega328-16MHz-Release=FastArduino.tar
+CND_PACKAGE_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/FastArduino.tar
 #
 # include compiler specific variables
 #

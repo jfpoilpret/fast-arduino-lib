@@ -479,5 +479,109 @@
       <item path="cores/fastarduino/watchdog.hh" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
+    <conf name="ATmega328-16MHz-Release" type="3">
+      <toolsSet>
+        <compilerSet>AVR-GNU-Toolchain-3.5.3|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>0</developmentMode>
+          <warningLevel>2</warningLevel>
+        </cTool>
+        <ccTool>
+          <developmentMode>0</developmentMode>
+          <standard>8</standard>
+          <incDir>
+            <pElem>cores</pElem>
+          </incDir>
+          <commandLine>-mmcu=${MCU} -DF_CPU=${F_CPU} -D${VARIANT} -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a</output>
+        </archiverTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+        </packFileList>
+      </packaging>
+      <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATtinyX4.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/softuart.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/softuart.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/streams.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/time.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/uart.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/uartcommons.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/utilities.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/watchdog.hh" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
   </confs>
 </configurationDescriptor>
