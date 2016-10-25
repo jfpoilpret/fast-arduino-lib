@@ -37,6 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/Events.o \
 	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
+	${OBJECTDIR}/cores/fastarduino/SPI.o \
+	${OBJECTDIR}/cores/fastarduino/WinBond.o \
 	${OBJECTDIR}/cores/fastarduino/main.o \
 	${OBJECTDIR}/cores/fastarduino/power.o \
 	${OBJECTDIR}/cores/fastarduino/softuart.o \
@@ -81,6 +83,16 @@ ${OBJECTDIR}/cores/fastarduino/LinkedList.o: nbproject/Makefile-${CND_CONF}.mk c
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/LinkedList.o cores/fastarduino/LinkedList.cpp
+
+${OBJECTDIR}/cores/fastarduino/SPI.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/SPI.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/SPI.o cores/fastarduino/SPI.cpp
+
+${OBJECTDIR}/cores/fastarduino/WinBond.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/WinBond.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/WinBond.o cores/fastarduino/WinBond.cpp
 
 ${OBJECTDIR}/cores/fastarduino/main.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="f1" displayName="devices" projectFiles="true" kind="ROOT">
+      <itemPath>cores/fastarduino/WinBond.cpp</itemPath>
+      <itemPath>cores/fastarduino/WinBond.hh</itemPath>
+    </logicalFolder>
     <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
         <itemPath>cores/fastarduino/boards/ATtinyX4.hh</itemPath>
@@ -16,6 +20,8 @@
       <itemPath>cores/fastarduino/LinkedList.hh</itemPath>
       <itemPath>cores/fastarduino/PCI.hh</itemPath>
       <itemPath>cores/fastarduino/Queue.hh</itemPath>
+      <itemPath>cores/fastarduino/SPI.cpp</itemPath>
+      <itemPath>cores/fastarduino/SPI.hh</itemPath>
       <itemPath>cores/fastarduino/main.cpp</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.hh</itemPath>
@@ -123,6 +129,14 @@
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -226,6 +240,14 @@
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -331,6 +353,14 @@
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -435,6 +465,14 @@
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -538,6 +576,14 @@
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
