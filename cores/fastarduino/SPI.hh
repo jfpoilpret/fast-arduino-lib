@@ -51,13 +51,13 @@ namespace SPI
 
 		inline void start_transfer()
 		{
+			_cs.toggle();
 #ifdef SPDR
 			SPCR = _spcr;
 			SPSR = _spsr;
 #else
 			//TODO
 #endif
-			_cs.toggle();
 		}
 		inline uint8_t transfer(uint8_t data)
 		{

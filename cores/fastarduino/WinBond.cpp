@@ -7,6 +7,7 @@ WinBond::WinBond(Board::DigitalPin cs): SPIDevice{cs, SPI::ChipSelect::ACTIVE_LO
 {
 }
 
+//TODO refactor to use inline for simple commands (only one _send call)
 uint16_t WinBond::status()
 {
 	start_transfer();
@@ -54,7 +55,7 @@ void WinBond::power_down()
 
 void WinBond::power_up()
 {
-	_send(0xB9);
+	_send(0xAB);
 	_delay_us(3);
 }
 
@@ -132,12 +133,7 @@ void WinBond::_send(uint8_t code)
 
 void WinBond::_send(uint8_t code, uint32_t address)
 {
-	start_transfer();
-	transfer(code);
-	transfer(address >> 16);
-	transfer(address >> 8);
-	transfer(address);
-	end_transfer();
+	_send(code, address, 0, 0);
 }
 
 void WinBond::_send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)

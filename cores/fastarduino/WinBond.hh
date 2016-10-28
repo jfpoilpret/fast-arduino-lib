@@ -3,8 +3,21 @@
 
 #include "SPI.hh"
 
-//TODO Wiring of WinBond IC
-// pullup for HOLD seems imperative, not sure for CS, normally optional for WP (depends on SR bits)
+/*
+ *                 W25Q80BV
+ *                +----U----+
+ * (/CS)--------1-|/CS   VCC|-8---------(VCC)
+ * (MISO)-------2-|DO  /HOLD|-7--VVVV---(VCC)
+ *            --3-|/WP   CLK|-6---------(CLK)
+ * (GND)--------4-|GND    DI|-5---------(MOSI)
+ *                +---------+
+ * 
+ * Note that WinBond IC works on Vcc = 3.3V (not 5V) and any inputs should be limited to 3.3V,
+ * hence, when working with 5V MCU, use level converters at least for DI, CLK and CS pins.
+ * This library operates WinBond IC in single SPI mode only (WinBond supports dual and quad modes);
+ * in this mode, the /HOLD pin should not be left dangling as it may trigger transmission errors
+ * when CS is low (active). I use a 10K resistor to pullup this pin to Vcc (3.3V)
+ */
 
 // Tested with W25Q80BV (8 Mbit)
 class WinBond: public SPI::SPIDevice
@@ -21,7 +34,6 @@ public:
 		uint8_t device_ID;
 	};
 	
-	// API
 	uint16_t status();
 	void set_status(uint16_t status);
 	bool wait_until_ready(uint16_t timeout_ms);
