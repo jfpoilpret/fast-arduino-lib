@@ -4,7 +4,7 @@
 #include "SPI.hh"
 
 //TODO Wiring of WinBond IC
-// pullups for CS
+// pullup for HOLD seems imperative, not sure for CS, normally optional for WP (depends on SR bits)
 
 // Tested with W25Q80BV (8 Mbit)
 class WinBond: public SPI::SPIDevice

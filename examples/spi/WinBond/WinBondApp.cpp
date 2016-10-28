@@ -15,7 +15,7 @@ constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
 #endif
 
 // Define vectors we need in the example
-USE_UART0()
+USE_UART0();
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 16;
@@ -88,4 +88,7 @@ int main()
 //		if (i % 16 == 0)
 //			out << endl;
 //	}
+
+	out << "Finished\n";
+	out.flush();
 }

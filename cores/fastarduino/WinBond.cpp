@@ -2,17 +2,20 @@
 
 #include "WinBond.hh"
 
-WinBond::WinBond(Board::DigitalPin cs): SPIDevice{cs, SPI::ChipSelect::ACTIVE_LOW, SPI::ClockRate::CLOCK_DIV_2}
+//WinBond::WinBond(Board::DigitalPin cs): SPIDevice{cs, SPI::ChipSelect::ACTIVE_LOW, SPI::ClockRate::CLOCK_DIV_2}
+WinBond::WinBond(Board::DigitalPin cs): SPIDevice{cs, SPI::ChipSelect::ACTIVE_LOW, SPI::ClockRate::CLOCK_DIV_4}
 {
 }
 
 uint16_t WinBond::status()
 {
 	start_transfer();
-	uint8_t status1 = transfer(0x05);
+	transfer(0x05);
+	uint8_t status1 = transfer(0x00);
 	end_transfer();
 	start_transfer();
-	uint8_t status2 = transfer(0x35);
+	transfer(0x35);
+	uint8_t status2 = transfer(0x00);
 	end_transfer();
 	return status2 << 8 | status1;
 }
@@ -29,10 +32,11 @@ bool WinBond::wait_until_ready(uint16_t timeout_ms)
 {
 	bool ready = false;
 	start_transfer();
+	transfer(0x05);
 	//TODO add timing check (once RTT is available)
 	while (true)
 	{
-		uint8_t status = transfer(0x05);
+		uint8_t status = transfer(0x00);
 		if (!(status & 0x01))
 		{
 			ready = true;
