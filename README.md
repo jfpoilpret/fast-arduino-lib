@@ -19,7 +19,7 @@ This comes at a cost:
 
 In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are built through netbeans, which was hard to initially setup, but much more friendly to use once setup is done. Also netbeans automatically provides makefiles that make it possible to build projects in command line.
 
-My special setup (I work on Windows but compile everything on an Ubuntu virtual machine) is described in ArduinoDevSetup.docx. This document also described how I setup netbeans for my projects.
+My special setup (I work on Windows but compile everything on an Ubuntu virtual machine) is described in ArduinoDevSetup.docx. This document also describes how I setup netbeans for my projects.
 
 Status
 ------
@@ -38,13 +38,19 @@ What the project already has:
 - Hardware UART support (for MCU that support it, ie not for ATtiny)
 - Software UART support (for all MCU)
 - "C++ like" Input/Output streams (used by UART implementations)
+- SPI master support (with WinBond flash memory as a first device example) on ATmega
 
 As of now, the following platforms are supported (and tested):
 
 - Arduino UNO
 - Arduino MEGA
-- Breadboard ATmega328 at 8MHz
+- Breadboard ATmega328 at 8MHz and 16MHz
 - Breadboard ATtiny84 at 8MHz
+
+I intend to later add support for:
+
+- Breadboard ATtiny85 at 8MHz
+- Arduino Leonardo
 
 Roadmap
 -------
@@ -57,12 +63,19 @@ The roadmap of supported features is the following:
 4. Hardware UART support (done)
 5. Pin Change Interrupt support (done)
 6. Software UART support (done)
+7. SPI support (ATmega328 first, done)
 
-7. External Pin Interrupt support
-8. SPI support (ATmega328 first)
-9. Real Time Timer support
-10. NRF24L01P support
-11. SPI support (ATtinyX4)
+8. SPI support (ATtinyX4)
+9. External Pin Interrupt support
+10. Real Time Timer support
+11. NRF24L01P support
 12. Trace support (including PROGMEM strings support)
 13. More boards variants support (Leonardo, ATtinyX5)
-14. ... To be determined later
+14. ... To be determined later, based on my own projects needs
+
+The following features are not in roadmap currently:
+
+- Analog Input support
+- PWM Output support
+- I2C support
+- OWI support
