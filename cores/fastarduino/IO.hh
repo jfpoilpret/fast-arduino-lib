@@ -1,8 +1,9 @@
 #ifndef IO_HH
 #define	IO_HH
 
-#include <fastarduino/Board.hh>
-#include <fastarduino/utilities.hh>
+#include "Board.hh"
+#include "utilities.hh"
+#include "iocommons.hh"
 
 class AbstractPort
 {
@@ -122,13 +123,6 @@ protected:
 	
 private:
 	uint8_t _MASK;
-};
-
-enum class PinMode
-{
-	INPUT,
-	INPUT_PULLUP,
-	OUTPUT,
 };
 
 // This class maps to a specific pin

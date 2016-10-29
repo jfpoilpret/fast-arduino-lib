@@ -1,8 +1,10 @@
 #include "SPI.hh"
 
+#ifdef SPDR
+// Handle SPI for ATmega
 void SPI::SPIDevice::init()
 {
-	//TODO Handle also USI for ATtiny
+	//TODO check code size and possibly revert to macro defined DDR_SPI and PORT_SPI if better
 	synchronized
 	{
 		// Set MOSI and SCK as Output
@@ -15,8 +17,6 @@ void SPI::SPIDevice::init()
 		Board::PORT_SPI_REG.set(
 			(Board::PORT_SPI_REG.get() | _BV(Board::SPI_MISO)) &
 			~(_BV(Board::SPI_MOSI) | _BV(Board::SPI_SCK)));
-		// Set MISO as high impedance (no pullup)
-//		Board::PORT_SPI_REG.set(Board::PORT_SPI_REG.get() & ~_BV(Board::SPI_MISO));
 	}
 }
 
@@ -38,3 +38,35 @@ SPI::SPIDevice::SPIDevice(	Board::DigitalPin cs, ChipSelect cs_mode,
 		_cs{cs, PinMode::OUTPUT, cs_mode == ChipSelect::ACTIVE_LOW}
 {
 }
+
+#else
+// Handle USI for ATtiny
+void SPI::SPIDevice::init()
+{
+	synchronized
+	{
+		// Set MOSI and SCK as Output
+		// Set MISO as Input (high impedance)
+		Board::DDR_SPI_REG.set(
+			(Board::DDR_SPI_REG.get() & ~_BV(Board::SPI_MISO)) |
+			_BV(Board::SPI_MOSI) | _BV(Board::SPI_SCK));
+		// Set MISO as pullup and force MOSI and SCK low
+		Board::PORT_SPI_REG.set(
+			(Board::PORT_SPI_REG.get() | _BV(Board::SPI_MISO)) &
+			~(_BV(Board::SPI_MOSI) | _BV(Board::SPI_SCK)));
+	}
+}
+
+SPI::ClockRate SPI::SPIDevice::compute_clockrate(uint32_t frequency)
+{
+	return ClockRate::CLOCK_DIV_2;
+}
+
+SPI::SPIDevice::SPIDevice(	Board::DigitalPin cs, ChipSelect cs_mode, 
+							UNUSED ClockRate rate, Mode mode, UNUSED DataOrder order)
+	:	_usicr{uint8_t(mode)},
+		_cs{cs, PinMode::OUTPUT, cs_mode == ChipSelect::ACTIVE_LOW}
+{
+}
+
+#endif

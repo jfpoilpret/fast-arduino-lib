@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <logicalFolder name="f1" displayName="devices" projectFiles="true" kind="ROOT">
+    <logicalFolder name="f1" displayName="devices" projectFiles="true">
       <itemPath>cores/fastarduino/WinBond.cpp</itemPath>
       <itemPath>cores/fastarduino/WinBond.hh</itemPath>
     </logicalFolder>
@@ -22,6 +22,7 @@
       <itemPath>cores/fastarduino/Queue.hh</itemPath>
       <itemPath>cores/fastarduino/SPI.cpp</itemPath>
       <itemPath>cores/fastarduino/SPI.hh</itemPath>
+      <itemPath>cores/fastarduino/iocommons.hh</itemPath>
       <itemPath>cores/fastarduino/main.cpp</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.hh</itemPath>
@@ -146,6 +147,8 @@
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
@@ -257,6 +260,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -370,6 +375,8 @@
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
@@ -482,6 +489,8 @@
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
@@ -593,6 +602,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -23,6 +23,9 @@
  */
 namespace Board
 {
+	//====
+	// IO
+	//====
 	constexpr const REGISTER PORT_A = _SELECT_REG(PINA);
 	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
 	constexpr const REGISTER PORT_C = _SELECT_REG(PINC);
@@ -150,6 +153,10 @@ namespace Board
 		return ((uint8_t) pin) & 0x7;
 	}
 
+	//===============
+	// IO interrupts
+	//===============
+	
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
@@ -243,17 +250,9 @@ namespace Board
 		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1, PCMSK2);
 	}
 
-	enum class SleepMode: uint8_t
-	{
-		IDLE = SLEEP_MODE_IDLE,
-		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
-		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
-		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
-		STANDBY = SLEEP_MODE_STANDBY,
-		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY,
-		
-		DEFAULT_MODE = 0xFF
-	};
+	//=======
+	// USART
+	//=======
 	
 	enum class USART: uint8_t
 	{
@@ -294,6 +293,33 @@ namespace Board
 	{
 		return REGISTER(_SELECT_UART_REG(usart, UBRR0, UBRR1, UBRR2, UBRR3));
 	}
+	
+	//=====
+	// SPI
+	//=====
+	
+	constexpr const REGISTER DDR_SPI_REG = _SELECT_REG(DDRB);
+	constexpr const REGISTER PORT_SPI_REG = _SELECT_REG(PORTB);
+	constexpr const uint8_t SPI_SS = PB0;
+	constexpr const uint8_t SPI_MOSI = PB2;
+	constexpr const uint8_t SPI_MISO = PB3;
+	constexpr const uint8_t SPI_SCK = PB1;
+
+	//=============
+	// Sleep Modes
+	//=============
+
+	enum class SleepMode: uint8_t
+	{
+		IDLE = SLEEP_MODE_IDLE,
+		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
+		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
+		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
+		STANDBY = SLEEP_MODE_STANDBY,
+		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY,
+		
+		DEFAULT_MODE = 0xFF
+	};
 };
 
 /**

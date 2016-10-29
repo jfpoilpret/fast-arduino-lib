@@ -4,6 +4,8 @@
 #include "Board.hh"
 #include "IO.hh"
 
+//TODO Make a SPIMaster class to have ctor as SPIDevice::init() ?
+//TODO Make a SPISlave class with a data handler/buffer
 namespace SPI
 {
 	enum class ClockRate: uint8_t
@@ -16,12 +18,21 @@ namespace SPI
 		CLOCK_DIV_8 = 0x11,
 		CLOCK_DIV_32 = 0x12
 	};
+	
+#ifdef SPDR
 	enum class DataOrder: uint8_t
 	{
 		MSB_FIRST = 0,
 		LSB_FIRST = _BV(DORD)
 	};
-	// Replace with one of 4 SPI modes?
+#else
+	enum class DataOrder: uint8_t
+	{
+		MSB_FIRST = 0
+	};
+#endif
+
+#ifdef SPDR
 	enum class Mode: uint8_t
 	{
 		MODE_0 = 0,
@@ -29,6 +40,13 @@ namespace SPI
 		MODE_2 = _BV(CPOL),
 		MODE_3 = _BV(CPHA) | _BV(CPOL)
 	};
+#else
+	enum class Mode: uint8_t
+	{
+		MODE_0 = _BV(USIWM0) | _BV(USICLK) | _BV(USICS1),
+		MODE_1 = _BV(USIWM0) | _BV(USICLK) | _BV(USICS1) | _BV(USICS0)
+	};
+#endif
 	
 	enum class ChipSelect: uint8_t
 	{
@@ -49,26 +67,45 @@ namespace SPI
 					Mode mode = Mode::MODE_0,
 					DataOrder order = DataOrder::MSB_FIRST);
 
+#ifdef SPDR
 		inline void start_transfer()
 		{
 			_cs.toggle();
-#ifdef SPDR
 			SPCR = _spcr;
 			SPSR = _spsr;
-#else
-			//TODO
-#endif
 		}
 		inline uint8_t transfer(uint8_t data)
 		{
-#ifdef SPDR
 			SPDR = data;
 			loop_until_bit_is_set(SPSR, SPIF);
 			return SPDR;
-#else
-			//TODO
-#endif
 		}
+#else
+		inline void start_transfer()
+		{
+			_cs.toggle();
+			// Set 3-wire mode (SPI) and requested SPI mode (0 or 1) and use software clock strobe (through USITC)
+			USICR = _usicr;
+		}
+		inline uint8_t transfer(uint8_t data)
+		{
+			//TODO check produced assembly code
+			USIDR = data;
+			// Clear counter overflow before transmission
+			USISR = _BV(USIOIF);
+			synchronized
+			{
+				do
+				{
+					USICR |= _BV(USITC);
+				}
+				while (bit_is_clear(USISR, USIOIF));
+			}
+			return USIDR;
+		}
+		
+#endif
+		
 		inline void transfer(uint8_t* data, uint16_t size)
 		{
 			while(size--)
@@ -93,7 +130,7 @@ namespace SPI
 		const uint8_t _spcr;
 		const uint8_t _spsr;
 #else
-			//TODO
+		const uint8_t _usicr;
 #endif
 		IOPin _cs;
 	};

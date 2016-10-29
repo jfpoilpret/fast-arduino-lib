@@ -3,6 +3,7 @@
 
 #include "utilities.hh"
 #include "Board.hh"
+#include <fastarduino/iocommons.hh>
 
 // This class maps to a PORT and handles it all 8 bits at a time
 // SRAM size supposed to be 0
@@ -45,13 +46,6 @@ private:
 	static const constexpr uint8_t _PIN = PIN;
 	static const constexpr uint8_t _DDR = _PIN + 1;
 	static const constexpr uint8_t _PORT = _PIN + 2;
-};
-
-enum class PinMode
-{
-	INPUT,
-	INPUT_PULLUP,
-	OUTPUT,
 };
 
 // This class maps to a specific pin

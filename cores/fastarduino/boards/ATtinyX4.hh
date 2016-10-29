@@ -36,6 +36,9 @@
  */
 namespace Board
 {
+	//====
+	// IO
+	//====
 	constexpr const REGISTER PORT_A = _SELECT_REG(PINA);
 	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
 
@@ -86,6 +89,10 @@ namespace Board
 							(uint8_t) pin - (uint8_t) DigitalPin::D8);
 	}
 
+	//===============
+	// IO interrupts
+	//===============
+	
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
@@ -110,9 +117,9 @@ namespace Board
 		PCI1 = DigitalPin::D1,			// PA1
 		PCI2 = DigitalPin::D2,			// PA2
 		PCI3 = DigitalPin::D3,			// PA3
-		PCI4 = DigitalPin::D4,			// PA4
-		PCI5 = DigitalPin::D5,			// PA5
-		PCI6 = DigitalPin::D6,			// PA6
+		PCI4 = DigitalPin::D4,			// PA4/SCK
+		PCI5 = DigitalPin::D5,			// PA5/MOSI
+		PCI6 = DigitalPin::D6,			// PA6/MISO
 		PCI7 = DigitalPin::D7,			// PA7
 		PCI8 = DigitalPin::D8,			// PB0
 		PCI9 = DigitalPin::D9,			// PB1
@@ -168,6 +175,28 @@ namespace Board
 		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1);
 	}
 
+	//=======
+	// USART
+	//=======
+	
+	enum class USART: uint8_t
+	{
+	};
+	
+	//=====
+	// SPI
+	//=====
+	
+	constexpr const REGISTER DDR_SPI_REG = _SELECT_REG(DDRA);
+	constexpr const REGISTER PORT_SPI_REG = _SELECT_REG(PORTA);
+	constexpr const uint8_t SPI_MOSI = PA5;
+	constexpr const uint8_t SPI_MISO = PA6;
+	constexpr const uint8_t SPI_SCK = PA4;
+
+	//=============
+	// Sleep Modes
+	//=============
+
     #define SLEEP_MODE_PWR_SAVE     (_BV(SM0) | _BV(SM1))
 	enum class SleepMode: uint8_t
 	{
@@ -179,10 +208,6 @@ namespace Board
 		EXTENDED_STANDBY = SLEEP_MODE_PWR_SAVE,
 		
 		DEFAULT_MODE = 0xFF
-	};
-
-	enum class USART: uint8_t
-	{
 	};
 };
 
