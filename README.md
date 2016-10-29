@@ -63,15 +63,14 @@ The roadmap of supported features is the following:
 4. Hardware UART support (done)
 5. Pin Change Interrupt support (done)
 6. Software UART support (done)
-7. SPI support (ATmega328 first, done)
+7. SPI support (done)
 
-8. SPI support (ATtinyX4)
-9. External Pin Interrupt support
-10. Real Time Timer support
-11. NRF24L01P support
-12. Trace support (including PROGMEM strings support)
-13. More boards variants support (Leonardo, ATtinyX5)
-14. ... To be determined later, based on my own projects needs
+8. External Pin Interrupt support
+9. Real Time Timer support
+10. NRF24L01P support
+11. Trace support (including PROGMEM strings support)
+12. More boards variants support (Leonardo, ATtinyX5)
+13. ... To be determined later, based on my own projects needs
 
 The following features are not in roadmap currently:
 
