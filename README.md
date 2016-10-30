@@ -64,8 +64,9 @@ The roadmap of supported features is the following:
 5. Pin Change Interrupt support (done)
 6. Software UART support (done)
 7. SPI support (done)
+8. External Pin Interrupt support (done for ATmega328)
 
-8. External Pin Interrupt support
+8'. External Pin Interrupt support (for ATmega2560 and ATtinyX4)
 9. Real Time Timer support
 10. NRF24L01P support
 11. Trace support (including PROGMEM strings support)
