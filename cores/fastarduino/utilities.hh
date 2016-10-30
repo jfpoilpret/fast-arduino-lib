@@ -80,6 +80,13 @@ inline void clear_mask(REGISTER REG, uint8_t MASK)
 	((volatile uint8_t&) REG) &= ~MASK;
 }
 
+inline void set_bit_field(REGISTER REG, uint8_t MASK, uint8_t VALUE) INLINE;
+inline void set_bit_field(REGISTER REG, uint8_t MASK, uint8_t VALUE)
+{
+	volatile uint8_t& ref = (volatile uint8_t&) REG;
+	ref = (ref & ~MASK) | (VALUE & MASK);
+}
+
 inline void set_ioreg_bit(REGISTER IOREG, uint8_t BIT) INLINE;
 inline void set_ioreg_bit(REGISTER IOREG, uint8_t BIT)
 {

@@ -131,6 +131,39 @@ namespace Board
 		EXT1 = DigitalPin::D3		// PD3
 	};
 
+#define _SELECT_INT(INT_NUM, ARG0, ARG1)	\
+	(INT_NUM == ExternalInterruptPin::EXT0 ? ARG0 : ARG1)
+	
+	constexpr REGISTER EICR_REG(UNUSED ExternalInterruptPin PIN)
+	{
+		return _SELECT_REG(EICRA);
+	}
+	
+	constexpr uint8_t EICR_MASK(ExternalInterruptPin PIN)
+	{
+		return _SELECT_INT(PIN, 0x03 << ISC00, 0x03 << ISC10);
+	}
+
+	constexpr REGISTER EIMSK_REG()
+	{
+		return _SELECT_REG(EIMSK);
+	}
+
+	constexpr uint8_t EIMSK_MASK(ExternalInterruptPin PIN)
+	{
+		return _SELECT_INT(PIN, _BV(INT0), _BV(INT1));
+	}
+
+	constexpr REGISTER EIFR_REG()
+	{
+		return _SELECT_REG(EIFR);
+	}
+
+	constexpr uint8_t EIFR_MASK(ExternalInterruptPin PIN)
+	{
+		return _SELECT_INT(PIN, _BV(INTF0), _BV(INTF1));
+	}
+
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */

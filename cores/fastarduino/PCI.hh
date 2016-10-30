@@ -18,18 +18,24 @@
 #define _USE_PCI(PORT)											\
 ISR(PCINT ## PORT ## _vect)										\
 {																\
-	PCI<Board::PCIPort::PCI ## PORT>::_handler->on_pin_change();\
+	PCI<Board::PCIPort::PCI ## PORT>::handle();\
 }
 
-// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
-// want to use PCI for a given PORT in your program, hence you need the proper ISR vector correctly defined
+// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp, or in main.cpp) 
+// to indicate you want to use PCI for a given PORT in your program, hence you need the proper 
+// ISR vector correctly defined
 #define USE_PCI0()	_USE_PCI(0)
 #define USE_PCI1()	_USE_PCI(1)
 #define USE_PCI2()	_USE_PCI(2)
 
-#define _FRIEND_PCI_VECT(PORT) friend void PCINT ## PORT ## _vect();
+//TODO Provide empty vector implementations (useful just for wake up from sleep, without any handler)
+//TODO Provide PCISignal<> class (no handler)
 
-class PCIHandler;
+class PCIHandler
+{
+public:
+	virtual bool on_pin_change() = 0;
+};
 
 template<Board::PCIPort PORT>
 class PCI
@@ -105,27 +111,25 @@ private:
 	static const constexpr REGISTER _PCMSK = Board::PCMSK_REG(PORT);
 	
 	static PCIHandler* _handler;
+	static inline void handle()
+	{
+		if (_handler) _handler->on_pin_change();
+	}
 	
-	_FRIEND_PCI_VECT(0);
+	friend void PCINT0_vect();
 #if defined(PCIE1)
-	_FRIEND_PCI_VECT(1);
+	friend void PCINT1_vect();
 #endif
 #if defined(PCIE2)
-	_FRIEND_PCI_VECT(2);
+	friend void PCINT2_vect();
 #endif
 #if defined(PCIE3)
-	_FRIEND_PCI_VECT(3);
+	friend void PCINT3_vect();
 #endif
 };
 
 template<Board::PCIPort PORT>
 PCIHandler* PCI<PORT>::_handler = 0;
-
-class PCIHandler
-{
-public:
-	virtual bool on_pin_change() = 0;
-};
 
 //TODO More functional subclasses to:
 // - allow detection of PCI mode (RAISE, LOWER...)
