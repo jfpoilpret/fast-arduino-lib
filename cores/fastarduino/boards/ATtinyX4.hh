@@ -62,7 +62,7 @@ namespace Board
 	};
 
 #define _SELECT_PIN(DPIN, ARG0, ARG1)	\
-	(DPIN < DigitalPin::D8 ? ARG0 :	ARG1)
+	(uint8_t(DPIN) < uint8_t(DigitalPin::D8) ? ARG0 :	ARG1)
 	
 #define _SELECT_PIN_REG(DPIN, REG0, REG1)	\
 	_SELECT_REG(_SELECT_PIN(DPIN, REG0, REG1))
@@ -102,6 +102,36 @@ namespace Board
 		EXT0 = DigitalPin::D10			// PB2
 	};
 
+	constexpr REGISTER EICR_REG(UNUSED ExternalInterruptPin PIN)
+	{
+		return _SELECT_REG(MCUCR);
+	}
+	
+	constexpr uint8_t EICR_MASK(UNUSED ExternalInterruptPin PIN)
+	{
+		return 0x03 << ISC00;
+	}
+
+	constexpr REGISTER EIMSK_REG()
+	{
+		return _SELECT_REG(GIMSK);
+	}
+
+	constexpr uint8_t EIMSK_MASK(UNUSED ExternalInterruptPin PIN)
+	{
+		return _BV(INT0);
+	}
+
+	constexpr REGISTER EIFR_REG()
+	{
+		return _SELECT_REG(GIFR);
+	}
+
+	constexpr uint8_t EIFR_MASK(UNUSED ExternalInterruptPin PIN)
+	{
+		return _BV(INTF0);
+	}
+
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
@@ -127,7 +157,7 @@ namespace Board
 	};
 
 #define _SELECT_PCI_PIN(PIN, ARG0, ARG1)	\
-	(PIN < InterruptPin::PCI8 ? ARG0 : ARG1)
+	(uint8_t(PIN) < uint8_t(InterruptPin::PCI8) ? ARG0 : ARG1)
 	
 #define _SELECT_PCI_PORT(PIN)					\
 	_SELECT_PCI_PIN(PIN, PCIPort::PCI0, PCIPort::PCI1)

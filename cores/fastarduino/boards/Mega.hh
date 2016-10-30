@@ -171,6 +171,47 @@ namespace Board
 		EXT5 = DigitalPin::D3			// PE5
 	};
 
+#define _SELECT_INT(INT_NUM, ARG0, ARG1, ARG2, ARG3, ARG4, ARG5)	\
+	(	INT_NUM == ExternalInterruptPin::EXT0 ? ARG0 :				\
+		INT_NUM == ExternalInterruptPin::EXT1 ? ARG1 :				\
+		INT_NUM == ExternalInterruptPin::EXT2 ? ARG2 :				\
+		INT_NUM == ExternalInterruptPin::EXT3 ? ARG3 :				\
+		INT_NUM == ExternalInterruptPin::EXT4 ? ARG4 :				\
+		ARG5)
+	
+	constexpr REGISTER EICR_REG(ExternalInterruptPin PIN)
+	{
+		return _SELECT_REG(_SELECT_INT(PIN, EICRA, EICRA, EICRA, EICRA, EICRB, EICRB));
+	}
+	
+	constexpr uint8_t EICR_MASK(ExternalInterruptPin PIN)
+	{
+		return _SELECT_INT(
+			PIN, 0x03 << ISC00, 0x03 << ISC10, 0x03 << ISC20, 0x03 << ISC30, 0x03 << ISC40, 0x03 << ISC50);
+	}
+
+	constexpr REGISTER EIMSK_REG()
+	{
+		return _SELECT_REG(EIMSK);
+	}
+
+	constexpr uint8_t EIMSK_MASK(ExternalInterruptPin PIN)
+	{
+		return _SELECT_INT(
+			PIN, _BV(INT0), _BV(INT1), _BV(INT2), _BV(INT3), _BV(INT4), _BV(INT5));
+	}
+
+	constexpr REGISTER EIFR_REG()
+	{
+		return _SELECT_REG(EIFR);
+	}
+
+	constexpr uint8_t EIFR_MASK(ExternalInterruptPin PIN)
+	{
+		return _SELECT_INT(
+			PIN, _BV(INTF0), _BV(INTF1), _BV(INTF2), _BV(INTF3), _BV(INTF4), _BV(INTF5));
+	}
+
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
