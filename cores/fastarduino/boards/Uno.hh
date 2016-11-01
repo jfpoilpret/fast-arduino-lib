@@ -294,6 +294,89 @@ namespace Board
 	constexpr const uint8_t SPI_MISO = PB4;
 	constexpr const uint8_t SPI_SCK = PB5;
 
+	//========
+	// Timers
+	//========
+	
+	enum class Timer8: uint8_t
+	{
+		TIMER0,
+		TIMER2
+	};
+	
+#define _SELECT_TIMER(TIMER, ARG0, ARG1)	\
+	(	TIMER == Timer8::TIMER0 ? ARG0 :		\
+		ARG1)
+	
+#define _SELECT_TIMER_REG(TIMER, REG0, REG1)	\
+	_SELECT_REG(_SELECT_TIMER(TIMER, REG0, REG1))
+	
+//#define _SELECT_TIMER_MSK(TIMER, MSK0, MSK1)	\
+//	_BV(_SELECT_TIMER(TIMER, MSK0, MSK1))
+
+	constexpr const REGISTER TCCRA(Timer8 TIMER)
+	{
+		return _SELECT_TIMER_REG(TIMER, TCCR0A, TCCR2A);
+	}
+	constexpr const REGISTER TCCRB(Timer8 TIMER)
+	{
+		return _SELECT_TIMER_REG(TIMER, TCCR0B, TCCR2B);
+	}
+	constexpr const REGISTER TCNT(Timer8 TIMER)
+	{
+		return _SELECT_TIMER_REG(TIMER, TCNT0, TCNT2);
+	}
+	constexpr const REGISTER OCRA(Timer8 TIMER)
+	{
+		return _SELECT_TIMER_REG(TIMER, OCR0A, OCR2A);
+	}
+	constexpr const REGISTER OCRB(Timer8 TIMER)
+	{
+		return _SELECT_TIMER_REG(TIMER, OCR0B, OCR2B);
+	}
+	constexpr const REGISTER TIMSK(Timer8 TIMER)
+	{
+		return _SELECT_TIMER_REG(TIMER, TIMSK0, TIMSK2);
+	}
+	constexpr const REGISTER TIFR(Timer8 TIMER)
+	{
+		return _SELECT_TIMER_REG(TIMER, TIFR0, TIFR2);
+	}
+
+	enum class Timer16: uint8_t
+	{
+		TIMER1
+	};
+	
+	constexpr const REGISTER TCCRA(UNUSED Timer16 TIMER)
+	{
+		return _SELECT_REG(TCCR1A);
+	}
+	constexpr const REGISTER TCCRB(UNUSED Timer16 TIMER)
+	{
+		return _SELECT_REG(TCCR1B);
+	}
+	constexpr const REGISTER TCNT(UNUSED Timer16 TIMER)
+	{
+		return _SELECT_REG(TCNT1);
+	}
+	constexpr const REGISTER OCRA(UNUSED Timer16 TIMER)
+	{
+		return _SELECT_REG(OCR1A);
+	}
+	constexpr const REGISTER OCRB(UNUSED Timer16 TIMER)
+	{
+		return _SELECT_REG(OCR1B);
+	}
+	constexpr const REGISTER TIMSK(UNUSED Timer16 TIMER)
+	{
+		return _SELECT_REG(TIMSK1);
+	}
+	constexpr const REGISTER TIFR(UNUSED Timer16 TIMER)
+	{
+		return _SELECT_REG(TIFR1);
+	}
+	
 	//=============
 	// Sleep Modes
 	//=============

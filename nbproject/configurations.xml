@@ -21,6 +21,8 @@
       <itemPath>cores/fastarduino/LinkedList.hh</itemPath>
       <itemPath>cores/fastarduino/PCI.hh</itemPath>
       <itemPath>cores/fastarduino/Queue.hh</itemPath>
+      <itemPath>cores/fastarduino/RTT.cpp</itemPath>
+      <itemPath>cores/fastarduino/RTT.hh</itemPath>
       <itemPath>cores/fastarduino/SPI.cpp</itemPath>
       <itemPath>cores/fastarduino/SPI.hh</itemPath>
       <itemPath>cores/fastarduino/iocommons.hh</itemPath>
@@ -132,6 +134,10 @@
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -249,6 +255,10 @@
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/RTT.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
@@ -364,6 +374,10 @@
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -481,6 +495,10 @@
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/RTT.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
@@ -596,6 +614,10 @@
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/RTT.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>

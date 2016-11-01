@@ -6,8 +6,8 @@ Watchdog* Watchdog::_singleton = 0;
 
 void Watchdog::begin(TimeOut timeout)
 {
-	uint16_t ms_per_tick = 1 << (timeout + 4);
-	uint8_t config = _BV(WDIE) | (timeout & 0x07) | (timeout & 0x08 ? _BV(WDP3) : 0);
+	uint16_t ms_per_tick = 1 << (uint8_t(timeout) + 4);
+	uint8_t config = _BV(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? _BV(WDP3) : 0);
 	
 	synchronized
 	{

@@ -6,11 +6,10 @@
 #include "Events.hh"
 #include "Board.hh"
 
-//TODO consider using singleton isntead here (try to optimize code size, as static members access may mean larger code)
 class Watchdog
 {
 public:
-	enum TimeOut
+	enum class TimeOut: uint8_t
 	{
 		TO_16ms = 0,
 		TO_32ms,
@@ -22,7 +21,7 @@ public:
 		TO_2s,
 		TO_4s,
 		TO_8s
-	} __attribute__((packed));
+	};
 	
 	Watchdog(Queue<Events::Event>& event_queue)
 		:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue)
@@ -31,7 +30,7 @@ public:
 	}
 	Watchdog(const Watchdog&) = delete;
 	
-	void begin(TimeOut timeout = TO_16ms);
+	void begin(TimeOut timeout = TimeOut::TO_16ms);
 	void end()
 	{
 		synchronized
