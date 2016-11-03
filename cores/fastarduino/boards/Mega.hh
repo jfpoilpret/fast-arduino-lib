@@ -346,6 +346,133 @@ namespace Board
 	constexpr const uint8_t SPI_MISO = PB3;
 	constexpr const uint8_t SPI_SCK = PB1;
 
+	//========
+	// Timers
+	//========
+	
+	enum class Timer: uint8_t
+	{
+		TIMER0,
+		TIMER1,
+		TIMER2,
+		TIMER3,
+		TIMER4,
+		TIMER5
+	};
+	
+	//TODO infer on template-based way to set constant information about each timer
+	template<Timer TIMER>
+	struct Timer_trait
+	{
+		using COUNTER = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 0;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = 0;
+		static constexpr const REGISTER TCCRA{};
+		static constexpr const REGISTER TCCRB{};
+		static constexpr const REGISTER TCNT{};
+		static constexpr const REGISTER OCRA{};
+		static constexpr const REGISTER OCRB{};
+		static constexpr const REGISTER TIMSK{};
+		static constexpr const REGISTER TIFR{};
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER0>
+	{
+		using TYPE = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 64;
+		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR0A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER2>
+	{
+		using TYPE = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 64;
+		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM21);
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS22);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR2A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR2B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT2);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR2A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR2B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK2);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR2);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER1>
+	{
+		using TYPE = uint16_t;
+		static constexpr const uint16_t PRESCALER  = 1;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR1A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER3>
+	{
+		using TYPE = uint16_t;
+		static constexpr const uint16_t PRESCALER  = 1;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM32) | _BV(CS30);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR3A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR3B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT3);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR3A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR3B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK3);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR3);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER4>
+	{
+		using TYPE = uint16_t;
+		static constexpr const uint16_t PRESCALER  = 1;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM42) | _BV(CS40);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR4A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR4B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT4);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR4A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR4B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK4);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR4);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER5>
+	{
+		using TYPE = uint16_t;
+		static constexpr const uint16_t PRESCALER  = 1;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM52) | _BV(CS50);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR5A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR5B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT5);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR5A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR5B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK5);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR5);
+	};
+	
 	//=============
 	// Sleep Modes
 	//=============
@@ -392,6 +519,21 @@ extern "C" {
 	void TIMER2_COMPA_vect(void) __attribute__ ((signal));
 	void TIMER2_COMPB_vect(void) __attribute__ ((signal));
 	void TIMER2_OVF_vect(void) __attribute__ ((signal));
+	void TIMER3_COMPA_vect(void) __attribute__ ((signal));
+	void TIMER3_COMPB_vect(void) __attribute__ ((signal));
+	void TIMER3_COMPC_vect(void) __attribute__ ((signal));
+	void TIMER3_OVF_vect(void) __attribute__ ((signal));
+	void TIMER3_CAPT_vect(void)  __attribute__ ((signal));
+	void TIMER4_COMPA_vect(void) __attribute__ ((signal));
+	void TIMER4_COMPB_vect(void) __attribute__ ((signal));
+	void TIMER4_COMPC_vect(void) __attribute__ ((signal));
+	void TIMER4_OVF_vect(void) __attribute__ ((signal));
+	void TIMER4_CAPT_vect(void)  __attribute__ ((signal));
+	void TIMER5_COMPA_vect(void) __attribute__ ((signal));
+	void TIMER5_COMPB_vect(void) __attribute__ ((signal));
+	void TIMER5_COMPC_vect(void) __attribute__ ((signal));
+	void TIMER5_OVF_vect(void) __attribute__ ((signal));
+	void TIMER5_CAPT_vect(void)  __attribute__ ((signal));
 	void TWI_vect(void) __attribute__ ((signal));
 	void WDT_vect(void) __attribute__ ((signal));
 	void USART0_UDRE_vect(void) __attribute__ ((signal));
