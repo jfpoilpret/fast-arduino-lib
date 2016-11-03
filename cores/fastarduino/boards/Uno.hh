@@ -7,6 +7,9 @@
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
 
+//TODO Use traits for more settings and reduce macros used in here to the strict minimum
+//TODO Externalize traits (to Uno_traits.hh, MEGA_traits.hh ...)
+
 /**
  * Cosa pin symbol and hardware definitions for the ATmega328P based
  * board Arduino Uno. Cosa does not use pin numbers as Arduino/Wiring,
@@ -298,84 +301,77 @@ namespace Board
 	// Timers
 	//========
 	
-	enum class Timer8: uint8_t
+	enum class Timer: uint8_t
 	{
 		TIMER0,
+		TIMER1,
 		TIMER2
 	};
 	
-#define _SELECT_TIMER(TIMER, ARG0, ARG1)	\
-	(	TIMER == Timer8::TIMER0 ? ARG0 :		\
-		ARG1)
-	
-#define _SELECT_TIMER_REG(TIMER, REG0, REG1)	\
-	_SELECT_REG(_SELECT_TIMER(TIMER, REG0, REG1))
-	
-//#define _SELECT_TIMER_MSK(TIMER, MSK0, MSK1)	\
-//	_BV(_SELECT_TIMER(TIMER, MSK0, MSK1))
-
-	constexpr const REGISTER TCCRA(Timer8 TIMER)
+	//TODO infer on template-based way to set constant information about each timer
+	template<Timer TIMER>
+	struct Timer_trait
 	{
-		return _SELECT_TIMER_REG(TIMER, TCCR0A, TCCR2A);
-	}
-	constexpr const REGISTER TCCRB(Timer8 TIMER)
-	{
-		return _SELECT_TIMER_REG(TIMER, TCCR0B, TCCR2B);
-	}
-	constexpr const REGISTER TCNT(Timer8 TIMER)
-	{
-		return _SELECT_TIMER_REG(TIMER, TCNT0, TCNT2);
-	}
-	constexpr const REGISTER OCRA(Timer8 TIMER)
-	{
-		return _SELECT_TIMER_REG(TIMER, OCR0A, OCR2A);
-	}
-	constexpr const REGISTER OCRB(Timer8 TIMER)
-	{
-		return _SELECT_TIMER_REG(TIMER, OCR0B, OCR2B);
-	}
-	constexpr const REGISTER TIMSK(Timer8 TIMER)
-	{
-		return _SELECT_TIMER_REG(TIMER, TIMSK0, TIMSK2);
-	}
-	constexpr const REGISTER TIFR(Timer8 TIMER)
-	{
-		return _SELECT_TIMER_REG(TIMER, TIFR0, TIFR2);
-	}
-
-	enum class Timer16: uint8_t
-	{
-		TIMER1
+		using COUNTER = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 0;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = 0;
+		static constexpr const REGISTER TCCRA{};
+		static constexpr const REGISTER TCCRB{};
+		static constexpr const REGISTER TCNT{};
+		static constexpr const REGISTER OCRA{};
+		static constexpr const REGISTER OCRB{};
+		static constexpr const REGISTER TIMSK{};
+		static constexpr const REGISTER TIFR{};
 	};
 	
-	constexpr const REGISTER TCCRA(UNUSED Timer16 TIMER)
+	template<>
+	struct Timer_trait<Timer::TIMER0>
 	{
-		return _SELECT_REG(TCCR1A);
-	}
-	constexpr const REGISTER TCCRB(UNUSED Timer16 TIMER)
+		using TYPE = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 64;
+		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR0A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER2>
 	{
-		return _SELECT_REG(TCCR1B);
-	}
-	constexpr const REGISTER TCNT(UNUSED Timer16 TIMER)
+		using TYPE = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 64;
+		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM21);
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS20) | _BV(CS21);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR2A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR2B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT2);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR2A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR2B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK2);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR2);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER1>
 	{
-		return _SELECT_REG(TCNT1);
-	}
-	constexpr const REGISTER OCRA(UNUSED Timer16 TIMER)
-	{
-		return _SELECT_REG(OCR1A);
-	}
-	constexpr const REGISTER OCRB(UNUSED Timer16 TIMER)
-	{
-		return _SELECT_REG(OCR1B);
-	}
-	constexpr const REGISTER TIMSK(UNUSED Timer16 TIMER)
-	{
-		return _SELECT_REG(TIMSK1);
-	}
-	constexpr const REGISTER TIFR(UNUSED Timer16 TIMER)
-	{
-		return _SELECT_REG(TIFR1);
-	}
+		using TYPE = uint16_t;
+		static constexpr const uint16_t PRESCALER  = 1;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR1A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
+	};
 	
 	//=============
 	// Sleep Modes

@@ -7,6 +7,7 @@
 
 // This class maps to a PORT and handles it all 8 bits at a time
 // SRAM size supposed to be 0
+//TODO replace uint8_t with enum class Port (board-specific definition)
 template<uint8_t PIN>
 class FastPort
 {

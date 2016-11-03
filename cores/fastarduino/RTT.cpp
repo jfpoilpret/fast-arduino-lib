@@ -1,6 +1,7 @@
 #include "RTT.hh"
 #include "time.hh"
 
+/*
 RTT* RTT::_singleton = 0;
 
 void RTT::_begin8(
@@ -70,3 +71,4 @@ void RTT::delay(uint32_t ms) const
 	while (millis() < end)
 		Time::yield();
 }
+*/
