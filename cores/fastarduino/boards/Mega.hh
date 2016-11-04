@@ -360,7 +360,6 @@ namespace Board
 		TIMER5
 	};
 	
-	//TODO infer on template-based way to set constant information about each timer
 	template<Timer TIMER>
 	struct Timer_trait
 	{

@@ -8,11 +8,13 @@
 #include "Events.hh"
 
 //TODO Improvements
-// - use only one template class for both 8-bits and 16-bits timers
-//   (for this, we need to create some kind of template class that holds each Timer in UNO.hh)
-// - use 2 flavours: one without event and one with event
+// - add micros resolution (based on TCNT current value)											1h
+// - add utility (here or in Time.hh, or somewhere else?) to compute time delta (in us)				30'
+// - use 2 flavours: one without event and one with event											1h+
 //   -> how to deal with call to the right tick() method from ISR then?
-// - implement mechanism to set/restore Time::delay function
+// - limit friendship to the right ISR (how to do that?)											30'
+// - improve _USE_RTT_TIMER to take Board::Timer value and remove each USE_RTT_TIMER_XX (how?)		30'
+// - implement mechanism to set/restore Time::delay function (also for watchdog)					1h
 
 // This macro is internally used in further macros and should not be used in your programs
 #define _USE_RTT_TIMER(TIMER_NUM)								\
@@ -21,14 +23,7 @@ ISR(TIMER ## TIMER_NUM ## _COMPA_vect)							\
 	RTT<Board::Timer::TIMER ## TIMER_NUM>::_singleton->tick();	\
 }
 
-#define _FRIEND_RTT_ISR(TIMER) friend void 
-//#define _USE_RTT_TIMER(TIMER_NUM)							\
-//ISR(TIMER ## TIMER_NUM ## _COMPA_vect)						\
-//{															\
-//	RTT<Board::Timer::TIMER ## TIMER_NUM>* rtt =			\
-//		RTT<Board::Timer::TIMER ## TIMER_NUM>::_singleton;	\
-//	if (rtt) rtt->tick();									\
-//}
+//#define _FRIEND_RTT_ISR(TIMER) friend void 
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
 // want to use RTT for a given Timer in your program, hence you need the proper ISR vector correctly defined
@@ -105,7 +100,6 @@ private:
 	
 	static RTT* _singleton;
 	
-//TODO Find a way (macro) to declare only ONE friend (the right ISR for that TIMER)
 	friend void TIMER0_COMPA_vect();
 #ifdef TIMER1_COMPA_vect
 	friend void TIMER1_COMPA_vect();
@@ -126,9 +120,6 @@ private:
 
 template<Board::Timer TIMER>
 RTT<TIMER>* RTT<TIMER>::_singleton = 0;
-
-//TODO Support Event queueing at defined period
-// ==> need to change the way vector call tick()...)
 
 //class EventRTT: public RTT
 //{

@@ -23,7 +23,8 @@ USE_RTT_TIMER4()
 USE_RTT_TIMER5()
 #elif defined (BREADBOARD_ATTINYX4)
 // Define vectors we need in the example
-
+USE_RTT_TIMER0()
+USE_RTT_TIMER1()
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -51,7 +52,8 @@ int main()
 	sei();
 
 #if defined (BREADBOARD_ATTINYX4)
-	//TODO
+	check_timer<Board::Timer::TIMER0>();
+	check_timer<Board::Timer::TIMER1>();
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 	check_timer<Board::Timer::TIMER0>();
 	check_timer<Board::Timer::TIMER1>();

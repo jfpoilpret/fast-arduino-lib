@@ -223,6 +223,66 @@ namespace Board
 	constexpr const uint8_t SPI_MISO = PA6;
 	constexpr const uint8_t SPI_SCK = PA4;
 
+	//========
+	// Timers
+	//========
+	
+	// IMPORTANT: on my setup, Timer runs faster than expected (9.5s for 10s)
+	//TODO check how we can calibrate clock?
+	enum class Timer: uint8_t
+	{
+		TIMER0,
+		TIMER1
+	};
+	
+	template<Timer TIMER>
+	struct Timer_trait
+	{
+		using COUNTER = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 0;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = 0;
+		static constexpr const REGISTER TCCRA{};
+		static constexpr const REGISTER TCCRB{};
+		static constexpr const REGISTER TCNT{};
+		static constexpr const REGISTER OCRA{};
+		static constexpr const REGISTER OCRB{};
+		static constexpr const REGISTER TIMSK{};
+		static constexpr const REGISTER TIFR{};
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER0>
+	{
+		using TYPE = uint8_t;
+		static constexpr const uint16_t PRESCALER  = 64;
+		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR0A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
+	};
+	
+	template<>
+	struct Timer_trait<Timer::TIMER1>
+	{
+		using TYPE = uint16_t;
+		static constexpr const uint16_t PRESCALER  = 1;
+		static constexpr const uint8_t TCCRA_VALUE  = 0;
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
+		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
+		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
+		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
+		static constexpr const REGISTER OCRA = _SELECT_REG(OCR1A);
+		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
+		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
+		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
+	};
+	
 	//=============
 	// Sleep Modes
 	//=============
