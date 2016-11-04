@@ -8,13 +8,12 @@
 #include "Events.hh"
 
 //TODO Improvements
-// - add micros resolution (based on TCNT current value)											1h
-// - add utility (here or in Time.hh, or somewhere else?) to compute time delta (in us)				30'
 // - use 2 flavours: one without event and one with event											1h+
 //   -> how to deal with call to the right tick() method from ISR then?
 // - limit friendship to the right ISR (how to do that?)											30'
 // - improve _USE_RTT_TIMER to take Board::Timer value and remove each USE_RTT_TIMER_XX (how?)		30'
 // - implement mechanism to set/restore Time::delay function (also for watchdog)					1h
+// - add utility (here or in Time.hh, or somewhere else?) to compute time delta (in us)				30'
 
 // This macro is internally used in further macros and should not be used in your programs
 #define _USE_RTT_TIMER(TIMER_NUM)								\
@@ -33,6 +32,13 @@ ISR(TIMER ## TIMER_NUM ## _COMPA_vect)							\
 #define USE_RTT_TIMER3()	_USE_RTT_TIMER(3)
 #define USE_RTT_TIMER4()	_USE_RTT_TIMER(4)
 #define USE_RTT_TIMER5()	_USE_RTT_TIMER(5)
+
+struct RTTTime
+{
+	RTTTime(uint32_t millis, uint16_t micros):millis(millis), micros(micros) {}
+	const uint32_t millis;
+	const uint16_t micros;
+};
 
 template<Board::Timer TIMER>
 class RTT
@@ -53,13 +59,27 @@ public:
 	}
 	inline void millis(uint32_t ms)
 	{
-		synchronized _millis = ms;
+		synchronized
+		{
+			_millis = ms;
+			_micros = 0;
+			// Reset timer counter
+			(volatile TYPE&) TRAIT::TCNT = 0;
+		}
+	}
+	inline uint16_t micros() const
+	{
+		synchronized return compute_micros();
+	}
+	RTTTime time() const
+	{
+		synchronized return RTTTime(_millis, compute_micros());
 	}
 	void delay(uint32_t ms) const
 	{
 		uint32_t end = millis() + ms + 1;
 		while (millis() < end)
-			Time::yield();
+			::Time::yield();
 	}
 
 	inline void begin()
@@ -91,12 +111,17 @@ public:
 	}
 	
 private:
+	inline uint16_t compute_micros() const
+	{
+		return uint16_t(1000UL * ((volatile TYPE&) TRAIT::TCNT) / (1 + (volatile TYPE&) TRAIT::OCRA));
+	}
 	inline void tick()
 	{
 		++_millis;
 	}
 	
 	volatile uint32_t _millis;
+	uint16_t _micros;
 	
 	static RTT* _singleton;
 	
