@@ -24,7 +24,7 @@ My special setup (I work on Windows but compile everything on an Ubuntu virtual 
 Status
 ------
 
-The project has just started, hence it does not cover much yet.
+The project has started a few months ago only, hence it does not cover much yet.
 
 What the project already has:
 
@@ -33,8 +33,10 @@ What the project already has:
 - General Events handling
 - Watchdog timer
 - Timed (periodic or not) jobs scheduling
+- Real Time Timer with microsecond precision
 - Power sleep
 - Pin Change Interrupt (PCI) handling
+- External Pin Interrupt handling
 - Hardware UART support (for MCU that support it, ie not for ATtiny)
 - Software UART support (for all MCU)
 - "C++ like" Input/Output streams (used by UART implementations)
@@ -64,14 +66,16 @@ The roadmap of supported features is the following:
 5. Pin Change Interrupt support (done)
 6. Software UART support (done)
 7. SPI support (done)
-8. External Pin Interrupt support (done for ATmega328)
-
-8'. External Pin Interrupt support (for ATmega2560 and ATtinyX4)
+8. External Pin Interrupt support (done)
 9. Real Time Timer support
+
 10. NRF24L01P support
 11. Trace support (including PROGMEM strings support)
-12. More boards variants support (Leonardo, ATtinyX5)
-13. ... To be determined later, based on my own projects needs
+12. Support of bandgap reference
+13. More boards variants support (Leonardo, ATtinyX5)
+14. ... To be determined later, based on my own projects needs
+
+Some refactoring is also planned, in order to revisit current way to support multiple boards with different capabilities, based on a "traits" approach. This has started with initial RTT implementation.
 
 The following features are not in roadmap currently:
 
