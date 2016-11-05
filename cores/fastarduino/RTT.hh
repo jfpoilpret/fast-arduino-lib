@@ -8,21 +8,18 @@
 #include "Events.hh"
 
 //TODO Improvements
-// - use 2 flavours: one without event and one with event											1h+
-//   -> how to deal with call to the right tick() method from ISR then?
-// - limit friendship to the right ISR (how to do that?)											30'
 // - improve _USE_RTT_TIMER to take Board::Timer value and remove each USE_RTT_TIMER_XX (how?)		30'
 // - implement mechanism to set/restore Time::delay function (also for watchdog)					1h
+// - do we need some kind of facade static class to access delay, millis...?
 // - add utility (here or in Time.hh, or somewhere else?) to compute time delta (in us)				30'
+// - do we need to put everything in a namespace?
 
 // This macro is internally used in further macros and should not be used in your programs
-#define _USE_RTT_TIMER(TIMER_NUM)								\
-ISR(TIMER ## TIMER_NUM ## _COMPA_vect)							\
-{																\
-	RTT<Board::Timer::TIMER ## TIMER_NUM>::_singleton->tick();	\
+#define _USE_RTT_TIMER(TIMER_NUM)		\
+ISR(TIMER ## TIMER_NUM ## _COMPA_vect)	\
+{										\
+	AbstractRTT::_singleton->tick();	\
 }
-
-//#define _FRIEND_RTT_ISR(TIMER) friend void 
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
 // want to use RTT for a given Timer in your program, hence you need the proper ISR vector correctly defined
@@ -33,97 +30,38 @@ ISR(TIMER ## TIMER_NUM ## _COMPA_vect)							\
 #define USE_RTT_TIMER4()	_USE_RTT_TIMER(4)
 #define USE_RTT_TIMER5()	_USE_RTT_TIMER(5)
 
-struct RTTTime
+class RTTCallback
 {
-	RTTTime(uint32_t millis, uint16_t micros):millis(millis), micros(micros) {}
-	const uint32_t millis;
-	const uint16_t micros;
+public:
+	virtual void on_rtt_change(uint32_t millis) = 0;
 };
 
-template<Board::Timer TIMER>
-class RTT
+class AbstractRTT
 {
-private:
-	using TRAIT = Board::Timer_trait<TIMER>;
-	using TYPE = typename TRAIT::TYPE;
-	
 public:
-	RTT() INLINE:_millis{}
+	void set_callback(RTTCallback* callback)
+	{
+		_callback = callback;
+	}
+	
+private:
+	AbstractRTT() INLINE:_millis{}, _callback{0}
 	{
 		_singleton = this;
 	}
 
-	inline uint32_t millis() const
-	{
-		synchronized return _millis;
-	}
-	inline void millis(uint32_t ms)
-	{
-		synchronized
-		{
-			_millis = ms;
-			_micros = 0;
-			// Reset timer counter
-			(volatile TYPE&) TRAIT::TCNT = 0;
-		}
-	}
-	inline uint16_t micros() const
-	{
-		synchronized return compute_micros();
-	}
-	RTTTime time() const
-	{
-		synchronized return RTTTime(_millis, compute_micros());
-	}
-	void delay(uint32_t ms) const
-	{
-		uint32_t end = millis() + ms + 1;
-		while (millis() < end)
-			::Time::yield();
-	}
+	volatile uint32_t _millis;
 
-	inline void begin()
-	{
-		synchronized
-		{
-			// Use a timer with 1 ms interrupts
-			// OCnA & OCnB disconnected, CTC (Clear Timer on Compare match)
-			(volatile uint8_t&) TRAIT::TCCRA = TRAIT::TCCRA_VALUE;
-			// Don't force output compare (FOCA & FOCB), Clock Select clk/64 (CS = 3)
-			(volatile uint8_t&) TRAIT::TCCRB = TRAIT::TCCRB_VALUE;
-			// Set timer counter compare match (when value reached, 1ms has elapsed)
-			(volatile TYPE&) TRAIT::OCRA = (F_CPU / TRAIT::PRESCALER / 1000) - 1;
-			// Reset timer counter
-			(volatile TYPE&) TRAIT::TCNT = 0;
-			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			(volatile uint8_t&) TRAIT::TIMSK = _BV(OCIE0A);
-		}
-	}
-	inline void end()
-	{
-		synchronized
-		{
-			// Stop timer
-			(volatile uint8_t&) TRAIT::TCCRB = 0;
-			// Clear timer interrupt mode (set interrupt on OCRnA compare match)
-			(volatile uint8_t&) TRAIT::TIMSK = 0;
-		}
-	}
-	
-private:
-	inline uint16_t compute_micros() const
-	{
-		return uint16_t(1000UL * ((volatile TYPE&) TRAIT::TCNT) / (1 + (volatile TYPE&) TRAIT::OCRA));
-	}
 	inline void tick()
 	{
 		++_millis;
+		if (_callback) _callback->on_rtt_change(_millis);
 	}
 	
-	volatile uint32_t _millis;
-	uint16_t _micros;
+	RTTCallback* _callback;
+	static AbstractRTT* _singleton;
 	
-	static RTT* _singleton;
+	template<Board::Timer TIMER> friend class RTT;
 	
 	friend void TIMER0_COMPA_vect();
 #ifdef TIMER1_COMPA_vect
@@ -143,16 +81,105 @@ private:
 #endif
 };
 
-template<Board::Timer TIMER>
-RTT<TIMER>* RTT<TIMER>::_singleton = 0;
+struct RTTTime
+{
+	RTTTime(uint32_t millis, uint16_t micros):millis(millis), micros(micros) {}
+	const uint32_t millis;
+	const uint16_t micros;
+};
 
-//class EventRTT: public RTT
-//{
-//protected:
-//	EventRTT(Queue<Events::Event>& event_queue, uint32_t period = 1000):_event_queue(event_queue) {}
-//	
-//private:
-//	Queue<Events::Event>& _event_queue;
-//};
+template<Board::Timer TIMER>
+class RTT: public AbstractRTT
+{
+private:
+	using TRAIT = Board::Timer_trait<TIMER>;
+	using TIMER_TYPE = typename TRAIT::TYPE;
+	
+public:
+	RTT() INLINE {}
+
+	inline uint32_t millis() const
+	{
+		synchronized return _millis;
+	}
+	void delay(uint32_t ms) const
+	{
+		uint32_t end = millis() + ms + 1;
+		while (millis() < end)
+			::Time::yield();
+	}
+	inline uint16_t micros() const
+	{
+		synchronized return compute_micros();
+	}
+	RTTTime time() const
+	{
+		synchronized return RTTTime(_millis, compute_micros());
+	}
+
+	inline void millis(uint32_t ms)
+	{
+		synchronized
+		{
+			_millis = ms;
+			// Reset timer counter
+			(volatile TIMER_TYPE&) TRAIT::TCNT = 0;
+		}
+	}
+
+	inline void begin()
+	{
+		synchronized
+		{
+			// Use a timer with 1 ms interrupts
+			// OCnA & OCnB disconnected, CTC (Clear Timer on Compare match)
+			(volatile uint8_t&) TRAIT::TCCRA = TRAIT::TCCRA_VALUE;
+			// Don't force output compare (FOCA & FOCB), Clock Select clk/64 (CS = 3)
+			(volatile uint8_t&) TRAIT::TCCRB = TRAIT::TCCRB_VALUE;
+			// Set timer counter compare match (when value reached, 1ms has elapsed)
+			(volatile TIMER_TYPE&) TRAIT::OCRA = (F_CPU / TRAIT::PRESCALER / 1000) - 1;
+			// Reset timer counter
+			(volatile TIMER_TYPE&) TRAIT::TCNT = 0;
+			// Set timer interrupt mode (set interrupt on OCRnA compare match)
+			(volatile uint8_t&) TRAIT::TIMSK = _BV(OCIE0A);
+		}
+	}
+	inline void end()
+	{
+		synchronized
+		{
+			// Stop timer
+			(volatile uint8_t&) TRAIT::TCCRB = 0;
+			// Clear timer interrupt mode (set interrupt on OCRnA compare match)
+			(volatile uint8_t&) TRAIT::TIMSK = 0;
+		}
+	}
+	
+private:
+	inline uint16_t compute_micros() const
+	{
+		return uint16_t(1000UL * ((volatile TIMER_TYPE&) TRAIT::TCNT) / (1 + (volatile TIMER_TYPE&) TRAIT::OCRA));
+	}
+};
+
+class RTTEventCallback: public RTTCallback
+{
+public:
+	RTTEventCallback(Queue<Events::Event>& event_queue, uint32_t period_ms = 1000)
+		:_event_queue(event_queue), _period_ms(period_ms) {}
+	
+private:
+	virtual void on_rtt_change(uint32_t millis) override
+	{
+		// This unusual way to check if millis is multiple of _period_ms allows avoiding division (extra code)
+		while (millis >= _period_ms)
+			millis -= _period_ms;
+		if (!millis)
+			_event_queue._push(Events::Event{Events::Type::RTT_TIMER});
+	}
+	
+	Queue<Events::Event>& _event_queue;
+	const uint32_t _period_ms;
+};
 
 #endif /* RTT_HH */

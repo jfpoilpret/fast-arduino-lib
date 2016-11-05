@@ -12,6 +12,7 @@ namespace Events
 		// Library-defined event types
 		const uint8_t NO_EVENT = 0;
 		const uint8_t WDT_TIMER = 1;
+		const uint8_t RTT_TIMER = 2;
 
 		// User-defined events start here (in range [128-255]))
 		const uint8_t USER_EVENT = 128;
