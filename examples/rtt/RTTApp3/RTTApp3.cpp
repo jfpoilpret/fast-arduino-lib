@@ -57,7 +57,7 @@ int main()
 	{
 		rtt.millis(0);
 		_delay_us(666);
-		RTTTime time = rtt.time();
+		Time::RTTTime time = rtt.time();
 		out << time.millis << "ms " << time.micros << "us\n" << flush;
 	}
 }

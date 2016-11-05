@@ -4,15 +4,11 @@
 #include <avr/interrupt.h>
 
 #include "utilities.hh"
+#include "time.hh"
 #include "Board.hh"
 #include "Events.hh"
 
-//TODO Improvements
-// - improve _USE_RTT_TIMER to take Board::Timer value and remove each USE_RTT_TIMER_XX (how?)		30'
-// - implement mechanism to set/restore Time::delay function (also for watchdog)					1h
-// - do we need some kind of facade static class to access delay, millis...?
-// - add utility (here or in Time.hh, or somewhere else?) to compute time delta (in us)				30'
-// - do we need to put everything in a namespace?
+//TODO do we need to put everything here in a namespace?
 
 // This macro is internally used in further macros and should not be used in your programs
 #define _USE_RTT_TIMER(TIMER_NUM)		\
@@ -81,13 +77,6 @@ private:
 #endif
 };
 
-struct RTTTime
-{
-	RTTTime(uint32_t millis, uint16_t micros):millis(millis), micros(micros) {}
-	const uint32_t millis;
-	const uint16_t micros;
-};
-
 template<Board::Timer TIMER>
 class RTT: public AbstractRTT
 {
@@ -112,9 +101,9 @@ public:
 	{
 		synchronized return compute_micros();
 	}
-	RTTTime time() const
+	Time::RTTTime time() const
 	{
-		synchronized return RTTTime(_millis, compute_micros());
+		synchronized return Time::RTTTime(_millis, compute_micros());
 	}
 
 	inline void millis(uint32_t ms)
