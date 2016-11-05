@@ -29,7 +29,9 @@ inline void _unlock(uint8_t* key)
   asm volatile("" ::: "memory");
 }
 
-#define synchronized for (uint8_t __key __attribute__((__cleanup__(_unlock))) = _lock(), i = 1; i != 0; i--)
+#define synchronized \
+_Pragma ("GCC diagnostic ignored \"-Wreturn-type\"") \
+for (uint8_t __key __attribute__((__cleanup__(_unlock))) = _lock(), i = 1; i != 0; i--)
 
 class REGISTER
 {
