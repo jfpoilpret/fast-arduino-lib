@@ -1,6 +1,6 @@
 /*
- * Pin Change Interrupt test sample.
- * Uses PCI driven switch input to light Arduino LED (D13)
+ * Real Time Timer test sample.
+ * Uses RTT delay to blink Arduino LED (D13)
  */
 
 #include <avr/interrupt.h>
