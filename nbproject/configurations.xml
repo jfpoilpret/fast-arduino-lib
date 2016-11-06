@@ -2,6 +2,8 @@
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="f1" displayName="devices" projectFiles="true">
+      <itemPath>cores/fastarduino/NRF24L01.cpp</itemPath>
+      <itemPath>cores/fastarduino/NRF24L01.hh</itemPath>
       <itemPath>cores/fastarduino/WinBond.cpp</itemPath>
       <itemPath>cores/fastarduino/WinBond.hh</itemPath>
     </logicalFolder>
@@ -47,6 +49,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>cores/fastarduino/errors.hh</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -131,6 +134,10 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -155,6 +162,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -251,6 +260,10 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -275,6 +288,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -371,6 +386,10 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -395,6 +414,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -491,6 +512,10 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -515,6 +540,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -611,6 +638,10 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -635,6 +666,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
       </item>
