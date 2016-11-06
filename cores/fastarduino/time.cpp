@@ -32,12 +32,17 @@ uint32_t Time::since(uint32_t start_ms)
 	return (start_ms <= now ? now - start_ms : 0);
 }
 
-inline static void DELAY(uint16_t us)
+void Time::delay_ms(uint16_t ms)
+{
+	while (ms--) Time::delay_us(1000);
+}
+
+void Time::delay_us(uint16_t us)
 {
 	_delay_loop_2((us * F_CPU) / 4000000L);
 }
 
 void Time::default_delay(uint32_t ms)
 {
-	while (ms--) DELAY(1000);
+	while (ms--) Time::delay_us(1000);
 }

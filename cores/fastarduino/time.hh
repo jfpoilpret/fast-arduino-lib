@@ -22,6 +22,8 @@ namespace Time
 	using MILLIS_PTR = uint32_t (*)();
 	extern MILLIS_PTR millis;
 	
+	void delay_ms(uint16_t ms);
+	void delay_us(uint16_t us);
 	void default_delay(uint32_t ms);
 	
 	template<typename CLOCK>
