@@ -22,12 +22,11 @@
 #ifndef NRF24L01_HH
 #define NRF24L01_HH
 
-#include <stddef.h>
+#include "NRF24L01_impl.hh"
 #include <util/delay.h>
-#include "utilities.hh"
+#include "errors.hh"
+#include "time.hh"
 #include "INT.hh"
-#include "PCI.hh"
-#include "SPI.hh"
 
 /**
  * SPI device driver for Nordic Semiconductor nRF24L01+ support.
@@ -58,23 +57,10 @@
 //TODO split in 2 classes to move out configuration and only keep API in this file
 //TODO replace all enum with better code (enum class or bitfield structs and unions)
 //TODO optimize code as much as can (size first, then speed)
-class NRF24L01: public SPI::SPIDevice
+template<Board::ExternalInterruptPin IRQ>
+class NRF24L01: public NRF24L01Impl
 {
 public:
-	/** Broadcast device address. */
-	static const uint8_t BROADCAST = 0x00;
-
-	/**
-	 * Maximum size of payload on device.
-	 */
-	static const size_t DEVICE_PAYLOAD_MAX = 32;
-
-	/**
-	 * Maximum size of payload. The device allows 32 bytes payload.
-	 * The source address one byte and port one byte as header.
-	 */
-	static const size_t PAYLOAD_MAX = DEVICE_PAYLOAD_MAX - 2;
-	
 	/**
 	 * Default timeout (in ms) to ensure send() is never stuck forever waiting 
 	 * for active IRQ (this can happen for an undetermined reason).
@@ -91,13 +77,9 @@ public:
 	 * @param[in] csn spi slave select pin number (default CS0).
 	 * @param[in] ce chip enable activates pin number (default GPIO P1-22).
 	 */
-	template<Board::ExternalInterruptPin IRQ>
 	NRF24L01(	uint16_t net, uint8_t dev,
 				Board::DigitalPin csn, Board::DigitalPin ce);
 
-	//TODO Do we need that destructor?
-	~NRF24L01();
-	
 	/**
 	 * Get driver channel.
 	 * @return channel.
@@ -111,7 +93,7 @@ public:
 	 * Get driver network address.
 	 * @return network address.
 	 */
-	inline int16_t get_network_address() const
+	inline uint16_t get_network_address() const
 	{
 		return _addr.network;
 	}
@@ -161,6 +143,7 @@ public:
 	inline void end()
 	{
 		powerdown();
+		_irq_signal.disable();
 	}
 
 	/**
@@ -260,469 +243,218 @@ public:
 	 * Return true(1) if the latest received message was a broadcast
 	 * otherwise false(0).
 	 */
-	bool is_broadcast()
+	bool is_broadcast() const
 	{
 		return (_dest == BROADCAST);
 	}
 
-
 private:
-	IOPin _ce;
-	IOPin _irq;
-
 	static const uint8_t DEFAULT_CHANNEL = 64;
-	
-	/**
-	 * SPI Commands (See chap. 8.3.1, tab. 20, pp. 51).
-	 */
-	enum class Command: uint8_t
-	{
-		R_REGISTER = 0x00, //!< Read command and status register.
-		W_REGISTER = 0x20, //!< Write command and status register.
-		REG_MASK = 0x1f, //!< Mask register address (5b).
-		
-		R_RX_PAYLOAD = 0x61, //!< Read RX payload.
-		W_TX_PAYLOAD = 0xa0, //!< Write TX payload.
-		
-		FLUSH_TX = 0xe1, //!< Flush TX FIFO.
-		FLUSH_RX = 0xe2, //!< Flush RX FIFO.
-		
-		REUSE_TX_PL = 0xe3, //!< Reuse last transmitted payload.
-		
-		R_RX_PL_WID = 0x60, //!< Read RX payload width.
-		
-		W_ACK_PAYLOAD = 0xa8, //!< Write TX payload with ACK (3 bit addr).
-		PIPE_MASK = 0x07, //!< Mask pipe address.
-		
-		W_TX_PAYLOAD_NO_ACK = 0xb0, //!< Disable AUTOACK on this specific packet.
-		NOP = 0xff //!< No operation, return status.
-	};
 
-	uint8_t read(uint8_t cmd);
-	void read(uint8_t cmd, void* buf, size_t size);
-
-	void write(uint8_t cmd);
-	void write(uint8_t cmd, uint8_t data);
-	void write(uint8_t cmd, const void* buf, size_t size);
-
-	inline uint8_t read(Command cmd)
-	{
-		return read(uint8_t(cmd));
-	}
-	inline void read(Command cmd, void* buf, size_t size)
-	{
-		read(uint8_t(cmd), buf, size);
-	}
-
-	inline void write(Command cmd)
-	{
-		write(uint8_t(cmd));
-	}
-	inline void write(Command cmd, uint8_t data)
-	{
-		write(uint8_t(cmd), data);
-	}
-	inline void write(Command cmd, const void* buf, size_t size)
-	{
-		write(uint8_t(cmd), buf, size);
-	}
-
-	/**
-	 * NRF transceiver registers map (See chap. 9, tab. 28, pp. 57).
-	 */
-	enum class Register: uint8_t
-	{
-		CONFIG = 0x00, //!< Configuration register.
-		EN_AA = 0x01, //!< Enable auto acknowledgement.
-		EN_RXADDR = 0x02, //!< Enable rx addresses.
-		SETUP_AW = 0x03, //!< Setup of address width.
-		SETUP_RETR = 0x04, //!< Setup of auto retransmission.
-		RF_CH = 0x05, //!< RF channel.
-		RF_SETUP = 0x06, //!< RF setup register.
-		STATUS = 0x07, //!< Status register.
-		OBSERVE_TX = 0x08, //!< Transmit observe register.
-		RPD = 0x09, //!< Received power detector.
-		RX_ADDR_P0 = 0x0a, //!< Receive address data pipe 0.
-		RX_ADDR_P1 = 0x0b, //!< - data pipe 1.
-		RX_ADDR_P2 = 0x0c, //!< - data pipe 2.
-		RX_ADDR_P3 = 0x0d, //!< - data pipe 3.
-		RX_ADDR_P4 = 0x0e, //!< - data pipe 4.
-		RX_ADDR_P5 = 0x0f, //!< - data pipe 5.
-		TX_ADDR = 0x10, //!< Transmit address.
-		RX_PW_P0 = 0x11, //!< Number of bytes in RX payload in data pipe 0.
-		RX_PW_P1 = 0x12, //!< - data pipe 1.
-		RX_PW_P2 = 0x13, //!< - data pipe 2.
-		RX_PW_P3 = 0x14, //!< - data pipe 3.
-		RX_PW_P4 = 0x15, //!< - data pipe 4.
-		RX_PW_P5 = 0x16, //!< - data pipe 5.
-		FIFO_STATUS = 0x17, //!< FIFO status register.
-		DYNPD = 0x1c, //!< Enable dynamic payload length.
-		FEATURE = 0x1d //!< Feature register.
-	};
-
-	/**
-	 * Register CONFIG bitfields, configuration.
-	 */
-	enum 
-	{
-		MASK_RX_DR = 6, //!< Mask interrupt caused by RX_DR.
-		MASK_TX_DS = 5, //!< Mask interrupt caused by TX_DS.
-		MASK_MAX_RT = 4, //!< Mask interrupt caused byt MAX_RT.
-		EN_CRC = 3, //!< Enable CRC.
-		CRCO = 2, //!< CRC encoding scheme (2/1 bytes CRC).
-		PWR_UP = 1, //!< Power up/down.
-		PRIM_RX = 0, //!< RX/TX control (PRX/PTX).
-	};
-
-	enum
-	{
-		POWER_DOWN = 0, //!< PWR_UP bit settings.
-		POWER_UP = _BV(PWR_UP)
-	} __attribute__((packed));
-
-	/**
-	 * Register EN_AA bitfields, auto acknowledgement.
-	 */
-	enum
-	{
-		ENAA_P5 = 5, //!< Enable auto acknowledgement data pipe 5.
-		ENAA_P4 = 4, //!< - data pipe 4.
-		ENAA_P3 = 3, //!< - data pipe 3.
-		ENAA_P2 = 2, //!< - data pipe 2.
-		ENAA_P1 = 1, //!< - data pipe 1.
-		ENAA_P0 = 0, //!< - data pipe 0.
-		ENAA_PA = 0x3f //!< Enable all auto ack on all data pipes.
-	} __attribute__((packed));
-
-	/**
-	 * Register EN_RXADDR bitfields, enable receive pipe.
-	 */
-	enum
-	{
-		ERX_P5 = 5, //!< Enable data pipe 5.
-		ERX_P4 = 4, //!< - data pipe 4.
-		ERX_P3 = 3, //!< - data pipe 3.
-		ERX_P2 = 2, //!< - data pipe 2.
-		ERX_P1 = 1, //!< - data pipe 1.
-		ERX_P0 = 0, //!< - data pipe 0.
-		ERX_PA = 0x3f //!< Enable all data pipes.
-	} __attribute__((packed));
-
-	/**
-	 * Register SETUP_AW bitfields, setup address width (3..5).
-	 */
-	enum
-	{
-		AW = 0, //!< RX/TX address field width (bits 2).
-		AW_3BYTES = 1, //!< 3 bytes.
-		AW_4BYTES = 2, //!< 4 bytes.
-		AW_5BYTES = 3 //!< 5 bytes.
-	} __attribute__((packed));
-
-	/**
-	 * Register SETUP_RETR bitfields, configure retransmission.
-	 */
-	enum
-	{
-		ARD = 4, //!< Auto retransmit delay (bits 4).
-		//!< - delay * 250 us (250..4000 us).
-		DEFAULT_ARD = 1, //!< Default auto retransmit delay (500 us)
-		ARC = 0, //!< Auto retransmit count (bits 4).
-		//!< - retransmit count (0..15).
-		DEFAULT_ARC = 15 //!< Default auto retransmit count (15)
-	} __attribute__((packed));
-
-	/**
-	 * Register RF_SETUP bitfields, radio configuration.
-	 */
-	enum
-	{
-		CONT_WAVE = 7, //!< Continuous carrier transmit.
-		RF_DR_LOW = 5, //!< Set RF data rate to 250 kbps.
-		PLL_LOCK_SIGNAL = 4, //!< Force PLL lock signal.
-		RF_DR_HIGH = 3, //!< Air data bitrate (2 Mbps).
-		RF_PWR = 1 //!< Set RF output power in TX mode (bits 2).
-	} __attribute__((packed));
-
-	/**
-	 * Transmission rates RF_DR_LOW/RF_DR_HIGH values, radio bit-rate.
-	 */
-	enum
-	{
-		RF_DR_1MBPS = 0, //!< 1 Mbps.
-		RF_DR_2MBPS = _BV(RF_DR_HIGH), //!< 2 Mbps.
-		RF_DR_250KBPS = _BV(RF_DR_LOW) //!< 250 Kbps.
-	} __attribute__((packed));
-
-	/**
-	 * Output power RF_PWR values, radio power setting.
-	 */
-	enum
-	{
-		RF_PWR_18DBM = 0, //!< -18dBm.
-		RF_PWR_12DBM = 2, //!< -12dBm.
-		RF_PWR_6DBM = 4, //!< -6dBm.
-		RF_PWR_0DBM = 6 //!<  0dBm.
-	} __attribute__((packed));
-
-	/**
-	 * Register STATUS bitfields.
-	 */
-	enum
-	{
-		RX_DR = 6, //!< Data ready RX FIFO interrupt.
-		TX_DS = 5, //!< Data send TX FIFO interrupt.
-		MAX_RT = 4, //!< Maximum number of TX retransmits interrupt.
-		RX_P_NO = 1, //!< Data pipe number for available payload (3b).
-		RX_P_NO_MASK = 0x0e, //!< Mask pipe number.
-		RX_P_NO_NONE = 0x07, //!< No pipe.
-		TX_FIFO_FULL = 0 //!< TX FIFO full flag.
-	} __attribute__((packed));
-
-	/**
-	 * Register OBSERVE_TX bitfields, performance statistics.
-	 */
-	enum
-	{
-		PLOS_CNT = 4, //!< Count lost packets (bits 4).
-		ARC_CNT = 0 //!< Count retransmitted packets (bits 4).
-	} __attribute__((packed));
-
-	/**
-	 * Register OBSERVE_TX data type, performance statistics.
-	 */
-	union observe_tx_t
-	{
-		uint8_t as_byte; //!< Byte representation of performance statistics.
-
-		struct
-		{
-			uint8_t arc_cnt : 4; //!< Count retransmitted packets.
-			uint8_t plos_cnt : 4; //!< Count lost packets.
-		};
-
-		/**
-		 * Construct transmitter performance statistics from register
-		 * reading.
-		 * @param[in] value register reading.
-		 */
-		observe_tx_t(uint8_t value) {
-			as_byte = value;
-		}
-	};
-
-	/**
-	 * Register FIFO_STATUS bitfields, transmission queue status.
-	 */
-	enum
-	{
-		TX_REUSE = 6, //!< Reuse last transmitted data packat.
-		TX_FULL = 5, //!< TX FIFO full flag.
-		TX_EMPTY = 4, //!< TX FIFO empty flag.
-		RX_FULL = 1, //!< RX FIFO full flag.
-		RX_EMPTY = 0, //!< RX FIFO empty flag.
-	} __attribute__((packed));
-
-	/**
-	 * Register FIFO_STATUS data type, transmission queue status.
-	 */
-	union fifo_status_t
-	{
-		uint8_t as_byte; //!< Byte representation of fifo status.
-
-		struct
-		{
-			uint8_t rx_empty : 1; //!< RX FIFO empty flag.
-			uint8_t rx_full : 1; //!< RX FIFO full flag.
-			uint8_t reserved1 : 2;
-			uint8_t tx_empty : 1; //!< TX FIFO empty flag.
-			uint8_t tx_full : 1; //!< TX FIFO full flag.
-			uint8_t tx_reuse : 1; //!< Reuse last transmitted data packat.
-			uint8_t reserved2 : 1;
-		};
-
-		/**
-		 * Construct transmitter queue status from register reading.
-		 * @param[in] value register reading.
-		 */
-		fifo_status_t(uint8_t value) {
-			as_byte = value;
-		}
-	};
-
-	/**
-	 * Register DYNPD bitfields.
-	 */
-	enum
-	{
-		DPL_P5 = 5, //!< Enable dynamic payload length data pipe 5.
-		DPL_P4 = 4, //!< - data pipe 4.
-		DPL_P3 = 3, //!< - data pipe 3.
-		DPL_P2 = 2, //!< - data pipe 2.
-		DPL_P1 = 1, //!< - data pipe 1.
-		DPL_P0 = 0, //!< - data pipe 0.
-		DPL_PA = 0x3f //!< Enable dynamic payload length on all pipes.
-	} __attribute__((packed));
-
-	/**
-	 * Register FEATURE bitfields.
-	 */
-	enum
-	{
-		EN_DPL = 2, //!< Enable dynamic payload length.
-		EN_ACK_PAY = 1, //!< Enable payload with ACK.
-		EN_DYN_ACK = 0 //!< Enable the W_TX_PAYLOAD_NOACK command.
-	} __attribute__((packed));
-
-	/**
-	 * Read register value. Issue R_REGISTER command with given
-	 * register and read value.
-	 * @param[in] reg register address.
-	 * @return register value.
-	 */
-	uint8_t read(Register reg)
-	{
-		return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
-	}
-
-	/**
-	 * Read register values. Issue R_REGISTER command with given
-	 * register and write given buffer.
-	 * @param[in] reg register address.
-	 * @param[in] buf buffer for read data.
-	 * @param[in] size number of bytes to read.
-	 */
-	void read(Register reg, void* buf, size_t size) {
-		read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
-	}
-
-	/**
-	 * Write command and value. Issue W_REGISTER command with register
-	 * and write data.
-	 * @param[in] reg register address.
-	 * @param[in] data new setting.
-	 * @return status.
-	 */
-	void write(Register reg, uint8_t data) {
-		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
-	}
-
-	/**
-	 * Write command and values. Issue W_REGISTER command with register
-	 * and write data from given buffer.
-	 * @param[in] reg register address.
-	 * @param[in] buf buffer with data to write.
-	 * @param[in] size number of bytes to write.
-	 * @return status.
-	 */
-	void write(Register reg, const void* buf, size_t size) {
-		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
-	}
-
-	/**
-	 * Network address together with port.
-	 */
-	struct addr_t
-	{
-		uint8_t device; //!< Device address (LSB).
-		int16_t network; //!< Network address.
-
-		addr_t(int16_t net, uint8_t dev) INLINE
-		{
-			network = net;
-			device = dev;
-		}
-	};
-
-	uint8_t _channel; //!< Current channel (device dependent.
-	addr_t _addr; //!< Current network and device address.
-	uint8_t _dest; //!< Latest message destination device address.
-
-	/**
-	 * NRF transceiver states (See chap. 6.1.1, fig. 4, pp. 22).
-	 */
-	enum class State: uint8_t
-	{
-		POWER_DOWN_STATE = 0,
-		STANDBY_STATE,
-		RX_STATE,
-		TX_STATE
-	};
-	State _state; //!< Transceiver state.
-	
-	/**
-	 * Register STATUS data type.
-	 */
-	union status_t
-	{
-		uint8_t as_byte; //!< Byte representation of status.
-		struct
-		{
-			uint8_t tx_full		:1; //!< TX FIFO full.
-			uint8_t rx_p_no		:3; //!< Data pipe number for available payload.
-			uint8_t max_rt		:1; //!< Max number of TX retransmit interrupt.
-			uint8_t tx_ds		:1; //!< Data send TX FIFO interrupt.
-			uint8_t rx_dr		:1; //!< Data ready RX FIFO interrupt.
-			uint8_t reserved	:1;
-		};
-
-		/**
-		 * Construct status from register reading.
-		 * @param[in] value register reading.
-		 */
-		status_t(uint8_t value)
-		{
-			as_byte = value;
-		}
-	};
-	status_t _status; //!< Latest status.
-
-	/**
-	 * Timing information (ch. 6.1.7, tab. 16, pp. 24).
-	 */
-	static const uint16_t Tpd2stby_ms = 3;
-	static const uint16_t Tstby2a_us = 130;
-	static const uint16_t Thce_us = 10;
-
-	/**
-	 * Configuration max values.
-	 */
-	enum {
-		AW_MAX = 5, //!< Max address width in bytes.
-		PIPE_MAX = 6, //!< Max number of pipes.
-	} __attribute__((packed));
-
-	/**
-	 * Read status. Issue NOP command to read status.
-	 * @return status.
-	 */
-	status_t read_status();
-
-	/**
-	 * Read FIFO status. Issue FIFO_STATUS command to read status.
-	 * @return fifo status.
-	 */
-	fifo_status_t read_fifo_status() {
-		return (read(Register::FIFO_STATUS));
-	}
-
-	/**
-	 * Read transmission status. Issue OBSERVE_TX command to read
-	 * status.
-	 * @return observe tx status.
-	 */
-	observe_tx_t read_observe_tx() {
-		return (read(Register::OBSERVE_TX));
-	}
-
-	int read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t count);
-	
 	bool wait_for_irq(uint32_t max_ms);
 
-	uint16_t _trans; //!< Send count.
-	uint16_t _retrans; //!< Retransmittion count.
-	uint16_t _drops; //!< Dropped messages.
+	IOPin _irq;
+	INTSignal<IRQ> _irq_signal;
 };
 
-#endif /* NRF24L01_HH */
+template<Board::ExternalInterruptPin IRQ>
+NRF24L01<IRQ>::NRF24L01(
+		uint16_t net, uint8_t dev,
+		Board::DigitalPin csn, Board::DigitalPin ce)
+	:	NRF24L01Impl{net, dev, csn, ce},
+		_irq{Board::DigitalPin(IRQ), PinMode::INPUT_PULLUP},
+		_irq_signal{InterruptTrigger::FALLING_EDGE}
+{
+}
 
+template<Board::ExternalInterruptPin IRQ>
+void NRF24L01<IRQ>::begin()
+{
+	// Setup hardware features, channel, bitrate, retransmission, dynamic payload
+	write(Register::FEATURE, (_BV(EN_DPL) | _BV(EN_ACK_PAY) | _BV(EN_DYN_ACK)));
+	write(Register::RF_CH, _channel);
+	write(Register::RF_SETUP, RF_DR_2MBPS | RF_PWR_0DBM);
+	write(Register::SETUP_RETR, (DEFAULT_ARD << ARD) | (DEFAULT_ARC << ARC));
+	write(Register::DYNPD, DPL_PA);
+
+	// Setup hardware receive pipes address; network (16-bit), device (8-bit)
+	// P0: auto-acknowledge (see set_transmit_mode)
+	// P1: node address<network:device> with auto-acknowledge
+	// P2: broadcast<network:0>
+	addr_t rx_addr = _addr;
+	write(Register::SETUP_AW, AW_3BYTES);
+	write(Register::RX_ADDR_P1, &rx_addr, sizeof (rx_addr));
+	write(Register::RX_ADDR_P2, BROADCAST);
+	write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
+	write(Register::EN_AA, _BV(ENAA_P1) | _BV(ENAA_P0));
+
+	// Ready to go
+	powerup();
+	
+	_irq_signal.enable();
+}
+
+template<Board::ExternalInterruptPin IRQ>
+void NRF24L01<IRQ>::powerup()
+{
+	if (_state != State::POWER_DOWN_STATE) return;
+	_ce.clear();
+
+	// Setup configuration for powerup and clear interrupts
+	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
+	Time::delay_ms(Tpd2stby_ms);
+	_state = State::STANDBY_STATE;
+
+	// Flush status
+	write(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
+	write(Command::FLUSH_TX);
+	write(Command::FLUSH_RX);
+}
+
+template<Board::ExternalInterruptPin IRQ>
+void NRF24L01<IRQ>::standby()
+{
+	if (_state == State::STANDBY_STATE) return;
+	_ce.clear();
+	_state = State::STANDBY_STATE;
+}
+
+template<Board::ExternalInterruptPin IRQ>
+void NRF24L01<IRQ>::powerdown()
+{
+	if (_state == State::POWER_DOWN_STATE) return;
+	_ce.clear();
+	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO));
+	_state = State::POWER_DOWN_STATE;
+}
+
+template<Board::ExternalInterruptPin IRQ>
+bool NRF24L01<IRQ>::wait_for_irq(uint32_t max_ms)
+{
+	uint32_t start = Time::millis();
+	while (true)
+	{
+		if (!_irq.value()) break;
+		if ((max_ms != 0) && (Time::since(start) > max_ms))
+			return false;
+		Time::yield();
+	}
+	return true;
+}
+
+template<Board::ExternalInterruptPin IRQ>
+int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len, uint32_t ms) {
+	if (buf == 0) return EINVAL;
+	if (len > PAYLOAD_MAX) return EMSGSIZE;
+
+	// Setting transmit destination first (needs to ensure standby mode)
+	standby();
+	// Trigger the transmitter mode
+	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
+	// Setup primary transmit address
+	addr_t tx_addr(_addr.network, dest);
+	write(Register::TX_ADDR, &tx_addr, sizeof (tx_addr));
+	// Write source address and payload to the transmit fifo
+	Command command = ((dest != BROADCAST) ? Command::W_TX_PAYLOAD : Command::W_TX_PAYLOAD_NO_ACK);
+	start_transfer();
+	_status = transfer(uint8_t(command));
+	transfer(_addr.device);
+	transfer(port);
+	transfer((uint8_t*) buf, len);
+	end_transfer();
+
+	// Check for auto-acknowledge pipe(0), and address setup and enable
+	if (dest != BROADCAST)
+	{
+		write(Register::RX_ADDR_P0, &tx_addr, sizeof (tx_addr));
+		write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1) | _BV(ERX_P0));
+	}
+	
+	_trans += 1;
+
+	// Pulse CE for 10us in order to start transmission
+	_ce.set();
+	Time::delay_us(Thce_us);
+	_ce.clear();
+	
+	// Wait for transmission
+	wait_for_irq(ms);
+
+	// Clear IRQ
+	status_t status = read_status();
+	write(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
+	
+	// Check for auto-acknowledge pipe(0) disable
+	if (dest != BROADCAST)
+	{
+		write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
+	}
+
+	bool data_sent = status.tx_ds;
+
+	// Read retransmission counter and update
+	observe_tx_t observe = read_observe_tx();
+	_retrans += observe.arc_cnt;
+
+	// Check that the message was delivered
+	if (data_sent) return len;
+
+	// Failed to delivery
+	write(Command::FLUSH_TX);
+	_drops += 1;
+
+	return EIO;
+}
+
+template<Board::ExternalInterruptPin IRQ>
+int NRF24L01<IRQ>::recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t ms)
+{
+	// First check if there is some payload in RX FIFO
+	if (!read_fifo_status().rx_empty)
+	{
+		return read_fifo_payload(src, port, buf, size);
+	}
+	
+	// Run in receiver mode
+	if (_state != State::RX_STATE)
+	{
+		standby();
+		// Configure primary receiver mode
+		write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP) | _BV(PRIM_RX));
+		_ce.set();
+		Time::delay_us(Tstby2a_us);
+		_state = State::RX_STATE;
+	}
+
+	// Check if there is data available on any pipe
+	if (!wait_for_irq(ms)) return ETIME;
+	status_t status =  read_status();
+	
+	// Go to standby mode and clear IRQ
+	standby();
+	write(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
+
+	// Check expected status (RX_DR)
+	if (!status.rx_dr) return EIO;
+
+	// Check the receiver fifo
+	if (read_fifo_status().rx_empty)
+	{
+		// UNEXPECTED BRANCH! TODO FIXME
+	}
+
+	// Check for payload error from device (Tab. 20, pp. 51, R_RX_PL_WID)
+	return read_fifo_payload(src, port, buf, size);
+}
+
+template<Board::ExternalInterruptPin IRQ>
+void NRF24L01<IRQ>::set_output_power_level(int8_t dBm)
+{
+	uint8_t pwr = RF_PWR_0DBM;
+	if (dBm < -12) pwr = RF_PWR_18DBM;
+	else if (dBm < -6) pwr = RF_PWR_12DBM;
+	else if (dBm < 0) pwr = RF_PWR_6DBM;
+	write(Register::RF_SETUP, RF_DR_2MBPS | pwr);
+}
+
+#endif /* NRF24L01_HH */
