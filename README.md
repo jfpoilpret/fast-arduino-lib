@@ -1,7 +1,16 @@
 FastArduino
 -----------
 
-Originally inspired by Cosa library from Mikael Patel.
+FastArduino is a C++, object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU. Its objectives are:
+
+- provide smaller and faster code for the same functionality
+- ensure you pay (size and speed) only for what you use
+- use real Object-Oriented Design everywhere
+- reduce risk of bad code, e.g. by preventing usage of unexisting features (pins, timers...) for the target MCU
+- enforce event-driven programs
+- support both ATmega and ATtiny chips
+
+It was originally inspired by Cosa library from Mikael Patel.
 
 After usage of Cosa libraries for several projects on ATmega328 and ATtiny84, I found out that the current way Cosa is built has a few drawbacks related to:
 
@@ -40,7 +49,7 @@ What the project already has:
 - Hardware UART support (for MCU that support it, ie not for ATtiny)
 - Software UART support (for all MCU)
 - "C++ like" Input/Output streams (used by UART implementations)
-- SPI master support (with WinBond flash memory as a first device example) on ATmega
+- SPI master support (with WinBond flash memory as a first device example)
 
 As of now, the following platforms are supported (and tested):
 
@@ -69,7 +78,7 @@ The roadmap of supported features is the following:
 8. External Pin Interrupt support (done)
 9. Real Time Timer support
 
-10. NRF24L01P support
+10. NRF24L01P support (on going)
 11. Trace support (including PROGMEM strings support)
 12. Support of bandgap reference
 13. More boards variants support (Leonardo, ATtinyX5)
