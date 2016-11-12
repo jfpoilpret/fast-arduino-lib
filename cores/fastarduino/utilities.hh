@@ -104,11 +104,18 @@ inline void clear_ioreg_bit(REGISTER IOREG, uint8_t BIT)
 inline bool ioreg_bit_value(REGISTER IOREG, uint8_t BIT) INLINE;
 inline bool ioreg_bit_value(REGISTER IOREG, uint8_t BIT)
 {
-	bool result = false;
+	//TODO check if optimization is possible in actual usage of this function
+	// E.g. in code below, extra mov r15,r30 is not absolutely necessary (r30 could be directly used)
+	// 2ae:   e0 e0           ldi     r30, 0x00       ; 0
+	// 2b0:   4f 99           sbic    0x09, 7 ; 9
+	// 2b2:   e1 e0           ldi     r30, 0x01       ; 1
+	// 2b4:   fe 2e           mov     r15, r30
+	bool result;
 	asm volatile(
+		"LDI %[RESULT], 0\n\t"			// Clear result value by default
 		"SBIC %[IOREG], %[BIT] \n\t"
 		"LDI %[RESULT], 1\n\t"			// Bit is set, set result value accordingly
-		:[RESULT] "+r" (result)
+		:[RESULT] "=&d" (result)
 		:[IOREG] "I" (IOREG.io_addr()), [BIT] "I" (BIT)
 	);
 	return result;
