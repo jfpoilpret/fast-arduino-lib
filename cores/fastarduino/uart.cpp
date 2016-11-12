@@ -3,7 +3,8 @@
 #if defined(UCSR0A)
 void AbstractUART::_begin(	uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits,
 							volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
-							volatile uint8_t& UCSRB, volatile uint8_t& UCSRC)
+							volatile uint8_t& UCSRB, volatile uint8_t& UCSRC,
+							bool has_rx, bool has_tx)
 {
 	bool u2x = true;
 	uint16_t ubrr = (F_CPU / 4 / rate - 1) / 2;
@@ -16,7 +17,7 @@ void AbstractUART::_begin(	uint32_t rate, Serial::Parity parity, Serial::StopBit
 	{
 		UBRR = ubrr;
 		UCSRA = (u2x ? _BV(U2X0) : 0);
-		UCSRB = _BV(RXCIE0) | _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
+		UCSRB = (has_rx ? _BV(RXCIE0) : 0) | (has_tx ? _BV(UDRIE0) : 0) | _BV(RXEN0) | _BV(TXEN0);
 		UCSRC = Serial::AVR_USART_PARITY(parity) | Serial::AVR_USART_STOPBITS(stop_bits) | _BV(UCSZ00) | _BV(UCSZ01);
 	}
 }
@@ -26,7 +27,7 @@ void AbstractUART::_end(volatile uint8_t& UCSRB)
 	synchronized UCSRB = 0;
 }
 
-void AbstractUART::_on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
+void AbstractUATX::_on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 {
 	synchronized
 	{
@@ -46,7 +47,7 @@ void AbstractUART::_on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 	}
 }
 
-void AbstractUART::_data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
+void AbstractUATX::_data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 {
 	_errors.has_errors = 0;
 	char value;
@@ -61,7 +62,7 @@ void AbstractUART::_data_register_empty(volatile uint8_t& UCSRB, volatile uint8_
 	}
 }
 
-void AbstractUART::_data_receive_complete(volatile uint8_t& UCSRA, volatile uint8_t& UDR)
+void AbstractUARX::_data_receive_complete(volatile uint8_t& UCSRA, volatile uint8_t& UDR)
 {
 	char status = UCSRA;
 	_errors.all_errors.data_overrun = status & _BV(DOR0);

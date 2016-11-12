@@ -9,91 +9,97 @@
 #if defined(UCSR0A)
 
 // This macro is internally used in further macros and should not be used in your programs
-#define _USE_UART(NAME)													\
-ISR(USART ## NAME ## _RX_vect)											\
-{																		\
-	UART<Board::USART::USART ## NAME>::_uart->data_receive_complete();	\
-}																		\
+#define _USE_UATX(NAME)													\
 ISR(USART ## NAME ## _UDRE_vect)										\
 {																		\
-	UART<Board::USART::USART ## NAME>::_uart->data_register_empty();	\
+	UATX<Board::USART::USART ## NAME>::_uatx->data_register_empty();	\
 }
+#define _USE_UARX(NAME)													\
+ISR(USART ## NAME ## _RX_vect)											\
+{																		\
+	UARX<Board::USART::USART ## NAME>::_uarx->data_receive_complete();	\
+}
+
+#define _USE_UART(NAME)		\
+_USE_UARX(NAME)				\
+_USE_UATX(NAME)
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
 // use a given UART in your program hence you need the proper ISR vector correctly defined
+#define USE_UATX0()	_USE_UATX(0)
+#define USE_UATX1()	_USE_UATX(1)
+#define USE_UATX2()	_USE_UATX(2)
+#define USE_UATX3()	_USE_UATX(3)
+
+#define USE_UARX0()	_USE_UARX(0)
+#define USE_UARX1()	_USE_UARX(1)
+#define USE_UARX2()	_USE_UARX(2)
+#define USE_UARX3()	_USE_UARX(3)
+
 #define USE_UART0()	_USE_UART(0)
 #define USE_UART1()	_USE_UART(1)
 #define USE_UART2()	_USE_UART(2)
 #define USE_UART3()	_USE_UART(3)
 
-// Internal macros to simplify friends declaration
-#define _FRIEND_RX_VECT(NAME) friend void NAME ## _RX_vect()
-#define _FRIEND_UDRE_VECT(NAME) friend void NAME ## _UDRE_vect()
-#define _FRIENDS(NAME)		\
-	_FRIEND_RX_VECT(NAME);	\
-	_FRIEND_UDRE_VECT(NAME);
-
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
-class AbstractUART: public Serial::UARTErrors, private InputBuffer, private OutputBuffer
+
+class AbstractUART: public Serial::UARTErrors
+{
+protected:
+	static void _begin(	uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits,
+						volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
+						volatile uint8_t& UCSRB, volatile uint8_t& UCSRC,
+						bool has_rx,
+						bool has_tx);
+	static void _end(volatile uint8_t& UCSRB);
+};
+
+class AbstractUATX: virtual public AbstractUART, private OutputBuffer
 {
 public:
-	InputBuffer& in()
-	{
-		return (InputBuffer&) *this;
-	}
-	
-	FormattedInput<InputBuffer> fin()
-	{
-		return FormattedInput<InputBuffer>(*this);
-	}
-	
-	OutputBuffer& out()
+	inline OutputBuffer& out()
 	{
 		return (OutputBuffer&) *this;
 	}
 	
-	FormattedOutput<OutputBuffer> fout()
+	inline FormattedOutput<OutputBuffer> fout()
 	{
 		return FormattedOutput<OutputBuffer>(*this);
 	}
 	
+	// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
+	// Fixed in 4.9.4 (currently using 4.9.2 only)
+	// We have to make the constructor public to allow virtual inheritance...
+//protected:
+	template<uint8_t SIZE_TX>
+	AbstractUATX(char (&output)[SIZE_TX])
+		:OutputBuffer{output}, _transmitting(false) {}
+	
 protected:
-	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-	AbstractUART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		:InputBuffer{input}, OutputBuffer{output}, _transmitting(false) {}
-	
-	static void _begin(	uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits,
-						volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
-						volatile uint8_t& UCSRB, volatile uint8_t& UCSRC);
-	static void _end(volatile uint8_t& UCSRB);
-	
 	void _on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
-	
 	void _data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
-	void _data_receive_complete(volatile uint8_t& UCSRA, volatile uint8_t& UDR);
 
 private:
 	bool _transmitting;
 };
 
 template<Board::USART USART>
-class UART: public AbstractUART
+class UATX: public AbstractUATX
 {
 public:
-	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-	UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		:AbstractUART(input, output)
+	template<uint8_t SIZE_TX>
+	UATX(char (&output)[SIZE_TX]):AbstractUATX(output)
 	{
-		_uart = this;
+		_uatx = this;
 	}
 	
-	void begin(	uint32_t rate,
-				Serial::Parity parity = Serial::Parity::NONE, 
-				Serial::StopBits stop_bits = Serial::StopBits::ONE)
+	inline void begin(	uint32_t rate,
+						Serial::Parity parity = Serial::Parity::NONE, 
+						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC);
+		_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC, false, true);
 	}
-	void end()
+	inline void end()
 	{
 		_end(UCSRC);
 	}
@@ -110,16 +116,86 @@ protected:
 	}
 	
 private:
-	void data_register_empty()
+	inline void data_register_empty()
 	{
 		_data_register_empty(UCSRB, UDR);
 	}
-	void data_receive_complete()
+	
+	static UATX<USART>* _uatx;
+	
+	static const constexpr REGISTER UCSRA = Board::UCSRA_REG(USART);
+	static const constexpr REGISTER UCSRB = Board::UCSRB_REG(USART);
+	static const constexpr REGISTER UCSRC = Board::UCSRC_REG(USART);
+	static const constexpr REGISTER UBRR = Board::UBRR_REG(USART);
+	static const constexpr REGISTER UDR = Board::UDR_REG(USART);
+
+	friend void USART0_UDRE_vect();
+#if defined(UCSR1A)
+	friend void USART1_UDRE_vect();
+#endif
+#if defined(UCSR2A)
+	friend void USART2_UDRE_vect();
+#endif
+#if defined(UCSR3A)
+	friend void USART3_UDRE_vect();
+#endif
+};
+
+template<Board::USART USART>
+UATX<USART>* UATX<USART>::_uatx = 0;
+
+class AbstractUARX: virtual public AbstractUART, private InputBuffer
+{
+public:
+	inline InputBuffer& in()
+	{
+		return (InputBuffer&) *this;
+	}
+	
+	inline FormattedInput<InputBuffer> fin()
+	{
+		return FormattedInput<InputBuffer>(*this);
+	}
+	
+	// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
+	// Fixed in 4.9.4 (currently using 4.9.2 only)
+	// We have to make the constructor public to allow virtual inheritance...
+//protected:
+	template<uint8_t SIZE_RX>
+	AbstractUARX(char (&input)[SIZE_RX]):InputBuffer{input} {}
+	
+protected:
+	void _data_receive_complete(volatile uint8_t& UCSRA, volatile uint8_t& UDR);
+};
+
+template<Board::USART USART>
+class UARX: public AbstractUARX
+{
+public:
+	template<uint8_t SIZE_RX>
+	UARX(char (&input)[SIZE_RX]):AbstractUARX(input)
+	{
+		_uarx = this;
+	}
+	
+	inline void begin(	uint32_t rate,
+						Serial::Parity parity = Serial::Parity::NONE, 
+						Serial::StopBits stop_bits = Serial::StopBits::ONE)
+	{
+		_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC, true, false);
+	}
+	inline void end()
+	{
+		_end(UCSRC);
+	}
+
+private:
+	inline void data_receive_complete()
 	{
 		_data_receive_complete(UCSRA, UDR);
 	}
 	
-	static UART<USART>* _uart;
+	static UARX<USART>* _uarx;
 	
 	static const constexpr REGISTER UCSRA = Board::UCSRA_REG(USART);
 	static const constexpr REGISTER UCSRB = Board::UCSRB_REG(USART);
@@ -127,20 +203,46 @@ private:
 	static const constexpr REGISTER UBRR = Board::UBRR_REG(USART);
 	static const constexpr REGISTER UDR = Board::UDR_REG(USART);
 	
-	_FRIENDS(USART0)
+	friend void USART0_RX_vect();
 #if defined(UCSR1A)
-	_FRIENDS(USART1)
+	friend void USART1_RX_vect();
 #endif
 #if defined(UCSR2A)
-	_FRIENDS(USART2)
+	friend void USART2_RX_vect();
 #endif
 #if defined(UCSR3A)
-	_FRIENDS(USART3)
+	friend void USART3_RX_vect();
 #endif
 };
 
 template<Board::USART USART>
-UART<USART>* UART<USART>::_uart = 0;
-#endif
+UARX<USART>* UARX<USART>::_uarx = 0;
 
+template<Board::USART USART>
+class UART: public UARX<USART>, public UATX<USART>
+{
+public:
+	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+	UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]):UARX<USART>{input}, UATX<USART>{output} {}
+	
+	inline void begin(	uint32_t rate,
+						Serial::Parity parity = Serial::Parity::NONE, 
+						Serial::StopBits stop_bits = Serial::StopBits::ONE)
+	{
+		AbstractUART::_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC, true, true);
+	}
+	inline void end()
+	{
+		AbstractUART::_end(UCSRC);
+	}
+	
+private:
+	static const constexpr REGISTER UCSRA = Board::UCSRA_REG(USART);
+	static const constexpr REGISTER UCSRB = Board::UCSRB_REG(USART);
+	static const constexpr REGISTER UCSRC = Board::UCSRC_REG(USART);
+	static const constexpr REGISTER UBRR = Board::UBRR_REG(USART);
+	static const constexpr REGISTER UDR = Board::UDR_REG(USART);
+};
+
+#endif	/* UCSR0A */
 #endif	/* UART_HH */
