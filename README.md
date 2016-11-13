@@ -76,13 +76,14 @@ The roadmap of supported features is the following:
 6. Software UART support (done)
 7. SPI support (done)
 8. External Pin Interrupt support (done)
-9. Real Time Timer support
+9. Real Time Timer support (done)
 
 10. NRF24L01P support (on going)
 11. Trace support (including PROGMEM strings support)
-12. Support of bandgap reference
-13. More boards variants support (Leonardo, ATtinyX5)
-14. ... To be determined later, based on my own projects needs
+12. EEPROM support
+13. Support of bandgap reference
+14. More boards variants support (Leonardo, ATtinyX5)
+15. ... To be determined later, based on my own projects needs
 
 Some refactoring is also planned, in order to revisit current way to support multiple boards with different capabilities, based on a "traits" approach. This has started with initial RTT implementation.
 
