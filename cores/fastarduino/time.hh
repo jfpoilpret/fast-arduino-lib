@@ -29,10 +29,18 @@ namespace Time
 	template<typename CLOCK>
 	class ClockDelegate
 	{
+		using TYPE = ClockDelegate<CLOCK>;
+		
 	public:
-		static void set_clock(const CLOCK* clock)
+		//TODO Simplify usage by creating an external template function that would call that member function
+		static void set_clock(const CLOCK& clock, bool set_defaults = true)
 		{
-			_clock = clock;
+			_clock = &clock;
+			if (set_defaults)
+			{
+				Time::delay = TYPE::delay;
+				Time::millis = TYPE::millis;
+			}
 		}
 		
 		static void delay(uint32_t ms)
@@ -46,11 +54,17 @@ namespace Time
 		}
 		
 	private:
-		static CLOCK* _clock;
+		static const CLOCK* _clock;
 	};
 	
 	template<typename CLOCK>
-	CLOCK* ClockDelegate<CLOCK>::_clock = 0;
+	const CLOCK* ClockDelegate<CLOCK>::_clock = 0;
+
+	template<typename CLOCK>
+	void set_clock(const CLOCK& clock, bool set_defaults = true)
+	{
+		Time::ClockDelegate<CLOCK>::set_clock(clock, set_defaults);
+	}
 	
 	class auto_delay
 	{
