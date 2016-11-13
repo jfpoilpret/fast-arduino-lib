@@ -57,6 +57,7 @@
 //TODO split in 2 classes to move out configuration and only keep API in this file
 //TODO replace all enum with better code (enum class or bitfield structs and unions)
 //TODO optimize code as much as can (size first, then speed)
+//TODO make IRQ optional (can be useful when limited pins number)
 template<Board::ExternalInterruptPin IRQ>
 class NRF24L01: public NRF24L01Impl
 {
@@ -344,16 +345,18 @@ bool NRF24L01<IRQ>::wait_for_irq(uint32_t max_ms)
 
 template<Board::ExternalInterruptPin IRQ>
 int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len, uint32_t ms) {
-	if (buf == 0) return EINVAL;
+	if (buf == 0 && len > 0) return EINVAL;
 	if (len > PAYLOAD_MAX) return EMSGSIZE;
 
 	// Setting transmit destination first (needs to ensure standby mode)
 	standby();
 	// Trigger the transmitter mode
 	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
+	
 	// Setup primary transmit address
 	addr_t tx_addr(_addr.network, dest);
 	write(Register::TX_ADDR, &tx_addr, sizeof (tx_addr));
+	
 	// Write source address and payload to the transmit fifo
 	Command command = ((dest != BROADCAST) ? Command::W_TX_PAYLOAD : Command::W_TX_PAYLOAD_NO_ACK);
 	start_transfer();
@@ -378,10 +381,21 @@ int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len,
 	_ce.clear();
 	
 	// Wait for transmission
-	wait_for_irq(ms);
+//	wait_for_irq(ms);
+	uint32_t start = Time::millis();
+	status_t status = 0;
+	while (true)
+	{
+		Time::yield();
+		status = read_status();
+		if (status.tx_ds || status.max_rt)
+			break;
+		if ((ms != 0) && (Time::since(start) > ms))
+			break;
+	}
 
+	bool data_sent = status.tx_ds;
 	// Clear IRQ
-	status_t status = read_status();
 	write(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
 	
 	// Check for auto-acknowledge pipe(0) disable
@@ -389,8 +403,6 @@ int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len,
 	{
 		write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
 	}
-
-	bool data_sent = status.tx_ds;
 
 	// Read retransmission counter and update
 	observe_tx_t observe = read_observe_tx();
@@ -441,6 +453,7 @@ int NRF24L01<IRQ>::recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uin
 	if (read_fifo_status().rx_empty)
 	{
 		// UNEXPECTED BRANCH! TODO FIXME
+		return -1;
 	}
 
 	// Check for payload error from device (Tab. 20, pp. 51, R_RX_PL_WID)
