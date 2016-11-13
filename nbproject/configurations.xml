@@ -29,6 +29,7 @@
       <itemPath>cores/fastarduino/RTT.hh</itemPath>
       <itemPath>cores/fastarduino/SPI.cpp</itemPath>
       <itemPath>cores/fastarduino/SPI.hh</itemPath>
+      <itemPath>cores/fastarduino/errors.hh</itemPath>
       <itemPath>cores/fastarduino/iocommons.hh</itemPath>
       <itemPath>cores/fastarduino/main.cpp</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
@@ -51,7 +52,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>cores/fastarduino/errors.hh</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
