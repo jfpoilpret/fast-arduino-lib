@@ -67,6 +67,7 @@ public:
 	 * for active IRQ (this can happen for an undetermined reason).
 	 * 10ms is high enough, considering 15 retransmits * 500us = 7.5ms
 	 */
+	//TODO Remove if useless, reintroduce if system gets stuck
 	static const uint32_t DEFAULT_SEND_TIMEOUT = 10;
 
 	/**
@@ -175,7 +176,7 @@ public:
 	 * @param[in] len number of bytes in buffer.
 	 * @return number of bytes send or negative error code.
 	 */
-	int send(uint8_t dest, uint8_t port, const void* buf, size_t len, uint32_t ms = DEFAULT_SEND_TIMEOUT);
+	int send(uint8_t dest, uint8_t port, const void* buf, size_t len);
 
 	/**
 	 * Receive message and store into given buffer with given maximum
@@ -344,19 +345,13 @@ bool NRF24L01<IRQ>::wait_for_irq(uint32_t max_ms)
 }
 
 template<Board::ExternalInterruptPin IRQ>
-int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len, uint32_t ms) {
+int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len) {
 	if (buf == 0 && len > 0) return EINVAL;
 	if (len > PAYLOAD_MAX) return EMSGSIZE;
 
 	// Setting transmit destination first (needs to ensure standby mode)
-	standby();
-	// Trigger the transmitter mode
-	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
-	
-	// Setup primary transmit address
-	addr_t tx_addr(_addr.network, dest);
-	write(Register::TX_ADDR, &tx_addr, sizeof (tx_addr));
-	
+	transmit_mode(dest);
+
 	// Write source address and payload to the transmit fifo
 	Command command = ((dest != BROADCAST) ? Command::W_TX_PAYLOAD : Command::W_TX_PAYLOAD_NO_ACK);
 	start_transfer();
@@ -366,44 +361,34 @@ int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len,
 	transfer((uint8_t*) buf, len);
 	end_transfer();
 
+	_trans += 1;
+
 	// Check for auto-acknowledge pipe(0), and address setup and enable
 	if (dest != BROADCAST)
 	{
+		addr_t tx_addr(_addr.network, dest);
 		write(Register::RX_ADDR_P0, &tx_addr, sizeof (tx_addr));
 		write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1) | _BV(ERX_P0));
 	}
 	
-	_trans += 1;
-
-	// Pulse CE for 10us in order to start transmission
-	_ce.set();
-	Time::delay_us(Thce_us);
-	_ce.clear();
-	
 	// Wait for transmission
-//	wait_for_irq(ms);
-	uint32_t start = Time::millis();
 	status_t status = 0;
 	while (true)
 	{
-		Time::yield();
 		status = read_status();
-		if (status.tx_ds || status.max_rt)
-			break;
-		if ((ms != 0) && (Time::since(start) > ms))
-			break;
+		if (status.tx_ds || status.max_rt) break;
+		Time::yield();
 	}
 
 	bool data_sent = status.tx_ds;
-	// Clear IRQ
-	write(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
 	
 	// Check for auto-acknowledge pipe(0) disable
 	if (dest != BROADCAST)
-	{
 		write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
-	}
 
+	// Reset status bits
+	write(Register::STATUS, _BV(TX_DS) | _BV(MAX_RT));
+	
 	// Read retransmission counter and update
 	observe_tx_t observe = read_observe_tx();
 	_retrans += observe.arc_cnt;
@@ -411,7 +396,7 @@ int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len,
 	// Check that the message was delivered
 	if (data_sent) return len;
 
-	// Failed to delivery
+	// Failed to deliver
 	write(Command::FLUSH_TX);
 	_drops += 1;
 
@@ -421,42 +406,19 @@ int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len,
 template<Board::ExternalInterruptPin IRQ>
 int NRF24L01<IRQ>::recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t ms)
 {
-	// First check if there is some payload in RX FIFO
-	if (!read_fifo_status().rx_empty)
-	{
-		return read_fifo_payload(src, port, buf, size);
-	}
-	
-	// Run in receiver mode
-	if (_state != State::RX_STATE)
-	{
-		standby();
-		// Configure primary receiver mode
-		write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP) | _BV(PRIM_RX));
-		_ce.set();
-		Time::delay_us(Tstby2a_us);
-		_state = State::RX_STATE;
-	}
+	// Run in receive mode
+	receive_mode();
 
 	// Check if there is data available on any pipe
-	if (!wait_for_irq(ms)) return ETIME;
-	status_t status =  read_status();
-	
-	// Go to standby mode and clear IRQ
-	standby();
-	write(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
-
-	// Check expected status (RX_DR)
-	if (!status.rx_dr) return EIO;
-
-	// Check the receiver fifo
-	if (read_fifo_status().rx_empty)
+	uint32_t start = Time::millis();
+	while (!available())
 	{
-		// UNEXPECTED BRANCH! TODO FIXME
-		return -1;
+		if ((ms != 0) && (Time::since(start) > ms))
+			return ETIME;
+		Time::yield();
 	}
-
-	// Check for payload error from device (Tab. 20, pp. 51, R_RX_PL_WID)
+	
+	// Try and read payload from FIFO
 	return read_fifo_payload(src, port, buf, size);
 }
 

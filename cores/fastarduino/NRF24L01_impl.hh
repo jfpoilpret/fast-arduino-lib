@@ -45,6 +45,14 @@ protected:
 	{
 		read(uint8_t(cmd), buf, size);
 	}
+	inline uint8_t read(Register reg)
+	{
+		return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
+	}
+	inline void read(Register reg, void* buf, size_t size)
+	{
+		read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
+	}
 
 	inline void write(Command cmd)
 	{
@@ -58,81 +66,31 @@ protected:
 	{
 		write(uint8_t(cmd), buf, size);
 	}
-
-	/**
-	 * Read register value. Issue R_REGISTER command with given
-	 * register and read value.
-	 * @param[in] reg register address.
-	 * @return register value.
-	 */
-	uint8_t read(Register reg)
-	{
-		return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
-	}
-
-	/**
-	 * Read register values. Issue R_REGISTER command with given
-	 * register and write given buffer.
-	 * @param[in] reg register address.
-	 * @param[in] buf buffer for read data.
-	 * @param[in] size number of bytes to read.
-	 */
-	void read(Register reg, void* buf, size_t size)
-	{
-		read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
-	}
-
-	/**
-	 * Write command and value. Issue W_REGISTER command with register
-	 * and write data.
-	 * @param[in] reg register address.
-	 * @param[in] data new setting.
-	 * @return status.
-	 */
-	void write(Register reg, uint8_t data)
+	inline void write(Register reg, uint8_t data)
 	{
 		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
 	}
-
-	/**
-	 * Write command and values. Issue W_REGISTER command with register
-	 * and write data from given buffer.
-	 * @param[in] reg register address.
-	 * @param[in] buf buffer with data to write.
-	 * @param[in] size number of bytes to write.
-	 * @return status.
-	 */
-	void write(Register reg, const void* buf, size_t size)
+	inline void write(Register reg, const void* buf, size_t size)
 	{
 		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 	}
 
-	/**
-	 * Read status. Issue NOP command to read status.
-	 * @return status.
-	 */
-	status_t read_status();
+	void transmit_mode(uint8_t dest);
+	void receive_mode();
 
-	/**
-	 * Read FIFO status. Issue FIFO_STATUS command to read status.
-	 * @return fifo status.
-	 */
-	fifo_status_t read_fifo_status()
+	bool available();
+	status_t read_status();
+	int read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t count);
+
+	inline fifo_status_t read_fifo_status()
 	{
 		return read(Register::FIFO_STATUS);
 	}
 
-	/**
-	 * Read transmission status. Issue OBSERVE_TX command to read
-	 * status.
-	 * @return observe tx status.
-	 */
-	observe_tx_t read_observe_tx()
+	inline observe_tx_t read_observe_tx()
 	{
 		return read(Register::OBSERVE_TX);
 	}
-
-	int read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t count);
 	
 	IOPin _ce;
 

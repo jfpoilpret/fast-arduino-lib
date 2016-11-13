@@ -1,5 +1,6 @@
 #include "NRF24L01_impl.hh"
 #include "errors.hh"
+#include "time.hh"
 
 NRF24L01Impl::NRF24L01Impl(
 		uint16_t net, uint8_t dev,
@@ -55,6 +56,48 @@ void NRF24L01Impl::write(uint8_t cmd, const void* buf, size_t size)
 	_status = transfer(cmd);
 	transfer((uint8_t*) buf, size);
 	end_transfer();
+}
+
+void NRF24L01Impl::transmit_mode(uint8_t dest)
+{
+	// Setup primary transmit address
+	addr_t tx_addr(_addr.network, dest);
+	write(Register::TX_ADDR, &tx_addr, sizeof (tx_addr));
+	
+	// Trigger the transmitter mode
+	if (_state != State::TX_STATE)
+	{
+		_ce.clear();
+		write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
+		_ce.set();
+	}
+	
+	// Wait for the transmitter to become active
+	if (_state == State::STANDBY_STATE) Time::delay_us(Tstby2a_us);
+	_state = State::TX_STATE;
+}
+
+void NRF24L01Impl::receive_mode()
+{
+	// Check already in receive mode
+	if (_state == State::RX_STATE) return;
+
+	// Configure primary receiver mode
+	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP) | _BV(PRIM_RX));
+	_ce.set();
+	if (_state == State::STANDBY_STATE) Time::delay_us(Tstby2a_us);
+	_state = State::RX_STATE;
+}
+
+bool NRF24L01Impl::available()
+{
+	// Check the receiver fifo
+	if (read_fifo_status().rx_empty) return false;
+
+	// Sanity check the size of the payload. Might require a flush
+	if (read(Command::R_RX_PL_WID) <= DEVICE_PAYLOAD_MAX) return true;
+	write(Command::FLUSH_RX);
+	return false;
 }
 
 NRF24L01Internals::status_t NRF24L01Impl::read_status() 
