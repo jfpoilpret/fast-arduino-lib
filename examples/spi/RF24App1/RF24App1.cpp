@@ -27,7 +27,9 @@ static const uint16_t NETWORK = 0xFFFF;
 static const uint8_t MASTER = 0x01;
 static const uint8_t SLAVE = 0x02;
 
-static const uint32_t RECEIVE_MAX_WAIT_MS = 1000L;
+static const uint32_t REPLY_MAX_WAIT_MS = 1000L;
+static const uint32_t RECEIVE_MAX_WAIT_MS = 10000L;
+static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 1000L;
 
 // Define vectors we need in the example
 USE_EMPTY_INT0();
@@ -70,50 +72,57 @@ int main()
 	
 	// Event Loop
 	uint8_t sent_port = 0;
-	uint16_t count_loops = 0;
-	bool send = master;
 	while (true)
 	{
 		// Reset RTT milliseconds counter to avoid overflow
 		rtt.millis(0);
-		if (send)
+		if (master)
 		{
-			// Send
+			// Try to send to slave
 			trace << "Sending... " << flush;
 			int result = rf.send(other_device, sent_port, 0, 0);
 			if (result < 0)
-			{
 				trace	<< "Error " << result << "! #Trans=" << rf.get_trans() 
 						<< " #Retrans=" << rf.get_retrans() 
 						<< " #Drops=" << rf.get_drops() << '\n' << flush;
-			}
 			else
-			{
 				trace << "OK\n" << flush;
-			}
+			
+			// Then wait for slave reply
+			trace << "Receiving...\n" << flush;
+			uint8_t src, port;
+			result = rf.recv(src, port, 0, 0, REPLY_MAX_WAIT_MS);
+			if (result < 0)
+				trace << "Error " << result << "!\n" << flush;
+			else
+				trace << "Received port " << uint16_t(port) << " from source " << uint16_t(src) << endl << flush;
+			
+			// Wait 1 second before doing it again
 			++sent_port;
+			Time::delay(DELAY_BETWEEN_2_FRAMES_MS);
 		}
 		else
 		{
-			// Receive
+			// Wait for master payload
 			trace << "Receiving...\n" << flush;
 			uint8_t src, port;
-			int result = rf.recv(src, port, 0, 0, RECEIVE_MAX_WAIT_MS);
+//			int result = rf.recv(src, port, 0, 0, RECEIVE_MAX_WAIT_MS);
+			int result = rf.recv(src, port, 0, 0);
 			if (result < 0)
-			{
 				trace << "Error " << result << "!\n" << flush;
-			}
 			else
 			{
 				trace << "Received port " << uint16_t(port) << " from source " << uint16_t(src) << endl << flush;
+				// Reply to master with same content
+				trace << "Replying... " << flush;
+				result = rf.send(src, port, 0, 0);
+				if (result < 0)
+					trace	<< "Error " << result << "! #Trans=" << rf.get_trans() 
+							<< " #Retrans=" << rf.get_retrans() 
+							<< " #Drops=" << rf.get_drops() << '\n' << flush;
+				else
+					trace << "OK\n" << flush;
 			}
 		}
-		send = !send;
-		if (!sent_port)
-		{
-			++count_loops;
-			trace << "Total loops: " << count_loops << endl << flush;
-		}
-		Time::delay_ms(5000);
 	}
 }
