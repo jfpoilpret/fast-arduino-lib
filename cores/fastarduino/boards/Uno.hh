@@ -346,7 +346,7 @@ namespace Board
 		using TYPE = uint8_t;
 		static constexpr const uint16_t PRESCALER  = 64;
 		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM21);
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS20) | _BV(CS21);
+		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS22);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR2A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR2B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT2);
