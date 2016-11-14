@@ -29,7 +29,7 @@ static const uint8_t SLAVE = 0x02;
 
 static const uint32_t REPLY_MAX_WAIT_MS = 1000L;
 static const uint32_t RECEIVE_MAX_WAIT_MS = 10000L;
-static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 1000L;
+static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
 
 // Define vectors we need in the example
 USE_EMPTY_INT0();
@@ -72,6 +72,7 @@ int main()
 	
 	// Event Loop
 	uint8_t sent_port = 0;
+	uint32_t count = 0;
 	while (true)
 	{
 		// Reset RTT milliseconds counter to avoid overflow
@@ -79,23 +80,21 @@ int main()
 		if (master)
 		{
 			// Try to send to slave
-			trace << "Sending... " << flush;
+			trace << "S " << sent_port << flush;
 			int result = rf.send(other_device, sent_port, 0, 0);
 			if (result < 0)
-				trace	<< "Error " << result << "! #Trans=" << rf.get_trans() 
+				trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 						<< " #Retrans=" << rf.get_retrans() 
 						<< " #Drops=" << rf.get_drops() << '\n' << flush;
-			else
-				trace << "OK\n" << flush;
 			
 			// Then wait for slave reply
-			trace << "Receiving...\n" << flush;
+			trace << " R " << flush;
 			uint8_t src, port;
 			result = rf.recv(src, port, 0, 0, REPLY_MAX_WAIT_MS);
 			if (result < 0)
-				trace << "Error " << result << "!\n" << flush;
+				trace << "\nError " << result << "!\n" << flush;
 			else
-				trace << "Received port " << uint16_t(port) << " from source " << uint16_t(src) << endl << flush;
+				trace << uint16_t(port) << " (" << uint16_t(src) << ") " << flush;
 			
 			// Wait 1 second before doing it again
 			++sent_port;
@@ -104,25 +103,25 @@ int main()
 		else
 		{
 			// Wait for master payload
-			trace << "Receiving...\n" << flush;
+			trace << "R " << flush;
 			uint8_t src, port;
-//			int result = rf.recv(src, port, 0, 0, RECEIVE_MAX_WAIT_MS);
 			int result = rf.recv(src, port, 0, 0);
 			if (result < 0)
-				trace << "Error " << result << "!\n" << flush;
+				trace << "\nError " << result << "!\n" << flush;
 			else
 			{
-				trace << "Received port " << uint16_t(port) << " from source " << uint16_t(src) << endl << flush;
+				trace << uint16_t(port) << " (" << uint16_t(src) << ") RR " << flush;
 				// Reply to master with same content
-				trace << "Replying... " << flush;
 				result = rf.send(src, port, 0, 0);
 				if (result < 0)
-					trace	<< "Error " << result << "! #Trans=" << rf.get_trans() 
+					trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 							<< " #Retrans=" << rf.get_retrans() 
 							<< " #Drops=" << rf.get_drops() << '\n' << flush;
-				else
-					trace << "OK\n" << flush;
 			}
 		}
+		if (++count % 1000 == 0)
+			trace << "\n count = " << count << "\n#Trans=" << rf.get_trans() 
+					<< " #Retrans=" << rf.get_retrans() 
+					<< " #Drops=" << rf.get_drops() << '\n' << flush;
 	}
 }
