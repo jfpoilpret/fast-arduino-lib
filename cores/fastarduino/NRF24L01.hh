@@ -57,8 +57,6 @@
 //TODO split in 2 classes to move out configuration and only keep API in this file
 //TODO replace all enum with better code (enum class or bitfield structs and unions)
 //TODO optimize code as much as can (size first, then speed)
-//TODO make IRQ optional (can be useful when limited pins number)
-template<Board::ExternalInterruptPin IRQ>
 class NRF24L01: public NRF24L01Impl
 {
 public:
@@ -80,7 +78,8 @@ public:
 	 * @param[in] ce chip enable activates pin number (default GPIO P1-22).
 	 */
 	NRF24L01(	uint16_t net, uint8_t dev,
-				Board::DigitalPin csn, Board::DigitalPin ce);
+				Board::DigitalPin csn, Board::DigitalPin ce)
+		:NRF24L01Impl{net, dev, csn, ce} {}
 
 	/**
 	 * Get driver channel.
@@ -145,7 +144,6 @@ public:
 	inline void end()
 	{
 		powerdown();
-		_irq_signal.disable();
 	}
 
 	/**
@@ -213,7 +211,7 @@ public:
 	 * Return number of retransmissions.
 	 * @return retransmit count.
 	 */
-	uint16_t get_retrans() const
+	inline uint16_t get_retrans() const
 	{
 		return _retrans;
 	}
@@ -222,7 +220,7 @@ public:
 	 * Return number of dropped messages.
 	 * @return drop count.
 	 */
-	uint16_t get_drops() const
+	inline uint16_t get_drops() const
 	{
 		return _drops;
 	}
@@ -236,7 +234,7 @@ public:
 	 * @param[in] len number of bytes in buffer.
 	 * @return number of bytes send or negative error code.
 	 */
-	int broadcast(uint8_t port, const void* buf, size_t len)
+	inline int broadcast(uint8_t port, const void* buf, size_t len)
 	{
 		return send(BROADCAST, port, buf, len);
 	}
@@ -245,191 +243,50 @@ public:
 	 * Return true(1) if the latest received message was a broadcast
 	 * otherwise false(0).
 	 */
-	bool is_broadcast() const
+	inline bool is_broadcast() const
 	{
 		return (_dest == BROADCAST);
 	}
 
 private:
 	static const uint8_t DEFAULT_CHANNEL = 64;
-
-	bool wait_for_irq(uint32_t max_ms);
-
-	IOPin _irq;
-	INTSignal<IRQ> _irq_signal;
 };
 
 template<Board::ExternalInterruptPin IRQ>
-NRF24L01<IRQ>::NRF24L01(
-		uint16_t net, uint8_t dev,
-		Board::DigitalPin csn, Board::DigitalPin ce)
-	:	NRF24L01Impl{net, dev, csn, ce},
-		_irq{Board::DigitalPin(IRQ), PinMode::INPUT_PULLUP},
-		_irq_signal{InterruptTrigger::FALLING_EDGE}
+class IRQ_NRF24L01: public NRF24L01
 {
-}
-
-template<Board::ExternalInterruptPin IRQ>
-void NRF24L01<IRQ>::begin()
-{
-	// Setup hardware features, channel, bitrate, retransmission, dynamic payload
-	write(Register::FEATURE, (_BV(EN_DPL) | _BV(EN_ACK_PAY) | _BV(EN_DYN_ACK)));
-	write(Register::RF_CH, _channel);
-	write(Register::RF_SETUP, RF_DR_2MBPS | RF_PWR_0DBM);
-	write(Register::SETUP_RETR, (DEFAULT_ARD << ARD) | (DEFAULT_ARC << ARC));
-	write(Register::DYNPD, DPL_PA);
-
-	// Setup hardware receive pipes address; network (16-bit), device (8-bit)
-	// P0: auto-acknowledge (see set_transmit_mode)
-	// P1: node address<network:device> with auto-acknowledge
-	// P2: broadcast<network:0>
-	addr_t rx_addr = _addr;
-	write(Register::SETUP_AW, AW_3BYTES);
-	write(Register::RX_ADDR_P1, &rx_addr, sizeof (rx_addr));
-	write(Register::RX_ADDR_P2, BROADCAST);
-	write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
-	write(Register::EN_AA, _BV(ENAA_P1) | _BV(ENAA_P0));
-
-	// Ready to go
-	powerup();
-	
-	_irq_signal.enable();
-}
-
-template<Board::ExternalInterruptPin IRQ>
-void NRF24L01<IRQ>::powerup()
-{
-	if (_state != State::POWER_DOWN_STATE) return;
-	_ce.clear();
-
-	// Setup configuration for powerup and clear interrupts
-	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
-	Time::delay_ms(Tpd2stby_ms);
-	_state = State::STANDBY_STATE;
-
-	// Flush status
-	write(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
-	write(Command::FLUSH_TX);
-	write(Command::FLUSH_RX);
-}
-
-template<Board::ExternalInterruptPin IRQ>
-void NRF24L01<IRQ>::standby()
-{
-	if (_state == State::STANDBY_STATE) return;
-	_ce.clear();
-	_state = State::STANDBY_STATE;
-}
-
-template<Board::ExternalInterruptPin IRQ>
-void NRF24L01<IRQ>::powerdown()
-{
-	if (_state == State::POWER_DOWN_STATE) return;
-	_ce.clear();
-	write(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO));
-	_state = State::POWER_DOWN_STATE;
-}
-
-template<Board::ExternalInterruptPin IRQ>
-bool NRF24L01<IRQ>::wait_for_irq(uint32_t max_ms)
-{
-	uint32_t start = Time::millis();
-	while (true)
+public:
+	/**
+	 * Construct NRF transceiver with given channel and pin numbers
+	 * for SPI slave select, activity enable and interrupt. Default
+	 * in parenthesis (Standard/Mega Arduino/TinyX4).
+	 * @param[in] net network address.
+	 * @param[in] dev device address.
+	 * @param[in] csn spi slave select pin number (default CS0).
+	 * @param[in] ce chip enable activates pin number (default GPIO P1-22).
+	 */
+	IRQ_NRF24L01(	uint16_t net, uint8_t dev,
+					Board::DigitalPin csn, Board::DigitalPin ce)
+		:	NRF24L01{net, dev, csn, ce},
+			_irq_signal{InterruptTrigger::FALLING_EDGE}
 	{
-		if (!_irq.value()) break;
-		if ((max_ms != 0) && (Time::since(start) > max_ms))
-			return false;
-		Time::yield();
-	}
-	return true;
-}
-
-template<Board::ExternalInterruptPin IRQ>
-int NRF24L01<IRQ>::send(uint8_t dest, uint8_t port, const void* buf, size_t len) {
-	if (buf == 0 && len > 0) return EINVAL;
-	if (len > PAYLOAD_MAX) return EMSGSIZE;
-
-	// Setting transmit destination first (needs to ensure standby mode)
-	transmit_mode(dest);
-
-	// Write source address and payload to the transmit fifo
-	Command command = ((dest != BROADCAST) ? Command::W_TX_PAYLOAD : Command::W_TX_PAYLOAD_NO_ACK);
-	start_transfer();
-	_status = transfer(uint8_t(command));
-	transfer(_addr.device);
-	transfer(port);
-	transfer((uint8_t*) buf, len);
-	end_transfer();
-
-	_trans += 1;
-
-	// Check for auto-acknowledge pipe(0), and address setup and enable
-	if (dest != BROADCAST)
-	{
-		addr_t tx_addr(_addr.network, dest);
-		write(Register::RX_ADDR_P0, &tx_addr, sizeof (tx_addr));
-		write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1) | _BV(ERX_P0));
-	}
-	
-	// Wait for transmission
-	status_t status = 0;
-	while (true)
-	{
-		status = read_status();
-		if (status.tx_ds || status.max_rt) break;
-		Time::yield();
+		IOPin irq{Board::DigitalPin(IRQ), PinMode::INPUT_PULLUP};
 	}
 
-	bool data_sent = status.tx_ds;
-	
-	// Check for auto-acknowledge pipe(0) disable
-	if (dest != BROADCAST)
-		write(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
-
-	// Reset status bits
-	write(Register::STATUS, _BV(TX_DS) | _BV(MAX_RT));
-	
-	// Read retransmission counter and update
-	observe_tx_t observe = read_observe_tx();
-	_retrans += observe.arc_cnt;
-
-	// Check that the message was delivered
-	if (data_sent) return len;
-
-	// Failed to deliver
-	write(Command::FLUSH_TX);
-	_drops += 1;
-
-	return EIO;
-}
-
-template<Board::ExternalInterruptPin IRQ>
-int NRF24L01<IRQ>::recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t ms)
-{
-	// Run in receive mode
-	receive_mode();
-
-	// Check if there is data available on any pipe
-	uint32_t start = Time::millis();
-	while (!available())
+	inline void begin()
 	{
-		if ((ms != 0) && (Time::since(start) > ms))
-			return ETIME;
-		Time::yield();
+		NRF24L01::begin();
+		_irq_signal.enable();
 	}
-	
-	// Try and read payload from FIFO
-	return read_fifo_payload(src, port, buf, size);
-}
 
-template<Board::ExternalInterruptPin IRQ>
-void NRF24L01<IRQ>::set_output_power_level(int8_t dBm)
-{
-	uint8_t pwr = RF_PWR_0DBM;
-	if (dBm < -12) pwr = RF_PWR_18DBM;
-	else if (dBm < -6) pwr = RF_PWR_12DBM;
-	else if (dBm < 0) pwr = RF_PWR_6DBM;
-	write(Register::RF_SETUP, RF_DR_2MBPS | pwr);
-}
+	inline void end()
+	{
+		_irq_signal.disable();
+		NRF24L01::end();
+	}
+
+private:
+	INTSignal<IRQ> _irq_signal;
+};
 
 #endif /* NRF24L01_HH */

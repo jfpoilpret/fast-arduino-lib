@@ -13,6 +13,7 @@
 
 static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;
 
+static const constexpr Board::ExternalInterruptPin PIN_IRQ = Board::ExternalInterruptPin::EXT0;
 static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8;
 static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
 
@@ -31,6 +32,7 @@ static const uint32_t RECEIVE_MAX_WAIT_MS = 10000L;
 static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
 
 // Define vectors we need in the example
+USE_EMPTY_INT0();
 USE_RTT_TIMER2();
 USE_UATX0()
 
@@ -64,7 +66,7 @@ int main()
 
 	// Start SPI and setup NRF24
 	SPI::SPIDevice::init();
-	NRF24L01 rf{NETWORK, self_device, PIN_CSN, PIN_CE};
+	IRQ_NRF24L01<Board::ExternalInterruptPin::EXT0> rf{NETWORK, self_device, PIN_CSN, PIN_CE};
 	rf.begin();
 	trace << "NRF24L01+ started\n" << flush;
 	

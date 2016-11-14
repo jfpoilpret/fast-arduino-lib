@@ -2,6 +2,7 @@
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="f1" displayName="devices" projectFiles="true">
+      <itemPath>cores/fastarduino/NRF24L01.cpp</itemPath>
       <itemPath>cores/fastarduino/NRF24L01.hh</itemPath>
       <itemPath>cores/fastarduino/NRF24L01_impl.cpp</itemPath>
       <itemPath>cores/fastarduino/NRF24L01_impl.hh</itemPath>
@@ -135,6 +136,8 @@
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -272,6 +275,8 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/NRF24L01_impl.cpp"
@@ -407,6 +412,8 @@
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -544,6 +551,8 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/NRF24L01_impl.cpp"
@@ -679,6 +688,8 @@
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/NRF24L01.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
