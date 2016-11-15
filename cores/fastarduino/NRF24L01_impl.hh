@@ -43,40 +43,41 @@ protected:
 	void write(uint8_t cmd, uint8_t data);
 	void write(uint8_t cmd, const void* buf, size_t size);
 
-	inline uint8_t read(Command cmd)
+	inline uint8_t read_command(Command cmd)
 	{
 		return read(uint8_t(cmd));
 	}
-	inline void read(Command cmd, void* buf, size_t size)
+	inline void read_command(Command cmd, void* buf, size_t size)
 	{
 		read(uint8_t(cmd), buf, size);
 	}
-	inline uint8_t read(Register reg)
+	//TODO check if having one READ Command per register could improve size
+	inline uint8_t read_register(Register reg)
 	{
 		return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
 	}
-	inline void read(Register reg, void* buf, size_t size)
+	inline void read_register(Register reg, void* buf, size_t size)
 	{
 		read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 	}
 
-	inline void write(Command cmd)
+	inline void write_command(Command cmd)
 	{
 		write(uint8_t(cmd));
 	}
-	inline void write(Command cmd, uint8_t data)
+	inline void write_command(Command cmd, uint8_t data)
 	{
 		write(uint8_t(cmd), data);
 	}
-	inline void write(Command cmd, const void* buf, size_t size)
+	inline void write_command(Command cmd, const void* buf, size_t size)
 	{
 		write(uint8_t(cmd), buf, size);
 	}
-	inline void write(Register reg, uint8_t data)
+	inline void write_register(Register reg, uint8_t data)
 	{
 		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
 	}
-	inline void write(Register reg, const void* buf, size_t size)
+	inline void write_register(Register reg, const void* buf, size_t size)
 	{
 		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 	}
@@ -90,12 +91,12 @@ protected:
 
 	inline fifo_status_t read_fifo_status()
 	{
-		return read(Register::FIFO_STATUS);
+		return read_register(Register::FIFO_STATUS);
 	}
 
 	inline observe_tx_t read_observe_tx()
 	{
-		return read(Register::OBSERVE_TX);
+		return read_register(Register::OBSERVE_TX);
 	}
 	
 	/**
