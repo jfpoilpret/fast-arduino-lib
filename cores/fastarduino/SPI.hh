@@ -4,6 +4,15 @@
 #include "Board.hh"
 #include "IO.hh"
 
+//TODO Add (or replace with) FastSPI template where there is NO member fields at all:
+//template<Board::DigitalPin CS,
+//		ChipSelect CS_MODE = ChipSelect::ACTIVE_LOW, 
+//		ClockRate RATE = ClockRate::CLOCK_DIV_4, 
+//		Mode MODE = Mode::MODE_0,
+//		DataOrder ORDER = DataOrder::MSB_FIRST>
+//class SPIDevice;
+// Will need AbstractSPIDevice to include all transfer() methods
+
 //TODO Make a SPIMaster class to have ctor as SPIDevice::init() ?
 //TODO Make a SPISlave class with a data handler/buffer
 namespace SPI
