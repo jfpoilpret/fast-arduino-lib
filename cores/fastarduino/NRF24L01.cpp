@@ -1,4 +1,7 @@
 #include "NRF24L01.hh"
+#include "NRF24L01_internals.hh"
+
+using namespace NRF24L01Internals;
 
 void NRF24L01::begin()
 {

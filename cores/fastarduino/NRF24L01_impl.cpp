@@ -1,6 +1,9 @@
 #include "NRF24L01_impl.hh"
+#include "NRF24L01_internals.hh"
 #include "errors.hh"
 #include "time.hh"
+
+using namespace NRF24L01Internals;
 
 NRF24L01Impl::NRF24L01Impl(
 		uint16_t net, uint8_t dev,
@@ -100,7 +103,7 @@ bool NRF24L01Impl::available()
 	return false;
 }
 
-NRF24L01Internals::status_t NRF24L01Impl::read_status() 
+NRF24L01Impl::status_t NRF24L01Impl::read_status() 
 {
 	start_transfer();
 	_status = transfer(uint8_t(Command::NOP));
