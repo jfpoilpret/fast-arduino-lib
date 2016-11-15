@@ -56,9 +56,6 @@
  * IMPORTANT: PCI pin is not yet supported actually.
  */
 
-//TODO reformat code to comply with fastArduino coding standards
-//TODO split in 2 classes to move out configuration and only keep API in this file
-//TODO replace all enum with better code (enum class or bitfield structs and unions)
 //TODO optimize code as much as can (size first, then speed)
 class NRF24L01: public SPI::SPIDevice
 {
@@ -96,7 +93,6 @@ public:
 	 */
 	NRF24L01(	uint16_t net, uint8_t dev,
 				Board::DigitalPin csn, Board::DigitalPin ce);
-//		:NRF24L01Impl{net, dev, csn, ce} {}
 
 	/**
 	 * Get driver channel.
@@ -343,7 +339,8 @@ protected:
 		 * reading.
 		 * @param[in] value register reading.
 		 */
-		observe_tx_t(uint8_t value) {
+		observe_tx_t(uint8_t value) INLINE
+		{
 			as_byte = value;
 		}
 	};
@@ -370,7 +367,8 @@ protected:
 		 * Construct transmitter queue status from register reading.
 		 * @param[in] value register reading.
 		 */
-		fifo_status_t(uint8_t value) {
+		fifo_status_t(uint8_t value) INLINE
+		{
 			as_byte = value;
 		}
 	};
@@ -421,7 +419,7 @@ protected:
 		 * Construct status from register reading.
 		 * @param[in] value register reading.
 		 */
-		status_t(uint8_t value)
+		status_t(uint8_t value) INLINE
 		{
 			as_byte = value;
 		}

@@ -74,7 +74,8 @@ void NRF24L01::powerdown()
 	_state = State::POWER_DOWN_STATE;
 }
 
-int NRF24L01::send(uint8_t dest, uint8_t port, const void* buf, size_t len) {
+int NRF24L01::send(uint8_t dest, uint8_t port, const void* buf, size_t len)
+{
 	if (buf == 0 && len > 0) return EINVAL;
 	if (len > PAYLOAD_MAX) return EMSGSIZE;
 
@@ -153,9 +154,12 @@ int NRF24L01::recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t
 void NRF24L01::set_output_power_level(int8_t dBm)
 {
 	uint8_t pwr = RF_PWR_0DBM;
-	if (dBm < -12) pwr = RF_PWR_18DBM;
-	else if (dBm < -6) pwr = RF_PWR_12DBM;
-	else if (dBm < 0) pwr = RF_PWR_6DBM;
+	if (dBm < -12)
+		pwr = RF_PWR_18DBM;
+	else if (dBm < -6)
+		pwr = RF_PWR_12DBM;
+	else if (dBm < 0)
+		pwr = RF_PWR_6DBM;
 	write_register(Register::RF_SETUP, RF_DR_2MBPS | pwr);
 }
 
