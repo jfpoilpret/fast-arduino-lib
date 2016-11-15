@@ -163,46 +163,6 @@ void NRF24L01::set_output_power_level(int8_t dBm)
 	write_register(Register::RF_SETUP, RF_DR_2MBPS | pwr);
 }
 
-uint8_t NRF24L01::read(uint8_t cmd)
-{
-	start_transfer();
-	_status = transfer(cmd);
-	uint8_t result = transfer(uint8_t(Command::NOP));
-	end_transfer();
-	return result;
-}
-
-void NRF24L01::read(uint8_t cmd, void* buf, size_t size)
-{
-	start_transfer();
-	_status = transfer(cmd);
-	transfer((uint8_t*) buf, size, uint8_t(Command::NOP));
-	end_transfer();
-}
-
-void NRF24L01::write(uint8_t cmd)
-{
-	start_transfer();
-	_status = transfer(cmd);
-	end_transfer();
-}
-
-void NRF24L01::write(uint8_t cmd, uint8_t data)
-{
-	start_transfer();
-	_status = transfer(cmd);
-	transfer(data);
-	end_transfer();
-}
-
-void NRF24L01::write(uint8_t cmd, const void* buf, size_t size)
-{
-	start_transfer();
-	_status = transfer(cmd);
-	transfer((uint8_t*) buf, size);
-	end_transfer();
-}
-
 void NRF24L01::transmit_mode(uint8_t dest)
 {
 	// Setup primary transmit address
@@ -243,14 +203,6 @@ bool NRF24L01::available()
 	if (read_command(Command::R_RX_PL_WID) <= DEVICE_PAYLOAD_MAX) return true;
 	write_command(Command::FLUSH_RX);
 	return false;
-}
-
-NRF24L01::status_t NRF24L01::read_status() 
-{
-	start_transfer();
-	_status = transfer(uint8_t(Command::NOP));
-	end_transfer();
-	return _status;
 }
 
 int NRF24L01::read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t size)

@@ -425,13 +425,44 @@ protected:
 		}
 	};
 
-	uint8_t read(uint8_t cmd);
-	void read(uint8_t cmd, void* buf, size_t size);
+	// Lowest-level methods to access NRF24L01 device
+	inline uint8_t read(uint8_t cmd)
+	{
+		start_transfer();
+		_status = transfer(cmd);
+		uint8_t result = transfer(uint8_t(Command::NOP));
+		end_transfer();
+		return result;
+	}
+	inline void read(uint8_t cmd, void* buf, size_t size)
+	{
+		start_transfer();
+		_status = transfer(cmd);
+		transfer((uint8_t*) buf, size, uint8_t(Command::NOP));
+		end_transfer();
+	}
+	inline void write(uint8_t cmd)
+	{
+		start_transfer();
+		_status = transfer(cmd);
+		end_transfer();
+	}
+	inline void write(uint8_t cmd, uint8_t data)
+	{
+		start_transfer();
+		_status = transfer(cmd);
+		transfer(data);
+		end_transfer();
+	}
+	inline void write(uint8_t cmd, const void* buf, size_t size)
+	{
+		start_transfer();
+		_status = transfer(cmd);
+		transfer((uint8_t*) buf, size);
+		end_transfer();
+	}
 
-	void write(uint8_t cmd);
-	void write(uint8_t cmd, uint8_t data);
-	void write(uint8_t cmd, const void* buf, size_t size);
-
+	// Command-level methods to access NRF24L01 device
 	inline uint8_t read_command(Command cmd)
 	{
 		return read(uint8_t(cmd));
@@ -440,15 +471,6 @@ protected:
 	{
 		read(uint8_t(cmd), buf, size);
 	}
-	inline uint8_t read_register(Register reg)
-	{
-		return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
-	}
-	inline void read_register(Register reg, void* buf, size_t size)
-	{
-		read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
-	}
-
 	inline void write_command(Command cmd)
 	{
 		write(uint8_t(cmd));
@@ -461,6 +483,16 @@ protected:
 	{
 		write(uint8_t(cmd), buf, size);
 	}
+
+	// Mid-level methods to access NRF24L01 device registers
+	inline uint8_t read_register(Register reg)
+	{
+		return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
+	}
+	inline void read_register(Register reg, void* buf, size_t size)
+	{
+		read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
+	}
 	inline void write_register(Register reg, uint8_t data)
 	{
 		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
@@ -470,18 +502,23 @@ protected:
 		write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 	}
 
+	inline status_t read_status()
+	{
+		start_transfer();
+		_status = transfer(uint8_t(Command::NOP));
+		end_transfer();
+		return _status;
+	}
+
 	void transmit_mode(uint8_t dest);
 	void receive_mode();
 
 	bool available();
-	status_t read_status();
 	int read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t count);
-
 	inline fifo_status_t read_fifo_status()
 	{
 		return read_register(Register::FIFO_STATUS);
 	}
-
 	inline observe_tx_t read_observe_tx()
 	{
 		return read_register(Register::OBSERVE_TX);
