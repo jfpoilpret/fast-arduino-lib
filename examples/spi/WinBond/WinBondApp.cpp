@@ -56,15 +56,15 @@ int main()
 	
 	out << "Started\n";
 
-	SPI::SPIDevice::init();
-	WinBond flash{CS};
+	FastSPI::init();
+	WinBond<CS> flash;
 	_delay_ms(1000);
 	
 	out << "S: " << hex << flash.status().value << endl << flush;
 	uint64_t id = flash.read_unique_ID();
 	out << "UID: " << hex << uint16_t(id >> 48) << ' ' << uint16_t(id >> 32) << ' ' 
 					<< uint16_t(id >> 16) << ' ' << uint16_t(id) << endl;
-	WinBond::Device device = flash.read_device();
+	WinBond<CS>::Device device = flash.read_device();
 	out << "M ID: " << hex << device.manufacturer_ID << endl;
 	out << "D ID: " << hex << device.device_ID << endl << flush;
 

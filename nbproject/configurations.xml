@@ -4,7 +4,6 @@
     <logicalFolder name="f1" displayName="devices" projectFiles="true">
       <itemPath>cores/fastarduino/NRF24L01.hh</itemPath>
       <itemPath>cores/fastarduino/NRF24L01_internals.hh</itemPath>
-      <itemPath>cores/fastarduino/WinBond.cpp</itemPath>
       <itemPath>cores/fastarduino/WinBond.hh</itemPath>
     </logicalFolder>
     <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
@@ -159,8 +158,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
@@ -291,8 +288,6 @@
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -425,8 +420,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
@@ -558,8 +551,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
@@ -690,8 +681,6 @@
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/WinBond.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>

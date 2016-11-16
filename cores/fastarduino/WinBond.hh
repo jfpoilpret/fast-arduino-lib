@@ -2,7 +2,7 @@
 #define WINBOND_HH
 
 #include <util/delay.h>
-#include "SPI.hh"
+#include "FastSPI.hh"
 
 /*
  *                 W25Q80BV
@@ -21,10 +21,11 @@
  */
 
 // Tested with W25Q80BV (8 Mbit)
-class WinBond: public SPI::SPIDevice
+template<Board::DigitalPin CS>
+class WinBond: public FastSPI::SPIDevice<CS, FastSPI::ChipSelect::ACTIVE_LOW, FastSPI::ClockRate::CLOCK_DIV_2>
 {
 public:
-	WinBond(Board::DigitalPin cs): SPIDevice{cs, SPI::ChipSelect::ACTIVE_LOW, SPI::ClockRate::CLOCK_DIV_2} {}
+	WinBond() {}
 
 	// This type maps to status SEC/TB/BP2/BP1/BP0
 	enum class BlockProtect:uint16_t
@@ -71,7 +72,7 @@ public:
 	private:
 		inline  Status(uint8_t sr1, uint8_t sr2):value(sr2 << 8 | sr1){}
 		
-		friend class WinBond;
+		friend class WinBond<CS>;
 	};
 	
 	inline Status status()
@@ -143,5 +144,95 @@ private:
 	void _send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size);
 };
 
-#endif /* WINBOND_HH */
+template<Board::DigitalPin CS>
+void WinBond<CS>::set_status(uint16_t status)
+{
+	this->start_transfer();
+	this->transfer(status);
+	this->transfer(status >> 8);
+	this->end_transfer();
+}
 
+template<Board::DigitalPin CS>
+bool WinBond<CS>::wait_until_ready(uint16_t timeout_ms)
+{
+	bool ready = false;
+	this->start_transfer();
+	this->transfer(0x05);
+	//TODO add timing check (once RTT is available)
+	while (true)
+	{
+		uint8_t status = this->transfer(0x00);
+		if (!(status & 0x01))
+		{
+			ready = true;
+			break;
+		}
+	}
+	this->end_transfer();
+	return ready;
+}
+
+template<Board::DigitalPin CS>
+typename WinBond<CS>::Device WinBond<CS>::read_device()
+{
+	Device device;
+	_send(0x90, 0, (uint8_t*) &device, sizeof(device));
+	return device;
+}
+
+template<Board::DigitalPin CS>
+uint64_t WinBond<CS>::read_unique_ID()
+{
+	uint8_t buffer[9];
+	_send(0x4B, 0, buffer, 9);
+	//FIXME check if we need to exchange bytes (endianness)
+	uint64_t id = *((uint64_t*) &buffer[1]);
+	return id;
+}
+
+template<Board::DigitalPin CS>
+uint8_t WinBond<CS>::read_data(uint32_t address)
+{
+	uint8_t data;
+	read_data(address, &data, 1);
+	return data;
+}
+
+template<Board::DigitalPin CS>
+void WinBond<CS>::read_data(uint32_t address, uint8_t* data, uint16_t size)
+{
+	_send(0x03, address, data, size);
+}
+
+template<Board::DigitalPin CS>
+uint8_t WinBond<CS>::_read(uint8_t code)
+{
+	this->start_transfer();
+	this->transfer(code);
+	uint8_t result = this->transfer(0);
+	this->end_transfer();
+	return result;
+}
+
+template<Board::DigitalPin CS>
+void WinBond<CS>::_send(uint8_t code)
+{
+	this->start_transfer();
+	this->transfer(code);
+	this->end_transfer();
+}
+
+template<Board::DigitalPin CS>
+void WinBond<CS>::_send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)
+{
+	this->start_transfer();
+	this->transfer(code);
+	this->transfer(address >> 16);
+	this->transfer(address >> 8);
+	this->transfer(address);
+	this->transfer(data, size);
+	this->end_transfer();
+}
+
+#endif /* WINBOND_HH */
