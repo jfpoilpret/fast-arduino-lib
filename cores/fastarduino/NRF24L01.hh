@@ -22,14 +22,14 @@
 #ifndef NRF24L01_HH
 #define NRF24L01_HH
 
-//#include "NRF24L01_impl.hh"
 #include <stddef.h>
 #include <util/delay.h>
 #include "utilities.hh"
 #include "errors.hh"
 #include "time.hh"
-#include "SPI.hh"
+#include "FastSPI.hh"
 #include "INT.hh"
+#include "NRF24L01_internals.hh"
 
 /**
  * SPI device driver for Nordic Semiconductor nRF24L01+ support.
@@ -55,9 +55,8 @@
  * - CSN is the usual CS pin used by SPI to select the device and can be set to any AVR pin
  * IMPORTANT: PCI pin is not yet supported actually.
  */
-
-//TODO optimize code as much as can (size first, then speed)
-class NRF24L01: public SPI::SPIDevice
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+class NRF24L01: private FastSPI::SPIDevice<CSN>
 {
 public:
 	/** Broadcast device address. */
@@ -91,8 +90,7 @@ public:
 	 * @param[in] csn spi slave select pin number (default CS0).
 	 * @param[in] ce chip enable activates pin number (default GPIO P1-22).
 	 */
-	NRF24L01(	uint16_t net, uint8_t dev,
-				Board::DigitalPin csn, Board::DigitalPin ce);
+	NRF24L01(uint16_t net, uint8_t dev);
 
 	/**
 	 * Get driver channel.
@@ -428,38 +426,38 @@ protected:
 	// Lowest-level methods to access NRF24L01 device
 	inline uint8_t read(uint8_t cmd)
 	{
-		start_transfer();
-		_status = transfer(cmd);
-		uint8_t result = transfer(uint8_t(Command::NOP));
-		end_transfer();
+		this->start_transfer();
+		_status = this->transfer(cmd);
+		uint8_t result = this->transfer(uint8_t(Command::NOP));
+		this->end_transfer();
 		return result;
 	}
 	inline void read(uint8_t cmd, void* buf, size_t size)
 	{
-		start_transfer();
-		_status = transfer(cmd);
-		transfer((uint8_t*) buf, size, uint8_t(Command::NOP));
-		end_transfer();
+		this->start_transfer();
+		_status = this->transfer(cmd);
+		this->transfer((uint8_t*) buf, size, uint8_t(Command::NOP));
+		this->end_transfer();
 	}
 	inline void write(uint8_t cmd)
 	{
-		start_transfer();
-		_status = transfer(cmd);
-		end_transfer();
+		this->start_transfer();
+		_status = this->transfer(cmd);
+		this->end_transfer();
 	}
 	inline void write(uint8_t cmd, uint8_t data)
 	{
-		start_transfer();
-		_status = transfer(cmd);
-		transfer(data);
-		end_transfer();
+		this->start_transfer();
+		_status = this->transfer(cmd);
+		this->transfer(data);
+		this->end_transfer();
 	}
 	inline void write(uint8_t cmd, const void* buf, size_t size)
 	{
-		start_transfer();
-		_status = transfer(cmd);
-		transfer((uint8_t*) buf, size);
-		end_transfer();
+		this->start_transfer();
+		_status = this->transfer(cmd);
+		this->transfer((uint8_t*) buf, size);
+		this->end_transfer();
 	}
 
 	// Command-level methods to access NRF24L01 device
@@ -504,9 +502,9 @@ protected:
 
 	inline status_t read_status()
 	{
-		start_transfer();
-		_status = transfer(uint8_t(Command::NOP));
-		end_transfer();
+		this->start_transfer();
+		_status = this->transfer(uint8_t(Command::NOP));
+		this->end_transfer();
 		return _status;
 	}
 
@@ -526,8 +524,8 @@ protected:
 		
 private:
 	static const uint8_t DEFAULT_CHANNEL = 64;
-	
-	IOPin _ce;
+
+	FastPin<CE> _ce;
 
 	addr_t _addr; //!< Current network and device address.
 	uint8_t _channel; //!< Current channel (device dependent.
@@ -541,8 +539,8 @@ private:
 	uint16_t _drops; //!< Dropped messages.
 };
 
-template<Board::ExternalInterruptPin IRQ>
-class IRQ_NRF24L01: public NRF24L01
+template<Board::DigitalPin CSN, Board::DigitalPin CE, Board::ExternalInterruptPin IRQ>
+class IRQ_NRF24L01: public NRF24L01<CSN, CE>
 {
 public:
 	/**
@@ -554,28 +552,263 @@ public:
 	 * @param[in] csn spi slave select pin number (default CS0).
 	 * @param[in] ce chip enable activates pin number (default GPIO P1-22).
 	 */
-	IRQ_NRF24L01(	uint16_t net, uint8_t dev,
-					Board::DigitalPin csn, Board::DigitalPin ce)
-		:	NRF24L01{net, dev, csn, ce},
+	IRQ_NRF24L01(uint16_t net, uint8_t dev)
+		:	NRF24L01<CSN, CE>{net, dev},
 			_irq_signal{InterruptTrigger::FALLING_EDGE}
 	{
-		IOPin irq{Board::DigitalPin(IRQ), PinMode::INPUT_PULLUP};
+		FastPin<Board::DigitalPin(IRQ)>{PinMode::INPUT_PULLUP};
 	}
 
 	inline void begin()
 	{
-		NRF24L01::begin();
+		NRF24L01<CSN, CE>::begin();
 		_irq_signal.enable();
 	}
 
 	inline void end()
 	{
 		_irq_signal.disable();
-		NRF24L01::end();
+		NRF24L01<CSN, CE>::end();
 	}
 
 private:
 	INTSignal<IRQ> _irq_signal;
 };
+
+using namespace NRF24L01Internals;
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+NRF24L01<CSN, CE>::NRF24L01(uint16_t net, uint8_t dev)
+	:	_ce{PinMode::OUTPUT, false},
+		_addr{net, dev},
+		_channel{DEFAULT_CHANNEL},
+		_dest{},
+		_status{0},
+		_state{State::POWER_DOWN_STATE},
+		_trans{},
+		_retrans{},
+		_drops{}
+{
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+void NRF24L01<CSN, CE>::begin()
+{
+	// Setup hardware features, channel, bitrate, retransmission, dynamic payload
+	write_register(Register::FEATURE, (_BV(EN_DPL) | _BV(EN_ACK_PAY) | _BV(EN_DYN_ACK)));
+	write_register(Register::RF_CH, _channel);
+	write_register(Register::RF_SETUP, RF_DR_2MBPS | RF_PWR_0DBM);
+	write_register(Register::SETUP_RETR, (DEFAULT_ARD << ARD) | (DEFAULT_ARC << ARC));
+	write_register(Register::DYNPD, DPL_PA);
+
+	// Setup hardware receive pipes address; network (16-bit), device (8-bit)
+	// P0: auto-acknowledge (see set_transmit_mode)
+	// P1: node address<network:device> with auto-acknowledge
+	// P2: broadcast<network:0>
+	addr_t rx_addr = _addr;
+	write_register(Register::SETUP_AW, AW_3BYTES);
+	write_register(Register::RX_ADDR_P1, &rx_addr, sizeof (rx_addr));
+	write_register(Register::RX_ADDR_P2, BROADCAST);
+	write_register(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
+	write_register(Register::EN_AA, _BV(ENAA_P1) | _BV(ENAA_P0));
+
+	// Ready to go
+	powerup();
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+void NRF24L01<CSN, CE>::powerup()
+{
+	if (_state != State::POWER_DOWN_STATE) return;
+	_ce.clear();
+
+	// Setup configuration for powerup and clear interrupts
+	write_register(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
+	Time::delay_ms(Tpd2stby_ms);
+	_state = State::STANDBY_STATE;
+
+	// Flush status
+	write_register(Register::STATUS, _BV(RX_DR) | _BV(TX_DS) | _BV(MAX_RT));
+	write_command(Command::FLUSH_TX);
+	write_command(Command::FLUSH_RX);
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+void NRF24L01<CSN, CE>::standby()
+{
+	if (_state == State::STANDBY_STATE) return;
+	_ce.clear();
+	_state = State::STANDBY_STATE;
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+void NRF24L01<CSN, CE>::powerdown()
+{
+	if (_state == State::POWER_DOWN_STATE) return;
+	_ce.clear();
+	write_register(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO));
+	_state = State::POWER_DOWN_STATE;
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+int NRF24L01<CSN, CE>::send(uint8_t dest, uint8_t port, const void* buf, size_t len)
+{
+	if (buf == 0 && len > 0) return EINVAL;
+	if (len > PAYLOAD_MAX) return EMSGSIZE;
+
+	// Setting transmit destination first (needs to ensure standby mode)
+	transmit_mode(dest);
+
+	// Write source address and payload to the transmit fifo
+	Command command = ((dest != BROADCAST) ? Command::W_TX_PAYLOAD : Command::W_TX_PAYLOAD_NO_ACK);
+	this->start_transfer();
+	_status = this->transfer(uint8_t(command));
+	this->transfer(_addr.device);
+	this->transfer(port);
+	this->transfer((uint8_t*) buf, len);
+	this->end_transfer();
+
+	_trans += 1;
+
+	// Check for auto-acknowledge pipe(0), and address setup and enable
+	if (dest != BROADCAST)
+	{
+		addr_t tx_addr(_addr.network, dest);
+		write_register(Register::RX_ADDR_P0, &tx_addr, sizeof (tx_addr));
+		write_register(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1) | _BV(ERX_P0));
+	}
+	
+	// Wait for transmission
+	status_t status = 0;
+	while (true)
+	{
+		status = read_status();
+		if (status.tx_ds || status.max_rt) break;
+		Time::yield();
+	}
+
+	bool data_sent = status.tx_ds;
+	
+	// Check for auto-acknowledge pipe(0) disable
+	if (dest != BROADCAST)
+		write_register(Register::EN_RXADDR, _BV(ERX_P2) | _BV(ERX_P1));
+
+	// Reset status bits
+	write_register(Register::STATUS, _BV(TX_DS) | _BV(MAX_RT));
+	
+	// Read retransmission counter and update
+	observe_tx_t observe = read_observe_tx();
+	_retrans += observe.arc_cnt;
+
+	// Check that the message was delivered
+	if (data_sent) return len;
+
+	// Failed to deliver
+	write_command(Command::FLUSH_TX);
+	_drops += 1;
+
+	return EIO;
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+int NRF24L01<CSN, CE>::recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t ms)
+{
+	// Run in receive mode
+	receive_mode();
+
+	// Check if there is data available on any pipe
+	uint32_t start = Time::millis();
+	while (!available())
+	{
+		if ((ms != 0) && (Time::since(start) > ms))
+			return ETIME;
+		Time::yield();
+	}
+	
+	// Try and read payload from FIFO
+	return read_fifo_payload(src, port, buf, size);
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+void NRF24L01<CSN, CE>::set_output_power_level(int8_t dBm)
+{
+	uint8_t pwr = RF_PWR_0DBM;
+	if (dBm < -12)
+		pwr = RF_PWR_18DBM;
+	else if (dBm < -6)
+		pwr = RF_PWR_12DBM;
+	else if (dBm < 0)
+		pwr = RF_PWR_6DBM;
+	write_register(Register::RF_SETUP, RF_DR_2MBPS | pwr);
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+void NRF24L01<CSN, CE>::transmit_mode(uint8_t dest)
+{
+	// Setup primary transmit address
+	addr_t tx_addr(_addr.network, dest);
+	write_register(Register::TX_ADDR, &tx_addr, sizeof (tx_addr));
+	
+	// Trigger the transmitter mode
+	if (_state != State::TX_STATE)
+	{
+		_ce.clear();
+		write_register(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP));
+		_ce.set();
+	}
+	
+	// Wait for the transmitter to become active
+	if (_state == State::STANDBY_STATE) Time::delay_us(Tstby2a_us);
+	_state = State::TX_STATE;
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+void NRF24L01<CSN, CE>::receive_mode()
+{
+	// Check already in receive mode
+	if (_state == State::RX_STATE) return;
+
+	// Configure primary receiver mode
+	write_register(Register::CONFIG, _BV(EN_CRC) | _BV(CRCO) | _BV(PWR_UP) | _BV(PRIM_RX));
+	_ce.set();
+	if (_state == State::STANDBY_STATE) Time::delay_us(Tstby2a_us);
+	_state = State::RX_STATE;
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+bool NRF24L01<CSN, CE>::available()
+{
+	// Check the receiver fifo
+	if (read_fifo_status().rx_empty) return false;
+
+	// Sanity check the size of the payload. Might require a flush
+	if (read_command(Command::R_RX_PL_WID) <= DEVICE_PAYLOAD_MAX) return true;
+	write_command(Command::FLUSH_RX);
+	return false;
+}
+
+template<Board::DigitalPin CSN, Board::DigitalPin CE>
+int NRF24L01<CSN, CE>::read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t size)
+{
+	// Check for payload error from device (Tab. 20, pp. 51, R_RX_PL_WID)
+	uint8_t count = read_command(Command::R_RX_PL_WID) - 2;
+	if ((count > PAYLOAD_MAX) || (count > size))
+	{
+		write_command(Command::FLUSH_RX);
+		return EMSGSIZE;
+	}
+	
+	// Data is available, check if this a broadcast or not
+	_dest = (read_status().rx_p_no == 1 ? _addr.device : BROADCAST);
+	
+	// Read the source address, port and payload
+	this->start_transfer();
+	_status = this->transfer(uint8_t(Command::R_RX_PAYLOAD));
+	src = this->transfer(0);
+	port = this->transfer(0);
+	this->transfer((uint8_t*) buf, count, uint8_t(Command::NOP));
+	this->end_transfer();
+	return count;
+}
 
 #endif /* NRF24L01_HH */

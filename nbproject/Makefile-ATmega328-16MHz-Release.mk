@@ -38,7 +38,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/Events.o \
 	${OBJECTDIR}/cores/fastarduino/FastSPI.o \
 	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
-	${OBJECTDIR}/cores/fastarduino/NRF24L01.o \
 	${OBJECTDIR}/cores/fastarduino/RTT.o \
 	${OBJECTDIR}/cores/fastarduino/SPI.o \
 	${OBJECTDIR}/cores/fastarduino/WinBond.o \
@@ -91,11 +90,6 @@ ${OBJECTDIR}/cores/fastarduino/LinkedList.o: nbproject/Makefile-${CND_CONF}.mk c
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/LinkedList.o cores/fastarduino/LinkedList.cpp
-
-${OBJECTDIR}/cores/fastarduino/NRF24L01.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/NRF24L01.cpp 
-	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
-	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/NRF24L01.o cores/fastarduino/NRF24L01.cpp
 
 ${OBJECTDIR}/cores/fastarduino/RTT.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/RTT.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
