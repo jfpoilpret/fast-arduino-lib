@@ -51,12 +51,15 @@ private:
 
 // This class maps to a specific pin
 // SRAM size supposed to be 0
-//TODO add method to change PinMode (should not be fixed at ctor time only)
 template<Board::DigitalPin DPIN>
 class FastPin
 {
 public:
 	FastPin(PinMode mode, bool value = false) INLINE
+	{
+		set_mode(mode, value);
+	}
+	void set_mode(PinMode mode, bool value = false) INLINE
 	{
 		if (mode == PinMode::OUTPUT)
 			set_ioreg_bit(_DDR, _BIT);
@@ -91,6 +94,19 @@ private:
 	static const constexpr uint8_t _BIT = Board::BIT(DPIN);
 };
 
+template<>
+class FastPin<Board::DigitalPin::NONE>
+{
+public:
+	FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
+	void set() INLINE {}
+	void clear() INLINE {}
+	void toggle() INLINE {}
+	bool value() INLINE
+	{
+		return false;
+	}
+};
 
 #endif	/* FASTIO_HH */
 

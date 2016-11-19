@@ -58,7 +58,8 @@ namespace Board
 		D8,				// PB0
 		D9,				// PB1
 		D10,			// PB2
-		LED = D7
+		LED = D7,
+		NONE = 0xFF
 	};
 
 #define _SELECT_PIN(DPIN, ARG0, ARG1)	\

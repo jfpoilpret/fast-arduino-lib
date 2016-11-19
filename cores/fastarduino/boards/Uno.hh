@@ -86,7 +86,8 @@ namespace Board
 		D17,			// PC3-A3
 		D18,			// PC4-A4
 		D19,			// PC5-A5
-		LED = D13
+		LED = D13,
+		NONE = 0xFF
 	};
 
 #define _SELECT_PIN(DPIN, ARG0, ARG1, ARG2)		\

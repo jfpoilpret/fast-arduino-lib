@@ -113,7 +113,8 @@ namespace Board
 		D67 = 69,		// PK5/A13
 		D68 = 70,		// PK6/A14
 		D69 = 71,		// PK7/A15
-		LED = D13
+		LED = D13,
+		NONE = 0XFF
 	};
 
 #define _SELECT_PIN(DPIN, ARG_E, ARG_H, ARG_B, ARG_A, ARG_C, ARG_D, ARG_L, ARG_F, ARG_K, ARG_J, ARG_G)	\
