@@ -36,7 +36,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/cores/fastarduino/Events.o \
-	${OBJECTDIR}/cores/fastarduino/FastSPI.o \
 	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
 	${OBJECTDIR}/cores/fastarduino/RTT.o \
 	${OBJECTDIR}/cores/fastarduino/SPI.o \
@@ -79,11 +78,6 @@ ${OBJECTDIR}/cores/fastarduino/Events.o: nbproject/Makefile-${CND_CONF}.mk cores
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/Events.o cores/fastarduino/Events.cpp
-
-${OBJECTDIR}/cores/fastarduino/FastSPI.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/FastSPI.cpp 
-	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/FastSPI.o cores/fastarduino/FastSPI.cpp
 
 ${OBJECTDIR}/cores/fastarduino/LinkedList.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/LinkedList.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino

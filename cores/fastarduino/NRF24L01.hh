@@ -27,7 +27,7 @@
 #include "utilities.hh"
 #include "errors.hh"
 #include "time.hh"
-#include "FastSPI.hh"
+#include "SPI.hh"
 #include "INT.hh"
 #include "NRF24L01_internals.hh"
 

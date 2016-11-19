@@ -1,4 +1,4 @@
-#include "FastSPI.hh"
+#include "SPI.hh"
 
 #ifdef SPDR
 // Handle SPI for ATmega
