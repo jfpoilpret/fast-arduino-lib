@@ -8,7 +8,7 @@
 #include <fastarduino/FastIO.hh>
 #include <fastarduino/RTT.hh>
 #include <fastarduino/time.hh>
-#include <fastarduino/NRF24L01.hh>
+#include <fastarduino/devices/NRF24L01.hh>
 #include <fastarduino/uart.hh>
 
 static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;

@@ -8,7 +8,7 @@
 #include <fastarduino/FastIO.hh>
 #include <fastarduino/RTT.hh>
 #include <fastarduino/time.hh>
-#include <fastarduino/NRF24L01.hh>
+#include <fastarduino/devices/NRF24L01.hh>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HAS_TRACE 1

@@ -7,14 +7,15 @@
         <itemPath>cores/fastarduino/boards/Mega.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
       </logicalFolder>
-      <logicalFolder name="f1" displayName="devices" projectFiles="true">
-        <itemPath>cores/fastarduino/NRF24L01.hh</itemPath>
-        <itemPath>cores/fastarduino/NRF24L01_internals.hh</itemPath>
-        <itemPath>cores/fastarduino/WinBond.hh</itemPath>
+      <logicalFolder name="devices" displayName="devices" projectFiles="true">
+        <itemPath>cores/fastarduino/devices/NRF24L01.hh</itemPath>
+        <itemPath>cores/fastarduino/devices/NRF24L01_internals.hh</itemPath>
+        <itemPath>cores/fastarduino/devices/WinBond.hh</itemPath>
       </logicalFolder>
       <itemPath>cores/fastarduino/Board.hh</itemPath>
       <itemPath>cores/fastarduino/Events.cpp</itemPath>
       <itemPath>cores/fastarduino/Events.hh</itemPath>
+      <itemPath>cores/fastarduino/ExternalInterrupt.hh</itemPath>
       <itemPath>cores/fastarduino/FastIO.hh</itemPath>
       <itemPath>cores/fastarduino/INT.hh</itemPath>
       <itemPath>cores/fastarduino/IO.hh</itemPath>
@@ -50,7 +51,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>cores/fastarduino/ExternalInterrupt.hh</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -140,9 +140,9 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01_internals.hh"
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
             ex="false"
             tool="3"
             flavor2="0">
@@ -159,7 +159,7 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -274,9 +274,9 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01_internals.hh"
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
             ex="false"
             tool="3"
             flavor2="0">
@@ -293,7 +293,7 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -408,9 +408,9 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01_internals.hh"
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
             ex="false"
             tool="3"
             flavor2="0">
@@ -427,7 +427,7 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -542,9 +542,9 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01_internals.hh"
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
             ex="false"
             tool="3"
             flavor2="0">
@@ -561,7 +561,7 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -676,9 +676,9 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/NRF24L01_internals.hh"
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
             ex="false"
             tool="3"
             flavor2="0">
@@ -695,7 +695,7 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/WinBond.hh" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"

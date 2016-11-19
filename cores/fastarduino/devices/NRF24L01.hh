@@ -24,11 +24,11 @@
 
 #include <stddef.h>
 #include <util/delay.h>
-#include "utilities.hh"
-#include "errors.hh"
-#include "time.hh"
-#include "SPI.hh"
-#include "INT.hh"
+#include "../utilities.hh"
+#include "../errors.hh"
+#include "../time.hh"
+#include "../SPI.hh"
+#include "../INT.hh"
 #include "NRF24L01_internals.hh"
 
 /**

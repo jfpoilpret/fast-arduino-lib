@@ -2,7 +2,7 @@
  * Software UART test sample.
  */
 
-#include <fastarduino/WinBond.hh>
+#include <fastarduino/devices/WinBond.hh>
 #include <util/delay.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
