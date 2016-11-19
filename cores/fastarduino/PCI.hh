@@ -5,6 +5,7 @@
 
 #include "utilities.hh"
 #include "Board.hh"
+#include "ExternalInterrupt.hh"
 
 // Principles:
 // One PCI<> instance for each PCINT vector
@@ -21,36 +22,30 @@ ISR(PCINT ## PORT ## _vect)										\
 	PCI<Board::PCIPort::PCI ## PORT>::handle();\
 }
 
+// This macro is internally used in further macros and should not be used in your programs
+#define _USE_EMPTY_PCI(PORT)										\
+EMPTY_INTERRUPT(PCINT ## PORT ## _vect)
+
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp, or in main.cpp) 
 // to indicate you want to use PCI for a given PORT in your program, hence you need the proper 
 // ISR vector correctly defined
 #define USE_PCI0()	_USE_PCI(0)
 #define USE_PCI1()	_USE_PCI(1)
 #define USE_PCI2()	_USE_PCI(2)
+#define USE_PCI3()	_USE_PCI(3)
 
-//TODO Provide empty vector implementations (useful just for wake up from sleep, without any handler)
-//TODO Provide PCISignal<> class (no handler)
-
-class PCIHandler
-{
-public:
-	virtual bool on_pin_change() = 0;
-};
+// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
+// want to use PCISignal for a given PCI port in your program, hence you need the proper ISR vector correctly defined
+// Use these when you want an PCI to wake up from sleep but you don't need any handler to be executed
+#define USE_EMPTY_PCI0()	_USE_EMPTY_PCI(0)
+#define USE_EMPTY_PCI1()	_USE_EMPTY_PCI(1)
+#define USE_EMPTY_PCI2()	_USE_EMPTY_PCI(2)
+#define USE_EMPTY_PCI3()	_USE_EMPTY_PCI(3)
 
 template<Board::PCIPort PORT>
-class PCI
+class PCISignal
 {
 public:
-	PCI(PCIHandler* handler = 0)
-	{
-		_handler = handler;
-	}
-	
-	inline void set_handler(PCIHandler* handler)
-	{
-		_handler = handler;
-	}
-	
 	inline void enable()
 	{
 		synchronized set_mask(_PCICR, _PCIE);
@@ -109,8 +104,24 @@ private:
 	static const constexpr REGISTER	_PCIFR = Board::PCIFR_REG();
 	static const constexpr uint8_t	_PCIF = Board::PCIFR_MSK(PORT);
 	static const constexpr REGISTER _PCMSK = Board::PCMSK_REG(PORT);
+};
+
+template<Board::PCIPort PORT>
+class PCI: public PCISignal<PORT>
+{
+public:
+	PCI(ExternalInterruptHandler* handler = 0)
+	{
+		_handler = handler;
+	}
 	
-	static PCIHandler* _handler;
+	inline void set_handler(ExternalInterruptHandler* handler)
+	{
+		_handler = handler;
+	}
+	
+private:
+	static ExternalInterruptHandler* _handler;
 	static inline void handle()
 	{
 		if (_handler) _handler->on_pin_change();
@@ -129,12 +140,7 @@ private:
 };
 
 template<Board::PCIPort PORT>
-PCIHandler* PCI<PORT>::_handler = 0;
-
-//TODO More functional subclasses to:
-// - allow detection of PCI mode (RAISE, LOWER...)
-// - allow chaining PCI handling to several handlers
-//TODO this is used when we have different handlers for the same port
+ExternalInterruptHandler* PCI<PORT>::_handler = 0;
 
 #endif	/* PCI_HH */
 

@@ -150,7 +150,7 @@ namespace Soft
 	};
 
 	template<Board::InterruptPin RX>
-	class UARX: public AbstractUARX, public PCIHandler
+	class UARX: public AbstractUARX, public ExternalInterruptHandler
 	{
 	public:
 		static const constexpr Board::DigitalPin DPIN = (Board::DigitalPin) RX;

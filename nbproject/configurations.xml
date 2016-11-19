@@ -50,6 +50,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>cores/fastarduino/ExternalInterrupt.hh</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -123,6 +124,11 @@
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/ExternalInterrupt.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -253,6 +259,11 @@
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/ExternalInterrupt.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/INT.hh" ex="false" tool="3" flavor2="0">
@@ -381,6 +392,11 @@
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/ExternalInterrupt.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -511,6 +527,11 @@
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/ExternalInterrupt.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/INT.hh" ex="false" tool="3" flavor2="0">
@@ -639,6 +660,11 @@
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/ExternalInterrupt.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>

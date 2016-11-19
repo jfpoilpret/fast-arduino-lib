@@ -28,7 +28,7 @@ USE_INT0()
 #error "Current target is not yet supported!"
 #endif
 
-class PinChangeHandler: public INTHandler
+class PinChangeHandler: public ExternalInterruptHandler
 {
 public:
 	PinChangeHandler()

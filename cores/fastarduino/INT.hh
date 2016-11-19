@@ -5,11 +5,11 @@
 
 #include "utilities.hh"
 #include "Board.hh"
+#include "ExternalInterrupt.hh"
 
 // Principles:
 // One INT<> instance for each INT vector
 // Handling is delegated by INT<> to a INTHandler instance
-//TODO factor PCIHandler and INTHandler into one unique handler class
 
 // This macro is internally used in further macros and should not be used in your programs
 #define _USE_INT(INT_NUM)										\
@@ -106,29 +106,23 @@ private:
 	static const constexpr uint8_t	_INTF = Board::EIFR_MASK(PIN);
 };
 
-class INTHandler
-{
-public:
-	virtual bool on_pin_change() = 0;
-};
-
 template<Board::ExternalInterruptPin PIN>
 class INT: public INTSignal<PIN>
 {
 public:
-	INT(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE, INTHandler* handler = 0)
+	INT(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE, ExternalInterruptHandler* handler = 0)
 		:INTSignal<PIN>{trigger}
 	{
 		_handler = handler;
 	}
 	
-	inline void set_handler(INTHandler* handler)
+	inline void set_handler(ExternalInterruptHandler* handler)
 	{
 		synchronized _handler = handler;
 	}
 
 private:
-	static INTHandler* _handler;
+	static ExternalInterruptHandler* _handler;
 	static inline void handle()
 	{
 		if (_handler) _handler->on_pin_change();
@@ -159,7 +153,7 @@ private:
 };
 
 template<Board::ExternalInterruptPin INT_NUM>
-INTHandler* INT<INT_NUM>::_handler = 0;
+ExternalInterruptHandler* INT<INT_NUM>::_handler = 0;
 
 #endif	/* INT_HH */
 

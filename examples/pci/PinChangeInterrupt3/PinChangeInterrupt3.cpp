@@ -58,7 +58,7 @@ USE_PCI1()
 #error "Current target is not yet supported!"
 #endif
 
-class PinChangeHandler: public PCIHandler
+class PinChangeHandler: public ExternalInterruptHandler
 {
 public:
 	PinChangeHandler():_switches{SWITCH_PORT, 0x00, 0xFF}, _leds{LED_PORT, 0xFF} {}
