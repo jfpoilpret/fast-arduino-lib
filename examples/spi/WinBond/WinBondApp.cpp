@@ -56,7 +56,7 @@ int main()
 	
 	out << "Started\n";
 
-	FastSPI::init();
+	SPI::init();
 	WinBond<CS> flash;
 	_delay_ms(1000);
 	

@@ -82,7 +82,7 @@ int main()
 	trace << "RTT started\n" << flush;
 
 	// Start SPI and setup NRF24
-	FastSPI::init();
+	SPI::init();
 	NRF24L01<PIN_CSN, PIN_CE> rf{NETWORK, self_device};
 	rf.begin();
 	trace << "NRF24L01+ started\n" << flush;
