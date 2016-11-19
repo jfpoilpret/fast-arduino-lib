@@ -119,7 +119,7 @@ namespace FastSPI
 	class SPIDevice: public AbstractSPIDevice
 	{
 	protected:
-		SPIDevice():_cs{PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW} {}
+		SPIDevice() INLINE:_cs{PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW} {}
 
 #ifdef SPDR
 		inline void start_transfer()
@@ -136,7 +136,7 @@ namespace FastSPI
 			USICR = _usicr;
 		}
 #endif
-		inline void end_transfer()
+		inline void end_transfer() INLINE
 		{
 			_cs.toggle();
 		}

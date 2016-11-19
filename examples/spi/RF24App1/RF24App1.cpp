@@ -9,18 +9,37 @@
 #include <fastarduino/RTT.hh>
 #include <fastarduino/time.hh>
 #include <fastarduino/NRF24L01.hh>
-#include <fastarduino/uart.hh>
 
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#define HAS_TRACE 1
 static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;
-
 static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8;
 static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
-
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 
+USE_RTT_TIMER2();
+#elif defined (BREADBOARD_ATTINYX4)
+#define HAS_TRACE 0
+static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;
+static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D2;
+static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D3;
+static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER0;
+
+// Define vectors we need in the example
+USE_RTT_TIMER0();
+#else
+#error "Current target is not yet supported!"
+#endif
+
+#if HAS_TRACE
+#include <fastarduino/uart.hh>
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
+USE_UATX0();
+#else
+#include <fastarduino/empty_streams.hh>
+#endif
 
 static const uint16_t NETWORK = 0xFFFF;
 static const uint8_t MASTER = 0x01;
@@ -29,10 +48,6 @@ static const uint8_t SLAVE = 0x02;
 static const uint32_t REPLY_MAX_WAIT_MS = 1000L;
 static const uint32_t RECEIVE_MAX_WAIT_MS = 10000L;
 static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
-
-// Define vectors we need in the example
-USE_RTT_TIMER2();
-USE_UATX0()
 
 static bool is_master()
 {
@@ -45,10 +60,14 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
+#if HAS_TRACE
 	// Setup traces
 	UATX<Board::USART::USART0> uatx{output_buffer};
 	uatx.begin(115200);
 	auto trace = uatx.fout();
+#else
+	EmptyOutput trace;
+#endif
 	
 	bool master = is_master();
 	uint8_t self_device = master ? MASTER : SLAVE;
@@ -56,7 +75,7 @@ int main()
 	trace << "RF24App1 started as " << (master ? "Master" : "Slave") << endl << flush;
 
 	// Setup RTT
-	RTT<Board::Timer::TIMER2> rtt;
+	RTT<RTT_TIMER> rtt;
 	rtt.begin();
 	// Set RTT instance as default clock from now
 	Time::set_clock(rtt);
