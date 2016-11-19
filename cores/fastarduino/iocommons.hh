@@ -1,7 +1,7 @@
 #ifndef IOCOMMONS_HH
 #define IOCOMMONS_HH
 
-enum class PinMode
+enum class PinMode: uint8_t
 {
 	INPUT,
 	INPUT_PULLUP,
