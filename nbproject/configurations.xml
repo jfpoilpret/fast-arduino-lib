@@ -28,6 +28,7 @@
       <itemPath>cores/fastarduino/RTT.hh</itemPath>
       <itemPath>cores/fastarduino/SPI.cpp</itemPath>
       <itemPath>cores/fastarduino/SPI.hh</itemPath>
+      <itemPath>cores/fastarduino/empty_streams.hh</itemPath>
       <itemPath>cores/fastarduino/errors.hh</itemPath>
       <itemPath>cores/fastarduino/iocommons.hh</itemPath>
       <itemPath>cores/fastarduino/main.cpp</itemPath>
@@ -169,6 +170,8 @@
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
@@ -299,6 +302,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -431,6 +436,8 @@
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
@@ -562,6 +569,8 @@
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/iocommons.hh" ex="false" tool="3" flavor2="0">
@@ -692,6 +701,8 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.hh" ex="false" tool="3" flavor2="0">
       </item>
