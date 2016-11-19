@@ -49,7 +49,9 @@ What the project already has:
 - Hardware UART support (for MCU that support it, ie not for ATtiny)
 - Software UART support (for all MCU)
 - "C++ like" Input/Output streams (used by UART implementations)
-- SPI master support (with WinBond flash memory as a first device example)
+- SPI master support
+- WinBond flash memory support
+- NRF24L01 device support
 
 As of now, the following platforms are supported (and tested):
 
@@ -77,8 +79,8 @@ The roadmap of supported features is the following:
 7. SPI support (done)
 8. External Pin Interrupt support (done)
 9. Real Time Timer support (done)
+10. NRF24L01P support (done)
 
-10. NRF24L01P support (on going)
 11. Trace support (including PROGMEM strings support)
 12. EEPROM support
 13. Support of bandgap reference
