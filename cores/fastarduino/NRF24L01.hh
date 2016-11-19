@@ -56,7 +56,7 @@
  * IMPORTANT: PCI pin is not yet supported actually.
  */
 template<Board::DigitalPin CSN, Board::DigitalPin CE>
-class NRF24L01: private FastSPI::SPIDevice<CSN>
+class NRF24L01: private SPI::SPIDevice<CSN>
 {
 public:
 	/** Broadcast device address. */

@@ -4,9 +4,8 @@
 #include "Board.hh"
 #include "FastIO.hh"
 
-//TODO Make a SPIMaster class to have ctor as SPIDevice::init() ?
 //TODO Make a SPISlave class with a data handler/buffer
-namespace FastSPI
+namespace SPI
 {
 	void init();
 	

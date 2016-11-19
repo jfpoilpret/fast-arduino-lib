@@ -22,7 +22,7 @@
 
 // Tested with W25Q80BV (8 Mbit)
 template<Board::DigitalPin CS>
-class WinBond: public FastSPI::SPIDevice<CS, FastSPI::ChipSelect::ACTIVE_LOW, FastSPI::ClockRate::CLOCK_DIV_2>
+class WinBond: public SPI::SPIDevice<CS, SPI::ChipSelect::ACTIVE_LOW, SPI::ClockRate::CLOCK_DIV_2>
 {
 public:
 	WinBond() {}
