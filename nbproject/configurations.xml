@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <logicalFolder name="f1" displayName="devices" projectFiles="true">
-      <itemPath>cores/fastarduino/NRF24L01.hh</itemPath>
-      <itemPath>cores/fastarduino/NRF24L01_internals.hh</itemPath>
-      <itemPath>cores/fastarduino/WinBond.hh</itemPath>
-    </logicalFolder>
     <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
         <itemPath>cores/fastarduino/boards/ATtinyX4.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Mega.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="devices" projectFiles="true">
+        <itemPath>cores/fastarduino/NRF24L01.hh</itemPath>
+        <itemPath>cores/fastarduino/NRF24L01_internals.hh</itemPath>
+        <itemPath>cores/fastarduino/WinBond.hh</itemPath>
       </logicalFolder>
       <itemPath>cores/fastarduino/Board.hh</itemPath>
       <itemPath>cores/fastarduino/Events.cpp</itemPath>
