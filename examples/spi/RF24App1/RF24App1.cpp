@@ -51,7 +51,7 @@ static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
 
 static bool is_master()
 {
-	FastPin<PIN_CONFIG> config{PinMode::INPUT_PULLUP};
+	FastPinType<PIN_CONFIG>::TYPE config{PinMode::INPUT_PULLUP};
 	return config.value();
 }
 

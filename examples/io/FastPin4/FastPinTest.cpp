@@ -26,14 +26,14 @@ static inline uint8_t calculate_pattern(uint8_t num_bits)
 }
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static constexpr const REGISTER LED_PORT = Board::PORT_D;
-static constexpr const REGISTER SWITCH_PORT = Board::PORT_C;
+static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
+static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_C;
 #elif defined (ARDUINO_MEGA)
-static constexpr const REGISTER LED_PORT = Board::PORT_A;
-static constexpr const REGISTER SWITCH_PORT = Board::PORT_D;
+static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
+static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_D;
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const REGISTER LED_PORT = Board::PORT_A;
-static constexpr const REGISTER SWITCH_PORT = Board::PORT_B;
+static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
+static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
 #else
 #error "Current target is not yet supported!"
 #endif

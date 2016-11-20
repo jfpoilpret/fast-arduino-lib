@@ -38,7 +38,7 @@ USE_UATX0()
 
 static bool is_master()
 {
-	FastPin<PIN_CONFIG> config{PinMode::INPUT_PULLUP};
+	typename FastPinType<PIN_CONFIG>::TYPE config{PinMode::INPUT_PULLUP};
 	return config.value();
 }
 

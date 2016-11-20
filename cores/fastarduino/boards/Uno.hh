@@ -57,9 +57,53 @@ namespace Board
 	//====
 	// IO
 	//====
-	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
-	constexpr const REGISTER PORT_C = _SELECT_REG(PINC);
-	constexpr const REGISTER PORT_D = _SELECT_REG(PIND);
+	enum class Port: uint8_t
+	{
+		PORT_B = 0,
+		PORT_C,
+		PORT_D,
+		NONE = 0xFF
+	};
+	
+	template<Port P>
+	struct Port_trait
+	{
+		static constexpr const REGISTER PIN{};
+		static constexpr const REGISTER DDR{};
+		static constexpr const REGISTER PORT{};
+		static constexpr const uint8_t DPIN_MASK = 0x00;
+	};
+	
+	template<>
+	struct Port_trait<Port::PORT_B>
+	{
+		static constexpr const REGISTER PIN = _SELECT_REG(PINB);
+		static constexpr const REGISTER DDR = _SELECT_REG(DDRB);
+		static constexpr const REGISTER PORT = _SELECT_REG(PORTB);
+		static constexpr const uint8_t DPIN_MASK = 0xFF;
+	};
+	
+	template<>
+	struct Port_trait<Port::PORT_C>
+	{
+		static constexpr const REGISTER PIN = _SELECT_REG(PINC);
+		static constexpr const REGISTER DDR = _SELECT_REG(DDRC);
+		static constexpr const REGISTER PORT = _SELECT_REG(PORTC);
+		static constexpr const uint8_t DPIN_MASK = 0x7F;
+	};
+	
+	template<>
+	struct Port_trait<Port::PORT_D>
+	{
+		static constexpr const REGISTER PIN = _SELECT_REG(PIND);
+		static constexpr const REGISTER DDR = _SELECT_REG(DDRD);
+		static constexpr const REGISTER PORT = _SELECT_REG(PORTD);
+		static constexpr const uint8_t DPIN_MASK = 0xFF;
+	};
+	
+//	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
+//	constexpr const REGISTER PORT_C = _SELECT_REG(PINC);
+//	constexpr const REGISTER PORT_D = _SELECT_REG(PIND);
 
 	/**
 	 * Digital pin symbols
@@ -90,13 +134,67 @@ namespace Board
 		NONE = 0xFF
 	};
 
-#define _SELECT_PIN(DPIN, ARG0, ARG1, ARG2)		\
-	(	DPIN < DigitalPin::D8 ? ARG0 :	\
-		DPIN < DigitalPin::D14 ? ARG1 :	\
+	template<DigitalPin DPIN>
+	struct DigitalPin_trait
+	{
+		static constexpr const Port PORT = Port::PORT_B;
+		static constexpr const uint8_t BIT = 0;
+		//TODO other traits here? e.g. INT, PCI, USART...
+	};
+	template<Port P, uint8_t B>
+	struct DigitalPin_trait_impl
+	{
+		static constexpr const Port PORT = P;
+		static constexpr const uint8_t BIT = B;
+	};
+
+	template<> struct DigitalPin_trait<DigitalPin::NONE>: public DigitalPin_trait_impl<Port::NONE, 0> {};
+	
+	template<> struct DigitalPin_trait<DigitalPin::D0>: public DigitalPin_trait_impl<Port::PORT_D, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D1>: public DigitalPin_trait_impl<Port::PORT_D, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D2>: public DigitalPin_trait_impl<Port::PORT_D, 2> {};
+	template<> struct DigitalPin_trait<DigitalPin::D3>: public DigitalPin_trait_impl<Port::PORT_D, 3> {};
+	template<> struct DigitalPin_trait<DigitalPin::D4>: public DigitalPin_trait_impl<Port::PORT_D, 4> {};
+	template<> struct DigitalPin_trait<DigitalPin::D5>: public DigitalPin_trait_impl<Port::PORT_D, 5> {};
+	template<> struct DigitalPin_trait<DigitalPin::D6>: public DigitalPin_trait_impl<Port::PORT_D, 6> {};
+	template<> struct DigitalPin_trait<DigitalPin::D7>: public DigitalPin_trait_impl<Port::PORT_D, 7> {};
+	
+	template<> struct DigitalPin_trait<DigitalPin::D8>: public DigitalPin_trait_impl<Port::PORT_B, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D9>: public DigitalPin_trait_impl<Port::PORT_B, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D10>: public DigitalPin_trait_impl<Port::PORT_B, 2> {};
+	template<> struct DigitalPin_trait<DigitalPin::D11>: public DigitalPin_trait_impl<Port::PORT_B, 3> {};
+	template<> struct DigitalPin_trait<DigitalPin::D12>: public DigitalPin_trait_impl<Port::PORT_B, 4> {};
+	template<> struct DigitalPin_trait<DigitalPin::D13>: public DigitalPin_trait_impl<Port::PORT_B, 5> {};
+	
+	template<> struct DigitalPin_trait<DigitalPin::D14>: public DigitalPin_trait_impl<Port::PORT_C, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D15>: public DigitalPin_trait_impl<Port::PORT_C, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D16>: public DigitalPin_trait_impl<Port::PORT_C, 2> {};
+	template<> struct DigitalPin_trait<DigitalPin::D17>: public DigitalPin_trait_impl<Port::PORT_C, 3> {};
+	template<> struct DigitalPin_trait<DigitalPin::D18>: public DigitalPin_trait_impl<Port::PORT_C, 4> {};
+	template<> struct DigitalPin_trait<DigitalPin::D19>: public DigitalPin_trait_impl<Port::PORT_C, 5> {};
+	
+#define _SELECT_PORT(PORT, ARG0, ARG1, ARG2)	\
+	(	PORT == Port::PORT_B ? ARG0 :			\
+		PORT == Port::PORT_C ? ARG1 :			\
+		ARG2)
+
+#define _SELECT_PIN(DPIN, ARG0, ARG1, ARG2)	\
+	(	DPIN < DigitalPin::D8 ? ARG0 :		\
+		DPIN < DigitalPin::D14 ? ARG1 :		\
 		ARG2)
 	
 #define _SELECT_PIN_REG(DPIN, REG0, REG1, REG2)		\
 	_SELECT_REG(_SELECT_PIN(DPIN, REG0, REG1, REG2))
+
+	constexpr REGISTER PIN_REG(Port port)
+	{
+		return _SELECT_REG(_SELECT_PORT(port, PINB, PINC, PIND));
+	}
+	
+	constexpr Port PORT(DigitalPin pin)
+	{
+		return _SELECT_PIN(pin, Port::PORT_D, Port::PORT_B, Port::PORT_C);
+	}
 
 	constexpr REGISTER PIN_REG(DigitalPin pin)
 	{

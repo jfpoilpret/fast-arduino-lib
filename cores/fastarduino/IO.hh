@@ -9,7 +9,7 @@ class AbstractPort
 {
 public:
 	AbstractPort() INLINE {}
-	AbstractPort(REGISTER PIN) INLINE : _PIN{PIN} {}
+	AbstractPort(Board::Port port) INLINE : _PIN{Board::PIN_REG(port)} {}
 	
 protected:
 	REGISTER PIN() INLINE
@@ -35,11 +35,11 @@ class IOPort: public AbstractPort
 {
 public:
 	IOPort() INLINE {}
-	IOPort(REGISTER PIN) INLINE : AbstractPort{PIN} {}
-	IOPort(REGISTER PIN, uint8_t ddr, uint8_t port = 0) INLINE : AbstractPort{PIN}
+	IOPort(Board::Port port) INLINE : AbstractPort{port} {}
+	IOPort(Board::Port port, uint8_t ddr, uint8_t value_port = 0) INLINE : AbstractPort{port}
 	{
 		set_DDR(ddr);
-		set_PORT(port);
+		set_PORT(value_port);
 	}
 	
 	void set_PORT(uint8_t port) INLINE
@@ -74,13 +74,13 @@ class IOMaskedPort: public AbstractPort
 {
 public:
 	IOMaskedPort() INLINE {}
-	IOMaskedPort(REGISTER PIN, uint8_t mask = 0) INLINE
-	: AbstractPort(PIN), _MASK(mask) {}
-	IOMaskedPort(REGISTER PIN, uint8_t mask, uint8_t ddr, uint8_t port = 0) INLINE 
-	: AbstractPort(PIN), _MASK(mask)
+	IOMaskedPort(Board::Port port, uint8_t mask = 0) INLINE
+	: AbstractPort(port), _MASK(mask) {}
+	IOMaskedPort(Board::Port port, uint8_t mask, uint8_t ddr, uint8_t value_port = 0) INLINE 
+	: AbstractPort(port), _MASK(mask)
 	{
 		set_DDR(ddr);
-		set_PORT(port);
+		set_PORT(value_port);
 	}
 	void set_PORT(uint8_t port) INLINE
 	{
@@ -132,7 +132,7 @@ class IOPin: public AbstractPort
 public:
 	IOPin() INLINE : _BIT{0} {}
 	IOPin(Board::DigitalPin DPIN, PinMode mode, bool value = false) INLINE
-	: AbstractPort{Board::PIN_REG(DPIN)}, _BIT(_BV(Board::BIT(DPIN)))
+	: AbstractPort{Board::PORT(DPIN)}, _BIT(_BV(Board::BIT(DPIN)))
 	{
 		pin_mode(mode, value);
 	}

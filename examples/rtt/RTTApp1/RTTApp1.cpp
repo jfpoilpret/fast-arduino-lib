@@ -34,7 +34,7 @@ const constexpr uint32_t BLINK_DELAY = 10000;
 template<Board::Timer TIMER>
 void check_timer()
 {
-	FastPin<Board::DigitalPin::LED> led{PinMode::OUTPUT, false};
+	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
 	RTT<TIMER> rtt;
 	rtt.begin();
 	// Event Loop

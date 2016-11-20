@@ -525,7 +525,7 @@ protected:
 private:
 	static const uint8_t DEFAULT_CHANNEL = 64;
 
-	FastPin<CE> _ce;
+	typename FastPinType<CE>::TYPE _ce;
 
 	addr_t _addr; //!< Current network and device address.
 	uint8_t _channel; //!< Current channel (device dependent.
@@ -556,7 +556,7 @@ public:
 		:	NRF24L01<CSN, CE>{net, dev},
 			_irq_signal{InterruptTrigger::FALLING_EDGE}
 	{
-		FastPin<Board::DigitalPin(IRQ)>{PinMode::INPUT_PULLUP};
+		typename FastPinType<Board::DigitalPin(IRQ)>::TYPE{PinMode::INPUT_PULLUP};
 	}
 
 	inline void begin()

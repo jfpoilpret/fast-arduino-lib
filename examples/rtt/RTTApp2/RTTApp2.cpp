@@ -36,7 +36,7 @@ int main()
 	// The additional 0.5x are due to the wake-up time at every interrupt (every ms)
 	Power::set_default_mode(Board::SleepMode::POWER_SAVE);
 	
-	FastPin<Board::DigitalPin::LED> led{PinMode::OUTPUT, false};
+	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
 //	RTT<Board::Timer::TIMER0> rtt;
 //	RTT<Board::Timer::TIMER1> rtt;
 	RTT<Board::Timer::TIMER2> rtt;

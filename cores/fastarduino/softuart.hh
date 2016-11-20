@@ -83,7 +83,7 @@ namespace Soft
 		}
 		void _write(uint8_t value);
 		
-		FastPin<TX> _tx;
+		typename FastPinType<TX>::TYPE _tx;
 	};
 
 	template<Board::DigitalPin DPIN>
@@ -181,7 +181,7 @@ namespace Soft
 		bool _pin_change();
 
 	private:
-		FastPin<DPIN> _rx;
+		typename FastPinType<DPIN>::TYPE _rx;
 		PCI<PCIPORT>* _pci;
 	};
 

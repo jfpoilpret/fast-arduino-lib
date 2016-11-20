@@ -17,10 +17,10 @@ USE_RTT_TIMER0()
 
 static const uint32_t PERIOD = 5000;
 
-class LedHandler: public Job, private FastPin<Board::DigitalPin::LED>
+class LedHandler: public Job, private FastPinType<Board::DigitalPin::LED>::TYPE
 {
 public:
-	LedHandler() : Job{0, PERIOD}, FastPin<Board::DigitalPin::LED>{PinMode::OUTPUT, false} {}
+	LedHandler() : Job{0, PERIOD}, FastPinType<Board::DigitalPin::LED>::TYPE{PinMode::OUTPUT, false} {}
 	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		toggle();
