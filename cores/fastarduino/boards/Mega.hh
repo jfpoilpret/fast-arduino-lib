@@ -303,39 +303,57 @@ namespace Board
 		USART2 = 2,
 		USART3 = 3
 	};
+
+	template<USART USART>
+	struct USART_trait
+	{
+		static constexpr const REGISTER UCSRA{};
+		static constexpr const REGISTER UCSRB{};
+		static constexpr const REGISTER UCSRC{};
+		static constexpr const REGISTER UDR{};
+		static constexpr const REGISTER UBRR{};
+	};
 	
-#define _SELECT_UART_REG(UART, REG0, REG1, REG2, REG3)	\
-	(	(uint8_t)(uint16_t)								\
-		(	UART == USART::USART0 ? &REG0 :				\
-			UART == USART::USART1 ? &REG1 :				\
-			UART == USART::USART2 ? &REG2 :				\
-			&REG3))
+	template<>
+	struct USART_trait<USART::USART0>
+	{
+		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR0A);
+		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR0B);
+		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR0C);
+		static constexpr const REGISTER UDR = _SELECT_REG(UDR0);
+		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR0);
+	};
 	
-	constexpr REGISTER UCSRA_REG(USART usart)
+	template<>
+	struct USART_trait<USART::USART1>
 	{
-		return REGISTER(_SELECT_UART_REG(usart, UCSR0A, UCSR1A, UCSR2A, UCSR3A));
-	}
-
-	constexpr REGISTER UCSRB_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UCSR0B, UCSR1B, UCSR2B, UCSR3B));
-	}
-
-	constexpr REGISTER UCSRC_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UCSR0C, UCSR1C, UCSR2C, UCSR3C));
-	}
-
-	constexpr REGISTER UDR_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UDR0, UDR1, UDR2, UDR3));
-	}
-
-	constexpr REGISTER UBRR_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UBRR0, UBRR1, UBRR2, UBRR3));
-	}
+		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR1A);
+		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR1B);
+		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR1C);
+		static constexpr const REGISTER UDR = _SELECT_REG(UDR1);
+		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR1);
+	};
 	
+	template<>
+	struct USART_trait<USART::USART2>
+	{
+		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR2A);
+		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR2B);
+		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR2C);
+		static constexpr const REGISTER UDR = _SELECT_REG(UDR2);
+		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR2);
+	};
+	
+	template<>
+	struct USART_trait<USART::USART3>
+	{
+		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR3A);
+		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR3B);
+		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR3C);
+		static constexpr const REGISTER UDR = _SELECT_REG(UDR3);
+		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR3);
+	};
+		
 	//=====
 	// SPI
 	//=====

@@ -86,6 +86,9 @@ private:
 template<Board::USART USART>
 class UATX: public AbstractUATX
 {
+private:
+	using TRAIT = Board::USART_trait<USART>;
+	
 public:
 	template<uint8_t SIZE_TX>
 	UATX(char (&output)[SIZE_TX]):AbstractUATX(output)
@@ -97,18 +100,18 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC, false, true);
+		_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, false, true);
 	}
 	inline void end()
 	{
-		_end(UCSRC);
+		_end(TRAIT::UCSRC);
 	}
 
 protected:	
 	// Listeners of events on the buffer
 	virtual void on_put() override
 	{
-		_on_put(UCSRB, UDR);
+		_on_put(TRAIT::UCSRB, TRAIT::UDR);
 	}
 	virtual void on_overflow(UNUSED char c) override
 	{
@@ -118,17 +121,11 @@ protected:
 private:
 	inline void data_register_empty()
 	{
-		_data_register_empty(UCSRB, UDR);
+		_data_register_empty(TRAIT::UCSRB, TRAIT::UDR);
 	}
 	
 	static UATX<USART>* _uatx;
 	
-	static const constexpr REGISTER UCSRA = Board::UCSRA_REG(USART);
-	static const constexpr REGISTER UCSRB = Board::UCSRB_REG(USART);
-	static const constexpr REGISTER UCSRC = Board::UCSRC_REG(USART);
-	static const constexpr REGISTER UBRR = Board::UBRR_REG(USART);
-	static const constexpr REGISTER UDR = Board::UDR_REG(USART);
-
 	friend void USART0_UDRE_vect();
 #if defined(UCSR1A)
 	friend void USART1_UDRE_vect();
@@ -171,6 +168,9 @@ protected:
 template<Board::USART USART>
 class UARX: public AbstractUARX
 {
+private:
+	using TRAIT = Board::USART_trait<USART>;
+	
 public:
 	template<uint8_t SIZE_RX>
 	UARX(char (&input)[SIZE_RX]):AbstractUARX(input)
@@ -182,26 +182,20 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC, true, false);
+		_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, false);
 	}
 	inline void end()
 	{
-		_end(UCSRC);
+		_end(TRAIT::UCSRC);
 	}
 
 private:
 	inline void data_receive_complete()
 	{
-		_data_receive_complete(UCSRA, UDR);
+		_data_receive_complete(TRAIT::UCSRA, TRAIT::UDR);
 	}
 	
 	static UARX<USART>* _uarx;
-	
-	static const constexpr REGISTER UCSRA = Board::UCSRA_REG(USART);
-	static const constexpr REGISTER UCSRB = Board::UCSRB_REG(USART);
-	static const constexpr REGISTER UCSRC = Board::UCSRC_REG(USART);
-	static const constexpr REGISTER UBRR = Board::UBRR_REG(USART);
-	static const constexpr REGISTER UDR = Board::UDR_REG(USART);
 	
 	friend void USART0_RX_vect();
 #if defined(UCSR1A)
@@ -221,6 +215,9 @@ UARX<USART>* UARX<USART>::_uarx = 0;
 template<Board::USART USART>
 class UART: public UARX<USART>, public UATX<USART>
 {
+private:
+	using TRAIT = Board::USART_trait<USART>;
+	
 public:
 	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 	UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]):UARX<USART>{input}, UATX<USART>{output} {}
@@ -229,19 +226,12 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		AbstractUART::_begin(rate, parity, stop_bits, UBRR, UCSRA, UCSRB, UCSRC, true, true);
+		AbstractUART::_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, true);
 	}
 	inline void end()
 	{
-		AbstractUART::_end(UCSRC);
+		AbstractUART::_end(TRAIT::UCSRC);
 	}
-	
-private:
-	static const constexpr REGISTER UCSRA = Board::UCSRA_REG(USART);
-	static const constexpr REGISTER UCSRB = Board::UCSRB_REG(USART);
-	static const constexpr REGISTER UCSRC = Board::UCSRC_REG(USART);
-	static const constexpr REGISTER UBRR = Board::UBRR_REG(USART);
-	static const constexpr REGISTER UDR = Board::UDR_REG(USART);
 };
 
 #endif	/* UCSR0A */

@@ -262,30 +262,25 @@ namespace Board
 		USART0 = 0
 	};
 	
-	constexpr REGISTER UCSRA_REG(UNUSED USART usart)
+	template<USART USART>
+	struct USART_trait
 	{
-		return _SELECT_REG(UCSR0A);
-	}
-
-	constexpr REGISTER UCSRB_REG(UNUSED USART usart)
+		static constexpr const REGISTER UCSRA{};
+		static constexpr const REGISTER UCSRB{};
+		static constexpr const REGISTER UCSRC{};
+		static constexpr const REGISTER UDR{};
+		static constexpr const REGISTER UBRR{};
+	};
+	
+	template<>
+	struct USART_trait<USART::USART0>
 	{
-		return _SELECT_REG(UCSR0B);
-	}
-
-	constexpr REGISTER UCSRC_REG(UNUSED USART usart)
-	{
-		return _SELECT_REG(UCSR0C);
-	}
-
-	constexpr REGISTER UDR_REG(UNUSED USART usart)
-	{
-		return _SELECT_REG(UDR0);
-	}
-
-	constexpr REGISTER UBRR_REG(UNUSED USART usart)
-	{
-		return _SELECT_REG(UBRR0);
-	}
+		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR0A);
+		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR0B);
+		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR0C);
+		static constexpr const REGISTER UDR = _SELECT_REG(UDR0);
+		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR0);
+	};
 	
 	//=====
 	// SPI

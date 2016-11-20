@@ -214,6 +214,16 @@ namespace Board
 	{
 	};
 	
+	template<USART USART>
+	struct USART_trait
+	{
+		static constexpr const REGISTER UCSRA{};
+		static constexpr const REGISTER UCSRB{};
+		static constexpr const REGISTER UCSRC{};
+		static constexpr const REGISTER UDR{};
+		static constexpr const REGISTER UBRR{};
+	};
+	
 	//=====
 	// SPI
 	//=====
