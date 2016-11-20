@@ -39,8 +39,12 @@ namespace Board
 	//====
 	// IO
 	//====
-	constexpr const REGISTER PORT_A = _SELECT_REG(PINA);
-	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
+	enum class Port: uint8_t
+	{
+		PORT_A = 0,
+		PORT_B,
+		NONE = 0xFF
+	};
 
 	/**
 	 * Digital pin symbols
@@ -62,34 +66,6 @@ namespace Board
 		NONE = 0xFF
 	};
 
-#define _SELECT_PIN(DPIN, ARG0, ARG1)	\
-	(uint8_t(DPIN) < uint8_t(DigitalPin::D8) ? ARG0 :	ARG1)
-	
-#define _SELECT_PIN_REG(DPIN, REG0, REG1)	\
-	_SELECT_REG(_SELECT_PIN(DPIN, REG0, REG1))
-	
-	constexpr REGISTER PIN_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PINA, PINB);
-	}
-
-	constexpr REGISTER DDR_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, DDRA, DDRB);
-	}
-
-	constexpr REGISTER PORT_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PORTA, PORTB);
-	}
-
-	constexpr uint8_t BIT(DigitalPin pin)
-	{
-		return _SELECT_PIN(	pin, 
-							(uint8_t) pin, 
-							(uint8_t) pin - (uint8_t) DigitalPin::D8);
-	}
-
 	//===============
 	// IO interrupts
 	//===============
@@ -102,36 +78,6 @@ namespace Board
 	{
 		EXT0 = DigitalPin::D10			// PB2
 	};
-
-	constexpr REGISTER EICR_REG(UNUSED ExternalInterruptPin PIN)
-	{
-		return _SELECT_REG(MCUCR);
-	}
-	
-	constexpr uint8_t EICR_MASK(UNUSED ExternalInterruptPin PIN)
-	{
-		return 0x03 << ISC00;
-	}
-
-	constexpr REGISTER EIMSK_REG()
-	{
-		return _SELECT_REG(GIMSK);
-	}
-
-	constexpr uint8_t EIMSK_MASK(UNUSED ExternalInterruptPin PIN)
-	{
-		return _BV(INT0);
-	}
-
-	constexpr REGISTER EIFR_REG()
-	{
-		return _SELECT_REG(GIFR);
-	}
-
-	constexpr uint8_t EIFR_MASK(UNUSED ExternalInterruptPin PIN)
-	{
-		return _BV(INTF0);
-	}
 
 	/**
 	 * Pin change interrupt (PCI) pins.
@@ -157,71 +103,12 @@ namespace Board
 		PCI10 = DigitalPin::D10			// PB2
 	};
 
-#define _SELECT_PCI_PIN(PIN, ARG0, ARG1)	\
-	(uint8_t(PIN) < uint8_t(InterruptPin::PCI8) ? ARG0 : ARG1)
-	
-#define _SELECT_PCI_PORT(PIN)					\
-	_SELECT_PCI_PIN(PIN, PCIPort::PCI0, PCIPort::PCI1)
-	
-#define _SELECT_PCI(PORT, ARG0, ARG1)	\
-	(PORT == PCIPort::PCI0 ? ARG0 :	ARG1)
-	
-#define _SELECT_PCI_REG(PORT, REG0, REG1)	\
-	_SELECT_REG(_SELECT_PCI(PORT, REG0, REG1))
-	
-#define _SELECT_PCI_MSK(PORT, MSK0, MSK1)	\
-	_BV(_SELECT_PCI(PORT, MSK0, MSK1))
-	
-	constexpr uint8_t BIT(InterruptPin pin)
-	{
-		return _SELECT_PCI_PIN(	pin, 
-								(uint8_t) pin, 
-								(uint8_t) pin - (uint8_t) InterruptPin::PCI8);
-	}
-	
-	constexpr PCIPort PCI_PORT(InterruptPin pin)
-	{
-		return _SELECT_PCI_PORT(pin);
-	}
-	constexpr REGISTER PCICR_REG()
-	{
-		return _SELECT_REG(GIMSK);
-	}
-	constexpr uint8_t PCIE_MSK(PCIPort PORT)
-	{
-		return _SELECT_PCI_MSK(PORT, PCIE0, PCIE1);
-	}
-	
-	constexpr REGISTER PCIFR_REG()
-	{
-		return _SELECT_REG(GIFR);
-	}
-	constexpr uint8_t PCIFR_MSK(PCIPort PORT)
-	{
-		return _SELECT_PCI_MSK(PORT, PCIF0, PCIF1);
-	}
-	
-	constexpr REGISTER PCMSK_REG(PCIPort PORT)
-	{
-		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1);
-	}
-
 	//=======
 	// USART
 	//=======
 	
 	enum class USART: uint8_t
 	{
-	};
-	
-	template<USART USART>
-	struct USART_trait
-	{
-		static constexpr const REGISTER UCSRA{};
-		static constexpr const REGISTER UCSRB{};
-		static constexpr const REGISTER UCSRC{};
-		static constexpr const REGISTER UDR{};
-		static constexpr const REGISTER UBRR{};
 	};
 	
 	//=====
@@ -244,54 +131,6 @@ namespace Board
 	{
 		TIMER0,
 		TIMER1
-	};
-	
-	template<Timer TIMER>
-	struct Timer_trait
-	{
-		using COUNTER = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 0;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = 0;
-		static constexpr const REGISTER TCCRA{};
-		static constexpr const REGISTER TCCRB{};
-		static constexpr const REGISTER TCNT{};
-		static constexpr const REGISTER OCRA{};
-		static constexpr const REGISTER OCRB{};
-		static constexpr const REGISTER TIMSK{};
-		static constexpr const REGISTER TIFR{};
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER0>
-	{
-		using TYPE = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 64;
-		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR0A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER1>
-	{
-		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR1A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
 	};
 	
 	//=============

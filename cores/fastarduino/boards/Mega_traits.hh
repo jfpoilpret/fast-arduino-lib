@@ -2,7 +2,6 @@
 #define BOARDS_MEGA_TRAITS_HH
 
 #include <avr/io.h>
-#include <avr/sleep.h>
 #include "Mega.hh"
 
 namespace Board

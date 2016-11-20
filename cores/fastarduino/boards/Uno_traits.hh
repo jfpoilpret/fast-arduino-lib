@@ -2,7 +2,6 @@
 #define BOARDS_UNO_TRAITS_HH
 
 #include <avr/io.h>
-#include <avr/sleep.h>
 #include "Uno.hh"
 
 namespace Board

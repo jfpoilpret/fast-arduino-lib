@@ -4,6 +4,7 @@
     <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
         <itemPath>cores/fastarduino/boards/ATtinyX4.hh</itemPath>
+        <itemPath>cores/fastarduino/boards/ATtinyX4_traits.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Mega.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Mega_traits.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
@@ -162,6 +163,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/ATtinyX4_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Mega_traits.hh"
@@ -310,6 +316,11 @@
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATtinyX4_traits.hh"
             ex="false"
             tool="3"
             flavor2="0">
@@ -466,6 +477,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/ATtinyX4_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Mega_traits.hh"
@@ -618,6 +634,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/ATtinyX4_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Mega_traits.hh"
@@ -766,6 +787,11 @@
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/ATtinyX4_traits.hh"
             ex="false"
             tool="3"
             flavor2="0">

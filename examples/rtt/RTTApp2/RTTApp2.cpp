@@ -37,9 +37,9 @@ int main()
 	Power::set_default_mode(Board::SleepMode::POWER_SAVE);
 	
 	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
-//	RTT<Board::Timer::TIMER0> rtt;
+	RTT<Board::Timer::TIMER0> rtt;
 //	RTT<Board::Timer::TIMER1> rtt;
-	RTT<Board::Timer::TIMER2> rtt;
+//	RTT<Board::Timer::TIMER2> rtt;
 
 	rtt.begin();
 	// Event Loop

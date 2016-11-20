@@ -19,7 +19,7 @@
 
 // Breadboards
 #elif defined(BREADBOARD_ATTINYX4)
-//#include "boards/ATtinyX4.hh"
+#include "boards/ATtinyX4_traits.hh"
 
 #else
 #error "Board.hh: board not supported"
