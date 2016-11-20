@@ -5,7 +5,7 @@
 
 #include "utilities.hh"
 #include "time.hh"
-#include "Board.hh"
+#include "Board_traits.hh"
 #include "Events.hh"
 
 //TODO do we need to put everything here in a namespace?

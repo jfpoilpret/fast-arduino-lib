@@ -3,7 +3,7 @@
 
 #include "uartcommons.hh"
 #include "streams.hh"
-#include "Board.hh"
+#include "Board_traits.hh"
 
 // Only MCU with physical USART are supported (not ATtiny then)
 #if defined(UCSR0A)

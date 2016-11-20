@@ -1,7 +1,7 @@
 #ifndef IO_HH
 #define	IO_HH
 
-#include "Board.hh"
+#include "Board_traits.hh"
 #include "utilities.hh"
 #include "iocommons.hh"
 

@@ -6,6 +6,7 @@
         <itemPath>cores/fastarduino/boards/ATtinyX4.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Mega.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
+        <itemPath>cores/fastarduino/boards/Uno_traits.hh</itemPath>
       </logicalFolder>
       <logicalFolder name="devices" displayName="devices" projectFiles="true">
         <itemPath>cores/fastarduino/devices/NRF24L01.hh</itemPath>
@@ -13,6 +14,7 @@
         <itemPath>cores/fastarduino/devices/WinBond.hh</itemPath>
       </logicalFolder>
       <itemPath>cores/fastarduino/Board.hh</itemPath>
+      <itemPath>cores/fastarduino/Board_traits.hh</itemPath>
       <itemPath>cores/fastarduino/Events.cpp</itemPath>
       <itemPath>cores/fastarduino/Events.hh</itemPath>
       <itemPath>cores/fastarduino/ExternalInterrupt.hh</itemPath>
@@ -121,6 +123,8 @@
       </compileType>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
@@ -140,13 +144,6 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -159,8 +156,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -169,6 +164,26 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/WinBond.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -255,6 +270,8 @@
       </packaging>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
@@ -274,13 +291,6 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -293,8 +303,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -303,6 +311,26 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/WinBond.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -389,6 +417,8 @@
       </packaging>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
@@ -408,13 +438,6 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -427,8 +450,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -437,6 +458,26 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/WinBond.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -523,6 +564,8 @@
       </packaging>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
@@ -542,13 +585,6 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -561,8 +597,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -571,6 +605,26 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/WinBond.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -657,6 +711,8 @@
       </packaging>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/Events.hh" ex="false" tool="3" flavor2="0">
@@ -676,13 +732,6 @@
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/NRF24L01.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="cores/fastarduino/PCI.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Queue.hh" ex="false" tool="3" flavor2="0">
@@ -695,8 +744,6 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/WinBond.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -705,6 +752,26 @@
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Uno_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/NRF24L01_internals.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/WinBond.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.hh" ex="false" tool="3" flavor2="0">
       </item>

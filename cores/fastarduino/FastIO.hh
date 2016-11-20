@@ -2,7 +2,7 @@
 #define	FASTIO_HH
 
 #include "utilities.hh"
-#include "Board.hh"
+#include "Board_traits.hh"
 #include <fastarduino/iocommons.hh>
 
 // This class maps to a PORT pin 
