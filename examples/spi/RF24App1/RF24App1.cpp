@@ -18,6 +18,14 @@ static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 
 USE_RTT_TIMER2();
+#elif defined(ARDUINO_MEGA)
+#define HAS_TRACE 1
+static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;
+static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8;
+static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
+static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
+
+USE_RTT_TIMER2();
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_TRACE 0
 static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;

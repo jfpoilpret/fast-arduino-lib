@@ -13,7 +13,7 @@
 // Useful class to handler register defined by constant address; those can be used in constexpr variables
 // Arduino Boards
 #if defined(ARDUINO_MEGA)
-//#include "boards/Mega.hh"
+#include "boards/Mega_traits.hh"
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #include "boards/Uno_traits.hh"
 

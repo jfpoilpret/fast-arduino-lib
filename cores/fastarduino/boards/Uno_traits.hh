@@ -52,7 +52,7 @@ namespace Board
 	template<DigitalPin DPIN>
 	struct DigitalPin_trait
 	{
-		static constexpr const Port PORT = Port::PORT_B;
+		static constexpr const Port PORT = Port::NONE;
 		static constexpr const uint8_t BIT = 0;
 		//TODO other traits here? e.g. INT, PCI, USART...
 	};
@@ -328,7 +328,6 @@ namespace Board
 		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
 		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
 	};
-	
 };
 
 #endif /* BOARDS_UNO_TRAITS_HH */

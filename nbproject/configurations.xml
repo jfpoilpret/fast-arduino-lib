@@ -5,6 +5,7 @@
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
         <itemPath>cores/fastarduino/boards/ATtinyX4.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Mega.hh</itemPath>
+        <itemPath>cores/fastarduino/boards/Mega_traits.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Uno.hh</itemPath>
         <itemPath>cores/fastarduino/boards/Uno_traits.hh</itemPath>
       </logicalFolder>
@@ -163,6 +164,11 @@
       </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/Mega_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno_traits.hh"
@@ -309,6 +315,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Mega_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -457,6 +468,11 @@
       </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/Mega_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno_traits.hh"
@@ -604,6 +620,11 @@
       </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/Mega_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno_traits.hh"
@@ -750,6 +771,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Mega.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/Mega_traits.hh"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/Uno.hh" ex="false" tool="3" flavor2="0">
       </item>
