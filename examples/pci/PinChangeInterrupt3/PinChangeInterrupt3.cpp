@@ -18,11 +18,13 @@ static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D3));
 static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D5));
 static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D7));
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
-static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D14));
-static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D16));
-static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D17));
+static constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D14;
+static constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D16;
+static constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D17;
+static constexpr const uint8_t SW1 = _BV(Board::BIT(SWITCH1));
+static constexpr const uint8_t SW2 = _BV(Board::BIT(SWITCH2));
+static constexpr const uint8_t SW3 = _BV(Board::BIT(SWITCH3));
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_C;
-static constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
 USE_PCI1()
 
@@ -32,11 +34,13 @@ static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D23));
 static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D24));
 static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D25));
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
-static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D53));
-static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D52));
-static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D51));
+static constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D53;
+static constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D52;
+static constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D51;
+static constexpr const uint8_t SW1 = _BV(Board::BIT(SWITCH1));
+static constexpr const uint8_t SW2 = _BV(Board::BIT(SWITCH2));
+static constexpr const uint8_t SW3 = _BV(Board::BIT(SWITCH3));
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
-static constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
 // Define vectors we need in the example
 USE_PCI0()
 
@@ -46,11 +50,13 @@ static constexpr const uint8_t LED2 = _BV(Board::BIT(Board::DigitalPin::D1));
 static constexpr const uint8_t LED3 = _BV(Board::BIT(Board::DigitalPin::D2));
 static constexpr const uint8_t LED4 = _BV(Board::BIT(Board::DigitalPin::D3));
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
-static constexpr const uint8_t SW1 = _BV(Board::BIT(Board::DigitalPin::D8));
-static constexpr const uint8_t SW2 = _BV(Board::BIT(Board::DigitalPin::D9));
-static constexpr const uint8_t SW3 = _BV(Board::BIT(Board::DigitalPin::D10));
+static constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D8;
+static constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D9;
+static constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D10;
+static constexpr const uint8_t SW1 = _BV(Board::BIT(SWITCH1));
+static constexpr const uint8_t SW2 = _BV(Board::BIT(SWITCH2));
+static constexpr const uint8_t SW3 = _BV(Board::BIT(SWITCH3));
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
-static constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
 USE_PCI1()
 
@@ -85,7 +91,7 @@ int main()
 	sei();
 
 	PinChangeHandler handler;
-	PCI<PCI_PORT> pci{&handler};
+	PCIType<SWITCH1>::TYPE pci{&handler};
 	
 	pci.enable_pins(SW1 | SW2 | SW3);
 	pci.enable();

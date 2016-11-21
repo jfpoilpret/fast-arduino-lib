@@ -11,22 +11,16 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D14;
-constexpr const Board::InterruptPin PCI_SWITCH = Board::InterruptPin::PCI14;
-constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
 USE_PCI1()
 
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D53;
-constexpr const Board::InterruptPin PCI_SWITCH = Board::InterruptPin::PCI0;
-constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
 // Define vectors we need in the example
 USE_PCI0()
 
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D8;
-constexpr const Board::InterruptPin PCI_SWITCH = Board::InterruptPin::PCI8;
-constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
 USE_PCI1()
 
@@ -62,9 +56,9 @@ int main()
 	sei();
 	
 	PinChangeHandler handler;
-	PCI<PCI_PORT> pci{&handler};
+	PCIType<SWITCH>::TYPE pci{&handler};
 	
-	pci.enable_pin(PCI_SWITCH);
+	pci.enable_pin<SWITCH>();
 	pci.enable();
 
 	// Event Loop

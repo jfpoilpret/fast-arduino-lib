@@ -111,34 +111,31 @@ namespace Board
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	enum class PCIPort: uint8_t
+//	using InterruptPin = DigitalPin;
+	
+	//TODO try another way (struct?) with implicit conversion from/to DigitalPin
+	namespace InterruptPin
 	{
-		PCI0 = 0,			// D8-D13, PB0-5 (PB6 & PB7 are for XTAL on Arduino UNO)
-		PCI1 = 1,			// A0-A5, PC0-5 (PC6 used for RESET)
-		PCI2 = 2			// D0-D7, PD0-7
-	};
-	enum class InterruptPin: uint8_t
-	{
-		PCI0 = DigitalPin::D0,			// PD0
-		PCI1 = DigitalPin::D1,			// PD1
-		PCI2 = DigitalPin::D2,			// PD2
-		PCI3 = DigitalPin::D3,			// PD3
-		PCI4 = DigitalPin::D4,			// PD4
-		PCI5 = DigitalPin::D5,			// PD5
-		PCI6 = DigitalPin::D6,			// PD6
-		PCI7 = DigitalPin::D7,			// PD7
-		PCI8 = DigitalPin::D8,			// PB0
-		PCI9 = DigitalPin::D9,			// PB1
-		PCI10 = DigitalPin::D10,		// PB2
-		PCI11 = DigitalPin::D11,		// PB3
-		PCI12 = DigitalPin::D12,		// PB4
-		PCI13 = DigitalPin::D13,		// PB5
-		PCI14 = DigitalPin::D14,		// PC0
-		PCI15 = DigitalPin::D15,		// PC1
-		PCI16 = DigitalPin::D16,		// PC2
-		PCI17 = DigitalPin::D17,		// PC3
-		PCI18 = DigitalPin::D18,		// PC4
-		PCI19 = DigitalPin::D19			// PC5
+		constexpr const DigitalPin D0 = DigitalPin::D0;
+		constexpr const DigitalPin D1 = DigitalPin::D1;
+		constexpr const DigitalPin D2 = DigitalPin::D2;
+		constexpr const DigitalPin D3 = DigitalPin::D3;
+		constexpr const DigitalPin D4 = DigitalPin::D4;
+		constexpr const DigitalPin D5 = DigitalPin::D5;
+		constexpr const DigitalPin D6 = DigitalPin::D6;
+		constexpr const DigitalPin D7 = DigitalPin::D7;
+		constexpr const DigitalPin D8 = DigitalPin::D8;
+		constexpr const DigitalPin D9 = DigitalPin::D9;
+		constexpr const DigitalPin D10 = DigitalPin::D10;
+		constexpr const DigitalPin D11 = DigitalPin::D11;
+		constexpr const DigitalPin D12 = DigitalPin::D12;
+		constexpr const DigitalPin D13 = DigitalPin::D13;
+		constexpr const DigitalPin D14 = DigitalPin::D14;
+		constexpr const DigitalPin D15 = DigitalPin::D15;
+		constexpr const DigitalPin D16 = DigitalPin::D16;
+		constexpr const DigitalPin D17 = DigitalPin::D17;
+		constexpr const DigitalPin D18 = DigitalPin::D18;
+		constexpr const DigitalPin D19 = DigitalPin::D19;
 	};
 
 	//=======

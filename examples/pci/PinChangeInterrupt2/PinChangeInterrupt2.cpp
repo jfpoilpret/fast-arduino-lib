@@ -18,7 +18,6 @@ constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
-constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
 USE_PCI1()
 
@@ -30,7 +29,6 @@ constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D22;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25;
-constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI0;
 // Define vectors we need in the example
 USE_PCI0()
 
@@ -42,7 +40,6 @@ constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D0;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3;
-constexpr const Board::PCIPort PCI_PORT = Board::PCIPort::PCI1;
 // Define vectors we need in the example
 USE_PCI1()
 
@@ -94,11 +91,11 @@ int main()
 	sei();
 
 	PinChangeHandler handler;
-	PCI<PCI_PORT> pci{&handler};
+	PCIType<SWITCH1>::TYPE pci{&handler};
 	
-	pci.enable_pin((Board::InterruptPin) SWITCH1);
-	pci.enable_pin((Board::InterruptPin) SWITCH2);
-	pci.enable_pin((Board::InterruptPin) SWITCH3);
+	pci.enable_pin<SWITCH1>();
+	pci.enable_pin<SWITCH2>();
+	pci.enable_pin<SWITCH3>();
 	pci.enable();
 
 	// Event Loop
