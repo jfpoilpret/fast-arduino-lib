@@ -142,36 +142,33 @@ namespace Board
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	enum class PCIPort: uint8_t
+	namespace InterruptPin
 	{
-		PCI0 = 0,			// PB0-7
-		PCI1 = 1,			// PJ0-1
-		PCI2 = 2			// PK0-7
-	};
-	enum class InterruptPin: uint8_t
-	{
-		PCI0 = DigitalPin::D53,			// PB0
-		PCI1 = DigitalPin::D52,			// PB1
-		PCI2 = DigitalPin::D51,			// PB2
-		PCI3 = DigitalPin::D50,			// PB3
-		PCI4 = DigitalPin::D10,			// PB4
-		PCI5 = DigitalPin::D11,			// PB5
-		PCI6 = DigitalPin::D12,			// PB6
-		PCI7 = DigitalPin::D13,			// PB7
+		// PB0-7
+		constexpr const DigitalPin D53 = DigitalPin::D53;
+		constexpr const DigitalPin D52 = DigitalPin::D52;
+		constexpr const DigitalPin D51 = DigitalPin::D51;
+		constexpr const DigitalPin D50 = DigitalPin::D50;
+		constexpr const DigitalPin D10 = DigitalPin::D10;
+		constexpr const DigitalPin D11 = DigitalPin::D11;
+		constexpr const DigitalPin D12 = DigitalPin::D12;
+		constexpr const DigitalPin D13 = DigitalPin::D13;
+
+		// PJ0-1
+		constexpr const DigitalPin D15 = DigitalPin::D15;
+		constexpr const DigitalPin D14 = DigitalPin::D14;
 		
-		PCI9 = DigitalPin::D15,			// PJ0
-		PCI10 = DigitalPin::D14,		// PJ1
-		
-		PCI16 = DigitalPin::D62,		// PK0
-		PCI17 = DigitalPin::D63,		// PK1
-		PCI18 = DigitalPin::D64,		// PK2
-		PCI19 = DigitalPin::D65,		// PK3
-		PCI20 = DigitalPin::D66,		// PK4
-		PCI21 = DigitalPin::D67,		// PK5
-		PCI22 = DigitalPin::D68,		// PK6
-		PCI23 = DigitalPin::D69			// PK7
+		// PK0-7
+		constexpr const DigitalPin D62 = DigitalPin::D62;
+		constexpr const DigitalPin D63 = DigitalPin::D63;
+		constexpr const DigitalPin D64 = DigitalPin::D64;
+		constexpr const DigitalPin D65 = DigitalPin::D65;
+		constexpr const DigitalPin D66 = DigitalPin::D66;
+		constexpr const DigitalPin D67 = DigitalPin::D67;
+		constexpr const DigitalPin D68 = DigitalPin::D68;
+		constexpr const DigitalPin D69 = DigitalPin::D69;
 	};
-	
+
 	//=======
 	// USART
 	//=======

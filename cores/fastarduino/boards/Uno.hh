@@ -111,8 +111,6 @@ namespace Board
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-//	using InterruptPin = DigitalPin;
-	
 	//TODO try another way (struct?) with implicit conversion from/to DigitalPin
 	namespace InterruptPin
 	{

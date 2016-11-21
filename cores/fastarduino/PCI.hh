@@ -6,11 +6,11 @@
 #include "utilities.hh"
 #include "Board.hh"
 #include "ExternalInterrupt.hh"
-#include "boards/Uno_traits.hh"
+#include "Board_traits.hh"
 
 // Principles:
 // One PCI<> instance for each PCINT vector
-// Handling is delegared by PCI<> to a PCIHandler instance
+// Handling is delegated by PCI<> to a PCIHandler instance
 // Several PCIHandler subclasses exist to:
 // - handle only one call (most efficient)
 // - handle a linked list of handlers
