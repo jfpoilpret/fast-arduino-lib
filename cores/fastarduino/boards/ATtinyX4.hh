@@ -82,25 +82,19 @@ namespace Board
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	enum class PCIPort: uint8_t
+	namespace InterruptPin
 	{
-		PCI0 = 0,			// D0-D7, PA0-7
-		PCI1 = 1			// D8-D10, PB0-2 (PB3 used for RESET)
-	};
-
-	enum class InterruptPin: uint8_t
-	{
-		PCI0 = DigitalPin::D0,			// PA0
-		PCI1 = DigitalPin::D1,			// PA1
-		PCI2 = DigitalPin::D2,			// PA2
-		PCI3 = DigitalPin::D3,			// PA3
-		PCI4 = DigitalPin::D4,			// PA4/SCK
-		PCI5 = DigitalPin::D5,			// PA5/MOSI
-		PCI6 = DigitalPin::D6,			// PA6/MISO
-		PCI7 = DigitalPin::D7,			// PA7
-		PCI8 = DigitalPin::D8,			// PB0
-		PCI9 = DigitalPin::D9,			// PB1
-		PCI10 = DigitalPin::D10			// PB2
+		constexpr const DigitalPin D0 = DigitalPin::D0;
+		constexpr const DigitalPin D1 = DigitalPin::D1;
+		constexpr const DigitalPin D2 = DigitalPin::D2;
+		constexpr const DigitalPin D3 = DigitalPin::D3;
+		constexpr const DigitalPin D4 = DigitalPin::D4;
+		constexpr const DigitalPin D5 = DigitalPin::D5;
+		constexpr const DigitalPin D6 = DigitalPin::D6;
+		constexpr const DigitalPin D7 = DigitalPin::D7;
+		constexpr const DigitalPin D8 = DigitalPin::D8;
+		constexpr const DigitalPin D9 = DigitalPin::D9;
+		constexpr const DigitalPin D10 = DigitalPin::D10;
 	};
 
 	//=======
