@@ -224,13 +224,14 @@ namespace Board
 	{
 		static constexpr const Port PORT = Port::NONE;
 		static constexpr const uint8_t BIT = 0;
-		//TODO other traits here? e.g. INT, USART...
+		static constexpr const bool IS_INT = false;
 	};
-	template<Port P, uint8_t B>
+	template<Port P, uint8_t B, bool INT = false>
 	struct DigitalPin_trait_impl
 	{
 		static constexpr const Port PORT = P;
 		static constexpr const uint8_t BIT = B;
+		static constexpr const bool IS_INT = INT;
 	};
 
 	template<> struct DigitalPin_trait<DigitalPin::NONE>: public DigitalPin_trait_impl<Port::NONE, 0> {};
@@ -262,17 +263,17 @@ namespace Board
 	template<> struct DigitalPin_trait<DigitalPin::D31>: public DigitalPin_trait_impl<Port::PORT_C, 6> {};
 	template<> struct DigitalPin_trait<DigitalPin::D30>: public DigitalPin_trait_impl<Port::PORT_C, 7> {};
 
-	template<> struct DigitalPin_trait<DigitalPin::D21>: public DigitalPin_trait_impl<Port::PORT_D, 0> {};
-	template<> struct DigitalPin_trait<DigitalPin::D20>: public DigitalPin_trait_impl<Port::PORT_D, 1> {};
-	template<> struct DigitalPin_trait<DigitalPin::D19>: public DigitalPin_trait_impl<Port::PORT_D, 2> {};
-	template<> struct DigitalPin_trait<DigitalPin::D18>: public DigitalPin_trait_impl<Port::PORT_D, 3> {};
+	template<> struct DigitalPin_trait<DigitalPin::D21>: public DigitalPin_trait_impl<Port::PORT_D, 0, true> {};
+	template<> struct DigitalPin_trait<DigitalPin::D20>: public DigitalPin_trait_impl<Port::PORT_D, 1, true> {};
+	template<> struct DigitalPin_trait<DigitalPin::D19>: public DigitalPin_trait_impl<Port::PORT_D, 2, true> {};
+	template<> struct DigitalPin_trait<DigitalPin::D18>: public DigitalPin_trait_impl<Port::PORT_D, 3, true> {};
 	template<> struct DigitalPin_trait<DigitalPin::D38>: public DigitalPin_trait_impl<Port::PORT_D, 7> {};
 
 	template<> struct DigitalPin_trait<DigitalPin::D0>: public DigitalPin_trait_impl<Port::PORT_E, 0> {};
 	template<> struct DigitalPin_trait<DigitalPin::D1>: public DigitalPin_trait_impl<Port::PORT_E, 1> {};
 	template<> struct DigitalPin_trait<DigitalPin::D5>: public DigitalPin_trait_impl<Port::PORT_E, 3> {};
-	template<> struct DigitalPin_trait<DigitalPin::D2>: public DigitalPin_trait_impl<Port::PORT_E, 4> {};
-	template<> struct DigitalPin_trait<DigitalPin::D3>: public DigitalPin_trait_impl<Port::PORT_E, 5> {};
+	template<> struct DigitalPin_trait<DigitalPin::D2>: public DigitalPin_trait_impl<Port::PORT_E, 4, true> {};
+	template<> struct DigitalPin_trait<DigitalPin::D3>: public DigitalPin_trait_impl<Port::PORT_E, 5, true> {};
 
 	template<> struct DigitalPin_trait<DigitalPin::D54>: public DigitalPin_trait_impl<Port::PORT_F, 0> {};
 	template<> struct DigitalPin_trait<DigitalPin::D55>: public DigitalPin_trait_impl<Port::PORT_F, 1> {};
@@ -381,46 +382,82 @@ namespace Board
 	// IO interrupts
 	//===============
 	
-#define _SELECT_INT(INT_NUM, ARG0, ARG1, ARG2, ARG3, ARG4, ARG5)	\
-	(	INT_NUM == ExternalInterruptPin::EXT0 ? ARG0 :				\
-		INT_NUM == ExternalInterruptPin::EXT1 ? ARG1 :				\
-		INT_NUM == ExternalInterruptPin::EXT2 ? ARG2 :				\
-		INT_NUM == ExternalInterruptPin::EXT3 ? ARG3 :				\
-		INT_NUM == ExternalInterruptPin::EXT4 ? ARG4 :				\
-		ARG5)
-	
-	constexpr REGISTER EICR_REG(ExternalInterruptPin PIN)
+	template<DigitalPin DPIN>
+	struct ExternalInterruptPin_trait
 	{
-		return _SELECT_REG(_SELECT_INT(PIN, EICRA, EICRA, EICRA, EICRA, EICRB, EICRB));
-	}
-	
-	constexpr uint8_t EICR_MASK(ExternalInterruptPin PIN)
-	{
-		return _SELECT_INT(
-			PIN, 0x03 << ISC00, 0x03 << ISC10, 0x03 << ISC20, 0x03 << ISC30, 0x03 << ISC40, 0x03 << ISC50);
-	}
+		static constexpr const REGISTER EICR_{};
+		static constexpr const uint8_t EICR_MASK = 0x00;
+		static constexpr const REGISTER EIMSK_{};
+		static constexpr const uint8_t EIMSK_MASK = 0x00;
+		static constexpr const REGISTER EIFR_{};
+		static constexpr const uint8_t EIFR_MASK = 0x00;
+	};
 
-	constexpr REGISTER EIMSK_REG()
+	template<>
+	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>
 	{
-		return _SELECT_REG(EIMSK);
-	}
+		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
+		static constexpr const uint8_t EICR_MASK = _BV(ISC00) | _BV(ISC01);
+		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
+		static constexpr const uint8_t EIMSK_MASK = _BV(INT0);
+		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF0);
+	};
 
-	constexpr uint8_t EIMSK_MASK(ExternalInterruptPin PIN)
+	template<>
+	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>
 	{
-		return _SELECT_INT(
-			PIN, _BV(INT0), _BV(INT1), _BV(INT2), _BV(INT3), _BV(INT4), _BV(INT5));
-	}
+		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
+		static constexpr const uint8_t EICR_MASK = _BV(ISC10) | _BV(ISC11);
+		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
+		static constexpr const uint8_t EIMSK_MASK = _BV(INT1);
+		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF1);
+	};
 
-	constexpr REGISTER EIFR_REG()
+	template<>
+	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT2>
 	{
-		return _SELECT_REG(EIFR);
-	}
+		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
+		static constexpr const uint8_t EICR_MASK = _BV(ISC20) | _BV(ISC21);
+		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
+		static constexpr const uint8_t EIMSK_MASK = _BV(INT2);
+		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF2);
+	};
 
-	constexpr uint8_t EIFR_MASK(ExternalInterruptPin PIN)
+	template<>
+	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT3>
 	{
-		return _SELECT_INT(
-			PIN, _BV(INTF0), _BV(INTF1), _BV(INTF2), _BV(INTF3), _BV(INTF4), _BV(INTF5));
-	}
+		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
+		static constexpr const uint8_t EICR_MASK = _BV(ISC30) | _BV(ISC31);
+		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
+		static constexpr const uint8_t EIMSK_MASK = _BV(INT3);
+		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF3);
+	};
+
+	template<>
+	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT4>
+	{
+		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRB);
+		static constexpr const uint8_t EICR_MASK = _BV(ISC40) | _BV(ISC41);
+		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
+		static constexpr const uint8_t EIMSK_MASK = _BV(INT4);
+		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF4);
+	};
+
+	template<>
+	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT5>
+	{
+		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRB);
+		static constexpr const uint8_t EICR_MASK = _BV(ISC50) | _BV(ISC51);
+		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
+		static constexpr const uint8_t EIMSK_MASK = _BV(INT5);
+		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF5);
+	};
 
 	/**
 	 * Pin change interrupt (PCI) pins.

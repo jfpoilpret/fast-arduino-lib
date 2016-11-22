@@ -129,14 +129,20 @@ namespace Board
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
 	 */
-	enum class ExternalInterruptPin: uint8_t
+	namespace ExternalInterruptPin
 	{
-		EXT0 = DigitalPin::D21,			// PD0
-		EXT1 = DigitalPin::D20,			// PD1
-		EXT2 = DigitalPin::D19,			// PD2
-		EXT3 = DigitalPin::D18,			// PD3
-		EXT4 = DigitalPin::D2,			// PE4
-		EXT5 = DigitalPin::D3			// PE5
+		constexpr const DigitalPin D21 = DigitalPin::D21;		// PD0
+		constexpr const DigitalPin D20 = DigitalPin::D20;		// PD1
+		constexpr const DigitalPin D19 = DigitalPin::D19;		// PD2
+		constexpr const DigitalPin D18 = DigitalPin::D18;		// PD3
+		constexpr const DigitalPin D2 = DigitalPin::D2;			// PE4
+		constexpr const DigitalPin D3 = DigitalPin::D3;			// PE5
+		constexpr const DigitalPin EXT0 = DigitalPin::D21;		// PD0
+		constexpr const DigitalPin EXT1 = DigitalPin::D20;		// PD1
+		constexpr const DigitalPin EXT2 = DigitalPin::D19;		// PD2
+		constexpr const DigitalPin EXT3 = DigitalPin::D18;		// PD3
+		constexpr const DigitalPin EXT4 = DigitalPin::D2;		// PE4
+		constexpr const DigitalPin EXT5 = DigitalPin::D3;		// PE5
 	};
 
 	/**

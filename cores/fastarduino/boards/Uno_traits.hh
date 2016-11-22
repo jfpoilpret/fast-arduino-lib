@@ -189,7 +189,7 @@ namespace Board
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
 		static constexpr const uint8_t EIMSK_MASK = _BV(INT0);
 		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INT0);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF0);
 	};
 
 	template<>
@@ -200,7 +200,7 @@ namespace Board
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
 		static constexpr const uint8_t EIMSK_MASK = _BV(INT1);
 		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INT1);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF1);
 	};
 
 	/**
