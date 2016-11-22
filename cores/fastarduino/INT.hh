@@ -4,7 +4,7 @@
 #include <avr/interrupt.h>
 
 #include "utilities.hh"
-#include "Board.hh"
+#include "Board_traits.hh"
 #include "ExternalInterrupt.hh"
 
 // Principles:
@@ -19,7 +19,7 @@ ISR(INT ## INT_NUM ## _vect)									\
 }
 
 // This macro is internally used in further macros and should not be used in your programs
-#define _USE_EMPTY_INT(INT_NUM)										\
+#define _USE_EMPTY_INT(INT_NUM)				\
 EMPTY_INTERRUPT(INT ## INT_NUM ## _vect)
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
@@ -53,60 +53,57 @@ enum class InterruptTrigger: uint8_t
 	RISING_EDGE		= 0xFF
 };
 
-template<Board::ExternalInterruptPin PIN>
+template<Board::DigitalPin PIN>
 class INTSignal
 {
+private:
+	using PIN_TRAIT = Board::DigitalPin_trait<PIN>;
+	using INT_TRAIT = Board::ExternalInterruptPin_trait<PIN>;
+	
 public:
 	INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)
 	{
+		static_assert(PIN_TRAIT::IS_INT, "PIN must be an external interrupt pin");
 		_set_trigger(trigger);
 	}
 	
 	inline void set_trigger(InterruptTrigger trigger)
 	{
-		synchronized set_bit_field(_EICR, _ISC, uint8_t(trigger));
+		synchronized set_bit_field(INT_TRAIT::EICR_, INT_TRAIT::EICR_MASK, uint8_t(trigger));
 	}
 	
 	inline void enable()
 	{
-		synchronized set_mask(_EIMSK, _INT);
+		synchronized set_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
 	}
 	inline void disable()
 	{
-		synchronized clear_mask(_EIMSK, _INT);
+		synchronized clear_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
 	}
 	inline void clear()
 	{
-		synchronized set_mask(_EIFR, _INTF);
+		synchronized set_mask(INT_TRAIT::EIFR_, INT_TRAIT::EIFR_MASK);
 	}
 
 	inline void _set_trigger(InterruptTrigger trigger)
 	{
-		set_bit_field(_EICR, _ISC, uint8_t(trigger));
+		set_bit_field(INT_TRAIT::EICR_, INT_TRAIT::EICR_MASK, uint8_t(trigger));
 	}
 	inline void _enable()
 	{
-		set_mask(_EIMSK, _INT);
+		set_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
 	}
 	inline void _disable()
 	{
-		clear_mask(_EIMSK, _INT);
+		clear_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
 	}
 	inline void _clear()
 	{
-		set_mask(_EIFR, _INTF);
+		set_mask(INT_TRAIT::EIFR_, INT_TRAIT::EIFR_MASK);
 	}
-	
-private:
-	static const constexpr REGISTER	_EICR = Board::EICR_REG(PIN);
-	static const constexpr uint8_t	_ISC = Board::EICR_MASK(PIN);
-	static const constexpr REGISTER	_EIMSK = Board::EIMSK_REG();
-	static const constexpr uint8_t	_INT = Board::EIMSK_MASK(PIN);
-	static const constexpr REGISTER	_EIFR = Board::EIFR_REG();
-	static const constexpr uint8_t	_INTF = Board::EIFR_MASK(PIN);
 };
 
-template<Board::ExternalInterruptPin PIN>
+template<Board::DigitalPin PIN>
 class INT: public INTSignal<PIN>
 {
 public:
@@ -152,7 +149,7 @@ private:
 #endif
 };
 
-template<Board::ExternalInterruptPin INT_NUM>
+template<Board::DigitalPin INT_NUM>
 ExternalInterruptHandler* INT<INT_NUM>::_handler = 0;
 
 #endif	/* INT_HH */

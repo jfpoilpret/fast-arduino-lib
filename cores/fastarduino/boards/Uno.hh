@@ -102,16 +102,17 @@ namespace Board
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
 	 */
-	enum class ExternalInterruptPin: uint8_t
+	namespace ExternalInterruptPin
 	{
-		EXT0 = DigitalPin::D2,		// PD2
-		EXT1 = DigitalPin::D3		// PD3
+		constexpr const DigitalPin D2 = DigitalPin::D2;		// PD2
+		constexpr const DigitalPin D3 = DigitalPin::D3;		// PD3
+		constexpr const DigitalPin EXT0 = DigitalPin::D2;		// PD2
+		constexpr const DigitalPin EXT1 = DigitalPin::D3;		// PD3
 	};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	//TODO try another way (struct?) with implicit conversion from/to DigitalPin
 	namespace InterruptPin
 	{
 		constexpr const DigitalPin D0 = DigitalPin::D0;

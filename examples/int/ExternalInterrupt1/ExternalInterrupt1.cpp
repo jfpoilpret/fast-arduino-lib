@@ -10,18 +10,15 @@
 #include <fastarduino/power.hh>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D2;
-constexpr const Board::ExternalInterruptPin INT_SWITCH = Board::ExternalInterruptPin::EXT0;
+constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D2;
 // Define vectors we need in the example
 USE_INT0()
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D21;
-constexpr const Board::ExternalInterruptPin INT_SWITCH = Board::ExternalInterruptPin::EXT0;
+constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21;
 // Define vectors we need in the example
 USE_INT0()
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D10;
-constexpr const Board::ExternalInterruptPin INT_SWITCH = Board::ExternalInterruptPin::EXT0;
+constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10;
 // Define vectors we need in the example
 USE_INT0()
 #else
@@ -56,7 +53,7 @@ int main()
 	sei();
 	
 	PinChangeHandler handler;
-	INT<INT_SWITCH> int0{InterruptTrigger::ANY_CHANGE, &handler};
+	INT<SWITCH> int0{InterruptTrigger::ANY_CHANGE, &handler};
 	int0.enable();
 
 	// Event Loop
