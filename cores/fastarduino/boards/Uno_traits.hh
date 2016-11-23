@@ -254,13 +254,16 @@ namespace Board
 	//=====
 	// SPI
 	//=====
-	
-//	constexpr const REGISTER DDR_SPI_REG = _SELECT_REG(DDRB);
-//	constexpr const REGISTER PORT_SPI_REG = _SELECT_REG(PORTB);
-//	constexpr const uint8_t SPI_SS = PB2;
-//	constexpr const uint8_t SPI_MOSI = PB3;
-//	constexpr const uint8_t SPI_MISO = PB4;
-//	constexpr const uint8_t SPI_SCK = PB5;
+
+	struct SPI_trait
+	{
+		static constexpr const REGISTER DDR = _SELECT_REG(DDRB);
+		static constexpr const REGISTER PORT = _SELECT_REG(PORTB);
+		static constexpr const uint8_t SS = PB2;
+		static constexpr const uint8_t MOSI = PB3;
+		static constexpr const uint8_t MISO = PB4;
+		static constexpr const uint8_t SCK = PB5;
+	};
 
 	//========
 	// Timers
