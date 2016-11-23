@@ -74,9 +74,10 @@ namespace Board
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
 	 */
-	enum class ExternalInterruptPin: uint8_t
+	namespace ExternalInterruptPin
 	{
-		EXT0 = DigitalPin::D10			// PB2
+		constexpr const DigitalPin D10 = DigitalPin::D10;		// PB2
+		constexpr const DigitalPin EXT0 = DigitalPin::D10;		// PB2
 	};
 
 	/**

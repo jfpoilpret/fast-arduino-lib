@@ -68,13 +68,14 @@ namespace Board
 	{
 		static constexpr const Port PORT = Port::NONE;
 		static constexpr const uint8_t BIT = 0;
-		//TODO other traits here? e.g. INT, USART...
+		static constexpr const bool IS_INT = false;
 	};
-	template<Port P, uint8_t B>
+	template<Port P, uint8_t B, bool INT = false>
 	struct DigitalPin_trait_impl
 	{
 		static constexpr const Port PORT = P;
 		static constexpr const uint8_t BIT = B;
+		static constexpr const bool IS_INT = INT;
 	};
 
 	template<> struct DigitalPin_trait<DigitalPin::NONE>: public DigitalPin_trait_impl<Port::NONE, 0> {};
@@ -90,7 +91,7 @@ namespace Board
 
 	template<> struct DigitalPin_trait<DigitalPin::D8>: public DigitalPin_trait_impl<Port::PORT_B, 0> {};
 	template<> struct DigitalPin_trait<DigitalPin::D9>: public DigitalPin_trait_impl<Port::PORT_B, 1> {};
-	template<> struct DigitalPin_trait<DigitalPin::D10>: public DigitalPin_trait_impl<Port::PORT_B, 2> {};
+	template<> struct DigitalPin_trait<DigitalPin::D10>: public DigitalPin_trait_impl<Port::PORT_B, 2, true> {};
 
 #define _SELECT_PORT(PORT, ARG0, ARG1)	\
 	(	PORT == Port::PORT_A ? ARG0 :	\
@@ -138,35 +139,27 @@ namespace Board
 	// IO interrupts
 	//===============
 	
-	constexpr REGISTER EICR_REG(UNUSED ExternalInterruptPin PIN)
+	template<DigitalPin DPIN>
+	struct ExternalInterruptPin_trait
 	{
-		return _SELECT_REG(MCUCR);
-	}
-	
-	constexpr uint8_t EICR_MASK(UNUSED ExternalInterruptPin PIN)
-	{
-		return 0x03 << ISC00;
-	}
+		static constexpr const REGISTER EICR_{};
+		static constexpr const uint8_t EICR_MASK = 0x00;
+		static constexpr const REGISTER EIMSK_{};
+		static constexpr const uint8_t EIMSK_MASK = 0x00;
+		static constexpr const REGISTER EIFR_{};
+		static constexpr const uint8_t EIFR_MASK = 0x00;
+	};
 
-	constexpr REGISTER EIMSK_REG()
+	template<>
+	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>
 	{
-		return _SELECT_REG(GIMSK);
-	}
-
-	constexpr uint8_t EIMSK_MASK(UNUSED ExternalInterruptPin PIN)
-	{
-		return _BV(INT0);
-	}
-
-	constexpr REGISTER EIFR_REG()
-	{
-		return _SELECT_REG(GIFR);
-	}
-
-	constexpr uint8_t EIFR_MASK(UNUSED ExternalInterruptPin PIN)
-	{
-		return _BV(INTF0);
-	}
+		static constexpr const REGISTER EICR_ = _SELECT_REG(MCUCR);
+		static constexpr const uint8_t EICR_MASK = _BV(ISC00) | _BV(ISC01);
+		static constexpr const REGISTER EIMSK_ = _SELECT_REG(GIMSK);
+		static constexpr const uint8_t EIMSK_MASK = _BV(INT0);
+		static constexpr const REGISTER EIFR_ = _SELECT_REG(GIFR);
+		static constexpr const uint8_t EIFR_MASK = _BV(INTF0);
+	};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
