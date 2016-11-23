@@ -539,7 +539,7 @@ private:
 	uint16_t _drops; //!< Dropped messages.
 };
 
-template<Board::DigitalPin CSN, Board::DigitalPin CE, Board::ExternalInterruptPin IRQ>
+template<Board::DigitalPin CSN, Board::DigitalPin CE, Board::DigitalPin IRQ>
 class IRQ_NRF24L01: public NRF24L01<CSN, CE>
 {
 public:
