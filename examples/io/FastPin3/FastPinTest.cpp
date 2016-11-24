@@ -1,9 +1,15 @@
 /*
- * LED chaser
- * This program shows usage of FastArduino port API to handle several output pins at a time.
- * On Arduino, you should branch LED (in series with 330 Ohm resistors to limit current) on the following pins:
- * - D0-D7
- * i.e. all pins mapped to AVR ATmega328 PORT D
+ * This program is the Hello World of Arduino: blink LED on D13.
+ * It checks FastArduino FastPort support.
+ * So far this is just an active loop with a active wait delay.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D13 (PB5) LED connected to ground through a resistor
+ * - on Arduino MEGA:
+ *   - D13 (PB7) LED connected to ground through a resistor
+ * - on ATtinyX4 based boards:
+ *   - D7 (PA7) LED connected to ground through a resistor
  */
 
 #include <avr/interrupt.h>
