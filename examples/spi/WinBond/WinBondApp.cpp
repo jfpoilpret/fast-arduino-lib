@@ -1,5 +1,17 @@
 /*
- * Software UART test sample.
+ * WinBond W25Q80BV SPI flash memory example.
+ * This program shows usage of FastArduino support for SPI and WinBond device.
+ * It checks all WinBond API implemented by WinBond.hh and traces all result to serial.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D1 (TX) used for tracing program activities
+ *   - D13 (SCK), D12 (MISO), D11 (MOSI), D7 (CS): SPI interface to WinBond
+ * - on Arduino MEGA:
+ *   - NOT SUPPORTED YET
+ * - on ATtinyX4 based boards:
+ *   - D1 (TX) used for tracing program activities
+ *   - D4 (SCK), D6 (MISO), D5 (MOSI), D7 (CS): SPI interface to WinBond
  */
 
 #include <fastarduino/devices/WinBond.hh>
@@ -9,7 +21,6 @@
 #include <fastarduino/uart.hh>
 
 constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
-static const uint8_t INPUT_BUFFER_SIZE = 16;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 256;
 
@@ -23,7 +34,6 @@ USE_UART0();
 
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
-static const uint8_t INPUT_BUFFER_SIZE = 0;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 128;
 #else
@@ -31,7 +41,6 @@ constexpr const size_t DATA_SIZE = 128;
 #endif
 
 // Buffers for UART
-static char input_buffer[INPUT_BUFFER_SIZE];
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 static uint8_t data[DATA_SIZE];
@@ -49,7 +58,7 @@ int main()
 	Soft::UATX<TX> uart{output_buffer};
 	uart.begin(115200);
 #else
-	UART<Board::USART::USART0> uart{input_buffer, output_buffer};
+	UATX<Board::USART::USART0> uart{output_buffer};
 	uart.begin(115200);
 #endif
 	FormattedOutput<OutputBuffer> out = uart.fout();
