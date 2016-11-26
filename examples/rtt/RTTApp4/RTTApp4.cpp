@@ -1,6 +1,15 @@
 /*
- * Real Time Timer test sample.
- * Uses RTT generated events to schedule a job linking LED.
+ * Real Time Timer example. Take #4
+ * This program shows usage of FastArduino Timer-based RTT (Real Time Timer) support along with periodic job scheduling.
+ * The program blinks a LED at a half-period of 5 seconds, forever.
+ * 
+ * Wiring:
+ * - on Arduino UNO and Arduino MEGA:
+ *   - no wiring needed as the program uses default LED on D13
+ * - on ATmega328P based boards:
+ *   - D13 (PB5) connected to a LED through a 330Ohm resistor then linked to GND
+ * - on ATtinyX4 based boards:
+ *   - D7 (LED, PA7) connected to a LED through a 330Ohm resistor then linked to GND
  */
 
 #include <avr/interrupt.h>
