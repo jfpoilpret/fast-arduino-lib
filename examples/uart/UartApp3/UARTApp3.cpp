@@ -1,5 +1,23 @@
 /*
- * Software UART test sample.
+ * Software UART example. take #2
+ * This program demonstrates usage of FastArduino Software (emulated) UART support and formatted output streams.
+ * In this example, we used just a single UART instead of individual UATX and UARX.
+ * Serial errors are traced as they occur.
+ * 
+ * It can be modified and recompiled in order to check various serial configurations:
+ * - speed (tested up to 115200 bps)
+ * - parity (non, odd or even)
+ * - stop bits (1 or 2)
+ * 
+ * Wiring:
+ * - on Arduino UNO:
+ *   - Use standard TX/RX but without hardware UART
+ * - on Arduino MEGA:
+ *   - TODO
+ * - on ATmega328P based boards:
+ *   - Use standard TX/RX but without hardware UART, connected to an Serial-USB converter
+ * - on ATtinyX4 based boards:
+ *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
  */
 
 #include <avr/interrupt.h>
@@ -10,17 +28,17 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
 USE_PCI2()
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
-constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
 USE_PCI0()
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
 USE_PCI0()
 #else
@@ -41,7 +59,7 @@ int main()
 	
 	// Setup UART
 	Soft::UART<RX, TX> uart{input_buffer, output_buffer};
-	PCI<uart.PCIPORT> pci{&uart};
+	typename PCIType<RX>::TYPE pci{&uart};
 	pci.enable();
 
 	// Start UART

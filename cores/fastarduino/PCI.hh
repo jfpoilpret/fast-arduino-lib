@@ -50,10 +50,9 @@ EMPTY_INTERRUPT(PCINT ## INT ## _vect)
 template<Board::Port PORT>
 class PCISignal
 {
-private:
+public:
 	using TRAIT = Board::Port_trait<PORT>;
 	
-public:
 	inline void enable()
 	{
 		synchronized set_mask(TRAIT::PCICR_, TRAIT::PCICR_MASK);
