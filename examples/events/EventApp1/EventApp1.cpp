@@ -1,12 +1,15 @@
 /*
- * LED chaser, with input settings
- * This program shows usage of FastArduino port API to handle several output at a time, plus individual input pins.
- * On Arduino, you should branch LED (in series with 330 Ohm resistors to limit current) on the following pins:
- * - D0-D7
- * i.e. all pins mapped to AVR ATmega328 PORT D
- * Then, you should branch 4 switches (I use DIP switches which are convenient on breadboard):
- * - one side to A0-A2 (number of simultaneously lit LED) and A3 (chase direction)
- * - the other side to GND (we use internal pullup resistors for inputs)
+ * Simple LED chaser. Take #1
+ * This program shows usage of FastArduino events support and port API.
+ * The number of LED roundtrips is limited to one because all events are pushed at startup and not regenerated.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ * - on Arduino MEGA:
+ *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ * - on ATtinyX4 based boards:
+ *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  */
 
 #include <avr/interrupt.h>

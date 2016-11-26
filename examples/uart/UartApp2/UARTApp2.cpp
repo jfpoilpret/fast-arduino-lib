@@ -1,5 +1,23 @@
 /*
- * Software UART test sample.
+ * Software UART example. Take #1
+ * This program demonstrates usage of FastArduino Software (emulated) UART support and formatted output streams.
+ * In this example, UATX and UARX are used individually.
+ * Serial errors are traced as they occur.
+ * 
+ * It can be modified and recompiled in order to check various serial configurations:
+ * - speed (tested up to 115200 bps)
+ * - parity (non, odd or even)
+ * - stop bits (1 or 2)
+ * 
+ * Wiring:
+ * - on Arduino UNO:
+ *   - Use standard TX/RX but without hardware UART
+ * - on Arduino MEGA:
+ *   - TODO
+ * - on ATmega328P based boards:
+ *   - Use standard TX/RX but without hardware UART, connected to an Serial-USB converter
+ * - on ATtinyX4 based boards:
+ *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
  */
 
 #include <avr/interrupt.h>
@@ -10,23 +28,22 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
 USE_PCI2()
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
-constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+constexpr const Board::DigitalPin RX = Board::DigitalPin::PCI0;
 // Define vectors we need in the example
 USE_PCI0()
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::InterruptPin RX = Board::InterruptPin::PCI0;
+constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
 USE_PCI0()
 #else
 #error "Current target is not yet supported!"
 #endif
-
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;
@@ -43,7 +60,7 @@ int main()
 	// Setup UART
 	Soft::UATX<TX> uatx{output_buffer};
 	Soft::UARX<RX> uarx{input_buffer};
-	PCI<uarx.PCIPORT> pci{&uarx};
+	typename PCIType<RX>::TYPE pci{&uarx};
 	pci.enable();
 
 	// Start UART

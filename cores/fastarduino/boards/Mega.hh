@@ -26,17 +26,21 @@ namespace Board
 	//====
 	// IO
 	//====
-	constexpr const REGISTER PORT_A = _SELECT_REG(PINA);
-	constexpr const REGISTER PORT_B = _SELECT_REG(PINB);
-	constexpr const REGISTER PORT_C = _SELECT_REG(PINC);
-	constexpr const REGISTER PORT_D = _SELECT_REG(PIND);
-	constexpr const REGISTER PORT_E = _SELECT_REG(PINE);
-	constexpr const REGISTER PORT_F = _SELECT_REG(PINF);
-	constexpr const REGISTER PORT_G = _SELECT_REG(PING);
-	constexpr const REGISTER PORT_H = _SELECT_REG(PINH);
-	constexpr const REGISTER PORT_J = _SELECT_REG(PINJ);
-	constexpr const REGISTER PORT_K = _SELECT_REG(PINK);
-	constexpr const REGISTER PORT_L = _SELECT_REG(PINL);
+	enum class Port: uint8_t
+	{
+		PORT_A = 0,
+		PORT_B,
+		PORT_C,
+		PORT_D,
+		PORT_E,
+		PORT_F,
+		PORT_G,
+		PORT_H,
+		PORT_J,
+		PORT_K,
+		PORT_L,
+		NONE = 0xFF
+	};
 	
 	/**
 	 * Digital pin symbols
@@ -117,43 +121,6 @@ namespace Board
 		NONE = 0XFF
 	};
 
-#define _SELECT_PIN(DPIN, ARG_E, ARG_H, ARG_B, ARG_A, ARG_C, ARG_D, ARG_L, ARG_F, ARG_K, ARG_J, ARG_G)	\
-	(	(uint8_t) DPIN < 8 ? ARG_E :		\
-		(uint8_t) DPIN < 16 ? ARG_H :		\
-		(uint8_t) DPIN < 24 ? ARG_B :		\
-		(uint8_t) DPIN < 32 ? ARG_A :		\
-		(uint8_t) DPIN < 40 ? ARG_C :		\
-		(uint8_t) DPIN < 48 ? ARG_D :		\
-		(uint8_t) DPIN < 56 ? ARG_L :		\
-		(uint8_t) DPIN < 64 ? ARG_F :		\
-		(uint8_t) DPIN < 72 ? ARG_K :		\
-		(uint8_t) DPIN < 80 ? ARG_J :		\
-		ARG_G)
-	
-//TODO Could that be simplified by using REG ## E, REG## H, ...?
-#define _SELECT_PIN_REG(DPIN, REG_E, REG_H, REG_B, REG_A, REG_C, REG_D, REG_L, REG_F, REG_K, REG_J, REG_G)	\
-	_SELECT_REG(_SELECT_PIN(DPIN, REG_E, REG_H, REG_B, REG_A, REG_C, REG_D, REG_L, REG_F, REG_K, REG_J, REG_G))
-
-	constexpr REGISTER PIN_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PINE, PINH, PINB, PINA, PINC, PIND, PINL, PINF, PINK, PINJ, PING);
-	}
-
-	constexpr REGISTER DDR_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, DDRE, DDRH, DDRB, DDRA, DDRC, DDRD, DDRL, DDRF, DDRK, DDRJ, DDRG);
-	}
-
-	constexpr REGISTER PORT_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PORTE, PORTH, PORTB, PORTA, PORTC, PORTD, PORTL, PORTF, PORTK, PORTJ, PORTG);
-	}
-
-	constexpr uint8_t BIT(DigitalPin pin)
-	{
-		return ((uint8_t) pin) & 0x7;
-	}
-
 	//===============
 	// IO interrupts
 	//===============
@@ -162,135 +129,51 @@ namespace Board
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
 	 */
-	enum class ExternalInterruptPin: uint8_t
+	namespace ExternalInterruptPin
 	{
-		EXT0 = DigitalPin::D21,			// PD0
-		EXT1 = DigitalPin::D20,			// PD1
-		EXT2 = DigitalPin::D19,			// PD2
-		EXT3 = DigitalPin::D18,			// PD3
-		EXT4 = DigitalPin::D2,			// PE4
-		EXT5 = DigitalPin::D3			// PE5
+		constexpr const DigitalPin D21 = DigitalPin::D21;		// PD0
+		constexpr const DigitalPin D20 = DigitalPin::D20;		// PD1
+		constexpr const DigitalPin D19 = DigitalPin::D19;		// PD2
+		constexpr const DigitalPin D18 = DigitalPin::D18;		// PD3
+		constexpr const DigitalPin D2 = DigitalPin::D2;			// PE4
+		constexpr const DigitalPin D3 = DigitalPin::D3;			// PE5
+		constexpr const DigitalPin EXT0 = DigitalPin::D21;		// PD0
+		constexpr const DigitalPin EXT1 = DigitalPin::D20;		// PD1
+		constexpr const DigitalPin EXT2 = DigitalPin::D19;		// PD2
+		constexpr const DigitalPin EXT3 = DigitalPin::D18;		// PD3
+		constexpr const DigitalPin EXT4 = DigitalPin::D2;		// PE4
+		constexpr const DigitalPin EXT5 = DigitalPin::D3;		// PE5
 	};
-
-#define _SELECT_INT(INT_NUM, ARG0, ARG1, ARG2, ARG3, ARG4, ARG5)	\
-	(	INT_NUM == ExternalInterruptPin::EXT0 ? ARG0 :				\
-		INT_NUM == ExternalInterruptPin::EXT1 ? ARG1 :				\
-		INT_NUM == ExternalInterruptPin::EXT2 ? ARG2 :				\
-		INT_NUM == ExternalInterruptPin::EXT3 ? ARG3 :				\
-		INT_NUM == ExternalInterruptPin::EXT4 ? ARG4 :				\
-		ARG5)
-	
-	constexpr REGISTER EICR_REG(ExternalInterruptPin PIN)
-	{
-		return _SELECT_REG(_SELECT_INT(PIN, EICRA, EICRA, EICRA, EICRA, EICRB, EICRB));
-	}
-	
-	constexpr uint8_t EICR_MASK(ExternalInterruptPin PIN)
-	{
-		return _SELECT_INT(
-			PIN, 0x03 << ISC00, 0x03 << ISC10, 0x03 << ISC20, 0x03 << ISC30, 0x03 << ISC40, 0x03 << ISC50);
-	}
-
-	constexpr REGISTER EIMSK_REG()
-	{
-		return _SELECT_REG(EIMSK);
-	}
-
-	constexpr uint8_t EIMSK_MASK(ExternalInterruptPin PIN)
-	{
-		return _SELECT_INT(
-			PIN, _BV(INT0), _BV(INT1), _BV(INT2), _BV(INT3), _BV(INT4), _BV(INT5));
-	}
-
-	constexpr REGISTER EIFR_REG()
-	{
-		return _SELECT_REG(EIFR);
-	}
-
-	constexpr uint8_t EIFR_MASK(ExternalInterruptPin PIN)
-	{
-		return _SELECT_INT(
-			PIN, _BV(INTF0), _BV(INTF1), _BV(INTF2), _BV(INTF3), _BV(INTF4), _BV(INTF5));
-	}
 
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	enum class PCIPort: uint8_t
+	namespace InterruptPin
 	{
-		PCI0 = 0,			// PB0-7
-		PCI1 = 1,			// PJ0-1
-		PCI2 = 2			// PK0-7
-	};
-	enum class InterruptPin: uint8_t
-	{
-		PCI0 = DigitalPin::D53,			// PB0
-		PCI1 = DigitalPin::D52,			// PB1
-		PCI2 = DigitalPin::D51,			// PB2
-		PCI3 = DigitalPin::D50,			// PB3
-		PCI4 = DigitalPin::D10,			// PB4
-		PCI5 = DigitalPin::D11,			// PB5
-		PCI6 = DigitalPin::D12,			// PB6
-		PCI7 = DigitalPin::D13,			// PB7
-		
-		PCI9 = DigitalPin::D15,			// PJ0
-		PCI10 = DigitalPin::D14,		// PJ1
-		
-		PCI16 = DigitalPin::D62,		// PK0
-		PCI17 = DigitalPin::D63,		// PK1
-		PCI18 = DigitalPin::D64,		// PK2
-		PCI19 = DigitalPin::D65,		// PK3
-		PCI20 = DigitalPin::D66,		// PK4
-		PCI21 = DigitalPin::D67,		// PK5
-		PCI22 = DigitalPin::D68,		// PK6
-		PCI23 = DigitalPin::D69			// PK7
-	};
-	
-#define _SELECT_PCI_PORT(PIN)					\
-	((uint8_t) PIN < 24 ? PCIPort::PCI0 : (uint8_t) PIN < 72 ? PCIPort::PCI2 : PCIPort::PCI1)
-	
-#define _SELECT_PCI(PORT, ARG0, ARG1, ARG2)	\
-	(	PORT == PCIPort::PCI0 ? ARG0 :		\
-		PORT == PCIPort::PCI1 ? ARG1 :		\
-		ARG2)
-	
-#define _SELECT_PCI_REG(PORT, REG0, REG1, REG2)	\
-	_SELECT_REG(_SELECT_PCI(PORT, REG0, REG1, REG2))
-	
-#define _SELECT_PCI_MSK(PORT, MSK0, MSK1, MSK2)	\
-	_BV(_SELECT_PCI(PORT, MSK0, MSK1, MSK2))
+		// PB0-7
+		constexpr const DigitalPin D53 = DigitalPin::D53;
+		constexpr const DigitalPin D52 = DigitalPin::D52;
+		constexpr const DigitalPin D51 = DigitalPin::D51;
+		constexpr const DigitalPin D50 = DigitalPin::D50;
+		constexpr const DigitalPin D10 = DigitalPin::D10;
+		constexpr const DigitalPin D11 = DigitalPin::D11;
+		constexpr const DigitalPin D12 = DigitalPin::D12;
+		constexpr const DigitalPin D13 = DigitalPin::D13;
 
-	constexpr uint8_t BIT(InterruptPin pin)
-	{
-		return ((uint8_t) pin) & 0x7;
-	}
-	
-	constexpr PCIPort PCI_PORT(InterruptPin pin)
-	{
-		return _SELECT_PCI_PORT(pin);
-	}
-	constexpr REGISTER PCICR_REG()
-	{
-		return _SELECT_REG(PCICR);
-	}
-	constexpr uint8_t PCIE_MSK(PCIPort PORT)
-	{
-		return _SELECT_PCI_MSK(PORT, PCIE0, PCIE1, PCIE2);
-	}
-	
-	constexpr REGISTER PCIFR_REG()
-	{
-		return _SELECT_REG(PCIFR);
-	}
-	constexpr uint8_t PCIFR_MSK(PCIPort PORT)
-	{
-		return _SELECT_PCI_MSK(PORT, PCIF0, PCIF1, PCIF2);
-	}
-	
-	constexpr REGISTER PCMSK_REG(PCIPort PORT)
-	{
-		return _SELECT_PCI_REG(PORT, PCMSK0, PCMSK1, PCMSK2);
-	}
+		// PJ0-1
+		constexpr const DigitalPin D15 = DigitalPin::D15;
+		constexpr const DigitalPin D14 = DigitalPin::D14;
+		
+		// PK0-7
+		constexpr const DigitalPin D62 = DigitalPin::D62;
+		constexpr const DigitalPin D63 = DigitalPin::D63;
+		constexpr const DigitalPin D64 = DigitalPin::D64;
+		constexpr const DigitalPin D65 = DigitalPin::D65;
+		constexpr const DigitalPin D66 = DigitalPin::D66;
+		constexpr const DigitalPin D67 = DigitalPin::D67;
+		constexpr const DigitalPin D68 = DigitalPin::D68;
+		constexpr const DigitalPin D69 = DigitalPin::D69;
+	};
 
 	//=======
 	// USART
@@ -303,49 +186,12 @@ namespace Board
 		USART2 = 2,
 		USART3 = 3
 	};
-	
-#define _SELECT_UART_REG(UART, REG0, REG1, REG2, REG3)	\
-	(	(uint8_t)(uint16_t)								\
-		(	UART == USART::USART0 ? &REG0 :				\
-			UART == USART::USART1 ? &REG1 :				\
-			UART == USART::USART2 ? &REG2 :				\
-			&REG3))
-	
-	constexpr REGISTER UCSRA_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UCSR0A, UCSR1A, UCSR2A, UCSR3A));
-	}
 
-	constexpr REGISTER UCSRB_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UCSR0B, UCSR1B, UCSR2B, UCSR3B));
-	}
-
-	constexpr REGISTER UCSRC_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UCSR0C, UCSR1C, UCSR2C, UCSR3C));
-	}
-
-	constexpr REGISTER UDR_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UDR0, UDR1, UDR2, UDR3));
-	}
-
-	constexpr REGISTER UBRR_REG(USART usart)
-	{
-		return REGISTER(_SELECT_UART_REG(usart, UBRR0, UBRR1, UBRR2, UBRR3));
-	}
-	
 	//=====
 	// SPI
 	//=====
 	
-	constexpr const REGISTER DDR_SPI_REG = _SELECT_REG(DDRB);
-	constexpr const REGISTER PORT_SPI_REG = _SELECT_REG(PORTB);
-	constexpr const uint8_t SPI_SS = PB0;
-	constexpr const uint8_t SPI_MOSI = PB2;
-	constexpr const uint8_t SPI_MISO = PB3;
-	constexpr const uint8_t SPI_SCK = PB1;
+	// Nothing special
 
 	//========
 	// Timers
@@ -359,118 +205,6 @@ namespace Board
 		TIMER3,
 		TIMER4,
 		TIMER5
-	};
-	
-	template<Timer TIMER>
-	struct Timer_trait
-	{
-		using COUNTER = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 0;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = 0;
-		static constexpr const REGISTER TCCRA{};
-		static constexpr const REGISTER TCCRB{};
-		static constexpr const REGISTER TCNT{};
-		static constexpr const REGISTER OCRA{};
-		static constexpr const REGISTER OCRB{};
-		static constexpr const REGISTER TIMSK{};
-		static constexpr const REGISTER TIFR{};
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER0>
-	{
-		using TYPE = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 64;
-		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR0A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER2>
-	{
-		using TYPE = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 64;
-		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM21);
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS22);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR2A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR2B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT2);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR2A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR2B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK2);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR2);
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER1>
-	{
-		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR1A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER3>
-	{
-		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM32) | _BV(CS30);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR3A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR3B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT3);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR3A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR3B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK3);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR3);
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER4>
-	{
-		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM42) | _BV(CS40);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR4A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR4B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT4);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR4A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR4B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK4);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR4);
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER5>
-	{
-		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM52) | _BV(CS50);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR5A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR5B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT5);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR5A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR5B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK5);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR5);
 	};
 	
 	//=============

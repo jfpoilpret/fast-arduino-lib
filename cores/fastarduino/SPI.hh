@@ -149,7 +149,7 @@ namespace SPI
 #else
 		static const constexpr uint8_t _usicr = uint8_t(MODE);
 #endif
-		FastPin<CS> _cs;
+		typename FastPinType<CS>::TYPE _cs;
 	};
 
 };

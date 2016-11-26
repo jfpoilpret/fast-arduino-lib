@@ -83,7 +83,7 @@ namespace Soft
 		}
 		void _write(uint8_t value);
 		
-		FastPin<TX> _tx;
+		typename FastPinType<TX>::TYPE _tx;
 	};
 
 	template<Board::DigitalPin DPIN>
@@ -149,29 +149,35 @@ namespace Soft
 		uint16_t _stop_bit_rx_time_no_push;
 	};
 
-	template<Board::InterruptPin RX>
+	template<Board::DigitalPin RX>
 	class UARX: public AbstractUARX, public ExternalInterruptHandler
 	{
 	public:
-		static const constexpr Board::DigitalPin DPIN = (Board::DigitalPin) RX;
-		static const constexpr Board::PCIPort PCIPORT = Board::PCI_PORT(RX);
+		using PCI_TYPE = typename PCIType<RX>::TYPE;
+		using PORT_TRAIT = typename PCI_TYPE::TRAIT;
+		
+//		static const constexpr Board::Port PCIPORT = PCIType<RX>::TYPE;
 
 		template<uint8_t SIZE_RX>
-		UARX(char (&input)[SIZE_RX]):AbstractUARX(input), _rx{PinMode::INPUT} {}
+		UARX(char (&input)[SIZE_RX]):AbstractUARX(input), _rx{PinMode::INPUT}
+		{
+			static_assert(PORT_TRAIT::PCI_MASK & _BV(Board::DigitalPin_trait<RX>::BIT), 
+				"RX must be a PinChangeInterrupt pin");
+		}
 		
-		void begin(	PCI<PCIPORT>& pci,
+		void begin(	PCI_TYPE& pci,
 					uint32_t rate, 
 					Serial::Parity parity = Serial::Parity::NONE, 
 					Serial::StopBits stop_bits = Serial::StopBits::ONE)
 		{
 			_pci = &pci;
 			_begin(rate, parity, stop_bits);
-			_pci->enable_pin(RX);
+			_pci->template enable_pin<RX>();
 		}
-	//	void end()
-	//	{
-	//		_end();
-	//	}
+		void end()
+		{
+			_pci->template disable_pin<RX>();
+		}
 		
 	protected:
 		virtual bool on_pin_change() override
@@ -181,11 +187,11 @@ namespace Soft
 		bool _pin_change();
 
 	private:
-		FastPin<DPIN> _rx;
-		PCI<PCIPORT>* _pci;
+		typename FastPinType<RX>::TYPE _rx;
+		PCI_TYPE* _pci;
 	};
 
-	template<Board::InterruptPin RX>
+	template<Board::DigitalPin RX>
 	bool UARX<RX>::_pin_change()
 	{
 		// Check RX is low (start bit)
@@ -241,7 +247,7 @@ namespace Soft
 		return true;
 	}
 	
-	template<Board::InterruptPin RX, Board::DigitalPin TX>
+	template<Board::DigitalPin RX, Board::DigitalPin TX>
 	class UART: public UARX<RX>, public UATX<TX>
 	{
 	public:
@@ -249,7 +255,7 @@ namespace Soft
 		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
 		:UARX<RX>{input}, UATX<TX>{output} {}
 		
-		void begin(	PCI<UARX<RX>::PCIPORT>& pci,
+		void begin(	typename UARX<RX>::PCI_TYPE& pci,
 					uint32_t rate, 
 					Serial::Parity parity = Serial::Parity::NONE, 
 					Serial::StopBits stop_bits = Serial::StopBits::ONE)
@@ -257,10 +263,11 @@ namespace Soft
 			UARX<RX>::begin(pci, rate, parity, stop_bits);
 			UATX<TX>::begin(rate, parity, stop_bits);
 		}
-//		void end()
-//		{
-//			
-//		}
+		void end()
+		{
+			UARX<RX>::end();
+			UATX<TX>::end();
+		}
 	};
 }
 

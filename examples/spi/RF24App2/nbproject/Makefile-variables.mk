@@ -30,6 +30,14 @@ CND_ARTIFACT_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/r
 CND_PACKAGE_DIR_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_MEGA-Release=rf24app2.tar
 CND_PACKAGE_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/rf24app2.tar
+# ATtiny84-Release configuration
+CND_PLATFORM_ATtiny84-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_ATtiny84-Release=rf24app2
+CND_ARTIFACT_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/rf24app2
+CND_PACKAGE_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_ATtiny84-Release=rf24app2.tar
+CND_PACKAGE_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/rf24app2.tar
 #
 # include compiler specific variables
 #

@@ -5,7 +5,7 @@
 
 #include <fastarduino/IO.hh>
 
-static IOPort PortB{Board::PORT_B};
+static IOPort PortB{Board::Port::PORT_B};
 
 static IOPin PinD0{Board::DigitalPin::D0, PinMode::INPUT};
 static IOPin PinD1{Board::DigitalPin::D1, PinMode::INPUT_PULLUP};
