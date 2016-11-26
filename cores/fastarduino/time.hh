@@ -2,6 +2,8 @@
 #define	TIME_HH
 
 #include <stdint.h>
+#include <util/delay_basic.h>
+
 #include "utilities.hh"
 
 namespace Time
@@ -22,8 +24,16 @@ namespace Time
 	using MILLIS_PTR = uint32_t (*)();
 	extern MILLIS_PTR millis;
 	
-	void delay_ms(uint16_t ms);
-	void delay_us(uint16_t us);
+	void delay_us(uint16_t us)
+	{
+		_delay_loop_2((us * F_CPU) / 4000000L);
+	}
+
+	void delay_ms(uint16_t ms)
+	{
+		while (ms--) delay_us(1000);
+	}
+
 	void default_delay(uint32_t ms);
 	
 	template<typename CLOCK>
