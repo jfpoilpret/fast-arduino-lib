@@ -26,6 +26,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#include <fastarduino/time.hh>
 #include <fastarduino/devices/SIPO.hh>
 
 #if defined(ARDUINO_UNO)
@@ -58,9 +59,17 @@ public:
 	static constexpr const uint8_t ROWS = 8;
 	static constexpr const uint8_t COLUMNS = 8;
 	
-	Matrix8x8Multiplexer(uint8_t data[ROWS], uint8_t blinks[ROWS])
-		:_data(data), _blinks(blinks), _row(0), _blink_count(0) {}
+	Matrix8x8Multiplexer()
+		:_data(), _blinks(), _row(), _blink_count() {}
 	
+	inline uint8_t* data()
+	{
+		return _data;
+	}
+	inline uint8_t* blinks()
+	{
+		return _blinks;
+	}
 	void refresh()
 	{
 		uint8_t data = _data[_row];
@@ -76,8 +85,8 @@ public:
 	
 protected:
 	SIPO<CLOCK, LATCH, DATA, uint16_t> _sipo;
-	uint8_t* _data;
-	uint8_t* _blinks;
+	uint8_t _data[ROWS];
+	uint8_t _blinks[ROWS];
 	uint8_t _row;
 	uint8_t _blink_count;
 };
@@ -96,30 +105,37 @@ static uint8_t data[] =
 
 // if 0, that means this pixel shall blink, if 1 it shall never blink
 // only lit pixels can blink, dark pixels never blink
-static uint8_t blinks[] =
-{
-	0xFF,
-	0,
-	0xFF,
-	0,
-	0xFF,
-	0,
-	0xFF,
-	0
-};
+//static uint8_t blinks[] =
+//{
+//	0, 0, 0, 0, 0, 0, 0, 0
+////	0xFF,
+////	0xFF,
+////	0xFF,
+////	0xFF,
+////	0xFF,
+////	0xFF,
+////	0xFF,
+////	0xFF
+//};
 
+// TIMER Vectors or not? For refresh or for calculus or both?
+
+int main() __attribute__((OS_main));
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
-	// Initialize Multiplexer
-	Matrix8x8Multiplexer<CLOCK, LATCH, DATA, 20> mux{data, blinks};
 	
+	// Initialize Multiplexer
+	Matrix8x8Multiplexer<CLOCK, LATCH, DATA, 20> mux;
+//	for (uint8_t i = 0; i < mux.ROWS; ++i)
+//		mux.data()[i] = data[i];
+
 	// Loop to light every LED for one second
 	while (true)
 	{
 		mux.refresh();
-		_delay_ms(2.0);
+		Time::delay_us(2000);
 	}
 	return 0;
 }
