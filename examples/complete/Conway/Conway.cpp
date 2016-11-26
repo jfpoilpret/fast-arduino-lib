@@ -40,8 +40,6 @@ static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
 #error "Current target is not yet supported!"
 #endif
 
-static constexpr const uint8_t ROWS = 8;
-
 //DO WE NEED THAT?
 union univ_uint16_t
 {
@@ -52,24 +50,52 @@ union univ_uint16_t
 	uint8_t as_uint8_t[2];
 };
 
+template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA>
+class Matrix8x8Multiplexer
+{
+public:
+	static constexpr const uint8_t ROWS = 8;
+	static constexpr const uint8_t COLUMNS = 8;
+	
+	Matrix8x8Multiplexer(uint8_t data[ROWS]):_data(data), _col(0) {}
+	
+	void refresh()
+	{
+//		_sipo.output(univ_uint16_t(_BV(_col) ^ 0xFF, _data[_col]).as_uint16_t);
+		_sipo.output(univ_uint16_t(_data[_col], _BV(_col) ^ 0xFF).as_uint16_t);
+		if (++_col == 8) _col = 0;
+	}
+	
+private:
+	SIPO<CLOCK, LATCH, DATA, uint16_t> _sipo;
+	uint8_t* _data;
+	uint8_t _col;
+};
+
+static uint8_t data[] =
+{
+	0B00111100,
+	0B01100110,
+	0B10000001,
+	0B10100101,
+	0B10000001,
+	0B10011001,
+	0B01100110,
+	0B00111100
+};
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
-	// Initialize SIPO handler
-	SIPO<CLOCK, LATCH, DATA, uint16_t> sipo;
+	// Initialize Multiplexer
+	Matrix8x8Multiplexer<CLOCK, LATCH, DATA> mux{data};
 	
 	// Loop to light every LED for one second
 	while (true)
 	{
-		for (uint8_t row = 0; row < 8; ++row)
-		{
-			for (uint8_t col = 0; col < 8; ++col)
-			{
-				sipo.output(univ_uint16_t(_BV(row), _BV(col) ^ 0xFF).as_uint16_t);
-				_delay_ms(1000.0);
-			}
-		}
+		mux.refresh();
+		_delay_ms(2.0);
 	}
 	return 0;
 }
