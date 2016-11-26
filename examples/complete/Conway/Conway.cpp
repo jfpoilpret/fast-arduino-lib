@@ -50,26 +50,36 @@ union univ_uint16_t
 	uint8_t as_uint8_t[2];
 };
 
-template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA>
+//TODO do we need BLINK_COUNT as template argument really?
+template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint8_t BLINK_COUNT = 2>
 class Matrix8x8Multiplexer
 {
 public:
 	static constexpr const uint8_t ROWS = 8;
 	static constexpr const uint8_t COLUMNS = 8;
 	
-	Matrix8x8Multiplexer(uint8_t data[ROWS]):_data(data), _col(0) {}
+	Matrix8x8Multiplexer(uint8_t data[ROWS], uint8_t blinks[ROWS])
+		:_data(data), _blinks(blinks), _row(0), _blink_count(0) {}
 	
 	void refresh()
 	{
-//		_sipo.output(univ_uint16_t(_BV(_col) ^ 0xFF, _data[_col]).as_uint16_t);
-		_sipo.output(univ_uint16_t(_data[_col], _BV(_col) ^ 0xFF).as_uint16_t);
-		if (++_col == 8) _col = 0;
+		uint8_t data = _data[_row];
+		if (_blink_count > BLINK_COUNT) data &= _blinks[_row];
+		_sipo.output(univ_uint16_t(data, _BV(_row) ^ 0xFF).as_uint16_t);
+		if (++_row == ROWS)
+		{
+			_row = 0;
+			if (++_blink_count == 2 * BLINK_COUNT)
+				_blink_count = 0;
+		}
 	}
 	
-private:
+protected:
 	SIPO<CLOCK, LATCH, DATA, uint16_t> _sipo;
 	uint8_t* _data;
-	uint8_t _col;
+	uint8_t* _blinks;
+	uint8_t _row;
+	uint8_t _blink_count;
 };
 
 static uint8_t data[] =
@@ -84,12 +94,26 @@ static uint8_t data[] =
 	0B00111100
 };
 
+// if 0, that means this pixel shall blink, if 1 it shall never blink
+// only lit pixels can blink, dark pixels never blink
+static uint8_t blinks[] =
+{
+	0xFF,
+	0,
+	0xFF,
+	0,
+	0xFF,
+	0,
+	0xFF,
+	0
+};
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 	// Initialize Multiplexer
-	Matrix8x8Multiplexer<CLOCK, LATCH, DATA> mux{data};
+	Matrix8x8Multiplexer<CLOCK, LATCH, DATA, 20> mux{data, blinks};
 	
 	// Loop to light every LED for one second
 	while (true)
