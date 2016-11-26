@@ -66,10 +66,14 @@ public:
 	{
 		return _data;
 	}
+	
+	// if 0, that means this pixel shall blink, if 1 it shall never blink
+	// only lit pixels can blink, dark pixels never blink
 	inline uint8_t* blinks()
 	{
 		return _blinks;
 	}
+	
 	void refresh()
 	{
 		uint8_t data = _data[_row];
@@ -103,22 +107,8 @@ static uint8_t data[] =
 	0B00111100
 };
 
-// if 0, that means this pixel shall blink, if 1 it shall never blink
-// only lit pixels can blink, dark pixels never blink
-//static uint8_t blinks[] =
-//{
-//	0, 0, 0, 0, 0, 0, 0, 0
-////	0xFF,
-////	0xFF,
-////	0xFF,
-////	0xFF,
-////	0xFF,
-////	0xFF,
-////	0xFF,
-////	0xFF
-//};
-
 // TIMER Vectors or not? For refresh or for calculus or both?
+
 
 int main() __attribute__((OS_main));
 int main()
