@@ -26,47 +26,23 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/FastIO.hh>
+#include <fastarduino/devices/SIPO.hh>
 
 #if defined(ARDUINO_UNO)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
 #elif defined (BREADBOARD_ATTINYX4)
+static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
+static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
+static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
 #else
 #error "Current target is not yet supported!"
 #endif
 
 static constexpr const uint8_t ROWS = 8;
 
-//TODO Class for SIPO handling
-template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, typename T = uint8_t>
-class SIPO
-{
-public:
-	SIPO():_clock{PinMode::OUTPUT, false}, _latch{PinMode::OUTPUT, true}, _data{PinMode::OUTPUT, false} {}
-	void output(T data)
-	{
-		uint8_t num_bits = sizeof(T) * 8;
-		T mask = 1 << (sizeof(T) * 8 - 1);
-		_latch.clear();
-		do
-		{
-			if (data & mask) _data.set(); else _data.clear();
-			_clock.set();
-			mask >>= 1;
-			_clock.clear();
-		}
-		while (--num_bits);
-		_latch.set();
-	}
-	
-private:
-	typename FastPinType<CLOCK>::TYPE _clock;
-	typename FastPinType<LATCH>::TYPE _latch;
-	typename FastPinType<DATA>::TYPE _data;
-};
-
+//DO WE NEED THAT?
 union univ_uint16_t
 {
 	univ_uint16_t(uint16_t input = 0): as_uint16_t(input) {}
@@ -90,7 +66,6 @@ int main()
 		{
 			for (uint8_t col = 0; col < 8; ++col)
 			{
-//				sipo.output(univ_uint16_t(_BV(col) ^ 0xFF, _BV(row)).as_uint16_t);
 				sipo.output(univ_uint16_t(_BV(row), _BV(col) ^ 0xFF).as_uint16_t);
 				_delay_ms(1000.0);
 			}

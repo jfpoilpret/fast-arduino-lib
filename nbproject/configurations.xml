@@ -13,6 +13,7 @@
       <logicalFolder name="devices" displayName="devices" projectFiles="true">
         <itemPath>cores/fastarduino/devices/NRF24L01.hh</itemPath>
         <itemPath>cores/fastarduino/devices/NRF24L01_internals.hh</itemPath>
+        <itemPath>cores/fastarduino/devices/SIPO.hh</itemPath>
         <itemPath>cores/fastarduino/devices/WinBond.hh</itemPath>
       </logicalFolder>
       <itemPath>cores/fastarduino/Board.hh</itemPath>
@@ -192,6 +193,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/SIPO.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/WinBond.hh"
             ex="false"
             tool="3"
@@ -348,6 +351,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/SIPO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/WinBond.hh"
             ex="false"
@@ -506,6 +511,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/SIPO.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/WinBond.hh"
             ex="false"
             tool="3"
@@ -663,6 +670,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/SIPO.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/WinBond.hh"
             ex="false"
             tool="3"
@@ -819,6 +828,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/SIPO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/WinBond.hh"
             ex="false"
