@@ -1,7 +1,7 @@
 /*
- * Pin Change Interrupt example. Take #1
+ * Pin External Interrupt example. Take #1
  * This program shows usage of External Interrupt Pin FastArduino support to light a LED when a button is pushed.
- * This sample uses a handler called by PCINT vector.
+ * This sample uses a handler called by INT vector.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):

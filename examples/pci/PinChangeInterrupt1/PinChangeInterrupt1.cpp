@@ -1,6 +1,18 @@
 /*
- * Pin Change Interrupt test sample.
- * Uses PCI driven switch input to light Arduino LED (D13)
+ * Pin Change Interrupt example. Take #1
+ * This program shows usage of Pin Change Interrupt (PCI) FastArduino support to light a LED when a button is pushed.
+ * This sample uses a handler called by PCINT vector.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D14 (PCINT8, PC0, ADC0) branch a push button connected to ground
+ *   - D13 (PB5) LED connected to ground through a resistor
+ * - on Arduino MEGA:
+ *   - D53 (PCINT0, PB0) branch a push button connected to ground
+ *   - D13 (PB7) LED connected to ground through a resistor
+ * - on ATtinyX4 based boards:
+ *   - D8 (PCINT8, PB0) branch a push button connected to ground
+ *   - D7 (PA7) LED connected to ground through a resistor
  */
 
 #include <avr/interrupt.h>

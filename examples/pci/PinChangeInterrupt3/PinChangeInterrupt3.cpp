@@ -1,9 +1,23 @@
 /*
- * Pin Change Interrupt test sample.
- * Takes PCI input from 3 switches and lights one of 3 LEDs (1 LED per button).
- * Also toggles a 4th LED on each PCI interrupt.
+ * Pin Change Interrupt example. Multiple PCI.
+ * This program shows usage of Pin Change Interrupt (PCI) FastArduino support to light LEDs when buttons are pushed.
+ * This sample uses a handler called by PCINT vector.
+ * Concretely, the example takes PCI input from 3 switches and lights one of 3 LEDs (1 LED per button).
+ * It also toggles a 4th LED on each PCI interrupt.
+ * 
  * This is similar to PinChangeInterrupt2 except it used IOPort instead of IOPin,
  * which is more size-efficient.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D1, D3, D5, D7 (port D) branch 4 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D14, D16, D17 (port C, ADC0, ADC2, ADC3) branch 3 buttons connected to ground
+ * - on Arduino MEGA:
+ *   - D22-D25 (port A) branch 4 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D53-D51 (port B) branch 3 buttons connected to ground
+ * - on ATtinyX4 based boards:
+ *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D8-D10 (port B) branch 3 buttons connected to ground
  */
 
 #include <avr/interrupt.h>

@@ -1,5 +1,5 @@
 /*
- * Pin Change Interrupt example. Take #2
+ * Pin External Interrupt example. Take #2
  * This program shows usage of External Interrupt Pin FastArduino support to light a LED when a button is pushed.
  * This sample uses INT0 vector as a mere signal (no handler called) to awaken MCU from sleep mode, hence the button
  * state is checked at wakeup time. This approach allows code size reduction by more than 300 bytes.

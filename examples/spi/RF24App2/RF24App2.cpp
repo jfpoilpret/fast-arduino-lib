@@ -1,5 +1,33 @@
 /*
- * NRF24L01+ test example.
+ * NRF24L01+ ping/pong example.
+ * This program shows usage of FastArduino support for SPI and NRF24L01+ device. It also uses FastArduino RTT and
+ * time support.
+ * The program should be uploaded to 2 boards (these can be 2 different boards).
+ * One board will act as "master" (initiates all exchanges), the other one as a "slave", will wait for
+ * master requests and will send reply after each received request.
+ * Master/Slave selection is performed by grounding PIN_CONFIG (if slave) or keep it floating (if master).
+ * For boards having a hardware USART, traces of all exchanges (and errors) are sent to it.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D1 (TX) used for tracing program activities
+ *   - D7 master/slave configuration pin
+ *   - D13 (SCK), D12 (MISO), D11 (MOSI), D8 (CSN): SPI interface to NRF24L01+
+ *   - D9 (CE): interface to NRF24L01+
+ *   - D2 (EXT0, IRQ): interface to NRF24L01+
+ * - on Arduino MEGA:
+ *   - D1 (TX) used for tracing program activities
+ *   - D7 master/slave configuration pin
+ *   - D52 (SCK), D50 (MISO), D51 (MOSI), D8 (CSN): SPI interface to NRF24L01+
+ *   - D9 (CE): interface to NRF24L01+
+ *   - D21 (EXT0, IRQ): interface to NRF24L01+
+ * - on ATtinyX4 based boards:
+ *   - D7 master/slave configuration pin
+ *   - D4 (SCK), D6 (MISO), D5 (MOSI), D2 (CSN): SPI interface to NRF24L01+
+ *   - D3 (CE): interface to NRF24L01+
+ *   - D10 (EXT0, IRQ): interface to NRF24L01+
+ * 
+ * Note: this example does use NRF24L01+ IRQ pin to wake up the active waiting loop during reception.
  */
 
 #include <avr/interrupt.h>
