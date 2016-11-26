@@ -3,8 +3,6 @@
 
 #include <fastarduino/FastIO.hh>
 
-// TODO Infer possible optimization by replace typename T with a size argument (num bits or num bytes)
-// then use only uint8_t in shifting loop and put inside another loop (for each byte)
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, typename T = uint8_t>
 class SIPO
 {
