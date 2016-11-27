@@ -50,6 +50,7 @@ static constexpr const uint8_t ROWS = 8;
 static constexpr const uint8_t COLUMNS = 8;
 
 //TODO Make it a template based on game size (num rows, num columns)
+//TODO Make a class to hold one generation and access its members?
 class GameOfLife
 {
 public:
@@ -113,17 +114,10 @@ private:
 	uint8_t* _current_generation;
 };
 
-
-
-//DO WE NEED THAT?
-union univ_uint16_t
+constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 {
-	univ_uint16_t(uint16_t input = 0): as_uint16_t(input) {}
-	univ_uint16_t(uint8_t high, uint8_t low): as_uint16_t((high << 8) | low) {}
-	
-	uint16_t as_uint16_t;
-	uint8_t as_uint8_t[2];
-};
+	return (high << 8) | low;
+}
 
 //TODO do we need BLINK_COUNT as template argument really?
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint8_t BLINK_COUNT = 2>
@@ -162,7 +156,7 @@ public:
 	{
 		uint8_t data = _data[_row];
 		if (_blinking && _blink_count > BLINK_COUNT) data &= _blinks[_row];
-		_sipo.output(univ_uint16_t(data, _BV(_row) ^ 0xFF).as_uint16_t);
+		_sipo.output(as_uint16_t(data, _BV(_row) ^ 0xFF));
 		if (++_row == ROWS)
 		{
 			_row = 0;
