@@ -101,8 +101,7 @@ private:
 		// - copy row to GPIOR0
 		// - rotate GPIOR (col+1) times
 		// check individual bits 0, 1 and 2
-		uint8_t count = 0;
-		if (game_row & _BV(col)) ++count;
+		uint8_t count = (game_row & _BV(col)) ? 1 : 0;
 		if (game_row & _BV(col ? col - 1 : COLUMNS - 1)) ++count;
 		if (game_row & _BV(col == COLUMNS - 1 ? 0 : col + 1)) ++count;
 		return count;
