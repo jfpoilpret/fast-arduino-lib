@@ -17,6 +17,8 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
     <itemPath>Conway.cpp</itemPath>
+    <itemPath>Multiplexer.hh</itemPath>
+    <itemPath>TestData.hh</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>.</Elem>
@@ -73,6 +75,10 @@
       </compileType>
       <item path="Conway.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Multiplexer.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TestData.hh" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="ATtiny84-Release" type="1">
       <toolsSet>
@@ -122,6 +128,10 @@
         </linkerTool>
       </compileType>
       <item path="Conway.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Multiplexer.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="TestData.hh" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

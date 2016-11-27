@@ -69,6 +69,11 @@ private:
 	uint8_t ADDR;
 };
 
+constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
+{
+	return (high << 8) | low;
+}
+
 //TODO Add optimized versions for IOREG registers: set_ioreg_mask, clear_ioreg_mask
 inline void set_mask(REGISTER REG, uint8_t MASK) INLINE;
 inline void set_mask(REGISTER REG, uint8_t MASK)

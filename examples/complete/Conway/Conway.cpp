@@ -27,7 +27,10 @@
 #include <util/delay.h>
 
 #include <fastarduino/time.hh>
-#include <fastarduino/devices/SIPO.hh>
+
+#include "Multiplexer.hh"
+
+#include "TestData.hh"
 
 #if defined(ARDUINO_UNO)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
@@ -46,8 +49,10 @@ static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
 static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS / REFRESH_PERIOD_MS;
 static constexpr const uint8_t BLINKING_COUNTER = 20;
 
-static constexpr const uint8_t ROWS = 8;
-static constexpr const uint8_t COLUMNS = 8;
+using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
+
+static constexpr const uint8_t ROWS = MULTIPLEXER::ROWS;
+static constexpr const uint8_t COLUMNS = MULTIPLEXER::COLUMNS;
 
 //TODO Make it a template based on game size (num rows, num columns)
 //TODO Make a class to hold one generation and access its members?
@@ -112,141 +117,6 @@ private:
 	}
 
 	uint8_t* _current_generation;
-};
-
-constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
-{
-	return (high << 8) | low;
-}
-
-//TODO do we need BLINK_COUNT as template argument really?
-template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint8_t BLINK_COUNT = 2>
-class Matrix8x8Multiplexer
-{
-public:
-	static constexpr const uint8_t ROWS = 8;
-	static constexpr const uint8_t COLUMNS = 8;
-	
-	Matrix8x8Multiplexer()
-		:_data(), _blinks(), _row(), _blink_count(), _blinking() {}
-	
-	inline uint8_t* data()
-	{
-		return _data;
-	}
-	
-	// if 0, that means this pixel shall blink, if 1 it shall never blink
-	// only lit pixels can blink, dark pixels never blink
-	inline uint8_t* blinks()
-	{
-		return _blinks;
-	}
-	
-	inline bool is_blinking()
-	{
-		return _blinking;
-	}
-	
-	inline void blinking(bool blink)
-	{
-		_blinking = blink;
-	}
-	
-	void refresh()
-	{
-		uint8_t data = _data[_row];
-		if (_blinking && _blink_count > BLINK_COUNT) data &= _blinks[_row];
-		_sipo.output(as_uint16_t(data, _BV(_row) ^ 0xFF));
-		if (++_row == ROWS)
-		{
-			_row = 0;
-			if (++_blink_count == 2 * BLINK_COUNT) _blink_count = 0;
-		}
-	}
-	
-protected:
-	SIPO<CLOCK, LATCH, DATA, uint16_t> _sipo;
-	uint8_t _data[ROWS];
-	uint8_t _blinks[ROWS];
-	uint8_t _row;
-	uint8_t _blink_count;
-	bool _blinking;
-};
-
-using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
-
-//static uint8_t data[] =
-//{
-//	0B00111100,
-//	0B01100110,
-//	0B10000001,
-//	0B10100101,
-//	0B10000001,
-//	0B10011001,
-//	0B01100110,
-//	0B00111100
-//};
-
-// Game of Life paterns example
-// Oscillator #1 OK
-//static uint8_t data[] =
-//{
-//	0B00000000,
-//	0B00000000,
-//	0B00010000,
-//	0B00010000,
-//	0B00010000,
-//	0B00000000,
-//	0B00000000,
-//	0B00000000
-//};
-// Oscillator #2 OK
-//static uint8_t data[] =
-//{
-//	0B00000000,
-//	0B00000000,
-//	0B00000000,
-//	0B00011100,
-//	0B00111000,
-//	0B00000000,
-//	0B00000000,
-//	0B00000000
-//};
-// Oscillator #3 OK
-//static uint8_t data[] =
-//{
-//	0B00000000,
-//	0B00000000,
-//	0B00110000,
-//	0B00110000,
-//	0B00001100,
-//	0B00001100,
-//	0B00000000,
-//	0B00000000
-//};
-// Still #1 OK
-//static uint8_t data[] =
-//{
-//	0B00000000,
-//	0B00000000,
-//	0B00000000,
-//	0B00011000,
-//	0B00100100,
-//	0B00011000,
-//	0B00000000,
-//	0B00000000
-//};
-// Glider #1 OK
-static uint8_t data[] =
-{
-	0B01000000,
-	0B00100000,
-	0B11100000,
-	0B00000000,
-	0B00000000,
-	0B00000000,
-	0B00000000,
-	0B00000000
 };
 
 // OPEN POINTS/TODO
