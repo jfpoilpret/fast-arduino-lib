@@ -41,6 +41,71 @@ static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
 #error "Current target is not yet supported!"
 #endif
 
+static constexpr const uint16_t REFRESH_PERIOD_MS = 2;
+static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
+static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS / REFRESH_PERIOD_MS;
+
+static constexpr const uint8_t ROWS = 8;
+static constexpr const uint8_t COLUMNS = 8;
+
+// - - -
+// - X -
+// - - -
+uint8_t neighbours(uint8_t game_row, uint8_t col)
+{
+	//TODO possibly optimize by:
+	// - copy row to GPIOR0
+	// - rotate GPIOR (col+1) times
+	// check individual bits 0, 1 and 2
+	uint8_t count = 0;
+	if (game_row & _BV(col)) ++count;
+	if (game_row & _BV(col ? col - 1 : COLUMNS - 1)) ++count;
+	if (game_row & _BV(col == COLUMNS - 1 ? 0 : col + 1)) ++count;
+	return count;
+}
+
+// We don't need to count once we have already 4 neighbours
+uint8_t neighbours(uint8_t game[ROWS], uint8_t row, uint8_t col)
+{
+	uint8_t count = neighbours(row ? game[row - 1] : game[ROWS - 1], col);
+	count += neighbours(row == ROWS - 1 ? game[0] : game[row + 1], col);
+	count += neighbours(game[row], col);
+	return count;
+}
+
+void progress_game(uint8_t game[ROWS])
+{
+	uint8_t next_generation[ROWS];
+	for (uint8_t row = 0; row < ROWS; ++row)
+		for (uint8_t col = 0; col < COLUMNS; ++col)
+		{
+			uint8_t count_neighbours = neighbours(game, row, col);
+			switch (count_neighbours)
+			{
+				case 3:
+				// cell is alive
+				next_generation[row] |= _BV(col);
+				break;
+				
+				case 4:
+				// cell state is kept
+				if (game[row] & _BV(col))
+					next_generation[row] |= _BV(col);
+				else
+					next_generation[row] &= ~_BV(col);
+				break;
+				
+				default:
+				// cell state is dead
+				next_generation[row] &= ~_BV(col);
+				break;
+			}
+		}
+	// Copy next generation to current one
+	for (uint8_t row = 0; row < ROWS; ++row)
+		game[row] = next_generation[row];
+}
+
 //DO WE NEED THAT?
 union univ_uint16_t
 {
@@ -60,7 +125,7 @@ public:
 	static constexpr const uint8_t COLUMNS = 8;
 	
 	Matrix8x8Multiplexer()
-		:_data(), _blinks(), _row(), _blink_count() {}
+		:_data(), _blinks(), _row(), _blink_count(), _blinking() {}
 	
 	inline uint8_t* data()
 	{
@@ -74,16 +139,25 @@ public:
 		return _blinks;
 	}
 	
+	inline bool is_blinking()
+	{
+		return _blinking;
+	}
+	
+	inline void blinking(bool blink)
+	{
+		_blinking = blink;
+	}
+	
 	void refresh()
 	{
 		uint8_t data = _data[_row];
-		if (_blink_count > BLINK_COUNT) data &= _blinks[_row];
+		if (_blinking && _blink_count > BLINK_COUNT) data &= _blinks[_row];
 		_sipo.output(univ_uint16_t(data, _BV(_row) ^ 0xFF).as_uint16_t);
 		if (++_row == ROWS)
 		{
 			_row = 0;
-			if (++_blink_count == 2 * BLINK_COUNT)
-				_blink_count = 0;
+			if (++_blink_count == 2 * BLINK_COUNT) _blink_count = 0;
 		}
 	}
 	
@@ -93,22 +167,85 @@ protected:
 	uint8_t _blinks[ROWS];
 	uint8_t _row;
 	uint8_t _blink_count;
+	bool _blinking;
 };
 
+//static uint8_t data[] =
+//{
+//	0B00111100,
+//	0B01100110,
+//	0B10000001,
+//	0B10100101,
+//	0B10000001,
+//	0B10011001,
+//	0B01100110,
+//	0B00111100
+//};
+
+// Game of Life paterns example
+// Oscillator #1 OK
+//static uint8_t data[] =
+//{
+//	0B00000000,
+//	0B00000000,
+//	0B00010000,
+//	0B00010000,
+//	0B00010000,
+//	0B00000000,
+//	0B00000000,
+//	0B00000000
+//};
+// Oscillator #2 OK
+//static uint8_t data[] =
+//{
+//	0B00000000,
+//	0B00000000,
+//	0B00000000,
+//	0B00011100,
+//	0B00111000,
+//	0B00000000,
+//	0B00000000,
+//	0B00000000
+//};
+// Oscillator #3 OK
+//static uint8_t data[] =
+//{
+//	0B00000000,
+//	0B00000000,
+//	0B00110000,
+//	0B00110000,
+//	0B00001100,
+//	0B00001100,
+//	0B00000000,
+//	0B00000000
+//};
+// Still #1 OK
+//static uint8_t data[] =
+//{
+//	0B00000000,
+//	0B00000000,
+//	0B00000000,
+//	0B00011000,
+//	0B00100100,
+//	0B00011000,
+//	0B00000000,
+//	0B00000000
+//};
+// Glider #1 OK
 static uint8_t data[] =
 {
-	0B00111100,
-	0B01100110,
-	0B10000001,
-	0B10100101,
-	0B10000001,
-	0B10011001,
-	0B01100110,
-	0B00111100
+	0B01000000,
+	0B00100000,
+	0B11100000,
+	0B00000000,
+	0B00000000,
+	0B00000000,
+	0B00000000,
+	0B00000000
 };
 
 // TIMER Vectors or not? For refresh or for calculus or both?
-
+// INT/PCI Vectors for start/stop and others
 
 int main() __attribute__((OS_main));
 int main()
@@ -118,14 +255,20 @@ int main()
 	
 	// Initialize Multiplexer
 	Matrix8x8Multiplexer<CLOCK, LATCH, DATA, 20> mux;
-//	for (uint8_t i = 0; i < mux.ROWS; ++i)
-//		mux.data()[i] = data[i];
+	for (uint8_t i = 0; i < mux.ROWS; ++i)
+		mux.data()[i] = data[i];
 
 	// Loop to light every LED for one second
+	uint16_t progress_counter = 0;
 	while (true)
 	{
 		mux.refresh();
 		Time::delay_us(2000);
+		if (++progress_counter == PROGRESS_COUNTER)
+		{
+			progress_game(mux.data());
+			progress_counter = 0;
+		}
 	}
 	return 0;
 }
