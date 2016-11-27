@@ -49,16 +49,19 @@ static constexpr const uint8_t BLINKING_COUNTER = 20;
 static constexpr const uint8_t ROWS = 8;
 static constexpr const uint8_t COLUMNS = 8;
 
+//TODO Make it a template based on game size (num rows, num columns)
 class GameOfLife
 {
 public:
-	static void progress_game(uint8_t game[ROWS])
+	GameOfLife(uint8_t game[ROWS]):_current_generation(game) {}
+	
+	void progress_game()
 	{
 		uint8_t next_generation[ROWS];
 		for (uint8_t row = 0; row < ROWS; ++row)
 			for (uint8_t col = 0; col < COLUMNS; ++col)
 			{
-				uint8_t count_neighbours = neighbours(game, row, col);
+				uint8_t count_neighbours = neighbours(row, col);
 				switch (count_neighbours)
 				{
 					case 3:
@@ -68,7 +71,7 @@ public:
 
 					case 4:
 					// cell state is kept
-					if (game[row] & _BV(col))
+					if (_current_generation[row] & _BV(col))
 						next_generation[row] |= _BV(col);
 					else
 						next_generation[row] &= ~_BV(col);
@@ -82,11 +85,11 @@ public:
 			}
 		// Copy next generation to current one
 		for (uint8_t row = 0; row < ROWS; ++row)
-			game[row] = next_generation[row];
+			_current_generation[row] = next_generation[row];
 	}
 
 private:
-	static uint8_t neighbours(uint8_t game_row, uint8_t col)
+	static uint8_t neighbours_in_row(uint8_t game_row, uint8_t col)
 	{
 		//TODO possibly optimize by:
 		// - copy row to GPIOR0
@@ -99,14 +102,15 @@ private:
 		return count;
 	}
 	
-	static uint8_t neighbours(uint8_t game[ROWS], uint8_t row, uint8_t col)
+	uint8_t neighbours(uint8_t row, uint8_t col)
 	{
-		uint8_t count = neighbours(row ? game[row - 1] : game[ROWS - 1], col);
-		count += neighbours(row == ROWS - 1 ? game[0] : game[row + 1], col);
-		count += neighbours(game[row], col);
+		uint8_t count = neighbours_in_row(row ? _current_generation[row - 1] : _current_generation[ROWS - 1], col);
+		count += neighbours_in_row(row == ROWS - 1 ? _current_generation[0] : _current_generation[row + 1], col);
+		count += neighbours_in_row(_current_generation[row], col);
 		return count;
 	}
 
+	uint8_t* _current_generation;
 };
 
 
@@ -252,11 +256,10 @@ static uint8_t data[] =
 };
 
 // OPEN POINTS/TODO
-// - Refactor to provide a class for the board (including progress methods)
-// - Improve to allow larger matrix size (eg 16x8, 16x16)
 // - Use TIMER vectors or not? For refresh, for game progress or for both?
-// - Use INT/PCI Vectors for start/stop and other buttons?
+// - Use INT/PCI Vectors for start/stop and other buttons? Normally not needed
 // - Implement initial board setup (with 3 buttons at first: previous, next, select/unselect)
+// - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
 
 int main() __attribute__((OS_main));
 int main()
@@ -266,8 +269,11 @@ int main()
 	
 	// Initialize Multiplexer
 	MULTIPLEXER mux;
-	for (uint8_t i = 0; i < mux.ROWS; ++i)
+	for (uint8_t i = 0; i < MULTIPLEXER::ROWS; ++i)
 		mux.data()[i] = data[i];
+	
+	// Initialize game board
+	GameOfLife game{mux.data()};
 
 	// Loop to light every LED for one second
 	uint16_t progress_counter = 0;
@@ -277,7 +283,7 @@ int main()
 		Time::delay_us(2000);
 		if (++progress_counter == PROGRESS_COUNTER)
 		{
-			GameOfLife::progress_game(mux.data());
+			game.progress_game();
 			progress_counter = 0;
 		}
 	}
