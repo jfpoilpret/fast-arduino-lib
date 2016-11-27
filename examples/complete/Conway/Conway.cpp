@@ -44,67 +44,72 @@ static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
 static constexpr const uint16_t REFRESH_PERIOD_MS = 2;
 static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
 static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS / REFRESH_PERIOD_MS;
+static constexpr const uint8_t BLINKING_COUNTER = 20;
 
 static constexpr const uint8_t ROWS = 8;
 static constexpr const uint8_t COLUMNS = 8;
 
-// - - -
-// - X -
-// - - -
-uint8_t neighbours(uint8_t game_row, uint8_t col)
+class GameOfLife
 {
-	//TODO possibly optimize by:
-	// - copy row to GPIOR0
-	// - rotate GPIOR (col+1) times
-	// check individual bits 0, 1 and 2
-	uint8_t count = 0;
-	if (game_row & _BV(col)) ++count;
-	if (game_row & _BV(col ? col - 1 : COLUMNS - 1)) ++count;
-	if (game_row & _BV(col == COLUMNS - 1 ? 0 : col + 1)) ++count;
-	return count;
-}
-
-// We don't need to count once we have already 4 neighbours
-uint8_t neighbours(uint8_t game[ROWS], uint8_t row, uint8_t col)
-{
-	uint8_t count = neighbours(row ? game[row - 1] : game[ROWS - 1], col);
-	count += neighbours(row == ROWS - 1 ? game[0] : game[row + 1], col);
-	count += neighbours(game[row], col);
-	return count;
-}
-
-void progress_game(uint8_t game[ROWS])
-{
-	uint8_t next_generation[ROWS];
-	for (uint8_t row = 0; row < ROWS; ++row)
-		for (uint8_t col = 0; col < COLUMNS; ++col)
-		{
-			uint8_t count_neighbours = neighbours(game, row, col);
-			switch (count_neighbours)
+public:
+	static void progress_game(uint8_t game[ROWS])
+	{
+		uint8_t next_generation[ROWS];
+		for (uint8_t row = 0; row < ROWS; ++row)
+			for (uint8_t col = 0; col < COLUMNS; ++col)
 			{
-				case 3:
-				// cell is alive
-				next_generation[row] |= _BV(col);
-				break;
-				
-				case 4:
-				// cell state is kept
-				if (game[row] & _BV(col))
+				uint8_t count_neighbours = neighbours(game, row, col);
+				switch (count_neighbours)
+				{
+					case 3:
+					// cell is alive
 					next_generation[row] |= _BV(col);
-				else
+					break;
+
+					case 4:
+					// cell state is kept
+					if (game[row] & _BV(col))
+						next_generation[row] |= _BV(col);
+					else
+						next_generation[row] &= ~_BV(col);
+					break;
+
+					default:
+					// cell state is dead
 					next_generation[row] &= ~_BV(col);
-				break;
-				
-				default:
-				// cell state is dead
-				next_generation[row] &= ~_BV(col);
-				break;
+					break;
+				}
 			}
-		}
-	// Copy next generation to current one
-	for (uint8_t row = 0; row < ROWS; ++row)
-		game[row] = next_generation[row];
-}
+		// Copy next generation to current one
+		for (uint8_t row = 0; row < ROWS; ++row)
+			game[row] = next_generation[row];
+	}
+
+private:
+	static uint8_t neighbours(uint8_t game_row, uint8_t col)
+	{
+		//TODO possibly optimize by:
+		// - copy row to GPIOR0
+		// - rotate GPIOR (col+1) times
+		// check individual bits 0, 1 and 2
+		uint8_t count = 0;
+		if (game_row & _BV(col)) ++count;
+		if (game_row & _BV(col ? col - 1 : COLUMNS - 1)) ++count;
+		if (game_row & _BV(col == COLUMNS - 1 ? 0 : col + 1)) ++count;
+		return count;
+	}
+	
+	static uint8_t neighbours(uint8_t game[ROWS], uint8_t row, uint8_t col)
+	{
+		uint8_t count = neighbours(row ? game[row - 1] : game[ROWS - 1], col);
+		count += neighbours(row == ROWS - 1 ? game[0] : game[row + 1], col);
+		count += neighbours(game[row], col);
+		return count;
+	}
+
+};
+
+
 
 //DO WE NEED THAT?
 union univ_uint16_t
@@ -169,6 +174,8 @@ protected:
 	uint8_t _blink_count;
 	bool _blinking;
 };
+
+using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
 
 //static uint8_t data[] =
 //{
@@ -244,8 +251,12 @@ static uint8_t data[] =
 	0B00000000
 };
 
-// TIMER Vectors or not? For refresh or for calculus or both?
-// INT/PCI Vectors for start/stop and others
+// OPEN POINTS/TODO
+// - Refactor to provide a class for the board (including progress methods)
+// - Improve to allow larger matrix size (eg 16x8, 16x16)
+// - Use TIMER vectors or not? For refresh, for game progress or for both?
+// - Use INT/PCI Vectors for start/stop and other buttons?
+// - Implement initial board setup (with 3 buttons at first: previous, next, select/unselect)
 
 int main() __attribute__((OS_main));
 int main()
@@ -254,7 +265,7 @@ int main()
 	sei();
 	
 	// Initialize Multiplexer
-	Matrix8x8Multiplexer<CLOCK, LATCH, DATA, 20> mux;
+	MULTIPLEXER mux;
 	for (uint8_t i = 0; i < mux.ROWS; ++i)
 		mux.data()[i] = data[i];
 
@@ -266,7 +277,7 @@ int main()
 		Time::delay_us(2000);
 		if (++progress_counter == PROGRESS_COUNTER)
 		{
-			progress_game(mux.data());
+			GameOfLife::progress_game(mux.data());
 			progress_counter = 0;
 		}
 	}
