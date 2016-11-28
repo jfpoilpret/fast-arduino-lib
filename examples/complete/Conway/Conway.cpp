@@ -27,6 +27,7 @@
 #include <util/delay.h>
 
 #include <fastarduino/time.hh>
+#include <fastarduino/Timer.hh>
 
 #include "Multiplexer.hh"
 
@@ -36,10 +37,16 @@
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
+static constexpr const Board::Timer TIMER = Board::Timer::TIMER0;
+static constexpr const Board::TimerPrescaler PRESCALER = Board::TimerPrescaler::DIV_256;
+USE_TIMER0();
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
+static constexpr const Board::Timer TIMER = Board::Timer::TIMER0;
+static constexpr const Board::TimerPrescaler PRESCALER = Board::TimerPrescaler::DIV_256;
+USE_TIMER0();
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -118,6 +125,19 @@ private:
 	uint8_t* _current_generation;
 };
 
+class DisplayRefresher: public TimerCallback
+{
+public:
+	DisplayRefresher(MULTIPLEXER& mux):_mux(mux) {}
+	virtual void on_timer() override
+	{
+		_mux.refresh();
+	}
+	
+private:
+	MULTIPLEXER& _mux; 
+};
+
 // OPEN POINTS/TODO
 // - Use TIMER vectors or not? For refresh, for game progress or for both?
 // - Use INT/PCI Vectors for start/stop and other buttons? Normally not needed
@@ -137,18 +157,22 @@ int main()
 	
 	// Initialize game board
 	GameOfLife game{mux.data()};
+	
+	DisplayRefresher display_refresher{mux};
+	Timer<TIMER> display_timer{display_refresher};
+	display_timer.begin(PRESCALER, F_CPU / 1000 / _BV(uint8_t(PRESCALER)) / 2 - 1);
 
 	// Loop to light every LED for one second
-	uint16_t progress_counter = 0;
+//	uint16_t progress_counter = 0;
 	while (true)
 	{
-		mux.refresh();
-		Time::delay_us(2000);
-		if (++progress_counter == PROGRESS_COUNTER)
-		{
+//		mux.refresh();
+		Time::delay_ms(PROGRESS_PERIOD_MS);
+//		if (++progress_counter == PROGRESS_COUNTER)
+//		{
 			game.progress_game();
-			progress_counter = 0;
-		}
+//			progress_counter = 0;
+//		}
 	}
 	return 0;
 }
