@@ -37,15 +37,18 @@
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
-static constexpr const Board::Timer TIMER = Board::Timer::TIMER0;
-static constexpr const Board::TimerPrescaler PRESCALER = Board::TimerPrescaler::DIV_256;
+static constexpr const Board::Timer TIMER_DISPLAY = Board::Timer::TIMER0;
+static constexpr const Board::TimerPrescaler PRESCALER_DISPLAY = Board::TimerPrescaler::DIV_256;
+static constexpr const Board::Timer TIMER_PROGRESS = Board::Timer::TIMER1;
+static constexpr const Board::TimerPrescaler PRESCALER_PROGRESS = Board::TimerPrescaler::DIV_1024;
 USE_TIMER0();
+USE_TIMER1();
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
-static constexpr const Board::Timer TIMER = Board::Timer::TIMER0;
-static constexpr const Board::TimerPrescaler PRESCALER = Board::TimerPrescaler::DIV_256;
+static constexpr const Board::Timer TIMER_DISPLAY = Board::Timer::TIMER0;
+static constexpr const Board::TimerPrescaler PRESCALER_DISPLAY = Board::TimerPrescaler::DIV_256;
 USE_TIMER0();
 #else
 #error "Current target is not yet supported!"
@@ -138,6 +141,19 @@ private:
 	MULTIPLEXER& _mux; 
 };
 
+class GameProgresser: public TimerCallback
+{
+public:
+	GameProgresser(GameOfLife& game): _game(game) {}
+	virtual void on_timer() override
+	{
+		_game.progress_game();
+	}
+	
+private:
+	GameOfLife& _game;
+};
+
 // OPEN POINTS/TODO
 // - Use TIMER vectors or not? For refresh, for game progress or for both?
 // - Use INT/PCI Vectors for start/stop and other buttons? Normally not needed
@@ -159,18 +175,22 @@ int main()
 	GameOfLife game{mux.data()};
 	
 	DisplayRefresher display_refresher{mux};
-	Timer<TIMER> display_timer{display_refresher};
-	display_timer.begin(PRESCALER, F_CPU / 1000 / _BV(uint8_t(PRESCALER)) / 2 - 1);
+	Timer<TIMER_DISPLAY> display_timer{display_refresher};
+	display_timer.begin(PRESCALER_DISPLAY, F_CPU / 1000 / _BV(uint8_t(PRESCALER_DISPLAY)) * REFRESH_PERIOD_MS - 1);
+	
+	GameProgresser game_progresser{game};
+	Timer<TIMER_PROGRESS> progress_timer{game_progresser};
+	progress_timer.begin(PRESCALER_PROGRESS, F_CPU / 1000 / _BV(uint8_t(PRESCALER_PROGRESS)) * PROGRESS_PERIOD_MS - 1);
 
 	// Loop to light every LED for one second
 //	uint16_t progress_counter = 0;
 	while (true)
 	{
 //		mux.refresh();
-		Time::delay_ms(PROGRESS_PERIOD_MS);
+//		Time::delay_ms(PROGRESS_PERIOD_MS);
 //		if (++progress_counter == PROGRESS_COUNTER)
 //		{
-			game.progress_game();
+//			game.progress_game();
 //			progress_counter = 0;
 //		}
 	}
