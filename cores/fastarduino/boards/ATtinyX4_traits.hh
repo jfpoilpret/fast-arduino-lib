@@ -271,7 +271,7 @@ namespace Board
 					p == TimerPrescaler::DIV_8 ? _BV(CS11) :
 					p == TimerPrescaler::DIV_64 ? _BV(CS10) | _BV(CS11) :
 					p == TimerPrescaler::DIV_256 ? _BV(CS12) :
-					_BV(CS12) | _BV(CS11));
+					_BV(CS12) | _BV(CS10));
 		}
 		static constexpr const uint16_t PRESCALER  = 1;
 		static constexpr const uint8_t TCCRA_VALUE  = 0;
