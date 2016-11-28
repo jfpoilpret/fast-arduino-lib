@@ -272,7 +272,7 @@ namespace Board
 	template<Timer TIMER>
 	struct Timer_trait
 	{
-		using COUNTER = uint8_t;
+		using TYPE = uint8_t;
 		static constexpr const uint16_t PRESCALER  = 0;
 		static constexpr const uint8_t TCCRA_VALUE  = 0;
 		static constexpr const uint8_t TCCRB_VALUE  = 0;
@@ -283,12 +283,33 @@ namespace Board
 		static constexpr const REGISTER OCRB{};
 		static constexpr const REGISTER TIMSK{};
 		static constexpr const REGISTER TIFR{};
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler)
+		{
+			return 0;
+		}
+//		static constexpr uint16_t counter(uint8_t period_ms);
+//		static constexpr uint8_t tccrb(uint16_t prescaler);
 	};
 	
+	//TODO IMPROVE NEW STUFF: TimerPrescaler should be put in only one header (same for all boards)
+	// Also define two constexpr methods for both kinds of timers prescaling values list, then attach point to there here
+	// Also define default prescaler options for MS timers
+	//TODO how to prevent using forbidden Prescaler values???
 	template<>
 	struct Timer_trait<Timer::TIMER0>
 	{
 		using TYPE = uint8_t;
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler p)
+		{
+//			static_assert(p != TimerPrescaler::DIV_32, "DIV_32 is not available for this Timer");
+//			static_assert(p != TimerPrescaler::DIV_128, "DIV_128 is not available for this Timer");
+			return (p == TimerPrescaler::NO_PRESCALING ? _BV(CS00) :
+					p == TimerPrescaler::DIV_8 ? _BV(CS01) :
+					p == TimerPrescaler::DIV_64 ? _BV(CS00) | _BV(CS01) :
+					p == TimerPrescaler::DIV_256 ? _BV(CS02) :
+					p == TimerPrescaler::DIV_1024 ? _BV(CS02) | _BV(CS01) :
+					0);
+		}
 		static constexpr const uint16_t PRESCALER  = 64;
 		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
 		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
@@ -305,6 +326,16 @@ namespace Board
 	struct Timer_trait<Timer::TIMER2>
 	{
 		using TYPE = uint8_t;
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler p)
+		{
+			return (p == TimerPrescaler::NO_PRESCALING ? _BV(CS20) :
+					p == TimerPrescaler::DIV_8 ? _BV(CS21) :
+					p == TimerPrescaler::DIV_32 ? _BV(CS21) | _BV(CS20) :
+					p == TimerPrescaler::DIV_64 ? _BV(CS22) :
+					p == TimerPrescaler::DIV_128 ? _BV(CS22) | _BV(CS02) :
+					p == TimerPrescaler::DIV_256 ? _BV(CS22) | _BV(CS21) :
+					_BV(CS22) | _BV(CS21) | _BV(CS20));
+		}
 		static constexpr const uint16_t PRESCALER  = 64;
 		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM21);
 		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS22);
@@ -321,6 +352,15 @@ namespace Board
 	struct Timer_trait<Timer::TIMER1>
 	{
 		using TYPE = uint16_t;
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler p)
+		{
+			return _BV(WGM12) | 
+				(	p == TimerPrescaler::NO_PRESCALING ? _BV(CS10) :
+					p == TimerPrescaler::DIV_8 ? _BV(CS11) :
+					p == TimerPrescaler::DIV_64 ? _BV(CS10) | _BV(CS11) :
+					p == TimerPrescaler::DIV_256 ? _BV(CS12) :
+					_BV(CS12) | _BV(CS11));
+		}
 		static constexpr const uint16_t PRESCALER  = 1;
 		static constexpr const uint8_t TCCRA_VALUE  = 0;
 		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);

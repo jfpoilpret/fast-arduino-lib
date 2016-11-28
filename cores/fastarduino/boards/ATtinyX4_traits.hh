@@ -216,7 +216,7 @@ namespace Board
 	template<Timer TIMER>
 	struct Timer_trait
 	{
-		using COUNTER = uint8_t;
+		using TYPE = uint8_t;
 		static constexpr const uint16_t PRESCALER  = 0;
 		static constexpr const uint8_t TCCRA_VALUE  = 0;
 		static constexpr const uint8_t TCCRB_VALUE  = 0;
@@ -227,12 +227,27 @@ namespace Board
 		static constexpr const REGISTER OCRB{};
 		static constexpr const REGISTER TIMSK{};
 		static constexpr const REGISTER TIFR{};
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler)
+		{
+			return 0;
+		}
 	};
 	
 	template<>
 	struct Timer_trait<Timer::TIMER0>
 	{
 		using TYPE = uint8_t;
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler p)
+		{
+//			static_assert(p != TimerPrescaler::DIV_32, "DIV_32 is not available for this Timer");
+//			static_assert(p != TimerPrescaler::DIV_128, "DIV_128 is not available for this Timer");
+			return (p == TimerPrescaler::NO_PRESCALING ? _BV(CS00) :
+					p == TimerPrescaler::DIV_8 ? _BV(CS01) :
+					p == TimerPrescaler::DIV_64 ? _BV(CS00) | _BV(CS01) :
+					p == TimerPrescaler::DIV_256 ? _BV(CS02) :
+					p == TimerPrescaler::DIV_1024 ? _BV(CS02) | _BV(CS01) :
+					0);
+		}
 		static constexpr const uint16_t PRESCALER  = 64;
 		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
 		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
@@ -249,6 +264,15 @@ namespace Board
 	struct Timer_trait<Timer::TIMER1>
 	{
 		using TYPE = uint16_t;
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler p)
+		{
+			return _BV(WGM12) | 
+				(	p == TimerPrescaler::NO_PRESCALING ? _BV(CS10) :
+					p == TimerPrescaler::DIV_8 ? _BV(CS11) :
+					p == TimerPrescaler::DIV_64 ? _BV(CS10) | _BV(CS11) :
+					p == TimerPrescaler::DIV_256 ? _BV(CS12) :
+					_BV(CS12) | _BV(CS11));
+		}
 		static constexpr const uint16_t PRESCALER  = 1;
 		static constexpr const uint8_t TCCRA_VALUE  = 0;
 		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);

@@ -32,6 +32,7 @@
       <itemPath>cores/fastarduino/RTT.hh</itemPath>
       <itemPath>cores/fastarduino/SPI.cpp</itemPath>
       <itemPath>cores/fastarduino/SPI.hh</itemPath>
+      <itemPath>cores/fastarduino/Timer.hh</itemPath>
       <itemPath>cores/fastarduino/empty_streams.hh</itemPath>
       <itemPath>cores/fastarduino/errors.hh</itemPath>
       <itemPath>cores/fastarduino/iocommons.hh</itemPath>
@@ -158,6 +159,8 @@
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/Timer.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -318,6 +321,8 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Timer.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -476,6 +481,8 @@
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/Timer.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
@@ -636,6 +643,8 @@
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/Timer.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
             tool="3"
@@ -794,6 +803,8 @@
       <item path="cores/fastarduino/SPI.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/SPI.hh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/Timer.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/ATtinyX4.hh"
             ex="false"
