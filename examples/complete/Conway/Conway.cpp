@@ -49,7 +49,10 @@ static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
 static constexpr const Board::Timer TIMER_DISPLAY = Board::Timer::TIMER0;
 static constexpr const Board::TimerPrescaler PRESCALER_DISPLAY = Board::TimerPrescaler::DIV_256;
+static constexpr const Board::Timer TIMER_PROGRESS = Board::Timer::TIMER1;
+static constexpr const Board::TimerPrescaler PRESCALER_PROGRESS = Board::TimerPrescaler::DIV_1024;
 USE_TIMER0();
+USE_TIMER1();
 #else
 #error "Current target is not yet supported!"
 #endif
