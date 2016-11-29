@@ -94,26 +94,20 @@ public:
 			for (uint8_t col = 0; col < COLUMNS; ++col)
 			{
 				uint8_t count_neighbours = neighbours(row, col);
-				switch (count_neighbours)
-				{
-					case 3:
+				if (count_neighbours == 3)
 					// cell is alive
 					next_generation[row] |= _BV(col);
-					break;
-
-					case 4:
+				else if (count_neighbours == 4)
+				{
 					// cell state is kept
 					if (_current_generation[row] & _BV(col))
 						next_generation[row] |= _BV(col);
 					else
 						next_generation[row] &= ~_BV(col);
-					break;
-
-					default:
+				}
+				else
 					// cell state is dead
 					next_generation[row] &= ~_BV(col);
-					break;
-				}
 			}
 		// Copy next generation to current one
 		for (uint8_t row = 0; row < ROWS; ++row)
