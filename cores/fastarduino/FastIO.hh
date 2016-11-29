@@ -7,13 +7,20 @@
 
 // This class maps to a PORT pin 
 // SRAM size is 0
-template<Board::Port PORT, uint8_t BIT>
+template<Board::Port PORT_, uint8_t BIT_>
 class FastPin
 {
 private:
-	using TRAIT = Board::Port_trait<PORT>;
+	using TRAIT = Board::Port_trait<PORT_>;
 	
 public:
+	static const Board::Port PORT = PORT_;
+	static const uint8_t BIT = BIT_;
+	
+	FastPin() INLINE
+	{
+		static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
+	}
 	FastPin(PinMode mode, bool value = false) INLINE
 	{
 		static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
@@ -48,21 +55,17 @@ public:
 	}
 };
 
-template<Board::DigitalPin DPIN>
-struct FastPinType
-{
-	using TYPE = FastPin<Board::DigitalPin_trait<DPIN>::PORT, Board::DigitalPin_trait<DPIN>::BIT>;
-};
-
 // This class maps to a PORT and handles it all 8 bits at a time
 // SRAM size is 0
-template<Board::Port PORT>
+template<Board::Port PORT_>
 class FastPort
 {
 private:
-	using TRAIT = Board::Port_trait<PORT>;
+	using TRAIT = Board::Port_trait<PORT_>;
 	
 public:
+	static const Board::Port PORT = PORT_;
+	
 	FastPort() {}
 	FastPort(uint8_t ddr, uint8_t port = 0) INLINE
 	{
@@ -70,12 +73,16 @@ public:
 		set_PORT(port);
 	}
 	
-//	template<uint8_t BIT>
-//	FastPin<PORT, BIT> get_pin(PinMode mode, bool value = false) INLINE;
 	template<uint8_t BIT>
 	FastPin<PORT, BIT> get_pin(PinMode mode, bool value = false)
 	{
 		return FastPin<PORT, BIT>{mode, value};
+	}
+	
+	template<uint8_t BIT>
+	FastPin<PORT, BIT> get_pin()
+	{
+		return FastPin<PORT, BIT>{};
 	}
 	
 	void set_PORT(uint8_t port) INLINE
@@ -104,16 +111,15 @@ public:
 	}
 };
 
-
-//template<Board::DigitalPin DPIN>
-//FastPin<Board::DigitalPin_trait<DPIN>::PORT, Board::DigitalPin_trait<DPIN>::BIT>
-//get_pin(PinMode mode, bool value = false) INLINE;
 template<Board::DigitalPin DPIN>
-FastPin<Board::DigitalPin_trait<DPIN>::PORT, Board::DigitalPin_trait<DPIN>::BIT>
-get_pin(PinMode mode, bool value = false)
+struct FastPinType
 {
-	return FastPin<Board::DigitalPin_trait<DPIN>::PORT, Board::DigitalPin_trait<DPIN>::BIT>{mode, value};
-}
+	static const Board::Port PORT = Board::DigitalPin_trait<DPIN>::PORT;
+	static const uint8_t BIT = Board::DigitalPin_trait<DPIN>::BIT;
+	static const uint8_t MASK = _BV(BIT);
+	using TYPE = FastPin<PORT, BIT>;
+	using PORT_TYPE = FastPort<PORT>;
+};
 
 template<>
 class FastPin<Board::Port::NONE, 0>
