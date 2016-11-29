@@ -40,6 +40,7 @@ static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
 static constexpr const Board::DigitalPin PREVIOUS = Board::DigitalPin::D5;
 static constexpr const Board::DigitalPin NEXT = Board::DigitalPin::D6;
 static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D7;
+static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D0;
 
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
@@ -58,6 +59,7 @@ static_assert(FastPinType<DATA>::PORT == PORT, "DATA must be on same port as CLO
 static_assert(FastPinType<PREVIOUS>::PORT == PORT, "PREVIOUS must be on same port as CLOCK");
 static_assert(FastPinType<NEXT>::PORT == PORT, "NEXT must be on same port as CLOCK");
 static_assert(FastPinType<SELECT>::PORT == PORT, "SELECT must be on same port as CLOCK");
+static_assert(FastPinType<START_STOP>::PORT == PORT, "START_STOP must be on same port as CLOCK");
 
 // Timing constants
 // Multiplexing is done one row every 2ms, ie 8 rows in 16ms
@@ -78,7 +80,8 @@ static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
 static constexpr const uint8_t ALL_PORT =	MULTIPLEXER::PORT_MASK |
 											FastPinType<PREVIOUS>::MASK |
 											FastPinType<NEXT>::MASK |
-											FastPinType<SELECT>::MASK;
+											FastPinType<SELECT>::MASK |
+											FastPinType<START_STOP>::MASK;
 
 //TODO Make it a template based on game size (num rows, num columns)
 //TODO Make a class to hold one generation and access its members?
