@@ -3,16 +3,28 @@
 
 #include <fastarduino/devices/SIPO.hh>
 
+// Make this class more generic (make rows/columns parameters)
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint8_t BLINK_COUNT = 2>
 class Matrix8x8Multiplexer
 {
+private:
+	using SIPO_TYPE = SIPO<CLOCK, LATCH, DATA>;
+	
 public:
 	static constexpr const uint8_t ROWS = 8;
 	static constexpr const uint8_t COLUMNS = 8;
 	
-	Matrix8x8Multiplexer()
-		:_data(), _blinks(), _row(), _blink_count(), _blinking() {}
+	static constexpr const Board::Port PORT = SIPO_TYPE::PORT;
+	static constexpr const uint8_t DDR_MASK = SIPO_TYPE::DDR_MASK;
+	static constexpr const uint8_t PORT_MASK = SIPO_TYPE::PORT_MASK;
+
+	Matrix8x8Multiplexer(bool blinking = false)
+		:_data(), _blinks(), _row(), _blink_count(), _blinking(blinking) {}
 	
+	inline void init()
+	{
+		_sipo.init();
+	}
 	inline uint8_t* data()
 	{
 		return _data;
@@ -48,7 +60,7 @@ public:
 	}
 	
 protected:
-	SIPO<CLOCK, LATCH, DATA, uint16_t> _sipo;
+	SIPO<CLOCK, LATCH, DATA> _sipo;
 	uint8_t _data[ROWS];
 	uint8_t _blinks[ROWS];
 	uint8_t _row;
