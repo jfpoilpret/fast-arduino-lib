@@ -27,7 +27,6 @@
 #include <util/delay.h>
 
 #include <fastarduino/time.hh>
-#include <fastarduino/Timer.hh>
 
 #include "Multiplexer.hh"
 
@@ -37,35 +36,49 @@
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
-static constexpr const Board::Timer TIMER_DISPLAY = Board::Timer::TIMER0;
-static constexpr const Board::TimerPrescaler PRESCALER_DISPLAY = Board::TimerPrescaler::DIV_256;
-static constexpr const Board::Timer TIMER_PROGRESS = Board::Timer::TIMER1;
-static constexpr const Board::TimerPrescaler PRESCALER_PROGRESS = Board::TimerPrescaler::DIV_1024;
-USE_TIMER0();
-USE_TIMER1();
+
+static constexpr const Board::DigitalPin PREVIOUS = Board::DigitalPin::D5;
+static constexpr const Board::DigitalPin NEXT = Board::DigitalPin::D6;
+static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D7;
+
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
-static constexpr const Board::Timer TIMER_DISPLAY = Board::Timer::TIMER0;
-static constexpr const Board::TimerPrescaler PRESCALER_DISPLAY = Board::TimerPrescaler::DIV_256;
-static constexpr const Board::Timer TIMER_PROGRESS = Board::Timer::TIMER1;
-static constexpr const Board::TimerPrescaler PRESCALER_PROGRESS = Board::TimerPrescaler::DIV_1024;
-USE_TIMER0();
-USE_TIMER1();
 #else
 #error "Current target is not yet supported!"
 #endif
 
+// Single port used by this circuit
+static constexpr const Board::Port PORT = FastPinType<CLOCK>::PORT;
+
+// Check at compile time that all pins are on the same port
+static_assert(FastPinType<LATCH>::PORT == PORT, "LATCH must be on same port as CLOCK");
+static_assert(FastPinType<DATA>::PORT == PORT, "DATA must be on same port as CLOCK");
+static_assert(FastPinType<PREVIOUS>::PORT == PORT, "PREVIOUS must be on same port as CLOCK");
+static_assert(FastPinType<NEXT>::PORT == PORT, "NEXT must be on same port as CLOCK");
+static_assert(FastPinType<SELECT>::PORT == PORT, "SELECT must be on same port as CLOCK");
+
+// Timing constants
+// Multiplexing is done one row every 2ms, ie 8 rows in 16ms
 static constexpr const uint16_t REFRESH_PERIOD_MS = 2;
-static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
-static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS / REFRESH_PERIOD_MS;
+// Blinking LEDs are toggled every 20 times the display is fully refreshed (ie 20 x 8 x 2ms = 320ms)
 static constexpr const uint8_t BLINKING_COUNTER = 20;
 
-using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
+static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
+static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS / REFRESH_PERIOD_MS;
 
+// Useful constants and types
+using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
 static constexpr const uint8_t ROWS = MULTIPLEXER::ROWS;
 static constexpr const uint8_t COLUMNS = MULTIPLEXER::COLUMNS;
+
+// Calculate direction of pins (3 output, 4 input with pullups)
+static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
+static constexpr const uint8_t ALL_PORT =	MULTIPLEXER::PORT_MASK |
+											FastPinType<PREVIOUS>::MASK |
+											FastPinType<NEXT>::MASK |
+											FastPinType<SELECT>::MASK;
 
 //TODO Make it a template based on game size (num rows, num columns)
 //TODO Make a class to hold one generation and access its members?
@@ -131,35 +144,7 @@ private:
 	uint8_t* _current_generation;
 };
 
-class DisplayRefresher: public TimerCallback
-{
-public:
-	DisplayRefresher(MULTIPLEXER& mux):_mux(mux) {}
-	virtual void on_timer() override
-	{
-		_mux.refresh();
-	}
-	
-private:
-	MULTIPLEXER& _mux; 
-};
-
-class GameProgresser: public TimerCallback
-{
-public:
-	GameProgresser(GameOfLife& game): _game(game) {}
-	virtual void on_timer() override
-	{
-		_game.progress_game();
-	}
-	
-private:
-	GameOfLife& _game;
-};
-
 // OPEN POINTS/TODO
-// - Use TIMER vectors or not? For refresh, for game progress or for both?
-// - Use INT/PCI Vectors for start/stop and other buttons? Normally not needed
 // - Implement initial board setup (with 3 buttons at first: previous, next, select/unselect)
 // - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
 
@@ -169,33 +154,36 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	// Initialize Multiplexer
-	MULTIPLEXER mux;
+	// Initialize all pins (only one port)
+	FastPort<PORT>{ALL_DDR, ALL_PORT};
+	
+	// Initialize Multiplexer (blinking at first)
+	MULTIPLEXER mux{true};
+	
+	// Step #1: Initialize board with 1st generation
+	//===============================================
+	//TODO 
 	for (uint8_t i = 0; i < MULTIPLEXER::ROWS; ++i)
 		mux.data()[i] = data[i];
 	
+	// Step #2: Start game
+	//=====================
 	// Initialize game board
 	GameOfLife game{mux.data()};
+	mux.blinking(false);
 	
-	DisplayRefresher display_refresher{mux};
-	Timer<TIMER_DISPLAY> display_timer{display_refresher};
-	display_timer.begin(PRESCALER_DISPLAY, F_CPU / 1000 / _BV(uint8_t(PRESCALER_DISPLAY)) * REFRESH_PERIOD_MS - 1);
-	
-	GameProgresser game_progresser{game};
-	Timer<TIMER_PROGRESS> progress_timer{game_progresser};
-	progress_timer.begin(PRESCALER_PROGRESS, F_CPU / 1000 / _BV(uint8_t(PRESCALER_PROGRESS)) * PROGRESS_PERIOD_MS - 1);
-
 	// Loop to light every LED for one second
-//	uint16_t progress_counter = 0;
+	uint16_t progress_counter = 0;
 	while (true)
 	{
-//		mux.refresh();
-//		Time::delay_ms(PROGRESS_PERIOD_MS);
-//		if (++progress_counter == PROGRESS_COUNTER)
-//		{
-//			game.progress_game();
-//			progress_counter = 0;
-//		}
+		mux.refresh();
+		Time::delay_ms(REFRESH_PERIOD_MS);
+		if (++progress_counter == PROGRESS_COUNTER)
+		{
+			game.progress_game();
+			progress_counter = 0;
+			//TODO Check if game is finished (ie no more live cell)
+		}
 	}
 	return 0;
 }
