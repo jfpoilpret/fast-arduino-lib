@@ -3,11 +3,31 @@
 
 #include <fastarduino/FastIO.hh>
 
-template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, typename T = uint8_t>
+//TODO Improve template arguments: T should not be here but directly for output() method
+//TODO We can then specialize output for uint8_t, uint16_t...
+template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA>
 class SIPO
 {
 public:
-	SIPO():_clock{PinMode::OUTPUT, false}, _latch{PinMode::OUTPUT, true}, _data{PinMode::OUTPUT, false} {}
+	static constexpr const Board::Port PORT = FastPinType<CLOCK>::PORT;
+	static constexpr const uint8_t DDR_MASK =
+		FastPinType<CLOCK>::MASK | FastPinType<LATCH>::MASK | FastPinType<DATA>::MASK;
+	static constexpr const uint8_t PORT_MASK = FastPinType<LATCH>::MASK;
+	
+	SIPO():_clock{}, _latch{}, _data{}
+	{
+		static_assert(	PORT == FastPinType<LATCH>::PORT && PORT == FastPinType<DATA>::PORT,
+						"CLOCK, LATCH and DATA pins must belong to the same PORT");
+	}
+	
+	inline void init()
+	{
+		_clock.set_mode(PinMode::OUTPUT, false);
+		_latch.set_mode(PinMode::OUTPUT, true);
+		_data.set_mode(PinMode::OUTPUT, false);
+	}
+	
+	template<typename T>
 	void output(T data)
 	{
 		T mask = 1 << (sizeof(T) * 8 - 1);
