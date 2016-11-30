@@ -24,12 +24,14 @@ namespace Time
 	using MILLIS_PTR = uint32_t (*)();
 	extern MILLIS_PTR millis;
 	
-	void delay_us(uint16_t us)
+	inline void delay_us(uint16_t us) INLINE;
+	inline void delay_us(uint16_t us)
 	{
 		_delay_loop_2((us * F_CPU) / 4000000L);
 	}
 
-	void delay_ms(uint16_t ms)
+	inline void delay_ms(uint16_t ms) INLINE;
+	inline void delay_ms(uint16_t ms)
 	{
 		while (ms--) delay_us(1000);
 	}
