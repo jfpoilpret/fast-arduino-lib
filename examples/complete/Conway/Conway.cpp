@@ -29,6 +29,7 @@
 #include <fastarduino/time.hh>
 
 #include "Multiplexer.hh"
+#include "Buttons.hh"
 
 #include "TestData.hh"
 
@@ -66,6 +67,9 @@ static_assert(FastPinType<START_STOP>::PORT == PORT, "START_STOP must be on same
 static constexpr const uint16_t REFRESH_PERIOD_MS = 2;
 // Blinking LEDs are toggled every 20 times the display is fully refreshed (ie 20 x 8 x 2ms = 320ms)
 static constexpr const uint8_t BLINKING_COUNTER = 20;
+// Buttons debouncing is done on a duration of 20ms
+static constexpr const uint8_t DEBOUNCE_TIME_MS = 20;
+static constexpr const uint8_t DEBOUNCE_COUNTER = DEBOUNCE_TIME_MS / REFRESH_PERIOD_MS;
 
 static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
 static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS / REFRESH_PERIOD_MS;
@@ -77,11 +81,11 @@ static constexpr const uint8_t COLUMNS = MULTIPLEXER::COLUMNS;
 
 // Calculate direction of pins (3 output, 4 input with pullups)
 static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
-static constexpr const uint8_t ALL_PORT =	MULTIPLEXER::PORT_MASK |
-											FastPinType<PREVIOUS>::MASK |
-											FastPinType<NEXT>::MASK |
-											FastPinType<SELECT>::MASK |
-											FastPinType<START_STOP>::MASK;
+static constexpr const uint8_t BUTTONS_MASK =	FastPinType<PREVIOUS>::MASK |
+												FastPinType<NEXT>::MASK |
+												FastPinType<SELECT>::MASK |
+												FastPinType<START_STOP>::MASK;
+static constexpr const uint8_t ALL_PORT =	MULTIPLEXER::PORT_MASK | BUTTONS_MASK;
 
 //TODO Make it a template based on game size (num rows, num columns)
 //TODO Make a class to hold one generation and access its members?
@@ -159,6 +163,30 @@ int main()
 	
 	// Step #1: Initialize board with 1st generation
 	//===============================================
+	{
+		//TODO Need to wait buttons low again
+		Buttons<PORT, BUTTONS_MASK, DEBOUNCE_COUNTER> buttons;
+		uint8_t row = 0;
+		uint8_t col = 0;
+		mux.data()[row] = _BV(col);
+		mux.blinks()[row] = _BV(col);
+		while (true)
+		{
+			// Check button states
+			uint8_t state = buttons.state();
+			// If STOP then setup is finished, skip to next step
+			if ((state & FastPinType<START_STOP>::MASK) == 0)
+				break;
+			// If NEXT/PREVIOUS then update blink
+			if ((state & FastPinType<NEXT>::MASK) == 0)
+			{
+				
+			}
+			mux.refresh();
+			Time::delay_ms(REFRESH_PERIOD_MS);
+		}
+	}
+	
 	//TODO 
 	for (uint8_t i = 0; i < MULTIPLEXER::ROWS; ++i)
 		mux.data()[i] = data[i];
