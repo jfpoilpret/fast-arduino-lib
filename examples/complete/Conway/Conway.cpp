@@ -158,18 +158,17 @@ int main()
 	// Initialize all pins (only one port)
 	FastPort<PORT>{ALL_DDR, ALL_PORT};
 	
-	// Initialize Multiplexer (blinking at first)
-	MULTIPLEXER mux{true};
+	// Initialize Multiplexer
+	MULTIPLEXER mux;
 	
 	// Step #1: Initialize board with 1st generation
 	//===============================================
 	{
-		//TODO Need to wait buttons low again
+		//FIXME Need to wait buttons low again
 		Buttons<PORT, BUTTONS_MASK, DEBOUNCE_COUNTER> buttons;
 		uint8_t row = 0;
 		uint8_t col = 0;
-		mux.data()[row] = _BV(col);
-		mux.blinks()[row] = _BV(col);
+		mux.blinks()[0] = _BV(0);
 		while (true)
 		{
 			// Check button states
@@ -177,25 +176,49 @@ int main()
 			// If STOP then setup is finished, skip to next step
 			if ((state & FastPinType<START_STOP>::MASK) == 0)
 				break;
+			// If SELECT pushed, then change current LED status
+			if ((state & FastPinType<SELECT>::MASK) == 0)
+				mux.data()[row] ^= _BV(col);
 			// If NEXT/PREVIOUS then update blink
 			if ((state & FastPinType<NEXT>::MASK) == 0)
 			{
-				
+				mux.blinks()[row] = 0;
+				if (++col == COLUMNS)
+				{
+					col = 0;
+					if (++row == ROWS)
+						row = 0;
+				}
+				mux.blinks()[row] = _BV(col);
 			}
-			mux.refresh();
+			if ((state & FastPinType<PREVIOUS>::MASK) == 0)
+			{
+				mux.blinks()[row] = 0;
+				if (col == 0)
+				{
+					col = COLUMNS -1;
+					if (row == 0)
+						row = ROWS - 1;
+					else
+						--row;
+				}
+				else
+					--col;
+				mux.blinks()[row] = _BV(col);
+			}
+			mux.blink();
 			Time::delay_ms(REFRESH_PERIOD_MS);
 		}
 	}
 	
 	//TODO 
-	for (uint8_t i = 0; i < MULTIPLEXER::ROWS; ++i)
-		mux.data()[i] = data[i];
+//	for (uint8_t i = 0; i < MULTIPLEXER::ROWS; ++i)
+//		mux.data()[i] = data[i];
 	
 	// Step #2: Start game
 	//=====================
 	// Initialize game board
 	GameOfLife game{mux.data()};
-	mux.blinking(false);
 	
 	// Loop to light every LED for one second
 	uint16_t progress_counter = 0;

@@ -3,8 +3,8 @@
 
 #include <fastarduino/devices/SIPO.hh>
 
-//TODO improve blink mode so that blink is done based only on _blinks, not with _data?
-// Make this class more generic (make rows/columns parameters)
+//TODO do we need BLINK_COUNT as class template argument, or just as method template argument?
+//TODO Make this class more generic (make rows/columns parameters)
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint8_t BLINK_COUNT = 2>
 class Matrix8x8Multiplexer
 {
@@ -19,8 +19,7 @@ public:
 	static constexpr const uint8_t DDR_MASK = SIPO_TYPE::DDR_MASK;
 	static constexpr const uint8_t PORT_MASK = SIPO_TYPE::PORT_MASK;
 
-	Matrix8x8Multiplexer(bool blinking = false)
-		:_data(), _blinks(), _row(), _blink_count(), _blinking(blinking) {}
+	Matrix8x8Multiplexer():_data(), _blinks(), _row(), _blink_count() {}
 	
 	inline void init()
 	{
@@ -37,21 +36,13 @@ public:
 	{
 		return _blinks;
 	}
-	
-	inline bool is_blinking()
-	{
-		return _blinking;
-	}
-	
-	inline void blinking(bool blink)
-	{
-		_blinking = blink;
-	}
-	
-	void refresh()
+
+	// Refreshes the next row of LED and blink it
+	// In this mode, blink is done for LEDs that are ON (in _data) and set to blink (in _blinks)
+	void refresh_and_blink()
 	{
 		uint8_t data = _data[_row];
-		if (_blinking && _blink_count > BLINK_COUNT) data &= _blinks[_row];
+		if (_blink_count > BLINK_COUNT) data &= ~_blinks[_row];
 		_sipo.output(as_uint16_t(data, _BV(_row) ^ 0xFF));
 		if (++_row == ROWS)
 		{
@@ -60,13 +51,37 @@ public:
 		}
 	}
 	
+	// Refreshes the next row of LED and blink LEDs that must blink
+	// In this mode, blink is done for LEDs that are set to blink (in _blinks), whatever if they're ON or not (in _data)
+	void blink()
+	{
+		uint8_t data = _data[_row];
+		if (_blink_count > BLINK_COUNT)
+			data &= ~_blinks[_row];
+		else
+			data |= _blinks[_row];
+		_sipo.output(as_uint16_t(data, _BV(_row) ^ 0xFF));
+		if (++_row == ROWS)
+		{
+			_row = 0;
+			if (++_blink_count == 2 * BLINK_COUNT) _blink_count = 0;
+		}
+	}
+	
+	// Refreshes the next row of LED without any blinking
+	void refresh()
+	{
+		_sipo.output(as_uint16_t(_data[_row], _BV(_row) ^ 0xFF));
+		if (++_row == ROWS)
+			_row = 0;
+	}
+	
 protected:
 	SIPO<CLOCK, LATCH, DATA> _sipo;
 	uint8_t _data[ROWS];
 	uint8_t _blinks[ROWS];
 	uint8_t _row;
 	uint8_t _blink_count;
-	bool _blinking;
 };
 
 #endif /* MULTIPLEXER_HH */

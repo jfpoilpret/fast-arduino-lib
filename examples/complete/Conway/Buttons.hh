@@ -7,7 +7,7 @@ template<Board::Port PORT, uint8_t MASK, uint8_t DEBOUNCE_COUNT>
 class Buttons
 {
 public:
-	Buttons():_latest_state(), _pending_state(), _count() {}
+	Buttons():_latest_state(MASK), _pending_state(), _count() {}
 
 	inline void init()
 	{
@@ -19,6 +19,7 @@ public:
 	{
 		uint8_t state = _port.get_PIN() & MASK;
 		// Don't return state unless it remained the same during DEBOUNCE_COUNT calls
+		//TODO this fi else is simplifyable (1st and 3rd condition can be merged in one)
 		if (state == _latest_state)
 		{
 			_pending_state = state;
