@@ -1,10 +1,34 @@
+// Important copyright notice: 
+// Parts of this file were copied from Mikael Patel's Cosa library, which copyright appears below.
+// Other parts are under Copyright (c) 2016, Jean-Francois Poilpret
+
+/**
+ * @file Cosa/Types.h
+ * @version 1.0
+ *
+ * @section License
+ * Copyright (C) 2012-2015, Mikael Patel
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * @section Description
+ * Common literals, data types and syntax abstractions.
+ *
+ * This file is part of the Arduino Che Cosa project.
+ */
 #ifndef UTILITIES_HH
 #define	UTILITIES_HH
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
-//#include "Board.hh"
 
 #ifndef UNUSED
 #define UNUSED __attribute__((unused))
