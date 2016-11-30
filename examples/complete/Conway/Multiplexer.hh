@@ -3,6 +3,7 @@
 
 #include <fastarduino/devices/SIPO.hh>
 
+//TODO improve blink mode so that blink is done based only on _blinks, not with _data?
 // Make this class more generic (make rows/columns parameters)
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint8_t BLINK_COUNT = 2>
 class Matrix8x8Multiplexer
