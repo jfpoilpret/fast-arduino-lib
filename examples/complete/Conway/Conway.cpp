@@ -104,19 +104,19 @@ public:
 			for (uint8_t col = 0; col < COLUMNS; ++col)
 			{
 				uint8_t count_neighbours = neighbours(row, col);
+				bool alive = false;
 				if (count_neighbours == 3)
 					// cell is alive
-					next_generation[row] |= _BV(col);
+					alive = true;
 				else if (count_neighbours == 4)
 				{
 					// cell state is kept
 					if (_current_generation[row] & _BV(col))
-						next_generation[row] |= _BV(col);
-					else
-						next_generation[row] &= ~_BV(col);
+						alive = true;
 				}
+				if (alive)
+					next_generation[row] |= _BV(col);
 				else
-					// cell state is dead
 					next_generation[row] &= ~_BV(col);
 			}
 		// Copy next generation to current one
@@ -150,6 +150,7 @@ private:
 
 // OPEN POINTS/TODO
 // - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
+// - Cleanify code with 2 functions, 1 setup, 1 game?
 
 int main() __attribute__((OS_main));
 int main()
