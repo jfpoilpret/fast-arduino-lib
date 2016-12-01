@@ -31,8 +31,6 @@
 #include "Multiplexer.hh"
 #include "Buttons.hh"
 
-#include "TestData.hh"
-
 #if defined(ARDUINO_UNO)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3;
@@ -47,6 +45,11 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D0;
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
+
+static constexpr const Board::DigitalPin PREVIOUS = Board::DigitalPin::D3;
+static constexpr const Board::DigitalPin NEXT = Board::DigitalPin::D4;
+static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5;
+static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -146,7 +149,6 @@ private:
 };
 
 // OPEN POINTS/TODO
-// - Implement initial board setup (with 3 buttons at first: previous, next, select/unselect)
 // - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
 
 int main() __attribute__((OS_main));
@@ -161,59 +163,60 @@ int main()
 	// Initialize Multiplexer
 	MULTIPLEXER mux;
 	
+	//TODO optimize if else maybe
 	// Step #1: Initialize board with 1st generation
 	//===============================================
 	{
-		//FIXME Need to wait buttons low again
 		Buttons<PORT, BUTTONS_MASK, DEBOUNCE_COUNTER> buttons;
 		uint8_t row = 0;
 		uint8_t col = 0;
 		mux.blinks()[0] = _BV(0);
+		uint8_t last_state = 0;
 		while (true)
 		{
 			// Check button states
 			uint8_t state = buttons.state();
-			// If STOP then setup is finished, skip to next step
-			if ((state & FastPinType<START_STOP>::MASK) == 0)
-				break;
-			// If SELECT pushed, then change current LED status
-			if ((state & FastPinType<SELECT>::MASK) == 0)
-				mux.data()[row] ^= _BV(col);
-			// If NEXT/PREVIOUS then update blink
-			if ((state & FastPinType<NEXT>::MASK) == 0)
+			if (state && state != last_state)
 			{
-				mux.blinks()[row] = 0;
-				if (++col == COLUMNS)
+				// If STOP then setup is finished, skip to next step
+				if (state & FastPinType<START_STOP>::MASK)
+					break;
+				// If SELECT pushed, then change current LED status
+				if (state & FastPinType<SELECT>::MASK)
+					mux.data()[row] ^= _BV(col);
+				// If NEXT/PREVIOUS then update blink
+				if (state & FastPinType<NEXT>::MASK)
 				{
-					col = 0;
-					if (++row == ROWS)
-						row = 0;
+					mux.blinks()[row] = 0;
+					if (++col == COLUMNS)
+					{
+						col = 0;
+						if (++row == ROWS)
+							row = 0;
+					}
+					mux.blinks()[row] = _BV(col);
 				}
-				mux.blinks()[row] = _BV(col);
-			}
-			if ((state & FastPinType<PREVIOUS>::MASK) == 0)
-			{
-				mux.blinks()[row] = 0;
-				if (col == 0)
+				if (state & FastPinType<PREVIOUS>::MASK)
 				{
-					col = COLUMNS -1;
-					if (row == 0)
-						row = ROWS - 1;
+					mux.blinks()[row] = 0;
+					if (col == 0)
+					{
+						col = COLUMNS -1;
+						if (row == 0)
+							row = ROWS - 1;
+						else
+							--row;
+					}
 					else
-						--row;
+						--col;
+					mux.blinks()[row] = _BV(col);
 				}
-				else
-					--col;
-				mux.blinks()[row] = _BV(col);
 			}
+			last_state = state;
 			mux.blink();
 			Time::delay_ms(REFRESH_PERIOD_MS);
 		}
 	}
-	
-	//TODO 
-//	for (uint8_t i = 0; i < MULTIPLEXER::ROWS; ++i)
-//		mux.data()[i] = data[i];
 	
 	// Step #2: Start game
 	//=====================

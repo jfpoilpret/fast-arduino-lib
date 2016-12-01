@@ -19,25 +19,24 @@ public:
 	{
 		uint8_t state = _port.get_PIN() & MASK;
 		// Don't return state unless it remained the same during DEBOUNCE_COUNT calls
-		//TODO this fi else is simplifyable (1st and 3rd condition can be merged in one)
-		if (state == _latest_state)
+		if (_count)
 		{
-			_pending_state = state;
-			_count = 0;
-		}
-		else if (state == _pending_state)
-		{
-			// Has new state been stable long enough?
+			// We are in a debouncing phase, check if we have reached end of debounce time
 			if (++_count == DEBOUNCE_COUNT)
-				_latest_state = state;
+			{
+				if (state == _pending_state)
+					_latest_state = state;
+				_count = 0;
+			}
 		}
-		else
+		else if (state != _latest_state)
 		{
-			// First is a really new state, start counting
+			// State has changed for the first time, start debouncing period now
 			_pending_state = state;
-			_count = 0;
+			_count = 1;
 		}
-		return _latest_state;
+		// Note that we want state to hold 1 when button is pushed, hence we invert all bits linked to button pins
+		return _latest_state ^ MASK;
 	}
 	
 private:
