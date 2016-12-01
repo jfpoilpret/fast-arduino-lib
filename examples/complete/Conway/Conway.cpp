@@ -188,15 +188,15 @@ int main()
 				mux.blinks()[row] = 0;
 				if (state & FastPinType<NEXT>::MASK)
 				{
-					col = (col == COLUMNS - 1 ? 0 : col + 1);
-					if (!col)
-						row = (row == ROWS - 1 ? 0 : row + 1);
+					row = (row == ROWS - 1 ? 0 : row + 1);
+					if (!row)
+						col = (col == COLUMNS - 1 ? 0 : col + 1);
 				}
 				if (state & FastPinType<PREVIOUS>::MASK)
 				{
-					col = (col == 0 ? COLUMNS - 1 : col - 1);
-					if (!col)
-						row = (row == 0 ? ROWS - 1 : row - 1);
+					row = (row == 0 ? ROWS - 1 : row - 1);
+					if (!row)
+						col = (col == 0 ? COLUMNS - 1 : col - 1);
 				}
 				mux.blinks()[row] = _BV(col);
 			}
@@ -222,7 +222,7 @@ int main()
 			{
 				game.progress_game();
 				progress_counter = 0;
-				//TODO Check if game is finished (ie no more live cell)
+				//TODO Check if game is finished (ie no more live cell, or still life), and do what then?
 			}
 		}
 	}
