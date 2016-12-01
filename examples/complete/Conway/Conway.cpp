@@ -188,25 +188,15 @@ int main()
 				mux.blinks()[row] = 0;
 				if (state & FastPinType<NEXT>::MASK)
 				{
-					if (++col == COLUMNS)
-					{
-						col = 0;
-						if (++row == ROWS)
-							row = 0;
-					}
+					col = (col == COLUMNS - 1 ? 0 : col + 1);
+					if (!col)
+						row = (row == ROWS - 1 ? 0 : row + 1);
 				}
 				if (state & FastPinType<PREVIOUS>::MASK)
 				{
-					if (col == 0)
-					{
-						col = COLUMNS -1;
-						if (row == 0)
-							row = ROWS - 1;
-						else
-							--row;
-					}
-					else
-						--col;
+					col = (col == 0 ? COLUMNS - 1 : col - 1);
+					if (!col)
+						row = (row == 0 ? ROWS - 1 : row - 1);
 				}
 				mux.blinks()[row] = _BV(col);
 			}
@@ -218,20 +208,22 @@ int main()
 	
 	// Step #2: Start game
 	//=====================
-	// Initialize game board
-	GameOfLife game{mux.data()};
-	
-	// Loop to light every LED for one second
-	uint16_t progress_counter = 0;
-	while (true)
 	{
-		mux.refresh();
-		Time::delay_ms(REFRESH_PERIOD_MS);
-		if (++progress_counter == PROGRESS_COUNTER)
+		// Initialize game board
+		GameOfLife game{mux.data()};
+
+		// Loop to light every LED for one second
+		uint16_t progress_counter = 0;
+		while (true)
 		{
-			game.progress_game();
-			progress_counter = 0;
-			//TODO Check if game is finished (ie no more live cell)
+			mux.refresh();
+			Time::delay_ms(REFRESH_PERIOD_MS);
+			if (++progress_counter == PROGRESS_COUNTER)
+			{
+				game.progress_game();
+				progress_counter = 0;
+				//TODO Check if game is finished (ie no more live cell)
+			}
 		}
 	}
 	return 0;
