@@ -185,20 +185,18 @@ int main()
 				if (state & FastPinType<SELECT>::MASK)
 					mux.data()[row] ^= _BV(col);
 				// If NEXT/PREVIOUS then update blink
+				mux.blinks()[row] = 0;
 				if (state & FastPinType<NEXT>::MASK)
 				{
-					mux.blinks()[row] = 0;
 					if (++col == COLUMNS)
 					{
 						col = 0;
 						if (++row == ROWS)
 							row = 0;
 					}
-					mux.blinks()[row] = _BV(col);
 				}
 				if (state & FastPinType<PREVIOUS>::MASK)
 				{
-					mux.blinks()[row] = 0;
 					if (col == 0)
 					{
 						col = COLUMNS -1;
@@ -209,8 +207,8 @@ int main()
 					}
 					else
 						--col;
-					mux.blinks()[row] = _BV(col);
 				}
+				mux.blinks()[row] = _BV(col);
 			}
 			last_state = state;
 			mux.blink();
