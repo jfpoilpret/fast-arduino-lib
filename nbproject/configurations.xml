@@ -16,6 +16,7 @@
         <itemPath>cores/fastarduino/devices/SIPO.hh</itemPath>
         <itemPath>cores/fastarduino/devices/WinBond.hh</itemPath>
       </logicalFolder>
+      <itemPath>cores/fastarduino/AnalogInput.hh</itemPath>
       <itemPath>cores/fastarduino/Board.hh</itemPath>
       <itemPath>cores/fastarduino/Board_traits.hh</itemPath>
       <itemPath>cores/fastarduino/Events.cpp</itemPath>
@@ -125,6 +126,8 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a</output>
         </archiverTool>
       </compileType>
+      <item path="cores/fastarduino/AnalogInput.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
@@ -286,6 +289,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/AnalogInput.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
@@ -447,6 +452,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/AnalogInput.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
@@ -608,6 +615,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/AnalogInput.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">
@@ -769,6 +778,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/AnalogInput.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/Board.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/Board_traits.hh" ex="false" tool="3" flavor2="0">

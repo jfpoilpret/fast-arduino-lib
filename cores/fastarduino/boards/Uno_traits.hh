@@ -95,30 +95,30 @@ namespace Board
 		static constexpr const bool IS_INT = INT;
 	};
 
-	template<> struct DigitalPin_trait<DigitalPin::NONE>: public DigitalPin_trait_impl<Port::NONE, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::NONE>: DigitalPin_trait_impl<Port::NONE, 0> {};
 	
-	template<> struct DigitalPin_trait<DigitalPin::D0>: public DigitalPin_trait_impl<Port::PORT_D, 0> {};
-	template<> struct DigitalPin_trait<DigitalPin::D1>: public DigitalPin_trait_impl<Port::PORT_D, 1> {};
-	template<> struct DigitalPin_trait<DigitalPin::D2>: public DigitalPin_trait_impl<Port::PORT_D, 2, true> {};
-	template<> struct DigitalPin_trait<DigitalPin::D3>: public DigitalPin_trait_impl<Port::PORT_D, 3, true> {};
-	template<> struct DigitalPin_trait<DigitalPin::D4>: public DigitalPin_trait_impl<Port::PORT_D, 4> {};
-	template<> struct DigitalPin_trait<DigitalPin::D5>: public DigitalPin_trait_impl<Port::PORT_D, 5> {};
-	template<> struct DigitalPin_trait<DigitalPin::D6>: public DigitalPin_trait_impl<Port::PORT_D, 6> {};
-	template<> struct DigitalPin_trait<DigitalPin::D7>: public DigitalPin_trait_impl<Port::PORT_D, 7> {};
+	template<> struct DigitalPin_trait<DigitalPin::D0>: DigitalPin_trait_impl<Port::PORT_D, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D1>: DigitalPin_trait_impl<Port::PORT_D, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D2>: DigitalPin_trait_impl<Port::PORT_D, 2, true> {};
+	template<> struct DigitalPin_trait<DigitalPin::D3>: DigitalPin_trait_impl<Port::PORT_D, 3, true> {};
+	template<> struct DigitalPin_trait<DigitalPin::D4>: DigitalPin_trait_impl<Port::PORT_D, 4> {};
+	template<> struct DigitalPin_trait<DigitalPin::D5>: DigitalPin_trait_impl<Port::PORT_D, 5> {};
+	template<> struct DigitalPin_trait<DigitalPin::D6>: DigitalPin_trait_impl<Port::PORT_D, 6> {};
+	template<> struct DigitalPin_trait<DigitalPin::D7>: DigitalPin_trait_impl<Port::PORT_D, 7> {};
 	
-	template<> struct DigitalPin_trait<DigitalPin::D8>: public DigitalPin_trait_impl<Port::PORT_B, 0> {};
-	template<> struct DigitalPin_trait<DigitalPin::D9>: public DigitalPin_trait_impl<Port::PORT_B, 1> {};
-	template<> struct DigitalPin_trait<DigitalPin::D10>: public DigitalPin_trait_impl<Port::PORT_B, 2> {};
-	template<> struct DigitalPin_trait<DigitalPin::D11>: public DigitalPin_trait_impl<Port::PORT_B, 3> {};
-	template<> struct DigitalPin_trait<DigitalPin::D12>: public DigitalPin_trait_impl<Port::PORT_B, 4> {};
-	template<> struct DigitalPin_trait<DigitalPin::D13>: public DigitalPin_trait_impl<Port::PORT_B, 5> {};
+	template<> struct DigitalPin_trait<DigitalPin::D8>: DigitalPin_trait_impl<Port::PORT_B, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D9>: DigitalPin_trait_impl<Port::PORT_B, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D10>: DigitalPin_trait_impl<Port::PORT_B, 2> {};
+	template<> struct DigitalPin_trait<DigitalPin::D11>: DigitalPin_trait_impl<Port::PORT_B, 3> {};
+	template<> struct DigitalPin_trait<DigitalPin::D12>: DigitalPin_trait_impl<Port::PORT_B, 4> {};
+	template<> struct DigitalPin_trait<DigitalPin::D13>: DigitalPin_trait_impl<Port::PORT_B, 5> {};
 	
-	template<> struct DigitalPin_trait<DigitalPin::D14>: public DigitalPin_trait_impl<Port::PORT_C, 0> {};
-	template<> struct DigitalPin_trait<DigitalPin::D15>: public DigitalPin_trait_impl<Port::PORT_C, 1> {};
-	template<> struct DigitalPin_trait<DigitalPin::D16>: public DigitalPin_trait_impl<Port::PORT_C, 2> {};
-	template<> struct DigitalPin_trait<DigitalPin::D17>: public DigitalPin_trait_impl<Port::PORT_C, 3> {};
-	template<> struct DigitalPin_trait<DigitalPin::D18>: public DigitalPin_trait_impl<Port::PORT_C, 4> {};
-	template<> struct DigitalPin_trait<DigitalPin::D19>: public DigitalPin_trait_impl<Port::PORT_C, 5> {};
+	template<> struct DigitalPin_trait<DigitalPin::D14>: DigitalPin_trait_impl<Port::PORT_C, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D15>: DigitalPin_trait_impl<Port::PORT_C, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D16>: DigitalPin_trait_impl<Port::PORT_C, 2> {};
+	template<> struct DigitalPin_trait<DigitalPin::D17>: DigitalPin_trait_impl<Port::PORT_C, 3> {};
+	template<> struct DigitalPin_trait<DigitalPin::D18>: DigitalPin_trait_impl<Port::PORT_C, 4> {};
+	template<> struct DigitalPin_trait<DigitalPin::D19>: DigitalPin_trait_impl<Port::PORT_C, 5> {};
 	
 #define _SELECT_PORT(PORT, ARG0, ARG1, ARG2)	\
 	(	PORT == Port::PORT_B ? ARG0 :			\
@@ -165,6 +165,124 @@ namespace Board
 							(uint8_t) pin - (uint8_t) DigitalPin::D8, 
 							(uint8_t) pin - (uint8_t) DigitalPin::D14);
 	}
+	
+	//==============
+	// Analog Input
+	//==============
+	template<AnalogReference AREF>
+	struct AnalogReference_trait
+	{
+		static constexpr const uint8_t MASK = 0;
+	};
+	
+	template<> struct AnalogReference_trait<AnalogReference::AREF>
+	{
+		static constexpr const uint8_t MASK = 0;
+	};
+	template<> struct AnalogReference_trait<AnalogReference::AVCC>
+	{
+		static constexpr const uint8_t MASK = _BV(REFS0);
+	};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>
+	{
+		static constexpr const uint8_t MASK = _BV(REFS1) | _BV(REFS0);
+	};
+
+	template<typename SAMPLE_TYPE>
+	struct AnalogSampleType_trait
+	{
+		static constexpr const uint8_t ADLAR_ = 0;
+		static constexpr const REGISTER _ADC{};
+	};
+	
+	template<>
+	struct AnalogSampleType_trait<uint16_t>
+	{
+		static constexpr const uint8_t ADLAR_ = 0;
+		static constexpr const REGISTER _ADC = _SELECT_REG(ADC);
+	};
+	template<>
+	struct AnalogSampleType_trait<uint8_t>
+	{
+		static constexpr const uint8_t ADLAR_ = _BV(ADLAR);
+		static constexpr const REGISTER _ADC = _SELECT_REG(ADCH);
+	};
+
+	template<AnalogClock MAXFREQ>
+	struct AnalogClock_trait
+	{
+		static constexpr const uint8_t PRESCALER = 0;
+		static constexpr const uint8_t PRESCALER_MASK = 0;
+		
+	};
+
+	template<uint32_t MAXFREQ>
+	struct AnalogClock_trait_impl
+	{
+		static constexpr uint8_t round_prescaler(uint16_t rate)
+		{
+			return (rate > 64 ? 128 :
+					rate > 32 ? 64 :
+					rate > 16 ? 32 :
+					rate > 8 ? 16 :
+					rate > 4 ? 8 :
+					rate > 2 ? 4 :
+					2);
+		}
+		static constexpr uint8_t prescaler_mask(uint8_t prescaler)
+		{
+			return (prescaler == 128 ? _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0) :
+					prescaler == 64 ? _BV(ADPS2) | _BV(ADPS1) :
+					prescaler == 32 ? _BV(ADPS2) | _BV(ADPS0) :
+					prescaler == 16 ? _BV(ADPS2) :
+					prescaler == 8 ? _BV(ADPS1) | _BV(ADPS0) :
+					prescaler == 4 ? _BV(ADPS1) :
+					_BV(ADPS0));
+		}
+
+		static constexpr const uint8_t PRESCALER = round_prescaler(uint16_t(F_CPU / MAXFREQ));
+		static constexpr const uint8_t PRESCALER_MASK = prescaler_mask(PRESCALER);
+	};
+	
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_50KHz>: AnalogClock_trait_impl<50000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_100KHz>: AnalogClock_trait_impl<100000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_200KHz>: AnalogClock_trait_impl<200000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_500KHz>: AnalogClock_trait_impl<500000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_1MHz>: AnalogClock_trait_impl<1000000UL> {};
+	
+	struct GlobalAnalogPin_trait
+	{
+		static constexpr const REGISTER ADMUX_ = _SELECT_REG(ADMUX);
+		static constexpr const REGISTER ADCSRA_ = _SELECT_REG(ADCSRA);
+		static constexpr const REGISTER ADCSRB_ = _SELECT_REG(ADCSRB);
+	};
+	
+	//TODO Check if and when we need DIDR0 stuff
+	template<AnalogPin APIN>
+	struct AnalogPin_trait
+	{
+//		static constexpr const REGISTER DIDR_ = _SELECT_REG(DIDR0);
+//		static constexpr const uint8_t DIDR_MASK = 0;
+		static constexpr const uint8_t MUX_MASK1 = 0;
+		static constexpr const uint8_t MUX_MASK2 = 0;
+	};
+	
+//	template<GlobalAnalogPin_trait::ADMUX_TYPE MUXM, uint8_t DIDRM>
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0>
+	struct AnalogPin_trait_impl
+	{
+		static constexpr const uint8_t MUX_MASK1 = MUXM1;
+		static constexpr const uint8_t MUX_MASK2 = MUXM2;
+	};
+	
+	template<> struct AnalogPin_trait<AnalogPin::A0>: AnalogPin_trait_impl<0> {};
+	template<> struct AnalogPin_trait<AnalogPin::A1>: AnalogPin_trait_impl<_BV(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A2>: AnalogPin_trait_impl<_BV(MUX1)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A3>: AnalogPin_trait_impl<_BV(MUX1) | _BV(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A4>: AnalogPin_trait_impl<_BV(MUX2)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A5>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<_BV(MUX3)> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<_BV(MUX3) | _BV(MUX2) | _BV(MUX1)> {};
 	
 	//===============
 	// IO interrupts
@@ -283,7 +401,7 @@ namespace Board
 		static constexpr const REGISTER OCRB{};
 		static constexpr const REGISTER TIMSK{};
 		static constexpr const REGISTER TIFR{};
-		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler)
+		static constexpr uint8_t TCCRB_prescaler(TimerPrescaler p)
 		{
 			return 0;
 		}
