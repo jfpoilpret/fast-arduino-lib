@@ -191,20 +191,23 @@ namespace Board
 	template<typename SAMPLE_TYPE>
 	struct AnalogSampleType_trait
 	{
-		static constexpr const uint8_t ADLAR_ = 0;
+		static constexpr const uint8_t ADLAR1 = 0;
+		static constexpr const uint8_t ADLAR2 = 0;
 		static constexpr const REGISTER _ADC{};
 	};
 	
 	template<>
 	struct AnalogSampleType_trait<uint16_t>
 	{
-		static constexpr const uint8_t ADLAR_ = 0;
+		static constexpr const uint8_t ADLAR1 = 0;
+		static constexpr const uint8_t ADLAR2 = 0;
 		static constexpr const REGISTER _ADC = _SELECT_REG(ADC);
 	};
 	template<>
 	struct AnalogSampleType_trait<uint8_t>
 	{
-		static constexpr const uint8_t ADLAR_ = _BV(ADLAR);
+		static constexpr const uint8_t ADLAR1 = _BV(ADLAR);
+		static constexpr const uint8_t ADLAR2 = 0;
 		static constexpr const REGISTER _ADC = _SELECT_REG(ADCH);
 	};
 
@@ -269,7 +272,6 @@ namespace Board
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFF;
 	};
 	
-//	template<GlobalAnalogPin_trait::ADMUX_TYPE MUXM, uint8_t DIDRM>
 	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFF>
 	struct AnalogPin_trait_impl
 	{

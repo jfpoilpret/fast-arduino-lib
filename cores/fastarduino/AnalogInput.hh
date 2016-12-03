@@ -30,8 +30,8 @@ public:
 		// First ensure that any pending sampling is finished
 		loop_until_bit_is_clear((volatile uint8_t&) GLOBAL_TRAIT::ADCSRA_, ADSC);
 		// Setup multiplexer selection and start conversion
-		((volatile uint8_t&) GLOBAL_TRAIT::ADMUX_) = VREF_TRAIT::MASK | TYPE_TRAIT::ADLAR_ | TRAIT::MUX_MASK1;
-		((volatile uint8_t&) GLOBAL_TRAIT::ADCSRB_) = TRAIT::MUX_MASK2;
+		((volatile uint8_t&) GLOBAL_TRAIT::ADMUX_) = VREF_TRAIT::MASK | TYPE_TRAIT::ADLAR1 | TRAIT::MUX_MASK1;
+		((volatile uint8_t&) GLOBAL_TRAIT::ADCSRB_) = TRAIT::MUX_MASK2 | TYPE_TRAIT::ADLAR2;
 
 		// The following delay is necessary for bandgap ADC, strangely 70us should be enough (timesheet)
 		// but this works only when no other ADC is used "at the same time"

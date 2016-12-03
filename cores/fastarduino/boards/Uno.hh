@@ -10,48 +10,6 @@
 //TODO Use traits for more settings and reduce macros used in here to the strict minimum
 //TODO Externalize traits (to Uno_traits.hh, MEGA_traits.hh ...)
 
-/**
- * Cosa pin symbol and hardware definitions for the ATmega328P based
- * board Arduino Uno. Cosa does not use pin numbers as Arduino/Wiring,
- * instead strong data type is used (enum types) for the specific pin
- * classes; DigitalPin, AnalogPin, PWMPin, etc.
- *
- * The pin numbers for ATmega328P are mapped as in Arduino. The static
- * inline functions, SFR, BIT and UART, rely on compiler optimizations
- * to be reduced.
- *
- * @section Board
- * @code
- *                         Arduino Uno
- *                  -----              -------
- *                +-|(o)|--------------| USB |---+
- *                | |   |              |     |   |
- *                | -----              |     |   |
- *                |                    -------   |
- *                |                              |
- *                |                            []| SCL
- *                |                            []| SDA
- *                |                            []| AREF
- *                |                            []| GND
- *             NC |[]                          []| D13/SCK/LED
- *          IOREF |[]                          []| D12/MISO
- *          RESET |[]                          []| D11/MOSI/PWM5
- *            3V3 |[]                          []| D10/SS/PWM4
- *             5V |[]                          []| D9/PWM3
- *            GND |[]                          []| D8
- *            GND |[]                            |
- *            Vin |[]                          []| D7
- *                |                            []| D6/PWM2
- *         A0/D14 |[]                          []| D5/PWM1
- *         A1/D15 |[]                          []| D4
- *         A2/D16 |[]                          []| D3/EXT1/PWM0
- *         A3/D17 |[]                          []| D2/EXT0
- *     SDA/A4/D18 |[]            ICSP          []| D1/TX
- *     SCL/A5/D19 |[]           o-o-o*         []| D0/RX
- *                 \            o-o-o           /
- *                  +--------------------------+
- * @endcode
- */
 namespace Board
 {
 	//====

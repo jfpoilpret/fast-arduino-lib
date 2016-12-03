@@ -8,32 +8,6 @@
 #define BOARDS_ATTINYX4
 #define BOARD_ATTINY
 
-/**
- * Cosa ATTINYX4 Board pin symbol definitions for the ATtinyX4
- * processors. Cosa does not use pin numbers as Arduino/Wiring,
- * instead strong data type is used (enum types) for the specific pin
- * classes; DigitalPin, AnalogPin, PWMPin, etc.
- *
- * The pin numbers are only symbolically mapped, i.e. a pin
- * number/digit will not work, symbols must be used, Board::D2.
- *
- * The static inline functions, SFR, BIT and UART, rely on compiler
- * optimizations to be reduced.
- *
- * @section Circuit
- * @code
- *                       ATinyX4
- *                     +----U----+
- * (VCC)-------------1-|VCC   GND|-14------------(GND)
- * (D8)--------------2-|PB0   PA0|-13----------(D0/A0)
- * (D9)--------------3-|PB1   PA1|-12----------(D1/A1)
- * (/RESET)----------4-|PB3   PA2|-11----------(D2/A2)
- * (EXT0/D10)--------5-|PB2   PA3|-10-------(D3/A3/SS)
- * (LED/D7/A7)-------6-|PA7   PA4|-9---(D4/A4/SCL/SCK)
- * (MISO/SDA/D6/A6)--7-|PA6   PA5|-8------(D5/A5/MOSI)
- *                     +---------+
- * @endcode
- */
 namespace Board
 {
 	//====
@@ -66,6 +40,39 @@ namespace Board
 		NONE = 0xFF
 	};
 
+	//==============
+	// Analog Input
+	//==============
+	enum class AnalogClock: uint8_t
+	{
+		MAX_FREQ_50KHz = 0,
+		MAX_FREQ_100KHz,
+		MAX_FREQ_200KHz,
+		MAX_FREQ_500KHz,
+		MAX_FREQ_1MHz
+	};
+	enum class AnalogReference: uint8_t
+	{
+		AREF = 0,
+		AVCC,
+		INTERNAL_1_1V
+	};
+	
+	enum class AnalogPin: uint8_t
+	{
+		A0 = 0,
+		A1,
+		A2,
+		A3,
+		A4,
+		A5,
+		A6,
+		A7,
+		TEMP,
+		BANDGAP,
+		NONE = 0xFF
+	};
+	
 	//===============
 	// IO interrupts
 	//===============

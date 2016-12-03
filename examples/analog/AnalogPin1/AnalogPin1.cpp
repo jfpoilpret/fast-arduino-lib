@@ -17,6 +17,7 @@
 #include <fastarduino/AnalogInput.hh>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#define HARDWARE_UART 1
 #include <fastarduino/uart.hh>
 static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
@@ -24,8 +25,13 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 USE_UART0();
 #elif defined (ARDUINO_MEGA)
 //TODO
+#define HARDWARE_UART 1
 #elif defined (BREADBOARD_ATTINYX4)
-//TODO
+#define HARDWARE_UART 0
+#include <fastarduino/softuart.hh>
+static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -41,7 +47,11 @@ int main()
 {
 	// Enable interrupts at startup time
 	sei();
+#if HARDWARE_UART
 	UATX<Board::USART::USART0> uart{output_buffer};
+#else
+	Soft::UATX<TX> uart{output_buffer};
+#endif
 	uart.begin(115200);
 
 	FormattedOutput<OutputBuffer> out = uart.fout();
