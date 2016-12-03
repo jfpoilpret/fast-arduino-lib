@@ -26,7 +26,7 @@ This comes at a cost:
 1. Template usage is often more complex in applications. The provided examples are here to help.
 2. Build times are increased as most code is inside C++ headers
 
-Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use numerous examples provided for that) in order to reap its benefits. fastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++11 standard.
+Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++11 standard.
 
 In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are built through netbeans, which was hard to initially setup, but much more friendly to use once setup is done. Also netbeans automatically provides makefiles that make it possible to build projects in command line.
 
@@ -56,6 +56,8 @@ What the project already has:
 - SPI master support
 - WinBond flash memory support
 - NRF24L01 device support
+- Analog Digital Conversion support (in Single Conversion mode only)
+- Power supply voltage measurement support
 
 As of now, the following platforms are supported (and tested):
 
@@ -69,7 +71,7 @@ I intend to later add support for:
 - Breadboard ATtiny85 at 8MHz
 - Arduino Leonardo
 
-Improtant! Note that "standard" IO implementation is deemed to disappear very soon, so if you consider starting a project with FastArduino today, prefer using FastIO.
+Important! Note that "standard" IO implementation is deemed to disappear very soon, so if you consider starting a project with FastArduino today, prefer using FastIO.
 
 Roadmap
 -------
@@ -86,17 +88,18 @@ The roadmap of supported features is the following:
 8. External Pin Interrupt support (done)
 9. Real Time Timer support (done)
 10. NRF24L01P support (done)
+11. SIPO shift register support
+12. Analog Input support (done for single conversion mode)
 
-11. Analog Input support
-12. Trace support (including PROGMEM strings support)
-13. EEPROM support
-14. Support of bandgap reference
-15. More boards variants support (Leonardo, ATtinyX5)
-16. ... To be determined later, based on my own projects needs
+13. General-purpose Timer support (will imply RTT implementation refactoring)
+14. Trace support (including PROGMEM strings support)
+15. EEPROM support
+16. More boards variants support (Leonardo, ATtinyX5)
+17. ... To be determined later, based on my own projects needs
 
-Some refactoring is also planned, in order to revisit current way to support multiple boards with different capabilities, based on a "traits" approach. This "tarit" approach refactoring has started with initial RTT implementation and is almost finished (as of November, 30th 2016); further changes are expected in this direction, normally with only little impact (or none at all) on API, until end 2016.
+Some refactoring is also planned, in order to revisit current way to support multiple boards with different capabilities, based on a "traits" approach. This "trait" approach refactoring has started with initial RTT implementation and is almost finished (as of December, 3rd 2016); further changes are expected in this direction, normally with only little impact (or none at all) on API, until end 2016.
 
-The following features are not in roadmap currently:
+The following features are not in FastArduino roadmap currently:
 
 - PWM Output support
 - I2C support
