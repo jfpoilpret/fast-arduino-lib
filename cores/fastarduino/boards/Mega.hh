@@ -121,6 +121,47 @@ namespace Board
 		NONE = 0XFF
 	};
 
+	//==============
+	// Analog Input
+	//==============
+	enum class AnalogClock: uint8_t
+	{
+		MAX_FREQ_50KHz = 0,
+		MAX_FREQ_100KHz,
+		MAX_FREQ_200KHz,
+		MAX_FREQ_500KHz,
+		MAX_FREQ_1MHz
+	};
+	enum class AnalogReference: uint8_t
+	{
+		AREF = 0,
+		AVCC,
+		INTERNAL_1_1V,
+		INTERNAL_2_56V
+	};
+	
+	enum class AnalogPin: uint8_t
+	{
+		A0 = 0,
+		A1,
+		A2,
+		A3,
+		A4,
+		A5,
+		A6,
+		A7,
+		A8,
+		A9,
+		A10,
+		A11,
+		A12,
+		A13,
+		A14,
+		A15,
+		BANDGAP,
+		NONE = 0xFF
+	};
+	
 	//===============
 	// IO interrupts
 	//===============

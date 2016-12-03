@@ -24,8 +24,12 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 USE_UART0();
 #elif defined (ARDUINO_MEGA)
-//TODO
 #define HARDWARE_UART 1
+#include <fastarduino/uart.hh>
+static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+USE_UART0();
 #elif defined (BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/softuart.hh>

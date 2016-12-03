@@ -378,6 +378,140 @@ namespace Board
 		return ((uint8_t) pin) & 0x7;
 	}
 
+	//==============
+	// Analog Input
+	//==============
+	template<AnalogReference AREF>
+	struct AnalogReference_trait
+	{
+		static constexpr const uint8_t MASK = 0;
+	};
+	
+	template<> struct AnalogReference_trait<AnalogReference::AREF>
+	{
+		static constexpr const uint8_t MASK = 0;
+	};
+	template<> struct AnalogReference_trait<AnalogReference::AVCC>
+	{
+		static constexpr const uint8_t MASK = _BV(REFS0);
+	};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>
+	{
+		static constexpr const uint8_t MASK = _BV(REFS1);
+	};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_2_56V>
+	{
+		static constexpr const uint8_t MASK = _BV(REFS1) | _BV(REFS0);
+	};
+
+	template<typename SAMPLE_TYPE>
+	struct AnalogSampleType_trait
+	{
+		static constexpr const uint8_t ADLAR1 = 0;
+		static constexpr const uint8_t ADLAR2 = 0;
+		static constexpr const REGISTER _ADC{};
+	};
+	
+	template<>
+	struct AnalogSampleType_trait<uint16_t>
+	{
+		static constexpr const uint8_t ADLAR1 = 0;
+		static constexpr const uint8_t ADLAR2 = 0;
+		static constexpr const REGISTER _ADC = _SELECT_REG(ADC);
+	};
+	template<>
+	struct AnalogSampleType_trait<uint8_t>
+	{
+		static constexpr const uint8_t ADLAR1 = _BV(ADLAR);
+		static constexpr const uint8_t ADLAR2 = 0;
+		static constexpr const REGISTER _ADC = _SELECT_REG(ADCH);
+	};
+
+	template<AnalogClock MAXFREQ>
+	struct AnalogClock_trait
+	{
+		static constexpr const uint8_t PRESCALER = 0;
+		static constexpr const uint8_t PRESCALER_MASK = 0;
+		
+	};
+
+	template<uint32_t MAXFREQ>
+	struct AnalogClock_trait_impl
+	{
+		static constexpr uint8_t round_prescaler(uint16_t rate)
+		{
+			return (rate > 64 ? 128 :
+					rate > 32 ? 64 :
+					rate > 16 ? 32 :
+					rate > 8 ? 16 :
+					rate > 4 ? 8 :
+					rate > 2 ? 4 :
+					2);
+		}
+		static constexpr uint8_t prescaler_mask(uint8_t prescaler)
+		{
+			return (prescaler == 128 ? _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0) :
+					prescaler == 64 ? _BV(ADPS2) | _BV(ADPS1) :
+					prescaler == 32 ? _BV(ADPS2) | _BV(ADPS0) :
+					prescaler == 16 ? _BV(ADPS2) :
+					prescaler == 8 ? _BV(ADPS1) | _BV(ADPS0) :
+					prescaler == 4 ? _BV(ADPS1) :
+					_BV(ADPS0));
+		}
+
+		static constexpr const uint8_t PRESCALER = round_prescaler(uint16_t(F_CPU / MAXFREQ));
+		static constexpr const uint8_t PRESCALER_MASK = prescaler_mask(PRESCALER);
+	};
+	
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_50KHz>: AnalogClock_trait_impl<50000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_100KHz>: AnalogClock_trait_impl<100000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_200KHz>: AnalogClock_trait_impl<200000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_500KHz>: AnalogClock_trait_impl<500000UL> {};
+	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_1MHz>: AnalogClock_trait_impl<1000000UL> {};
+	
+	struct GlobalAnalogPin_trait
+	{
+		static constexpr const REGISTER ADMUX_ = _SELECT_REG(ADMUX);
+		static constexpr const REGISTER ADCSRA_ = _SELECT_REG(ADCSRA);
+		static constexpr const REGISTER ADCSRB_ = _SELECT_REG(ADCSRB);
+	};
+	
+	template<AnalogPin APIN>
+	struct AnalogPin_trait
+	{
+		static constexpr const uint8_t MUX_MASK1 = 0;
+		static constexpr const uint8_t MUX_MASK2 = 0;
+		static constexpr const bool IS_BANDGAP = false;
+		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFF;
+	};
+	
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFF>
+	struct AnalogPin_trait_impl
+	{
+		static constexpr const uint8_t MUX_MASK1 = MUXM1;
+		static constexpr const uint8_t MUX_MASK2 = MUXM2;
+		static constexpr const bool IS_BANDGAP = (VOLTAGE != 0xFFFF);
+		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
+	};
+	
+	template<> struct AnalogPin_trait<AnalogPin::A0>: AnalogPin_trait_impl<0> {};
+	template<> struct AnalogPin_trait<AnalogPin::A1>: AnalogPin_trait_impl<_BV(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A2>: AnalogPin_trait_impl<_BV(MUX1)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A3>: AnalogPin_trait_impl<_BV(MUX1) | _BV(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A4>: AnalogPin_trait_impl<_BV(MUX2)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A5>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A6>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX1)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A7>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX1) | _BV(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<_BV(MUX4) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1), 0, 1100> {};
+	template<> struct AnalogPin_trait<AnalogPin::A8>: AnalogPin_trait_impl<0, _BV(MUX5)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A9>: AnalogPin_trait_impl<_BV(MUX0), _BV(MUX5)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A10>: AnalogPin_trait_impl<_BV(MUX1), _BV(MUX5)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A11>: AnalogPin_trait_impl<_BV(MUX1) | _BV(MUX0), _BV(MUX5)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A12>: AnalogPin_trait_impl<_BV(MUX2), _BV(MUX5)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A13>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX0), _BV(MUX5)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A14>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX1), _BV(MUX5)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A15>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX1) | _BV(MUX0), _BV(MUX5)> {};
+
 	//===============
 	// IO interrupts
 	//===============
