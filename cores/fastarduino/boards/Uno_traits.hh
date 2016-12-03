@@ -265,14 +265,18 @@ namespace Board
 //		static constexpr const uint8_t DIDR_MASK = 0;
 		static constexpr const uint8_t MUX_MASK1 = 0;
 		static constexpr const uint8_t MUX_MASK2 = 0;
+		static constexpr const bool IS_BANDGAP = false;
+		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFF;
 	};
 	
 //	template<GlobalAnalogPin_trait::ADMUX_TYPE MUXM, uint8_t DIDRM>
-	template<uint8_t MUXM1, uint8_t MUXM2 = 0>
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFF>
 	struct AnalogPin_trait_impl
 	{
 		static constexpr const uint8_t MUX_MASK1 = MUXM1;
 		static constexpr const uint8_t MUX_MASK2 = MUXM2;
+		static constexpr const bool IS_BANDGAP = (VOLTAGE != 0xFFFF);
+		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
 	};
 	
 	template<> struct AnalogPin_trait<AnalogPin::A0>: AnalogPin_trait_impl<0> {};
@@ -282,7 +286,7 @@ namespace Board
 	template<> struct AnalogPin_trait<AnalogPin::A4>: AnalogPin_trait_impl<_BV(MUX2)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A5>: AnalogPin_trait_impl<_BV(MUX2) | _BV(MUX0)> {};
 	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<_BV(MUX3)> {};
-	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<_BV(MUX3) | _BV(MUX2) | _BV(MUX1)> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<_BV(MUX3) | _BV(MUX2) | _BV(MUX1), 0, 1100> {};
 	
 	//===============
 	// IO interrupts

@@ -48,14 +48,15 @@ int main()
 	
 	// Declare Analog input
 	ANALOG_INPUT pot;
+	PowerVoltage<> power;
 
-	out << "Prescaler: " << pot.PRESCALER << endl << flush;
+	out << "Prescaler: " << ANALOG_INPUT::PRESCALER << endl << flush;
 	
 	// Loop of samplings
 	while (true)
 	{
 		ANALOG_INPUT::TYPE value = pot.sample();
-		out << value << endl << flush;
+		out << value << " (" << power.voltage_mV() << " mV)\n" << flush;
 		//TODO display on UART (HW or SW))
 		Time::delay_ms(1000);
 	}
