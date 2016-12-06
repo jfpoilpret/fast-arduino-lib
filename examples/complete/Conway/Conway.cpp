@@ -27,6 +27,7 @@
 #include <util/delay.h>
 
 #include <fastarduino/time.hh>
+//#include <fastarduino/AnalogInput.hh>
 
 #include "Multiplexer.hh"
 #include "Buttons.hh"
@@ -67,15 +68,17 @@ static_assert(FastPinType<START_STOP>::PORT == PORT, "START_STOP must be on same
 
 // Timing constants
 // Multiplexing is done one row every 2ms, ie 8 rows in 16ms
-static constexpr const uint16_t REFRESH_PERIOD_MS = 2;
+static constexpr const uint16_t REFRESH_PERIOD_US = 1000;
 // Blinking LEDs are toggled every 20 times the display is fully refreshed (ie 20 x 8 x 2ms = 320ms)
-static constexpr const uint8_t BLINKING_COUNTER = 20;
+//FIXME that should be provided as a MS period then counter be deduced!
+static constexpr const uint16_t BLINKING_HALF_TIME_MS = 250;
+static constexpr const uint16_t BLINKING_COUNTER = BLINKING_HALF_TIME_MS * 1000UL / REFRESH_PERIOD_US;
 // Buttons debouncing is done on a duration of 20ms
-static constexpr const uint8_t DEBOUNCE_TIME_MS = 20;
-static constexpr const uint8_t DEBOUNCE_COUNTER = DEBOUNCE_TIME_MS / REFRESH_PERIOD_MS;
+static constexpr const uint16_t DEBOUNCE_TIME_MS = 20;
+static constexpr const uint8_t DEBOUNCE_COUNTER = DEBOUNCE_TIME_MS * 1000UL / REFRESH_PERIOD_US;
 
 static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
-static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS / REFRESH_PERIOD_MS;
+static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS * 1000UL / REFRESH_PERIOD_US;
 
 // Useful constants and types
 using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
@@ -195,7 +198,7 @@ int main()
 			}
 			last_state = state;
 			mux.blink();
-			Time::delay_ms(REFRESH_PERIOD_MS);
+			Time::delay_us(REFRESH_PERIOD_US);
 		}
 	}
 	
@@ -210,7 +213,7 @@ int main()
 		while (true)
 		{
 			mux.refresh();
-			Time::delay_ms(REFRESH_PERIOD_MS);
+			Time::delay_us(REFRESH_PERIOD_US);
 			if (++progress_counter == PROGRESS_COUNTER)
 			{
 				game.progress_game();

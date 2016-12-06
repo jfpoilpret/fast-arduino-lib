@@ -5,7 +5,7 @@
 
 //TODO do we need BLINK_COUNT as class template argument, or just as method template argument?
 //TODO Make this class more generic (make rows/columns parameters)
-template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint8_t BLINK_COUNT = 2>
+template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint16_t BLINK_COUNT = 16>
 class Matrix8x8Multiplexer
 {
 private:
@@ -42,12 +42,12 @@ public:
 	void refresh_and_blink()
 	{
 		uint8_t data = _data[_row];
-		if (_blink_count > BLINK_COUNT) data &= ~_blinks[_row];
+		if (_blink_count > BLINK_COUNT / ROWS) data &= ~_blinks[_row];
 		_sipo.output(as_uint16_t(_BV(_row), data ^ 0xFF));
 		if (++_row == ROWS)
 		{
 			_row = 0;
-			if (++_blink_count == 2 * BLINK_COUNT) _blink_count = 0;
+			if (++_blink_count == 2 * BLINK_COUNT / ROWS) _blink_count = 0;
 		}
 	}
 	
@@ -56,7 +56,7 @@ public:
 	void blink()
 	{
 		uint8_t data = _data[_row];
-		if (_blink_count > BLINK_COUNT)
+		if (_blink_count > BLINK_COUNT / ROWS)
 			data &= ~_blinks[_row];
 		else
 			data |= _blinks[_row];
@@ -64,7 +64,7 @@ public:
 		if (++_row == ROWS)
 		{
 			_row = 0;
-			if (++_blink_count == 2 * BLINK_COUNT) _blink_count = 0;
+			if (++_blink_count == 2 * BLINK_COUNT / ROWS) _blink_count = 0;
 		}
 	}
 	
@@ -81,7 +81,7 @@ protected:
 	uint8_t _data[ROWS];
 	uint8_t _blinks[ROWS];
 	uint8_t _row;
-	uint8_t _blink_count;
+	uint16_t _blink_count;
 };
 
 #endif /* MULTIPLEXER_HH */
