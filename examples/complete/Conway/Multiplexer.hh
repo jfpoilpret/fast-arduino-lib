@@ -43,7 +43,7 @@ public:
 	{
 		uint8_t data = _data[_row];
 		if (_blink_count > BLINK_COUNT) data &= ~_blinks[_row];
-		_sipo.output(as_uint16_t(data, _BV(_row) ^ 0xFF));
+		_sipo.output(as_uint16_t(_BV(_row), data ^ 0xFF));
 		if (++_row == ROWS)
 		{
 			_row = 0;
@@ -60,7 +60,7 @@ public:
 			data &= ~_blinks[_row];
 		else
 			data |= _blinks[_row];
-		_sipo.output(as_uint16_t(data, _BV(_row) ^ 0xFF));
+		_sipo.output(as_uint16_t(_BV(_row), data ^ 0xFF));
 		if (++_row == ROWS)
 		{
 			_row = 0;
@@ -71,7 +71,7 @@ public:
 	// Refreshes the next row of LED without any blinking
 	void refresh()
 	{
-		_sipo.output(as_uint16_t(_data[_row], _BV(_row) ^ 0xFF));
+		_sipo.output(as_uint16_t(_BV(_row), _data[_row] ^ 0xFF));
 		if (++_row == ROWS)
 			_row = 0;
 	}
