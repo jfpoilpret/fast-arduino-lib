@@ -18,11 +18,18 @@
  *   - D2 is an output connected to both SIPO clock pins
  *   - D3 is an output connected to both SIPO latch pins
  *   - D4 is an output connected to first SIPO serial data input
+ *   - D0 is an input connected to the START/STOP button (connected itself to GND)
+ *   - D7 is an input connected to the SELECT button (connected itself to GND)
+ *   - A0 is an analog input connected to the ROW potentiometer
+ *   - A1 is an analog input connected to the COLUMN potentiometer
  *   - TODO LATER other pins for ADC pots and 2 push buttons
  * - on ATtinyX4 based boards:
  *   - TODO
  */
 
+//TODO use start/stop, during 2nd phase, to suspend/resume game
+//TODO use ROW or COLUMN pot, during 2nd phase, to change game speed
+//TODO detect end of game (empty board or still generation) and display special smilie
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -37,8 +44,8 @@ static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3;
 static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
 
-static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A5;
-static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A6;
+static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A0;
+static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A1;
 
 static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D7;
 static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D0;
@@ -155,7 +162,6 @@ int main()
 	// Initialize Multiplexer
 	MULTIPLEXER mux;
 	
-	//TODO optimize if else maybe
 	// Step #1: Initialize board with 1st generation
 	//===============================================
 	{
