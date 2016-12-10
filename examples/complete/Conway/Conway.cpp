@@ -22,9 +22,14 @@
  *   - D7 is an input connected to the SELECT button (connected itself to GND)
  *   - A0 is an analog input connected to the ROW potentiometer
  *   - A1 is an analog input connected to the COLUMN potentiometer
- *   - TODO LATER other pins for ADC pots and 2 push buttons
  * - on ATtinyX4 based boards:
- *   - TODO
+ *   - PAx is an output connected to both SIPO clock pins
+ *   - PAx is an output connected to both SIPO latch pins
+ *   - PA0 is an output connected to first SIPO serial data input
+ *   - PA5 is an input connected to the START/STOP button (connected itself to GND)
+ *   - PA4 is an input connected to the SELECT button (connected itself to GND)
+ *   - A6 is an analog input connected to the ROW potentiometer
+ *   - A7 is an analog input connected to the COLUMN potentiometer
  */
 
 //TODO use start/stop, during 2nd phase, to suspend/resume game
@@ -37,6 +42,7 @@
 #include <fastarduino/AnalogInput.hh>
 
 #include "Multiplexer.hh"
+#include "Button.hh"
 #include "Buttons.hh"
 
 #if defined(ARDUINO_UNO)
@@ -60,6 +66,16 @@ static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A4;
 
 static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5;
 static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
+//TODO Find real PAx for latch and clock
+//static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::DX;
+//static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::DX;
+//static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D0;
+//
+//static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A7;
+//static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A6;
+//
+//static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4;
+//static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -118,8 +134,25 @@ public:
 					next_generation[row] &= ~_BV(col);
 			}
 		// Copy next generation to current one
+		_still = true;
+		_empty = true;
 		for (uint8_t row = 0; row < ROWS; ++row)
-			_current_generation[row] = next_generation[row];
+		{
+			if (_current_generation[row] != next_generation[row])
+				_still = false;
+			if ((_current_generation[row] = next_generation[row]))
+				_empty = false;
+		}
+	}
+	
+	inline bool is_empty()
+	{
+		return _empty;
+	}
+
+	inline bool is_still()
+	{
+		return _still;
 	}
 
 private:
@@ -144,6 +177,8 @@ private:
 	}
 
 	uint8_t* _current_generation;
+	bool _empty;
+	bool _still;
 };
 
 // OPEN POINTS/TODO
@@ -191,7 +226,7 @@ int main()
 					mux.data()[row] ^= _BV(col);
 			}
 			last_state = state;
-			mux.blink();
+			mux.refresh(BlinkMode::BLINK_ALL_BLINKS);
 			Time::delay_us(REFRESH_PERIOD_US);
 		}
 	}
@@ -199,22 +234,39 @@ int main()
 	// Step #2: Start game
 	//=====================
 	{
+		Button<START_STOP, DEBOUNCE_COUNTER> stop;
 		// Initialize game board
 		GameOfLife game{mux.data()};
 
-		// Loop to light every LED for one second
+		// Loop to refresh LED matrix and progress game to next generation
 		uint16_t progress_counter = 0;
 		while (true)
 		{
-			mux.refresh();
+			mux.refresh(BlinkMode::NO_BLINK);
 			Time::delay_us(REFRESH_PERIOD_US);
-			if (++progress_counter == PROGRESS_COUNTER)
+			if (!stop.state() && ++progress_counter == PROGRESS_COUNTER)
 			{
 				game.progress_game();
 				progress_counter = 0;
-				//TODO Check if game is finished (ie no more live cell, or still life), and do what then?
+				// Check if game is finished (ie no more live cell, or still life)
+				if (game.is_empty())
+				{
+					//TODO Load a smilie into the game
+					break;
+				}
+				if (game.is_still())
+					break;
 			}
 		}
+	}
+	
+	// Step #3: End game
+	//===================
+	// Here we just need to refresh content and blink it until reset
+	while (true)
+	{
+		Time::delay_us(REFRESH_PERIOD_US);
+		mux.refresh(BlinkMode::BLINK_ALL_DATA);
 	}
 	return 0;
 }

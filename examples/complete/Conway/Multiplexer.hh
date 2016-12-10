@@ -3,6 +3,18 @@
 
 #include <fastarduino/devices/SIPO.hh>
 
+enum class BlinkMode: uint8_t
+{
+	// In this mode, no blink occurs at all
+	NO_BLINK = 0,
+	// In this mode, blink is done for LEDs that are ON (in _data), whatever _blinks content
+	BLINK_ALL_DATA,
+	// In this mode, blink is done for LEDs that are set to blink (in _blinks), whatever if they're ON or not (in _data)
+	BLINK_ALL_BLINKS,
+	// In this mode, blink is done for LEDs that are ON (in _data) and set to blink (in _blinks)
+	BLINK_BLINKABLE_DATA
+};
+
 //TODO do we need BLINK_COUNT as class template argument, or just as method template argument?
 //TODO Make this class more generic (make rows/columns parameters)
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA, uint16_t BLINK_COUNT = 16>
@@ -37,38 +49,32 @@ public:
 		return _blinks;
 	}
 
-	// Refreshes the next row of LED and blink it
-	// In this mode, blink is done for LEDs that are ON (in _data) and set to blink (in _blinks)
-	void refresh_and_blink()
+	void refresh(BlinkMode blink_mode)
 	{
 		uint8_t data = _data[_row];
-		if (_blink_count > BLINK_COUNT / ROWS) data &= ~_blinks[_row];
-		_sipo.output(as_uint16_t(_BV(_row), data ^ 0xFF));
-		if (++_row == ROWS)
+		if (blink_mode != BlinkMode::NO_BLINK)
 		{
-			_row = 0;
-			if (++_blink_count == 2 * BLINK_COUNT / ROWS) _blink_count = 0;
+			if (_blink_count > BLINK_COUNT / ROWS)
+			{
+				if (blink_mode == BlinkMode::BLINK_BLINKABLE_DATA || blink_mode == BlinkMode::BLINK_ALL_BLINKS)
+					data &= ~_blinks[_row];
+				else
+					data = 0;
+			}
+			else if (blink_mode == BlinkMode::BLINK_ALL_BLINKS)
+				data |= _blinks[_row];
 		}
-	}
-	
-	// Refreshes the next row of LED and blink LEDs that must blink
-	// In this mode, blink is done for LEDs that are set to blink (in _blinks), whatever if they're ON or not (in _data)
-	void blink()
-	{
-		uint8_t data = _data[_row];
-		if (_blink_count > BLINK_COUNT / ROWS)
-			data &= ~_blinks[_row];
-		else
-			data |= _blinks[_row];
 		_sipo.output(as_uint16_t(_BV(_row), data ^ 0xFF));
 		if (++_row == ROWS)
 		{
 			_row = 0;
-			if (++_blink_count == 2 * BLINK_COUNT / ROWS) _blink_count = 0;
+			if (blink_mode != BlinkMode::NO_BLINK && ++_blink_count == 2 * BLINK_COUNT / ROWS)
+				_blink_count = 0;
 		}
 	}
 	
 	// Refreshes the next row of LED without any blinking
+	// This is equivalent to refresh(BlinkMode::NO_BLINK) but smaller and faster
 	void refresh()
 	{
 		_sipo.output(as_uint16_t(_BV(_row), _data[_row] ^ 0xFF));
