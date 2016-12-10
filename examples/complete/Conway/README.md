@@ -105,13 +105,13 @@ Notes:
 The code
 --------
 
-All code is written in C++ langauge (I use C++11 standard).
+All code is written in C++ language (I use C++11 standard).
 
-For some parts (digital IO, analog input), I decided to use some parts of my [FastArduino](TODO) library.
+For some parts (digital IO, analog input), I decided to use some parts of my [FastArduino](https://github.com/jfpoilpret/fast-arduino-lib) library.
 
-TODO mention toolchain, how to make (from github)...
-TODO describe the main parts of the code, including used FastArduino stuff.
-TODO mention template usage and possible use of bigger matrices at no cost on code size.
+- TODO mention toolchain, how to make (from github)...
+- TODO describe the main parts of the code, including used FastArduino stuff.
+- TODO mention template usage and possible use of bigger matrices at no cost on code size.
 
 The challenge
 -------------
