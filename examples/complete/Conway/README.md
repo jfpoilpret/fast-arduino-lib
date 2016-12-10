@@ -59,7 +59,9 @@ For the final circuit, I used two 50x90mm stripbard, stacked together, the above
 
 Original LochMaster design files are [here](Conway-board-Logic.LM4) and [here](Conway-board-UI.LM4)  (these can be displayed with a [free viewer](http://www.abacom-online.de/updates/LochMaster40_Viewer.zip). Here are drawings of the stripboards:
 
-![UI board](conway-board-UI-lochmaster.png) ![Logic board](conway-board-logic-lochmaster.png)
+UI board (above)             |  Logic board (under)
+:-------------------------:|:-------------------------:
+![](conway-board-UI-lochmaster.png)  |  ![](conway-board-logic-lochmaster.png)
 
 And here are the actual stripboards ready:
 
