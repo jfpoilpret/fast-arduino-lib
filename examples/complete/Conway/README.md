@@ -55,21 +55,59 @@ For the first tests on ATtiny84A, I have used a simple test board I have made th
 
 I then reused the same breadboard circuit as before. For these tests, the cicuit was powered through only 3.3V (instead of 5V on Arduino), that helped me fix current-limiting resistors for LEDs in order to keep high enough light output.
 
-For the final circuit, I used a 50x90mm stripbard, containing all components but the battery holder (2x1.5V AA). I designed it with [LochMaster](http://www.abacom-online.de/uk/html/lochmaster.html).
+For the final circuit, I used two 50x90mm stripbard, stacked together, the above board containing all "UI" stuff (LED matrix, buttons, potentiometers), the under board with all electronics (MCU, IC, resistors, caps, ISP header). Both boards are stacked with pin headers, just like Arduino shields. I designed those with [LochMaster](http://www.abacom-online.de/uk/html/lochmaster.html).
 
-Original LochMaster design files are here >>>>>> LINK TODO <<<<<< (this can be displayed with a [free viewer](http://www.abacom-online.de/updates/LochMaster40_Viewer.zip). Here are pictures of the stripboard:
+Original LochMaster design files are [here](Conway-board-Logic.LM4) and [here](Conway-board-UI.LM4)  (these can be displayed with a [free viewer](http://www.abacom-online.de/updates/LochMaster40_Viewer.zip). Here are drawings of the stripboards:
 
-TODO >>>>>> PHOTO <<<<<< >>>>>> PHOTO <<<<<<
+![UI board](conway-board-UI-lochmaster.png) ![Logic board](conway-board-logic-lochmaster.png)
+
+And here are the actual stripboards ready:
+
+TODO
 
 Bill of Material
 ----------------
 
-TODO
+- 1 x ATtiny84A (but the system should work the same on an ATtiny44 or ATtiny24)
+- 2 x 74HC595
+- 1 x red LED matrix 8x8
+- 1 x tantalum cap 10uF
+- 3 x tantalum cap 100nF
+- 1 x resistor 10K
+- 8 x resistor 110 (TODO optimize this value?)
+- 2 x tactile switch buttons extra small (6 x 3.5 x 3.5mm)
+- 2 x square momentary buttons (12 x 12 x 6mm)
+- 1 x female pin header 10 pins
+- 1 x female pin header 8 pins
+- 1 x female pin header 4 pins
+- 1 x female pin header 1 pin
+- 1 x male pin header 10 pins
+- 1 x male pin header 8 pins
+- 1 x male pin header 4 pins
+- 1 x male pin header 1 pin
+- 1 x male pin header 2 pins right angle 
+- 1 x male 2x3 pins shrouded header
+- 1 x IC socket DIP14
+- 2 x IC socket DIP16
+- 1 x USB female type A socket (THT)
+
+Notes:
+
+- TODO explain pin headers can be bought as long strips and cut to the right size.
+- TODO explain male pin headers.
+- TODO ISP header can be replace 2 male headers of 3 pins each
+- TODO I prefer precision IC sockets rather than standard
+- TODO USB socket is optional one can directly power the circuit through the 2 right angled pin headers
+- TODO explain where I found my components
 
 The code
 --------
 
-TODO mention C++ language, toolchain, FastARduino, how to make (from github)...
+All code is written in C++ langauge (I use C++11 standard).
+
+For some parts (digital IO, analog input), I decided to use some parts of my [FastArduino](TODO) library.
+
+TODO mention toolchain, how to make (from github)...
 TODO describe the main parts of the code, including used FastArduino stuff.
 TODO mention template usage and possible use of bigger matrices at no cost on code size.
 
@@ -89,6 +127,7 @@ Here is a summary of the general guideline I used to squeeze code size in this p
 - Avoid multiplication or division at runtime (use compile-time operations for constants) as this will also require extra code libraries included into your program code. Division and multiplication are allowed only for power of 2 (simple left or right shifts then).
 - Replace `switch` with `if...else if...` code blocks as it seems GCC produces a lot of code for `switch`.
 - Concentrate all pins needed by your program to a single port of the MCU, that will allow simpler (and smaller) initialization code (e.g. to setup output/input for each pin through `DDRx` and `PORTx` registers).
+- Replace several methods with similar behavior (e.g. refresh methods in `Multiplexer` class with different blink modes) into one with a bit more complex code (more `if` conditions) but smaller than the sum of code of all other methdos used in the project.
 - Deal with several input buttons as a whole (by reading `PORT` and using bit masks to determine individual buttons state) rather than reading each bit individually.
 - TODO MORE
 
