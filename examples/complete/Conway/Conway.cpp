@@ -32,9 +32,12 @@
  *   - A7 is an analog input connected to the COLUMN potentiometer
  */
 
-//TODO use start/stop, during 2nd phase, to suspend/resume game
-//TODO use ROW or COLUMN pot, during 2nd phase, to change game speed
-//TODO detect end of game (empty board or still generation) and display special smilie
+//TODO 1. Improve Button/Buttons to include a uniquePress API
+//TODO 2. Possibly remove use of Buttons and use 2 Button instead
+//TODO 3. Check and debug Suspend/Resumer and end of game detection
+//TODO 4. Reuse left pot (row selection) to determine speed of game
+//TODO 5. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours, use bit-parallel calculation...)
+
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -112,8 +115,21 @@ static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
 static constexpr const uint8_t BUTTONS_MASK = FastPinType<SELECT>::MASK | FastPinType<START_STOP>::MASK;
 static constexpr const uint8_t ALL_PORT = MULTIPLEXER::PORT_MASK | BUTTONS_MASK;
 
+static constexpr const uint8_t SMILEY[] =
+{
+	0B01100110,
+	0B10011001,
+	0B10000001,
+	0B10000001,
+	0B01000010,
+	0B00100100,
+	0B00011000,
+	0B00000000
+};
+
+//TODO Externalize into its own header
 //TODO Make it a template based on game size (num rows, num columns)
-//TODO Make a class to hold one generation and access its members?
+//TODO Maybe make a class to hold one generation and access its members?
 class GameOfLife
 {
 public:
@@ -184,7 +200,6 @@ private:
 // OPEN POINTS/TODO
 // - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
 // - Cleanify code with 2 functions, 1 setup, 1 game?
-
 int main() __attribute__((OS_main));
 int main()
 {
@@ -251,7 +266,9 @@ int main()
 				// Check if game is finished (ie no more live cell, or still life)
 				if (game.is_empty())
 				{
-					//TODO Load a smilie into the game
+					// Load a smiley into the game
+					for (uint8_t i = 0; i < sizeof(SMILEY)/sizeof(SMILEY[0]); ++i)
+						mux.blinks()[i] = SMILEY[i];
 					break;
 				}
 				if (game.is_still())
