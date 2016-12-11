@@ -3,6 +3,7 @@
 
 #include <fastarduino/FastIO.hh>
 
+//FIXME unique_press() does not work properly: it skips some presses sometimes...
 //TODO Possibly use same header for both classes Buttons and Button
 //TODO Some more refactoring is possible (AbstractButton<type> to use also with Buttons)
 //TODO Implement relaxing button that triggers state() true only once until button is depressed
