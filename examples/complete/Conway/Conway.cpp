@@ -32,11 +32,10 @@
  *   - A7 is an analog input connected to the COLUMN potentiometer
  */
 
-//TODO 1. Improve Button/Buttons to include a uniquePress API
-//TODO 2. Possibly remove use of Buttons and use 2 Button instead
-//TODO 3. Check and debug Suspend/Resumer and end of game detection
-//TODO 4. Reuse left pot (row selection) to determine speed of game
-//TODO 5. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours, use bit-parallel calculation...)
+//TODO 1. Check and debug Suspend/Resume and end of game detection
+//TODO 2. Reuse left pot (row selection) to determine speed of game
+//TODO 3. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours, use bit-parallel calculation...)
+//TODO 4. Update ATtiny84 pins for actual project boards (no more prototype)
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -46,6 +45,7 @@
 
 #include "Multiplexer.hh"
 #include "Button.hh"
+#include "Game.hh"
 
 #if defined(ARDUINO_UNO)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
@@ -108,6 +108,7 @@ static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS * 1000UL /
 using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
 static constexpr const uint8_t ROWS = MULTIPLEXER::ROWS;
 static constexpr const uint8_t COLUMNS = MULTIPLEXER::COLUMNS;
+using GAME = GameOfLife<ROWS, COLUMNS>;
 
 // Calculate direction of pins (3 output, 2 input with pullups)
 static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
@@ -124,76 +125,6 @@ static constexpr const uint8_t SMILEY[] =
 	0B00100100,
 	0B00011000,
 	0B00000000
-};
-
-//TODO Externalize into its own header
-//TODO Make it a template based on game size (num rows, num columns)
-//TODO Maybe make a class to hold one generation and access its members?
-class GameOfLife
-{
-public:
-	GameOfLife(uint8_t game[ROWS]):_current_generation(game) {}
-	
-	void progress_game()
-	{
-		uint8_t next_generation[ROWS];
-		for (uint8_t row = 0; row < ROWS; ++row)
-			for (uint8_t col = 0; col < COLUMNS; ++col)
-			{
-				uint8_t count_neighbours = neighbours(row, col);
-				if (count_neighbours == 3 || (count_neighbours == 4 && (_current_generation[row] & _BV(col))))
-					// cell is alive
-					next_generation[row] |= _BV(col);
-				else
-					// cell is dead
-					next_generation[row] &= ~_BV(col);
-			}
-		// Copy next generation to current one
-		_still = true;
-		_empty = true;
-		for (uint8_t row = 0; row < ROWS; ++row)
-		{
-			if (_current_generation[row] != next_generation[row])
-				_still = false;
-			if ((_current_generation[row] = next_generation[row]))
-				_empty = false;
-		}
-	}
-	
-	inline bool is_empty()
-	{
-		return _empty;
-	}
-
-	inline bool is_still()
-	{
-		return _still;
-	}
-
-private:
-	static uint8_t neighbours_in_row(uint8_t game_row, uint8_t col)
-	{
-		//TODO possibly optimize by:
-		// - copy row to GPIOR0
-		// - rotate GPIOR (col+1) times
-		// check individual bits 0, 1 and 2
-		uint8_t count = (game_row & _BV(col)) ? 1 : 0;
-		if (game_row & _BV(col ? col - 1 : COLUMNS - 1)) ++count;
-		if (game_row & _BV(col == COLUMNS - 1 ? 0 : col + 1)) ++count;
-		return count;
-	}
-	
-	uint8_t neighbours(uint8_t row, uint8_t col)
-	{
-		uint8_t count = neighbours_in_row(row ? _current_generation[row - 1] : _current_generation[ROWS - 1], col);
-		count += neighbours_in_row(row == ROWS - 1 ? _current_generation[0] : _current_generation[row + 1], col);
-		count += neighbours_in_row(_current_generation[row], col);
-		return count;
-	}
-
-	uint8_t* _current_generation;
-	bool _empty;
-	bool _still;
 };
 
 // OPEN POINTS/TODO
@@ -242,7 +173,7 @@ int main()
 	//=====================
 	{
 		// Initialize game board
-		GameOfLife game{mux.data()};
+		GAME game{mux.data()};
 
 		// Loop to refresh LED matrix and progress game to next generation
 		uint16_t progress_counter = 0;

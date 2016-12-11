@@ -19,6 +19,7 @@
     <itemPath>Button.hh</itemPath>
     <itemPath>Buttons.hh</itemPath>
     <itemPath>Conway.cpp</itemPath>
+    <itemPath>Game.hh</itemPath>
     <itemPath>Multiplexer.hh</itemPath>
     <itemPath>TestData.hh</itemPath>
   </logicalFolder>
@@ -81,6 +82,8 @@
       </item>
       <item path="Conway.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Game.hh" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Multiplexer.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="TestData.hh" ex="false" tool="3" flavor2="0">
@@ -138,6 +141,8 @@
       <item path="Buttons.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Conway.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Game.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Multiplexer.hh" ex="false" tool="3" flavor2="0">
       </item>
