@@ -46,7 +46,6 @@
 
 #include "Multiplexer.hh"
 #include "Button.hh"
-#include "Buttons.hh"
 
 #if defined(ARDUINO_UNO)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
@@ -212,16 +211,16 @@ int main()
 	// Initialize Multiplexer
 	MULTIPLEXER mux;
 	
+	Button<START_STOP, DEBOUNCE_COUNTER> stop;
 	// Step #1: Initialize board with 1st generation
 	//===============================================
 	{
-		Buttons<PORT, BUTTONS_MASK, DEBOUNCE_COUNTER> buttons;
+		Button<SELECT, DEBOUNCE_COUNTER> select;
 		AnalogInput<ROW, Board::AnalogReference::AVCC, uint8_t> row_input;
 		AnalogInput<COLUMN, Board::AnalogReference::AVCC, uint8_t> column_input;
 		uint8_t row = 0;
 		uint8_t col = 0;
 		mux.blinks()[0] = _BV(0);
-		uint8_t last_state = 0;
 		while (true)
 		{
 			// Update selected cell
@@ -230,17 +229,10 @@ int main()
 			col = column_input.sample() >> 5;
 			mux.blinks()[row] = _BV(col);
 			// Check button states
-			uint8_t state = buttons.state();
-			if (state && state != last_state)
-			{
-				// If STOP then setup is finished, skip to next step
-				if (state & FastPinType<START_STOP>::MASK)
-					break;
-				// If SELECT pushed, then change current LED status
-				if (state & FastPinType<SELECT>::MASK)
-					mux.data()[row] ^= _BV(col);
-			}
-			last_state = state;
+			if (stop.unique_press())
+				break;
+			if (select.unique_press())
+				mux.data()[row] ^= _BV(col);
 			mux.refresh(BlinkMode::BLINK_ALL_BLINKS);
 			Time::delay_us(REFRESH_PERIOD_US);
 		}
@@ -249,7 +241,6 @@ int main()
 	// Step #2: Start game
 	//=====================
 	{
-		Button<START_STOP, DEBOUNCE_COUNTER> stop;
 		// Initialize game board
 		GameOfLife game{mux.data()};
 
@@ -259,7 +250,8 @@ int main()
 		{
 			mux.refresh(BlinkMode::NO_BLINK);
 			Time::delay_us(REFRESH_PERIOD_US);
-			if (!stop.state() && ++progress_counter == PROGRESS_COUNTER)
+			bool pause = stop.unique_press();
+			if (!pause && ++progress_counter == PROGRESS_COUNTER)
 			{
 				game.progress_game();
 				progress_counter = 0;
