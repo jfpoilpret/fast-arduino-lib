@@ -41,7 +41,9 @@ I hence decided to use 2 rotating knobs (potentiometers), just like the famous "
 
 The circuit has another button, used to start the game (used to tell the system that setup of the first generation is finished) and also suspend it at any time, then resume it.
 
-Finally, to make the project a bit more challenging, trying to use the last available byte of code, I add a third potentiometer, used to control the speed of the game.
+Finally, to make the project a bit more challenging, trying to use the last available byte of code, I decided to reuse one of the pots used in setup in order to control the speed of the game.
+
+TODO electronics schema here
 
 My first prototype was originally developed on an Arduino UNO (it uses an ATmega328P, compatible with ATtiny, with just more pins, more bytes and more features on chip). The advantage is that it is easy to upload programs to an Arduino with just a USB cable.
 
@@ -63,9 +65,9 @@ UI board (above)             |  Logic board (under)
 :-------------------------:|:-------------------------:
 ![](conway-board-UI-lochmaster.png)  |  ![](conway-board-logic-lochmaster.png)
 
-And here are the actual stripboards ready:
+And here are the actual stripboards ready (without IC and LED matrix):
 
-TODO
+![stripboards](stripboards-ready-small.jpg)
 
 Bill of Material
 ----------------
