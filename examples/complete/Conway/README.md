@@ -78,7 +78,7 @@ Bill of Material
 - 1 x tantalum cap 10uF
 - 3 x tantalum cap 100nF
 - 1 x resistor 10K
-- 8 x resistor 110 (TODO optimize this value?)
+- 8 x resistor 330 Ohm
 - 2 x tactile switch buttons extra small (6 x 3.5 x 3.5mm)
 - 2 x square momentary buttons (12 x 12 x 6mm)
 - 1 x female pin header 10 pins
