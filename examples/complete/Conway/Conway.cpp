@@ -191,7 +191,7 @@ int main()
 				{
 					// Load a smiley into the game
 					for (uint8_t i = 0; i < sizeof(SMILEY)/sizeof(SMILEY[0]); ++i)
-						mux.blinks()[i] = SMILEY[i];
+						mux.data()[i] = SMILEY[i];
 					break;
 				}
 				if (game.is_still())
