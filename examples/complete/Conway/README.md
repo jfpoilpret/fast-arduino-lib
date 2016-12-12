@@ -5,6 +5,8 @@ This small project is my contribution to [HACKADAY.IO 1kB Challenge](https://hac
 
 This example implements well known [**Conway's Game of Life**](https://en.wikipedia.org/wiki/Conway's_Game_of_Life).
 
+Note that this implementation uses *Periodic Boundary Conditions* to simulate a field of an infinite size, i.e. each boundary is connected to the opposite boundary. This makes algorithm a bit more complex to implement but it mimics better the intent of this game.
+
 How to play
 -----------
 
@@ -16,9 +18,11 @@ You can define the first generation any way you see fit.
 
 Once you are done with first generation setup, you can start the game by pressing the START button.
 
-Then, generations get calculated and displayed, one after another, at regular intervals (speed is controllable through a third knob, from a few hundred ms to a few seconds).
+Then, generations get calculated and displayed, one after another, at regular intervals (speed is controllable through one of the two knobs used in the previous setup stage), from a few hundred ms to a few seconds).
 
-The situation where we reach a generation with no cells alive, is detected and a smilie displayed to show that.
+The START button can also be used to pause the game, then resume it at a later time.
+
+The situation where we reach a generation with no cells alive, is detected and a smiley displayed to show that.
 
 If the system reaches a stable situation (with live cells that never change), this is indicated by blinking those cells.
 
@@ -39,6 +43,8 @@ For 1st generation setup, I originally used 3 push buttons, one Previous/Next pa
 
 I hence decided to use 2 rotating knobs (potentiometers), just like the famous "Etch a Sketch" toy, to go faster to a position in the matrix. I kept one push button for changing the state of the currently selected cell. Wiring then took 2 analog input pins and 1 digital input pin.
 
+An analog joystick with a button on top would probably be the ideal device for this, but I did not have one at disposal. Anyway, the program and the wiring should remain the same (or roughly so for the wiring).
+
 The circuit has another button, used to start the game (used to tell the system that setup of the first generation is finished) and also suspend it at any time, then resume it.
 
 Finally, to make the project a bit more challenging, trying to use the last available byte of code, I decided to reuse one of the pots used in setup in order to control the speed of the game.
@@ -55,11 +61,11 @@ For the first tests on ATtiny84A, I have used a simple test board I have made th
 
 ![ATtiny84 test board](ATtiny84-test-board-small.jpg)
 
-I then reused the same breadboard circuit as before. For these tests, the cicuit was powered through only 3.3V (instead of 5V on Arduino), that helped me fix current-limiting resistors for LEDs in order to keep high enough light output.
+I then reused the same breadboard circuit as before.
 
 For the final circuit, I used two 50x90mm stripbard, stacked together, the above board containing all "UI" stuff (LED matrix, buttons, potentiometers), the under board with all electronics (MCU, IC, resistors, caps, ISP header). Both boards are stacked with pin headers, just like Arduino shields. I designed those with [LochMaster](http://www.abacom-online.de/uk/html/lochmaster.html).
 
-Original LochMaster design files are [here](Conway-board-Logic.LM4) and [here](Conway-board-UI.LM4)  (these can be displayed with a [free viewer](http://www.abacom-online.de/updates/LochMaster40_Viewer.zip). Here are drawings of the stripboards:
+Original LochMaster design files are [here](Conway-board-Logic.LM4) and [here](Conway-board-UI.LM4)  (these can be displayed with a [free viewer](http://www.abacom-online.de/updates/LochMaster40_Viewer.zip)). Here are drawings of the stripboards:
 
 UI board (above)             |  Logic board (under)
 :-------------------------:|:-------------------------:
@@ -132,8 +138,8 @@ Here is a summary of the general guideline I used to squeeze code size in this p
 - Replace `switch` with `if...else if...` code blocks as it seems GCC produces a lot of code for `switch`.
 - Concentrate all pins needed by your program to a single port of the MCU, that will allow simpler (and smaller) initialization code (e.g. to setup output/input for each pin through `DDRx` and `PORTx` registers).
 - Replace several methods with similar behavior (e.g. refresh methods in `Multiplexer` class with different blink modes) into one with a bit more complex code (more `if` conditions) but smaller than the sum of code of all other methdos used in the project.
-- Deal with several input buttons as a whole (by reading `PORT` and using bit masks to determine individual buttons state) rather than reading each bit individually.
-- TODO MORE
+- When using template classes with several instances (different template arguments), if some code in template is rather big, then try to factor it out to a non-template abstract base class, and make the template class derive from it.
+- TODO MORE if needed
 
 **IMPORTANT**: note that these guidelines are not always possible in all projects; for instance, it is difficult to avoid ISR when you need to perform serial communication (UART, SPI, I2C), when you need a Timer...
 
