@@ -10,7 +10,7 @@ template<uint8_t ROWS, uint8_t COLUMNS>
 class GameOfLife
 {
 public:
-	GameOfLife(uint8_t game[ROWS]):_current_generation(game) {}
+	GameOfLife(uint8_t game[ROWS]):_current_generation{game}, _empty{}, _still{} {}
 	
 	void progress_game()
 	{

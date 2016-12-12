@@ -177,11 +177,13 @@ int main()
 
 		// Loop to refresh LED matrix and progress game to next generation
 		uint16_t progress_counter = 0;
+		bool pause = false;
 		while (true)
 		{
 			mux.refresh(BlinkMode::NO_BLINK);
 			Time::delay_us(REFRESH_PERIOD_US);
-			bool pause = stop.unique_press();
+			if (stop.unique_press())
+				pause = !pause;
 			if (!pause && ++progress_counter == PROGRESS_COUNTER)
 			{
 				game.progress_game();
@@ -203,6 +205,7 @@ int main()
 	// Step #3: End game
 	//===================
 	// Here we just need to refresh content and blink it until reset
+	Time::delay_ms(1000);
 	while (true)
 	{
 		Time::delay_us(REFRESH_PERIOD_US);

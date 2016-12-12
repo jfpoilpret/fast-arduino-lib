@@ -16,14 +16,17 @@ protected:
 	bool _state(bool state, uint8_t debounce_count)
 	{
 		// Don't return state unless it remained the same during DEBOUNCE_COUNT calls
+		_changed = false;
 		if (_count)
 		{
 			// We are in a debouncing phase, check if we have reached end of debounce time
 			if (++_count == debounce_count)
 			{
-				_changed = (state == _pending_state);
-				if (_changed)
+				if (state == _pending_state)
+				{
+					_changed = true;
 					_latest_state = state;
+				}
 				_count = 0;
 			}
 		}
