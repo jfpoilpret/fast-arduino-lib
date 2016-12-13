@@ -3,11 +3,8 @@
 
 #include <fastarduino/FastIO.hh>
 
-//FIXME unique_press() does not work properly: it skips some presses sometimes...
 //TODO Possibly use same header for both classes Buttons and Button
 //TODO Some more refactoring is possible (AbstractButton<type> to use also with Buttons)
-//TODO Implement relaxing button that triggers state() true only once until button is depressed
-//TODO optimize size by using bits in one byte
 class AbstractButton
 {
 protected:
@@ -16,7 +13,7 @@ protected:
 	bool _state(bool state, uint8_t debounce_count)
 	{
 		// Don't return state unless it remained the same during DEBOUNCE_COUNT calls
-		_changed = false;
+		bool changed = false;
 		if (_count)
 		{
 			// We are in a debouncing phase, check if we have reached end of debounce time
@@ -24,7 +21,7 @@ protected:
 			{
 				if (state == _pending_state)
 				{
-					_changed = true;
+					changed = true;
 					_latest_state = state;
 				}
 				_count = 0;
@@ -36,7 +33,8 @@ protected:
 			_pending_state = state;
 			_count = 1;
 		}
-		// Note that we want state to hold 1 when button is pushed, hence we invert all bits linked to button pins
+		_changed = changed;
+		// Note that we want state to return true when button is pushed (LOW), hence we negate state here
 		return !_latest_state;
 	}
 	
