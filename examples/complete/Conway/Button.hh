@@ -3,41 +3,39 @@
 
 #include <fastarduino/FastIO.hh>
 
-//FIXME unique_press() does not work properly: it skips some presses sometimes...
 //TODO Possibly use same header for both classes Buttons and Button
 //TODO Some more refactoring is possible (AbstractButton<type> to use also with Buttons)
-//TODO Implement relaxing button that triggers state() true only once until button is depressed
 //TODO optimize size by using bits in one byte
 class AbstractButton
 {
 protected:
-	AbstractButton():_latest_state(true), _pending_state{}, _changed{}, _count() {}
+	AbstractButton():_status{}, _count() {}
 
 	bool _state(bool state, uint8_t debounce_count)
 	{
 		// Don't return state unless it remained the same during DEBOUNCE_COUNT calls
-		_changed = false;
+		_status.changed = false;
 		if (_count)
 		{
 			// We are in a debouncing phase, check if we have reached end of debounce time
 			if (++_count == debounce_count)
 			{
-				if (state == _pending_state)
+				if (state == _status.pending)
 				{
-					_changed = true;
-					_latest_state = state;
+					_status.changed = true;
+					_status.latest = state;
 				}
 				_count = 0;
 			}
 		}
-		else if (state != _latest_state)
+		else if (state != _status.latest)
 		{
 			// State has changed for the first time, start debouncing period now
-			_pending_state = state;
+			_status.pending = state;
 			_count = 1;
 		}
 		// Note that we want state to hold 1 when button is pushed, hence we invert all bits linked to button pins
-		return !_latest_state;
+		return !_status.latest;
 	}
 	
 	bool _unique_press(bool state, uint8_t debounce_count)
@@ -48,13 +46,18 @@ protected:
 public:
 	inline bool changed() INLINE
 	{
-		return _changed;
+		return _status.changed;
 	}
 	
 private:
-	bool _latest_state;
-	bool _pending_state;
-	bool _changed;
+	struct State
+	{
+		State():latest{true}, pending{}, changed{} {}
+		
+		bool latest		:1;
+		bool pending	:1;
+		bool changed	:1;
+	} _status;
 	uint8_t _count;
 };
 
