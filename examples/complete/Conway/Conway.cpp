@@ -152,7 +152,7 @@ int main()
 	
 #if HAS_TRACE
 	// Setup traces
-	uatx.begin(9600);
+	uatx.begin(57600);
 	trace.width(0);
 #endif
 	
