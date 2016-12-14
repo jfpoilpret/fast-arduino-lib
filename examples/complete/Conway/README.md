@@ -139,7 +139,12 @@ Here is a summary of the general guideline I used to squeeze code size in this p
 - Concentrate all pins needed by your program to a single port of the MCU, that will allow simpler (and smaller) initialization code (e.g. to setup output/input for each pin through `DDRx` and `PORTx` registers).
 - Replace several methods with similar behavior (e.g. refresh methods in `Multiplexer` class with different blink modes) into one with a bit more complex code (more `if` conditions) but smaller than the sum of code of all other methdos used in the project.
 - When using template classes with several instances (different template arguments), if some code in template is rather big, then try to factor it out to a non-template abstract base class, and make the template class derive from it.
-- TODO MORE if needed
+- Replace "classical" algorithm to count neighbours of a cell to determine next generation, with an optimized bit-parallel processing, thus removing all conditional (only boolean operations on bytes) and removing an embedded loop for columns. This one change enabled more than 100 bytes gain in code size, let alone speed efficiency. Thanks [Yann Guidon](https://hackaday.io/whygee) for his suggestion on that one. it took me several days to understand how to do it but it was worth it.
+
+Some options I had in mind but did not need to use for this contest (hell, 1024 bytes is just too much :-)):
+
+- Remove vector table altogether (about 40 bytes); this is normally done with a simple option at compile/link time.
+- Use AVR special `GPIORn` addresses; I am actually not sure I could have gained something with that, so I did not even try it.
 
 **IMPORTANT**: note that these guidelines are not always possible in all projects; for instance, it is difficult to avoid ISR when you need to perform serial communication (UART, SPI, I2C), when you need a Timer...
 
