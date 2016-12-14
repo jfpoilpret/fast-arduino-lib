@@ -32,7 +32,6 @@
  *   - A7 is an analog input connected to the COLUMN potentiometer
  */
 
-//TODO 1. Check and debug Suspend/Resume and end of game detection
 //TODO 2. Reuse left pot (row selection) to determine speed of game
 //TODO 3. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours, use bit-parallel calculation...)
 //TODO 4. Update ATtiny84 pins for actual project boards (no more prototype)
