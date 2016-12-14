@@ -3,6 +3,12 @@
 
 #include <avr/sfr_defs.h>
 
+#if defined(ARDUINO_UNO)
+#define HAS_TRACE 1
+#include <fastarduino/streams.hh>
+extern FormattedOutput<OutputBuffer> trace;
+#endif
+
 //TODO Improve templating by defining the right type for each row (uint8_t, uint16_t, uint32_t...)
 // Row Type could be deduced from COLUMNS value (or conversely)
 //TODO Maybe make a class to hold one generation and access its members?
@@ -40,9 +46,15 @@ public:
 	
 	void progress_game()
 	{
+#ifdef HAS_TRACE
+		trace << "process_game()\n" << flush;
+#endif
 		uint8_t next_generation[ROWS];
 		for (uint8_t row = 0; row < ROWS; ++row)
 		{
+#ifdef HAS_TRACE
+			trace << "row #" << dec << row << endl << flush;
+#endif
 			uint8_t previous = (row ? _current_generation[row - 1] : _current_generation[ROWS - 1]);
 			uint8_t next = (row == ROWS - 1 ? _current_generation[0] : _current_generation[row + 1]);
 			uint8_t current = _current_generation[row];
@@ -51,7 +63,7 @@ public:
 			uint8_t ok, code;
 			neighbours2(count_high, count_low, code, ok);
 			
-			current = ok & ((code & ~current) | ~code);
+			current = ok & ((code & current) | ~code);
 			next_generation[row] = current; 
 		}
 		// Copy next generation to current one
@@ -90,7 +102,7 @@ private:
 		// Perform bit-parallel calculation and update counts array
 		// On return, counts contain the number of live cells over 3 rows, column per column (0-3)
 		output_sum = input_a ^ input_b;
-		output_carry = (output_sum | input_a) & input_carry;
+		output_carry = (output_sum & input_carry) | (input_a & input_b);
 		output_sum ^= input_carry;
 	}
 	static void adder(uint8_t input_a, uint8_t input_b, uint8_t input_carry, uint8_t& output_sum)
@@ -117,18 +129,35 @@ private:
 		// To perform bit-parallel computation we'll need to rotate copies of count bytes left and right
 		// Add each column to its left and right columns into 4 bits [0-9]
 		uint8_t total_0, total_1, total_2, total_3, carry_0, carry_1, carry_2;
+		
 		adder(count_low, rotate_left(count_low), rotate_right(count_low), total_0, carry_0);
 		adder(count_high, rotate_left(count_high), rotate_right(count_high), total_1, carry_1);
 		// Add carries now
-		adder(total_0, total_1, carry_0, total_2, carry_2);
-		adder(total_2, carry_1, carry_2, total_3);
+		adder(total_1, carry_0, 0, total_1, carry_2);
+		adder(carry_1, carry_2, 0, total_2, total_3);
 
+#ifdef HAS_TRACE
+//		trace.width(8);
+//		trace << "count_h = " << bin << count_high << endl << flush;
+//		trace << "count_l = " << bin << count_low << "\n\n" << flush;
+//		trace << "total_3 = " << bin << total_3 << endl << flush;
+//		trace << "total_2 = " << bin << total_2 << endl << flush;
+//		trace << "total_1 = " << bin << total_1 << endl << flush;
+//		trace << "total_0 = " << bin << total_0 << "\n\n" << flush;
+//		trace.width(0);
+#endif
 		//TODO compute result bits
 		// - OK = 0 => too few or too many neighbours
 		// - OK = 1 / CODE = 0 -> 3 neighbours
 		// - OK = 1 / CODE = 1 -> 4 neighbours
 		ok = (~total_3) & (total_1 ^ total_2) & ~(total_0 ^ total_1);
 		code = ok & total_2;
+#ifdef HAS_TRACE
+		trace.width(8);
+		trace << "ok   = " << bin << ok << endl << flush;
+		trace << "code = " << bin << code << "\n\n" << flush;
+		trace.width(0);
+#endif
 	}
 	
 	static uint8_t neighbours_in_row(uint8_t game_row, uint8_t col)

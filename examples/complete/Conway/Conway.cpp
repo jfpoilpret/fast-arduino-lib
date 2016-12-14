@@ -54,9 +54,10 @@ static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
 static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A0;
 static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A1;
 
-static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D7;
-static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D0;
+static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5;
+static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
 
+#define HAS_TRACE 1
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
@@ -77,8 +78,22 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
 //
 //static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4;
 //static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
+#define HAS_TRACE 0
 #else
 #error "Current target is not yet supported!"
+#endif
+
+#if HAS_TRACE
+#include <fastarduino/uart.hh>
+USE_UATX0();
+
+// Buffers for UART
+static const uint8_t OUTPUT_BUFFER_SIZE = 128;
+static char output_buffer[OUTPUT_BUFFER_SIZE];
+static UATX<Board::USART::USART0> uatx{output_buffer};
+FormattedOutput<OutputBuffer> trace = uatx.fout();
+#else
+#include <fastarduino/empty_streams.hh>
 #endif
 
 // Single port used by this circuit
@@ -134,6 +149,12 @@ int main()
 {
 	// Enable interrupts at startup time
 	sei();
+	
+#if HAS_TRACE
+	// Setup traces
+	uatx.begin(9600);
+	trace.width(0);
+#endif
 	
 	// Initialize all pins (only one port)
 	FastPort<PORT>{ALL_DDR, ALL_PORT};
