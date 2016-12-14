@@ -33,7 +33,7 @@
  */
 
 //TODO 2. Reuse left pot (row selection) to determine speed of game
-//TODO 3. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours, use bit-parallel calculation...)
+//TODO 3. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours)
 //TODO 4. Update ATtiny84 pins for actual project boards (no more prototype)
 
 #include <avr/interrupt.h>
@@ -78,7 +78,6 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
 //
 //static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4;
 //static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
-#define HAS_TRACE 0
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -92,8 +91,6 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 static UATX<Board::USART::USART0> uatx{output_buffer};
 FormattedOutput<OutputBuffer> trace = uatx.fout();
-#else
-#include <fastarduino/empty_streams.hh>
 #endif
 
 // Single port used by this circuit
