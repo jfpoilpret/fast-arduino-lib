@@ -1,6 +1,7 @@
 #ifndef EMPTYSTREAMS_HH
 #define	EMPTYSTREAMS_HH
 
+#include <stddef.h>
 #include "utilities.hh"
 
 class EmptyOutput
