@@ -11,34 +11,35 @@ extern FormattedOutput<OutputBuffer> trace;
 
 //TODO Improve templating by defining the right type for each row (uint8_t, uint16_t, uint32_t...)
 // Row Type could be deduced from COLUMNS value (or conversely)
-//TODO Maybe make a class to hold one generation and access its members?
 template<uint8_t ROWS, uint8_t COLUMNS>
 class GameOfLife
 {
 public:
 	GameOfLife(uint8_t game[ROWS]):_current_generation{game}, _empty{}, _still{} {}
 	
-	//TODO Further possible optimization: do not recalculate previous and current in each loop iteration, 
-	// reuse current and next of the previous iteration!
 	void progress_game()
 	{
 #ifdef HAS_TRACE
 		trace << "process_game()\n" << flush;
 #endif
 		uint8_t next_generation[ROWS];
+		// Initialize first iteration (optimization))
+		uint8_t previous = _current_generation[ROWS - 1];
+		uint8_t current = _current_generation[0];
 		for (uint8_t row = 0; row < ROWS; ++row)
 		{
 #ifdef HAS_TRACE
 			trace << "row #" << dec << row << endl << flush;
 #endif
-			uint8_t previous = (row ? _current_generation[row - 1] : _current_generation[ROWS - 1]);
 			uint8_t next = (row == ROWS - 1 ? _current_generation[0] : _current_generation[row + 1]);
-			uint8_t current = _current_generation[row];
 			uint8_t ok, code;
 			neighbours(current, previous, next, code, ok);
 			
-			current = ok & ((code & current) | ~code);
-			next_generation[row] = current; 
+			uint8_t new_current = ok & ((code & current) | ~code);
+			next_generation[row] = new_current; 
+			// Prepare next iteration
+			previous = current;
+			current = next;
 		}
 		// Copy next generation to current one
 		_still = true;
