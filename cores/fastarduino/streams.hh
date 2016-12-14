@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Queue.hh"
 
 //TODO Add operator out << in; to unstack all input and push it to output (optimization possible?)
@@ -175,28 +176,45 @@ protected:
 	// conversions from numeric value to string
 	const char* convert(int v)
 	{
-		char s[8 * sizeof(int) + 1];
-		return itoa(v, s, (uint8_t) _base);
+		return justify(itoa(v, conversion_buffer, (uint8_t) _base), filler());
 	}
 	const char* convert(unsigned int v)
 	{
-		char s[8 * sizeof(int) + 1];
-		return utoa(v, s, (uint8_t) _base);
+		return justify(utoa(v, conversion_buffer, (uint8_t) _base), filler());
 	}
 	const char* convert(long v)
 	{
-		char s[8 * sizeof(long) + 1];
-		return ltoa(v, s, (uint8_t) _base);
+		return justify(ltoa(v, conversion_buffer, (uint8_t) _base), filler());
 	}
 	const char* convert(unsigned long v)
 	{
-		char s[8 * sizeof(long) + 1];
-		return ultoa(v, s, (uint8_t) _base);
+		return justify(ultoa(v, conversion_buffer, (uint8_t) _base), filler());
 	}
 	const char* convert(double v)
 	{
-		char s[MAX_BUF_LEN];
-		return dtostrf(v, _width, _precision, s);
+		return dtostrf(v, _width, _precision, conversion_buffer);
+	}
+	const char* justify(char* input, char filler = ' ')
+	{
+		if (strlen(input) < _width)
+		{
+			uint8_t add = _width - strlen(input);
+			memmove(input + add, input, strlen(input) + 1);
+			memset(input, filler, add);
+		}
+		return input;
+	}
+	char filler()
+	{
+		switch (_base)
+		{
+			case Base::bin:
+			case Base::hex:
+			case Base::oct:
+				return '0';
+			case Base::dec:
+				return ' ';
+		}
 	}
 
 	static const uint8_t MAX_BUF_LEN = 64;
@@ -205,6 +223,7 @@ private:
 	int8_t _width;
 	uint8_t _precision;
 	Base _base;
+	char conversion_buffer[MAX_BUF_LEN];
 };
 
 //TODO Add reset of latest format used
