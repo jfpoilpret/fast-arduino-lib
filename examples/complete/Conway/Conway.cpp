@@ -32,9 +32,9 @@
  *   - A7 is an analog input connected to the COLUMN potentiometer
  */
 
-//TODO 2. Reuse left pot (row selection) to determine speed of game
+//TODO 1. Reuse left pot (row selection) to determine speed of game
+//TODO 2. Update ATtiny84 pins for actual project boards (no more prototype)
 //TODO 3. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours)
-//TODO 4. Update ATtiny84 pins for actual project boards (no more prototype)
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -148,7 +148,7 @@ int main()
 	sei();
 	
 #if HAS_TRACE
-	// Setup traces
+	// Setup traces (Arduino only)
 	uatx.begin(57600);
 	trace.width(0);
 #endif
