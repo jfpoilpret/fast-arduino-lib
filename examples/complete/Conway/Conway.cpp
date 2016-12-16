@@ -23,13 +23,13 @@
  *   - A0 is an analog input connected to the ROW potentiometer
  *   - A1 is an analog input connected to the COLUMN potentiometer
  * - on ATtinyX4 based boards:
- *   - PAx is an output connected to both SIPO clock pins
- *   - PAx is an output connected to both SIPO latch pins
+ *   - PA2 is an output connected to both SIPO clock pins
+ *   - PA1 is an output connected to both SIPO latch pins
  *   - PA0 is an output connected to first SIPO serial data input
  *   - PA5 is an input connected to the START/STOP button (connected itself to GND)
  *   - PA4 is an input connected to the SELECT button (connected itself to GND)
- *   - A6 is an analog input connected to the ROW potentiometer
- *   - A7 is an analog input connected to the COLUMN potentiometer
+ *   - A7 is an analog input connected to the ROW potentiometer
+ *   - A6 is an analog input connected to the COLUMN potentiometer
  */
 
 //TODO 1. Reuse left pot (row selection) to determine speed of game
@@ -59,25 +59,15 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
 
 #define HAS_TRACE 1
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D0;
+static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
 static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
-static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D2;
+static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D0;
 
-static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A3;
-static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A4;
+static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A6;
+static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A7;
 
-static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5;
-static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
-//TODO Find real PAx for latch and clock
-//static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::DX;
-//static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::DX;
-//static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D0;
-//
-//static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A7;
-//static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A6;
-//
-//static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4;
-//static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
+static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4;
+static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -126,16 +116,17 @@ static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
 static constexpr const uint8_t BUTTONS_MASK = FastPinType<SELECT>::MASK | FastPinType<START_STOP>::MASK;
 static constexpr const uint8_t ALL_PORT = MULTIPLEXER::PORT_MASK | BUTTONS_MASK;
 
+//NOTE: on the stripboards-based circuit, rows and columns are inverted
 static constexpr const uint8_t SMILEY[] =
 {
-	0B01100110,
-	0B10011001,
-	0B10000001,
-	0B10000001,
+	0B01110000,
+	0B10001000,
+	0B10000100,
 	0B01000010,
-	0B00100100,
-	0B00011000,
-	0B00000000
+	0B01000010,
+	0B10000100,
+	0B10001000,
+	0B01110000
 };
 
 // OPEN POINTS/TODO
@@ -173,8 +164,8 @@ int main()
 		{
 			// Update selected cell
 			mux.blinks()[row] = 0;
-			row = row_input.sample() >> 5;
-			col = column_input.sample() >> 5;
+			row = 7 - (row_input.sample() >> 5);
+			col = 7 - (column_input.sample() >> 5);
 			mux.blinks()[row] = _BV(col);
 			// Check button states
 			if (stop.unique_press())
@@ -222,6 +213,10 @@ int main()
 	// Step #3: End game
 	//===================
 	// Here we just need to refresh content and blink it until reset
+	// First we clear multiplexer display, then we wait for one second
+	//FIXME why does this simple call add 32 bytes of code?? (908 -> 940)
+//	mux.clear();
+	//FIXME define constant here instead
 	Time::delay_ms(1000);
 	while (true)
 	{

@@ -64,7 +64,7 @@ public:
 			else if (blink_mode == BlinkMode::BLINK_ALL_BLINKS)
 				data |= _blinks[_row];
 		}
-		_sipo.output(as_uint16_t(_BV(_row), data ^ 0xFF));
+		_sipo.output(as_uint16_t(_BV(_row) ^ 0xFF, data));
 		if (++_row == ROWS)
 		{
 			_row = 0;
@@ -77,9 +77,14 @@ public:
 	// This is equivalent to refresh(BlinkMode::NO_BLINK) but smaller and faster
 	void refresh()
 	{
-		_sipo.output(as_uint16_t(_BV(_row), _data[_row] ^ 0xFF));
+		_sipo.output(as_uint16_t(_BV(_row) ^ 0xFF, _data[_row]));
 		if (++_row == ROWS)
 			_row = 0;
+	}
+	
+	void clear()
+	{
+		_sipo.output(as_uint16_t(_BV(_row) ^ 0xFF, 0));
 	}
 	
 protected:
