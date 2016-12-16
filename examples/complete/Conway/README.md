@@ -75,6 +75,11 @@ And here are the actual stripboards ready (without IC and LED matrix):
 
 ![stripboards](stripboards-ready-small.jpg)
 
+Final stacked boards, ready to operate:
+
+![final stacked boards](finished-stacked-boards-small.jpg)
+
+
 Bill of Material
 ----------------
 
