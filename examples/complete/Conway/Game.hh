@@ -23,7 +23,7 @@ public:
 		trace << "process_game()\n" << flush;
 #endif
 		uint8_t next_generation[ROWS];
-		// Initialize first iteration (optimization))
+		// Initialize first iteration (optimization)
 		uint8_t previous = _current_generation[ROWS - 1];
 		uint8_t current = _current_generation[0];
 		for (uint8_t row = 0; row < ROWS; ++row)
@@ -35,6 +35,10 @@ public:
 			uint8_t ok, code;
 			neighbours(current, previous, next, code, ok);
 			
+			// New current is based on ok and code:
+			// if ok == 0, then new current cell is dead
+			// if ok == 1 and code == 1 (4 neighbours including self), then new current is same as old current
+			// if ok == 1 and code == 0 (3 neighbours including self), then new current is alive
 			uint8_t new_current = ok & ((code & current) | ~code);
 			next_generation[row] = new_current; 
 			// Prepare next iteration
@@ -74,15 +78,14 @@ private:
 	}
 	static void adder(uint8_t input_a, uint8_t input_b, uint8_t input_carry, uint8_t& output_sum, uint8_t& output_carry)
 	{
-		// Perform bit-parallel calculation and update counts array
-		// On return, counts contain the number of live cells over 3 rows, column per column (0-3)
+		// Perform bit-parallel calculation of "full adder" (A + B + carry)
 		output_sum = input_a ^ input_b;
 		output_carry = (output_sum & input_carry) | (input_a & input_b);
 		output_sum ^= input_carry;
 	}
 	static void adder(uint8_t input_a, uint8_t input_b, uint8_t& output_sum, uint8_t& output_carry)
 	{
-		// Perform bit-parallel calculation and update counts array
+		// Perform bit-parallel calculation of "half adder" (A + B))
 		output_sum = input_a ^ input_b;
 		output_carry = input_a & input_b;
 	}
@@ -90,8 +93,8 @@ private:
 	static void neighbours(uint8_t row1, uint8_t row2, uint8_t row3, uint8_t& code, uint8_t& ok)
 	{
 		uint8_t count_high, count_low;
-		// Perform bit-parallel calculation and update counts array
-		// On return, counts contain the number of live cells over 3 rows, column per column [0-3]
+		// Perform bit-parallel calculation and update count
+		// On return, count (high/low) contain the number of live cells over 3 rows, column per column [0-3]
 		adder(row1, row2, row3, count_low, count_high);
 
 		// Compute bit-parallel number of neighbours for each column

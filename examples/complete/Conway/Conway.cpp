@@ -71,6 +71,7 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
 #error "Current target is not yet supported!"
 #endif
 
+// Trace is used only for Arduino UNO if needed
 #if HAS_TRACE
 #include <fastarduino/uart.hh>
 USE_UATX0();
