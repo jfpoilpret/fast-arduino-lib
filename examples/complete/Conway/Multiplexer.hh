@@ -84,7 +84,7 @@ public:
 	
 	void clear()
 	{
-		_sipo.output(as_uint16_t(_BV(_row) ^ 0xFF, 0));
+		_sipo.output(0);
 	}
 	
 protected:

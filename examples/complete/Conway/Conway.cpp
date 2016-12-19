@@ -33,8 +33,7 @@
  */
 
 //TODO 1. Reuse left pot (row selection) to determine speed of game
-//TODO 2. Update ATtiny84 pins for actual project boards (no more prototype)
-//TODO 3. Optimize if needed (several leads: remove vectors, use GPIOR for neighbours)
+//TODO 2. Optimize further if needed (several leads: remove vectors, use GPIOR for neighbours)
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -101,9 +100,11 @@ static constexpr const uint16_t BLINKING_COUNTER = BLINKING_HALF_TIME_MS * 1000U
 // Buttons debouncing is done on a duration of 20ms
 static constexpr const uint16_t DEBOUNCE_TIME_MS = 20;
 static constexpr const uint8_t DEBOUNCE_COUNTER = DEBOUNCE_TIME_MS * 1000UL / REFRESH_PERIOD_US;
-
+// Delay between 2 generations during phase 2
 static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
 static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS * 1000UL / REFRESH_PERIOD_US;
+// Delay between phase 2 (game) and phase 3 (end of game)
+static constexpr const uint16_t DELAY_BEFORE_END_GAME_MS = 1000;
 
 // Useful constants and types
 using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
@@ -131,7 +132,6 @@ static constexpr const uint8_t SMILEY[] =
 
 // OPEN POINTS/TODO
 // - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
-// - Cleanify code with 2 functions, 1 setup, 1 game?
 int main() __attribute__((OS_main));
 int main()
 {
@@ -214,10 +214,8 @@ int main()
 	//===================
 	// Here we just need to refresh content and blink it until reset
 	// First we clear multiplexer display, then we wait for one second
-	//FIXME why does this simple call add 32 bytes of code?? (908 -> 940)
-//	mux.clear();
-	//FIXME define constant here instead
-	Time::delay_ms(1000);
+	mux.clear();
+	Time::delay_ms(DELAY_BEFORE_END_GAME_MS);
 	while (true)
 	{
 		Time::delay_us(REFRESH_PERIOD_US);
