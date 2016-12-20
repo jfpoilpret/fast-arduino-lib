@@ -84,7 +84,7 @@ public:
 	
 	void clear()
 	{
-		_sipo.output(0);
+		_sipo.output(uint16_t(0));
 	}
 	
 protected:
