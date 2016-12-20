@@ -6,7 +6,10 @@
  * - cells are displayed on an 8x8 LED matrix
  * - initial setup is set through 2 pots (X and Y) and one button to select/unselect a cell
  * - starting/suspending the game is done by a second push button
- * - a 3rd pot allows speed tuning
+ * - when the game has started, the Y pot allows speed tuning
+ * - the end of game is detected when:
+ *   - no cells are alive: in this case a smiley is blinking
+ *   - the last generation is stable (still life): in this case the last generation is blinking
  * 
  * Circuit:
  * - MCU is connected to 2 chained 74HC595 SIPO
@@ -32,8 +35,8 @@
  *   - A6 is an analog input connected to the COLUMN potentiometer
  */
 
-//TODO 1. Reuse left pot (row selection) to determine speed of game
-//TODO 2. Optimize further if needed (several leads: remove vectors, use GPIOR for neighbours)
+// OPEN POINTS/TODO
+// - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -146,8 +149,6 @@ static uint16_t game_period()
 	return (MIN_PROGRESS_PERIOD_MS * (period + 1)) >> LOG2(REFRESH_PERIOD_MS);
 }
 
-// OPEN POINTS/TODO
-// - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
 int main() __attribute__((OS_main));
 int main()
 {
