@@ -100,7 +100,7 @@ static_assert(FastPinType<START_STOP>::PORT == PORT, "START_STOP must be on same
 // Utility function to find the exponent of the nearest power of 2 for an integer
 constexpr uint16_t LOG2(uint16_t n)
 {
-	return (n < 2) ? 1 : 1 + LOG2(n / 2);
+	return (n < 2) ? 0 : 1 + LOG2(n / 2);
 }
 
 // Timing constants
@@ -119,10 +119,11 @@ static constexpr const uint16_t MIN_PROGRESS_PERIOD_MS = 256;
 static constexpr const uint16_t DELAY_BEFORE_END_GAME_MS = 1000;
 
 // Useful constants and types
-using MULTIPLEXER = Matrix8x8Multiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
+using MULTIPLEXER = MatrixMultiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
+using ROW_TYPE = MULTIPLEXER::ROW_TYPE;
 static constexpr const uint8_t ROWS = MULTIPLEXER::ROWS;
 static constexpr const uint8_t COLUMNS = MULTIPLEXER::COLUMNS;
-using GAME = GameOfLife<ROWS, COLUMNS>;
+using GAME = GameOfLife<ROWS, ROW_TYPE>;
 
 // Calculate direction of pins (3 output, 2 input with pullups)
 static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
@@ -130,7 +131,8 @@ static constexpr const uint8_t BUTTONS_MASK = FastPinType<SELECT>::MASK | FastPi
 static constexpr const uint8_t ALL_PORT = MULTIPLEXER::PORT_MASK | BUTTONS_MASK;
 
 //NOTE: on the stripboards-based circuit, rows and columns are inverted
-static constexpr const uint8_t SMILEY[] =
+//FIXME make it size-agnostic (how??)
+static constexpr const ROW_TYPE SMILEY[] =
 {
 	0B01110000,
 	0B10001000,
@@ -183,8 +185,8 @@ int main()
 		{
 			// Update selected cell
 			mux.blinks()[row] = 0;
-			row = 7 - (row_input.sample() >> 5);
-			col = 7 - (column_input.sample() >> 5);
+			row = ROWS - 1 - (row_input.sample() >> (8 - LOG2(ROWS)));
+			col = COLUMNS - 1 - (column_input.sample() >> (8 - LOG2(COLUMNS)));
 			mux.blinks()[row] = _BV(col);
 			// Check button states
 			if (stop.unique_press())

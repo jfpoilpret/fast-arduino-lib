@@ -9,37 +9,39 @@
 extern FormattedOutput<OutputBuffer> trace;
 #endif
 
-//TODO Improve templating by defining the right type for each row (uint8_t, uint16_t, uint32_t...)
-// Row Type could be deduced from COLUMNS value (or conversely)
-template<uint8_t ROWS, uint8_t COLUMNS>
+template<uint8_t ROWS_ = 8, typename ROW_TYPE_ = uint8_t>
 class GameOfLife
 {
 public:
-	GameOfLife(uint8_t game[ROWS]):_current_generation{game}, _empty{}, _still{} {}
+	using ROW_TYPE = ROW_TYPE_;
+	static constexpr const uint8_t ROWS = ROWS_;
+	static constexpr const uint8_t COLUMNS = sizeof(ROW_TYPE) * 8;
+	
+	GameOfLife(ROW_TYPE game[ROWS]):_current_generation{game}, _empty{}, _still{} {}
 	
 	void progress_game()
 	{
 #ifdef HAS_TRACE
 		trace << "process_game()\n" << flush;
 #endif
-		uint8_t next_generation[ROWS];
+		ROW_TYPE next_generation[ROWS];
 		// Initialize first iteration (optimization)
-		uint8_t previous = _current_generation[ROWS - 1];
-		uint8_t current = _current_generation[0];
+		ROW_TYPE previous = _current_generation[ROWS - 1];
+		ROW_TYPE current = _current_generation[0];
 		for (uint8_t row = 0; row < ROWS; ++row)
 		{
 #ifdef HAS_TRACE
 			trace << "row #" << dec << row << endl << flush;
 #endif
-			uint8_t next = (row == ROWS - 1 ? _current_generation[0] : _current_generation[row + 1]);
-			uint8_t ok, code;
+			ROW_TYPE next = (row == ROWS - 1 ? _current_generation[0] : _current_generation[row + 1]);
+			ROW_TYPE ok, code;
 			neighbours(current, previous, next, code, ok);
 			
 			// New current is based on ok and code:
 			// if ok == 0, then new current cell is dead
 			// if ok == 1 and code == 1 (4 neighbours including self), then new current is same as old current
 			// if ok == 1 and code == 0 (3 neighbours including self), then new current is alive
-			uint8_t new_current = ok & ((code & current) | ~code);
+			ROW_TYPE new_current = ok & ((code & current) | ~code);
 			next_generation[row] = new_current; 
 			// Prepare next iteration
 			previous = current;
@@ -68,31 +70,31 @@ public:
 	}
 
 private:
-	static uint8_t rotate_left(uint8_t input)
+	static ROW_TYPE rotate_left(ROW_TYPE input)
 	{
-		return (input << 1) | (input >> 7);
+		return (input << 1) | (input >> (COLUMNS - 1));
 	}
-	static uint8_t rotate_right(uint8_t input)
+	static ROW_TYPE rotate_right(ROW_TYPE input)
 	{
-		return (input >> 1) | (input << 7);
+		return (input >> 1) | (input << (COLUMNS - 1));
 	}
-	static void adder(uint8_t input_a, uint8_t input_b, uint8_t input_carry, uint8_t& output_sum, uint8_t& output_carry)
+	static void adder(ROW_TYPE input_a, ROW_TYPE input_b, ROW_TYPE input_carry, ROW_TYPE& output_sum, ROW_TYPE& output_carry)
 	{
 		// Perform bit-parallel calculation of "full adder" (A + B + carry)
 		output_sum = input_a ^ input_b;
 		output_carry = (output_sum & input_carry) | (input_a & input_b);
 		output_sum ^= input_carry;
 	}
-	static void adder(uint8_t input_a, uint8_t input_b, uint8_t& output_sum, uint8_t& output_carry)
+	static void adder(ROW_TYPE input_a, ROW_TYPE input_b, ROW_TYPE& output_sum, ROW_TYPE& output_carry)
 	{
 		// Perform bit-parallel calculation of "half adder" (A + B))
 		output_sum = input_a ^ input_b;
 		output_carry = input_a & input_b;
 	}
 	
-	static void neighbours(uint8_t row1, uint8_t row2, uint8_t row3, uint8_t& code, uint8_t& ok)
+	static void neighbours(ROW_TYPE row1, ROW_TYPE row2, ROW_TYPE row3, ROW_TYPE& code, ROW_TYPE& ok)
 	{
-		uint8_t count_high, count_low;
+		ROW_TYPE count_high, count_low;
 		// Perform bit-parallel calculation and update count
 		// On return, count (high/low) contain the number of live cells over 3 rows, column per column [0-3]
 		adder(row1, row2, row3, count_low, count_high);
@@ -105,7 +107,7 @@ private:
 
 		// To perform bit-parallel computation we'll need to rotate copies of count bytes left and right
 		// Add each column to its left and right columns into 4 bits [0-9]
-		uint8_t total_0, total_1, total_2, total_3, carry_0, carry_1, carry_2;
+		ROW_TYPE total_0, total_1, total_2, total_3, carry_0, carry_1, carry_2;
 		
 		adder(count_low, rotate_left(count_low), rotate_right(count_low), total_0, carry_0);
 		adder(count_high, rotate_left(count_high), rotate_right(count_high), total_1, carry_1);
@@ -137,7 +139,7 @@ private:
 #endif
 	}
 	
-	uint8_t* _current_generation;
+	ROW_TYPE* _current_generation;
 	bool _empty;
 	bool _still;
 };
