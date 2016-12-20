@@ -52,6 +52,7 @@ static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
 
 static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A0;
 static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A1;
+static constexpr const Board::AnalogPin SPEED = Board::AnalogPin::A0;
 
 static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5;
 static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
@@ -64,6 +65,7 @@ static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D0;
 
 static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A6;
 static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A7;
+static constexpr const Board::AnalogPin SPEED = Board::AnalogPin::A7;
 
 static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4;
 static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
@@ -92,18 +94,24 @@ static_assert(FastPinType<DATA>::PORT == PORT, "DATA must be on same port as CLO
 static_assert(FastPinType<SELECT>::PORT == PORT, "SELECT must be on same port as CLOCK");
 static_assert(FastPinType<START_STOP>::PORT == PORT, "START_STOP must be on same port as CLOCK");
 
+// Utility function to find the exponent of the nearest power of 2 for an integer
+constexpr uint16_t LOG2(uint16_t n)
+{
+	return (n < 2) ? 1 : 1 + LOG2(n / 2);
+}
+
 // Timing constants
-// Multiplexing is done one row every 2ms, ie 8 rows in 16ms
-static constexpr const uint16_t REFRESH_PERIOD_US = 1000;
+// Multiplexing is done one row every 1ms, ie 8 rows in 8ms
+static constexpr const uint16_t REFRESH_PERIOD_MS = 1;
+static constexpr const uint16_t REFRESH_PERIOD_US = 1000 * REFRESH_PERIOD_MS;
 // Blinking LEDs are toggled every 20 times the display is fully refreshed (ie 20 x 8 x 2ms = 320ms)
 static constexpr const uint16_t BLINKING_HALF_TIME_MS = 250;
-static constexpr const uint16_t BLINKING_COUNTER = BLINKING_HALF_TIME_MS * 1000UL / REFRESH_PERIOD_US;
+static constexpr const uint16_t BLINKING_COUNTER = BLINKING_HALF_TIME_MS / REFRESH_PERIOD_MS;
 // Buttons debouncing is done on a duration of 20ms
 static constexpr const uint16_t DEBOUNCE_TIME_MS = 20;
-static constexpr const uint8_t DEBOUNCE_COUNTER = DEBOUNCE_TIME_MS * 1000UL / REFRESH_PERIOD_US;
-// Delay between 2 generations during phase 2
-static constexpr const uint16_t PROGRESS_PERIOD_MS = 2000;
-static constexpr const uint16_t PROGRESS_COUNTER = PROGRESS_PERIOD_MS * 1000UL / REFRESH_PERIOD_US;
+static constexpr const uint8_t DEBOUNCE_COUNTER = DEBOUNCE_TIME_MS / REFRESH_PERIOD_MS;
+// Minimum delay between 2 generations during phase 2 (must be a power of 2)
+static constexpr const uint16_t MIN_PROGRESS_PERIOD_MS = 256;
 // Delay between phase 2 (game) and phase 3 (end of game)
 static constexpr const uint16_t DELAY_BEFORE_END_GAME_MS = 1000;
 
@@ -131,6 +139,13 @@ static constexpr const uint8_t SMILEY[] =
 	0B01110000
 };
 
+static uint16_t game_period()
+{
+	AnalogInput<SPEED, Board::AnalogReference::AVCC, uint8_t> speed_input;
+	uint8_t period = speed_input.sample() >> 4;
+	return (MIN_PROGRESS_PERIOD_MS * (period + 1)) >> LOG2(REFRESH_PERIOD_MS);
+}
+
 // OPEN POINTS/TODO
 // - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
 int main() __attribute__((OS_main));
@@ -151,7 +166,9 @@ int main()
 	// Initialize Multiplexer
 	MULTIPLEXER mux;
 	
+	// STOP button is used during both phase 1 and 2, hence declare it in global main() scope
 	Button<START_STOP, DEBOUNCE_COUNTER> stop;
+	
 	// Step #1: Initialize board with 1st generation
 	//===============================================
 	{
@@ -193,7 +210,7 @@ int main()
 			Time::delay_us(REFRESH_PERIOD_US);
 			if (stop.unique_press())
 				pause = !pause;
-			if (!pause && ++progress_counter == PROGRESS_COUNTER)
+			if (!pause && ++progress_counter >= game_period())
 			{
 				game.progress_game();
 				progress_counter = 0;
