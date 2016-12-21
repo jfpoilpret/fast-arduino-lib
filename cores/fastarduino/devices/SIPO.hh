@@ -30,7 +30,7 @@ public:
 	template<typename T>
 	void output(T data)
 	{
-		T mask = 1 << (sizeof(T) * 8 - 1);
+		T mask = (T(1)) << (sizeof(T) * 8 - 1);
 		_latch.clear();
 		do
 		{

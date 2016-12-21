@@ -17,11 +17,11 @@ enum class BlinkMode: uint8_t
 
 // Special "traits" used by Multiplexer to determine, at compile time, its behavior based on the number of 
 // ROWS and COLUMNS
-template<typename ROW_TYPE_, uint8_t ROWS_>
+template<uint8_t ROWS_, uint8_t COLUMNS_>
 struct MATRIX_TRAIT
 {
-	using ROW_TYPE = ROW_TYPE_;
 	using COLUMN_TYPE = uint8_t;
+	using ROW_TYPE = uint8_t;
 	using TYPE = uint16_t;
 	static TYPE as_type(COLUMN_TYPE column, ROW_TYPE row);
 	static constexpr const bool SUPPORTED = false;
@@ -30,41 +30,40 @@ struct MATRIX_TRAIT
 template<typename ROW_TYPE_, typename COLUMN_TYPE_, typename TYPE_>
 struct MATRIX_TRAIT_IMPL
 {
-	using ROW_TYPE = ROW_TYPE_;
 	using COLUMN_TYPE = COLUMN_TYPE_;
+	using ROW_TYPE = ROW_TYPE_;
 	using TYPE = TYPE_;
 	static TYPE as_type(COLUMN_TYPE column, ROW_TYPE row)
 	{
-		return TYPE((column << (8 * sizeof(ROW_TYPE))) | row);
+		return ((TYPE(column)) << (8 * sizeof(ROW_TYPE))) | TYPE(row);
 	}
 	static constexpr const bool SUPPORTED = true;
 };
 
-template<> struct MATRIX_TRAIT<uint8_t, 8>: MATRIX_TRAIT_IMPL<uint8_t, uint8_t, uint16_t> {};
-template<> struct MATRIX_TRAIT<uint16_t, 16>: MATRIX_TRAIT_IMPL<uint16_t, uint16_t, uint32_t> {};
+template<> struct MATRIX_TRAIT<8, 8>: MATRIX_TRAIT_IMPL<uint8_t, uint8_t, uint16_t> {};
+template<> struct MATRIX_TRAIT<16, 16>: MATRIX_TRAIT_IMPL<uint16_t, uint16_t, uint32_t> {};
 //TODO other template for more special cases: 16+8, 8+16, 24+8...
 
 //TODO do we need BLINK_COUNT as class template argument, or just as method template argument?
 
-//TODO improve use ROWS/COLUMNS as parameters and deduce types from TRAIT
 template<	Board::DigitalPin CLOCK, 
 			Board::DigitalPin LATCH, 
 			Board::DigitalPin DATA, 
 			uint16_t BLINK_COUNT = 16,
 			uint8_t ROWS_ = 8,
-			typename ROW_TYPE_ = uint8_t>
+			uint8_t COLUMNS_ = 8>
 class MatrixMultiplexer
 {
 private:
 	using SIPO_TYPE = SIPO<CLOCK, LATCH, DATA>;
-	using TRAIT = MATRIX_TRAIT<ROW_TYPE_, ROWS_>;
+	using TRAIT = MATRIX_TRAIT<COLUMNS_, ROWS_>;
 	
-	static_assert(TRAIT::SUPPORTED, "Provided ROW_TYPE_ and ROWS_ template parameters are not supported");
+	static_assert(TRAIT::SUPPORTED, "Provided COLUMNS_ and ROWS_ template parameters are not supported");
 	
 public:
-	using ROW_TYPE = ROW_TYPE_;
+	using ROW_TYPE = typename TRAIT::ROW_TYPE;
 	static constexpr const uint8_t ROWS = ROWS_;
-	static constexpr const uint8_t COLUMNS = sizeof(ROW_TYPE) * 8;
+	static constexpr const uint8_t COLUMNS = COLUMNS_;
 	
 	static constexpr const Board::Port PORT = SIPO_TYPE::PORT;
 	static constexpr const uint8_t DDR_MASK = SIPO_TYPE::DDR_MASK;

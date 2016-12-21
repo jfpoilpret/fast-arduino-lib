@@ -88,6 +88,17 @@ static UATX<Board::USART::USART0> uatx{output_buffer};
 FormattedOutput<OutputBuffer> trace = uatx.fout();
 #endif
 
+#define ROW_COUNT 16
+#define COLUMN_COUNT 16
+
+// Those defines can be overridden in command line to support bigger LED matrices (eg 16x16)
+#ifndef ROW_COUNT
+#define ROW_COUNT 8
+#endif
+#ifndef COLUMN_COUNT
+#define COLUMN_COUNT 8
+#endif
+
 // Single port used by this circuit
 static constexpr const Board::Port PORT = FastPinType<CLOCK>::PORT;
 
@@ -119,10 +130,10 @@ static constexpr const uint16_t MIN_PROGRESS_PERIOD_MS = 256;
 static constexpr const uint16_t DELAY_BEFORE_END_GAME_MS = 1000;
 
 // Useful constants and types
-using MULTIPLEXER = MatrixMultiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER>;
+static constexpr const uint8_t ROWS = ROW_COUNT;
+static constexpr const uint8_t COLUMNS = COLUMN_COUNT;
+using MULTIPLEXER = MatrixMultiplexer<CLOCK, LATCH, DATA, BLINKING_COUNTER, ROWS, COLUMNS>;
 using ROW_TYPE = MULTIPLEXER::ROW_TYPE;
-static constexpr const uint8_t ROWS = MULTIPLEXER::ROWS;
-static constexpr const uint8_t COLUMNS = MULTIPLEXER::COLUMNS;
 using GAME = GameOfLife<ROWS, ROW_TYPE>;
 
 // Calculate direction of pins (3 output, 2 input with pullups)
