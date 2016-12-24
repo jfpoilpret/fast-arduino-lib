@@ -142,9 +142,9 @@ Conway program uses the following subset of FastArduino library:
 - `time.hh`: busy loop delay functions (us and ms)
 - `AnalogInput.hh`: self explanatory
 - `SIPO.hh`: handles output to a chain of one or more shift registers, through 3 output pins
-- `FastIO.h`: handles digital IO (used by `Button.hh` and `SIPO.hh`
+- `FastIO.h`: handles digital IO (used by `Button.hh` and `SIPO.hh`)
 
-Since the program is fully "templatized", this means it can easily be reused for other sizes of LED matrices. I successfully checked it on a 16x16 LED matrix (with 4 shift registers then):
+Since the program is fully "templatized", this means it can easily be reused to handle other sizes of LED matrices. I successfully checked it on a 16x16 LED matrix (with 4 shift registers then):
 
 TODO LINK VIDEO?
 
@@ -158,11 +158,11 @@ First off, ensure your Linux box contains the ATmel AVR 8 bit toolchain (I use 3
 
 The following commands show how to build the Conway 8x8 program:
 
-  > git clone https://github.com/jfpoilpret/fast-arduino-lib.git
-  > cd fast-arduino-lib
-  > make CONF=ATtiny84-Release build
-  > cd examples/complete/Conway
-  > make CONF=ATtiny84-Release build
+    > git clone https://github.com/jfpoilpret/fast-arduino-lib.git
+    > cd fast-arduino-lib
+    > make CONF=ATtiny84-Release build
+    > cd examples/complete/Conway
+    > make CONF=ATtiny84-Release build
 
 That's it! In a few seconds you get (in `dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux`):
 
@@ -171,16 +171,16 @@ That's it! In a few seconds you get (in `dist/ATtiny84-Release/AVR-GNU-Toolchain
 
 The following commands will upload the generated program to your ATtiny84, connected to your box through an **ArduinoISP** (that is a USB-ISP programmer that is very useful for AVR programming). You may as well use other programmers for this task, but then you'll probably have to update `Makefile-FastArduino.mk` file (part of FastArduino library) to accomodate your programmer:
 
-  > make CONF=ATtiny84-Release fuses
-  > make CONF=ATtiny84-Release flash
+    > make CONF=ATtiny84-Release fuses
+    > make CONF=ATtiny84-Release flash
 
 The first command sets the fuses of the MCU and is mandatory the first time yuou upload the program; you won't have to repeat this command on later uploads.
 
 Note that these make targets simply delegate all the work to the well-known `avrdude` binary, which should be properly installed on your Linux box.
 
 
-<a href="challenge"/>The challenge
-----------------------------------
+<a name="challenge"></a>The challenge
+-------------------------------------
 
 Making all the program for this game to fit within 1KB of flash has been a big challenge.
 
