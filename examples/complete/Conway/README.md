@@ -7,6 +7,7 @@ This example implements well known [**Conway's Game of Life**](https://en.wikipe
 
 Note that this implementation uses *Periodic Boundary Conditions* to simulate a field of an infinite size, i.e. each boundary is connected to the opposite boundary. This makes algorithm a bit more complex to implement but it mimics better the intent of this game.
 
+
 How to play
 -----------
 
@@ -25,6 +26,7 @@ The START button can also be used to pause the game, then resume it at a later t
 The situation where we reach a generation with no cells alive, is detected and a smiley displayed to show that.
 
 If the system reaches a stable situation (with live cells that never change), this is indicated by blinking those cells.
+
 
 Circuit & Prototypes
 --------------------
@@ -108,26 +110,77 @@ Bill of Material
 
 Notes:
 
-- TODO explain pin headers can be bought as long strips and cut to the right size.
-- TODO explain male pin headers.
-- TODO ISP header can be replace 2 male headers of 3 pins each
-- TODO I prefer precision IC sockets rather than standard
-- TODO USB socket is optional one can directly power the circuit through the 2 right angled pin headers
-- TODO explain where I found my components
+- For male pin headers, I needed high headers (> 10mm) but I did not have any, hence I have used pin headers with 6mm on each side, then I have moved the headers on one side only (by applying a vertical pressure onto them, on a table), which gave me 12mm high headers.
+- For the ISP header,  prefer using a shrouded 2x3 headers, so I can use its notch to indicate how to plug the ISP programmer properly. If you don't have one, you can replace it with a double pin header (2x3) or even 2 pin headers of 3 pins each, but then be careful when pluggin your programmer!
+- For IC sockets, I used precision IC sockets rather than standard ones, because they offer some space, under the IC, where you can solder wires, which I did.
+- The USB socket is used only for powering the circuit; it is purely optional as one can directly power the circuit through the 2 right angled pin headers on the lower board.
+- Most components are quite standard except probably the LED matrix, which seems to be designed on demand by the retailer I got it from: http://www.play-zone.ch/en/bauteile/led/segmente-matrix/led-matrix-8x8-rot-3-7cm-x-3-7cm.html If you can't find the same component, then you can find any equivalent but then you'll have to redesign the upper board accordingly.
+
 
 The code
 --------
 
 All code is written in C++ language (I use C++11 standard).
 
-For some parts (digital IO, analog input), I decided to use some parts of my [FastArduino](https://github.com/jfpoilpret/fast-arduino-lib) library.
+For some parts (digital IO, analog input), I decided to use some parts of my [FastArduino](https://github.com/jfpoilpret/fast-arduino-lib) library, which is actually a generic AVR library that I started writing in 2016, with a focus on code speed and size optimization.
 
-- TODO mention toolchain, how to make (from github)...
-- TODO describe the main parts of the code, including used FastArduino stuff.
-- TODO mention template usage and possible use of bigger matrices at no cost on code size.
+I use the official ATmel AVR 8-bit Toolchain 3.5.3 - Linux 64-bit which is not the real latest toolchain (latest as of December 2016 was 3.5.4), but I guess building should work the same on latest 3.5.4 toolchain, but it may have different code size (better or worse).
 
-The challenge
--------------
+Since I am currently satisfied with 3.5.3 toolchain, I do not contemplate updating within the next few months.
+
+The program is divided into the following source files (excluding code from the FastArduino library itself):
+
+- `Conway.cpp`: the main file, contains all constants used in the program (pin numbers, time delays...) and the `main()` function, in charge of instantiating all objects used by the program, and performing all 3 steps of the game: game setup, game loop, end of game.
+- `Game.hh`: contains template `class GameOfLife` which points to the current generation state (as an array of unsigned integers) and implements the algorithm to progress from the current generation to the next one. The template is parameterized by the board size (number of rows and type of a row, defining the number of columns), but for the **hackaday.io 1KB challenge**, we use default values of 8x8.
+- `Multiplexer.hh`: contains template `class MatrixMultiplexer`, plus a few helper classes, which is in charge of storing the state each LED in the matrix, i.e. the state of the game board, and ensuring it is displayed through multiplexing, i.e. dispay one matrix row at a time, one after the other. This class also handles blinking of particular LEDs as needed. The template is parameterized by the board size (number of rows and number of columns), but for the **hackaday.io 1KB challenge**, we use default values of 8x8. The helper classes present in this file are *traits* classes, that are used to help determine settings, used by `MatrixMultiplexer`, different for each template intantiation, i.e. an 8x8 matrix Vs. a 16x16 matrix.
+- `Button.hh`: a simple implementation of a debounced button wired on an input pin, with a pullup resistor.
+
+Since the program does not use AVR Timers (see [below](#challenge) for an explanation why), classes with methods that depend on timing, e.g. `MatrixMultiplexer.refresh()`, `Button.state()`, use an internal counter with an upper limit which is calculated based on a hard-coded delay (1ms) used by the loop of each step of the game. That makes those classes hardly reusable in a real design, where one would perfer using a hardware timer; that's the reason why they are part og the Conway example, rather than being part of the FastArduino library itself.
+
+Conway program uses the following subset of FastArduino library:
+
+- `time.hh`: busy loop delay functions (us and ms)
+- `AnalogInput.hh`: self explanatory
+- `SIPO.hh`: handles output to a chain of one or more shift registers, through 3 output pins
+- `FastIO.h`: handles digital IO (used by `Button.hh` and `SIPO.hh`
+
+Since the program is fully "templatized", this means it can easily be reused for other sizes of LED matrices. I successfully checked it on a 16x16 LED matrix (with 4 shift registers then):
+
+TODO LINK VIDEO?
+
+However, the code size increases whenc compiled for larger matrices.
+
+
+How to build the program (Linux)
+--------------------------------
+
+First off, ensure your Linux box contains the ATmel AVR 8 bit toolchain (I use 3.5.3, latest is 3.5.4) and your `$PATH` points to its `bin` directory.
+
+The following commands show how to build the Conway 8x8 program:
+
+  > git clone https://github.com/jfpoilpret/fast-arduino-lib.git
+  > cd fast-arduino-lib
+  > make CONF=ATtiny84-Release build
+  > cd examples/complete/Conway
+  > make CONF=ATtiny84-Release build
+
+That's it! In a few seconds you get (in `dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux`):
+
+- `conway.hex`: the hexadecimal representation of conway executable program, ready to be uploaded to an ATtiny84
+- `conway.dump.txt`: the full dump file, with assembly code, of conway executable program; that has been useful to track down where most code bytes were used, facilitating the selection of optimization focus
+
+The following commands will upload the generated program to your ATtiny84, connected to your box through an **ArduinoISP** (that is a USB-ISP programmer that is very useful for AVR programming). You may as well use other programmers for this task, but then you'll probably have to update `Makefile-FastArduino.mk` file (part of FastArduino library) to accomodate your programmer:
+
+  > make CONF=ATtiny84-Release fuses
+  > make CONF=ATtiny84-Release flash
+
+The first command sets the fuses of the MCU and is mandatory the first time yuou upload the program; you won't have to repeat this command on later uploads.
+
+Note that these make targets simply delegate all the work to the well-known `avrdude` binary, which should be properly installed on your Linux box.
+
+
+<a href="challenge"/>The challenge
+----------------------------------
 
 Making all the program for this game to fit within 1KB of flash has been a big challenge.
 
