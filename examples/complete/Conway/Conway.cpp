@@ -35,11 +35,6 @@
  *   - A6 is an analog input connected to the COLUMN potentiometer
  */
 
-// OPEN POINTS/TODO
-// - Check latest optimization (no vector table) works on ATtiny circuit
-// - Check compilation on UNO (may have to set same config for linker)
-// - remove __jumpMain and set direcly main() instead; check if that still works
-
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -258,6 +253,7 @@ int main()
 	return 0;
 }
 
+#if defined (BREADBOARD_ATTINYX4)
 // Since we use -nostartfiles option we must manually set the startup code (at address 0x00)
 void __jumpMain() __attribute__((naked)) __attribute__((section (".init9")));
 
@@ -268,3 +264,4 @@ void __jumpMain()
 	asm volatile ( "clr __zero_reg__" );	// r1 set to 0
 	asm volatile ( "rjmp main");			// jump to main()
 }
+#endif
