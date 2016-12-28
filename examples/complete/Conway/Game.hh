@@ -47,7 +47,7 @@ public:
 			previous = current;
 			current = next;
 		}
-		// Copy next generation to current one
+		// Copy next generation to current one and update status flags
 		_still = true;
 		_empty = true;
 		for (uint8_t row = 0; row < ROWS; ++row)
