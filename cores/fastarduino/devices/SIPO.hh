@@ -3,8 +3,6 @@
 
 #include <fastarduino/FastIO.hh>
 
-//TODO Improve template arguments: T should not be here but directly for output() method
-//TODO We can then specialize output for uint8_t, uint16_t...
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA>
 class SIPO
 {
@@ -30,8 +28,33 @@ public:
 	template<typename T>
 	void output(T data)
 	{
-		T mask = (T(1)) << (sizeof(T) * 8 - 1);
+		uint8_t* pdata = (uint8_t*) data;
 		_latch.clear();
+		for (uint8_t i = 0 ; i < sizeof(T); ++i)
+			_output(pdata[i]);
+		_latch.set();
+	}
+	
+	// Specialized output for most common types
+	inline void output(uint8_t data) INLINE
+	{
+		_latch.clear();
+		_output(data);
+		_latch.set();
+	}
+	
+	inline void output(uint16_t data) INLINE
+	{
+		_latch.clear();
+		_output(data >> 8);
+		_output(data);
+		_latch.set();
+	}
+	
+private:
+	void _output(uint8_t data)
+	{
+		uint8_t mask = 0x80;
 		do
 		{
 			if (data & mask) _data.set(); else _data.clear();
@@ -40,10 +63,8 @@ public:
 			_clock.clear();
 		}
 		while (mask);
-		_latch.set();
 	}
-	
-private:
+
 	typename FastPinType<CLOCK>::TYPE _clock;
 	typename FastPinType<LATCH>::TYPE _latch;
 	typename FastPinType<DATA>::TYPE _data;
