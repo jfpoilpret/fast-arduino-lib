@@ -148,8 +148,12 @@ Since the program is fully "templatized", this means it can easily be reused to 
 
 TODO LINK VIDEO?
 
-However, the code size increases whenc compiled for larger matrices.
+However, note that the code size increases when compiled for larger matrices than 8x8:
 
+- 8x8 matrix:   962 bytes
+- 16x16 matrix: 1256 bytes
+
+TODO review figures when optimization done.
 
 How to build the program (Linux)
 --------------------------------
@@ -198,10 +202,10 @@ Here is a summary of the general guideline I used to squeeze code size in this p
 - Replace several methods with similar behavior (e.g. refresh methods in `Multiplexer` class with different blink modes) into one with a bit more complex code (more `if` conditions) but smaller than the sum of code of all other methdos used in the project.
 - When using template classes with several instances (different template arguments), if some code in template is rather big, then try to factor it out to a non-template abstract base class, and make the template class derive from it.
 - Replace "classical" algorithm to count neighbours of a cell to determine next generation, with an optimized bit-parallel processing, thus removing all conditional (only boolean operations on bytes) and removing an embedded loop for columns. This one change enabled more than 100 bytes gain in code size, let alone speed efficiency. Thanks [Yann Guidon](https://hackaday.io/whygee) for his suggestion on that one. it took me several days to understand how to do it but it was worth it.
+- Remove vector table and GCC init code altogether (about 50 bytes). This was done by using option `-nostartfiles` at link time, in addition to creating specific `void __jumpMain() __attribute__((naked)) __attribute__((section (".init9")));` function, placed at address `0x0000` (i.e. directly jumped to at boot time and upon reset of the MCU) to call standard `main()`.
 
 Some options I had in mind but did not need to use for this contest (hell, 1024 bytes is just too much :-)):
 
-- Remove vector table altogether (about 40 bytes); this is normally done with a simple option at compile/link time.
 - Use AVR special `GPIORn` addresses; I am actually not sure I could have gained something with that, so I did not even try it.
 
 **IMPORTANT**: note that these guidelines are not always possible in all projects; for instance, it is difficult to avoid ISR when you need to perform serial communication (UART, SPI, I2C), when you need a Timer...
@@ -210,4 +214,35 @@ Some options I had in mind but did not need to use for this contest (hell, 1024 
 The Contest
 -----------
 
-TODO evidence of 1KB claims.
+My build includes generation of 2 evidences that the program, built for the circuit with an 8x8 matrix, is under 1KB of code:
+
+1. `avr-size` generates an output with program size information
+
+2. `avr-objdump` generates a dump file `conway.dump.txt` with the list of all symbols and all assembly code part of the final executable
+
+On an ATtiny84A (8KB available for code, 512 bytes for data), here is the output of `avr-size`:
+
+	AVR Memory Usage
+	----------------
+	Device: attiny84
+
+	Program:     962 bytes (11.7% Full)
+	(.text + .data + .bootloader)
+
+	Data:          0 bytes (0.0% Full)
+	(.data + .bss + .noinit)
+
+The dump file includes at its beginning the list of sections with their respective sizes:
+
+	Sections:
+	Idx Name          Size      VMA       LMA       File off  Algn
+	  0 .text         000003c2  00000000  00000000  00000054  2**1
+					  CONTENTS, ALLOC, LOAD, READONLY, CODE
+	  1 .data         00000000  00800060  00800060  00000416  2**0
+					  CONTENTS, ALLOC, LOAD, DATA
+	  2 .comment      00000030  00000000  00000000  00000416  2**0
+					  CONTENTS, READONLY
+
+As one can see, the code size in `text` section is 0x03c2, i.e. 962 bytes, whereas the `.data` section is empty.
+
+TODO update once official code (with TAG) is finalized and project is submitted.
