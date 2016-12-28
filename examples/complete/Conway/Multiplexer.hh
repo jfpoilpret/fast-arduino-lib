@@ -102,9 +102,7 @@ public:
 			else if (blink_mode == BlinkMode::BLINK_ALL_BLINKS)
 				data |= _blinks[_row];
 		}
-		//FIXME Adapt to work on any ROW/COLUMN size
 		_sipo.output(TRAIT::as_type(~_BV(_row), data));
-//		_sipo.output(as_uint16_t(_BV(_row) ^ 0xFF, data));
 		if (++_row == ROWS)
 		{
 			_row = 0;
@@ -117,18 +115,14 @@ public:
 	// This is equivalent to refresh(BlinkMode::NO_BLINK) but smaller and faster
 	void refresh()
 	{
-		//FIXME Adapt to work on any ROW/COLUMN size
 		_sipo.output(TRAIT::as_type(~_BV(_row), _data[_row]));
-//		_sipo.output(as_uint16_t(_BV(_row) ^ 0xFF, _data[_row]));
 		if (++_row == ROWS)
 			_row = 0;
 	}
 	
 	void clear()
 	{
-		//FIXME Adapt to work on any ROW/COLUMN size
 		_sipo.output(TRAIT::as_type(0, 0));
-//		_sipo.output(uint16_t(0));
 	}
 	
 protected:
