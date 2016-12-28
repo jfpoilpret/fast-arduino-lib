@@ -146,14 +146,13 @@ Conway program uses the following subset of FastArduino library:
 
 Since the program is fully "templatized", this means it can easily be reused to handle other sizes of LED matrices. I successfully checked it on a 16x16 LED matrix (with 4 shift registers then):
 
-TODO LINK VIDEO?
+![16x16 LED Matrix run example](Conway-16x16-running.mkv)
 
 However, note that the code size increases when compiled for larger matrices than 8x8:
 
 - 8x8 matrix:   962 bytes
 - 16x16 matrix: 1256 bytes
 
-TODO review figures when optimization done.
 
 How to build the program (Linux)
 --------------------------------
@@ -245,4 +244,4 @@ The dump file includes at its beginning the list of sections with their respecti
 
 As one can see, the code size in `text` section is 0x03c2, i.e. 962 bytes, whereas the `.data` section is empty.
 
-TODO update once official code (with TAG) is finalized and project is submitted.
+This information is based on github code tagged "HACKADAY-1KB-CONTEST" at https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/HACKADAY-1KB-CONTEST
