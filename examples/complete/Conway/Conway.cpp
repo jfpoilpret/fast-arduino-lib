@@ -36,7 +36,9 @@
  */
 
 // OPEN POINTS/TODO
-// - Improve (use templates) to allow larger matrix size (eg 16x8, 16x16)
+// - Check latest optimization (no vector table) works on ATtiny circuit
+// - Check compilation on UNO (may have to set same config for linker)
+// - remove __jumpMain and set direcly main() instead; check if that still works
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -80,7 +82,6 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
 #if HAS_TRACE
 #include <fastarduino/uart.hh>
 USE_UATX0();
-
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -88,8 +89,9 @@ static UATX<Board::USART::USART0> uatx{output_buffer};
 FormattedOutput<OutputBuffer> trace = uatx.fout();
 #endif
 
-#define ROW_COUNT 16
-#define COLUMN_COUNT 16
+// Uncomment these lines if you want to quickly generate a program for a 16x16 LED matrix (default is 8x8))
+//#define ROW_COUNT 16
+//#define COLUMN_COUNT 16
 
 // Those defines can be overridden in command line to support bigger LED matrices (eg 16x16)
 #ifndef ROW_COUNT
@@ -254,4 +256,15 @@ int main()
 		mux.refresh(BlinkMode::BLINK_ALL_DATA);
 	}
 	return 0;
+}
+
+// Since we use -nostartfiles option we must manually set the startup code (at address 0x00)
+void __jumpMain() __attribute__((naked)) __attribute__((section (".init9")));
+
+// Startup code just clears R1 (this is expected by GCC) and calls main()
+void __jumpMain()
+{    
+	asm volatile ( ".set __stack, %0" :: "i" (RAMEND) );
+	asm volatile ( "clr __zero_reg__" );	// r1 set to 0
+	asm volatile ( "rjmp main");			// jump to main()
 }
