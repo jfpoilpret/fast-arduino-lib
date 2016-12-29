@@ -84,14 +84,14 @@ Final stacked boards, ready to operate:
 ![final stacked boards](finished-stacked-boards-small.jpg)
 
 
-Bill of Material
-----------------
+Bill of Materials
+-----------------
 
 - 1 x ATtiny84A (but the system should work the same on an ATtiny44 or ATtiny24)
 - 2 x 74HC595
 - 1 x red LED matrix 8x8
 - 1 x tantalum cap 10uF
-- 3 x tantalum cap 100nF
+- 3 x ceramic cap 100nF
 - 1 x resistor 10K
 - 8 x resistor 330 Ohm
 - 2 x tactile switch buttons extra small (6 x 3.5 x 3.5mm)
