@@ -115,7 +115,7 @@ constexpr uint16_t LOG2(uint16_t n)
 // Multiplexing is done one row every 1ms, ie 8 rows in 8ms
 static constexpr const uint16_t REFRESH_PERIOD_MS = 1;
 static constexpr const uint16_t REFRESH_PERIOD_US = 1000 * REFRESH_PERIOD_MS;
-// Blinking LEDs are toggled every 20 times the display is fully refreshed (ie 20 x 8 x 2ms = 320ms)
+// Blinking LEDs are toggled every 250ms
 static constexpr const uint16_t BLINKING_HALF_TIME_MS = 250;
 static constexpr const uint16_t BLINKING_COUNTER = BLINKING_HALF_TIME_MS / REFRESH_PERIOD_MS;
 // Buttons debouncing is done on a duration of 20ms
