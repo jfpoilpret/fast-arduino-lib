@@ -51,7 +51,7 @@ The circuit has another button, used to start the game (used to tell the system 
 
 Finally, to make the project a bit more challenging, trying to use the last available byte of code, I decided to reuse one of the pots used in setup in order to control the speed of the game.
 
-![Electronics schema](conway.sch.svg.jpg)
+![Electronics schema](conway.sch.svg)
 
 My first prototype was originally developed on an Arduino UNO (it uses an ATmega328P, compatible with ATtiny, with just more pins, more bytes and more features on chip). The advantage is that it is easy to upload programs to an Arduino with just a USB cable.
 
