@@ -126,9 +126,9 @@ All code is written in C++ language (I use C++11 standard).
 
 For some parts (digital IO, analog input), I decided to use some parts of my [FastArduino](https://github.com/jfpoilpret/fast-arduino-lib) library, which is actually a generic AVR library that I started writing in 2016, with a focus on code speed and size optimization.
 
-I use the official ATmel AVR 8-bit Toolchain 3.5.3 - Linux 64-bit which is not the real latest toolchain (latest as of December 2016 was 3.5.4), but I guess building should work the same on latest 3.5.4 toolchain, but it may have different code size (better or worse).
+I use the official **ATmel AVR 8-bit Toolchain 3.5.3 - Linux 64-bit** which is not the real latest toolchain (latest as of December 2016 was 3.5.4), but I guess building should work the same on latest 3.5.4 toolchain, but it may have different code size (better or worse).
 
-Since I am currently satisfied with 3.5.3 toolchain, I do not contemplate updating within the next few months.
+Since I am currently satisfied with 3.5.3 toolchain, I do not foresee updating it within the next few months.
 
 The program is divided into the following source files (excluding code from the FastArduino library itself):
 
@@ -148,7 +148,7 @@ Conway program uses the following subset of FastArduino library:
 
 Since the program is fully "templatized", this means it can easily be reused to handle other sizes of LED matrices. I successfully checked it on a 16x16 LED matrix (with 4 shift registers then):
 
-![16x16 LED Matrix run example](Conway-16x16-running.mkv)
+[![16x16 LED Matrix run example](Conway-16x16-running.jpg)](Conway-16x16-running.mkv)
 
 However, note that the code size increases when compiled for larger matrices than 8x8:
 
