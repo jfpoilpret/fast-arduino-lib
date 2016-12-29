@@ -51,7 +51,7 @@ The circuit has another button, used to start the game (used to tell the system 
 
 Finally, to make the project a bit more challenging, trying to use the last available byte of code, I decided to reuse one of the pots used in setup in order to control the speed of the game.
 
-TODO electronics schema here
+![Electronics schema](conway.sch.svg.jpg)
 
 My first prototype was originally developed on an Arduino UNO (it uses an ATmega328P, compatible with ATtiny, with just more pins, more bytes and more features on chip). The advantage is that it is easy to upload programs to an Arduino with just a USB cable.
 
@@ -177,9 +177,9 @@ The following commands will upload the generated program to your ATtiny84, conne
     > make CONF=ATtiny84-Release fuses
     > make CONF=ATtiny84-Release flash
 
-The first command sets the fuses of the MCU and is mandatory the first time yuou upload the program; you won't have to repeat this command on later uploads.
+The first command sets the fuses of the MCU and is mandatory the first time you upload the program; you won't have to repeat this command on later uploads if you change the program.
 
-Note that these make targets simply delegate all the work to the well-known `avrdude` binary, which should be properly installed on your Linux box.
+Note that these "make targets" (`fuses` and `flash`) simply delegate all the work to the well-known `avrdude` binary, which must first be properly installed on your Linux box.
 
 
 <a name="challenge"></a>The challenge
@@ -205,7 +205,7 @@ Here is a summary of the general guideline I used to squeeze code size in this p
 
 Some options I had in mind but did not need to use for this contest (hell, 1024 bytes is just too much :-)):
 
-- Use AVR special `GPIORn` addresses; I am actually not sure I could have gained something with that, so I did not even try it.
+- Use AVR special `GPIORn` addresses; I am actually not sure whether and how I could have gained something with that, so I did not even try it.
 
 **IMPORTANT**: note that these guidelines are not always possible in all projects; for instance, it is difficult to avoid ISR when you need to perform serial communication (UART, SPI, I2C), when you need a Timer...
 
