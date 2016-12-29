@@ -19,7 +19,7 @@ You can define the first generation any way you see fit.
 
 Once you are done with first generation setup, you can start the game by pressing the START button.
 
-Then, generations get calculated and displayed, one after another, at regular intervals (speed is controllable through one of the two knobs used in the previous setup stage), from a few hundred ms to a few seconds).
+Then, generations get calculated and displayed, one after another, at regular intervals (speed is controllable through one of the two knobs used in the previous setup stage), from a few hundred ms to a few seconds.
 
 The START button can also be used to pause the game, then resume it at a later time.
 
@@ -39,7 +39,7 @@ The ATtiny84 is a tiny MCU with "only" 11 available IO pins (digital and some an
 
 Hence addressing an **8x8 LED matrix** is better done using SIPO (Serial In, Parallel Out) shift registers, I used 2 chained **74HC595**, one for matrix rows (LED anodes), the other for the columns (LED cathodes). I added current-limiting resistors to all 8 columns, to avoid roasting the MCU. Wiring for this takes only 3 digital output pins of the MCU (data, clock and latch).
 
-LED matrix addressing is done though *multiplexing* (display one complete row at a time during a few ms, then display the next row, and so on). If all rows get "swept" fast enough, then human eye persistence makes you think all the matrix is displayed at the same time. I determined (after experiments) that showing each row during 2ms, then handling the next, i.e. 16ms to display all 8 rows, was the longest delay I could use.
+LED matrix addressing is done though *multiplexing* (display one complete row at a time during a few ms, then display the next row, and so on). If all rows get "swept" fast enough, then human eye persistence makes you think all the matrix is displayed at the same time. I determined (after experiments) that showing each row during 2ms, then handling the next, i.e. 16ms to display all 8 rows, was the longest delay I could use. In the final program, I use 1ms for that duration.
 
 For 1st generation setup, I originally used 3 push buttons, one Previous/Next pair to position the "cursor" (blinking LED) to the cell which we want to change state (dead or alive), then one button to switch the state of currently selected cell. This worked fine but that made the first phase very slow to setup for the end user. Wiring here required 3 digital inputs (one per button).
 
@@ -51,23 +51,23 @@ The circuit has another button, used to start the game (used to tell the system 
 
 Finally, to make the project a bit more challenging, trying to use the last available byte of code, I decided to reuse one of the pots used in setup in order to control the speed of the game.
 
-Here are the schematics for this circuit (made with KiCAD):
+Here are the schematics for this circuit (made with [KiCAD](http://kicad-pcb.org/)):
 
 ![Electronics schema](conway.sch.png)
 
-My first prototype was originally developed on an Arduino UNO (it uses an ATmega328P, compatible with ATtiny, with just more pins, more bytes and more features on chip). The advantage is that it is easy to upload programs to an Arduino with just a USB cable.
+My first prototype was originally developed on an Arduino UNO (it uses an ATmega328P, compatible with ATtiny, with just more pins, more bytes and more features on chip). The advantages are first that it is easy to upload programs to an Arduino with just a USB cable, then we can use ATmega328 UART (connected to USB) to send traces to a console, useful for debugging the program.
 
-The rest of the circuit (LED matrix, resistors, SIPO IC, buttons, pots, caps) was originally put on 2 breadboards:
+The rest of the prototype circuit (LED matrix, resistors, SIPO IC, buttons, pots, caps) was originally put on 2 breadboards:
 
 ![1st prototype](UNO-Buttons-small.jpg)
 
-For the first tests on ATtiny84A, I have used a simple test board I have made that just contains the ATtiny84 with pin headers to all its pins: 
+For the first tests on ATtiny84A, I have used a simple test board I have made in the past, that just contains the ATtiny84 with pin headers to all its pins: 
 
 ![ATtiny84 test board](ATtiny84-test-board-small.jpg)
 
-I then reused the same breadboard circuit as before.
+I then reused the same breadboarded circuit as before.
 
-For the final circuit, I used two 50x90mm stripbard, stacked together, the above board containing all "UI" stuff (LED matrix, buttons, potentiometers), the under board with all electronics (MCU, IC, resistors, caps, ISP header). Both boards are stacked with pin headers, just like Arduino shields. I designed those with [LochMaster](http://www.abacom-online.de/uk/html/lochmaster.html).
+For the final circuit, I used two 50x90mm stripbards, stacked together, the above board containing all "UI" stuff (LED matrix, buttons, potentiometers), the under board with all electronics (MCU, IC, resistors, caps, ISP header). Both boards are stacked with pin headers, just like Arduino shields. I designed those with [LochMaster](http://www.abacom-online.de/uk/html/lochmaster.html).
 
 Original LochMaster design files are [here](Conway-board-Logic.LM4) and [here](Conway-board-UI.LM4)  (these can be displayed with a [free viewer](http://www.abacom-online.de/updates/LochMaster40_Viewer.zip)). Here are drawings of the stripboards:
 
@@ -113,7 +113,7 @@ Bill of Materials
 Notes:
 
 - For male pin headers, I needed high headers (> 10mm) but I did not have any, hence I have used pin headers with 6mm on each side, then I have moved the headers on one side only (by applying a vertical pressure onto them, on a table), which gave me 12mm high headers.
-- For the ISP header,  prefer using a shrouded 2x3 headers, so I can use its notch to indicate how to plug the ISP programmer properly. If you don't have one, you can replace it with a double pin header (2x3) or even 2 pin headers of 3 pins each, but then be careful when pluggin your programmer!
+- For the ISP header, I prefer using a shrouded 2x3 pins header, so I can use its notch to indicate how to plug the ISP programmer properly. If you don't have one, you can replace it with a double pin header (2x3) or even 2 pin headers of 3 pins each, but then be careful when plugging your programmer!
 - For IC sockets, I used precision IC sockets rather than standard ones, because they offer some space, under the IC, where you can solder wires, which I did.
 - The USB socket is used only for powering the circuit; it is purely optional as one can directly power the circuit through the 2 right angled pin headers on the lower board.
 - Most components are quite standard except probably the LED matrix, which seems to be designed on demand by the retailer I got it from: http://www.play-zone.ch/en/bauteile/led/segmente-matrix/led-matrix-8x8-rot-3-7cm-x-3-7cm.html If you can't find the same component, then you can find any equivalent but then you'll have to redesign the upper board accordingly.
@@ -134,10 +134,10 @@ The program is divided into the following source files (excluding code from the 
 
 - `Conway.cpp`: the main file, contains all constants used in the program (pin numbers, time delays...) and the `main()` function, in charge of instantiating all objects used by the program, and performing all 3 steps of the game: game setup, game loop, end of game.
 - `Game.hh`: contains template `class GameOfLife` which points to the current generation state (as an array of unsigned integers) and implements the algorithm to progress from the current generation to the next one. The template is parameterized by the board size (number of rows and type of a row, defining the number of columns), but for the **hackaday.io 1KB challenge**, we use default values of 8x8.
-- `Multiplexer.hh`: contains template `class MatrixMultiplexer`, plus a few helper classes, which is in charge of storing the state each LED in the matrix, i.e. the state of the game board, and ensuring it is displayed through multiplexing, i.e. dispay one matrix row at a time, one after the other. This class also handles blinking of particular LEDs as needed. The template is parameterized by the board size (number of rows and number of columns), but for the **hackaday.io 1KB challenge**, we use default values of 8x8. The helper classes present in this file are *traits* classes, that are used to help determine settings, used by `MatrixMultiplexer`, different for each template intantiation, i.e. an 8x8 matrix Vs. a 16x16 matrix.
+- `Multiplexer.hh`: contains template `class MatrixMultiplexer`, plus a few helper classes, which is in charge of storing the state of each LED in the matrix, i.e. the state of the game board, and ensuring it is displayed through multiplexing, i.e. display one matrix row at a time, one after the other. This class also handles blinking of particular LEDs as needed. The template is parameterized by the board size (number of rows and number of columns), but for the **hackaday.io 1KB challenge**, we use default values of 8x8. The helper classes present in this file are *traits* classes, that are used to help determine settings, used by `MatrixMultiplexer`, different for each template intantiation, e.g. an 8x8 matrix Vs. a 16x16 matrix.
 - `Button.hh`: a simple implementation of a debounced button wired on an input pin, with a pullup resistor.
 
-Since the program does not use AVR Timers (see [below](#challenge) for an explanation why), classes with methods that depend on timing, e.g. `MatrixMultiplexer.refresh()`, `Button.state()`, use an internal counter with an upper limit which is calculated based on a hard-coded delay (1ms) used by the loop of each step of the game. That makes those classes hardly reusable in a real design, where one would perfer using a hardware timer; that's the reason why they are part og the Conway example, rather than being part of the FastArduino library itself.
+Since the program does not use AVR Timers (see [below](#challenge) for an explanation why), classes with methods that depend on timing, e.g. `MatrixMultiplexer.refresh()`, `Button.state()`, use an internal counter with an upper limit which is calculated based on a hard-coded delay (1ms) used by the loop of each step of the game. That makes those classes hardly reusable in a real design, where one would prefer using a hardware timer; that's the reason why they are part of the Conway example, rather than being part of the FastArduino library itself.
 
 Conway program uses the following subset of FastArduino library:
 
@@ -146,11 +146,11 @@ Conway program uses the following subset of FastArduino library:
 - `SIPO.hh`: handles output to a chain of one or more shift registers, through 3 output pins
 - `FastIO.h`: handles digital IO (used by `Button.hh` and `SIPO.hh`)
 
-Since the program is fully "templatized", this means it can easily be reused to handle other sizes of LED matrices. I successfully checked it on a 16x16 LED matrix (with 4 shift registers then):
+Since the program is fully "templatized", this means it can easily be reused to handle other sizes of LED matrices. I successfully checked it on a 16x16 LED matrix (with 4 shift registers then); you can click on the picture below to open a video showing the game with the well-known "lightweight spaceship" pattern:
 
 [![16x16 LED Matrix run example](Conway-16x16-running.jpg)](Conway-16x16-running.mkv)
 
-However, note that the code size increases when compiled for larger matrices than 8x8:
+However, note that code size increases when compiled for larger matrices than 8x8:
 
 - 8x8 matrix:   962 bytes
 - 16x16 matrix: 1256 bytes
@@ -183,6 +183,8 @@ The first command sets the fuses of the MCU and is mandatory the first time you 
 
 Note that these "make targets" (`fuses` and `flash`) simply delegate all the work to the well-known `avrdude` binary, which must first be properly installed on your Linux box.
 
+For more information on my personal build setup, you can refer to [this document](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx).
+
 
 <a name="challenge"></a>The challenge
 -------------------------------------
@@ -191,7 +193,7 @@ Making all the program for this game to fit within 1KB of flash has been a big c
 
 Here is a summary of the general guideline I used to squeeze code size in this project:
 
-- Don't use global variables as accessing them requires special `LDS`/`STS` instructions which are 4 bytes instead of 2 bytes for most AVR instructions. Also, global variables will trigger initialization code by GCC, which takes a few extra dozen bytes. Hence, exclusively use local variables everywhere.
+- Don't use global variables as accessing them requires special `LDS`/`STS` instructions which are 4 bytes (instead of 2 bytes useed by most AVR instructions). Also, global variables will trigger initialization code by GCC, which takes a few extra dozen bytes. Hence, exclusively use local variables everywhere.
 - Don't use ISR (Interrupt Service Routines) as each ISR will generate more than 50 bytes of code, just to save current registers context to the stack and restore it before the end of ISR. Also using an ISR generally implies using one global variable (or more) to communicate information between the ISR and the main program loop.
 - Avoid virtual methods in C++ classes as it generates `vtable` data for each class containing virtual methods (typically 4 bytes + 2 bytes per virtual method), stored in Flash and copied to SRAM at startup. Also, the code to call a virtual method is more instructions than for a non virtual method.
 - Use C++ templates in a smart way, i.e. for all code that takes only one or a few instructions, e.g. for digital IO, FastArduino FastIO templates just generate inlined `CBI`/`SBI` instruction to clear or set the pin.
@@ -221,7 +223,7 @@ My build includes generation of 2 evidences that the program, built for the circ
 
 2. `avr-objdump` generates a dump file `conway.dump.txt` with the list of all symbols and all assembly code part of the final executable
 
-On an ATtiny84A (8KB available for code, 512 bytes for data), here is the output of `avr-size`:
+For an ATtiny84A (8KB available for code, 512 bytes for data), here is the output of `avr-size`:
 
 	AVR Memory Usage
 	----------------
@@ -244,6 +246,6 @@ The dump file includes at its beginning the list of sections with their respecti
 	  2 .comment      00000030  00000000  00000000  00000416  2**0
 					  CONTENTS, READONLY
 
-As one can see, the code size in `text` section is 0x03c2, i.e. 962 bytes, whereas the `.data` section is empty.
+As one can see, the code size in `.text` section is 0x03c2, i.e. 962 bytes, whereas the `.data` section is empty.
 
 This information is based on github code tagged "HACKADAY-1KB-CONTEST" at https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/HACKADAY-1KB-CONTEST
