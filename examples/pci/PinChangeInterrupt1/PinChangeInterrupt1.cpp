@@ -17,7 +17,7 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 #include <fastarduino/PCI.hh>
 #include <fastarduino/power.hh>
 
@@ -44,8 +44,8 @@ class PinChangeHandler: public ExternalInterruptHandler
 {
 public:
 	PinChangeHandler()
-	:	_switch{SWITCH, PinMode::INPUT_PULLUP},
-		_led{Board::DigitalPin::LED, PinMode::OUTPUT}
+	:	_switch{PinMode::INPUT_PULLUP},
+		_led{PinMode::OUTPUT}
 	{}
 	
 	virtual bool on_pin_change() override
@@ -58,8 +58,8 @@ public:
 	}
 	
 private:
-	IOPin _switch;
-	IOPin _led;	
+	FastPinType<SWITCH>::TYPE _switch;
+	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
 };
 
 int main()

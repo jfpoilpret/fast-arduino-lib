@@ -13,7 +13,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
@@ -32,11 +32,9 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to write to LEDs
-	IOMaskedPort pins[NUM_LEDS];
+	FastMaskedPort<LED_PORT> pins[NUM_LEDS];
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
-	{
-		pins[i] = IOMaskedPort{LED_PORT, _BV(i), 0xFF};
-	}
+		pins[i] = FastMaskedPort<LED_PORT>{_BV(i), 0xFF};
 	
 	// Loop of the LED chaser
 	while (true)

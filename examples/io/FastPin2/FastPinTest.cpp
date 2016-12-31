@@ -14,12 +14,12 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 
 int main()
 {
 	sei();
-	IOPin PinLED{Board::DigitalPin::LED, PinMode::OUTPUT};
+	FastPinType<Board::DigitalPin::LED>::TYPE PinLED{PinMode::OUTPUT};
 	while (true)
 	{
 		PinLED.toggle();

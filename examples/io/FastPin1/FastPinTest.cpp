@@ -3,13 +3,13 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 
-static IOPort PortB{Board::Port::PORT_B};
+static FastPort<Board::Port::PORT_B> PortB;
 
-static IOPin PinD0{Board::DigitalPin::D0, PinMode::INPUT};
-static IOPin PinD1{Board::DigitalPin::D1, PinMode::INPUT_PULLUP};
-static IOPin PinD2{Board::DigitalPin::D2, PinMode::OUTPUT};
+static FastPinType<Board::DigitalPin::D0>::TYPE PinD0{PinMode::INPUT};
+static FastPinType<Board::DigitalPin::D1>::TYPE PinD1{PinMode::INPUT_PULLUP};
+static FastPinType<Board::DigitalPin::D2>::TYPE PinD2{PinMode::OUTPUT};
 
 bool f()
 {

@@ -16,7 +16,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)
 {
@@ -48,8 +48,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to read settings and write to LEDs
-	IOPort switchPort{SWITCH_PORT, 0x00, 0x0F};
-	IOPort ledPort{LED_PORT, 0xFF};
+	FastPort<SWITCH_PORT> switchPort{0x00, 0x0F};
+	FastPort<LED_PORT> ledPort{0xFF};
 	
 	// Loop of the LED chaser
 	while (true)

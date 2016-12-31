@@ -15,7 +15,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 #include <fastarduino/Events.hh>
 #include <fastarduino/watchdog.hh>
 #include <fastarduino/scheduler.hh>
@@ -35,10 +35,10 @@ static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
 
 static const uint32_t PERIOD = 1000;
 
-class LedHandler: public Job, private IOPort
+class LedHandler: public Job, private FastPort<LED_PORT>
 {
 public:
-	LedHandler() : Job{0, PERIOD}, IOPort{LED_PORT, 0xFF}, _value{0} {}
+	LedHandler() : Job{0, PERIOD}, FastPort{0xFF}, _value{0} {}
 	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		uint8_t value = _value;

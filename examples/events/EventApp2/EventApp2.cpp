@@ -14,7 +14,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 #include <fastarduino/Events.hh>
 #include <fastarduino/watchdog.hh>
 
@@ -30,10 +30,10 @@ static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
 #error "Current target is not yet supported!"
 #endif
 
-class LedHandler: public EventHandler, private IOPort
+class LedHandler: public EventHandler, private FastPort<LED_PORT>
 {
 public:
-	LedHandler() : EventHandler{Type::WDT_TIMER}, IOPort{LED_PORT, 0xFF}, _value{0} {}
+	LedHandler() : EventHandler{Type::WDT_TIMER}, FastPort{0xFF}, _value{0} {}
 	virtual void on_event(UNUSED const Event& event) override
 	{
 		uint8_t value = _value;

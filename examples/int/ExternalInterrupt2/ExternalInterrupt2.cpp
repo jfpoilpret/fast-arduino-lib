@@ -19,7 +19,7 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 #include <fastarduino/INT.hh>
 #include <fastarduino/power.hh>
 
@@ -44,8 +44,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	IOPin button{SWITCH, PinMode::INPUT_PULLUP};
-	IOPin led{Board::DigitalPin::LED, PinMode::OUTPUT};	
+	FastPinType<SWITCH>::TYPE button{PinMode::INPUT_PULLUP};
+	FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT};	
 	INTSignal<SWITCH> int0{InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 

@@ -14,7 +14,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
@@ -32,7 +32,7 @@ int main()
 	sei();
 
 	// Set Port D direction to all outputs
-	IOPort ledPort{LED_PORT};
+	FastPort<LED_PORT> ledPort;
 	ledPort.set_DDR(0xFF);
 	uint8_t value = 0;
 	// Loop of the LED chaser
