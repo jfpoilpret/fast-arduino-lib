@@ -111,6 +111,59 @@ public:
 	}
 };
 
+// This class maps to a PORT and handles it all 8 bits at a time
+// SRAM size is 0
+template<Board::Port PORT_>
+class FastMaskedPort
+{
+private:
+	using TRAIT = Board::Port_trait<PORT_>;
+	
+public:
+	static const Board::Port PORT = PORT_;
+	
+	FastMaskedPort() {}
+	FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0) INLINE
+	:_mask{mask}
+	{
+		set_DDR(ddr);
+		set_PORT(port);
+	}
+	
+	void set_PORT(uint8_t port) INLINE
+	{
+		MASK_VALUE(TRAIT::PORT, port);
+	}
+	uint8_t get_PORT() INLINE
+	{
+		return TRAIT::PORT.get() & _mask;
+	}
+	void set_DDR(uint8_t ddr) INLINE
+	{
+		MASK_VALUE(TRAIT::DDR, ddr);
+	}
+	uint8_t get_DDR() INLINE
+	{
+		return TRAIT::DDR.get() & _mask;
+	}
+	void set_PIN(uint8_t pin) INLINE
+	{
+		TRAIT::PIN.set(pin & _mask);
+	}
+	uint8_t get_PIN() INLINE
+	{
+		return TRAIT::PIN.get() & _mask;
+	}
+	
+private:
+	void MASK_VALUE(volatile uint8_t& reg, uint8_t value) INLINE
+	{
+		reg = (reg & ~_mask) | (value & _mask);
+	}
+	
+	uint8_t _mask;
+};
+
 template<Board::DigitalPin DPIN>
 struct FastPinType
 {
