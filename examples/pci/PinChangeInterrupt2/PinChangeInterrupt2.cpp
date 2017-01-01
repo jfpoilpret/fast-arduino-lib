@@ -19,7 +19,7 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 #include <fastarduino/PCI.hh>
 #include <fastarduino/power.hh>
 
@@ -64,38 +64,33 @@ class PinChangeHandler: public ExternalInterruptHandler
 {
 public:
 	PinChangeHandler()
-	:_switches
-	{
-		IOPin{SWITCH1, PinMode::INPUT_PULLUP}, 
-		IOPin{SWITCH2, PinMode::INPUT_PULLUP}, 
-		IOPin{SWITCH3, PinMode::INPUT_PULLUP}
-	},
-	_leds
-	{
-		IOPin{LED1, PinMode::OUTPUT}, 
-		IOPin{LED2, PinMode::OUTPUT}, 
-		IOPin{LED3, PinMode::OUTPUT}, 
-		IOPin{LED4, PinMode::OUTPUT}
-	}
+	:	_switch1{PinMode::INPUT_PULLUP},
+		_switch2{PinMode::INPUT_PULLUP},
+		_switch3{PinMode::INPUT_PULLUP},
+		_led1{PinMode::OUTPUT},
+		_led2{PinMode::OUTPUT},
+		_led3{PinMode::OUTPUT},
+		_led4{PinMode::OUTPUT}
 	{
 	}
 	
 	virtual bool on_pin_change() override
 	{
-		for (uint8_t i = 0; i < 3; ++i)
-		{
-			if (_switches[i].value())
-				_leds[i].clear();
-			else
-				_leds[i].set();
-		}
-		_leds[3].toggle();
+		if (_switch1.value()) _led1.clear(); else _led1.set();
+		if (_switch2.value()) _led2.clear(); else _led2.set();
+		if (_switch3.value()) _led3.clear(); else _led3.set();
+		_led4.toggle();
 		return true;
 	}
 	
 private:
-	IOPin _switches[3];
-	IOPin _leds[4];	
+	FastPinType<SWITCH1>::TYPE _switch1;
+	FastPinType<SWITCH2>::TYPE _switch2;
+	FastPinType<SWITCH3>::TYPE _switch3;
+	FastPinType<LED1>::TYPE _led1;
+	FastPinType<LED2>::TYPE _led2;
+	FastPinType<LED3>::TYPE _led3;
+	FastPinType<LED4>::TYPE _led4;
 };
 
 int main()

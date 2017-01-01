@@ -15,7 +15,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/IO.hh>
+#include <fastarduino/FastIO.hh>
 #include <fastarduino/Events.hh>
 
 using namespace Events;
@@ -54,14 +54,15 @@ static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
 #error "Current target is not yet supported!"
 #endif
 
-class LedHandler: public EventHandler, private IOPin
+template<Board::DigitalPin PIN>
+class LedHandler: public EventHandler, private FastPinType<PIN>::TYPE
 {
 public:
 	LedHandler() {}
-	LedHandler(uint8_t type, Board::DigitalPin led) : EventHandler{type}, IOPin{led, PinMode::OUTPUT} {}
+	LedHandler(uint8_t type) : EventHandler{type}, FastPinType<PIN>::TYPE{PinMode::OUTPUT} {}
 	virtual void on_event(UNUSED const Event& event) override
 	{
-		toggle();
+		this->toggle();
 	}
 };
 
@@ -76,19 +77,23 @@ int main()
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	LedHandler handlers[NUM_LEDS]
-	{
-		LedHandler{Type::USER_EVENT, LED0},
-		LedHandler{uint8_t(Type::USER_EVENT + 1), LED1},
-		LedHandler{uint8_t(Type::USER_EVENT + 2), LED2},
-		LedHandler{uint8_t(Type::USER_EVENT + 3), LED3},
-		LedHandler{uint8_t(Type::USER_EVENT + 4), LED4},
-		LedHandler{uint8_t(Type::USER_EVENT + 5), LED5},
-		LedHandler{uint8_t(Type::USER_EVENT + 6), LED6},
-		LedHandler{uint8_t(Type::USER_EVENT + 7), LED7}
-	};
-	for (uint8_t i = 0; i < NUM_LEDS; ++i)
-		dispatcher.insert(handlers[i]);
+	LedHandler<LED0> handler0{Type::USER_EVENT};
+	LedHandler<LED1> handler1{uint8_t(Type::USER_EVENT + 1)};
+	LedHandler<LED2> handler2{uint8_t(Type::USER_EVENT + 2)};
+	LedHandler<LED3> handler3{uint8_t(Type::USER_EVENT + 3)};
+	LedHandler<LED4> handler4{uint8_t(Type::USER_EVENT + 4)};
+	LedHandler<LED5> handler5{uint8_t(Type::USER_EVENT + 5)};
+	LedHandler<LED6> handler6{uint8_t(Type::USER_EVENT + 6)};
+	LedHandler<LED7> handler7{uint8_t(Type::USER_EVENT + 7)};
+	
+	dispatcher.insert(handler0);
+	dispatcher.insert(handler1);
+	dispatcher.insert(handler2);
+	dispatcher.insert(handler3);
+	dispatcher.insert(handler4);
+	dispatcher.insert(handler5);
+	dispatcher.insert(handler6);
+	dispatcher.insert(handler7);
 	
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
