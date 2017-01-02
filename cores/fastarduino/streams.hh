@@ -196,9 +196,10 @@ protected:
 	}
 	const char* justify(char* input, char filler = ' ')
 	{
-		if (strlen(input) < _width)
+		uint8_t width = (_width >= 0 ? _width : -_width);
+		if (strlen(input) < width)
 		{
-			uint8_t add = _width - strlen(input);
+			uint8_t add = width - strlen(input);
 			memmove(input + add, input, strlen(input) + 1);
 			memset(input, filler, add);
 		}
