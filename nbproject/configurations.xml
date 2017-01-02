@@ -24,7 +24,6 @@
       <itemPath>cores/fastarduino/ExternalInterrupt.hh</itemPath>
       <itemPath>cores/fastarduino/FastIO.hh</itemPath>
       <itemPath>cores/fastarduino/INT.hh</itemPath>
-      <itemPath>cores/fastarduino/IO.hh</itemPath>
       <itemPath>cores/fastarduino/LinkedList.cpp</itemPath>
       <itemPath>cores/fastarduino/LinkedList.hh</itemPath>
       <itemPath>cores/fastarduino/PCI.hh</itemPath>
@@ -144,8 +143,6 @@
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/INT.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -308,8 +305,6 @@
       </item>
       <item path="cores/fastarduino/INT.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
@@ -470,8 +465,6 @@
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/INT.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -634,8 +627,6 @@
       </item>
       <item path="cores/fastarduino/INT.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.hh" ex="false" tool="3" flavor2="0">
@@ -796,8 +787,6 @@
       <item path="cores/fastarduino/FastIO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/INT.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/IO.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/LinkedList.cpp" ex="false" tool="1" flavor2="0">
       </item>
