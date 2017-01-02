@@ -42,7 +42,7 @@ The project has started about 6 months ago only, hence it does not cover everyth
 What the project already has:
 
 - Utilities (queue, list, timing)
-- IO support: this comes in 2 flavors, one standard implementation and one template-based, optimized for speed and size. It is possible to mix both flavors in one program.
+- Fast IO support: template-based, optimized for speed and size.
 - General Events handling
 - Watchdog timer
 - Timed (periodic or not) jobs scheduling
@@ -71,8 +71,6 @@ I intend to later add support for:
 - Breadboard ATtiny85 at 8MHz
 - Arduino Leonardo
 
-Important! Note that "standard" IO implementation is deemed to disappear very soon, so if you consider starting a project with FastArduino today, prefer using FastIO.
-
 Roadmap
 -------
 
@@ -97,7 +95,7 @@ The roadmap of supported features is the following:
 16. More boards variants support (Leonardo, ATtinyX5)
 17. ... To be determined later, based on my own projects needs
 
-Some refactoring is also planned, in order to revisit current way to support multiple boards with different capabilities, based on a "traits" approach. This "trait" approach refactoring has started with initial RTT implementation and is almost finished (as of December, 3rd 2016); further changes are expected in this direction, normally with only little impact (or none at all) on API, until end 2016.
+Some refactoring is also planned, in order to revisit current way to support multiple boards with different capabilities, based on a "traits" approach. This "trait" approach refactoring has started with initial RTT implementation and is almost finished (as of December, 3rd 2016); further changes are expected in this direction, normally with only little impact (or none at all) on API, until January 2017.
 
 The following features are not in FastArduino roadmap currently:
 
