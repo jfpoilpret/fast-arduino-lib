@@ -143,8 +143,9 @@ examples: build
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF}
 	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF}
 	$(MAKE) -C examples/spi/WinBond CONF=${CONF}
-# TODO make this exec conditional (if CONF != ATtiny84)
-#	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF}
+ifeq ($(findstring ATtiny84,${CONF}),)
+	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF}
+endif
 	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF}
 	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF}
 
@@ -173,8 +174,9 @@ clean-examples: clean
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/WinBond CONF=${CONF} clean
-# TODO make this exec conditional (if CONF != ATtiny84)
-#	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF} clean
+ifeq ($(findstring ATtiny84,${CONF}),)
+	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF} clean
+endif
 	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF} clean
 
