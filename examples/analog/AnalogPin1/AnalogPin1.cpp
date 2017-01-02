@@ -1,15 +1,16 @@
 /*
  * Potentiometer value reading example.
  * This program shows usage of FastArduino AnalogInput API.
- * TODO Further description
+ * It reads and converts the analog level on a pin and displays it to the UART console.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
- *   - TODO
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  * - on Arduino MEGA:
- *   - TODO
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  * - on ATtinyX4 based boards:
- *   - TODO
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <avr/interrupt.h>
@@ -71,7 +72,6 @@ int main()
 	{
 		ANALOG_INPUT::TYPE value = pot.sample();
 		out << value << " (" << power.voltage_mV() << " mV)\n" << flush;
-		//TODO display on UART (HW or SW))
 		Time::delay_ms(1000);
 	}
 	return 0;
