@@ -317,65 +317,10 @@ namespace Board
 	template<> struct DigitalPin_trait<DigitalPin::D43>: public DigitalPin_trait_impl<Port::PORT_L, 6> {};
 	template<> struct DigitalPin_trait<DigitalPin::D42>: public DigitalPin_trait_impl<Port::PORT_L, 7> {};
 
-#define _SELECT_PORT(PORT, ARG_A, ARG_B, ARG_C, ARG_D, ARG_E, ARG_F, ARG_G, ARG_H, ARG_J, ARG_K, ARG_L)	\
-	(	PORT == Port::PORT_A ? ARG_A :			\
-		PORT == Port::PORT_B ? ARG_B :			\
-		PORT == Port::PORT_C ? ARG_C :			\
-		PORT == Port::PORT_D ? ARG_D :			\
-		PORT == Port::PORT_E ? ARG_E :			\
-		PORT == Port::PORT_F ? ARG_F :			\
-		PORT == Port::PORT_G ? ARG_G :			\
-		PORT == Port::PORT_H ? ARG_H :			\
-		PORT == Port::PORT_J ? ARG_J :			\
-		PORT == Port::PORT_K ? ARG_K :			\
-		ARG_L)
-
-#define _SELECT_PIN(DPIN, ARG_E, ARG_H, ARG_B, ARG_A, ARG_C, ARG_D, ARG_L, ARG_F, ARG_K, ARG_J, ARG_G)	\
-	(	(uint8_t) DPIN < 8 ? ARG_E :		\
-		(uint8_t) DPIN < 16 ? ARG_H :		\
-		(uint8_t) DPIN < 24 ? ARG_B :		\
-		(uint8_t) DPIN < 32 ? ARG_A :		\
-		(uint8_t) DPIN < 40 ? ARG_C :		\
-		(uint8_t) DPIN < 48 ? ARG_D :		\
-		(uint8_t) DPIN < 56 ? ARG_L :		\
-		(uint8_t) DPIN < 64 ? ARG_F :		\
-		(uint8_t) DPIN < 72 ? ARG_K :		\
-		(uint8_t) DPIN < 80 ? ARG_J :		\
-		ARG_G)
-	
-//TODO Could that be simplified by using REG ## E, REG## H, ...?
-#define _SELECT_PIN_REG(DPIN, REG_E, REG_H, REG_B, REG_A, REG_C, REG_D, REG_L, REG_F, REG_K, REG_J, REG_G)	\
-	_SELECT_REG(_SELECT_PIN(DPIN, REG_E, REG_H, REG_B, REG_A, REG_C, REG_D, REG_L, REG_F, REG_K, REG_J, REG_G))
-
-	constexpr REGISTER PIN_REG(Port port)
+	template<DigitalPin PIN>
+	constexpr uint8_t BIT()
 	{
-		return _SELECT_REG(_SELECT_PORT(port, PINA, PINB, PINC, PIND, PINE, PINF, PING, PINH, PINJ, PINK, PINL));
-	}
-	
-	constexpr Port PORT(DigitalPin pin)
-	{
-		return _SELECT_PIN(pin, Port::PORT_E, Port::PORT_H, Port::PORT_B, Port::PORT_A, Port::PORT_C, 
-			Port::PORT_D, Port::PORT_L, Port::PORT_F, Port::PORT_K, Port::PORT_J, Port::PORT_G);
-	}
-
-	constexpr REGISTER PIN_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PINE, PINH, PINB, PINA, PINC, PIND, PINL, PINF, PINK, PINJ, PING);
-	}
-
-	constexpr REGISTER DDR_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, DDRE, DDRH, DDRB, DDRA, DDRC, DDRD, DDRL, DDRF, DDRK, DDRJ, DDRG);
-	}
-
-	constexpr REGISTER PORT_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PORTE, PORTH, PORTB, PORTA, PORTC, PORTD, PORTL, PORTF, PORTK, PORTJ, PORTG);
-	}
-
-	constexpr uint8_t BIT(DigitalPin pin)
-	{
-		return ((uint8_t) pin) & 0x7;
+		return DigitalPin_trait<PIN>::BIT;
 	}
 
 	//==============

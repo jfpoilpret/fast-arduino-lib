@@ -93,48 +93,12 @@ namespace Board
 	template<> struct DigitalPin_trait<DigitalPin::D9>: public DigitalPin_trait_impl<Port::PORT_B, 1> {};
 	template<> struct DigitalPin_trait<DigitalPin::D10>: public DigitalPin_trait_impl<Port::PORT_B, 2, true> {};
 
-#define _SELECT_PORT(PORT, ARG0, ARG1)	\
-	(	PORT == Port::PORT_A ? ARG0 :	\
-		ARG1)
-
-#define _SELECT_PIN(DPIN, ARG0, ARG1)	\
-	(uint8_t(DPIN) < uint8_t(DigitalPin::D8) ? ARG0 :	ARG1)
-	
-#define _SELECT_PIN_REG(DPIN, REG0, REG1)	\
-	_SELECT_REG(_SELECT_PIN(DPIN, REG0, REG1))
-	
-	constexpr REGISTER PIN_REG(Port port)
+	template<DigitalPin PIN>
+	constexpr uint8_t BIT()
 	{
-		return _SELECT_REG(_SELECT_PORT(port, PINA, PINB));
+		return DigitalPin_trait<PIN>::BIT;
 	}
 	
-	constexpr Port PORT(DigitalPin pin)
-	{
-		return _SELECT_PIN(pin, Port::PORT_A, Port::PORT_B);
-	}
-
-	constexpr REGISTER PIN_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PINA, PINB);
-	}
-
-	constexpr REGISTER DDR_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, DDRA, DDRB);
-	}
-
-	constexpr REGISTER PORT_REG(DigitalPin pin)
-	{
-		return _SELECT_PIN_REG(pin, PORTA, PORTB);
-	}
-
-	constexpr uint8_t BIT(DigitalPin pin)
-	{
-		return _SELECT_PIN(	pin, 
-							(uint8_t) pin, 
-							(uint8_t) pin - (uint8_t) DigitalPin::D8);
-	}
-
 	//==============
 	// Analog Input
 	//==============
