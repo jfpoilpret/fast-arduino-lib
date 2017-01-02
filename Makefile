@@ -118,6 +118,65 @@ help: .help-post
 .help-post: .help-impl
 # Add your post 'help' code here...
 
+examples: build
+	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF}
+	$(MAKE) -C examples/analog/AnalogPin2 CONF=${CONF}
+	$(MAKE) -C examples/complete/Conway CONF=${CONF}
+	$(MAKE) -C examples/events/EventApp1 CONF=${CONF}
+	$(MAKE) -C examples/events/EventApp2 CONF=${CONF}
+	$(MAKE) -C examples/events/EventApp3 CONF=${CONF}
+	$(MAKE) -C examples/events/EventApp4 CONF=${CONF}
+	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF}
+	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF}
+	$(MAKE) -C examples/io/FastPin1 CONF=${CONF}
+	$(MAKE) -C examples/io/FastPin2 CONF=${CONF}
+	$(MAKE) -C examples/io/FastPin3 CONF=${CONF}
+	$(MAKE) -C examples/io/FastPin4 CONF=${CONF}
+	$(MAKE) -C examples/io/FastPin5 CONF=${CONF}
+	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF}
+	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF}
+	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF}
+	$(MAKE) -C examples/rtt/RTTApp1 CONF=${CONF}
+	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF}
+	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF}
+	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF}
+	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF}
+	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF}
+	$(MAKE) -C examples/spi/WinBond CONF=${CONF}
+# TODO make this exec conditional (if CONF != ATtiny84)
+#	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF}
+	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF}
+	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF}
+
+clean-examples: clean
+	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF} clean
+	$(MAKE) -C examples/analog/AnalogPin2 CONF=${CONF} clean
+	$(MAKE) -C examples/complete/Conway CONF=${CONF} clean
+	$(MAKE) -C examples/events/EventApp1 CONF=${CONF} clean
+	$(MAKE) -C examples/events/EventApp2 CONF=${CONF} clean
+	$(MAKE) -C examples/events/EventApp3 CONF=${CONF} clean
+	$(MAKE) -C examples/events/EventApp4 CONF=${CONF} clean
+	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF} clean
+	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF} clean
+	$(MAKE) -C examples/io/FastPin1 CONF=${CONF} clean
+	$(MAKE) -C examples/io/FastPin2 CONF=${CONF} clean
+	$(MAKE) -C examples/io/FastPin3 CONF=${CONF} clean
+	$(MAKE) -C examples/io/FastPin4 CONF=${CONF} clean
+	$(MAKE) -C examples/io/FastPin5 CONF=${CONF} clean
+	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF} clean
+	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF} clean
+	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/RTTApp1 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF} clean
+	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF} clean
+	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF} clean
+	$(MAKE) -C examples/spi/WinBond CONF=${CONF} clean
+# TODO make this exec conditional (if CONF != ATtiny84)
+#	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF} clean
+	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF} clean
+	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF} clean
 
 
 # include project implementation makefile
