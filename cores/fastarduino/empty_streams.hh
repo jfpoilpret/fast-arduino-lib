@@ -15,52 +15,52 @@ public:
 	void puts(const char* str UNUSED) {}
 //	void puts_P();
 	
-	EmptyOutput& operator << (char c)
+	EmptyOutput& operator << (char c UNUSED)
 	{
 		return *this;
 	}
-	EmptyOutput& operator << (const char* s)
+	EmptyOutput& operator << (const char* s UNUSED)
 	{
 		return *this;
 	}
-	EmptyOutput& operator << (int v)
+	EmptyOutput& operator << (int v UNUSED)
 	{
 		return *this;
 	}
-	EmptyOutput& operator << (unsigned int v)
+	EmptyOutput& operator << (unsigned int v UNUSED)
 	{
 		return *this;
 	}
-	EmptyOutput& operator << (long v)
+	EmptyOutput& operator << (long v UNUSED)
 	{
 		return *this;
 	}
-	EmptyOutput& operator << (unsigned long v)
+	EmptyOutput& operator << (unsigned long v UNUSED)
 	{
 		return *this;
 	}
-	EmptyOutput& operator << (double v)
+	EmptyOutput& operator << (double v UNUSED)
 	{
 		return *this;
 	}
 	
 	typedef void (*Manipulator)(EmptyOutput&);
-	EmptyOutput& operator << (Manipulator f)
+	EmptyOutput& operator << (Manipulator f UNUSED)
 	{
 		return *this;
 	}
 };
 
-inline void bin(EmptyOutput& stream) {}
+inline void bin(EmptyOutput& stream UNUSED) {}
 
-inline void oct(EmptyOutput& stream) {}
+inline void oct(EmptyOutput& stream UNUSED) {}
 
-inline void dec(EmptyOutput& stream) {}
+inline void dec(EmptyOutput& stream UNUSED) {}
 
-inline void hex(EmptyOutput& stream) {}
+inline void hex(EmptyOutput& stream UNUSED) {}
 
-inline void flush(EmptyOutput& stream) {}
+inline void flush(EmptyOutput& stream UNUSED) {}
 
-inline void endl(EmptyOutput& stream) {}
+inline void endl(EmptyOutput& stream UNUSED) {}
 
 #endif	/* EMPTYSTREAMS_HH */
