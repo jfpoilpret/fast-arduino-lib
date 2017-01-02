@@ -121,7 +121,9 @@ help: .help-post
 examples: build
 	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF}
 	$(MAKE) -C examples/analog/AnalogPin2 CONF=${CONF}
+ifeq ($(findstring MEGA,${CONF}),)
 	$(MAKE) -C examples/complete/Conway CONF=${CONF}
+endif
 	$(MAKE) -C examples/events/EventApp1 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp2 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp3 CONF=${CONF}
@@ -152,7 +154,9 @@ endif
 clean-examples: clean
 	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF} clean
 	$(MAKE) -C examples/analog/AnalogPin2 CONF=${CONF} clean
+ifeq ($(findstring MEGA,${CONF}),)
 	$(MAKE) -C examples/complete/Conway CONF=${CONF} clean
+endif
 	$(MAKE) -C examples/events/EventApp1 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp3 CONF=${CONF} clean
