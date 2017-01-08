@@ -49,6 +49,10 @@ public:
 		_callback = &callback;
 	}
 
+	static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
+	{
+		return prescaler_is_adequate(prescaler_quotient(p, us));
+	}
 	static constexpr TIMER_PRESCALER prescaler(uint32_t us)
 	{
 		return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
@@ -56,6 +60,10 @@ public:
 	static constexpr TIMER_TYPE counter(TIMER_PRESCALER prescaler, uint32_t us)
 	{
 		return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;
+	}
+	static constexpr TIMER_TYPE counter(uint32_t us)
+	{
+		return (TIMER_TYPE) prescaler_quotient(prescaler(us), us) - 1;
 	}
 
 	inline void begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
