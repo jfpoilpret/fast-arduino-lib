@@ -532,8 +532,7 @@ namespace Board
 
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
-			return _BV(WGM12) | 
-				(	p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS10) :
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS10) :
 					p == TIMER_PRESCALER::DIV_8 ? _BV(CS11) :
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS10) | _BV(CS11) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS12) :

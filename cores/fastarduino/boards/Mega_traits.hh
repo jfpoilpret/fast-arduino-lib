@@ -634,13 +634,81 @@ namespace Board
 	// Timers
 	//========
 	
+	enum TimerPrescalers: uint8_t
+	{
+		PRESCALERS_1_8_64_256_1024,
+		PRESCALERS_1_8_32_64_128_256_1024,
+		PRESCALERS_NONE
+	};
+	
+	template<TimerPrescalers PRESCALERS>
+	struct TimerPrescalers_trait
+	{
+		enum class TimerPrescaler: uint8_t {};
+		using TYPE = TimerPrescaler;
+		static constexpr const TimerPrescaler ALL_PRESCALERS[] = {};
+	};
+	
+	template<>
+	struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_8_64_256_1024>
+	{
+		enum class TimerPrescaler: uint8_t
+		{
+			NO_PRESCALING	= 0,
+			DIV_8			= 3,
+			DIV_64			= 6,
+			DIV_256			= 8,
+			DIV_1024		= 10
+		};
+		using TYPE = TimerPrescaler;
+		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
+		{
+			TimerPrescaler::NO_PRESCALING,
+			TimerPrescaler::DIV_8,
+			TimerPrescaler::DIV_64,
+			TimerPrescaler::DIV_256,
+			TimerPrescaler::DIV_1024
+		};
+	};
+	
+	template<>
+	struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024>
+	{
+		enum class TimerPrescaler: uint8_t
+		{
+			NO_PRESCALING	= 0,
+			DIV_8			= 3,
+			DIV_32			= 5,
+			DIV_64			= 6,
+			DIV_128			= 7,
+			DIV_256			= 8,
+			DIV_1024		= 10
+		};
+		using TYPE = TimerPrescaler;
+		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
+		{
+			TimerPrescaler::NO_PRESCALING,
+			TimerPrescaler::DIV_8,
+			TimerPrescaler::DIV_32,
+			TimerPrescaler::DIV_64,
+			TimerPrescaler::DIV_128,
+			TimerPrescaler::DIV_256,
+			TimerPrescaler::DIV_1024
+		};
+	};
+	
 	template<Timer TIMER>
 	struct Timer_trait
 	{
-		using COUNTER = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 0;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = 0;
+		using TYPE = uint8_t;
+		static constexpr const uint32_t MAX_COUNTER = 0;
+
+		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_NONE;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+
+//		static constexpr const uint8_t TCCRA_VALUE  = 0;
+//		static constexpr const uint8_t TCCRB_VALUE  = 0;
 		static constexpr const REGISTER TCCRA{};
 		static constexpr const REGISTER TCCRB{};
 		static constexpr const REGISTER TCNT{};
@@ -648,15 +716,24 @@ namespace Board
 		static constexpr const REGISTER OCRB{};
 		static constexpr const REGISTER TIMSK{};
 		static constexpr const REGISTER TIFR{};
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return 0;
+		}
 	};
 	
 	template<>
 	struct Timer_trait<Timer::TIMER0>
 	{
 		using TYPE = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 64;
-		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
+		static constexpr const uint32_t MAX_COUNTER = 256;
+
+		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+		
+//		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
+//		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
@@ -664,15 +741,30 @@ namespace Board
 		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
 		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
 		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
+
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS00) :
+					p == TIMER_PRESCALER::DIV_8 ? _BV(CS01) :
+					p == TIMER_PRESCALER::DIV_64 ? _BV(CS00) | _BV(CS01) :
+					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
+					p == TIMER_PRESCALER::DIV_1024 ? _BV(CS02) | _BV(CS01) :
+					0);
+		}
 	};
 	
 	template<>
 	struct Timer_trait<Timer::TIMER2>
 	{
 		using TYPE = uint8_t;
-		static constexpr const uint16_t PRESCALER  = 64;
-		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM21);
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS22);
+		static constexpr const uint32_t MAX_COUNTER = 256;
+
+		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+
+//		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM21);
+//		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS22);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR2A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR2B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT2);
@@ -680,15 +772,31 @@ namespace Board
 		static constexpr const REGISTER OCRB = _SELECT_REG(OCR2B);
 		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK2);
 		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR2);
+
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS20) :
+					p == TIMER_PRESCALER::DIV_8 ? _BV(CS21) :
+					p == TIMER_PRESCALER::DIV_32 ? _BV(CS21) | _BV(CS20) :
+					p == TIMER_PRESCALER::DIV_64 ? _BV(CS22) :
+					p == TIMER_PRESCALER::DIV_128 ? _BV(CS22) | _BV(CS02) :
+					p == TIMER_PRESCALER::DIV_256 ? _BV(CS22) | _BV(CS21) :
+					_BV(CS22) | _BV(CS21) | _BV(CS20));
+		}
 	};
 	
 	template<>
 	struct Timer_trait<Timer::TIMER1>
 	{
 		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
+		static constexpr const uint32_t MAX_COUNTER = 65536;
+
+		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+
+//		static constexpr const uint8_t TCCRA_VALUE  = 0;
+//		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
@@ -696,15 +804,29 @@ namespace Board
 		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
 		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
 		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
+
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS10) :
+					p == TIMER_PRESCALER::DIV_8 ? _BV(CS11) :
+					p == TIMER_PRESCALER::DIV_64 ? _BV(CS10) | _BV(CS11) :
+					p == TIMER_PRESCALER::DIV_256 ? _BV(CS12) :
+					_BV(CS12) | _BV(CS10));
+		}
 	};
 	
 	template<>
 	struct Timer_trait<Timer::TIMER3>
 	{
 		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM32) | _BV(CS30);
+		static constexpr const uint32_t MAX_COUNTER = 65536;
+
+		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+
+//		static constexpr const uint8_t TCCRA_VALUE  = 0;
+//		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM32) | _BV(CS30);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR3A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR3B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT3);
@@ -712,15 +834,29 @@ namespace Board
 		static constexpr const REGISTER OCRB = _SELECT_REG(OCR3B);
 		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK3);
 		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR3);
+
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS30) :
+					p == TIMER_PRESCALER::DIV_8 ? _BV(CS31) :
+					p == TIMER_PRESCALER::DIV_64 ? _BV(CS30) | _BV(CS31) :
+					p == TIMER_PRESCALER::DIV_256 ? _BV(CS32) :
+					_BV(CS32) | _BV(CS30));
+		}
 	};
 	
 	template<>
 	struct Timer_trait<Timer::TIMER4>
 	{
 		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM42) | _BV(CS40);
+		static constexpr const uint32_t MAX_COUNTER = 65536;
+
+		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+
+//		static constexpr const uint8_t TCCRA_VALUE  = 0;
+//		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM42) | _BV(CS40);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR4A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR4B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT4);
@@ -728,15 +864,29 @@ namespace Board
 		static constexpr const REGISTER OCRB = _SELECT_REG(OCR4B);
 		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK4);
 		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR4);
+
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS40) :
+					p == TIMER_PRESCALER::DIV_8 ? _BV(CS41) :
+					p == TIMER_PRESCALER::DIV_64 ? _BV(CS40) | _BV(CS41) :
+					p == TIMER_PRESCALER::DIV_256 ? _BV(CS42) :
+					_BV(CS42) | _BV(CS40));
+		}
 	};
 	
 	template<>
 	struct Timer_trait<Timer::TIMER5>
 	{
 		using TYPE = uint16_t;
-		static constexpr const uint16_t PRESCALER  = 1;
-		static constexpr const uint8_t TCCRA_VALUE  = 0;
-		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM52) | _BV(CS50);
+		static constexpr const uint32_t MAX_COUNTER = 65536;
+
+		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+
+//		static constexpr const uint8_t TCCRA_VALUE  = 0;
+//		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM52) | _BV(CS50);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR5A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR5B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT5);
@@ -744,6 +894,15 @@ namespace Board
 		static constexpr const REGISTER OCRB = _SELECT_REG(OCR5B);
 		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK5);
 		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR5);
+
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS50) :
+					p == TIMER_PRESCALER::DIV_8 ? _BV(CS51) :
+					p == TIMER_PRESCALER::DIV_64 ? _BV(CS50) | _BV(CS51) :
+					p == TIMER_PRESCALER::DIV_256 ? _BV(CS52) :
+					_BV(CS52) | _BV(CS50));
+		}
 	};
 };
 
