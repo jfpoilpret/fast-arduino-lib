@@ -152,16 +152,16 @@ namespace Board
 		TIMER2
 	};
 	
-	enum class TimerPrescaler: uint8_t
-	{
-		NO_PRESCALING	= 0,
-		DIV_8			= 3,
-		DIV_32			= 5,
-		DIV_64			= 6,
-		DIV_128			= 7,
-		DIV_256			= 8,
-		DIV_1024		= 10
-	};
+//	enum class TimerPrescaler: uint8_t
+//	{
+//		NO_PRESCALING	= 0,
+//		DIV_8			= 3,
+//		DIV_32			= 5,
+//		DIV_64			= 6,
+//		DIV_128			= 7,
+//		DIV_256			= 8,
+//		DIV_1024		= 10
+//	};
 	
 	//=============
 	// Sleep Modes
