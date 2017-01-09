@@ -38,10 +38,10 @@ class Timer
 {
 private:
 	using TRAIT = Board::Timer_trait<TIMER>;
-	using TIMER_TYPE = typename TRAIT::TYPE;
 	using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
 	
 public:
+	using TIMER_TYPE = typename TRAIT::TYPE;
 	using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 
 	Timer(TimerCallback& callback) INLINE
@@ -75,9 +75,9 @@ public:
 	inline void _begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
 	{
 		// OCnA & OCnB disconnected, CTC (Clear Timer on Compare match)
-		(volatile uint8_t&) TRAIT::TCCRA = TRAIT::TCCRA_VALUE;
+		(volatile uint8_t&) TRAIT::TCCRA = TRAIT::CTC_TCCRA;
 		// Don't force output compare (FOCA & FOCB), Clock Select according to prescaler
-		(volatile uint8_t&) TRAIT::TCCRB = TRAIT::TCCRB_prescaler(prescaler);
+		(volatile uint8_t&) TRAIT::TCCRB = TRAIT::CTC_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
 		// Set timer counter compare match (when value reached, 1ms has elapsed)
 		(volatile TIMER_TYPE&) TRAIT::OCRA = max;
 		// Reset timer counter

@@ -346,8 +346,8 @@ namespace Board
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
 		
-//		static constexpr const uint8_t TCCRA_VALUE  = 0;
-//		static constexpr const uint8_t TCCRB_VALUE  = 0;
+		static constexpr const uint8_t CTC_TCCRA  = 0;
+		static constexpr const uint8_t CTC_TCCRB  = 0;
 		static constexpr const REGISTER TCCRA{};
 		static constexpr const REGISTER TCCRB{};
 		static constexpr const REGISTER TCNT{};
@@ -371,8 +371,8 @@ namespace Board
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
 		
-//		static constexpr const uint8_t TCCRA_VALUE  = _BV(WGM01);
-//		static constexpr const uint8_t TCCRB_VALUE  = _BV(CS00) | _BV(CS01);
+		static constexpr const uint8_t CTC_TCCRA  = _BV(WGM01);
+		static constexpr const uint8_t CTC_TCCRB  = 0;
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
@@ -402,8 +402,8 @@ namespace Board
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
 
-//		static constexpr const uint8_t TCCRA_VALUE  = 0;
-//		static constexpr const uint8_t TCCRB_VALUE  = _BV(WGM12) | _BV(CS10);
+		static constexpr const uint8_t CTC_TCCRA  = 0;
+		static constexpr const uint8_t CTC_TCCRB  = _BV(WGM12);
 		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
 		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
 		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
