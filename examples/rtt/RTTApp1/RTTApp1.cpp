@@ -20,21 +20,21 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 // Define vectors we need in the example
-USE_RTT_TIMER0()
-USE_RTT_TIMER1()
-USE_RTT_TIMER2()
+USE_TIMER0()
+USE_TIMER1()
+USE_TIMER2()
 #elif defined (ARDUINO_MEGA)
 // Define vectors we need in the example
-USE_RTT_TIMER0()
-USE_RTT_TIMER1()
-USE_RTT_TIMER2()
-USE_RTT_TIMER3()
-USE_RTT_TIMER4()
-USE_RTT_TIMER5()
+USE_TIMER0()
+USE_TIMER1()
+USE_TIMER2()
+USE_TIMER3()
+USE_TIMER4()
+USE_TIMER5()
 #elif defined (BREADBOARD_ATTINYX4)
 // Define vectors we need in the example
-USE_RTT_TIMER0()
-USE_RTT_TIMER1()
+USE_TIMER0()
+USE_TIMER1()
 #else
 #error "Current target is not yet supported!"
 #endif
