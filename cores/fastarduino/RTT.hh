@@ -62,10 +62,11 @@ public:
 
 	inline void begin()
 	{
-		Timer<TIMER>::begin(MILLI_PRESCALER, MILLI_COUNTER);
+		synchronized _begin();
 	}
 	inline void _begin()
 	{
+		_millis = 0;
 		Timer<TIMER>::_begin(MILLI_PRESCALER, MILLI_COUNTER);
 	}
 	inline void end()

@@ -22,20 +22,20 @@
 #include <fastarduino/uart.hh>
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
-USE_RTT_TIMER0();
+USE_TIMER0();
 USE_UATX0();
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.hh>
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
-USE_RTT_TIMER0();
+USE_TIMER0();
 USE_UATX0();
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/softuart.hh>
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
-USE_RTT_TIMER0();
+USE_TIMER0();
 #else
 #error "Current target is not yet supported!"
 #endif

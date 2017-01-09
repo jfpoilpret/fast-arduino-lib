@@ -23,9 +23,9 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 // Define vectors we need in the example
-//USE_RTT_TIMER0()
-//USE_RTT_TIMER1()
-USE_RTT_TIMER2()
+USE_TIMER0()
+//USE_TIMER1()
+//USE_TIMER2()
 #elif defined (ARDUINO_MEGA)
 // Define vectors we need in the example
 
@@ -46,7 +46,7 @@ int main()
 	// NB in this sleep mode, delay takes about 1.5 times the specified time, and works only with Timer2
 	// because other timers cannot wake uf MCU from that sleep mode, as per specification.
 	// The additional 0.5x are due to the wake-up time at every interrupt (every ms)
-	Power::set_default_mode(Board::SleepMode::POWER_SAVE);
+//	Power::set_default_mode(Board::SleepMode::POWER_SAVE);
 	
 	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
 	RTT<Board::Timer::TIMER0> rtt;

@@ -22,7 +22,7 @@
 using namespace Events;
 
 // Define vectors we need in the example
-USE_RTT_TIMER0()
+USE_TIMER0()
 
 static const uint32_t PERIOD = 5000;
 
