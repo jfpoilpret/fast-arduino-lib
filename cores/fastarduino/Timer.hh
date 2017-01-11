@@ -9,13 +9,27 @@
 
 //TODO do we need to put everything here in a namespace?
 
+// These macros are internally used in further macros and should not be used in your programs
+#define _DISPATCH_TIMER(TIMER_NUM)	Timer<Board::Timer::TIMER ## TIMER_NUM>::call_back_if_needed();
+#define _ALIAS_TIMER(TIMER_NUM)	ISR(TIMER ## TIMER_NUM ## _COMPA_vect, ISR_ALIASOF(TIMER0_COMPA_vect));
+
+// Thia macro should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
+// want to use Timers in your program, hence you need the proper ISR vectors correctly defined
+#define USE_TIMERS()					\
+ISR(TIMER0_COMPA_vect)					\
+{										\
+	FOR_ALL_TIMERS(_DISPATCH_TIMER)		\
+}										\
+										\
+FOR_OTHER_TIMERS(_ALIAS_TIMER)
+
 //TODO Improve size by using one unique vector and aliases for others
 // Then the vector should check which timer interrupt is on and call the matching Timer class template instance
 // This macro is internally used in further macros and should not be used in your programs
 #define _USE_TIMER(TIMER_NUM)										\
 ISR(TIMER ## TIMER_NUM ## _COMPA_vect)								\
 {																	\
-	Timer<Board::Timer::TIMER ## TIMER_NUM>::_callback->on_timer();	\
+	Timer<Board::Timer::TIMER ## TIMER_NUM>::call_back_if_needed();	\
 }
 
 // Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
@@ -131,6 +145,12 @@ private:
 	static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
 	{
 		return best_prescaler(prescalers, prescalers + N, us);
+	}
+	
+	static void call_back_if_needed()
+	{
+		if (((volatile uint8_t&) TRAIT::TIFR) & _BV(OCF0A))
+			_callback->on_timer();
 	}
 
 	static TimerCallback* _callback;
