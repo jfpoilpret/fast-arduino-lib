@@ -23,7 +23,6 @@ ISR(TIMER0_COMPA_vect)					\
 										\
 FOR_OTHER_TIMERS(_ALIAS_TIMER)
 
-//TODO Improve size by using one unique vector and aliases for others
 // Then the vector should check which timer interrupt is on and call the matching Timer class template instance
 // This macro is internally used in further macros and should not be used in your programs
 #define _USE_TIMER(TIMER_NUM)										\
@@ -40,6 +39,10 @@ ISR(TIMER ## TIMER_NUM ## _COMPA_vect)								\
 #define USE_TIMER3()	_USE_TIMER(3)
 #define USE_TIMER4()	_USE_TIMER(4)
 #define USE_TIMER5()	_USE_TIMER(5)
+
+//TODO Further improve size by having USE_TIMERS() take variadic arguments to:
+// - determine main TIMER ISR
+// - determine other TIMER ISR
 
 class TimerCallback
 {
