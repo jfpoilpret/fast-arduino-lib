@@ -46,7 +46,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	RTTEventCallback callback{event_queue};
+	RTTEventCallback<> callback{event_queue};
 	RTT<Board::Timer::TIMER0> rtt;
 	rtt.set_callback(&callback);
 	

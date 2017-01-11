@@ -98,24 +98,22 @@ private:
 	}
 };
 
+template<uint32_t PERIOD_MS = 1024>
 class RTTEventCallback: public RTTCallback
 {
+	static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
 public:
-	RTTEventCallback(Queue<Events::Event>& event_queue, uint32_t period_ms = 1000)
-		:_event_queue(event_queue), _period_ms(period_ms) {}
+	RTTEventCallback(Queue<Events::Event>& event_queue)
+		:_event_queue(event_queue) {}
 	
 private:
 	virtual void on_rtt_change(uint32_t millis) override
 	{
-		// This unusual way to check if millis is multiple of _period_ms allows avoiding division (extra code)
-		while (millis >= _period_ms)
-			millis -= _period_ms;
-		if (!millis)
+		if ((millis & (PERIOD_MS - 1)) == 0)
 			_event_queue._push(Events::Event{Events::Type::RTT_TIMER});
 	}
 	
 	Queue<Events::Event>& _event_queue;
-	const uint32_t _period_ms;
 };
 
 #endif /* RTT_HH */
