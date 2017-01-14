@@ -10,18 +10,18 @@
 //TODO do we need to put everything here in a namespace?
 
 // These macros are internally used in further macros and should not be used in your programs
-#define _DISPATCH_TIMER(TIMER_NUM)	Timer<Board::Timer::TIMER ## TIMER_NUM>::call_back_if_needed();
-#define _ALIAS_TIMER(TIMER_NUM)	ISR(TIMER ## TIMER_NUM ## _COMPA_vect, ISR_ALIASOF(TIMER0_COMPA_vect));
+#define ALIAS_TIMER_(TN, T0)	\
+	ISR(TIMER ## TN ## _COMPA_vect, ISR_ALIASOF(TIMER ## T0 ## _COMPA_vect));
 
-// Thia macro should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
-// want to use Timers in your program, hence you need the proper ISR vectors correctly defined
-#define USE_TIMERS()					\
-ISR(TIMER0_COMPA_vect)					\
-{										\
-	FOR_ALL_TIMERS(_DISPATCH_TIMER)		\
-}										\
-										\
-FOR_OTHER_TIMERS(_ALIAS_TIMER)
+#define PREPEND_TIMER_(TN, ...) Board::Timer::TIMER ## TN
+
+#define USE_TIMERS(T0, ...)																								\
+ISR(TIMER ## T0 ## _COMPA_vect)																							\
+{																														\
+	timer_impl::CallbackHandler<FOR_EACH_SEP(PREPEND_TIMER_, , EMPTY, COMMA, EMPTY, T0, ##__VA_ARGS__)>::callback();	\
+}																														\
+																														\
+FOR_EACH(ALIAS_TIMER_, T0, ##__VA_ARGS__)
 
 // Then the vector should check which timer interrupt is on and call the matching Timer class template instance
 // This macro is internally used in further macros and should not be used in your programs
@@ -43,6 +43,12 @@ ISR(TIMER ## TIMER_NUM ## _COMPA_vect)								\
 //TODO Further improve size by having USE_TIMERS() take variadic arguments to:
 // - determine main TIMER ISR
 // - determine other TIMER ISR
+
+namespace timer_impl
+{
+	template<Board::Timer T0, Board::Timer... TS>
+	struct CallbackHandler;
+}
 
 class TimerCallback
 {
@@ -158,6 +164,10 @@ private:
 
 	static TimerCallback* _callback;
 	
+//	friend timer_impl::CallbackHandler<TIMER>;
+	template<Board::Timer, Board::Timer...> friend struct timer_impl::CallbackHandler;
+	
+	//TODO Remove these friends once USE_TIMER(...) macro is working
 	friend void TIMER0_COMPA_vect();
 #ifdef TIMER1_COMPA_vect
 	friend void TIMER1_COMPA_vect();
@@ -178,5 +188,27 @@ private:
 
 template<Board::Timer TIMER>
 TimerCallback* Timer<TIMER>::_callback = 0;
+
+namespace timer_impl
+{
+	template<Board::Timer T0, Board::Timer... TS>
+	struct CallbackHandler
+	{
+		static void callback()
+		{
+			CallbackHandler<T0>::callback();
+			CallbackHandler<TS...>::callback();
+		}
+	};
+
+	template<Board::Timer T>
+	struct CallbackHandler<T>
+	{
+		static void callback()
+		{
+			Timer<T>::call_back_if_needed();
+		}
+	};
+}
 
 #endif /* TIMER_HH */

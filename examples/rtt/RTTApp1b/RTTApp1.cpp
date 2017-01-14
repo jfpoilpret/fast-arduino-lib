@@ -18,7 +18,19 @@
 #include <fastarduino/FastIO.hh>
 #include <fastarduino/RTT.hh>
 
-USE_TIMERS()
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+// Define vectors we need in the example
+USE_TIMERS(0, 1, 2)
+#elif defined (ARDUINO_MEGA)
+// Define vectors we need in the example
+USE_TIMERS(0, 1, 2, 3 , 4, 5)
+#elif defined (BREADBOARD_ATTINYX4)
+// Define vectors we need in the example
+USE_TIMERS(0, 1)
+#else
+#error "Current target is not yet supported!"
+#endif
+
 
 const constexpr uint32_t BLINK_DELAY = 10000;
 
