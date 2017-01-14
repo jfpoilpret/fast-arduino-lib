@@ -165,6 +165,11 @@ inline uint8_t get_ioreg_byte(REGISTER IOREG)
 }
 
 // Useful macro to iterate
+// NOTE: these macros have been inspired by several readings:
+// http://stackoverflow.com/questions/11761703/overloading-macro-on-number-of-arguments
+// http://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros
+// https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
+
 #define EMPTY(...)
 #define CAT(X, Y) X##Y
 #define COMMA() ,
