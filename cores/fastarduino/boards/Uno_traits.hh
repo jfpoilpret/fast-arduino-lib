@@ -416,17 +416,6 @@ namespace Board
 		};
 	};
 	
-	//TODO Remove extra stuff for RTT after we have auto calculation of prescaler and counter values
-	//TODO additional information: list of prescalers, MAX value, max us delay acceptable
-#define FOR_ALL_TIMERS(TIMER_CB)	\
-	TIMER_CB(0)						\
-	TIMER_CB(1)						\
-	TIMER_CB(2)
-	
-#define FOR_OTHER_TIMERS(TIMER_CB)	\
-	TIMER_CB(1)						\
-	TIMER_CB(2)
-	
 	template<Timer TIMER>
 	struct Timer_trait
 	{

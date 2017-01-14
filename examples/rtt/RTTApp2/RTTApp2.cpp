@@ -23,9 +23,9 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 // Define vectors we need in the example
-USE_TIMER0()
-//USE_TIMER1()
-//USE_TIMER2()
+USE_TIMERS(0)
+//USE_TIMERS(1)
+//USE_TIMERS(2)
 #elif defined (ARDUINO_MEGA)
 // Define vectors we need in the example
 

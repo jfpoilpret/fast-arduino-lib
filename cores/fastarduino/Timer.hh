@@ -23,31 +23,11 @@ ISR(TIMER ## T0 ## _COMPA_vect)																							\
 																														\
 FOR_EACH(ALIAS_TIMER_, T0, ##__VA_ARGS__)
 
-// Then the vector should check which timer interrupt is on and call the matching Timer class template instance
-// This macro is internally used in further macros and should not be used in your programs
-#define _USE_TIMER(TIMER_NUM)										\
-ISR(TIMER ## TIMER_NUM ## _COMPA_vect)								\
-{																	\
-	Timer<Board::Timer::TIMER ## TIMER_NUM>::call_back_if_needed();	\
-}
-
-// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
-// want to use RTT for a given Timer in your program, hence you need the proper ISR vector correctly defined
-#define USE_TIMER0()	_USE_TIMER(0)
-#define USE_TIMER1()	_USE_TIMER(1)
-#define USE_TIMER2()	_USE_TIMER(2)
-#define USE_TIMER3()	_USE_TIMER(3)
-#define USE_TIMER4()	_USE_TIMER(4)
-#define USE_TIMER5()	_USE_TIMER(5)
-
-//TODO Further improve size by having USE_TIMERS() take variadic arguments to:
-// - determine main TIMER ISR
-// - determine other TIMER ISR
-
+// Forward declaration necessary to be declared as friend
+// Complete declaration can be found at the end of this file
 namespace timer_impl
 {
-	template<Board::Timer T0, Board::Timer... TS>
-	struct CallbackHandler;
+	template<Board::Timer T0, Board::Timer... TS> struct CallbackHandler;
 }
 
 class TimerCallback
@@ -164,26 +144,7 @@ private:
 
 	static TimerCallback* _callback;
 	
-//	friend timer_impl::CallbackHandler<TIMER>;
 	template<Board::Timer, Board::Timer...> friend struct timer_impl::CallbackHandler;
-	
-	//TODO Remove these friends once USE_TIMER(...) macro is working
-	friend void TIMER0_COMPA_vect();
-#ifdef TIMER1_COMPA_vect
-	friend void TIMER1_COMPA_vect();
-#endif
-#ifdef TIMER2_COMPA_vect
-	friend void TIMER2_COMPA_vect();
-#endif
-#ifdef TIMER3_COMPA_vect
-	friend void TIMER3_COMPA_vect();
-#endif
-#ifdef TIMER4_COMPA_vect
-	friend void TIMER4_COMPA_vect();
-#endif
-#ifdef TIMER5_COMPA_vect
-	friend void TIMER5_COMPA_vect();
-#endif
 };
 
 template<Board::Timer TIMER>

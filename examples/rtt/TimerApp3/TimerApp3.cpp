@@ -8,7 +8,7 @@
 
 constexpr const Board::Timer TIMER = Board::Timer::TIMER1;
 // Define vectors we need in the example
-USE_TIMER1();
+USE_TIMERS(1);
 
 using TIMER_TYPE = Timer<TIMER>;
 constexpr const uint32_t PERIOD_US = 1000000;
