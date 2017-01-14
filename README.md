@@ -86,19 +86,26 @@ The roadmap of supported features is the following:
 8. External Pin Interrupt support (done)
 9. Real Time Timer support (done)
 10. NRF24L01P support (done)
-11. SIPO shift register support
+11. SIPO shift register support (done)
 12. Analog Input support (done for single conversion mode)
+13. General-purpose Timer support (done)
 
-13. General-purpose Timer support (will imply RTT implementation refactoring)
-14. Trace support (including PROGMEM strings support)
-15. EEPROM support
+
+14. EEPROM support
+15. Trace support (including PROGMEM strings support)
 16. More boards variants support (Leonardo, ATtinyX5)
 17. ... To be determined later, based on my own projects needs
 
-Some refactoring is also planned, in order to revisit current way to support multiple boards with different capabilities, based on a "traits" approach. This "trait" approach refactoring has started with initial RTT implementation and is almost finished (as of December, 3rd 2016); further changes are expected in this direction, normally with only little impact (or none at all) on API, until January 2017.
+Some refactoring is also planned, in January-February 2017, in order to:
 
-The following features are not in FastArduino roadmap currently:
+- more easily and better allow for multiple boards support.
+- improve code size for ISR by using ISR ALIAS when possible
+- cleanup code according to some common C++ guidelines
 
-- PWM Output support
+This refactoring should normally have no (or little) impact on API.
+
+The following features are not in FastArduino roadmap currently (but may be in the future):
+
 - I2C support
+- PWM Output support
 - OWI support
