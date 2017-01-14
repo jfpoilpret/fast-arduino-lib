@@ -26,15 +26,15 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D2;
 // Define vectors we need in the example
-USE_EMPTY_INT0()
+USE_EMPTY_INTS(0)
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21;
 // Define vectors we need in the example
-USE_EMPTY_INT0()
+USE_EMPTY_INTS(0)
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10;
 // Define vectors we need in the example
-USE_EMPTY_INT0()
+USE_EMPTY_INTS(0)
 #else
 #error "Current target is not yet supported!"
 #endif

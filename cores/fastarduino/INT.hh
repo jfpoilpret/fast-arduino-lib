@@ -9,41 +9,27 @@
 
 // Principles:
 // One INT<> instance for each INT vector
-// Handling is delegated by INT<> to a INTHandler instance
+// Handling, if needed, can be delegated by INT<> to a ExternalInterruptHandler instance
 
-// This macro is internally used in further macros and should not be used in your programs
-#define _USE_INT(INT_NUM)										\
-ISR(INT ## INT_NUM ## _vect)									\
-{																\
-	INT<Board::ExternalInterruptPin::EXT ## INT_NUM>::handle();	\
-}
+// These macros are internally used in further macros and should not be used in your programs
+#define ALIAS_INT_(PN, P0)	\
+	ISR(INT ## PN ## _vect, ISR_ALIASOF(INT ## P0 ## _vect));
 
-// This macro is internally used in further macros and should not be used in your programs
-#define _USE_EMPTY_INT(INT_NUM)				\
-EMPTY_INTERRUPT(INT ## INT_NUM ## _vect)
+#define PREPEND_INT_(PN, ...) Board::ExternalInterruptPin::EXT ## PN
 
-// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
-// want to use INT for a given INT pin in your program, hence you need the proper ISR vector correctly defined
-#define USE_INT0()	_USE_INT(0)
-#define USE_INT1()	_USE_INT(1)
-#define USE_INT2()	_USE_INT(2)
-#define USE_INT3()	_USE_INT(3)
-#define USE_INT4()	_USE_INT(4)
-#define USE_INT5()	_USE_INT(5)
-#define USE_INT6()	_USE_INT(6)
-#define USE_INT7()	_USE_INT(7)
+#define USE_INTS(P0, ...)																						\
+ISR(INT ## P0 ## _vect)																							\
+{																												\
+	INT_impl::InterruptHandler<FOR_EACH_SEP(PREPEND_INT_, , EMPTY, COMMA, EMPTY, P0, ##__VA_ARGS__)>::handle();	\
+}																												\
+																												\
+FOR_EACH(ALIAS_INT_, P0, ##__VA_ARGS__)
 
-// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
-// want to use INTSignal for a given INT pin in your program, hence you need the proper ISR vector correctly defined
-// Use these when you want an INT to wake up from sleep but you don't need any handler to be executed
-#define USE_EMPTY_INT0()	_USE_EMPTY_INT(0)
-#define USE_EMPTY_INT1()	_USE_EMPTY_INT(1)
-#define USE_EMPTY_INT2()	_USE_EMPTY_INT(2)
-#define USE_EMPTY_INT3()	_USE_EMPTY_INT(3)
-#define USE_EMPTY_INT4()	_USE_EMPTY_INT(4)
-#define USE_EMPTY_INT5()	_USE_EMPTY_INT(5)
-#define USE_EMPTY_INT6()	_USE_EMPTY_INT(6)
-#define USE_EMPTY_INT7()	_USE_EMPTY_INT(7)
+#define EMPTY_INT_(PN, _0)					\
+EMPTY_INTERRUPT(INT ## PN ## _vect);
+
+#define USE_EMPTY_INTS(P0, ...)				\
+FOR_EACH(EMPTY_INT_, _0, P0, ##__VA_ARGS__)
 
 enum class InterruptTrigger: uint8_t
 {
@@ -56,7 +42,7 @@ enum class InterruptTrigger: uint8_t
 template<Board::DigitalPin PIN>
 class INTSignal
 {
-private:
+protected:
 	using PIN_TRAIT = Board::DigitalPin_trait<PIN>;
 	using INT_TRAIT = Board::ExternalInterruptPin_trait<PIN>;
 	
@@ -103,6 +89,13 @@ public:
 	}
 };
 
+// Forward declaration necessary to be declared as friend
+// Complete declaration can be found at the end of this file
+namespace INT_impl
+{
+	template<Board::DigitalPin P0, Board::DigitalPin... PS> struct InterruptHandler;
+}
+
 template<Board::DigitalPin PIN>
 class INT: public INTSignal<PIN>
 {
@@ -120,37 +113,40 @@ public:
 
 private:
 	static ExternalInterruptHandler* _handler;
-	static inline void handle()
+	
+	static void handle_if_needed()
 	{
-		if (_handler) _handler->on_pin_change();
+		if (((volatile uint8_t&) INTSignal<PIN>::INT_TRAIT::EIFR_) & INTSignal<PIN>::INT_TRAIT::EIFR_MASK)
+			_handler->on_pin_change();
 	}
 	
-	friend void INT0_vect();
-#if defined(INT1)
-	friend void INT1_vect();
-#endif
-#if defined(INT2)
-	friend void INT2_vect();
-#endif
-#if defined(INT3)
-	friend void INT3_vect();
-#endif
-#if defined(INT4)
-	friend void INT4_vect();
-#endif
-#if defined(INT5)
-	friend void INT5_vect();
-#endif
-#if defined(INT6)
-	friend void INT6_vect();
-#endif
-#if defined(INT7)
-	friend void INT7_vect();
-#endif
+	template<Board::DigitalPin, Board::DigitalPin...> friend struct INT_impl::InterruptHandler;
 };
 
 template<Board::DigitalPin INT_NUM>
 ExternalInterruptHandler* INT<INT_NUM>::_handler = 0;
+
+namespace INT_impl
+{
+	template<Board::DigitalPin P0, Board::DigitalPin... PS>
+	struct InterruptHandler
+	{
+		static void handle()
+		{
+			InterruptHandler<P0>::handle();
+			InterruptHandler<PS...>::handle();
+		}
+	};
+
+	template<Board::DigitalPin P>
+	struct InterruptHandler<P>
+	{
+		static void handle()
+		{
+			INT<P>::handle_if_needed();
+		}
+	};
+}
 
 #endif	/* INT_HH */
 
