@@ -32,7 +32,7 @@ constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
 // Define vectors we need in the example
-USE_PCI1()
+USE_PCIS(1)
 
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D53;
@@ -43,7 +43,7 @@ constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25;
 // Define vectors we need in the example
-USE_PCI0()
+USE_PCIS(0)
 
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D8;
@@ -54,7 +54,7 @@ constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3;
 // Define vectors we need in the example
-USE_PCI1()
+USE_PCIS(1)
 
 #else
 #error "Current target is not yet supported!"

@@ -24,17 +24,17 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D14;
 // Define vectors we need in the example
-USE_PCI1()
+USE_PCIS(1)
 
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D53;
 // Define vectors we need in the example
-USE_PCI0()
+USE_PCIS(0)
 
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D8;
 // Define vectors we need in the example
-USE_PCI1()
+USE_PCIS(1)
 
 #else
 #error "Current target is not yet supported!"

@@ -10,42 +10,34 @@
 
 // Principles:
 // One PCI<> instance for each PCINT vector
-// Handling is delegated by PCI<> to a PCIHandler instance
-// Several PCIHandler subclasses exist to:
+// Handling, if needed, can be delegated by PCI<> to a ExternalInterruptHandler instance
+// Several ExternalInterruptHandler subclasses exist to:
 // - handle only one call (most efficient)
 // - handle a linked list of handlers
 // - support exact changes modes (store port state) of PINs
 
-// This macro is internally used in further macros and should not be used in your programs
-#define _USE_PCI(INT)										\
-ISR(PCINT ## INT ## _vect)									\
-{															\
-	using TRAIT = Board::PCI_trait<INT>;					\
-	static_assert(TRAIT::PORT != Board::Port::NONE, "");	\
-	PCI<TRAIT::PORT>::handle();								\
-}
+// These macros are internally used in further macros and should not be used in your programs
+#define ALIAS_PCI_(PN, P0)	\
+	ISR(PCINT ## PN ## _vect, ISR_ALIASOF(PCINT ## P0 ## _vect));
 
-// This macro is internally used in further macros and should not be used in your programs
-#define _USE_EMPTY_PCI(INT)					\
-EMPTY_INTERRUPT(PCINT ## INT ## _vect)
+#define PREPEND_PCI_(PN, ...) Board::PCI_trait< PN >::PORT
+#define ASSERT_PCI_(PN, ...) static_assert(Board::PCI_trait< PN >::PORT != Board::Port::NONE, "PORT must support PCI");
 
-//TODO INFER on a way to find out which vector should used when you only know a DigitalPin...
+#define USE_PCIS(P0, ...)																						\
+ISR(PCINT ## P0 ## _vect)																						\
+{																												\
+	FOR_EACH(ASSERT_PCI_, , ##__VA_ARGS__)																		\
+	PCI_impl::InterruptHandler<FOR_EACH_SEP(PREPEND_PCI_, , EMPTY, COMMA, EMPTY, P0, ##__VA_ARGS__)>::handle();	\
+}																												\
+																												\
+FOR_EACH(ALIAS_PCI_, P0, ##__VA_ARGS__)
 
-// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp, or in main.cpp) 
-// to indicate you want to use PCI for a given PORT in your program, hence you need the proper 
-// ISR vector correctly defined
-#define USE_PCI0()	_USE_PCI(0)
-#define USE_PCI1()	_USE_PCI(1)
-#define USE_PCI2()	_USE_PCI(2)
-#define USE_PCI3()	_USE_PCI(3)
+#define EMPTY_PCI_(PN, _0)					\
+EMPTY_INTERRUPT(PCINT ## PN ## _vect);
 
-// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
-// want to use PCISignal for a given PCI port in your program, hence you need the proper ISR vector correctly defined
-// Use these when you want an PCI to wake up from sleep but you don't need any handler to be executed
-#define USE_EMPTY_PCI0()	_USE_EMPTY_PCI(0)
-#define USE_EMPTY_PCI1()	_USE_EMPTY_PCI(1)
-#define USE_EMPTY_PCI2()	_USE_EMPTY_PCI(2)
-#define USE_EMPTY_PCI3()	_USE_EMPTY_PCI(3)
+#define USE_EMPTY_PCIS(P0, ...)				\
+FOR_EACH(EMPTY_PCI_, _0, P0, ##__VA_ARGS__)
+
 
 template<Board::Port PORT>
 class PCISignal
@@ -69,7 +61,6 @@ public:
 	{
 		synchronized set_mask(TRAIT::PCMSK_, mask);
 	}
-	//TODO REWORK with TRAIT
 	template<Board::DigitalPin PIN>
 	inline void enable_pin()
 	{
@@ -84,15 +75,6 @@ public:
 		static_assert(TRAIT::PCI_MASK & _BV(Board::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
 		synchronized clear_mask(TRAIT::PCMSK_, _BV(Board::DigitalPin_trait<PIN>::BIT));
 	}
-//	inline void enable_pin(Board::DigitalPin pin)
-//	{
-//		enable_pins(_BV(Board::BIT(pin)));
-//	}
-//	inline void disable_pin(Board::DigitalPin  pin)
-//	{
-//		const uint8_t mask = _BV(Board::BIT(pin));
-//		synchronized clear_mask(TRAIT::PCMSK_, mask);
-//	}
 	
 	inline void _enable()
 	{
@@ -124,16 +106,14 @@ public:
 		static_assert(TRAIT::PCI_MASK & _BV(Board::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
 		clear_mask(TRAIT::PCMSK_, _BV(Board::DigitalPin_trait<PIN>::BIT));
 	}
-//	inline void _enable_pin(Board::DigitalPin pin)
-//	{
-//		_enable_pins(_BV(Board::BIT(pin)));
-//	}
-//	inline void _disable_pin(Board::DigitalPin pin)
-//	{
-//		const uint8_t mask = _BV(Board::BIT(pin));
-//		clear_mask(TRAIT::PCMSK_, mask);
-//	}
 };
+
+// Forward declaration necessary to be declared as friend
+// Complete declaration can be found at the end of this file
+namespace PCI_impl
+{
+	template<Board::Port P0, Board::Port... PS> struct InterruptHandler;
+}
 
 template<Board::Port PORT>
 class PCI: public PCISignal<PORT>
@@ -151,21 +131,14 @@ public:
 	
 private:
 	static ExternalInterruptHandler* _handler;
-	static inline void handle()
+	
+	static void handle_if_needed()
 	{
-		if (_handler) _handler->on_pin_change();
+		if (((volatile uint8_t&) PCISignal<PORT>::TRAIT::PCIFR_) & PCISignal<PORT>::TRAIT::PCIFR_MASK)
+			_handler->on_pin_change();
 	}
 	
-	friend void PCINT0_vect();
-#if defined(PCIE1)
-	friend void PCINT1_vect();
-#endif
-#if defined(PCIE2)
-	friend void PCINT2_vect();
-#endif
-#if defined(PCIE3)
-	friend void PCINT3_vect();
-#endif
+	template<Board::Port, Board::Port...> friend struct PCI_impl::InterruptHandler;
 };
 
 template<Board::Port PORT>
@@ -177,5 +150,27 @@ struct PCIType
 	using TYPE = PCI<Board::DigitalPin_trait<PIN>::PORT>;
 	static constexpr const uint8_t PCINT = Board::Port_trait<Board::DigitalPin_trait<PIN>::PORT>::PCINT;
 };
+
+namespace PCI_impl
+{
+	template<Board::Port P0, Board::Port... PS>
+	struct InterruptHandler
+	{
+		static void handle()
+		{
+			InterruptHandler<P0>::handle();
+			InterruptHandler<PS...>::handle();
+		}
+	};
+
+	template<Board::Port P>
+	struct InterruptHandler<P>
+	{
+		static void handle()
+		{
+			PCI<P>::handle_if_needed();
+		}
+	};
+}
 
 #endif	/* PCI_HH */

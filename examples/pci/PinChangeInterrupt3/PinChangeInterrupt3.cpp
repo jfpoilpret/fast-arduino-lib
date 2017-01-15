@@ -40,7 +40,7 @@ static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_C;
 // Define vectors we need in the example
-USE_PCI1()
+USE_PCIS(1)
 
 #elif defined (ARDUINO_MEGA)
 static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D22>());
@@ -56,7 +56,7 @@ static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
 // Define vectors we need in the example
-USE_PCI0()
+USE_PCIS(0)
 
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D0>());
@@ -72,7 +72,7 @@ static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
 // Define vectors we need in the example
-USE_PCI1()
+USE_PCIS(1)
 
 #else
 #error "Current target is not yet supported!"
