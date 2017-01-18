@@ -17,27 +17,37 @@
 // - support exact changes modes (store port state) of PINs
 
 // These macros are internally used in further macros and should not be used in your programs
-#define ALIAS_PCI_(PN, P0)	\
-	ISR(PCINT ## PN ## _vect, ISR_ALIASOF(PCINT ## P0 ## _vect));
+#define ISR_PCI_(P0, ...)										\
+ISR(PCINT ## P0 ## _vect, ISR_NAKED)							\
+{																\
+	asm volatile(												\
+		"push r16\n\t"											\
+		"ldi r16, %[PCINT]\n\t"									\
+		"out %[GPIOR], r16\n\t"									\
+		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [PCINT] "I" (P0)	\
+	);															\
+	ISRCallback::callback();									\
+	asm volatile(												\
+		"pop r16\n\t"											\
+		"reti\n\t"												\
+	);															\
+}																\
 
 #define PREPEND_PCI_(PN, ...) Board::PCI_trait< PN >::PORT
 #define ASSERT_PCI_(PN, ...) static_assert(Board::PCI_trait< PN >::PORT != Board::Port::NONE, "PORT must support PCI");
 
-#define USE_PCIS(P0, ...)																						\
-ISR(PCINT ## P0 ## _vect)																						\
-{																												\
-	FOR_EACH(ASSERT_PCI_, , ##__VA_ARGS__)																		\
-	PCI_impl::InterruptHandler<FOR_EACH_SEP(PREPEND_PCI_, , EMPTY, COMMA, EMPTY, P0, ##__VA_ARGS__)>::handle();	\
-}																												\
-																												\
-FOR_EACH(ALIAS_PCI_, P0, ##__VA_ARGS__)
+#define USE_PCIS(P0, ...)																		\
+using ISRCallback =																				\
+	PCI_impl::ISRHandler<FOR_EACH_SEP(PREPEND_PCI_, , EMPTY, COMMA, EMPTY, P0, ##__VA_ARGS__)>;	\
+																								\
+FOR_EACH(ASSERT_PCI_, , P0, ##__VA_ARGS__)														\
+FOR_EACH(ISR_PCI_, , P0, ##__VA_ARGS__)
 
 #define EMPTY_PCI_(PN, _0)					\
 EMPTY_INTERRUPT(PCINT ## PN ## _vect);
 
 #define USE_EMPTY_PCIS(P0, ...)				\
 FOR_EACH(EMPTY_PCI_, _0, P0, ##__VA_ARGS__)
-
 
 template<Board::Port PORT>
 class PCISignal
@@ -134,7 +144,7 @@ private:
 	
 	static void handle_if_needed()
 	{
-		if (((volatile uint8_t&) PCISignal<PORT>::TRAIT::PCIFR_) & PCISignal<PORT>::TRAIT::PCIFR_MASK)
+		if (GPIOR0 == PCISignal<PORT>::TRAIT::PCINT)
 			_handler->on_pin_change();
 	}
 	
@@ -153,6 +163,53 @@ struct PCIType
 
 namespace PCI_impl
 {
+	template<Board::Port... PS>
+	struct ISRHandler
+	{
+		static void callback() __attribute__((naked))
+		{
+			asm volatile(
+				"push r1\n\t"
+				"push r0\n\t"
+				"in r0, __SREG__\n\t"
+				"push r0\n\t"
+				"eor r1, r1\n\t"
+				"push r18\n\t"
+				"push r19\n\t"
+				"push r20\n\t"
+				"push r21\n\t"
+				"push r22\n\t"
+				"push r23\n\t"
+				"push r24\n\t"
+				"push r25\n\t"
+				"push r26\n\t"
+				"push r27\n\t"
+				"push r30\n\t"
+				"push r31\n\t"
+			);
+			InterruptHandler<PS...>::handle();
+			asm volatile(
+				"pop r31\n\t"
+				"pop r30\n\t"
+				"pop r27\n\t"
+				"pop r26\n\t"
+				"pop r25\n\t"
+				"pop r24\n\t"
+				"pop r23\n\t"
+				"pop r22\n\t"
+				"pop r21\n\t"
+				"pop r20\n\t"
+				"pop r19\n\t"
+				"pop r18\n\t"
+				"pop r0\n\t"
+				"out __SREG__, r0\n\t"
+				"pop r0\n\t"
+				"pop r1\n\t"
+				"ret\n\t"
+			);
+		}
+	};
+	
 	template<Board::Port P0, Board::Port... PS>
 	struct InterruptHandler
 	{
