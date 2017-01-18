@@ -6,6 +6,7 @@
 #include "Events.hh"
 #include "Board.hh"
 
+//TODO Improve to provide 2 API: one with Clock and Event queue, one with just WDT, no ISR
 class Watchdog
 {
 public:
