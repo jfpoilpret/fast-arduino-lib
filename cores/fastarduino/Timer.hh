@@ -32,7 +32,7 @@ ISR(TIMER ## T0 ## _COMPA_vect, ISR_NAKED)						\
 using ISRCallback =																						\
 	timer_impl::ISRHandler<FOR_EACH_SEP(PREPEND_TIMER_, , EMPTY, COMMA, EMPTY, T0, ##__VA_ARGS__)>;		\
 																										\
-FOR_EACH(ISR_TIMER_, _0, T0, ##__VA_ARGS__)
+FOR_EACH(ISR_TIMER_, , T0, ##__VA_ARGS__)
 
 // Forward declaration necessary to be declared as friend
 // Complete declaration can be found at the end of this file
