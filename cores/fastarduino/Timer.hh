@@ -9,7 +9,7 @@
 
 //TODO do we need to put everything here in a namespace?
 
-// This macro is internally used in further macro and should not be used in your programs
+// These macros are internally used in further macro and should not be used in your programs
 #define ISR_TIMER_(T0, ...)										\
 ISR(TIMER ## T0 ## _COMPA_vect, ISR_NAKED)						\
 {																\
@@ -26,6 +26,7 @@ ISR(TIMER ## T0 ## _COMPA_vect, ISR_NAKED)						\
 	);															\
 }																\
 
+#define PREPEND_TIMER_(TN, ...) Board::Timer::TIMER ## TN
 
 #define USE_TIMERS(T0, ...)																				\
 using ISRCallback =																						\
