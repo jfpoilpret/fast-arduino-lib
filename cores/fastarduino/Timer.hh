@@ -9,19 +9,29 @@
 
 //TODO do we need to put everything here in a namespace?
 
-// These macros are internally used in further macros and should not be used in your programs
-#define ALIAS_TIMER_(TN, T0)	\
-	ISR(TIMER ## TN ## _COMPA_vect, ISR_ALIASOF(TIMER ## T0 ## _COMPA_vect));
+// This macro is internally used in further macro and should not be used in your programs
+#define ISR_TIMER_(T0, ...)										\
+ISR(TIMER ## T0 ## _COMPA_vect, ISR_NAKED)						\
+{																\
+	asm volatile(												\
+		"push r16\n\t"											\
+		"ldi r16, %[TIMER]\n\t"									\
+		"out %[GPIOR], r16\n\t"									\
+		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [TIMER] "I" (T0)	\
+	);															\
+	ISRCallback::callback();									\
+	asm volatile(												\
+		"pop r16\n\t"											\
+		"reti\n\t"												\
+	);															\
+}																\
 
-#define PREPEND_TIMER_(TN, ...) Board::Timer::TIMER ## TN
 
-#define USE_TIMERS(T0, ...)																								\
-ISR(TIMER ## T0 ## _COMPA_vect)																							\
-{																														\
-	timer_impl::CallbackHandler<FOR_EACH_SEP(PREPEND_TIMER_, , EMPTY, COMMA, EMPTY, T0, ##__VA_ARGS__)>::callback();	\
-}																														\
-																														\
-FOR_EACH(ALIAS_TIMER_, T0, ##__VA_ARGS__)
+#define USE_TIMERS(T0, ...)																				\
+using ISRCallback =																						\
+	timer_impl::ISRHandler<FOR_EACH_SEP(PREPEND_TIMER_, , EMPTY, COMMA, EMPTY, T0, ##__VA_ARGS__)>;		\
+																										\
+FOR_EACH(ISR_TIMER_, _0, T0, ##__VA_ARGS__)
 
 // Forward declaration necessary to be declared as friend
 // Complete declaration can be found at the end of this file
@@ -88,6 +98,30 @@ public:
 		// Set timer interrupt mode (set interrupt on OCRnA compare match)
 		(volatile uint8_t&) TRAIT::TIMSK = _BV(OCIE0A);
 	}
+	inline void suspend()
+	{
+		synchronized _suspend();
+	}
+	inline void _suspend()
+	{
+		// Clear timer interrupt mode
+		(volatile uint8_t&) TRAIT::TIMSK = 0;
+	}
+	inline void resume()
+	{
+		synchronized _resume();
+	}
+	inline void _resume()
+	{
+		// Reset timer counter
+		(volatile TIMER_TYPE&) TRAIT::TCNT = 0;
+		// Set timer interrupt mode (set interrupt on OCRnA compare match)
+		(volatile uint8_t&) TRAIT::TIMSK = _BV(OCIE0A);
+	}
+	inline bool is_suspended()
+	{
+		return (volatile uint8_t&) TRAIT::TIMSK == 0;
+	}
 	inline void end()
 	{
 		synchronized _end();
@@ -138,7 +172,7 @@ private:
 	
 	static void call_back_if_needed()
 	{
-		if (((volatile uint8_t&) TRAIT::TIFR) & _BV(OCF0A))
+		if (GPIOR0 == uint8_t(TIMER))
 			_callback->on_timer();
 	}
 
@@ -152,6 +186,53 @@ TimerCallback* Timer<TIMER>::_callback = 0;
 
 namespace timer_impl
 {
+	template<Board::Timer... TS>
+	struct ISRHandler
+	{
+		static void callback() __attribute__((naked))
+		{
+			asm volatile(
+				"push r1\n\t"
+				"push r0\n\t"
+				"in r0, __SREG__\n\t"
+				"push r0\n\t"
+				"eor r1, r1\n\t"
+				"push r18\n\t"
+				"push r19\n\t"
+				"push r20\n\t"
+				"push r21\n\t"
+				"push r22\n\t"
+				"push r23\n\t"
+				"push r24\n\t"
+				"push r25\n\t"
+				"push r26\n\t"
+				"push r27\n\t"
+				"push r30\n\t"
+				"push r31\n\t"
+			);
+			CallbackHandler<TS...>::callback();
+			asm volatile(
+				"pop r31\n\t"
+				"pop r30\n\t"
+				"pop r27\n\t"
+				"pop r26\n\t"
+				"pop r25\n\t"
+				"pop r24\n\t"
+				"pop r23\n\t"
+				"pop r22\n\t"
+				"pop r21\n\t"
+				"pop r20\n\t"
+				"pop r19\n\t"
+				"pop r18\n\t"
+				"pop r0\n\t"
+				"out __SREG__, r0\n\t"
+				"pop r0\n\t"
+				"pop r1\n\t"
+				"ret\n\t"
+			);
+		}
+	};
+	
 	template<Board::Timer T0, Board::Timer... TS>
 	struct CallbackHandler
 	{

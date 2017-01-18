@@ -471,7 +471,7 @@ namespace Board
 					p == TIMER_PRESCALER::DIV_8 ? _BV(CS01) :
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS00) | _BV(CS01) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
-					p == TIMER_PRESCALER::DIV_1024 ? _BV(CS02) | _BV(CS01) :
+					p == TIMER_PRESCALER::DIV_1024 ? _BV(CS02) | _BV(CS00) :
 					0);
 		}
 	};
@@ -502,7 +502,7 @@ namespace Board
 					p == TIMER_PRESCALER::DIV_8 ? _BV(CS21) :
 					p == TIMER_PRESCALER::DIV_32 ? _BV(CS21) | _BV(CS20) :
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS22) :
-					p == TIMER_PRESCALER::DIV_128 ? _BV(CS22) | _BV(CS02) :
+					p == TIMER_PRESCALER::DIV_128 ? _BV(CS22) | _BV(CS20) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS22) | _BV(CS21) :
 					_BV(CS22) | _BV(CS21) | _BV(CS20));
 		}
