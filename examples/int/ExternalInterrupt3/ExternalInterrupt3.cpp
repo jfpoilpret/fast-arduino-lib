@@ -45,7 +45,7 @@ public:
 	
 	virtual bool on_pin_change() override
 	{
-		if (_switch.value())
+		if (!_switch.value())
 			_led.set();
 		return true;
 	}
@@ -65,7 +65,7 @@ public:
 	
 	virtual bool on_pin_change() override
 	{
-		if (_switch.value())
+		if (!_switch.value())
 			_led.clear();
 		return true;
 	}
