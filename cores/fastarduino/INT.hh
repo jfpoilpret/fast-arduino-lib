@@ -12,18 +12,29 @@
 // Handling, if needed, can be delegated by INT<> to a ExternalInterruptHandler instance
 
 // These macros are internally used in further macros and should not be used in your programs
-#define ALIAS_INT_(PN, P0)	\
-	ISR(INT ## PN ## _vect, ISR_ALIASOF(INT ## P0 ## _vect));
+#define ISR_INT_(X0, ...)										\
+ISR(INT ## X0 ## _vect, ISR_NAKED)								\
+{																\
+	asm volatile(												\
+		"push r16\n\t"											\
+		"ldi r16, %[PCINT]\n\t"									\
+		"out %[GPIOR], r16\n\t"									\
+		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [PCINT] "I" (X0)	\
+	);															\
+	ISRCallback::callback();									\
+	asm volatile(												\
+		"pop r16\n\t"											\
+		"reti\n\t"												\
+	);															\
+}																\
 
-#define PREPEND_INT_(PN, ...) Board::ExternalInterruptPin::EXT ## PN
+#define PREPEND_INT_(XN, ...) Board::ExternalInterruptPin::EXT ## XN
 
-#define USE_INTS(P0, ...)																						\
-ISR(INT ## P0 ## _vect)																							\
-{																												\
-	INT_impl::InterruptHandler<FOR_EACH_SEP(PREPEND_INT_, , EMPTY, COMMA, EMPTY, P0, ##__VA_ARGS__)>::handle();	\
-}																												\
-																												\
-FOR_EACH(ALIAS_INT_, P0, ##__VA_ARGS__)
+#define USE_INTS(X0, ...)																		\
+using ISRCallback =																				\
+	INT_impl::ISRHandler<FOR_EACH_SEP(PREPEND_INT_, , EMPTY, COMMA, EMPTY, X0, ##__VA_ARGS__)>;	\
+																								\
+FOR_EACH(ISR_INT_, , X0, ##__VA_ARGS__)
 
 #define EMPTY_INT_(PN, _0)					\
 EMPTY_INTERRUPT(INT ## PN ## _vect);
