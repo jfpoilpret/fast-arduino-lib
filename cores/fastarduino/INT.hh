@@ -116,7 +116,8 @@ private:
 	
 	static void handle_if_needed()
 	{
-		if (((volatile uint8_t&) INTSignal<PIN>::INT_TRAIT::EIFR_) & INTSignal<PIN>::INT_TRAIT::EIFR_MASK)
+		//FIXME need conversion from PIN to INT in DigitalPin_trait
+		if (GPIOR0 == INTSignal<PIN>::INT_TRAIT::INT)
 			_handler->on_pin_change();
 	}
 	
@@ -128,6 +129,53 @@ ExternalInterruptHandler* INT<INT_NUM>::_handler = 0;
 
 namespace INT_impl
 {
+	template<Board::DigitalPin... PS>
+	struct ISRHandler
+	{
+		static void callback() __attribute__((naked))
+		{
+			asm volatile(
+				"push r1\n\t"
+				"push r0\n\t"
+				"in r0, __SREG__\n\t"
+				"push r0\n\t"
+				"eor r1, r1\n\t"
+				"push r18\n\t"
+				"push r19\n\t"
+				"push r20\n\t"
+				"push r21\n\t"
+				"push r22\n\t"
+				"push r23\n\t"
+				"push r24\n\t"
+				"push r25\n\t"
+				"push r26\n\t"
+				"push r27\n\t"
+				"push r30\n\t"
+				"push r31\n\t"
+			);
+			InterruptHandler<PS...>::handle();
+			asm volatile(
+				"pop r31\n\t"
+				"pop r30\n\t"
+				"pop r27\n\t"
+				"pop r26\n\t"
+				"pop r25\n\t"
+				"pop r24\n\t"
+				"pop r23\n\t"
+				"pop r22\n\t"
+				"pop r21\n\t"
+				"pop r20\n\t"
+				"pop r19\n\t"
+				"pop r18\n\t"
+				"pop r0\n\t"
+				"out __SREG__, r0\n\t"
+				"pop r0\n\t"
+				"pop r1\n\t"
+				"ret\n\t"
+			);
+		}
+	};
+	
 	template<Board::DigitalPin P0, Board::DigitalPin... PS>
 	struct InterruptHandler
 	{

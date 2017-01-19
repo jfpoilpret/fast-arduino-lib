@@ -229,6 +229,7 @@ namespace Board
 	template<DigitalPin DPIN>
 	struct ExternalInterruptPin_trait
 	{
+		static constexpr const uint8_t INT = 0;
 		static constexpr const REGISTER EICR_{};
 		static constexpr const uint8_t EICR_MASK = 0x00;
 		static constexpr const REGISTER EIMSK_{};
@@ -240,6 +241,7 @@ namespace Board
 	template<>
 	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>
 	{
+		static constexpr const uint8_t INT = 0;
 		static constexpr const REGISTER EICR_ = _SELECT_REG(MCUCR);
 		static constexpr const uint8_t EICR_MASK = _BV(ISC00) | _BV(ISC01);
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(GIMSK);

@@ -464,6 +464,7 @@ namespace Board
 	template<DigitalPin DPIN>
 	struct ExternalInterruptPin_trait
 	{
+		static constexpr const uint8_t INT = 0;
 		static constexpr const REGISTER EICR_{};
 		static constexpr const uint8_t EICR_MASK = 0x00;
 		static constexpr const REGISTER EIMSK_{};
@@ -475,6 +476,7 @@ namespace Board
 	template<>
 	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>
 	{
+		static constexpr const uint8_t INT = 0;
 		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
 		static constexpr const uint8_t EICR_MASK = _BV(ISC00) | _BV(ISC01);
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
@@ -486,6 +488,7 @@ namespace Board
 	template<>
 	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>
 	{
+		static constexpr const uint8_t INT = 1;
 		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
 		static constexpr const uint8_t EICR_MASK = _BV(ISC10) | _BV(ISC11);
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
@@ -497,6 +500,7 @@ namespace Board
 	template<>
 	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT2>
 	{
+		static constexpr const uint8_t INT = 2;
 		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
 		static constexpr const uint8_t EICR_MASK = _BV(ISC20) | _BV(ISC21);
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
@@ -508,6 +512,7 @@ namespace Board
 	template<>
 	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT3>
 	{
+		static constexpr const uint8_t INT = 3;
 		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
 		static constexpr const uint8_t EICR_MASK = _BV(ISC30) | _BV(ISC31);
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
@@ -519,6 +524,7 @@ namespace Board
 	template<>
 	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT4>
 	{
+		static constexpr const uint8_t INT = 4;
 		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRB);
 		static constexpr const uint8_t EICR_MASK = _BV(ISC40) | _BV(ISC41);
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
@@ -530,6 +536,7 @@ namespace Board
 	template<>
 	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT5>
 	{
+		static constexpr const uint8_t INT = 5;
 		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRB);
 		static constexpr const uint8_t EICR_MASK = _BV(ISC50) | _BV(ISC51);
 		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
