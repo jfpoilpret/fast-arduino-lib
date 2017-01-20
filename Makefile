@@ -130,6 +130,7 @@ endif
 	$(MAKE) -C examples/events/EventApp4 CONF=${CONF}
 	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF}
 	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF}
+	$(MAKE) -C examples/int/ExternalInterrupt3 CONF=${CONF}
 	$(MAKE) -C examples/io/FastPin1 CONF=${CONF}
 	$(MAKE) -C examples/io/FastPin2 CONF=${CONF}
 	$(MAKE) -C examples/io/FastPin3 CONF=${CONF}
@@ -138,10 +139,14 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF}
-	$(MAKE) -C examples/rtt/RTTApp1 CONF=${CONF}
+	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF}
+	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF}
+	$(MAKE) -C examples/rtt/TimerApp2 CONF=${CONF}
+	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF}
+	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF}
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF}
 	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF}
 	$(MAKE) -C examples/spi/WinBond CONF=${CONF}
@@ -163,6 +168,7 @@ endif
 	$(MAKE) -C examples/events/EventApp4 CONF=${CONF} clean
 	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF} clean
 	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF} clean
+	$(MAKE) -C examples/int/ExternalInterrupt3 CONF=${CONF} clean
 	$(MAKE) -C examples/io/FastPin1 CONF=${CONF} clean
 	$(MAKE) -C examples/io/FastPin2 CONF=${CONF} clean
 	$(MAKE) -C examples/io/FastPin3 CONF=${CONF} clean
@@ -171,10 +177,14 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF} clean
-	$(MAKE) -C examples/rtt/RTTApp1 CONF=${CONF} clean
+	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/TimerApp2 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF} clean
+	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/WinBond CONF=${CONF} clean
