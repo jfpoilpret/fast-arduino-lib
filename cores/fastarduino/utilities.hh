@@ -1,5 +1,6 @@
 // Important copyright notice: 
-// Parts of this file were copied from Mikael Patel's Cosa library, which copyright appears below.
+// Some parts of this file were copied from Mikael Patel's Cosa library, which copyright appears below.
+// Some parts of this file directly derive from https://tty1.net/blog/2008/avr-gcc-optimisations_en.html
 // Other parts are under Copyright (c) 2016, Jean-Francois Poilpret
 
 /**
@@ -56,6 +57,11 @@ inline void _unlock(uint8_t* key)
 #define synchronized \
 _Pragma ("GCC diagnostic ignored \"-Wreturn-type\"") \
 for (uint8_t __key __attribute__((__cleanup__(_unlock))) = _lock(), i = 1; i != 0; i--)
+
+// Macro found on https://tty1.net/blog/2008/avr-gcc-optimisations_en.html
+// This allows processing pointers to SRAM data be performed directly from Y, Z registers
+// this may optimize code size on some circumstances
+#define FIX_BASE_POINTER(_ptr) __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
 
 class REGISTER
 {

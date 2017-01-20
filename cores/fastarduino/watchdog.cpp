@@ -32,6 +32,7 @@ void Watchdog::delay(uint32_t ms)
 ISR(WDT_vect)
 {
 	Watchdog* watchdog = Watchdog::_singleton;
+//	FIX_BASE_POINTER(watchdog);
 	if (watchdog)
 	{
 		watchdog->_millis += watchdog->_millis_per_tick;
