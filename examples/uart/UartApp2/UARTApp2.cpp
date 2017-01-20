@@ -30,17 +30,17 @@
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
-USE_PCI2()
+USE_PCIS(2)
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
 constexpr const Board::DigitalPin RX = Board::DigitalPin::PCI0;
 // Define vectors we need in the example
-USE_PCI0()
+USE_PCIS(0)
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
-USE_PCI0()
+USE_PCIS(0)
 #else
 #error "Current target is not yet supported!"
 #endif
