@@ -26,7 +26,7 @@ ISR(PCINT ## P0 ## _vect, ISR_NAKED)							\
 		"out %[GPIOR], r16\n\t"									\
 		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [PCINT] "I" (P0)	\
 	);															\
-	ISRCallback::callback();									\
+	PCIISRCallback::callback();									\
 	asm volatile(												\
 		"pop r16\n\t"											\
 		"reti\n\t"												\
@@ -37,7 +37,7 @@ ISR(PCINT ## P0 ## _vect, ISR_NAKED)							\
 #define ASSERT_PCI_(PN, ...) static_assert(Board::PCI_trait< PN >::PORT != Board::Port::NONE, "PORT must support PCI");
 
 #define USE_PCIS(P0, ...)																		\
-using ISRCallback =																				\
+using PCIISRCallback =																			\
 	PCI_impl::ISRHandler<FOR_EACH_SEP(PREPEND_PCI_, , EMPTY, COMMA, EMPTY, P0, ##__VA_ARGS__)>;	\
 																								\
 FOR_EACH(ASSERT_PCI_, , P0, ##__VA_ARGS__)														\

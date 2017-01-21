@@ -21,7 +21,7 @@ ISR(INT ## X0 ## _vect, ISR_NAKED)								\
 		"out %[GPIOR], r16\n\t"									\
 		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [PCINT] "I" (X0)	\
 	);															\
-	ISRCallback::callback();									\
+	INTISRCallback::callback();									\
 	asm volatile(												\
 		"pop r16\n\t"											\
 		"reti\n\t"												\
@@ -31,7 +31,7 @@ ISR(INT ## X0 ## _vect, ISR_NAKED)								\
 #define PREPEND_INT_(XN, ...) Board::ExternalInterruptPin::EXT ## XN
 
 #define USE_INTS(X0, ...)																		\
-using ISRCallback =																				\
+using INTISRCallback =																			\
 	INT_impl::ISRHandler<FOR_EACH_SEP(PREPEND_INT_, , EMPTY, COMMA, EMPTY, X0, ##__VA_ARGS__)>;	\
 																								\
 FOR_EACH(ISR_INT_, , X0, ##__VA_ARGS__)

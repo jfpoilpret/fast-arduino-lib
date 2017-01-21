@@ -19,7 +19,7 @@ ISR(TIMER ## T0 ## _COMPA_vect, ISR_NAKED)						\
 		"out %[GPIOR], r16\n\t"									\
 		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [TIMER] "I" (T0)	\
 	);															\
-	ISRCallback::callback();									\
+	TimerISRCallback::callback();									\
 	asm volatile(												\
 		"pop r16\n\t"											\
 		"reti\n\t"												\
@@ -29,7 +29,7 @@ ISR(TIMER ## T0 ## _COMPA_vect, ISR_NAKED)						\
 #define PREPEND_TIMER_(TN, ...) Board::Timer::TIMER ## TN
 
 #define USE_TIMERS(T0, ...)																				\
-using ISRCallback =																						\
+using TimerISRCallback =																				\
 	timer_impl::ISRHandler<FOR_EACH_SEP(PREPEND_TIMER_, , EMPTY, COMMA, EMPTY, T0, ##__VA_ARGS__)>;		\
 																										\
 FOR_EACH(ISR_TIMER_, , T0, ##__VA_ARGS__)
