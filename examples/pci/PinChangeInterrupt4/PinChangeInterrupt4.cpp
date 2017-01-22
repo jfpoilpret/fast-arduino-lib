@@ -51,8 +51,8 @@ private:
 
 // Define vectors we need in the example
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-REGISTER_PCI_ISR_METHOD(0, SwitchHandler, &SwitchHandler::on_switch_on_change)
-REGISTER_PCI_ISR_METHOD(1, SwitchHandler, &SwitchHandler::on_switch_off_change)
+REGISTER_PCI_ISR_METHOD(1, SwitchHandler, &SwitchHandler::on_switch_on_change)
+REGISTER_PCI_ISR_METHOD(0, SwitchHandler, &SwitchHandler::on_switch_off_change)
 #endif
 
 int main()
