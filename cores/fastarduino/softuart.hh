@@ -150,7 +150,7 @@ namespace Soft
 	};
 
 	template<Board::DigitalPin RX>
-	class UARX: public AbstractUARX, public ExternalInterruptHandler
+	class UARX: public AbstractUARX
 	{
 	public:
 		using PCI_TYPE = typename PCIType<RX>::TYPE;
@@ -180,11 +180,7 @@ namespace Soft
 		}
 		
 	protected:
-		virtual bool on_pin_change() override
-		{
-			return _pin_change();
-		}
-		bool _pin_change();
+		void on_pin_change();
 
 	private:
 		typename FastPinType<RX>::TYPE _rx;
@@ -192,10 +188,10 @@ namespace Soft
 	};
 
 	template<Board::DigitalPin RX>
-	bool UARX<RX>::_pin_change()
+	void UARX<RX>::on_pin_change()
 	{
 		// Check RX is low (start bit)
-		if (_rx.value()) return false;
+		if (_rx.value()) return;
 		uint8_t value = 0;
 		bool odd = false;
 		Serial::_UARTErrors errors;
@@ -244,7 +240,7 @@ namespace Soft
 		}
 		// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 		_pci->_clear();
-		return true;
+		return;
 	}
 	
 	template<Board::DigitalPin RX, Board::DigitalPin TX>

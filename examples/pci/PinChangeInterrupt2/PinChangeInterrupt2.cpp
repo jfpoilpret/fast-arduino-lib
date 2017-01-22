@@ -31,9 +31,6 @@ constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
-// Define vectors we need in the example
-USE_PCIS(1)
-
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D53;
 constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D52;
@@ -42,9 +39,6 @@ constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D22;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25;
-// Define vectors we need in the example
-USE_PCIS(0)
-
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D8;
 constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D9;
@@ -53,14 +47,11 @@ constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D0;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3;
-// Define vectors we need in the example
-USE_PCIS(1)
-
 #else
 #error "Current target is not yet supported!"
 #endif
 
-class PinChangeHandler: public ExternalInterruptHandler
+class PinChangeHandler
 {
 public:
 	PinChangeHandler()
@@ -74,13 +65,12 @@ public:
 	{
 	}
 	
-	virtual bool on_pin_change() override
+	void on_pin_change()
 	{
 		if (_switch1.value()) _led1.clear(); else _led1.set();
 		if (_switch2.value()) _led2.clear(); else _led2.set();
 		if (_switch3.value()) _led3.clear(); else _led3.set();
 		_led4.toggle();
-		return true;
 	}
 	
 private:
@@ -93,13 +83,23 @@ private:
 	FastPinType<LED4>::TYPE _led4;
 };
 
+// Define vectors we need in the example
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
+#elif defined (ARDUINO_MEGA)
+REGISTER_PCI_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
+#elif defined (BREADBOARD_ATTINYX4)
+REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
+#endif
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 
 	PinChangeHandler handler;
-	PCIType<SWITCH1>::TYPE pci{&handler};
+	register_handler(handler);
+	PCIType<SWITCH1>::TYPE pci;
 	
 	pci.enable_pin<SWITCH1>();
 	pci.enable_pin<SWITCH2>();

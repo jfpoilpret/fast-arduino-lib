@@ -39,9 +39,6 @@ static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_C;
-// Define vectors we need in the example
-USE_PCIS(1)
-
 #elif defined (ARDUINO_MEGA)
 static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D22>());
 static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D23>());
@@ -55,9 +52,6 @@ static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
-// Define vectors we need in the example
-USE_PCIS(0)
-
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D0>());
 static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D1>());
@@ -71,19 +65,16 @@ static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
-// Define vectors we need in the example
-USE_PCIS(1)
-
 #else
 #error "Current target is not yet supported!"
 #endif
 
-class PinChangeHandler: public ExternalInterruptHandler
+class PinChangeHandler
 {
 public:
 	PinChangeHandler():_switches{0x00, 0xFF}, _leds{0xFF} {}
 	
-	virtual bool on_pin_change() override
+	void on_pin_change()
 	{
 		uint8_t switches = _switches.get_PIN();
 		uint8_t leds = (_leds.get_PIN() & LED4) ^ LED4;
@@ -91,7 +82,6 @@ public:
 		if (!(switches & SW2)) leds |= LED2;
 		if (!(switches & SW3)) leds |= LED3;
 		_leds.set_PORT(leds);
-		return true;
 	}
 	
 private:
@@ -99,13 +89,23 @@ private:
 	FastPort<LED_PORT> _leds;	
 };
 
+// Define vectors we need in the example
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
+#elif defined (ARDUINO_MEGA)
+REGISTER_PCI_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
+#elif defined (BREADBOARD_ATTINYX4)
+REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
+#endif
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 
 	PinChangeHandler handler;
-	PCIType<SWITCH1>::TYPE pci{&handler};
+	register_handler(handler);
+	PCIType<SWITCH1>::TYPE pci;
 	
 	pci.enable_pins(SW1 | SW2 | SW3);
 	pci.enable();
