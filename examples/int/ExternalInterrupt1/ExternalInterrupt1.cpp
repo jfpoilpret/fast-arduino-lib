@@ -24,21 +24,15 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D2;
-// Define vectors we need in the example
-USE_INTS(0)
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21;
-// Define vectors we need in the example
-USE_INTS(0)
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10;
-// Define vectors we need in the example
-USE_INTS(0)
 #else
 #error "Current target is not yet supported!"
 #endif
 
-class PinChangeHandler: public ExternalInterruptHandler
+class PinChangeHandler
 {
 public:
 	PinChangeHandler()
@@ -46,13 +40,12 @@ public:
 		_led{PinMode::OUTPUT}
 	{}
 	
-	virtual bool on_pin_change() override
+	void on_pin_change()
 	{
 		if (_switch.value())
 			_led.clear();
 		else
 			_led.set();
-		return true;
 	}
 	
 private:
@@ -60,13 +53,17 @@ private:
 	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
 };
 
+// Define vectors we need in the example
+REGISTER_INT_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
+
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 	
 	PinChangeHandler handler;
-	INT<SWITCH> int0{InterruptTrigger::ANY_CHANGE, &handler};
+	register_handler(handler);
+	INTSignal<SWITCH> int0{InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 
 	// Event Loop

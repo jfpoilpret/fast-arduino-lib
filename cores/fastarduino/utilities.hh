@@ -170,6 +170,49 @@ inline uint8_t get_ioreg_byte(REGISTER IOREG)
 	return value;
 }
 
+// Utilities to handle ISR callbacks
+#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)		\
+ISR(VECTOR)													\
+{															\
+	HandlerCallbackHolder< HANDLER , CALLBACK >::handle();	\
+}
+
+#define REGISTER_ISR_FUNCTION_(VECTOR, CALLBACK)	\
+ISR(VECTOR)											\
+{													\
+	CALLBACK ();									\
+}
+
+template<typename Handler> void register_handler(Handler&);
+template<typename Handler>
+class HandlerHolder
+{
+protected:
+	static Handler* _handler;
+	friend void register_handler<Handler>(Handler&);
+};
+
+template<typename Handler>
+Handler* HandlerHolder<Handler>::_handler = 0;
+
+template<typename Handler, void(Handler::*Callback)()>
+class HandlerCallbackHolder: public HandlerHolder<Handler>
+{
+public:
+	static void handle()
+	{
+		Handler* handler = HandlerHolder<Handler>::_handler;
+		FIX_BASE_POINTER(handler);
+		return (handler->*Callback)();
+	}
+};
+
+template<typename Handler>
+void register_handler(Handler& handler)
+{
+	HandlerHolder<Handler>::_handler = &handler;
+}
+
 // Useful macro to iterate
 // NOTE: these macros have been inspired by several readings:
 // http://stackoverflow.com/questions/11761703/overloading-macro-on-number-of-arguments

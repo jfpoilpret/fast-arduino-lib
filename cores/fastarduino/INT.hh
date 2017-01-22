@@ -5,42 +5,18 @@
 
 #include "utilities.hh"
 #include "Board_traits.hh"
-#include "ExternalInterrupt.hh"
 
 // Principles:
 // One INT<> instance for each INT vector
 // Handling, if needed, can be delegated by INT<> to a ExternalInterruptHandler instance
 
-// These macros are internally used in further macros and should not be used in your programs
-#define ISR_INT_(X0, ...)										\
-ISR(INT ## X0 ## _vect, ISR_NAKED)								\
-{																\
-	asm volatile(												\
-		"push r16\n\t"											\
-		"ldi r16, %[PCINT]\n\t"									\
-		"out %[GPIOR], r16\n\t"									\
-		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [PCINT] "I" (X0)	\
-	);															\
-	INTISRCallback::callback();									\
-	asm volatile(												\
-		"pop r16\n\t"											\
-		"reti\n\t"												\
-	);															\
-}																\
+#define REGISTER_INT_ISR_METHOD(INT_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(INT ## INT_NUM ## _vect, HANDLER, CALLBACK)
 
-#define PREPEND_INT_(XN, ...) Board::ExternalInterruptPin::EXT ## XN
+#define REGISTER_INT_ISR_FUNCTION(INT_NUM, CALLBACK)	\
+REGISTER_ISR_FUNCTION_(INT ## INT_NUM ## _vect, CALLBACK)
 
-#define USE_INTS(X0, ...)																		\
-using INTISRCallback =																			\
-	INT_impl::ISRHandler<FOR_EACH_SEP(PREPEND_INT_, , EMPTY, COMMA, EMPTY, X0, ##__VA_ARGS__)>;	\
-																								\
-FOR_EACH(ISR_INT_, , X0, ##__VA_ARGS__)
-
-#define EMPTY_INT_(PN, _0)					\
-EMPTY_INTERRUPT(INT ## PN ## _vect);
-
-#define USE_EMPTY_INTS(P0, ...)				\
-FOR_EACH(EMPTY_INT_, _0, P0, ##__VA_ARGS__)
+#define REGISTER_INT_ISR_EMPTY(INT_NUM)	EMPTY_INTERRUPT(INT ## INT_NUM ## _vect);
 
 enum class InterruptTrigger: uint8_t
 {
@@ -100,112 +76,4 @@ public:
 	}
 };
 
-// Forward declaration necessary to be declared as friend
-// Complete declaration can be found at the end of this file
-namespace INT_impl
-{
-	template<Board::DigitalPin P0, Board::DigitalPin... PS> struct InterruptHandler;
-}
-
-template<Board::DigitalPin PIN>
-class INT: public INTSignal<PIN>
-{
-public:
-	INT(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE, ExternalInterruptHandler* handler = 0)
-		:INTSignal<PIN>{trigger}
-	{
-		_handler = handler;
-	}
-	
-	inline void set_handler(ExternalInterruptHandler* handler)
-	{
-		synchronized _handler = handler;
-	}
-
-private:
-	static ExternalInterruptHandler* _handler;
-	
-	static void handle_if_needed()
-	{
-		//FIXME need conversion from PIN to INT in DigitalPin_trait
-		if (GPIOR0 == INTSignal<PIN>::INT_TRAIT::INT)
-			_handler->on_pin_change();
-	}
-	
-	template<Board::DigitalPin, Board::DigitalPin...> friend struct INT_impl::InterruptHandler;
-};
-
-template<Board::DigitalPin INT_NUM>
-ExternalInterruptHandler* INT<INT_NUM>::_handler = 0;
-
-namespace INT_impl
-{
-	template<Board::DigitalPin... PS>
-	struct ISRHandler
-	{
-		static void callback() __attribute__((naked))
-		{
-			asm volatile(
-				"push r1\n\t"
-				"push r0\n\t"
-				"in r0, __SREG__\n\t"
-				"push r0\n\t"
-				"eor r1, r1\n\t"
-				"push r18\n\t"
-				"push r19\n\t"
-				"push r20\n\t"
-				"push r21\n\t"
-				"push r22\n\t"
-				"push r23\n\t"
-				"push r24\n\t"
-				"push r25\n\t"
-				"push r26\n\t"
-				"push r27\n\t"
-				"push r30\n\t"
-				"push r31\n\t"
-			);
-			InterruptHandler<PS...>::handle();
-			asm volatile(
-				"pop r31\n\t"
-				"pop r30\n\t"
-				"pop r27\n\t"
-				"pop r26\n\t"
-				"pop r25\n\t"
-				"pop r24\n\t"
-				"pop r23\n\t"
-				"pop r22\n\t"
-				"pop r21\n\t"
-				"pop r20\n\t"
-				"pop r19\n\t"
-				"pop r18\n\t"
-				"pop r0\n\t"
-				"out __SREG__, r0\n\t"
-				"pop r0\n\t"
-				"pop r1\n\t"
-				"ret\n\t"
-			);
-		}
-	};
-	
-	template<Board::DigitalPin P0, Board::DigitalPin... PS>
-	struct InterruptHandler
-	{
-		static void handle()
-		{
-			InterruptHandler<P0>::handle();
-			InterruptHandler<PS...>::handle();
-		}
-	};
-
-	template<Board::DigitalPin P>
-	struct InterruptHandler<P>
-	{
-		static void handle()
-		{
-			INT<P>::handle_if_needed();
-		}
-	};
-}
-
 #endif	/* INT_HH */
-

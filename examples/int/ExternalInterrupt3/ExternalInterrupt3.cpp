@@ -24,66 +24,53 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D2;
 constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D3;
-// Define vectors we need in the example
-USE_INTS(0, 1)
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D21;
 constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D20;
-// Define vectors we need in the example
-USE_INTS(0, 1)
 #else
 #error "Current target is not yet supported!"
 #endif
 
-class SwitchOnHandler: public ExternalInterruptHandler
+class SwitchHandler
 {
 public:
-	SwitchOnHandler()
-	:	_switch{PinMode::INPUT_PULLUP},
+	SwitchHandler()
+	:	_switch_on{PinMode::INPUT_PULLUP},
+		_switch_off{PinMode::INPUT_PULLUP},
 		_led{PinMode::OUTPUT}
 	{}
 	
-	virtual bool on_pin_change() override
+	void on_switch_on_change()
 	{
-		if (!_switch.value())
+		if (!_switch_on.value())
 			_led.set();
-		return true;
+	}
+	
+	void on_switch_off_change()
+	{
+		if (!_switch_off.value())
+			_led.clear();
 	}
 	
 private:
-	FastPinType<SWITCH_ON>::TYPE _switch;
+	FastPinType<SWITCH_ON>::TYPE _switch_on;
+	FastPinType<SWITCH_OFF>::TYPE _switch_off;
 	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
 };
 
-class SwitchOffHandler: public ExternalInterruptHandler
-{
-public:
-	SwitchOffHandler()
-	:	_switch{PinMode::INPUT_PULLUP},
-		_led{PinMode::OUTPUT}
-	{}
-	
-	virtual bool on_pin_change() override
-	{
-		if (!_switch.value())
-			_led.clear();
-		return true;
-	}
-	
-private:
-	FastPinType<SWITCH_OFF>::TYPE _switch;
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
-};
+// Define vectors we need in the example
+REGISTER_INT_ISR_METHOD(0, SwitchHandler, &SwitchHandler::on_switch_on_change)
+REGISTER_INT_ISR_METHOD(1, SwitchHandler, &SwitchHandler::on_switch_off_change)
 
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 	
-	SwitchOnHandler switchon_handler;
-	SwitchOffHandler switchoff_handler;
-	INT<SWITCH_ON> int0{InterruptTrigger::ANY_CHANGE, &switchon_handler};
-	INT<SWITCH_OFF> int1{InterruptTrigger::ANY_CHANGE, &switchoff_handler};
+	SwitchHandler switch_handler;
+	register_handler(switch_handler);
+	INTSignal<SWITCH_ON> int0{InterruptTrigger::ANY_CHANGE};
+	INTSignal<SWITCH_OFF> int1{InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 	int1.enable();
 
