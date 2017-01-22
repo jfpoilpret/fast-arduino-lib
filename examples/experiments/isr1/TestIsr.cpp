@@ -4,23 +4,33 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <fastarduino/utilities.hh>
+//#include <avr/interrupt.h>
+//#include <avr/io.h>
+#include <fastarduino/FastIO.hh>
 
-#define MAKE_ISR(VECTOR, HOLDER)	\
-ISR(VECTOR)							\
-{									\
-	HOLDER :: _handler->callback();	\
+#define MAKE_ISR(VECTOR, HANDLER)		\
+ISR(VECTOR)								\
+{										\
+	HandlerHolder< HANDLER >::handle();	\
 }
+
+template<typename Handler> void register_handler(Handler&);
 
 template<typename Handler>
 class HandlerHolder
 {
+public:
+	static void handle()
+	{
+		return _handler->callback();
+	}
 private:
 	static Handler* _handler;
-	
-	friend void TIMER0_COMPA_vect();
-	template<typename Handler> friend void register_handler(Handler&);
+	friend void register_handler<Handler>(Handler&);
 };
+
+template<typename Handler>
+Handler* HandlerHolder<Handler>::_handler = 0;
 
 template<typename Handler>
 void register_handler(Handler& handler)
@@ -31,10 +41,21 @@ void register_handler(Handler& handler)
 class MyHandler
 {
 public:
-	void callback();
+	MyHandler(): _led{PinMode::OUTPUT} {}
+	void callback()
+	{
+		_led.toggle();
+	}
+private:
+	FastPinType<Board::DigitalPin::LED>::TYPE _led;
 };
+
+MAKE_ISR(INT0_vect, MyHandler)
 
 int main()
 {
-	return 0;
+	sei();
+	MyHandler my_handler;
+	register_handler(my_handler);
+	while (true) ;
 }

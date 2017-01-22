@@ -56,13 +56,13 @@ LDLIBSOPTIONS=../../../dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfa
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1: ../../../dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1: ../../../dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
 
 ${OBJECTDIR}/TestIsr.o: TestIsr.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -76,7 +76,7 @@ ${OBJECTDIR}/TestIsr.o: TestIsr.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/fastpin1
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1
 
 # Subprojects
 .clean-subprojects:
