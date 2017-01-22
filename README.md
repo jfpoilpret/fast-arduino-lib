@@ -3,7 +3,7 @@ FastArduino
 
 FastArduino is a C++, object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU. Its objectives are:
 
-- provide smaller and faster code for the same functionality
+- provide smaller and faster code than other libraries for the same functionality
 - ensure you pay (size and speed) only for what you use
 - use real Object-Oriented Design everywhere
 - reduce risk of bad code, e.g. by preventing usage of unexisting features (pins, timers...) for the target MCU
@@ -32,16 +32,16 @@ In the initial drafts, I decided not to be compliant with Arduino IDE as I find 
 
 Making FastArduino buildable on Arduino IDE is not on my roadmap currently (and probably won't until long, as I'm more than happy with my current setup until now).
 
-My special setup (I work on Windows but compile everything on an Ubuntu virtual machine) is described in ArduinoDevSetup.docx. This document also describes how I setup netbeans for my projects.
+My special setup (I work on Windows but compile everything on an Ubuntu virtual machine) is described in [ArduinoDevSetup.docx](ArduinoDevSetup.docx). This document also describes how I setup netbeans for my projects.
 
 Status
 ------
 
-The project has started about 6 months ago only, hence it does not cover everything yet.
+The project has started less than one year ago only, hence it does not cover everything yet.
 
 What the project already has:
 
-- Utilities (queue, list, timing)
+- General utilities (queue, list, timing)
 - Fast IO support: template-based, optimized for speed and size.
 - General Events handling
 - Watchdog timer
@@ -54,8 +54,8 @@ What the project already has:
 - Software UART support (for all MCU)
 - "C++ like" Input/Output streams (used by UART implementations)
 - SPI master support
-- WinBond flash memory support
-- NRF24L01 device support
+- WinBond flash memory support (SPI-based)
+- NRF24L01 device support (SPI-based)
 - Analog Digital Conversion support (in Single Conversion mode only)
 - Power supply voltage measurement support
 
@@ -98,11 +98,11 @@ The roadmap of supported features is the following:
 
 Some refactoring is also planned, in January-February 2017, in order to:
 
-- more easily and better allow for multiple boards support.
-- improve code size for ISR by using ISR ALIAS when possible
+- improve code size for ISR by avoiding virtual calls when possible
+- more easily and better allow for multiple boards support
 - cleanup code according to some common C++ guidelines
 
-This refactoring should normally have no (or little) impact on API.
+This refactoring should normally have only little impact on API.
 
 The following features are not in FastArduino roadmap currently (but may be in the future):
 
