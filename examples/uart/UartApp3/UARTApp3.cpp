@@ -30,17 +30,17 @@
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
-USE_PCIS(2)
+REGISTER_UART_PCI_ISR(RX, 2)
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
 constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
-USE_PCIS(0)
+REGISTER_UART_PCI_ISR(RX, 0)
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 // Define vectors we need in the example
-USE_PCIS(0)
+REGISTER_UART_PCI_ISR(RX, 0)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -59,7 +59,8 @@ int main()
 	
 	// Setup UART
 	Soft::UART<RX, TX> uart{input_buffer, output_buffer};
-	typename PCIType<RX>::TYPE pci{&uart};
+	uart.register_rx_handler();
+	typename PCIType<RX>::TYPE pci;
 	pci.enable();
 
 	// Start UART

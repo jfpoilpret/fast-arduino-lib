@@ -1,11 +1,19 @@
 #ifndef SOFTUART_HH
 #define	SOFTUART_HH
 
+#include "utilities.hh"
 #include "uartcommons.hh"
 #include "streams.hh"
 #include "Board.hh"
 #include "FastIO.hh"
 #include "PCI.hh"
+#include "INT.hh"
+
+#define REGISTER_UART_PCI_ISR(RX, PCI_NUM) \
+REGISTER_PCI_ISR_METHOD(PCI_NUM, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
+
+#define REGISTER_UART_INT_ISR(INT_NUM, UARX_TYPE) \
+REGISTER_INT_ISR_METHOD(INT_NUM, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
 
 //FIXME Handle begin/end properly in relation to current queue content
 //TODO Find out why netbeans shows an error on in()._push() and out().pull()
@@ -153,38 +161,61 @@ namespace Soft
 	class UARX: public AbstractUARX
 	{
 	public:
+		using PIN_TRAIT = Board::DigitalPin_trait<RX>;
 		using PCI_TYPE = typename PCIType<RX>::TYPE;
 		using PORT_TRAIT = typename PCI_TYPE::TRAIT;
+		using INT_TYPE = INTSignal<RX>;
 		
-//		static const constexpr Board::Port PCIPORT = PCIType<RX>::TYPE;
-
 		template<uint8_t SIZE_RX>
 		UARX(char (&input)[SIZE_RX]):AbstractUARX(input), _rx{PinMode::INPUT}
 		{
-			static_assert(PORT_TRAIT::PCI_MASK & _BV(Board::DigitalPin_trait<RX>::BIT), 
-				"RX must be a PinChangeInterrupt pin");
+			static_assert(
+				(PORT_TRAIT::PCI_MASK & _BV(Board::DigitalPin_trait<RX>::BIT)) || (PIN_TRAIT::IS_INT), 
+				"RX must be a PinChangeInterrupt or an ExternalInterrupt pin");
 		}
 		
-		void begin(	PCI_TYPE& pci,
+		void register_rx_handler()
+		{
+			register_handler(*this);
+		}
+		
+		void begin(	PCI_TYPE& enabler,
 					uint32_t rate, 
 					Serial::Parity parity = Serial::Parity::NONE, 
 					Serial::StopBits stop_bits = Serial::StopBits::ONE)
 		{
-			_pci = &pci;
+			_pci = &enabler;
 			_begin(rate, parity, stop_bits);
 			_pci->template enable_pin<RX>();
 		}
+		
+		void begin(	INT_TYPE& enabler,
+					uint32_t rate, 
+					Serial::Parity parity = Serial::Parity::NONE, 
+					Serial::StopBits stop_bits = Serial::StopBits::ONE)
+		{
+			_int = enabler;
+			_begin(rate, parity, stop_bits);
+			_int->enable();
+		}
 		void end()
 		{
-			_pci->template disable_pin<RX>();
+			if (PIN_TRAIT::IS_INT)
+				_int->disable();
+			else
+				_pci->template disable_pin<RX>();
 		}
 		
-	protected:
+//	protected:
 		void on_pin_change();
 
 	private:
 		typename FastPinType<RX>::TYPE _rx;
-		PCI_TYPE* _pci;
+		union
+		{
+			PCI_TYPE* _pci;
+			INT_TYPE* _int;
+		};
 	};
 
 	template<Board::DigitalPin RX>
