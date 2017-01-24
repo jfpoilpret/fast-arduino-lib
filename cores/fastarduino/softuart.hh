@@ -12,7 +12,7 @@
 #define REGISTER_UART_PCI_ISR(RX, PCI_NUM) \
 REGISTER_PCI_ISR_METHOD(PCI_NUM, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
 
-#define REGISTER_UART_INT_ISR(INT_NUM, UARX_TYPE) \
+#define REGISTER_UART_INT_ISR(RX, INT_NUM) \
 REGISTER_INT_ISR_METHOD(INT_NUM, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
 
 //FIXME Handle begin/end properly in relation to current queue content
@@ -194,7 +194,7 @@ namespace Soft
 					Serial::Parity parity = Serial::Parity::NONE, 
 					Serial::StopBits stop_bits = Serial::StopBits::ONE)
 		{
-			_int = enabler;
+			_int = &enabler;
 			_begin(rate, parity, stop_bits);
 			_int->enable();
 		}
@@ -282,12 +282,20 @@ namespace Soft
 		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
 		:UARX<RX>{input}, UATX<TX>{output} {}
 		
-		void begin(	typename UARX<RX>::PCI_TYPE& pci,
+		void begin(	typename UARX<RX>::PCI_TYPE& pci_enabler,
 					uint32_t rate, 
 					Serial::Parity parity = Serial::Parity::NONE, 
 					Serial::StopBits stop_bits = Serial::StopBits::ONE)
 		{
-			UARX<RX>::begin(pci, rate, parity, stop_bits);
+			UARX<RX>::begin(pci_enabler, rate, parity, stop_bits);
+			UATX<TX>::begin(rate, parity, stop_bits);
+		}
+		void begin(	typename UARX<RX>::INT_TYPE& int_enabler,
+					uint32_t rate, 
+					Serial::Parity parity = Serial::Parity::NONE, 
+					Serial::StopBits stop_bits = Serial::StopBits::ONE)
+		{
+			UARX<RX>::begin(int_enabler, rate, parity, stop_bits);
 			UATX<TX>::begin(rate, parity, stop_bits);
 		}
 		void end()
