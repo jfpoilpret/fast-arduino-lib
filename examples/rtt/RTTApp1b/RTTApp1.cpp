@@ -20,17 +20,24 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 // Define vectors we need in the example
-USE_TIMERS(0, 1, 2)
+REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
+REGISTER_RTT_ISR(2)
 #elif defined (ARDUINO_MEGA)
 // Define vectors we need in the example
-USE_TIMERS(0, 1, 2, 3 , 4, 5)
+REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
+REGISTER_RTT_ISR(2)
+REGISTER_RTT_ISR(3)
+REGISTER_RTT_ISR(4)
+REGISTER_RTT_ISR(5)
 #elif defined (BREADBOARD_ATTINYX4)
 // Define vectors we need in the example
-USE_TIMERS(0, 1)
+REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
 #else
 #error "Current target is not yet supported!"
 #endif
-
 
 const constexpr uint32_t BLINK_DELAY = 10000;
 
@@ -39,6 +46,7 @@ void check_timer()
 {
 	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
 	RTT<TIMER> rtt;
+	rtt.register_rtt_handler();
 	rtt.begin();
 	// Event Loop
 	for (uint8_t i = 0; i < 5; ++i)

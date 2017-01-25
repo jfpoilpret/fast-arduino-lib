@@ -21,20 +21,8 @@
 #include <fastarduino/FastIO.hh>
 #include <fastarduino/RTT.hh>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 // Define vectors we need in the example
-USE_TIMERS(0)
-//USE_TIMERS(1)
-//USE_TIMERS(2)
-#elif defined (ARDUINO_MEGA)
-// Define vectors we need in the example
-
-#elif defined (BREADBOARD_ATTINYX4)
-// Define vectors we need in the example
-
-#else
-#error "Current target is not yet supported!"
-#endif
+REGISTER_RTT_ISR(0)
 
 const constexpr uint32_t BLINK_DELAY = 10000;
 
@@ -44,14 +32,13 @@ int main()
 	sei();
 
 	// NB in this sleep mode, delay takes about 1.5 times the specified time, and works only with Timer2
-	// because other timers cannot wake uf MCU from that sleep mode, as per specification.
+	// because other timers cannot wake up MCU from that sleep mode, as per specification.
 	// The additional 0.5x are due to the wake-up time at every interrupt (every ms)
 //	Power::set_default_mode(Board::SleepMode::POWER_SAVE);
 	
 	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
 	RTT<Board::Timer::TIMER0> rtt;
-//	RTT<Board::Timer::TIMER1> rtt;
-//	RTT<Board::Timer::TIMER2> rtt;
+	rtt.register_rtt_handler();
 
 	rtt.begin();
 	// Event Loop

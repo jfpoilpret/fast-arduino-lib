@@ -8,6 +8,12 @@
 
 //TODO do we need to put everything here in a namespace?
 
+//TODO REGISTER ISR macro
+//TODO register method
+#define REGISTER_RTT_ISR(TIMER_NUM)	\
+REGISTER_TIMER_ISR_METHOD(TIMER_NUM, RTT<Board::Timer::TIMER ## TIMER_NUM >, &RTT<Board::Timer::TIMER ## TIMER_NUM >::on_timer)
+
+//TODO Ultimately remove that virtual call...
 class RTTCallback
 {
 public:
@@ -15,16 +21,21 @@ public:
 };
 
 template<Board::Timer TIMER>
-class RTT: private TimerCallback, private Timer<TIMER>
+class RTT: private Timer<TIMER>
 {
 private:
-	using TRAIT = typename RTT::TRAIT;
-	using TIMER_TYPE = typename RTT::TIMER_TYPE;
-	using TIMER_PRESCALER = typename RTT::TIMER_PRESCALER;
+	using TRAIT = typename Timer<TIMER>::TRAIT;
+	using TIMER_TYPE = typename Timer<TIMER>::TIMER_TYPE;
+	using TIMER_PRESCALER = typename Timer<TIMER>::TIMER_PRESCALER;
 	
 public:
-	RTT() INLINE : Timer<TIMER>((TimerCallback&) *this), _callback{0} {}
+	RTT() INLINE : _callback{0} {}
 
+	void register_rtt_handler()
+	{
+		register_handler(*this);
+	}
+	
 	void set_callback(RTTCallback* callback)
 	{
 		_callback = callback;
@@ -78,6 +89,12 @@ public:
 		Timer<TIMER>::_end();
 	}
 	
+	void on_timer()
+	{
+		++_millis;
+		if (_callback) _callback->on_rtt_change(_millis);
+	}
+	
 private:
 	static constexpr const uint32_t ONE_MILLI = 1000UL;
 	static constexpr const TIMER_PRESCALER MILLI_PRESCALER = RTT::prescaler(ONE_MILLI);
@@ -85,12 +102,6 @@ private:
 	
 	volatile uint32_t _millis;
 	RTTCallback* _callback;
-	
-	virtual void on_timer() override
-	{
-		++_millis;
-		if (_callback) _callback->on_rtt_change(_millis);
-	}
 	
 	inline uint16_t compute_micros() const
 	{

@@ -22,7 +22,7 @@
 using namespace Events;
 
 // Define vectors we need in the example
-USE_TIMERS(0)
+REGISTER_RTT_ISR(0)
 
 static const uint32_t PERIOD = 5000;
 
@@ -48,6 +48,7 @@ int main()
 
 	RTTEventCallback<> callback{event_queue};
 	RTT<Board::Timer::TIMER0> rtt;
+	rtt.register_rtt_handler();
 	rtt.set_callback(&callback);
 	
 	// Prepare Dispatcher and Handlers
