@@ -15,9 +15,6 @@
 #include <fastarduino/Timer.hh>
 #include <fastarduino/time.hh>
 
-// Define vectors we need in the example
-USE_TIMERS(0, 1)
-
 constexpr const Board::Timer BLINK_TIMER = Board::Timer::TIMER0;
 using BLINK_TIMER_TYPE = Timer<BLINK_TIMER>;
 constexpr const uint32_t BLINK_PERIOD_US = 10000;
@@ -34,12 +31,12 @@ static_assert(SUSPEND_TIMER_TYPE::is_adequate(SUSPEND_PRESCALER, SUSPEND_PERIOD_
 		"SUSPEND_TIMER_TYPE::is_adequate(SUSPEND_PRESCALER, SUSPEND_PERIOD_US)");
 constexpr const SUSPEND_TIMER_TYPE::TIMER_TYPE SUSPEND_COUNTER = SUSPEND_TIMER_TYPE::counter(SUSPEND_PRESCALER, SUSPEND_PERIOD_US);
 
-class BlinkHandler: public TimerCallback
+class BlinkHandler
 {
 public:
 	BlinkHandler(): _led{PinMode::OUTPUT, false} {}
 	
-	virtual void on_timer() override
+	void on_timer()
 	{
 		_led.set();
 		Time::delay_us(1000);
@@ -50,12 +47,12 @@ private:
 	FastPinType<Board::DigitalPin::LED>::TYPE _led;
 };
 
-class SuspendHandler: public TimerCallback
+class SuspendHandler
 {
 public:
 	SuspendHandler(BLINK_TIMER_TYPE& blink_timer):_blink_timer{blink_timer} {}
 	
-	virtual void on_timer() override
+	void on_timer()
 	{
 		if (_blink_timer.is_suspended())
 			_blink_timer._resume();
@@ -67,12 +64,18 @@ private:
 	BLINK_TIMER_TYPE& _blink_timer;
 };
 
+// Define vectors we need in the example
+REGISTER_TIMER_ISR_METHOD(0, BlinkHandler, &BlinkHandler::on_timer)
+REGISTER_TIMER_ISR_METHOD(1, SuspendHandler, &SuspendHandler::on_timer)
+
 int main()
 {
 	BlinkHandler blink_handler;
-	BLINK_TIMER_TYPE blink_timer{blink_handler};
+	BLINK_TIMER_TYPE blink_timer;
 	SuspendHandler suspend_handler{blink_timer};
-	SUSPEND_TIMER_TYPE suspend_timer{suspend_handler};
+	SUSPEND_TIMER_TYPE suspend_timer;
+	register_handler(blink_handler);
+	register_handler(suspend_handler);
 	blink_timer._begin(BLINK_PRESCALER, BLINK_COUNTER);
 	suspend_timer._begin(SUSPEND_PRESCALER, SUSPEND_COUNTER);
 	sei();

@@ -9,43 +9,13 @@
 
 //TODO do we need to put everything here in a namespace?
 
-// These macros are internally used in further macro and should not be used in your programs
-#define ISR_TIMER_(T0, ...)										\
-ISR(TIMER ## T0 ## _COMPA_vect, ISR_NAKED)						\
-{																\
-	asm volatile(												\
-		"push r16\n\t"											\
-		"ldi r16, %[TIMER]\n\t"									\
-		"out %[GPIOR], r16\n\t"									\
-		::[GPIOR] "I" (_SFR_IO_ADDR(GPIOR0)), [TIMER] "I" (T0)	\
-	);															\
-	TimerISRCallback::callback();									\
-	asm volatile(												\
-		"pop r16\n\t"											\
-		"reti\n\t"												\
-	);															\
-}																\
+#define REGISTER_TIMER_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(TIMER ## TIMER_NUM ## _COMPA_vect, HANDLER, CALLBACK)
 
-#define PREPEND_TIMER_(TN, ...) Board::Timer::TIMER ## TN
+#define REGISTER_TIMER_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
+REGISTER_ISR_FUNCTION_(TIMER ## TIMER_NUM ## _COMPA_vect, CALLBACK)
 
-#define USE_TIMERS(T0, ...)																				\
-using TimerISRCallback =																				\
-	timer_impl::ISRHandler<FOR_EACH_SEP(PREPEND_TIMER_, , EMPTY, COMMA, EMPTY, T0, ##__VA_ARGS__)>;		\
-																										\
-FOR_EACH(ISR_TIMER_, , T0, ##__VA_ARGS__)
-
-// Forward declaration necessary to be declared as friend
-// Complete declaration can be found at the end of this file
-namespace timer_impl
-{
-	template<Board::Timer T0, Board::Timer... TS> struct CallbackHandler;
-}
-
-class TimerCallback
-{
-public:
-	virtual void on_timer() = 0;
-};
+#define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(TIMER ## TIMER_NUM ## _COMPA_vect);
 
 template<Board::Timer TIMER>
 class Timer
@@ -57,11 +27,6 @@ protected:
 public:
 	using TIMER_TYPE = typename TRAIT::TYPE;
 	using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
-
-	Timer(TimerCallback& callback) INLINE
-	{
-		_callback = &callback;
-	}
 
 	static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
 	{
@@ -170,88 +135,6 @@ private:
 	{
 		return best_prescaler(prescalers, prescalers + N, us);
 	}
-	
-	static void call_back_if_needed()
-	{
-		if (GPIOR0 == uint8_t(TIMER))
-			_callback->on_timer();
-	}
-
-	static TimerCallback* _callback;
-	
-	template<Board::Timer, Board::Timer...> friend struct timer_impl::CallbackHandler;
 };
-
-template<Board::Timer TIMER>
-TimerCallback* Timer<TIMER>::_callback = 0;
-
-namespace timer_impl
-{
-	template<Board::Timer... TS>
-	struct ISRHandler
-	{
-		static void callback() __attribute__((naked))
-		{
-			asm volatile(
-				"push r1\n\t"
-				"push r0\n\t"
-				"in r0, __SREG__\n\t"
-				"push r0\n\t"
-				"eor r1, r1\n\t"
-				"push r18\n\t"
-				"push r19\n\t"
-				"push r20\n\t"
-				"push r21\n\t"
-				"push r22\n\t"
-				"push r23\n\t"
-				"push r24\n\t"
-				"push r25\n\t"
-				"push r26\n\t"
-				"push r27\n\t"
-				"push r30\n\t"
-				"push r31\n\t"
-			);
-			CallbackHandler<TS...>::callback();
-			asm volatile(
-				"pop r31\n\t"
-				"pop r30\n\t"
-				"pop r27\n\t"
-				"pop r26\n\t"
-				"pop r25\n\t"
-				"pop r24\n\t"
-				"pop r23\n\t"
-				"pop r22\n\t"
-				"pop r21\n\t"
-				"pop r20\n\t"
-				"pop r19\n\t"
-				"pop r18\n\t"
-				"pop r0\n\t"
-				"out __SREG__, r0\n\t"
-				"pop r0\n\t"
-				"pop r1\n\t"
-				"ret\n\t"
-			);
-		}
-	};
-	
-	template<Board::Timer T0, Board::Timer... TS>
-	struct CallbackHandler
-	{
-		static void callback()
-		{
-			CallbackHandler<T0>::callback();
-			CallbackHandler<TS...>::callback();
-		}
-	};
-
-	template<Board::Timer T>
-	struct CallbackHandler<T>
-	{
-		static void callback()
-		{
-			Timer<T>::call_back_if_needed();
-		}
-	};
-}
 
 #endif /* TIMER_HH */
