@@ -47,7 +47,8 @@ static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8;
 static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 
-USE_TIMERS(2)
+// Define vectors we need in the example
+REGISTER_RTT_ISR(2)
 #elif defined(ARDUINO_MEGA)
 #define HAS_TRACE 1
 static const constexpr Board::DigitalPin PIN_IRQ = Board::ExternalInterruptPin::EXT0;
@@ -56,7 +57,8 @@ static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8;
 static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 
-USE_TIMERS(2)
+// Define vectors we need in the example
+REGISTER_RTT_ISR(2)
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_TRACE 0
 static const constexpr Board::DigitalPin PIN_IRQ = Board::ExternalInterruptPin::EXT0;
@@ -66,7 +68,7 @@ static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D3;
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER0;
 
 // Define vectors we need in the example
-USE_TIMERS(0)
+REGISTER_RTT_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -90,7 +92,7 @@ static const uint32_t RECEIVE_MAX_WAIT_MS = 10000L;
 static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
 
 // Define vectors we need in the example
-USE_EMPTY_INTS(0)
+REGISTER_INT_ISR_EMPTY(0)
 
 static bool is_master()
 {
@@ -119,6 +121,7 @@ int main()
 
 	// Setup RTT
 	RTT<RTT_TIMER> rtt;
+	rtt.register_rtt_handler();
 	rtt.begin();
 	// Set RTT instance as default clock from now
 	Time::set_clock(rtt);
