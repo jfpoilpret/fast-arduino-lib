@@ -15,6 +15,7 @@
 // - handle a linked list of handlers
 // - support exact changes modes (store port state) of PINs
 
+//TODO IMPROVE static checks by adding PIN as argument to check PIN is consistent with PCINT selected
 #define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK)										\
 static_assert(Board::PCI_trait< PCI_NUM >::PORT != Board::Port::NONE, "PORT must support PCI");	\
 REGISTER_ISR_METHOD_(PCINT ## PCI_NUM ## _vect, HANDLER, CALLBACK)
