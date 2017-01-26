@@ -144,7 +144,6 @@ endif
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF}
-	$(MAKE) -C examples/rtt/TimerApp2 CONF=${CONF}
 	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF}
 	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF}
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF}
@@ -155,6 +154,7 @@ ifeq ($(findstring ATtiny84,${CONF}),)
 endif
 	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF}
 	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF}
+	$(MAKE) -C examples/uart/UartApp4 CONF=${CONF}
 
 clean-examples: clean
 	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF} clean
@@ -193,6 +193,7 @@ ifeq ($(findstring ATtiny84,${CONF}),)
 endif
 	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF} clean
+	$(MAKE) -C examples/uart/UartApp4 CONF=${CONF} clean
 
 
 # include project implementation makefile
