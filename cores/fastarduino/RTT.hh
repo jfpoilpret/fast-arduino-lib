@@ -8,17 +8,18 @@
 
 //TODO do we need to put everything here in a namespace?
 
-//TODO REGISTER ISR macro
-//TODO register method
 #define REGISTER_RTT_ISR(TIMER_NUM)	\
 REGISTER_TIMER_ISR_METHOD(TIMER_NUM, RTT<Board::Timer::TIMER ## TIMER_NUM >, &RTT<Board::Timer::TIMER ## TIMER_NUM >::on_timer)
 
-//TODO Ultimately remove that virtual call...
-class RTTCallback
-{
-public:
-	virtual void on_rtt_change(uint32_t millis) = 0;
-};
+// Utilities to handle ISR callbacks
+#define REGISTER_RTT_CALLBACK_ISR(TIMER_NUM, HANDLER, CALLBACK)								\
+ISR(TIMER ## TIMER_NUM ## _COMPA_vect)														\
+{																							\
+	using RTT_HANDLER = RTT<Board::Timer::TIMER ## TIMER_NUM >;								\
+	using RTT_HOLDER = HandlerCallbackHolder< RTT_HANDLER, &RTT_HANDLER::on_timer >;		\
+	RTT_HOLDER::handle();																	\
+	RTTHandlerCallbackHolder< HANDLER , CALLBACK >::handle(RTT_HOLDER::handler()->millis());\
+}
 
 template<Board::Timer TIMER>
 class RTT: private Timer<TIMER>
@@ -29,16 +30,9 @@ private:
 	using TIMER_PRESCALER = typename Timer<TIMER>::TIMER_PRESCALER;
 	
 public:
-	RTT() INLINE : _callback{0} {}
-
 	void register_rtt_handler()
 	{
 		register_handler(*this);
-	}
-	
-	void set_callback(RTTCallback* callback)
-	{
-		_callback = callback;
 	}
 	
 	inline uint32_t millis() const
@@ -92,16 +86,15 @@ public:
 	void on_timer()
 	{
 		++_millis;
-		if (_callback) _callback->on_rtt_change(_millis);
 	}
+	
+protected:
+	volatile uint32_t _millis;
 	
 private:
 	static constexpr const uint32_t ONE_MILLI = 1000UL;
 	static constexpr const TIMER_PRESCALER MILLI_PRESCALER = RTT::prescaler(ONE_MILLI);
 	static constexpr const TIMER_TYPE MILLI_COUNTER = RTT::counter(ONE_MILLI);
-	
-	volatile uint32_t _millis;
-	RTTCallback* _callback;
 	
 	inline uint16_t compute_micros() const
 	{
@@ -110,15 +103,14 @@ private:
 };
 
 template<uint32_t PERIOD_MS = 1024>
-class RTTEventCallback: public RTTCallback
+class RTTEventCallback
 {
 	static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
 public:
 	RTTEventCallback(Queue<Events::Event>& event_queue)
 		:_event_queue(event_queue) {}
 	
-private:
-	virtual void on_rtt_change(uint32_t millis) override
+	void on_rtt_change(uint32_t millis)
 	{
 		if ((millis & (PERIOD_MS - 1)) == 0)
 			_event_queue._push(Events::Event{Events::Type::RTT_TIMER});
@@ -126,5 +118,35 @@ private:
 	
 	Queue<Events::Event>& _event_queue;
 };
+
+template<typename Handler> void register_rtt_handler(Handler&);
+template<typename Handler>
+class RTTHandlerHolder
+{
+protected:
+	static Handler* _handler;
+	friend void register_rtt_handler<Handler>(Handler&);
+};
+
+template<typename Handler>
+Handler* RTTHandlerHolder<Handler>::_handler = 0;
+
+template<typename Handler, void(Handler::*Callback)(uint32_t)>
+class RTTHandlerCallbackHolder: public RTTHandlerHolder<Handler>
+{
+public:
+	static void handle(uint32_t millis)
+	{
+		Handler* handler = RTTHandlerHolder<Handler>::_handler;
+		FIX_BASE_POINTER(handler);
+		return (handler->*Callback)(millis);
+	}
+};
+
+template<typename Handler>
+void register_rtt_handler(Handler& handler)
+{
+	RTTHandlerHolder<Handler>::_handler = &handler;
+}
 
 #endif /* RTT_HH */

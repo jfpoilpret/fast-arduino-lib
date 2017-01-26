@@ -19,10 +19,10 @@
 #include <fastarduino/Events.hh>
 #include <fastarduino/scheduler.hh>
 
-using namespace Events;
-
 // Define vectors we need in the example
-REGISTER_RTT_ISR(0)
+REGISTER_RTT_CALLBACK_ISR(0, RTTEventCallback<>, &RTTEventCallback<>::on_rtt_change)
+
+using namespace Events;
 
 static const uint32_t PERIOD = 5000;
 
@@ -30,7 +30,7 @@ class LedHandler: public Job, private FastPinType<Board::DigitalPin::LED>::TYPE
 {
 public:
 	LedHandler() : Job{0, PERIOD}, FastPinType<Board::DigitalPin::LED>::TYPE{PinMode::OUTPUT, false} {}
-	virtual void on_schedule(UNUSED uint32_t millis) override
+	void on_schedule(UNUSED uint32_t millis)
 	{
 		toggle();
 	}
@@ -49,7 +49,7 @@ int main()
 	RTTEventCallback<> callback{event_queue};
 	RTT<Board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
-	rtt.set_callback(&callback);
+	register_rtt_handler(callback);
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;

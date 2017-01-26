@@ -187,7 +187,12 @@ template<typename Handler> void register_handler(Handler&);
 template<typename Handler>
 class HandlerHolder
 {
-protected:
+public:
+	static Handler* handler()
+	{
+		return _handler;
+	}
+private:
 	static Handler* _handler;
 	friend void register_handler<Handler>(Handler&);
 };
@@ -201,9 +206,9 @@ class HandlerCallbackHolder: public HandlerHolder<Handler>
 public:
 	static void handle()
 	{
-		Handler* handler = HandlerHolder<Handler>::_handler;
-		FIX_BASE_POINTER(handler);
-		return (handler->*Callback)();
+		Handler* handler_instance = HandlerHolder<Handler>::handler();
+		FIX_BASE_POINTER(handler_instance);
+		return (handler_instance->*Callback)();
 	}
 };
 
