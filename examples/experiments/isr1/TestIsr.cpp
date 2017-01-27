@@ -38,30 +38,40 @@ void register_handler(Handler& handler)
 	HandlerHolder<Handler>::_handler = &handler;
 }
 
-#define REGISTER_ISR_METHOD_(HANDLER, CALLBACK,...)	\
+#define CALL_HANDLER(HANDLER, CALLBACK,...)	\
 HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >::handle
+
+#define CALLBACK_HANDLER(HANDLER, CALLBACK,...)	\
+CALL_HANDLER(HANDLER, CALLBACK, ##__VA_ARGS__)
 
 struct TestHandler
 {
-	void act0() {}
-	void act1(uint32_t) {}
-	void act2(bool, uint32_t) {}
+	TestHandler(): _count(0) {}
+	
+	void act0() {++_count;}
+	void act1(uint32_t arg) {_count += arg;}
+	void act2(bool inc, uint32_t arg) {if (inc) _count += arg; else _count -= arg;}
+	
+	uint16_t _count;
 };
 
 static void test()
 {
-	TestHandler handler;
-	register_handler(handler);
-
-	REGISTER_ISR_METHOD_(TestHandler, &TestHandler::act0)();
-	REGISTER_ISR_METHOD_(TestHandler, &TestHandler::act1, uint32_t)(1000UL);
-	REGISTER_ISR_METHOD_(TestHandler, &TestHandler::act2, bool, uint32_t)(true, 1000UL);
+	CALL_HANDLER(TestHandler, &TestHandler::act0)();
+	CALL_HANDLER(TestHandler, &TestHandler::act1, uint32_t)(1000UL);
+	CALL_HANDLER(TestHandler, &TestHandler::act2, bool, uint32_t)(false, 500UL);
+	CALLBACK_HANDLER(TestHandler, &TestHandler::act0)();
+	CALLBACK_HANDLER(TestHandler, &TestHandler::act1, uint32_t)(2000UL);
+	CALLBACK_HANDLER(TestHandler, &TestHandler::act2, bool, uint32_t)(true, 100UL);
 }
 
 int main() __attribute__((OS_main));
 int main()
 {
 	sei();
-	test();
-	while (true) ;
+	
+	TestHandler handler;
+	register_handler(handler);
+
+	while (handler._count < 10000) test();
 }
