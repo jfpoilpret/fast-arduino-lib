@@ -8,66 +8,58 @@
 
 #include <avr/interrupt.h>
 
-// Utilities to handle ISR callbacks
-#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)		\
-ISR(VECTOR)													\
-{															\
-	HandlerCallbackHolder< HANDLER , CALLBACK >::handle();	\
-}
-
-template<typename Handler> void register_handler(Handler&);
-template<typename Handler>
-class HandlerHolder
+// General experiments here
+template<typename Handler, typename... Args>
+struct HandlerHolder
 {
-public:
-	static Handler* handler()
-	{
-		return _handler;
-	}
-private:
+	using Holder = HandlerHolder<Handler, Args...>;
 	static Handler* _handler;
-	friend void register_handler<Handler>(Handler&);
-};
-
-template<typename Handler>
-Handler* HandlerHolder<Handler>::_handler = 0;
-
-template<typename Handler, void(Handler::*Callback)()>
-class HandlerCallbackHolder: public HandlerHolder<Handler>
-{
-public:
-	static void handle()
+	
+	template<void (Handler::*Callback)(Args...)>
+	struct CallbackHolder
 	{
-		Handler* handler_instance = HandlerHolder<Handler>::handler();
-//		FIX_BASE_POINTER(handler_instance);
-		return (handler_instance->*Callback)();
-	}
+		static void handle(Args... args)
+		{
+			(Holder::_handler->*Callback)(args...);
+		}
+	};
 };
 
-template<typename Handler>
-void register_handler(Handler& handler)
+template<typename Handler, typename... Args>
+Handler* HandlerHolder<Handler, Args...>::_handler = 0;
+
+struct TestHandler
 {
-	HandlerHolder<Handler>::_handler = &handler;
+	void act0() {}
+	void act1(uint32_t) {}
+	void act2(bool, uint32_t) {}
+};
+
+//static HandlerHolder<TestHandler, &TestHandler::act0> handler0;
+//static HandlerHolder<TestHandler> handler0;
+//static HandlerHolder<TestHandler, uint32_t> handler1;
+//static HandlerHolder<TestHandler, bool, uint32_t> handler2;
+
+static void test()
+{
+	TestHandler handler;
+	HandlerHolder<TestHandler>::_handler = &handler;
+	HandlerHolder<TestHandler>::CallbackHolder<&TestHandler::act0>::handle();
+
+	HandlerHolder<TestHandler, uint32_t>::_handler = &handler;
+	HandlerHolder<TestHandler, uint32_t>::CallbackHolder<&TestHandler::act1>::handle(1000UL);
+
+	HandlerHolder<TestHandler, bool, uint32_t>::_handler = &handler;
+	HandlerHolder<TestHandler, bool, uint32_t>::CallbackHolder<&TestHandler::act2>::handle(true, 1000UL);
 }
 
-class MyHandler
-{
-public:
-	MyHandler() {}
-	void callback()
-	{
-		++_count;
-	}
-	uint16_t _count;
-};
 
-REGISTER_ISR_METHOD_(INT0_vect, MyHandler, &MyHandler::callback)
+
 
 int main() __attribute__((OS_main));
 int main()
 {
 	sei();
-	MyHandler my_handler;
-	register_handler(my_handler);
+	test();
 	while (true) ;
 }
