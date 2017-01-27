@@ -9,24 +9,34 @@
 #include <avr/interrupt.h>
 
 // General experiments here
-template<typename Handler, typename... Args>
+template<typename Handler>
 struct HandlerHolder
 {
-	using Holder = HandlerHolder<Handler, Args...>;
+	using Holder = HandlerHolder<Handler>;
 	static Handler* _handler;
-	
-	template<void (Handler::*Callback)(Args...)>
-	struct CallbackHolder
+
+	template<typename... Args>
+	struct ArgsHodler
 	{
-		static void handle(Args... args)
+		template<void (Handler::*Callback)(Args...)>
+		struct CallbackHolder
 		{
-			(Holder::_handler->*Callback)(args...);
-		}
+			static void handle(Args... args)
+			{
+				(Holder::_handler->*Callback)(args...);
+			}
+		};
 	};
 };
 
-template<typename Handler, typename... Args>
-Handler* HandlerHolder<Handler, Args...>::_handler = 0;
+template<typename Handler>
+Handler* HandlerHolder<Handler>::_handler = 0;
+
+template<typename Handler>
+void register_handler(Handler& handler)
+{
+	HandlerHolder<Handler>::_handler = &handler;
+}
 
 struct TestHandler
 {
@@ -35,22 +45,15 @@ struct TestHandler
 	void act2(bool, uint32_t) {}
 };
 
-//static HandlerHolder<TestHandler, &TestHandler::act0> handler0;
-//static HandlerHolder<TestHandler> handler0;
-//static HandlerHolder<TestHandler, uint32_t> handler1;
-//static HandlerHolder<TestHandler, bool, uint32_t> handler2;
-
 static void test()
 {
 	TestHandler handler;
-	HandlerHolder<TestHandler>::_handler = &handler;
-	HandlerHolder<TestHandler>::CallbackHolder<&TestHandler::act0>::handle();
+	register_handler(handler);
+//	HandlerHolder<TestHandler>::_handler = &handler;
 
-	HandlerHolder<TestHandler, uint32_t>::_handler = &handler;
-	HandlerHolder<TestHandler, uint32_t>::CallbackHolder<&TestHandler::act1>::handle(1000UL);
-
-	HandlerHolder<TestHandler, bool, uint32_t>::_handler = &handler;
-	HandlerHolder<TestHandler, bool, uint32_t>::CallbackHolder<&TestHandler::act2>::handle(true, 1000UL);
+	HandlerHolder<TestHandler>::ArgsHodler<>::CallbackHolder<&TestHandler::act0>::handle();
+	HandlerHolder<TestHandler>::ArgsHodler<uint32_t>::CallbackHolder<&TestHandler::act1>::handle(1000UL);
+	HandlerHolder<TestHandler>::ArgsHodler<bool, uint32_t>::CallbackHolder<&TestHandler::act2>::handle(true, 1000UL);
 }
 
 
