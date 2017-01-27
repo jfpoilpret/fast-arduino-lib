@@ -38,6 +38,9 @@ void register_handler(Handler& handler)
 	HandlerHolder<Handler>::_handler = &handler;
 }
 
+#define REGISTER_ISR_METHOD_(HANDLER, CALLBACK,...)	\
+HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >::handle
+
 struct TestHandler
 {
 	void act0() {}
@@ -49,15 +52,11 @@ static void test()
 {
 	TestHandler handler;
 	register_handler(handler);
-//	HandlerHolder<TestHandler>::_handler = &handler;
 
-	HandlerHolder<TestHandler>::ArgsHodler<>::CallbackHolder<&TestHandler::act0>::handle();
-	HandlerHolder<TestHandler>::ArgsHodler<uint32_t>::CallbackHolder<&TestHandler::act1>::handle(1000UL);
-	HandlerHolder<TestHandler>::ArgsHodler<bool, uint32_t>::CallbackHolder<&TestHandler::act2>::handle(true, 1000UL);
+	REGISTER_ISR_METHOD_(TestHandler, &TestHandler::act0)();
+	REGISTER_ISR_METHOD_(TestHandler, &TestHandler::act1, uint32_t)(1000UL);
+	REGISTER_ISR_METHOD_(TestHandler, &TestHandler::act2, bool, uint32_t)(true, 1000UL);
 }
-
-
-
 
 int main() __attribute__((OS_main));
 int main()
