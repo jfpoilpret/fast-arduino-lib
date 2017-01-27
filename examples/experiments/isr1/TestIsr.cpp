@@ -4,25 +4,25 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-//#include <avr/interrupt.h>
-//#include <avr/io.h>
-#include <fastarduino/FastIO.hh>
+#include <stdint.h>
 
-#define MAKE_ISR(VECTOR, HANDLER)		\
-ISR(VECTOR)								\
-{										\
-	HandlerHolder< HANDLER >::handle();	\
+#include <avr/interrupt.h>
+
+// Utilities to handle ISR callbacks
+#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)		\
+ISR(VECTOR)													\
+{															\
+	HandlerCallbackHolder< HANDLER , CALLBACK >::handle();	\
 }
 
 template<typename Handler> void register_handler(Handler&);
-
 template<typename Handler>
 class HandlerHolder
 {
 public:
-	static void handle()
+	static Handler* handler()
 	{
-		return _handler->callback();
+		return _handler;
 	}
 private:
 	static Handler* _handler;
@@ -31,6 +31,18 @@ private:
 
 template<typename Handler>
 Handler* HandlerHolder<Handler>::_handler = 0;
+
+template<typename Handler, void(Handler::*Callback)()>
+class HandlerCallbackHolder: public HandlerHolder<Handler>
+{
+public:
+	static void handle()
+	{
+		Handler* handler_instance = HandlerHolder<Handler>::handler();
+//		FIX_BASE_POINTER(handler_instance);
+		return (handler_instance->*Callback)();
+	}
+};
 
 template<typename Handler>
 void register_handler(Handler& handler)
@@ -41,17 +53,17 @@ void register_handler(Handler& handler)
 class MyHandler
 {
 public:
-	MyHandler(): _led{PinMode::OUTPUT} {}
+	MyHandler() {}
 	void callback()
 	{
-		_led.toggle();
+		++_count;
 	}
-private:
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;
+	uint16_t _count;
 };
 
-MAKE_ISR(INT0_vect, MyHandler)
+REGISTER_ISR_METHOD_(INT0_vect, MyHandler, &MyHandler::callback)
 
+int main() __attribute__((OS_main));
 int main()
 {
 	sei();

@@ -60,7 +60,7 @@
                             CT="3"
                             CN="UNO-Release"
                             AC="true"
-                            BL="true"
+                            BL="false"
                             WD="../../.."
                             BC="${MAKE}  -f Makefile CONF=UNO-Release"
                             CC="${MAKE}  -f Makefile CONF=UNO-Release clean"

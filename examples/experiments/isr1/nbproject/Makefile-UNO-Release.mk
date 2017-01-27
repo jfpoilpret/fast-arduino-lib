@@ -71,7 +71,6 @@ ${OBJECTDIR}/TestIsr.o: TestIsr.cpp
 
 # Subprojects
 .build-subprojects:
-	cd ../../.. && ${MAKE}  -f Makefile CONF=UNO-Release
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -80,7 +79,6 @@ ${OBJECTDIR}/TestIsr.o: TestIsr.cpp
 
 # Subprojects
 .clean-subprojects:
-	cd ../../.. && ${MAKE}  -f Makefile CONF=UNO-Release clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl
