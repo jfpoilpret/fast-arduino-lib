@@ -4,6 +4,20 @@
 
 Watchdog* Watchdog::_singleton = 0;
 
+void WatchdogSignal::_begin(uint8_t config)
+{
+	wdt_reset();
+	MCUSR |= 1 << WDRF;
+	WDTCSR = _BV(WDCE) | _BV(WDE);
+	WDTCSR = config;
+}
+
+void WatchdogSignal::begin(TimeOut timeout)
+{
+	uint8_t config = _BV(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? _BV(WDP3) : 0);
+	synchronized _begin(config);
+}
+
 void Watchdog::begin(TimeOut timeout)
 {
 	uint16_t ms_per_tick = 1 << (uint8_t(timeout) + 4);
@@ -11,10 +25,7 @@ void Watchdog::begin(TimeOut timeout)
 	
 	synchronized
 	{
-		wdt_reset();
-		MCUSR |= 1 << WDRF;
-		WDTCSR = _BV(WDCE) | _BV(WDE);
-		WDTCSR = config;
+		_begin(config);
 		_millis_per_tick = ms_per_tick;
 		_millis = 0;
 	}

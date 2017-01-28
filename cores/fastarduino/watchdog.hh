@@ -6,8 +6,9 @@
 #include "Events.hh"
 #include "Board.hh"
 
-//TODO Improve to provide 2 API: one with Clock and Event queue, one with just WDT, no ISR
-class Watchdog
+//TODO Remove singleton and use standard ISR registration procedure with macro
+
+class WatchdogSignal
 {
 public:
 	enum class TimeOut: uint8_t
@@ -24,13 +25,6 @@ public:
 		TO_8s
 	};
 	
-	Watchdog(Queue<Events::Event>& event_queue)
-		:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue)
-	{
-		Watchdog::_singleton = this;
-	}
-	Watchdog(const Watchdog&) = delete;
-	
 	void begin(TimeOut timeout = TimeOut::TO_16ms);
 	void end()
 	{
@@ -40,6 +34,22 @@ public:
 			WDTCSR = 0;
 		}
 	}
+	
+protected:
+	void _begin(uint8_t config);
+};
+
+class Watchdog: public WatchdogSignal
+{
+public:
+	Watchdog(Queue<Events::Event>& event_queue)
+		:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue)
+	{
+		Watchdog::_singleton = this;
+	}
+	Watchdog(const Watchdog&) = delete;
+	
+	void begin(TimeOut timeout = TimeOut::TO_16ms);
 	
 	uint32_t millis() const
 	{
