@@ -12,13 +12,14 @@
 REGISTER_TIMER_ISR_METHOD(TIMER_NUM, RTT<Board::Timer::TIMER ## TIMER_NUM >, &RTT<Board::Timer::TIMER ## TIMER_NUM >::on_timer)
 
 // Utilities to handle ISR callbacks
-#define REGISTER_RTT_CALLBACK_ISR(TIMER_NUM, HANDLER, CALLBACK)								\
-ISR(TIMER ## TIMER_NUM ## _COMPA_vect)														\
-{																							\
-	using RTT_HANDLER = RTT<Board::Timer::TIMER ## TIMER_NUM >;								\
-	using RTT_HOLDER = HandlerCallbackHolder< RTT_HANDLER, &RTT_HANDLER::on_timer >;		\
-	RTT_HOLDER::handle();																	\
-	RTTHandlerCallbackHolder< HANDLER , CALLBACK >::handle(RTT_HOLDER::handler()->millis());\
+#define REGISTER_RTT_CALLBACK_ISR(TIMER_NUM, HANDLER, CALLBACK)							\
+ISR(TIMER ## TIMER_NUM ## _COMPA_vect)													\
+{																						\
+	using RTT_HANDLER = RTT<Board::Timer::TIMER ## TIMER_NUM >;							\
+	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);									\
+	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer);	\
+	RTT_HANDLE::handle();																\
+	CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()->millis());		\
 }
 
 template<Board::Timer TIMER>
@@ -118,35 +119,5 @@ public:
 	
 	Queue<Events::Event>& _event_queue;
 };
-
-template<typename Handler> void register_rtt_handler(Handler&);
-template<typename Handler>
-class RTTHandlerHolder
-{
-protected:
-	static Handler* _handler;
-	friend void register_rtt_handler<Handler>(Handler&);
-};
-
-template<typename Handler>
-Handler* RTTHandlerHolder<Handler>::_handler = 0;
-
-template<typename Handler, void(Handler::*Callback)(uint32_t)>
-class RTTHandlerCallbackHolder: public RTTHandlerHolder<Handler>
-{
-public:
-	static void handle(uint32_t millis)
-	{
-		Handler* handler = RTTHandlerHolder<Handler>::_handler;
-		FIX_BASE_POINTER(handler);
-		return (handler->*Callback)(millis);
-	}
-};
-
-template<typename Handler>
-void register_rtt_handler(Handler& handler)
-{
-	RTTHandlerHolder<Handler>::_handler = &handler;
-}
 
 #endif /* RTT_HH */

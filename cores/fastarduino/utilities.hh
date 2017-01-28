@@ -171,10 +171,18 @@ inline uint8_t get_ioreg_byte(REGISTER IOREG)
 }
 
 // Utilities to handle ISR callbacks
-#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)		\
-ISR(VECTOR)													\
-{															\
-	HandlerCallbackHolder< HANDLER , CALLBACK >::handle();	\
+#define HANDLER_HOLDER_(HANDLER) HandlerHolder< HANDLER >
+
+#define CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK,...)	\
+HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >
+
+#define CALL_HANDLER_(HANDLER, CALLBACK,...)	\
+CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK, ##__VA_ARGS__)::handle
+
+#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)	\
+ISR(VECTOR)												\
+{														\
+	CALL_HANDLER_(HANDLER , CALLBACK)();				\
 }
 
 #define REGISTER_ISR_FUNCTION_(VECTOR, CALLBACK)	\
@@ -192,6 +200,24 @@ public:
 	{
 		return _handler;
 	}
+	
+	using Holder = HandlerHolder<Handler>;
+	
+	template<typename... Args>
+	struct ArgsHodler
+	{
+		template<void (Handler::*Callback)(Args...)>
+		struct CallbackHolder
+		{
+			static void handle(Args... args)
+			{
+				Handler* handler_instance = Holder::handler();
+				FIX_BASE_POINTER(handler_instance);
+				(handler_instance->*Callback)(args...);
+			}
+		};
+	};
+	
 private:
 	static Handler* _handler;
 	friend void register_handler<Handler>(Handler&);
@@ -199,18 +225,6 @@ private:
 
 template<typename Handler>
 Handler* HandlerHolder<Handler>::_handler = 0;
-
-template<typename Handler, void(Handler::*Callback)()>
-class HandlerCallbackHolder: public HandlerHolder<Handler>
-{
-public:
-	static void handle()
-	{
-		Handler* handler_instance = HandlerHolder<Handler>::handler();
-		FIX_BASE_POINTER(handler_instance);
-		return (handler_instance->*Callback)();
-	}
-};
 
 template<typename Handler>
 void register_handler(Handler& handler)

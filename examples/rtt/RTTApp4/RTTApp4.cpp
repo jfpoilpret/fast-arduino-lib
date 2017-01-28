@@ -30,7 +30,7 @@ class LedHandler: public Job, private FastPinType<Board::DigitalPin::LED>::TYPE
 {
 public:
 	LedHandler() : Job{0, PERIOD}, FastPinType<Board::DigitalPin::LED>::TYPE{PinMode::OUTPUT, false} {}
-	void on_schedule(UNUSED uint32_t millis)
+	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		toggle();
 	}
@@ -49,7 +49,7 @@ int main()
 	RTTEventCallback<> callback{event_queue};
 	RTT<Board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
-	register_rtt_handler(callback);
+	register_handler(callback);
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
