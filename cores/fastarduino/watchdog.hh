@@ -7,6 +7,16 @@
 #include "Board.hh"
 
 //TODO Remove singleton and use standard ISR registration procedure with macro
+#define REGISTER_WATCHDOG_CLOCK_ISR_METHOD()	\
+REGISTER_ISR_METHOD_(WDT_vect, Watchdog, &Watchdog::on_tick)
+
+#define REGISTER_WATCHDOG_ISR_METHOD(HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(WDT_vect, HANDLER, CALLBACK)
+
+#define REGISTER_WATCHDOG_ISR_FUNCTION(CALLBACK)	\
+REGISTER_ISR_FUNCTION_(WDT_vect, CALLBACK)
+
+#define REGISTER_INT_ISR_EMPTY() EMPTY_INTERRUPT(WDT_vect);
 
 class WatchdogSignal
 {
@@ -36,18 +46,26 @@ public:
 	}
 	
 protected:
-	void _begin(uint8_t config);
+	inline void _begin(uint8_t config) INLINE
+	{
+		wdt_reset();
+		MCUSR |= 1 << WDRF;
+		WDTCSR = _BV(WDCE) | _BV(WDE);
+		WDTCSR = config;
+	}
 };
 
 class Watchdog: public WatchdogSignal
 {
 public:
 	Watchdog(Queue<Events::Event>& event_queue)
-		:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue)
-	{
-		Watchdog::_singleton = this;
-	}
+		:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue) {}
 	Watchdog(const Watchdog&) = delete;
+	
+	void register_watchdog_handler()
+	{
+		register_handler(*this);
+	}
 	
 	void begin(TimeOut timeout = TimeOut::TO_16ms);
 	
@@ -57,13 +75,16 @@ public:
 	}
 	void delay(uint32_t ms);
 	
+	void on_tick()
+	{
+		_millis += _millis_per_tick;
+		_event_queue.push(Events::Event{Events::Type::WDT_TIMER});
+	}
+	
 private:
 	volatile uint32_t _millis;
 	uint16_t _millis_per_tick;
 	Queue<Events::Event>& _event_queue;
-	
-	static Watchdog *_singleton;
-	friend void WDT_vect(void);
 };
 
 #endif	/* WATCHDOG_HH */

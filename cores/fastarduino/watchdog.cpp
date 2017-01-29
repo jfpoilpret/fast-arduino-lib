@@ -2,16 +2,6 @@
 #include "watchdog.hh"
 #include "utilities.hh"
 
-Watchdog* Watchdog::_singleton = 0;
-
-void WatchdogSignal::_begin(uint8_t config)
-{
-	wdt_reset();
-	MCUSR |= 1 << WDRF;
-	WDTCSR = _BV(WDCE) | _BV(WDE);
-	WDTCSR = config;
-}
-
 void WatchdogSignal::begin(TimeOut timeout)
 {
 	uint8_t config = _BV(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? _BV(WDP3) : 0);
@@ -37,16 +27,5 @@ void Watchdog::delay(uint32_t ms)
 	while (millis() < limit)
 	{
 		Time::yield();
-	}
-}
-
-ISR(WDT_vect)
-{
-	Watchdog* watchdog = Watchdog::_singleton;
-//	FIX_BASE_POINTER(watchdog);
-	if (watchdog)
-	{
-		watchdog->_millis += watchdog->_millis_per_tick;
-		watchdog->_event_queue.push(Events::Event{Events::Type::WDT_TIMER});
 	}
 }

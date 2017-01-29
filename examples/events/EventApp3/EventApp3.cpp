@@ -31,6 +31,9 @@ static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
 #error "Current target is not yet supported!"
 #endif
 
+// Define vectors we need in the example
+REGISTER_WATCHDOG_CLOCK_ISR_METHOD()
+
 static const uint32_t PERIOD = 1000;
 
 class LedHandler: public Job, private FastPort<LED_PORT>
@@ -65,6 +68,7 @@ int main()
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
 	Watchdog watchdog{event_queue};
+	watchdog.register_watchdog_handler();
 	Scheduler<Watchdog> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
