@@ -239,7 +239,8 @@ void register_handler(Handler& handler)
 // https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
 
 #define EMPTY(...)
-#define CAT(X, Y) X##Y
+#define CAT(X, Y) X ## Y
+#define CAT3(X, Y, Z) X ## Y ## Z
 #define COMMA() ,
 #define STRINGIFY(X, ...) #X
 #define ID(X, ...) X

@@ -9,13 +9,13 @@
 //TODO do we need to put everything here in a namespace?
 
 #define REGISTER_RTT_ISR(TIMER_NUM)	\
-REGISTER_TIMER_ISR_METHOD(TIMER_NUM, RTT<Board::Timer::TIMER ## TIMER_NUM >, &RTT<Board::Timer::TIMER ## TIMER_NUM >::on_timer)
+REGISTER_TIMER_ISR_METHOD(TIMER_NUM, CAT(RTT<Board::Timer::TIMER, TIMER_NUM) >, CAT(&RTT<Board::Timer::TIMER, TIMER_NUM) >::on_timer)
 
 // Utilities to handle ISR callbacks
 #define REGISTER_RTT_CALLBACK_ISR(TIMER_NUM, HANDLER, CALLBACK)							\
-ISR(TIMER ## TIMER_NUM ## _COMPA_vect)													\
+ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
 {																						\
-	using RTT_HANDLER = RTT<Board::Timer::TIMER ## TIMER_NUM >;							\
+	using RTT_HANDLER = CAT(RTT<Board::Timer::TIMER, TIMER_NUM) >;						\
 	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);									\
 	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer);	\
 	RTT_HANDLE::handle();																\

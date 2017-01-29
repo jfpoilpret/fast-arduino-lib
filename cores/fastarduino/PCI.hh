@@ -18,15 +18,15 @@
 //TODO IMPROVE static checks by adding PIN as argument to check PIN is consistent with PCINT selected
 #define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK)										\
 static_assert(Board::PCI_trait< PCI_NUM >::PORT != Board::Port::NONE, "PORT must support PCI");	\
-REGISTER_ISR_METHOD_(PCINT ## PCI_NUM ## _vect, HANDLER, CALLBACK)
+REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)
 
 #define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK)											\
 static_assert(Board::PCI_trait< PCI_NUM >::PORT != Board::Port::NONE, "PORT must support PCI");	\
-REGISTER_ISR_FUNCTION_(PCINT ## PCI_NUM ## _vect, CALLBACK)
+REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
 
 #define REGISTER_PCI_ISR_EMPTY(PCI_NUM)															\
 static_assert(Board::PCI_trait< PCI_NUM >::PORT != Board::Port::NONE, "PORT must support PCI");	\
-EMPTY_INTERRUPT(PCINT ## PCI_NUM ## _vect);
+EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect));
 
 template<Board::Port PORT>
 class PCISignal

@@ -54,7 +54,9 @@ private:
 
 // Define vectors we need in the example
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
+#define PCI_NUM 1
+REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_change)
+//REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
 #elif defined (ARDUINO_MEGA)
 REGISTER_PCI_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
 #elif defined (BREADBOARD_ATTINYX4)

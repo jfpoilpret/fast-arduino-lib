@@ -10,14 +10,14 @@
 
 // This macro is internally used in further macros and should not be used in your programs
 #define _USE_UATX(NAME)													\
-ISR(USART ## NAME ## _UDRE_vect)										\
+ISR(CAT3(USART, NAME, _UDRE_vect))										\
 {																		\
-	UATX<Board::USART::USART ## NAME>::_uatx->data_register_empty();	\
+	CAT(UATX<Board::USART::USART, NAME)>::_uatx->data_register_empty();	\
 }
-#define _USE_UARX(NAME)													\
-ISR(USART ## NAME ## _RX_vect)											\
-{																		\
-	UARX<Board::USART::USART ## NAME>::_uarx->data_receive_complete();	\
+#define _USE_UARX(NAME)														\
+ISR(CAT3(USART, NAME, _RX_vect))											\
+{																			\
+	CAT(UARX<Board::USART::USART, NAME)>::_uarx->data_receive_complete();	\
 }
 
 #define _USE_UART(NAME)		\
