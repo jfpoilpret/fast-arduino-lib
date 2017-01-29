@@ -39,6 +39,7 @@ private:
 // Define vectors we need in the example
 REGISTER_TIMER_ISR_METHOD(1, Handler, &Handler::on_timer)
 
+int main() __attribute__((OS_main));
 int main()
 {
 	sei();

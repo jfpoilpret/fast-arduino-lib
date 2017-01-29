@@ -62,6 +62,7 @@ private:
 REGISTER_INT_ISR_METHOD(0, SwitchHandler, &SwitchHandler::on_switch_on_change)
 REGISTER_INT_ISR_METHOD(1, SwitchHandler, &SwitchHandler::on_switch_off_change)
 
+int main() __attribute__((OS_main));
 int main()
 {
 	// Enable interrupts at startup time

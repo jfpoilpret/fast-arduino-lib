@@ -57,6 +57,7 @@ void check_timer()
 	rtt.end();
 }
 
+int main() __attribute__((OS_main));
 int main()
 {
 	// Enable interrupts at startup time

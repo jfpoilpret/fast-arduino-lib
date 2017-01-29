@@ -68,6 +68,7 @@ private:
 REGISTER_TIMER_ISR_METHOD(0, BlinkHandler, &BlinkHandler::on_timer)
 REGISTER_TIMER_ISR_METHOD(1, SuspendHandler, &SuspendHandler::on_timer)
 
+int main() __attribute__((OS_main));
 int main()
 {
 	BlinkHandler blink_handler;

@@ -26,6 +26,7 @@ REGISTER_RTT_ISR(0)
 
 const constexpr uint32_t BLINK_DELAY = 10000;
 
+int main() __attribute__((OS_main));
 int main()
 {
 	// Enable interrupts at startup time

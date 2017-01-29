@@ -47,7 +47,6 @@ static uint8_t data[DATA_SIZE];
 
 constexpr const uint32_t PAGE = 0x010000;
 
-int main() __attribute__((OS_main));
 int main()
 {
 	// Enable interrupts at startup time

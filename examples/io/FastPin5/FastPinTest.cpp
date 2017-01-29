@@ -27,6 +27,7 @@ static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
 
 static const uint8_t NUM_LEDS = 8;
 
+int main() __attribute__((OS_main));
 int main()
 {
 	// Enable interrupts at startup time
