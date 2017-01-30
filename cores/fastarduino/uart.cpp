@@ -36,7 +36,7 @@ void AbstractUATX::_on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR)
 		{
 			// Yes, trigger TX
 			char value;
-			if (OutputBuffer::pull(value))
+			if (OutputBuffer::_pull(value))
 			{
 				// Set UDR interrupt to be notified when we can send the next character
 				UCSRB |= _BV(UDRIE0);
