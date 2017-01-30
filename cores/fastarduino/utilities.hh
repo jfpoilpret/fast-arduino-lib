@@ -1,35 +1,13 @@
 // Important copyright notice: 
-// Some parts of this file were copied from Mikael Patel's Cosa library, which copyright appears below.
 // Some parts of this file directly derive from https://tty1.net/blog/2008/avr-gcc-optimisations_en.html
 // Other parts are under Copyright (c) 2016, Jean-Francois Poilpret
 
-/**
- * @file Cosa/Types.h
- * @version 1.0
- *
- * @section License
- * Copyright (C) 2012-2015, Mikael Patel
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * @section Description
- * Common literals, data types and syntax abstractions.
- *
- * This file is part of the Arduino Che Cosa project.
- */
 #ifndef UTILITIES_HH
 #define	UTILITIES_HH
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 
 #ifndef UNUSED
 #define UNUSED __attribute__((unused))
@@ -39,24 +17,9 @@
 #define INLINE __attribute__((always_inline))
 #endif
 
-inline uint8_t _lock() INLINE;
-inline uint8_t _lock()
-{
-	uint8_t key = SREG;
-	asm volatile("cli" ::: "memory");
-	return key;
-}
-
-inline void _unlock(uint8_t* key) INLINE;
-inline void _unlock(uint8_t* key)
-{
-  SREG = *key;
-  asm volatile("" ::: "memory");
-}
-
 #define synchronized \
 _Pragma ("GCC diagnostic ignored \"-Wreturn-type\"") \
-for (uint8_t __key __attribute__((__cleanup__(_unlock))) = _lock(), i = 1; i != 0; i--)
+ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 
 // Macro found on https://tty1.net/blog/2008/avr-gcc-optimisations_en.html
 // This allows processing pointers to SRAM data be performed directly from Y, Z registers
