@@ -6,21 +6,6 @@
 
 /* This board is based on ATmega1280/2560 but only ATmega2560 is supported */
 
-/**
- * Cosa MEGA Board pin symbol definitions for the ATmega1280 and
- * ATmega2560 based Arduino boards; Mega 1280/2560. Cosa does not use
- * pin numbers as Arduino/Wiring, instead strong data type is used
- * (enum types) for the specific pin classes; DigitalPin, AnalogPin,
- * etc.
- *
- * The pin numbers for ATmega1280 and ATmega2560 are only symbolically
- * mapped, i.e. a pin number/digit will not work, symbols must be
- * used, e.g., Board::D42. Avoid iterations assuming that the symbols
- * are in order.
- *
- * The static inline functions, SFR, BIT and UART, rely on compiler
- * optimizations to be reduced.
- */
 namespace Board
 {
 	//====
