@@ -3,11 +3,8 @@
 // Content has been adapted to use FastArduino original parts, under Copyright (c) 2016, Jean-Francois Poilpret
 
 /**
- * @file NRF24L01P.hh
- * @version 1.0
- *
- * @section License
  * Copyright (C) 2013-2015, Mikael Patel
+ * Copyright (C) 2016-2017, Jean-Francois Poilpret
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,7 +16,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * This file is part of the Arduino Che Cosa project.
+ * This file was originally part of the Arduino Che Cosa project,
+ * it has been adapted and refactored to FastArduino library.
  */
 
 #ifndef NRF24L01_HH
