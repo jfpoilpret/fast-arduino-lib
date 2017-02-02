@@ -38,7 +38,6 @@
       <itemPath>cores/fastarduino/main.cpp</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.hh</itemPath>
-      <itemPath>cores/fastarduino/ring_array.hh</itemPath>
       <itemPath>cores/fastarduino/scheduler.hh</itemPath>
       <itemPath>cores/fastarduino/softuart.cpp</itemPath>
       <itemPath>cores/fastarduino/softuart.hh</itemPath>
@@ -212,8 +211,6 @@
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/softuart.cpp" ex="false" tool="1" flavor2="0">
@@ -370,8 +367,6 @@
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
@@ -530,8 +525,6 @@
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/softuart.cpp" ex="false" tool="1" flavor2="0">
@@ -689,8 +682,6 @@
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/softuart.cpp" ex="false" tool="1" flavor2="0">
@@ -847,8 +838,6 @@
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.hh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/ring_array.hh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.hh" ex="false" tool="3" flavor2="0">
       </item>
