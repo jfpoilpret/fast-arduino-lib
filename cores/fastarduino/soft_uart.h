@@ -15,13 +15,13 @@
 #ifndef SOFTUART_HH
 #define	SOFTUART_HH
 
-#include "utilities.hh"
-#include "uartcommons.hh"
-#include "streams.hh"
-#include "Board.hh"
-#include "FastIO.hh"
-#include "PCI.hh"
-#include "INT.hh"
+#include "utilities.h"
+#include "uart_commons.h"
+#include "streams.h"
+#include "board.h"
+#include "fast_io.h"
+#include "pci.h"
+#include "int.h"
 
 #define REGISTER_UART_PCI_ISR(RX, PCI_NUM) \
 REGISTER_PCI_ISR_METHOD(PCI_NUM, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)

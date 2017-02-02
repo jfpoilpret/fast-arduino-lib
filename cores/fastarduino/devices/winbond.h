@@ -16,7 +16,7 @@
 #define WINBOND_HH
 
 #include <util/delay.h>
-#include "../SPI.hh"
+#include "../spi.h"
 
 /*
  *                 W25Q80BV

@@ -17,7 +17,7 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <fastarduino/FastIO.hh>
+#include <fastarduino/fast_io.h>
 
 static FastPort<Board::Port::PORT_B> PortB;
 

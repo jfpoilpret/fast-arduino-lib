@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #include <ctype.h>
-#include "streams.hh"
+#include "streams.h"
 
 char get(InputBuffer& in)
 {

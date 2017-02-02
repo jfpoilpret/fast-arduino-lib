@@ -29,8 +29,8 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/RTT.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/realtime_timer.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 // Define vectors we need in the example

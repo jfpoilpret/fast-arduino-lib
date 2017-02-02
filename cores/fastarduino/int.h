@@ -17,8 +17,8 @@
 
 #include <avr/interrupt.h>
 
-#include "utilities.hh"
-#include "Board_traits.hh"
+#include "utilities.h"
+#include "board_traits.h"
 
 // Principles:
 // One INT<> instance for each INT vector

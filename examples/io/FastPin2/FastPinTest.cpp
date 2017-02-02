@@ -28,7 +28,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/FastIO.hh>
+#include <fastarduino/fast_io.h>
 
 int main()
 {

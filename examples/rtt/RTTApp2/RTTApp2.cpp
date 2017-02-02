@@ -31,9 +31,9 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/power.hh>
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/RTT.hh>
+#include <fastarduino/power.h>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/realtime_timer.h>
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)

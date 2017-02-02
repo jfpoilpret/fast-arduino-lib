@@ -15,7 +15,7 @@
 #ifndef BUTTONS_HH
 #define BUTTONS_HH
 
-#include <fastarduino/FastIO.hh>
+#include <fastarduino/fast_io.h>
 
 template<Board::Port PORT, uint8_t MASK, uint8_t DEBOUNCE_COUNT>
 class Buttons

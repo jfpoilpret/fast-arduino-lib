@@ -29,11 +29,11 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/Events.hh>
-#include <fastarduino/watchdog.hh>
-#include <fastarduino/scheduler.hh>
-#include <fastarduino/power.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/events.h>
+#include <fastarduino/watchdog.h>
+#include <fastarduino/scheduler.h>
+#include <fastarduino/power.h>
 
 using namespace Events;
 

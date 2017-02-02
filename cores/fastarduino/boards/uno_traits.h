@@ -16,7 +16,7 @@
 #define BOARDS_UNO_TRAITS_HH
 
 #include <avr/io.h>
-#include "Uno.hh"
+#include "uno.h"
 
 namespace Board
 {

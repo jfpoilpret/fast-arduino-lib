@@ -30,22 +30,22 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/RTT.hh>
+#include <fastarduino/realtime_timer.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 USE_UATX0()
 #elif defined (ARDUINO_MEGA)
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 USE_UATX0()
 #elif defined (BREADBOARD_ATTINYX4)
-#include <fastarduino/softuart.hh>
+#include <fastarduino/soft_uart.h>
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example

@@ -16,7 +16,7 @@
 #define BOARDS_ATTINYX4_TRAITS_HH
 
 #include <avr/io.h>
-#include "ATtinyX4.hh"
+#include "attiny_x4.h"
 
 namespace Board
 {

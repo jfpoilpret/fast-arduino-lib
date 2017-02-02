@@ -15,8 +15,8 @@
 #ifndef ANALOGINPUT_HH
 #define ANALOGINPUT_HH
 
-#include "Board_traits.hh"
-#include "time.hh"
+#include "board_traits.h"
+#include "time.h"
 
 //TODO LATER: add class (or namespace?) with general methods enable/disable ADC...
 //TODO Do we need an Abstract class (no template) to perform all work?

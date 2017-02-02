@@ -14,7 +14,7 @@
 
 #include <util/delay_basic.h>
 
-#include "softuart.hh"
+#include "soft_uart.h"
 
 void Soft::AbstractUATX::_begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits)
 {

@@ -16,8 +16,8 @@
 #define	EVENTS_HH
 
 #include <stddef.h>
-#include "Queue.hh"
-#include "LinkedList.hh"
+#include "queue.h"
+#include "linked_list.h"
 
 namespace Events
 {

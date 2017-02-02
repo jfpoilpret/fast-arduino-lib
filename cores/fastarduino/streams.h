@@ -18,7 +18,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Queue.hh"
+#include "queue.h"
 
 //TODO Add operator out << in; to unstack all input and push it to output (optimization possible?)
 //TODO Maybe add operator in >> out; question is when should the redirection be finished?

@@ -34,7 +34,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 
 // Define vectors we need in the example
 USE_UART0()

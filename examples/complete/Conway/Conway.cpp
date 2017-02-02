@@ -52,8 +52,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/time.hh>
-#include <fastarduino/AnalogInput.hh>
+#include <fastarduino/time.h>
+#include <fastarduino/analog_input.h>
 
 #include "Multiplexer.hh"
 #include "Button.hh"
@@ -89,7 +89,7 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
 
 // Trace is used only for Arduino UNO if needed
 #if HAS_TRACE
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 USE_UATX0();
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;

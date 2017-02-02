@@ -33,9 +33,9 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/INT.hh>
-#include <fastarduino/power.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/int.h>
+#include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D2;

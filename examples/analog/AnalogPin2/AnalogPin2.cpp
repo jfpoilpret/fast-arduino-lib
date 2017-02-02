@@ -30,9 +30,9 @@
  */
 
 #include <avr/interrupt.h>
-#include <fastarduino/time.hh>
-#include <fastarduino/AnalogInput.hh>
-#include <fastarduino/FastIO.hh>
+#include <fastarduino/time.h>
+#include <fastarduino/analog_input.h>
+#include <fastarduino/fast_io.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;

@@ -25,8 +25,8 @@
  *   - D7 (PA7) LED connected to ground through a resistor
  */
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/Timer.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/timer.h>
 
 constexpr const Board::Timer TIMER = Board::Timer::TIMER1;
 using TIMER_TYPE = Timer<TIMER>;

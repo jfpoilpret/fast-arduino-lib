@@ -16,7 +16,7 @@
 #define BOARDS_MEGA_TRAITS_HH
 
 #include <avr/io.h>
-#include "Mega.hh"
+#include "mega.h"
 
 namespace Board
 {

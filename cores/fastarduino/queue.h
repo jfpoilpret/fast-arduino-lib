@@ -15,8 +15,8 @@
 #ifndef QUEUE_HH
 #define	QUEUE_HH
 
-#include "utilities.hh"
-#include "time.hh"
+#include "utilities.h"
+#include "time.h"
 
 //TODO imprvoe code size by creating a non-template base class with all common stuff
 //TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?

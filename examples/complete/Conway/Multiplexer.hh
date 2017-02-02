@@ -15,7 +15,7 @@
 #ifndef MULTIPLEXER_HH
 #define MULTIPLEXER_HH
 
-#include <fastarduino/devices/SIPO.hh>
+#include <fastarduino/devices/sipo.h>
 
 enum class BlinkMode: uint8_t
 {

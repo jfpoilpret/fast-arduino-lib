@@ -15,8 +15,8 @@
 #ifndef SCHEDULER_HH
 #define	SCHEDULER_HH
 
-#include "Events.hh"
-#include "LinkedList.hh"
+#include "events.h"
+#include "linked_list.h"
 
 using namespace Events;
 

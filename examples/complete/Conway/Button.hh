@@ -15,7 +15,7 @@
 #ifndef BUTTON_HH
 #define BUTTON_HH
 
-#include <fastarduino/FastIO.hh>
+#include <fastarduino/fast_io.h>
 
 //TODO Possibly use same header for both classes Buttons and Button
 //TODO Some more refactoring is possible (AbstractButton<type> to use also with Buttons)

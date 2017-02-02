@@ -19,32 +19,32 @@
       <itemPath>cores/fastarduino/analog_input.h</itemPath>
       <itemPath>cores/fastarduino/board.h</itemPath>
       <itemPath>cores/fastarduino/board_traits.h</itemPath>
+      <itemPath>cores/fastarduino/empty_streams.h</itemPath>
+      <itemPath>cores/fastarduino/errors.h</itemPath>
       <itemPath>cores/fastarduino/events.cpp</itemPath>
       <itemPath>cores/fastarduino/events.h</itemPath>
       <itemPath>cores/fastarduino/external_interrupt.h</itemPath>
       <itemPath>cores/fastarduino/fast_io.h</itemPath>
       <itemPath>cores/fastarduino/int.h</itemPath>
+      <itemPath>cores/fastarduino/iocommons.h</itemPath>
       <itemPath>cores/fastarduino/linked_list.cpp</itemPath>
       <itemPath>cores/fastarduino/linked_list.h</itemPath>
-      <itemPath>cores/fastarduino/pci.h</itemPath>
-      <itemPath>cores/fastarduino/queue.h</itemPath>
-      <itemPath>cores/fastarduino/realtime_timer.h</itemPath>
-      <itemPath>cores/fastarduino/spi.cpp</itemPath>
-      <itemPath>cores/fastarduino/spi.h</itemPath>
-      <itemPath>cores/fastarduino/timer.h</itemPath>
-      <itemPath>cores/fastarduino/empty_streams.h</itemPath>
-      <itemPath>cores/fastarduino/errors.h</itemPath>
-      <itemPath>cores/fastarduino/iocommons.h</itemPath>
       <itemPath>cores/fastarduino/main.cpp</itemPath>
+      <itemPath>cores/fastarduino/pci.h</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.h</itemPath>
+      <itemPath>cores/fastarduino/queue.h</itemPath>
+      <itemPath>cores/fastarduino/realtime_timer.h</itemPath>
       <itemPath>cores/fastarduino/scheduler.h</itemPath>
       <itemPath>cores/fastarduino/soft_uart.cpp</itemPath>
       <itemPath>cores/fastarduino/soft_uart.h</itemPath>
+      <itemPath>cores/fastarduino/spi.cpp</itemPath>
+      <itemPath>cores/fastarduino/spi.h</itemPath>
       <itemPath>cores/fastarduino/streams.cpp</itemPath>
       <itemPath>cores/fastarduino/streams.h</itemPath>
       <itemPath>cores/fastarduino/time.cpp</itemPath>
       <itemPath>cores/fastarduino/time.h</itemPath>
+      <itemPath>cores/fastarduino/timer.h</itemPath>
       <itemPath>cores/fastarduino/uart.cpp</itemPath>
       <itemPath>cores/fastarduino/uart.h</itemPath>
       <itemPath>cores/fastarduino/uart_commons.h</itemPath>
@@ -90,7 +90,6 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>cores/fastarduino</Elem>
-    <Elem>cores/fastarduino</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -129,69 +128,91 @@
       </item>
       <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/external_interrupt.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/mega.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/mega_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/mega_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/uno.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/uno_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/uno_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p_internals.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/winbond.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/winbond.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/external_interrupt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/iocommons.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -200,6 +221,8 @@
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -262,69 +285,91 @@
       </item>
       <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/external_interrupt.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/mega.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/mega_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/mega_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/uno.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/uno_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/uno_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p_internals.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/winbond.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/winbond.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/external_interrupt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/iocommons.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -333,6 +378,8 @@
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -395,69 +442,91 @@
       </item>
       <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/external_interrupt.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/mega.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/mega_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/mega_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/uno.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/uno_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/uno_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p_internals.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/winbond.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/winbond.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/external_interrupt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/iocommons.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -466,6 +535,8 @@
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -528,69 +599,91 @@
       </item>
       <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/external_interrupt.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/mega.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/mega_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/mega_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/uno.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/uno_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/uno_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p_internals.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/winbond.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/winbond.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/external_interrupt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/iocommons.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -599,6 +692,8 @@
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -661,69 +756,91 @@
       </item>
       <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/external_interrupt.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/boards/attiny_x4_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/mega.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/mega_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/mega_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/uno.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/boards/uno_traits.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/boards/uno_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/nrf24l01p_internals.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/winbond.h" ex="false" tool="3" flavor2="0">
+      <item path="cores/fastarduino/devices/winbond.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/external_interrupt.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/fast_io.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/iocommons.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/linked_list.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/linked_list.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/pci.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/realtime_timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/scheduler.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/soft_uart.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/spi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/streams.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -732,6 +849,8 @@
       <item path="cores/fastarduino/time.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/time.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>

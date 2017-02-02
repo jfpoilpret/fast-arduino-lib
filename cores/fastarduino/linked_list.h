@@ -15,7 +15,7 @@
 #ifndef LINKEDLIST_HH
 #define	LINKEDLIST_HH
 
-#include "utilities.hh"
+#include "utilities.h"
 
 class LinkImpl
 {

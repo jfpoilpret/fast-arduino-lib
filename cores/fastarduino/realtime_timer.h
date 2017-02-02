@@ -16,9 +16,9 @@
 #define RTT_HH
 
 #include <avr/interrupt.h>
-#include "Timer.hh"
-#include "time.hh"
-#include "Events.hh"
+#include "timer.h"
+#include "time.h"
+#include "events.h"
 
 //TODO do we need to put everything here in a namespace?
 

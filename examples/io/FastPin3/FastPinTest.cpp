@@ -28,7 +28,7 @@
 
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include <fastarduino/FastIO.hh>
+#include <fastarduino/fast_io.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;

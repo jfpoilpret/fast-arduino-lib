@@ -47,11 +47,10 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/RTT.hh>
-#include <fastarduino/time.hh>
-#include <fastarduino/devices/NRF24L01.hh>
-#include <fastarduino/uart.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/realtime_timer.h>
+#include <fastarduino/time.h>
+#include <fastarduino/devices/nrf24l01p.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HAS_TRACE 1
@@ -88,7 +87,7 @@ REGISTER_RTT_ISR(0)
 #endif
 
 #if HAS_TRACE
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];

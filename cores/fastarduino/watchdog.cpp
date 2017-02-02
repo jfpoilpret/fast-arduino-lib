@@ -12,9 +12,9 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "time.hh"
-#include "watchdog.hh"
-#include "utilities.hh"
+#include "time.h"
+#include "watchdog.h"
+#include "utilities.h"
 
 void WatchdogSignal::begin(TimeOut timeout)
 {

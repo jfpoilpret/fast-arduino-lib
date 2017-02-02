@@ -18,7 +18,7 @@
 #include <stdint.h>
 #include <util/delay_basic.h>
 
-#include "utilities.hh"
+#include "utilities.h"
 
 namespace Time
 {

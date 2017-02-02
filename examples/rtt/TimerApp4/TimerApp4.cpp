@@ -25,9 +25,9 @@
  *   - D7 (PA7) LED connected to ground through a resistor
  */
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/Timer.hh>
-#include <fastarduino/time.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/timer.h>
+#include <fastarduino/time.h>
 
 constexpr const Board::Timer BLINK_TIMER = Board::Timer::TIMER0;
 using BLINK_TIMER_TYPE = Timer<BLINK_TIMER>;

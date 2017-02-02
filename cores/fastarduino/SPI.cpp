@@ -12,8 +12,8 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "SPI.hh"
-#include "Board_traits.hh"
+#include "spi.h"
+#include "board_traits.h"
 
 #ifdef SPDR
 // Handle SPI for ATmega

@@ -25,12 +25,12 @@
 
 #include <stddef.h>
 #include <util/delay.h>
-#include "../utilities.hh"
-#include "../errors.hh"
-#include "../time.hh"
-#include "../SPI.hh"
-#include "../INT.hh"
-#include "NRF24L01_internals.hh"
+#include "../utilities.h"
+#include "../errors.h"
+#include "../time.h"
+#include "../spi.h"
+#include "../int.h"
+#include "nrf24l01p_internals.h"
 
 /**
  * SPI device driver for Nordic Semiconductor nRF24L01+ support.

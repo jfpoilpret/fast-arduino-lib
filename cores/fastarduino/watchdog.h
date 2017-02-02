@@ -17,8 +17,8 @@
 
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
-#include "Events.hh"
-#include "Board.hh"
+#include "events.h"
+#include "board.h"
 
 //TODO Remove singleton and use standard ISR registration procedure with macro
 #define REGISTER_WATCHDOG_CLOCK_ISR_METHOD()	\

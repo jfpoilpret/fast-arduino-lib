@@ -28,11 +28,11 @@
  *   - D4 (SCK), D6 (MISO), D5 (MOSI), D7 (CS): SPI interface to WinBond
  */
 
-#include <fastarduino/devices/WinBond.hh>
 #include <util/delay.h>
+#include <fastarduino/devices/winbond.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 
 constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;

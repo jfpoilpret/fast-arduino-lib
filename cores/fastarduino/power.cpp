@@ -12,6 +12,6 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "power.hh"
+#include "power.h"
 
 Board::SleepMode Power::_default_mode = Board::SleepMode::IDLE;

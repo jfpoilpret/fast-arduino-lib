@@ -37,8 +37,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/softuart.hh>
-#include <fastarduino/utilities.hh>
+#include <fastarduino/soft_uart.h>
+#include <fastarduino/utilities.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D3;

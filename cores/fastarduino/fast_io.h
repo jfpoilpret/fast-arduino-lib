@@ -15,9 +15,9 @@
 #ifndef FASTIO_HH
 #define	FASTIO_HH
 
-#include "utilities.hh"
-#include "Board_traits.hh"
-#include <fastarduino/iocommons.hh>
+#include "utilities.h"
+#include "board_traits.h"
+#include "iocommons.h"
 
 // This class maps to a PORT pin 
 // SRAM size is 0

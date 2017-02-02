@@ -12,9 +12,9 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "time.hh"
-#include "Board.hh"
-#include "power.hh"
+#include "time.h"
+#include "board.h"
+#include "power.h"
 
 Time::DELAY_PTR Time::delay = Time::default_delay;
 Time::MILLIS_PTR Time::millis = 0;

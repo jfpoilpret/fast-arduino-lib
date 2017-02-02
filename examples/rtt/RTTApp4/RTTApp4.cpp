@@ -28,10 +28,10 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/RTT.hh>
-#include <fastarduino/Events.hh>
-#include <fastarduino/scheduler.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/realtime_timer.h>
+#include <fastarduino/events.h>
+#include <fastarduino/scheduler.h>
 
 // Define vectors we need in the example
 REGISTER_RTT_CALLBACK_ISR(0, RTTEventCallback<>, &RTTEventCallback<>::on_rtt_change)

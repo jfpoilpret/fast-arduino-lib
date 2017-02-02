@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "uart.hh"
+#include "uart.h"
 
 #if defined(UCSR0A)
 void AbstractUART::_begin(	uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits,

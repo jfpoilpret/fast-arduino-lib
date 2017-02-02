@@ -15,7 +15,7 @@
 #ifndef SIPO_HH
 #define SIPO_HH
 
-#include <fastarduino/FastIO.hh>
+#include "../fast_io.h"
 
 template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA>
 class SIPO

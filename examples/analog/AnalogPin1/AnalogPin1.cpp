@@ -28,26 +28,26 @@
  */
 
 #include <avr/interrupt.h>
-#include <fastarduino/time.hh>
-#include <fastarduino/AnalogInput.hh>
+#include <fastarduino/time.h>
+#include <fastarduino/analog_input.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 USE_UART0();
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 USE_UART0();
 #elif defined (BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
-#include <fastarduino/softuart.hh>
+#include <fastarduino/soft_uart.h>
 static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;

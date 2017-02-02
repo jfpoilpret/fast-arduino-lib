@@ -16,7 +16,7 @@
 #define	EMPTYSTREAMS_HH
 
 #include <stddef.h>
-#include "utilities.hh"
+#include "utilities.h"
 
 class EmptyOutput
 {

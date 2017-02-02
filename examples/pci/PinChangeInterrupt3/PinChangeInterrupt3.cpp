@@ -36,9 +36,9 @@
 
 #include <avr/interrupt.h>
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/PCI.hh>
-#include <fastarduino/power.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/pci.h>
+#include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D1>());

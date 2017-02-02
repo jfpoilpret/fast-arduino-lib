@@ -29,8 +29,8 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <fastarduino/FastIO.hh>
-#include <fastarduino/Events.hh>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/events.h>
 
 using namespace Events;
 

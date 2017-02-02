@@ -35,12 +35,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/cores/fastarduino/Events.o \
-	${OBJECTDIR}/cores/fastarduino/LinkedList.o \
-	${OBJECTDIR}/cores/fastarduino/SPI.o \
+	${OBJECTDIR}/cores/fastarduino/events.o \
+	${OBJECTDIR}/cores/fastarduino/linked_list.o \
 	${OBJECTDIR}/cores/fastarduino/main.o \
 	${OBJECTDIR}/cores/fastarduino/power.o \
-	${OBJECTDIR}/cores/fastarduino/softuart.o \
+	${OBJECTDIR}/cores/fastarduino/soft_uart.o \
+	${OBJECTDIR}/cores/fastarduino/spi.o \
 	${OBJECTDIR}/cores/fastarduino/streams.o \
 	${OBJECTDIR}/cores/fastarduino/time.o \
 	${OBJECTDIR}/cores/fastarduino/uart.o \
@@ -73,20 +73,15 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a: ${OBJECTFILES}
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a
 
-${OBJECTDIR}/cores/fastarduino/Events.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/Events.cpp 
+${OBJECTDIR}/cores/fastarduino/events.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/events.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/Events.o cores/fastarduino/Events.cpp
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/events.o cores/fastarduino/events.cpp
 
-${OBJECTDIR}/cores/fastarduino/LinkedList.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/LinkedList.cpp 
+${OBJECTDIR}/cores/fastarduino/linked_list.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/linked_list.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/LinkedList.o cores/fastarduino/LinkedList.cpp
-
-${OBJECTDIR}/cores/fastarduino/SPI.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/SPI.cpp 
-	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
-	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/SPI.o cores/fastarduino/SPI.cpp
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/linked_list.o cores/fastarduino/linked_list.cpp
 
 ${OBJECTDIR}/cores/fastarduino/main.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
@@ -98,10 +93,15 @@ ${OBJECTDIR}/cores/fastarduino/power.o: nbproject/Makefile-${CND_CONF}.mk cores/
 	${RM} "$@.d"
 	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/power.o cores/fastarduino/power.cpp
 
-${OBJECTDIR}/cores/fastarduino/softuart.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/softuart.cpp 
+${OBJECTDIR}/cores/fastarduino/soft_uart.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/soft_uart.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
-	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/softuart.o cores/fastarduino/softuart.cpp
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/soft_uart.o cores/fastarduino/soft_uart.cpp
+
+${OBJECTDIR}/cores/fastarduino/spi.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/spi.cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
+	${RM} "$@.d"
+	$(COMPILE.cc) -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/spi.o cores/fastarduino/spi.cpp
 
 ${OBJECTDIR}/cores/fastarduino/streams.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/streams.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino

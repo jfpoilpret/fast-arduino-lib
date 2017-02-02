@@ -18,8 +18,8 @@
 #include <avr/interrupt.h>
 #include <stddef.h>
 
-#include "utilities.hh"
-#include "Board_traits.hh"
+#include "utilities.h"
+#include "board_traits.h"
 
 //TODO do we need to put everything here in a namespace?
 
