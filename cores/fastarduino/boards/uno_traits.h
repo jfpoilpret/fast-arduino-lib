@@ -461,7 +461,6 @@ namespace Board
 	//TODO IMPROVE NEW STUFF: TimerPrescaler should be put in only one header (same for all boards)
 	// Also define two constexpr methods for both kinds of timers prescaling values list, then attach point to there here
 	// Also define default prescaler options for MS timers
-	//TODO how to prevent using forbidden Prescaler values???
 	template<>
 	struct Timer_trait<Timer::TIMER0>
 	{

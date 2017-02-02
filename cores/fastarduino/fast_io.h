@@ -17,7 +17,13 @@
 
 #include "utilities.h"
 #include "board_traits.h"
-#include "iocommons.h"
+
+enum class PinMode: uint8_t
+{
+	INPUT,
+	INPUT_PULLUP,
+	OUTPUT,
+};
 
 // This class maps to a PORT pin 
 // SRAM size is 0

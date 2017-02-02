@@ -58,7 +58,6 @@ namespace Time
 		using TYPE = ClockDelegate<CLOCK>;
 		
 	public:
-		//TODO Simplify usage by creating an external template function that would call that member function
 		static void set_clock(const CLOCK& clock, bool set_defaults = true)
 		{
 			_clock = &clock;

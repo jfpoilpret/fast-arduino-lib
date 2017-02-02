@@ -21,9 +21,6 @@
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
 
-//TODO Use traits for more settings and reduce macros used in here to the strict minimum
-//TODO Externalize traits (to Uno_traits.hh, MEGA_traits.hh ...)
-
 namespace Board
 {
 	//====

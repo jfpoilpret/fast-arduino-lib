@@ -20,7 +20,6 @@
 #include "events.h"
 #include "board.h"
 
-//TODO Remove singleton and use standard ISR registration procedure with macro
 #define REGISTER_WATCHDOG_CLOCK_ISR_METHOD()	\
 REGISTER_ISR_METHOD_(WDT_vect, Watchdog, &Watchdog::on_tick)
 
