@@ -5,6 +5,7 @@
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
         <itemPath>cores/fastarduino/boards/attiny_x4.h</itemPath>
         <itemPath>cores/fastarduino/boards/attiny_x4_traits.h</itemPath>
+        <itemPath>cores/fastarduino/boards/common_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/mega.h</itemPath>
         <itemPath>cores/fastarduino/boards/mega_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/uno.h</itemPath>
@@ -133,6 +134,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -292,6 +298,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/common_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/mega.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/mega_traits.h"
@@ -443,6 +454,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -602,6 +618,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/common_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/mega.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/mega_traits.h"
@@ -753,6 +774,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
             flavor2="0">
