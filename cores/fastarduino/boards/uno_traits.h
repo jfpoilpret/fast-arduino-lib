@@ -111,19 +111,15 @@ namespace Board
 	{
 		static constexpr const uint8_t MASK = 0;
 	};
+	template<uint8_t MASK_>
+	struct AnalogReference_trait_impl
+	{
+		static constexpr const uint8_t MASK = MASK_;
+	};
 	
-	template<> struct AnalogReference_trait<AnalogReference::AREF>
-	{
-		static constexpr const uint8_t MASK = 0;
-	};
-	template<> struct AnalogReference_trait<AnalogReference::AVCC>
-	{
-		static constexpr const uint8_t MASK = _BV(REFS0);
-	};
-	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>
-	{
-		static constexpr const uint8_t MASK = _BV(REFS1) | _BV(REFS0);
-	};
+	template<> struct AnalogReference_trait<AnalogReference::AREF>:AnalogReference_trait_impl<0> {};
+	template<> struct AnalogReference_trait<AnalogReference::AVCC>:AnalogReference_trait_impl<_BV(REFS0)> {};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>:AnalogReference_trait_impl<_BV(REFS1) | _BV(REFS0)> {};
 
 	template<typename SAMPLE_TYPE>
 	struct AnalogSampleType_trait
@@ -132,21 +128,16 @@ namespace Board
 		static constexpr const uint8_t ADLAR2 = 0;
 		static constexpr const REGISTER _ADC{};
 	};
+	template<uint8_t ADLAR1_, uint8_t ADLAR2_, REG ADC_>
+	struct AnalogSampleType_trait_impl
+	{
+		static constexpr const uint8_t ADLAR1 = ADLAR1_;
+		static constexpr const uint8_t ADLAR2 = ADLAR2_;
+		static constexpr const REGISTER _ADC = ADC_;
+	};
 	
-	template<>
-	struct AnalogSampleType_trait<uint16_t>
-	{
-		static constexpr const uint8_t ADLAR1 = 0;
-		static constexpr const uint8_t ADLAR2 = 0;
-		static constexpr const REGISTER _ADC = _SELECT_REG(ADC);
-	};
-	template<>
-	struct AnalogSampleType_trait<uint8_t>
-	{
-		static constexpr const uint8_t ADLAR1 = _BV(ADLAR);
-		static constexpr const uint8_t ADLAR2 = 0;
-		static constexpr const REGISTER _ADC = _SELECT_REG(ADCH);
-	};
+	template<> struct AnalogSampleType_trait<uint16_t>: AnalogSampleType_trait_impl<0, 0, R_(ADC)> {};
+	template<> struct AnalogSampleType_trait<uint8_t>: AnalogSampleType_trait_impl<_BV(ADLAR), 0, R_(ADCH)> {};
 
 	template<AnalogClock MAXFREQ>
 	struct AnalogClock_trait
@@ -189,20 +180,19 @@ namespace Board
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_200KHz>: AnalogClock_trait_impl<200000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_500KHz>: AnalogClock_trait_impl<500000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_1MHz>: AnalogClock_trait_impl<1000000UL> {};
-	
-	struct GlobalAnalogPin_trait
+
+	template<REG ADMUX__, REG ADCSRA__, REG ADCSRB__>
+	struct GlobalAnalogPin_trait_impl
 	{
-		static constexpr const REGISTER ADMUX_ = _SELECT_REG(ADMUX);
-		static constexpr const REGISTER ADCSRA_ = _SELECT_REG(ADCSRA);
-		static constexpr const REGISTER ADCSRB_ = _SELECT_REG(ADCSRB);
+		static constexpr const REGISTER ADMUX_ = ADMUX__;
+		static constexpr const REGISTER ADCSRA_ = ADCSRA__;
+		static constexpr const REGISTER ADCSRB_ = ADCSRB__;
 	};
+	struct GlobalAnalogPin_trait:GlobalAnalogPin_trait_impl<R_(ADMUX), R_(ADCSRA), R_(ADCSRB)> {};
 	
-	//TODO Check if and when we need DIDR0 stuff
 	template<AnalogPin APIN>
 	struct AnalogPin_trait
 	{
-//		static constexpr const REGISTER DIDR_ = _SELECT_REG(DIDR0);
-//		static constexpr const uint8_t DIDR_MASK = 0;
 		static constexpr const uint8_t MUX_MASK1 = 0;
 		static constexpr const uint8_t MUX_MASK2 = 0;
 		static constexpr const bool IS_BANDGAP = false;
@@ -243,29 +233,22 @@ namespace Board
 		static constexpr const uint8_t EIFR_MASK = 0x00;
 	};
 
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>
+	template<uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_, REG EIFR__, uint8_t EIFR_MASK_>
+	struct ExternalInterruptPin_trait_impl
 	{
-		static constexpr const uint8_t INT = 0;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC00) | _BV(ISC01);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT0);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF0);
+		static constexpr const uint8_t INT = INT_;
+		static constexpr const REGISTER EICR_ = EICR__;
+		static constexpr const uint8_t EICR_MASK = EICR_MASK_;
+		static constexpr const REGISTER EIMSK_ = EIMSK__;
+		static constexpr const uint8_t EIMSK_MASK = EIMSK_MASK_;
+		static constexpr const REGISTER EIFR_ = EIFR__;
+		static constexpr const uint8_t EIFR_MASK = EIFR_MASK_;
 	};
 
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>
-	{
-		static constexpr const uint8_t INT = 1;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC10) | _BV(ISC11);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT1);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF1);
-	};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>: 
+		ExternalInterruptPin_trait_impl<0, R_(EICRA), _BV(ISC00) | _BV(ISC01), R_(EIMSK), _BV(INT0), R_(EIFR), _BV(INTF0)> {};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>: 
+		ExternalInterruptPin_trait_impl<1, R_(EICRA), _BV(ISC10) | _BV(ISC11), R_(EIMSK), _BV(INT1), R_(EIFR), _BV(INTF1)> {};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
@@ -313,35 +296,42 @@ namespace Board
 		static constexpr const REGISTER UDR{};
 		static constexpr const REGISTER UBRR{};
 	};
-	
-	template<>
-	struct USART_trait<USART::USART0>
+	template<REG UCSRA_, REG UCSRB_, REG UCSRC_, REG UDR_, REG UBRR_>
+	struct USART_trait_impl
 	{
-		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR0A);
-		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR0B);
-		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR0C);
-		static constexpr const REGISTER UDR = _SELECT_REG(UDR0);
-		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR0);
+		static constexpr const REGISTER UCSRA = UCSRA_;
+		static constexpr const REGISTER UCSRB = UCSRB_;
+		static constexpr const REGISTER UCSRC = UCSRC_;
+		static constexpr const REGISTER UDR = UDR_;
+		static constexpr const REGISTER UBRR = UBRR_;
 	};
+	
+	template<> struct USART_trait<USART::USART0>: USART_trait_impl<R_(UCSR0A), R_(UCSR0B), R_(UCSR0C), R_(UDR0), R_(UBRR0)> {};
 	
 	//=====
 	// SPI
 	//=====
 
-	struct SPI_trait
+	template<Port PORT_, uint8_t SS_, uint8_t MOSI_, uint8_t MISO_, uint8_t SCK_>
+	struct SPI_trait_impl
 	{
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRB);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTB);
+		//TODO ultimately replace 3 lines with just reference to Port_trait
+		using PORT_TRAIT = Port_trait<PORT_>;
+		static constexpr const REGISTER DDR = PORT_TRAIT::DDR;
+		static constexpr const REGISTER PORT = PORT_TRAIT::PORT;
+		
 		static constexpr const uint8_t SS = PB2;
 		static constexpr const uint8_t MOSI = PB3;
 		static constexpr const uint8_t MISO = PB4;
 		static constexpr const uint8_t SCK = PB5;
 	};
+	struct SPI_trait: SPI_trait_impl<Port::PORT_B, PB2, PB3, PB4, PB5> {};
 
 	//========
 	// Timers
 	//========
-	
+
+	//TODO externalize BEGIN
 	enum TimerPrescalers: uint8_t
 	{
 		PRESCALERS_1_8_64_256_1024,
@@ -405,6 +395,12 @@ namespace Board
 		};
 	};
 	
+	template<typename TYPE_> struct Timer_type_trait
+	{
+		static constexpr const uint32_t MAX_COUNTER = 1UL << (8 * sizeof(TYPE_));
+	};
+	//TODO externalize END
+	
 	template<Timer TIMER>
 	struct Timer_trait
 	{
@@ -429,61 +425,50 @@ namespace Board
 			return 0;
 		}
 	};
+
+	template<typename TYPE_, TimerPrescalers PRESCALERS_, uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, REG TCCRA_, REG TCCRB_, REG TCNT_, REG OCRA_, REG OCRB_, REG TIMSK_, REG TIFR_>
+	struct Timer_trait_impl
+	{
+		using TYPE = TYPE_;
+		static constexpr const uint32_t MAX_COUNTER = Timer_type_trait<TYPE>::MAX_COUNTER;
+
+		static constexpr const TimerPrescalers PRESCALERS = PRESCALERS_;
+		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
+		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
+		
+		static constexpr const uint8_t CTC_TCCRA  = CTC_TCCRA_;
+		static constexpr const uint8_t CTC_TCCRB  = CTC_TCCRB_;
+		static constexpr const REGISTER TCCRA = TCCRA_;
+		static constexpr const REGISTER TCCRB = TCCRB_;
+		static constexpr const REGISTER TCNT = TCNT_;
+		static constexpr const REGISTER OCRA = OCRA_;
+		static constexpr const REGISTER OCRB = OCRB_;
+		static constexpr const REGISTER TIMSK = TIMSK_;
+		static constexpr const REGISTER TIFR = TIFR_;
+	};
 	
 	//TODO IMPROVE NEW STUFF: TimerPrescaler should be put in only one header (same for all boards)
 	// Also define two constexpr methods for both kinds of timers prescaling values list, then attach point to there here
 	// Also define default prescaler options for MS timers
-	template<>
-	struct Timer_trait<Timer::TIMER0>
+	template<> struct Timer_trait<Timer::TIMER0>: 
+		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							_BV(WGM01), 0, R_(TCCR0A), R_(TCCR0B), R_(TCNT0), 
+							R_(OCR0A), R_(OCR0B), R_(TIMSK0), R_(TIFR0)>
 	{
-		using TYPE = uint8_t;
-		static constexpr const uint32_t MAX_COUNTER = 256;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-		
-		static constexpr const uint8_t CTC_TCCRA  = _BV(WGM01);
-		static constexpr const uint8_t CTC_TCCRB  = 0;
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR0A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
-		
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS00) :
 					p == TIMER_PRESCALER::DIV_8 ? _BV(CS01) :
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS00) | _BV(CS01) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
-					p == TIMER_PRESCALER::DIV_1024 ? _BV(CS02) | _BV(CS00) :
-					0);
+					_BV(CS02) | _BV(CS00));
 		}
 	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER2>
+	template<> struct Timer_trait<Timer::TIMER2>: 
+		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024, 
+							_BV(WGM21), 0, R_(TCCR2A), R_(TCCR2B), R_(TCNT2), 
+							R_(OCR2A), R_(OCR2B), R_(TIMSK2), R_(TIFR2)>
 	{
-		using TYPE = uint8_t;
-		static constexpr const uint32_t MAX_COUNTER = 256;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-		
-		static constexpr const uint8_t CTC_TCCRA  = _BV(WGM21);
-		static constexpr const uint8_t CTC_TCCRB  = 0;
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR2A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR2B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT2);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR2A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR2B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK2);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR2);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS20) :
@@ -496,26 +481,11 @@ namespace Board
 		}
 	};
 	
-	template<>
-	struct Timer_trait<Timer::TIMER1>
+	template<> struct Timer_trait<Timer::TIMER1>: 
+		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							0, _BV(WGM12), R_(TCCR1A), R_(TCCR1B), R_(TCNT1), 
+							R_(OCR1A), R_(OCR1B), R_(TIMSK1), R_(TIFR1)>
 	{
-		using TYPE = uint16_t;
-		static constexpr const uint32_t MAX_COUNTER = 65536;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-
-		static constexpr const uint8_t CTC_TCCRA  = 0;
-		static constexpr const uint8_t CTC_TCCRB  = _BV(WGM12);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR1A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS10) :
