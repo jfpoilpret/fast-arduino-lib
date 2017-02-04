@@ -15,19 +15,6 @@
 #ifndef BOARD_TRAITS_HH
 #define BOARD_TRAITS_HH
 
-#include <avr/sfr_defs.h>
-#include <avr/io.h>
-
-#include "utilities.h"
-
-//TODO include common board traits utilities used in each XXX_traits header
-// - template traits parents
-
-//TODO move to common traits_utils header
-// This internal macro is used by individual boards headers
-#define _SELECT_REG(REG) REGISTER((uint8_t)(uint16_t)&REG)
-
-// Useful class to handler register defined by constant address; those can be used in constexpr variables
 // Arduino Boards
 #if defined(ARDUINO_MEGA)
 #include "boards/mega_traits.h"
