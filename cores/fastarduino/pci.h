@@ -46,7 +46,8 @@ template<Board::Port PORT>
 class PCISignal
 {
 public:
-	using TRAIT = Board::Port_trait<PORT>;
+	using PORT_TRAIT = Board::Port_trait<PORT>;
+	using TRAIT = Board::PCI_trait<PORT_TRAIT::PCINT>;
 	
 	inline void enable()
 	{

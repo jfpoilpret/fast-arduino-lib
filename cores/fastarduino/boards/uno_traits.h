@@ -18,8 +18,15 @@
 #include <avr/io.h>
 #include "uno.h"
 
+//TODO include common board traits utilities used in each XXX_traits header
+// - template traits parents
+
+#define R_(REG) ((uint16_t)&REG)
+
 namespace Board
 {
+	using REG = uint16_t;
+
 	//====
 	// IO
 	//====
@@ -30,66 +37,22 @@ namespace Board
 		static constexpr const REGISTER DDR{};
 		static constexpr const REGISTER PORT{};
 		static constexpr const uint8_t DPIN_MASK = 0x00;
-		
 		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
 	};
 	
-	template<>
-	struct Port_trait<Port::PORT_B>
+	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_>
+	struct Port_trait_impl
 	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINB);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRB);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTB);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-		
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x3F;
-		static constexpr const uint8_t PCICR_MASK = _BV(PCIE0); 
-		static constexpr const uint8_t PCIFR_MASK = _BV(PCIF0);
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_ = _SELECT_REG(PCMSK0);
+		static constexpr const REGISTER PIN = PIN_;
+		static constexpr const REGISTER DDR = DDR_;
+		static constexpr const REGISTER PORT = PORT_;
+		static constexpr const uint8_t DPIN_MASK = DPIN_MASK_;
+		static constexpr const uint8_t PCINT = PCINT_;
 	};
-	
-	template<>
-	struct Port_trait<Port::PORT_C>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINC);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRC);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTC);
-		static constexpr const uint8_t DPIN_MASK = 0x7F;
 
-		static constexpr const uint8_t PCINT = 1;
-		static constexpr const uint8_t PCI_MASK = 0x3F;
-		static constexpr const uint8_t PCICR_MASK = _BV(PCIE1); 
-		static constexpr const uint8_t PCIFR_MASK = _BV(PCIF1);
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_ = _SELECT_REG(PCMSK1);
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_D>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PIND);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRD);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTD);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-
-		static constexpr const uint8_t PCINT = 2;
-		static constexpr const uint8_t PCI_MASK = 0xFF;
-		static constexpr const uint8_t PCICR_MASK = _BV(PCIE2); 
-		static constexpr const uint8_t PCIFR_MASK = _BV(PCIF2);
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_ = _SELECT_REG(PCMSK2);
-	};
+	template<> struct Port_trait<Port::PORT_B>: Port_trait_impl<R_(PINB), R_(DDRB), R_(PORTB), 0xFF, 0> {};
+	template<> struct Port_trait<Port::PORT_C>: Port_trait_impl<R_(PINC), R_(DDRC), R_(PORTC), 0x7F, 1> {};
+	template<> struct Port_trait<Port::PORT_D>: Port_trait_impl<R_(PIND), R_(DDRD), R_(PORTD), 0xFF, 2> {};
 	
 	/**
 	 * Digital pin symbols
@@ -311,22 +274,31 @@ namespace Board
 	struct PCI_trait
 	{
 		static constexpr const Port PORT = Port::NONE;
+		static constexpr const uint8_t PCI_MASK = 0x00;
+		static constexpr const uint8_t PCICR_MASK = 0x00; 
+		static constexpr const uint8_t PCIFR_MASK = 0x00;
+		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
+		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
+		static constexpr const REGISTER PCMSK_{};
 	};
-	template<>
-	struct PCI_trait<0>
+	template<Port PORT_, uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__, REG PCMSK__>
+	struct PCI_trait_impl
 	{
-		static constexpr const Port PORT = Port::PORT_B;
+		static constexpr const Port PORT = PORT_;
+		static constexpr const uint8_t PCI_MASK = PCI_MASK_;
+		static constexpr const uint8_t PCICR_MASK = PCICR_MASK_; 
+		static constexpr const uint8_t PCIFR_MASK = PCIFR_MASK_;
+		static constexpr const REGISTER PCICR_ = PCICR__;
+		static constexpr const REGISTER PCIFR_ = PCIFR__;
+		static constexpr const REGISTER PCMSK_ = PCMSK__;
 	};
-	template<>
-	struct PCI_trait<1>
-	{
-		static constexpr const Port PORT = Port::PORT_C;
-	};
-	template<>
-	struct PCI_trait<2>
-	{
-		static constexpr const Port PORT = Port::PORT_D;
-	};
+
+	template<> struct PCI_trait<0>: 
+		PCI_trait_impl<Port::PORT_B, 0x3F, _BV(PCIE0), _BV(PCIF0), R_(PCICR), R_(PCIFR), R_(PCMSK0)> {};
+	template<> struct PCI_trait<1>: 
+		PCI_trait_impl<Port::PORT_C, 0x3F, _BV(PCIE1), _BV(PCIF1), R_(PCICR), R_(PCIFR), R_(PCMSK1)> {};
+	template<> struct PCI_trait<2>: 
+		PCI_trait_impl<Port::PORT_D, 0xFF, _BV(PCIE2), _BV(PCIF2), R_(PCICR), R_(PCIFR), R_(PCMSK2)> {};
 
 	//=======
 	// USART

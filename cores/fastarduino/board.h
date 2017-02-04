@@ -21,7 +21,7 @@
 #include "utilities.h"
 
 // This internal macro is used by individual boards headers
-#define _SELECT_REG(REG) REGISTER((uint8_t)(uint16_t)&REG)
+//#define _SELECT_REG(REG) REGISTER((uint8_t)(uint16_t)&REG)
 
 // Useful class to handler register defined by constant address; those can be used in constexpr variables
 // Arduino Boards
