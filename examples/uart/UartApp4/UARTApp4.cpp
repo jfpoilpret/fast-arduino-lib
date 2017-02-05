@@ -46,11 +46,11 @@ constexpr const Board::DigitalPin TX = Board::DigitalPin::D3;
 constexpr const Board::DigitalPin RX = Board::DigitalPin::D2;
 // Define vectors we need in the example
 REGISTER_UART_INT_ISR(RX, 0)
-//#elif defined (ARDUINO_MEGA)
-//constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
-//constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
-//// Define vectors we need in the example
-//REGISTER_UART_PCI_ISR(RX, 0)
+#elif defined (ARDUINO_MEGA)
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
+constexpr const Board::DigitalPin RX = Board::DigitalPin::D21;
+// Define vectors we need in the example
+REGISTER_UART_INT_ISR(RX, 0)
 //#elif defined (BREADBOARD_ATTINYX4)
 //constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 //constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
