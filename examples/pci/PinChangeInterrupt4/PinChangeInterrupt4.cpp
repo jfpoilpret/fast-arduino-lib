@@ -31,8 +31,17 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#define PCINT_ON	1
+#define PCINT_OFF	0
 constexpr const Board::DigitalPin SWITCH_ON = Board::DigitalPin::D14;
 constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D8;
+#elif defined(ARDUINO_MEGA)
+#define PCINT_ON	0
+#define PCINT_OFF	2
+constexpr const Board::DigitalPin SWITCH_ON = Board::DigitalPin::D53;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D62;
+#elif defined(BREADBOARD_ATTINYX4)
+#error "Current target is not yet supported!"
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -65,10 +74,8 @@ private:
 };
 
 // Define vectors we need in the example
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-REGISTER_PCI_ISR_METHOD(1, SwitchHandler, &SwitchHandler::on_switch_on_change)
-REGISTER_PCI_ISR_METHOD(0, SwitchHandler, &SwitchHandler::on_switch_off_change)
-#endif
+REGISTER_PCI_ISR_METHOD(PCINT_ON, SwitchHandler, &SwitchHandler::on_switch_on_change)
+REGISTER_PCI_ISR_METHOD(PCINT_OFF, SwitchHandler, &SwitchHandler::on_switch_off_change)
 
 int main() __attribute__((OS_main));
 int main()
