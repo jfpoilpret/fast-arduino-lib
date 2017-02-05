@@ -64,7 +64,7 @@ int main()
 	// Loop of samplings
 	while (true)
 	{
-		ANALOG_INPUT::TYPE value = pot.sample() >> 1;
+		ANALOG_INPUT::TYPE value = pot.sample();
 		leds.set_PORT(value);
 		Time::delay_ms(1000);
 	}
