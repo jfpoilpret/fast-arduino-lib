@@ -17,237 +17,31 @@
 
 #include <avr/io.h>
 #include "mega.h"
+#include "common_traits.h"
 
 namespace Board
 {
 	//====
 	// IO
 	//====
-	template<Port P>
-	struct Port_trait
-	{
-		static constexpr const REGISTER PIN{};
-		static constexpr const REGISTER DDR{};
-		static constexpr const REGISTER PORT{};
-		static constexpr const uint8_t DPIN_MASK = 0x00;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_A>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINA);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRA);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTA);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
-//	PCI0 = 0,			// PB0-7
-	template<>
-	struct Port_trait<Port::PORT_B>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINB);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRB);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTB);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0xFF;
-		static constexpr const uint8_t PCICR_MASK = _BV(PCIE0); 
-		static constexpr const uint8_t PCIFR_MASK = _BV(PCIF0);
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_ = _SELECT_REG(PCMSK0);
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_C>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINC);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRC);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTC);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_D>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PIND);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRD);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTD);
-		static constexpr const uint8_t DPIN_MASK = 0x8F;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_E>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINE);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRE);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTE);
-		static constexpr const uint8_t DPIN_MASK = 0x3B;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_F>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINF);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRF);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTF);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_G>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PING);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRG);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTG);
-		static constexpr const uint8_t DPIN_MASK = 0x27;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_H>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINH);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRH);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTH);
-		static constexpr const uint8_t DPIN_MASK = 0x7B;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
-	
+	template<> struct Port_trait<Port::PORT_A>: Port_trait_impl<R_(PINA), R_(DDRA), R_(PORTA), 0xFF, 0> {};
+	//	PCI0 = 0,			// PB0-7
+	template<> struct Port_trait<Port::PORT_B>: Port_trait_impl<R_(PINB), R_(DDRB), R_(PORTB), 0xFF, 0> {};
+	template<> struct Port_trait<Port::PORT_C>: Port_trait_impl<R_(PINC), R_(DDRC), R_(PORTC), 0xFF, 0> {};
+	template<> struct Port_trait<Port::PORT_D>: Port_trait_impl<R_(PIND), R_(DDRD), R_(PORTD), 0x8F, 0> {};
+	template<> struct Port_trait<Port::PORT_E>: Port_trait_impl<R_(PINE), R_(DDRE), R_(PORTE), 0x3B, 0> {};
+	template<> struct Port_trait<Port::PORT_F>: Port_trait_impl<R_(PINF), R_(DDRF), R_(PORTF), 0xFF, 0> {};
+	template<> struct Port_trait<Port::PORT_G>: Port_trait_impl<R_(PING), R_(DDRG), R_(PORTG), 0x27, 0> {};
+	template<> struct Port_trait<Port::PORT_H>: Port_trait_impl<R_(PINH), R_(DDRH), R_(PORTH), 0x7B, 0> {};
 //	PCI1 = 1,			// PJ0-1
-	template<>
-	struct Port_trait<Port::PORT_J>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINJ);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRJ);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTJ);
-		static constexpr const uint8_t DPIN_MASK = 0x03;
-
-		static constexpr const uint8_t PCINT = 1;
-		static constexpr const uint8_t PCI_MASK = 0x03;
-		static constexpr const uint8_t PCICR_MASK = _BV(PCIE1); 
-		static constexpr const uint8_t PCIFR_MASK = _BV(PCIF1);
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_ = _SELECT_REG(PCMSK1);
-	};
-	
+	template<> struct Port_trait<Port::PORT_J>: Port_trait_impl<R_(PINJ), R_(DDRJ), R_(PORTJ), 0x03, 1> {};
 //	PCI2 = 2			// PK0-7
-	template<>
-	struct Port_trait<Port::PORT_K>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINK);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRK);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTK);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-
-		static constexpr const uint8_t PCINT = 2;
-		static constexpr const uint8_t PCI_MASK = 0xFF;
-		static constexpr const uint8_t PCICR_MASK = _BV(PCIE2); 
-		static constexpr const uint8_t PCIFR_MASK = _BV(PCIF2);
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_ = _SELECT_REG(PCMSK2);
-	};
-	
-	template<>
-	struct Port_trait<Port::PORT_L>
-	{
-		static constexpr const REGISTER PIN = _SELECT_REG(PINL);
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRL);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTL);
-		static constexpr const uint8_t DPIN_MASK = 0xFF;
-
-		static constexpr const uint8_t PCINT = 0;
-		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
-		static constexpr const uint8_t PCIFR_MASK = 0x00;
-		static constexpr const REGISTER PCICR_ = _SELECT_REG(PCICR);
-		static constexpr const REGISTER PCIFR_ = _SELECT_REG(PCIFR);
-		static constexpr const REGISTER PCMSK_{};
-	};
+	template<> struct Port_trait<Port::PORT_K>: Port_trait_impl<R_(PINK), R_(DDRK), R_(PORTK), 0xFF, 2> {};
+	template<> struct Port_trait<Port::PORT_L>: Port_trait_impl<R_(PINL), R_(DDRL), R_(PORTL), 0xFF, 0> {};
 	
 	/**
 	 * Digital pin symbols
 	 */
-	template<DigitalPin DPIN>
-	struct DigitalPin_trait
-	{
-		static constexpr const Port PORT = Port::NONE;
-		static constexpr const uint8_t BIT = 0;
-		static constexpr const bool IS_INT = false;
-	};
-	template<Port P, uint8_t B, bool INT = false>
-	struct DigitalPin_trait_impl
-	{
-		static constexpr const Port PORT = P;
-		static constexpr const uint8_t BIT = B;
-		static constexpr const bool IS_INT = INT;
-	};
-
 	template<> struct DigitalPin_trait<DigitalPin::NONE>: public DigitalPin_trait_impl<Port::NONE, 0> {};
 	
 	template<> struct DigitalPin_trait<DigitalPin::D22>: public DigitalPin_trait_impl<Port::PORT_A, 0> {};
@@ -331,127 +125,24 @@ namespace Board
 	template<> struct DigitalPin_trait<DigitalPin::D43>: public DigitalPin_trait_impl<Port::PORT_L, 6> {};
 	template<> struct DigitalPin_trait<DigitalPin::D42>: public DigitalPin_trait_impl<Port::PORT_L, 7> {};
 
-	template<DigitalPin PIN>
-	constexpr uint8_t BIT()
-	{
-		return DigitalPin_trait<PIN>::BIT;
-	}
-
 	//==============
 	// Analog Input
 	//==============
-	template<AnalogReference AREF>
-	struct AnalogReference_trait
-	{
-		static constexpr const uint8_t MASK = 0;
-	};
+	template<> struct AnalogReference_trait<AnalogReference::AREF>:AnalogReference_trait_impl<0> {};
+	template<> struct AnalogReference_trait<AnalogReference::AVCC>:AnalogReference_trait_impl<_BV(REFS0)> {};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>:AnalogReference_trait_impl<_BV(REFS1)> {};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_2_56V>:AnalogReference_trait_impl<_BV(REFS1) | _BV(REFS0)> {};
 	
-	template<> struct AnalogReference_trait<AnalogReference::AREF>
-	{
-		static constexpr const uint8_t MASK = 0;
-	};
-	template<> struct AnalogReference_trait<AnalogReference::AVCC>
-	{
-		static constexpr const uint8_t MASK = _BV(REFS0);
-	};
-	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>
-	{
-		static constexpr const uint8_t MASK = _BV(REFS1);
-	};
-	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_2_56V>
-	{
-		static constexpr const uint8_t MASK = _BV(REFS1) | _BV(REFS0);
-	};
+	template<> struct AnalogSampleType_trait<uint16_t>: AnalogSampleType_trait_impl<0, 0, R_(ADC)> {};
+	template<> struct AnalogSampleType_trait<uint8_t>: AnalogSampleType_trait_impl<_BV(ADLAR), 0, R_(ADCH)> {};
 
-	template<typename SAMPLE_TYPE>
-	struct AnalogSampleType_trait
-	{
-		static constexpr const uint8_t ADLAR1 = 0;
-		static constexpr const uint8_t ADLAR2 = 0;
-		static constexpr const REGISTER _ADC{};
-	};
-	
-	template<>
-	struct AnalogSampleType_trait<uint16_t>
-	{
-		static constexpr const uint8_t ADLAR1 = 0;
-		static constexpr const uint8_t ADLAR2 = 0;
-		static constexpr const REGISTER _ADC = _SELECT_REG(ADC);
-	};
-	template<>
-	struct AnalogSampleType_trait<uint8_t>
-	{
-		static constexpr const uint8_t ADLAR1 = _BV(ADLAR);
-		static constexpr const uint8_t ADLAR2 = 0;
-		static constexpr const REGISTER _ADC = _SELECT_REG(ADCH);
-	};
-
-	template<AnalogClock MAXFREQ>
-	struct AnalogClock_trait
-	{
-		static constexpr const uint8_t PRESCALER = 0;
-		static constexpr const uint8_t PRESCALER_MASK = 0;
-		
-	};
-
-	template<uint32_t MAXFREQ>
-	struct AnalogClock_trait_impl
-	{
-		static constexpr uint8_t round_prescaler(uint16_t rate)
-		{
-			return (rate > 64 ? 128 :
-					rate > 32 ? 64 :
-					rate > 16 ? 32 :
-					rate > 8 ? 16 :
-					rate > 4 ? 8 :
-					rate > 2 ? 4 :
-					2);
-		}
-		static constexpr uint8_t prescaler_mask(uint8_t prescaler)
-		{
-			return (prescaler == 128 ? _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0) :
-					prescaler == 64 ? _BV(ADPS2) | _BV(ADPS1) :
-					prescaler == 32 ? _BV(ADPS2) | _BV(ADPS0) :
-					prescaler == 16 ? _BV(ADPS2) :
-					prescaler == 8 ? _BV(ADPS1) | _BV(ADPS0) :
-					prescaler == 4 ? _BV(ADPS1) :
-					_BV(ADPS0));
-		}
-
-		static constexpr const uint8_t PRESCALER = round_prescaler(uint16_t(F_CPU / MAXFREQ));
-		static constexpr const uint8_t PRESCALER_MASK = prescaler_mask(PRESCALER);
-	};
-	
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_50KHz>: AnalogClock_trait_impl<50000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_100KHz>: AnalogClock_trait_impl<100000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_200KHz>: AnalogClock_trait_impl<200000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_500KHz>: AnalogClock_trait_impl<500000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_1MHz>: AnalogClock_trait_impl<1000000UL> {};
-	
-	struct GlobalAnalogPin_trait
-	{
-		static constexpr const REGISTER ADMUX_ = _SELECT_REG(ADMUX);
-		static constexpr const REGISTER ADCSRA_ = _SELECT_REG(ADCSRA);
-		static constexpr const REGISTER ADCSRB_ = _SELECT_REG(ADCSRB);
-	};
-	
-	template<AnalogPin APIN>
-	struct AnalogPin_trait
-	{
-		static constexpr const uint8_t MUX_MASK1 = 0;
-		static constexpr const uint8_t MUX_MASK2 = 0;
-		static constexpr const bool IS_BANDGAP = false;
-		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFF;
-	};
-	
-	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFF>
-	struct AnalogPin_trait_impl
-	{
-		static constexpr const uint8_t MUX_MASK1 = MUXM1;
-		static constexpr const uint8_t MUX_MASK2 = MUXM2;
-		static constexpr const bool IS_BANDGAP = (VOLTAGE != 0xFFFF);
-		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
-	};
+
+	struct GlobalAnalogPin_trait:GlobalAnalogPin_trait_impl<R_(ADMUX), R_(ADCSRA), R_(ADCSRB)> {};
 	
 	template<> struct AnalogPin_trait<AnalogPin::A0>: AnalogPin_trait_impl<0> {};
 	template<> struct AnalogPin_trait<AnalogPin::A1>: AnalogPin_trait_impl<_BV(MUX0)> {};
@@ -474,358 +165,80 @@ namespace Board
 	//===============
 	// IO interrupts
 	//===============
-	
-	template<DigitalPin DPIN>
-	struct ExternalInterruptPin_trait
-	{
-		static constexpr const uint8_t INT = 0;
-		static constexpr const REGISTER EICR_{};
-		static constexpr const uint8_t EICR_MASK = 0x00;
-		static constexpr const REGISTER EIMSK_{};
-		static constexpr const uint8_t EIMSK_MASK = 0x00;
-		static constexpr const REGISTER EIFR_{};
-		static constexpr const uint8_t EIFR_MASK = 0x00;
-	};
-
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>
-	{
-		static constexpr const uint8_t INT = 0;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC00) | _BV(ISC01);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT0);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF0);
-	};
-
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>
-	{
-		static constexpr const uint8_t INT = 1;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC10) | _BV(ISC11);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT1);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF1);
-	};
-
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT2>
-	{
-		static constexpr const uint8_t INT = 2;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC20) | _BV(ISC21);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT2);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF2);
-	};
-
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT3>
-	{
-		static constexpr const uint8_t INT = 3;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRA);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC30) | _BV(ISC31);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT3);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF3);
-	};
-
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT4>
-	{
-		static constexpr const uint8_t INT = 4;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRB);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC40) | _BV(ISC41);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT4);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF4);
-	};
-
-	template<>
-	struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT5>
-	{
-		static constexpr const uint8_t INT = 5;
-		static constexpr const REGISTER EICR_ = _SELECT_REG(EICRB);
-		static constexpr const uint8_t EICR_MASK = _BV(ISC50) | _BV(ISC51);
-		static constexpr const REGISTER EIMSK_ = _SELECT_REG(EIMSK);
-		static constexpr const uint8_t EIMSK_MASK = _BV(INT5);
-		static constexpr const REGISTER EIFR_ = _SELECT_REG(EIFR);
-		static constexpr const uint8_t EIFR_MASK = _BV(INTF5);
-	};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>: 
+		ExternalInterruptPin_trait_impl<0, R_(EICRA), _BV(ISC00) | _BV(ISC01), R_(EIMSK), _BV(INT0), R_(EIFR), _BV(INTF0)> {};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>: 
+		ExternalInterruptPin_trait_impl<1, R_(EICRA), _BV(ISC10) | _BV(ISC11), R_(EIMSK), _BV(INT1), R_(EIFR), _BV(INTF1)> {};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT2>: 
+		ExternalInterruptPin_trait_impl<2, R_(EICRA), _BV(ISC20) | _BV(ISC21), R_(EIMSK), _BV(INT2), R_(EIFR), _BV(INTF2)> {};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT3>: 
+		ExternalInterruptPin_trait_impl<3, R_(EICRA), _BV(ISC30) | _BV(ISC31), R_(EIMSK), _BV(INT3), R_(EIFR), _BV(INTF3)> {};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT4>: 
+		ExternalInterruptPin_trait_impl<4, R_(EICRA), _BV(ISC40) | _BV(ISC41), R_(EIMSK), _BV(INT4), R_(EIFR), _BV(INTF4)> {};
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT5>: 
+		ExternalInterruptPin_trait_impl<5, R_(EICRA), _BV(ISC50) | _BV(ISC51), R_(EIMSK), _BV(INT5), R_(EIFR), _BV(INTF5)> {};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
-	template<uint8_t PCINT>
-	struct PCI_trait
-	{
-		static constexpr const Port PORT = Port::NONE;
-	};
-	template<>
-	struct PCI_trait<0>
-	{
-		static constexpr const Port PORT = Port::PORT_B;
-	};
-	template<>
-	struct PCI_trait<1>
-	{
-		static constexpr const Port PORT = Port::PORT_J;
-	};
-	template<>
-	struct PCI_trait<2>
-	{
-		static constexpr const Port PORT = Port::PORT_K;
-	};
-	
+	template<> struct PCI_trait<0>: 
+		PCI_trait_impl<Port::PORT_B, 0xFF, _BV(PCIE0), _BV(PCIF0), R_(PCICR), R_(PCIFR), R_(PCMSK0)> {};
+	template<> struct PCI_trait<1>: 
+		PCI_trait_impl<Port::PORT_J, 0x03, _BV(PCIE1), _BV(PCIF1), R_(PCICR), R_(PCIFR), R_(PCMSK1)> {};
+	template<> struct PCI_trait<2>: 
+		PCI_trait_impl<Port::PORT_K, 0xFF, _BV(PCIE2), _BV(PCIF2), R_(PCICR), R_(PCIFR), R_(PCMSK2)> {};
+
 	//=======
 	// USART
 	//=======
-	
-	template<USART USART>
-	struct USART_trait
-	{
-		static constexpr const REGISTER UCSRA{};
-		static constexpr const REGISTER UCSRB{};
-		static constexpr const REGISTER UCSRC{};
-		static constexpr const REGISTER UDR{};
-		static constexpr const REGISTER UBRR{};
-	};
-	
-	template<>
-	struct USART_trait<USART::USART0>
-	{
-		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR0A);
-		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR0B);
-		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR0C);
-		static constexpr const REGISTER UDR = _SELECT_REG(UDR0);
-		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR0);
-	};
-	
-	template<>
-	struct USART_trait<USART::USART1>
-	{
-		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR1A);
-		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR1B);
-		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR1C);
-		static constexpr const REGISTER UDR = _SELECT_REG(UDR1);
-		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR1);
-	};
-	
-	template<>
-	struct USART_trait<USART::USART2>
-	{
-		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR2A);
-		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR2B);
-		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR2C);
-		static constexpr const REGISTER UDR = _SELECT_REG(UDR2);
-		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR2);
-	};
-	
-	template<>
-	struct USART_trait<USART::USART3>
-	{
-		static constexpr const REGISTER UCSRA = _SELECT_REG(UCSR3A);
-		static constexpr const REGISTER UCSRB = _SELECT_REG(UCSR3B);
-		static constexpr const REGISTER UCSRC = _SELECT_REG(UCSR3C);
-		static constexpr const REGISTER UDR = _SELECT_REG(UDR3);
-		static constexpr const REGISTER UBRR = _SELECT_REG(UBRR3);
-	};
-		
+	template<> struct USART_trait<USART::USART0>: USART_trait_impl<R_(UCSR0A), R_(UCSR0B), R_(UCSR0C), R_(UDR0), R_(UBRR0)> {};
+	template<> struct USART_trait<USART::USART1>: USART_trait_impl<R_(UCSR1A), R_(UCSR1B), R_(UCSR1C), R_(UDR1), R_(UBRR1)> {};
+	template<> struct USART_trait<USART::USART2>: USART_trait_impl<R_(UCSR2A), R_(UCSR2B), R_(UCSR2C), R_(UDR2), R_(UBRR2)> {};
+	template<> struct USART_trait<USART::USART3>: USART_trait_impl<R_(UCSR3A), R_(UCSR3B), R_(UCSR3C), R_(UDR3), R_(UBRR3)> {};
+
 	//=====
 	// SPI
 	//=====
+	struct SPI_trait: SPI_trait_impl<Port::PORT_B, PB0, PB2, PB3, PB1> {};
 	
-	struct SPI_trait
-	{
-		static constexpr const REGISTER DDR = _SELECT_REG(DDRB);
-		static constexpr const REGISTER PORT = _SELECT_REG(PORTB);
-		static constexpr const uint8_t SS = PB0;
-		static constexpr const uint8_t MOSI = PB2;
-		static constexpr const uint8_t MISO = PB3;
-		static constexpr const uint8_t SCK = PB1;
-	};
-
 	//========
 	// Timers
 	//========
-	
-	enum TimerPrescalers: uint8_t
+	template<> struct Timer_trait<Timer::TIMER0>: 
+		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							_BV(WGM01), 0, R_(TCCR0A), R_(TCCR0B), R_(TCNT0), 
+							R_(OCR0A), R_(OCR0B), R_(TIMSK0), R_(TIFR0)>
 	{
-		PRESCALERS_1_8_64_256_1024,
-		PRESCALERS_1_8_32_64_128_256_1024,
-		PRESCALERS_NONE
-	};
-	
-	template<TimerPrescalers PRESCALERS>
-	struct TimerPrescalers_trait
-	{
-		enum class TimerPrescaler: uint8_t {};
-		using TYPE = TimerPrescaler;
-		static constexpr const TimerPrescaler ALL_PRESCALERS[] = {};
-	};
-	
-	template<>
-	struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_8_64_256_1024>
-	{
-		enum class TimerPrescaler: uint8_t
-		{
-			NO_PRESCALING	= 0,
-			DIV_8			= 3,
-			DIV_64			= 6,
-			DIV_256			= 8,
-			DIV_1024		= 10
-		};
-		using TYPE = TimerPrescaler;
-		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
-		{
-			TimerPrescaler::NO_PRESCALING,
-			TimerPrescaler::DIV_8,
-			TimerPrescaler::DIV_64,
-			TimerPrescaler::DIV_256,
-			TimerPrescaler::DIV_1024
-		};
-	};
-	
-	template<>
-	struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024>
-	{
-		enum class TimerPrescaler: uint8_t
-		{
-			NO_PRESCALING	= 0,
-			DIV_8			= 3,
-			DIV_32			= 5,
-			DIV_64			= 6,
-			DIV_128			= 7,
-			DIV_256			= 8,
-			DIV_1024		= 10
-		};
-		using TYPE = TimerPrescaler;
-		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
-		{
-			TimerPrescaler::NO_PRESCALING,
-			TimerPrescaler::DIV_8,
-			TimerPrescaler::DIV_32,
-			TimerPrescaler::DIV_64,
-			TimerPrescaler::DIV_128,
-			TimerPrescaler::DIV_256,
-			TimerPrescaler::DIV_1024
-		};
-	};
-	
-	template<Timer TIMER>
-	struct Timer_trait
-	{
-		using TYPE = uint8_t;
-		static constexpr const uint32_t MAX_COUNTER = 0;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_NONE;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-
-		static constexpr const uint8_t CTC_TCCRA  = 0;
-		static constexpr const uint8_t CTC_TCCRB  = 0;
-		static constexpr const REGISTER TCCRA{};
-		static constexpr const REGISTER TCCRB{};
-		static constexpr const REGISTER TCNT{};
-		static constexpr const REGISTER OCRA{};
-		static constexpr const REGISTER OCRB{};
-		static constexpr const REGISTER TIMSK{};
-		static constexpr const REGISTER TIFR{};
-		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
-		{
-			return 0;
-		}
-	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER0>
-	{
-		using TYPE = uint8_t;
-		static constexpr const uint32_t MAX_COUNTER = 256;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-		
-		static constexpr const uint8_t CTC_TCCRA  = _BV(WGM01);
-		static constexpr const uint8_t CTC_TCCRB  = 0;
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR0A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR0B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT0);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR0A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR0B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK0);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR0);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS00) :
 					p == TIMER_PRESCALER::DIV_8 ? _BV(CS01) :
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS00) | _BV(CS01) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
-					p == TIMER_PRESCALER::DIV_1024 ? _BV(CS02) | _BV(CS01) :
-					0);
+					_BV(CS02) | _BV(CS00));
 		}
 	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER2>
+	template<> struct Timer_trait<Timer::TIMER2>: 
+		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024, 
+							_BV(WGM21), 0, R_(TCCR2A), R_(TCCR2B), R_(TCNT2), 
+							R_(OCR2A), R_(OCR2B), R_(TIMSK2), R_(TIFR2)>
 	{
-		using TYPE = uint8_t;
-		static constexpr const uint32_t MAX_COUNTER = 256;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-
-		static constexpr const uint8_t CTC_TCCRA  = _BV(WGM21);
-		static constexpr const uint8_t CTC_TCCRB  = 0;
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR2A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR2B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT2);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR2A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR2B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK2);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR2);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS20) :
 					p == TIMER_PRESCALER::DIV_8 ? _BV(CS21) :
 					p == TIMER_PRESCALER::DIV_32 ? _BV(CS21) | _BV(CS20) :
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS22) :
-					p == TIMER_PRESCALER::DIV_128 ? _BV(CS22) | _BV(CS02) :
+					p == TIMER_PRESCALER::DIV_128 ? _BV(CS22) | _BV(CS20) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS22) | _BV(CS21) :
 					_BV(CS22) | _BV(CS21) | _BV(CS20));
 		}
 	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER1>
+	template<> struct Timer_trait<Timer::TIMER1>: 
+		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							0, _BV(WGM12), R_(TCCR1A), R_(TCCR1B), R_(TCNT1), 
+							R_(OCR1A), R_(OCR1B), R_(TIMSK1), R_(TIFR1)>
 	{
-		using TYPE = uint16_t;
-		static constexpr const uint32_t MAX_COUNTER = 65536;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-
-		static constexpr const uint8_t CTC_TCCRA  = 0;
-		static constexpr const uint8_t CTC_TCCRB  = _BV(WGM12);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR1A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR1B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT1);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR1A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR1B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK1);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR1);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS10) :
@@ -835,27 +248,11 @@ namespace Board
 					_BV(CS12) | _BV(CS10));
 		}
 	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER3>
+	template<> struct Timer_trait<Timer::TIMER3>: 
+		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							0, _BV(WGM32), R_(TCCR3A), R_(TCCR3B), R_(TCNT3), 
+							R_(OCR3A), R_(OCR3B), R_(TIMSK3), R_(TIFR3)>
 	{
-		using TYPE = uint16_t;
-		static constexpr const uint32_t MAX_COUNTER = 65536;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-
-		static constexpr const uint8_t CTC_TCCRA  = 0;
-		static constexpr const uint8_t CTC_TCCRB  = _BV(WGM32);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR3A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR3B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT3);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR3A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR3B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK3);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR3);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS30) :
@@ -865,27 +262,11 @@ namespace Board
 					_BV(CS32) | _BV(CS30));
 		}
 	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER4>
+	template<> struct Timer_trait<Timer::TIMER4>: 
+		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							0, _BV(WGM42), R_(TCCR4A), R_(TCCR4B), R_(TCNT4), 
+							R_(OCR4A), R_(OCR4B), R_(TIMSK4), R_(TIFR4)>
 	{
-		using TYPE = uint16_t;
-		static constexpr const uint32_t MAX_COUNTER = 65536;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-
-		static constexpr const uint8_t CTC_TCCRA  = 0;
-		static constexpr const uint8_t CTC_TCCRB  = _BV(WGM42);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR4A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR4B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT4);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR4A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR4B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK4);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR4);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS40) :
@@ -895,27 +276,11 @@ namespace Board
 					_BV(CS42) | _BV(CS40));
 		}
 	};
-	
-	template<>
-	struct Timer_trait<Timer::TIMER5>
+	template<> struct Timer_trait<Timer::TIMER5>: 
+		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							0, _BV(WGM52), R_(TCCR5A), R_(TCCR5B), R_(TCNT5), 
+							R_(OCR5A), R_(OCR5B), R_(TIMSK5), R_(TIFR5)>
 	{
-		using TYPE = uint16_t;
-		static constexpr const uint32_t MAX_COUNTER = 65536;
-
-		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_1_8_64_256_1024;
-		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-
-		static constexpr const uint8_t CTC_TCCRA  = 0;
-		static constexpr const uint8_t CTC_TCCRB  = _BV(WGM52);
-		static constexpr const REGISTER TCCRA = _SELECT_REG(TCCR5A);
-		static constexpr const REGISTER TCCRB = _SELECT_REG(TCCR5B);
-		static constexpr const REGISTER TCNT = _SELECT_REG(TCNT5);
-		static constexpr const REGISTER OCRA = _SELECT_REG(OCR5A);
-		static constexpr const REGISTER OCRB = _SELECT_REG(OCR5B);
-		static constexpr const REGISTER TIMSK = _SELECT_REG(TIMSK5);
-		static constexpr const REGISTER TIFR = _SELECT_REG(TIFR5);
-
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS50) :
