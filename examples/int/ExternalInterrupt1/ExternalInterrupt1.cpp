@@ -27,7 +27,6 @@
  * - on ATtinyX4 based boards:
  *   - D10 (INT0, PB0) branch a push button connected to ground
  *   - D7 (PA7) LED connected to ground through a resistor
- * Uses PCI driven switch input to light Arduino LED (D13, )
  */
 
 #include <avr/interrupt.h>

@@ -15,6 +15,7 @@
 /*
  * Software UART example. take #2
  * This program demonstrates usage of FastArduino Software (emulated) UART support and formatted output streams.
+ * For RX pin we use INT ISR.
  * In this example, we used just a single UART instead of individual UATX and UARX.
  * Serial errors are traced as they occur.
  * 

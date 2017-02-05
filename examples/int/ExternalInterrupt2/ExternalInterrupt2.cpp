@@ -16,7 +16,7 @@
  * Pin External Interrupt example. Take #2
  * This program shows usage of External Interrupt Pin FastArduino support to light a LED when a button is pushed.
  * This sample uses INT0 vector as a mere signal (no handler called) to awaken MCU from sleep mode, hence the button
- * state is checked at wakeup time. This approach allows code size reduction by more than 300 bytes.
+ * state is checked at wakeup time. This approach allows code size reduction by more than 50 bytes.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
@@ -28,7 +28,6 @@
  * - on ATtinyX4 based boards:
  *   - D10 (INT0, PB0) branch a push button connected to ground
  *   - D7 (PA7) LED connected to ground through a resistor
- * Uses PCI driven switch input to light Arduino LED (D13, )
  */
 
 #include <avr/interrupt.h>
