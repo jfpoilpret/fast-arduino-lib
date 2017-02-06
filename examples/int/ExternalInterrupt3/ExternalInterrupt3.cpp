@@ -25,7 +25,8 @@
  *   - D13 (PB5) LED connected to ground through a resistor
  * - on Arduino MEGA: TODO
  *   - D21 (INT0) branch a push button connected to ground
- *   - D13 (PB7) LED connected to ground through a resistor
+ *   - D20 (INT1) branch a push button connected to ground
+ *   - D13 LED connected to ground through a resistor
  */
 
 #include <avr/interrupt.h>
