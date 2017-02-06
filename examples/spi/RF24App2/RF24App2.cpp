@@ -93,7 +93,7 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 USE_UATX0();
 #else
-#include <fastarduino/empty_streams.hh>
+#include <fastarduino/empty_streams.h>
 #endif
 
 static const uint16_t NETWORK = 0xFFFF;

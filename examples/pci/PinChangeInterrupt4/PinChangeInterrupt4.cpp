@@ -41,7 +41,10 @@ constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D8;
 constexpr const Board::DigitalPin SWITCH_ON = Board::DigitalPin::D53;
 constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D62;
 #elif defined(BREADBOARD_ATTINYX4)
-#error "Current target is not yet supported!"
+#define PCINT_ON	0
+#define PCINT_OFF	1
+constexpr const Board::DigitalPin SWITCH_ON = Board::DigitalPin::D0;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D8;
 #else
 #error "Current target is not yet supported!"
 #endif

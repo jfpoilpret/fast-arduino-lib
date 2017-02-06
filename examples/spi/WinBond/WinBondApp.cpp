@@ -41,10 +41,10 @@ constexpr const size_t DATA_SIZE = 256;
 // Define vectors we need in the example
 USE_UART0();
 #elif defined (ARDUINO_MEGA)
-#include <fastarduino/uart.hh>
+#include <fastarduino/uart.h>
 //TODO
 #elif defined (BREADBOARD_ATTINYX4)
-#include <fastarduino/softuart.hh>
+#include <fastarduino/soft_uart.h>
 
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
