@@ -31,20 +31,22 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D14_PCI1;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D8_PCI0;
 #define PCINT_ON	1
 #define PCINT_OFF	0
-constexpr const Board::DigitalPin SWITCH_ON = Board::DigitalPin::D14;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D8;
 #elif defined(ARDUINO_MEGA)
+constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D53_PCI0;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D62_PCI2;
 #define PCINT_ON	0
 #define PCINT_OFF	2
-constexpr const Board::DigitalPin SWITCH_ON = Board::DigitalPin::D53;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D62;
 #elif defined(BREADBOARD_ATTINYX4)
 #define PCINT_ON	0
 #define PCINT_OFF	1
-constexpr const Board::DigitalPin SWITCH_ON = Board::DigitalPin::D0;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::DigitalPin::D8;
+constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D0_PCI0;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D8_PCI1;
+#define PCINT_ON	0
+#define PCINT_OFF	1
 #else
 #error "Current target is not yet supported!"
 #endif

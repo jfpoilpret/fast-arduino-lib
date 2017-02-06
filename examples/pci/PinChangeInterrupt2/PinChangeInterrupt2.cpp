@@ -38,29 +38,32 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D14;
-constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D16;
-constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D17;
+constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D14_PCI1;
+constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D16_PCI1;
+constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D17_PCI1;
 constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
+#define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D53;
-constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D52;
-constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D51;
+constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PCI0;
+constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D52_PCI0;
+constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D51_PCI0;
 constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D22;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25;
+#define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D8;
-constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D9;
-constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D10;
+constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PCI1;
+constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D9_PCI1;
+constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D10_PCI1;
 constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D0;
 constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1;
 constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3;
+#define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -98,13 +101,7 @@ private:
 };
 
 // Define vectors we need in the example
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#elif defined (ARDUINO_MEGA)
-REGISTER_PCI_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#elif defined (BREADBOARD_ATTINYX4)
-REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#endif
+REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_change)
 
 int main() __attribute__((OS_main));
 int main()

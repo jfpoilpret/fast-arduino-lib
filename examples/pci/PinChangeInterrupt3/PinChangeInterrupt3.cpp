@@ -46,39 +46,42 @@ static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D3>());
 static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D5>());
 static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D7>());
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
-static constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D14;
-static constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D16;
-static constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D17;
+static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D14_PCI1;
+static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D16_PCI1;
+static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D17_PCI1;
 static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_C;
+#define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
 static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D22>());
 static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D23>());
 static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D24>());
 static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D25>());
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
-static constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D53;
-static constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D52;
-static constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D51;
+static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PCI0;
+static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D52_PCI0;
+static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D51_PCI0;
 static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
+#define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D0>());
 static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D1>());
 static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D2>());
 static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D3>());
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
-static constexpr const Board::DigitalPin SWITCH1 = Board::DigitalPin::D8;
-static constexpr const Board::DigitalPin SWITCH2 = Board::DigitalPin::D9;
-static constexpr const Board::DigitalPin SWITCH3 = Board::DigitalPin::D10;
+static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PCI1;
+static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D9_PCI1;
+static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D10_PCI1;
 static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
+#define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -104,13 +107,7 @@ private:
 };
 
 // Define vectors we need in the example
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#elif defined (ARDUINO_MEGA)
-REGISTER_PCI_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#elif defined (BREADBOARD_ATTINYX4)
-REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#endif
+REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_change)
 
 int main() __attribute__((OS_main));
 int main()
