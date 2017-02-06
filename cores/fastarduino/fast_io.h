@@ -31,7 +31,7 @@ template<Board::Port PORT_, uint8_t BIT_>
 class FastPin
 {
 private:
-	using TRAIT = Board::Port_trait<PORT_>;
+	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
 	static const Board::Port PORT = PORT_;
@@ -81,7 +81,7 @@ template<Board::Port PORT_>
 class FastPort
 {
 private:
-	using TRAIT = Board::Port_trait<PORT_>;
+	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
 	static const Board::Port PORT = PORT_;
@@ -137,7 +137,7 @@ template<Board::Port PORT_>
 class FastMaskedPort
 {
 private:
-	using TRAIT = Board::Port_trait<PORT_>;
+	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
 	static const Board::Port PORT = PORT_;
@@ -191,8 +191,8 @@ private:
 template<Board::DigitalPin DPIN>
 struct FastPinType
 {
-	static const Board::Port PORT = Board::DigitalPin_trait<DPIN>::PORT;
-	static const uint8_t BIT = Board::DigitalPin_trait<DPIN>::BIT;
+	static const Board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
+	static const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
 	static const uint8_t MASK = _BV(BIT);
 	using TYPE = FastPin<PORT, BIT>;
 	using PORT_TYPE = FastPort<PORT>;

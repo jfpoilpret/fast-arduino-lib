@@ -25,13 +25,13 @@ void SPI::init()
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
 		// Also set SS as Output (mandatory for Master SPI as per Atmel datasheet)
-		Board::SPI_trait::DDR.set(
-			(Board::SPI_trait::DDR.get() & ~_BV(Board::SPI_trait::MISO)) |
-			_BV(Board::SPI_trait::MOSI) | _BV(Board::SPI_trait::SCK) | _BV(Board::SPI_trait::SS));
+		board_traits::SPI_trait::DDR.set(
+			(board_traits::SPI_trait::DDR.get() & ~_BV(board_traits::SPI_trait::MISO)) |
+			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK) | _BV(board_traits::SPI_trait::SS));
 		// Set MISO as pullup and force MOSI and SCK low
-		Board::SPI_trait::PORT.set(
-			(Board::SPI_trait::PORT.get() | _BV(Board::SPI_trait::MISO)) &
-			~(_BV(Board::SPI_trait::MOSI) | _BV(Board::SPI_trait::SCK)));
+		board_traits::SPI_trait::PORT.set(
+			(board_traits::SPI_trait::PORT.get() | _BV(board_traits::SPI_trait::MISO)) &
+			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK)));
 	}
 }
 #else
@@ -42,13 +42,13 @@ void SPI::init()
 	{
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
-		Board::SPI_trait::DDR.set(
-			(Board::SPI_trait::DDR.get() & ~_BV(Board::SPI_trait::MISO)) |
-			_BV(Board::SPI_trait::MOSI) | _BV(Board::SPI_trait::SCK));
+		board_traits::SPI_trait::DDR.set(
+			(board_traits::SPI_trait::DDR.get() & ~_BV(board_traits::SPI_trait::MISO)) |
+			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
 		// Set MISO as pullup and force MOSI and SCK low
-		Board::SPI_trait::PORT.set(
-			(Board::SPI_trait::PORT.get() | _BV(Board::SPI_trait::MISO)) &
-			~(_BV(Board::SPI_trait::MOSI) | _BV(Board::SPI_trait::SCK)));
+		board_traits::SPI_trait::PORT.set(
+			(board_traits::SPI_trait::PORT.get() | _BV(board_traits::SPI_trait::MISO)) &
+			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK)));
 	}
 }
 #endif

@@ -19,7 +19,7 @@
 #include "mega.h"
 #include "common_traits.h"
 
-namespace Board
+namespace board_traits
 {
 	//====
 	// IO
