@@ -171,18 +171,12 @@ namespace Board
 	 */
 	namespace ExternalInterruptPin
 	{
-		constexpr const DigitalPin D21 = DigitalPin::D21;		// PD0
-		constexpr const DigitalPin D20 = DigitalPin::D20;		// PD1
-		constexpr const DigitalPin D19 = DigitalPin::D19;		// PD2
-		constexpr const DigitalPin D18 = DigitalPin::D18;		// PD3
-		constexpr const DigitalPin D2 = DigitalPin::D2;			// PE4
-		constexpr const DigitalPin D3 = DigitalPin::D3;			// PE5
-		constexpr const DigitalPin EXT0 = DigitalPin::D21;		// PD0
-		constexpr const DigitalPin EXT1 = DigitalPin::D20;		// PD1
-		constexpr const DigitalPin EXT2 = DigitalPin::D19;		// PD2
-		constexpr const DigitalPin EXT3 = DigitalPin::D18;		// PD3
-		constexpr const DigitalPin EXT4 = DigitalPin::D2;		// PE4
-		constexpr const DigitalPin EXT5 = DigitalPin::D3;		// PE5
+		constexpr const DigitalPin D21_EXT0 = DigitalPin::D21;		// PD0
+		constexpr const DigitalPin D20_EXT1 = DigitalPin::D20;		// PD1
+		constexpr const DigitalPin D19_EXT2 = DigitalPin::D19;		// PD2
+		constexpr const DigitalPin D18_EXT3 = DigitalPin::D18;		// PD3
+		constexpr const DigitalPin D2_EXT4 = DigitalPin::D2;		// PE4
+		constexpr const DigitalPin D3_EXT5 = DigitalPin::D3;		// PE5
 	};
 
 	/**
@@ -191,28 +185,28 @@ namespace Board
 	namespace InterruptPin
 	{
 		// PB0-7
-		constexpr const DigitalPin D53 = DigitalPin::D53;
-		constexpr const DigitalPin D52 = DigitalPin::D52;
-		constexpr const DigitalPin D51 = DigitalPin::D51;
-		constexpr const DigitalPin D50 = DigitalPin::D50;
-		constexpr const DigitalPin D10 = DigitalPin::D10;
-		constexpr const DigitalPin D11 = DigitalPin::D11;
-		constexpr const DigitalPin D12 = DigitalPin::D12;
-		constexpr const DigitalPin D13 = DigitalPin::D13;
+		constexpr const DigitalPin D53_PCI0 = DigitalPin::D53;
+		constexpr const DigitalPin D52_PCI0 = DigitalPin::D52;
+		constexpr const DigitalPin D51_PCI0 = DigitalPin::D51;
+		constexpr const DigitalPin D50_PCI0 = DigitalPin::D50;
+		constexpr const DigitalPin D10_PCI0 = DigitalPin::D10;
+		constexpr const DigitalPin D11_PCI0 = DigitalPin::D11;
+		constexpr const DigitalPin D12_PCI0 = DigitalPin::D12;
+		constexpr const DigitalPin D13_PCI0 = DigitalPin::D13;
 
 		// PJ0-1
-		constexpr const DigitalPin D15 = DigitalPin::D15;
-		constexpr const DigitalPin D14 = DigitalPin::D14;
+		constexpr const DigitalPin D15_PCI1 = DigitalPin::D15;
+		constexpr const DigitalPin D14_PCI1 = DigitalPin::D14;
 		
 		// PK0-7
-		constexpr const DigitalPin D62 = DigitalPin::D62;
-		constexpr const DigitalPin D63 = DigitalPin::D63;
-		constexpr const DigitalPin D64 = DigitalPin::D64;
-		constexpr const DigitalPin D65 = DigitalPin::D65;
-		constexpr const DigitalPin D66 = DigitalPin::D66;
-		constexpr const DigitalPin D67 = DigitalPin::D67;
-		constexpr const DigitalPin D68 = DigitalPin::D68;
-		constexpr const DigitalPin D69 = DigitalPin::D69;
+		constexpr const DigitalPin D62_PCI2 = DigitalPin::D62;
+		constexpr const DigitalPin D63_PCI2 = DigitalPin::D63;
+		constexpr const DigitalPin D64_PCI2 = DigitalPin::D64;
+		constexpr const DigitalPin D65_PCI2 = DigitalPin::D65;
+		constexpr const DigitalPin D66_PCI2 = DigitalPin::D66;
+		constexpr const DigitalPin D67_PCI2 = DigitalPin::D67;
+		constexpr const DigitalPin D68_PCI2 = DigitalPin::D68;
+		constexpr const DigitalPin D69_PCI2 = DigitalPin::D69;
 	};
 
 	//=======

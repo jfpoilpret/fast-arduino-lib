@@ -86,9 +86,9 @@ namespace board_traits
 	//===============
 	// IO interrupts
 	//===============
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D2_EXT0>: 
 		ExternalInterruptPin_trait_impl<0, R_(EICRA), _BV(ISC00) | _BV(ISC01), R_(EIMSK), _BV(INT0), R_(EIFR), _BV(INTF0)> {};
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D3_EXT1>: 
 		ExternalInterruptPin_trait_impl<1, R_(EICRA), _BV(ISC10) | _BV(ISC11), R_(EIMSK), _BV(INT1), R_(EIFR), _BV(INTF1)> {};
 
 	/**

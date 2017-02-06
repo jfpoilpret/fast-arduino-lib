@@ -77,7 +77,7 @@ namespace board_traits
 	//===============
 	// IO interrupts
 	//===============
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D10_EXT0>: 
 		ExternalInterruptPin_trait_impl<0, R_(MCUCR), _BV(ISC00) | _BV(ISC01), R_(GIMSK), _BV(INT0), R_(GIFR), _BV(INTF0)> {};
 
 	/**

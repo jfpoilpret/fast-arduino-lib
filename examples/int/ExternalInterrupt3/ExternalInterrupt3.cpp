@@ -36,11 +36,11 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D2;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D3;
+constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D2_EXT0;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D3_EXT1;
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D21;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D20;
+constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D21_EXT0;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D20_EXT1;
 #else
 #error "Current target is not yet supported!"
 #endif

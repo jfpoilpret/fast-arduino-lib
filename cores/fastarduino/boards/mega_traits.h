@@ -165,17 +165,17 @@ namespace board_traits
 	//===============
 	// IO interrupts
 	//===============
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT0>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D21_EXT0>: 
 		ExternalInterruptPin_trait_impl<0, R_(EICRA), _BV(ISC00) | _BV(ISC01), R_(EIMSK), _BV(INT0), R_(EIFR), _BV(INTF0)> {};
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT1>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D20_EXT1>: 
 		ExternalInterruptPin_trait_impl<1, R_(EICRA), _BV(ISC10) | _BV(ISC11), R_(EIMSK), _BV(INT1), R_(EIFR), _BV(INTF1)> {};
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT2>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D19_EXT2>: 
 		ExternalInterruptPin_trait_impl<2, R_(EICRA), _BV(ISC20) | _BV(ISC21), R_(EIMSK), _BV(INT2), R_(EIFR), _BV(INTF2)> {};
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT3>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D18_EXT3>: 
 		ExternalInterruptPin_trait_impl<3, R_(EICRA), _BV(ISC30) | _BV(ISC31), R_(EIMSK), _BV(INT3), R_(EIFR), _BV(INTF3)> {};
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT4>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D2_EXT4>: 
 		ExternalInterruptPin_trait_impl<4, R_(EICRA), _BV(ISC40) | _BV(ISC41), R_(EIMSK), _BV(INT4), R_(EIFR), _BV(INTF4)> {};
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::EXT5>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D3_EXT5>: 
 		ExternalInterruptPin_trait_impl<5, R_(EICRA), _BV(ISC50) | _BV(ISC51), R_(EIMSK), _BV(INT5), R_(EIFR), _BV(INTF5)> {};
 
 	/**
