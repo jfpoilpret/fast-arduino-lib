@@ -43,22 +43,22 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D3;
-constexpr const Board::DigitalPin RX = Board::DigitalPin::D2;
-// Define vectors we need in the example
-REGISTER_UART_INT_ISR(RX, 0)
+constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D2_EXT0;
+#define INT_NUM 0
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
-constexpr const Board::DigitalPin RX = Board::DigitalPin::D21;
-// Define vectors we need in the example
-REGISTER_UART_INT_ISR(RX, 0)
+constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D21_EXT0;
+#define INT_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin RX = Board::DigitalPin::D10;
-// Define vectors we need in the example
-REGISTER_UART_INT_ISR(RX, 0)
+constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D10_EXT0;
+#define INT_NUM 0
 #else
 #error "Current target is not yet supported!"
 #endif
+
+// Define vectors we need in the example
+REGISTER_UART_INT_ISR(RX, INT_NUM)
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;
@@ -75,7 +75,6 @@ int main()
 	// Setup UART
 	Soft::UART<RX, TX> uart{input_buffer, output_buffer};
 	uart.register_rx_handler();
-//	INTSignal<RX> int_signal;
 	Soft::UART<RX, TX>::INT_TYPE int_signal;
 	
 	// Start UART

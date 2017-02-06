@@ -42,22 +42,22 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
-// Define vectors we need in the example
-REGISTER_UART_PCI_ISR(RX, 2)
+constexpr const Board::DigitalPin RX = Board::InterruptPin::D0_PCI2;
+#define PCI_NUM 2
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
-constexpr const Board::DigitalPin RX = Board::DigitalPin::D53;
-// Define vectors we need in the example
-REGISTER_UART_PCI_ISR(RX, 0)
+constexpr const Board::DigitalPin RX = Board::InterruptPin::D53_PCI0;
+#define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
-// Define vectors we need in the example
-REGISTER_UART_PCI_ISR(RX, 0)
+constexpr const Board::DigitalPin RX = Board::InterruptPin::D0_PCI0;
+#define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"
 #endif
+
+// Define vectors we need in the example
+REGISTER_UART_PCI_ISR(RX, PCI_NUM)
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;

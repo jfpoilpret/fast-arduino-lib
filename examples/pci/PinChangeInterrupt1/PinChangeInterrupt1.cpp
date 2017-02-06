@@ -36,11 +36,14 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D14;
+constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D14_PCI1;
+#define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D53;
+constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D53_PCI0;
+#define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH = Board::DigitalPin::D8;
+constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D8_PCI1;
+#define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -67,15 +70,7 @@ private:
 };
 
 // Define vectors we need in the example
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-#define PCI_NUM 1
 REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_change)
-//REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#elif defined (ARDUINO_MEGA)
-REGISTER_PCI_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#elif defined (BREADBOARD_ATTINYX4)
-REGISTER_PCI_ISR_METHOD(1, PinChangeHandler, &PinChangeHandler::on_pin_change)
-#endif
 
 int main() __attribute__((OS_main));
 int main()
