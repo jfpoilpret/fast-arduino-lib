@@ -130,7 +130,9 @@ endif
 	$(MAKE) -C examples/events/EventApp4 CONF=${CONF}
 	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF}
 	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF}
+ifeq ($(findstring ATtiny84,${CONF}),)
 	$(MAKE) -C examples/int/ExternalInterrupt3 CONF=${CONF}
+endif
 	$(MAKE) -C examples/io/FastPin1 CONF=${CONF}
 	$(MAKE) -C examples/io/FastPin2 CONF=${CONF}
 	$(MAKE) -C examples/io/FastPin3 CONF=${CONF}
@@ -172,7 +174,9 @@ endif
 	$(MAKE) -C examples/events/EventApp4 CONF=${CONF} clean
 	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF} clean
 	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF} clean
+ifeq ($(findstring ATtiny84,${CONF}),)
 	$(MAKE) -C examples/int/ExternalInterrupt3 CONF=${CONF} clean
+endif
 	$(MAKE) -C examples/io/FastPin1 CONF=${CONF} clean
 	$(MAKE) -C examples/io/FastPin2 CONF=${CONF} clean
 	$(MAKE) -C examples/io/FastPin3 CONF=${CONF} clean
