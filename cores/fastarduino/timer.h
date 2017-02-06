@@ -35,7 +35,7 @@ template<Board::Timer TIMER>
 class Timer
 {
 protected:
-	using TRAIT = Board::Timer_trait<TIMER>;
+	using TRAIT = board_traits::Timer_trait<TIMER>;
 	using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
 	
 public:

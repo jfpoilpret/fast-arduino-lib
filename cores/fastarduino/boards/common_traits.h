@@ -24,8 +24,9 @@
 #define R_(REG) ((uint16_t)&REG)
 
 //TODO rename namespace to avoid auto completion for end developers to show traits
-namespace Board
+namespace board_traits
 {
+	using namespace ::Board;
 	using REG = uint16_t;
 	
 	template<Port P>
@@ -62,12 +63,6 @@ namespace Board
 		static constexpr const bool IS_INT = INT;
 	};
 
-	template<DigitalPin PIN>
-	constexpr uint8_t BIT()
-	{
-		return DigitalPin_trait<PIN>::BIT;
-	}
-	
 	template<AnalogReference AREF> 
 	struct AnalogReference_trait
 	{
@@ -343,5 +338,14 @@ namespace Board
 		static constexpr const REGISTER TIFR = TIFR_;
 	};
 };
+
+namespace Board
+{
+	template<DigitalPin PIN>
+	constexpr uint8_t BIT()
+	{
+		return board_traits::DigitalPin_trait<PIN>::BIT;
+	}
+};	
 
 #endif /* BOARDS_COMMON_TRAITS_HH */

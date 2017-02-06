@@ -28,11 +28,11 @@ template<	Board::AnalogPin APIN,
 class AnalogInput
 {
 private:
-	using TRAIT = Board::AnalogPin_trait<APIN>;
-	using GLOBAL_TRAIT = Board::GlobalAnalogPin_trait;
-	using VREF_TRAIT = Board::AnalogReference_trait<AREF>;
-	using TYPE_TRAIT = Board::AnalogSampleType_trait<SAMPLE_TYPE>;
-	using FREQ_TRAIT = Board::AnalogClock_trait<MAXFREQ>;
+	using TRAIT = board_traits::AnalogPin_trait<APIN>;
+	using GLOBAL_TRAIT = board_traits::GlobalAnalogPin_trait;
+	using VREF_TRAIT = board_traits::AnalogReference_trait<AREF>;
+	using TYPE_TRAIT = board_traits::AnalogSampleType_trait<SAMPLE_TYPE>;
+	using FREQ_TRAIT = board_traits::AnalogClock_trait<MAXFREQ>;
 	
 public:
 	using TYPE = SAMPLE_TYPE;
@@ -69,7 +69,7 @@ class PowerVoltage: public AnalogInput<	BG,
 										Board::AnalogClock::MAX_FREQ_50KHz>
 {
 private:
-	using TRAIT = Board::AnalogPin_trait<BG>;
+	using TRAIT = board_traits::AnalogPin_trait<BG>;
 	static_assert(TRAIT::IS_BANDGAP, "BG parameter must be a bandgap ADC input");
 	static constexpr const uint16_t REFERENCE_MV = TRAIT::BANDGAP_VOLTAGE_MV;
 	

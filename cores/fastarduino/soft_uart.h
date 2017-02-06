@@ -175,7 +175,7 @@ namespace Soft
 	class UARX: public AbstractUARX
 	{
 	public:
-		using PIN_TRAIT = Board::DigitalPin_trait<RX>;
+		using PIN_TRAIT = board_traits::DigitalPin_trait<RX>;
 		using PCI_TYPE = typename PCIType<RX>::TYPE;
 		using PORT_TRAIT = typename PCI_TYPE::TRAIT;
 		using INT_TYPE = INTSignal<RX>;
@@ -184,7 +184,7 @@ namespace Soft
 		UARX(char (&input)[SIZE_RX]):AbstractUARX(input), _rx{PinMode::INPUT}
 		{
 			static_assert(
-				(PORT_TRAIT::PCI_MASK & _BV(Board::DigitalPin_trait<RX>::BIT)) || (PIN_TRAIT::IS_INT), 
+				(PORT_TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<RX>::BIT)) || (PIN_TRAIT::IS_INT), 
 				"RX must be a PinChangeInterrupt or an ExternalInterrupt pin");
 		}
 		

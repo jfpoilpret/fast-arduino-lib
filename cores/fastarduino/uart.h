@@ -101,7 +101,7 @@ template<Board::USART USART>
 class UATX: public AbstractUATX
 {
 private:
-	using TRAIT = Board::USART_trait<USART>;
+	using TRAIT = board_traits::USART_trait<USART>;
 	
 public:
 	template<uint8_t SIZE_TX>
@@ -183,7 +183,7 @@ template<Board::USART USART>
 class UARX: public AbstractUARX
 {
 private:
-	using TRAIT = Board::USART_trait<USART>;
+	using TRAIT = board_traits::USART_trait<USART>;
 	
 public:
 	template<uint8_t SIZE_RX>
@@ -230,7 +230,7 @@ template<Board::USART USART>
 class UART: public UARX<USART>, public UATX<USART>
 {
 private:
-	using TRAIT = Board::USART_trait<USART>;
+	using TRAIT = board_traits::USART_trait<USART>;
 	
 public:
 	template<uint8_t SIZE_RX, uint8_t SIZE_TX>

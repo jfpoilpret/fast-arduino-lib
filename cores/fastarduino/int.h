@@ -44,8 +44,8 @@ template<Board::DigitalPin PIN>
 class INTSignal
 {
 protected:
-	using PIN_TRAIT = Board::DigitalPin_trait<PIN>;
-	using INT_TRAIT = Board::ExternalInterruptPin_trait<PIN>;
+	using PIN_TRAIT = board_traits::DigitalPin_trait<PIN>;
+	using INT_TRAIT = board_traits::ExternalInterruptPin_trait<PIN>;
 	
 public:
 	INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)

@@ -19,7 +19,7 @@
 #include "attiny_x4.h"
 #include "common_traits.h"
 
-namespace Board
+namespace board_traits
 {
 	//====
 	// IO
