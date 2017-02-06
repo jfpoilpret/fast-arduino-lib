@@ -5,73 +5,42 @@
  */
 
 #include <stdint.h>
+#include <avr/io.h>
 
-#include <avr/interrupt.h>
-
-// General experiments here
-template<typename Handler>
-struct HandlerHolder
+class REGISTER
 {
-	using Holder = HandlerHolder<Handler>;
-	static Handler* _handler;
-
-	template<typename... Args>
-	struct ArgsHodler
+public:
+	constexpr REGISTER():ADDR(0) {}
+	constexpr REGISTER(const REGISTER& rhs):ADDR(rhs.ADDR) {}
+	constexpr REGISTER(uint16_t ADDR):ADDR(ADDR) {}
+	operator volatile uint8_t& () const
 	{
-		template<void (Handler::*Callback)(Args...)>
-		struct CallbackHolder
-		{
-			static void handle(Args... args)
-			{
-				(Holder::_handler->*Callback)(args...);
-			}
-		};
-	};
+		return *((volatile uint8_t*) ADDR);
+	}
+	operator volatile uint16_t& () const
+	{
+		return *((volatile uint16_t*) ADDR);
+	}
+	//TODO small enhancement: use operators () instead
+	void set(uint8_t value) const
+	{
+		*((volatile uint8_t*) ADDR) = value;
+	}
+	uint8_t get() const
+	{
+		return *((volatile uint8_t*) ADDR);
+	}
+
+private:	
+	uint16_t ADDR;
 };
 
-template<typename Handler>
-Handler* HandlerHolder<Handler>::_handler = 0;
-
-template<typename Handler>
-void register_handler(Handler& handler)
-{
-	HandlerHolder<Handler>::_handler = &handler;
-}
-
-#define CALL_HANDLER(HANDLER, CALLBACK,...)	\
-HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >::handle
-
-#define CALLBACK_HANDLER(HANDLER, CALLBACK,...)	\
-CALL_HANDLER(HANDLER, CALLBACK, ##__VA_ARGS__)
-
-struct TestHandler
-{
-	TestHandler(): _count(0) {}
-	
-	void act0() {++_count;}
-	void act1(uint32_t arg) {_count += arg;}
-	void act2(bool inc, uint32_t arg) {if (inc) _count += arg; else _count -= arg;}
-	
-	uint16_t _count;
-};
-
-static void test()
-{
-	CALL_HANDLER(TestHandler, &TestHandler::act0)();
-	CALL_HANDLER(TestHandler, &TestHandler::act1, uint32_t)(1000UL);
-	CALL_HANDLER(TestHandler, &TestHandler::act2, bool, uint32_t)(false, 500UL);
-	CALLBACK_HANDLER(TestHandler, &TestHandler::act0)();
-	CALLBACK_HANDLER(TestHandler, &TestHandler::act1, uint32_t)(2000UL);
-	CALLBACK_HANDLER(TestHandler, &TestHandler::act2, bool, uint32_t)(true, 100UL);
-}
+constexpr const REGISTER REG_EMPTY{};
+constexpr const REGISTER REG_PORTB{(uint16_t)&PORTB};
+constexpr const REGISTER REG_PORTB2 = REG_PORTB;
 
 int main() __attribute__((OS_main));
 int main()
 {
-	sei();
-	
-	TestHandler handler;
-	register_handler(handler);
-
-	while (handler._count < 10000) test();
+	REG_PORTB.set(0xFF);
 }
