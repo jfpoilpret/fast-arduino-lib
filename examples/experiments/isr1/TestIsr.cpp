@@ -13,20 +13,28 @@ public:
 	constexpr REGISTER():ADDR(0) {}
 	constexpr REGISTER(const REGISTER& rhs):ADDR(rhs.ADDR) {}
 	constexpr REGISTER(uint16_t ADDR):ADDR(ADDR) {}
-	operator volatile uint8_t& () const
-	{
-		return *((volatile uint8_t*) ADDR);
-	}
-	operator volatile uint16_t& () const
-	{
-		return *((volatile uint16_t*) ADDR);
-	}
-	//TODO small enhancement: use operators () instead
-	void set(uint8_t value) const
+	
+	void operator =(uint8_t value) const
 	{
 		*((volatile uint8_t*) ADDR) = value;
 	}
-	uint8_t get() const
+	void operator |=(uint8_t value) const
+	{
+		*((volatile uint8_t*) ADDR) |= value;
+	}
+	void operator &=(uint8_t value) const
+	{
+		*((volatile uint8_t*) ADDR) &= value;
+	}
+	void operator ^=(uint8_t value) const
+	{
+		*((volatile uint8_t*) ADDR) ^= value;
+	}
+	uint8_t operator ~() const
+	{
+		return ~(*((volatile uint8_t*) ADDR));
+	}
+	operator uint8_t() const
 	{
 		return *((volatile uint8_t*) ADDR);
 	}
@@ -39,8 +47,15 @@ constexpr const REGISTER REG_EMPTY{};
 constexpr const REGISTER REG_PORTB{(uint16_t)&PORTB};
 constexpr const REGISTER REG_PORTB2 = REG_PORTB;
 
+//TODO check bit clear and bit set
 int main() __attribute__((OS_main));
 int main()
 {
-	REG_PORTB.set(0xFF);
+	REG_PORTB = 0xFF;
+	REG_PORTB &= 0x0F;
+	REG_PORTB |= 0x80;
+	REG_PORTB &= ~0x08;
+	REG_PORTB ^= 0xFF;
+	uint8_t value = REG_PORTB;
+	value = ~REG_PORTB;
 }
