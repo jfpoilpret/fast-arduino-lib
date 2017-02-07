@@ -47,15 +47,21 @@ constexpr const REGISTER REG_EMPTY{};
 constexpr const REGISTER REG_PORTB{(uint16_t)&PORTB};
 constexpr const REGISTER REG_PORTB2 = REG_PORTB;
 
-//TODO check bit clear and bit set
 int main() __attribute__((OS_main));
 int main()
 {
-	REG_PORTB = 0xFF;
-	REG_PORTB &= 0x0F;
-	REG_PORTB |= 0x80;
-	REG_PORTB &= ~0x08;
-	REG_PORTB ^= 0xFF;
-	uint8_t value = REG_PORTB;
-	value = ~REG_PORTB;
+	REG_PORTB = 0xFF;				// ldi + out
+	REG_PORTB &= 0x0F;				// in + andi + out
+	REG_PORTB |= 0x80;				// sbi
+	REG_PORTB &= ~0x08;				// cbi
+	REG_PORTB ^= 0xFF;				// in + com
+	REG_PORTB ^= 0x23;				// in + ldi + eor + pout
+	uint8_t value = REG_PORTB;		// in
+	while (value != 123)			// cpi + breq
+	{
+		value = ~REG_PORTB;			// in + com
+
+		value = REG_PORTB | value;	// in + or
+		value = REG_PORTB & value;	// in + and
+	}
 }
