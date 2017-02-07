@@ -7,45 +7,53 @@
 #include <stdint.h>
 #include <avr/io.h>
 
+template<typename T>
 class REGISTER
 {
 public:
 	constexpr REGISTER():ADDR(0) {}
-	constexpr REGISTER(const REGISTER& rhs):ADDR(rhs.ADDR) {}
+	constexpr REGISTER(const REGISTER<T>& rhs):ADDR(rhs.ADDR) {}
 	constexpr REGISTER(uint16_t ADDR):ADDR(ADDR) {}
 	
-	void operator =(uint8_t value) const
+	void operator =(T value) const
 	{
-		*((volatile uint8_t*) ADDR) = value;
+		*((volatile T*) ADDR) = value;
 	}
-	void operator |=(uint8_t value) const
+	void operator |=(T value) const
 	{
-		*((volatile uint8_t*) ADDR) |= value;
+		*((volatile T*) ADDR) |= value;
 	}
-	void operator &=(uint8_t value) const
+	void operator &=(T value) const
 	{
-		*((volatile uint8_t*) ADDR) &= value;
+		*((volatile T*) ADDR) &= value;
 	}
-	void operator ^=(uint8_t value) const
+	void operator ^=(T value) const
 	{
-		*((volatile uint8_t*) ADDR) ^= value;
+		*((volatile T*) ADDR) ^= value;
 	}
 	uint8_t operator ~() const
 	{
-		return ~(*((volatile uint8_t*) ADDR));
+		return ~(*((volatile T*) ADDR));
 	}
-	operator uint8_t() const
+	operator T() const
 	{
-		return *((volatile uint8_t*) ADDR);
+		return *((volatile T*) ADDR);
 	}
 
 private:	
 	uint16_t ADDR;
 };
 
-constexpr const REGISTER REG_EMPTY{};
-constexpr const REGISTER REG_PORTB{(uint16_t)&PORTB};
-constexpr const REGISTER REG_PORTB2 = REG_PORTB;
+using REG8 = REGISTER<uint8_t>;
+using REG16 = REGISTER<uint16_t>;
+
+constexpr const REG8 REG_EMPTY{};
+constexpr const REG8 REG_PORTB{(uint16_t)&PORTB};
+constexpr const REG8 REG_PORTB2 = REG_PORTB;
+
+constexpr const REG16 REG16_EMPTY{};
+constexpr const REG16 REG16_TCNT{(uint16_t)&TCNT1};
+constexpr const REG16 REG16_TCNT2 = REG16_TCNT;
 
 int main() __attribute__((OS_main));
 int main()
@@ -56,12 +64,27 @@ int main()
 	REG_PORTB &= ~0x08;				// cbi
 	REG_PORTB ^= 0xFF;				// in + com
 	REG_PORTB ^= 0x23;				// in + ldi + eor + pout
-	uint8_t value = REG_PORTB;		// in
-	while (value != 123)			// cpi + breq
+	uint8_t value8 = REG_PORTB;		// in
+	while (value8 != 123)			// cpi + breq
 	{
-		value = ~REG_PORTB;			// in + com
+		value8 = ~REG_PORTB;			// in + com
 
-		value = REG_PORTB | value;	// in + or
-		value = REG_PORTB & value;	// in + and
+		value8 = REG_PORTB | value8;	// in + or
+		value8 = REG_PORTB & value8;	// in + and
+	}
+	
+	REG16_TCNT = 0xFFFF;
+	REG16_TCNT &= 0x0F0F;
+	REG16_TCNT |= 0x8000;
+	REG16_TCNT &= ~0x0800;
+	REG16_TCNT ^= 0xFFFF;
+	REG16_TCNT ^= 0x2323;
+	uint16_t value16 = REG16_TCNT;
+	while (value16 != 15000)
+	{
+		value16 = ~REG16_TCNT;
+		
+		value16 = REG16_TCNT | value16;
+		value16 = REG16_TCNT & value16;
 	}
 }
