@@ -36,6 +36,7 @@ ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 // this may optimize code size on some circumstances
 #define FIX_BASE_POINTER(_ptr) __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
 
+/*
 class REGISTER
 {
 public:
@@ -71,12 +72,14 @@ public:
 private:	
 	uint8_t ADDR;
 };
+*/
 
 constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 {
 	return (high << 8) | low;
 }
 
+/*
 //TODO Add optimized versions for IOREG registers: set_ioreg_mask, clear_ioreg_mask
 inline void set_mask(REGISTER REG, uint8_t MASK) INLINE;
 inline void set_mask(REGISTER REG, uint8_t MASK)
@@ -142,6 +145,7 @@ inline uint8_t get_ioreg_byte(REGISTER IOREG)
 	asm volatile("IN %[VALUE], %[IOREG]\n\t":[VALUE] "+r" (value):[IOREG] "I" (IOREG.io_addr()));
 	return value;
 }
+*/
 
 // Utilities to handle ISR callbacks
 #define HANDLER_HOLDER_(HANDLER) HandlerHolder< HANDLER >

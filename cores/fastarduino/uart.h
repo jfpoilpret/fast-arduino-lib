@@ -114,18 +114,21 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, false, true);
+		_begin(	rate, parity, stop_bits, 
+				(volatile uint16_t&) TRAIT::UBRR, (volatile uint8_t&) TRAIT::UCSRA, 
+				(volatile uint8_t&) TRAIT::UCSRB, (volatile uint8_t&) TRAIT::UCSRC, 
+				false, true);
 	}
 	inline void end()
 	{
-		_end(TRAIT::UCSRC);
+		_end((volatile uint8_t&) TRAIT::UCSRC);
 	}
 
 protected:	
 	// Listeners of events on the buffer
 	virtual void on_put() override
 	{
-		_on_put(TRAIT::UCSRB, TRAIT::UDR);
+		_on_put((volatile uint8_t&) TRAIT::UCSRB, (volatile uint8_t&) TRAIT::UDR);
 	}
 	virtual void on_overflow(UNUSED char c) override
 	{
@@ -135,7 +138,7 @@ protected:
 private:
 	inline void data_register_empty()
 	{
-		_data_register_empty(TRAIT::UCSRB, TRAIT::UDR);
+		_data_register_empty((volatile uint8_t&) TRAIT::UCSRB, (volatile uint8_t&) TRAIT::UDR);
 	}
 	
 	static UATX<USART>* _uatx;
@@ -196,17 +199,20 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, false);
+		_begin(	rate, parity, stop_bits, 
+				(volatile uint16_t&) TRAIT::UBRR, (volatile uint8_t&) TRAIT::UCSRA, 
+				(volatile uint8_t&) TRAIT::UCSRB, (volatile uint8_t&) TRAIT::UCSRC, 
+				true, false);
 	}
 	inline void end()
 	{
-		_end(TRAIT::UCSRC);
+		_end((volatile uint8_t&) TRAIT::UCSRC);
 	}
 
 private:
 	inline void data_receive_complete()
 	{
-		_data_receive_complete(TRAIT::UCSRA, TRAIT::UDR);
+		_data_receive_complete((volatile uint8_t&) TRAIT::UCSRA, (volatile uint8_t&) TRAIT::UDR);
 	}
 	
 	static UARX<USART>* _uarx;
@@ -240,11 +246,14 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		AbstractUART::_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, true);
+		AbstractUART::_begin(	rate, parity, stop_bits,
+								(volatile uint16_t&) TRAIT::UBRR, (volatile uint8_t&) TRAIT::UCSRA, 
+								(volatile uint8_t&) TRAIT::UCSRB, (volatile uint8_t&) TRAIT::UCSRC, 
+								true, true);
 	}
 	inline void end()
 	{
-		AbstractUART::_end(TRAIT::UCSRC);
+		AbstractUART::_end((volatile uint8_t&) TRAIT::UCSRC);
 	}
 };
 
