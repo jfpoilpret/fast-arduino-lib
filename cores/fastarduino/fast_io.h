@@ -34,8 +34,8 @@ private:
 	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
-	static const Board::Port PORT = PORT_;
-	static const uint8_t BIT = BIT_;
+	static constexpr const Board::Port PORT = PORT_;
+	static constexpr const uint8_t BIT = BIT_;
 	
 	FastPin() INLINE
 	{
@@ -84,7 +84,7 @@ private:
 	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
-	static const Board::Port PORT = PORT_;
+	static constexpr const Board::Port PORT = PORT_;
 	
 	FastPort() {}
 	FastPort(uint8_t ddr, uint8_t port = 0) INLINE
@@ -140,7 +140,7 @@ private:
 	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
-	static const Board::Port PORT = PORT_;
+	static constexpr const Board::Port PORT = PORT_;
 	
 	FastMaskedPort() {}
 	FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0)
@@ -182,9 +182,9 @@ private:
 template<Board::DigitalPin DPIN>
 struct FastPinType
 {
-	static const Board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
-	static const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
-	static const uint8_t MASK = _BV(BIT);
+	static constexpr const Board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
+	static constexpr const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
+	static constexpr const uint8_t MASK = _BV(BIT);
 	using TYPE = FastPin<PORT, BIT>;
 	using PORT_TYPE = FastPort<PORT>;
 };

@@ -41,10 +41,10 @@ void SPI::init()
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
 		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~_BV(board_traits::SPI_trait::MISO)) |
-			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
+			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK);
 		// Set MISO as pullup and force MOSI and SCK low
 		board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | _BV(board_traits::SPI_trait::MISO)) &
-			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK)));
+			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
 	}
 }
 #endif

@@ -51,19 +51,19 @@ public:
 	
 	inline void enable()
 	{
-		synchronized set_mask(TRAIT::PCICR_, TRAIT::PCICR_MASK);
+		synchronized TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
 	}
 	inline void disable()
 	{
-		synchronized clear_mask(TRAIT::PCICR_, TRAIT::PCICR_MASK);
+		synchronized TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
 	}
 	inline void clear()
 	{
-		synchronized set_mask(TRAIT::PCIFR_, TRAIT::PCIFR_MASK);
+		synchronized TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
 	}
 	inline void enable_pins(uint8_t mask)
 	{
-		synchronized set_mask(TRAIT::PCMSK_, mask);
+		synchronized TRAIT::PCMSK_ |= mask;
 	}
 	template<Board::DigitalPin PIN>
 	inline void enable_pin()
@@ -77,24 +77,24 @@ public:
 	{
 		static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
 		static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
-		synchronized clear_mask(TRAIT::PCMSK_, _BV(board_traits::DigitalPin_trait<PIN>::BIT));
+		synchronized TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
 	}
 	
 	inline void _enable()
 	{
-		set_mask(TRAIT::PCICR_, TRAIT::PCICR_MASK);
+		TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
 	}
 	inline void _disable()
 	{
-		clear_mask(TRAIT::PCICR_, TRAIT::PCICR_MASK);
+		TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
 	}
 	inline void _clear()
 	{
-		set_mask(TRAIT::PCIFR_, TRAIT::PCIFR_MASK);
+		TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
 	}
 	inline void _enable_pins(uint8_t mask)
 	{
-		set_mask(TRAIT::PCMSK_, mask);
+		TRAIT::PCMSK_ |= mask;
 	}
 	template<Board::DigitalPin PIN>
 	inline void _enable_pin()
@@ -108,7 +108,7 @@ public:
 	{
 		static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
 		static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
-		clear_mask(TRAIT::PCMSK_, _BV(board_traits::DigitalPin_trait<PIN>::BIT));
+		TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
 	}
 };
 

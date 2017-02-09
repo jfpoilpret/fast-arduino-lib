@@ -24,3 +24,11 @@ void exit(int status) __attribute__((weak));
 void exit(int status UNUSED)
 {
 }
+
+namespace __cxxabiv1
+{
+	extern "C"
+	{
+		void __cxa_pure_virtual() {}
+	}
+}
