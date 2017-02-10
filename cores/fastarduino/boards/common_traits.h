@@ -91,12 +91,6 @@ namespace board_traits
 		static constexpr const uint8_t DPIN_MASK = DPIN_MASK_;
 		static constexpr const uint8_t PCINT = PCINT_;
 	};
-//	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_>
-//	constexpr const REG8 Port_trait_impl<PIN_, DDR_, PORT_, DPIN_MASK_, PCINT_>::PIN;
-//	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_>
-//	constexpr const REG8 Port_trait_impl<PIN_, DDR_, PORT_, DPIN_MASK_, PCINT_>::DDR;
-//	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_>
-//	constexpr const REG8 Port_trait_impl<PIN_, DDR_, PORT_, DPIN_MASK_, PCINT_>::PORT;
 	
 	template<DigitalPin DPIN>
 	struct DigitalPin_trait
@@ -220,12 +214,6 @@ namespace board_traits
 		static constexpr const REG8 EIFR_ = EIFR__;
 		static constexpr const uint8_t EIFR_MASK = EIFR_MASK_;
 	};
-//	template<uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_, REG EIFR__, uint8_t EIFR_MASK_>
-//	constexpr const REG8 ExternalInterruptPin_trait_impl<INT_, EICR__, EICR_MASK_, EIMSK__, EIMSK_MASK_, EIFR__, EIFR_MASK_>::EICR_;
-//	template<uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_, REG EIFR__, uint8_t EIFR_MASK_>
-//	constexpr const REG8 ExternalInterruptPin_trait_impl<INT_, EICR__, EICR_MASK_, EIMSK__, EIMSK_MASK_, EIFR__, EIFR_MASK_>::EIMSK_;
-//	template<uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_, REG EIFR__, uint8_t EIFR_MASK_>
-//	constexpr const REG8 ExternalInterruptPin_trait_impl<INT_, EICR__, EICR_MASK_, EIMSK__, EIMSK_MASK_, EIFR__, EIFR_MASK_>::EIFR_;
 
 	template<uint8_t PCINT> 
 	struct PCI_trait
@@ -249,12 +237,6 @@ namespace board_traits
 		static constexpr const REG8 PCIFR_ = PCIFR__;
 		static constexpr const REG8 PCMSK_ = PCMSK__;
 	};
-//	template<Port PORT_, uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__, REG PCMSK__>
-//	constexpr const REG8 PCI_trait_impl<PORT_, PCI_MASK_, PCICR_MASK_, PCIFR_MASK_, PCICR__, PCIFR__, PCMSK__>::PCICR_;
-//	template<Port PORT_, uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__, REG PCMSK__>
-//	constexpr const REG8 PCI_trait_impl<PORT_, PCI_MASK_, PCICR_MASK_, PCIFR_MASK_, PCICR__, PCIFR__, PCMSK__>::PCIFR_;
-//	template<Port PORT_, uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__, REG PCMSK__>
-//	constexpr const REG8 PCI_trait_impl<PORT_, PCI_MASK_, PCICR_MASK_, PCIFR_MASK_, PCICR__, PCIFR__, PCMSK__>::PCMSK_;
 
 	template<USART USART> 
 	struct USART_trait
