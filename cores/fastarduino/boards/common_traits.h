@@ -23,7 +23,6 @@
 // This internal macro is used by individual boards headers
 #define R_(REG) ((uint16_t)&REG)
 
-//TODO rename namespace to avoid auto completion for end developers to show traits
 namespace board_traits
 {
 	template<typename T>

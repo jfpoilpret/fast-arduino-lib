@@ -25,6 +25,7 @@ void exit(int status UNUSED)
 {
 }
 
+#ifndef NO_ABI
 // Define ABI functions that may be required at link time under specific situations
 namespace __cxxabiv1
 {
@@ -35,6 +36,7 @@ namespace __cxxabiv1
 		// multiple inheritance) for the compiler to detect that no pure virtual method will be actually 
 		// called. Replacing multiple inheritance, when possible, with class member instead of private
 		// inheritance, can help reduce code size
-//		void __cxa_pure_virtual() {}
+		void __cxa_pure_virtual() {}
 	}
 }
+#endif
