@@ -68,16 +68,35 @@ static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
 #error "Current target is not yet supported!"
 #endif
 
+//template<Board::DigitalPin PIN>
+//class LedHandler: public EventHandler, private FastPinType<PIN>::TYPE
+//{
+//public:
+//	LedHandler() {}
+//	LedHandler(uint8_t type) : EventHandler{type}, FastPinType<PIN>::TYPE{PinMode::OUTPUT} {}
+//	virtual void on_event(UNUSED const Event& event) override
+//	{
+//		this->toggle();
+//	}
+//};
+
+// Avoiding multiple inheritance reduces code size:
+// - no cxa pure virtual method included in linked exe (2 bytes)
+// - one less vtable (for EventHandler itself)
+// But this also increases main() stack size of 8 bytes, i.e. 1 byte per LedHandler instance?
 template<Board::DigitalPin PIN>
-class LedHandler: public EventHandler, private FastPinType<PIN>::TYPE
+class LedHandler: public EventHandler
 {
 public:
 	LedHandler() {}
-	LedHandler(uint8_t type) : EventHandler{type}, FastPinType<PIN>::TYPE{PinMode::OUTPUT} {}
+	LedHandler(uint8_t type) : EventHandler{type}, _led{PinMode::OUTPUT} {}
 	virtual void on_event(UNUSED const Event& event) override
 	{
-		this->toggle();
+		_led.toggle();
 	}
+	
+private:
+	typename FastPinType<PIN>::TYPE _led;
 };
 
 int main()

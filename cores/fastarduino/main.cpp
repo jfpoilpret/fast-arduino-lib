@@ -25,10 +25,16 @@ void exit(int status UNUSED)
 {
 }
 
+// Define ABI functions that may be required at link time under specific situations
 namespace __cxxabiv1
 {
 	extern "C"
 	{
-		void __cxa_pure_virtual() {}
+		// This is required during link when a constructor may call a pure virtual method
+		// If this is required, it is likely the faulty constructor is too complex (e.g. when using
+		// multiple inheritance) for the compiler to detect that no pure virtual method will be actually 
+		// called. Replacing multiple inheritance, when possible, with class member instead of private
+		// inheritance, can help reduce code size
+//		void __cxa_pure_virtual() {}
 	}
 }

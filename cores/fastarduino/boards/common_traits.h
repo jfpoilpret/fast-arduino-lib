@@ -34,27 +34,6 @@ namespace board_traits
 //		constexpr REGISTER(const REGISTER<T>& rhs):ADDR(rhs.ADDR) {}
 		constexpr REGISTER(uint16_t ADDR) INLINE:ADDR(ADDR) {}
 
-//		void operator =(T value) const INLINE
-//		{
-//			*((volatile T*) ADDR) = (T) value;
-//		}
-//		void operator |=(T value) const INLINE
-//		{
-//			*((volatile T*) ADDR) |= (T) value;
-//		}
-//		void operator &=(T value) const INLINE
-//		{
-//			*((volatile T*) ADDR) &= (T) value;
-//		}
-//		void operator ^=(T value) const INLINE
-//		{
-//			*((volatile T*) ADDR) ^= (T) value;
-//		}
-//		T operator ~() const INLINE
-//		{
-//			return ~(*((volatile T*) ADDR));
-//		}
-		
 		void operator =(int value) const INLINE 
 		{
 			*((volatile T*) ADDR) = (T) value;
