@@ -16,7 +16,7 @@
 #define	FASTIO_HH
 
 #include "utilities.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 enum class PinMode: uint8_t
 {

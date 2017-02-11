@@ -15,7 +15,7 @@
 #ifndef ANALOGINPUT_HH
 #define ANALOGINPUT_HH
 
-#include "board_traits.h"
+#include "boards/board_traits.h"
 #include "time.h"
 
 //TODO LATER: add class (or namespace?) with general methods enable/disable ADC...

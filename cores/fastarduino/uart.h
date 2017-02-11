@@ -17,7 +17,7 @@
 
 #include "uart_commons.h"
 #include "streams.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 // Only MCU with physical USART are supported (not ATtiny then)
 #if defined(UCSR0A)

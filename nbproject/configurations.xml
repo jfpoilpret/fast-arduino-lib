@@ -5,6 +5,8 @@
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
         <itemPath>cores/fastarduino/boards/attiny_x4.h</itemPath>
         <itemPath>cores/fastarduino/boards/attiny_x4_traits.h</itemPath>
+        <itemPath>cores/fastarduino/boards/board.h</itemPath>
+        <itemPath>cores/fastarduino/boards/board_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/common_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/mega.h</itemPath>
         <itemPath>cores/fastarduino/boards/mega_traits.h</itemPath>
@@ -18,8 +20,6 @@
         <itemPath>cores/fastarduino/devices/winbond.h</itemPath>
       </logicalFolder>
       <itemPath>cores/fastarduino/analog_input.h</itemPath>
-      <itemPath>cores/fastarduino/board.h</itemPath>
-      <itemPath>cores/fastarduino/board_traits.h</itemPath>
       <itemPath>cores/fastarduino/empty_streams.h</itemPath>
       <itemPath>cores/fastarduino/errors.h</itemPath>
       <itemPath>cores/fastarduino/events.cpp</itemPath>
@@ -124,16 +124,19 @@
       </compileType>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/board.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board_traits.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -284,16 +287,19 @@
       </packaging>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/board.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board_traits.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -444,16 +450,19 @@
       </packaging>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/board.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board_traits.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -604,16 +613,19 @@
       </packaging>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/board.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board_traits.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -764,16 +776,19 @@
       </packaging>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/board.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/board_traits.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4_traits.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/board_traits.h"
             ex="false"
             tool="3"
             flavor2="0">

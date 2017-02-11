@@ -17,7 +17,7 @@
 
 #include <avr/io.h>
 
-#include "../board.h"
+#include "board.h"
 
 // This internal macro is used by individual boards headers
 #define R_(REG) ((uint16_t)&REG)

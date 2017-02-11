@@ -18,8 +18,8 @@
 #include <avr/interrupt.h>
 
 #include "utilities.h"
-#include "board.h"
-#include "board_traits.h"
+#include "boards/board.h"
+#include "boards/board_traits.h"
 
 // Principles:
 // One PCI<> instance for each PCINT vector

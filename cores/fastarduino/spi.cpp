@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #include "spi.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 #ifdef SPDR
 // Handle SPI for ATmega

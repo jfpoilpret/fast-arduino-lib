@@ -12,21 +12,21 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#ifndef BOARD_HH
-#define BOARD_HH
+#ifndef BOARDS_BOARD_TRAITS_HH
+#define BOARDS_BOARD_TRAITS_HH
 
 // Arduino Boards
 #if defined(ARDUINO_MEGA)
-#include "boards/mega.h"
+#include "mega_traits.h"
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-#include "boards/uno.h"
+#include "uno_traits.h"
 
 // Breadboards
 #elif defined(BREADBOARD_ATTINYX4)
-#include "boards/attiny_x4.h"
+#include "attiny_x4_traits.h"
 
 #else
-#error "board.h: board not supported"
+#error "board_traits.h: board not supported"
 #endif
 
-#endif /* BOARD_HH */
+#endif /* BOARDS_BOARD_TRAITS_HH */

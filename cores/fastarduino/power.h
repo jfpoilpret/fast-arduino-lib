@@ -18,7 +18,7 @@
 #include <avr/interrupt.h>
 #include <avr/power.h>
 #include <avr/sleep.h>
-#include "board.h"
+#include "boards/board.h"
 
 class Power
 {
