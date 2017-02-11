@@ -1,5 +1,5 @@
 FastArduino
------------
+===========
 
 FastArduino is a C++, object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU. Its objectives are:
 
@@ -35,7 +35,7 @@ Making FastArduino buildable on Arduino IDE is not on my roadmap currently (and 
 My special setup (I work on Windows but compile everything on an Ubuntu virtual machine) is described in [ArduinoDevSetup.docx](ArduinoDevSetup.docx). This document also describes how I setup netbeans for my projects.
 
 Status
-------
+======
 
 The project has started less than one year ago only, hence it does not cover everything yet, also its API is likely to change, more or less drastically, until April (see roadmap).
 
@@ -72,26 +72,26 @@ I intend to later add support for:
 - Arduino Leonardo
 
 Roadmap
--------
+=======
 
 The roadmap of next activities and new supported features is the following:
 
 February-March 2017
-===================
+-------------------
 1. Refactor UART (Harware and Software) code to optimize code size
 2. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
 3. EEPROM support
 4. Trace support (including PROGMEM strings support)
 
 March-April 2017
-================
+----------------
 5. Review namespaces overall (existence and names)
 6. Rename board pins to include Port and Bit reference, not just Dx
 7. Apply coding guidelines across the library code (not necessarily example code)
 8. Add support for ATtinyX5
 
 May-June 2017
-=============
+-------------
 9. Add documentation (SR handling, Board support adding, API...)
 10. Improve Analog Input support and code
 11. Improve Timer support (support other modes than CTC)
