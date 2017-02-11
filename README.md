@@ -37,7 +37,7 @@ My special setup (I work on Windows but compile everything on an Ubuntu virtual 
 Status
 ------
 
-The project has started less than one year ago only, hence it does not cover everything yet.
+The project has started less than one year ago only, hence it does not cover everything yet, also its API is likely to change, more or less drastically, until April (see roadmap).
 
 What the project already has:
 
@@ -74,35 +74,30 @@ I intend to later add support for:
 Roadmap
 -------
 
-The roadmap of supported features is the following:
+The roadmap of next activities and new supported features is the following:
 
-1. Fast IO support (done)
-2. Watchdog and events support (done)
-3. Power management (done)
-4. Hardware UART support (done)
-5. Pin Change Interrupt support (done)
-6. Software UART support (done)
-7. SPI support (done)
-8. External Pin Interrupt support (done)
-9. Real Time Timer support (done)
-10. NRF24L01P support (done)
-11. SIPO shift register support (done)
-12. Analog Input support (done for single conversion mode)
-13. General-purpose Timer support (done)
+February-March 2017
+===================
+1. Refactor UART (Harware and Software) code to optimize code size
+2. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
+3. EEPROM support
+4. Trace support (including PROGMEM strings support)
 
+March-April 2017
+================
+5. Review namespaces overall (existence and names)
+6. Rename board pins to include Port and Bit reference, not just Dx
+7. Apply coding guidelines across the library code (not necessarily example code)
+8. Add support for ATtinyX5
 
-14. EEPROM support
-15. Trace support (including PROGMEM strings support)
-16. More boards variants support (Leonardo, ATtinyX5)
-17. ... To be determined later, based on my own projects needs
+May-June 2017
+=============
+9. Add documentation (SR handling, Board support adding, API...)
+10. Improve Analog Input support and code
+11. Improve Timer support (support other modes than CTC)
+12. Add support for Arduino Leonardo and CDC feature
 
-Some refactoring is also planned, in January-February 2017, in order to:
-
-- improve code size for ISR by avoiding virtual calls when possible
-- more easily and better allow for multiple boards support
-- cleanup code according to some common C++ guidelines
-
-This refactoring should normally have only little impact on API.
+Note that activities 1, 2, 5, 6 and 7 will have an impact on current API.
 
 The following features are not in FastArduino roadmap currently (but may be in the future):
 
