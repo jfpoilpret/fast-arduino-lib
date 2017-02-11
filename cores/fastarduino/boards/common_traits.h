@@ -53,12 +53,7 @@ namespace board_traits
 		{
 			return ~(*((volatile T*) ADDR));
 		}
-		//TODO check if this can be removed and simply replaced with operator volatile T&() (not explicit, then)
-		operator T() const INLINE 
-		{
-			return *((volatile T*) ADDR);
-		}
-		explicit operator volatile T&() const INLINE 
+		operator volatile T&() const INLINE 
 		{
 			return *((volatile T*) ADDR);
 		}
