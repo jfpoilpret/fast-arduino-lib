@@ -68,18 +68,6 @@ static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
 #error "Current target is not yet supported!"
 #endif
 
-//template<Board::DigitalPin PIN>
-//class LedHandler: public EventHandler, private FastPinType<PIN>::TYPE
-//{
-//public:
-//	LedHandler() {}
-//	LedHandler(uint8_t type) : EventHandler{type}, FastPinType<PIN>::TYPE{PinMode::OUTPUT} {}
-//	virtual void on_event(UNUSED const Event& event) override
-//	{
-//		this->toggle();
-//	}
-//};
-
 // Avoiding multiple inheritance reduces code size:
 // - no cxa pure virtual method included in linked exe (2 bytes)
 // - one less vtable (for EventHandler itself)
