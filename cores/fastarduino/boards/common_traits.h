@@ -57,6 +57,30 @@ namespace board_traits
 		{
 			return *((volatile T*) ADDR);
 		}
+		bool operator ==(T value) const INLINE
+		{
+			return *((volatile T*) ADDR) == value;
+		}
+		bool operator !=(T value) const INLINE
+		{
+			return *((volatile T*) ADDR) != value;
+		}
+		bool operator >(T value) const INLINE
+		{
+			return *((volatile T*) ADDR) > value;
+		}
+		bool operator >=(T value) const INLINE
+		{
+			return *((volatile T*) ADDR) >= value;
+		}
+		bool operator <(T value) const INLINE
+		{
+			return *((volatile T*) ADDR) < value;
+		}
+		bool operator <=(T value) const INLINE
+		{
+			return *((volatile T*) ADDR) <= value;
+		}
 
 	private:	
 		const uint16_t ADDR;
