@@ -63,31 +63,31 @@ namespace board_traits
 		{
 			while (*((volatile T*) ADDR) & _BV(bit)) ;
 		}
-		bool operator ==(T value) const INLINE
+		bool operator ==(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) == value;
+			return *((volatile T*) ADDR) == (T) value;
 		}
-		bool operator !=(T value) const INLINE
+		bool operator !=(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) != value;
+			return *((volatile T*) ADDR) != (T) value;
 		}
-		bool operator >(T value) const INLINE
+		bool operator >(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) > value;
+			return *((volatile T*) ADDR) > (T) value;
 		}
-		bool operator >=(T value) const INLINE
+		bool operator >=(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) >= value;
+			return *((volatile T*) ADDR) >= (T) value;
 		}
-		bool operator <(T value) const INLINE
+		bool operator <(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) < value;
+			return *((volatile T*) ADDR) < (T) value;
 		}
-		bool operator <=(T value) const INLINE
+		bool operator <=(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) <= value;
+			return *((volatile T*) ADDR) <= (T) value;
 		}
-		operator volatile T&() const INLINE 
+		operator volatile T&() const INLINE
 		{
 			return *((volatile T*) ADDR);
 		}
