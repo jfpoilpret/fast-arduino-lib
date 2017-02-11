@@ -17,11 +17,14 @@
 
 #include <avr/io.h>
 
-#include "../utilities.h"
 #include "../board.h"
 
 // This internal macro is used by individual boards headers
 #define R_(REG) ((uint16_t)&REG)
+
+#ifndef INLINE
+#define INLINE __attribute__((always_inline))
+#endif
 
 namespace board_traits
 {
@@ -58,7 +61,7 @@ namespace board_traits
 		}
 		void loop_until_bit_clear(uint8_t bit) const INLINE
 		{
-			while (*((volatile T*) ADDR) | _BV(bit)) ;
+			while (*((volatile T*) ADDR) & _BV(bit)) ;
 		}
 		bool operator ==(T value) const INLINE
 		{
@@ -411,6 +414,8 @@ namespace board_traits
 
 namespace Board
 {
+	template<DigitalPin PIN>
+	constexpr uint8_t BIT() INLINE;
 	template<DigitalPin PIN>
 	constexpr uint8_t BIT()
 	{
