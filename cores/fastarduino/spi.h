@@ -15,7 +15,7 @@
 #ifndef FASTSPI_HH
 #define FASTSPI_HH
 
-#include "board.h"
+#include "boards/board.h"
 #include "fast_io.h"
 
 //TODO Make a SPISlave class with a data handler/buffer

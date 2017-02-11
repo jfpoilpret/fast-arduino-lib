@@ -18,7 +18,7 @@
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include "events.h"
-#include "board.h"
+#include "boards/board.h"
 
 #define REGISTER_WATCHDOG_CLOCK_ISR_METHOD()	\
 REGISTER_ISR_METHOD_(WDT_vect, Watchdog, &Watchdog::on_tick)

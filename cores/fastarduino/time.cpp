@@ -13,8 +13,8 @@
 //   limitations under the License.
 
 #include "time.h"
-#include "board.h"
 #include "power.h"
+#include "boards/board.h"
 
 Time::DELAY_PTR Time::delay = Time::default_delay;
 Time::MILLIS_PTR Time::millis = 0;

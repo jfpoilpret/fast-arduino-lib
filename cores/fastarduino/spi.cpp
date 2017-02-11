@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #include "spi.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 #ifdef SPDR
 // Handle SPI for ATmega
@@ -25,13 +25,11 @@ void SPI::init()
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
 		// Also set SS as Output (mandatory for Master SPI as per Atmel datasheet)
-		board_traits::SPI_trait::DDR.set(
-			(board_traits::SPI_trait::DDR.get() & ~_BV(board_traits::SPI_trait::MISO)) |
-			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK) | _BV(board_traits::SPI_trait::SS));
+		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~_BV(board_traits::SPI_trait::MISO)) |
+			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK) | _BV(board_traits::SPI_trait::SS);
 		// Set MISO as pullup and force MOSI and SCK low
-		board_traits::SPI_trait::PORT.set(
-			(board_traits::SPI_trait::PORT.get() | _BV(board_traits::SPI_trait::MISO)) &
-			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK)));
+		board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | _BV(board_traits::SPI_trait::MISO)) &
+			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
 	}
 }
 #else
@@ -42,13 +40,11 @@ void SPI::init()
 	{
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
-		board_traits::SPI_trait::DDR.set(
-			(board_traits::SPI_trait::DDR.get() & ~_BV(board_traits::SPI_trait::MISO)) |
-			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
+		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~_BV(board_traits::SPI_trait::MISO)) |
+			_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK);
 		// Set MISO as pullup and force MOSI and SCK low
-		board_traits::SPI_trait::PORT.set(
-			(board_traits::SPI_trait::PORT.get() | _BV(board_traits::SPI_trait::MISO)) &
-			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK)));
+		board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | _BV(board_traits::SPI_trait::MISO)) &
+			~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
 	}
 }
 #endif

@@ -18,7 +18,7 @@
 #include <avr/interrupt.h>
 
 #include "utilities.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 // Principles:
 // One INT<> instance for each INT vector
@@ -56,37 +56,37 @@ public:
 	
 	inline void set_trigger(InterruptTrigger trigger)
 	{
-		synchronized set_bit_field(INT_TRAIT::EICR_, INT_TRAIT::EICR_MASK, uint8_t(trigger));
+		synchronized INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 	}
 	
 	inline void enable()
 	{
-		synchronized set_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
+		synchronized INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
 	}
 	inline void disable()
 	{
-		synchronized clear_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
+		synchronized INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
 	}
 	inline void clear()
 	{
-		synchronized set_mask(INT_TRAIT::EIFR_, INT_TRAIT::EIFR_MASK);
+		synchronized INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
 	}
 
 	inline void _set_trigger(InterruptTrigger trigger)
 	{
-		set_bit_field(INT_TRAIT::EICR_, INT_TRAIT::EICR_MASK, uint8_t(trigger));
+		INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 	}
 	inline void _enable()
 	{
-		set_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
+		INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
 	}
 	inline void _disable()
 	{
-		clear_mask(INT_TRAIT::EIMSK_, INT_TRAIT::EIMSK_MASK);
+		INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
 	}
 	inline void _clear()
 	{
-		set_mask(INT_TRAIT::EIFR_, INT_TRAIT::EIFR_MASK);
+		INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
 	}
 };
 

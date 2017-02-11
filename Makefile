@@ -141,20 +141,16 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF}
-ifeq ($(findstring MEGA,${CONF}),)
 	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF}
-endif
 	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF}
 	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF}
 	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF}
-ifeq ($(findstring MEGA,${CONF}),)
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF}
 	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF}
 	$(MAKE) -C examples/spi/WinBond CONF=${CONF}
-endif
 ifeq ($(findstring ATtiny84,${CONF}),)
 	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF}
 endif
@@ -185,20 +181,16 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF} clean
-ifeq ($(findstring MEGA,${CONF}),)
 	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF} clean
-endif
 	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF} clean
-ifeq ($(findstring MEGA,${CONF}),)
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/WinBond CONF=${CONF} clean
-endif
 ifeq ($(findstring ATtiny84,${CONF}),)
 	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF} clean
 endif

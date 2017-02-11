@@ -5,73 +5,86 @@
  */
 
 #include <stdint.h>
+#include <avr/io.h>
 
-#include <avr/interrupt.h>
-
-// General experiments here
-template<typename Handler>
-struct HandlerHolder
+template<typename T>
+class REGISTER
 {
-	using Holder = HandlerHolder<Handler>;
-	static Handler* _handler;
-
-	template<typename... Args>
-	struct ArgsHodler
+public:
+	constexpr REGISTER():ADDR(0) {}
+	constexpr REGISTER(const REGISTER<T>& rhs):ADDR(rhs.ADDR) {}
+	constexpr REGISTER(uint16_t ADDR):ADDR(ADDR) {}
+	
+	void operator =(T value) const
 	{
-		template<void (Handler::*Callback)(Args...)>
-		struct CallbackHolder
-		{
-			static void handle(Args... args)
-			{
-				(Holder::_handler->*Callback)(args...);
-			}
-		};
-	};
+		*((volatile T*) ADDR) = value;
+	}
+	void operator |=(T value) const
+	{
+		*((volatile T*) ADDR) |= value;
+	}
+	void operator &=(T value) const
+	{
+		*((volatile T*) ADDR) &= value;
+	}
+	void operator ^=(T value) const
+	{
+		*((volatile T*) ADDR) ^= value;
+	}
+	uint8_t operator ~() const
+	{
+		return ~(*((volatile T*) ADDR));
+	}
+	operator T() const
+	{
+		return *((volatile T*) ADDR);
+	}
+
+private:	
+	uint16_t ADDR;
 };
 
-template<typename Handler>
-Handler* HandlerHolder<Handler>::_handler = 0;
+using REG8 = REGISTER<uint8_t>;
+using REG16 = REGISTER<uint16_t>;
 
-template<typename Handler>
-void register_handler(Handler& handler)
-{
-	HandlerHolder<Handler>::_handler = &handler;
-}
+constexpr const REG8 REG_EMPTY{};
+constexpr const REG8 REG_PORTB{(uint16_t)&PORTB};
+constexpr const REG8 REG_PORTB2 = REG_PORTB;
 
-#define CALL_HANDLER(HANDLER, CALLBACK,...)	\
-HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >::handle
-
-#define CALLBACK_HANDLER(HANDLER, CALLBACK,...)	\
-CALL_HANDLER(HANDLER, CALLBACK, ##__VA_ARGS__)
-
-struct TestHandler
-{
-	TestHandler(): _count(0) {}
-	
-	void act0() {++_count;}
-	void act1(uint32_t arg) {_count += arg;}
-	void act2(bool inc, uint32_t arg) {if (inc) _count += arg; else _count -= arg;}
-	
-	uint16_t _count;
-};
-
-static void test()
-{
-	CALL_HANDLER(TestHandler, &TestHandler::act0)();
-	CALL_HANDLER(TestHandler, &TestHandler::act1, uint32_t)(1000UL);
-	CALL_HANDLER(TestHandler, &TestHandler::act2, bool, uint32_t)(false, 500UL);
-	CALLBACK_HANDLER(TestHandler, &TestHandler::act0)();
-	CALLBACK_HANDLER(TestHandler, &TestHandler::act1, uint32_t)(2000UL);
-	CALLBACK_HANDLER(TestHandler, &TestHandler::act2, bool, uint32_t)(true, 100UL);
-}
+constexpr const REG16 REG16_EMPTY{};
+constexpr const REG16 REG16_TCNT{(uint16_t)&TCNT1};
+constexpr const REG16 REG16_TCNT2 = REG16_TCNT;
 
 int main() __attribute__((OS_main));
 int main()
 {
-	sei();
-	
-	TestHandler handler;
-	register_handler(handler);
+	REG_PORTB = 0xFF;				// ldi + out
+	REG_PORTB &= 0x0F;				// in + andi + out
+	REG_PORTB |= 0x80;				// sbi
+	REG_PORTB &= ~0x08;				// cbi
+	REG_PORTB ^= 0xFF;				// in + com
+	REG_PORTB ^= 0x23;				// in + ldi + eor + pout
+	uint8_t value8 = REG_PORTB;		// in
+	while (value8 != 123)			// cpi + breq
+	{
+		value8 = ~REG_PORTB;			// in + com
 
-	while (handler._count < 10000) test();
+		value8 = REG_PORTB | value8;	// in + or
+		value8 = REG_PORTB & value8;	// in + and
+	}
+	
+	REG16_TCNT = 0xFFFF;
+	REG16_TCNT &= 0x0F0F;
+	REG16_TCNT |= 0x8000;
+	REG16_TCNT &= ~0x0800;
+	REG16_TCNT ^= 0xFFFF;
+	REG16_TCNT ^= 0x2323;
+	uint16_t value16 = REG16_TCNT;
+	while (value16 != 15000)
+	{
+		value16 = ~REG16_TCNT;
+		
+		value16 = REG16_TCNT | value16;
+		value16 = REG16_TCNT & value16;
+	}
 }

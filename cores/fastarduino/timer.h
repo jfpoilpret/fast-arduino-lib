@@ -19,7 +19,7 @@
 #include <stddef.h>
 
 #include "utilities.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 //TODO do we need to put everything here in a namespace?
 
@@ -68,15 +68,15 @@ public:
 	inline void _begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
 	{
 		// OCnA & OCnB disconnected, CTC (Clear Timer on Compare match)
-		(volatile uint8_t&) TRAIT::TCCRA = TRAIT::CTC_TCCRA;
+		TRAIT::TCCRA = TRAIT::CTC_TCCRA;
 		// Don't force output compare (FOCA & FOCB), Clock Select according to prescaler
-		(volatile uint8_t&) TRAIT::TCCRB = TRAIT::CTC_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
+		TRAIT::TCCRB = TRAIT::CTC_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
 		// Set timer counter compare match (when value reached, 1ms has elapsed)
-		(volatile TIMER_TYPE&) TRAIT::OCRA = max;
+		TRAIT::OCRA = max;
 		// Reset timer counter
-		(volatile TIMER_TYPE&) TRAIT::TCNT = 0;
+		TRAIT::TCNT = 0;
 		// Set timer interrupt mode (set interrupt on OCRnA compare match)
-		(volatile uint8_t&) TRAIT::TIMSK = _BV(OCIE0A);
+		TRAIT::TIMSK = _BV(OCIE0A);
 	}
 	inline void suspend()
 	{
@@ -85,7 +85,7 @@ public:
 	inline void _suspend()
 	{
 		// Clear timer interrupt mode
-		(volatile uint8_t&) TRAIT::TIMSK = 0;
+		TRAIT::TIMSK = 0;
 	}
 	inline void resume()
 	{
@@ -94,13 +94,13 @@ public:
 	inline void _resume()
 	{
 		// Reset timer counter
-		(volatile TIMER_TYPE&) TRAIT::TCNT = 0;
+		TRAIT::TCNT = 0;
 		// Set timer interrupt mode (set interrupt on OCRnA compare match)
-		(volatile uint8_t&) TRAIT::TIMSK = _BV(OCIE0A);
+		TRAIT::TIMSK = _BV(OCIE0A);
 	}
 	inline bool is_suspended()
 	{
-		return (volatile uint8_t&) TRAIT::TIMSK == 0;
+		return TRAIT::TIMSK == 0;
 	}
 	inline void end()
 	{
@@ -109,9 +109,9 @@ public:
 	inline void _end()
 	{
 		// Stop timer
-		(volatile uint8_t&) TRAIT::TCCRB = 0;
+		TRAIT::TCCRB = 0;
 		// Clear timer interrupt mode (set interrupt on OCRnA compare match)
-		(volatile uint8_t&) TRAIT::TIMSK = 0;
+		TRAIT::TIMSK = 0;
 	}
 	
 private:

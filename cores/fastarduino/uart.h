@@ -17,7 +17,7 @@
 
 #include "uart_commons.h"
 #include "streams.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 // Only MCU with physical USART are supported (not ATtiny then)
 #if defined(UCSR0A)
@@ -114,7 +114,7 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, false, true);
+		_begin(	rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, false, true);
 	}
 	inline void end()
 	{
@@ -196,7 +196,7 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, false);
+		_begin(	rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, false);
 	}
 	inline void end()
 	{
@@ -240,7 +240,7 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		AbstractUART::_begin(rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, true);
+		AbstractUART::_begin(	rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, true);
 	}
 	inline void end()
 	{

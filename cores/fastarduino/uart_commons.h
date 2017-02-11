@@ -15,7 +15,7 @@
 #ifndef UARTCOMMONS_HH
 #define	UARTCOMMONS_HH
 
-#include "board.h"
+#include "boards/board.h"
 
 namespace Serial
 {

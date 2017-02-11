@@ -15,7 +15,7 @@
 #ifndef ANALOGINPUT_HH
 #define ANALOGINPUT_HH
 
-#include "board_traits.h"
+#include "boards/board_traits.h"
 #include "time.h"
 
 //TODO LATER: add class (or namespace?) with general methods enable/disable ADC...
@@ -42,23 +42,22 @@ public:
 	SAMPLE_TYPE sample()
 	{
 		// First ensure that any pending sampling is finished
-		loop_until_bit_is_clear((volatile uint8_t&) GLOBAL_TRAIT::ADCSRA_, ADSC);
+		GLOBAL_TRAIT::ADCSRA_.loop_until_bit_clear(ADSC);
 		// Setup multiplexer selection and start conversion
-		((volatile uint8_t&) GLOBAL_TRAIT::ADMUX_) = VREF_TRAIT::MASK | TYPE_TRAIT::ADLAR1 | TRAIT::MUX_MASK1;
-		((volatile uint8_t&) GLOBAL_TRAIT::ADCSRB_) = TRAIT::MUX_MASK2 | TYPE_TRAIT::ADLAR2;
+		GLOBAL_TRAIT::ADMUX_ = VREF_TRAIT::MASK | TYPE_TRAIT::ADLAR1 | TRAIT::MUX_MASK1;
+		GLOBAL_TRAIT::ADCSRB_ = TRAIT::MUX_MASK2 | TYPE_TRAIT::ADLAR2;
 
-		// The following delay is necessary for bandgap ADC, strangely 70us should be enough (timesheet)
+		// The following delay is necessary for bandgap ADC, strangely 70us should be enough (datasheet)
 		// but this works only when no other ADC is used "at the same time"
 		// In this situation, a delay of minimum 400us seems necessary to ensure bandgap reference voltage is stabilized
 		if (TRAIT::IS_BANDGAP)
 			Time::delay_us(BG_STABILIZATION_DELAY_US);
-//			Time::delay_us(70);
 		
-		((volatile uint8_t&) GLOBAL_TRAIT::ADCSRA_) = _BV(ADEN) | _BV(ADSC) | TRAIT::MUX_MASK2 | FREQ_TRAIT::PRESCALER_MASK;
+		GLOBAL_TRAIT::ADCSRA_ = _BV(ADEN) | _BV(ADSC) | TRAIT::MUX_MASK2 | FREQ_TRAIT::PRESCALER_MASK;
 		// Wait until sampling is done
-		loop_until_bit_is_clear((volatile uint8_t&) GLOBAL_TRAIT::ADCSRA_, ADSC);
+		GLOBAL_TRAIT::ADCSRA_.loop_until_bit_clear(ADSC);
 		// Should we synchronize ADC reading?
-		return (volatile SAMPLE_TYPE&) TYPE_TRAIT::_ADC;
+		return TYPE_TRAIT::_ADC;
 	}
 };
 

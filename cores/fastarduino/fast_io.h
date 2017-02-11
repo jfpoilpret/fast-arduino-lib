@@ -16,7 +16,7 @@
 #define	FASTIO_HH
 
 #include "utilities.h"
-#include "board_traits.h"
+#include "boards/board_traits.h"
 
 enum class PinMode: uint8_t
 {
@@ -34,8 +34,8 @@ private:
 	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
-	static const Board::Port PORT = PORT_;
-	static const uint8_t BIT = BIT_;
+	static constexpr const Board::Port PORT = PORT_;
+	static constexpr const uint8_t BIT = BIT_;
 	
 	FastPin() INLINE
 	{
@@ -49,29 +49,29 @@ public:
 	void set_mode(PinMode mode, bool value = false) INLINE
 	{
 		if (mode == PinMode::OUTPUT)
-			set_ioreg_bit(TRAIT::DDR, BIT);
+			TRAIT::DDR |= _BV(BIT);
 		else
-			clear_ioreg_bit(TRAIT::DDR, BIT);
+			TRAIT::DDR &= ~_BV(BIT);
 		if (value || mode == PinMode::INPUT_PULLUP)
-			set_ioreg_bit(TRAIT::PORT, BIT);
+			TRAIT::PORT |= _BV(BIT);
 		else
-			clear_ioreg_bit(TRAIT::PORT, BIT);
+			TRAIT::PORT &= ~_BV(BIT);
 	}
 	void set() INLINE
 	{
-		set_ioreg_bit(TRAIT::PORT, BIT);
+		TRAIT::PORT |= _BV(BIT);
 	}
 	void clear() INLINE
 	{
-		clear_ioreg_bit(TRAIT::PORT, BIT);
+		TRAIT::PORT &= ~_BV(BIT);
 	}
 	void toggle() INLINE
 	{
-		set_ioreg_bit(TRAIT::PIN, BIT);
+		TRAIT::PIN |= _BV(BIT);
 	}
 	bool value() INLINE
 	{
-		return ioreg_bit_value(TRAIT::PIN, BIT);
+		return TRAIT::PIN & _BV(BIT);
 	}
 };
 
@@ -84,7 +84,7 @@ private:
 	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
-	static const Board::Port PORT = PORT_;
+	static constexpr const Board::Port PORT = PORT_;
 	
 	FastPort() {}
 	FastPort(uint8_t ddr, uint8_t port = 0) INLINE
@@ -107,27 +107,27 @@ public:
 	
 	void set_PORT(uint8_t port) INLINE
 	{
-		set_ioreg_byte(TRAIT::PORT, port);
+		TRAIT::PORT = port;
 	}
 	uint8_t get_PORT() INLINE
 	{
-		return get_ioreg_byte(TRAIT::PORT);
+		return TRAIT::PORT;
 	}
 	void set_DDR(uint8_t ddr) INLINE
 	{
-		set_ioreg_byte(TRAIT::DDR, ddr);
+		TRAIT::DDR = ddr;
 	}
 	uint8_t get_DDR() INLINE
 	{
-		return get_ioreg_byte(TRAIT::DDR);
+		return TRAIT::DDR;
 	}
 	void set_PIN(uint8_t pin) INLINE
 	{
-		set_ioreg_byte(TRAIT::PIN, pin);
+		TRAIT::PIN = pin;
 	}
 	uint8_t get_PIN() INLINE
 	{
-		return get_ioreg_byte(TRAIT::PIN);
+		return TRAIT::PIN;
 	}
 };
 
@@ -140,7 +140,7 @@ private:
 	using TRAIT = board_traits::Port_trait<PORT_>;
 	
 public:
-	static const Board::Port PORT = PORT_;
+	static constexpr const Board::Port PORT = PORT_;
 	
 	FastMaskedPort() {}
 	FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0)
@@ -152,48 +152,39 @@ public:
 	
 	void set_PORT(uint8_t port) INLINE
 	{
-		MASK_VALUE(TRAIT::PORT, port);
+		TRAIT::PORT = (TRAIT::PORT & ~_mask) | (port & _mask);
 	}
 	uint8_t get_PORT() INLINE
 	{
-		return MASK_VALUE(TRAIT::PORT);
+		return TRAIT::PORT & _mask;
 	}
 	void set_DDR(uint8_t ddr) INLINE
 	{
-		MASK_VALUE(TRAIT::DDR, ddr);
+		TRAIT::DDR = (TRAIT::DDR & ~_mask) | (ddr & _mask);
 	}
 	uint8_t get_DDR() INLINE
 	{
-		return MASK_VALUE(TRAIT::DDR);
+		return TRAIT::DDR & _mask;
 	}
 	void set_PIN(uint8_t pin) INLINE
 	{
-		TRAIT::PIN.set(pin & _mask);
+		TRAIT::PIN = pin & _mask;
 	}
 	uint8_t get_PIN() INLINE
 	{
-		return MASK_VALUE(TRAIT::PIN);
+		return TRAIT::PIN & _mask;
 	}
 	
 private:
-	void MASK_VALUE(volatile uint8_t& reg, uint8_t value)
-	{
-		reg = (reg & ~_mask) | (value & _mask);
-	}
-	uint8_t MASK_VALUE(volatile uint8_t& reg)
-	{
-		return reg & _mask;
-	}
-	
 	uint8_t _mask;
 };
 
 template<Board::DigitalPin DPIN>
 struct FastPinType
 {
-	static const Board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
-	static const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
-	static const uint8_t MASK = _BV(BIT);
+	static constexpr const Board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
+	static constexpr const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
+	static constexpr const uint8_t MASK = _BV(BIT);
 	using TYPE = FastPin<PORT, BIT>;
 	using PORT_TYPE = FastPort<PORT>;
 };
