@@ -42,7 +42,12 @@ constexpr const size_t DATA_SIZE = 256;
 USE_UART0();
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
-//TODO
+constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
+static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+constexpr const size_t DATA_SIZE = 256;
+
+// Define vectors we need in the example
+USE_UART0();
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
 
