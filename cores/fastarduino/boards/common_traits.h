@@ -30,7 +30,6 @@ namespace board_traits
 	{
 	public:
 		constexpr REGISTER():ADDR(0) {}
-//		constexpr REGISTER(const REGISTER<T>& rhs):ADDR(rhs.ADDR) {}
 		constexpr REGISTER(uint16_t ADDR) INLINE:ADDR(ADDR) {}
 
 		void operator =(int value) const INLINE 
@@ -53,9 +52,13 @@ namespace board_traits
 		{
 			return ~(*((volatile T*) ADDR));
 		}
-		operator volatile T&() const INLINE 
+		void loop_until_bit_set(uint8_t bit) const INLINE
 		{
-			return *((volatile T*) ADDR);
+			while (!(*((volatile T*) ADDR) & _BV(bit))) ;
+		}
+		void loop_until_bit_clear(uint8_t bit) const INLINE
+		{
+			while (*((volatile T*) ADDR) | _BV(bit)) ;
 		}
 		bool operator ==(T value) const INLINE
 		{
@@ -80,6 +83,10 @@ namespace board_traits
 		bool operator <=(T value) const INLINE
 		{
 			return *((volatile T*) ADDR) <= value;
+		}
+		operator volatile T&() const INLINE 
+		{
+			return *((volatile T*) ADDR);
 		}
 
 	private:	
