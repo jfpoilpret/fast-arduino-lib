@@ -78,26 +78,25 @@ The roadmap of next activities and new supported features is the following:
 
 February-March 2017
 -------------------
-1. Refactor UART (Harware and Software) code to optimize code size
-2. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
-3. EEPROM support
-4. Trace support (including PROGMEM strings support)
+1. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
+2. EEPROM support
+3. Trace support (including PROGMEM strings support)
 
 March-April 2017
 ----------------
-5. Review namespaces overall (existence and names)
-6. Rename board pins to include Port and Bit reference, not just Dx
-7. Apply coding guidelines across the library code (not necessarily example code)
-8. Add support for ATtinyX5
+4. Review namespaces overall (existence and names)
+5. Rename board pins to include Port and Bit reference, not just Dx
+6. Apply coding guidelines across the library code (not necessarily example code)
+7. Add support for ATtinyX5
 
 May-June 2017
 -------------
-9. Add documentation (SR handling, Board support adding, API...)
-10. Improve Analog Input support and code
-11. Improve Timer support (support other modes than CTC)
-12. Add support for Arduino Leonardo and CDC feature
+8. Add documentation (SR handling, Board support adding, API...)
+9. Improve Analog Input support and code
+10. Improve Timer support (support other modes than CTC)
+11. Add support for Arduino Leonardo and CDC feature
 
-Note that activities 1, 2, 5, 6 and 7 will have an impact on current API.
+Note that activities 1, 4, 5 and 6 will have an impact on current API.
 
 The following features are not in FastArduino roadmap currently (but may be in the future):
 
