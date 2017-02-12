@@ -18,6 +18,7 @@
 #include <avr/io.h>
 
 #include "board.h"
+#include "../uart_commons.h"
 
 // This internal macro is used by individual boards headers
 #define R_(REG) ((uint16_t)&REG)
@@ -275,6 +276,10 @@ namespace board_traits
 		static constexpr const REG8 UCSRC{};
 		static constexpr const REG8 UDR{};
 		static constexpr const REG16 UBRR{};
+		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
+		{
+			return 0;
+		}
 	};
 	template<REG UCSRA_, REG UCSRB_, REG UCSRC_, REG UDR_, REG UBRR_>
 	struct USART_trait_impl

@@ -44,7 +44,6 @@
       <itemPath>cores/fastarduino/time.cpp</itemPath>
       <itemPath>cores/fastarduino/time.h</itemPath>
       <itemPath>cores/fastarduino/timer.h</itemPath>
-      <itemPath>cores/fastarduino/uart.cpp</itemPath>
       <itemPath>cores/fastarduino/uart.h</itemPath>
       <itemPath>cores/fastarduino/uart_commons.h</itemPath>
       <itemPath>cores/fastarduino/utilities.h</itemPath>
@@ -224,8 +223,6 @@
       </item>
       <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="cores/fastarduino/uart.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart_commons.h" ex="false" tool="3" flavor2="0">
@@ -381,8 +378,6 @@
       <item path="cores/fastarduino/time.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -540,8 +535,6 @@
       </item>
       <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="cores/fastarduino/uart.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart_commons.h" ex="false" tool="3" flavor2="0">
@@ -698,8 +691,6 @@
       </item>
       <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="cores/fastarduino/uart.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart_commons.h" ex="false" tool="3" flavor2="0">
@@ -855,8 +846,6 @@
       <item path="cores/fastarduino/time.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/timer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="cores/fastarduino/uart.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/uart.h" ex="false" tool="3" flavor2="0">
       </item>
