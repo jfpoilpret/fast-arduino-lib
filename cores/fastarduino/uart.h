@@ -273,7 +273,6 @@ public:
 		AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
 		synchronized
 		{
-			//FIXME all constants should be in USART traits!
 			TRAIT::UBRR = setup.ubrr_value;
 			TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
 			TRAIT::UCSRB = TRAIT::TX_ENABLE_MASK | TRAIT::RX_ENABLE_MASK | TRAIT::UDRIE_MASK | TRAIT::RXCIE_MASK;
