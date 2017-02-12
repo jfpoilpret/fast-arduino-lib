@@ -284,8 +284,10 @@ namespace Soft
 			_delay_loop_2(_stop_bit_rx_time_no_push);
 		}
 		// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
-		_pci->_clear();
-		return;
+		if (PIN_TRAIT::IS_INT)
+			_int->_clear();
+		else
+			_pci->_clear();
 	}
 	
 	template<Board::DigitalPin RX, Board::DigitalPin TX>
