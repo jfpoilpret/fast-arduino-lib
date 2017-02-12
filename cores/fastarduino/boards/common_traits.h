@@ -276,12 +276,18 @@ namespace board_traits
 		static constexpr const REG8 UCSRC{};
 		static constexpr const REG8 UDR{};
 		static constexpr const REG16 UBRR{};
+		static constexpr const uint8_t U2X_MASK = 0;
+		static constexpr const uint8_t TX_ENABLE_MASK = 0;
+		static constexpr const uint8_t RX_ENABLE_MASK = 0;
+		static constexpr const uint8_t UDRIE_MASK = 0;
+		static constexpr const uint8_t RXCIE_MASK = 0;
 		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
 		{
 			return 0;
 		}
 	};
-	template<REG UCSRA_, REG UCSRB_, REG UCSRC_, REG UDR_, REG UBRR_>
+	template<REG UCSRA_, REG UCSRB_, REG UCSRC_, REG UDR_, REG UBRR_, 
+			uint8_t U2X_BIT, uint8_t TX_ENABLE_BIT, uint8_t RX_ENABLE_BIT, uint8_t UDRIE_BIT, uint8_t RXCIE_BIT>
 	struct USART_trait_impl
 	{
 		static constexpr const REG8 UCSRA = UCSRA_;
@@ -289,6 +295,11 @@ namespace board_traits
 		static constexpr const REG8 UCSRC = UCSRC_;
 		static constexpr const REG8 UDR = UDR_;
 		static constexpr const REG16 UBRR = UBRR_;
+		static constexpr const uint8_t U2X_MASK = _BV(U2X_BIT);
+		static constexpr const uint8_t TX_ENABLE_MASK = _BV(TX_ENABLE_BIT);
+		static constexpr const uint8_t RX_ENABLE_MASK = _BV(RX_ENABLE_BIT);
+		static constexpr const uint8_t UDRIE_MASK = _BV(UDRIE_BIT);
+		static constexpr const uint8_t RXCIE_MASK = _BV(RXCIE_BIT);
 	};
 	
 	template<Port PORT_, uint8_t SS_, uint8_t MOSI_, uint8_t MISO_, uint8_t SCK_>

@@ -56,7 +56,6 @@ _USE_UATX(NAME)
 #define USE_UART3()	_USE_UART(3)
 
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
-//FIXME put all UART-dependent constant in TRAITS
 //FIXME reuse generic way to handle ISR (cleaner and avoids multiple friends in class)
 class AbstractUART: public Serial::UARTErrors
 {
@@ -69,11 +68,12 @@ protected:
 	};
 	static constexpr SpeedSetup compute_speed(uint32_t rate)
 	{
-		//TODO Define 4096 as a constant
-		return (UBRR_double(rate) < 4096) ? SpeedSetup(UBRR_double(rate), true) : SpeedSetup(UBRR_single(rate), false);
+		return (UBRR_double(rate) < DOUBLE_SPEED_RATE_LIMIT) ? SpeedSetup(UBRR_double(rate), true) : SpeedSetup(UBRR_single(rate), false);
 	}
 	
 private:
+	static constexpr const uint16_t DOUBLE_SPEED_RATE_LIMIT = 4096;
+	
 	static constexpr uint16_t UBRR_double(uint32_t rate)
 	{
 		return (F_CPU / 4 / rate - 1) / 2;
@@ -101,13 +101,12 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		SpeedSetup setup = compute_speed(rate);
+		AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
 		synchronized
 		{
-			//FIXME all constants should be in USART traits!
 			TRAIT::UBRR = setup.ubrr_value;
-			TRAIT::UCSRA = (setup.u2x ? _BV(U2X0) : 0);
-			TRAIT::UCSRB = _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
+			TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
+			TRAIT::UCSRB = TRAIT::TX_ENABLE_MASK | TRAIT::UDRIE_MASK;
 			TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
 		}
 	}
@@ -139,9 +138,8 @@ protected:
 				char value;
 				if (OutputBuffer::_pull(value))
 				{
-					//FIXME all constants should be in USART traits!
 					// Set UDR interrupt to be notified when we can send the next character
-					TRAIT::UCSRB |= _BV(UDRIE0);
+					TRAIT::UCSRB |= TRAIT::UDRIE_MASK;
 					TRAIT::UDR = value;
 					_transmitting = true;
 				}
@@ -164,9 +162,8 @@ private:
 		{
 			_errors.all_errors.queue_overflow = true;
 			_transmitting = false;
-			//FIXME all constants should be in USART traits!
 			// Clear UDRIE to prevent UDR interrupt to go on forever
-			TRAIT::UCSRB &= ~_BV(UDRIE0);
+			TRAIT::UCSRB &= ~TRAIT::UDRIE_MASK;
 		}
 	}
 	
@@ -216,12 +213,12 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		SpeedSetup setup = compute_speed(rate);
+		AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
 		synchronized
 		{
 			TRAIT::UBRR = setup.ubrr_value;
-			TRAIT::UCSRA = (setup.u2x ? _BV(U2X0) : 0);
-			TRAIT::UCSRB = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
+			TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
+			TRAIT::UCSRB = TRAIT::TX_ENABLE_MASK | TRAIT::RXCIE_MASK;
 			TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
 		}
 	}
@@ -233,6 +230,7 @@ public:
 private:
 	inline void data_receive_complete()
 	{
+		//FIXME all constants should be in USART traits!
 		char status = TRAIT::UCSRA;
 		_errors.all_errors.data_overrun = status & _BV(DOR0);
 		_errors.all_errors.frame_error = status & _BV(FE0);
@@ -277,8 +275,8 @@ public:
 		{
 			//FIXME all constants should be in USART traits!
 			TRAIT::UBRR = setup.ubrr_value;
-			TRAIT::UCSRA = (setup.u2x ? _BV(U2X0) : 0);
-			TRAIT::UCSRB = _BV(RXCIE0) | _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
+			TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
+			TRAIT::UCSRB = TRAIT::TX_ENABLE_MASK | TRAIT::RX_ENABLE_MASK | TRAIT::UDRIE_MASK | TRAIT::RXCIE_MASK;
 			TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
 		}
 	}
