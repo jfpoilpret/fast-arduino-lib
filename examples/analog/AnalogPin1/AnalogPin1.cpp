@@ -37,14 +37,14 @@
 static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
-USE_UART0();
+REGISTER_UATX_ISR(0)
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
-USE_UART0();
+REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
@@ -68,6 +68,7 @@ int main()
 	sei();
 #if HARDWARE_UART
 	UATX<Board::USART::USART0> uart{output_buffer};
+	uart.register_handler();
 #else
 	Soft::UATX<TX> uart{output_buffer};
 #endif

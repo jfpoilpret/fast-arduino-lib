@@ -90,7 +90,7 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
 // Trace is used only for Arduino UNO if needed
 #if HAS_TRACE
 #include <fastarduino/uart.h>
-USE_UATX0();
+REGISTER_UATX_ISR(0)
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -181,6 +181,7 @@ int main()
 	
 #if HAS_TRACE
 	// Setup traces (Arduino only)
+	uatx.register_handler();
 	uatx.begin(57600);
 	trace.width(0);
 #endif

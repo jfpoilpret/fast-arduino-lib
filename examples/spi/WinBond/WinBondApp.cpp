@@ -39,7 +39,7 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 256;
 
 // Define vectors we need in the example
-USE_UART0();
+REGISTER_UATX_ISR(0)
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
 constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
@@ -47,7 +47,7 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 256;
 
 // Define vectors we need in the example
-USE_UART0();
+REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
 
@@ -77,7 +77,9 @@ int main()
 	uart.begin(115200);
 #else
 	UATX<Board::USART::USART0> uart{output_buffer};
+	uart.register_handler();
 	uart.begin(115200);
+	
 #endif
 	FormattedOutput<OutputBuffer> out = uart.fout();
 	
