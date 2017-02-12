@@ -191,10 +191,50 @@ namespace board_traits
 	//=======
 	// USART
 	//=======
-	template<> struct USART_trait<USART::USART0>: USART_trait_impl<R_(UCSR0A), R_(UCSR0B), R_(UCSR0C), R_(UDR0), R_(UBRR0)> {};
-	template<> struct USART_trait<USART::USART1>: USART_trait_impl<R_(UCSR1A), R_(UCSR1B), R_(UCSR1C), R_(UDR1), R_(UBRR1)> {};
-	template<> struct USART_trait<USART::USART2>: USART_trait_impl<R_(UCSR2A), R_(UCSR2B), R_(UCSR2C), R_(UDR2), R_(UBRR2)> {};
-	template<> struct USART_trait<USART::USART3>: USART_trait_impl<R_(UCSR3A), R_(UCSR3B), R_(UCSR3C), R_(UDR3), R_(UBRR3)> {};
+	template<> struct USART_trait<USART::USART0>: 
+		USART_trait_impl<R_(UCSR0A), R_(UCSR0B), R_(UCSR0C), R_(UDR0), R_(UBRR0), U2X0, TXEN0, RXEN0, UDRIE0, RXCIE0> 
+	{
+		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
+		{
+			return	(	parity == Serial::Parity::EVEN ? _BV(UPM00) : 
+						parity == Serial::Parity::ODD ? _BV(UPM00) | _BV(UPM01) : 0x00)
+					|	(stopbits == Serial::StopBits::ONE ? 0x00 : _BV(USBS0))
+					|	_BV(UCSZ00) | _BV(UCSZ01);
+		}
+	};
+	template<> struct USART_trait<USART::USART1>: 
+		USART_trait_impl<R_(UCSR1A), R_(UCSR1B), R_(UCSR1C), R_(UDR1), R_(UBRR1), U2X1, TXEN1, RXEN1, UDRIE1, RXCIE1> 
+	{
+		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
+		{
+			return	(	parity == Serial::Parity::EVEN ? _BV(UPM10) : 
+						parity == Serial::Parity::ODD ? _BV(UPM10) | _BV(UPM11) : 0x00)
+					|	(stopbits == Serial::StopBits::ONE ? 0x00 : _BV(USBS1))
+					|	_BV(UCSZ10) | _BV(UCSZ11);
+		}
+	};
+	template<> struct USART_trait<USART::USART2>: 
+		USART_trait_impl<R_(UCSR2A), R_(UCSR2B), R_(UCSR2C), R_(UDR2), R_(UBRR2), U2X2, TXEN2, RXEN2, UDRIE2, RXCIE2> 
+	{
+		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
+		{
+			return	(	parity == Serial::Parity::EVEN ? _BV(UPM20) : 
+						parity == Serial::Parity::ODD ? _BV(UPM20) | _BV(UPM21) : 0x00)
+					|	(stopbits == Serial::StopBits::ONE ? 0x00 : _BV(USBS2))
+					|	_BV(UCSZ20) | _BV(UCSZ21);
+		}
+	};
+	template<> struct USART_trait<USART::USART3>: 
+		USART_trait_impl<R_(UCSR3A), R_(UCSR3B), R_(UCSR3C), R_(UDR3), R_(UBRR3), U2X3, TXEN3, RXEN3, UDRIE3, RXCIE3> 
+	{
+		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
+		{
+			return	(	parity == Serial::Parity::EVEN ? _BV(UPM30) : 
+						parity == Serial::Parity::ODD ? _BV(UPM30) | _BV(UPM31) : 0x00)
+					|	(stopbits == Serial::StopBits::ONE ? 0x00 : _BV(USBS3))
+					|	_BV(UCSZ30) | _BV(UCSZ31);
+		}
+	};
 
 	//=====
 	// SPI
