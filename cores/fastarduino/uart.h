@@ -56,21 +56,66 @@ _USE_UATX(NAME)
 #define USE_UART3()	_USE_UART(3)
 
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
-
+//FIXME put all UART-dependent constant in TRAITS
+//FIXME reuse generic way to handle ISR (cleaner and avoids multiple friends in class)
 class AbstractUART: public Serial::UARTErrors
 {
 protected:
-	static void _begin(	uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits,
-						volatile uint16_t& UBRR, volatile uint8_t& UCSRA,
-						volatile uint8_t& UCSRB, volatile uint8_t& UCSRC,
-						bool has_rx,
-						bool has_tx);
-	static void _end(volatile uint8_t& UCSRB);
+	struct SpeedSetup
+	{
+		constexpr SpeedSetup(uint16_t ubrr_value, bool u2x): ubrr_value{ubrr_value}, u2x{u2x} {}
+		const uint16_t ubrr_value;
+		const bool u2x;
+	};
+	static constexpr SpeedSetup compute_speed(uint32_t rate)
+	{
+		//TODO Define 4096 as a constant
+		return (UBRR_double(rate) < 4096) ? SpeedSetup(UBRR_double(rate), true) : SpeedSetup(UBRR_single(rate), false);
+	}
+	
+private:
+	static constexpr uint16_t UBRR_double(uint32_t rate)
+	{
+		return (F_CPU / 4 / rate - 1) / 2;
+	}
+	static constexpr uint16_t UBRR_single(uint32_t rate)
+	{
+		return (F_CPU / 8 / rate - 1) / 2;
+	}
 };
 
-class AbstractUATX: virtual public AbstractUART, private OutputBuffer
+template<Board::USART USART>
+class UATX: virtual public AbstractUART, private OutputBuffer
 {
+private:
+	using TRAIT = board_traits::USART_trait<USART>;
+	
 public:
+	template<uint8_t SIZE_TX>
+	UATX(char (&output)[SIZE_TX]):OutputBuffer{output}, _transmitting(false)
+	{
+		_uatx = this;
+	}
+	
+	inline void begin(	uint32_t rate,
+						Serial::Parity parity = Serial::Parity::NONE, 
+						Serial::StopBits stop_bits = Serial::StopBits::ONE)
+	{
+		SpeedSetup setup = compute_speed(rate);
+		synchronized
+		{
+			//FIXME all constants should be in USART traits!
+			TRAIT::UBRR = setup.ubrr_value;
+			TRAIT::UCSRA = (setup.u2x ? _BV(U2X0) : 0);
+			TRAIT::UCSRB = _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
+			TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
+		}
+	}
+	inline void end()
+	{
+		synchronized TRAIT::UCSRB = 0;
+	}
+
 	inline OutputBuffer& out()
 	{
 		return (OutputBuffer&) *this;
@@ -81,51 +126,27 @@ public:
 		return FormattedOutput<OutputBuffer>(*this);
 	}
 	
-	// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
-	// Fixed in 4.9.4 (currently using 4.9.2 only)
-	// We have to make the constructor public to allow virtual inheritance...
-//protected:
-	template<uint8_t SIZE_TX>
-	AbstractUATX(char (&output)[SIZE_TX])
-		:OutputBuffer{output}, _transmitting(false) {}
-	
-protected:
-	void _on_put(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
-	void _data_register_empty(volatile uint8_t& UCSRB, volatile uint8_t& UDR);
-
-private:
-	bool _transmitting;
-};
-
-template<Board::USART USART>
-class UATX: public AbstractUATX
-{
-private:
-	using TRAIT = board_traits::USART_trait<USART>;
-	
-public:
-	template<uint8_t SIZE_TX>
-	UATX(char (&output)[SIZE_TX]):AbstractUATX(output)
-	{
-		_uatx = this;
-	}
-	
-	inline void begin(	uint32_t rate,
-						Serial::Parity parity = Serial::Parity::NONE, 
-						Serial::StopBits stop_bits = Serial::StopBits::ONE)
-	{
-		_begin(	rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, false, true);
-	}
-	inline void end()
-	{
-		_end(TRAIT::UCSRC);
-	}
-
 protected:	
 	// Listeners of events on the buffer
 	virtual void on_put() override
 	{
-		_on_put(TRAIT::UCSRB, TRAIT::UDR);
+		synchronized
+		{
+			// Check if TX is not currently active, if so, activate it
+			if (!_transmitting)
+			{
+				// Yes, trigger TX
+				char value;
+				if (OutputBuffer::_pull(value))
+				{
+					//FIXME all constants should be in USART traits!
+					// Set UDR interrupt to be notified when we can send the next character
+					TRAIT::UCSRB |= _BV(UDRIE0);
+					TRAIT::UDR = value;
+					_transmitting = true;
+				}
+			}
+		}
 	}
 	virtual void on_overflow(UNUSED char c) override
 	{
@@ -135,11 +156,24 @@ protected:
 private:
 	inline void data_register_empty()
 	{
-		_data_register_empty(TRAIT::UCSRB, TRAIT::UDR);
+		_errors.has_errors = 0;
+		char value;
+		if (out()._pull(value))
+			TRAIT::UDR = value;
+		else
+		{
+			_errors.all_errors.queue_overflow = true;
+			_transmitting = false;
+			//FIXME all constants should be in USART traits!
+			// Clear UDRIE to prevent UDR interrupt to go on forever
+			TRAIT::UCSRB &= ~_BV(UDRIE0);
+		}
 	}
 	
 	static UATX<USART>* _uatx;
 	
+	bool _transmitting;
+
 	friend void USART0_UDRE_vect();
 #if defined(UCSR1A)
 	friend void USART1_UDRE_vect();
@@ -155,9 +189,19 @@ private:
 template<Board::USART USART>
 UATX<USART>* UATX<USART>::_uatx = 0;
 
-class AbstractUARX: virtual public AbstractUART, private InputBuffer
+template<Board::USART USART>
+class UARX: virtual public AbstractUART, private InputBuffer
 {
+private:
+	using TRAIT = board_traits::USART_trait<USART>;
+	
 public:
+	template<uint8_t SIZE_RX>
+	UARX(char (&input)[SIZE_RX]):InputBuffer{input}
+	{
+		_uarx = this;
+	}
+	
 	inline InputBuffer& in()
 	{
 		return (InputBuffer&) *this;
@@ -168,45 +212,33 @@ public:
 		return FormattedInput<InputBuffer>(*this);
 	}
 	
-	// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
-	// Fixed in 4.9.4 (currently using 4.9.2 only)
-	// We have to make the constructor public to allow virtual inheritance...
-//protected:
-	template<uint8_t SIZE_RX>
-	AbstractUARX(char (&input)[SIZE_RX]):InputBuffer{input} {}
-	
-protected:
-	void _data_receive_complete(volatile uint8_t& UCSRA, volatile uint8_t& UDR);
-};
-
-template<Board::USART USART>
-class UARX: public AbstractUARX
-{
-private:
-	using TRAIT = board_traits::USART_trait<USART>;
-	
-public:
-	template<uint8_t SIZE_RX>
-	UARX(char (&input)[SIZE_RX]):AbstractUARX(input)
-	{
-		_uarx = this;
-	}
-	
 	inline void begin(	uint32_t rate,
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		_begin(	rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, false);
+		SpeedSetup setup = compute_speed(rate);
+		synchronized
+		{
+			TRAIT::UBRR = setup.ubrr_value;
+			TRAIT::UCSRA = (setup.u2x ? _BV(U2X0) : 0);
+			TRAIT::UCSRB = _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0);
+			TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
+		}
 	}
 	inline void end()
 	{
-		_end(TRAIT::UCSRC);
+		synchronized TRAIT::UCSRB = 0;
 	}
 
 private:
 	inline void data_receive_complete()
 	{
-		_data_receive_complete(TRAIT::UCSRA, TRAIT::UDR);
+		char status = TRAIT::UCSRA;
+		_errors.all_errors.data_overrun = status & _BV(DOR0);
+		_errors.all_errors.frame_error = status & _BV(FE0);
+		_errors.all_errors.parity_error = status & _BV(UPE0);
+		char value = TRAIT::UDR;
+		_errors.all_errors.queue_overflow = !in()._push(value);
 	}
 	
 	static UARX<USART>* _uarx;
@@ -240,11 +272,19 @@ public:
 						Serial::Parity parity = Serial::Parity::NONE, 
 						Serial::StopBits stop_bits = Serial::StopBits::ONE)
 	{
-		AbstractUART::_begin(	rate, parity, stop_bits, TRAIT::UBRR, TRAIT::UCSRA, TRAIT::UCSRB, TRAIT::UCSRC, true, true);
+		AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
+		synchronized
+		{
+			//FIXME all constants should be in USART traits!
+			TRAIT::UBRR = setup.ubrr_value;
+			TRAIT::UCSRA = (setup.u2x ? _BV(U2X0) : 0);
+			TRAIT::UCSRB = _BV(RXCIE0) | _BV(UDRIE0) | _BV(RXEN0) | _BV(TXEN0);
+			TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
+		}
 	}
 	inline void end()
 	{
-		AbstractUART::_end(TRAIT::UCSRC);
+		synchronized TRAIT::UCSRB = 0;
 	}
 };
 

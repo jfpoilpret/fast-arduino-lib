@@ -104,7 +104,16 @@ namespace board_traits
 	//=======
 	// USART
 	//=======
-	template<> struct USART_trait<USART::USART0>: USART_trait_impl<R_(UCSR0A), R_(UCSR0B), R_(UCSR0C), R_(UDR0), R_(UBRR0)> {};
+	template<> struct USART_trait<USART::USART0>: USART_trait_impl<R_(UCSR0A), R_(UCSR0B), R_(UCSR0C), R_(UDR0), R_(UBRR0)> 
+	{
+		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
+		{
+			return	(	parity == Serial::Parity::EVEN ? _BV(UPM00) : 
+						parity == Serial::Parity::ODD ? _BV(UPM00) | _BV(UPM01) : 0x00)
+					|	(stopbits == Serial::StopBits::ONE ? 0x00 : _BV(USBS0))
+					|	_BV(UCSZ00) | _BV(UCSZ01);
+		}
+	};
 	
 	//=====
 	// SPI
