@@ -37,7 +37,7 @@
 #include <fastarduino/uart.h>
 
 // Define vectors we need in the example
-USE_UART0()
+REGISTER_UART_ISR(0)
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;
@@ -53,6 +53,7 @@ int main()
 	
 	// Start UART
 	UART<Board::USART::USART0> uart{input_buffer, output_buffer};
+	uart.register_handler();
 	uart.begin(115200);
 //	uart.begin(230400);
 	InputBuffer& in = uart.in();

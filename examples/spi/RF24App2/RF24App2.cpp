@@ -91,7 +91,7 @@ REGISTER_RTT_ISR(0)
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-USE_UATX0();
+REGISTER_UATX_ISR(0)
 #else
 #include <fastarduino/empty_streams.h>
 #endif
@@ -121,6 +121,7 @@ int main()
 #if HAS_TRACE
 	// Setup traces
 	UATX<Board::USART::USART0> uatx{output_buffer};
+	uatx.register_handler();
 	uatx.begin(115200);
 	auto trace = uatx.fout();
 #else

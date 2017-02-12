@@ -37,13 +37,13 @@
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
-USE_UATX0()
+REGISTER_UATX_ISR(0)
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
-USE_UATX0()
+REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
@@ -67,6 +67,7 @@ int main()
 	uatx.begin(115200);
 #else
 	UATX<Board::USART::USART0> uatx{output_buffer};
+	uatx.register_handler();
 	uatx.begin(115200);
 #endif
 

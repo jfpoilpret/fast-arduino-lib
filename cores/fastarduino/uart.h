@@ -22,41 +22,24 @@
 // Only MCU with physical USART are supported (not ATtiny then)
 #if defined(UCSR0A)
 
-// This macro is internally used in further macros and should not be used in your programs
-#define _USE_UATX(NAME)													\
-ISR(CAT3(USART, NAME, _UDRE_vect))										\
-{																		\
-	CAT(UATX<Board::USART::USART, NAME)>::_uatx->data_register_empty();	\
-}
-#define _USE_UARX(NAME)														\
-ISR(CAT3(USART, NAME, _RX_vect))											\
-{																			\
-	CAT(UARX<Board::USART::USART, NAME)>::_uarx->data_receive_complete();	\
-}
+#define REGISTER_UATX_ISR_METHOD_(UART_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(CAT3(USART, UART_NUM, _UDRE_vect), HANDLER, CALLBACK)
+#define REGISTER_UARX_ISR_METHOD_(UART_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(CAT3(USART, UART_NUM, _RX_vect), HANDLER, CALLBACK)
 
-#define _USE_UART(NAME)		\
-_USE_UARX(NAME)				\
-_USE_UATX(NAME)
+#define UATX_CLASS_(UART_NUM) CAT(UATX<Board::USART::USART, UART_NUM) >
+#define UARX_CLASS_(UART_NUM) CAT(UARX<Board::USART::USART, UART_NUM) >
+#define UART_CLASS_(UART_NUM) CAT(UART<Board::USART::USART, UART_NUM) >
 
-// Those macros should be added somewhere in a cpp file (advised name: vectors.cpp) to indicate you
-// use a given UART in your program hence you need the proper ISR vector correctly defined
-#define USE_UATX0()	_USE_UATX(0)
-#define USE_UATX1()	_USE_UATX(1)
-#define USE_UATX2()	_USE_UATX(2)
-#define USE_UATX3()	_USE_UATX(3)
-
-#define USE_UARX0()	_USE_UARX(0)
-#define USE_UARX1()	_USE_UARX(1)
-#define USE_UARX2()	_USE_UARX(2)
-#define USE_UARX3()	_USE_UARX(3)
-
-#define USE_UART0()	_USE_UART(0)
-#define USE_UART1()	_USE_UART(1)
-#define USE_UART2()	_USE_UART(2)
-#define USE_UART3()	_USE_UART(3)
+#define REGISTER_UATX_ISR(UART_NUM)												\
+REGISTER_UATX_ISR_METHOD_(UART_NUM, UATX_CLASS_(UART_NUM), & UATX_CLASS_(UART_NUM) ::data_register_empty)
+#define REGISTER_UARX_ISR(UART_NUM)												\
+REGISTER_UARX_ISR_METHOD_(UART_NUM, UARX_CLASS_(UART_NUM), & UARX_CLASS_(UART_NUM) ::data_receive_complete)
+#define REGISTER_UART_ISR(UART_NUM)																			\
+REGISTER_UATX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), & UART_CLASS_(UART_NUM) ::data_register_empty)	\
+REGISTER_UARX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), & UART_CLASS_(UART_NUM) ::data_receive_complete)
 
 //TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
-//FIXME reuse generic way to handle ISR (cleaner and avoids multiple friends in class)
 class AbstractUART: public Serial::UARTErrors
 {
 protected:
@@ -91,10 +74,11 @@ private:
 	using TRAIT = board_traits::USART_trait<USART>;
 	
 public:
-	template<uint8_t SIZE_TX>
-	UATX(char (&output)[SIZE_TX]):OutputBuffer{output}, _transmitting(false)
+	template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]):OutputBuffer{output}, _transmitting(false) {}
+	
+	inline void register_handler()
 	{
-		_uatx = this;
+		::register_handler(*this);
 	}
 	
 	inline void begin(	uint32_t rate,
@@ -125,6 +109,21 @@ public:
 		return FormattedOutput<OutputBuffer>(*this);
 	}
 	
+	inline void data_register_empty()
+	{
+		_errors.has_errors = 0;
+		char value;
+		if (out()._pull(value))
+			TRAIT::UDR = value;
+		else
+		{
+			_errors.all_errors.queue_overflow = true;
+			_transmitting = false;
+			// Clear UDRIE to prevent UDR interrupt to go on forever
+			TRAIT::UCSRB &= ~TRAIT::UDRIE_MASK;
+		}
+	}
+	
 protected:	
 	// Listeners of events on the buffer
 	virtual void on_put() override
@@ -152,39 +151,8 @@ protected:
 	}
 	
 private:
-	inline void data_register_empty()
-	{
-		_errors.has_errors = 0;
-		char value;
-		if (out()._pull(value))
-			TRAIT::UDR = value;
-		else
-		{
-			_errors.all_errors.queue_overflow = true;
-			_transmitting = false;
-			// Clear UDRIE to prevent UDR interrupt to go on forever
-			TRAIT::UCSRB &= ~TRAIT::UDRIE_MASK;
-		}
-	}
-	
-	static UATX<USART>* _uatx;
-	
 	bool _transmitting;
-
-	friend void USART0_UDRE_vect();
-#if defined(UCSR1A)
-	friend void USART1_UDRE_vect();
-#endif
-#if defined(UCSR2A)
-	friend void USART2_UDRE_vect();
-#endif
-#if defined(UCSR3A)
-	friend void USART3_UDRE_vect();
-#endif
 };
-
-template<Board::USART USART>
-UATX<USART>* UATX<USART>::_uatx = 0;
 
 template<Board::USART USART>
 class UARX: virtual public AbstractUART, private InputBuffer
@@ -193,10 +161,11 @@ private:
 	using TRAIT = board_traits::USART_trait<USART>;
 	
 public:
-	template<uint8_t SIZE_RX>
-	UARX(char (&input)[SIZE_RX]):InputBuffer{input}
+	template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]):InputBuffer{input} {}
+	
+	inline void register_handler()
 	{
-		_uarx = this;
+		::register_handler(*this);
 	}
 	
 	inline InputBuffer& in()
@@ -227,7 +196,6 @@ public:
 		synchronized TRAIT::UCSRB = 0;
 	}
 
-private:
 	inline void data_receive_complete()
 	{
 		//FIXME all constants should be in USART traits!
@@ -238,23 +206,7 @@ private:
 		char value = TRAIT::UDR;
 		_errors.all_errors.queue_overflow = !in()._push(value);
 	}
-	
-	static UARX<USART>* _uarx;
-	
-	friend void USART0_RX_vect();
-#if defined(UCSR1A)
-	friend void USART1_RX_vect();
-#endif
-#if defined(UCSR2A)
-	friend void USART2_RX_vect();
-#endif
-#if defined(UCSR3A)
-	friend void USART3_RX_vect();
-#endif
 };
-
-template<Board::USART USART>
-UARX<USART>* UARX<USART>::_uarx = 0;
 
 template<Board::USART USART>
 class UART: public UARX<USART>, public UATX<USART>
@@ -265,6 +217,11 @@ private:
 public:
 	template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 	UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]):UARX<USART>{input}, UATX<USART>{output} {}
+	
+	inline void register_handler()
+	{
+		::register_handler(*this);
+	}
 	
 	inline void begin(	uint32_t rate,
 						Serial::Parity parity = Serial::Parity::NONE, 
@@ -282,6 +239,16 @@ public:
 	inline void end()
 	{
 		synchronized TRAIT::UCSRB = 0;
+	}
+	
+	// Workaround trick to make REGISTER_UART_ISR work properly
+	inline void data_register_empty()
+	{
+		UATX<USART>::data_register_empty();
+	}
+	inline void data_receive_complete()
+	{
+		UARX<USART>::data_receive_complete();
 	}
 };
 
