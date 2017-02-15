@@ -175,6 +175,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/eeprom.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
@@ -330,6 +332,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/eeprom.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -487,6 +491,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/eeprom.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
@@ -643,6 +649,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/eeprom.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/errors.h" ex="false" tool="3" flavor2="0">
@@ -798,6 +806,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/eeprom.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/empty_streams.h" ex="false" tool="3" flavor2="0">
       </item>

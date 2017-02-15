@@ -83,12 +83,12 @@ public:
 		return EOF;
 	}
 	
+	void scan(char* str, size_t max);
+	
 protected:
 	// Listeners of events on the buffer
 	virtual void on_empty() {}
 	virtual void on_get(UNUSED char c) {}
-	
-	void scan(char* str, size_t max);
 };
 
 // The following functions are blocking until input is satisfied
@@ -347,6 +347,11 @@ public:
 		return _stream.gets(str, max);
 	}
 	
+	FormattedInput<STREAM>& operator >> (char& v)
+	{
+		_stream.scan(&v, sizeof(char));
+		return *this;
+	}
 	FormattedInput<STREAM>& operator >> (int& v)
 	{
 		char buffer[sizeof(int) * 8 + 1];
