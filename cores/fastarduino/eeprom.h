@@ -21,7 +21,7 @@
 #include "utilities.h"
 
 #define REGISTER_EEPROM_ISR()		\
-REGISTER_ISR_METHOD_(eeprom::AsyncEEPROMManager, &eeprom::AsyncEEPROMManager::on_ready)
+REGISTER_ISR_METHOD_(eeprom::AbstractEEPROMWriter, &eeprom::AbstractEEPROMWriter::on_ready)
 
 namespace eeprom
 {
@@ -48,26 +48,59 @@ namespace eeprom
 		inline static void write(uint16_t address, uint8_t value)
 		{
 			wait_until_ready();
-			EEAR = address;
-			EEDR = value;
-			synchronized
-			{
-				EECR |= _BV(EEMPE);
-				EECR |= _BV(EEPE);
-			}
+			_write(address, value);
 		}
-
+		
 		inline static void read(uint16_t address, uint8_t& value)
 		{
 			wait_until_ready();
 			EEAR = address;
-			EECR |= _BV(EERE);
+			EECR = _BV(EERE);
 			value = EEDR;
 		}
 
 		inline static void wait_until_ready()
 		{
 			while (EECR & _BV(EEPE)) ;
+		}
+		
+	protected:
+		// In order to optimize write time we read current byte first, then compare it with new value
+		// Then we choose between erase, write and erase+write based on comparison
+		// This approach is detailed in ATmel note AVR103: Using the EEPROM Programming Modes 
+		// http://www.atmel.com/images/doc2578.pdf
+		inline static void _write(uint16_t address, uint8_t value)
+		{
+			EEAR = address;
+			EECR = _BV(EERE);
+			uint8_t old_value = EEDR;
+			uint8_t diff = old_value ^ value;
+			if (diff & value)
+			{
+				// Some bits need to be erased (ie set to 1)
+				if (value == 0xFF)
+					// Erase only
+					EECR = EEPM0;
+				else
+					// Combine Erase/Write operation
+					EECR = 0;
+			}
+			else
+			{
+				// No bit to be erased
+				if (diff)
+					// Some bits to be programmed (set to 0): Write only
+					EECR = EEPM1;
+				else
+					// old value == new value => do nothing
+					return;
+			}
+			EEDR = value;
+			synchronized
+			{
+				EECR |= _BV(EEMPE);
+				EECR |= _BV(EEPE);
+			}
 		}
 	};
 
@@ -76,20 +109,18 @@ namespace eeprom
 	public:
 		virtual void on_write_finished() = 0;
 	};
-//	class ReadHandler;
 
-	//TODO Make it used for both read and write
-	class AsyncEEPROMManager
+	class AbstractEEPROMWriter: public EEPROM
 	{
 	protected:
 		template<typename T>
-		AsyncEEPROMManager(uint16_t address, const T* value, WriteHandler* handler)
+		AbstractEEPROMWriter(uint16_t address, const T* value, WriteHandler* handler)
 		:_address{address}, _buffer{value}, _size{sizeof(T)}, _handler{handler}
 		{
 			register_handler(*this);
 		}
 		
-		~AsyncEEPROMManager()
+		~AbstractEEPROMWriter()
 		{
 			wait_until_done();
 		}
@@ -109,32 +140,30 @@ namespace eeprom
 		{
 			if (_size)
 			{
-				EEAR = _address++;
-				EEDR = *_buffer++;
-				EECR |= _BV(EEMPE);
-				EECR |= _BV(EEPE);
+				_write(_address++, *_buffer++);
 				--_size;
+				EECR |= _BV(EERIE);
 			}
 			else
 			{
-				EECR &= ~_BV(EERIE);
+				EECR = 0;
 				if (_handler) _handler->on_write_finished();
 			}
 		}
 
 	private:
-		uint16_t _address;
-		uint8_t* _buffer;
-		uint8_t _size;
+		volatile uint16_t _address;
+		volatile uint8_t* _buffer;
+		volatile uint8_t _size;
 		WriteHandler* _handler;
 	};
 	
 	template<typename T>
-	class EEPROMWriter: public AsyncEEPROMManager
+	class EEPROMWriter: public AbstractEEPROMWriter
 	{
 	public:
 		EEPROMWriter(uint16_t address, const T& value, WriteHandler* handler = 0)
-		:AsyncEEPROMManager{address, &_value, handler}, _value{value}
+		:AbstractEEPROMWriter{address, &_value, handler}, _value{value}
 		{
 			start();
 		}

@@ -32,30 +32,25 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
-static constexpr const uint8_t INPUT_BUFFER_SIZE = 64;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
-REGISTER_UART_ISR(0)
+REGISTER_UATX_ISR(0)
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
-static constexpr const uint8_t INPUT_BUFFER_SIZE = 64;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
-REGISTER_UART_ISR(0)
+REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
-static constexpr const uint8_t INPUT_BUFFER_SIZE = 64;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin RX = Board::DigitalPin::D0;
 #else
 #error "Current target is not yet supported!"
 #endif
 
 // Buffers for UART
-static char input_buffer[INPUT_BUFFER_SIZE];
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace eeprom;
@@ -65,36 +60,23 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	UART<Board::USART::USART0> uart{input_buffer, output_buffer};
+	UATX<Board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
-	//TODO Handle PCI/INT enabling
-	Soft::UART<RX, TX> uart{input_buffer, output_buffer};
+	Soft::UATX<RX, TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
 
 	FormattedOutput<OutputBuffer> out = uart.fout();
-//	FormattedInput<InputBuffer> in = uart.fin();
-	InputBuffer& in = uart.in();
-	
-	// Declare Analog input
-	while (true)
+
+	for (uint16_t i = 0 ; i < 256; ++i)
 	{
-		char command;
-		out << "Command (R/W): " << flush;
-		command = ::get(in);
-//		in >> command;
-		if (command == 'W')
-		{
-			EEPROM::write(0, (uint8_t) 123);
-			out << "\n1 byte written to EEPROM.\n";
-		}
-		else if (command == 'R')
-		{
-			uint8_t value;
-			EEPROM::read(0, value);
-			out << "\n1 byte read from EEPROM: " << value << '\n';
-		}
+		out << "1 byte written to EEPROM: " << i << '\n';
+		EEPROM::write(0, (uint8_t) i);
+		uint8_t value;
+		EEPROM::read(0, value);
+		out << "1 byte read from EEPROM: " << value << '\n';
+		Time::delay_ms(1000);
 	}
 	return 0;
 }
