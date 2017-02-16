@@ -69,6 +69,7 @@ static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address)
 	{
 		uint8_t value;
 		EEPROM::read(address + i, value);
+		//TODO improve format (use hex or fix 3 chars per value)
 		out << value << ' ' << flush;
 	}
 	out << '\n';
@@ -81,7 +82,6 @@ struct Content
 
 static void write_eeprom(FormattedOutput<OutputBuffer>& out, QueuedWriter& writer, uint16_t address, Content content)
 {
-//	writer.write(address, content);
 	if (writer.write(address, content))
 	{
 		writer.wait_until_done();
@@ -89,6 +89,10 @@ static void write_eeprom(FormattedOutput<OutputBuffer>& out, QueuedWriter& write
 	}
 }
 
+//TODO Further checks: 
+// - different content everytime
+// - different type (ie size)
+// - use wait_until_done() only at the end (or when write() returns false)
 int main()
 {
 	// Enable interrupts at startup time

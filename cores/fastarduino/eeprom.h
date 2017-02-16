@@ -105,6 +105,7 @@ namespace eeprom
 		}
 	};
 	
+	//TODO possibility to add a callback when write is finished?
 	class QueuedWriter: private EEPROM
 	{
 	public:
@@ -198,81 +199,6 @@ namespace eeprom
 		WriteItem _current;
 		volatile bool _done;
 	};
-
-	class WriteHandler
-	{
-	public:
-		virtual void on_write_finished() = 0;
-	};
-
-//	class AbstractEEPROMWriter: public EEPROM
-//	{
-//	protected:
-//		template<typename T>
-//		AbstractEEPROMWriter(uint16_t address, const T* value, WriteHandler* handler)
-//		:_address{address}, _buffer{value}, _size{sizeof(T)}, _handler{handler}
-//		{
-//			register_handler(*this);
-//		}
-//		
-//		~AbstractEEPROMWriter()
-//		{
-//			wait_until_done();
-//		}
-//		
-//		inline void start()
-//		{
-//			EECR = _BV(EERIE);
-//		}
-//
-//	public:
-//		inline void wait_until_done()
-//		{
-//			while (_size) ;
-//		}
-//		
-//		void on_ready()
-//		{
-//			if (_size)
-//			{
-//				_write(_address++, *_buffer++);
-//				--_size;
-//				EECR |= _BV(EERIE);
-//			}
-//			else
-//			{
-//				EECR = 0;
-//				//TODO replace with event? avoid virtual (called from ISR!)
-//				if (_handler) _handler->on_write_finished();
-//			}
-//		}
-//
-//	private:
-//		uint16_t _address;
-//		const uint8_t* _buffer;
-//		volatile uint8_t _size;
-//		WriteHandler* _handler;
-//	};
-//	
-//	template<typename T>
-//	class EEPROMWriter: public AbstractEEPROMWriter
-//	{
-//	public:
-//		EEPROMWriter(uint16_t address, const T& value, WriteHandler* handler = 0)
-//		:AbstractEEPROMWriter{address, _value, handler}, _value{*((const uint8_t*) &value)}
-//		{
-//			start();
-//		}
-//
-//	private:
-//		const uint8_t _value[sizeof(T)];
-//	};
-//	
-//	template<typename T>
-//	EEPROMWriter<T> async_writer(uint16_t address, const T& value, WriteHandler* handler = 0)
-//	{
-//		return EEPROMWriter<T>{address, value, handler};
-//	}
 }
 
 #endif /* EEPROM_H */
