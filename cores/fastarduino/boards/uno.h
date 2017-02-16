@@ -208,6 +208,7 @@ extern "C" {
 	void USART_RX_vect(void) __attribute__ ((signal));
 	void USART_TX_vect(void) __attribute__ ((signal));
 	void USART_UDRE_vect(void) __attribute__ ((signal));
+	void EE_READY_vect(void) __attribute__ ((signal));
 }
 
 #define USART0_RX_vect USART_RX_vect

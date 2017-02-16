@@ -19,9 +19,10 @@
 #include <avr/interrupt.h>
 
 #include "utilities.h"
+#include "queue.h"
 
 #define REGISTER_EEPROM_ISR()		\
-REGISTER_ISR_METHOD_(eeprom::AbstractEEPROMWriter, &eeprom::AbstractEEPROMWriter::on_ready)
+REGISTER_ISR_METHOD_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready)
 
 namespace eeprom
 {
@@ -103,6 +104,100 @@ namespace eeprom
 			}
 		}
 	};
+	
+	class QueuedWriter: private EEPROM
+	{
+	public:
+		template<uint16_t SIZE>
+		QueuedWriter(uint8_t (&buffer)[SIZE]):_buffer{buffer}, _current{}, _done{true}
+		{
+			register_handler(*this);
+		}
+		
+		template<typename T>
+		bool write(uint16_t address, const T& value)
+		{
+			synchronized return _write(address, (uint8_t*) &value, sizeof(T));
+		}
+		
+		bool write(uint16_t address, uint8_t value)
+		{
+			synchronized return _write(address, &value, 1);
+		}
+		
+		void wait_until_done()
+		{
+			while (!_done) ;
+		}
+		
+		void on_ready()
+		{
+			// Is there any item being currently written
+			if (_current.size)
+			{
+				uint8_t value;
+				_buffer._pull(value);
+				EEPROM::_write(_current.address++, value);
+				--_current.size;
+				EECR |= _BV(EERIE);
+			}
+			else
+			{
+				// Is there any item left to be written
+				if (_buffer._pull(_current.low_address))
+				{
+					// Yes, get it and start transmission
+					_buffer._pull(_current.high_address);
+					_buffer._pull(_current.size);
+					EECR |= _BV(EERIE);
+				}
+				else
+				{
+					// All writes are finished
+					_done = true;
+					EECR = 0;
+				}
+			}
+		}
+		
+	private:
+		bool _write(uint16_t address, uint8_t* value, uint8_t size)
+		{
+			// First check if there is enough space in _buffer for this queued write
+			if (_buffer._free() < size + sizeof(WriteItem))
+				return false;
+			_done = false;
+			// Add new queued write to buffer
+			_buffer._push(address & 0xFF);
+			_buffer._push(address >> 8);
+			_buffer._push(size);
+			for (uint8_t i = 0; i < size; ++i)
+				_buffer._push(*value++);
+			
+			// Start transmission if not done yet
+			EECR = _BV(EERIE);
+			return true;
+		}
+
+		struct WriteItem
+		{
+			WriteItem(): address{0}, size{0} {}
+			union
+			{
+				uint16_t address;
+				struct
+				{
+					uint8_t low_address;
+					uint8_t high_address;
+				};
+			};
+			uint8_t size;
+		};
+		
+		Queue<uint8_t, uint8_t> _buffer;
+		WriteItem _current;
+		volatile bool _done;
+	};
 
 	class WriteHandler
 	{
@@ -110,67 +205,74 @@ namespace eeprom
 		virtual void on_write_finished() = 0;
 	};
 
-	class AbstractEEPROMWriter: public EEPROM
-	{
-	protected:
-		template<typename T>
-		AbstractEEPROMWriter(uint16_t address, const T* value, WriteHandler* handler)
-		:_address{address}, _buffer{value}, _size{sizeof(T)}, _handler{handler}
-		{
-			register_handler(*this);
-		}
-		
-		~AbstractEEPROMWriter()
-		{
-			wait_until_done();
-		}
-		
-		inline void start()
-		{
-			EECR = _BV(EERIE);
-		}
-
-	public:
-		inline void wait_until_done()
-		{
-			while (_size) ;
-		}
-		
-		void on_ready()
-		{
-			if (_size)
-			{
-				_write(_address++, *_buffer++);
-				--_size;
-				EECR |= _BV(EERIE);
-			}
-			else
-			{
-				EECR = 0;
-				if (_handler) _handler->on_write_finished();
-			}
-		}
-
-	private:
-		volatile uint16_t _address;
-		volatile uint8_t* _buffer;
-		volatile uint8_t _size;
-		WriteHandler* _handler;
-	};
-	
-	template<typename T>
-	class EEPROMWriter: public AbstractEEPROMWriter
-	{
-	public:
-		EEPROMWriter(uint16_t address, const T& value, WriteHandler* handler = 0)
-		:AbstractEEPROMWriter{address, &_value, handler}, _value{value}
-		{
-			start();
-		}
-
-	private:
-		T _value;
-	};
+//	class AbstractEEPROMWriter: public EEPROM
+//	{
+//	protected:
+//		template<typename T>
+//		AbstractEEPROMWriter(uint16_t address, const T* value, WriteHandler* handler)
+//		:_address{address}, _buffer{value}, _size{sizeof(T)}, _handler{handler}
+//		{
+//			register_handler(*this);
+//		}
+//		
+//		~AbstractEEPROMWriter()
+//		{
+//			wait_until_done();
+//		}
+//		
+//		inline void start()
+//		{
+//			EECR = _BV(EERIE);
+//		}
+//
+//	public:
+//		inline void wait_until_done()
+//		{
+//			while (_size) ;
+//		}
+//		
+//		void on_ready()
+//		{
+//			if (_size)
+//			{
+//				_write(_address++, *_buffer++);
+//				--_size;
+//				EECR |= _BV(EERIE);
+//			}
+//			else
+//			{
+//				EECR = 0;
+//				//TODO replace with event? avoid virtual (called from ISR!)
+//				if (_handler) _handler->on_write_finished();
+//			}
+//		}
+//
+//	private:
+//		uint16_t _address;
+//		const uint8_t* _buffer;
+//		volatile uint8_t _size;
+//		WriteHandler* _handler;
+//	};
+//	
+//	template<typename T>
+//	class EEPROMWriter: public AbstractEEPROMWriter
+//	{
+//	public:
+//		EEPROMWriter(uint16_t address, const T& value, WriteHandler* handler = 0)
+//		:AbstractEEPROMWriter{address, _value, handler}, _value{*((const uint8_t*) &value)}
+//		{
+//			start();
+//		}
+//
+//	private:
+//		const uint8_t _value[sizeof(T)];
+//	};
+//	
+//	template<typename T>
+//	EEPROMWriter<T> async_writer(uint16_t address, const T& value, WriteHandler* handler = 0)
+//	{
+//		return EEPROMWriter<T>{address, value, handler};
+//	}
 }
 
 #endif /* EEPROM_H */
