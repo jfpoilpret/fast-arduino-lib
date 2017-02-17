@@ -31,14 +31,6 @@ namespace eeprom
 	{
 	public:
 		template<typename T>
-		static void write(uint16_t address, const T& value)
-		{
-			uint8_t* v = (uint8_t*) &value;
-			for (uint8_t i = 0; i < sizeof(T); ++i)
-				write(address++, *v++);
-		}
-
-		template<typename T>
 		static void read(uint16_t address, T& value)
 		{
 			uint8_t* v = (uint8_t*) &value;
@@ -46,12 +38,6 @@ namespace eeprom
 				read(address++, *v++);
 		}
 
-		inline static void write(uint16_t address, uint8_t value)
-		{
-			wait_until_ready();
-			_write(address, value);
-		}
-		
 		inline static void read(uint16_t address, uint8_t& value)
 		{
 			wait_until_ready();
@@ -60,6 +46,25 @@ namespace eeprom
 			value = EEDR;
 		}
 
+		template<typename T>
+		static void write(uint16_t address, const T& value)
+		{
+			uint8_t* v = (uint8_t*) &value;
+			for (uint8_t i = 0; i < sizeof(T); ++i)
+				write(address++, *v++);
+		}
+
+		inline static void write(uint16_t address, uint8_t value)
+		{
+			wait_until_ready();
+			_write(address, value);
+		}
+		
+		static constexpr const uint16_t size()
+		{
+			return E2END + 1;
+		}
+		
 		inline static void wait_until_ready()
 		{
 			while (EECR & _BV(EEPE)) ;
