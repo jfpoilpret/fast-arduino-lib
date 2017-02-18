@@ -80,7 +80,8 @@ struct Content
 	uint8_t content[16];
 };
 
-static void write_eeprom(FormattedOutput<OutputBuffer>& out, QueuedWriter& writer, uint16_t address, Content content)
+template<typename T>
+static void write_eeprom(FormattedOutput<OutputBuffer>& out, QueuedWriter& writer, uint16_t address, const T& content)
 {
 	if (writer.write(address, content))
 	{
@@ -106,17 +107,23 @@ int main()
 	uart.begin(115200);
 
 	FormattedOutput<OutputBuffer> out = uart.fout();
-//	out << "Start...\n";
+	out << "Start...\n";
 	
 	QueuedWriter writer{eeprom_buffer};
 	
 	Content content;
-	for (uint16_t i = 0 ; i < 16; ++i)
+	for (uint8_t i = 0 ; i < 16; ++i)
 		content.content[i] = i;
 
-	for (uint16_t address = 0; address < 1024; address += 16)
+	for (uint16_t address = 0; address < 512; address += 16)
 		write_eeprom(out, writer, address, content);
+
+	char buffer[12];
+	out << "buffer address = " << (uint16_t) buffer << '\n';
+	for (uint8_t i = 0 ; i < 12; ++i)
+		buffer[i] = i * 4;
+	write_eeprom(out, writer, 512, buffer);
 	
-//	out << "Finish\n";
+	out << "Finish\n";
 	return 0;
 }
