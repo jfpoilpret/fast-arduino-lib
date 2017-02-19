@@ -41,6 +41,12 @@ constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 	return (high << 8) | low;
 }
 
+template<typename T>
+constexpr T is_zero(T value, T default_value)
+{
+	return (value ? value : default_value);
+}
+
 // Utilities to handle ISR callbacks
 #define HANDLER_HOLDER_(HANDLER) HandlerHolder< HANDLER >
 
