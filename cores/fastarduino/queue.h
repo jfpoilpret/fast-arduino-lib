@@ -37,6 +37,10 @@ public:
 	uint8_t _peek(T* buffer, uint8_t size) const;
 	template<uint8_t SIZE>
 	uint8_t _peek(T (&buffer)[SIZE]) const;
+	inline bool _empty() const
+	{
+		return (_tail == _head);
+	}
 	inline uint8_t _items() const
 	{
 		return (_tail - _head) & _mask;
@@ -44,6 +48,10 @@ public:
 	inline uint8_t _free() const
 	{
 		return (_head - _tail - 1) & _mask;
+	}
+	inline void _clear()
+	{
+		_head = _tail = 0;
 	}
 
 	// Those methods are interrupt-safe hence can be called outside any ISR
@@ -68,6 +76,10 @@ public:
 	{
 		synchronized return _peek(buffer);
 	}
+	inline bool empty() const
+	{
+		synchronized return _empty();
+	}
 	inline uint8_t items() const
 	{
 		synchronized return _items();
@@ -75,6 +87,10 @@ public:
 	inline uint8_t free() const
 	{
 		synchronized return _free();
+	}
+	inline void clear()
+	{
+		synchronized _clear();
 	}
 	
 private:
