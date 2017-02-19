@@ -62,17 +62,21 @@ static uint8_t eeprom_buffer[EEPROM_BUFFER_SIZE];
 
 using namespace eeprom;
 
-static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address)
+static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint8_t loops = 1)
 {
-	out << "Read EEPROM at address " << address << '\n';
-	for (uint16_t i = 0 ; i < 16; ++i)
+	for (uint8_t i = 0; i < loops; ++i)
 	{
-		uint8_t value;
-		EEPROM::read(address + i, value);
-		//TODO improve format (use hex or fix 3 chars per value)
-		out << value << ' ' << flush;
+		out.width(4);
+		out << address << ": ";
+		out.width(2);
+		for (uint8_t j = 0 ; j < 16; ++j)
+		{
+			uint8_t value;
+			EEPROM::read(address++, value);
+			out << value << ' ' << flush;
+		}
+		out << '\n';
 	}
-	out << '\n';
 }
 
 struct Content
@@ -83,17 +87,15 @@ struct Content
 template<typename T>
 static void write_eeprom(FormattedOutput<OutputBuffer>& out, QueuedWriter& writer, uint16_t address, const T& content)
 {
-	if (writer.write(address, content))
+	if (!writer.write(address, content))
 	{
+		out << "Could not write to " << address << endl << flush;
 		writer.wait_until_done();
-		trace_eeprom(out, address);
+		if (!writer.write(address, content))
+			out << "Could not again write to " << address << endl << flush;
 	}
 }
 
-//TODO Further checks: 
-// - different content everytime
-// - different type (ie size)
-// - use wait_until_done() only at the end (or when write() returns false)
 int main()
 {
 	// Enable interrupts at startup time
@@ -107,23 +109,36 @@ int main()
 	uart.begin(115200);
 
 	FormattedOutput<OutputBuffer> out = uart.fout();
-	out << "Start...\n";
+	out << hex;
+	out << "\nInitial EEPROM content\n" << flush;	
+	trace_eeprom(out, 0, EEPROM::size() / 16);
 	
 	QueuedWriter writer{eeprom_buffer};
 	
+	writer.erase();
+	out << "After EEPROM erase\n" << flush;
+	writer.wait_until_done();
+	trace_eeprom(out, 0, EEPROM::size() / 16);
+
 	Content content;
 	for (uint8_t i = 0 ; i < 16; ++i)
 		content.content[i] = i;
 
 	for (uint16_t address = 0; address < 512; address += 16)
 		write_eeprom(out, writer, address, content);
+	out << "After 512 EEPROM writes\n" << flush;
+	writer.wait_until_done();
+	trace_eeprom(out, 0, 32);
 
-	char buffer[12];
-	out << "buffer address = " << (uint16_t) buffer << '\n';
-	for (uint8_t i = 0 ; i < 12; ++i)
-		buffer[i] = i * 4;
+	char buffer[] = "abcdefghijklmnopqrstuvwxyz";
 	write_eeprom(out, writer, 512, buffer);
-	
-	out << "Finish\n";
+	out << "After EEPROM string write\n" << flush;
+	writer.wait_until_done();
+	trace_eeprom(out, 512, 3);
+
+	writer.write(768, buffer, 6);
+	out << "After EEPROM partial string write\n" << flush;
+	writer.wait_until_done();
+	trace_eeprom(out, 768, 3);
 	return 0;
 }

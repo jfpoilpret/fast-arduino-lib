@@ -55,6 +55,23 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace eeprom;
 
+static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint8_t loops = 1)
+{
+	for (uint8_t i = 0; i < loops; ++i)
+	{
+		out.width(4);
+		out << address << ": ";
+		out.width(2);
+		for (uint8_t j = 0 ; j < 16; ++j)
+		{
+			uint8_t value;
+			EEPROM::read(address++, value);
+			out << value << ' ' << flush;
+		}
+		out << '\n';
+	}
+}
+
 int main()
 {
 	// Enable interrupts at startup time
@@ -68,15 +85,26 @@ int main()
 	uart.begin(115200);
 
 	FormattedOutput<OutputBuffer> out = uart.fout();
+	out << hex;
+	out << "\nInitial EEPROM content\n";	
+	trace_eeprom(out, 0, EEPROM::size() / 16);
+	
+	EEPROM::erase();
+	out << "After EEPROM erase\n";	
+	trace_eeprom(out, 0, EEPROM::size() / 16);
 
 	for (uint16_t i = 0 ; i < 256; ++i)
-	{
-		out << "1 byte written to EEPROM: " << i << '\n';
-		EEPROM::write(0, (uint8_t) i);
-		uint8_t value;
-		EEPROM::read(0, value);
-		out << "1 byte read from EEPROM: " << value << '\n';
-		Time::delay_ms(1000);
-	}
+		EEPROM::write(i, (uint8_t) i);
+	out << "After 256 EEPROM writes\n";	
+	trace_eeprom(out, 0, EEPROM::size() / 16);
+	
+	char buffer[] = "abcdefghijklmnopqrstuvwxyz";
+	EEPROM::write(256, buffer);
+	out << "After EEPROM string write\n";	
+	trace_eeprom(out, 256, 3);
+
+	EEPROM::write(256 + 64, buffer, 6);
+	out << "After EEPROM partial string write\n";	
+	trace_eeprom(out, 256 + 64, 3);
 	return 0;
 }
