@@ -21,11 +21,20 @@
 #include "utilities.h"
 #include "queue.h"
 
+// Utilities to handle ISR callbacks
 #define REGISTER_EEPROM_ISR()		\
 REGISTER_ISR_METHOD_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready)
 
-//TODO 1. Check address and size: reject or limit address/size?
-//TODO 2. Add callback
+#define REGISTER_EEPROM_CALLBACK_ISR(HANDLER, CALLBACK)	\
+ISR(EE_READY_vect)										\
+{														\
+	using WRT_HANDLER = eeprom::QueuedWriter;			\
+	using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);	\
+	WRT_HOLDER::handler()->on_ready();					\
+	if (WRT_HOLDER::handler()->is_done())				\
+		CALL_HANDLER_(HANDLER, CALLBACK)();				\
+}
+
 namespace eeprom
 {
 	// Blocking EEPROM handler
@@ -229,6 +238,7 @@ namespace eeprom
 			{
 				// Start erase
 				_erase = true;
+				_done = false;
 				_current.address = 0;
 				_current.size = size();
 				// Start transmission if not done yet
