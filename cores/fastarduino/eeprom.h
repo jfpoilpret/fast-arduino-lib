@@ -33,49 +33,57 @@ namespace eeprom
 	{
 	public:
 		template<typename T>
-		static void read(uint16_t address, T& value)
+		static bool read(uint16_t address, T& value)
 		{
+			if (!check(address, sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) &value;
 			for (uint16_t i = 0; i < sizeof(T); ++i)
-				read(address++, *v++);
+				_blocked_read(address++, *v++);
+			return true;
 		}
 
 		template<typename T>
-		static void read(uint16_t address, T* value, uint16_t count)
+		static bool read(uint16_t address, T* value, uint16_t count)
 		{
+			if (!check(address, count * sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) value;
 			for (uint16_t i = 0; i < count * sizeof(T); ++i)
-				read(address++, *v++);
+				_blocked_read(address++, *v++);
+			return true;
 		}
 
-		inline static void read(uint16_t address, uint8_t& value)
+		inline static bool read(uint16_t address, uint8_t& value)
 		{
-			wait_until_ready();
-			EEAR = address;
-			EECR = _BV(EERE);
-			value = EEDR;
+			if (!check(address, 1)) return false;
+			_blocked_read(address, value);
+			return true;
 		}
 
 		template<typename T>
-		static void write(uint16_t address, const T& value)
+		static bool write(uint16_t address, const T& value)
 		{
+			if (!check(address, sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) &value;
 			for (uint8_t i = 0; i < sizeof(T); ++i)
-				write(address++, *v++);
+				_blocked_write(address++, *v++);
+			return true;
 		}
 
 		template<typename T>
-		static void write(uint16_t address, const T* value, uint16_t count)
+		static bool write(uint16_t address, const T* value, uint16_t count)
 		{
+			if (!check(address, count * sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) value;
 			for (uint8_t i = 0; i < count * sizeof(T); ++i)
-				write(address++, *v++);
+				_blocked_write(address++, *v++);
+			return true;
 		}
 
-		inline static void write(uint16_t address, uint8_t value)
+		inline static bool write(uint16_t address, uint8_t value)
 		{
-			wait_until_ready();
-			_write(address, value);
+			if (!check(address, 1)) return false;
+			_blocked_write(address, value);
+			return true;
 		}
 		
 		static void erase()
@@ -100,7 +108,26 @@ namespace eeprom
 	protected:
 		inline static bool check(uint16_t address, uint16_t size)
 		{
-			return (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
+			return size && (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
+		}
+		
+		inline static void _blocked_read(uint16_t address, uint8_t& value)
+		{
+			wait_until_ready();
+			_read(address, value);
+		}
+
+		inline static void _read(uint16_t address, uint8_t& value)
+		{
+			EEAR = address;
+			EECR = _BV(EERE);
+			value = EEDR;
+		}
+
+		inline static void _blocked_write(uint16_t address, uint8_t value)
+		{
+			wait_until_ready();
+			_write(address, value);
 		}
 		
 		// In order to optimize write time we read current byte first, then compare it with new value
@@ -171,17 +198,20 @@ namespace eeprom
 		template<typename T>
 		bool write(uint16_t address, const T& value)
 		{
+			if (!check(address, sizeof(T))) return false;
 			synchronized return _write(address, (uint8_t*) &value, sizeof(T));
 		}
 		
 		template<typename T>
 		bool write(uint16_t address, const T* value, uint16_t count)
 		{
+			if (!check(address, count * sizeof(T))) return false;
 			synchronized return _write(address, (uint8_t*) value, count * sizeof(T));
 		}
 		
 		bool write(uint16_t address, uint8_t value)
 		{
+			if (!check(address, 1)) return false;
 			synchronized return _write(address, &value, 1);
 		}
 		

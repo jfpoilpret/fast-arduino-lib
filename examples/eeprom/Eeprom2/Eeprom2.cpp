@@ -140,5 +140,18 @@ int main()
 	out << "After EEPROM partial string write\n" << flush;
 	writer.wait_until_done();
 	trace_eeprom(out, 768, 3);
+	
+	// Check out of ranges writes
+	uint8_t value = 0;
+	bool ok;
+	ok = writer.write(E2END + 1, value);
+	if (ok)
+		out << "ERROR! write(E2END + 1) did not fail!" << flush;
+	ok = writer.write(E2END, buffer);
+	if (ok)
+		out << "ERROR! write(E2END, 27) did not fail!" << flush;
+	ok = writer.write(E2END, buffer, 0);
+	if (ok)
+		out << "ERROR! write(E2END, x, 0) did not fail!" << flush;
 	return 0;
 }

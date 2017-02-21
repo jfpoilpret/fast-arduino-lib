@@ -106,5 +106,27 @@ int main()
 	EEPROM::write(256 + 64, buffer, 6);
 	out << "After EEPROM partial string write\n";	
 	trace_eeprom(out, 256 + 64, 3);
+	
+	// Check out of ranges read/writes
+	uint8_t value;
+	bool ok;
+	ok = EEPROM::read(E2END + 1, value);
+	if (ok)
+		out << "ERROR! read(E2END + 1) did not fail!" << flush;
+	ok = EEPROM::read(E2END, buffer);
+	if (ok)
+		out << "ERROR! read(E2END, 27) did not fail!" << flush;
+	ok = EEPROM::read(E2END, buffer, 0);
+	if (ok)
+		out << "ERROR! read(E2END, x, 0) did not fail!" << flush;
+	ok = EEPROM::write(E2END + 1, value);
+	if (ok)
+		out << "ERROR! write(E2END + 1) did not fail!" << flush;
+	ok = EEPROM::write(E2END, buffer);
+	if (ok)
+		out << "ERROR! write(E2END, 27) did not fail!" << flush;
+	ok = EEPROM::write(E2END, buffer, 0);
+	if (ok)
+		out << "ERROR! write(E2END, x, 0) did not fail!" << flush;
 	return 0;
 }
