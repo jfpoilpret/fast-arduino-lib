@@ -17,6 +17,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 #include <util/atomic.h>
 
 #ifndef UNUSED
@@ -46,6 +47,18 @@ constexpr T is_zero(T value, T default_value)
 {
 	return (value ? value : default_value);
 }
+
+// Utilities to handle PROGMEM storage
+//TODO maybe do it a template to allow other types of pointers (e.g lookup tables...))
+class FlashStorage;
+//TODO try to replace with inline (template?) function
+#define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const FlashStorage*) &__c[0];}))
+//FIXME the following does not work (compile-time error)
+//template<size_t SIZE>
+//const FlashStorage* F(const char (&ptr)[SIZE])
+//{
+//	return (const FlashStorage*) (__extension__({static const char __c[SIZE] PROGMEM = (ptr); &__c[0];}));
+//}
 
 // Utilities to handle ISR callbacks
 #define HANDLER_HOLDER_(HANDLER) HandlerHolder< HANDLER >

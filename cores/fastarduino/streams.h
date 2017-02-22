@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "queue.h"
+#include "utilities.h"
 
 //TODO Add operator out << in; to unstack all input and push it to output (optimization possible?)
 //TODO Maybe add operator in >> out; question is when should the redirection be finished?
@@ -51,7 +52,12 @@ public:
 		while (*str) put(*str++, false);
 		on_put();
 	}
-//	void puts_P();
+	void puts(const FlashStorage* str)
+	{
+		uint16_t address = (uint16_t) str;
+		while (char value = pgm_read_byte(address++)) put(value, false);
+		on_put();
+	}
 	
 protected:
 	// Listeners of events on the buffer
@@ -264,8 +270,10 @@ public:
 	{
 		_stream.puts(str);
 	}
-	//TODO Handle PROGMEM strings output
-//	void puts_P();
+	void puts(const FlashStorage* str)
+	{
+		_stream.puts(str);
+	}
 	
 	//TODO add support for char, void* (address), PSTR
 	FormattedOutput<STREAM>& operator << (char c)
@@ -274,6 +282,12 @@ public:
 		return *this;
 	}
 	FormattedOutput<STREAM>& operator << (const char* s)
+	{
+		//TODO Add justify with width if <0
+		_stream.puts(s);
+		return *this;
+	}
+	FormattedOutput<STREAM>& operator << (const FlashStorage* s)
 	{
 		//TODO Add justify with width if <0
 		_stream.puts(s);
