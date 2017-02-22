@@ -126,6 +126,7 @@ ifeq ($(findstring MEGA,${CONF}),)
 endif
 	$(MAKE) -C examples/eeprom/Eeprom1 CONF=${CONF}
 	$(MAKE) -C examples/eeprom/Eeprom2 CONF=${CONF}
+	$(MAKE) -C examples/eeprom/Eeprom3 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp1 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp2 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp3 CONF=${CONF}
@@ -168,6 +169,7 @@ ifeq ($(findstring MEGA,${CONF}),)
 endif
 	$(MAKE) -C examples/eeprom/Eeprom1 CONF=${CONF} clean
 	$(MAKE) -C examples/eeprom/Eeprom2 CONF=${CONF} clean
+	$(MAKE) -C examples/eeprom/Eeprom3 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp1 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp3 CONF=${CONF} clean
