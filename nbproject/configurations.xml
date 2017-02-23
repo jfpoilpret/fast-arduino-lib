@@ -20,6 +20,7 @@
         <itemPath>cores/fastarduino/devices/winbond.h</itemPath>
       </logicalFolder>
       <itemPath>cores/fastarduino/analog_input.h</itemPath>
+      <itemPath>cores/fastarduino/eeprom.h</itemPath>
       <itemPath>cores/fastarduino/empty_streams.h</itemPath>
       <itemPath>cores/fastarduino/errors.h</itemPath>
       <itemPath>cores/fastarduino/events.cpp</itemPath>
