@@ -104,7 +104,7 @@ int main()
 	UATX<Board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
-	Soft::UATX<RX, TX> uart{output_buffer};
+	Soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
 
