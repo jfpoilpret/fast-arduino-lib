@@ -49,7 +49,7 @@
 # This Makefile provides additional make targets that you can use from NetBeans or in command line):
 # - flash	upload already built program to TARGET flash memory
 # - fuses	upload fuses to TARGET (fuses are set by default based on TARGET and FREQ)
-# - eeprom	upload data to TARGET eeprom memory (NOT YET IMPLEMENTED)
+# - eeprom	upload data to TARGET eeprom memory (data should have been created by build as .eep file)
 #
 # Fuses are set by default for each configuration but may be changed directly through additional parameters
 # passed to make:
@@ -76,6 +76,15 @@
 # - WDT off
 # For other frequencies, only the following setting changes:
 # - External crystal oscillator (freq 8.0+), startup time PWRDWN/RESET 16CK/14CK +65ms
+#
+# Command-line usage:
+#--------------------
+# first cd to project directory (where project Makefile is found), then
+# > make <target> CONF=<config>
+# e.g. the following builds the program, uploads it to flash and upload eeprom also
+# > make CONF=UNO-Release
+# > make flash CONF=UNO-Release
+# > make eeprom CONF=UNO-Release
 
 # TODO Infer reuse of Arduino setup (programmers, frequencies, architecture...)
 
@@ -197,7 +206,8 @@ endif
 # Special targets to be called from project's specific Makefile
 
 .build-exe:
-	avr-objcopy -O ihex ${CND_ARTIFACT_PATH_${CONF}} ${CND_ARTIFACT_PATH_${CONF}}.hex
+	avr-objcopy -R .eeprom -O ihex ${CND_ARTIFACT_PATH_${CONF}} ${CND_ARTIFACT_PATH_${CONF}}.hex
+	avr-objcopy -j .eeprom --change-section-lma .eeprom=0 -O ihex ${CND_ARTIFACT_PATH_${CONF}} ${CND_ARTIFACT_PATH_${CONF}}.eep
 	avr-nm --synthetic -S -C --size-sort ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.nm.txt
 	avr-objdump -m ${ARCH} -x -d -C ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.dump.txt
 	avr-size -C --mcu=${MCU} ${CND_ARTIFACT_PATH_${CONF}}
@@ -209,6 +219,15 @@ flash:
 	avrdude ${AVRDUDE_OPTIONS} -Uflash:w:${CND_ARTIFACT_PATH_${CONF}}.hex:i 
 
 fuses:
+ifeq (${PROGRAMMER},UNO)
+	$(error Fuses cannot be written to UNO through optiboot bootloader)
+else
 	avrdude ${AVRDUDE_OPTIONS} -U lfuse:w:${LFUSE}:m -U hfuse:w:${HFUSE}:m -U efuse:w:${EFUSE}:m
+endif
 
-#TODO eeprom target to infer
+eeprom:
+ifeq (${PROGRAMMER},UNO)
+	$(error EEPROM cannot be written to UNO through optiboot bootloader)
+else
+	avrdude ${AVRDUDE_OPTIONS} -D -U eeprom:w:${CND_ARTIFACT_PATH_${CONF}}.eep:i
+endif

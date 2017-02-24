@@ -17,6 +17,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/eeprom.h>
 
 #include "utilities.h"
 #include "queue.h"
@@ -42,6 +43,11 @@ namespace eeprom
 	{
 	public:
 		template<typename T>
+		inline static bool read(const T* address, T& value)
+		{
+			return read((uint16_t) address, value);
+		}
+		template<typename T>
 		static bool read(uint16_t address, T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
@@ -52,6 +58,11 @@ namespace eeprom
 		}
 
 		template<typename T>
+		inline static bool read(const T* address, T* value, uint16_t count)
+		{
+			return read((uint16_t) address, value, count);
+		}
+		template<typename T>
 		static bool read(uint16_t address, T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
@@ -61,6 +72,10 @@ namespace eeprom
 			return true;
 		}
 
+		inline static bool read(const uint8_t* address, uint8_t& value)
+		{
+			return read((uint16_t) address, value);
+		}
 		inline static bool read(uint16_t address, uint8_t& value)
 		{
 			if (!check(address, 1)) return false;
@@ -68,6 +83,11 @@ namespace eeprom
 			return true;
 		}
 
+		template<typename T>
+		inline static bool write(const T* address, const T& value)
+		{
+			return write((uint16_t) address, value);
+		}
 		template<typename T>
 		static bool write(uint16_t address, const T& value)
 		{
@@ -79,6 +99,11 @@ namespace eeprom
 		}
 
 		template<typename T>
+		inline static bool write(const T* address, const T* value, uint16_t count)
+		{
+			return write((uint16_t) address, value, count);
+		}
+		template<typename T>
 		static bool write(uint16_t address, const T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
@@ -88,6 +113,10 @@ namespace eeprom
 			return true;
 		}
 
+		inline static bool write(const uint8_t* address, uint8_t value)
+		{
+			return write((uint16_t) address, value);
+		}
 		inline static bool write(uint16_t address, uint8_t value)
 		{
 			if (!check(address, 1)) return false;
@@ -205,6 +234,12 @@ namespace eeprom
 		}
 		
 		template<typename T>
+		inline bool write(const T* address, const T& value)
+		{
+			return write((uint16_t) address, value);
+		}
+		
+		template<typename T>
 		bool write(uint16_t address, const T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
@@ -212,10 +247,21 @@ namespace eeprom
 		}
 		
 		template<typename T>
+		inline bool write(const T* address, const T* value, uint16_t count)
+		{
+			return write((uint16_t) address, value, count);
+		}
+		
+		template<typename T>
 		bool write(uint16_t address, const T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
 			synchronized return _write(address, (uint8_t*) value, count * sizeof(T));
+		}
+		
+		inline bool write(const uint8_t* address, uint8_t value)
+		{
+			return write((uint16_t) address, value);
 		}
 		
 		bool write(uint16_t address, uint8_t value)
