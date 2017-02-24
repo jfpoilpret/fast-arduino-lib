@@ -127,6 +127,7 @@ endif
 	$(MAKE) -C examples/eeprom/Eeprom1 CONF=${CONF}
 	$(MAKE) -C examples/eeprom/Eeprom2 CONF=${CONF}
 	$(MAKE) -C examples/eeprom/Eeprom3 CONF=${CONF}
+	$(MAKE) -C examples/eeprom/Eeprom4 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp1 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp2 CONF=${CONF}
 	$(MAKE) -C examples/events/EventApp3 CONF=${CONF}
@@ -141,6 +142,7 @@ endif
 	$(MAKE) -C examples/io/FastPin3 CONF=${CONF}
 	$(MAKE) -C examples/io/FastPin4 CONF=${CONF}
 	$(MAKE) -C examples/io/FastPin5 CONF=${CONF}
+	$(MAKE) -C examples/misc/Flash1 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF}
@@ -160,6 +162,9 @@ endif
 	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF}
 	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF}
 	$(MAKE) -C examples/uart/UartApp4 CONF=${CONF}
+ifeq ($(findstring ATtiny84,${CONF}),)
+	$(MAKE) -C examples/uart/UartApp5 CONF=${CONF}
+endif
 
 clean-examples: clean
 	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF} clean
@@ -170,6 +175,7 @@ endif
 	$(MAKE) -C examples/eeprom/Eeprom1 CONF=${CONF} clean
 	$(MAKE) -C examples/eeprom/Eeprom2 CONF=${CONF} clean
 	$(MAKE) -C examples/eeprom/Eeprom3 CONF=${CONF} clean
+	$(MAKE) -C examples/eeprom/Eeprom4 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp1 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/events/EventApp3 CONF=${CONF} clean
@@ -184,6 +190,7 @@ endif
 	$(MAKE) -C examples/io/FastPin3 CONF=${CONF} clean
 	$(MAKE) -C examples/io/FastPin4 CONF=${CONF} clean
 	$(MAKE) -C examples/io/FastPin5 CONF=${CONF} clean
+	$(MAKE) -C examples/misc/Flash1 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF} clean
@@ -203,6 +210,9 @@ endif
 	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF} clean
 	$(MAKE) -C examples/uart/UartApp4 CONF=${CONF} clean
+ifeq ($(findstring ATtiny84,${CONF}),)
+	$(MAKE) -C examples/uart/UartApp5 CONF=${CONF}
+endif
 
 
 # include project implementation makefile
