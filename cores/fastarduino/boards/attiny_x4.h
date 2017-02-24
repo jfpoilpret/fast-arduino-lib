@@ -173,6 +173,7 @@ namespace Board
 #define TIMER1_OVF_vect TIM1_OVF_vect
 #define TIMER1_COMPA_vect TIM1_COMPA_vect
 #define TIMER1_COMPB_vect TIM1_COMPB_vect
+#define EE_READY_vect EE_RDY_vect
 
 /**
  * Forward declare interrupt service routines to allow them as friends.
@@ -193,5 +194,6 @@ extern "C" {
 	void WDT_vect(void) __attribute__ ((signal));
 	void USI_START_vect(void) __attribute__ ((signal));
 	void USI_OVF_vect(void) __attribute__ ((signal));
+	void EE_READY_vect(void) __attribute__ ((signal));
 }
 #endif /* BOARDS_ATTINYX4_HH */

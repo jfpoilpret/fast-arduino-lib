@@ -316,5 +316,6 @@ extern "C" {
 	void USART3_UDRE_vect(void) __attribute__ ((signal));
 	void USART3_RX_vect(void) __attribute__ ((signal));
 	void USART3_TX_vect(void) __attribute__ ((signal));
+	void EE_READY_vect(void) __attribute__ ((signal));
 }
 #endif /* BOARDS_MEGA_HH */
