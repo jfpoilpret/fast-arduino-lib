@@ -58,6 +58,8 @@ What the project already has:
 - NRF24L01 device support (SPI-based)
 - Analog Digital Conversion support (in Single Conversion mode only)
 - Power supply voltage measurement support
+- Flash memory data support (PROGMEM data), particularly strings (useful to limit used SRAM)
+- EEPROM support with synchronous or asynchronous write
 
 As of now, the following platforms are supported (and tested):
 
@@ -78,27 +80,26 @@ The roadmap of next activities and new supported features is the following:
 
 February-March 2017
 -------------------
-1. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
-2. EEPROM support
-3. Trace support (including PROGMEM strings support)
+1. Debug formatted input streams
+2. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
 
 March-April 2017
 ----------------
+3. Rename board pins to include Port and Bit reference, not just Dx
 4. Review namespaces overall (existence and names)
-5. Rename board pins to include Port and Bit reference, not just Dx
-6. Apply coding guidelines across the library code (not necessarily example code)
-7. Add support for ATtinyX5
+5. Apply coding guidelines across the library code (not necessarily example code)
+6. Add support for ATtinyX5
 
 May-June 2017
 -------------
-8. Add documentation (SR handling, Board support adding, API...)
-9. Improve Analog Input support and code
-10. Improve Timer support (support other modes than CTC)
-11. Add support for Arduino Leonardo and CDC feature
+7. Add documentation (ISR handling, Board support adding, API...)
+8. Improve Analog Input support and code
+9. Improve Timer support (support other modes than CTC)
+10. Add support for Arduino Leonardo and CDC feature
 
-Note that activities 1, 4, 5 and 6 will have an impact on current API.
+Note that some of the activities above will have an impact on current API.
 
-The following features are not in FastArduino roadmap currently (but may be in the future):
+The following features are not in FastArduino roadmap currently (but may be in the future); I list them by decreasing order of interest (personal viewpoint):
 
 - I2C support
 - PWM Output support
