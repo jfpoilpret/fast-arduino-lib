@@ -84,9 +84,9 @@ static void trace_ready(FormattedOutput<OutputBuffer>& out, EepromReady& notifie
 	out << "on_ready callback called " << dec << notifier.count() << " times.\n" << flush;
 }
 
-static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint8_t loops = 1)
+static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint16_t loops = 1)
 {
-	for (uint8_t i = 0; i < loops; ++i)
+	for (uint16_t i = 0; i < loops; ++i)
 	{
 		out.width(4);
 		out << hex << address << ": ";

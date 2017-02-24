@@ -55,9 +55,9 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace eeprom;
 
-static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint8_t loops = 1)
+static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint16_t loops = 1)
 {
-	for (uint8_t i = 0; i < loops; ++i)
+	for (uint16_t i = 0; i < loops; ++i)
 	{
 		out.width(4);
 		out << address << ": ";
