@@ -52,6 +52,21 @@ constexpr T is_zero(T value, T default_value)
 class FlashStorage;
 #define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const FlashStorage*) &__c[0];}))
 
+template<typename T>
+T& read_flash(uint16_t address, T& item)
+{
+	uint8_t* ptr = (uint8_t*) &item;
+	for (size_t i = 0; i < sizeof(T); ++i)
+		*ptr++ = pgm_read_byte(address++);
+	return item;
+}
+
+template<typename T>
+T& read_flash(const T* address, T& item)
+{
+	return read_flash((uint16_t) address, item);
+}
+
 // Utilities to handle ISR callbacks
 #define HANDLER_HOLDER_(HANDLER) HandlerHolder< HANDLER >
 
