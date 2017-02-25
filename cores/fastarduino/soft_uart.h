@@ -23,11 +23,11 @@
 #include "pci.h"
 #include "int.h"
 
-#define REGISTER_UART_PCI_ISR(RX, PCI_NUM) \
-REGISTER_PCI_ISR_METHOD(PCI_NUM, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
+#define REGISTER_UART_PCI_ISR(RX, PCI_NUM)													\
+REGISTER_PCI_ISR_METHOD(PCI_NUM, RX, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
 
-#define REGISTER_UART_INT_ISR(RX, INT_NUM) \
-REGISTER_INT_ISR_METHOD(INT_NUM, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
+#define REGISTER_UART_INT_ISR(RX, INT_NUM)													\
+REGISTER_INT_ISR_METHOD(INT_NUM, RX, Soft::UARX< RX >, & Soft::UARX< RX >::on_pin_change)
 
 //FIXME Handle begin/end properly in relation to current queue content
 //TODO Find out why netbeans shows an error on in()._push() and out().pull()

@@ -26,7 +26,7 @@
 #define REGISTER_EEPROM_ISR()		\
 REGISTER_ISR_METHOD_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready)
 
-#define REGISTER_EEPROM_CALLBACK_ISR(HANDLER, CALLBACK)	\
+#define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)	\
 ISR(EE_READY_vect)										\
 {														\
 	using WRT_HANDLER = eeprom::QueuedWriter;			\
@@ -34,6 +34,16 @@ ISR(EE_READY_vect)										\
 	WRT_HOLDER::handler()->on_ready();					\
 	if (WRT_HOLDER::handler()->is_done())				\
 		CALL_HANDLER_(HANDLER, CALLBACK)();				\
+}
+
+#define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)			\
+ISR(EE_READY_vect)										\
+{														\
+	using WRT_HANDLER = eeprom::QueuedWriter;			\
+	using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);	\
+	WRT_HOLDER::handler()->on_ready();					\
+	if (WRT_HOLDER::handler()->is_done())				\
+		CALLBACK ();									\
 }
 
 namespace eeprom

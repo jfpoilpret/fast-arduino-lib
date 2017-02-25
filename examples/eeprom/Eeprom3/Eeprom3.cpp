@@ -70,7 +70,7 @@ private:
 	uint16_t _counter;
 };
 
-REGISTER_EEPROM_CALLBACK_ISR(EepromReady, &EepromReady::ready)
+REGISTER_EEPROM_ISR_METHOD(EepromReady, &EepromReady::ready)
 
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];

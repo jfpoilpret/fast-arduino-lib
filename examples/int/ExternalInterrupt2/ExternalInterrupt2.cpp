@@ -39,15 +39,15 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D2_EXT0;
 // Define vectors we need in the example
-REGISTER_INT_ISR_EMPTY(0)
+REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21_EXT0;
 // Define vectors we need in the example
-REGISTER_INT_ISR_EMPTY(0)
+REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10_EXT0;
 // Define vectors we need in the example
-REGISTER_INT_ISR_EMPTY(0)
+REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #else
 #error "Current target is not yet supported!"
 #endif

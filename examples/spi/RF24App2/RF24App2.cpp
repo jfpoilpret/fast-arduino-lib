@@ -105,7 +105,7 @@ static const uint32_t RECEIVE_MAX_WAIT_MS = 10000L;
 static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
 
 // Define vectors we need in the example
-REGISTER_INT_ISR_EMPTY(0)
+REGISTER_INT_ISR_EMPTY(0, PIN_IRQ)
 
 static bool is_master()
 {

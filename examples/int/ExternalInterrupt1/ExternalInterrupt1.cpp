@@ -67,7 +67,7 @@ private:
 };
 
 // Define vectors we need in the example
-REGISTER_INT_ISR_METHOD(0, PinChangeHandler, &PinChangeHandler::on_pin_change)
+REGISTER_INT_ISR_METHOD(0, SWITCH, PinChangeHandler, &PinChangeHandler::on_pin_change)
 
 int main() __attribute__((OS_main));
 int main()

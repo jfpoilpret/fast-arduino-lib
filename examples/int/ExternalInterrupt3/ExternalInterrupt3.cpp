@@ -73,8 +73,8 @@ private:
 };
 
 // Define vectors we need in the example
-REGISTER_INT_ISR_METHOD(0, SwitchHandler, &SwitchHandler::on_switch_on_change)
-REGISTER_INT_ISR_METHOD(1, SwitchHandler, &SwitchHandler::on_switch_off_change)
+REGISTER_INT_ISR_METHOD(0, SWITCH_ON, SwitchHandler, &SwitchHandler::on_switch_on_change)
+REGISTER_INT_ISR_METHOD(1, SWITCH_OFF, SwitchHandler, &SwitchHandler::on_switch_off_change)
 
 int main() __attribute__((OS_main));
 int main()

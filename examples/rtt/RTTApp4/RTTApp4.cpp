@@ -34,7 +34,7 @@
 #include <fastarduino/scheduler.h>
 
 // Define vectors we need in the example
-REGISTER_RTT_CALLBACK_ISR(0, RTTEventCallback<>, &RTTEventCallback<>::on_rtt_change)
+REGISTER_RTT_ISR_METHOD(0, RTTEventCallback<>, &RTTEventCallback<>::on_rtt_change)
 
 using namespace Events;
 

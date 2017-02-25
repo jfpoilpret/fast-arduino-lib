@@ -101,7 +101,7 @@ private:
 };
 
 // Define vectors we need in the example
-REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_change)
+REGISTER_PCI_ISR_METHOD(PCI_NUM, SWITCH1, PinChangeHandler, &PinChangeHandler::on_pin_change)
 
 int main() __attribute__((OS_main));
 int main()

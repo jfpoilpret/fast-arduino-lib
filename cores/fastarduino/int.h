@@ -24,13 +24,20 @@
 // One INT<> instance for each INT vector
 // Handling, if needed, can be delegated by INT<> to a ExternalInterruptHandler instance
 
-#define REGISTER_INT_ISR_METHOD(INT_NUM, HANDLER, CALLBACK)	\
+#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)														\
+static_assert(board_traits::DigitalPin_trait< PIN >::IS_INT, "PIN must be an INT pin.");								\
+static_assert(board_traits::ExternalInterruptPin_trait< PIN >::INT == INT_NUM , "PIN INT number must match INT_NUM");	\
 REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)
 
-#define REGISTER_INT_ISR_FUNCTION(INT_NUM, CALLBACK)	\
+#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)																\
+static_assert(board_traits::DigitalPin_trait< PIN >::IS_INT, "PIN must be an INT pin.");								\
+static_assert(board_traits::ExternalInterruptPin_trait< PIN >::INT == INT_NUM , "PIN INT number must match INT_NUM");	\
 REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)
 
-#define REGISTER_INT_ISR_EMPTY(INT_NUM)	EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
+#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)																			\
+static_assert(board_traits::DigitalPin_trait< PIN >::IS_INT, "PIN must be an INT pin.");								\
+static_assert(board_traits::ExternalInterruptPin_trait< PIN >::INT == INT_NUM , "PIN INT number must match INT_NUM");	\
+EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
 
 enum class InterruptTrigger: uint8_t
 {

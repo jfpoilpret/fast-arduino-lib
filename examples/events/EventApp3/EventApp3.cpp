@@ -46,7 +46,7 @@ static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
 #endif
 
 // Define vectors we need in the example
-REGISTER_WATCHDOG_CLOCK_ISR_METHOD()
+REGISTER_WATCHDOG_CLOCK_ISR()
 
 static const uint32_t PERIOD = 1000;
 
