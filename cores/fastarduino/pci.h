@@ -29,30 +29,25 @@
 // - handle a linked list of handlers
 // - support exact changes modes (store port state) of PINs
 
-//TODO IMPROVE static checks by allowing several PIN arguments and multiple checks then
-#define REGISTER_PCI_ISR_METHOD(PCI_NUM, PIN, HANDLER, CALLBACK)												\
+#define CHECK_PCI_PIN_(PIN, PCI_NUM)																			\
 static_assert(board_traits::PCI_trait< PCI_NUM >::PORT != Board::Port::NONE, "PORT must support PCI");			\
 static_assert(board_traits::DigitalPin_trait< PIN >::PORT == board_traits::PCI_trait< PCI_NUM >::PORT,			\
 	"PIN port must match PCI_NUM port");																		\
 static_assert(_BV(board_traits::DigitalPin_trait< PIN >::BIT) & board_traits::PCI_trait< PCI_NUM >::PCI_MASK,	\
-	"PIN must be a PCINT pin");																					\
+	"PIN must be a PCINT pin");
+
+//TODO IMPROVE static checks by allowing several PIN arguments and multiple checks then
+#define REGISTER_PCI_ISR_METHOD(PCI_NUM, PIN, HANDLER, CALLBACK)				\
+CHECK_PCI_PIN_(PIN, PCI_NUM)													\
 REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)
 
-#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, PIN, CALLBACK)														\
-static_assert(board_traits::PCI_trait< PCI_NUM >::PORT != Board::Port::NONE, "PORT must support PCI");			\
-static_assert(board_traits::DigitalPin_trait< PIN >::PORT == board_traits::PCI_trait< PCI_NUM >::PORT,			\
-	"PIN port must match PCI_NUM port");																		\
-static_assert(_BV(board_traits::DigitalPin_trait< PIN >::BIT) & board_traits::PCI_trait< PCI_NUM >::PCI_MASK,	\
-	"PIN must be a PCINT pin");																					\
+#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, PIN, CALLBACK)						\
+CHECK_PCI_PIN_(PIN, PCI_NUM)													\
 REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
 
-#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN)																	\
-static_assert(board_traits::PCI_trait< PCI_NUM >::PORT != Board::Port::NONE, "PORT must support PCI");			\
-static_assert(board_traits::DigitalPin_trait< PIN >::PORT == board_traits::PCI_trait< PCI_NUM >::PORT,			\
-	"PIN port must match PCI_NUM port");																		\
-static_assert(_BV(board_traits::DigitalPin_trait< PIN >::BIT) & board_traits::PCI_trait< PCI_NUM >::PCI_MASK,	\
-	"PIN must be a PCINT pin");																					\
-EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect));
+#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN)									\
+CHECK_PCI_PIN_(PIN, PCI_NUM)													\
+EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))
 
 template<Board::Port PORT>
 class PCISignal
