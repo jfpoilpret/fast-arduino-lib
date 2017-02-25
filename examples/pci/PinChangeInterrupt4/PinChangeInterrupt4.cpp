@@ -79,8 +79,8 @@ private:
 };
 
 // Define vectors we need in the example
-REGISTER_PCI_ISR_METHOD(PCINT_ON, SWITCH_ON, SwitchHandler, &SwitchHandler::on_switch_on_change)
-REGISTER_PCI_ISR_METHOD(PCINT_OFF, SWITCH_OFF, SwitchHandler, &SwitchHandler::on_switch_off_change)
+REGISTER_PCI_ISR_METHOD(PCINT_ON, SwitchHandler, &SwitchHandler::on_switch_on_change, SWITCH_ON)
+REGISTER_PCI_ISR_METHOD(PCINT_OFF, SwitchHandler, &SwitchHandler::on_switch_off_change, SWITCH_OFF)
 
 int main() __attribute__((OS_main));
 int main()

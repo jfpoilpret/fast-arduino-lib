@@ -36,17 +36,16 @@ static_assert(board_traits::DigitalPin_trait< PIN >::PORT == board_traits::PCI_t
 static_assert(_BV(board_traits::DigitalPin_trait< PIN >::BIT) & board_traits::PCI_trait< PCI_NUM >::PCI_MASK,	\
 	"PIN must be a PCINT pin");
 
-//TODO IMPROVE static checks by allowing several PIN arguments and multiple checks then
-#define REGISTER_PCI_ISR_METHOD(PCI_NUM, PIN, HANDLER, CALLBACK)				\
-CHECK_PCI_PIN_(PIN, PCI_NUM)													\
+#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...)			\
+FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)							\
 REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)
 
-#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, PIN, CALLBACK)						\
-CHECK_PCI_PIN_(PIN, PCI_NUM)													\
+#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)					\
+FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)							\
 REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
 
-#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN)									\
-CHECK_PCI_PIN_(PIN, PCI_NUM)													\
+#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)								\
+FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)							\
 EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))
 
 template<Board::Port PORT>
