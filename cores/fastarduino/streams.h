@@ -15,6 +15,7 @@
 #ifndef STREAMS_HH
 #define	STREAMS_HH
 
+#include <ctype.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,7 +28,7 @@ class OutputBuffer:public Queue<char, char>
 {
 public:
 	template<uint8_t SIZE>
-	OutputBuffer(char (&buffer)[SIZE]): Queue<char, char>(buffer)
+	OutputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
@@ -73,7 +74,7 @@ public:
 	static const int EOF = -1;
 	
 	template<uint8_t SIZE>
-	InputBuffer(char (&buffer)[SIZE]): Queue<char, char>(buffer)
+	InputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
 	{
 		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 	}
@@ -89,7 +90,7 @@ public:
 		return EOF;
 	}
 	
-	void scan(char* str, size_t max);
+	char* scan(char* str, size_t max);
 	
 protected:
 	// Listeners of events on the buffer
@@ -114,7 +115,7 @@ public:
 		hex = 16
 	};
 	
-	FormatBase(): _width(6), _precision(4), _base(Base::dec) {}
+	FormatBase(): _width{6}, _precision{4}, _base{Base::dec} {}
 	
 	inline void width(int8_t width)
 	{
@@ -252,7 +253,7 @@ template<typename STREAM>
 class FormattedOutput: public FormatBase
 {
 public:
-	FormattedOutput(STREAM& stream): _stream(stream) {}
+	FormattedOutput(STREAM& stream): _stream{stream} {}
 
 	void flush()
 	{
@@ -275,7 +276,7 @@ public:
 		_stream.puts(str);
 	}
 	
-	//TODO add support for char, void* (address), PSTR
+	//TODO add support for void* (address)
 	FormattedOutput<STREAM>& operator << (char c)
 	{
 		_stream.put(c);
@@ -319,7 +320,7 @@ public:
 		return *this;
 	}
 	
-	typedef void (*Manipulator)(FormattedOutput<STREAM>&);
+	using Manipulator = void (*)(FormattedOutput<STREAM>&);
 	FormattedOutput<STREAM>& operator << (Manipulator f)
 	{
 		f(*this);
@@ -329,20 +330,20 @@ public:
 private:
 	STREAM& _stream;
 	
-	template<typename FSTREAM> friend FSTREAM& bin(FSTREAM&);
-	template<typename FSTREAM> friend FSTREAM& oct(FSTREAM&);
-	template<typename FSTREAM> friend FSTREAM& dec(FSTREAM&);
-	template<typename FSTREAM> friend FSTREAM& hex(FSTREAM&);
+	template<typename FSTREAM> friend void bin(FSTREAM&);
+	template<typename FSTREAM> friend void oct(FSTREAM&);
+	template<typename FSTREAM> friend void dec(FSTREAM&);
+	template<typename FSTREAM> friend void hex(FSTREAM&);
 
-	template<typename FSTREAM> friend FSTREAM& flush(FSTREAM&);
-	template<typename FSTREAM> friend FSTREAM& endl(FSTREAM&);
+	template<typename FSTREAM> friend void flush(FSTREAM&);
+	template<typename FSTREAM> friend void endl(FSTREAM&);
 };
 
 template<typename STREAM>
 class FormattedInput: public FormatBase
 {
 public:
-	FormattedInput(STREAM& stream): _stream(stream) {}
+	FormattedInput(STREAM& stream): _stream{stream}, _skipws{true} {}
 
 	int available() const
 	{
@@ -361,43 +362,56 @@ public:
 		return _stream.gets(str, max);
 	}
 	
+	FormattedInput<STREAM>& operator >> (bool& v)
+	{
+		skip_whitespaces(_skipws);
+		char c = ::pull(_stream);
+		v = (c != '0');
+		return *this;
+	}
 	FormattedInput<STREAM>& operator >> (char& v)
 	{
-		_stream.scan(&v, sizeof(char));
+		skip_whitespaces(_skipws);
+		v = ::pull(_stream);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (int& v)
 	{
+		skip_whitespaces(_skipws);
 		char buffer[sizeof(int) * 8 + 1];
 		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (unsigned int& v)
 	{
+		skip_whitespaces(_skipws);
 		char buffer[sizeof(int) * 8 + 1];
 		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (long& v)
 	{
+		skip_whitespaces(_skipws);
 		char buffer[sizeof(long) * 8 + 1];
 		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (unsigned long& v)
 	{
+		skip_whitespaces(_skipws);
 		char buffer[sizeof(long) * 8 + 1];
 		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	FormattedInput<STREAM>& operator >> (double& v)
 	{
+		skip_whitespaces(_skipws);
 		char buffer[MAX_BUF_LEN];
 		convert(_stream.scan(buffer, sizeof buffer), v);
 		return *this;
 	}
 	
-	typedef void (*Manipulator)(FormattedInput<STREAM>&);
+	using Manipulator = void (*)(FormattedInput<STREAM>&);
 	FormattedInput<STREAM>& operator >> (Manipulator f)
 	{
 		f(*this);
@@ -405,13 +419,41 @@ public:
 	}
 	
 private:
-	STREAM& _stream;
+	void skip_whitespaces(bool skip = true)
+	{
+		if (skip)
+			while (isspace(::peek(_stream))) ::pull(_stream);
+	}
 	
-	template<typename FSTREAM> friend FSTREAM& bin(FSTREAM&);
-	template<typename FSTREAM> friend FSTREAM& oct(FSTREAM&);
-	template<typename FSTREAM> friend FSTREAM& dec(FSTREAM&);
-	template<typename FSTREAM> friend FSTREAM& hex(FSTREAM&);
+	STREAM& _stream;
+	bool _skipws;
+	
+	template<typename FSTREAM> friend void bin(FSTREAM&);
+	template<typename FSTREAM> friend void oct(FSTREAM&);
+	template<typename FSTREAM> friend void dec(FSTREAM&);
+	template<typename FSTREAM> friend void hex(FSTREAM&);
+	template<typename FSTREAM> friend void ws(FSTREAM&);
+	template<typename FSTREAM> friend void skipws(FSTREAM&);
+	template<typename FSTREAM> friend void noskipws(FSTREAM&);
 };
+
+template<typename FSTREAM> 
+inline void ws(FSTREAM& stream)
+{
+	stream.skip_whitespaces();
+}
+
+template<typename FSTREAM> 
+inline void skipws(FSTREAM& stream)
+{
+	stream._skipws = true;
+}
+
+template<typename FSTREAM> 
+inline void noskipws(FSTREAM& stream)
+{
+	stream._skipws = false;
+}
 
 template<typename FSTREAM>
 inline void bin(FSTREAM& stream)

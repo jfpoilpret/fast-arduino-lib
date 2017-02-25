@@ -160,4 +160,13 @@ T pull(Queue<T, TREF>& queue)
 	return item;
 }
 
+template<typename T, typename TREF>
+T peek(Queue<T, TREF>& queue)
+{
+	T item;
+	while (!queue.peek(item))
+		Time::yield();
+	return item;
+}
+
 #endif	/* QUEUE_HH */

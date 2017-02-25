@@ -48,7 +48,7 @@ static void handle(OUTPUT& out, INPUT& in, const FlashStorage* type)
 {
 	out << type << F(": ") << flush;
 	T value;
-	in >> value;
+	in >> skipws >> value;
 	out << value << endl << flush;
 }
 

@@ -12,7 +12,6 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include <ctype.h>
 #include "streams.h"
 
 char get(InputBuffer& in)
@@ -43,13 +42,17 @@ int gets(InputBuffer& in, char* str, size_t max, char end)
 	return size;
 }
 
-void InputBuffer::scan(char* str, size_t max)
+char* InputBuffer::scan(char* str, size_t max)
 {
-	while (max > 0)
+	char* next = str;
+	while (max > 1)
 	{
-		char value;
-		if (!pull(value) or isspace(value))
+		char value = ::pull(*this);
+		if (isspace(value))
 			break;
+		*next++ = value;
+		--max;
 	}
-	*str = 0;
+	*next = 0;
+	return str;
 }
