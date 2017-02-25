@@ -68,7 +68,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		//TODO try all formatted inputs
 		handle<char>(out, in, F("char"));
 		handle<uint16_t>(out, in, F("uint16_t"));
 		handle<int16_t>(out, in, F("int16_t"));

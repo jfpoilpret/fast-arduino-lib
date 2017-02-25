@@ -59,7 +59,7 @@ What the project already has:
 - Analog Digital Conversion support (in Single Conversion mode only)
 - Power supply voltage measurement support
 - Flash memory data support (PROGMEM data), particularly strings (useful to limit used SRAM)
-- EEPROM support with synchronous or asynchronous write
+- EEPROM support, with synchronous or asynchronous write
 
 As of now, the following platforms are supported (and tested):
 
@@ -80,22 +80,21 @@ The roadmap of next activities and new supported features is the following:
 
 February-March 2017
 -------------------
-1. Debug formatted input streams
-2. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
+1. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
 
 March-April 2017
 ----------------
-3. Rename board pins to include Port and Bit reference, not just Dx
-4. Review namespaces overall (existence and names)
-5. Apply coding guidelines across the library code (not necessarily example code)
-6. Add support for ATtinyX5
+2. Rename board pins to include Port and Bit reference, not just Dx
+3. Review namespaces overall (existence and names)
+4. Apply coding guidelines across the library code (not necessarily example code)
+5. Add support for ATtinyX5
 
 May-June 2017
 -------------
-7. Add documentation (ISR handling, Board support adding, API...)
-8. Improve Analog Input support and code
-9. Improve Timer support (support other modes than CTC)
-10. Add support for Arduino Leonardo and CDC feature
+6. Add documentation (ISR handling, Board support adding, API...)
+7. Improve Analog Input support and code
+8. Improve Timer support (support other modes than CTC)
+9. Add support for Arduino Leonardo and CDC feature
 
 Note that some of the activities above will have an impact on current API.
 
