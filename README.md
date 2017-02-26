@@ -6,7 +6,7 @@ FastArduino is a C++, object-oriented library for Arduino boards based on AVR MC
 - provide smaller and faster code than other libraries for the same functionality
 - ensure you pay (size and speed) only for what you use
 - use real Object-Oriented Design everywhere
-- reduce risk of bad code, e.g. by preventing usage of unexisting features (pins, timers...) for the target MCU
+- reduce risk of bad code, e.g. by preventing usage, at compile time, of unexisting features (pins, timers...) for the target MCU
 - enforce event-driven programs
 - support both ATmega and ATtiny chips
 
@@ -78,23 +78,19 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-February-March 2017
--------------------
-1. Improve ISR registration API to enforce checks that the right ISR is used (e.g. INTx or PCINTy)
-
 March-April 2017
 ----------------
-2. Rename board pins to include Port and Bit reference, not just Dx
-3. Review namespaces overall (existence and names)
-4. Apply coding guidelines across the library code (not necessarily example code)
-5. Add support for ATtinyX5
+1. Rename board pins to include Port and Bit reference, not just Dx
+2. Review namespaces overall (existence and names)
+3. Apply coding guidelines across the library code (not necessarily example code)
+4. Add support for ATtinyX5
 
 May-June 2017
 -------------
-6. Add documentation (ISR handling, Board support adding, API...)
-7. Improve Analog Input support and code
-8. Improve Timer support (support other modes than CTC)
-9. Add support for Arduino Leonardo and CDC feature
+5. Add documentation (ISR handling, Board support adding, API...)
+6. Improve Analog Input support and code
+7. Improve Timer support (support other modes than CTC)
+8. Add support for Arduino Leonardo and CDC feature
 
 Note that some of the activities above will have an impact on current API.
 
