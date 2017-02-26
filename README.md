@@ -80,22 +80,21 @@ The roadmap of next activities and new supported features is the following:
 
 March-April 2017
 ----------------
-1. Rename board pins to include Port and Bit reference, not just Dx
-2. Review namespaces overall (existence and names)
-3. Apply coding guidelines across the library code (not necessarily example code)
-4. Add support for ATtinyX5
+1. Review namespaces overall (existence and names)
+2. Apply coding guidelines across the library code (not necessarily example code)
+3. Add support for ATtinyX5
 
 May-June 2017
 -------------
-5. Add documentation (ISR handling, Board support adding, API...)
-6. Improve Analog Input support and code
-7. Improve Timer support (support other modes than CTC)
-8. Add support for Arduino Leonardo and CDC feature
+4. Add documentation (ISR handling, Board support adding, API...)
+5. Improve Analog Input support and code
+6. Improve Timer support (support other modes than CTC)
+7. Add support for Arduino Leonardo and CDC feature
 
 Note that some of the activities above will have an impact on current API.
 
 The following features are not in FastArduino roadmap currently (but may be in the future); I list them by decreasing order of interest (personal viewpoint):
 
-- I2C support
 - PWM Output support
+- I2C support
 - OWI support
