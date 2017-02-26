@@ -41,8 +41,8 @@
 #include <fastarduino/utilities.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin RX = Board::InterruptPin::D0_PCI2;
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PD1;
+constexpr const Board::DigitalPin RX = Board::InterruptPin::D0_PD0_PCI2;
 #define PCI_NUM 2
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;

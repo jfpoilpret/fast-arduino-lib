@@ -38,14 +38,14 @@ static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0;
-static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
-static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2;
-static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3;
-static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4;
-static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5;
-static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6;
-static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
+static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0_PD0;
+static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1_PD1;
+static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2_PD2;
+static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3_PD3;
+static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4_PD4;
+static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5_PD5;
+static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6_PD6;
+static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7_PD7;
 #elif defined (ARDUINO_MEGA)
 static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D22;
 static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D23;

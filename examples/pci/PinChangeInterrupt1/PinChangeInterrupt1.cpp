@@ -36,7 +36,7 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D14_PCI1;
+constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D14_PC0_PCI1;
 #define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D53_PCI0;

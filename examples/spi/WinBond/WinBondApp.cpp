@@ -34,7 +34,7 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #include <fastarduino/uart.h>
 
-constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
+constexpr const Board::DigitalPin CS = Board::DigitalPin::D7_PD7;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 256;
 

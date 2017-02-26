@@ -38,13 +38,13 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D14_PCI1;
-constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D16_PCI1;
-constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D17_PCI1;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7;
+constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D14_PC0_PCI1;
+constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D16_PC2_PCI1;
+constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D17_PC3_PCI1;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1_PD1;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3_PD3;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5_PD5;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7_PD7;
 #define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
 constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PCI0;

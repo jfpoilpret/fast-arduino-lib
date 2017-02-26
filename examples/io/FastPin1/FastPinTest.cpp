@@ -21,9 +21,9 @@
 
 static FastPort<Board::Port::PORT_B> PortB;
 
-static FastPinType<Board::DigitalPin::D0>::TYPE PinD0{PinMode::INPUT};
-static FastPinType<Board::DigitalPin::D1>::TYPE PinD1{PinMode::INPUT_PULLUP};
-static FastPinType<Board::DigitalPin::D2>::TYPE PinD2{PinMode::OUTPUT};
+static FastPinType<Board::DigitalPin::D0_PD0>::TYPE PinD0{PinMode::INPUT};
+static FastPinType<Board::DigitalPin::D1_PD1>::TYPE PinD1{PinMode::INPUT_PULLUP};
+static FastPinType<Board::DigitalPin::D2_PD2>::TYPE PinD2{PinMode::OUTPUT};
 
 bool f()
 {

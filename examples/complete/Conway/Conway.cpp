@@ -60,16 +60,16 @@
 #include "Game.hh"
 
 #if defined(ARDUINO_UNO)
-static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
-static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3;
-static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4;
+static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2_PD2;
+static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3_PD3;
+static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4_PD4;
 
 static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A0;
 static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A1;
 static constexpr const Board::AnalogPin SPEED = Board::AnalogPin::A0;
 
-static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5;
-static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6;
+static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5_PD5;
+static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6_PD6;
 
 #define HAS_TRACE 1
 #elif defined (BREADBOARD_ATTINYX4)

@@ -33,33 +33,33 @@ struct Callback
 };
 
 // Try to register INT0 vector for a non INT pin
-REGISTER_INT_ISR_EMPTY(0, Board::DigitalPin::D0)
-REGISTER_INT_ISR_METHOD(0, Board::DigitalPin::D0, Callback, &Callback::callback)
-REGISTER_INT_ISR_FUNCTION(0, Board::DigitalPin::D0, callback)
+REGISTER_INT_ISR_EMPTY(0, Board::DigitalPin::D0_PD0)
+REGISTER_INT_ISR_METHOD(0, Board::DigitalPin::D0_PD0, Callback, &Callback::callback)
+REGISTER_INT_ISR_FUNCTION(0, Board::DigitalPin::D0_PD0, callback)
 // Try to register INT0 vector for a non INT1 pin
-REGISTER_INT_ISR_EMPTY(0, Board::ExternalInterruptPin::D3_EXT1)
-REGISTER_INT_ISR_METHOD(0, Board::ExternalInterruptPin::D3_EXT1, Callback, &Callback::callback)
-REGISTER_INT_ISR_FUNCTION(0, Board::ExternalInterruptPin::D3_EXT1, callback)
+REGISTER_INT_ISR_EMPTY(0, Board::ExternalInterruptPin::D3_PD3_EXT1)
+REGISTER_INT_ISR_METHOD(0, Board::ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
+REGISTER_INT_ISR_FUNCTION(0, Board::ExternalInterruptPin::D3_PD3_EXT1, callback)
 
 //TODO Try to register PCINT0 vector for a non PCINT pin
 //NOTE this is not possible with UNO as all pins are mapped to a PCINT (only possible with MEGA)
 // Try to register PCINT0 vector for a PCINT2 pin
-REGISTER_PCI_ISR_EMPTY(0, Board::InterruptPin::D0_PCI2)
-REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, Board::InterruptPin::D0_PCI2)
-REGISTER_PCI_ISR_FUNCTION(0, callback, Board::InterruptPin::D0_PCI2)
+REGISTER_PCI_ISR_EMPTY(0, Board::InterruptPin::D0_PD0_PCI2)
+REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, Board::InterruptPin::D0_PD0_PCI2)
+REGISTER_PCI_ISR_FUNCTION(0, callback, Board::InterruptPin::D0_PD0_PCI2)
 // Try to register PCINT0 vector for several PCINT0 pins and one PCINT2 pin
-REGISTER_PCI_ISR_EMPTY(0, Board::InterruptPin::D8_PCI0, Board::InterruptPin::D10_PCI0, Board::InterruptPin::D0_PCI2)
-REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, Board::InterruptPin::D8_PCI0, Board::InterruptPin::D10_PCI0, Board::InterruptPin::D0_PCI2)
-REGISTER_PCI_ISR_FUNCTION(0, callback, Board::InterruptPin::D8_PCI0, Board::InterruptPin::D10_PCI0, Board::InterruptPin::D0_PCI2)
+REGISTER_PCI_ISR_EMPTY(0, Board::InterruptPin::D8_PB0_PCI0, Board::InterruptPin::D10_PB2_PCI0, Board::InterruptPin::D0_PD0_PCI2)
+REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, Board::InterruptPin::D8_PB0_PCI0, Board::InterruptPin::D10_PB2_PCI0, Board::InterruptPin::D0_PD0_PCI2)
+REGISTER_PCI_ISR_FUNCTION(0, callback, Board::InterruptPin::D8_PB0_PCI0, Board::InterruptPin::D10_PB2_PCI0, Board::InterruptPin::D0_PD0_PCI2)
 
 //TODO Try to register SW UART for a non PCINT pin
 //NOTE this is not possible with UNO as all pins are mapped to a PCINT (only possible with MEGA)
 // Try to register SW UART with bad PCINT pin
-REGISTER_UART_PCI_ISR(Board::InterruptPin::D0_PCI2, 0)
+REGISTER_UART_PCI_ISR(Board::InterruptPin::D0_PD0_PCI2, 0)
 // Try to register SW UART with a non INT pin
-REGISTER_UART_INT_ISR(Board::DigitalPin::D0, 0)
+REGISTER_UART_INT_ISR(Board::DigitalPin::D0_PD0, 0)
 // Try to register SW UART with a bad INT pin
-REGISTER_UART_INT_ISR(Board::ExternalInterruptPin::D3_EXT1, 0)
+REGISTER_UART_INT_ISR(Board::ExternalInterruptPin::D3_PD3_EXT1, 0)
 
 //IMPORTANT NOTE the following checks generate each a whole bunch of errors because there is no static_assert
 // but only "normal" compilation errors, due to use of non existing value for an enum, with plenty of consequent errors

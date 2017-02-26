@@ -41,14 +41,14 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D1>());
-static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D3>());
-static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D5>());
-static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D7>());
+static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D1_PD1>());
+static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D3_PD3>());
+static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D5_PD5>());
+static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D7_PD7>());
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
-static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D14_PCI1;
-static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D16_PCI1;
-static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D17_PCI1;
+static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D14_PC0_PCI1;
+static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D16_PC2_PCI1;
+static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D17_PC3_PCI1;
 static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());

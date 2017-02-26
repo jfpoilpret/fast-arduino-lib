@@ -51,9 +51,9 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HAS_TRACE 1
-static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;
-static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8;
-static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
+static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7_PD7;
+static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8_PB0;
+static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9_PB1;
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 
 // Define vectors we need in the example
