@@ -73,16 +73,16 @@ static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6_PD6;
 
 #define HAS_TRACE 1
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2;
-static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1;
-static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D0;
+static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2_PA2;
+static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1_PA1;
+static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D0_PA0;
 
 static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A6;
 static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A7;
 static constexpr const Board::AnalogPin SPEED = Board::AnalogPin::A7;
 
-static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4;
-static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5;
+static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4_PA4;
+static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5_PA5;
 #else
 #error "Current target is not yet supported!"
 #endif

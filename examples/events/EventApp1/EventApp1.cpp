@@ -56,14 +56,14 @@ static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D27;
 static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D28;
 static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D29;
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0;
-static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1;
-static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2;
-static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3;
-static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4;
-static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5;
-static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6;
-static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7;
+static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0_PA0;
+static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1_PA1;
+static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2_PA2;
+static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3_PA3;
+static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4_PA4;
+static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5_PA5;
+static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6_PA6;
+static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7_PA7;
 #else
 #error "Current target is not yet supported!"
 #endif

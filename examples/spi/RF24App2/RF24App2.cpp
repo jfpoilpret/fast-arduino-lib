@@ -74,10 +74,10 @@ static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 REGISTER_RTT_ISR(2)
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_TRACE 0
-static const constexpr Board::DigitalPin PIN_IRQ = Board::ExternalInterruptPin::D10_EXT0;
-static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;
-static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D2;
-static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D3;
+static const constexpr Board::DigitalPin PIN_IRQ = Board::ExternalInterruptPin::D10_PB2_EXT0;
+static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7_PA7;
+static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D2_PA2;
+static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D3_PA3;
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER0;
 
 // Define vectors we need in the example

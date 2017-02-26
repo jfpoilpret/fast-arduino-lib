@@ -32,18 +32,18 @@ namespace board_traits
 	 */
 	template<> struct DigitalPin_trait<DigitalPin::NONE>: public DigitalPin_trait_impl<Port::NONE, 0> {};
 	
-	template<> struct DigitalPin_trait<DigitalPin::D0>: public DigitalPin_trait_impl<Port::PORT_A, 0> {};
-	template<> struct DigitalPin_trait<DigitalPin::D1>: public DigitalPin_trait_impl<Port::PORT_A, 1> {};
-	template<> struct DigitalPin_trait<DigitalPin::D2>: public DigitalPin_trait_impl<Port::PORT_A, 2> {};
-	template<> struct DigitalPin_trait<DigitalPin::D3>: public DigitalPin_trait_impl<Port::PORT_A, 3> {};
-	template<> struct DigitalPin_trait<DigitalPin::D4>: public DigitalPin_trait_impl<Port::PORT_A, 4> {};
-	template<> struct DigitalPin_trait<DigitalPin::D5>: public DigitalPin_trait_impl<Port::PORT_A, 5> {};
-	template<> struct DigitalPin_trait<DigitalPin::D6>: public DigitalPin_trait_impl<Port::PORT_A, 6> {};
-	template<> struct DigitalPin_trait<DigitalPin::D7>: public DigitalPin_trait_impl<Port::PORT_A, 7> {};
+	template<> struct DigitalPin_trait<DigitalPin::D0_PA0>: public DigitalPin_trait_impl<Port::PORT_A, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D1_PA1>: public DigitalPin_trait_impl<Port::PORT_A, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D2_PA2>: public DigitalPin_trait_impl<Port::PORT_A, 2> {};
+	template<> struct DigitalPin_trait<DigitalPin::D3_PA3>: public DigitalPin_trait_impl<Port::PORT_A, 3> {};
+	template<> struct DigitalPin_trait<DigitalPin::D4_PA4>: public DigitalPin_trait_impl<Port::PORT_A, 4> {};
+	template<> struct DigitalPin_trait<DigitalPin::D5_PA5>: public DigitalPin_trait_impl<Port::PORT_A, 5> {};
+	template<> struct DigitalPin_trait<DigitalPin::D6_PA6>: public DigitalPin_trait_impl<Port::PORT_A, 6> {};
+	template<> struct DigitalPin_trait<DigitalPin::D7_PA7>: public DigitalPin_trait_impl<Port::PORT_A, 7> {};
 
-	template<> struct DigitalPin_trait<DigitalPin::D8>: public DigitalPin_trait_impl<Port::PORT_B, 0> {};
-	template<> struct DigitalPin_trait<DigitalPin::D9>: public DigitalPin_trait_impl<Port::PORT_B, 1> {};
-	template<> struct DigitalPin_trait<DigitalPin::D10>: public DigitalPin_trait_impl<Port::PORT_B, 2, true> {};
+	template<> struct DigitalPin_trait<DigitalPin::D8_PB0>: public DigitalPin_trait_impl<Port::PORT_B, 0> {};
+	template<> struct DigitalPin_trait<DigitalPin::D9_PB1>: public DigitalPin_trait_impl<Port::PORT_B, 1> {};
+	template<> struct DigitalPin_trait<DigitalPin::D10_PB2>: public DigitalPin_trait_impl<Port::PORT_B, 2, true> {};
 
 	//==============
 	// Analog Input
@@ -77,7 +77,7 @@ namespace board_traits
 	//===============
 	// IO interrupts
 	//===============
-	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D10_EXT0>: 
+	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D10_PB2_EXT0>: 
 		ExternalInterruptPin_trait_impl<0, R_(MCUCR), _BV(ISC00) | _BV(ISC01), R_(GIMSK), _BV(INT0), R_(GIFR), _BV(INTF0)> {};
 
 	/**

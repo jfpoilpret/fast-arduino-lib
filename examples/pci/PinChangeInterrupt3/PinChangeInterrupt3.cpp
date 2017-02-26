@@ -69,14 +69,14 @@ static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_B;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D0>());
-static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D1>());
-static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D2>());
-static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D3>());
+static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D0_PA0>());
+static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D1_PA1>());
+static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D2_PA2>());
+static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D3_PA3>());
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
-static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PCI1;
-static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D9_PCI1;
-static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D10_PCI1;
+static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PB0_PCI1;
+static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D9_PB1_PCI1;
+static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D10_PB2_PCI1;
 static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());

@@ -42,7 +42,7 @@ constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D14_PC0_PCI1;
 constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D53_PCI0;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D8_PCI1;
+constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D8_PB0_PCI1;
 #define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"

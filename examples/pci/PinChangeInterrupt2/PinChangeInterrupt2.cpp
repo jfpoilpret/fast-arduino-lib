@@ -56,13 +56,13 @@ constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PCI1;
-constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D9_PCI1;
-constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D10_PCI1;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D0;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3;
+constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PB0_PCI1;
+constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D9_PB1_PCI1;
+constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D10_PB2_PCI1;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D0_PA0;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1_PA1;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2_PA2;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3_PA3;
 #define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"

@@ -45,7 +45,7 @@ constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21_EXT0
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10_EXT0;
+constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10_PB2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #else

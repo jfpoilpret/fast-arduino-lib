@@ -39,18 +39,18 @@ namespace Board
 	 */
 	enum class DigitalPin: uint8_t
 	{
-		D0 = 0,			// PA0
-		D1,				// PA1
-		D2,				// PA2
-		D3,				// PA3
-		D4,				// PA4
-		D5,				// PA5
-		D6,				// PA6
-		D7,				// PA7
-		D8,				// PB0
-		D9,				// PB1
-		D10,			// PB2
-		LED = D7,
+		D0_PA0 = 0,			// PA0
+		D1_PA1,				// PA1
+		D2_PA2,				// PA2
+		D3_PA3,				// PA3
+		D4_PA4,				// PA4
+		D5_PA5,				// PA5
+		D6_PA6,				// PA6
+		D7_PA7,				// PA7
+		D8_PB0,				// PB0
+		D9_PB1,				// PB1
+		D10_PB2,			// PB2
+		LED = DigitalPin::D7_PA7,
 		NONE = 0xFF
 	};
 
@@ -97,7 +97,7 @@ namespace Board
 	 */
 	namespace ExternalInterruptPin
 	{
-		constexpr const DigitalPin D10_EXT0 = DigitalPin::D10;		// PB2
+		constexpr const DigitalPin D10_PB2_EXT0 = DigitalPin::D10_PB2;		// PB2
 	};
 
 	/**
@@ -105,18 +105,18 @@ namespace Board
 	 */
 	namespace InterruptPin
 	{
-		constexpr const DigitalPin D0_PCI0 = DigitalPin::D0;
-		constexpr const DigitalPin D1_PCI0 = DigitalPin::D1;
-		constexpr const DigitalPin D2_PCI0 = DigitalPin::D2;
-		constexpr const DigitalPin D3_PCI0 = DigitalPin::D3;
-		constexpr const DigitalPin D4_PCI0 = DigitalPin::D4;
-		constexpr const DigitalPin D5_PCI0 = DigitalPin::D5;
-		constexpr const DigitalPin D6_PCI0 = DigitalPin::D6;
-		constexpr const DigitalPin D7_PCI0 = DigitalPin::D7;
+		constexpr const DigitalPin D0_PA0_PCI0 = DigitalPin::D0_PA0;
+		constexpr const DigitalPin D1_PA1_PCI0 = DigitalPin::D1_PA1;
+		constexpr const DigitalPin D2_PA2_PCI0 = DigitalPin::D2_PA2;
+		constexpr const DigitalPin D3_PA3_PCI0 = DigitalPin::D3_PA3;
+		constexpr const DigitalPin D4_PA4_PCI0 = DigitalPin::D4_PA4;
+		constexpr const DigitalPin D5_PA5_PCI0 = DigitalPin::D5_PA5;
+		constexpr const DigitalPin D6_PA6_PCI0 = DigitalPin::D6_PA6;
+		constexpr const DigitalPin D7_PA7_PCI0 = DigitalPin::D7_PA7;
 		
-		constexpr const DigitalPin D8_PCI1 = DigitalPin::D8;
-		constexpr const DigitalPin D9_PCI1 = DigitalPin::D9;
-		constexpr const DigitalPin D10_PCI1 = DigitalPin::D10;
+		constexpr const DigitalPin D8_PB0_PCI1 = DigitalPin::D8_PB0;
+		constexpr const DigitalPin D9_PB1_PCI1 = DigitalPin::D9_PB1;
+		constexpr const DigitalPin D10_PB2_PCI1 = DigitalPin::D10_PB2;
 	};
 
 	//=======

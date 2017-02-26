@@ -44,7 +44,7 @@ REGISTER_UATX_ISR(0)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
 #else
 #error "Current target is not yet supported!"
 #endif

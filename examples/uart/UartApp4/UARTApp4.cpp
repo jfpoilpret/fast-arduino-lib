@@ -50,8 +50,8 @@ constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
 constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D21_EXT0;
 #define INT_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D10_EXT0;
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
+constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D10_PB2_EXT0;
 #define INT_NUM 0
 #else
 #error "Current target is not yet supported!"

@@ -51,8 +51,8 @@ REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
 
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1;
-constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
+constexpr const Board::DigitalPin CS = Board::DigitalPin::D7_PA7;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 128;
 #else
