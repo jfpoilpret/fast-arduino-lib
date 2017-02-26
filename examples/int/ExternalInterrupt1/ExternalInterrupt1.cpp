@@ -38,7 +38,7 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D2_PD2_EXT0;
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21_EXT0;
+constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21_PD0_EXT0;
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10_PB2_EXT0;
 #else

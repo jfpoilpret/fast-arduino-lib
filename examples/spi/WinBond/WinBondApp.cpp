@@ -42,7 +42,7 @@ constexpr const size_t DATA_SIZE = 256;
 REGISTER_UATX_ISR(0)
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
-constexpr const Board::DigitalPin CS = Board::DigitalPin::D7;
+constexpr const Board::DigitalPin CS = Board::DigitalPin::D7_PH4;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 256;
 

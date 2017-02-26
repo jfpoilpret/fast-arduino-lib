@@ -47,13 +47,13 @@ constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5_PD5;
 constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7_PD7;
 #define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PCI0;
-constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D52_PCI0;
-constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D51_PCI0;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D22;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25;
+constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PB0_PCI0;
+constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D52_PB1_PCI0;
+constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D51_PB2_PCI0;
+constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D22_PA0;
+constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23_PA1;
+constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24_PA2;
+constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25_PA3;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PB0_PCI1;

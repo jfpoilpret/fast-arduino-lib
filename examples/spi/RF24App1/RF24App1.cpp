@@ -60,9 +60,9 @@ static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 REGISTER_RTT_ISR(2)
 #elif defined(ARDUINO_MEGA)
 #define HAS_TRACE 1
-static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7;
-static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8;
-static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9;
+static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7_PH4;
+static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8_PH5;
+static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9_PH6;
 static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
 
 // Define vectors we need in the example

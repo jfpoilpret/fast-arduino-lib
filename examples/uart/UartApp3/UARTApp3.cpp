@@ -46,8 +46,8 @@ constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PD1;
 constexpr const Board::DigitalPin RX = Board::InterruptPin::D0_PD0_PCI2;
 #define PCI_NUM 2
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D52;
-constexpr const Board::DigitalPin RX = Board::InterruptPin::D53_PCI0;
+constexpr const Board::DigitalPin TX = Board::DigitalPin::D52_PB1;
+constexpr const Board::DigitalPin RX = Board::InterruptPin::D53_PB0_PCI0;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;

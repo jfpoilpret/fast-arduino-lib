@@ -36,8 +36,8 @@ constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D8_PB0_PCI0;
 #define PCINT_ON	1
 #define PCINT_OFF	0
 #elif defined(ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D53_PCI0;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D62_PCI2;
+constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D53_PB0_PCI0;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D62_PK0_PCI2;
 #define PCINT_ON	0
 #define PCINT_OFF	2
 #elif defined(BREADBOARD_ATTINYX4)

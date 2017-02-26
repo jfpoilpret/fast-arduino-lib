@@ -25,6 +25,10 @@ static FastPinType<Board::DigitalPin::D0_PD0>::TYPE PinD0{PinMode::INPUT};
 static FastPinType<Board::DigitalPin::D1_PD1>::TYPE PinD1{PinMode::INPUT_PULLUP};
 static FastPinType<Board::DigitalPin::D2_PD2>::TYPE PinD2{PinMode::OUTPUT};
 #elif defined (ARDUINO_MEGA)
+static FastPort<Board::Port::PORT_B> PortB;
+static FastPinType<Board::DigitalPin::D0_PE0>::TYPE PinD0{PinMode::INPUT};
+static FastPinType<Board::DigitalPin::D1_PE1>::TYPE PinD1{PinMode::INPUT_PULLUP};
+static FastPinType<Board::DigitalPin::D2_PE4>::TYPE PinD2{PinMode::OUTPUT};
 #elif defined (BREADBOARD_ATTINYX4)
 static FastPort<Board::Port::PORT_B> PortB;
 static FastPinType<Board::DigitalPin::D0_PA0>::TYPE PinD0{PinMode::INPUT};

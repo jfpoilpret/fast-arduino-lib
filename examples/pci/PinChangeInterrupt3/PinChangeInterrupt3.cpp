@@ -55,14 +55,14 @@ static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());
 static constexpr const Board::Port SWITCH_PORT = Board::Port::PORT_C;
 #define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
-static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D22>());
-static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D23>());
-static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D24>());
-static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D25>());
+static constexpr const uint8_t LED1 = _BV(Board::BIT<Board::DigitalPin::D22_PA0>());
+static constexpr const uint8_t LED2 = _BV(Board::BIT<Board::DigitalPin::D23_PA1>());
+static constexpr const uint8_t LED3 = _BV(Board::BIT<Board::DigitalPin::D24_PA2>());
+static constexpr const uint8_t LED4 = _BV(Board::BIT<Board::DigitalPin::D25_PA3>());
 static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
-static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PCI0;
-static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D52_PCI0;
-static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D51_PCI0;
+static constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PB0_PCI0;
+static constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D52_PB1_PCI0;
+static constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D51_PB2_PCI0;
 static constexpr const uint8_t SW1 = _BV(Board::BIT<SWITCH1>());
 static constexpr const uint8_t SW2 = _BV(Board::BIT<SWITCH2>());
 static constexpr const uint8_t SW3 = _BV(Board::BIT<SWITCH3>());

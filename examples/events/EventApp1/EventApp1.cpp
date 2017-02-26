@@ -47,14 +47,14 @@ static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5_PD5;
 static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6_PD6;
 static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7_PD7;
 #elif defined (ARDUINO_MEGA)
-static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D22;
-static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D23;
-static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D24;
-static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D25;
-static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D26;
-static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D27;
-static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D28;
-static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D29;
+static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D22_PA0;
+static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D23_PA1;
+static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D24_PA2;
+static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D25_PA3;
+static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D26_PA4;
+static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D27_PA5;
+static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D28_PA6;
+static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D29_PA7;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0_PA0;
 static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1_PA1;

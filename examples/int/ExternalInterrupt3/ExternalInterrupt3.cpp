@@ -39,8 +39,8 @@
 constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D2_PD2_EXT0;
 constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D3_PD3_EXT1;
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D21_EXT0;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D20_EXT1;
+constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D21_PD0_EXT0;
+constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D20_PD1_EXT1;
 #else
 #error "Current target is not yet supported!"
 #endif
