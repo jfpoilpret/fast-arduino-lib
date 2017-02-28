@@ -555,7 +555,7 @@ public:
 	 */
 	IRQ_NRF24L01(uint16_t net, uint8_t dev)
 		:	NRF24L01<CSN, CE>{net, dev},
-			_irq_signal{InterruptTrigger::FALLING_EDGE}
+			_irq_signal{interrupt::InterruptTrigger::FALLING_EDGE}
 	{
 		typename gpio::FastPinType<board::DigitalPin(IRQ)>::TYPE{gpio::PinMode::INPUT_PULLUP};
 	}
@@ -573,7 +573,7 @@ public:
 	}
 
 private:
-	INTSignal<IRQ> _irq_signal;
+	interrupt::INTSignal<IRQ> _irq_signal;
 };
 
 using namespace NRF24L01Internals;

@@ -48,81 +48,84 @@ REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
 FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)							\
 EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))
 
-template<board::Port PORT>
-class PCISignal
+namespace interrupt
 {
-public:
-	using PORT_TRAIT = board_traits::Port_trait<PORT>;
-	using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
-	
-	inline void enable()
+	template<board::Port PORT>
+	class PCISignal
 	{
-		synchronized TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
-	}
-	inline void disable()
-	{
-		synchronized TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
-	}
-	inline void clear()
-	{
-		synchronized TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
-	}
-	inline void enable_pins(uint8_t mask)
-	{
-		synchronized TRAIT::PCMSK_ |= mask;
-	}
-	template<board::DigitalPin PIN>
-	inline void enable_pin()
-	{
-		static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-		static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
-		enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
-	}
-	template<board::DigitalPin PIN>
-	inline void disable_pin()
-	{
-		static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-		static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
-		synchronized TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
-	}
-	
-	inline void _enable()
-	{
-		TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
-	}
-	inline void _disable()
-	{
-		TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
-	}
-	inline void _clear()
-	{
-		TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
-	}
-	inline void _enable_pins(uint8_t mask)
-	{
-		TRAIT::PCMSK_ |= mask;
-	}
-	template<board::DigitalPin PIN>
-	inline void _enable_pin()
-	{
-		static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-		static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
-		_enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
-	}
-	template<board::DigitalPin PIN>
-	inline void _disable_pin()
-	{
-		static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-		static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
-		TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
-	}
-};
+	public:
+		using PORT_TRAIT = board_traits::Port_trait<PORT>;
+		using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
 
-template<board::DigitalPin PIN>
-struct PCIType
-{
-	using TYPE = PCISignal<board_traits::DigitalPin_trait<PIN>::PORT>;
-	static constexpr const uint8_t PCINT = board_traits::Port_trait<board_traits::DigitalPin_trait<PIN>::PORT>::PCINT;
-};
+		inline void enable()
+		{
+			synchronized TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
+		}
+		inline void disable()
+		{
+			synchronized TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
+		}
+		inline void clear()
+		{
+			synchronized TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
+		}
+		inline void enable_pins(uint8_t mask)
+		{
+			synchronized TRAIT::PCMSK_ |= mask;
+		}
+		template<board::DigitalPin PIN>
+		inline void enable_pin()
+		{
+			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
+		}
+		template<board::DigitalPin PIN>
+		inline void disable_pin()
+		{
+			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			synchronized TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
+		}
+
+		inline void _enable()
+		{
+			TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
+		}
+		inline void _disable()
+		{
+			TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
+		}
+		inline void _clear()
+		{
+			TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
+		}
+		inline void _enable_pins(uint8_t mask)
+		{
+			TRAIT::PCMSK_ |= mask;
+		}
+		template<board::DigitalPin PIN>
+		inline void _enable_pin()
+		{
+			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			_enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
+		}
+		template<board::DigitalPin PIN>
+		inline void _disable_pin()
+		{
+			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
+		}
+	};
+
+	template<board::DigitalPin PIN>
+	struct PCIType
+	{
+		using TYPE = PCISignal<board_traits::DigitalPin_trait<PIN>::PORT>;
+		static constexpr const uint8_t PCINT = board_traits::Port_trait<board_traits::DigitalPin_trait<PIN>::PORT>::PCINT;
+	};
+}
 
 #endif	/* PCI_HH */

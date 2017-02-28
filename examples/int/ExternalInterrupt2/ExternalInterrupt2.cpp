@@ -59,7 +59,7 @@ int main()
 	
 	gpio::FastPinType<SWITCH>::TYPE button{gpio::PinMode::INPUT_PULLUP};
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};	
-	INTSignal<SWITCH> int0{InterruptTrigger::ANY_CHANGE};
+	interrupt::INTSignal<SWITCH> int0{interrupt::InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 
 	// Event Loop

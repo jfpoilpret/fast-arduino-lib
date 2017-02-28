@@ -90,8 +90,8 @@ int main()
 	
 	SwitchHandler switch_handler;
 	register_handler(switch_handler);
-	PCIType<SWITCH_ON>::TYPE pci_on;
-	PCIType<SWITCH_OFF>::TYPE pci_off;
+	interrupt::PCIType<SWITCH_ON>::TYPE pci_on;
+	interrupt::PCIType<SWITCH_OFF>::TYPE pci_off;
 	
 	pci_on.enable_pin<SWITCH_ON>();
 	pci_off.enable_pin<SWITCH_OFF>();

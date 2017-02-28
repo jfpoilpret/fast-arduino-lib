@@ -111,7 +111,7 @@ int main()
 
 	PinChangeHandler handler;
 	register_handler(handler);
-	PCIType<SWITCH1>::TYPE pci;
+	interrupt::PCIType<SWITCH1>::TYPE pci;
 	
 	pci.enable_pin<SWITCH1>();
 	pci.enable_pin<SWITCH2>();

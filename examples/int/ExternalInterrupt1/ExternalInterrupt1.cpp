@@ -77,7 +77,7 @@ int main()
 	
 	PinChangeHandler handler;
 	register_handler(handler);
-	INTSignal<SWITCH> int0{InterruptTrigger::ANY_CHANGE};
+	interrupt::INTSignal<SWITCH> int0{interrupt::InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 
 	// Event Loop

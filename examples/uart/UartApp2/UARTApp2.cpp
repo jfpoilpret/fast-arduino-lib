@@ -75,7 +75,7 @@ int main()
 	serial::soft::UATX<TX> uatx{output_buffer};
 	serial::soft::UARX<RX> uarx{input_buffer};
 	uarx.register_rx_handler();
-	typename PCIType<RX>::TYPE pci;
+	typename interrupt::PCIType<RX>::TYPE pci;
 	pci.enable();
 
 	// Start UART

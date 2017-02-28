@@ -39,62 +39,65 @@ static_assert(board_traits::DigitalPin_trait< PIN >::IS_INT, "PIN must be an INT
 static_assert(board_traits::ExternalInterruptPin_trait< PIN >::INT == INT_NUM , "PIN INT number must match INT_NUM");	\
 EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
 
-enum class InterruptTrigger: uint8_t
+namespace interrupt
 {
-	LOW_LEVEL		= 0x00,
-	ANY_CHANGE		= 0x55,
-	FALLING_EDGE	= 0xAA,
-	RISING_EDGE		= 0xFF
-};
+	enum class InterruptTrigger: uint8_t
+	{
+		LOW_LEVEL		= 0x00,
+		ANY_CHANGE		= 0x55,
+		FALLING_EDGE	= 0xAA,
+		RISING_EDGE		= 0xFF
+	};
 
-template<board::DigitalPin PIN>
-class INTSignal
-{
-protected:
-	using PIN_TRAIT = board_traits::DigitalPin_trait<PIN>;
-	using INT_TRAIT = board_traits::ExternalInterruptPin_trait<PIN>;
-	
-public:
-	INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)
+	template<board::DigitalPin PIN>
+	class INTSignal
 	{
-		static_assert(PIN_TRAIT::IS_INT, "PIN must be an external interrupt pin");
-		_set_trigger(trigger);
-	}
-	
-	inline void set_trigger(InterruptTrigger trigger)
-	{
-		synchronized INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
-	}
-	
-	inline void enable()
-	{
-		synchronized INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
-	}
-	inline void disable()
-	{
-		synchronized INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
-	}
-	inline void clear()
-	{
-		synchronized INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
-	}
+	protected:
+		using PIN_TRAIT = board_traits::DigitalPin_trait<PIN>;
+		using INT_TRAIT = board_traits::ExternalInterruptPin_trait<PIN>;
 
-	inline void _set_trigger(InterruptTrigger trigger)
-	{
-		INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
-	}
-	inline void _enable()
-	{
-		INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
-	}
-	inline void _disable()
-	{
-		INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
-	}
-	inline void _clear()
-	{
-		INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
-	}
-};
+	public:
+		INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)
+		{
+			static_assert(PIN_TRAIT::IS_INT, "PIN must be an external interrupt pin");
+			_set_trigger(trigger);
+		}
+
+		inline void set_trigger(InterruptTrigger trigger)
+		{
+			synchronized INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
+		}
+
+		inline void enable()
+		{
+			synchronized INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
+		}
+		inline void disable()
+		{
+			synchronized INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
+		}
+		inline void clear()
+		{
+			synchronized INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
+		}
+
+		inline void _set_trigger(InterruptTrigger trigger)
+		{
+			INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
+		}
+		inline void _enable()
+		{
+			INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
+		}
+		inline void _disable()
+		{
+			INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
+		}
+		inline void _clear()
+		{
+			INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
+		}
+	};
+}
 
 #endif	/* INT_HH */
