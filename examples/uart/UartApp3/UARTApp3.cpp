@@ -35,11 +35,8 @@
  *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
 #include <fastarduino/soft_uart.h>
-#include <fastarduino/utilities.h>
+#include <fastarduino/time.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PD1;
@@ -107,6 +104,6 @@ int main()
 			out.put('\n');
 			uart.clear_errors();
 		}
-		_delay_ms(10.0);
+		time::delay_ms(10);
 	}
 }

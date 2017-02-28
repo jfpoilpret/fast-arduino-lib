@@ -28,9 +28,8 @@
  *   - D8-D10 (port B) branch 3 switches connected to ground
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
 #include <fastarduino/fast_io.h>
+#include <fastarduino/time.h>
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)
 {
@@ -75,7 +74,7 @@ int main()
 		for (uint8_t i = 0; i < 8; ++i)
 		{
 			ledPort.set_PORT(shift_pattern(pattern, (direction ? i : 7 - i)));
-			_delay_ms(250.0);
+			time::delay_ms(250);
 		}
 	}
 	return 0;

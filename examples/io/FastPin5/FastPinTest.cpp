@@ -25,9 +25,8 @@
  *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
 #include <fastarduino/fast_io.h>
+#include <fastarduino/time.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
@@ -57,9 +56,9 @@ int main()
 		for (uint8_t i = 0; i < 8; ++i)
 		{
 			pins[i].set_PORT(0xFF);
-			_delay_ms(250.0);
+			time::delay_ms(250);
 			pins[i].set_PORT(0x00);
-			_delay_ms(250.0);
+			time::delay_ms(250);
 		}
 	}
 	return 0;

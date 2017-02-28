@@ -49,9 +49,6 @@
  *   - A6 is an analog input connected to the COLUMN potentiometer
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
 #include <fastarduino/time.h>
 #include <fastarduino/analog_input.h>
 

@@ -29,8 +29,6 @@
  *   - D7 (LED, PA7) connected to a LED through a 330Ohm resistor then linked to GND
  */
 
-#include <avr/interrupt.h>
-
 #include <fastarduino/power.h>
 #include <fastarduino/fast_io.h>
 #include <fastarduino/realtime_timer.h>

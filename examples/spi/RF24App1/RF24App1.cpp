@@ -41,9 +41,6 @@
  * Note: this example does not use NRF24L01+ IRQ pin to wake up the active waiting loop during reception.
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
 #include <fastarduino/fast_io.h>
 #include <fastarduino/realtime_timer.h>
 #include <fastarduino/time.h>

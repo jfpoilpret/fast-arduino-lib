@@ -26,9 +26,8 @@
  *   - D7 (PA7) LED connected to ground through a resistor
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
 #include <fastarduino/fast_io.h>
+#include <fastarduino/time.h>
 
 int main()
 {
@@ -37,7 +36,7 @@ int main()
 	while (true)
 	{
 		PinLED.toggle();
-		_delay_ms(400.0);
+		time::delay_ms(400);
 	}
 	return 0;
 }

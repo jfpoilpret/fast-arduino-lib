@@ -24,8 +24,6 @@
  *   - D13 (PB5) LED connected to ground through a resistor
  */
 
-#include <avr/interrupt.h>
-
 #include <fastarduino/fast_io.h>
 #include <fastarduino/pci.h>
 #include <fastarduino/power.h>

@@ -26,9 +26,8 @@
  *   - D7 (PA7) LED connected to ground through a resistor
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
 #include <fastarduino/fast_io.h>
+#include <fastarduino/time.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
@@ -58,7 +57,7 @@ int main()
 			value <<= 1;
 		ledPort.set_PORT(value);
 		
-		_delay_ms(250.0);
+		time::delay_ms(250);
 	}
 	return 0;
 }

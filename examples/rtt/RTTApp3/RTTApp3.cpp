@@ -27,10 +27,8 @@
  *   - D1 (PA1) as TX to a Serial-USB converter
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
 #include <fastarduino/realtime_timer.h>
+#include <fastarduino/time.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #include <fastarduino/uart.h>
@@ -82,7 +80,7 @@ int main()
 	while (true)
 	{
 		rtt.millis(0);
-		_delay_us(666);
+		time::delay_us(666);
 		time::RTTTime time = rtt.time();
 		out << time.millis << "ms " << time.micros << "us\n" << streams::flush;
 	}

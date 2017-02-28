@@ -29,7 +29,6 @@
  *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  */
 
-#include <avr/interrupt.h>
 #include <fastarduino/time.h>
 #include <fastarduino/analog_input.h>
 #include <fastarduino/fast_io.h>

@@ -26,9 +26,7 @@
  *   - NOT SUPPORTED
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
+#include <fastarduino/time.h>
 #include <fastarduino/uart.h>
 
 // Define vectors we need in the example
@@ -75,6 +73,6 @@ int main()
 		handle<int32_t>(out, in, F("int32_t"));
 		handle<bool>(out, in, F("bool"));
 		
-		_delay_ms(1000.0);
+		time::delay_ms(1000);
 	}
 }

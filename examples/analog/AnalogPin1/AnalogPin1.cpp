@@ -27,7 +27,6 @@
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
-#include <avr/interrupt.h>
 #include <fastarduino/time.h>
 #include <fastarduino/analog_input.h>
 

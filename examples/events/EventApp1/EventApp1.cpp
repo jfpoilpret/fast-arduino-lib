@@ -26,11 +26,9 @@
  *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  */
 
-#include <avr/interrupt.h>
-#include <util/delay.h>
-
 #include <fastarduino/fast_io.h>
 #include <fastarduino/events.h>
+#include <fastarduino/time.h>
 
 using namespace events;
 
@@ -128,7 +126,7 @@ int main()
 	{
 		Event event = pull(event_queue);
 		dispatcher.dispatch(event);
-		_delay_ms(250);
+		time::delay_ms(250);
 	}
 	return 0;
 }
