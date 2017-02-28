@@ -17,72 +17,75 @@
 
 #include "../fast_io.h"
 
-template<board::DigitalPin CLOCK, board::DigitalPin LATCH, board::DigitalPin DATA>
-class SIPO
+namespace devices
 {
-public:
-	static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
-	static constexpr const uint8_t DDR_MASK =
-		gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;
-	static constexpr const uint8_t PORT_MASK = gpio::FastPinType<LATCH>::MASK;
-	
-	SIPO():_clock{}, _latch{}, _data{}
+	template<board::DigitalPin CLOCK, board::DigitalPin LATCH, board::DigitalPin DATA>
+	class SIPO
 	{
-		static_assert(	PORT == gpio::FastPinType<LATCH>::PORT && PORT == gpio::FastPinType<DATA>::PORT,
-						"CLOCK, LATCH and DATA pins must belong to the same PORT");
-	}
-	
-	inline void init()
-	{
-		_clock.set_mode(gpio::PinMode::OUTPUT, false);
-		_latch.set_mode(gpio::PinMode::OUTPUT, true);
-		_data.set_mode(gpio::PinMode::OUTPUT, false);
-	}
-	
-	template<typename T>
-	void output(T data)
-	{
-		uint8_t* pdata = (uint8_t*) data;
-		_latch.clear();
-		for (uint8_t i = 0 ; i < sizeof(T); ++i)
-			_output(pdata[i]);
-		_latch.set();
-	}
-	
-	// Specialized output for most common types
-	inline void output(uint8_t data) INLINE
-	{
-		_latch.clear();
-		_output(data);
-		_latch.set();
-	}
-	
-	inline void output(uint16_t data) INLINE
-	{
-		_latch.clear();
-		_output(data >> 8);
-		_output(data);
-		_latch.set();
-	}
-	
-private:
-	void _output(uint8_t data)
-	{
-		uint8_t mask = 0x80;
-		do
-		{
-			if (data & mask) _data.set(); else _data.clear();
-			_clock.set();
-			mask >>= 1;
-			_clock.clear();
-		}
-		while (mask);
-	}
+	public:
+		static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
+		static constexpr const uint8_t DDR_MASK =
+			gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;
+		static constexpr const uint8_t PORT_MASK = gpio::FastPinType<LATCH>::MASK;
 
-	typename gpio::FastPinType<CLOCK>::TYPE _clock;
-	typename gpio::FastPinType<LATCH>::TYPE _latch;
-	typename gpio::FastPinType<DATA>::TYPE _data;
-};
+		SIPO():_clock{}, _latch{}, _data{}
+		{
+			static_assert(	PORT == gpio::FastPinType<LATCH>::PORT && PORT == gpio::FastPinType<DATA>::PORT,
+							"CLOCK, LATCH and DATA pins must belong to the same PORT");
+		}
+
+		inline void init()
+		{
+			_clock.set_mode(gpio::PinMode::OUTPUT, false);
+			_latch.set_mode(gpio::PinMode::OUTPUT, true);
+			_data.set_mode(gpio::PinMode::OUTPUT, false);
+		}
+
+		template<typename T>
+		void output(T data)
+		{
+			uint8_t* pdata = (uint8_t*) data;
+			_latch.clear();
+			for (uint8_t i = 0 ; i < sizeof(T); ++i)
+				_output(pdata[i]);
+			_latch.set();
+		}
+
+		// Specialized output for most common types
+		inline void output(uint8_t data) INLINE
+		{
+			_latch.clear();
+			_output(data);
+			_latch.set();
+		}
+
+		inline void output(uint16_t data) INLINE
+		{
+			_latch.clear();
+			_output(data >> 8);
+			_output(data);
+			_latch.set();
+		}
+
+	private:
+		void _output(uint8_t data)
+		{
+			uint8_t mask = 0x80;
+			do
+			{
+				if (data & mask) _data.set(); else _data.clear();
+				_clock.set();
+				mask >>= 1;
+				_clock.clear();
+			}
+			while (mask);
+		}
+
+		typename gpio::FastPinType<CLOCK>::TYPE _clock;
+		typename gpio::FastPinType<LATCH>::TYPE _latch;
+		typename gpio::FastPinType<DATA>::TYPE _data;
+	};
+}
 
 #endif /* SIPO_HH */
 
