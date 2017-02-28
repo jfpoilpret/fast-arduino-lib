@@ -37,6 +37,7 @@ ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 // this may optimize code size on some circumstances
 #define FIX_BASE_POINTER(_ptr) __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
 
+//TODO namespace
 constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 {
 	return (high << 8) | low;
@@ -48,30 +49,35 @@ constexpr T is_zero(T value, T default_value)
 	return (value ? value : default_value);
 }
 
+namespace flash
+{
+	// Utilities to handle PROGMEM storage for strings
+	class FlashStorage;
+
+	template<typename T>
+	T& read_flash(uint16_t address, T& item)
+	{
+		uint8_t* ptr = (uint8_t*) &item;
+		for (size_t i = 0; i < sizeof(T); ++i)
+			*ptr++ = pgm_read_byte(address++);
+		return item;
+	}
+
+	template<typename T>
+	T& read_flash(const T* address, T& item)
+	{
+		return read_flash((uint16_t) address, item);
+	}
+}
+
 // Utilities to handle PROGMEM storage for strings
-class FlashStorage;
-#define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const FlashStorage*) &__c[0];}))
-
-template<typename T>
-T& read_flash(uint16_t address, T& item)
-{
-	uint8_t* ptr = (uint8_t*) &item;
-	for (size_t i = 0; i < sizeof(T); ++i)
-		*ptr++ = pgm_read_byte(address++);
-	return item;
-}
-
-template<typename T>
-T& read_flash(const T* address, T& item)
-{
-	return read_flash((uint16_t) address, item);
-}
+#define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const flash::FlashStorage*) &__c[0];}))
 
 // Utilities to handle ISR callbacks
-#define HANDLER_HOLDER_(HANDLER) HandlerHolder< HANDLER >
+#define HANDLER_HOLDER_(HANDLER) interrupt::HandlerHolder< HANDLER >
 
 #define CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK,...)	\
-HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >
+interrupt::HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >
 
 #define CALL_HANDLER_(HANDLER, CALLBACK,...)	\
 CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK, ##__VA_ARGS__)::handle
@@ -88,45 +94,48 @@ ISR(VECTOR)											\
 	CALLBACK ();									\
 }
 
-template<typename Handler> void register_handler(Handler&);
-template<typename Handler>
-class HandlerHolder
+namespace interrupt
 {
-public:
-	static Handler* handler()
+	template<typename Handler> void register_handler(Handler&);
+	template<typename Handler>
+	class HandlerHolder
 	{
-		return _handler;
-	}
-	
-	using Holder = HandlerHolder<Handler>;
-	
-	template<typename... Args>
-	struct ArgsHodler
-	{
-		template<void (Handler::*Callback)(Args...)>
-		struct CallbackHolder
+	public:
+		static Handler* handler()
 		{
-			static void handle(Args... args)
+			return _handler;
+		}
+
+		using Holder = HandlerHolder<Handler>;
+
+		template<typename... Args>
+		struct ArgsHodler
+		{
+			template<void (Handler::*Callback)(Args...)>
+			struct CallbackHolder
 			{
-				Handler* handler_instance = Holder::handler();
-				FIX_BASE_POINTER(handler_instance);
-				(handler_instance->*Callback)(args...);
-			}
+				static void handle(Args... args)
+				{
+					Handler* handler_instance = Holder::handler();
+					FIX_BASE_POINTER(handler_instance);
+					(handler_instance->*Callback)(args...);
+				}
+			};
 		};
+
+	private:
+		static Handler* _handler;
+		friend void register_handler<Handler>(Handler&);
 	};
-	
-private:
-	static Handler* _handler;
-	friend void register_handler<Handler>(Handler&);
-};
 
-template<typename Handler>
-Handler* HandlerHolder<Handler>::_handler = 0;
+	template<typename Handler>
+	Handler* HandlerHolder<Handler>::_handler = 0;
 
-template<typename Handler>
-void register_handler(Handler& handler)
-{
-	HandlerHolder<Handler>::_handler = &handler;
+	template<typename Handler>
+	void register_handler(Handler& handler)
+	{
+		HandlerHolder<Handler>::_handler = &handler;
+	}
 }
 
 // Useful macro to iterate

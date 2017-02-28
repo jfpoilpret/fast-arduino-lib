@@ -198,7 +198,7 @@ namespace soft
 		
 		void register_rx_handler()
 		{
-			register_handler(*this);
+			interrupt::register_handler(*this);
 		}
 		
 		void begin(	PCI_TYPE& enabler,

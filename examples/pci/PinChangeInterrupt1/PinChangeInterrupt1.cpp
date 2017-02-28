@@ -79,7 +79,7 @@ int main()
 	sei();
 	
 	PinChangeHandler handler;
-	register_handler(handler);
+	interrupt::register_handler(handler);
 	interrupt::PCIType<SWITCH>::TYPE pci;
 	
 	pci.enable_pin<SWITCH>();

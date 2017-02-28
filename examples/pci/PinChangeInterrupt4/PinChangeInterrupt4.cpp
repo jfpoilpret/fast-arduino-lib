@@ -89,7 +89,7 @@ int main()
 	sei();
 	
 	SwitchHandler switch_handler;
-	register_handler(switch_handler);
+	interrupt::register_handler(switch_handler);
 	interrupt::PCIType<SWITCH_ON>::TYPE pci_on;
 	interrupt::PCIType<SWITCH_OFF>::TYPE pci_off;
 	

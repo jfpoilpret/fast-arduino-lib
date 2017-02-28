@@ -76,7 +76,7 @@ int main()
 	sei();
 	
 	PinChangeHandler handler;
-	register_handler(handler);
+	interrupt::register_handler(handler);
 	interrupt::INTSignal<SWITCH> int0{interrupt::InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 
