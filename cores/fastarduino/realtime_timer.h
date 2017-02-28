@@ -68,7 +68,7 @@ namespace timer
 		{
 			uint32_t end = millis() + ms + 1;
 			while (millis() < end)
-				::time::yield();
+				time::yield();
 		}
 		inline uint16_t micros() const
 		{

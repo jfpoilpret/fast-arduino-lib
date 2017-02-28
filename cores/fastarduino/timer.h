@@ -21,8 +21,6 @@
 #include "utilities.h"
 #include "boards/board_traits.h"
 
-//TODO do we need to put everything here in a namespace?
-
 #define REGISTER_TIMER_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
 

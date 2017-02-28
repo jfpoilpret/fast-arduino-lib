@@ -35,20 +35,17 @@ namespace serial
 {
 namespace soft
 {
-	using streams::OutputBuffer;
-	using streams::FormattedOutput;
-	
-	class AbstractUATX: virtual public UARTErrors, private OutputBuffer
+	class AbstractUATX: virtual public UARTErrors, private streams::OutputBuffer
 	{
 	public:
-		OutputBuffer& out()
+		streams::OutputBuffer& out()
 		{
 			return (OutputBuffer&) *this;
 		}
 
-		FormattedOutput<OutputBuffer> fout()
+		streams::FormattedOutput<OutputBuffer> fout()
 		{
-			return FormattedOutput<OutputBuffer>(*this);
+			return streams::FormattedOutput<streams::OutputBuffer>(*this);
 		}
 
 		// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
@@ -147,20 +144,17 @@ namespace soft
 		_delay_loop_2(_stop_bit_tx_time);
 	}
 
-	using streams::InputBuffer;
-	using streams::FormattedInput;
-	
-	class AbstractUARX: virtual public UARTErrors, private InputBuffer
+	class AbstractUARX: virtual public UARTErrors, private streams::InputBuffer
 	{
 	public:
-		InputBuffer& in()
+		streams::InputBuffer& in()
 		{
-			return (InputBuffer&) *this;
+			return (streams::InputBuffer&) *this;
 		}
 
-		FormattedInput<InputBuffer> fin()
+		streams::FormattedInput<streams::InputBuffer> fin()
 		{
-			return FormattedInput<InputBuffer>(*this);
+			return streams::FormattedInput<streams::InputBuffer>(*this);
 		}
 
 	protected:

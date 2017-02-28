@@ -71,17 +71,14 @@ namespace hard
 		}
 	};
 
-	using streams::OutputBuffer;
-	using streams::FormattedOutput;
-	
 	template<board::USART USART>
-	class UATX: virtual public AbstractUART, private OutputBuffer
+	class UATX: virtual public AbstractUART, private streams::OutputBuffer
 	{
 	private:
 		using TRAIT = board_traits::USART_trait<USART>;
 
 	public:
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]):OutputBuffer{output}, _transmitting(false) {}
+		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]):streams::OutputBuffer{output}, _transmitting(false) {}
 
 		inline void register_handler()
 		{
@@ -106,14 +103,14 @@ namespace hard
 			synchronized TRAIT::UCSRB = 0;
 		}
 
-		inline OutputBuffer& out()
+		inline streams::OutputBuffer& out()
 		{
 			return (OutputBuffer&) *this;
 		}
 
-		inline FormattedOutput<OutputBuffer> fout()
+		inline streams::FormattedOutput<streams::OutputBuffer> fout()
 		{
-			return FormattedOutput<OutputBuffer>(*this);
+			return streams::FormattedOutput<streams::OutputBuffer>(*this);
 		}
 
 		inline void data_register_empty()
@@ -161,11 +158,8 @@ namespace hard
 		bool _transmitting;
 	};
 
-	using streams::InputBuffer;
-	using streams::FormattedInput;
-	
 	template<board::USART USART>
-	class UARX: virtual public AbstractUART, private InputBuffer
+	class UARX: virtual public AbstractUART, private streams::InputBuffer
 	{
 	private:
 		using TRAIT = board_traits::USART_trait<USART>;
@@ -178,14 +172,14 @@ namespace hard
 			interrupt::register_handler(*this);
 		}
 
-		inline InputBuffer& in()
+		inline streams::InputBuffer& in()
 		{
-			return (InputBuffer&) *this;
+			return (streams::InputBuffer&) *this;
 		}
 
-		inline FormattedInput<InputBuffer> fin()
+		inline streams::FormattedInput<streams::InputBuffer> fin()
 		{
-			return FormattedInput<InputBuffer>(*this);
+			return streams::FormattedInput<streams::InputBuffer>(*this);
 		}
 
 		inline void begin(	uint32_t rate,
