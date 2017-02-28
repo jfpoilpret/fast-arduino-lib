@@ -40,7 +40,7 @@ using namespace events;
 
 static const uint32_t PERIOD = 5000;
 
-class LedHandler: public scheduler::Job
+class LedHandler: public Job
 {
 public:
 	LedHandler() : Job{0, PERIOD}, _led{gpio::PinMode::OUTPUT, false} {}
@@ -70,7 +70,7 @@ int main()
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	scheduler::Scheduler<timer::RTT<board::Timer::TIMER0>> scheduler{rtt, Type::RTT_TIMER};
+	Scheduler<timer::RTT<board::Timer::TIMER0>> scheduler{rtt, Type::RTT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;
