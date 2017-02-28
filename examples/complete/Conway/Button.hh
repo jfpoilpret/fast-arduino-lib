@@ -70,19 +70,19 @@ private:
 	uint8_t _count;
 };
 
-template<Board::DigitalPin DPIN, uint8_t DEBOUNCE_COUNT>
+template<board::DigitalPin DPIN, uint8_t DEBOUNCE_COUNT>
 class Button: public AbstractButton
 {
 public:
-	static constexpr const Board::Port PORT = FastPinType<DPIN>::PORT;
+	static constexpr const board::Port PORT = gpio::FastPinType<DPIN>::PORT;
 	static constexpr const uint8_t DDR_MASK = 0;
-	static constexpr const uint8_t PORT_MASK = FastPinType<DPIN>::MASK;
+	static constexpr const uint8_t PORT_MASK = gpio::FastPinType<DPIN>::MASK;
 	
 	Button() {}
 
 	inline void init() INLINE
 	{
-		_pin.set_mode(PinMode::INPUT_PULLUP);
+		_pin.set_mode(gpio::PinMode::INPUT_PULLUP);
 	}
 
 	inline bool state() INLINE
@@ -96,7 +96,7 @@ public:
 	}
 
 private:
-	typename FastPinType<DPIN>::TYPE _pin;
+	typename gpio::FastPinType<DPIN>::TYPE _pin;
 };
 
 #endif /* BUTTON_HH */

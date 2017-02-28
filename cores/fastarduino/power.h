@@ -20,31 +20,34 @@
 #include <avr/sleep.h>
 #include "boards/board.h"
 
-class Power
+namespace power
 {
-public:
-	static void set_default_mode(Board::SleepMode mode)
+	class Power
 	{
-		if (mode != Board::SleepMode::DEFAULT_MODE)
-			_default_mode = mode;
-	}
-	static void sleep()
-	{
-		sleep(_default_mode);
-	}
-	
-	static void sleep(Board::SleepMode mode)
-	{
-		set_sleep_mode((uint8_t) mode);
-		cli();
-		sleep_enable();
-		sei();
-		sleep_cpu();
-		sleep_disable();
-	}
-	
-private:
-	static Board::SleepMode _default_mode;
-};
+	public:
+		static void set_default_mode(board::SleepMode mode)
+		{
+			if (mode != board::SleepMode::DEFAULT_MODE)
+				_default_mode = mode;
+		}
+		static void sleep()
+		{
+			sleep(_default_mode);
+		}
+
+		static void sleep(board::SleepMode mode)
+		{
+			set_sleep_mode((uint8_t) mode);
+			cli();
+			sleep_enable();
+			sei();
+			sleep_cpu();
+			sleep_disable();
+		}
+
+	private:
+		static board::SleepMode _default_mode;
+	};
+}
 
 #endif	/* POWER_HH */

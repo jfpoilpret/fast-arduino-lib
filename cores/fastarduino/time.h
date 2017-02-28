@@ -20,7 +20,7 @@
 
 #include "utilities.h"
 
-namespace Time
+namespace time
 {
 	struct RTTTime
 	{
@@ -63,8 +63,8 @@ namespace Time
 			_clock = &clock;
 			if (set_defaults)
 			{
-				Time::delay = TYPE::delay;
-				Time::millis = TYPE::millis;
+				time::delay = TYPE::delay;
+				time::millis = TYPE::millis;
 			}
 		}
 		
@@ -88,7 +88,7 @@ namespace Time
 	template<typename CLOCK>
 	void set_clock(const CLOCK& clock, bool set_defaults = true)
 	{
-		Time::ClockDelegate<CLOCK>::set_clock(clock, set_defaults);
+		time::ClockDelegate<CLOCK>::set_clock(clock, set_defaults);
 	}
 	
 	class auto_delay

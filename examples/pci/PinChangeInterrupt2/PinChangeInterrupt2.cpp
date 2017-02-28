@@ -38,31 +38,31 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D14_PC0_PCI1;
-constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D16_PC2_PCI1;
-constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D17_PC3_PCI1;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1_PD1;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D3_PD3;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D5_PD5;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D7_PD7;
+constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D14_PC0_PCI1;
+constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D16_PC2_PCI1;
+constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D17_PC3_PCI1;
+constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PD1;
+constexpr const board::DigitalPin LED2 = board::DigitalPin::D3_PD3;
+constexpr const board::DigitalPin LED3 = board::DigitalPin::D5_PD5;
+constexpr const board::DigitalPin LED4 = board::DigitalPin::D7_PD7;
 #define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D53_PB0_PCI0;
-constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D52_PB1_PCI0;
-constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D51_PB2_PCI0;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D22_PA0;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D23_PA1;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D24_PA2;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D25_PA3;
+constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D53_PB0_PCI0;
+constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D52_PB1_PCI0;
+constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D51_PB2_PCI0;
+constexpr const board::DigitalPin LED1 = board::DigitalPin::D22_PA0;
+constexpr const board::DigitalPin LED2 = board::DigitalPin::D23_PA1;
+constexpr const board::DigitalPin LED3 = board::DigitalPin::D24_PA2;
+constexpr const board::DigitalPin LED4 = board::DigitalPin::D25_PA3;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH1 = Board::InterruptPin::D8_PB0_PCI1;
-constexpr const Board::DigitalPin SWITCH2 = Board::InterruptPin::D9_PB1_PCI1;
-constexpr const Board::DigitalPin SWITCH3 = Board::InterruptPin::D10_PB2_PCI1;
-constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D0_PA0;
-constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D1_PA1;
-constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D2_PA2;
-constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D3_PA3;
+constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D8_PB0_PCI1;
+constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D9_PB1_PCI1;
+constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D10_PB2_PCI1;
+constexpr const board::DigitalPin LED1 = board::DigitalPin::D0_PA0;
+constexpr const board::DigitalPin LED2 = board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin LED3 = board::DigitalPin::D2_PA2;
+constexpr const board::DigitalPin LED4 = board::DigitalPin::D3_PA3;
 #define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"
@@ -121,6 +121,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(Board::SleepMode::POWER_DOWN);
+		Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

@@ -14,13 +14,13 @@
 
 #include "linked_list.h"
 
-void LinkedListImpl::insert(LinkImpl* item)
+void containers::LinkedListImpl::insert(LinkImpl* item)
 {
 	item->_next = _head;
 	_head = item;
 }
 
-bool LinkedListImpl::remove(LinkImpl* item)
+bool containers::LinkedListImpl::remove(LinkImpl* item)
 {
 	if (_head == 0) return false;
 	if (_head == item)

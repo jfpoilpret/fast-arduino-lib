@@ -28,7 +28,7 @@
 #include <fastarduino/fast_io.h>
 #include <fastarduino/timer.h>
 
-constexpr const Board::Timer TIMER = Board::Timer::TIMER1;
+constexpr const board::Timer TIMER = board::Timer::TIMER1;
 using TIMER_TYPE = Timer<TIMER>;
 constexpr const uint32_t PERIOD_US = 1000000;
 
@@ -47,7 +47,7 @@ public:
 	}
 	
 private:
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;
+	FastPinType<board::DigitalPin::LED>::TYPE _led;
 };
 
 // Define vectors we need in the example

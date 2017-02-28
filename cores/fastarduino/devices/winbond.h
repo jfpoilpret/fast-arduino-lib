@@ -35,8 +35,8 @@
  */
 
 // Tested with W25Q80BV (8 Mbit)
-template<Board::DigitalPin CS>
-class WinBond: public SPI::SPIDevice<CS, SPI::ChipSelect::ACTIVE_LOW, SPI::ClockRate::CLOCK_DIV_2>
+template<board::DigitalPin CS>
+class WinBond: public spi::SPIDevice<CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2>
 {
 public:
 	WinBond() {}
@@ -158,7 +158,7 @@ private:
 	void _send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size);
 };
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 void WinBond<CS>::set_status(uint16_t status)
 {
 	this->start_transfer();
@@ -167,7 +167,7 @@ void WinBond<CS>::set_status(uint16_t status)
 	this->end_transfer();
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 bool WinBond<CS>::wait_until_ready(uint16_t timeout_ms)
 {
 	bool ready = false;
@@ -187,7 +187,7 @@ bool WinBond<CS>::wait_until_ready(uint16_t timeout_ms)
 	return ready;
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 typename WinBond<CS>::Device WinBond<CS>::read_device()
 {
 	Device device;
@@ -195,7 +195,7 @@ typename WinBond<CS>::Device WinBond<CS>::read_device()
 	return device;
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 uint64_t WinBond<CS>::read_unique_ID()
 {
 	uint8_t buffer[9];
@@ -205,7 +205,7 @@ uint64_t WinBond<CS>::read_unique_ID()
 	return id;
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 uint8_t WinBond<CS>::read_data(uint32_t address)
 {
 	uint8_t data;
@@ -213,13 +213,13 @@ uint8_t WinBond<CS>::read_data(uint32_t address)
 	return data;
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 void WinBond<CS>::read_data(uint32_t address, uint8_t* data, uint16_t size)
 {
 	_send(0x03, address, data, size);
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 uint8_t WinBond<CS>::_read(uint8_t code)
 {
 	this->start_transfer();
@@ -229,7 +229,7 @@ uint8_t WinBond<CS>::_read(uint8_t code)
 	return result;
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 void WinBond<CS>::_send(uint8_t code)
 {
 	this->start_transfer();
@@ -237,7 +237,7 @@ void WinBond<CS>::_send(uint8_t code)
 	this->end_transfer();
 }
 
-template<Board::DigitalPin CS>
+template<board::DigitalPin CS>
 void WinBond<CS>::_send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)
 {
 	this->start_transfer();

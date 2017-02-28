@@ -31,124 +31,127 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
-template<Board::Timer TIMER>
-class Timer
+namespace timer
 {
-protected:
-	using TRAIT = board_traits::Timer_trait<TIMER>;
-	using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
-	
-public:
-	using TIMER_TYPE = typename TRAIT::TYPE;
-	using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
+	template<board::Timer TIMER>
+	class Timer
+	{
+	protected:
+		using TRAIT = board_traits::Timer_trait<TIMER>;
+		using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
 
-	static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
-	{
-		return prescaler_is_adequate(prescaler_quotient(p, us));
-	}
-	static constexpr TIMER_PRESCALER prescaler(uint32_t us)
-	{
-		return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
-	}
-	static constexpr TIMER_TYPE counter(TIMER_PRESCALER prescaler, uint32_t us)
-	{
-		return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;
-	}
-	static constexpr TIMER_TYPE counter(uint32_t us)
-	{
-		return (TIMER_TYPE) prescaler_quotient(prescaler(us), us) - 1;
-	}
+	public:
+		using TIMER_TYPE = typename TRAIT::TYPE;
+		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 
-	inline void begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
-	{
-		synchronized _begin(prescaler, max);
-	}
+		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
+		{
+			return prescaler_is_adequate(prescaler_quotient(p, us));
+		}
+		static constexpr TIMER_PRESCALER prescaler(uint32_t us)
+		{
+			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
+		}
+		static constexpr TIMER_TYPE counter(TIMER_PRESCALER prescaler, uint32_t us)
+		{
+			return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;
+		}
+		static constexpr TIMER_TYPE counter(uint32_t us)
+		{
+			return (TIMER_TYPE) prescaler_quotient(prescaler(us), us) - 1;
+		}
 
-	// We'll need additional methods in Timer_trait<>
-	inline void _begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
-	{
-		// OCnA & OCnB disconnected, CTC (Clear Timer on Compare match)
-		TRAIT::TCCRA = TRAIT::CTC_TCCRA;
-		// Don't force output compare (FOCA & FOCB), Clock Select according to prescaler
-		TRAIT::TCCRB = TRAIT::CTC_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
-		// Set timer counter compare match (when value reached, 1ms has elapsed)
-		TRAIT::OCRA = max;
-		// Reset timer counter
-		TRAIT::TCNT = 0;
-		// Set timer interrupt mode (set interrupt on OCRnA compare match)
-		TRAIT::TIMSK = _BV(OCIE0A);
-	}
-	inline void suspend()
-	{
-		synchronized _suspend();
-	}
-	inline void _suspend()
-	{
-		// Clear timer interrupt mode
-		TRAIT::TIMSK = 0;
-	}
-	inline void resume()
-	{
-		synchronized _resume();
-	}
-	inline void _resume()
-	{
-		// Reset timer counter
-		TRAIT::TCNT = 0;
-		// Set timer interrupt mode (set interrupt on OCRnA compare match)
-		TRAIT::TIMSK = _BV(OCIE0A);
-	}
-	inline bool is_suspended()
-	{
-		return TRAIT::TIMSK == 0;
-	}
-	inline void end()
-	{
-		synchronized _end();
-	}
-	inline void _end()
-	{
-		// Stop timer
-		TRAIT::TCCRB = 0;
-		// Clear timer interrupt mode (set interrupt on OCRnA compare match)
-		TRAIT::TIMSK = 0;
-	}
-	
-private:
-	static constexpr uint32_t prescaler_quotient(TIMER_PRESCALER p, uint32_t us)
-	{
-		return (F_CPU / 1000000UL * us) / _BV(uint8_t(p));
-	}
+		inline void begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
+		{
+			synchronized _begin(prescaler, max);
+		}
 
-	static constexpr uint32_t prescaler_remainder(TIMER_PRESCALER p, uint32_t us)
-	{
-		return (F_CPU / 1000000UL * us) % _BV(uint8_t(p));
-	}
+		// We'll need additional methods in Timer_trait<>
+		inline void _begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
+		{
+			// OCnA & OCnB disconnected, CTC (Clear Timer on Compare match)
+			TRAIT::TCCRA = TRAIT::CTC_TCCRA;
+			// Don't force output compare (FOCA & FOCB), Clock Select according to prescaler
+			TRAIT::TCCRB = TRAIT::CTC_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
+			// Set timer counter compare match (when value reached, 1ms has elapsed)
+			TRAIT::OCRA = max;
+			// Reset timer counter
+			TRAIT::TCNT = 0;
+			// Set timer interrupt mode (set interrupt on OCRnA compare match)
+			TRAIT::TIMSK = _BV(OCIE0A);
+		}
+		inline void suspend()
+		{
+			synchronized _suspend();
+		}
+		inline void _suspend()
+		{
+			// Clear timer interrupt mode
+			TRAIT::TIMSK = 0;
+		}
+		inline void resume()
+		{
+			synchronized _resume();
+		}
+		inline void _resume()
+		{
+			// Reset timer counter
+			TRAIT::TCNT = 0;
+			// Set timer interrupt mode (set interrupt on OCRnA compare match)
+			TRAIT::TIMSK = _BV(OCIE0A);
+		}
+		inline bool is_suspended()
+		{
+			return TRAIT::TIMSK == 0;
+		}
+		inline void end()
+		{
+			synchronized _end();
+		}
+		inline void _end()
+		{
+			// Stop timer
+			TRAIT::TCCRB = 0;
+			// Clear timer interrupt mode (set interrupt on OCRnA compare match)
+			TRAIT::TIMSK = 0;
+		}
 
-	static constexpr bool prescaler_is_adequate(uint32_t quotient)
-	{
-		return quotient > 1 and quotient < TRAIT::MAX_COUNTER;
-	}
+	private:
+		static constexpr uint32_t prescaler_quotient(TIMER_PRESCALER p, uint32_t us)
+		{
+			return (F_CPU / 1000000UL * us) / _BV(uint8_t(p));
+		}
 
-	static constexpr TIMER_PRESCALER best_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t us)
-	{
-		return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ? p2 :
-				!prescaler_is_adequate(prescaler_quotient(p2, us)) ? p1 :
-				prescaler_remainder(p1, us) < prescaler_remainder(p2, us) ? p1 :
-				prescaler_remainder(p1, us) > prescaler_remainder(p2, us) ? p2 :
-				prescaler_quotient(p1, us) > prescaler_quotient(p2, us) ? p1 : p2);
-	}
+		static constexpr uint32_t prescaler_remainder(TIMER_PRESCALER p, uint32_t us)
+		{
+			return (F_CPU / 1000000UL * us) % _BV(uint8_t(p));
+		}
 
-	static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t us)
-	{
-		return (begin + 1 == end ? *begin : best_prescaler_in_2(*begin, best_prescaler(begin + 1 , end, us), us));
-	}
+		static constexpr bool prescaler_is_adequate(uint32_t quotient)
+		{
+			return quotient > 1 and quotient < TRAIT::MAX_COUNTER;
+		}
 
-	template<size_t N>
-	static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
-	{
-		return best_prescaler(prescalers, prescalers + N, us);
-	}
-};
+		static constexpr TIMER_PRESCALER best_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t us)
+		{
+			return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ? p2 :
+					!prescaler_is_adequate(prescaler_quotient(p2, us)) ? p1 :
+					prescaler_remainder(p1, us) < prescaler_remainder(p2, us) ? p1 :
+					prescaler_remainder(p1, us) > prescaler_remainder(p2, us) ? p2 :
+					prescaler_quotient(p1, us) > prescaler_quotient(p2, us) ? p1 : p2);
+		}
+
+		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t us)
+		{
+			return (begin + 1 == end ? *begin : best_prescaler_in_2(*begin, best_prescaler(begin + 1 , end, us), us));
+		}
+
+		template<size_t N>
+		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
+		{
+			return best_prescaler(prescalers, prescalers + N, us);
+		}
+	};
+}
 
 #endif /* TIMER_HH */

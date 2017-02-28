@@ -100,7 +100,7 @@ namespace board_traits
 	using REG8 = REGISTER<uint8_t>;
 	using REG16 = REGISTER<uint16_t>;
 
-	using namespace ::Board;
+	using namespace ::board;
 	using REG = uint16_t;
 	
 	template<Port P>
@@ -281,7 +281,7 @@ namespace board_traits
 		static constexpr const uint8_t RX_ENABLE_MASK = 0;
 		static constexpr const uint8_t UDRIE_MASK = 0;
 		static constexpr const uint8_t RXCIE_MASK = 0;
-		static constexpr uint8_t UCSRC_value(Serial::Parity parity, Serial::StopBits stopbits)
+		static constexpr uint8_t UCSRC_value(serial::Parity parity, serial::StopBits stopbits)
 		{
 			return 0;
 		}
@@ -428,7 +428,7 @@ namespace board_traits
 	};
 };
 
-namespace Board
+namespace board
 {
 	template<DigitalPin PIN>
 	constexpr uint8_t BIT() INLINE;

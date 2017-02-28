@@ -38,11 +38,11 @@
 using namespace Events;
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
+static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 #elif defined (ARDUINO_MEGA)
-static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -79,7 +79,7 @@ static Queue<Event> event_queue{buffer};
 int main()
 {
 	// Set power settings
-	Power::set_default_mode(Board::SleepMode::POWER_DOWN);
+	Power::set_default_mode(board::SleepMode::POWER_DOWN);
 	// Enable interrupts at startup time
 	sei();
 

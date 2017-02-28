@@ -42,16 +42,16 @@
 #include <fastarduino/utilities.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PD1;
-constexpr const Board::DigitalPin RX = Board::InterruptPin::D0_PD0_PCI2;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PD1;
+constexpr const board::DigitalPin RX = board::InterruptPin::D0_PD0_PCI2;
 #define PCI_NUM 2
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D52_PB1;
-constexpr const Board::DigitalPin RX = Board::InterruptPin::D53_PB0_PCI0;
+constexpr const board::DigitalPin TX = board::DigitalPin::D52_PB1;
+constexpr const board::DigitalPin RX = board::InterruptPin::D53_PB0_PCI0;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
-constexpr const Board::DigitalPin RX = Board::InterruptPin::D0_PA0_PCI0;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin RX = board::InterruptPin::D0_PA0_PCI0;
 #define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"

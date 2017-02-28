@@ -42,16 +42,16 @@
 #include <fastarduino/utilities.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D3_PD3;
-constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::DigitalPin TX = board::DigitalPin::D3_PD3;
+constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D2_PD2_EXT0;
 #define INT_NUM 0
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D52_PB1;
-constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D21_PD0_EXT0;
+constexpr const board::DigitalPin TX = board::DigitalPin::D52_PB1;
+constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D21_PD0_EXT0;
 #define INT_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
-constexpr const Board::DigitalPin RX = Board::ExternalInterruptPin::D10_PB2_EXT0;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D10_PB2_EXT0;
 #define INT_NUM 0
 #else
 #error "Current target is not yet supported!"

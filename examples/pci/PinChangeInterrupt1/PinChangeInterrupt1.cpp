@@ -36,13 +36,13 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D14_PC0_PCI1;
+constexpr const board::DigitalPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
 #define PCI_NUM 1
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D53_PB0_PCI0;
+constexpr const board::DigitalPin SWITCH = board::InterruptPin::D53_PB0_PCI0;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH = Board::InterruptPin::D8_PB0_PCI1;
+constexpr const board::DigitalPin SWITCH = board::InterruptPin::D8_PB0_PCI1;
 #define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"
@@ -66,7 +66,7 @@ public:
 	
 private:
 	FastPinType<SWITCH>::TYPE _switch;
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
+	FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 
 // Define vectors we need in the example
@@ -88,6 +88,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(Board::SleepMode::POWER_DOWN);
+		Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

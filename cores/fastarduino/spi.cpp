@@ -17,7 +17,7 @@
 
 #ifdef SPDR
 // Handle SPI for ATmega
-void SPI::init()
+void spi::init()
 {
 	//TODO check code size and possibly revert to macro defined DDR_SPI and PORT_SPI if better
 	synchronized
@@ -34,7 +34,7 @@ void SPI::init()
 }
 #else
 // Handle USI for ATtiny
-void SPI::init()
+void spi::init()
 {
 	synchronized
 	{

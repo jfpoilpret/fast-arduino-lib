@@ -18,189 +18,192 @@
 #include "utilities.h"
 #include "boards/board_traits.h"
 
-enum class PinMode: uint8_t
+namespace gpio
 {
-	INPUT,
-	INPUT_PULLUP,
-	OUTPUT,
-};
+	enum class PinMode: uint8_t
+	{
+		INPUT,
+		INPUT_PULLUP,
+		OUTPUT,
+	};
 
-// This class maps to a PORT pin 
-// SRAM size is 0
-template<Board::Port PORT_, uint8_t BIT_>
-class FastPin
-{
-private:
-	using TRAIT = board_traits::Port_trait<PORT_>;
-	
-public:
-	static constexpr const Board::Port PORT = PORT_;
-	static constexpr const uint8_t BIT = BIT_;
-	
-	FastPin() INLINE
+	// This class maps to a PORT pin 
+	// SRAM size is 0
+	template<board::Port PORT_, uint8_t BIT_>
+	class FastPin
 	{
-		static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
-	}
-	FastPin(PinMode mode, bool value = false) INLINE
-	{
-		static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
-		set_mode(mode, value);
-	}
-	void set_mode(PinMode mode, bool value = false) INLINE
-	{
-		if (mode == PinMode::OUTPUT)
-			TRAIT::DDR |= _BV(BIT);
-		else
-			TRAIT::DDR &= ~_BV(BIT);
-		if (value || mode == PinMode::INPUT_PULLUP)
+	private:
+		using TRAIT = board_traits::Port_trait<PORT_>;
+
+	public:
+		static constexpr const board::Port PORT = PORT_;
+		static constexpr const uint8_t BIT = BIT_;
+
+		FastPin() INLINE
+		{
+			static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
+		}
+		FastPin(PinMode mode, bool value = false) INLINE
+		{
+			static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
+			set_mode(mode, value);
+		}
+		void set_mode(PinMode mode, bool value = false) INLINE
+		{
+			if (mode == PinMode::OUTPUT)
+				TRAIT::DDR |= _BV(BIT);
+			else
+				TRAIT::DDR &= ~_BV(BIT);
+			if (value || mode == PinMode::INPUT_PULLUP)
+				TRAIT::PORT |= _BV(BIT);
+			else
+				TRAIT::PORT &= ~_BV(BIT);
+		}
+		void set() INLINE
+		{
 			TRAIT::PORT |= _BV(BIT);
-		else
+		}
+		void clear() INLINE
+		{
 			TRAIT::PORT &= ~_BV(BIT);
-	}
-	void set() INLINE
-	{
-		TRAIT::PORT |= _BV(BIT);
-	}
-	void clear() INLINE
-	{
-		TRAIT::PORT &= ~_BV(BIT);
-	}
-	void toggle() INLINE
-	{
-		TRAIT::PIN |= _BV(BIT);
-	}
-	bool value() INLINE
-	{
-		return TRAIT::PIN & _BV(BIT);
-	}
-};
+		}
+		void toggle() INLINE
+		{
+			TRAIT::PIN |= _BV(BIT);
+		}
+		bool value() INLINE
+		{
+			return TRAIT::PIN & _BV(BIT);
+		}
+	};
 
-// This class maps to a PORT and handles it all 8 bits at a time
-// SRAM size is 0
-template<Board::Port PORT_>
-class FastPort
-{
-private:
-	using TRAIT = board_traits::Port_trait<PORT_>;
-	
-public:
-	static constexpr const Board::Port PORT = PORT_;
-	
-	FastPort() {}
-	FastPort(uint8_t ddr, uint8_t port = 0) INLINE
+	// This class maps to a PORT and handles it all 8 bits at a time
+	// SRAM size is 0
+	template<board::Port PORT_>
+	class FastPort
 	{
-		set_DDR(ddr);
-		set_PORT(port);
-	}
-	
-	template<uint8_t BIT>
-	FastPin<PORT, BIT> get_pin(PinMode mode, bool value = false)
-	{
-		return FastPin<PORT, BIT>{mode, value};
-	}
-	
-	template<uint8_t BIT>
-	FastPin<PORT, BIT> get_pin()
-	{
-		return FastPin<PORT, BIT>{};
-	}
-	
-	void set_PORT(uint8_t port) INLINE
-	{
-		TRAIT::PORT = port;
-	}
-	uint8_t get_PORT() INLINE
-	{
-		return TRAIT::PORT;
-	}
-	void set_DDR(uint8_t ddr) INLINE
-	{
-		TRAIT::DDR = ddr;
-	}
-	uint8_t get_DDR() INLINE
-	{
-		return TRAIT::DDR;
-	}
-	void set_PIN(uint8_t pin) INLINE
-	{
-		TRAIT::PIN = pin;
-	}
-	uint8_t get_PIN() INLINE
-	{
-		return TRAIT::PIN;
-	}
-};
+	private:
+		using TRAIT = board_traits::Port_trait<PORT_>;
 
-// This class maps to a PORT and handles several bits at a time based on a mask
-// SRAM size is 1 byte
-template<Board::Port PORT_>
-class FastMaskedPort
-{
-private:
-	using TRAIT = board_traits::Port_trait<PORT_>;
-	
-public:
-	static constexpr const Board::Port PORT = PORT_;
-	
-	FastMaskedPort() {}
-	FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0)
-	:_mask{mask}
-	{
-		set_DDR(ddr);
-		set_PORT(port);
-	}
-	
-	void set_PORT(uint8_t port) INLINE
-	{
-		TRAIT::PORT = (TRAIT::PORT & ~_mask) | (port & _mask);
-	}
-	uint8_t get_PORT() INLINE
-	{
-		return TRAIT::PORT & _mask;
-	}
-	void set_DDR(uint8_t ddr) INLINE
-	{
-		TRAIT::DDR = (TRAIT::DDR & ~_mask) | (ddr & _mask);
-	}
-	uint8_t get_DDR() INLINE
-	{
-		return TRAIT::DDR & _mask;
-	}
-	void set_PIN(uint8_t pin) INLINE
-	{
-		TRAIT::PIN = pin & _mask;
-	}
-	uint8_t get_PIN() INLINE
-	{
-		return TRAIT::PIN & _mask;
-	}
-	
-private:
-	uint8_t _mask;
-};
+	public:
+		static constexpr const board::Port PORT = PORT_;
 
-template<Board::DigitalPin DPIN>
-struct FastPinType
-{
-	static constexpr const Board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
-	static constexpr const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
-	static constexpr const uint8_t MASK = _BV(BIT);
-	using TYPE = FastPin<PORT, BIT>;
-	using PORT_TYPE = FastPort<PORT>;
-};
+		FastPort() {}
+		FastPort(uint8_t ddr, uint8_t port = 0) INLINE
+		{
+			set_DDR(ddr);
+			set_PORT(port);
+		}
 
-template<>
-class FastPin<Board::Port::NONE, 0>
-{
-public:
-	FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
-	void set() INLINE {}
-	void clear() INLINE {}
-	void toggle() INLINE {}
-	bool value() INLINE
+		template<uint8_t BIT>
+		FastPin<PORT, BIT> get_pin(PinMode mode, bool value = false)
+		{
+			return FastPin<PORT, BIT>{mode, value};
+		}
+
+		template<uint8_t BIT>
+		FastPin<PORT, BIT> get_pin()
+		{
+			return FastPin<PORT, BIT>{};
+		}
+
+		void set_PORT(uint8_t port) INLINE
+		{
+			TRAIT::PORT = port;
+		}
+		uint8_t get_PORT() INLINE
+		{
+			return TRAIT::PORT;
+		}
+		void set_DDR(uint8_t ddr) INLINE
+		{
+			TRAIT::DDR = ddr;
+		}
+		uint8_t get_DDR() INLINE
+		{
+			return TRAIT::DDR;
+		}
+		void set_PIN(uint8_t pin) INLINE
+		{
+			TRAIT::PIN = pin;
+		}
+		uint8_t get_PIN() INLINE
+		{
+			return TRAIT::PIN;
+		}
+	};
+
+	// This class maps to a PORT and handles several bits at a time based on a mask
+	// SRAM size is 1 byte
+	template<board::Port PORT_>
+	class FastMaskedPort
 	{
-		return false;
-	}
-};
+	private:
+		using TRAIT = board_traits::Port_trait<PORT_>;
+
+	public:
+		static constexpr const board::Port PORT = PORT_;
+
+		FastMaskedPort() {}
+		FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0)
+		:_mask{mask}
+		{
+			set_DDR(ddr);
+			set_PORT(port);
+		}
+
+		void set_PORT(uint8_t port) INLINE
+		{
+			TRAIT::PORT = (TRAIT::PORT & ~_mask) | (port & _mask);
+		}
+		uint8_t get_PORT() INLINE
+		{
+			return TRAIT::PORT & _mask;
+		}
+		void set_DDR(uint8_t ddr) INLINE
+		{
+			TRAIT::DDR = (TRAIT::DDR & ~_mask) | (ddr & _mask);
+		}
+		uint8_t get_DDR() INLINE
+		{
+			return TRAIT::DDR & _mask;
+		}
+		void set_PIN(uint8_t pin) INLINE
+		{
+			TRAIT::PIN = pin & _mask;
+		}
+		uint8_t get_PIN() INLINE
+		{
+			return TRAIT::PIN & _mask;
+		}
+
+	private:
+		uint8_t _mask;
+	};
+
+	template<board::DigitalPin DPIN>
+	struct FastPinType
+	{
+		static constexpr const board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
+		static constexpr const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
+		static constexpr const uint8_t MASK = _BV(BIT);
+		using TYPE = FastPin<PORT, BIT>;
+		using PORT_TYPE = FastPort<PORT>;
+	};
+
+	template<>
+	class FastPin<board::Port::NONE, 0>
+	{
+	public:
+		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
+		void set() INLINE {}
+		void clear() INLINE {}
+		void toggle() INLINE {}
+		bool value() INLINE
+		{
+			return false;
+		}
+	};
+}
 
 #endif	/* FASTIO_HH */

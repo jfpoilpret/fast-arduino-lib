@@ -47,7 +47,7 @@ enum class InterruptTrigger: uint8_t
 	RISING_EDGE		= 0xFF
 };
 
-template<Board::DigitalPin PIN>
+template<board::DigitalPin PIN>
 class INTSignal
 {
 protected:

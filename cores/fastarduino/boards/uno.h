@@ -21,7 +21,7 @@
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
 
-namespace Board
+namespace board
 {
 	//====
 	// IO

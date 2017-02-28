@@ -50,7 +50,7 @@ int main()
 	sei();
 	
 	// Start UART
-	UATX<Board::USART::USART0> uart{output_buffer};
+	UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
 	FormattedOutput<OutputBuffer> out = uart.fout();

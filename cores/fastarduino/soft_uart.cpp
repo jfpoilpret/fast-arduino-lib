@@ -16,7 +16,7 @@
 
 #include "soft_uart.h"
 
-void Soft::AbstractUATX::_begin(uint32_t rate, Serial::Parity parity, Serial::StopBits stop_bits)
+void serial::soft::AbstractUATX::_begin(uint32_t rate, Parity parity, StopBits stop_bits)
 {
 	_parity = parity;
 	// Calculate timing for TX in number of cycles
@@ -28,7 +28,7 @@ void Soft::AbstractUATX::_begin(uint32_t rate, Serial::Parity parity, Serial::St
 	_start_bit_tx_time = (bit_time - 12) / 4;
 	// For stop bit we lengthten the bit duration of 25% to guarantee alignment of RX side on stop duration
 	_stop_bit_tx_time = (bit_time / 4) * 5 / 4;
-	if (stop_bits == Serial::StopBits::TWO) _stop_bit_tx_time *= 2;
+	if (stop_bits == StopBits::TWO) _stop_bit_tx_time *= 2;
 }
 
 //TODO Can this really be considered constexpr?
@@ -38,9 +38,9 @@ constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
 }
 
-void Soft::AbstractUARX::_begin(
-	uint32_t rate, Serial::Parity parity, 
-	UNUSED Serial::StopBits stop_bits)
+void serial::soft::AbstractUARX::_begin(
+	uint32_t rate, Parity parity, 
+	UNUSED StopBits stop_bits)
 {
 	_parity = parity;
 	// Calculate timing for RX in number of cycles
@@ -61,7 +61,7 @@ void Soft::AbstractUARX::_begin(
 	// 16+4N cycles elapse between processing of each bit
 	_interbit_rx_time = compute_delay(bit_time, 16);
 	
-	if (parity != Serial::Parity::NONE)
+	if (parity != Parity::NONE)
 	{
 		// When parity must be checked, the number of cycles between last data bit sampled and parity bit sample is:
 		// - 20 cycles + 4n delay
@@ -92,14 +92,14 @@ void Soft::AbstractUARX::_begin(
 	// Additionally, 49 cycles elapse until next PCI can be handled
 }
 
-Serial::Parity Soft::AbstractUATX::calculate_parity(Serial::Parity parity, uint8_t value)
+serial::Parity serial::soft::AbstractUATX::calculate_parity(Parity parity, uint8_t value)
 {
-	if (parity == Serial::Parity::NONE) return Serial::Parity::NONE;
+	if (parity == Parity::NONE) return Parity::NONE;
 	bool odd = false;
 	while (value)
 	{
 		if (value & 0x01) odd = !odd;
 		value >>= 1;
 	}
-	return (odd ? Serial::Parity::ODD : Serial::Parity::EVEN);
+	return (odd ? Parity::ODD : Parity::EVEN);
 }

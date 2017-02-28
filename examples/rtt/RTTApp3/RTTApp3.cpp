@@ -46,7 +46,7 @@ REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
@@ -66,7 +66,7 @@ int main()
 	Soft::UATX<TX> uatx{output_buffer};
 	uatx.begin(115200);
 #else
-	UATX<Board::USART::USART0> uatx{output_buffer};
+	UATX<board::USART::USART0> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
 #endif
@@ -74,7 +74,7 @@ int main()
 	FormattedOutput<OutputBuffer> out = uatx.fout();
 	out << "Started\n";
 	
-	RTT<Board::Timer::TIMER0> rtt;
+	RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
 
 	rtt.begin();
@@ -83,7 +83,7 @@ int main()
 	{
 		rtt.millis(0);
 		_delay_us(666);
-		Time::RTTTime time = rtt.time();
+		time::RTTTime time = rtt.time();
 		out << time.millis << "ms " << time.micros << "us\n" << flush;
 	}
 }

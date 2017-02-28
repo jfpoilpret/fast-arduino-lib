@@ -36,11 +36,11 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D21_PD0_EXT0;
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const Board::DigitalPin SWITCH = Board::ExternalInterruptPin::D10_PB2_EXT0;
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -63,7 +63,7 @@ public:
 	
 private:
 	FastPinType<SWITCH>::TYPE _switch;
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
+	FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 
 // Define vectors we need in the example
@@ -86,9 +86,9 @@ int main()
 #if defined(BREADBOARD_ATTINYX4)
 		// Not sure why, but INT0 ANY_CHANGE does not seem to wake up MCU in POWER_SAVE mode, 
 		// although that works well with UNO and MEGA...
-		Power::sleep(Board::SleepMode::IDLE);
+		Power::sleep(board::SleepMode::IDLE);
 #else
-		Power::sleep(Board::SleepMode::POWER_DOWN);
+		Power::sleep(board::SleepMode::POWER_DOWN);
 #endif
 	}
 }

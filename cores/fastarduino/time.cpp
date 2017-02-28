@@ -16,15 +16,15 @@
 #include "power.h"
 #include "boards/board.h"
 
-Time::DELAY_PTR Time::delay = Time::default_delay;
-Time::MILLIS_PTR Time::millis = 0;
+time::DELAY_PTR time::delay = time::default_delay;
+time::MILLIS_PTR time::millis = 0;
 
-void Time::yield()
+void time::yield()
 {
-	Power::sleep();
+	power::Power::sleep();
 }
 
-Time::RTTTime Time::delta(const RTTTime& time1, const RTTTime& time2)
+time::RTTTime time::delta(const RTTTime& time1, const RTTTime& time2)
 {
 	uint32_t millis = (time1.millis <= time2.millis ? time2.millis - time1.millis : 0);
 	uint16_t micros = 0;
@@ -38,13 +38,13 @@ Time::RTTTime Time::delta(const RTTTime& time1, const RTTTime& time2)
 	return RTTTime{millis, micros};
 }
 
-uint32_t Time::since(uint32_t start_ms)
+uint32_t time::since(uint32_t start_ms)
 {
-	uint32_t now = Time::millis();
+	uint32_t now = time::millis();
 	return (start_ms <= now ? now - start_ms : 0);
 }
 
-void Time::default_delay(uint32_t ms)
+void time::default_delay(uint32_t ms)
 {
-	while (ms--) Time::delay_us(1000);
+	while (ms--) time::delay_us(1000);
 }

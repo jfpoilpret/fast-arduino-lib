@@ -49,10 +49,10 @@ int main()
 	// NB in this sleep mode, delay takes about 1.5 times the specified time, and works only with Timer2
 	// because other timers cannot wake up MCU from that sleep mode, as per specification.
 	// The additional 0.5x are due to the wake-up time at every interrupt (every ms)
-//	Power::set_default_mode(Board::SleepMode::POWER_SAVE);
+//	Power::set_default_mode(board::SleepMode::POWER_SAVE);
 	
-	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
-	RTT<Board::Timer::TIMER0> rtt;
+	typename FastPinType<board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
+	RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
 
 	rtt.begin();

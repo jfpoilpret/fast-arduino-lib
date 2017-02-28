@@ -44,7 +44,7 @@ REGISTER_UATX_ISR(0)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -82,7 +82,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	UATX<Board::USART::USART0> uart{output_buffer};
+	UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
 	Soft::UATX<TX> uart{output_buffer};
