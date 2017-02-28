@@ -69,7 +69,7 @@ template<	board::DigitalPin CLOCK,
 class MatrixMultiplexer
 {
 private:
-	using SIPO_TYPE = SIPO<CLOCK, LATCH, DATA>;
+	using SIPO_TYPE = devices::SIPO<CLOCK, LATCH, DATA>;
 	using TRAIT = MATRIX_TRAIT<COLUMNS_, ROWS_>;
 	
 	static_assert(TRAIT::SUPPORTED, "Provided COLUMNS_ and ROWS_ template parameters are not supported");
@@ -140,7 +140,7 @@ public:
 	}
 	
 protected:
-	SIPO<CLOCK, LATCH, DATA> _sipo;
+	devices::SIPO<CLOCK, LATCH, DATA> _sipo;
 	ROW_TYPE _data[ROWS];
 	ROW_TYPE _blinks[ROWS];
 	uint8_t _row;

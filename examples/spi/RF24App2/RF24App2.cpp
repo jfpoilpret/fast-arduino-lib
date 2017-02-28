@@ -143,7 +143,7 @@ int main()
 
 	// Start SPI and setup NRF24
 	spi::init();
-	IRQ_NRF24L01<PIN_CSN, PIN_CE, PIN_IRQ> rf{NETWORK, self_device};
+	devices::rf::IRQ_NRF24L01<PIN_CSN, PIN_CE, PIN_IRQ> rf{NETWORK, self_device};
 	rf.begin();
 	trace << "NRF24L01+ started\n" << streams::flush;
 	
