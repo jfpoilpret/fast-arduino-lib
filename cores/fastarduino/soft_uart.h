@@ -184,9 +184,9 @@ namespace soft
 	{
 	public:
 		using PIN_TRAIT = board_traits::DigitalPin_trait<RX>;
-		using PCI_TYPE = typename PCIType<RX>::TYPE;
+		using PCI_TYPE = typename interrupt::PCIType<RX>::TYPE;
 		using PORT_TRAIT = typename PCI_TYPE::TRAIT;
-		using INT_TYPE = INTSignal<RX>;
+		using INT_TYPE = interrupt::INTSignal<RX>;
 		
 		template<uint8_t SIZE_RX>
 		UARX(char (&input)[SIZE_RX]):AbstractUARX(input), _rx{gpio::PinMode::INPUT}

@@ -84,8 +84,8 @@ int main()
 	
 	SwitchHandler switch_handler;
 	register_handler(switch_handler);
-	INTSignal<SWITCH_ON> int0{InterruptTrigger::ANY_CHANGE};
-	INTSignal<SWITCH_OFF> int1{InterruptTrigger::ANY_CHANGE};
+	interrupt::INTSignal<SWITCH_ON> int0{interrupt::InterruptTrigger::ANY_CHANGE};
+	interrupt::INTSignal<SWITCH_OFF> int1{interrupt::InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 	int1.enable();
 

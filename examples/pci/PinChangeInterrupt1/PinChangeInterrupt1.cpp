@@ -80,7 +80,7 @@ int main()
 	
 	PinChangeHandler handler;
 	register_handler(handler);
-	PCIType<SWITCH>::TYPE pci;
+	interrupt::PCIType<SWITCH>::TYPE pci;
 	
 	pci.enable_pin<SWITCH>();
 	pci.enable();
