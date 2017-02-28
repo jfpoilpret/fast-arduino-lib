@@ -18,10 +18,8 @@
 #include "events.h"
 #include "linked_list.h"
 
-namespace scheduler
+namespace events
 {
-	using namespace events;
-
 	class Job;
 
 	template<typename CLOCK>

@@ -52,7 +52,7 @@ REGISTER_WATCHDOG_CLOCK_ISR()
 
 static const uint32_t PERIOD = 1000;
 
-class LedHandler: public scheduler::Job, private gpio::FastPort<LED_PORT>
+class LedHandler: public Job, private gpio::FastPort<LED_PORT>
 {
 public:
 	LedHandler() : Job{0, PERIOD}, FastPort{0xFF}, _value{0} {}
@@ -87,7 +87,7 @@ int main()
 	Dispatcher dispatcher;
 	watchdog::Watchdog watchdog{event_queue};
 	watchdog.register_watchdog_handler();
-	scheduler::Scheduler<watchdog::Watchdog> scheduler{watchdog, Type::WDT_TIMER};
+	Scheduler<watchdog::Watchdog> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;
