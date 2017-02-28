@@ -21,13 +21,13 @@
 #include "events.h"
 
 #define REGISTER_RTT_ISR(TIMER_NUM)	\
-REGISTER_TIMER_ISR_METHOD(TIMER_NUM, CAT(RTT<board::Timer::TIMER, TIMER_NUM) >, CAT(&RTT<board::Timer::TIMER, TIMER_NUM) >::on_timer)
+REGISTER_TIMER_ISR_METHOD(TIMER_NUM, CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >, CAT(&timer::RTT<board::Timer::TIMER, TIMER_NUM) >::on_timer)
 
 // Utilities to handle ISR callbacks
 #define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)							\
 ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
 {																						\
-	using RTT_HANDLER = CAT(RTT<board::Timer::TIMER, TIMER_NUM) >;						\
+	using RTT_HANDLER = CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >;				\
 	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);									\
 	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer);	\
 	RTT_HANDLE::handle();																\
@@ -37,7 +37,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
 #define REGISTER_RTT_ISR_FUNCTION(TIMER_NUM, CALLBACK)									\
 ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
 {																						\
-	using RTT_HANDLER = CAT(RTT<board::Timer::TIMER, TIMER_NUM) >;						\
+	using RTT_HANDLER = CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >;				\
 	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);									\
 	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer);	\
 	RTT_HANDLE::handle();																\

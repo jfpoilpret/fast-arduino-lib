@@ -29,7 +29,7 @@
 #include <fastarduino/timer.h>
 
 constexpr const board::Timer TIMER = board::Timer::TIMER1;
-using TIMER_TYPE = Timer<TIMER>;
+using TIMER_TYPE = timer::Timer<TIMER>;
 constexpr const uint32_t PERIOD_US = 1000000;
 
 constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::prescaler(PERIOD_US);
@@ -39,7 +39,7 @@ constexpr const TIMER_TYPE::TIMER_TYPE COUNTER = TIMER_TYPE::counter(PRESCALER, 
 class Handler
 {
 public:
-	Handler(): _led{PinMode::OUTPUT, false} {}
+	Handler(): _led{gpio::PinMode::OUTPUT, false} {}
 	
 	void on_timer()
 	{
@@ -47,7 +47,7 @@ public:
 	}
 	
 private:
-	FastPinType<board::DigitalPin::LED>::TYPE _led;
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;
 };
 
 // Define vectors we need in the example

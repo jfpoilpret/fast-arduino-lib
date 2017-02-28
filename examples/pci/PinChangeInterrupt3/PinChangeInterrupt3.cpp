@@ -102,8 +102,8 @@ public:
 	}
 	
 private:
-	FastPort<SWITCH_PORT> _switches;
-	FastPort<LED_PORT> _leds;	
+	gpio::FastPort<SWITCH_PORT> _switches;
+	gpio::FastPort<LED_PORT> _leds;	
 };
 
 // Define vectors we need in the example
@@ -125,6 +125,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(board::SleepMode::POWER_DOWN);
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

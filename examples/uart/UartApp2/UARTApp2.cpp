@@ -72,8 +72,8 @@ int main()
 	sei();
 	
 	// Setup UART
-	Soft::UATX<TX> uatx{output_buffer};
-	Soft::UARX<RX> uarx{input_buffer};
+	serial::soft::UATX<TX> uatx{output_buffer};
+	serial::soft::UARX<RX> uarx{input_buffer};
 	uarx.register_rx_handler();
 	typename PCIType<RX>::TYPE pci;
 	pci.enable();
@@ -104,13 +104,13 @@ int main()
 //	uatx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 //	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 
-	InputBuffer& in = uarx.in();
-	FormattedOutput<OutputBuffer> out = uatx.fout();
+	streams::InputBuffer& in = uarx.in();
+	streams::FormattedOutput<streams::OutputBuffer> out = uatx.fout();
 
 	while (true)
 	{
 		int value = in.get();
-		if (value != InputBuffer::EOF)
+		if (value != streams::InputBuffer::EOF)
 			out.put(value);
 		if (uarx.has_errors())
 		{

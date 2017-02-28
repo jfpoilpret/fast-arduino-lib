@@ -73,7 +73,7 @@ int main()
 	sei();
 	
 	// Setup UART
-	Soft::UART<RX, TX> uart{input_buffer, output_buffer};
+	serial::soft::UART<RX, TX> uart{input_buffer, output_buffer};
 	uart.register_rx_handler();
 	typename PCIType<RX>::TYPE pci;
 	pci.enable();
@@ -89,13 +89,13 @@ int main()
 //	uart.begin(pci, 115200, Serial::Parity::ODD);
 //	uart.begin(pci, 115200, Serial::Parity::EVEN);
 
-	InputBuffer& in = uart.in();
-	FormattedOutput<OutputBuffer> out = uart.fout();
+	streams::InputBuffer& in = uart.in();
+	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 	while (true)
 	{
 		int value = in.get();
-		if (value != InputBuffer::EOF)
+		if (value != streams::InputBuffer::EOF)
 			out.put(value);
 		if (uart.has_errors())
 		{

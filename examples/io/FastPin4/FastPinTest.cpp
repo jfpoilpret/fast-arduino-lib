@@ -62,8 +62,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to read settings and write to LEDs
-	FastPort<SWITCH_PORT> switchPort{0x00, 0x0F};
-	FastPort<LED_PORT> ledPort{0xFF};
+	gpio::FastPort<SWITCH_PORT> switchPort{0x00, 0x0F};
+	gpio::FastPort<LED_PORT> ledPort{0xFF};
 	
 	// Loop of the LED chaser
 	while (true)

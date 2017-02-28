@@ -57,8 +57,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	FastPinType<SWITCH>::TYPE button{PinMode::INPUT_PULLUP};
-	FastPinType<board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT};	
+	gpio::FastPinType<SWITCH>::TYPE button{gpio::PinMode::INPUT_PULLUP};
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};	
 	INTSignal<SWITCH> int0{InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 
@@ -72,9 +72,9 @@ int main()
 #if defined(BREADBOARD_ATTINYX4)
 		// Not sure why, but INT0 ANY_CHANGE does not seem to wake up MCU in POWER_SAVE mode, 
 		// although that works well with UNO and MEGA...
-		Power::sleep(board::SleepMode::IDLE);
+		power::Power::sleep(board::SleepMode::IDLE);
 #else
-		Power::sleep(board::SleepMode::POWER_DOWN);
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
 #endif
 	}
 }

@@ -100,7 +100,7 @@ static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
 
 static bool is_master()
 {
-	FastPinType<PIN_CONFIG>::TYPE config{PinMode::INPUT_PULLUP};
+	gpio::FastPinType<PIN_CONFIG>::TYPE config{gpio::PinMode::INPUT_PULLUP};
 	return config.value();
 }
 
@@ -111,32 +111,32 @@ int main()
 
 #if HAS_TRACE
 	// Setup traces
-	UATX<board::USART::USART0> uatx{output_buffer};
+	serial::UATX<board::USART::USART0> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
 	auto trace = uatx.fout();
 #else
-	EmptyOutput trace;
+	streams::EmptyOutput trace;
 #endif
 	
 	bool master = is_master();
 	uint8_t self_device = master ? MASTER : SLAVE;
 	uint8_t other_device = master ? SLAVE : MASTER;
-	trace << "RF24App1 started as " << (master ? "Master" : "Slave") << endl << flush;
+	trace << "RF24App1 started as " << (master ? "Master" : "Slave") << streams::endl << streams::flush;
 
 	// Setup RTT
-	RTT<RTT_TIMER> rtt;
+	timer::RTT<RTT_TIMER> rtt;
 	rtt.register_rtt_handler();
 	rtt.begin();
 	// Set RTT instance as default clock from now
 	time::set_clock(rtt);
-	trace << "RTT started\n" << flush;
+	trace << "RTT started\n" << streams::flush;
 
 	// Start SPI and setup NRF24
-	SPI::init();
+	spi::init();
 	NRF24L01<PIN_CSN, PIN_CE> rf{NETWORK, self_device};
 	rf.begin();
-	trace << "NRF24L01+ started\n" << flush;
+	trace << "NRF24L01+ started\n" << streams::flush;
 	
 	// Event Loop
 	uint8_t sent_port = 0;
@@ -148,21 +148,21 @@ int main()
 		if (master)
 		{
 			// Try to send to slave
-			trace << "S " << sent_port << flush;
+			trace << "S " << sent_port << streams::flush;
 			int result = rf.send(other_device, sent_port, 0, 0);
 			if (result < 0)
 				trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 						<< " #Retrans=" << rf.get_retrans() 
-						<< " #Drops=" << rf.get_drops() << '\n' << flush;
+						<< " #Drops=" << rf.get_drops() << '\n' << streams::flush;
 			
 			// Then wait for slave reply
-			trace << " R " << flush;
+			trace << " R " << streams::flush;
 			uint8_t src, port;
 			result = rf.recv(src, port, 0, 0, REPLY_MAX_WAIT_MS);
 			if (result < 0)
-				trace << "\nError " << result << "!\n" << flush;
+				trace << "\nError " << result << "!\n" << streams::flush;
 			else
-				trace << uint16_t(port) << " (" << uint16_t(src) << ") " << flush;
+				trace << uint16_t(port) << " (" << uint16_t(src) << ") " << streams::flush;
 			
 			// Wait 1 second before doing it again
 			++sent_port;
@@ -171,25 +171,25 @@ int main()
 		else
 		{
 			// Wait for master payload
-			trace << "R " << flush;
+			trace << "R " << streams::flush;
 			uint8_t src, port;
 			int result = rf.recv(src, port, 0, 0);
 			if (result < 0)
-				trace << "\nError " << result << "!\n" << flush;
+				trace << "\nError " << result << "!\n" << streams::flush;
 			else
 			{
-				trace << uint16_t(port) << " (" << uint16_t(src) << ") RR " << flush;
+				trace << uint16_t(port) << " (" << uint16_t(src) << ") RR " << streams::flush;
 				// Reply to master with same content
 				result = rf.send(src, port, 0, 0);
 				if (result < 0)
 					trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 							<< " #Retrans=" << rf.get_retrans() 
-							<< " #Drops=" << rf.get_drops() << '\n' << flush;
+							<< " #Drops=" << rf.get_drops() << '\n' << streams::flush;
 			}
 		}
 		if (++count % 1000 == 0)
 			trace << "\n count = " << count << "\n#Trans=" << rf.get_trans() 
 					<< " #Retrans=" << rf.get_retrans() 
-					<< " #Drops=" << rf.get_drops() << '\n' << flush;
+					<< " #Drops=" << rf.get_drops() << '\n' << streams::flush;
 	}
 }

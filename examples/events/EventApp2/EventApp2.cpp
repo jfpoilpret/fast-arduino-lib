@@ -32,7 +32,7 @@
 #include <fastarduino/events.h>
 #include <fastarduino/watchdog.h>
 
-using namespace Events;
+using namespace events;
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
@@ -47,7 +47,7 @@ static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 // Define vectors we need in the example
 REGISTER_WATCHDOG_CLOCK_ISR()
 
-class LedHandler: public EventHandler, private FastPort<LED_PORT>
+class LedHandler: public EventHandler, private gpio::FastPort<LED_PORT>
 {
 public:
 	LedHandler() : EventHandler{Type::WDT_TIMER}, FastPort{0xFF}, _value{0} {}
@@ -70,7 +70,7 @@ static const uint8_t EVENT_QUEUE_SIZE = 32;
 
 // Prepare event queue
 static Event buffer[EVENT_QUEUE_SIZE];
-static Queue<Event> event_queue{buffer};
+static containers::Queue<Event> event_queue{buffer};
 	
 int main()
 {
@@ -83,9 +83,9 @@ int main()
 	dispatcher.insert(handler);
 	
 	// Start watchdog
-	Watchdog watchdog{event_queue};
+	watchdog::Watchdog watchdog{event_queue};
 	watchdog.register_watchdog_handler();
-	watchdog.begin(Watchdog::TimeOut::TO_64ms);
+	watchdog.begin(watchdog::Watchdog::TimeOut::TO_64ms);
 	
 	// Event Loop
 	while (true)

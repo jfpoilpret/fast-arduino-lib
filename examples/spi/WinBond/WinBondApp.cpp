@@ -73,81 +73,81 @@ int main()
 
 	// Start UART
 #if defined (BREADBOARD_ATTINYX4)
-	Soft::UATX<TX> uart{output_buffer};
+	serial::soft::UATX<TX> uart{output_buffer};
 	uart.begin(115200);
 #else
-	UATX<board::USART::USART0> uart{output_buffer};
+	serial::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
 	
 #endif
-	FormattedOutput<OutputBuffer> out = uart.fout();
+	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 	
 	out << "Started\n";
 
-	SPI::init();
+	spi::init();
 	WinBond<CS> flash;
 	_delay_ms(1000);
 	
-	out << "S: " << hex << flash.status().value << endl << flush;
+	out << "S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	uint64_t id = flash.read_unique_ID();
-	out << "UID: " << hex << uint16_t(id >> 48) << ' ' << uint16_t(id >> 32) << ' ' 
-					<< uint16_t(id >> 16) << ' ' << uint16_t(id) << endl;
+	out << "UID: " << streams::hex << uint16_t(id >> 48) << ' ' << uint16_t(id >> 32) << ' ' 
+					<< uint16_t(id >> 16) << ' ' << uint16_t(id) << streams::endl;
 	WinBond<CS>::Device device = flash.read_device();
-	out << "M ID: " << hex << device.manufacturer_ID << endl;
-	out << "D ID: " << hex << device.device_ID << endl << flush;
+	out << "M ID: " << streams::hex << device.manufacturer_ID << streams::endl;
+	out << "D ID: " << streams::hex << device.device_ID << streams::endl << streams::flush;
 
-	out << "B4 RD 1 pg, S: " << hex << flash.status().value << endl << flush;
+	out << "B4 RD 1 pg, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	flash.read_data(PAGE, data, sizeof data);
-	out << "Af RD, S: " << hex << flash.status().value << endl << flush;
+	out << "Af RD, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 
-	out << "Pg RD:" << endl << flush;
+	out << "Pg RD:" << streams::endl << streams::flush;
 	for (uint16_t i = 0; i < sizeof data; ++i)
 	{
-		out << hex << data[i] << ' ';
+		out << streams::hex << data[i] << ' ';
 		if ((i + 1) % 16 == 0)
-			out << endl << flush;
+			out << streams::endl << streams::flush;
 	}
-	out << endl << flush;
+	out << streams::endl << streams::flush;
 	
-	out << "B4 erase, S: " << hex << flash.status().value << endl << flush;
+	out << "B4 erase, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	flash.enable_write();
-	out << "Af enable WR, S: " << hex << flash.status().value << endl << flush;
+	out << "Af enable WR, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	flash.erase_sector(PAGE);
-	out << "Af erase, S: " << hex << flash.status().value << endl << flush;
+	out << "Af erase, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 
 	flash.wait_until_ready(10);
-	out << "Af wait, S: " << hex << flash.status().value << endl << flush;
+	out << "Af wait, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 
 	for (uint16_t i = 0; i < sizeof data; ++i)
 		data[i] = uint8_t(i);
 
-	out << "B4 WR, S: " << hex << flash.status().value << endl << flush;
+	out << "B4 WR, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	flash.enable_write();
 	flash.write_page(PAGE, data, sizeof data);
-	out << "Af WR, S: " << hex << flash.status().value << endl << flush;
+	out << "Af WR, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	
 	flash.wait_until_ready(10);
-	out << "Af wait, S: " << hex << flash.status().value << endl << flush;
+	out << "Af wait, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	
 	for (uint16_t i = 0; i < sizeof data; ++i)
 		data[i] = 0;
 	
-	out << "B4 RD 1 byte, S: " << hex << flash.status().value << endl << flush;
+	out << "B4 RD 1 byte, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	uint8_t value = flash.read_data(PAGE + sizeof(data) / 2);
-	out << "RD " << value << ", S: " << hex << flash.status().value << endl << flush;
+	out << "RD " << value << ", S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	
-	out << "B4 RD 1 pg, S: " << hex << flash.status().value << endl << flush;
+	out << "B4 RD 1 pg, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 	flash.read_data(PAGE, data, sizeof data);
-	out << "Af RD, S: " << hex << flash.status().value << endl << flush;
+	out << "Af RD, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
 
-	out << "Pg RD:" << endl << flush;
+	out << "Pg RD:" << streams::endl << streams::flush;
 	for (uint16_t i = 0; i < sizeof data; ++i)
 	{
-		out << hex << data[i] << ' ';
+		out << streams::hex << data[i] << ' ';
 		if ((i + 1) % 16 == 0)
-			out << endl << flush;
+			out << streams::endl << streams::flush;
 	}
 
-	out << "\nFinished\n" << flush;
+	out << "\nFinished\n" << streams::flush;
 }

@@ -526,7 +526,7 @@ protected:
 private:
 	static const uint8_t DEFAULT_CHANNEL = 64;
 
-	typename FastPinType<CE>::TYPE _ce;
+	typename gpio::FastPinType<CE>::TYPE _ce;
 
 	addr_t _addr; //!< Current network and device address.
 	uint8_t _channel; //!< Current channel (device dependent.
@@ -557,7 +557,7 @@ public:
 		:	NRF24L01<CSN, CE>{net, dev},
 			_irq_signal{InterruptTrigger::FALLING_EDGE}
 	{
-		typename FastPinType<board::DigitalPin(IRQ)>::TYPE{PinMode::INPUT_PULLUP};
+		typename gpio::FastPinType<board::DigitalPin(IRQ)>::TYPE{gpio::PinMode::INPUT_PULLUP};
 	}
 
 	inline void begin()
@@ -580,7 +580,7 @@ using namespace NRF24L01Internals;
 
 template<board::DigitalPin CSN, board::DigitalPin CE>
 NRF24L01<CSN, CE>::NRF24L01(uint16_t net, uint8_t dev)
-	:	_ce{PinMode::OUTPUT, false},
+	:	_ce{gpio::PinMode::OUTPUT, false},
 		_addr{net, dev},
 		_channel{DEFAULT_CHANNEL},
 		_dest{},
@@ -654,8 +654,8 @@ void NRF24L01<CSN, CE>::powerdown()
 template<board::DigitalPin CSN, board::DigitalPin CE>
 int NRF24L01<CSN, CE>::send(uint8_t dest, uint8_t port, const void* buf, size_t len)
 {
-	if (buf == 0 && len > 0) return EINVAL;
-	if (len > PAYLOAD_MAX) return EMSGSIZE;
+	if (buf == 0 && len > 0) return errors::EINVAL;
+	if (len > PAYLOAD_MAX) return errors::EMSGSIZE;
 
 	// Setting transmit destination first (needs to ensure standby mode)
 	transmit_mode(dest);
@@ -708,7 +708,7 @@ int NRF24L01<CSN, CE>::send(uint8_t dest, uint8_t port, const void* buf, size_t 
 	write_command(Command::FLUSH_TX);
 	_drops += 1;
 
-	return EIO;
+	return errors::EIO;
 }
 
 template<board::DigitalPin CSN, board::DigitalPin CE>
@@ -722,7 +722,7 @@ int NRF24L01<CSN, CE>::recv(uint8_t& src, uint8_t& port, void* buf, size_t size,
 	while (!available())
 	{
 		if ((ms != 0) && (time::since(start) > ms))
-			return ETIME;
+			return errors::ETIME;
 		time::yield();
 	}
 	
@@ -796,7 +796,7 @@ int NRF24L01<CSN, CE>::read_fifo_payload(uint8_t& src, uint8_t& port, void* buf,
 	if ((count > PAYLOAD_MAX) || (count > size))
 	{
 		write_command(Command::FLUSH_RX);
-		return EMSGSIZE;
+		return errors::EMSGSIZE;
 	}
 	
 	// Data is available, check if this a broadcast or not

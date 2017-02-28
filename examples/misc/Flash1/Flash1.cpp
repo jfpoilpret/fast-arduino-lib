@@ -61,16 +61,16 @@ struct Dummy
 	char e;
 };
 
-using OUTPUT = FormattedOutput<OutputBuffer>;
+using OUTPUT = streams::FormattedOutput<streams::OutputBuffer>;
 
 OUTPUT& operator<< (OUTPUT& out, const Dummy& item)
 {
-	out	<< dec << F("{\n\ta: ") << item.a 
+	out	<< streams::dec << F("{\n\ta: ") << item.a 
 		<< F("\n\tb: ") << item.b 
 		<< F("\n\tc: ") << item.c 
 		<< F("\n\td: ") << item.d 
 		<< F("\n\te: ") << item.e 
-		<< F("\n}\n") << flush;
+		<< F("\n}\n") << streams::flush;
 	return out;
 }
 
@@ -82,13 +82,13 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	UATX<board::USART::USART0> uart{output_buffer};
+	serial::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
-	Soft::UATX<TX> uart{output_buffer};
+	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
-	FormattedOutput<OutputBuffer> out = uart.fout();
+	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 	Dummy value;
 	out << F("sample1 = ") << read_flash(&sample1, value);

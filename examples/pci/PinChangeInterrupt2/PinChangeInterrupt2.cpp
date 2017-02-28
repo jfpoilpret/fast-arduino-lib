@@ -72,13 +72,13 @@ class PinChangeHandler
 {
 public:
 	PinChangeHandler()
-	:	_switch1{PinMode::INPUT_PULLUP},
-		_switch2{PinMode::INPUT_PULLUP},
-		_switch3{PinMode::INPUT_PULLUP},
-		_led1{PinMode::OUTPUT},
-		_led2{PinMode::OUTPUT},
-		_led3{PinMode::OUTPUT},
-		_led4{PinMode::OUTPUT}
+	:	_switch1{gpio::PinMode::INPUT_PULLUP},
+		_switch2{gpio::PinMode::INPUT_PULLUP},
+		_switch3{gpio::PinMode::INPUT_PULLUP},
+		_led1{gpio::PinMode::OUTPUT},
+		_led2{gpio::PinMode::OUTPUT},
+		_led3{gpio::PinMode::OUTPUT},
+		_led4{gpio::PinMode::OUTPUT}
 	{
 	}
 	
@@ -91,13 +91,13 @@ public:
 	}
 	
 private:
-	FastPinType<SWITCH1>::TYPE _switch1;
-	FastPinType<SWITCH2>::TYPE _switch2;
-	FastPinType<SWITCH3>::TYPE _switch3;
-	FastPinType<LED1>::TYPE _led1;
-	FastPinType<LED2>::TYPE _led2;
-	FastPinType<LED3>::TYPE _led3;
-	FastPinType<LED4>::TYPE _led4;
+	gpio::FastPinType<SWITCH1>::TYPE _switch1;
+	gpio::FastPinType<SWITCH2>::TYPE _switch2;
+	gpio::FastPinType<SWITCH3>::TYPE _switch3;
+	gpio::FastPinType<LED1>::TYPE _led1;
+	gpio::FastPinType<LED2>::TYPE _led2;
+	gpio::FastPinType<LED3>::TYPE _led3;
+	gpio::FastPinType<LED4>::TYPE _led4;
 };
 
 // Define vectors we need in the example
@@ -121,6 +121,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(board::SleepMode::POWER_DOWN);
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

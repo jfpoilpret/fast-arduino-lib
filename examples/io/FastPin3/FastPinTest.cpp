@@ -46,7 +46,7 @@ int main()
 	sei();
 
 	// Set Port D direction to all outputs
-	FastPort<LED_PORT> ledPort;
+	gpio::FastPort<LED_PORT> ledPort;
 	ledPort.set_DDR(0xFF);
 	uint8_t value = 0;
 	// Loop of the LED chaser
