@@ -94,7 +94,7 @@ REGISTER_UATX_ISR(0)
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-static serial::UATX<board::USART::USART0> uatx{output_buffer};
+static serial::hard::UATX<board::USART::USART0> uatx{output_buffer};
 streams::FormattedOutput<streams::OutputBuffer> trace = uatx.fout();
 #endif
 

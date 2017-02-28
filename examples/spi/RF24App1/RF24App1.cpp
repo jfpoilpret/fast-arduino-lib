@@ -111,7 +111,7 @@ int main()
 
 #if HAS_TRACE
 	// Setup traces
-	serial::UATX<board::USART::USART0> uatx{output_buffer};
+	serial::hard::UATX<board::USART::USART0> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
 	auto trace = uatx.fout();
