@@ -78,23 +78,31 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-March-April 2017
-----------------
-1. Review namespaces overall (existence and names)
-2. Apply coding guidelines across the library code (not necessarily example code)
-3. Add support for ATtinyX5
+March 2017
+----------
+1. PWM output support
 
-May-June 2017
--------------
-4. Add documentation (ISR handling, Board support adding, API...)
-5. Improve Analog Input support and code
-6. Improve Timer support (support other modes than CTC)
-7. Add support for Arduino Leonardo and CDC feature
+April 2017
+----------
+2. I2C support
+3. Add support for Arduino Leonardo (without CDC feature)
 
-Note that some of the activities above will have an impact on current API.
+May 2017
+--------
+4. Add support for ATtinyX5
+5. Add CDC feature support for Arduino Leonardo
 
-The following features are not in FastArduino roadmap currently (but may be in the future); I list them by decreasing order of interest (personal viewpoint):
+June 2017
+---------
+6. Improve Analog Input support and code
+7. Improve Timer support (support other modes than CTC)
+8. Improve SPI to support slave mode
 
-- PWM Output support
-- I2C support
+In addition to these activities, I will start to perform continuous improvements at all times, regarding:
+
+- coding guidelines applied across the library code (not necessarily example code)
+- documentation (ISR handling, Board support adding, API...)
+
+The following features are not in FastArduino roadmap currently (but may be in the future):
+
 - OWI support
