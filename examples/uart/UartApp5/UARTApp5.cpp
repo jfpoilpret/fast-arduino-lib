@@ -50,10 +50,10 @@ int main()
 	sei();
 	
 	// Start UART
-	UATX<board::USART::USART0> uart{output_buffer};
+	serial::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
-	FormattedOutput<OutputBuffer> out = uart.fout();
+	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 	// Event Loop
 	while (true)

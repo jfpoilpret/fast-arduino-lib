@@ -63,18 +63,18 @@ int main()
 	sei();
 	// Start UART
 #if defined (BREADBOARD_ATTINYX4)
-	Soft::UATX<TX> uatx{output_buffer};
+	serial::soft::UATX<TX> uatx{output_buffer};
 	uatx.begin(115200);
 #else
-	UATX<board::USART::USART0> uatx{output_buffer};
+	serial::UATX<board::USART::USART0> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
 #endif
 
-	FormattedOutput<OutputBuffer> out = uatx.fout();
+	streams::FormattedOutput<streams::OutputBuffer> out = uatx.fout();
 	out << "Started\n";
 	
-	RTT<board::Timer::TIMER0> rtt;
+	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
 
 	rtt.begin();
@@ -84,6 +84,6 @@ int main()
 		rtt.millis(0);
 		_delay_us(666);
 		time::RTTTime time = rtt.time();
-		out << time.millis << "ms " << time.micros << "us\n" << flush;
+		out << time.millis << "ms " << time.micros << "us\n" << streams::flush;
 	}
 }

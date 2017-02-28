@@ -52,13 +52,13 @@ int main()
 	sei();
 	
 	// Start UART
-	UART<board::USART::USART0> uart{input_buffer, output_buffer};
+	serial::UART<board::USART::USART0> uart{input_buffer, output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
 //	uart.begin(230400);
-	InputBuffer& in = uart.in();
-//	FormattedInput<InputBuffer> in = uart.fin();
-	FormattedOutput<OutputBuffer> out = uart.fout();
+	streams::InputBuffer& in = uart.in();
+//	streams::FormattedInput<streams::InputBuffer> in = uart.fin();
+	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 	// Event Loop
 	while (true)
@@ -66,10 +66,14 @@ int main()
 		out.puts("Enter a letter: ");
 		out.flush();
 //		int input = in.get();
-		int input = ::get(in);
+		int input = streams::get(in);
 		out.put(input);
 		out.put('\n');
-		out << (char) input << ' ' << dec << input << ' ' << oct << input << ' ' << hex << input << ' ' << bin << input << endl;
+		out << (char) input << ' ' 
+			<< streams::dec << input << ' ' 
+			<< streams::oct << input << ' ' 
+			<< streams::hex << input << ' ' 
+			<< streams::bin << input << streams::endl;
 		out.flush();
 		_delay_ms(1000.0);
 	}

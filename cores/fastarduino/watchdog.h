@@ -21,7 +21,7 @@
 #include "boards/board.h"
 
 #define REGISTER_WATCHDOG_CLOCK_ISR()	\
-REGISTER_ISR_METHOD_(WDT_vect, Watchdog, &Watchdog::on_tick)
+REGISTER_ISR_METHOD_(WDT_vect, watchdog::Watchdog, &watchdog::Watchdog::on_tick)
 
 #define REGISTER_WATCHDOG_ISR_METHOD(HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(WDT_vect, HANDLER, CALLBACK)

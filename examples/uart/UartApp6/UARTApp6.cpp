@@ -40,16 +40,16 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char input_buffer[INPUT_BUFFER_SIZE];
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using INPUT = FormattedInput<InputBuffer>;
-using OUTPUT = FormattedOutput<OutputBuffer>;
+using INPUT = streams::FormattedInput<streams::InputBuffer>;
+using OUTPUT = streams::FormattedOutput<streams::OutputBuffer>;
 
 template<typename T>
 static void handle(OUTPUT& out, INPUT& in, const FlashStorage* type)
 {
-	out << type << F(": ") << flush;
+	out << type << F(": ") << streams::flush;
 	T value;
-	in >> skipws >> value;
-	out << value << endl << flush;
+	in >> streams::skipws >> value;
+	out << value << streams::endl << streams::flush;
 }
 
 int main() __attribute__((OS_main));
@@ -59,11 +59,11 @@ int main()
 	sei();
 	
 	// Start UART
-	UART<board::USART::USART0> uart{input_buffer, output_buffer};
+	serial::UART<board::USART::USART0> uart{input_buffer, output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
-	FormattedInput<InputBuffer> in = uart.fin();
-	FormattedOutput<OutputBuffer> out = uart.fout();
+	INPUT in = uart.fin();
+	OUTPUT out = uart.fout();
 
 	// Event Loop
 	while (true)

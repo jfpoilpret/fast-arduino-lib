@@ -55,9 +55,9 @@ class SwitchHandler
 {
 public:
 	SwitchHandler()
-	:	_switch_on{PinMode::INPUT_PULLUP},
-		_switch_off{PinMode::INPUT_PULLUP},
-		_led{PinMode::OUTPUT}
+	:	_switch_on{gpio::PinMode::INPUT_PULLUP},
+		_switch_off{gpio::PinMode::INPUT_PULLUP},
+		_led{gpio::PinMode::OUTPUT}
 	{}
 	
 	void on_switch_on_change()
@@ -73,9 +73,9 @@ public:
 	}
 	
 private:
-	FastPinType<SWITCH_ON>::TYPE _switch_on;
-	FastPinType<SWITCH_OFF>::TYPE _switch_off;
-	FastPinType<board::DigitalPin::LED>::TYPE _led;	
+	gpio::FastPinType<SWITCH_ON>::TYPE _switch_on;
+	gpio::FastPinType<SWITCH_OFF>::TYPE _switch_off;
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 
 // Define vectors we need in the example
@@ -101,6 +101,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(board::SleepMode::POWER_DOWN);
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

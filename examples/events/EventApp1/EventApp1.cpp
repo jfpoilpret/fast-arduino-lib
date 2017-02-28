@@ -32,7 +32,7 @@
 #include <fastarduino/fast_io.h>
 #include <fastarduino/events.h>
 
-using namespace Events;
+using namespace events;
 
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
@@ -77,14 +77,14 @@ class LedHandler: public EventHandler
 {
 public:
 	LedHandler() {}
-	LedHandler(uint8_t type) : EventHandler{type}, _led{PinMode::OUTPUT} {}
+	LedHandler(uint8_t type) : EventHandler{type}, _led{gpio::PinMode::OUTPUT} {}
 	virtual void on_event(UNUSED const Event& event) override
 	{
 		_led.toggle();
 	}
 	
 private:
-	typename FastPinType<PIN>::TYPE _led;
+	typename gpio::FastPinType<PIN>::TYPE _led;
 };
 
 int main()
@@ -94,7 +94,7 @@ int main()
 
 	// Prepare event queue
 	Event buffer[EVENT_QUEUE_SIZE];
-	Queue<Event> event_queue{buffer};
+	containers::Queue<Event> event_queue{buffer};
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;

@@ -73,7 +73,7 @@ int main()
 	serial::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
-	Soft::UATX<TX> uart{output_buffer};
+	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
 

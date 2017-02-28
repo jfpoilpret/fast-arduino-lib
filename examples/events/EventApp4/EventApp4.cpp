@@ -35,7 +35,7 @@
 #include <fastarduino/scheduler.h>
 #include <fastarduino/power.h>
 
-using namespace Events;
+using namespace events;
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
@@ -52,7 +52,7 @@ REGISTER_WATCHDOG_CLOCK_ISR()
 
 static const uint32_t PERIOD = 1000;
 
-class LedHandler: public Job, private FastPort<LED_PORT>
+class LedHandler: public scheduler::Job, private gpio::FastPort<LED_PORT>
 {
 public:
 	LedHandler() : Job{0, PERIOD}, FastPort{0xFF}, _value{0} {}
@@ -74,27 +74,27 @@ private:
 // Define event queue
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static Event buffer[EVENT_QUEUE_SIZE];
-static Queue<Event> event_queue{buffer};
+static containers::Queue<Event> event_queue{buffer};
 
 int main()
 {
 	// Set power settings
-	Power::set_default_mode(board::SleepMode::POWER_DOWN);
+	power::Power::set_default_mode(board::SleepMode::POWER_DOWN);
 	// Enable interrupts at startup time
 	sei();
 
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	Watchdog watchdog{event_queue};
+	watchdog::Watchdog watchdog{event_queue};
 	watchdog.register_watchdog_handler();
-	Scheduler<Watchdog> scheduler{watchdog, Type::WDT_TIMER};
+	scheduler::Scheduler<watchdog::Watchdog> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;
 	scheduler.schedule(job);
 	
 	// Start watchdog
-	watchdog.begin(Watchdog::TimeOut::TO_125ms);
+	watchdog.begin(watchdog::Watchdog::TimeOut::TO_125ms);
 	
 	// Event Loop
 	while (true)

@@ -52,8 +52,8 @@ class PinChangeHandler
 {
 public:
 	PinChangeHandler()
-	:	_switch{PinMode::INPUT_PULLUP},
-		_led{PinMode::OUTPUT}
+	:	_switch{gpio::PinMode::INPUT_PULLUP},
+		_led{gpio::PinMode::OUTPUT}
 	{}
 	
 	void on_pin_change()
@@ -65,8 +65,8 @@ public:
 	}
 	
 private:
-	FastPinType<SWITCH>::TYPE _switch;
-	FastPinType<board::DigitalPin::LED>::TYPE _led;	
+	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 
 // Define vectors we need in the example
@@ -88,6 +88,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(board::SleepMode::POWER_DOWN);
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

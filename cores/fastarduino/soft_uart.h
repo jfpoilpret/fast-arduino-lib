@@ -24,10 +24,10 @@
 #include "int.h"
 
 #define REGISTER_UART_PCI_ISR(RX, PCI_NUM)													\
-REGISTER_PCI_ISR_METHOD(PCI_NUM, soft::UARX< RX >, & soft::UARX< RX >::on_pin_change, RX)
+REGISTER_PCI_ISR_METHOD(PCI_NUM, serial::soft::UARX< RX >, & serial::soft::UARX< RX >::on_pin_change, RX)
 
 #define REGISTER_UART_INT_ISR(RX, INT_NUM)													\
-REGISTER_INT_ISR_METHOD(INT_NUM, RX, soft::UARX< RX >, & soft::UARX< RX >::on_pin_change)
+REGISTER_INT_ISR_METHOD(INT_NUM, RX, serial::soft::UARX< RX >, & serial::soft::UARX< RX >::on_pin_change)
 
 //FIXME Handle begin/end properly in relation to current queue content
 //TODO Find out why netbeans shows an error on in()._push() and out().pull()
@@ -38,7 +38,7 @@ namespace soft
 	using streams::OutputBuffer;
 	using streams::FormattedOutput;
 	
-	class AbstractUATX: virtual public serial::UARTErrors, private OutputBuffer
+	class AbstractUATX: virtual public UARTErrors, private OutputBuffer
 	{
 	public:
 		OutputBuffer& out()
@@ -59,10 +59,10 @@ namespace soft
 		AbstractUATX(char (&output)[SIZE_TX]):OutputBuffer{output} {}
 		
 	protected:
-		void _begin(uint32_t rate, serial::Parity parity, serial::StopBits stop_bits);
-		static serial::Parity calculate_parity(serial::Parity parity, uint8_t value);
+		void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
+		static Parity calculate_parity(Parity parity, uint8_t value);
 
-		serial::Parity _parity;
+		Parity _parity;
 		// Various timing constants based on rate
 		uint16_t _interbit_tx_time;
 		uint16_t _start_bit_tx_time;
@@ -77,8 +77,8 @@ namespace soft
 		UATX(char (&output)[SIZE_TX]):AbstractUATX{output}, _tx{gpio::PinMode::OUTPUT, true} {}
 		
 		void begin(	uint32_t rate, 
-					serial::Parity parity = serial::Parity::NONE, 
-					serial::StopBits stop_bits = serial::StopBits::ONE)
+					Parity parity = Parity::NONE, 
+					StopBits stop_bits = StopBits::ONE)
 		{
 			_begin(rate, parity, stop_bits);
 			//FIXME if queue is not empty, we should process it until everything is written...
@@ -117,7 +117,7 @@ namespace soft
 	void UATX<DPIN>::_write(uint8_t value)
 	{
 		// Pre-calculate all what we need: parity bit
-		serial::Parity parity_bit = calculate_parity(_parity, value);
+		Parity parity_bit = calculate_parity(_parity, value);
 
 		// Write start bit
 		_tx.clear();
@@ -137,7 +137,7 @@ namespace soft
 			_delay_loop_2(_interbit_tx_time);
 		}
 		// Add parity if needed
-		if (parity_bit != serial::Parity::NONE)
+		if (parity_bit != Parity::NONE)
 		{
 			if (parity_bit == _parity) _tx.clear(); else _tx.set();
 			_delay_loop_2(_interbit_tx_time);
@@ -150,7 +150,7 @@ namespace soft
 	using streams::InputBuffer;
 	using streams::FormattedInput;
 	
-	class AbstractUARX: virtual public serial::UARTErrors, private InputBuffer
+	class AbstractUARX: virtual public UARTErrors, private InputBuffer
 	{
 	public:
 		InputBuffer& in()
@@ -167,10 +167,10 @@ namespace soft
 		template<uint8_t SIZE_RX>
 		AbstractUARX(char (&input)[SIZE_RX]):InputBuffer{input} {}
 
-		void _begin(uint32_t rate, serial::Parity parity, serial::StopBits stop_bits);
+		void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
 
 		// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
-		serial::Parity _parity;
+		Parity _parity;
 		// Various timing constants based on rate
 		uint16_t _interbit_rx_time;
 		uint16_t _start_bit_rx_time;
@@ -203,8 +203,8 @@ namespace soft
 		
 		void begin(	PCI_TYPE& enabler,
 					uint32_t rate, 
-					serial::Parity parity = serial::Parity::NONE, 
-					serial::StopBits stop_bits = serial::StopBits::ONE)
+					Parity parity = Parity::NONE, 
+					StopBits stop_bits = StopBits::ONE)
 		{
 			_pci = &enabler;
 			_begin(rate, parity, stop_bits);
@@ -213,8 +213,8 @@ namespace soft
 		
 		void begin(	INT_TYPE& enabler,
 					uint32_t rate, 
-					serial::Parity parity = serial::Parity::NONE, 
-					serial::StopBits stop_bits = serial::StopBits::ONE)
+					Parity parity = Parity::NONE, 
+					StopBits stop_bits = StopBits::ONE)
 		{
 			_int = &enabler;
 			_begin(rate, parity, stop_bits);
@@ -247,7 +247,7 @@ namespace soft
 		if (_rx.value()) return;
 		uint8_t value = 0;
 		bool odd = false;
-		serial::_UARTErrors errors;
+		_UARTErrors errors;
 		errors.has_errors = 0;
 		// Wait for start bit to finish
 		_delay_loop_2(_start_bit_rx_time);
@@ -269,11 +269,11 @@ namespace soft
 			odd = !odd;
 		}
 		
-		if (_parity != serial::Parity::NONE)
+		if (_parity != Parity::NONE)
 		{
 			// Wait for parity bit TODO NEED SPECIFIC DELAY HERE
 			_delay_loop_2(_parity_bit_rx_time);
-			bool parity_bit = (_parity == serial::Parity::ODD ? !odd : odd);
+			bool parity_bit = (_parity == Parity::ODD ? !odd : odd);
 			// Check parity bit
 			errors.all_errors.parity_error = (_rx.value() != parity_bit);
 		}
@@ -308,16 +308,16 @@ namespace soft
 		
 		void begin(	typename UARX<RX>::PCI_TYPE& pci_enabler,
 					uint32_t rate, 
-					serial::Parity parity = serial::Parity::NONE, 
-					serial::StopBits stop_bits = serial::StopBits::ONE)
+					Parity parity = Parity::NONE, 
+					StopBits stop_bits = StopBits::ONE)
 		{
 			UARX<RX>::begin(pci_enabler, rate, parity, stop_bits);
 			UATX<TX>::begin(rate, parity, stop_bits);
 		}
 		void begin(	typename UARX<RX>::INT_TYPE& int_enabler,
 					uint32_t rate, 
-					serial::Parity parity = serial::Parity::NONE, 
-					serial::StopBits stop_bits = serial::StopBits::ONE)
+					Parity parity = Parity::NONE, 
+					StopBits stop_bits = StopBits::ONE)
 		{
 			UARX<RX>::begin(int_enabler, rate, parity, stop_bits);
 			UATX<TX>::begin(rate, parity, stop_bits);

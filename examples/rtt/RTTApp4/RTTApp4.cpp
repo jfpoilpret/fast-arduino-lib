@@ -34,43 +34,43 @@
 #include <fastarduino/scheduler.h>
 
 // Define vectors we need in the example
-REGISTER_RTT_ISR_METHOD(0, RTTEventCallback<>, &RTTEventCallback<>::on_rtt_change)
+REGISTER_RTT_ISR_METHOD(0, timer::RTTEventCallback<>, &timer::RTTEventCallback<>::on_rtt_change)
 
-using namespace Events;
+using namespace events;
 
 static const uint32_t PERIOD = 5000;
 
-class LedHandler: public Job
+class LedHandler: public scheduler::Job
 {
 public:
-	LedHandler() : Job{0, PERIOD}, _led{PinMode::OUTPUT, false} {}
+	LedHandler() : Job{0, PERIOD}, _led{gpio::PinMode::OUTPUT, false} {}
 	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		_led.toggle();
 	}
 	
 private:
-	typename FastPinType<board::DigitalPin::LED>::TYPE _led;
+	typename gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;
 };
 
 // Define event queue
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static Event buffer[EVENT_QUEUE_SIZE];
-static Queue<Event> event_queue{buffer};
+static containers::Queue<Event> event_queue{buffer};
 
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 
-	RTTEventCallback<> callback{event_queue};
-	RTT<board::Timer::TIMER0> rtt;
+	timer::RTTEventCallback<> callback{event_queue};
+	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
 	register_handler(callback);
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	Scheduler<RTT<board::Timer::TIMER0>> scheduler{rtt, Type::RTT_TIMER};
+	scheduler::Scheduler<timer::RTT<board::Timer::TIMER0>> scheduler{rtt, Type::RTT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;
