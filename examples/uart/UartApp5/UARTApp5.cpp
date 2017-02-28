@@ -50,7 +50,7 @@ int main()
 	sei();
 	
 	// Start UART
-	serial::UATX<board::USART::USART0> uart{output_buffer};
+	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
 	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();

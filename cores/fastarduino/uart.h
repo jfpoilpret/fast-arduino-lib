@@ -27,9 +27,9 @@ REGISTER_ISR_METHOD_(CAT3(USART, UART_NUM, _UDRE_vect), HANDLER, CALLBACK)
 #define REGISTER_UARX_ISR_METHOD_(UART_NUM, HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(CAT3(USART, UART_NUM, _RX_vect), HANDLER, CALLBACK)
 
-#define UATX_CLASS_(UART_NUM) CAT(serial::UATX<board::USART::USART, UART_NUM) >
-#define UARX_CLASS_(UART_NUM) CAT(serial::UARX<board::USART::USART, UART_NUM) >
-#define UART_CLASS_(UART_NUM) CAT(serial::UART<board::USART::USART, UART_NUM) >
+#define UATX_CLASS_(UART_NUM) CAT(serial::hard::UATX<board::USART::USART, UART_NUM) >
+#define UARX_CLASS_(UART_NUM) CAT(serial::hard::UARX<board::USART::USART, UART_NUM) >
+#define UART_CLASS_(UART_NUM) CAT(serial::hard::UART<board::USART::USART, UART_NUM) >
 
 #define REGISTER_UATX_ISR(UART_NUM)												\
 REGISTER_UATX_ISR_METHOD_(UART_NUM, UATX_CLASS_(UART_NUM), & UATX_CLASS_(UART_NUM) ::data_register_empty)
@@ -40,6 +40,8 @@ REGISTER_UATX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), & UART_CLASS_(UART_NU
 REGISTER_UARX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), & UART_CLASS_(UART_NUM) ::data_receive_complete)
 
 namespace serial
+{
+namespace hard
 {
 	//TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
 	class AbstractUART: public UARTErrors
@@ -259,6 +261,7 @@ namespace serial
 			UARX<USART>::data_receive_complete();
 		}
 	};
+}
 }
 
 #endif	/* UCSR0A */

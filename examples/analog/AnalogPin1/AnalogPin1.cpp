@@ -70,7 +70,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	serial::UATX<board::USART::USART0> uart{output_buffer};
+	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
 	serial::soft::UATX<TX> uart{output_buffer};
