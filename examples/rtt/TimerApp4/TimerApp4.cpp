@@ -29,7 +29,7 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/time.h>
 
-constexpr const Board::Timer BLINK_TIMER = Board::Timer::TIMER0;
+constexpr const board::Timer BLINK_TIMER = board::Timer::TIMER0;
 using BLINK_TIMER_TYPE = Timer<BLINK_TIMER>;
 constexpr const uint32_t BLINK_PERIOD_US = 10000;
 constexpr const BLINK_TIMER_TYPE::TIMER_PRESCALER BLINK_PRESCALER = BLINK_TIMER_TYPE::prescaler(BLINK_PERIOD_US);
@@ -37,7 +37,7 @@ static_assert(BLINK_TIMER_TYPE::is_adequate(BLINK_PRESCALER, BLINK_PERIOD_US),
 		"BLINK_TIMER_TYPE::is_adequate(BLINK_PRESCALER, BLINK_PERIOD_US)");
 constexpr const BLINK_TIMER_TYPE::TIMER_TYPE BLINK_COUNTER = BLINK_TIMER_TYPE::counter(BLINK_PRESCALER, BLINK_PERIOD_US);
 
-constexpr const Board::Timer SUSPEND_TIMER = Board::Timer::TIMER1;
+constexpr const board::Timer SUSPEND_TIMER = board::Timer::TIMER1;
 using SUSPEND_TIMER_TYPE = Timer<SUSPEND_TIMER>;
 constexpr const uint32_t SUSPEND_PERIOD_US = 4000000;
 constexpr const SUSPEND_TIMER_TYPE::TIMER_PRESCALER SUSPEND_PRESCALER = SUSPEND_TIMER_TYPE::prescaler(SUSPEND_PERIOD_US);
@@ -53,12 +53,12 @@ public:
 	void on_timer()
 	{
 		_led.set();
-		Time::delay_us(1000);
+		time::delay_us(1000);
 		_led.clear();
 	}
 	
 private:
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;
+	FastPinType<board::DigitalPin::LED>::TYPE _led;
 };
 
 class SuspendHandler

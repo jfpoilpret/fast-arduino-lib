@@ -48,7 +48,7 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/soft_uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr const uint8_t EEPROM_BUFFER_SIZE = 64;
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -62,7 +62,7 @@ static uint8_t eeprom_buffer[EEPROM_BUFFER_SIZE];
 
 using namespace eeprom;
 
-static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint16_t loops = 1)
+static void trace_eeprom(streams::FormattedOutput<streams::OutputBuffer>& out, uint16_t address, uint16_t loops = 1)
 {
 	for (uint16_t i = 0; i < loops; ++i)
 	{
@@ -73,7 +73,7 @@ static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, u
 		{
 			uint8_t value;
 			EEPROM::read(address++, value);
-			out << value << ' ' << flush;
+			out << value << ' ' << streams::flush;
 		}
 		out << '\n';
 	}
@@ -85,14 +85,14 @@ struct Content
 };
 
 template<typename T>
-static void write_eeprom(FormattedOutput<OutputBuffer>& out, QueuedWriter& writer, uint16_t address, const T& content)
+static void write_eeprom(streams::FormattedOutput<streams::OutputBuffer>& out, QueuedWriter& writer, uint16_t address, const T& content)
 {
 	if (!writer.write(address, content))
 	{
-		out << "Could not write to " << address << endl << flush;
+		out << "Could not write to " << address << streams::endl << streams::flush;
 		writer.wait_until_done();
 		if (!writer.write(address, content))
-			out << "Could not again write to " << address << endl << flush;
+			out << "Could not again write to " << address << streams::endl << streams::flush;
 	}
 }
 
@@ -101,22 +101,22 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	UATX<Board::USART::USART0> uart{output_buffer};
+	serial::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
-	Soft::UATX<TX> uart{output_buffer};
+	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
 
-	FormattedOutput<OutputBuffer> out = uart.fout();
-	out << hex;
-	out << "\nInitial EEPROM content\n" << flush;	
+	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+	out << streams::hex;
+	out << "\nInitial EEPROM content\n" << streams::flush;	
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 	
 	QueuedWriter writer{eeprom_buffer};
 	
 	writer.erase();
-	out << "After EEPROM erase\n" << flush;
+	out << "After EEPROM erase\n" << streams::flush;
 	writer.wait_until_done();
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 
@@ -126,18 +126,18 @@ int main()
 
 	for (uint16_t address = 0; address < 512; address += 16)
 		write_eeprom(out, writer, address, content);
-	out << "After 512 EEPROM writes\n" << flush;
+	out << "After 512 EEPROM writes\n" << streams::flush;
 	writer.wait_until_done();
 	trace_eeprom(out, 0, 32);
 
 	char buffer[] = "abcdefghijklmnopqrstuvwxyz";
 	write_eeprom(out, writer, 512, buffer);
-	out << "After EEPROM string write\n" << flush;
+	out << "After EEPROM string write\n" << streams::flush;
 	writer.wait_until_done();
 	trace_eeprom(out, 512, 3);
 
 	writer.write(768, buffer, 6);
-	out << "After EEPROM partial string write\n" << flush;
+	out << "After EEPROM partial string write\n" << streams::flush;
 	writer.wait_until_done();
 	trace_eeprom(out, 768, 3);
 	
@@ -146,12 +146,12 @@ int main()
 	bool ok;
 	ok = writer.write(E2END + 1, value);
 	if (ok)
-		out << "ERROR! write(E2END + 1) did not fail!" << flush;
+		out << "ERROR! write(E2END + 1) did not fail!" << streams::flush;
 	ok = writer.write(E2END, buffer);
 	if (ok)
-		out << "ERROR! write(E2END, 27) did not fail!" << flush;
+		out << "ERROR! write(E2END, 27) did not fail!" << streams::flush;
 	ok = writer.write(E2END, buffer, 0);
 	if (ok)
-		out << "ERROR! write(E2END, x, 0) did not fail!" << flush;
+		out << "ERROR! write(E2END, x, 0) did not fail!" << streams::flush;
 	return 0;
 }

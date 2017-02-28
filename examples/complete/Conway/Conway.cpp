@@ -60,29 +60,29 @@
 #include "Game.hh"
 
 #if defined(ARDUINO_UNO)
-static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2_PD2;
-static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D3_PD3;
-static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D4_PD4;
+static constexpr const board::DigitalPin CLOCK = board::DigitalPin::D2_PD2;
+static constexpr const board::DigitalPin LATCH = board::DigitalPin::D3_PD3;
+static constexpr const board::DigitalPin DATA = board::DigitalPin::D4_PD4;
 
-static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A0;
-static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A1;
-static constexpr const Board::AnalogPin SPEED = Board::AnalogPin::A0;
+static constexpr const board::AnalogPin ROW = board::AnalogPin::A0;
+static constexpr const board::AnalogPin COLUMN = board::AnalogPin::A1;
+static constexpr const board::AnalogPin SPEED = board::AnalogPin::A0;
 
-static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D5_PD5;
-static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D6_PD6;
+static constexpr const board::DigitalPin SELECT = board::DigitalPin::D5_PD5;
+static constexpr const board::DigitalPin START_STOP = board::DigitalPin::D6_PD6;
 
 #define HAS_TRACE 1
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const Board::DigitalPin CLOCK = Board::DigitalPin::D2_PA2;
-static constexpr const Board::DigitalPin LATCH = Board::DigitalPin::D1_PA1;
-static constexpr const Board::DigitalPin DATA = Board::DigitalPin::D0_PA0;
+static constexpr const board::DigitalPin CLOCK = board::DigitalPin::D2_PA2;
+static constexpr const board::DigitalPin LATCH = board::DigitalPin::D1_PA1;
+static constexpr const board::DigitalPin DATA = board::DigitalPin::D0_PA0;
 
-static constexpr const Board::AnalogPin ROW = Board::AnalogPin::A6;
-static constexpr const Board::AnalogPin COLUMN = Board::AnalogPin::A7;
-static constexpr const Board::AnalogPin SPEED = Board::AnalogPin::A7;
+static constexpr const board::AnalogPin ROW = board::AnalogPin::A6;
+static constexpr const board::AnalogPin COLUMN = board::AnalogPin::A7;
+static constexpr const board::AnalogPin SPEED = board::AnalogPin::A7;
 
-static constexpr const Board::DigitalPin SELECT = Board::DigitalPin::D4_PA4;
-static constexpr const Board::DigitalPin START_STOP = Board::DigitalPin::D5_PA5;
+static constexpr const board::DigitalPin SELECT = board::DigitalPin::D4_PA4;
+static constexpr const board::DigitalPin START_STOP = board::DigitalPin::D5_PA5;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -94,8 +94,8 @@ REGISTER_UATX_ISR(0)
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-static UATX<Board::USART::USART0> uatx{output_buffer};
-FormattedOutput<OutputBuffer> trace = uatx.fout();
+static serial::UATX<board::USART::USART0> uatx{output_buffer};
+streams::FormattedOutput<streams::OutputBuffer> trace = uatx.fout();
 #endif
 
 // Uncomment these lines if you want to quickly generate a program for a 16x16 LED matrix (default is 8x8))
@@ -111,13 +111,13 @@ FormattedOutput<OutputBuffer> trace = uatx.fout();
 #endif
 
 // Single port used by this circuit
-static constexpr const Board::Port PORT = FastPinType<CLOCK>::PORT;
+static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
 
 // Check at compile time that all pins are on the same port
-static_assert(FastPinType<LATCH>::PORT == PORT, "LATCH must be on same port as CLOCK");
-static_assert(FastPinType<DATA>::PORT == PORT, "DATA must be on same port as CLOCK");
-static_assert(FastPinType<SELECT>::PORT == PORT, "SELECT must be on same port as CLOCK");
-static_assert(FastPinType<START_STOP>::PORT == PORT, "START_STOP must be on same port as CLOCK");
+static_assert(gpio::FastPinType<LATCH>::PORT == PORT, "LATCH must be on same port as CLOCK");
+static_assert(gpio::FastPinType<DATA>::PORT == PORT, "DATA must be on same port as CLOCK");
+static_assert(gpio::FastPinType<SELECT>::PORT == PORT, "SELECT must be on same port as CLOCK");
+static_assert(gpio::FastPinType<START_STOP>::PORT == PORT, "START_STOP must be on same port as CLOCK");
 
 // Utility function to find the exponent of the nearest power of 2 for an integer
 constexpr uint16_t LOG2(uint16_t n)
@@ -149,7 +149,7 @@ using GAME = GameOfLife<ROWS, ROW_TYPE>;
 
 // Calculate direction of pins (3 output, 2 input with pullups)
 static constexpr const uint8_t ALL_DDR = MULTIPLEXER::DDR_MASK;
-static constexpr const uint8_t BUTTONS_MASK = FastPinType<SELECT>::MASK | FastPinType<START_STOP>::MASK;
+static constexpr const uint8_t BUTTONS_MASK = gpio::FastPinType<SELECT>::MASK | gpio::FastPinType<START_STOP>::MASK;
 static constexpr const uint8_t ALL_PORT = MULTIPLEXER::PORT_MASK | BUTTONS_MASK;
 
 //NOTE: on the stripboards-based circuit, rows and columns are inverted
@@ -168,7 +168,7 @@ static constexpr const ROW_TYPE SMILEY[] =
 
 static uint16_t game_period()
 {
-	AnalogInput<SPEED, Board::AnalogReference::AVCC, uint8_t> speed_input;
+	analog::AnalogInput<SPEED, board::AnalogReference::AVCC, uint8_t> speed_input;
 	uint8_t period = speed_input.sample() >> 4;
 	return (MIN_PROGRESS_PERIOD_MS * (period + 1)) >> LOG2(REFRESH_PERIOD_MS);
 }
@@ -187,7 +187,7 @@ int main()
 #endif
 	
 	// Initialize all pins (only one port)
-	FastPort<PORT>{ALL_DDR, ALL_PORT};
+	gpio::FastPort<PORT>{ALL_DDR, ALL_PORT};
 	
 	// Initialize Multiplexer
 	MULTIPLEXER mux;
@@ -199,8 +199,8 @@ int main()
 	//===============================================
 	{
 		Button<SELECT, DEBOUNCE_COUNTER> select;
-		AnalogInput<ROW, Board::AnalogReference::AVCC, uint8_t> row_input;
-		AnalogInput<COLUMN, Board::AnalogReference::AVCC, uint8_t> column_input;
+		analog::AnalogInput<ROW, board::AnalogReference::AVCC, uint8_t> row_input;
+		analog::AnalogInput<COLUMN, board::AnalogReference::AVCC, uint8_t> column_input;
 		uint8_t row = 0;
 		uint8_t col = 0;
 		mux.blinks()[0] = _BV(0);
@@ -217,7 +217,7 @@ int main()
 			if (select.unique_press())
 				mux.data()[row] ^= _BV(col);
 			mux.refresh(BlinkMode::BLINK_ALL_BLINKS);
-			Time::delay_us(REFRESH_PERIOD_US);
+			time::delay_us(REFRESH_PERIOD_US);
 		}
 	}
 	
@@ -233,7 +233,7 @@ int main()
 		while (true)
 		{
 			mux.refresh(BlinkMode::NO_BLINK);
-			Time::delay_us(REFRESH_PERIOD_US);
+			time::delay_us(REFRESH_PERIOD_US);
 			if (stop.unique_press())
 				pause = !pause;
 			if (!pause && ++progress_counter >= game_period())
@@ -259,10 +259,10 @@ int main()
 	// Here we just need to refresh content and blink it until reset
 	// First we clear multiplexer display, then we wait for one second
 	mux.clear();
-	Time::delay_ms(DELAY_BEFORE_END_GAME_MS);
+	time::delay_ms(DELAY_BEFORE_END_GAME_MS);
 	while (true)
 	{
-		Time::delay_us(REFRESH_PERIOD_US);
+		time::delay_us(REFRESH_PERIOD_US);
 		mux.refresh(BlinkMode::BLINK_ALL_DATA);
 	}
 	return 0;

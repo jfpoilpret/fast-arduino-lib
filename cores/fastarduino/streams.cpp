@@ -14,45 +14,48 @@
 
 #include "streams.h"
 
-char get(InputBuffer& in)
+namespace streams
 {
-	return ::pull<char>(in);
-}
-
-char* get(InputBuffer& in, char* content, size_t size)
-{
-	char* current = content;
-	for (size_t i = 0; i < size; ++i)
-		*current++ = ::pull(in);
-	return content;
-}
-
-int gets(InputBuffer& in, char* str, size_t max, char end)
-{
-	size_t size = 0;
-	while (size < max - 1)
+	char get(InputBuffer& in)
 	{
-		char value = ::pull(in);
-		*str++ = value;
-		++size;
-		if (value == end)
-			break;
+		return containers::pull<char>(in);
 	}
-	*str = 0;
-	return size;
-}
 
-char* InputBuffer::scan(char* str, size_t max)
-{
-	char* next = str;
-	while (max > 1)
+	char* get(InputBuffer& in, char* content, size_t size)
 	{
-		char value = ::pull(*this);
-		if (isspace(value))
-			break;
-		*next++ = value;
-		--max;
+		char* current = content;
+		for (size_t i = 0; i < size; ++i)
+			*current++ = containers::pull(in);
+		return content;
 	}
-	*next = 0;
-	return str;
+
+	int gets(InputBuffer& in, char* str, size_t max, char end)
+	{
+		size_t size = 0;
+		while (size < max - 1)
+		{
+			char value = containers::pull(in);
+			*str++ = value;
+			++size;
+			if (value == end)
+				break;
+		}
+		*str = 0;
+		return size;
+	}
+
+	char* InputBuffer::scan(char* str, size_t max)
+	{
+		char* next = str;
+		while (max > 1)
+		{
+			char value = containers::pull(*this);
+			if (isspace(value))
+				break;
+			*next++ = value;
+			--max;
+		}
+		*next = 0;
+		return str;
+	}
 }

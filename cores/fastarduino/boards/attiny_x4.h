@@ -22,7 +22,7 @@
 #define BOARDS_ATTINYX4
 #define BOARD_ATTINY
 
-namespace Board
+namespace board
 {
 	//====
 	// IO

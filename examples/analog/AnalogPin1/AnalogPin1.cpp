@@ -34,23 +34,23 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
-static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
+static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
-static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
+static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
-static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
+static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -58,27 +58,30 @@ constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-//using ANALOG_INPUT = AnalogInput<POT, Board::AnalogReference::AVCC, uint16_t, Board::AnalogClock::MAX_FREQ_200KHz>;
-//using ANALOG_INPUT = AnalogInput<POT, Board::AnalogReference::AVCC, uint8_t, Board::AnalogClock::MAX_FREQ_200KHz>;
-using ANALOG_INPUT = AnalogInput<POT, Board::AnalogReference::AVCC, uint8_t, Board::AnalogClock::MAX_FREQ_1MHz>;
+//using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint16_t, board::AnalogClock::MAX_FREQ_200KHz>;
+//using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
+using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_1MHz>;
+
+using streams::endl;
+using streams::flush;
 
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	UATX<Board::USART::USART0> uart{output_buffer};
+	serial::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
 	Soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
 
-	FormattedOutput<OutputBuffer> out = uart.fout();
+	auto out = uart.fout();
 	
 	// Declare Analog input
 	ANALOG_INPUT pot;
-	PowerVoltage<> power;
+	analog::PowerVoltage<> power;
 
 	out << "Prescaler: " << ANALOG_INPUT::PRESCALER << endl << flush;
 	
@@ -87,7 +90,7 @@ int main()
 	{
 		ANALOG_INPUT::TYPE value = pot.sample();
 		out << value << " (" << power.voltage_mV() << " mV)\n" << flush;
-		Time::delay_ms(1000);
+		time::delay_ms(1000);
 	}
 	return 0;
 }

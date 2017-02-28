@@ -35,29 +35,29 @@
 #include <fastarduino/fast_io.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
-static constexpr const Board::Port LED_PORT = Board::Port::PORT_D;
+static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
+static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 static constexpr const uint8_t LED_MASK = 0xFF;
 #elif defined (ARDUINO_MEGA)
-static constexpr const Board::AnalogPin POT = Board::AnalogPin::A0;
-static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
+static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 static constexpr const uint8_t LED_MASK = 0xFF;
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const Board::AnalogPin POT = Board::AnalogPin::A7;
-static constexpr const Board::Port LED_PORT = Board::Port::PORT_A;
+static constexpr const board::AnalogPin POT = board::AnalogPin::A7;
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 static constexpr const uint8_t LED_MASK = 0x7F;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-using ANALOG_INPUT = AnalogInput<POT, Board::AnalogReference::AVCC, uint8_t, Board::AnalogClock::MAX_FREQ_200KHz>;
+using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 
 int main()
 {
 	// Enable interrupts at startup time
 	sei();
 	
-	FastMaskedPort<LED_PORT> leds{LED_MASK, 0xFF};
+	gpio::FastMaskedPort<LED_PORT> leds{LED_MASK, 0xFF};
 	// Declare Analog input
 	ANALOG_INPUT pot;
 
@@ -66,7 +66,7 @@ int main()
 	{
 		ANALOG_INPUT::TYPE value = pot.sample();
 		leds.set_PORT(value);
-		Time::delay_ms(1000);
+		time::delay_ms(1000);
 	}
 	return 0;
 }

@@ -50,7 +50,7 @@ public:
 	}
 	
 private:
-	typename FastPinType<Board::DigitalPin::LED>::TYPE _led;
+	typename FastPinType<board::DigitalPin::LED>::TYPE _led;
 };
 
 // Define event queue
@@ -64,13 +64,13 @@ int main()
 	sei();
 
 	RTTEventCallback<> callback{event_queue};
-	RTT<Board::Timer::TIMER0> rtt;
+	RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
 	register_handler(callback);
 	
 	// Prepare Dispatcher and Handlers
 	Dispatcher dispatcher;
-	Scheduler<RTT<Board::Timer::TIMER0>> scheduler{rtt, Type::RTT_TIMER};
+	Scheduler<RTT<board::Timer::TIMER0>> scheduler{rtt, Type::RTT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;

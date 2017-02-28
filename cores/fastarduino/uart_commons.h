@@ -17,7 +17,7 @@
 
 #include <stdint.h>
 
-namespace Serial
+namespace serial
 {
 	enum class Parity: uint8_t
 	{

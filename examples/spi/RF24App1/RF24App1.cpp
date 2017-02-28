@@ -51,28 +51,28 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HAS_TRACE 1
-static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7_PD7;
-static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8_PB0;
-static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9_PB1;
-static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
+static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PD7;
+static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PB0;
+static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D9_PB1;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(2)
 #elif defined(ARDUINO_MEGA)
 #define HAS_TRACE 1
-static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7_PH4;
-static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D8_PH5;
-static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D9_PH6;
-static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER2;
+static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PH4;
+static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PH5;
+static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D9_PH6;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(2)
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_TRACE 0
-static const constexpr Board::DigitalPin PIN_CONFIG = Board::DigitalPin::D7_PA7;
-static const constexpr Board::DigitalPin PIN_CSN = Board::DigitalPin::D2_PA2;
-static const constexpr Board::DigitalPin PIN_CE = Board::DigitalPin::D3_PA3;
-static const constexpr Board::Timer RTT_TIMER = Board::Timer::TIMER0;
+static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PA7;
+static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D2_PA2;
+static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D3_PA3;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER0;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
@@ -111,7 +111,7 @@ int main()
 
 #if HAS_TRACE
 	// Setup traces
-	UATX<Board::USART::USART0> uatx{output_buffer};
+	UATX<board::USART::USART0> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
 	auto trace = uatx.fout();
@@ -129,7 +129,7 @@ int main()
 	rtt.register_rtt_handler();
 	rtt.begin();
 	// Set RTT instance as default clock from now
-	Time::set_clock(rtt);
+	time::set_clock(rtt);
 	trace << "RTT started\n" << flush;
 
 	// Start SPI and setup NRF24
@@ -166,7 +166,7 @@ int main()
 			
 			// Wait 1 second before doing it again
 			++sent_port;
-			Time::delay(DELAY_BETWEEN_2_FRAMES_MS);
+			time::delay(DELAY_BETWEEN_2_FRAMES_MS);
 		}
 		else
 		{

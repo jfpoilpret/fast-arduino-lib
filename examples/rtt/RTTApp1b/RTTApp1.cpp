@@ -55,10 +55,10 @@ REGISTER_RTT_ISR(1)
 
 const constexpr uint32_t BLINK_DELAY = 10000;
 
-template<Board::Timer TIMER>
+template<board::Timer TIMER>
 void check_timer()
 {
-	typename FastPinType<Board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
+	typename FastPinType<board::DigitalPin::LED>::TYPE led{PinMode::OUTPUT, false};
 	RTT<TIMER> rtt;
 	rtt.register_rtt_handler();
 	rtt.begin();
@@ -78,18 +78,18 @@ int main()
 	sei();
 
 #if defined (BREADBOARD_ATTINYX4)
-	check_timer<Board::Timer::TIMER0>();
-	check_timer<Board::Timer::TIMER1>();
+	check_timer<board::Timer::TIMER0>();
+	check_timer<board::Timer::TIMER1>();
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-	check_timer<Board::Timer::TIMER0>();
-	check_timer<Board::Timer::TIMER1>();
-	check_timer<Board::Timer::TIMER2>();
+	check_timer<board::Timer::TIMER0>();
+	check_timer<board::Timer::TIMER1>();
+	check_timer<board::Timer::TIMER2>();
 #elif defined (ARDUINO_MEGA)
-	check_timer<Board::Timer::TIMER0>();
-	check_timer<Board::Timer::TIMER1>();
-	check_timer<Board::Timer::TIMER2>();
-	check_timer<Board::Timer::TIMER3>();
-	check_timer<Board::Timer::TIMER4>();
-	check_timer<Board::Timer::TIMER5>();
+	check_timer<board::Timer::TIMER0>();
+	check_timer<board::Timer::TIMER1>();
+	check_timer<board::Timer::TIMER2>();
+	check_timer<board::Timer::TIMER3>();
+	check_timer<board::Timer::TIMER4>();
+	check_timer<board::Timer::TIMER5>();
 #endif
 }

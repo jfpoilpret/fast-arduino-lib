@@ -59,7 +59,7 @@ int main()
 	sei();
 	
 	// Start UART
-	UART<Board::USART::USART0> uart{input_buffer, output_buffer};
+	UART<board::USART::USART0> uart{input_buffer, output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
 	FormattedInput<InputBuffer> in = uart.fin();

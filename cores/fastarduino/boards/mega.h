@@ -20,7 +20,7 @@
 
 /* This board is based on ATmega1280/2560 but only ATmega2560 is supported */
 
-namespace Board
+namespace board
 {
 	//====
 	// IO

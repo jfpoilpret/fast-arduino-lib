@@ -17,26 +17,26 @@
 
 #include "../fast_io.h"
 
-template<Board::DigitalPin CLOCK, Board::DigitalPin LATCH, Board::DigitalPin DATA>
+template<board::DigitalPin CLOCK, board::DigitalPin LATCH, board::DigitalPin DATA>
 class SIPO
 {
 public:
-	static constexpr const Board::Port PORT = FastPinType<CLOCK>::PORT;
+	static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
 	static constexpr const uint8_t DDR_MASK =
-		FastPinType<CLOCK>::MASK | FastPinType<LATCH>::MASK | FastPinType<DATA>::MASK;
-	static constexpr const uint8_t PORT_MASK = FastPinType<LATCH>::MASK;
+		gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;
+	static constexpr const uint8_t PORT_MASK = gpio::FastPinType<LATCH>::MASK;
 	
 	SIPO():_clock{}, _latch{}, _data{}
 	{
-		static_assert(	PORT == FastPinType<LATCH>::PORT && PORT == FastPinType<DATA>::PORT,
+		static_assert(	PORT == gpio::FastPinType<LATCH>::PORT && PORT == gpio::FastPinType<DATA>::PORT,
 						"CLOCK, LATCH and DATA pins must belong to the same PORT");
 	}
 	
 	inline void init()
 	{
-		_clock.set_mode(PinMode::OUTPUT, false);
-		_latch.set_mode(PinMode::OUTPUT, true);
-		_data.set_mode(PinMode::OUTPUT, false);
+		_clock.set_mode(gpio::PinMode::OUTPUT, false);
+		_latch.set_mode(gpio::PinMode::OUTPUT, true);
+		_data.set_mode(gpio::PinMode::OUTPUT, false);
 	}
 	
 	template<typename T>
@@ -79,9 +79,9 @@ private:
 		while (mask);
 	}
 
-	typename FastPinType<CLOCK>::TYPE _clock;
-	typename FastPinType<LATCH>::TYPE _latch;
-	typename FastPinType<DATA>::TYPE _data;
+	typename gpio::FastPinType<CLOCK>::TYPE _clock;
+	typename gpio::FastPinType<LATCH>::TYPE _latch;
+	typename gpio::FastPinType<DATA>::TYPE _data;
 };
 
 #endif /* SIPO_HH */

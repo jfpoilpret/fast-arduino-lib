@@ -20,7 +20,11 @@
 #if defined(ARDUINO_UNO)
 #define HAS_TRACE 1
 #include <fastarduino/streams.h>
-extern FormattedOutput<OutputBuffer> trace;
+extern streams::FormattedOutput<streams::OutputBuffer> trace;
+using streams::bin;
+using streams::dec;
+using streams::endl;
+using streams::flush;
 #endif
 
 template<uint8_t ROWS_ = 8, typename ROW_TYPE_ = uint8_t>

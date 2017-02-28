@@ -60,9 +60,9 @@ template<> struct MATRIX_TRAIT<16, 16>: MATRIX_TRAIT_IMPL<uint16_t, uint16_t, ui
 
 //TODO do we need BLINK_COUNT as class template argument, or just as method template argument?
 
-template<	Board::DigitalPin CLOCK, 
-			Board::DigitalPin LATCH, 
-			Board::DigitalPin DATA, 
+template<	board::DigitalPin CLOCK, 
+			board::DigitalPin LATCH, 
+			board::DigitalPin DATA, 
 			uint16_t BLINK_COUNT = 16,
 			uint8_t ROWS_ = 8,
 			uint8_t COLUMNS_ = 8>
@@ -79,7 +79,7 @@ public:
 	static constexpr const uint8_t ROWS = ROWS_;
 	static constexpr const uint8_t COLUMNS = COLUMNS_;
 	
-	static constexpr const Board::Port PORT = SIPO_TYPE::PORT;
+	static constexpr const board::Port PORT = SIPO_TYPE::PORT;
 	static constexpr const uint8_t DDR_MASK = SIPO_TYPE::DDR_MASK;
 	static constexpr const uint8_t PORT_MASK = SIPO_TYPE::PORT_MASK;
 

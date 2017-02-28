@@ -19,7 +19,7 @@
 #include "fast_io.h"
 
 //TODO Make a SPISlave class with a data handler/buffer
-namespace SPI
+namespace spi
 {
 	void init();
 	
@@ -124,7 +124,7 @@ namespace SPI
 		}
 	};
 
-	template<Board::DigitalPin CS,
+	template<board::DigitalPin CS,
 			ChipSelect CS_MODE = ChipSelect::ACTIVE_LOW, 
 			ClockRate RATE = ClockRate::CLOCK_DIV_4, 
 			Mode MODE = Mode::MODE_0,
@@ -132,7 +132,7 @@ namespace SPI
 	class SPIDevice: public AbstractSPIDevice
 	{
 	protected:
-		SPIDevice() INLINE:_cs{PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW} {}
+		SPIDevice() INLINE:_cs{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW} {}
 
 #ifdef SPDR
 		inline void start_transfer()
@@ -163,7 +163,7 @@ namespace SPI
 #else
 		static const constexpr uint8_t _usicr = uint8_t(MODE);
 #endif
-		typename FastPinType<CS>::TYPE _cs;
+		typename gpio::FastPinType<CS>::TYPE _cs;
 	};
 
 };

@@ -19,7 +19,7 @@
 #include "queue.h"
 #include "linked_list.h"
 
-namespace Events
+namespace events
 {
 	namespace Type
 	{
@@ -54,13 +54,13 @@ namespace Events
 	class EventHandler;
 
 	// Dispatcher should be used only from non-interrupt code
-	class Dispatcher: public LinkedList<EventHandler>
+	class Dispatcher: public containers::LinkedList<EventHandler>
 	{
 	public:
 		void dispatch(const Event& event);
 	};
 
-	class EventHandler: public Link<EventHandler>
+	class EventHandler: public containers::Link<EventHandler>
 	{
 	public:
 		uint8_t type() const INLINE

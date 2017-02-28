@@ -14,7 +14,7 @@
 
 #include "events.h"
 
-namespace Events
+namespace events
 {
 	class HandlerCaller
 	{

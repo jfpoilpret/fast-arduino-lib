@@ -36,11 +36,11 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D2_PD2_EXT0;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D3_PD3_EXT1;
+constexpr const board::DigitalPin SWITCH_ON = board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::DigitalPin SWITCH_OFF = board::ExternalInterruptPin::D3_PD3_EXT1;
 #elif defined (ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH_ON = Board::ExternalInterruptPin::D21_PD0_EXT0;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::ExternalInterruptPin::D20_PD1_EXT1;
+constexpr const board::DigitalPin SWITCH_ON = board::ExternalInterruptPin::D21_PD0_EXT0;
+constexpr const board::DigitalPin SWITCH_OFF = board::ExternalInterruptPin::D20_PD1_EXT1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -69,7 +69,7 @@ public:
 private:
 	FastPinType<SWITCH_ON>::TYPE _switch_on;
 	FastPinType<SWITCH_OFF>::TYPE _switch_off;
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
+	FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 
 // Define vectors we need in the example
@@ -92,6 +92,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(Board::SleepMode::POWER_DOWN);
+		Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

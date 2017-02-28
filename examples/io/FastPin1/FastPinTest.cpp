@@ -20,20 +20,20 @@
 #include <fastarduino/fast_io.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static FastPort<Board::Port::PORT_B> PortB;
-static FastPinType<Board::DigitalPin::D0_PD0>::TYPE PinD0{PinMode::INPUT};
-static FastPinType<Board::DigitalPin::D1_PD1>::TYPE PinD1{PinMode::INPUT_PULLUP};
-static FastPinType<Board::DigitalPin::D2_PD2>::TYPE PinD2{PinMode::OUTPUT};
+static FastPort<board::Port::PORT_B> PortB;
+static FastPinType<board::DigitalPin::D0_PD0>::TYPE PinD0{PinMode::INPUT};
+static FastPinType<board::DigitalPin::D1_PD1>::TYPE PinD1{PinMode::INPUT_PULLUP};
+static FastPinType<board::DigitalPin::D2_PD2>::TYPE PinD2{PinMode::OUTPUT};
 #elif defined (ARDUINO_MEGA)
-static FastPort<Board::Port::PORT_B> PortB;
-static FastPinType<Board::DigitalPin::D0_PE0>::TYPE PinD0{PinMode::INPUT};
-static FastPinType<Board::DigitalPin::D1_PE1>::TYPE PinD1{PinMode::INPUT_PULLUP};
-static FastPinType<Board::DigitalPin::D2_PE4>::TYPE PinD2{PinMode::OUTPUT};
+static FastPort<board::Port::PORT_B> PortB;
+static FastPinType<board::DigitalPin::D0_PE0>::TYPE PinD0{PinMode::INPUT};
+static FastPinType<board::DigitalPin::D1_PE1>::TYPE PinD1{PinMode::INPUT_PULLUP};
+static FastPinType<board::DigitalPin::D2_PE4>::TYPE PinD2{PinMode::OUTPUT};
 #elif defined (BREADBOARD_ATTINYX4)
-static FastPort<Board::Port::PORT_B> PortB;
-static FastPinType<Board::DigitalPin::D0_PA0>::TYPE PinD0{PinMode::INPUT};
-static FastPinType<Board::DigitalPin::D1_PA1>::TYPE PinD1{PinMode::INPUT_PULLUP};
-static FastPinType<Board::DigitalPin::D2_PA2>::TYPE PinD2{PinMode::OUTPUT};
+static FastPort<board::Port::PORT_B> PortB;
+static FastPinType<board::DigitalPin::D0_PA0>::TYPE PinD0{PinMode::INPUT};
+static FastPinType<board::DigitalPin::D1_PA1>::TYPE PinD1{PinMode::INPUT_PULLUP};
+static FastPinType<board::DigitalPin::D2_PA2>::TYPE PinD2{PinMode::OUTPUT};
 #else
 #error "Current target is not yet supported!"
 #endif

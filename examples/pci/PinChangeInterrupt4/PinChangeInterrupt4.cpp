@@ -31,20 +31,20 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D14_PC0_PCI1;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D8_PB0_PCI0;
+constexpr const board::DigitalPin SWITCH_ON = board::InterruptPin::D14_PC0_PCI1;
+constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI0;
 #define PCINT_ON	1
 #define PCINT_OFF	0
 #elif defined(ARDUINO_MEGA)
-constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D53_PB0_PCI0;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D62_PK0_PCI2;
+constexpr const board::DigitalPin SWITCH_ON = board::InterruptPin::D53_PB0_PCI0;
+constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D62_PK0_PCI2;
 #define PCINT_ON	0
 #define PCINT_OFF	2
 #elif defined(BREADBOARD_ATTINYX4)
 #define PCINT_ON	0
 #define PCINT_OFF	1
-constexpr const Board::DigitalPin SWITCH_ON = Board::InterruptPin::D0_PA0_PCI0;
-constexpr const Board::DigitalPin SWITCH_OFF = Board::InterruptPin::D8_PB0_PCI1;
+constexpr const board::DigitalPin SWITCH_ON = board::InterruptPin::D0_PA0_PCI0;
+constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI1;
 #define PCINT_ON	0
 #define PCINT_OFF	1
 #else
@@ -75,7 +75,7 @@ public:
 private:
 	FastPinType<SWITCH_ON>::TYPE _switch_on;
 	FastPinType<SWITCH_OFF>::TYPE _switch_off;
-	FastPinType<Board::DigitalPin::LED>::TYPE _led;	
+	FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 
 // Define vectors we need in the example
@@ -101,6 +101,6 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Power::sleep(Board::SleepMode::POWER_DOWN);
+		Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 }

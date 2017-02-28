@@ -417,7 +417,7 @@ namespace eeprom
 			return WriteItem{value1, value2, value3};
 		}
 
-		Queue<uint8_t, uint8_t> _buffer;
+		containers::Queue<uint8_t, uint8_t> _buffer;
 		WriteItem _current;
 		volatile bool _erase;
 		volatile bool _done;

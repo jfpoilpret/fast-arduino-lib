@@ -22,473 +22,476 @@
 #include "queue.h"
 #include "utilities.h"
 
-//TODO Add operator out << in; to unstack all input and push it to output (optimization possible?)
-//TODO Maybe add operator in >> out; question is when should the redirection be finished?
-class OutputBuffer:public Queue<char, char>
+namespace streams
 {
-public:
-	template<uint8_t SIZE>
-	OutputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
+	//TODO Add operator out << in; to unstack all input and push it to output (optimization possible?)
+	//TODO Maybe add operator in >> out; question is when should the redirection be finished?
+	class OutputBuffer:public containers::Queue<char, char>
 	{
-		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
-	}
-	
-	void flush()
-	{
-		while (items())
-			Time::yield();
-	}
-	void put(char c, bool call_on_put = true)
-	{
-		if (!push(c)) on_overflow(c);
-		if (call_on_put) on_put();
-	}
-	void put(const char* content, size_t size)
-	{
-		while (size--) put(*content++, false);
-		on_put();
-	}
-	void puts(const char* str)
-	{
-		while (*str) put(*str++, false);
-		on_put();
-	}
-	void puts(const FlashStorage* str)
-	{
-		uint16_t address = (uint16_t) str;
-		while (char value = pgm_read_byte(address++)) put(value, false);
-		on_put();
-	}
-	
-protected:
-	// Listeners of events on the buffer
-	virtual void on_overflow(UNUSED char c) {}
-	virtual void on_put() {}
-};
+	public:
+		template<uint8_t SIZE>
+		OutputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
+		{
+			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
+		}
 
-//TODO Handle generic errors coming from UART RX (eg Parity...)
-//TODO allow blocking input somehow
-class InputBuffer: public Queue<char, char>
-{
-public:
-	static const int EOF = -1;
-	
-	template<uint8_t SIZE>
-	InputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
-	{
-		static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
-	}
+		void flush()
+		{
+			while (items())
+				time::yield();
+		}
+		void put(char c, bool call_on_put = true)
+		{
+			if (!push(c)) on_overflow(c);
+			if (call_on_put) on_put();
+		}
+		void put(const char* content, size_t size)
+		{
+			while (size--) put(*content++, false);
+			on_put();
+		}
+		void puts(const char* str)
+		{
+			while (*str) put(*str++, false);
+			on_put();
+		}
+		void puts(const FlashStorage* str)
+		{
+			uint16_t address = (uint16_t) str;
+			while (char value = pgm_read_byte(address++)) put(value, false);
+			on_put();
+		}
 
-	int available() const
-	{
-		return items();
-	}
-	int get()
-	{
-		char value;
-		if (pull(value)) return value;
-		return EOF;
-	}
-	
-	char* scan(char* str, size_t max);
-	
-protected:
-	// Listeners of events on the buffer
-	virtual void on_empty() {}
-	virtual void on_get(UNUSED char c) {}
-};
-
-// The following functions are blocking until input is satisfied
-char get(InputBuffer& in);
-char* get(InputBuffer& in, char* content, size_t size);
-int gets(InputBuffer& in, char* str, size_t max, char end = 0);
-
-class FormatBase
-{
-public:
-	enum class Base: uint8_t
-	{
-//		bcd = 0,
-		bin = 2,
-		oct = 8,
-		dec = 10,
-		hex = 16
+	protected:
+		// Listeners of events on the buffer
+		virtual void on_overflow(UNUSED char c) {}
+		virtual void on_put() {}
 	};
-	
-	FormatBase(): _width{6}, _precision{4}, _base{Base::dec} {}
-	
-	inline void width(int8_t width)
+
+	//TODO Handle generic errors coming from UART RX (eg Parity...)
+	//TODO allow blocking input somehow
+	class InputBuffer: public containers::Queue<char, char>
 	{
-		_width = width;
-	}
-	inline int8_t width()
-	{
-		return _width;
-	}
-	inline void precision(int8_t precision)
-	{
-		_precision = precision;
-	}
-	inline int8_t precision()
-	{
-		return _precision;
-	}
-	inline void base(Base base)
-	{
-		_base = base;
-	}
-	inline Base base()
-	{
-		return _base;
-	}
-	
-protected:
-	void reset()
-	{
-		_width = 6;
-		_precision = 4;
-		_base = Base::dec;
-	}
-	// conversions from string to numeric value
-	bool convert(const char* token, double& v)
-	{
-		char* endptr;
-		double value = strtod(token, &endptr);
-		if (endptr == token)
-			return false;
-		v = value;
-		return true;
-	}
-	bool convert(const char* token, long& v)
-	{
-		char* endptr;
-		long value = strtol(token, &endptr, (uint8_t) _base);
-		if (endptr == token)
-			return false;
-		v = value;
-		return true;
-	}
-	bool convert(const char* token, unsigned long& v)
-	{
-		char* endptr;
-		unsigned long value = strtoul(token, &endptr, (uint8_t) _base);
-		if (endptr == token)
-			return false;
-		v = value;
-		return true;
-	}
-	bool convert(const char* token, int& v)
-	{
-		long value;
-		if (!convert(token, value))
-			return false;
-		v = (int) value;
-		return true;
-	}
-	bool convert(const char* token, unsigned int& v)
-	{
-		unsigned long value;
-		if (!convert(token, value))
-			return false;
-		v = (unsigned int) value;
-		return true;
-	}
-	
-	// conversions from numeric value to string
-	const char* convert(int v)
-	{
-		return justify(itoa(v, conversion_buffer, (uint8_t) _base), filler());
-	}
-	const char* convert(unsigned int v)
-	{
-		return justify(utoa(v, conversion_buffer, (uint8_t) _base), filler());
-	}
-	const char* convert(long v)
-	{
-		return justify(ltoa(v, conversion_buffer, (uint8_t) _base), filler());
-	}
-	const char* convert(unsigned long v)
-	{
-		return justify(ultoa(v, conversion_buffer, (uint8_t) _base), filler());
-	}
-	const char* convert(double v)
-	{
-		return dtostrf(v, _width, _precision, conversion_buffer);
-	}
-	const char* justify(char* input, char filler = ' ')
-	{
-		uint8_t width = (_width >= 0 ? _width : -_width);
-		if (strlen(input) < width)
+	public:
+		static const int EOF = -1;
+
+		template<uint8_t SIZE>
+		InputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
 		{
-			uint8_t add = width - strlen(input);
-			memmove(input + add, input, strlen(input) + 1);
-			memset(input, filler, add);
+			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
-		return input;
-	}
-	char filler()
-	{
-		switch (_base)
+
+		int available() const
 		{
-			case Base::bin:
-			case Base::hex:
-			case Base::oct:
-				return '0';
-			case Base::dec:
-				return ' ';
+			return items();
 		}
+		int get()
+		{
+			char value;
+			if (pull(value)) return value;
+			return EOF;
+		}
+
+		char* scan(char* str, size_t max);
+
+	protected:
+		// Listeners of events on the buffer
+		virtual void on_empty() {}
+		virtual void on_get(UNUSED char c) {}
+	};
+
+	// The following functions are blocking until input is satisfied
+	char get(InputBuffer& in);
+	char* get(InputBuffer& in, char* content, size_t size);
+	int gets(InputBuffer& in, char* str, size_t max, char end = 0);
+
+	class FormatBase
+	{
+	public:
+		enum class Base: uint8_t
+		{
+	//		bcd = 0,
+			bin = 2,
+			oct = 8,
+			dec = 10,
+			hex = 16
+		};
+
+		FormatBase(): _width{6}, _precision{4}, _base{Base::dec} {}
+
+		inline void width(int8_t width)
+		{
+			_width = width;
+		}
+		inline int8_t width()
+		{
+			return _width;
+		}
+		inline void precision(int8_t precision)
+		{
+			_precision = precision;
+		}
+		inline int8_t precision()
+		{
+			return _precision;
+		}
+		inline void base(Base base)
+		{
+			_base = base;
+		}
+		inline Base base()
+		{
+			return _base;
+		}
+
+	protected:
+		void reset()
+		{
+			_width = 6;
+			_precision = 4;
+			_base = Base::dec;
+		}
+		// conversions from string to numeric value
+		bool convert(const char* token, double& v)
+		{
+			char* endptr;
+			double value = strtod(token, &endptr);
+			if (endptr == token)
+				return false;
+			v = value;
+			return true;
+		}
+		bool convert(const char* token, long& v)
+		{
+			char* endptr;
+			long value = strtol(token, &endptr, (uint8_t) _base);
+			if (endptr == token)
+				return false;
+			v = value;
+			return true;
+		}
+		bool convert(const char* token, unsigned long& v)
+		{
+			char* endptr;
+			unsigned long value = strtoul(token, &endptr, (uint8_t) _base);
+			if (endptr == token)
+				return false;
+			v = value;
+			return true;
+		}
+		bool convert(const char* token, int& v)
+		{
+			long value;
+			if (!convert(token, value))
+				return false;
+			v = (int) value;
+			return true;
+		}
+		bool convert(const char* token, unsigned int& v)
+		{
+			unsigned long value;
+			if (!convert(token, value))
+				return false;
+			v = (unsigned int) value;
+			return true;
+		}
+
+		// conversions from numeric value to string
+		const char* convert(int v)
+		{
+			return justify(itoa(v, conversion_buffer, (uint8_t) _base), filler());
+		}
+		const char* convert(unsigned int v)
+		{
+			return justify(utoa(v, conversion_buffer, (uint8_t) _base), filler());
+		}
+		const char* convert(long v)
+		{
+			return justify(ltoa(v, conversion_buffer, (uint8_t) _base), filler());
+		}
+		const char* convert(unsigned long v)
+		{
+			return justify(ultoa(v, conversion_buffer, (uint8_t) _base), filler());
+		}
+		const char* convert(double v)
+		{
+			return dtostrf(v, _width, _precision, conversion_buffer);
+		}
+		const char* justify(char* input, char filler = ' ')
+		{
+			uint8_t width = (_width >= 0 ? _width : -_width);
+			if (strlen(input) < width)
+			{
+				uint8_t add = width - strlen(input);
+				memmove(input + add, input, strlen(input) + 1);
+				memset(input, filler, add);
+			}
+			return input;
+		}
+		char filler()
+		{
+			switch (_base)
+			{
+				case Base::bin:
+				case Base::hex:
+				case Base::oct:
+					return '0';
+				case Base::dec:
+					return ' ';
+			}
+		}
+
+		static const uint8_t MAX_BUF_LEN = 64;
+
+	private:
+		int8_t _width;
+		uint8_t _precision;
+		Base _base;
+		char conversion_buffer[MAX_BUF_LEN];
+	};
+
+	//TODO Add reset of latest format used
+	template<typename STREAM>
+	class FormattedOutput: public FormatBase
+	{
+	public:
+		FormattedOutput(STREAM& stream): _stream{stream} {}
+
+		void flush()
+		{
+			_stream.flush();
+		}
+		void put(char c, bool call_on_put = true)
+		{
+			_stream.put(c, call_on_put);
+		}
+		void put(const char* content, size_t size)
+		{
+			_stream.put(content, size);
+		}
+		void puts(const char* str)
+		{
+			_stream.puts(str);
+		}
+		void puts(const FlashStorage* str)
+		{
+			_stream.puts(str);
+		}
+
+		//TODO add support for void* (address)
+		FormattedOutput<STREAM>& operator << (char c)
+		{
+			_stream.put(c);
+			return *this;
+		}
+		FormattedOutput<STREAM>& operator << (const char* s)
+		{
+			//TODO Add justify with width if <0
+			_stream.puts(s);
+			return *this;
+		}
+		FormattedOutput<STREAM>& operator << (const FlashStorage* s)
+		{
+			//TODO Add justify with width if <0
+			_stream.puts(s);
+			return *this;
+		}
+		FormattedOutput<STREAM>& operator << (int v)
+		{
+			_stream.puts(convert(v));
+			return *this;
+		}
+		FormattedOutput<STREAM>& operator << (unsigned int v)
+		{
+			_stream.puts(convert(v));
+			return *this;
+		}
+		FormattedOutput<STREAM>& operator << (long v)
+		{
+			_stream.puts(convert(v));
+			return *this;
+		}
+		FormattedOutput<STREAM>& operator << (unsigned long v)
+		{
+			_stream.puts(convert(v));
+			return *this;
+		}
+		FormattedOutput<STREAM>& operator << (double v)
+		{
+			_stream.puts(convert(v));
+			return *this;
+		}
+
+		using Manipulator = void (*)(FormattedOutput<STREAM>&);
+		FormattedOutput<STREAM>& operator << (Manipulator f)
+		{
+			f(*this);
+			return *this;
+		}
+
+	private:
+		STREAM& _stream;
+
+		template<typename FSTREAM> friend void bin(FSTREAM&);
+		template<typename FSTREAM> friend void oct(FSTREAM&);
+		template<typename FSTREAM> friend void dec(FSTREAM&);
+		template<typename FSTREAM> friend void hex(FSTREAM&);
+
+		template<typename FSTREAM> friend void flush(FSTREAM&);
+		template<typename FSTREAM> friend void endl(FSTREAM&);
+	};
+
+	template<typename STREAM>
+	class FormattedInput: public FormatBase
+	{
+	public:
+		FormattedInput(STREAM& stream): _stream{stream}, _skipws{true} {}
+
+		int available() const
+		{
+			return _stream.available();
+		}
+		int get()
+		{
+			return _stream.get();
+		}
+		int get(char* content, size_t size)
+		{
+			return _stream.get(content, size);
+		}
+		int gets(char* str, size_t max)
+		{
+			return _stream.gets(str, max);
+		}
+
+		FormattedInput<STREAM>& operator >> (bool& v)
+		{
+			skip_whitespaces(_skipws);
+			char c = containers::pull(_stream);
+			v = (c != '0');
+			return *this;
+		}
+		FormattedInput<STREAM>& operator >> (char& v)
+		{
+			skip_whitespaces(_skipws);
+			v = containers::pull(_stream);
+			return *this;
+		}
+		FormattedInput<STREAM>& operator >> (int& v)
+		{
+			skip_whitespaces(_skipws);
+			char buffer[sizeof(int) * 8 + 1];
+			convert(_stream.scan(buffer, sizeof buffer), v);
+			return *this;
+		}
+		FormattedInput<STREAM>& operator >> (unsigned int& v)
+		{
+			skip_whitespaces(_skipws);
+			char buffer[sizeof(int) * 8 + 1];
+			convert(_stream.scan(buffer, sizeof buffer), v);
+			return *this;
+		}
+		FormattedInput<STREAM>& operator >> (long& v)
+		{
+			skip_whitespaces(_skipws);
+			char buffer[sizeof(long) * 8 + 1];
+			convert(_stream.scan(buffer, sizeof buffer), v);
+			return *this;
+		}
+		FormattedInput<STREAM>& operator >> (unsigned long& v)
+		{
+			skip_whitespaces(_skipws);
+			char buffer[sizeof(long) * 8 + 1];
+			convert(_stream.scan(buffer, sizeof buffer), v);
+			return *this;
+		}
+		FormattedInput<STREAM>& operator >> (double& v)
+		{
+			skip_whitespaces(_skipws);
+			char buffer[MAX_BUF_LEN];
+			convert(_stream.scan(buffer, sizeof buffer), v);
+			return *this;
+		}
+
+		using Manipulator = void (*)(FormattedInput<STREAM>&);
+		FormattedInput<STREAM>& operator >> (Manipulator f)
+		{
+			f(*this);
+			return *this;
+		}
+
+	private:
+		void skip_whitespaces(bool skip = true)
+		{
+			if (skip)
+				while (isspace(containers::peek(_stream))) containers::pull(_stream);
+		}
+
+		STREAM& _stream;
+		bool _skipws;
+
+		template<typename FSTREAM> friend void bin(FSTREAM&);
+		template<typename FSTREAM> friend void oct(FSTREAM&);
+		template<typename FSTREAM> friend void dec(FSTREAM&);
+		template<typename FSTREAM> friend void hex(FSTREAM&);
+		template<typename FSTREAM> friend void ws(FSTREAM&);
+		template<typename FSTREAM> friend void skipws(FSTREAM&);
+		template<typename FSTREAM> friend void noskipws(FSTREAM&);
+	};
+
+	template<typename FSTREAM> 
+	inline void ws(FSTREAM& stream)
+	{
+		stream.skip_whitespaces();
 	}
 
-	static const uint8_t MAX_BUF_LEN = 64;
-	
-private:
-	int8_t _width;
-	uint8_t _precision;
-	Base _base;
-	char conversion_buffer[MAX_BUF_LEN];
-};
+	template<typename FSTREAM> 
+	inline void skipws(FSTREAM& stream)
+	{
+		stream._skipws = true;
+	}
 
-//TODO Add reset of latest format used
-template<typename STREAM>
-class FormattedOutput: public FormatBase
-{
-public:
-	FormattedOutput(STREAM& stream): _stream{stream} {}
+	template<typename FSTREAM> 
+	inline void noskipws(FSTREAM& stream)
+	{
+		stream._skipws = false;
+	}
 
-	void flush()
+	template<typename FSTREAM>
+	inline void bin(FSTREAM& stream)
 	{
-		_stream.flush();
+		stream.base(FormatBase::Base::bin);
 	}
-	void put(char c, bool call_on_put = true)
-	{
-		_stream.put(c, call_on_put);
-	}
-	void put(const char* content, size_t size)
-	{
-		_stream.put(content, size);
-	}
-	void puts(const char* str)
-	{
-		_stream.puts(str);
-	}
-	void puts(const FlashStorage* str)
-	{
-		_stream.puts(str);
-	}
-	
-	//TODO add support for void* (address)
-	FormattedOutput<STREAM>& operator << (char c)
-	{
-		_stream.put(c);
-		return *this;
-	}
-	FormattedOutput<STREAM>& operator << (const char* s)
-	{
-		//TODO Add justify with width if <0
-		_stream.puts(s);
-		return *this;
-	}
-	FormattedOutput<STREAM>& operator << (const FlashStorage* s)
-	{
-		//TODO Add justify with width if <0
-		_stream.puts(s);
-		return *this;
-	}
-	FormattedOutput<STREAM>& operator << (int v)
-	{
-		_stream.puts(convert(v));
-		return *this;
-	}
-	FormattedOutput<STREAM>& operator << (unsigned int v)
-	{
-		_stream.puts(convert(v));
-		return *this;
-	}
-	FormattedOutput<STREAM>& operator << (long v)
-	{
-		_stream.puts(convert(v));
-		return *this;
-	}
-	FormattedOutput<STREAM>& operator << (unsigned long v)
-	{
-		_stream.puts(convert(v));
-		return *this;
-	}
-	FormattedOutput<STREAM>& operator << (double v)
-	{
-		_stream.puts(convert(v));
-		return *this;
-	}
-	
-	using Manipulator = void (*)(FormattedOutput<STREAM>&);
-	FormattedOutput<STREAM>& operator << (Manipulator f)
-	{
-		f(*this);
-		return *this;
-	}
-	
-private:
-	STREAM& _stream;
-	
-	template<typename FSTREAM> friend void bin(FSTREAM&);
-	template<typename FSTREAM> friend void oct(FSTREAM&);
-	template<typename FSTREAM> friend void dec(FSTREAM&);
-	template<typename FSTREAM> friend void hex(FSTREAM&);
 
-	template<typename FSTREAM> friend void flush(FSTREAM&);
-	template<typename FSTREAM> friend void endl(FSTREAM&);
-};
+	template<typename FSTREAM>
+	inline void oct(FSTREAM& stream)
+	{
+		stream.base(FormatBase::Base::oct);
+	}
 
-template<typename STREAM>
-class FormattedInput: public FormatBase
-{
-public:
-	FormattedInput(STREAM& stream): _stream{stream}, _skipws{true} {}
+	template<typename FSTREAM>
+	inline void dec(FSTREAM& stream)
+	{
+		stream.base(FormatBase::Base::dec);
+	}
 
-	int available() const
+	template<typename FSTREAM>
+	inline void hex(FSTREAM& stream)
 	{
-		return _stream.available();
+		stream.base(FormatBase::Base::hex);
 	}
-	int get()
-	{
-		return _stream.get();
-	}
-	int get(char* content, size_t size)
-	{
-		return _stream.get(content, size);
-	}
-	int gets(char* str, size_t max)
-	{
-		return _stream.gets(str, max);
-	}
-	
-	FormattedInput<STREAM>& operator >> (bool& v)
-	{
-		skip_whitespaces(_skipws);
-		char c = ::pull(_stream);
-		v = (c != '0');
-		return *this;
-	}
-	FormattedInput<STREAM>& operator >> (char& v)
-	{
-		skip_whitespaces(_skipws);
-		v = ::pull(_stream);
-		return *this;
-	}
-	FormattedInput<STREAM>& operator >> (int& v)
-	{
-		skip_whitespaces(_skipws);
-		char buffer[sizeof(int) * 8 + 1];
-		convert(_stream.scan(buffer, sizeof buffer), v);
-		return *this;
-	}
-	FormattedInput<STREAM>& operator >> (unsigned int& v)
-	{
-		skip_whitespaces(_skipws);
-		char buffer[sizeof(int) * 8 + 1];
-		convert(_stream.scan(buffer, sizeof buffer), v);
-		return *this;
-	}
-	FormattedInput<STREAM>& operator >> (long& v)
-	{
-		skip_whitespaces(_skipws);
-		char buffer[sizeof(long) * 8 + 1];
-		convert(_stream.scan(buffer, sizeof buffer), v);
-		return *this;
-	}
-	FormattedInput<STREAM>& operator >> (unsigned long& v)
-	{
-		skip_whitespaces(_skipws);
-		char buffer[sizeof(long) * 8 + 1];
-		convert(_stream.scan(buffer, sizeof buffer), v);
-		return *this;
-	}
-	FormattedInput<STREAM>& operator >> (double& v)
-	{
-		skip_whitespaces(_skipws);
-		char buffer[MAX_BUF_LEN];
-		convert(_stream.scan(buffer, sizeof buffer), v);
-		return *this;
-	}
-	
-	using Manipulator = void (*)(FormattedInput<STREAM>&);
-	FormattedInput<STREAM>& operator >> (Manipulator f)
-	{
-		f(*this);
-		return *this;
-	}
-	
-private:
-	void skip_whitespaces(bool skip = true)
-	{
-		if (skip)
-			while (isspace(::peek(_stream))) ::pull(_stream);
-	}
-	
-	STREAM& _stream;
-	bool _skipws;
-	
-	template<typename FSTREAM> friend void bin(FSTREAM&);
-	template<typename FSTREAM> friend void oct(FSTREAM&);
-	template<typename FSTREAM> friend void dec(FSTREAM&);
-	template<typename FSTREAM> friend void hex(FSTREAM&);
-	template<typename FSTREAM> friend void ws(FSTREAM&);
-	template<typename FSTREAM> friend void skipws(FSTREAM&);
-	template<typename FSTREAM> friend void noskipws(FSTREAM&);
-};
 
-template<typename FSTREAM> 
-inline void ws(FSTREAM& stream)
-{
-	stream.skip_whitespaces();
-}
+	template<typename FSTREAM>
+	inline void flush(FSTREAM& stream)
+	{
+		stream.flush();
+	}
 
-template<typename FSTREAM> 
-inline void skipws(FSTREAM& stream)
-{
-	stream._skipws = true;
-}
-
-template<typename FSTREAM> 
-inline void noskipws(FSTREAM& stream)
-{
-	stream._skipws = false;
-}
-
-template<typename FSTREAM>
-inline void bin(FSTREAM& stream)
-{
-	stream.base(FormatBase::Base::bin);
-}
-
-template<typename FSTREAM>
-inline void oct(FSTREAM& stream)
-{
-	stream.base(FormatBase::Base::oct);
-}
-
-template<typename FSTREAM>
-inline void dec(FSTREAM& stream)
-{
-	stream.base(FormatBase::Base::dec);
-}
-
-template<typename FSTREAM>
-inline void hex(FSTREAM& stream)
-{
-	stream.base(FormatBase::Base::hex);
-}
-
-template<typename FSTREAM>
-inline void flush(FSTREAM& stream)
-{
-	stream.flush();
-}
-
-template<typename FSTREAM>
-inline void endl(FSTREAM& stream)
-{
-	stream.put('\n');
+	template<typename FSTREAM>
+	inline void endl(FSTREAM& stream)
+	{
+		stream.put('\n');
+	}
 }
 
 #endif	/* STREAMS_HH */

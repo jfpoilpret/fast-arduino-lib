@@ -45,7 +45,7 @@ REGISTER_UATX_ISR(0)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-constexpr const Board::DigitalPin TX = Board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -55,7 +55,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace eeprom;
 
-static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, uint16_t loops = 1)
+static void trace_eeprom(streams::FormattedOutput<streams::OutputBuffer>& out, uint16_t address, uint16_t loops = 1)
 {
 	for (uint16_t i = 0; i < loops; ++i)
 	{
@@ -66,7 +66,7 @@ static void trace_eeprom(FormattedOutput<OutputBuffer>& out, uint16_t address, u
 		{
 			uint8_t value;
 			EEPROM::read(address++, value);
-			out << value << ' ' << flush;
+			out << value << ' ' << streams::flush;
 		}
 		out << '\n';
 	}
@@ -77,15 +77,15 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	UATX<Board::USART::USART0> uart{output_buffer};
+	serial::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 #else
-	Soft::UATX<TX> uart{output_buffer};
+	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
 
-	FormattedOutput<OutputBuffer> out = uart.fout();
-	out << hex;
+	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+	out << streams::hex;
 	out << "\nInitial EEPROM content\n";	
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 	
@@ -112,21 +112,21 @@ int main()
 	bool ok;
 	ok = EEPROM::read(E2END + 1, value);
 	if (ok)
-		out << "ERROR! read(E2END + 1) did not fail!" << flush;
+		out << "ERROR! read(E2END + 1) did not fail!" << streams::flush;
 	ok = EEPROM::read(E2END, buffer);
 	if (ok)
-		out << "ERROR! read(E2END, 27) did not fail!" << flush;
+		out << "ERROR! read(E2END, 27) did not fail!" << streams::flush;
 	ok = EEPROM::read(E2END, buffer, 0);
 	if (ok)
-		out << "ERROR! read(E2END, x, 0) did not fail!" << flush;
+		out << "ERROR! read(E2END, x, 0) did not fail!" << streams::flush;
 	ok = EEPROM::write(E2END + 1, value);
 	if (ok)
-		out << "ERROR! write(E2END + 1) did not fail!" << flush;
+		out << "ERROR! write(E2END + 1) did not fail!" << streams::flush;
 	ok = EEPROM::write(E2END, buffer);
 	if (ok)
-		out << "ERROR! write(E2END, 27) did not fail!" << flush;
+		out << "ERROR! write(E2END, 27) did not fail!" << streams::flush;
 	ok = EEPROM::write(E2END, buffer, 0);
 	if (ok)
-		out << "ERROR! write(E2END, x, 0) did not fail!" << flush;
+		out << "ERROR! write(E2END, x, 0) did not fail!" << streams::flush;
 	return 0;
 }

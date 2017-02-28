@@ -38,32 +38,32 @@ static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0_PD0;
-static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1_PD1;
-static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2_PD2;
-static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3_PD3;
-static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4_PD4;
-static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5_PD5;
-static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6_PD6;
-static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7_PD7;
+static constexpr const board::DigitalPin LED0 = board::DigitalPin::D0_PD0;
+static constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PD1;
+static constexpr const board::DigitalPin LED2 = board::DigitalPin::D2_PD2;
+static constexpr const board::DigitalPin LED3 = board::DigitalPin::D3_PD3;
+static constexpr const board::DigitalPin LED4 = board::DigitalPin::D4_PD4;
+static constexpr const board::DigitalPin LED5 = board::DigitalPin::D5_PD5;
+static constexpr const board::DigitalPin LED6 = board::DigitalPin::D6_PD6;
+static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PD7;
 #elif defined (ARDUINO_MEGA)
-static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D22_PA0;
-static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D23_PA1;
-static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D24_PA2;
-static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D25_PA3;
-static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D26_PA4;
-static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D27_PA5;
-static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D28_PA6;
-static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D29_PA7;
+static constexpr const board::DigitalPin LED0 = board::DigitalPin::D22_PA0;
+static constexpr const board::DigitalPin LED1 = board::DigitalPin::D23_PA1;
+static constexpr const board::DigitalPin LED2 = board::DigitalPin::D24_PA2;
+static constexpr const board::DigitalPin LED3 = board::DigitalPin::D25_PA3;
+static constexpr const board::DigitalPin LED4 = board::DigitalPin::D26_PA4;
+static constexpr const board::DigitalPin LED5 = board::DigitalPin::D27_PA5;
+static constexpr const board::DigitalPin LED6 = board::DigitalPin::D28_PA6;
+static constexpr const board::DigitalPin LED7 = board::DigitalPin::D29_PA7;
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const Board::DigitalPin LED0 = Board::DigitalPin::D0_PA0;
-static constexpr const Board::DigitalPin LED1 = Board::DigitalPin::D1_PA1;
-static constexpr const Board::DigitalPin LED2 = Board::DigitalPin::D2_PA2;
-static constexpr const Board::DigitalPin LED3 = Board::DigitalPin::D3_PA3;
-static constexpr const Board::DigitalPin LED4 = Board::DigitalPin::D4_PA4;
-static constexpr const Board::DigitalPin LED5 = Board::DigitalPin::D5_PA5;
-static constexpr const Board::DigitalPin LED6 = Board::DigitalPin::D6_PA6;
-static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7_PA7;
+static constexpr const board::DigitalPin LED0 = board::DigitalPin::D0_PA0;
+static constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PA1;
+static constexpr const board::DigitalPin LED2 = board::DigitalPin::D2_PA2;
+static constexpr const board::DigitalPin LED3 = board::DigitalPin::D3_PA3;
+static constexpr const board::DigitalPin LED4 = board::DigitalPin::D4_PA4;
+static constexpr const board::DigitalPin LED5 = board::DigitalPin::D5_PA5;
+static constexpr const board::DigitalPin LED6 = board::DigitalPin::D6_PA6;
+static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PA7;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -72,7 +72,7 @@ static constexpr const Board::DigitalPin LED7 = Board::DigitalPin::D7_PA7;
 // - no cxa pure virtual method included in linked exe (2 bytes)
 // - one less vtable (for EventHandler itself)
 // But this also increases main() stack size of 8 bytes, i.e. 1 byte per LedHandler instance?
-template<Board::DigitalPin PIN>
+template<board::DigitalPin PIN>
 class LedHandler: public EventHandler
 {
 public:

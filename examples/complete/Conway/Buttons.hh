@@ -17,7 +17,7 @@
 
 #include <fastarduino/fast_io.h>
 
-template<Board::Port PORT, uint8_t MASK, uint8_t DEBOUNCE_COUNT>
+template<board::Port PORT, uint8_t MASK, uint8_t DEBOUNCE_COUNT>
 class Buttons
 {
 public:
