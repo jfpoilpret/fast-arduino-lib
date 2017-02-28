@@ -14,33 +14,36 @@
 
 #include "linked_list.h"
 
-void containers::LinkedListImpl::insert(LinkImpl* item)
+namespace containers
 {
-	item->_next = _head;
-	_head = item;
-}
-
-bool containers::LinkedListImpl::remove(LinkImpl* item)
-{
-	if (_head == 0) return false;
-	if (_head == item)
+	void LinkedListImpl::insert(LinkImpl* item)
 	{
-		_head = _head->_next;
-		item->_next = 0;
-		return true;
+		item->_next = _head;
+		_head = item;
 	}
-	LinkImpl* previous = _head;
-	LinkImpl* current = _head->_next;
-	while (current != 0)
+
+	bool LinkedListImpl::remove(LinkImpl* item)
 	{
-		if (current == item)
+		if (_head == 0) return false;
+		if (_head == item)
 		{
-			previous->_next = current->_next;
+			_head = _head->_next;
 			item->_next = 0;
 			return true;
 		}
-		previous = current;
-		current = current->_next;
+		LinkImpl* previous = _head;
+		LinkImpl* current = _head->_next;
+		while (current != 0)
+		{
+			if (current == item)
+			{
+				previous->_next = current->_next;
+				item->_next = 0;
+				return true;
+			}
+			previous = current;
+			current = current->_next;
+		}
+		return false;
 	}
-	return false;
 }
