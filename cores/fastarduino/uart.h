@@ -83,7 +83,7 @@ namespace serial
 
 		inline void register_handler()
 		{
-			::register_handler(*this);
+			interrupt::register_handler(*this);
 		}
 
 		inline void begin(	uint32_t rate,
@@ -173,7 +173,7 @@ namespace serial
 
 		inline void register_handler()
 		{
-			::register_handler(*this);
+			interrupt::register_handler(*this);
 		}
 
 		inline InputBuffer& in()
@@ -228,7 +228,7 @@ namespace serial
 
 		inline void register_handler()
 		{
-			::register_handler(*this);
+			interrupt::register_handler(*this);
 		}
 
 		inline void begin(	uint32_t rate,

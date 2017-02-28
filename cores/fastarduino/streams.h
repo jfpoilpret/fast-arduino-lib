@@ -55,7 +55,7 @@ namespace streams
 			while (*str) put(*str++, false);
 			on_put();
 		}
-		void puts(const FlashStorage* str)
+		void puts(const flash::FlashStorage* str)
 		{
 			uint16_t address = (uint16_t) str;
 			while (char value = pgm_read_byte(address++)) put(value, false);
@@ -273,7 +273,7 @@ namespace streams
 		{
 			_stream.puts(str);
 		}
-		void puts(const FlashStorage* str)
+		void puts(const flash::FlashStorage* str)
 		{
 			_stream.puts(str);
 		}
@@ -290,7 +290,7 @@ namespace streams
 			_stream.puts(s);
 			return *this;
 		}
-		FormattedOutput<STREAM>& operator << (const FlashStorage* s)
+		FormattedOutput<STREAM>& operator << (const flash::FlashStorage* s)
 		{
 			//TODO Add justify with width if <0
 			_stream.puts(s);

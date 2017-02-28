@@ -44,7 +44,7 @@ using INPUT = streams::FormattedInput<streams::InputBuffer>;
 using OUTPUT = streams::FormattedOutput<streams::OutputBuffer>;
 
 template<typename T>
-static void handle(OUTPUT& out, INPUT& in, const FlashStorage* type)
+static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)
 {
 	out << type << F(": ") << streams::flush;
 	T value;

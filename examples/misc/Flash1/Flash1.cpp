@@ -91,7 +91,7 @@ int main()
 	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 	Dummy value;
-	out << F("sample1 = ") << read_flash(&sample1, value);
-	out << F("sample2 = ") << read_flash(&sample2, value);
+	out << F("sample1 = ") << flash::read_flash(&sample1, value);
+	out << F("sample2 = ") << flash::read_flash(&sample2, value);
 	return 0;
 }

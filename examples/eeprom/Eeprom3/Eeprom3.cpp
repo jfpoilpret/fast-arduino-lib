@@ -136,7 +136,7 @@ int main()
 	
 	QueuedWriter writer{eeprom_buffer};
 	EepromReady ready_callback;
-	register_handler(ready_callback);
+	interrupt::register_handler(ready_callback);
 	
 	writer.erase();
 	out << "After EEPROM erase\n" << streams::flush;

@@ -58,7 +58,7 @@ int main()
 {
 	sei();
 	Handler handler;
-	register_handler(handler);
+	interrupt::register_handler(handler);
 	TIMER_TYPE timer;
 	timer.begin(PRESCALER, COUNTER);
 	

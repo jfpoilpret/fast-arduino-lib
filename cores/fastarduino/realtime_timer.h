@@ -57,7 +57,7 @@ namespace timer
 	public:
 		void register_rtt_handler()
 		{
-			register_handler(*this);
+			interrupt::register_handler(*this);
 		}
 
 		inline uint32_t millis() const

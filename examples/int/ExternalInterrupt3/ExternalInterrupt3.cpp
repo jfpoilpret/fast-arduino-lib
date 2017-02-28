@@ -83,7 +83,7 @@ int main()
 	sei();
 	
 	SwitchHandler switch_handler;
-	register_handler(switch_handler);
+	interrupt::register_handler(switch_handler);
 	interrupt::INTSignal<SWITCH_ON> int0{interrupt::InterruptTrigger::ANY_CHANGE};
 	interrupt::INTSignal<SWITCH_OFF> int1{interrupt::InterruptTrigger::ANY_CHANGE};
 	int0.enable();

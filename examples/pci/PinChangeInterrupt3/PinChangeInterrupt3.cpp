@@ -116,7 +116,7 @@ int main()
 	sei();
 
 	PinChangeHandler handler;
-	register_handler(handler);
+	interrupt::register_handler(handler);
 	interrupt::PCIType<SWITCH1>::TYPE pci;
 	
 	pci.enable_pins(SW1 | SW2 | SW3);

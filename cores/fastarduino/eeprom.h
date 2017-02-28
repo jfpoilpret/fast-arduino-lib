@@ -240,7 +240,7 @@ namespace eeprom
 		template<uint16_t SIZE>
 		QueuedWriter(uint8_t (&buffer)[SIZE]):_buffer{buffer}, _current{}, _erase{false}, _done{true}
 		{
-			register_handler(*this);
+			interrupt::register_handler(*this);
 		}
 		
 		template<typename T>

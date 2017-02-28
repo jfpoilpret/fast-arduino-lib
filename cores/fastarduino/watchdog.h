@@ -79,7 +79,7 @@ namespace watchdog
 
 		void register_watchdog_handler()
 		{
-			register_handler(*this);
+			interrupt::register_handler(*this);
 		}
 
 		void begin(TimeOut timeout = TimeOut::TO_16ms);
