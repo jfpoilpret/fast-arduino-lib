@@ -126,7 +126,15 @@ namespace board_traits
 	//========
 	template<> struct Timer_trait<Timer::TIMER0>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
-							_BV(WGM01), 0, R_(TCCR0A), R_(TCCR0B), R_(TCNT0), 
+							PWMPin::D6_PD6_OC0A, PWMPin::D5_PD5_OC0B,
+							_BV(WGM00) | _BV(WGM01), _BV(WGM02),
+							_BV(WGM00), _BV(WGM02),
+							_BV(WGM01), 0,
+							0, 0,
+							_BV(COM0A0), _BV(COM0B0),
+							_BV(COM0A1), _BV(COM0B1),
+							_BV(COM0A0) | _BV(COM0A1), _BV(COM0B0) | _BV(COM0B1),
+							R_(TCCR0A), R_(TCCR0B), R_(TCNT0), 
 							R_(OCR0A), R_(OCR0B), R_(TIMSK0), R_(TIFR0)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
@@ -140,7 +148,15 @@ namespace board_traits
 	};
 	template<> struct Timer_trait<Timer::TIMER2>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024, 
-							_BV(WGM21), 0, R_(TCCR2A), R_(TCCR2B), R_(TCNT2), 
+							PWMPin::D11_PB3_OC2A, PWMPin::D3_PD3_OC2B,
+							_BV(WGM20) | _BV(WGM21), _BV(WGM22),
+							_BV(WGM20), _BV(WGM22),
+							_BV(WGM21), 0,
+							0, 0,
+							_BV(COM2A0), _BV(COM2B0),
+							_BV(COM2A1), _BV(COM2B1),
+							_BV(COM2A0) | _BV(COM2A1), _BV(COM2B0) | _BV(COM2B1),
+							R_(TCCR2A), R_(TCCR2B), R_(TCNT2), 
 							R_(OCR2A), R_(OCR2B), R_(TIMSK2), R_(TIFR2)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
@@ -156,7 +172,15 @@ namespace board_traits
 	};
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
-							0, _BV(WGM12), R_(TCCR1A), R_(TCCR1B), R_(TCNT1), 
+							PWMPin::D9_PB1_OC1A, PWMPin::D10_PB2_OC1B,
+							_BV(WGM10) | _BV(WGM11), _BV(WGM12) | _BV(WGM13),
+							_BV(WGM10) | _BV(WGM11), _BV(WGM13),
+							0, _BV(WGM12), 
+							0, 0,
+							_BV(COM1A0), _BV(COM1B0),
+							_BV(COM1A1), _BV(COM1B1),
+							_BV(COM1A0) | _BV(COM1A1), _BV(COM1B0) | _BV(COM1B1),
+							R_(TCCR1A), R_(TCCR1B), R_(TCNT1), 
 							R_(OCR1A), R_(OCR1B), R_(TIMSK1), R_(TIFR1)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)

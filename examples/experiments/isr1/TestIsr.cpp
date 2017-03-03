@@ -4,31 +4,39 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <stdint.h>
-#include <avr/io.h>
-#include <avr/pgmspace.h>
+#include <fastarduino/fast_io.h>
+#include <fastarduino/time.h>
+#include <fastarduino/timer.h>
 
-// Utilities to handle PROGMEM storage
-template<typename T> class FlashStorage;
-#define F_(type, ptr) (__extension__({static const type __fs[] PROGMEM = (ptr); (const FlashStorage< type >*) &__fs[0];}))
-//#define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const FlashStorage*) &__c[0];}))
-#define F(ptr) F_(char, ptr)
+constexpr const board::Timer TIMER = board::Timer::TIMER0;
+using TIMER_TYPE = timer::Timer<TIMER>;
+// Frequency for PWM
+constexpr const uint16_t PWM_FREQUENCY = 500;
+constexpr const uint32_t PERIOD_US = 1000000 / PWM_FREQUENCY;
 
-using CALLBACK = void (*)(char);
+constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::prescaler(PERIOD_US);
+static_assert(TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US), "TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US)");
 
-static void f(const FlashStorage<char>* flash, CALLBACK cb)
-{
-	uint16_t address = (uint16_t) flash;
-	while (char value = pgm_read_byte(address++)) cb(value);
-}
+constexpr const uint16_t LOOP_DELAY_MS = 10;
 
-static void callback(char c)
-{
-	PORTB = c;
-}
+using time::delay_ms;
+using timer::TimerOutputMode;
+using gpio::FastPinType;
+using gpio::PinMode;
 
-int main() __attribute__((OS_main));
+using LED_PIN = FastPinType<board::PWMPin::D6_PD6_OC0A>::TYPE;
+
 int main()
 {
-	f(F("abcdefghijklmnopqrstuvwxyz"), callback);
+	LED_PIN led{PinMode::OUTPUT};
+	TIMER_TYPE timer;
+	timer._begin_FastPWM(PRESCALER, TimerOutputMode::NON_INVERTING, TimerOutputMode::DISCONNECTED);
+	sei();
+	
+	TIMER_TYPE::TIMER_TYPE duty = 0;
+	while (true)
+	{
+		timer.set_max_A(duty++);
+		delay_ms(LOOP_DELAY_MS);
+	}
 }

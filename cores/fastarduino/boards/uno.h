@@ -94,9 +94,23 @@ namespace board
 		NONE = 0xFF
 	};
 	
+	//============
+	// PWM output
+	//============
+	//TODO
+	
 	//===============
 	// IO interrupts
 	//===============
+	namespace PWMPin
+	{
+		constexpr const DigitalPin D6_PD6_OC0A = DigitalPin::D6_PD6;
+		constexpr const DigitalPin D5_PD5_OC0B = DigitalPin::D5_PD5;
+		constexpr const DigitalPin D9_PB1_OC1A = DigitalPin::D9_PB1;
+		constexpr const DigitalPin D10_PB2_OC1B = DigitalPin::D10_PB2;
+		constexpr const DigitalPin D11_PB3_OC2A = DigitalPin::D11_PB3;
+		constexpr const DigitalPin D3_PD3_OC2B = DigitalPin::D3_PD3;
+	};
 	
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
