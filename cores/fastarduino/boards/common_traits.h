@@ -391,8 +391,25 @@ namespace board_traits
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
 		
+		static constexpr const DigitalPin PIN_OCRA = DigitalPin::NONE;
+		static constexpr const DigitalPin PIN_OCRB = DigitalPin::NONE;
+
+		static constexpr const uint8_t F_PWM_TCCRA = 0;
+		static constexpr const uint8_t F_PWM_TCCRB = 0;
+		static constexpr const uint8_t PC_PWM_TCCRA = 0;
+		static constexpr const uint8_t PC_PWM_TCCRB = 0;
 		static constexpr const uint8_t CTC_TCCRA  = 0;
 		static constexpr const uint8_t CTC_TCCRB  = 0;
+		
+		static constexpr const uint8_t COM_NORMAL_A = 0;
+		static constexpr const uint8_t COM_TOGGLE_A = 0;
+		static constexpr const uint8_t COM_CLEAR_A = 0;
+		static constexpr const uint8_t COM_SET_A = 0;
+		static constexpr const uint8_t COM_NORMAL_B = 0;
+		static constexpr const uint8_t COM_TOGGLE_B = 0;
+		static constexpr const uint8_t COM_CLEAR_B = 0;
+		static constexpr const uint8_t COM_SET_B = 0;
+		
 		static constexpr const REG8 TCCRA{};
 		static constexpr const REG8 TCCRB{};
 		static constexpr const REGISTER<TYPE> TCNT{};
@@ -406,7 +423,16 @@ namespace board_traits
 		}
 	};
 
-	template<typename TYPE_, TimerPrescalers PRESCALERS_, uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, REG TCCRA_, REG TCCRB_, REG TCNT_, REG OCRA_, REG OCRB_, REG TIMSK_, REG TIFR_>
+	template<typename TYPE_, TimerPrescalers PRESCALERS_, DigitalPin PIN_OCRA_, DigitalPin PIN_OCRB_,
+			uint8_t F_PWM_TCCRA_, uint8_t F_PWM_TCCRB_, 
+			uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, 
+			uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, 
+			uint8_t COM_NORMAL_A_, uint8_t COM_NORMAL_B_, 
+			uint8_t COM_TOGGLE_A_, uint8_t COM_TOGGLE_B_, 
+			uint8_t COM_CLEAR_A_, uint8_t COM_CLEAR_B_, 
+			uint8_t COM_SET_A_, uint8_t COM_SET_B_, 
+			REG TCCRA_, REG TCCRB_, REG TCNT_, 
+			REG OCRA_, REG OCRB_, REG TIMSK_, REG TIFR_>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -416,8 +442,25 @@ namespace board_traits
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 		
+		static constexpr const DigitalPin PIN_OCRA = PIN_OCRA_;
+		static constexpr const DigitalPin PIN_OCRB = PIN_OCRB_;
+
+		static constexpr const uint8_t F_PWM_TCCRA = F_PWM_TCCRA_;
+		static constexpr const uint8_t F_PWM_TCCRB = F_PWM_TCCRB_;
+		static constexpr const uint8_t PC_PWM_TCCRA = PC_PWM_TCCRA_;
+		static constexpr const uint8_t PC_PWM_TCCRB = PC_PWM_TCCRB_;
 		static constexpr const uint8_t CTC_TCCRA  = CTC_TCCRA_;
 		static constexpr const uint8_t CTC_TCCRB  = CTC_TCCRB_;
+		
+		static constexpr const uint8_t COM_NORMAL_A = COM_NORMAL_A_;
+		static constexpr const uint8_t COM_TOGGLE_A = COM_TOGGLE_A_;
+		static constexpr const uint8_t COM_CLEAR_A = COM_CLEAR_A_;
+		static constexpr const uint8_t COM_SET_A = COM_SET_A_;
+		static constexpr const uint8_t COM_NORMAL_B = COM_NORMAL_B_;
+		static constexpr const uint8_t COM_TOGGLE_B = COM_TOGGLE_B_;
+		static constexpr const uint8_t COM_CLEAR_B = COM_CLEAR_B_;
+		static constexpr const uint8_t COM_SET_B = COM_SET_B_;
+		
 		static constexpr const REG8 TCCRA = TCCRA_;
 		static constexpr const REG8 TCCRB = TCCRB_;
 		static constexpr const REGISTER<TYPE> TCNT = TCNT_;

@@ -97,7 +97,7 @@ namespace timer
 		inline void _begin()
 		{
 			_millis = 0;
-			Timer<TIMER>::_begin(MILLI_PRESCALER, MILLI_COUNTER);
+			Timer<TIMER>::_begin_CTC(MILLI_PRESCALER, MILLI_COUNTER);
 		}
 		inline void end()
 		{

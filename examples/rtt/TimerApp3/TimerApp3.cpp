@@ -60,7 +60,7 @@ int main()
 	Handler handler;
 	interrupt::register_handler(handler);
 	TIMER_TYPE timer;
-	timer.begin(PRESCALER, COUNTER);
+	timer.begin_CTC(PRESCALER, COUNTER);
 	
 	while (true) ;
 }

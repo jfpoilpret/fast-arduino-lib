@@ -91,8 +91,8 @@ int main()
 	SUSPEND_TIMER_TYPE suspend_timer;
 	interrupt::register_handler(blink_handler);
 	interrupt::register_handler(suspend_handler);
-	blink_timer._begin(BLINK_PRESCALER, BLINK_COUNTER);
-	suspend_timer._begin(SUSPEND_PRESCALER, SUSPEND_COUNTER);
+	blink_timer._begin_CTC(BLINK_PRESCALER, BLINK_COUNTER);
+	suspend_timer._begin_CTC(SUSPEND_PRESCALER, SUSPEND_COUNTER);
 	sei();
 	
 	while (true) ;
