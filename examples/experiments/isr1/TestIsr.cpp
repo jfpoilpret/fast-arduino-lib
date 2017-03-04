@@ -12,12 +12,15 @@ constexpr const board::Timer TIMER = board::Timer::TIMER0;
 using TIMER_TYPE = timer::Timer<TIMER>;
 // Frequency for PWM
 constexpr const uint16_t PWM_FREQUENCY = 500;
-constexpr const uint32_t PERIOD_US = 1000000 / PWM_FREQUENCY;
 
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::prescaler(PERIOD_US);
-static_assert(TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US), "TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US)");
+constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::PWM_prescaler(PWM_FREQUENCY);
+//static_assert(PRESCALER == TIMER_TYPE::TIMER_PRESCALER::DIV_64, "PRESCALER should be /64");
 
-constexpr const uint16_t LOOP_DELAY_MS = 10;
+//TODO Timer API to chech adequcy of prescaler for frequency (within some min/max range)
+static_assert(TIMER_TYPE::PWM_frequency(PRESCALER) >= 500, "PWM Frequency is expected greater than 450");
+static_assert(TIMER_TYPE::PWM_frequency(PRESCALER) < 1000, "PWM Frequency is expected less than 1000");
+
+constexpr const uint16_t LOOP_DELAY_MS = 1000;
 
 using time::delay_ms;
 using timer::TimerOutputMode;
@@ -33,10 +36,12 @@ int main()
 	timer._begin_FastPWM(PRESCALER, TimerOutputMode::NON_INVERTING, TimerOutputMode::DISCONNECTED);
 	sei();
 	
-	TIMER_TYPE::TIMER_TYPE duty = 0;
-	while (true)
-	{
-		timer.set_max_A(duty++);
-		delay_ms(LOOP_DELAY_MS);
-	}
+	timer.set_max_A(1);
+	while (true) ;
+//	TIMER_TYPE::TIMER_TYPE duty = 0;
+//	while (true)
+//	{
+//		timer.set_max_A(duty++);
+//		delay_ms(LOOP_DELAY_MS);
+//	}
 }

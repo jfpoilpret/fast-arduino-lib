@@ -29,8 +29,8 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
-//TODO improve PWM API by adding static methods to calculate best prescaler for requested PWM frequency, and vice-versa
-//TODO improve PWM API by adding a specific PWMOutput class, extracted from Timer
+//TODO add data members to save various statuses: output modes A & B, timer mode?
+//TODO improve PWM API by adding a specific PWMOutput class, extracted from Timer, used to perform duty cycle changes
 namespace timer
 {
 	enum class TimerOutputMode
@@ -51,12 +51,13 @@ namespace timer
 	public:
 		using TIMER_TYPE = typename TRAIT::TYPE;
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
+		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
 
 		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
 		{
 			return prescaler_is_adequate(prescaler_quotient(p, us));
 		}
-		static constexpr TIMER_PRESCALER prescaler(uint32_t us)
+		static constexpr TIMER_PRESCALER timer_prescaler(uint32_t us)
 		{
 			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
 		}
@@ -66,9 +67,20 @@ namespace timer
 		}
 		static constexpr TIMER_TYPE counter(uint32_t us)
 		{
-			return (TIMER_TYPE) prescaler_quotient(prescaler(us), us) - 1;
+			return (TIMER_TYPE) prescaler_quotient(timer_prescaler(us), us) - 1;
 		}
 
+		//FIXME prescaler is different for FastPWM and Phase Correct PWM
+		static constexpr TIMER_PRESCALER PWM_prescaler(uint16_t pwm_frequency)
+		{
+			return best_frequency_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * TRAIT::MAX_COUNTER);
+		}
+		//FIXME frequency is different for FastPWM and Phase Correct PWM
+		static constexpr uint16_t PWM_frequency(TIMER_PRESCALER prescaler)
+		{
+			return F_CPU / _BV(uint8_t(prescaler)) / TRAIT::MAX_COUNTER;
+		}
+		
 		inline void begin_CTC(TIMER_PRESCALER prescaler, TIMER_TYPE max)
 		{
 			synchronized _begin_CTC(prescaler, max);
@@ -156,6 +168,7 @@ namespace timer
 			TRAIT::TIMSK = 0;
 		}
 		
+		//FIXME with this API we cannot get to 0% duty cycle... as 0 is not always 0
 		inline void set_max_A(TIMER_TYPE max)
 		{
 			if (sizeof(TIMER_TYPE) > 1)
@@ -220,6 +233,28 @@ namespace timer
 		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
 		{
 			return best_prescaler(prescalers, prescalers + N, us);
+		}
+		
+		static constexpr bool prescaler_is_adequate_for_frequency(TIMER_PRESCALER p, uint32_t freq)
+		{
+			return (F_CPU / (uint32_t) _BV(uint8_t(p)) > freq);
+		}
+		
+		static constexpr TIMER_PRESCALER best_frequency_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t freq)
+		{
+			return prescaler_is_adequate_for_frequency(p2, freq) ? p2 : p1;
+		}
+
+		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t freq)
+		{
+			return (begin + 1 == end ? *begin : 
+					best_frequency_prescaler_in_2(*begin, best_frequency_prescaler(begin + 1 , end, freq), freq));
+		}
+
+		template<size_t N>
+		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t freq)
+		{
+			return best_frequency_prescaler(prescalers, prescalers + N, freq);
 		}
 	};
 }
