@@ -25,19 +25,23 @@ using timer::TimerOutputMode;
 using gpio::FastPinType;
 using gpio::PinMode;
 
-using LED_PIN = FastPinType<board::PWMPin::D6_PD6_OC0A>::TYPE;
+using LED1_PIN = FastPinType<board::PWMPin::D6_PD6_OC0A>::TYPE;
+using LED2_PIN = FastPinType<board::PWMPin::D5_PD5_OC0B>::TYPE;
 
 int main()
 {
-	LED_PIN led{PinMode::OUTPUT};
-	TIMER_TYPE timer{TimerOutputMode::NON_INVERTING};
+	LED1_PIN led1{PinMode::OUTPUT};
+	LED2_PIN led2{PinMode::OUTPUT};
+	TIMER_TYPE timer{TimerOutputMode::NON_INVERTING, TimerOutputMode::NON_INVERTING};
 	timer._begin_FastPWM(PRESCALER);
 	sei();
 	
-	TIMER_TYPE::TIMER_TYPE duty = 0;
+	TIMER_TYPE::TIMER_TYPE duty1 = 0;
+	TIMER_TYPE::TIMER_TYPE duty2 = 0xFF;
 	while (true)
 	{
-		timer.set_max_A(duty++);
+		timer.set_max_A(duty1++);
+		timer.set_max_B(duty2--);
 		delay_ms(LOOP_DELAY_MS);
 	}
 }
