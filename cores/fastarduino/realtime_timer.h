@@ -118,7 +118,7 @@ namespace timer
 
 	private:
 		static constexpr const uint32_t ONE_MILLI = 1000UL;
-		static constexpr const TIMER_PRESCALER MILLI_PRESCALER = RTT::prescaler(ONE_MILLI);
+		static constexpr const TIMER_PRESCALER MILLI_PRESCALER = RTT::timer_prescaler(ONE_MILLI);
 		static constexpr const TIMER_TYPE MILLI_COUNTER = RTT::counter(ONE_MILLI);
 
 		inline uint16_t compute_micros() const
