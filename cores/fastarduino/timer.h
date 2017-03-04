@@ -29,7 +29,8 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
-//TODO add data members to save various statuses: output modes A & B, timer mode?
+//TODO add data members to save various statuses: timer mode?
+//TODO consider defining a parent to hold these status fields??
 //TODO improve PWM API by adding a specific PWMOutput class, extracted from Timer, used to perform duty cycle changes
 namespace timer
 {
@@ -74,15 +75,14 @@ namespace timer
 			return (TIMER_TYPE) prescaler_quotient(timer_prescaler(us), us) - 1;
 		}
 
-		//FIXME prescaler is different for FastPWM and Phase Correct PWM
-		static constexpr TIMER_PRESCALER PWM_prescaler(uint16_t pwm_frequency)
+		static constexpr TIMER_PRESCALER PWM_prescaler(uint16_t pwm_frequency, bool fast_pwm)
 		{
-			return best_frequency_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * TRAIT::MAX_COUNTER);
+			return best_frequency_prescaler(
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * TRAIT::MAX_COUNTER * (fast_pwm ? 1 : 2));
 		}
-		//FIXME frequency is different for FastPWM and Phase Correct PWM
-		static constexpr uint16_t PWM_frequency(TIMER_PRESCALER prescaler)
+		static constexpr uint16_t PWM_frequency(TIMER_PRESCALER prescaler, bool fast_pwm)
 		{
-			return F_CPU / _BV(uint8_t(prescaler)) / TRAIT::MAX_COUNTER;
+			return F_CPU / _BV(uint8_t(prescaler)) / TRAIT::MAX_COUNTER / (fast_pwm ? 1 : 2);
 		}
 		
 		inline void begin_CTC(TIMER_PRESCALER prescaler, TIMER_TYPE max)
@@ -103,7 +103,6 @@ namespace timer
 			TRAIT::TIMSK = _BV(OCIE0A);
 		}
 		
-		//TODO maybe put in non-template parent class?
 		inline void set_output_modes(TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
 		{
 			_mode = mode_A(output_mode_A) | mode_B(output_mode_B);
