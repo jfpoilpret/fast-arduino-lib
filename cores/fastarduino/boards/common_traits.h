@@ -401,10 +401,12 @@ namespace board_traits
 		static constexpr const uint8_t CTC_TCCRA  = 0;
 		static constexpr const uint8_t CTC_TCCRB  = 0;
 		
+		static constexpr const uint8_t COM_MASK_A = 0;
 		static constexpr const uint8_t COM_NORMAL_A = 0;
 		static constexpr const uint8_t COM_TOGGLE_A = 0;
 		static constexpr const uint8_t COM_CLEAR_A = 0;
 		static constexpr const uint8_t COM_SET_A = 0;
+		static constexpr const uint8_t COM_MASK_B = 0;
 		static constexpr const uint8_t COM_NORMAL_B = 0;
 		static constexpr const uint8_t COM_TOGGLE_B = 0;
 		static constexpr const uint8_t COM_CLEAR_B = 0;
@@ -427,6 +429,7 @@ namespace board_traits
 			uint8_t F_PWM_TCCRA_, uint8_t F_PWM_TCCRB_, 
 			uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, 
 			uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, 
+			uint8_t COM_MASK_A_, uint8_t COM_MASK_B_, 
 			uint8_t COM_NORMAL_A_, uint8_t COM_NORMAL_B_, 
 			uint8_t COM_TOGGLE_A_, uint8_t COM_TOGGLE_B_, 
 			uint8_t COM_CLEAR_A_, uint8_t COM_CLEAR_B_, 
@@ -452,10 +455,12 @@ namespace board_traits
 		static constexpr const uint8_t CTC_TCCRA  = CTC_TCCRA_;
 		static constexpr const uint8_t CTC_TCCRB  = CTC_TCCRB_;
 		
+		static constexpr const uint8_t COM_MASK_A = COM_MASK_A_;
 		static constexpr const uint8_t COM_NORMAL_A = COM_NORMAL_A_;
 		static constexpr const uint8_t COM_TOGGLE_A = COM_TOGGLE_A_;
 		static constexpr const uint8_t COM_CLEAR_A = COM_CLEAR_A_;
 		static constexpr const uint8_t COM_SET_A = COM_SET_A_;
+		static constexpr const uint8_t COM_MASK_B = COM_MASK_B_;
 		static constexpr const uint8_t COM_NORMAL_B = COM_NORMAL_B_;
 		static constexpr const uint8_t COM_TOGGLE_B = COM_TOGGLE_B_;
 		static constexpr const uint8_t COM_CLEAR_B = COM_CLEAR_B_;

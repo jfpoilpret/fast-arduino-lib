@@ -33,7 +33,7 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 //TODO improve PWM API by adding a specific PWMOutput class, extracted from Timer, used to perform duty cycle changes
 namespace timer
 {
-	enum class TimerOutputMode
+	enum class TimerOutputMode:uint8_t
 	{
 		DISCONNECTED,
 		TOGGLE,
@@ -52,6 +52,8 @@ namespace timer
 		using TIMER_TYPE = typename TRAIT::TYPE;
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
+		
+		Timer():_mode_A{mode_A(TimerOutputMode::DISCONNECTED)}, _mode_B{mode_B(TimerOutputMode::DISCONNECTED)} {}
 
 		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
 		{
@@ -99,13 +101,20 @@ namespace timer
 			TRAIT::TIMSK = _BV(OCIE0A);
 		}
 		
-		inline void begin_FastPWM(TIMER_PRESCALER prescaler, TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
+		//TODO maybe put in non-template parent class?
+		inline void set_output_modes(TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
 		{
-			synchronized _begin_FastPWM(prescaler, output_mode_A, output_mode_B);
+			_mode_A = mode_A(output_mode_A);
+			_mode_B = mode_B(output_mode_B);
 		}
-		inline void _begin_FastPWM(TIMER_PRESCALER prescaler, TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
+		
+		inline void begin_FastPWM(TIMER_PRESCALER prescaler)
 		{
-			TRAIT::TCCRA = TRAIT::F_PWM_TCCRA | mode_A(output_mode_A) | mode_B(output_mode_B);
+			synchronized _begin_FastPWM(prescaler);
+		}
+		inline void _begin_FastPWM(TIMER_PRESCALER prescaler)
+		{
+			TRAIT::TCCRA = TRAIT::F_PWM_TCCRA | _mode_A | _mode_B;
 			TRAIT::TCCRB = TRAIT::F_PWM_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
 			// Reset timer counter
 			TRAIT::TCNT = 0;
@@ -115,13 +124,13 @@ namespace timer
 			TRAIT::TIMSK = 0;
 		}
 		
-		inline void begin_PhaseCorrectPWM(TIMER_PRESCALER prescaler, TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
+		inline void begin_PhaseCorrectPWM(TIMER_PRESCALER prescaler)
 		{
-			synchronized _begin_PhaseCorrectPWM(prescaler, output_mode_A, output_mode_B);
+			synchronized _begin_PhaseCorrectPWM(prescaler);
 		}
-		inline void _begin_PhaseCorrectPWM(TIMER_PRESCALER prescaler, TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
+		inline void _begin_PhaseCorrectPWM(TIMER_PRESCALER prescaler)
 		{
-			TRAIT::TCCRA = TRAIT::PC_PWM_TCCRA | mode_A(output_mode_A) | mode_B(output_mode_B);
+			TRAIT::TCCRA = TRAIT::PC_PWM_TCCRA | _mode_A | _mode_B;
 			TRAIT::TCCRB = TRAIT::PC_PWM_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
 			// Reset timer counter
 			TRAIT::TCNT = 0;
@@ -168,20 +177,27 @@ namespace timer
 			TRAIT::TIMSK = 0;
 		}
 		
-		//FIXME with this API we cannot get to 0% duty cycle... as 0 is not always 0
 		inline void set_max_A(TIMER_TYPE max)
 		{
-			if (sizeof(TIMER_TYPE) > 1)
-				synchronized TRAIT::OCRA = max;
-			else
+			synchronized
+			{
+				if (max)
+					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_A) | (_mode_A & TRAIT::COM_MASK_A);
+				else
+					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_A) | (mode_A(TimerOutputMode::DISCONNECTED) & TRAIT::COM_MASK_A);
 				TRAIT::OCRA = max;
+			}
 		}
 		inline void set_max_B(TIMER_TYPE max)
 		{
-			if (sizeof(TIMER_TYPE) > 1)
-				synchronized TRAIT::OCRB = max;
-			else
+			synchronized
+			{
+				if (max)
+					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_B) | (_mode_B & TRAIT::COM_MASK_B);
+				else
+					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_B) | (mode_B(TimerOutputMode::DISCONNECTED) & TRAIT::COM_MASK_B);
 				TRAIT::OCRB = max;
+			}
 		}
 
 	private:
@@ -256,6 +272,10 @@ namespace timer
 		{
 			return best_frequency_prescaler(prescalers, prescalers + N, freq);
 		}
+		
+		//TODO check if it can be optimized with only one byte with both modes?
+		uint8_t _mode_A;
+		uint8_t _mode_B;
 	};
 }
 

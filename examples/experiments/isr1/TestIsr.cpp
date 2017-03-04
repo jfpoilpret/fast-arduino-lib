@@ -10,13 +10,11 @@
 
 constexpr const board::Timer TIMER = board::Timer::TIMER0;
 using TIMER_TYPE = timer::Timer<TIMER>;
+
 // Frequency for PWM
 constexpr const uint16_t PWM_FREQUENCY = 500;
-
 constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::PWM_prescaler(PWM_FREQUENCY);
-//static_assert(PRESCALER == TIMER_TYPE::TIMER_PRESCALER::DIV_64, "PRESCALER should be /64");
-
-//TODO Timer API to chech adequcy of prescaler for frequency (within some min/max range)
+//TODO Timer API to check adequacy of prescaler for frequency (within some min/max range)
 static_assert(TIMER_TYPE::PWM_frequency(PRESCALER) >= 500, "PWM Frequency is expected greater than 450");
 static_assert(TIMER_TYPE::PWM_frequency(PRESCALER) < 1000, "PWM Frequency is expected less than 1000");
 
@@ -33,15 +31,14 @@ int main()
 {
 	LED_PIN led{PinMode::OUTPUT};
 	TIMER_TYPE timer;
-	timer._begin_FastPWM(PRESCALER, TimerOutputMode::NON_INVERTING, TimerOutputMode::DISCONNECTED);
+	timer.set_output_modes(TimerOutputMode::NON_INVERTING, TimerOutputMode::DISCONNECTED);
+	timer._begin_FastPWM(PRESCALER);
 	sei();
 	
-	timer.set_max_A(1);
-	while (true) ;
-//	TIMER_TYPE::TIMER_TYPE duty = 0;
-//	while (true)
-//	{
-//		timer.set_max_A(duty++);
-//		delay_ms(LOOP_DELAY_MS);
-//	}
+	TIMER_TYPE::TIMER_TYPE duty = 0;
+	while (true)
+	{
+		timer.set_max_A(duty++);
+		delay_ms(LOOP_DELAY_MS);
+	}
 }
