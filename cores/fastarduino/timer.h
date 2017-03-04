@@ -29,7 +29,7 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
-//TODO add data members to save various statuses: timer mode?
+//TODO Add API to set interrupts we want to register
 //TODO consider defining a parent to hold these status fields??
 //TODO improve PWM API by adding a specific PWMOutput class, extracted from Timer, used to perform duty cycle changes
 namespace timer
@@ -40,6 +40,14 @@ namespace timer
 		TOGGLE,
 		NON_INVERTING,
 		INVERTING
+	};
+	
+	enum class TimerMode:uint8_t
+	{
+		NORMAL,
+		CTC,
+		FAST_PWM,
+		PHASE_CORRECT_PWM
 	};
 	
 	template<board::Timer TIMER>
@@ -54,14 +62,22 @@ namespace timer
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
 		
-		Timer(	TimerOutputMode output_mode_A = TimerOutputMode::DISCONNECTED, 
+		Timer(	TimerMode timer_mode,
+				TimerOutputMode output_mode_A = TimerOutputMode::DISCONNECTED, 
 				TimerOutputMode output_mode_B = TimerOutputMode::DISCONNECTED)
-			:_mode{uint8_t(mode_A(output_mode_A) | mode_B(output_mode_B))} {}
+			:	_tccra{uint8_t(COM_A(output_mode_A) | COM_B(output_mode_B) | timer_mode_TCCRA(timer_mode))},
+				_tccrb{timer_mode_TCCRB(timer_mode)} {}
 
-		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
+		inline void set_timer_mode(TimerMode timer_mode)
 		{
-			return prescaler_is_adequate(prescaler_quotient(p, us));
+			set_mask(_tccra, 0xFF & ~(TRAIT::COM_MASK_A | TRAIT::COM_MASK_B), timer_mode_TCCRA(timer_mode));
+			_tccrb = timer_mode_TCCRB(timer_mode);
 		}
+		inline void set_output_modes(TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
+		{
+			set_mask(_tccra, TRAIT::COM_MASK_A | TRAIT::COM_MASK_B, COM_A(output_mode_A) | COM_B(output_mode_B));
+		}
+		
 		static constexpr TIMER_PRESCALER timer_prescaler(uint32_t us)
 		{
 			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
@@ -74,6 +90,10 @@ namespace timer
 		{
 			return (TIMER_TYPE) prescaler_quotient(timer_prescaler(us), us) - 1;
 		}
+		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
+		{
+			return prescaler_is_adequate(prescaler_quotient(p, us));
+		}
 
 		static constexpr TIMER_PRESCALER PWM_prescaler(uint16_t pwm_frequency, bool fast_pwm)
 		{
@@ -85,59 +105,34 @@ namespace timer
 			return F_CPU / _BV(uint8_t(prescaler)) / TRAIT::MAX_COUNTER / (fast_pwm ? 1 : 2);
 		}
 		
-		inline void begin_CTC(TIMER_PRESCALER prescaler, TIMER_TYPE max)
+		inline void begin(TIMER_PRESCALER prescaler)
 		{
-			synchronized _begin_CTC(prescaler, max);
+			synchronized _begin(prescaler);
 		}
-		inline void _begin_CTC(TIMER_PRESCALER prescaler, TIMER_TYPE max)
+		inline void _begin(TIMER_PRESCALER prescaler)
 		{
-			// OCnA & OCnB disconnected, CTC (Clear Timer on Compare match)
-			TRAIT::TCCRA = TRAIT::CTC_TCCRA;
-			// Don't force output compare (FOCA & FOCB), Clock Select according to prescaler
-			TRAIT::TCCRB = TRAIT::CTC_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
+			TRAIT::TCCRA = _tccra;
+			TRAIT::TCCRB = _tccrb | TRAIT::TCCRB_prescaler(prescaler);
+			TRAIT::OCRA = 0;
+			TRAIT::OCRB = 0;
+			TRAIT::TCNT = 0;
+			TRAIT::TIMSK = 0;
+		}
+		
+		inline void begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
+		{
+			synchronized _begin(prescaler, max);
+		}
+		inline void _begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
+		{
+			TRAIT::TCCRA = _tccra;
+			TRAIT::TCCRB = _tccrb | TRAIT::TCCRB_prescaler(prescaler);
 			// Set timer counter compare match
 			TRAIT::OCRA = max;
-			// Reset timer counter
+			TRAIT::OCRB = 0;
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
 			TRAIT::TIMSK = _BV(OCIE0A);
-		}
-		
-		inline void set_output_modes(TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
-		{
-			_mode = mode_A(output_mode_A) | mode_B(output_mode_B);
-		}
-		
-		inline void begin_FastPWM(TIMER_PRESCALER prescaler)
-		{
-			synchronized _begin_FastPWM(prescaler);
-		}
-		inline void _begin_FastPWM(TIMER_PRESCALER prescaler)
-		{
-			TRAIT::TCCRA = TRAIT::F_PWM_TCCRA | _mode;
-			TRAIT::TCCRB = TRAIT::F_PWM_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
-			// Reset timer counter
-			TRAIT::TCNT = 0;
-			TRAIT::OCRA = 0;
-			TRAIT::OCRB = 0;
-			// Clear timer interrupt mode
-			TRAIT::TIMSK = 0;
-		}
-		
-		inline void begin_PhaseCorrectPWM(TIMER_PRESCALER prescaler)
-		{
-			synchronized _begin_PhaseCorrectPWM(prescaler);
-		}
-		inline void _begin_PhaseCorrectPWM(TIMER_PRESCALER prescaler)
-		{
-			TRAIT::TCCRA = TRAIT::PC_PWM_TCCRA | _mode;
-			TRAIT::TCCRB = TRAIT::PC_PWM_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
-			// Reset timer counter
-			TRAIT::TCNT = 0;
-			TRAIT::OCRA = 0;
-			TRAIT::OCRB = 0;
-			// Clear timer interrupt mode
-			TRAIT::TIMSK = 0;
 		}
 		
 		inline void suspend()
@@ -182,9 +177,9 @@ namespace timer
 			synchronized
 			{
 				if (max)
-					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_A) | (_mode & TRAIT::COM_MASK_A);
+					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, _tccra);
 				else
-					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_A) | (mode_A(TimerOutputMode::DISCONNECTED) & TRAIT::COM_MASK_A);
+					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, COM_A(TimerOutputMode::DISCONNECTED));
 				TRAIT::OCRA = max;
 			}
 		}
@@ -193,27 +188,41 @@ namespace timer
 			synchronized
 			{
 				if (max)
-					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_B) | (_mode & TRAIT::COM_MASK_B);
+					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, _tccra);
 				else
-					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_B) | (mode_B(TimerOutputMode::DISCONNECTED) & TRAIT::COM_MASK_B);
+					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, COM_B(TimerOutputMode::DISCONNECTED));
 				TRAIT::OCRB = max;
 			}
 		}
 
 	private:
-		static constexpr uint8_t mode_A(TimerOutputMode output_mode)
+		static constexpr uint8_t COM_A(TimerOutputMode output_mode)
 		{
 			return (output_mode == TimerOutputMode::TOGGLE ? TRAIT::COM_TOGGLE_A :
 					output_mode == TimerOutputMode::INVERTING ? TRAIT::COM_SET_A :
 					output_mode == TimerOutputMode::NON_INVERTING ? TRAIT::COM_CLEAR_A :
 					TRAIT::COM_NORMAL_A);
 		}
-		static constexpr uint8_t mode_B(TimerOutputMode output_mode)
+		static constexpr uint8_t COM_B(TimerOutputMode output_mode)
 		{
 			return (output_mode == TimerOutputMode::TOGGLE ? TRAIT::COM_TOGGLE_B :
 					output_mode == TimerOutputMode::INVERTING ? TRAIT::COM_SET_B :
 					output_mode == TimerOutputMode::NON_INVERTING ? TRAIT::COM_CLEAR_B :
 					TRAIT::COM_NORMAL_B);
+		}
+		static constexpr uint8_t timer_mode_TCCRA(TimerMode timer_mode)
+		{
+			return (timer_mode == TimerMode::CTC ? TRAIT::CTC_TCCRA :
+					timer_mode == TimerMode::FAST_PWM ? TRAIT::F_PWM_TCCRA :
+					timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRA :
+					0);
+		}
+		static constexpr uint8_t timer_mode_TCCRB(TimerMode timer_mode)
+		{
+			return (timer_mode == TimerMode::CTC ? TRAIT::CTC_TCCRB :
+					timer_mode == TimerMode::FAST_PWM ? TRAIT::F_PWM_TCCRB :
+					timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRB :
+					0);
 		}
 		
 		static constexpr uint32_t prescaler_quotient(TIMER_PRESCALER p, uint32_t us)
@@ -273,7 +282,8 @@ namespace timer
 			return best_frequency_prescaler(prescalers, prescalers + N, freq);
 		}
 		
-		uint8_t _mode;
+		uint8_t _tccra;
+		uint8_t _tccrb;
 	};
 }
 

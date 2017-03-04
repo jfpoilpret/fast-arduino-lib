@@ -23,6 +23,7 @@ static_assert(TIMER_TYPE::PWM_frequency(PRESCALER, FAST_PWM) < 1000, "PWM Freque
 constexpr const uint16_t LOOP_DELAY_MS = 1000;
 
 using time::delay_ms;
+using timer::TimerMode;
 using timer::TimerOutputMode;
 using gpio::FastPinType;
 using gpio::PinMode;
@@ -34,9 +35,9 @@ int main()
 {
 	LED1_PIN led1{PinMode::OUTPUT};
 	LED2_PIN led2{PinMode::OUTPUT};
-	TIMER_TYPE timer{TimerOutputMode::NON_INVERTING, TimerOutputMode::NON_INVERTING};
-//	timer._begin_FastPWM(PRESCALER);
-	timer._begin_PhaseCorrectPWM(PRESCALER);
+	TIMER_TYPE timer{FAST_PWM ? TimerMode::FAST_PWM : TimerMode::PHASE_CORRECT_PWM, 
+		TimerOutputMode::NON_INVERTING, TimerOutputMode::NON_INVERTING};
+	timer._begin(PRESCALER);
 	sei();
 	
 	TIMER_TYPE::TIMER_TYPE duty1 = 0;
