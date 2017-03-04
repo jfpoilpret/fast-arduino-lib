@@ -55,7 +55,7 @@ namespace timer
 		
 		Timer(	TimerOutputMode output_mode_A = TimerOutputMode::DISCONNECTED, 
 				TimerOutputMode output_mode_B = TimerOutputMode::DISCONNECTED)
-			:_mode_A{mode_A(output_mode_A)}, _mode_B{mode_B(output_mode_B)} {}
+			:_mode{uint8_t(mode_A(output_mode_A) | mode_B(output_mode_B))} {}
 
 		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
 		{
@@ -106,8 +106,7 @@ namespace timer
 		//TODO maybe put in non-template parent class?
 		inline void set_output_modes(TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
 		{
-			_mode_A = mode_A(output_mode_A);
-			_mode_B = mode_B(output_mode_B);
+			_mode = mode_A(output_mode_A) | mode_B(output_mode_B);
 		}
 		
 		inline void begin_FastPWM(TIMER_PRESCALER prescaler)
@@ -116,7 +115,7 @@ namespace timer
 		}
 		inline void _begin_FastPWM(TIMER_PRESCALER prescaler)
 		{
-			TRAIT::TCCRA = TRAIT::F_PWM_TCCRA | _mode_A | _mode_B;
+			TRAIT::TCCRA = TRAIT::F_PWM_TCCRA | _mode;
 			TRAIT::TCCRB = TRAIT::F_PWM_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
 			// Reset timer counter
 			TRAIT::TCNT = 0;
@@ -132,7 +131,7 @@ namespace timer
 		}
 		inline void _begin_PhaseCorrectPWM(TIMER_PRESCALER prescaler)
 		{
-			TRAIT::TCCRA = TRAIT::PC_PWM_TCCRA | _mode_A | _mode_B;
+			TRAIT::TCCRA = TRAIT::PC_PWM_TCCRA | _mode;
 			TRAIT::TCCRB = TRAIT::PC_PWM_TCCRB | TRAIT::TCCRB_prescaler(prescaler);
 			// Reset timer counter
 			TRAIT::TCNT = 0;
@@ -184,7 +183,7 @@ namespace timer
 			synchronized
 			{
 				if (max)
-					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_A) | (_mode_A & TRAIT::COM_MASK_A);
+					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_A) | (_mode & TRAIT::COM_MASK_A);
 				else
 					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_A) | (mode_A(TimerOutputMode::DISCONNECTED) & TRAIT::COM_MASK_A);
 				TRAIT::OCRA = max;
@@ -195,7 +194,7 @@ namespace timer
 			synchronized
 			{
 				if (max)
-					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_B) | (_mode_B & TRAIT::COM_MASK_B);
+					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_B) | (_mode & TRAIT::COM_MASK_B);
 				else
 					TRAIT::TCCRA = (TRAIT::TCCRA & ~TRAIT::COM_MASK_B) | (mode_B(TimerOutputMode::DISCONNECTED) & TRAIT::COM_MASK_B);
 				TRAIT::OCRB = max;
@@ -275,9 +274,7 @@ namespace timer
 			return best_frequency_prescaler(prescalers, prescalers + N, freq);
 		}
 		
-		//TODO check if it can be optimized with only one byte with both modes?
-		uint8_t _mode_A;
-		uint8_t _mode_B;
+		uint8_t _mode;
 	};
 }
 
