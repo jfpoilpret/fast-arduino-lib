@@ -49,6 +49,12 @@ constexpr T is_zero(T value, T default_value)
 	return (value ? value : default_value);
 }
 
+template<typename T>
+void set_mask(volatile T& reg, T mask, T value)
+{
+	reg = (reg & ~mask) | (value & mask);
+}
+
 namespace flash
 {
 	// Utilities to handle PROGMEM storage for strings

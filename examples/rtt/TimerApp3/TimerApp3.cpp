@@ -59,8 +59,8 @@ int main()
 	sei();
 	Handler handler;
 	interrupt::register_handler(handler);
-	TIMER_TYPE timer;
-	timer.begin_CTC(PRESCALER, COUNTER);
+	TIMER_TYPE timer{timer::TimerMode::CTC};
+	timer.begin(PRESCALER, COUNTER);
 	
 	while (true) ;
 }

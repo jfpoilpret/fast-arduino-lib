@@ -86,13 +86,13 @@ int main() __attribute__((OS_main));
 int main()
 {
 	BlinkHandler blink_handler;
-	BLINK_TIMER_TYPE blink_timer;
+	BLINK_TIMER_TYPE blink_timer{timer::TimerMode::CTC};
 	SuspendHandler suspend_handler{blink_timer};
-	SUSPEND_TIMER_TYPE suspend_timer;
+	SUSPEND_TIMER_TYPE suspend_timer{timer::TimerMode::CTC};
 	interrupt::register_handler(blink_handler);
 	interrupt::register_handler(suspend_handler);
-	blink_timer._begin_CTC(BLINK_PRESCALER, BLINK_COUNTER);
-	suspend_timer._begin_CTC(SUSPEND_PRESCALER, SUSPEND_COUNTER);
+	blink_timer._begin(BLINK_PRESCALER, BLINK_COUNTER);
+	suspend_timer._begin(SUSPEND_PRESCALER, SUSPEND_COUNTER);
 	sei();
 	
 	while (true) ;

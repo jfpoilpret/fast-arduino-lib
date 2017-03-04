@@ -55,6 +55,8 @@ namespace timer
 		using TIMER_PRESCALER = typename Timer<TIMER>::TIMER_PRESCALER;
 
 	public:
+		RTT():Timer<TIMER>{TimerMode::CTC} {}
+		
 		void register_rtt_handler()
 		{
 			interrupt::register_handler(*this);
@@ -97,7 +99,7 @@ namespace timer
 		inline void _begin()
 		{
 			_millis = 0;
-			Timer<TIMER>::_begin_CTC(MILLI_PRESCALER, MILLI_COUNTER);
+			Timer<TIMER>::_begin(MILLI_PRESCALER, MILLI_COUNTER);
 		}
 		inline void end()
 		{
