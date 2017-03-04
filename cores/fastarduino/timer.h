@@ -53,7 +53,9 @@ namespace timer
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
 		
-		Timer():_mode_A{mode_A(TimerOutputMode::DISCONNECTED)}, _mode_B{mode_B(TimerOutputMode::DISCONNECTED)} {}
+		Timer(	TimerOutputMode output_mode_A = TimerOutputMode::DISCONNECTED, 
+				TimerOutputMode output_mode_B = TimerOutputMode::DISCONNECTED)
+			:_mode_A{mode_A(output_mode_A)}, _mode_B{mode_B(output_mode_B)} {}
 
 		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
 		{

@@ -30,8 +30,7 @@ using LED_PIN = FastPinType<board::PWMPin::D6_PD6_OC0A>::TYPE;
 int main()
 {
 	LED_PIN led{PinMode::OUTPUT};
-	TIMER_TYPE timer;
-	timer.set_output_modes(TimerOutputMode::NON_INVERTING, TimerOutputMode::DISCONNECTED);
+	TIMER_TYPE timer{TimerOutputMode::NON_INVERTING};
 	timer._begin_FastPWM(PRESCALER);
 	sei();
 	
