@@ -44,79 +44,78 @@ namespace board
 	/**
 	 * Digital pin symbols
 	 */
-	//TODO remove useless constant values?
 	enum class DigitalPin: uint8_t
 	{
-		D0_PE0 = 0,			// PE0/RX0
-		D1_PE1 = 1,			// PE1/TX0
-		D2_PE4 = 4,			// PE4
-		D3_PE5 = 5,			// PE5
-		D4_PG5 = 85,		// PG5
-		D5_PE3 = 3,			// PE3
-		D6_PH3 = 11,		// PH3
-		D7_PH4 = 12,		// PH4
-		D8_PH5 = 13,		// PH5
-		D9_PH6 = 14,		// PH6
-		D10_PB4 = 20,		// PB4
-		D11_PB5 = 21,		// PB5
-		D12_PB6 = 22,		// PB6
-		D13_PB7 = 23,		// PB7
-		D14_PJ1 = 73,		// PJ1/TX3
-		D15_PJ0 = 72,		// PJ0/RX3
-		D16_PH1 = 9,		// PH1/TX2
-		D17_PH0 = 8,		// PH0/RX2
-		D18_PD3 = 43,		// PD3/TX1
-		D19_PD2 = 42,		// PD2/RX1
-		D20_PD1 = 41,		// PD1/SDA
-		D21_PD0 = 40,		// PD0/SCL
-		D22_PA0 = 24,		// PA0/AD0
-		D23_PA1 = 25,		// PA1
-		D24_PA2 = 26,		// PA2
-		D25_PA3 = 27,		// PA3
-		D26_PA4 = 28,		// PA4
-		D27_PA5 = 29,		// PA5
-		D28_PA6 = 30,		// PA6
-		D29_PA7 = 31,		// PA7
-		D30_PC7 = 39,		// PC7
-		D31_PC6 = 38,		// PC6
-		D32_PC5 = 37,		// PC5
-		D33_PC4 = 36,		// PC4
-		D34_PC3 = 35,		// PC3
-		D35_PC2 = 34,		// PC2
-		D36_PC1 = 33,		// PC1
-		D37_PC0 = 32,		// PC0
-		D38_PD7 = 47,		// PD7
-		D39_PG2 = 82,		// PG2
-		D40_PG1 = 81,		// PG1
-		D41_PG0 = 80,		// PG0
-		D42_PL7 = 55,		// PL7
-		D43_PL6 = 54,		// PL6
-		D44_PL5 = 53,		// PL5
-		D45_PL4 = 52,		// PL4
-		D46_PL3 = 51,		// PL3
-		D47_PL2 = 50,		// PL2
-		D48_PL1 = 49,		// PL1
-		D49_PL0 = 48,		// PL0
-		D50_PB3 = 19,		// PB3/MISO
-		D51_PB2 = 18,		// PB2/MOSI
-		D52_PB1 = 17,		// PB1/SCK
-		D53_PB0 = 16,		// PB0/SS
-		D54_PF0 = 56,		// PF0/A0
-		D55_PF1 = 57,		// PF1/A1
-		D56_PF2 = 58,		// PF2/A2
-		D57_PF3 = 59,		// PF3/A3
-		D58_PF4 = 60,		// PF4/A4
-		D59_PF5 = 61,		// PF5/A5
-		D60_PF6 = 62,		// PF6/A6
-		D61_PF7 = 63,		// PF7/A7
-		D62_PK0 = 64,		// PK0/A8
-		D63_PK1 = 65,		// PK1/A9
-		D64_PK2 = 66,		// PK2/A10
-		D65_PK3 = 67,		// PK3/A11
-		D66_PK4 = 68,		// PK4/A12
-		D67_PK5 = 69,		// PK5/A13
-		D68_PK6 = 70,		// PK6/A14
-		D69_PK7 = 71,		// PK7/A15
+		D0_PE0 = 0,	// PE0/RX0
+		D1_PE1,		// PE1/TX0
+		D2_PE4,		// PE4
+		D3_PE5,		// PE5
+		D4_PG5,		// PG5
+		D5_PE3,		// PE3
+		D6_PH3,		// PH3
+		D7_PH4,		// PH4
+		D8_PH5,		// PH5
+		D9_PH6,		// PH6
+		D10_PB4,	// PB4
+		D11_PB5,	// PB5
+		D12_PB6,	// PB6
+		D13_PB7,	// PB7
+		D14_PJ1,	// PJ1/TX3
+		D15_PJ0,	// PJ0/RX3
+		D16_PH1,	// PH1/TX2
+		D17_PH0,	// PH0/RX2
+		D18_PD3,	// PD3/TX1
+		D19_PD2,	// PD2/RX1
+		D20_PD1,	// PD1/SDA
+		D21_PD0,	// PD0/SCL
+		D22_PA0,	// PA0/AD0
+		D23_PA1,	// PA1
+		D24_PA2,	// PA2
+		D25_PA3,	// PA3
+		D26_PA4,	// PA4
+		D27_PA5,	// PA5
+		D28_PA6,	// PA6
+		D29_PA7,	// PA7
+		D30_PC7,	// PC7
+		D31_PC6,	// PC6
+		D32_PC5,	// PC5
+		D33_PC4,	// PC4
+		D34_PC3,	// PC3
+		D35_PC2,	// PC2
+		D36_PC1,	// PC1
+		D37_PC0,	// PC0
+		D38_PD7,	// PD7
+		D39_PG2,	// PG2
+		D40_PG1,	// PG1
+		D41_PG0,	// PG0
+		D42_PL7,	// PL7
+		D43_PL6,	// PL6
+		D44_PL5,	// PL5
+		D45_PL4,	// PL4
+		D46_PL3,	// PL3
+		D47_PL2,	// PL2
+		D48_PL1,	// PL1
+		D49_PL0,	// PL0
+		D50_PB3,	// PB3/MISO
+		D51_PB2,	// PB2/MOSI
+		D52_PB1,	// PB1/SCK
+		D53_PB0,	// PB0/SS
+		D54_PF0,	// PF0/A0
+		D55_PF1,	// PF1/A1
+		D56_PF2,	// PF2/A2
+		D57_PF3,	// PF3/A3
+		D58_PF4,	// PF4/A4
+		D59_PF5,	// PF5/A5
+		D60_PF6,	// PF6/A6
+		D61_PF7,	// PF7/A7
+		D62_PK0,	// PK0/A8
+		D63_PK1,	// PK1/A9
+		D64_PK2,	// PK2/A10
+		D65_PK3,	// PK3/A11
+		D66_PK4,	// PK4/A12
+		D67_PK5,	// PK5/A13
+		D68_PK6,	// PK6/A14
+		D69_PK7,	// PK7/A15
 		LED = DigitalPin::D13_PB7,
 		NONE = 0XFF
 	};
