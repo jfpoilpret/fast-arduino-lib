@@ -161,10 +161,41 @@ namespace board
 		NONE = 0xFF
 	};
 	
+	//============
+	// PWM output
+	//============
+	/**
+	 * PWM-enabled pin symbols; sub-set of digital pins
+	 * to allow compile time checking.
+	 */
+	namespace PWMPin
+	{
+		// This pin is also OC1C! We can handle only one timer for one pin!
+		constexpr const DigitalPin D13_PB7_OC0A = DigitalPin::D13_PB7;
+		constexpr const DigitalPin D4_PG5_OC0B = DigitalPin::D4_PG5;
+		
+		constexpr const DigitalPin D11_PB5_OC1A = DigitalPin::D11_PB5;
+		constexpr const DigitalPin D12_PB6_OC1B = DigitalPin::D12_PB6;
+		
+		constexpr const DigitalPin D10_PB4_OC2A = DigitalPin::D10_PB4;
+		constexpr const DigitalPin D9_PH6_OC2B = DigitalPin::D9_PH6;
+
+		constexpr const DigitalPin D3_PE5_OC3A = DigitalPin::D5_PE3;
+		constexpr const DigitalPin D2_PE4_OC3B = DigitalPin::D2_PE4;
+		constexpr const DigitalPin D3_PE5_OC3C = DigitalPin::D3_PE5;
+		
+		constexpr const DigitalPin D6_PH3_OC4A = DigitalPin::D6_PH3;
+		constexpr const DigitalPin D7_PH4_OC4B = DigitalPin::D7_PH4;
+		constexpr const DigitalPin D8_PH5_OC4C = DigitalPin::D8_PH5;
+
+		constexpr const DigitalPin D44_PL5_OC5C = DigitalPin::D44_PL5;
+		constexpr const DigitalPin D45_PL4_OC5B = DigitalPin::D45_PL4;
+		constexpr const DigitalPin D46_PL3_OC5A = DigitalPin::D46_PL3;
+	};
+	
 	//===============
 	// IO interrupts
 	//===============
-	
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
