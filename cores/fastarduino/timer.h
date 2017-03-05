@@ -29,9 +29,9 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
-//TODO Add API to set interrupts we want to register
-//TODO consider defining a parent to hold these status fields??
 //TODO improve PWM API by adding a specific PWMOutput class, extracted from Timer, used to perform duty cycle changes
+//TODO Add API to explicitly set interrupts we want to enable
+//TODO Add API to support Input Capture when available for Timer (Timer1)
 namespace timer
 {
 	enum class TimerOutputMode:uint8_t
@@ -42,6 +42,7 @@ namespace timer
 		INVERTING
 	};
 	
+	//TODO shall we support full range PWM (ie 16 bits for Timer1)?
 	enum class TimerMode:uint8_t
 	{
 		NORMAL,
@@ -96,15 +97,26 @@ namespace timer
 			return prescaler_is_adequate(prescaler_quotient(p, us));
 		}
 
+		//TODO should we allow faster PWM frequency then 64KHz?
 		//FIXME ensure formulas match datasheet for all timers
-		static constexpr TIMER_PRESCALER PWM_prescaler(uint16_t pwm_frequency, bool fast_pwm)
+		static constexpr TIMER_PRESCALER FastPWM_prescaler(uint16_t pwm_frequency)
 		{
 			return best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL) * (fast_pwm ? 1 : 2));
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL));
 		}
-		static constexpr uint16_t PWM_frequency(TIMER_PRESCALER prescaler, bool fast_pwm)
+		static constexpr uint16_t FastPWM_frequency(TIMER_PRESCALER prescaler)
 		{
-			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL) / (fast_pwm ? 1 : 2);
+			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL);
+		}
+		
+		static constexpr TIMER_PRESCALER PhaseCorrectPWM_prescaler(uint16_t pwm_frequency)
+		{
+			return best_frequency_prescaler(
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (2UL * PWM_MAX));
+		}
+		static constexpr uint16_t PhaseCorrectPWM_frequency(TIMER_PRESCALER prescaler)
+		{
+			return F_CPU / _BV(uint8_t(prescaler)) / (2UL * PWM_MAX);
 		}
 		
 		inline void begin(TIMER_PRESCALER prescaler)
@@ -182,7 +194,7 @@ namespace timer
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, _tccra);
 				else
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, COM_A(TimerOutputMode::DISCONNECTED));
-				TRAIT::OCRA = max & PWM_MAX;
+				TRAIT::OCRA = max;
 			}
 		}
 		inline void set_max_B(TIMER_TYPE max)
@@ -193,7 +205,7 @@ namespace timer
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, _tccra);
 				else
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, COM_B(TimerOutputMode::DISCONNECTED));
-				TRAIT::OCRB = max & PWM_MAX;
+				TRAIT::OCRB = max;
 			}
 		}
 
