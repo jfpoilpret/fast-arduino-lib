@@ -24,7 +24,10 @@
  * - on Arduino MEGA:
  *   - TODO
  * - on ATtinyX4 based boards:
- *   - TODO
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D10 (PB2): LED connected to GND through a 1K resistor 
+ *   - D7 (PA7): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>
@@ -45,10 +48,10 @@ static constexpr const board::DigitalPin LED1 = board::PWMPin::;
 static constexpr const board::DigitalPin LED2 = board::PWMPin::;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const board::AnalogPin POT1 = board::AnalogPin::A7;
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D6_PD6_OC0A;
-static constexpr const board::DigitalPin LED2 = board::PWMPin::D5_PD5_OC0B;
+static constexpr const board::DigitalPin LED1 = board::PWMPin::D10_PB2_OC0A;
+static constexpr const board::DigitalPin LED2 = board::PWMPin::D7_PA7_OC0B;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"
