@@ -379,6 +379,13 @@ namespace board_traits
 	struct Timer_type_trait
 	{
 		static constexpr const uint32_t MAX_COUNTER = 1UL << (8 * sizeof(TYPE));
+		static constexpr const uint16_t MAX_PWM = MAX_COUNTER - 1;
+	};
+	template<>
+	struct Timer_type_trait<uint16_t>
+	{
+		static constexpr const uint32_t MAX_COUNTER = 1UL << (8 * sizeof(uint16_t));
+		static constexpr const uint16_t MAX_PWM = 0x3FF;
 	};
 
 	template<Timer TIMER>
@@ -386,6 +393,7 @@ namespace board_traits
 	{
 		using TYPE = uint8_t;
 		static constexpr const uint32_t MAX_COUNTER = 0;
+		static constexpr const uint16_t MAX_PWM = 0;
 
 		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_NONE;
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
@@ -440,6 +448,7 @@ namespace board_traits
 	{
 		using TYPE = TYPE_;
 		static constexpr const uint32_t MAX_COUNTER = Timer_type_trait<TYPE>::MAX_COUNTER;
+		static constexpr const uint16_t MAX_PWM = Timer_type_trait<TYPE>::MAX_PWM;
 
 		static constexpr const TimerPrescalers PRESCALERS = PRESCALERS_;
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
