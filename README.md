@@ -60,6 +60,7 @@ What the project already has:
 - Power supply voltage measurement support
 - Flash memory data support (PROGMEM data), particularly strings (useful to limit used SRAM)
 - EEPROM support, with synchronous or asynchronous write
+- PWM output support
 
 As of now, the following platforms are supported (and tested):
 
@@ -78,14 +79,11 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-March 2017
-----------
-1. PWM output support
-
-April 2017
-----------
-2. I2C support
-3. Add support for Arduino Leonardo (without CDC feature)
+March-April 2017
+----------------
+1. I2C support
+2. Add support for Arduino Leonardo (without CDC feature)
+3. Improve Timer support (support input capture where available)
 
 May 2017
 --------
@@ -95,8 +93,7 @@ May 2017
 June 2017
 ---------
 6. Improve Analog Input support and code
-7. Improve Timer support (support other modes than CTC)
-8. Improve SPI to support slave mode
+7. Improve SPI to support slave mode
 
 In addition to these activities, I will start to perform continuous improvements at all times, regarding:
 
