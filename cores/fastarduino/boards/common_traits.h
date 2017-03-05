@@ -436,7 +436,7 @@ namespace board_traits
 		static constexpr const REG8 TCCRA{};
 		static constexpr const REG8 TCCRB{};
 		static constexpr const REGISTER<TYPE> TCNT{};
-//		static constexpr const REGISTER<TYPE> OCRA{};
+		static constexpr const REGISTER<TYPE> OCRA{};
 		
 		static constexpr const REG8 TIMSK{};
 		static constexpr const REG8 TIFR{};
