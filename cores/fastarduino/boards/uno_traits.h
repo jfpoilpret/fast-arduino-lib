@@ -175,8 +175,8 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							PWMPin::D9_PB1_OC1A, PWMPin::D10_PB2_OC1B,
-							_BV(WGM10) | _BV(WGM11), _BV(WGM12) | _BV(WGM13),
-							_BV(WGM10) | _BV(WGM11), _BV(WGM13),
+							_BV(WGM10) | _BV(WGM11), _BV(WGM12),
+							_BV(WGM10) | _BV(WGM11), 0,
 							0, _BV(WGM12), 
 							_BV(COM1A0) | _BV(COM1A1), _BV(COM1B0) | _BV(COM1B1),
 							0, 0,

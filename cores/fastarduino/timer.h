@@ -61,6 +61,7 @@ namespace timer
 		using TIMER_TYPE = typename TRAIT::TYPE;
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
+		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
 		Timer(	TimerMode timer_mode,
 				TimerOutputMode output_mode_A = TimerOutputMode::DISCONNECTED, 
@@ -95,14 +96,15 @@ namespace timer
 			return prescaler_is_adequate(prescaler_quotient(p, us));
 		}
 
+		//FIXME ensure formulas match datasheet for all timers
 		static constexpr TIMER_PRESCALER PWM_prescaler(uint16_t pwm_frequency, bool fast_pwm)
 		{
 			return best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * TRAIT::MAX_COUNTER * (fast_pwm ? 1 : 2));
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL) * (fast_pwm ? 1 : 2));
 		}
 		static constexpr uint16_t PWM_frequency(TIMER_PRESCALER prescaler, bool fast_pwm)
 		{
-			return F_CPU / _BV(uint8_t(prescaler)) / TRAIT::MAX_COUNTER / (fast_pwm ? 1 : 2);
+			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL) / (fast_pwm ? 1 : 2);
 		}
 		
 		inline void begin(TIMER_PRESCALER prescaler)
@@ -180,7 +182,7 @@ namespace timer
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, _tccra);
 				else
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, COM_A(TimerOutputMode::DISCONNECTED));
-				TRAIT::OCRA = max;
+				TRAIT::OCRA = max & PWM_MAX;
 			}
 		}
 		inline void set_max_B(TIMER_TYPE max)
@@ -191,7 +193,7 @@ namespace timer
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, _tccra);
 				else
 					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, COM_B(TimerOutputMode::DISCONNECTED));
-				TRAIT::OCRB = max;
+				TRAIT::OCRB = max & PWM_MAX;
 			}
 		}
 
