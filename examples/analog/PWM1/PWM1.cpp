@@ -18,7 +18,7 @@
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - TODO
+ *   - D6: LED connected to GND through a 1K resistor 
  * - on Arduino MEGA:
  *   - TODO
  * - on ATtinyX4 based boards:
