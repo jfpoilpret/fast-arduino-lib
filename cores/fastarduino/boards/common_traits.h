@@ -305,7 +305,6 @@ namespace board_traits
 	template<Port PORT_, uint8_t SS_, uint8_t MOSI_, uint8_t MISO_, uint8_t SCK_>
 	struct SPI_trait_impl
 	{
-		//TODO ultimately replace 3 lines with just reference to Port_trait
 		using PORT_TRAIT = Port_trait<PORT_>;
 		static constexpr const REG8 DDR = PORT_TRAIT::DDR;
 		static constexpr const REG8 PORT = PORT_TRAIT::PORT;
@@ -387,6 +386,32 @@ namespace board_traits
 		static constexpr const uint32_t MAX_COUNTER = 1UL << (8 * sizeof(uint16_t));
 		static constexpr const uint16_t MAX_PWM = 0x3FF;
 	};
+	
+	template<Timer TIMER, uint8_t COM>
+	struct Timer_COM_trait
+	{
+		using TYPE = uint8_t;
+		static constexpr const DigitalPin PIN_OCR = DigitalPin::NONE;
+		static constexpr const REGISTER<TYPE> OCR{};
+		static constexpr const uint8_t COM_MASK = 0;
+		static constexpr const uint8_t COM_NORMAL = 0;
+		static constexpr const uint8_t COM_TOGGLE = 0;
+		static constexpr const uint8_t COM_CLEAR = 0;
+		static constexpr const uint8_t COM_SET = 0;
+	};
+	template<typename TYPE_, DigitalPin PIN_OCR_, REG OCR_, uint8_t COM_MASK_, 
+			uint8_t COM_NORMAL_, uint8_t COM_TOGGLE_, uint8_t COM_CLEAR_, uint8_t COM_SET_>
+	struct Timer_COM_trait_impl
+	{
+		using TYPE = TYPE_;
+		static constexpr const DigitalPin PIN_OCR = PIN_OCR_;
+		static constexpr const REGISTER<TYPE> OCR = OCR_;
+		static constexpr const uint8_t COM_MASK = COM_MASK_;
+		static constexpr const uint8_t COM_NORMAL = COM_NORMAL_;
+		static constexpr const uint8_t COM_TOGGLE = COM_TOGGLE_;
+		static constexpr const uint8_t COM_CLEAR = COM_CLEAR_;
+		static constexpr const uint8_t COM_SET = COM_SET_;
+	};
 
 	template<Timer TIMER>
 	struct Timer_trait
@@ -399,8 +424,7 @@ namespace board_traits
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
 		
-		static constexpr const DigitalPin PIN_OCRA = DigitalPin::NONE;
-		static constexpr const DigitalPin PIN_OCRB = DigitalPin::NONE;
+		static constexpr const uint8_t COM_COUNT = 0;
 
 		static constexpr const uint8_t F_PWM_TCCRA = 0;
 		static constexpr const uint8_t F_PWM_TCCRB = 0;
@@ -409,22 +433,11 @@ namespace board_traits
 		static constexpr const uint8_t CTC_TCCRA  = 0;
 		static constexpr const uint8_t CTC_TCCRB  = 0;
 		
-		static constexpr const uint8_t COM_MASK_A = 0;
-		static constexpr const uint8_t COM_NORMAL_A = 0;
-		static constexpr const uint8_t COM_TOGGLE_A = 0;
-		static constexpr const uint8_t COM_CLEAR_A = 0;
-		static constexpr const uint8_t COM_SET_A = 0;
-		static constexpr const uint8_t COM_MASK_B = 0;
-		static constexpr const uint8_t COM_NORMAL_B = 0;
-		static constexpr const uint8_t COM_TOGGLE_B = 0;
-		static constexpr const uint8_t COM_CLEAR_B = 0;
-		static constexpr const uint8_t COM_SET_B = 0;
-		
 		static constexpr const REG8 TCCRA{};
 		static constexpr const REG8 TCCRB{};
 		static constexpr const REGISTER<TYPE> TCNT{};
-		static constexpr const REGISTER<TYPE> OCRA{};
-		static constexpr const REGISTER<TYPE> OCRB{};
+//		static constexpr const REGISTER<TYPE> OCRA{};
+		
 		static constexpr const REG8 TIMSK{};
 		static constexpr const REG8 TIFR{};
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
@@ -433,17 +446,13 @@ namespace board_traits
 		}
 	};
 
-	template<typename TYPE_, TimerPrescalers PRESCALERS_, DigitalPin PIN_OCRA_, DigitalPin PIN_OCRB_,
+	template<typename TYPE_, TimerPrescalers PRESCALERS_, 
+			uint8_t COM_COUNT_,
 			uint8_t F_PWM_TCCRA_, uint8_t F_PWM_TCCRB_, 
 			uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, 
 			uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, 
-			uint8_t COM_MASK_A_, uint8_t COM_MASK_B_, 
-			uint8_t COM_NORMAL_A_, uint8_t COM_NORMAL_B_, 
-			uint8_t COM_TOGGLE_A_, uint8_t COM_TOGGLE_B_, 
-			uint8_t COM_CLEAR_A_, uint8_t COM_CLEAR_B_, 
-			uint8_t COM_SET_A_, uint8_t COM_SET_B_, 
-			REG TCCRA_, REG TCCRB_, REG TCNT_, 
-			REG OCRA_, REG OCRB_, REG TIMSK_, REG TIFR_>
+			REG TCCRA_, REG TCCRB_, REG TCNT_, REG OCRA_, 
+			REG TIMSK_, REG TIFR_>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -454,8 +463,7 @@ namespace board_traits
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 		
-		static constexpr const DigitalPin PIN_OCRA = PIN_OCRA_;
-		static constexpr const DigitalPin PIN_OCRB = PIN_OCRB_;
+		static constexpr const uint8_t COM_COUNT = COM_COUNT_;
 
 		static constexpr const uint8_t F_PWM_TCCRA = F_PWM_TCCRA_;
 		static constexpr const uint8_t F_PWM_TCCRB = F_PWM_TCCRB_;
@@ -464,24 +472,32 @@ namespace board_traits
 		static constexpr const uint8_t CTC_TCCRA  = CTC_TCCRA_;
 		static constexpr const uint8_t CTC_TCCRB  = CTC_TCCRB_;
 		
-		static constexpr const uint8_t COM_MASK_A = COM_MASK_A_;
-		static constexpr const uint8_t COM_NORMAL_A = COM_NORMAL_A_;
-		static constexpr const uint8_t COM_TOGGLE_A = COM_TOGGLE_A_;
-		static constexpr const uint8_t COM_CLEAR_A = COM_CLEAR_A_;
-		static constexpr const uint8_t COM_SET_A = COM_SET_A_;
-		static constexpr const uint8_t COM_MASK_B = COM_MASK_B_;
-		static constexpr const uint8_t COM_NORMAL_B = COM_NORMAL_B_;
-		static constexpr const uint8_t COM_TOGGLE_B = COM_TOGGLE_B_;
-		static constexpr const uint8_t COM_CLEAR_B = COM_CLEAR_B_;
-		static constexpr const uint8_t COM_SET_B = COM_SET_B_;
-		
 		static constexpr const REG8 TCCRA = TCCRA_;
 		static constexpr const REG8 TCCRB = TCCRB_;
 		static constexpr const REGISTER<TYPE> TCNT = TCNT_;
 		static constexpr const REGISTER<TYPE> OCRA = OCRA_;
-		static constexpr const REGISTER<TYPE> OCRB = OCRB_;
+		
 		static constexpr const REG8 TIMSK = TIMSK_;
 		static constexpr const REG8 TIFR = TIFR_;
+	};
+	
+	template<DigitalPin PIN>
+	struct PWMPin_trait
+	{
+		static constexpr const bool HAS_PWM = false;
+		static constexpr const uint8_t COM = 0;
+		static constexpr const Timer TIMER = Timer::TIMER0;
+		using TIMER_TRAIT = Timer_trait<TIMER>;
+		using TYPE = uint8_t;
+	};
+	template<Timer TIMER_, uint8_t COM_> 
+	struct PWMPin_trait_impl
+	{
+		static constexpr const bool HAS_PWM = true;
+		static constexpr const uint8_t COM = COM_;
+		static constexpr const Timer TIMER = TIMER_;
+		using TIMER_TRAIT = Timer_trait<TIMER>;
+		using TYPE = typename TIMER_TRAIT::TYPE;
 	};
 };
 

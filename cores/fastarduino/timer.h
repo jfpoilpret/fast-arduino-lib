@@ -64,20 +64,13 @@ namespace timer
 		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
-		Timer(	TimerMode timer_mode,
-				TimerOutputMode output_mode_A = TimerOutputMode::DISCONNECTED, 
-				TimerOutputMode output_mode_B = TimerOutputMode::DISCONNECTED)
-			:	_tccra{uint8_t(COM_A(output_mode_A) | COM_B(output_mode_B) | timer_mode_TCCRA(timer_mode))},
-				_tccrb{timer_mode_TCCRB(timer_mode)} {}
+		Timer(TimerMode timer_mode)
+			:_tccra{timer_mode_TCCRA(timer_mode)}, _tccrb{timer_mode_TCCRB(timer_mode)} {}
 
 		inline void set_timer_mode(TimerMode timer_mode)
 		{
 			set_mask(_tccra, 0xFF & ~(TRAIT::COM_MASK_A | TRAIT::COM_MASK_B), timer_mode_TCCRA(timer_mode));
 			_tccrb = timer_mode_TCCRB(timer_mode);
-		}
-		inline void set_output_modes(TimerOutputMode output_mode_A, TimerOutputMode output_mode_B)
-		{
-			set_mask(_tccra, TRAIT::COM_MASK_A | TRAIT::COM_MASK_B, COM_A(output_mode_A) | COM_B(output_mode_B));
 		}
 		
 		static constexpr TIMER_PRESCALER timer_prescaler(uint32_t us)
@@ -98,7 +91,6 @@ namespace timer
 		}
 
 		//TODO should we allow faster PWM frequency then 64KHz?
-		//FIXME ensure formulas match datasheet for all timers
 		static constexpr TIMER_PRESCALER FastPWM_prescaler(uint16_t pwm_frequency)
 		{
 			return best_frequency_prescaler(
@@ -128,7 +120,6 @@ namespace timer
 			TRAIT::TCCRA = _tccra;
 			TRAIT::TCCRB = _tccrb | TRAIT::TCCRB_prescaler(prescaler);
 			TRAIT::OCRA = 0;
-			TRAIT::OCRB = 0;
 			TRAIT::TCNT = 0;
 			TRAIT::TIMSK = 0;
 		}
@@ -143,7 +134,6 @@ namespace timer
 			TRAIT::TCCRB = _tccrb | TRAIT::TCCRB_prescaler(prescaler);
 			// Set timer counter compare match
 			TRAIT::OCRA = max;
-			TRAIT::OCRB = 0;
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
 			TRAIT::TIMSK = _BV(OCIE0A);
@@ -185,45 +175,42 @@ namespace timer
 			// Clear timer interrupt mode (set interrupt on OCRnA compare match)
 			TRAIT::TIMSK = 0;
 		}
-		
-		inline void set_max_A(TIMER_TYPE max)
+
+		template<uint8_t COM>
+		inline void set_output_mode(TimerOutputMode mode)
 		{
+			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
+			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
+			set_mask(_tccra, COM_TRAIT::COM_MASK, convert_COM<COM>(mode));
+		}
+		
+		template<uint8_t COM>
+		inline void set_max(TIMER_TYPE max)
+		{
+			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
+			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
 			synchronized
 			{
 				if (max)
-					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, _tccra);
+					set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, _tccra);
 				else
-					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_A, COM_A(TimerOutputMode::DISCONNECTED));
-				TRAIT::OCRA = max;
+					set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, 
+						convert_COM<COM>(TimerOutputMode::DISCONNECTED));
+				COM_TRAIT::OCR = max;
 			}
 		}
-		inline void set_max_B(TIMER_TYPE max)
+		
+	private:
+		template<uint8_t COM>
+		static constexpr uint8_t convert_COM(TimerOutputMode output_mode)
 		{
-			synchronized
-			{
-				if (max)
-					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, _tccra);
-				else
-					set_mask((volatile uint8_t&) TRAIT::TCCRA, TRAIT::COM_MASK_B, COM_B(TimerOutputMode::DISCONNECTED));
-				TRAIT::OCRB = max;
-			}
+			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
+			return (output_mode == TimerOutputMode::TOGGLE ? COM_TRAIT::COM_TOGGLE :
+					output_mode == TimerOutputMode::INVERTING ? COM_TRAIT::COM_SET :
+					output_mode == TimerOutputMode::NON_INVERTING ? COM_TRAIT::COM_CLEAR :
+					COM_TRAIT::COM_NORMAL);
 		}
 
-	private:
-		static constexpr uint8_t COM_A(TimerOutputMode output_mode)
-		{
-			return (output_mode == TimerOutputMode::TOGGLE ? TRAIT::COM_TOGGLE_A :
-					output_mode == TimerOutputMode::INVERTING ? TRAIT::COM_SET_A :
-					output_mode == TimerOutputMode::NON_INVERTING ? TRAIT::COM_CLEAR_A :
-					TRAIT::COM_NORMAL_A);
-		}
-		static constexpr uint8_t COM_B(TimerOutputMode output_mode)
-		{
-			return (output_mode == TimerOutputMode::TOGGLE ? TRAIT::COM_TOGGLE_B :
-					output_mode == TimerOutputMode::INVERTING ? TRAIT::COM_SET_B :
-					output_mode == TimerOutputMode::NON_INVERTING ? TRAIT::COM_CLEAR_B :
-					TRAIT::COM_NORMAL_B);
-		}
 		static constexpr uint8_t timer_mode_TCCRA(TimerMode timer_mode)
 		{
 			return (timer_mode == TimerMode::CTC ? TRAIT::CTC_TCCRA :
