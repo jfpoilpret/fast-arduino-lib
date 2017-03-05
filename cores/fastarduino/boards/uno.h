@@ -97,11 +97,10 @@ namespace board
 	//============
 	// PWM output
 	//============
-	//TODO
-	
-	//===============
-	// IO interrupts
-	//===============
+	/**
+	 * PWM-enabled pin symbols; sub-set of digital pins
+	 * to allow compile time checking.
+	 */
 	namespace PWMPin
 	{
 		constexpr const DigitalPin D6_PD6_OC0A = DigitalPin::D6_PD6;
@@ -112,6 +111,9 @@ namespace board
 		constexpr const DigitalPin D3_PD3_OC2B = DigitalPin::D3_PD3;
 	};
 	
+	//===============
+	// IO interrupts
+	//===============
 	/**
 	 * External interrupt pin symbols; sub-set of digital pins
 	 * to allow compile time checking.
