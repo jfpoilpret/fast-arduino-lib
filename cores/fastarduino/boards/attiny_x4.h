@@ -87,6 +87,21 @@ namespace board
 		NONE = 0xFF
 	};
 	
+	//============
+	// PWM output
+	//============
+	/**
+	 * PWM-enabled pin symbols; sub-set of digital pins
+	 * to allow compile time checking.
+	 */
+	namespace PWMPin
+	{
+		constexpr const DigitalPin D10_PB2_OC0A = DigitalPin::D10_PB2;
+		constexpr const DigitalPin D7_PA7_OC0B = DigitalPin::D7_PA7;
+		constexpr const DigitalPin D6_PA6_OC1A = DigitalPin::D6_PA6;
+		constexpr const DigitalPin D5_PA5_OC1B = DigitalPin::D5_PA5;
+	};
+	
 	//===============
 	// IO interrupts
 	//===============

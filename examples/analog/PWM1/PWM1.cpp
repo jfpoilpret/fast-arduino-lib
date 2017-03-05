@@ -22,7 +22,8 @@
  * - on Arduino MEGA:
  *   - TODO
  * - on ATtinyX4 based boards:
- *   - TODO
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D10 (PB2): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>
@@ -39,8 +40,8 @@ static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED = board::PWMPin::;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX4)
-static constexpr const board::AnalogPin POT = board::AnalogPin::A7;
-static constexpr const board::DigitalPin LED = board::PWMPin::D6_PD6_OC0A;
+static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
+static constexpr const board::DigitalPin LED = board::PWMPin::D10_PB2_OC0A;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"
