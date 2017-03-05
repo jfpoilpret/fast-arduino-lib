@@ -22,7 +22,10 @@
  *   - D5: LED connected to GND through a 1K resistor 
  *   - D6: LED connected to GND through a 1K resistor 
  * - on Arduino MEGA:
- *   - TODO
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D9: LED connected to GND through a 1K resistor 
+ *   - D10: LED connected to GND through a 1K resistor 
  * - on ATtinyX4 based boards:
  *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
@@ -44,9 +47,9 @@ static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::;
-static constexpr const board::DigitalPin LED2 = board::PWMPin::;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::DigitalPin LED1 = board::PWMPin::D10_PB4_OC2A;
+static constexpr const board::DigitalPin LED2 = board::PWMPin::D9_PH6_OC2B;
+static constexpr const board::Timer TIMER = board::Timer::TIMER2;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;

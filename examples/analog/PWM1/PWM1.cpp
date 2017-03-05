@@ -20,7 +20,8 @@
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D6: LED connected to GND through a 1K resistor 
  * - on Arduino MEGA:
- *   - TODO
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D4: LED connected to GND through a 1K resistor 
  * - on ATtinyX4 based boards:
  *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D10 (PB2): LED connected to GND through a 1K resistor 
@@ -37,7 +38,7 @@ static constexpr const board::DigitalPin LED = board::PWMPin::D6_PD6_OC0A;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
-static constexpr const board::DigitalPin LED = board::PWMPin::;
+static constexpr const board::DigitalPin LED = board::PWMPin::D4_PG5_OC0B;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
