@@ -76,6 +76,11 @@ namespace timer
 		{
 			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
 		}
+		static constexpr uint32_t timer_frequency(TIMER_PRESCALER prescaler)
+		{
+			return F_CPU / _BV(uint8_t(prescaler));
+		}
+		
 		static constexpr TIMER_TYPE counter(TIMER_PRESCALER prescaler, uint32_t us)
 		{
 			return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;

@@ -4,89 +4,101 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
+#include <fastarduino/analog_input.h>
 #include <fastarduino/time.h>
 #include <fastarduino/timer.h>
 #include <fastarduino/pwm.h>
 
-// Define here which PWM mode you want to test, and which timer you want to use
-#define FASTPWM 0
-#define TIMER_NUM 5
+static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
+static constexpr const board::Timer TIMER = board::Timer::TIMER1;
+static constexpr const board::DigitalPin SERVO_PIN = board::PWMPin::D9_PB1_OC1A;
 
-#if TIMER_NUM == 0
-constexpr const board::Timer TIMER = board::Timer::TIMER0;
-#elif TIMER_NUM == 1
-constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#elif TIMER_NUM == 2
-constexpr const board::Timer TIMER = board::Timer::TIMER2;
-#elif TIMER_NUM == 3
-constexpr const board::Timer TIMER = board::Timer::TIMER3;
-#elif TIMER_NUM == 4
-constexpr const board::Timer TIMER = board::Timer::TIMER4;
-#elif TIMER_NUM == 5
-constexpr const board::Timer TIMER = board::Timer::TIMER5;
-#endif
+template<board::Timer TIMER, board::DigitalPin PIN> 
+class Servo
+{
+	using TIMER_TRAIT = board_traits::Timer_trait<TIMER>;
+	
+public:
+	Servo(timer::Timer<TIMER>& timer, uint16_t neutral, uint16_t minimum, uint16_t maximum)
+		:	timer_{timer}, out_{timer, timer::TimerOutputMode::NON_INVERTING}, 
+			neutral_{int16_t(neutral)}, minimum_{int16_t(minimum)}, maximum_{int16_t(maximum)}
+	{
+		static_assert(TIMER_TRAIT::MAX_PWM >= 0x3FF, "TIMER must be a 16 bits timer");
+		out_.set_duty(neutral_);
+	}
+	
+	inline void set(uint16_t value)
+	{
+		out_.set_duty(value);
+	}
+
+	inline void rotate(int8_t angle)
+	{
+		uint16_t duty;
+		if (angle > 0)
+			duty = angle * (maximum_ - neutral_) / (MAX - 0) + neutral_;
+		else if (angle < 0)
+			duty = angle * (neutral_ - minimum_) / (0 - MIN) + neutral_;
+		else
+			duty = neutral_;
+		out_.set_duty(duty);
+	}
+
+private:
+	static const int8_t MAX = 127;
+	static const int8_t MIN = -128;
+	
+	timer::Timer<TIMER>& timer_;
+	analog::PWMOutput<PIN> out_;
+	const int16_t neutral_;
+	const int16_t minimum_;
+	const int16_t maximum_;
+};
+
 using TIMER_TYPE = timer::Timer<TIMER>;
 
-#if FASTPWM
-#define COMPUTE_PWM_PRESCALER TIMER_TYPE::FastPWM_prescaler
-#define COMPUTE_PWM_FREQUENCY TIMER_TYPE::FastPWM_frequency
-#define TIMER_MODE TimerMode::FAST_PWM
-#else
-#define COMPUTE_PWM_PRESCALER TIMER_TYPE::PhaseCorrectPWM_prescaler
-#define COMPUTE_PWM_FREQUENCY TIMER_TYPE::PhaseCorrectPWM_frequency
-#define TIMER_MODE TimerMode::PHASE_CORRECT_PWM
-#endif
-
 // Frequency for PWM
-constexpr const uint16_t PWM_FREQUENCY = 450;
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = COMPUTE_PWM_PRESCALER(PWM_FREQUENCY);
-// Check the actual PWM frequency we get with this timer
-static_assert(COMPUTE_PWM_FREQUENCY(PRESCALER) >= 450, "PWM Frequency is expected greater than 450");
-static_assert(COMPUTE_PWM_FREQUENCY(PRESCALER) < 2000, "PWM Frequency is expected less than 1000");
+constexpr const uint16_t PWM_FREQUENCY = 50;
+constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::FastPWM_prescaler(PWM_FREQUENCY);
+// Check the actual frequency we get with this timer
+constexpr const uint32_t FREQUENCY = TIMER_TYPE::timer_frequency(PRESCALER);
 
-constexpr const uint16_t LOOP_DELAY_MS = 1000;
+// Given the following servo constants
+constexpr const uint16_t MINIMUM_US = 900;
+constexpr const uint16_t MAXIMUM_US = 2100;
+constexpr const uint16_t NEUTRAL_US = 1500;
+
+// We calculate values for timer OCR
+constexpr const uint16_t MINIMUM = MINIMUM_US * FREQUENCY / 1000000UL;
+constexpr const uint16_t MAXIMUM = MAXIMUM_US * FREQUENCY / 1000000UL;
+constexpr const uint16_t NEUTRAL = NEUTRAL_US * FREQUENCY / 1000000UL;
+
+//TODO Calculate OCR value for minimum
+//TODO Calculate ratio to apply uint8_t to get the maximum value at 255
+
+constexpr const uint16_t LOOP_DELAY_MS = 100;
 
 using time::delay_ms;
 using timer::TimerMode;
-using timer::TimerOutputMode;
-using analog::PWMOutput;
 
-#if TIMER_NUM == 0
-using LED1_PIN = PWMOutput<board::PWMPin::D13_PB7_OC0A>;
-using LED2_PIN = PWMOutput<board::PWMPin::D4_PG5_OC0B>;
-#elif TIMER_NUM == 1
-using LED1_PIN = PWMOutput<board::PWMPin::D11_PB5_OC1A>;
-using LED2_PIN = PWMOutput<board::PWMPin::D12_PB6_OC1B>;
-#elif TIMER_NUM == 2
-using LED1_PIN = PWMOutput<board::PWMPin::D10_PB4_OC2A>;
-using LED2_PIN = PWMOutput<board::PWMPin::D9_PH6_OC2B>;
-#elif TIMER_NUM == 3
-using LED1_PIN = PWMOutput<board::PWMPin::D2_PE4_OC3B>;
-using LED2_PIN = PWMOutput<board::PWMPin::D3_PE5_OC3C>;
-#elif TIMER_NUM == 4
-using LED1_PIN = PWMOutput<board::PWMPin::D6_PH3_OC4A>;
-using LED2_PIN = PWMOutput<board::PWMPin::D7_PH4_OC4B>;
-#elif TIMER_NUM == 5
-using LED1_PIN = PWMOutput<board::PWMPin::D46_PL3_OC5A>;
-using LED2_PIN = PWMOutput<board::PWMPin::D44_PL5_OC5C>;
-#endif
+using SERVO1 = Servo<TIMER, SERVO_PIN>;
+using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 
 int main()
 {
-	TIMER_TYPE timer{TIMER_MODE};
-	LED1_PIN led1{timer};
-	LED2_PIN led2{timer};
+	TIMER_TYPE timer{TimerMode::FAST_PWM};
+	ANALOG_INPUT pot;
+	SERVO1 servo1{timer, NEUTRAL, MINIMUM, MAXIMUM};
 	timer._begin(PRESCALER);
 	sei();
 	
-	LED1_PIN::TYPE duty1 = 0;
-	LED2_PIN::TYPE duty2 = LED2_PIN::MAX;
 	while (true)
 	{
-		led1.set_duty(duty1++);
-		led2.set_duty(duty2--);
-		if (duty1 > LED1_PIN::MAX) duty1 = 0;
-		if (duty2 > LED2_PIN::MAX) duty2 = LED2_PIN::MAX;
+		ANALOG_INPUT::TYPE value = pot.sample();
+		int16_t v = value - 128;
+		servo1.rotate(v);
+//		servo1.rotate(int8_t(value - 128));
+//		servo1.set(MINIMUM + value);
 		delay_ms(LOOP_DELAY_MS);
 	}
 }
