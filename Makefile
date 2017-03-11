@@ -212,8 +212,8 @@ endif
 	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF} clean
 	$(MAKE) -C examples/uart/UartApp4 CONF=${CONF} clean
 ifeq ($(findstring ATtiny84,${CONF}),)
-	$(MAKE) -C examples/uart/UartApp5 CONF=${CONF}
-	$(MAKE) -C examples/uart/UartApp6 CONF=${CONF}
+	$(MAKE) -C examples/uart/UartApp5 CONF=${CONF} clean
+	$(MAKE) -C examples/uart/UartApp6 CONF=${CONF} clean
 endif
 
 

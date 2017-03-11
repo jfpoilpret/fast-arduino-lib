@@ -28,10 +28,10 @@ namespace analog
 	class PWMOutput
 	{
 		using TRAIT = board_traits::PWMPin_trait<PIN>;
-		static constexpr const uint8_t COM = TRAIT::COM;
 		using TIMER_TRAIT = board_traits::Timer_trait<TRAIT::TIMER>;
 		
 	public:
+		static constexpr const uint8_t COM = TRAIT::COM;
 		using TIMER = timer::Timer<TRAIT::TIMER>;
 		
 		PWMOutput(TIMER& timer, TimerOutputMode output_mode = TimerOutputMode::NON_INVERTING):_timer{timer}

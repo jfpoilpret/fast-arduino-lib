@@ -7,6 +7,7 @@
         <itemPath>cores/fastarduino/boards/attiny_x4_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/board.h</itemPath>
         <itemPath>cores/fastarduino/boards/board_traits.h</itemPath>
+        <itemPath>cores/fastarduino/boards/common_traits..cpp</itemPath>
         <itemPath>cores/fastarduino/boards/common_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/mega.h</itemPath>
         <itemPath>cores/fastarduino/boards/mega_traits.h</itemPath>
@@ -16,6 +17,7 @@
       <logicalFolder name="devices" displayName="devices" projectFiles="true">
         <itemPath>cores/fastarduino/devices/nrf24l01p.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p_internals.h</itemPath>
+        <itemPath>cores/fastarduino/devices/servo16.h</itemPath>
         <itemPath>cores/fastarduino/devices/sipo.h</itemPath>
         <itemPath>cores/fastarduino/devices/winbond.h</itemPath>
       </logicalFolder>
@@ -141,6 +143,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/common_traits..cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
@@ -166,6 +173,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/servo16.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -301,6 +313,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/common_traits..cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
@@ -326,6 +343,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/servo16.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -461,6 +483,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/common_traits..cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
@@ -486,6 +513,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/servo16.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -621,6 +653,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/common_traits..cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
@@ -646,6 +683,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/servo16.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -781,6 +823,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/common_traits..cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/common_traits.h"
             ex="false"
             tool="3"
@@ -806,6 +853,11 @@
             flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p_internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/servo16.h"
             ex="false"
             tool="3"
             flavor2="0">

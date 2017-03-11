@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/cores/fastarduino/boards/common_traits..o \
 	${OBJECTDIR}/cores/fastarduino/events.o \
 	${OBJECTDIR}/cores/fastarduino/linked_list.o \
 	${OBJECTDIR}/cores/fastarduino/main.o \
@@ -71,6 +72,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a: ${OBJECTFILES}
 	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a
+
+${OBJECTDIR}/cores/fastarduino/boards/common_traits..o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/boards/common_traits..cpp 
+	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino/boards
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/boards/common_traits..o cores/fastarduino/boards/common_traits..cpp
 
 ${OBJECTDIR}/cores/fastarduino/events.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/events.cpp 
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino

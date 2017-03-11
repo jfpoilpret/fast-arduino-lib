@@ -20,6 +20,7 @@
 
 #include "utilities.h"
 #include "boards/board_traits.h"
+#include "fast_io.h"
 
 #define REGISTER_TIMER_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
@@ -28,6 +29,23 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
 REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
+
+#define REGISTER_COMPA_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
+#define REGISTER_COMPB_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPB_vect), HANDLER, CALLBACK)
+#define REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)		\
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
+
+#define TIMER_CLASS_(TIMER_NUM)		CAT(timer::PulseTimer<board::Timer::TIMER, TIMER_NUM) >
+
+#define REGISTER_PULSE_TIMER_ISR(TIMER_NUM)							\
+REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_pulse_overflow)
+
+//#define REGISTER_PULSE_TIMER_ISR(TIMER_NUM)																		
+//REGISTER_COMPA_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_servo_compare_A)	
+//REGISTER_COMPB_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_servo_compare_B)	
+//REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_servo_overflow)
 
 //TODO Add API to explicitly set interrupts we want to enable
 //TODO Add API to support Input Capture when available for Timer (Timer1)
@@ -41,7 +59,7 @@ namespace timer
 		INVERTING
 	};
 	
-	//TODO shall we support full range PWM (ie 16 bits for Timer1)?
+	//TODO shall we support full range PWM (ie 16 bits for Timer1)? HOW?
 	enum class TimerMode:uint8_t
 	{
 		NORMAL,
@@ -49,6 +67,9 @@ namespace timer
 		FAST_PWM,
 		PHASE_CORRECT_PWM
 	};
+	
+	template<board::Timer TIMER>
+	class PulseTimer;
 	
 	template<board::Timer TIMER>
 	class Timer
@@ -63,12 +84,13 @@ namespace timer
 		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
+		// Constructor to create a general-purpose timer
 		Timer(TimerMode timer_mode)
 			:_tccra{timer_mode_TCCRA(timer_mode)}, _tccrb{timer_mode_TCCRB(timer_mode)} {}
 
 		inline void set_timer_mode(TimerMode timer_mode)
 		{
-			set_mask(_tccra, 0xFF & ~(TRAIT::COM_MASK_A | TRAIT::COM_MASK_B), timer_mode_TCCRA(timer_mode));
+			set_mask(_tccra, 0xFF & ~TRAIT::COM_MASK, timer_mode_TCCRA(timer_mode));
 			_tccrb = timer_mode_TCCRB(timer_mode);
 		}
 		
@@ -203,8 +225,10 @@ namespace timer
 				COM_TRAIT::OCR = max;
 			}
 		}
-		
+
 	private:
+		Timer(uint8_t tccra, uint8_t tccrb):_tccra{tccra}, _tccrb{tccrb} {}
+
 		template<uint8_t COM>
 		static constexpr uint8_t convert_COM(TimerOutputMode output_mode)
 		{
@@ -289,6 +313,144 @@ namespace timer
 		
 		uint8_t _tccra;
 		uint8_t _tccrb;
+		
+		friend class PulseTimer<TIMER>;
+	};
+
+	// private (implementation detail) template class to hold (or not) a counter of Timer Overflows
+	//TODO try to hide it inside PulseTimer? then make its methods public (no need for friend anymore)
+	template<typename T>
+	class PulseCounter
+	{
+		PulseCounter(UNUSED uint8_t max) {}
+		void reset() {}
+		bool count_and_check()
+		{
+			return true;
+		}
+		template<board::Timer TIMER> friend class PulseTimer;
+	};
+	template<>
+	class PulseCounter<uint8_t>
+	{
+		PulseCounter(uint8_t max):MAX{max}, count_{0} {}
+		void reset()
+		{
+			count_ = 0;
+		}
+		bool count_and_check()
+		{
+			if (++count_ == MAX) count_ = 0;
+			return !count_;
+		}
+		const uint8_t MAX;
+		uint8_t count_;
+		template<board::Timer TIMER> friend class PulseTimer;
+	};
+	
+	//TODO Is it better to define PulseTimer16/PulseTimer8 or keep it generic as now?
+	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
+	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every 
+	// 20ms, ie with a 50Hz frequency.
+	// This implementation ensures a good pulse width precision for 16-bits timers, as well as 8-bits timers.
+	template<board::Timer TIMER>
+	class PulseTimer: public Timer<TIMER>
+	{
+		using PARENT = Timer<TIMER>;
+		using TRAIT = typename PARENT::TRAIT;
+		
+	public:
+		using TIMER_PRESCALER = typename PARENT::TIMER_PRESCALER;
+
+		PulseTimer(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
+			:	Timer<TIMER>{TCCRA(), TCCRB(max_pulse_width_us, time_between_pulses_us)}, 
+				counter_{OVERFLOW_COUNTER(max_pulse_width_us, time_between_pulses_us)},
+				com_pins_{}
+		{
+			if (TRAIT::IS_16BITS)
+				// If 16 bits timer, set ICR immediately (won't change later on))
+				TRAIT::ICR = PARENT::counter(time_between_pulses_us);
+			else
+				// If 8 bits timer, then we need ISR on Overflow and Compare A/B
+				interrupt::register_handler(*this);
+		}
+
+		inline void begin()
+		{
+			synchronized _begin();
+		}
+		inline void _begin()
+		{
+			TRAIT::TCCRA = PARENT::_tccra;
+			TRAIT::TCCRB = PARENT::_tccrb;
+			TRAIT::TCNT = 0;
+			TRAIT::OCRA = 0;
+			TRAIT::TIMSK = (TRAIT::IS_16BITS ? 0 : _BV(TOIE0));
+		}
+		
+		void on_pulse_overflow()
+		{
+			if (counter_.count_and_check() && com_pins_)
+			{
+				//TODO not clean code at all, find a better way (not so easy) to improve
+				// Once time_between_pulses_us has elapsed, we should set (or toggle?) OCR pin
+				if (com_pins_ & _BV(0))
+					set_pin<0>();
+				if (com_pins_ & _BV(1))
+					set_pin<1>();
+				if (com_pins_ & _BV(2))
+					set_pin<2>();
+			}
+		}
+		
+		template<uint8_t COM>
+		static void set_pin()
+		{
+			typename gpio::FastPinType<board_traits::Timer_COM_trait<TIMER, 0>::PIN_OCR>::TYPE pin;
+			pin.set();
+		}
+		
+		// Methods called by Servo class (should be private and Servo declared friend)
+//		template<uint8_t COM>
+		void register_pin(uint8_t com_index)
+		{
+//			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
+//			using PIN_TYPE = typename gpio::FastPinType<COM_TRAIT::PIN_OCR>::TYPE;
+//			PIN_TYPE pin;
+//			pin.as_slow_pin()
+			com_pins_ |= _BV(com_index);
+		}
+		void unregister_pin(uint8_t com_index)
+		{
+			com_pins_ &= ~_BV(com_index);
+		}
+		
+	private:
+		static constexpr uint8_t TCCRA()
+		{
+			// If 16 bits, use ICR1 FastPWM
+			// If 8 bits, use CTC/TOV ISR
+			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRA : TRAIT::CTC_TCCRA);
+		}
+		static constexpr uint8_t TCCRB(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
+		{
+			// If 16 bits, use ICR1 FastPWM and prescaler forced to best fit all pulse frequency
+			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
+			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRB : TRAIT::CTC_TCCRB) | 
+					TRAIT::TCCRB_prescaler(PRESCALER(max_pulse_width_us, time_between_pulses_us));
+		}
+		static constexpr TIMER_PRESCALER PRESCALER(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
+		{
+			return PARENT::timer_prescaler(TRAIT::IS_16BITS ? time_between_pulses_us : max_pulse_width_us);
+		}
+		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
+		{
+			//TODO double check this formula
+			return time_between_pulses_us * 256UL * _BV(uint8_t(PRESCALER(max_pulse_width_us, time_between_pulses_us))) / F_CPU;
+		}
+		
+		PulseCounter<typename TRAIT::TYPE> counter_;
+		uint8_t com_pins_;
 	};
 }
 

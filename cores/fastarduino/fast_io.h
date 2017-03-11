@@ -27,6 +27,52 @@ namespace gpio
 		OUTPUT,
 	};
 
+	// Experimental API, maybe removed if judged bad
+	template<board::Port PORT, uint8_t BIT> class FastPin;
+	class SlowPin
+	{
+	public:
+		void set()
+		{
+			PORT_ |= BIT_;
+		}
+		void clear()
+		{
+			PORT_ &= ~BIT_;
+		}
+		void toggle()
+		{
+			PIN_ |= BIT_;
+		}
+		bool value()
+		{
+			return PIN_ & BIT_;
+		}
+		void set_mode(PinMode mode, bool value)
+		{
+			if (mode == PinMode::OUTPUT)
+				DDR_ |= BIT_;
+			else
+				DDR_ &= ~BIT_;
+			if (value || mode == PinMode::INPUT_PULLUP)
+				PORT_ |= BIT_;
+			else
+				PORT_ &= ~BIT_;
+		}
+		
+	private:
+		SlowPin(volatile uint8_t& DDR, volatile uint8_t& PIN, volatile uint8_t& PORT, uint8_t BIT)
+			:DDR_{DDR}, PIN_{PIN}, PORT_{PORT}, BIT_{BIT} {}
+		
+		volatile uint8_t& DDR_;
+		volatile uint8_t& PIN_;
+		volatile uint8_t& PORT_;
+		const uint8_t BIT_;
+		
+		template<board::Port PORT, uint8_t BIT>
+		friend class FastPin;
+	};
+
 	// This class maps to a PORT pin 
 	// SRAM size is 0
 	template<board::Port PORT_, uint8_t BIT_>
@@ -74,6 +120,12 @@ namespace gpio
 		bool value() INLINE
 		{
 			return TRAIT::PIN & _BV(BIT);
+		}
+
+		// Experimental API, maybe removed if judged bad
+		SlowPin as_slow_pin()
+		{
+			return SlowPin{TRAIT::DDR, TRAIT::PORT, TRAIT::PIN, BIT};
 		}
 	};
 
