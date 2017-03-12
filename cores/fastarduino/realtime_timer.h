@@ -119,13 +119,14 @@ namespace timer
 		volatile uint32_t _millis;
 
 	private:
+		using CALC = Calculator<TIMER>;
 		static constexpr const uint32_t ONE_MILLI = 1000UL;
-		static constexpr const TIMER_PRESCALER MILLI_PRESCALER = RTT::timer_prescaler(ONE_MILLI);
-		static constexpr const TIMER_TYPE MILLI_COUNTER = RTT::counter(ONE_MILLI);
+		static constexpr const TIMER_PRESCALER MILLI_PRESCALER = CALC::CTC_prescaler(ONE_MILLI);
+		static constexpr const TIMER_TYPE MILLI_COUNTER = CALC::CTC_counter(MILLI_PRESCALER, ONE_MILLI);
 
 		inline uint16_t compute_micros() const
 		{
-			return uint16_t(1000UL * ((volatile TIMER_TYPE&) TRAIT::TCNT) / (1 + (volatile TIMER_TYPE&) TRAIT::OCRA));
+			return uint16_t(ONE_MILLI * ((volatile TIMER_TYPE&) TRAIT::TCNT) / (1 + (volatile TIMER_TYPE&) TRAIT::OCRA));
 		}
 	};
 

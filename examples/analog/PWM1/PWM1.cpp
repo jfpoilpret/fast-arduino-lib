@@ -51,10 +51,11 @@ static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED_OUTPUT = analog::PWMOutput<LED>;
 using TIMER_TYPE = timer::Timer<TIMER>;
+using CALC = timer::Calculator<TIMER>;
 
 // Frequency for PWM
 constexpr const uint16_t PWM_FREQUENCY = 450;
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::FastPWM_prescaler(PWM_FREQUENCY);
+constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
 
 int main()
 {

@@ -47,6 +47,142 @@ REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIM
 //TODO Add API to support Input Capture when available for Timer (Timer1)
 namespace timer
 {
+	// All utility methods go here
+	template<board::Timer TIMER>
+	struct Calculator
+	{
+	private:
+		using TRAIT = board_traits::Timer_trait<TIMER>;
+		using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
+
+	public:
+		using TIMER_TYPE = typename TRAIT::TYPE;
+		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
+		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
+		
+		// Calculations for Compare mode
+		static constexpr TIMER_PRESCALER CTC_prescaler(uint32_t us)
+		{
+			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
+		}
+		static constexpr uint32_t CTC_frequency(TIMER_PRESCALER prescaler)
+		{
+			return F_CPU / _BV(uint8_t(prescaler));
+		}
+		static constexpr TIMER_TYPE CTC_counter(TIMER_PRESCALER prescaler, uint32_t us)
+		{
+			return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;
+		}
+		static constexpr bool is_adequate_for_CTC(TIMER_PRESCALER p, uint32_t us)
+		{
+			return prescaler_is_adequate(prescaler_quotient(p, us));
+		}
+
+		// Calculations for Fast PWM mode 8 bits or 10 bits)
+		static constexpr TIMER_PRESCALER FastPWM_prescaler(uint16_t pwm_frequency)
+		{
+			return best_frequency_prescaler(
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL));
+		}
+		static constexpr uint16_t FastPWM_frequency(TIMER_PRESCALER prescaler)
+		{
+			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL);
+		}
+		
+		// Calculations for Phase Correct PWM mode 8 bits or 10 bits)
+		static constexpr TIMER_PRESCALER PhaseCorrectPWM_prescaler(uint16_t pwm_frequency)
+		{
+			return best_frequency_prescaler(
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (2UL * PWM_MAX));
+		}
+		static constexpr uint16_t PhaseCorrectPWM_frequency(TIMER_PRESCALER prescaler)
+		{
+			return F_CPU / _BV(uint8_t(prescaler)) / (2UL * PWM_MAX);
+		}
+	
+//		static constexpr TIMER_PRESCALER pulse_prescaler(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
+//		{
+//			return TRAIT::IS_16BITS ? PWM_ICR_prescaler(pulse_frequency) : CTC_prescaler(max_pulse_width_us);
+//		}
+
+		// Calculations for 16 bits ICR-based Fast PWM mode
+		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
+		{
+			static_assert(TRAIT::IS_16BITS, "TIMER must be 16 bits");
+			return best_frequency_prescaler(
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * 16384UL);
+		}
+		static constexpr uint16_t PWM_ICR_frequency(TIMER_PRESCALER prescaler, uint16_t counter)
+		{
+			static_assert(TRAIT::IS_16BITS, "TIMER must be 16 bits");
+			return F_CPU / _BV(uint8_t(prescaler)) / counter;
+		}
+		static constexpr uint16_t PWM_ICR_counter(TIMER_PRESCALER prescaler, uint16_t pwm_frequency)
+		{
+			static_assert(TRAIT::IS_16BITS, "TIMER must be 16 bits");
+			return F_CPU / _BV(uint8_t(prescaler)) / pwm_frequency;
+		}
+		
+	private:
+		static constexpr uint32_t prescaler_quotient(TIMER_PRESCALER p, uint32_t us)
+		{
+			return (F_CPU / 1000000UL * us) / _BV(uint8_t(p));
+		}
+
+		static constexpr uint32_t prescaler_remainder(TIMER_PRESCALER p, uint32_t us)
+		{
+			return (F_CPU / 1000000UL * us) % _BV(uint8_t(p));
+		}
+
+		static constexpr bool prescaler_is_adequate(uint32_t quotient)
+		{
+			return quotient > 1 and quotient < TRAIT::MAX_COUNTER;
+		}
+
+		static constexpr TIMER_PRESCALER best_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t us)
+		{
+			return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ? p2 :
+					!prescaler_is_adequate(prescaler_quotient(p2, us)) ? p1 :
+					prescaler_remainder(p1, us) < prescaler_remainder(p2, us) ? p1 :
+					prescaler_remainder(p1, us) > prescaler_remainder(p2, us) ? p2 :
+					prescaler_quotient(p1, us) > prescaler_quotient(p2, us) ? p1 : p2);
+		}
+
+		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t us)
+		{
+			return (begin + 1 == end ? *begin : best_prescaler_in_2(*begin, best_prescaler(begin + 1 , end, us), us));
+		}
+
+		template<size_t N>
+		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
+		{
+			return best_prescaler(prescalers, prescalers + N, us);
+		}
+		
+		static constexpr bool prescaler_is_adequate_for_frequency(TIMER_PRESCALER p, uint32_t freq)
+		{
+			return (F_CPU / (uint32_t) _BV(uint8_t(p)) > freq);
+		}
+		
+		static constexpr TIMER_PRESCALER best_frequency_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t freq)
+		{
+			return prescaler_is_adequate_for_frequency(p2, freq) ? p2 : p1;
+		}
+
+		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t freq)
+		{
+			return (begin + 1 == end ? *begin : 
+					best_frequency_prescaler_in_2(*begin, best_frequency_prescaler(begin + 1 , end, freq), freq));
+		}
+
+		template<size_t N>
+		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t freq)
+		{
+			return best_frequency_prescaler(prescalers, prescalers + N, freq);
+		}
+		
+	};
+
 	enum class TimerOutputMode:uint8_t
 	{
 		DISCONNECTED,
@@ -64,7 +200,7 @@ namespace timer
 		PHASE_CORRECT_PWM
 	};
 	
-	template<board::Timer TIMER>
+	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
 	class PulseTimer;
 	
 	template<board::Timer TIMER>
@@ -88,49 +224,6 @@ namespace timer
 		{
 			set_mask(_tccra, 0xFF & ~TRAIT::COM_MASK, timer_mode_TCCRA(timer_mode));
 			_tccrb = timer_mode_TCCRB(timer_mode);
-		}
-		
-		static constexpr TIMER_PRESCALER timer_prescaler(uint32_t us)
-		{
-			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
-		}
-		static constexpr uint32_t timer_frequency(TIMER_PRESCALER prescaler)
-		{
-			return F_CPU / _BV(uint8_t(prescaler));
-		}
-		
-		static constexpr TIMER_TYPE counter(TIMER_PRESCALER prescaler, uint32_t us)
-		{
-			return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;
-		}
-		static constexpr TIMER_TYPE counter(uint32_t us)
-		{
-			return (TIMER_TYPE) prescaler_quotient(timer_prescaler(us), us) - 1;
-		}
-		static constexpr bool is_adequate(TIMER_PRESCALER p, uint32_t us)
-		{
-			return prescaler_is_adequate(prescaler_quotient(p, us));
-		}
-
-		//TODO should we allow faster PWM frequency then 64KHz?
-		static constexpr TIMER_PRESCALER FastPWM_prescaler(uint16_t pwm_frequency)
-		{
-			return best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL));
-		}
-		static constexpr uint16_t FastPWM_frequency(TIMER_PRESCALER prescaler)
-		{
-			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL);
-		}
-		
-		static constexpr TIMER_PRESCALER PhaseCorrectPWM_prescaler(uint16_t pwm_frequency)
-		{
-			return best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (2UL * PWM_MAX));
-		}
-		static constexpr uint16_t PhaseCorrectPWM_frequency(TIMER_PRESCALER prescaler)
-		{
-			return F_CPU / _BV(uint8_t(prescaler)) / (2UL * PWM_MAX);
 		}
 		
 		inline void begin(TIMER_PRESCALER prescaler)
@@ -222,7 +315,7 @@ namespace timer
 			}
 		}
 
-	private:
+	protected:
 		Timer(uint8_t tccra, uint8_t tccrb):_tccra{tccra}, _tccrb{tccrb} {}
 
 		template<uint8_t COM>
@@ -250,67 +343,8 @@ namespace timer
 					0);
 		}
 		
-		static constexpr uint32_t prescaler_quotient(TIMER_PRESCALER p, uint32_t us)
-		{
-			return (F_CPU / 1000000UL * us) / _BV(uint8_t(p));
-		}
-
-		static constexpr uint32_t prescaler_remainder(TIMER_PRESCALER p, uint32_t us)
-		{
-			return (F_CPU / 1000000UL * us) % _BV(uint8_t(p));
-		}
-
-		static constexpr bool prescaler_is_adequate(uint32_t quotient)
-		{
-			return quotient > 1 and quotient < TRAIT::MAX_COUNTER;
-		}
-
-		static constexpr TIMER_PRESCALER best_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t us)
-		{
-			return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ? p2 :
-					!prescaler_is_adequate(prescaler_quotient(p2, us)) ? p1 :
-					prescaler_remainder(p1, us) < prescaler_remainder(p2, us) ? p1 :
-					prescaler_remainder(p1, us) > prescaler_remainder(p2, us) ? p2 :
-					prescaler_quotient(p1, us) > prescaler_quotient(p2, us) ? p1 : p2);
-		}
-
-		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t us)
-		{
-			return (begin + 1 == end ? *begin : best_prescaler_in_2(*begin, best_prescaler(begin + 1 , end, us), us));
-		}
-
-		template<size_t N>
-		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
-		{
-			return best_prescaler(prescalers, prescalers + N, us);
-		}
-		
-		static constexpr bool prescaler_is_adequate_for_frequency(TIMER_PRESCALER p, uint32_t freq)
-		{
-			return (F_CPU / (uint32_t) _BV(uint8_t(p)) > freq);
-		}
-		
-		static constexpr TIMER_PRESCALER best_frequency_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t freq)
-		{
-			return prescaler_is_adequate_for_frequency(p2, freq) ? p2 : p1;
-		}
-
-		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t freq)
-		{
-			return (begin + 1 == end ? *begin : 
-					best_frequency_prescaler_in_2(*begin, best_frequency_prescaler(begin + 1 , end, freq), freq));
-		}
-
-		template<size_t N>
-		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t freq)
-		{
-			return best_frequency_prescaler(prescalers, prescalers + N, freq);
-		}
-		
 		uint8_t _tccra;
 		uint8_t _tccrb;
-		
-		friend class PulseTimer<TIMER>;
 	};
 
 	// private (implementation detail) template class to hold (or not) a counter of Timer Overflows
@@ -324,7 +358,7 @@ namespace timer
 		{
 			return true;
 		}
-		template<board::Timer TIMER> friend class PulseTimer;
+		template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER> friend class PulseTimer;
 	};
 	template<>
 	class PulseCounter<uint8_t>
@@ -341,7 +375,7 @@ namespace timer
 		}
 		const uint8_t MAX;
 		uint8_t count_;
-		template<board::Timer TIMER> friend class PulseTimer;
+		template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER> friend class PulseTimer;
 	};
 	
 	//TODO review API to pass prescaler explicitly to constructor?
@@ -350,25 +384,26 @@ namespace timer
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every 
 	// 20ms, ie with a 50Hz frequency.
 	// This implementation ensures a good pulse width precision for 16-bits timers, as well as 8-bits timers.
-	template<board::Timer TIMER>
+	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
 	class PulseTimer: public Timer<TIMER>
 	{
 		using PARENT = Timer<TIMER>;
 		using TRAIT = typename PARENT::TRAIT;
-		using PRESCALERS_TRAIT = typename PARENT::PRESCALERS_TRAIT;
+		//FIXME temporary check for 16bits only
+		static_assert(TRAIT::IS_16BITS, "TIMER must be a 16 bits timer");
+		using CALCULATOR = Calculator<TIMER>;
 		
 	public:
-		using TIMER_PRESCALER = typename PARENT::TIMER_PRESCALER;
-
 		//TODO define as template to avoid generated code for static constexpr utilities?
-		PulseTimer(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
-			:	Timer<TIMER>{TCCRA(), TCCRB(max_pulse_width_us, pulse_frequency)}, 
-				counter_{OVERFLOW_COUNTER(max_pulse_width_us, pulse_frequency)},
+//		template<uint16_t PULSE_FREQ>
+		PulseTimer(uint16_t PULSE_FREQ, UNUSED uint16_t max_pulse_width_us)
+			:	Timer<TIMER>{TCCRA(), TCCRB()}, 
+//				counter_{OVERFLOW_COUNTER(max_pulse_width_us, pulse_frequency)},
 				com_pins_{}
 		{
 			if (TRAIT::IS_16BITS)
 				// If 16 bits timer, set ICR immediately (won't change later on))
-				TRAIT::ICR = PWM_ICR_counter(pulse_frequency);
+				TRAIT::ICR = CALCULATOR::PWM_ICR_counter(PRESCALER, PULSE_FREQ);
 			else
 				// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 				interrupt::register_handler(*this);
@@ -387,20 +422,20 @@ namespace timer
 			TRAIT::TIMSK = (TRAIT::IS_16BITS ? 0 : _BV(TOIE0));
 		}
 		
-		void on_pulse_overflow()
-		{
-			if (counter_.count_and_check() && com_pins_)
-			{
-				//TODO not clean code at all, find a better way (not so easy) to improve
-				// Once time_between_pulses_us has elapsed, we should set (or toggle?) OCR pin
-				if (com_pins_ & _BV(0))
-					set_pin<0>();
-				if (com_pins_ & _BV(1))
-					set_pin<1>();
-				if (com_pins_ & _BV(2))
-					set_pin<2>();
-			}
-		}
+//		void on_pulse_overflow()
+//		{
+//			if (counter_.count_and_check() && com_pins_)
+//			{
+//				//TODO not clean code at all, find a better way (not so easy) to improve
+//				// Once time_between_pulses_us has elapsed, we should set (or toggle?) OCR pin
+//				if (com_pins_ & _BV(0))
+//					set_pin<0>();
+//				if (com_pins_ & _BV(1))
+//					set_pin<1>();
+//				if (com_pins_ & _BV(2))
+//					set_pin<2>();
+//			}
+//		}
 		
 		template<uint8_t COM>
 		static void set_pin()
@@ -426,45 +461,20 @@ namespace timer
 			// If 8 bits, use CTC/TOV ISR
 			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRA : TRAIT::CTC_TCCRA);
 		}
-		static constexpr uint8_t TCCRB(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
+		static constexpr uint8_t TCCRB()
 		{
 			// If 16 bits, use ICR1 FastPWM and prescaler forced to best fit all pulse frequency
 			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
-			//TODO improve code a bit by removing PRESCALER and adding its code here directly
-			// (only one TRAIT::IS_16BITS?)
-			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRB : TRAIT::CTC_TCCRB) | 
-					TRAIT::TCCRB_prescaler(PRESCALER(max_pulse_width_us, pulse_frequency));
+			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRB : TRAIT::CTC_TCCRB) | TRAIT::TCCRB_prescaler(PRESCALER);
 		}
-		static constexpr TIMER_PRESCALER PRESCALER(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
-		{
-			return TRAIT::IS_16BITS ?
-				PWM_ICR_prescaler(pulse_frequency) :
-				PARENT::timer_prescaler(max_pulse_width_us);
-		}
-		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
-		{
-			//TODO double check this formula
-			return 256UL * _BV(uint8_t(PRESCALER(max_pulse_width_us, pulse_frequency))) / F_CPU / pulse_frequency;
-		}
-		
-		//TODO PUBLIC FOR DEBUG ONLY
-	public:
-		static constexpr uint16_t PWM_ICR_counter(uint16_t pwm_frequency)
-		{
-			return F_CPU / _BV(uint8_t(PWM_ICR_prescaler(pwm_frequency))) / pwm_frequency;
-		}
-		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
-		{
-			return PARENT::best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * 16384UL);
-		}
-		static constexpr uint16_t PWM_ICR_frequency(uint16_t pwm_frequency)
-		{
-			return F_CPU / _BV(uint8_t(PWM_ICR_prescaler(pwm_frequency))) / PWM_ICR_counter(pwm_frequency);
-		}
+//		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
+//		{
+//			//TODO double check this formula
+//			return 256UL * _BV(uint8_t(PRESCALER(max_pulse_width_us, pulse_frequency))) / F_CPU / pulse_frequency;
+//		}
 		
 	private:
-		PulseCounter<typename TRAIT::TYPE> counter_;
+//		PulseCounter<typename TRAIT::TYPE> counter_;
 		uint8_t com_pins_;
 	};
 }

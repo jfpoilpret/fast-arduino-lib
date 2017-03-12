@@ -29,12 +29,13 @@
 #include <fastarduino/timer.h>
 
 constexpr const board::Timer TIMER = board::Timer::TIMER1;
+using CALCULATOR = timer::Calculator<TIMER>;
 using TIMER_TYPE = timer::Timer<TIMER>;
 constexpr const uint32_t PERIOD_US = 1000000;
 
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = TIMER_TYPE::timer_prescaler(PERIOD_US);
-static_assert(TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US), "TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US)");
-constexpr const TIMER_TYPE::TIMER_TYPE COUNTER = TIMER_TYPE::counter(PRESCALER, PERIOD_US);
+constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
+static_assert(CALCULATOR::is_adequate_for_CTC(PRESCALER, PERIOD_US), "TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US)");
+constexpr const TIMER_TYPE::TIMER_TYPE COUNTER = CALCULATOR::CTC_counter(PRESCALER, PERIOD_US);
 
 class Handler
 {

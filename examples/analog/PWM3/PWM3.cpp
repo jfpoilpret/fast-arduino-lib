@@ -48,29 +48,26 @@ static constexpr const board::Timer TIMER1 = board::Timer::TIMER1;
 #error "Current target is not yet supported!"
 #endif
 
-using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
-using LED1_OUTPUT = analog::PWMOutput<LED1>;
-using TIMER1_TYPE = timer::PulseTimer<TIMER1>;
-using TIMER1_DUTY_TYPE = TIMER1_TYPE::TIMER_TYPE;
-
-// Pulse Frequency
-constexpr const uint16_t PULSE_FREQUENCY = 50;
+using CALCULATOR1 = timer::Calculator<TIMER1>;
+using PRESCALER1_TYPE = CALCULATOR1::TIMER_PRESCALER;
 
 // Constants for LED1
 constexpr const uint16_t PULSE1_MAXWIDTH_US = 2000;
 constexpr const uint16_t PULSE1_MINWIDTH_US = 1000;
 
-//TODO Implement later constexpr struct defining MIN/MAX pulse
-//template<typename PWM, typename INPUT, typename PULSE>
-//void update_pulse(PWM pin, INPUT value, PULSE& duty)
-//{
-//	
-//}
+// Pulse Frequency
+constexpr const uint16_t PULSE_FREQUENCY = 50;
+constexpr const PRESCALER1_TYPE PRESCALER1 = CALCULATOR1::PWM_ICR_prescaler(PULSE_FREQUENCY);
+
+using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
+using LED1_OUTPUT = analog::PWMOutput<LED1>;
+using TIMER1_TYPE = timer::PulseTimer<TIMER1, PRESCALER1>;
+using TIMER1_DUTY_TYPE = TIMER1_TYPE::TIMER_TYPE;
 
 int main()
 {
 	// Initialize timer and pins
-	TIMER1_TYPE timer1{PULSE1_MAXWIDTH_US, PULSE_FREQUENCY};
+	TIMER1_TYPE timer1{PULSE_FREQUENCY, PULSE1_MAXWIDTH_US};
 	LED1_OUTPUT led1{timer1};
 	ANALOG1_INPUT pot1;
 
