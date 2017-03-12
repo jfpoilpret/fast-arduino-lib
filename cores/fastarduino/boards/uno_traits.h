@@ -192,8 +192,8 @@ namespace board_traits
 							R_(TIMSK1), R_(TIFR1),
 							R_(ICR1),
 							0, _BV(WGM12) | _BV(WGM13),
-							_BV(WGM11), _BV(WGM13),
-							_BV(WGM11), _BV(WGM12) | _BV(WGM13)>
+							_BV(WGM11), _BV(WGM12) | _BV(WGM13),
+							_BV(WGM11), _BV(WGM13)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{

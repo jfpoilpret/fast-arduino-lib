@@ -13,7 +13,7 @@ static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin SERVO_PIN = board::PWMPin::D9_PB1_OC1A;
 
-REGISTER_PULSE_TIMER_ISR(1)
+//REGISTER_PULSE_TIMER_ISR(1)
 
 template<board::Timer TIMER, board::DigitalPin PIN> 
 class Servo
@@ -75,11 +75,20 @@ private:
 using TIMER_TYPE = timer::PulseTimer<TIMER>;
 
 // Interval between 2 pulses
-constexpr const uint16_t TIME_BETWEEN_PULSES_US = 20000;
+constexpr const uint16_t PULSE_FREQUENCY = 50;
 
 //DEBUG CHECK PRESCALER and COUNTER
-static_assert(TIMER_TYPE::timer_prescaler(TIME_BETWEEN_PULSES_US) == TIMER_TYPE::TIMER_PRESCALER::DIV_8,"");
-static_assert(TIMER_TYPE::counter(TIME_BETWEEN_PULSES_US) == 62500, "");
+//static_assert(TIMER_TYPE::PWM_ICR_prescaler(PULSE_FREQUENCY) == TIMER_TYPE::TIMER_PRESCALER::DIV_1024, "");
+//static_assert(TIMER_TYPE::PWM_ICR_prescaler(PULSE_FREQUENCY) == TIMER_TYPE::TIMER_PRESCALER::DIV_256, "");
+//static_assert(TIMER_TYPE::PWM_ICR_prescaler(PULSE_FREQUENCY) == TIMER_TYPE::TIMER_PRESCALER::DIV_64, "");
+static_assert(TIMER_TYPE::PWM_ICR_prescaler(PULSE_FREQUENCY) == TIMER_TYPE::TIMER_PRESCALER::DIV_8, "");
+//static_assert(TIMER_TYPE::PWM_ICR_prescaler(PULSE_FREQUENCY) == TIMER_TYPE::TIMER_PRESCALER::NO_PRESCALING, "");
+static_assert(TIMER_TYPE::PWM_ICR_counter(PULSE_FREQUENCY) > 39990, "");
+static_assert(TIMER_TYPE::PWM_ICR_counter(PULSE_FREQUENCY) < 40010, "");
+//static_assert(TIMER_TYPE::PWM_ICR_counter(PULSE_FREQUENCY) == 33920, "");
+
+static_assert(TIMER_TYPE::PWM_ICR_frequency(PULSE_FREQUENCY) > 40, "");
+	static_assert(TIMER_TYPE::PWM_ICR_frequency(PULSE_FREQUENCY) < 60, "");
 
 // Given the following servo constants
 constexpr const uint16_t MINIMUM_US = 900;
@@ -99,7 +108,7 @@ using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint
 
 int main()
 {
-	TIMER_TYPE timer{MAXIMUM_US, TIME_BETWEEN_PULSES_US};
+	TIMER_TYPE timer{MAXIMUM_US, PULSE_FREQUENCY};
 	ANALOG_INPUT pot;
 	SERVO1 servo1{timer};
 	timer._begin();

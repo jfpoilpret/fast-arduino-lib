@@ -39,6 +39,7 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
 
 #define TIMER_CLASS_(TIMER_NUM)		CAT(timer::PulseTimer<board::Timer::TIMER, TIMER_NUM) >
 
+//TODO this should be only for 8bits timer...
 #define REGISTER_PULSE_TIMER_ISR(TIMER_NUM)							\
 REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_pulse_overflow)
 
@@ -358,23 +359,25 @@ namespace timer
 	{
 		using PARENT = Timer<TIMER>;
 		using TRAIT = typename PARENT::TRAIT;
+		using PRESCALERS_TRAIT = typename PARENT::PRESCALERS_TRAIT;
 		
 	public:
 		using TIMER_PRESCALER = typename PARENT::TIMER_PRESCALER;
 
-		PulseTimer(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
-			:	Timer<TIMER>{TCCRA(), TCCRB(max_pulse_width_us, time_between_pulses_us)}, 
-				counter_{OVERFLOW_COUNTER(max_pulse_width_us, time_between_pulses_us)},
+		PulseTimer(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
+			:	Timer<TIMER>{TCCRA(), TCCRB(max_pulse_width_us, pulse_frequency)}, 
+				counter_{OVERFLOW_COUNTER(max_pulse_width_us, pulse_frequency)},
 				com_pins_{}
 		{
 			if (TRAIT::IS_16BITS)
 				// If 16 bits timer, set ICR immediately (won't change later on))
-				TRAIT::ICR = PARENT::counter(time_between_pulses_us);
+				TRAIT::ICR = PWM_ICR_counter(pulse_frequency);
+//				TRAIT::ICR = PARENT::counter(time_between_pulses_us);
 			else
 				// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 				interrupt::register_handler(*this);
 		}
-
+				
 		inline void begin()
 		{
 			synchronized _begin();
@@ -411,13 +414,8 @@ namespace timer
 		}
 		
 		// Methods called by Servo class (should be private and Servo declared friend)
-//		template<uint8_t COM>
 		void register_pin(uint8_t com_index)
 		{
-//			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
-//			using PIN_TYPE = typename gpio::FastPinType<COM_TRAIT::PIN_OCR>::TYPE;
-//			PIN_TYPE pin;
-//			pin.as_slow_pin()
 			com_pins_ |= _BV(com_index);
 		}
 		void unregister_pin(uint8_t com_index)
@@ -432,23 +430,43 @@ namespace timer
 			// If 8 bits, use CTC/TOV ISR
 			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRA : TRAIT::CTC_TCCRA);
 		}
-		static constexpr uint8_t TCCRB(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
+		static constexpr uint8_t TCCRB(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
 		{
 			// If 16 bits, use ICR1 FastPWM and prescaler forced to best fit all pulse frequency
 			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
 			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRB : TRAIT::CTC_TCCRB) | 
-					TRAIT::TCCRB_prescaler(PRESCALER(max_pulse_width_us, time_between_pulses_us));
+					TRAIT::TCCRB_prescaler(PRESCALER(max_pulse_width_us, pulse_frequency));
 		}
-		static constexpr TIMER_PRESCALER PRESCALER(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
+		static constexpr TIMER_PRESCALER PRESCALER(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
 		{
-			return PARENT::timer_prescaler(TRAIT::IS_16BITS ? time_between_pulses_us : max_pulse_width_us);
+			return TRAIT::IS_16BITS ?
+				PWM_ICR_prescaler(pulse_frequency) :
+				PARENT::timer_prescaler(max_pulse_width_us);
 		}
-		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t max_pulse_width_us, uint16_t time_between_pulses_us)
+		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
 		{
 			//TODO double check this formula
-			return time_between_pulses_us * 256UL * _BV(uint8_t(PRESCALER(max_pulse_width_us, time_between_pulses_us))) / F_CPU;
+			return 256UL * _BV(uint8_t(PRESCALER(max_pulse_width_us, pulse_frequency))) / F_CPU / pulse_frequency;
 		}
 		
+		//TODO PUBLIC FOR DEBUG ONLY
+	public:
+		static constexpr uint16_t PWM_ICR_counter(uint16_t pwm_frequency)
+		{
+			//FIXME WRONG FORMULA: pwm_frequency should be used 2 times, not just once...
+			return F_CPU / _BV(uint8_t(PWM_ICR_prescaler(pwm_frequency))) / pwm_frequency;
+		}
+		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
+		{
+			return PARENT::best_frequency_prescaler(
+				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * 16384UL);
+		}
+		static constexpr uint16_t PWM_ICR_frequency(uint16_t pwm_frequency)
+		{
+			return F_CPU / _BV(uint8_t(PWM_ICR_prescaler(pwm_frequency))) / PWM_ICR_counter(pwm_frequency);
+		}
+		
+	private:
 		PulseCounter<typename TRAIT::TYPE> counter_;
 		uint8_t com_pins_;
 	};
