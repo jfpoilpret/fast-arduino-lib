@@ -55,6 +55,12 @@ namespace analog
 		{
 			_timer.template set_max<COM>(duty);
 		}
+
+		//TODO we also need this method but the method needs to convert us into OCRxA/B value...
+//		inline void set_pulse(TYPE pulse_us)
+//		{
+//			_timer.template set_max<COM>(pulse_us);
+//		}
 		
 	private:
 		TIMER& _timer;

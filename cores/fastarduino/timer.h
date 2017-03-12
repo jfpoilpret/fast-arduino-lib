@@ -43,11 +43,6 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
 #define REGISTER_PULSE_TIMER_ISR(TIMER_NUM)							\
 REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_pulse_overflow)
 
-//#define REGISTER_PULSE_TIMER_ISR(TIMER_NUM)																		
-//REGISTER_COMPA_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_servo_compare_A)	
-//REGISTER_COMPB_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_servo_compare_B)	
-//REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_servo_overflow)
-
 //TODO Add API to explicitly set interrupts we want to enable
 //TODO Add API to support Input Capture when available for Timer (Timer1)
 namespace timer
@@ -349,6 +344,7 @@ namespace timer
 		template<board::Timer TIMER> friend class PulseTimer;
 	};
 	
+	//TODO review API to pass prescaler explicitly to constructor?
 	//TODO Is it better to define PulseTimer16/PulseTimer8 or keep it generic as now?
 	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every 
@@ -364,6 +360,7 @@ namespace timer
 	public:
 		using TIMER_PRESCALER = typename PARENT::TIMER_PRESCALER;
 
+		//TODO define as template to avoid generated code for static constexpr utilities?
 		PulseTimer(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
 			:	Timer<TIMER>{TCCRA(), TCCRB(max_pulse_width_us, pulse_frequency)}, 
 				counter_{OVERFLOW_COUNTER(max_pulse_width_us, pulse_frequency)},
@@ -372,7 +369,6 @@ namespace timer
 			if (TRAIT::IS_16BITS)
 				// If 16 bits timer, set ICR immediately (won't change later on))
 				TRAIT::ICR = PWM_ICR_counter(pulse_frequency);
-//				TRAIT::ICR = PARENT::counter(time_between_pulses_us);
 			else
 				// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 				interrupt::register_handler(*this);
@@ -434,6 +430,8 @@ namespace timer
 		{
 			// If 16 bits, use ICR1 FastPWM and prescaler forced to best fit all pulse frequency
 			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
+			//TODO improve code a bit by removing PRESCALER and adding its code here directly
+			// (only one TRAIT::IS_16BITS?)
 			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRB : TRAIT::CTC_TCCRB) | 
 					TRAIT::TCCRB_prescaler(PRESCALER(max_pulse_width_us, pulse_frequency));
 		}
@@ -453,7 +451,6 @@ namespace timer
 	public:
 		static constexpr uint16_t PWM_ICR_counter(uint16_t pwm_frequency)
 		{
-			//FIXME WRONG FORMULA: pwm_frequency should be used 2 times, not just once...
 			return F_CPU / _BV(uint8_t(PWM_ICR_prescaler(pwm_frequency))) / pwm_frequency;
 		}
 		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
