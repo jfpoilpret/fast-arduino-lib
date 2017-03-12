@@ -119,7 +119,7 @@ int main()
 		ANALOG_INPUT::TYPE value = pot.sample();
 		TIMER_TYPE::TIMER_TYPE value2 = value;
 		if (sizeof(TIMER_TYPE::TIMER_TYPE) == 2)
-			value2 <<= 3;
+			value2 <<= 4;
 		servo1.set(value2);
 //		int16_t v = value - 128;
 //		servo1.rotate(v);
