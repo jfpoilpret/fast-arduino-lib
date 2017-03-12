@@ -100,10 +100,17 @@ namespace timer
 			return F_CPU / _BV(uint8_t(prescaler)) / (2UL * PWM_MAX);
 		}
 	
-//		static constexpr TIMER_PRESCALER pulse_prescaler(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
-//		{
-//			return TRAIT::IS_16BITS ? PWM_ICR_prescaler(pulse_frequency) : CTC_prescaler(max_pulse_width_us);
-//		}
+		// Calculations for 8bits/16 bits PulseTimer class
+		static constexpr TIMER_PRESCALER PulseTimer_prescaler(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
+		{
+			return TRAIT::IS_16BITS ? PWM_ICR_prescaler(pulse_frequency) : CTC_prescaler(max_pulse_width_us);
+		}
+		static constexpr TIMER_TYPE PulseTimer_value(TIMER_PRESCALER prescaler, uint16_t period_us)
+		{
+			static_assert(TRAIT::IS_16BITS or is_adequate_for_CTC(prescaler, period_us),
+				"period_us is too large for an 8 bits timer");
+			return CTC_counter(prescaler, period_us);
+		}
 
 		// Calculations for 16 bits ICR-based Fast PWM mode
 		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
@@ -191,7 +198,6 @@ namespace timer
 		INVERTING
 	};
 	
-	//TODO shall we support full range PWM (ie 16 bits for Timer1)? HOW?
 	enum class TimerMode:uint8_t
 	{
 		NORMAL,
@@ -378,8 +384,6 @@ namespace timer
 		template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER> friend class PulseTimer;
 	};
 	
-	//TODO review API to pass prescaler explicitly to constructor?
-	//TODO Is it better to define PulseTimer16/PulseTimer8 or keep it generic as now?
 	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every 
 	// 20ms, ie with a 50Hz frequency.
@@ -394,16 +398,14 @@ namespace timer
 		using CALCULATOR = Calculator<TIMER>;
 		
 	public:
-		//TODO define as template to avoid generated code for static constexpr utilities?
-//		template<uint16_t PULSE_FREQ>
-		PulseTimer(uint16_t PULSE_FREQ, UNUSED uint16_t max_pulse_width_us)
+		PulseTimer(uint16_t pulse_frequency)
 			:	Timer<TIMER>{TCCRA(), TCCRB()}, 
-//				counter_{OVERFLOW_COUNTER(max_pulse_width_us, pulse_frequency)},
+				counter_{OVERFLOW_COUNTER(pulse_frequency)},
 				com_pins_{}
 		{
 			if (TRAIT::IS_16BITS)
 				// If 16 bits timer, set ICR immediately (won't change later on))
-				TRAIT::ICR = CALCULATOR::PWM_ICR_counter(PRESCALER, PULSE_FREQ);
+				TRAIT::ICR = CALCULATOR::PWM_ICR_counter(PRESCALER, pulse_frequency);
 			else
 				// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 				interrupt::register_handler(*this);
@@ -422,20 +424,20 @@ namespace timer
 			TRAIT::TIMSK = (TRAIT::IS_16BITS ? 0 : _BV(TOIE0));
 		}
 		
-//		void on_pulse_overflow()
-//		{
-//			if (counter_.count_and_check() && com_pins_)
-//			{
-//				//TODO not clean code at all, find a better way (not so easy) to improve
-//				// Once time_between_pulses_us has elapsed, we should set (or toggle?) OCR pin
-//				if (com_pins_ & _BV(0))
-//					set_pin<0>();
-//				if (com_pins_ & _BV(1))
-//					set_pin<1>();
-//				if (com_pins_ & _BV(2))
-//					set_pin<2>();
-//			}
-//		}
+		void on_pulse_overflow()
+		{
+			if (counter_.count_and_check() && com_pins_)
+			{
+				//TODO not clean code at all, find a better way (not so easy) to improve
+				// Once time_between_pulses_us has elapsed, we should set (or toggle?) OCR pin
+				if (com_pins_ & _BV(0))
+					set_pin<0>();
+				if (com_pins_ & _BV(1))
+					set_pin<1>();
+				if (com_pins_ & _BV(2))
+					set_pin<2>();
+			}
+		}
 		
 		template<uint8_t COM>
 		static void set_pin()
@@ -467,14 +469,14 @@ namespace timer
 			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
 			return (TRAIT::IS_16BITS ? TRAIT::F_PWM_ICR_TCCRB : TRAIT::CTC_TCCRB) | TRAIT::TCCRB_prescaler(PRESCALER);
 		}
-//		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
-//		{
-//			//TODO double check this formula
-//			return 256UL * _BV(uint8_t(PRESCALER(max_pulse_width_us, pulse_frequency))) / F_CPU / pulse_frequency;
-//		}
+		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t pulse_frequency)
+		{
+			//TODO double check this formula
+			return 256UL * _BV(uint8_t(PRESCALER)) / F_CPU / pulse_frequency;
+		}
 		
 	private:
-//		PulseCounter<typename TRAIT::TYPE> counter_;
+		PulseCounter<typename TRAIT::TYPE> counter_;
 		uint8_t com_pins_;
 	};
 }

@@ -48,8 +48,8 @@ static constexpr const board::Timer TIMER1 = board::Timer::TIMER1;
 #error "Current target is not yet supported!"
 #endif
 
-using CALCULATOR1 = timer::Calculator<TIMER1>;
-using PRESCALER1_TYPE = CALCULATOR1::TIMER_PRESCALER;
+using CALC1 = timer::Calculator<TIMER1>;
+using PRESCALER1_TYPE = CALC1::TIMER_PRESCALER;
 
 // Constants for LED1
 constexpr const uint16_t PULSE1_MAXWIDTH_US = 2000;
@@ -57,17 +57,35 @@ constexpr const uint16_t PULSE1_MINWIDTH_US = 1000;
 
 // Pulse Frequency
 constexpr const uint16_t PULSE_FREQUENCY = 50;
-constexpr const PRESCALER1_TYPE PRESCALER1 = CALCULATOR1::PWM_ICR_prescaler(PULSE_FREQUENCY);
+constexpr const PRESCALER1_TYPE PRESCALER1 = CALC1::PulseTimer_prescaler(PULSE1_MAXWIDTH_US, PULSE_FREQUENCY);
 
 using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED1_OUTPUT = analog::PWMOutput<LED1>;
 using TIMER1_TYPE = timer::PulseTimer<TIMER1, PRESCALER1>;
 using TIMER1_DUTY_TYPE = TIMER1_TYPE::TIMER_TYPE;
 
+// Rework useful Arduino functions map() and constrain()
+//TODO push to utilities?
+template<typename T>
+constexpr T constrain(T value, T min, T max)
+{
+	return value < min ? min : value > max ? max : value;
+}
+template<typename TI, typename TO>
+constexpr TO map(TI value, TI input_range, TO output_min, TO output_max)
+{
+	return TO (value * (output_max - output_min) / input_range + output_min);
+}
+template<typename TI, typename TO>
+constexpr TO map(TI value, TI input_min, TI input_max, TO output_min, TO output_max)
+{
+	return map(value, input_max - input_min, output_min, output_max);
+}
+
 int main()
 {
 	// Initialize timer and pins
-	TIMER1_TYPE timer1{PULSE_FREQUENCY, PULSE1_MAXWIDTH_US};
+	TIMER1_TYPE timer1{PULSE_FREQUENCY};
 	LED1_OUTPUT led1{timer1};
 	ANALOG1_INPUT pot1;
 
@@ -79,17 +97,16 @@ int main()
 	sei();
 	
 	// Loop of samplings
-	LED1_OUTPUT::TYPE pulse1 = 0;
+	uint16_t pulse1 = 0;
 	while (true)
 	{
-		ANALOG1_INPUT::TYPE value1 = pot1.sample();
-		led1.set_duty(value1 << 4);
-//		LED1_OUTPUT::TYPE pulse = value1 * (PULSE1_MAXWIDTH_US - PULSE1_MINWIDTH_US) / 256UL + PULSE1_MINWIDTH_US;
-//		if (pulse1 != pulse)
-//		{
-//			pulse1 = pulse;
-//			led1.set_duty(pulse1);
-//		}
+		uint32_t input1 = pot1.sample();
+		uint16_t pulse = map(input1, 256UL, PULSE1_MINWIDTH_US, PULSE1_MAXWIDTH_US);
+		if (pulse1 != pulse)
+		{
+			pulse1 = pulse;
+			led1.set_duty(CALC1::PulseTimer_value(PRESCALER1, pulse1));
+		}
 		time::delay_ms(100);
 	}
 	return 0;
