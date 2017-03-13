@@ -147,6 +147,10 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF}
+	$(MAKE) -C examples/analog/PWM1 CONF=${CONF}
+	$(MAKE) -C examples/analog/PWM2 CONF=${CONF}
+	$(MAKE) -C examples/analog/PWM3 CONF=${CONF}
+	$(MAKE) -C examples/analog/PWM4 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF}
@@ -196,6 +200,10 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF} clean
+	$(MAKE) -C examples/analog/PWM1 CONF=${CONF} clean
+	$(MAKE) -C examples/analog/PWM2 CONF=${CONF} clean
+	$(MAKE) -C examples/analog/PWM3 CONF=${CONF} clean
+	$(MAKE) -C examples/analog/PWM4 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF} clean
