@@ -79,6 +79,12 @@ namespace flash
 // Utilities to handle PROGMEM storage for strings
 #define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const flash::FlashStorage*) &__c[0];}))
 
+// Useful macros to pass arguments containing a comma
+#define AS_ONE_ARG(...) __VA_ARGS__
+#define SINGLE_ARG1_(...) __VA_ARGS__
+#define SINGLE_ARG2_(...) __VA_ARGS__
+#define SINGLE_ARG3_(...) __VA_ARGS__
+
 // Utilities to handle ISR callbacks
 #define HANDLER_HOLDER_(HANDLER) interrupt::HandlerHolder< HANDLER >
 
@@ -86,12 +92,12 @@ namespace flash
 interrupt::HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >
 
 #define CALL_HANDLER_(HANDLER, CALLBACK,...)	\
-CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK, ##__VA_ARGS__)::handle
+CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), ##__VA_ARGS__)::handle
 
 #define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)	\
 ISR(VECTOR)												\
 {														\
-	CALL_HANDLER_(HANDLER , CALLBACK)();				\
+	CALL_HANDLER_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK))();				\
 }
 
 #define REGISTER_ISR_FUNCTION_(VECTOR, CALLBACK)	\

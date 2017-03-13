@@ -31,17 +31,17 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
 #define REGISTER_COMPA_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), SINGLE_ARG3_(HANDLER), SINGLE_ARG3_(CALLBACK))
 #define REGISTER_COMPB_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPB_vect), HANDLER, CALLBACK)
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPB_vect), SINGLE_ARG3_(HANDLER), SINGLE_ARG3_(CALLBACK))
 #define REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)		\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), SINGLE_ARG3_(HANDLER), SINGLE_ARG3_(CALLBACK))
 
-#define TIMER_CLASS_(TIMER_NUM)		CAT(timer::PulseTimer<board::Timer::TIMER, TIMER_NUM) >
+#define TIMER_CLASS_(TIMER_NUM, PRESCALER) CAT(timer::PulseTimer<board::Timer::TIMER, TIMER_NUM) , PRESCALER >
 
 //TODO this should be only for 8bits timer...
-#define REGISTER_PULSE_TIMER_ISR(TIMER_NUM)							\
-REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, TIMER_CLASS_(TIMER_NUM), & TIMER_CLASS_(TIMER_NUM) ::on_pulse_overflow)
+#define REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER)							\
+REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, AS_ONE_ARG(TIMER_CLASS_(TIMER_NUM, PRESCALER)), & AS_ONE_ARG(TIMER_CLASS_(TIMER_NUM, PRESCALER) ::on_pulse_overflow))
 
 //TODO Add API to explicitly set interrupts we want to enable
 //TODO Add API to support Input Capture when available for Timer (Timer1)
@@ -107,26 +107,21 @@ namespace timer
 		}
 		static constexpr TIMER_TYPE PulseTimer_value(TIMER_PRESCALER prescaler, uint16_t period_us)
 		{
-			static_assert(TRAIT::IS_16BITS or is_adequate_for_CTC(prescaler, period_us),
-				"period_us is too large for an 8 bits timer");
 			return CTC_counter(prescaler, period_us);
 		}
 
 		// Calculations for 16 bits ICR-based Fast PWM mode
 		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
 		{
-			static_assert(TRAIT::IS_16BITS, "TIMER must be 16 bits");
 			return best_frequency_prescaler(
 				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * 16384UL);
 		}
 		static constexpr uint16_t PWM_ICR_frequency(TIMER_PRESCALER prescaler, uint16_t counter)
 		{
-			static_assert(TRAIT::IS_16BITS, "TIMER must be 16 bits");
 			return F_CPU / _BV(uint8_t(prescaler)) / counter;
 		}
 		static constexpr uint16_t PWM_ICR_counter(TIMER_PRESCALER prescaler, uint16_t pwm_frequency)
 		{
-			static_assert(TRAIT::IS_16BITS, "TIMER must be 16 bits");
 			return F_CPU / _BV(uint8_t(prescaler)) / pwm_frequency;
 		}
 		
@@ -206,8 +201,8 @@ namespace timer
 		PHASE_CORRECT_PWM
 	};
 	
-	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
-	class PulseTimer;
+//	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
+//	class PulseTimer;
 	
 	template<board::Timer TIMER>
 	class Timer
@@ -356,7 +351,7 @@ namespace timer
 	// private (implementation detail) template class to hold (or not) a counter of Timer Overflows
 	//TODO try to hide it inside PulseTimer? then make its methods public (no need for friend anymore)
 	template<typename T>
-	class PulseCounter
+	struct PulseCounter
 	{
 		PulseCounter(UNUSED uint8_t max) {}
 		void reset() {}
@@ -364,10 +359,9 @@ namespace timer
 		{
 			return true;
 		}
-		template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER> friend class PulseTimer;
 	};
 	template<>
-	class PulseCounter<uint8_t>
+	struct PulseCounter<uint8_t>
 	{
 		PulseCounter(uint8_t max):MAX{max}, count_{0} {}
 		void reset()
@@ -381,7 +375,6 @@ namespace timer
 		}
 		const uint8_t MAX;
 		uint8_t count_;
-		template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER> friend class PulseTimer;
 	};
 	
 	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
@@ -393,8 +386,6 @@ namespace timer
 	{
 		using PARENT = Timer<TIMER>;
 		using TRAIT = typename PARENT::TRAIT;
-		//FIXME temporary check for 16bits only
-		static_assert(TRAIT::IS_16BITS, "TIMER must be a 16 bits timer");
 		using CALCULATOR = Calculator<TIMER>;
 		
 	public:
@@ -457,6 +448,22 @@ namespace timer
 		}
 		
 	private:
+//		struct PulseCounter
+//		{
+//			PulseCounter(uint8_t max):MAX{max}, count_{0} {}
+//			void reset()
+//			{
+//				count_ = 0;
+//			}
+//			bool count_and_check()
+//			{
+//				if (++count_ == MAX) count_ = 0;
+//				return !count_;
+//			}
+//			const uint8_t MAX;
+//			uint8_t count_;
+//		};
+		
 		static constexpr uint8_t TCCRA()
 		{
 			// If 16 bits, use ICR1 FastPWM
@@ -472,7 +479,7 @@ namespace timer
 		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t pulse_frequency)
 		{
 			//TODO double check this formula
-			return 256UL * _BV(uint8_t(PRESCALER)) / F_CPU / pulse_frequency;
+			return TRAIT::IS_16BITS ? 0 : 256UL * _BV(uint8_t(PRESCALER)) / F_CPU / pulse_frequency;
 		}
 		
 	private:
