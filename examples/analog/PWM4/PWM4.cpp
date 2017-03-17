@@ -58,14 +58,16 @@ constexpr const uint16_t PULSE0_MINWIDTH_US = 1000;
 // Pulse Frequency
 constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const PRESCALER0_TYPE PRESCALER0 = CALC0::PulseTimer_prescaler(PULSE0_MAXWIDTH_US, PULSE_FREQUENCY);
+static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
 
 // Register ISR needed for PulseTimer (8 bits specific)
-REGISTER_PULSE_TIMER8_ISR(0, PRESCALER0)
+REGISTER_PULSE_TIMER8_ISR(0, PRESCALER0, LED0)
 
 using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED0_OUTPUT = analog::PWMOutput<LED0>;
-using TIMER0_TYPE = timer::PulseTimer<TIMER0, PRESCALER0>;
+using TIMER0_TYPE = timer::PulseTimer8<TIMER0, PRESCALER0>;
 using TIMER0_DUTY_TYPE = TIMER0_TYPE::TIMER_TYPE;
+static_assert(TIMER0_TYPE::OVERFLOW_COUNTER(PULSE_FREQUENCY) == 4, "");
 
 // Rework useful Arduino functions map() and constrain()
 //TODO push to utilities?
@@ -85,15 +87,23 @@ constexpr TO map(TI value, TI input_min, TI input_max, TO output_min, TO output_
 	return map(value, input_max - input_min, output_min, output_max);
 }
 
+//TODO use 2 LEDs to trace if we pass here or not
+using gpio::PinMode;
+using DEBUG_LED1 = gpio::FastPinType<board::DigitalPin::D11_PB3>::TYPE;
+using DEBUG_LED2 = gpio::FastPinType<board::DigitalPin::D12_PB4>::TYPE;
+
 int main()
 {
+	DEBUG_LED1 led1{PinMode::OUTPUT};
+	DEBUG_LED2 led2{PinMode::OUTPUT};
+	
 	// Initialize timer and pins
 	TIMER0_TYPE timer0{PULSE_FREQUENCY};
 	LED0_OUTPUT led0{timer0};
 	ANALOG0_INPUT pot0;
 
 	// Start timer
-	timer0.register_pin(LED0_OUTPUT::COM);
+//	timer0.register_pin(LED0_OUTPUT::COM);
 	timer0._begin();
 	
 	// Enable interrupts
@@ -104,12 +114,13 @@ int main()
 	while (true)
 	{
 		uint32_t input0 = pot0.sample();
-		uint16_t pulse = map(input0, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
-		if (pulse0 != pulse)
-		{
-			pulse0 = pulse;
-			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
-		}
+		led0.set_duty(input0);
+//		uint16_t pulse = map(input0, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
+//		if (pulse0 != pulse)
+//		{
+//			pulse0 = pulse;
+//			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
+//		}
 		time::delay_ms(100);
 	}
 	return 0;

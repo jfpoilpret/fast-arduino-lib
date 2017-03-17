@@ -39,13 +39,15 @@ namespace analog
 			static_assert(TRAIT::HAS_PWM, "PIN must be a PWM pin");
 			// Initialize pin as output
 			typename gpio::FastPinType<PIN>::TYPE output{gpio::PinMode::OUTPUT};
-			// Set com mode for pin
-			_timer.template set_output_mode<COM>(output_mode);
+			if (TIMER_TRAIT::IS_16BITS)
+				// Set com mode for pin
+				_timer.template set_output_mode<COM>(output_mode);
 		}
 		
 		inline void set_output_mode(TimerOutputMode output_mode)
 		{
-			_timer.template set_output_mode<COM>(output_mode);
+			if (TIMER_TRAIT::IS_16BITS)
+				_timer.template set_output_mode<COM>(output_mode);
 		}
 
 		using TYPE = typename TIMER_TRAIT::TYPE;
