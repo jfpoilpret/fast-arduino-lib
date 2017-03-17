@@ -22,6 +22,7 @@
 #include "boards/board_traits.h"
 #include "fast_io.h"
 
+//TODO rework naming of these API macros
 #define REGISTER_TIMER_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
 
@@ -37,15 +38,9 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPB_vect), SINGLE_ARG3_(HANDLER),
 #define REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)		\
 REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), SINGLE_ARG3_(HANDLER), SINGLE_ARG3_(CALLBACK))
 
-#define TIMER_CLASS_(TIMER_NUM, PRESCALER) CAT(timer::PulseTimer8<board::Timer::TIMER, TIMER_NUM) , PRESCALER >
-
-//#define REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER, PIN1, PIN2)						
-//REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, AS_ONE_ARG(TIMER_CLASS_(TIMER_NUM, PRESCALER)),	
-//	& AS_ONE_ARG(TIMER_CLASS_(TIMER_NUM, PRESCALER) ::on_pulse_overflow))
-
-//TODO register TOVF ISR to check if this is the last overflow and hence we need to set PINs high
-//TODO register COMPA/B ISR to clear PINs low
 //TODO improve to allow variable number of pins (1 to 3)
+//TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
+//TODO improve gpio to allow static set/clear/toggle...
 #define REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER, PIN1)							\
 ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 {																						\
@@ -55,25 +50,16 @@ ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 	CALL_HANDLER_(T, &T::overflow, bool&)(reset);										\
 	if (reset)																			\
 	{																					\
-		using DEBUG_LED1 = gpio::FastPinType<board::DigitalPin::D11_PB3>::TYPE;			\
-		DEBUG_LED1 led1;																\
-		led1.toggle();																	\
 		P pin;																			\
-		pin.set();																	\
+		pin.set();																		\
 	}																					\
 }																						\
 ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
 {																						\
-	using DEBUG_LED2 = gpio::FastPinType<board::DigitalPin::D12_PB4>::TYPE;				\
-	DEBUG_LED2 led2;																	\
-	led2.toggle();																		\
 	using P = typename gpio::FastPinType< PIN1 >::TYPE;									\
 	P pin;																				\
 	pin.clear();																		\
 }																						\
-
-//REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, AS_ONE_ARG(TIMER_CLASS_(TIMER_NUM, PRESCALER)),	
-//	& AS_ONE_ARG(TIMER_CLASS_(TIMER_NUM, PRESCALER) ::on_pulse_overflow))
 
 //TODO Add API to explicitly set interrupts we want to enable
 //TODO Add API to support Input Capture when available for Timer (Timer1)
@@ -440,8 +426,7 @@ namespace timer
 	public:
 		PulseTimer8(uint16_t pulse_frequency)
 			:	Timer<TIMER>{TCCRA(), TCCRB()}, 
-				MAX{OVERFLOW_COUNTER(pulse_frequency)},
-				com_pins_{}
+				MAX{OVERFLOW_COUNTER(pulse_frequency)}
 		{
 			// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 			interrupt::register_handler(*this);
@@ -458,7 +443,7 @@ namespace timer
 			TRAIT::TCNT = 0;
 			TRAIT::OCRA = 0;
 			//TODO trait for selecting those interrupts?
-			//TODO how to handle COMPA and COMPB and COMPC?
+			//TODO how to handle COMPA and COMPB?
 			TRAIT::TIMSK = _BV(TOIE0) | _BV(OCIE0A);
 		}
 		
@@ -466,69 +451,27 @@ namespace timer
 		{
 			if (++count_ == MAX) count_ = 0;
 			reset = !count_;
-//			if (com_pins_ && !count_)
-//			{
-//				//TODO not clean code at all, find a better way (not so easy) to improve
-//				// Once time_between_pulses_us has elapsed, we should set (or toggle?) OCR pin
-//				if (com_pins_ & _BV(0))
-//					set_pin<0>();
-//				if (com_pins_ & _BV(1))
-//					set_pin<1>();
-//				if (com_pins_ & _BV(2))
-//					set_pin<2>();
-//			}
 		}
 
-//FIXME should be private		
-//		template<uint8_t COM>
-//		void set_pin()
-//		{
-//			DEBUG_LED2 led2;
-//			led2.toggle();
-//			//FIXME As soon as we link COM pin, we cannot set it ourselves?
-//			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
-//			set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, 
-//				PARENT::template convert_COM<COM>(TimerOutputMode::DISCONNECTED));
-//			constexpr board::DigitalPin PIN = board_traits::Timer_COM_trait<TIMER, COM>::PIN_OCR;
-//			typename gpio::FastPinType<PIN>::TYPE pin;
-//			pin.set();
-//			set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, PARENT::_tccra);
-//		}
-		
-		// Methods called by Servo class (should be private and Servo declared friend)
-//		void register_pin(uint8_t com_index)
-//		{
-//			com_pins_ |= _BV(com_index);
-//		}
-//		void unregister_pin(uint8_t com_index)
-//		{
-//			com_pins_ &= ~_BV(com_index);
-//		}
-		
-//	private:
+	private:
 		static constexpr uint8_t TCCRA()
 		{
 			// If 8 bits, use CTC/TOV ISR
 			return 0;
-//			return TRAIT::CTC_TCCRA;
 		}
 		static constexpr uint8_t TCCRB()
 		{
 			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
 			return TRAIT::TCCRB_prescaler(PRESCALER);
-//			return TRAIT::CTC_TCCRB | TRAIT::TCCRB_prescaler(PRESCALER);
 		}
 		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t pulse_frequency)
 		{
-			//TODO double check this formula
-//			return 256UL * _BV(uint8_t(PRESCALER)) / F_CPU / pulse_frequency;
 			return F_CPU / 256UL / _BV(uint8_t(PRESCALER)) / pulse_frequency;
 		}
 		
 	private:
 		const uint8_t MAX;
 		uint8_t count_;
-		uint8_t com_pins_;
 	};
 }
 

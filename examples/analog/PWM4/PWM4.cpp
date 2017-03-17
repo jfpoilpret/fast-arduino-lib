@@ -67,7 +67,6 @@ using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, ui
 using LED0_OUTPUT = analog::PWMOutput<LED0>;
 using TIMER0_TYPE = timer::PulseTimer8<TIMER0, PRESCALER0>;
 using TIMER0_DUTY_TYPE = TIMER0_TYPE::TIMER_TYPE;
-static_assert(TIMER0_TYPE::OVERFLOW_COUNTER(PULSE_FREQUENCY) == 4, "");
 
 // Rework useful Arduino functions map() and constrain()
 //TODO push to utilities?
@@ -87,23 +86,14 @@ constexpr TO map(TI value, TI input_min, TI input_max, TO output_min, TO output_
 	return map(value, input_max - input_min, output_min, output_max);
 }
 
-//TODO use 2 LEDs to trace if we pass here or not
-using gpio::PinMode;
-using DEBUG_LED1 = gpio::FastPinType<board::DigitalPin::D11_PB3>::TYPE;
-using DEBUG_LED2 = gpio::FastPinType<board::DigitalPin::D12_PB4>::TYPE;
-
 int main()
 {
-	DEBUG_LED1 led1{PinMode::OUTPUT};
-	DEBUG_LED2 led2{PinMode::OUTPUT};
-	
 	// Initialize timer and pins
 	TIMER0_TYPE timer0{PULSE_FREQUENCY};
 	LED0_OUTPUT led0{timer0};
 	ANALOG0_INPUT pot0;
 
 	// Start timer
-//	timer0.register_pin(LED0_OUTPUT::COM);
 	timer0._begin();
 	
 	// Enable interrupts
