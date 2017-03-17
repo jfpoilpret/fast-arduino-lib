@@ -35,6 +35,8 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED0 = board::PWMPin::D6_PD6_OC0A;
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+static constexpr const board::DigitalPin LED1 = board::PWMPin::D5_PD5_OC0B;
 static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
@@ -61,10 +63,12 @@ constexpr const PRESCALER0_TYPE PRESCALER0 = CALC0::PulseTimer_prescaler(PULSE0_
 static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
 
 // Register ISR needed for PulseTimer (8 bits specific)
-REGISTER_PULSE_TIMER8_ISR(0, PRESCALER0, LED0, board::DigitalPin::NONE)
+REGISTER_PULSE_TIMER8_ISR(0, PRESCALER0, LED0, LED1)
 
 using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED0_OUTPUT = analog::PWMOutput<LED0>;
+using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
+using LED1_OUTPUT = analog::PWMOutput<LED1>;
 using TIMER0_TYPE = timer::PulseTimer8<TIMER0, PRESCALER0>;
 using TIMER0_DUTY_TYPE = TIMER0_TYPE::TIMER_TYPE;
 
@@ -92,6 +96,8 @@ int main()
 	TIMER0_TYPE timer0{PULSE_FREQUENCY};
 	LED0_OUTPUT led0{timer0};
 	ANALOG0_INPUT pot0;
+	LED1_OUTPUT led1{timer0};
+	ANALOG1_INPUT pot1;
 
 	// Start timer
 	timer0._begin();
@@ -101,6 +107,7 @@ int main()
 	
 	// Loop of samplings
 	uint16_t pulse0 = 0;
+	uint16_t pulse1 = 0;
 	while (true)
 	{
 		uint32_t input0 = pot0.sample();
@@ -109,6 +116,13 @@ int main()
 		{
 			pulse0 = pulse;
 			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
+		}
+		uint32_t input1 = pot1.sample();
+		pulse = map(input1, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
+		if (pulse1 != pulse)
+		{
+			pulse1 = pulse;
+			led1.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse1));
 		}
 		time::delay_ms(100);
 	}
