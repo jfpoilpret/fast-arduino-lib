@@ -247,6 +247,7 @@ namespace gpio
 	class FastPin<board::Port::NONE, 0>
 	{
 	public:
+		FastPin() INLINE {}
 		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
 		void set() INLINE {}
 		void clear() INLINE {}
