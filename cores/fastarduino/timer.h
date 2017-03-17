@@ -22,44 +22,40 @@
 #include "boards/board_traits.h"
 #include "fast_io.h"
 
-//TODO rework naming of these API macros
-#define REGISTER_TIMER_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
+#define REGISTER_PULSE_TIMER_OVF_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)			\
+ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))												\
+{																					\
+	using T = CAT(timer::PulseTimer8<board::Timer::TIMER, TIMER_NUM) , PRESCALER >;	\
+	bool reset;																		\
+	CALL_HANDLER_(T, &T::overflow, bool&)(reset);									\
+	if (reset)																		\
+	{																				\
+		using P1 = typename gpio::FastPinType< PIN_A >::TYPE;						\
+		P1 pin1;																	\
+		pin1.set();																	\
+		using P2 = typename gpio::FastPinType< PIN_B >::TYPE;						\
+		P2 pin2;																	\
+		pin2.set();																	\
+	}																				\
+}
 
-#define REGISTER_TIMER_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
-REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
-
-#define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
-
-#define REGISTER_COMPA_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), SINGLE_ARG3_(HANDLER), SINGLE_ARG3_(CALLBACK))
-#define REGISTER_COMPB_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPB_vect), SINGLE_ARG3_(HANDLER), SINGLE_ARG3_(CALLBACK))
-#define REGISTER_TOVF_ISR_METHOD_(TIMER_NUM, HANDLER, CALLBACK)		\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), SINGLE_ARG3_(HANDLER), SINGLE_ARG3_(CALLBACK))
+#define REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, COMP, PIN)	\
+ISR(CAT3(TIMER, TIMER_NUM, COMP))										\
+{																		\
+	using P = typename gpio::FastPinType< PIN >::TYPE;					\
+	P pin;																\
+	pin.clear();														\
+}
 
 //TODO improve to allow variable number of pins (1 to 3)
 //TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
 //TODO improve gpio to allow static set/clear/toggle...
-#define REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER, PIN1)							\
-ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
-{																						\
-	using T = CAT(timer::PulseTimer8<board::Timer::TIMER, TIMER_NUM) , PRESCALER >;		\
-	using P = typename gpio::FastPinType< PIN1 >::TYPE;									\
-	bool reset;																			\
-	CALL_HANDLER_(T, &T::overflow, bool&)(reset);										\
-	if (reset)																			\
-	{																					\
-		P pin;																			\
-		pin.set();																		\
-	}																					\
-}																						\
-ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
-{																						\
-	using P = typename gpio::FastPinType< PIN1 >::TYPE;									\
-	P pin;																				\
-	pin.clear();																		\
-}																						\
+#define REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)		\
+REGISTER_PULSE_TIMER_OVF_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)			\
+REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, _COMPA_vect, PIN_A)	\
+REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, _COMPB_vect, PIN_B)
+
+//EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
 
 //TODO Add API to explicitly set interrupts we want to enable
 //TODO Add API to support Input Capture when available for Timer (Timer1)
@@ -408,13 +404,10 @@ namespace timer
 		}
 	};
 	
-	//IDEA:
-	// use API (private) to tell ISR what to do
-	// REGISTER ISR for TIMER and for PIN (or PINs))
 	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every 
 	// 20ms, ie with a 50Hz frequency.
-	// This implementation ensures a good pulse width precision for 16-bits timers, as well as 8-bits timers.
+	// This implementation ensures a good pulse width precision for 8-bits timers.
 	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
 	class PulseTimer8: public Timer<TIMER>
 	{
@@ -443,8 +436,7 @@ namespace timer
 			TRAIT::TCNT = 0;
 			TRAIT::OCRA = 0;
 			//TODO trait for selecting those interrupts?
-			//TODO how to handle COMPA and COMPB?
-			TRAIT::TIMSK = _BV(TOIE0) | _BV(OCIE0A);
+			TRAIT::TIMSK = _BV(TOIE0) | _BV(OCIE0A) | _BV(OCIE0B);
 		}
 		
 		void overflow(bool& reset)

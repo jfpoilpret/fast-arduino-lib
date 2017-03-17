@@ -61,7 +61,7 @@ constexpr const PRESCALER0_TYPE PRESCALER0 = CALC0::PulseTimer_prescaler(PULSE0_
 static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
 
 // Register ISR needed for PulseTimer (8 bits specific)
-REGISTER_PULSE_TIMER8_ISR(0, PRESCALER0, LED0)
+REGISTER_PULSE_TIMER8_ISR(0, PRESCALER0, LED0, board::DigitalPin::NONE)
 
 using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED0_OUTPUT = analog::PWMOutput<LED0>;
