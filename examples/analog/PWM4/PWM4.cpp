@@ -104,13 +104,12 @@ int main()
 	while (true)
 	{
 		uint32_t input0 = pot0.sample();
-		led0.set_duty(input0);
-//		uint16_t pulse = map(input0, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
-//		if (pulse0 != pulse)
-//		{
-//			pulse0 = pulse;
-//			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
-//		}
+		uint16_t pulse = map(input0, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
+		if (pulse0 != pulse)
+		{
+			pulse0 = pulse;
+			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
+		}
 		time::delay_ms(100);
 	}
 	return 0;
