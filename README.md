@@ -5,7 +5,7 @@ FastArduino is a C++, object-oriented library for Arduino boards based on AVR MC
 
 - provide smaller and faster code than other libraries for the same functionality
 - ensure you pay (size and speed) only for what you use
-- use real Object-Oriented Design everywhere
+- use C++ Object-Oriented Design everywhere
 - reduce risk of bad code, e.g. by preventing usage, at compile time, of unexisting features (pins, timers...) for the target MCU
 - enforce event-driven programs
 - support both ATmega and ATtiny chips
@@ -24,7 +24,7 @@ FastArduino tries to favour C++ templates rather than virtual methods whenever p
 This comes at a cost: 
 
 1. Template usage is often more complex in applications. The provided examples are here to help.
-2. Build times are increased as most code is inside C++ headers
+2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included)
 
 Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++11 standard.
 
@@ -61,6 +61,7 @@ What the project already has:
 - Flash memory data support (PROGMEM data), particularly strings (useful to limit used SRAM)
 - EEPROM support, with synchronous or asynchronous write
 - PWM output support
+- "Pulsed" Timer support (useful for Servos)
 
 As of now, the following platforms are supported (and tested):
 
@@ -81,19 +82,20 @@ The roadmap of next activities and new supported features is the following:
 
 March-April 2017
 ----------------
-1. I2C support
-2. Add support for Arduino Leonardo (without CDC feature)
+1. Servo control API
+2. I2C support
 3. Improve Timer support (support input capture where available)
+4. Add support for Arduino Leonardo (without CDC feature)
 
 May 2017
 --------
-4. Add support for ATtinyX5
-5. Add CDC feature support for Arduino Leonardo
+5. Add support for ATtinyX5
+6. Add CDC feature support for Arduino Leonardo
 
 June 2017
 ---------
-6. Improve Analog Input support and code
-7. Improve SPI to support slave mode
+7. Improve Analog Input support and code
+8. Improve SPI to support slave mode
 
 In addition to these activities, I will start to perform continuous improvements at all times, regarding:
 
