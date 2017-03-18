@@ -89,7 +89,7 @@ template<typename IN, typename OUT>
 void update(IN& in, OUT& out, uint16_t old_pulse)
 {
 	uint32_t input = in.sample();
-	uint16_t pulse = map(input, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
+	uint16_t pulse = utils::map(input, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
 	if (old_pulse != pulse)
 	{
 		old_pulse = pulse;

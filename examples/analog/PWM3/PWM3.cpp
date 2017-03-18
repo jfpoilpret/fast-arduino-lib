@@ -82,7 +82,7 @@ int main()
 	while (true)
 	{
 		uint32_t input1 = pot1.sample();
-		uint16_t pulse = map(input1, 256UL, PULSE1_MINWIDTH_US, PULSE1_MAXWIDTH_US);
+		uint16_t pulse = utils::map(input1, 256UL, PULSE1_MINWIDTH_US, PULSE1_MAXWIDTH_US);
 		if (pulse1 != pulse)
 		{
 			pulse1 = pulse;

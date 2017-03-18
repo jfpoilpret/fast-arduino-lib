@@ -278,7 +278,7 @@ namespace timer
 
 		inline void set_timer_mode(TimerMode timer_mode)
 		{
-			set_mask(_tccra, 0xFF & ~TRAIT::COM_MASK, timer_mode_TCCRA(timer_mode));
+			utils::set_mask(_tccra, 0xFF & ~TRAIT::COM_MASK, timer_mode_TCCRA(timer_mode));
 			_tccrb = timer_mode_TCCRB(timer_mode);
 		}
 		
@@ -352,7 +352,7 @@ namespace timer
 		{
 			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
 			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
-			set_mask(_tccra, COM_TRAIT::COM_MASK, convert_COM<COM>(mode));
+			utils::set_mask(_tccra, COM_TRAIT::COM_MASK, convert_COM<COM>(mode));
 		}
 		
 		template<uint8_t COM>
@@ -363,9 +363,9 @@ namespace timer
 			synchronized
 			{
 				if (max)
-					set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, _tccra);
+					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, _tccra);
 				else
-					set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, 
+					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, 
 						convert_COM<COM>(TimerOutputMode::DISCONNECTED));
 				COM_TRAIT::OCR = max;
 			}

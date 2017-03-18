@@ -390,7 +390,7 @@ namespace eeprom
 			WriteItem():address{0}, size{0} {}
 			WriteItem(uint8_t value1, uint8_t value2, uint8_t value3)
 				:	address{uint16_t(value1 << 4 | value2 >> 4)}, 
-					size{uint16_t(is_zero((value2 & 0x0F) << 8 | value3, E2END + 1))} {}
+					size{uint16_t(utils::is_zero((value2 & 0x0F) << 8 | value3, E2END + 1))} {}
 			inline static uint8_t value1(uint16_t address, uint16_t size UNUSED)
 			{
 				return address >> 4;
