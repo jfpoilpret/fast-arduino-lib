@@ -19,6 +19,7 @@
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 
+#include "interrupts.h"
 #include "utilities.h"
 #include "queue.h"
 

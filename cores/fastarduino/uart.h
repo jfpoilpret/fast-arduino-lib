@@ -15,6 +15,7 @@
 #ifndef UART_HH
 #define	UART_HH
 
+#include "interrupts.h"
 #include "uart_commons.h"
 #include "streams.h"
 #include "boards/board_traits.h"

@@ -16,6 +16,7 @@
 #define RTT_HH
 
 #include <avr/interrupt.h>
+#include "interrupts.h"
 #include "timer.h"
 #include "time.h"
 #include "events.h"

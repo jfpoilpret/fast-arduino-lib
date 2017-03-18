@@ -18,6 +18,7 @@
 #include <avr/interrupt.h>
 #include <stddef.h>
 
+#include "interrupts.h"
 #include "utilities.h"
 #include "boards/board_traits.h"
 #include "gpio.h"

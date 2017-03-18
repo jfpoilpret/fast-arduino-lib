@@ -17,6 +17,7 @@
 
 #include <avr/interrupt.h>
 
+#include "interrupts.h"
 #include "utilities.h"
 #include "boards/board.h"
 #include "boards/board_traits.h"

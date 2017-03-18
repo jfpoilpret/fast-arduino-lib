@@ -17,6 +17,7 @@
 
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
+#include "interrupts.h"
 #include "events.h"
 #include "boards/board.h"
 

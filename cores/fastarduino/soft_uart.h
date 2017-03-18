@@ -15,6 +15,7 @@
 #ifndef SOFTUART_HH
 #define	SOFTUART_HH
 
+#include "interrupts.h"
 #include "utilities.h"
 #include "uart_commons.h"
 #include "streams.h"
