@@ -234,13 +234,66 @@ namespace gpio
 	};
 
 	template<board::DigitalPin DPIN>
-	struct FastPinType
+	class FastPinType
 	{
-		static constexpr const board::Port PORT = board_traits::DigitalPin_trait<DPIN>::PORT;
-		static constexpr const uint8_t BIT = board_traits::DigitalPin_trait<DPIN>::BIT;
+	private:
+		using TRAIT = board_traits::DigitalPin_trait<DPIN>;
+		using PTRAIT = board_traits::Port_trait<TRAIT::PORT>;
+		
+	public:
+		static constexpr const board::Port PORT = TRAIT::PORT;
+		static constexpr const uint8_t BIT = TRAIT::BIT;
 		static constexpr const uint8_t MASK = _BV(BIT);
 		using TYPE = FastPin<PORT, BIT>;
 		using PORT_TYPE = FastPort<PORT>;
+		
+		static void set_mode(PinMode mode, bool value = false)
+		{
+			if (mode == PinMode::OUTPUT)
+				PTRAIT::DDR |= _BV(BIT);
+			else
+				PTRAIT::DDR &= ~_BV(BIT);
+			if (value || mode == PinMode::INPUT_PULLUP)
+				PTRAIT::PORT |= _BV(BIT);
+			else
+				PTRAIT::PORT &= ~_BV(BIT);
+		}
+		static void set()
+		{
+			PTRAIT::PORT |= _BV(BIT);
+		}
+		static void clear()
+		{
+			PTRAIT::PORT &= ~_BV(BIT);
+		}
+		static void toggle()
+		{
+			PTRAIT::PIN |= _BV(BIT);
+		}
+		static bool value()
+		{
+			return PTRAIT::PIN & _BV(BIT);
+		}
+	};
+
+	template<>
+	class FastPinType<board::DigitalPin::NONE>
+	{
+	public:
+		static constexpr const board::Port PORT = board::Port::NONE;
+		static constexpr const uint8_t BIT = 0;
+		static constexpr const uint8_t MASK = 0;
+		using TYPE = FastPin<PORT, BIT>;
+		using PORT_TYPE = FastPort<PORT>;
+		
+		static void set_mode(UNUSED PinMode mode, UNUSED bool value = false) {}
+		static void set() {}
+		static void clear() {}
+		static void toggle() {}
+		static bool value()
+		{
+			return false;
+		}
 	};
 
 	template<>

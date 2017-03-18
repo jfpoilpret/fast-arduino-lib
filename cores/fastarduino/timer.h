@@ -23,9 +23,6 @@
 #include "boards/board_traits.h"
 #include "gpio.h"
 
-//TODO improve gpio to allow static set/clear/toggle...
-//TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
-
 // Generic macros to register ISR on Timer
 //=========================================
 //TODO rework naming of these API macros
@@ -37,6 +34,7 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
+//TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
 #define REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)				\
 ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 {																						\
@@ -48,12 +46,8 @@ ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);										\
 	if (reset)																			\
 	{																					\
-		using P1 = typename gpio::FastPinType< PIN_A >::TYPE;							\
-		P1 pin1;																		\
-		pin1.set();																		\
-		using P2 = typename gpio::FastPinType< PIN_B >::TYPE;							\
-		P2 pin2;																		\
-		pin2.set();																		\
+		gpio::FastPinType< PIN_A >::set();												\
+		gpio::FastPinType< PIN_B >::set();												\
 	}																					\
 }
 
@@ -67,11 +61,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 	bool reset;																			\
 	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);										\
 	if (reset)																			\
-	{																					\
-		using P = typename gpio::FastPinType< PIN >::TYPE;								\
-		P pin;																			\
-		pin.set();																		\
-	}																					\
+		gpio::FastPinType< PIN >::clear();												\
 }
 
 #define REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, COM_NUM, COMP, PIN)					\
@@ -80,9 +70,7 @@ ISR(CAT3(TIMER, TIMER_NUM, COMP))														\
 	const board::Timer T = CAT(board::Timer::TIMER, TIMER_NUM);							\
 	using PINT = board_traits::Timer_COM_trait<T, COM_NUM>;								\
 	static_assert(PIN == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");\
-	using P = typename gpio::FastPinType< PIN >::TYPE;									\
-	P pin;																				\
-	pin.clear();																		\
+	gpio::FastPinType< PIN >::clear();													\
 }
 
 // Macros to register ISR for PWM on PulseTimer8

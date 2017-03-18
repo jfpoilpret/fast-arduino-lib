@@ -561,7 +561,7 @@ namespace rf
 			:	NRF24L01<CSN, CE>{net, dev},
 				_irq_signal{interrupt::InterruptTrigger::FALLING_EDGE}
 		{
-			typename gpio::FastPinType<board::DigitalPin(IRQ)>::TYPE{gpio::PinMode::INPUT_PULLUP};
+			gpio::FastPinType<IRQ>::set_mode(gpio::PinMode::INPUT_PULLUP);
 		}
 
 		inline void begin()
