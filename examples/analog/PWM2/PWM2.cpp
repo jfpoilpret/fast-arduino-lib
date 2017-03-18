@@ -92,7 +92,7 @@ int main()
 	while (true)
 	{
 		ANALOG_INPUT1::TYPE value1 = pot1.sample();
-		ANALOG_INPUT1::TYPE value2 = pot2.sample();
+		ANALOG_INPUT2::TYPE value2 = pot2.sample();
 		if (duty1 != value1)
 		{
 			duty1 = value1;

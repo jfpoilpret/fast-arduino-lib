@@ -309,7 +309,11 @@ namespace board_traits
 							_BV(WGM10) | _BV(WGM11), 0,
 							0, _BV(WGM12), 
 							R_(TCCR1A), R_(TCCR1B), R_(TCNT1), R_(OCR1A), 
-							R_(TIMSK1), R_(TIFR1)>
+							R_(TIMSK1), R_(TIFR1),
+							R_(ICR1),
+							0, _BV(WGM12) | _BV(WGM13),
+							_BV(WGM11), _BV(WGM12) | _BV(WGM13),
+							_BV(WGM11), _BV(WGM13)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -337,7 +341,11 @@ namespace board_traits
 							_BV(WGM30) | _BV(WGM31), 0,
 							0, _BV(WGM32), 
 							R_(TCCR3A), R_(TCCR3B), R_(TCNT3), R_(OCR3A), 
-							R_(TIMSK3), R_(TIFR3)>
+							R_(TIMSK3), R_(TIFR3),
+							R_(ICR3),
+							0, _BV(WGM32) | _BV(WGM33),
+							_BV(WGM31), _BV(WGM32) | _BV(WGM33),
+							_BV(WGM31), _BV(WGM33)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -365,7 +373,11 @@ namespace board_traits
 							_BV(WGM40) | _BV(WGM41), 0,
 							0, _BV(WGM42), 
 							R_(TCCR4A), R_(TCCR4B), R_(TCNT4), R_(OCR4A), 
-							R_(TIMSK4), R_(TIFR4)>
+							R_(TIMSK4), R_(TIFR4),
+							R_(ICR4),
+							0, _BV(WGM42) | _BV(WGM43),
+							_BV(WGM41), _BV(WGM42) | _BV(WGM43),
+							_BV(WGM41), _BV(WGM43)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -393,7 +405,11 @@ namespace board_traits
 							_BV(WGM50) | _BV(WGM51), 0,
 							0, _BV(WGM52), 
 							R_(TCCR5A), R_(TCCR5B), R_(TCNT5), R_(OCR5A), 
-							R_(TIMSK5), R_(TIFR5)>
+							R_(TIMSK5), R_(TIFR5),
+							R_(ICR5),
+							0, _BV(WGM52) | _BV(WGM53),
+							_BV(WGM51), _BV(WGM52) | _BV(WGM53),
+							_BV(WGM51), _BV(WGM53)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{

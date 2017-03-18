@@ -38,7 +38,7 @@ static constexpr const board::DigitalPin LED1 = board::PWMPin::D9_PB1_OC1A;
 static constexpr const board::Timer TIMER1 = board::Timer::TIMER1;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D4_PG5_OC1B;
+static constexpr const board::DigitalPin LED1 = board::PWMPin::D11_PB5_OC1A;
 static constexpr const board::Timer TIMER1 = board::Timer::TIMER1;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
