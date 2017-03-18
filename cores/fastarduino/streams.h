@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "queue.h"
+#include "flash.h"
 #include "utilities.h"
 
 namespace streams

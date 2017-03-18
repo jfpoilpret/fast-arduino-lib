@@ -17,7 +17,6 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/pgmspace.h>
 #include <util/atomic.h>
 
 #ifndef UNUSED
@@ -72,30 +71,6 @@ namespace utils
 		reg = (reg & ~mask) | (value & mask);
 	}
 }
-
-namespace flash
-{
-	// Utilities to handle PROGMEM storage for strings
-	class FlashStorage;
-
-	template<typename T>
-	T& read_flash(uint16_t address, T& item)
-	{
-		uint8_t* ptr = (uint8_t*) &item;
-		for (size_t i = 0; i < sizeof(T); ++i)
-			*ptr++ = pgm_read_byte(address++);
-		return item;
-	}
-
-	template<typename T>
-	T& read_flash(const T* address, T& item)
-	{
-		return read_flash((uint16_t) address, item);
-	}
-}
-
-// Utilities to handle PROGMEM storage for strings
-#define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const flash::FlashStorage*) &__c[0];}))
 
 // Useful macros to pass arguments containing a comma
 #define AS_ONE_ARG(...) __VA_ARGS__

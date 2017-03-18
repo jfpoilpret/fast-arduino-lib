@@ -27,6 +27,7 @@
       <itemPath>cores/fastarduino/errors.h</itemPath>
       <itemPath>cores/fastarduino/events.cpp</itemPath>
       <itemPath>cores/fastarduino/events.h</itemPath>
+      <itemPath>cores/fastarduino/flash.h</itemPath>
       <itemPath>cores/fastarduino/gpio.h</itemPath>
       <itemPath>cores/fastarduino/int.h</itemPath>
       <itemPath>cores/fastarduino/linked_list.cpp</itemPath>
@@ -199,6 +200,8 @@
       </item>
       <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/flash.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/gpio.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
@@ -368,6 +371,8 @@
       <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/flash.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/gpio.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -539,6 +544,8 @@
       </item>
       <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/flash.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/gpio.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
@@ -709,6 +716,8 @@
       </item>
       <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/flash.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/gpio.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/int.h" ex="false" tool="3" flavor2="0">
@@ -878,6 +887,8 @@
       <item path="cores/fastarduino/events.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/events.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/flash.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/gpio.h" ex="false" tool="3" flavor2="0">
       </item>
