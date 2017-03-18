@@ -13,11 +13,13 @@
 //   limitations under the License.
 
 /*
- * Use potentiometer to set LED light level or blink through PulseTimer-based PWM.
+ * Use potentiometer to set 2 LEDs light level through PulseTimer-based PWM.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D5: LED connected to GND through a 1K resistor 
  *   - D6: LED connected to GND through a 1K resistor 
  * - on Arduino MEGA:
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
@@ -64,8 +66,8 @@ static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
 
 // Register ISR needed for PulseTimer (8 bits specific)
 // NOTE ISR to register are different based on pins used and their number (1 or 2)
-//REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, LED0, LED1)
-REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, LED0)
+REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, LED0, LED1)
+//REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, LED0)
 //REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, LED1)
 
 using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
@@ -111,8 +113,8 @@ int main()
 	TIMER0_TYPE timer0{PULSE_FREQUENCY};
 	LED0_OUTPUT led0{timer0};
 	ANALOG0_INPUT pot0;
-//	LED1_OUTPUT led1{timer0};
-//	ANALOG1_INPUT pot1;
+	LED1_OUTPUT led1{timer0};
+	ANALOG1_INPUT pot1;
 
 	// Start timer
 	timer0._begin();
@@ -122,25 +124,11 @@ int main()
 	
 	// Loop of samplings
 	uint16_t pulse0 = 0;
-//	uint16_t pulse1 = 0;
+	uint16_t pulse1 = 0;
 	while (true)
 	{
 		update(pot0, led0, pulse0);
-//		update(pot1, led1, pulse1);
-//		uint32_t input0 = pot0.sample();
-//		uint16_t pulse = map(input0, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
-//		if (pulse0 != pulse)
-//		{
-//			pulse0 = pulse;
-//			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
-//		}
-//		uint32_t input1 = pot1.sample();
-//		pulse = map(input1, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
-//		if (pulse1 != pulse)
-//		{
-//			pulse1 = pulse;
-//			led1.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse1));
-//		}
+		update(pot1, led1, pulse1);
 		time::delay_ms(100);
 	}
 	return 0;
