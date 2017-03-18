@@ -22,7 +22,9 @@
 #include "boards/board_traits.h"
 #include "fast_io.h"
 
-#define REGISTER_PULSE_TIMER_OVF_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)			\
+//TODO improve gpio to allow static set/clear/toggle...
+//TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
+#define REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)			\
 ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))												\
 {																					\
 	using T = CAT(timer::PulseTimer8<board::Timer::TIMER, TIMER_NUM) , PRESCALER >;	\
@@ -39,6 +41,20 @@ ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))												\
 	}																				\
 }
 
+#define REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN)					\
+ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))												\
+{																					\
+	using T = CAT(timer::PulseTimer8<board::Timer::TIMER, TIMER_NUM) , PRESCALER >;	\
+	bool reset;																		\
+	CALL_HANDLER_(T, &T::overflow, bool&)(reset);									\
+	if (reset)																		\
+	{																				\
+		using P = typename gpio::FastPinType< PIN >::TYPE;							\
+		P pin;																		\
+		pin.set();																	\
+	}																				\
+}
+
 #define REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, COMP, PIN)	\
 ISR(CAT3(TIMER, TIMER_NUM, COMP))										\
 {																		\
@@ -47,15 +63,21 @@ ISR(CAT3(TIMER, TIMER_NUM, COMP))										\
 	pin.clear();														\
 }
 
-//TODO improve to allow variable number of pins (1 to 3)
-//TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
-//TODO improve gpio to allow static set/clear/toggle...
-#define REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)		\
-REGISTER_PULSE_TIMER_OVF_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)			\
+//TODO add static_asserts to ensure PINs match timer and COM
+#define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)	\
+REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)			\
 REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, _COMPA_vect, PIN_A)	\
 REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, _COMPB_vect, PIN_B)
 
-//EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
+#define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)			\
+REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN_A)					\
+REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, _COMPA_vect, PIN_A)	\
+EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
+
+#define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)			\
+REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN_B)					\
+REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, PRESCALER, _COMPB_vect, PIN_B)	\
+EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect))
 
 //TODO Add API to explicitly set interrupts we want to enable
 //TODO Add API to support Input Capture when available for Timer (Timer1)

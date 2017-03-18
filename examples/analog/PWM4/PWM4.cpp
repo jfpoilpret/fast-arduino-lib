@@ -63,7 +63,10 @@ constexpr const PRESCALER0_TYPE PRESCALER0 = CALC0::PulseTimer_prescaler(PULSE0_
 static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
 
 // Register ISR needed for PulseTimer (8 bits specific)
-REGISTER_PULSE_TIMER8_ISR(0, PRESCALER0, LED0, LED1)
+// NOTE ISR to register are different based on pins used and their number (1 or 2)
+//REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, LED0, LED1)
+REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, LED0)
+//REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, LED1)
 
 using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED0_OUTPUT = analog::PWMOutput<LED0>;
@@ -90,14 +93,26 @@ constexpr TO map(TI value, TI input_min, TI input_max, TO output_min, TO output_
 	return map(value, input_max - input_min, output_min, output_max);
 }
 
+template<typename IN, typename OUT>
+void update(IN& in, OUT& out, uint16_t old_pulse)
+{
+	uint32_t input = in.sample();
+	uint16_t pulse = map(input, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
+	if (old_pulse != pulse)
+	{
+		old_pulse = pulse;
+		out.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse));
+	}
+}
+
 int main()
 {
 	// Initialize timer and pins
 	TIMER0_TYPE timer0{PULSE_FREQUENCY};
 	LED0_OUTPUT led0{timer0};
 	ANALOG0_INPUT pot0;
-	LED1_OUTPUT led1{timer0};
-	ANALOG1_INPUT pot1;
+//	LED1_OUTPUT led1{timer0};
+//	ANALOG1_INPUT pot1;
 
 	// Start timer
 	timer0._begin();
@@ -107,23 +122,25 @@ int main()
 	
 	// Loop of samplings
 	uint16_t pulse0 = 0;
-	uint16_t pulse1 = 0;
+//	uint16_t pulse1 = 0;
 	while (true)
 	{
-		uint32_t input0 = pot0.sample();
-		uint16_t pulse = map(input0, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
-		if (pulse0 != pulse)
-		{
-			pulse0 = pulse;
-			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
-		}
-		uint32_t input1 = pot1.sample();
-		pulse = map(input1, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
-		if (pulse1 != pulse)
-		{
-			pulse1 = pulse;
-			led1.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse1));
-		}
+		update(pot0, led0, pulse0);
+//		update(pot1, led1, pulse1);
+//		uint32_t input0 = pot0.sample();
+//		uint16_t pulse = map(input0, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
+//		if (pulse0 != pulse)
+//		{
+//			pulse0 = pulse;
+//			led0.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse0));
+//		}
+//		uint32_t input1 = pot1.sample();
+//		pulse = map(input1, 256UL, PULSE0_MINWIDTH_US, PULSE0_MAXWIDTH_US);
+//		if (pulse1 != pulse)
+//		{
+//			pulse1 = pulse;
+//			led1.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse1));
+//		}
 		time::delay_ms(100);
 	}
 	return 0;
