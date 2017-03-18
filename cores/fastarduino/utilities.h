@@ -38,6 +38,22 @@ ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 #define FIX_BASE_POINTER(_ptr) __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
 
 //TODO namespace
+template<typename T>
+constexpr T constrain(T value, T min, T max)
+{
+	return value < min ? min : value > max ? max : value;
+}
+template<typename TI, typename TO>
+constexpr TO map(TI value, TI input_range, TO output_min, TO output_max)
+{
+	return TO (value * (output_max - output_min) / input_range + output_min);
+}
+template<typename TI, typename TO>
+constexpr TO map(TI value, TI input_min, TI input_max, TO output_min, TO output_max)
+{
+	return map(value, input_max - input_min, output_min, output_max);
+}
+
 constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 {
 	return (high << 8) | low;

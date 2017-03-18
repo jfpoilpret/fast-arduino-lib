@@ -64,24 +64,6 @@ using LED1_OUTPUT = analog::PWMOutput<LED1>;
 using TIMER1_TYPE = timer::PulseTimer16<TIMER1, PRESCALER1>;
 using TIMER1_DUTY_TYPE = TIMER1_TYPE::TIMER_TYPE;
 
-// Rework useful Arduino functions map() and constrain()
-//TODO push to utilities?
-template<typename T>
-constexpr T constrain(T value, T min, T max)
-{
-	return value < min ? min : value > max ? max : value;
-}
-template<typename TI, typename TO>
-constexpr TO map(TI value, TI input_range, TO output_min, TO output_max)
-{
-	return TO (value * (output_max - output_min) / input_range + output_min);
-}
-template<typename TI, typename TO>
-constexpr TO map(TI value, TI input_min, TI input_max, TO output_min, TO output_max)
-{
-	return map(value, input_max - input_min, output_min, output_max);
-}
-
 int main()
 {
 	// Initialize timer and pins
