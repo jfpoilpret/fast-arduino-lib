@@ -26,7 +26,7 @@
  *   - D7 (PA7) LED connected to ground through a resistor
  */
 
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
 
 int main()

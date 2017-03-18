@@ -17,7 +17,7 @@
  * This example shall never compile successfully but only expose a list of compile-time errors.
  */
 
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/int.h>
 #include <fastarduino/pci.h>
 #include <fastarduino/soft_uart.h>

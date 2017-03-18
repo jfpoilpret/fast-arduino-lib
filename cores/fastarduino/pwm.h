@@ -17,7 +17,7 @@
 
 #include "boards/board.h"
 #include "boards/board_traits.h"
-#include "fast_io.h"
+#include "gpio.h"
 #include "timer.h"
 
 namespace analog

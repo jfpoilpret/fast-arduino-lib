@@ -26,7 +26,7 @@
  *   - D7 (LED, PA7) connected to a LED through a 330Ohm resistor then linked to GND
  */
 
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/realtime_timer.h>
 #include <fastarduino/events.h>
 #include <fastarduino/scheduler.h>

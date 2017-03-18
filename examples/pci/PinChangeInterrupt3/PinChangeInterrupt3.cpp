@@ -34,7 +34,7 @@
  *   - D8-D10 (port B) branch 3 buttons connected to ground
  */
 
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/pci.h>
 #include <fastarduino/power.h>
 

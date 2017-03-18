@@ -19,7 +19,7 @@
 #include "uart_commons.h"
 #include "streams.h"
 #include "boards/board.h"
-#include "fast_io.h"
+#include "gpio.h"
 #include "pci.h"
 #include "int.h"
 

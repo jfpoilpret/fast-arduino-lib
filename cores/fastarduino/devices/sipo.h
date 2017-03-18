@@ -15,7 +15,7 @@
 #ifndef SIPO_HH
 #define SIPO_HH
 
-#include "../fast_io.h"
+#include "../gpio.h"
 
 namespace devices
 {

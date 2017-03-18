@@ -16,7 +16,7 @@
 #define FASTSPI_HH
 
 #include "boards/board.h"
-#include "fast_io.h"
+#include "gpio.h"
 
 //TODO Make a SPISlave class with a data handler/buffer
 namespace spi

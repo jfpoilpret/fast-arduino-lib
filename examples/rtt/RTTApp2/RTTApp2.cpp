@@ -30,7 +30,7 @@
  */
 
 #include <fastarduino/power.h>
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/realtime_timer.h>
 
 // Define vectors we need in the example

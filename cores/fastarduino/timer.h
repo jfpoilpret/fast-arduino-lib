@@ -20,7 +20,7 @@
 
 #include "utilities.h"
 #include "boards/board_traits.h"
-#include "fast_io.h"
+#include "gpio.h"
 
 //TODO improve gpio to allow static set/clear/toggle...
 //TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void

@@ -31,7 +31,7 @@
 
 #include <fastarduino/time.h>
 #include <fastarduino/analog_input.h>
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;

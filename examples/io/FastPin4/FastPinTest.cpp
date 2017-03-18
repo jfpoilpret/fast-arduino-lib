@@ -28,7 +28,7 @@
  *   - D8-D10 (port B) branch 3 switches connected to ground
  */
 
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)

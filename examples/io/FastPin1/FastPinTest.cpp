@@ -17,7 +17,7 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <fastarduino/fast_io.h>
+#include <fastarduino/gpio.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 static gpio::FastPort<board::Port::PORT_B> PortB;
