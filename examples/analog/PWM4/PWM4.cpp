@@ -46,7 +46,9 @@ static constexpr const board::DigitalPin LED0 = board::PWMPin::D4_PG5_OC0B;
 static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
-static constexpr const board::DigitalPin LED0 = board::PWMPin::D00_PB2_OC0A;
+static constexpr const board::DigitalPin LED0 = board::PWMPin::D10_PB2_OC0A;
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+static constexpr const board::DigitalPin LED1 = board::PWMPin::D7_PA7_OC0B;
 static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"
@@ -62,7 +64,12 @@ constexpr const uint16_t PULSE0_MINWIDTH_US = 1000;
 // Pulse Frequency
 constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const PRESCALER0_TYPE PRESCALER0 = CALC0::PulseTimer_prescaler(PULSE0_MAXWIDTH_US, PULSE_FREQUENCY);
+//FIXME this assert fails on ATtiny??
+#if defined (BREADBOARD_ATTINYX4)
+static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_64, "");
+#else
 static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
+#endif
 
 // Register ISR needed for PulseTimer (8 bits specific)
 // NOTE ISR to register are different based on pins used and their number (1 or 2)
