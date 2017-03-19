@@ -61,7 +61,7 @@ constexpr const PRESCALER1_TYPE PRESCALER1 = CALC1::PulseTimer_prescaler(PULSE1_
 
 using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED1_OUTPUT = analog::PWMOutput<LED1>;
-using TIMER1_TYPE = timer::PulseTimer16<TIMER1, PRESCALER1>;
+using TIMER1_TYPE = timer::PulseTimer<TIMER1, PRESCALER1>;
 using TIMER1_DUTY_TYPE = TIMER1_TYPE::TIMER_TYPE;
 
 int main()

@@ -82,7 +82,7 @@ using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, ui
 using LED0_OUTPUT = analog::PWMOutput<LED0>;
 using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED1_OUTPUT = analog::PWMOutput<LED1>;
-using TIMER0_TYPE = timer::PulseTimer8<TIMER0, PRESCALER0>;
+using TIMER0_TYPE = timer::PulseTimer<TIMER0, PRESCALER0>;
 using TIMER0_DUTY_TYPE = TIMER0_TYPE::TIMER_TYPE;
 
 template<typename IN, typename OUT>

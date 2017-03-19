@@ -9,30 +9,6 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/pwm.h>
 
-template<	board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER, 
-			typename T = typename board_traits::Timer_trait<TIMER>::TYPE>
-class PulseTimer: public timer::Timer<TIMER>
-{
-public:
-	PulseTimer(UNUSED uint16_t pulse_frequency):timer::Timer<TIMER>{0, 0} {}
-	inline void begin() {}
-	inline void _begin() {}
-};
-
-template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
-class PulseTimer<TIMER, PRESCALER, uint8_t>: public timer::PulseTimer8<TIMER, PRESCALER>
-{
-public:
-	PulseTimer(uint16_t pulse_frequency):timer::PulseTimer8<TIMER, PRESCALER>{pulse_frequency} {}
-};
-
-template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
-class PulseTimer<TIMER, PRESCALER, uint16_t>: public timer::PulseTimer16<TIMER, PRESCALER>
-{
-public:
-	PulseTimer(uint16_t pulse_frequency):timer::PulseTimer16<TIMER, PRESCALER>{pulse_frequency} {}
-};
-
 constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
 using TCALC0 = timer::Calculator<TIMER0>;
 using TPRESCALER0 = TCALC0::TIMER_PRESCALER;
@@ -46,8 +22,8 @@ constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const TPRESCALER0 PRESCALER0 = TCALC0::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
 constexpr const TPRESCALER1 PRESCALER1 = TCALC1::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
 
-using PULSE_TIMER0 = PulseTimer<TIMER0, PRESCALER0>;
-using PULSE_TIMER1 = PulseTimer<TIMER1, PRESCALER1>;
+using PULSE_TIMER0 = timer::PulseTimer<TIMER0, PRESCALER0>;
+using PULSE_TIMER1 = timer::PulseTimer<TIMER1, PRESCALER1>;
 
 //template<board::Timer TIMER, board::DigitalPin PIN> 
 //class Servo

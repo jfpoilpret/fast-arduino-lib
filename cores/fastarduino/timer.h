@@ -498,6 +498,31 @@ namespace timer
 		const uint8_t MAX;
 		uint8_t count_;
 	};
+
+	// Unified API for PulseTimer whatever the timer bits size (no need to use PulseTimer8 or PulseTimer16)
+	template<	board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER, 
+				typename T = typename board_traits::Timer_trait<TIMER>::TYPE>
+	class PulseTimer: public timer::Timer<TIMER>
+	{
+	public:
+		PulseTimer(UNUSED uint16_t pulse_frequency):timer::Timer<TIMER>{0, 0} {}
+		inline void begin() {}
+		inline void _begin() {}
+	};
+
+	template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
+	class PulseTimer<TIMER, PRESCALER, uint8_t>: public timer::PulseTimer8<TIMER, PRESCALER>
+	{
+	public:
+		PulseTimer(uint16_t pulse_frequency):timer::PulseTimer8<TIMER, PRESCALER>{pulse_frequency} {}
+	};
+
+	template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
+	class PulseTimer<TIMER, PRESCALER, uint16_t>: public timer::PulseTimer16<TIMER, PRESCALER>
+	{
+	public:
+		PulseTimer(uint16_t pulse_frequency):timer::PulseTimer16<TIMER, PRESCALER>{pulse_frequency} {}
+	};
 }
 
 #endif /* TIMER_HH */
