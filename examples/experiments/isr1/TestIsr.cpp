@@ -101,8 +101,8 @@ using PULSE_TIMER1 = PulseTimer<TIMER1, PRESCALER1>;
 int main() __attribute__((OS_main));
 int main()
 {
-//	PULSE_TIMER0 timer0{PULSE_FREQUENCY};
-//	timer0._begin();
+	PULSE_TIMER0 timer0{PULSE_FREQUENCY};
+	timer0._begin();
 	PULSE_TIMER1 timer1{PULSE_FREQUENCY};
 	timer1._begin();
 	sei();
