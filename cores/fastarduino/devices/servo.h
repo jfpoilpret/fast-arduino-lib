@@ -61,13 +61,12 @@ namespace servo
 			out_.set_duty(counter(utils::constrain(pulse_us, US_MINIMUM_, US_MAXIMUM_)));
 		}
 
-		//TODO Better API name?
 		inline void rotate(int8_t angle)
 		{
 			angle = utils::constrain(angle, MIN, MAX);
 			TYPE count = (	angle >= 0 ? 
-							utils::map(int16_t(angle), 0, int16_t(MAX), COUNTER_NEUTRAL_, COUNTER_MAXIMUM_) :
-							utils::map(int16_t(angle), int16_t(MIN), 0, COUNTER_MINIMUM_, COUNTER_NEUTRAL_));
+							utils::map(int32_t(angle), 0L, int32_t(MAX), COUNTER_NEUTRAL_, COUNTER_MAXIMUM_) :
+							utils::map(int32_t(angle), int32_t(MIN), 0L, COUNTER_MINIMUM_, COUNTER_NEUTRAL_));
 			out_.set_duty(count);
 		}
 
