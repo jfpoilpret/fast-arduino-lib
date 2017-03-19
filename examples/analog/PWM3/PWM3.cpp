@@ -28,7 +28,7 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/timer.h>
+#include <fastarduino/pulse_timer.h>
 #include <fastarduino/analog_input.h>
 #include <fastarduino/pwm.h>
 

@@ -37,6 +37,7 @@
       <itemPath>cores/fastarduino/pci.h</itemPath>
       <itemPath>cores/fastarduino/power.cpp</itemPath>
       <itemPath>cores/fastarduino/power.h</itemPath>
+      <itemPath>cores/fastarduino/pulse_timer.h</itemPath>
       <itemPath>cores/fastarduino/pwm.h</itemPath>
       <itemPath>cores/fastarduino/queue.h</itemPath>
       <itemPath>cores/fastarduino/realtime_timer.h</itemPath>
@@ -221,6 +222,8 @@
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/pulse_timer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/pwm.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
@@ -394,6 +397,8 @@
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/pulse_timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/pwm.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -569,6 +574,8 @@
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/pulse_timer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/pwm.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
@@ -743,6 +750,8 @@
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/pulse_timer.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/pwm.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/queue.h" ex="false" tool="3" flavor2="0">
@@ -916,6 +925,8 @@
       <item path="cores/fastarduino/power.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/power.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/pulse_timer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/pwm.h" ex="false" tool="3" flavor2="0">
       </item>
