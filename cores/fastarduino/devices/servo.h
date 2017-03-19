@@ -12,8 +12,8 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#ifndef SERVO16_H
-#define SERVO16_H
+#ifndef SERVO_H
+#define SERVO_H
 
 #include <fastarduino/pulse_timer.h>
 #include <fastarduino/pwm.h>
@@ -46,6 +46,7 @@ namespace servo
 
 		inline void detach() INLINE
 		{
+			//FIXME with an 8-bits PulseTimer, this does not work (produces a very thin pulse)
 			out_.set_duty(0);
 		}
 
@@ -91,5 +92,4 @@ namespace servo
 }
 }
 
-#endif /* SERVO16_H */
-
+#endif /* SERVO_H */

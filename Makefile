@@ -155,6 +155,7 @@ endif
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF}
 	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF}
+	$(MAKE) -C examples/motors/Servo1 CONF=${CONF}
 	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF}
 	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF}
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF}
@@ -208,6 +209,7 @@ endif
 	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF} clean
+	$(MAKE) -C examples/motors/Servo1 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF} clean
 	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF} clean
 	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF} clean
