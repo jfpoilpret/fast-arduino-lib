@@ -19,17 +19,35 @@ public:
 	inline void _begin() {}
 };
 
-constexpr const board::Timer TIMER = board::Timer::TIMER0;
-using TCALC = timer::Calculator<TIMER>;
-using TPRESCALER = TCALC::TIMER_PRESCALER;
+template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
+class PulseTimer<TIMER, PRESCALER, uint8_t>: public timer::PulseTimer8<TIMER, PRESCALER>
+{
+public:
+	PulseTimer(uint16_t pulse_frequency):timer::PulseTimer8<TIMER, PRESCALER>{pulse_frequency} {}
+};
+
+template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
+class PulseTimer<TIMER, PRESCALER, uint16_t>: public timer::PulseTimer16<TIMER, PRESCALER>
+{
+public:
+	PulseTimer(uint16_t pulse_frequency):timer::PulseTimer16<TIMER, PRESCALER>{pulse_frequency} {}
+};
+
+constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
+using TCALC0 = timer::Calculator<TIMER0>;
+using TPRESCALER0 = TCALC0::TIMER_PRESCALER;
+
+constexpr const board::Timer TIMER1 = board::Timer::TIMER1;
+using TCALC1 = timer::Calculator<TIMER1>;
+using TPRESCALER1 = TCALC1::TIMER_PRESCALER;
 
 constexpr const uint16_t MAX_PULSE_US = 2000;
 constexpr const uint16_t PULSE_FREQUENCY = 50;
-constexpr const TPRESCALER PRESCALER = TCALC::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
+constexpr const TPRESCALER0 PRESCALER0 = TCALC0::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
+constexpr const TPRESCALER1 PRESCALER1 = TCALC1::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
 
-using PULSE_TIMER = PulseTimer<TIMER, PRESCALER>;
-
-static PULSE_TIMER my_timer{PULSE_FREQUENCY};
+using PULSE_TIMER0 = PulseTimer<TIMER0, PRESCALER0>;
+using PULSE_TIMER1 = PulseTimer<TIMER1, PRESCALER1>;
 
 //template<board::Timer TIMER, board::DigitalPin PIN> 
 //class Servo
@@ -80,6 +98,13 @@ static PULSE_TIMER my_timer{PULSE_FREQUENCY};
 //	const int16_t maximum_;
 //};
 
+int main() __attribute__((OS_main));
 int main()
 {
+//	PULSE_TIMER0 timer0{PULSE_FREQUENCY};
+//	timer0._begin();
+	PULSE_TIMER1 timer1{PULSE_FREQUENCY};
+	timer1._begin();
+	sei();
+	while (true);
 }
