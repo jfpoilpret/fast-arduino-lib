@@ -38,14 +38,9 @@ namespace utils
 		return value < min ? min : value > max ? max : value;
 	}
 	template<typename TI, typename TO>
-	constexpr TO map(TI value, TI input_range, TO output_min, TO output_max)
-	{
-		return TO (value * (output_max - output_min) / input_range + output_min);
-	}
-	template<typename TI, typename TO>
 	constexpr TO map(TI value, TI input_min, TI input_max, TO output_min, TO output_max)
 	{
-		return map(value, input_max - input_min, output_min, output_max);
+		return output_min + (value - input_min) * (output_max - output_min) / (input_max - input_min);
 	}
 
 	constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
