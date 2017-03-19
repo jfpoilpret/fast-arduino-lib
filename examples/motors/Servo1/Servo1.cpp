@@ -1,11 +1,12 @@
 /*
  * Use potentiometer to set servo arm angle through Servo API.
  * This example uses an 8-bit timer.
+ * The servo I use in this example is a TowerPro SG90.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
- *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D6: LED connected to GND through a 1K resistor 
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D6: connected to servo signal pin (orange wire)
  */
 
 #include <fastarduino/boards/board.h>
@@ -19,8 +20,11 @@ using TCALC = timer::Calculator<TIMER>;
 using TPRESCALER = TCALC::TIMER_PRESCALER;
 
 // Constants for servo and prescaler to be used for TIMER
-constexpr const uint16_t MAX_PULSE_US = 2000;
-constexpr const uint16_t MIN_PULSE_US = 1000;
+//constexpr const uint16_t MAX_PULSE_US = 2400;
+//constexpr const uint16_t MIN_PULSE_US = 900;
+constexpr const uint16_t MAX_PULSE_US = 2400;
+constexpr const uint16_t MIN_PULSE_US = 544;
+constexpr const uint16_t NEUTRAL_PULSE_US = 1500;
 constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const TPRESCALER PRESCALER = TCALC::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
 
@@ -44,7 +48,7 @@ int main()
 	// Instantiate pulse timer for servo
 	PULSE_TIMER servo_timer{PULSE_FREQUENCY};
 	// Instantiate servo
-	SERVO1 servo1{servo_timer, MIN_PULSE_US, MAX_PULSE_US};
+	SERVO1 servo1{servo_timer, MIN_PULSE_US, MAX_PULSE_US, NEUTRAL_PULSE_US};
 	// Start pulse timer
 	servo_timer._begin();
 	// Enable interrupts
