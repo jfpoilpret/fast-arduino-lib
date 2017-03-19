@@ -17,7 +17,7 @@
       <logicalFolder name="devices" displayName="devices" projectFiles="true">
         <itemPath>cores/fastarduino/devices/nrf24l01p.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p_internals.h</itemPath>
-        <itemPath>cores/fastarduino/devices/servo16.h</itemPath>
+        <itemPath>cores/fastarduino/devices/servo.h</itemPath>
         <itemPath>cores/fastarduino/devices/sipo.h</itemPath>
         <itemPath>cores/fastarduino/devices/winbond.h</itemPath>
       </logicalFolder>
@@ -180,10 +180,7 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/servo16.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="cores/fastarduino/devices/servo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -356,10 +353,7 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/servo16.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="cores/fastarduino/devices/servo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -532,10 +526,7 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/servo16.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="cores/fastarduino/devices/servo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -708,10 +699,7 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/servo16.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="cores/fastarduino/devices/servo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -884,10 +872,7 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="cores/fastarduino/devices/servo16.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="cores/fastarduino/devices/servo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/sipo.h" ex="false" tool="3" flavor2="0">
       </item>
