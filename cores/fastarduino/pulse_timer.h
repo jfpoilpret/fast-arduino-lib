@@ -51,7 +51,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 	bool reset;																			\
 	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);										\
 	if (reset)																			\
-		gpio::FastPinType< PIN >::clear();												\
+		gpio::FastPinType< PIN >::set();												\
 }
 
 #define REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, COM_NUM, COMP, PIN)					\
@@ -86,15 +86,18 @@ namespace timer
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every 
 	// 20ms, ie with a 50Hz frequency.
 	// This implementation ensures a good pulse width precision for 16-bits timer.
-	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
+	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER_>
 	class PulseTimer16: public Timer<TIMER>
 	{
 		using PARENT = Timer<TIMER>;
 		using TRAIT = typename PARENT::TRAIT;
-		using CALCULATOR = Calculator<TIMER>;
 		static_assert(TRAIT::IS_16BITS, "TIMER must be a 16 bits timer");
 		
 	public:
+		using CALCULATOR = Calculator<TIMER>;
+		using TIMER_PRESCALER = typename CALCULATOR::TIMER_PRESCALER;
+		static constexpr const TIMER_PRESCALER PRESCALER = PRESCALER_;
+		
 		PulseTimer16(uint16_t pulse_frequency)
 			:	Timer<TIMER>{TCCRA(), TCCRB()}
 		{
@@ -131,15 +134,18 @@ namespace timer
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every 
 	// 20ms, ie with a 50Hz frequency.
 	// This implementation ensures a good pulse width precision for 8-bits timers.
-	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
+	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER_>
 	class PulseTimer8: public Timer<TIMER>
 	{
 		using PARENT = Timer<TIMER>;
 		using TRAIT = typename PARENT::TRAIT;
-		using CALCULATOR = Calculator<TIMER>;
 		static_assert(!TRAIT::IS_16BITS, "TIMER must be an 8 bits timer");
 		
 	public:
+		using CALCULATOR = Calculator<TIMER>;
+		using TIMER_PRESCALER = typename CALCULATOR::TIMER_PRESCALER;
+		static constexpr const TIMER_PRESCALER PRESCALER = PRESCALER_;
+
 		PulseTimer8(uint16_t pulse_frequency)
 			:	Timer<TIMER>{TCCRA(), TCCRB()}, 
 				MAX{OVERFLOW_COUNTER(pulse_frequency)}
