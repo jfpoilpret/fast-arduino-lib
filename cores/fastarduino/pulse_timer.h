@@ -25,32 +25,40 @@
 #include "gpio.h"
 
 //TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
-#define REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)				\
-ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
-{																						\
-	const board::Timer T = CAT(board::Timer::TIMER, TIMER_NUM);							\
-	using TT = board_traits::Timer_trait<T>;											\
-	static_assert(!TT::IS_16BITS ,"TIMER_NUM must be an 8 bits Timer");					\
-	using PT = timer::PulseTimer8<T , PRESCALER>;										\
-	bool reset;																			\
-	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);										\
-	if (reset)																			\
-	{																					\
-		gpio::FastPinType< PIN_A >::set();												\
-		gpio::FastPinType< PIN_B >::set();												\
-	}																					\
+#define REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, COM_A, PIN_B, COM_B)	\
+ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))														\
+{																							\
+	const board::Timer T = CAT(board::Timer::TIMER, TIMER_NUM);								\
+	using TT = board_traits::Timer_trait<T>;												\
+	static_assert(!TT::IS_16BITS ,"TIMER_NUM must be an 8 bits Timer");						\
+	using PINTA = board_traits::Timer_COM_trait<T, COM_A>;									\
+	static_assert(PIN_A == PINTA::PIN_OCR, "PIN_A must be connected to TIMER_NUM OCxA");	\
+	using PINTB = board_traits::Timer_COM_trait<T, COM_B>;									\
+	static_assert(PIN_B == PINTB::PIN_OCR, "PIN_B must be connected to TIMER_NUM OCxB");	\
+	using PT = timer::PulseTimer8<T , PRESCALER>;											\
+	bool reset;																				\
+	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);											\
+	if (reset)																				\
+	{																						\
+		if (PINTA::OCR != 0)																\
+			gpio::FastPinType< PIN_A >::set();												\
+		if (PINTB::OCR != 0)																\
+			gpio::FastPinType< PIN_B >::set();												\
+	}																						\
 }
 
-#define REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN)						\
+#define REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN, COM_NUM)				\
 ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 {																						\
 	const board::Timer T = CAT(board::Timer::TIMER, TIMER_NUM);							\
 	using TT = board_traits::Timer_trait<T>;											\
 	static_assert(!TT::IS_16BITS ,"TIMER_NUM must be an 8 bits Timer");					\
+	using PINT = board_traits::Timer_COM_trait<T, COM_NUM>;								\
+	static_assert(PIN == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");\
 	using PT = timer::PulseTimer8<T , PRESCALER>;										\
 	bool reset;																			\
 	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);										\
-	if (reset)																			\
+	if (reset and PINT::OCR != 0)														\
 		gpio::FastPinType< PIN >::set();												\
 }
 
@@ -66,17 +74,17 @@ ISR(CAT3(TIMER, TIMER_NUM, COMP))														\
 // Macros to register ISR for PWM on PulseTimer8
 //==============================================
 #define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)	\
-REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, PIN_B)			\
+REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, 0, PIN_B, 1)	\
 REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, 0, _COMPA_vect, PIN_A)			\
 REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, 1, _COMPB_vect, PIN_B)
 
 #define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)			\
-REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN_A)					\
+REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN_A, 0)				\
 REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, 0, _COMPA_vect, PIN_A)			\
 EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
 
 #define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)			\
-REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN_B)					\
+REGISTER_PULSE_TIMER_OVF1_ISR_(TIMER_NUM, PRESCALER, PIN_B, 1)				\
 REGISTER_PULSE_TIMER_COMP_ISR_(TIMER_NUM, 1, _COMPB_vect, PIN_B)			\
 EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect))
 
