@@ -5,115 +5,106 @@
  */
 
 #include <fastarduino/boards/board.h>
-#include <fastarduino/analog_input.h>
+#include <fastarduino/uart.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
-#include <fastarduino/pulse_timer.h>
-#include <fastarduino/pwm.h>
+#include <fastarduino/realtime_timer.h>
 #include <fastarduino/utilities.h>
+#include <fastarduino/flash.h>
 
-template<typename TIMER, board::DigitalPin PIN> 
-class Servo
+REGISTER_RTT_ISR(0)
+REGISTER_UATX_ISR(0)
+
+// Conversion method
+static constexpr uint16_t distance_mm(uint16_t echo_us)
 {
-	using CALC = typename TIMER::CALCULATOR;
-	using TPRESCALER = typename CALC::TIMER_PRESCALER;
-	static constexpr const TPRESCALER PRESCALER = TIMER::PRESCALER;
-	
+	return uint16_t(echo_us * 1000UL / 2UL / 340UL);
+}
+
+//TODO non blocking ultrasonic sensor
+// - use RTT timer (template arg)
+// - use pin interrupt (either EXT or PCI, both should be supported)
+template<board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO>
+class HCSR04
+{
 public:
-	using TYPE = typename TIMER::TIMER_TYPE;
+	static constexpr const uint16_t DEFAULT_TIMEOUT_US = 4 * 2 * 1000000UL / 340 + 1;
 	
-	Servo(	TIMER& timer, uint16_t us_minimum, uint16_t us_maximum, 
-			uint16_t us_neutral = 0)
-		:	out_{timer}, 
-			US_MINIMUM_{us_minimum}, 
-			US_MAXIMUM_{us_maximum}, 
-			US_NEUTRAL_{us_neutral ? us_neutral : ((us_maximum + us_minimum) / 2)},
-			COUNTER_MINIMUM_{counter(US_MINIMUM_)},
-			COUNTER_MAXIMUM_{counter(US_MAXIMUM_)},
-			COUNTER_NEUTRAL_{counter(US_NEUTRAL_)} {}
-			
-	inline void detach() INLINE
-	{
-		out_.set_duty(0);
-	}
-	
-	inline void set_counter(TYPE value) INLINE
-	{
-		out_.set_duty(utils::constrain(value, COUNTER_MINIMUM_, COUNTER_MAXIMUM_));
-	}
-	
-	inline void set_pulse(uint16_t pulse_us)
-	{
-		// Constrain pulse to min/max and convert pulse to timer counter value
-		out_.set_duty(counter(utils::constrain(pulse_us, US_MINIMUM_, US_MAXIMUM_)));
-	}
+	HCSR04(timer::RTT<TIMER>& rtt)
+		:	rtt_{rtt}, 
+			trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}, 
+			start_{}, echo_pulse_{0}, ready_{false} {}
 
-	//TODO Better API name?
-	inline void rotate(int8_t angle)
+	uint16_t echo_us(uint16_t timeout_us = DEFAULT_TIMEOUT_US)
 	{
-		angle = utils::constrain(angle, MIN, MAX);
-		TYPE count = (	angle >= 0 ? 
-						utils::map(int16_t(angle), 0, int16_t(MAX), COUNTER_NEUTRAL_, COUNTER_MAXIMUM_) :
-						utils::map(int16_t(angle), int16_t(MIN), 0, COUNTER_MINIMUM_, COUNTER_NEUTRAL_));
-		out_.set_duty(count);
+		// Pulse TRIGGER for 10us
+		trigger_.set();
+		time::delay_us(TRIGGER_PULSE_US);
+		trigger_.clear();
+		// Read current time (need RTT)
+		time::RTTTime start = rtt_.time();
+		while (!echo_.value()) ;
+		// Read current time (need RTT)
+		time::RTTTime end = rtt_.time();
+		time::RTTTime delta = time::delta(start, end);
+		return uint16_t(delta.millis * 1000 + delta.micros);
 	}
-
+	
+	//TODO later: async API
+	void async_echo();
+	bool ready() const
+	{
+		return ready_;
+	}
+	uint16_t await_echo_us(uint16_t timeout = DEFAULT_TIMEOUT_US);
+	//TODO callback from PCI/EXT
+	void on_echo();
+	
 private:
-	static constexpr TYPE counter(uint16_t pulse_us)
-	{
-		return CALC::PulseTimer_value(PRESCALER, pulse_us);
-	}
+	static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 	
-	static const int8_t MAX = +90;
-	static const int8_t MIN = -90;
-	
-	analog::PWMOutput<PIN> out_;
-	
-	const uint16_t US_MINIMUM_;
-	const uint16_t US_MAXIMUM_;
-	const uint16_t US_NEUTRAL_;
-	const TYPE COUNTER_MINIMUM_;
-	const TYPE COUNTER_MAXIMUM_;
-	const TYPE COUNTER_NEUTRAL_;
+	timer::RTT<TIMER>& rtt_;
+	typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
+	typename gpio::FastPinType<ECHO>::TYPE echo_;
+	time::RTTTime start_;
+	volatile uint16_t echo_pulse_;
+	volatile bool ready_;
 };
 
-constexpr const board::Timer TIMER = board::Timer::TIMER0;
-using TCALC = timer::Calculator<TIMER>;
-using TPRESCALER = TCALC::TIMER_PRESCALER;
+static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
+static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PD3;
+static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 
-constexpr const uint16_t MAX_PULSE_US = 2000;
-constexpr const uint16_t MIN_PULSE_US = 1000;
-constexpr const uint16_t PULSE_FREQUENCY = 50;
-constexpr const TPRESCALER PRESCALER = TCALC::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Buffers for UART
+static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D6_PD6_OC0A;
-constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-
-using PULSE_TIMER = timer::PulseTimer<TIMER, PRESCALER>;
-using SERVO1 = Servo<PULSE_TIMER, SERVO_PIN1>;
-using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
-
-// Register ISR needed for PulseTimer (8 bits specific)
-//REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER, SERVO_PIN1, SERVO_PIN2)
-REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER, SERVO_PIN1)
+using RTT = timer::RTT<TIMER>;
+using PROXI = HCSR04<TIMER, TRIGGER, ECHO>;
 
 int main() __attribute__((OS_main));
 int main()
 {
-	PULSE_TIMER servo_timer{PULSE_FREQUENCY};
-	SERVO1 servo1{servo_timer, MIN_PULSE_US, MAX_PULSE_US};
-	ANALOG1_INPUT pot1;
-	servo_timer._begin();
 	sei();
-
-//	servo1.detach();
+	
+	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
+	uart.register_handler();
+	uart.begin(115200);
+	auto out = uart.fout();
+	
+	RTT rtt;
+	rtt.register_rtt_handler();
+	PROXI sensor{rtt};
+	rtt.begin();
+	
+	out << F("Starting...\n") << streams::flush;
+	
 	while (true)
 	{
-		uint16_t input1 = pot1.sample();
-//		servo1.set_counter(input1);
-//		servo1.set_pulse(MIN_PULSE_US + input1 * 4);
-		int16_t angle = int16_t(input1) - 128;
-		servo1.rotate(angle);
-		
-		time::delay_ms(100);
+		uint16_t pulse = sensor.echo_us();
+		uint16_t mm = distance_mm(pulse);
+		//TODO trace value to output
+		out << F("Distance: ") << mm << F(" mm\n") << streams::flush;
+		time::delay_ms(1000);
 	}
 }
