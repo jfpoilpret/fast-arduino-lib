@@ -20,8 +20,6 @@ using TCALC = timer::Calculator<TIMER>;
 using TPRESCALER = TCALC::TIMER_PRESCALER;
 
 // Constants for servo and prescaler to be used for TIMER
-//constexpr const uint16_t MAX_PULSE_US = 2400;
-//constexpr const uint16_t MIN_PULSE_US = 900;
 constexpr const uint16_t MAX_PULSE_US = 2400;
 constexpr const uint16_t MIN_PULSE_US = 544;
 constexpr const uint16_t NEUTRAL_PULSE_US = 1500;
