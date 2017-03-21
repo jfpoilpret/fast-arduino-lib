@@ -21,6 +21,7 @@
         <itemPath>cores/fastarduino/devices/sipo.h</itemPath>
         <itemPath>cores/fastarduino/devices/winbond.h</itemPath>
       </logicalFolder>
+      <itemPath>cores/fastarduino/abi.cpp</itemPath>
       <itemPath>cores/fastarduino/analog_input.h</itemPath>
       <itemPath>cores/fastarduino/eeprom.h</itemPath>
       <itemPath>cores/fastarduino/empty_streams.h</itemPath>
@@ -127,6 +128,8 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a</output>
         </archiverTool>
       </compileType>
+      <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
@@ -300,6 +303,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
@@ -473,6 +478,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
@@ -646,6 +653,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
@@ -819,6 +828,8 @@
                             group="bin"/>
         </packFileList>
       </packaging>
+      <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="cores/fastarduino/analog_input.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/attiny_x4.h"
