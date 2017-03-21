@@ -25,8 +25,15 @@ namespace time
 	struct RTTTime
 	{
 		RTTTime(uint32_t millis = 0, uint16_t micros = 0):millis(millis), micros(micros) {}
-		const uint32_t millis;
-		const uint16_t micros;
+		RTTTime(const RTTTime& that):millis{that.millis}, micros{that.micros} {}
+		RTTTime& operator= (const RTTTime& that)
+		{
+			millis = that.millis;
+			micros = that.micros;
+			return *this;
+		}
+		uint32_t millis;
+		uint16_t micros;
 	};
 
 	void yield();
