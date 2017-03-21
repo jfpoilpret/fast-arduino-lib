@@ -12,13 +12,28 @@
 #include <fastarduino/utilities.h>
 #include <fastarduino/flash.h>
 
+#include <fastarduino/int.h>
+
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
 
 // Conversion method
 static constexpr uint16_t distance_mm(uint16_t echo_us)
 {
-	return uint16_t(echo_us * 1000UL / 2UL / 340UL);
+	// 340 m/s => 340000mm in 1000000us => 340/1000 mm/us
+	return uint16_t(echo_us * 340UL / 1000UL / 2UL);
+}
+
+// Utilities to handle ISR callbacks
+#define REGISTER_SERVO_INT_ISR(TIMER_NUM, INT_NUM, TRIGGER, ECHO)							\
+static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
+static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
+	"PIN INT number must match INT_NUM");													\
+ISR(CAT3(INT, INT_NUM, _vect))																\
+{																							\
+	static constexpr const board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);		\
+	using SERVO_HANDLER = HCSR04<TIMER, TRIGGER, ECHO >;									\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
 }
 
 //TODO non blocking ultrasonic sensor
@@ -31,38 +46,90 @@ public:
 	static constexpr const uint16_t DEFAULT_TIMEOUT_US = 4 * 2 * 1000000UL / 340 + 1;
 	
 	HCSR04(timer::RTT<TIMER>& rtt)
-		:	rtt_{rtt}, 
+		:	signal_{},
+			rtt_{rtt}, 
 			trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}, 
-			start_{}, echo_pulse_{0}, ready_{false} {}
+			start_{}, echo_pulse_{0}, ready_{false}
+	{
+		interrupt::register_handler(*this);
+	}
 
 	uint16_t echo_us(uint16_t timeout_us = DEFAULT_TIMEOUT_US)
 	{
+		rtt_.millis(0);
 		// Pulse TRIGGER for 10us
 		trigger_.set();
 		time::delay_us(TRIGGER_PULSE_US);
 		trigger_.clear();
+		// Wait for echo signal start
+		uint16_t timeout_ms = rtt_.millis() + timeout_us / 1000 + 1;
+		while (!echo_.value())
+			if (rtt_.millis() >= timeout_ms) return 0;
 		// Read current time (need RTT)
 		time::RTTTime start = rtt_.time();
-		while (!echo_.value()) ;
+		// Wait for echo signal end
+		while (echo_.value())
+			if (rtt_.millis() >= timeout_ms) return 0;
 		// Read current time (need RTT)
 		time::RTTTime end = rtt_.time();
 		time::RTTTime delta = time::delta(start, end);
-		return uint16_t(delta.millis * 1000 + delta.micros);
+		return uint16_t(delta.millis * 1000UL + delta.micros);
 	}
 	
-	//TODO later: async API
-	void async_echo();
+	void async_echo()
+	{
+		ready_ = false;
+		rtt_.millis(0);
+		signal_.enable();
+		// Pulse TRIGGER for 10us
+		trigger_.set();
+		time::delay_us(TRIGGER_PULSE_US);
+		trigger_.clear();
+	}
+	
 	bool ready() const
 	{
 		return ready_;
 	}
-	uint16_t await_echo_us(uint16_t timeout = DEFAULT_TIMEOUT_US);
+	
+	uint16_t await_echo_us(uint16_t timeout_us = DEFAULT_TIMEOUT_US)
+	{
+		// Wait for echo signal start
+		uint16_t timeout_ms = rtt_.millis() + timeout_us / 1000 + 1;
+		while (!ready_)
+			if (rtt_.millis() >= timeout_ms)
+			{
+				signal_.disable();
+				ready_ = true;
+				return 0;
+			}
+		return echo_pulse_;
+	}
+	
 	//TODO callback from PCI/EXT
-	void on_echo();
+	void on_echo()
+	{
+		static time::RTTTime start;
+		if (echo_.value())
+		{
+			// pulse started
+			start = rtt_.time();
+		}
+		else
+		{
+			// pulse ended
+			time::RTTTime end = rtt_.time();
+			time::RTTTime delta = time::delta(start, end);
+			echo_pulse_ = uint16_t(delta.millis * 1000UL + delta.micros);
+			ready_ = true;
+			signal_._disable();
+		}
+	}
 	
 private:
 	static constexpr const uint16_t TRIGGER_PULSE_US = 10;
-	
+
+	interrupt::INTSignal<ECHO> signal_;
 	timer::RTT<TIMER>& rtt_;
 	typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 	typename gpio::FastPinType<ECHO>::TYPE echo_;
@@ -72,8 +139,10 @@ private:
 };
 
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PD3;
+static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD3_EXT1;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+
+REGISTER_SERVO_INT_ISR(0, 1, TRIGGER, ECHO)
 
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Buffers for UART
@@ -101,10 +170,12 @@ int main()
 	
 	while (true)
 	{
-		uint16_t pulse = sensor.echo_us();
+//		uint16_t pulse = sensor.echo_us();
+		sensor.async_echo();
+		uint16_t pulse = sensor.await_echo_us();
 		uint16_t mm = distance_mm(pulse);
-		//TODO trace value to output
-		out << F("Distance: ") << mm << F(" mm\n") << streams::flush;
+		// trace value to output
+		out << F("Pulse: ") << pulse  << F(" us. Distance: ") << mm << F(" mm\n") << streams::flush;
 		time::delay_ms(1000);
 	}
 }
