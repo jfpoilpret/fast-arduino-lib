@@ -25,13 +25,12 @@ static constexpr uint16_t distance_mm(uint16_t echo_us)
 }
 
 // Utilities to handle ISR callbacks
-#define REGISTER_SERVO_INT_ISR(TIMER_NUM, INT_NUM, TRIGGER, ECHO)							\
+#define REGISTER_SERVO_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)								\
 static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
 static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
 	"PIN INT number must match INT_NUM");													\
 ISR(CAT3(INT, INT_NUM, _vect))																\
 {																							\
-	static constexpr const board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);		\
 	using SERVO_HANDLER = HCSR04<TIMER, TRIGGER, ECHO >;									\
 	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
 }
@@ -45,13 +44,13 @@ class HCSR04
 public:
 	static constexpr const uint16_t DEFAULT_TIMEOUT_US = 4 * 2 * 1000000UL / 340 + 1;
 	
-	HCSR04(timer::RTT<TIMER>& rtt)
-		:	signal_{},
-			rtt_{rtt}, 
+	HCSR04(timer::RTT<TIMER>& rtt, bool async = true)
+		:	rtt_{rtt}, 
 			trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}, 
 			start_{}, echo_pulse_{0}, ready_{false}
 	{
-		interrupt::register_handler(*this);
+		if (async)
+			interrupt::register_handler(*this);
 	}
 
 	uint16_t echo_us(uint16_t timeout_us = DEFAULT_TIMEOUT_US)
@@ -80,7 +79,6 @@ public:
 	{
 		ready_ = false;
 		rtt_.millis(0);
-		signal_.enable();
 		// Pulse TRIGGER for 10us
 		trigger_.set();
 		time::delay_us(TRIGGER_PULSE_US);
@@ -99,7 +97,6 @@ public:
 		while (!ready_)
 			if (rtt_.millis() >= timeout_ms)
 			{
-				signal_.disable();
 				ready_ = true;
 				return 0;
 			}
@@ -109,40 +106,39 @@ public:
 	//TODO callback from PCI/EXT
 	void on_echo()
 	{
-		static time::RTTTime start;
 		if (echo_.value())
 		{
 			// pulse started
-			start = rtt_.time();
+			start_ = rtt_.time();
+			started_ = true;
 		}
-		else
+		else if (started_)
 		{
 			// pulse ended
 			time::RTTTime end = rtt_.time();
-			time::RTTTime delta = time::delta(start, end);
+			time::RTTTime delta = time::delta(start_, end);
 			echo_pulse_ = uint16_t(delta.millis * 1000UL + delta.micros);
 			ready_ = true;
-			signal_._disable();
+			started_ = false;
 		}
 	}
 	
 private:
 	static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
-	interrupt::INTSignal<ECHO> signal_;
 	timer::RTT<TIMER>& rtt_;
 	typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 	typename gpio::FastPinType<ECHO>::TYPE echo_;
 	time::RTTTime start_;
 	volatile uint16_t echo_pulse_;
+	//TODO optimize space: only 2 bits needed here!
 	volatile bool ready_;
+	volatile bool started_;
 };
 
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
 static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD3_EXT1;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
-
-REGISTER_SERVO_INT_ISR(0, 1, TRIGGER, ECHO)
 
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Buffers for UART
@@ -150,6 +146,12 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using RTT = timer::RTT<TIMER>;
 using PROXI = HCSR04<TIMER, TRIGGER, ECHO>;
+
+//REGISTER_SERVO_INT_ISR(TIMER, 1, TRIGGER, ECHO)
+ISR(INT1_vect)
+{
+	CALL_HANDLER_(PROXI, &PROXI::on_echo)();
+}
 
 int main() __attribute__((OS_main));
 int main()
@@ -163,8 +165,10 @@ int main()
 	
 	RTT rtt;
 	rtt.register_rtt_handler();
-	PROXI sensor{rtt};
 	rtt.begin();
+	interrupt::INTSignal<ECHO> signal;
+	signal.enable();
+	PROXI sensor{rtt};
 	
 	out << F("Starting...\n") << streams::flush;
 	
@@ -173,9 +177,10 @@ int main()
 //		uint16_t pulse = sensor.echo_us();
 		sensor.async_echo();
 		uint16_t pulse = sensor.await_echo_us();
+		uint32_t timing = rtt.millis();
 		uint16_t mm = distance_mm(pulse);
 		// trace value to output
-		out << F("Pulse: ") << pulse  << F(" us. Distance: ") << mm << F(" mm\n") << streams::flush;
+		out << F("Pulse: ") << pulse  << F(" us. Distance: ") << mm << F(" mm (duration = ") << timing << F(" ms)\n") << streams::flush;
 		time::delay_ms(1000);
 	}
 }
