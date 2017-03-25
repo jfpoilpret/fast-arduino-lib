@@ -30,7 +30,7 @@ static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,
 	"PIN INT number must match INT_NUM");													\
 ISR(CAT3(INT, INT_NUM, _vect))																\
 {																							\
-	using SERVO_HANDLER = HCSR04<TIMER, TRIGGER, ECHO >;									\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
 	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
 }
 
@@ -38,7 +38,7 @@ ISR(CAT3(INT, INT_NUM, _vect))																\
 CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
 ISR(CAT3(PCINT, PCI_NUM, _vect))															\
 {																							\
-	using SERVO_HANDLER = HCSR04<TIMER, TRIGGER, ECHO >;									\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
 	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
 }
 
