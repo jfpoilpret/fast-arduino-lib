@@ -63,23 +63,22 @@ namespace sonar
 	{
 	public:
 		static constexpr const uint16_t MAX_RANGE_M = 4;
-		static constexpr const uint16_t DEFAULT_TIMEOUT_US = MAX_RANGE_M * 2 * 1000000UL / SPEED_OF_SOUND + 1;
+		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000 / SPEED_OF_SOUND + 1;
 
 		HCSR04(timer::RTT<TIMER>& rtt, bool async = true)
 			:	rtt_{rtt}, 
 				trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}, 
-				start_{}, echo_pulse_{0}, ready_{false}
+				start_{}, echo_pulse_{0}, status_{0}
 		{
 			// If async mode is gonna be used, then register this as interrupt handler (for INT or PCI)
 			if (async)
 				interrupt::register_handler(*this);
 		}
 
-		//TODO if timeouts are implemented in millis, then change API to accept ms not us!
 		// Blocking API
 		// Do note that timeout here is for the whole method not just for the sound echo, hence it
 		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
-		uint16_t echo_us(uint16_t timeout_us = DEFAULT_TIMEOUT_US)
+		uint16_t echo_us(uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
 			rtt_.millis(0);
 			// Pulse TRIGGER for 10us
@@ -87,7 +86,7 @@ namespace sonar
 			time::delay_us(TRIGGER_PULSE_US);
 			trigger_.clear();
 			// Wait for echo signal start
-			uint16_t timeout_ms = rtt_.millis() + timeout_us / 1000 + 1;
+			timeout_ms += rtt_.millis();
 			while (!echo_.value())
 				if (rtt_.millis() >= timeout_ms) return 0;
 			// Read current time (need RTT)
@@ -103,8 +102,7 @@ namespace sonar
 
 		void async_echo()
 		{
-			ready_ = false;
-			started_ = false;
+			status_ = 0;
 			rtt_.millis(0);
 			// Pulse TRIGGER for 10us
 			trigger_.set();
@@ -114,18 +112,17 @@ namespace sonar
 
 		bool ready() const
 		{
-			return ready_;
+			return status_ & READY;
 		}
 
-		uint16_t await_echo_us(uint16_t timeout_us = DEFAULT_TIMEOUT_US)
+		uint16_t await_echo_us(uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
 			// Wait for echo signal start
-			uint16_t timeout_ms = rtt_.millis() + timeout_us / 1000 + 1;
-			while (!ready_)
+			timeout_ms += rtt_.millis();
+			while (!(status_ & READY))
 				if (rtt_.millis() >= timeout_ms)
 				{
-					ready_ = true;
-					started_ = false;
+					status_ = READY;
 					return 0;
 				}
 			return echo_pulse_;
@@ -137,16 +134,15 @@ namespace sonar
 			{
 				// pulse started
 				start_ = rtt_.time();
-				started_ = true;
+				status_ = STARTED;
 			}
-			else if (started_)
+			else if (status_ & STARTED)
 			{
 				// pulse ended
 				time::RTTTime end = rtt_.time();
 				time::RTTTime delta = time::delta(start_, end);
 				echo_pulse_ = uint16_t(delta.millis * 1000UL + delta.micros);
-				ready_ = true;
-				started_ = false;
+				status_ = READY;
 			}
 		}
 
@@ -158,9 +154,10 @@ namespace sonar
 		typename gpio::FastPinType<ECHO>::TYPE echo_;
 		time::RTTTime start_;
 		volatile uint16_t echo_pulse_;
-		//TODO optimize space: only 2 bits needed here!
-		volatile bool ready_;
-		volatile bool started_;
+
+		static constexpr const uint8_t READY = 0x01;
+		static constexpr const uint8_t STARTED = 0x02;
+		volatile uint8_t status_;
 	};
 }
 }
