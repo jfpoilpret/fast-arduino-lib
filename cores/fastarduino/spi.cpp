@@ -19,7 +19,6 @@
 // Handle SPI for ATmega
 void spi::init()
 {
-	//TODO check code size and possibly revert to macro defined DDR_SPI and PORT_SPI if better
 	synchronized
 	{
 		// Set MOSI and SCK as Output

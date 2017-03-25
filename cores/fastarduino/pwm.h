@@ -38,7 +38,6 @@ namespace analog
 		{
 			static_assert(TRAIT::HAS_PWM, "PIN must be a PWM pin");
 			// Initialize pin as output
-			//TODO Improve FastPinType to allow setting mode as static method
 			gpio::FastPinType<PIN>::set_mode(gpio::PinMode::OUTPUT);
 			if (TIMER_TRAIT::IS_16BITS)
 				// Set com mode for pin

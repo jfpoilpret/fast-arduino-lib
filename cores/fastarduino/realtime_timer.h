@@ -89,8 +89,7 @@ namespace timer
 			{
 				_millis = ms;
 				// Reset timer counter
-				//TODO do we absolutely need the cast here?
-				(volatile TIMER_TYPE&) TRAIT::TCNT = 0;
+				TRAIT::TCNT = 0;
 			}
 		}
 

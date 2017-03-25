@@ -46,7 +46,6 @@ namespace servo
 
 		inline void detach() INLINE
 		{
-			//FIXME with an 8-bits PulseTimer, this does not work (produces a very thin pulse)
 			out_.set_duty(0);
 		}
 
