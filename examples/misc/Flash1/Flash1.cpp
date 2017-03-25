@@ -26,7 +26,6 @@
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
-//#include <fastarduino/utilities.h>
 #include <fastarduino/flash.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
