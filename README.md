@@ -62,6 +62,7 @@ What the project already has:
 - EEPROM support, with synchronous or asynchronous write
 - PWM output support
 - "Pulsed" Timer support (useful for Servos)
+- Servo control API
 
 As of now, the following platforms are supported (and tested):
 
@@ -82,7 +83,7 @@ The roadmap of next activities and new supported features is the following:
 
 March-April 2017
 ----------------
-1. Servo control API
+1. Sonar ranger API
 2. I2C support
 3. Improve Timer support (support input capture where available)
 4. Add support for Arduino Leonardo (without CDC feature)

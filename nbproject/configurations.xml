@@ -15,6 +15,7 @@
         <itemPath>cores/fastarduino/boards/uno_traits.h</itemPath>
       </logicalFolder>
       <logicalFolder name="devices" displayName="devices" projectFiles="true">
+        <itemPath>cores/fastarduino/devices/hcsr04.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p_internals.h</itemPath>
         <itemPath>cores/fastarduino/devices/servo.h</itemPath>
@@ -172,6 +173,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
@@ -348,6 +351,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -522,6 +527,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
@@ -698,6 +705,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -872,6 +881,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
