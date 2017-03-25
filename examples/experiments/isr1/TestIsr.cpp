@@ -13,6 +13,7 @@
 #include <fastarduino/flash.h>
 
 #include <fastarduino/int.h>
+#include <fastarduino/pci.h>
 
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
@@ -25,11 +26,19 @@ static constexpr uint16_t distance_mm(uint16_t echo_us)
 }
 
 // Utilities to handle ISR callbacks
-#define REGISTER_SERVO_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)								\
+#define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)								\
 static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
 static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
 	"PIN INT number must match INT_NUM");													\
 ISR(CAT3(INT, INT_NUM, _vect))																\
+{																							\
+	using SERVO_HANDLER = HCSR04<TIMER, TRIGGER, ECHO >;									\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
+}
+
+#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO)								\
+CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
+ISR(CAT3(PCINT, PCI_NUM, _vect))															\
 {																							\
 	using SERVO_HANDLER = HCSR04<TIMER, TRIGGER, ECHO >;									\
 	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
@@ -147,11 +156,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 using RTT = timer::RTT<TIMER>;
 using PROXI = HCSR04<TIMER, TRIGGER, ECHO>;
 
-//REGISTER_SERVO_INT_ISR(TIMER, 1, TRIGGER, ECHO)
-ISR(INT1_vect)
-{
-	CALL_HANDLER_(PROXI, &PROXI::on_echo)();
-}
+REGISTER_HCSR04_INT_ISR(TIMER, 1, TRIGGER, ECHO)
 
 int main() __attribute__((OS_main));
 int main()
