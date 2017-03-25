@@ -14,7 +14,7 @@
 
 /*
  * Asynchronous sonar sensor read and conversion.
- * This program shows usage of FastArduino HCSR04 device API with PCINT ISR.
+ * This program shows usage of FastArduino HCSR04 device API with PCINT ISR om 2 pins.
  * 
  * Wiring: TODO
  * - on ATmega328P based boards (including Arduino UNO):
@@ -50,8 +50,12 @@ using devices::sonar::distance_mm;
 // Register all needed ISR
 REGISTER_RTT_ISR(2)
 REGISTER_UATX_ISR(0)
-//TODO 
-//REGISTER_HCSR04_INT_ISR(TIMER, 1, TRIGGER1, ECHO1)		
+//TODO Improve HCSR04 to directly provide API for using several servos on same PCINT vector
+ISR(PCINT2_vect)
+{
+	CALL_HANDLER_(PROXIM1, &PROXIM1::on_echo)();
+	CALL_HANDLER_(PROXIM2, &PROXIM2::on_echo)();
+}
 
 int main() __attribute__((OS_main));
 int main()
