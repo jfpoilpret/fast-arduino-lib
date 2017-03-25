@@ -60,7 +60,7 @@ int main()
 	RTT rtt;
 	rtt.register_rtt_handler();
 	rtt.begin();
-	PROXIM sensor{rtt};
+	PROXIM sensor{rtt, false};
 	
 	out << F("Starting...\n") << streams::flush;
 	
