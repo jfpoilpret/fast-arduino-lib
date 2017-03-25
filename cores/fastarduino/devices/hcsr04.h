@@ -57,6 +57,7 @@ namespace sonar
 	}
 
 	//TODO Add API to support callback in case distance becomes out of a specified range
+	//TODO improve API to allow several types instances sharing the same TRIGGER pin
 	template<board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO>
 	class HCSR04
 	{
