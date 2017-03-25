@@ -56,13 +56,13 @@ LDLIBSOPTIONS=../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastard
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo2
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1: ../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo2: ../../../dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo2: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo2 ${OBJECTFILES} ${LDLIBSOPTIONS} -Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map
 
 ${OBJECTDIR}/Servo2.o: Servo2.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -75,7 +75,7 @@ ${OBJECTDIR}/Servo2.o: Servo2.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo2
 
 # Subprojects
 .clean-subprojects:

@@ -53,7 +53,7 @@
           <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo1</output>
           <linkerLibItems>
             <linkerLibProjectItem>
               <makeArtifact PL="../../.."
@@ -103,7 +103,7 @@
           <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo1</output>
           <linkerLibItems>
             <linkerLibProjectItem>
               <makeArtifact PL="../../.."
@@ -155,7 +155,7 @@
           <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo1</output>
           <linkerLibItems>
             <linkerLibProjectItem>
               <makeArtifact PL="../../.."
@@ -205,7 +205,7 @@
           <warningLevel>2</warningLevel>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/isr1</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/servo1</output>
           <linkerLibItems>
             <linkerLibProjectItem>
               <makeArtifact PL="../../.."
