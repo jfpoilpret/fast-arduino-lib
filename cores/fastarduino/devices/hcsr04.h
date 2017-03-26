@@ -100,9 +100,12 @@ namespace sonar
 			// Read current time (need RTT)
 			time::RTTTime end = rtt_.time();
 			time::RTTTime delta = time::delta(start, end);
-			return uint16_t(delta.millis * 1000UL + delta.micros);
+			echo_pulse_ = uint16_t(delta.millis * 1000UL + delta.micros);
+			return echo_pulse_;
 		}
 		
+		//TODO How to manage status & timeout smartly?
+		// We want to avoid using await_echo_us() to handle state & timeout!
 		void async_echo(bool trigger = true)
 		{
 			status_ = 0;
@@ -112,6 +115,11 @@ namespace sonar
 		bool ready() const
 		{
 			return status_ & READY;
+		}
+		
+		uint16_t latest_echo_us() const
+		{
+			synchronized return echo_pulse_;
 		}
 
 		uint16_t await_echo_us(uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
