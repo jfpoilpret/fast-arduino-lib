@@ -48,12 +48,19 @@ namespace sonar
 {
 	static constexpr const uint32_t SPEED_OF_SOUND = 340UL;
 	
-	// Conversion method
-	static constexpr uint16_t distance_mm(uint16_t echo_us)
+	// Conversion methods
+	static constexpr uint16_t echo_us_to_distance_mm(uint16_t echo_us)
 	{
 		// 340 m/s => 340000mm in 1000000us => 340/1000 mm/us
 		// Divide by 2 as echo time includes full sound round-trip
 		return uint16_t(echo_us * SPEED_OF_SOUND / 1000UL / 2UL);
+	}
+
+	static constexpr uint16_t distance_mm_to_echo_us(uint16_t distance_mm)
+	{
+		// 340 m/s => 340000mm in 1000000us => 340/1000 mm/us
+		// Multiply by 2 as echo time must include full sound round-trip
+		return uint16_t(distance_mm * 1000UL * 2UL / SPEED_OF_SOUND);
 	}
 
 	//TODO Add API to support callback in case distance becomes out of a specified range
@@ -80,11 +87,7 @@ namespace sonar
 		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
 		uint16_t echo_us(uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
-			rtt_.millis(0);
-			// Pulse TRIGGER for 10us
-			trigger_.set();
-			time::delay_us(TRIGGER_PULSE_US);
-			trigger_.clear();
+			trigger();
 			// Wait for echo signal start
 			timeout_ms += rtt_.millis();
 			while (!echo_.value())
@@ -99,15 +102,11 @@ namespace sonar
 			time::RTTTime delta = time::delta(start, end);
 			return uint16_t(delta.millis * 1000UL + delta.micros);
 		}
-
-		void async_echo()
+		
+		void async_echo(bool trigger = true)
 		{
 			status_ = 0;
-			rtt_.millis(0);
-			// Pulse TRIGGER for 10us
-			trigger_.set();
-			time::delay_us(TRIGGER_PULSE_US);
-			trigger_.clear();
+			if (trigger) this->trigger();
 		}
 
 		bool ready() const
@@ -147,6 +146,15 @@ namespace sonar
 		}
 
 	private:
+		void trigger()
+		{
+			rtt_.millis(0);
+			// Pulse TRIGGER for 10us
+			trigger_.set();
+			time::delay_us(TRIGGER_PULSE_US);
+			trigger_.clear();
+		}
+		
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
 		timer::RTT<TIMER>& rtt_;

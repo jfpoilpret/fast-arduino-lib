@@ -42,7 +42,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using RTT = timer::RTT<TIMER>;
 using PROXIM = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO>;
-using devices::sonar::distance_mm;
+using devices::sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
 REGISTER_RTT_ISR(2)
@@ -74,7 +74,7 @@ int main()
 	{
 		sensor.async_echo();
 		uint16_t pulse1 = sensor.await_echo_us();
-		uint16_t mm1 = distance_mm(pulse1);
+		uint16_t mm1 = echo_us_to_distance_mm(pulse1);
 		// trace value to output
 		out << F("Pulse1: ") << pulse1  << F(" us. Distance: ") << mm1 << F(" mm\n") << streams::flush;
 		time::delay_ms(1000);
