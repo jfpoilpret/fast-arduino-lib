@@ -31,7 +31,7 @@ DEFAULTCONF=UNO-Release
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=UNO-Release ATmega328-Release ATtiny84-Release MEGA-Release ATmega328-16MHz-Release 
+ALLCONFS=UNO-Release ATmega328-Release ATtiny84-Release MEGA-Release ATmega328-16MHz-Release NANO-Release 
 
 
 # build

@@ -20,6 +20,8 @@
 #include "mega.h"
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #include "uno.h"
+#elif defined(ARDUINO_NANO)
+#include "uno.h"
 
 // Breadboards
 #elif defined(BREADBOARD_ATTINYX4)

@@ -20,6 +20,8 @@
 #include "mega_traits.h"
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #include "uno_traits.h"
+#elif defined(ARDUINO_NANO)
+#include "uno_traits.h"
 
 // Breadboards
 #elif defined(BREADBOARD_ATTINYX4)

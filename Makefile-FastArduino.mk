@@ -105,6 +105,18 @@ ifeq ($(findstring UNO,${CONF}),UNO)
 		COM=/dev/ttyACM0
 	endif
 else
+ifeq ($(findstring NANO,${CONF}),NANO)
+	VARIANT=ARDUINO_NANO
+	MCU=atmega328p
+	ARCH=avr5
+	F_CPU=16000000L
+	ifeq (${PROGRAMMER},)
+		PROGRAMMER=NANO
+	endif
+	ifeq (${COM},)
+		COM=/dev/ttyUSB0
+	endif
+else
 ifeq ($(findstring ATmega328,${CONF}),ATmega328)
 	VARIANT=BREADBOARD_ATMEGA328P
 	MCU=atmega328p
@@ -159,6 +171,7 @@ endif
 endif
 endif
 endif
+endif
 
 # set F_CPU if config name includes it (eg 8MHz, 16MHz)
 ifeq ($(findstring 16MHz,${CONF}),16MHz)
@@ -197,6 +210,9 @@ ifeq (${PROGRAMMER},SHIELD)
 endif
 ifeq (${PROGRAMMER},UNO)
         AVRDUDE_OPTIONS+= -c arduino -b 115200 -P ${COM}
+endif
+ifeq (${PROGRAMMER},NANO)
+        AVRDUDE_OPTIONS+= -c arduino -b 57600 -P ${COM}
 endif
 ifeq (${PROGRAMMER},MEGA)
         AVRDUDE_OPTIONS+= -c wiring -b 115200 -P ${COM}

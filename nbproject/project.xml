@@ -33,6 +33,10 @@
                     <name>ATmega328-16MHz-Release</name>
                     <type>3</type>
                 </confElem>
+                <confElem>
+                    <name>NANO-Release</name>
+                    <type>3</type>
+                </confElem>
             </confList>
             <formatting>
                 <project-formatting-style>false</project-formatting-style>
