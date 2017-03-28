@@ -89,6 +89,10 @@ namespace board
 		A3,
 		A4,
 		A5,
+#ifdef HAS_8_ANALOG_INPUTS
+		A6,
+		A7,
+#endif
 		TEMP,
 		BANDGAP,
 		NONE = 0xFF
