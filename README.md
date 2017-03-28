@@ -67,6 +67,7 @@ What the project already has:
 As of now, the following platforms are supported (and tested):
 
 - Arduino UNO
+- Arduino NANO
 - Arduino MEGA
 - Breadboard ATmega328 at 8MHz and 16MHz
 - Breadboard ATtiny84 at 8MHz
