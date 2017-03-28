@@ -38,6 +38,14 @@ CND_ARTIFACT_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3
 CND_PACKAGE_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_ATtiny84-Release=analogpin1.tar
 CND_PACKAGE_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/analogpin1.tar
+# NANO-Release configuration
+CND_PLATFORM_NANO-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_NANO-Release=analogpin1
+CND_ARTIFACT_PATH_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/analogpin1
+CND_PACKAGE_DIR_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_NANO-Release=analogpin1.tar
+CND_PACKAGE_PATH_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/analogpin1.tar
 #
 # include compiler specific variables
 #
