@@ -78,6 +78,5 @@ int main()
 	{
 		sensor.async_echo();
 		sensor.await_echo_us();
-		time::delay_ms(1000);
 	}
 }
