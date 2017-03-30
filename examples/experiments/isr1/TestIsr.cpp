@@ -17,25 +17,23 @@
 REGISTER_RTT_ISR(0)
 
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD3_EXT1;
+static constexpr const board::DigitalPin ECHO = board::InterruptPin::D3_PD3_PCI2;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 
 using RTT = timer::RTT<TIMER>;
 using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO>;
 
-#define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
-static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
-static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
-	"PIN INT number must match INT_NUM");													\
-ISR(CAT3(INT, INT_NUM, _vect))																\
-{																							\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
-	auto handler = SERVO_HOLDER::handler();													\
-	handler->on_echo();																		\
-	if (handler->ready())																	\
-		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
-}
+//#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
+//CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
+//ISR(CAT3(PCINT, PCI_NUM, _vect))															\
+//{																							\
+//	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
+//	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
+//	auto handler = SERVO_HOLDER::handler();													\
+//	handler->on_echo();																		\
+//	if (handler->ready())																	\
+//		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
+//}
 
 class SonarListener
 {
@@ -58,7 +56,7 @@ private:
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
 };
 
-REGISTER_HCSR04_INT_ISR_METHOD(TIMER, 1, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
+REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, 2, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
 
 int main() __attribute__((OS_main));
 int main()
@@ -70,7 +68,8 @@ int main()
 	RTT rtt;
 	rtt.register_rtt_handler();
 	rtt.begin();
-	interrupt::INTSignal<ECHO> signal;
+	typename interrupt::PCIType<ECHO>::TYPE signal;
+	signal.enable_pin<ECHO>();
 	signal.enable();
 	SONAR sensor{rtt};
 	

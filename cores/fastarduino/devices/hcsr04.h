@@ -42,6 +42,58 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))															\
 	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
 }
 
+#define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
+static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
+static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
+	"PIN INT number must match INT_NUM");													\
+ISR(CAT3(INT, INT_NUM, _vect))																\
+{																							\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
+	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
+	auto handler = SERVO_HOLDER::handler();													\
+	handler->on_echo();																		\
+	if (handler->ready())																	\
+		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
+}
+
+#define REGISTER_HCSR04_INT_ISR_FUNCTION(TIMER, INT_NUM, TRIGGER, ECHO, CALLBACK)			\
+static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
+static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
+	"PIN INT number must match INT_NUM");													\
+ISR(CAT3(INT, INT_NUM, _vect))																\
+{																							\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
+	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
+	auto handler = SERVO_HOLDER::handler();													\
+	handler->on_echo();																		\
+	if (handler->ready())																	\
+		CALLBACK (handler->latest_echo_us());												\
+}
+
+#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
+CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
+ISR(CAT3(PCINT, PCI_NUM, _vect))															\
+{																							\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
+	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
+	auto handler = SERVO_HOLDER::handler();													\
+	handler->on_echo();																		\
+	if (handler->ready())																	\
+		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
+}
+
+#define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)			\
+CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
+ISR(CAT3(PCINT, PCI_NUM, _vect))															\
+{																							\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
+	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
+	auto handler = SERVO_HOLDER::handler();													\
+	handler->on_echo();																		\
+	if (handler->ready())																	\
+		CALLBACK (handler->latest_echo_us());												\
+}
+
 namespace devices
 {
 namespace sonar
