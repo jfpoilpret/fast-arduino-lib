@@ -7,7 +7,7 @@ FastArduino is a C++, object-oriented library for Arduino boards based on AVR MC
 - ensure you pay (size and speed) only for what you use
 - use C++ Object-Oriented Design everywhere
 - reduce risk of bad code, e.g. by preventing usage, at compile time, of unexisting features (pins, timers...) for the target MCU
-- enforce event-driven programs
+- support and encourage event-driven programs
 - support both ATmega and ATtiny chips
 
 It was originally inspired by Cosa library from Mikael Patel.
@@ -19,12 +19,14 @@ After usage of Cosa libraries for several projects on ATmega328 and particularly
 
 From my viewpoint, the main source of those drawbacks is essentially heavy usage of `virtual` methods, which quickly increases code size when you start to define deep classes hierarchies; this also can have a slight impact on speed due to additional indirection when calling methods.
 
-FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one parent and direct children).
+FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one parent and direct children). 
 
-This comes at a cost: 
+Also, no ISR gets automatically declared by FastArduino: every program declares the ISR it needs by using pre-defined FastArduino ISR-registration macros (note that ISR registration is the only feature for which FastArduino uses macros). FastArduino does not use `virtual` methods for ISR callbacks, which enables optimization of ISR code size, which wuld not have been possible with `virtual` methods as callbacks.
+
+All this comes at a cost: 
 
 1. Template usage is often more complex in applications. The provided examples are here to help.
-2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included)
+2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included); for this point, please note that compile time difference is hardly noticeable.
 
 Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++11 standard.
 
@@ -82,20 +84,20 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-March-April 2017
-----------------
+April 2017
+----------
 1. Sonar ranger API
 2. I2C support
-3. Improve Timer support (support input capture where available)
-4. Add support for Arduino Leonardo (without CDC feature)
+3. Add support for Arduino Leonardo (without CDC feature)
 
 May 2017
 --------
-5. Add support for ATtinyX5
-6. Add CDC feature support for Arduino Leonardo
+4. Add support for ATtinyX5
+5. Add CDC feature support for Arduino Leonardo
 
 June 2017
 ---------
+6. Improve Timer support (support input capture where available)
 7. Improve Analog Input support and code
 8. Improve SPI to support slave mode
 
