@@ -22,6 +22,8 @@
 # Where:
 # - TARGET is one of:
 #   - UNO
+#   - NANO
+#   - LEONARDO
 #   - MEGA
 #   - ATmega328
 #   - ATtiny84
@@ -39,6 +41,8 @@
 # Additional parameters are expected for uploading programs to the MCU:
 # - PROGRAMMER sets the programmer used for upload, can be one of:
 #   - UNO	use default UNO bootloader through USB (default for Arduino UNO)
+#   - NANO	use default NANO bootloader through USB (default for Arduino NANO)
+#   - LEONARDO	use default LEONARDO bootloader through USB (default for Arduino LEONARDO)
 #   - MEGA	use default MEGA bootloader through USB (default for Arduino MEGA)
 #   - ISP	use ArduinoISP breakout connected to PC through USB (used by default for breadboard configs)
 #   - SHIELD	use AVR ISP shield coupled with an Arduino UNO
@@ -117,6 +121,18 @@ ifeq ($(findstring NANO,${CONF}),NANO)
 		COM=/dev/ttyUSB0
 	endif
 else
+ifeq ($(findstring LEONARDO,${CONF}),LEONARDO)
+	VARIANT=ARDUINO_LEONARDO
+	MCU=atmega32u4
+	ARCH=avr5
+	F_CPU=16000000L
+	ifeq (${PROGRAMMER},)
+		PROGRAMMER=LEONARDO
+	endif
+	ifeq (${COM},)
+		COM=/dev/ttyACM0
+	endif
+else
 ifeq ($(findstring ATmega328,${CONF}),ATmega328)
 	VARIANT=BREADBOARD_ATMEGA328P
 	MCU=atmega328p
@@ -172,6 +188,7 @@ endif
 endif
 endif
 endif
+endif
 
 # set F_CPU if config name includes it (eg 8MHz, 16MHz)
 ifeq ($(findstring 16MHz,${CONF}),16MHz)
@@ -213,6 +230,9 @@ ifeq (${PROGRAMMER},UNO)
 endif
 ifeq (${PROGRAMMER},NANO)
         AVRDUDE_OPTIONS+= -c arduino -b 57600 -P ${COM}
+endif
+ifeq (${PROGRAMMER},LEONARDO)
+        AVRDUDE_OPTIONS+= -c avr109 -b 57600 -P ${COM}
 endif
 ifeq (${PROGRAMMER},MEGA)
         AVRDUDE_OPTIONS+= -c wiring -b 115200 -P ${COM}

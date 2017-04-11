@@ -20,6 +20,8 @@
 #include "mega.h"
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #include "uno.h"
+#elif defined(ARDUINO_LEONARDO)
+#include "leonardo.h"
 #elif defined(ARDUINO_NANO)
 #define HAS_8_ANALOG_INPUTS
 #include "uno.h"
