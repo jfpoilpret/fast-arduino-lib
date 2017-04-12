@@ -131,9 +131,7 @@ namespace board
 		constexpr const DigitalPin D9_PB5_OC1A = DigitalPin::D9_PB5;
 		constexpr const DigitalPin D10_PB6_OC1B = DigitalPin::D10_PB6;
 		constexpr const DigitalPin D5_PC6_OC3A = DigitalPin::D5_PC6;
-		constexpr const DigitalPin D13_PC7_OC4A = DigitalPin::D13_PC7;
-		constexpr const DigitalPin D6_PD7_OC4D = DigitalPin::D6_PD7;
-		constexpr const DigitalPin D12_PD6_OC4D = DigitalPin::D12_PD6;
+		//TODO High-speed timer (Timer4) related PWM pins are not listed here because Timer4 is not supported yer
 	};
 	
 	//===============
@@ -185,14 +183,14 @@ namespace board
 	//========
 	// Timers
 	//========
-	
+	// Timer enumeration is only for "standard" timers, not high-speed timer (Timer4)
 	enum class Timer: uint8_t
 	{
 		TIMER0,
 		TIMER1,
-		TIMER3,
-		TIMER4
+		TIMER3
 	};
+	//TODO Add specific enumeration for High-speed timer? (or specific traits?)
 	
 	//=============
 	// Sleep Modes

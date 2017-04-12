@@ -37,6 +37,10 @@
                     <name>NANO-Release</name>
                     <type>3</type>
                 </confElem>
+                <confElem>
+                    <name>LEONARDO-Release</name>
+                    <type>3</type>
+                </confElem>
             </confList>
             <formatting>
                 <project-formatting-style>false</project-formatting-style>

@@ -222,43 +222,37 @@ namespace board_traits
 		}
 	};
 	
-	//TODO
 	template<> struct Timer_COM_trait<Timer::TIMER3, 0>: Timer_COM_trait_impl<
 		uint16_t, PWMPin::D5_PC6_OC3A, R_(OCR3A), 
 		_BV(COM3A0) | _BV(COM3A1), 0, _BV(COM3A0), _BV(COM3A1), _BV(COM3A0) | _BV(COM3A1)> {};
-	template<> struct Timer_COM_trait<Timer::TIMER3, 1>: Timer_COM_trait_impl<
-		uint16_t, PWMPin::D10_PB6_OC1B, R_(OCR3B), 
-		_BV(COM3B0) | _BV(COM3B1), 0, _BV(COM3B0), _BV(COM3B1), _BV(COM3B0) | _BV(COM3B1)> {};
-	template<> struct Timer_trait<Timer::TIMER1>: 
+	template<> struct Timer_trait<Timer::TIMER3>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
-							2,
-							_BV(WGM10) | _BV(WGM11), _BV(WGM12),
-							_BV(WGM10) | _BV(WGM11), 0,
-							0, _BV(WGM12), 
-							R_(TCCR1A), R_(TCCR1B), R_(TCNT1), R_(OCR1A), 
-							R_(TIMSK1), R_(TIFR1),
-							R_(ICR1),
-							0, _BV(WGM12) | _BV(WGM13),
-							_BV(WGM11), _BV(WGM12) | _BV(WGM13),
-							_BV(WGM11), _BV(WGM13)>
+							1,
+							_BV(WGM30) | _BV(WGM31), _BV(WGM32),
+							_BV(WGM30) | _BV(WGM31), 0,
+							0, _BV(WGM32), 
+							R_(TCCR3A), R_(TCCR3B), R_(TCNT3), R_(OCR3A), 
+							R_(TIMSK3), R_(TIFR3),
+							R_(ICR3),
+							0, _BV(WGM32) | _BV(WGM33),
+							_BV(WGM31), _BV(WGM32) | _BV(WGM33),
+							_BV(WGM31), _BV(WGM33)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
-			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS10) :
-					p == TIMER_PRESCALER::DIV_8 ? _BV(CS11) :
-					p == TIMER_PRESCALER::DIV_64 ? _BV(CS10) | _BV(CS11) :
-					p == TIMER_PRESCALER::DIV_256 ? _BV(CS12) :
-					_BV(CS12) | _BV(CS10));
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? _BV(CS30) :
+					p == TIMER_PRESCALER::DIV_8 ? _BV(CS31) :
+					p == TIMER_PRESCALER::DIV_64 ? _BV(CS30) | _BV(CS31) :
+					p == TIMER_PRESCALER::DIV_256 ? _BV(CS32) :
+					_BV(CS32) | _BV(CS30));
 		}
 	};
 	
-	//TODO
-	template<> struct PWMPin_trait<PWMPin::D6_PD6_OC0A>: PWMPin_trait_impl<Timer::TIMER0, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D5_PD5_OC0B>: PWMPin_trait_impl<Timer::TIMER0, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D9_PB1_OC1A>: PWMPin_trait_impl<Timer::TIMER1, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D10_PB2_OC1B>: PWMPin_trait_impl<Timer::TIMER1, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D11_PB3_OC2A>: PWMPin_trait_impl<Timer::TIMER2, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D3_PD3_OC2B>: PWMPin_trait_impl<Timer::TIMER2, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D11_PB7_OC0A>: PWMPin_trait_impl<Timer::TIMER0, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D3_PD0_OC0B>: PWMPin_trait_impl<Timer::TIMER0, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D9_PB5_OC1A>: PWMPin_trait_impl<Timer::TIMER1, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D10_PB6_OC1B>: PWMPin_trait_impl<Timer::TIMER1, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D5_PC6_OC3A>: PWMPin_trait_impl<Timer::TIMER3, 0> {};
 };
 
 #endif /* BOARDS_LEONARDO_TRAITS_HH */
