@@ -129,8 +129,12 @@ ifeq ($(findstring LEONARDO,${CONF}),LEONARDO)
 	ifeq (${PROGRAMMER},)
 		PROGRAMMER=LEONARDO
 	endif
+	#TODO Improve: deduce one from the other
+	ifeq (${COM_LEONARDO},)
+		COM_LEONARDO=/dev/ttyACM0
+	endif
 	ifeq (${COM},)
-		COM=/dev/ttyACM0
+		COM=/dev/ttyACM1
 	endif
 else
 ifeq ($(findstring ATmega328,${CONF}),ATmega328)
@@ -252,6 +256,13 @@ endif
 upload: flash
 
 flash:
+ifeq (${PROGRAMMER},LEONARDO)
+	# Leonardo is specific, we first need to open port at 1200bds for a few seconds
+	# so that it enters bootloader mode and wait USB port to be open by avrdue
+	stty -F ${COM_LEONARDO} ispeed 1200 ospeed 1200
+	# sleep 1.5 seems too short
+	sleep 2.5
+endif
 	avrdude ${AVRDUDE_OPTIONS} -Uflash:w:${CND_ARTIFACT_PATH_${CONF}}.hex:i 
 
 fuses:
