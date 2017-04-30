@@ -84,19 +84,19 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-April 2017
-----------
+May 2017
+--------
 1. Sonar ranger API
 2. I2C support
 3. Add support for Arduino Leonardo (without CDC feature)
 
-May 2017
---------
+May-June 2017
+-------------
 4. Add support for ATtinyX5
 5. Add CDC feature support for Arduino Leonardo
 
-June 2017
----------
+June-July 2017
+--------------
 6. Improve Timer support (support input capture where available)
 7. Improve Analog Input support and code
 8. Improve SPI to support slave mode
