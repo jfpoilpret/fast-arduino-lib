@@ -74,57 +74,57 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a: ${OBJECTFILES}
 	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a ${OBJECTFILES} 
 	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a
 
-${OBJECTDIR}/cores/fastarduino/abi.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/abi.cpp 
+${OBJECTDIR}/cores/fastarduino/abi.o: cores/fastarduino/abi.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/abi.o cores/fastarduino/abi.cpp
 
-${OBJECTDIR}/cores/fastarduino/boards/common_traits.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/boards/common_traits.cpp 
+${OBJECTDIR}/cores/fastarduino/boards/common_traits.o: cores/fastarduino/boards/common_traits.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino/boards
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/boards/common_traits.o cores/fastarduino/boards/common_traits.cpp
 
-${OBJECTDIR}/cores/fastarduino/events.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/events.cpp 
+${OBJECTDIR}/cores/fastarduino/events.o: cores/fastarduino/events.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/events.o cores/fastarduino/events.cpp
 
-${OBJECTDIR}/cores/fastarduino/linked_list.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/linked_list.cpp 
+${OBJECTDIR}/cores/fastarduino/linked_list.o: cores/fastarduino/linked_list.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/linked_list.o cores/fastarduino/linked_list.cpp
 
-${OBJECTDIR}/cores/fastarduino/main.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/main.cpp 
+${OBJECTDIR}/cores/fastarduino/main.o: cores/fastarduino/main.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/main.o cores/fastarduino/main.cpp
 
-${OBJECTDIR}/cores/fastarduino/power.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/power.cpp 
+${OBJECTDIR}/cores/fastarduino/power.o: cores/fastarduino/power.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/power.o cores/fastarduino/power.cpp
 
-${OBJECTDIR}/cores/fastarduino/soft_uart.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/soft_uart.cpp 
+${OBJECTDIR}/cores/fastarduino/soft_uart.o: cores/fastarduino/soft_uart.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/soft_uart.o cores/fastarduino/soft_uart.cpp
 
-${OBJECTDIR}/cores/fastarduino/spi.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/spi.cpp 
+${OBJECTDIR}/cores/fastarduino/spi.o: cores/fastarduino/spi.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/spi.o cores/fastarduino/spi.cpp
 
-${OBJECTDIR}/cores/fastarduino/streams.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/streams.cpp 
+${OBJECTDIR}/cores/fastarduino/streams.o: cores/fastarduino/streams.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/streams.o cores/fastarduino/streams.cpp
 
-${OBJECTDIR}/cores/fastarduino/time.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/time.cpp 
+${OBJECTDIR}/cores/fastarduino/time.o: cores/fastarduino/time.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/time.o cores/fastarduino/time.cpp
 
-${OBJECTDIR}/cores/fastarduino/watchdog.o: nbproject/Makefile-${CND_CONF}.mk cores/fastarduino/watchdog.cpp 
+${OBJECTDIR}/cores/fastarduino/watchdog.o: cores/fastarduino/watchdog.cpp nbproject/Makefile-${CND_CONF}.mk
 	${MKDIR} -p ${OBJECTDIR}/cores/fastarduino
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -Icores -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/cores/fastarduino/watchdog.o cores/fastarduino/watchdog.cpp
@@ -135,7 +135,6 @@ ${OBJECTDIR}/cores/fastarduino/watchdog.o: nbproject/Makefile-${CND_CONF}.mk cor
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libfastarduino.a
 
 # Subprojects
 .clean-subprojects:
