@@ -259,7 +259,7 @@ upload: flash
 flash:
 ifeq (${PROGRAMMER},LEONARDO)
 	# Leonardo is specific, we first need to open port at 1200bds for a few seconds
-	# so that it enters bootloader mode and wait USB port to be open by avrdue
+	# so that it enters bootloader mode and wait USB port to be open by avrdude
 	stty -F ${COM_LEONARDO} ispeed 1200 ospeed 1200 || :
 	# sleep 1.5 seems too short
 	sleep 2.5
