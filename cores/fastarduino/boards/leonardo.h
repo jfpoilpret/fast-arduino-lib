@@ -21,9 +21,27 @@
 /* This board is based on ATmega32u4 */
 #define BOARD_ATMEGA32U4
 
+#ifndef INLINE
+#define INLINE __attribute__((always_inline))
+#endif
+
 // Arduino Leonardo pinout: http://duino4projects.com/wp-content/uploads/2013/04/Ardunio_leonardo_pinout.jpg
 namespace board
 {
+	//=====================
+	// Initialization code
+	//=====================
+	static void init() INLINE;
+	static void init()
+	{
+		// Disable USB controller by default
+		USBCON = 0;
+		UDCON = 0;
+		// Disable all interrupts
+		UDINT = 0;
+		UDIEN = 0;
+	}
+	
 	//====
 	// IO
 	//====

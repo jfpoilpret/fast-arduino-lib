@@ -21,8 +21,18 @@
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
 
+#ifndef INLINE
+#define INLINE __attribute__((always_inline))
+#endif
+
 namespace board
 {
+	//=====================
+	// Initialization code
+	//=====================
+	static void init() INLINE;
+	static void init() {}
+	
 	//====
 	// IO
 	//====

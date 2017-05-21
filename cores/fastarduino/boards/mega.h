@@ -20,8 +20,18 @@
 
 /* This board is based on ATmega1280/2560 but only ATmega2560 is supported */
 
+#ifndef INLINE
+#define INLINE __attribute__((always_inline))
+#endif
+
 namespace board
 {
+	//=====================
+	// Initialization code
+	//=====================
+	static void init() INLINE;
+	static void init() {}
+	
 	//====
 	// IO
 	//====

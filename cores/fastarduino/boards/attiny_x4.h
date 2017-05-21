@@ -22,8 +22,18 @@
 #define BOARDS_ATTINYX4
 #define BOARD_ATTINY
 
+#ifndef INLINE
+#define INLINE __attribute__((always_inline))
+#endif
+
 namespace board
 {
+	//=====================
+	// Initialization code
+	//=====================
+	static void init() INLINE;
+	static void init() {}
+	
 	//====
 	// IO
 	//====
