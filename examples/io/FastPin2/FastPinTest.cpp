@@ -31,12 +31,13 @@
 
 int main()
 {
+	board::init();
 	sei();
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE PinLED{gpio::PinMode::OUTPUT};
 	while (true)
 	{
 		PinLED.toggle();
-		time::delay_ms(400);
+		time::delay_ms(2000);
 	}
 	return 0;
 }
