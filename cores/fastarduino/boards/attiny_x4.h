@@ -31,8 +31,8 @@ namespace board
 	//=====================
 	// Initialization code
 	//=====================
-	static void init() INLINE;
-	static void init() {}
+	inline static void init() INLINE;
+	inline static void init() {}
 	
 	//====
 	// IO
