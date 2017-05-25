@@ -21,7 +21,7 @@
 #include "boards/board_traits.h"
 
 // Only MCU with physical USART are supported (not ATtiny then)
-#if defined(UCSR0A)
+#if defined(UCSR0A) || defined(UCSR1A)
 
 #define REGISTER_UATX_ISR_METHOD_(UART_NUM, HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(CAT3(USART, UART_NUM, _UDRE_vect), HANDLER, CALLBACK)
@@ -203,11 +203,10 @@ namespace hard
 
 		inline void data_receive_complete()
 		{
-			//FIXME all constants should be in USART traits!
 			char status = TRAIT::UCSRA;
-			_errors.all_errors.data_overrun = status & _BV(DOR0);
-			_errors.all_errors.frame_error = status & _BV(FE0);
-			_errors.all_errors.parity_error = status & _BV(UPE0);
+			_errors.all_errors.data_overrun = status & TRAIT::DOR_MASK;
+			_errors.all_errors.frame_error = status & TRAIT::FE_MASK;
+			_errors.all_errors.parity_error = status & TRAIT::UPE_MASK;
 			char value = TRAIT::UDR;
 			_errors.all_errors.queue_overflow = !in()._push(value);
 		}

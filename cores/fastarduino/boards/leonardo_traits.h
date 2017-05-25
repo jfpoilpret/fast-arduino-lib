@@ -122,7 +122,8 @@ namespace board_traits
 	// USART
 	//=======
 	template<> struct USART_trait<USART::USART1>: 
-		USART_trait_impl<R_(UCSR1A), R_(UCSR1B), R_(UCSR1C), R_(UDR1), R_(UBRR1), U2X1, TXEN1, RXEN1, UDRIE1, RXCIE1> 
+		USART_trait_impl<	R_(UCSR1A), R_(UCSR1B), R_(UCSR1C), R_(UDR1), R_(UBRR1), 
+							U2X1, TXEN1, RXEN1, UDRIE1, RXCIE1, DOR1, FE1, UPE1> 
 	{
 		static constexpr uint8_t UCSRC_value(serial::Parity parity, serial::StopBits stopbits)
 		{
