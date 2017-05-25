@@ -30,6 +30,14 @@ CND_ARTIFACT_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/u
 CND_PACKAGE_DIR_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_MEGA-Release=uartapp1.tar
 CND_PACKAGE_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/uartapp1.tar
+# LEONARDO-Release configuration
+CND_PLATFORM_LEONARDO-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_LEONARDO-Release=uartapp1
+CND_ARTIFACT_PATH_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/uartapp1
+CND_PACKAGE_DIR_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_LEONARDO-Release=uartapp1.tar
+CND_PACKAGE_PATH_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/uartapp1.tar
 #
 # include compiler specific variables
 #

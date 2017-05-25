@@ -34,8 +34,15 @@
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
 
+#ifdef ARDUINO_LEONARDO
+// Define vectors we need in the example
+REGISTER_UART_ISR(1)
+static const board::USART USART = board::USART::USART1;
+#else
 // Define vectors we need in the example
 REGISTER_UART_ISR(0)
+static const board::USART USART = board::USART::USART0;
+#endif
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;
@@ -46,11 +53,12 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	
 	// Start UART
-	serial::hard::UART<board::USART::USART0> uart{input_buffer, output_buffer};
+	serial::hard::UART<USART> uart{input_buffer, output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
 //	uart.begin(230400);
