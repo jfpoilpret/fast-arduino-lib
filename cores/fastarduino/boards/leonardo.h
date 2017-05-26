@@ -117,11 +117,17 @@ namespace board
 	enum class AnalogPin: uint8_t
 	{
 		A0_ADC7 = 0,
+		A0 = A0_ADC7,
 		A1_ADC6,
+		A1 = A1_ADC6,
 		A2_ADC5,
+		A2 = A2_ADC5,
 		A3_ADC4,
+		A3 = A3_ADC4,
 		A4_ADC1,
+		A4 = A4_ADC1,
 		A5_ADC0,
+		A5 = A5_ADC0,
 		
 		A6_D4_ADC8,
 		A7_D6_ADC10,
