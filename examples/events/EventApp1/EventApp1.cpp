@@ -18,7 +18,7 @@
  * The number of LED roundtrips is limited to one because all events are pushed at startup and not regenerated.
  * 
  * Wiring:
- * - on ATmega328P based boards (including Arduino UNO):
+ * - on ATmega328P based boards (including Arduino UNO) and on Leonardo:
  *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  * - on Arduino MEGA:
  *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
@@ -44,6 +44,15 @@ static constexpr const board::DigitalPin LED4 = board::DigitalPin::D4_PD4;
 static constexpr const board::DigitalPin LED5 = board::DigitalPin::D5_PD5;
 static constexpr const board::DigitalPin LED6 = board::DigitalPin::D6_PD6;
 static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PD7;
+#elif defined (ARDUINO_LEONARDO)
+static constexpr const board::DigitalPin LED0 = board::DigitalPin::D0_PD2;
+static constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PD3;
+static constexpr const board::DigitalPin LED2 = board::DigitalPin::D2_PD1;
+static constexpr const board::DigitalPin LED3 = board::DigitalPin::D3_PD0;
+static constexpr const board::DigitalPin LED4 = board::DigitalPin::D4_PD4;
+static constexpr const board::DigitalPin LED5 = board::DigitalPin::D5_PC6;
+static constexpr const board::DigitalPin LED6 = board::DigitalPin::D6_PD7;
+static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PE6;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::DigitalPin LED0 = board::DigitalPin::D22_PA0;
 static constexpr const board::DigitalPin LED1 = board::DigitalPin::D23_PA1;
@@ -87,6 +96,7 @@ private:
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 

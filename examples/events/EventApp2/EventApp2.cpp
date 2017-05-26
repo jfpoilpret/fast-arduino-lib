@@ -19,6 +19,8 @@
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ * - on Arduino LEONARDO:
+ *	- D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in series with 330 Ohm resistors
  * - on Arduino MEGA:
  *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  * - on ATtinyX4 based boards:
@@ -31,7 +33,7 @@
 
 using namespace events;
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_LEONARDO)
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
@@ -71,6 +73,7 @@ static containers::Queue<Event> event_queue{buffer};
 	
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 

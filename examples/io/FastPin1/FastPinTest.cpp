@@ -24,6 +24,11 @@ static gpio::FastPort<board::Port::PORT_B> PortB;
 static gpio::FastPinType<board::DigitalPin::D0_PD0>::TYPE PinD0{gpio::PinMode::INPUT};
 static gpio::FastPinType<board::DigitalPin::D1_PD1>::TYPE PinD1{gpio::PinMode::INPUT_PULLUP};
 static gpio::FastPinType<board::DigitalPin::D2_PD2>::TYPE PinD2{gpio::PinMode::OUTPUT};
+#elif defined(ARDUINO_LEONARDO)
+static gpio::FastPort<board::Port::PORT_B> PortB;
+static gpio::FastPinType<board::DigitalPin::D0_PD2>::TYPE PinD0{gpio::PinMode::INPUT};
+static gpio::FastPinType<board::DigitalPin::D1_PD3>::TYPE PinD1{gpio::PinMode::INPUT_PULLUP};
+static gpio::FastPinType<board::DigitalPin::D2_PD1>::TYPE PinD2{gpio::PinMode::OUTPUT};
 #elif defined (ARDUINO_MEGA)
 static gpio::FastPort<board::Port::PORT_B> PortB;
 static gpio::FastPinType<board::DigitalPin::D0_PE0>::TYPE PinD0{gpio::PinMode::INPUT};
@@ -54,6 +59,7 @@ bool f()
 
 int main()
 {
+	board::init();
 	f();
 	return 0;
 }

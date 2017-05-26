@@ -20,6 +20,9 @@
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  *   - D14-D17 (A0-A3, port C) branch 4 switches connected to ground
+ * - on Arduino LEONARDO:
+ *	- D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in series with 330 Ohm resistors
+ *	- A0-A3 (port F) branch 4 switches connected to ground
  * - on Arduino MEGA:
  *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  *   - D21-D18 (port D) branch 4 switches connected to ground
@@ -30,6 +33,32 @@
 
 #include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
+
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+static constexpr const board::Port LED_PORT = board::Port::PORT_D;
+static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
+static constexpr const uint8_t SPEED_SHIFT = 0;
+static constexpr const uint8_t DIRECTION_MASK = 0x08;
+#elif defined (ARDUINO_LEONARDO)
+static constexpr const board::Port LED_PORT = board::Port::PORT_D;
+static constexpr const board::Port SWITCH_PORT = board::Port::PORT_F;
+static constexpr const uint8_t SPEED_SHIFT = 4;
+static constexpr const uint8_t DIRECTION_MASK = 0x80;
+#elif defined (ARDUINO_MEGA)
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
+static constexpr const board::Port SWITCH_PORT = board::Port::PORT_D;
+static constexpr const uint8_t SPEED_SHIFT = 0;
+static constexpr const uint8_t DIRECTION_MASK = 0x08;
+#elif defined (BREADBOARD_ATTINYX4)
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
+static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
+static constexpr const uint8_t SPEED_SHIFT = 0;
+static constexpr const uint8_t DIRECTION_MASK = 0x08;
+#else
+#error "Current target is not yet supported!"
+#endif
+
+static constexpr const uint8_t SPEED_MASK = 0x07 << SPEED_SHIFT;
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)
 {
@@ -43,25 +72,13 @@ static inline uint8_t calculate_pattern(uint8_t num_bits)
 	return pattern;
 }
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-static constexpr const board::Port LED_PORT = board::Port::PORT_D;
-static constexpr const board::Port SWITCH_PORT = board::Port::PORT_C;
-#elif defined (ARDUINO_MEGA)
-static constexpr const board::Port LED_PORT = board::Port::PORT_A;
-static constexpr const board::Port SWITCH_PORT = board::Port::PORT_D;
-#elif defined (BREADBOARD_ATTINYX4)
-static constexpr const board::Port LED_PORT = board::Port::PORT_A;
-static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
-#else
-#error "Current target is not yet supported!"
-#endif
-
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to read settings and write to LEDs
-	gpio::FastPort<SWITCH_PORT> switchPort{0x00, 0x0F};
+	gpio::FastPort<SWITCH_PORT> switchPort{0x00, SPEED_MASK | DIRECTION_MASK};
 	gpio::FastPort<LED_PORT> ledPort{0xFF};
 	
 	// Loop of the LED chaser
@@ -69,8 +86,8 @@ int main()
 	{
 		// Read settings everytime a LED chasing loop is about to start
 		uint8_t settings = switchPort.get_PIN();
-		uint8_t pattern = calculate_pattern(settings & 0x07);
-		bool direction = settings & 0x08;
+		uint8_t pattern = calculate_pattern((settings & SPEED_MASK) >> SPEED_SHIFT);
+		bool direction = settings & DIRECTION_MASK;
 		for (uint8_t i = 0; i < 8; ++i)
 		{
 			ledPort.set_PORT(shift_pattern(pattern, (direction ? i : 7 - i)));

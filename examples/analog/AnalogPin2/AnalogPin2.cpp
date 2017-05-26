@@ -21,6 +21,9 @@
  * - on ATmega328P based boards (including Arduino UNO):
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ * - on Arduino LEONARDO:
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *	- D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in series with 330 Ohm resistors
  * - on Arduino MEGA:
  *   - TODO
  *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
@@ -33,7 +36,7 @@
 #include <fastarduino/analog_input.h>
 #include <fastarduino/gpio.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_LEONARDO)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 static constexpr const uint8_t LED_MASK = 0xFF;
@@ -53,6 +56,7 @@ using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	
