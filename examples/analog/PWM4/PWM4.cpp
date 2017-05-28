@@ -40,6 +40,12 @@ static constexpr const board::DigitalPin LED0 = board::PWMPin::D6_PD6_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D5_PD5_OC0B;
 static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
+#elif defined (ARDUINO_LEONARDO)
+static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
+static constexpr const board::DigitalPin LED0 = board::PWMPin::D11_PB7_OC0A;
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+static constexpr const board::DigitalPin LED1 = board::PWMPin::D3_PD0_OC0B;
+static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED0 = board::PWMPin::D13_PB7_OC0A;
@@ -79,9 +85,9 @@ REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, LED0, LED1)
 //REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, LED1)
 
 using ANALOG0_INPUT = analog::AnalogInput<POT0, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
-using LED0_OUTPUT = analog::PWMOutput<LED0>;
+using LED0_OUTPUT = analog::PWMOutput<LED0, true>;
 using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
-using LED1_OUTPUT = analog::PWMOutput<LED1>;
+using LED1_OUTPUT = analog::PWMOutput<LED1, true>;
 using TIMER0_TYPE = timer::PulseTimer<TIMER0, PRESCALER0>;
 using TIMER0_DUTY_TYPE = TIMER0_TYPE::TIMER_TYPE;
 
@@ -99,6 +105,7 @@ void update(IN& in, OUT& out, uint16_t old_pulse)
 
 int main()
 {
+	board::init();
 	// Initialize timer and pins
 	TIMER0_TYPE timer0{PULSE_FREQUENCY};
 	LED0_OUTPUT led0{timer0};
