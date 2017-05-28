@@ -58,6 +58,7 @@ static containers::Queue<Event> event_queue{buffer};
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 

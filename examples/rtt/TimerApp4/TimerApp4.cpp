@@ -87,6 +87,7 @@ REGISTER_TIMER_ISR_METHOD(1, SuspendHandler, &SuspendHandler::on_timer)
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	BlinkHandler blink_handler;
 	BLINK_TIMER_TYPE blink_timer{timer::TimerMode::CTC};
 	SuspendHandler suspend_handler{blink_timer};

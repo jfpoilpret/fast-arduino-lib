@@ -19,7 +19,7 @@
  * For each available timer on the target platform, the program blinks a LED 5 times with a period of 10 seconds.
  * 
  * Wiring:
- * - on Arduino UNO and Arduino MEGA:
+ * - on Arduino UNO, Arduino LEONARDO and Arduino MEGA:
  *   - no wiring needed as the program uses default LED on D13
  * - on ATmega328P based boards:
  *   - D13 (PB5) connected to a LED through a 330Ohm resistor then linked to GND
@@ -35,6 +35,11 @@
 REGISTER_RTT_ISR(0)
 REGISTER_RTT_ISR(1)
 REGISTER_RTT_ISR(2)
+#elif defined (ARDUINO_LEONARDO)
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
+REGISTER_RTT_ISR(3)
 #elif defined (ARDUINO_MEGA)
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
@@ -72,6 +77,7 @@ void check_timer()
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 
@@ -82,6 +88,10 @@ int main()
 	check_timer<board::Timer::TIMER0>();
 	check_timer<board::Timer::TIMER1>();
 	check_timer<board::Timer::TIMER2>();
+#elif defined (ARDUINO_LEONARDO)
+	check_timer<board::Timer::TIMER0>();
+	check_timer<board::Timer::TIMER1>();
+	check_timer<board::Timer::TIMER3>();
 #elif defined (ARDUINO_MEGA)
 	check_timer<board::Timer::TIMER0>();
 	check_timer<board::Timer::TIMER1>();

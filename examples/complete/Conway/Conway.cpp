@@ -63,12 +63,23 @@ static constexpr const board::DigitalPin DATA = board::DigitalPin::D4_PD4;
 
 static constexpr const board::AnalogPin ROW = board::AnalogPin::A0;
 static constexpr const board::AnalogPin COLUMN = board::AnalogPin::A1;
-static constexpr const board::AnalogPin SPEED = board::AnalogPin::A0;
+static constexpr const board::AnalogPin SPEED_PIN = board::AnalogPin::A0;
 
 static constexpr const board::DigitalPin SELECT = board::DigitalPin::D5_PD5;
 static constexpr const board::DigitalPin START_STOP = board::DigitalPin::D6_PD6;
 
 #define HAS_TRACE 1
+#elif defined (ARDUINO_LEONARDO)
+static constexpr const board::DigitalPin CLOCK = board::DigitalPin::D0_PD2;
+static constexpr const board::DigitalPin LATCH = board::DigitalPin::D1_PD3;
+static constexpr const board::DigitalPin DATA = board::DigitalPin::D2_PD1;
+
+static constexpr const board::AnalogPin ROW = board::AnalogPin::A0;
+static constexpr const board::AnalogPin COLUMN = board::AnalogPin::A1;
+static constexpr const board::AnalogPin SPEED_PIN = board::AnalogPin::A1;
+
+static constexpr const board::DigitalPin SELECT = board::DigitalPin::D3_PD0;
+static constexpr const board::DigitalPin START_STOP = board::DigitalPin::D4_PD4;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::DigitalPin CLOCK = board::DigitalPin::D2_PA2;
 static constexpr const board::DigitalPin LATCH = board::DigitalPin::D1_PA1;
@@ -76,7 +87,7 @@ static constexpr const board::DigitalPin DATA = board::DigitalPin::D0_PA0;
 
 static constexpr const board::AnalogPin ROW = board::AnalogPin::A6;
 static constexpr const board::AnalogPin COLUMN = board::AnalogPin::A7;
-static constexpr const board::AnalogPin SPEED = board::AnalogPin::A7;
+static constexpr const board::AnalogPin SPEED_PIN = board::AnalogPin::A7;
 
 static constexpr const board::DigitalPin SELECT = board::DigitalPin::D4_PA4;
 static constexpr const board::DigitalPin START_STOP = board::DigitalPin::D5_PA5;
@@ -165,7 +176,7 @@ static constexpr const ROW_TYPE SMILEY[] =
 
 static uint16_t game_period()
 {
-	analog::AnalogInput<SPEED, board::AnalogReference::AVCC, uint8_t> speed_input;
+	analog::AnalogInput<SPEED_PIN, board::AnalogReference::AVCC, uint8_t> speed_input;
 	uint8_t period = speed_input.sample() >> 4;
 	return (MIN_PROGRESS_PERIOD_MS * (period + 1)) >> LOG2(REFRESH_PERIOD_MS);
 }
@@ -173,6 +184,7 @@ static uint16_t game_period()
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	

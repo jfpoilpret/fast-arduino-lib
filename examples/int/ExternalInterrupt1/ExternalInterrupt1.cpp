@@ -21,6 +21,9 @@
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D2 (INT0, PD2) branch a push button connected to ground
  *   - D13 (PB5) LED connected to ground through a resistor
+ * - on Arduino LEONARDO:
+ *   - D3 (INT0) branch a push button connected to ground
+ *   - D13 (PC7) LED connected to ground through a resistor
  * - on Arduino MEGA:
  *   - D21 (INT0) branch a push button connected to ground
  *   - D13 (PB7) LED connected to ground through a resistor
@@ -35,6 +38,8 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
+#elif defined (ARDUINO_LEONARDO)
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D3_PD0_EXT0;
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
 #elif defined (BREADBOARD_ATTINYX4)
@@ -70,6 +75,7 @@ REGISTER_INT_ISR_METHOD(0, SWITCH, PinChangeHandler, &PinChangeHandler::on_pin_c
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	

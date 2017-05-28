@@ -38,6 +38,9 @@
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
+#elif defined (ARDUINO_LEONARDO)
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D3_PD0_EXT0;
+REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
 // Define vectors we need in the example
@@ -52,6 +55,7 @@ REGISTER_INT_ISR_EMPTY(0, SWITCH)
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	

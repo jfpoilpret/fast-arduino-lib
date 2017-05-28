@@ -36,6 +36,9 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const board::DigitalPin SWITCH_ON = board::ExternalInterruptPin::D2_PD2_EXT0;
 constexpr const board::DigitalPin SWITCH_OFF = board::ExternalInterruptPin::D3_PD3_EXT1;
+#elif defined (ARDUINO_LEONARDO)
+constexpr const board::DigitalPin SWITCH_ON = board::ExternalInterruptPin::D3_PD0_EXT0;
+constexpr const board::DigitalPin SWITCH_OFF = board::ExternalInterruptPin::D2_PD1_EXT1;
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin SWITCH_ON = board::ExternalInterruptPin::D21_PD0_EXT0;
 constexpr const board::DigitalPin SWITCH_OFF = board::ExternalInterruptPin::D20_PD1_EXT1;
@@ -77,6 +80,7 @@ REGISTER_INT_ISR_METHOD(1, SWITCH_OFF, SwitchHandler, &SwitchHandler::on_switch_
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	

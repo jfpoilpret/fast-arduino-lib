@@ -36,6 +36,9 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 constexpr const board::DigitalPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
 #define PCI_NUM 1
+#elif defined (ARDUINO_LEONARDO)
+constexpr const board::DigitalPin SWITCH = board::InterruptPin::D8_PB4_PCI0;
+#define PCI_NUM 0
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin SWITCH = board::InterruptPin::D53_PB0_PCI0;
 #define PCI_NUM 0
@@ -73,6 +76,7 @@ REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_cha
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	

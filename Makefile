@@ -118,6 +118,7 @@ help: .help-post
 .help-post: .help-impl
 # Add your post 'help' code here...
 
+#TODO Add new examples: Servo, Sonar
 examples: build
 	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF}
 	$(MAKE) -C examples/analog/AnalogPin2 CONF=${CONF}
@@ -146,7 +147,9 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF}
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF}
+ifeq ($(findstring LEONARDO,${CONF}),)
 	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF}
+endif
 	$(MAKE) -C examples/analog/PWM1 CONF=${CONF}
 	$(MAKE) -C examples/analog/PWM2 CONF=${CONF}
 	$(MAKE) -C examples/analog/PWM3 CONF=${CONF}
@@ -200,7 +203,9 @@ endif
 	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF} clean
 	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF} clean
+ifeq ($(findstring LEONARDO,${CONF}),)
 	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF} clean
+endif
 	$(MAKE) -C examples/analog/PWM1 CONF=${CONF} clean
 	$(MAKE) -C examples/analog/PWM2 CONF=${CONF} clean
 	$(MAKE) -C examples/analog/PWM3 CONF=${CONF} clean

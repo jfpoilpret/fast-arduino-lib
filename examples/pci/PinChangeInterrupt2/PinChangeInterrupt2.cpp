@@ -44,6 +44,15 @@ constexpr const board::DigitalPin LED2 = board::DigitalPin::D3_PD3;
 constexpr const board::DigitalPin LED3 = board::DigitalPin::D5_PD5;
 constexpr const board::DigitalPin LED4 = board::DigitalPin::D7_PD7;
 #define PCI_NUM 1
+#elif defined (ARDUINO_LEONARDO)
+constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D8_PB4_PCI0;
+constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D9_PB5_PCI0;
+constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D10_PB6_PCI0;
+constexpr const board::DigitalPin LED1 = board::DigitalPin::D0_PD2;
+constexpr const board::DigitalPin LED2 = board::DigitalPin::D1_PD3;
+constexpr const board::DigitalPin LED3 = board::DigitalPin::D2_PD1;
+constexpr const board::DigitalPin LED4 = board::DigitalPin::D3_PD0;
+#define PCI_NUM 0
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D53_PB0_PCI0;
 constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D52_PB1_PCI0;
@@ -104,6 +113,7 @@ REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_cha
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 

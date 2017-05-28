@@ -32,20 +32,29 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #include <fastarduino/uart.h>
-static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
+#elif defined (ARDUINO_LEONARDO)
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART1;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
+REGISTER_UATX_ISR(1)
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
-static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
-constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
-static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 #else
@@ -57,6 +66,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	// Start UART
@@ -64,7 +74,7 @@ int main()
 	serial::soft::UATX<TX> uatx{output_buffer};
 	uatx.begin(115200);
 #else
-	serial::hard::UATX<board::USART::USART0> uatx{output_buffer};
+	serial::hard::UATX<UART> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
 #endif

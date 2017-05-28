@@ -31,7 +31,7 @@ DEFAULTCONF=UNO-Release
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=UNO-Release ATtiny84-Release 
+ALLCONFS=UNO-Release ATtiny84-Release LEONARDO-Release 
 
 
 # build
