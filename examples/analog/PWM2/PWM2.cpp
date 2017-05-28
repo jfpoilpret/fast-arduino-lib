@@ -44,6 +44,12 @@ static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D6_PD6_OC0A;
 static constexpr const board::DigitalPin LED2 = board::PWMPin::D5_PD5_OC0B;
 static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+#elif defined (ARDUINO_LEONARDO)
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
+static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
+static constexpr const board::DigitalPin LED1 = board::PWMPin::D11_PB7_OC0A;
+static constexpr const board::DigitalPin LED2 = board::PWMPin::D3_PD0_OC0B;
+static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
@@ -73,6 +79,7 @@ constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(
 
 int main()
 {
+	board::init();
 	// Initialize timer and pins
 	TIMER_TYPE timer{timer::TimerMode::FAST_PWM};
 	LED_OUTPUT1 led1{timer};
