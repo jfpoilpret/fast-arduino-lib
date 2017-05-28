@@ -78,7 +78,7 @@ namespace servo
 		static const int8_t MAX = +90;
 		static const int8_t MIN = -90;
 
-		analog::PWMOutput<PIN> out_;
+		analog::PWMOutput<PIN, true> out_;
 
 		const uint16_t US_MINIMUM_;
 		const uint16_t US_MAXIMUM_;

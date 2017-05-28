@@ -24,7 +24,7 @@ namespace analog
 {
 	using timer::TimerOutputMode;
 	
-	template<board::DigitalPin PIN>
+	template<board::DigitalPin PIN, bool PULSED = false>
 	class PWMOutput
 	{
 		using TRAIT = board_traits::PWMPin_trait<PIN>;
@@ -39,14 +39,14 @@ namespace analog
 			static_assert(TRAIT::HAS_PWM, "PIN must be a PWM pin");
 			// Initialize pin as output
 			gpio::FastPinType<PIN>::set_mode(gpio::PinMode::OUTPUT);
-			if (TIMER_TRAIT::IS_16BITS)
+			if (TIMER_TRAIT::IS_16BITS || !PULSED)
 				// Set com mode for pin
 				_timer.template set_output_mode<COM>(output_mode);
 		}
 		
 		inline void set_output_mode(TimerOutputMode output_mode)
 		{
-			if (TIMER_TRAIT::IS_16BITS)
+			if (TIMER_TRAIT::IS_16BITS || !PULSED)
 				_timer.template set_output_mode<COM>(output_mode);
 		}
 
