@@ -38,6 +38,14 @@ CND_ARTIFACT_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3
 CND_PACKAGE_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_ATtiny84-Release=rf24app1.tar
 CND_PACKAGE_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/rf24app1.tar
+# LEONARDO-Release configuration
+CND_PLATFORM_LEONARDO-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_LEONARDO-Release=rf24app1
+CND_ARTIFACT_PATH_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/rf24app1
+CND_PACKAGE_DIR_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_LEONARDO-Release=rf24app1.tar
+CND_PACKAGE_PATH_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/rf24app1.tar
 #
 # include compiler specific variables
 #
