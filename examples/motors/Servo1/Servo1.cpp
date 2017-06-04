@@ -15,7 +15,22 @@
 #include <fastarduino/pulse_timer.h>
 #include <fastarduino/devices/servo.h>
 
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#define TIMER_NUM 0
 constexpr const board::Timer TIMER = board::Timer::TIMER0;
+// PIN connected to servo signal
+constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D6_PD6_OC0A;
+constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#elif defined(ARDUINO_LEONARDO)
+#define TIMER_NUM 0
+constexpr const board::Timer TIMER = board::Timer::TIMER0;
+// PIN connected to servo signal
+constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D11_PB7_OC0A;
+constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#else
+#error "Current target is not yet supported!"
+#endif
+
 using TCALC = timer::Calculator<TIMER>;
 using TPRESCALER = TCALC::TIMER_PRESCALER;
 
@@ -26,23 +41,20 @@ constexpr const uint16_t NEUTRAL_PULSE_US = 1500;
 constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const TPRESCALER PRESCALER = TCALC::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
 
-// PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D6_PD6_OC0A;
-
 // Predefine types used for Timer and Servo
 using PULSE_TIMER = timer::PulseTimer<TIMER, PRESCALER>;
 using SERVO1 = devices::servo::Servo<PULSE_TIMER, SERVO_PIN1>;
 
-constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 
 // Register ISR needed for PulseTimer (8 bits specific)
-//REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER, SERVO_PIN1, SERVO_PIN2)
-REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER, SERVO_PIN1)
+REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, SERVO_PIN1)
 
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
+	
 	// Instantiate pulse timer for servo
 	PULSE_TIMER servo_timer{PULSE_FREQUENCY};
 	// Instantiate servo

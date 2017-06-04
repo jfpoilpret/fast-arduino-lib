@@ -270,7 +270,7 @@
           <commandLine>-Os -Wl,--gc-sections -Wl,--relax -flto -mmcu=${MCU} -Wl,-Map,${CND_ARTIFACT_PATH_${CONF}}.map</commandLine>
         </linkerTool>
       </compileType>
-      <item path="RF24App1.cpp" ex="false" tool="1" flavor2="0">
+      <item path="RF24App1.cpp" ex="false" tool="1" flavor2="8">
       </item>
     </conf>
   </confs>

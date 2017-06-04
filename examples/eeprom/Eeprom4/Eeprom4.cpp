@@ -32,12 +32,21 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+#elif defined (ARDUINO_LEONARDO)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART1;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(1)
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
@@ -96,10 +105,11 @@ static void trace_eeprom(OUTPUT& out)
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 #if HARDWARE_UART
-	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
+	serial::hard::UATX<UART> uart{output_buffer};
 	uart.register_handler();
 #else
 	serial::soft::UATX<TX> uart{output_buffer};

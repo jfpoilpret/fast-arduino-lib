@@ -64,10 +64,10 @@ static const constexpr board::USART UART = board::USART::USART1;
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D8_PB4;
 static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D9_PB5;
 static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D10_PB6;
-static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER0;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER1;
 
 // Define vectors we need in the example
-REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
 #elif defined(ARDUINO_MEGA)
 #define HAS_TRACE 1
 #define USART_NUM 0
@@ -128,6 +128,7 @@ int main()
 	uatx.register_handler();
 	uatx.begin(115200);
 	auto trace = uatx.fout();
+	trace.width(0);
 #else
 	streams::EmptyOutput trace;
 #endif

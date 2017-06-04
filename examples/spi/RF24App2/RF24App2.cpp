@@ -51,6 +51,8 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
 #define HAS_TRACE 1
+#define USART_NUM 0
+static const constexpr board::USART UART = board::USART::USART0;
 static const constexpr board::DigitalPin PIN_IRQ = board::ExternalInterruptPin::D2_PD2_EXT0;
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PD7;
 static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PB0;
@@ -59,8 +61,22 @@ static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(2)
+#elif defined(ARDUINO_LEONARDO)
+#define HAS_TRACE 1
+#define USART_NUM 1
+static const constexpr board::USART UART = board::USART::USART1;
+static const constexpr board::DigitalPin PIN_IRQ = board::ExternalInterruptPin::D3_PD0_EXT0;
+static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D8_PB4;
+static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D9_PB5;
+static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D10_PB6;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER1;
+
+// Define vectors we need in the example
+REGISTER_RTT_ISR(1)
 #elif defined(ARDUINO_MEGA)
 #define HAS_TRACE 1
+#define USART_NUM 0
+static const constexpr board::USART UART = board::USART::USART0;
 static const constexpr board::DigitalPin PIN_IRQ = board::ExternalInterruptPin::D21_PD0_EXT0;
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PH4;
 static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PH5;
@@ -88,7 +104,7 @@ REGISTER_RTT_ISR(0)
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-REGISTER_UATX_ISR(0)
+REGISTER_UATX_ISR(USART_NUM)
 #else
 #include <fastarduino/empty_streams.h>
 #endif
@@ -112,15 +128,17 @@ static bool is_master()
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 
 #if HAS_TRACE
 	// Setup traces
-	serial::hard::UATX<board::USART::USART0> uatx{output_buffer};
+	serial::hard::UATX<UART> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
 	auto trace = uatx.fout();
+	trace.width(0);
 #else
 	streams::EmptyOutput trace;
 #endif

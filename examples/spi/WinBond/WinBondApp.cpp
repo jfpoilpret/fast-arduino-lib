@@ -39,7 +39,18 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 256;
 
 // Define vectors we need in the example
+constexpr const board::USART UART = board::USART::USART0;
 REGISTER_UATX_ISR(0)
+#elif defined(ARDUINO_LEONARDO)
+#include <fastarduino/uart.h>
+
+constexpr const board::DigitalPin CS = board::DigitalPin::D7_PE6;
+static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+constexpr const size_t DATA_SIZE = 256;
+
+// Define vectors we need in the example
+constexpr const board::USART UART = board::USART::USART1;
+REGISTER_UATX_ISR(1)
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
 constexpr const board::DigitalPin CS = board::DigitalPin::D7_PH4;
@@ -47,6 +58,7 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 256;
 
 // Define vectors we need in the example
+constexpr const board::USART UART = board::USART::USART0;
 REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
@@ -68,6 +80,7 @@ constexpr const uint32_t PAGE = 0x010000;
 
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 
@@ -76,10 +89,9 @@ int main()
 	serial::soft::UATX<TX> uart{output_buffer};
 	uart.begin(115200);
 #else
-	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
+	serial::hard::UATX<UART> uart{output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
-	
 #endif
 	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 	
