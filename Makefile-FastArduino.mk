@@ -252,28 +252,39 @@ endif
 	avr-objdump -m ${ARCH} -x -d -C ${CND_ARTIFACT_PATH_${CONF}} >${CND_ARTIFACT_PATH_${CONF}}.dump.txt
 	avr-size -C --mcu=${MCU} ${CND_ARTIFACT_PATH_${CONF}}
 
+.pre-upload:
+	#TODO improve to set right values to COM
+ifeq (${PROGRAMMER},LEONARDO)
+	# Leonardo is specific, we first need to open port at 1200bds for a few seconds
+	# so that it enters bootloader mode and wait USB port to be open by avrdude
+#	stty -F ${COM_LEONARDO} ispeed 1200 ospeed 1200 || :
+	stty -F ${COM} ispeed 1200 ospeed 1200 || :
+	# sleep 1.5 seems too short
+	sleep 2.5
+endif
+	
 #TODO remove eventually (deprecated in favor of flash target)
 upload: flash
 
 #TODO replace all line with avrdude with a call to some kinda proc that does stty first for Leonardo
-flash:
-ifeq (${PROGRAMMER},LEONARDO)
-	# Leonardo is specific, we first need to open port at 1200bds for a few seconds
-	# so that it enters bootloader mode and wait USB port to be open by avrdude
-	stty -F ${COM_LEONARDO} ispeed 1200 ospeed 1200 || :
-	# sleep 1.5 seems too short
-	sleep 2.5
-endif
+flash: .pre-upload
+#ifeq (${PROGRAMMER},LEONARDO)
+#	# Leonardo is specific, we first need to open port at 1200bds for a few seconds
+#	# so that it enters bootloader mode and wait USB port to be open by avrdude
+#	stty -F ${COM_LEONARDO} ispeed 1200 ospeed 1200 || :
+#	# sleep 1.5 seems too short
+#	sleep 2.5
+#endif
 	avrdude ${AVRDUDE_OPTIONS} -Uflash:w:${CND_ARTIFACT_PATH_${CONF}}.hex:i 
 
-fuses:
+fuses: .pre-upload
 ifeq (${PROGRAMMER},UNO)
 	$(error Fuses cannot be written to UNO through optiboot bootloader)
 else
 	avrdude ${AVRDUDE_OPTIONS} -U lfuse:w:${LFUSE}:m -U hfuse:w:${HFUSE}:m -U efuse:w:${EFUSE}:m
 endif
 
-eeprom:
+eeprom: .pre-upload
 ifeq (${PROGRAMMER},UNO)
 	$(error EEPROM cannot be written to UNO through optiboot bootloader)
 else
