@@ -42,6 +42,10 @@
 constexpr const board::DigitalPin TX = board::DigitalPin::D3_PD3;
 constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D2_PD2_EXT0;
 #define INT_NUM 0
+#elif defined (ARDUINO_LEONARDO)
+constexpr const board::DigitalPin TX = board::DigitalPin::D2_PD1;
+constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D3_PD0_EXT0;
+#define INT_NUM 0
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin TX = board::DigitalPin::D52_PB1;
 constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D21_PD0_EXT0;
@@ -66,6 +70,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	// Enable interrupts at startup time
 	sei();
 	
