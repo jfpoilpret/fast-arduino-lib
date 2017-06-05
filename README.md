@@ -71,32 +71,36 @@ As of now, the following platforms are supported (and tested):
 - Arduino UNO
 - Arduino NANO
 - Arduino MEGA
+- Arduino Leonardo (without USB support)
 - Breadboard ATmega328 at 8MHz and 16MHz
 - Breadboard ATtiny84 at 8MHz
 
 I intend to later add support for:
 
 - Breadboard ATtiny85 at 8MHz
-- Arduino Leonardo
+- Arduino Leonardo with USB support
 
 Roadmap
 =======
 
 The roadmap of next activities and new supported features is the following:
 
-May-June 2017
--------------
+June 2017
+---------
 1. Sonar ranger API
-2. Add support for Arduino Leonardo (without CDC feature)
-3. I2C support
-4. Add support for ATtinyX5
-5. Add CDC feature support for Arduino Leonardo
+2. I2C support
 
 July-August 2017
 ----------------
-6. Improve Timer support (support input capture where available)
-7. Improve Analog Input support and code
-8. Improve SPI to support slave mode
+3. Add support for ATtinyX5
+4. Add USB support for Arduino Leonardo
+5. Improve Timer support (support input capture where available)
+
+December 2017
+-------------
+6. Improve Analog Input support and code
+7. Improve SPI to support slave mode
+8. Add high-speed timer support of Arduino Leonardo
 
 In addition to these activities, I will start to perform continuous improvements at all times, regarding:
 
