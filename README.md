@@ -21,12 +21,12 @@ From my viewpoint, the main source of those drawbacks is essentially heavy usage
 
 FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one parent and direct children). 
 
-Also, no ISR gets automatically declared by FastArduino: every program declares the ISR it needs by using pre-defined FastArduino ISR-registration macros (note that ISR registration is the only feature for which FastArduino uses macros). FastArduino does not use `virtual` methods for ISR callbacks, which enables optimization of ISR code size, which wuld not have been possible with `virtual` methods as callbacks.
+Also, no ISR gets automatically declared by FastArduino: every program declares the ISR it needs by using pre-defined FastArduino ISR-registration macros (note that ISR registration is the only feature for which FastArduino uses macros). FastArduino does not use `virtual` methods for ISR callbacks, thus permitting optimization of ISR code size, which would not have been possible with `virtual` methods as callbacks.
 
 All this comes at a cost: 
 
 1. Template usage is often more complex in applications. The provided examples are here to help.
-2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included); for this point, please note that compile time difference is hardly noticeable.
+2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included); for this point however, please note that compile time difference is hardly noticeable.
 
 Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++11 standard.
 
@@ -43,7 +43,7 @@ The project has started less than one year ago only, hence it does not cover eve
 
 What the project already has:
 
-- General utilities (queue, list, timing)
+- General utilities (queues, linked lists, busy loop delays)
 - Fast IO support: template-based, optimized for speed and size.
 - General Events handling
 - Watchdog timer
