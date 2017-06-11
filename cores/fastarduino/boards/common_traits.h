@@ -321,6 +321,14 @@ namespace board_traits
 		static constexpr const uint8_t MISO = MISO_;
 		static constexpr const uint8_t SCK = SCK_;
 	};
+	
+	template<Port PORT_, uint8_t SCL_, uint8_t SDA_>
+	struct TWI_trait_impl
+	{
+		using PORT_TRAIT = Port_trait<PORT_>;
+		static constexpr const REG8 PORT = PORT_TRAIT::PORT;
+		static constexpr const uint8_t PULLUP_MASK = _BV(SCL_) | _BV(SDA_);
+	};
 
 	enum TimerPrescalers: uint8_t
 	{

@@ -126,6 +126,11 @@ namespace board_traits
 	//=====
 	struct SPI_trait: SPI_trait_impl<Port::PORT_B, PB2, PB3, PB4, PB5> {};
 
+	//=====
+	// I2C
+	//=====
+	struct TWI_trait: TWI_trait_impl<Port::PORT_C, PC5, PC4> {};
+
 	//========
 	// Timers
 	//========
