@@ -69,13 +69,6 @@ struct RealTime
 	BCD	year;
 } __attribute__ ((packed));
 
-//TODO check if packed attribute is really necessary
-struct RTCWrite
-{
-	uint8_t address;
-	RealTime time;
-} __attribute__ ((packed));
-
 const uint32_t I2C_FREQUENCY = 100000;
 
 // NOTE we use prescaler = 1 everywhere
@@ -106,9 +99,7 @@ int main()
 	
 	i2c::I2CDevice rtc{manager};
 	
-	RTCWrite buffer;
-	buffer.address = 0;
-	RealTime& init_time = buffer.time;
+	RealTime init_time;
 	init_time.day.two_digits = 0x11;
 	init_time.month.two_digits = 0x06;
 	init_time.year.two_digits = 0x17;
@@ -119,8 +110,8 @@ int main()
 	
 	// Initialize clock date
 	//=======================
-	rtc.write(DEVICE_ADDRESS, buffer);
-//	rtc.write(DEVICE_ADDRESS, init_time);
+	rtc.write(DEVICE_ADDRESS, uint8_t(0), true);
+	rtc.write(DEVICE_ADDRESS, init_time, false, true);
 	out << "status #2 " << manager.error() << '\n' << streams::flush;
 
 	time::delay_ms(2000);

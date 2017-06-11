@@ -138,13 +138,12 @@ namespace i2c
 	public:
 		I2CDevice(I2CManager& manager):_manager{manager}, _stopped{true} {}
 		
-		//TODO improve API to allow better split with several reads/writes without start/sla/stop
-		
-		//TODO shouldn't these methods be all protected (ie used by actual devices with "business" methods)?
-		int read(uint8_t address, uint8_t* data, uint8_t size, bool dont_stop = false)
+		//TODO improve API to use enum for stop/dontstop and start/dontstart (clearer API during calls)
+		int read(uint8_t address, uint8_t* data, uint8_t size, bool dont_stop = false, bool dont_start = false)
 		{
-			bool ok =		(_stopped ? _manager.start() : _manager.repeat_start())
-						&&	_manager.send_slar(address);
+			bool ok = true;
+			if (!dont_start)
+				ok = (_stopped ? _manager.start() : _manager.repeat_start()) && _manager.send_slar(address);
 			while (ok && size--)
 				ok = _manager.receive_data(*data++);
 			ok = ok && _manager.stop_receive();
@@ -153,10 +152,11 @@ namespace i2c
 			_stopped = !dont_stop;
 			return _manager.error();
 		}
-		int write(uint8_t address, const uint8_t* data, uint8_t size, bool dont_stop = false)
+		int write(uint8_t address, const uint8_t* data, uint8_t size, bool dont_stop = false, bool dont_start = false)
 		{
-			bool ok =		(_stopped ? _manager.start() : _manager.repeat_start())
-						&&	_manager.send_slaw(address);
+			bool ok = true;
+			if (!dont_start)
+				ok = (_stopped ? _manager.start() : _manager.repeat_start()) && _manager.send_slaw(address);
 			while (ok && size--)
 				ok = _manager.send_data(*data++);
 			if (!dont_stop)
@@ -165,13 +165,13 @@ namespace i2c
 			return _manager.error();
 		}
 		
-		template<typename T> int write(uint8_t address, const T& data, bool dont_stop = false)
+		template<typename T> int write(uint8_t address, const T& data, bool dont_stop = false, bool dont_start = false)
 		{
-			return write(address, (const uint8_t*) &data, sizeof(T), dont_stop);
+			return write(address, (const uint8_t*) &data, sizeof(T), dont_stop, dont_start);
 		}
-		template<typename T> int read(uint8_t address, T& data, bool dont_stop = false)
+		template<typename T> int read(uint8_t address, T& data, bool dont_stop = false, bool dont_start = false)
 		{
-			return read(address, (uint8_t*) &data, sizeof(T), dont_stop);
+			return read(address, (uint8_t*) &data, sizeof(T), dont_stop, dont_start);
 		}
 		
 	private:
