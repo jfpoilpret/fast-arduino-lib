@@ -57,7 +57,7 @@ namespace i2c
 			// 1. Disable TWI
 			TWCR = 0;
 			// 2. remove SDA/SCL pullups
-			TRAIT::PORT&|= ~TRAIT::PULLUP_MASK;
+			TRAIT::PORT &= ~TRAIT::PULLUP_MASK;
 		}
 		int error() const
 		{
@@ -134,13 +134,15 @@ namespace i2c
 	class I2CDevice
 	{
 	protected:
+		//TODO public only for tests without subclasses
+	public:
 		I2CDevice(I2CManager& manager):_manager{manager}, _stopped{true} {}
 		
 		//TODO shouldn't these methods be all protected (ie used by actual devices with "business" methods)?
-		int write(uint8_t address, const uint8_t* data, uint8_t size, bool dont_stop = false)
+		int read(uint8_t address, uint8_t* data, uint8_t size, bool dont_stop = false)
 		{
 			bool ok =		(_stopped ? _manager.start() : _manager.repeat_start())
-						&&	_manager.send_slaw(address);
+						&&	_manager.send_slar(address);
 			while (ok && size--)
 				ok = _manager.receive_data(*data++);
 			ok = ok && _manager.stop_receive();
@@ -149,10 +151,10 @@ namespace i2c
 			_stopped = !dont_stop;
 			return _manager.error();
 		}
-		int read(uint8_t address, uint8_t* data, uint8_t size, bool dont_stop = false)
+		int write(uint8_t address, const uint8_t* data, uint8_t size, bool dont_stop = false)
 		{
 			bool ok =		(_stopped ? _manager.start() : _manager.repeat_start())
-						&&	_manager.send_slar(address);
+						&&	_manager.send_slaw(address);
 			while (ok && size--)
 				ok = _manager.send_data(*data++);
 			if (!dont_stop)
@@ -161,11 +163,11 @@ namespace i2c
 			return _manager.error();
 		}
 		
-		template<T> int write(uint8_t address, const T& data, bool dont_stop = false)
+		template<typename T> int write(uint8_t address, const T& data, bool dont_stop = false)
 		{
 			return write(address, (const uint8_t*) &data, sizeof(T), dont_stop);
 		}
-		template<T> int read(uint8_t address, T& data, bool dont_stop = false)
+		template<typename T> int read(uint8_t address, T& data, bool dont_stop = false)
 		{
 			return read(address, (uint8_t*) &data, sizeof(T), dont_stop);
 		}
