@@ -64,7 +64,7 @@ namespace i2c
 			return _error ? _status : 0;
 		}
 		
-		//TODO low-level methods to handle the bus, called by I2CDevice
+		//TODO low-level methods to handle the bus, make private?
 		bool start() INLINE
 		{
 			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
@@ -138,6 +138,8 @@ namespace i2c
 	public:
 		I2CDevice(I2CManager& manager):_manager{manager}, _stopped{true} {}
 		
+		//TODO improve API to allow better split with several reads/writes without start/sla/stop
+		
 		//TODO shouldn't these methods be all protected (ie used by actual devices with "business" methods)?
 		int read(uint8_t address, uint8_t* data, uint8_t size, bool dont_stop = false)
 		{
@@ -176,23 +178,6 @@ namespace i2c
 		I2CManager& _manager;
 		bool _stopped;
 	};
-	
-	//TODO do we need a class including device address (as member or as template arg)?
-//	class I2CDevice
-//	{
-//	public:
-//		I2CDevice(uint8_t address): _address{address & 0xF8} {}
-//		
-//		//TODO do we need address here? should already be a member of I2CDevice since construction!
-//		//TODO shouldn't these methods be all protected (ie used by actual devices with "business" methods)?
-//		int write(uint8_t address, const uint8_t* data, uint8_t size, bool dont_stop = false);
-//		template<T> int write(uint8_t address, const T& data, bool dont_stop = false);
-//		int read(uint8_t address, uint8_t* buffer, uint8_t size, bool dont_stop = false);
-//		template<T> int read(uint8_t address, T& data, bool dont_stop = false);
-//		
-//	private:
-//		const uint8_t _address;
-//	};
 };
 
 #endif /* I2C_HH */

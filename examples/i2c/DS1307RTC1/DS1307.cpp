@@ -57,6 +57,7 @@ union BCD
 	uint8_t two_digits;
 };
 
+//TODO check if packed attribute is really necessary
 struct RealTime 
 {
 	BCD seconds;
@@ -68,7 +69,12 @@ struct RealTime
 	BCD	year;
 } __attribute__ ((packed));
 
-//TODO define constants for expected results
+//TODO check if packed attribute is really necessary
+struct RTCWrite
+{
+	uint8_t address;
+	RealTime time;
+} __attribute__ ((packed));
 
 const uint32_t I2C_FREQUENCY = 100000;
 
@@ -95,11 +101,14 @@ int main()
 	i2c::I2CManager manager;
 	manager.begin();
 	out << "I2C interface started\n" << streams::flush;
+	out << "status #1 " << manager.error() << '\n' << streams::flush;
 	time::delay_ms(1000);
 	
 	i2c::I2CDevice rtc{manager};
 	
-	RealTime init_time;
+	RTCWrite buffer;
+	buffer.address = 0;
+	RealTime& init_time = buffer.time;
 	init_time.day.two_digits = 0x11;
 	init_time.month.two_digits = 0x06;
 	init_time.year.two_digits = 0x17;
@@ -108,19 +117,21 @@ int main()
 	init_time.minutes.two_digits = 0;
 	init_time.seconds.two_digits = 0;
 	
-	// Send data to slave: initialize clock date
-	//==========================================
-	rtc.write(DEVICE_ADDRESS, init_time);
+	// Initialize clock date
+	//=======================
+	rtc.write(DEVICE_ADDRESS, buffer);
+//	rtc.write(DEVICE_ADDRESS, init_time);
+	out << "status #2 " << manager.error() << '\n' << streams::flush;
 
 	time::delay_ms(2000);
 	
-	// Send a byte to a slave
-	//=======================
+	// Read clock
+	//============
 	RealTime time;
-	rtc.write(DEVICE_ADDRESS, 0, true);
-	// Read bytes from a slave
-	//========================
+	rtc.write(DEVICE_ADDRESS, uint8_t(0), true);
+	out << "status #3 " << manager.error() << '\n' << streams::flush;
 	rtc.read(DEVICE_ADDRESS, time);
+	out << "status #4 " << manager.error() << '\n' << streams::flush;
 	
 	out	<< "RTC: " 
 		<< time.day.tens << time.day.units << '.'
@@ -134,5 +145,6 @@ int main()
 	// Stop TWI interface
 	//===================
 	manager.end();
+	out << "status #5 " << manager.error() << '\n' << streams::flush;
 	out << "End\n" << streams::flush;
 }
