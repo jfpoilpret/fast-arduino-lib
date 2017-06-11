@@ -18,16 +18,17 @@ REGISTER_UATX_ISR(0)
 
 // DS1307 specific
 const uint8_t DEVICE_ADDRESS = 0x68 << 1;
-struct BCD
+union BCD
 {
 	struct
 	{
-		uint8_t high	:4;
-		uint8_t low		:4;
+		uint8_t units	:4;
+		uint8_t tens	:4;
 	};
-	uint8_t data;
+	uint8_t two_digits;
 };
-struct RealTime
+
+struct RealTime 
 {
 	BCD seconds;
 	BCD minutes;
@@ -36,7 +37,7 @@ struct RealTime
 	BCD day;
 	BCD month;
 	BCD	year;
-};
+} __attribute__ ((packed));
 
 //TODO define constants for expected results
 
@@ -50,16 +51,16 @@ constexpr uint8_t calculate_TWBR(uint32_t frequency)
 
 static bool wait_twi(uint8_t expected_status)
 {
-	out << "W " << streams::hex << expected_status << " #1" << streams::flush;
+	out << "W " << expected_status << " #1" << streams::flush;
 	loop_until_bit_is_set(TWCR, TWINT);
 	out << " #2" << streams::flush;
 	if ((TWSR & 0xF8) == expected_status)
 	{
-		out << "- " << streams::dec << streams::flush;
+		out << "- " << streams::flush;
 		return true;
 	}
 	//TODO ERROR handling and trace
-	out << " X " << streams::hex << TWSR << streams::dec << ' ' << streams::flush;
+	out << " X " << TWSR << ' ' << streams::flush;
 	return false;
 }
 
@@ -72,6 +73,7 @@ int main()
 	uart.register_handler();
 	uart.begin(115200);
 	out.width(0);
+	out.base(streams::FormatBase::Base::hex);
 	out << "Start\n" << streams::flush;
 	
 	// Start TWI interface
@@ -87,6 +89,55 @@ int main()
 	out << "I2C interface started\n" << streams::flush;
 	time::delay_ms(1000);
 	
+	RealTime init_time;
+	init_time.day.two_digits = 0x11;
+	init_time.month.two_digits = 0x06;
+	init_time.year.two_digits = 0x17;
+	init_time.weekday = 1;
+	init_time.hours.two_digits = 0x12;
+	init_time.minutes.two_digits = 0;
+	init_time.seconds.two_digits = 0;
+	
+	// Send data to slave: initialize clock date
+	//==========================================
+	// 1. send START
+	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
+	wait_twi(0x08);
+	// 2. send SLA+W
+	TWDR = DEVICE_ADDRESS;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x18);
+	// 3.1 send data: register address
+	TWDR = 0;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	// 3.2 send data: time registers
+	TWDR = init_time.seconds.two_digits;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	TWDR = init_time.minutes.two_digits;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	TWDR = init_time.hours.two_digits;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	TWDR = init_time.weekday;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	TWDR = init_time.day.two_digits;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	TWDR = init_time.month.two_digits;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	TWDR = init_time.year.two_digits;
+	TWCR = _BV(TWEN) | _BV(TWINT);
+	wait_twi(0x28);
+	// 4. send STOP
+	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
+
+	time::delay_ms(2000);
+	
 	// Send a byte to a slave
 	//=======================
 	// 1. send START
@@ -96,20 +147,18 @@ int main()
 	TWDR = DEVICE_ADDRESS;
 	TWCR = _BV(TWEN) | _BV(TWINT);
 	wait_twi(0x18);
-	// 3. send data
+	// 3. send data (register address (0) to read in next frame)
 	TWDR = 0;
 	TWCR = _BV(TWEN) | _BV(TWINT);
 	wait_twi(0x28);
-//	// 4. send STOP (normally not needed (or harmful?) with DS1307
-//	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);	
+	// 4. do not send STOP (DS1307 expects a REPEATING START)
 
 	RealTime time;
-	// Read a byte from a slave
-	//=========================
+	// Read bytes from a slave
+	//========================
 	// 1. send REPEATING START
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
 	wait_twi(0x10);
-//	wait_twi(0x08);
 	// 2. send SLA+R
 	TWDR = DEVICE_ADDRESS | 0x01;
 	TWCR = _BV(TWEN) | _BV(TWINT);
@@ -117,37 +166,44 @@ int main()
 	// 3. Read data & send ACK
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 	wait_twi(0x50);
-	time.seconds.data = TWDR;
+	time.seconds.two_digits = TWDR;
+	out << " =" << TWDR << ' ' << streams::flush;
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 	wait_twi(0x50);
-	time.minutes.data = TWDR;
+	time.minutes.two_digits = TWDR;
+	out << " =" << TWDR << ' ' << streams::flush;
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 	wait_twi(0x50);
-	time.hours.data = TWDR;
+	time.hours.two_digits = TWDR;
+	out << " =" << TWDR << ' ' << streams::flush;
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 	wait_twi(0x50);
 	time.weekday = TWDR;
+	out << " =" << TWDR << ' ' << streams::flush;
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 	wait_twi(0x50);
-	time.day.data = TWDR;
+	time.day.two_digits = TWDR;
+	out << " =" << TWDR << ' ' << streams::flush;
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 	wait_twi(0x50);
-	time.month.data = TWDR;
+	time.month.two_digits = TWDR;
+	out << " =" << TWDR << ' ' << streams::flush;
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 	wait_twi(0x50);
-	time.year.data = TWDR;
+	time.year.two_digits = TWDR;
+	out << " =" << TWDR << ' ' << streams::flush;
 	TWCR = _BV(TWEN) | _BV(TWINT);
 	wait_twi(0x58);
 	// 4. send STOP
 	TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
 	
 	out	<< "RTC: " 
-		<< time.day.high << time.day.low << '.'
-		<< time.month.high << time.month.low << '.'
-		<< time.year.high << time.year.low << ' '
-		<< time.hours.high << time.hours.low << ':'
-		<< time.minutes.high << time.minutes.low << ':'
-		<< time.seconds.high << time.seconds.low << '\n'
+		<< time.day.tens << time.day.units << '.'
+		<< time.month.tens << time.month.units << '.'
+		<< time.year.tens << time.year.units << ' '
+		<< time.hours.tens << time.hours.units << ':'
+		<< time.minutes.tens << time.minutes.units << ':'
+		<< time.seconds.tens << time.seconds.units << '\n'
 		<< streams::flush;
 	
 	// Stop TWI interface
