@@ -57,7 +57,6 @@ union BCD
 	uint8_t two_digits;
 };
 
-//TODO check if packed attribute is really necessary
 struct RealTime 
 {
 	BCD seconds;
@@ -67,20 +66,14 @@ struct RealTime
 	BCD day;
 	BCD month;
 	BCD	year;
-} __attribute__ ((packed));
+};
 
 const uint32_t I2C_FREQUENCY = 100000;
 
-// NOTE we use prescaler = 1 everywhere
-constexpr uint8_t calculate_TWBR(uint32_t frequency)
-{
-	return (F_CPU / frequency - 16UL) / 2;
-}
-
-// TODO traits for: SDA, SCL pins
 int main() __attribute__((OS_main));
 int main()
 {
+	board::init();
 	sei();
 	
 	uart.register_handler();
