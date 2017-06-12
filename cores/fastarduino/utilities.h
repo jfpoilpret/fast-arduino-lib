@@ -59,6 +59,25 @@ namespace utils
 	{
 		reg = (reg & ~mask) | (value & mask);
 	}
+	
+	uint8_t bcd_to_binary(uint8_t bcd) INLINE;
+	uint8_t bcd_to_binary(uint8_t bcd)
+	{
+		uint8_t tens = bcd >> 4;
+		// We avoid tens * 10 to avoid adding library for multiplication
+		return (tens * 8) + (tens * 2) + (bcd & 0x0F);
+	}
+	uint8_t binary_to_bcd(uint8_t binary) INLINE;
+	uint8_t binary_to_bcd(uint8_t binary)
+	{
+		uint8_t bcd = 0;
+		while (binary >= 10)
+		{
+			bcd += 0x10;
+			binary -= 10;
+		}
+		return bcd + binary;
+	}
 }
 
 #endif	/* UTILITIES_HH */
