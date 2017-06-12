@@ -110,8 +110,8 @@ int main()
 	
 	// Initialize clock date
 	//=======================
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), true);
-	rtc.write(DEVICE_ADDRESS, init_time, false, true);
+	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
+	rtc.write(DEVICE_ADDRESS, init_time, i2c::BusConditions::NO_START_STOP);
 	out << "status #2 " << manager.error() << '\n' << streams::flush;
 
 	time::delay_ms(2000);
@@ -119,9 +119,9 @@ int main()
 	// Read clock
 	//============
 	RealTime time;
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), true);
+	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
 	out << "status #3 " << manager.error() << '\n' << streams::flush;
-	rtc.read(DEVICE_ADDRESS, time);
+	rtc.read(DEVICE_ADDRESS, time, i2c::BusConditions::REPEAT_START_STOP);
 	out << "status #4 " << manager.error() << '\n' << streams::flush;
 	
 	out	<< "RTC: " 

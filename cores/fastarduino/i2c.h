@@ -21,17 +21,15 @@
 //TODO add support for ATtiny (use USI)
 
 //TODO ERRORS? constants in errors.h or dedicated enum class?
-//TODO should methods return the error or just a bool and then an error() method would return the exact issue
 
 //TODO add support for asynchronous operation?
 //TODO register ISR macro?
-//NOTE only Master operation is supported for the moment
 //TODO is it useful to support interrupt-driven (async) mode? that would require static buffers for read and write!
 // Should we then provide two distinct I2CManager classes?
 
+//NOTE only Master operation is supported for the moment
 namespace i2c
 {
-	//TODO all static or singleton or whatever?
 	// NOTE we use prescaler = 1 everywhere
 	class I2CManager
 	{
@@ -64,7 +62,8 @@ namespace i2c
 			return _error ? _status : 0;
 		}
 		
-		//TODO low-level methods to handle the bus, make private?
+	private:
+		// low-level methods to handle the bus, used by friend class I2CDevice
 		bool start() INLINE
 		{
 			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
@@ -129,6 +128,18 @@ namespace i2c
 		int _status;
 		//TODO remove _error as _status should be enough (forced to zero if no error)
 		bool _error;
+		
+		friend class I2CDevice;
+	};
+	
+	enum class BusConditions: uint8_t
+	{
+		NO_START_NO_STOP = 0x00,
+		START_NO_STOP = 0x01,
+		REPEAT_START_NO_STOP = 0x03,
+		START_STOP = 0x05,
+		REPEAT_START_STOP = 0x07,
+		NO_START_STOP = 0x04
 	};
 	
 	class I2CDevice
@@ -136,47 +147,43 @@ namespace i2c
 	protected:
 		//TODO public only for tests without subclasses
 	public:
-		I2CDevice(I2CManager& manager):_manager{manager}, _stopped{true} {}
+		I2CDevice(I2CManager& manager):_manager{manager} {}
 		
-		//TODO improve API to use enum for stop/dontstop and start/dontstart (clearer API during calls)
-		int read(uint8_t address, uint8_t* data, uint8_t size, bool dont_stop = false, bool dont_start = false)
+		int read(uint8_t address, uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
 		{
 			bool ok = true;
-			if (!dont_start)
-				ok = (_stopped ? _manager.start() : _manager.repeat_start()) && _manager.send_slar(address);
+			if (uint8_t(conditions) & 0x01)
+				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) && _manager.send_slar(address);
 			while (ok && size--)
 				ok = _manager.receive_data(*data++);
 			ok = ok && _manager.stop_receive();
-			if (!dont_stop)
+			if (uint8_t(conditions) & 0x04)
 				_manager.stop();
-			_stopped = !dont_stop;
 			return _manager.error();
 		}
-		int write(uint8_t address, const uint8_t* data, uint8_t size, bool dont_stop = false, bool dont_start = false)
+		int write(uint8_t address, const uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
 		{
 			bool ok = true;
-			if (!dont_start)
-				ok = (_stopped ? _manager.start() : _manager.repeat_start()) && _manager.send_slaw(address);
+			if (uint8_t(conditions) & 0x01)
+				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) && _manager.send_slaw(address);
 			while (ok && size--)
 				ok = _manager.send_data(*data++);
-			if (!dont_stop)
+			if (uint8_t(conditions) & 0x04)
 				_manager.stop();
-			_stopped = !dont_stop;
 			return _manager.error();
 		}
 		
-		template<typename T> int write(uint8_t address, const T& data, bool dont_stop = false, bool dont_start = false)
+		template<typename T> int write(uint8_t address, const T& data, BusConditions conditions = BusConditions::START_STOP)
 		{
-			return write(address, (const uint8_t*) &data, sizeof(T), dont_stop, dont_start);
+			return write(address, (const uint8_t*) &data, sizeof(T), conditions);
 		}
-		template<typename T> int read(uint8_t address, T& data, bool dont_stop = false, bool dont_start = false)
+		template<typename T> int read(uint8_t address, T& data, BusConditions conditions = BusConditions::START_STOP)
 		{
-			return read(address, (uint8_t*) &data, sizeof(T), dont_stop, dont_start);
+			return read(address, (uint8_t*) &data, sizeof(T), conditions);
 		}
 		
 	private:
 		I2CManager& _manager;
-		bool _stopped;
 	};
 };
 
