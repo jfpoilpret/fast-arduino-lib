@@ -47,13 +47,60 @@ namespace rtc
 	public:
 		DS1307(i2c::I2CManager& manager): I2CDevice(manager) {}
 
+		//TODO Error handling?
 		//TODO API set datetime, get datetime, setup, read/write SRAM
-		void setDateTime(const tm& datetime);
-		void halt_clock();
-		void getDateTime(tm& datetime);
+		void setDateTime(tm& datetime)
+		{
+			// 1st convert datetime for DS1307 (BCD)
+			datetime.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
+			datetime.tm_min = utils::binary_to_bcd(datetime.tm_min);
+			datetime.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
+			datetime.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
+			datetime.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
+			datetime.tm_year = utils::binary_to_bcd(datetime.tm_year);
+			// send register address to write to (0)
+			write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP);
+			// send datetime at address 0
+			write(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP);
+		}
 		
-		void enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ);
-		void disable_output(bool output_value = false);
+		void getDateTime(tm& datetime)
+		{
+			// send register address to read from (0)
+			write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP);
+			// read datetime at address 0
+			read(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP);
+			// convert DS1307 output (BCD) to integer type
+			datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
+			datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
+			datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
+			datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
+			datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
+			datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
+		}
+		
+		void halt_clock()
+		{
+			// just write 0x80 at address 0
+			write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP);
+			write(DEVICE_ADDRESS, uint8_t(0x80), i2c::BusConditions::NO_START_STOP);
+		}
+		
+		void enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
+		{
+			ControlRegister control;
+			control.sqwe = 1;
+			control.rs = uint8_t(frequency);
+			write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP);
+			write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP);
+		}
+		void disable_output(bool output_value = false)
+		{
+			ControlRegister control;
+			control.out = output_value;
+			write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP);
+			write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP);
+		}
 		
 		void set_ram(uint8_t address, uint8_t data);
 		uint8_t get_ram(uint8_t address);
@@ -63,7 +110,27 @@ namespace rtc
 		template<typename T> void get_ram(uint8_t address, T& data);
 		
 	private:
-		//TODO internal structures
+		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
+		static constexpr const uint8_t TIME_ADDRESS = 0x00;
+		static constexpr const uint8_t CONTROL_ADDRESS = 0x07;
+		static constexpr const uint8_t RAM_START = 0x08;
+		static constexpr const uint8_t RAM_END = 0x3F;
+		static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START + 1;
+
+		union ControlRegister
+		{
+			ControlRegister(uint8_t data = 0):data{data} {}
+			
+			uint8_t data;
+			struct
+			{
+				uint8_t rs		:2;
+				uint8_t res1	:2;
+				uint8_t sqwe	:1;
+				uint8_t res2	:2;
+				uint8_t out		:1;
+			};
+		};
 		
 	};
 }

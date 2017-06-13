@@ -14,6 +14,7 @@
 
 #include <fastarduino/time.h>
 #include <fastarduino/i2c.h>
+#include <fastarduino/devices/ds1307.h>
 
 #if defined(ARDUINO_UNO)
 #define HARDWARE_UART 1
@@ -31,30 +32,10 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<UART> uart{output_buffer};
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
-// DS1307 specific
-const uint8_t DEVICE_ADDRESS = 0x68 << 1;
-union BCD
-{
-	struct
-	{
-		uint8_t units	:4;
-		uint8_t tens	:4;
-	};
-	uint8_t two_digits;
-};
-
-struct RealTime 
-{
-	BCD seconds;
-	BCD minutes;
-	BCD hours;
-	uint8_t weekday;
-	BCD day;
-	BCD month;
-	BCD	year;
-};
-
 const uint32_t I2C_FREQUENCY = 100000;
+
+using devices::rtc::DS1307;
+using devices::rtc::tm;
 
 int main() __attribute__((OS_main));
 int main()
@@ -76,45 +57,42 @@ int main()
 	out << "status #1 " << manager.error() << '\n' << streams::flush;
 	time::delay_ms(1000);
 	
-	i2c::I2CDevice rtc{manager};
+	DS1307 rtc{manager};
 	
-	RealTime init_time;
-	init_time.day.two_digits = 0x11;
-	init_time.month.two_digits = 0x06;
-	init_time.year.two_digits = 0x17;
-	init_time.weekday = 1;
-	init_time.hours.two_digits = 0x12;
-	init_time.minutes.two_digits = 0;
-	init_time.seconds.two_digits = 0;
+	tm time1;
+	time1.tm_hour = time1.tm_min = time1.tm_sec = 0;
+	time1.tm_mday = 11;
+	time1.tm_mon = 6;
+	time1.tm_year = 17;
+	//TODO check if we can avoid this init (who knows the weekday for a given date?)
+	time1.tm_wday = 1;
 	
 	// Initialize clock date
 	//=======================
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
-	rtc.write(DEVICE_ADDRESS, init_time, i2c::BusConditions::NO_START_STOP);
+	rtc.setDateTime(time1);
 	out << "status #2 " << manager.error() << '\n' << streams::flush;
 
 	time::delay_ms(2000);
 	
 	// Read clock
 	//============
-	RealTime time;
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
+	tm time2;
+	rtc.getDateTime(time2);
 	out << "status #3 " << manager.error() << '\n' << streams::flush;
-	rtc.read(DEVICE_ADDRESS, time, i2c::BusConditions::REPEAT_START_STOP);
-	out << "status #4 " << manager.error() << '\n' << streams::flush;
 	
 	out	<< "RTC: " 
-		<< time.day.tens << time.day.units << '.'
-		<< time.month.tens << time.month.units << '.'
-		<< time.year.tens << time.year.units << ' '
-		<< time.hours.tens << time.hours.units << ':'
-		<< time.minutes.tens << time.minutes.units << ':'
-		<< time.seconds.tens << time.seconds.units << '\n'
+		<< '[' << time1.tm_wday << ']'
+		<< time1.tm_mday << '.'
+		<< time1.tm_mon << '.'
+		<< time1.tm_year << ' '
+		<< time1.tm_hour << ':'
+		<< time1.tm_min << ':'
+		<< time1.tm_sec << '\n'
 		<< streams::flush;
 	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "status #5 " << manager.error() << '\n' << streams::flush;
+	out << "status #4 " << manager.error() << '\n' << streams::flush;
 	out << "End\n" << streams::flush;
 }
