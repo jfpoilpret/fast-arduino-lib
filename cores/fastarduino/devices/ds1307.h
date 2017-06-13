@@ -48,7 +48,6 @@ namespace rtc
 		DS1307(i2c::I2CManager& manager): I2CDevice(manager) {}
 
 		//TODO Error handling?
-		//TODO API set datetime, get datetime, setup, read/write SRAM
 		void setDateTime(tm& datetime)
 		{
 			// 1st convert datetime for DS1307 (BCD)
@@ -102,20 +101,66 @@ namespace rtc
 			write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP);
 		}
 		
-		void set_ram(uint8_t address, uint8_t data);
-		uint8_t get_ram(uint8_t address);
-		void set_ram(uint8_t address, const uint8_t* data, uint8_t size);
-		void get_ram(uint8_t address, uint8_t* data, uint8_t size);
-		template<typename T> void set_ram(uint8_t address, const T& data);
-		template<typename T> void get_ram(uint8_t address, T& data);
+		uint8_t ram_size() const
+		{
+			return RAM_SIZE;
+		}
+		void set_ram(uint8_t address, uint8_t data)
+		{
+			address += RAM_START;
+			if (address < RAM_END)
+			{
+				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
+				write(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP);
+			}
+		}
+		uint8_t get_ram(uint8_t address)
+		{
+			address += RAM_START;
+			uint8_t data = 0;
+			if (address < RAM_END)
+			{
+				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
+				read(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP);
+			}
+			return data;
+		}
+		
+		void set_ram(uint8_t address, const uint8_t* data, uint8_t size)
+		{
+			address += RAM_START;
+			if (address + size <= RAM_END)
+			{
+				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
+				write(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP);
+			}
+		}
+		void get_ram(uint8_t address, uint8_t* data, uint8_t size)
+		{
+			address += RAM_START;
+			if (address + size <= RAM_END)
+			{
+				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
+				read(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP);
+			}
+		}
+		
+		template<typename T> void set_ram(uint8_t address, const T& data)
+		{
+			set_ram(address, &data, sizeof(T));
+		}
+		template<typename T> void get_ram(uint8_t address, T& data)
+		{
+			get_ram(address, &data, sizeof(T));
+		}
 		
 	private:
 		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 		static constexpr const uint8_t TIME_ADDRESS = 0x00;
 		static constexpr const uint8_t CONTROL_ADDRESS = 0x07;
 		static constexpr const uint8_t RAM_START = 0x08;
-		static constexpr const uint8_t RAM_END = 0x3F;
-		static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START + 1;
+		static constexpr const uint8_t RAM_END = 0x40;
+		static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
 
 		union ControlRegister
 		{
