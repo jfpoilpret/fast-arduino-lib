@@ -145,8 +145,6 @@ namespace i2c
 	class I2CDevice
 	{
 	protected:
-		//TODO public only for tests without subclasses
-	public:
 		I2CDevice(I2CManager& manager):_manager{manager} {}
 		
 		int read(uint8_t address, uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)

@@ -31,6 +31,14 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<UART> uart{output_buffer};
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
+// Subclass I2CDevice to make protected methods available
+class PublicDevice: public i2c::I2CDevice
+{
+public:
+	PublicDevice(i2c::I2CManager& manager): i2c::I2CDevice{manager} {}
+	friend int main();
+};
+
 // DS1307 specific
 const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 union BCD
@@ -76,7 +84,7 @@ int main()
 	out << "status #1 " << manager.error() << '\n' << streams::flush;
 	time::delay_ms(1000);
 	
-	i2c::I2CDevice rtc{manager};
+	PublicDevice rtc{manager};
 	
 	RealTime init_time;
 	init_time.day.two_digits = 0x11;
