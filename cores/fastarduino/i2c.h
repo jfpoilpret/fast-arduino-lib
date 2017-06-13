@@ -156,7 +156,6 @@ namespace i2c
 				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) && _manager.send_slar(address);
 			while (ok && size--)
 				ok = _manager.receive_data(*data++);
-			//FIXME stop_receive should be optional  here! But should it be linked to STOP condition?
 			if (uint8_t(conditions) & 0x04)
 			{
 				ok = ok && _manager.stop_receive();
@@ -164,6 +163,11 @@ namespace i2c
 			}
 			return _manager.error();
 		}
+		template<typename T> int read(uint8_t address, T& data, BusConditions conditions = BusConditions::START_STOP)
+		{
+			return read(address, (uint8_t*) &data, sizeof(T), conditions);
+		}
+		
 		int write(uint8_t address, const uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
 		{
 			bool ok = true;
@@ -175,14 +179,20 @@ namespace i2c
 				_manager.stop();
 			return _manager.error();
 		}
-		
 		template<typename T> int write(uint8_t address, const T& data, BusConditions conditions = BusConditions::START_STOP)
 		{
 			return write(address, (const uint8_t*) &data, sizeof(T), conditions);
 		}
-		template<typename T> int read(uint8_t address, T& data, BusConditions conditions = BusConditions::START_STOP)
+		// Specialization for uint8_t data
+		int write(uint8_t address, uint8_t data, BusConditions conditions = BusConditions::START_STOP)
 		{
-			return read(address, (uint8_t*) &data, sizeof(T), conditions);
+			bool ok = true;
+			if (uint8_t(conditions) & 0x01)
+				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) && _manager.send_slaw(address);
+			ok = ok && _manager.send_data(data);
+			if (uint8_t(conditions) & 0x04)
+				_manager.stop();
+			return _manager.error();
 		}
 		
 	private:
