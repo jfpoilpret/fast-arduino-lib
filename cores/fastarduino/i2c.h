@@ -156,9 +156,12 @@ namespace i2c
 				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) && _manager.send_slar(address);
 			while (ok && size--)
 				ok = _manager.receive_data(*data++);
-			ok = ok && _manager.stop_receive();
+			//FIXME stop_receive should be optional  here! But should it be linked to STOP condition?
 			if (uint8_t(conditions) & 0x04)
+			{
+				ok = ok && _manager.stop_receive();
 				_manager.stop();
+			}
 			return _manager.error();
 		}
 		int write(uint8_t address, const uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
