@@ -23,6 +23,13 @@ static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+#elif defined(ARDUINO_MEGA)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif
