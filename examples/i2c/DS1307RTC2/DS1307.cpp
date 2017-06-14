@@ -36,6 +36,7 @@ const uint32_t I2C_FREQUENCY = 100000;
 
 using devices::rtc::DS1307;
 using devices::rtc::tm;
+using devices::rtc::SquareWaveFrequency;
 
 int main() __attribute__((OS_main));
 int main()
@@ -45,7 +46,7 @@ int main()
 	
 	uart.register_handler();
 	uart.begin(115200);
-	out.width(0);
+	out.width(2);
 	out.base(streams::FormatBase::Base::hex);
 	out << "Start\n" << streams::flush;
 	
@@ -58,6 +59,17 @@ int main()
 	time::delay_ms(1000);
 	
 	DS1307 rtc{manager};
+	
+	// read RAM content and print out
+	uint8_t data[DS1307::ram_size()];
+	rtc.get_ram(0, data, sizeof data);
+	out << "RAM content\n";
+	for (uint8_t i = 0; i < sizeof(data); ++i)
+	{
+		if (!(i % 8)) out << '\n' << streams::flush;
+		out << data[i] << ' ';
+	}
+	out << '\n' << streams::flush;
 	
 	tm time1;
 	time1.tm_hour = time1.tm_min = time1.tm_sec = 0;
@@ -90,9 +102,24 @@ int main()
 		<< time1.tm_sec << '\n'
 		<< streams::flush;
 	
+	// Enable output clock
+	//====================
+	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
+	out << "status #4 " << manager.error() << '\n' << streams::flush;
+	
+	time::delay_ms(10000);
+	
+	rtc.disable_output(false);
+	out << "status #5 " << manager.error() << '\n' << streams::flush;
+
+	// write RAM content
+	for (uint8_t i = 0; i < sizeof(data); ++i)
+		data[i] = i;
+	rtc.set_ram(0, data, sizeof data);
+	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "status #4 " << manager.error() << '\n' << streams::flush;
+	out << "status #6 " << manager.error() << '\n' << streams::flush;
 	out << "End\n" << streams::flush;
 }

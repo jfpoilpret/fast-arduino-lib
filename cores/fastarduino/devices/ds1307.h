@@ -101,7 +101,7 @@ namespace rtc
 			write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP);
 		}
 		
-		uint8_t ram_size() const
+		static constexpr uint8_t ram_size()
 		{
 			return RAM_SIZE;
 		}

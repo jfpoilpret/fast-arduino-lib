@@ -11,9 +11,9 @@ CND_PLATFORM_UNO-Release=AVR-GNU-Toolchain-3.5.3-Linux
 CND_ARTIFACT_DIR_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux
 CND_ARTIFACT_NAME_UNO-Release=ds1307rtc2
 CND_ARTIFACT_PATH_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/ds1307rtc2
-CND_PACKAGE_DIR_UNO-Release=
-CND_PACKAGE_NAME_UNO-Release=
-CND_PACKAGE_PATH_UNO-Release=
+CND_PACKAGE_DIR_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_UNO-Release=ds1307rtc2.tar
+CND_PACKAGE_PATH_UNO-Release=dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/ds1307rtc2.tar
 # ATmega328-Release configuration
 CND_PLATFORM_ATmega328-Release=AVR-GNU-Toolchain-3.5.3-Linux
 CND_ARTIFACT_DIR_ATmega328-Release=dist/ATmega328-Release/AVR-GNU-Toolchain-3.5.3-Linux
