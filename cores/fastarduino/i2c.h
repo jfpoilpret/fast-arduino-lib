@@ -92,22 +92,31 @@ namespace i2c
 			TWCR = _BV(TWEN) | _BV(TWINT);
 			return wait_twint(0x28);
 		}
-		bool receive_data(uint8_t& data) INLINE
+		bool receive_data(uint8_t& data, bool last_byte = false) INLINE
 		{
 			//FIXME it seems TWEA is to acknowledge next received byte (not the previous one!)
 			// Then a problem occurs for the last byte we want to get, which should have NACK instead!
 			// Send ACK for previous data (including SLA-R)
-			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
-			bool ok = wait_twint(0x50);
+			bool ok;
+			if (last_byte)
+			{
+				TWCR = _BV(TWEN) | _BV(TWINT);
+				ok = wait_twint(0x58);
+			}
+			else
+			{
+				TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
+				ok = wait_twint(0x50);
+			}
 			if (ok) data = TWDR;
 			return ok;
 		}
-		bool stop_receive() INLINE
-		{
-			// Just send NACK to notify slave to stop sending data
-			TWCR = _BV(TWEN) | _BV(TWINT);
-			return wait_twint(0x58);
-		}
+//		bool stop_receive() INLINE
+//		{
+//			// Just send NACK to notify slave to stop sending data
+//			TWCR = _BV(TWEN) | _BV(TWINT);
+//			return wait_twint(0x58);
+//		}
 		void stop() INLINE
 		{
 			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
@@ -157,11 +166,11 @@ namespace i2c
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
 				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) && _manager.send_slar(address);
-			while (ok && size--)
+			while (ok && --size)
 				ok = _manager.receive_data(*data++);
 			if (uint8_t(conditions) & 0x04)
 			{
-				ok = ok && _manager.stop_receive();
+				ok = ok && _manager.receive_data(*data++, true);
 				_manager.stop();
 			}
 			return _manager.error();
