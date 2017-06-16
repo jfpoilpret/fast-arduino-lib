@@ -68,7 +68,7 @@ namespace rtc
 			// send register address to read from (0)
 			write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP);
 			// read datetime at address 0
-			read(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP);
+			read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP);
 			// convert DS1307 output (BCD) to integer type
 			datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
 			datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
