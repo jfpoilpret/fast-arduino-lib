@@ -38,7 +38,7 @@ namespace i2c
 	public:
 		static constexpr const uint32_t DEFAULT_FREQUENCY = 100000UL;
 		
-		I2CManager(): _status{}, _error{} {}
+		I2CManager(): _status{} {}
 		
 		void begin(uint32_t frequency = DEFAULT_FREQUENCY) INLINE
 		{
@@ -57,9 +57,9 @@ namespace i2c
 			// 2. remove SDA/SCL pullups
 			TRAIT::PORT &= ~TRAIT::PULLUP_MASK;
 		}
-		int error() const
+		uint8_t error() const
 		{
-			return _error ? _status : 0;
+			return _status;
 		}
 		
 	private:
@@ -94,6 +94,8 @@ namespace i2c
 		}
 		bool receive_data(uint8_t& data) INLINE
 		{
+			//FIXME it seems TWEA is to acknowledge next received byte (not the previous one!)
+			// Then a problem occurs for the last byte we want to get, which should have NACK instead!
 			// Send ACK for previous data (including SLA-R)
 			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 			bool ok = wait_twint(0x50);
@@ -116,8 +118,13 @@ namespace i2c
 		{
 			loop_until_bit_is_set(TWCR, TWINT);
 			_status = TWSR & 0xF8;
-			_error = (_status != expected_status);
-			return !_error;
+			if (_status == expected_status)
+			{
+				_status = 0;
+				return true;
+			}
+			else
+				return false;
 		}
 
 		static constexpr uint8_t calculate_TWBR(uint32_t frequency)
@@ -125,9 +132,7 @@ namespace i2c
 			return (F_CPU / frequency - 16UL) / 2;
 		}
 		
-		int _status;
-		//TODO remove _error as _status should be enough (forced to zero if no error)
-		bool _error;
+		uint8_t _status;
 		
 		friend class I2CDevice;
 	};
