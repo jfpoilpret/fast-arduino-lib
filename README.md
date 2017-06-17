@@ -65,6 +65,8 @@ What the project already has:
 - PWM output support
 - "Pulsed" Timer support (useful for Servos)
 - Servo control API
+- I2C master support (synchronous mode)
+- DS1307 RTC device support (I2C-based)
 
 As of now, the following platforms are supported (and tested):
 
@@ -88,19 +90,21 @@ The roadmap of next activities and new supported features is the following:
 June 2017
 ---------
 1. Sonar ranger API
-2. I2C support
 
 July-August 2017
 ----------------
+2. Improve I2C master support (asynchronous mode)
 3. Add support for ATtinyX5
 4. Add USB support for Arduino Leonardo
 5. Improve Timer support (support input capture where available)
+6. Support other I2C devices: MCP23017 (IO multiplexer), MPU6050 (Accelerometer/Gyroscope), HMC5883L (Compass)
 
 December 2017
 -------------
-6. Improve Analog Input support and code
-7. Improve SPI to support slave mode
-8. Add high-speed timer support of Arduino Leonardo
+7. Improve Analog Input support and code
+8. Improve SPI to support slave mode
+9. Improve I2C to support slave mode
+10. Add high-speed timer support of Arduino Leonardo
 
 In addition to these activities, I will start to perform continuous improvements at all times, regarding:
 
