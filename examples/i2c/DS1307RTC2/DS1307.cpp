@@ -52,6 +52,11 @@ using devices::rtc::DS1307;
 using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
 
+void trace_status(uint8_t expected_status, uint8_t actual_status)
+{
+	out << "status expected = " << expected_status << ", actual = " << actual_status << '\n' << streams::flush;
+}
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -66,7 +71,7 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	i2c::I2CManager manager;
+	i2c::I2CManager manager{trace_status};
 	manager.begin();
 	out << "I2C interface started\n" << streams::flush;
 	out << "status #1 " << manager.error() << '\n' << streams::flush;
@@ -77,6 +82,7 @@ int main()
 	// read RAM content and print out
 	uint8_t data[DS1307::ram_size()];
 	rtc.get_ram(0, data, sizeof data);
+	out << "status #2 " << manager.error() << '\n' << streams::flush;
 	out << "RAM content\n";
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 	{
@@ -96,7 +102,7 @@ int main()
 	// Initialize clock date
 	//=======================
 	rtc.setDateTime(time1);
-	out << "status #2 " << manager.error() << '\n' << streams::flush;
+	out << "status #3 " << manager.error() << '\n' << streams::flush;
 
 	time::delay_ms(2000);
 	
@@ -104,7 +110,7 @@ int main()
 	//============
 	tm time2;
 	rtc.getDateTime(time2);
-	out << "status #3 " << manager.error() << '\n' << streams::flush;
+	out << "status #4 " << manager.error() << '\n' << streams::flush;
 	
 	out	<< "RTC: " 
 		<< '[' << time1.tm_wday << ']'
@@ -119,21 +125,21 @@ int main()
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
-	out << "status #4 " << manager.error() << '\n' << streams::flush;
+	out << "status #5 " << manager.error() << '\n' << streams::flush;
 	
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
-	out << "status #5 " << manager.error() << '\n' << streams::flush;
+	out << "status #6 " << manager.error() << '\n' << streams::flush;
 
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
 	rtc.set_ram(0, data, sizeof data);
+	out << "status #7 " << manager.error() << '\n' << streams::flush;
 	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "status #6 " << manager.error() << '\n' << streams::flush;
 	out << "End\n" << streams::flush;
 }
