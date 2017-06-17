@@ -17,15 +17,17 @@
 
 #include "boards/board_traits.h"
 
-//TODO define traits for other MCU
+//TODO Add debug facility (needed for implementing new devices)
+// - special I2CManager?
+// - integrate in current I2CManager but careful about size and speed impact!
+//TODO ERRORS? constants in errors.h or in i2c namespace or dedicated enum class?
+
+
 //TODO add support for ATtiny (use USI)
-
-//TODO ERRORS? constants in errors.h or dedicated enum class?
-
 //TODO add support for asynchronous operation?
-//TODO register ISR macro?
 //TODO is it useful to support interrupt-driven (async) mode? that would require static buffers for read and write!
 // Should we then provide two distinct I2CManager classes?
+//TODO register ISR macro?
 
 //NOTE only Master operation is supported for the moment
 namespace i2c
@@ -111,12 +113,6 @@ namespace i2c
 			if (ok) data = TWDR;
 			return ok;
 		}
-//		bool stop_receive() INLINE
-//		{
-//			// Just send NACK to notify slave to stop sending data
-//			TWCR = _BV(TWEN) | _BV(TWINT);
-//			return wait_twint(0x58);
-//		}
 		void stop() INLINE
 		{
 			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
