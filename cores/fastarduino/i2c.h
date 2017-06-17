@@ -32,6 +32,8 @@
 //NOTE only Master operation is supported for the moment
 namespace i2c
 {
+	using I2C_STATUS_HOOK = void (*)(uint8_t expected_status, uint8_t actual_status);
+	
 	// NOTE we use prescaler = 1 everywhere
 	class I2CManager
 	{
@@ -40,7 +42,7 @@ namespace i2c
 	public:
 		static constexpr const uint32_t DEFAULT_FREQUENCY = 100000UL;
 		
-		I2CManager(): _status{} {}
+		I2CManager(I2C_STATUS_HOOK hook = 0): _status{}, _hook{hook} {}
 		
 		void begin(uint32_t frequency = DEFAULT_FREQUENCY) INLINE
 		{
@@ -123,6 +125,7 @@ namespace i2c
 		{
 			loop_until_bit_is_set(TWCR, TWINT);
 			_status = TWSR & 0xF8;
+			if (_hook) _hook(expected_status, _status);
 			if (_status == expected_status)
 			{
 				_status = 0;
@@ -138,6 +141,7 @@ namespace i2c
 		}
 		
 		uint8_t _status;
+		const I2C_STATUS_HOOK _hook;
 		
 		friend class I2CDevice;
 	};
