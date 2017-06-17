@@ -121,7 +121,7 @@ namespace rtc
 			if (address < RAM_END)
 			{
 				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
-				read(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP);
+				read(DEVICE_ADDRESS, data, i2c::BusConditions::REPEAT_START_STOP);
 			}
 			return data;
 		}
@@ -141,7 +141,7 @@ namespace rtc
 			if (address + size <= RAM_END)
 			{
 				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
-				read(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP);
+				read(DEVICE_ADDRESS, data, size, i2c::BusConditions::REPEAT_START_STOP);
 			}
 		}
 		
