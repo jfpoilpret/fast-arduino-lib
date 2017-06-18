@@ -51,10 +51,24 @@ const uint32_t I2C_FREQUENCY = 100000;
 using devices::rtc::DS1307;
 using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
+using streams::flush;
 
 void trace_status(uint8_t expected_status, uint8_t actual_status)
 {
-	out << "status expected = " << expected_status << ", actual = " << actual_status << '\n' << streams::flush;
+	out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << '\n' << flush;
+}
+
+void trace_time(const tm& time)
+{
+	out	<< F("RTC: [") 
+		<< time.tm_wday << ']'
+		<< time.tm_mday << '.'
+		<< time.tm_mon << '.'
+		<< time.tm_year << ' '
+		<< time.tm_hour << ':'
+		<< time.tm_min << ':'
+		<< time.tm_sec << '\n'
+		<< flush;
 }
 
 int main() __attribute__((OS_main));
@@ -67,14 +81,14 @@ int main()
 	uart.begin(115200);
 	out.width(2);
 	out.base(streams::FormatBase::Base::hex);
-	out << "Start\n" << streams::flush;
+	out << F("Start\n") << flush;
 	
 	// Start TWI interface
 	//====================
 	i2c::I2CManager manager{trace_status};
 	manager.begin();
-	out << "I2C interface started\n" << streams::flush;
-	out << "status #1 " << manager.error() << '\n' << streams::flush;
+	out << F("I2C interface started\n") << flush;
+	out << F("status #1 ") << manager.error() << '\n' << flush;
 	time::delay_ms(1000);
 	
 	DS1307 rtc{manager};
@@ -82,14 +96,14 @@ int main()
 	// read RAM content and print out
 	uint8_t data[DS1307::ram_size()];
 	rtc.get_ram(0, data, sizeof data);
-	out << "status #2 " << manager.error() << '\n' << streams::flush;
-	out << "RAM content\n";
+	out << F("status #2 ") << manager.error() << '\n' << flush;
+	out << F("RAM content\n");
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 	{
-		if (!(i % 8)) out << '\n' << streams::flush;
+		if (!(i % 8)) out << '\n' << flush;
 		out << data[i] << ' ';
 	}
-	out << '\n' << streams::flush;
+	out << '\n' << flush;
 	
 	tm time1;
 	time1.tm_hour = time1.tm_min = time1.tm_sec = 0;
@@ -102,7 +116,7 @@ int main()
 	// Initialize clock date
 	//=======================
 	rtc.setDateTime(time1);
-	out << "status #3 " << manager.error() << '\n' << streams::flush;
+	out << F("status #3 ") << manager.error() << '\n' << flush;
 
 	time::delay_ms(2000);
 	
@@ -110,36 +124,27 @@ int main()
 	//============
 	tm time2;
 	rtc.getDateTime(time2);
-	out << "status #4 " << manager.error() << '\n' << streams::flush;
-	
-	out	<< "RTC: " 
-		<< '[' << time1.tm_wday << ']'
-		<< time1.tm_mday << '.'
-		<< time1.tm_mon << '.'
-		<< time1.tm_year << ' '
-		<< time1.tm_hour << ':'
-		<< time1.tm_min << ':'
-		<< time1.tm_sec << '\n'
-		<< streams::flush;
+	out << F("status #4 ") << manager.error() << '\n' << flush;
+	trace_time(time2);
 	
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
-	out << "status #5 " << manager.error() << '\n' << streams::flush;
+	out << F("status #5 ") << manager.error() << '\n' << flush;
 	
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
-	out << "status #6 " << manager.error() << '\n' << streams::flush;
+	out << F("status #6 ") << manager.error() << '\n' << flush;
 
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
 	rtc.set_ram(0, data, sizeof data);
-	out << "status #7 " << manager.error() << '\n' << streams::flush;
+	out << F("status #7 ") << manager.error() << '\n' << flush;
 	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "End\n" << streams::flush;
+	out << F("End\n") << flush;
 }
