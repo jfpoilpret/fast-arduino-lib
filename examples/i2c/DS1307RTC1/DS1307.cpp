@@ -81,7 +81,7 @@ int main()
 	i2c::I2CManager manager;
 	manager.begin();
 	out << "I2C interface started\n" << streams::flush;
-	out << "status #1 " << manager.error() << '\n' << streams::flush;
+	out << "status #1 " << manager.status() << '\n' << streams::flush;
 	time::delay_ms(1000);
 	
 	PublicDevice rtc{manager};
@@ -99,7 +99,7 @@ int main()
 	//=======================
 	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
 	rtc.write(DEVICE_ADDRESS, init_time, i2c::BusConditions::NO_START_STOP);
-	out << "status #2 " << manager.error() << '\n' << streams::flush;
+	out << "status #2 " << manager.status() << '\n' << streams::flush;
 
 	time::delay_ms(2000);
 	
@@ -107,9 +107,9 @@ int main()
 	//============
 	RealTime time;
 	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
-	out << "status #3 " << manager.error() << '\n' << streams::flush;
+	out << "status #3 " << manager.status() << '\n' << streams::flush;
 	rtc.read(DEVICE_ADDRESS, time, i2c::BusConditions::REPEAT_START_STOP);
-	out << "status #4 " << manager.error() << '\n' << streams::flush;
+	out << "status #4 " << manager.status() << '\n' << streams::flush;
 	
 	out	<< "RTC: " 
 		<< time.day.tens << time.day.units << '.'
@@ -123,6 +123,6 @@ int main()
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "status #5 " << manager.error() << '\n' << streams::flush;
+	out << "status #5 " << manager.status() << '\n' << streams::flush;
 	out << "End\n" << streams::flush;
 }

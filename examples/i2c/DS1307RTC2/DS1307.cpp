@@ -37,13 +37,22 @@ static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
+#elif defined(BREADBOARD_ATTINYX4)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #else
 #error "Current target is not yet supported!"
 #endif
 
 // UART for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
+#if HARDWARE_UART
 static serial::hard::UATX<UART> uart{output_buffer};
+#else
+static serial::soft::UATX<TX> uart{output_buffer};
+#endif
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 const uint32_t I2C_FREQUENCY = 100000;
@@ -76,8 +85,9 @@ int main()
 {
 	board::init();
 	sei();
-	
+#if HARDWARE_UART
 	uart.register_handler();
+#endif
 	uart.begin(115200);
 	out.width(2);
 	out.base(streams::FormatBase::Base::hex);
@@ -88,7 +98,7 @@ int main()
 	i2c::I2CManager manager{trace_status};
 	manager.begin();
 	out << F("I2C interface started\n") << flush;
-	out << F("status #1 ") << manager.error() << '\n' << flush;
+	out << F("status #1 ") << manager.status() << '\n' << flush;
 	time::delay_ms(1000);
 	
 	DS1307 rtc{manager};
@@ -96,7 +106,7 @@ int main()
 	// read RAM content and print out
 	uint8_t data[DS1307::ram_size()];
 	rtc.get_ram(0, data, sizeof data);
-	out << F("status #2 ") << manager.error() << '\n' << flush;
+	out << F("status #2 ") << manager.status() << '\n' << flush;
 	out << F("RAM content\n");
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 	{
@@ -116,7 +126,7 @@ int main()
 	// Initialize clock date
 	//=======================
 	rtc.setDateTime(time1);
-	out << F("status #3 ") << manager.error() << '\n' << flush;
+	out << F("status #3 ") << manager.status() << '\n' << flush;
 
 	time::delay_ms(2000);
 	
@@ -124,24 +134,24 @@ int main()
 	//============
 	tm time2;
 	rtc.getDateTime(time2);
-	out << F("status #4 ") << manager.error() << '\n' << flush;
+	out << F("status #4 ") << manager.status() << '\n' << flush;
 	trace_time(time2);
 	
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
-	out << F("status #5 ") << manager.error() << '\n' << flush;
+	out << F("status #5 ") << manager.status() << '\n' << flush;
 	
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
-	out << F("status #6 ") << manager.error() << '\n' << flush;
+	out << F("status #6 ") << manager.status() << '\n' << flush;
 
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
 	rtc.set_ram(0, data, sizeof data);
-	out << F("status #7 ") << manager.error() << '\n' << flush;
+	out << F("status #7 ") << manager.status() << '\n' << flush;
 	
 	// Stop TWI interface
 	//===================
