@@ -51,7 +51,6 @@ namespace i2c
 		constexpr const uint8_t SLA_R_TRANSMITTED_NACK		= 0x48;
 		constexpr const uint8_t DATA_RECEIVED_ACK			= 0x50;
 		constexpr const uint8_t DATA_RECEIVED_NACK			= 0x58;
-		
 	}
 	
 	enum class I2CMode: uint8_t
@@ -194,8 +193,8 @@ namespace i2c
 			// 0. Initialize timing constants
 			_mode = mode;
 			// 1. set SDA/SCL as outputs and HIGH (master)
-			TRAIT::DDR |= TRAIT::PULLUP_MASK;
-			TRAIT::PORT |= TRAIT::PULLUP_MASK;
+			TRAIT::DDR |= TRAIT::SCL_SDA_MASK;
+			TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
 			// 2. Force 1 to data
 			USIDR = 0xFF;
 			// 3. Enable TWI
@@ -210,8 +209,8 @@ namespace i2c
 			USICR = 0;
 			// 2. remove SDA/SCL pullups
 			//FIXME WHAT SHALL WE DO HERE REALLY?
-			TRAIT::DDR &= ~TRAIT::PULLUP_MASK;
-			TRAIT::PORT &= ~TRAIT::PULLUP_MASK;
+			TRAIT::DDR &= ~TRAIT::SCL_SDA_MASK;
+			TRAIT::PORT &= ~TRAIT::SCL_SDA_MASK;
 		}
 		uint8_t status() const
 		{
@@ -229,7 +228,7 @@ namespace i2c
 			_delay_loop_1(T_SU_STA());
 			// Now we can generate start condition
 			// First ensure SDA and SCL are set as outputs
-			TRAIT::DDR |= TRAIT::PULLUP_MASK;
+			TRAIT::DDR |= TRAIT::SCL_SDA_MASK;
 			// Force SDA low for Thd-sta
 			TRAIT::PORT &= ~_BV(TRAIT::BIT_SDA);
 			_delay_loop_1(T_HD_STA());
@@ -240,6 +239,7 @@ namespace i2c
 			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
 			//TODO how to check START transmission? USISIF flag
 			_status = Status::OK;
+			if (_hook) _hook(Status::OK, _status);
 			return true;
 		}
 		bool repeat_start() INLINE
@@ -255,18 +255,20 @@ namespace i2c
 			USIDR = address | 0x01;
 			transfer(USISR_DATA);
 			// For acknowledge, first set SDA as input
-			TRAIT::DDR &= ~ _BV(TRAIT::BIT_SDA);
+			TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
 			if (transfer(USISR_ACK) & 0x01)
 			{
 				// NACK received
-				TRAIT::PORT |= TRAIT::PULLUP_MASK;
+				TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
 				// store state
 				_status = Status::SLA_R_TRANSMITTED_NACK;
+				if (_hook) _hook(Status::OK, _status);
 				return false;
 			}
 			// Set SDA as output again
 			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
 			_status = Status::OK;
+			if (_hook) _hook(Status::OK, _status);
 			return true;
 		}
 		bool send_slaw(uint8_t address) INLINE
@@ -281,14 +283,16 @@ namespace i2c
 			if (transfer(USISR_ACK) & 0x01)
 			{
 				// NACK received
-				TRAIT::PORT |= TRAIT::PULLUP_MASK;
+				TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
 				// store state
 				_status = Status::SLA_W_TRANSMITTED_NACK;
+				if (_hook) _hook(Status::OK, _status);
 				return false;
 			}
 			// Set SDA as output again
 			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
 			_status = Status::OK;
+			if (_hook) _hook(Status::OK, _status);
 			return true;
 		}
 		bool send_data(uint8_t data) INLINE
@@ -303,14 +307,16 @@ namespace i2c
 			if (transfer(USISR_ACK) & 0x01)
 			{
 				// NACK received
-				TRAIT::PORT |= TRAIT::PULLUP_MASK;
+				TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
 				// store state
 				_status = Status::DATA_TRANSMITTED_NACK;
+				if (_hook) _hook(Status::OK, _status);
 				return false;
 			}
 			// Set SDA as output again
 			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
 			_status = Status::OK;
+			if (_hook) _hook(Status::OK, _status);
 			return true;
 		}
 		bool receive_data(uint8_t& data, bool last_byte = false) INLINE
@@ -324,6 +330,7 @@ namespace i2c
 			USIDR = (last_byte ? 0xFF : 0x00);
 			transfer(USISR_ACK);
 			_status = Status::OK;
+			if (_hook) _hook(Status::OK, _status);
 			return true;
 		}
 		void stop() INLINE
@@ -359,21 +366,6 @@ namespace i2c
 			return USIDR;
 		}
 		
-//		bool wait_twint(uint8_t expected_status)
-//		{
-//			
-//			loop_until_bit_is_set(TWCR, TWINT);
-//			_status = TWSR & 0xF8;
-//			if (_hook) _hook(expected_status, _status);
-//			if (_status == expected_status)
-//			{
-//				_status = 0;
-//				return true;
-//			}
-//			else
-//				return false;
-//		}
-
 		// Constant values for USISR
 		// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
 		static constexpr const uint8_t USISR_DATA = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);

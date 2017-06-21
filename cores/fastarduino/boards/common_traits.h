@@ -329,7 +329,7 @@ namespace board_traits
 		static constexpr const REG8 PORT = PORT_TRAIT::PORT;
 		static constexpr const REG8 PIN = PORT_TRAIT::PIN;
 		static constexpr const REG8 DDR = PORT_TRAIT::DDR;
-		static constexpr const uint8_t PULLUP_MASK = _BV(SCL_) | _BV(SDA_);
+		static constexpr const uint8_t SCL_SDA_MASK = _BV(SCL_) | _BV(SDA_);
 		static constexpr const uint8_t BIT_SCL = SCL_;
 		static constexpr const uint8_t BIT_SDA = SDA_;
 	};
