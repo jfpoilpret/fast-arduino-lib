@@ -178,39 +178,70 @@ namespace i2c
 		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us + 1);
 	}
 
+	//TODO optimize code size by templating on Frequency? => will trigger heavy rework on devices!
+	//TODO check if possible to optimize timing delays (seem much above requirements a 100KHz)
 	//TODO make private methods as public from a private class -> cleaner
-	// NOTE we use prescaler = 1 everywhere
 	class I2CManager
 	{
 		using TRAIT = board_traits::TWI_trait;
 		
+		inline void SCL_HIGH()
+		{
+			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
+			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
+		}
+		inline void SCL_LOW()
+		{
+			TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
+		}
+		inline void SDA_HIGH()
+		{
+			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+		}
+		inline void SDA_LOW()
+		{
+			TRAIT::PORT &= ~_BV(TRAIT::BIT_SDA);
+		}
+		
+		inline void SDA_INPUT()
+		{
+			TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
+			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+		}
+		inline void SDA_OUTPUT()
+		{
+			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
+		}
+		
 	public:
-		//TODO hook is never called currently
-		I2CManager(I2C_STATUS_HOOK hook = 0): _status{}, _hook{hook} {}
+		I2CManager(I2C_STATUS_HOOK hook = 0): _status{}, _hook{hook}
+		{
+			// set SDA/SCL default directions
+			TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
+			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+			TRAIT::DDR |= _BV(TRAIT::BIT_SCL);
+			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
+		}
 		
 		void begin(I2CMode mode = I2CMode::Standard) INLINE
 		{
 			// 0. Initialize timing constants
 			_mode = mode;
-			// 1. set SDA/SCL as outputs and HIGH (master)
-			TRAIT::DDR |= TRAIT::SCL_SDA_MASK;
-			TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
-			// 2. Force 1 to data
+			// 1. Force 1 to data
 			USIDR = 0xFF;
-			// 3. Enable TWI
+			// 2. Enable TWI
 			// Set USI I2C mode, enable software clock strobe (USITC)
 			USICR = _BV(USIWM1) | _BV(USICS1) | _BV(USICLK);
 			// Clear all interrupt flags
 			USISR = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
+			// 3. Set SDA as output
+			SDA_OUTPUT();
 		}
 		void end() INLINE
 		{
-			// 1. Disable TWI
+			// Disable TWI
 			USICR = 0;
-			// 2. remove SDA/SCL pullups
-			//FIXME WHAT SHALL WE DO HERE REALLY?
-			TRAIT::DDR &= ~TRAIT::SCL_SDA_MASK;
-			TRAIT::PORT &= ~TRAIT::SCL_SDA_MASK;
+			//TODO should we set SDA back to INPUT?
 		}
 		uint8_t status() const
 		{
@@ -222,22 +253,20 @@ namespace i2c
 		bool start() INLINE
 		{
 			// Ensure SCL is HIGH
-			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
-			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
+			SCL_HIGH();
 			// Wait for Tsu-sta
 			_delay_loop_1(T_SU_STA());
 			// Now we can generate start condition
-			// First ensure SDA and SCL are set as outputs
-			TRAIT::DDR |= TRAIT::SCL_SDA_MASK;
 			// Force SDA low for Thd-sta
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SDA);
+			SDA_LOW();
 			_delay_loop_1(T_HD_STA());
 			// Pull SCL low
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
-			_delay_loop_1(T_LOW());
+			SCL_LOW();
+//			_delay_loop_1(T_LOW());
 			// Release SDA (force high)
-			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+			SDA_HIGH();
 			//TODO how to check START transmission? USISIF flag
+//			_status = (USISR & _BV(USISIF) ? Status::OK : Status::START_TRANSMITTED)
 			_status = Status::OK;
 			if (_hook) _hook(Status::OK, _status);
 			return true;
@@ -246,86 +275,24 @@ namespace i2c
 		{
 			return start();
 		}
-		//TODO refactor if possible (need size optimization)
+
 		bool send_slar(uint8_t address) INLINE
 		{
-			// Set SCL low
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
-			// Transfer address byte
-			USIDR = address | 0x01;
-			transfer(USISR_DATA);
-			// For acknowledge, first set SDA as input
-			TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
-			if (transfer(USISR_ACK) & 0x01)
-			{
-				// NACK received
-				TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
-				// store state
-				_status = Status::SLA_R_TRANSMITTED_NACK;
-				if (_hook) _hook(Status::OK, _status);
-				return false;
-			}
-			// Set SDA as output again
-			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
-			_status = Status::OK;
-			if (_hook) _hook(Status::OK, _status);
-			return true;
+			return send_byte(address | 0x01, Status::SLA_R_TRANSMITTED_NACK);
 		}
 		bool send_slaw(uint8_t address) INLINE
 		{
-			// Set SCL low
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
-			// Transfer address byte
-			USIDR = address;
-			transfer(USISR_DATA);
-			// For acknowledge, first set SDA as input
-			TRAIT::DDR &= ~ _BV(TRAIT::BIT_SDA);
-			if (transfer(USISR_ACK) & 0x01)
-			{
-				// NACK received
-				TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
-				// store state
-				_status = Status::SLA_W_TRANSMITTED_NACK;
-				if (_hook) _hook(Status::OK, _status);
-				return false;
-			}
-			// Set SDA as output again
-			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
-			_status = Status::OK;
-			if (_hook) _hook(Status::OK, _status);
-			return true;
+			return send_byte(address, Status::SLA_W_TRANSMITTED_NACK);
 		}
+		
 		bool send_data(uint8_t data) INLINE
 		{
-			// Set SCL low
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
-			// Transfer address byte
-			USIDR = data;
-			transfer(USISR_DATA);
-			// For acknowledge, first set SDA as input
-			TRAIT::DDR &= ~ _BV(TRAIT::BIT_SDA);
-			if (transfer(USISR_ACK) & 0x01)
-			{
-				// NACK received
-				TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
-				// store state
-				_status = Status::DATA_TRANSMITTED_NACK;
-				if (_hook) _hook(Status::OK, _status);
-				return false;
-			}
-			// Set SDA as output again
-			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
-			_status = Status::OK;
-			if (_hook) _hook(Status::OK, _status);
-			return true;
+			return send_byte(data, Status::DATA_TRANSMITTED_NACK);
 		}
-		bool receive_data(uint8_t& data, bool last_byte = false) INLINE
+		bool receive_data(uint8_t& data, bool last_byte = false)
 		{
-			// First set SDA as input
-			TRAIT::DDR &= ~ _BV(TRAIT::BIT_SDA);
+			SDA_INPUT();
 			data = transfer(USISR_DATA);
-			// Set SDA as output again
-			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
 			// Send ACK (or NACK if last byte)
 			USIDR = (last_byte ? 0xFF : 0x00);
 			transfer(USISR_ACK);
@@ -333,20 +300,34 @@ namespace i2c
 			if (_hook) _hook(Status::OK, _status);
 			return true;
 		}
+		
 		void stop() INLINE
 		{
 			// Pull SDA low
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SDA);
+			SDA_LOW();
 			// Release SCL
-			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
-			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
+			SCL_HIGH();
 			_delay_loop_1(T_SU_STO());
 			// Release SDA
-			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+			SDA_HIGH();
 			_delay_loop_1(T_BUF());
 		}
 		
 	private:
+		bool send_byte(uint8_t data, uint8_t NACK)
+		{
+			// Set SCL low TODO is this line really needed for every byte transferred?
+			SCL_LOW();
+			// Transfer address byte
+			USIDR = data;
+			transfer(USISR_DATA);
+			// For acknowledge, first set SDA as input
+			SDA_INPUT();
+			_status = (transfer(USISR_ACK) & 0x01) ? NACK : Status::OK;
+			if (_hook) _hook(Status::OK, _status);
+			return _status == Status::OK;
+		}
+		
 		uint8_t transfer(uint8_t USISR_count)
 		{
 			// Init counter (8 bits or 1 bit for acknowledge)
@@ -363,7 +344,12 @@ namespace i2c
 			}
 			while (bit_is_clear(USISR, USIOIF));
 			_delay_loop_1(T_LOW());
-			return USIDR;
+			// Read data
+			uint8_t data = USIDR;
+			USIDR = 0xFF;
+			// Release SDA
+			SDA_OUTPUT();
+			return data;
 		}
 		
 		// Constant values for USISR

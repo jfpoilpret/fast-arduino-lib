@@ -22,13 +22,25 @@ namespace devices
 {
 namespace rtc
 {
+	enum class WeekDay: uint8_t
+	{
+		Sunday = 1,
+		Monday,
+		Tuesday,
+		Wednesday,
+		Thursday,
+		Friday,
+		Saturday
+	};
+	
 	// Note we slightly adapted standard tm (time.h) to fit with DS1307 RTC
+	// IMPORTANT! You are responsible to set the correct week day when setting RTC date!
 	struct tm
 	{
 		uint8_t tm_sec;		/**< seconds after the minute - [ 0 to 59 ] */
 		uint8_t tm_min;		/**< minutes after the hour - [ 0 to 59 ] */
 		uint8_t tm_hour;	/**< hours since midnight - [ 0 to 23 ] */
-		uint8_t tm_wday;	/**< days since Sunday - [ 1 to 7 ] */
+		WeekDay tm_wday;	/**< days since Sunday - [ 1 to 7 ] */
 		uint8_t tm_mday;	/**< day of the month - [ 1 to 31 ] */
 		uint8_t tm_mon;		/**< months since January - [ 1 to 12 ] */
 		uint8_t tm_year;	/**< years since 2000 */
