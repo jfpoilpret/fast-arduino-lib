@@ -122,7 +122,6 @@ namespace i2c
 		}
 		bool receive_data(uint8_t& data, bool last_byte = false) INLINE
 		{
-			//FIXME it seems TWEA is to acknowledge next received byte (not the previous one!)
 			// Then a problem occurs for the last byte we want to get, which should have NACK instead!
 			// Send ACK for previous data (including SLA-R)
 			bool ok;
@@ -242,42 +241,25 @@ namespace i2c
 		// low-level methods to handle the bus, used by friend class I2CDevice
 		bool start() INLINE
 		{
-			// Ensure SCL is HIGH
-			SCL_HIGH();
-			// Wait for Tsu-sta
-			_delay_loop_1(T_SU_STA);
-			// Now we can generate start condition
-			// Force SDA low for Thd-sta
-			SDA_LOW();
-			_delay_loop_1(T_HD_STA);
-			// Pull SCL low
-			SCL_LOW();
-//			_delay_loop_1(T_LOW());
-			// Release SDA (force high)
-			SDA_HIGH();
-			//TODO how to check START transmission? USISIF flag
-//			_status = (USISR & _BV(USISIF) ? Status::OK : Status::START_TRANSMITTED)
-			_status = Status::OK;
-			if (_hook) _hook(Status::OK, _status);
-			return true;
+			return _start(Status::START_TRANSMITTED);
 		}
 		bool repeat_start() INLINE
 		{
-			return start();
+			return _start(Status::REPEAT_START_TRANSMITTED);
 		}
 
 		bool send_slar(uint8_t address) INLINE
 		{
-			return send_byte(address | 0x01, Status::SLA_R_TRANSMITTED_NACK);
+			return send_byte(address | 0x01, Status::SLA_R_TRANSMITTED_ACK, Status::SLA_R_TRANSMITTED_NACK);
 		}
 		bool send_slaw(uint8_t address) INLINE
 		{
-			return send_byte(address, Status::SLA_W_TRANSMITTED_NACK);
+			return send_byte(address, Status::SLA_W_TRANSMITTED_ACK, Status::SLA_W_TRANSMITTED_NACK);
 		}
 		
 		bool send_data(uint8_t data) INLINE
 		{
-			return send_byte(data, Status::DATA_TRANSMITTED_NACK);
+			return send_byte(data, Status::DATA_TRANSMITTED_ACK, Status::DATA_TRANSMITTED_NACK);
 		}
 		bool receive_data(uint8_t& data, bool last_byte = false)
 		{
@@ -285,10 +267,9 @@ namespace i2c
 			data = transfer(USISR_DATA);
 			// Send ACK (or NACK if last byte)
 			USIDR = (last_byte ? 0xFF : 0x00);
+			uint8_t good_status = (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
 			transfer(USISR_ACK);
-			_status = Status::OK;
-			if (_hook) _hook(Status::OK, _status);
-			return true;
+			return callback_hook(true, good_status, good_status);
 		}
 		
 		void stop() INLINE
@@ -304,7 +285,27 @@ namespace i2c
 		}
 		
 	private:
-		bool send_byte(uint8_t data, uint8_t NACK)
+		bool _start(uint8_t good_status)
+		{
+			// Ensure SCL is HIGH
+			SCL_HIGH();
+			// Wait for Tsu-sta
+			_delay_loop_1(T_SU_STA);
+			// Now we can generate start condition
+			// Force SDA low for Thd-sta
+			SDA_LOW();
+			_delay_loop_1(T_HD_STA);
+			// Pull SCL low
+			SCL_LOW();
+//			_delay_loop_1(T_LOW());
+			// Release SDA (force high)
+			SDA_HIGH();
+			//TODO check START transmission with USISIF flag?
+//			return callback_hook(USISR & _BV(USISIF), good_status, Status::ARBITRATION_LOST);
+			return callback_hook(true, good_status, Status::ARBITRATION_LOST);
+		}
+		
+		bool send_byte(uint8_t data, uint8_t ACK, uint8_t NACK)
 		{
 			// Set SCL low TODO is this line really needed for every byte transferred?
 			SCL_LOW();
@@ -313,9 +314,7 @@ namespace i2c
 			transfer(USISR_DATA);
 			// For acknowledge, first set SDA as input
 			SDA_INPUT();
-			_status = (transfer(USISR_ACK) & 0x01) ? NACK : Status::OK;
-			if (_hook) _hook(Status::OK, _status);
-			return _status == Status::OK;
+			return callback_hook(transfer(USISR_ACK) & 0x01, ACK, NACK);
 		}
 		
 		uint8_t transfer(uint8_t USISR_count)
@@ -340,6 +339,13 @@ namespace i2c
 			// Release SDA
 			SDA_OUTPUT();
 			return data;
+		}
+		
+		bool callback_hook(bool ok, uint8_t good_status, uint8_t bad_status)
+		{
+			if (_hook) _hook(good_status, (ok ? good_status : bad_status));
+			_status = (ok ? Status::OK : bad_status);
+			return ok;
 		}
 		
 		// Constant values for USISR
@@ -405,7 +411,6 @@ namespace i2c
 			return read(address, (uint8_t*) &data, sizeof(T), conditions);
 		}
 		
-		//TODO try to refactor write #1 and #3 as they use lots of common code (start and end)
 		int write(uint8_t address, const uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
 		{
 			bool ok = true;
