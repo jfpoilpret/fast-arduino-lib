@@ -54,10 +54,10 @@ namespace rtc
 		FREQ_32768HZ = 0x03
 	};
 	
-	class DS1307: public i2c::I2CDevice
+	class DS1307: public i2c::I2CDevice<i2c::I2CMode::Standard>
 	{
 	public:
-		DS1307(i2c::I2CManager& manager): I2CDevice(manager) {}
+		DS1307(MANAGER& manager): I2CDevice(manager) {}
 
 		//TODO Error handling?
 		void setDateTime(tm& datetime)

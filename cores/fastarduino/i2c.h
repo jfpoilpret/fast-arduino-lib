@@ -16,16 +16,14 @@
 #define I2C_HH
 
 #include <util/delay_basic.h>
+#include "utilities.h"
 #include "boards/board_traits.h"
 
+// Rework API:
+// - I2Cmode in ctor (not begin) or as template argument
+// Refactor ATmega implementation to use I2CMode rather than frequency
 //TODO Use enum class for frequency selection: 100KHz or 400KHz)
-//TODO Add debug facility (needed for implementing new devices)
-// - special I2CManager?
-// - integrate in current I2CManager but careful about size and speed impact!
-//TODO ERRORS? constants in errors.h or in i2c namespace or dedicated enum class?
 
-
-//TODO add support for ATtiny (use USI)
 //TODO add support for asynchronous operation?
 //TODO is it useful to support interrupt-driven (async) mode? that would require static buffers for read and write!
 // Should we then provide two distinct I2CManager classes?
@@ -172,43 +170,37 @@ namespace i2c
 		friend class I2CDevice;
 	};
 #else
-	//TODO Externalize that utility method (to another header?) and rename so it does not produce compile errors!
-	static constexpr uint8_t calculate_delay1_count(float time_us)
-	{
-		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us + 1);
-	}
-
-	//TODO optimize code size by templating on Frequency? => will trigger heavy rework on devices!
 	//TODO check if possible to optimize timing delays (seem much above requirements a 100KHz)
 	//TODO make private methods as public from a private class -> cleaner
+	template<I2CMode MODE = I2CMode::Standard>
 	class I2CManager
 	{
 		using TRAIT = board_traits::TWI_trait;
 		
-		inline void SCL_HIGH()
+		inline void SCL_HIGH() INLINE
 		{
 			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
 			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
 		}
-		inline void SCL_LOW()
+		inline void SCL_LOW() INLINE
 		{
 			TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
 		}
-		inline void SDA_HIGH()
+		inline void SDA_HIGH() INLINE
 		{
 			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
 		}
-		inline void SDA_LOW()
+		inline void SDA_LOW() INLINE
 		{
 			TRAIT::PORT &= ~_BV(TRAIT::BIT_SDA);
 		}
 		
-		inline void SDA_INPUT()
+		inline void SDA_INPUT() INLINE
 		{
 			TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
 			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
 		}
-		inline void SDA_OUTPUT()
+		inline void SDA_OUTPUT() INLINE
 		{
 			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
 		}
@@ -223,10 +215,8 @@ namespace i2c
 			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
 		}
 		
-		void begin(I2CMode mode = I2CMode::Standard) INLINE
+		void begin() INLINE
 		{
-			// 0. Initialize timing constants
-			_mode = mode;
 			// 1. Force 1 to data
 			USIDR = 0xFF;
 			// 2. Enable TWI
@@ -255,11 +245,11 @@ namespace i2c
 			// Ensure SCL is HIGH
 			SCL_HIGH();
 			// Wait for Tsu-sta
-			_delay_loop_1(T_SU_STA());
+			_delay_loop_1(T_SU_STA);
 			// Now we can generate start condition
 			// Force SDA low for Thd-sta
 			SDA_LOW();
-			_delay_loop_1(T_HD_STA());
+			_delay_loop_1(T_HD_STA);
 			// Pull SCL low
 			SCL_LOW();
 //			_delay_loop_1(T_LOW());
@@ -307,10 +297,10 @@ namespace i2c
 			SDA_LOW();
 			// Release SCL
 			SCL_HIGH();
-			_delay_loop_1(T_SU_STO());
+			_delay_loop_1(T_SU_STO);
 			// Release SDA
 			SDA_HIGH();
-			_delay_loop_1(T_BUF());
+			_delay_loop_1(T_BUF);
 		}
 		
 	private:
@@ -334,16 +324,16 @@ namespace i2c
 			USISR = USISR_count;
 			do
 			{
-				_delay_loop_1(T_LOW());
+				_delay_loop_1(T_LOW);
 				// clock strobe (SCL raising edge)
 				USICR |= _BV(USITC);
 				TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
-				_delay_loop_1(T_HIGH());
+				_delay_loop_1(T_HIGH);
 				// clock strobe (SCL falling edge)
 				USICR |= _BV(USITC);
 			}
 			while (bit_is_clear(USISR, USIOIF));
-			_delay_loop_1(T_LOW());
+			_delay_loop_1(T_LOW);
 			// Read data
 			uint8_t data = USIDR;
 			USIDR = 0xFF;
@@ -357,53 +347,23 @@ namespace i2c
 		static constexpr const uint8_t USISR_DATA = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
 		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
 		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
+
+		static constexpr uint8_t calculate_count(float standard, float fast)
+		{
+			return utils::calculate_delay1_count(MODE == I2CMode::Standard ? standard : fast);
+		}
 		
-		// Timing constants for Standard mode (as per I2C specifications)
-		static constexpr const uint8_t STD_T_HD_STA = calculate_delay1_count(4.0);
-		static constexpr const uint8_t STD_T_LOW = calculate_delay1_count(4.7);
-		static constexpr const uint8_t STD_T_HIGH = calculate_delay1_count(4.0);
-		static constexpr const uint8_t STD_T_SU_STA = calculate_delay1_count(4.7);
-		static constexpr const uint8_t STD_T_SU_STO = calculate_delay1_count(4.0);
-		static constexpr const uint8_t STD_T_BUF = calculate_delay1_count(4.7);
-		
-		// Timing constants for Fast mode (as per I2C specifications)
-		static constexpr const uint8_t FAST_T_HD_STA = calculate_delay1_count(0.6);
-		static constexpr const uint8_t FAST_T_LOW = calculate_delay1_count(1.3);
-		static constexpr const uint8_t FAST_T_HIGH = calculate_delay1_count(0.6);
-		static constexpr const uint8_t FAST_T_SU_STA = calculate_delay1_count(0.6);
-		static constexpr const uint8_t FAST_T_SU_STO = calculate_delay1_count(0.6);
-		static constexpr const uint8_t FAST_T_BUF = calculate_delay1_count(1.3);
-		
-		uint8_t T_HD_STA() const
-		{
-			return (_mode == I2CMode::Standard ? STD_T_HD_STA : FAST_T_HD_STA);
-		}
-		uint8_t T_LOW() const
-		{
-			return (_mode == I2CMode::Standard ? STD_T_LOW : FAST_T_LOW);
-		}
-		uint8_t T_HIGH() const
-		{
-			return (_mode == I2CMode::Standard ? STD_T_HIGH : FAST_T_HIGH);
-		}
-		uint8_t T_SU_STA() const
-		{
-			return (_mode == I2CMode::Standard ? STD_T_SU_STA : FAST_T_SU_STA);
-		}
-		uint8_t T_SU_STO() const
-		{
-			return (_mode == I2CMode::Standard ? STD_T_SU_STO : FAST_T_SU_STO);
-		}
-		uint8_t T_BUF() const
-		{
-			return (_mode == I2CMode::Standard ? STD_T_BUF : FAST_T_BUF);
-		}
+		// Timing constants for current mode (as per I2C specifications)
+		static constexpr const uint8_t T_HD_STA = calculate_count(4.0, 0.6);
+		static constexpr const uint8_t T_LOW = calculate_count(4.7, 1.3);
+		static constexpr const uint8_t T_HIGH = calculate_count(4.0, 0.6);
+		static constexpr const uint8_t T_SU_STA = calculate_count(4.7, 0.6);
+		static constexpr const uint8_t T_SU_STO = calculate_count(4.0, 0.6);
+		static constexpr const uint8_t T_BUF = calculate_count(4.7, 1.3);
 		
 		uint8_t _status;
 		const I2C_STATUS_HOOK _hook;
-		I2CMode _mode;
-		
-		friend class I2CDevice;
+		template<I2CMode M> friend class I2CDevice;
 	};
 #endif
 	
@@ -417,10 +377,14 @@ namespace i2c
 		NO_START_STOP = 0x04
 	};
 	
+	template<I2CMode MODE = I2CMode::Standard>
 	class I2CDevice
 	{
+	public:
+		using MANAGER = I2CManager<MODE>;
+		
 	protected:
-		I2CDevice(I2CManager& manager):_manager{manager} {}
+		I2CDevice(MANAGER& manager):_manager{manager} {}
 		
 		int read(uint8_t address, uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
 		{
@@ -441,6 +405,7 @@ namespace i2c
 			return read(address, (uint8_t*) &data, sizeof(T), conditions);
 		}
 		
+		//TODO try to refactor write #1 and #3 as they use lots of common code (start and end)
 		int write(uint8_t address, const uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
 		{
 			bool ok = true;
@@ -469,7 +434,7 @@ namespace i2c
 		}
 		
 	private:
-		I2CManager& _manager;
+		MANAGER& _manager;
 	};
 };
 

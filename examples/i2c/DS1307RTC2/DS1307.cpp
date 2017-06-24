@@ -115,7 +115,7 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	i2c::I2CManager manager{trace_status};
+	i2c::I2CManager<> manager{trace_status};
 	manager.begin();
 	out << F("I2C interface started\n") << flush;
 	display_status('1', manager.status());
