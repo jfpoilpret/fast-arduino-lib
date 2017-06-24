@@ -19,8 +19,7 @@
 #include "utilities.h"
 #include "boards/board_traits.h"
 
-// Rework API:
-// Refactor ATmega implementation the same as for ATtiny
+//TODO Refactor more to unify common code between ATtiny and ATmega: only I2CHandler is specific
 
 //TODO add support for asynchronous operation?
 //TODO is it useful to support interrupt-driven (async) mode? that would require static buffers for read and write!
@@ -57,114 +56,148 @@ namespace i2c
 
 #if defined(TWCR)
 	// NOTE we use prescaler = 1 everywhere
+	template<I2CMode MODE = I2CMode::Standard>
 	class I2CManager
 	{
-		using TRAIT = board_traits::TWI_trait;
-		
 	public:
-		static constexpr const uint32_t DEFAULT_FREQUENCY = 100000UL;
+		I2CManager(I2C_STATUS_HOOK hook = 0): _handler{hook} {}
 		
-		I2CManager(I2C_STATUS_HOOK hook = 0): _status{}, _hook{hook} {}
-		
-		void begin(uint32_t frequency = DEFAULT_FREQUENCY) INLINE
+		void begin() INLINE
 		{
-			// 1. set SDA/SCL pullups
-			TRAIT::PORT |= TRAIT::PULLUP_MASK;
-			// 2. set I2C frequency
-			TWBR = calculate_TWBR(frequency);
-			TWSR = 0;
-			// 3. Enable TWI
-			TWCR = _BV(TWEN);
+			_handler.begin();
 		}
 		void end() INLINE
 		{
-			// 1. Disable TWI
-			TWCR = 0;
-			// 2. remove SDA/SCL pullups
-			TRAIT::PORT &= ~TRAIT::PULLUP_MASK;
+			_handler.end();
 		}
 		uint8_t status() const
 		{
-			return _status;
+			return _handler.status();
 		}
 		
 	private:
-		// low-level methods to handle the bus, used by friend class I2CDevice
-		bool start() INLINE
+		class I2CHandler
 		{
-			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
-			return wait_twint(Status::START_TRANSMITTED);
-		}
-		bool repeat_start() INLINE
-		{
-			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
-			return wait_twint(Status::REPEAT_START_TRANSMITTED);
-		}
-		bool send_slar(uint8_t address) INLINE
-		{
-			TWDR = address | 0x01;
-			TWCR = _BV(TWEN) | _BV(TWINT);
-			return wait_twint(Status::SLA_R_TRANSMITTED_ACK);
-		}
-		bool send_slaw(uint8_t address) INLINE
-		{
-			TWDR = address;
-			TWCR = _BV(TWEN) | _BV(TWINT);
-			return wait_twint(Status::SLA_W_TRANSMITTED_ACK);
-		}
-		bool send_data(uint8_t data) INLINE
-		{
-			TWDR = data;
-			TWCR = _BV(TWEN) | _BV(TWINT);
-			return wait_twint(Status::DATA_TRANSMITTED_ACK);
-		}
-		bool receive_data(uint8_t& data, bool last_byte = false) INLINE
-		{
-			// Then a problem occurs for the last byte we want to get, which should have NACK instead!
-			// Send ACK for previous data (including SLA-R)
-			bool ok;
-			if (last_byte)
+		private:
+			static constexpr const uint32_t STANDARD_FREQUENCY = 100000UL;
+			static constexpr const uint32_t FAST_FREQUENCY = 400000UL;
+			
+			static constexpr uint8_t calculate_TWBR(uint32_t frequency)
 			{
-				TWCR = _BV(TWEN) | _BV(TWINT);
-				ok = wait_twint(Status::DATA_RECEIVED_NACK);
+				return (F_CPU / frequency - 16UL) / 2;
 			}
-			else
-			{
-				TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
-				ok = wait_twint(Status::DATA_RECEIVED_ACK);
-			}
-			if (ok) data = TWDR;
-			return ok;
-		}
-		void stop() INLINE
-		{
-			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
-		}
-		
-	private:
-		bool wait_twint(uint8_t expected_status)
-		{
-			loop_until_bit_is_set(TWCR, TWINT);
-			_status = TWSR & 0xF8;
-			if (_hook) _hook(expected_status, _status);
-			if (_status == expected_status)
-			{
-				_status = 0;
-				return true;
-			}
-			else
-				return false;
-		}
 
-		static constexpr uint8_t calculate_TWBR(uint32_t frequency)
+			static constexpr const uint8_t TWBR_VALUE = 
+				calculate_TWBR(MODE == I2CMode::Standard ? STANDARD_FREQUENCY : FAST_FREQUENCY);
+		
+			using TRAIT = board_traits::TWI_trait;
+		
+			I2CHandler(I2C_STATUS_HOOK hook): _status{}, _hook{hook} {}
+
+			void begin() INLINE
+			{
+				// 1. set SDA/SCL pullups
+				TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
+				// 2. set I2C frequency
+				TWBR = TWBR_VALUE;
+				TWSR = 0;
+				// 3. Enable TWI
+				TWCR = _BV(TWEN);
+			}
+			void end() INLINE
+			{
+				// 1. Disable TWI
+				TWCR = 0;
+				// 2. remove SDA/SCL pullups
+				TRAIT::PORT &= ~TRAIT::SCL_SDA_MASK;
+			}
+
+		public:
+			uint8_t status() const
+			{
+				return _status;
+			}
+
+			// low-level methods to handle the bus, used by friend class I2CDevice
+			bool start() INLINE
+			{
+				TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
+				return wait_twint(Status::START_TRANSMITTED);
+			}
+			bool repeat_start() INLINE
+			{
+				TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
+				return wait_twint(Status::REPEAT_START_TRANSMITTED);
+			}
+			bool send_slar(uint8_t address) INLINE
+			{
+				TWDR = address | 0x01;
+				TWCR = _BV(TWEN) | _BV(TWINT);
+				return wait_twint(Status::SLA_R_TRANSMITTED_ACK);
+			}
+			bool send_slaw(uint8_t address) INLINE
+			{
+				TWDR = address;
+				TWCR = _BV(TWEN) | _BV(TWINT);
+				return wait_twint(Status::SLA_W_TRANSMITTED_ACK);
+			}
+			bool send_data(uint8_t data) INLINE
+			{
+				TWDR = data;
+				TWCR = _BV(TWEN) | _BV(TWINT);
+				return wait_twint(Status::DATA_TRANSMITTED_ACK);
+			}
+			bool receive_data(uint8_t& data, bool last_byte = false) INLINE
+			{
+				// Then a problem occurs for the last byte we want to get, which should have NACK instead!
+				// Send ACK for previous data (including SLA-R)
+				bool ok;
+				if (last_byte)
+				{
+					TWCR = _BV(TWEN) | _BV(TWINT);
+					ok = wait_twint(Status::DATA_RECEIVED_NACK);
+				}
+				else
+				{
+					TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
+					ok = wait_twint(Status::DATA_RECEIVED_ACK);
+				}
+				if (ok) data = TWDR;
+				return ok;
+			}
+			void stop() INLINE
+			{
+				TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
+			}
+
+		private:
+			bool wait_twint(uint8_t expected_status)
+			{
+				loop_until_bit_is_set(TWCR, TWINT);
+				_status = TWSR & 0xF8;
+				if (_hook) _hook(expected_status, _status);
+				if (_status == expected_status)
+				{
+					_status = 0;
+					return true;
+				}
+				else
+					return false;
+			}
+		
+			uint8_t _status;
+			const I2C_STATUS_HOOK _hook;
+			
+			friend class I2CManager<MODE>;
+		};
+
+		I2CHandler& handler() INLINE
 		{
-			return (F_CPU / frequency - 16UL) / 2;
+			return _handler;
 		}
 		
-		uint8_t _status;
-		const I2C_STATUS_HOOK _hook;
-		
-		friend class I2CDevice;
+		I2CHandler _handler;
+		template<I2CMode M> friend class I2CDevice;
 	};
 #else
 	template<I2CMode MODE = I2CMode::Standard>
