@@ -330,7 +330,7 @@ namespace i2c
 				transfer(USISR_DATA);
 				// For acknowledge, first set SDA as input
 				SDA_INPUT();
-				return callback_hook(transfer(USISR_ACK) & 0x01, ACK, NACK);
+				return callback_hook((transfer(USISR_ACK) & 0x01) == 0, ACK, NACK);
 			}
 
 			uint8_t transfer(uint8_t USISR_count)
