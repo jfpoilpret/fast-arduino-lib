@@ -20,9 +20,7 @@
 #include "boards/board_traits.h"
 
 // Rework API:
-// - I2Cmode in ctor (not begin) or as template argument
-// Refactor ATmega implementation to use I2CMode rather than frequency
-//TODO Use enum class for frequency selection: 100KHz or 400KHz)
+// Refactor ATmega implementation the same as for ATtiny
 
 //TODO add support for asynchronous operation?
 //TODO is it useful to support interrupt-driven (async) mode? that would require static buffers for read and write!
@@ -169,206 +167,233 @@ namespace i2c
 		friend class I2CDevice;
 	};
 #else
-	//TODO check if possible to optimize timing delays (seem much above requirements a 100KHz)
-	//TODO make private methods as public from a private class -> cleaner
 	template<I2CMode MODE = I2CMode::Standard>
 	class I2CManager
 	{
-		using TRAIT = board_traits::TWI_trait;
-		
-		inline void SCL_HIGH() INLINE
-		{
-			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
-			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
-		}
-		inline void SCL_LOW() INLINE
-		{
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
-		}
-		inline void SDA_HIGH() INLINE
-		{
-			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
-		}
-		inline void SDA_LOW() INLINE
-		{
-			TRAIT::PORT &= ~_BV(TRAIT::BIT_SDA);
-		}
-		
-		inline void SDA_INPUT() INLINE
-		{
-			TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
-			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
-		}
-		inline void SDA_OUTPUT() INLINE
-		{
-			TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
-		}
-		
 	public:
-		I2CManager(I2C_STATUS_HOOK hook = 0): _status{}, _hook{hook}
-		{
-			// set SDA/SCL default directions
-			TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
-			TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
-			TRAIT::DDR |= _BV(TRAIT::BIT_SCL);
-			TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
-		}
+		I2CManager(I2C_STATUS_HOOK hook = 0): _handler{hook} {}
 		
 		void begin() INLINE
 		{
-			// 1. Force 1 to data
-			USIDR = 0xFF;
-			// 2. Enable TWI
-			// Set USI I2C mode, enable software clock strobe (USITC)
-			USICR = _BV(USIWM1) | _BV(USICS1) | _BV(USICLK);
-			// Clear all interrupt flags
-			USISR = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
-			// 3. Set SDA as output
-			SDA_OUTPUT();
+			_handler.begin();
 		}
 		void end() INLINE
 		{
-			// Disable TWI
-			USICR = 0;
-			//TODO should we set SDA back to INPUT?
+			_handler.end();
 		}
 		uint8_t status() const
 		{
-			return _status;
+			return _handler.status();
 		}
 		
 	private:
-		// low-level methods to handle the bus, used by friend class I2CDevice
-		bool start() INLINE
+		class I2CHandler
 		{
-			return _start(Status::START_TRANSMITTED);
-		}
-		bool repeat_start() INLINE
-		{
-			return _start(Status::REPEAT_START_TRANSMITTED);
-		}
+		private:
+			using TRAIT = board_traits::TWI_trait;
 
-		bool send_slar(uint8_t address) INLINE
-		{
-			return send_byte(address | 0x01, Status::SLA_R_TRANSMITTED_ACK, Status::SLA_R_TRANSMITTED_NACK);
-		}
-		bool send_slaw(uint8_t address) INLINE
-		{
-			return send_byte(address, Status::SLA_W_TRANSMITTED_ACK, Status::SLA_W_TRANSMITTED_NACK);
-		}
-		
-		bool send_data(uint8_t data) INLINE
-		{
-			return send_byte(data, Status::DATA_TRANSMITTED_ACK, Status::DATA_TRANSMITTED_NACK);
-		}
-		bool receive_data(uint8_t& data, bool last_byte = false)
-		{
-			SDA_INPUT();
-			data = transfer(USISR_DATA);
-			// Send ACK (or NACK if last byte)
-			USIDR = (last_byte ? 0xFF : 0x00);
-			uint8_t good_status = (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
-			transfer(USISR_ACK);
-			return callback_hook(true, good_status, good_status);
-		}
-		
-		void stop() INLINE
-		{
-			// Pull SDA low
-			SDA_LOW();
-			// Release SCL
-			SCL_HIGH();
-			_delay_loop_1(T_SU_STO);
-			// Release SDA
-			SDA_HIGH();
-			_delay_loop_1(T_BUF);
-		}
-		
-	private:
-		bool _start(uint8_t good_status)
-		{
-			// Ensure SCL is HIGH
-			SCL_HIGH();
-			// Wait for Tsu-sta
-			_delay_loop_1(T_SU_STA);
-			// Now we can generate start condition
-			// Force SDA low for Thd-sta
-			SDA_LOW();
-			_delay_loop_1(T_HD_STA);
-			// Pull SCL low
-			SCL_LOW();
-//			_delay_loop_1(T_LOW());
-			// Release SDA (force high)
-			SDA_HIGH();
-			//TODO check START transmission with USISIF flag?
-//			return callback_hook(USISR & _BV(USISIF), good_status, Status::ARBITRATION_LOST);
-			return callback_hook(true, good_status, Status::ARBITRATION_LOST);
-		}
-		
-		bool send_byte(uint8_t data, uint8_t ACK, uint8_t NACK)
-		{
-			// Set SCL low TODO is this line really needed for every byte transferred?
-			SCL_LOW();
-			// Transfer address byte
-			USIDR = data;
-			transfer(USISR_DATA);
-			// For acknowledge, first set SDA as input
-			SDA_INPUT();
-			return callback_hook(transfer(USISR_ACK) & 0x01, ACK, NACK);
-		}
-		
-		uint8_t transfer(uint8_t USISR_count)
-		{
-			// Init counter (8 bits or 1 bit for acknowledge)
-			USISR = USISR_count;
-			do
+			I2CHandler(I2C_STATUS_HOOK hook): _status{}, _hook{hook}
 			{
-				_delay_loop_1(T_LOW);
-				// clock strobe (SCL raising edge)
-				USICR |= _BV(USITC);
-				TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
-				_delay_loop_1(T_HIGH);
-				// clock strobe (SCL falling edge)
-				USICR |= _BV(USITC);
+				// set SDA/SCL default directions
+				TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
+				TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+				TRAIT::DDR |= _BV(TRAIT::BIT_SCL);
+				TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
 			}
-			while (bit_is_clear(USISR, USIOIF));
-			_delay_loop_1(T_LOW);
-			// Read data
-			uint8_t data = USIDR;
-			USIDR = 0xFF;
-			// Release SDA
-			SDA_OUTPUT();
-			return data;
-		}
-		
-		bool callback_hook(bool ok, uint8_t good_status, uint8_t bad_status)
-		{
-			if (_hook) _hook(good_status, (ok ? good_status : bad_status));
-			_status = (ok ? Status::OK : bad_status);
-			return ok;
-		}
-		
-		// Constant values for USISR
-		// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
-		static constexpr const uint8_t USISR_DATA = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
-		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
-		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
+			
+			inline void SCL_HIGH() INLINE
+			{
+				TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
+				TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
+			}
+			inline void SCL_LOW() INLINE
+			{
+				TRAIT::PORT &= ~_BV(TRAIT::BIT_SCL);
+			}
+			inline void SDA_HIGH() INLINE
+			{
+				TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+			}
+			inline void SDA_LOW() INLINE
+			{
+				TRAIT::PORT &= ~_BV(TRAIT::BIT_SDA);
+			}
 
-		static constexpr uint8_t calculate_count(float standard, float fast)
+			inline void SDA_INPUT() INLINE
+			{
+				TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
+				TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+			}
+			inline void SDA_OUTPUT() INLINE
+			{
+				TRAIT::DDR |= _BV(TRAIT::BIT_SDA);
+			}
+		
+			void begin() INLINE
+			{
+				// 1. Force 1 to data
+				USIDR = 0xFF;
+				// 2. Enable TWI
+				// Set USI I2C mode, enable software clock strobe (USITC)
+				USICR = _BV(USIWM1) | _BV(USICS1) | _BV(USICLK);
+				// Clear all interrupt flags
+				USISR = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
+				// 3. Set SDA as output
+				SDA_OUTPUT();
+			}
+			void end() INLINE
+			{
+				// Disable TWI
+				USICR = 0;
+				//TODO should we set SDA back to INPUT?
+			}
+			
+		public:
+			uint8_t status() const
+			{
+				return _status;
+			}
+			
+			// low-level methods to handle the bus, used by friend class I2CDevice
+			bool start() INLINE
+			{
+				return _start(Status::START_TRANSMITTED);
+			}
+			bool repeat_start() INLINE
+			{
+				return _start(Status::REPEAT_START_TRANSMITTED);
+			}
+
+			bool send_slar(uint8_t address) INLINE
+			{
+				return send_byte(address | 0x01, Status::SLA_R_TRANSMITTED_ACK, Status::SLA_R_TRANSMITTED_NACK);
+			}
+			bool send_slaw(uint8_t address) INLINE
+			{
+				return send_byte(address, Status::SLA_W_TRANSMITTED_ACK, Status::SLA_W_TRANSMITTED_NACK);
+			}
+
+			bool send_data(uint8_t data) INLINE
+			{
+				return send_byte(data, Status::DATA_TRANSMITTED_ACK, Status::DATA_TRANSMITTED_NACK);
+			}
+			bool receive_data(uint8_t& data, bool last_byte = false)
+			{
+				SDA_INPUT();
+				data = transfer(USISR_DATA);
+				// Send ACK (or NACK if last byte)
+				USIDR = (last_byte ? 0xFF : 0x00);
+				uint8_t good_status = (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
+				transfer(USISR_ACK);
+				return callback_hook(true, good_status, good_status);
+			}
+
+			void stop() INLINE
+			{
+				// Pull SDA low
+				SDA_LOW();
+				// Release SCL
+				SCL_HIGH();
+				_delay_loop_1(T_SU_STO);
+				// Release SDA
+				SDA_HIGH();
+				_delay_loop_1(T_BUF);
+			}
+
+		private:
+			bool _start(uint8_t good_status)
+			{
+				// Ensure SCL is HIGH
+				SCL_HIGH();
+				// Wait for Tsu-sta
+				_delay_loop_1(T_SU_STA);
+				// Now we can generate start condition
+				// Force SDA low for Thd-sta
+				SDA_LOW();
+				_delay_loop_1(T_HD_STA);
+				// Pull SCL low
+				SCL_LOW();
+	//			_delay_loop_1(T_LOW());
+				// Release SDA (force high)
+				SDA_HIGH();
+				//TODO check START transmission with USISIF flag?
+	//			return callback_hook(USISR & _BV(USISIF), good_status, Status::ARBITRATION_LOST);
+				return callback_hook(true, good_status, Status::ARBITRATION_LOST);
+			}
+
+			bool send_byte(uint8_t data, uint8_t ACK, uint8_t NACK)
+			{
+				// Set SCL low TODO is this line really needed for every byte transferred?
+				SCL_LOW();
+				// Transfer address byte
+				USIDR = data;
+				transfer(USISR_DATA);
+				// For acknowledge, first set SDA as input
+				SDA_INPUT();
+				return callback_hook(transfer(USISR_ACK) & 0x01, ACK, NACK);
+			}
+
+			uint8_t transfer(uint8_t USISR_count)
+			{
+				// Init counter (8 bits or 1 bit for acknowledge)
+				USISR = USISR_count;
+				do
+				{
+					_delay_loop_1(T_LOW);
+					// clock strobe (SCL raising edge)
+					USICR |= _BV(USITC);
+					TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
+					_delay_loop_1(T_HIGH);
+					// clock strobe (SCL falling edge)
+					USICR |= _BV(USITC);
+				}
+				while (bit_is_clear(USISR, USIOIF));
+				_delay_loop_1(T_LOW);
+				// Read data
+				uint8_t data = USIDR;
+				USIDR = 0xFF;
+				// Release SDA
+				SDA_OUTPUT();
+				return data;
+			}
+
+			bool callback_hook(bool ok, uint8_t good_status, uint8_t bad_status)
+			{
+				if (_hook) _hook(good_status, (ok ? good_status : bad_status));
+				_status = (ok ? Status::OK : bad_status);
+				return ok;
+			}
+
+			// Constant values for USISR
+			// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
+			static constexpr const uint8_t USISR_DATA = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
+			// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
+			static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
+
+			static constexpr uint8_t calculate_count(float standard, float fast)
+			{
+				return utils::calculate_delay1_count(MODE == I2CMode::Standard ? standard : fast);
+			}
+
+			// Timing constants for current mode (as per I2C specifications)
+			static constexpr const uint8_t T_HD_STA = calculate_count(4.0, 0.6);
+			static constexpr const uint8_t T_LOW = calculate_count(4.7, 1.3);
+			static constexpr const uint8_t T_HIGH = calculate_count(4.0, 0.6);
+			static constexpr const uint8_t T_SU_STA = calculate_count(4.7, 0.6);
+			static constexpr const uint8_t T_SU_STO = calculate_count(4.0, 0.6);
+			static constexpr const uint8_t T_BUF = calculate_count(4.7, 1.3);
+
+			uint8_t _status;
+			const I2C_STATUS_HOOK _hook;
+			friend class I2CManager<MODE>;
+		};
+		
+		I2CHandler& handler() INLINE
 		{
-			return utils::calculate_delay1_count(MODE == I2CMode::Standard ? standard : fast);
+			return _handler;
 		}
 		
-		// Timing constants for current mode (as per I2C specifications)
-		static constexpr const uint8_t T_HD_STA = calculate_count(4.0, 0.6);
-		static constexpr const uint8_t T_LOW = calculate_count(4.7, 1.3);
-		static constexpr const uint8_t T_HIGH = calculate_count(4.0, 0.6);
-		static constexpr const uint8_t T_SU_STA = calculate_count(4.7, 0.6);
-		static constexpr const uint8_t T_SU_STO = calculate_count(4.0, 0.6);
-		static constexpr const uint8_t T_BUF = calculate_count(4.7, 1.3);
-		
-		uint8_t _status;
-		const I2C_STATUS_HOOK _hook;
+		I2CHandler _handler;
 		template<I2CMode M> friend class I2CDevice;
 	};
 #endif
@@ -388,9 +413,10 @@ namespace i2c
 	{
 	public:
 		using MANAGER = I2CManager<MODE>;
+		using HANDLER = typename MANAGER::I2CHandler;
 		
 	protected:
-		I2CDevice(MANAGER& manager):_manager{manager} {}
+		I2CDevice(MANAGER& manager):_manager{manager.handler()} {}
 		
 		int read(uint8_t address, uint8_t* data, uint8_t size, BusConditions conditions = BusConditions::START_STOP)
 		{
@@ -439,7 +465,7 @@ namespace i2c
 		}
 		
 	private:
-		MANAGER& _manager;
+		HANDLER& _manager;
 	};
 };
 
