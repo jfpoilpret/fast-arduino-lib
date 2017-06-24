@@ -55,8 +55,6 @@ static serial::soft::UATX<TX> uart{output_buffer};
 #endif
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
-const uint32_t I2C_FREQUENCY = 100000;
-
 using devices::rtc::DS1307;
 using devices::rtc::WeekDay;
 using devices::rtc::tm;
