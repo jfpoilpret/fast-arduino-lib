@@ -79,7 +79,8 @@ namespace utils
 	
 	constexpr uint8_t calculate_delay1_count(float time_us)
 	{
-		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us + 1);
+		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us);
+//		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us + 1);
 	}
 }
 
