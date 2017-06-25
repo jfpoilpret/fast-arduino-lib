@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #include <fastarduino/time.h>
-#include <fastarduino/i2c.h>
+#include <fastarduino/i2c_manager.h>
 #include <fastarduino/devices/ds1307.h>
 
 #if defined(ARDUINO_UNO)

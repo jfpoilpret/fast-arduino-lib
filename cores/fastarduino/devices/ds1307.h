@@ -15,7 +15,7 @@
 #ifndef DS1307_H
 #define DS1307_H
 
-#include "../i2c.h"
+#include "../i2c_device.h"
 #include "../utilities.h"
 
 namespace devices
