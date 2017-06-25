@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #include <fastarduino/time.h>
-#include <fastarduino/i2c.h>
+#include <fastarduino/i2c_device.h>
 #include <fastarduino/uart.h>
 
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
@@ -25,18 +25,20 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
+// I2C Device specific stuff goes here
+//=====================================
+// HMC5883L specific
+static constexpr const i2c::I2CMode MODE = i2c::I2CMode::Fast;
+const uint8_t DEVICE_ADDRESS = 0x1E << 1;
+const uint8_t NUM_REGISTERS = 13;
+
 // Subclass I2CDevice to make protected methods available
-class PublicDevice: public i2c::I2CDevice
+class PublicDevice: public i2c::I2CDevice<MODE>
 {
 public:
-	PublicDevice(i2c::I2CManager& manager): i2c::I2CDevice{manager} {}
+	PublicDevice(MANAGER& manager): I2CDevice(manager) {}
 	friend int main();
 };
-
-// HMC5883L specific
-const uint8_t DEVICE_ADDRESS = 0x1E << 1;
-const uint32_t I2C_FREQUENCY = 400000;
-const uint8_t NUM_REGISTERS = 13;
 
 using streams::flush;
 
@@ -67,8 +69,8 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	i2c::I2CManager manager{trace_status};
-	manager.begin(I2C_FREQUENCY);
+	i2c::I2CManager<MODE> manager{trace_status};
+	manager.begin();
 	out << F("I2C interface started\n") << flush;
 	out << F("status #1 ") << manager.status() << '\n' << flush;
 	

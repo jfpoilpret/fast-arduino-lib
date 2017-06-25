@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #include <fastarduino/time.h>
-#include <fastarduino/i2c.h>
+#include <fastarduino/i2c_device.h>
 
 #if defined(ARDUINO_UNO)
 #define HARDWARE_UART 1
@@ -32,10 +32,10 @@ static serial::hard::UATX<UART> uart{output_buffer};
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 // Subclass I2CDevice to make protected methods available
-class PublicDevice: public i2c::I2CDevice
+class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::Standard>
 {
 public:
-	PublicDevice(i2c::I2CManager& manager): i2c::I2CDevice{manager} {}
+	PublicDevice(MANAGER& manager): i2c::I2CDevice<i2c::I2CMode::Standard>{manager} {}
 	friend int main();
 };
 
@@ -78,7 +78,7 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	i2c::I2CManager manager;
+	i2c::I2CManager<i2c::I2CMode::Standard> manager;
 	manager.begin();
 	out << "I2C interface started\n" << streams::flush;
 	out << "status #1 " << manager.status() << '\n' << streams::flush;
