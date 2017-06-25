@@ -7,10 +7,10 @@ FastArduino is a C++, object-oriented library for Arduino boards based on AVR MC
 - ensure you pay (size and speed) only for what you use
 - use C++ Object-Oriented Design everywhere
 - reduce risk of bad code, e.g. by preventing usage, at compile time, of unexisting features (pins, timers...) for the target MCU
-- support and encourage event-driven programs
+- support event-driven programs
 - support both ATmega and ATtiny chips
 
-It was originally inspired by Cosa library from Mikael Patel.
+It was originally inspired by [Cosa library](https://github.com/mikaelpatel/Cosa) from Mikael Patel.
 
 After usage of Cosa libraries for several projects on ATmega328 and particularly ATtiny84, I found out that the current way Cosa is built has a few drawbacks related to:
 
@@ -19,7 +19,7 @@ After usage of Cosa libraries for several projects on ATmega328 and particularly
 
 From my viewpoint, the main source of those drawbacks is essentially heavy usage of `virtual` methods, which quickly increases code size when you start to define deep classes hierarchies; this also can have a slight impact on speed due to additional indirection when calling methods.
 
-FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one parent and direct children). 
+FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one abstract parent and direct children). 
 
 Also, no ISR gets automatically declared by FastArduino: every program declares the ISR it needs by using pre-defined FastArduino ISR-registration macros (note that ISR registration is the only feature for which FastArduino uses macros). FastArduino does not use `virtual` methods for ISR callbacks, thus permitting optimization of ISR code size, which would not have been possible with `virtual` methods as callbacks.
 
@@ -39,7 +39,7 @@ My special setup (I work on Windows but compile everything on an Ubuntu virtual 
 Status
 ======
 
-The project has started less than one year ago only, hence it does not cover everything yet, also its API is likely to change, more or less drastically, until April (see roadmap).
+The project has started a bit more than one year ago, it covers a lot already, but is not fully complete yet; also its API may still change, more or less drastically, during Summer 2017 (see roadmap).
 
 What the project already has:
 
@@ -65,7 +65,7 @@ What the project already has:
 - PWM output support
 - "Pulsed" Timer support (useful for Servos)
 - Servo control API
-- I2C master support (synchronous mode, ATmega only)
+- I2C master support (synchronous mode)
 - DS1307 RTC device support (I2C-based)
 
 As of now, the following platforms are supported (and tested):
@@ -87,27 +87,26 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-June-July 2017
---------------
-1. I2C master support (synchronous mode) for ATtiny
-2. Support other I2C devices: MCP23017 (IO multiplexer), MPU6050 (Accelerometer/Gyroscope), HMC5883L (Compass)
-3. Sonar ranger API
-4. Improve I2C master support (asynchronous mode)
+July 2017
+---------
+1. Support other I2C devices: MCP23017 (IO multiplexer), MPU6050 (Accelerometer/Gyroscope), HMC5883L (Compass)
+2. Sonar ranger API
+3. Improve I2C master support (asynchronous mode)
 
 August 2017
 -----------
-5. Add support for ATtinyX5
-6. Add USB support for Arduino Leonardo
-7. Improve Timer support (support input capture where available)
+4. Add support for ATtinyX5
+5. Add USB support for Arduino Leonardo
+6. Improve Timer support (support input capture where available)
 
 December 2017
 -------------
-8. Improve Analog Input support and code
-9. Improve SPI to support slave mode
-10. Improve I2C to support slave mode
-11. Add high-speed timer support of Arduino Leonardo
+7. Improve Analog Input support and code
+8. Improve SPI to support slave mode
+9. Improve I2C to support slave mode
+10. Add high-speed timer support of Arduino Leonardo
 
-In addition to these activities, I will start to perform continuous improvements at all times, regarding:
+In addition to these activities, I intend to perform various continuous improvements during Summer, regarding:
 
 - coding guidelines applied across the library code (not necessarily example code)
 - documentation (ISR handling, Board support adding, API...)
