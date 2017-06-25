@@ -296,7 +296,7 @@ namespace i2c
 		return send_byte(data, Status::DATA_TRANSMITTED_ACK, Status::DATA_TRANSMITTED_NACK);
 	}
 	template<I2CMode MODE>
-	bool I2CHandler<MODE>::receive_data(uint8_t& data, bool last_byte = false)
+	bool I2CHandler<MODE>::receive_data(uint8_t& data, bool last_byte)
 	{
 		SDA_INPUT();
 		data = transfer(USISR_DATA);
