@@ -30,7 +30,6 @@ namespace i2c
 	private:
 		using TRAIT = board_traits::TWI_trait;
 
-		//FIXME declaration only and implement later on
 		inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;
 
 		inline void begin() INLINE;
