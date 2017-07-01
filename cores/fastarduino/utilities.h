@@ -77,6 +77,15 @@ namespace utils
 		return bcd + binary;
 	}
 	
+	inline void swap_bytes(uint16_t& value)
+	{
+		value = (value >> 8) | (value << 8);
+	}
+	inline void swap_bytes(int16_t& value)
+	{
+		swap_bytes((uint16_t&)value);
+	}
+	
 	constexpr uint8_t calculate_delay1_count(float time_us)
 	{
 		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us);
