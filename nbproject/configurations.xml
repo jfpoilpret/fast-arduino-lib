@@ -19,6 +19,7 @@
       <logicalFolder name="devices" displayName="devices" projectFiles="true">
         <itemPath>cores/fastarduino/devices/ds1307.h</itemPath>
         <itemPath>cores/fastarduino/devices/hcsr04.h</itemPath>
+        <itemPath>cores/fastarduino/devices/hmc5883l.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p_internals.h</itemPath>
         <itemPath>cores/fastarduino/devices/servo.h</itemPath>
@@ -195,6 +196,11 @@
       </item>
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -355,6 +361,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -415,6 +427,11 @@
       <item path="cores/fastarduino/devices/ds1307.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
@@ -576,6 +593,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -636,6 +659,11 @@
       <item path="cores/fastarduino/devices/ds1307.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
@@ -797,6 +825,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -857,6 +891,11 @@
       <item path="cores/fastarduino/devices/ds1307.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
@@ -1018,6 +1057,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -1078,6 +1123,11 @@
       <item path="cores/fastarduino/devices/ds1307.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
@@ -1263,6 +1313,11 @@
       </item>
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -1446,6 +1501,11 @@
       <item path="cores/fastarduino/devices/ds1307.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
