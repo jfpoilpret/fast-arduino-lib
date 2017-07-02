@@ -1,7 +1,7 @@
 FastArduino
 ===========
 
-FastArduino is a C++, object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU. Its objectives are:
+FastArduino is a C++ object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU. Its objectives are:
 
 - provide smaller and faster code than other libraries for the same functionality
 - ensure you pay (size and speed) only for what you use
@@ -30,7 +30,7 @@ All this comes at a cost:
 
 Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++11 standard.
 
-In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are built through netbeans, which was hard to initially setup, but much more friendly to use once setup is done. Also netbeans automatically provides makefiles that make it possible to build projects in command line.
+In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are built through [netbeans](https://netbeans.org/), which was hard to initially setup, but much more friendly to use once setup is done. Also netbeans automatically provides makefiles that make it possible to build projects in command line.
 
 Making FastArduino buildable on Arduino IDE is not on my roadmap currently (and probably won't until long, as I'm more than happy with my current setup until now).
 
@@ -67,6 +67,7 @@ What the project already has:
 - Servo control API
 - I2C master support (synchronous mode)
 - DS1307 RTC device support (I2C-based)
+- HMC5883L magnetometer device support (I2C-based)
 
 As of now, the following platforms are supported (and tested):
 
@@ -87,14 +88,11 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-July 2017
----------
-1. Support other I2C devices: MCP23017 (IO multiplexer), MPU6050 (Accelerometer/Gyroscope), HMC5883L (Compass)
+July-August 2017
+----------------
+1. Support other I2C devices: MCP23017 (IO multiplexer), MPU6050 (Accelerometer/Gyroscope)
 2. Sonar ranger API
 3. Improve I2C master support (asynchronous mode)
-
-August 2017
------------
 4. Add support for ATtinyX5
 5. Add USB support for Arduino Leonardo
 6. Improve Timer support (support input capture where available)
