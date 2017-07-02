@@ -17,6 +17,8 @@
 #include <fastarduino/utilities.h>
 #include <fastarduino/uart.h>
 
+#include <math.h>
+
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
@@ -45,8 +47,15 @@ using streams::flush;
 using streams::dec;
 using streams::hex;
 
+static float magnetic_heading(int16_t x, int16_t y)
+{
+	float theta = atan2(y, x);
+	return theta;
+}
+
 //TODO create own source file in specific namespace
 //TODO Add optional support for DRDY pin (but it does not seem to work?)
+//TODO Add API (namespace level?) to calculate magnetic/true heading
 //TODO Check and optimize source code size
 struct MagneticFields
 {
@@ -126,9 +135,9 @@ public:
 		SamplesAveraged samples = SamplesAveraged::ONE_SAMPLE, 
 		MeasurementMode measurement = MeasurementMode::NORMAL)
 	{
-		_gain = gain;
+		_gain = GAIN(gain);
 		return		write_register(CONFIG_REG_A, uint8_t(measurement) | uint8_t(rate) | uint8_t(samples))
-				&&	write_register(CONFIG_REG_B, uint8_t(_gain))
+				&&	write_register(CONFIG_REG_B, uint8_t(gain))
 				&&	write_register(MODE_REG, uint8_t(mode));
 	}
 	
@@ -191,7 +200,7 @@ private:
 	
 	void convert_field_to_mGa(int16_t& value)
 	{
-		value = value * 1000L / GAIN(_gain);
+		value = value * 1000L / _gain;
 	}
 
 	static constexpr uint16_t GAIN(Gain gain)
@@ -205,8 +214,7 @@ private:
 				gain == Gain::GAIN_5_6GA ? 330 : 230);
 	}
 	
-	//TODO what is best to store Gain (uint8_t) or GAIN (int16_t)
-	Gain _gain;
+	uint16_t _gain;
 };
 
 using MAGNETOMETER = HMC5883L<i2c::I2CMode::Fast>;
@@ -256,17 +264,15 @@ int main()
 	trace_status(compass.status());
 	while (true)
 	{
-//		while (!compass.status().ready) time::delay_ms(1);
 		while (!compass.status().ready) ;
 		trace_status(compass.status());
-//		time::delay_ms(5000);
-//		time::delay_ms(100);
-//		trace_status(compass.status());
 		MagneticFields fields;
 		ok = compass.magnetic_fields(fields);
 //		out << dec << F("magnetic_fields() ") << ok << '\n' << flush;
 //		out << hex << F("status #3 ") << manager.status() << '\n' << flush;
 //		trace_fields(fields);
+		float heading = magnetic_heading(fields.x, fields.y);
+		out << F("Magnetic heading ") << heading << F(" rad\n") << flush;
 		compass.convert_fields_to_mGA(fields);
 		trace_fields(fields);
 		time::delay_ms(500);
