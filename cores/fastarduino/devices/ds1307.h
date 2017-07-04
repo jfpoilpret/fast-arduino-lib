@@ -59,8 +59,7 @@ namespace rtc
 	public:
 		DS1307(MANAGER& manager): I2CDevice(manager) {}
 
-		//TODO Error handling?
-		void setDateTime(tm& datetime)
+		bool setDateTime(tm& datetime)
 		{
 			// 1st convert datetime for DS1307 (BCD)
 			datetime.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
@@ -70,61 +69,63 @@ namespace rtc
 			datetime.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
 			datetime.tm_year = utils::binary_to_bcd(datetime.tm_year);
 			// send register address to write to (0)
-			write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP);
 			// send datetime at address 0
-			write(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP);
+			return		write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					&&	write(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 		
-		void getDateTime(tm& datetime)
+		bool getDateTime(tm& datetime)
 		{
 			// send register address to read from (0)
-			write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP);
 			// read datetime at address 0
-			read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP);
-			// convert DS1307 output (BCD) to integer type
-			datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
-			datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
-			datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
-			datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
-			datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
-			datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
+			if (	write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+				&&	read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+			{
+				// convert DS1307 output (BCD) to integer type
+				datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
+				datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
+				datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
+				datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
+				datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
+				datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
+			}
 		}
 		
-		void halt_clock()
+		bool halt_clock()
 		{
 			// just write 0x80 at address 0
-			write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP);
-			write(DEVICE_ADDRESS, uint8_t(0x80), i2c::BusConditions::NO_START_STOP);
+			return		write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					&&	write(DEVICE_ADDRESS, uint8_t(0x80), i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 		
-		void enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
+		bool enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
 		{
 			ControlRegister control;
 			control.sqwe = 1;
 			control.rs = uint8_t(frequency);
-			write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP);
-			write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP);
+			return		write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					&&	write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
-		void disable_output(bool output_value = false)
+		bool disable_output(bool output_value = false)
 		{
 			ControlRegister control;
 			control.out = output_value;
-			write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP);
-			write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP);
+			return		write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					&&	write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 		
 		static constexpr uint8_t ram_size()
 		{
 			return RAM_SIZE;
 		}
-		void set_ram(uint8_t address, uint8_t data)
+		bool set_ram(uint8_t address, uint8_t data)
 		{
 			address += RAM_START;
 			if (address < RAM_END)
-			{
-				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
-				write(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP);
-			}
+				return		write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+						&&	write(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+			else
+				return false;
 		}
 		uint8_t get_ram(uint8_t address)
 		{
@@ -138,32 +139,32 @@ namespace rtc
 			return data;
 		}
 		
-		void set_ram(uint8_t address, const uint8_t* data, uint8_t size)
+		bool set_ram(uint8_t address, const uint8_t* data, uint8_t size)
 		{
 			address += RAM_START;
 			if (address + size <= RAM_END)
-			{
-				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
-				write(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP);
-			}
+				return		write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+						&&	write(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+			else
+				return false;
 		}
-		void get_ram(uint8_t address, uint8_t* data, uint8_t size)
+		bool get_ram(uint8_t address, uint8_t* data, uint8_t size)
 		{
 			address += RAM_START;
 			if (address + size <= RAM_END)
-			{
-				write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP);
-				read(DEVICE_ADDRESS, data, size, i2c::BusConditions::REPEAT_START_STOP);
-			}
+				return		write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+						&&	read(DEVICE_ADDRESS, data, size, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK;
+			else
+				return false;
 		}
 		
-		template<typename T> void set_ram(uint8_t address, const T& data)
+		template<typename T> bool set_ram(uint8_t address, const T& data)
 		{
-			set_ram(address, &data, sizeof(T));
+			return set_ram(address, &data, sizeof(T));
 		}
-		template<typename T> void get_ram(uint8_t address, T& data)
+		template<typename T> bool get_ram(uint8_t address, T& data)
 		{
-			get_ram(address, &data, sizeof(T));
+			return get_ram(address, &data, sizeof(T));
 		}
 		
 	private:
