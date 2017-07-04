@@ -16,8 +16,8 @@
 #define HMC5883L_H
 
 #include <math.h>
-#include <fastarduino/i2c_device.h>
-#include <fastarduino/utilities.h>
+#include "../i2c_device.h'
+#include "../utilities.h"
 
 //TODO Add optional support for DRDY pin (but it does not seem to work?)
 //TODO Add API (namespace level?) to calculate magnetic/true heading
