@@ -16,7 +16,7 @@
 #define HMC5883L_H
 
 #include <math.h>
-#include "../i2c_device.h'
+#include "../i2c_device.h"
 #include "../utilities.h"
 
 //TODO Add optional support for DRDY pin (but it does not seem to work?)
