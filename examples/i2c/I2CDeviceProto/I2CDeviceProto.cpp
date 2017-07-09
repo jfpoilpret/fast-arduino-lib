@@ -154,9 +154,11 @@ int main()
 	PowerManagement power;
 	device.write(DEVICE_ADDRESS, GYRO_CONFIG, i2c::BusConditions::START_NO_STOP);
 	device.write(DEVICE_ADDRESS, uint8_t(GyroRange::RANGE_250), i2c::BusConditions::NO_START_NO_STOP);
-	device.write(DEVICE_ADDRESS, uint8_t(AccelRange::RANGE_2G), i2c::BusConditions::NO_START_STOP);
+//	device.write(DEVICE_ADDRESS, uint8_t(AccelRange::RANGE_2G), i2c::BusConditions::NO_START_STOP);
+	device.write(DEVICE_ADDRESS, uint8_t(AccelRange::RANGE_2G), i2c::BusConditions::NO_START_NO_STOP);
 	//TODO try repeat start instead!
-	device.write(DEVICE_ADDRESS, PWR_MGMT_1, i2c::BusConditions::START_NO_STOP);
+	device.write(DEVICE_ADDRESS, PWR_MGMT_1, i2c::BusConditions::REPEAT_START_NO_STOP);
+//	device.write(DEVICE_ADDRESS, PWR_MGMT_1, i2c::BusConditions::START_NO_STOP);
 	device.write(DEVICE_ADDRESS, power, i2c::BusConditions::NO_START_STOP);
 //	out << hex << F("status #2 ") << manager.status() << '\n' << flush;
 	

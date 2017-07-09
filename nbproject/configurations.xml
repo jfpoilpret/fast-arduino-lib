@@ -20,6 +20,7 @@
         <itemPath>cores/fastarduino/devices/ds1307.h</itemPath>
         <itemPath>cores/fastarduino/devices/hcsr04.h</itemPath>
         <itemPath>cores/fastarduino/devices/hmc5883l.h</itemPath>
+        <itemPath>cores/fastarduino/devices/mpu6050.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p.h</itemPath>
         <itemPath>cores/fastarduino/devices/nrf24l01p_internals.h</itemPath>
         <itemPath>cores/fastarduino/devices/servo.h</itemPath>
@@ -197,6 +198,11 @@
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/mpu6050.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -433,6 +439,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/mpu6050.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -661,6 +672,11 @@
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/mpu6050.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -897,6 +913,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/mpu6050.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -1129,6 +1150,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/mpu6050.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -1318,6 +1344,11 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/devices/mpu6050.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="cores/fastarduino/devices/nrf24l01p.h"
             ex="false"
             tool="3"
@@ -1503,6 +1534,11 @@
       <item path="cores/fastarduino/devices/hcsr04.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/devices/hmc5883l.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="cores/fastarduino/devices/mpu6050.h"
             ex="false"
             tool="3"
             flavor2="0">
