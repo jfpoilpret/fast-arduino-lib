@@ -20,13 +20,8 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-//TODO Externalize conversion for rotation speeds, accelerations
-// And make it generic (scale, bits-precision) and both ways
-
-//TODO add FIFO support? => callback?
+//TODO add FIFO support? API to set FIFO, and get read access to it.
 //TODO add INT support? => only API, ISR is in the hand of end application programmer.
-
-//TODO add 9DOF support (auxiliary I2C)? => does not seem really useful without knowing how to use the DMP...
 //TODO add other registers? what remains that is useful really?
 namespace devices
 {
@@ -108,6 +103,7 @@ namespace magneto
 		HIGH	= 1
 	};
 
+	//NOTE: MPU6050 auxiliary I2C is not supported.
 	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW>
 	class MPU6050: public i2c::I2CDevice<MODE>
 	{
