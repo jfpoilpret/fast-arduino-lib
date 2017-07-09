@@ -20,9 +20,6 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-//TODO check example
-//TODO allow AD0 selection (as template argument)
-
 //TODO Externalize conversion for rotation speeds, accelerations
 // And make it generic (scale, bits-precision) and both ways
 
@@ -38,15 +35,6 @@ namespace devices
 //TODO then should we also change directories structure or not necessarily (yet)
 namespace magneto
 {
-		//TODO infer best unit (millis, centi dps?)
-//		void convert_gyro_to_dps(int16_t& gyro)
-//		{
-//			// MPU-6000 Register Map datasheet §4.19 LSB sensitivity
-//			// Here we redo the calculation and use 32768 (instead of 32767) as half-range (for optimization)
-//			//TODO optimize calculus and avoid using long
-//			gyro = gyro * GYRO_RANGE_DPS(_gyro_range) / 32768L;
-//		}
-	
 	enum class GyroRange: uint8_t
 	{
 		RANGE_250	= 0 << 3,
@@ -113,8 +101,14 @@ namespace magneto
 		int16_t		temperature;
 		Sensor3D	accel;
 	};
+	
+	enum class AD0: uint8_t
+	{
+		LOW		= 0,
+		HIGH	= 1
+	};
 
-	template<i2c::I2CMode MODE = i2c::I2CMode::Fast>
+	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW>
 	class MPU6050: public i2c::I2CDevice<MODE>
 	{
 	public:
@@ -203,7 +197,7 @@ namespace magneto
 		}
 
 	private:
-		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
+		static constexpr const uint8_t DEVICE_ADDRESS = (0x68 | uint8_t(AD0)) << 1;
 
 		static constexpr const uint8_t SMPRT_DIV = 0x19;
 		static constexpr const uint8_t CONFIG = 0x1A;
