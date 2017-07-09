@@ -67,12 +67,19 @@ namespace utils
 	}
 	
 	//TODO make it templatized on input type? output type?
-	constexpr int16_t map(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
+	constexpr int16_t map_raw_to_physical(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
 	{
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
 		return (int8_t(prefix) > 0 ? 
 				value * range / power_of_10(int8_t(prefix)) / (1UL << precision_bits) :
 				value * range * power_of_10(int8_t(prefix)) / (1UL << precision_bits));
+	}
+	constexpr int16_t map_physical_to_raw(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
+	{
+		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
+		return (int8_t(prefix) > 0 ? 
+				value * (1UL << precision_bits) * power_of_10(int8_t(prefix)) / range :
+				value * (1UL << precision_bits) / power_of_10(int8_t(prefix)) / range);
 	}
 	
 	constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)

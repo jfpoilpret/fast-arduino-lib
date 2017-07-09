@@ -41,7 +41,7 @@ static serial::soft::UATX<TX> uart{output_buffer};
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 using utils::UnitPrefix;
-using utils::map;
+using utils::map_raw_to_physical;
 using devices::magneto::MPU6050;
 using devices::magneto::AllSensors;
 using devices::magneto::AccelRange;
@@ -58,11 +58,11 @@ static constexpr const AccelRange ACCEL_RANGE = AccelRange::RANGE_2G;
 
 inline int16_t gyro(int16_t value)
 {
-	return map(value, UnitPrefix::CENTI, GYRO_RANGE_DPS(GYRO_RANGE), 15);
+	return map_raw_to_physical(value, UnitPrefix::CENTI, GYRO_RANGE_DPS(GYRO_RANGE), 15);
 }
 inline int16_t accel(int16_t value)
 {
-	return map(value, UnitPrefix::MILLI, ACCEL_RANGE_G(ACCEL_RANGE), 15);
+	return map_raw_to_physical(value, UnitPrefix::MILLI, ACCEL_RANGE_G(ACCEL_RANGE), 15);
 }
 
 void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
