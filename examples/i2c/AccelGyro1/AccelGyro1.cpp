@@ -40,12 +40,30 @@ static serial::soft::UATX<TX> uart{output_buffer};
 #endif
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
+using utils::UnitPrefix;
+using utils::map;
 using devices::magneto::MPU6050;
 using devices::magneto::AllSensors;
+using devices::magneto::AccelRange;
+using devices::magneto::GyroRange;
+using devices::magneto::ACCEL_RANGE_G;
+using devices::magneto::GYRO_RANGE_DPS;
 
 using streams::dec;
 using streams::hex;
 using streams::flush;
+
+static constexpr const GyroRange GYRO_RANGE = GyroRange::RANGE_250;
+static constexpr const AccelRange ACCEL_RANGE = AccelRange::RANGE_2G;
+
+inline int16_t gyro(int16_t value)
+{
+	return map(value, UnitPrefix::CENTI, GYRO_RANGE_DPS(GYRO_RANGE), 15);
+}
+inline int16_t accel(int16_t value)
+{
+	return map(value, UnitPrefix::MILLI, ACCEL_RANGE_G(ACCEL_RANGE), 15);
+}
 
 void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
 {
@@ -73,7 +91,7 @@ int main()
 
 	ACCELEROMETER mpu{manager};
 	
-	bool ok = mpu.begin();
+	bool ok = mpu.begin(GyroRange::RANGE_250, AccelRange::RANGE_2G);
 	out << dec << F("begin() ") << ok << '\n' << flush;
 	while (true)
 	{
@@ -83,14 +101,21 @@ int main()
 		if (ok)
 		{
 			out	<< dec 
-				<< F("Gyro x = ") << sensors.gyro.x 
+				<< F("raw Gyro x = ") << sensors.gyro.x 
 				<< F(", y = ") << sensors.gyro.y 
 				<< F(", z = ") << sensors.gyro.z << '\n' << flush;
 			out	<< dec 
-				<< F("Accel x = ") << sensors.accel.x 
+				<< F("cdps Gyro x = ") << gyro(sensors.gyro.x)
+				<< F(", y = ") << gyro(sensors.gyro.y) 
+				<< F(", z = ") << gyro(sensors.gyro.z) << '\n' << flush;
+			out	<< dec 
+				<< F("raw Accel x = ") << sensors.accel.x 
 				<< F(", y = ") << sensors.accel.y 
 				<< F(", z = ") << sensors.accel.z << '\n' << flush;
-			//TODO methods to convert data: accel, gyro, temperature
+			out	<< dec 
+				<< F("mG Accel x = ") << accel(sensors.accel.x) 
+				<< F(", y = ") << accel(sensors.accel.y) 
+				<< F(", z = ") << accel(sensors.accel.z) << '\n' << flush;
 			// Also check the temperature precision as per datasheet
 			out << dec << F("Temp = ") << mpu.convert_temp_to_centi_degrees(sensors.temperature) << F(" centi-C\n") << flush;
 		}
