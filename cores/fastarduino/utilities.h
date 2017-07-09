@@ -43,6 +43,38 @@ namespace utils
 		return output_min + (value - input_min) * (output_max - output_min) / (input_max - input_min);
 	}
 
+	// NOTE: we use prefixes that can be covered in a uint32
+	enum class UnitPrefix: int8_t
+	{
+		GIGA	= 9,
+		MEGA	= 6,
+		KILO	= 3,
+		HECTO	= 2,
+		DECA	= 1,
+		NONE	= 0,
+		DECI	= -1,
+		CENTI	= -2,
+		MILLI	= -3,
+		MICRO	= -6,
+		NANO	= -9,
+	};
+	
+	constexpr uint32_t power_of_10(int8_t n)
+	{
+		return (n > 0 ? 10UL * power_of_10(n - 1) :
+				n == 0 ? 1 :
+				power_of_10(-n));
+	}
+	
+	//TODO make it templatized on input type? output type?
+	constexpr int16_t map(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
+	{
+		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
+		return (int8_t(prefix) > 0 ? 
+				value * range / power_of_10(int8_t(prefix)) / (1UL << precision_bits) :
+				value * range * power_of_10(int8_t(prefix)) / (1UL << precision_bits));
+	}
+	
 	constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 	{
 		return (high << 8) | low;
