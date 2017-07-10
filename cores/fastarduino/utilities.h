@@ -125,10 +125,24 @@ namespace utils
 		swap_bytes((uint16_t&)value);
 	}
 	
+	
+	template<typename T>
+	union ToUint8
+	{
+		static_assert(sizeof(T) == 1, "T must be a one-byte size type");
+		ToUint8(T value): value(value) {}
+		T value;
+		uint8_t as_uint8;
+	};
+	template<typename T>
+	constexpr uint8_t as_uint8_t(T input)
+	{
+		return ToUint8<T>(input).as_uint8;
+	}
+	
 	constexpr uint8_t calculate_delay1_count(float time_us)
 	{
 		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us);
-//		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us + 1);
 	}
 }
 
