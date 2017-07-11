@@ -20,8 +20,8 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-//TODO add FIFO support? API to set FIFO, and get read access to it.
-//TODO add INT support? => only API, ISR is in the hand of end application programmer.
+//TODO check FIFO support
+//TODO check INT support (Digital Analyzer only?)
 //TODO add other registers? what remains that is useful really?
 namespace devices
 {
@@ -210,6 +210,12 @@ namespace magneto
 			return temperature;
 		}
 		
+		static int16_t convert_temp_to_centi_degrees(int16_t temp)
+		{
+			// MPU-6000 Register Map datasheet §4.18 formula: Tc = TEMP / 340 + 36.53
+			return int16_t(temp * 10L / 34L + 3653);
+		}
+
 		bool accel_measures(Sensor3D& accel)
 		{
 			if (	this->write(DEVICE_ADDRESS, ACCEL_XOUT, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
@@ -244,7 +250,12 @@ namespace magneto
 			return status;
 		}
 		
-		//TODO factor out common parts (almost always the same except register address
+		bool reset_fifo()
+		{
+			return		this->write(DEVICE_ADDRESS, USER_CTRL, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					&&	this->write(DEVICE_ADDRESS, uint8_t(0x44), i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+		}
+		
 		uint16_t fifo_count()
 		{
 			uint16_t count = 0;
@@ -255,23 +266,9 @@ namespace magneto
 		}
 		
 		template<typename T>
-		inline bool fifo_pop(T& output)
+		inline bool fifo_pop(T& output, bool wait = false)
 		{
-			return fifo_pop((int16_t*) &output, sizeof(T) / 2);
-		}
-		bool fifo_pop(int16_t& output)
-		{
-			uint8_t* value = (uint8_t*) &output;
-			return (	this->write(DEVICE_ADDRESS, FIFO_R_W, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-					&&	this->read(DEVICE_ADDRESS, value[1], i2c::BusConditions::REPEAT_START_NO_STOP) == i2c::Status::OK
-					&&	this->write(DEVICE_ADDRESS, FIFO_R_W, i2c::BusConditions::REPEAT_START_NO_STOP) == i2c::Status::OK
-					&&	this->read(DEVICE_ADDRESS, value[0], i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK);
-		}
-
-		static int16_t convert_temp_to_centi_degrees(int16_t temp)
-		{
-			// MPU-6000 Register Map datasheet §4.18 formula: Tc = TEMP / 340 + 36.53
-			return int16_t(temp * 10L / 34L + 3653);
+			return fifo_pop((uint8_t*) &output, sizeof(T), wait);
 		}
 
 	private:
@@ -313,12 +310,25 @@ namespace magneto
 			utils::swap_bytes(sensors.z);
 		}
 		
-		bool fifo_pop(int16_t* buffer, uint8_t size)
+		bool fifo_pop(uint8_t* buffer, uint8_t size, bool wait)
 		{
-			while (size--)
-				if (!fifo_pop(*buffer++))
+			while (fifo_count() < size)
+				if (!wait) 
 					return false;
-			return true;
+				else
+					//TODO yield here instead?
+					;
+			if (	this->write(DEVICE_ADDRESS, FIFO_R_W, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+				&&	this->read(DEVICE_ADDRESS, buffer, size, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+			{
+				// Swap all 2-bytes words
+				uint16_t* temp = (uint16_t*) buffer;
+				size /= 2;
+				while (size--)
+					utils::swap_bytes(*temp++);
+				return true;
+			}
+			return false;
 		}
 
 	};

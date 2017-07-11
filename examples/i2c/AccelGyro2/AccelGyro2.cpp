@@ -102,44 +102,41 @@ int main()
 	int_enable.data_ready = 1;
 	bool ok = mpu.begin(fifo_enable, int_enable, SAMPLE_RATE_DIVIDER, GyroRange::RANGE_250, AccelRange::RANGE_2G);
 	out << dec << F("begin() ") << ok << '\n' << flush;
+	ok = mpu.reset_fifo();
+	out << dec << F("reset_fifo() ") << ok << '\n' << flush;
 	while (true)
 	{
-		INTStatus status = mpu.interrupt_status();
-		out << hex << F("INTStatus = ") << utils::as_uint8_t(status) << '\n' << flush;
-		if (status.data_ready)
+//		INTStatus status = mpu.interrupt_status();
+//		out << hex << F("INTStatus = ") << utils::as_uint8_t(status) << '\n' << flush;
+//		uint16_t count = mpu.fifo_count();
+//		out << dec << F("FIFO count = ") << count << '\n' << flush;
+
+		AllSensors sensors;
+		if (mpu.fifo_pop(sensors, true))
 		{
-			uint16_t count = mpu.fifo_count();
-			out << dec << F("FIFO count = ") << count << '\n' << flush;
-			while (status.data_ready)
-			{
-				AllSensors sensors;
-				if (mpu.fifo_pop(sensors))
-				{
 //					out	<< dec 
 //						<< F("raw Gyro x = ") << sensors.gyro.x 
 //						<< F(", y = ") << sensors.gyro.y 
 //						<< F(", z = ") << sensors.gyro.z << '\n' << flush;
-					out	<< dec 
-						<< F("cdps Gyro x = ") << gyro(sensors.gyro.x)
-						<< F(", y = ") << gyro(sensors.gyro.y) 
-						<< F(", z = ") << gyro(sensors.gyro.z) << '\n' << flush;
 //					out	<< dec 
 //						<< F("raw Accel x = ") << sensors.accel.x 
 //						<< F(", y = ") << sensors.accel.y 
 //						<< F(", z = ") << sensors.accel.z << '\n' << flush;
-					out	<< dec 
-						<< F("mG Accel x = ") << accel(sensors.accel.x) 
-						<< F(", y = ") << accel(sensors.accel.y) 
-						<< F(", z = ") << accel(sensors.accel.z) << '\n' << flush;
-					// Also check the temperature precision as per datasheet
-					out << dec << F("Temp = ") << mpu.convert_temp_to_centi_degrees(sensors.temperature) << F(" centi-C\n") << flush;
-				}
-				else
-					out << F("fifo_pop() KO\n") << flush;
-				status = mpu.interrupt_status();
-			}
+					
+			out	<< dec 
+				<< F("cdps Gyro x = ") << gyro(sensors.gyro.x)
+				<< F(", y = ") << gyro(sensors.gyro.y) 
+				<< F(", z = ") << gyro(sensors.gyro.z) << '\n' << flush;
+			out	<< dec 
+				<< F("mG Accel x = ") << accel(sensors.accel.x) 
+				<< F(", y = ") << accel(sensors.accel.y) 
+				<< F(", z = ") << accel(sensors.accel.z) << '\n' << flush;
+			// Also check the temperature precision as per datasheet
+			out << dec << F("Temp = ") << mpu.convert_temp_to_centi_degrees(sensors.temperature) << F(" centi-C\n") << flush;
 		}
-		time::delay_ms(1000);
+		else
+			out << F("fifo_pop() KO\n") << flush;
+		time::delay_ms(10);
 	}
 	
 	// Stop TWI interface
