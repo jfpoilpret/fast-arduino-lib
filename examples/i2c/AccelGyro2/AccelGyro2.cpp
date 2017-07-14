@@ -50,6 +50,7 @@ using devices::magneto::FIFOEnable;
 using devices::magneto::INTStatus;
 using devices::magneto::ACCEL_RANGE_G;
 using devices::magneto::GYRO_RANGE_DPS;
+using devices::magneto::DLPF;
 
 using streams::dec;
 using streams::hex;
@@ -100,7 +101,8 @@ int main()
 	fifo_enable.accel = fifo_enable.gyro_x = fifo_enable.gyro_y = fifo_enable.gyro_z = fifo_enable.temperature = 1;
 	INTStatus int_enable;
 	int_enable.data_ready = 1;
-	bool ok = mpu.begin(fifo_enable, int_enable, SAMPLE_RATE_DIVIDER, GyroRange::RANGE_250, AccelRange::RANGE_2G);
+	bool ok = mpu.begin(fifo_enable, int_enable, SAMPLE_RATE_DIVIDER, 
+						GyroRange::RANGE_250, AccelRange::RANGE_2G, DLPF::ACCEL_BW_5HZ);
 	out << dec << F("begin() ") << ok << '\n' << flush;
 	ok = mpu.reset_fifo();
 	out << dec << F("reset_fifo() ") << ok << '\n' << flush;

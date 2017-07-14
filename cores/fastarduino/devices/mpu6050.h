@@ -20,9 +20,6 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-//TODO check FIFO support
-//TODO check INT support (Digital Analyzer only?)
-//TODO add other registers? what remains that is useful really?
 namespace devices
 {
 //FIXME rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
@@ -83,6 +80,25 @@ namespace magneto
 		STOPPED				= 7
 	};
 	
+	enum class DLPF: uint8_t
+	{
+		ACCEL_BW_260HZ		= 0,
+		ACCEL_BW_184HZ		= 1,
+		ACCEL_BW_94HZ		= 2,
+		ACCEL_BW_44HZ		= 3,
+		ACCEL_BW_21HZ		= 4,
+		ACCEL_BW_10HZ		= 5,
+		ACCEL_BW_5HZ		= 6,
+		
+		GYRO_BW_256HZ		= 0,
+		GYRO_BW_188HZ		= 1,
+		GYRO_BW_98HZ		= 2,
+		GYRO_BW_42HZ		= 3,
+		GYRO_BW_20HZ		= 4,
+		GYRO_BW_10HZ		= 5,
+		GYRO_BW_5HZ			= 6
+	};
+	
 	struct FIFOEnable
 	{
 		FIFOEnable(): reserved{}, accel{}, gyro_z{}, gyro_y{}, gyro_x{}, temperature{} {}
@@ -132,11 +148,13 @@ namespace magneto
 
 		bool begin( GyroRange gyro_range = GyroRange::RANGE_250,
 					AccelRange accel_range = AccelRange::RANGE_2G,
+					DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
 					ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 		{
 			PowerManagement power;
 			power.clock_select = uint8_t(clock_select);
-			return		this->write(DEVICE_ADDRESS, GYRO_CONFIG, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+			return		this->write(DEVICE_ADDRESS, CONFIG, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					&&	this->write(DEVICE_ADDRESS, uint8_t(low_pass_filter), i2c::BusConditions::NO_START_NO_STOP) == i2c::Status::OK
 					&&	this->write(DEVICE_ADDRESS, uint8_t(gyro_range), i2c::BusConditions::NO_START_NO_STOP) == i2c::Status::OK
 					&&	this->write(DEVICE_ADDRESS, uint8_t(accel_range), i2c::BusConditions::NO_START_NO_STOP) == i2c::Status::OK
 					&&	this->write(DEVICE_ADDRESS, PWR_MGMT_1, i2c::BusConditions::REPEAT_START_NO_STOP) == i2c::Status::OK
@@ -148,15 +166,17 @@ namespace magneto
 					uint8_t sample_rate_divider,
 					GyroRange gyro_range = GyroRange::RANGE_250,
 					AccelRange accel_range = AccelRange::RANGE_2G,
+					DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
 					ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 		{
 			fifo_enable.reserved = 0;
 			if (utils::as_uint8_t(fifo_enable) == 0)
-				return begin(gyro_range, accel_range, clock_select);
+				return begin(gyro_range, accel_range, low_pass_filter, clock_select);
 			int_enable.reserved1 = int_enable.reserved2 = 0;
 			PowerManagement power;
 			power.clock_select = uint8_t(clock_select);
-			return		this->write(DEVICE_ADDRESS, GYRO_CONFIG, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+			return		this->write(DEVICE_ADDRESS, CONFIG, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					&&	this->write(DEVICE_ADDRESS, uint8_t(low_pass_filter), i2c::BusConditions::NO_START_NO_STOP) == i2c::Status::OK
 					&&	this->write(DEVICE_ADDRESS, uint8_t(gyro_range), i2c::BusConditions::NO_START_NO_STOP) == i2c::Status::OK
 					&&	this->write(DEVICE_ADDRESS, uint8_t(accel_range), i2c::BusConditions::NO_START_NO_STOP) == i2c::Status::OK
 					
@@ -316,8 +336,9 @@ namespace magneto
 				if (!wait) 
 					return false;
 				else
+				{
 					//TODO yield here instead?
-					;
+				}
 			if (	this->write(DEVICE_ADDRESS, FIFO_R_W, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
 				&&	this->read(DEVICE_ADDRESS, buffer, size, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
 			{
