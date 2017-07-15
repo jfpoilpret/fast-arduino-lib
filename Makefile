@@ -118,13 +118,6 @@ help: .help-post
 .help-post: .help-impl
 # Add your post 'help' code here...
 
-#TODO Add new examples: Servo, Sonar
-examples: build
-	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF};)
-
-clean-examples: clean
-	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF} clean;)
-	
 # include project implementation makefile
 include nbproject/Makefile-impl.mk
 

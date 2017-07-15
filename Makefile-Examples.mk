@@ -68,3 +68,10 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway							\
 
 # Finally define all examples supported for the current variant (defined by current configuration)
 ALL_EXAMPLES = ${COMMON_EXAMPLES} ${EXAMPLES_${VARIANT}}
+
+# Special build target for all fastArduino examples
+examples: build
+	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF};)
+
+clean-examples: clean
+	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF} clean;)
