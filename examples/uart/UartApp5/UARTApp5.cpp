@@ -23,7 +23,7 @@
  * - stop bits (1 or 2)
  * 
  * Wiring:
- * - on Arduino UNO and Arduino MEGA:
+ * - on Arduino UNO, Arduino NANO and Arduino MEGA:
  *   - Use standard TX/RX
  * - on ATmega328P based boards:
  *   - Use standard TX/RX connected to an Serial-USB converter

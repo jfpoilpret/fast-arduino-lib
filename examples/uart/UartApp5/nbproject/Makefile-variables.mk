@@ -30,6 +30,14 @@ CND_ARTIFACT_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/u
 CND_PACKAGE_DIR_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_MEGA-Release=uartapp5.tar
 CND_PACKAGE_PATH_MEGA-Release=dist/MEGA-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/uartapp5.tar
+# ATmega328-16MHz-Release configuration
+CND_PLATFORM_ATmega328-16MHz-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_ATmega328-16MHz-Release=uartapp5
+CND_ARTIFACT_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/uartapp5
+CND_PACKAGE_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_ATmega328-16MHz-Release=uartapp5.tar
+CND_PACKAGE_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/uartapp5.tar
 #
 # include compiler specific variables
 #

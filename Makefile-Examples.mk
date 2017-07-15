@@ -41,9 +41,7 @@ EXAMPLES_ARDUINO_UNO=		complete/Conway							\
 
 EXAMPLES_ARDUINO_LEONARDO=	complete/Conway							\
 				int/ExternalInterrupt3						\
-				uart/UartApp1							\
-				uart/UartApp5							\
-				uart/UartApp6							
+				uart/UartApp1							
 
 EXAMPLES_ARDUINO_MEGA=		int/ExternalInterrupt3						\
 				pci/PinChangeInterrupt4						\
