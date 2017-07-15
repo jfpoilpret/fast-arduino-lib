@@ -45,7 +45,7 @@ template<typename T>
 static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)
 {
 	out << type << F(": ") << streams::flush;
-	T value;
+	T value{};
 	in >> streams::skipws >> value;
 	out << value << streams::endl << streams::flush;
 }

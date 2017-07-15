@@ -89,7 +89,11 @@ namespace eeprom
 		}
 		inline static bool read(uint16_t address, uint8_t& value)
 		{
-			if (!check(address, 1)) return false;
+			if (!check(address, 1))
+			{
+				value = 0xFF;
+				return false;
+			}
 			_blocked_read(address, value);
 			return true;
 		}
