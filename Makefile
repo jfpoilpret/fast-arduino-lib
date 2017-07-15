@@ -120,118 +120,11 @@ help: .help-post
 
 #TODO Add new examples: Servo, Sonar
 examples: build
-	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF}
-	$(MAKE) -C examples/analog/AnalogPin2 CONF=${CONF}
-ifeq ($(findstring MEGA,${CONF}),)
-	$(MAKE) -C examples/complete/Conway CONF=${CONF}
-endif
-	$(MAKE) -C examples/eeprom/Eeprom1 CONF=${CONF}
-	$(MAKE) -C examples/eeprom/Eeprom2 CONF=${CONF}
-	$(MAKE) -C examples/eeprom/Eeprom3 CONF=${CONF}
-	$(MAKE) -C examples/eeprom/Eeprom4 CONF=${CONF}
-	$(MAKE) -C examples/events/EventApp1 CONF=${CONF}
-	$(MAKE) -C examples/events/EventApp2 CONF=${CONF}
-	$(MAKE) -C examples/events/EventApp3 CONF=${CONF}
-	$(MAKE) -C examples/events/EventApp4 CONF=${CONF}
-	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF}
-	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF}
-ifeq ($(findstring ATtiny84,${CONF}),)
-	$(MAKE) -C examples/int/ExternalInterrupt3 CONF=${CONF}
-endif
-	$(MAKE) -C examples/io/FastPin1 CONF=${CONF}
-	$(MAKE) -C examples/io/FastPin2 CONF=${CONF}
-	$(MAKE) -C examples/io/FastPin3 CONF=${CONF}
-	$(MAKE) -C examples/io/FastPin4 CONF=${CONF}
-	$(MAKE) -C examples/io/FastPin5 CONF=${CONF}
-	$(MAKE) -C examples/misc/Flash1 CONF=${CONF}
-	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF}
-	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF}
-	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF}
-ifeq ($(findstring LEONARDO,${CONF}),)
-	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF}
-endif
-	$(MAKE) -C examples/analog/PWM1 CONF=${CONF}
-	$(MAKE) -C examples/analog/PWM2 CONF=${CONF}
-	$(MAKE) -C examples/analog/PWM3 CONF=${CONF}
-	$(MAKE) -C examples/analog/PWM4 CONF=${CONF}
-	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF}
-	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF}
-	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF}
-	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF}
-	$(MAKE) -C examples/motors/Servo1 CONF=${CONF}
-	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF}
-	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF}
-	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF}
-	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF}
-	$(MAKE) -C examples/spi/WinBond CONF=${CONF}
-ifeq ($(findstring ATtiny84,${CONF}),)
-	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF}
-endif
-	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF}
-	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF}
-	$(MAKE) -C examples/uart/UartApp4 CONF=${CONF}
-ifeq ($(findstring ATtiny84,${CONF}),)
-	$(MAKE) -C examples/uart/UartApp5 CONF=${CONF}
-	$(MAKE) -C examples/uart/UartApp6 CONF=${CONF}
-endif
+	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF};)
 
 clean-examples: clean
-	$(MAKE) -C examples/analog/AnalogPin1 CONF=${CONF} clean
-	$(MAKE) -C examples/analog/AnalogPin2 CONF=${CONF} clean
-ifeq ($(findstring MEGA,${CONF}),)
-	$(MAKE) -C examples/complete/Conway CONF=${CONF} clean
-endif
-	$(MAKE) -C examples/eeprom/Eeprom1 CONF=${CONF} clean
-	$(MAKE) -C examples/eeprom/Eeprom2 CONF=${CONF} clean
-	$(MAKE) -C examples/eeprom/Eeprom3 CONF=${CONF} clean
-	$(MAKE) -C examples/eeprom/Eeprom4 CONF=${CONF} clean
-	$(MAKE) -C examples/events/EventApp1 CONF=${CONF} clean
-	$(MAKE) -C examples/events/EventApp2 CONF=${CONF} clean
-	$(MAKE) -C examples/events/EventApp3 CONF=${CONF} clean
-	$(MAKE) -C examples/events/EventApp4 CONF=${CONF} clean
-	$(MAKE) -C examples/int/ExternalInterrupt1 CONF=${CONF} clean
-	$(MAKE) -C examples/int/ExternalInterrupt2 CONF=${CONF} clean
-ifeq ($(findstring ATtiny84,${CONF}),)
-	$(MAKE) -C examples/int/ExternalInterrupt3 CONF=${CONF} clean
-endif
-	$(MAKE) -C examples/io/FastPin1 CONF=${CONF} clean
-	$(MAKE) -C examples/io/FastPin2 CONF=${CONF} clean
-	$(MAKE) -C examples/io/FastPin3 CONF=${CONF} clean
-	$(MAKE) -C examples/io/FastPin4 CONF=${CONF} clean
-	$(MAKE) -C examples/io/FastPin5 CONF=${CONF} clean
-	$(MAKE) -C examples/misc/Flash1 CONF=${CONF} clean
-	$(MAKE) -C examples/pci/PinChangeInterrupt1 CONF=${CONF} clean
-	$(MAKE) -C examples/pci/PinChangeInterrupt2 CONF=${CONF} clean
-	$(MAKE) -C examples/pci/PinChangeInterrupt3 CONF=${CONF} clean
-ifeq ($(findstring LEONARDO,${CONF}),)
-	$(MAKE) -C examples/pci/PinChangeInterrupt4 CONF=${CONF} clean
-endif
-	$(MAKE) -C examples/analog/PWM1 CONF=${CONF} clean
-	$(MAKE) -C examples/analog/PWM2 CONF=${CONF} clean
-	$(MAKE) -C examples/analog/PWM3 CONF=${CONF} clean
-	$(MAKE) -C examples/analog/PWM4 CONF=${CONF} clean
-	$(MAKE) -C examples/rtt/RTTApp1b CONF=${CONF} clean
-	$(MAKE) -C examples/rtt/RTTApp2 CONF=${CONF} clean
-	$(MAKE) -C examples/rtt/RTTApp3 CONF=${CONF} clean
-	$(MAKE) -C examples/rtt/RTTApp4 CONF=${CONF} clean
-	$(MAKE) -C examples/motors/Servo1 CONF=${CONF} clean
-	$(MAKE) -C examples/rtt/TimerApp3 CONF=${CONF} clean
-	$(MAKE) -C examples/rtt/TimerApp4 CONF=${CONF} clean
-	$(MAKE) -C examples/spi/RF24App1 CONF=${CONF} clean
-	$(MAKE) -C examples/spi/RF24App2 CONF=${CONF} clean
-	$(MAKE) -C examples/spi/WinBond CONF=${CONF} clean
-ifeq ($(findstring ATtiny84,${CONF}),)
-	$(MAKE) -C examples/uart/UartApp1 CONF=${CONF} clean
-endif
-	$(MAKE) -C examples/uart/UartApp2 CONF=${CONF} clean
-	$(MAKE) -C examples/uart/UartApp3 CONF=${CONF} clean
-	$(MAKE) -C examples/uart/UartApp4 CONF=${CONF} clean
-ifeq ($(findstring ATtiny84,${CONF}),)
-	$(MAKE) -C examples/uart/UartApp5 CONF=${CONF} clean
-	$(MAKE) -C examples/uart/UartApp6 CONF=${CONF} clean
-endif
-
-
+	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF} clean;)
+	
 # include project implementation makefile
 include nbproject/Makefile-impl.mk
 
@@ -240,3 +133,6 @@ include nbproject/Makefile-variables.mk
 
 # include FastArduino make
 include Makefile-FastArduino.mk
+
+# include list of all examples
+include Makefile-Examples.mk

@@ -101,6 +101,7 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
+      <itemPath>Makefile-Examples.mk</itemPath>
       <itemPath>Makefile-FastArduino.mk</itemPath>
     </logicalFolder>
   </logicalFolder>
@@ -337,6 +338,12 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
                             from="${OUTPUT_PATH}"
@@ -610,6 +617,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -847,6 +860,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -1048,6 +1067,12 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
                             from="${OUTPUT_PATH}"
