@@ -38,7 +38,7 @@
 #include <fastarduino/analog_input.h>
 #include <fastarduino/pwm.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D6_PD6_OC0A;

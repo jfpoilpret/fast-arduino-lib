@@ -49,7 +49,9 @@ EXAMPLES_ARDUINO_MEGA=		int/ExternalInterrupt3						\
 				uart/UartApp5							\
 				uart/UartApp6							
 
-EXAMPLES_ARDUINO_NANO=		uart/UartApp1							\
+EXAMPLES_ARDUINO_NANO=		int/ExternalInterrupt3						\
+				pci/PinChangeInterrupt4						\
+				uart/UartApp1							\
 				uart/UartApp5							\
 				uart/UartApp6							
 

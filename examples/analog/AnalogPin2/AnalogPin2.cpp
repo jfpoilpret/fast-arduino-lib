@@ -36,7 +36,7 @@
 #include <fastarduino/analog_input.h>
 #include <fastarduino/gpio.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_LEONARDO)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_LEONARDO) || defined(ARDUINO_NANO)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 static constexpr const uint8_t LED_MASK = 0xFF;

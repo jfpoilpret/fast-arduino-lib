@@ -31,7 +31,7 @@
 #include <util/delay.h>
 #include <fastarduino/devices/winbond.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #include <fastarduino/uart.h>
 
 constexpr const board::DigitalPin CS = board::DigitalPin::D7_PD7;

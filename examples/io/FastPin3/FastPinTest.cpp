@@ -31,7 +31,7 @@
 #include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_LEONARDO)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO) || defined(ARDUINO_LEONARDO)
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;

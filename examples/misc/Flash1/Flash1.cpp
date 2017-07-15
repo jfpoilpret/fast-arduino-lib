@@ -28,7 +28,7 @@
 
 #include <fastarduino/flash.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;

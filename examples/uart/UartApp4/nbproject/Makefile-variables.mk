@@ -54,6 +54,14 @@ CND_ARTIFACT_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-T
 CND_PACKAGE_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_ATmega328-16MHz-Release=uartapp2.tar
 CND_PACKAGE_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/uartapp2.tar
+# NANO-Release configuration
+CND_PLATFORM_NANO-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_NANO-Release=uartapp4
+CND_ARTIFACT_PATH_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/uartapp4
+CND_PACKAGE_DIR_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_NANO-Release=uartapp4.tar
+CND_PACKAGE_PATH_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/uartapp4.tar
 #
 # include compiler specific variables
 #

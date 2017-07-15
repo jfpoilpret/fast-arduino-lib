@@ -30,7 +30,7 @@
 #include <fastarduino/gpio.h>
 #include <fastarduino/realtime_timer.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_RTT_ISR(1)

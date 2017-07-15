@@ -19,7 +19,7 @@
 
 #include <fastarduino/gpio.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static gpio::FastPort<board::Port::PORT_B> PortB;
 static gpio::FastPinType<board::DigitalPin::D0_PD0>::TYPE PinD0{gpio::PinMode::INPUT};
 static gpio::FastPinType<board::DigitalPin::D1_PD1>::TYPE PinD1{gpio::PinMode::INPUT_PULLUP};

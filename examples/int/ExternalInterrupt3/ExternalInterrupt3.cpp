@@ -33,7 +33,7 @@
 #include <fastarduino/int.h>
 #include <fastarduino/power.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 constexpr const board::DigitalPin SWITCH_ON = board::ExternalInterruptPin::D2_PD2_EXT0;
 constexpr const board::DigitalPin SWITCH_OFF = board::ExternalInterruptPin::D3_PD3_EXT1;
 #elif defined (ARDUINO_LEONARDO)

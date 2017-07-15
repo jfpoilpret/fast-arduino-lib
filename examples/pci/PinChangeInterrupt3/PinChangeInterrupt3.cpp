@@ -38,7 +38,7 @@
 #include <fastarduino/pci.h>
 #include <fastarduino/power.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const uint8_t LED1 = _BV(board::BIT<board::DigitalPin::D1_PD1>());
 static constexpr const uint8_t LED2 = _BV(board::BIT<board::DigitalPin::D3_PD3>());
 static constexpr const uint8_t LED3 = _BV(board::BIT<board::DigitalPin::D5_PD5>());

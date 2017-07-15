@@ -38,7 +38,7 @@
 #include <fastarduino/soft_uart.h>
 #include <fastarduino/time.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 constexpr const board::DigitalPin TX = board::DigitalPin::D3_PD3;
 constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D2_PD2_EXT0;
 #define INT_NUM 0

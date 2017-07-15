@@ -38,7 +38,7 @@
 #include <fastarduino/time.h>
 #include <fastarduino/utilities.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PD1;
 constexpr const board::DigitalPin RX = board::InterruptPin::D0_PD0_PCI2;
 #define PCI_NUM 2

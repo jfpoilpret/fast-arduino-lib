@@ -35,7 +35,7 @@ using namespace events;
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 static const uint8_t NUM_LEDS = 8;
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const board::DigitalPin LED0 = board::DigitalPin::D0_PD0;
 static constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PD1;
 static constexpr const board::DigitalPin LED2 = board::DigitalPin::D2_PD2;

@@ -46,7 +46,7 @@
 #include <fastarduino/time.h>
 #include <fastarduino/devices/nrf24l01p.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HAS_TRACE 1
 #define USART_NUM 0
 static const constexpr board::USART UART = board::USART::USART0;

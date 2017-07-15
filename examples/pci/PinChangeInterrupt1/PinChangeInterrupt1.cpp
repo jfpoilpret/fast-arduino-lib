@@ -33,7 +33,7 @@
 #include <fastarduino/pci.h>
 #include <fastarduino/power.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 constexpr const board::DigitalPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
 #define PCI_NUM 1
 #elif defined (ARDUINO_LEONARDO)

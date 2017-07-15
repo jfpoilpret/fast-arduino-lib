@@ -34,7 +34,7 @@
 #include <fastarduino/int.h>
 #include <fastarduino/power.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
