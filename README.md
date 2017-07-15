@@ -68,6 +68,7 @@ What the project already has:
 - I2C master support (synchronous mode)
 - DS1307 RTC device support (I2C-based)
 - HMC5883L magnetometer device support (I2C-based)
+- MPU-6050 accelerometer/gyroscope device support (I2C-based)
 
 As of now, the following platforms are supported (and tested):
 
@@ -90,7 +91,7 @@ The roadmap of next activities and new supported features is the following:
 
 July-August 2017
 ----------------
-1. Support other I2C devices: MCP23017 (IO multiplexer), MPU6050 (Accelerometer/Gyroscope)
+1. Support other I2C devices: MCP23017 (IO multiplexer)
 2. Sonar ranger API
 3. Improve I2C master support (asynchronous mode)
 4. Add support for ATtinyX5
