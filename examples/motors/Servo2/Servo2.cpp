@@ -21,6 +21,12 @@ constexpr const board::Timer TIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D9_PB1_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#elif defined(ARDUINO_MEGA)
+#define TIMER_NUM 1
+constexpr const board::Timer TIMER = board::Timer::TIMER1;
+// PIN connected to servo signal
+constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D11_PB5_OC1A;
+constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #elif defined(ARDUINO_LEONARDO)
 #define TIMER_NUM 1
 constexpr const board::Timer TIMER = board::Timer::TIMER1;

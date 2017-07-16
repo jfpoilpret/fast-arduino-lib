@@ -21,18 +21,28 @@ constexpr const board::Timer TIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D6_PD6_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
+#elif defined(ARDUINO_MEGA)
+#define TIMER_NUM 0
+constexpr const board::Timer TIMER = board::Timer::TIMER0;
+// PIN connected to servo signal
+constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D4_PG5_OC0B;
+constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_B_ISR
 #elif defined(ARDUINO_LEONARDO)
 #define TIMER_NUM 0
 constexpr const board::Timer TIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D11_PB7_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
 #elif defined(BREADBOARD_ATTINYX4)
 #define TIMER_NUM 0
 constexpr const board::Timer TIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D10_PB2_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -54,7 +64,7 @@ using SERVO1 = devices::servo::Servo<PULSE_TIMER, SERVO_PIN1>;
 using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
 
 // Register ISR needed for PulseTimer (8 bits specific)
-REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, SERVO_PIN1)
+REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER, SERVO_PIN1)
 
 int main() __attribute__((OS_main));
 int main()

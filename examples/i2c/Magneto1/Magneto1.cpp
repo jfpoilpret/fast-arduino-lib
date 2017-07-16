@@ -16,7 +16,7 @@
 #include <fastarduino/i2c_manager.h>
 #include <fastarduino/devices/hmc5883l.h>
 
-#if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
