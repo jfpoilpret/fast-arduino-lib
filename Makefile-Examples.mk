@@ -18,16 +18,21 @@
 #FIXME this list is in fact wrong because most examples have been set to work only on UNO,MEGA,ATmega328 and ATtiny
 # Not all examples have been updated when LEONARDO and NANO boards have been added to FastArduino support
 # For NANO, adding support is straightforward (same as UNO) but not for LENOARDO
-COMMON_EXAMPLES=	analog/AnalogPin1 analog/AnalogPin2					\
+COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2						\
+			analog/AnalogPin1 analog/AnalogPin2					\
+			i2c/DS1307RTC1 i2c/DS1307RTC2						\
 			eeprom/Eeprom1 eeprom/Eeprom2 eeprom/Eeprom3 eeprom/Eeprom4		\
 			events/EventApp1 events/EventApp2 events/EventApp3 events/EventApp4	\
 			int/ExternalInterrupt1 int/ExternalInterrupt2				\
 			io/FastPin1 io/FastPin2 io/FastPin3 io/FastPin4 io/FastPin5		\
 			misc/Flash1								\
+			i2c/Magneto1								\
 			pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
 			analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4				\
 			rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4			\
-			motors/Servo1								\
+			motors/Servo1 motors/Servo2						\
+			sonar/Sonar1 sonar/Sonar2 sonar/Sonar3					\
+			sonar/Sonar4 sonar/Sonar5 sonar/Sonar6					\
 			rtt/TimerApp3 rtt/TimerApp4						\
 			spi/RF24App1 spi/RF24App2 spi/WinBond					\
 			uart/UartApp2 uart/UartApp3 uart/UartApp4
@@ -64,7 +69,6 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3						\
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway							\
 				pci/PinChangeInterrupt4						
 
-#TODO add missing AccelGyro1 AccelGyro2 DS1307RTC1 DS1307RTC2 Magneto1 Servo1 Servo2 Sonar1 Sonar2 Sonar3 Sonar4 Sonar5 Sonar6
 
 # Finally define all examples supported for the current variant (defined by current configuration)
 ALL_EXAMPLES = ${COMMON_EXAMPLES} ${EXAMPLES_${VARIANT}}

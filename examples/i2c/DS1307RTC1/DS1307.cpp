@@ -15,20 +15,36 @@
 #include <fastarduino/time.h>
 #include <fastarduino/i2c_device.h>
 
-#if defined(ARDUINO_UNO)
+#if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+#elif defined(ARDUINO_LEONARDO)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART1;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(1)
+#elif defined(BREADBOARD_ATTINYX4)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #else
 #error "Current target is not yet supported!"
 #endif
 
 // UART for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
+#if HARDWARE_UART
 static serial::hard::UATX<UART> uart{output_buffer};
+#else
+static serial::soft::UATX<TX> uart{output_buffer};
+#endif
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
 // Subclass I2CDevice to make protected methods available
@@ -70,7 +86,9 @@ int main()
 	board::init();
 	sei();
 	
+#if HARDWARE_UART
 	uart.register_handler();
+#endif
 	uart.begin(115200);
 	out.width(0);
 	out.base(streams::FormatBase::Base::hex);

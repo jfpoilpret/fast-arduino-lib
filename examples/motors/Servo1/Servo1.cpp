@@ -27,6 +27,12 @@ constexpr const board::Timer TIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D11_PB7_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#elif defined(BREADBOARD_ATTINYX4)
+#define TIMER_NUM 0
+constexpr const board::Timer TIMER = board::Timer::TIMER0;
+// PIN connected to servo signal
+constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D10_PB2_OC0A;
+constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #else
 #error "Current target is not yet supported!"
 #endif

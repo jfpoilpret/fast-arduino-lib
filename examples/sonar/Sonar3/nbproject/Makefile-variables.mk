@@ -38,6 +38,30 @@ CND_ARTIFACT_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3
 CND_PACKAGE_DIR_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
 CND_PACKAGE_NAME_ATtiny84-Release=sonar3.tar
 CND_PACKAGE_PATH_ATtiny84-Release=dist/ATtiny84-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/sonar3.tar
+# ATmega328-16MHz-Release configuration
+CND_PLATFORM_ATmega328-16MHz-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_ATmega328-16MHz-Release=sonar3
+CND_ARTIFACT_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/sonar3
+CND_PACKAGE_DIR_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_ATmega328-16MHz-Release=sonar3.tar
+CND_PACKAGE_PATH_ATmega328-16MHz-Release=dist/ATmega328-16MHz-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/sonar3.tar
+# NANO-Release configuration
+CND_PLATFORM_NANO-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_NANO-Release=sonar3
+CND_ARTIFACT_PATH_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/sonar3
+CND_PACKAGE_DIR_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_NANO-Release=sonar3.tar
+CND_PACKAGE_PATH_NANO-Release=dist/NANO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/sonar3.tar
+# LEONARDO-Release configuration
+CND_PLATFORM_LEONARDO-Release=AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_DIR_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux
+CND_ARTIFACT_NAME_LEONARDO-Release=sonar3
+CND_ARTIFACT_PATH_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/sonar3
+CND_PACKAGE_DIR_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package
+CND_PACKAGE_NAME_LEONARDO-Release=sonar3.tar
+CND_PACKAGE_PATH_LEONARDO-Release=dist/LEONARDO-Release/AVR-GNU-Toolchain-3.5.3-Linux/package/sonar3.tar
 #
 # include compiler specific variables
 #

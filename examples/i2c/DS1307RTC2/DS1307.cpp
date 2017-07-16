@@ -16,7 +16,7 @@
 #include <fastarduino/i2c_manager.h>
 #include <fastarduino/devices/ds1307.h>
 
-#if defined(ARDUINO_UNO)
+#if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
