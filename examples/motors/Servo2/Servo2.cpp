@@ -15,7 +15,7 @@
 #include <fastarduino/pulse_timer.h>
 #include <fastarduino/devices/servo.h>
 
-#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define TIMER_NUM 1
 constexpr const board::Timer TIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
