@@ -72,7 +72,7 @@ constexpr const uint16_t PULSE0_MINWIDTH_US = 1000;
 // Pulse Frequency
 constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const PRESCALER0_TYPE PRESCALER0 = CALC0::PulseTimer_prescaler(PULSE0_MAXWIDTH_US, PULSE_FREQUENCY);
-#if defined (BREADBOARD_ATTINYX4)
+#if F_CPU == 8000000L
 static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_64, "");
 #else
 static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
