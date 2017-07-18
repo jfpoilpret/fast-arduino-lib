@@ -49,13 +49,17 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
+# FastArduino doc generation targets
+docs:
+	doxygen ./Doxyfile
+
 # build
 build: .build-post
 
 .build-pre:
 # Add your pre 'build' code here...
 
-.build-post: .build-impl
+.build-post: .build-impl docs
 # Add your post 'build' code here...
 
 
