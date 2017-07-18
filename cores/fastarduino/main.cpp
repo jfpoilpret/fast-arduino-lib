@@ -25,6 +25,7 @@ void exit(int status UNUSED)
 {
 }
 
+//FIXME is it really useful? This is already defined in abi.cpp
 #ifndef NO_ABI
 // Define ABI functions that may be required at link time under specific situations
 namespace __cxxabiv1

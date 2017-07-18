@@ -2,7 +2,7 @@
 // Large parts of this file were copied from Mikael Patel's Cosa library, which copyright appears below
 // Content has been adapted to use FastArduino original parts, under Copyright (c) 2016, Jean-Francois Poilpret
 
-/**
+/*
  * Copyright (C) 2013-2015, Mikael Patel
  * Copyright (C) 2016-2017, Jean-Francois Poilpret
  *
