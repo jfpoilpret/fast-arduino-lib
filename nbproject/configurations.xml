@@ -9,6 +9,7 @@
         <itemPath>cores/fastarduino/boards/board_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/common_traits.cpp</itemPath>
         <itemPath>cores/fastarduino/boards/common_traits.h</itemPath>
+        <itemPath>cores/fastarduino/boards/empty.h</itemPath>
         <itemPath>cores/fastarduino/boards/leonardo.h</itemPath>
         <itemPath>cores/fastarduino/boards/leonardo_traits.h</itemPath>
         <itemPath>cores/fastarduino/boards/mega.h</itemPath>
@@ -100,6 +101,7 @@
                    displayName="Important Files"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Doxyfile</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>Makefile-Examples.mk</itemPath>
       <itemPath>Makefile-FastArduino.mk</itemPath>
@@ -169,6 +171,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/empty.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/leonardo.h"
             ex="false"
@@ -413,6 +417,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/empty.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/leonardo.h"
             ex="false"
             tool="3"
@@ -655,6 +661,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/empty.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/leonardo.h"
             ex="false"
@@ -899,6 +907,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/empty.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/leonardo.h"
             ex="false"
             tool="3"
@@ -1142,6 +1152,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/empty.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/leonardo.h"
             ex="false"
             tool="3"
@@ -1336,6 +1348,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="cores/fastarduino/boards/empty.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="cores/fastarduino/boards/leonardo.h"
             ex="false"
             tool="3"
@@ -1529,6 +1543,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="cores/fastarduino/boards/empty.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cores/fastarduino/boards/leonardo.h"
             ex="false"

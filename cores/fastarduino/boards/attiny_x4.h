@@ -26,6 +26,10 @@
 #define INLINE __attribute__((always_inline))
 #endif
 
+/**
+ * @namespace
+ * Defines all types and constants specific to support ATtinyX4 MCU targets.
+ */
 namespace board
 {
 	//=====================
@@ -221,4 +225,8 @@ extern "C" {
 	void USI_OVF_vect(void) __attribute__ ((signal));
 	void EE_READY_vect(void) __attribute__ ((signal));
 }
+
+/**
+ * @}
+ */
 #endif /* BOARDS_ATTINYX4_HH */
