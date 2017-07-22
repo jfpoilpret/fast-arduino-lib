@@ -1,4 +1,4 @@
-doc/**
+apidoc/**
 **/dist
 **/build
 **/.dep.inc
