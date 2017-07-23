@@ -18,11 +18,27 @@
 #include "boards/board_traits.h"
 #include "time.h"
 
+/**
+ * Defines all API to manipulate analog input/output.
+ */
 namespace analog
 {
 	//TODO LATER: add class (or namespace?) with general methods enable/disable ADC...
-	//TODO Do we need an Abstract class (no template) to perform all work?
-	//TODO Shouldn't SAMPLE_TYPE be a template parameter of method sample()
+
+	/**
+	 * API that handles a given analog input pin of the target MCU.
+	 * 
+	 * @tparam APIN a unique analog pin for the MCU target; this may also not be
+	 * a real pin but an internal sensor (e.g. temperature or bandgap).
+	 * @tparam AREF the analog reference to use for that input
+	 * @tparam SAMPLE_TYPE the type of samples, either `uint8_t` (8 bits) or
+	 * `uint16_t` (10 bits)
+	 * @tparam MAXFREQ the maximum input clock frequency of the ADC circuit; higher
+	 * frequencies imply lower precision of samples.
+	 * @sa board::AnalogPin
+	 * @sa board::AnalogReference
+	 * @sa board::AnalogClock
+	 */
 	template<	board::AnalogPin APIN, 
 				board::AnalogReference AREF = board::AnalogReference::AVCC, 
 				typename SAMPLE_TYPE = uint16_t,
@@ -36,11 +52,26 @@ namespace analog
 		using TYPE_TRAIT = board_traits::AnalogSampleType_trait<SAMPLE_TYPE>;
 		using FREQ_TRAIT = board_traits::AnalogClock_trait<MAXFREQ>;
 
-	public:
-		using TYPE = SAMPLE_TYPE;
-		static constexpr const uint8_t PRESCALER = FREQ_TRAIT::PRESCALER;
 		static constexpr const uint16_t BG_STABILIZATION_DELAY_US = 400;
 
+	public:
+		/**
+		 * The type of samples returned by `sample()`.
+		 */
+		using TYPE = SAMPLE_TYPE;
+		
+		/**
+		 * The prescaler used by ADC circuitry, calculated from `MAXFREQ` template
+		 * parameter.
+		 */
+		static constexpr const uint8_t PRESCALER = FREQ_TRAIT::PRESCALER;
+
+		/**
+		 * Start an analog-digital conversion for this analog input pin and return
+		 * sample value.
+		 * 
+		 * @return the sample value converted from this analog input pin
+		 */
 		SAMPLE_TYPE sample()
 		{
 			// First ensure that any pending sampling is finished
@@ -63,6 +94,14 @@ namespace analog
 		}
 	};
 
+	/**
+	 * API that uses bandgap feature to calculate current voltage fed to the MCU.
+	 * 
+	 * @tparam BG a unique bandgap analog pin for the MCU target; although the
+	 * accepted type is `board::AnalogPin` enum, only bandgap inputs are allowed
+	 * otherwise a compilation error will occur.
+	 * @sa board::AnalogPin
+	 */
 	template<board::AnalogPin BG=board::AnalogPin::BANDGAP>
 	class PowerVoltage: public AnalogInput<	BG, 
 											board::AnalogReference::AVCC, 
@@ -75,6 +114,11 @@ namespace analog
 		static constexpr const uint16_t REFERENCE_MV = TRAIT::BANDGAP_VOLTAGE_MV;
 
 	public:
+		/**
+		 * Get the voltage, in mV, feeding the MCU.
+		 * 
+		 * @return the current voltage in mV
+		 */
 		uint16_t voltage_mV()
 		{
 			// Get sample
