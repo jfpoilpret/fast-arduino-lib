@@ -19,7 +19,7 @@
 #include "boards/board_traits.h"
 
 /**
- * Defines all API to manipulate digital input/output pins.
+ * Defines all API to manipulate general-purpose digital input/output pins.
  */
 namespace gpio
 {
@@ -196,11 +196,12 @@ namespace gpio
 			return TRAIT::PIN & _BV(BIT);
 		}
 
-		// Experimental API, maybe removed if judged bad
+		/// @cond experimental
 		SlowPin as_slow_pin()
 		{
 			return SlowPin{TRAIT::DDR, TRAIT::PORT, TRAIT::PIN, BIT};
 		}
+		/// @endcond
 	};
 
 	/**
@@ -239,7 +240,7 @@ namespace gpio
 		 * The pins mode is forced on the target MCU.
 		 * 
 		 * @param ddr the direction to set (in `DDR` register of this port) for 
-		 * each pin (1 bit is one pin, TODO when `1` the pin is set as output, 
+		 * each pin (1 bit is one pin, when `1` the pin is set as output, 
 		 * when `0` as input).
 		 * @param port the initial values for `PORT` register of this port; each  
 		 * bit is for one pin of the port, its meaning depends on the pin direction: 
@@ -254,46 +255,139 @@ namespace gpio
 			set_PORT(port);
 		}
 
+		/**
+		 * Create a `FastPin` instance for a given pin of this port, and sets its
+		 * direction mode and level value (if output).
+		 * Note that you would normally not need this method, as each pin should
+		 * normally already set properly first through this port.
+		 * You should rather use `get_pin()` instead.
+		 * 
+		 * @tparam BIT the bit position for which to return a `FastPin` instance;
+		 * if there is no pin at this bit position, a compilation error will occur.
+		 * @return a `FastPin` instance allowing direct manipulation of the given 
+		 * pin
+		 * @sa get_pin()
+		 */
 		template<uint8_t BIT>
 		FastPin<PORT, BIT> get_pin(PinMode mode, bool value = false)
 		{
 			return FastPin<PORT, BIT>{mode, value};
 		}
 
+		/**
+		 * Create a `FastPin` instance for a given pin of this port.
+		 * No additional setup is performed on that pin: it just keeps its current
+		 * direction and value.
+		 * 
+		 * @tparam BIT the bit position for which to return a `FastPin` instance;
+		 * if there is no pin at this bit position, a compilation error will occur.
+		 * @return a `FastPin` instance allowing direct manipulation of the given 
+		 * pin
+		 */
 		template<uint8_t BIT>
 		FastPin<PORT, BIT> get_pin()
 		{
 			return FastPin<PORT, BIT>{};
 		}
 
+		/**
+		 * Set the 8-bits value for port PORT register.
+		 * If a pin is set currently set as output, then the matching bit in `port`
+		 * will set the output level of this pin.
+		 * If a pin is set currently as input, then the matching bit in `port`
+		 * defines if a pullup resistor is used or not.
+		 * 
+		 * @param port the initial values for `PORT` register of this port; each  
+		 * bit is for one pin of the port, its meaning depends on the pin direction: 
+		 * if input, then it fixes if pullup resistor should be used, if output,
+		 * then it fixes the output level of the pin.
+		 * @sa set_DDR()
+		 */
 		void set_PORT(uint8_t port) INLINE
 		{
 			TRAIT::PORT = port;
 		}
+		
+		/**
+		 * Get the current 8-bit value of port PORT register.
+		 * Each bit maps to a pin configuration in this port.
+		 * Depending on DDR configuration for a pin, the PORT value is interpreted
+		 * differently: for an input pin, the matching PORT bit indicates if this
+		 * pin has a pullup register on it.
+		 * 
+		 * @return the value of PORT register
+		 */
 		uint8_t get_PORT() INLINE
 		{
 			return TRAIT::PORT;
 		}
+		
+		/**
+		 * Set the 8-bits value for port DDR (direction) register.
+		 * Each pin direction is decided by the matching bit.
+		 * 
+		 * @param ddr the direction to set (in `DDR` register of this port) for 
+		 * each pin (1 bit is one pin, when `1` the pin is set as output, 
+		 * when `0` as input).
+		 * @sa set_PORT()
+		 */
 		void set_DDR(uint8_t ddr) INLINE
 		{
 			TRAIT::DDR = ddr;
 		}
+		
+		/**
+		 * Get the current 8-bit value of port DDR (direction) register.
+		 * Each pin direction is decided by the matching bit.
+		 * 
+		 * @return the value of DDR register
+		 */
 		uint8_t get_DDR() INLINE
 		{
 			return TRAIT::DDR;
 		}
+		
+		/**
+		 * Set the 8-bits value for port PIN register. Writing a `1` bit in this
+		 * register will toggle the matching PORT bit; writing `0` has no effect.
+		 * 
+		 * @param pin the value to write to PIN register for this port
+		 */
 		void set_PIN(uint8_t pin) INLINE
 		{
 			TRAIT::PIN = pin;
 		}
+
+		/**
+		 * Get the 8-bits value of PIN register for this port, i\.e\. the current
+		 * level of every pin of the port, be it an output or an input pin.
+		 * 
+		 * @return the value of PIN register
+		 */
 		uint8_t get_PIN() INLINE
 		{
 			return TRAIT::PIN;
 		}
 	};
 
-	// This class maps to a PORT and handles several bits at a time based on a mask
-	// SRAM size is 1 byte
+	/**
+	 * API that manipulates a part of a digital IO port.
+	 * Implementation is highly optimized for size and speed: instances use
+	 * 1 byte SRAM only.
+	 * 
+	 * Using this API allows you to manipulate several pins of a port at once,
+	 * but without having to care for other pins of that port: the API always 
+	 * ensure that only those selected pins get modified.
+	 * This is useful when, for instance, you handle a 4x4 keypad with one port,
+	 * 4 pins out and 4 pins in, then you can define 2 `FastMaskedPort` instances,
+	 * one for output pins, the other for input pins.
+	 * 
+	 * Note that, although more efficient than using individual `FastPin`s, it is
+	 * not as efficient as using only one single `FastPort` to handle all its pins.
+	 * 
+	 * @tparam PORT_ the target port
+	 * @sa board::Port
+	 */
 	template<board::Port PORT_>
 	class FastMaskedPort
 	{
@@ -301,9 +395,47 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
+		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;
 
-		FastMaskedPort() {}
+		/**
+		 * Construct a default `FastMaskedPort` without any physical setup on 
+		 * target MCU, without any pin at all (mask = 0).
+		 * This is useful only when a default constructor is needed, e.g. when
+		 * defining an array of `FastMaskedPort`s.
+		 */
+		FastMaskedPort():_mask{0} {}
+
+		/**
+		 * Construct a `FastMaskedPort` without any physical setup on target MCU.
+		 * This is useful if default pins directions and values are OK for you and 
+		 * you want to avoid calling mode setup on target MCU.
+		 * 
+		 * @param mask the bit mask determining which pins of the port are handled
+		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
+		 * methods.
+		 */
+		FastMaskedPort(uint8_t mask) {}
+
+		/**
+		 * Construct a `FastMaskedPort` for the pins selected by the provide 
+		 * bits mask, with the given direction byte and initial values
+		 * byte.
+		 * The pins mode are forced on the target MCU.
+		 * 
+		 * @param mask the bit mask determining which pins of the port are handled
+		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
+		 * methods.
+		 * @param ddr the direction to set (in `DDR` register of this port) for 
+		 * each pin (1 bit is one pin, when `1` the pin is set as output, 
+		 * when `0` as input).
+		 * @param port the initial values for `PORT` register of this port; each  
+		 * bit is for one pin of the port, its meaning depends on the pin direction: 
+		 * if input, then it fixes if pullup resistor should be used, if output,
+		 * then it fixes the output level of the pin.
+		 * @sa set_DDR()
+		 * @sa set_PORT()
+		 */
 		FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0)
 		:_mask{mask}
 		{
@@ -311,26 +443,88 @@ namespace gpio
 			set_PORT(port);
 		}
 
+		/**
+		 * Set the 8-bits value for port PORT register, this value will be masked
+		 * according to the provided bit mask provided in constructor.
+		 * If a pin is set currently set as output, then the matching bit in `port`
+		 * will set the output level of this pin.
+		 * If a pin is set currently as input, then the matching bit in `port`
+		 * defines if a pullup resistor is used or not.
+		 * 
+		 * @param port the initial values for `PORT` register of this port; each  
+		 * bit is for one pin of the port, its meaning depends on the pin direction: 
+		 * if input, then it fixes if pullup resistor should be used, if output,
+		 * then it fixes the output level of the pin.
+		 * @sa set_DDR()
+		 */
 		void set_PORT(uint8_t port) INLINE
 		{
 			TRAIT::PORT = (TRAIT::PORT & ~_mask) | (port & _mask);
 		}
+		
+		/**
+		 * Get the current 8-bit value of port PORT register, masked according to
+		 * the bit mask provided at construction time.
+		 * Each bit maps to a pin configuration in this port.
+		 * For all pins not part of the mask, returned value is `0`.
+		 * Depending on DDR configuration for a pin, the PORT value is interpreted
+		 * differently: for an input pin, the matching PORT bit indicates if this
+		 * pin has a pullup register on it.
+		 * 
+		 * @return the value of PORT register masked with constructor-provided bit mask
+		 */
 		uint8_t get_PORT() INLINE
 		{
 			return TRAIT::PORT & _mask;
 		}
+		
+		/**
+		 * Set the 8-bits value for port DDR (direction) register, this value 
+		 * will be masked according to the provided bit mask provided in constructor.
+		 * Each pin direction is decided by the matching bit.
+		 * 
+		 * @param ddr the direction to set (in `DDR` register of this port) for 
+		 * each pin (1 bit is one pin, when `1` the pin is set as output, 
+		 * when `0` as input).
+		 * @sa set_PORT()
+		 */
 		void set_DDR(uint8_t ddr) INLINE
 		{
 			TRAIT::DDR = (TRAIT::DDR & ~_mask) | (ddr & _mask);
 		}
+		
+		/**
+		 * Get the current 8-bit value of port DDR (direction) register, masked 
+		 * according to the bit mask provided at construction time.
+		 * Each pin direction is decided by the matching bit.
+		 * For all pins not part of the mask, returned value is `0`.
+		 * 
+		 * @return the value of DDR register masked with constructor-provided bit mask
+		 */
 		uint8_t get_DDR() INLINE
 		{
 			return TRAIT::DDR & _mask;
 		}
+
+		/**
+		 * Set the 8-bits value for port PIN register, this value will be masked 
+		 * according to the provided bit mask provided in constructor.
+		 * Writing a `1` bit in this register will toggle the matching PORT bit; 
+		 * writing `0` has no effect.
+		 * 
+		 * @param pin the value to write to PIN register for this port
+		 */
 		void set_PIN(uint8_t pin) INLINE
 		{
 			TRAIT::PIN = pin & _mask;
 		}
+		
+		/**
+		 * Get the current 8-bit value of PIN register for this port, masked 
+		 * according to the bit mask provided at construction time.
+		 * 
+		 * @return the value of PIN register masked with constructor-provided bit mask
+		 */
 		uint8_t get_PIN() INLINE
 		{
 			return TRAIT::PIN & _mask;
