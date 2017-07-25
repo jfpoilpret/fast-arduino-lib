@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file 
+ * Analog Input API.
+ */
 #ifndef ANALOGINPUT_HH
 #define ANALOGINPUT_HH
 
@@ -149,3 +155,4 @@ namespace analog
 }
 
 #endif /* ANALOGINPUT_HH */
+/// @endcond

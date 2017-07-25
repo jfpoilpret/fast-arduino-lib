@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file 
+ * General Purpose (digital) Input Output API.
+ */
 #ifndef FASTIO_HH
 #define	FASTIO_HH
 
@@ -689,3 +695,4 @@ namespace gpio
 }
 
 #endif	/* FASTIO_HH */
+/// @endcond

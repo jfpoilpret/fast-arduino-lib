@@ -12,11 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
 /**
  * @file 
  * Flash memory utilities.
  */
-
 #ifndef FLASH_HH
 #define	FLASH_HH
 
@@ -99,3 +100,4 @@ namespace flash
 #define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const flash::FlashStorage*) &__c[0];}))
 
 #endif	/* FLASH_HH */
+/// @endcond

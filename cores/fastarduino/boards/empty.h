@@ -12,6 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
 #ifndef BOARDS_EMPTY_HH
 #define BOARDS_EMPTY_HH
 
@@ -86,3 +87,4 @@ namespace board
 };
 
 #endif /* BOARDS_EMPTY_HH */
+/// @endcond
