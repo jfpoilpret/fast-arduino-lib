@@ -232,34 +232,83 @@ namespace time
 	}
 
 	/**
-	 * TODO doc + snippet
+	 * Set a new `time::delay` function for the duration of the current scope;
+	 * when the scope is left, the previous `time::delay` function is restored.
+	 * Usage example:
+	 * @code
+	 * void my_delay(uint32_t ms)
+	 * {
+	 *     ...
+	 * }
+	 * void f()
+	 * {
+	 *     // Set new time::delay function
+	 *     auto_delay d{my_delay};
+	 *     // call API that rely on time::delay
+	 *     ...
+	 *     // Restore previous time::delay function
+	 * }
+	 * @endcode
 	 */
 	class auto_delay
 	{
 	public:
+		/**
+		 * Set new `time::delay` to @p new_delay after storing current function 
+		 * for later restore.
+		 * @param new_delay new function pointer to replace `time::delay`
+		 */
 		auto_delay(DELAY_PTR new_delay) INLINE:_old_delay{delay}
 		{
 			delay = new_delay;
 		}
+		/// @cond notdocumented
 		~auto_delay() INLINE
 		{
 			delay = _old_delay;
 		}
+		/// @endcond
 	private:
 		const DELAY_PTR _old_delay;
 	};
 
+	/**
+	 * Set a new `time::millis` function for the duration of the current scope;
+	 * when the scope is left, the previous `time::millis` function is restored.
+	 * Usage example:
+	 * @code
+	 * uint32_t my_millis()
+	 * {
+	 *     ...
+	 * }
+	 * void f()
+	 * {
+	 *     // Set new time::millis function
+	 *     auto_millis d{my_millis};
+	 *     // call API that rely on time::millis
+	 *     ...
+	 *     // Restore previous time::millis function
+	 * }
+	 * @endcode
+	 */
 	class auto_millis
 	{
 	public:
+		/**
+		 * Set new `time::millis` to @p new_millis after storing current function 
+		 * for later restore.
+		 * @param new_millis new function pointer to replace `time::millis`
+		 */
 		auto_millis(MILLIS_PTR new_millis) INLINE:_old_millis{millis}
 		{
 			millis = new_millis;
 		}
+		/// @cond notdocumented
 		~auto_millis() INLINE
 		{
 			millis = _old_millis;
 		}
+		/// @endcond
 	private:
 		const MILLIS_PTR _old_millis;
 	};
