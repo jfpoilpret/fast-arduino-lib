@@ -49,17 +49,13 @@ MKDIR=mkdir
 CP=cp
 CCADMIN=CCadmin
 
-# FastArduino doc generation targets
-docs:
-	doxygen ./Doxyfile
-
 # build
 build: .build-post
 
 .build-pre:
 # Add your pre 'build' code here...
 
-.build-post: .build-impl docs
+.build-post: .build-impl
 # Add your post 'build' code here...
 
 
@@ -121,6 +117,10 @@ help: .help-post
 
 .help-post: .help-impl
 # Add your post 'help' code here...
+
+# FastArduino doc generation targets
+docs:
+	doxygen ./Doxyfile
 
 # include project implementation makefile
 include nbproject/Makefile-impl.mk
