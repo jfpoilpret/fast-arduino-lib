@@ -12,6 +12,13 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond uno
+
+/**
+ * @file 
+ * ATmega328P specific features and pins.
+ */
+
 #ifndef BOARDS_UNO_HH
 #define BOARDS_UNO_HH
 
@@ -27,25 +34,33 @@
 
 namespace board
 {
-	//=====================
-	// Initialization code
-	//=====================
-	inline static void init() INLINE;
+	/**
+	 * Performs special initialization for ATmega328P, actually nothing at all.
+	 * This must be called first in your `main()` function, even `sei()`.
+	 */
 	inline static void init() {}
 	
-	//====
-	// IO
-	//====
+	/**
+	 * Defines all available ports of ATmega328P.
+	 */
 	enum class Port: uint8_t
 	{
+		/** Port B (7 IO) */
 		PORT_B = 0,
+		/** Port C (6 IO) */
 		PORT_C,
+		/** Port D (8 IO) */
 		PORT_D,
+		/** FastArduino internal: DO NOT USE */
 		NONE = 0xFF
 	};
 	
 	/**
-	 * Digital pin symbols
+	 * Defines all available digital input/output pins of ATmega328P, with 
+	 * reference to Arduino UNO pins.
+	 * Each symbol is in the form `Dxx_Pyz`, where `xx` is the pin number on 
+	 * Arduino, `y` is the port letter (B, c or D) and `z` is the bit number for 
+	 * that pin within its port.
 	 */
 	enum class DigitalPin: uint8_t
 	{
@@ -69,13 +84,15 @@ namespace board
 		D17_PC3,			// PC3-A3
 		D18_PC4,			// PC4-A4
 		D19_PC5,			// PC5-A5
+		/** Shortcut for LED pin on Arduino */
 		LED = DigitalPin::D13_PB5,
+		/** FastArduino internal: DO NOT USE */
 		NONE = 0xFF
 	};
 
-	//==============
-	// Analog Input
-	//==============
+	/**
+	 * Defines available clocks of ATmega328P, used for analog input.
+	 */
 	enum class AnalogClock: uint8_t
 	{
 		MAX_FREQ_50KHz = 0,
@@ -84,13 +101,27 @@ namespace board
 		MAX_FREQ_500KHz,
 		MAX_FREQ_1MHz
 	};
+	
+	/**
+	 * Defines available voltage references of ATmega328P, used for analog input.
+	 */
 	enum class AnalogReference: uint8_t
 	{
+		/** Voltage reference is given by the `AREF` pin. */
 		AREF = 0,
+		/** Voltage reference is given by the `AVcc` pin. */
 		AVCC,
+		/** Voltage reference is internal 1.1V reference, generated from the
+		 * internal bandgap reference. */
 		INTERNAL_1_1V
 	};
 	
+	/**
+	 * Defines all available analog input pins of ATmega328P, with 
+	 * reference to Arduino UNO pins.
+	 * Note that this includes also other sources than pin, e.g. the internal
+	 * bandgap reference or the temperature sensor.
+	 */
 	enum class AnalogPin: uint8_t
 	{
 		A0 = 0,
@@ -103,8 +134,11 @@ namespace board
 		A6,
 		A7,
 #endif
+		/** Temperature sensor */
 		TEMP,
+		/** Bandgap reference */
 		BANDGAP,
+		/** FastArduino internal: DO NOT USE */
 		NONE = 0xFF
 	};
 	
@@ -112,8 +146,12 @@ namespace board
 	// PWM output
 	//============
 	/**
-	 * PWM-enabled pin symbols; sub-set of digital pins
-	 * to allow compile time checking.
+	 * Defines all digital output pins of ATmega328P, capable of PWM output.
+	 * Each symbol is in the form `Dxx_Pyz_OCuv`, where `xx` is the pin number on 
+	 * Arduino, `y` is the port letter (B, c or D), `z` is the bit number for 
+	 * that pin within its port, `u` is the number of the timer used by this PWM 
+	 * pin and `v` the letter indicating which compare register of the timer this 
+	 * PWM pin is mapped to.
 	 */
 	namespace PWMPin
 	{
@@ -125,12 +163,14 @@ namespace board
 		constexpr const DigitalPin D3_PD3_OC2B = DigitalPin::D3_PD3;
 	};
 	
-	//===============
-	// IO interrupts
-	//===============
+	
 	/**
-	 * External interrupt pin symbols; sub-set of digital pins
-	 * to allow compile time checking.
+	 * Defines all digital output pins of ATmega328P, usable as direct external 
+	 * interrupt pins.
+	 * Each symbol is in the form `Dxx_Pyz_EXTu`, where `xx` is the pin number on 
+	 * Arduino, `y` is the port letter (B, c or D), `z` is the bit number for 
+	 * that pin within its port and `u` is the number of the interrupt for that
+	 * pin.
 	 */
 	namespace ExternalInterruptPin
 	{
@@ -139,7 +179,12 @@ namespace board
 	};
 
 	/**
-	 * Pin change interrupt (PCI) pins.
+	 * Defines all digital output pins of ATmega328P, usable as pin change 
+	 * interrupt (PCI) pins.
+	 * Each symbol is in the form `Dxx_Pyz_PCIu`, where `xx` is the pin number on 
+	 * Arduino, `y` is the port letter (B, c or D), `z` is the bit number for 
+	 * that pin within its port and `u` is the number of the PCI vector for that
+	 * pin.
 	 */
 	namespace InterruptPin
 	{
@@ -167,36 +212,30 @@ namespace board
 		constexpr const DigitalPin D19_PC5_PCI1 = DigitalPin::D19_PC5;
 	};
 
-	//=======
-	// USART
-	//=======
-	
+	/**
+	 * Defines all USART modules of ATmega328P, actually only one.
+	 */
 	enum class USART: uint8_t
 	{
 		USART0 = 0
 	};
 	
-	//=====
-	// SPI
-	//=====
-
-	// Nothing special
-
-	//========
-	// Timers
-	//========
-	
+	/**
+	 * Defines all timers available for ATmega328P.
+	 */
 	enum class Timer: uint8_t
 	{
+		/** Timer0 (8 bits) */
 		TIMER0,
+		/** Timer1 (16 bits) */
 		TIMER1,
+		/** Timer2 (8 bits) */
 		TIMER2
 	};
 	
-	//=============
-	// Sleep Modes
-	//=============
-
+	/**
+	 * Defines all available sleep modes for ATmega328P.
+	 */
 	enum class SleepMode: uint8_t
 	{
 		IDLE = SLEEP_MODE_IDLE,
@@ -246,3 +285,4 @@ extern "C" {
 #define USART0_UDRE_vect USART_UDRE_vect
 
 #endif /* BOARDS_UNO_HH */
+/// @endcond
