@@ -120,7 +120,15 @@ help: .help-post
 
 # FastArduino doc generation targets
 docs:
-	doxygen ./Doxyfile
+	# Create all apidoc/* dirs and subdirs as doxygen cannot properly create them
+	mkdir -p apidoc
+	mkdir -p apidoc/html
+	mkdir -p apidoc/latex
+	# Call each generation
+	doxygen ./dox/doxyfile-api
+	mkdir -p apidoc/html/boards
+	mkdir -p apidoc/latex/boards
+	doxygen ./dox/doxyfile-uno
 
 # include project implementation makefile
 include nbproject/Makefile-impl.mk

@@ -13,6 +13,15 @@
 //   limitations under the License.
 
 /// @cond api
+
+/**
+ * @file 
+ * Target-specific features and pins; this serves as an example, showing all
+ * types but without any content.
+ * For actual types for a specific target MCU (or Arduino board), please refer
+ * to specific boards support section. TODO REF BOARDS SECTION.
+ */
+
 #ifndef BOARDS_EMPTY_HH
 #define BOARDS_EMPTY_HH
 

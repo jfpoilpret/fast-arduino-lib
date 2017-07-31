@@ -25,18 +25,28 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
 
+/// @cond notdocumented
 /* This board is based on ATmega328P */
 #define BOARD_ATMEGA328P
 
 #ifndef INLINE
 #define INLINE __attribute__((always_inline))
 #endif
+/// @endcond
 
+/**
+ * Defines all types and constants specific to support ATmega328P MCU target.
+ */
 namespace board
 {
 	/**
 	 * Performs special initialization for ATmega328P, actually nothing at all.
-	 * This must be called first in your `main()` function, even `sei()`.
+	 * This must be called first in your `main()` function, even before `sei()`.
+	 * In general you should ALWAYS call this function at the beginning of your
+	 * `main()` even if you know it will not do anything; this will prevent strange
+	 * behaviors when you want to port your code to another MCU target for which
+	 * `init()` does perform important initialization, e.g. ATmega32u4 (Arduino
+	 * LEONARDO).
 	 */
 	inline static void init() {}
 	
@@ -51,7 +61,7 @@ namespace board
 		PORT_C,
 		/** Port D (8 IO) */
 		PORT_D,
-		/** FastArduino internal: DO NOT USE */
+		// FastArduino internal: DO NOT USE
 		NONE = 0xFF
 	};
 	
@@ -59,34 +69,54 @@ namespace board
 	 * Defines all available digital input/output pins of ATmega328P, with 
 	 * reference to Arduino UNO pins.
 	 * Each symbol is in the form `Dxx_Pyz`, where `xx` is the pin number on 
-	 * Arduino, `y` is the port letter (B, c or D) and `z` is the bit number for 
+	 * Arduino, `y` is the port letter (B, C or D) and `z` is the bit number for 
 	 * that pin within its port.
 	 */
 	enum class DigitalPin: uint8_t
 	{
+		/** Pin PD0 (D0 on Arduino UNO) */
 		D0_PD0 = 0,			// PD0
+		/** Pin PD1 (D1 on Arduino UNO) */
 		D1_PD1,				// PD1
+		/** Pin PD2 (D2 on Arduino UNO) */
 		D2_PD2,				// PD2
+		/** Pin PD3 (D3 on Arduino UNO) */
 		D3_PD3,				// PD3
+		/** Pin PD4 (D4 on Arduino UNO) */
 		D4_PD4,				// PD4
+		/** Pin PD5 (D5 on Arduino UNO) */
 		D5_PD5,				// PD5
+		/** Pin PD6 (D6 on Arduino UNO) */
 		D6_PD6,				// PD6
+		/** Pin PD7 (D7 on Arduino UNO) */
 		D7_PD7,				// PD7
+		/** Pin PB0 (D8 on Arduino UNO) */
 		D8_PB0,				// PB0
+		/** Pin PB1 (D9 on Arduino UNO) */
 		D9_PB1,				// PB1
+		/** Pin PB2 (D10 on Arduino UNO) */
 		D10_PB2,			// PB2
+		/** Pin PB3 (D11 on Arduino UNO) */
 		D11_PB3,			// PB3
+		/** Pin PB4 (D12 on Arduino UNO) */
 		D12_PB4,			// PB4
+		/** Pin PB5 (D13 on Arduino UNO) */
 		D13_PB5,			// PB5
+		/** Pin PC0 (A0, D14 on Arduino UNO) */
 		D14_PC0,			// PC0-A0
+		/** Pin PC1 (A1, D15 on Arduino UNO) */
 		D15_PC1,			// PC1-A1
+		/** Pin PC2 (A2, D16 on Arduino UNO) */
 		D16_PC2,			// PC2-A2
+		/** Pin PC3 (A3, D17 on Arduino UNO) */
 		D17_PC3,			// PC3-A3
+		/** Pin PC4 (A4, D18 on Arduino UNO) */
 		D18_PC4,			// PC4-A4
+		/** Pin PC5 (A5, D19 on Arduino UNO) */
 		D19_PC5,			// PC5-A5
 		/** Shortcut for LED pin on Arduino */
 		LED = DigitalPin::D13_PB5,
-		/** FastArduino internal: DO NOT USE */
+		// FastArduino internal: DO NOT USE
 		NONE = 0xFF
 	};
 
@@ -124,31 +154,36 @@ namespace board
 	 */
 	enum class AnalogPin: uint8_t
 	{
+		/** Pin ADC0 (A0, D14 on Arduino UNO) */
 		A0 = 0,
+		/** Pin ADC1 (A1, D15 on Arduino UNO) */
 		A1,
+		/** Pin ADC2 (A2, D16 on Arduino UNO) */
 		A2,
+		/** Pin ADC3 (A3, D17 on Arduino UNO) */
 		A3,
+		/** Pin ADC4 (A4, D18 on Arduino UNO) */
 		A4,
+		/** Pin ADC5 (A5, D19 on Arduino UNO) */
 		A5,
 #ifdef HAS_8_ANALOG_INPUTS
+		/** Pin ADC6 (A6 on Arduino NANO) */
 		A6,
+		/** Pin ADC7 (A7 on Arduino NANO) */
 		A7,
 #endif
 		/** Temperature sensor */
 		TEMP,
 		/** Bandgap reference */
 		BANDGAP,
-		/** FastArduino internal: DO NOT USE */
+		// FastArduino internal: DO NOT USE
 		NONE = 0xFF
 	};
 	
-	//============
-	// PWM output
-	//============
 	/**
 	 * Defines all digital output pins of ATmega328P, capable of PWM output.
 	 * Each symbol is in the form `Dxx_Pyz_OCuv`, where `xx` is the pin number on 
-	 * Arduino, `y` is the port letter (B, c or D), `z` is the bit number for 
+	 * Arduino, `y` is the port letter (B, C or D), `z` is the bit number for 
 	 * that pin within its port, `u` is the number of the timer used by this PWM 
 	 * pin and `v` the letter indicating which compare register of the timer this 
 	 * PWM pin is mapped to.
@@ -163,14 +198,15 @@ namespace board
 		constexpr const DigitalPin D3_PD3_OC2B = DigitalPin::D3_PD3;
 	};
 	
-	
 	/**
 	 * Defines all digital output pins of ATmega328P, usable as direct external 
 	 * interrupt pins.
 	 * Each symbol is in the form `Dxx_Pyz_EXTu`, where `xx` is the pin number on 
-	 * Arduino, `y` is the port letter (B, c or D), `z` is the bit number for 
+	 * Arduino, `y` is the port letter (B, C or D), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the interrupt for that
 	 * pin.
+	 * This namespace exists for the sole purpose of quickly finding an external
+	 * interrupt pin among all digital IO pins.
 	 */
 	namespace ExternalInterruptPin
 	{
@@ -182,9 +218,11 @@ namespace board
 	 * Defines all digital output pins of ATmega328P, usable as pin change 
 	 * interrupt (PCI) pins.
 	 * Each symbol is in the form `Dxx_Pyz_PCIu`, where `xx` is the pin number on 
-	 * Arduino, `y` is the port letter (B, c or D), `z` is the bit number for 
+	 * Arduino, `y` is the port letter (B, C or D), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the PCI vector for that
 	 * pin.
+	 * This namespace exists for the sole purpose of quickly finding an pin change
+	 * interrupt pin among all digital IO pins.
 	 */
 	namespace InterruptPin
 	{
@@ -238,21 +276,54 @@ namespace board
 	 */
 	enum class SleepMode: uint8_t
 	{
+		/** 
+		 * In this mode, CPU is stopped but all other peripherals and interrupts
+		 * work normally. In this mode, current consumption is reduced to about 
+		 * 25% of active mode consumption.
+		 */
 		IDLE = SLEEP_MODE_IDLE,
+		/** 
+		 * In this mode, CPU is stopped but other peripherals and interrupts
+		 * work normally, except IO. This mode is actually very similar to `IDLE`.
+		 */
 		ADC_NOISE_REDUCTION = SLEEP_MODE_ADC,
+		/**
+		 * In this mode, everything is stopped (including oscillator) but external
+		 * interrupts, I2C slave (if enabled) and Watchdog Timer (if enabled).
+		 * This is lowest current consumption mode, typically a few uA, depending
+		 * on other factors (voltage, watchdog enabled or not).
+		 * Waking up from this mode may take significant time until internal 
+		 * oscillator is restarted and stabilized; refer to datasheet for more
+		 * detailed data (look for `Start-up times`).
+		 */
 		POWER_DOWN = SLEEP_MODE_PWR_DOWN,
+		/**
+		 * This mode is similar to `POWER_DOWN`, except Timer2 is still running
+		 * if enabled.
+		 * Waking up from this mode may take significant time until internal 
+		 * oscillator is restarted and stabilized; refer to datasheet for more
+		 * detailed data (look for `Start-up times`).
+		 */
 		POWER_SAVE = SLEEP_MODE_PWR_SAVE,
+		/**
+		 * This mode is similar to `POWER_DOWN`, except the oscillator is kept
+		 * running, hence waking up from this mode takes only 6 clock cycles.
+		 */
 		STANDBY = SLEEP_MODE_STANDBY,
+		/**
+		 * This mode is similar to `POWER_SAVE`, except the oscillator is kept
+		 * running, hence waking up from this mode takes only 6 clock cycles.
+		 */
 		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY,
-		
+
+		//FIXME it seems that this enum value is just plain useless, why did I
+		// introduce it? If no justification, then simply remove it!
 		DEFAULT_MODE = 0xFF
 	};
-	
 };
 
-/**
- * Forward declare interrupt service routines to allow them as friends.
- */
+/// @cond notdocumented
+// Forward declare interrupt service routines to allow them as friends
 extern "C" {
 	void ADC_vect(void) __attribute__ ((signal));
 	void ANALOG_COMP_vect(void) __attribute__ ((signal));
@@ -283,6 +354,7 @@ extern "C" {
 #define USART0_RX_vect USART_RX_vect
 #define USART0_TX_vect USART_TX_vect
 #define USART0_UDRE_vect USART_UDRE_vect
+/// @endcond
 
 #endif /* BOARDS_UNO_HH */
 /// @endcond
