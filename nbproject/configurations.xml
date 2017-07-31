@@ -101,10 +101,15 @@
                    displayName="Important Files"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
-      <itemPath>Doxyfile</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>Makefile-Examples.mk</itemPath>
       <itemPath>Makefile-FastArduino.mk</itemPath>
+      <itemPath>dox/doxyfile-api</itemPath>
+      <itemPath>dox/doxyfile-atmega328</itemPath>
+      <itemPath>dox/doxyfile-attinyx4</itemPath>
+      <itemPath>dox/doxyfile-common</itemPath>
+      <itemPath>dox/doxyfile-nano</itemPath>
+      <itemPath>dox/doxyfile-uno</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -342,6 +347,18 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
                             from="${OUTPUT_PATH}"
@@ -629,6 +646,18 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -874,6 +903,18 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -1077,6 +1118,18 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
                             from="${OUTPUT_PATH}"

@@ -124,11 +124,14 @@ docs:
 	mkdir -p apidoc
 	mkdir -p apidoc/html
 	mkdir -p apidoc/latex
-	# Call each generation
-	doxygen ./dox/doxyfile-api
 	mkdir -p apidoc/html/boards
 	mkdir -p apidoc/latex/boards
+	# Call each generation
+	doxygen ./dox/doxyfile-api
 	doxygen ./dox/doxyfile-uno
+	doxygen ./dox/doxyfile-nano
+	doxygen ./dox/doxyfile-atmega328
+	doxygen ./dox/doxyfile-attinyx4
 
 # include project implementation makefile
 include nbproject/Makefile-impl.mk
