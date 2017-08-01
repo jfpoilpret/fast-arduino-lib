@@ -104,6 +104,7 @@
       <itemPath>Makefile</itemPath>
       <itemPath>Makefile-Examples.mk</itemPath>
       <itemPath>Makefile-FastArduino.mk</itemPath>
+      <itemPath>dox/boards.md</itemPath>
       <itemPath>dox/doxyfile-api</itemPath>
       <itemPath>dox/doxyfile-atmega328</itemPath>
       <itemPath>dox/doxyfile-attinyx4</itemPath>

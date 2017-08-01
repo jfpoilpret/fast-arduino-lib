@@ -19,7 +19,7 @@
  * Target-specific features and pins; this serves as an example, showing all
  * types but without any content.
  * For actual types for a specific target MCU (or Arduino board), please refer
- * to specific boards support section. TODO REF BOARDS SECTION.
+ * to [specific targets support section](@ref supportedboards).
  */
 
 #ifndef BOARDS_EMPTY_HH
@@ -29,7 +29,9 @@
 
 /**
  * Defines all types and constants specific to support a specific MCU target.
- * This serves only as an example here; for actual targets, refer to proper header files in `board` directory.
+ * This serves only as an example here; for actual targets, refer to proper header 
+ * files in `board` directory, or refer refer to
+ * [specific targets support section](@ref supportedboards).
  */
 namespace board
 {
