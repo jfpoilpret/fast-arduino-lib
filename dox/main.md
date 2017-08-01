@@ -30,7 +30,7 @@ Discovering FastArduino API step by step
 Using Fast Arduino API can be learnt step by step in the preferred following order:
 
 Basics:
-1. [gpio & time](#gpio_time)
+1. [gpio & time](@ref gpiotime)
 2. UART & flash
 3. timer
 4. real-time timer
@@ -51,7 +51,7 @@ Devices:
 1. SPI
 2. I2C
 
-### Basics: gpio & time		{#gpio_time}
+### @anchor gpiotime Basics: gpio & time ###
 
 Here is a first example of a FastArduino based program:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
