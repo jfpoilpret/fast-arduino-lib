@@ -130,6 +130,7 @@ docs:
 	doxygen ./dox/doxyfile-api
 	doxygen ./dox/doxyfile-uno
 	doxygen ./dox/doxyfile-nano
+	doxygen ./dox/doxyfile-leonardo
 	doxygen ./dox/doxyfile-atmega328
 	doxygen ./dox/doxyfile-attinyx4
 
