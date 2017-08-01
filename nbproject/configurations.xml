@@ -110,6 +110,7 @@
       <itemPath>dox/doxyfile-attinyx4</itemPath>
       <itemPath>dox/doxyfile-common</itemPath>
       <itemPath>dox/doxyfile-leonardo</itemPath>
+      <itemPath>dox/doxyfile-mega</itemPath>
       <itemPath>dox/doxyfile-nano</itemPath>
       <itemPath>dox/doxyfile-uno</itemPath>
     </logicalFolder>

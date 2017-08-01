@@ -1,0 +1,26 @@
+# Doxyfile 1.8.13
+
+@INCLUDE		= dox/doxyfile-common
+
+# Override project name and brief if needed
+#PROJECT_NAME           = FastArduino
+#PROJECT_BRIEF          = "C++ library to build fast but small Arduino/AVR projects"
+
+# Define which sections should be included in generated doc (default none)
+ENABLED_SECTIONS       = mega
+
+# Override if you need to restrict generation to one file or one subdir
+# (default is cores directory, i.e. all source files)
+INPUT                  = cores/fastarduino/boards/mega.h
+# Override excluded patterns to restrict generation scope (default none)
+#EXCLUDE_PATTERNS       = */boards/empty*
+
+# Override to ensure generated doc is under proper subdir of html
+HTML_OUTPUT            = html/boards/mega
+
+# Override to ensure generated doc is under proper subdir of html
+LATEX_OUTPUT           = latex/boards/mega
+
+# Override if you want some macros defined for this doc generation
+PREDEFINED             = __AVR_ATmega2560__ ARDUINO_MEGA F_CPU=16000000L UCSR0A SPDR TWCR
+
