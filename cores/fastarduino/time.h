@@ -83,7 +83,7 @@ namespace time
 	void yield();
 
 	/**
-	 * Compute the time delta from @time1 and @time2.
+	 * Compute the time delta from @p time1 and @p time2.
 	 * The method expects @p time1 to occur *before* @p time2; otherwise, behavior 
 	 * is undefined.
 	 * @param time1 the starting time

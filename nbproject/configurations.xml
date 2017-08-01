@@ -113,6 +113,7 @@
       <itemPath>dox/doxyfile-mega</itemPath>
       <itemPath>dox/doxyfile-nano</itemPath>
       <itemPath>dox/doxyfile-uno</itemPath>
+      <itemPath>dox/main.md</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
