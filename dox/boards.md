@@ -26,6 +26,8 @@ In addition, the following option shall be set at compile time:
 
 When using FastArduino makefile, then you first need to create your project under netbeans, generate a proper configuration for it, and pass it to `make`. This is described in further details in [ArduinoDevSetup](../../../ArduinoDevSetup.docx).
 
+Note that you should **never** include directly a specific board header file (e.g. `#include <fastarduno/boards/uno.h>`) in your own source code, this will not compile properly. Instead, you should simply `#include <fastarduino/boards/board.h>` which will include the proper header file for the board defined by `VARIANT`.
+
 Capabilities of each supported target
 -------------------------------------
 
