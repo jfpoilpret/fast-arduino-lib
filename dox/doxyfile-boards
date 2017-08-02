@@ -1,0 +1,8 @@
+# Doxyfile 1.8.13
+
+@INCLUDE		= dox/doxyfile-common
+
+# Set proper HTML generation for board support (minimalist layout)
+LAYOUT_FILE            = dox/doxygen-layout-minimum.xml
+GENERATE_TREEVIEW      = NO
+

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="f1"
+                   displayName="Documentation"
+                   projectFiles="true"
+                   kind="ROOT">
+      <itemPath>dox/boards.md</itemPath>
+      <itemPath>dox/doxyfile-api</itemPath>
+      <itemPath>dox/doxyfile-atmega328</itemPath>
+      <itemPath>dox/doxyfile-attinyx4</itemPath>
+      <itemPath>dox/doxyfile-boards</itemPath>
+      <itemPath>dox/doxyfile-common</itemPath>
+      <itemPath>dox/doxyfile-leonardo</itemPath>
+      <itemPath>dox/doxyfile-mega</itemPath>
+      <itemPath>dox/doxyfile-nano</itemPath>
+      <itemPath>dox/doxyfile-uno</itemPath>
+      <itemPath>dox/doxygen-layout-minimum.xml</itemPath>
+      <itemPath>dox/main.md</itemPath>
+    </logicalFolder>
     <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
         <itemPath>cores/fastarduino/boards/attiny_x4.h</itemPath>
@@ -104,16 +121,6 @@
       <itemPath>Makefile</itemPath>
       <itemPath>Makefile-Examples.mk</itemPath>
       <itemPath>Makefile-FastArduino.mk</itemPath>
-      <itemPath>dox/boards.md</itemPath>
-      <itemPath>dox/doxyfile-api</itemPath>
-      <itemPath>dox/doxyfile-atmega328</itemPath>
-      <itemPath>dox/doxyfile-attinyx4</itemPath>
-      <itemPath>dox/doxyfile-common</itemPath>
-      <itemPath>dox/doxyfile-leonardo</itemPath>
-      <itemPath>dox/doxyfile-mega</itemPath>
-      <itemPath>dox/doxyfile-nano</itemPath>
-      <itemPath>dox/doxyfile-uno</itemPath>
-      <itemPath>dox/main.md</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -316,6 +323,30 @@
       </item>
       <item path="cores/fastarduino/watchdog.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dox/boards.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-api" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-atmega328" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-attinyx4" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-boards" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-common" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-leonardo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-mega" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-nano" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-uno" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/main.md" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="ATmega328-Release" type="3">
       <toolsSet>
@@ -351,6 +382,12 @@
         <packType>Tar</packType>
         <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/FastArduino.tar</output>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
                             from="${OUTPUT_PATH}"
@@ -572,6 +609,30 @@
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/boards.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-api" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-atmega328" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-attinyx4" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-boards" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-common" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-leonardo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-mega" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-nano" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-uno" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="ATtiny84-Release" type="3">
@@ -662,6 +723,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -829,6 +896,30 @@
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/boards.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-api" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-atmega328" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-attinyx4" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-boards" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-common" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-leonardo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-mega" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-nano" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-uno" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="MEGA-Release" type="3">
@@ -919,6 +1010,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -1086,6 +1183,30 @@
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/boards.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-api" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-atmega328" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-attinyx4" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-boards" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-common" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-leonardo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-mega" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-nano" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-uno" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="ATmega328-16MHz-Release" type="3">
@@ -1176,6 +1297,12 @@
                             perm="644"
                             owner="root"
                             group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}lib/${OUTPUT_BASENAME}"
+                            from="${OUTPUT_PATH}"
+                            perm="644"
+                            owner="root"
+                            group="bin"/>
         </packFileList>
       </packaging>
       <item path="cores/fastarduino/abi.cpp" ex="false" tool="1" flavor2="0">
@@ -1343,6 +1470,30 @@
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/boards.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-api" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-atmega328" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-attinyx4" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-boards" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-common" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-leonardo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-mega" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-nano" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-uno" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="NANO-Release" type="3">
@@ -1540,6 +1691,30 @@
       </item>
       <item path="cores/fastarduino/watchdog.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dox/boards.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-api" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-atmega328" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-attinyx4" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-boards" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-common" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-leonardo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-mega" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-nano" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-uno" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/main.md" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="LEONARDO-Release" type="3">
       <toolsSet>
@@ -1735,6 +1910,30 @@
       <item path="cores/fastarduino/watchdog.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="cores/fastarduino/watchdog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/boards.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-api" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-atmega328" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-attinyx4" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-boards" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-common" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-leonardo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-mega" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-nano" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxyfile-uno" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

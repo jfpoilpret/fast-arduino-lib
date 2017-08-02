@@ -1,9 +1,9 @@
 # Doxyfile 1.8.13
 
-@INCLUDE		= dox/doxyfile-common
+@INCLUDE		= dox/doxyfile-boards
 
 # Override project name and brief if needed
-#PROJECT_NAME           = FastArduino
+PROJECT_NAME           = "FastArduino - ATtinyX4 Support"
 #PROJECT_BRIEF          = "C++ library to build fast but small Arduino/AVR projects"
 
 # Define which sections should be included in generated doc (default none)
