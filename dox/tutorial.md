@@ -309,14 +309,62 @@ You may wonder why `"Hello, World!\n"` occupies 16 bytes, although it should use
 Compared to Arduino API, FastArduino brings formatted streams as can be found in standard C++; although more verbose than usual C `printf()` function, formatted streams allow compile-time safety.
 
 Here is an example that prints formatted data to USB:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/uart.h>
 
-TODO Example
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-TODO Equivalent ARduino API
+REGISTER_UATX_ISR(0)
 
-TODO Show potential issues with Arduino API
+int main()
+{
+    board::init();
+    sei();
+	
+    serial::hard::UATX<board::USART::USART0> uart{output_buffer};
+    uart.register_handler();
+    uart.begin(115200);
 
-TODO compare size
+    streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+    uint16_t value = 0x8000;
+    out << F("value = 0x") << hex << value 
+        << F(", ") << dec << value 
+        << F(", 0") << oct << value 
+        << F(", B") << bin << value << endl;
+    return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here, we use `uart.fout()` instead of `uart.out()` to get a `streams::FormattedOutput` on which we can use the "insertion operator" `<<`.
+
+TODO more details on usage + references C++ ostream.
+
+Here is the equivalent code with Arduino API:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+void setup()
+{
+    Serial.begin(115200);
+    byte value = 0x8000;
+    Serial.print(F("value = 0x"));
+    Serial.print(value, 16);
+    Serial.print(F(", "));
+    Serial.print(value);
+    Serial.print(F(", 0"));
+    Serial.print(value, 8);
+    Serial.print(F(", B"));
+    Serial.println(value, 2);
+}
+
+void loop()
+{
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once again, we can compare the size of both:
+|           | Arduino API | FastArduino |
+|-----------|-------------|-------------|
+| code size | 1808 bytes  | 1412 bytes  |
+| data size | 186 bytes   | 77 bytes    |
 
 TODO introduce input streams also!
 
