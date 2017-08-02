@@ -120,7 +120,8 @@ help: .help-post
 
 # FastArduino doc generation targets
 docs:
-	# Create all apidoc/* dirs and subdirs as doxygen cannot properly create them
+	# Re-create all apidoc/* dirs and subdirs as doxygen cannot properly create them
+	rm -r apidoc
 	mkdir -p apidoc
 	mkdir -p apidoc/html
 	mkdir -p apidoc/latex
