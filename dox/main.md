@@ -33,6 +33,7 @@ In the generated `Makefile` of the project, you can include FastArduino provided
 Once you can build your project from netbeans, you can build it from a Linux shell as well:
 
 > $ make CONF=UNO-Release
+> 
 > $ make flash CONF=UNO-Release
 
 TODO: copy from Conway example readme!

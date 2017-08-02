@@ -9,7 +9,7 @@ Using FastArduino API can be learnt step by step in the preferred following orde
 
 Basics:
 1. [gpio & time](@ref gpiotime)
-2. UART & flash
+2. [UART & flash](@ref uartflash)
 3. timer
 4. real-time timer
 5. analog input
@@ -21,8 +21,8 @@ Advanced:
 2. interrupts
 3. events, scheduler
 4. power
-5. SPI devices
-6. I2C devices
+5. SPI devices management
+6. I2C devices management
 7. eeprom
 
 Devices:
@@ -135,8 +135,7 @@ The problem here is that Arduino API accept a simple number when they need a pin
 
 This problem cannot occur with FastArduino as the available pins are stored in a strong enum and it becomes impossible to select a pin that does not exist for the board we target!
 
-Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, TODO IDE/toolchains versions):
-
+Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR Toolchain 3.5.3, Arduino API project built with Arduino IDE 1.8.2):
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
 | code size | 928 bytes   | 154 bytes   |
@@ -184,19 +183,141 @@ This should be rather straightforward to understand if you know C or C++.
 
 Here is an equivalent example with Arduino API:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-TODO LED chasing with Arduino IDE.
-https://learn.sparkfun.com/tutorials/sik-experiment-guide-for-arduino---v32/experiment-4-driving-multiple-leds
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const byte LED_PINS[] = {0, 1, 2, 3, 4, 5, 6, 7};
+const byte NUM_LEDS =  sizeof(LED_PINS) / sizeof(LED_PINS[0]);
 
+void setup()
+{
+    for(byte i = 0; i < NUM_LEDS; i++)
+        pinMode(LED_PINS[i], OUTPUT);
+}
+
+void loop()
+{
+    for(byte i = 0; i < NUM_LEDS; i++)
+    {
+        digitalWrite(LED_PINS[i], HIGH);
+        delay(250);
+        digitalWrite(LED_PINS[i], LOW);
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 We see, with Arduino API, that we have to deal with each pin individually, which makes the program source code longer and not necessarily easier to understand.
 
 Here is a quick comparison of the sizes for both programs:
-TODO
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | XXX bytes   | XXX bytes   |
-| data size | X bytes     | X byte      |
+| code size | 968 bytes   | 168 bytes   |
+| data size | 17 bytes    | 0 byte      |
 
 
+@anchor uartflash Basics: UART & flash
+--------------------------------------
+
+Although not often necessary in many finished programs, `UART` (for serial communication interface) is often very useful for debugging a program while it is being developed; this is why `UART` is presented now.
+
+Here is a first simple program showing how to display, with FastArduino API, a simple string to the serial output (for UNO, this is connected to USB):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/uart.h>
+
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static char output_buffer[OUTPUT_BUFFER_SIZE];
+
+REGISTER_UATX_ISR(0)
+
+int main()
+{
+    board::init();
+    sei();
+	
+    serial::hard::UATX<board::USART::USART0> uart{output_buffer};
+    uart.register_handler();
+    uart.begin(115200);
+
+    streams::OutputBuffer out = uart.out();
+    out.puts("Hello, World!\n");
+    out.flush();
+    return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+As usual, at first we need to include the proper header (`uart.h`) to use its API.
+
+Then, we define a buffer that will be used by the `UART` API to transmit characters to your PC through USB. You may find it cumbersome to do it yourself but it brings a huge advantage: you are the one to decide of the buffer size, whereas in Arduino API, you have no choice. Here, we consider 64 bits to be big enough to store characters that will be transmitted to the PC. How `UART` is using this buffer is not important to you though.
+
+Then we *register an ISR* necessary for transmissions to take place; this is done by the `REGISTER_UATX_ISR(0)` macro. Explicit ISR registration is one important design choice of FastArduino: **you** decide which ISR should be registered to do what. This may again seem cumbersome but once again this gives you the benefit to decie what you need, hence build your application the way you want it.
+
+The code that follows instantiates a `uart::hard::UATX` object that is using `board::USART::USART0` (the only one available on UNO) and based on the previously created buffer. Note that `UATX` class is in charge of **only** transmitting characters, not receiving. Other classes exist for only receiving (`UARX`), or for doing both (`UART`).
+
+Once created, `uart` needs to be *linked* to the ISR previously registered, this is done through `uart.register_handler()`. Then we can set `uart` ready for transmission, at serial speed of 115200 bps.
+
+Next step consists in extracting, from `uart`, a `streams::OutputBuffer` that will allow us to send characters or strings to USB:
+
+    out.puts("Hello, World!\n");
+
+The last important instruction waits for all characters to be transmitted before leaving the program.
+
+Here is the equivalent code with Arduino API:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println("Hello, World!");
+}
+
+void loop()
+{
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Of course, we can see here that the code looks simpler, although one may wonder why we need to define a `loop()` function that does nothing.
+
+Now let's compare the size of both:
+|           | Arduino API | FastArduino |
+|-----------|-------------|-------------|
+| code size | 1440 bytes  | 768 bytes   |
+| data size | 200 bytes   | 93 bytes    |
+The data size is big because the buffer used by `Serial` has a hard-coded size (you cannot change it without modifying and recompiling Arduino API). Moreover, when using `Serial`, 2 buffers are created, one for input and one for output, even though you may only need the latter one!
+
+Now let's take a look at the 93 bytes of data used in the FastArduino version of this example, how are they broken down?
+| Source            | data size   |
+|-------------------|-------------|
+| `output_buffer`   | 64 bytes    |
+| power API         | 1 byte      |
+| `UATX` ISR        | 2 bytes     |
+| `UATX` vtable     | 10 bytes    |
+| "Hello, World!\n" | 16 bytes    |
+| **TOTAL**         | 93 bytes    |
+
+*vtable* is specific data created by C++ compiler for classes with `virtual` methods: every time you use virtual methods in classes, this will add more data size, this is why FastArduino avoids `virtual` as much as possible.
+
+As you can see in the table above, the constant string `"Hello, World!\n"` occupies 16 bytes of data (i.e. AVR SRAM) in addition to 16 bytes of Flash (as it is part of the program and must eb stored permanently). If your program deals with a lot of constant strings like this, you may quickly meet a memory problem with SRAM usage. This is why it is more effective to keep these strings exclusively in Flash (you have no choice) but load them t SRAM only when they are needed, i.e. when they get printed to `UATX` as in the sample code.
+
+How do we change our program so that this string is only stored in Flash? We can use FastArduino `flash` API for that, by changing only one line of code:
+
+    out.puts(F("Hello, World!\n"));
+
+Note th use of `F()` macro here: this makes the string reside in Flash only, and then it is being read from Flash "on the fly" by `out.puts()` method; the latter method is overloaded for usual C-strings (initial example) and for C-strings stored in Flash only.
+
+We can compare the impact on sizes:
+|           | without %F() | with %F()   |
+|-----------|--------------|-------------|
+| code size | 768 bytes    | 776 bytes   |
+| data size | 93 bytes     | 77 bytes    |
+Although a bit more code has been added (the code to read the string from Flash into SRAM on the fly), we see 16 bytes have been removed from data, this is the size of the string constant.
+
+You may wonder why `"Hello, World!\n"` occupies 16 bytes, although it should use only 15 bytes (if we account for the terminating `'\0'` character); this is because the string is stored in Flash and Flash is word-addressable, not byte-addressable on AVR.
+
+Compared to Arduino API, FastArduino brings formatted streams as can be found in standard C++; although more verbose than usual C `printf()` function, formatted streams allow compile-time safety.
+
+Here is an example that prints formatted data to USB:
+
+TODO Example
+
+TODO Equivalent ARduino API
+
+TODO Show potential issues with Arduino API
+
+TODO compare size
+
+TODO introduce input streams also!
 
 
