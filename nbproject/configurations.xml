@@ -17,6 +17,7 @@
       <itemPath>dox/doxyfile-uno</itemPath>
       <itemPath>dox/doxygen-layout-minimum.xml</itemPath>
       <itemPath>dox/main.md</itemPath>
+      <itemPath>dox/tutorial.md</itemPath>
     </logicalFolder>
     <logicalFolder name="fastarduino" displayName="fastarduino" projectFiles="true">
       <logicalFolder name="boards" displayName="boards" projectFiles="true">
@@ -347,6 +348,8 @@
       </item>
       <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dox/tutorial.md" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="ATmega328-Release" type="3">
       <toolsSet>
@@ -633,6 +636,8 @@
       <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="dox/main.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/tutorial.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="ATtiny84-Release" type="3">
@@ -921,6 +926,8 @@
       </item>
       <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dox/tutorial.md" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="MEGA-Release" type="3">
       <toolsSet>
@@ -1207,6 +1214,8 @@
       <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="dox/main.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/tutorial.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="ATmega328-16MHz-Release" type="3">
@@ -1495,6 +1504,8 @@
       </item>
       <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dox/tutorial.md" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="NANO-Release" type="3">
       <toolsSet>
@@ -1715,6 +1726,8 @@
       </item>
       <item path="dox/main.md" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="dox/tutorial.md" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="LEONARDO-Release" type="3">
       <toolsSet>
@@ -1934,6 +1947,8 @@
       <item path="dox/doxygen-layout-minimum.xml" ex="false" tool="3" flavor2="0">
       </item>
       <item path="dox/main.md" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="dox/tutorial.md" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
