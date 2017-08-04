@@ -89,23 +89,28 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-July-August 2017
-----------------
-1. Support other I2C devices: MCP23017 (IO multiplexer)
-2. Sonar ranger API
-3. Improve I2C master support (asynchronous mode)
-4. Add support for ATtinyX5
-5. Add USB support for Arduino Leonardo
-6. Improve Timer support (support input capture where available)
+August 2017
+-----------
+1. Document API and prepare a tutorial
+2. Improve streams support ala C++
+3. Improve Timer support (support input capture where available)
+4. Sonar ranger API
+
+September 2017
+--------------
+5. Add support for ATtinyX5
+6. Improve I2C master support (asynchronous mode)
 
 December 2017
 -------------
-7. Improve Analog Input support and code
-8. Improve SPI to support slave mode
-9. Improve I2C to support slave mode
-10. Add high-speed timer support of Arduino Leonardo
+7. Support other I2C devices: MCP23017 (IO multiplexer)
+8. Improve Analog Input support and code
+9. Improve SPI to support slave mode
+10. Improve I2C to support slave mode
+11. Add USB support for Arduino Leonardo
+12. Add high-speed timer support of Arduino Leonardo
 
-In addition to these activities, I intend to perform various continuous improvements during Summer, regarding:
+In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
 - coding guidelines applied across the library code (not necessarily example code)
 - documentation (ISR handling, Board support adding, API...)
