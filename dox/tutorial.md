@@ -24,13 +24,17 @@ Advanced:
 5. SPI devices management
 6. I2C devices management
 7. eeprom
+8. Software UART
 
 Devices:
 1. SPI
 2. I2C
+3. Other devices: sonar, servo, SIPO
 
 @anchor gpiotime Basics: gpio & time
 ------------------------------------
+
+### Blink example ###
 
 Here is a first example of a FastArduino based program:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -143,7 +147,9 @@ Now, what is really interesting in comparing both working code examples is the s
 
 As you probably know, Atmel AVR MCU (and Arduino boards that embed them) are much constrained in code and data size, hence we could say that "every byte counts". In the table ablove, one easily sees that Arduino API comes cluttered with lots of code and data, even if you don't need it; on the other hand, FastArduino is highly optimized and will produce code only for what you **do** use.
 
-Now `gpio.h` has more API than just `gpio::FastPin` and `gpio::FastPinType`; it also includes `gpio::FastPort` and `gpio::FastMaskedPort` that allow to manipulate several pins at a time, as long as these pis belong to the same Port of the MCU. This allows size and speed optimizations when having to deal with a group of related pins, e.g. if you want to implement a LED chasing project.
+### LED Chaser example ###
+
+Now `gpio.h` has more API than just `gpio::FastPin` and `gpio::FastPinType`; it also includes `gpio::FastPort` and `gpio::FastMaskedPort` that allow to manipulate several pins at a time, as long as these pis belong to the same Port of the MCU. This allows size and speed optimizations when having to deal with a group of related pins, e.g. if you want to implement a LED chaser project.
 
 With FastArduino, here is a program showing how you could implement a simple 8 LED chaser on UNO:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -213,6 +219,8 @@ Here is a quick comparison of the sizes for both programs:
 
 @anchor uartflash Basics: UART & flash
 --------------------------------------
+
+### Simple Serial Output example ###
 
 Although not often necessary in many finished programs, `UART` (for serial communication interface) is often very useful for debugging a program while it is being developed; this is why `UART` is presented now.
 
@@ -295,7 +303,7 @@ How do we change our program so that this string is only stored in Flash? We can
 
     out.puts(F("Hello, World!\n"));
 
-Note th use of `F()` macro here: this makes the string reside in Flash only, and then it is being read from Flash "on the fly" by `out.puts()` method; the latter method is overloaded for usual C-strings (initial example) and for C-strings stored in Flash only.
+Note the use of `F()` macro here: this makes the string reside in Flash only, and then it is being read from Flash "on the fly" by `out.puts()` method; the latter method is overloaded for usual C-strings (initial example) and for C-strings stored in Flash only.
 
 We can compare the impact on sizes:
 |           | without %F() | with %F()   |
@@ -305,6 +313,10 @@ We can compare the impact on sizes:
 Although a bit more code has been added (the code to read the string from Flash into SRAM on the fly), we see 16 bytes have been removed from data, this is the size of the string constant.
 
 You may wonder why `"Hello, World!\n"` occupies 16 bytes, although it should use only 15 bytes (if we account for the terminating `'\0'` character); this is because the string is stored in Flash and Flash is word-addressable, not byte-addressable on AVR.
+
+TODO more about flash API for other types than strings.
+
+### Formatted Output example ###
 
 Compared to Arduino API, FastArduino brings formatted streams as can be found in standard C++; although more verbose than usual C `printf()` function, formatted streams allow compile-time safety.
 
@@ -337,7 +349,9 @@ int main()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here, we use `uart.fout()` instead of `uart.out()` to get a `streams::FormattedOutput` on which we can use the "insertion operator" `<<`.
 
-TODO more details on usage + references C++ ostream.
+If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::ostream` API](http://www.cplusplus.com/reference/ostream/ostream/operator%3C%3C/) which FastArduino library tries to implement with some level of fidelity.
+
+You can also find more details in `streams` namespace documentation.
 
 Here is the equivalent code with Arduino API:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -366,6 +380,18 @@ Once again, we can compare the size of both:
 | code size | 1808 bytes  | 1412 bytes  |
 | data size | 186 bytes   | 77 bytes    |
 
-TODO introduce input streams also!
+### Serial Input example ###
 
+FastArduino also implements input streams connected to serial output; here is a simple example:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+TODO input sample code
+only UARX for this example
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+TODO mention waiting API and link to power and yield().
+
+TODO introduce input streams also! Simple or Formatted
+
+TODO show formatted input
+
+TODO mention software UART but do nto demonstrate (advanced).
