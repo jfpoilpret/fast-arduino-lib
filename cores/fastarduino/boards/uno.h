@@ -76,44 +76,84 @@ namespace board
 	{
 		/** Pin PD0 (D0 on Arduino UNO) */
 		D0_PD0 = 0,			// PD0
+		/** Pin PD0 (D0 on Arduino UNO) */
+		D0 = DigitalPin::D0_PD0,		// PD0
 		/** Pin PD1 (D1 on Arduino UNO) */
 		D1_PD1,				// PD1
+		/** Pin PD1 (D1 on Arduino UNO) */
+		D1 = DigitalPin::D1_PD1,				// PD1
 		/** Pin PD2 (D2 on Arduino UNO) */
 		D2_PD2,				// PD2
+		/** Pin PD2 (D2 on Arduino UNO) */
+		D2 = DigitalPin::D2_PD2,				// PD2
 		/** Pin PD3 (D3 on Arduino UNO) */
 		D3_PD3,				// PD3
+		/** Pin PD3 (D3 on Arduino UNO) */
+		D3 = DigitalPin::D3_PD3,				// PD3
 		/** Pin PD4 (D4 on Arduino UNO) */
 		D4_PD4,				// PD4
+		/** Pin PD4 (D4 on Arduino UNO) */
+		D4 = DigitalPin::D4_PD4,				// PD4
 		/** Pin PD5 (D5 on Arduino UNO) */
 		D5_PD5,				// PD5
+		/** Pin PD5 (D5 on Arduino UNO) */
+		D5 = DigitalPin::D5_PD5,				// PD5
 		/** Pin PD6 (D6 on Arduino UNO) */
 		D6_PD6,				// PD6
+		/** Pin PD6 (D6 on Arduino UNO) */
+		D6 = DigitalPin::D6_PD6,				// PD6
 		/** Pin PD7 (D7 on Arduino UNO) */
 		D7_PD7,				// PD7
+		/** Pin PD7 (D7 on Arduino UNO) */
+		D7 = DigitalPin::D7_PD7,				// PD7
 		/** Pin PB0 (D8 on Arduino UNO) */
 		D8_PB0,				// PB0
+		/** Pin PB0 (D8 on Arduino UNO) */
+		D8 = DigitalPin::D8_PB0,				// PB0
 		/** Pin PB1 (D9 on Arduino UNO) */
 		D9_PB1,				// PB1
+		/** Pin PB1 (D9 on Arduino UNO) */
+		D9 = DigitalPin::D9_PB1,				// PB1
 		/** Pin PB2 (D10 on Arduino UNO) */
 		D10_PB2,			// PB2
+		/** Pin PB2 (D10 on Arduino UNO) */
+		D10 = DigitalPin::D10_PB2,			// PB2
 		/** Pin PB3 (D11 on Arduino UNO) */
 		D11_PB3,			// PB3
+		/** Pin PB3 (D11 on Arduino UNO) */
+		D11 = DigitalPin::D11_PB3,			// PB3
 		/** Pin PB4 (D12 on Arduino UNO) */
 		D12_PB4,			// PB4
+		/** Pin PB4 (D12 on Arduino UNO) */
+		D12 = DigitalPin::D12_PB4,			// PB4
 		/** Pin PB5 (D13 on Arduino UNO) */
 		D13_PB5,			// PB5
+		/** Pin PB5 (D13 on Arduino UNO) */
+		D13 = DigitalPin::D13_PB5,			// PB5
 		/** Pin PC0 (A0, D14 on Arduino UNO) */
 		D14_PC0,			// PC0-A0
+		/** Pin PC0 (A0, D14 on Arduino UNO) */
+		A0 = DigitalPin::D14_PC0,			// PC0-A0
 		/** Pin PC1 (A1, D15 on Arduino UNO) */
 		D15_PC1,			// PC1-A1
+		/** Pin PC1 (A1, D15 on Arduino UNO) */
+		A1 = DigitalPin::D15_PC1,			// PC1-A1
 		/** Pin PC2 (A2, D16 on Arduino UNO) */
 		D16_PC2,			// PC2-A2
+		/** Pin PC2 (A2, D16 on Arduino UNO) */
+		A2 = DigitalPin::D16_PC2,			// PC2-A2
 		/** Pin PC3 (A3, D17 on Arduino UNO) */
 		D17_PC3,			// PC3-A3
+		/** Pin PC3 (A3, D17 on Arduino UNO) */
+		A3 = DigitalPin::D17_PC3,			// PC3-A3
 		/** Pin PC4 (A4, D18 on Arduino UNO) */
 		D18_PC4,			// PC4-A4
+		/** Pin PC4 (A4, D18 on Arduino UNO) */
+		A4 = DigitalPin::D18_PC4,			// PC4-A4
 		/** Pin PC5 (A5, D19 on Arduino UNO) */
 		D19_PC5,			// PC5-A5
+		/** Pin PC5 (A5, D19 on Arduino UNO) */
+		A5 = DigitalPin::D19_PC5,			// PC5-A5
 		/** Shortcut for LED pin on Arduino */
 		LED = DigitalPin::D13_PB5,
 		// FastArduino internal: DO NOT USE
