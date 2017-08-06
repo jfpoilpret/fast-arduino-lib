@@ -16,7 +16,6 @@
 #define	INTERRUPTS_HH
 
 #include <avr/interrupt.h>
-#include "interrupts.h"
 
 // Macro found on https://tty1.net/blog/2008/avr-gcc-optimisations_en.html
 // This allows processing pointers to SRAM data be performed directly from Y, Z registers
