@@ -31,6 +31,7 @@ Devices:
 2. I2C
 3. Other devices: sonar, servo, SIPO
 
+
 @anchor gpiotime Basics: gpio & time
 ------------------------------------
 
@@ -515,13 +516,92 @@ We have already seen `UATX` and `UARX` as classes for sending, resp. receiving, 
 
 As you know, the number of physical (hardware) UART available on an MCU target is limited, some targets (ATtiny) don't even have any hardware UART at all. For this reason, if you need extra UART featurs to connect to some devices, you can use software UART API, documented in [namespace `serial::soft`](TODO). As this more complicated to use, it is not part of this basic tutorial, but will be addressed later on.
 
+
 @anchor analoginput Basics: analog input
 ----------------------------------------
 
-TODO simple example explained
+Here is a simple example using analog input API to read a value from some sensor (thermistor, potentiometer, whatever you like) and lights a LED if the read value is above some threshold:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/analog_input.h>
+#include <fastarduino/gpio.h>
+#include <fastarduino/time.h>
 
-TODO compare size with Arduino core
+const uint16_t THRESHOLD = 500;
 
+int main()
+{
+    board::init();
+    sei();
+
+    gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+    analog::AnalogInput<board::AnalogPin::A0> sensor;
+    while (true)
+    {
+        if (sensor.sample() > THRESHOLD)
+            led.set();
+        else
+            led.clear();
+        time::delay_ms(100);
+    }
+    return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This example is an adaptation of the [first GPIO example](@ref gpio) of this tutorial.
+
+The first change consists in including the necessary header:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/analog_input.h>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then we have the definition of the `sensor` variable:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+    analog::AnalogInput<board::AnalogPin::A0> sensor;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here we instantiate `AnalogInput` for analog pin `A0` (on Arduino UNO).
+
+In the infinite loop, we then get the current analog value of `sensor` and compare it to `THRESHOLD` constant:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+        if (sensor.sample() > THRESHOLD)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, sample values are on 10 bits (0..1023) represented as `uint16_t`.
+
+If you don't need such precision, you can define `sensor` differently:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+    analog::AnalogInput<board::AnalogPin::A0, board::AnalogReference::AVCC, uint8_t> sensor;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note the two additional template arguments provided to `AnalogInput<...>`:
+- the first added argument `board::AnalogReference::AVCC`, although seldom changed, may become important when you create your own boards from MCU chips; you can further read API documentation if you need more information about it
+- the second added argument is the type of returned samples, either `uint16_t` (default value) or `uint8_t`. The type determines the samples precision:
+    - `uint8_t`: 8 bits (samples between 0 and 255)
+    - `uint16_t`: 10 bits (samples between 0 and 1023)
+
+Now let's compare the first example with the equivalent Arduino core API program:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+void setup()
+{
+    pinMode(LED_BUILTIN, OUTPUT);
+}
+
+const uint16_t THRESHOLD = 500;
+
+void loop()
+{
+    if (analogRead(A0) > THRESHOLD)
+        digitalWrite(LED_BUILTIN, HIGH);
+    else
+        digitalWrite(LED_BUILTIN, LOW);
+    delay(100);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As usual, we compare the size of both:
+|           | Arduino API | FastArduino |
+|-----------|-------------|-------------|
+| code size | 204 bytes   | 926 bytes   |
+| data size | 0 bytes     | 9 bytes     |
+
+Note that Arduino core API does not allow you any other precision than 10 bits.
 
 
 @anchor timer Basics: timer
