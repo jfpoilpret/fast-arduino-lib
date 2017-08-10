@@ -12,6 +12,13 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file 
+ * Timer API.
+ */
+
 #ifndef TIMER_HH
 #define TIMER_HH
 
@@ -22,6 +29,7 @@
 #include "utilities.h"
 #include "boards/board_traits.h"
 
+//TODO doxygen
 // Generic macros to register ISR on Timer
 //=========================================
 //TODO rework naming of these API macros
@@ -35,9 +43,92 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 //TODO Add API to explicitly set interrupts we want to enable
 //TODO Add API to support Input Capture when available for Timer (Timer1)
+
+/**
+ * Defines all API to manipulate AVR Timers.
+ * In order to properly use Timers, some concepts are important to understand:
+ * - Frequency and Prescaler
+ * - BOTTOM, TOP and MAX values
+ * - Modes of operation
+ * - Output modes
+ * TODO better document notions above, in particular prescaler.
+ * TODO different timers with different options
+ */
 namespace timer
 {
+	//TODO rework doc as it seems too near AVR datasheet and too far Timer API
+	/**
+	 * Defines the mode of operation of a timer.
+	 */
+	enum class TimerMode:uint8_t
+	{
+		/** 
+		 * Timer "Normal" mode: counter is incremented up to maximum value (0xFF
+		 * for 8-bits Timer, 0xFFFF for 16-bits Timer), and then resets to 0.
+		 * Timer Overflow may generate an interrupt.
+		 */
+		NORMAL,
+		/**
+		 * Timer "Clear Timer on Compare match" mode: counter is incremented until
+		 * it reaches "TOP" (OCRxA register value), then it is reset to 0.
+		 * Reaching TOP may trigger an interrupt.
+		 */
+		CTC,
+		/**
+		 * Timer "Fast Phase Width Modulation" mode: counter is incremented until
+		 * it reaches MAX value (0xFF for 8-bits Timer, TODO for 16-bits Timer).
+		 * In this mode the timer can be linked to PWM output pins to be 
+		 * automatically set or cleared when:
+		 * - counter reaches MAX
+		 * - counter reaches TOP (OCRxA or OCRxB)
+		 * Reaching TOP and MAX may trigger interrupts.
+		 */
+		FAST_PWM,
+		/**
+		 * Timer "Phase Correct Pulse Width Modulation" mode: counter is 
+		 * incremented until MAX (0xFF for 8-bits Timer, TODO for 16-bits Timer),
+		 * then decremented until 0, and incremented again...
+		 * In this mode the timer can be linked to PWM output pins to be 
+		 * automatically set or cleared when:
+		 * - counter reaches MAX
+		 * - counter reaches TOP (OCRxA or OCRxB)
+		 * Reaching TOP and MAX may trigger interrupts.
+		 */
+		PHASE_CORRECT_PWM
+	};
+
+	/**
+	 * Defines the "connection" between this timer and specific PWM output pins.
+	 */
+	enum class TimerOutputMode:uint8_t
+	{
+		/** No connection for this pin: pin is unaffected by timer operation. */
+		DISCONNECTED,
+		/** Pin is toggled on Compare Match. */
+		TOGGLE,
+		/** 
+		 * Pin is cleared on Compare Match. For TimerMode::FAST_PWM and
+		 * TimerMode::PHASE_CORRECT_PWM modes, pin will also be set when counter
+		 * reaches BOTTOM (0). This is also known as "non-inverting" mode).
+		 */
+		NON_INVERTING,
+		/** 
+		 * Pin is set on Compare Match. For TimerMode::FAST_PWM and
+		 * TimerMode::PHASE_CORRECT_PWM modes, pin will also be cleared when 
+		 * counter reaches BOTTOM (0). This is also known as "inverting" mode).
+		 */
+		INVERTING
+	};
+	
 	// All utility methods go here
+	/**
+	 * Defines a set of calculation methods for the given @p TIMER
+	 * The behavior of these methods is specific to each AVR Timer are there can
+	 * be many important differences between 2 timers on AVR.
+	 * 
+	 * @tparam TIMER the timer for which we need calculation methods
+	 * @sa board::Timer
+	 */
 	template<board::Timer TIMER>
 	struct Calculator
 	{
@@ -46,23 +137,75 @@ namespace timer
 		using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
 
 	public:
+		/** 
+		 * The timer type: either `uint8_t` or `uint16_t`; this is defined and
+		 * not changeable for each Timer. Timer counter and max values have 
+		 * this type.
+		 */
 		using TIMER_TYPE = typename TRAIT::TYPE;
+		/**
+		 * The type (`enum`) of the possible prescaler values for this timer;
+		 * this is defined and not changeable for each Timer.
+		 */
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
+		/**
+		 * The maximum value you can use for this timer in PWM modes: using this
+		 * value will set PWM duty as 100%.
+		 */
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
-		// Calculations for Compare mode
+		/**
+		 * Computes the ideal prescaler value to use for this timer, in
+		 * TimerMode::CTC mode, in order to be able to count up to @p us
+		 * microseconds.
+		 * TODO constexpr function!
+		 * @param us the number of microseconds we want to be able to count up to
+		 * @return the best prescaler to use
+		 * @sa CTC_counter()
+		 * @sa CTC_frequency()
+		 */
 		static constexpr TIMER_PRESCALER CTC_prescaler(uint32_t us)
 		{
 			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
 		}
+		/**
+		 * Computes the frequency at which this timer would perform, in 
+		 * TimerMode::CTC mode, if it was using @p prescaler.
+		 * TODO constexpr function!
+		 * @param prescaler the prescaler value for which to compute timer
+		 * frequency
+		 * @return timer frequency when using @p prescaler
+		 * @sa CTC_prescaler()
+		 */
 		static constexpr uint32_t CTC_frequency(TIMER_PRESCALER prescaler)
 		{
 			return F_CPU / _BV(uint8_t(prescaler));
 		}
+		/**
+		 * Computes the value of counter to use for this timer, in TimerMode::CTC
+		 * mode, with @p prescaler, in order to reach @p us microseconds.
+		 * TODO constexpr function!
+		 * @param prescaler the prescaler used for this timer
+		 * @param us the number of microseconds to reach with this timer in CTC mode
+		 * @return the MAX value to be used in order to reach @p us
+		 * @sa CTC_prescaler()
+		 * @sa Timer::begin(TIMER_PRESCALER, TIMER_TYPE)
+		 */
 		static constexpr TIMER_TYPE CTC_counter(TIMER_PRESCALER prescaler, uint32_t us)
 		{
 			return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;
 		}
+		/**
+		 * Verifies that the given prescaler @p p is suitable for this timer in
+		 * TimerMode::CTC in ordeer to be able to reach @p us microseconds.
+		 * This is normally not needed but can be helpful in a `static_assert` in
+		 * your code.
+		 * TODO constexpr function!
+		 * TODO finish doc
+		 * @param p
+		 * @param us
+		 * @return 
+		 */
 		static constexpr bool is_adequate_for_CTC(TIMER_PRESCALER p, uint32_t us)
 		{
 			return prescaler_is_adequate(prescaler_quotient(p, us));
@@ -175,22 +318,6 @@ namespace timer
 		
 	};
 
-	enum class TimerOutputMode:uint8_t
-	{
-		DISCONNECTED,
-		TOGGLE,
-		NON_INVERTING,
-		INVERTING
-	};
-	
-	enum class TimerMode:uint8_t
-	{
-		NORMAL,
-		CTC,
-		FAST_PWM,
-		PHASE_CORRECT_PWM
-	};
-	
 	template<board::Timer TIMER>
 	class Timer
 	{
@@ -337,3 +464,4 @@ namespace timer
 }
 
 #endif /* TIMER_HH */
+/// @endcond
