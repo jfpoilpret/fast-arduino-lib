@@ -31,6 +31,7 @@ namespace analog
 {
 	//TODO LATER: add class (or namespace?) with general methods enable/disable ADC...
 
+	//FIXME better put arguments in APIN, TYPE, MAXFREQ, AREF
 	/**
 	 * API that handles a given analog input pin of the target MCU.
 	 * 
