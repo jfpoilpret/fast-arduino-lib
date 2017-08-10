@@ -10,9 +10,9 @@ Using FastArduino API can be learnt step by step in the preferred following orde
 Basics:
 1. [gpio & time](@ref gpiotime)
 2. [UART & flash](@ref uartflash)
-3. timer
-4. real-time timer
-5. analog input
+3. [analog input](@ref analoginput)
+4. [timer](@ref timer)
+5. real-time timer
 6. PWM
 7. utilities
 
@@ -314,7 +314,40 @@ Although a bit more code has been added (the code to read the string from Flash 
 
 You may wonder why `"Hello, World!\n"` occupies 16 bytes, although it should use only 15 bytes (if we account for the terminating `'\0'` character); this is because the string is stored in Flash and Flash is word-addressable, not byte-addressable on AVR.
 
-TODO more about flash API for other types than strings.
+Note that Flash can also be used to store other read-only data that you may want to access at runtime at specific times, i.e. data you do not want to be stored permanently on SRAM during all execution of your program.
+
+The following example shows how to:
+- define, in your source code, read-only data that shall be stored in Flash memory
+- read that data when you need it
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/flash.h>
+
+// This is the type of data we want to store in flash
+struct Dummy
+{
+    uint16_t a;
+    uint8_t b;
+    bool c;
+    int16_t d;
+    char e;
+};
+
+// Define 2 variables of that type, which will be stored in flash
+// Note the PROGMEM keyword that says the compiler and linker to put this data to flash
+const Dummy sample1 PROGMEM = {54321, 123, true, -22222, 'z'};
+const Dummy sample2 PROGMEM = {12345, 231, false, -11111, 'A'};
+
+// The following function needs value of sample1 to be read from flash
+void read_and_use_sample1()
+{
+    // value will get copied with sample1 read-only content
+    Dummy value;
+    // request reading sample1 from flash into local variable value
+    flash::read_flash(&sample1, value);
+    // Here we can use value which is {54321, 123, true, -22222, 'z'}
+
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Formatted Output example ###
 
@@ -384,14 +417,119 @@ Once again, we can compare the size of both:
 
 FastArduino also implements input streams connected to serial output; here is a simple example:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-TODO input sample code
-only UARX for this example
+#include <fastarduino/uart.h>
+
+static constexpr const uint8_t INPUT_BUFFER_SIZE = 64;
+static char input_buffer[INPUT_BUFFER_SIZE];
+
+REGISTER_UARX_ISR(0)
+
+int main()
+{
+    board::init();
+    sei();
+	
+    serial::hard::UARX<board::USART::USART0> uart{input_buffer};
+    uart.register_handler();
+    uart.begin(115200);
+
+    streams::InputBuffer in = uart.in();
+
+    // Get one character if any
+    int input = in.get();
+    if (input != InputBuffer:EOF)
+    {
+        char value = char(input);
+    }
+
+    // Wait until a character is ready and get it
+    char value = streams::get(in);
+
+    // Wait until a complete string is ready and get it
+    char str[64+1];
+    int len = streams::gets(in, str, 64);
+
+    return 0;
+}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note the similarities between this example and UATX example above for all the setup parts.
+The main differences are:
+- use `UARX` type instead of `UATX`
+- `REGISTER_UARX_ISR()` instead of `REGISTER_UATX_ISR()` macro for ISR registration
+- use `InputBuffer` instead of `OutputBuffer` and `uart.in()` instead of `uart.out()`
 
-TODO mention waiting API and link to power and yield().
+Then `UARX` mainly offers one method, `get()`, which returns the next character serially received and buffered; if the input buffer is currently empty, then `get()` returns `InputBuffer::EOF`, which must be tested before dealing with the returned value.
 
-TODO introduce input streams also! Simple or Formatted
+Then the example uses 2 functions defined directly within `streams` namespace:
+- `get()`: this is similar to `InputBuffer.get()` except that it **blocks** until one character is available on serial input.
+- `gets()`: this blocks until a complete string (terminated by `'\0'`) gets read on serial input and fills the given buffer parameter with that string content.
 
-TODO show formatted input
+Note that these 2 functions use `time::yield()` while waiting; this may be linked to `power` management. Please take a look at the documentation for this API for further details.
 
-TODO mention software UART but do nto demonstrate (advanced).
+### Formatted Input example ###
+
+Similar to output, input streams supports formatted input, as can be found in standard C++; once again, formatted input streams allow compile-time safety.
+
+The following example uses formatted input to read values from USB:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/uart.h>
+
+// Define vectors we need in the example
+REGISTER_UARX_ISR(0)
+
+// Buffers for UARX
+static const uint8_t INPUT_BUFFER_SIZE = 64;
+static char input_buffer[INPUT_BUFFER_SIZE];
+
+using INPUT = streams::FormattedInput<streams::InputBuffer>;
+
+int main()
+{
+    board::init();
+    sei();
+	
+    // Start UART
+    serial::hard::UARX<board::USART::USART0> uarx{input_buffer};
+    uarx.register_handler();
+    uarx.begin(115200);
+    INPUT in = uarx.fin();
+
+    // Wait for a char
+    char value1;
+    in >> streams::skipws >> value1;
+
+    // Wait for an uint16_t
+    uint16_t value2;
+    in >> streams::skipws >> value2;
+
+    return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here, we use `uart.fin()` instead of `uart.in()` to get a `streams::FormattedInput` on which we can use the "extraction operator" `>>`. All extractions are blocking and will not return until the required type can be read from the buffer.
+
+If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::istream` API](http://www.cplusplus.com/reference/istream/istream/operator%3E%3E/) which FastArduino library tries to implement with some level of fidelity.
+
+You can also find more details in `streams` namespace documentation.
+
+We have already seen `UATX` and `UARX` as classes for sending, resp. receiving, data through serial. There is also `UARX` which combines both.
+
+As you know, the number of physical (hardware) UART available on an MCU target is limited, some targets (ATtiny) don't even have any hardware UART at all. For this reason, if you need extra UART featurs to connect to some devices, you can use software UART API, documented in [namespace `serial::soft`](TODO). As this more complicated to use, it is not part of this basic tutorial, but will be addressed later on.
+
+@anchor analoginput Basics: analog input
+----------------------------------------
+
+TODO simple example explained
+
+TODO compare size with Arduino core
+
+
+
+@anchor timer Basics: timer
+---------------------------
+
+TODO reminder on what timers are and what they can do.
+
+TODO all timers are similar but different (prescalers, size, capabilities).
+
+TODO start simple example (which one?)
+

@@ -20,23 +20,45 @@ FastArduino implementation:
 
 The rest of this guide provides indications where to start and proceed with learning how to use FastArduino for your projects.
 
+Building FastArduino
+--------------------
+First off, ensure your Linux box contains the ATmel AVR 8 bit toolchain (I use 3.5.3, latest is 3.5.4) and your `$PATH` points to its `bin` directory.
+
+The following commands show how to build the FastArduino library:
+
+    > git clone https://github.com/jfpoilpret/fast-arduino-lib.git
+    > cd fast-arduino-lib
+    > make CONF=UNO-Release build
+
+This creates the FastArduino library, built for Arduino UNO, into `dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a`).
+
+Note that `make` builds one version of FastArduino library for a specific target, that target is specified with `CONF=<target>`. The currently supported targets are:
+- UNO-Release: Arduino UNO
+- NANO-Release: Arduino NANO
+- LEONARDO-Release: Arduino LEONARDO
+- MEGA-Release: Arduino MEGA
+- ATmega328-Release: bare ATmega328P MCU at 8 MHz
+- ATmega328-16MHz-Release: bare ATmega328P MCU at 16 MHz
+- ATtinyX4-Release: bare ATtinyX4 MCU at 8 MHz
+
 Building a project using FastArduino
 ------------------------------------
-The easiest way to start a project using FastArduino is probably to use [netbeans](https://netbeans.org/), first setup as described [here](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx).
+One simple, but a bit cumbersome, way to start a project using FastArduino is probably to use [netbeans](https://netbeans.org/), first setup as described [here](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx).
 
-Then you can create a new C++ project in netbeans, set the proper configuration for it, based on your target MCU or board, and include FastArduino library to the project.
+Then you can use [FastArduino Project Template](https://github.com/jfpoilpret/fastarduino-project-template) to create your first project (just follow instructions in that repository).
 
-Your project shall have at least one ".cpp" source file with an `int main()` function, as shown in the [tutorial](tutorial.html).
-
-In the generated `Makefile` of the project, you can include FastArduino provided `Makefile-FastArduino.mk` which will help setup of all predefined macros. Take a look at comments in this provided Makefile to understand how to use it.
+Your project shall have at least one ".cpp" source file with an `int main()` function, as shown in the [tutorial](tutorial.html). The FastArduino Project Template includes this source file already.
 
 Once you can build your project from netbeans, you can build it from a Linux shell as well:
 
-> $ make CONF=UNO-Release
-> 
-> $ make flash CONF=UNO-Release
+    > $ make CONF=UNO-Release
+    > $ make flash CONF=UNO-Release
 
-TODO: copy from Conway example readme!
+The first `make` builds your program for the target specified with `CONF=...`.
+
+The second `make` uploads the built program to the Flash memory of the target MCU.
+
+The `make` command takes optional arguments that help you specify how to upload to your MCU target, among a set of ways, and through which USB port. This is directly documented in [Makefile-FastArduino](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/Makefile-FastArduino.mk); please go there for further details.
 
 FastArduino library organisation
 --------------------------------
@@ -48,34 +70,33 @@ FastArduino library is organized in a sinple directory structure:
 Most of the library's source code is inside `.h` header files, only a small part of it is in `.cpp` files. This is due to heavy C++ template usage which requires most source code to be present on header files.
 
 All FastArduino source code is defined inside namespaces, in order to avoid names conflicts across programs. Namespaces can include sub-namespaces in some occasions. Namespaces are organized as follows:
+- [analog](namespaceanalog.html): contains the API to handle analog input and "pseudo-analog" output (PWM).
+- [containers](TODO): utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.
+- [devices](TODO): this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:
+    - [magneto](TODO): API for magnetometers, gyroscopes, accelerometers
+    - [rf](TODO): API for radio-frequency chips
+    - [rtc](TODO): API for real time clock chips
+    - [servo](TODO): API to handle servomotors
+    - [sonar](TODO): API to handle sonar range sensors
+- [eeprom](TODO): contains the API to handle read and write to and from the internal MCU EEPROM.
+- [errors](TODO): all errors that can be returned by FastArduino API are defined here as constants.
+- [events](TODO): this namespace defines general event handling that can be used in your programs. Most FastArduino are able to generate events on specific conditions. This namespace also contain the scheduler API which permits scheduling of jobs at specific times or periods.
+- [flash](namespaceflash.html): contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.
+- [gpio](namespacegpio.html): that namespace deals with all API to manage digital input and outputs.
+- [i2c](TODO): that namespace contains all API to deal with I2C (also known as *Two Wires Interface*), including a base class to help you define support for new devices based on I2C protocol.
+- [interrupt](TODO): this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.
+- [power](TODO): contains the API to handle AVR power modes.
+- [serial](namespaceserial.html): contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:
+    - [hard](namespaceserial_1_1hard.html): this namespace support AVR embedded UART (for ATmega MCU only, as ATtiny do not have this feature)
+    - [soft](TODO): this namespace supports software UART (for all MCU); software serial is less efficient and bigger in code size than its hardware equivalent
+- [spi](TODO): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.
+- [streams](namespacestreams.html): this namespace provide a C++ streams like API for input and output (used by serial UART API).
+- [time](namespacetime.html): provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.
+- [timer](TODO): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.
+- [utils](namespaceutils.html): provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".
+- [watchdog](TODO): this namespace defines an API to deal with MCU watchdog timer as a way 
 
-TODO add links to doxygen namespace doc for each namespace!
-
-- analog: contains the API to handle analog input and "pseudo-analog" output (PWM).
-- containers: utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.
-- devices: this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:
-    - magneto: API for magnetometers, gyroscopes, accelerometers
-    - rf: API for radio-frequency chips
-    - rtc: API for real time clock chips
-    - servo: API to handle servomotors
-    - sonar: API to handle sonar range sensors
-- eeprom: contains the API to handle read and write to and from the internal MCU EEPROM.
-- errors: all errors that can be returned by FastArduino API are defined here as constants.
-- events: this namespace defines general event handling that can be used in your programs. Most FastArduino are able to generate events on specific conditions. This namespace also contain the scheduler API which permits scheduling of jobs at specific times or periods.
-- flash: contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.
-- gpio: that namespace deals with all API to manage digital input and outputs.
-- i2c: that namespace contains all API to deal with I2C (also known as *Two Wires Interface*), including a base class to help you define support for new devices based on I2C protocol.
-- interrupt: this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.
-- power: contains the API to handle AVR power modes.
-- serial: contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:
-    - hard: this namespace support AVR embedded UART (for ATmega MCU only, as ATtiny do not have this feature)
-    - soft: this namespace supports software UART (for all MCU); software serial is less efficient and bigger in code size than its hardware equivalent
-- spi: that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.
-- streams: this namespace provide a C++ streams like API for input and output (used by serial UART API).
-- time: provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.
-- timer: defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.
-- utils: provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".
-- watchdog: this namespace defines an API to deal with MCU watchdog timer as a way 
+In addition to all namespaces above, there is one omnipresent namespace `board` that defines all configuration (list of digital & analog pins, timers...) specific to an MCU target. The documentation for this namespace depends on the MCU target, as described [here](supportedboards.html).
 
 As you can see, all namespaces in FastArduino are 100% lowercase by convention.
 
@@ -91,5 +112,5 @@ Finally, regarding FastArduino organization, it is important to note that a spec
 
 Discovering FastArduino API step by step
 ----------------------------------------
-TODO link to tutorial
+The best way to discover FastArduino is to follow [this tutorial](tutorial.html).
 
