@@ -37,7 +37,7 @@ int main()
 	while (true)
 	{
 		PinLED.toggle();
-		time::delay_ms(2000);
+		time::delay_ms(500);
 	}
 	return 0;
 }
