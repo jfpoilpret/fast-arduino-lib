@@ -1,7 +1,11 @@
 FastArduino
 ===========
 
-FastArduino is a C++ object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU. Its objectives are:
+FastArduino is a C++ object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU.
+
+FastArduino API is documented [here](jfpoilpret.github.io/fast-arduino-lib/) and documentation also includes a [simple tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html).
+
+FastArduino objectives are:
 
 - provide smaller and faster code than other libraries for the same functionality
 - ensure you pay (size and speed) only for what you use
@@ -89,15 +93,12 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-August 2017
------------
-1. Document API and prepare a tutorial
+August-September 2017
+---------------------
+1. Improve board specific enums to include Arduino pin aliases
 2. Improve streams support ala C++
 3. Improve Timer support (support input capture where available)
-4. Sonar ranger API
-
-September 2017
---------------
+4. Finalize sonar ranger API
 5. Add support for ATtinyX5
 6. Improve I2C master support (asynchronous mode)
 
@@ -113,8 +114,9 @@ December 2017
 In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
 - coding guidelines applied across the library code (not necessarily example code)
-- documentation (ISR handling, Board support adding, API...)
+- complete documentation (ISR handling, Board support adding, API...)
 
 The following features are not in FastArduino roadmap currently (but may be in the future):
 
 - OWI support
+
