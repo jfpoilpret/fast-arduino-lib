@@ -1,0 +1,5 @@
+<map id="serial::hard::UARX&lt; USART &gt;" name="serial::hard::UARX&lt; USART &gt;">
+<area shape="rect" id="node5" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. " alt="" coords="69,259,199,300"/>
+<area shape="rect" id="node3" href="$classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="138,95,279,121"/>
+<area shape="rect" id="node4" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="141,5,277,47"/>
+</map>

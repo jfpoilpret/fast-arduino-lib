@@ -1,0 +1,11 @@
+<map id="serial::soft::UART&lt; RX, TX &gt;" name="serial::soft::UART&lt; RX, TX &gt;">
+<area shape="rect" id="node2" href="$classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX \&gt;" alt="" coords="211,276,341,317"/>
+<area shape="rect" id="node3" href="$classserial_1_1soft_1_1_abstract_u_a_r_x.html" title="serial::soft::AbstractUARX" alt="" coords="5,179,184,206"/>
+<area shape="rect" id="node4" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="212,96,345,123"/>
+<area shape="rect" id="node9" href="$classserial_1_1soft_1_1_abstract_u_a_t_x.html" title="serial::soft::AbstractUATX" alt="" coords="368,179,544,206"/>
+<area shape="rect" id="node5" href="$classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="44,96,185,123"/>
+<area shape="rect" id="node6" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="249,5,385,47"/>
+<area shape="rect" id="node10" href="$classstreams_1_1_output_buffer.html" title="Output API based on a ring buffer. " alt="" coords="371,96,522,123"/>
+<area shape="rect" id="node7" href="$classinterrupt_1_1_i_n_t_signal.html" title="interrupt::INTSignal\l\&lt; PIN \&gt;" alt="" coords="209,172,343,213"/>
+<area shape="rect" id="node8" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="serial::soft::UATX\l\&lt; TX \&gt;" alt="" coords="371,276,498,317"/>
+</map>

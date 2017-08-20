@@ -1,0 +1,19 @@
+<map id="fastarduino/time.h" name="fastarduino/time.h">
+<area shape="rect" id="node2" href="$analog__input_8h.html" title="Analog Input API. " alt="" coords="5,80,133,121"/>
+<area shape="rect" id="node3" href="$hcsr04_8h_source.html" title="fastarduino/devices\l/hcsr04.h" alt="" coords="119,333,254,375"/>
+<area shape="rect" id="node4" href="$nrf24l01p_8h_source.html" title="fastarduino/devices\l/nrf24l01p.h" alt="" coords="583,80,718,121"/>
+<area shape="rect" id="node5" href="$queue_8h_source.html" title="fastarduino/queue.h" alt="" coords="423,87,559,114"/>
+<area shape="rect" id="node9" href="$realtime__timer_8h_source.html" title="fastarduino/realtime\l_timer.h" alt="" coords="208,244,344,285"/>
+<area shape="rect" id="node12" href="$watchdog_8cpp_source.html" title="fastarduino/watchdog.cpp" alt="" coords="353,341,524,367"/>
+<area shape="rect" id="node18" href="$time_8cpp_source.html" title="fastarduino/time.cpp" alt="" coords="742,87,882,114"/>
+<area shape="rect" id="node6" href="$eeprom_8h_source.html" title="fastarduino/eeprom.h" alt="" coords="588,169,732,196"/>
+<area shape="rect" id="node7" href="$events_8h_source.html" title="fastarduino/events.h" alt="" coords="423,169,563,196"/>
+<area shape="rect" id="node13" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="1053,169,1201,196"/>
+<area shape="rect" id="node8" href="$events_8cpp_source.html" title="fastarduino/events.cpp" alt="" coords="600,251,755,278"/>
+<area shape="rect" id="node10" href="$scheduler_8h_source.html" title="fastarduino/scheduler.h" alt="" coords="779,251,936,278"/>
+<area shape="rect" id="node11" href="$watchdog_8h_source.html" title="fastarduino/watchdog.h" alt="" coords="419,251,576,278"/>
+<area shape="rect" id="node14" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="960,251,1112,278"/>
+<area shape="rect" id="node16" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="1136,251,1299,278"/>
+<area shape="rect" id="node17" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="1323,251,1445,278"/>
+<area shape="rect" id="node15" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="953,341,1119,367"/>
+</map>

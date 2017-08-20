@@ -1,0 +1,4 @@
+<map id="devices::WinBond&lt; CS &gt;" name="devices::WinBond&lt; CS &gt;">
+<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CS,\l spi::ChipSelect::ACTIVE\l_LOW, spi::ClockRate::CLOCK\l_DIV_2 \&gt;" alt="" coords="5,80,213,151"/>
+<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="spi::AbstractSPIDevice" alt="" coords="30,5,189,32"/>
+</map>

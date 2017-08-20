@@ -1,0 +1,7 @@
+<map id="serial::hard::UART&lt; USART &gt;" name="serial::hard::UART&lt; USART &gt;">
+<area shape="rect" id="node2" href="$classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. " alt="" coords="83,169,215,211"/>
+<area shape="rect" id="node6" href="$classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. " alt="" coords="240,169,371,211"/>
+<area shape="rect" id="node4" href="$classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="5,95,147,121"/>
+<area shape="rect" id="node5" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="159,5,295,47"/>
+<area shape="rect" id="node7" href="$classstreams_1_1_output_buffer.html" title="Output API based on a ring buffer. " alt="" coords="303,95,454,121"/>
+</map>
