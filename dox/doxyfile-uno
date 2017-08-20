@@ -16,10 +16,10 @@ INPUT                  = cores/fastarduino/boards/uno.h
 #EXCLUDE_PATTERNS       = */boards/empty*
 
 # Override to ensure generated doc is under proper subdir of html
-HTML_OUTPUT            = html/boards/uno
+HTML_OUTPUT            = docs/boards/uno
 
 # Override to ensure generated doc is under proper subdir of html
-LATEX_OUTPUT           = latex/boards/uno
+LATEX_OUTPUT           = apidoc/latex/boards/uno
 
 # Override if you want some macros defined for this doc generation
 PREDEFINED             = __AVR_ATmega328P__ ARDUINO_UNO F_CPU=16000000L UCSR0A SPDR TWCR

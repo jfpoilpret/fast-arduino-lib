@@ -24,7 +24,7 @@ In addition, the following option shall be set at compile time:
     - `attiny84`
     - `atmega2560`
 
-When using FastArduino makefile, then you first need to create your project under netbeans, generate a proper configuration for it, and pass it to `make`. This is described in further details in [ArduinoDevSetup](../../../ArduinoDevSetup.docx).
+When using FastArduino makefile, then you first need to create your project under netbeans, generate a proper configuration for it, and pass it to `make`. This is described in further details in [ArduinoDevSetup](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx?raw=true).
 
 Note that you should **never** include directly a specific board header file (e.g. `#include <fastarduno/boards/uno.h>`) in your own source code, this will not compile properly. Instead, you should simply `#include <fastarduino/boards/board.h>` which will include the proper header file for the board defined by `VARIANT`.
 
@@ -33,12 +33,12 @@ Capabilities of each supported target
 
 For each of the following supported targets, you can find the documentation of its specific header file:
 
-- [Arduino UNO](../boards/uno/namespaceboard.html)
-- [Arduino NANO](../boards/nano/namespaceboard.html)
-- [ATmega328P based board](../boards/atmega328/namespaceboard.html)
-- [ATtinyX4 based board](../boards/attinyx4/namespaceboard.html)
-- [Arduino LEONARDO](../boards/leonardo/namespaceboard.html)
-- [Arduino MEGA](../boards/mega/namespaceboard.html)
+- [Arduino UNO](boards/uno/namespaceboard.html)
+- [Arduino NANO](boards/nano/namespaceboard.html)
+- [ATmega328P based board](boards/atmega328/namespaceboard.html)
+- [ATtinyX4 based board](boards/attinyx4/namespaceboard.html)
+- [Arduino LEONARDO](boards/leonardo/namespaceboard.html)
+- [Arduino MEGA](boards/mega/namespaceboard.html)
 
 Then all standard FastArduino API works on each target and shares this common documentation.
 

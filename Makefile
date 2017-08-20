@@ -119,14 +119,14 @@ help: .help-post
 # Add your post 'help' code here...
 
 # FastArduino doc generation targets
-docs:
-	# Re-create all apidoc/* dirs and subdirs as doxygen cannot properly create them
-#	rm -r apidoc
+doco:
+	# docs is target for html doc (published on github pages)
+	# apidoc is target for all other documentation formats (LATEX)
+	# Re-create all dirs and subdirs as doxygen cannot properly create them
 	mkdir -p apidoc
-	mkdir -p apidoc/html
 	mkdir -p apidoc/latex
-	mkdir -p apidoc/html/boards
 	mkdir -p apidoc/latex/boards
+	mkdir -p docs/boards
 	# Call each generation
 	doxygen ./dox/doxyfile-api
 	doxygen ./dox/doxyfile-uno
