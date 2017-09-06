@@ -1,0 +1,46 @@
+{
+	"files.exclude": {
+		"**/.git": true,
+		"apidoc": true,
+		"build": true,
+		"dist": true,
+		"docs": true,
+		"example-boards": true,
+		"nbprojects": true
+	},
+    "files.insertFinalNewline": true,
+	"editor.insertSpaces": false,
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.tabSize": 4,
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+    "C_Cpp.autocomplete": "Disabled",
+    "clang.cxxflags": [
+        "-std=c++11",
+        "-DF_CPU=16000000UL",
+        "-DARDUINO_UNO",
+        "-Wall",
+        "-I${workspaceRoot}/cores"
+    ],
+    "todohighlight.include": ["**/*.h","**/*.cpp"],
+    "todohighlight.keywords": [
+        "TODO",
+        "FIXME"
+    ],
+    "todohighlight.maxFilesForSearch": 512,
+    "todohighlight.toggleURI": false,
+    "fastarduino.listedBoards": [
+        {
+            "board": "Arduino UNO",
+            "programmer": "UNO USB",
+            "serial": "/dev/ttyACM0"
+        },
+        {
+            "board": "ATmega328",
+            "frequency": [8, 16],
+            "programmer": "ArduinoISP.cc"
+        }
+    ]
+}
