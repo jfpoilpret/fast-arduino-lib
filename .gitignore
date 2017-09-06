@@ -1,5 +1,6 @@
 apidoc/**
 **/dist
+**/deps
 **/build
 **/.dep.inc
 **/nbproject/*.bash

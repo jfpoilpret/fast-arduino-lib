@@ -1,0 +1,76 @@
+# Makefile inspired by https://gist.github.com/maxtruxa/4b3929e118914ccef057f8a05c614b0f
+# Adapted for FastArduino library and projects
+#
+# Default configuration variables to ease makefile debugging
+MCU=atmega328p
+F_CPU=16000000UL
+VARIANT=ARDUINO_UNO
+ARCH=avr5
+
+# User-defined target file
+TARGET=libfastarduino.a
+
+# Output directories
+config:=$(VARIANT)-$(subst 000000UL,MHz,$(F_CPU))
+objdir:=build/$(config)
+depdir:=deps/$(config)
+distdir:=dist/$(config)
+target:=$(distdir)/$(TARGET)
+
+# List of source files
+sources:=$(shell find cores -name "*.cpp")
+# List of generated files: objects and dependencies
+objects:=$(patsubst %,$(objdir)/%.o,$(basename $(sources)))
+deps:=$(patsubst %,$(depdir)/%.d,$(basename $(sources)))
+
+
+# Create all needed subdirectories
+$(shell mkdir -p $(dir $(objects)) >/dev/null)
+$(shell mkdir -p $(dir $(deps)) >/dev/null)
+$(shell mkdir -p $(distdir) >/dev/null)
+
+# Environment
+rm:=rm -f
+ar:=ar
+ranlib:=ranlib
+cxx:=avr-g++
+
+# Flags for compilation and build
+cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall -Icores -std=c++11 
+depflags = -MT $@ -MD -MP -MF $(depdir)/$*.Td
+
+compile.cc = $(cxx) $(depflags) $(cxxflags) -c -o $@
+precompile =
+postcompile = mv -f $(depdir)/$*.Td $(depdir)/$*.d
+
+build: $(target)
+
+.PHONY: clean
+clean:
+	$(rm) -r $(objdir) $(depdir) $(distdir)
+
+.PHONY: help
+help:
+	@echo Available targets: build clean
+	@echo $(sources)
+	@echo $(objects)
+	@echo $(deps)
+
+# Main target library FastArduino
+$(target): $(objects)
+	$(rm) $@
+	$(ar) -rv $@ $^
+	$(ranlib) $@
+
+# Target for generating dependencies
+$(objdir)/%.o: %.cpp
+$(objdir)/%.o: %.cpp $(depdir)/%.d
+	$(precompile)
+	$(compile.cc) $<
+	$(postcompile)
+
+.PRECIOUS = $(depdir)/%.d
+$(depdir)/%.d: ;
+
+-include $(deps)
+
