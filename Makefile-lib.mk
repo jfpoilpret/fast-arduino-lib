@@ -5,8 +5,10 @@
 # This is actually used for fastarduino library itself.
 #
 
-#include Makefile-config.mk
-include Makefile-common.mk
+# Find path of this Makefile before including other makefiles in the same path
+thispath:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+#include $(thispath)/Makefile-config.mk
+include $(thispath)/Makefile-common.mk
 
 # Main target library
 $(target): $(objects) $(TARGET_LIBS)

@@ -5,8 +5,10 @@
 # This must be included by your own Makefile for building a project
 # This is actually used by all fastarduino examples
 
-#include Makefile-config.mk
-include Makefile-common.mk
+# Find path of this Makefile before including other makefiles in the same path
+thispath:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+#include $(thispath)/Makefile-config.mk
+include $(thispath)/Makefile-common.mk
 
 # Main target project using FastArduino
 $(target): $(objects) $(TARGET_LIBS)

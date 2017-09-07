@@ -1,0 +1,18 @@
+#
+
+# Default configuration variables to ease makefile debugging
+MCU:=atmega328p
+F_CPU:=16000000UL
+VARIANT:=ARDUINO_UNO
+ARCH:=avr5
+
+# Set necessary variables for generic makefile
+SOURCE_ROOT:=.
+INCLUDES:=../../../cores
+TARGET:=analogpin1
+#TODO Avoid computing full distdir since it can be done by included makefile!
+TARGET_LIBS:=../../../dist/$(VARIANT)-$(subst 000000UL,MHz,$(F_CPU))/libfastarduino.a
+
+# include generic makefile for apps
+include ../../../Makefile-app.mk
+
