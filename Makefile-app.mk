@@ -20,5 +20,21 @@ $(target): $(objects) $(TARGET_LIBS)
 	$(objdump) -m $(ARCH) -x -d -C $@ >$@.dump
 	$(objsize) -C --mcu=$(MCU) $@
 
+# Upload Targets
+.pre-upload:
+	#TODO specific preparation for LEONARDO
+
+flash: $(target) .pre-upload
+	avrdude $(avrdude_options) -Uflash:w:$<.hex:i
+
+eeprom: $(target) .pre-upload
+ifeq($(CAN_PROGRAM_EEPROM),YES)
+	avrdude $(avrdude_options) -D -U eeprom:w:$<.eep:i
+else
+	$(error EEPROM cannot be written for that target and programmer)
+endif
+
+#TODO fuses programming support
+
 -include $(deps)
 

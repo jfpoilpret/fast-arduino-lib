@@ -42,6 +42,9 @@ precompile =
 postcompile = mv -f $(depdir)/$*.Td $(depdir)/$*.d
 link.o = $(cxx) $(ldflags) -o $@
 
+# Flags for target programming (upload)
+avrdude_options:=$(DUDE_OPTION) $(if $(DUDE_SERIAL),-P $(DUDE_SERIAL))
+
 build: $(target)
 
 .PHONY: clean
