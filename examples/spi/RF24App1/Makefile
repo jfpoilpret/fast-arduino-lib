@@ -1,129 +1,34 @@
+#   Copyright 2016-2017 Jean-Francois Poilpret
 #
-#  There exist several targets which are by default empty and which can be 
-#  used for execution of your targets. These targets are usually executed 
-#  before and after some main targets. They are: 
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
 #
-#     .build-pre:              called before 'build' target
-#     .build-post:             called after 'build' target
-#     .clean-pre:              called before 'clean' target
-#     .clean-post:             called after 'clean' target
-#     .clobber-pre:            called before 'clobber' target
-#     .clobber-post:           called after 'clobber' target
-#     .all-pre:                called before 'all' target
-#     .all-post:               called after 'all' target
-#     .help-pre:               called before 'help' target
-#     .help-post:              called after 'help' target
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-#  Targets beginning with '.' are not intended to be called on their own.
-#
-#  Main targets can be executed directly, and they are:
-#  
-#     build                    build a specific configuration
-#     clean                    remove built files from a configuration
-#     clobber                  remove all built files
-#     all                      build all configurations
-#     help                     print help mesage
-#  
-#  Targets .build-impl, .clean-impl, .clobber-impl, .all-impl, and
-#  .help-impl are implemented in nbproject/makefile-impl.mk.
-#
-#  Available make variables:
-#
-#     CND_BASEDIR                base directory for relative paths
-#     CND_DISTDIR                default top distribution directory (build artifacts)
-#     CND_BUILDDIR               default top build directory (object files, ...)
-#     CONF                       name of current configuration
-#     CND_PLATFORM_${CONF}       platform name (current configuration)
-#     CND_ARTIFACT_DIR_${CONF}   directory of build artifact (current configuration)
-#     CND_ARTIFACT_NAME_${CONF}  name of build artifact (current configuration)
-#     CND_ARTIFACT_PATH_${CONF}  path to build artifact (current configuration)
-#     CND_PACKAGE_DIR_${CONF}    directory of package (current configuration)
-#     CND_PACKAGE_NAME_${CONF}   name of package (current configuration)
-#     CND_PACKAGE_PATH_${CONF}   path to package (current configuration)
-#
-# NOCDDL
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
 
+# Specific to FastArduino examples: we use the current directory name as
+# the target name
+# That allows using the same Makefile for all examples
+THISPATH:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-# Environment 
-MKDIR=mkdir
-CP=cp
-CCADMIN=CCadmin
+# Set necessary variables for generic makefile
+# Name of target (binary and derivatives)
+TARGET:=$(lastword $(subst /, ,$(THISPATH)))
+# Where to search for source files (.cpp)
+SOURCE_ROOT:=.
+# Where FastArduino project is located (used to find library and includes)
+FASTARDUINO_ROOT=../../..
+# Additional paths containing includes (usually empty)
+ADDITIONAL_INCLUDES:=
+# Additional paths containing libraries other than fastarduino (usually empty)
+ADDITIONAL_LIBS:=
 
-# build
-build: .build-post
+# include generic makefile for apps
+include $(FASTARDUINO_ROOT)/Makefile-app.mk
 
-.build-pre:
-# Add your pre 'build' code here...
-
-.build-post: .build-impl .build-exe
-# Add your post 'build' code here...
-	
-# clean
-clean: .clean-post
-
-.clean-pre:
-# Add your pre 'clean' code here...
-
-.clean-post: .clean-impl
-# Add your post 'clean' code here...
-
-
-# clobber
-clobber: .clobber-post
-
-.clobber-pre:
-# Add your pre 'clobber' code here...
-
-.clobber-post: .clobber-impl
-# Add your post 'clobber' code here...
-
-
-# all
-all: .all-post
-
-.all-pre:
-# Add your pre 'all' code here...
-
-.all-post: .all-impl
-# Add your post 'all' code here...
-
-
-# build tests
-build-tests: .build-tests-post
-
-.build-tests-pre:
-# Add your pre 'build-tests' code here...
-
-.build-tests-post: .build-tests-impl
-# Add your post 'build-tests' code here...
-
-
-# run tests
-test: .test-post
-
-.test-pre: build-tests
-# Add your pre 'test' code here...
-
-.test-post: .test-impl
-# Add your post 'test' code here...
-
-
-# help
-help: .help-post
-
-.help-pre:
-# Add your pre 'help' code here...
-
-.help-post: .help-impl
-# Add your post 'help' code here...
-
-
-
-# include project implementation makefile
-include nbproject/Makefile-impl.mk
-
-# include project make variables
-include nbproject/Makefile-variables.mk
-
-# include FastArduino make
-include ../../../Makefile-FastArduino.mk

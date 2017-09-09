@@ -74,8 +74,14 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway							\
 ALL_EXAMPLES = ${COMMON_EXAMPLES} ${EXAMPLES_${VARIANT}}
 
 # Special build target for all fastArduino examples
+# Need to export all necessary variables to submakes
+export CONF PROGRAMMER COM
+export VARIANT MCU ARCH F_CPU
+export DUDE_OPTION CAN_PROGRAM_EEPROM CAN_PROGRAM_FUSES DUDE_SERIAL DUDE_SERIAL_RESET
+
 examples: build
-	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF};)
+	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example);)
 
 clean-examples: clean
-	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) CONF=${CONF} clean;)
+	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) clean;)
+

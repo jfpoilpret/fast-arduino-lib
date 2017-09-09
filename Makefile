@@ -45,5 +45,5 @@ doco:
 	doxygen ./dox/doxyfile-attinyx4
 
 # include list of all examples
-#include Makefile-Examples.mk
+include Makefile-Examples.mk
 
