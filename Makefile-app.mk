@@ -34,6 +34,11 @@ $(target): $(objects) $(libs)
 	$(objsize) -C --mcu=$(MCU) $@
 
 # Upload Targets
+.upload-check:
+ifneq ($(can_upload),true)
+	$(error Missing configuration variables for upload. Cannot proceed.)
+endif
+
 .pre-upload:
 	# Specific preparation for LEONARDO
 ifneq ($(DUDE_SERIAL_RESET),)
@@ -41,10 +46,10 @@ ifneq ($(DUDE_SERIAL_RESET),)
 	sleep 2.5
 endif
 
-flash: $(target) .pre-upload
+flash: .upload-check $(target) .pre-upload
 	avrdude $(avrdude_options) -Uflash:w:$<.hex:i
 
-eeprom: $(target) .pre-upload
+eeprom: .upload-check $(target) .pre-upload
 ifeq ($(CAN_PROGRAM_EEPROM),YES)
 	avrdude $(avrdude_options) -D -U eeprom:w:$<.eep:i
 else

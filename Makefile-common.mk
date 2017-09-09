@@ -18,6 +18,15 @@
 # This is included by either Makefile-lib or Makefile-app
 #
 
+# Set flags indicating if we have enough configuration setup for targets
+can_build:=$(and $(VARIANT),$(ARCH),$(MCU),$(F_CPU),true)
+can_upload:=$(and $(DUDE_OPTION),$(can_build))
+
+# Ensure that we have enough config for running make
+ifneq ($(can_build), true)
+    $(error Missing configuration variables. Cannot proceed.)
+endif
+
 # Output directories
 config:=$(VARIANT)-$(subst 000000UL,MHz,$(F_CPU))
 objdir:=build/$(config)
