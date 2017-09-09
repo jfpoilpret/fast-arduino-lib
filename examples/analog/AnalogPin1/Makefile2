@@ -1,17 +1,5 @@
 #
 
-# Default configuration variables to ease makefile debugging
-MCU:=atmega328p
-F_CPU:=16000000UL
-VARIANT:=ARDUINO_UNO
-ARCH:=avr5
-DUDE_OPTION:=-c arduino -b 115200
-DUDE_SERIAL:=/dev/ttyACM0
-DUDE_SERIAL_RESET:=
-CAN_PROGRAM_EEPROM:=
-CAN_PROGRAM_FUSES:=
-
-
 # Set necessary variables for generic makefile
 # Name of target (binary and derivatives)
 TARGET:=analogpin1

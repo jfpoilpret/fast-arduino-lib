@@ -16,6 +16,20 @@
 # by providing only a configuration (with special naming convention) which will then be
 # converted to all variables expected by Makefile-common
 
+ifndef CONF
+    $(info No CONF was specified)
+    $(info Hence the following variables have to be defined:)
+    $(info VARIANT, MCU, ARCH, F_CPU)
+    $(info )
+endif
+
+ifndef PROGRAMMER
+    $(info No PROGRAMMER was specified for upload (flash, eeprom, fuses) targets)
+    $(info Hence the following variables may have to be defined:)
+    $(info DUDE_OPTION) $(info - DUDE_SERIAL $(info - DUDE_SERIAL_RESET $(info - CAN_PROGRAM_EEPROM $(info - CAN_PROGRAM_FUSES
+    $(info )
+endif
+
 # set variables based on each configuration
 ifeq ($(findstring UNO,$(CONF)),UNO)
 	VARIANT:=ARDUINO_UNO
@@ -28,8 +42,7 @@ ifeq ($(findstring UNO,$(CONF)),UNO)
 	ifeq ($(COM),)
 		COM:=/dev/ttyACM0
 	endif
-else
-ifeq ($(findstring NANO,$(CONF)),NANO)
+else ifeq ($(findstring NANO,$(CONF)),NANO)
 	VARIANT:=ARDUINO_NANO
 	MCU:=atmega328p
 	ARCH:=avr5
@@ -40,8 +53,7 @@ ifeq ($(findstring NANO,$(CONF)),NANO)
 	ifeq ($(COM),)
 		COM:=/dev/ttyUSB0
 	endif
-else
-ifeq ($(findstring LEONARDO,$(CONF)),LEONARDO)
+else ifeq ($(findstring LEONARDO,$(CONF)),LEONARDO)
 	VARIANT:=ARDUINO_LEONARDO
 	MCU:=atmega32u4
 	ARCH:=avr5
@@ -56,8 +68,7 @@ ifeq ($(findstring LEONARDO,$(CONF)),LEONARDO)
 	ifeq ($(COM),)
 		COM:=/dev/ttyACM1
 	endif
-else
-ifeq ($(findstring ATmega328,$(CONF)),ATmega328)
+else ifeq ($(findstring ATmega328,$(CONF)),ATmega328)
 	VARIANT:=BREADBOARD_ATMEGA328P
 	MCU:=atmega328p
 	ARCH:=avr5
@@ -65,8 +76,7 @@ ifeq ($(findstring ATmega328,$(CONF)),ATmega328)
 	ifeq ($(PROGRAMMER),)
 		PROGRAMMER:=ISP
 	endif
-else
-ifeq ($(findstring ATtiny84,$(CONF)),ATtiny84)
+else ifeq ($(findstring ATtiny84,$(CONF)),ATtiny84)
 	VARIANT:=BREADBOARD_ATTINYX4
 	MCU:=attiny84
 	ARCH:=avr25
@@ -74,8 +84,7 @@ ifeq ($(findstring ATtiny84,$(CONF)),ATtiny84)
 	ifeq ($(PROGRAMMER),)
 		PROGRAMMER:=ISP
 	endif
-else
-ifeq ($(findstring MEGA,$(CONF)),MEGA)
+else ifeq ($(findstring MEGA,$(CONF)),MEGA)
 	VARIANT:=ARDUINO_MEGA
 	MCU:=atmega2560
 	ARCH:=avr6
@@ -88,46 +97,58 @@ ifeq ($(findstring MEGA,$(CONF)),MEGA)
 	endif
 # Add other targets here
 endif
-endif
-endif
-endif
-endif
-endif
 
 # set F_CPU if config name includes it (eg 8MHz, 16MHz)
 ifeq ($(findstring 16MHz,$(CONF)),16MHz)
 	F_CPU:=16000000UL
-else
-ifeq ($(findstring 8MHz,$(CONF)),8MHz)
+else ifeq ($(findstring 8MHz,$(CONF)),8MHz)
 	F_CPU:=8000000UL
-else
-ifeq ($(findstring 20MHz,$(CONF)),20MHz)
+else ifeq ($(findstring 20MHz,$(CONF)),20MHz)
 	F_CPU:=20000000UL
-endif
-endif
 endif
 
 # Set upload options
-ifeq ($(PROGRAMMER),)
-	PROGRAMMER=UNO
+ifndef DUDE_OPTION
+	ifeq ($(PROGRAMMER),ISP)
+        	DUDE_OPTION := -c arduinoisp 
+		CAN_PROGRAM_EEPROM := YES
+		CAN_PROGRAM_FUSES := YES
+	else ifeq ($(PROGRAMMER),SHIELD)
+		DUDE_OPTION := -c stk500v1 -b 19200
+		CAN_PROGRAM_EEPROM := YES
+		CAN_PROGRAM_FUSES := YES
+	else ifeq ($(PROGRAMMER),UNO)
+		DUDE_OPTION := -c arduino -b 115200
+	else ifeq ($(PROGRAMMER),NANO)
+		DUDE_OPTION := -c arduino -b 57600
+		CAN_PROGRAM_EEPROM := YES
+		CAN_PROGRAM_FUSES := YES
+	else ifeq ($(PROGRAMMER),LEONARDO)
+		DUDE_OPTION := -c avr109 -b 57600
+		CAN_PROGRAM_EEPROM := YES
+		CAN_PROGRAM_FUSES := YES
+	else ifeq ($(PROGRAMMER),MEGA)
+		DUDE_OPTION := -c wiring -b 115200
+		CAN_PROGRAM_EEPROM := YES
+		CAN_PROGRAM_FUSES := YES
+	endif
 endif
-AVRDUDE_OPTIONS=-p $(MCU)
-ifeq ($(PROGRAMMER),ISP)
-        AVRDUDE_OPTIONS+= -c arduinoisp 
+
+ifeq ($(origin DUDE_SERIAL),undefined)
+	DUDE_SERIAL := $(COM)
 endif
-ifeq ($(PROGRAMMER),SHIELD)
-        AVRDUDE_OPTIONS+= -c stk500v1 -b 19200 -P $(COM)
+
+ifeq ($(origin DUDE_SERIAL_RESET),undefined)
+	DUDE_SERIAL_RESET := $(COM_LEONARDO)
 endif
-ifeq ($(PROGRAMMER),UNO)
-        AVRDUDE_OPTIONS+= -c arduino -b 115200 -P $(COM)
-endif
-ifeq ($(PROGRAMMER),NANO)
-        AVRDUDE_OPTIONS+= -c arduino -b 57600 -P $(COM)
-endif
-ifeq ($(PROGRAMMER),LEONARDO)
-        AVRDUDE_OPTIONS+= -c avr109 -b 57600 -P $(COM)
-endif
-ifeq ($(PROGRAMMER),MEGA)
-        AVRDUDE_OPTIONS+= -c wiring -b 115200 -P $(COM)
-endif
+
+#$(info $$VARIANT is [${VARIANT}])
+#$(info $$ARCH is [${ARCH}])
+#$(info $$MCU is [${MCU}])
+#$(info $$F_CPU is [${F_CPU}])
+#$(info $$DUDE_OPTION is [${DUDE_OPTION}])
+#$(info $$DUDE_SERIAL is [${DUDE_SERIAL}])
+#$(info $$DUDE_SERIAL_RESET is [${DUDE_SERIAL_RESET}])
+#$(info $$CAN_PROGRAM_EEPROM is [${CAN_PROGRAM_EEPROM}])
+#$(info $$CAN_PROGRAM_FUSES is [${CAN_PROGRAM_FUSES}])
 
