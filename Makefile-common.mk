@@ -11,6 +11,18 @@ depdir:=deps/$(config)
 distdir:=dist/$(config)
 target:=$(distdir)/$(TARGET)
 
+# Libraries dependencies
+ifeq ($(FASTARDUINO_ROOT),)
+	FASTARDUINO_ROOT := .
+	fastarduinolib:=
+else
+	fastarduinolib:=$(FASTARDUINO_ROOT)/dist/$(config)/libfastarduino.a
+endif
+libs:=$(fastarduinolib) $(ADDITIONAL_LIBS)
+
+# Input directories
+includes:=$(patsubst %,-I %,$(FASTARDUINO_ROOT)/cores $(ADDITIONAL_INCLUDES))
+
 # List of source files
 sources:=$(shell find $(SOURCE_ROOT) -name "*.cpp")
 # List of generated files: objects and dependencies
@@ -33,7 +45,7 @@ objdump:=avr-objdump
 objsize:=avr-size
 
 # Flags for compilation and build
-cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall -I$(INCLUDES) -std=c++11 
+cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++11 
 ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
 depflags = -MT $@ -MD -MP -MF $(depdir)/$*.Td
 

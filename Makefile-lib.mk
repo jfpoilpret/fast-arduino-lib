@@ -11,7 +11,7 @@ thispath:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 include $(thispath)/Makefile-common.mk
 
 # Main target library
-$(target): $(objects) $(TARGET_LIBS)
+$(target): $(objects) $(libs)
 	$(rm) $@
 	$(ar) -rv $@ $^
 	$(ranlib) $@

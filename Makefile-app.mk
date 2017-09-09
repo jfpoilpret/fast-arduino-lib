@@ -11,7 +11,7 @@ thispath:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 include $(thispath)/Makefile-common.mk
 
 # Main target project using FastArduino
-$(target): $(objects) $(TARGET_LIBS)
+$(target): $(objects) $(libs)
 	$(rm) $@ $@.eep $@.nm $@.map
 	$(link.o) $^
 	$(objcopy) -R .eeprom -O ihex $@ $@.hex
@@ -22,13 +22,17 @@ $(target): $(objects) $(TARGET_LIBS)
 
 # Upload Targets
 .pre-upload:
-	#TODO specific preparation for LEONARDO
+	# Specific preparation for LEONARDO
+ifneq ($(DUDE_SERIAL_RESET),)
+	stty -F $(DUDE_SERIAL_RESET) ispeed 1200 1200 || :
+	sleep 2.5
+endif
 
 flash: $(target) .pre-upload
 	avrdude $(avrdude_options) -Uflash:w:$<.hex:i
 
 eeprom: $(target) .pre-upload
-ifeq($(CAN_PROGRAM_EEPROM),YES)
+ifeq ($(CAN_PROGRAM_EEPROM),YES)
 	avrdude $(avrdude_options) -D -U eeprom:w:$<.eep:i
 else
 	$(error EEPROM cannot be written for that target and programmer)

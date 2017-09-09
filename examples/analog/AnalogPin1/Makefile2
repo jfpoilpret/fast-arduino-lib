@@ -13,11 +13,16 @@ CAN_PROGRAM_FUSES:=
 
 
 # Set necessary variables for generic makefile
-SOURCE_ROOT:=.
-INCLUDES:=../../../cores
+# Name of target (binary and derivatives)
 TARGET:=analogpin1
-#TODO Avoid computing full distdir since it can be done by included makefile!
-TARGET_LIBS:=../../../dist/$(VARIANT)-$(subst 000000UL,MHz,$(F_CPU))/libfastarduino.a
+# Where to search for source files (.cpp)
+SOURCE_ROOT:=.
+# Where FastArduino project is located (used to find library and includes)
+FASTARDUINO_ROOT=../../..
+# Additional paths containing includes (usually empty)
+ADDITIONAL_INCLUDES:=
+# Additional paths containing libraries other than fastarduino (usually empty)
+ADDITIONAL_LIBS:=
 
 # include generic makefile for apps
 include ../../../Makefile-app.mk

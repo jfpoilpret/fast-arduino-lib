@@ -7,14 +7,14 @@ VARIANT:=ARDUINO_UNO
 ARCH:=avr5
 
 # Set necessary variables for generic makefile
+# Main target name (.a for library, no extension for app) without path
+TARGET:=libfastarduino.a
 # Which directory to look for source files (.cpp)
 SOURCE_ROOT:=cores
 # Comma-separated list of directories containing external headers to include
-INCLUDES:=cores
-# Main target name (.a for library, no extension for app) without path
-TARGET:=libfastarduino.a
+ADDITIONAL_INCLUDES:=
 # Space-separated list of paths to libraries to link with target app
-TARGET_LIBS:=
+ADDITIONAL_LIBS:=
 
 # include generic makefile for libs
 include Makefile-lib.mk
