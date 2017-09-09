@@ -47,7 +47,7 @@ objsize:=avr-size
 # Flags for compilation and build
 cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++11 
 ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
-depflags = -MT $@ -MD -MP -MF $(depdir)/$*.Td
+depflags = -MT $@ -MMD -MP -MF $(depdir)/$*.Td
 
 compile.cc = $(cxx) $(depflags) $(cxxflags) -c -o $@
 precompile =
@@ -55,7 +55,7 @@ postcompile = mv -f $(depdir)/$*.Td $(depdir)/$*.d
 link.o = $(cxx) $(ldflags) -o $@
 
 # Flags for target programming (upload)
-avrdude_options:=$(DUDE_OPTION) $(if $(DUDE_SERIAL),-P $(DUDE_SERIAL))
+avrdude_options:=-p $(MCU) $(DUDE_OPTION) $(if $(DUDE_SERIAL),-P $(DUDE_SERIAL))
 
 build: $(target)
 
