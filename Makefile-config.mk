@@ -26,7 +26,7 @@ endif
 ifndef PROGRAMMER
     $(info No PROGRAMMER was specified for upload (flash, eeprom, fuses) targets)
     $(info Hence the following variables may have to be defined:)
-    $(info DUDE_OPTION) $(info - DUDE_SERIAL $(info - DUDE_SERIAL_RESET $(info - CAN_PROGRAM_EEPROM $(info - CAN_PROGRAM_FUSES
+    $(info DUDE_OPTION, DUDE_SERIAL, DUDE_SERIAL_RESET, CAN_PROGRAM_EEPROM, CAN_PROGRAM_FUSES)
     $(info )
 endif
 
