@@ -36,7 +36,15 @@ $(target): $(objects) $(libs)
 # Upload Targets
 .upload-check:
 ifneq ($(can_upload),true)
-	$(error Missing configuration variables for upload. Cannot proceed.)
+	$(info Missing configuration variables for upload.)
+	$(info Either PROGRAMMER (and optionally COM) is provided)
+	$(info or the following variables:)
+	$(info - DUDE_OPTION (mandatory)
+	$(info - DUDE_SERIAL (needed for some programmers)
+	$(info - DUDE_SERIAL_RESET (needed for some programmers)
+	$(info - CAN_PROGRAM_EEPROM=YES (for some programmers)
+	$(info - CAN_PROGRAM_FUSES=YES (for some programmers)
+	$(error Cannot proceed)
 endif
 
 .pre-upload:

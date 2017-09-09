@@ -84,7 +84,13 @@ build: .build-check $(target)
 .build-check:
 	# Ensure that we have enough config for running make
 ifneq ($(can_build), true)
-	$(error Missing configuration variables. Cannot proceed.)
+	$(info Missing configuration variables.)
+	$(info Either CONF is provided or all of the following variables:)
+	$(info - VARIANT)
+	$(info - MCU)
+	$(info - F_CPU)
+	$(info - ARCH)
+	$(error Cannot proceed)
 endif
 
 .PHONY: clean

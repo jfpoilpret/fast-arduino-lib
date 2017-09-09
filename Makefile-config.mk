@@ -16,20 +16,6 @@
 # by providing only a configuration (with special naming convention) which will then be
 # converted to all variables expected by Makefile-common
 
-ifndef CONF
-    $(info No CONF was specified)
-    $(info Hence the following variables have to be defined:)
-    $(info VARIANT, MCU, ARCH, F_CPU)
-    $(info )
-endif
-
-ifndef PROGRAMMER
-    $(info No PROGRAMMER was specified for upload (flash, eeprom, fuses) targets)
-    $(info Hence the following variables may have to be defined:)
-    $(info DUDE_OPTION, DUDE_SERIAL, DUDE_SERIAL_RESET, CAN_PROGRAM_EEPROM, CAN_PROGRAM_FUSES)
-    $(info )
-endif
-
 # set variables based on each configuration
 ifeq ($(findstring UNO,$(CONF)),UNO)
 	VARIANT:=ARDUINO_UNO
