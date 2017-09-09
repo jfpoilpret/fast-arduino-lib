@@ -22,11 +22,6 @@
 can_build:=$(and $(VARIANT),$(ARCH),$(MCU),$(F_CPU),true)
 can_upload:=$(and $(DUDE_OPTION),$(can_build))
 
-# Ensure that we have enough config for running make
-ifneq ($(can_build), true)
-    $(error Missing configuration variables. Cannot proceed.)
-endif
-
 # Output directories
 config:=$(VARIANT)-$(subst 000000UL,MHz,$(F_CPU))
 objdir:=build/$(config)
@@ -53,9 +48,11 @@ objects:=$(patsubst %,$(objdir)/%.o,$(basename $(sources)))
 deps:=$(patsubst %,$(depdir)/%.d,$(basename $(sources)))
 
 # Create all needed subdirectories
-$(shell mkdir -p $(dir $(objects)) >/dev/null)
-$(shell mkdir -p $(dir $(deps)) >/dev/null)
-$(shell mkdir -p $(distdir) >/dev/null)
+ifeq ($(can_build), true)
+    $(shell mkdir -p $(dir $(objects)) >/dev/null)
+    $(shell mkdir -p $(dir $(deps)) >/dev/null)
+    $(shell mkdir -p $(distdir) >/dev/null)
+endif
 
 # Environment
 rm:=rm -f
@@ -80,10 +77,18 @@ link.o = $(cxx) $(ldflags) -o $@
 # Flags for target programming (upload)
 avrdude_options:=-p $(MCU) $(DUDE_OPTION) $(if $(DUDE_SERIAL),-P $(DUDE_SERIAL))
 
-build: $(target)
+.PHONY: build
+build: .build-check $(target)
+
+.PHONY: .build-check
+.build-check:
+	# Ensure that we have enough config for running make
+ifneq ($(can_build), true)
+	$(error Missing configuration variables. Cannot proceed.)
+endif
 
 .PHONY: clean
-clean:
+clean: .build-check
 	$(rm) -r $(objdir) $(depdir) $(distdir)
 
 .PHONY: help
