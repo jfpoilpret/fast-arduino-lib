@@ -12,9 +12,14 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+# Specific to FastArduino examples: we use the current directory name as
+# the target name
+# That allows using the same Makefile for all examples
+THISPATH:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
 # Set necessary variables for generic makefile
 # Name of target (binary and derivatives)
-TARGET:=analogpin1
+TARGET:=$(lastword $(subst /, ,$(THISPATH)))
 # Where to search for source files (.cpp)
 SOURCE_ROOT:=.
 # Where FastArduino project is located (used to find library and includes)
