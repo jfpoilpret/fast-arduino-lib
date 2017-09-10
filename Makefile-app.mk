@@ -20,8 +20,8 @@
 
 # Find path of this Makefile before including other makefiles in the same path
 thispath:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-include $(thispath)/Makefile-config.mk
-include $(thispath)/Makefile-common.mk
+include $(thispath)Makefile-config.mk
+include $(thispath)Makefile-common.mk
 
 # Main target project using FastArduino
 $(target): $(objects) $(libs)
