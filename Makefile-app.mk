@@ -34,6 +34,7 @@ $(target): $(objects) $(libs)
 	$(objsize) -C --mcu=$(MCU) $@
 
 # Upload Targets
+.PHONY: .upload-check
 .upload-check:
 ifneq ($(can_upload),true)
 	$(info Missing configuration variables for upload.)
@@ -47,16 +48,30 @@ ifneq ($(can_upload),true)
 	$(error Cannot proceed)
 endif
 
+.PHONY: .fuses-check
+.fuses-check: .upload-check
+ifneq ($(has_fuses),true)
+	$(info Missing configuration variables for fuses.)
+	$(info The following variables must be provided (in 0xHH format):)
+	$(info - HFUSE)
+	$(info - LFUSE)
+	$(info - EFUSE)
+	$(error Cannot proceed)
+endif
+
+# Handle specific preparation for LEONARDO
+.PHONY: .pre-upload
 .pre-upload:
-	# Specific preparation for LEONARDO
 ifneq ($(DUDE_SERIAL_RESET),)
 	stty -F $(DUDE_SERIAL_RESET) ispeed 1200 1200 || :
 	sleep 2.5
 endif
 
+.PHONY: flash
 flash: .upload-check $(target) .pre-upload
 	avrdude $(avrdude_options) -Uflash:w:$<.hex:i
 
+.PHONY: eeprom
 eeprom: .upload-check $(target) .pre-upload
 ifeq ($(CAN_PROGRAM_EEPROM),YES)
 	avrdude $(avrdude_options) -D -U eeprom:w:$<.eep:i
@@ -64,7 +79,13 @@ else
 	$(error EEPROM cannot be written for that target and programmer)
 endif
 
-#TODO fuses programming support
+.PHONY: fuses
+fuses: .fuses-check $(target) .pre-upload
+ifeq ($(CAN_PROGRAM_FUSES),YES)
+	avrdude $(avrdude_options) -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m
+else
+	$(error Fuses cannot be written for that target and programmer)
+endif
 
 -include $(deps)
 

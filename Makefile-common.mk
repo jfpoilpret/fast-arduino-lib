@@ -21,6 +21,7 @@
 # Set flags indicating if we have enough configuration setup for targets
 can_build:=$(and $(VARIANT),$(ARCH),$(MCU),$(F_CPU),true)
 can_upload:=$(and $(DUDE_OPTION),$(can_build))
+has_fuses:=$(and $(LFUSE),$(HFUSE),$(EFUSE),true)
 
 # Output directories
 config:=$(VARIANT)-$(subst 000000UL,MHz,$(F_CPU))
@@ -80,9 +81,9 @@ avrdude_options:=-p $(MCU) $(DUDE_OPTION) $(if $(DUDE_SERIAL),-P $(DUDE_SERIAL))
 .PHONY: build
 build: .build-check $(target)
 
+# Ensure that we have enough config for running make
 .PHONY: .build-check
 .build-check:
-	# Ensure that we have enough config for running make
 ifneq ($(can_build), true)
 	$(info Missing configuration variables.)
 	$(info Either CONF is provided or all of the following variables:)

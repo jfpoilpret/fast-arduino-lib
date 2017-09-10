@@ -27,15 +27,15 @@ ADDITIONAL_LIBS:=
 include Makefile-lib.mk
 
 # FastArduino doc generation targets
+# - docs is target for html doc (published on github pages)
+# - apidoc is target for all other documentation formats (LATEX)
+# - re-create all dirs and subdirs as doxygen cannot properly create them
+# - call each generation
 doco:
-	# docs is target for html doc (published on github pages)
-	# apidoc is target for all other documentation formats (LATEX)
-	# Re-create all dirs and subdirs as doxygen cannot properly create them
 	mkdir -p apidoc
 	mkdir -p apidoc/latex
 	mkdir -p apidoc/latex/boards
 	mkdir -p docs/boards
-	# Call each generation
 	doxygen ./dox/doxyfile-api
 	doxygen ./dox/doxyfile-uno
 	doxygen ./dox/doxyfile-nano
