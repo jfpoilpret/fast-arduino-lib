@@ -31,16 +31,27 @@
     ],
     "todohighlight.maxFilesForSearch": 512,
     "todohighlight.toggleURI": false,
-    "fastarduino.listedBoards": [
-        {
+    "fastarduino.general": {
+        "projectType": "Library",
+        "defaultTarget": "UNO"
+    },
+    "fastarduino.targets": {
+        "UNO": {
             "board": "Arduino UNO",
             "programmer": "UNO USB",
             "serial": "/dev/ttyACM0"
         },
+        "ATmega328-16MHz":
         {
             "board": "ATmega328",
-            "frequency": [8, 16],
+            "frequency": 16,
+            "programmer": "ArduinoISP.cc"
+        },
+        "ATmega328-8MHz":
+        {
+            "board": "ATmega328",
+            "frequency": 8,
             "programmer": "ArduinoISP.cc"
         }
-    ]
+    }
 }
