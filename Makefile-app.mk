@@ -43,8 +43,8 @@ ifneq ($(can_upload),true)
 	$(info - DUDE_OPTION (mandatory)
 	$(info - DUDE_SERIAL (needed for some programmers)
 	$(info - DUDE_SERIAL_RESET (needed for some programmers)
-	$(info - CAN_PROGRAM_EEPROM=YES (for some programmers)
-	$(info - CAN_PROGRAM_FUSES=YES (for some programmers)
+	$(info - CAN_PROGRAM_EEPROM=true (for some programmers)
+	$(info - CAN_PROGRAM_FUSES=true (for some programmers)
 	$(error Cannot proceed)
 endif
 
@@ -73,7 +73,7 @@ flash: .upload-check $(target) .pre-upload
 
 .PHONY: eeprom
 eeprom: .upload-check $(target) .pre-upload
-ifeq ($(CAN_PROGRAM_EEPROM),YES)
+ifeq ($(CAN_PROGRAM_EEPROM),true)
 	avrdude $(avrdude_options) -D -U eeprom:w:$<.eep:i
 else
 	$(error EEPROM cannot be written for that target and programmer)
@@ -81,7 +81,7 @@ endif
 
 .PHONY: fuses
 fuses: .fuses-check $(target) .pre-upload
-ifeq ($(CAN_PROGRAM_FUSES),YES)
+ifeq ($(CAN_PROGRAM_FUSES),true)
 	avrdude $(avrdude_options) -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m
 else
 	$(error Fuses cannot be written for that target and programmer)
