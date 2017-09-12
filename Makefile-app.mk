@@ -68,11 +68,11 @@ ifneq ($(DUDE_SERIAL_RESET),)
 endif
 
 .PHONY: flash
-flash: .upload-check $(target) .pre-upload
+flash:  $(target) .upload-check .pre-upload
 	avrdude $(avrdude_options) -Uflash:w:$<.hex:i
 
 .PHONY: eeprom
-eeprom: .upload-check $(target) .pre-upload
+eeprom:  $(target) .upload-check .pre-upload
 ifeq ($(CAN_PROGRAM_EEPROM),true)
 	avrdude $(avrdude_options) -D -U eeprom:w:$<.eep:i
 else
@@ -80,7 +80,7 @@ else
 endif
 
 .PHONY: fuses
-fuses: .fuses-check $(target) .pre-upload
+fuses: .fuses-check .pre-upload
 ifeq ($(CAN_PROGRAM_FUSES),true)
 	avrdude $(avrdude_options) -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m
 else
