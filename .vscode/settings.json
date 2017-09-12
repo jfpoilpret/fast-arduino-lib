@@ -41,6 +41,11 @@
             "programmer": "UNO USB",
             "serial": "/dev/ttyACM0"
         },
+        "LEONARDO": {
+            "board": "Arduino LEONARDO",
+            "programmer": "LEONARDO USB",
+            "serial": "/dev/ttyACM0"
+        },
         "ATmega328-16MHz":
         {
             "board": "ATmega328",
