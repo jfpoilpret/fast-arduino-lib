@@ -1,15 +1,15 @@
 {
-	"files.exclude": {
-		"**/.git": true,
-		"apidoc": true,
-		"build": true,
-		"dist": true,
-		"docs": true,
-		"example-boards": true,
-		"nbprojects": true
-	},
+    "files.exclude": {
+        "**/.git": true,
+        "apidoc": true,
+        "build": true,
+        "dist": true,
+        "docs": true,
+        "example-boards": true,
+        "nbprojects": true
+    },
     "files.insertFinalNewline": true,
-	"editor.insertSpaces": false,
+        "editor.insertSpaces": false,
     "editor.rulers": [
         80,
         120
@@ -39,6 +39,16 @@
         "UNO": {
             "board": "Arduino UNO",
             "programmer": "UNO USB",
+            "serial": "/dev/ttyACM0"
+        },
+        "NANO": {
+            "board": "Arduino NANO",
+            "programmer": "NANO USB",
+            "serial": "/dev/ttyUSB0"
+        },
+        "MEGA": {
+            "board": "Arduino MEGA",
+            "programmer": "MEGA USB",
             "serial": "/dev/ttyACM0"
         },
         "LEONARDO": {
