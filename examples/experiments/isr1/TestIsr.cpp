@@ -69,7 +69,7 @@ int main() __attribute__((OS_main));
 int main()
 {
 	sei();
-	
+
 	uart.register_handler();
 	uart.begin(115200);
 	out.width(0);
@@ -97,7 +97,7 @@ int main()
 	init_time.hours.two_digits = 0x12;
 	init_time.minutes.two_digits = 0;
 	init_time.seconds.two_digits = 0;
-	
+
 	// Send data to slave: initialize clock date
 	//==========================================
 	// 1. send START
