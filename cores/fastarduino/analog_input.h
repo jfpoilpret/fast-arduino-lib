@@ -66,7 +66,7 @@ namespace analog
 		 * The type of samples returned by `sample()`.
 		 */
 		using TYPE = SAMPLE_TYPE;
-		
+
 		/**
 		 * The prescaler used by ADC circuitry, calculated from `MAXFREQ` template
 		 * parameter.
@@ -129,7 +129,7 @@ namespace analog
 		uint16_t voltage_mV()
 		{
 			// Get sample
-			uint16_t rate = this-> template sample();
+			uint16_t rate = this->template sample();
 			// Do the maths to find out Vcc from rate:
 			return REFERENCE_MV * 1024L / rate;
 		}
