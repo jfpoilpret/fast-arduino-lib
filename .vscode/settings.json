@@ -10,21 +10,15 @@
         "nbprojects": true
     },
     "files.insertFinalNewline": true,
-        "editor.insertSpaces": false,
+    "editor.insertSpaces": false,
     "editor.rulers": [
         80,
         120
     ],
     "editor.tabSize": 4,
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
-    "C_Cpp.autocomplete": "Disabled",
-    "clang.cxxflags": [
-        "-std=c++11",
-        "-DF_CPU=16000000UL",
-        "-DARDUINO_UNO",
-        "-Wall",
-        "-I${workspaceRoot}/cores"
-    ],
+    "C_Cpp.autocomplete": "Default",
+    "C_Cpp.intelliSenseEngine": "Default",
     "todohighlight.include": ["**/*.h","**/*.cpp"],
     "todohighlight.keywords": [
         "TODO",
@@ -70,3 +64,4 @@
         }
     }
 }
+
