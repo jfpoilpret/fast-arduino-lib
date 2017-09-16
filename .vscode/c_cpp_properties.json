@@ -27,13 +27,18 @@
             "name": "Linux",
             "includePath": [
                 "~/avr8-gnu-toolchain-linux_x86_64/avr/include",
+                "~/avr8-gnu-toolchain-linux_x86_64/lib/gcc/avr/4.9.2/include",
                 "${workspaceRoot}/cores"
             ],
-            "defines": [],
+            "defines": [
+                "ARDUINO_UNO",
+                "F_CPU=16000000UL"
+            ],
             "intelliSenseMode": "clang-x64",
             "browse": {
                 "path": [
                     "~/avr8-gnu-toolchain-linux_x86_64/avr/include",
+                    "~/avr8-gnu-toolchain-linux_x86_64/lib/gcc/avr/4.9.2/include",
                     "${workspaceRoot}/cores"
                 ],
                 "limitSymbolsToIncludedHeaders": true,

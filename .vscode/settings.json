@@ -3,6 +3,7 @@
         "**/.git": true,
         "apidoc": true,
         "build": true,
+        "deps": true,
         "dist": true,
         "docs": true,
         "example-boards": true,
@@ -32,7 +33,6 @@
     "todohighlight.maxFilesForSearch": 512,
     "todohighlight.toggleURI": false,
     "fastarduino.general": {
-        "projectType": "Library",
         "defaultTarget": "UNO"
     },
     "fastarduino.targets": {
