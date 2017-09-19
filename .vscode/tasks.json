@@ -7,7 +7,7 @@
             "taskName": "Generate Documentation",
             "type": "shell",
             "command": "make doco",
-            "group": "build",
+            "group": "none",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -19,7 +19,7 @@
             "taskName": "Clean all examples",
             "type": "shell",
             "command": "make clean-examples CONF=UNO-Release",
-            "group": "build",
+            "group": "none",
             "presentation": {
                 "echo": true,
                 "reveal": "always",

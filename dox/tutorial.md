@@ -320,6 +320,7 @@ Note that Flash can also be used to store other read-only data that you may want
 The following example shows how to:
 - define, in your source code, read-only data that shall be stored in Flash memory
 - read that data when you need it
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 #include <fastarduino/flash.h>
 
@@ -598,18 +599,162 @@ void loop()
 As usual, we compare the size of both:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 204 bytes   | 926 bytes   |
-| data size | 0 bytes     | 9 bytes     |
+| code size | 926 bytes   | 204 bytes   |
+| data size | 9 bytes     | 0 bytes     |
 
 Note that Arduino core API does not allow you any other precision than 10 bits.
 
 
 @anchor timer Basics: timer
 ---------------------------
+A timer (it should actually be named "timer/counter") is a logic chip or part of an MCU that just "counts" pulses of a clock at a given frequency. It can have several modes. It is used in many occasions such as:
+- real time counting
+- asynchronous tasks (one-shot or periodic) scheduling
+- PWM signal generation (see TODO for further details)
 
-TODO reminder on what timers are and what they can do.
+A timer generally counts up, but it may also, on some occasions, count down; it may trigger interrupts on several events (i.e. when counter reaches some specific limits), it may drive some specific digital output pins, and sometimes it may also be driven by digital input pins (to stop counting).
 
-TODO all timers are similar but different (prescalers, size, capabilities).
+There are typically several independent timers on an MCU, but they are not all the same. Timers may differ in:
+- counter size (8 or 16 bits for AVR timers)
+- list of settable frequencies (timer frequencies are derived from the MCU clock by prescaler devices)
+- the timer modes supported
+- the pins they are connected to
+- specific capabilities they may have
 
-TODO start simple example (which one?)
+Rather than explaining the theory further, we will start studying a simple example that uses a timer for blinking a LED, a little bit like the first example but totally driven asynchronously:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/timer.h>
+
+constexpr const board::Timer TIMER = board::Timer::TIMER1;
+using CALCULATOR = timer::Calculator<TIMER>;
+using TIMER_TYPE = timer::Timer<TIMER>;
+constexpr const uint32_t PERIOD_US = 1000000;
+
+constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
+constexpr const TIMER_TYPE::TIMER_TYPE COUNTER = CALCULATOR::CTC_counter(PRESCALER, PERIOD_US);
+
+class Handler
+{
+public:
+	Handler(): _led{gpio::PinMode::OUTPUT, false} {}
+	
+	void on_timer()
+	{
+		_led.toggle();
+	}
+	
+private:
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;
+};
+
+// Define vectors we need in the example
+REGISTER_TIMER_ISR_METHOD(1, Handler, &Handler::on_timer)
+
+int main()
+{
+	board::init();
+	sei();
+	Handler handler;
+	interrupt::register_handler(handler);
+	TIMER_TYPE timer{timer::TimerMode::CTC};
+	timer.begin(PRESCALER, COUNTER);
+	
+	while (true) ;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This example looks much more complex than all previous examples but it is straightforward to understand once explained part after part.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/timer.h>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In addition to GPIO, we include the header containing all Timer API.
+
+For this example, we use Arduino UNO, which MCU (ATmega328P) includes 3 timers (named respectively `Timer0`, `Timer1`, `Timer2` in its datasheet), we use Timer1 which is 16-bits in size:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+constexpr const board::Timer TIMER = board::Timer::TIMER1;
+using CALCULATOR = timer::Calculator<TIMER>;
+using TIMER_TYPE = timer::Timer<TIMER>;
+constexpr const uint32_t PERIOD_US = 1000000;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Although not needed, it is a good practice to define a `const`, named `TIMER` in this snippet, valued with the real timer we intend to use.
+Then we define 2 new type aliases, `CALCULATOR` and `TIMER` that will help us type less code (this is common recommended practice when using C++ templates heavily in programs):
+- `CALCULATOR` is the type of a class which provides `static` utility methods that will help us configure the timer we have selected; do note that, since all timers are different, `CALCULATOR` is specific to one timer only; hence if our program was using 2 distinct timers, we would have to define two distinct calculator type aliases, one for each timer.
+- `TIMER_TYPE` is the type of the class that embed all timer API for the specific timer we have selected.
+
+Finally we define `PERIOD_US` the period, in microseconds, at which we want the LED to blink. Please note that this is in fact half the actual period, because this is the time at which we will toggle the LED light.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
+constexpr const TIMER_TYPE::TIMER_TYPE COUNTER = CALCULATOR::CTC_counter(PRESCALER, PERIOD_US);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The above snippet defines constant settings, computed by `CALCULATOR` utility class, that we will later use to initialize our timer:
+- `PRESCALER` is the **optimum** prescaler value that we can use for our timer in order to be able to count up to the requested period, i.e. 1 second; the type of prescaler is an `enum` that depends on each timer (because the list of available prescaler values differ from one timer to another). The prescaler defines the number by which the MCU clock frequency will be divided to provide the pulses used to increment the timer. We don't need to know this value or fix it ourselves because `CALCULATOR::CTC_prescaler` calculates the best choice for us.
+- `COUNTER` is the maximum counter value that the timer can reach until 1 second has ellapsed; its type is based on the timer we have selected (i.e. `Timer1` => 16 bits => `uint16_t`), but we don't need to fix this type ourselves because it depends on the timer we have selected.
+
+Note that, although we know in advance which timer we use, we always avoid declaring direct types (such as `uint16_t`) in order to facilate a potential change to another timer in the future, without having to change several code locations. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+class Handler
+{
+public:
+	Handler(): _led{gpio::PinMode::OUTPUT, false} {}
+	
+	void on_timer()
+	{
+		_led.toggle();
+	}
+	
+private:
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here we define the class which implements the code in charge of blinking the LED every time the timer has reached its maximum value, i.e. every second.
+There is nothing special to explain here, except that the method `on_timer()` is a *callback function* which will get called asynchronously (from interrupt handlers) when the timer reaches its max.
+
+Since timers generate interruptions, we need to "attach" our handler code above to the suitable interruption, this is done through the following line of code:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_TIMER_ISR_METHOD(1, Handler, &Handler::on_timer)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`REGISTER_TIMER_ISR_METHOD` is a macro that will generate extra code (code you do not need, nor want, to see) to declare the Interrupt Service Routine (*ISR*) attached to the proper interruption of our selected timer; it takes 3 arguments:
+- `1` is the timer number (`0`, `1` or `2` on UNO)
+- `Handler` is the class that contains the code to be called when the interrupt occurs
+- `&Handler::on_timer` is the Pointer to Member Function (often abbreviated *PTMF* by usual C++ developers) telling which method from `Handler` shall be called back when the interrupt occurs
+In FastArduino, interrupt handling follows some patterns that are further described [here](TODO) and won't bed eveloped in detail now.
+
+Now we can finally start writing the code of the `main()` function:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+int main()
+{
+	board::init();
+	sei();
+	Handler handler;
+	interrupt::register_handler(handler);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Past the usual initialization stuff, this code performs an important task regarding interrupt handling: it creates `handler`, an instance of the `Handler` class that has been defined before as the class to handle interrupts for the selected timer, and then it **registers** this handler instance with FastArduino. Now we are sure that interrupts for our timer will call `handler.on_timer()`.
+
+The last part of the code creates and starts the timer we need in our program:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	TIMER_TYPE timer{timer::TimerMode::CTC};
+	timer.begin(PRESCALER, COUNTER);
+	
+	while (true) ;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`timer` is the instance of `timer::Timer` API for `board::Timer::TIMER1`; upon instantiation, it is passed the timer mode to use.
+Here we use *CTC* mode (Clear Timer on Compare); in this mode the counter is incremented until it reaches a maximum value, then it triggers an interrupt and it clears the counter value back to zero and starts counting up again. 
+
+`timer.begin()` activates the timer with the provided values for clock prescaler and the maximum counter value, that were calculated initially in the program. These 2 values have been calculated in order for `timer` to generate an interrupt (i.e. call `handler.on_timer()`) every second.
+
+Note the infinite loop `while (true);` at the end of `main()`: without it the program would terminate immediately, giving no chance to our timer and handler to operate as expected. What is interesting to see here is that the main code does not do anything besides looping forever: all actual stuff happens asynchronously behind the scenes!
+
+I would have liked to perform a size comparison with Arduino API, but unfortunately, the basic Arduino API does not provide an equivalent way to directly access a timer, hence we cannot produce the equivalent code here. Anyway, here is the size for the example above:
+|           | FastArduino |
+|-----------|-------------|
+| code size | 248 bytes   |
+| data size | 2 bytes     |
+
+TODO other examples? or next: RTT, PWM, jobs/events
 
