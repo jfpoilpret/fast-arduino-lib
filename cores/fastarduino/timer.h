@@ -486,8 +486,10 @@ namespace timer
 	class Timer
 	{
 	protected:
+		/// @cond notdocumented
 		using TRAIT = board_traits::Timer_trait<TIMER>;
 		using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
+		/// @endcond
 
 	public:
 		/**
@@ -766,6 +768,7 @@ namespace timer
 		}
 
 	protected:
+		/// @cond notdocumented
 		Timer(uint8_t tccra, uint8_t tccrb):_tccra{tccra}, _tccrb{tccrb} {}
 
 		template<uint8_t COM>
@@ -795,6 +798,7 @@ namespace timer
 		
 		uint8_t _tccra;
 		uint8_t _tccrb;
+		/// @endcond
 	};
 }
 
