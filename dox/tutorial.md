@@ -12,7 +12,7 @@ Basics:
 2. [UART & flash](@ref uartflash)
 3. [analog input](@ref analoginput)
 4. [timer](@ref timer)
-5. real-time timer
+5. [real-time timer](@ref rtt)
 6. PWM
 7. utilities
 
@@ -721,7 +721,7 @@ REGISTER_TIMER_ISR_METHOD(1, Handler, &Handler::on_timer)
 - `1` is the timer number (`0`, `1` or `2` on UNO)
 - `Handler` is the class that contains the code to be called when the interrupt occurs
 - `&Handler::on_timer` is the Pointer to Member Function (often abbreviated *PTMF* by usual C++ developers) telling which method from `Handler` shall be called back when the interrupt occurs
-In FastArduino, interrupt handling follows some patterns that are further described [here](TODO) and won't bed eveloped in detail now.
+In FastArduino, interrupt handling follows some patterns that are further described [here](TODO) and won't be developed in detail now.
 
 Now we can finally start writing the code of the `main()` function:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -756,5 +756,8 @@ I would have liked to perform a size comparison with Arduino API, but unfortunat
 | code size | 248 bytes   |
 | data size | 2 bytes     |
 
-TODO other examples? or next: RTT, PWM, jobs/events
 
+@anchor real-time timer Basics: rtt
+-----------------------------------
+
+TODO

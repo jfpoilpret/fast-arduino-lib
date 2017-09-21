@@ -18,7 +18,6 @@
  * @file 
  * Timer API.
  */
-
 #ifndef TIMER_HH
 #define TIMER_HH
 
@@ -29,16 +28,36 @@
 #include "utilities.h"
 #include "boards/board_traits.h"
 
-//TODO doxygen
 // Generic macros to register ISR on Timer
 //=========================================
 //TODO rework naming of these API macros
+/**
+ * Register the necessary ISR (interrupt Service Routine) for a timer::Timer
+ * with a callback method in CTC mode.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
+ * is triggered; this must be a proper PTMF (pointer to member function).
+ */
 #define REGISTER_TIMER_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
 
+/**
+ * Register the necessary ISR (interrupt Service Routine) for a timer::Timer
+ * with a callback function in CTC mode.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param CALLBACK the function that will be called when the interrupt is
+ * triggered
+ */
 #define REGISTER_TIMER_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
 REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
+/**
+ * Register an enpty ISR (interrupt Service Routine) for a timer::Timer.
+ * This may be needed when using timer CTC mode but when you don't need any
+ * callback.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ */
 #define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
 //TODO Add API to explicitly set interrupts we want to enable
@@ -51,12 +70,10 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
  * - BOTTOM, TOP and MAX values
  * - Modes of operation
  * - Output modes
- * TODO better document notions above, in particular prescaler.
- * TODO different timers with different options
+ * These concepts are described in details in AVR datasheets.
  */
 namespace timer
 {
-	//TODO rework doc as it seems too near AVR datasheet and too far Timer API
 	/**
 	 * Defines the mode of operation of a timer.
 	 */
@@ -76,7 +93,7 @@ namespace timer
 		CTC,
 		/**
 		 * Timer "Fast Phase Width Modulation" mode: counter is incremented until
-		 * it reaches MAX value (0xFF for 8-bits Timer, TODO for 16-bits Timer).
+		 * it reaches MAX value (0xFF for 8-bits Timer, 0x3FF for 16-bits Timer).
 		 * In this mode the timer can be linked to PWM output pins to be 
 		 * automatically set or cleared when:
 		 * - counter reaches MAX
@@ -86,7 +103,7 @@ namespace timer
 		FAST_PWM,
 		/**
 		 * Timer "Phase Correct Pulse Width Modulation" mode: counter is 
-		 * incremented until MAX (0xFF for 8-bits Timer, TODO for 16-bits Timer),
+		 * incremented until MAX (0xFF for 8-bits Timer, 0x3FF for 16-bits Timer),
 		 * then decremented until 0, and incremented again...
 		 * In this mode the timer can be linked to PWM output pins to be 
 		 * automatically set or cleared when:
@@ -120,7 +137,6 @@ namespace timer
 		INVERTING
 	};
 	
-	// All utility methods go here
 	/**
 	 * Defines a set of calculation methods for the given @p TIMER
 	 * The behavior of these methods is specific to each AVR Timer are there can
@@ -158,7 +174,9 @@ namespace timer
 		 * Computes the ideal prescaler value to use for this timer, in
 		 * TimerMode::CTC mode, in order to be able to count up to @p us
 		 * microseconds.
-		 * TODO constexpr function!
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
 		 * @param us the number of microseconds we want to be able to count up to
 		 * @return the best prescaler to use
 		 * @sa CTC_counter()
@@ -168,10 +186,13 @@ namespace timer
 		{
 			return best_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us);
 		}
+
 		/**
 		 * Computes the frequency at which this timer would perform, in 
 		 * TimerMode::CTC mode, if it was using @p prescaler.
-		 * TODO constexpr function!
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
 		 * @param prescaler the prescaler value for which to compute timer
 		 * frequency
 		 * @return timer frequency when using @p prescaler
@@ -181,10 +202,13 @@ namespace timer
 		{
 			return F_CPU / _BV(uint8_t(prescaler));
 		}
+
 		/**
 		 * Computes the value of counter to use for this timer, in TimerMode::CTC
 		 * mode, with @p prescaler, in order to reach @p us microseconds.
-		 * TODO constexpr function!
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided constant arguments.
+		 * 
 		 * @param prescaler the prescaler used for this timer
 		 * @param us the number of microseconds to reach with this timer in CTC mode
 		 * @return the MAX value to be used in order to reach @p us
@@ -195,64 +219,195 @@ namespace timer
 		{
 			return (TIMER_TYPE) prescaler_quotient(prescaler, us) - 1;
 		}
+
 		/**
 		 * Verifies that the given prescaler @p p is suitable for this timer in
 		 * TimerMode::CTC in ordeer to be able to reach @p us microseconds.
 		 * This is normally not needed but can be helpful in a `static_assert` in
 		 * your code.
-		 * TODO constexpr function!
-		 * TODO finish doc
-		 * @param p
-		 * @param us
-		 * @return 
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided constant arguments.
+		 * You could use this method in `static_assert()` in order to check that
+		 * the requested period @p us is OK for this timer.
+		 *
+		 * @param p the prescaler used for this timer
+		 * @param us the number of microseconds to reach with this timer in CTC mode
+		 * @retval `true` if @p p and @p us are adequate for @p TIMER
+		 * @retval `false` if @p p and @p us are **NOT** adequate for @p TIMER
+		 * @sa CTC_prescaler()
+		 * @sa CTC_counter()
 		 */
 		static constexpr bool is_adequate_for_CTC(TIMER_PRESCALER p, uint32_t us)
 		{
 			return prescaler_is_adequate(prescaler_quotient(p, us));
 		}
 
-		// Calculations for Fast PWM mode 8 bits or 10 bits)
+		/**
+		 * Computes the ideal prescaler value to use for this timer, in
+		 * TimerMode::FAST_PWM mode, in order to be able to reach at least
+		 * @p pwm_frequency.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * @param pwm_frequency the PWM frequency we want to reach
+		 * @return the best prescaler to use
+		 * @sa FastPWM_frequency()
+		 */
 		static constexpr TIMER_PRESCALER FastPWM_prescaler(uint16_t pwm_frequency)
 		{
 			return best_frequency_prescaler(
 				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL));
 		}
+
+		/**
+		 * Computes the frequency at which this timer would perform, in 
+		 * TimerMode::FAST_PWM mode, if it was using @p prescaler.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * @param prescaler the prescaler value for which to compute timer
+		 * frequency
+		 * @return timer frequency when using @p prescaler
+		 * @sa FastPWM_prescaler()
+		 */
 		static constexpr uint16_t FastPWM_frequency(TIMER_PRESCALER prescaler)
 		{
 			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL);
 		}
 		
-		// Calculations for Phase Correct PWM mode 8 bits or 10 bits)
+		/**
+		 * Computes the ideal prescaler value to use for this timer, in
+		 * TimerMode::PHASE_CORRECT_PWM mode, in order to be able to reach at
+		 * least @p pwm_frequency.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * @param pwm_frequency the PWM frequency we want to reach
+		 * @return the best prescaler to use
+		 * @sa PhaseCorrectPWM_frequency()
+		 */
 		static constexpr TIMER_PRESCALER PhaseCorrectPWM_prescaler(uint16_t pwm_frequency)
 		{
 			return best_frequency_prescaler(
 				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (2UL * PWM_MAX));
 		}
+
+		/**
+		 * Computes the frequency at which this timer would perform, in 
+		 * TimerMode::PHASE_CORRECT_PWM mode, if it was using @p prescaler.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * @param prescaler the prescaler value for which to compute timer
+		 * frequency
+		 * @return timer frequency when using @p prescaler
+		 * @sa PhaseCorrectPWM_prescaler()
+		 */
 		static constexpr uint16_t PhaseCorrectPWM_frequency(TIMER_PRESCALER prescaler)
 		{
 			return F_CPU / _BV(uint8_t(prescaler)) / (2UL * PWM_MAX);
 		}
 	
-		// Calculations for 8bits/16 bits PulseTimer class
+		/**
+		 * Computes the ideal prescaler value to use for this timer, when used
+		 * in timer::PulseTimer, in order to be able to reach at least
+		 * @p pulse_frequency with a maximum pulse width of @p max_pulse_width_us.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * @param max_pulse_width_us the maximum pulse width, in microseconds,
+		 * to produce
+		 * @param pulse_frequency the pulse frequency we want to reach
+		 * @return the best prescaler to use
+		 * @sa PulseTimer_value()
+		 */
 		static constexpr TIMER_PRESCALER PulseTimer_prescaler(uint16_t max_pulse_width_us, uint16_t pulse_frequency)
 		{
 			return TRAIT::IS_16BITS ? PWM_ICR_prescaler(pulse_frequency) : CTC_prescaler(max_pulse_width_us);
 		}
+
+		/**
+		 * Computes the ideal value to use for this timer, when used
+		 * in timer::PulseTimer, in order to produce a pulse of the required width
+		 * @p period_us with the given @p prescaler.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * Note that this method is directly called as needed by timer::PulseTimer,
+		 * hence you generally won't need to call it yourself.
+		 *
+		 * @param prescaler the prescaler value for which to compute value
+		 * @param period_us the pulse width, in microseconds, to produce
+		 * @return the value to use to produce the required pulse
+		 * @sa PulseTimer_prescaler()
+		 */
 		static constexpr TIMER_TYPE PulseTimer_value(TIMER_PRESCALER prescaler, uint16_t period_us)
 		{
 			return CTC_counter(prescaler, period_us);
 		}
 
-		// Calculations for 16 bits ICR-based Fast PWM mode
+		/**
+		 * Computes the ideal prescaler value to use for this timer, when used
+		 * in timer::PulseTimer, in order to be able to reach at least
+		 * @p pulse_frequency with a maximum pulse width of @p max_pulse_width_us.
+		 * This method applies only to 16-bits timers, for which PulseTimer uses
+		 * FastPWM mode with register `ICR` as TOP value.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * Note that this method is directly called as needed by timer::PulseTimer,
+		 * hence you generally won't need to call it yourself.
+		 *
+		 * @param pwm_frequency the pulse frequency we want to reach
+		 * @return the best prescaler to use
+		 * @sa PWM_ICR_frequency()
+		 * @sa PWM_ICR_counter()
+		 */
 		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
 		{
 			return best_frequency_prescaler(
 				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * 16384UL);
 		}
+		
+		/**
+		 * Computes the frequency at which this timer would perform, when used
+		 * in timer::PulseTimer, if it was using @p prescaler and @p counter.
+		 * This method applies only to 16-bits timers, for which PulseTimer uses
+		 * FastPWM mode with register `ICR` as TOP value.
+		 *
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * @param prescaler the prescaler value for which to compute timer
+		 * frequency
+		 * @param counter the counter value for which to compute timer
+		 * frequency
+		 * @return timer frequency
+		 * @sa PWM_ICR_prescaler()
+		 * @sa PWM_ICR_counter()
+		 */
 		static constexpr uint16_t PWM_ICR_frequency(TIMER_PRESCALER prescaler, uint16_t counter)
 		{
 			return F_CPU / _BV(uint8_t(prescaler)) / counter;
 		}
+
+		/**
+		 * Computes the ideal counter TOP value to use for this timer, when used
+		 * in timer::PulseTimer, in order to be able to reach at least
+		 * @p pulse_frequency with the given @p prescaler.
+		 * This method applies only to 16-bits timers, for which PulseTimer uses
+		 * FastPWM mode with register `ICR` as TOP value.
+		 *
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 *
+		 * @param prescaler the prescaler value for which to compute timer
+		 * frequency
+		 * @param pwm_frequency the pulse frequency we want to reach
+		 * @return ideal value to set for `ICR` register
+		 * @sa PWM_ICR_prescaler()
+		 * @sa PWM_ICR_frequency()
+		 */
 		static constexpr uint16_t PWM_ICR_counter(TIMER_PRESCALER prescaler, uint16_t pwm_frequency)
 		{
 			return F_CPU / _BV(uint8_t(prescaler)) / pwm_frequency;
@@ -318,6 +473,14 @@ namespace timer
 		
 	};
 
+	/**
+	 * General API to handle an AVR timer.
+	 * Note that many timer usages will require ISR registration with one of
+	 * the macros defined in this header file.
+	 * 
+	 * @tparam TIMER the timer for which we need calculation methods
+	 * @sa board::Timer
+	 */
 	template<board::Timer TIMER>
 	class Timer
 	{
@@ -326,25 +489,77 @@ namespace timer
 		using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
 
 	public:
+		/**
+		 * The type of this timer's counter (either `uint8_t` or `uint16_t`).
+		 */
 		using TIMER_TYPE = typename TRAIT::TYPE;
+
+		/**
+		 * The enum type listing all available precaler values for this timer.
+		 */
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
+
+		/**
+		 * The maximum value that can be set to this timer's counter.
+		 */
 		static constexpr const TIMER_TYPE TIMER_MAX = TRAIT::MAX_COUNTER - 1;
+
+		/**
+		 * The maximum value that can be set to this timer's counter in PWM mode.
+		 */
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
 		// Constructor to create a general-purpose timer
+		/**
+		 * Construct a new Timer handler and initialize its mode.
+		 * Note this constructore does *not* start the timer.
+		 * @param timer_mode the mode to initalize this timer with
+		 * @sa begin()
+		 */
 		Timer(TimerMode timer_mode)
 			:_tccra{timer_mode_TCCRA(timer_mode)}, _tccrb{timer_mode_TCCRB(timer_mode)} {}
 
+		/**
+		 * Change timer mode.
+		 * @param timer_mode the mode to reset this timer to
+		 */
 		inline void set_timer_mode(TimerMode timer_mode)
 		{
 			utils::set_mask(_tccra, 0xFF & ~TRAIT::COM_MASK, timer_mode_TCCRA(timer_mode));
 			_tccrb = timer_mode_TCCRB(timer_mode);
 		}
-		
+
+		/**
+		 * Start this timer in the currently selected mode, with the provided
+		 * @p prescaler value. This method does not enable timer interrupts,
+		 * hence no ISR registration is needed.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `_begin()` instead.
+		 * @param prescaler the prescale enum value to use for this timer
+		 * @sa begin(TIMER_PRESCALER, TIMER_TYPE)
+		 * @sa end()
+		 * @sa _begin(TIMER_PRESCALER)
+		 */
 		inline void begin(TIMER_PRESCALER prescaler)
 		{
 			synchronized _begin(prescaler);
 		}
+
+		/**
+		 * Start this timer in the currently selected mode, with the provided
+		 * @p prescaler value. This method does not enable timer interrupts,
+		 * hence no ISR registration is needed.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `begin()` instead.
+		 * @param prescaler the prescale enum value to use for this timer
+		 * @sa _begin(TIMER_PRESCALER, TIMER_TYPE)
+		 * @sa _end()
+		 * @sa begin(TIMER_PRESCALER)
+		 */
 		inline void _begin(TIMER_PRESCALER prescaler)
 		{
 			TRAIT::TCCRA = _tccra;
@@ -354,10 +569,41 @@ namespace timer
 			TRAIT::TIMSK = 0;
 		}
 		
+		/**
+		 * Start this timer in the currently selected mode, with the provided
+		 * @p prescaler value and @p max value. 
+		 * This method enables timer interrupts (Compare Match),hence ISR
+		 * registration is required.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `_begin()` instead.
+		 * @param prescaler the prescale enum value to use for this timer
+		 * @param max the maximum value to use for this timer's counter
+		 * @sa begin(TIMER_PRESCALER)
+		 * @sa end()
+		 * @sa _begin(TIMER_PRESCALER, TIMER_TYPE)
+		 */
 		inline void begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
 		{
 			synchronized _begin(prescaler, max);
 		}
+
+	   /**
+		 * Start this timer in the currently selected mode, with the provided
+		 * @p prescaler value and @p max value. 
+		 * This method enables timer interrupts (Compare Match),hence ISR
+		 * registration is required.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `begin()` instead.
+		 * @param prescaler the prescale enum value to use for this timer
+		 * @param max the maximum value to use for this timer's counter
+		 * @sa _begin(TIMER_PRESCALER)
+		 * @sa _end()
+		 * @sa begin(TIMER_PRESCALER, TIMER_TYPE)
+		 */
 		inline void _begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)
 		{
 			TRAIT::TCCRA = _tccra;
@@ -369,19 +615,62 @@ namespace timer
 			TRAIT::TIMSK = _BV(OCIE0A);
 		}
 		
+		/**
+		 * Temporarily suspend this timer: the timer does not generate any
+		 * interrupt any longer.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `_suspend()` instead.
+		 * @sa resume()
+		 * @sa _suspend()
+		 */
 		inline void suspend()
 		{
 			synchronized _suspend();
 		}
+
+		/**
+		 * Temporarily suspend this timer: the timer does not generate any
+		 * interrupt any longer.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `suspend()` instead.
+		 * @sa _resume()
+		 * @sa suspend()
+		 */
 		inline void _suspend()
 		{
 			// Clear timer interrupt mode
 			TRAIT::TIMSK = 0;
 		}
+
+		/**
+		 * Resume this timer if it was previously suspended: the timer's counter
+		 * is reset and the timer starts generating interrupts again.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `_resume()` instead.
+		 * @sa suspend()
+		 * @sa _resume()
+		 */
 		inline void resume()
 		{
 			synchronized _resume();
 		}
+
+		/**
+		 * Resume this timer if it was previously suspended: the timer's counter
+		 * is reset and the timer starts generating interrupts again.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `resume()` instead.
+		 * @sa _suspend()
+		 * @sa resume()
+		 */
 		inline void _resume()
 		{
 			// Reset timer counter
@@ -389,15 +678,43 @@ namespace timer
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
 			TRAIT::TIMSK = _BV(OCIE0A);
 		}
+
+		/**
+		 * Check if this timer is currently suspended, i.e. it does not generate
+		 * any interrupts.
+		 * @retval true the timer is currently suspended
+		 * @retval false the timer is currently active
+		 */
 		inline bool is_suspended()
 		{
 			return TRAIT::TIMSK == 0;
 		}
-		
+
+		/**
+		 * Completely stop this timer: timer interrupts are disabled and counter 
+		 * is stopped.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `_end()` instead.
+		 * @sa begin()
+		 * @sa _end()
+		 */
 		inline void end()
 		{
 			synchronized _end();
 		}
+
+		/**
+		 * Completely stop this timer: timer interrupts are disabled and counter 
+		 * is stopped.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `end()` instead.
+		 * @sa _begin()
+		 * @sa end()
+		 */
 		inline void _end()
 		{
 			// Stop timer
@@ -406,6 +723,13 @@ namespace timer
 			TRAIT::TIMSK = 0;
 		}
 
+		/**
+		 * Change the output mode for this timer; this enables connection between 
+		 * this timer to one of its associated digital output pins.
+		 * @tparam COM the index of the output pin for this timer; your program
+		 * will not compile if you use an incorrect value.
+		 * @param mode the new output mode for this timer and this pin
+		 */
 		template<uint8_t COM>
 		inline void set_output_mode(TimerOutputMode mode)
 		{
@@ -414,6 +738,16 @@ namespace timer
 			utils::set_mask(_tccra, COM_TRAIT::COM_MASK, convert_COM<COM>(mode));
 		}
 		
+		/**
+		 * Change the maximum value for this timer, in relation to one of its
+		 * associated digital output pins.
+		 * Note that this method is always synchronized, i.e. it disables
+		 * interrupts during its call and restores interrupts on return.
+		 * 
+		 * @tparam COM the index of the output pin for this timer; your program
+		 * will not compile if you use an incorrect value.
+		 * @param max the new maximum value for this timer and this pin
+		 */
 		template<uint8_t COM>
 		inline void set_max(TIMER_TYPE max)
 		{
