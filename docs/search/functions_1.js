@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['base',['base',['../classstreams_1_1_format_base.html#a0e4352fd9cb1b47963761c92148e2aac',1,'streams::FormatBase::base(Base base)'],['../classstreams_1_1_format_base.html#a97f8bfe150ae26f91eb702b6624369b0',1,'streams::FormatBase::base()']]],
-  ['bcd_5fto_5fbinary',['bcd_to_binary',['../namespaceutils.html#af5b3426ba48caf5ee96ed71fa8b7bb5e',1,'utils']]],
-  ['begin',['begin',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd',1,'devices::rf::NRF24L01::begin()'],['../classserial_1_1hard_1_1_u_a_t_x.html#ad02715895d9cafefc1a28df302ce6049',1,'serial::hard::UATX::begin()'],['../classserial_1_1hard_1_1_u_a_r_x.html#a29a4dfaecb6e1e2828864efc46f111ec',1,'serial::hard::UARX::begin()']]],
-  ['bin',['bin',['../namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1',1,'streams']]],
-  ['binary_5fto_5fbcd',['binary_to_bcd',['../namespaceutils.html#a76076365828136f5178f279fb3c129de',1,'utils']]],
-  ['broadcast',['broadcast',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4',1,'devices::rf::NRF24L01']]]
+  ['as_5fuint16_5ft',['as_uint16_t',['../namespaceutils.html#a9d48a47fd601d3b960ce55b26a4d5194',1,'utils']]],
+  ['as_5fuint8_5ft',['as_uint8_t',['../namespaceutils.html#a8122a1acb9aff2f2cd1d4ae7e1e99ac9',1,'utils']]],
+  ['auto_5fdelay',['auto_delay',['../classtime_1_1auto__delay.html#af9ffd33d155ba2ff39cb3f6fea96fdb4',1,'time::auto_delay']]],
+  ['auto_5fmillis',['auto_millis',['../classtime_1_1auto__millis.html#a98fad2c2c88e941ea0bd505d657e1cfb',1,'time::auto_millis']]],
+  ['available',['available',['../classstreams_1_1_input_buffer.html#a1279d7c61d7728fb5af5d5c0423f692f',1,'streams::InputBuffer::available()'],['../classstreams_1_1_formatted_input.html#a634a05db1427007b81d34358b710ace3',1,'streams::FormattedInput::available()']]]
 ];

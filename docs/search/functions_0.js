@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['as_5fuint16_5ft',['as_uint16_t',['../namespaceutils.html#a9d48a47fd601d3b960ce55b26a4d5194',1,'utils']]],
-  ['as_5fuint8_5ft',['as_uint8_t',['../namespaceutils.html#a8122a1acb9aff2f2cd1d4ae7e1e99ac9',1,'utils']]],
-  ['auto_5fdelay',['auto_delay',['../classtime_1_1auto__delay.html#af9ffd33d155ba2ff39cb3f6fea96fdb4',1,'time::auto_delay']]],
-  ['auto_5fmillis',['auto_millis',['../classtime_1_1auto__millis.html#a98fad2c2c88e941ea0bd505d657e1cfb',1,'time::auto_millis']]],
-  ['available',['available',['../classstreams_1_1_input_buffer.html#a20166925a3144bbf70513b33fd82e55a',1,'streams::InputBuffer::available()'],['../classstreams_1_1_formatted_input.html#a2be5b076d9ee1e98bfa030ba58d44f94',1,'streams::FormattedInput::available()']]]
+  ['_5fbegin',['_begin',['../classtimer_1_1_timer.html#a796c372ae7f28668e621833ba278bbc0',1,'timer::Timer::_begin(TIMER_PRESCALER prescaler)'],['../classtimer_1_1_timer.html#a9dca4a29884f5029ad980b013aeacb73',1,'timer::Timer::_begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)']]],
+  ['_5fend',['_end',['../classtimer_1_1_timer.html#a0726839c082f295de3b1082d71db1a17',1,'timer::Timer']]],
+  ['_5fresume',['_resume',['../classtimer_1_1_timer.html#ae7916fa40c6ce244c2db387da0c0a455',1,'timer::Timer']]],
+  ['_5fsuspend',['_suspend',['../classtimer_1_1_timer.html#ad95670b14db859098ab160e7a6b35018',1,'timer::Timer']]]
 ];

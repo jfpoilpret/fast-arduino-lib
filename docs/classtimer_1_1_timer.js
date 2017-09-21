@@ -1,11 +1,8 @@
 var classtimer_1_1_timer =
 [
-    [ "TRAIT", "classtimer_1_1_timer.html#ae28769c615d9c109b1a7dff24305e349", null ],
-    [ "PRESCALERS_TRAIT", "classtimer_1_1_timer.html#a2a1885ab80a997759894f0e1908d25e0", null ],
     [ "TIMER_TYPE", "classtimer_1_1_timer.html#ab5073343302f7e2699c0b9cb598ca451", null ],
     [ "TIMER_PRESCALER", "classtimer_1_1_timer.html#ade1d7f8efd6c214d36d2f6fe549a2ee1", null ],
     [ "Timer", "classtimer_1_1_timer.html#a78d5018d575e2001f859b41934eac32a", null ],
-    [ "Timer", "classtimer_1_1_timer.html#a895fe3934a0ccc390ae9ace84aa2065d", null ],
     [ "set_timer_mode", "classtimer_1_1_timer.html#a497a75567ed3d02f6a34ee2edb3c4f9a", null ],
     [ "begin", "classtimer_1_1_timer.html#afaed74b66a7f4aa9da27395124b85832", null ],
     [ "_begin", "classtimer_1_1_timer.html#a796c372ae7f28668e621833ba278bbc0", null ],
@@ -20,11 +17,6 @@ var classtimer_1_1_timer =
     [ "_end", "classtimer_1_1_timer.html#a0726839c082f295de3b1082d71db1a17", null ],
     [ "set_output_mode", "classtimer_1_1_timer.html#a45cf211371bb6ead9008c79589792d4c", null ],
     [ "set_max", "classtimer_1_1_timer.html#ad1918f31dd4db7bea9517237c5531ee8", null ],
-    [ "convert_COM", "classtimer_1_1_timer.html#abbfe028cab220d6bd26555a8ad1106d7", null ],
-    [ "timer_mode_TCCRA", "classtimer_1_1_timer.html#ab372c0fe71fac429416c2c5c2afd9917", null ],
-    [ "timer_mode_TCCRB", "classtimer_1_1_timer.html#aa4fac6e977f0452122a4cbaad1dc3d32", null ],
     [ "TIMER_MAX", "classtimer_1_1_timer.html#aa4a34b03ca03819b9c3a9fcc5ceaf29f", null ],
-    [ "PWM_MAX", "classtimer_1_1_timer.html#a9165e68e0050cc46f07bb52b2064d3e9", null ],
-    [ "_tccra", "classtimer_1_1_timer.html#ab26f89634f9b4eb14e6079fb72753507", null ],
-    [ "_tccrb", "classtimer_1_1_timer.html#aae4af829e510beb7036e23a0fb274ac6", null ]
+    [ "PWM_MAX", "classtimer_1_1_timer.html#a9165e68e0050cc46f07bb52b2064d3e9", null ]
 ];

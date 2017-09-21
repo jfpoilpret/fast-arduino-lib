@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['uart',['UART',['../classserial_1_1hard_1_1_u_a_r_t.html#aa820e0838b6fcdbd0040c4f511a2ac70',1,'serial::hard::UART']]],
-  ['uarx',['UARX',['../classserial_1_1hard_1_1_u_a_r_x.html#a1925b0bc83804f8bc15fafa26437dde5',1,'serial::hard::UARX']]],
-  ['uatx',['UATX',['../classserial_1_1hard_1_1_u_a_t_x.html#a2f9c79264d4550e4081c65500f95c771',1,'serial::hard::UATX']]]
+  ['timer',['Timer',['../classtimer_1_1_timer.html#a78d5018d575e2001f859b41934eac32a',1,'timer::Timer']]],
+  ['toggle',['toggle',['../classgpio_1_1_fast_pin.html#aa163ea832ed19672f76e8ae270f0d64d',1,'gpio::FastPin::toggle()'],['../classgpio_1_1_fast_pin_type.html#a5f3139c04fa7528f72e6440d19d3f16c',1,'gpio::FastPinType::toggle()']]]
 ];

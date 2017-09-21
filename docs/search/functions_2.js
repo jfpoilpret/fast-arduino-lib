@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['calculate_5fdelay1_5fcount',['calculate_delay1_count',['../namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271',1,'utils']]],
-  ['clear',['clear',['../classgpio_1_1_fast_pin.html#aacdd1ac814176c092cae63d1dc83b144',1,'gpio::FastPin::clear()'],['../classgpio_1_1_fast_pin_type.html#ab440230869c0201cdfb7154c5aeec3bb',1,'gpio::FastPinType::clear()']]],
-  ['clear_5ferrors',['clear_errors',['../classserial_1_1_u_a_r_t_errors.html#aad35c22c4adaaa09bddf0542eb9f128f',1,'serial::UARTErrors']]],
-  ['constrain',['constrain',['../namespaceutils.html#af1acb8c6f0e6493f88d42b2192e68ba3',1,'utils']]],
-  ['ctc_5fcounter',['CTC_counter',['../structtimer_1_1_calculator.html#a44116fbe0411b953c2337d1ad3709f1c',1,'timer::Calculator']]],
-  ['ctc_5ffrequency',['CTC_frequency',['../structtimer_1_1_calculator.html#a4892832813ae14347bc4299d779a0331',1,'timer::Calculator']]],
-  ['ctc_5fprescaler',['CTC_prescaler',['../structtimer_1_1_calculator.html#a493755c4f41b27f11b37657d378341a9',1,'timer::Calculator']]]
+  ['base',['base',['../classstreams_1_1_format_base.html#a0e4352fd9cb1b47963761c92148e2aac',1,'streams::FormatBase::base(Base base)'],['../classstreams_1_1_format_base.html#a97f8bfe150ae26f91eb702b6624369b0',1,'streams::FormatBase::base()']]],
+  ['bcd_5fto_5fbinary',['bcd_to_binary',['../namespaceutils.html#af5b3426ba48caf5ee96ed71fa8b7bb5e',1,'utils']]],
+  ['begin',['begin',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd',1,'devices::rf::NRF24L01::begin()'],['../classtimer_1_1_timer.html#afaed74b66a7f4aa9da27395124b85832',1,'timer::Timer::begin(TIMER_PRESCALER prescaler)'],['../classtimer_1_1_timer.html#a4398c870c1f92454a1c8a6ade6e00db9',1,'timer::Timer::begin(TIMER_PRESCALER prescaler, TIMER_TYPE max)'],['../classserial_1_1hard_1_1_u_a_t_x.html#ad02715895d9cafefc1a28df302ce6049',1,'serial::hard::UATX::begin()'],['../classserial_1_1hard_1_1_u_a_r_x.html#a29a4dfaecb6e1e2828864efc46f111ec',1,'serial::hard::UARX::begin()']]],
+  ['bin',['bin',['../namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1',1,'streams']]],
+  ['binary_5fto_5fbcd',['binary_to_bcd',['../namespaceutils.html#a76076365828136f5178f279fb3c129de',1,'utils']]],
+  ['broadcast',['broadcast',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4',1,'devices::rf::NRF24L01']]]
 ];

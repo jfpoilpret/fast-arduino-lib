@@ -2,7 +2,7 @@ var classstreams_1_1_formatted_input =
 [
     [ "Manipulator", "classstreams_1_1_formatted_input.html#abac4844b2293dca9ff95582cc3bd776b", null ],
     [ "FormattedInput", "classstreams_1_1_formatted_input.html#a69e894a7c2c67e294ce3cbc2599574cb", null ],
-    [ "available", "classstreams_1_1_formatted_input.html#a2be5b076d9ee1e98bfa030ba58d44f94", null ],
+    [ "available", "classstreams_1_1_formatted_input.html#a634a05db1427007b81d34358b710ace3", null ],
     [ "get", "classstreams_1_1_formatted_input.html#a0aa0dd9b87ad8594545b70ce241f71fc", null ],
     [ "get", "classstreams_1_1_formatted_input.html#a7db190d51b53be3a7c8ce63bae902f38", null ],
     [ "gets", "classstreams_1_1_formatted_input.html#abeb6511228597ed2ca3a008be38d6d05", null ],
