@@ -13,7 +13,8 @@
                 "reveal": "always",
                 "focus": false,
                 "panel": "shared"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "taskName": "Clean all examples",

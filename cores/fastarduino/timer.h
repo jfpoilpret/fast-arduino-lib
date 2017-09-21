@@ -70,6 +70,7 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
  * - BOTTOM, TOP and MAX values
  * - Modes of operation
  * - Output modes
+ * 
  * These concepts are described in details in AVR datasheets.
  */
 namespace timer

@@ -757,7 +757,7 @@ I would have liked to perform a size comparison with Arduino API, but unfortunat
 | data size | 2 bytes     |
 
 
-@anchor real-time timer Basics: rtt
+@anchor rtt Basics: real-time timer 
 -----------------------------------
 
 TODO
