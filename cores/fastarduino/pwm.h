@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * PWM API.
+ */
 #ifndef PWM_H
 #define PWM_H
 
@@ -23,7 +29,15 @@
 namespace analog
 {
 	using timer::TimerOutputMode;
-	
+
+	/**
+	 * Construct a new handler for a PWM output pin.
+	 * @tparam PIN the digital pin to use as PWM output
+	 * @tparam PULSED whether to use a `timer::PulseTimer` instead of a 
+	 * `timer::Timer`; this is useful when e.g. you want to use a PWM pin to
+	 * manage a servo motor, where pulses shall be limited to a few ms but 
+	 * triggered every few dozen ms.
+	 */
 	template<board::DigitalPin PIN, bool PULSED = false>
 	class PWMOutput
 	{
@@ -31,6 +45,7 @@ namespace analog
 		using TIMER_TRAIT = board_traits::Timer_trait<TRAIT::TIMER>;
 		
 	public:
+		//TODO DOC
 		static constexpr const uint8_t COM = TRAIT::COM;
 		using TIMER = timer::Timer<TRAIT::TIMER>;
 		
@@ -64,4 +79,4 @@ namespace analog
 }
 
 #endif /* PWM_H */
-
+/// @endcond

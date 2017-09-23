@@ -13,7 +13,7 @@ Basics:
 3. [analog input](@ref analoginput)
 4. [timer](@ref timer)
 5. [real-time timer](@ref rtt)
-6. PWM
+6. [PWM](@ref pwm)
 7. utilities
 
 Advanced:
@@ -24,7 +24,7 @@ Advanced:
 5. SPI devices management
 6. I2C devices management
 7. eeprom
-8. Software UART
+8. software UART
 
 Devices:
 1. SPI
@@ -854,3 +854,135 @@ Note that this snippet is just an example and is not usable as is: it does not i
 
 Another interesting use of RTT is to perform some periodic actions. FastArduino implements an events handling mechanism that can be connected to an RTT in order to deliver periodic events. This mechanism is [described later](TODO) in this tutorial.
 
+
+@anchor pwm Basics: PWM 
+-----------------------
+
+PWM (*Pulse Width modulation*) is a technique that can be used to simulate generation of an analog voltage level through a purely digital output. This is done by varying the *duty cycle* of a rectangular pulse wave, i.e. the ratio of "on" time over the wave period.
+
+PWM is implemented by MCU through timers.
+
+FastArduino includes special support for PWM. The following example demonstrates PWM to increase then decrease the light emitted by a LED:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/time.h>
+#include <fastarduino/pwm.h>
+
+static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+using TIMER_TYPE = timer::Timer<TIMER>;
+using CALC = timer::Calculator<TIMER>;
+static constexpr const uint16_t PWM_FREQUENCY = 450;
+static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
+
+static constexpr const board::DigitalPin LED = board::PWMPin::D6_PD6_OC0A;
+using LED_PWM = analog::PWMOutput<LED>;
+
+int main()
+{
+	board::init();
+	sei();
+
+	// Initialize timer
+	TIMER_TYPE timer{timer::TimerMode::FAST_PWM};
+	timer.begin(PRESCALER);
+	
+	LED_PWM led{timer};
+	// Loop of samplings
+	while (true)
+	{
+		for (LED_PWM::TYPE duty = 0; duty < LED_PWM::MAX; ++duty)
+		{
+			led.set_duty(duty);
+			time::delay_ms(50);
+		}
+		for (LED_PWM::TYPE duty = LED_PWM::MAX; duty > 0; --duty)
+		{
+			led.set_duty(duty);
+			time::delay_ms(50);
+		}
+	}
+	return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The program starts by including the header for PWM API; this will automatically include the timer API header too.
+
+Then a timer is selected for PWM (note that the choice of a timer imposes the choice of possible pins) and a prescaler value computed for it, based on the PWM frequency we want to use, 450Hz, which is generally good enough for most use cases (dimming a LED, rotating a DC motor...):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+using TIMER_TYPE = timer::Timer<TIMER>;
+using CALC = timer::Calculator<TIMER>;
+static constexpr const uint16_t PWM_FREQUENCY = 450;
+static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then we define the pin that will be connected to the LED and the PWMOutput type for this pin:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+static constexpr const board::DigitalPin LED = board::PWMPin::D6_PD6_OC0A;
+using LED_PWM = analog::PWMOutput<LED>;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note that `board::PWMPin` namespace limits the pins to PWM-enabled pins; also note the pin name `D6_PD6_OC0A` includes useful information:
+- this is pin `D6` on Arduino UNO
+- this pin is on `PD6` i.e. Port D bit #6
+- this pin is connectable to `OC0A` i.e. Timer 0 COM A
+
+Then, in `main()`, after the usual initialization code, we initialize and start the timer:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	// Initialize timer
+	TIMER_TYPE timer{timer::TimerMode::FAST_PWM};
+	timer.begin(PRESCALER);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Notice we use the *Fast PWM* mode here, but we might as well use *Phase Correct PWM* mode.
+
+Next we connect the LED pin to the timer:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	LED_PWM led{timer};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the main loop, we have 2 consecutive loops, the first increases the light, the second decreases it. Both loops vary the duty cycle between its limits:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+		for (LED_PWM::TYPE duty = 0; duty < LED_PWM::MAX; ++duty)
+		{
+			led.set_duty(duty);
+			time::delay_ms(50);
+		}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note the use of `LED_PWM::TYPE`, which depends on the timer selected (8 or 16 bits), and `LED_PWM::MAX` which provides the maximum value usable for the duty cycle, i.e. the value mapping to 100% duty cycle. Pay attention to the fact that `LED_PWM::TYPE` is unsigned, this explains the 2nd loop:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+		for (LED_PWM::TYPE duty = LED_PWM::MAX; duty > 0; --duty)
+		{
+			led.set_duty(duty);
+			time::delay_ms(50);
+		}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here, we shall not use `duty >= 0` as the `for` condition, because that condition would be always `true`, hence the loop would be infinite.
+
+Now let's compare this example with the Arduino API equivalent:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#define LED 6
+
+void setup() {
+}
+
+void loop() {
+    for (int duty = 0; duty < 255; ++duty)
+    {
+        analogWrite(LED, duty);
+        delay(50);
+    }
+    for (int duty = 255; duty > 0; --duty)
+    {
+        analogWrite(LED, duty);
+        delay(50);
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Nothing special to comment here, except:
+- `duty` values are always limited to 255 even though some PWM pins are attached to a 16-bits timer
+- you cannot choose the PWM mode you want to use, it is fixed by Arduino API and varies depending on which timer is used (e.g. for Arduino UNO, Timer0 uses Fast PWM, whereas Time1 and Timer2 use Phase Correct PWM mode)
+- you cannot choose the PWM frequency, this is imposed to you by Arduino API and varies depending on which timer is used
+- you may pass any pin value to `analogWrite()` and the sketch will still compile and upload but the sketch will not work
+
+Comparing sizes once again shows big differences:
+|           | Arduino API | FastArduino |
+|-----------|-------------|-------------|
+| code size | 1302 bytes  | 288 bytes   |
+| data size | 9 bytes     | 0 byte      |
