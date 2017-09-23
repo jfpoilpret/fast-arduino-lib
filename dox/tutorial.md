@@ -731,7 +731,7 @@ int main()
 	sei();
 	Handler handler;
 	interrupt::register_handler(handler);
-}
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Past the usual initialization stuff, this code performs an important task regarding interrupt handling: it creates `handler`, an instance of the `Handler` class that has been defined before as the class to handle interrupts for the selected timer, and then it **registers** this handler instance with FastArduino. Now we are sure that interrupts for our timer will call `handler.on_timer()`.
 
@@ -786,7 +786,7 @@ int main()
 	rtt.register_rtt_handler();
 	rtt.begin();
 
-	typename gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
 	while (true)
 	{
 		led.toggle();
@@ -816,10 +816,10 @@ Finally, we have the usual loop, toogling the LED, and then delay for 10s, using
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let's examine the size of this program and compare it with the first example of this tutorial, which used `time::delay_ms()`:
-|           | time::delay_ms | RTT::delay  |
-|-----------|----------------|-------------|
-| code size | 154 bytes      | 396 bytes   |
-| data size | 0 bytes        | 3 byte      |
+|           | delay_ms   | RTT::delay  |
+|-----------|------------|-------------|
+| code size | 154 bytes  | 404 bytes   |
+| data size | 0 bytes    | 3 bytes     |
 
 As you can see, code and data size is higher here, so what is the point of using `RTT::delay()` instead of `time::delay_ms()`? The answer is **power consumption**:
 - `time::delay_ms` is a busy loop which requires the MCU to be running during the whole delay, hence consuming "active supply current" (about 15mA for an ATmega328P at 16MHz)
