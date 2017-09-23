@@ -828,8 +828,8 @@ As you can see, code and data size is higher here, so what is the point of using
 Another practical use of RTT is to measure the elapsed time between two events. For instance it can be used with an ultrasonic ranging device to measure the duration of an ultrasound wave to do a roundript from the device to an obstacle, then calculate the actual distance in mm. The following snippet shows how it could look like for an HC-SR04 sensor:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 // Declare 2 pins connected to HC-SR04
-gpio::FastPinType<board::DigitalPin::D0>::TYPE trigger_pin{gpio::PinMode::OUTPUT};
-gpio::FastPinType<board::DigitalPin::D1>::TYPE echo_pin{gpio::PinMode::INPUT};
+gpio::FastPinType<board::DigitalPin::D0>::TYPE trigger{gpio::PinMode::OUTPUT};
+gpio::FastPinType<board::DigitalPin::D1>::TYPE echo{gpio::PinMode::INPUT};
 
 // Declare RTT (note: don't forget to call REGISTER_RTT_ISR(1) macro in your program)
 timer::RTT<board::Timer::TIMER1>& rtt;
@@ -840,13 +840,13 @@ time::delay_us(10);
 trigger.clear();
 
 // Wait for echo signal start
-while (!echo_.value()) ;
+while (!echo.value()) ;
 // Reset RTT time
 rtt.millis(0);
 // Wait for echo signal end
-while (echo_.value()) ;
+while (echo.value()) ;
 // Read current time
-time::RTTTime end = rtt_.time();
+time::RTTTime end = rtt.time();
 // Calculate the echo duration in microseconds
 uint16_t echo_us = uint16_t(end.millis * 1000UL + end.micros);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
