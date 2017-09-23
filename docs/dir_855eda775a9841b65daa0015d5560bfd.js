@@ -31,7 +31,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "pulse_timer.h", "pulse__timer_8h_source.html", null ],
     [ "pwm.h", "pwm_8h_source.html", null ],
     [ "queue.h", "queue_8h_source.html", null ],
-    [ "realtime_timer.h", "realtime__timer_8h_source.html", null ],
+    [ "realtime_timer.h", "realtime__timer_8h.html", "realtime__timer_8h" ],
     [ "scheduler.h", "scheduler_8h_source.html", null ],
     [ "soft_uart.cpp", "soft__uart_8cpp_source.html", null ],
     [ "soft_uart.h", "soft__uart_8h_source.html", null ],

@@ -20,7 +20,7 @@
 <area shape="rect" id="node39" href="$timer_8h.html" title="Timer API. " alt="" coords="2207,80,2337,107"/>
 <area shape="rect" id="node3" href="$analog__input_8h.html" title="Analog Input API. " alt="" coords="709,155,837,196"/>
 <area shape="rect" id="node4" href="$hcsr04_8h_source.html" title="fastarduino/devices\l/hcsr04.h" alt="" coords="1195,423,1330,464"/>
-<area shape="rect" id="node10" href="$realtime__timer_8h_source.html" title="fastarduino/realtime\l_timer.h" alt="" coords="669,333,805,375"/>
+<area shape="rect" id="node10" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="669,333,805,375"/>
 <area shape="rect" id="node19" href="$time_8cpp_source.html" title="fastarduino/time.cpp" alt="" coords="545,162,685,189"/>
 <area shape="rect" id="node8" href="$events_8h_source.html" title="fastarduino/events.h" alt="" coords="329,251,469,278"/>
 <area shape="rect" id="node9" href="$events_8cpp_source.html" title="fastarduino/events.cpp" alt="" coords="491,341,645,367"/>

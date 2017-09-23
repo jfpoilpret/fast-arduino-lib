@@ -41,7 +41,7 @@ var NAVTREEINDEX =
 ".html",
 "classdevices_1_1rtc_1_1_d_s1307.html#af223e47007a9c65fa5bee35bf82a8404",
 "classserial_1_1soft_1_1_u_a_t_x.html#af9b66620509cfd69e015de96badd01bc",
-"power_8cpp_source.html"
+"namespaceutils.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
