@@ -760,4 +760,97 @@ I would have liked to perform a size comparison with Arduino API, but unfortunat
 @anchor rtt Basics: real-time timer 
 -----------------------------------
 
-TODO
+A real-time timer is primarily a device that tracks time in standard measurements (ms, us).
+
+It may be used in various situations such as:
+- delay program execution for some us or ms
+- capture the duration of some event with good accuracy
+- implement timeouts in programs waiting for an event to occur
+- generate periodic events
+
+The simple example that follows illustrates the first use case:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/realtime_timer.h>
+
+REGISTER_RTT_ISR(0)
+
+const constexpr uint32_t BLINK_DELAY_MS = 500;
+
+int main()
+{
+	board::init();
+	sei();
+
+	timer::RTT<board::Timer::TIMER0> rtt;
+	rtt.register_rtt_handler();
+	rtt.begin();
+
+	typename gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	while (true)
+	{
+		led.toggle();
+		rtt.delay(BLINK_DELAY_MS);
+	}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This example looks much like the first blinking example in this tutorial, with a few changes.
+
+First off, as usual the neceaary header file is included:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/realtime_timer.h>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Then we need to register an ISR for the RTT feature to work properly:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_RTT_ISR(0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Then, in `main()`, after the usual initialization stuff, we create a real-time timer instance, based on AVR UNO Timer0 (8-bits timer), register it with the ISR previously registered with `REGISTER_RTT_ISR(0)` macro, and finally starts it counting time.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	timer::RTT<board::Timer::TIMER0> rtt;
+	rtt.register_rtt_handler();
+	rtt.begin();
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Finally, we have the usual loop, toogling the LED, and then delay for 10s, using the RTT API: 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+		rtt.delay(BLINK_DELAY_MS);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let's examine the size of this program and compare it with the first example of this tutorial, which used `time::delay_ms()`:
+|           | time::delay_ms | RTT::delay  |
+|-----------|----------------|-------------|
+| code size | 154 bytes      | 396 bytes   |
+| data size | 0 bytes        | 3 byte      |
+
+As you can see, code and data size is higher here, so what is the point of using `RTT::delay()` instead of `time::delay_ms()`? The answer is **power consumption**:
+- `time::delay_ms` is a busy loop which requires the MCU to be running during the whole delay, hence consuming "active supply current" (about 15mA for an ATmega328P at 16MHz)
+- `RTT::delay()` will set the MCU to pre-defined sleep mode and will still continue to operate well under most available sleep modes (this depends on which timer gets used, refer to [AVR datasheet](TODO) for further details); this will alow reduction of supply current, hence power consumption. Current supply will be reduced more or less dramatically according to the selected sleep mode.
+
+Another practical use of RTT is to measure the elapsed time between two events. For instance it can be used with an ultrasonic ranging device to measure the duration of an ultrasound wave to do a roundript from the device to an obstacle, then calculate the actual distance in mm. The following snippet shows how it could look like for an HC-SR04 sensor:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+// Declare 2 pins connected to HC-SR04
+gpio::FastPinType<board::DigitalPin::D0>::TYPE trigger_pin{gpio::PinMode::OUTPUT};
+gpio::FastPinType<board::DigitalPin::D1>::TYPE echo_pin{gpio::PinMode::INPUT};
+
+// Declare RTT (note: don't forget to call REGISTER_RTT_ISR(1) macro in your program)
+timer::RTT<board::Timer::TIMER1>& rtt;
+
+// Send a 10us pulse to the trigger pin
+trigger.set();
+time::delay_us(10);
+trigger.clear();
+
+// Wait for echo signal start
+while (!echo_.value()) ;
+// Reset RTT time
+rtt.millis(0);
+// Wait for echo signal end
+while (echo_.value()) ;
+// Read current time
+time::RTTTime end = rtt_.time();
+// Calculate the echo duration in microseconds
+uint16_t echo_us = uint16_t(end.millis * 1000UL + end.micros);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note that this snippet is just an example and is not usable as is: it does not include a timeout mechanism to avoid waiting the echo signal forever (which can happen if the ultrasonic wave does not encounter an obstacle within its possible range, i.e. 4 meters). Also, this approach could be improved by making it interrupt-driven (i.e. having interrupts generated when the `echo_pin` changes state).
+
+Another interesting use of RTT is to perform some periodic actions. FastArduino implements an events handling mechanism that can be connected to an RTT in order to deliver periodic events. This mechanism is [described later](TODO) in this tutorial.
+

@@ -479,7 +479,7 @@ namespace timer
 	 * Note that many timer usages will require ISR registration with one of
 	 * the macros defined in this header file.
 	 * 
-	 * @tparam TIMER the timer for which we need calculation methods
+	 * @tparam TIMER the AVR timer forto use for this Timer
 	 * @sa board::Timer
 	 */
 	template<board::Timer TIMER>
@@ -512,10 +512,9 @@ namespace timer
 		 */
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
-		// Constructor to create a general-purpose timer
 		/**
 		 * Construct a new Timer handler and initialize its mode.
-		 * Note this constructore does *not* start the timer.
+		 * Note this constructor does *not* start the timer.
 		 * @param timer_mode the mode to initalize this timer with
 		 * @sa begin()
 		 */
