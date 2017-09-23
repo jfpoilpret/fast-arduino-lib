@@ -28,22 +28,22 @@ The following commands show how to build the FastArduino library:
 
     > git clone https://github.com/jfpoilpret/fast-arduino-lib.git
     > cd fast-arduino-lib
-    > make CONF=UNO-Release build
+    > make CONF=UNO build
 
 This creates the FastArduino library, built for Arduino UNO, into `dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a`).
 
 Note that `make` builds one version of FastArduino library for a specific target, that target is specified with `CONF=<target>`. The currently supported targets are:
-- UNO-Release: Arduino UNO
-- NANO-Release: Arduino NANO
-- LEONARDO-Release: Arduino LEONARDO
-- MEGA-Release: Arduino MEGA
-- ATmega328-Release: bare ATmega328P MCU at 8 MHz
-- ATmega328-16MHz-Release: bare ATmega328P MCU at 16 MHz
-- ATtinyX4-Release: bare ATtinyX4 MCU at 8 MHz
+- UNO: Arduino UNO
+- NANO: Arduino NANO
+- LEONARDO: Arduino LEONARDO
+- MEGA: Arduino MEGA
+- ATmega328-8Mhz: bare ATmega328P MCU at 8 MHz
+- ATmega328-16MHz: bare ATmega328P MCU at 16 MHz
+- ATtinyX4-8MHz: bare ATtinyX4 MCU at 8 MHz
 
 Building a project using FastArduino
 ------------------------------------
-One simple, but a bit cumbersome, way to start a project using FastArduino is probably to use [netbeans](https://netbeans.org/), first setup as described [here](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx).
+One simple way to start a project using FastArduino is probably to use [Visual Studio Code](https://code.visualstudio.com/), first setup as described [here](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx).
 
 Then you can use [FastArduino Project Template](https://github.com/jfpoilpret/fastarduino-project-template) to create your first project (just follow instructions in that repository).
 
@@ -51,14 +51,14 @@ Your project shall have at least one ".cpp" source file with an `int main()` fun
 
 Once you can build your project from netbeans, you can build it from a Linux shell as well:
 
-    > $ make CONF=UNO-Release
-    > $ make flash CONF=UNO-Release
+    > $ make CONF=UNO
+    > $ make flash CONF=UNO
 
 The first `make` builds your program for the target specified with `CONF=...`.
 
 The second `make` uploads the built program to the Flash memory of the target MCU.
 
-The `make` command takes optional arguments that help you specify how to upload to your MCU target, among a set of ways, and through which USB port. This is directly documented in [Makefile-FastArduino](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/Makefile-FastArduino.mk); please go there for further details.
+The `make` command takes optional arguments that help you specify how to upload to your MCU target, among a set of ways, and through which USB port.
 
 FastArduino library organisation
 --------------------------------
@@ -92,7 +92,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [spi](TODO): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.
 - [streams](namespacestreams.html): this namespace provide a C++ streams like API for input and output (used by serial UART API).
 - [time](namespacetime.html): provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.
-- [timer](TODO): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.
+- [timer](namespacetime.html): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.
 - [utils](namespaceutils.html): provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".
 - [watchdog](TODO): this namespace defines an API to deal with MCU watchdog timer as a way 
 
