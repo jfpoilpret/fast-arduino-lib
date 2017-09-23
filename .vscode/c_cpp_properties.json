@@ -33,7 +33,8 @@
             ],
             "defines": [
                 "ARDUINO_UNO",
-                "F_CPU=16000000UL"
+                "F_CPU=16000000UL",
+                "__AVR_ATmega328P__"
             ],
             "intelliSenseMode": "clang-x64",
             "browse": {
