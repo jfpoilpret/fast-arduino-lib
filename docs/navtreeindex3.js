@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"namespaceutils.html":[3,0,8],
 "nrf24l01p_8h_source.html":[5,0,0,1,4],
 "nrf24l01p__internals_8h_source.html":[5,0,0,1,5],
 "pages.html":[],
@@ -8,6 +7,7 @@ var NAVTREEINDEX3 =
 "power_8cpp_source.html":[5,0,0,21],
 "power_8h_source.html":[5,0,0,22],
 "pulse__timer_8h_source.html":[5,0,0,23],
+"pwm_8h.html":[5,0,0,24],
 "pwm_8h_source.html":[5,0,0,24],
 "queue_8h_source.html":[5,0,0,25],
 "realtime__timer_8h.html":[5,0,0,26],

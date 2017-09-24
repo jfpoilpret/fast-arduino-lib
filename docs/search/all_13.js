@@ -2,7 +2,7 @@ var searchData=
 [
   ['time',['time',['../namespacetime.html',1,'']]],
   ['time_2eh',['time.h',['../time_8h.html',1,'']]],
-  ['timer',['Timer',['../classtimer_1_1_timer.html',1,'timer::Timer&lt; TIMER &gt;'],['../namespacetimer.html',1,'timer'],['../classtimer_1_1_timer.html#a78d5018d575e2001f859b41934eac32a',1,'timer::Timer::Timer()'],['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb',1,'board::Timer()']]],
+  ['timer',['Timer',['../classtimer_1_1_timer.html',1,'timer::Timer&lt; TIMER &gt;'],['../namespacetimer.html',1,'timer'],['../classanalog_1_1_p_w_m_output.html#ab8f0381e39f522b7a5473445534707c8',1,'analog::PWMOutput::TIMER()'],['../classtimer_1_1_timer.html#a78d5018d575e2001f859b41934eac32a',1,'timer::Timer::Timer()'],['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb',1,'board::Timer()']]],
   ['timer_2eh',['timer.h',['../timer_8h.html',1,'']]],
   ['timer_5fmax',['TIMER_MAX',['../classtimer_1_1_timer.html#aa4a34b03ca03819b9c3a9fcc5ceaf29f',1,'timer::Timer']]],
   ['timer_5fprescaler',['TIMER_PRESCALER',['../structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8',1,'timer::Calculator::TIMER_PRESCALER()'],['../classtimer_1_1_timer.html#ade1d7f8efd6c214d36d2f6fe549a2ee1',1,'timer::Timer::TIMER_PRESCALER()']]],
@@ -24,5 +24,5 @@ var searchData=
   ['tx_5fempty',['tx_empty',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html#a5af0aabad0040100c79e73eb0356e859',1,'devices::rf::NRF24L01::fifo_status_t']]],
   ['tx_5ffull',['tx_full',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html#afcef0ccb482c028180ce4f499d55b61e',1,'devices::rf::NRF24L01::fifo_status_t::tx_full()'],['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a09496b277315ce8c9b4bc18f22d8d91d',1,'devices::rf::NRF24L01::status_t::tx_full()']]],
   ['tx_5freuse',['tx_reuse',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html#a12123937d9935646e6c28a92d1aa31cd',1,'devices::rf::NRF24L01::fifo_status_t']]],
-  ['type',['TYPE',['../classanalog_1_1_analog_input.html#a1da7ef5f6f828c02277c59bb189b6006',1,'analog::AnalogInput::TYPE()'],['../classgpio_1_1_fast_pin_type.html#a839f5e379fc75c2aaa9565a18fd0757d',1,'gpio::FastPinType::TYPE()']]]
+  ['type',['TYPE',['../classanalog_1_1_analog_input.html#a1da7ef5f6f828c02277c59bb189b6006',1,'analog::AnalogInput::TYPE()'],['../classgpio_1_1_fast_pin_type.html#a839f5e379fc75c2aaa9565a18fd0757d',1,'gpio::FastPinType::TYPE()'],['../classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556',1,'analog::PWMOutput::TYPE()']]]
 ];

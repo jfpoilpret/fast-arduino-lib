@@ -105,26 +105,26 @@ $(document).ready(function(){initNavTree('index.html','');});
 <p>First off, ensure your Linux box contains the ATmel AVR 8 bit toolchain (I use 3.5.3, latest is 3.5.4) and your <code>$PATH</code> points to its <code>bin</code> directory.</p>
 <p>The following commands show how to build the FastArduino library: </p><pre class="fragment">&gt; git clone https://github.com/jfpoilpret/fast-arduino-lib.git
 &gt; cd fast-arduino-lib
-&gt; make CONF=UNO-Release build
+&gt; make CONF=UNO build
 </pre><p>This creates the FastArduino library, built for Arduino UNO, into <code>dist/UNO-Release/AVR-GNU-Toolchain-3.5.3-Linux/libfastarduino.a</code>).</p>
 <p>Note that <code>make</code> builds one version of FastArduino library for a specific target, that target is specified with <code>CONF=&lt;target&gt;</code>. The currently supported targets are:</p><ul>
-<li>UNO-Release: Arduino UNO</li>
-<li>NANO-Release: Arduino NANO</li>
-<li>LEONARDO-Release: Arduino LEONARDO</li>
-<li>MEGA-Release: Arduino MEGA</li>
-<li>ATmega328-Release: bare ATmega328P MCU at 8 MHz</li>
-<li>ATmega328-16MHz-Release: bare ATmega328P MCU at 16 MHz</li>
-<li>ATtinyX4-Release: bare ATtinyX4 MCU at 8 MHz</li>
+<li>UNO: Arduino UNO</li>
+<li>NANO: Arduino NANO</li>
+<li>LEONARDO: Arduino LEONARDO</li>
+<li>MEGA: Arduino MEGA</li>
+<li>ATmega328-8Mhz: bare ATmega328P MCU at 8 MHz</li>
+<li>ATmega328-16MHz: bare ATmega328P MCU at 16 MHz</li>
+<li>ATtinyX4-8MHz: bare ATtinyX4 MCU at 8 MHz</li>
 </ul>
 <h2>Building a project using FastArduino </h2>
-<p>One simple, but a bit cumbersome, way to start a project using FastArduino is probably to use <a href="https://netbeans.org/">netbeans</a>, first setup as described <a href="https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx">here</a>.</p>
+<p>One simple way to start a project using FastArduino is probably to use <a href="https://code.visualstudio.com/">Visual Studio Code</a>, first setup as described <a href="https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx">here</a>.</p>
 <p>Then you can use <a href="https://github.com/jfpoilpret/fastarduino-project-template">FastArduino Project Template</a> to create your first project (just follow instructions in that repository).</p>
 <p>Your project shall have at least one ".cpp" source file with an <code>int main()</code> function, as shown in the <a href="tutorial.html">tutorial</a>. The FastArduino Project Template includes this source file already.</p>
-<p>Once you can build your project from netbeans, you can build it from a Linux shell as well: </p><pre class="fragment">&gt; $ make CONF=UNO-Release
-&gt; $ make flash CONF=UNO-Release
+<p>Once you can build your project from netbeans, you can build it from a Linux shell as well: </p><pre class="fragment">&gt; $ make CONF=UNO
+&gt; $ make flash CONF=UNO
 </pre><p>The first <code>make</code> builds your program for the target specified with <code>CONF=...</code>.</p>
 <p>The second <code>make</code> uploads the built program to the Flash memory of the target MCU.</p>
-<p>The <code>make</code> command takes optional arguments that help you specify how to upload to your MCU target, among a set of ways, and through which USB port. This is directly documented in <a href="https://github.com/jfpoilpret/fast-arduino-lib/blob/master/Makefile-FastArduino.mk">Makefile-FastArduino</a>; please go there for further details.</p>
+<p>The <code>make</code> command takes optional arguments that help you specify how to upload to your MCU target, among a set of ways, and through which USB port.</p>
 <h2>FastArduino library organisation </h2>
 <p>FastArduino library is organized in a sinple directory structure:</p><ul>
 <li><b>fastarduino</b>: contains "core" FastArduino source files, handling all AVR MCU internal parts: Digital Input/Output, Timers, Analog-Digital Converters, Interrupts, I2C, SPI, Watchdog, UART...<ul>
@@ -161,7 +161,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li>[spi](TODO): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.</li>
 <li><a href="namespacestreams.html">streams</a>: this namespace provide a C++ streams like API for input and output (used by serial UART API).</li>
 <li><a href="namespacetime.html">time</a>: provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.</li>
-<li>[timer](TODO): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.</li>
+<li><a href="namespacetime.html">timer</a>: defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.</li>
 <li><a href="namespaceutils.html">utils</a>: provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".</li>
 <li>[watchdog](TODO): this namespace defines an API to deal with MCU watchdog timer as a way</li>
 </ul>

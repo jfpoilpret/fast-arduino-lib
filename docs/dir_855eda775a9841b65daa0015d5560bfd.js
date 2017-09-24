@@ -29,7 +29,9 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "power.cpp", "power_8cpp_source.html", null ],
     [ "power.h", "power_8h_source.html", null ],
     [ "pulse_timer.h", "pulse__timer_8h_source.html", null ],
-    [ "pwm.h", "pwm_8h_source.html", null ],
+    [ "pwm.h", "pwm_8h.html", [
+      [ "PWMOutput", "classanalog_1_1_p_w_m_output.html", "classanalog_1_1_p_w_m_output" ]
+    ] ],
     [ "queue.h", "queue_8h_source.html", null ],
     [ "realtime_timer.h", "realtime__timer_8h.html", "realtime__timer_8h" ],
     [ "scheduler.h", "scheduler_8h_source.html", null ],
