@@ -14,7 +14,7 @@ Basics:
 4. [timer](@ref timer)
 5. [real-time timer](@ref rtt)
 6. [PWM](@ref pwm)
-7. utilities
+7. [utilities](@ref utils)
 
 Advanced:
 1. watchdog
@@ -986,3 +986,74 @@ Comparing sizes once again shows big differences:
 |-----------|-------------|-------------|
 | code size | 1302 bytes  | 288 bytes   |
 | data size | 9 bytes     | 0 byte      |
+
+
+@anchor utils Basics: utilities
+-------------------------------
+
+FastArduino provides several general utilities, gathered inside one namespace `utils`.
+
+We will not demonstrate each of these utilities here but just show a few of them in action. In your own programs, if you find yourself in need of some helper stuff that you think deserves to be provided as a general utility, then first take a look at FastArduino [utilities API documentation](namespaceutils.html) and check if you don't find it there, or something similar that you could use in your situation.
+
+FastArduino utilities are made of different kinds:
+- low-level utilities: mostly functions to handle bytes and bits
+- value conversion utilities: functions to help convert a value from one referential to another, very useful when dealing with sensors of all sorts
+
+### Low-level utilities examples
+
+The few examples in this section will introduce you to a few functions that may prove useful if you need to handle devices that are not natively supported by FastArduino.
+
+1. `utils::swap_bytes`: this function is useful whenever you use a sensor device that provides you with integer values, coded on 2 bytes, with high byte first and low byte second; since AVR MCU are "little-endian" processors, they expect words in the opposite order: low byte first, high byte second, hence in order to interpret values provided by that device, you need to first swap their bytes. Bytes swap is performed "in-place", i.e. the original value is replace with the converted value. The following example is an excerpt of `hmc5883l.h` provided by FastArduino, where magnetic fields in 3 axes have to be converted from big endian (as provided by the HMC5883L) to little endian (as expected by the AVR MCU):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+    bool magnetic_fields(MagneticFields& fields)
+    {
+        if (	this->write(DEVICE_ADDRESS, OUTPUT_REG_1, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+            &&	this->read(DEVICE_ADDRESS, fields, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+        {
+            utils::swap_bytes(fields.x);
+            utils::swap_bytes(fields.y);
+            utils::swap_bytes(fields.z);
+            return true;
+        }
+        else
+            return false;
+    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+2. `utils::bcd_to_binary`: this function is useful when you use a sensor device that provides values coded as *BCD* (binary-coded decimal), i.e. where each half-byte (*nibble*) contains the value of one digit (i.e. `0` to `9`), thus holding a range of values from `0` to `99`. Many RTC devices use BCD representation for time. In order to performa calculation on BCD values, you need to first convert them to binary. The opposite function is also provided as `utils::binary_to_bcd`. The following example is an excerpt of `ds1307.h` provided by FastArduino, where each datetime field (seconds, minutes, hours...) have to be covnerted from BCD to binary:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+    bool getDateTime(tm& datetime)
+    {
+        // send register address to read from (0)
+        // read datetime at address 0
+        if (	write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+            &&	read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+        {
+            // convert DS1307 output (BCD) to integer type
+            datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
+            datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
+            datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
+            datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
+            datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
+            datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
+        }
+    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Conversion utilities examples
+
+Device sensors measure some physical quantity and generally provide you with some integer value that somehow maps to the physical value. hence to make use of the raw value provided by a sensor, you need to convert it to some more meaningful value that you can understand and operate upon.
+
+Or conversely, you may just need to compare the physical value agains some thresholds (e.g. check the gyroscopic speed according to some axis is less than 10°/s), and perform some action when this is not true. In this situation, you don't really need to convert the raw sensor value into a physical quantity to compare to the physical threshold, but rather convert (once only) the physical threshold into the corresponding raw value (a constant in your program) and then only compare raw values, which is:
+- more performant (no conversion needed before comparison)
+- more size efficient (conversion of threshold can be done at compile time, hence no code is generated for it)
+
+FastArduino utilities provide several conversion methods between raw and physical quantities, according to raw and physical ranges (known for each sensor), and unit prefix (e.g. kilo, mega, giga, centi, milli...). These methods are `constexpr`, which means that, when provided with constant arguments, they will be evaluated at compile-time and return a value that is itself stored as a constant.
+
+1. `utils::map_physical_to_raw`: although it may seem complicated by its list of arguments, this function is actually pretty simple: TODO explain
+
+TODO snippet
+
+2. `utils::map_raw_to_physical`: TODO
+
+In addition to these functions, FastArduino utilities also include the more common `utils::map` and `utils::constrain` which work like their Arduino API equivalent `map()` and `constrain()`.
