@@ -1,9 +1,5 @@
+.vscode/c_cpp_properties.json
 apidoc/**
 **/dist
 **/deps
 **/build
-**/.dep.inc
-**/nbproject/*.bash
-**/nbproject/private
-**/*.BAK
-**/*.OLD
