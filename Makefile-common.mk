@@ -40,7 +40,7 @@ endif
 libs:=$(fastarduinolib) $(ADDITIONAL_LIBS)
 
 # Input directories
-includes:=$(patsubst %,-I %,$(FASTARDUINO_ROOT)/cores $(ADDITIONAL_INCLUDES))
+includes:=$(patsubst %,-I %,$(abspath $(FASTARDUINO_ROOT)/cores $(ADDITIONAL_INCLUDES)))
 
 # List of source files
 sources:=$(shell find $(SOURCE_ROOT) -name "*.cpp")
@@ -106,7 +106,7 @@ help:
 $(objdir)/%.o: %.cpp
 $(objdir)/%.o: %.cpp $(depdir)/%.d
 	$(precompile)
-	$(compile.cc) $<
+	$(compile.cc) $(abspath $<)
 	$(postcompile)
 
 .PRECIOUS = $(depdir)/%.d

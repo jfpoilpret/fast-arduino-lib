@@ -26,7 +26,7 @@ include $(thispath)Makefile-common.mk
 # Main target project using FastArduino
 $(target): $(objects) $(libs)
 	$(rm) $@ $@.eep $@.nm $@.map
-	$(link.o) $^
+	$(link.o) $(abspath $^)
 	$(objcopy) -R .eeprom -O ihex $@ $@.hex
 	$(objcopy) -j .eeprom --change-section-lma .eeprom=0 -O ihex $@ $@.eep
 	$(nm) --synthetic -S -C --size-sort $@ >$@.nm

@@ -19,7 +19,7 @@
         {
             "taskName": "Clean all examples",
             "type": "shell",
-            "command": "make clean-examples CONF=UNO-Release",
+            "command": "make clean-examples CONF=UNO",
             "group": "none",
             "presentation": {
                 "echo": true,
@@ -32,7 +32,7 @@
         {
             "taskName": "Build all examples",
             "type": "shell",
-            "command": "make examples CONF=UNO-Release",
+            "command": "make examples CONF=UNO",
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -44,8 +44,7 @@
                 {
                     "base": "$gcc",
                     "fileLocation": [
-                        "relative",
-                        "${fileDirname}"
+                        "absolute"
                     ]
                 }
             ]
