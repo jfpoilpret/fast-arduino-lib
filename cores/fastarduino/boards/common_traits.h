@@ -474,6 +474,10 @@ namespace board_traits
 		{
 			return 0;
 		}
+
+		// Input-capture stuff
+		static constexpr const board::DigitalPin ICP_PIN = board::DigitalPin::NONE;
+		static constexpr const uint8_t ICES_TCCRB = 0;
 	};
 
 	template<typename TYPE_, TimerPrescalers PRESCALERS_, 
@@ -486,7 +490,9 @@ namespace board_traits
 			REG ICR_ = 0, 
 			uint8_t CTC_ICR_TCCRA_ = 0, uint8_t CTC_ICR_TCCRB_ = 0, 
 			uint8_t F_PWM_ICR_TCCRA_ = 0, uint8_t F_PWM_ICR_TCCRB_ = 0, 
-			uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0>
+			uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0,
+			board::DigitalPin ICP_PIN_ = board::DigitalPin::NONE,
+			uint8_t ICES_TCCRB_ = 0>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -523,6 +529,9 @@ namespace board_traits
 		
 		static constexpr const REG8 TIMSK = TIMSK_;
 		static constexpr const REG8 TIFR = TIFR_;
+
+		static constexpr const board::DigitalPin ICP_PIN = ICP_PIN_;
+		static constexpr const uint8_t ICES_TCCRB = ICES_TCCRB_;
 	};
 	
 	template<DigitalPin PIN>

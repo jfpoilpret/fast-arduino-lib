@@ -39,7 +39,7 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_TIMER_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
+#define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
 REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
 
 /**
@@ -49,7 +49,7 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_TIMER_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
+#define REGISTER_TIMER_COMPARE_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
 REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 /**
@@ -58,11 +58,20 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
  * callback.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
+#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
-//TODO Add API to explicitly set interrupts we want to enable
-//TODO Add API to support Input Capture when available for Timer (Timer1)
+//TODO Document
+//TODO Improve to read ICR immediately and pass it to CALLBACK, also pass timer to callback?
+#define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _CAPT_vect), HANDLER, CALLBACK)
 
+#define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
+REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _CAPT_vect), CALLBACK)
+
+#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
+
+
+//TODO Add API to explicitly set interrupts we want to enable?
 /**
  * Defines all API to manipulate AVR Timers.
  * In order to properly use Timers, some concepts are important to understand:
@@ -136,6 +145,20 @@ namespace timer
 		 * counter reaches BOTTOM (0). This is also known as "inverting" mode).
 		 */
 		INVERTING
+	};
+
+	//TODO Later add Analog Compare in addition to ICP edges
+	/**
+	 * Defines the type of input capture we want for a timer.
+	 */
+	enum class TimerInputCapture:uint8_t
+	{
+		/** No input capture needed. */
+		NONE,
+		/** Input capture needed on rising edge of ICP pin. */
+		RISING_EDGE,
+		/** Input capture needed on falling edge of ICP pin. */
+		FALLING_EDGE
 	};
 	
 	/**
@@ -474,6 +497,7 @@ namespace timer
 		
 	};
 
+	//TODO also need to update pulse_timer templates accordingly!
 	/**
 	 * General API to handle an AVR timer.
 	 * Note that many timer usages will require ISR registration with one of
@@ -482,7 +506,7 @@ namespace timer
 	 * @tparam TIMER the AVR timer forto use for this Timer
 	 * @sa board::Timer
 	 */
-	template<board::Timer TIMER>
+	template<board::Timer TIMER, bool INPUT_CAPTURE = false>
 	class Timer
 	{
 	protected:
@@ -490,7 +514,9 @@ namespace timer
 		using TRAIT = board_traits::Timer_trait<TIMER>;
 		using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
 		/// @endcond
-
+		static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE || !INPUT_CAPTURE,
+			"This timer does not support Input Capture.");
+		
 	public:
 		/**
 		 * The type of this timer's counter (either `uint8_t` or `uint16_t`).
@@ -511,6 +537,12 @@ namespace timer
 		 * The maximum value that can be set to this timer's counter in PWM mode.
 		 */
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
+
+		/**
+		 * The pin that is used for Input Capture feature, if supported by this 
+		 * timer, or `board::DigitalPin::NONE` if not.
+		 */
+		static constexpr const board::DigitalPin ICP_PIN = TRAIT::ICP_PIN;
 		
 		/**
 		 * Construct a new Timer handler and initialize its mode.
@@ -519,7 +551,21 @@ namespace timer
 		 * @sa begin()
 		 */
 		Timer(TimerMode timer_mode)
-			:_tccra{timer_mode_TCCRA(timer_mode)}, _tccrb{timer_mode_TCCRB(timer_mode)} {}
+		:	_tccra{timer_mode_TCCRA(timer_mode)}, 
+			_tccrb{timer_mode_TCCRB(timer_mode)},
+			_input_capture{false} {}
+
+		/**
+		 * Change Input Capture mode for this timer, provided it is supported,
+		 * otherwise a compilation error will occur.
+		 * @param input_capture the input capture mode to initalize this timer with
+		 */
+		inline void set_input_capture(TimerInputCapture input_capture)
+		{
+			static_assert(INPUT_CAPTURE, "This method is only available for Timer<?, true>.");
+			if (_input_capture = (input_capture != TimerInputCapture::NONE))
+				utils::set_mask(_tccrb, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture)); 
+		}
 
 		/**
 		 * Change timer mode.
@@ -528,7 +574,7 @@ namespace timer
 		inline void set_timer_mode(TimerMode timer_mode)
 		{
 			utils::set_mask(_tccra, 0xFF & ~TRAIT::COM_MASK, timer_mode_TCCRA(timer_mode));
-			_tccrb = timer_mode_TCCRB(timer_mode);
+			utils::set_mask(_tccrb, 0xFF & ~TRAIT::ICES_TCCRB, timer_mode_TCCRB(timer_mode));
 		}
 
 		/**
@@ -551,8 +597,9 @@ namespace timer
 
 		/**
 		 * Start this timer in the currently selected mode, with the provided
-		 * @p prescaler value. This method does not enable timer interrupts,
-		 * hence no ISR registration is needed.
+		 * @p prescaler value. This method does not enable timer compare interrupts,
+		 * hence no ISR registration for these is needed. However, if `INPUT_CAPTURE` 
+		 * is in effect, Input Capture interrupt may be enabled.
 		 * Note that this method is not synchronized, hence you should ensure it
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
@@ -569,6 +616,8 @@ namespace timer
 			TRAIT::OCRA = 0;
 			TRAIT::TCNT = 0;
 			TRAIT::TIMSK = 0;
+			//TODO use TRAIT instead of ICIE1
+			TRAIT::TIMSK = (_input_capture ? _BV(ICIE1) : 0);
 		}
 		
 		/**
@@ -576,6 +625,8 @@ namespace timer
 		 * @p prescaler value and @p max value. 
 		 * This method enables timer interrupts (Compare Match),hence ISR
 		 * registration is required.
+		 * Also, if `INPUT_CAPTURE` is in effect, Input Capture interrupt may be
+		 * enabled.
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
@@ -614,7 +665,8 @@ namespace timer
 			TRAIT::OCRA = max;
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK = _BV(OCIE0A);
+			//TODO use TRAIT instead of OCIE0A and ICIE1
+			TRAIT::TIMSK = _BV(OCIE0A) | (_input_capture ? _BV(ICIE1) : 0);
 		}
 		
 		/**
@@ -678,7 +730,8 @@ namespace timer
 			// Reset timer counter
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK = _BV(OCIE0A);
+			//TODO use TRAIT instead of OCIE0A and ICIE1
+			TRAIT::TIMSK = _BV(OCIE0A) | (_input_capture ? _BV(ICIE1) : 0);
 		}
 
 		/**
@@ -768,7 +821,8 @@ namespace timer
 
 	protected:
 		/// @cond notdocumented
-		Timer(uint8_t tccra, uint8_t tccrb):_tccra{tccra}, _tccrb{tccrb} {}
+		Timer(uint8_t tccra, uint8_t tccrb)
+			:_tccra{tccra}, _tccrb{tccrb}, _input_capture{false} {}
 
 		template<uint8_t COM>
 		static constexpr uint8_t convert_COM(TimerOutputMode output_mode)
@@ -794,9 +848,14 @@ namespace timer
 					timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRB :
 					0);
 		}
+		static constexpr uint8_t input_capture_TCCRB(TimerInputCapture input_capture)
+		{
+			return (input_capture == TimerInputCapture::RISING_EDGE ? TRAIT::ICES_TCCRB : 0);
+		}
 		
 		uint8_t _tccra;
 		uint8_t _tccrb;
+		bool _input_capture;
 		/// @endcond
 	};
 }

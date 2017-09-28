@@ -203,7 +203,8 @@ namespace board_traits
 							R_(ICR1),
 							0, _BV(WGM12) | _BV(WGM13),
 							_BV(WGM11), _BV(WGM12) | _BV(WGM13),
-							_BV(WGM11), _BV(WGM13)>
+							_BV(WGM11), _BV(WGM13),
+							board::DigitalPin::D8_PB0, _BV(ICES1)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{

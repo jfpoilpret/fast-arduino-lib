@@ -41,7 +41,7 @@
  * @sa REGISTER_RTT_ISR_FUNCTION
  */
 #define REGISTER_RTT_ISR(TIMER_NUM)	\
-REGISTER_TIMER_ISR_METHOD(TIMER_NUM, CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >, CAT(&timer::RTT<board::Timer::TIMER, TIMER_NUM) >::on_timer)
+REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >, CAT(&timer::RTT<board::Timer::TIMER, TIMER_NUM) >::on_timer)
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
