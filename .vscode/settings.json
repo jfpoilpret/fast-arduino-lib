@@ -6,8 +6,7 @@
         "deps": true,
         "dist": true,
         "docs": true,
-        "example-boards": true,
-        "nbprojects": true
+        "example-boards": true
     },
     "files.insertFinalNewline": true,
     "editor.insertSpaces": false,
@@ -64,4 +63,3 @@
         }
     }
 }
-
