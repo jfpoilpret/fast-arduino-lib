@@ -98,6 +98,10 @@ endif
 clean: .build-check
 	$(rm) -r $(objdir) $(depdir) $(distdir)
 
+.PHONY: clean-all
+clean:
+	$(rm) -r build/* deps/* dist/*
+
 .PHONY: help
 help:
 	@echo Available targets: build clean
