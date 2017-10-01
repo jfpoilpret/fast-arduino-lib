@@ -99,7 +99,7 @@ clean: .build-check
 	$(rm) -r $(objdir) $(depdir) $(distdir)
 
 .PHONY: clean-all
-clean:
+clean-all:
 	$(rm) -r build/* deps/* dist/*
 
 .PHONY: help
