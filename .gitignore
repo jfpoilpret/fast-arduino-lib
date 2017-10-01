@@ -4,3 +4,5 @@ apidoc/**
 **/dist
 **/deps
 **/build
+**/*BAK
+**/*.OLD
