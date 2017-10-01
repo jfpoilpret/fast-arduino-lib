@@ -61,13 +61,25 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 #define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
 //TODO Document
-//TODO Improve to read ICR immediately and pass it to CALLBACK, also pass timer to callback?
-#define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _CAPT_vect), HANDLER, CALLBACK)
+#define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)		\
+ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
+{																			\
+	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);		\
+	using TRAIT = board_traits::Timer_trait<TIMER>;							\
+	TRAIT::TYPE capture = TRAIT::ICR;										\
+	CALL_HANDLER_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK))(capture);	\
+}
 
-#define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
-REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _CAPT_vect), CALLBACK)
+#define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
+ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
+{																			\
+	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);		\
+	using TRAIT = board_traits::Timer_trait<TIMER>;							\
+	TRAIT::TYPE capture = TRAIT::ICR;										\
+	CALLBACK (capture);														\
+}
 
+//TODO is an empty interrupt handler useful really?
 #define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
 
 
@@ -504,6 +516,9 @@ namespace timer
 	 * the macros defined in this header file.
 	 * 
 	 * @tparam TIMER the AVR timer forto use for this Timer
+	 * @tparam INPUT_CAPTURE prepare using Input Capture with this timer, if set
+	 * to `true` (`false` by default); the selected @p TIMER must support Input
+	 * Capture, otherwise, compilation will fail.
 	 * @sa board::Timer
 	 */
 	template<board::Timer TIMER, bool INPUT_CAPTURE = false>
@@ -667,6 +682,34 @@ namespace timer
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
 			//TODO use TRAIT instead of OCIE0A and ICIE1
 			TRAIT::TIMSK = _BV(OCIE0A) | (_input_capture ? _BV(ICIE1) : 0);
+		}
+
+		/**
+		 * Reset current counter to 0.
+		 * This method is synchronized if needed (i.e. if this timer is 16 bits).
+		 * If you do not need synchronization, then you should better use
+		 * `_reset()` instead.
+		 * @sa _reset()
+		 */
+		inline void reset()
+		{
+			if (sizeof TRAIT::TIMER_TYPE > 1)
+				synchronized _reset();
+			else
+				_reset();
+		}
+		
+		/**
+		 * Reset current counter to 0.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `reset()` instead.
+		 * @sa reset()
+		 */
+		inline void _reset()
+		{
+			TRAIT::TCNT = 0;
 		}
 		
 		/**
