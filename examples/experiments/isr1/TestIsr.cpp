@@ -46,7 +46,6 @@ int main()
 	uart.register_handler();
 	uart.begin(115200);
 	out.width(0);
-	out.base(streams::FormatBase::Base::hex);
 	out << "Start\n" << streams::flush;
 
 	gpio::FastPinType<board::DigitalPin::LED>::set_mode(gpio::PinMode::OUTPUT, false);

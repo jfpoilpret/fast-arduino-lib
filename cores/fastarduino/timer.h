@@ -67,7 +67,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
 	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);		\
 	using TRAIT = board_traits::Timer_trait<TIMER>;							\
 	TRAIT::TYPE capture = TRAIT::ICR;										\
-	CALL_HANDLER_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK))(capture);	\
+	CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(capture);					\
 }
 
 #define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
@@ -206,6 +206,13 @@ namespace timer
 		 */
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
+		//TODO calculation method for Normal mode: return best prescaler for 
+		// duration per tick (simple)
+		static constexpr TIMER_PRESCALER tick_prescaler(uint32_t us_per_tick)
+		{
+			return best_tick_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us_per_tick);
+		}
+
 		/**
 		 * Computes the ideal prescaler value to use for this timer, in
 		 * TimerMode::CTC mode, in order to be able to count up to @p us
@@ -507,6 +514,28 @@ namespace timer
 			return best_frequency_prescaler(prescalers, prescalers + N, freq);
 		}
 		
+		static constexpr bool prescaler_is_adequate_for_tick(TIMER_PRESCALER p, uint32_t us)
+		{
+			return (prescaler_quotient(p, us) >= 1);
+		}
+		
+		static constexpr TIMER_PRESCALER best_tick_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t us)
+		{
+			return (prescaler_is_adequate_for_tick(p2, us)? p2 : p1);
+		}
+
+		static constexpr TIMER_PRESCALER best_tick_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t us)
+		{
+			return (begin + 1 == end ? *begin : 
+					best_tick_prescaler_in_2(*begin, best_tick_prescaler(begin + 1 , end, us), us));
+		}
+
+		template<size_t N>
+		static constexpr TIMER_PRESCALER best_tick_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
+		{
+			return best_frequency_prescaler(prescalers, prescalers + N, us);
+		}
+		
 	};
 
 	//TODO also need to update pulse_timer templates accordingly!
@@ -578,8 +607,15 @@ namespace timer
 		inline void set_input_capture(TimerInputCapture input_capture)
 		{
 			static_assert(INPUT_CAPTURE, "This method is only available for Timer<?, true>.");
-			if (_input_capture = (input_capture != TimerInputCapture::NONE))
+			_input_capture = (input_capture != TimerInputCapture::NONE);
+			if (_input_capture)
+			{
 				utils::set_mask(_tccrb, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture)); 
+				//FIXME we need to set actual TCCRB!!!!
+				TRAIT::TIMSK |= _BV(ICIE1);
+			}
+			else
+				TRAIT::TIMSK &= ~_BV(ICIE1);
 		}
 
 		/**
@@ -630,7 +666,6 @@ namespace timer
 			TRAIT::TCCRB = _tccrb | TRAIT::TCCRB_prescaler(prescaler);
 			TRAIT::OCRA = 0;
 			TRAIT::TCNT = 0;
-			TRAIT::TIMSK = 0;
 			//TODO use TRAIT instead of ICIE1
 			TRAIT::TIMSK = (_input_capture ? _BV(ICIE1) : 0);
 		}
@@ -693,7 +728,7 @@ namespace timer
 		 */
 		inline void reset()
 		{
-			if (sizeof TRAIT::TIMER_TYPE > 1)
+			if (sizeof(TIMER_TYPE) > 1)
 				synchronized _reset();
 			else
 				_reset();
