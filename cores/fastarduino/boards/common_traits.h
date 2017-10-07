@@ -432,6 +432,16 @@ namespace board_traits
 		static constexpr const uint8_t COM_SET = COM_SET_;
 	};
 
+	// Constants for all possible Timer interrupts
+	namespace TimerInterrupt
+	{
+		static constexpr const uint8_t OVERFLOW = 0x01;
+		static constexpr const uint8_t OUTPUT_COMPARE_A = 0x02;
+		static constexpr const uint8_t OUTPUT_COMPARE_B = 0x04;
+		static constexpr const uint8_t OUTPUT_COMPARE_C = 0x08;
+		static constexpr const uint8_t INPUT_CAPTURE = 0x10;
+	};
+
 	template<Timer TIMER>
 	struct Timer_trait
 	{
@@ -478,6 +488,10 @@ namespace board_traits
 		{
 			return 0;
 		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t interrupt)
+		{
+			return 0;
+		}
 
 		// Input-capture stuff
 		static constexpr const board::DigitalPin ICP_PIN = board::DigitalPin::NONE;
@@ -486,9 +500,7 @@ namespace board_traits
 
 	template<typename TYPE_, TimerPrescalers PRESCALERS_, 
 			uint8_t COM_COUNT_,
-
 			uint8_t MODE_MASK_TCCRA_, uint8_t MODE_MASK_TCCRB_, uint8_t CS_MASK_TCCRB_,
-
 			uint8_t F_PWM_TCCRA_, uint8_t F_PWM_TCCRB_, 
 			uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, 
 			uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, 

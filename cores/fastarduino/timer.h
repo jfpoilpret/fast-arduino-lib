@@ -135,35 +135,18 @@ namespace timer
 	};
 
 	//TODO document
-	//TODO make it a trait or template based on timer?
 	enum class TimerInterrupt:uint8_t
 	{
-		OVERFLOW = _BV(TOIE1),
-		OUTPUT_COMPARE_A = _BV(OCIE1A),
-		OUTPUT_COMPARE_B = _BV(OCIE1B),
-		// OUTPUT_COMPARE_C,
-		INPUT_CAPTURE = _BV(ICIE1)
+		OVERFLOW = board_traits::TimerInterrupt::OVERFLOW,
+		OUTPUT_COMPARE_A = board_traits::TimerInterrupt::OUTPUT_COMPARE_A,
+		OUTPUT_COMPARE_B = board_traits::TimerInterrupt::OUTPUT_COMPARE_B,
+		OUTPUT_COMPARE_C = board_traits::TimerInterrupt::OUTPUT_COMPARE_C,
+		INPUT_CAPTURE = board_traits::TimerInterrupt::INPUT_CAPTURE
 	};
 
-	class TimerInterruptSet
+	constexpr TimerInterrupt operator|(TimerInterrupt i1, TimerInterrupt i2)
 	{
-	public:
-		constexpr TimerInterruptSet(): value_{} {}
-		constexpr TimerInterruptSet(TimerInterrupt i): value_{uint8_t(i)} {}
-		constexpr uint8_t value() const
-		{
-			return value_;
-		}
-
-	private:
-		constexpr TimerInterruptSet(uint8_t value): value_{value} {}
-		const uint8_t value_;
-		friend constexpr TimerInterruptSet operator|(TimerInterruptSet, TimerInterrupt);
-	};
-
-	constexpr TimerInterruptSet operator|(TimerInterruptSet s, TimerInterrupt i)
-	{
-		return TimerInterruptSet(s.value() | uint8_t(i));
+		return TimerInterrupt(uint8_t(i1) | uint8_t(i2));
 	}
 
 	/**
@@ -625,18 +608,24 @@ namespace timer
 		 * @sa set_interrupts()
 		 * @sa set_prescaler()
 		 */
-		Timer(TimerMode timer_mode, TIMER_PRESCALER prescaler, TimerInterruptSet interrupts = {})
+		Timer(TimerMode timer_mode, TIMER_PRESCALER prescaler, TimerInterrupt interrupts = TimerInterrupt(0))
 		:	_tccra{timer_mode_TCCRA(timer_mode)}, 
 			_tccrb{timer_mode_TCCRB(timer_mode) | TRAIT::TCCRB_prescaler(prescaler)},
-			_timsk{interrupts.value()} {}
+			_timsk{uint8_t(interrupts)}
+		{
+			//TODO assert interrupts
+			static_assert(TIMSK_MASK_IS_SUPPORTED(interrupts), "TIMER does not support requested interrupts");
+		}
 
 		//TODO doc
-		inline void set_interrupts(TimerInterruptSet interrupts)
+		inline void set_interrupts(const TimerInterrupt interrupts) INLINE
 		{
-			_timsk = interrupts.value();
+			//TODO static_assert
+			static_assert(TIMSK_MASK_IS_SUPPORTED(interrupts), "TIMER does not support requested interrupts");
+			_timsk = uint8_t(interrupts);
 			// Check if timer is currently running
 			if (TRAIT::TCCRB)
-				TRAIT::TIMSK = interrupts.value();
+				TRAIT::TIMSK = uint8_t(interrupts);
 		}
 
 		//TODO doc
@@ -905,6 +894,12 @@ namespace timer
 					output_mode == TimerOutputMode::INVERTING ? COM_TRAIT::COM_SET :
 					output_mode == TimerOutputMode::NON_INVERTING ? COM_TRAIT::COM_CLEAR :
 					COM_TRAIT::COM_NORMAL);
+		}
+
+		static constexpr bool TIMSK_MASK_IS_SUPPORTED(TimerInterrupt interrupt)
+		{
+			return (TRAIT::TIMSK_MASK(0xFF) & TRAIT::TIMSK_MASK(uint8_t(interrupt))) 
+					== TRAIT::TIMSK_MASK(uint8_t(interrupt));
 		}
 
 		static constexpr uint8_t timer_mode_TCCRA(TimerMode timer_mode)

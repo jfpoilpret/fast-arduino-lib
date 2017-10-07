@@ -158,6 +158,13 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
 					_BV(CS02) | _BV(CS00));
 		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE0) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE0A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE0B) : 0);
+		}
 	};
 	
 	template<> struct Timer_COM_trait<Timer::TIMER2, 0>: Timer_COM_trait_impl<
@@ -185,6 +192,13 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_128 ? _BV(CS22) | _BV(CS20) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS22) | _BV(CS21) :
 					_BV(CS22) | _BV(CS21) | _BV(CS20));
+		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE2) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE2A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE2B) : 0);
 		}
 	};
 	
@@ -216,6 +230,14 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS10) | _BV(CS11) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS12) :
 					_BV(CS12) | _BV(CS10));
+		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE1) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE1A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE1B) : 0)
+				|	(i & INPUT_CAPTURE ? _BV(ICIE1) : 0);
 		}
 	};
 	

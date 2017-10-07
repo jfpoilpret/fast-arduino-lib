@@ -60,6 +60,9 @@ static constexpr uint16_t milliseconds(uint16_t ticks)
 	return ticks * PRECISION / CALC::CTC_frequency(PRESCALER);
 }
 
+using timer::TimerInputCapture;
+using timer::TimerInterrupt;
+
 class Capture
 {
 public:
@@ -71,7 +74,7 @@ public:
 		{
 			// Button pushed, prepare for next capture (on button release)
 			_timer._reset();
-			_timer.set_input_capture(timer::TimerInputCapture::RISING_EDGE);
+			_timer.set_input_capture(TimerInputCapture::RISING_EDGE);
 		}
 		else
 		{
@@ -88,8 +91,9 @@ public:
 		{
 			_ready = false;
 			_capture = 0;
-			_timer.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
-			_timer.set_interrupts({timer::TimerInterrupt::INPUT_CAPTURE});
+			_timer.set_input_capture(TimerInputCapture::FALLING_EDGE);
+			_timer.set_interrupts(TimerInterrupt::INPUT_CAPTURE);
+			// _timer.set_interrupts(TimerInterrupt::INPUT_CAPTURE | TimerInterrupt::OUTPUT_COMPARE_A);
 		}
 	}
 
