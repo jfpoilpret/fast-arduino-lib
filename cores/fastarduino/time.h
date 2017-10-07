@@ -185,7 +185,7 @@ namespace time
 		using TYPE = ClockDelegate<CLOCK>;
 		
 	public:
-		static void set_clock(const CLOCK& clock, bool set_defaults = true)
+		static void set_clock(const CLOCK& clock)
 		{
 			_clock = &clock;
 			time::delay = TYPE::delay;
