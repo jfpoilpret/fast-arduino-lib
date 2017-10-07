@@ -48,7 +48,7 @@ REGISTER_UATX_ISR(0)
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 // Timer stuff
-using TIMER_TYPE = timer::Timer<TIMER, true>;
+using TIMER_TYPE = timer::Timer<TIMER>;
 using TYPE = TIMER_TYPE::TIMER_TYPE;
 static constexpr const board::DigitalPin ICP = TIMER_TYPE::ICP_PIN;
 static constexpr const uint32_t PRECISION = 1000UL;
@@ -76,7 +76,7 @@ public:
 		else
 		{
 			// Button released, stop capture and get captured value
-			_timer.set_input_capture(timer::TimerInputCapture::NONE);
+			_timer.set_interrupts({});
 			_capture = capture;
 			_ready = true;
 		}
@@ -89,6 +89,7 @@ public:
 			_ready = false;
 			_capture = 0;
 			_timer.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
+			_timer.set_interrupts({timer::TimerInterrupt::INPUT_CAPTURE});
 		}
 	}
 
@@ -125,9 +126,9 @@ int main()
 	out.width(0);
 	out << F("Started\n");
 	
-	TIMER_TYPE timer{timer::TimerMode::NORMAL};
+	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
 
-	timer.begin(PRESCALER);
+	timer.begin();
 	Capture capture{timer};
 	interrupt::register_handler(capture);
 

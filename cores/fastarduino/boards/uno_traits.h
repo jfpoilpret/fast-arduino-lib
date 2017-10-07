@@ -143,6 +143,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER0>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							2,
+							_BV(WGM00) | _BV(WGM01), _BV(WGM02), _BV(CS00) | _BV(CS01) | _BV(CS02),
 							_BV(WGM00) | _BV(WGM01), 0,
 							_BV(WGM00), 0,
 							_BV(WGM01), 0,
@@ -168,6 +169,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER2>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024, 
 							2,
+							_BV(WGM20) | _BV(WGM21), _BV(WGM22), _BV(CS20) | _BV(CS21) | _BV(CS22),
 							_BV(WGM20) | _BV(WGM21), 0,
 							_BV(WGM20), 0,
 							_BV(WGM21), 0,
@@ -195,6 +197,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							2,
+							_BV(WGM10) | _BV(WGM11), _BV(WGM12) | _BV(WGM13), _BV(CS10) | _BV(CS11) | _BV(CS12),
 							_BV(WGM10) | _BV(WGM11), _BV(WGM12),
 							_BV(WGM10) | _BV(WGM11), 0,
 							0, _BV(WGM12), 

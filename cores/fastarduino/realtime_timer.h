@@ -123,7 +123,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT():Timer<TIMER>{TimerMode::CTC}, _millis{} {}
+		RTT():Timer<TIMER>{TimerMode::CTC, MILLI_PRESCALER}, _millis{} {}
 		
 		/**
 		 * Register this RTT with the matching ISR that should have been
@@ -244,7 +244,7 @@ namespace timer
 		inline void _begin()
 		{
 			_millis = 0;
-			Timer<TIMER>::_begin(MILLI_PRESCALER, MILLI_COUNTER);
+			Timer<TIMER>::_begin(MILLI_COUNTER);
 		}
 
 		/**

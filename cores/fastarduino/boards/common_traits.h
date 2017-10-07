@@ -453,6 +453,10 @@ namespace board_traits
 		static constexpr const uint8_t PC_PWM_TCCRB = 0;
 		static constexpr const uint8_t CTC_TCCRA  = 0;
 		static constexpr const uint8_t CTC_TCCRB  = 0;
+
+		static constexpr const uint8_t CS_MASK_TCCRB = 0;
+		static constexpr const uint8_t MODE_MASK_TCCRA = 0;
+		static constexpr const uint8_t MODE_MASK_TCCRB = 0;
 		
 		static constexpr const REG8 TCCRA{};
 		static constexpr const REG8 TCCRB{};
@@ -482,6 +486,9 @@ namespace board_traits
 
 	template<typename TYPE_, TimerPrescalers PRESCALERS_, 
 			uint8_t COM_COUNT_,
+
+			uint8_t MODE_MASK_TCCRA_, uint8_t MODE_MASK_TCCRB_, uint8_t CS_MASK_TCCRB_,
+
 			uint8_t F_PWM_TCCRA_, uint8_t F_PWM_TCCRB_, 
 			uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, 
 			uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, 
@@ -506,6 +513,10 @@ namespace board_traits
 		
 		static constexpr const uint8_t COM_COUNT = COM_COUNT_;
 		static constexpr const uint8_t COM_MASK = ~(0xFF >> (2 * COM_COUNT));
+
+		static constexpr const uint8_t CS_MASK_TCCRB = CS_MASK_TCCRB_;
+		static constexpr const uint8_t MODE_MASK_TCCRA = MODE_MASK_TCCRA_;
+		static constexpr const uint8_t MODE_MASK_TCCRB = MODE_MASK_TCCRB_;
 
 		static constexpr const uint8_t F_PWM_TCCRA = F_PWM_TCCRA_;
 		static constexpr const uint8_t F_PWM_TCCRB = F_PWM_TCCRB_;

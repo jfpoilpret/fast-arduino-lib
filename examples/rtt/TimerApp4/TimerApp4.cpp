@@ -89,13 +89,13 @@ int main()
 {
 	board::init();
 	BlinkHandler blink_handler;
-	BLINK_TIMER_TYPE blink_timer{timer::TimerMode::CTC};
+	BLINK_TIMER_TYPE blink_timer{timer::TimerMode::CTC, BLINK_PRESCALER};
 	SuspendHandler suspend_handler{blink_timer};
-	SUSPEND_TIMER_TYPE suspend_timer{timer::TimerMode::CTC};
+	SUSPEND_TIMER_TYPE suspend_timer{timer::TimerMode::CTC, SUSPEND_PRESCALER};
 	interrupt::register_handler(blink_handler);
 	interrupt::register_handler(suspend_handler);
-	blink_timer._begin(BLINK_PRESCALER, BLINK_COUNTER);
-	suspend_timer._begin(SUSPEND_PRESCALER, SUSPEND_COUNTER);
+	blink_timer._begin(BLINK_COUNTER);
+	suspend_timer._begin(SUSPEND_COUNTER);
 	sei();
 	
 	while (true) ;

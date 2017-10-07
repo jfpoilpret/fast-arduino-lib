@@ -65,12 +65,12 @@ int main()
 {
 	board::init();
 	// Initialize timer and pins
-	TIMER_TYPE timer{timer::TimerMode::FAST_PWM};
+	TIMER_TYPE timer{timer::TimerMode::FAST_PWM, PRESCALER};
 	LED_OUTPUT led{timer};
 	ANALOG_INPUT pot;
 
 	// Start timer
-	timer._begin(PRESCALER);
+	timer._begin();
 	
 	// Enable interrupts
 	sei();
