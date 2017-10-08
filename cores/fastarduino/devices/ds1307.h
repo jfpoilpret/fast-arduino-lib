@@ -88,7 +88,9 @@ namespace rtc
 				datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
 				datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
 				datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
+				return true;
 			}
+			return false;
 		}
 		
 		bool halt_clock()
