@@ -112,19 +112,6 @@ namespace timer
 			TRAIT::ICR = CALCULATOR::PWM_ICR_counter(PRESCALER, pulse_frequency);
 		}
 				
-		inline void begin()
-		{
-			synchronized _begin();
-		}
-		inline void _begin()
-		{
-			TRAIT::TCCRA = PARENT::_tccra;
-			TRAIT::TCCRB = PARENT::_tccrb;
-			TRAIT::TCNT = 0;
-			TRAIT::OCRA = 0;
-			TRAIT::TIMSK = 0;
-		}
-		
 	private:
 		static constexpr uint8_t TCCRA()
 		{
@@ -155,27 +142,13 @@ namespace timer
 		static constexpr const TIMER_PRESCALER PRESCALER = PRESCALER_;
 
 		PulseTimer8(uint16_t pulse_frequency)
-			:	Timer<TIMER>{TCCRA(), TCCRB()}, 
+			:	Timer<TIMER>{TCCRA(), TCCRB(), TIMSK()}, 
 				MAX{OVERFLOW_COUNTER(pulse_frequency)}
 		{
 			// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 			interrupt::register_handler(*this);
 		}
 				
-		inline void begin()
-		{
-			synchronized _begin();
-		}
-		inline void _begin()
-		{
-			TRAIT::TCCRA = PARENT::_tccra;
-			TRAIT::TCCRB = PARENT::_tccrb;
-			TRAIT::TCNT = 0;
-			TRAIT::OCRA = 0;
-			//TODO trait for selecting those interrupts?
-			TRAIT::TIMSK = _BV(TOIE0) | _BV(OCIE0A) | _BV(OCIE0B);
-		}
-		
 		void overflow(bool& reset)
 		{
 			if (++count_ == MAX) count_ = 0;
@@ -192,6 +165,11 @@ namespace timer
 		{
 			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
 			return TRAIT::TCCRB_prescaler(PRESCALER);
+		}
+		static constexpr uint8_t TIMSK()
+		{
+			return TRAIT::TIMSK_MASK(uint8_t(
+				TimerInterrupt::OVERFLOW | TimerInterrupt::OUTPUT_COMPARE_A | TimerInterrupt::OUTPUT_COMPARE_B));
 		}
 		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t pulse_frequency)
 		{
