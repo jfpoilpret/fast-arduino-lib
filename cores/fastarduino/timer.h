@@ -60,7 +60,14 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
  */
 #define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
-//TODO Document
+/**
+ * Register the necessary ISR (interrupt Service Routine) for the Input Capture
+ * of a timer::Timer.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
+ * is triggered; this must be a proper PTMF (pointer to member function).
+ */
 #define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)		\
 ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
 {																			\
@@ -70,6 +77,13 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
 	CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(capture);					\
 }
 
+/**
+ * Register the necessary ISR (interrupt Service Routine) for the Input Capture
+ * of a timer::Timer.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param CALLBACK the function that will be called when the interrupt is
+ * triggered
+ */
 #define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
 ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
 {																			\
@@ -79,7 +93,12 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
 	CALLBACK (capture);														\
 }
 
-//TODO is an empty interrupt handler useful really?
+/**
+ * Register an enpty ISR (Interrupt Service Routine) for the Input Capture
+ * of a timer::Timer.
+ * This would normally not be needed.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ */
 #define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
 
 /**
@@ -134,16 +153,36 @@ namespace timer
 		PHASE_CORRECT_PWM
 	};
 
-	//TODO document
+	/**
+	 * Defines the interrupts that can be handled by a timer.
+	 * @sa Timer::set_interrupts()
+	 */
 	enum class TimerInterrupt:uint8_t
 	{
+		/** This interrupt occurs when the counter overflows it maximum value. */
 		OVERFLOW = board_traits::TimerInterrupt::OVERFLOW,
+		/** This interrupt occurs when the counter reached `OCRA`. */
 		OUTPUT_COMPARE_A = board_traits::TimerInterrupt::OUTPUT_COMPARE_A,
+		/** This interrupt occurs when the counter reached `OCRB`. */
 		OUTPUT_COMPARE_B = board_traits::TimerInterrupt::OUTPUT_COMPARE_B,
+		/** 
+		 * This interrupt occurs when the counter reached `OCRC`.
+		 * Note that this interrupt is not supported by all timers.
+		 */
 		OUTPUT_COMPARE_C = board_traits::TimerInterrupt::OUTPUT_COMPARE_C,
+		/** 
+		 * This interrupt occurs during input capture, i.e. when a signal (rising
+		 * or falling edge, according to currently set `TimerInputCapture`) is
+		 * detected.
+		 * Note that this interrupt is not supported by all timers.
+		 */
 		INPUT_CAPTURE = board_traits::TimerInterrupt::INPUT_CAPTURE
 	};
 
+	/**
+	 * Combine 2 timer interrupts for use with `Timer.set_interrupts()`.
+	 * @sa Timer.set_interrupts()
+	 */
 	constexpr TimerInterrupt operator|(TimerInterrupt i1, TimerInterrupt i2)
 	{
 		return TimerInterrupt(uint8_t(i1) | uint8_t(i2));
@@ -217,8 +256,16 @@ namespace timer
 		 */
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
 		
-		//TODO doc. calculation method for Normal mode: return best prescaler for 
-		// duration per tick (simple)
+		/**
+		 * Computes the ideal prescaler to use for this timer, in order to generate
+		 * timer ticks of @p us_per_tick microseconds or less.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 * 
+		 * @param us_per_tick the maximum number of us to be reached by one
+		 * counter tick
+		 * @return the best prescaler to use
+		 */
 		static constexpr TIMER_PRESCALER tick_prescaler(uint32_t us_per_tick)
 		{
 			return best_tick_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us_per_tick);
@@ -550,8 +597,6 @@ namespace timer
 		
 	};
 
-	//TODO also need to update pulse_timer templates accordingly!
-	//TODO rework, possibly subclass for input capture?
 	/**
 	 * General API to handle an AVR timer.
 	 * Note that many timer usages will require ISR registration with one of
@@ -602,7 +647,8 @@ namespace timer
 		 * @param timer_mode the mode to initalize this timer with
 		 * @param prescaler the prescale enum value to use for this timer
 		 * @param interrupts default interrupts that will be used when timer is 
-		 * started
+		 * started; note that some interrupts are not supported by all timers, if
+		 * used here, they will silently be ignored.
 		 * @sa begin()
 		 * @sa set_timer_mode()
 		 * @sa set_interrupts()
@@ -610,27 +656,41 @@ namespace timer
 		 */
 		Timer(TimerMode timer_mode, TIMER_PRESCALER prescaler, TimerInterrupt interrupts = TimerInterrupt(0))
 		:	_tccra{timer_mode_TCCRA(timer_mode)}, 
-			_tccrb{timer_mode_TCCRB(timer_mode) | TRAIT::TCCRB_prescaler(prescaler)},
-			_timsk{uint8_t(interrupts)}
-		{
-			//TODO assert interrupts
-			static_assert(TIMSK_MASK_IS_SUPPORTED(interrupts), "TIMER does not support requested interrupts");
-		}
+			_tccrb{uint8_t(timer_mode_TCCRB(timer_mode) | TRAIT::TCCRB_prescaler(prescaler))},
+			_timsk{TRAIT::TIMSK_MASK(uint8_t(interrupts))} {}
 
-		//TODO doc
-		inline void set_interrupts(const TimerInterrupt interrupts) INLINE
+		/**
+		 * Set the list of interrupts that must be triggered by this timer.
+		 * If you do not want any interrupt triggered, then call this method
+		 * with no argument.
+		 * To select several interrupts, just "or" them together:
+		 * @code
+		 * timer.set_interrupts(TimerInterrupt::OVERFLOW | TimerInterrupt::INPUT_CAPTURE);
+		 * @endcode
+		 * 
+		 * @param interrupts interrupts that will be used when timer is 
+		 * started; note that some interrupts are not supported by all timers, if
+		 * used here, they will silently be ignored.
+		 */
+		inline void set_interrupts(TimerInterrupt interrupts = TimerInterrupt(0))
 		{
-			//TODO static_assert
-			static_assert(TIMSK_MASK_IS_SUPPORTED(interrupts), "TIMER does not support requested interrupts");
-			_timsk = uint8_t(interrupts);
+			_timsk = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB)
-				TRAIT::TIMSK = uint8_t(interrupts);
+				TRAIT::TIMSK = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 		}
 
-		//TODO doc
+		/**
+		 * Set the input capture mode fr this timer.
+		 * Input Capture will work only if `set_interrupts()` is called with
+		 * `TimerInterrupt::INPUT_CAPTURE`.
+		 * Note that some timers do not support input capture; in this situation,
+		 * using this method will generate a compiler error.
+		 * @param input_capture new input capture mode to use
+		 */
 		inline void set_input_capture(TimerInputCapture input_capture)
 		{
+			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
 			utils::set_mask(_tccrb, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB)
@@ -653,7 +713,10 @@ namespace timer
 			}
 		}
 
-		//TODO doc
+		/**
+		 * Change prescaler for this timer.
+		 * @param prescaler the prescale enum value to use for this timer
+		 */
 		inline void set_prescaler(TIMER_PRESCALER prescaler)
 		{
 			utils::set_mask(_tccrb, TRAIT::CS_MASK_TCCRB, TRAIT::TCCRB_prescaler(prescaler));

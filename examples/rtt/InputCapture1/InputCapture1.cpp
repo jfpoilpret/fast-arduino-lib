@@ -79,7 +79,7 @@ public:
 		else
 		{
 			// Button released, stop capture and get captured value
-			_timer.set_interrupts({});
+			_timer.set_interrupts();
 			_capture = capture;
 			_ready = true;
 		}
@@ -93,7 +93,6 @@ public:
 			_capture = 0;
 			_timer.set_input_capture(TimerInputCapture::FALLING_EDGE);
 			_timer.set_interrupts(TimerInterrupt::INPUT_CAPTURE);
-			// _timer.set_interrupts(TimerInterrupt::INPUT_CAPTURE | TimerInterrupt::OUTPUT_COMPARE_A);
 		}
 	}
 
