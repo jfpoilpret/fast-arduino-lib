@@ -466,7 +466,6 @@ namespace timer
 		 */
 		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
 		{
-			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must have ICR");
 			return best_frequency_prescaler(
 				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (TRAIT::MAX_PWM + 1UL));
 		}
