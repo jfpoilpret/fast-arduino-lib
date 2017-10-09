@@ -262,6 +262,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER0>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							2,
+							_BV(WGM00) | _BV(WGM01), _BV(WGM02), _BV(CS00) | _BV(CS01) | _BV(CS02),
 							_BV(WGM00) | _BV(WGM01), 0,
 							_BV(WGM00), 0,
 							_BV(WGM01), 0,
@@ -276,6 +277,13 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
 					_BV(CS02) | _BV(CS00));
 		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE0) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE0A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE0B) : 0);
+		}
 	};
 	
 	template<> struct Timer_COM_trait<Timer::TIMER2, 0>: Timer_COM_trait_impl<
@@ -287,6 +295,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER2>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024, 
 							2,
+							_BV(WGM20) | _BV(WGM21), _BV(WGM22), _BV(CS20) | _BV(CS21) | _BV(CS22),
 							_BV(WGM20) | _BV(WGM21), 0,
 							_BV(WGM20), 0,
 							_BV(WGM21), 0,
@@ -303,6 +312,13 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS22) | _BV(CS21) :
 					_BV(CS22) | _BV(CS21) | _BV(CS20));
 		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE2) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE2A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE2B) : 0);
+		}
 	};
 	
 	template<> struct Timer_COM_trait<Timer::TIMER1, 0>: Timer_COM_trait_impl<
@@ -314,6 +330,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							2,
+							_BV(WGM10) | _BV(WGM11), _BV(WGM12) | _BV(WGM13), _BV(CS10) | _BV(CS11) | _BV(CS12),
 							_BV(WGM10) | _BV(WGM11), _BV(WGM12),
 							_BV(WGM10) | _BV(WGM11), 0,
 							0, _BV(WGM12), 
@@ -332,6 +349,14 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS12) :
 					_BV(CS12) | _BV(CS10));
 		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE1) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE1A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE1B) : 0)
+				|	(i & INPUT_CAPTURE ? _BV(ICIE1) : 0);
+		}
 	};
 	
 	template<> struct Timer_COM_trait<Timer::TIMER3, 0>: Timer_COM_trait_impl<
@@ -346,6 +371,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER3>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							3,
+							_BV(WGM30) | _BV(WGM31), _BV(WGM32) | _BV(WGM33), _BV(CS10) | _BV(CS11) | _BV(CS12),
 							_BV(WGM30) | _BV(WGM31), _BV(WGM32),
 							_BV(WGM30) | _BV(WGM31), 0,
 							0, _BV(WGM32), 
@@ -364,6 +390,14 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS32) :
 					_BV(CS32) | _BV(CS30));
 		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE3) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE3A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE3B) : 0)
+				|	(i & INPUT_CAPTURE ? _BV(ICIE3) : 0);
+		}
 	};
 	
 	template<> struct Timer_COM_trait<Timer::TIMER4, 0>: Timer_COM_trait_impl<
@@ -378,6 +412,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER4>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							3,
+							_BV(WGM40) | _BV(WGM41), _BV(WGM42) | _BV(WGM43), _BV(CS10) | _BV(CS11) | _BV(CS12),
 							_BV(WGM40) | _BV(WGM41), _BV(WGM42),
 							_BV(WGM40) | _BV(WGM41), 0,
 							0, _BV(WGM42), 
@@ -386,7 +421,8 @@ namespace board_traits
 							R_(ICR4),
 							0, _BV(WGM42) | _BV(WGM43),
 							_BV(WGM41), _BV(WGM42) | _BV(WGM43),
-							_BV(WGM41), _BV(WGM43)>
+							_BV(WGM41), _BV(WGM43),
+							board::DigitalPin::D48_PL1, _BV(ICES4)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -395,6 +431,14 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS40) | _BV(CS41) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS42) :
 					_BV(CS42) | _BV(CS40));
+		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE4) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE4A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE4B) : 0)
+				|	(i & INPUT_CAPTURE ? _BV(ICIE4) : 0);
 		}
 	};
 	
@@ -410,6 +454,7 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER5>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							3,
+							_BV(WGM50) | _BV(WGM51), _BV(WGM52) | _BV(WGM53), _BV(CS10) | _BV(CS11) | _BV(CS12),
 							_BV(WGM50) | _BV(WGM51), _BV(WGM52),
 							_BV(WGM50) | _BV(WGM51), 0,
 							0, _BV(WGM52), 
@@ -418,7 +463,8 @@ namespace board_traits
 							R_(ICR5),
 							0, _BV(WGM52) | _BV(WGM53),
 							_BV(WGM51), _BV(WGM52) | _BV(WGM53),
-							_BV(WGM51), _BV(WGM53)>
+							_BV(WGM51), _BV(WGM53),
+							board::DigitalPin::D48_PL1, _BV(ICES5)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -427,6 +473,14 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_64 ? _BV(CS50) | _BV(CS51) :
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS52) :
 					_BV(CS52) | _BV(CS50));
+		}
+		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? _BV(TOIE5) : 0)
+				|	(i & OUTPUT_COMPARE_A ? _BV(OCIE5A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? _BV(OCIE5B) : 0)
+				|	(i & INPUT_CAPTURE ? _BV(ICIE5) : 0);
 		}
 	};
 	
