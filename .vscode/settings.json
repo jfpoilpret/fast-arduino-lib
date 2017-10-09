@@ -60,6 +60,12 @@
             "board": "ATmega328",
             "frequency": 8,
             "programmer": "ArduinoISP.cc"
+        },
+        "ATtiny84-8MHz":
+        {
+            "board": "ATtinyX4",
+            "frequency": 8,
+            "programmer": "ArduinoISP.cc"
         }
     }
 }
