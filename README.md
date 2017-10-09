@@ -53,27 +53,32 @@ What the project already has:
 
 - General utilities (queues, linked lists, busy loop delays)
 - Fast IO support: template-based, optimized for speed and size.
-- General Events handling
-- Watchdog timer
-- Timed (periodic or not) jobs scheduling
-- Real Time Timer with microsecond precision
-- Power sleep
-- Pin Change Interrupt (PCI) handling
-- External Pin Interrupt handling
-- Hardware UART support (for MCU that support it, ie not for ATtiny)
-- Software UART support (for all MCU)
-- "C++ like" Input/Output streams (used by UART implementations)
-- SPI master support
-- WinBond flash memory support (SPI-based)
-- NRF24L01 device support (SPI-based)
 - Analog Digital Conversion support (in Single Conversion mode only)
 - Power supply voltage measurement support
 - Flash memory data support (PROGMEM data), particularly strings (useful to limit used SRAM)
 - EEPROM support, with synchronous or asynchronous write
+- General Events handling
+- Watchdog timer
+- Timer modes support, including Input Capture
+- Timed (periodic or not) jobs scheduling
+- Real Time Timer with microsecond precision
 - PWM output support
 - "Pulsed" Timer support (useful for Servos)
-- Servo control API
+- Power sleep
+- Pin Change Interrupt (PCI) handling
+- External Pin Interrupt handling
+- SPI master support
 - I2C master support (synchronous mode)
+- Hardware UART support (for MCU that support it, ie not for ATtiny)
+- Software UART support (for all MCU)
+- "C++ like" Input/Output streams (used by UART implementations)
+
+In addition, FastArduino brings support for the following devices:
+
+- SIPO (*Serial in Parralel out*) chips
+- Servo control API
+- WinBond flash memory support (SPI-based)
+- NRF24L01 device support (SPI-based)
 - DS1307 RTC device support (I2C-based)
 - HMC5883L magnetometer device support (I2C-based)
 - MPU-6050 accelerometer/gyroscope device support (I2C-based)
@@ -92,33 +97,29 @@ I intend to later add support for:
 - Breadboard ATtiny85 at 8MHz
 - Arduino Leonardo with USB support
 
-I have started writing a [step-by-step tutorial](TOhttp://jfpoilpret.github.io/fast-arduino-lib/tutorial.htmlDO) to learn FastArduino API, which shall be finished by end 2017, but it can already be used to understand some of FastArduino API. In parallel to that, I am documenting [FastArduino API](TOhttp://jfpoilpret.github.io/fast-arduino-lib/DO) through [doxygen](http://www.stack.nl/~dimitri/doxygen/) and that should also be finished by end 2017.
+I have started writing a [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) to learn FastArduino API, which shall be finished by end 2017, but it can already be used to understand some of FastArduino API. In parallel to that, I am documenting [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) through [doxygen](http://www.stack.nl/~dimitri/doxygen/) and that should also be finished by end 2017.
 
 Roadmap
 =======
 
 The roadmap of next activities and new supported features is the following:
 
-September 2017
---------------
-1. Improve board specific enums to include Arduino pin aliases
-2. Improve streams support ala C++
-
 October 2017
 ------------
-3. Improve Timer support (support input capture where available)
-4. Finalize sonar ranger API
-5. Add support for ATtinyX5
+1. Improve board specific enums to include Arduino pin aliases
+2. Improve streams support ala C++
+3. Finalize sonar ranger API
+4. Add support for ATtinyX5
 
 December 2017
 -------------
-6. Support other I2C devices: MCP23017 (IO multiplexer)
-7. Improve Analog Input support and code
-8. Improve I2C master support (asynchronous mode)
-9. Improve SPI to support slave mode
-10. Improve I2C to support slave mode
-11. Add USB support for Arduino Leonardo
-12. Add high-speed timer support of Arduino Leonardo
+5. Support other I2C devices: MCP23017 (IO multiplexer)
+6. Improve Analog Input support and code
+7. Improve I2C master support (asynchronous mode)
+8. Improve SPI to support slave mode
+9. Improve I2C to support slave mode
+10. Add USB support for Arduino Leonardo
+11. Add high-speed timer support of Arduino Leonardo
 
 In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
