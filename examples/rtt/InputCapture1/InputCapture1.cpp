@@ -25,23 +25,40 @@
 #include <fastarduino/timer.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
+#define HAS_UART 1
+#define UART_NUM 0
+static constexpr const board::USART UART = board::USART::USART0;
 #define TIMER_NUM 1
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-
-#include <fastarduino/uart.h>
-static constexpr const board::USART UART = board::USART::USART0;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-// Define vectors we need in the example
-REGISTER_UATX_ISR(0)
-
-#elif defined (ARDUINO_LEONARDO)
-#error "Current target is not yet supported!"
 #elif defined (ARDUINO_MEGA)
-#error "Current target is not yet supported!"
+#define HAS_UART 1
+#define UART_NUM 0
+static constexpr const board::USART UART = board::USART::USART0;
+#define TIMER_NUM 4
+static constexpr const board::Timer TIMER = board::Timer::TIMER4;
+#elif defined (ARDUINO_LEONARDO)
+#define HAS_UART 1
+#define UART_NUM 1
+static constexpr const board::USART UART = board::USART::USART1;
+#define TIMER_NUM 1
+static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 #elif defined (BREADBOARD_ATTINYX4)
-#error "Current target is not yet supported!"
+#define HAS_UART 0
+static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+#define TIMER_NUM 1
+static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 #else
 #error "Current target is not yet supported!"
+#endif
+
+#if HAS_UART
+#include <fastarduino/uart.h>
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(UART_NUM)
+#else
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
+#include <fastarduino/soft_uart.h>
 #endif
 
 // Buffers for UART
@@ -117,11 +134,11 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Start UART
-#if defined (BREADBOARD_ATTINYX4)
-	serial::soft::UATX<TX> uatx{output_buffer};
-#else
+#if HAS_UART
 	serial::hard::UATX<UART> uatx{output_buffer};
 	uatx.register_handler();
+#else
+	serial::soft::UATX<TX> uatx{output_buffer};
 #endif
 	uatx.begin(115200);
 
