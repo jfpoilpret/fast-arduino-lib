@@ -610,9 +610,9 @@ Note that Arduino core API does not allow you any other precision than 10 bits.
 A timer (it should actually be named "timer/counter") is a logic chip or part of an MCU that just "counts" pulses of a clock at a given frequency. It can have several modes. It is used in many occasions such as:
 - real time counting
 - asynchronous tasks (one-shot or periodic) scheduling
-- PWM signal generation (see TODO for further details)
+- PWM signal generation (see [PWM](@ref pwm) for further details)
 
-A timer generally counts up, but it may also, on some occasions, count down; it may trigger interrupts on several events (i.e. when counter reaches some specific limits), it may drive some specific digital output pins, and sometimes it may also be driven by digital input pins (to stop counting).
+A timer generally counts up, but it may also, on some occasions, count down; it may trigger interrupts on several events (i.e. when counter reaches some specific limits), it may drive some specific digital output pins, and sometimes it may also be driven by digital input pins (to capture counter value).
 
 There are typically several independent timers on an MCU, but they are not all the same. Timers may differ in:
 - counter size (8 or 16 bits for AVR timers)
@@ -621,7 +621,7 @@ There are typically several independent timers on an MCU, but they are not all t
 - the pins they are connected to
 - specific capabilities they may have
 
-Rather than explaining the theory further, we will start studying a simple example that uses a timer for blinking a LED, a little bit like the first example but totally driven asynchronously:
+Rather than explaining the theory further, we will start studying a simple example that uses a timer for blinking a LED, a little bit like the first example in this tutorial, but totally driven asynchronously:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 #include <fastarduino/gpio.h>
 #include <fastarduino/timer.h>
@@ -649,16 +649,17 @@ private:
 };
 
 // Define vectors we need in the example
-REGISTER_TIMER_ISR_METHOD(1, Handler, &Handler::on_timer)
+REGISTER_TIMER_COMPARE_ISR_METHOD(1, Handler, &Handler::on_timer)
 
+int main() __attribute__((OS_main));
 int main()
 {
 	board::init();
 	sei();
 	Handler handler;
 	interrupt::register_handler(handler);
-	TIMER_TYPE timer{timer::TimerMode::CTC};
-	timer.begin(PRESCALER, COUNTER);
+	TIMER_TYPE timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
+	timer.begin(COUNTER);
 	
 	while (true) ;
 }
@@ -715,9 +716,9 @@ There is nothing special to explain here, except that the method `on_timer()` is
 
 Since timers generate interruptions, we need to "attach" our handler code above to the suitable interruption, this is done through the following line of code:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-REGISTER_TIMER_ISR_METHOD(1, Handler, &Handler::on_timer)
+REGISTER_TIMER_COMPARE_ISR_METHOD(1, Handler, &Handler::on_timer)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`REGISTER_TIMER_ISR_METHOD` is a macro that will generate extra code (code you do not need, nor want, to see) to declare the Interrupt Service Routine (*ISR*) attached to the proper interruption of our selected timer; it takes 3 arguments:
+`REGISTER_TIMER_COMPARE_ISR_METHOD` is a macro that will generate extra code (code you do not need, nor want, to see) to declare the Interrupt Service Routine (*ISR*) attached to the proper interruption of our selected timer; it takes 3 arguments:
 - `1` is the timer number (`0`, `1` or `2` on UNO)
 - `Handler` is the class that contains the code to be called when the interrupt occurs
 - `&Handler::on_timer` is the Pointer to Member Function (often abbreviated *PTMF* by usual C++ developers) telling which method from `Handler` shall be called back when the interrupt occurs
@@ -725,6 +726,7 @@ In FastArduino, interrupt handling follows some patterns that are further descri
 
 Now we can finally start writing the code of the `main()` function:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+int main() __attribute__((OS_main));
 int main()
 {
 	board::init();
@@ -735,18 +737,23 @@ int main()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Past the usual initialization stuff, this code performs an important task regarding interrupt handling: it creates `handler`, an instance of the `Handler` class that has been defined before as the class to handle interrupts for the selected timer, and then it **registers** this handler instance with FastArduino. Now we are sure that interrupts for our timer will call `handler.on_timer()`.
 
+Do note the specific `main` declaration line before its definition: `int main() __attribute__((OS_main));`. This helps the compiler perform some optimization on this function, and may avoid generating several dozens code instructions in some circumstances. In some situations though, this may increase code size by a few bytes; for your own programs, you would have to compile with and without this line if you want to find what is the best for you.
+
 The last part of the code creates and starts the timer we need in our program:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-	TIMER_TYPE timer{timer::TimerMode::CTC};
-	timer.begin(PRESCALER, COUNTER);
+	TIMER_TYPE timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
+	timer.begin(COUNTER);
 	
 	while (true) ;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-`timer` is the instance of `timer::Timer` API for `board::Timer::TIMER1`; upon instantiation, it is passed the timer mode to use.
-Here we use *CTC* mode (Clear Timer on Compare); in this mode the counter is incremented until it reaches a maximum value, then it triggers an interrupt and it clears the counter value back to zero and starts counting up again. 
+`timer` is the instance of `timer::Timer` API for `board::Timer::TIMER1`; upon instantiation, it is passed the timer mode to use, the previously calculated clock prescaler, and the interrupt we want to enable.
 
-`timer.begin()` activates the timer with the provided values for clock prescaler and the maximum counter value, that were calculated initially in the program. These 2 values have been calculated in order for `timer` to generate an interrupt (i.e. call `handler.on_timer()`) every second.
+Here we use *CTC* mode (Clear Timer on Compare); in this mode the counter is incremented until it reaches a maximum value, then it triggers an interrupt and it clears the counter value back to zero and starts counting up again.
+
+To ensure that our handler to get called back when the timer reaches 1 second, we set `timer::TimerInterrupt::OUTPUT_COMPARE_A`, which enables the proper interrupt on this timer: when the counter is reached, an interrupt will occur, the properly registered ISR will be called, and in turn it will call our handler.
+
+Then `timer.begin()` activates the timer with the maximum counter value, that was calculated initially in the program. This value, along with `PRESCALER`, has been calculated in order for `timer` to generate an interrupt (i.e. call `handler.on_timer()`) every second.
 
 Note the infinite loop `while (true);` at the end of `main()`: without it the program would terminate immediately, giving no chance to our timer and handler to operate as expected. What is interesting to see here is that the main code does not do anything besides looping forever: all actual stuff happens asynchronously behind the scenes!
 
@@ -1050,10 +1057,16 @@ Or conversely, you may just need to compare the physical value agains some thres
 
 FastArduino utilities provide several conversion methods between raw and physical quantities, according to raw and physical ranges (known for each sensor), and unit prefix (e.g. kilo, mega, giga, centi, milli...). These methods are `constexpr`, which means that, when provided with constant arguments, they will be evaluated at compile-time and return a value that is itself stored as a constant.
 
-1. `utils::map_physical_to_raw`: although it may seem complicated by its list of arguments, this function is actually pretty simple: TODO explain
+1. `utils::map_physical_to_raw`: although it may seem complicated by its list of arguments, this function is actually pretty simple, as demonstrated in the snippet hereafter:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	static constexpr const int16_t ACCEL_1 = map_physical_to_raw(500, UnitPrefix::MILLI, 2, 15);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this example, we convert the acceleration value 500mg (g is *9.81 m/s/s*) to the equivalent raw value as produced by an MPU-6050 accelerometer, using *+/-2g* range (`2` is the max physical value we can get with this device using this range) where this raw value is stored on `15 bits` (+1 bit for the sign), i.e. `32767` is the raw value returned by the device when the measured acceleration is `+2g`.
 
-TODO snippet
-
-2. `utils::map_raw_to_physical`: TODO
+2. `utils::map_raw_to_physical`: this method does the exact opposite of `utils::map_physical_to_raw` with the same parameters, reversed:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	int16_t rotation = map_raw_to_physical(raw, UnitPrefix::CENTI, 250, 15);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this example, we convert `raw` which is returned by the MPU-6050 gyroscope, using range *+/-250°/s* with `15 bits` precision (+1 bit for the sign), i.e. `32767` is the raw value returned by the device when the measured rotation speed is `+250°/s`. The calculated value is returned in *c°/s* (centi-degrees per second).
 
 In addition to these functions, FastArduino utilities also include the more common `utils::map` and `utils::constrain` which work like their Arduino API equivalent `map()` and `constrain()`.
