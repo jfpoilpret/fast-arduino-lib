@@ -82,7 +82,8 @@ $(document).ready(function(){initNavTree('namespacetimer.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">timer Namespace Reference</div>  </div>
 </div><!--header-->
@@ -129,6 +130,20 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:a6f85b9572e33671db45e5ac8ee3ea097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the mode of operation of a timer.  <a href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a6f85b9572e33671db45e5ac8ee3ea097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98b209585f558b1b52fb14d14f50bdc7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">TimerInterrupt</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a0134b04a942cbc5336958c8cd09b82f3">TimerInterrupt::OVERFLOW</a> = board_traits::TimerInterrupt::OVERFLOW, 
+<br />
+&#160;&#160;<a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a1aac1f38fe13831901945888f2a3998d">TimerInterrupt::OUTPUT_COMPARE_A</a> = board_traits::TimerInterrupt::OUTPUT_COMPARE_A, 
+<br />
+&#160;&#160;<a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a2ec54b766f810d959b45fe0149db994c">TimerInterrupt::OUTPUT_COMPARE_B</a> = board_traits::TimerInterrupt::OUTPUT_COMPARE_B, 
+<br />
+&#160;&#160;<a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a152b06238f6e18dc172a755417314a5a">TimerInterrupt::OUTPUT_COMPARE_C</a> = board_traits::TimerInterrupt::OUTPUT_COMPARE_C, 
+<br />
+&#160;&#160;<a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a59c3ffa1d28f462f0a3a1812cface9d3">TimerInterrupt::INPUT_CAPTURE</a> = board_traits::TimerInterrupt::INPUT_CAPTURE
+<br />
+ }<tr class="memdesc:a98b209585f558b1b52fb14d14f50bdc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the interrupts that can be handled by a timer.  <a href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a98b209585f558b1b52fb14d14f50bdc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17d2af2848409a47612cd961ea27b5a0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0">TimerOutputMode</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a99c8ce56e7ab246445d3b134724428f3">TimerOutputMode::DISCONNECTED</a>, 
 <br />
@@ -141,6 +156,20 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:a17d2af2848409a47612cd961ea27b5a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the "connection" between this timer and specific PWM output pins.  <a href="namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:a17d2af2848409a47612cd961ea27b5a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a908aa72c1bb077bec67565b637350bf4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetimer.html#a908aa72c1bb077bec67565b637350bf4">TimerInputCapture</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacetimer.html#a908aa72c1bb077bec67565b637350bf4ad85243a747ac5537ef0b7adde99c3e98">TimerInputCapture::RISING_EDGE</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacetimer.html#a908aa72c1bb077bec67565b637350bf4a297f5ea19073f4b51715b029f48d5d52">TimerInputCapture::FALLING_EDGE</a>
+<br />
+ }<tr class="memdesc:a908aa72c1bb077bec67565b637350bf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the type of input capture we want for a timer.  <a href="namespacetimer.html#a908aa72c1bb077bec67565b637350bf4">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a908aa72c1bb077bec67565b637350bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a10762dd286296623f6262a801cd925a9"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">TimerInterrupt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacetimer.html#a10762dd286296623f6262a801cd925a9">operator|</a> (<a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">TimerInterrupt</a> i1, <a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">TimerInterrupt</a> i2)</td></tr>
+<tr class="memdesc:a10762dd286296623f6262a801cd925a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combine 2 timer interrupts for use with <code><a class="el" href="classtimer_1_1_timer.html#a443dd5644964229be95917ff0bd774df" title="Set the list of interrupts that must be triggered by this timer. ">Timer.set_interrupts()</a></code>.  <a href="#a10762dd286296623f6262a801cd925a9">More...</a><br /></td></tr>
+<tr class="separator:a10762dd286296623f6262a801cd925a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines all API to manipulate AVR Timers. </p>
@@ -194,7 +223,48 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00081">81</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00148">148</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+
+</div>
+</div>
+<a id="a98b209585f558b1b52fb14d14f50bdc7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98b209585f558b1b52fb14d14f50bdc7">&#9670;&nbsp;</a></span>TimerInterrupt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">timer::TimerInterrupt</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Defines the interrupts that can be handled by a timer. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_timer.html#a443dd5644964229be95917ff0bd774df" title="Set the list of interrupts that must be triggered by this timer. ">Timer::set_interrupts()</a> </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a98b209585f558b1b52fb14d14f50bdc7a0134b04a942cbc5336958c8cd09b82f3"></a>OVERFLOW&#160;</td><td class="fielddoc"><p>This interrupt occurs when the counter overflows it maximum value. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a98b209585f558b1b52fb14d14f50bdc7a1aac1f38fe13831901945888f2a3998d"></a>OUTPUT_COMPARE_A&#160;</td><td class="fielddoc"><p>This interrupt occurs when the counter reached <code>OCRA</code>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a98b209585f558b1b52fb14d14f50bdc7a2ec54b766f810d959b45fe0149db994c"></a>OUTPUT_COMPARE_B&#160;</td><td class="fielddoc"><p>This interrupt occurs when the counter reached <code>OCRB</code>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a98b209585f558b1b52fb14d14f50bdc7a152b06238f6e18dc172a755417314a5a"></a>OUTPUT_COMPARE_C&#160;</td><td class="fielddoc"><p>This interrupt occurs when the counter reached <code>OCRC</code>. </p>
+<p>Note that this interrupt is not supported by all timers. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a98b209585f558b1b52fb14d14f50bdc7a59c3ffa1d28f462f0a3a1812cface9d3"></a>INPUT_CAPTURE&#160;</td><td class="fielddoc"><p>This interrupt occurs during input capture, i.e. </p>
+<p>when a signal (rising or falling edge, according to currently set <code>TimerInputCapture</code>) is detected. Note that this interrupt is not supported by all timers. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00189">189</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -232,7 +302,73 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00121">121</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00223">223</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+
+</div>
+</div>
+<a id="a908aa72c1bb077bec67565b637350bf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a908aa72c1bb077bec67565b637350bf4">&#9670;&nbsp;</a></span>TimerInputCapture</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacetimer.html#a908aa72c1bb077bec67565b637350bf4">timer::TimerInputCapture</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Defines the type of input capture we want for a timer. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a908aa72c1bb077bec67565b637350bf4ad85243a747ac5537ef0b7adde99c3e98"></a>RISING_EDGE&#160;</td><td class="fielddoc"><p>Input capture needed on rising edge of ICP pin. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a908aa72c1bb077bec67565b637350bf4a297f5ea19073f4b51715b029f48d5d52"></a>FALLING_EDGE&#160;</td><td class="fielddoc"><p>Input capture needed on falling edge of ICP pin. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00247">247</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a10762dd286296623f6262a801cd925a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10762dd286296623f6262a801cd925a9">&#9670;&nbsp;</a></span>operator|()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">TimerInterrupt</a> timer::operator| </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">TimerInterrupt</a>&#160;</td>
+          <td class="paramname"><em>i1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7">TimerInterrupt</a>&#160;</td>
+          <td class="paramname"><em>i2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Combine 2 timer interrupts for use with <code><a class="el" href="classtimer_1_1_timer.html#a443dd5644964229be95917ff0bd774df" title="Set the list of interrupts that must be triggered by this timer. ">Timer.set_interrupts()</a></code>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_timer.html#a443dd5644964229be95917ff0bd774df" title="Set the list of interrupts that must be triggered by this timer. ">Timer.set_interrupts()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00215">215</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>

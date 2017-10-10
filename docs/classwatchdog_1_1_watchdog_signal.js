@@ -13,6 +13,5 @@ var classwatchdog_1_1_watchdog_signal =
       [ "TO_8s", "classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a20bf5a68c13809216a5ec3d321a7a7b2", null ]
     ] ],
     [ "begin", "classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a", null ],
-    [ "end", "classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab", null ],
-    [ "_begin", "classwatchdog_1_1_watchdog_signal.html#a80fd64516d5557eb92dce214c3693817", null ]
+    [ "end", "classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab", null ]
 ];

@@ -83,66 +83,176 @@ $(document).ready(function(){initNavTree('classwatchdog_1_1_watchdog_signal.html
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classwatchdog_1_1_watchdog_signal-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">watchdog::WatchdogSignal Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Simple API to handle watchdog signals.  
+ <a href="classwatchdog_1_1_watchdog_signal.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="watchdog_8h_source.html">fastarduino/watchdog.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for watchdog::WatchdogSignal:</div>
 <div class="dyncontent">
 <div class="center"><img src="classwatchdog_1_1_watchdog_signal__inherit__graph.png" border="0" usemap="#watchdog_1_1_watchdog_signal_inherit__map" alt="Inheritance graph"/></div>
 <map name="watchdog_1_1_watchdog_signal_inherit__map" id="watchdog_1_1_watchdog_signal_inherit__map">
-<area shape="rect" id="node2" href="classwatchdog_1_1_watchdog.html" title="watchdog::Watchdog" alt="" coords="23,80,169,107"/>
+<area shape="rect" id="node2" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. " alt="" coords="23,80,169,107"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ab781ec34d67a0ad552cf76a33e5f2353"><td class="memItemLeft" align="right" valign="top"><a id="ab781ec34d67a0ad552cf76a33e5f2353"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>TimeOut</b> : uint8_t { <br />
-&#160;&#160;<b>TO_16ms</b> = 0, 
+<tr class="memitem:ab781ec34d67a0ad552cf76a33e5f2353"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">TimeOut</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a> = 0, 
 <br />
-&#160;&#160;<b>TO_32ms</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a5c127bc3e865ef5b3f22a5a89f088bfa">TimeOut::TO_32ms</a>, 
 <br />
-&#160;&#160;<b>TO_64ms</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353aa242d79167431204d86c7aa65a03c14a">TimeOut::TO_64ms</a>, 
 <br />
-&#160;&#160;<b>TO_125ms</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353ad7219a43d3bfae8995c16e4cd3188fe4">TimeOut::TO_125ms</a>, 
 <br />
-&#160;&#160;<b>TO_250ms</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353ae313983d43e7304bffbd4d82cdb9ecfc">TimeOut::TO_250ms</a>, 
 <br />
-&#160;&#160;<b>TO_500ms</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353afb811591cc29f5e01ef24eeb560868b1">TimeOut::TO_500ms</a>, 
 <br />
-&#160;&#160;<b>TO_1s</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353abf2e5dd4acceb83564e09d08753331fc">TimeOut::TO_1s</a>, 
 <br />
-&#160;&#160;<b>TO_2s</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353adc12ed02078a2edaa012491658089e28">TimeOut::TO_2s</a>, 
 <br />
-&#160;&#160;<b>TO_4s</b>, 
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353af043bc9855a6e47ea123ff80769e7870">TimeOut::TO_4s</a>, 
 <br />
-&#160;&#160;<b>TO_8s</b>
+&#160;&#160;<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a20bf5a68c13809216a5ec3d321a7a7b2">TimeOut::TO_8s</a>
 <br />
- }</td></tr>
+ }<tr class="memdesc:ab781ec34d67a0ad552cf76a33e5f2353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the watchdog timeout period; watchdog interrupts will be triggered at the selected period.  <a href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">More...</a><br /></td></tr>
+</td></tr>
 <tr class="separator:ab781ec34d67a0ad552cf76a33e5f2353"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3040c8929991e081f02619ed89513b5a"><td class="memItemLeft" align="right" valign="top"><a id="a3040c8929991e081f02619ed89513b5a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (TimeOut timeout=TimeOut::TO_16ms)</td></tr>
+<tr class="memitem:a3040c8929991e081f02619ed89513b5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">begin</a> (<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">TimeOut</a> timeout=<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</td></tr>
+<tr class="memdesc:a3040c8929991e081f02619ed89513b5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the watchdog timer with the given <code>timeout</code> period.  <a href="#a3040c8929991e081f02619ed89513b5a">More...</a><br /></td></tr>
 <tr class="separator:a3040c8929991e081f02619ed89513b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a080a9c4a33228be0eb5584fb64eb47ab"><td class="memItemLeft" align="right" valign="top"><a id="a080a9c4a33228be0eb5584fb64eb47ab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
+<tr class="memitem:a080a9c4a33228be0eb5584fb64eb47ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">end</a> ()</td></tr>
+<tr class="memdesc:a080a9c4a33228be0eb5584fb64eb47ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop this watchdog timer.  <a href="#a080a9c4a33228be0eb5584fb64eb47ab">More...</a><br /></td></tr>
 <tr class="separator:a080a9c4a33228be0eb5584fb64eb47ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a80fd64516d5557eb92dce214c3693817"><td class="memItemLeft" align="right" valign="top"><a id="a80fd64516d5557eb92dce214c3693817"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>_begin</b> (uint8_t config) INLINE</td></tr>
-<tr class="separator:a80fd64516d5557eb92dce214c3693817"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00037">37</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<div class="textblock"><p>Simple API to handle watchdog signals. </p>
+<p>In this mode, the AVR watchdog timer is used to wake up the MCU at a specific timer period, in order to leave a low-power sleep mode, to e.g. perform periodic tasks. With this API, you do not need to register an ISR callback if you do not need one; in this situation you need to register an empty ISR with <code><a class="el" href="watchdog_8h.html#adb4cc81538efc2536ee6e1d06ae4b92f" title="Register an empty ISR (interrupt Service Routine) for a watchdog::WatchdogSignal. ...">REGISTER_WATCHDOG_ISR_EMPTY()</a></code> macro. If you want to register a callback on every watchdog timer tick, then you can use either <code>REGISTER_WATCHDOG_ISR_FUNCTION</code> or <code>REGISTER_WATCHDOG_ISR_METHOD</code> macros. </p>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00082">82</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="ab781ec34d67a0ad552cf76a33e5f2353"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab781ec34d67a0ad552cf76a33e5f2353">&#9670;&nbsp;</a></span>TimeOut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">watchdog::WatchdogSignal::TimeOut</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Defines the watchdog timeout period; watchdog interrupts will be triggered at the selected period. </p>
+<p>The MCU will be awakened at this period too. Note that watchdog timeout period is not very accurate, you would normally not use for real-time counting. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c"></a>TO_16ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 16 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353a5c127bc3e865ef5b3f22a5a89f088bfa"></a>TO_32ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 32 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353aa242d79167431204d86c7aa65a03c14a"></a>TO_64ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 64 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353ad7219a43d3bfae8995c16e4cd3188fe4"></a>TO_125ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 125 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353ae313983d43e7304bffbd4d82cdb9ecfc"></a>TO_250ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 250 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353afb811591cc29f5e01ef24eeb560868b1"></a>TO_500ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 500 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353abf2e5dd4acceb83564e09d08753331fc"></a>TO_1s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 1 second. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353adc12ed02078a2edaa012491658089e28"></a>TO_2s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 2 seconds. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353af043bc9855a6e47ea123ff80769e7870"></a>TO_4s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 4 seconds. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab781ec34d67a0ad552cf76a33e5f2353a20bf5a68c13809216a5ec3d321a7a7b2"></a>TO_8s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 8 seconds. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00092">92</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3040c8929991e081f02619ed89513b5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3040c8929991e081f02619ed89513b5a">&#9670;&nbsp;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void watchdog::WatchdogSignal::begin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">TimeOut</a>&#160;</td>
+          <td class="paramname"><em>timeout</em> = <code><a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a></code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start the watchdog timer with the given <code>timeout</code> period. </p>
+<p>From now on, watchdog interrupts get generated at <code>timeout</code> period, and the MCU gets awakened at this period too, if sleeping. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeout</td><td>the watchdog timeout period </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8cpp_source.html#l00021">21</a> of file <a class="el" href="watchdog_8cpp_source.html">watchdog.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a080a9c4a33228be0eb5584fb64eb47ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a080a9c4a33228be0eb5584fb64eb47ab">&#9670;&nbsp;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void watchdog::WatchdogSignal::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stop this watchdog timer. </p>
+<p>No more watchdog interrupts get triggered. </p>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00127">127</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>fastarduino/<a class="el" href="watchdog_8h_source.html">watchdog.h</a></li>
 <li>fastarduino/<a class="el" href="watchdog_8cpp_source.html">watchdog.cpp</a></li>
 </ul>
@@ -151,7 +261,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>_begin</b> (uint8_t c
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>watchdog</b></li><li class="navelem"><a class="el" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a></li>
+    <li class="navelem"><a class="el" href="namespacewatchdog.html">watchdog</a></li><li class="navelem"><a class="el" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

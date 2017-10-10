@@ -2,6 +2,7 @@ var structtimer_1_1_calculator =
 [
     [ "TIMER_TYPE", "structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0", null ],
     [ "TIMER_PRESCALER", "structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8", null ],
+    [ "tick_prescaler", "structtimer_1_1_calculator.html#a3af87e51b4091606d74dc06fd42a5203", null ],
     [ "CTC_prescaler", "structtimer_1_1_calculator.html#a493755c4f41b27f11b37657d378341a9", null ],
     [ "CTC_frequency", "structtimer_1_1_calculator.html#a4892832813ae14347bc4299d779a0331", null ],
     [ "CTC_counter", "structtimer_1_1_calculator.html#a44116fbe0411b953c2337d1ad3709f1c", null ],

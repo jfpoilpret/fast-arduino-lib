@@ -48,5 +48,5 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "uart_commons.h", "uart__commons_8h.html", "uart__commons_8h" ],
     [ "utilities.h", "utilities_8h.html", "utilities_8h" ],
     [ "watchdog.cpp", "watchdog_8cpp_source.html", null ],
-    [ "watchdog.h", "watchdog_8h_source.html", null ]
+    [ "watchdog.h", "watchdog_8h.html", "watchdog_8h" ]
 ];

@@ -8,5 +8,6 @@ var namespaces =
     [ "streams", "namespacestreams.html", null ],
     [ "time", "namespacetime.html", null ],
     [ "timer", "namespacetimer.html", null ],
-    [ "utils", "namespaceutils.html", null ]
+    [ "utils", "namespaceutils.html", null ],
+    [ "watchdog", "namespacewatchdog.html", null ]
 ];

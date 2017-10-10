@@ -11,7 +11,7 @@
 <area shape="rect" id="node13" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="1053,169,1201,196"/>
 <area shape="rect" id="node8" href="$events_8cpp_source.html" title="fastarduino/events.cpp" alt="" coords="600,251,755,278"/>
 <area shape="rect" id="node10" href="$scheduler_8h_source.html" title="fastarduino/scheduler.h" alt="" coords="779,251,936,278"/>
-<area shape="rect" id="node11" href="$watchdog_8h_source.html" title="fastarduino/watchdog.h" alt="" coords="419,251,576,278"/>
+<area shape="rect" id="node11" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="419,251,576,278"/>
 <area shape="rect" id="node14" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="960,251,1112,278"/>
 <area shape="rect" id="node16" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="1136,251,1299,278"/>
 <area shape="rect" id="node17" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="1323,251,1445,278"/>

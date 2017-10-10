@@ -84,10 +84,13 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 <h3><a id="index__"></a>- _ -</h3><ul>
 <li>_begin()
-: <a class="el" href="classtimer_1_1_timer.html#a796c372ae7f28668e621833ba278bbc0">timer::Timer&lt; TIMER &gt;</a>
+: <a class="el" href="classtimer_1_1_timer.html#a8f5c8ebeaffbc7fef49340d2b9ed3de6">timer::Timer&lt; TIMER &gt;</a>
 </li>
 <li>_end()
 : <a class="el" href="classtimer_1_1_timer.html#a0726839c082f295de3b1082d71db1a17">timer::Timer&lt; TIMER &gt;</a>
+</li>
+<li>_reset()
+: <a class="el" href="classtimer_1_1_timer.html#a2cdfa08e0288ce42eaac0a07cf395ec2">timer::Timer&lt; TIMER &gt;</a>
 </li>
 <li>_resume()
 : <a class="el" href="classtimer_1_1_timer.html#ae7916fa40c6ce244c2db387da0c0a455">timer::Timer&lt; TIMER &gt;</a>
@@ -120,7 +123,9 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
 , <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a29a4dfaecb6e1e2828864efc46f111ec">serial::hard::UARX&lt; USART &gt;</a>
 , <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#ad02715895d9cafefc1a28df302ce6049">serial::hard::UATX&lt; USART &gt;</a>
-, <a class="el" href="classtimer_1_1_timer.html#afaed74b66a7f4aa9da27395124b85832">timer::Timer&lt; TIMER &gt;</a>
+, <a class="el" href="classtimer_1_1_timer.html#a6b51aad9992b247ed05b88c83ec6d9bf">timer::Timer&lt; TIMER &gt;</a>
+, <a class="el" href="classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765">watchdog::Watchdog</a>
+, <a class="el" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">watchdog::WatchdogSignal</a>
 </li>
 <li>broadcast()
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
@@ -152,6 +157,9 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>data_overrun()
 : <a class="el" href="classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa">serial::UARTErrors</a>
 </li>
+<li>delay()
+: <a class="el" href="classwatchdog_1_1_watchdog.html#af47f9fc304d16f777fc85d13f7b6826a">watchdog::Watchdog</a>
+</li>
 </ul>
 
 
@@ -161,6 +169,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a92599733d6550aa15962e88fd6c7e1ae">serial::hard::UARX&lt; USART &gt;</a>
 , <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#af728d825af83cf230f373b85c69cf8b6">serial::hard::UATX&lt; USART &gt;</a>
 , <a class="el" href="classtimer_1_1_timer.html#a043781de60f3603f94866759271e7c02">timer::Timer&lt; TIMER &gt;</a>
+, <a class="el" href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">watchdog::WatchdogSignal</a>
 </li>
 </ul>
 
@@ -236,9 +245,6 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>get_PIN()
 : <a class="el" href="classgpio_1_1_fast_port.html#a57a77753702bf9d527a3320b38db0a8b">gpio::FastPort&lt; PORT_ &gt;</a>
 </li>
-<li>get_pin()
-: <a class="el" href="classgpio_1_1_fast_port.html#abf6495c92e849cb2432eded57b0347f9">gpio::FastPort&lt; PORT_ &gt;</a>
-</li>
 <li>get_PORT()
 : <a class="el" href="classgpio_1_1_fast_masked_port.html#abd51d7cf6eda99ba1ee37e84ff613146">gpio::FastMaskedPort&lt; PORT_ &gt;</a>
 , <a class="el" href="classgpio_1_1_fast_port.html#a2d17c01a12e2b5648f0956c36164e4c3">gpio::FastPort&lt; PORT_ &gt;</a>
@@ -281,6 +287,13 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 </ul>
 
 
+<h3><a id="index_m"></a>- m -</h3><ul>
+<li>millis()
+: <a class="el" href="classwatchdog_1_1_watchdog.html#a01cdedd19e0374266cdbf431f39897fb">watchdog::Watchdog</a>
+</li>
+</ul>
+
+
 <h3><a id="index_n"></a>- n -</h3><ul>
 <li>NRF24L01()
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a98152bba08b4fe4bf11259ec01b32b99">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
@@ -301,13 +314,13 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="classstreams_1_1_output_buffer.html#aa13694bb814ae1b5677be89749917255">streams::OutputBuffer</a>
 </li>
 <li>operator&lt;&lt;()
-: <a class="el" href="classstreams_1_1_formatted_output.html#ab82ee2f56e57f6fbf5671de2ab9d6b9c">streams::FormattedOutput&lt; STREAM &gt;</a>
+: <a class="el" href="classstreams_1_1_formatted_output.html#aa9f4045b324aba07b5156aab612653a0">streams::FormattedOutput&lt; STREAM &gt;</a>
 </li>
 <li>operator=()
 : <a class="el" href="structtime_1_1_r_t_t_time.html#a3e7fbc5e09298b94ab381e432f0ecd7d">time::RTTTime</a>
 </li>
 <li>operator&gt;&gt;()
-: <a class="el" href="classstreams_1_1_formatted_input.html#a513eccaed6a021d79902ce7720da087a">streams::FormattedInput&lt; STREAM &gt;</a>
+: <a class="el" href="classstreams_1_1_formatted_input.html#a4d8bc328f8cf5e2b5e049284206c2e58">streams::FormattedInput&lt; STREAM &gt;</a>
 </li>
 <li>out()
 : <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#adc319ffda93cb20a6b0da045df66df22">serial::hard::UATX&lt; USART &gt;</a>
@@ -345,7 +358,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="classstreams_1_1_output_buffer.html#a9e56188860122ecde913568da279dfbd">streams::OutputBuffer</a>
 </li>
 <li>puts()
-: <a class="el" href="classstreams_1_1_formatted_output.html#aa81741006a95cb454f1f9e4fc90adf6a">streams::FormattedOutput&lt; STREAM &gt;</a>
+: <a class="el" href="classstreams_1_1_formatted_output.html#a0dc59eba01fed96bd851b5a801865f21">streams::FormattedOutput&lt; STREAM &gt;</a>
 , <a class="el" href="classstreams_1_1_output_buffer.html#a28ddce2ee7cc838d7cbcb883cb895737">streams::OutputBuffer</a>
 </li>
 <li>PWM_ICR_counter()
@@ -377,6 +390,12 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>register_handler()
 : <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#aced1af3784376b18a1372ad1821d16ac">serial::hard::UARX&lt; USART &gt;</a>
 , <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a5357297f58870fc8e71dd70a1e79ada1">serial::hard::UATX&lt; USART &gt;</a>
+</li>
+<li>register_watchdog_handler()
+: <a class="el" href="classwatchdog_1_1_watchdog.html#a60f58af63c79fbbeb90760f76368cc0f">watchdog::Watchdog</a>
+</li>
+<li>reset()
+: <a class="el" href="classtimer_1_1_timer.html#ad4c9349d276125ce23eb3150700885cc">timer::Timer&lt; TIMER &gt;</a>
 </li>
 <li>resume()
 : <a class="el" href="classtimer_1_1_timer.html#adfccf54410b82ddce0cb8c15312cde70">timer::Timer&lt; TIMER &gt;</a>
@@ -417,6 +436,12 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>set_duty()
 : <a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0">analog::PWMOutput&lt; PIN, PULSED &gt;</a>
 </li>
+<li>set_input_capture()
+: <a class="el" href="classtimer_1_1_timer.html#a4bbd26c12a3b176a7c266602710911ab">timer::Timer&lt; TIMER &gt;</a>
+</li>
+<li>set_interrupts()
+: <a class="el" href="classtimer_1_1_timer.html#a443dd5644964229be95917ff0bd774df">timer::Timer&lt; TIMER &gt;</a>
+</li>
 <li>set_max()
 : <a class="el" href="classtimer_1_1_timer.html#ad1918f31dd4db7bea9517237c5531ee8">timer::Timer&lt; TIMER &gt;</a>
 </li>
@@ -439,6 +464,9 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="classgpio_1_1_fast_masked_port.html#a83c759e9e3dc2a451accc00f19ffda55">gpio::FastMaskedPort&lt; PORT_ &gt;</a>
 , <a class="el" href="classgpio_1_1_fast_port.html#a910c81c3668585199f4d1dbd669438a8">gpio::FastPort&lt; PORT_ &gt;</a>
 </li>
+<li>set_prescaler()
+: <a class="el" href="classtimer_1_1_timer.html#a28b3c60424e01bc559f09ebf091fcb5a">timer::Timer&lt; TIMER &gt;</a>
+</li>
 <li>set_timer_mode()
 : <a class="el" href="classtimer_1_1_timer.html#a497a75567ed3d02f6a34ee2edb3c4f9a">timer::Timer&lt; TIMER &gt;</a>
 </li>
@@ -455,8 +483,11 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
+<li>tick_prescaler()
+: <a class="el" href="structtimer_1_1_calculator.html#a3af87e51b4091606d74dc06fd42a5203">timer::Calculator&lt; TIMER &gt;</a>
+</li>
 <li>Timer()
-: <a class="el" href="classtimer_1_1_timer.html#a78d5018d575e2001f859b41934eac32a">timer::Timer&lt; TIMER &gt;</a>
+: <a class="el" href="classtimer_1_1_timer.html#af49a72d954cc17901d92d04d818f578c">timer::Timer&lt; TIMER &gt;</a>
 </li>
 <li>toggle()
 : <a class="el" href="classgpio_1_1_fast_pin.html#aa163ea832ed19672f76e8ae270f0d64d">gpio::FastPin&lt; PORT_, BIT_ &gt;</a>
@@ -490,8 +521,11 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 
 <h3><a id="index_w"></a>- w -</h3><ul>
+<li>Watchdog()
+: <a class="el" href="classwatchdog_1_1_watchdog.html#a5b6545920c68ee7620a74d603568c88e">watchdog::Watchdog</a>
+</li>
 <li>width()
-: <a class="el" href="classstreams_1_1_format_base.html#afb85ec474bb16c0919cb1fe54783397d">streams::FormatBase</a>
+: <a class="el" href="classstreams_1_1_format_base.html#a4e964b6f257427bd25281bd77e1580ae">streams::FormatBase</a>
 </li>
 </ul>
 </div><!-- contents -->

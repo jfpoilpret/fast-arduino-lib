@@ -72,8 +72,5 @@ var annotated_dup =
     [ "streams", "namespacestreams.html", "namespacestreams" ],
     [ "time", "namespacetime.html", "namespacetime" ],
     [ "timer", "namespacetimer.html", "namespacetimer" ],
-    [ "watchdog", null, [
-      [ "Watchdog", "classwatchdog_1_1_watchdog.html", "classwatchdog_1_1_watchdog" ],
-      [ "WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", "classwatchdog_1_1_watchdog_signal" ]
-    ] ]
+    [ "watchdog", "namespacewatchdog.html", "namespacewatchdog" ]
 ];
