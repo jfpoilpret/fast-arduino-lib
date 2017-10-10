@@ -53,12 +53,41 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
 REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 /**
- * Register an enpty ISR (interrupt Service Routine) for a timer::Timer.
+ * Register an empty ISR (interrupt Service Routine) for a timer::Timer.
  * This may be needed when using timer CTC mode but when you don't need any
  * callback.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
 #define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
+
+/**
+ * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
+ * of a timer::Timer.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
+ * is triggered; this must be a proper PTMF (pointer to member function).
+ */
+#define REGISTER_TIMER_OVERFLOW_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
+REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
+
+/**
+ * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
+ * of a timer::Timer.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param CALLBACK the function that will be called when the interrupt is
+ * triggered
+ */
+#define REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
+REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)
+
+/**
+ * Register an empty ISR (Interrupt Service Routine) for the Counter Overflow
+ * of a timer::Timer.
+ * This would normally not be needed.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ */
+#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _OVF_vect));
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Input Capture
@@ -94,7 +123,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
 }
 
 /**
- * Register an enpty ISR (Interrupt Service Routine) for the Input Capture
+ * Register an empty ISR (Interrupt Service Routine) for the Input Capture
  * of a timer::Timer.
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
