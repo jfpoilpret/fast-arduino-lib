@@ -165,7 +165,10 @@ namespace watchdog
 		 */
 		Watchdog(containers::Queue<events::Event>& event_queue)
 			:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue) {}
+
+		/// @cond notdocumented
 		Watchdog(const Watchdog&) = delete;
+		/// @endcond
 
 		/**
 		 * Register this watchdog instance with the matching ISR that should 
