@@ -17,8 +17,8 @@ Basics:
 7. [utilities](@ref utils)
 
 Advanced:
-1. watchdog
-2. interrupts
+1. [watchdog](@ref watchdog)
+2. [interrupts](@ref interrupts)
 3. events, scheduler
 4. power
 5. SPI devices management
@@ -115,9 +115,9 @@ void setup()
 void loop()
 {
     digitalWrite(LED_BUILTIN, HIGH);
-    delay(1000);
+    delay(500);
     digitalWrite(LED_BUILTIN, LOW);
-    delay(1000);
+    delay(500);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Granted that the latter code seems simpler to write! However, it is also simpler to write it wrong, build and upload it to Arduino and only see it not working:
@@ -1070,3 +1070,84 @@ In this example, we convert the acceleration value 500mg (g is *9.81 m/s/s*) to 
 In this example, we convert `raw` which is returned by the MPU-6050 gyroscope, using range *+/-250°/s* with `15 bits` precision (+1 bit for the sign), i.e. `32767` is the raw value returned by the device when the measured rotation speed is `+250°/s`. The calculated value is returned in *c°/s* (centi-degrees per second).
 
 In addition to these functions, FastArduino utilities also include the more common `utils::map` and `utils::constrain` which work like their Arduino API equivalent `map()` and `constrain()`.
+
+
+@anchor watchdog Advanced: Watchdog
+-----------------------------------
+
+In general, a watchdog is a device (or part of a device) that is used to frequently check that a system is not hanging. AVR MCU include such a device and this can be programmed to other purposes than checking the system is alive, e.g. as a simple timer with low-power consumption. This is in that purpose that FastArduino defines a specific Watchdog API.
+
+FastArduino defines 2 watchdog classes. The first one, `WatchdogSignal` allows you to generate watchdog timer interrupts at a given period.
+The following example is yet another way to blink a LED:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/power.h>
+#include <fastarduino/watchdog.h>
+
+// Define vectors we need in the example
+REGISTER_WATCHDOG_ISR_EMPTY()
+
+int main() __attribute__((OS_main));
+int main()
+{
+	board::init();
+	sei();
+
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+
+	watchdog::WatchdogSignal watchdog;
+	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_500ms);
+	
+	while (true)
+	{
+		led.toggle();
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
+	}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this example, we use `watchdog` API but also `power` API in order to reduce power-consumption.
+
+As we use `WatchdogSignal`, we need to register an ISR, however we do not need any callback, hecen we just register an empty ISR.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_WATCHDOG_ISR_EMPTY()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then we have the usual `main()` function which, after defining `led` output pin, starts the watchdog timer:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	watchdog::WatchdogSignal watchdog;
+	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_500ms);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here we use a 500ms timeout period, which means our sleeping code will be awakened every 500ms.
+
+The infinite loop just toggles `led` pin level and goes to sleep:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	while (true)
+	{
+		led.toggle();
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
+	}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+As explained [later](TODO), `power::Power::sleep(board::SleepMode::POWER_DOWN)` just puts the MCU to sleep until some external interrupts wake it up; in our example, that interrupt is the watchdog timeout interrupt. 
+
+The size of this example is not much bigger than the first example of this tutorial:
+|           | FastArduino |
+|-----------|-------------|
+| code size | 262 bytes   |
+| data size | 0 byte      |
+
+FastArduino defines another class, `Watchdog`. This class allows to use the AVR watchdog timer as a clock for events generation. This will be demonstrated when [events scheduling](TODO) is described.
+
+
+@anchor interrupts Advanced: Interrupts
+---------------------------------------
+
+TODO ISR and interrupts in AVR brief intro
+
+TODO refer to some previous examples REGISTER macro and register_handler
+
+TODO general interrupts API/macros and naming conventions for macros
+
+TODO specific API macros
+
+TODO table of all REGISTER macros
+
