@@ -74,29 +74,29 @@ namespace board
 	enum class DigitalPin: uint8_t
 	{
 		/** Pin PA0 (D0) */
-		D0_PA0 = 0,			// PA0
+		D0_PA0 = 0,
 		/** Pin PA1 (D1) */
-		D1_PA1,				// PA1
+		D1_PA1,
 		/** Pin PA2 (D2) */
-		D2_PA2,				// PA2
+		D2_PA2,
 		/** Pin PA3 (D3) */
-		D3_PA3,				// PA3
+		D3_PA3,
 		/** Pin PA4 (D4) */
-		D4_PA4,				// PA4
+		D4_PA4,
 		/** Pin PA5 (D5) */
-		D5_PA5,				// PA5
+		D5_PA5,
 		/** Pin PA6 (D6) */
-		D6_PA6,				// PA6
+		D6_PA6,
 		/** Pin PA6 (D7) */
-		D7_PA7,				// PA7
+		D7_PA7,
 		/** Pin PB0 (D8) */
-		D8_PB0,				// PB0
+		D8_PB0,
 		/** Pin PB1 (D9) */
-		D9_PB1,				// PB1
+		D9_PB1,
 		/** Pin PB2 (D10) */
-		D10_PB2,			// PB2
+		D10_PB2,
 		/** Shortcut for LED pin, arbitrarily chosen to be D7 */
-		LED = DigitalPin::D7_PA7,
+		LED = D7_PA7,
 		// FastArduino internal: DO NOT USE
 		NONE = 0xFF
 	};
@@ -187,7 +187,7 @@ namespace board
 	 */
 	namespace ExternalInterruptPin
 	{
-		constexpr const DigitalPin D10_PB2_EXT0 = DigitalPin::D10_PB2;		// PB2
+		constexpr const DigitalPin D10_PB2_EXT0 = DigitalPin::D10_PB2;
 	};
 
 	/**

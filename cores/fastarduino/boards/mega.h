@@ -93,147 +93,287 @@ namespace board
 	enum class DigitalPin: uint8_t
 	{
 		/** Pin PE0 (D0/RX0 on Arduino MEGA) */
-		D0_PE0 = 0,	// PE0/RX0
+		D0_PE0 = 0,
+		/** Pin PE0 (D0/RX0 on Arduino MEGA) */
+		D0 = D0_PE0,
 		/** Pin PE1 (D1/TX0 on Arduino MEGA) */
-		D1_PE1,		// PE1/TX0
+		D1_PE1,
+		/** Pin PE1 (D1/TX0 on Arduino MEGA) */
+		D1 = D1_PE1,
 		/** Pin PE4 (D3 on Arduino MEGA) */
-		D2_PE4,		// PE4
+		D2_PE4,
+		/** Pin PE4 (D3 on Arduino MEGA) */
+		D2 = D2_PE4,
 		/** Pin PE5 (D3 on Arduino MEGA) */
-		D3_PE5,		// PE5
+		D3_PE5,
+		/** Pin PE5 (D3 on Arduino MEGA) */
+		D3 = D3_PE5,
 		/** Pin PG5 (D4 on Arduino MEGA) */
-		D4_PG5,		// PG5
+		D4_PG5,
+		/** Pin PG5 (D4 on Arduino MEGA) */
+		D4 = D4_PG5,
 		/** Pin PE3 (D5 on Arduino MEGA) */
-		D5_PE3,		// PE3
+		D5_PE3,
+		/** Pin PE3 (D5 on Arduino MEGA) */
+		D5 = D5_PE3,
 		/** Pin PH3 (D6 on Arduino MEGA) */
-		D6_PH3,		// PH3
+		D6_PH3,
+		/** Pin PH3 (D6 on Arduino MEGA) */
+		D6 = D6_PH3,
 		/** Pin PH4 (D7 on Arduino MEGA) */
-		D7_PH4,		// PH4
+		D7_PH4,
+		/** Pin PH4 (D7 on Arduino MEGA) */
+		D7 = D7_PH4,
 		/** Pin PH5 (D8 on Arduino MEGA) */
-		D8_PH5,		// PH5
+		D8_PH5,
+		/** Pin PH5 (D8 on Arduino MEGA) */
+		D8 = D8_PH5,
 		/** Pin PH6 (D9 on Arduino MEGA) */
-		D9_PH6,		// PH6
+		D9_PH6,
+		/** Pin PH6 (D9 on Arduino MEGA) */
+		D9 = D9_PH6,
 		/** Pin PB4 (D10 on Arduino MEGA) */
-		D10_PB4,	// PB4
+		D10_PB4,
+		/** Pin PB4 (D10 on Arduino MEGA) */
+		D10 = D10_PB4,
 		/** Pin PB5 (D11 on Arduino MEGA) */
-		D11_PB5,	// PB5
+		D11_PB5,
+		/** Pin PB5 (D11 on Arduino MEGA) */
+		D11 = D11_PB5,
 		/** Pin PB6 (D12 on Arduino MEGA) */
-		D12_PB6,	// PB6
+		D12_PB6,
+		/** Pin PB6 (D12 on Arduino MEGA) */
+		D12 = D12_PB6,
 		/** Pin PB7 (D13 on Arduino MEGA) */
-		D13_PB7,	// PB7
+		D13_PB7,
+		/** Pin PB7 (D13 on Arduino MEGA) */
+		D13 = D13_PB7,
 		/** Pin PJ1 (D14/TX3 on Arduino MEGA) */
-		D14_PJ1,	// PJ1/TX3
+		D14_PJ1,
+		/** Pin PJ1 (D14/TX3 on Arduino MEGA) */
+		D14 = D14_PJ1,
 		/** Pin PJ0 (D15/RX3 on Arduino MEGA) */
-		D15_PJ0,	// PJ0/RX3
+		D15_PJ0,
+		/** Pin PJ0 (D15/RX3 on Arduino MEGA) */
+		D15 = D15_PJ0,
 		/** Pin PH1 (D16 /TX2 on Arduino MEGA) */
-		D16_PH1,	// PH1/TX2
+		D16_PH1,
+		/** Pin PH1 (D16 /TX2 on Arduino MEGA) */
+		D16 = D16_PH1,
 		/** Pin PH0 (D17 /RX2 on Arduino MEGA) */
-		D17_PH0,	// PH0/RX2
+		D17_PH0,
+		/** Pin PH0 (D17 /RX2 on Arduino MEGA) */
+		D17 = D17_PH0,
 		/** Pin PD3 (D18 /TX1 on Arduino MEGA) */
-		D18_PD3,	// PD3/TX1
+		D18_PD3,
+		/** Pin PD3 (D18 /TX1 on Arduino MEGA) */
+		D18 = D18_PD3,
 		/** Pin PD2 (D19 /RX1 on Arduino MEGA) */
-		D19_PD2,	// PD2/RX1
+		D19_PD2,
+		/** Pin PD2 (D19 /RX1 on Arduino MEGA) */
+		D19 = D19_PD2,
 		/** Pin PD1 (D20 /SDA on Arduino MEGA) */
-		D20_PD1,	// PD1/SDA
+		D20_PD1,
+		/** Pin PD1 (D20 /SDA on Arduino MEGA) */
+		D20 = D20_PD1,
 		/** Pin PD0 (D21 /SCL on Arduino MEGA) */
-		D21_PD0,	// PD0/SCL
+		D21_PD0,
+		/** Pin PD0 (D21 /SCL on Arduino MEGA) */
+		D21 = D21_PD0,
 		/** Pin PA0 (D22 on Arduino MEGA) */
-		D22_PA0,	// PA0
+		D22_PA0,
+		/** Pin PA0 (D22 on Arduino MEGA) */
+		D22 = D22_PA0,
 		/** Pin PA1 (D23 on Arduino MEGA) */
-		D23_PA1,	// PA1
+		D23_PA1,
+		/** Pin PA1 (D23 on Arduino MEGA) */
+		D23 = D23_PA1,
 		/** Pin PA2 (D24 on Arduino MEGA) */
-		D24_PA2,	// PA2
+		D24_PA2,
+		/** Pin PA2 (D24 on Arduino MEGA) */
+		D24 = D24_PA2,
 		/** Pin PA3 (D25 on Arduino MEGA) */
-		D25_PA3,	// PA3
+		D25_PA3,
+		/** Pin PA3 (D25 on Arduino MEGA) */
+		D25 = D25_PA3,
 		/** Pin PA4 (D26 on Arduino MEGA) */
-		D26_PA4,	// PA4
+		D26_PA4,
+		/** Pin PA4 (D26 on Arduino MEGA) */
+		D26 = D26_PA4,
 		/** Pin PA5 (D27 on Arduino MEGA) */
-		D27_PA5,	// PA5
+		D27_PA5,
+		/** Pin PA5 (D27 on Arduino MEGA) */
+		D27 = D27_PA5,
 		/** Pin PA6 (D28 on Arduino MEGA) */
-		D28_PA6,	// PA6
+		D28_PA6,
+		/** Pin PA6 (D28 on Arduino MEGA) */
+		D28 = D28_PA6,
 		/** Pin PA7 (D29 on Arduino MEGA) */
-		D29_PA7,	// PA7
+		D29_PA7,
+		/** Pin PA7 (D29 on Arduino MEGA) */
+		D29 = D29_PA7,
 		/** Pin PC7 (D30 on Arduino MEGA) */
-		D30_PC7,	// PC7
+		D30_PC7,
+		/** Pin PC7 (D30 on Arduino MEGA) */
+		D30 = D30_PC7,
 		/** Pin PC6 (D31 on Arduino MEGA) */
-		D31_PC6,	// PC6
+		D31_PC6,
+		/** Pin PC6 (D31 on Arduino MEGA) */
+		D31 = D31_PC6,
 		/** Pin PC5 (D32 on Arduino MEGA) */
-		D32_PC5,	// PC5
+		D32_PC5,
+		/** Pin PC5 (D32 on Arduino MEGA) */
+		D32 = D32_PC5,
 		/** Pin PC4 (D33 on Arduino MEGA) */
-		D33_PC4,	// PC4
+		D33_PC4,
+		/** Pin PC4 (D33 on Arduino MEGA) */
+		D33 = D33_PC4,
 		/** Pin PC3 (D34 on Arduino MEGA) */
-		D34_PC3,	// PC3
+		D34_PC3,
+		/** Pin PC3 (D34 on Arduino MEGA) */
+		D34 = D34_PC3,
 		/** Pin PC2 (D35 on Arduino MEGA) */
-		D35_PC2,	// PC2
+		D35_PC2,
+		/** Pin PC2 (D35 on Arduino MEGA) */
+		D35 = D35_PC2,
 		/** Pin PC1 (D36 on Arduino MEGA) */
-		D36_PC1,	// PC1
+		D36_PC1,
+		/** Pin PC1 (D36 on Arduino MEGA) */
+		D36 = D36_PC1,
 		/** Pin PC0 (D37 on Arduino MEGA) */
-		D37_PC0,	// PC0
+		D37_PC0,
+		/** Pin PC0 (D37 on Arduino MEGA) */
+		D37 = D37_PC0,
 		/** Pin PD7 (D38 on Arduino MEGA) */
-		D38_PD7,	// PD7
+		D38_PD7,
+		/** Pin PD7 (D38 on Arduino MEGA) */
+		D38 = D38_PD7,
 		/** Pin PG2 (D39 on Arduino MEGA) */
-		D39_PG2,	// PG2
+		D39_PG2,
+		/** Pin PG2 (D39 on Arduino MEGA) */
+		D39 = D39_PG2,
 		/** Pin PG1 (D40 on Arduino MEGA) */
-		D40_PG1,	// PG1
+		D40_PG1,
+		/** Pin PG1 (D40 on Arduino MEGA) */
+		D40 = D40_PG1,
 		/** Pin PG0 (D41 on Arduino MEGA) */
-		D41_PG0,	// PG0
+		D41_PG0,
+		/** Pin PG0 (D41 on Arduino MEGA) */
+		D41 = D41_PG0,
 		/** Pin PL7 (D42 on Arduino MEGA) */
-		D42_PL7,	// PL7
+		D42_PL7,
+		/** Pin PL7 (D42 on Arduino MEGA) */
+		D42 = D42_PL7,
 		/** Pin PL6 (D43 on Arduino MEGA) */
-		D43_PL6,	// PL6
+		D43_PL6,
+		/** Pin PL6 (D43 on Arduino MEGA) */
+		D43 = D43_PL6,
 		/** Pin PL5 (D44 on Arduino MEGA) */
-		D44_PL5,	// PL5
+		D44_PL5,
+		/** Pin PL5 (D44 on Arduino MEGA) */
+		D44 = D44_PL5,
 		/** Pin PL4 (D45 on Arduino MEGA) */
-		D45_PL4,	// PL4
+		D45_PL4,
+		/** Pin PL4 (D45 on Arduino MEGA) */
+		D45 = D45_PL4,
 		/** Pin PL3 (D46 on Arduino MEGA) */
-		D46_PL3,	// PL3
+		D46_PL3,
+		/** Pin PL3 (D46 on Arduino MEGA) */
+		D46 = D46_PL3,
 		/** Pin PL2 (D47 on Arduino MEGA) */
-		D47_PL2,	// PL2
+		D47_PL2,
+		/** Pin PL2 (D47 on Arduino MEGA) */
+		D47 = D47_PL2,
 		/** Pin PL1 (D48 on Arduino MEGA) */
-		D48_PL1,	// PL1
+		D48_PL1,
+		/** Pin PL1 (D48 on Arduino MEGA) */
+		D48 = D48_PL1,
 		/** Pin PL0 (D49 on Arduino MEGA) */
-		D49_PL0,	// PL0
+		D49_PL0,
+		/** Pin PL0 (D49 on Arduino MEGA) */
+		D49 = D49_PL0,
 		/** Pin PB3 (D50/MISO on Arduino MEGA) */
-		D50_PB3,	// PB3/MISO
+		D50_PB3,
+		/** Pin PB3 (D50/MISO on Arduino MEGA) */
+		D50 = D50_PB3,
 		/** Pin PB2 (D51/MOSI on Arduino MEGA) */
-		D51_PB2,	// PB2/MOSI
+		D51_PB2,
+		/** Pin PB2 (D51/MOSI on Arduino MEGA) */
+		D51 = D51_PB2,
 		/** Pin PB1 (D52/SCK on Arduino MEGA) */
-		D52_PB1,	// PB1/SCK
+		D52_PB1,
+		/** Pin PB1 (D52/SCK on Arduino MEGA) */
+		D52 = D52_PB1,
 		/** Pin PB0 (D53/SS on Arduino MEGA) */
-		D53_PB0,	// PB0/SS
+		D53_PB0,
+		/** Pin PB0 (D53/SS on Arduino MEGA) */
+		D53 = D53_PB0,
 		/** Pin PF0 (D54/A0 on Arduino MEGA) */
-		D54_PF0,	// PF0/A0
+		D54_PF0,
+		/** Pin PF0 (D54/A0 on Arduino MEGA) */
+		A0 = D54_PF0,
 		/** Pin PF1 (D55/A1 on Arduino MEGA) */
-		D55_PF1,	// PF1/A1
+		D55_PF1,
+		/** Pin PF1 (D55/A1 on Arduino MEGA) */
+		A1 = D55_PF1,
 		/** Pin PF2 (D56/A2 on Arduino MEGA) */
-		D56_PF2,	// PF2/A2
+		D56_PF2,
+		/** Pin PF2 (D56/A2 on Arduino MEGA) */
+		A2 = D56_PF2,
 		/** Pin PF3 (D57/A3 on Arduino MEGA) */
-		D57_PF3,	// PF3/A3
+		D57_PF3,
+		/** Pin PF3 (D57/A3 on Arduino MEGA) */
+		A3 = D57_PF3,
 		/** Pin PF4 (D58/A4 on Arduino MEGA) */
-		D58_PF4,	// PF4/A4
+		D58_PF4,
+		/** Pin PF4 (D58/A4 on Arduino MEGA) */
+		A4 = D58_PF4,
 		/** Pin PF5 (D59/A5 on Arduino MEGA) */
-		D59_PF5,	// PF5/A5
+		D59_PF5,
+		/** Pin PF5 (D59/A5 on Arduino MEGA) */
+		A5 = D59_PF5,
 		/** Pin PF6 (D60/A6 on Arduino MEGA) */
-		D60_PF6,	// PF6/A6
+		D60_PF6,
+		/** Pin PF6 (D60/A6 on Arduino MEGA) */
+		A6 = D60_PF6,
 		/** Pin PF7 (D61/A7 on Arduino MEGA) */
-		D61_PF7,	// PF7/A7
+		D61_PF7,
+		/** Pin PF7 (D61/A7 on Arduino MEGA) */
+		A7 = D61_PF7,
 		/** Pin PK0 (D62/A8 on Arduino MEGA) */
-		D62_PK0,	// PK0/A8
+		D62_PK0,
+		/** Pin PK0 (D62/A8 on Arduino MEGA) */
+		A8 = D62_PK0,
 		/** Pin PK1 (D63/A9 on Arduino MEGA) */
-		D63_PK1,	// PK1/A9
+		D63_PK1,
+		/** Pin PK1 (D63/A9 on Arduino MEGA) */
+		A9 = D63_PK1,
 		/** Pin PK2 (D64/A10 on Arduino MEGA) */
-		D64_PK2,	// PK2/A10
+		D64_PK2,
+		/** Pin PK2 (D64/A10 on Arduino MEGA) */
+		A10 = D64_PK2,
 		/** Pin PK3 (D65/A11 on Arduino MEGA) */
-		D65_PK3,	// PK3/A11
+		D65_PK3,
+		/** Pin PK3 (D65/A11 on Arduino MEGA) */
+		A11 = D65_PK3,
 		/** Pin PK4 (D66/A12 on Arduino MEGA) */
-		D66_PK4,	// PK4/A12
+		D66_PK4,
+		/** Pin PK4 (D66/A12 on Arduino MEGA) */
+		A12 = D66_PK4,
 		/** Pin PK5 (D67/A13 on Arduino MEGA) */
-		D67_PK5,	// PK5/A13
+		D67_PK5,
+		/** Pin PK5 (D67/A13 on Arduino MEGA) */
+		A13 = D67_PK5,
 		/** Pin PK6 (D68/A14 on Arduino MEGA) */
-		D68_PK6,	// PK6/A14
+		D68_PK6,
+		/** Pin PK6 (D68/A14 on Arduino MEGA) */
+		A14 = D68_PK6,
 		/** Pin PK7 (D69/A15 on Arduino MEGA) */
-		D69_PK7,	// PK7/A15
+		D69_PK7,
+		/** Pin PK7 (D69/A15 on Arduino MEGA) */
+		A15 = D69_PK7,
 		/** Shortcut for LED pin on Arduino */
-		LED = DigitalPin::D13_PB7,
+		LED = D13_PB7,
 		// FastArduino internal: DO NOT USE
 		NONE = 0XFF
 	};
@@ -340,7 +480,7 @@ namespace board
 		constexpr const DigitalPin D10_PB4_OC2A = DigitalPin::D10_PB4;
 		constexpr const DigitalPin D9_PH6_OC2B = DigitalPin::D9_PH6;
 
-		constexpr const DigitalPin D3_PE5_OC3A = DigitalPin::D5_PE3;
+		constexpr const DigitalPin D5_PE3_OC3A = DigitalPin::D5_PE3;
 		constexpr const DigitalPin D2_PE4_OC3B = DigitalPin::D2_PE4;
 		constexpr const DigitalPin D3_PE5_OC3C = DigitalPin::D3_PE5;
 		
@@ -351,6 +491,27 @@ namespace board
 		constexpr const DigitalPin D44_PL5_OC5C = DigitalPin::D44_PL5;
 		constexpr const DigitalPin D45_PL4_OC5B = DigitalPin::D45_PL4;
 		constexpr const DigitalPin D46_PL3_OC5A = DigitalPin::D46_PL3;
+
+		constexpr const DigitalPin D13 = DigitalPin::D13_PB7;
+		constexpr const DigitalPin D4 = DigitalPin::D4_PG5;
+		
+		constexpr const DigitalPin D11 = DigitalPin::D11_PB5;
+		constexpr const DigitalPin D12 = DigitalPin::D12_PB6;
+		
+		constexpr const DigitalPin D10 = DigitalPin::D10_PB4;
+		constexpr const DigitalPin D9 = DigitalPin::D9_PH6;
+
+		constexpr const DigitalPin D5 = DigitalPin::D5_PE3;
+		constexpr const DigitalPin D2 = DigitalPin::D2_PE4;
+		constexpr const DigitalPin D3 = DigitalPin::D3_PE5;
+		
+		constexpr const DigitalPin D6 = DigitalPin::D6_PH3;
+		constexpr const DigitalPin D7 = DigitalPin::D7_PH4;
+		constexpr const DigitalPin D8 = DigitalPin::D8_PH5;
+
+		constexpr const DigitalPin D44 = DigitalPin::D44_PL5;
+		constexpr const DigitalPin D45 = DigitalPin::D45_PL4;
+		constexpr const DigitalPin D46 = DigitalPin::D46_PL3;
 	};
 	
 	/**
@@ -365,12 +526,19 @@ namespace board
 	 */
 	namespace ExternalInterruptPin
 	{
-		constexpr const DigitalPin D21_PD0_EXT0 = DigitalPin::D21_PD0;		// PD0
-		constexpr const DigitalPin D20_PD1_EXT1 = DigitalPin::D20_PD1;		// PD1
-		constexpr const DigitalPin D19_PD2_EXT2 = DigitalPin::D19_PD2;		// PD2
-		constexpr const DigitalPin D18_PD3_EXT3 = DigitalPin::D18_PD3;		// PD3
-		constexpr const DigitalPin D2_PE4_EXT4 = DigitalPin::D2_PE4;		// PE4
-		constexpr const DigitalPin D3_PE5_EXT5 = DigitalPin::D3_PE5;		// PE5
+		constexpr const DigitalPin D21_PD0_EXT0 = DigitalPin::D21_PD0;
+		constexpr const DigitalPin D20_PD1_EXT1 = DigitalPin::D20_PD1;
+		constexpr const DigitalPin D19_PD2_EXT2 = DigitalPin::D19_PD2;
+		constexpr const DigitalPin D18_PD3_EXT3 = DigitalPin::D18_PD3;
+		constexpr const DigitalPin D2_PE4_EXT4 = DigitalPin::D2_PE4;
+		constexpr const DigitalPin D3_PE5_EXT5 = DigitalPin::D3_PE5;
+
+		constexpr const DigitalPin D21 = DigitalPin::D21_PD0;
+		constexpr const DigitalPin D20 = DigitalPin::D20_PD1;
+		constexpr const DigitalPin D19 = DigitalPin::D19_PD2;
+		constexpr const DigitalPin D18 = DigitalPin::D18_PD3;
+		constexpr const DigitalPin D2 = DigitalPin::D2_PE4;
+		constexpr const DigitalPin D3 = DigitalPin::D3_PE5;
 	};
 
 	/**
@@ -408,6 +576,30 @@ namespace board
 		constexpr const DigitalPin D67_PK5_PCI2 = DigitalPin::D67_PK5;
 		constexpr const DigitalPin D68_PK6_PCI2 = DigitalPin::D68_PK6;
 		constexpr const DigitalPin D69_PK7_PCI2 = DigitalPin::D69_PK7;
+
+		// PB0-7
+		constexpr const DigitalPin D53 = DigitalPin::D53_PB0;
+		constexpr const DigitalPin D52 = DigitalPin::D52_PB1;
+		constexpr const DigitalPin D51 = DigitalPin::D51_PB2;
+		constexpr const DigitalPin D50 = DigitalPin::D50_PB3;
+		constexpr const DigitalPin D10 = DigitalPin::D10_PB4;
+		constexpr const DigitalPin D11 = DigitalPin::D11_PB5;
+		constexpr const DigitalPin D12 = DigitalPin::D12_PB6;
+		constexpr const DigitalPin D13 = DigitalPin::D13_PB7;
+
+		// PJ0-1
+		constexpr const DigitalPin D15 = DigitalPin::D15_PJ0;
+		constexpr const DigitalPin D14 = DigitalPin::D14_PJ1;
+		
+		// PK0-7
+		constexpr const DigitalPin A8 = DigitalPin::D62_PK0;
+		constexpr const DigitalPin A9 = DigitalPin::D63_PK1;
+		constexpr const DigitalPin A10 = DigitalPin::D64_PK2;
+		constexpr const DigitalPin A11 = DigitalPin::D65_PK3;
+		constexpr const DigitalPin A12 = DigitalPin::D66_PK4;
+		constexpr const DigitalPin A13 = DigitalPin::D67_PK5;
+		constexpr const DigitalPin A14 = DigitalPin::D68_PK6;
+		constexpr const DigitalPin A15 = DigitalPin::D69_PK7;
 	};
 
 	/**

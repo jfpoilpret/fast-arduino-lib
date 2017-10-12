@@ -86,45 +86,85 @@ namespace board
 	{
 		/** Pin PD2 (D0 on Arduino LEONARDO) */
 		D0_PD2 = 0,
+		/** Pin PD2 (D0 on Arduino LEONARDO) */
+		D0 = D0_PD2,
 		/** Pin PD3 (D1 on Arduino LEONARDO) */
 		D1_PD3,
+		/** Pin PD3 (D1 on Arduino LEONARDO) */
+		D1 = D1_PD3,
 		/** Pin PD1 (D2 on Arduino LEONARDO) */
 		D2_PD1,
+		/** Pin PD1 (D2 on Arduino LEONARDO) */
+		D2 = D2_PD1,
 		/** Pin PD0 (D3 on Arduino LEONARDO) */
 		D3_PD0,
+		/** Pin PD0 (D3 on Arduino LEONARDO) */
+		D3 = D3_PD0,
 		/** Pin PD4 (D4 on Arduino LEONARDO) */
 		D4_PD4,
+		/** Pin PD4 (D4 on Arduino LEONARDO) */
+		D4 = D4_PD4,
 		/** Pin PC6 (D5 on Arduino LEONARDO) */
 		D5_PC6,
+		/** Pin PC6 (D5 on Arduino LEONARDO) */
+		D5 = D5_PC6,
 		/** Pin PD7 (D6 on Arduino LEONARDO) */
 		D6_PD7,
+		/** Pin PD7 (D6 on Arduino LEONARDO) */
+		D6 = D6_PD7,
 		/** Pin PE6 (D7 on Arduino LEONARDO) */
 		D7_PE6,
+		/** Pin PE6 (D7 on Arduino LEONARDO) */
+		D7 = D7_PE6,
 		/** Pin PB4 (D8 on Arduino LEONARDO) */
 		D8_PB4,
+		/** Pin PB4 (D8 on Arduino LEONARDO) */
+		D8 = D8_PB4,
 		/** Pin PB5 (D9 on Arduino LEONARDO) */
 		D9_PB5,
+		/** Pin PB5 (D9 on Arduino LEONARDO) */
+		D9 = D9_PB5,
 		/** Pin PB6 (D10 on Arduino LEONARDO) */
 		D10_PB6,
+		/** Pin PB6 (D10 on Arduino LEONARDO) */
+		D10 = D10_PB6,
 		/** Pin PB7 (D11 on Arduino LEONARDO) */
 		D11_PB7,
+		/** Pin PB7 (D11 on Arduino LEONARDO) */
+		D11 = D11_PB7,
 		/** Pin PD6 (D12 on Arduino LEONARDO) */
 		D12_PD6,
+		/** Pin PD6 (D12 on Arduino LEONARDO) */
+		D12 = D12_PD6,
 		/** Pin PC7 (D13 on Arduino LEONARDO) */
 		D13_PC7,
+		/** Pin PC7 (D13 on Arduino LEONARDO) */
+		D13 = D13_PC7,
 		
 		/** Pin PF7 (A0 on Arduino LEONARDO) */
 		A0_PF7,
+		/** Pin PF7 (A0 on Arduino LEONARDO) */
+		A0 = A0_PF7,
 		/** Pin PF6 (A1 on Arduino LEONARDO) */
 		A1_PF6,
+		/** Pin PF6 (A1 on Arduino LEONARDO) */
+		A1 = A1_PF6,
 		/** Pin PF5 (A2 on Arduino LEONARDO) */
 		A2_PF5,
+		/** Pin PF5 (A2 on Arduino LEONARDO) */
+		A2 = A2_PF5,
 		/** Pin PF4 (A3 on Arduino LEONARDO) */
 		A3_PF4,
+		/** Pin PF4 (A3 on Arduino LEONARDO) */
+		A3 = A3_PF4,
 		/** Pin PF1 (A4 on Arduino LEONARDO) */
 		A4_PF1,
+		/** Pin PF1 (A4 on Arduino LEONARDO) */
+		A4 = A4_PF1,
 		/** Pin PF0 (A5 on Arduino LEONARDO) */
 		A5_PF0,
+		/** Pin PF0 (A5 on Arduino LEONARDO) */
+		A5 = A5_PF0,
 		
 		/** Pin PB1 (SCK (SPI) on Arduino LEONARDO) */
 		SCK_PB1,
@@ -139,7 +179,7 @@ namespace board
 		TXLED_PD5,
 		
 		/** Shortcut for LED pin on Arduino */
-		LED = DigitalPin::D13_PC7,
+		LED = D13_PC7,
 		// FastArduino internal: DO NOT USE
 		NONE = 0xFF
 	};
@@ -181,40 +221,52 @@ namespace board
 		/** Pin ADC7 (A0 on Arduino LEONARDO) */
 		A0_ADC7 = 0,
 		/** Alias to pin ADC7 (A0 on Arduino LEONARDO) */
-		A0 = AnalogPin::A0_ADC7,
+		A0 = A0_ADC7,
 		/** Pin ADC6 (A1 on Arduino LEONARDO) */
 		A1_ADC6,
 		/** Alias to pin ADC7 (A0 on Arduino LEONARDO) */
-		A1 = AnalogPin::A1_ADC6,
+		A1 = A1_ADC6,
 		/** Pin ADC5 (A2 on Arduino LEONARDO) */
 		A2_ADC5,
 		/** Alias to pin ADC5 (A2 on Arduino LEONARDO) */
-		A2 = AnalogPin::A2_ADC5,
+		A2 = A2_ADC5,
 		/** Pin ADC4 (A3 on Arduino LEONARDO) */
 		A3_ADC4,
 		/** Alias to pin ADC4 (A3 on Arduino LEONARDO) */
-		A3 = AnalogPin::A3_ADC4,
+		A3 = A3_ADC4,
 		/** Pin ADC1 (A4 on Arduino LEONARDO) */
 		A4_ADC1,
 		/** Alias to pin ADC1 (A4 on Arduino LEONARDO) */
-		A4 = AnalogPin::A4_ADC1,
+		A4 = A4_ADC1,
 		/** Pin ADC0 (A5 on Arduino LEONARDO) */
 		A5_ADC0,
 		/** Alias to pin ADC0 (A5 on Arduino LEONARDO) */
-		A5 = AnalogPin::A5_ADC0,
+		A5 = A5_ADC0,
 
 		/** Pin ADC8 (D4 on Arduino LEONARDO) */
 		A6_D4_ADC8,
+		/** Pin ADC8 (D4 on Arduino LEONARDO) */
+		D4 = A6_D4_ADC8,
 		/** Pin ADC10 (D6 on Arduino LEONARDO) */
 		A7_D6_ADC10,
+		/** Pin ADC10 (D6 on Arduino LEONARDO) */
+		D6 = A7_D6_ADC10,
 		/** Pin ADC11 (D8 on Arduino LEONARDO) */
 		A8_D8_ADC11,
+		/** Pin ADC11 (D8 on Arduino LEONARDO) */
+		D8 = A8_D8_ADC11,
 		/** Pin ADC12 (D9 on Arduino LEONARDO) */
 		A9_D9_ADC12,
+		/** Pin ADC12 (D9 on Arduino LEONARDO) */
+		D9 = A9_D9_ADC12,
 		/** Pin ADC13 (D10 on Arduino LEONARDO) */
 		A10_D10_ADC13,
+		/** Pin ADC13 (D10 on Arduino LEONARDO) */
+		D10 = A10_D10_ADC13,
 		/** Pin ADC9 (D12 on Arduino LEONARDO) */
 		A11_D12_ADC9,
+		/** Pin ADC9 (D12 on Arduino LEONARDO) */
+		D12 = A11_D12_ADC9,
 		
 		/** Temperature sensor */
 		TEMP,
@@ -250,6 +302,12 @@ namespace board
 		constexpr const DigitalPin D10_PB6_OC1B = DigitalPin::D10_PB6;
 		constexpr const DigitalPin D5_PC6_OC3A = DigitalPin::D5_PC6;
 		//TODO High-speed timer (Timer4) related PWM pins are not listed here because Timer4 is not supported yer
+
+		constexpr const DigitalPin D11 = DigitalPin::D11_PB7;
+		constexpr const DigitalPin D3 = DigitalPin::D3_PD0;
+		constexpr const DigitalPin D9 = DigitalPin::D9_PB5;
+		constexpr const DigitalPin D10 = DigitalPin::D10_PB6;
+		constexpr const DigitalPin D5 = DigitalPin::D5_PC6;
 	};
 	
 	/**
@@ -269,6 +327,12 @@ namespace board
 		constexpr const DigitalPin D0_PD2_EXT2 = DigitalPin::D0_PD2;
 		constexpr const DigitalPin D1_PD3_EXT3 = DigitalPin::D1_PD3;
 		constexpr const DigitalPin D7_PE6_EXT6 = DigitalPin::D7_PE6;
+
+		constexpr const DigitalPin D3 = DigitalPin::D3_PD0;
+		constexpr const DigitalPin D2 = DigitalPin::D2_PD1;
+		constexpr const DigitalPin D0 = DigitalPin::D0_PD2;
+		constexpr const DigitalPin D1 = DigitalPin::D1_PD3;
+		constexpr const DigitalPin D7 = DigitalPin::D7_PE6;
 	};
 
 	/**
@@ -292,6 +356,11 @@ namespace board
 		constexpr const DigitalPin D9_PB5_PCI0 = DigitalPin::D9_PB5;
 		constexpr const DigitalPin D10_PB6_PCI0 = DigitalPin::D10_PB6;
 		constexpr const DigitalPin D11_PB7_PCI0 = DigitalPin::D11_PB7;
+
+		constexpr const DigitalPin D8 = DigitalPin::D8_PB4;
+		constexpr const DigitalPin D9 = DigitalPin::D9_PB5;
+		constexpr const DigitalPin D10 = DigitalPin::D10_PB6;
+		constexpr const DigitalPin D11 = DigitalPin::D11_PB7;
 	};
 
 	/**
