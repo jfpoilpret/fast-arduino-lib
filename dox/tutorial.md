@@ -722,7 +722,7 @@ REGISTER_TIMER_COMPARE_ISR_METHOD(1, Handler, &Handler::on_timer)
 - `1` is the timer number (`0`, `1` or `2` on UNO)
 - `Handler` is the class that contains the code to be called when the interrupt occurs
 - `&Handler::on_timer` is the Pointer to Member Function (often abbreviated *PTMF* by usual C++ developers) telling which method from `Handler` shall be called back when the interrupt occurs
-In FastArduino, interrupt handling follows some patterns that are further described [here](TODO) and won't be developed in detail now.
+In FastArduino, interrupt handling follows some patterns that are further described [here](@ref interrupts) and won't be developed in detail now.
 
 Now we can finally start writing the code of the `main()` function:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -1141,13 +1141,283 @@ FastArduino defines another class, `Watchdog`. This class allows to use the AVR 
 @anchor interrupts Advanced: Interrupts
 ---------------------------------------
 
-TODO ISR and interrupts in AVR brief intro
+### Introduction to AVR interrupts
 
-TODO refer to some previous examples REGISTER macro and register_handler
+Many AVR MCU features are based upon interrupts, so that the MCU can efficiently react to events such as timer overflow, pin level change, without having to poll for these conditions. Using AVR interrupts makes your program responsive to events relevant to you. This alos allows taking advantage of power sleep modes thus reducing energy consumption while the MCU has nothing to do other than wait for events to occur.
 
-TODO general interrupts API/macros and naming conventions for macros
+Each AVR MCU has a predefined list of interrupts sources, each individually activable, and each with an associated *vector* which is the address of an Interrupt Service Routine (**ISR**), executed whenver the matching interrupt occurs. Each ISR is imposed a specific name.
 
-TODO specific API macros
+Among common interrupt vectors, you will find for example:
+- `TIMERn_OVF_vect`: triggered when Timer *n* overflows
+- `INTn_vect`: triggered when input pin *INTn* changes level
+- `UARTn_RX_vect`: triggered when a new character has been received on serial receiver *UARTn`
+- ...
 
-TODO table of all REGISTER macros
+### AVR interrupts handling in FastArduino
 
+In FastArduino, ISR are created upon your explicit request, FastArduino will never add an ISR without your consent. FastArduino calls this ISR creation a **registration**.
+
+ISR registration is performed through macros provided by FastArduino. There are essentially 4 flavours of registration macros:
+1. API-specific registration: in this flavour, a FastArduino feature requires to directly be linked to an ISR, through a dedicated macro and a specific registration method (either implicitly called by constructor or explicitly through a specific method). In the previous examples of this tutorial, you have already encountered `REGISTER_UATX_ISR()`, `REGISTER_UARX_ISR()`, `REGISTER_UART_ISR()` and `REGISTER_RTT_ISR()`.
+All macros in this flavour follow the same naming scheme:`REGISTER_XXX_ISR`, where *XXX* is the feature handled.
+2. Empty ISR registration: in this flavour, you activate an interrupt but do not want any callback for it, but then you have to define an empty ISR for it; this empty ISR will not increase code size of your program. You may wonder why you would want to enable an interrupt but do nothing when it occurs, in fact this is often used to make the MCU sleep (low power consumption) and wake it once an interrupt occurs. You have already seen such usage in a previous example, where `REGISTER_WATCHDOG_ISR_EMPTY()` was used.
+3. Method callback registration: with this flavour, you activate an interrupt and want a sepcific method of a given class to be called back when the interrupt occurs; in this flavour, a second step is required inside your code: you need to register an instance of the class that was registered. In this tutorial, previous examples used this approach with `REGISTER_TIMER_COMPARE_ISR_METHOD()` macro and `interrupt::register_handler(handler);` instance registration in `main()`. This is probably the most useful approach as it allows to pass an implicit context (`this` class instance) to the callback.
+4. Function callback registration: with this flavour, you can register one of your functions (global or static) as a callback of an ISR. This approach does not require an extra registration step. This is not used as often as the Method callback registration flavour above.
+
+Whenever method callback is needed (typically for flavours 1 and 3 above), then a second registration step is needed.
+
+All FastArduino API respects some guidelines for naming ISR registration macros. All macros are in one of the following formats:
+- `REGISTER_XXX_ISR()` for API-specific registration
+- `REGISTER_XXX_ISR_EMPTY()` for empty ISR
+- `REGISTER_XXX_ISR_CALLBACK()` for method callback
+- `REGISTER_XXX_ISR_FUNCTION()` for function callback
+
+Here is a table showing all FastArduino macros to register ISR (*Name* is to be replaced in macro name `REGISTER_NAME_ISR`, `REGISTER_NAME_ISR_EMPTY`, `REGISTER_NAME_ISR_CALLBACK` or `REGISTER_NAME_ISR_FUNCTION`):
+| Header             | Name              | Flavours | Comments                                                           |
+|--------------------|-------------------|----------|--------------------------------------------------------------------|
+| `eeprom.h`         | `EEPROM`          | 1,3,4    | Called when asynchronous EEPROM write is finished.                 |
+| `int.h`            | `INT`             | 2,3,4    | Called when an INT pin changes level.                              |
+| `pci.h`            | `PCI`             | 2,3,4    | Called when a PCINT pin changes level.                             |
+| `pulse_timer.h`    | `PULSE_TIMER8_A`  | 1        | Called when a PulseTimer8 overflows or equals OCRA.                |
+| `pulse_timer.h`    | `PULSE_TIMER8_B`  | 1        | Called when a PulseTimer8 overflows or equals OCRB.                |
+| `pulse_timer.h`    | `PULSE_TIMER8_AB` | 1        | Called when a PulseTimer8 overflows or equals OCRA or OCRB.        |
+| `realtime_timer.h` | `RTT`             | 1,3,4    | Called when RTT timer has one more millisecond elapsed.            |
+| `soft_uart.h`      | `UART_PCI`        | 1        | Called when a start bit is received on a PCINT pin linked to UATX. |
+| `soft_uart.h`      | `UART_INT`        | 1        | Called when a start bit is received on an INT pin linked to UATX.  |
+| `timer.h`          | `COMPARE`         | 2,3,4    | Called when a Timer counter reaches OCRA.                          |
+| `timer.h`          | `OVERFLOW`        | 2,3,4    | Called when a Timer counter overflows.                             |
+| `timer.h`          | `CAPTURE`         | 2,3,4    | Called when a Timer counter gets captured (when ICP level changes).|
+| `uart.h`           | `UATX`            | 1        | Called when one character is finished transmitted on UATX.         |
+| `uart.h`           | `UARX`            | 1        | Called when one character is finished received on UARX.            |
+| `uart.h`           | `UART`            | 1        | Called when one character is finished transmitted/received on UART.|
+| `watchdog.h`       | `WATCHDOG_CLOCK`  | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
+| `watchdog.h`       | `WATCHDOG`        | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
+
+For further details on ISR registration in FastArduino, you can check `interrutps.h` API (TODO LINK) for the general approach, and each individual API documentation for specific interrupts.
+
+### Pin Interrupts
+
+One very common usage of AVR interrupts is to handle level changes of specific digital input pins. AVR MCU have two kinds of pin interrupts:
+- External Interrupts: an interrupt can be triggered for a specific pin when its level changes or is equal to some value (high or low); the number of such pins is quite limited (e.g. only 2 on Arduino UNO)
+- Pin Change Interrupts: an interrupt is triggered when one in a set of pins has a changing level; the same interrupt (hence the same ISR) is used for all pins (typically 8, but not necessarily), thus the ISR must determine, by its own means, which pin has triggered the interrupt; although more pins support this interrupt, it is less convenient to use than external interrupts.
+
+#### External Interrupts
+
+External Interrupts are handled with the API provided by `int.h`. This API is demonstrated in the example below:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/int.h>
+#include <fastarduino/power.h>
+
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
+
+class PinChangeHandler
+{
+public:
+	PinChangeHandler():_switch{gpio::PinMode::INPUT_PULLUP}, _led{gpio::PinMode::OUTPUT} {}
+	
+	void on_pin_change()
+	{
+		if (_switch.value())
+			_led.clear();
+		else
+			_led.set();
+	}
+	
+private:
+	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
+};
+
+// Define vectors we need in the example
+REGISTER_INT_ISR_METHOD(0, SWITCH, PinChangeHandler, &PinChangeHandler::on_pin_change)
+
+int main() __attribute__((OS_main));
+int main()
+{
+	board::init();
+	// Enable interrupts at startup time
+	sei();
+	
+	PinChangeHandler handler;
+	interrupt::register_handler(handler);
+	interrupt::INTSignal<SWITCH> int0{interrupt::InterruptTrigger::ANY_CHANGE};
+	int0.enable();
+
+	// Event Loop
+	while (true)
+	{
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
+	}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this example, most of the MCU time is spent sleeping in power down mode. The pin `INT0` (D2 on UNO) is connected to a push button and used to switch on or off the UNO LED (on D13).
+
+Note how the button pin is defined:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here we use `board::ExternalInterruptPin` namespace to find out the possible pins that can be used as External Interrupt pins.
+
+Then we define the class that will handle interrupts occurring when the button pin changes level:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+class PinChangeHandler
+{
+public:
+	PinChangeHandler():_switch{gpio::PinMode::INPUT_PULLUP}, _led{gpio::PinMode::OUTPUT} {}
+	
+	void on_pin_change()
+	{
+		if (_switch.value())
+			_led.clear();
+		else
+			_led.set();
+	}
+	
+private:
+	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The interesting code here is the `on_pin_change()` method which be called back when the button is pushed or relaxed, i.e. on any level change.
+Since this method is called whatever the new pin level, it must explicitly check the button status (i.e. the pin level) to set the right output for the LED pin. Note that, since we use `gpio::PinMode::INPUT_PULLUP`, the pin value will be `false` when the button is pushed, and `true` when it is not.
+
+The next line of code registers `PinChangeHandler` class and `on_pin_change()` method as callback for `INT0` interrupt.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_INT_ISR_METHOD(0, SWITCH, PinChangeHandler, &PinChangeHandler::on_pin_change)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In addition to the class and method, the macro takes the number of the `INT` interrupt (`0`) and the pin connected to this interrupt.
+Note that the pin reference is redundant; it is passed as a way to ensure that the provided `INT` number matches the pin that we use, if it doesn't, then your code will not compile.
+
+Then the `main()` function oincludes the following initialization code:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	PinChangeHandler handler;
+	interrupt::register_handler(handler);
+	interrupt::INTSignal<SWITCH> int0{interrupt::InterruptTrigger::ANY_CHANGE};
+	int0.enable();
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Once the interrupt handler has been instantiated, it must be registered (2nd step of method callback registration).
+Then an `INTSignal` is created for `INT0` and it is set for any level change of the pin.
+Finally, the interrupt is activated.
+
+Note the infinite loop in `main()`:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	while (true)
+	{
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
+	}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With this loop, we set the MCU to sleep in lowest energy consumption mode. Only some interrupts (`INT0` is one of them) will awaken the MCU from its sleep, immediately after the matching ISR has been called.
+
+Here is the equivalent example with Arduino API:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <avr/sleep.h>
+
+void onPinChange()
+{
+    digitalWrite(LED_BUILTIN, !digitalRead(2));
+}
+
+void setup()
+{
+    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(2, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(2), onPinChange, CHANGE);
+}
+
+void loop()
+{
+    sleep_enable();
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+    sleep_cpu();
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+First note that Arduino API has no API for sleep mode management, hence you have to include `<avr/sleep.h>` and handle all this by yourself.
+Also note that you can only attach a function to an interrupt. Arduino API offers no way to attach a class member instead.
+
+Now let's just compare examples sizes, as usual:
+|           | Arduino API | FastArduino |
+|-----------|-------------|-------------|
+| code size | 1238 bytes  | 266 bytes   |
+| data size | 13 bytes    | 2 bytes     |
+
+
+#### Pin Change Interrupts
+
+Pin Change Interrupts are handled with the API provided by `pci.h`. This API is demonstrated in the example below:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/pci.h>
+#include <fastarduino/power.h>
+
+constexpr const board::DigitalPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
+#define PCI_NUM 1
+
+class PinChangeHandler
+{
+public:
+	PinChangeHandler():_switch{gpio::PinMode::INPUT_PULLUP}, _led{gpio::PinMode::OUTPUT} {}
+	
+	void on_pin_change()
+	{
+		if (_switch.value())
+			_led.clear();
+		else
+			_led.set();
+	}
+	
+private:
+	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
+};
+
+// Define vectors we need in the example
+REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_change, SWITCH)
+
+int main() __attribute__((OS_main));
+int main()
+{
+	board::init();
+	// Enable interrupts at startup time
+	sei();
+	
+	PinChangeHandler handler;
+	interrupt::register_handler(handler);
+	interrupt::PCIType<SWITCH>::TYPE pci;
+	
+	pci.enable_pin<SWITCH>();
+	pci.enable();
+
+	// Event Loop
+	while (true)
+	{
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
+	}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example performs the same as the previous example except it uses another pin for the button.
+Most of the code is similar, hecen we will focu only on differences.
+
+The first difference is in the way we define the pin to use as interrupt source:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+constexpr const board::DigitalPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
+#define PCI_NUM 1
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here we use `board::InterruptPin` namespace to find out the possible pins that can be used as Pin Change Interrupt pins. We select pin D14 and see from its name that is belonging to `PCINT1` interrupt vector. We also define the `PCINT` number as a constant, `PCI_NUM`, for later use.
+
+Then we register `PinChangeHandler` class and `on_pin_change()` method as callback for `PCINT1` interrupt.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_PCI_ISR_METHOD(PCI_NUM, PinChangeHandler, &PinChangeHandler::on_pin_change, SWITCH)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once we have, as before,registered our handler class, we then create a `PCISignal` instance that we will use to activate the proper interrupt:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	interrupt::PCIType<SWITCH>::TYPE pci;
+	
+	pci.enable_pin<SWITCH>();
+	pci.enable();
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Before enabling the `PCINT1` interrupt, we need to first indicate that we are only interested in changes of the button pin.
+
+For this example, we cannot compare sizes with the Arduino API equivalent because Pin Change Interrupts are not supported by the API.
