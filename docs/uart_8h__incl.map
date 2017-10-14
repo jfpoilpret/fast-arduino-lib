@@ -1,5 +1,5 @@
 <map id="fastarduino/uart.h" name="fastarduino/uart.h">
-<area shape="rect" id="node2" href="$interrupts_8h_source.html" title="interrupts.h" alt="" coords="17,80,104,107"/>
+<area shape="rect" id="node2" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="17,80,104,107"/>
 <area shape="rect" id="node4" href="$uart__commons_8h.html" title="Common definitions for serial API. " alt="" coords="119,229,237,256"/>
 <area shape="rect" id="node6" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="355,80,435,107"/>
 <area shape="rect" id="node11" href="$queue_8h_source.html" title="queue.h" alt="" coords="361,155,429,181"/>

@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('timer_8h.html','');});
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;avr/interrupt.h&gt;</code><br />
 <code>#include &lt;stddef.h&gt;</code><br />
-<code>#include &quot;interrupts.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="interrupts_8h_source.html">interrupts.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utilities_8h_source.html">utilities.h</a>&quot;</code><br />
 <code>#include &quot;boards/board_traits.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -103,7 +103,7 @@ Include dependency graph for timer.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="timer_8h__incl.png" border="0" usemap="#fastarduino_2timer_8h" alt=""/></div>
 <map name="fastarduino_2timer_8h" id="fastarduino_2timer_8h">
-<area shape="rect" id="node4" href="interrupts_8h_source.html" title="interrupts.h" alt="" coords="117,80,203,107"/>
+<area shape="rect" id="node4" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="117,80,203,107"/>
 <area shape="rect" id="node5" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="228,80,303,107"/>
 </map>
 </div>
@@ -139,19 +139,19 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:acfce0d4d6115510756da8d720409ed26"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#acfce0d4d6115510756da8d720409ed26">REGISTER_TIMER_COMPARE_ISR_METHOD</a>(TIMER_NUM,  HANDLER,  CALLBACK)&#160;&#160;&#160;REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)</td></tr>
+<tr class="memitem:acfce0d4d6115510756da8d720409ed26"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#acfce0d4d6115510756da8d720409ed26">REGISTER_TIMER_COMPARE_ISR_METHOD</a>(TIMER_NUM,  HANDLER,  CALLBACK)&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)</td></tr>
 <tr class="memdesc:acfce0d4d6115510756da8d720409ed26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a> with a callback method in CTC mode.  <a href="#acfce0d4d6115510756da8d720409ed26">More...</a><br /></td></tr>
 <tr class="separator:acfce0d4d6115510756da8d720409ed26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97efa79149bd7e075e9cff2473356cee"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#a97efa79149bd7e075e9cff2473356cee">REGISTER_TIMER_COMPARE_ISR_FUNCTION</a>(TIMER_NUM,  CALLBACK)&#160;&#160;&#160;REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)</td></tr>
+<tr class="memitem:a97efa79149bd7e075e9cff2473356cee"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#a97efa79149bd7e075e9cff2473356cee">REGISTER_TIMER_COMPARE_ISR_FUNCTION</a>(TIMER_NUM,  CALLBACK)&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#a2e21bdc04462c5c326663df9e838bc6b">REGISTER_ISR_FUNCTION_</a>(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)</td></tr>
 <tr class="memdesc:a97efa79149bd7e075e9cff2473356cee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a> with a callback function in CTC mode.  <a href="#a97efa79149bd7e075e9cff2473356cee">More...</a><br /></td></tr>
 <tr class="separator:a97efa79149bd7e075e9cff2473356cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b8d4f090408ab7c6e7efc20da5d0056"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#a0b8d4f090408ab7c6e7efc20da5d0056">REGISTER_TIMER_COMPARE_ISR_EMPTY</a>(TIMER_NUM)&#160;&#160;&#160;EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));</td></tr>
 <tr class="memdesc:a0b8d4f090408ab7c6e7efc20da5d0056"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register an empty ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a>.  <a href="#a0b8d4f090408ab7c6e7efc20da5d0056">More...</a><br /></td></tr>
 <tr class="separator:a0b8d4f090408ab7c6e7efc20da5d0056"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d38220cfa628f7eafe0119472ff3bb1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#a3d38220cfa628f7eafe0119472ff3bb1">REGISTER_TIMER_OVERFLOW_ISR_METHOD</a>(TIMER_NUM,  HANDLER,  CALLBACK)&#160;&#160;&#160;REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)</td></tr>
+<tr class="memitem:a3d38220cfa628f7eafe0119472ff3bb1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#a3d38220cfa628f7eafe0119472ff3bb1">REGISTER_TIMER_OVERFLOW_ISR_METHOD</a>(TIMER_NUM,  HANDLER,  CALLBACK)&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)</td></tr>
 <tr class="memdesc:a3d38220cfa628f7eafe0119472ff3bb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for the Counter Overflow of a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a>.  <a href="#a3d38220cfa628f7eafe0119472ff3bb1">More...</a><br /></td></tr>
 <tr class="separator:a3d38220cfa628f7eafe0119472ff3bb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafbf223572c88bbc11011e1744699a84"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#aafbf223572c88bbc11011e1744699a84">REGISTER_TIMER_OVERFLOW_ISR_FUNCTION</a>(TIMER_NUM,  CALLBACK)&#160;&#160;&#160;REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)</td></tr>
+<tr class="memitem:aafbf223572c88bbc11011e1744699a84"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#aafbf223572c88bbc11011e1744699a84">REGISTER_TIMER_OVERFLOW_ISR_FUNCTION</a>(TIMER_NUM,  CALLBACK)&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#a2e21bdc04462c5c326663df9e838bc6b">REGISTER_ISR_FUNCTION_</a>(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)</td></tr>
 <tr class="memdesc:aafbf223572c88bbc11011e1744699a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for the Counter Overflow of a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a>.  <a href="#aafbf223572c88bbc11011e1744699a84">More...</a><br /></td></tr>
 <tr class="separator:aafbf223572c88bbc11011e1744699a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabf35a33eb29e8f5a9271a8c1d809bb4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#aabf35a33eb29e8f5a9271a8c1d809bb4">REGISTER_TIMER_OVERFLOW_ISR_EMPTY</a>(TIMER_NUM)&#160;&#160;&#160;EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _OVF_vect));</td></tr>
@@ -254,7 +254,7 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -269,7 +269,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00042">42</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00041">41</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -294,7 +294,7 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#a2e21bdc04462c5c326663df9e838bc6b">REGISTER_ISR_FUNCTION_</a>(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -308,7 +308,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00052">52</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00051">51</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -336,7 +336,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00061">61</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00060">60</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -367,7 +367,7 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -382,7 +382,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00071">71</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00070">70</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -407,7 +407,7 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#a2e21bdc04462c5c326663df9e838bc6b">REGISTER_ISR_FUNCTION_</a>(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -421,7 +421,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00081">81</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00080">80</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -449,7 +449,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00090">90</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00089">89</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -496,7 +496,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00100">100</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00099">99</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -536,7 +536,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00116">116</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00115">115</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -564,7 +564,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00131">131</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00130">130</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>

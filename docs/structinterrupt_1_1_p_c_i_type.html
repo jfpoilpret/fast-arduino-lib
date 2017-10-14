@@ -88,25 +88,35 @@ $(document).ready(function(){initNavTree('structinterrupt_1_1_p_c_i_type.html','
 <div class="title">interrupt::PCIType&lt; PIN &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Helper class that easily converts a <code>PIN</code> into the right <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>.  
+ <a href="structinterrupt_1_1_p_c_i_type.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="pci_8h_source.html">fastarduino/pci.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aa5d4aea33dcfb5047b9c8e692e727e01"><td class="memItemLeft" align="right" valign="top"><a id="aa5d4aea33dcfb5047b9c8e692e727e01"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TYPE</b> = <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">PCISignal</a>&lt; board_traits::DigitalPin_trait&lt; PIN &gt;::PORT &gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structinterrupt_1_1_p_c_i_type.html#aa5d4aea33dcfb5047b9c8e692e727e01">TYPE</a> = <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">PCISignal</a>&lt; board_traits::DigitalPin_trait&lt; PIN &gt;::PORT &gt;</td></tr>
+<tr class="memdesc:aa5d4aea33dcfb5047b9c8e692e727e01"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a> type for <code>PIN</code>. <br /></td></tr>
 <tr class="separator:aa5d4aea33dcfb5047b9c8e692e727e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ade102a62db31cff23ad88bb268037e5b"><td class="memItemLeft" align="right" valign="top"><a id="ade102a62db31cff23ad88bb268037e5b"></a>
-static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>PCINT</b> = board_traits::Port_trait&lt;board_traits::DigitalPin_trait&lt;PIN&gt;::PORT&gt;::PCINT</td></tr>
+static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structinterrupt_1_1_p_c_i_type.html#ade102a62db31cff23ad88bb268037e5b">PCINT</a> = board_traits::Port_trait&lt;board_traits::DigitalPin_trait&lt;PIN&gt;::PORT&gt;::PCINT</td></tr>
+<tr class="memdesc:ade102a62db31cff23ad88bb268037e5b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><code>PCINT</code> vector number for this <code>PIN</code> <br /></td></tr>
 <tr class="separator:ade102a62db31cff23ad88bb268037e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::DigitalPin PIN&gt;<br />
 struct interrupt::PCIType&lt; PIN &gt;</h3>
 
+<p>Helper class that easily converts a <code>PIN</code> into the right <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>. </p>
+<p>The following snippet demonstrates usage of <code><a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal. ">PCIType</a></code> to declare a <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code> instance for later use in a function:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> PIN = board::DigitalPin::D7;</div><div class="line">    <a class="code" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCIType&lt;PIN&gt;::TYPE</a> pci;</div><div class="line">    pci.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#a41142586240ca8149cbc8a1c0372d719">enable_pin</a>&lt;PIN&gt;();</div><div class="line">    pci.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#aee4bc1d43f102c16e56cd6ed11058058">enable</a>();</div><div class="line">    ...</div><div class="line">    pci.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#a75a7c5441b6b6bb6fe7f9045d14b9d63">disable</a>();</div><div class="line">}</div></div><!-- fragment --> <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00125">125</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00455">455</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="pci_8h_source.html">pci.h</a></li>
 </ul>
@@ -115,7 +125,7 @@ struct interrupt::PCIType&lt; PIN &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>interrupt</b></li><li class="navelem"><a class="el" href="structinterrupt_1_1_p_c_i_type.html">PCIType</a></li>
+    <li class="navelem"><a class="el" href="namespaceinterrupt.html">interrupt</a></li><li class="navelem"><a class="el" href="structinterrupt_1_1_p_c_i_type.html">PCIType</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['timeout',['TimeOut',['../classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353',1,'watchdog::WatchdogSignal']]],
-  ['timer',['Timer',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb',1,'board']]],
-  ['timerinputcapture',['TimerInputCapture',['../namespacetimer.html#a908aa72c1bb077bec67565b637350bf4',1,'timer']]],
-  ['timerinterrupt',['TimerInterrupt',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7',1,'timer']]],
-  ['timermode',['TimerMode',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097',1,'timer']]],
-  ['timeroutputmode',['TimerOutputMode',['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0',1,'timer']]]
+  ['sleepmode',['SleepMode',['../namespaceboard.html#ae62717162088fee094efad7ff669183d',1,'board']]],
+  ['state',['State',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ac665b346c57c2fb75ecbc8265ff2f74f',1,'devices::rf::NRF24L01']]],
+  ['stopbits',['StopBits',['../namespaceserial.html#a1cc0a59518594157f23ddf16842243b3',1,'serial']]]
 ];

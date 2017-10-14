@@ -3,5 +3,5 @@
 <area shape="rect" id="node4" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="189,80,247,107"/>
 <area shape="rect" id="node8" href="$timer_8h.html" title="Timer API. " alt="" coords="315,80,377,107"/>
 <area shape="rect" id="node5" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="226,155,301,181"/>
-<area shape="rect" id="node11" href="$interrupts_8h_source.html" title="interrupts.h" alt="" coords="325,155,412,181"/>
+<area shape="rect" id="node11" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="325,155,412,181"/>
 </map>

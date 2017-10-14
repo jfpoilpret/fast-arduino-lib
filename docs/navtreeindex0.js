@@ -13,7 +13,6 @@ var NAVTREEINDEX0 =
 ".html":[4,0,4],
 ".html":[4,0,5],
 ".html":[4,0,7],
-".html":[4,0,8],
 "abi_8cpp_source.html":[5,0,0,2],
 "analog__input_8h.html":[5,0,0,3],
 "analog__input_8h_source.html":[5,0,0,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classdevices_1_1rtc_1_1_d_s1307.html#ad10038c7429b572fb1ad571e798fd3ef":[4,0,3,2,0,12],
 "classdevices_1_1rtc_1_1_d_s1307.html#ae9f34a23d85cdd4ae9e9db4c167a6658":[4,0,3,2,0,3],
 "classdevices_1_1rtc_1_1_d_s1307.html#af223e47007a9c65fa5bee35bf82a8404":[4,0,3,2,0,9],
-"classdevices_1_1rtc_1_1_d_s1307.html#afe1e1743ee7d6b94cbe175daedef62bd":[4,0,3,2,0,1]
+"classdevices_1_1rtc_1_1_d_s1307.html#afe1e1743ee7d6b94cbe175daedef62bd":[4,0,3,2,0,1],
+"classdevices_1_1servo_1_1_servo.html":[4,0,3,3,0]
 };

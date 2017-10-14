@@ -55,12 +55,7 @@ var annotated_dup =
       [ "I2CHandler", "classi2c_1_1_i2_c_handler.html", "classi2c_1_1_i2_c_handler" ],
       [ "I2CManager", "classi2c_1_1_i2_c_manager.html", "classi2c_1_1_i2_c_manager" ]
     ] ],
-    [ "interrupt", null, [
-      [ "HandlerHolder", "classinterrupt_1_1_handler_holder.html", "classinterrupt_1_1_handler_holder" ],
-      [ "INTSignal", "classinterrupt_1_1_i_n_t_signal.html", "classinterrupt_1_1_i_n_t_signal" ],
-      [ "PCISignal", "classinterrupt_1_1_p_c_i_signal.html", "classinterrupt_1_1_p_c_i_signal" ],
-      [ "PCIType", "structinterrupt_1_1_p_c_i_type.html", "structinterrupt_1_1_p_c_i_type" ]
-    ] ],
+    [ "interrupt", "namespaceinterrupt.html", "namespaceinterrupt" ],
     [ "power", null, [
       [ "Power", "classpower_1_1_power.html", "classpower_1_1_power" ]
     ] ],

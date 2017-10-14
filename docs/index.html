@@ -151,7 +151,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li><a href="namespaceflash.html">flash</a>: contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.</li>
 <li><a href="namespacegpio.html">gpio</a>: that namespace deals with all API to manage digital input and outputs.</li>
 <li>[i2c](TODO): that namespace contains all API to deal with I2C (also known as <em>Two Wires Interface</em>), including a base class to help you define support for new devices based on I2C protocol.</li>
-<li>[interrupt](TODO): this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.</li>
+<li><a href="namespaceinterrupt.html">interrupt</a>: this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.</li>
 <li>[power](TODO): contains the API to handle AVR power modes.</li>
 <li><a href="namespaceserial.html">serial</a>: contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:<ul>
 <li><a href="namespaceserial_1_1hard.html">hard</a>: this namespace support AVR embedded UART (for ATmega MCU only, as ATtiny do not have this feature)</li>
@@ -163,7 +163,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li><a href="namespacetime.html">time</a>: provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.</li>
 <li><a href="namespacetime.html">timer</a>: defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.</li>
 <li><a href="namespaceutils.html">utils</a>: provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".</li>
-<li>[watchdog](TODO): this namespace defines an API to deal with MCU watchdog timer as a way</li>
+<li><a href="namespacewatchdog.html">watchdog</a>: this namespace defines an API to deal with MCU watchdog timer as a way</li>
 </ul>
 <p>In addition to all namespaces above, there is one omnipresent namespace <code>board</code> that defines all configuration (list of digital &amp; analog pins, timers...) specific to an MCU target. The documentation for this namespace depends on the MCU target, as described <a href="supportedboards.html">here</a>.</p>
 <p>As you can see, all namespaces in FastArduino are 100% lowercase by convention.</p>
@@ -171,7 +171,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <p>FastArduino is <b>heavily</b> based on C++ templates as you will see when developing with it. Although many people will tell you that "C++ templates are evil and generate bloated code, they are not for embedded", don't believe them! C++ templates, when properly used, bring many advantages without the abovementioned "drawback".</p>
 <p>One downside of templates is its syntax, that may sound less familiar to many developers, but that should not be barrier against its use.</p>
 <p>In FastArduino, templates offer a huge advantage over competing libraries: type-safety is guaranteed at compile-time whatever the MCU/Arduino board target of your program: for instance, it is <b>not possible</b>, with FastArduino, to compile a program that would try to access an IO pin that does not exist on the target; most other libraries I know allow you to do that without complaining.</p>
-<p>Finally, regarding FastArduino organization, it is important to note that a special concept has been developed to deal with interrupt vectors. The rationale behind the concept is that FastArduino will <b>never</b> register an interrupt vector by itself; instead it provides you specific macros for all kinds of interrupt vectors that will generate proper ISR functions, including type-safety checks embedded in the macro. The major advantage of that is that you will never have libraries competing for the same ISR, as is often the case when using Arduino API. This point is further detailed in [FastArduino ISR Handling](TODO).</p>
+<p>Finally, regarding FastArduino organization, it is important to note that a special concept has been developed to deal with interrupt vectors. The rationale behind the concept is that FastArduino will <b>never</b> register an interrupt vector by itself; instead it provides you specific macros for all kinds of interrupt vectors that will generate proper ISR functions, including type-safety checks embedded in the macro. The major advantage of that is that you will never have libraries competing for the same ISR, as is often the case when using Arduino API. This point is further detailed in <a href="interrupts_8h.html#details">FastArduino ISR Handling</a>.</p>
 <h2>Discovering FastArduino API step by step </h2>
 <p>The best way to discover FastArduino is to follow <a href="tutorial.html">this tutorial</a>. </p>
 </div></div><!-- contents -->

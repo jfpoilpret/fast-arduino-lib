@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['setup_5faw',['SETUP_AW',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa51ce6e22a02accadc359e125441193e9',1,'devices::rf::NRF24L01']]],
-  ['setup_5fretr',['SETUP_RETR',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa14367f0ebd70d515bc5566b6cc976d46',1,'devices::rf::NRF24L01']]],
-  ['status',['STATUS',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa5f241c8c8f985b3c51e05d39cf030f4c',1,'devices::rf::NRF24L01']]]
+  ['phase_5fcorrect_5fpwm',['PHASE_CORRECT_PWM',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770',1,'timer']]],
+  ['pipe_5fmask',['PIPE_MASK',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30ab9f475993c1dd99db529c27f80f1642d',1,'devices::rf::NRF24L01']]]
 ];

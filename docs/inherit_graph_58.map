@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structtimer_1_1_calculator.html" title="Defines a set of calculation methods for the given TIMER The behavior of these methods is specific to..." alt="" coords="5,5,132,47"/>
+<area shape="rect" id="node1" href="$classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. " alt="" coords="5,5,187,32"/>
+<area shape="rect" id="node2" href="$classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. " alt="" coords="235,5,380,32"/>
 </map>

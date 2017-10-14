@@ -4,6 +4,7 @@ var namespaces =
     [ "board", "namespaceboard.html", "namespaceboard" ],
     [ "flash", "namespaceflash.html", null ],
     [ "gpio", "namespacegpio.html", null ],
+    [ "interrupt", "namespaceinterrupt.html", null ],
     [ "serial", "namespaceserial.html", "namespaceserial" ],
     [ "streams", "namespacestreams.html", null ],
     [ "time", "namespacetime.html", null ],
