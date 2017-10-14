@@ -131,8 +131,10 @@ ISR(VECTOR)											\
 }
 
 /**
- * Defines API to handle interrupts callbacks.
- * TODO namespace contains other API too (pin interrupts).
+ * Defines API to:
+ * - generically handle interrupts callbacks
+ * - handle external interrupt pins
+ * - handle pin change interrupts
  */
 namespace interrupt
 {
