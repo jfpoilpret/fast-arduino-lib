@@ -31,7 +31,6 @@ REGISTER_PCI_ISR_METHOD(PCI_NUM, serial::soft::UARX< RX >, & serial::soft::UARX<
 REGISTER_INT_ISR_METHOD(INT_NUM, RX, serial::soft::UARX< RX >, & serial::soft::UARX< RX >::on_pin_change)
 
 //FIXME Handle begin/end properly in relation to current queue content
-//TODO Find out why netbeans shows an error on in()._push() and out().pull()
 namespace serial
 {
 namespace soft

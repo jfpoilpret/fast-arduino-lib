@@ -89,7 +89,6 @@ ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
 	CALLBACK (RTT_HOLDER::handler()->millis());											\
 }
 
-//TODO do we have to add doc to namespace again (already present in timer.h)?
 namespace timer
 {
 	/**
