@@ -1107,7 +1107,7 @@ int main()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 In this example, we use `watchdog` API but also `power` API in order to reduce power-consumption.
 
-As we use `WatchdogSignal`, we need to register an ISR, however we do not need any callback, hecen we just register an empty ISR.
+As we use `WatchdogSignal`, we need to register an ISR, however we do not need any callback, hence we just register an empty ISR.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 REGISTER_WATCHDOG_ISR_EMPTY()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1159,7 +1159,7 @@ In FastArduino, ISR are created upon your explicit request, FastArduino will nev
 
 ISR registration is performed through macros provided by FastArduino. There are essentially 4 flavours of registration macros:
 1. API-specific registration: in this flavour, a FastArduino feature requires to directly be linked to an ISR, through a dedicated macro and a specific registration method (either implicitly called by constructor or explicitly through a specific method). In the previous examples of this tutorial, you have already encountered `REGISTER_UATX_ISR()`, `REGISTER_UARX_ISR()`, `REGISTER_UART_ISR()` and `REGISTER_RTT_ISR()`.
-All macros in this flavour follow the same naming scheme:`REGISTER_XXX_ISR`, where *XXX* is the feature handled.
+All macros in this flavour follow the same naming scheme: `REGISTER_XXX_ISR`, where *XXX* is the feature handled.
 2. Empty ISR registration: in this flavour, you activate an interrupt but do not want any callback for it, but then you have to define an empty ISR for it; this empty ISR will not increase code size of your program. You may wonder why you would want to enable an interrupt but do nothing when it occurs, in fact this is often used to make the MCU sleep (low power consumption) and wake it once an interrupt occurs. You have already seen such usage in a previous example, where `REGISTER_WATCHDOG_ISR_EMPTY()` was used.
 3. Method callback registration: with this flavour, you activate an interrupt and want a sepcific method of a given class to be called back when the interrupt occurs; in this flavour, a second step is required inside your code: you need to register an instance of the class that was registered. In this tutorial, previous examples used this approach with `REGISTER_TIMER_COMPARE_ISR_METHOD()` macro and `interrupt::register_handler(handler);` instance registration in `main()`. This is probably the most useful approach as it allows to pass an implicit context (`this` class instance) to the callback.
 4. Function callback registration: with this flavour, you can register one of your functions (global or static) as a callback of an ISR. This approach does not require an extra registration step. This is not used as often as the Method callback registration flavour above.
@@ -1193,7 +1193,7 @@ Here is a table showing all FastArduino macros to register ISR (*Name* is to be 
 | `watchdog.h`       | `WATCHDOG_CLOCK`  | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
 | `watchdog.h`       | `WATCHDOG`        | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
 
-For further details on ISR registration in FastArduino, you can check `interrutps.h` API (TODO LINK) for the general approach, and each individual API documentation for specific interrupts.
+For further details on ISR registration in FastArduino, you can check [`interrutps.h` API](interrupts_8h.html) for the general approach, and each individual API documentation for specific interrupts.
 
 ### Pin Interrupts
 
@@ -1397,7 +1397,7 @@ int main()
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This example performs the same as the previous example except it uses another pin for the button.
-Most of the code is similar, hecen we will focu only on differences.
+Most of the code is similar, hence we will focus only on differences.
 
 The first difference is in the way we define the pin to use as interrupt source:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}

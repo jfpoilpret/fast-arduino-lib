@@ -84,7 +84,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [flash](namespaceflash.html): contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.
 - [gpio](namespacegpio.html): that namespace deals with all API to manage digital input and outputs.
 - [i2c](TODO): that namespace contains all API to deal with I2C (also known as *Two Wires Interface*), including a base class to help you define support for new devices based on I2C protocol.
-- [interrupt](TODO): this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.
+- [interrupt](namespaceinterrupt.html): this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.
 - [power](TODO): contains the API to handle AVR power modes.
 - [serial](namespaceserial.html): contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:
     - [hard](namespaceserial_1_1hard.html): this namespace support AVR embedded UART (for ATmega MCU only, as ATtiny do not have this feature)
@@ -108,7 +108,7 @@ One downside of templates is its syntax, that may sound less familiar to many de
 
 In FastArduino, templates offer a huge advantage over competing libraries: type-safety is guaranteed at compile-time whatever the MCU/Arduino board target of your program: for instance, it is **not possible**, with FastArduino, to compile a program that would try to access an IO pin that does not exist on the target; most other libraries I know allow you to do that without complaining.
 
-Finally, regarding FastArduino organization, it is important to note that a special concept has been developed to deal with interrupt vectors. The rationale behind the concept is that FastArduino will **never** register an interrupt vector by itself; instead it provides you specific macros for all kinds of interrupt vectors that will generate proper ISR functions, including type-safety checks embedded in the macro. The major advantage of that is that you will never have libraries competing for the same ISR, as is often the case when using Arduino API. This point is further detailed in [FastArduino ISR Handling](TODO).
+Finally, regarding FastArduino organization, it is important to note that a special concept has been developed to deal with interrupt vectors. The rationale behind the concept is that FastArduino will **never** register an interrupt vector by itself; instead it provides you specific macros for all kinds of interrupt vectors that will generate proper ISR functions, including type-safety checks embedded in the macro. The major advantage of that is that you will never have libraries competing for the same ISR, as is often the case when using Arduino API. This point is further detailed in [FastArduino ISR Handling](interrupts_8h.html#details).
 
 Discovering FastArduino API step by step
 ----------------------------------------

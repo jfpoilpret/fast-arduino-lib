@@ -131,7 +131,8 @@ ISR(VECTOR)											\
 }
 
 /**
- * Defines API to:
+ * Defines API to handle AVR interruptions.
+ * In particular, the following API are provided:
  * - generically handle interrupts callbacks
  * - handle external interrupt pins
  * - handle pin change interrupts
