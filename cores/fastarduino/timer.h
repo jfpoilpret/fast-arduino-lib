@@ -30,7 +30,6 @@
 
 // Generic macros to register ISR on Timer
 //=========================================
-//TODO rework naming of these API macros
 /**
  * Register the necessary ISR (interrupt Service Routine) for a timer::Timer
  * with a callback method in CTC mode.
