@@ -94,7 +94,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [time](namespacetime.html): provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.
 - [timer](namespacetime.html): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.
 - [utils](namespaceutils.html): provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".
-- [watchdog](TODO): this namespace defines an API to deal with MCU watchdog timer as a way 
+- [watchdog](namespacewatchdog.html): this namespace defines an API to deal with MCU watchdog timer as a way 
 
 In addition to all namespaces above, there is one omnipresent namespace `board` that defines all configuration (list of digital & analog pins, timers...) specific to an MCU target. The documentation for this namespace depends on the MCU target, as described [here](supportedboards.html).
 
