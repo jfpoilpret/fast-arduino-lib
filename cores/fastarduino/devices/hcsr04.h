@@ -25,22 +25,35 @@
 
 // Utilities to handle ISR callbacks
 #define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)								\
-static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
+static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "ECHO must be an INT pin.");	\
 static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
-	"PIN INT number must match INT_NUM");													\
+	"ECHO INT number must match INT_NUM");													\
 ISR(CAT3(INT, INT_NUM, _vect))																\
 {																							\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
-	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();							\
 }
 
-#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO)								\
+#define REGISTER_HCSR04_PCI_ISR(TIMER_NUM, PCI_NUM, TRIGGER, ECHO)							\
 CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
 ISR(CAT3(PCINT, PCI_NUM, _vect))															\
 {																							\
+	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);						\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
-	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_echo)();								\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();							\
 }
+
+#define REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)									\
+ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))														\
+{																							\
+	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);						\
+	using TRAIT = board_traits::Timer_trait<TIMER>;											\
+	static_assert(TRAIT::ICP_PIN == ECHO, "ECHO must be an ICP pin.");						\
+	TRAIT::TYPE capture = TRAIT::ICR;														\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, true >;				\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_capture, uint16_t)(capture);			\
+}
+	// CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_capture, TRAIT::TYPE)(capture);			
 
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
 static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
@@ -51,7 +64,7 @@ ISR(CAT3(INT, INT_NUM, _vect))																\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
 	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
 	auto handler = SERVO_HOLDER::handler();													\
-	handler->on_echo();																		\
+	handler->on_pin_change();																\
 	if (handler->ready())																	\
 		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
 }
@@ -65,7 +78,7 @@ ISR(CAT3(INT, INT_NUM, _vect))																\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
 	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
 	auto handler = SERVO_HOLDER::handler();													\
-	handler->on_echo();																		\
+	handler->on_pin_change();																\
 	if (handler->ready())																	\
 		CALLBACK (handler->latest_echo_us());												\
 }
@@ -77,7 +90,7 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))															\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
 	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
 	auto handler = SERVO_HOLDER::handler();													\
-	handler->on_echo();																		\
+	handler->on_pin_change();																\
 	if (handler->ready())																	\
 		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
 }
@@ -89,7 +102,7 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))															\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
 	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
 	auto handler = SERVO_HOLDER::handler();													\
-	handler->on_echo();																		\
+	handler->on_pin_change();																\
 	if (handler->ready())																	\
 		CALLBACK (handler->latest_echo_us());												\
 }
@@ -115,70 +128,35 @@ namespace sonar
 		return uint16_t(distance_mm * 1000UL * 2UL / SPEED_OF_SOUND);
 	}
 
-	//TODO improve API to allow several types instances sharing the same TRIGGER pin
-	template<board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO>
-	class HCSR04
+	//TODO (undocumented) abstract sonar class that handles all common stuff.
+	//TODO must be able to deal with RTT+PCI/INT and Timer input capture
+	template<board::Timer TIMER>
+	class AbstractSonar
 	{
+	protected:
+		using TIMER_TYPE = timer::Timer<TIMER>;
+		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
+
 	public:
-		static constexpr const uint16_t MAX_RANGE_M = 4;
-		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000 / SPEED_OF_SOUND + 1;
-
-		HCSR04(timer::RTT<TIMER>& rtt, bool async = true)
-			:	rtt_{rtt}, 
-				trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}, 
-				start_{}, echo_pulse_{0}, status_{0}
-		{
-			// If async mode is gonna be used, then register this as interrupt handler (for INT or PCI)
-			if (async)
-				interrupt::register_handler(*this);
-		}
-
-		// Blocking API
-		// Do note that timeout here is for the whole method not just for the sound echo, hence it
-		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
-		uint16_t echo_us(uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
-		{
-			trigger();
-			// Wait for echo signal start
-			timeout_ms += rtt_.millis();
-			while (!echo_.value())
-				if (rtt_.millis() >= timeout_ms) return 0;
-			// Read current time (need RTT)
-			time::RTTTime start = rtt_.time();
-			// Wait for echo signal end
-			while (echo_.value())
-				if (rtt_.millis() >= timeout_ms) return 0;
-			// Read current time (need RTT)
-			time::RTTTime end = rtt_.time();
-			time::RTTTime delta = time::delta(start, end);
-			echo_pulse_ = uint16_t(delta.millis * 1000UL + delta.micros);
-			return echo_pulse_;
-		}
-		
-		//TODO How to manage status & timeout smartly?
-		// We want to avoid using await_echo_us() to handle state & timeout!
-		void async_echo(bool trigger = true)
-		{
-			status_ = 0;
-			if (trigger) this->trigger();
-		}
-
-		bool ready() const
+		inline bool ready() const
 		{
 			return status_ & READY;
 		}
 		
-		uint16_t latest_echo_us() const
+		inline TYPE latest_echo_ticks() const
 		{
-			synchronized return echo_pulse_;
+			if (sizeof(TYPE) > 1)
+				synchronized return echo_pulse_;
+			else
+				return echo_pulse_;
 		}
 
-		uint16_t await_echo_us(uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
+		TYPE await_echo_ticks(TYPE timeout_ticks)
 		{
 			// Wait for echo signal start
-			timeout_ms += rtt_.millis();
+			timer_.reset();
 			while (!(status_ & READY))
-				if (rtt_.millis() >= timeout_ms)
+				if (timer_.ticks() >= timeout_ticks)
 				{
 					status_ = READY;
 					return 0;
@@ -186,28 +164,103 @@ namespace sonar
 			return echo_pulse_;
 		}
 
-		void on_echo()
+	protected:
+		AbstractSonar(TIMER_TYPE& timer):timer_{timer}, echo_pulse_{0}, status_{0} {}
+
+		inline void trigger_sent(bool capture)
 		{
-			if (echo_.value())
+			if (capture) timer_.set_input_capture(timer::TimerInputCapture::RISING_EDGE);
+			status_ = 0;
+		}
+		inline void pulse_started()
+		{
+			timer_._reset();
+			status_ = STARTED;
+		}
+		inline void pulse_finished()
+		{
+			echo_pulse_ = timer_._ticks();
+			status_ = READY;
+		}
+		inline void pulse_captured(TYPE capture)
+		{
+			if (timer_.input_capture() == timer::TimerInputCapture::RISING_EDGE)
 			{
-				// pulse started
-				start_ = rtt_.time();
+				timer_._reset();
+				timer_.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
 				status_ = STARTED;
 			}
-			else if (status_ & STARTED)
+			else
 			{
-				// pulse ended
-				time::RTTTime end = rtt_.time();
-				time::RTTTime delta = time::delta(start_, end);
-				echo_pulse_ = uint16_t(delta.millis * 1000UL + delta.micros);
+				echo_pulse_ = capture;
 				status_ = READY;
 			}
+		}
+
+		TIMER_TYPE& timer_;
+		volatile TYPE echo_pulse_;
+
+		static constexpr const uint8_t READY = 0x01;
+		static constexpr const uint8_t STARTED = 0x02;
+		volatile uint8_t status_;
+	};
+
+	//TODO create abstract parent with all common code
+	//TODO improve API to allow several types instances sharing the same TRIGGER pin
+	template<board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO, bool USE_CAPTURE = false>
+	class HCSR04: public AbstractSonar<TIMER>
+	{
+	private:
+		using PARENT = AbstractSonar<TIMER>;
+		using TIMER_TYPE = timer::Timer<TIMER>;
+		
+	public:
+		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
+		static constexpr const uint16_t MAX_RANGE_M = 4;
+		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000 / SPEED_OF_SOUND + 1;
+
+		HCSR04(timer::Timer<TIMER>& timer)
+			:	PARENT{timer}, 
+				trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT} {}
+
+		inline void register_handler()
+		{
+			interrupt::register_handler(*this);
+		}
+
+		// Blocking API
+		// Do note that timeout here is for the whole method not just for the sound echo, hence it
+		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
+		TYPE echo_ticks(TYPE timeout_ticks)
+		{
+			async_echo();
+			return this->await_echo_ticks(timeout_ticks);
+		}
+		
+		// We want to avoid using await_echo_us() to handle state & timeout!
+		void async_echo(bool trigger = true)
+		{
+			this->trigger_sent(USE_CAPTURE);
+			if (trigger) this->trigger();
+		}
+
+		void on_pin_change()
+		{
+			if (echo_.value())
+				this->pulse_started();
+			// else if (this->ready())
+			else
+				this->pulse_finished();
+		}
+
+		void on_capture(TYPE capture)
+		{
+			this->pulse_captured(capture);
 		}
 
 	private:
 		void trigger()
 		{
-			rtt_.millis(0);
 			// Pulse TRIGGER for 10us
 			trigger_.set();
 			time::delay_us(TRIGGER_PULSE_US);
@@ -216,15 +269,8 @@ namespace sonar
 		
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
-		timer::RTT<TIMER>& rtt_;
 		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 		typename gpio::FastPinType<ECHO>::TYPE echo_;
-		time::RTTTime start_;
-		volatile uint16_t echo_pulse_;
-
-		static constexpr const uint8_t READY = 0x01;
-		static constexpr const uint8_t STARTED = 0x02;
-		volatile uint8_t status_;
 	};
 }
 }

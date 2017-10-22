@@ -4,18 +4,15 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <fastarduino/gpio.h>
-#include <fastarduino/timer.h>
+#include <fastarduino/devices/hcsr04.h>
+#include <fastarduino/time.h>
 #include <fastarduino/uart.h>
 
 #define TIMER_NUM 1
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-using TIMER_TYPE = timer::Timer<TIMER, true>;
-static constexpr const board::DigitalPin ICP = TIMER_TYPE::ICP_PIN;
-
-static constexpr const uint32_t PRECISION = 1000UL;
-using CALC = timer::Calculator<TIMER>;
-static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
+using TIMER_TYPE = timer::Timer<TIMER>;
+static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2;
+static constexpr const board::DigitalPin ECHO = TIMER_TYPE::ICP_PIN;
 
 // UART for traces
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
@@ -23,19 +20,18 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
-static volatile TIMER_TYPE::TIMER_TYPE _capture;
-static volatile uint8_t _captured = 0;
+using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, true>;
+// using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, false>;
+static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
+using CALC = timer::Calculator<TIMER>;
+static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
 
-void callback(TIMER_TYPE::TIMER_TYPE capture)
-{
-	gpio::FastPinType<board::DigitalPin::LED>::toggle();
-	_capture = capture;
-	++_captured;
-}
+static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
 
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
-REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, callback)
+REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)
+// REGISTER_HCSR04_PCI_ISR(TIMER_NUM, 0, TRIGGER, ECHO)
 
 int main() __attribute__((OS_main));
 int main()
@@ -48,23 +44,26 @@ int main()
 	out.width(0);
 	out << "Start\n" << streams::flush;
 
-	gpio::FastPinType<board::DigitalPin::LED>::set_mode(gpio::PinMode::OUTPUT, false);
-	gpio::FastPinType<ICP>::set_mode(gpio::PinMode::INPUT_PULLUP);
-
-	// interrupt::register_handler()
-	
 	// Start timer
-	uint8_t captured = 0;
-	TIMER_TYPE timer{timer::TimerMode::NORMAL};
-	timer.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
-	timer.begin(PRESCALER);
-	out << "Timer started. You can press on button.\n" << streams::flush;
+	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER, timer::TimerInterrupt::INPUT_CAPTURE};
+	// TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
+	timer.begin();
+	out << "Timer started.\n" << streams::flush;
 
+	SONAR sonar{timer};
+	sonar.register_handler();
+	time::delay_ms(5000);
 	while (true)
 	{
-		while (captured == _captured);
-		TIMER_TYPE::TIMER_TYPE capture = _capture;
-		captured = _captured;
-		out << "#" << captured << ": " << capture << "\n" << streams::flush;
+		out << "#1\n" << streams::flush;
+		sonar.async_echo();
+		out << "#2\n" << streams::flush;
+		SONAR::TYPE echo = sonar.await_echo_ticks(TIMEOUT);
+		// SONAR::TYPE echo = sonar.echo_ticks(TIMEOUT);
+		out << "#3\n" << streams::flush;
+		uint32_t us = CALC::ticks_to_us(PRESCALER, echo);
+		uint16_t distance = devices::sonar::echo_us_to_distance_mm(us);
+		out << "# " << echo << " ticks, " << us << "us, " << distance << "mm\n" << streams::flush;
+		time::delay_ms(500);
 	}
 }
