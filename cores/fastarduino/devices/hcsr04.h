@@ -24,37 +24,37 @@
 #include <fastarduino/pci.h>
 
 // Utilities to handle ISR callbacks
-#define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)								\
-static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "ECHO must be an INT pin.");	\
-static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
-	"ECHO INT number must match INT_NUM");													\
-ISR(CAT3(INT, INT_NUM, _vect))																\
-{																							\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
-	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();							\
+#define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)									\
+static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "ECHO must be an INT pin.");		\
+static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,				\
+	"ECHO INT number must match INT_NUM");														\
+ISR(CAT3(INT, INT_NUM, _vect))																	\
+{																								\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;	\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();								\
 }
 
-#define REGISTER_HCSR04_PCI_ISR(TIMER_NUM, PCI_NUM, TRIGGER, ECHO)							\
-CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
-ISR(CAT3(PCINT, PCI_NUM, _vect))															\
-{																							\
-	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);						\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
-	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();							\
+#define REGISTER_HCSR04_PCI_ISR(TIMER_NUM, PCI_NUM, TRIGGER, ECHO)								\
+CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
+ISR(CAT3(PCINT, PCI_NUM, _vect))																\
+{																								\
+	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);							\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();								\
 }
 
-#define REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)									\
-ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))														\
-{																							\
-	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);						\
-	using TRAIT = board_traits::Timer_trait<TIMER>;											\
-	static_assert(TRAIT::ICP_PIN == ECHO, "ECHO must be an ICP pin.");						\
-	TRAIT::TYPE capture = TRAIT::ICR;														\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, true >;				\
-	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_capture, uint16_t)(capture);			\
+#define REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)										\
+ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))															\
+{																								\
+	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);							\
+	using TRAIT = board_traits::Timer_trait<TIMER>;												\
+	static_assert(TRAIT::ICP_PIN == ECHO, "ECHO must be an ICP pin.");							\
+	TRAIT::TYPE capture = TRAIT::ICR;															\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_ICP>;	\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_capture, TRAIT::TYPE)(capture);				\
 }
-	// CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_capture, TRAIT::TYPE)(capture);			
 
+//TODO UPDATE ALL NEXT REGISTER MACROS TO FIT NEW HCSR04 template args and method names
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
 static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
 static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
@@ -107,6 +107,8 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))															\
 		CALLBACK (handler->latest_echo_us());												\
 }
 
+//TODO regsiter function/method callback for ICP
+
 namespace devices
 {
 namespace sonar
@@ -127,6 +129,14 @@ namespace sonar
 		// Multiply by 2 as echo time must include full sound round-trip
 		return uint16_t(distance_mm * 1000UL * 2UL / SPEED_OF_SOUND);
 	}
+
+	enum class SonarType
+	{
+		BLOCKING,
+		ASYNC_INT,
+		ASYNC_PCINT,
+		ASYNC_ICP
+	};
 
 	//TODO (undocumented) abstract sonar class that handles all common stuff.
 	//TODO must be able to deal with RTT+PCI/INT and Timer input capture
@@ -151,7 +161,10 @@ namespace sonar
 				return echo_pulse_;
 		}
 
-		TYPE await_echo_ticks(TYPE timeout_ticks)
+	protected:
+		AbstractSonar(TIMER_TYPE& timer):timer_{timer}, echo_pulse_{0}, status_{0} {}
+
+		TYPE async_echo_ticks(TYPE timeout_ticks)
 		{
 			// Wait for echo signal start
 			timer_.reset();
@@ -164,12 +177,28 @@ namespace sonar
 			return echo_pulse_;
 		}
 
-	protected:
-		AbstractSonar(TIMER_TYPE& timer):timer_{timer}, echo_pulse_{0}, status_{0} {}
+		template<board::DigitalPin ECHO>
+		TYPE blocking_echo_ticks(typename gpio::FastPinType<ECHO>::TYPE& echo, TYPE timeout_ticks)
+		{
+			timer_.reset();
+			while (!echo.value())
+				if (timer_.ticks() >= timeout_ticks)
+					return 0;
+			timer_.reset();
+			status_ = STARTED;
+			// Wait for echo signal end
+			while (echo.value())
+				if (timer_.ticks() >= timeout_ticks)
+					return 0;
+			echo_pulse_ = timer_._ticks();
+			status_ = READY;
+			return echo_pulse_;
+		}
 
 		inline void trigger_sent(bool capture)
 		{
 			if (capture) timer_.set_input_capture(timer::TimerInputCapture::RISING_EDGE);
+			timer_.reset();
 			status_ = 0;
 		}
 		inline void pulse_started()
@@ -197,6 +226,7 @@ namespace sonar
 			}
 		}
 
+		//TODO these should be all private!
 		TIMER_TYPE& timer_;
 		volatile TYPE echo_pulse_;
 
@@ -205,15 +235,28 @@ namespace sonar
 		volatile uint8_t status_;
 	};
 
-	//TODO create abstract parent with all common code
+	//TODO improve API to allow blocking echo (when we cannot use interrupt-driven pins)
+	//TODO improve API (regi macro actually) to allow sharing PCINT pins vector
+	// e.g. to allow using several pins for echo in a PCINT port each with a sonar
 	//TODO improve API to allow several types instances sharing the same TRIGGER pin
-	template<board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO, bool USE_CAPTURE = false>
+	template<
+		board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO, 
+		SonarType SONAR_TYPE = SonarType::BLOCKING>
 	class HCSR04: public AbstractSonar<TIMER>
 	{
 	private:
 		using PARENT = AbstractSonar<TIMER>;
 		using TIMER_TYPE = timer::Timer<TIMER>;
-		
+		using TIMER_TRAIT = board_traits::Timer_trait<TIMER>;
+		using ECHO_PIN_TRAIT = board_traits::DigitalPin_trait<ECHO>;
+		using ECHO_PORT_TRAIT = board_traits::Port_trait<ECHO_PIN_TRAIT::PORT>;
+		static_assert(SONAR_TYPE != SonarType::ASYNC_ICP || TIMER_TRAIT::ICP_PIN == ECHO, 
+			"SONAR_TYPE == ASYNC_ICP but ECHO is not an ICP pin");
+		static_assert(SONAR_TYPE != SonarType::ASYNC_INT || ECHO_PIN_TRAIT::IS_INT, 
+			"SONAR_TYPE == ASYNC_INT but ECHO is not an INT pin");
+		static_assert(SONAR_TYPE != SonarType::ASYNC_PCINT || ECHO_PORT_TRAIT::PCINT != 0xFF, 
+			"SONAR_TYPE == ASYNC_PCINT but ECHO is not an PCI pin");
+				
 	public:
 		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
 		static constexpr const uint16_t MAX_RANGE_M = 4;
@@ -225,6 +268,8 @@ namespace sonar
 
 		inline void register_handler()
 		{
+			static_assert(SONAR_TYPE != SonarType::BLOCKING, 
+				"register_handler() must not be called with SonarType::BLOCKING");
 			interrupt::register_handler(*this);
 		}
 
@@ -234,32 +279,43 @@ namespace sonar
 		TYPE echo_ticks(TYPE timeout_ticks)
 		{
 			async_echo();
-			return this->await_echo_ticks(timeout_ticks);
+			return await_echo_ticks(timeout_ticks);
+		}
+
+		TYPE await_echo_ticks(TYPE timeout_ticks)
+		{
+			if (SONAR_TYPE != SonarType::BLOCKING)
+				return this->async_echo_ticks(timeout_ticks);
+			else
+				return this->template blocking_echo_ticks<ECHO>(echo_, timeout_ticks);
 		}
 		
 		// We want to avoid using await_echo_us() to handle state & timeout!
 		void async_echo(bool trigger = true)
 		{
-			this->trigger_sent(USE_CAPTURE);
+			this->trigger_sent(SONAR_TYPE == SonarType::ASYNC_ICP);
 			if (trigger) this->trigger();
 		}
 
 		void on_pin_change()
 		{
+			static_assert(SONAR_TYPE == SonarType::ASYNC_INT || SONAR_TYPE == SonarType::ASYNC_PCINT, 
+				"on_pin_change() must be called only with SonarType::ASYNC_INT or ASYNC_PCINT");
 			if (echo_.value())
 				this->pulse_started();
-			// else if (this->ready())
 			else
 				this->pulse_finished();
 		}
 
 		void on_capture(TYPE capture)
 		{
+			static_assert(SONAR_TYPE == SonarType::ASYNC_ICP, 
+				"on_capture() must be called only with SonarType::ASYNC_ICP");
 			this->pulse_captured(capture);
 		}
 
 	private:
-		void trigger()
+		inline void trigger()
 		{
 			// Pulse TRIGGER for 10us
 			trigger_.set();
