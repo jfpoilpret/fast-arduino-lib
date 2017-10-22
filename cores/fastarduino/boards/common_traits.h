@@ -110,9 +110,9 @@ namespace board_traits
 		static constexpr const REG8 DDR{};
 		static constexpr const REG8 PORT{};
 		static constexpr const uint8_t DPIN_MASK = 0x00;
-		static constexpr const uint8_t PCINT = 0;
+		static constexpr const uint8_t PCINT = 0xFF;
 	};
-	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_>
+	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_ = 0xFF>
 	struct Port_trait_impl
 	{
 		static constexpr const REG8 PIN{PIN_};
