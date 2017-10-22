@@ -299,6 +299,18 @@ namespace timer
 			return best_tick_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us_per_tick);
 		}
 
+		//TODO DOC
+		static constexpr uint32_t ticks_to_us(TIMER_PRESCALER prescaler, TIMER_TYPE ticks)
+		{
+			return uint32_t(ticks) * _BV(uint8_t(prescaler)) / (F_CPU / 1000000UL);
+		}
+
+		//TODO DOC
+		static constexpr TIMER_TYPE us_to_ticks(TIMER_PRESCALER prescaler, uint32_t us)
+		{
+			return TIMER_TYPE(us * (F_CPU / 1000000UL) / _BV(uint8_t(prescaler)));
+		}
+
 		/**
 		 * Computes the ideal prescaler value to use for this timer, in
 		 * TimerMode::CTC mode, in order to be able to count up to @p us
@@ -707,6 +719,8 @@ namespace timer
 				TRAIT::TIMSK = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 		}
 
+		//TODO method to check if some interrupt is enabled
+
 		/**
 		 * Set the input capture mode fr this timer.
 		 * Input Capture will work only if `set_interrupts()` is called with
@@ -722,6 +736,13 @@ namespace timer
 			// Check if timer is currently running
 			if (TRAIT::TCCRB)
 				TRAIT::TCCRB = _tccrb;
+		}
+
+		//TODO DOC
+		inline TimerInputCapture input_capture() const
+		{
+			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
+			return TRAIT::TCCRB & TRAIT::ICES_TCCRB ? TimerInputCapture::RISING_EDGE : TimerInputCapture::FALLING_EDGE;
 		}
 
 		/**
@@ -740,6 +761,8 @@ namespace timer
 			}
 		}
 
+		//TODO getter method for current TimerMode
+
 		/**
 		 * Change prescaler for this timer.
 		 * @param prescaler the prescale enum value to use for this timer
@@ -751,6 +774,8 @@ namespace timer
 			if (TRAIT::TCCRB)
 				TRAIT::TCCRB = _tccrb;
 		}
+
+		//TODO getter method for current prescaler
 
 		/**
 		 * Start this timer in the currently selected mode, with the provided
@@ -808,7 +833,7 @@ namespace timer
 			else
 				_reset();
 		}
-		
+
 		/**
 		 * Reset current counter to 0.
 		 * Note that this method is not synchronized, hence you should ensure it
@@ -820,6 +845,34 @@ namespace timer
 		inline void _reset()
 		{
 			TRAIT::TCNT = 0;
+		}
+		
+		/**
+		 * Return the current counter value for this timer.
+		 * This method is synchronized if needed (i.e. if this timer is 16 bits).
+		 * If you do not need synchronization, then you should better use
+		 * `_ticks()` instead.
+		 * @sa _ticks()
+		 */
+		inline TIMER_TYPE ticks()
+		{
+			if (sizeof(TIMER_TYPE) > 1)
+				synchronized return _ticks();
+			else
+				return _ticks();
+		}
+
+		/**
+		 * Return the current counter value for this timer.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `ticks()` instead.
+		 * @sa ticks()
+		 */
+		inline TIMER_TYPE _ticks()
+		{
+			return TRAIT::TCNT;
 		}
 		
 		/**
