@@ -49,7 +49,7 @@ Then you can use [FastArduino Project Template](https://github.com/jfpoilpret/fa
 
 Your project shall have at least one ".cpp" source file with an `int main()` function, as shown in the [tutorial](tutorial.html). The FastArduino Project Template includes this source file already.
 
-Once you can build your project from netbeans, you can build it from a Linux shell as well:
+That FastArduino project template also supports building from a Linux shell:
 
     > $ make CONF=UNO
     > $ make flash CONF=UNO
