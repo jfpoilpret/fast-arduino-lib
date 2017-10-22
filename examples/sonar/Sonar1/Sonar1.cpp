@@ -26,7 +26,7 @@
 #include <fastarduino/boards/board.h>
 #include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
-#include <fastarduino/realtime_timer.h>
+#include <fastarduino/timer.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/devices/hcsr04.h>
 
