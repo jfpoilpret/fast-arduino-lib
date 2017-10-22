@@ -26,7 +26,7 @@
 #include <fastarduino/boards/board.h>
 #include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
-#include <fastarduino/realtime_timer.h>
+#include <fastarduino/timer.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/int.h>
 #include <fastarduino/devices/hcsr04.h>
@@ -81,12 +81,17 @@ static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D10
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using RTT = timer::RTT<TIMER>;
-using PROXIM = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO>;
+using TIMER_TYPE = timer::Timer<TIMER>;
+using CALC = timer::Calculator<TIMER>;
+using devices::sonar::SonarType;
+using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;
+static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
+static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
+static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
+
 using devices::sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
-REGISTER_RTT_ISR(TIMER_NUM)
 REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)		
 
 int main() __attribute__((OS_main));
@@ -104,23 +109,25 @@ int main()
 	uart.begin(115200);
 	auto out = uart.fout();
 	
-	RTT rtt;
-	rtt.register_rtt_handler();
-	rtt.begin();
+	// Start timer
+	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
+	timer.begin();
+	SONAR sonar{timer};
+	sonar.register_handler();
+
 	interrupt::INTSignal<ECHO> signal;
 	signal.enable();
-	PROXIM sensor{rtt};
 	
 	out << F("Starting...\n") << streams::flush;
 	
 	while (true)
 	{
-		sensor.async_echo();
-		uint16_t pulse = sensor.await_echo_us();
-		uint32_t timing = rtt.millis();
-		uint16_t mm = echo_us_to_distance_mm(pulse);
+		sonar.async_echo();
+		SONAR::TYPE pulse = sonar.await_echo_ticks(TIMEOUT);
+		uint32_t us = CALC::ticks_to_us(PRESCALER, pulse);
+		uint16_t mm = echo_us_to_distance_mm(us);
 		// trace value to output
-		out << F("Pulse: ") << pulse  << F(" us. Distance: ") << mm << F(" mm (duration = ") << timing << F(" ms)\n") << streams::flush;
+		out << F("Pulse: ") << pulse << F(" ticks, ") << us << F("us. Distance: ") << mm << F("mm\n") << streams::flush;
 		time::delay_ms(1000);
 	}
 }
