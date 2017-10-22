@@ -36,8 +36,8 @@
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
-#define TIMER_NUM 0
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+#define TIMER_NUM 1
+static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
 static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PD3;
 #elif defined (ARDUINO_MEGA)
@@ -46,8 +46,8 @@ static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PD3;
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
-#define TIMER_NUM 0
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+#define TIMER_NUM 1
+static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PE4;
 static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PE5;
 #elif defined(ARDUINO_LEONARDO)
@@ -56,8 +56,8 @@ static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PE5;
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(1)
-#define TIMER_NUM 0
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+#define TIMER_NUM 1
+static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD1;
 static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PD0;
 #elif defined(BREADBOARD_ATTINYX4)
@@ -65,8 +65,8 @@ static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PD0;
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-#define TIMER_NUM 0
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+#define TIMER_NUM 1
+static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
 static constexpr const board::DigitalPin ECHO = board::DigitalPin::D10_PB2;
 #else
@@ -76,12 +76,16 @@ static constexpr const board::DigitalPin ECHO = board::DigitalPin::D10_PB2;
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using RTT = timer::RTT<TIMER>;
-using PROXIM = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO>;
+using TIMER_TYPE = timer::Timer<TIMER>;
+using CALC = timer::Calculator<TIMER>;
+using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO>;
+static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
+static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
+static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
+
 using devices::sonar::echo_us_to_distance_mm;
 
-// Register all needed ISR
-REGISTER_RTT_ISR(TIMER_NUM)
+// No ISR needed here as we work in pure blocking mode
 
 int main() __attribute__((OS_main));
 int main()
@@ -98,20 +102,20 @@ int main()
 	uart.begin(115200);
 	auto out = uart.fout();
 	
-	RTT rtt;
-	rtt.register_rtt_handler();
-	rtt.begin();
-	PROXIM sensor{rtt, false};
+	// Start timer
+	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
+	timer.begin();
+	SONAR sonar{timer};
 	
 	out << F("Starting...\n") << streams::flush;
 	
 	while (true)
 	{
-		uint16_t pulse = sensor.echo_us();
-		uint32_t timing = rtt.millis();
-		uint16_t mm = echo_us_to_distance_mm(pulse);
+		SONAR::TYPE pulse = sonar.echo_ticks(TIMEOUT);
+		uint32_t us = CALC::ticks_to_us(PRESCALER, pulse);
+		uint16_t mm = echo_us_to_distance_mm(us);
 		// trace value to output
-		out << F("Pulse: ") << pulse  << F(" us. Distance: ") << mm << F(" mm (duration = ") << timing << F(" ms)\n") << streams::flush;
+		out << F("Pulse: ") << pulse << F(" ticks, ") << us << F("us. Distance: ") << mm << F("mm\n") << streams::flush;
 		time::delay_ms(1000);
 	}
 }
