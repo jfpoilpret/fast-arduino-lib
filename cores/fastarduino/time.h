@@ -153,7 +153,7 @@ namespace time
 	inline void delay_us(uint16_t us) INLINE;
 	inline void delay_us(uint16_t us)
 	{
-		_delay_loop_2((us * F_CPU) / 4000000L);
+		_delay_loop_2(us * (F_CPU / 1000000UL) / 4UL);
 	}
 
 	/**
