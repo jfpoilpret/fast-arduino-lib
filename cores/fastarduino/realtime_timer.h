@@ -283,6 +283,12 @@ namespace timer
 		}
 		/// @endcond
 
+		//TODO DOC
+		inline Timer<TIMER>& timer()
+		{
+			return *this;
+		}
+
 	protected:
 		/// @cond notdocumented
 		volatile uint32_t _millis;
