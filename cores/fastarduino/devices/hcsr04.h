@@ -167,7 +167,6 @@ namespace sonar
 		TYPE async_echo_ticks(TYPE timeout_ticks)
 		{
 			// Wait for echo signal start
-			timer_.reset();
 			while (!(status_ & READY))
 				if (timer_.ticks() >= timeout_ticks)
 				{
@@ -184,49 +183,56 @@ namespace sonar
 			while (!echo.value())
 				if (timer_.ticks() >= timeout_ticks)
 					return 0;
-			timer_.reset();
+			echo_pulse_ = timer_.ticks();
 			status_ = STARTED;
 			// Wait for echo signal end
 			while (echo.value())
 				if (timer_.ticks() >= timeout_ticks)
 					return 0;
-			echo_pulse_ = timer_._ticks();
+			echo_pulse_ = timer_.ticks() - echo_pulse_;
 			status_ = READY;
 			return echo_pulse_;
 		}
 
-		inline void trigger_sent(bool capture)
+		inline void trigger_sent(bool capture, bool reset)
 		{
 			if (capture) timer_.set_input_capture(timer::TimerInputCapture::RISING_EDGE);
-			timer_.reset();
+			if (reset) timer_.reset();
 			status_ = 0;
 		}
+		//TODO improve by passing TCNT as argument (obtained from ISR and passed through on_pin_change())
 		inline void pulse_started()
 		{
-			timer_._reset();
-			status_ = STARTED;
+			if (status_ == 0)
+			{
+				echo_pulse_ = timer_._ticks();
+				status_ = STARTED;
+			}
 		}
 		inline void pulse_finished()
 		{
-			echo_pulse_ = timer_._ticks();
-			status_ = READY;
+			if (status_ == STARTED)
+			{
+				echo_pulse_ = timer_._ticks() - echo_pulse_;
+				status_ = READY;
+			}
 		}
 		inline void pulse_captured(TYPE capture)
 		{
 			if (timer_.input_capture() == timer::TimerInputCapture::RISING_EDGE)
 			{
-				timer_._reset();
 				timer_.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
+				echo_pulse_ = capture;
 				status_ = STARTED;
 			}
 			else
 			{
-				echo_pulse_ = capture;
+				echo_pulse_ = capture - echo_pulse_;
 				status_ = READY;
 			}
 		}
 
-		//TODO these should be all private!
+	private:
 		TIMER_TYPE& timer_;
 		volatile TYPE echo_pulse_;
 
@@ -235,7 +241,6 @@ namespace sonar
 		volatile uint8_t status_;
 	};
 
-	//TODO improve API to allow blocking echo (when we cannot use interrupt-driven pins)
 	//TODO improve API (regi macro actually) to allow sharing PCINT pins vector
 	// e.g. to allow using several pins for echo in a PCINT port each with a sonar
 	//TODO improve API to allow several types instances sharing the same TRIGGER pin
@@ -260,7 +265,7 @@ namespace sonar
 	public:
 		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
 		static constexpr const uint16_t MAX_RANGE_M = 4;
-		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000 / SPEED_OF_SOUND + 1;
+		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
 		HCSR04(timer::Timer<TIMER>& timer)
 			:	PARENT{timer}, 
@@ -293,7 +298,7 @@ namespace sonar
 		// We want to avoid using await_echo_us() to handle state & timeout!
 		void async_echo(bool trigger = true)
 		{
-			this->trigger_sent(SONAR_TYPE == SonarType::ASYNC_ICP);
+			this->trigger_sent(SONAR_TYPE == SonarType::ASYNC_ICP, trigger);
 			if (trigger) this->trigger();
 		}
 
