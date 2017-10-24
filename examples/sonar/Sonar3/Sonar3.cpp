@@ -92,7 +92,7 @@ static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECIS
 using devices::sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
-REGISTER_HCSR04_PCI_ISR(TIMER_NUM, PCI_NUM, TRIGGER, ECHO)		
+REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO)		
 
 int main() __attribute__((OS_main));
 int main()

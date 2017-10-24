@@ -30,17 +30,19 @@ static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,
 	"ECHO INT number must match INT_NUM");														\
 ISR(CAT3(INT, INT_NUM, _vect))																	\
 {																								\
+	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;	\
-	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();								\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change, TRAIT::TYPE)(TRAIT::TCNT);		\
 }
 
-#define REGISTER_HCSR04_PCI_ISR(TIMER_NUM, PCI_NUM, TRIGGER, ECHO)								\
+//TODO Allow multiple echo pins for the same PCINT
+#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO)									\
 CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
 ISR(CAT3(PCINT, PCI_NUM, _vect))																\
 {																								\
-	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);							\
+	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
-	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change)();								\
+	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change, TRAIT::TYPE)(TRAIT::TCNT);		\
 }
 
 #define REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)										\
@@ -54,7 +56,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))															\
 	CALL_HANDLER_(SERVO_HANDLER, &SERVO_HANDLER::on_capture, TRAIT::TYPE)(capture);				\
 }
 
-//TODO UPDATE ALL NEXT REGISTER MACROS TO FIT NEW HCSR04 template args and method names
+//TODO UPDATE MACRO TO FIT NEW HCSR04 template args and method names
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
 static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
 static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
@@ -69,6 +71,7 @@ ISR(CAT3(INT, INT_NUM, _vect))																\
 		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
 }
 
+//TODO UPDATE MACRO TO FIT NEW HCSR04 template args and method names
 #define REGISTER_HCSR04_INT_ISR_FUNCTION(TIMER, INT_NUM, TRIGGER, ECHO, CALLBACK)			\
 static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "PIN must be an INT pin.");	\
 static_assert(board_traits::ExternalInterruptPin_trait< ECHO >::INT == INT_NUM ,			\
@@ -83,28 +86,30 @@ ISR(CAT3(INT, INT_NUM, _vect))																\
 		CALLBACK (handler->latest_echo_us());												\
 }
 
-#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)	\
-CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
-ISR(CAT3(PCINT, PCI_NUM, _vect))															\
-{																							\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
-	auto handler = SERVO_HOLDER::handler();													\
-	handler->on_pin_change();																\
-	if (handler->ready())																	\
-		CALL_HANDLER_(HANDLER, CALLBACK, uint16_t)(handler->latest_echo_us());				\
+#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)		\
+CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
+ISR(CAT3(PCINT, PCI_NUM, _vect))																\
+{																								\
+	using TRAIT = board_traits::Timer_trait<TIMER>;												\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
+	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
+	auto handler = SERVO_HOLDER::handler();														\
+	handler->on_pin_change(TRAIT::TCNT);														\
+	if (handler->ready())																		\
+		CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(handler->latest_echo_ticks());			\
 }
 
-#define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)			\
-CHECK_PCI_PIN_(ECHO, PCI_NUM)																\
-ISR(CAT3(PCINT, PCI_NUM, _vect))															\
-{																							\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO >;					\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);									\
-	auto handler = SERVO_HOLDER::handler();													\
-	handler->on_pin_change();																\
-	if (handler->ready())																	\
-		CALLBACK (handler->latest_echo_us());												\
+#define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)				\
+CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
+ISR(CAT3(PCINT, PCI_NUM, _vect))																\
+{																								\
+	using TRAIT = board_traits::Timer_trait<TIMER>;												\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
+	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
+	auto handler = SERVO_HOLDER::handler();														\
+	handler->on_pin_change(TRAIT::TCNT);														\
+	if (handler->ready())																		\
+		CALLBACK (handler->latest_echo_ticks());												\
 }
 
 //TODO regsiter function/method callback for ICP
@@ -200,36 +205,27 @@ namespace sonar
 			if (reset) timer_.reset();
 			status_ = 0;
 		}
-		//TODO improve by passing TCNT as argument (obtained from ISR and passed through on_pin_change())
-		inline void pulse_started()
+
+		inline void pulse_edge(bool rising, TYPE ticks)
 		{
-			if (status_ == 0)
+			if (rising && status_ == 0)
 			{
-				echo_pulse_ = timer_._ticks();
+				echo_pulse_ = ticks;
 				status_ = STARTED;
 			}
-		}
-		inline void pulse_finished()
-		{
-			if (status_ == STARTED)
+			else if ((!rising) && status_ == STARTED)
 			{
-				echo_pulse_ = timer_._ticks() - echo_pulse_;
+				echo_pulse_ = ticks - echo_pulse_;
 				status_ = READY;
 			}
 		}
+
 		inline void pulse_captured(TYPE capture)
 		{
-			if (timer_.input_capture() == timer::TimerInputCapture::RISING_EDGE)
-			{
+			bool rising = (timer_.input_capture() == timer::TimerInputCapture::RISING_EDGE);
+			if (rising)
 				timer_.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
-				echo_pulse_ = capture;
-				status_ = STARTED;
-			}
-			else
-			{
-				echo_pulse_ = capture - echo_pulse_;
-				status_ = READY;
-			}
+			pulse_edge(rising, capture);
 		}
 
 	private:
@@ -243,7 +239,6 @@ namespace sonar
 
 	//TODO improve API (regi macro actually) to allow sharing PCINT pins vector
 	// e.g. to allow using several pins for echo in a PCINT port each with a sonar
-	//TODO improve API to allow several types instances sharing the same TRIGGER pin
 	template<
 		board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO, 
 		SonarType SONAR_TYPE = SonarType::BLOCKING>
@@ -302,14 +297,11 @@ namespace sonar
 			if (trigger) this->trigger();
 		}
 
-		void on_pin_change()
+		void on_pin_change(TYPE ticks)
 		{
 			static_assert(SONAR_TYPE == SonarType::ASYNC_INT || SONAR_TYPE == SonarType::ASYNC_PCINT, 
 				"on_pin_change() must be called only with SonarType::ASYNC_INT or ASYNC_PCINT");
-			if (echo_.value())
-				this->pulse_started();
-			else
-				this->pulse_finished();
+			this->pulse_edge(echo_.value(), ticks);
 		}
 
 		void on_capture(TYPE capture)

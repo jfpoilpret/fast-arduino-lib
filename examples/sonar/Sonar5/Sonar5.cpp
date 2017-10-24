@@ -101,8 +101,10 @@ using devices::sonar::echo_us_to_distance_mm;
 //TODO Improve HCSR04 to directly provide API for using several sonars on same PCINT vector
 ISR(PCI_ISR)
 {
-	CALL_HANDLER_(SONAR1, &SONAR1::on_pin_change)();
-	CALL_HANDLER_(SONAR2, &SONAR2::on_pin_change)();
+	using TRAIT = board_traits::Timer_trait<TIMER>;
+	TRAIT::TYPE ticks = TRAIT::TCNT;
+	CALL_HANDLER_(SONAR1, &SONAR1::on_pin_change, TRAIT::TYPE)(ticks);
+	CALL_HANDLER_(SONAR2, &SONAR2::on_pin_change, TRAIT::TYPE)(ticks);
 }
 
 int main() __attribute__((OS_main));
