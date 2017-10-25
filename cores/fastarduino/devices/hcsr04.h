@@ -23,7 +23,8 @@
 #include <fastarduino/int.h>
 #include <fastarduino/pci.h>
 
-//TODO Improve on_pin_change() to return bool to indicate if ready yet
+//TODO Improve on_pin_change() to return bool to indicate if ready yet 
+// but this requires improvements of CALL_HANDLER_
 // Utilities to handle ISR callbacks
 #define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)									\
 static_assert(board_traits::DigitalPin_trait< ECHO >::IS_INT, "ECHO must be an INT pin.");		\
@@ -179,7 +180,6 @@ namespace sonar
 	};
 
 	//TODO (undocumented) abstract sonar class that handles all common stuff.
-	//TODO must be able to deal with RTT+PCI/INT and Timer input capture
 	template<board::Timer TIMER>
 	class AbstractSonar
 	{
@@ -241,7 +241,7 @@ namespace sonar
 			status_ = 0;
 		}
 
-		inline void pulse_edge(bool rising, TYPE ticks)
+		inline bool pulse_edge(bool rising, TYPE ticks)
 		{
 			if (rising && status_ == 0)
 			{
@@ -252,15 +252,17 @@ namespace sonar
 			{
 				echo_pulse_ = ticks - echo_pulse_;
 				status_ = READY;
+				return true;
 			}
+			return false;
 		}
 
-		inline void pulse_captured(TYPE capture)
+		inline bool pulse_captured(TYPE capture)
 		{
 			bool rising = (timer_.input_capture() == timer::TimerInputCapture::RISING_EDGE);
 			if (rising)
 				timer_.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
-			pulse_edge(rising, capture);
+			return pulse_edge(rising, capture);
 		}
 
 	private:
@@ -272,8 +274,6 @@ namespace sonar
 		volatile uint8_t status_;
 	};
 
-	//TODO improve API (regi macro actually) to allow sharing PCINT pins vector
-	// e.g. to allow using several pins for echo in a PCINT port each with a sonar
 	template<
 		board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO, 
 		SonarType SONAR_TYPE = SonarType::BLOCKING>
