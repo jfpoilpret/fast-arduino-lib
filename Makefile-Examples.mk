@@ -17,7 +17,7 @@
 # Examples common to all targets
 #FIXME this list is in fact wrong because most examples have been set to work only on UNO,MEGA,ATmega328 and ATtiny
 # Not all examples have been updated when LEONARDO and NANO boards have been added to FastArduino support
-# For NANO, adding support is straightforward (same as UNO) but not for LENOARDO
+# For NANO, adding support is straightforward (same as UNO) but not for LEONARDO
 COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					analog/AnalogPin1 analog/AnalogPin2										\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\
@@ -33,6 +33,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					motors/Servo1 motors/Servo2												\
 					sonar/Sonar1 sonar/Sonar2 sonar/Sonar3									\
 					sonar/Sonar4 sonar/Sonar5 sonar/Sonar6									\
+					sonar/Sonar7 sonar/Sonar8 sonar/Sonar9									\
 					rtt/TimerApp3 rtt/TimerApp4												\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
 					uart/UartApp2 uart/UartApp3 uart/UartApp4
