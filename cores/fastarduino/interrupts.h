@@ -83,7 +83,7 @@
 #define HANDLER_HOLDER_(HANDLER) interrupt::HandlerHolder< HANDLER >
 
 #define CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK,...)	\
-interrupt::HandlerHolder< HANDLER >::ArgsHodler< __VA_ARGS__ >::CallbackHolder< CALLBACK >
+interrupt::HandlerHolder< HANDLER >::ArgsHolder< __VA_ARGS__ >::CallbackHolder< CALLBACK >
 
 #define CALL_HANDLER_(HANDLER, CALLBACK,...)	\
 CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), ##__VA_ARGS__)::handle
@@ -152,10 +152,9 @@ namespace interrupt
 
 		using Holder = HandlerHolder<Handler>;
 
-		//FIXME rename Hodler -> Holder
 		//TODO allow for callbacks that return something
 		template<typename... Args>
-		struct ArgsHodler
+		struct ArgsHolder
 		{
 			template<void (Handler::*Callback)(Args...)>
 			struct CallbackHolder
