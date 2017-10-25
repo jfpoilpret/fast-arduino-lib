@@ -152,6 +152,8 @@ namespace interrupt
 
 		using Holder = HandlerHolder<Handler>;
 
+		//FIXME rename Hodler -> Holder
+		//TODO allow for callbacks that return something
 		template<typename... Args>
 		struct ArgsHodler
 		{

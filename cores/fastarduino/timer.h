@@ -720,6 +720,7 @@ namespace timer
 		}
 
 		//TODO method to check if some interrupt is enabled
+		//TODO methods to add/remove interrupts?
 
 		/**
 		 * Set the input capture mode fr this timer.
