@@ -103,8 +103,8 @@ ISR(PCI_ISR)
 {
 	using TRAIT = board_traits::Timer_trait<TIMER>;
 	TRAIT::TYPE ticks = TRAIT::TCNT;
-	CALL_HANDLER_(SONAR1, &SONAR1::on_pin_change, TRAIT::TYPE)(ticks);
-	CALL_HANDLER_(SONAR2, &SONAR2::on_pin_change, TRAIT::TYPE)(ticks);
+	CALL_HANDLER_RETURN_(SONAR1, &SONAR1::on_pin_change, bool, TRAIT::TYPE)(ticks);
+	CALL_HANDLER_RETURN_(SONAR2, &SONAR2::on_pin_change, bool, TRAIT::TYPE)(ticks);
 }
 
 int main() __attribute__((OS_main));

@@ -24,7 +24,6 @@
 #include "timer.h"
 #include "gpio.h"
 
-//TODO infer improvement of FastArduino interrupts registration to allow handlers returning non void
 #define REGISTER_PULSE_TIMER_OVF2_ISR_(TIMER_NUM, PRESCALER, PIN_A, COM_A, PIN_B, COM_B)	\
 ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))														\
 {																							\
@@ -36,9 +35,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))														\
 	using PINTB = board_traits::Timer_COM_trait<T, COM_B>;									\
 	static_assert(PIN_B == PINTB::PIN_OCR, "PIN_B must be connected to TIMER_NUM OCxB");	\
 	using PT = timer::PulseTimer8<T , PRESCALER>;											\
-	bool reset;																				\
-	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);											\
-	if (reset)																				\
+	if (CALL_HANDLER_RETURN_(PT, &PT::overflow, bool)())									\
 	{																						\
 		if (PINTA::OCR != 0)																\
 			gpio::FastPinType< PIN_A >::set();												\
@@ -56,9 +53,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))													\
 	using PINT = board_traits::Timer_COM_trait<T, COM_NUM>;								\
 	static_assert(PIN == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");\
 	using PT = timer::PulseTimer8<T , PRESCALER>;										\
-	bool reset;																			\
-	CALL_HANDLER_(PT, &PT::overflow, bool&)(reset);										\
-	if (reset and PINT::OCR != 0)														\
+	if (CALL_HANDLER_RETURN_(PT, &PT::overflow, bool)())								\
 		gpio::FastPinType< PIN >::set();												\
 }
 
@@ -149,10 +144,10 @@ namespace timer
 			interrupt::register_handler(*this);
 		}
 				
-		void overflow(bool& reset)
+		bool overflow()
 		{
 			if (++count_ == MAX) count_ = 0;
-			reset = !count_;
+			return !count_;
 		}
 
 	private:

@@ -82,11 +82,14 @@
 // Utilities to handle ISR callbacks
 #define HANDLER_HOLDER_(HANDLER) interrupt::HandlerHolder< HANDLER >
 
-#define CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK,...)	\
-interrupt::HandlerHolder< HANDLER >::ArgsHolder< __VA_ARGS__ >::CallbackHolder< CALLBACK >
+#define CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK, RET,...)	\
+interrupt::HandlerHolder< HANDLER >::ArgsHolder< RET, ##__VA_ARGS__ >::CallbackHolder< CALLBACK >
 
 #define CALL_HANDLER_(HANDLER, CALLBACK,...)	\
-CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), ##__VA_ARGS__)::handle
+CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), void, ##__VA_ARGS__)::handle
+
+#define CALL_HANDLER_RETURN_(HANDLER, CALLBACK, RET,...)	\
+CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), RET, ##__VA_ARGS__)::handle
 /// @endcond
 
 /**
@@ -111,6 +114,12 @@ CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), ##__VA_A
 ISR(VECTOR)															\
 {																	\
 	CALL_HANDLER_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK))();	\
+}
+
+#define REGISTER_ISR_METHOD_RETURN_(VECTOR, HANDLER, CALLBACK, RET)				\
+ISR(VECTOR)																		\
+{																				\
+	CALL_HANDLER_RETURN_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK), RET)();	\
 }
 
 /**
@@ -152,18 +161,17 @@ namespace interrupt
 
 		using Holder = HandlerHolder<Handler>;
 
-		//TODO allow for callbacks that return something
-		template<typename... Args>
+		template<typename Ret, typename... Args>
 		struct ArgsHolder
 		{
-			template<void (Handler::*Callback)(Args...)>
+			template<Ret (Handler::*Callback)(Args...)>
 			struct CallbackHolder
 			{
-				static void handle(Args... args)
+				static Ret handle(Args... args)
 				{
 					Handler* handler_instance = Holder::handler();
 					FIX_BASE_POINTER(handler_instance);
-					(handler_instance->*Callback)(args...);
+					return (handler_instance->*Callback)(args...);
 				}
 			};
 		};

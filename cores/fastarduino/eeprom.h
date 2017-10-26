@@ -25,15 +25,14 @@
 
 // Utilities to handle ISR callbacks
 #define REGISTER_EEPROM_ISR()		\
-REGISTER_ISR_METHOD_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready)
+REGISTER_ISR_METHOD_RETURN_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready, bool)
 
 #define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)	\
 ISR(EE_READY_vect)										\
 {														\
 	using WRT_HANDLER = eeprom::QueuedWriter;			\
 	using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);	\
-	WRT_HOLDER::handler()->on_ready();					\
-	if (WRT_HOLDER::handler()->is_done())				\
+	if (WRT_HOLDER::handler()->on_ready())				\
 		CALL_HANDLER_(HANDLER, CALLBACK)();				\
 }
 
@@ -42,8 +41,7 @@ ISR(EE_READY_vect)										\
 {														\
 	using WRT_HANDLER = eeprom::QueuedWriter;			\
 	using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);	\
-	WRT_HOLDER::handler()->on_ready();					\
-	if (WRT_HOLDER::handler()->is_done())				\
+	if (WRT_HOLDER::handler()->on_ready())				\
 		CALLBACK ();									\
 }
 
@@ -317,7 +315,7 @@ namespace eeprom
 			return _done;
 		}
 		
-		void on_ready()
+		bool on_ready()
 		{
 			if (_erase)
 			{
@@ -351,6 +349,7 @@ namespace eeprom
 				_done = true;
 				EECR = 0;
 			}
+			return _done;
 		}
 		
 	private:

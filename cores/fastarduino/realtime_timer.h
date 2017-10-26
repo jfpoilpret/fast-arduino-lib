@@ -57,14 +57,14 @@ REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, CAT(timer::RTT<board::Timer::TIMER,
  * @sa REGISTER_RTT_ISR_FUNCTION
  * @sa REGISTER_RTT_ISR
  */
-#define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)							\
-ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
-{																						\
-	using RTT_HANDLER = CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >;				\
-	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);									\
-	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer);	\
-	RTT_HANDLE::handle();																\
-	CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()->millis());		\
+#define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)								\
+ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))													\
+{																							\
+	using RTT_HANDLER = CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >;					\
+	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);										\
+	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer, void);	\
+	RTT_HANDLE::handle();																	\
+	CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()->millis());			\
 }
 
 /**
