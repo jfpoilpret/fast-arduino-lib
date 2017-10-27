@@ -36,15 +36,20 @@ ISR(CAT3(INT, INT_NUM, _vect))																		\
 	CALL_HANDLER_RETURN_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change, bool, TRAIT::TYPE)(counter);	\
 }
 
-//TODO Allow multiple echo pins for the same PCINT
-#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO)										\
-CHECK_PCI_PIN_(ECHO, PCI_NUM)																		\
+#define CALL_HCSR4_(ECHO, DUMMY)																	\
+{																									\
+	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;		\
+	CALL_HANDLER_RETURN_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change, bool, TRAIT::TYPE)(counter);	\
+}
+
+//TODO Allow multiple trigger/echo pin pairs (same PCINT for all echo)
+#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)									\
+FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, ECHO, ##__VA_ARGS__)												\
 ISR(CAT3(PCINT, PCI_NUM, _vect))																	\
 {																									\
 	using TRAIT = board_traits::Timer_trait<TIMER>;													\
 	TRAIT::TYPE counter = TRAIT::TCNT;																\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;		\
-	CALL_HANDLER_RETURN_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change, bool, TRAIT::TYPE)(counter);	\
+	FOR_EACH(CALL_HCSR4_, EMPTY, ECHO, ##__VA_ARGS__)												\
 }
 
 #define REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)										\
@@ -88,6 +93,7 @@ ISR(CAT3(INT, INT_NUM, _vect))																	\
 		CALLBACK (counter);																		\
 }
 
+//TODO Allow multiple echo pins for the same PCINT
 #define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)		\
 CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
 ISR(CAT3(PCINT, PCI_NUM, _vect))																\
@@ -101,6 +107,7 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))																\
 		CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(counter);									\
 }
 
+//TODO Allow multiple echo pins for the same PCINT
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)				\
 CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
 ISR(CAT3(PCINT, PCI_NUM, _vect))																\
@@ -171,7 +178,6 @@ namespace sonar
 		ASYNC_ICP
 	};
 
-	//TODO (undocumented) abstract sonar class that handles all common stuff.
 	template<board::Timer TIMER>
 	class AbstractSonar
 	{
