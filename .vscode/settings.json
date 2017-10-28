@@ -67,5 +67,6 @@
             "frequency": 8,
             "programmer": "ArduinoISP.cc"
         }
-    }
+    },
+    "terminal.integrated.scrollback": 5000
 }
