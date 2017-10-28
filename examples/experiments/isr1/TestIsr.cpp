@@ -20,7 +20,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 
-using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, true>;
+using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, devices::sonar::SonarType::ASYNC_ICP>;
 // using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, false>;
 static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
 using CALC = timer::Calculator<TIMER>;
@@ -31,7 +31,6 @@ static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECIS
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)
-// REGISTER_HCSR04_PCI_ISR(TIMER_NUM, 0, TRIGGER, ECHO)
 
 int main() __attribute__((OS_main));
 int main()
