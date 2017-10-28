@@ -39,7 +39,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define PCI_ISR PCINT2_vect
+#define PCI_NUM 2
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D2_PD2;
 static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D3_PD3_PCI2;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D4_PD4;
@@ -52,7 +52,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define PCI_ISR PCINT0_vect
+#define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D2_PE4;
 static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D53_PB0_PCI0;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D3_PE5;
@@ -65,7 +65,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(1)
 #define TIMER_NUM 1
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define PCI_ISR PCINT0_vect
+#define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D2_PD1;
 static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D8_PB4_PCI0;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D3_PD0;
@@ -77,7 +77,7 @@ static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #define TIMER_NUM 1
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define PCI_ISR PCINT1_vect
+#define PCI_NUM 1
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D0_PA0;
 static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D10_PB2_PCI1;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D1_PA1;
@@ -101,14 +101,7 @@ static constexpr const SONAR1::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECI
 using devices::sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
-//TODO Improve HCSR04 to directly provide API for using several sonars on same PCINT vector
-ISR(PCI_ISR)
-{
-	using TRAIT = board_traits::Timer_trait<TIMER>;
-	TRAIT::TYPE ticks = TRAIT::TCNT;
-	CALL_HANDLER_RETURN_(SONAR1, &SONAR1::on_pin_change, bool, TRAIT::TYPE)(ticks);
-	CALL_HANDLER_RETURN_(SONAR2, &SONAR2::on_pin_change, bool, TRAIT::TYPE)(ticks);
-}
+REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, SONAR1, SONAR2)
 
 int main() __attribute__((OS_main));
 int main()

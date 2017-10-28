@@ -32,24 +32,34 @@ ISR(CAT3(INT, INT_NUM, _vect))																		\
 {																									\
 	using TRAIT = board_traits::Timer_trait<TIMER>;													\
 	TRAIT::TYPE counter = TRAIT::TCNT;																\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;		\
-	CALL_HANDLER_RETURN_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change, bool, TRAIT::TYPE)(counter);	\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;		\
+	CALL_HANDLER_RETURN_(SONAR_HANDLER, &SONAR_HANDLER::on_pin_change, bool, TRAIT::TYPE)(counter);	\
 }
 
 #define CALL_HCSR4_(ECHO, DUMMY)																	\
 {																									\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;		\
-	CALL_HANDLER_RETURN_(SERVO_HANDLER, &SERVO_HANDLER::on_pin_change, bool, TRAIT::TYPE)(counter);	\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;		\
+	CALL_HANDLER_RETURN_(SONAR_HANDLER, &SONAR_HANDLER::on_pin_change, bool, TRAIT::TYPE)(counter);	\
 }
 
-//TODO Allow multiple trigger/echo pin pairs (same PCINT for all echo)
-#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)									\
-FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, ECHO, ##__VA_ARGS__)												\
-ISR(CAT3(PCINT, PCI_NUM, _vect))																	\
-{																									\
-	using TRAIT = board_traits::Timer_trait<TIMER>;													\
-	TRAIT::TYPE counter = TRAIT::TCNT;																\
-	FOR_EACH(CALL_HCSR4_, EMPTY, ECHO, ##__VA_ARGS__)												\
+#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)								\
+FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, ECHO, ##__VA_ARGS__)											\
+ISR(CAT3(PCINT, PCI_NUM, _vect))																\
+{																								\
+	using TRAIT = board_traits::Timer_trait<TIMER>;												\
+	TRAIT::TYPE counter = TRAIT::TCNT;															\
+	FOR_EACH(CALL_HCSR4_, EMPTY, ECHO, ##__VA_ARGS__)											\
+}
+
+#define CALL_DISTINCT_HCSR4_(SONAR, DUMMY)	\
+CALL_HANDLER_RETURN_(SONAR, &SONAR::on_pin_change, bool, TRAIT::TYPE)(counter);
+
+#define REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, SONAR, ...)							\
+ISR(CAT3(PCINT, PCI_NUM, _vect))																\
+{																								\
+	using TRAIT = board_traits::Timer_trait<TIMER>;												\
+	TRAIT::TYPE counter = TRAIT::TCNT;															\
+	FOR_EACH(CALL_DISTINCT_HCSR4_, EMPTY, SONAR, ##__VA_ARGS__)									\
 }
 
 #define REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)										\
@@ -59,8 +69,8 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))															\
 	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	static_assert(TRAIT::ICP_PIN == ECHO, "ECHO must be an ICP pin.");							\
 	TRAIT::TYPE capture = TRAIT::ICR;															\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_ICP>;	\
-	CALL_HANDLER_RETURN_(SERVO_HANDLER, &SERVO_HANDLER::on_capture, bool, TRAIT::TYPE)(capture);\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_ICP>;	\
+	CALL_HANDLER_RETURN_(SONAR_HANDLER, &SONAR_HANDLER::on_capture, bool, TRAIT::TYPE)(capture);\
 }
 
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)		\
@@ -71,9 +81,9 @@ ISR(CAT3(INT, INT_NUM, _vect))																	\
 {																								\
 	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	TRAIT::TYPE counter = TRAIT::TCNT;															\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT >;	\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
-	auto handler = SERVO_HOLDER::handler();														\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT >;	\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);										\
+	auto handler = SONAR_HOLDER::handler();														\
 	if (handler->on_pin_change(counter))														\
 		CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(counter);									\
 }
@@ -86,37 +96,35 @@ ISR(CAT3(INT, INT_NUM, _vect))																	\
 {																								\
 	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	TRAIT::TYPE counter = TRAIT::TCNT;															\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT >;	\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
-	auto handler = SERVO_HOLDER::handler();														\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT >;	\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);										\
+	auto handler = SONAR_HOLDER::handler();														\
 	if (handler->on_pin_change(counter))														\
 		CALLBACK (counter);																		\
 }
 
-//TODO Allow multiple echo pins for the same PCINT
 #define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)		\
 CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
 ISR(CAT3(PCINT, PCI_NUM, _vect))																\
 {																								\
 	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	TRAIT::TYPE counter = TRAIT::TCNT;															\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
-	auto handler = SERVO_HOLDER::handler();														\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);										\
+	auto handler = SONAR_HOLDER::handler();														\
 	if (handler->on_pin_change(counter))														\
 		CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(counter);									\
 }
 
-//TODO Allow multiple echo pins for the same PCINT
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)				\
 CHECK_PCI_PIN_(ECHO, PCI_NUM)																	\
 ISR(CAT3(PCINT, PCI_NUM, _vect))																\
 {																								\
 	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	TRAIT::TYPE counter = TRAIT::TCNT;															\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
-	auto handler = SERVO_HOLDER::handler();														\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;	\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);										\
+	auto handler = SONAR_HOLDER::handler();														\
 	if (handler->on_pin_change(counter))														\
 		CALLBACK (counter);																		\
 }
@@ -128,9 +136,9 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))															\
 	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	static_assert(TRAIT::ICP_PIN == ECHO, "ECHO must be an ICP pin.");							\
 	TRAIT::TYPE capture = TRAIT::ICR;															\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_ICP>;	\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
-	auto handler = SERVO_HOLDER::handler();														\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_ICP>;	\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);										\
+	auto handler = SONAR_HOLDER::handler();														\
 	if (handler->on_capture(capture))															\
 		CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(capture);									\
 }
@@ -142,9 +150,9 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))															\
 	using TRAIT = board_traits::Timer_trait<TIMER>;												\
 	static_assert(TRAIT::ICP_PIN == ECHO, "ECHO must be an ICP pin.");							\
 	TRAIT::TYPE capture = TRAIT::ICR;															\
-	using SERVO_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_ICP>;	\
-	using SERVO_HOLDER = HANDLER_HOLDER_(SERVO_HANDLER);										\
-	auto handler = SERVO_HOLDER::handler();														\
+	using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_ICP>;	\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);										\
+	auto handler = SONAR_HOLDER::handler();														\
 	if (handler->on_capture(capture))															\
 		CALLBACK (capture);																		\
 }
