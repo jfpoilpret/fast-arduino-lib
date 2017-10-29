@@ -380,6 +380,14 @@ namespace utils
 	{
 		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us);
 	}
+
+	//TODO DOC
+	constexpr uint8_t num_bits(uint8_t mask, uint8_t num = 0)
+	{
+		return (mask == 0 ? num :
+				mask & 1 ? num_bits(mask >> 1, num + 1) :
+				num_bits(mask >> 1, num));
+	}
 }
 
 #endif	/* UTILITIES_HH */
