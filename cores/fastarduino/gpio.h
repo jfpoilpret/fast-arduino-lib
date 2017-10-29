@@ -376,6 +376,8 @@ namespace gpio
 		}
 	};
 
+	//TODO Infer whether mask should be a template parameter instead?
+	//TODO or at least a const?
 	/**
 	 * API that manipulates a part of a digital IO port.
 	 * Implementation is highly optimized for size and speed: instances use
@@ -405,14 +407,6 @@ namespace gpio
 		static constexpr const board::Port PORT = PORT_;
 
 		/**
-		 * Construct a default `FastMaskedPort` without any physical setup on 
-		 * target MCU, without any pin at all (mask = 0).
-		 * This is useful only when a default constructor is needed, e.g. when
-		 * defining an array of `FastMaskedPort`s.
-		 */
-		FastMaskedPort():_mask{0} {}
-
-		/**
 		 * Construct a `FastMaskedPort` without any physical setup on target MCU.
 		 * This is useful if default pins directions and values are OK for you and 
 		 * you want to avoid calling mode setup on target MCU.
@@ -421,7 +415,7 @@ namespace gpio
 		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
 		 * methods.
 		 */
-		FastMaskedPort(uint8_t mask) {}
+		FastMaskedPort(uint8_t mask = 0):_mask{mask} {}
 
 		/**
 		 * Construct a `FastMaskedPort` for the pins selected by the provide 
