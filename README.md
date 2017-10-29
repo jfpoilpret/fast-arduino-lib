@@ -112,16 +112,17 @@ November 2017
 -------------
 2. Improve streams support ala C++
 3. Add support for ATtinyX5
+4. Refactor Event system to allow any value type for events
 
-December 2017
--------------
-4. Support other I2C devices: MCP23017 (IO multiplexer)
-5. Improve Analog Input support and code
-6. Improve I2C master support (asynchronous mode)
-7. Improve SPI to support slave mode
-8. Improve I2C to support slave mode
-9. Add USB support for Arduino Leonardo
-10. Add high-speed timer support of Arduino Leonardo
+1st Quarter 2018
+----------------
+5. Support other I2C devices: MCP23017 (IO multiplexer)
+6. Improve Analog Input support and code
+7. Improve I2C master support (asynchronous mode)
+8. Improve SPI to support slave mode
+9. Improve I2C to support slave mode
+10. Add USB support for Arduino Leonardo
+11. Add high-speed timer support of Arduino Leonardo
 
 In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
