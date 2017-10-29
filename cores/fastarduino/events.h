@@ -32,6 +32,8 @@ namespace events
 		const uint8_t USER_EVENT = 128;
 	};
 
+	//TODO would it be possible/useful to make Event a template on `_value` type?
+	// In this case, we should also specialize template for T = void (no value needed)
 	class Event
 	{
 	public:
