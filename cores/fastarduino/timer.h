@@ -654,6 +654,9 @@ namespace timer
 		/// @endcond
 		
 	public:
+		//TODO DOC
+		// static constexpr const board::Timer TIMER = TIMER;
+
 		/**
 		 * The type of this timer's counter (either `uint8_t` or `uint16_t`).
 		 */
