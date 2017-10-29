@@ -26,11 +26,14 @@
  */
 
 #include <fastarduino/boards/board.h>
+
 #include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
 #include <fastarduino/timer.h>
-#include <fastarduino/devices/hcsr04.h>
+#include <fastarduino/queue.h>
 #include <fastarduino/utilities.h>
+
+#include <fastarduino/devices/hcsr04.h>
 
 using board::DigitalPin;
 using gpio::FastPinType;
@@ -42,13 +45,13 @@ static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const DigitalPin TRIGGER = DigitalPin::D8;
 // Pins connected to each sonar echo
 //TODO only define DigitalPins here, and deduce port and bits afterwards
-static constexpr const board::Port ECHO_PORT = board::Port::PORT_B;
+static constexpr const board::Port ECHO_PORT = board::Port::PORT_D;
 static constexpr const uint8_t SFRONT = _BV(FastPinType<DigitalPin::D0>::BIT);
 static constexpr const uint8_t SREAR = _BV(FastPinType<DigitalPin::D1>::BIT);
 static constexpr const uint8_t SLEFT = _BV(FastPinType<DigitalPin::D2>::BIT);
 static constexpr const uint8_t SRIGHT = _BV(FastPinType<DigitalPin::D3>::BIT);
 // Pins connected to LED
-static constexpr const board::Port LED_PORT = board::Port::PORT_B;
+static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 static constexpr const uint8_t LFRONT = _BV(FastPinType<DigitalPin::D4>::BIT);
 static constexpr const uint8_t LREAR = _BV(FastPinType<DigitalPin::D5>::BIT);
 static constexpr const uint8_t LLEFT = _BV(FastPinType<DigitalPin::D6>::BIT);
@@ -70,66 +73,66 @@ using TIMER_TYPE = timer::Timer<TIMER>;
 using CALC = timer::Calculator<TIMER>;
 static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
 static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
-static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
 
 using devices::sonar::distance_mm_to_echo_us;
 
 static constexpr const uint16_t DISTANCE_THRESHOLD_MM = 150;
+static constexpr const SONAR::TYPE DISTANCE_THRESHOLD_TICKS = 
+	CALC::us_to_ticks(PRESCALER, distance_mm_to_echo_us(DISTANCE_THRESHOLD_MM)); 
+
+using QUEUE = containers::Queue<SONAR::EVENT>;
 
 class SonarListener
 {
 public:
-	SonarListener(SONAR& sonar, uint16_t min_mm)
-	:	sonar_{sonar},
-		MIN_TICKS{CALC::us_to_ticks(PRESCALER, distance_mm_to_echo_us(min_mm))}, 
-		leds_{LED_MASK, 0xFF}
+	SonarListener(QUEUE& queue):queue_{queue}
 	{
 		interrupt::register_handler(*this);
 	}
 	
-	//FIXME This callback is too big for use in an ISR, prefer queuing an event?
-	void on_sonar(uint8_t ready_mask)
+	void on_sonar(SONAR::EVENT event)
 	{
-		uint8_t leds =	compute_led_mask(ready_mask, SFRONT, LFRONT)	|
-						compute_led_mask(ready_mask, SREAR, LREAR)		|
-						compute_led_mask(ready_mask, SLEFT, LLEFT)		|
-						compute_led_mask(ready_mask, SRIGHT, LRIGHT)	|
-						(leds_.get_PIN() & ~ready_mask);
-		leds_.set_PORT(leds);
+		// queue event for main loop to use it
+		queue_._push(event);
 	}
 	
 private:
-	uint8_t compute_led_mask(uint8_t ready_mask, uint8_t sonar_bit, uint8_t led_bit)
-	{
-		if ((ready_mask & sonar_bit) && sonar_.echo_ticks(sonar_bit) < MIN_TICKS)
-			return led_bit;
-		else
-			return 0;
-	}
-
-	SONAR& sonar_;
-	const SONAR::TYPE MIN_TICKS;
-	gpio::FastMaskedPort<LED_PORT> leds_;
+	QUEUE& queue_;
 };
 
 REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, SONAR, SonarListener, &SonarListener::on_sonar)
+
+static constexpr const uint8_t QUEUE_SIZE = 8;
+static SONAR::EVENT event_buffer[QUEUE_SIZE];
 
 int main() __attribute__((OS_main));
 int main()
 {
 	board::init();
 	sei();
-	
+
+	gpio::FastMaskedPort<LED_PORT> leds{LED_MASK, 0xFF};
+
+	QUEUE queue{event_buffer};
+
 	// Start timer
 	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
 	timer.begin();
 	SONAR sonar{timer};
 
-	SonarListener listener{sonar, DISTANCE_THRESHOLD_MM};
+	SonarListener listener{queue};
 
 	while (true)
 	{
 		sonar.trigger();
-		while (!sonar.all_ready()) ;
+		SONAR::EVENT event;
+		while (!sonar.all_ready())
+		{
+			//TODO use pull function that yields instead?
+			while (queue.pull(event))
+			{
+				//TODO handle event properly
+			}
+		}
 	}
 }

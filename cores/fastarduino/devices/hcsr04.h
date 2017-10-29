@@ -173,9 +173,9 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))												\
 {																				\
 	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
 	auto handler = SONAR_HOLDER::handler();										\
-	uint8_t mask = handler->on_pin_change();									\
-	if (mask)																	\
-		CALL_HANDLER_(HANDLER, CALLBACK, uint8_t)(mask);						\
+	auto event = handler->on_pin_change();										\
+	if (event.ready || event.started)											\
+		CALL_HANDLER_(HANDLER, CALLBACK, decltype(event))(event);				\
 }
 
 //TODO add static_assert to check PCI_NUM matches SONAR PORT
@@ -184,9 +184,9 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))												\
 {																				\
 	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
 	auto handler = SONAR_HOLDER::handler();										\
-	uint8_t mask = handler->on_pin_change();									\
-	if (mask)																	\
-		CALLBACK (mask);														\
+	auto event = handler->on_pin_change();										\
+	if (event.ready || event.started)											\
+		CALLBACK (event);														\
 }
 
 namespace devices
@@ -218,14 +218,13 @@ namespace sonar
 		ASYNC_ICP
 	};
 
-	template<board::Timer TIMER>
+	template<board::Timer TIMER_>
 	class AbstractSonar
 	{
-	protected:
-		using TIMER_TYPE = timer::Timer<TIMER>;
-		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
-
 	public:
+		using TIMER = timer::Timer<TIMER_>;
+		using TYPE = typename TIMER::TIMER_TYPE;
+
 		inline bool ready() const
 		{
 			return status_ & READY;
@@ -240,7 +239,7 @@ namespace sonar
 		}
 
 	protected:
-		AbstractSonar(TIMER_TYPE& timer):timer_{timer}, echo_pulse_{0}, status_{0} {}
+		AbstractSonar(TIMER& timer):timer_{timer}, echo_pulse_{0}, status_{0} {}
 
 		TYPE async_echo_ticks(TYPE timeout_ticks)
 		{
@@ -304,7 +303,7 @@ namespace sonar
 		}
 
 	private:
-		TIMER_TYPE& timer_;
+		TIMER& timer_;
 		volatile TYPE echo_pulse_;
 
 		static constexpr const uint8_t READY = 0x01;
@@ -313,35 +312,35 @@ namespace sonar
 	};
 
 	template<
-		board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO, 
-		SonarType SONAR_TYPE = SonarType::BLOCKING>
-	class HCSR04: public AbstractSonar<TIMER>
+		board::Timer TIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_, 
+		SonarType SONAR_TYPE_ = SonarType::BLOCKING>
+	class HCSR04: public AbstractSonar<TIMER_>
 	{
 	private:
-		using PARENT = AbstractSonar<TIMER>;
-		using TIMER_TRAIT = board_traits::Timer_trait<TIMER>;
-		using ECHO_PIN_TRAIT = board_traits::DigitalPin_trait<ECHO>;
+		using PARENT = AbstractSonar<TIMER_>;
+		using TIMER_TRAIT = board_traits::Timer_trait<TIMER_>;
+		using ECHO_PIN_TRAIT = board_traits::DigitalPin_trait<ECHO_>;
 		using ECHO_PORT_TRAIT = board_traits::Port_trait<ECHO_PIN_TRAIT::PORT>;
-		static_assert(SONAR_TYPE != SonarType::ASYNC_ICP || TIMER_TRAIT::ICP_PIN == ECHO, 
+		static_assert(SONAR_TYPE_ != SonarType::ASYNC_ICP || TIMER_TRAIT::ICP_PIN == ECHO_, 
 			"SONAR_TYPE == ASYNC_ICP but ECHO is not an ICP pin");
-		static_assert(SONAR_TYPE != SonarType::ASYNC_INT || ECHO_PIN_TRAIT::IS_INT, 
+		static_assert(SONAR_TYPE_ != SonarType::ASYNC_INT || ECHO_PIN_TRAIT::IS_INT, 
 			"SONAR_TYPE == ASYNC_INT but ECHO is not an INT pin");
-		static_assert(SONAR_TYPE != SonarType::ASYNC_PCINT || ECHO_PORT_TRAIT::PCINT != 0xFF, 
+		static_assert(SONAR_TYPE_ != SonarType::ASYNC_PCINT || ECHO_PORT_TRAIT::PCINT != 0xFF, 
 			"SONAR_TYPE == ASYNC_PCINT but ECHO is not an PCI pin");
 				
 	public:
-		using TIMER_TYPE = timer::Timer<TIMER>;
-		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
+		using TIMER = timer::Timer<TIMER_>;
+		using TYPE = typename TIMER::TIMER_TYPE;
 		static constexpr const uint16_t MAX_RANGE_M = 4;
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
-		HCSR04(timer::Timer<TIMER>& timer)
+		HCSR04(TIMER& timer)
 			:	PARENT{timer}, 
 				trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT} {}
 
 		inline void register_handler()
 		{
-			static_assert(SONAR_TYPE != SonarType::BLOCKING, 
+			static_assert(SONAR_TYPE_ != SonarType::BLOCKING, 
 				"register_handler() must not be called with SonarType::BLOCKING");
 			interrupt::register_handler(*this);
 		}
@@ -357,29 +356,29 @@ namespace sonar
 
 		TYPE await_echo_ticks(TYPE timeout_ticks)
 		{
-			if (SONAR_TYPE != SonarType::BLOCKING)
+			if (SONAR_TYPE_ != SonarType::BLOCKING)
 				return this->async_echo_ticks(timeout_ticks);
 			else
-				return this->template blocking_echo_ticks<ECHO>(echo_, timeout_ticks);
+				return this->template blocking_echo_ticks<ECHO_>(echo_, timeout_ticks);
 		}
 		
 		// We want to avoid using await_echo_us() to handle state & timeout!
 		void async_echo(bool trigger = true)
 		{
-			this->trigger_sent(SONAR_TYPE == SonarType::ASYNC_ICP, trigger);
+			this->trigger_sent(SONAR_TYPE_ == SonarType::ASYNC_ICP, trigger);
 			if (trigger) this->trigger();
 		}
 
 		bool on_pin_change(TYPE ticks)
 		{
-			static_assert(SONAR_TYPE == SonarType::ASYNC_INT || SONAR_TYPE == SonarType::ASYNC_PCINT, 
+			static_assert(SONAR_TYPE_ == SonarType::ASYNC_INT || SONAR_TYPE_ == SonarType::ASYNC_PCINT, 
 				"on_pin_change() must be called only with SonarType::ASYNC_INT or ASYNC_PCINT");
 			return this->pulse_edge(echo_.value(), ticks);
 		}
 
 		bool on_capture(TYPE capture)
 		{
-			static_assert(SONAR_TYPE == SonarType::ASYNC_ICP, 
+			static_assert(SONAR_TYPE_ == SonarType::ASYNC_ICP, 
 				"on_capture() must be called only with SonarType::ASYNC_ICP");
 			return this->pulse_captured(capture);
 		}
@@ -395,27 +394,45 @@ namespace sonar
 		
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
-		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
-		typename gpio::FastPinType<ECHO>::TYPE echo_;
+		typename gpio::FastPinType<TRIGGER_>::TYPE trigger_;
+		typename gpio::FastPinType<ECHO_>::TYPE echo_;
 	};
 
-	template<board::Timer TIMER, board::DigitalPin TRIGGER,	board::Port PORT, uint8_t MASK>
+	//TODO have to avoid const so that Event refs can be updated, hence have to define "getters"
+	template<board::Timer TIMER_>
+	struct SonarEvent
+	{
+	public:
+		using TYPE = typename board_traits::Timer_trait<TIMER_>::TYPE;
+
+		SonarEvent():started{}, ready{}, ticks{} {}
+		SonarEvent(uint8_t started, uint8_t ready, TYPE ticks)
+			:started{started}, ready{ready}, ticks{ticks} {}
+
+		uint8_t started;
+		uint8_t ready;
+		TYPE ticks;
+	};
+
+	//TODO how do we handle timeout? internally? externally?
+	template<board::Timer TIMER_, board::DigitalPin TRIGGER_, board::Port PORT_, uint8_t MASK_>
 	class MultiHCSR04
 	{
-		using PTRAIT = board_traits::Port_trait<PORT>;
-		static_assert(PTRAIT::PCINT != 0xFF, "PORT must support PCINT");
-		static_assert((PTRAIT::DPIN_MASK & MASK) == MASK, "MASK must contain available PORT pins");
+		using PTRAIT = board_traits::Port_trait<PORT_>;
+		static_assert(PTRAIT::PCINT != 0xFF, "PORT_ must support PCINT");
+		static_assert((PTRAIT::DPIN_MASK & MASK_) == MASK_, "MASK_ must contain available PORT pins");
 
 	public:
-		using TIMER_TYPE = timer::Timer<TIMER>;
-		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
+		using TIMER = timer::Timer<TIMER_>;
+		using TYPE = typename TIMER::TIMER_TYPE;
+		using EVENT = SonarEvent<TIMER_>;
 
 		static constexpr const uint16_t MAX_RANGE_M = 4;
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
 		//TODO allow 2 constructors: with/without FastPort init DDR
-		MultiHCSR04(TIMER_TYPE& timer)
-			:timer_{timer}, started_{}, ready_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{MASK, 0}, ticks_{}
+		MultiHCSR04(TIMER& timer)
+			:timer_{timer}, started_{}, ready_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{MASK_, 0}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -427,49 +444,21 @@ namespace sonar
 
 		bool all_ready() const
 		{
-			return ready_ == MASK;
+			return ready_ == MASK_;
 		}
 
 		void trigger()
 		{
-			for (uint8_t i = 0; i < NUM_SONARS; ++i)
-				ticks_[i] = 0;
 			started_ = 0;
 			ready_ = 0;
-			// Pulse TRIGGER for 10us
 			timer_.reset();
+			// Pulse TRIGGER for 10us
 			trigger_.set();
 			time::delay_us(TRIGGER_PULSE_US);
 			trigger_.clear();
 		}
 
-		// TYPE echo_ticks(uint8_t index)
-		// {
-		// 	if (index < NUM_SONARS)
-		// 		return ticks_[index];
-		// 	else
-		// 		return 0;
-		// }
-
-		TYPE echo_ticks(uint8_t mask)
-		{
-			if (!mask) return 0;
-			uint8_t current = 0;
-			uint8_t bit = 0x01;
-			while (bit)
-			{
-				if (MASK & bit)
-				{
-					if (mask & bit)
-						return ticks_[current];
-					++current;
-				}
-				bit <<= 1;
-			}
-			return 0;
-		}
-
-		uint8_t on_pin_change()
+		EVENT on_pin_change()
 		{
 			TYPE ticks = timer_._ticks();
 			// Compute the newly started echoes
@@ -477,61 +466,20 @@ namespace sonar
 			uint8_t started = pins & ~started_;
 			// Compute the newly finished echoes
 			uint8_t ready = ~pins & started_ & ~ready_;
-			if (started)
-			{
-				// keep ticks for each new started
-				uint8_t index[NUM_SONARS + 1];
-				indices(started, index);
-				uint8_t* current = index;
-				while (*current != 0xFF)
-					ticks_[*current++] = ticks;
-				started_ |= started;
-			}
-			if (ready)
-			{
-				// compute ticks for each new finished
-				uint8_t index[NUM_SONARS + 1];
-				indices(ready, index);
-				uint8_t* current = index;
-				while (*current != 0xFF)
-				{
-					ticks_[*current] = ticks - ticks_[*current];
-					++current;
-				}
-				ready_ |= ready;
-			}
-			return ready;
+			// Update status of all echo pins
+			started_ |= started;
+			ready_ |= ready;
+			return EVENT{started, ready, ticks};
 		}
 
 	private:
-		static void indices(uint8_t mask, uint8_t* index)
-		{
-			uint8_t current = 0;
-			uint8_t bit = 0x01;
-			while (bit)
-			{
-				if (MASK & bit)
-				{
-					if (mask & bit)
-					{
-						*index++ = current;
-					}
-					++current;
-				}
-				bit <<= 1;
-			}
-			*index = 0xFF;
-		}
-
-		static constexpr const uint8_t NUM_SONARS = utils::num_bits(MASK);
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
-		TIMER_TYPE& timer_;
+		TIMER& timer_;
 		volatile uint8_t started_;
 		volatile uint8_t ready_;
-		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
-		gpio::FastMaskedPort<PORT> echo_;
-		TYPE ticks_[NUM_SONARS];
+		typename gpio::FastPinType<TRIGGER_>::TYPE trigger_;
+		gpio::FastMaskedPort<PORT_> echo_;
 	};
 }
 }
