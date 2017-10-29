@@ -19,6 +19,7 @@
 #include <fastarduino/gpio.h>
 #include <fastarduino/time.h>
 #include <fastarduino/realtime_timer.h>
+#include <fastarduino/utilities.h>
 
 #include <fastarduino/int.h>
 #include <fastarduino/pci.h>
@@ -166,6 +167,28 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))															\
 		CALLBACK (capture);																		\
 }
 
+//TODO add static_assert to check PCI_NUM matches SONAR PORT
+#define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, SONAR, HANDLER, CALLBACK)	\
+ISR(CAT3(PCINT, PCI_NUM, _vect))												\
+{																				\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
+	auto handler = SONAR_HOLDER::handler();										\
+	uint8_t mask = handler->on_pin_change();									\
+	if (mask)																	\
+		CALL_HANDLER_(HANDLER, CALLBACK, uint8_t)(mask);						\
+}
+
+//TODO add static_assert to check PCI_NUM matches SONAR PORT
+#define REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(PCI_NUM, SONAR, CALLBACK)		\
+ISR(CAT3(PCINT, PCI_NUM, _vect))												\
+{																				\
+	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
+	auto handler = SONAR_HOLDER::handler();										\
+	uint8_t mask = handler->on_pin_change();									\
+	if (mask)																	\
+		CALLBACK (mask);														\
+}
+
 namespace devices
 {
 namespace sonar
@@ -296,7 +319,6 @@ namespace sonar
 	{
 	private:
 		using PARENT = AbstractSonar<TIMER>;
-		using TIMER_TYPE = timer::Timer<TIMER>;
 		using TIMER_TRAIT = board_traits::Timer_trait<TIMER>;
 		using ECHO_PIN_TRAIT = board_traits::DigitalPin_trait<ECHO>;
 		using ECHO_PORT_TRAIT = board_traits::Port_trait<ECHO_PIN_TRAIT::PORT>;
@@ -308,6 +330,7 @@ namespace sonar
 			"SONAR_TYPE == ASYNC_PCINT but ECHO is not an PCI pin");
 				
 	public:
+		using TIMER_TYPE = timer::Timer<TIMER>;
 		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
 		static constexpr const uint16_t MAX_RANGE_M = 4;
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
@@ -374,6 +397,141 @@ namespace sonar
 
 		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 		typename gpio::FastPinType<ECHO>::TYPE echo_;
+	};
+
+	template<board::Timer TIMER, board::DigitalPin TRIGGER,	board::Port PORT, uint8_t MASK>
+	class MultiHCSR04
+	{
+		using PTRAIT = board_traits::Port_trait<PORT>;
+		static_assert(PTRAIT::PCINT != 0xFF, "PORT must support PCINT");
+		static_assert((PTRAIT::DPIN_MASK & MASK) == MASK, "MASK must contain available PORT pins");
+
+	public:
+		using TIMER_TYPE = timer::Timer<TIMER>;
+		using TYPE = typename TIMER_TYPE::TIMER_TYPE;
+
+		static constexpr const uint16_t MAX_RANGE_M = 4;
+		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
+
+		//TODO allow 2 constructors: with/without FastPort init DDR
+		MultiHCSR04(TIMER_TYPE& timer)
+			:timer_{timer}, started_{}, ready_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{MASK, 0}, ticks_{}
+		{
+			interrupt::register_handler(*this);
+		}
+
+		uint8_t ready() const
+		{
+			return ready_;
+		}
+
+		bool all_ready() const
+		{
+			return ready_ == MASK;
+		}
+
+		void trigger()
+		{
+			for (uint8_t i = 0; i < NUM_SONARS; ++i)
+				ticks_[i] = 0;
+			started_ = 0;
+			ready_ = 0;
+			// Pulse TRIGGER for 10us
+			timer_.reset();
+			trigger_.set();
+			time::delay_us(TRIGGER_PULSE_US);
+			trigger_.clear();
+		}
+
+		// TYPE echo_ticks(uint8_t index)
+		// {
+		// 	if (index < NUM_SONARS)
+		// 		return ticks_[index];
+		// 	else
+		// 		return 0;
+		// }
+
+		TYPE echo_ticks(uint8_t mask)
+		{
+			if (!mask) return 0;
+			uint8_t current = 0;
+			uint8_t bit = 0x01;
+			while (bit)
+			{
+				if (MASK & bit)
+				{
+					if (mask & bit)
+						return ticks_[current];
+					++current;
+				}
+				bit <<= 1;
+			}
+			return 0;
+		}
+
+		uint8_t on_pin_change()
+		{
+			TYPE ticks = timer_._ticks();
+			// Compute the newly started echoes
+			uint8_t pins = echo_.get_PIN();
+			uint8_t started = pins & ~started_;
+			// Compute the newly finished echoes
+			uint8_t ready = ~pins & started_ & ~ready_;
+			if (started)
+			{
+				// keep ticks for each new started
+				uint8_t index[NUM_SONARS + 1];
+				indices(started, index);
+				uint8_t* current = index;
+				while (*current != 0xFF)
+					ticks_[*current++] = ticks;
+				started_ |= started;
+			}
+			if (ready)
+			{
+				// compute ticks for each new finished
+				uint8_t index[NUM_SONARS + 1];
+				indices(ready, index);
+				uint8_t* current = index;
+				while (*current != 0xFF)
+				{
+					ticks_[*current] = ticks - ticks_[*current];
+					++current;
+				}
+				ready_ |= ready;
+			}
+			return ready;
+		}
+
+	private:
+		static void indices(uint8_t mask, uint8_t* index)
+		{
+			uint8_t current = 0;
+			uint8_t bit = 0x01;
+			while (bit)
+			{
+				if (MASK & bit)
+				{
+					if (mask & bit)
+					{
+						*index++ = current;
+					}
+					++current;
+				}
+				bit <<= 1;
+			}
+			*index = 0xFF;
+		}
+
+		static constexpr const uint8_t NUM_SONARS = utils::num_bits(MASK);
+		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
+
+		TIMER_TYPE& timer_;
+		volatile uint8_t started_;
+		volatile uint8_t ready_;
+		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
+		gpio::FastMaskedPort<PORT> echo_;
+		TYPE ticks_[NUM_SONARS];
 	};
 }
 }
