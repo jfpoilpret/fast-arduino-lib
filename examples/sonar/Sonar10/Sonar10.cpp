@@ -44,26 +44,65 @@ using gpio::FastPinType;
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const DigitalPin TRIGGER = DigitalPin::D8;
 // Pins connected to each sonar echo
-//TODO only define DigitalPins here, and deduce port and bits afterwards
-static constexpr const board::Port ECHO_PORT = board::Port::PORT_D;
-static constexpr const uint8_t SFRONT = _BV(FastPinType<DigitalPin::D0>::BIT);
-static constexpr const uint8_t SREAR = _BV(FastPinType<DigitalPin::D1>::BIT);
-static constexpr const uint8_t SLEFT = _BV(FastPinType<DigitalPin::D2>::BIT);
-static constexpr const uint8_t SRIGHT = _BV(FastPinType<DigitalPin::D3>::BIT);
+static constexpr const DigitalPin SFRONT = DigitalPin::D0;
+static constexpr const DigitalPin SREAR = DigitalPin::D1;
+static constexpr const DigitalPin SLEFT = DigitalPin::D2;
+static constexpr const DigitalPin SRIGHT = DigitalPin::D3;
 // Pins connected to LED
-static constexpr const board::Port LED_PORT = board::Port::PORT_D;
-static constexpr const uint8_t LFRONT = _BV(FastPinType<DigitalPin::D4>::BIT);
-static constexpr const uint8_t LREAR = _BV(FastPinType<DigitalPin::D5>::BIT);
-static constexpr const uint8_t LLEFT = _BV(FastPinType<DigitalPin::D6>::BIT);
-static constexpr const uint8_t LRIGHT = _BV(FastPinType<DigitalPin::D7>::BIT);
+static constexpr const DigitalPin LFRONT = DigitalPin::D4;
+static constexpr const DigitalPin LREAR = DigitalPin::D5;
+static constexpr const DigitalPin LLEFT = DigitalPin::D6;
+static constexpr const DigitalPin LRIGHT = DigitalPin::D7;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-//TODO perform static checks here to ensure all pins/ports are proper
+// perform static checks here to ensure all pins/ports are proper
+static constexpr const board::Port ECHO_PORT = FastPinType<SFRONT>::PORT;
+static_assert(ECHO_PORT == FastPinType<SREAR>::PORT, "SFRONT and SREAR must share the same PORT");
+static_assert(ECHO_PORT == FastPinType<SLEFT>::PORT, "SFRONT and SLEFT must share the same PORT");
+static_assert(ECHO_PORT == FastPinType<SRIGHT>::PORT, "SFRONT and SRIGHT must share the same PORT");
+//TODO also assert PCI_NUM for ECHO_PORT match (how without access to trait?)
 
-static constexpr const uint8_t SONAR_MASK = SFRONT | SREAR | SLEFT;
-static constexpr const uint8_t LED_MASK = LFRONT | LREAR | LLEFT;
+static constexpr const board::Port LED_PORT = FastPinType<LFRONT>::PORT;
+static_assert(LED_PORT == FastPinType<LREAR>::PORT, "LFRONT and LREAR must share the same PORT");
+static_assert(LED_PORT == FastPinType<LLEFT>::PORT, "LFRONT and LLEFT must share the same PORT");
+static_assert(LED_PORT == FastPinType<LRIGHT>::PORT, "LFRONT and LRIGHT must share the same PORT");
+
+struct EchoLed
+{
+	template<DigitalPin ECHO, DigitalPin LED>
+	static constexpr const EchoLed create()
+	{
+		return EchoLed{_BV(FastPinType<ECHO>::BIT), _BV(FastPinType<LED>::BIT)};
+	}
+
+	constexpr EchoLed(uint8_t echo, uint8_t led):echo{echo}, led{led} {}
+
+	const uint8_t echo;
+	const uint8_t led;
+};
+
+static constexpr const EchoLed ECHO_LEDS[] =
+{
+	EchoLed::create<SFRONT, LFRONT>(),
+	EchoLed::create<SREAR, LREAR>(),
+	EchoLed::create<SLEFT, LLEFT>()
+};
+static constexpr const uint8_t NUM_SONARS = sizeof(ECHO_LEDS) / sizeof(EchoLed);
+
+static constexpr uint8_t echo_mask(uint8_t index = 0, uint8_t mask = 0)
+{
+	return (index < NUM_SONARS ? echo_mask(index + 1, ECHO_LEDS[index].echo | mask) : mask);
+}
+static constexpr uint8_t led_mask(uint8_t index = 0, uint8_t mask = 0)
+{
+	return (index < NUM_SONARS ? led_mask(index + 1, ECHO_LEDS[index].led | mask) : mask);
+}
+
+// define masks to use for ports dealing with sonar echo pins and LED pins
+static constexpr const uint8_t SONAR_MASK = echo_mask();
+static constexpr const uint8_t LED_MASK = led_mask();
 
 // Declate device type to handle all sonars
 using SONAR = devices::sonar::MultiHCSR04<TIMER, TRIGGER, ECHO_PORT, SONAR_MASK>;
@@ -125,13 +164,25 @@ int main()
 	while (true)
 	{
 		sonar.trigger();
-		SONAR::EVENT event;
 		while (!sonar.all_ready())
 		{
+			SONAR::EVENT event;
+			SONAR::TYPE ticks[NUM_SONARS];
 			//TODO use pull function that yields instead?
 			while (queue.pull(event))
 			{
-				//TODO handle event properly
+				// Calculate new status of LEDs for finished sonar echoes
+				uint8_t alarms = 0;
+				for (uint8_t i = 0; i < NUM_SONARS; ++i)
+				{
+					if (ECHO_LEDS[i].echo & event.started)
+						ticks[i] = event.ticks;
+					else if (	(ECHO_LEDS[i].echo & event.ready)
+							&&	(event.ticks - ticks[i] <= DISTANCE_THRESHOLD_TICKS))
+						alarms |= ECHO_LEDS[i].led;
+				}
+				// Update LEDs as needed
+				leds.set_PORT(alarms | (leds.get_PIN() & ~event.ready));
 			}
 		}
 	}
