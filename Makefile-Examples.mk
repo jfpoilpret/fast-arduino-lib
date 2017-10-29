@@ -41,6 +41,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						int/ExternalInterrupt3					\
 						pci/PinChangeInterrupt4					\
+						sonar/Sonar10							\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							
@@ -57,12 +58,14 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 
 EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						pci/PinChangeInterrupt4					\
+						sonar/Sonar10							\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							
 
 EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3			\
 								pci/PinChangeInterrupt4			\
+								sonar/Sonar10					\
 								uart/UartApp1					\
 								uart/UartApp5					\
 								uart/UartApp6					
