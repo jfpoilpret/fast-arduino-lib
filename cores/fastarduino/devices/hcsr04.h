@@ -432,7 +432,7 @@ namespace sonar
 
 		//TODO allow 2 constructors: with/without FastPort init DDR
 		MultiHCSR04(TIMER& timer)
-			:timer_{timer}, started_{}, ready_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{MASK_, 0}
+			:timer_{timer}, started_{}, ready_{}, active_{false}, trigger_{gpio::PinMode::OUTPUT}, echo_{MASK_, 0}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -447,10 +447,20 @@ namespace sonar
 			return ready_ == MASK_;
 		}
 
+		void set_ready()
+		{
+			if (active_)
+			{
+				ready_ = MASK_;
+				active_ = false;
+			}
+		}
+
 		void trigger()
 		{
 			started_ = 0;
 			ready_ = 0;
+			active_ = true;
 			timer_.reset();
 			// Pulse TRIGGER for 10us
 			trigger_.set();
@@ -469,6 +479,8 @@ namespace sonar
 			// Update status of all echo pins
 			started_ |= started;
 			ready_ |= ready;
+			if (ready_ == MASK_)
+				active_ = false;
 			return EVENT{started, ready, ticks};
 		}
 
@@ -478,6 +490,7 @@ namespace sonar
 		TIMER& timer_;
 		volatile uint8_t started_;
 		volatile uint8_t ready_;
+		bool active_;
 		typename gpio::FastPinType<TRIGGER_>::TYPE trigger_;
 		gpio::FastMaskedPort<PORT_> echo_;
 	};

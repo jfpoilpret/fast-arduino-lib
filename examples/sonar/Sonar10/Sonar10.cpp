@@ -32,7 +32,7 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/queue.h>
 #include <fastarduino/utilities.h>
-
+#include <fastarduino/pci.h>
 #include <fastarduino/devices/hcsr04.h>
 
 using board::DigitalPin;
@@ -40,7 +40,7 @@ using gpio::FastPinType;
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define TIMER_NUM 1
-#define PCI_NUM 0
+#define PCI_NUM 2
 static constexpr const board::Timer TIMER = board::Timer::TIMER1;
 static constexpr const DigitalPin TRIGGER = DigitalPin::D8;
 // Pins connected to each sonar echo
@@ -112,6 +112,7 @@ using TIMER_TYPE = timer::Timer<TIMER>;
 using CALC = timer::Calculator<TIMER>;
 static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
 static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
+static constexpr const TIMER_TYPE::TIMER_TYPE TIMEOUT_MAX = CALC::CTC_counter(PRESCALER, PRECISION);
 
 using devices::sonar::distance_mm_to_echo_us;
 
@@ -121,23 +122,35 @@ static constexpr const SONAR::TYPE DISTANCE_THRESHOLD_TICKS =
 
 using QUEUE = containers::Queue<SONAR::EVENT>;
 
+using DEBUG = gpio::FastPinType<DigitalPin::LED>;
+
 class SonarListener
 {
 public:
-	SonarListener(QUEUE& queue):queue_{queue}
+	SonarListener(SONAR& sonar, QUEUE& queue):sonar_{sonar}, queue_{queue}
 	{
 		interrupt::register_handler(*this);
 	}
 	
+	//FIXME it seems this method never gets called?
 	void on_sonar(SONAR::EVENT event)
 	{
 		// queue event for main loop to use it
+		// DEBUG::set();
 		queue_._push(event);
+	}
+
+	void on_timeout()
+	{
+		sonar_.set_ready();
 	}
 	
 private:
+	SONAR& sonar_;
 	QUEUE& queue_;
 };
+
+REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, SonarListener, &SonarListener::on_timeout)
 
 REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, SONAR, SonarListener, &SonarListener::on_sonar)
 
@@ -154,23 +167,37 @@ int main()
 
 	QUEUE queue{event_buffer};
 
-	// Start timer
-	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
-	timer.begin();
+	// Setup timer
+	TIMER_TYPE timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
+	// Setup PCI
+	interrupt::PCISignal<ECHO_PORT> signal;
+	signal.set_enable_pins(SONAR_MASK);
+	signal.enable();
+
+	// Setup sonar and listener
 	SONAR sonar{timer};
+	SonarListener listener{sonar, queue};
 
-	SonarListener listener{queue};
+	DEBUG::set_mode(gpio::PinMode::OUTPUT, false);
+	DEBUG::set();
+	time::delay_ms(2000);
+	DEBUG::clear();
+	time::delay_ms(2000);
 
+	// Start timer
+	timer.begin(TIMEOUT_MAX);
+	// Infinite loop to trigger sonar and light LEDs when near object is detected 
 	while (true)
 	{
 		sonar.trigger();
+		SONAR::TYPE ticks[NUM_SONARS];
 		while (!sonar.all_ready())
 		{
 			SONAR::EVENT event;
-			SONAR::TYPE ticks[NUM_SONARS];
 			//TODO use pull function that yields instead?
 			while (queue.pull(event))
 			{
+				// DEBUG::set();
 				// Calculate new status of LEDs for finished sonar echoes
 				uint8_t alarms = 0;
 				for (uint8_t i = 0; i < NUM_SONARS; ++i)
@@ -184,6 +211,8 @@ int main()
 				// Update LEDs as needed
 				leds.set_PORT(alarms | (leds.get_PIN() & ~event.ready));
 			}
+			time::delay_ms(10);
+			// DEBUG::clear();
 		}
 	}
 }
