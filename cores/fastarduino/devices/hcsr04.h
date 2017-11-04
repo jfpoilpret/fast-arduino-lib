@@ -490,6 +490,7 @@ namespace sonar
 		TIMER& timer_;
 		volatile uint8_t started_;
 		volatile uint8_t ready_;
+		//TODO shouldn't this be declared volatile too?
 		bool active_;
 		typename gpio::FastPinType<TRIGGER_>::TYPE trigger_;
 		gpio::FastMaskedPort<PORT_> echo_;
