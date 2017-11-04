@@ -62,7 +62,6 @@ static constexpr const board::Port ECHO_PORT = FastPinType<SFRONT>::PORT;
 static_assert(ECHO_PORT == FastPinType<SREAR>::PORT, "SFRONT and SREAR must share the same PORT");
 static_assert(ECHO_PORT == FastPinType<SLEFT>::PORT, "SFRONT and SLEFT must share the same PORT");
 static_assert(ECHO_PORT == FastPinType<SRIGHT>::PORT, "SFRONT and SRIGHT must share the same PORT");
-//TODO also assert PCI_NUM for ECHO_PORT match (how without access to trait?)
 
 static constexpr const board::Port LED_PORT = FastPinType<LFRONT>::PORT;
 static_assert(LED_PORT == FastPinType<LREAR>::PORT, "LFRONT and LREAR must share the same PORT");
@@ -101,11 +100,11 @@ static constexpr uint8_t led_mask(uint8_t index = 0, uint8_t mask = 0)
 }
 
 // define masks to use for ports dealing with sonar echo pins and LED pins
-static constexpr const uint8_t SONAR_MASK = echo_mask();
+static constexpr const uint8_t ECHO_MASK = echo_mask();
 static constexpr const uint8_t LED_MASK = led_mask();
 
 // Declate device type to handle all sonars
-using SONAR = devices::sonar::MultiHCSR04<TIMER, TRIGGER, ECHO_PORT, SONAR_MASK>;
+using SONAR = devices::sonar::MultiHCSR04<TIMER, TRIGGER, ECHO_PORT, ECHO_MASK>;
 
 // Declare timer types and constants
 using TIMER_TYPE = timer::Timer<TIMER>;
@@ -171,7 +170,7 @@ int main()
 	TIMER_TYPE timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	// Setup PCI for all sonar echo pins
 	interrupt::PCISignal<ECHO_PORT> signal;
-	signal._set_enable_pins(SONAR_MASK);
+	signal._set_enable_pins(ECHO_MASK);
 	signal._enable();
 
 	// Setup sonar and listener
@@ -199,12 +198,12 @@ int main()
 				uint8_t ready_leds = 0;
 				for (uint8_t i = 0; i < NUM_SONARS; ++i)
 				{
-					if (ECHO_LEDS[i].echo & event.started)
-						ticks[i] = event.ticks;
-					else if (ECHO_LEDS[i].echo & event.ready)
+					if (ECHO_LEDS[i].echo & event.started())
+						ticks[i] = event.ticks();
+					else if (ECHO_LEDS[i].echo & event.ready())
 					{
 						ready_leds |= ECHO_LEDS[i].led; 
-						if	(event.ticks - ticks[i] <= DISTANCE_THRESHOLD_TICKS)
+						if	(event.ticks() - ticks[i] <= DISTANCE_THRESHOLD_TICKS)
 							alarms |= ECHO_LEDS[i].led;
 					}
 				}
@@ -214,6 +213,5 @@ int main()
 		}
 		//The following line seems required, otherwise LEDs lighting seems unstable
 		time::delay_ms(10);
-		// leds.set_PORT(0);
 	}
 }

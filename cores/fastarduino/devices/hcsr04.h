@@ -167,21 +167,23 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))															\
 		CALLBACK (capture);																		\
 }
 
-//TODO add static_assert to check PCI_NUM matches SONAR PORT
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, SONAR, HANDLER, CALLBACK)	\
 ISR(CAT3(PCINT, PCI_NUM, _vect))												\
 {																				\
+	static_assert(SONAR::ECHO_PORT == board_traits::PCI_trait< PCI_NUM >::PORT,	\
+		"SONAR::ECHO_PORT port must match PCI_NUM port");						\
 	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
 	auto handler = SONAR_HOLDER::handler();										\
 	auto event = handler->on_pin_change();										\
-	if (event.ready || event.started)											\
+	if (event.ready() || event.started())										\
 		CALL_HANDLER_(HANDLER, CALLBACK, decltype(event))(event);				\
 }
 
-//TODO add static_assert to check PCI_NUM matches SONAR PORT
 #define REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(PCI_NUM, SONAR, CALLBACK)		\
 ISR(CAT3(PCINT, PCI_NUM, _vect))												\
 {																				\
+	static_assert(SONAR::ECHO_PORT == board_traits::PCI_trait< PCI_NUM >::PORT,	\
+		"SONAR::ECHO_PORT port must match PCI_NUM port");						\
 	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
 	auto handler = SONAR_HOLDER::handler();										\
 	auto event = handler->on_pin_change();										\
@@ -398,41 +400,55 @@ namespace sonar
 		typename gpio::FastPinType<ECHO_>::TYPE echo_;
 	};
 
-	//TODO have to avoid const so that Event refs can be updated, hence have to define "getters"
 	template<board::Timer TIMER_>
 	struct SonarEvent
 	{
 	public:
 		using TYPE = typename board_traits::Timer_trait<TIMER_>::TYPE;
 
-		SonarEvent():started{}, ready{}, ticks{} {}
+		SonarEvent():started_{}, ready_{}, ticks_{} {}
 		SonarEvent(uint8_t started, uint8_t ready, TYPE ticks)
-			:started{started}, ready{ready}, ticks{ticks} {}
+			:started_{started}, ready_{ready}, ticks_{ticks} {}
 
-		uint8_t started;
-		uint8_t ready;
-		TYPE ticks;
+		uint8_t started() const
+		{
+			return started_;
+		}
+		uint8_t ready() const
+		{
+			return ready_;
+		}
+		TYPE ticks() const
+		{
+			return ticks_;
+		}
+
+	private:
+		uint8_t started_;
+		uint8_t ready_;
+		TYPE ticks_;
 	};
 
-	//TODO how do we handle timeout? internally? externally?
-	template<board::Timer TIMER_, board::DigitalPin TRIGGER_, board::Port PORT_, uint8_t MASK_>
+	template<board::Timer TIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_>
 	class MultiHCSR04
 	{
-		using PTRAIT = board_traits::Port_trait<PORT_>;
-		static_assert(PTRAIT::PCINT != 0xFF, "PORT_ must support PCINT");
-		static_assert((PTRAIT::DPIN_MASK & MASK_) == MASK_, "MASK_ must contain available PORT pins");
+		using PTRAIT = board_traits::Port_trait<ECHO_PORT_>;
+		static_assert(PTRAIT::PCINT != 0xFF, "ECHO_PORT_ must support PCINT");
+		static_assert((PTRAIT::DPIN_MASK & ECHO_MASK_) == ECHO_MASK_, "ECHO_MASK_ must contain available PORT pins");
 
 	public:
 		using TIMER = timer::Timer<TIMER_>;
 		using TYPE = typename TIMER::TIMER_TYPE;
 		using EVENT = SonarEvent<TIMER_>;
-
+		static constexpr const board::DigitalPin TRIGGER = TRIGGER_;
+		static constexpr const board::Port ECHO_PORT = ECHO_PORT_;
+		static constexpr const uint8_t ECHO_MASK = ECHO_MASK_;
+		
 		static constexpr const uint16_t MAX_RANGE_M = 4;
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
-		//TODO allow 2 constructors: with/without FastPort init DDR
 		MultiHCSR04(TIMER& timer)
-			:timer_{timer}, started_{}, ready_{}, active_{false}, trigger_{gpio::PinMode::OUTPUT}, echo_{MASK_, 0}
+			:timer_{timer}, started_{}, ready_{}, active_{false}, trigger_{gpio::PinMode::OUTPUT}, echo_{ECHO_MASK_, 0}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -444,14 +460,14 @@ namespace sonar
 
 		bool all_ready() const
 		{
-			return ready_ == MASK_;
+			return ready_ == ECHO_MASK_;
 		}
 
 		void set_ready()
 		{
 			if (active_)
 			{
-				ready_ = MASK_;
+				ready_ = ECHO_MASK_;
 				active_ = false;
 			}
 		}
@@ -479,7 +495,7 @@ namespace sonar
 			// Update status of all echo pins
 			started_ |= started;
 			ready_ |= ready;
-			if (ready_ == MASK_)
+			if (ready_ == ECHO_MASK_)
 				active_ = false;
 			return EVENT{started, ready, ticks};
 		}
@@ -490,10 +506,9 @@ namespace sonar
 		TIMER& timer_;
 		volatile uint8_t started_;
 		volatile uint8_t ready_;
-		//TODO shouldn't this be declared volatile too?
-		bool active_;
+		volatile bool active_;
 		typename gpio::FastPinType<TRIGGER_>::TYPE trigger_;
-		gpio::FastMaskedPort<PORT_> echo_;
+		gpio::FastMaskedPort<ECHO_PORT_> echo_;
 	};
 }
 }
