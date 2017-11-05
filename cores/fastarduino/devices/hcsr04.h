@@ -486,7 +486,10 @@ namespace sonar
 
 		EVENT on_pin_change()
 		{
+			//TODO Better get ticks from ISR and pass it along as argument
 			TYPE ticks = timer_._ticks();
+			if (!active_)
+				return EVENT{};
 			// Compute the newly started echoes
 			uint8_t pins = echo_.get_PIN();
 			uint8_t started = pins & ~started_;
