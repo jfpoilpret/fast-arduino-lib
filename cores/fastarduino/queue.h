@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #ifndef QUEUE_HH
-#define	QUEUE_HH
+#define QUEUE_HH
 
 #include "utilities.h"
 #include "time.h"
@@ -22,12 +22,11 @@ namespace containers
 {
 	//TODO imprvoe code size by creating a non-template base class with all common stuff
 	//TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?
-	template<typename T, typename TREF = const T&>
-	class Queue
+	template<typename T, typename TREF = const T&> class Queue
 	{
 	public:
 		template<uint8_t SIZE>
-		Queue(T (&buffer)[SIZE]): _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
+		Queue(T (&buffer)[SIZE]) : _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
 		{
 			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
@@ -37,8 +36,7 @@ namespace containers
 		bool _pull(T& item);
 		bool _peek(T& item) const;
 		uint8_t _peek(T* buffer, uint8_t size) const;
-		template<uint8_t SIZE>
-		uint8_t _peek(T (&buffer)[SIZE]) const;
+		template<uint8_t SIZE> uint8_t _peek(T (&buffer)[SIZE]) const;
 		inline bool _empty() const
 		{
 			return (_tail == _head);
@@ -73,8 +71,7 @@ namespace containers
 		{
 			synchronized return _peek(buffer, size);
 		}
-		template<uint8_t SIZE>
-		inline uint8_t peek(T (&buffer)[SIZE]) const
+		template<uint8_t SIZE> inline uint8_t peek(T (&buffer)[SIZE]) const
 		{
 			synchronized return _peek(buffer);
 		}
@@ -102,34 +99,28 @@ namespace containers
 		volatile uint8_t _tail;
 	};
 
-	template<typename T, typename TREF>
-	bool Queue<T, TREF>::_peek(T& item) const
+	template<typename T, typename TREF> bool Queue<T, TREF>::_peek(T& item) const
 	{
 		if (_tail == _head) return false;
 		item = _buffer[_head];
 		return true;
 	}
 
-	template<typename T, typename TREF>
-	uint8_t Queue<T, TREF>::_peek(T* buffer, uint8_t size) const
+	template<typename T, typename TREF> uint8_t Queue<T, TREF>::_peek(T* buffer, uint8_t size) const
 	{
 		uint8_t actual = (_tail - _head) & _mask;
 		if (size > actual) size = actual;
 		//TODO optimize copy (index calculation is simple if split in 2 parts)
-		for (uint8_t i = 0; i < size; ++i)
-			buffer[i] = _buffer[(_head + i) & _mask];
+		for (uint8_t i = 0; i < size; ++i) buffer[i] = _buffer[(_head + i) & _mask];
 		return size;
 	}
 
-	template<typename T, typename TREF>
-	template<uint8_t SIZE>
-	uint8_t Queue<T, TREF>::_peek(T (&buffer)[SIZE]) const
+	template<typename T, typename TREF> template<uint8_t SIZE> uint8_t Queue<T, TREF>::_peek(T (&buffer)[SIZE]) const
 	{
 		return _peek(&buffer, SIZE);
 	}
 
-	template<typename T, typename TREF>
-	bool Queue<T, TREF>::_push(TREF item)
+	template<typename T, typename TREF> bool Queue<T, TREF>::_push(TREF item)
 	{
 		if ((_head - _tail - 1) & _mask)
 		{
@@ -140,8 +131,7 @@ namespace containers
 		return false;
 	}
 
-	template<typename T, typename TREF>
-	bool Queue<T, TREF>::_pull(T& item)
+	template<typename T, typename TREF> bool Queue<T, TREF>::_pull(T& item)
 	{
 		if (_tail != _head)
 		{
@@ -153,23 +143,19 @@ namespace containers
 	}
 
 	// Utility method that waits until a Queue has an item available
-	template<typename T, typename TREF>
-	T pull(Queue<T, TREF>& queue)
+	template<typename T, typename TREF> T pull(Queue<T, TREF>& queue)
 	{
 		T item;
-		while (!queue.pull(item))
-			time::yield();
+		while (!queue.pull(item)) time::yield();
 		return item;
 	}
 
-	template<typename T, typename TREF>
-	T peek(Queue<T, TREF>& queue)
+	template<typename T, typename TREF> T peek(Queue<T, TREF>& queue)
 	{
 		T item;
-		while (!queue.peek(item))
-			time::yield();
+		while (!queue.peek(item)) time::yield();
 		return item;
 	}
 }
 
-#endif	/* QUEUE_HH */
+#endif /* QUEUE_HH */

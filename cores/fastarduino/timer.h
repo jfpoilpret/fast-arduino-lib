@@ -38,8 +38,8 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
+#define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK) \
+	REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a timer::Timer
@@ -48,8 +48,8 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_TIMER_COMPARE_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
-REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
+#define REGISTER_TIMER_COMPARE_ISR_FUNCTION(TIMER_NUM, CALLBACK) \
+	REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
 
 /**
  * Register an empty ISR (interrupt Service Routine) for a timer::Timer.
@@ -57,7 +57,7 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
  * callback.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
+#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM) EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
@@ -67,8 +67,8 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
+#define REGISTER_TIMER_OVERFLOW_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK) \
+	REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
@@ -77,8 +77,8 @@ REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(TIMER_NUM, CALLBACK)	\
-REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)
+#define REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(TIMER_NUM, CALLBACK) \
+	REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for the Counter Overflow
@@ -86,7 +86,7 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _OVF_vect));
+#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM) EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _OVF_vect));
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Input Capture
@@ -96,14 +96,14 @@ REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)		\
-ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
-{																			\
-	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);		\
-	using TRAIT = board_traits::Timer_trait<TIMER>;							\
-	TRAIT::TYPE capture = TRAIT::ICR;										\
-	CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(capture);					\
-}
+#define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)     \
+	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))                                 \
+	{                                                                       \
+		constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM); \
+		using TRAIT = board_traits::Timer_trait<TIMER>;                     \
+		TRAIT::TYPE capture = TRAIT::ICR;                                   \
+		CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(capture);             \
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Input Capture
@@ -112,14 +112,14 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
-ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
-{																			\
-	constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM);		\
-	using TRAIT = board_traits::Timer_trait<TIMER>;							\
-	TRAIT::TYPE capture = TRAIT::ICR;										\
-	CALLBACK (capture);														\
-}
+#define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)            \
+	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))                                 \
+	{                                                                       \
+		constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM); \
+		using TRAIT = board_traits::Timer_trait<TIMER>;                     \
+		TRAIT::TYPE capture = TRAIT::ICR;                                   \
+		CALLBACK(capture);                                                  \
+	}
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for the Input Capture
@@ -127,7 +127,7 @@ ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))										\
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
+#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM) EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
 
 /**
  * Defines all API to manipulate AVR Timers.
@@ -144,7 +144,7 @@ namespace timer
 	/**
 	 * Defines the mode of operation of a timer.
 	 */
-	enum class TimerMode:uint8_t
+	enum class TimerMode : uint8_t
 	{
 		/** 
 		 * Timer "Normal" mode: counter is incremented up to maximum value (0xFF
@@ -185,7 +185,7 @@ namespace timer
 	 * Defines the interrupts that can be handled by a timer.
 	 * @sa Timer::set_interrupts()
 	 */
-	enum class TimerInterrupt:uint8_t
+	enum class TimerInterrupt : uint8_t
 	{
 		/** This interrupt occurs when the counter overflows it maximum value. */
 		OVERFLOW = board_traits::TimerInterrupt::OVERFLOW,
@@ -219,7 +219,7 @@ namespace timer
 	/**
 	 * Defines the "connection" between this timer and specific PWM output pins.
 	 */
-	enum class TimerOutputMode:uint8_t
+	enum class TimerOutputMode : uint8_t
 	{
 		/** No connection for this pin: pin is unaffected by timer operation. */
 		DISCONNECTED,
@@ -243,14 +243,14 @@ namespace timer
 	/**
 	 * Defines the type of input capture we want for a timer.
 	 */
-	enum class TimerInputCapture:uint8_t
+	enum class TimerInputCapture : uint8_t
 	{
 		/** Input capture needed on rising edge of ICP pin. */
 		RISING_EDGE,
 		/** Input capture needed on falling edge of ICP pin. */
 		FALLING_EDGE
 	};
-	
+
 	/**
 	 * Defines a set of calculation methods for the given @p TIMER
 	 * The behavior of these methods is specific to each AVR Timer are there can
@@ -259,8 +259,7 @@ namespace timer
 	 * @tparam TIMER the timer for which we need calculation methods
 	 * @sa board::Timer
 	 */
-	template<board::Timer TIMER>
-	struct Calculator
+	template<board::Timer TIMER> struct Calculator
 	{
 	private:
 		using TRAIT = board_traits::Timer_trait<TIMER>;
@@ -283,7 +282,7 @@ namespace timer
 		 * value will set PWM duty as 100%.
 		 */
 		static constexpr const TIMER_TYPE PWM_MAX = TRAIT::MAX_PWM;
-		
+
 		/**
 		 * Computes the ideal prescaler to use for this timer, in order to generate
 		 * timer ticks of @p us_per_tick microseconds or less.
@@ -396,8 +395,7 @@ namespace timer
 		 */
 		static constexpr TIMER_PRESCALER FastPWM_prescaler(uint16_t pwm_frequency)
 		{
-			return best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL));
+			return best_frequency_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (PWM_MAX + 1UL));
 		}
 
 		/**
@@ -415,7 +413,7 @@ namespace timer
 		{
 			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL);
 		}
-		
+
 		/**
 		 * Computes the ideal prescaler value to use for this timer, in
 		 * TimerMode::PHASE_CORRECT_PWM mode, in order to be able to reach at
@@ -429,8 +427,7 @@ namespace timer
 		 */
 		static constexpr TIMER_PRESCALER PhaseCorrectPWM_prescaler(uint16_t pwm_frequency)
 		{
-			return best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (2UL * PWM_MAX));
+			return best_frequency_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (2UL * PWM_MAX));
 		}
 
 		/**
@@ -448,7 +445,7 @@ namespace timer
 		{
 			return F_CPU / _BV(uint8_t(prescaler)) / (2UL * PWM_MAX);
 		}
-	
+
 		/**
 		 * Computes the ideal prescaler value to use for this timer, when used
 		 * in timer::PulseTimer, in order to be able to reach at least
@@ -506,10 +503,9 @@ namespace timer
 		 */
 		static constexpr TIMER_PRESCALER PWM_ICR_prescaler(uint16_t pwm_frequency)
 		{
-			return best_frequency_prescaler(
-				PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (TRAIT::MAX_PWM + 1UL));
+			return best_frequency_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, pwm_frequency * (TRAIT::MAX_PWM + 1UL));
 		}
-		
+
 		/**
 		 * Computes the frequency at which this timer would perform, when used
 		 * in timer::PulseTimer, if it was using @p prescaler and @p counter.
@@ -553,7 +549,7 @@ namespace timer
 		{
 			return F_CPU / _BV(uint8_t(prescaler)) / pwm_frequency;
 		}
-		
+
 	private:
 		static constexpr uint32_t prescaler_quotient(TIMER_PRESCALER p, uint32_t us)
 		{
@@ -572,68 +568,75 @@ namespace timer
 
 		static constexpr TIMER_PRESCALER best_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t us)
 		{
-			return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ? p2 :
-					!prescaler_is_adequate(prescaler_quotient(p2, us)) ? p1 :
-					prescaler_remainder(p1, us) < prescaler_remainder(p2, us) ? p1 :
-					prescaler_remainder(p1, us) > prescaler_remainder(p2, us) ? p2 :
-					prescaler_quotient(p1, us) > prescaler_quotient(p2, us) ? p1 : p2);
+			return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ?
+						p2 :
+						!prescaler_is_adequate(prescaler_quotient(p2, us)) ?
+						p1 :
+						prescaler_remainder(p1, us) < prescaler_remainder(p2, us) ?
+						p1 :
+						prescaler_remainder(p1, us) > prescaler_remainder(p2, us) ?
+						p2 :
+						prescaler_quotient(p1, us) > prescaler_quotient(p2, us) ? p1 : p2);
 		}
 
-		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t us)
+		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end,
+														uint32_t us)
 		{
-			return (begin + 1 == end ? *begin : best_prescaler_in_2(*begin, best_prescaler(begin + 1 , end, us), us));
+			return (begin + 1 == end ? *begin : best_prescaler_in_2(*begin, best_prescaler(begin + 1, end, us), us));
 		}
 
 		template<size_t N>
-		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
+		static constexpr TIMER_PRESCALER best_prescaler(const TIMER_PRESCALER (&prescalers)[N], uint32_t us)
 		{
 			return best_prescaler(prescalers, prescalers + N, us);
 		}
-		
+
 		static constexpr bool prescaler_is_adequate_for_frequency(TIMER_PRESCALER p, uint32_t freq)
 		{
 			return (F_CPU / (uint32_t) _BV(uint8_t(p)) > freq);
 		}
-		
-		static constexpr TIMER_PRESCALER best_frequency_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t freq)
+
+		static constexpr TIMER_PRESCALER best_frequency_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2,
+																	   uint32_t freq)
 		{
 			return prescaler_is_adequate_for_frequency(p2, freq) ? p2 : p1;
 		}
 
-		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t freq)
+		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER* begin,
+																  const TIMER_PRESCALER* end, uint32_t freq)
 		{
-			return (begin + 1 == end ? *begin : 
-					best_frequency_prescaler_in_2(*begin, best_frequency_prescaler(begin + 1 , end, freq), freq));
+			return (begin + 1 == end ? *begin : best_frequency_prescaler_in_2(
+													*begin, best_frequency_prescaler(begin + 1, end, freq), freq));
 		}
 
 		template<size_t N>
-		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t freq)
+		static constexpr TIMER_PRESCALER best_frequency_prescaler(const TIMER_PRESCALER (&prescalers)[N], uint32_t freq)
 		{
 			return best_frequency_prescaler(prescalers, prescalers + N, freq);
 		}
-		
+
 		static constexpr bool prescaler_is_adequate_for_tick(TIMER_PRESCALER p, uint32_t us)
 		{
 			return (prescaler_quotient(p, us) >= 1);
 		}
-		
+
 		static constexpr TIMER_PRESCALER best_tick_prescaler_in_2(TIMER_PRESCALER p1, TIMER_PRESCALER p2, uint32_t us)
 		{
-			return (prescaler_is_adequate_for_tick(p2, us)? p2 : p1);
+			return (prescaler_is_adequate_for_tick(p2, us) ? p2 : p1);
 		}
 
-		static constexpr TIMER_PRESCALER best_tick_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end, uint32_t us)
+		static constexpr TIMER_PRESCALER best_tick_prescaler(const TIMER_PRESCALER* begin, const TIMER_PRESCALER* end,
+															 uint32_t us)
 		{
-			return (begin + 1 == end ? *begin : 
-					best_tick_prescaler_in_2(*begin, best_tick_prescaler(begin + 1 , end, us), us));
+			return (begin + 1 == end ? *begin :
+									   best_tick_prescaler_in_2(*begin, best_tick_prescaler(begin + 1, end, us), us));
 		}
 
 		template<size_t N>
-		static constexpr TIMER_PRESCALER best_tick_prescaler(const TIMER_PRESCALER(&prescalers)[N], uint32_t us)
+		static constexpr TIMER_PRESCALER best_tick_prescaler(const TIMER_PRESCALER (&prescalers)[N], uint32_t us)
 		{
 			return best_frequency_prescaler(prescalers, prescalers + N, us);
 		}
-		
 	};
 
 	/**
@@ -644,15 +647,14 @@ namespace timer
 	 * @tparam TIMER the AVR timer forto use for this Timer
 	 * @sa board::Timer
 	 */
-	template<board::Timer TIMER>
-	class Timer
+	template<board::Timer TIMER> class Timer
 	{
 	protected:
 		/// @cond notdocumented
 		using TRAIT = board_traits::Timer_trait<TIMER>;
 		using PRESCALERS_TRAIT = typename TRAIT::PRESCALERS_TRAIT;
 		/// @endcond
-		
+
 	public:
 		//TODO DOC
 		// static constexpr const board::Timer TIMER = TIMER;
@@ -682,7 +684,7 @@ namespace timer
 		 * timer, or `board::DigitalPin::NONE` if not.
 		 */
 		static constexpr const board::DigitalPin ICP_PIN = TRAIT::ICP_PIN;
-		
+
 		/**
 		 * Construct a new Timer handler and initialize its mode.
 		 * Note this constructor does *not* start the timer.
@@ -697,9 +699,11 @@ namespace timer
 		 * @sa set_prescaler()
 		 */
 		Timer(TimerMode timer_mode, TIMER_PRESCALER prescaler, TimerInterrupt interrupts = TimerInterrupt(0))
-		:	_tccra{timer_mode_TCCRA(timer_mode)}, 
-			_tccrb{uint8_t(timer_mode_TCCRB(timer_mode) | TRAIT::TCCRB_prescaler(prescaler))},
-			_timsk{TRAIT::TIMSK_MASK(uint8_t(interrupts))} {}
+			: _tccra{timer_mode_TCCRA(timer_mode)}, _tccrb{uint8_t(timer_mode_TCCRB(timer_mode) |
+																   TRAIT::TCCRB_prescaler(prescaler))},
+			  _timsk{TRAIT::TIMSK_MASK(uint8_t(interrupts))}
+		{
+		}
 
 		/**
 		 * Set the list of interrupts that must be triggered by this timer.
@@ -718,8 +722,7 @@ namespace timer
 		{
 			_timsk = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB)
-				TRAIT::TIMSK = TRAIT::TIMSK_MASK(uint8_t(interrupts));
+			if (TRAIT::TCCRB) TRAIT::TIMSK = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 		}
 
 		//TODO method to check if some interrupt is enabled
@@ -738,8 +741,7 @@ namespace timer
 			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
 			utils::set_mask(_tccrb, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB)
-				TRAIT::TCCRB = _tccrb;
+			if (TRAIT::TCCRB) TRAIT::TCCRB = _tccrb;
 		}
 
 		//TODO DOC
@@ -775,8 +777,7 @@ namespace timer
 		{
 			utils::set_mask(_tccrb, TRAIT::CS_MASK_TCCRB, TRAIT::TCCRB_prescaler(prescaler));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB)
-				TRAIT::TCCRB = _tccrb;
+			if (TRAIT::TCCRB) TRAIT::TCCRB = _tccrb;
 		}
 
 		//TODO getter method for current prescaler
@@ -850,7 +851,7 @@ namespace timer
 		{
 			TRAIT::TCNT = 0;
 		}
-		
+
 		/**
 		 * Return the current counter value for this timer.
 		 * This method is synchronized if needed (i.e. if this timer is 16 bits).
@@ -878,7 +879,7 @@ namespace timer
 		{
 			return TRAIT::TCNT;
 		}
-		
+
 		/**
 		 * Temporarily suspend this timer: the timer does not generate any
 		 * interrupt any longer.
@@ -994,14 +995,13 @@ namespace timer
 		 * will not compile if you use an incorrect value.
 		 * @param mode the new output mode for this timer and this pin
 		 */
-		template<uint8_t COM>
-		inline void set_output_mode(TimerOutputMode mode)
+		template<uint8_t COM> inline void set_output_mode(TimerOutputMode mode)
 		{
 			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
 			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
 			utils::set_mask(_tccra, COM_TRAIT::COM_MASK, convert_COM<COM>(mode));
 		}
-		
+
 		/**
 		 * Change the maximum value for this timer, in relation to one of its
 		 * associated digital output pins.
@@ -1012,8 +1012,7 @@ namespace timer
 		 * will not compile if you use an incorrect value.
 		 * @param max the new maximum value for this timer and this pin
 		 */
-		template<uint8_t COM>
-		inline void set_max(TIMER_TYPE max)
+		template<uint8_t COM> inline void set_max(TIMER_TYPE max)
 		{
 			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
 			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
@@ -1022,52 +1021,55 @@ namespace timer
 				if (max)
 					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, _tccra);
 				else
-					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, 
-						convert_COM<COM>(TimerOutputMode::DISCONNECTED));
+					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK,
+									convert_COM<COM>(TimerOutputMode::DISCONNECTED));
 				COM_TRAIT::OCR = max;
 			}
 		}
 
 	protected:
 		/// @cond notdocumented
-		Timer(uint8_t tccra, uint8_t tccrb, uint8_t timsk = 0)
-			:_tccra{tccra}, _tccrb{tccrb}, _timsk{timsk} {}
+		Timer(uint8_t tccra, uint8_t tccrb, uint8_t timsk = 0) : _tccra{tccra}, _tccrb{tccrb}, _timsk{timsk}
+		{
+		}
 
-		template<uint8_t COM>
-		static constexpr uint8_t convert_COM(TimerOutputMode output_mode)
+		template<uint8_t COM> static constexpr uint8_t convert_COM(TimerOutputMode output_mode)
 		{
 			using COM_TRAIT = board_traits::Timer_COM_trait<TIMER, COM>;
-			return (output_mode == TimerOutputMode::TOGGLE ? COM_TRAIT::COM_TOGGLE :
-					output_mode == TimerOutputMode::INVERTING ? COM_TRAIT::COM_SET :
-					output_mode == TimerOutputMode::NON_INVERTING ? COM_TRAIT::COM_CLEAR :
-					COM_TRAIT::COM_NORMAL);
+			return (output_mode == TimerOutputMode::TOGGLE ?
+						COM_TRAIT::COM_TOGGLE :
+						output_mode == TimerOutputMode::INVERTING ?
+						COM_TRAIT::COM_SET :
+						output_mode == TimerOutputMode::NON_INVERTING ? COM_TRAIT::COM_CLEAR : COM_TRAIT::COM_NORMAL);
 		}
 
 		static constexpr bool TIMSK_MASK_IS_SUPPORTED(TimerInterrupt interrupt)
 		{
-			return (TRAIT::TIMSK_MASK(0xFF) & TRAIT::TIMSK_MASK(uint8_t(interrupt))) 
-					== TRAIT::TIMSK_MASK(uint8_t(interrupt));
+			return (TRAIT::TIMSK_MASK(0xFF) & TRAIT::TIMSK_MASK(uint8_t(interrupt))) ==
+				   TRAIT::TIMSK_MASK(uint8_t(interrupt));
 		}
 
 		static constexpr uint8_t timer_mode_TCCRA(TimerMode timer_mode)
 		{
-			return (timer_mode == TimerMode::CTC ? TRAIT::CTC_TCCRA :
-					timer_mode == TimerMode::FAST_PWM ? TRAIT::F_PWM_TCCRA :
-					timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRA :
-					0);
+			return (timer_mode == TimerMode::CTC ?
+						TRAIT::CTC_TCCRA :
+						timer_mode == TimerMode::FAST_PWM ?
+						TRAIT::F_PWM_TCCRA :
+						timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRA : 0);
 		}
 		static constexpr uint8_t timer_mode_TCCRB(TimerMode timer_mode)
 		{
-			return (timer_mode == TimerMode::CTC ? TRAIT::CTC_TCCRB :
-					timer_mode == TimerMode::FAST_PWM ? TRAIT::F_PWM_TCCRB :
-					timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRB :
-					0);
+			return (timer_mode == TimerMode::CTC ?
+						TRAIT::CTC_TCCRB :
+						timer_mode == TimerMode::FAST_PWM ?
+						TRAIT::F_PWM_TCCRB :
+						timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRB : 0);
 		}
 		static constexpr uint8_t input_capture_TCCRB(TimerInputCapture input_capture)
 		{
 			return (input_capture == TimerInputCapture::RISING_EDGE ? TRAIT::ICES_TCCRB : 0);
 		}
-		
+
 		uint8_t _tccra;
 		uint8_t _tccrb;
 		uint8_t _timsk;

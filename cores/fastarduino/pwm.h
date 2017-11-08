@@ -39,12 +39,11 @@ namespace analog
 	 * triggered every few dozen ms.
 	 * @sa board::DigitalPin
 	 */
-	template<board::DigitalPin PIN, bool PULSED = false>
-	class PWMOutput
+	template<board::DigitalPin PIN, bool PULSED = false> class PWMOutput
 	{
 		using TRAIT = board_traits::PWMPin_trait<PIN>;
 		using TIMER_TRAIT = board_traits::Timer_trait<TRAIT::TIMER>;
-		
+
 	public:
 		/// @cond notdocumented
 		static constexpr const uint8_t COM = TRAIT::COM;
@@ -54,7 +53,7 @@ namespace analog
 		 * The actual `timer::Timer` type associated to this `PWMOutput`.
 		 */
 		using TIMER = timer::Timer<TRAIT::TIMER>;
-		
+
 		/**
 		 * Construct a new PWM output pin, connected to @p timer, using 
 		 * @p output_mode.
@@ -64,7 +63,7 @@ namespace analog
 		 * @param output_mode the connection output mode to use; note this is not
 		 * used in pulsed mode, i.e. when @p PULSED template argument is `true`.
 		 */
-		PWMOutput(TIMER& timer, TimerOutputMode output_mode = TimerOutputMode::NON_INVERTING):_timer{timer}
+		PWMOutput(TIMER& timer, TimerOutputMode output_mode = TimerOutputMode::NON_INVERTING) : _timer{timer}
 		{
 			static_assert(TRAIT::HAS_PWM, "PIN must be a PWM pin");
 			// Initialize pin as output
@@ -73,7 +72,7 @@ namespace analog
 				// Set com mode for pin
 				_timer.template set_output_mode<COM>(output_mode);
 		}
-		
+
 		/**
 		 * Change the connection output mode of this PWM pin to its timer.
 		 * @param output_mode the new connection output mode to use; note this 
@@ -82,8 +81,7 @@ namespace analog
 		 */
 		inline void set_output_mode(TimerOutputMode output_mode)
 		{
-			if (TIMER_TRAIT::IS_16BITS || !PULSED)
-				_timer.template set_output_mode<COM>(output_mode);
+			if (TIMER_TRAIT::IS_16BITS || !PULSED) _timer.template set_output_mode<COM>(output_mode);
 		}
 
 		/**
@@ -100,7 +98,7 @@ namespace analog
 		 * @sa TYPE
 		 */
 		static constexpr const TYPE MAX = TIMER_TRAIT::MAX_PWM;
-		
+
 		/**
 		 * Set the duty cycle for this PWM pin, from `0` (0% duty cycle) to
 		 * `MAX` (100%), any value above `MAX` will be used as 100%.

@@ -38,55 +38,77 @@ namespace devices
 
 	// Tested with W25Q80BV (8 Mbit)
 	template<board::DigitalPin CS>
-	class WinBond: public spi::SPIDevice<CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2>
+	class WinBond : public spi::SPIDevice<CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2>
 	{
 	public:
-		WinBond() {}
+		WinBond()
+		{
+		}
 
 		// This type maps to status SEC/TB/BP2/BP1/BP0
-		enum class BlockProtect:uint16_t
+		enum class BlockProtect : uint16_t
 		{
-			BLOCK_NONE			= 0x00,
-			BLOCK_UPPER_64KB	= 0x01 << 2,
-			BLOCK_UPPER_128KB	= 0x02 << 2,
-			BLOCK_UPPER_256KB	= 0x03 << 2,
-			BLOCK_UPPER_512KB	= 0x04 << 2,
+			BLOCK_NONE = 0x00,
+			BLOCK_UPPER_64KB = 0x01 << 2,
+			BLOCK_UPPER_128KB = 0x02 << 2,
+			BLOCK_UPPER_256KB = 0x03 << 2,
+			BLOCK_UPPER_512KB = 0x04 << 2,
 
-			BLOCK_LOWER_64KB	= 0x09 << 2,
-			BLOCK_LOWER_128KB	= 0x0A << 2,
-			BLOCK_LOWER_256KB	= 0x0B << 2,
-			BLOCK_LOWER_512KB	= 0x0C << 2,
-			BLOCK_ALL			= 0x07 << 2,
+			BLOCK_LOWER_64KB = 0x09 << 2,
+			BLOCK_LOWER_128KB = 0x0A << 2,
+			BLOCK_LOWER_256KB = 0x0B << 2,
+			BLOCK_LOWER_512KB = 0x0C << 2,
+			BLOCK_ALL = 0x07 << 2,
 
-			BLOCK_UPPER_4KB		= 0x11 << 2,
-			BLOCK_UPPER_8KB		= 0x12 << 2,
-			BLOCK_UPPER_16KB	= 0x13 << 2,
-			BLOCK_UPPER_32KB	= 0x14 << 2,
+			BLOCK_UPPER_4KB = 0x11 << 2,
+			BLOCK_UPPER_8KB = 0x12 << 2,
+			BLOCK_UPPER_16KB = 0x13 << 2,
+			BLOCK_UPPER_32KB = 0x14 << 2,
 
-			BLOCK_LOWER_4KB		= 0x19 << 2,
-			BLOCK_LOWER_8KB		= 0x1A << 2,
-			BLOCK_LOWER_16KB	= 0x1B << 2,
-			BLOCK_LOWER_32KB	= 0x1C << 2
+			BLOCK_LOWER_4KB = 0x19 << 2,
+			BLOCK_LOWER_8KB = 0x1A << 2,
+			BLOCK_LOWER_16KB = 0x1B << 2,
+			BLOCK_LOWER_32KB = 0x1C << 2
 		};
-		enum class StatusRegisterProtect: uint16_t
+		enum class StatusRegisterProtect : uint16_t
 		{
-			SOFTWARE_PROTECTION		= 0x0000,
-			HARDWARE_PROTECTION		= 0x0080,
-			POWER_SUPPLY_LOCKDOWN	= 0x0100
+			SOFTWARE_PROTECTION = 0x0000,
+			HARDWARE_PROTECTION = 0x0080,
+			POWER_SUPPLY_LOCKDOWN = 0x0100
 		};
 		struct Status
 		{
-			inline bool busy() const { return value & 0x0001; }
-			inline bool write_enable_latch() const { return value & 0x0002; }
-			inline BlockProtect block_protect() const { return static_cast<BlockProtect>(value & 0x007A); }
-			inline bool complement_protect() const { return value & 0x4000; }
-			inline bool suspend_status() const { return value & 0x8000; }
-			inline StatusRegisterProtect status_register_protect() const { return static_cast<StatusRegisterProtect>(value & 0x0180); }
+			inline bool busy() const
+			{
+				return value & 0x0001;
+			}
+			inline bool write_enable_latch() const
+			{
+				return value & 0x0002;
+			}
+			inline BlockProtect block_protect() const
+			{
+				return static_cast<BlockProtect>(value & 0x007A);
+			}
+			inline bool complement_protect() const
+			{
+				return value & 0x4000;
+			}
+			inline bool suspend_status() const
+			{
+				return value & 0x8000;
+			}
+			inline StatusRegisterProtect status_register_protect() const
+			{
+				return static_cast<StatusRegisterProtect>(value & 0x0180);
+			}
 
 			const uint16_t value;
 
 		private:
-			inline  Status(uint8_t sr1, uint8_t sr2):value(sr2 << 8 | sr1){}
+			inline Status(uint8_t sr1, uint8_t sr2) : value(sr2 << 8 | sr1)
+			{
+			}
 
 			friend class WinBond<CS>;
 		};
@@ -160,8 +182,7 @@ namespace devices
 		void _send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size);
 	};
 
-	template<board::DigitalPin CS>
-	void WinBond<CS>::set_status(uint16_t status)
+	template<board::DigitalPin CS> void WinBond<CS>::set_status(uint16_t status)
 	{
 		this->start_transfer();
 		this->transfer(status);
@@ -169,8 +190,7 @@ namespace devices
 		this->end_transfer();
 	}
 
-	template<board::DigitalPin CS>
-	bool WinBond<CS>::wait_until_ready(uint16_t timeout_ms)
+	template<board::DigitalPin CS> bool WinBond<CS>::wait_until_ready(uint16_t timeout_ms)
 	{
 		bool ready = false;
 		this->start_transfer();
@@ -189,16 +209,14 @@ namespace devices
 		return ready;
 	}
 
-	template<board::DigitalPin CS>
-	typename WinBond<CS>::Device WinBond<CS>::read_device()
+	template<board::DigitalPin CS> typename WinBond<CS>::Device WinBond<CS>::read_device()
 	{
 		Device device;
 		_send(0x90, 0, (uint8_t*) &device, sizeof(device));
 		return device;
 	}
 
-	template<board::DigitalPin CS>
-	uint64_t WinBond<CS>::read_unique_ID()
+	template<board::DigitalPin CS> uint64_t WinBond<CS>::read_unique_ID()
 	{
 		uint8_t buffer[9];
 		_send(0x4B, 0, buffer, 9);
@@ -207,22 +225,19 @@ namespace devices
 		return id;
 	}
 
-	template<board::DigitalPin CS>
-	uint8_t WinBond<CS>::read_data(uint32_t address)
+	template<board::DigitalPin CS> uint8_t WinBond<CS>::read_data(uint32_t address)
 	{
 		uint8_t data;
 		read_data(address, &data, 1);
 		return data;
 	}
 
-	template<board::DigitalPin CS>
-	void WinBond<CS>::read_data(uint32_t address, uint8_t* data, uint16_t size)
+	template<board::DigitalPin CS> void WinBond<CS>::read_data(uint32_t address, uint8_t* data, uint16_t size)
 	{
 		_send(0x03, address, data, size);
 	}
 
-	template<board::DigitalPin CS>
-	uint8_t WinBond<CS>::_read(uint8_t code)
+	template<board::DigitalPin CS> uint8_t WinBond<CS>::_read(uint8_t code)
 	{
 		this->start_transfer();
 		this->transfer(code);
@@ -231,16 +246,14 @@ namespace devices
 		return result;
 	}
 
-	template<board::DigitalPin CS>
-	void WinBond<CS>::_send(uint8_t code)
+	template<board::DigitalPin CS> void WinBond<CS>::_send(uint8_t code)
 	{
 		this->start_transfer();
 		this->transfer(code);
 		this->end_transfer();
 	}
 
-	template<board::DigitalPin CS>
-	void WinBond<CS>::_send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)
+	template<board::DigitalPin CS> void WinBond<CS>::_send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)
 	{
 		this->start_transfer();
 		this->transfer(code);

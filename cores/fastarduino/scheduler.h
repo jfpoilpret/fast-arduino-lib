@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #ifndef SCHEDULER_HH
-#define	SCHEDULER_HH
+#define SCHEDULER_HH
 
 #include "events.h"
 #include "linked_list.h"
@@ -22,11 +22,12 @@ namespace events
 {
 	class Job;
 
-	template<typename CLOCK>
-	class Scheduler: public EventHandler, public containers::LinkedList<Job>
+	template<typename CLOCK> class Scheduler : public EventHandler, public containers::LinkedList<Job>
 	{
 	public:
-		Scheduler(const CLOCK& clock, uint8_t type) INLINE: EventHandler{type}, _clock(clock) {}
+		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler{type}, _clock(clock)
+		{
+		}
 
 		virtual void on_event(UNUSED const Event& event) override INLINE
 		{
@@ -48,7 +49,7 @@ namespace events
 		const CLOCK& _clock;
 	};
 
-	class Job: public containers::Link<Job>
+	class Job : public containers::Link<Job>
 	{
 	public:
 		bool is_periodic() const INLINE
@@ -71,8 +72,9 @@ namespace events
 		virtual void on_schedule(uint32_t millis) = 0;
 
 	protected:
-		Job(uint32_t next = 0, uint32_t period = 0) INLINE
-			:_next_time(next), _period(period) {}
+		Job(uint32_t next = 0, uint32_t period = 0) INLINE : _next_time(next), _period(period)
+		{
+		}
 
 	private:
 		uint32_t _next_time;
@@ -81,19 +83,17 @@ namespace events
 		template<typename CLOCK> friend class Scheduler;
 	};
 
-	template<typename CLOCK>
-	bool Scheduler<CLOCK>::operator()(Job& job)
+	template<typename CLOCK> bool Scheduler<CLOCK>::operator()(Job& job)
 	{
 		uint32_t now = _clock.millis();
 		if (job.next_time() <= now)
 		{
 			job.on_schedule(now);
-			if (!job.is_periodic())
-				return true;
+			if (!job.is_periodic()) return true;
 			job.reschedule(now + job.period());
 		}
 		return false;
 	}
 }
 
-#endif	/* SCHEDULER_HH */
+#endif /* SCHEDULER_HH */

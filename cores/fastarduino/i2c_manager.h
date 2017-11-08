@@ -20,12 +20,13 @@
 
 namespace i2c
 {
-	template<I2CMode MODE = I2CMode::Standard>
-	class I2CManager
+	template<I2CMode MODE = I2CMode::Standard> class I2CManager
 	{
 	public:
-		I2CManager(I2C_STATUS_HOOK hook = 0): _handler{hook} {}
-		
+		I2CManager(I2C_STATUS_HOOK hook = 0) : _handler{hook}
+		{
+		}
+
 		void begin() INLINE
 		{
 			_handler.begin();
@@ -38,19 +39,18 @@ namespace i2c
 		{
 			return _handler.status();
 		}
-		
+
 	private:
 		using HANDLER = I2CHandler<MODE>;
-		
+
 		HANDLER& handler() INLINE
 		{
 			return _handler;
 		}
-		
+
 		HANDLER _handler;
 		template<I2CMode M> friend class I2CDevice;
 	};
 };
 
 #endif /* I2C_MANAGER_HH */
-

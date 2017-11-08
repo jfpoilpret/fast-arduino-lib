@@ -46,16 +46,14 @@ namespace analog
 	 * @sa board::AnalogReference
 	 * @sa board::AnalogClock
 	 */
-	template<	board::AnalogPin APIN, 
-				board::AnalogReference AREF = board::AnalogReference::AVCC, 
-				typename SAMPLE_TYPE = uint16_t,
-				board::AnalogClock MAXFREQ = board::AnalogClock::MAX_FREQ_200KHz>
+	template<board::AnalogPin APIN, board::AnalogReference AREF = board::AnalogReference::AVCC,
+			 typename SAMPLE_TYPE = uint16_t, board::AnalogClock MAXFREQ = board::AnalogClock::MAX_FREQ_200KHz>
 	class AnalogInput
 	{
 	private:
 		using TRAIT = board_traits::AnalogPin_trait<APIN>;
 		using GLOBAL_TRAIT = board_traits::GlobalAnalogPin_trait;
-		using VREF_TRAIT = board_traits::AnalogReference_trait<AREF>;
+		using AREF_TRAIT = board_traits::AnalogReference_trait<AREF>;
 		using TYPE_TRAIT = board_traits::AnalogSampleType_trait<SAMPLE_TYPE>;
 		using FREQ_TRAIT = board_traits::AnalogClock_trait<MAXFREQ>;
 
@@ -84,14 +82,13 @@ namespace analog
 			// First ensure that any pending sampling is finished
 			GLOBAL_TRAIT::ADCSRA_.loop_until_bit_clear(ADSC);
 			// Setup multiplexer selection and start conversion
-			GLOBAL_TRAIT::ADMUX_ = VREF_TRAIT::MASK | TYPE_TRAIT::ADLAR1 | TRAIT::MUX_MASK1;
+			GLOBAL_TRAIT::ADMUX_ = AREF_TRAIT::MASK | TYPE_TRAIT::ADLAR1 | TRAIT::MUX_MASK1;
 			GLOBAL_TRAIT::ADCSRB_ = TRAIT::MUX_MASK2 | TYPE_TRAIT::ADLAR2;
 
 			// The following delay is necessary for bandgap ADC, strangely 70us should be enough (datasheet)
 			// but this works only when no other ADC is used "at the same time"
 			// In this situation, a delay of minimum 400us seems necessary to ensure bandgap reference voltage is stabilized
-			if (TRAIT::IS_BANDGAP)
-				time::delay_us(BG_STABILIZATION_DELAY_US);
+			if (TRAIT::IS_BANDGAP) time::delay_us(BG_STABILIZATION_DELAY_US);
 
 			GLOBAL_TRAIT::ADCSRA_ = _BV(ADEN) | _BV(ADSC) | TRAIT::MUX_MASK2 | FREQ_TRAIT::PRESCALER_MASK;
 			// Wait until sampling is done
@@ -109,11 +106,9 @@ namespace analog
 	 * otherwise a compilation error will occur.
 	 * @sa board::AnalogPin
 	 */
-	template<board::AnalogPin BG=board::AnalogPin::BANDGAP>
-	class PowerVoltage: public AnalogInput<	BG, 
-											board::AnalogReference::AVCC, 
-											uint16_t, 
-											board::AnalogClock::MAX_FREQ_50KHz>
+	template<board::AnalogPin BG = board::AnalogPin::BANDGAP>
+	class PowerVoltage
+		: public AnalogInput<BG, board::AnalogReference::AVCC, uint16_t, board::AnalogClock::MAX_FREQ_50KHz>
 	{
 	private:
 		using TRAIT = board_traits::AnalogPin_trait<BG>;

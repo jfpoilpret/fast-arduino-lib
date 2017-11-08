@@ -21,9 +21,9 @@
  * you need to handle, whatever the number of pins you need in this PCINT.
  * If you add a callback, it will be called for whatever pin may have changed 
  * state in the list of pins supported by your `interrupt::PCI` instance.
- */ 
+ */
 #ifndef PCI_HH
-#define	PCI_HH
+#define PCI_HH
 
 #include <avr/interrupt.h>
 
@@ -33,12 +33,12 @@
 #include "boards/board_traits.h"
 
 /// @cond notdocumented
-#define CHECK_PCI_PIN_(PIN, PCI_NUM)																			\
-static_assert(board_traits::PCI_trait< PCI_NUM >::PORT != board::Port::NONE, "PORT must support PCI");			\
-static_assert(board_traits::DigitalPin_trait< PIN >::PORT == board_traits::PCI_trait< PCI_NUM >::PORT,			\
-	"PIN port must match PCI_NUM port");																		\
-static_assert(_BV(board_traits::DigitalPin_trait< PIN >::BIT) & board_traits::PCI_trait< PCI_NUM >::PCI_MASK,	\
-	"PIN must be a PCINT pin");
+#define CHECK_PCI_PIN_(PIN, PCI_NUM)                                                                          \
+	static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");      \
+	static_assert(board_traits::DigitalPin_trait<PIN>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,        \
+				  "PIN port must match PCI_NUM port");                                                        \
+	static_assert(_BV(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK, \
+				  "PIN must be a PCINT pin");
 /// @endcond
 
 /**
@@ -51,9 +51,9 @@ static_assert(_BV(board_traits::DigitalPin_trait< PIN >::BIT) & board_traits::PC
  * @param PIN... the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...)			\
-FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)							\
-REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)
+#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...) \
+	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)             \
+	REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt 
@@ -65,9 +65,9 @@ REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)
  * @param PIN... the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)					\
-FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)							\
-REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
+#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...) \
+	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)      \
+	REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt 
@@ -78,9 +78,9 @@ REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
  * @param PIN... the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)								\
-FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)							\
-EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))
+#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)         \
+	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__) \
+	EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))
 
 namespace interrupt
 {
@@ -103,8 +103,7 @@ namespace interrupt
 	 * @sa REGISTER_PCI_ISR_EMPTY
 	 * @sa PCIType
 	 */
-	template<board::Port PORT>
-	class PCISignal
+	template<board::Port PORT> class PCISignal
 	{
 	public:
 		/// @cond notdocumented
@@ -245,11 +244,11 @@ namespace interrupt
 		 * @sa disable_pin()
 		 * @sa enable_pins()
 		 */
-		template<board::DigitalPin PIN>
-		inline void enable_pin()
+		template<board::DigitalPin PIN> inline void enable_pin()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+						  "PIN must be a PCI within PORT");
 			enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
 		}
 
@@ -265,11 +264,11 @@ namespace interrupt
 		 * @sa _disable_pin()
 		 * @sa enable_pin()
 		 */
-		template<board::DigitalPin PIN>
-		inline void disable_pin()
+		template<board::DigitalPin PIN> inline void disable_pin()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+						  "PIN must be a PCI within PORT");
 			synchronized TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
 		}
 
@@ -404,11 +403,11 @@ namespace interrupt
 		 * @sa _disable_pin()
 		 * @sa _enable_pins()
 		 */
-		template<board::DigitalPin PIN>
-		inline void _enable_pin()
+		template<board::DigitalPin PIN> inline void _enable_pin()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+						  "PIN must be a PCI within PORT");
 			_enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
 		}
 
@@ -424,11 +423,11 @@ namespace interrupt
 		 * @sa disable_pin()
 		 * @sa _enable_pin()
 		 */
-		template<board::DigitalPin PIN>
-		inline void _disable_pin()
+		template<board::DigitalPin PIN> inline void _disable_pin()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT), "PIN must be a PCI within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+						  "PIN must be a PCI within PORT");
 			TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
 		}
 	};
@@ -451,15 +450,15 @@ namespace interrupt
 	 * @endcode
 	 * @sa board::DigitalPin
 	 */
-	template<board::DigitalPin PIN>
-	struct PCIType
+	template<board::DigitalPin PIN> struct PCIType
 	{
 		/** PCISignal type for @p PIN */
 		using TYPE = PCISignal<board_traits::DigitalPin_trait<PIN>::PORT>;
 		/** `PCINT` vector number for this @p PIN */
-		static constexpr const uint8_t PCINT = board_traits::Port_trait<board_traits::DigitalPin_trait<PIN>::PORT>::PCINT;
+		static constexpr const uint8_t PCINT =
+			board_traits::Port_trait<board_traits::DigitalPin_trait<PIN>::PORT>::PCINT;
 	};
 }
 
-#endif	/* PCI_HH */
+#endif /* PCI_HH */
 /// @endcond

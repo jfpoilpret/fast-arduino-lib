@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #ifndef EVENTS_HH
-#define	EVENTS_HH
+#define EVENTS_HH
 
 #include <stddef.h>
 #include "queue.h"
@@ -37,8 +37,9 @@ namespace events
 	class Event
 	{
 	public:
-		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) INLINE
-			: _type{type}, _value{value} {}
+		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) INLINE : _type{type}, _value{value}
+		{
+		}
 		uint8_t type() const INLINE
 		{
 			return _type;
@@ -56,13 +57,13 @@ namespace events
 	class EventHandler;
 
 	// Dispatcher should be used only from non-interrupt code
-	class Dispatcher: public containers::LinkedList<EventHandler>
+	class Dispatcher : public containers::LinkedList<EventHandler>
 	{
 	public:
 		void dispatch(const Event& event);
 	};
 
-	class EventHandler: public containers::Link<EventHandler>
+	class EventHandler : public containers::Link<EventHandler>
 	{
 	public:
 		uint8_t type() const INLINE
@@ -71,14 +72,15 @@ namespace events
 		}
 
 		virtual void on_event(const Event& event) = 0;
-		
+
 	protected:
-		EventHandler(uint8_t type = Type::NO_EVENT) INLINE
-			: _type{type} {}
-		
+		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : _type{type}
+		{
+		}
+
 		uint8_t _type;
 		//TODO is this really needed?
 		friend class Dispatcher;
 	};
 };
-#endif	/* EVENTS_HH */
+#endif /* EVENTS_HH */

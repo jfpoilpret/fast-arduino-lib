@@ -17,9 +17,9 @@
 /**
  * @file 
  * General API for handling External Interrupt pins.
- */ 
+ */
 #ifndef INT_HH
-#define	INT_HH
+#define INT_HH
 
 #include <avr/interrupt.h>
 
@@ -37,10 +37,10 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)														\
-static_assert(board_traits::DigitalPin_trait< PIN >::IS_INT, "PIN must be an INT pin.");								\
-static_assert(board_traits::ExternalInterruptPin_trait< PIN >::INT == INT_NUM , "PIN INT number must match INT_NUM");	\
-REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)
+#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)                                                       \
+	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
+	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
+	REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an External Interrupt 
@@ -51,10 +51,10 @@ REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)																\
-static_assert(board_traits::DigitalPin_trait< PIN >::IS_INT, "PIN must be an INT pin.");								\
-static_assert(board_traits::ExternalInterruptPin_trait< PIN >::INT == INT_NUM , "PIN INT number must match INT_NUM");	\
-REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)
+#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)                                                              \
+	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
+	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
+	REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for an External Interrupt 
@@ -65,26 +65,26 @@ REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)
  * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
  * do not match, compilation will fail.
  */
-#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)																			\
-static_assert(board_traits::DigitalPin_trait< PIN >::IS_INT, "PIN must be an INT pin.");								\
-static_assert(board_traits::ExternalInterruptPin_trait< PIN >::INT == INT_NUM , "PIN INT number must match INT_NUM");	\
-EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
+#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                                                                           \
+	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
+	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
+	EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
 
 namespace interrupt
 {
 	/**
 	 * Kind of change that will trigger an External Interrupt for a given pin.
 	 */
-	enum class InterruptTrigger: uint8_t
+	enum class InterruptTrigger : uint8_t
 	{
 		/** Interrupt is triggered whenever pin level is low. */
-		LOW_LEVEL		= 0x00,
+		LOW_LEVEL = 0x00,
 		/** Interrupt is triggered whenever pin level is changing (rising or falling). */
-		ANY_CHANGE		= 0x55,
+		ANY_CHANGE = 0x55,
 		/** Interrupt is triggered whenever pin level is falling from high to low. */
-		FALLING_EDGE	= 0xAA,
+		FALLING_EDGE = 0xAA,
 		/** Interrupt is triggered whenever pin level is rising from low to high. */
-		RISING_EDGE		= 0xFF
+		RISING_EDGE = 0xFF
 	};
 
 	/**
@@ -101,8 +101,7 @@ namespace interrupt
 	 * @sa REGISTER_INT_ISR_METHOD
 	 * @sa REGISTER_INT_ISR_EMPTY
 	 */
-	template<board::DigitalPin PIN>
-	class INTSignal
+	template<board::DigitalPin PIN> class INTSignal
 	{
 	protected:
 		/// @cond notdocumented
@@ -139,7 +138,8 @@ namespace interrupt
 		 */
 		inline void set_trigger(InterruptTrigger trigger)
 		{
-			synchronized INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
+			synchronized INT_TRAIT::EICR_ =
+				(INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 		}
 
 		/**
@@ -232,5 +232,5 @@ namespace interrupt
 	};
 }
 
-#endif	/* INT_HH */
+#endif /* INT_HH */
 /// @endcond

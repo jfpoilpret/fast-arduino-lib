@@ -19,7 +19,7 @@
  * Flash memory utilities.
  */
 #ifndef FLASH_HH
-#define	FLASH_HH
+#define FLASH_HH
 
 #include <avr/pgmspace.h>
 
@@ -43,12 +43,10 @@ namespace flash
 	 * @param item the item to read from flah storage
 	 * @return a reference to read @p item
 	 */
-	template<typename T>
-	T& read_flash(uint16_t address, T& item)
+	template<typename T> T& read_flash(uint16_t address, T& item)
 	{
 		uint8_t* ptr = (uint8_t*) &item;
-		for (size_t i = 0; i < sizeof(T); ++i)
-			*ptr++ = pgm_read_byte(address++);
+		for (size_t i = 0; i < sizeof(T); ++i) *ptr++ = pgm_read_byte(address++);
 		return item;
 	}
 
@@ -78,8 +76,7 @@ namespace flash
 	 * @param item the item to read from flah storage
 	 * @return a reference to read @p item
 	 */
-	template<typename T>
-	T& read_flash(const T* address, T& item)
+	template<typename T> T& read_flash(const T* address, T& item)
 	{
 		return read_flash((uint16_t) address, item);
 	}
@@ -97,7 +94,11 @@ namespace flash
  * @param ptr the string to be automatically stored on flash
  * @sa streams::OutputBuffer::puts(const flash::FlashStorage*)
  */
-#define F(ptr) (__extension__({static const char __c[] PROGMEM = (ptr); (const flash::FlashStorage*) &__c[0];}))
+#define F(ptr)                                   \
+	(__extension__({                             \
+		static const char __c[] PROGMEM = (ptr); \
+		(const flash::FlashStorage*) &__c[0];    \
+	}))
 
-#endif	/* FLASH_HH */
+#endif /* FLASH_HH */
 /// @endcond

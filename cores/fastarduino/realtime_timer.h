@@ -40,8 +40,9 @@
  * @sa REGISTER_RTT_ISR_METHOD
  * @sa REGISTER_RTT_ISR_FUNCTION
  */
-#define REGISTER_RTT_ISR(TIMER_NUM)	\
-REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >, CAT(&timer::RTT<board::Timer::TIMER, TIMER_NUM) >::on_timer)
+#define REGISTER_RTT_ISR(TIMER_NUM)                                                                  \
+	REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) >, \
+									  CAT(&timer::RTT < board::Timer::TIMER, TIMER_NUM) > ::on_timer)
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
@@ -57,15 +58,15 @@ REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, CAT(timer::RTT<board::Timer::TIMER,
  * @sa REGISTER_RTT_ISR_FUNCTION
  * @sa REGISTER_RTT_ISR
  */
-#define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)								\
-ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))													\
-{																							\
-	using RTT_HANDLER = CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >;					\
-	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);										\
-	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer, void);	\
-	RTT_HANDLE::handle();																	\
-	CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()->millis());			\
-}
+#define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)                                   \
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                    \
+	{                                                                                           \
+		using RTT_HANDLER = CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) > ;                \
+		using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                        \
+		using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer, void); \
+		RTT_HANDLE::handle();                                                                   \
+		CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()->millis());            \
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
@@ -79,15 +80,15 @@ ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))													\
  * @sa REGISTER_RTT_ISR_METHOD
  * @sa REGISTER_RTT_ISR
  */
-#define REGISTER_RTT_ISR_FUNCTION(TIMER_NUM, CALLBACK)									\
-ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
-{																						\
-	using RTT_HANDLER = CAT(timer::RTT<board::Timer::TIMER, TIMER_NUM) >;				\
-	using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);									\
-	using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer);	\
-	RTT_HANDLE::handle();																\
-	CALLBACK (RTT_HOLDER::handler()->millis());											\
-}
+#define REGISTER_RTT_ISR_FUNCTION(TIMER_NUM, CALLBACK)                                    \
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                              \
+	{                                                                                     \
+		using RTT_HANDLER = CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) > ;          \
+		using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                  \
+		using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer); \
+		RTT_HANDLE::handle();                                                             \
+		CALLBACK(RTT_HOLDER::handler()->millis());                                        \
+	}
 
 namespace timer
 {
@@ -106,8 +107,7 @@ namespace timer
 	 * @sa board::Timer
 	 * @sa REGISTER_RTT_ISR()
 	 */
-	template<board::Timer TIMER>
-	class RTT: private Timer<TIMER>
+	template<board::Timer TIMER> class RTT : private Timer<TIMER>
 	{
 	private:
 		using TRAIT = typename Timer<TIMER>::TRAIT;
@@ -122,8 +122,10 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT():Timer<TIMER>{TimerMode::CTC, MILLI_PRESCALER}, _millis{} {}
-		
+		RTT() : Timer<TIMER>{TimerMode::CTC, MILLI_PRESCALER}, _millis{}
+		{
+		}
+
 		/**
 		 * Register this RTT with the matching ISR that should have been
 		 * registered with REGISTER_RTT_ISR().
@@ -164,8 +166,7 @@ namespace timer
 		void delay(uint32_t ms) const
 		{
 			uint32_t end = millis() + ms + 1;
-			while (millis() < end)
-				time::yield();
+			while (millis() < end) time::yield();
 		}
 
 		/**
@@ -302,22 +303,23 @@ namespace timer
 
 		inline uint16_t compute_micros() const
 		{
-			return uint16_t(ONE_MILLI * ((volatile TIMER_TYPE&) TRAIT::TCNT) / (1 + (volatile TIMER_TYPE&) TRAIT::OCRA));
+			return uint16_t(ONE_MILLI * ((volatile TIMER_TYPE&) TRAIT::TCNT) /
+							(1 + (volatile TIMER_TYPE&) TRAIT::OCRA));
 		}
 	};
 
-	template<uint32_t PERIOD_MS = 1024>
-	class RTTEventCallback
+	template<uint32_t PERIOD_MS = 1024> class RTTEventCallback
 	{
 		static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
+
 	public:
-		RTTEventCallback(containers::Queue<events::Event>& event_queue)
-			:_event_queue(event_queue) {}
+		RTTEventCallback(containers::Queue<events::Event>& event_queue) : _event_queue(event_queue)
+		{
+		}
 
 		void on_rtt_change(uint32_t millis)
 		{
-			if ((millis & (PERIOD_MS - 1)) == 0)
-				_event_queue._push(events::Event{events::Type::RTT_TIMER});
+			if ((millis & (PERIOD_MS - 1)) == 0) _event_queue._push(events::Event{events::Type::RTT_TIMER});
 		}
 
 		containers::Queue<events::Event>& _event_queue;

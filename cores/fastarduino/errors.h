@@ -18,10 +18,10 @@
 // List of errors returned by some FastArduino methods
 namespace errors
 {
-	constexpr const int EIO			= -5;
-	constexpr const int EINVAL		= -22;
-	constexpr const int ETIME		= -62;
-	constexpr const int EMSGSIZE	= -90;
+	constexpr const int EIO = -5;
+	constexpr const int EINVAL = -22;
+	constexpr const int ETIME = -62;
+	constexpr const int EMSGSIZE = -90;
 }
 
 #endif /* ERRORS_HH */

@@ -19,7 +19,7 @@
  * General utilities API that have broad application in programs.
  */
 #ifndef UTILITIES_HH
-#define	UTILITIES_HH
+#define UTILITIES_HH
 
 #include <avr/io.h>
 #include <util/atomic.h>
@@ -52,9 +52,7 @@
  * }
  * @endcode
  */
-#define synchronized \
-_Pragma ("GCC diagnostic ignored \"-Wreturn-type\"") \
-ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+#define synchronized _Pragma("GCC diagnostic ignored \"-Wreturn-type\"") ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 
 /**
  * Contains all generic utility methods.
@@ -70,8 +68,7 @@ namespace utils
 	 * @param max the maximum allowed value
 	 * @return the value constrained to be between @p min and @p max
 	 */
-	template<typename T>
-	constexpr T constrain(T value, T min, T max)
+	template<typename T> constexpr T constrain(T value, T min, T max)
 	{
 		return value < min ? min : value > max ? max : value;
 	}
@@ -105,19 +102,19 @@ namespace utils
 	 * To avoid large arithmetic calculation, we limit these prefixes to power
 	 * of 10 that can hold within 32 bits; this is why TERA or PICO are absent.
 	 */
-	enum class UnitPrefix: int8_t
+	enum class UnitPrefix : int8_t
 	{
-		GIGA	= 9,
-		MEGA	= 6,
-		KILO	= 3,
-		HECTO	= 2,
-		DECA	= 1,
-		NONE	= 0,
-		DECI	= -1,
-		CENTI	= -2,
-		MILLI	= -3,
-		MICRO	= -6,
-		NANO	= -9,
+		GIGA = 9,
+		MEGA = 6,
+		KILO = 3,
+		HECTO = 2,
+		DECA = 1,
+		NONE = 0,
+		DECI = -1,
+		CENTI = -2,
+		MILLI = -3,
+		MICRO = -6,
+		NANO = -9,
 	};
 
 	/**
@@ -130,9 +127,7 @@ namespace utils
 	 */
 	constexpr uint32_t power_of_10(int8_t n)
 	{
-		return (n > 0 ? 10UL * power_of_10(n - 1) :
-				n == 0 ? 1 :
-				power_of_10(-n));
+		return (n > 0 ? 10UL * power_of_10(n - 1) : n == 0 ? 1 : power_of_10(-n));
 	}
 
 	//TODO make it templatized on input type? output type?
@@ -192,11 +187,10 @@ namespace utils
 	constexpr int16_t map_raw_to_physical(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
 	{
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
-		return (int8_t(prefix) > 0 ? 
-				value * range / power_of_10(int8_t(prefix)) / (1UL << precision_bits) :
-				value * range * power_of_10(int8_t(prefix)) / (1UL << precision_bits));
+		return (int8_t(prefix) > 0 ? value * range / power_of_10(int8_t(prefix)) / (1UL << precision_bits) :
+									 value * range * power_of_10(int8_t(prefix)) / (1UL << precision_bits));
 	}
-	
+
 	/**
 	 * Convert an absolute physical @p value, expressed in some given measurement 
 	 * unit, scaled with @p prefix, into a raw measurement as if obtained
@@ -251,9 +245,8 @@ namespace utils
 	constexpr int16_t map_physical_to_raw(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
 	{
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
-		return (int8_t(prefix) > 0 ? 
-				value * (1UL << precision_bits) * power_of_10(int8_t(prefix)) / range :
-				value * (1UL << precision_bits) / power_of_10(int8_t(prefix)) / range);
+		return (int8_t(prefix) > 0 ? value * (1UL << precision_bits) * power_of_10(int8_t(prefix)) / range :
+									 value * (1UL << precision_bits) / power_of_10(int8_t(prefix)) / range);
 	}
 
 	/**
@@ -274,8 +267,7 @@ namespace utils
 	 * @param default_value the value to replace 0
 	 * @return @p value if @p value is not false (or 0) otherwise @p default_value
 	 */
-	template<typename T>
-	constexpr T is_zero(T value, T default_value)
+	template<typename T> constexpr T is_zero(T value, T default_value)
 	{
 		return (value ? value : default_value);
 	}
@@ -287,8 +279,7 @@ namespace utils
 	 * @param mask the bit mask indicating which bits shall change
 	 * @param value the new value for @p reg
 	 */
-	template<typename T>
-	void set_mask(volatile T& reg, T mask, T value)
+	template<typename T> void set_mask(volatile T& reg, T mask, T value)
 	{
 		reg = (reg & ~mask) | (value & mask);
 	}
@@ -305,7 +296,7 @@ namespace utils
 		// We avoid tens * 10 to avoid adding library for multiplication
 		return (tens * 8) + (tens * 2) + (bcd & 0x0F);
 	}
-	
+
 	/**
 	 * Convert a natural integers to a BCD byte (2 digits).
 	 * Behavior is undefined if @p binary `>99`.
@@ -333,7 +324,7 @@ namespace utils
 	{
 		value = (value >> 8) | (value << 8);
 	}
-	
+
 	/**
 	 * Swap 2 bytes of a 2-bytes integer. Useful to convert from big-endian to 
 	 * small-endian (AVR).
@@ -341,15 +332,16 @@ namespace utils
 	 */
 	inline void swap_bytes(int16_t& value)
 	{
-		swap_bytes((uint16_t&)value);
+		swap_bytes((uint16_t&) value);
 	}
 
 	/// @cond notdocumented
-	template<typename T>
-	union ToUint8
+	template<typename T> union ToUint8
 	{
 		static_assert(sizeof(T) == 1, "T must be a one-byte size type");
-		ToUint8(T value): value(value) {}
+		ToUint8(T value) : value(value)
+		{
+		}
 		T value;
 		uint8_t as_uint8;
 	};
@@ -362,12 +354,11 @@ namespace utils
 	 * @param input the bit field struct value to convert
 	 * @return @p input casted as a byte
 	 */
-	template<typename T>
-	constexpr uint8_t as_uint8_t(T input)
+	template<typename T> constexpr uint8_t as_uint8_t(T input)
 	{
 		return ToUint8<T>(input).as_uint8;
 	}
-	
+
 	/**
 	 * Calculate the count to pass to `delay1()` in order to reach @p time_us 
 	 * microseconds delay. Calculation is performed at compile-time, provided
@@ -384,11 +375,9 @@ namespace utils
 	//TODO DOC
 	constexpr uint8_t num_bits(uint8_t mask, uint8_t num = 0)
 	{
-		return (mask == 0 ? num :
-				mask & 1 ? num_bits(mask >> 1, num + 1) :
-				num_bits(mask >> 1, num));
+		return (mask == 0 ? num : mask & 1 ? num_bits(mask >> 1, num + 1) : num_bits(mask >> 1, num));
 	}
 }
 
-#endif	/* UTILITIES_HH */
+#endif /* UTILITIES_HH */
 /// @endcond

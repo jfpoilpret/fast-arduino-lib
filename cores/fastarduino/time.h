@@ -19,7 +19,7 @@
  * Simple time utilities.
  */
 #ifndef TIME_HH
-#define	TIME_HH
+#define TIME_HH
 
 #include <stdint.h>
 #include <util/delay_basic.h>
@@ -49,20 +49,24 @@ namespace time
 		 * @param millis number of milliseconds
 		 * @param micros number of microseconds (0..999)
 		 */
-		RTTTime(uint32_t millis = 0, uint16_t micros = 0):millis(millis), micros(micros) {}
-		
+		RTTTime(uint32_t millis = 0, uint16_t micros = 0) : millis(millis), micros(micros)
+		{
+		}
+
 		/**
 		 * Construct a copy of @p that.
 		 * @param that
 		 */
-		RTTTime(const RTTTime& that):millis{that.millis}, micros{that.micros} {}
-		
+		RTTTime(const RTTTime& that) : millis{that.millis}, micros{that.micros}
+		{
+		}
+
 		/**
 		 * Assign this `RTTTime` instance from @p that.
 		 * @param that the source real time value
 		 * @return 
 		 */
-		RTTTime& operator= (const RTTTime& that)
+		RTTTime& operator=(const RTTTime& that)
 		{
 			millis = that.millis;
 			micros = that.micros;
@@ -107,7 +111,7 @@ namespace time
 	 * Function pointer type used for `time::delay` global variable.
 	 */
 	using DELAY_PTR = void (*)(uint32_t ms);
-	
+
 	/**
 	 * Delay program execution for the given amount of milliseconds.
 	 * `delay` is not actually a function but a function pointer; this allows 
@@ -179,11 +183,10 @@ namespace time
 	void default_delay(uint32_t ms);
 
 	/// @cond notdocumented
-	template<typename CLOCK>
-	class ClockDelegate
+	template<typename CLOCK> class ClockDelegate
 	{
 		using TYPE = ClockDelegate<CLOCK>;
-		
+
 	public:
 		static void set_clock(const CLOCK& clock)
 		{
@@ -191,23 +194,22 @@ namespace time
 			time::delay = TYPE::delay;
 			time::millis = TYPE::millis;
 		}
-		
+
 		static void delay(uint32_t ms)
 		{
 			_clock->delay(ms);
 		}
-		
+
 		static uint32_t millis()
 		{
 			return _clock->millis();
 		}
-		
+
 	private:
 		static const CLOCK* _clock;
 	};
-	
-	template<typename CLOCK>
-	const CLOCK* ClockDelegate<CLOCK>::_clock = 0;
+
+	template<typename CLOCK> const CLOCK* ClockDelegate<CLOCK>::_clock = 0;
 	// @endcond
 
 	/**
@@ -225,8 +227,7 @@ namespace time
 	 * `delay()`
 	 * @param clock the instance which methods will be called
 	 */
-	template<typename CLOCK>
-	void set_clock(const CLOCK& clock)
+	template<typename CLOCK> void set_clock(const CLOCK& clock)
 	{
 		time::ClockDelegate<CLOCK>::set_clock(clock);
 	}
@@ -258,7 +259,7 @@ namespace time
 		 * for later restore.
 		 * @param new_delay new function pointer to replace `time::delay`
 		 */
-		auto_delay(DELAY_PTR new_delay) INLINE:_old_delay{delay}
+		auto_delay(DELAY_PTR new_delay) INLINE : _old_delay{delay}
 		{
 			delay = new_delay;
 		}
@@ -299,7 +300,7 @@ namespace time
 		 * for later restore.
 		 * @param new_millis new function pointer to replace `time::millis`
 		 */
-		auto_millis(MILLIS_PTR new_millis) INLINE:_old_millis{millis}
+		auto_millis(MILLIS_PTR new_millis) INLINE : _old_millis{millis}
 		{
 			millis = new_millis;
 		}
@@ -314,5 +315,5 @@ namespace time
 	};
 };
 
-#endif	/* TIME_HH */
+#endif /* TIME_HH */
 /// @endcond

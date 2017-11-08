@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #ifndef LINKEDLIST_HH
-#define	LINKEDLIST_HH
+#define LINKEDLIST_HH
 
 #include "utilities.h"
 
@@ -22,17 +22,21 @@ namespace containers
 	class LinkImpl
 	{
 	public:
-		LinkImpl() INLINE : _next{0} {}
+		LinkImpl() INLINE : _next{0}
+		{
+		}
 
 	protected:
-		LinkImpl* _next;	
+		LinkImpl* _next;
 		friend class LinkedListImpl;
 	};
 
 	class LinkedListImpl
 	{
 	public:
-		LinkedListImpl() INLINE : _head{0} {}
+		LinkedListImpl() INLINE : _head{0}
+		{
+		}
 		void insert(LinkImpl* item);
 		bool remove(LinkImpl* item);
 		template<typename F> void traverse(F f);
@@ -41,10 +45,9 @@ namespace containers
 		LinkImpl* _head;
 	};
 
-	template<typename T>
-	class LinkedList: private LinkedListImpl
+	template<typename T> class LinkedList : private LinkedListImpl
 	{
-	public:	
+	public:
 		void insert(T& item) INLINE
 		{
 			LinkedListImpl::insert(&item);
@@ -59,24 +62,22 @@ namespace containers
 			while (current != 0)
 			{
 				T* next = current->next();
-				if (f(*current))
-					remove(*current);
+				if (f(*current)) remove(*current);
 				current = next;
 			}
 		}
 
 	private:
-		T *head() INLINE
+		T* head() INLINE
 		{
 			return (T*) _head;
 		}
 	};
 
-	template<typename T>
-	class Link: private LinkImpl
+	template<typename T> class Link : private LinkImpl
 	{
 	private:
-		T *next() INLINE
+		T* next() INLINE
 		{
 			return (T*) _next;
 		}
@@ -84,4 +85,4 @@ namespace containers
 	};
 }
 
-#endif	/* LINKEDLIST_HH */
+#endif /* LINKEDLIST_HH */

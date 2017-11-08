@@ -19,7 +19,7 @@
  * Common definitions for serial API.
  */
 #ifndef UARTCOMMONS_HH
-#define	UARTCOMMONS_HH
+#define UARTCOMMONS_HH
 
 #include <stdint.h>
 
@@ -31,7 +31,7 @@ namespace serial
 	/**
 	 * Parity used for serial transmission.
 	 */
-	enum class Parity: uint8_t
+	enum class Parity : uint8_t
 	{
 		/** No parity bit */
 		NONE = 0,
@@ -40,11 +40,11 @@ namespace serial
 		/** Odd parity bit */
 		ODD = 3
 	};
-	
+
 	/**
 	 * Number of stop bits used for serial transmission.
 	 */
-	enum class StopBits: uint8_t
+	enum class StopBits : uint8_t
 	{
 		/** One stop bit */
 		ONE = 1,
@@ -58,10 +58,10 @@ namespace serial
 		uint8_t has_errors;
 		struct
 		{
-			bool frame_error	:1;
-			bool data_overrun	:1;
-			bool queue_overflow	:1;
-			bool parity_error	:1;
+			bool frame_error : 1;
+			bool data_overrun : 1;
+			bool queue_overflow : 1;
+			bool parity_error : 1;
 		} all_errors;
 	};
 	/// @endcond
@@ -76,7 +76,7 @@ namespace serial
 		{
 			clear_errors();
 		}
-		
+
 		/**
 		 * Reset UART errors to no error.
 		 */
@@ -141,5 +141,5 @@ namespace serial
 	};
 };
 
-#endif	/* UARTCOMMONS_HH */
+#endif /* UARTCOMMONS_HH */
 /// @endcond

@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 #ifndef POWER_HH
-#define	POWER_HH
+#define POWER_HH
 
 #include <avr/interrupt.h>
 #include <avr/power.h>
@@ -27,8 +27,7 @@ namespace power
 	public:
 		static void set_default_mode(board::SleepMode mode)
 		{
-			if (mode != board::SleepMode::DEFAULT_MODE)
-				_default_mode = mode;
+			if (mode != board::SleepMode::DEFAULT_MODE) _default_mode = mode;
 		}
 		static void sleep()
 		{
@@ -50,4 +49,4 @@ namespace power
 	};
 }
 
-#endif	/* POWER_HH */
+#endif /* POWER_HH */

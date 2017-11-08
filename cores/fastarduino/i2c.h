@@ -25,25 +25,25 @@ namespace i2c
 {
 	// Hook function type, useful for debugging new I2C devices implementation
 	using I2C_STATUS_HOOK = void (*)(uint8_t expected_status, uint8_t actual_status);
-	
+
 	namespace Status
 	{
-		constexpr const uint8_t OK							= 0x00;
-		constexpr const uint8_t START_TRANSMITTED			= 0x08;
-		constexpr const uint8_t REPEAT_START_TRANSMITTED	= 0x10;
-		constexpr const uint8_t SLA_W_TRANSMITTED_ACK		= 0x18;
-		constexpr const uint8_t SLA_W_TRANSMITTED_NACK		= 0x20;
-		constexpr const uint8_t DATA_TRANSMITTED_ACK		= 0x28;
-		constexpr const uint8_t DATA_TRANSMITTED_NACK		= 0x30;
-		constexpr const uint8_t ARBITRATION_LOST			= 0x38;
-		
-		constexpr const uint8_t SLA_R_TRANSMITTED_ACK		= 0x40;
-		constexpr const uint8_t SLA_R_TRANSMITTED_NACK		= 0x48;
-		constexpr const uint8_t DATA_RECEIVED_ACK			= 0x50;
-		constexpr const uint8_t DATA_RECEIVED_NACK			= 0x58;
+		constexpr const uint8_t OK = 0x00;
+		constexpr const uint8_t START_TRANSMITTED = 0x08;
+		constexpr const uint8_t REPEAT_START_TRANSMITTED = 0x10;
+		constexpr const uint8_t SLA_W_TRANSMITTED_ACK = 0x18;
+		constexpr const uint8_t SLA_W_TRANSMITTED_NACK = 0x20;
+		constexpr const uint8_t DATA_TRANSMITTED_ACK = 0x28;
+		constexpr const uint8_t DATA_TRANSMITTED_NACK = 0x30;
+		constexpr const uint8_t ARBITRATION_LOST = 0x38;
+
+		constexpr const uint8_t SLA_R_TRANSMITTED_ACK = 0x40;
+		constexpr const uint8_t SLA_R_TRANSMITTED_NACK = 0x48;
+		constexpr const uint8_t DATA_RECEIVED_ACK = 0x50;
+		constexpr const uint8_t DATA_RECEIVED_NACK = 0x58;
 	}
-	
-	enum class I2CMode: uint8_t
+
+	enum class I2CMode : uint8_t
 	{
 		Standard,
 		Fast
@@ -51,4 +51,3 @@ namespace i2c
 };
 
 #endif /* I2C_HH */
-

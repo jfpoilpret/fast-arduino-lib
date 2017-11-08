@@ -19,7 +19,7 @@
  * General Purpose (digital) Input Output API.
  */
 #ifndef FASTIO_HH
-#define	FASTIO_HH
+#define FASTIO_HH
 
 #include "utilities.h"
 #include "boards/board_traits.h"
@@ -32,7 +32,7 @@ namespace gpio
 	/**
 	 * Defines the configurable mode of a digital IO pin.
 	 */
-	enum class PinMode: uint8_t
+	enum class PinMode : uint8_t
 	{
 		/** Digital pin is configured as high-impedance (open drain) input. */
 		INPUT,
@@ -75,18 +75,19 @@ namespace gpio
 			else
 				PORT_ &= ~BIT_;
 		}
-		
+
 	private:
 		SlowPin(volatile uint8_t& DDR, volatile uint8_t& PIN, volatile uint8_t& PORT, uint8_t BIT)
-			:DDR_{DDR}, PIN_{PIN}, PORT_{PORT}, BIT_{BIT} {}
-		
+			: DDR_{DDR}, PIN_{PIN}, PORT_{PORT}, BIT_{BIT}
+		{
+		}
+
 		volatile uint8_t& DDR_;
 		volatile uint8_t& PIN_;
 		volatile uint8_t& PORT_;
 		const uint8_t BIT_;
-		
-		template<board::Port PORT, uint8_t BIT>
-		friend class FastPin;
+
+		template<board::Port PORT, uint8_t BIT> friend class FastPin;
 	};
 	/// @endcond
 
@@ -108,8 +109,7 @@ namespace gpio
 	 * @sa gpio::FastPinType
 	 * @sa gpio::FastPort::get_pin()
 	 */
-	template<board::Port PORT_, uint8_t BIT_>
-	class FastPin
+	template<board::Port PORT_, uint8_t BIT_> class FastPin
 	{
 	private:
 		using TRAIT = board_traits::Port_trait<PORT_>;
@@ -129,7 +129,7 @@ namespace gpio
 		{
 			static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
 		}
-		
+
 		/**
 		 * Construct a `FastPin` with the given mode and initial value.
 		 * The pin mode is forced on the target MCU.
@@ -144,7 +144,7 @@ namespace gpio
 			static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
 			set_mode(mode, value);
 		}
-		
+
 		/**
 		 * Set mode (direction) and value (if output) of this pin.
 		 * 
@@ -163,7 +163,7 @@ namespace gpio
 			else
 				TRAIT::PORT &= ~_BV(BIT);
 		}
-		
+
 		/**
 		 * Set pin level to `HIGH` (i\.e\. Vcc).
 		 * This method will generally use 1 single instruction in most cases.
@@ -172,7 +172,7 @@ namespace gpio
 		{
 			TRAIT::PORT |= _BV(BIT);
 		}
-		
+
 		/**
 		 * Set pin level to `LOW` (i\.e\. GND).
 		 * This method will generally use 1 single instruction in most cases.
@@ -181,7 +181,7 @@ namespace gpio
 		{
 			TRAIT::PORT &= ~_BV(BIT);
 		}
-		
+
 		/**
 		 * Toggle pin level, i\.e\. set it to `LOW` if it was `HIGH`, and `HIGH` 
 		 * if it was `LOW`.
@@ -191,7 +191,7 @@ namespace gpio
 		{
 			TRAIT::PIN |= _BV(BIT);
 		}
-		
+
 		/**
 		 * Return the current level of this pin.
 		 * @retval true if current pin  level is `HIGH` (i\.e\. Vcc)
@@ -223,8 +223,7 @@ namespace gpio
 	 * @sa board::Port
 	 * @sa gpio::FastMaskedPort
 	 */
-	template<board::Port PORT_>
-	class FastPort
+	template<board::Port PORT_> class FastPort
 	{
 	private:
 		using TRAIT = board_traits::Port_trait<PORT_>;
@@ -238,8 +237,10 @@ namespace gpio
 		 * This is useful if default pins directions and values are OK for you and 
 		 * you want to avoid calling mode setup on target MCU.
 		 */
-		FastPort() {}
-		
+		FastPort()
+		{
+		}
+
 		/**
 		 * Construct a `FastPort` with the given direction byte and initial values
 		 * byte.
@@ -274,8 +275,7 @@ namespace gpio
 		 * pin
 		 * @sa get_pin()
 		 */
-		template<uint8_t BIT>
-		FastPin<PORT, BIT> get_pin(PinMode mode, bool value = false)
+		template<uint8_t BIT> FastPin<PORT, BIT> get_pin(PinMode mode, bool value = false)
 		{
 			return FastPin<PORT, BIT>{mode, value};
 		}
@@ -290,8 +290,7 @@ namespace gpio
 		 * @return a `FastPin` instance allowing direct manipulation of the given 
 		 * pin
 		 */
-		template<uint8_t BIT>
-		FastPin<PORT, BIT> get_pin()
+		template<uint8_t BIT> FastPin<PORT, BIT> get_pin()
 		{
 			return FastPin<PORT, BIT>{};
 		}
@@ -313,7 +312,7 @@ namespace gpio
 		{
 			TRAIT::PORT = port;
 		}
-		
+
 		/**
 		 * Get the current 8-bit value of port PORT register.
 		 * Each bit maps to a pin configuration in this port.
@@ -327,7 +326,7 @@ namespace gpio
 		{
 			return TRAIT::PORT;
 		}
-		
+
 		/**
 		 * Set the 8-bits value for port DDR (direction) register.
 		 * Each pin direction is decided by the matching bit.
@@ -341,7 +340,7 @@ namespace gpio
 		{
 			TRAIT::DDR = ddr;
 		}
-		
+
 		/**
 		 * Get the current 8-bit value of port DDR (direction) register.
 		 * Each pin direction is decided by the matching bit.
@@ -352,7 +351,7 @@ namespace gpio
 		{
 			return TRAIT::DDR;
 		}
-		
+
 		/**
 		 * Set the 8-bits value for port PIN register. Writing a `1` bit in this
 		 * register will toggle the matching PORT bit; writing `0` has no effect.
@@ -396,8 +395,7 @@ namespace gpio
 	 * @tparam PORT_ the target port
 	 * @sa board::Port
 	 */
-	template<board::Port PORT_>
-	class FastMaskedPort
+	template<board::Port PORT_> class FastMaskedPort
 	{
 	private:
 		using TRAIT = board_traits::Port_trait<PORT_>;
@@ -415,7 +413,9 @@ namespace gpio
 		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
 		 * methods.
 		 */
-		FastMaskedPort(uint8_t mask = 0):_mask{mask} {}
+		FastMaskedPort(uint8_t mask = 0) : _mask{mask}
+		{
+		}
 
 		/**
 		 * Construct a `FastMaskedPort` for the pins selected by the provide 
@@ -436,8 +436,7 @@ namespace gpio
 		 * @sa set_DDR()
 		 * @sa set_PORT()
 		 */
-		FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0)
-		:_mask{mask}
+		FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0) : _mask{mask}
 		{
 			set_DDR(ddr);
 			set_PORT(port);
@@ -461,7 +460,7 @@ namespace gpio
 		{
 			TRAIT::PORT = (TRAIT::PORT & ~_mask) | (port & _mask);
 		}
-		
+
 		/**
 		 * Get the current 8-bit value of port PORT register, masked according to
 		 * the bit mask provided at construction time.
@@ -477,7 +476,7 @@ namespace gpio
 		{
 			return TRAIT::PORT & _mask;
 		}
-		
+
 		/**
 		 * Set the 8-bits value for port DDR (direction) register, this value 
 		 * will be masked according to the provided bit mask provided in constructor.
@@ -492,7 +491,7 @@ namespace gpio
 		{
 			TRAIT::DDR = (TRAIT::DDR & ~_mask) | (ddr & _mask);
 		}
-		
+
 		/**
 		 * Get the current 8-bit value of port DDR (direction) register, masked 
 		 * according to the bit mask provided at construction time.
@@ -518,7 +517,7 @@ namespace gpio
 		{
 			TRAIT::PIN = pin & _mask;
 		}
-		
+
 		/**
 		 * Get the current 8-bit value of PIN register for this port, masked 
 		 * according to the bit mask provided at construction time.
@@ -570,13 +569,12 @@ namespace gpio
 	 * @sa gpio::DigitalPin
 	 * @sa gpio::FastPin
 	 */
-	template<board::DigitalPin DPIN>
-	class FastPinType
+	template<board::DigitalPin DPIN> class FastPinType
 	{
 	private:
 		using TRAIT = board_traits::DigitalPin_trait<DPIN>;
 		using PTRAIT = board_traits::Port_trait<TRAIT::PORT>;
-		
+
 	public:
 		/** The port to which `DPIN` belongs. */
 		static constexpr const board::Port PORT = TRAIT::PORT;
@@ -584,12 +582,12 @@ namespace gpio
 		static constexpr const uint8_t BIT = TRAIT::BIT;
 		/** The bit-mask to use when accessing `DPIN` through `PORT`. */
 		static constexpr const uint8_t MASK = _BV(BIT);
-		
+
 		/** The exact `FastPin` parameterized type for `DPIN` IO pin. */
 		using TYPE = FastPin<PORT, BIT>;
 		/** The exact `FastPort` parameterized type that `DPIN` IO pin belongs to. */
 		using PORT_TYPE = FastPort<PORT>;
-		
+
 		/**
 		 * Set mode (direction) and value (if output) of `DPIN`.
 		 * 
@@ -608,7 +606,7 @@ namespace gpio
 			else
 				PTRAIT::PORT &= ~_BV(BIT);
 		}
-		
+
 		/**
 		 * Set pin level to `HIGH` (i\.e\. Vcc).
 		 * This method will generally use 1 single instruction in most cases.
@@ -617,7 +615,7 @@ namespace gpio
 		{
 			PTRAIT::PORT |= _BV(BIT);
 		}
-		
+
 		/**
 		 * Set pin level to `LOW` (i\.e\. GND).
 		 * This method will generally use 1 single instruction in most cases.
@@ -626,7 +624,7 @@ namespace gpio
 		{
 			PTRAIT::PORT &= ~_BV(BIT);
 		}
-		
+
 		/**
 		 * Toggle pin level, i\.e\. set it to `LOW` if it was `HIGH`, and `HIGH` 
 		 * if it was `LOW`.
@@ -636,7 +634,7 @@ namespace gpio
 		{
 			PTRAIT::PIN |= _BV(BIT);
 		}
-		
+
 		/**
 		 * Return the current level pin `DPIN`.
 		 * @retval true if current pin  level is `HIGH` (i\.e\. Vcc)
@@ -649,8 +647,7 @@ namespace gpio
 	};
 
 	/// @cond notdocumented
-	template<>
-	class FastPinType<board::DigitalPin::NONE>
+	template<> class FastPinType<board::DigitalPin::NONE>
 	{
 	public:
 		static constexpr const board::Port PORT = board::Port::NONE;
@@ -658,11 +655,19 @@ namespace gpio
 		static constexpr const uint8_t MASK = 0;
 		using TYPE = FastPin<PORT, BIT>;
 		using PORT_TYPE = FastPort<PORT>;
-		
-		static void set_mode(UNUSED PinMode mode, UNUSED bool value = false) {}
-		static void set() {}
-		static void clear() {}
-		static void toggle() {}
+
+		static void set_mode(UNUSED PinMode mode, UNUSED bool value = false)
+		{
+		}
+		static void set()
+		{
+		}
+		static void clear()
+		{
+		}
+		static void toggle()
+		{
+		}
 		static bool value()
 		{
 			return false;
@@ -671,15 +676,24 @@ namespace gpio
 	/// @endcond
 
 	/// @cond notdocumented
-	template<>
-	class FastPin<board::Port::NONE, 0>
+	template<> class FastPin<board::Port::NONE, 0>
 	{
 	public:
-		FastPin() INLINE {}
-		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
-		void set() INLINE {}
-		void clear() INLINE {}
-		void toggle() INLINE {}
+		FastPin() INLINE
+		{
+		}
+		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE
+		{
+		}
+		void set() INLINE
+		{
+		}
+		void clear() INLINE
+		{
+		}
+		void toggle() INLINE
+		{
+		}
 		bool value() INLINE
 		{
 			return false;
@@ -688,5 +702,5 @@ namespace gpio
 	/// @endcond
 }
 
-#endif	/* FASTIO_HH */
+#endif /* FASTIO_HH */
 /// @endcond

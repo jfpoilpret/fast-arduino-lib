@@ -19,8 +19,7 @@
 
 namespace devices
 {
-	template<board::DigitalPin CLOCK, board::DigitalPin LATCH, board::DigitalPin DATA>
-	class SIPO
+	template<board::DigitalPin CLOCK, board::DigitalPin LATCH, board::DigitalPin DATA> class SIPO
 	{
 	public:
 		static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
@@ -28,10 +27,10 @@ namespace devices
 			gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;
 		static constexpr const uint8_t PORT_MASK = gpio::FastPinType<LATCH>::MASK;
 
-		SIPO():_clock{}, _latch{}, _data{}
+		SIPO() : _clock{}, _latch{}, _data{}
 		{
-			static_assert(	PORT == gpio::FastPinType<LATCH>::PORT && PORT == gpio::FastPinType<DATA>::PORT,
-							"CLOCK, LATCH and DATA pins must belong to the same PORT");
+			static_assert(PORT == gpio::FastPinType<LATCH>::PORT && PORT == gpio::FastPinType<DATA>::PORT,
+						  "CLOCK, LATCH and DATA pins must belong to the same PORT");
 		}
 
 		inline void init()
@@ -41,13 +40,11 @@ namespace devices
 			_data.set_mode(gpio::PinMode::OUTPUT, false);
 		}
 
-		template<typename T>
-		void output(T data)
+		template<typename T> void output(T data)
 		{
 			uint8_t* pdata = (uint8_t*) data;
 			_latch.clear();
-			for (uint8_t i = 0 ; i < sizeof(T); ++i)
-				_output(pdata[i]);
+			for (uint8_t i = 0; i < sizeof(T); ++i) _output(pdata[i]);
 			_latch.set();
 		}
 
@@ -73,12 +70,14 @@ namespace devices
 			uint8_t mask = 0x80;
 			do
 			{
-				if (data & mask) _data.set(); else _data.clear();
+				if (data & mask)
+					_data.set();
+				else
+					_data.clear();
 				_clock.set();
 				mask >>= 1;
 				_clock.clear();
-			}
-			while (mask);
+			} while (mask);
 		}
 
 		typename gpio::FastPinType<CLOCK>::TYPE _clock;
@@ -88,4 +87,3 @@ namespace devices
 }
 
 #endif /* SIPO_HH */
-

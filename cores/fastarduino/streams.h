@@ -19,7 +19,7 @@
  * C++-like std::iostream facilities.
  */
 #ifndef STREAMS_HH
-#define	STREAMS_HH
+#define STREAMS_HH
 
 #include <ctype.h>
 #include <stddef.h>
@@ -71,11 +71,10 @@ namespace streams
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
 	 */
-	class OutputBuffer:public containers::Queue<char, char>
+	class OutputBuffer : public containers::Queue<char, char>
 	{
 	public:
-		template<uint8_t SIZE>
-		OutputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
+		template<uint8_t SIZE> OutputBuffer(char (&buffer)[SIZE]) : Queue<char, char>{buffer}
 		{
 			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
@@ -85,10 +84,9 @@ namespace streams
 		 */
 		void flush()
 		{
-			while (items())
-				time::yield();
+			while (items()) time::yield();
 		}
-		
+
 		/**
 		 * Append a character to the buffer.
 		 * If the buffer is full, then `on_overflow()` will be called.
@@ -104,7 +102,7 @@ namespace streams
 			if (!push(c)) on_overflow(c);
 			if (call_on_put) on_put();
 		}
-		
+
 		/**
 		 * Append several characters to the buffer.
 		 * If the buffer is full, then `on_overflow()` will be called.
@@ -121,7 +119,7 @@ namespace streams
 			while (size--) put(*content++, false);
 			on_put();
 		}
-		
+
 		/**
 		 * Append a string to the buffer.
 		 * The `'\0'` end character of @p str is not transmitted.
@@ -138,7 +136,7 @@ namespace streams
 			while (*str) put(*str++, false);
 			on_put();
 		}
-		
+
 		/**
 		 * Append a string, stored on flash memory, to the buffer.
 		 * The `'\0'` end character of @p str is not transmitted.
@@ -170,15 +168,19 @@ namespace streams
 		 * @param c the character that could not be appended due to buffer
 		 * overflow
 		 */
-		virtual void on_overflow(UNUSED char c) {}
-		
+		virtual void on_overflow(UNUSED char c)
+		{
+		}
+
 		/**
 		 * Callback method called when new content has been added to the buffer.
 		 * This can be overridden by a subclass to trigger interrupt-driven
 		 * transmission of buffer data.
 		 * Default implementation does nothing.
 		 */
-		virtual void on_put() {}
+		virtual void on_put()
+		{
+		}
 	};
 
 	//TODO make queue private but provide delegate push()
@@ -192,7 +194,7 @@ namespace streams
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
 	 */
-	class InputBuffer: public containers::Queue<char, char>
+	class InputBuffer : public containers::Queue<char, char>
 	{
 	public:
 		/**
@@ -200,8 +202,7 @@ namespace streams
 		 */
 		static const int EOF = -1;
 
-		template<uint8_t SIZE>
-		InputBuffer(char (&buffer)[SIZE]): Queue<char, char>{buffer}
+		template<uint8_t SIZE> InputBuffer(char (&buffer)[SIZE]) : Queue<char, char>{buffer}
 		{
 			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
@@ -213,7 +214,7 @@ namespace streams
 		{
 			return items();
 		}
-		
+
 		/**
 		 * @return next character to be read from buffer, or `EOF` if buffer is
 		 * empty
@@ -238,8 +239,8 @@ namespace streams
 	protected:
 		//FIXME these never get called???
 		// Listeners of events on the buffer
-//		virtual void on_empty() {}
-//		virtual void on_get(UNUSED char c) {}
+		//		virtual void on_empty() {}
+		//		virtual void on_get(UNUSED char c) {}
 	};
 
 	/**
@@ -248,7 +249,7 @@ namespace streams
 	 * @return next character to be read from @p in
 	 */
 	char get(InputBuffer& in);
-	
+
 	/**
 	 * Wait for @p in to have at least @p size characters in buffer and get them.
 	 * @param in the `InputBuffer` to read characters from
@@ -258,7 +259,7 @@ namespace streams
 	 * @return @p content
 	 */
 	char* get(InputBuffer& in, char* content, size_t size);
-	
+
 	/**
 	 * Wait for @p in to have either at least @p size characters in buffer,
 	 * or to reach character value @p end, then copy read string into @p str.
@@ -281,9 +282,9 @@ namespace streams
 		/**
 		 * Base for numbers representation.
 		 */
-		enum class Base: uint8_t
+		enum class Base : uint8_t
 		{
-	//		bcd = 0,
+			//		bcd = 0,
 			/** Binary */
 			bin = 2,
 			/** Octal */
@@ -294,7 +295,9 @@ namespace streams
 			hex = 16
 		};
 
-		FormatBase(): _width{6}, _precision{4}, _base{Base::dec} {}
+		FormatBase() : _width{6}, _precision{4}, _base{Base::dec}
+		{
+		}
 
 		/**
 		 * Set minimum width used for displaying values. If a value's 
@@ -314,7 +317,7 @@ namespace streams
 		{
 			_width = width;
 		}
-		
+
 		/**
 		 * Get the current minimum width value (default = `6`) used for formatted 
 		 * output.
@@ -378,8 +381,7 @@ namespace streams
 		{
 			char* endptr;
 			double value = strtod(token, &endptr);
-			if (endptr == token)
-				return false;
+			if (endptr == token) return false;
 			v = value;
 			return true;
 		}
@@ -387,8 +389,7 @@ namespace streams
 		{
 			char* endptr;
 			long value = strtol(token, &endptr, (uint8_t) _base);
-			if (endptr == token)
-				return false;
+			if (endptr == token) return false;
 			v = value;
 			return true;
 		}
@@ -396,24 +397,21 @@ namespace streams
 		{
 			char* endptr;
 			unsigned long value = strtoul(token, &endptr, (uint8_t) _base);
-			if (endptr == token)
-				return false;
+			if (endptr == token) return false;
 			v = value;
 			return true;
 		}
 		bool convert(const char* token, int& v)
 		{
 			long value;
-			if (!convert(token, value))
-				return false;
+			if (!convert(token, value)) return false;
 			v = (int) value;
 			return true;
 		}
 		bool convert(const char* token, unsigned int& v)
 		{
 			unsigned long value;
-			if (!convert(token, value))
-				return false;
+			if (!convert(token, value)) return false;
 			v = (unsigned int) value;
 			return true;
 		}
@@ -454,18 +452,18 @@ namespace streams
 		{
 			switch (_base)
 			{
-				case Base::bin:
-				case Base::hex:
-				case Base::oct:
-					return '0';
-				case Base::dec:
-					return ' ';
+			case Base::bin:
+			case Base::hex:
+			case Base::oct:
+				return '0';
+			case Base::dec:
+				return ' ';
 			}
 		}
 
 		static const uint8_t MAX_BUF_LEN = 64;
 		/// @endcond
-		
+
 	private:
 		int8_t _width;
 		uint8_t _precision;
@@ -478,15 +476,16 @@ namespace streams
 	 * Output stream wrapper to provide formatted output API, a la C++.
 	 * @tparam STREAM the output stream to wrap, typically OutputBuffer.
 	 */
-	template<typename STREAM>
-	class FormattedOutput: public FormatBase
+	template<typename STREAM> class FormattedOutput : public FormatBase
 	{
 	public:
 		/**
 		 * Construct a formatted output wrapper of @p stream
 		 * @param stream the output stream to be wrapped
 		 */
-		FormattedOutput(STREAM& stream): _stream{stream} {}
+		FormattedOutput(STREAM& stream) : _stream{stream}
+		{
+		}
 
 		/**
 		 * @copydoc OutputBuffer::flush()
@@ -495,7 +494,7 @@ namespace streams
 		{
 			_stream.flush();
 		}
-		
+
 		/**
 		 * @copydoc OutputBuffer::put(char, bool)
 		 */
@@ -503,7 +502,7 @@ namespace streams
 		{
 			_stream.put(c, call_on_put);
 		}
-		
+
 		/**
 		 * @copydoc OutputBuffer::put(const char*, size_t)
 		 */
@@ -511,7 +510,7 @@ namespace streams
 		{
 			_stream.put(content, size);
 		}
-		
+
 		/**
 		 * @copydoc OutputBuffer::puts(const char*)
 		 */
@@ -519,7 +518,7 @@ namespace streams
 		{
 			_stream.puts(str);
 		}
-		
+
 		/**
 		 * @copydoc OutputBuffer::puts(const flash::FlashStorage*)
 		 */
@@ -538,12 +537,12 @@ namespace streams
 		 * @param c the character to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (char c)
+		FormattedOutput<STREAM>& operator<<(char c)
 		{
 			_stream.put(c);
 			return *this;
 		}
-		
+
 		/**
 		 * Output a C-string (`\0` terminated).
 		 * @code
@@ -552,7 +551,7 @@ namespace streams
 		 * @param s the string to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (const char* s)
+		FormattedOutput<STREAM>& operator<<(const char* s)
 		{
 			//TODO Add justify with width if <0
 			_stream.puts(s);
@@ -567,7 +566,7 @@ namespace streams
 		 * @param s the string to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (const flash::FlashStorage* s)
+		FormattedOutput<STREAM>& operator<<(const flash::FlashStorage* s)
 		{
 			//TODO Add justify with width if <0
 			_stream.puts(s);
@@ -584,7 +583,7 @@ namespace streams
 		 * @param v the number to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (int v)
+		FormattedOutput<STREAM>& operator<<(int v)
 		{
 			_stream.puts(convert(v));
 			return *this;
@@ -600,7 +599,7 @@ namespace streams
 		 * @param v the number to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (unsigned int v)
+		FormattedOutput<STREAM>& operator<<(unsigned int v)
 		{
 			_stream.puts(convert(v));
 			return *this;
@@ -616,7 +615,7 @@ namespace streams
 		 * @param v the number to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (long v)
+		FormattedOutput<STREAM>& operator<<(long v)
 		{
 			_stream.puts(convert(v));
 			return *this;
@@ -632,7 +631,7 @@ namespace streams
 		 * @param v the number to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (unsigned long v)
+		FormattedOutput<STREAM>& operator<<(unsigned long v)
 		{
 			_stream.puts(convert(v));
 			return *this;
@@ -648,7 +647,7 @@ namespace streams
 		 * @param v the number to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (double v)
+		FormattedOutput<STREAM>& operator<<(double v)
 		{
 			_stream.puts(convert(v));
 			return *this;
@@ -675,7 +674,7 @@ namespace streams
 		 * @param f the manipulator to apply to this output stream
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator << (Manipulator f)
+		FormattedOutput<STREAM>& operator<<(Manipulator f)
 		{
 			f(*this);
 			return *this;
@@ -683,7 +682,7 @@ namespace streams
 
 	private:
 		STREAM& _stream;
-		
+
 		/// @cond notdocumented
 		template<typename FSTREAM> friend void bin(FSTREAM&);
 		template<typename FSTREAM> friend void oct(FSTREAM&);
@@ -699,15 +698,16 @@ namespace streams
 	 * Input stream wrapper to provide formatted input API, a la C++.
 	 * @tparam STREAM the input stream to wrap, typically InputBuffer.
 	 */
-	template<typename STREAM>
-	class FormattedInput: public FormatBase
+	template<typename STREAM> class FormattedInput : public FormatBase
 	{
 	public:
 		/**
 		 * Construct a formatted input wrapper of @p stream
 		 * @param stream the input stream to be wrapped
 		 */
-		FormattedInput(STREAM& stream): _stream{stream}, _skipws{true} {}
+		FormattedInput(STREAM& stream) : _stream{stream}, _skipws{true}
+		{
+		}
 
 		/**
 		 * @copydoc InputBuffer::available()
@@ -716,7 +716,7 @@ namespace streams
 		{
 			return _stream.available();
 		}
-		
+
 		/**
 		 * @copydoc InputBuffer::get()
 		 */
@@ -762,7 +762,7 @@ namespace streams
 		 * @param v the boolean value read from the input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (bool& v)
+		FormattedInput<STREAM>& operator>>(bool& v)
 		{
 			skip_whitespaces(_skipws);
 			char c = containers::pull(_stream);
@@ -782,7 +782,7 @@ namespace streams
 		 * @param v the next character read from the input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (char& v)
+		FormattedInput<STREAM>& operator>>(char& v)
 		{
 			skip_whitespaces(_skipws);
 			v = containers::pull(_stream);
@@ -801,7 +801,7 @@ namespace streams
 		 * @param v the integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (int& v)
+		FormattedInput<STREAM>& operator>>(int& v)
 		{
 			skip_whitespaces(_skipws);
 			char buffer[sizeof(int) * 8 + 1];
@@ -821,7 +821,7 @@ namespace streams
 		 * @param v the unsigned integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (unsigned int& v)
+		FormattedInput<STREAM>& operator>>(unsigned int& v)
 		{
 			skip_whitespaces(_skipws);
 			char buffer[sizeof(int) * 8 + 1];
@@ -841,7 +841,7 @@ namespace streams
 		 * @param v the long integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (long& v)
+		FormattedInput<STREAM>& operator>>(long& v)
 		{
 			skip_whitespaces(_skipws);
 			char buffer[sizeof(long) * 8 + 1];
@@ -861,7 +861,7 @@ namespace streams
 		 * @param v the unsigned long integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (unsigned long& v)
+		FormattedInput<STREAM>& operator>>(unsigned long& v)
 		{
 			skip_whitespaces(_skipws);
 			char buffer[sizeof(long) * 8 + 1];
@@ -881,7 +881,7 @@ namespace streams
 		 * @param v the floating point value read from the input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (double& v)
+		FormattedInput<STREAM>& operator>>(double& v)
 		{
 			skip_whitespaces(_skipws);
 			char buffer[MAX_BUF_LEN];
@@ -893,7 +893,7 @@ namespace streams
 		 * General type of a manipulator function applicable to this input stream.
 		 */
 		using Manipulator = void (*)(FormattedInput<STREAM>&);
-		
+
 		/**
 		 * Apply a `Manipulator` to this input stream.
 		 * A manipulator may:
@@ -911,7 +911,7 @@ namespace streams
 		 * @param f the manipulator to apply to this input stream
 		 * @return @p this formatted input
 		 */
-		FormattedInput<STREAM>& operator >> (Manipulator f)
+		FormattedInput<STREAM>& operator>>(Manipulator f)
 		{
 			f(*this);
 			return *this;
@@ -937,7 +937,7 @@ namespace streams
 		template<typename FSTREAM> friend void noskipws(FSTREAM&);
 		/// @endcond
 	};
-	
+
 	//TODO define argumented manipulators for width, precision, filler
 
 	/**
@@ -950,8 +950,7 @@ namespace streams
 	 * in >> ws >> c;
 	 * @endcode
 	 */
-	template<typename FSTREAM> 
-	inline void ws(FSTREAM& stream)
+	template<typename FSTREAM> inline void ws(FSTREAM& stream)
 	{
 		stream.skip_whitespaces();
 	}
@@ -960,8 +959,7 @@ namespace streams
 	 * Manipulator for an input stream, which will activate whitespace discarding
 	 * before formatted input operations on that stream .
 	 */
-	template<typename FSTREAM> 
-	inline void skipws(FSTREAM& stream)
+	template<typename FSTREAM> inline void skipws(FSTREAM& stream)
 	{
 		stream._skipws = true;
 	}
@@ -970,8 +968,7 @@ namespace streams
 	 * Manipulator for an input stream, which will deactivate whitespace discarding
 	 * before formatted input operations on that stream .
 	 */
-	template<typename FSTREAM> 
-	inline void noskipws(FSTREAM& stream)
+	template<typename FSTREAM> inline void noskipws(FSTREAM& stream)
 	{
 		stream._skipws = false;
 	}
@@ -980,8 +977,7 @@ namespace streams
 	 * Manipulator for an output or input stream, which will set the base, used to
 	 * represent (output) or interpret (input) integral	numerical values, to binary.
 	 */
-	template<typename FSTREAM>
-	inline void bin(FSTREAM& stream)
+	template<typename FSTREAM> inline void bin(FSTREAM& stream)
 	{
 		stream.base(FormatBase::Base::bin);
 	}
@@ -990,8 +986,7 @@ namespace streams
 	 * Manipulator for an output or input stream, which will set the base, used to
 	 * represent (output) or interpret (input) integral	numerical values, to octal.
 	 */
-	template<typename FSTREAM>
-	inline void oct(FSTREAM& stream)
+	template<typename FSTREAM> inline void oct(FSTREAM& stream)
 	{
 		stream.base(FormatBase::Base::oct);
 	}
@@ -1000,8 +995,7 @@ namespace streams
 	 * Manipulator for an output or input stream, which will set the base, used to
 	 * represent (output) or interpret (input) integral	numerical values, to decimal.
 	 */
-	template<typename FSTREAM>
-	inline void dec(FSTREAM& stream)
+	template<typename FSTREAM> inline void dec(FSTREAM& stream)
 	{
 		stream.base(FormatBase::Base::dec);
 	}
@@ -1010,8 +1004,7 @@ namespace streams
 	 * Manipulator for an output or input stream, which will set the base, used to
 	 * represent (output) or interpret (input) integral	numerical values, to hexadecimal.
 	 */
-	template<typename FSTREAM>
-	inline void hex(FSTREAM& stream)
+	template<typename FSTREAM> inline void hex(FSTREAM& stream)
 	{
 		stream.base(FormatBase::Base::hex);
 	}
@@ -1019,8 +1012,7 @@ namespace streams
 	/**
 	 * Manipulator for an output stream, which will flush the stream buffer.
 	 */
-	template<typename FSTREAM>
-	inline void flush(FSTREAM& stream)
+	template<typename FSTREAM> inline void flush(FSTREAM& stream)
 	{
 		stream.flush();
 	}
@@ -1029,13 +1021,12 @@ namespace streams
 	 * Manipulator for an output stream, which will insert a new-line character
 	 * and flush the stream buffer.
 	 */
-	template<typename FSTREAM>
-	inline void endl(FSTREAM& stream)
+	template<typename FSTREAM> inline void endl(FSTREAM& stream)
 	{
 		stream.put('\n');
 		stream.flush();
 	}
 }
 
-#endif	/* STREAMS_HH */
+#endif /* STREAMS_HH */
 /// @endcond

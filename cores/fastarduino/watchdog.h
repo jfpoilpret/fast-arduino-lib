@@ -19,7 +19,7 @@
  * Watchdog API.
  */
 #ifndef WATCHDOG_HH
-#define	WATCHDOG_HH
+#define WATCHDOG_HH
 
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
@@ -32,8 +32,7 @@
  * to work properly.
  * @sa watchdog::Watchdog
  */
-#define REGISTER_WATCHDOG_CLOCK_ISR()	\
-REGISTER_ISR_METHOD_(WDT_vect, watchdog::Watchdog, &watchdog::Watchdog::on_tick)
+#define REGISTER_WATCHDOG_CLOCK_ISR() REGISTER_ISR_METHOD_(WDT_vect, watchdog::Watchdog, &watchdog::Watchdog::on_tick)
 
 /**
  * Register the necessary ISR (interrupt Service Routine) with a callback method
@@ -43,8 +42,7 @@ REGISTER_ISR_METHOD_(WDT_vect, watchdog::Watchdog, &watchdog::Watchdog::on_tick)
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_WATCHDOG_ISR_METHOD(HANDLER, CALLBACK)	\
-REGISTER_ISR_METHOD_(WDT_vect, HANDLER, CALLBACK)
+#define REGISTER_WATCHDOG_ISR_METHOD(HANDLER, CALLBACK) REGISTER_ISR_METHOD_(WDT_vect, HANDLER, CALLBACK)
 
 /**
  * Register the necessary ISR (interrupt Service Routine) with a callback function
@@ -53,8 +51,7 @@ REGISTER_ISR_METHOD_(WDT_vect, HANDLER, CALLBACK)
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_WATCHDOG_ISR_FUNCTION(CALLBACK)	\
-REGISTER_ISR_FUNCTION_(WDT_vect, CALLBACK)
+#define REGISTER_WATCHDOG_ISR_FUNCTION(CALLBACK) REGISTER_ISR_FUNCTION_(WDT_vect, CALLBACK)
 
 /**
  * Register an empty ISR (interrupt Service Routine) for a watchdog::WatchdogSignal.
@@ -89,7 +86,7 @@ namespace watchdog
 		 * Note that watchdog timeout period is not very accurate, you would
 		 * normally not use for real-time counting.
 		 */
-		enum class TimeOut: uint8_t
+		enum class TimeOut : uint8_t
 		{
 			/** Watchdog timeout 16 ms. */
 			TO_16ms = 0,
@@ -151,7 +148,7 @@ namespace watchdog
 	 * `REGISTER_WATCHDOG_CLOCK_ISR()` macro first, then ensure you call
 	 * `register_watchdog_handler()`.
 	 */
-	class Watchdog: public WatchdogSignal
+	class Watchdog : public WatchdogSignal
 	{
 	public:
 		/**
@@ -164,7 +161,9 @@ namespace watchdog
 		 * watchdog tick
 		 */
 		Watchdog(containers::Queue<events::Event>& event_queue)
-			:_millis{0}, _millis_per_tick{0}, _event_queue(event_queue) {}
+			: _millis{0}, _millis_per_tick{0}, _event_queue(event_queue)
+		{
+		}
 
 		/// @cond notdocumented
 		Watchdog(const Watchdog&) = delete;
@@ -228,5 +227,5 @@ namespace watchdog
 	};
 }
 
-#endif	/* WATCHDOG_HH */
+#endif /* WATCHDOG_HH */
 /// @endcond

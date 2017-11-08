@@ -38,14 +38,12 @@ constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
 }
 
-void serial::soft::AbstractUARX::_begin(
-	uint32_t rate, Parity parity, 
-	UNUSED StopBits stop_bits)
+void serial::soft::AbstractUARX::_begin(uint32_t rate, Parity parity, UNUSED StopBits stop_bits)
 {
 	_parity = parity;
 	// Calculate timing for RX in number of cycles
 	uint16_t bit_time = uint16_t(F_CPU / rate);
-	
+
 	// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2()
 	// 87 cycles (+4N delay) elapse until start bit is detected from PCI interrupt and 1st bit is sampled:
 	// - 3 cycles to generate the PCI interrupt
@@ -56,11 +54,11 @@ void serial::soft::AbstractUARX::_begin(
 	// - 4N + 4 in delay
 	// - 18 cycles until first bit sample read
 	// For sampling of first bit we wait until middle of first bit
-	_start_bit_rx_time = compute_delay(3 * bit_time / 2, 3+2+4+2+50+4+4+18);
-	
+	_start_bit_rx_time = compute_delay(3 * bit_time / 2, 3 + 2 + 4 + 2 + 50 + 4 + 4 + 18);
+
 	// 16+4N cycles elapse between processing of each bit
 	_interbit_rx_time = compute_delay(bit_time, 16);
-	
+
 	if (parity != Parity::NONE)
 	{
 		// When parity must be checked, the number of cycles between last data bit sampled and parity bit sample is:
@@ -71,12 +69,12 @@ void serial::soft::AbstractUARX::_begin(
 		// - 41 cycles in _push
 		// - 4N cycles in delay loop
 		// - 5 additional cycles to make sure we passed the edge of stop bit
-		_stop_bit_rx_time_push = compute_delay(bit_time / 2, 21+41+5);
+		_stop_bit_rx_time_push = compute_delay(bit_time / 2, 21 + 41 + 5);
 		// If an error occurred (no push) then the following cycles will get executed until we re-enable PCI
 		// - 26 cycles before delay loop
 		// - 4N cycles in delay loop
 		// - 5 additional cycles to make sure we passed the edge of stop bit
-		_stop_bit_rx_time_no_push = compute_delay(bit_time / 2, 26+5);
+		_stop_bit_rx_time_no_push = compute_delay(bit_time / 2, 26 + 5);
 	}
 	else
 	{
@@ -85,9 +83,9 @@ void serial::soft::AbstractUARX::_begin(
 		// - 41 cycles in _push
 		// - 4N cycles in delay loop
 		// - 5 additional cycles to make sure we passed the edge of stop bit
-		_stop_bit_rx_time_push = compute_delay(bit_time / 2, 24+41+5);
+		_stop_bit_rx_time_push = compute_delay(bit_time / 2, 24 + 41 + 5);
 	}
-	
+
 	// We don't care about actual stop bit time, we just ensure we are ready for PCI before the end on stop bit
 	// Additionally, 49 cycles elapse until next PCI can be handled
 }
