@@ -23,7 +23,7 @@ namespace spi
 {
 	void init();
 	
-	enum class ClockRate: uint8_t
+	enum class ClockRate : uint8_t
 	{
 		CLOCK_DIV_4 = 0x00,
 		CLOCK_DIV_16 = 0x01,
@@ -46,20 +46,20 @@ namespace spi
 	}
 
 #ifdef SPDR
-	enum class DataOrder: uint8_t
+	enum class DataOrder : uint8_t
 	{
 		MSB_FIRST = 0,
 		LSB_FIRST = _BV(DORD)
 	};
 #else
-	enum class DataOrder: uint8_t
+	enum class DataOrder : uint8_t
 	{
 		MSB_FIRST = 0
 	};
 #endif
 
 #ifdef SPDR
-	enum class Mode: uint8_t
+	enum class Mode : uint8_t
 	{
 		MODE_0 = 0,
 		MODE_1 = _BV(CPHA),
@@ -67,14 +67,14 @@ namespace spi
 		MODE_3 = _BV(CPHA) | _BV(CPOL)
 	};
 #else
-	enum class Mode: uint8_t
+	enum class Mode : uint8_t
 	{
 		MODE_0 = _BV(USIWM0) | _BV(USICLK) | _BV(USICS1),
 		MODE_1 = _BV(USIWM0) | _BV(USICLK) | _BV(USICS1) | _BV(USICS0)
 	};
 #endif
 	
-	enum class ChipSelect: uint8_t
+	enum class ChipSelect : uint8_t
 	{
 		ACTIVE_LOW = 0,
 		ACTIVE_HIGH = 1
@@ -111,7 +111,7 @@ namespace spi
 		
 		inline void transfer(uint8_t* data, uint16_t size)
 		{
-			while(size--)
+			while (size--)
 			{
 				register uint8_t value = *data;
 				*data++ = transfer(value);
@@ -119,8 +119,7 @@ namespace spi
 		}
 		inline void transfer(uint8_t* data, uint16_t size, uint8_t sent)
 		{
-			while(size--)
-				*data++ = transfer(sent);
+			while (size--) *data++ = transfer(sent);
 		}
 	};
 
@@ -129,10 +128,12 @@ namespace spi
 			ClockRate RATE = ClockRate::CLOCK_DIV_4, 
 			Mode MODE = Mode::MODE_0,
 			DataOrder ORDER = DataOrder::MSB_FIRST>
-	class SPIDevice: public AbstractSPIDevice
+	class SPIDevice : public AbstractSPIDevice
 	{
 	protected:
-		SPIDevice() INLINE:_cs{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW} {}
+		SPIDevice() INLINE : _cs{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW}
+		{
+		}
 
 #ifdef SPDR
 		inline void start_transfer()
@@ -155,8 +156,8 @@ namespace spi
 		}
 
 	private:
-		// Configuration values to reset at beginning of each transfer
 #ifdef SPDR
+		// Configuration values to reset at beginning of each transfer
 		static const constexpr uint8_t _spcr = 
 			_BV(SPE) | _BV(MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
 		static const constexpr uint8_t _spsr = (uint8_t(RATE) & 0x10) ? _BV(SPI2X) : 0;
@@ -165,7 +166,6 @@ namespace spi
 #endif
 		typename gpio::FastPinType<CS>::TYPE _cs;
 	};
-
 };
 
 #endif /* FASTSPI_HH */
