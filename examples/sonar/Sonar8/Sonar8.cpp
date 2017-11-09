@@ -46,8 +46,8 @@ static constexpr const board::DigitalPin ECHO = timer::Timer<TIMER>::ICP_PIN;
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
-#define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
+#define TIMER_NUM 5
+static constexpr const board::Timer TIMER = board::Timer::TIMER5;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PE4;
 static constexpr const board::DigitalPin ECHO = timer::Timer<TIMER>::ICP_PIN;
 #elif defined(ARDUINO_LEONARDO)
