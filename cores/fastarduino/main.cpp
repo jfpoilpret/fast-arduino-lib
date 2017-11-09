@@ -24,20 +24,3 @@ void exit(int status) __attribute__((weak));
 void exit(int status UNUSED)
 {
 }
-
-//FIXME is it really useful? This is already defined in abi.cpp
-#ifndef NO_ABI
-// Define ABI functions that may be required at link time under specific situations
-namespace __cxxabiv1
-{
-	extern "C"
-	{
-		// This is required during link when a constructor may call a pure virtual method
-		// If this is required, it is likely the faulty constructor is too complex (e.g. when using
-		// multiple inheritance) for the compiler to detect that no pure virtual method will be actually 
-		// called. Replacing multiple inheritance, when possible, with class member instead of private
-		// inheritance, can help reduce code size
-		void __cxa_pure_virtual() {}
-	}
-}
-#endif
