@@ -220,7 +220,28 @@ namespace sonar
 		ASYNC_ICP
 	};
 
-	template<board::Timer TIMER_>
+	/// @cond notdocumented
+	// The following struct template is a utility to ensure we will avoid
+	// failing static_assert() on ICP when ICP is not used.
+	// Not very beautiful, but I could not find a better way so far
+	//TODO Find a cleaner way to avoid static_assert errors if not using ICP
+	template<bool CAPTURE> struct TimerTrigger
+	{
+		template<typename TIMER_> static void trigger(UNUSED TIMER_& timer)
+		{
+		}
+	};
+
+	template<> struct TimerTrigger<true>
+	{
+		template<typename TIMER_> static void trigger(TIMER_& timer)
+		{
+			timer.set_input_capture(timer::TimerInputCapture::RISING_EDGE);
+		}
+	};
+	/// @endcond
+
+	template<board::Timer TIMER_, bool CAPTURE>
 	class AbstractSonar
 	{
 	public:
@@ -273,9 +294,10 @@ namespace sonar
 			return echo_pulse_;
 		}
 
-		inline void trigger_sent(bool capture, bool reset)
+		inline void trigger_sent(bool reset)
 		{
-			if (capture) timer_.set_input_capture(timer::TimerInputCapture::RISING_EDGE);
+			// Trigger capture if needed (compile-time decision)
+			TimerTrigger<CAPTURE>::trigger(timer_);
 			if (reset) timer_.reset();
 			status_ = 0;
 		}
@@ -298,6 +320,7 @@ namespace sonar
 
 		inline bool pulse_captured(TYPE capture)
 		{
+			//TODO static_assert
 			bool rising = (timer_.input_capture() == timer::TimerInputCapture::RISING_EDGE);
 			if (rising)
 				timer_.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
@@ -316,10 +339,10 @@ namespace sonar
 	template<
 		board::Timer TIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_, 
 		SonarType SONAR_TYPE_ = SonarType::BLOCKING>
-	class HCSR04: public AbstractSonar<TIMER_>
+	class HCSR04: public AbstractSonar<TIMER_, SONAR_TYPE_ == SonarType::ASYNC_ICP>
 	{
 	private:
-		using PARENT = AbstractSonar<TIMER_>;
+		using PARENT = AbstractSonar<TIMER_, SONAR_TYPE_ == SonarType::ASYNC_ICP>;
 		using TIMER_TRAIT = board_traits::Timer_trait<TIMER_>;
 		using ECHO_PIN_TRAIT = board_traits::DigitalPin_trait<ECHO_>;
 		using ECHO_PORT_TRAIT = board_traits::Port_trait<ECHO_PIN_TRAIT::PORT>;
@@ -367,7 +390,7 @@ namespace sonar
 		// We want to avoid using await_echo_us() to handle state & timeout!
 		void async_echo(bool trigger = true)
 		{
-			this->trigger_sent(SONAR_TYPE_ == SonarType::ASYNC_ICP, trigger);
+			this->trigger_sent(trigger);
 			if (trigger) this->trigger();
 		}
 
