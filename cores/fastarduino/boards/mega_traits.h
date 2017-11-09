@@ -360,7 +360,7 @@ namespace board_traits
 	};
 	
 	template<> struct Timer_COM_trait<Timer::TIMER3, 0>: Timer_COM_trait_impl<
-		uint16_t, PWMPin::D3_PE5_OC3A, R_(OCR3A), 
+		uint16_t, PWMPin::D5_PE3_OC3A, R_(OCR3A), 
 		_BV(COM3A0) | _BV(COM3A1), 0, _BV(COM3A0), _BV(COM3A1), _BV(COM3A0) | _BV(COM3A1)> {};
 	template<> struct Timer_COM_trait<Timer::TIMER3, 1>: Timer_COM_trait_impl<
 		uint16_t, PWMPin::D2_PE4_OC3B, R_(OCR3B), 
@@ -490,7 +490,7 @@ namespace board_traits
 	template<> struct PWMPin_trait<PWMPin::D12_PB6_OC1B>: PWMPin_trait_impl<Timer::TIMER1, 1> {};
 	template<> struct PWMPin_trait<PWMPin::D10_PB4_OC2A>: PWMPin_trait_impl<Timer::TIMER2, 0> {};
 	template<> struct PWMPin_trait<PWMPin::D9_PH6_OC2B>: PWMPin_trait_impl<Timer::TIMER2, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D3_PE5_OC3A>: PWMPin_trait_impl<Timer::TIMER3, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D5_PE3_OC3A>: PWMPin_trait_impl<Timer::TIMER3, 0> {};
 	template<> struct PWMPin_trait<PWMPin::D2_PE4_OC3B>: PWMPin_trait_impl<Timer::TIMER3, 1> {};
 	template<> struct PWMPin_trait<PWMPin::D3_PE5_OC3C>: PWMPin_trait_impl<Timer::TIMER3, 2> {};
 	template<> struct PWMPin_trait<PWMPin::D6_PH3_OC4A>: PWMPin_trait_impl<Timer::TIMER4, 0> {};
