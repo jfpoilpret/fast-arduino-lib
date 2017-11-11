@@ -85,7 +85,7 @@
 namespace interrupt
 {
 	/**
-	 * Handler of a Pin Change Interrupt vector, i.e. a @p PORT. For each PCINT
+	 * Handler of a Pin Change Interrupt vector, i.e. a @p PORT_. For each PCINT
 	 * vector you need, you must create one instance of this handler. 
 	 * With one instance, you are then able to handle individually each pin 
 	 * which interrupt you want to enable or disable. 
@@ -96,22 +96,28 @@ namespace interrupt
 	 * If you don't know the port you need to handle but only a pin, then you can
 	 * use `PCIType<PIN>::TYPE`.
 	 * 
-	 * @tparam PORT the IO port which PCINT vector you want to manage; if @p PORT
+	 * @tparam PORT_ the IO port which PCINT vector you want to manage; if @p PORT_
 	 * has no associated PCINT vector then the program will not compile.
 	 * @sa REGISTER_PCI_ISR_FUNCTION
 	 * @sa REGISTER_PCI_ISR_METHOD
 	 * @sa REGISTER_PCI_ISR_EMPTY
 	 * @sa PCIType
 	 */
-	template<board::Port PORT> class PCISignal
+	template<board::Port PORT_> class PCISignal
 	{
 	public:
+		/** The IO port which PCINT vector is managed by this PCISignal. */
+		static constexpr const board::PORT = PORT_;
+
 		/// @cond notdocumented
 		//TODO why is that public? should be private!
-		//FIXME why is there no assert here? isn't it possible that PORT has no PCINT?
 		using PORT_TRAIT = board_traits::Port_trait<PORT>;
+		static_assert(PORT_TRAIT::PCINT != 0xFF, "PORT_ must support PCINT");
 		using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
 		/// @endcond
+
+		/** The PCINT vector number for this PCISignal. */
+		static constexpr const uint8_t PCINT = PORT_TRAIT::PCINT;
 
 		/**
 		 * Enable pin change interrupts for the port of the `PCISignal`.

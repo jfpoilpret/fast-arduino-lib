@@ -22,9 +22,12 @@ namespace containers
 {
 	//TODO imprvoe code size by creating a non-template base class with all common stuff
 	//TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?
-	template<typename T, typename TREF = const T&> class Queue
+	template<typename T_, typename TREF_ = const T_&> class Queue
 	{
 	public:
+		using T = T_;
+		using TREF = TREF_;
+
 		template<uint8_t SIZE>
 		Queue(T (&buffer)[SIZE]) : _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
 		{
@@ -37,6 +40,10 @@ namespace containers
 		bool _peek(T& item) const;
 		uint8_t _peek(T* buffer, uint8_t size) const;
 		template<uint8_t SIZE> uint8_t _peek(T (&buffer)[SIZE]) const;
+		inline uint8_t size() const
+		{
+			return _mask;
+		}
 		inline bool _empty() const
 		{
 			return (_tail == _head);

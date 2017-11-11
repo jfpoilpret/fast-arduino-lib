@@ -92,6 +92,7 @@
 
 namespace timer
 {
+	//TODO rename template args per new conventions
 	/**
 	 * API to handle a real-time timer.
 	 * A real-time timer keeps track of time with micro-second precision.

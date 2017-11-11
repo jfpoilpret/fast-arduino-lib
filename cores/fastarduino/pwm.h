@@ -32,15 +32,25 @@ namespace analog
 
 	/**
 	 * Construct a new handler for a PWM output pin.
-	 * @tparam PIN the digital pin to use as PWM output
-	 * @tparam PULSED whether to use a `timer::PulseTimer` instead of a 
+	 * @tparam PIN_ the digital pin to use as PWM output
+	 * @tparam PULSED_ whether to use a `timer::PulseTimer` instead of a 
 	 * `timer::Timer`; this is useful when e.g. you want to use a PWM pin to
 	 * manage a servo motor, where pulses shall be limited to a few ms but 
 	 * triggered every few dozen ms.
 	 * @sa board::DigitalPin
 	 */
-	template<board::DigitalPin PIN, bool PULSED = false> class PWMOutput
+	template<board::DigitalPin PIN_, bool PULSED_ = false> class PWMOutput
 	{
+	public:
+		/** The digital pin for this PWMOutput. */
+		static constexpr const board::DigitalPin PIN = PIN_;
+		/**
+		 * Whether this PWMOutput uses a `timer::PulseTimer` instead of a 
+		 * `timer::Timer`.
+		 */
+		static constexpr const bool PULSED = PULSED_;
+
+	private:
 		using TRAIT = board_traits::PWMPin_trait<PIN>;
 		using TIMER_TRAIT = board_traits::Timer_trait<TRAIT::TIMER>;
 

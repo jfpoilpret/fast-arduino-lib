@@ -22,9 +22,11 @@ namespace events
 {
 	class Job;
 
-	template<typename CLOCK> class Scheduler : public EventHandler, public containers::LinkedList<Job>
+	template<typename CLOCK_> class Scheduler : public EventHandler, public containers::LinkedList<Job>
 	{
 	public:
+		using CLOCK = CLOCK_;
+
 		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler{type}, _clock(clock)
 		{
 		}

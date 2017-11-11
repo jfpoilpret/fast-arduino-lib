@@ -45,9 +45,10 @@ namespace containers
 		LinkImpl* _head;
 	};
 
-	template<typename T> class LinkedList : private LinkedListImpl
+	template<typename T_> class LinkedList : private LinkedListImpl
 	{
 	public:
+		using T = T_;
 		void insert(T& item) INLINE
 		{
 			LinkedListImpl::insert(&item);
@@ -74,8 +75,11 @@ namespace containers
 		}
 	};
 
-	template<typename T> class Link : private LinkImpl
+	template<typename T_> class Link : private LinkImpl
 	{
+	public:
+		using T = T_;
+
 	private:
 		T* next() INLINE
 		{

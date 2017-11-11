@@ -474,11 +474,14 @@ namespace streams
 	//TODO Add reset of latest format used
 	/**
 	 * Output stream wrapper to provide formatted output API, a la C++.
-	 * @tparam STREAM the output stream to wrap, typically OutputBuffer.
+	 * @tparam STREAM_ the output stream to wrap, typically OutputBuffer.
 	 */
-	template<typename STREAM> class FormattedOutput : public FormatBase
+	template<typename STREAM_> class FormattedOutput : public FormatBase
 	{
 	public:
+		/** The output stream wrapped by this FormattedOutput. */
+		using STREAM = STREAM_;
+
 		/**
 		 * Construct a formatted output wrapper of @p stream
 		 * @param stream the output stream to be wrapped
@@ -696,11 +699,14 @@ namespace streams
 
 	/**
 	 * Input stream wrapper to provide formatted input API, a la C++.
-	 * @tparam STREAM the input stream to wrap, typically InputBuffer.
+	 * @tparam STREAM_ the input stream to wrap, typically InputBuffer.
 	 */
-	template<typename STREAM> class FormattedInput : public FormatBase
+	template<typename STREAM_> class FormattedInput : public FormatBase
 	{
 	public:
+		/** The input stream wrapped by FormattedInput. */
+		using STREAM = STREAM_;
+
 		/**
 		 * Construct a formatted input wrapper of @p stream
 		 * @param stream the input stream to be wrapped

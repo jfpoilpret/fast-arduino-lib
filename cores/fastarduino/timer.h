@@ -251,6 +251,7 @@ namespace timer
 		FALLING_EDGE
 	};
 
+	//TODO rename template args as per new conventions
 	/**
 	 * Defines a set of calculation methods for the given @p TIMER
 	 * The behavior of these methods is specific to each AVR Timer are there can

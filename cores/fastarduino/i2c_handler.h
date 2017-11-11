@@ -22,9 +22,9 @@
 
 namespace i2c
 {
-	template<I2CMode MODE> class I2CManager;
+	template<I2CMode MODE_> class I2CManager;
 
-	template<I2CMode MODE> class I2CHandler
+	template<I2CMode MODE_> class I2CHandler
 	{
 	private:
 		using TRAIT = board_traits::TWI_trait;
@@ -35,6 +35,7 @@ namespace i2c
 		inline void end() INLINE;
 
 	public:
+		static constexpr const I2CMode MODE = MODE_;
 		inline uint8_t status() const INLINE
 		{
 			return _status;

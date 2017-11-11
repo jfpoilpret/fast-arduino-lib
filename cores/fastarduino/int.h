@@ -94,15 +94,19 @@ namespace interrupt
 	 * occurs for @p PIN, then you have to use `REGISTER_INT_ISR_FUNCTION` or 
 	 * `REGISTER_INT_ISR_METHOD()` macros.
 	 * If you don't then use `REGISTER_INT_ISR_EMPTY` macro.
-	 * @tparam PIN the External Interrupt pin; if @p PIN is not an External Interrupt 
+	 * @tparam PIN_ the External Interrupt pin; if @p PIN_ is not an External Interrupt 
 	 * pin, then the program will not compile.
 	 * @sa board::ExternalInterruptPin
 	 * @sa REGISTER_INT_ISR_FUNCTION
 	 * @sa REGISTER_INT_ISR_METHOD
 	 * @sa REGISTER_INT_ISR_EMPTY
 	 */
-	template<board::DigitalPin PIN> class INTSignal
+	template<board::DigitalPin PIN_> class INTSignal
 	{
+	public:
+		/** The External Interrupt pin managed by this INTSignal. */
+		static constexpr const board::DigitalPin PIN = PIN_;
+
 	protected:
 		/// @cond notdocumented
 		//TODO why is that protected? should be private!

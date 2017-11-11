@@ -67,9 +67,11 @@ namespace serial
 			uint16_t _stop_bit_tx_time;
 		};
 
-		template<board::DigitalPin TX> class UATX : public AbstractUATX
+		template<board::DigitalPin TX_> class UATX : public AbstractUATX
 		{
 		public:
+			static constexpr const board::DigitalPin TX = TX_;
+
 			template<uint8_t SIZE_TX>
 			UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, _tx{gpio::PinMode::OUTPUT, true}
 			{
@@ -176,9 +178,11 @@ namespace serial
 			uint16_t _stop_bit_rx_time_no_push;
 		};
 
-		template<board::DigitalPin RX> class UARX : public AbstractUARX
+		template<board::DigitalPin RX_> class UARX : public AbstractUARX
 		{
 		public:
+			static constexpr const board::DigitalPin RX = RX_;
+
 			using PIN_TRAIT = board_traits::DigitalPin_trait<RX>;
 			using PCI_TYPE = typename interrupt::PCIType<RX>::TYPE;
 			using PORT_TRAIT = typename PCI_TYPE::TRAIT;
@@ -288,9 +292,12 @@ namespace serial
 				_pci->_clear();
 		}
 
-		template<board::DigitalPin RX, board::DigitalPin TX> class UART : public UARX<RX>, public UATX<TX>
+		template<board::DigitalPin RX_, board::DigitalPin TX_> class UART : public UARX<RX>, public UATX<TX>
 		{
 		public:
+			static constexpr const board::DigitalPin TX = TX_;
+			static constexpr const board::DigitalPin RX = RX_;
+			
 			template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 			UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX<RX>{input}, UATX<TX>{output}
 			{

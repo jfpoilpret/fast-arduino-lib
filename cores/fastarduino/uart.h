@@ -113,11 +113,15 @@ namespace serial
 		 * program, through `REGISTER_UATX_ISR()`, then call `register_handler()`
 		 * immediately after the UATX instance has been constructed.
 		 * 
-		 * @tparam USART the hardware `board::USART` to use
+		 * @tparam USART_ the hardware `board::USART` to use
 		 * @sa REGISTER_UATX_ISR()
 		 */
 		template<board::USART USART> class UATX : virtual public AbstractUART, private streams::OutputBuffer
 		{
+		public:
+			/** The hardware `board::USART` used by this UATX. */
+			static constexpr const board::USART USART = USART_;
+
 		private:
 			using TRAIT = board_traits::USART_trait<USART>;
 
@@ -249,11 +253,15 @@ namespace serial
 		 * program, through `REGISTER_UARX_ISR()`, then call `register_handler()`
 		 * immediately after the UARX instance has been constructed.
 		 * 
-		 * @tparam USART the hardware `board::USART` to use
+		 * @tparam USART_ the hardware `board::USART` to use
 		 * @sa REGISTER_UARX_ISR()
 		 */
-		template<board::USART USART> class UARX : virtual public AbstractUART, private streams::InputBuffer
+		template<board::USART USART_> class UARX : virtual public AbstractUART, private streams::InputBuffer
 		{
+		public:
+			/** The hardware `board::USART` used by this UARX. */
+			static constexpr const board::USART USART = USART_;
+
 		private:
 			using TRAIT = board_traits::USART_trait<USART>;
 
@@ -349,11 +357,15 @@ namespace serial
 		 * program, through `REGISTER_UART_ISR()`, then call `register_handler()`
 		 * immediately after the UART instance has been constructed.
 		 * 
-		 * @tparam USART the hardware `board::USART` to use
+		 * @tparam USART_ the hardware `board::USART` to use
 		 * @sa REGISTER_UART_ISR()
 		 */
-		template<board::USART USART> class UART : public UARX<USART>, public UATX<USART>
+		template<board::USART USART_> class UART : public UARX<USART>, public UATX<USART>
 		{
+		public:
+			/** The hardware `board::USART` used by this UART. */
+			static constexpr const board::USART USART = USART_;
+
 		private:
 			using TRAIT = board_traits::USART_trait<USART>;
 

@@ -20,9 +20,11 @@
 
 namespace i2c
 {
-	template<I2CMode MODE = I2CMode::Standard> class I2CManager
+	template<I2CMode MODE_ = I2CMode::Standard> class I2CManager
 	{
 	public:
+		static constexpr const I2CMode MODE = MODE_;
+
 		I2CManager(I2C_STATUS_HOOK hook = 0) : _handler{hook}
 		{
 		}
