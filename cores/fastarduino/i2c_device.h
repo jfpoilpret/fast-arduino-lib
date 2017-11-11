@@ -30,9 +30,10 @@ namespace i2c
 		NO_START_STOP = 0x04
 	};
 
-	template<I2CMode MODE = I2CMode::Standard> class I2CDevice
+	template<I2CMode MODE_ = I2CMode::Standard> class I2CDevice
 	{
 	public:
+		static constexpr const I2CMode MODE = MODE_;
 		using MANAGER = I2CManager<MODE>;
 		using HANDLER = typename MANAGER::HANDLER;
 

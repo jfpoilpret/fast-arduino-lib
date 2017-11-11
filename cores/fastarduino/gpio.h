@@ -565,17 +565,19 @@ namespace gpio
 	 * }
 	 * @endcode
 	 * 
-	 * @tparam DPIN a unique digital pin for the MCU target
+	 * @tparam DPIN_ a unique digital pin for the MCU target
 	 * @sa gpio::DigitalPin
 	 * @sa gpio::FastPin
 	 */
-	template<board::DigitalPin DPIN> class FastPinType
+	template<board::DigitalPin DPIN_> class FastPinType
 	{
 	private:
-		using TRAIT = board_traits::DigitalPin_trait<DPIN>;
+		using TRAIT = board_traits::DigitalPin_trait<DPIN_>;
 		using PTRAIT = board_traits::Port_trait<TRAIT::PORT>;
 
 	public:
+		/** The digital pin for this FastPinType. */
+		static constexpr const board::DigitalPin DPIN = DPIN_;
 		/** The port to which `DPIN` belongs. */
 		static constexpr const board::Port PORT = TRAIT::PORT;
 		/** The bit position of `DPIN` within its port. */
