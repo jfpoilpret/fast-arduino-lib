@@ -63,7 +63,7 @@ constexpr const uint16_t PULSE1_MINWIDTH_US = 1000;
 constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const PRESCALER1_TYPE PRESCALER1 = CALC1::PulseTimer_prescaler(PULSE1_MAXWIDTH_US, PULSE_FREQUENCY);
 
-using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
+using ANALOG1_INPUT = analog::AnalogInput<POT1, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED1_OUTPUT = analog::PWMOutput<LED1>;
 using TIMER1_TYPE = timer::PulseTimer<TIMER1, PRESCALER1>;
 using TIMER1_DUTY_TYPE = TIMER1_TYPE::TIMER_TYPE;

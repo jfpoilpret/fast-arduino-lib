@@ -292,7 +292,7 @@ namespace serial
 				_pci->_clear();
 		}
 
-		template<board::DigitalPin RX_, board::DigitalPin TX_> class UART : public UARX<RX>, public UATX<TX>
+		template<board::DigitalPin RX_, board::DigitalPin TX_> class UART : public UARX<RX_>, public UATX<TX_>
 		{
 		public:
 			static constexpr const board::DigitalPin TX = TX_;

@@ -176,7 +176,7 @@ static constexpr const ROW_TYPE SMILEY[] =
 
 static uint16_t game_period()
 {
-	analog::AnalogInput<SPEED_PIN, board::AnalogReference::AVCC, uint8_t> speed_input;
+	analog::AnalogInput<SPEED_PIN, uint8_t, board::AnalogReference::AVCC> speed_input;
 	uint8_t period = speed_input.sample() >> 4;
 	return (MIN_PROGRESS_PERIOD_MS * (period + 1)) >> LOG2(REFRESH_PERIOD_MS);
 }
@@ -208,8 +208,8 @@ int main()
 	//===============================================
 	{
 		Button<SELECT, DEBOUNCE_COUNTER> select;
-		analog::AnalogInput<ROW, board::AnalogReference::AVCC, uint8_t> row_input;
-		analog::AnalogInput<COLUMN, board::AnalogReference::AVCC, uint8_t> column_input;
+		analog::AnalogInput<ROW, uint8_t, board::AnalogReference::AVCC> row_input;
+		analog::AnalogInput<COLUMN, uint8_t, board::AnalogReference::AVCC> column_input;
 		uint8_t row = 0;
 		uint8_t col = 0;
 		mux.blinks()[0] = _BV(0);

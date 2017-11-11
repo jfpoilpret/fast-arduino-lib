@@ -107,7 +107,7 @@ namespace interrupt
 	{
 	public:
 		/** The IO port which PCINT vector is managed by this PCISignal. */
-		static constexpr const board::PORT = PORT_;
+		static constexpr const board::Port PORT = PORT_;
 
 		/// @cond notdocumented
 		//TODO why is that public? should be private!

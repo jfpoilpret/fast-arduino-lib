@@ -116,7 +116,7 @@ namespace serial
 		 * @tparam USART_ the hardware `board::USART` to use
 		 * @sa REGISTER_UATX_ISR()
 		 */
-		template<board::USART USART> class UATX : virtual public AbstractUART, private streams::OutputBuffer
+		template<board::USART USART_> class UATX : virtual public AbstractUART, private streams::OutputBuffer
 		{
 		public:
 			/** The hardware `board::USART` used by this UATX. */
@@ -360,7 +360,7 @@ namespace serial
 		 * @tparam USART_ the hardware `board::USART` to use
 		 * @sa REGISTER_UART_ISR()
 		 */
-		template<board::USART USART_> class UART : public UARX<USART>, public UATX<USART>
+		template<board::USART USART_> class UART : public UARX<USART_>, public UATX<USART_>
 		{
 		public:
 			/** The hardware `board::USART` used by this UART. */

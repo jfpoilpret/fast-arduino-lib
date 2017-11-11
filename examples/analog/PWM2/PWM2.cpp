@@ -66,8 +66,8 @@ static constexpr const board::Timer TIMER = board::Timer::TIMER0;
 #error "Current target is not yet supported!"
 #endif
 
-using ANALOG_INPUT1 = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
-using ANALOG_INPUT2 = analog::AnalogInput<POT2, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
+using ANALOG_INPUT1 = analog::AnalogInput<POT1, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
+using ANALOG_INPUT2 = analog::AnalogInput<POT2, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED_OUTPUT1 = analog::PWMOutput<LED1>;
 using LED_OUTPUT2 = analog::PWMOutput<LED2>;
 using CALC = timer::Calculator<TIMER>;

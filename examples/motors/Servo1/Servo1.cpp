@@ -61,7 +61,7 @@ constexpr const TPRESCALER PRESCALER = TCALC::PulseTimer_prescaler(MAX_PULSE_US,
 using PULSE_TIMER = timer::PulseTimer<TIMER, PRESCALER>;
 using SERVO1 = devices::servo::Servo<PULSE_TIMER, SERVO_PIN1>;
 
-using ANALOG1_INPUT = analog::AnalogInput<POT1, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
+using ANALOG1_INPUT = analog::AnalogInput<POT1, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 
 // Register ISR needed for PulseTimer (8 bits specific)
 REGISTER_PULSE_TIMER8_ISR(TIMER_NUM, PRESCALER, SERVO_PIN1)
