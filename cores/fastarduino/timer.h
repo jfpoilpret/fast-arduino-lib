@@ -251,7 +251,6 @@ namespace timer
 		FALLING_EDGE
 	};
 
-	//TODO rename template args as per new conventions
 	/**
 	 * Defines a set of calculation methods for the given @p NTIMER_
 	 * The behavior of these methods is specific to each AVR Timer are there can
@@ -647,6 +646,7 @@ namespace timer
 	template<board::Timer NTIMER_> class Timer
 	{
 	public:
+		/** The Board timer used by this Timer. */
 		static constexpr const board::Timer NTIMER = NTIMER_;
 
 	protected:
@@ -656,13 +656,15 @@ namespace timer
 		/// @endcond
 
 	public:
-		//TODO DOC
-		// static constexpr const board::Timer TIMER = TIMER;
-
 		/**
 		 * The type of this timer's counter (either `uint8_t` or `uint16_t`).
 		 */
 		using TYPE = typename TRAIT::TYPE;
+
+		/**
+		 * The Calculator type for this Timer.
+		 */
+		using CALCULATOR = Calculator<NTIMER>;
 
 		/**
 		 * The enum type listing all available precaler values for this timer.

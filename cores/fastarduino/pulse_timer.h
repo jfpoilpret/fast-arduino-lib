@@ -82,7 +82,6 @@
 
 namespace timer
 {
-	//TODO rename template args properly
 	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every
 	// 20ms, ie with a 50Hz frequency.
