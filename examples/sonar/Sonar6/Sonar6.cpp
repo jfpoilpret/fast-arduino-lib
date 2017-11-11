@@ -87,7 +87,7 @@ using CALC = timer::Calculator<TIMER>;
 using devices::sonar::SonarType;
 using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;
 static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
-static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
+static constexpr const TIMER_TYPE::PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
 static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
 
 using devices::sonar::echo_us_to_distance_mm;

@@ -24,14 +24,19 @@ namespace devices
 	namespace servo
 	{
 		// This must be used with TIMER = timer::PulseTimer<...>
-		template<typename TIMER, board::DigitalPin PIN> class Servo
+		template<typename TIMER_, board::DigitalPin PIN_> class Servo
 		{
+		public:
+			using TIMER = TIMER_;
+			static constexpr const board::DigitalPin PIN = PIN_;
+
+		private:
 			using CALC = typename TIMER::CALCULATOR;
-			using TPRESCALER = typename CALC::TIMER_PRESCALER;
+			using TPRESCALER = typename CALC::PRESCALER;
 			static constexpr const TPRESCALER PRESCALER = TIMER::PRESCALER;
 
 		public:
-			using TYPE = typename TIMER::TIMER_TYPE;
+			using TYPE = typename TIMER::TYPE;
 
 			Servo(TIMER& timer, uint16_t us_minimum, uint16_t us_maximum, uint16_t us_neutral = 0)
 				: out_{timer}, US_MINIMUM_{us_minimum}, US_MAXIMUM_{us_maximum},

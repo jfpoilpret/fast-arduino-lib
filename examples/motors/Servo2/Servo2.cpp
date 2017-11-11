@@ -17,25 +17,25 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define TIMER_NUM 1
-constexpr const board::Timer TIMER = board::Timer::TIMER1;
+constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D9_PB1_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #elif defined(ARDUINO_MEGA)
 #define TIMER_NUM 1
-constexpr const board::Timer TIMER = board::Timer::TIMER1;
+constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D11_PB5_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #elif defined(ARDUINO_LEONARDO)
 #define TIMER_NUM 1
-constexpr const board::Timer TIMER = board::Timer::TIMER1;
+constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D9_PB5_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #elif defined(BREADBOARD_ATTINYX4)
 #define TIMER_NUM 1
-constexpr const board::Timer TIMER = board::Timer::TIMER1;
+constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
 constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D6_PA6_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
@@ -43,8 +43,8 @@ constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #error "Current target is not yet supported!"
 #endif
 
-using TCALC = timer::Calculator<TIMER>;
-using TPRESCALER = TCALC::TIMER_PRESCALER;
+using TCALC = timer::Calculator<NTIMER>;
+using TPRESCALER = TCALC::PRESCALER;
 
 // Constants for servo and prescaler to be used for TIMER
 constexpr const uint16_t MAX_PULSE_US = 2400;
@@ -54,7 +54,7 @@ constexpr const uint16_t PULSE_FREQUENCY = 50;
 constexpr const TPRESCALER PRESCALER = TCALC::PulseTimer_prescaler(MAX_PULSE_US, PULSE_FREQUENCY);
 
 // Predefine types used for Timer and Servo
-using PULSE_TIMER = timer::PulseTimer<TIMER, PRESCALER>;
+using PULSE_TIMER = timer::PulseTimer<NTIMER, PRESCALER>;
 using SERVO1 = devices::servo::Servo<PULSE_TIMER, SERVO_PIN1>;
 
 using ANALOG1_INPUT = analog::AnalogInput<POT1, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;

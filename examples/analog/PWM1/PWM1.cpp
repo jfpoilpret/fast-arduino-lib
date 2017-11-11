@@ -35,37 +35,37 @@
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED = board::PWMPin::D6_PD6_OC0A;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_LEONARDO)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED = board::PWMPin::D11_PB7_OC0A;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED = board::PWMPin::D4_PG5_OC0B;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED = board::PWMPin::D10_PB2_OC0A;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"
 #endif
 
 using ANALOG_INPUT = analog::AnalogInput<POT, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED_OUTPUT = analog::PWMOutput<LED>;
-using TIMER_TYPE = timer::Timer<TIMER>;
-using CALC = timer::Calculator<TIMER>;
+using TIMER = timer::Timer<NTIMER>;
+using CALC = timer::Calculator<NTIMER>;
 
 // Frequency for PWM
 constexpr const uint16_t PWM_FREQUENCY = 450;
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
+constexpr const TIMER::PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
 
 int main()
 {
 	board::init();
 	// Initialize timer and pins
-	TIMER_TYPE timer{timer::TimerMode::FAST_PWM, PRESCALER};
+	TIMER timer{timer::TimerMode::FAST_PWM, PRESCALER};
 	LED_OUTPUT led{timer};
 	ANALOG_INPUT pot;
 

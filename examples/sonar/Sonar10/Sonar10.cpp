@@ -41,7 +41,7 @@ using gpio::FastPinType;
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define TIMER_NUM 1
 #define PCI_NUM 2
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const DigitalPin TRIGGER = DigitalPin::D8;
 // Pins connected to each sonar echo
 static constexpr const DigitalPin SFRONT = DigitalPin::D0;
@@ -104,14 +104,14 @@ static constexpr const uint8_t ECHO_MASK = echo_mask();
 static constexpr const uint8_t LED_MASK = led_mask();
 
 // Declate device type to handle all sonars
-using SONAR = devices::sonar::MultiHCSR04<TIMER, TRIGGER, ECHO_PORT, ECHO_MASK>;
+using SONAR = devices::sonar::MultiHCSR04<NTIMER, TRIGGER, ECHO_PORT, ECHO_MASK>;
 
 // Declare timer types and constants
-using TIMER_TYPE = timer::Timer<TIMER>;
-using CALC = timer::Calculator<TIMER>;
+using TIMER = timer::Timer<NTIMER>;
+using CALC = timer::Calculator<NTIMER>;
 static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
-static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
-static constexpr const TIMER_TYPE::TIMER_TYPE TIMEOUT_MAX = CALC::CTC_counter(PRESCALER, PRECISION);
+static constexpr const TIMER::PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
+static constexpr const TIMER::TYPE TIMEOUT_MAX = CALC::CTC_counter(PRESCALER, PRECISION);
 
 using devices::sonar::distance_mm_to_echo_us;
 
@@ -167,7 +167,7 @@ int main()
 	gpio::FastMaskedPort<LED_PORT> leds{LED_MASK, 0xFF};
 
 	// Setup timer
-	TIMER_TYPE timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
+	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	// Setup PCI for all sonar echo pins
 	interrupt::PCISignal<ECHO_PORT> signal;
 	signal._set_enable_pins(ECHO_MASK);

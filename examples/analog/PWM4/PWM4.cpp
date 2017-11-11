@@ -39,31 +39,31 @@ static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED0 = board::PWMPin::D6_PD6_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D5_PD5_OC0B;
-static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_LEONARDO)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED0 = board::PWMPin::D11_PB7_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D3_PD0_OC0B;
-static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED0 = board::PWMPin::D13_PB7_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D4_PG5_OC0B;
-static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
 static constexpr const board::DigitalPin LED0 = board::PWMPin::D10_PB2_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D7_PA7_OC0B;
-static constexpr const board::Timer TIMER0 = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-using CALC0 = timer::Calculator<TIMER0>;
-using PRESCALER0_TYPE = CALC0::TIMER_PRESCALER;
+using CALC = timer::Calculator<NTIMER>;
+using PRESCALER = CALC::PRESCALER;
 
 // Constants for LED0
 constexpr const uint16_t PULSE0_MAXWIDTH_US = 2000;
@@ -71,11 +71,11 @@ constexpr const uint16_t PULSE0_MINWIDTH_US = 1000;
 
 // Pulse Frequency
 constexpr const uint16_t PULSE_FREQUENCY = 50;
-constexpr const PRESCALER0_TYPE PRESCALER0 = CALC0::PulseTimer_prescaler(PULSE0_MAXWIDTH_US, PULSE_FREQUENCY);
+constexpr const PRESCALER PRESCALER0 = CALC::PulseTimer_prescaler(PULSE0_MAXWIDTH_US, PULSE_FREQUENCY);
 #if F_CPU == 8000000UL
-static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_64, "");
+static_assert(PRESCALER0 == PRESCALER::DIV_64, "");
 #else
-static_assert(PRESCALER0 == PRESCALER0_TYPE::DIV_256, "");
+static_assert(PRESCALER0 == PRESCALER::DIV_256, "");
 #endif
 
 // Register ISR needed for PulseTimer (8 bits specific)
@@ -88,8 +88,8 @@ using ANALOG0_INPUT = analog::AnalogInput<POT0, uint8_t, board::AnalogReference:
 using LED0_OUTPUT = analog::PWMOutput<LED0, true>;
 using ANALOG1_INPUT = analog::AnalogInput<POT1, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED1_OUTPUT = analog::PWMOutput<LED1, true>;
-using TIMER0_TYPE = timer::PulseTimer<TIMER0, PRESCALER0>;
-using TIMER0_DUTY_TYPE = TIMER0_TYPE::TIMER_TYPE;
+using TIMER = timer::PulseTimer<NTIMER, PRESCALER0>;
+using TIMER_DUTY_TYPE = TIMER::TYPE;
 
 template<typename IN, typename OUT>
 void update(IN& in, OUT& out, uint16_t old_pulse)
@@ -99,7 +99,7 @@ void update(IN& in, OUT& out, uint16_t old_pulse)
 	if (old_pulse != pulse)
 	{
 		old_pulse = pulse;
-		out.set_duty(CALC0::PulseTimer_value(PRESCALER0, pulse));
+		out.set_duty(CALC::PulseTimer_value(PRESCALER0, pulse));
 	}
 }
 
@@ -107,14 +107,14 @@ int main()
 {
 	board::init();
 	// Initialize timer and pins
-	TIMER0_TYPE timer0{PULSE_FREQUENCY};
-	LED0_OUTPUT led0{timer0};
+	TIMER timer{PULSE_FREQUENCY};
+	LED0_OUTPUT led0{timer};
 	ANALOG0_INPUT pot0;
-	LED1_OUTPUT led1{timer0};
+	LED1_OUTPUT led1{timer};
 	ANALOG1_INPUT pot1;
 
 	// Start timer
-	timer0._begin();
+	timer._begin();
 	
 	// Enable interrupts
 	sei();

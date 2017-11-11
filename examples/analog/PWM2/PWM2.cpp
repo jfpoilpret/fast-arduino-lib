@@ -43,25 +43,25 @@ static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D6_PD6_OC0A;
 static constexpr const board::DigitalPin LED2 = board::PWMPin::D5_PD5_OC0B;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_LEONARDO)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D11_PB7_OC0A;
 static constexpr const board::DigitalPin LED2 = board::PWMPin::D3_PD0_OC0B;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D10_PB4_OC2A;
 static constexpr const board::DigitalPin LED2 = board::PWMPin::D9_PH6_OC2B;
-static constexpr const board::Timer TIMER = board::Timer::TIMER2;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER2;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED1 = board::PWMPin::D10_PB2_OC0A;
 static constexpr const board::DigitalPin LED2 = board::PWMPin::D7_PA7_OC0B;
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -70,18 +70,18 @@ using ANALOG_INPUT1 = analog::AnalogInput<POT1, uint8_t, board::AnalogReference:
 using ANALOG_INPUT2 = analog::AnalogInput<POT2, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED_OUTPUT1 = analog::PWMOutput<LED1>;
 using LED_OUTPUT2 = analog::PWMOutput<LED2>;
-using CALC = timer::Calculator<TIMER>;
-using TIMER_TYPE = timer::Timer<TIMER>;
+using CALC = timer::Calculator<NTIMER>;
+using TIMER = timer::Timer<NTIMER>;
 
 // Frequency for PWM
 constexpr const uint16_t PWM_FREQUENCY = 450;
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
+constexpr const TIMER::PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
 
 int main()
 {
 	board::init();
 	// Initialize timer and pins
-	TIMER_TYPE timer{timer::TimerMode::FAST_PWM, PRESCALER};
+	TIMER timer{timer::TimerMode::FAST_PWM, PRESCALER};
 	LED_OUTPUT1 led1{timer};
 	LED_OUTPUT2 led2{timer};
 	ANALOG_INPUT1 pot1;

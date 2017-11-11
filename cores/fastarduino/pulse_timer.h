@@ -87,19 +87,23 @@ namespace timer
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every
 	// 20ms, ie with a 50Hz frequency.
 	// This implementation ensures a good pulse width precision for 16-bits timer.
-	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER_>
-	class PulseTimer16 : public Timer<TIMER>
+	template<board::Timer NTIMER_, typename Calculator<NTIMER_>::PRESCALER PRESCALER_>
+	class PulseTimer16 : public Timer<NTIMER_>
 	{
-		using PARENT = Timer<TIMER>;
+	public:
+		static constexpr const board::Timer NTIMER = NTIMER_;
+
+	private:
+		using PARENT = Timer<NTIMER>;
 		using TRAIT = typename PARENT::TRAIT;
 		static_assert(TRAIT::IS_16BITS, "TIMER must be a 16 bits timer");
 
 	public:
-		using CALCULATOR = Calculator<TIMER>;
-		using TIMER_PRESCALER = typename CALCULATOR::TIMER_PRESCALER;
-		static constexpr const TIMER_PRESCALER PRESCALER = PRESCALER_;
+		using CALCULATOR = Calculator<NTIMER>;
+		using TPRESCALER = typename CALCULATOR::PRESCALER;
+		static constexpr const TPRESCALER PRESCALER = PRESCALER_;
 
-		PulseTimer16(uint16_t pulse_frequency) : Timer<TIMER>{TCCRA(), TCCRB()}
+		PulseTimer16(uint16_t pulse_frequency) : Timer<NTIMER>{TCCRA(), TCCRB()}
 		{
 			TRAIT::ICR = CALCULATOR::PWM_ICR_counter(PRESCALER, pulse_frequency);
 		}
@@ -121,20 +125,24 @@ namespace timer
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every
 	// 20ms, ie with a 50Hz frequency.
 	// This implementation ensures a good pulse width precision for 8-bits timers.
-	template<board::Timer TIMER, typename Calculator<TIMER>::TIMER_PRESCALER PRESCALER_>
-	class PulseTimer8 : public Timer<TIMER>
+	template<board::Timer NTIMER_, typename Calculator<NTIMER_>::PRESCALER PRESCALER_>
+	class PulseTimer8 : public Timer<NTIMER_>
 	{
-		using PARENT = Timer<TIMER>;
+	public:
+		static constexpr const board::Timer NTIMER = NTIMER_;
+
+	private:
+		using PARENT = Timer<NTIMER>;
 		using TRAIT = typename PARENT::TRAIT;
 		static_assert(!TRAIT::IS_16BITS, "TIMER must be an 8 bits timer");
 
 	public:
-		using CALCULATOR = Calculator<TIMER>;
-		using TIMER_PRESCALER = typename CALCULATOR::TIMER_PRESCALER;
-		static constexpr const TIMER_PRESCALER PRESCALER = PRESCALER_;
+		using CALCULATOR = Calculator<NTIMER>;
+		using TPRESCALER = typename CALCULATOR::PRESCALER;
+		static constexpr const TPRESCALER PRESCALER = PRESCALER_;
 
 		PulseTimer8(uint16_t pulse_frequency)
-			: Timer<TIMER>{TCCRA(), TCCRB(), TIMSK()}, MAX{OVERFLOW_COUNTER(pulse_frequency)}
+			: Timer<NTIMER>{TCCRA(), TCCRB(), TIMSK()}, MAX{OVERFLOW_COUNTER(pulse_frequency)}
 		{
 			// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 			interrupt::register_handler(*this);
@@ -173,12 +181,14 @@ namespace timer
 	};
 
 	// Unified API for PulseTimer whatever the timer bits size (no need to use PulseTimer8 or PulseTimer16)
-	template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER,
-			 typename T = typename board_traits::Timer_trait<TIMER>::TYPE>
-	class PulseTimer : public timer::Timer<TIMER>
+	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER,
+			 typename T = typename board_traits::Timer_trait<NTIMER_>::TYPE>
+	class PulseTimer : public timer::Timer<NTIMER_>
 	{
 	public:
-		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<TIMER>{0, 0}
+		static constexpr const board::Timer NTIMER = NTIMER_;
+
+		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER>{0, 0}
 		{
 		}
 		inline void begin()
@@ -189,20 +199,20 @@ namespace timer
 		}
 	};
 
-	template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
-	class PulseTimer<TIMER, PRESCALER, uint8_t> : public timer::PulseTimer8<TIMER, PRESCALER>
+	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_>
+	class PulseTimer<NTIMER_, PRESCALER_, uint8_t> : public timer::PulseTimer8<NTIMER_, PRESCALER_>
 	{
 	public:
-		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer8<TIMER, PRESCALER>{pulse_frequency}
+		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer8<NTIMER_, PRESCALER_>{pulse_frequency}
 		{
 		}
 	};
 
-	template<board::Timer TIMER, typename timer::Calculator<TIMER>::TIMER_PRESCALER PRESCALER>
-	class PulseTimer<TIMER, PRESCALER, uint16_t> : public timer::PulseTimer16<TIMER, PRESCALER>
+	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_>
+	class PulseTimer<NTIMER_, PRESCALER_, uint16_t> : public timer::PulseTimer16<NTIMER_, PRESCALER_>
 	{
 	public:
-		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer16<TIMER, PRESCALER>{pulse_frequency}
+		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer16<NTIMER_, PRESCALER_>{pulse_frequency}
 		{
 		}
 	};

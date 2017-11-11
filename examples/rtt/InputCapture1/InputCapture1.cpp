@@ -29,24 +29,24 @@
 #define UART_NUM 0
 static constexpr const board::USART UART = board::USART::USART0;
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #elif defined (ARDUINO_MEGA)
 #define HAS_UART 1
 #define UART_NUM 0
 static constexpr const board::USART UART = board::USART::USART0;
 #define TIMER_NUM 4
-static constexpr const board::Timer TIMER = board::Timer::TIMER4;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER4;
 #elif defined (ARDUINO_LEONARDO)
 #define HAS_UART 1
 #define UART_NUM 1
 static constexpr const board::USART UART = board::USART::USART1;
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_UART 0
 static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -65,23 +65,23 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 // Timer stuff
-using TIMER_TYPE = timer::Timer<TIMER>;
-using TYPE = TIMER_TYPE::TIMER_TYPE;
-static constexpr const board::DigitalPin ICP = TIMER_TYPE::ICP_PIN;
+using TIMER = timer::Timer<NTIMER>;
+using TYPE = TIMER::TYPE;
+static constexpr const board::DigitalPin ICP = TIMER::ICP_PIN;
 static constexpr const uint32_t PRECISION = 10000UL;
-using CALC = timer::Calculator<TIMER>;
-static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::tick_prescaler(PRECISION);
+using CALC = timer::Calculator<NTIMER>;
+static constexpr const TIMER::PRESCALER PRESCALER = CALC::tick_prescaler(PRECISION);
 #if F_CPU == 16000000UL
-static_assert(PRESCALER == TIMER_TYPE::TIMER_PRESCALER::DIV_1024, "PRESCALER should be DIV_1024");
+static_assert(PRESCALER == TIMER::PRESCALER::DIV_1024, "PRESCALER should be DIV_1024");
 #elif F_CPU == 8000000UL
-static_assert(PRESCALER == TIMER_TYPE::TIMER_PRESCALER::DIV_256, "PRESCALER should be DIV_256");
+static_assert(PRESCALER == TIMER::PRESCALER::DIV_256, "PRESCALER should be DIV_256");
 #else
 #error "Current frequency not supported!"
 #endif
 
 static constexpr uint32_t milliseconds(uint32_t ticks, uint32_t overflows)
 {
-	return (ticks + overflows * TIMER_TYPE::TIMER_MAX) * 1000UL / CALC::CTC_frequency(PRESCALER);
+	return (ticks + overflows * TIMER::TIMER_MAX) * 1000UL / CALC::CTC_frequency(PRESCALER);
 }
 
 using timer::TimerInputCapture;
@@ -90,7 +90,7 @@ using timer::TimerInterrupt;
 class Capture
 {
 public:
-	Capture(TIMER_TYPE& timer):_timer{timer}, _input{gpio::PinMode::INPUT_PULLUP}, _ready{false}, _capture{0} {}
+	Capture(TIMER& timer):_timer{timer}, _input{gpio::PinMode::INPUT_PULLUP}, _ready{false}, _capture{0} {}
 
 	void on_capture(TYPE capture)
 	{
@@ -139,7 +139,7 @@ public:
 	}
 
 private:
-	TIMER_TYPE& _timer;
+	TIMER& _timer;
 	gpio::FastPinType<ICP>::TYPE _input;
 	volatile bool _ready;
 	volatile TYPE _capture;
@@ -167,7 +167,7 @@ int main()
 	out.width(0);
 	out << F("Started\n");
 	
-	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
+	TIMER timer{timer::TimerMode::NORMAL, PRESCALER};
 
 	timer.begin();
 	Capture capture{timer};

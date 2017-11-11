@@ -29,23 +29,23 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/time.h>
 
-constexpr const board::Timer BLINK_TIMER = board::Timer::TIMER0;
-using BLINK_CALC = timer::Calculator<BLINK_TIMER>;
-using BLINK_TIMER_TYPE = timer::Timer<BLINK_TIMER>;
+constexpr const board::Timer BLINK_NTIMER = board::Timer::TIMER0;
+using BLINK_CALC = timer::Calculator<BLINK_NTIMER>;
+using BLINK_TIMER = timer::Timer<BLINK_NTIMER>;
 constexpr const uint32_t BLINK_PERIOD_US = 10000;
-constexpr const BLINK_TIMER_TYPE::TIMER_PRESCALER BLINK_PRESCALER = BLINK_CALC::CTC_prescaler(BLINK_PERIOD_US);
+constexpr const BLINK_TIMER::PRESCALER BLINK_PRESCALER = BLINK_CALC::CTC_prescaler(BLINK_PERIOD_US);
 static_assert(BLINK_CALC::is_adequate_for_CTC(BLINK_PRESCALER, BLINK_PERIOD_US), 
 		"BLINK_TIMER_TYPE::is_adequate(BLINK_PRESCALER, BLINK_PERIOD_US)");
-constexpr const BLINK_TIMER_TYPE::TIMER_TYPE BLINK_COUNTER = BLINK_CALC::CTC_counter(BLINK_PRESCALER, BLINK_PERIOD_US);
+constexpr const BLINK_TIMER::TYPE BLINK_COUNTER = BLINK_CALC::CTC_counter(BLINK_PRESCALER, BLINK_PERIOD_US);
 
-constexpr const board::Timer SUSPEND_TIMER = board::Timer::TIMER1;
-using SUSPEND_CALC = timer::Calculator<SUSPEND_TIMER>;
-using SUSPEND_TIMER_TYPE = timer::Timer<SUSPEND_TIMER>;
+constexpr const board::Timer SUSPEND_NTIMER = board::Timer::TIMER1;
+using SUSPEND_CALC = timer::Calculator<SUSPEND_NTIMER>;
+using SUSPEND_TIMER = timer::Timer<SUSPEND_NTIMER>;
 constexpr const uint32_t SUSPEND_PERIOD_US = 4000000;
-constexpr const SUSPEND_TIMER_TYPE::TIMER_PRESCALER SUSPEND_PRESCALER = SUSPEND_CALC::CTC_prescaler(SUSPEND_PERIOD_US);
+constexpr const SUSPEND_TIMER::PRESCALER SUSPEND_PRESCALER = SUSPEND_CALC::CTC_prescaler(SUSPEND_PERIOD_US);
 static_assert(SUSPEND_CALC::is_adequate_for_CTC(SUSPEND_PRESCALER, SUSPEND_PERIOD_US), 
 		"SUSPEND_TIMER_TYPE::is_adequate(SUSPEND_PRESCALER, SUSPEND_PERIOD_US)");
-constexpr const SUSPEND_TIMER_TYPE::TIMER_TYPE SUSPEND_COUNTER = SUSPEND_CALC::CTC_counter(SUSPEND_PRESCALER, SUSPEND_PERIOD_US);
+constexpr const SUSPEND_TIMER::TYPE SUSPEND_COUNTER = SUSPEND_CALC::CTC_counter(SUSPEND_PRESCALER, SUSPEND_PERIOD_US);
 
 class BlinkHandler
 {
@@ -66,7 +66,7 @@ private:
 class SuspendHandler
 {
 public:
-	SuspendHandler(BLINK_TIMER_TYPE& blink_timer):_blink_timer{blink_timer} {}
+	SuspendHandler(BLINK_TIMER& blink_timer):_blink_timer{blink_timer} {}
 	
 	void on_timer()
 	{
@@ -77,7 +77,7 @@ public:
 	}
 	
 private:
-	BLINK_TIMER_TYPE& _blink_timer;
+	BLINK_TIMER& _blink_timer;
 };
 
 // Define vectors we need in the example
@@ -89,9 +89,9 @@ int main()
 {
 	board::init();
 	BlinkHandler blink_handler;
-	BLINK_TIMER_TYPE blink_timer{timer::TimerMode::CTC, BLINK_PRESCALER};
+	BLINK_TIMER blink_timer{timer::TimerMode::CTC, BLINK_PRESCALER};
 	SuspendHandler suspend_handler{blink_timer};
-	SUSPEND_TIMER_TYPE suspend_timer{timer::TimerMode::CTC, SUSPEND_PRESCALER};
+	SUSPEND_TIMER suspend_timer{timer::TimerMode::CTC, SUSPEND_PRESCALER};
 	interrupt::register_handler(blink_handler);
 	interrupt::register_handler(suspend_handler);
 	blink_timer._begin(BLINK_COUNTER);

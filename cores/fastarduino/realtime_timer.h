@@ -104,16 +104,20 @@ namespace timer
 	 * - delay program execution for some us or ms
 	 * - generate periodic events
 	 * 
-	 * @tparam TIMER the AVR timer used by this RTT
+	 * @tparam NTIMER_ the AVR timer used by this RTT
 	 * @sa board::Timer
 	 * @sa REGISTER_RTT_ISR()
 	 */
-	template<board::Timer TIMER> class RTT : private Timer<TIMER>
+	template<board::Timer NTIMER_> class RTT : private Timer<NTIMER_>
 	{
+	public:
+		/** The AVR timer used by this RTT. */
+		static constexpr const board::Timer NTIMER = NTIMER_;
+
 	private:
-		using TRAIT = typename Timer<TIMER>::TRAIT;
-		using TIMER_TYPE = typename Timer<TIMER>::TIMER_TYPE;
-		using TIMER_PRESCALER = typename Timer<TIMER>::TIMER_PRESCALER;
+		using TRAIT = typename Timer<NTIMER>::TRAIT;
+		using TYPE = typename Timer<NTIMER>::TYPE;
+		using PRESCALER = typename Timer<NTIMER>::PRESCALER;
 
 	public:
 		/**
@@ -123,7 +127,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT() : Timer<TIMER>{TimerMode::CTC, MILLI_PRESCALER}, _millis{}
+		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER}, _millis{}
 		{
 		}
 
@@ -245,7 +249,7 @@ namespace timer
 		inline void _begin()
 		{
 			_millis = 0;
-			Timer<TIMER>::_begin(MILLI_COUNTER);
+			Timer<NTIMER>::_begin(MILLI_COUNTER);
 		}
 
 		/**
@@ -259,7 +263,7 @@ namespace timer
 		 */
 		inline void end()
 		{
-			Timer<TIMER>::end();
+			Timer<NTIMER>::end();
 		}
 
 		/**
@@ -275,7 +279,7 @@ namespace timer
 		 */
 		inline void _end()
 		{
-			Timer<TIMER>::_end();
+			Timer<NTIMER>::_end();
 		}
 
 		/// @cond notdocumented
@@ -286,7 +290,7 @@ namespace timer
 		/// @endcond
 
 		//TODO DOC
-		inline Timer<TIMER>& timer()
+		inline Timer<NTIMER>& timer()
 		{
 			return *this;
 		}
@@ -297,15 +301,14 @@ namespace timer
 		/// @endcond
 
 	private:
-		using CALC = Calculator<TIMER>;
+		using CALC = Calculator<NTIMER>;
 		static constexpr const uint32_t ONE_MILLI = 1000UL;
-		static constexpr const TIMER_PRESCALER MILLI_PRESCALER = CALC::CTC_prescaler(ONE_MILLI);
-		static constexpr const TIMER_TYPE MILLI_COUNTER = CALC::CTC_counter(MILLI_PRESCALER, ONE_MILLI);
+		static constexpr const PRESCALER MILLI_PRESCALER = CALC::CTC_prescaler(ONE_MILLI);
+		static constexpr const TYPE MILLI_COUNTER = CALC::CTC_counter(MILLI_PRESCALER, ONE_MILLI);
 
 		inline uint16_t compute_micros() const
 		{
-			return uint16_t(ONE_MILLI * ((volatile TIMER_TYPE&) TRAIT::TCNT) /
-							(1 + (volatile TIMER_TYPE&) TRAIT::OCRA));
+			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1 + (volatile TYPE&) TRAIT::OCRA));
 		}
 	};
 
