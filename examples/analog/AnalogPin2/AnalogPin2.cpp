@@ -52,7 +52,7 @@ static constexpr const uint8_t LED_MASK = 0x7F;
 #error "Current target is not yet supported!"
 #endif
 
-using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
+using ANALOG_INPUT = analog::AnalogInput<POT, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 
 int main()
 {

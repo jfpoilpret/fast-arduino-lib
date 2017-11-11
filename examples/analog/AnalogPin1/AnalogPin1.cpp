@@ -75,9 +75,7 @@ constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-//using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint16_t, board::AnalogClock::MAX_FREQ_200KHz>;
-//using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_200KHz>;
-using ANALOG_INPUT = analog::AnalogInput<POT, board::AnalogReference::AVCC, uint8_t, board::AnalogClock::MAX_FREQ_1MHz>;
+using ANALOG_INPUT = analog::AnalogInput<POT, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_1MHz>;
 
 using streams::endl;
 using streams::flush;

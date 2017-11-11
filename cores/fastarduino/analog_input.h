@@ -31,25 +31,45 @@ namespace analog
 {
 	//TODO LATER: add class (or namespace?) with general methods enable/disable ADC...
 
-	//FIXME better put arguments in APIN, TYPE, MAXFREQ, AREF
 	/**
 	 * API that handles a given analog input pin of the target MCU.
 	 * 
-	 * @tparam APIN a unique analog pin for the MCU target; this may also not be
+	 * @tparam APIN_ a unique analog pin for the MCU target; this may also not be
 	 * a real pin but an internal sensor (e.g. temperature or bandgap).
-	 * @tparam AREF the analog reference to use for that input
-	 * @tparam SAMPLE_TYPE the type of samples, either `uint8_t` (8 bits) or
+	 * @tparam AREF_ the analog reference to use for that input
+	 * @tparam SAMPLE_TYPE_ the type of samples, either `uint8_t` (8 bits) or
 	 * `uint16_t` (10 bits)
-	 * @tparam MAXFREQ the maximum input clock frequency of the ADC circuit; higher
+	 * @tparam MAXFREQ_ the maximum input clock frequency of the ADC circuit; higher
 	 * frequencies imply lower precision of samples.
 	 * @sa board::AnalogPin
 	 * @sa board::AnalogReference
 	 * @sa board::AnalogClock
 	 */
-	template<board::AnalogPin APIN, board::AnalogReference AREF = board::AnalogReference::AVCC,
-			 typename SAMPLE_TYPE = uint16_t, board::AnalogClock MAXFREQ = board::AnalogClock::MAX_FREQ_200KHz>
+	template<board::AnalogPin APIN_, typename SAMPLE_TYPE_ = uint16_t,
+			 board::AnalogReference AREF_ = board::AnalogReference::AVCC,
+			 board::AnalogClock MAXFREQ_ = board::AnalogClock::MAX_FREQ_200KHz>
 	class AnalogInput
 	{
+	public:
+		/**
+		 * The analog pin for this AnalogInput; this may also not be
+		 * a real pin but an internal sensor (e.g. temperature or bandgap).
+		 */
+		static constexpr const board::AnalogPin APIN = APIN_;
+		/**
+		 * The analog reference to use for that analog input.
+		 */
+		static constexpr const board::AnalogReference AREF = AREF_;
+		/**
+		 * The type of samples returned by `sample()`.
+		 */
+		using SAMPLE_TYPE = SAMPLE_TYPE_;
+		/**
+		 * The maximum input clock frequency of the ADC circuit; higher
+		 * frequencies imply lower precision of samples.
+		 */
+		static constexpr const board::AnalogClock MAXFREQ = MAXFREQ_;
+
 	private:
 		using TRAIT = board_traits::AnalogPin_trait<APIN>;
 		using GLOBAL_TRAIT = board_traits::GlobalAnalogPin_trait;
@@ -108,7 +128,7 @@ namespace analog
 	 */
 	template<board::AnalogPin BG = board::AnalogPin::BANDGAP>
 	class PowerVoltage
-		: public AnalogInput<BG, board::AnalogReference::AVCC, uint16_t, board::AnalogClock::MAX_FREQ_50KHz>
+		: public AnalogInput<BG, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz>
 	{
 	private:
 		using TRAIT = board_traits::AnalogPin_trait<BG>;
