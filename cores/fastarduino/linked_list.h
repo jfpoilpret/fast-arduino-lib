@@ -22,19 +22,19 @@ namespace containers
 	class LinkImpl
 	{
 	public:
-		LinkImpl() INLINE : _next{0}
+		LinkImpl() INLINE : next_{0}
 		{
 		}
 
 	protected:
-		LinkImpl* _next;
+		LinkImpl* next_;
 		friend class LinkedListImpl;
 	};
 
 	class LinkedListImpl
 	{
 	public:
-		LinkedListImpl() INLINE : _head{0}
+		LinkedListImpl() INLINE : head_{0}
 		{
 		}
 		void insert(LinkImpl* item);
@@ -42,7 +42,7 @@ namespace containers
 		template<typename F> void traverse(F f);
 
 	protected:
-		LinkImpl* _head;
+		LinkImpl* head_;
 	};
 
 	template<typename T_> class LinkedList : private LinkedListImpl
@@ -71,7 +71,7 @@ namespace containers
 	private:
 		T* head() INLINE
 		{
-			return (T*) _head;
+			return (T*) head_;
 		}
 	};
 
@@ -83,7 +83,7 @@ namespace containers
 	private:
 		T* next() INLINE
 		{
-			return (T*) _next;
+			return (T*) next_;
 		}
 		friend class LinkedList<T>;
 	};

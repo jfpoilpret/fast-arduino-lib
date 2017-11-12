@@ -190,26 +190,26 @@ namespace time
 	public:
 		static void set_clock(const CLOCK& clock)
 		{
-			_clock = &clock;
+			clock_ = &clock;
 			time::delay = TYPE::delay;
 			time::millis = TYPE::millis;
 		}
 
 		static void delay(uint32_t ms)
 		{
-			_clock->delay(ms);
+			clock_->delay(ms);
 		}
 
 		static uint32_t millis()
 		{
-			return _clock->millis();
+			return clock_->millis();
 		}
 
 	private:
-		static const CLOCK* _clock;
+		static const CLOCK* clock_;
 	};
 
-	template<typename CLOCK> const CLOCK* ClockDelegate<CLOCK>::_clock = 0;
+	template<typename CLOCK> const CLOCK* ClockDelegate<CLOCK>::clock_ = 0;
 	// @endcond
 
 	/**
@@ -259,18 +259,18 @@ namespace time
 		 * for later restore.
 		 * @param new_delay new function pointer to replace `time::delay`
 		 */
-		auto_delay(DELAY_PTR new_delay) INLINE : _old_delay{delay}
+		auto_delay(DELAY_PTR new_delay) INLINE : old_delay_{delay}
 		{
 			delay = new_delay;
 		}
 		/// @cond notdocumented
 		~auto_delay() INLINE
 		{
-			delay = _old_delay;
+			delay = old_delay_;
 		}
 		/// @endcond
 	private:
-		const DELAY_PTR _old_delay;
+		const DELAY_PTR old_delay_;
 	};
 
 	/**
@@ -300,18 +300,18 @@ namespace time
 		 * for later restore.
 		 * @param new_millis new function pointer to replace `time::millis`
 		 */
-		auto_millis(MILLIS_PTR new_millis) INLINE : _old_millis{millis}
+		auto_millis(MILLIS_PTR new_millis) INLINE : old_millis_{millis}
 		{
 			millis = new_millis;
 		}
 		/// @cond notdocumented
 		~auto_millis() INLINE
 		{
-			millis = _old_millis;
+			millis = old_millis_;
 		}
 		/// @endcond
 	private:
-		const MILLIS_PTR _old_millis;
+		const MILLIS_PTR old_millis_;
 	};
 };
 

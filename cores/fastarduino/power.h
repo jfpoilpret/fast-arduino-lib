@@ -27,11 +27,11 @@ namespace power
 	public:
 		static void set_default_mode(board::SleepMode mode)
 		{
-			if (mode != board::SleepMode::DEFAULT_MODE) _default_mode = mode;
+			if (mode != board::SleepMode::DEFAULT_MODE) default_mode_ = mode;
 		}
 		static void sleep()
 		{
-			sleep(_default_mode);
+			sleep(default_mode_);
 		}
 
 		static void sleep(board::SleepMode mode)
@@ -45,7 +45,7 @@ namespace power
 		}
 
 	private:
-		static board::SleepMode _default_mode;
+		static board::SleepMode default_mode_;
 	};
 }
 

@@ -38,7 +38,7 @@ namespace i2c
 		static constexpr const I2CMode MODE = MODE_;
 		inline uint8_t status() const INLINE
 		{
-			return _status;
+			return status_;
 		}
 
 		// Low-level methods to handle the bus, used by friend class I2CDevice
@@ -66,7 +66,7 @@ namespace i2c
 		inline void SDA_INPUT() INLINE;
 		inline void SDA_OUTPUT() INLINE;
 
-		bool _start(uint8_t good_status);
+		bool send_start(uint8_t good_status);
 		bool send_byte(uint8_t data, uint8_t ACK, uint8_t NACK);
 		uint8_t transfer(uint8_t USISR_count);
 		bool callback_hook(bool ok, uint8_t good_status, uint8_t bad_status);
@@ -86,8 +86,8 @@ namespace i2c
 		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(MODE == I2CMode::Standard ? 4.7 : 1.3);
 #endif
 
-		uint8_t _status;
-		const I2C_STATUS_HOOK _hook;
+		uint8_t status_;
+		const I2C_STATUS_HOOK hook_;
 
 		friend class I2CManager<MODE>;
 	};
@@ -99,7 +99,7 @@ namespace i2c
 
 	// ATmega implementation
 	//----------------------
-	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : _status{}, _hook{hook}
+	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : status_{}, hook_{hook}
 	{
 	}
 
@@ -175,11 +175,11 @@ namespace i2c
 	template<I2CMode MODE> bool I2CHandler<MODE>::wait_twint(uint8_t expected_status)
 	{
 		loop_until_bit_is_set(TWCR, TWINT);
-		_status = TWSR & 0xF8;
-		if (_hook) _hook(expected_status, _status);
-		if (_status == expected_status)
+		status_ = TWSR & 0xF8;
+		if (hook_) hook_(expected_status, status_);
+		if (status_ == expected_status)
 		{
-			_status = 0;
+			status_ = 0;
 			return true;
 		}
 		else
@@ -190,7 +190,7 @@ namespace i2c
 
 	// ATtiny implementation
 	//----------------------
-	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : _status{}, _hook{hook}
+	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : status_{}, hook_{hook}
 	{
 		// set SDA/SCL default directions
 		TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
@@ -247,11 +247,11 @@ namespace i2c
 
 	template<I2CMode MODE> bool I2CHandler<MODE>::start()
 	{
-		return _start(Status::START_TRANSMITTED);
+		return send_start(Status::START_TRANSMITTED);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::repeat_start()
 	{
-		return _start(Status::REPEAT_START_TRANSMITTED);
+		return send_start(Status::REPEAT_START_TRANSMITTED);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slar(uint8_t address)
 	{
@@ -287,7 +287,7 @@ namespace i2c
 		_delay_loop_1(T_BUF);
 	}
 
-	template<I2CMode MODE> bool I2CHandler<MODE>::_start(uint8_t good_status)
+	template<I2CMode MODE> bool I2CHandler<MODE>::send_start(uint8_t good_status)
 	{
 		// Ensure SCL is HIGH
 		SCL_HIGH();
@@ -341,8 +341,8 @@ namespace i2c
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::callback_hook(bool ok, uint8_t good_status, uint8_t bad_status)
 	{
-		if (_hook) _hook(good_status, (ok ? good_status : bad_status));
-		_status = (ok ? Status::OK : bad_status);
+		if (hook_) hook_(good_status, (ok ? good_status : bad_status));
+		status_ = (ok ? Status::OK : bad_status);
 		return ok;
 	}
 

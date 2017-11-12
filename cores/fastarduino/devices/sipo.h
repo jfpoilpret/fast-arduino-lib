@@ -19,15 +19,19 @@
 
 namespace devices
 {
-	template<board::DigitalPin CLOCK, board::DigitalPin LATCH, board::DigitalPin DATA> class SIPO
+	template<board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_> class SIPO
 	{
 	public:
+		static constexpr const board::DigitalPin CLOCK = CLOCK_;
+		static constexpr const board::DigitalPin LATCH = LATCH_;
+		static constexpr const board::DigitalPin DATA = DATA_;
+		
 		static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
 		static constexpr const uint8_t DDR_MASK =
 			gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;
 		static constexpr const uint8_t PORT_MASK = gpio::FastPinType<LATCH>::MASK;
 
-		SIPO() : _clock{}, _latch{}, _data{}
+		SIPO() : clock_{}, latch_{}, data_{}
 		{
 			static_assert(PORT == gpio::FastPinType<LATCH>::PORT && PORT == gpio::FastPinType<DATA>::PORT,
 						  "CLOCK, LATCH and DATA pins must belong to the same PORT");
@@ -35,54 +39,54 @@ namespace devices
 
 		inline void init()
 		{
-			_clock.set_mode(gpio::PinMode::OUTPUT, false);
-			_latch.set_mode(gpio::PinMode::OUTPUT, true);
-			_data.set_mode(gpio::PinMode::OUTPUT, false);
+			clock_.set_mode(gpio::PinMode::OUTPUT, false);
+			latch_.set_mode(gpio::PinMode::OUTPUT, true);
+			data_.set_mode(gpio::PinMode::OUTPUT, false);
 		}
 
 		template<typename T> void output(T data)
 		{
 			uint8_t* pdata = (uint8_t*) data;
-			_latch.clear();
-			for (uint8_t i = 0; i < sizeof(T); ++i) _output(pdata[i]);
-			_latch.set();
+			latch_.clear();
+			for (uint8_t i = 0; i < sizeof(T); ++i) bit_bang_data(pdata[i]);
+			latch_.set();
 		}
 
 		// Specialized output for most common types
 		inline void output(uint8_t data) INLINE
 		{
-			_latch.clear();
-			_output(data);
-			_latch.set();
+			latch_.clear();
+			bit_bang_data(data);
+			latch_.set();
 		}
 
 		inline void output(uint16_t data) INLINE
 		{
-			_latch.clear();
-			_output(data >> 8);
-			_output(data);
-			_latch.set();
+			latch_.clear();
+			bit_bang_data(data >> 8);
+			bit_bang_data(data);
+			latch_.set();
 		}
 
 	private:
-		void _output(uint8_t data)
+		void bit_bang_data(uint8_t data)
 		{
 			uint8_t mask = 0x80;
 			do
 			{
 				if (data & mask)
-					_data.set();
+					data_.set();
 				else
-					_data.clear();
-				_clock.set();
+					data_.clear();
+				clock_.set();
 				mask >>= 1;
-				_clock.clear();
+				clock_.clear();
 			} while (mask);
 		}
 
-		typename gpio::FastPinType<CLOCK>::TYPE _clock;
-		typename gpio::FastPinType<LATCH>::TYPE _latch;
-		typename gpio::FastPinType<DATA>::TYPE _data;
+		typename gpio::FastPinType<CLOCK>::TYPE clock_;
+		typename gpio::FastPinType<LATCH>::TYPE latch_;
+		typename gpio::FastPinType<DATA>::TYPE data_;
 	};
 }
 

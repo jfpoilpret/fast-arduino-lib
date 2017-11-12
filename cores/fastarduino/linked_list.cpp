@@ -18,31 +18,31 @@ namespace containers
 {
 	void LinkedListImpl::insert(LinkImpl* item)
 	{
-		item->_next = _head;
-		_head = item;
+		item->next_ = head_;
+		head_ = item;
 	}
 
 	bool LinkedListImpl::remove(LinkImpl* item)
 	{
-		if (_head == 0) return false;
-		if (_head == item)
+		if (head_ == 0) return false;
+		if (head_ == item)
 		{
-			_head = _head->_next;
-			item->_next = 0;
+			head_ = head_->next_;
+			item->next_ = 0;
 			return true;
 		}
-		LinkImpl* previous = _head;
-		LinkImpl* current = _head->_next;
+		LinkImpl* previous = head_;
+		LinkImpl* current = head_->next_;
 		while (current != 0)
 		{
 			if (current == item)
 			{
-				previous->_next = current->_next;
-				item->_next = 0;
+				previous->next_ = current->next_;
+				item->next_ = 0;
 				return true;
 			}
 			previous = current;
-			current = current->_next;
+			current = current->next_;
 		}
 		return false;
 	}

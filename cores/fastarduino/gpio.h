@@ -413,7 +413,7 @@ namespace gpio
 		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
 		 * methods.
 		 */
-		FastMaskedPort(uint8_t mask = 0) : _mask{mask}
+		FastMaskedPort(uint8_t mask = 0) : mask_{mask}
 		{
 		}
 
@@ -436,7 +436,7 @@ namespace gpio
 		 * @sa set_DDR()
 		 * @sa set_PORT()
 		 */
-		FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0) : _mask{mask}
+		FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0) : mask_{mask}
 		{
 			set_DDR(ddr);
 			set_PORT(port);
@@ -458,7 +458,7 @@ namespace gpio
 		 */
 		void set_PORT(uint8_t port) INLINE
 		{
-			TRAIT::PORT = (TRAIT::PORT & ~_mask) | (port & _mask);
+			TRAIT::PORT = (TRAIT::PORT & ~mask_) | (port & mask_);
 		}
 
 		/**
@@ -474,7 +474,7 @@ namespace gpio
 		 */
 		uint8_t get_PORT() INLINE
 		{
-			return TRAIT::PORT & _mask;
+			return TRAIT::PORT & mask_;
 		}
 
 		/**
@@ -489,7 +489,7 @@ namespace gpio
 		 */
 		void set_DDR(uint8_t ddr) INLINE
 		{
-			TRAIT::DDR = (TRAIT::DDR & ~_mask) | (ddr & _mask);
+			TRAIT::DDR = (TRAIT::DDR & ~mask_) | (ddr & mask_);
 		}
 
 		/**
@@ -502,7 +502,7 @@ namespace gpio
 		 */
 		uint8_t get_DDR() INLINE
 		{
-			return TRAIT::DDR & _mask;
+			return TRAIT::DDR & mask_;
 		}
 
 		/**
@@ -515,7 +515,7 @@ namespace gpio
 		 */
 		void set_PIN(uint8_t pin) INLINE
 		{
-			TRAIT::PIN = pin & _mask;
+			TRAIT::PIN = pin & mask_;
 		}
 
 		/**
@@ -526,11 +526,11 @@ namespace gpio
 		 */
 		uint8_t get_PIN() INLINE
 		{
-			return TRAIT::PIN & _mask;
+			return TRAIT::PIN & mask_;
 		}
 
 	private:
-		uint8_t _mask;
+		uint8_t mask_;
 	};
 
 	/**

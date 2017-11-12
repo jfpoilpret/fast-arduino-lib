@@ -132,7 +132,7 @@ namespace watchdog
 
 	protected:
 		/// @cond notdocumented
-		inline void _begin(uint8_t config) INLINE
+		inline void begin_with_config(uint8_t config) INLINE
 		{
 			wdt_reset();
 			MCUSR |= 1 << WDRF;
@@ -161,7 +161,7 @@ namespace watchdog
 		 * watchdog tick
 		 */
 		Watchdog(containers::Queue<events::Event>& event_queue)
-			: _millis{0}, _millis_per_tick{0}, _event_queue(event_queue)
+			: millis_{0}, millis_per_tick_{0}, event_queue_(event_queue)
 		{
 		}
 
@@ -195,7 +195,7 @@ namespace watchdog
 		 */
 		uint32_t millis() const
 		{
-			synchronized return _millis;
+			synchronized return millis_;
 		}
 
 		/**
@@ -215,15 +215,15 @@ namespace watchdog
 		/// @cond notdocumented
 		void on_tick()
 		{
-			_millis += _millis_per_tick;
-			_event_queue.push(events::Event{events::Type::WDT_TIMER});
+			millis_ += millis_per_tick_;
+			event_queue_._push(events::Event{events::Type::WDT_TIMER});
 		}
 		/// @endcond
 
 	private:
-		volatile uint32_t _millis;
-		uint16_t _millis_per_tick;
-		containers::Queue<events::Event>& _event_queue;
+		volatile uint32_t millis_;
+		uint16_t millis_per_tick_;
+		containers::Queue<events::Event>& event_queue_;
 	};
 }
 

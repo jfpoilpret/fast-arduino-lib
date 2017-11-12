@@ -38,7 +38,7 @@ namespace i2c
 		using HANDLER = typename MANAGER::HANDLER;
 
 	protected:
-		I2CDevice(MANAGER& manager) : _manager{manager.handler()}
+		I2CDevice(MANAGER& manager) : manager_{manager.handler()}
 		{
 		}
 
@@ -46,15 +46,15 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) &&
-					 _manager.send_slar(address);
-			while (ok && --size) ok = _manager.receive_data(*data++);
+				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start()) &&
+					 manager_.send_slar(address);
+			while (ok && --size) ok = manager_.receive_data(*data++);
 			if (uint8_t(conditions) & 0x04)
 			{
-				ok = ok && _manager.receive_data(*data++, true);
-				_manager.stop();
+				ok = ok && manager_.receive_data(*data++, true);
+				manager_.stop();
 			}
-			return _manager.status();
+			return manager_.status();
 		}
 		template<typename T> int read(uint8_t address, T& data, BusConditions conditions = BusConditions::START_STOP)
 		{
@@ -66,11 +66,11 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) &&
-					 _manager.send_slaw(address);
-			while (ok && size--) ok = _manager.send_data(*data++);
-			if (uint8_t(conditions) & 0x04) _manager.stop();
-			return _manager.status();
+				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start()) &&
+					 manager_.send_slaw(address);
+			while (ok && size--) ok = manager_.send_data(*data++);
+			if (uint8_t(conditions) & 0x04) manager_.stop();
+			return manager_.status();
 		}
 		template<typename T>
 		int write(uint8_t address, const T& data, BusConditions conditions = BusConditions::START_STOP)
@@ -82,15 +82,15 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? _manager.repeat_start() : _manager.start()) &&
-					 _manager.send_slaw(address);
-			ok = ok && _manager.send_data(data);
-			if (uint8_t(conditions) & 0x04) _manager.stop();
-			return _manager.status();
+				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start()) &&
+					 manager_.send_slaw(address);
+			ok = ok && manager_.send_data(data);
+			if (uint8_t(conditions) & 0x04) manager_.stop();
+			return manager_.status();
 		}
 
 	private:
-		HANDLER& _manager;
+		HANDLER& manager_;
 	};
 };
 

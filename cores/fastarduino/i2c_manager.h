@@ -25,21 +25,21 @@ namespace i2c
 	public:
 		static constexpr const I2CMode MODE = MODE_;
 
-		I2CManager(I2C_STATUS_HOOK hook = 0) : _handler{hook}
+		I2CManager(I2C_STATUS_HOOK hook = 0) : handler_{hook}
 		{
 		}
 
 		void begin() INLINE
 		{
-			_handler.begin();
+			handler_.begin();
 		}
 		void end() INLINE
 		{
-			_handler.end();
+			handler_.end();
 		}
 		uint8_t status() const
 		{
-			return _handler.status();
+			return handler_.status();
 		}
 
 	private:
@@ -47,10 +47,10 @@ namespace i2c
 
 		HANDLER& handler() INLINE
 		{
-			return _handler;
+			return handler_;
 		}
 
-		HANDLER _handler;
+		HANDLER handler_;
 		template<I2CMode M> friend class I2CDevice;
 	};
 };

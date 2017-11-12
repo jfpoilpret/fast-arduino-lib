@@ -14,4 +14,4 @@
 
 #include "power.h"
 
-board::SleepMode power::Power::_default_mode = board::SleepMode::IDLE;
+board::SleepMode power::Power::default_mode_ = board::SleepMode::IDLE;

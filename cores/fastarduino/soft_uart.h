@@ -99,7 +99,7 @@ namespace serial
 			}
 			virtual void on_overflow(UNUSED char c) override
 			{
-				_errors.all_errors.queue_overflow = true;
+				errors_.all_errors.queue_overflow = true;
 			}
 
 		private:
@@ -241,7 +241,7 @@ namespace serial
 			if (_rx.value()) return;
 			uint8_t value = 0;
 			bool odd = false;
-			_UARTErrors errors;
+			UARTErrors_ errors;
 			errors.has_errors = 0;
 			// Wait for start bit to finish
 			_delay_loop_2(_start_bit_rx_time);
@@ -281,7 +281,7 @@ namespace serial
 			}
 			else
 			{
-				_errors = errors;
+				errors_ = errors;
 				// Wait for 1st stop bit
 				_delay_loop_2(_stop_bit_rx_time_no_push);
 			}

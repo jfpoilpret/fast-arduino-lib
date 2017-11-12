@@ -57,7 +57,7 @@ namespace eeprom
 		{
 			if (!check(address, sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) &value;
-			for (uint16_t i = 0; i < sizeof(T); ++i) _blocked_read(address++, *v++);
+			for (uint16_t i = 0; i < sizeof(T); ++i) blocked_read(address++, *v++);
 			return true;
 		}
 
@@ -69,7 +69,7 @@ namespace eeprom
 		{
 			if (!check(address, count * sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) value;
-			for (uint16_t i = 0; i < count * sizeof(T); ++i) _blocked_read(address++, *v++);
+			for (uint16_t i = 0; i < count * sizeof(T); ++i) blocked_read(address++, *v++);
 			return true;
 		}
 
@@ -84,7 +84,7 @@ namespace eeprom
 				value = 0xFF;
 				return false;
 			}
-			_blocked_read(address, value);
+			blocked_read(address, value);
 			return true;
 		}
 
@@ -96,7 +96,7 @@ namespace eeprom
 		{
 			if (!check(address, sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) &value;
-			for (uint8_t i = 0; i < sizeof(T); ++i) _blocked_write(address++, *v++);
+			for (uint8_t i = 0; i < sizeof(T); ++i) blocked_write(address++, *v++);
 			return true;
 		}
 
@@ -108,7 +108,7 @@ namespace eeprom
 		{
 			if (!check(address, count * sizeof(T))) return false;
 			uint8_t* v = (uint8_t*) value;
-			for (uint8_t i = 0; i < count * sizeof(T); ++i) _blocked_write(address++, *v++);
+			for (uint8_t i = 0; i < count * sizeof(T); ++i) blocked_write(address++, *v++);
 			return true;
 		}
 
@@ -119,7 +119,7 @@ namespace eeprom
 		inline static bool write(uint16_t address, uint8_t value)
 		{
 			if (!check(address, 1)) return false;
-			_blocked_write(address, value);
+			blocked_write(address, value);
 			return true;
 		}
 
@@ -128,7 +128,7 @@ namespace eeprom
 			for (uint16_t address = 0; address < size(); ++address)
 			{
 				wait_until_ready();
-				_erase(address);
+				erase_address(address);
 			}
 		}
 
@@ -149,30 +149,30 @@ namespace eeprom
 			return size && (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
 		}
 
-		inline static void _blocked_read(uint16_t address, uint8_t& value)
+		inline static void blocked_read(uint16_t address, uint8_t& value)
 		{
 			wait_until_ready();
-			_read(address, value);
+			read_byte(address, value);
 		}
 
-		inline static void _read(uint16_t address, uint8_t& value)
+		inline static void read_byte(uint16_t address, uint8_t& value)
 		{
 			EEAR = address;
 			EECR = _BV(EERE);
 			value = EEDR;
 		}
 
-		inline static void _blocked_write(uint16_t address, uint8_t value)
+		inline static void blocked_write(uint16_t address, uint8_t value)
 		{
 			wait_until_ready();
-			_write(address, value);
+			write_byte(address, value);
 		}
 
 		// In order to optimize write time we read current byte first, then compare it with new value
 		// Then we choose between erase, write and erase+write based on comparison
 		// This approach is detailed in ATmel note AVR103: Using the EEPROM Programming Modes
 		// http://www.atmel.com/images/doc2578.pdf
-		inline static void _write(uint16_t address, uint8_t value)
+		inline static void write_byte(uint16_t address, uint8_t value)
 		{
 			EEAR = address;
 			EECR = _BV(EERE);
@@ -206,7 +206,7 @@ namespace eeprom
 			}
 		}
 
-		inline static bool _erase(uint16_t address)
+		inline static bool erase_address(uint16_t address)
 		{
 			EEAR = address;
 			EECR = _BV(EERE);
@@ -228,7 +228,7 @@ namespace eeprom
 	{
 	public:
 		template<uint16_t SIZE>
-		QueuedWriter(uint8_t (&buffer)[SIZE]) : _buffer{buffer}, _current{}, _erase{false}, _done{true}
+		QueuedWriter(uint8_t (&buffer)[SIZE]) : buffer_{buffer}, current_{}, erase_{false}, done_{true}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -241,7 +241,7 @@ namespace eeprom
 		template<typename T> bool write(uint16_t address, const T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
-			synchronized return _write(address, (uint8_t*) &value, sizeof(T));
+			synchronized return write_data(address, (uint8_t*) &value, sizeof(T));
 		}
 
 		template<typename T> inline bool write(const T* address, const T* value, uint16_t count)
@@ -252,7 +252,7 @@ namespace eeprom
 		template<typename T> bool write(uint16_t address, const T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
-			synchronized return _write(address, (uint8_t*) value, count * sizeof(T));
+			synchronized return write_data(address, (uint8_t*) value, count * sizeof(T));
 		}
 
 		inline bool write(const uint8_t* address, uint8_t value)
@@ -263,7 +263,7 @@ namespace eeprom
 		bool write(uint16_t address, uint8_t value)
 		{
 			if (!check(address, 1)) return false;
-			synchronized return _write(address, &value, 1);
+			synchronized return write_data(address, &value, 1);
 		}
 
 		void erase()
@@ -271,18 +271,18 @@ namespace eeprom
 			// First remove all pending writes
 			synchronized
 			{
-				_buffer._clear();
-				_current.size = 0;
+				buffer_._clear();
+				current_.size = 0;
 			}
 			// Wait until current byte write is finished
 			wait_until_done();
 			synchronized
 			{
 				// Start erase
-				_erase = true;
-				_done = false;
-				_current.address = 0;
-				_current.size = size();
+				erase_ = true;
+				done_ = false;
+				current_.address = 0;
+				current_.size = size();
 				// Start transmission if not done yet
 				EECR = _BV(EERIE);
 			}
@@ -290,50 +290,50 @@ namespace eeprom
 
 		void wait_until_done()
 		{
-			while (!_done)
+			while (!done_)
 				;
 		}
 
 		bool is_done()
 		{
-			return _done;
+			return done_;
 		}
 
 		bool on_ready()
 		{
-			if (_erase)
+			if (erase_)
 			{
-				if (_current.size)
+				if (current_.size)
 					erase_next();
 				else
 				{
 					// All erases are finished
-					_erase = false;
+					erase_ = false;
 					// Mark all EEPROM work as finished if no write is pending in the queue
-					if (_buffer._empty())
+					if (buffer_._empty())
 					{
-						_done = true;
+						done_ = true;
 						EECR = 0;
 					}
 				}
 			}
-			else if (_current.size)
+			else if (current_.size)
 				// There is one item being currently written, write next byte
 				write_next();
-			else if (!_buffer._empty())
+			else if (!buffer_._empty())
 			{
 				// Current item is finished writing but there is another item to be written in the queue
 				// Get new item and start transmission of first byte
-				_current = next_item();
+				current_ = next_item();
 				write_next();
 			}
 			else
 			{
 				// All writes are finished
-				_done = true;
+				done_ = true;
 				EECR = 0;
 			}
-			return _done;
+			return done_;
 		}
 
 	private:
@@ -342,29 +342,29 @@ namespace eeprom
 		void write_next()
 		{
 			uint8_t value;
-			_buffer._pull(value);
-			EEPROM::_write(_current.address++, value);
-			--_current.size;
+			buffer_._pull(value);
+			EEPROM::write_byte(current_.address++, value);
+			--current_.size;
 			EECR |= _BV(EERIE);
 		}
 
 		void erase_next()
 		{
-			EEPROM::_erase(_current.address++);
-			--_current.size;
+			EEPROM::erase_address(current_.address++);
+			--current_.size;
 			EECR |= _BV(EERIE);
 		}
 
-		bool _write(uint16_t address, uint8_t* value, uint16_t size)
+		bool write_data(uint16_t address, uint8_t* value, uint16_t size)
 		{
-			// First check if there is enough space in _buffer for this queued write
-			if ((_buffer._free() < size + ITEM_SIZE) || !size) return false;
-			_done = false;
+			// First check if there is enough space in buffer_ for this queued write
+			if ((buffer_._free() < size + ITEM_SIZE) || !size) return false;
+			done_ = false;
 			// Add new queued write to buffer
-			_buffer._push(WriteItem::value1(address, size));
-			_buffer._push(WriteItem::value2(address, size));
-			_buffer._push(WriteItem::value3(address, size));
-			for (uint16_t i = 0; i < size; ++i) _buffer._push(*value++);
+			buffer_._push(WriteItem::value1(address, size));
+			buffer_._push(WriteItem::value2(address, size));
+			buffer_._push(WriteItem::value3(address, size));
+			for (uint16_t i = 0; i < size; ++i) buffer_._push(*value++);
 
 			// Start transmission if not done yet
 			EECR = _BV(EERIE);
@@ -401,16 +401,16 @@ namespace eeprom
 		WriteItem next_item()
 		{
 			uint8_t value1, value2, value3;
-			_buffer._pull(value1);
-			_buffer._pull(value2);
-			_buffer._pull(value3);
+			buffer_._pull(value1);
+			buffer_._pull(value2);
+			buffer_._pull(value3);
 			return WriteItem{value1, value2, value3};
 		}
 
-		containers::Queue<uint8_t, uint8_t> _buffer;
-		WriteItem _current;
-		volatile bool _erase;
-		volatile bool _done;
+		containers::Queue<uint8_t, uint8_t> buffer_;
+		WriteItem current_;
+		volatile bool erase_;
+		volatile bool done_;
 	};
 }
 

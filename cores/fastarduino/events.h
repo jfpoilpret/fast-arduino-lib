@@ -32,26 +32,26 @@ namespace events
 		const uint8_t USER_EVENT = 128;
 	};
 
-	//TODO would it be possible/useful to make Event a template on `_value` type?
+	//TODO would it be possible/useful to make Event a template on `value_` type?
 	// In this case, we should also specialize template for T = void (no value needed)
 	class Event
 	{
 	public:
-		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) INLINE : _type{type}, _value{value}
+		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) INLINE : type_{type}, value_{value}
 		{
 		}
 		uint8_t type() const INLINE
 		{
-			return _type;
+			return type_;
 		}
 		uint16_t value() const INLINE
 		{
-			return _value;
+			return value_;
 		}
 
 	private:
-		uint8_t _type;
-		uint16_t _value;
+		uint8_t type_;
+		uint16_t value_;
 	};
 
 	class EventHandler;
@@ -68,17 +68,17 @@ namespace events
 	public:
 		uint8_t type() const INLINE
 		{
-			return _type;
+			return type_;
 		}
 
 		virtual void on_event(const Event& event) = 0;
 
 	protected:
-		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : _type{type}
+		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : type_{type}
 		{
 		}
 
-		uint8_t _type;
+		uint8_t type_;
 		//TODO is this really needed?
 		friend class Dispatcher;
 	};

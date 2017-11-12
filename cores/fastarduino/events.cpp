@@ -19,17 +19,17 @@ namespace events
 	class HandlerCaller
 	{
 	public:
-		HandlerCaller(const Event& event) INLINE : _event{event}
+		HandlerCaller(const Event& event) INLINE : event_{event}
 		{
 		}
 		bool operator()(EventHandler& handler) INLINE
 		{
-			if (handler.type() == _event.type()) handler.on_event(_event);
+			if (handler.type() == event_.type()) handler.on_event(event_);
 			return false;
 		}
 
 	private:
-		const Event _event;
+		const Event event_;
 	};
 
 	void Dispatcher::dispatch(const Event& event)

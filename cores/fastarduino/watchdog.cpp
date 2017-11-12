@@ -21,7 +21,7 @@ namespace watchdog
 	void WatchdogSignal::begin(TimeOut timeout)
 	{
 		uint8_t config = _BV(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? _BV(WDP3) : 0);
-		synchronized _begin(config);
+		synchronized begin_with_config(config);
 	}
 
 	void Watchdog::begin(TimeOut timeout)
@@ -31,9 +31,9 @@ namespace watchdog
 
 		synchronized
 		{
-			_begin(config);
-			_millis_per_tick = ms_per_tick;
-			_millis = 0;
+			begin_with_config(config);
+			millis_per_tick_ = ms_per_tick;
+			millis_ = 0;
 		}
 	}
 

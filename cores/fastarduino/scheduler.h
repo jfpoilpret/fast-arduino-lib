@@ -27,7 +27,7 @@ namespace events
 	public:
 		using CLOCK = CLOCK_;
 
-		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler{type}, _clock(clock)
+		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler{type}, clock_(clock)
 		{
 		}
 
@@ -48,7 +48,7 @@ namespace events
 		}
 
 	private:
-		const CLOCK& _clock;
+		const CLOCK& clock_;
 	};
 
 	class Job : public containers::Link<Job>
@@ -56,38 +56,38 @@ namespace events
 	public:
 		bool is_periodic() const INLINE
 		{
-			return _period != 0;
+			return period_ != 0;
 		}
 		uint32_t next_time() const INLINE
 		{
-			return _next_time;
+			return next_time_;
 		}
 		uint32_t period() const INLINE
 		{
-			return _period;
+			return period_;
 		}
 		void reschedule(uint32_t when) INLINE
 		{
-			_next_time = when;
+			next_time_ = when;
 		}
 
 		virtual void on_schedule(uint32_t millis) = 0;
 
 	protected:
-		Job(uint32_t next = 0, uint32_t period = 0) INLINE : _next_time(next), _period(period)
+		Job(uint32_t next = 0, uint32_t period = 0) INLINE : next_time_(next), period_(period)
 		{
 		}
 
 	private:
-		uint32_t _next_time;
-		uint32_t _period;
+		uint32_t next_time_;
+		uint32_t period_;
 
 		template<typename CLOCK> friend class Scheduler;
 	};
 
 	template<typename CLOCK> bool Scheduler<CLOCK>::operator()(Job& job)
 	{
-		uint32_t now = _clock.millis();
+		uint32_t now = clock_.millis();
 		if (job.next_time() <= now)
 		{
 			job.on_schedule(now);

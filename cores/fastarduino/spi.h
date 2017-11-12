@@ -131,40 +131,40 @@ namespace spi
 	class SPIDevice : public AbstractSPIDevice
 	{
 	protected:
-		SPIDevice() INLINE : _cs{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW}
+		SPIDevice() INLINE : cs_{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW}
 		{
 		}
 
 #ifdef SPDR
 		inline void start_transfer()
 		{
-			_cs.toggle();
-			SPCR = _spcr;
-			SPSR = _spsr;
+			cs_.toggle();
+			SPCR = SPCR_;
+			SPSR = SPSR_;
 		}
 #else
 		inline void start_transfer()
 		{
-			_cs.toggle();
+			cs_.toggle();
 			// Set 3-wire mode (SPI) and requested SPI mode (0 or 1) and use software clock strobe (through USITC)
-			USICR = _usicr;
+			USICR = USICR_;
 		}
 #endif
 		inline void end_transfer() INLINE
 		{
-			_cs.toggle();
+			cs_.toggle();
 		}
 
 	private:
 #ifdef SPDR
 		// Configuration values to reset at beginning of each transfer
-		static const constexpr uint8_t _spcr = 
+		static const constexpr uint8_t SPCR_ = 
 			_BV(SPE) | _BV(MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
-		static const constexpr uint8_t _spsr = (uint8_t(RATE) & 0x10) ? _BV(SPI2X) : 0;
+		static const constexpr uint8_t SPSR_ = (uint8_t(RATE) & 0x10) ? _BV(SPI2X) : 0;
 #else
-		static const constexpr uint8_t _usicr = uint8_t(MODE);
+		static const constexpr uint8_t USICR_ = uint8_t(MODE);
 #endif
-		typename gpio::FastPinType<CS>::TYPE _cs;
+		typename gpio::FastPinType<CS>::TYPE cs_;
 	};
 };
 

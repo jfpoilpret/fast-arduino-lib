@@ -126,7 +126,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER}, _millis{}
+		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER}, millis_{}
 		{
 		}
 
@@ -154,7 +154,7 @@ namespace timer
 		 */
 		inline uint32_t millis() const
 		{
-			synchronized return _millis;
+			synchronized return millis_;
 		}
 
 		/**
@@ -202,7 +202,7 @@ namespace timer
 		 */
 		time::RTTTime time() const
 		{
-			synchronized return time::RTTTime(_millis, compute_micros());
+			synchronized return time::RTTTime(millis_, compute_micros());
 		}
 
 		/**
@@ -214,7 +214,7 @@ namespace timer
 		{
 			synchronized
 			{
-				_millis = ms;
+				millis_ = ms;
 				// Reset timer counter
 				TRAIT::TCNT = 0;
 			}
@@ -247,7 +247,7 @@ namespace timer
 		 */
 		inline void _begin()
 		{
-			_millis = 0;
+			millis_ = 0;
 			Timer<NTIMER>::_begin(MILLI_COUNTER);
 		}
 
@@ -284,7 +284,7 @@ namespace timer
 		/// @cond notdocumented
 		void on_timer()
 		{
-			++_millis;
+			++millis_;
 		}
 		/// @endcond
 
@@ -296,7 +296,7 @@ namespace timer
 
 	protected:
 		/// @cond notdocumented
-		volatile uint32_t _millis;
+		volatile uint32_t millis_;
 		/// @endcond
 
 	private:
@@ -316,16 +316,16 @@ namespace timer
 		static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
 
 	public:
-		RTTEventCallback(containers::Queue<events::Event>& event_queue) : _event_queue(event_queue)
+		RTTEventCallback(containers::Queue<events::Event>& event_queue) : event_queue_(event_queue)
 		{
 		}
 
 		void on_rtt_change(uint32_t millis)
 		{
-			if ((millis & (PERIOD_MS - 1)) == 0) _event_queue._push(events::Event{events::Type::RTT_TIMER});
+			if ((millis & (PERIOD_MS - 1)) == 0) event_queue_._push(events::Event{events::Type::RTT_TIMER});
 		}
 
-		containers::Queue<events::Event>& _event_queue;
+		containers::Queue<events::Event>& event_queue_;
 	};
 }
 

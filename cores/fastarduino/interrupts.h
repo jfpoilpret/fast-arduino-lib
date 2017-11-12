@@ -156,7 +156,7 @@ namespace interrupt
 	public:
 		static Handler* handler()
 		{
-			return _handler;
+			return handler_;
 		}
 
 		using Holder = HandlerHolder<Handler>;
@@ -175,11 +175,11 @@ namespace interrupt
 		};
 
 	private:
-		static Handler* _handler;
+		static Handler* handler_;
 		friend void register_handler<Handler>(Handler&);
 	};
 
-	template<typename Handler> Handler* HandlerHolder<Handler>::_handler = 0;
+	template<typename Handler> Handler* HandlerHolder<Handler>::handler_ = 0;
 	/// @endcond
 
 	/**
@@ -195,7 +195,7 @@ namespace interrupt
 	 */
 	template<typename Handler> void register_handler(Handler& handler)
 	{
-		HandlerHolder<Handler>::_handler = &handler;
+		HandlerHolder<Handler>::handler_ = &handler;
 	}
 }
 

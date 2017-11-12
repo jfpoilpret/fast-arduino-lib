@@ -134,7 +134,7 @@ namespace serial
 			 * blocking.
 			 */
 			template<uint8_t SIZE_TX>
-			UATX(char (&output)[SIZE_TX]) : streams::OutputBuffer{output}, _transmitting(false)
+			UATX(char (&output)[SIZE_TX]) : streams::OutputBuffer{output}, transmitting_{false}
 			{
 			}
 
@@ -201,14 +201,14 @@ namespace serial
 			/// @cond notdocumented
 			inline void data_register_empty()
 			{
-				_errors.has_errors = 0;
+				errors_.has_errors = 0;
 				char value;
 				if (out()._pull(value))
 					TRAIT::UDR = value;
 				else
 				{
-					_errors.all_errors.queue_overflow = true;
-					_transmitting = false;
+					errors_.all_errors.queue_overflow = true;
+					transmitting_ = false;
 					// Clear UDRIE to prevent UDR interrupt to go on forever
 					TRAIT::UCSRB &= ~TRAIT::UDRIE_MASK;
 				}
@@ -223,7 +223,7 @@ namespace serial
 				synchronized
 				{
 					// Check if TX is not currently active, if so, activate it
-					if (!_transmitting)
+					if (!transmitting_)
 					{
 						// Yes, trigger TX
 						char value;
@@ -232,19 +232,19 @@ namespace serial
 							// Set UDR interrupt to be notified when we can send the next character
 							TRAIT::UCSRB |= TRAIT::UDRIE_MASK;
 							TRAIT::UDR = value;
-							_transmitting = true;
+							transmitting_ = true;
 						}
 					}
 				}
 			}
 			virtual void on_overflow(UNUSED char c) override
 			{
-				_errors.all_errors.queue_overflow = true;
+				errors_.all_errors.queue_overflow = true;
 			}
 			/// @endcond
 
 		private:
-			bool _transmitting;
+			bool transmitting_;
 		};
 
 		/**
@@ -342,11 +342,11 @@ namespace serial
 			inline void data_receive_complete()
 			{
 				char status = TRAIT::UCSRA;
-				_errors.all_errors.data_overrun = status & TRAIT::DOR_MASK;
-				_errors.all_errors.frame_error = status & TRAIT::FE_MASK;
-				_errors.all_errors.parity_error = status & TRAIT::UPE_MASK;
+				errors_.all_errors.data_overrun = status & TRAIT::DOR_MASK;
+				errors_.all_errors.frame_error = status & TRAIT::FE_MASK;
+				errors_.all_errors.parity_error = status & TRAIT::UPE_MASK;
 				char value = TRAIT::UDR;
-				_errors.all_errors.queue_overflow = !in()._push(value);
+				errors_.all_errors.queue_overflow = !in()._push(value);
 			}
 			/// @endcond
 		};

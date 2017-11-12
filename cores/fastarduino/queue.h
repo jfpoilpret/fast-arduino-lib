@@ -29,7 +29,7 @@ namespace containers
 		using TREF = TREF_;
 
 		template<uint8_t SIZE>
-		Queue(T (&buffer)[SIZE]) : _buffer{buffer}, _mask{(uint8_t)(SIZE - 1)}, _head{0}, _tail{0}
+		Queue(T (&buffer)[SIZE]) : buffer_{buffer}, mask_{(uint8_t)(SIZE - 1)}, head_{0}, tail_{0}
 		{
 			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
@@ -42,23 +42,23 @@ namespace containers
 		template<uint8_t SIZE> uint8_t _peek(T (&buffer)[SIZE]) const;
 		inline uint8_t size() const
 		{
-			return _mask;
+			return mask_;
 		}
 		inline bool _empty() const
 		{
-			return (_tail == _head);
+			return (tail_ == head_);
 		}
 		inline uint8_t _items() const
 		{
-			return (_tail - _head) & _mask;
+			return (tail_ - head_) & mask_;
 		}
 		inline uint8_t _free() const
 		{
-			return (_head - _tail - 1) & _mask;
+			return (head_ - tail_ - 1) & mask_;
 		}
 		inline void _clear()
 		{
-			_head = _tail = 0;
+			head_ = tail_ = 0;
 		}
 
 		// Those methods are interrupt-safe hence can be called outside any ISR
@@ -100,25 +100,25 @@ namespace containers
 		}
 
 	private:
-		T* const _buffer;
-		const uint8_t _mask;
-		volatile uint8_t _head;
-		volatile uint8_t _tail;
+		T* const buffer_;
+		const uint8_t mask_;
+		volatile uint8_t head_;
+		volatile uint8_t tail_;
 	};
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::_peek(T& item) const
 	{
-		if (_tail == _head) return false;
-		item = _buffer[_head];
+		if (tail_ == head_) return false;
+		item = buffer_[head_];
 		return true;
 	}
 
 	template<typename T, typename TREF> uint8_t Queue<T, TREF>::_peek(T* buffer, uint8_t size) const
 	{
-		uint8_t actual = (_tail - _head) & _mask;
+		uint8_t actual = (tail_ - head_) & mask_;
 		if (size > actual) size = actual;
 		//TODO optimize copy (index calculation is simple if split in 2 parts)
-		for (uint8_t i = 0; i < size; ++i) buffer[i] = _buffer[(_head + i) & _mask];
+		for (uint8_t i = 0; i < size; ++i) buffer[i] = buffer_[(head_ + i) & mask_];
 		return size;
 	}
 
@@ -129,10 +129,10 @@ namespace containers
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::_push(TREF item)
 	{
-		if ((_head - _tail - 1) & _mask)
+		if ((head_ - tail_ - 1) & mask_)
 		{
-			_buffer[_tail] = item;
-			_tail = (_tail + 1) & _mask;
+			buffer_[tail_] = item;
+			tail_ = (tail_ + 1) & mask_;
 			return true;
 		}
 		return false;
@@ -140,10 +140,10 @@ namespace containers
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::_pull(T& item)
 	{
-		if (_tail != _head)
+		if (tail_ != head_)
 		{
-			item = _buffer[_head];
-			_head = (_head + 1) & _mask;
+			item = buffer_[head_];
+			head_ = (head_ + 1) & mask_;
 			return true;
 		}
 		return false;
