@@ -104,12 +104,9 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-October 2017
-------------
+November-December 2017
+----------------------
 1. Finalize sonar ranger API
-
-November 2017
--------------
 2. Improve streams support ala C++
 3. Add support for ATtinyX5
 4. Refactor Event system to allow any value type for events
@@ -126,8 +123,8 @@ November 2017
 
 In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
-- complete documentation (Tutorial, API, ISR handling, Board support adding...)
 - coding guidelines applied across the library code (not necessarily example code)
+- complete documentation (Tutorial, API, ISR handling, Board support adding...)
 
 The following features are not in FastArduino roadmap currently (but may be in the future):
 
