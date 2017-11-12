@@ -15,8 +15,8 @@
 #ifndef WINBOND_HH
 #define WINBOND_HH
 
-#include <util/delay.h>
 #include "../spi.h"
+#include "../time.h"
 
 namespace devices
 {
@@ -115,19 +115,19 @@ namespace devices
 
 		inline Status status()
 		{
-			return Status(_read(0x05), _read(0x35));
+			return Status(read(0x05), read(0x35));
 		}
 		void set_status(uint16_t status);
 		bool wait_until_ready(uint16_t timeout_ms);
 
 		inline void power_down()
 		{
-			_send(0xB9);
+			send(0xB9);
 		}
 		inline void power_up()
 		{
-			_send(0xAB);
-			_delay_us(3);
+			send(0xAB);
+			time::delay_us(3);
 		}
 
 		struct Device
@@ -140,46 +140,46 @@ namespace devices
 
 		inline void enable_write()
 		{
-			_send(0x06);
+			send(0x06);
 		}
 		inline void disable_write()
 		{
-			_send(0x04);
+			send(0x04);
 		}
 
 		inline void erase_sector(uint32_t address)
 		{
-			_send(0x20, address);
+			send(0x20, address);
 		}
 		inline void erase_block_32K(uint32_t address)
 		{
-			_send(0x52, address);
+			send(0x52, address);
 		}
 		inline void erase_block_64K(uint32_t address)
 		{
-			_send(0xD8, address);
+			send(0xD8, address);
 		}
 		inline void erase_chip()
 		{
-			_send(0xC7);
+			send(0xC7);
 		}
 
 		inline void write_page(uint32_t address, uint8_t* data, uint8_t size)
 		{
-			_send(0x02, address, data, (size == 0 ? 256 : size));
+			send(0x02, address, data, (size == 0 ? 256 : size));
 		}
 
 		uint8_t read_data(uint32_t address);
 		void read_data(uint32_t address, uint8_t* data, uint16_t size);
 
 	private:
-		uint8_t _read(uint8_t code);
-		void _send(uint8_t code);
-		inline void _send(uint8_t code, uint32_t address)
+		uint8_t read(uint8_t code);
+		void send(uint8_t code);
+		inline void send(uint8_t code, uint32_t address)
 		{
-			_send(code, address, 0, 0);
+			send(code, address, 0, 0);
 		}
-		void _send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size);
+		void send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size);
 	};
 
 	template<board::DigitalPin CS> void WinBond<CS>::set_status(uint16_t status)
@@ -212,14 +212,14 @@ namespace devices
 	template<board::DigitalPin CS> typename WinBond<CS>::Device WinBond<CS>::read_device()
 	{
 		Device device;
-		_send(0x90, 0, (uint8_t*) &device, sizeof(device));
+		send(0x90, 0, (uint8_t*) &device, sizeof(device));
 		return device;
 	}
 
 	template<board::DigitalPin CS> uint64_t WinBond<CS>::read_unique_ID()
 	{
 		uint8_t buffer[9];
-		_send(0x4B, 0, buffer, 9);
+		send(0x4B, 0, buffer, 9);
 		//FIXME check if we need to exchange bytes (endianness)
 		uint64_t id = *((uint64_t*) &buffer[1]);
 		return id;
@@ -234,10 +234,10 @@ namespace devices
 
 	template<board::DigitalPin CS> void WinBond<CS>::read_data(uint32_t address, uint8_t* data, uint16_t size)
 	{
-		_send(0x03, address, data, size);
+		send(0x03, address, data, size);
 	}
 
-	template<board::DigitalPin CS> uint8_t WinBond<CS>::_read(uint8_t code)
+	template<board::DigitalPin CS> uint8_t WinBond<CS>::read(uint8_t code)
 	{
 		this->start_transfer();
 		this->transfer(code);
@@ -246,14 +246,14 @@ namespace devices
 		return result;
 	}
 
-	template<board::DigitalPin CS> void WinBond<CS>::_send(uint8_t code)
+	template<board::DigitalPin CS> void WinBond<CS>::send(uint8_t code)
 	{
 		this->start_transfer();
 		this->transfer(code);
 		this->end_transfer();
 	}
 
-	template<board::DigitalPin CS> void WinBond<CS>::_send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)
+	template<board::DigitalPin CS> void WinBond<CS>::send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)
 	{
 		this->start_transfer();
 		this->transfer(code);

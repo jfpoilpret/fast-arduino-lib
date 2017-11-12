@@ -57,7 +57,7 @@ namespace serial
 			}
 
 		protected:
-			void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
+			void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 			static Parity calculate_parity(Parity parity, uint8_t value);
 
 			Parity parity_;
@@ -79,7 +79,7 @@ namespace serial
 
 			void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 			{
-				_begin(rate, parity, stop_bits);
+				begin_serial(rate, parity, stop_bits);
 				//FIXME if queue is not empty, we should process it until everything is written...
 			}
 			void end()
@@ -166,7 +166,7 @@ namespace serial
 			{
 			}
 
-			void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
+			void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 
 			// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
 			Parity parity_;
@@ -204,7 +204,7 @@ namespace serial
 					   StopBits stop_bits = StopBits::ONE)
 			{
 				pci_ = &enabler;
-				_begin(rate, parity, stop_bits);
+				begin_serial(rate, parity, stop_bits);
 				pci_->template enable_pin<RX>();
 			}
 
@@ -212,7 +212,7 @@ namespace serial
 					   StopBits stop_bits = StopBits::ONE)
 			{
 				int_ = &enabler;
-				_begin(rate, parity, stop_bits);
+				begin_serial(rate, parity, stop_bits);
 				int_->enable();
 			}
 			void end()

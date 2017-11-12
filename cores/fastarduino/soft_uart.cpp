@@ -16,7 +16,7 @@
 
 #include "soft_uart.h"
 
-void serial::soft::AbstractUATX::_begin(uint32_t rate, Parity parity, StopBits stop_bits)
+void serial::soft::AbstractUATX::begin_serial(uint32_t rate, Parity parity, StopBits stop_bits)
 {
 	parity_ = parity;
 	// Calculate timing for TX in number of cycles
@@ -38,7 +38,7 @@ constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
 }
 
-void serial::soft::AbstractUARX::_begin(uint32_t rate, Parity parity, UNUSED StopBits stop_bits)
+void serial::soft::AbstractUARX::begin_serial(uint32_t rate, Parity parity, UNUSED StopBits stop_bits)
 {
 	parity_ = parity;
 	// Calculate timing for RX in number of cycles
