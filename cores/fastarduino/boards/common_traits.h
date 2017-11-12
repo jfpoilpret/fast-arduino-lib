@@ -153,14 +153,14 @@ namespace board_traits
 	{
 		static constexpr const uint8_t ADLAR1 = 0;
 		static constexpr const uint8_t ADLAR2 = 0;
-		static constexpr const REGISTER<SAMPLE_TYPE> _ADC{};
+		static constexpr const REGISTER<SAMPLE_TYPE> ADC_{};
 	};
-	template<typename SAMPLE_TYPE, uint8_t ADLAR1_, uint8_t ADLAR2_, REG ADC_>
+	template<typename SAMPLE_TYPE, uint8_t ADLAR1_, uint8_t ADLAR2_, REG ADC__>
 	struct AnalogSampleType_trait_impl
 	{
 		static constexpr const uint8_t ADLAR1 = ADLAR1_;
 		static constexpr const uint8_t ADLAR2 = ADLAR2_;
-		static constexpr const REGISTER<SAMPLE_TYPE> _ADC = ADC_;
+		static constexpr const REGISTER<SAMPLE_TYPE> ADC_ = ADC__;
 	};
 	
 	template<AnalogClock MAXFREQ> 

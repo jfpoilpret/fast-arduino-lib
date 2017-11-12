@@ -114,25 +114,28 @@ namespace analog
 			// Wait until sampling is done
 			GLOBAL_TRAIT::ADCSRA_.loop_until_bit_clear(ADSC);
 			// Should we synchronize ADC reading?
-			return TYPE_TRAIT::_ADC;
+			return TYPE_TRAIT::ADC_;
 		}
 	};
 
 	/**
 	 * API that uses bandgap feature to calculate current voltage fed to the MCU.
 	 * 
-	 * @tparam BG a unique bandgap analog pin for the MCU target; although the
+	 * @tparam BANDGAP_ a unique bandgap analog pin for the MCU target; although the
 	 * accepted type is `board::AnalogPin` enum, only bandgap inputs are allowed
 	 * otherwise a compilation error will occur.
 	 * @sa board::AnalogPin
 	 */
-	template<board::AnalogPin BG = board::AnalogPin::BANDGAP>
+	template<board::AnalogPin BANDGAP_ = board::AnalogPin::BANDGAP>
 	class PowerVoltage
-		: public AnalogInput<BG, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz>
+		: public AnalogInput<BANDGAP_, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz>
 	{
+	public:
+		static constexpr const board::AnalogPin BANDGAP = BANDGAP_;
+
 	private:
-		using TRAIT = board_traits::AnalogPin_trait<BG>;
-		static_assert(TRAIT::IS_BANDGAP, "BG parameter must be a bandgap ADC input");
+		using TRAIT = board_traits::AnalogPin_trait<BANDGAP>;
+		static_assert(TRAIT::IS_BANDGAP, "BANDGAP_ parameter must be a bandgap ADC input");
 		static constexpr const uint16_t REFERENCE_MV = TRAIT::BANDGAP_VOLTAGE_MV;
 
 	public:
@@ -165,7 +168,7 @@ namespace analog
 		//Other API? eg sample_ready? sample_changed?
 
 	private:
-		SAMPLE_TYPE _sample;
+		SAMPLE_TYPE sample_;
 	};
 	*/
 }
