@@ -60,11 +60,11 @@ namespace serial
 			void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
 			static Parity calculate_parity(Parity parity, uint8_t value);
 
-			Parity _parity;
+			Parity parity_;
 			// Various timing constants based on rate
-			uint16_t _interbit_tx_time;
-			uint16_t _start_bit_tx_time;
-			uint16_t _stop_bit_tx_time;
+			uint16_t interbit_tx_time_;
+			uint16_t start_bit_tx_time_;
+			uint16_t stop_bit_tx_time_;
 		};
 
 		template<board::DigitalPin TX_> class UATX : public AbstractUATX
@@ -73,7 +73,7 @@ namespace serial
 			static constexpr const board::DigitalPin TX = TX_;
 
 			template<uint8_t SIZE_TX>
-			UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, _tx{gpio::PinMode::OUTPUT, true}
+			UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}
 			{
 			}
 
@@ -109,43 +109,43 @@ namespace serial
 			}
 			void _write(uint8_t value);
 
-			typename gpio::FastPinType<TX>::TYPE _tx;
+			typename gpio::FastPinType<TX>::TYPE tx_;
 		};
 
 		template<board::DigitalPin DPIN> void UATX<DPIN>::_write(uint8_t value)
 		{
 			// Pre-calculate all what we need: parity bit
-			Parity parity_bit = calculate_parity(_parity, value);
+			Parity parity_bit = calculate_parity(parity_, value);
 
 			// Write start bit
-			_tx.clear();
+			tx_.clear();
 			// Wait before starting actual value transmission
-			_delay_loop_2(_start_bit_tx_time);
+			_delay_loop_2(start_bit_tx_time_);
 			for (uint8_t bit = 0; bit < 8; ++bit)
 			{
 				if (value & 0x01)
-					_tx.set();
+					tx_.set();
 				else
 				{
 					// Additional NOP to ensure set/clear are executed exactly at the same time (cycle)
 					asm volatile("NOP");
-					_tx.clear();
+					tx_.clear();
 				}
 				value >>= 1;
-				_delay_loop_2(_interbit_tx_time);
+				_delay_loop_2(interbit_tx_time_);
 			}
 			// Add parity if needed
 			if (parity_bit != Parity::NONE)
 			{
-				if (parity_bit == _parity)
-					_tx.clear();
+				if (parity_bit == parity_)
+					tx_.clear();
 				else
-					_tx.set();
-				_delay_loop_2(_interbit_tx_time);
+					tx_.set();
+				_delay_loop_2(interbit_tx_time_);
 			}
 			// Add stop bit
-			_tx.set();
-			_delay_loop_2(_stop_bit_tx_time);
+			tx_.set();
+			_delay_loop_2(stop_bit_tx_time_);
 		}
 
 		class AbstractUARX : virtual public UARTErrors, private streams::InputBuffer
@@ -169,13 +169,13 @@ namespace serial
 			void _begin(uint32_t rate, Parity parity, StopBits stop_bits);
 
 			// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
-			Parity _parity;
+			Parity parity_;
 			// Various timing constants based on rate
-			uint16_t _interbit_rx_time;
-			uint16_t _start_bit_rx_time;
-			uint16_t _parity_bit_rx_time;
-			uint16_t _stop_bit_rx_time_push;
-			uint16_t _stop_bit_rx_time_no_push;
+			uint16_t interbit_rx_time_;
+			uint16_t start_bit_rx_time_;
+			uint16_t parity_bit_rx_time_;
+			uint16_t stop_bit_rx_time_push_;
+			uint16_t stop_bit_rx_time_no_push_;
 		};
 
 		template<board::DigitalPin RX_> class UARX : public AbstractUARX
@@ -188,7 +188,7 @@ namespace serial
 			using PORT_TRAIT = typename PCI_TYPE::TRAIT;
 			using INT_TYPE = interrupt::INTSignal<RX>;
 
-			template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX(input), _rx{gpio::PinMode::INPUT}
+			template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX(input), rx_{gpio::PinMode::INPUT}
 			{
 				static_assert(
 					(PORT_TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<RX>::BIT)) || (PIN_TRAIT::IS_INT),
@@ -203,73 +203,73 @@ namespace serial
 			void begin(PCI_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE,
 					   StopBits stop_bits = StopBits::ONE)
 			{
-				_pci = &enabler;
+				pci_ = &enabler;
 				_begin(rate, parity, stop_bits);
-				_pci->template enable_pin<RX>();
+				pci_->template enable_pin<RX>();
 			}
 
 			void begin(INT_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE,
 					   StopBits stop_bits = StopBits::ONE)
 			{
-				_int = &enabler;
+				int_ = &enabler;
 				_begin(rate, parity, stop_bits);
-				_int->enable();
+				int_->enable();
 			}
 			void end()
 			{
 				if (PIN_TRAIT::IS_INT)
-					_int->disable();
+					int_->disable();
 				else
-					_pci->template disable_pin<RX>();
+					pci_->template disable_pin<RX>();
 			}
 
 			//	protected:
 			void on_pin_change();
 
 		private:
-			typename gpio::FastPinType<RX>::TYPE _rx;
+			typename gpio::FastPinType<RX>::TYPE rx_;
 			union
 			{
-				PCI_TYPE* _pci;
-				INT_TYPE* _int;
+				PCI_TYPE* pci_;
+				INT_TYPE* int_;
 			};
 		};
 
 		template<board::DigitalPin RX> void UARX<RX>::on_pin_change()
 		{
 			// Check RX is low (start bit)
-			if (_rx.value()) return;
+			if (rx_.value()) return;
 			uint8_t value = 0;
 			bool odd = false;
 			UARTErrors_ errors;
 			errors.has_errors = 0;
 			// Wait for start bit to finish
-			_delay_loop_2(_start_bit_rx_time);
+			_delay_loop_2(start_bit_rx_time_);
 			// Read first 7 bits
 			for (uint8_t i = 0; i < 7; ++i)
 			{
-				if (_rx.value())
+				if (rx_.value())
 				{
 					value |= 0x80;
 					odd = !odd;
 				}
 				value >>= 1;
-				_delay_loop_2(_interbit_rx_time);
+				_delay_loop_2(interbit_rx_time_);
 			}
 			// Read last bit
-			if (_rx.value())
+			if (rx_.value())
 			{
 				value |= 0x80;
 				odd = !odd;
 			}
 
-			if (_parity != Parity::NONE)
+			if (parity_ != Parity::NONE)
 			{
 				// Wait for parity bit TODO NEED SPECIFIC DELAY HERE
-				_delay_loop_2(_parity_bit_rx_time);
-				bool parity_bit = (_parity == Parity::ODD ? !odd : odd);
+				_delay_loop_2(parity_bit_rx_time_);
+				bool parity_bit = (parity_ == Parity::ODD ? !odd : odd);
 				// Check parity bit
-				errors.all_errors.parity_error = (_rx.value() != parity_bit);
+				errors.all_errors.parity_error = (rx_.value() != parity_bit);
 			}
 
 			// Push value if no error
@@ -277,19 +277,19 @@ namespace serial
 			{
 				errors.all_errors.queue_overflow = !in()._push(value);
 				// Wait for 1st stop bit
-				_delay_loop_2(_stop_bit_rx_time_push);
+				_delay_loop_2(stop_bit_rx_time_push_);
 			}
 			else
 			{
 				errors_ = errors;
 				// Wait for 1st stop bit
-				_delay_loop_2(_stop_bit_rx_time_no_push);
+				_delay_loop_2(stop_bit_rx_time_no_push_);
 			}
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 			if (PIN_TRAIT::IS_INT)
-				_int->_clear();
+				int_->_clear();
 			else
-				_pci->_clear();
+				pci_->_clear();
 		}
 
 		template<board::DigitalPin RX_, board::DigitalPin TX_> class UART : public UARX<RX_>, public UATX<TX_>

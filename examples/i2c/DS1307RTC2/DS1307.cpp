@@ -138,7 +138,7 @@ int main()
 	
 	// Initialize clock date
 	//=======================
-	rtc.setDateTime(time1);
+	rtc.set_datetime(time1);
 	display_status('3', manager.status());
 
 	time::delay_ms(2000);
@@ -146,7 +146,7 @@ int main()
 	// Read clock
 	//============
 	tm time2;
-	rtc.getDateTime(time2);
+	rtc.get_datetime(time2);
 	display_status('4', manager.status());
 	display_time(time2);
 	

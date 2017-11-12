@@ -701,9 +701,9 @@ namespace timer
 		 * @sa set_prescaler()
 		 */
 		Timer(TimerMode timer_mode, PRESCALER prescaler, TimerInterrupt interrupts = TimerInterrupt(0))
-			: _tccra{timer_mode_TCCRA(timer_mode)}, _tccrb{uint8_t(timer_mode_TCCRB(timer_mode) |
+			: tccra_{timer_mode_TCCRA(timer_mode)}, tccrb_{uint8_t(timer_mode_TCCRB(timer_mode) |
 																   TRAIT::TCCRB_prescaler(prescaler))},
-			  _timsk{TRAIT::TIMSK_MASK(uint8_t(interrupts))}
+			  timsk_{TRAIT::TIMSK_MASK(uint8_t(interrupts))}
 		{
 		}
 
@@ -722,7 +722,7 @@ namespace timer
 		 */
 		inline void set_interrupts(TimerInterrupt interrupts = TimerInterrupt(0))
 		{
-			_timsk = TRAIT::TIMSK_MASK(uint8_t(interrupts));
+			timsk_ = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB) TRAIT::TIMSK = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 		}
@@ -741,9 +741,9 @@ namespace timer
 		inline void set_input_capture(TimerInputCapture input_capture)
 		{
 			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
-			utils::set_mask(_tccrb, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture));
+			utils::set_mask(tccrb_, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB) TRAIT::TCCRB = _tccrb;
+			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
 		}
 
 		//TODO DOC
@@ -759,13 +759,13 @@ namespace timer
 		 */
 		inline void set_timer_mode(TimerMode timer_mode)
 		{
-			utils::set_mask(_tccra, TRAIT::MODE_MASK_TCCRA, timer_mode_TCCRA(timer_mode));
-			utils::set_mask(_tccrb, TRAIT::MODE_MASK_TCCRB, timer_mode_TCCRB(timer_mode));
+			utils::set_mask(tccra_, TRAIT::MODE_MASK_TCCRA, timer_mode_TCCRA(timer_mode));
+			utils::set_mask(tccrb_, TRAIT::MODE_MASK_TCCRB, timer_mode_TCCRB(timer_mode));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB)
 			{
-				TRAIT::TCCRA = _tccra;
-				TRAIT::TCCRB = _tccrb;
+				TRAIT::TCCRA = tccra_;
+				TRAIT::TCCRB = tccrb_;
 			}
 		}
 
@@ -777,9 +777,9 @@ namespace timer
 		 */
 		inline void set_prescaler(PRESCALER prescaler)
 		{
-			utils::set_mask(_tccrb, TRAIT::CS_MASK_TCCRB, TRAIT::TCCRB_prescaler(prescaler));
+			utils::set_mask(tccrb_, TRAIT::CS_MASK_TCCRB, TRAIT::TCCRB_prescaler(prescaler));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB) TRAIT::TCCRB = _tccrb;
+			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
 		}
 
 		//TODO getter method for current prescaler
@@ -817,13 +817,13 @@ namespace timer
 		 */
 		inline void _begin(TYPE max = 0)
 		{
-			TRAIT::TCCRA = _tccra;
-			TRAIT::TCCRB = _tccrb;
+			TRAIT::TCCRA = tccra_;
+			TRAIT::TCCRB = tccrb_;
 			// Set timer counter compare match
 			TRAIT::OCRA = max;
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK = _timsk;
+			TRAIT::TIMSK = timsk_;
 		}
 
 		/**
@@ -943,7 +943,7 @@ namespace timer
 			// Reset timer counter
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK = _timsk;
+			TRAIT::TIMSK = timsk_;
 		}
 
 		/**
@@ -1001,7 +1001,7 @@ namespace timer
 		{
 			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
 			using COM_TRAIT = board_traits::Timer_COM_trait<NTIMER, COM>;
-			utils::set_mask(_tccra, COM_TRAIT::COM_MASK, convert_COM<COM>(mode));
+			utils::set_mask(tccra_, COM_TRAIT::COM_MASK, convert_COM<COM>(mode));
 		}
 
 		/**
@@ -1021,7 +1021,7 @@ namespace timer
 			synchronized
 			{
 				if (max)
-					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, _tccra);
+					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK, tccra_);
 				else
 					utils::set_mask((volatile uint8_t&) TRAIT::TCCRA, COM_TRAIT::COM_MASK,
 									convert_COM<COM>(TimerOutputMode::DISCONNECTED));
@@ -1031,7 +1031,7 @@ namespace timer
 
 	protected:
 		/// @cond notdocumented
-		Timer(uint8_t tccra, uint8_t tccrb, uint8_t timsk = 0) : _tccra{tccra}, _tccrb{tccrb}, _timsk{timsk}
+		Timer(uint8_t tccra, uint8_t tccrb, uint8_t timsk = 0) : tccra_{tccra}, tccrb_{tccrb}, timsk_{timsk}
 		{
 		}
 
@@ -1072,9 +1072,9 @@ namespace timer
 			return (input_capture == TimerInputCapture::RISING_EDGE ? TRAIT::ICES_TCCRB : 0);
 		}
 
-		uint8_t _tccra;
-		uint8_t _tccrb;
-		uint8_t _timsk;
+		uint8_t tccra_;
+		uint8_t tccrb_;
+		uint8_t timsk_;
 		/// @endcond
 	};
 }

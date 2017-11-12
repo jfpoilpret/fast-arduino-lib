@@ -295,7 +295,7 @@ namespace streams
 			hex = 16
 		};
 
-		FormatBase() : _width{6}, _precision{4}, _base{Base::dec}
+		FormatBase() : width_{6}, precision_{4}, base_{Base::dec}
 		{
 		}
 
@@ -315,7 +315,7 @@ namespace streams
 		 */
 		inline void width(int8_t width)
 		{
-			_width = width;
+			width_ = width;
 		}
 
 		/**
@@ -325,7 +325,7 @@ namespace streams
 		 */
 		inline int8_t width()
 		{
-			return _width;
+			return width_;
 		}
 
 		/**
@@ -336,7 +336,7 @@ namespace streams
 		 */
 		inline void precision(uint8_t precision)
 		{
-			_precision = precision;
+			precision_ = precision;
 		}
 
 		/**
@@ -346,7 +346,7 @@ namespace streams
 		 */
 		inline uint8_t precision()
 		{
-			return _precision;
+			return precision_;
 		}
 
 		/**
@@ -356,7 +356,7 @@ namespace streams
 		 */
 		inline void base(Base base)
 		{
-			_base = base;
+			base_ = base;
 		}
 
 		/**
@@ -365,16 +365,16 @@ namespace streams
 		 */
 		inline Base base()
 		{
-			return _base;
+			return base_;
 		}
 
 	protected:
 		/// @cond notdocumented
 		void reset()
 		{
-			_width = 6;
-			_precision = 4;
-			_base = Base::dec;
+			width_ = 6;
+			precision_ = 4;
+			base_ = Base::dec;
 		}
 		// conversions from string to numeric value
 		bool convert(const char* token, double& v)
@@ -388,7 +388,7 @@ namespace streams
 		bool convert(const char* token, long& v)
 		{
 			char* endptr;
-			long value = strtol(token, &endptr, (uint8_t) _base);
+			long value = strtol(token, &endptr, (uint8_t) base_);
 			if (endptr == token) return false;
 			v = value;
 			return true;
@@ -396,7 +396,7 @@ namespace streams
 		bool convert(const char* token, unsigned long& v)
 		{
 			char* endptr;
-			unsigned long value = strtoul(token, &endptr, (uint8_t) _base);
+			unsigned long value = strtoul(token, &endptr, (uint8_t) base_);
 			if (endptr == token) return false;
 			v = value;
 			return true;
@@ -419,27 +419,27 @@ namespace streams
 		// conversions from numeric value to string
 		const char* convert(int v)
 		{
-			return justify(itoa(v, conversion_buffer, (uint8_t) _base), filler());
+			return justify(itoa(v, conversion_buffer, (uint8_t) base_), filler());
 		}
 		const char* convert(unsigned int v)
 		{
-			return justify(utoa(v, conversion_buffer, (uint8_t) _base), filler());
+			return justify(utoa(v, conversion_buffer, (uint8_t) base_), filler());
 		}
 		const char* convert(long v)
 		{
-			return justify(ltoa(v, conversion_buffer, (uint8_t) _base), filler());
+			return justify(ltoa(v, conversion_buffer, (uint8_t) base_), filler());
 		}
 		const char* convert(unsigned long v)
 		{
-			return justify(ultoa(v, conversion_buffer, (uint8_t) _base), filler());
+			return justify(ultoa(v, conversion_buffer, (uint8_t) base_), filler());
 		}
 		const char* convert(double v)
 		{
-			return dtostrf(v, _width, _precision, conversion_buffer);
+			return dtostrf(v, width_, precision_, conversion_buffer);
 		}
 		const char* justify(char* input, char filler = ' ')
 		{
-			uint8_t width = (_width >= 0 ? _width : -_width);
+			uint8_t width = (width_ >= 0 ? width_ : -width_);
 			if (strlen(input) < width)
 			{
 				uint8_t add = width - strlen(input);
@@ -450,7 +450,7 @@ namespace streams
 		}
 		char filler()
 		{
-			switch (_base)
+			switch (base_)
 			{
 			case Base::bin:
 			case Base::hex:
@@ -465,9 +465,9 @@ namespace streams
 		/// @endcond
 
 	private:
-		int8_t _width;
-		uint8_t _precision;
-		Base _base;
+		int8_t width_;
+		uint8_t precision_;
+		Base base_;
 		char conversion_buffer[MAX_BUF_LEN];
 	};
 
@@ -486,7 +486,7 @@ namespace streams
 		 * Construct a formatted output wrapper of @p stream
 		 * @param stream the output stream to be wrapped
 		 */
-		FormattedOutput(STREAM& stream) : _stream{stream}
+		FormattedOutput(STREAM& stream) : stream_{stream}
 		{
 		}
 
@@ -495,7 +495,7 @@ namespace streams
 		 */
 		void flush()
 		{
-			_stream.flush();
+			stream_.flush();
 		}
 
 		/**
@@ -503,7 +503,7 @@ namespace streams
 		 */
 		void put(char c, bool call_on_put = true)
 		{
-			_stream.put(c, call_on_put);
+			stream_.put(c, call_on_put);
 		}
 
 		/**
@@ -511,7 +511,7 @@ namespace streams
 		 */
 		void put(const char* content, size_t size)
 		{
-			_stream.put(content, size);
+			stream_.put(content, size);
 		}
 
 		/**
@@ -519,7 +519,7 @@ namespace streams
 		 */
 		void puts(const char* str)
 		{
-			_stream.puts(str);
+			stream_.puts(str);
 		}
 
 		/**
@@ -527,7 +527,7 @@ namespace streams
 		 */
 		void puts(const flash::FlashStorage* str)
 		{
-			_stream.puts(str);
+			stream_.puts(str);
 		}
 
 		//TODO add support for void* (address)
@@ -542,7 +542,7 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(char c)
 		{
-			_stream.put(c);
+			stream_.put(c);
 			return *this;
 		}
 
@@ -557,7 +557,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(const char* s)
 		{
 			//TODO Add justify with width if <0
-			_stream.puts(s);
+			stream_.puts(s);
 			return *this;
 		}
 
@@ -572,7 +572,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(const flash::FlashStorage* s)
 		{
 			//TODO Add justify with width if <0
-			_stream.puts(s);
+			stream_.puts(s);
 			return *this;
 		}
 
@@ -588,7 +588,7 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(int v)
 		{
-			_stream.puts(convert(v));
+			stream_.puts(convert(v));
 			return *this;
 		}
 
@@ -604,7 +604,7 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(unsigned int v)
 		{
-			_stream.puts(convert(v));
+			stream_.puts(convert(v));
 			return *this;
 		}
 
@@ -620,7 +620,7 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(long v)
 		{
-			_stream.puts(convert(v));
+			stream_.puts(convert(v));
 			return *this;
 		}
 
@@ -636,7 +636,7 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(unsigned long v)
 		{
-			_stream.puts(convert(v));
+			stream_.puts(convert(v));
 			return *this;
 		}
 
@@ -652,7 +652,7 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(double v)
 		{
-			_stream.puts(convert(v));
+			stream_.puts(convert(v));
 			return *this;
 		}
 
@@ -684,7 +684,7 @@ namespace streams
 		}
 
 	private:
-		STREAM& _stream;
+		STREAM& stream_;
 
 		/// @cond notdocumented
 		template<typename FSTREAM> friend void bin(FSTREAM&);
@@ -711,7 +711,7 @@ namespace streams
 		 * Construct a formatted input wrapper of @p stream
 		 * @param stream the input stream to be wrapped
 		 */
-		FormattedInput(STREAM& stream) : _stream{stream}, _skipws{true}
+		FormattedInput(STREAM& stream) : stream_{stream}, skipws_{true}
 		{
 		}
 
@@ -720,7 +720,7 @@ namespace streams
 		 */
 		int available() const
 		{
-			return _stream.available();
+			return stream_.available();
 		}
 
 		/**
@@ -728,7 +728,7 @@ namespace streams
 		 */
 		int get()
 		{
-			return _stream.get();
+			return stream_.get();
 		}
 
 		/**
@@ -739,7 +739,7 @@ namespace streams
 		 */
 		char* get(char* content, size_t size)
 		{
-			return get(_stream, content, size);
+			return get(stream_, content, size);
 		}
 
 		/**
@@ -751,7 +751,7 @@ namespace streams
 		 */
 		int gets(char* str, size_t max)
 		{
-			return gets(_stream, str, max);
+			return gets(stream_, str, max);
 		}
 
 		/**
@@ -770,8 +770,8 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(bool& v)
 		{
-			skip_whitespaces(_skipws);
-			char c = containers::pull(_stream);
+			skip_whitespaces(skipws_);
+			char c = containers::pull(stream_);
 			v = (c != '0');
 			return *this;
 		}
@@ -790,8 +790,8 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(char& v)
 		{
-			skip_whitespaces(_skipws);
-			v = containers::pull(_stream);
+			skip_whitespaces(skipws_);
+			v = containers::pull(stream_);
 			return *this;
 		}
 
@@ -809,9 +809,9 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(int& v)
 		{
-			skip_whitespaces(_skipws);
+			skip_whitespaces(skipws_);
 			char buffer[sizeof(int) * 8 + 1];
-			convert(_stream.scan(buffer, sizeof buffer), v);
+			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -829,9 +829,9 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(unsigned int& v)
 		{
-			skip_whitespaces(_skipws);
+			skip_whitespaces(skipws_);
 			char buffer[sizeof(int) * 8 + 1];
-			convert(_stream.scan(buffer, sizeof buffer), v);
+			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -849,9 +849,9 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(long& v)
 		{
-			skip_whitespaces(_skipws);
+			skip_whitespaces(skipws_);
 			char buffer[sizeof(long) * 8 + 1];
-			convert(_stream.scan(buffer, sizeof buffer), v);
+			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -869,9 +869,9 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(unsigned long& v)
 		{
-			skip_whitespaces(_skipws);
+			skip_whitespaces(skipws_);
 			char buffer[sizeof(long) * 8 + 1];
-			convert(_stream.scan(buffer, sizeof buffer), v);
+			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -889,9 +889,9 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(double& v)
 		{
-			skip_whitespaces(_skipws);
+			skip_whitespaces(skipws_);
 			char buffer[MAX_BUF_LEN];
-			convert(_stream.scan(buffer, sizeof buffer), v);
+			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -927,11 +927,11 @@ namespace streams
 		void skip_whitespaces(bool skip = true)
 		{
 			if (skip)
-				while (isspace(containers::peek(_stream))) containers::pull(_stream);
+				while (isspace(containers::peek(stream_))) containers::pull(stream_);
 		}
 
-		STREAM& _stream;
-		bool _skipws;
+		STREAM& stream_;
+		bool skipws_;
 
 		/// @cond notdocumented
 		template<typename FSTREAM> friend void bin(FSTREAM&);
@@ -967,7 +967,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void skipws(FSTREAM& stream)
 	{
-		stream._skipws = true;
+		stream.skipws_ = true;
 	}
 
 	/**
@@ -976,7 +976,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void noskipws(FSTREAM& stream)
 	{
-		stream._skipws = false;
+		stream.skipws_ = false;
 	}
 
 	/**

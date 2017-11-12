@@ -61,7 +61,7 @@ namespace devices
 			{
 			}
 
-			bool setDateTime(tm& datetime)
+			bool set_datetime(tm& datetime)
 			{
 				// 1st convert datetime for DS1307 (BCD)
 				datetime.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
@@ -76,7 +76,7 @@ namespace devices
 					   write(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 			}
 
-			bool getDateTime(tm& datetime)
+			bool get_datetime(tm& datetime)
 			{
 				// send register address to read from (0)
 				// read datetime at address 0
