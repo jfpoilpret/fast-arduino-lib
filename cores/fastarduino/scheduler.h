@@ -27,7 +27,7 @@ namespace events
 	public:
 		using CLOCK = CLOCK_;
 
-		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler{type}, clock_(clock)
+		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler{type}, clock_{clock}
 		{
 		}
 
@@ -74,7 +74,7 @@ namespace events
 		virtual void on_schedule(uint32_t millis) = 0;
 
 	protected:
-		Job(uint32_t next = 0, uint32_t period = 0) INLINE : next_time_(next), period_(period)
+		Job(uint32_t next = 0, uint32_t period = 0) INLINE : next_time_{next}, period_{period}
 		{
 		}
 

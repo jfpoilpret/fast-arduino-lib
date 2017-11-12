@@ -316,7 +316,7 @@ namespace timer
 		static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
 
 	public:
-		RTTEventCallback(containers::Queue<events::Event>& event_queue) : event_queue_(event_queue)
+		RTTEventCallback(containers::Queue<events::Event>& event_queue) : event_queue_{event_queue}
 		{
 		}
 

@@ -161,7 +161,7 @@ namespace watchdog
 		 * watchdog tick
 		 */
 		Watchdog(containers::Queue<events::Event>& event_queue)
-			: millis_{0}, millis_per_tick_{0}, event_queue_(event_queue)
+			: millis_{0}, millis_per_tick_{0}, event_queue_{event_queue}
 		{
 		}
 
