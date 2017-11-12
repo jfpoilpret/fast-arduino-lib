@@ -203,7 +203,7 @@ namespace serial
 			{
 				errors_.has_errors = 0;
 				char value;
-				if (out()._pull(value))
+				if (out().pull_(value))
 					TRAIT::UDR = value;
 				else
 				{
@@ -227,7 +227,7 @@ namespace serial
 					{
 						// Yes, trigger TX
 						char value;
-						if (OutputBuffer::_pull(value))
+						if (OutputBuffer::pull_(value))
 						{
 							// Set UDR interrupt to be notified when we can send the next character
 							TRAIT::UCSRB |= TRAIT::UDRIE_MASK;
@@ -346,7 +346,7 @@ namespace serial
 				errors_.all_errors.frame_error = status & TRAIT::FE_MASK;
 				errors_.all_errors.parity_error = status & TRAIT::UPE_MASK;
 				char value = TRAIT::UDR;
-				errors_.all_errors.queue_overflow = !in()._push(value);
+				errors_.all_errors.queue_overflow = !in().push_(value);
 			}
 			/// @endcond
 		};

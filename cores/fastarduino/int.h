@@ -126,7 +126,7 @@ namespace interrupt
 		INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)
 		{
 			static_assert(PIN_TRAIT::IS_INT, "PIN must be an external interrupt pin");
-			_set_trigger(trigger);
+			set_trigger_(trigger);
 		}
 
 		/**
@@ -135,10 +135,10 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_set_trigger()` instead.
+		 * `set_trigger_()` instead.
 		 * 
 		 * @param trigger the new kind of level event 
-		 * @sa _set_trigger()
+		 * @sa set_trigger_()
 		 */
 		inline void set_trigger(InterruptTrigger trigger)
 		{
@@ -151,7 +151,7 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_enable()` instead.
+		 * `enable_()` instead.
 		 */
 		inline void enable()
 		{
@@ -163,7 +163,7 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_disable()` instead.
+		 * `disable_()` instead.
 		 */
 		inline void disable()
 		{
@@ -177,7 +177,7 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_clear()` instead.
+		 * `clear_()` instead.
 		 */
 		inline void clear()
 		{
@@ -191,7 +191,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `set_trigger()` instead.
 		 */
-		inline void _set_trigger(InterruptTrigger trigger)
+		inline void set_trigger_(InterruptTrigger trigger)
 		{
 			INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 		}
@@ -203,7 +203,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `enable()` instead.
 		 */
-		inline void _enable()
+		inline void enable_()
 		{
 			INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
 		}
@@ -215,7 +215,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `disable()` instead.
 		 */
-		inline void _disable()
+		inline void disable_()
 		{
 			INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
 		}
@@ -229,7 +229,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `clear()` instead.
 		 */
-		inline void _clear()
+		inline void clear_()
 		{
 			INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
 		}

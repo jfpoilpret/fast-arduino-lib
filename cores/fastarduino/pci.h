@@ -127,8 +127,8 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_enable()` instead.
-		 * @sa _enable()
+		 * `enable_()` instead.
+		 * @sa enable_()
 		 * @sa disable()
 		 * @sa enable_pin()
 		 * @sa enable_pins()
@@ -145,9 +145,9 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_disable()` instead.
+		 * `disable_()` instead.
 		 * @sa enable()
-		 * @sa _disable()
+		 * @sa disable_()
 		 * @sa disable_pin()
 		 */
 		inline void disable()
@@ -162,8 +162,8 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_clear()` instead.
-		 * @sa _clear()
+		 * `clear_()` instead.
+		 * @sa clear_()
 		 */
 		inline void clear()
 		{
@@ -177,10 +177,10 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_set_enable_pins()` instead.
+		 * `set_enable_pins_()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
 		 * to enable for this port; other pins will have interrupts disbaled.
-		 * @sa _set_enable_pins()
+		 * @sa set_enable_pins_()
 		 * @sa enable_pins()
 		 * @sa disable_pins()
 		 */
@@ -199,12 +199,12 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_enable_pins()` instead.
+		 * `enable_pins_()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
 		 * to enable for this port; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
 		 * @sa enable()
-		 * @sa _enable_pins()
+		 * @sa enable_pins_()
 		 * @sa enable_pin()
 		 * @sa disable_pin()
 		 */
@@ -223,12 +223,12 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_disable_pins()` instead.
+		 * `disable_pins_()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
 		 * to disable for this port; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
 		 * @sa disable()
-		 * @sa _disable_pins()
+		 * @sa disable_pins_()
 		 * @sa enable_pin()
 		 * @sa disable_pin()
 		 */
@@ -242,11 +242,11 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_enable_pin()` instead.
+		 * `enable_pin_()` instead.
 		 * @tparam PIN the pin for which to enable Pin Change Interrupts; this must
 		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
-		 * @sa _enable_pin()
+		 * @sa enable_pin_()
 		 * @sa disable_pin()
 		 * @sa enable_pins()
 		 */
@@ -263,11 +263,11 @@ namespace interrupt
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_disable_pin()` instead.
+		 * `disable_pin_()` instead.
 		 * @tparam PIN the pin for which to disable Pin Change Interrupts; this must
 		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
-		 * @sa _disable_pin()
+		 * @sa disable_pin_()
 		 * @sa enable_pin()
 		 */
 		template<board::DigitalPin PIN> inline void disable_pin()
@@ -288,11 +288,11 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `enable()` instead.
 		 * @sa enable()
-		 * @sa _disable()
-		 * @sa _enable_pin()
-		 * @sa _enable_pins()
+		 * @sa disable_()
+		 * @sa enable_pin_()
+		 * @sa enable_pins_()
 		 */
-		inline void _enable()
+		inline void enable_()
 		{
 			TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
 		}
@@ -306,10 +306,10 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `disable()` instead.
 		 * @sa enable()
-		 * @sa _disable()
-		 * @sa _disable_pin()
+		 * @sa disable()
+		 * @sa disable_pin_()
 		 */
-		inline void _disable()
+		inline void disable_()
 		{
 			TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
 		}
@@ -324,7 +324,7 @@ namespace interrupt
 		 * `clear()` instead.
 		 * @sa clear()
 		 */
-		inline void _clear()
+		inline void clear_()
 		{
 			TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
 		}
@@ -340,10 +340,10 @@ namespace interrupt
 		 * @param mask the mask of pin bits which pin change interrupts you want
 		 * to enable for this port; other pins will have interrupts disbaled.
 		 * @sa set_enable_pins()
-		 * @sa _enable_pins()
-		 * @sa _disable_pins()
+		 * @sa enable_pins_()
+		 * @sa disable_pins_()
 		 */
-		inline void _set_enable_pins(uint8_t mask)
+		inline void set_enable_pins_(uint8_t mask)
 		{
 			TRAIT::PCMSK_ = mask;
 		}
@@ -351,9 +351,9 @@ namespace interrupt
 		/**
 		 * Enable pin change interrupts for several pins of this port.
 		 * This does not enable completely interrupts, for this you need to also
-		 * call `_enable()`.
+		 * call `enable_()`.
 		 * This method is useful when you have several pins to enable at once; if
-		 * you have only one pin, then `_enable_pin()` is preferred. 
+		 * you have only one pin, then `enable_pin_()` is preferred. 
 		 * This method provides no compile-time safety net if you pass a wrong mask.
 		 * Note that this method is not synchronized, hence you should ensure it
 		 * is called only while global interrupts are not enabled.
@@ -362,12 +362,12 @@ namespace interrupt
 		 * @param mask the mask of pin bits which pin change interrupts you want
 		 * to enable for this port; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
-		 * @sa _enable()
+		 * @sa enable_()
 		 * @sa enable_pins()
-		 * @sa _enable_pin()
-		 * @sa _disable_pin()
+		 * @sa enable_pin_()
+		 * @sa disable_pin_()
 		 */
-		inline void _enable_pins(uint8_t mask)
+		inline void enable_pins_(uint8_t mask)
 		{
 			TRAIT::PCMSK_ |= mask;
 		}
@@ -375,9 +375,9 @@ namespace interrupt
 		/**
 		 * Disable pin change interrupts for several pins of this port.
 		 * This does not disable completely interrupts, for this you need to also
-		 * call `_disable()`.
+		 * call `disable_()`.
 		 * This method is useful when you have several pins to disable at once; if
-		 * you have only one pin, then `_disable_pin()` is preferred. 
+		 * you have only one pin, then `disable_pin_()` is preferred. 
 		 * This method provides no compile-time safety net if you pass a wrong mask.
 		 * Note that this method is not synchronized, hence you should ensure it
 		 * is called only while global interrupts are not enabled.
@@ -386,12 +386,12 @@ namespace interrupt
 		 * @param mask the mask of pin bits which pin change interrupts you want
 		 * to disable for this port; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
-		 * @sa _disable()
+		 * @sa disable_()
 		 * @sa disable_pins()
-		 * @sa _enable_pin()
-		 * @sa _disable_pin()
+		 * @sa enable_pin_()
+		 * @sa disable_pin_()
 		 */
-		inline void _disable_pins(uint8_t mask)
+		inline void disable_pins_(uint8_t mask)
 		{
 			TRAIT::PCMSK_ &= ~mask;
 		}
@@ -406,15 +406,15 @@ namespace interrupt
 		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
 		 * @sa enable_pin()
-		 * @sa _disable_pin()
-		 * @sa _enable_pins()
+		 * @sa disable_pin_()
+		 * @sa enable_pins_()
 		 */
-		template<board::DigitalPin PIN> inline void _enable_pin()
+		template<board::DigitalPin PIN> inline void enable_pin_()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			_enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
+			enable_pins_(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
 		}
 
 		/**
@@ -427,9 +427,9 @@ namespace interrupt
 		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
 		 * @sa disable_pin()
-		 * @sa _enable_pin()
+		 * @sa enable_pin_()
 		 */
-		template<board::DigitalPin PIN> inline void _disable_pin()
+		template<board::DigitalPin PIN> inline void disable_pin_()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),

@@ -226,13 +226,13 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_begin()` instead.
+		 * `begin_()` instead.
 		 * @sa end()
-		 * @sa _begin()
+		 * @sa begin_()
 		 */
 		inline void begin()
 		{
-			synchronized _begin();
+			synchronized begin_();
 		}
 
 		/**
@@ -242,13 +242,13 @@ namespace timer
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `begin()` instead.
-		 * @sa _end()
+		 * @sa end_()
 		 * @sa begin()
 		 */
-		inline void _begin()
+		inline void begin_()
 		{
 			millis_ = 0;
-			Timer<NTIMER>::_begin(MILLI_COUNTER);
+			Timer<NTIMER>::begin_(MILLI_COUNTER);
 		}
 
 		/**
@@ -256,9 +256,9 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_end()` instead.
+		 * `end_()` instead.
 		 * @sa begin()
-		 * @sa _end()
+		 * @sa end_()
 		 */
 		inline void end()
 		{
@@ -273,12 +273,12 @@ namespace timer
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `end()` instead.
-		 * @sa _begin()
+		 * @sa begin_()
 		 * @sa end()
 		 */
-		inline void _end()
+		inline void end_()
 		{
-			Timer<NTIMER>::_end();
+			Timer<NTIMER>::end_();
 		}
 
 		/// @cond notdocumented
@@ -322,7 +322,7 @@ namespace timer
 
 		void on_rtt_change(uint32_t millis)
 		{
-			if ((millis & (PERIOD_MS - 1)) == 0) event_queue_._push(events::Event{events::Type::RTT_TIMER});
+			if ((millis & (PERIOD_MS - 1)) == 0) event_queue_.push_(events::Event{events::Type::RTT_TIMER});
 		}
 
 		containers::Queue<events::Event>& event_queue_;

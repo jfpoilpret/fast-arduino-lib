@@ -76,7 +76,7 @@ int main()
 	// Instantiate servo
 	SERVO1 servo1{servo_timer, MIN_PULSE_US, MAX_PULSE_US, NEUTRAL_PULSE_US};
 	// Start pulse timer
-	servo_timer._begin();
+	servo_timer.begin_();
 	// Enable interrupts
 	sei();
 

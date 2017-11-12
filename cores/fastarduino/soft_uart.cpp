@@ -66,7 +66,7 @@ void serial::soft::AbstractUARX::begin_serial(uint32_t rate, Parity parity, UNUS
 		parity_bit_rx_time_ = compute_delay(bit_time, 20);
 		// If no error (push) then the following cycles will get executed until we re-enable PCI
 		// - 21 cycles before delay loop
-		// - 41 cycles in _push
+		// - 41 cycles in push_
 		// - 4N cycles in delay loop
 		// - 5 additional cycles to make sure we passed the edge of stop bit
 		stop_bit_rx_time_push_ = compute_delay(bit_time / 2, 21 + 41 + 5);
@@ -80,7 +80,7 @@ void serial::soft::AbstractUARX::begin_serial(uint32_t rate, Parity parity, UNUS
 	{
 		// If no error (push) then the following cycles will get executed until we re-enable PCI
 		// - 24 cycles before delay loop
-		// - 41 cycles in _push
+		// - 41 cycles in push_
 		// - 4N cycles in delay loop
 		// - 5 additional cycles to make sure we passed the edge of stop bit
 		stop_bit_rx_time_push_ = compute_delay(bit_time / 2, 24 + 41 + 5);

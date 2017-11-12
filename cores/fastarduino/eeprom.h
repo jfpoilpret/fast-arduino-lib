@@ -271,7 +271,7 @@ namespace eeprom
 			// First remove all pending writes
 			synchronized
 			{
-				buffer_._clear();
+				buffer_.clear_();
 				current_.size = 0;
 			}
 			// Wait until current byte write is finished
@@ -310,7 +310,7 @@ namespace eeprom
 					// All erases are finished
 					erase_ = false;
 					// Mark all EEPROM work as finished if no write is pending in the queue
-					if (buffer_._empty())
+					if (buffer_.empty_())
 					{
 						done_ = true;
 						EECR = 0;
@@ -320,7 +320,7 @@ namespace eeprom
 			else if (current_.size)
 				// There is one item being currently written, write next byte
 				write_next();
-			else if (!buffer_._empty())
+			else if (!buffer_.empty_())
 			{
 				// Current item is finished writing but there is another item to be written in the queue
 				// Get new item and start transmission of first byte
@@ -342,7 +342,7 @@ namespace eeprom
 		void write_next()
 		{
 			uint8_t value;
-			buffer_._pull(value);
+			buffer_.pull_(value);
 			EEPROM::write_byte(current_.address++, value);
 			--current_.size;
 			EECR |= _BV(EERIE);
@@ -358,13 +358,13 @@ namespace eeprom
 		bool write_data(uint16_t address, uint8_t* value, uint16_t size)
 		{
 			// First check if there is enough space in buffer_ for this queued write
-			if ((buffer_._free() < size + ITEM_SIZE) || !size) return false;
+			if ((buffer_.free_() < size + ITEM_SIZE) || !size) return false;
 			done_ = false;
 			// Add new queued write to buffer
-			buffer_._push(WriteItem::value1(address, size));
-			buffer_._push(WriteItem::value2(address, size));
-			buffer_._push(WriteItem::value3(address, size));
-			for (uint16_t i = 0; i < size; ++i) buffer_._push(*value++);
+			buffer_.push_(WriteItem::value1(address, size));
+			buffer_.push_(WriteItem::value2(address, size));
+			buffer_.push_(WriteItem::value3(address, size));
+			for (uint16_t i = 0; i < size; ++i) buffer_.push_(*value++);
 
 			// Start transmission if not done yet
 			EECR = _BV(EERIE);
@@ -401,9 +401,9 @@ namespace eeprom
 		WriteItem next_item()
 		{
 			uint8_t value1, value2, value3;
-			buffer_._pull(value1);
-			buffer_._pull(value2);
-			buffer_._pull(value3);
+			buffer_.pull_(value1);
+			buffer_.pull_(value2);
+			buffer_.pull_(value3);
 			return WriteItem{value1, value2, value3};
 		}
 

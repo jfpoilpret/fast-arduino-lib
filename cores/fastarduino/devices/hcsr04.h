@@ -522,7 +522,7 @@ namespace devices
 			EVENT on_pin_change()
 			{
 				//TODO Better get ticks from ISR and pass it along as argument
-				TYPE ticks = timer_._ticks();
+				TYPE ticks = timer_.ticks_();
 				if (!active_)
 					return EVENT{};
 				// Compute the newly started echoes

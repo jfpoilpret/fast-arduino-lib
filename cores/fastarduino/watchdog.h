@@ -216,7 +216,7 @@ namespace watchdog
 		void on_tick()
 		{
 			millis_ += millis_per_tick_;
-			event_queue_._push(events::Event{events::Type::WDT_TIMER});
+			event_queue_.push_(events::Event{events::Type::WDT_TIMER});
 		}
 		/// @endcond
 

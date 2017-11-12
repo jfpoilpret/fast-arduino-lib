@@ -792,14 +792,14 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_begin()` instead.
+		 * `begin_()` instead.
 		 * @param max the maximum value to use for this timer's counter
 		 * @sa end()
-		 * @sa _begin(TYPE)
+		 * @sa begin_(TYPE)
 		 */
 		inline void begin(TYPE max = 0)
 		{
-			synchronized _begin(max);
+			synchronized begin_(max);
 		}
 
 		/**
@@ -812,10 +812,10 @@ namespace timer
 		 * If you need synchronization, then you should better use
 		 * `begin()` instead.
 		 * @param max the maximum value to use for this timer's counter
-		 * @sa _end()
+		 * @sa end_()
 		 * @sa begin(TYPE)
 		 */
-		inline void _begin(TYPE max = 0)
+		inline void begin_(TYPE max = 0)
 		{
 			TRAIT::TCCRA = tccra_;
 			TRAIT::TCCRB = tccrb_;
@@ -830,15 +830,15 @@ namespace timer
 		 * Reset current counter to 0.
 		 * This method is synchronized if needed (i.e. if this timer is 16 bits).
 		 * If you do not need synchronization, then you should better use
-		 * `_reset()` instead.
-		 * @sa _reset()
+		 * `reset_()` instead.
+		 * @sa reset_()
 		 */
 		inline void reset()
 		{
 			if (sizeof(TYPE) > 1)
-				synchronized _reset();
+				synchronized reset_();
 			else
-				_reset();
+				reset_();
 		}
 
 		/**
@@ -849,7 +849,7 @@ namespace timer
 		 * `reset()` instead.
 		 * @sa reset()
 		 */
-		inline void _reset()
+		inline void reset_()
 		{
 			TRAIT::TCNT = 0;
 		}
@@ -858,15 +858,15 @@ namespace timer
 		 * Return the current counter value for this timer.
 		 * This method is synchronized if needed (i.e. if this timer is 16 bits).
 		 * If you do not need synchronization, then you should better use
-		 * `_ticks()` instead.
-		 * @sa _ticks()
+		 * `ticks_()` instead.
+		 * @sa ticks_()
 		 */
 		inline TYPE ticks()
 		{
 			if (sizeof(TYPE) > 1)
-				synchronized return _ticks();
+				synchronized return ticks_();
 			else
-				return _ticks();
+				return ticks_();
 		}
 
 		/**
@@ -877,7 +877,7 @@ namespace timer
 		 * `ticks()` instead.
 		 * @sa ticks()
 		 */
-		inline TYPE _ticks()
+		inline TYPE ticks_()
 		{
 			return TRAIT::TCNT;
 		}
@@ -888,13 +888,13 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_suspend()` instead.
+		 * `suspend_()` instead.
 		 * @sa resume()
-		 * @sa _suspend()
+		 * @sa suspend_()
 		 */
 		inline void suspend()
 		{
-			synchronized _suspend();
+			synchronized suspend_();
 		}
 
 		/**
@@ -904,10 +904,10 @@ namespace timer
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `suspend()` instead.
-		 * @sa _resume()
+		 * @sa resume_()
 		 * @sa suspend()
 		 */
-		inline void _suspend()
+		inline void suspend_()
 		{
 			// Clear timer interrupt mode
 			TRAIT::TIMSK = 0;
@@ -919,13 +919,13 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_resume()` instead.
+		 * `resume_()` instead.
 		 * @sa suspend()
-		 * @sa _resume()
+		 * @sa resume_()
 		 */
 		inline void resume()
 		{
-			synchronized _resume();
+			synchronized resume_();
 		}
 
 		/**
@@ -935,10 +935,10 @@ namespace timer
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `resume()` instead.
-		 * @sa _suspend()
+		 * @sa suspend_()
 		 * @sa resume()
 		 */
-		inline void _resume()
+		inline void resume_()
 		{
 			// Reset timer counter
 			TRAIT::TCNT = 0;
@@ -963,13 +963,13 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `_end()` instead.
+		 * `end_()` instead.
 		 * @sa begin()
-		 * @sa _end()
+		 * @sa end_()
 		 */
 		inline void end()
 		{
-			synchronized _end();
+			synchronized end_();
 		}
 
 		/**
@@ -979,10 +979,10 @@ namespace timer
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `end()` instead.
-		 * @sa _begin()
+		 * @sa begin_()
 		 * @sa end()
 		 */
-		inline void _end()
+		inline void end_()
 		{
 			// Stop timer
 			TRAIT::TCCRB = 0;

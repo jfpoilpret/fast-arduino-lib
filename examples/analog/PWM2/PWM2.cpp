@@ -88,7 +88,7 @@ int main()
 	ANALOG_INPUT2 pot2;
 
 	// Start timer
-	timer._begin();
+	timer.begin_();
 	
 	// Enable interrupts
 	sei();

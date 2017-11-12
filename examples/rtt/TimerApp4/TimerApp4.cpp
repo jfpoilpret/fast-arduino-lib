@@ -71,9 +71,9 @@ public:
 	void on_timer()
 	{
 		if (_blink_timer.is_suspended())
-			_blink_timer._resume();
+			_blink_timer.resume_();
 		else
-			_blink_timer._suspend();
+			_blink_timer.suspend_();
 	}
 	
 private:
@@ -94,8 +94,8 @@ int main()
 	SUSPEND_TIMER suspend_timer{timer::TimerMode::CTC, SUSPEND_PRESCALER};
 	interrupt::register_handler(blink_handler);
 	interrupt::register_handler(suspend_handler);
-	blink_timer._begin(BLINK_COUNTER);
-	suspend_timer._begin(SUSPEND_COUNTER);
+	blink_timer.begin_(BLINK_COUNTER);
+	suspend_timer.begin_(SUSPEND_COUNTER);
 	sei();
 	
 	while (true) ;

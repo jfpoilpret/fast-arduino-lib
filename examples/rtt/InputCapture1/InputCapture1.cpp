@@ -97,7 +97,7 @@ public:
 		if (!_input.value())
 		{
 			// Button pushed, prepare for next capture (on button release)
-			_timer._reset();
+			_timer.reset_();
 			_overflows = 0;
 			_timer.set_input_capture(TimerInputCapture::RISING_EDGE);
 		}

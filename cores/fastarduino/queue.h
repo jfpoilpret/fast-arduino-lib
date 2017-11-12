@@ -35,28 +35,28 @@ namespace containers
 		}
 
 		// Those methods are not interrupt-safe hence must be called only from an ISR
-		bool _push(TREF item);
-		bool _pull(T& item);
-		bool _peek(T& item) const;
-		uint8_t _peek(T* buffer, uint8_t size) const;
-		template<uint8_t SIZE> uint8_t _peek(T (&buffer)[SIZE]) const;
+		bool push_(TREF item);
+		bool pull_(T& item);
+		bool peek_(T& item) const;
+		uint8_t peek_(T* buffer, uint8_t size) const;
+		template<uint8_t SIZE> uint8_t peek_(T (&buffer)[SIZE]) const;
 		inline uint8_t size() const
 		{
 			return mask_;
 		}
-		inline bool _empty() const
+		inline bool empty_() const
 		{
 			return (tail_ == head_);
 		}
-		inline uint8_t _items() const
+		inline uint8_t items_() const
 		{
 			return (tail_ - head_) & mask_;
 		}
-		inline uint8_t _free() const
+		inline uint8_t free_() const
 		{
 			return (head_ - tail_ - 1) & mask_;
 		}
-		inline void _clear()
+		inline void clear_()
 		{
 			head_ = tail_ = 0;
 		}
@@ -64,39 +64,39 @@ namespace containers
 		// Those methods are interrupt-safe hence can be called outside any ISR
 		inline bool push(TREF item)
 		{
-			synchronized return _push(item);
+			synchronized return push_(item);
 		}
 		inline bool pull(T& item)
 		{
-			synchronized return _pull(item);
+			synchronized return pull_(item);
 		}
 		inline bool peek(T& item) const
 		{
-			synchronized return _peek(item);
+			synchronized return peek_(item);
 		}
 		inline uint8_t peek(T* buffer, uint8_t size) const
 		{
-			synchronized return _peek(buffer, size);
+			synchronized return peek_(buffer, size);
 		}
 		template<uint8_t SIZE> inline uint8_t peek(T (&buffer)[SIZE]) const
 		{
-			synchronized return _peek(buffer);
+			synchronized return peek_(buffer);
 		}
 		inline bool empty() const
 		{
-			synchronized return _empty();
+			synchronized return empty_();
 		}
 		inline uint8_t items() const
 		{
-			synchronized return _items();
+			synchronized return items_();
 		}
 		inline uint8_t free() const
 		{
-			synchronized return _free();
+			synchronized return free_();
 		}
 		inline void clear()
 		{
-			synchronized _clear();
+			synchronized clear_();
 		}
 
 	private:
@@ -106,14 +106,14 @@ namespace containers
 		volatile uint8_t tail_;
 	};
 
-	template<typename T, typename TREF> bool Queue<T, TREF>::_peek(T& item) const
+	template<typename T, typename TREF> bool Queue<T, TREF>::peek_(T& item) const
 	{
 		if (tail_ == head_) return false;
 		item = buffer_[head_];
 		return true;
 	}
 
-	template<typename T, typename TREF> uint8_t Queue<T, TREF>::_peek(T* buffer, uint8_t size) const
+	template<typename T, typename TREF> uint8_t Queue<T, TREF>::peek_(T* buffer, uint8_t size) const
 	{
 		uint8_t actual = (tail_ - head_) & mask_;
 		if (size > actual) size = actual;
@@ -122,12 +122,12 @@ namespace containers
 		return size;
 	}
 
-	template<typename T, typename TREF> template<uint8_t SIZE> uint8_t Queue<T, TREF>::_peek(T (&buffer)[SIZE]) const
+	template<typename T, typename TREF> template<uint8_t SIZE> uint8_t Queue<T, TREF>::peek_(T (&buffer)[SIZE]) const
 	{
-		return _peek(&buffer, SIZE);
+		return peek_(&buffer, SIZE);
 	}
 
-	template<typename T, typename TREF> bool Queue<T, TREF>::_push(TREF item)
+	template<typename T, typename TREF> bool Queue<T, TREF>::push_(TREF item)
 	{
 		if ((head_ - tail_ - 1) & mask_)
 		{
@@ -138,7 +138,7 @@ namespace containers
 		return false;
 	}
 
-	template<typename T, typename TREF> bool Queue<T, TREF>::_pull(T& item)
+	template<typename T, typename TREF> bool Queue<T, TREF>::pull_(T& item)
 	{
 		if (tail_ != head_)
 		{

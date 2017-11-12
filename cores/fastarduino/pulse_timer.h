@@ -193,7 +193,7 @@ namespace timer
 		inline void begin()
 		{
 		}
-		inline void _begin()
+		inline void begin_()
 		{
 		}
 	};

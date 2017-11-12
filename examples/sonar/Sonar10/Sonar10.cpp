@@ -132,7 +132,7 @@ public:
 	void on_sonar(SONAR::EVENT event)
 	{
 		// queue event for main loop to use it
-		queue_._push(event);
+		queue_.push_(event);
 	}
 
 	void on_timeout()
@@ -170,15 +170,15 @@ int main()
 	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	// Setup PCI for all sonar echo pins
 	interrupt::PCISignal<ECHO_PORT> signal;
-	signal._set_enable_pins(ECHO_MASK);
-	signal._enable();
+	signal.set_enable_pins_(ECHO_MASK);
+	signal.enable_();
 
 	// Setup sonar and listener
 	SONAR sonar{timer};
 	SonarListener listener{sonar, queue};
 
 	// Start timer
-	timer._begin(TIMEOUT_MAX);
+	timer.begin_(TIMEOUT_MAX);
 
 	// Enable interrupts now
 	sei();

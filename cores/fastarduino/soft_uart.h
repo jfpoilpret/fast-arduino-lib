@@ -105,14 +105,14 @@ namespace serial
 		private:
 			inline void write(uint8_t value)
 			{
-				synchronized _write(value);
+				synchronized write_(value);
 			}
-			void _write(uint8_t value);
+			void write_(uint8_t value);
 
 			typename gpio::FastPinType<TX>::TYPE tx_;
 		};
 
-		template<board::DigitalPin DPIN> void UATX<DPIN>::_write(uint8_t value)
+		template<board::DigitalPin DPIN> void UATX<DPIN>::write_(uint8_t value)
 		{
 			// Pre-calculate all what we need: parity bit
 			Parity parity_bit = calculate_parity(parity_, value);
@@ -275,7 +275,7 @@ namespace serial
 			// Push value if no error
 			if (!errors.has_errors)
 			{
-				errors.all_errors.queue_overflow = !in()._push(value);
+				errors.all_errors.queue_overflow = !in().push_(value);
 				// Wait for 1st stop bit
 				_delay_loop_2(stop_bit_rx_time_push_);
 			}
@@ -287,9 +287,9 @@ namespace serial
 			}
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 			if (PIN_TRAIT::IS_INT)
-				int_->_clear();
+				int_->clear_();
 			else
-				pci_->_clear();
+				pci_->clear_();
 		}
 
 		template<board::DigitalPin RX_, board::DigitalPin TX_> class UART : public UARX<RX_>, public UATX<TX_>
