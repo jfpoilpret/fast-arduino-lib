@@ -5,6 +5,8 @@ FastArduino is a C++ object-oriented library for Arduino boards based on AVR MCU
 
 FastArduino API is documented [here](http://jfpoilpret.github.io/fast-arduino-lib/) and documentation also includes a [simple tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html).
 
+FastArduino C++ code is also analyzed by SonarQube and results of this analysis are published from time to time [here](https://sonarcloud.io/dashboard?id=FastArduino-UNO).
+
 FastArduino objectives are:
 
 - provide smaller and faster code than other libraries for the same functionality
