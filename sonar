@@ -1,0 +1,5 @@
+#!/bin/bash
+make clean-examples CONF=UNO
+~/sonar-wrapper --out-dir ../sonar make examples CONF=UNO
+~/sonar-scanner -Dsonar.projectKey=FastArduino-UNO -Dsonar.sources=cores,examples -Dsonar.cfamily.build-wrapper-output=../sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=jfpoilpret-github -Dsonar.login=$SONAR_TOKEN
+
