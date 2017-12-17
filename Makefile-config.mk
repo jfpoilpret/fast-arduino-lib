@@ -99,6 +99,10 @@ ifndef DUDE_OPTION
         	DUDE_OPTION := -c arduinoisp 
 		CAN_PROGRAM_EEPROM := true
 		CAN_PROGRAM_FUSES := true
+	else ifeq ($(PROGRAMMER),ISPORG)
+        	DUDE_OPTION := -c arduinoisporg
+		CAN_PROGRAM_EEPROM := true
+		CAN_PROGRAM_FUSES := true
 	else ifeq ($(PROGRAMMER),SHIELD)
 		DUDE_OPTION := -c stk500v1 -b 19200
 		CAN_PROGRAM_EEPROM := true
