@@ -6,6 +6,14 @@ Preamble
 Why do we need guidelines?
 Where do these guidelines apply?
 
+Files
+-----
+All FastArduino source code files names are in `lower_case`, with `.h` or `.cpp` extensions.
+
+Directories are also named in `lowercase` (no underscore).
+
+Using namespaces is mandatory for all API.
+
 Naming
 ------
 Throughout FastArduino library code, the following naming conventions apply:
