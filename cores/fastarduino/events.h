@@ -32,8 +32,6 @@ namespace events
 		const uint8_t USER_EVENT = 128;
 	};
 
-	//TODO would it be possible/useful to make Event a template on `value_` type?
-	// In this case, we should also specialize template for T = void (no value needed)
 	// T must have public default and copy constructors
 	template<typename T>
 	class Event
@@ -75,24 +73,6 @@ namespace events
 	template<typename T>
 	class EventHandler;
 
-	//TODO Put in Dispatcher as private class
-	template<typename T>
-	class HandlerCaller
-	{
-	public:
-		HandlerCaller(const Event<T>& event) INLINE : event_{event}
-		{
-		}
-		bool operator()(EventHandler<T>& handler) INLINE
-		{
-			if (handler.type() == event_.type()) handler.on_event(event_);
-			return false;
-		}
-
-	private:
-		const Event<T> event_;
-	};
-
 	// Dispatcher should be used only from non-interrupt code
 	template<typename T>
 	class Dispatcher : public containers::LinkedList<EventHandler<T>>
@@ -100,8 +80,25 @@ namespace events
 	public:
 		void dispatch(const Event<T>& event)
 		{
-			this->traverse(HandlerCaller<T>(event));
+			this->traverse(HandlerCaller(event));
 		}
+	
+	private:
+		class HandlerCaller
+		{
+		public:
+			HandlerCaller(const Event<T>& event) INLINE : event_{event}
+			{
+			}
+			bool operator()(EventHandler<T>& handler) INLINE
+			{
+				if (handler.type() == event_.type()) handler.on_event(event_);
+				return false;
+			}
+
+		private:
+			const Event<T> event_;
+		};
 	};
 
 	template<typename T>
