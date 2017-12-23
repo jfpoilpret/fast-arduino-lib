@@ -142,15 +142,19 @@ namespace watchdog
 		/// @endcond
 	};
 
+	//TODO update DOC after templatization complete
 	/**
 	 * Simple API to use watchdog timer as a clock for events generation.
 	 * For this to work correctly, you need to register the proper ISR through
 	 * `REGISTER_WATCHDOG_CLOCK_ISR()` macro first, then ensure you call
 	 * `register_watchdog_handler()`.
 	 */
+	template<typename T>
 	class Watchdog : public WatchdogSignal
 	{
 	public:
+		using EVENT = events::Event<T>;
+
 		/**
 		 * Construct a new watchdog-based clock that will, for each watchdog 
 		 * timeout, add an event to the given @p event_queue for further 
@@ -160,7 +164,7 @@ namespace watchdog
 		 * @param event_queue the queue to which `Event`s will be pushed on each 
 		 * watchdog tick
 		 */
-		Watchdog(containers::Queue<events::Event>& event_queue)
+		Watchdog(containers::Queue<EVENT>& event_queue)
 			: millis_{0}, millis_per_tick_{0}, event_queue_{event_queue}
 		{
 		}
@@ -216,14 +220,14 @@ namespace watchdog
 		void on_tick()
 		{
 			millis_ += millis_per_tick_;
-			event_queue_.push_(events::Event{events::Type::WDT_TIMER});
+			event_queue_.push_(EVENT{events::Type::WDT_TIMER});
 		}
 		/// @endcond
 
 	private:
 		volatile uint32_t millis_;
 		uint16_t millis_per_tick_;
-		containers::Queue<events::Event>& event_queue_;
+		containers::Queue<EVENT>& event_queue_;
 	};
 }
 

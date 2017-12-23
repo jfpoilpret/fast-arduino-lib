@@ -80,12 +80,12 @@ static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PA7;
 // - one less vtable (for EventHandler itself)
 // But this also increases main() stack size of 8 bytes, i.e. 1 byte per LedHandler instance?
 template<board::DigitalPin PIN>
-class LedHandler: public EventHandler
+class LedHandler: public EventHandler<void>
 {
 public:
 	LedHandler() {}
-	LedHandler(uint8_t type) : EventHandler{type}, _led{gpio::PinMode::OUTPUT} {}
-	virtual void on_event(UNUSED const Event& event) override
+	LedHandler(uint8_t type) : EventHandler<void>{type}, _led{gpio::PinMode::OUTPUT} {}
+	virtual void on_event(UNUSED const Event<void>& event) override
 	{
 		_led.toggle();
 	}
@@ -94,6 +94,7 @@ private:
 	typename gpio::FastPinType<PIN>::TYPE _led;
 };
 
+int main() __attribute__((OS_main));
 int main()
 {
 	board::init();
@@ -101,11 +102,11 @@ int main()
 	sei();
 
 	// Prepare event queue
-	Event buffer[EVENT_QUEUE_SIZE];
-	containers::Queue<Event> event_queue{buffer};
+	Event<void> buffer[EVENT_QUEUE_SIZE];
+	containers::Queue<Event<void>> event_queue{buffer};
 	
 	// Prepare Dispatcher and Handlers
-	Dispatcher dispatcher;
+	Dispatcher<void> dispatcher;
 	LedHandler<LED0> handler0{Type::USER_EVENT};
 	LedHandler<LED1> handler1{uint8_t(Type::USER_EVENT + 1)};
 	LedHandler<LED2> handler2{uint8_t(Type::USER_EVENT + 2)};
@@ -127,14 +128,14 @@ int main()
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		event_queue.push(Event{uint8_t(Type::USER_EVENT + i)});
-		event_queue.push(Event{uint8_t(Type::USER_EVENT + i)});
+		event_queue.push(Event<void>{uint8_t(Type::USER_EVENT + i)});
+		event_queue.push(Event<void>{uint8_t(Type::USER_EVENT + i)});
 	}
 
 	// Event Loop
 	while (true)
 	{
-		Event event = pull(event_queue);
+		Event<void> event = pull(event_queue);
 		dispatcher.dispatch(event);
 		time::delay_ms(250);
 	}

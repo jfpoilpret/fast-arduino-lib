@@ -24,7 +24,8 @@ namespace watchdog
 		synchronized begin_with_config(config);
 	}
 
-	void Watchdog::begin(TimeOut timeout)
+	template<typename T>
+	void Watchdog<T>::begin(TimeOut timeout)
 	{
 		uint16_t ms_per_tick = 1 << (uint8_t(timeout) + 4);
 		uint8_t config = _BV(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? _BV(WDP3) : 0);
@@ -37,7 +38,8 @@ namespace watchdog
 		}
 	}
 
-	void Watchdog::delay(uint32_t ms)
+	template<typename T>
+	void Watchdog<T>::delay(uint32_t ms)
 	{
 		uint32_t limit = millis() + ms;
 		while (millis() < limit)

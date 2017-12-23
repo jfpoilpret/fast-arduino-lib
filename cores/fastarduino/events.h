@@ -34,36 +34,78 @@ namespace events
 
 	//TODO would it be possible/useful to make Event a template on `value_` type?
 	// In this case, we should also specialize template for T = void (no value needed)
+	// T must have public default and copy constructors
+	template<typename T>
 	class Event
 	{
 	public:
-		Event(uint8_t type = Type::NO_EVENT, uint16_t value = 0) INLINE : type_{type}, value_{value}
+		Event(uint8_t type = Type::NO_EVENT, T value = T{}) INLINE : type_{type}, value_{value}
 		{
 		}
 		uint8_t type() const INLINE
 		{
 			return type_;
 		}
-		uint16_t value() const INLINE
+		T value() const INLINE
 		{
 			return value_;
 		}
 
 	private:
 		uint8_t type_;
-		uint16_t value_;
+		T value_;
 	};
 
-	class EventHandler;
-
-	// Dispatcher should be used only from non-interrupt code
-	class Dispatcher : public containers::LinkedList<EventHandler>
+	template<>
+	class Event<void>
 	{
 	public:
-		void dispatch(const Event& event);
+		Event(uint8_t type = Type::NO_EVENT) INLINE : type_{type}
+		{
+		}
+		uint8_t type() const INLINE
+		{
+			return type_;
+		}
+
+	private:
+		uint8_t type_;
 	};
 
-	class EventHandler : public containers::Link<EventHandler>
+	template<typename T>
+	class EventHandler;
+
+	//TODO Put in Dispatcher as private class
+	template<typename T>
+	class HandlerCaller
+	{
+	public:
+		HandlerCaller(const Event<T>& event) INLINE : event_{event}
+		{
+		}
+		bool operator()(EventHandler<T>& handler) INLINE
+		{
+			if (handler.type() == event_.type()) handler.on_event(event_);
+			return false;
+		}
+
+	private:
+		const Event<T> event_;
+	};
+
+	// Dispatcher should be used only from non-interrupt code
+	template<typename T>
+	class Dispatcher : public containers::LinkedList<EventHandler<T>>
+	{
+	public:
+		void dispatch(const Event<T>& event)
+		{
+			this->traverse(HandlerCaller<T>(event));
+		}
+	};
+
+	template<typename T>
+	class EventHandler : public containers::Link<EventHandler<T>>
 	{
 	public:
 		uint8_t type() const INLINE
@@ -71,7 +113,7 @@ namespace events
 			return type_;
 		}
 
-		virtual void on_event(const Event& event) = 0;
+		virtual void on_event(const Event<T>& event) = 0;
 
 	protected:
 		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : type_{type}
@@ -80,7 +122,7 @@ namespace events
 
 		uint8_t type_;
 		//TODO is this really needed?
-		friend class Dispatcher;
+		friend class Dispatcher<T>;
 	};
 };
 #endif /* EVENTS_HH */

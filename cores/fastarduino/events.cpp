@@ -14,26 +14,29 @@
 
 #include "events.h"
 
+//FIXME have to pull that code back into events.h because template-based!
 namespace events
 {
-	class HandlerCaller
-	{
-	public:
-		HandlerCaller(const Event& event) INLINE : event_{event}
-		{
-		}
-		bool operator()(EventHandler& handler) INLINE
-		{
-			if (handler.type() == event_.type()) handler.on_event(event_);
-			return false;
-		}
+	// template<typename T>
+	// class HandlerCaller
+	// {
+	// public:
+	// 	HandlerCaller(const Event<T>& event) INLINE : event_{event}
+	// 	{
+	// 	}
+	// 	bool operator()(EventHandler<T>& handler) INLINE
+	// 	{
+	// 		if (handler.type() == event_.type()) handler.on_event(event_);
+	// 		return false;
+	// 	}
 
-	private:
-		const Event event_;
-	};
+	// private:
+	// 	const Event<T> event_;
+	// };
 
-	void Dispatcher::dispatch(const Event& event)
-	{
-		traverse(HandlerCaller(event));
-	}
+	// template<typename T>
+	// void Dispatcher<T>::dispatch(const Event<T>& event)
+	// {
+	// 	traverse(HandlerCaller<T>(event));
+	// }
 };
