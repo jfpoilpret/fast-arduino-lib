@@ -37,6 +37,8 @@ namespace events
 	class Event
 	{
 	public:
+		using TYPE = T;
+		
 		Event(uint8_t type = Type::NO_EVENT, T value = T{}) INLINE : type_{type}, value_{value}
 		{
 		}
@@ -58,6 +60,8 @@ namespace events
 	class Event<void>
 	{
 	public:
+		using TYPE = void;
+		
 		Event(uint8_t type = Type::NO_EVENT) INLINE : type_{type}
 		{
 		}

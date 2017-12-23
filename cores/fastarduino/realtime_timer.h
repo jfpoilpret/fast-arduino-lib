@@ -311,21 +311,21 @@ namespace timer
 		}
 	};
 
-	template<uint32_t PERIOD_MS = 1024> class RTTEventCallback
+	template<typename T, uint32_t PERIOD_MS = 1024> class RTTEventCallback
 	{
 		static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
 
 	public:
-		RTTEventCallback(containers::Queue<events::Event>& event_queue) : event_queue_{event_queue}
+		RTTEventCallback(containers::Queue<events::Event<T>>& event_queue) : event_queue_{event_queue}
 		{
 		}
 
 		void on_rtt_change(uint32_t millis)
 		{
-			if ((millis & (PERIOD_MS - 1)) == 0) event_queue_.push_(events::Event{events::Type::RTT_TIMER});
+			if ((millis & (PERIOD_MS - 1)) == 0) event_queue_.push_(events::Event<T>{events::Type::RTT_TIMER});
 		}
 
-		containers::Queue<events::Event>& event_queue_;
+		containers::Queue<events::Event<T>>& event_queue_;
 	};
 }
 
