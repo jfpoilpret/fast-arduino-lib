@@ -74,15 +74,27 @@ namespace events
 		uint8_t type_;
 	};
 
-	template<typename T>
+	template<typename T> struct Event_trait
+	{
+		static constexpr const bool IS_EVENT = false;
+	};
+	template<>
+	template<typename T> struct Event_trait<Event<T>>
+	{
+		static constexpr const bool IS_EVENT = true;
+	};
+
+	template<typename EVENT>
 	class EventHandler;
 
 	// Dispatcher should be used only from non-interrupt code
-	template<typename T>
-	class Dispatcher : public containers::LinkedList<EventHandler<T>>
+	template<typename EVENT>
+	class Dispatcher : public containers::LinkedList<EventHandler<EVENT>>
 	{
+		static_assert(Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
+
 	public:
-		void dispatch(const Event<T>& event)
+		void dispatch(const EVENT& event)
 		{
 			this->traverse(HandlerCaller(event));
 		}
@@ -91,30 +103,32 @@ namespace events
 		class HandlerCaller
 		{
 		public:
-			HandlerCaller(const Event<T>& event) INLINE : event_{event}
+			HandlerCaller(const EVENT& event) INLINE : event_{event}
 			{
 			}
-			bool operator()(EventHandler<T>& handler) INLINE
+			bool operator()(EventHandler<EVENT>& handler) INLINE
 			{
 				if (handler.type() == event_.type()) handler.on_event(event_);
 				return false;
 			}
 
 		private:
-			const Event<T> event_;
+			const EVENT event_;
 		};
 	};
 
-	template<typename T>
-	class EventHandler : public containers::Link<EventHandler<T>>
+	template<typename EVENT>
+	class EventHandler : public containers::Link<EventHandler<EVENT>>
 	{
+		static_assert(Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
+		
 	public:
 		uint8_t type() const INLINE
 		{
 			return type_;
 		}
 
-		virtual void on_event(const Event<T>& event) = 0;
+		virtual void on_event(const EVENT& event) = 0;
 
 	protected:
 		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : type_{type}
@@ -123,7 +137,7 @@ namespace events
 
 		uint8_t type_;
 		//TODO is this really needed?
-		friend class Dispatcher<T>;
+		friend class Dispatcher<EVENT>;
 	};
 };
 #endif /* EVENTS_HH */

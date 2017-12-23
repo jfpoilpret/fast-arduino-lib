@@ -22,16 +22,17 @@ namespace events
 {
 	class Job;
 
-	template<typename CLOCK_, typename T_> class Scheduler : public EventHandler<T_>, public containers::LinkedList<Job>
+	template<typename CLOCK_, typename EVENT_> class Scheduler : public EventHandler<EVENT_>, public containers::LinkedList<Job>
 	{
 	public:
 		using CLOCK = CLOCK_;
+		using EVENT = EVENT_;
 
-		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler<T_>{type}, clock_{clock}
+		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler<EVENT>{type}, clock_{clock}
 		{
 		}
 
-		virtual void on_event(UNUSED const Event<T_>& event) override INLINE
+		virtual void on_event(UNUSED const EVENT& event) override INLINE
 		{
 			traverse(*this);
 		}

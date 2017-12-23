@@ -75,17 +75,19 @@ static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PA7;
 #error "Current target is not yet supported!"
 #endif
 
+using EVENT = Event<void>;
+
 // Avoiding multiple inheritance reduces code size:
 // - no cxa pure virtual method included in linked exe (2 bytes)
 // - one less vtable (for EventHandler itself)
 // But this also increases main() stack size of 8 bytes, i.e. 1 byte per LedHandler instance?
 template<board::DigitalPin PIN>
-class LedHandler: public EventHandler<void>
+class LedHandler: public EventHandler<EVENT>
 {
 public:
 	LedHandler() {}
-	LedHandler(uint8_t type) : EventHandler<void>{type}, _led{gpio::PinMode::OUTPUT} {}
-	virtual void on_event(UNUSED const Event<void>& event) override
+	LedHandler(uint8_t type) : EventHandler<EVENT>{type}, _led{gpio::PinMode::OUTPUT} {}
+	virtual void on_event(UNUSED const EVENT& event) override
 	{
 		_led.toggle();
 	}
@@ -102,11 +104,11 @@ int main()
 	sei();
 
 	// Prepare event queue
-	Event<void> buffer[EVENT_QUEUE_SIZE];
-	containers::Queue<Event<void>> event_queue{buffer};
+	EVENT buffer[EVENT_QUEUE_SIZE];
+	containers::Queue<EVENT> event_queue{buffer};
 	
 	// Prepare Dispatcher and Handlers
-	Dispatcher<void> dispatcher;
+	Dispatcher<EVENT> dispatcher;
 	LedHandler<LED0> handler0{Type::USER_EVENT};
 	LedHandler<LED1> handler1{uint8_t(Type::USER_EVENT + 1)};
 	LedHandler<LED2> handler2{uint8_t(Type::USER_EVENT + 2)};
@@ -128,14 +130,14 @@ int main()
 	// push some events for a start
 	for (uint8_t i = 0; i < NUM_LEDS; ++i)
 	{
-		event_queue.push(Event<void>{uint8_t(Type::USER_EVENT + i)});
-		event_queue.push(Event<void>{uint8_t(Type::USER_EVENT + i)});
+		event_queue.push(EVENT{uint8_t(Type::USER_EVENT + i)});
+		event_queue.push(EVENT{uint8_t(Type::USER_EVENT + i)});
 	}
 
 	// Event Loop
 	while (true)
 	{
-		Event<void> event = pull(event_queue);
+		EVENT event = pull(event_queue);
 		dispatcher.dispatch(event);
 		time::delay_ms(250);
 	}

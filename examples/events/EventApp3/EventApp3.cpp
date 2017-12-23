@@ -44,8 +44,10 @@ static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #error "Current target is not yet supported!"
 #endif
 
+using EVENT = Event<void>;
+
 // Define vectors we need in the example
-REGISTER_WATCHDOG_CLOCK_ISR(void)
+REGISTER_WATCHDOG_CLOCK_ISR(EVENT)
 
 static const uint32_t PERIOD = 1000;
 
@@ -70,8 +72,8 @@ private:
 
 // Define event queue
 static const uint8_t EVENT_QUEUE_SIZE = 32;
-static Event<void> buffer[EVENT_QUEUE_SIZE];
-static containers::Queue<Event<void>> event_queue{buffer};
+static EVENT buffer[EVENT_QUEUE_SIZE];
+static containers::Queue<EVENT> event_queue{buffer};
 
 int main() __attribute__((OS_main));
 int main()
@@ -81,10 +83,10 @@ int main()
 	sei();
 
 	// Prepare Dispatcher and Handlers
-	Dispatcher<void> dispatcher;
-	watchdog::Watchdog<void> watchdog{event_queue};
+	Dispatcher<EVENT> dispatcher;
+	watchdog::Watchdog<EVENT> watchdog{event_queue};
 	watchdog.register_watchdog_handler();
-	Scheduler<watchdog::Watchdog<void>, void> scheduler{watchdog, Type::WDT_TIMER};
+	Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;
@@ -96,7 +98,7 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Event<void> event = pull(event_queue);
+		EVENT event = pull(event_queue);
 		dispatcher.dispatch(event);
 	}
 }

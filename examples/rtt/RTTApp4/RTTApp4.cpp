@@ -31,10 +31,11 @@
 #include <fastarduino/events.h>
 #include <fastarduino/scheduler.h>
 
-// Define vectors we need in the example
-REGISTER_RTT_ISR_METHOD(0, timer::RTTEventCallback<void>, &timer::RTTEventCallback<void>::on_rtt_change)
-
 using namespace events;
+using EVENT = Event<void>;
+
+// Define vectors we need in the example
+REGISTER_RTT_ISR_METHOD(0, timer::RTTEventCallback<EVENT>, &timer::RTTEventCallback<EVENT>::on_rtt_change)
 
 static const uint32_t PERIOD = 5000;
 
@@ -53,8 +54,8 @@ private:
 
 // Define event queue
 static const uint8_t EVENT_QUEUE_SIZE = 32;
-static Event<void> buffer[EVENT_QUEUE_SIZE];
-static containers::Queue<Event<void>> event_queue{buffer};
+static EVENT buffer[EVENT_QUEUE_SIZE];
+static containers::Queue<EVENT> event_queue{buffer};
 
 int main()
 {
@@ -62,14 +63,14 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	timer::RTTEventCallback<void> callback{event_queue};
+	timer::RTTEventCallback<EVENT> callback{event_queue};
 	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
 	interrupt::register_handler(callback);
 	
 	// Prepare Dispatcher and Handlers
-	Dispatcher<void> dispatcher;
-	Scheduler<timer::RTT<board::Timer::TIMER0>, void> scheduler{rtt, Type::RTT_TIMER};
+	Dispatcher<EVENT> dispatcher;
+	Scheduler<timer::RTT<board::Timer::TIMER0>, EVENT> scheduler{rtt, Type::RTT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;
@@ -81,7 +82,7 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		Event<void> event = pull(event_queue);
+		EVENT event = pull(event_queue);
 		dispatcher.dispatch(event);
 	}
 }

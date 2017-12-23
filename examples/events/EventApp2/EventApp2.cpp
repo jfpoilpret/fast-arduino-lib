@@ -43,14 +43,16 @@ static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #error "Current target is not yet supported!"
 #endif
 
-// Define vectors we need in the example
-REGISTER_WATCHDOG_CLOCK_ISR(void)
+using EVENT = Event<void>;
 
-class LedHandler: public EventHandler<void>, private gpio::FastPort<LED_PORT>
+// Define vectors we need in the example
+REGISTER_WATCHDOG_CLOCK_ISR(EVENT)
+
+class LedHandler: public EventHandler<EVENT>, private gpio::FastPort<LED_PORT>
 {
 public:
-	LedHandler() : EventHandler<void>{Type::WDT_TIMER}, FastPort{0xFF}, _value{0} {}
-	virtual void on_event(UNUSED const Event<void>& event) override
+	LedHandler() : EventHandler<EVENT>{Type::WDT_TIMER}, FastPort{0xFF}, _value{0} {}
+	virtual void on_event(UNUSED const EVENT& event) override
 	{
 		uint8_t value = _value;
 		if (value == 0)
@@ -68,8 +70,8 @@ private:
 static const uint8_t EVENT_QUEUE_SIZE = 32;
 
 // Prepare event queue
-static Event<void> buffer[EVENT_QUEUE_SIZE];
-static containers::Queue<Event<void>> event_queue{buffer};
+static EVENT buffer[EVENT_QUEUE_SIZE];
+static containers::Queue<EVENT> event_queue{buffer};
 	
 int main() __attribute__((OS_main));
 int main()
@@ -79,19 +81,19 @@ int main()
 	sei();
 
 	// Prepare Dispatcher and Handlers
-	Dispatcher<void> dispatcher;
+	Dispatcher<EVENT> dispatcher;
 	LedHandler handler;
 	dispatcher.insert(handler);
 	
 	// Start watchdog
-	watchdog::Watchdog<void> watchdog{event_queue};
+	watchdog::Watchdog<EVENT> watchdog{event_queue};
 	watchdog.register_watchdog_handler();
 	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_64ms);
 	
 	// Event Loop
 	while (true)
 	{
-		Event<void> event = pull(event_queue);
+		EVENT event = pull(event_queue);
 		dispatcher.dispatch(event);
 	}
 }
