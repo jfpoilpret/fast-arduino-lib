@@ -22,16 +22,16 @@ namespace events
 {
 	class Job;
 
-	template<typename CLOCK_> class Scheduler : public EventHandler, public containers::LinkedList<Job>
+	template<typename CLOCK_, typename T_> class Scheduler : public EventHandler<T_>, public containers::LinkedList<Job>
 	{
 	public:
 		using CLOCK = CLOCK_;
 
-		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler{type}, clock_{clock}
+		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler<T_>{type}, clock_{clock}
 		{
 		}
 
-		virtual void on_event(UNUSED const Event& event) override INLINE
+		virtual void on_event(UNUSED const Event<T_>& event) override INLINE
 		{
 			traverse(*this);
 		}
@@ -82,10 +82,10 @@ namespace events
 		uint32_t next_time_;
 		uint32_t period_;
 
-		template<typename CLOCK> friend class Scheduler;
+		template<typename CLOCK, typename T> friend class Scheduler;
 	};
 
-	template<typename CLOCK> bool Scheduler<CLOCK>::operator()(Job& job)
+	template<typename CLOCK, typename T> bool Scheduler<CLOCK, T>::operator()(Job& job)
 	{
 		uint32_t now = clock_.millis();
 		if (job.next_time() <= now)
