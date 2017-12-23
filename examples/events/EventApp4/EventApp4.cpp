@@ -47,7 +47,7 @@ static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #endif
 
 // Define vectors we need in the example
-REGISTER_WATCHDOG_CLOCK_ISR()
+REGISTER_WATCHDOG_CLOCK_ISR(void)
 
 static const uint32_t PERIOD = 1000;
 
@@ -72,8 +72,8 @@ private:
 
 // Define event queue
 static const uint8_t EVENT_QUEUE_SIZE = 32;
-static Event buffer[EVENT_QUEUE_SIZE];
-static containers::Queue<Event> event_queue{buffer};
+static Event<void> buffer[EVENT_QUEUE_SIZE];
+static containers::Queue<Event<void>> event_queue{buffer};
 
 int main()
 {
@@ -84,22 +84,22 @@ int main()
 	sei();
 
 	// Prepare Dispatcher and Handlers
-	Dispatcher dispatcher;
-	watchdog::Watchdog watchdog{event_queue};
+	Dispatcher<void> dispatcher;
+	watchdog::Watchdog<void> watchdog{event_queue};
 	watchdog.register_watchdog_handler();
-	Scheduler<watchdog::Watchdog> scheduler{watchdog, Type::WDT_TIMER};
+	Scheduler<watchdog::Watchdog<void>, void> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
 	LedHandler job;
 	scheduler.schedule(job);
 	
 	// Start watchdog
-	watchdog.begin(watchdog::Watchdog::TimeOut::TO_125ms);
+	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_125ms);
 	
 	// Event Loop
 	while (true)
 	{
-		Event event = pull(event_queue);
+		Event<void> event = pull(event_queue);
 		dispatcher.dispatch(event);
 	}
 }
