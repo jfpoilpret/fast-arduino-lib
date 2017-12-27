@@ -19,7 +19,7 @@ Basics:
 Advanced:
 1. [watchdog](@ref watchdog)
 2. [interrupts](@ref interrupts)
-3. events, scheduler
+3. [events, scheduler](@ref events)
 4. power
 5. SPI devices management
 6. I2C devices management
@@ -1421,3 +1421,471 @@ Once we have, as before,registered our handler class, we then create a `PCISigna
 Before enabling the `PCINT1` interrupt, we need to first indicate that we are only interested in changes of the button pin.
 
 For this example, we cannot compare sizes with the Arduino API equivalent because Pin Change Interrupts are not supported by the API.
+
+@anchor events Advanced: Events, Scheduler
+------------------------------------------
+
+FastArduino supports (and even encourages) events-driven programming, where events are generally generated and queued by interrupts (timer, pin changes, watchdog...) but not only, and events are then dequeued in an infinite loop (named the "event loop") in `main()`. 
+
+This way of programming allows short handling of interrupts in ISR (important because interrupts are disabled during ISR execution), and defer long tasks execution to the event loop.
+
+### Events API
+
+We will use the following example to explain the general Event API:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/pci.h>
+#include <fastarduino/events.h>
+#include <fastarduino/time.h>
+
+#define PCI_NUM 2
+static constexpr const board::Port BUTTONS_PORT = board::Port::PORT_D;
+static constexpr const board::DigitalPin LED = board::DigitalPin::LED;
+
+using namespace events;
+
+using EVENT = Event<uint8_t>;
+static constexpr const uint8_t BUTTON_EVENT = Type::USER_EVENT;
+
+// Class handling PCI interrupts and transforming them into events
+class EventGenerator
+{
+public:
+	EventGenerator(containers::Queue<EVENT>& event_queue):event_queue_{event_queue}, buttons_{0x00, 0xFF} {}
+
+	void on_pin_change()
+	{
+		event_queue_.push_(EVENT{BUTTON_EVENT, buttons_.get_PIN()});
+	}
+
+private:
+	containers::Queue<EVENT>& event_queue_;
+	gpio::FastPort<BUTTONS_PORT> buttons_;
+};
+
+REGISTER_PCI_ISR_METHOD(PCI_NUM, EventGenerator, &EventGenerator::on_pin_change, board::DigitalPin::D0_PD0)
+
+void blink(uint8_t buttons)
+{
+	// If no button is pressed, do nothing
+	if (!buttons) return;
+
+	gpio::FastPinType<LED>::TYPE led;
+	// Buttons are plit in 2 groups of four:
+	// - 1st group sets 5 iterations
+	// - 2nd group sets 10 iterations
+	// Note: we multiply by 2 because one blink iteration means toggling the LED twice
+	uint8_t iterations = (buttons & 0x0F ? 5 : 10) * 2;
+	// In each group, each buttons define the delay between LED toggles
+	// - 1st/5th button: 200ms
+	// - 2nd/6th button: 400ms
+	// - 3rd/7th button: 800ms
+	// - 4th/8th button: 1600ms
+	uint16_t delay = (buttons & 0x11 ? 200 : buttons & 0x22 ? 400 : buttons & 0x44 ? 800 : 1600);
+	while (iterations--)
+	{
+		led.toggle();
+		time::delay_ms(delay);
+	}
+}
+
+static const uint8_t EVENT_QUEUE_SIZE = 32;
+
+int main() __attribute__((OS_main));
+int main()
+{
+	board::init();
+
+	// Prepare event queue
+	EVENT buffer[EVENT_QUEUE_SIZE];
+	containers::Queue<EVENT> event_queue{buffer};
+
+	// Create and register event generator
+	EventGenerator generator{event_queue};
+	interrupt::register_handler(generator);
+
+	// Setup PCI interrupts
+	interrupt::PCISignal<BUTTONS_PORT> signal;
+	signal.enable_pins_(0xFF);
+	signal.enable_();
+
+	// Setup LED pin as output
+	gpio::FastPinType<LED>::TYPE led{gpio::PinMode::OUTPUT};
+
+	// Enable interrupts at startup time
+	sei();
+
+	// Event Loop
+	while (true)
+	{
+		EVENT event = containers::pull(event_queue);
+		if (event.type() == BUTTON_EVENT)
+			// Invert levels as 0 means button pushed (and we want 1 instead)
+			blink(event.value() ^ 0xFF);
+	}
+	return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this example, 8 buttons are connected to one port and generate Pin Change Interrupts when pressed. The registered 
+ISR generates an event for each pin change; the main event loop pulls one event from the events queue and starts a 
+blinking sequence of the LED connected to D13 (Arduino UNO); the selected sequence (number of blinks and delay between 
+blinks) depends on the pressed button.
+
+First off, you need to include the heeader with FastArduino Events API:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/events.h>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then we will be using `namepsace events` in our example:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+using namespace events;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Events API defines `template<typename T> class Event<T>` which basically contains 2 properties:
+- `type()` which is an `uint8_t` value used to discriminate different event types. FastArduino predefines a few event
+types and enables you to define your own types as you need,
+- `value()` is a `T` instance which you can use any way you need; each event will transport such a value. If you do not need any additional information on your own events, then you can use `void` for `T`.
+
+In the example, we use events to transport the state of all 8 buttons (as a `uint8_t`):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+using EVENT = Event<uint8_t>;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We also define a specific event type when buttons state changes:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+static constexpr const uint8_t BUTTON_EVENT = Type::USER_EVENT;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Note that `Type` is a namespace inside `events` namepsace, which lists FastArduino pre-defined Event types as constants:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+		const uint8_t NO_EVENT = 0;
+		const uint8_t WDT_TIMER = 1;
+		const uint8_t RTT_TIMER = 2;
+
+		// User-defined events start here (in range [128-255]))
+		const uint8_t USER_EVENT = 128;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Numbers from 3 to 127 are reserved for FastArduino future enhancements.
+
+The we define the class that will handle Pin Change Interrupts and generate events:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+class EventGenerator
+{
+public:
+	EventGenerator(containers::Queue<EVENT>& event_queue):event_queue_{event_queue}, buttons_{0x00, 0xFF} {}
+
+	void on_pin_change()
+	{
+		event_queue_.push_(EVENT{BUTTON_EVENT, buttons_.get_PIN()});
+	}
+
+private:
+	containers::Queue<EVENT>& event_queue_;
+	gpio::FastPort<BUTTONS_PORT> buttons_;
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note the use of `containers::Queue<EVENT>` that represents a [ring-buffer](https://en.wikipedia.org/wiki/Circular_buffer)
+queue to which events are pushed when the state of buttons are changing, and from which events are pulled from the main 
+event loop (as shown later).
+
+The most interesting code is the single line:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+		event_queue_.push_(EVENT{BUTTON_EVENT, buttons_.get_PIN()});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+where a new `EVENT` is instantiated, its value is the current level of all 8 buttons pins; then the new event is pushed 
+to the events queue.
+
+As [usual](@ref interrupts), we have to register this handler to the right PCI ISR:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_PCI_ISR_METHOD(PCI_NUM, EventGenerator, &EventGenerator::on_pin_change, board::DigitalPin::D0_PD0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Next we define the size of the events queue, which must be a power of 2 (this allows code size and speed optimizations):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+static const uint8_t EVENT_QUEUE_SIZE = 32;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This must be known at compile-time as we do not want dynamic memory allocation in an embedded program.
+
+The actual events queue is instantiated inside `main()`:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	EVENT buffer[EVENT_QUEUE_SIZE];
+	containers::Queue<EVENT> event_queue{buffer};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note that this is done in 2 steps:
+1. A buffer of the required size is allocated (in the stack for this example); the actual size, in this example, is `64` 
+bytes, i.e. 32 times 1 byte (event type) + 1 byte (event value).
+2. A `Queue` is instantiated for this buffer; after this step, you should never directly access `buffer` from your code.
+
+Finally, the `main()` function has the infinite event loop:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	while (true)
+	{
+		EVENT event = containers::pull(event_queue);
+		if (event.type() == BUTTON_EVENT)
+			// Invert levels as 0 means button pushed (and we want 1 instead)
+			blink(event.value() ^ 0xFF);
+	}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The call to `containers::pull(event_queue)` is blocking until an event is available in the queue, i.e. has been pushed
+by `EventGenerator::on_pin_change()`. While waiting, this call uses `time::yield()` which may put the MCU in sleep mode (see Power management tutorial later TODO LINK).
+
+Once an event is pulled from the event queue, we check its type and call `blink()` function with the event value, i.e. 
+the state of buttons when Pin Change Interrupt has occurred.
+
+The `blink()` function simply loops for the requested number of iterations and blinking delay, and returns only when the 
+full blinking sequence is finished. This function is very simple and there is no need to explain it further.
+
+### Event Dispatcher
+
+In the previous example, only one type of event is expected inside the event loop. In more complex applications though,
+many more types of events are foreseeable and we may end up with an event loop like:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	while (true)
+	{
+		EVENT event = containers::pull(event_queue);
+		switch (event.type())
+        {
+            case EVENT_TYPE_1:
+            // Do something
+            break;
+
+            case EVENT_TYPE_2:
+            // Do something else
+            break;
+
+            case EVENT_TYPE_3:
+            // Do yet something else
+            break;
+
+            ...
+        }
+	}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This generally makes code less readable and more difficult to maintain.
+
+FastArduino API supports an *event dispatching* approach, where you define `EventHandler` classes and register 
+instances for specific event types:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+class MyHandler: public EventHandler<EVENT>
+{
+public:
+	MyHandler() : EventHandler<EVENT>{Type::USER_EVENT} {}
+	virtual void on_event(const EVENT& event) override
+	{
+        // Do something
+	}
+};
+
+int main()
+{
+    ...
+	// Prepare Handlers
+	MyHandler handler;
+    ...
+	
+	// Prepare Dispatcher and register Handlers
+	Dispatcher<EVENT> dispatcher;
+	dispatcher.insert(handler);
+    ...
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With `events::Dispatcher`, you can register one handler for each event type, and then the main event loop
+is reduced to the simple code below:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	while (true)
+	{
+		EVENT event = pull(event_queue);
+		dispatcher.dispatch(event);
+	}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The right event handler gets automatically called for each pulled event.
+
+Note that `events::EventHandler` uses a `virtual` method, hence this may have an impact on memory size consumed in
+Flash (vtables) and also on method call time.
+
+### Scheduler & Jobs
+
+Some types of events are generated by FastArduino features. In particular, watchdog and realtime timer features can be
+setup to trigger some time events at given periods. From these events, FastArduino offers a `events::Scheduler` API, 
+that allows you to define periodic `events::Job`s.
+
+The next code demonstrates a new way of blinking a LED by using watchdog generated events and associated jobs:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/events.h>
+#include <fastarduino/watchdog.h>
+#include <fastarduino/scheduler.h>
+
+using namespace events;
+using EVENT = Event<void>;
+
+// Define vectors we need in the example
+REGISTER_WATCHDOG_CLOCK_ISR(EVENT)
+
+static const uint32_t PERIOD = 1000;
+
+class LedBlinkerJob: public Job
+{
+public:
+	LedBlinkerJob() : Job{0, PERIOD}, led_{gpio::PinMode::OUTPUT} {}
+	virtual void on_schedule(UNUSED uint32_t millis) override
+	{
+		led_.toggle();
+	}
+	
+private:
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
+};
+
+// Define event queue
+static const uint8_t EVENT_QUEUE_SIZE = 32;
+static EVENT buffer[EVENT_QUEUE_SIZE];
+static containers::Queue<EVENT> event_queue{buffer};
+
+int main() __attribute__((OS_main));
+int main()
+{
+	board::init();
+	// Enable interrupts at startup time
+	sei();
+
+	// Prepare Dispatcher and Handlers
+	Dispatcher<EVENT> dispatcher;
+	watchdog::Watchdog<EVENT> watchdog{event_queue};
+	watchdog.register_watchdog_handler();
+	Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
+	dispatcher.insert(scheduler);
+
+	LedBlinkerJob job;
+	scheduler.schedule(job);
+	
+	// Start watchdog
+	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_64ms);
+	
+	// Event Loop
+	while (true)
+	{
+		EVENT event = pull(event_queue);
+		dispatcher.dispatch(event);
+	}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FastArduino `Scheduler` API is defined in its own header, but under the same `events` namespace:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/scheduler.h>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This API is based on FastArduino events management, hence we need to define the `event` type we need:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+using EVENT = Event<void>;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FastArduino `Scheduler` does not use `Event`'s`value`, hence we can simply use `void`, so that one `EVENT` will be
+exactly one byte in size.
+
+Next step consists in registering Watchdog clock ISR:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_WATCHDOG_CLOCK_ISR(EVENT)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We then define a `Job` subclass that will be called back at the required period:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+class LedBlinkerJob: public Job
+{
+public:
+	LedBlinkerJob() : Job{0, PERIOD}, led_{gpio::PinMode::OUTPUT} {}
+	virtual void on_schedule(UNUSED uint32_t millis) override
+	{
+		led_.toggle();
+	}
+	
+private:
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`Job` constructor takes 2 arguments:
+- `next`: the delay in ms after which this job will execute for the first time; `0` means this job should execute
+immediately (TODO explain further when is immediately)
+- `period`: the period in ms at which the job shall be re-executed; `0` means this job will execute only once.
+
+In this example, we set the job period to 1000ms, i.e. the actual blink period will be 2s.
+
+The `virtual` method `Job::on_schedule()` will get called when the time to executed has elapsed, not necessarily at the 
+exact expected time (the exact time depends on several factors exposed hereafter).
+
+In the example, we then declare the event queue, this time as static memory (not in the stack):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+static const uint8_t EVENT_QUEUE_SIZE = 32;
+static EVENT buffer[EVENT_QUEUE_SIZE];
+static containers::Queue<EVENT> event_queue{buffer};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In `main()`, we create a `Dispatcher` that will be used in the event loop, a `Watchdog` that
+will generate and queue `Type::WDT_TIMER` events on each watchdog timeout, and a `Scheduler` that will
+get notified of  `Type::WDT_TIMER` events and will use the created `Watchdog` as a clock, in order to
+determine which `Job`s to call.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	Dispatcher<EVENT> dispatcher;
+	watchdog::Watchdog<EVENT> watchdog{event_queue};
+	watchdog.register_watchdog_handler();
+	Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
+	dispatcher.insert(scheduler);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note the last code line, which links the `Scheduler` to the `Dispatcher` so it can handle proper events.
+
+Next, we instantiate the job that will make the LED blink, and schedule with `Scheduler`:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	LedBlinkerJob job;
+	scheduler.schedule(job);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We can then start the watchdog with any suitable timeout value (the selected value impacts the accuracy of the 
+watchdog clock):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_64ms);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Finally, then event loop is quite usual:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	while (true)
+	{
+		EVENT event = pull(event_queue);
+		dispatcher.dispatch(event);
+	}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Jobs scheduling accuracy depends on several factors:
+- the accuracy of the `CLOCK` used for `Scheduler`; FastArduino provides two possible clocks (but you may also 
+provide your own): `watchdog::Watchdog` and `timer::RTT`.
+- the CPU occupation of your main event loop, which may trigger a `Job` long after its expected time.
+
+As mentioned above, `Scheduler` can also work with `timer::RTT`, that would mean only a few changes in the previous 
+example, as shown in the next snippet, only showing new lines of code:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/realtime_timer.h>
+...
+static const uint16_t RTT_EVENT_PERIOD = 1024;
+REGISTER_RTT_EVENT_ISR(0, EVENT, RTT_EVENT_PERIOD)
+...
+void main()
+{
+    ...
+	timer::RTTEventCallback<EVENT, RTT_EVENT_PERIOD> callback{event_queue};
+	timer::RTT<board::Timer::TIMER0> rtt;
+	rtt.register_rtt_handler();
+	interrupt::register_handler(callback);
+    ...
+	Scheduler<timer::RTT<board::Timer::TIMER0>, EVENT> scheduler{rtt, Type::RTT_TIMER};
+    ...
+	rtt.begin();
+    ...
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TODO further explain changed code above
+
+
+
+
+
