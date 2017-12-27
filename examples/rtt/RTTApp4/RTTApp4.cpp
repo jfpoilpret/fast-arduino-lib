@@ -34,8 +34,11 @@
 using namespace events;
 using EVENT = Event<void>;
 
+static const uint16_t RTT_EVENT_PERIOD = 1024;
+
 // Define vectors we need in the example
-REGISTER_RTT_ISR_METHOD(0, timer::RTTEventCallback<EVENT>, &timer::RTTEventCallback<EVENT>::on_rtt_change)
+// REGISTER_RTT_ISR_METHOD(0, timer::RTTEventCallback<EVENT>, &timer::RTTEventCallback<EVENT>::on_rtt_change)
+REGISTER_RTT_EVENT_ISR(0, EVENT, RTT_EVENT_PERIOD)
 
 static const uint32_t PERIOD = 5000;
 
@@ -63,7 +66,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	timer::RTTEventCallback<EVENT> callback{event_queue};
+	timer::RTTEventCallback<EVENT, RTT_EVENT_PERIOD> callback{event_queue};
 	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
 	interrupt::register_handler(callback);

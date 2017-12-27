@@ -90,6 +90,18 @@
 		CALLBACK(RTT_HOLDER::handler()->millis());                                        \
 	}
 
+//TODO DOC API
+#define REGISTER_RTT_EVENT_ISR(TIMER_NUM, EVENT, PERIOD)															\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                    					\
+	{                                                                                           					\
+		using RTT_HANDLER = CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) > ;                					\
+		using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                        					\
+		using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer, void); 					\
+		RTT_HANDLE::handle();                                                                   					\
+		using RTT_CB_HANDLER = timer::RTTEventCallback< EVENT , PERIOD > ;											\
+		CALL_HANDLER_(RTT_CB_HANDLER, &RTT_CB_HANDLER::on_rtt_change, uint32_t)(RTT_HOLDER::handler()->millis());	\
+	}
+
 namespace timer
 {
 	/**
@@ -311,6 +323,7 @@ namespace timer
 		}
 	};
 
+	//TODO DOC API
 	template<typename EVENT, uint32_t PERIOD_MS = 1024> class RTTEventCallback
 	{
 		static_assert(events::Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
