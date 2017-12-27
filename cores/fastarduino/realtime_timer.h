@@ -138,7 +138,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER}, millis_{}
+		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER, TimerInterrupt::OUTPUT_COMPARE_A}, millis_{}
 		{
 		}
 
