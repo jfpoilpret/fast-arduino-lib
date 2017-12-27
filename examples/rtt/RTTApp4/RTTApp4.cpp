@@ -37,7 +37,6 @@ using EVENT = Event<void>;
 static const uint16_t RTT_EVENT_PERIOD = 1024;
 
 // Define vectors we need in the example
-// REGISTER_RTT_ISR_METHOD(0, timer::RTTEventCallback<EVENT>, &timer::RTTEventCallback<EVENT>::on_rtt_change)
 REGISTER_RTT_EVENT_ISR(0, EVENT, RTT_EVENT_PERIOD)
 
 static const uint32_t PERIOD = 5000;
