@@ -20,7 +20,7 @@ Advanced:
 1. [watchdog](@ref watchdog)
 2. [interrupts](@ref interrupts)
 3. [events, scheduler](@ref events)
-4. power
+4. [power](@ref power)
 5. SPI devices management
 6. I2C devices management
 7. eeprom
@@ -859,7 +859,7 @@ uint16_t echo_us = uint16_t(end.millis * 1000UL + end.micros);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Note that this snippet is just an example and is not usable as is: it does not include a timeout mechanism to avoid waiting the echo signal forever (which can happen if the ultrasonic wave does not encounter an obstacle within its possible range, i.e. 4 meters). Also, this approach could be improved by making it interrupt-driven (i.e. having interrupts generated when the `echo_pin` changes state).
 
-Another interesting use of RTT is to perform some periodic actions. FastArduino implements an events handling mechanism that can be connected to an RTT in order to deliver periodic events. This mechanism is [described later](TODO) in this tutorial.
+Another interesting use of RTT is to perform some periodic actions. FastArduino implements an events handling mechanism that can be connected to an RTT in order to deliver periodic events. This mechanism is [described later](@ref events) in this tutorial.
 
 
 @anchor pwm Basics: PWM 
@@ -1127,7 +1127,7 @@ The infinite loop just toggles `led` pin level and goes to sleep:
 		power::Power::sleep(board::SleepMode::POWER_DOWN);
 	}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-As explained [later](TODO), `power::Power::sleep(board::SleepMode::POWER_DOWN)` just puts the MCU to sleep until some external interrupts wake it up; in our example, that interrupt is the watchdog timeout interrupt. 
+As explained [later](@ref power), `power::Power::sleep(board::SleepMode::POWER_DOWN)` just puts the MCU to sleep until some external interrupts wake it up; in our example, that interrupt is the watchdog timeout interrupt. 
 
 The size of this example is not much bigger than the first example of this tutorial:
 |           | FastArduino |
@@ -1135,7 +1135,7 @@ The size of this example is not much bigger than the first example of this tutor
 | code size | 262 bytes   |
 | data size | 0 byte      |
 
-FastArduino defines another class, `Watchdog`. This class allows to use the AVR watchdog timer as a clock for events generation. This will be demonstrated when [events scheduling](TODO) is described.
+FastArduino defines another class, `Watchdog`. This class allows to use the AVR watchdog timer as a clock for events generation. This will be demonstrated when [events scheduling](@ref events) is described.
 
 
 @anchor interrupts Advanced: Interrupts
@@ -1422,6 +1422,7 @@ Before enabling the `PCINT1` interrupt, we need to first indicate that we are on
 
 For this example, we cannot compare sizes with the Arduino API equivalent because Pin Change Interrupts are not supported by the API.
 
+
 @anchor events Advanced: Events, Scheduler
 ------------------------------------------
 
@@ -1627,7 +1628,7 @@ Finally, the `main()` function has the infinite event loop:
 	}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The call to `containers::pull(event_queue)` is blocking until an event is available in the queue, i.e. has been pushed
-by `EventGenerator::on_pin_change()`. While waiting, this call uses `time::yield()` which may put the MCU in sleep mode (see Power management tutorial later TODO LINK).
+by `EventGenerator::on_pin_change()`. While waiting, this call uses `time::yield()` which may put the MCU in sleep mode (see [Power management tutorial later](@ref power)).
 
 Once an event is pulled from the event queue, we check its type and call `blink()` function with the event value, i.e. 
 the state of buttons when Pin Change Interrupt has occurred.
@@ -1807,7 +1808,7 @@ private:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 `Job` constructor takes 2 arguments:
 - `next`: the delay in ms after which this job will execute for the first time; `0` means this job should execute
-immediately (TODO explain further when is immediately)
+immediately
 - `period`: the period in ms at which the job shall be re-executed; `0` means this job will execute only once.
 
 In this example, we set the job period to 1000ms, i.e. the actual blink period will be 2s.
@@ -1872,9 +1873,9 @@ REGISTER_RTT_EVENT_ISR(0, EVENT, RTT_EVENT_PERIOD)
 void main()
 {
     ...
-	timer::RTTEventCallback<EVENT, RTT_EVENT_PERIOD> callback{event_queue};
 	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.register_rtt_handler();
+	timer::RTTEventCallback<EVENT, RTT_EVENT_PERIOD> callback{event_queue};
 	interrupt::register_handler(callback);
     ...
 	Scheduler<timer::RTT<board::Timer::TIMER0>, EVENT> scheduler{rtt, Type::RTT_TIMER};
@@ -1883,9 +1884,93 @@ void main()
     ...
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TODO further explain changed code above
+
+Since this code uses a realtime timer, two lines of code instantiate, then start one such timer:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	timer::RTT<board::Timer::TIMER0> rtt;
+	rtt.register_rtt_handler();
+    ...
+	rtt.begin();
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In addition, we use `timer::RTTEventCallback` utility class, which purpose is to generate events from
+RTT ticks:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	timer::RTTEventCallback<EVENT, RTT_EVENT_PERIOD> callback{event_queue};
+	interrupt::register_handler(callback);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here we create a callback that will generate an event every `RTT_EVENT_PERIOD` milliseconds.
+
+We also need to register the right ISR for the RTT and the callback:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+REGISTER_RTT_EVENT_ISR(0, EVENT, RTT_EVENT_PERIOD)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now the scheduler can be instantiated with the RTT instance as its clock and `Type::RTT_TIMER` as
+the type of events to listen to:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	Scheduler<timer::RTT<board::Timer::TIMER0>, EVENT> scheduler{rtt, Type::RTT_TIMER};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+@anchor power Advanced: Power Management
+----------------------------------------
 
+AVR MCU support various sleep modes that you can use to reduce power consumption of your circuits.
 
+Each sleep mode has distinct characteristics regarding:
+- maximum current consumed
+- list of wake-up signals (interrupts)
+- time to wake up from sleep
+
+FastArduino support for AVR power modes is quite simple, gathered in `namespace power` and consists in
+a single class `power::Power` with 3 static methods.
+
+In addition, the available sleep modes for a given MCU are defined in `board::SleepMode` enumerated type.
+
+Here is a simple example:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/gpio.h>
+#include <fastarduino/power.h>
+#include <fastarduino/watchdog.h>
+
+// Define vectors we need in the example
+REGISTER_WATCHDOG_ISR_EMPTY()
+
+int main() __attribute__((OS_main));
+int main()
+{
+	board::init();
+	sei();
+
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+
+	watchdog::WatchdogSignal watchdog;
+	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_500ms);
+	
+	while (true)
+	{
+		led.toggle();
+		power::Power::sleep(board::SleepMode::POWER_DOWN);
+	}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+You may have recognized it: this is the example presented in the [Watchdog section](@ref watchdog) of this tutorial.
+
+In the main loop, we just toggle the LED pin and go to `board::SleepMode::POWER_DOWN` sleep mode (the mode that 
+consumes the least current of all).
+
+The `Power::sleep()` method will return only when the MCU is awakened by an external signal, in this example, the
+signal used is the watchdog timeout interrupt (every 500ms). 
+
+Note that the `time::yield()` method just calls `Power::sleep()` (with current default sleep mode) and this method 
+is used by other FastArduino API on several occasions whenever these API need to wait for something:
+- `watchdog::Watchdog::delay()` while waiting for time to elapse for the given delay
+- `timer::RTT::delay()` while waiting for time to elapse for the given delay
+- `streams::OutputBuffer::flush()` while waiting until all stream content has been read by a consumer (e.g. UART)
+- `containers::pull()` and `containers::peek()` while waiting for an item to be pushed to a queue
+- `devices::rf::NRF24L01` when sending or receving payload
+
+Hence when using any of these API, it is important to select the proper sleep mode, based on your power 
+consumption requirements.
 
