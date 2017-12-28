@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classanalog_1_1_analog_input.html" title="analog::AnalogInput\l\&lt; BG, board::AnalogReference\l::AVCC, uint16_t, board::\lAnalogClock::MAX_FREQ_50KHz \&gt;" alt="" coords="5,5,241,76"/>
-<area shape="rect" id="node2" href="$classanalog_1_1_power_voltage.html" title="API that uses bandgap feature to calculate current voltage fed to the MCU. " alt="" coords="289,20,439,61"/>
+<area shape="rect" id="node1" href="$classanalog_1_1_analog_input.html" title="analog::AnalogInput\l\&lt; BANDGAP_, uint16_t,\l board::AnalogReference\l::AVCC, board::AnalogClock\l::MAX_FREQ_50KHz \&gt;" alt="" coords="5,5,196,91"/>
+<area shape="rect" id="node2" href="$classanalog_1_1_power_voltage.html" title="API that uses bandgap feature to calculate current voltage fed to the MCU. " alt="" coords="244,27,393,69"/>
 </map>

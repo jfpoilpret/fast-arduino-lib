@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: serial::hard::UART&lt; USART &gt; Class Template Reference</title>
+<title>FastArduino: serial::hard::UART&lt; USART_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -82,9 +82,10 @@ $(document).ready(function(){initNavTree('classserial_1_1hard_1_1_u_a_r_t.html',
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classserial_1_1hard_1_1_u_a_r_t-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">serial::hard::UART&lt; USART &gt; Class Template Reference</div>  </div>
+<div class="title">serial::hard::UART&lt; USART_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -93,10 +94,10 @@ $(document).ready(function(){initNavTree('classserial_1_1hard_1_1_u_a_r_t.html',
 
 <p><code>#include &lt;<a class="el" href="uart_8h_source.html">fastarduino/uart.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for serial::hard::UART&lt; USART &gt;:</div>
+Inheritance diagram for serial::hard::UART&lt; USART_ &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classserial_1_1hard_1_1_u_a_r_t__inherit__graph.png" border="0" usemap="#serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t_01_4_inherit__map" id="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t_01_4_inherit__map">
+<div class="center"><img src="classserial_1_1hard_1_1_u_a_r_t__inherit__graph.png" border="0" usemap="#serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t___01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t___01_4_inherit__map" id="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t___01_4_inherit__map">
 <area shape="rect" id="node2" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. " alt="" coords="83,169,215,211"/>
 <area shape="rect" id="node6" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. " alt="" coords="240,169,371,211"/>
 <area shape="rect" id="node4" href="classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="5,95,147,121"/>
@@ -105,10 +106,10 @@ Inheritance diagram for serial::hard::UART&lt; USART &gt;:</div>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for serial::hard::UART&lt; USART &gt;:</div>
+Collaboration diagram for serial::hard::UART&lt; USART_ &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classserial_1_1hard_1_1_u_a_r_t__coll__graph.png" border="0" usemap="#serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t_01_4_coll__map" id="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t_01_4_coll__map">
+<div class="center"><img src="classserial_1_1hard_1_1_u_a_r_t__coll__graph.png" border="0" usemap="#serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t___01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t___01_4_coll__map" id="serial_1_1hard_1_1_u_a_r_t_3_01_u_s_a_r_t___01_4_coll__map">
 <area shape="rect" id="node2" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. " alt="" coords="83,169,215,211"/>
 <area shape="rect" id="node6" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. " alt="" coords="240,169,371,211"/>
 <area shape="rect" id="node4" href="classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="5,95,147,121"/>
@@ -119,78 +120,92 @@ Collaboration diagram for serial::hard::UART&lt; USART &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa820e0838b6fcdbd0040c4f511a2ac70"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE_RX, uint8_t SIZE_TX&gt; </td></tr>
-<tr class="memitem:aa820e0838b6fcdbd0040c4f511a2ac70"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html#aa820e0838b6fcdbd0040c4f511a2ac70">UART</a> (char(&amp;input)[SIZE_RX], char(&amp;output)[SIZE_TX])</td></tr>
-<tr class="memdesc:aa820e0838b6fcdbd0040c4f511a2ac70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial receiver/transceiver and provide it with 2 buffers, one for interrupt-based reception, one for interrupt-based transmission.  <a href="#aa820e0838b6fcdbd0040c4f511a2ac70">More...</a><br /></td></tr>
-<tr class="separator:aa820e0838b6fcdbd0040c4f511a2ac70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classserial_1_1hard_1_1_u_a_r_x')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html">serial::hard::UARX&lt; USART &gt;</a></td></tr>
-<tr class="memitem:a1925b0bc83804f8bc15fafa26437dde5 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE_RX&gt; </td></tr>
-<tr class="memitem:a1925b0bc83804f8bc15fafa26437dde5 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a1925b0bc83804f8bc15fafa26437dde5">UARX</a> (char(&amp;input)[SIZE_RX])</td></tr>
-<tr class="memdesc:a1925b0bc83804f8bc15fafa26437dde5 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial receiver and provide it with a buffer for interrupt-based reception.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#a1925b0bc83804f8bc15fafa26437dde5">More...</a><br /></td></tr>
-<tr class="separator:a1925b0bc83804f8bc15fafa26437dde5 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aced1af3784376b18a1372ad1821d16ac inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#aced1af3784376b18a1372ad1821d16ac">register_handler</a> ()</td></tr>
-<tr class="memdesc:aced1af3784376b18a1372ad1821d16ac inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this receiver with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a>.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#aced1af3784376b18a1372ad1821d16ac">More...</a><br /></td></tr>
-<tr class="separator:aced1af3784376b18a1372ad1821d16ac inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29a4dfaecb6e1e2828864efc46f111ec inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a29a4dfaecb6e1e2828864efc46f111ec">begin</a> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
-<tr class="memdesc:a29a4dfaecb6e1e2828864efc46f111ec inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the receiver.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#a29a4dfaecb6e1e2828864efc46f111ec">More...</a><br /></td></tr>
-<tr class="separator:a29a4dfaecb6e1e2828864efc46f111ec inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92599733d6550aa15962e88fd6c7e1ae inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a92599733d6550aa15962e88fd6c7e1ae">end</a> ()</td></tr>
-<tr class="memdesc:a92599733d6550aa15962e88fd6c7e1ae inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop reception.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#a92599733d6550aa15962e88fd6c7e1ae">More...</a><br /></td></tr>
-<tr class="separator:a92599733d6550aa15962e88fd6c7e1ae inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab71d9819dad42e4e54cfdc3923b13c89 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top"><a id="ab71d9819dad42e4e54cfdc3923b13c89"></a>
-<a class="el" href="classstreams_1_1_input_buffer.html">streams::InputBuffer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ab71d9819dad42e4e54cfdc3923b13c89">in</a> ()</td></tr>
-<tr class="memdesc:ab71d9819dad42e4e54cfdc3923b13c89 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the raw input stream used to read content received through this serial transmitter. <br /></td></tr>
-<tr class="separator:ab71d9819dad42e4e54cfdc3923b13c89 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1692661026c4861fb8c378efdd3ecf07 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top"><a id="a1692661026c4861fb8c378efdd3ecf07"></a>
-<a class="el" href="classstreams_1_1_formatted_input.html">streams::FormattedInput</a>&lt; <a class="el" href="classstreams_1_1_input_buffer.html">streams::InputBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a1692661026c4861fb8c378efdd3ecf07">fin</a> ()</td></tr>
-<tr class="memdesc:a1692661026c4861fb8c378efdd3ecf07 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the formatted input stream used to read content received through this serial transmitter. <br /></td></tr>
-<tr class="separator:a1692661026c4861fb8c378efdd3ecf07 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classserial_1_1hard_1_1_u_a_t_x')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt; USART &gt;</a></td></tr>
-<tr class="memitem:a2f9c79264d4550e4081c65500f95c771 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE_TX&gt; </td></tr>
-<tr class="memitem:a2f9c79264d4550e4081c65500f95c771 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a2f9c79264d4550e4081c65500f95c771">UATX</a> (char(&amp;output)[SIZE_TX])</td></tr>
-<tr class="memdesc:a2f9c79264d4550e4081c65500f95c771 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial transmitter and provide it with a buffer for interrupt-based transmission.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#a2f9c79264d4550e4081c65500f95c771">More...</a><br /></td></tr>
-<tr class="separator:a2f9c79264d4550e4081c65500f95c771 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5357297f58870fc8e71dd70a1e79ada1 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a5357297f58870fc8e71dd70a1e79ada1">register_handler</a> ()</td></tr>
-<tr class="memdesc:a5357297f58870fc8e71dd70a1e79ada1 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this transmitter with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a>.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#a5357297f58870fc8e71dd70a1e79ada1">More...</a><br /></td></tr>
-<tr class="separator:a5357297f58870fc8e71dd70a1e79ada1 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad02715895d9cafefc1a28df302ce6049 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#ad02715895d9cafefc1a28df302ce6049">begin</a> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
-<tr class="memdesc:ad02715895d9cafefc1a28df302ce6049 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the transmitter.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#ad02715895d9cafefc1a28df302ce6049">More...</a><br /></td></tr>
-<tr class="separator:ad02715895d9cafefc1a28df302ce6049 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af728d825af83cf230f373b85c69cf8b6 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#af728d825af83cf230f373b85c69cf8b6">end</a> ()</td></tr>
-<tr class="memdesc:af728d825af83cf230f373b85c69cf8b6 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop all transmissions.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#af728d825af83cf230f373b85c69cf8b6">More...</a><br /></td></tr>
-<tr class="separator:af728d825af83cf230f373b85c69cf8b6 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc319ffda93cb20a6b0da045df66df22 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top"><a id="adc319ffda93cb20a6b0da045df66df22"></a>
-<a class="el" href="classstreams_1_1_output_buffer.html">streams::OutputBuffer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#adc319ffda93cb20a6b0da045df66df22">out</a> ()</td></tr>
-<tr class="memdesc:adc319ffda93cb20a6b0da045df66df22 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the raw output stream used to send content through this serial transmitter. <br /></td></tr>
-<tr class="separator:adc319ffda93cb20a6b0da045df66df22 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c626a0c6e68e634bfa1f61edd866940 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top"><a id="a2c626a0c6e68e634bfa1f61edd866940"></a>
-<a class="el" href="classstreams_1_1_formatted_output.html">streams::FormattedOutput</a>&lt; <a class="el" href="classstreams_1_1_output_buffer.html">streams::OutputBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a2c626a0c6e68e634bfa1f61edd866940">fout</a> ()</td></tr>
-<tr class="memdesc:a2c626a0c6e68e634bfa1f61edd866940 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the formatted output stream used to send content through this serial transmitter. <br /></td></tr>
-<tr class="separator:a2c626a0c6e68e634bfa1f61edd866940 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4220cac127ba38d00c8facf49ed038b"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE_RX, uint8_t SIZE_TX&gt; </td></tr>
+<tr class="memitem:aa4220cac127ba38d00c8facf49ed038b"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html#aa4220cac127ba38d00c8facf49ed038b">UART</a> (char(&amp;input)[SIZE_RX], char(&amp;output)[SIZE_TX])</td></tr>
+<tr class="memdesc:aa4220cac127ba38d00c8facf49ed038b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial receiver/transceiver and provide it with 2 buffers, one for interrupt-based reception, one for interrupt-based transmission.  <a href="#aa4220cac127ba38d00c8facf49ed038b">More...</a><br /></td></tr>
+<tr class="separator:aa4220cac127ba38d00c8facf49ed038b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classserial_1_1hard_1_1_u_a_r_x')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html">serial::hard::UARX&lt; USART_ &gt;</a></td></tr>
+<tr class="memitem:a5e4adca3a15c030fde986c65e0971f3e inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE_RX&gt; </td></tr>
+<tr class="memitem:a5e4adca3a15c030fde986c65e0971f3e inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a5e4adca3a15c030fde986c65e0971f3e">UARX</a> (char(&amp;input)[SIZE_RX])</td></tr>
+<tr class="memdesc:a5e4adca3a15c030fde986c65e0971f3e inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial receiver and provide it with a buffer for interrupt-based reception.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#a5e4adca3a15c030fde986c65e0971f3e">More...</a><br /></td></tr>
+<tr class="separator:a5e4adca3a15c030fde986c65e0971f3e inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace25979d5084b5f30214601c336920e6 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ace25979d5084b5f30214601c336920e6">register_handler</a> ()</td></tr>
+<tr class="memdesc:ace25979d5084b5f30214601c336920e6 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this receiver with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a>.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#ace25979d5084b5f30214601c336920e6">More...</a><br /></td></tr>
+<tr class="separator:ace25979d5084b5f30214601c336920e6 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab990e6d4b45a811a451f1eeaa96faf1b inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ab990e6d4b45a811a451f1eeaa96faf1b">begin</a> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
+<tr class="memdesc:ab990e6d4b45a811a451f1eeaa96faf1b inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the receiver.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#ab990e6d4b45a811a451f1eeaa96faf1b">More...</a><br /></td></tr>
+<tr class="separator:ab990e6d4b45a811a451f1eeaa96faf1b inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa71b459ae36f387311f6558c5400926a inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#aa71b459ae36f387311f6558c5400926a">end</a> ()</td></tr>
+<tr class="memdesc:aa71b459ae36f387311f6558c5400926a inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop reception.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#aa71b459ae36f387311f6558c5400926a">More...</a><br /></td></tr>
+<tr class="separator:aa71b459ae36f387311f6558c5400926a inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdc0d330538570d6b4d7488efa48769c inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top"><a id="abdc0d330538570d6b4d7488efa48769c"></a>
+<a class="el" href="classstreams_1_1_input_buffer.html">streams::InputBuffer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#abdc0d330538570d6b4d7488efa48769c">in</a> ()</td></tr>
+<tr class="memdesc:abdc0d330538570d6b4d7488efa48769c inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the raw input stream used to read content received through this serial transmitter. <br /></td></tr>
+<tr class="separator:abdc0d330538570d6b4d7488efa48769c inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a810a547b9ba009c34291e5a6033645c3 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top"><a id="a810a547b9ba009c34291e5a6033645c3"></a>
+<a class="el" href="classstreams_1_1_formatted_input.html">streams::FormattedInput</a>&lt; <a class="el" href="classstreams_1_1_input_buffer.html">streams::InputBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a810a547b9ba009c34291e5a6033645c3">fin</a> ()</td></tr>
+<tr class="memdesc:a810a547b9ba009c34291e5a6033645c3 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the formatted input stream used to read content received through this serial transmitter. <br /></td></tr>
+<tr class="separator:a810a547b9ba009c34291e5a6033645c3 inherit pub_methods_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classserial_1_1hard_1_1_u_a_t_x')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt; USART_ &gt;</a></td></tr>
+<tr class="memitem:aac216368224107002b59b0400626306e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE_TX&gt; </td></tr>
+<tr class="memitem:aac216368224107002b59b0400626306e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#aac216368224107002b59b0400626306e">UATX</a> (char(&amp;output)[SIZE_TX])</td></tr>
+<tr class="memdesc:aac216368224107002b59b0400626306e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial transmitter and provide it with a buffer for interrupt-based transmission.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#aac216368224107002b59b0400626306e">More...</a><br /></td></tr>
+<tr class="separator:aac216368224107002b59b0400626306e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4608d77079869a3fb2aecb1757b1d2cc inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a4608d77079869a3fb2aecb1757b1d2cc">register_handler</a> ()</td></tr>
+<tr class="memdesc:a4608d77079869a3fb2aecb1757b1d2cc inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this transmitter with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a>.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#a4608d77079869a3fb2aecb1757b1d2cc">More...</a><br /></td></tr>
+<tr class="separator:a4608d77079869a3fb2aecb1757b1d2cc inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b04d0617b28fd343a01f865dee787e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
+<tr class="memdesc:a64b04d0617b28fd343a01f865dee787e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the transmitter.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">More...</a><br /></td></tr>
+<tr class="separator:a64b04d0617b28fd343a01f865dee787e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefd9bfc4341322aba0b7e6875ec2fbba inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#aefd9bfc4341322aba0b7e6875ec2fbba">end</a> ()</td></tr>
+<tr class="memdesc:aefd9bfc4341322aba0b7e6875ec2fbba inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop all transmissions.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#aefd9bfc4341322aba0b7e6875ec2fbba">More...</a><br /></td></tr>
+<tr class="separator:aefd9bfc4341322aba0b7e6875ec2fbba inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a552cbafcf93e91e5cc704a09144d848e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top"><a id="a552cbafcf93e91e5cc704a09144d848e"></a>
+<a class="el" href="classstreams_1_1_output_buffer.html">streams::OutputBuffer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a552cbafcf93e91e5cc704a09144d848e">out</a> ()</td></tr>
+<tr class="memdesc:a552cbafcf93e91e5cc704a09144d848e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the raw output stream used to send content through this serial transmitter. <br /></td></tr>
+<tr class="separator:a552cbafcf93e91e5cc704a09144d848e inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a8f9c59c9822a98fb4ad6a495645bd5 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top"><a id="a8a8f9c59c9822a98fb4ad6a495645bd5"></a>
+<a class="el" href="classstreams_1_1_formatted_output.html">streams::FormattedOutput</a>&lt; <a class="el" href="classstreams_1_1_output_buffer.html">streams::OutputBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a8a8f9c59c9822a98fb4ad6a495645bd5">fout</a> ()</td></tr>
+<tr class="memdesc:a8a8f9c59c9822a98fb4ad6a495645bd5 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the formatted output stream used to send content through this serial transmitter. <br /></td></tr>
+<tr class="separator:a8a8f9c59c9822a98fb4ad6a495645bd5 inherit pub_methods_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:aad4d349a3a3e1a14666e0596a8985f2f"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html#aad4d349a3a3e1a14666e0596a8985f2f">USART</a> = USART_</td></tr>
+<tr class="memdesc:aad4d349a3a3e1a14666e0596a8985f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> used by this <a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. ">UART</a>.  <a href="#aad4d349a3a3e1a14666e0596a8985f2f">More...</a><br /></td></tr>
+<tr class="separator:aad4d349a3a3e1a14666e0596a8985f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_classserial_1_1hard_1_1_u_a_r_x"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classserial_1_1hard_1_1_u_a_r_x')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html">serial::hard::UARX&lt; USART_ &gt;</a></td></tr>
+<tr class="memitem:a1c6b5733bfa55c65ea58ca03b2819bbe inherit pub_static_attribs_classserial_1_1hard_1_1_u_a_r_x"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a1c6b5733bfa55c65ea58ca03b2819bbe">USART</a> = USART_</td></tr>
+<tr class="memdesc:a1c6b5733bfa55c65ea58ca03b2819bbe inherit pub_static_attribs_classserial_1_1hard_1_1_u_a_r_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> used by this <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. ">UARX</a>.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#a1c6b5733bfa55c65ea58ca03b2819bbe">More...</a><br /></td></tr>
+<tr class="separator:a1c6b5733bfa55c65ea58ca03b2819bbe inherit pub_static_attribs_classserial_1_1hard_1_1_u_a_r_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_attribs_classserial_1_1hard_1_1_u_a_t_x"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classserial_1_1hard_1_1_u_a_t_x')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt; USART_ &gt;</a></td></tr>
+<tr class="memitem:add950dee052568489b0892f120ba02cb inherit pub_static_attribs_classserial_1_1hard_1_1_u_a_t_x"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#add950dee052568489b0892f120ba02cb">USART</a> = USART_</td></tr>
+<tr class="memdesc:add950dee052568489b0892f120ba02cb inherit pub_static_attribs_classserial_1_1hard_1_1_u_a_t_x"><td class="mdescLeft">&#160;</td><td class="mdescRight">The hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> used by this <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. ">UATX</a>.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#add950dee052568489b0892f120ba02cb">More...</a><br /></td></tr>
+<tr class="separator:add950dee052568489b0892f120ba02cb inherit pub_static_attribs_classserial_1_1hard_1_1_u_a_t_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;board::USART USART&gt;<br />
-class serial::hard::UART&lt; USART &gt;</h3>
+<div class="textblock"><h3>template&lt;board::USART USART_&gt;<br />
+class serial::hard::UART&lt; USART_ &gt;</h3>
 
 <p>Hardware serial receiver/transceiver API. </p>
-<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UART to work correctly...">REGISTER_UART_ISR()</a></code>, then call <code><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a5357297f58870fc8e71dd70a1e79ada1" title="Register this transmitter with the matching ISR that should have been registered with REGISTER_UATX_I...">register_handler()</a></code> immediately after the <a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. ">UART</a> instance has been constructed.</p>
+<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UART to work correctly...">REGISTER_UART_ISR()</a></code>, then call <code><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a4608d77079869a3fb2aecb1757b1d2cc" title="Register this transmitter with the matching ISR that should have been registered with REGISTER_UATX_I...">register_handler()</a></code> immediately after the <a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. ">UART</a> instance has been constructed.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">USART</td><td>the hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> to use </td></tr>
+    <tr><td class="paramname">USART_</td><td>the hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> to use </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UART to work correctly...">REGISTER_UART_ISR()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00355">355</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00363">363</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa820e0838b6fcdbd0040c4f511a2ac70"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa820e0838b6fcdbd0040c4f511a2ac70">&#9670;&nbsp;</a></span>UART()</h2>
+<a id="aa4220cac127ba38d00c8facf49ed038b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4220cac127ba38d00c8facf49ed038b">&#9670;&nbsp;</a></span>UART()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::USART USART&gt; </div>
+template&lt;board::USART USART_&gt; </div>
 <div class="memtemplate">
 template&lt;uint8_t SIZE_RX, uint8_t SIZE_TX&gt; </div>
 <table class="mlabels">
@@ -198,7 +213,7 @@ template&lt;uint8_t SIZE_RX, uint8_t SIZE_TX&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART</a>&lt; USART &gt;::<a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html">UART</a> </td>
+          <td class="memname"><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART</a>&lt; USART_ &gt;::<a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html">UART</a> </td>
           <td>(</td>
           <td class="paramtype">char(&amp;)&#160;</td>
           <td class="paramname"><em>input</em>[SIZE_RX], </td>
@@ -225,13 +240,42 @@ template&lt;uint8_t SIZE_RX, uint8_t SIZE_TX&gt; </div>
 <p>Construct a new hardware serial receiver/transceiver and provide it with 2 buffers, one for interrupt-based reception, one for interrupt-based transmission. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">input</td><td>an array of characters used by this receiver to store content received through serial line, buffered until read through <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ab71d9819dad42e4e54cfdc3923b13c89" title="Get the raw input stream used to read content received through this serial transmitter. ">in()</a></code> or <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a1692661026c4861fb8c378efdd3ecf07" title="Get the formatted input stream used to read content received through this serial transmitter. ">fin()</a></code>. </td></tr>
+    <tr><td class="paramname">input</td><td>an array of characters used by this receiver to store content received through serial line, buffered until read through <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#abdc0d330538570d6b4d7488efa48769c" title="Get the raw input stream used to read content received through this serial transmitter. ">in()</a></code> or <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#a810a547b9ba009c34291e5a6033645c3" title="Get the formatted input stream used to read content received through this serial transmitter. ">fin()</a></code>. </td></tr>
     <tr><td class="paramname">output</td><td>an array of characters used by this transmitter to buffer output during transmission so that write methods are not blocking. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00374">374</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00386">386</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aad4d349a3a3e1a14666e0596a8985f2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad4d349a3a3e1a14666e0596a8985f2f">&#9670;&nbsp;</a></span>USART</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::USART USART_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a> <a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART</a>&lt; USART_ &gt;::USART = USART_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> used by this <a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. ">UART</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00367">367</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 
 </div>
 </div>

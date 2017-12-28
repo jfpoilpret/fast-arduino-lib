@@ -27,5 +27,6 @@ var utilities_8h =
     [ "swap_bytes", "utilities_8h.html#a53f4a46843c0030ed1388d10c0ad6179", null ],
     [ "swap_bytes", "utilities_8h.html#aa520b3da671862f180de0fa3499ae293", null ],
     [ "as_uint8_t", "utilities_8h.html#a8122a1acb9aff2f2cd1d4ae7e1e99ac9", null ],
-    [ "calculate_delay1_count", "utilities_8h.html#a6ed4721feb889faa1f72fc2629d71271", null ]
+    [ "calculate_delay1_count", "utilities_8h.html#a6ed4721feb889faa1f72fc2629d71271", null ],
+    [ "num_bits", "utilities_8h.html#aadb785961c9199701ce9025177b243c6", null ]
 ];

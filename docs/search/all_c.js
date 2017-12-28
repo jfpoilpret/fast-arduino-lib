@@ -1,15 +1,12 @@
 var searchData=
 [
-  ['magneticfields',['MagneticFields',['../structdevices_1_1magneto_1_1_magnetic_fields.html',1,'devices::magneto']]],
-  ['manipulator',['Manipulator',['../classstreams_1_1_formatted_output.html#a8b6f2134ba2738320ddcee7c8b484169',1,'streams::FormattedOutput::Manipulator()'],['../classstreams_1_1_formatted_input.html#abac4844b2293dca9ff95582cc3bd776b',1,'streams::FormattedInput::Manipulator()']]],
-  ['map',['map',['../namespaceutils.html#a608f8edf36fb4a7c58dd01232e07c0c8',1,'utils']]],
-  ['map_5fphysical_5fto_5fraw',['map_physical_to_raw',['../namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32',1,'utils']]],
-  ['map_5fraw_5fto_5fphysical',['map_raw_to_physical',['../namespaceutils.html#a610e02474f969fc747fa1725b79e252c',1,'utils']]],
-  ['mask',['MASK',['../classgpio_1_1_fast_pin_type.html#a699ddc0c62895a55d319cffb2a66b6c7',1,'gpio::FastPinType']]],
-  ['max',['MAX',['../classanalog_1_1_p_w_m_output.html#a1103f4999ec776e95432ca594167ed17',1,'analog::PWMOutput']]],
-  ['max_5frt',['max_rt',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a6c4a43f0613197e7f9831b882ef18fb3',1,'devices::rf::NRF24L01::status_t']]],
-  ['micros',['micros',['../structtime_1_1_r_t_t_time.html#ad612e0350274ff0eea2769599617a923',1,'time::RTTTime']]],
-  ['millis',['millis',['../structtime_1_1_r_t_t_time.html#aaded1d29763b09e1c3564e5735676742',1,'time::RTTTime::millis()'],['../classwatchdog_1_1_watchdog.html#a01cdedd19e0374266cdbf431f39897fb',1,'watchdog::Watchdog::millis()'],['../namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70',1,'time::millis()']]],
-  ['millis_5fptr',['MILLIS_PTR',['../namespacetime.html#abe5f682f4654fd7af7c744d41fd2efdd',1,'time']]],
-  ['mpu6050',['MPU6050',['../classdevices_1_1magneto_1_1_m_p_u6050.html',1,'devices::magneto']]]
+  ['network',['network',['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html#ab96267277742b5d81046be3bd6476858',1,'devices::rf::NRF24L01::addr_t']]],
+  ['no_5fevent',['NO_EVENT',['../namespaceevents_1_1_type.html#a2c33d039e5fdd277900219bd3cd74eb0',1,'events::Type']]],
+  ['non_5finverting',['NON_INVERTING',['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a5b9d80a04f3ec2025977abad33e94e61',1,'timer']]],
+  ['none',['NONE',['../namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693',1,'serial']]],
+  ['nop',['NOP',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a1a004f5abe2b334db21328be1ea6b593',1,'devices::rf::NRF24L01']]],
+  ['normal',['NORMAL',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a1e23852820b9154316c7c06e2b7ba051',1,'timer']]],
+  ['noskipws',['noskipws',['../namespacestreams.html#a69896b602e1678789bbad7b9fa98e3a3',1,'streams']]],
+  ['nrf24l01',['NRF24L01',['../classdevices_1_1rf_1_1_n_r_f24_l01.html',1,'devices::rf::NRF24L01&lt; CSN, CE &gt;'],['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a98152bba08b4fe4bf11259ec01b32b99',1,'devices::rf::NRF24L01::NRF24L01()']]],
+  ['ntimer',['NTIMER',['../classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083',1,'timer::RTT::NTIMER()'],['../classtimer_1_1_timer.html#a260ddf8df1436604859a07ebb30d9e23',1,'timer::Timer::NTIMER()']]]
 ];

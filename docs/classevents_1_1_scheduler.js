@@ -1,8 +1,9 @@
 var classevents_1_1_scheduler =
 [
-    [ "Scheduler", "classevents_1_1_scheduler.html#ab2b494b703adca5e3ef5cb642fb286d8", null ],
-    [ "on_event", "classevents_1_1_scheduler.html#a9b02cb1e1269e644978b65b08ed1a71f", null ],
-    [ "operator()", "classevents_1_1_scheduler.html#ac830ee65f3597e99fa3b58a87fb7e8f0", null ],
-    [ "schedule", "classevents_1_1_scheduler.html#a4c67f6dea48c3c9bc75ab3a89316d7fa", null ],
-    [ "unschedule", "classevents_1_1_scheduler.html#a17571bfb66ad99359e269e4f2d9d9999", null ]
+    [ "CLOCK", "classevents_1_1_scheduler.html#afec660953213969f4e4f7e81b2256110", null ],
+    [ "EVENT", "classevents_1_1_scheduler.html#ad8099104b97bb2573fdc4ce91b0f2652", null ],
+    [ "Scheduler", "classevents_1_1_scheduler.html#a4b39d6c6759fdb97c4844eb3816e975a", null ],
+    [ "schedule", "classevents_1_1_scheduler.html#a92d66252e1454ff7eff6fa7a2fa04bf4", null ],
+    [ "unschedule", "classevents_1_1_scheduler.html#a6886f399f31429c4aa4ec1dbbdd5d801", null ],
+    [ "clock_", "classevents_1_1_scheduler.html#ad3d7697ecef4c812f2982f178c8bb77a", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: timer::RTTEventCallback&lt; PERIOD_MS &gt; Class Template Reference</title>
+<title>FastArduino: timer::RTTEventCallback&lt; EVENT, PERIOD_MS &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -82,42 +82,27 @@ $(document).ready(function(){initNavTree('classtimer_1_1_r_t_t_event_callback.ht
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classtimer_1_1_r_t_t_event_callback-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">timer::RTTEventCallback&lt; PERIOD_MS &gt; Class Template Reference</div>  </div>
+<div class="title">timer::RTTEventCallback&lt; EVENT, PERIOD_MS &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Collaboration diagram for timer::RTTEventCallback&lt; PERIOD_MS &gt;:</div>
-<div class="dyncontent">
-<div class="center"><img src="classtimer_1_1_r_t_t_event_callback__coll__graph.png" border="0" usemap="#timer_1_1_r_t_t_event_callback_3_01_p_e_r_i_o_d___m_s_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="timer_1_1_r_t_t_event_callback_3_01_p_e_r_i_o_d___m_s_01_4_coll__map" id="timer_1_1_r_t_t_event_callback_3_01_p_e_r_i_o_d___m_s_01_4_coll__map">
-<area shape="rect" id="node2" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l events::Event \&gt;" alt="" coords="23,5,159,47"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a92bb5cc0693f4658738dfedc3b224916"><td class="memItemLeft" align="right" valign="top"><a id="a92bb5cc0693f4658738dfedc3b224916"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>RTTEventCallback</b> (<a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; <a class="el" href="classevents_1_1_event.html">events::Event</a> &gt; &amp;event_queue)</td></tr>
-<tr class="separator:a92bb5cc0693f4658738dfedc3b224916"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9fa94288e394b03aeac19a182de2e045"><td class="memItemLeft" align="right" valign="top"><a id="a9fa94288e394b03aeac19a182de2e045"></a>
+<tr class="memitem:a41ca339f4780aae1b793dd16ad9701a9"><td class="memItemLeft" align="right" valign="top"><a id="a41ca339f4780aae1b793dd16ad9701a9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RTTEventCallback</b> (<a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; EVENT &gt; &amp;event_queue)</td></tr>
+<tr class="separator:a41ca339f4780aae1b793dd16ad9701a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92b815d4645f776d6ef5f47a8cc4c1f3"><td class="memItemLeft" align="right" valign="top"><a id="a92b815d4645f776d6ef5f47a8cc4c1f3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>on_rtt_change</b> (uint32_t millis)</td></tr>
-<tr class="separator:a9fa94288e394b03aeac19a182de2e045"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a8cb090cab83387308b2abcd172b97e85"><td class="memItemLeft" align="right" valign="top"><a id="a8cb090cab83387308b2abcd172b97e85"></a>
-<a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; <a class="el" href="classevents_1_1_event.html">events::Event</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>_event_queue</b></td></tr>
-<tr class="separator:a8cb090cab83387308b2abcd172b97e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a92b815d4645f776d6ef5f47a8cc4c1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;uint32_t PERIOD_MS = 1024&gt;<br />
-class timer::RTTEventCallback&lt; PERIOD_MS &gt;</h3>
+<div class="textblock"><h3>template&lt;typename EVENT, uint32_t PERIOD_MS = 1024&gt;<br />
+class timer::RTTEventCallback&lt; EVENT, PERIOD_MS &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00304">304</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00327">327</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a></li>
 </ul>

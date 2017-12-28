@@ -177,8 +177,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ad59cc4688ab8e474a87a997b56ad88b7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><b>_irq_signal</b></td></tr>
-<tr class="separator:ad59cc4688ab8e474a87a997b56ad88b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ee325414c9a1aba93af5f756bf6cea0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><b>irq_signal_</b></td></tr>
+<tr class="separator:a8ee325414c9a1aba93af5f756bf6cea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -365,7 +365,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>read_fifo_payload</b> 
 class devices::rf::IRQ_NRF24L01&lt; CSN, CE, IRQ &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00548">548</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00547">547</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1137cd45cf6ee0c58f8dc9762a84e6b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1137cd45cf6ee0c58f8dc9762a84e6b3">&#9670;&nbsp;</a></span>IRQ_NRF24L01()</h2>
@@ -414,13 +414,13 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ&g
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00560">560</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00559">559</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ad59cc4688ab8e474a87a997b56ad88b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad59cc4688ab8e474a87a997b56ad88b7">&#9670;&nbsp;</a></span>_irq_signal</h2>
+<a id="a8ee325414c9a1aba93af5f756bf6cea0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ee325414c9a1aba93af5f756bf6cea0">&#9670;&nbsp;</a></span>irq_signal_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -428,12 +428,12 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ&g
 template&lt;board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html">devices::rf::IRQ_NRF24L01</a>&lt; CSN, CE, IRQ &gt;::_irq_signal</td>
+          <td class="memname"><a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html">devices::rf::IRQ_NRF24L01</a>&lt; CSN, CE, IRQ &gt;::irq_signal_</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba297f5ea19073f4b51715b029f48d5d52">interrupt::InterruptTrigger::FALLING_EDGE</a>}</div><div class="line">        {</div><div class="line">            <a class="code" href="classgpio_1_1_fast_pin_type.html#a0fca7a9cd5885cda50b74f02a2bc3378">gpio::FastPinType&lt;IRQ&gt;::set_mode</a>(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041ace9c2fb3e41547f8dfb11145f7485786">gpio::PinMode::INPUT_PULLUP</a>);</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd">begin</a>()</div><div class="line">        {</div><div class="line">            <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd">NRF24L01&lt;CSN, CE&gt;::begin</a>();</div><div class="line">            _irq_signal.enable();</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123">end</a>()</div><div class="line">        {</div><div class="line">            _irq_signal.disable();</div><div class="line">            <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123">NRF24L01&lt;CSN, CE&gt;::end</a>();</div><div class="line">        }</div><div class="line"></div><div class="line">    <span class="keyword">private</span>:</div><div class="line">        <a class="code" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt;IRQ&gt;</a> _irq_signal</div></div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00562">562</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<b>Initial value:</b><div class="fragment"><div class="line">{<a class="code" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba297f5ea19073f4b51715b029f48d5d52">interrupt::InterruptTrigger::FALLING_EDGE</a>}</div><div class="line">            {</div><div class="line">                <a class="code" href="classgpio_1_1_fast_pin_type.html#aec745f596e959cb883f9ba66a526b1b6">gpio::FastPinType&lt;IRQ&gt;::set_mode</a>(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041ace9c2fb3e41547f8dfb11145f7485786">gpio::PinMode::INPUT_PULLUP</a>);</div><div class="line">            }</div><div class="line"></div><div class="line">            <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd">begin</a>()</div><div class="line">            {</div><div class="line">                <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd">NRF24L01&lt;CSN, CE&gt;::begin</a>();</div><div class="line">                irq_signal_.enable();</div><div class="line">            }</div><div class="line"></div><div class="line">            <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123">end</a>()</div><div class="line">            {</div><div class="line">                irq_signal_.disable();</div><div class="line">                <a class="code" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123">NRF24L01&lt;CSN, CE&gt;::end</a>();</div><div class="line">            }</div><div class="line"></div><div class="line">        <span class="keyword">private</span>:</div><div class="line">            <a class="code" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt;IRQ&gt;</a> irq_signal_</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00560">560</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>

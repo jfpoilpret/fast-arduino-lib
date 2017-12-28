@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('watchdog_8h.html','');});
 <div class="textblock"><code>#include &lt;avr/interrupt.h&gt;</code><br />
 <code>#include &lt;avr/wdt.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="interrupts_8h_source.html">interrupts.h</a>&quot;</code><br />
-<code>#include &quot;events.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="events_8h_source.html">events.h</a>&quot;</code><br />
 <code>#include &quot;boards/board.h&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for watchdog.h:</div>
@@ -102,20 +102,12 @@ Include dependency graph for watchdog.h:</div>
 <div class="center"><img src="watchdog_8h__incl.png" border="0" usemap="#fastarduino_2watchdog_8h" alt=""/></div>
 <map name="fastarduino_2watchdog_8h" id="fastarduino_2watchdog_8h">
 <area shape="rect" id="node4" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="5,80,92,107"/>
-<area shape="rect" id="node5" href="events_8h_source.html" title="events.h" alt="" coords="267,80,339,107"/>
+<area shape="rect" id="node5" href="events_8h.html" title="Support for events management. " alt="" coords="267,80,339,107"/>
 <area shape="rect" id="node15" href="board_8h_source.html" title="boards/board.h" alt="" coords="364,80,472,107"/>
 <area shape="rect" id="node7" href="queue_8h_source.html" title="queue.h" alt="" coords="269,155,337,181"/>
 <area shape="rect" id="node14" href="linked__list_8h_source.html" title="linked_list.h" alt="" coords="175,229,266,256"/>
 <area shape="rect" id="node8" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="238,304,313,331"/>
 <area shape="rect" id="node11" href="time_8h.html" title="Simple time utilities. " alt="" coords="341,229,399,256"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="watchdog_8h__dep__incl.png" border="0" usemap="#fastarduino_2watchdog_8hdep" alt=""/></div>
-<map name="fastarduino_2watchdog_8hdep" id="fastarduino_2watchdog_8hdep">
-<area shape="rect" id="node2" href="watchdog_8cpp_source.html" title="fastarduino/watchdog.cpp" alt="" coords="5,80,176,107"/>
 </map>
 </div>
 </div>
@@ -126,7 +118,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_signal.html">watchdog::WatchdogSignal</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple API to handle watchdog signals.  <a href="classwatchdog_1_1_watchdog_signal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog&lt; EVENT &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple API to use watchdog timer as a clock for events generation.  <a href="classwatchdog_1_1_watchdog.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -138,9 +130,9 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ad060c52a2a6ab7f8db2dfc957736c390"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="watchdog_8h.html#ad060c52a2a6ab7f8db2dfc957736c390">REGISTER_WATCHDOG_CLOCK_ISR</a>()&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(WDT_vect, <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>, &amp;watchdog::Watchdog::on_tick)</td></tr>
-<tr class="memdesc:ad060c52a2a6ab7f8db2dfc957736c390"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">watchdog::Watchdog</a> to work properly.  <a href="#ad060c52a2a6ab7f8db2dfc957736c390">More...</a><br /></td></tr>
-<tr class="separator:ad060c52a2a6ab7f8db2dfc957736c390"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6998639a03718afa44f5626c17ce8994"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="watchdog_8h.html#a6998639a03718afa44f5626c17ce8994">REGISTER_WATCHDOG_CLOCK_ISR</a>(EVENT)&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(WDT_vect, <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt;EVENT&gt;, &amp;<a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt;EVENT&gt;::on_tick)</td></tr>
+<tr class="memdesc:a6998639a03718afa44f5626c17ce8994"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">watchdog::Watchdog</a> to work properly.  <a href="#a6998639a03718afa44f5626c17ce8994">More...</a><br /></td></tr>
+<tr class="separator:a6998639a03718afa44f5626c17ce8994"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04cf0d3a526304c80ae5bf73ee63edb0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="watchdog_8h.html#a04cf0d3a526304c80ae5bf73ee63edb0">REGISTER_WATCHDOG_ISR_METHOD</a>(HANDLER,  CALLBACK)&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(WDT_vect, HANDLER, CALLBACK)</td></tr>
 <tr class="memdesc:a04cf0d3a526304c80ae5bf73ee63edb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) with a callback method that will be called every time a watchdog timeout occurs, according to how <a class="el" href="classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. ">watchdog::WatchdogSignal</a> was started.  <a href="#a04cf0d3a526304c80ae5bf73ee63edb0">More...</a><br /></td></tr>
 <tr class="separator:a04cf0d3a526304c80ae5bf73ee63edb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -156,8 +148,8 @@ Macros</h2></td></tr>
 
 <p class="definition">Definition in file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="ad060c52a2a6ab7f8db2dfc957736c390"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad060c52a2a6ab7f8db2dfc957736c390">&#9670;&nbsp;</a></span>REGISTER_WATCHDOG_CLOCK_ISR</h2>
+<a id="a6998639a03718afa44f5626c17ce8994"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6998639a03718afa44f5626c17ce8994">&#9670;&nbsp;</a></span>REGISTER_WATCHDOG_CLOCK_ISR</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -165,16 +157,23 @@ Macros</h2></td></tr>
         <tr>
           <td class="memname">#define REGISTER_WATCHDOG_CLOCK_ISR</td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(WDT_vect, <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>, &amp;watchdog::Watchdog::on_tick)</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">EVENT</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(WDT_vect, <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt;EVENT&gt;, &amp;<a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt;EVENT&gt;::on_tick)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">watchdog::Watchdog</a> to work properly. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">EVENT</td><td>the type of Event&lt;T&gt; to be generated by the watchdog </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">watchdog::Watchdog</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00035">35</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00036">36</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -213,7 +212,7 @@ Macros</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00046">46</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00047">47</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -263,7 +262,7 @@ Macros</h2></td></tr>
 <p>Register an empty ISR (interrupt Service Routine) for a <a class="el" href="classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. ">watchdog::WatchdogSignal</a>. </p>
 <p>This may be needed when using watchdog just to awaken a sleeping MCU, but without any necessary immediate callback. </p>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00064">64</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00063">63</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>

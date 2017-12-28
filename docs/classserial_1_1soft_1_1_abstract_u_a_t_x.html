@@ -95,11 +95,11 @@ Inheritance diagram for serial::soft::AbstractUATX:</div>
 <div class="dyncontent">
 <div class="center"><img src="classserial_1_1soft_1_1_abstract_u_a_t_x__inherit__graph.png" border="0" usemap="#serial_1_1soft_1_1_abstract_u_a_t_x_inherit__map" alt="Inheritance graph"/></div>
 <map name="serial_1_1soft_1_1_abstract_u_a_t_x_inherit__map" id="serial_1_1soft_1_1_abstract_u_a_t_x_inherit__map">
-<area shape="rect" id="node5" href="classserial_1_1soft_1_1_u_a_t_x.html" title="serial::soft::UATX\l\&lt; TX \&gt;" alt="" coords="91,244,218,285"/>
+<area shape="rect" id="node5" href="classserial_1_1soft_1_1_u_a_t_x.html" title="serial::soft::UATX\l\&lt; TX_ \&gt;" alt="" coords="91,244,218,285"/>
 <area shape="rect" id="node2" href="classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="5,95,139,121"/>
 <area shape="rect" id="node3" href="classstreams_1_1_output_buffer.html" title="Output API based on a ring buffer. " alt="" coords="163,95,314,121"/>
 <area shape="rect" id="node4" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="171,5,307,47"/>
-<area shape="rect" id="node6" href="classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; TX \&gt;" alt="" coords="91,333,219,375"/>
+<area shape="rect" id="node6" href="classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; TX_ \&gt;" alt="" coords="91,333,219,375"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -148,9 +148,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aedb00f78b79002f000113a713bf54787"><td class="memItemLeft" align="right" valign="top"><a id="aedb00f78b79002f000113a713bf54787"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>_begin</b> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits)</td></tr>
-<tr class="separator:aedb00f78b79002f000113a713bf54787"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72c8fd6a3db64e33b448d3c1fe2401de"><td class="memItemLeft" align="right" valign="top"><a id="a72c8fd6a3db64e33b448d3c1fe2401de"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>begin_serial</b> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits)</td></tr>
+<tr class="separator:a72c8fd6a3db64e33b448d3c1fe2401de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -160,22 +160,22 @@ static <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b32242203
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:aadd469d791cdfbef67132ae8cffcd63e"><td class="memItemLeft" align="right" valign="top"><a id="aadd469d791cdfbef67132ae8cffcd63e"></a>
-<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a>&#160;</td><td class="memItemRight" valign="bottom"><b>_parity</b></td></tr>
-<tr class="separator:aadd469d791cdfbef67132ae8cffcd63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe11662300bf328a7d7e2cb2fa52a601"><td class="memItemLeft" align="right" valign="top"><a id="abe11662300bf328a7d7e2cb2fa52a601"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_interbit_tx_time</b></td></tr>
-<tr class="separator:abe11662300bf328a7d7e2cb2fa52a601"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a295ad28fa09f360a55503042c16a53e9"><td class="memItemLeft" align="right" valign="top"><a id="a295ad28fa09f360a55503042c16a53e9"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_start_bit_tx_time</b></td></tr>
-<tr class="separator:a295ad28fa09f360a55503042c16a53e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93fc76acca6b1d20e69f68e2d32f96ad"><td class="memItemLeft" align="right" valign="top"><a id="a93fc76acca6b1d20e69f68e2d32f96ad"></a>
-uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>_stop_bit_tx_time</b></td></tr>
-<tr class="separator:a93fc76acca6b1d20e69f68e2d32f96ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a557ccdc2f865e9ec4ad67d0fe29ae5c5"><td class="memItemLeft" align="right" valign="top"><a id="a557ccdc2f865e9ec4ad67d0fe29ae5c5"></a>
+<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a>&#160;</td><td class="memItemRight" valign="bottom"><b>parity_</b></td></tr>
+<tr class="separator:a557ccdc2f865e9ec4ad67d0fe29ae5c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa90532402e438e5a2c4aaf328e9eee3"><td class="memItemLeft" align="right" valign="top"><a id="afa90532402e438e5a2c4aaf328e9eee3"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>interbit_tx_time_</b></td></tr>
+<tr class="separator:afa90532402e438e5a2c4aaf328e9eee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac45b013ff86e0826145dc4dab3af88ec"><td class="memItemLeft" align="right" valign="top"><a id="ac45b013ff86e0826145dc4dab3af88ec"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>start_bit_tx_time_</b></td></tr>
+<tr class="separator:ac45b013ff86e0826145dc4dab3af88ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6470bf9890035b72aa1fc76678d288b"><td class="memItemLeft" align="right" valign="top"><a id="ae6470bf9890035b72aa1fc76678d288b"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>stop_bit_tx_time_</b></td></tr>
+<tr class="separator:ae6470bf9890035b72aa1fc76678d288b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classserial_1_1_u_a_r_t_errors"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classserial_1_1_u_a_r_t_errors')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classserial_1_1_u_a_r_t_errors.html">serial::UARTErrors</a></td></tr>
-<tr class="memitem:a829ce0a529cbfb631a31fd5288bd9e07 inherit pro_attribs_classserial_1_1_u_a_r_t_errors"><td class="memItemLeft" align="right" valign="top"><a id="a829ce0a529cbfb631a31fd5288bd9e07"></a>
-_UARTErrors&#160;</td><td class="memItemRight" valign="bottom"><b>_errors</b></td></tr>
-<tr class="separator:a829ce0a529cbfb631a31fd5288bd9e07 inherit pro_attribs_classserial_1_1_u_a_r_t_errors"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2160eae1e743f61184ed5847a0f74b3a inherit pro_attribs_classserial_1_1_u_a_r_t_errors"><td class="memItemLeft" align="right" valign="top"><a id="a2160eae1e743f61184ed5847a0f74b3a"></a>
+UARTErrors_&#160;</td><td class="memItemRight" valign="bottom"><b>errors_</b></td></tr>
+<tr class="separator:a2160eae1e743f61184ed5847a0f74b3a inherit pro_attribs_classserial_1_1_u_a_r_t_errors"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">

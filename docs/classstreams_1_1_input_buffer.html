@@ -102,8 +102,8 @@ Inheritance diagram for streams::InputBuffer:</div>
 <area shape="rect" id="node5" href="classserial_1_1soft_1_1_abstract_u_a_r_x.html" title="serial::soft::AbstractUARX" alt="" coords="162,177,341,203"/>
 <area shape="rect" id="node2" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="93,5,229,47"/>
 <area shape="rect" id="node4" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. " alt="" coords="6,259,137,300"/>
-<area shape="rect" id="node6" href="classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX \&gt;" alt="" coords="187,259,316,300"/>
-<area shape="rect" id="node7" href="classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; RX \&gt;" alt="" coords="187,348,315,389"/>
+<area shape="rect" id="node6" href="classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX_ \&gt;" alt="" coords="187,259,316,300"/>
+<area shape="rect" id="node7" href="classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; RX_ \&gt;" alt="" coords="187,348,315,389"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -129,63 +129,66 @@ template&lt;uint8_t SIZE&gt; </td></tr>
 <tr class="memdesc:aabe0a27b6438c133667a7df9e693a6f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read one word from buffer, blocking until a space is read or <code>max</code> characters have been read already.  <a href="#aabe0a27b6438c133667a7df9e693a6f7">More...</a><br /></td></tr>
 <tr class="separator:aabe0a27b6438c133667a7df9e693a6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcontainers_1_1_queue"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcontainers_1_1_queue')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcontainers_1_1_queue.html">containers::Queue&lt; char, char &gt;</a></td></tr>
-<tr class="memitem:ae673d7fb940718a9e9ef1b414f30268b inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="ae673d7fb940718a9e9ef1b414f30268b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Queue</b> (char(&amp;buffer)[SIZE])</td></tr>
-<tr class="separator:ae673d7fb940718a9e9ef1b414f30268b inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc784713428fb3859f2d1d88956c7160 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="abc784713428fb3859f2d1d88956c7160"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>_push</b> (char item)</td></tr>
-<tr class="separator:abc784713428fb3859f2d1d88956c7160 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae3ac0eadd9bd390698c5a13a2368631 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="aae3ac0eadd9bd390698c5a13a2368631"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>_pull</b> (char &amp;item)</td></tr>
-<tr class="separator:aae3ac0eadd9bd390698c5a13a2368631 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8138d45873d7b9015f446f465a9df3f6 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a8138d45873d7b9015f446f465a9df3f6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>_peek</b> (char &amp;item) const</td></tr>
-<tr class="separator:a8138d45873d7b9015f446f465a9df3f6 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb270fc23c79812763d8aa1fccf602fe inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="afb270fc23c79812763d8aa1fccf602fe"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_peek</b> (char *buffer, uint8_t size) const</td></tr>
-<tr class="separator:afb270fc23c79812763d8aa1fccf602fe inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b0d73a03bca01fdae195b24ae3e2af2 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a3b0d73a03bca01fdae195b24ae3e2af2"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_peek</b> (char(&amp;buffer)[SIZE]) const</td></tr>
-<tr class="separator:a3b0d73a03bca01fdae195b24ae3e2af2 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7bb7d20625b2027f1e0de1ee7d350199 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a7bb7d20625b2027f1e0de1ee7d350199"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>_empty</b> () const</td></tr>
-<tr class="separator:a7bb7d20625b2027f1e0de1ee7d350199 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0717f4cf869e440210af09dc8d289d2d inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a0717f4cf869e440210af09dc8d289d2d"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_items</b> () const</td></tr>
-<tr class="separator:a0717f4cf869e440210af09dc8d289d2d inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81c83d9cae0ece9975bc0066ef09baae inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a81c83d9cae0ece9975bc0066ef09baae"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_free</b> () const</td></tr>
-<tr class="separator:a81c83d9cae0ece9975bc0066ef09baae inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada3b419905249d9b21dffaa3f2e7fc04 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="ada3b419905249d9b21dffaa3f2e7fc04"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>_clear</b> ()</td></tr>
-<tr class="separator:ada3b419905249d9b21dffaa3f2e7fc04 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7581c6215aa9492ba38c9901a92e8191 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a7581c6215aa9492ba38c9901a92e8191"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>push</b> (char item)</td></tr>
-<tr class="separator:a7581c6215aa9492ba38c9901a92e8191 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d9bf9e28eeca399f3cd0e4070270735 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a1d9bf9e28eeca399f3cd0e4070270735"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>pull</b> (char &amp;item)</td></tr>
-<tr class="separator:a1d9bf9e28eeca399f3cd0e4070270735 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7aaf1cfa074763ecbaae4ff2d17a574 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="ae7aaf1cfa074763ecbaae4ff2d17a574"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (char &amp;item) const</td></tr>
-<tr class="separator:ae7aaf1cfa074763ecbaae4ff2d17a574 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49035e8be437e7208f9cfbb79362adc9 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a49035e8be437e7208f9cfbb79362adc9"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (char *buffer, uint8_t size) const</td></tr>
-<tr class="separator:a49035e8be437e7208f9cfbb79362adc9 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8672c812d56e433411871b0267fd9540 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a8672c812d56e433411871b0267fd9540"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (char(&amp;buffer)[SIZE]) const</td></tr>
-<tr class="separator:a8672c812d56e433411871b0267fd9540 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a755c82b80c172fab25bbf77d03c67f23 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a755c82b80c172fab25bbf77d03c67f23"></a>
+<tr class="memitem:aca99c22736f50f3e357702fb02bb2834 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="aca99c22736f50f3e357702fb02bb2834"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Queue</b> (T(&amp;buffer)[SIZE])</td></tr>
+<tr class="separator:aca99c22736f50f3e357702fb02bb2834 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab143ccea2d5d73854ed3013a318beda2 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="ab143ccea2d5d73854ed3013a318beda2"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>push_</b> (TREF item)</td></tr>
+<tr class="separator:ab143ccea2d5d73854ed3013a318beda2 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace3872d821b24ac9cb515573b3c687b3 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="ace3872d821b24ac9cb515573b3c687b3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>pull_</b> (T &amp;item)</td></tr>
+<tr class="separator:ace3872d821b24ac9cb515573b3c687b3 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11986454de8b5b3bd5eb0d50a8f59967 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a11986454de8b5b3bd5eb0d50a8f59967"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>peek_</b> (T &amp;item) const</td></tr>
+<tr class="separator:a11986454de8b5b3bd5eb0d50a8f59967 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b4a8b5159020caab00abba67903fc39 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a8b4a8b5159020caab00abba67903fc39"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek_</b> (T *buffer, uint8_t size) const</td></tr>
+<tr class="separator:a8b4a8b5159020caab00abba67903fc39 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f9e5cede6b5f8e2875516e7d4bc86a7 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a5f9e5cede6b5f8e2875516e7d4bc86a7"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek_</b> (T(&amp;buffer)[SIZE]) const</td></tr>
+<tr class="separator:a5f9e5cede6b5f8e2875516e7d4bc86a7 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dde204e519e98fbacbabdc7d456e11e inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a7dde204e519e98fbacbabdc7d456e11e"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="separator:a7dde204e519e98fbacbabdc7d456e11e inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bfd0803a08aa7363b9608ed64474678 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a4bfd0803a08aa7363b9608ed64474678"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty_</b> () const</td></tr>
+<tr class="separator:a4bfd0803a08aa7363b9608ed64474678 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56649c6345bdb582a15bc66dc853bfdd inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a56649c6345bdb582a15bc66dc853bfdd"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>items_</b> () const</td></tr>
+<tr class="separator:a56649c6345bdb582a15bc66dc853bfdd inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab561b57e48848788f3ed6c429df9920f inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="ab561b57e48848788f3ed6c429df9920f"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>free_</b> () const</td></tr>
+<tr class="separator:ab561b57e48848788f3ed6c429df9920f inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37080cc6d5631ec3cfb859a4de0fb6c2 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a37080cc6d5631ec3cfb859a4de0fb6c2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_</b> ()</td></tr>
+<tr class="separator:a37080cc6d5631ec3cfb859a4de0fb6c2 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a202901193e7b1bf3d940094ff2d6219a inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a202901193e7b1bf3d940094ff2d6219a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>push</b> (TREF item)</td></tr>
+<tr class="separator:a202901193e7b1bf3d940094ff2d6219a inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02f9e08c4deadbfb0f9d6885a73930e4 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a02f9e08c4deadbfb0f9d6885a73930e4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>pull</b> (T &amp;item)</td></tr>
+<tr class="separator:a02f9e08c4deadbfb0f9d6885a73930e4 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a811a466ef9dcecbe8c9324e9a818efde inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a811a466ef9dcecbe8c9324e9a818efde"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (T &amp;item) const</td></tr>
+<tr class="separator:a811a466ef9dcecbe8c9324e9a818efde inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09ef8dc6eadb8a11f057ba5804871790 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a09ef8dc6eadb8a11f057ba5804871790"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (T *buffer, uint8_t size) const</td></tr>
+<tr class="separator:a09ef8dc6eadb8a11f057ba5804871790 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b2efcc589462a0b3fe8acbb44c1a4a9 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a1b2efcc589462a0b3fe8acbb44c1a4a9"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (T(&amp;buffer)[SIZE]) const</td></tr>
+<tr class="separator:a1b2efcc589462a0b3fe8acbb44c1a4a9 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a594a05c1cd32c640317d91c5928ff43f inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a594a05c1cd32c640317d91c5928ff43f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const</td></tr>
-<tr class="separator:a755c82b80c172fab25bbf77d03c67f23 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a121d96a887df3af10a627c60a73a2766 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a121d96a887df3af10a627c60a73a2766"></a>
+<tr class="separator:a594a05c1cd32c640317d91c5928ff43f inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac27c87f9de54ecb11a96d40074a2b069 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="ac27c87f9de54ecb11a96d40074a2b069"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>items</b> () const</td></tr>
-<tr class="separator:a121d96a887df3af10a627c60a73a2766 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa63f59463f4df49991cda4e3ef20749 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="afa63f59463f4df49991cda4e3ef20749"></a>
+<tr class="separator:ac27c87f9de54ecb11a96d40074a2b069 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad3c8f009898e3b10976ae2c7b650308 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="aad3c8f009898e3b10976ae2c7b650308"></a>
 uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>free</b> () const</td></tr>
-<tr class="separator:afa63f59463f4df49991cda4e3ef20749 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a273414792d1376a0710149623a6459a5 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a273414792d1376a0710149623a6459a5"></a>
+<tr class="separator:aad3c8f009898e3b10976ae2c7b650308 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a757d9a4b0cceee0a2db3e93d36970603 inherit pub_methods_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a757d9a4b0cceee0a2db3e93d36970603"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
-<tr class="separator:a273414792d1376a0710149623a6459a5 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a757d9a4b0cceee0a2db3e93d36970603 inherit pub_methods_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -193,6 +196,16 @@ Static Public Attributes</h2></td></tr>
 static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1_input_buffer.html#a3a2eaa820e637c43fff7c123498e8654">EOF</a> = -1</td></tr>
 <tr class="memdesc:a3a2eaa820e637c43fff7c123498e8654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special value returned by <code><a class="el" href="classstreams_1_1_input_buffer.html#a98e69ab9ca5958fe796cf9c8f4c57118">get()</a></code> when buffer is empty. <br /></td></tr>
 <tr class="separator:a3a2eaa820e637c43fff7c123498e8654"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classcontainers_1_1_queue"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classcontainers_1_1_queue')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classcontainers_1_1_queue.html">containers::Queue&lt; char, char &gt;</a></td></tr>
+<tr class="memitem:a6611f442aefd7dac3184b146ce42631a inherit pub_types_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a6611f442aefd7dac3184b146ce42631a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>T</b> = char</td></tr>
+<tr class="separator:a6611f442aefd7dac3184b146ce42631a inherit pub_types_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58435f1392a29022e767c72f9c2a6278 inherit pub_types_classcontainers_1_1_queue"><td class="memItemLeft" align="right" valign="top"><a id="a58435f1392a29022e767c72f9c2a6278"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>TREF</b> = char</td></tr>
+<tr class="separator:a58435f1392a29022e767c72f9c2a6278 inherit pub_types_classcontainers_1_1_queue"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Input API based on a ring buffer. </p>
@@ -204,7 +217,7 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00195">195</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00197">197</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a1279d7c61d7728fb5af5d5c0423f692f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1279d7c61d7728fb5af5d5c0423f692f">&#9670;&nbsp;</a></span>available()</h2>
@@ -230,7 +243,7 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>number of available characters in buffer </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00212">212</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00213">213</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -258,7 +271,7 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>next character to be read from buffer, or <code>EOF</code> if buffer is empty </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00221">221</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00222">222</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -298,7 +311,7 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the next word read from buffer </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8cpp_source.html#l00047">47</a> of file <a class="el" href="streams_8cpp_source.html">streams.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8cpp_source.html#l00045">45</a> of file <a class="el" href="streams_8cpp_source.html">streams.cpp</a>.</p>
 
 </div>
 </div>

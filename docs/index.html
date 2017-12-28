@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <p>One simple way to start a project using FastArduino is probably to use <a href="https://code.visualstudio.com/">Visual Studio Code</a>, first setup as described <a href="https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx">here</a>.</p>
 <p>Then you can use <a href="https://github.com/jfpoilpret/fastarduino-project-template">FastArduino Project Template</a> to create your first project (just follow instructions in that repository).</p>
 <p>Your project shall have at least one ".cpp" source file with an <code>int main()</code> function, as shown in the <a href="tutorial.html">tutorial</a>. The FastArduino Project Template includes this source file already.</p>
-<p>Once you can build your project from netbeans, you can build it from a Linux shell as well: </p><pre class="fragment">&gt; $ make CONF=UNO
+<p>That FastArduino project template also supports building from a Linux shell: </p><pre class="fragment">&gt; $ make CONF=UNO
 &gt; $ make flash CONF=UNO
 </pre><p>The first <code>make</code> builds your program for the target specified with <code>CONF=...</code>.</p>
 <p>The second <code>make</code> uploads the built program to the Flash memory of the target MCU.</p>

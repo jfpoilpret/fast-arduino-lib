@@ -114,13 +114,13 @@ Include dependency graph for uart.h:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt; USART &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt; USART_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hardware serial transmitter API.  <a href="classserial_1_1hard_1_1_u_a_t_x.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html">serial::hard::UARX&lt; USART &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html">serial::hard::UARX&lt; USART_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hardware serial receiver API.  <a href="classserial_1_1hard_1_1_u_a_r_x.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART&lt; USART &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART&lt; USART_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hardware serial receiver/transceiver API.  <a href="classserial_1_1hard_1_1_u_a_r_t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -135,10 +135,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:aa33c57bb6fa1e93177abb21fe8fecb10"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(UART_NUM)&#160;&#160;&#160;REGISTER_UATX_ISR_METHOD_(UART_NUM, UATX_CLASS_(UART_NUM), &amp; UATX_CLASS_(UART_NUM) ::data_register_empty)</td></tr>
+<tr class="memitem:aa33c57bb6fa1e93177abb21fe8fecb10"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(UART_NUM)&#160;&#160;&#160;REGISTER_UATX_ISR_METHOD_(UART_NUM, UATX_CLASS_(UART_NUM), &amp;UATX_CLASS_(UART_NUM)::data_register_empty)</td></tr>
 <tr class="memdesc:aa33c57bb6fa1e93177abb21fe8fecb10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for an <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. ">serial::hard::UATX</a> to work correctly.  <a href="#aa33c57bb6fa1e93177abb21fe8fecb10">More...</a><br /></td></tr>
 <tr class="separator:aa33c57bb6fa1e93177abb21fe8fecb10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fed67375824a0fc63e21ecdb7ce0db0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0">REGISTER_UARX_ISR</a>(UART_NUM)&#160;&#160;&#160;REGISTER_UARX_ISR_METHOD_(UART_NUM, UARX_CLASS_(UART_NUM), &amp; UARX_CLASS_(UART_NUM) ::data_receive_complete)</td></tr>
+<tr class="memitem:a4fed67375824a0fc63e21ecdb7ce0db0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0">REGISTER_UARX_ISR</a>(UART_NUM)&#160;&#160;&#160;REGISTER_UARX_ISR_METHOD_(UART_NUM, UARX_CLASS_(UART_NUM), &amp;UARX_CLASS_(UART_NUM)::data_receive_complete)</td></tr>
 <tr class="memdesc:a4fed67375824a0fc63e21ecdb7ce0db0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for an <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. ">serial::hard::UARX</a> to work correctly.  <a href="#a4fed67375824a0fc63e21ecdb7ce0db0">More...</a><br /></td></tr>
 <tr class="separator:a4fed67375824a0fc63e21ecdb7ce0db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bd735d1a3a5a0a8e3253fd3f1720b29"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29">REGISTER_UART_ISR</a>(UART_NUM)</td></tr>
@@ -161,7 +161,7 @@ Macros</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">UART_NUM</td><td>)</td>
-          <td>&#160;&#160;&#160;REGISTER_UATX_ISR_METHOD_(UART_NUM, UATX_CLASS_(UART_NUM), &amp; UATX_CLASS_(UART_NUM) ::data_register_empty)</td>
+          <td>&#160;&#160;&#160;REGISTER_UATX_ISR_METHOD_(UART_NUM, UATX_CLASS_(UART_NUM), &amp;UATX_CLASS_(UART_NUM)::data_register_empty)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -189,7 +189,7 @@ Macros</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">UART_NUM</td><td>)</td>
-          <td>&#160;&#160;&#160;REGISTER_UARX_ISR_METHOD_(UART_NUM, UARX_CLASS_(UART_NUM), &amp; UARX_CLASS_(UART_NUM) ::data_receive_complete)</td>
+          <td>&#160;&#160;&#160;REGISTER_UARX_ISR_METHOD_(UART_NUM, UARX_CLASS_(UART_NUM), &amp;UARX_CLASS_(UART_NUM)::data_receive_complete)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -221,7 +221,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">REGISTER_UATX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &amp; UART_CLASS_(UART_NUM) ::data_register_empty)   \</div><div class="line">REGISTER_UARX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &amp; UART_CLASS_(UART_NUM) ::data_receive_complete)</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">REGISTER_UATX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &amp;UART_CLASS_(UART_NUM)::data_register_empty) \</div><div class="line">    REGISTER_UARX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &amp;UART_CLASS_(UART_NUM)::data_receive_complete)</div></div><!-- fragment -->
 <p>Register the necessary ISR (interrupt Service Routine) for an <a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. ">serial::hard::UART</a> to work correctly. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

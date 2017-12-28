@@ -1,3 +1,4 @@
-<map id="timer::PulseTimer8&lt; TIMER, PRESCALER_ &gt;" name="timer::PulseTimer8&lt; TIMER, PRESCALER_ &gt;">
-<area shape="rect" id="node2" href="$classtimer_1_1_timer.html" title="General API to handle an AVR timer. " alt="" coords="19,5,177,32"/>
+<map id="timer::PulseTimer8&lt; NTIMER_, PRESCALER_ &gt;" name="timer::PulseTimer8&lt; NTIMER_, PRESCALER_ &gt;">
+<area shape="rect" id="node3" href="$classtimer_1_1_pulse_timer_3_01_n_t_i_m_e_r___00_01_p_r_e_s_c_a_l_e_r___00_01uint8__t_01_4.html" title="timer::PulseTimer\&lt;\l NTIMER_, PRESCALER\l_, uint8_t \&gt;" alt="" coords="19,169,194,225"/>
+<area shape="rect" id="node2" href="$classtimer_1_1_timer.html" title="General API to handle an AVR timer. " alt="" coords="19,5,194,32"/>
 </map>

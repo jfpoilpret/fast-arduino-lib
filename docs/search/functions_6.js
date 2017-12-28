@@ -1,15 +1,14 @@
 var searchData=
 [
-  ['fastmaskedport',['FastMaskedPort',['../classgpio_1_1_fast_masked_port.html#a2540ab806cac66579bd883a20d5d964b',1,'gpio::FastMaskedPort::FastMaskedPort()'],['../classgpio_1_1_fast_masked_port.html#a3db12fd528e54d272b42d767d8fd02fc',1,'gpio::FastMaskedPort::FastMaskedPort(uint8_t mask)'],['../classgpio_1_1_fast_masked_port.html#ab1d0e6a7feccd8e6bdd5a43a8c8742fb',1,'gpio::FastMaskedPort::FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port=0)']]],
-  ['fastpin',['FastPin',['../classgpio_1_1_fast_pin.html#a51a984d640ee2e0dd5ebfec39fa5a8f2',1,'gpio::FastPin::FastPin() INLINE'],['../classgpio_1_1_fast_pin.html#af8ae56f7842e4fe6abe5ed87b96635af',1,'gpio::FastPin::FastPin(PinMode mode, bool value=false) INLINE']]],
-  ['fastport',['FastPort',['../classgpio_1_1_fast_port.html#a84be18957e6be3f7cee54b23e8cd24c6',1,'gpio::FastPort::FastPort()'],['../classgpio_1_1_fast_port.html#ac8b0daa4b4e74425e6c11d0a1af1c2f2',1,'gpio::FastPort::FastPort(uint8_t ddr, uint8_t port=0) INLINE']]],
-  ['fastpwm_5ffrequency',['FastPWM_frequency',['../structtimer_1_1_calculator.html#ac378c076955bb22926c53b52fdfa8278',1,'timer::Calculator']]],
-  ['fastpwm_5fprescaler',['FastPWM_prescaler',['../structtimer_1_1_calculator.html#a1d48b90c4296e8b2cdce1f7ae29391c1',1,'timer::Calculator']]],
-  ['fifo_5fstatus_5ft',['fifo_status_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html#a4ed6aa4a278e432e3c63efe6ef5d3b2e',1,'devices::rf::NRF24L01::fifo_status_t']]],
-  ['fin',['fin',['../classserial_1_1hard_1_1_u_a_r_x.html#a1692661026c4861fb8c378efdd3ecf07',1,'serial::hard::UARX']]],
-  ['flush',['flush',['../classstreams_1_1_output_buffer.html#a7d96fc82535d45d4e4316857c142e6de',1,'streams::OutputBuffer::flush()'],['../classstreams_1_1_formatted_output.html#a0304e24bea5bb36da81581e82fa9d60b',1,'streams::FormattedOutput::flush()'],['../namespacestreams.html#a155684415ba442e665f551819429b3a0',1,'streams::flush()']]],
-  ['formattedinput',['FormattedInput',['../classstreams_1_1_formatted_input.html#a69e894a7c2c67e294ce3cbc2599574cb',1,'streams::FormattedInput']]],
-  ['formattedoutput',['FormattedOutput',['../classstreams_1_1_formatted_output.html#a97bbf43a1aa2c35eb1891f2194c4a1f6',1,'streams::FormattedOutput']]],
-  ['fout',['fout',['../classserial_1_1hard_1_1_u_a_t_x.html#a2c626a0c6e68e634bfa1f61edd866940',1,'serial::hard::UATX']]],
-  ['frame_5ferror',['frame_error',['../classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7',1,'serial::UARTErrors']]]
+  ['get',['get',['../classstreams_1_1_input_buffer.html#a98e69ab9ca5958fe796cf9c8f4c57118',1,'streams::InputBuffer::get()'],['../classstreams_1_1_formatted_input.html#ac61612b4afdb7e8e5c3abf0ddd1af8d4',1,'streams::FormattedInput::get()'],['../classstreams_1_1_formatted_input.html#ab3ad5e0084252cc4850ee7958fc71cbc',1,'streams::FormattedInput::get(char *content, size_t size)'],['../namespacestreams.html#ae9231fdc3188b9bbcd5cca8c30b6ce56',1,'streams::get(InputBuffer &amp;in)'],['../namespacestreams.html#a47d9c74a3baad11f971c361d5def9603',1,'streams::get(InputBuffer &amp;in, char *content, size_t size)']]],
+  ['get_5fchannel',['get_channel',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ab94595c2c57ae43f2de904605751bec2',1,'devices::rf::NRF24L01']]],
+  ['get_5fddr',['get_DDR',['../classgpio_1_1_fast_port.html#aaa2806c2eddb28c4056ba6f95ebbe32f',1,'gpio::FastPort::get_DDR()'],['../classgpio_1_1_fast_masked_port.html#a4f4d904398811aa8a66a9aab0c01e029',1,'gpio::FastMaskedPort::get_DDR()']]],
+  ['get_5fdevice_5faddress',['get_device_address',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a025f4805121aee12fb218458fc4b5a57',1,'devices::rf::NRF24L01']]],
+  ['get_5fdrops',['get_drops',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a2649cd9a33694a1a459d54a312799f1f',1,'devices::rf::NRF24L01']]],
+  ['get_5fnetwork_5faddress',['get_network_address',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ae4ebe5bdb445b5bd137f5055fc7dd8cd',1,'devices::rf::NRF24L01']]],
+  ['get_5fpin',['get_pin',['../classgpio_1_1_fast_port.html#abf6495c92e849cb2432eded57b0347f9',1,'gpio::FastPort::get_pin(PinMode mode, bool value=false)'],['../classgpio_1_1_fast_port.html#ad239b42e4388126afe8242a01cd8eb2d',1,'gpio::FastPort::get_pin()'],['../classgpio_1_1_fast_port.html#a57a77753702bf9d527a3320b38db0a8b',1,'gpio::FastPort::get_PIN() INLINE'],['../classgpio_1_1_fast_masked_port.html#a81a2d3c06d8da66ad042eea9f7801f1f',1,'gpio::FastMaskedPort::get_PIN()']]],
+  ['get_5fport',['get_PORT',['../classgpio_1_1_fast_port.html#a2d17c01a12e2b5648f0956c36164e4c3',1,'gpio::FastPort::get_PORT()'],['../classgpio_1_1_fast_masked_port.html#abd51d7cf6eda99ba1ee37e84ff613146',1,'gpio::FastMaskedPort::get_PORT()']]],
+  ['get_5fretrans',['get_retrans',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a0e95d3ea4f07cd023238bfa1969be98d',1,'devices::rf::NRF24L01']]],
+  ['get_5ftrans',['get_trans',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a060d6151100e55bdb2adc607d8884c8b',1,'devices::rf::NRF24L01']]],
+  ['gets',['gets',['../classstreams_1_1_formatted_input.html#ab3b4a36382147bb77942cb16465fcb86',1,'streams::FormattedInput::gets()'],['../namespacestreams.html#ac7e71752619ba753c5c01d6c61719b2a',1,'streams::gets()']]]
 ];

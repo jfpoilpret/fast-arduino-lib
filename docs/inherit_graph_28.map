@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port. " alt="" coords="5,5,153,47"/>
+<area shape="rect" id="node1" href="$classeeprom_1_1_e_e_p_r_o_m.html" title="eeprom::EEPROM" alt="" coords="5,5,136,32"/>
+<area shape="rect" id="node2" href="$classeeprom_1_1_queued_writer.html" title="eeprom::QueuedWriter" alt="" coords="184,5,337,32"/>
 </map>

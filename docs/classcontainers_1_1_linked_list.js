@@ -1,6 +1,7 @@
 var classcontainers_1_1_linked_list =
 [
-    [ "insert", "classcontainers_1_1_linked_list.html#ae5e539e0010aea5ed8026731304b5a7c", null ],
-    [ "remove", "classcontainers_1_1_linked_list.html#a1bbfaf7d4dde55c044ca2cde560da049", null ],
-    [ "traverse", "classcontainers_1_1_linked_list.html#af7853c1b72ee664b8ce23b91dfb1b053", null ]
+    [ "T", "classcontainers_1_1_linked_list.html#af07a8b8e2b75d77751a541dd494d4e91", null ],
+    [ "insert", "classcontainers_1_1_linked_list.html#ac44c93a96f2aaffe0411565798c6cd67", null ],
+    [ "remove", "classcontainers_1_1_linked_list.html#ad122223e314aa7adb16637e09ceb20d8", null ],
+    [ "traverse", "classcontainers_1_1_linked_list.html#a974fb6a46b9477e005b9c17a5b47ae72", null ]
 ];

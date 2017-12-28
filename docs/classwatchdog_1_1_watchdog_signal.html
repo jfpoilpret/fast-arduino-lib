@@ -98,7 +98,7 @@ Inheritance diagram for watchdog::WatchdogSignal:</div>
 <div class="dyncontent">
 <div class="center"><img src="classwatchdog_1_1_watchdog_signal__inherit__graph.png" border="0" usemap="#watchdog_1_1_watchdog_signal_inherit__map" alt="Inheritance graph"/></div>
 <map name="watchdog_1_1_watchdog_signal_inherit__map" id="watchdog_1_1_watchdog_signal_inherit__map">
-<area shape="rect" id="node2" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. " alt="" coords="23,80,169,107"/>
+<area shape="rect" id="node2" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. " alt="" coords="23,80,169,121"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -142,7 +142,7 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Simple API to handle watchdog signals. </p>
 <p>In this mode, the AVR watchdog timer is used to wake up the MCU at a specific timer period, in order to leave a low-power sleep mode, to e.g. perform periodic tasks. With this API, you do not need to register an ISR callback if you do not need one; in this situation you need to register an empty ISR with <code><a class="el" href="watchdog_8h.html#adb4cc81538efc2536ee6e1d06ae4b92f" title="Register an empty ISR (interrupt Service Routine) for a watchdog::WatchdogSignal. ...">REGISTER_WATCHDOG_ISR_EMPTY()</a></code> macro. If you want to register a callback on every watchdog timer tick, then you can use either <code>REGISTER_WATCHDOG_ISR_FUNCTION</code> or <code>REGISTER_WATCHDOG_ISR_METHOD</code> macros. </p>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00082">82</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00081">81</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ab781ec34d67a0ad552cf76a33e5f2353"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab781ec34d67a0ad552cf76a33e5f2353">&#9670;&nbsp;</a></span>TimeOut</h2>
@@ -199,6 +199,9 @@ Public Member Functions</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void watchdog::WatchdogSignal::begin </td>
@@ -208,6 +211,11 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Start the watchdog timer with the given <code>timeout</code> period. </p>
@@ -218,7 +226,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8cpp_source.html#l00021">21</a> of file <a class="el" href="watchdog_8cpp_source.html">watchdog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00122">122</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -248,13 +256,12 @@ Public Member Functions</h2></td></tr>
 <p>Stop this watchdog timer. </p>
 <p>No more watchdog interrupts get triggered. </p>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00127">127</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00131">131</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="watchdog_8h_source.html">watchdog.h</a></li>
-<li>fastarduino/<a class="el" href="watchdog_8cpp_source.html">watchdog.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

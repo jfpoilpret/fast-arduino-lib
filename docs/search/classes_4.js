@@ -1,6 +1,7 @@
 var searchData=
 [
   ['fastmaskedport',['FastMaskedPort',['../classgpio_1_1_fast_masked_port.html',1,'gpio']]],
+  ['fastmaskedport_3c_20echo_5fport_20_3e',['FastMaskedPort&lt; ECHO_PORT &gt;',['../classgpio_1_1_fast_masked_port.html',1,'gpio']]],
   ['fastpin',['FastPin',['../classgpio_1_1_fast_pin.html',1,'gpio']]],
   ['fastpintype',['FastPinType',['../classgpio_1_1_fast_pin_type.html',1,'gpio']]],
   ['fastpintype_3c_20ce_20_3e',['FastPinType&lt; CE &gt;',['../classgpio_1_1_fast_pin_type.html',1,'gpio']]],

@@ -1,12 +1,18 @@
 var classdevices_1_1sonar_1_1_h_c_s_r04 =
 [
-    [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html#aff44ece03b045b4fc023b7ac71928dbf", null ],
-    [ "echo_us", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a5390cf8a041f1ba460fe3868ed04c26d", null ],
-    [ "async_echo", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a17a95298a2c2fcd5f8f8238dd2f7658b", null ],
-    [ "ready", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a0763353d5b9c9b15325e2ed975f0376c", null ],
-    [ "latest_echo_us", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a95b5486cd917c43af23c1157053b9de4", null ],
-    [ "await_echo_us", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a58cc9529fc73187d351f52054d828d09", null ],
-    [ "on_echo", "classdevices_1_1sonar_1_1_h_c_s_r04.html#afb6a5c54da3f8a328d714f249f88fd9a", null ],
-    [ "MAX_RANGE_M", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a3a85142cf76cbfc864fc5475096c1dd5", null ],
-    [ "DEFAULT_TIMEOUT_MS", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a23bd208fe75ad3c6f1da23630573d52c", null ]
+    [ "TIMER", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a663330cbedaf9766233cd6ceda42a9c0", null ],
+    [ "TYPE", "classdevices_1_1sonar_1_1_h_c_s_r04.html#ac17007e7b3f8accde78c4d61be5d3a85", null ],
+    [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html#afcd7d0feda341b41354df821cf0ff16d", null ],
+    [ "register_handler", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a6789b466cc58841a7b645e0fb417103d", null ],
+    [ "echo_ticks", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a6cb5b2ba4d6698d05024a70a7f943e63", null ],
+    [ "await_echo_ticks", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a65b6875104f4fc1059022e83e38ea5c1", null ],
+    [ "async_echo", "classdevices_1_1sonar_1_1_h_c_s_r04.html#aeee56c6e71f8589fad4c001975774bf7", null ],
+    [ "on_pin_change", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a4e7a984a5c8046f82d234d3c8477ea42", null ],
+    [ "on_capture", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a0c0350a860abd63efcd0915c463fd3ab", null ],
+    [ "NTIMER", "classdevices_1_1sonar_1_1_h_c_s_r04.html#ab62a50ba8020933d560178ce37f4d872", null ],
+    [ "TRIGGER", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a9dafeb3856a963e8dff9e67a64f55149", null ],
+    [ "ECHO", "classdevices_1_1sonar_1_1_h_c_s_r04.html#ac657a0ff0e763f97633c4a5e7179a239", null ],
+    [ "SONAR_TYPE", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a71e6d0d6892d993152356637fc02f289", null ],
+    [ "MAX_RANGE_M", "classdevices_1_1sonar_1_1_h_c_s_r04.html#ac33ea5af29450962ac8033b3f8685814", null ],
+    [ "DEFAULT_TIMEOUT_MS", "classdevices_1_1sonar_1_1_h_c_s_r04.html#ae864aa0d54918613423c7d92ce6be44d", null ]
 ];

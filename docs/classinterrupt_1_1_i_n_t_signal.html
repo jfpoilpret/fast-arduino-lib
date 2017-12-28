@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: interrupt::INTSignal&lt; PIN &gt; Class Template Reference</title>
+<title>FastArduino: interrupt::INTSignal&lt; PIN_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -82,9 +82,10 @@ $(document).ready(function(){initNavTree('classinterrupt_1_1_i_n_t_signal.html',
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classinterrupt_1_1_i_n_t_signal-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">interrupt::INTSignal&lt; PIN &gt; Class Template Reference</div>  </div>
+<div class="title">interrupt::INTSignal&lt; PIN_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -95,42 +96,48 @@ $(document).ready(function(){initNavTree('classinterrupt_1_1_i_n_t_signal.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a43937da2294da2731bab67a0bf9943e1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a43937da2294da2731bab67a0bf9943e1">INTSignal</a> (<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a> trigger=<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba1d6fe09476721a54c07d90573d84a1f2">InterruptTrigger::ANY_CHANGE</a>)</td></tr>
-<tr class="memdesc:a43937da2294da2731bab67a0bf9943e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a handler for <code>PIN</code> external interrupt pin.  <a href="#a43937da2294da2731bab67a0bf9943e1">More...</a><br /></td></tr>
-<tr class="separator:a43937da2294da2731bab67a0bf9943e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfd6f8c6c1c48fb37c58d6f333b543a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#abfd6f8c6c1c48fb37c58d6f333b543a2">set_trigger</a> (<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a> trigger)</td></tr>
-<tr class="memdesc:abfd6f8c6c1c48fb37c58d6f333b543a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the kind of level event that shall trigger an External Interrupt for <code>PIN</code>.  <a href="#abfd6f8c6c1c48fb37c58d6f333b543a2">More...</a><br /></td></tr>
-<tr class="separator:abfd6f8c6c1c48fb37c58d6f333b543a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60ff5b40e8702f4660c1a1ce986a179e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a60ff5b40e8702f4660c1a1ce986a179e">enable</a> ()</td></tr>
-<tr class="memdesc:a60ff5b40e8702f4660c1a1ce986a179e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts for this external interrupt pin.  <a href="#a60ff5b40e8702f4660c1a1ce986a179e">More...</a><br /></td></tr>
-<tr class="separator:a60ff5b40e8702f4660c1a1ce986a179e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afebb9ed3fae3c0355b99bc3822cc6d83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#afebb9ed3fae3c0355b99bc3822cc6d83">disable</a> ()</td></tr>
-<tr class="memdesc:afebb9ed3fae3c0355b99bc3822cc6d83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable interrupts for this external interrupt pin.  <a href="#afebb9ed3fae3c0355b99bc3822cc6d83">More...</a><br /></td></tr>
-<tr class="separator:afebb9ed3fae3c0355b99bc3822cc6d83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87211e9923ec55d4a43af06855d12f2c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a87211e9923ec55d4a43af06855d12f2c">clear</a> ()</td></tr>
-<tr class="memdesc:a87211e9923ec55d4a43af06855d12f2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this external interrupt pin.  <a href="#a87211e9923ec55d4a43af06855d12f2c">More...</a><br /></td></tr>
-<tr class="separator:a87211e9923ec55d4a43af06855d12f2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35d41a06866ae8dc6eb71a7ffec3d407"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a35d41a06866ae8dc6eb71a7ffec3d407">_set_trigger</a> (<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a> trigger)</td></tr>
-<tr class="memdesc:a35d41a06866ae8dc6eb71a7ffec3d407"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts for this external interrupt pin.  <a href="#a35d41a06866ae8dc6eb71a7ffec3d407">More...</a><br /></td></tr>
-<tr class="separator:a35d41a06866ae8dc6eb71a7ffec3d407"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadcce720c45a2127d1301c6b5201fc54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#aadcce720c45a2127d1301c6b5201fc54">_enable</a> ()</td></tr>
-<tr class="memdesc:aadcce720c45a2127d1301c6b5201fc54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts for this external interrupt pin.  <a href="#aadcce720c45a2127d1301c6b5201fc54">More...</a><br /></td></tr>
-<tr class="separator:aadcce720c45a2127d1301c6b5201fc54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c746e403bee6e1d10620880bd7914e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a8c746e403bee6e1d10620880bd7914e4">_disable</a> ()</td></tr>
-<tr class="memdesc:a8c746e403bee6e1d10620880bd7914e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable interrupts for this external interrupt pin.  <a href="#a8c746e403bee6e1d10620880bd7914e4">More...</a><br /></td></tr>
-<tr class="separator:a8c746e403bee6e1d10620880bd7914e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab39b47e8051e1b0faa0b230051a1e3b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#ab39b47e8051e1b0faa0b230051a1e3b2">_clear</a> ()</td></tr>
-<tr class="memdesc:ab39b47e8051e1b0faa0b230051a1e3b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this external interrupt pin.  <a href="#ab39b47e8051e1b0faa0b230051a1e3b2">More...</a><br /></td></tr>
-<tr class="separator:ab39b47e8051e1b0faa0b230051a1e3b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89f8c6919b007c42cb8337e5ec40b0af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a89f8c6919b007c42cb8337e5ec40b0af">INTSignal</a> (<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a> trigger=<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba1d6fe09476721a54c07d90573d84a1f2">InterruptTrigger::ANY_CHANGE</a>)</td></tr>
+<tr class="memdesc:a89f8c6919b007c42cb8337e5ec40b0af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a handler for <code>PIN</code> external interrupt pin.  <a href="#a89f8c6919b007c42cb8337e5ec40b0af">More...</a><br /></td></tr>
+<tr class="separator:a89f8c6919b007c42cb8337e5ec40b0af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ed3344f68e3ed91d1221a4eff7088d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a2ed3344f68e3ed91d1221a4eff7088d4">set_trigger</a> (<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a> trigger)</td></tr>
+<tr class="memdesc:a2ed3344f68e3ed91d1221a4eff7088d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the kind of level event that shall trigger an External Interrupt for <code>PIN</code>.  <a href="#a2ed3344f68e3ed91d1221a4eff7088d4">More...</a><br /></td></tr>
+<tr class="separator:a2ed3344f68e3ed91d1221a4eff7088d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72228b0e74171cc89f3907a29d361e8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a72228b0e74171cc89f3907a29d361e8b">enable</a> ()</td></tr>
+<tr class="memdesc:a72228b0e74171cc89f3907a29d361e8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts for this external interrupt pin.  <a href="#a72228b0e74171cc89f3907a29d361e8b">More...</a><br /></td></tr>
+<tr class="separator:a72228b0e74171cc89f3907a29d361e8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2f7f2150b01e0827e87bf68d0c15a1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#af2f7f2150b01e0827e87bf68d0c15a1f">disable</a> ()</td></tr>
+<tr class="memdesc:af2f7f2150b01e0827e87bf68d0c15a1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable interrupts for this external interrupt pin.  <a href="#af2f7f2150b01e0827e87bf68d0c15a1f">More...</a><br /></td></tr>
+<tr class="separator:af2f7f2150b01e0827e87bf68d0c15a1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3daf83472a3337e558639a48383a18e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a3daf83472a3337e558639a48383a18e7">clear</a> ()</td></tr>
+<tr class="memdesc:a3daf83472a3337e558639a48383a18e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this external interrupt pin.  <a href="#a3daf83472a3337e558639a48383a18e7">More...</a><br /></td></tr>
+<tr class="separator:a3daf83472a3337e558639a48383a18e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34dc95e45b5cec9e65e0c7c3e4ff2772"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a34dc95e45b5cec9e65e0c7c3e4ff2772">set_trigger_</a> (<a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a> trigger)</td></tr>
+<tr class="memdesc:a34dc95e45b5cec9e65e0c7c3e4ff2772"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts for this external interrupt pin.  <a href="#a34dc95e45b5cec9e65e0c7c3e4ff2772">More...</a><br /></td></tr>
+<tr class="separator:a34dc95e45b5cec9e65e0c7c3e4ff2772"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d346fd2ec783c625c89e4c6b566906b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a1d346fd2ec783c625c89e4c6b566906b">enable_</a> ()</td></tr>
+<tr class="memdesc:a1d346fd2ec783c625c89e4c6b566906b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable interrupts for this external interrupt pin.  <a href="#a1d346fd2ec783c625c89e4c6b566906b">More...</a><br /></td></tr>
+<tr class="separator:a1d346fd2ec783c625c89e4c6b566906b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abec0afa523dae7eb3016c38960c6bbe8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#abec0afa523dae7eb3016c38960c6bbe8">disable_</a> ()</td></tr>
+<tr class="memdesc:abec0afa523dae7eb3016c38960c6bbe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable interrupts for this external interrupt pin.  <a href="#abec0afa523dae7eb3016c38960c6bbe8">More...</a><br /></td></tr>
+<tr class="separator:abec0afa523dae7eb3016c38960c6bbe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab12f360005dcfdedf422fd1fff725a07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#ab12f360005dcfdedf422fd1fff725a07">clear_</a> ()</td></tr>
+<tr class="memdesc:ab12f360005dcfdedf422fd1fff725a07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this external interrupt pin.  <a href="#ab12f360005dcfdedf422fd1fff725a07">More...</a><br /></td></tr>
+<tr class="separator:ab12f360005dcfdedf422fd1fff725a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a680bc3d1051770fe9e84b2a6f83c7e4c"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a680bc3d1051770fe9e84b2a6f83c7e4c">PIN</a> = PIN_</td></tr>
+<tr class="memdesc:a680bc3d1051770fe9e84b2a6f83c7e4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The External Interrupt pin managed by this <a class="el" href="classinterrupt_1_1_i_n_t_signal.html" title="Handler of an External Interrupt. ">INTSignal</a>.  <a href="#a680bc3d1051770fe9e84b2a6f83c7e4c">More...</a><br /></td></tr>
+<tr class="separator:a680bc3d1051770fe9e84b2a6f83c7e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;board::DigitalPin PIN&gt;<br />
-class interrupt::INTSignal&lt; PIN &gt;</h3>
+<div class="textblock"><h3>template&lt;board::DigitalPin PIN_&gt;<br />
+class interrupt::INTSignal&lt; PIN_ &gt;</h3>
 
 <p>Handler of an External Interrupt. </p>
 <p>You must create as many as you have pins you want to handle as External Interrupts. If you need a function or method to be called back when an External Interrupt occurs for <code>PIN</code>, then you have to use <code>REGISTER_INT_ISR_FUNCTION</code> or <code><a class="el" href="int_8h.html#a3e2a8c98468d29717612f7c694a17d59" title="Register the necessary ISR (Interrupt Service Routine) for an External Interrupt pin. ">REGISTER_INT_ISR_METHOD()</a></code> macros. If you don't then use <code>REGISTER_INT_ISR_EMPTY</code> macro. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PIN</td><td>the External Interrupt pin; if <code>PIN</code> is not an External Interrupt pin, then the program will not compile. </td></tr>
+    <tr><td class="paramname">PIN_</td><td>the External Interrupt pin; if <code>PIN_</code> is not an External Interrupt pin, then the program will not compile. </td></tr>
   </table>
   </dd>
 </dl>
@@ -142,21 +149,21 @@ class interrupt::INTSignal&lt; PIN &gt;</h3>
 <dd>
 <a class="el" href="int_8h.html#a797c88ca60edb14f5189217ad50a65cb" title="Register an empty ISR (Interrupt Service Routine) for an External Interrupt pin. ">REGISTER_INT_ISR_EMPTY</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00105">105</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00104">104</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a43937da2294da2731bab67a0bf9943e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43937da2294da2731bab67a0bf9943e1">&#9670;&nbsp;</a></span>INTSignal()</h2>
+<a id="a89f8c6919b007c42cb8337e5ec40b0af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89f8c6919b007c42cb8337e5ec40b0af">&#9670;&nbsp;</a></span>INTSignal()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::<a class="el" href="classinterrupt_1_1_i_n_t_signal.html">INTSignal</a> </td>
+          <td class="memname"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::<a class="el" href="classinterrupt_1_1_i_n_t_signal.html">INTSignal</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a>&#160;</td>
           <td class="paramname"><em>trigger</em> = <code><a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba1d6fe09476721a54c07d90573d84a1f2">InterruptTrigger::ANY_CHANGE</a></code></td><td>)</td>
@@ -177,28 +184,28 @@ template&lt;board::DigitalPin PIN&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a60ff5b40e8702f4660c1a1ce986a179e" title="Enable interrupts for this external interrupt pin. ">enable()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a72228b0e74171cc89f3907a29d361e8b" title="Enable interrupts for this external interrupt pin. ">enable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_i_n_t_signal.html#abfd6f8c6c1c48fb37c58d6f333b543a2" title="Change the kind of level event that shall trigger an External Interrupt for PIN. ">set_trigger()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a2ed3344f68e3ed91d1221a4eff7088d4" title="Change the kind of level event that shall trigger an External Interrupt for PIN. ">set_trigger()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00123">123</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00126">126</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="abfd6f8c6c1c48fb37c58d6f333b543a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfd6f8c6c1c48fb37c58d6f333b543a2">&#9670;&nbsp;</a></span>set_trigger()</h2>
+<a id="a2ed3344f68e3ed91d1221a4eff7088d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ed3344f68e3ed91d1221a4eff7088d4">&#9670;&nbsp;</a></span>set_trigger()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::set_trigger </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::set_trigger </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a>&#160;</td>
           <td class="paramname"><em>trigger</em></td><td>)</td>
@@ -213,32 +220,32 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Change the kind of level event that shall trigger an External Interrupt for <code>PIN</code>. </p>
-<p>Note that this method is synchronized, i.e. it disables interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a35d41a06866ae8dc6eb71a7ffec3d407" title="Enable interrupts for this external interrupt pin. ">_set_trigger()</a></code> instead.</p>
+<p>Note that this method is synchronized, i.e. it disables interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a34dc95e45b5cec9e65e0c7c3e4ff2772" title="Enable interrupts for this external interrupt pin. ">set_trigger_()</a></code> instead.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">trigger</td><td>the new kind of level event </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a35d41a06866ae8dc6eb71a7ffec3d407" title="Enable interrupts for this external interrupt pin. ">_set_trigger()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a34dc95e45b5cec9e65e0c7c3e4ff2772" title="Enable interrupts for this external interrupt pin. ">set_trigger_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00140">140</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00143">143</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
-<a id="a60ff5b40e8702f4660c1a1ce986a179e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60ff5b40e8702f4660c1a1ce986a179e">&#9670;&nbsp;</a></span>enable()</h2>
+<a id="a72228b0e74171cc89f3907a29d361e8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72228b0e74171cc89f3907a29d361e8b">&#9670;&nbsp;</a></span>enable()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::enable </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::enable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -252,25 +259,25 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Enable interrupts for this external interrupt pin. </p>
-<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#aadcce720c45a2127d1301c6b5201fc54" title="Enable interrupts for this external interrupt pin. ">_enable()</a></code> instead. </p>
+<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a1d346fd2ec783c625c89e4c6b566906b" title="Enable interrupts for this external interrupt pin. ">enable_()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00152">152</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00156">156</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
-<a id="afebb9ed3fae3c0355b99bc3822cc6d83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afebb9ed3fae3c0355b99bc3822cc6d83">&#9670;&nbsp;</a></span>disable()</h2>
+<a id="af2f7f2150b01e0827e87bf68d0c15a1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2f7f2150b01e0827e87bf68d0c15a1f">&#9670;&nbsp;</a></span>disable()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::disable </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::disable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -284,25 +291,25 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Disable interrupts for this external interrupt pin. </p>
-<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a8c746e403bee6e1d10620880bd7914e4" title="Disable interrupts for this external interrupt pin. ">_disable()</a></code> instead. </p>
+<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#abec0afa523dae7eb3016c38960c6bbe8" title="Disable interrupts for this external interrupt pin. ">disable_()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00164">164</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00168">168</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
-<a id="a87211e9923ec55d4a43af06855d12f2c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87211e9923ec55d4a43af06855d12f2c">&#9670;&nbsp;</a></span>clear()</h2>
+<a id="a3daf83472a3337e558639a48383a18e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3daf83472a3337e558639a48383a18e7">&#9670;&nbsp;</a></span>clear()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::clear </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::clear </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -316,25 +323,25 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Clear the interrupt flag for this external interrupt pin. </p>
-<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#ab39b47e8051e1b0faa0b230051a1e3b2" title="Clear the interrupt flag for this external interrupt pin. ">_clear()</a></code> instead. </p>
+<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#ab12f360005dcfdedf422fd1fff725a07" title="Clear the interrupt flag for this external interrupt pin. ">clear_()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00178">178</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00182">182</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
-<a id="a35d41a06866ae8dc6eb71a7ffec3d407"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35d41a06866ae8dc6eb71a7ffec3d407">&#9670;&nbsp;</a></span>_set_trigger()</h2>
+<a id="a34dc95e45b5cec9e65e0c7c3e4ff2772"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34dc95e45b5cec9e65e0c7c3e4ff2772">&#9670;&nbsp;</a></span>set_trigger_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::_set_trigger </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::set_trigger_ </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">InterruptTrigger</a>&#160;</td>
           <td class="paramname"><em>trigger</em></td><td>)</td>
@@ -349,25 +356,25 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Enable interrupts for this external interrupt pin. </p>
-<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#abfd6f8c6c1c48fb37c58d6f333b543a2" title="Change the kind of level event that shall trigger an External Interrupt for PIN. ">set_trigger()</a></code> instead. </p>
+<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a2ed3344f68e3ed91d1221a4eff7088d4" title="Change the kind of level event that shall trigger an External Interrupt for PIN. ">set_trigger()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00190">190</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00194">194</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
-<a id="aadcce720c45a2127d1301c6b5201fc54"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aadcce720c45a2127d1301c6b5201fc54">&#9670;&nbsp;</a></span>_enable()</h2>
+<a id="a1d346fd2ec783c625c89e4c6b566906b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d346fd2ec783c625c89e4c6b566906b">&#9670;&nbsp;</a></span>enable_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::_enable </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::enable_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -381,25 +388,25 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Enable interrupts for this external interrupt pin. </p>
-<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a60ff5b40e8702f4660c1a1ce986a179e" title="Enable interrupts for this external interrupt pin. ">enable()</a></code> instead. </p>
+<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a72228b0e74171cc89f3907a29d361e8b" title="Enable interrupts for this external interrupt pin. ">enable()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00202">202</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00206">206</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
-<a id="a8c746e403bee6e1d10620880bd7914e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c746e403bee6e1d10620880bd7914e4">&#9670;&nbsp;</a></span>_disable()</h2>
+<a id="abec0afa523dae7eb3016c38960c6bbe8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abec0afa523dae7eb3016c38960c6bbe8">&#9670;&nbsp;</a></span>disable_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::_disable </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::disable_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -413,25 +420,25 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Disable interrupts for this external interrupt pin. </p>
-<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#afebb9ed3fae3c0355b99bc3822cc6d83" title="Disable interrupts for this external interrupt pin. ">disable()</a></code> instead. </p>
+<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#af2f7f2150b01e0827e87bf68d0c15a1f" title="Disable interrupts for this external interrupt pin. ">disable()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00214">214</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00218">218</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>
-<a id="ab39b47e8051e1b0faa0b230051a1e3b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab39b47e8051e1b0faa0b230051a1e3b2">&#9670;&nbsp;</a></span>_clear()</h2>
+<a id="ab12f360005dcfdedf422fd1fff725a07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab12f360005dcfdedf422fd1fff725a07">&#9670;&nbsp;</a></span>clear_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN&gt; </div>
+template&lt;board::DigitalPin PIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN &gt;::_clear </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::clear_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -445,9 +452,38 @@ template&lt;board::DigitalPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Clear the interrupt flag for this external interrupt pin. </p>
-<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a87211e9923ec55d4a43af06855d12f2c" title="Clear the interrupt flag for this external interrupt pin. ">clear()</a></code> instead. </p>
+<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a3daf83472a3337e558639a48383a18e7" title="Clear the interrupt flag for this external interrupt pin. ">clear()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00228">228</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00232">232</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a680bc3d1051770fe9e84b2a6f83c7e4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a680bc3d1051770fe9e84b2a6f83c7e4c">&#9670;&nbsp;</a></span>PIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin PIN_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal</a>&lt; PIN_ &gt;::PIN = PIN_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The External Interrupt pin managed by this <a class="el" href="classinterrupt_1_1_i_n_t_signal.html" title="Handler of an External Interrupt. ">INTSignal</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00108">108</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>

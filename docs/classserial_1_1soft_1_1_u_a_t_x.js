@@ -1,8 +1,9 @@
 var classserial_1_1soft_1_1_u_a_t_x =
 [
-    [ "UATX", "classserial_1_1soft_1_1_u_a_t_x.html#a5ed67dc6db0b79c01eabce986f213b7e", null ],
-    [ "begin", "classserial_1_1soft_1_1_u_a_t_x.html#a58a6873bf7b21470922ac6ffe6aa0f58", null ],
-    [ "end", "classserial_1_1soft_1_1_u_a_t_x.html#af9b66620509cfd69e015de96badd01bc", null ],
-    [ "on_put", "classserial_1_1soft_1_1_u_a_t_x.html#aa7615c909be66a8c1c243030ebf0d46a", null ],
-    [ "on_overflow", "classserial_1_1soft_1_1_u_a_t_x.html#a89d5decaba906590c07cdecf5af38d55", null ]
+    [ "UATX", "classserial_1_1soft_1_1_u_a_t_x.html#ab823008e711802840b92fe2c1339f6b3", null ],
+    [ "begin", "classserial_1_1soft_1_1_u_a_t_x.html#afd47337a77c3f1146b8c5e2ccc73ce3e", null ],
+    [ "end", "classserial_1_1soft_1_1_u_a_t_x.html#a30a5c287a1a47ce6fc59914f869cd4ff", null ],
+    [ "on_put", "classserial_1_1soft_1_1_u_a_t_x.html#a163f31e1b6bb7bf354e761e583daabed", null ],
+    [ "on_overflow", "classserial_1_1soft_1_1_u_a_t_x.html#af5240859774a95a078b6314c3b0ba0ec", null ],
+    [ "TX", "classserial_1_1soft_1_1_u_a_t_x.html#aee7e52d834bae3c16d9768f789336a3e", null ]
 ];

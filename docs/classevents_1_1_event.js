@@ -1,6 +1,7 @@
 var classevents_1_1_event =
 [
-    [ "Event", "classevents_1_1_event.html#a72dcc505bb5a3bca538f96ffa42b4e0d", null ],
-    [ "type", "classevents_1_1_event.html#aacfdf5060bbc45c4603d1cc810d18b2a", null ],
-    [ "value", "classevents_1_1_event.html#ad19f670f2433ff6be0f591981ac7f150", null ]
+    [ "TYPE", "classevents_1_1_event.html#a4b1eb7c8f86774b57ae77b5951e73c5b", null ],
+    [ "Event", "classevents_1_1_event.html#a70ff55a428a1aaab417f281031d6672d", null ],
+    [ "type", "classevents_1_1_event.html#a4cc68c5a6710d276baa534b61a25f611", null ],
+    [ "value", "classevents_1_1_event.html#a4b7799d447a297415d41ca0264b5f76d", null ]
 ];

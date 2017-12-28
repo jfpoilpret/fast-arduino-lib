@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: analog::PWMOutput&lt; PIN, PULSED &gt; Class Template Reference</title>
+<title>FastArduino: analog::PWMOutput&lt; PIN_, PULSED_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -86,7 +86,7 @@ $(document).ready(function(){initNavTree('classanalog_1_1_p_w_m_output.html','')
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classanalog_1_1_p_w_m_output-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">analog::PWMOutput&lt; PIN, PULSED &gt; Class Template Reference</div>  </div>
+<div class="title">analog::PWMOutput&lt; PIN_, PULSED_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -97,87 +97,94 @@ $(document).ready(function(){initNavTree('classanalog_1_1_p_w_m_output.html','')
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ab8f0381e39f522b7a5473445534707c8"><td class="memItemLeft" align="right" valign="top"><a id="ab8f0381e39f522b7a5473445534707c8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#ab8f0381e39f522b7a5473445534707c8">TIMER</a> = <a class="el" href="classtimer_1_1_timer.html">timer::Timer</a>&lt; TRAIT::TIMER &gt;</td></tr>
-<tr class="memdesc:ab8f0381e39f522b7a5473445534707c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actual <code><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a></code> type associated to this <code><a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. ">PWMOutput</a></code>. <br /></td></tr>
-<tr class="separator:ab8f0381e39f522b7a5473445534707c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a944e19010ae3ef032386c9e1b809e556"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556">TYPE</a> = typename TIMER_TRAIT::TYPE</td></tr>
-<tr class="memdesc:a944e19010ae3ef032386c9e1b809e556"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type (either <code>uint8_t</code> or <code>uint16_t</code>) of values acceptable for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>.  <a href="#a944e19010ae3ef032386c9e1b809e556">More...</a><br /></td></tr>
-<tr class="separator:a944e19010ae3ef032386c9e1b809e556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6aa7f4cbd8574ac3e1fd2858982c38c"><td class="memItemLeft" align="right" valign="top"><a id="af6aa7f4cbd8574ac3e1fd2858982c38c"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#af6aa7f4cbd8574ac3e1fd2858982c38c">TIMER</a> = <a class="el" href="classtimer_1_1_timer.html">timer::Timer</a>&lt; TRAIT::TIMER &gt;</td></tr>
+<tr class="memdesc:af6aa7f4cbd8574ac3e1fd2858982c38c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actual <code><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a></code> type associated to this <code><a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. ">PWMOutput</a></code>. <br /></td></tr>
+<tr class="separator:af6aa7f4cbd8574ac3e1fd2858982c38c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b5ec6328d9f534c0012a712b83ae601"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">TYPE</a> = typename TIMER_TRAIT::TYPE</td></tr>
+<tr class="memdesc:a5b5ec6328d9f534c0012a712b83ae601"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type (either <code>uint8_t</code> or <code>uint16_t</code>) of values acceptable for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#aee390c15b358294596ecc29f5a76bdfe" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>.  <a href="#a5b5ec6328d9f534c0012a712b83ae601">More...</a><br /></td></tr>
+<tr class="separator:a5b5ec6328d9f534c0012a712b83ae601"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a23f43b87ae467b32eaf2fb0c098adb97"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#a23f43b87ae467b32eaf2fb0c098adb97">PWMOutput</a> (<a class="el" href="classanalog_1_1_p_w_m_output.html#ab8f0381e39f522b7a5473445534707c8">TIMER</a> &amp;timer, TimerOutputMode output_mode=TimerOutputMode::NON_INVERTING)</td></tr>
-<tr class="memdesc:a23f43b87ae467b32eaf2fb0c098adb97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new PWM output pin, connected to <code>timer</code>, using <code>output_mode</code>.  <a href="#a23f43b87ae467b32eaf2fb0c098adb97">More...</a><br /></td></tr>
-<tr class="separator:a23f43b87ae467b32eaf2fb0c098adb97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaae88d18f1fead50dc0cb8104a3ed94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#abaae88d18f1fead50dc0cb8104a3ed94">set_output_mode</a> (TimerOutputMode output_mode)</td></tr>
-<tr class="memdesc:abaae88d18f1fead50dc0cb8104a3ed94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the connection output mode of this PWM pin to its timer.  <a href="#abaae88d18f1fead50dc0cb8104a3ed94">More...</a><br /></td></tr>
-<tr class="separator:abaae88d18f1fead50dc0cb8104a3ed94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae657fe7dc5a566d4c12a1cb866941fb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0">set_duty</a> (<a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556">TYPE</a> duty)</td></tr>
-<tr class="memdesc:ae657fe7dc5a566d4c12a1cb866941fb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the duty cycle for this PWM pin, from <code>0</code> (0% duty cycle) to <code>MAX</code> (100%), any value above <code>MAX</code> will be used as 100%.  <a href="#ae657fe7dc5a566d4c12a1cb866941fb0">More...</a><br /></td></tr>
-<tr class="separator:ae657fe7dc5a566d4c12a1cb866941fb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4e79680a95585223ec740e9a770ca7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#abe4e79680a95585223ec740e9a770ca7">PWMOutput</a> (<a class="el" href="classanalog_1_1_p_w_m_output.html#af6aa7f4cbd8574ac3e1fd2858982c38c">TIMER</a> &amp;timer, TimerOutputMode output_mode=TimerOutputMode::NON_INVERTING)</td></tr>
+<tr class="memdesc:abe4e79680a95585223ec740e9a770ca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new PWM output pin, connected to <code>timer</code>, using <code>output_mode</code>.  <a href="#abe4e79680a95585223ec740e9a770ca7">More...</a><br /></td></tr>
+<tr class="separator:abe4e79680a95585223ec740e9a770ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afebbdf08ca77a9dc70d0cd44bf05f4fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#afebbdf08ca77a9dc70d0cd44bf05f4fc">set_output_mode</a> (TimerOutputMode output_mode)</td></tr>
+<tr class="memdesc:afebbdf08ca77a9dc70d0cd44bf05f4fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the connection output mode of this PWM pin to its timer.  <a href="#afebbdf08ca77a9dc70d0cd44bf05f4fc">More...</a><br /></td></tr>
+<tr class="separator:afebbdf08ca77a9dc70d0cd44bf05f4fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee390c15b358294596ecc29f5a76bdfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#aee390c15b358294596ecc29f5a76bdfe">set_duty</a> (<a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">TYPE</a> duty)</td></tr>
+<tr class="memdesc:aee390c15b358294596ecc29f5a76bdfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the duty cycle for this PWM pin, from <code>0</code> (0% duty cycle) to <code>MAX</code> (100%), any value above <code>MAX</code> will be used as 100%.  <a href="#aee390c15b358294596ecc29f5a76bdfe">More...</a><br /></td></tr>
+<tr class="separator:aee390c15b358294596ecc29f5a76bdfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a1103f4999ec776e95432ca594167ed17"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#a1103f4999ec776e95432ca594167ed17">MAX</a> = TIMER_TRAIT::MAX_PWM</td></tr>
-<tr class="memdesc:a1103f4999ec776e95432ca594167ed17"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum acceptable value for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>.  <a href="#a1103f4999ec776e95432ca594167ed17">More...</a><br /></td></tr>
-<tr class="separator:a1103f4999ec776e95432ca594167ed17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c5cb3437be029f487da004f1a932f9a"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#a7c5cb3437be029f487da004f1a932f9a">PIN</a> = PIN_</td></tr>
+<tr class="memdesc:a7c5cb3437be029f487da004f1a932f9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The digital pin for this <a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. ">PWMOutput</a>.  <a href="#a7c5cb3437be029f487da004f1a932f9a">More...</a><br /></td></tr>
+<tr class="separator:a7c5cb3437be029f487da004f1a932f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8157e700b6b6c750bd8d37db84a86fb2"><td class="memItemLeft" align="right" valign="top"><a id="a8157e700b6b6c750bd8d37db84a86fb2"></a>
+static constexpr const bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#a8157e700b6b6c750bd8d37db84a86fb2">PULSED</a> = PULSED_</td></tr>
+<tr class="memdesc:a8157e700b6b6c750bd8d37db84a86fb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this <a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. ">PWMOutput</a> uses a <code><a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a></code> instead of a <code><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a></code>. <br /></td></tr>
+<tr class="separator:a8157e700b6b6c750bd8d37db84a86fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b1fdf788fa1f9e717280f459b09a135"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html#a6b1fdf788fa1f9e717280f459b09a135">MAX</a> = TIMER_TRAIT::MAX_PWM</td></tr>
+<tr class="memdesc:a6b1fdf788fa1f9e717280f459b09a135"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum acceptable value for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#aee390c15b358294596ecc29f5a76bdfe" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>.  <a href="#a6b1fdf788fa1f9e717280f459b09a135">More...</a><br /></td></tr>
+<tr class="separator:a6b1fdf788fa1f9e717280f459b09a135"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;board::DigitalPin PIN, bool PULSED = false&gt;<br />
-class analog::PWMOutput&lt; PIN, PULSED &gt;</h3>
+<div class="textblock"><h3>template&lt;board::DigitalPin PIN_, bool PULSED_ = false&gt;<br />
+class analog::PWMOutput&lt; PIN_, PULSED_ &gt;</h3>
 
 <p>Construct a new handler for a PWM output pin. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PIN</td><td>the digital pin to use as PWM output </td></tr>
-    <tr><td class="paramname">PULSED</td><td>whether to use a <code><a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a></code> instead of a <code><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a></code>; this is useful when e.g. you want to use a PWM pin to manage a servo motor, where pulses shall be limited to a few ms but triggered every few dozen ms. </td></tr>
+    <tr><td class="paramname">PIN_</td><td>the digital pin to use as PWM output </td></tr>
+    <tr><td class="paramname">PULSED_</td><td>whether to use a <code><a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a></code> instead of a <code><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a></code>; this is useful when e.g. you want to use a PWM pin to manage a servo motor, where pulses shall be limited to a few ms but triggered every few dozen ms. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00043">43</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00042">42</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a944e19010ae3ef032386c9e1b809e556"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a944e19010ae3ef032386c9e1b809e556">&#9670;&nbsp;</a></span>TYPE</h2>
+<a id="a5b5ec6328d9f534c0012a712b83ae601"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b5ec6328d9f534c0012a712b83ae601">&#9670;&nbsp;</a></span>TYPE</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
+template&lt;board::DigitalPin PIN_, bool PULSED_ = false&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN, PULSED &gt;::<a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556">TYPE</a> =  typename TIMER_TRAIT::TYPE</td>
+          <td class="memname">using <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN_, PULSED_ &gt;::<a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">TYPE</a> =  typename TIMER_TRAIT::TYPE</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>The type (either <code>uint8_t</code> or <code>uint16_t</code>) of values acceptable for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a> </dd>
+<p>The type (either <code>uint8_t</code> or <code>uint16_t</code>) of values acceptable for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#aee390c15b358294596ecc29f5a76bdfe" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classanalog_1_1_p_w_m_output.html#aee390c15b358294596ecc29f5a76bdfe" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a> </dd>
 <dd>
-<a class="el" href="classanalog_1_1_p_w_m_output.html#a1103f4999ec776e95432ca594167ed17" title="The maximum acceptable value for duty in set_duty(). ">MAX</a> </dd></dl>
+<a class="el" href="classanalog_1_1_p_w_m_output.html#a6b1fdf788fa1f9e717280f459b09a135" title="The maximum acceptable value for duty in set_duty(). ">MAX</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00095">95</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00103">103</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a23f43b87ae467b32eaf2fb0c098adb97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23f43b87ae467b32eaf2fb0c098adb97">&#9670;&nbsp;</a></span>PWMOutput()</h2>
+<a id="abe4e79680a95585223ec740e9a770ca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe4e79680a95585223ec740e9a770ca7">&#9670;&nbsp;</a></span>PWMOutput()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
+template&lt;board::DigitalPin PIN_, bool PULSED_ = false&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN, PULSED &gt;::<a class="el" href="classanalog_1_1_p_w_m_output.html">PWMOutput</a> </td>
+          <td class="memname"><a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN_, PULSED_ &gt;::<a class="el" href="classanalog_1_1_p_w_m_output.html">PWMOutput</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classanalog_1_1_p_w_m_output.html#ab8f0381e39f522b7a5473445534707c8">TIMER</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classanalog_1_1_p_w_m_output.html#af6aa7f4cbd8574ac3e1fd2858982c38c">TIMER</a> &amp;&#160;</td>
           <td class="paramname"><em>timer</em>, </td>
         </tr>
         <tr>
@@ -208,24 +215,24 @@ template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00067">67</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00076">76</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="abaae88d18f1fead50dc0cb8104a3ed94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abaae88d18f1fead50dc0cb8104a3ed94">&#9670;&nbsp;</a></span>set_output_mode()</h2>
+<a id="afebbdf08ca77a9dc70d0cd44bf05f4fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afebbdf08ca77a9dc70d0cd44bf05f4fc">&#9670;&nbsp;</a></span>set_output_mode()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
+template&lt;board::DigitalPin PIN_, bool PULSED_ = false&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN, PULSED &gt;::set_output_mode </td>
+          <td class="memname">void <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN_, PULSED_ &gt;::set_output_mode </td>
           <td>(</td>
           <td class="paramtype">TimerOutputMode&#160;</td>
           <td class="paramname"><em>output_mode</em></td><td>)</td>
@@ -247,25 +254,25 @@ template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00083">83</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00092">92</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
 
 </div>
 </div>
-<a id="ae657fe7dc5a566d4c12a1cb866941fb0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae657fe7dc5a566d4c12a1cb866941fb0">&#9670;&nbsp;</a></span>set_duty()</h2>
+<a id="aee390c15b358294596ecc29f5a76bdfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee390c15b358294596ecc29f5a76bdfe">&#9670;&nbsp;</a></span>set_duty()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
+template&lt;board::DigitalPin PIN_, bool PULSED_ = false&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN, PULSED &gt;::set_duty </td>
+          <td class="memname">void <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN_, PULSED_ &gt;::set_duty </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556">TYPE</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">TYPE</a>&#160;</td>
           <td class="paramname"><em>duty</em></td><td>)</td>
           <td></td>
         </tr>
@@ -284,28 +291,28 @@ template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556" title="The type (either uint8_t or uint16_t) of values acceptable for duty in set_duty(). ">TYPE</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601" title="The type (either uint8_t or uint16_t) of values acceptable for duty in set_duty(). ">TYPE</a> </dd>
 <dd>
-<a class="el" href="classanalog_1_1_p_w_m_output.html#a1103f4999ec776e95432ca594167ed17" title="The maximum acceptable value for duty in set_duty(). ">MAX</a> </dd></dl>
+<a class="el" href="classanalog_1_1_p_w_m_output.html#a6b1fdf788fa1f9e717280f459b09a135" title="The maximum acceptable value for duty in set_duty(). ">MAX</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00111">111</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00119">119</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a1103f4999ec776e95432ca594167ed17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1103f4999ec776e95432ca594167ed17">&#9670;&nbsp;</a></span>MAX</h2>
+<a id="a7c5cb3437be029f487da004f1a932f9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c5cb3437be029f487da004f1a932f9a">&#9670;&nbsp;</a></span>PIN</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
+template&lt;board::DigitalPin PIN_, bool PULSED_ = false&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr const <a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556">TYPE</a> <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN, PULSED &gt;::MAX = TIMER_TRAIT::MAX_PWM</td>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN_, PULSED_ &gt;::PIN = PIN_</td>
         </tr>
       </table>
   </td>
@@ -315,12 +322,40 @@ template&lt;board::DigitalPin PIN, bool PULSED = false&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>The maximum acceptable value for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classanalog_1_1_p_w_m_output.html#ae657fe7dc5a566d4c12a1cb866941fb0" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a> </dd>
-<dd>
-<a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556" title="The type (either uint8_t or uint16_t) of values acceptable for duty in set_duty(). ">TYPE</a> </dd></dl>
+<p>The digital pin for this <a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. ">PWMOutput</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00102">102</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00046">46</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+
+</div>
+</div>
+<a id="a6b1fdf788fa1f9e717280f459b09a135"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b1fdf788fa1f9e717280f459b09a135">&#9670;&nbsp;</a></span>MAX</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin PIN_, bool PULSED_ = false&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">TYPE</a> <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; PIN_, PULSED_ &gt;::MAX = TIMER_TRAIT::MAX_PWM</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The maximum acceptable value for <code>duty</code> in <code><a class="el" href="classanalog_1_1_p_w_m_output.html#aee390c15b358294596ecc29f5a76bdfe" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a></code>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classanalog_1_1_p_w_m_output.html#aee390c15b358294596ecc29f5a76bdfe" title="Set the duty cycle for this PWM pin, from 0 (0% duty cycle) to MAX (100%), any value above MAX will b...">set_duty()</a> </dd>
+<dd>
+<a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601" title="The type (either uint8_t or uint16_t) of values acceptable for duty in set_duty(). ">TYPE</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pwm_8h_source.html#l00110">110</a> of file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
 
 </div>
 </div>

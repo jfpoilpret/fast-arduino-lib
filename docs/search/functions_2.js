@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['base',['base',['../classstreams_1_1_format_base.html#a0e4352fd9cb1b47963761c92148e2aac',1,'streams::FormatBase::base(Base base)'],['../classstreams_1_1_format_base.html#a97f8bfe150ae26f91eb702b6624369b0',1,'streams::FormatBase::base()']]],
-  ['bcd_5fto_5fbinary',['bcd_to_binary',['../namespaceutils.html#af5b3426ba48caf5ee96ed71fa8b7bb5e',1,'utils']]],
-  ['begin',['begin',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd',1,'devices::rf::NRF24L01::begin()'],['../classtimer_1_1_timer.html#a6b51aad9992b247ed05b88c83ec6d9bf',1,'timer::Timer::begin()'],['../classserial_1_1hard_1_1_u_a_t_x.html#ad02715895d9cafefc1a28df302ce6049',1,'serial::hard::UATX::begin()'],['../classserial_1_1hard_1_1_u_a_r_x.html#a29a4dfaecb6e1e2828864efc46f111ec',1,'serial::hard::UARX::begin()'],['../classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a',1,'watchdog::WatchdogSignal::begin()'],['../classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765',1,'watchdog::Watchdog::begin()']]],
-  ['bin',['bin',['../namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1',1,'streams']]],
-  ['binary_5fto_5fbcd',['binary_to_bcd',['../namespaceutils.html#a76076365828136f5178f279fb3c129de',1,'utils']]],
-  ['broadcast',['broadcast',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4',1,'devices::rf::NRF24L01']]]
+  ['calculate_5fdelay1_5fcount',['calculate_delay1_count',['../namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271',1,'utils']]],
+  ['clear',['clear',['../classgpio_1_1_fast_pin.html#aacdd1ac814176c092cae63d1dc83b144',1,'gpio::FastPin::clear()'],['../classgpio_1_1_fast_pin_type.html#a5a031efb5fa3df88fdc861ec80ae580b',1,'gpio::FastPinType::clear()'],['../classinterrupt_1_1_i_n_t_signal.html#a3daf83472a3337e558639a48383a18e7',1,'interrupt::INTSignal::clear()'],['../classinterrupt_1_1_p_c_i_signal.html#a537a570866951cd8e6913c0abff4f1b1',1,'interrupt::PCISignal::clear()']]],
+  ['clear_5f',['clear_',['../classinterrupt_1_1_i_n_t_signal.html#ab12f360005dcfdedf422fd1fff725a07',1,'interrupt::INTSignal::clear_()'],['../classinterrupt_1_1_p_c_i_signal.html#a2bb0bfed157c128aa239f0448d2efa73',1,'interrupt::PCISignal::clear_()']]],
+  ['clear_5ferrors',['clear_errors',['../classserial_1_1_u_a_r_t_errors.html#aad35c22c4adaaa09bddf0542eb9f128f',1,'serial::UARTErrors']]],
+  ['constrain',['constrain',['../namespaceutils.html#af1acb8c6f0e6493f88d42b2192e68ba3',1,'utils']]],
+  ['ctc_5fcounter',['CTC_counter',['../structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455',1,'timer::Calculator']]],
+  ['ctc_5ffrequency',['CTC_frequency',['../structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4',1,'timer::Calculator']]],
+  ['ctc_5fprescaler',['CTC_prescaler',['../structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29',1,'timer::Calculator']]]
 ];

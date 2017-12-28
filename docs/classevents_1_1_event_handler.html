@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: events::EventHandler Class Reference</title>
+<title>FastArduino: events::EventHandler&lt; EVENT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,64 +83,150 @@ $(document).ready(function(){initNavTree('classevents_1_1_event_handler.html',''
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classevents_1_1_event_handler-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">events::EventHandler Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">events::EventHandler&lt; EVENT &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Abstract event handler, used by <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code> to get called back when an event of the expected type is dispatched.  
+ <a href="classevents_1_1_event_handler.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="events_8h_source.html">fastarduino/events.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for events::EventHandler:</div>
+Inheritance diagram for events::EventHandler&lt; EVENT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classevents_1_1_event_handler__inherit__graph.png" border="0" usemap="#events_1_1_event_handler_inherit__map" alt="Inheritance graph"/></div>
-<map name="events_1_1_event_handler_inherit__map" id="events_1_1_event_handler_inherit__map">
-<area shape="rect" id="node4" href="classevents_1_1_scheduler.html" title="events::Scheduler\&lt;\l CLOCK \&gt;" alt="" coords="47,229,181,271"/>
-<area shape="rect" id="node2" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler \&gt;" alt="" coords="5,80,223,107"/>
-<area shape="rect" id="node3" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="45,5,183,32"/>
+<div class="center"><img src="classevents_1_1_event_handler__inherit__graph.png" border="0" usemap="#events_1_1_event_handler_3_01_e_v_e_n_t_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="events_1_1_event_handler_3_01_e_v_e_n_t_01_4_inherit__map" id="events_1_1_event_handler_3_01_e_v_e_n_t_01_4_inherit__map">
+<area shape="rect" id="node2" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler\l\&lt; EVENT \&gt; \&gt;" alt="" coords="5,80,211,121"/>
+<area shape="rect" id="node3" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="39,5,177,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for events::EventHandler:</div>
+Collaboration diagram for events::EventHandler&lt; EVENT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classevents_1_1_event_handler__coll__graph.png" border="0" usemap="#events_1_1_event_handler_coll__map" alt="Collaboration graph"/></div>
-<map name="events_1_1_event_handler_coll__map" id="events_1_1_event_handler_coll__map">
-<area shape="rect" id="node2" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler \&gt;" alt="" coords="5,81,223,108"/>
-<area shape="rect" id="node3" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="45,5,183,32"/>
+<div class="center"><img src="classevents_1_1_event_handler__coll__graph.png" border="0" usemap="#events_1_1_event_handler_3_01_e_v_e_n_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="events_1_1_event_handler_3_01_e_v_e_n_t_01_4_coll__map" id="events_1_1_event_handler_3_01_e_v_e_n_t_01_4_coll__map">
+<area shape="rect" id="node2" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler\l\&lt; EVENT \&gt; \&gt;" alt="" coords="5,81,211,123"/>
+<area shape="rect" id="node3" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="39,5,177,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa32c5ba6754c5757bae5b29329ca37d6"><td class="memItemLeft" align="right" valign="top"><a id="aa32c5ba6754c5757bae5b29329ca37d6"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> () const INLINE</td></tr>
-<tr class="separator:aa32c5ba6754c5757bae5b29329ca37d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae412f4a1004787224c4fa18d29265b2d"><td class="memItemLeft" align="right" valign="top"><a id="ae412f4a1004787224c4fa18d29265b2d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>on_event</b> (const <a class="el" href="classevents_1_1_event.html">Event</a> &amp;event)=0</td></tr>
-<tr class="separator:ae412f4a1004787224c4fa18d29265b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3ce6db961c671fec9475507d17a65d0"><td class="memItemLeft" align="right" valign="top"><a id="ab3ce6db961c671fec9475507d17a65d0"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">type</a> () const INLINE</td></tr>
+<tr class="memdesc:ab3ce6db961c671fec9475507d17a65d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of event that this handler accepts and can act upon. <br /></td></tr>
+<tr class="separator:ab3ce6db961c671fec9475507d17a65d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1504447f58fbe5060bf2218dee9c09"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09">on_event</a> (const EVENT &amp;event)=0</td></tr>
+<tr class="memdesc:adf1504447f58fbe5060bf2218dee9c09"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pure virtual method is called by <code><a class="el" href="classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7" title="Dispatch the given event to the right EventHandler, based on the event type. ">Dispatcher::dispatch()</a></code> when <code>event.type()</code> matches the type supported by this <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>.  <a href="#adf1504447f58fbe5060bf2218dee9c09">More...</a><br /></td></tr>
+<tr class="separator:adf1504447f58fbe5060bf2218dee9c09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a84f5fbdd8f5a9f60e2664c4ef74347bd"><td class="memItemLeft" align="right" valign="top"><a id="a84f5fbdd8f5a9f60e2664c4ef74347bd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>EventHandler</b> (uint8_t type=Type::NO_EVENT) INLINE</td></tr>
-<tr class="separator:a84f5fbdd8f5a9f60e2664c4ef74347bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a85da0917169465a8f47dc0c8fe2eeeaa"><td class="memItemLeft" align="right" valign="top"><a id="a85da0917169465a8f47dc0c8fe2eeeaa"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_type</b></td></tr>
-<tr class="separator:a85da0917169465a8f47dc0c8fe2eeeaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a1b6e45fb04ed611dc09c71a30d2341"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#a3a1b6e45fb04ed611dc09c71a30d2341">EventHandler</a> (uint8_t <a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">type</a>=<a class="el" href="namespaceevents_1_1_type.html#a2c33d039e5fdd277900219bd3cd74eb0">Type::NO_EVENT</a>) INLINE</td></tr>
+<tr class="memdesc:a3a1b6e45fb04ed611dc09c71a30d2341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an <a class="el" href="classevents_1_1_event.html" title="A standard Event as managed by FastArduino event API. ">Event</a> Handler for given <code>type</code> of event.  <a href="#a3a1b6e45fb04ed611dc09c71a30d2341">More...</a><br /></td></tr>
+<tr class="separator:a3a1b6e45fb04ed611dc09c71a30d2341"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:ad90424f003fc2afb836709cbffa47e2c"><td class="memItemLeft" align="right" valign="top"><a id="ad90424f003fc2afb836709cbffa47e2c"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>Dispatcher</b></td></tr>
-<tr class="separator:ad90424f003fc2afb836709cbffa47e2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a952db2da0658d8db8dfccf72f81d6e3f"><td class="memItemLeft" align="right" valign="top"><a id="a952db2da0658d8db8dfccf72f81d6e3f"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>Dispatcher&lt; EVENT &gt;</b></td></tr>
+<tr class="separator:a952db2da0658d8db8dfccf72f81d6e3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classcontainers_1_1_link"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classcontainers_1_1_link')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classcontainers_1_1_link.html">containers::Link&lt; EventHandler&lt; EVENT &gt; &gt;</a></td></tr>
+<tr class="memitem:a6b64035a31450f45e1395c0f20b4aa14 inherit pub_types_classcontainers_1_1_link"><td class="memItemLeft" align="right" valign="top"><a id="a6b64035a31450f45e1395c0f20b4aa14"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>T</b> = EventHandler&lt; EVENT &gt;</td></tr>
+<tr class="separator:a6b64035a31450f45e1395c0f20b4aa14 inherit pub_types_classcontainers_1_1_link"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00063">63</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<div class="textblock"><h3>template&lt;typename EVENT&gt;<br />
+class events::EventHandler&lt; EVENT &gt;</h3>
+
+<p>Abstract event handler, used by <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code> to get called back when an event of the expected type is dispatched. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7" title="Dispatch the given event to the right EventHandler, based on the event type. ">Dispatcher::dispatch()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00280">280</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a3a1b6e45fb04ed611dc09c71a30d2341"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a1b6e45fb04ed611dc09c71a30d2341">&#9670;&nbsp;</a></span>EventHandler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classevents_1_1_event_handler.html">events::EventHandler</a>&lt; EVENT &gt;::<a class="el" href="classevents_1_1_event_handler.html">EventHandler</a> </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>type</em> = <code><a class="el" href="namespaceevents_1_1_type.html#a2c33d039e5fdd277900219bd3cd74eb0">Type::NO_EVENT</a></code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create an <a class="el" href="classevents_1_1_event.html" title="A standard Event as managed by FastArduino event API. ">Event</a> Handler for given <code>type</code> of event. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>the evnt type handled by this handler </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00305">305</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="adf1504447f58fbe5060bf2218dee9c09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf1504447f58fbe5060bf2218dee9c09">&#9670;&nbsp;</a></span>on_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classevents_1_1_event_handler.html">events::EventHandler</a>&lt; EVENT &gt;::on_event </td>
+          <td>(</td>
+          <td class="paramtype">const EVENT &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This pure virtual method is called by <code><a class="el" href="classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7" title="Dispatch the given event to the right EventHandler, based on the event type. ">Dispatcher::dispatch()</a></code> when <code>event.type()</code> matches the type supported by this <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>the event to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="events_8h_source.html">events.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -148,7 +234,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Dispatcher</b></td><
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>events</b></li><li class="navelem"><a class="el" href="classevents_1_1_event_handler.html">EventHandler</a></li>
+    <li class="navelem"><a class="el" href="namespaceevents.html">events</a></li><li class="navelem"><a class="el" href="classevents_1_1_event_handler.html">EventHandler</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

@@ -96,12 +96,9 @@ $(document).ready(function(){initNavTree('classgpio_1_1_fast_masked_port.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2540ab806cac66579bd883a20d5d964b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_masked_port.html#a2540ab806cac66579bd883a20d5d964b">FastMaskedPort</a> ()</td></tr>
-<tr class="memdesc:a2540ab806cac66579bd883a20d5d964b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a default <code><a class="el" href="classgpio_1_1_fast_masked_port.html" title="API that manipulates a part of a digital IO port. ">FastMaskedPort</a></code> without any physical setup on target MCU, without any pin at all (mask = 0).  <a href="#a2540ab806cac66579bd883a20d5d964b">More...</a><br /></td></tr>
-<tr class="separator:a2540ab806cac66579bd883a20d5d964b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3db12fd528e54d272b42d767d8fd02fc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_masked_port.html#a3db12fd528e54d272b42d767d8fd02fc">FastMaskedPort</a> (uint8_t mask)</td></tr>
-<tr class="memdesc:a3db12fd528e54d272b42d767d8fd02fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <code><a class="el" href="classgpio_1_1_fast_masked_port.html" title="API that manipulates a part of a digital IO port. ">FastMaskedPort</a></code> without any physical setup on target MCU.  <a href="#a3db12fd528e54d272b42d767d8fd02fc">More...</a><br /></td></tr>
-<tr class="separator:a3db12fd528e54d272b42d767d8fd02fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97f7ae921e108b0ce6192f6d3a0fde51"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_masked_port.html#a97f7ae921e108b0ce6192f6d3a0fde51">FastMaskedPort</a> (uint8_t mask=0)</td></tr>
+<tr class="memdesc:a97f7ae921e108b0ce6192f6d3a0fde51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <code><a class="el" href="classgpio_1_1_fast_masked_port.html" title="API that manipulates a part of a digital IO port. ">FastMaskedPort</a></code> without any physical setup on target MCU.  <a href="#a97f7ae921e108b0ce6192f6d3a0fde51">More...</a><br /></td></tr>
+<tr class="separator:a97f7ae921e108b0ce6192f6d3a0fde51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1d0e6a7feccd8e6bdd5a43a8c8742fb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_masked_port.html#ab1d0e6a7feccd8e6bdd5a43a8c8742fb">FastMaskedPort</a> (uint8_t mask, uint8_t ddr, uint8_t port=0)</td></tr>
 <tr class="memdesc:ab1d0e6a7feccd8e6bdd5a43a8c8742fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <code><a class="el" href="classgpio_1_1_fast_masked_port.html" title="API that manipulates a part of a digital IO port. ">FastMaskedPort</a></code> for the pins selected by the provide bits mask, with the given direction byte and initial values byte.  <a href="#ab1d0e6a7feccd8e6bdd5a43a8c8742fb">More...</a><br /></td></tr>
 <tr class="separator:ab1d0e6a7feccd8e6bdd5a43a8c8742fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,40 +145,8 @@ class gpio::FastMaskedPort&lt; PORT_ &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00398">398</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2540ab806cac66579bd883a20d5d964b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2540ab806cac66579bd883a20d5d964b">&#9670;&nbsp;</a></span>FastMaskedPort() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgpio_1_1_fast_masked_port.html">gpio::FastMaskedPort</a>&lt; PORT_ &gt;::<a class="el" href="classgpio_1_1_fast_masked_port.html">FastMaskedPort</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Construct a default <code><a class="el" href="classgpio_1_1_fast_masked_port.html" title="API that manipulates a part of a digital IO port. ">FastMaskedPort</a></code> without any physical setup on target MCU, without any pin at all (mask = 0). </p>
-<p>This is useful only when a default constructor is needed, e.g. when defining an array of <code><a class="el" href="classgpio_1_1_fast_masked_port.html" title="API that manipulates a part of a digital IO port. ">FastMaskedPort</a></code>s. </p>
-
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00413">413</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
-
-</div>
-</div>
-<a id="a3db12fd528e54d272b42d767d8fd02fc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3db12fd528e54d272b42d767d8fd02fc">&#9670;&nbsp;</a></span>FastMaskedPort() <span class="overload">[2/3]</span></h2>
+<a id="a97f7ae921e108b0ce6192f6d3a0fde51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97f7ae921e108b0ce6192f6d3a0fde51">&#9670;&nbsp;</a></span>FastMaskedPort() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -195,7 +160,7 @@ template&lt;board::Port PORT_&gt; </div>
           <td class="memname"><a class="el" href="classgpio_1_1_fast_masked_port.html">gpio::FastMaskedPort</a>&lt; PORT_ &gt;::<a class="el" href="classgpio_1_1_fast_masked_port.html">FastMaskedPort</a> </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>mask</em></td><td>)</td>
+          <td class="paramname"><em>mask</em> = <code>0</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -215,12 +180,12 @@ template&lt;board::Port PORT_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00424">424</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00416">416</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
 <a id="ab1d0e6a7feccd8e6bdd5a43a8c8742fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1d0e6a7feccd8e6bdd5a43a8c8742fb">&#9670;&nbsp;</a></span>FastMaskedPort() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1d0e6a7feccd8e6bdd5a43a8c8742fb">&#9670;&nbsp;</a></span>FastMaskedPort() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -275,7 +240,7 @@ template&lt;board::Port PORT_&gt; </div>
 <dd>
 <a class="el" href="classgpio_1_1_fast_masked_port.html#a83c759e9e3dc2a451accc00f19ffda55" title="Set the 8-bits value for port PORT register, this value will be masked according to the provided bit ...">set_PORT()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00445">445</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00439">439</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -316,7 +281,7 @@ template&lt;board::Port PORT_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgpio_1_1_fast_masked_port.html#a5f091bf863af69362c102531b0f58fa7" title="Set the 8-bits value for port DDR (direction) register, this value will be masked according to the pr...">set_DDR()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00466">466</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00459">459</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -349,7 +314,7 @@ template&lt;board::Port PORT_&gt; </div>
 <p>Each bit maps to a pin configuration in this port. For all pins not part of the mask, returned value is <code>0</code>. Depending on DDR configuration for a pin, the PORT value is interpreted differently: for an input pin, the matching PORT bit indicates if this pin has a pullup register on it.</p>
 <dl class="section return"><dt>Returns</dt><dd>the value of PORT register masked with constructor-provided bit mask </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00482">482</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00475">475</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -389,7 +354,7 @@ template&lt;board::Port PORT_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgpio_1_1_fast_masked_port.html#a83c759e9e3dc2a451accc00f19ffda55" title="Set the 8-bits value for port PORT register, this value will be masked according to the provided bit ...">set_PORT()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00497">497</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00490">490</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -422,7 +387,7 @@ template&lt;board::Port PORT_&gt; </div>
 <p>Each pin direction is decided by the matching bit. For all pins not part of the mask, returned value is <code>0</code>.</p>
 <dl class="section return"><dt>Returns</dt><dd>the value of DDR register masked with constructor-provided bit mask </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00510">510</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00503">503</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -461,7 +426,7 @@ template&lt;board::Port PORT_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00523">523</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00516">516</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -493,7 +458,7 @@ template&lt;board::Port PORT_&gt; </div>
 <p>Get the current 8-bit value of PIN register for this port, masked according to the bit mask provided at construction time. </p>
 <dl class="section return"><dt>Returns</dt><dd>the value of PIN register masked with constructor-provided bit mask </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00534">534</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00527">527</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>

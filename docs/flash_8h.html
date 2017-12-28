@@ -121,7 +121,7 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a16c40764aaba0de309f5ff429c8bac15"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(ptr)&#160;&#160;&#160;(__extension__({static const char __c[] PROGMEM = (ptr); (const flash::FlashStorage*) &amp;__c[0];}))</td></tr>
+<tr class="memitem:a16c40764aaba0de309f5ff429c8bac15"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(ptr)</td></tr>
 <tr class="memdesc:a16c40764aaba0de309f5ff429c8bac15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force string constant to be stored as flash storage.  <a href="#a16c40764aaba0de309f5ff429c8bac15">More...</a><br /></td></tr>
 <tr class="separator:a16c40764aaba0de309f5ff429c8bac15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -152,11 +152,11 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">ptr</td><td>)</td>
-          <td>&#160;&#160;&#160;(__extension__({static const char __c[] PROGMEM = (ptr); (const flash::FlashStorage*) &amp;__c[0];}))</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Value:</b><div class="fragment"><div class="line">(__extension__({                             \</div><div class="line">        static <span class="keyword">const</span> <span class="keywordtype">char</span> __c[] PROGMEM = (ptr); \</div><div class="line">        (<span class="keyword">const</span> flash::FlashStorage*) &amp;__c[0];    \</div><div class="line">    }))</div></div><!-- fragment -->
 <p>Force string constant to be stored as flash storage. </p>
 <p>Here is a classical usage here: </p><div class="fragment"><div class="line"><span class="keywordtype">char</span> buffer[64];</div><div class="line"><a class="code" href="classstreams_1_1_output_buffer.html">streams::OutputBuffer</a> out{buffer};</div><div class="line">out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Hello, world!\n&quot;</span>);</div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -166,7 +166,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1_output_buffer.html#a28ddce2ee7cc838d7cbcb883cb895737" title="Append a string, stored on flash memory, to the buffer. ">streams::OutputBuffer::puts(const flash::FlashStorage*)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00100">100</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00097">97</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
 
 </div>
 </div>

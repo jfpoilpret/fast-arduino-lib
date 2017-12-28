@@ -10,5 +10,5 @@ var classeeprom_1_1_queued_writer =
     [ "erase", "classeeprom_1_1_queued_writer.html#ad2933f1803b50189ced1361ee0292ac8", null ],
     [ "wait_until_done", "classeeprom_1_1_queued_writer.html#a0353f95d047cb009060412e5e783731e", null ],
     [ "is_done", "classeeprom_1_1_queued_writer.html#afe13f318a8ff6cd77a5d7e2088a08683", null ],
-    [ "on_ready", "classeeprom_1_1_queued_writer.html#a1368850ae81be7ce5394fa9641a4ac8b", null ]
+    [ "on_ready", "classeeprom_1_1_queued_writer.html#a0a6772e7be98434376867ef5f87a0199", null ]
 ];

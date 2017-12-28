@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: devices::servo::Servo&lt; TIMER, PIN &gt; Class Template Reference</title>
+<title>FastArduino: devices::servo::Servo&lt; TIMER_, PIN_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,42 +83,52 @@ $(document).ready(function(){initNavTree('classdevices_1_1servo_1_1_servo.html',
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classdevices_1_1servo_1_1_servo-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">devices::servo::Servo&lt; TIMER, PIN &gt; Class Template Reference</div>  </div>
+<div class="title">devices::servo::Servo&lt; TIMER_, PIN_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a2ef5d03968758b57e7e03e19d5b1a496"><td class="memItemLeft" align="right" valign="top"><a id="a2ef5d03968758b57e7e03e19d5b1a496"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TYPE</b> = typename TIMER::TIMER_TYPE</td></tr>
-<tr class="separator:a2ef5d03968758b57e7e03e19d5b1a496"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a366bd6dc01be89d7be23e197e87827a0"><td class="memItemLeft" align="right" valign="top"><a id="a366bd6dc01be89d7be23e197e87827a0"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>TIMER</b> = TIMER_</td></tr>
+<tr class="separator:a366bd6dc01be89d7be23e197e87827a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a361e07e9cd4979b41d4953e7ab1ce7c3"><td class="memItemLeft" align="right" valign="top"><a id="a361e07e9cd4979b41d4953e7ab1ce7c3"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>TYPE</b> = typename TIMER::TYPE</td></tr>
+<tr class="separator:a361e07e9cd4979b41d4953e7ab1ce7c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a366302bb61ccb7257b0b7363667f039f"><td class="memItemLeft" align="right" valign="top"><a id="a366302bb61ccb7257b0b7363667f039f"></a>
+<tr class="memitem:a028a4772a90a2938f441aadf07f2bae1"><td class="memItemLeft" align="right" valign="top"><a id="a028a4772a90a2938f441aadf07f2bae1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Servo</b> (TIMER &amp;timer, uint16_t us_minimum, uint16_t us_maximum, uint16_t us_neutral=0)</td></tr>
-<tr class="separator:a366302bb61ccb7257b0b7363667f039f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6b84cbabba8974966348a6faf13ba6c"><td class="memItemLeft" align="right" valign="top"><a id="ae6b84cbabba8974966348a6faf13ba6c"></a>
+<tr class="separator:a028a4772a90a2938f441aadf07f2bae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade9487997d8d90df4abb47405a5efaff"><td class="memItemLeft" align="right" valign="top"><a id="ade9487997d8d90df4abb47405a5efaff"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>detach</b> () INLINE</td></tr>
-<tr class="separator:ae6b84cbabba8974966348a6faf13ba6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81237fc6ec8efdc47774c7182b5ca22d"><td class="memItemLeft" align="right" valign="top"><a id="a81237fc6ec8efdc47774c7182b5ca22d"></a>
+<tr class="separator:ade9487997d8d90df4abb47405a5efaff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ff9678aef2121dd1e4389dc60fde0b9"><td class="memItemLeft" align="right" valign="top"><a id="a2ff9678aef2121dd1e4389dc60fde0b9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_counter</b> (TYPE value) INLINE</td></tr>
-<tr class="separator:a81237fc6ec8efdc47774c7182b5ca22d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad34d114ca6ac82ec74ee9839dfcea891"><td class="memItemLeft" align="right" valign="top"><a id="ad34d114ca6ac82ec74ee9839dfcea891"></a>
+<tr class="separator:a2ff9678aef2121dd1e4389dc60fde0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5aa1fd487bd521e40bbab790ad47928"><td class="memItemLeft" align="right" valign="top"><a id="aa5aa1fd487bd521e40bbab790ad47928"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>set_pulse</b> (uint16_t pulse_us)</td></tr>
-<tr class="separator:ad34d114ca6ac82ec74ee9839dfcea891"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefdcf8a526370f5cc8dd8e7d68d01a22"><td class="memItemLeft" align="right" valign="top"><a id="aefdcf8a526370f5cc8dd8e7d68d01a22"></a>
+<tr class="separator:aa5aa1fd487bd521e40bbab790ad47928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10154f3587089ed6f93b58d896a64e3b"><td class="memItemLeft" align="right" valign="top"><a id="a10154f3587089ed6f93b58d896a64e3b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>rotate</b> (int8_t angle)</td></tr>
-<tr class="separator:aefdcf8a526370f5cc8dd8e7d68d01a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a10154f3587089ed6f93b58d896a64e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a4f405699b4fbce545d46687d5a94de9c"><td class="memItemLeft" align="right" valign="top"><a id="a4f405699b4fbce545d46687d5a94de9c"></a>
+static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><b>PIN</b> = PIN_</td></tr>
+<tr class="separator:a4f405699b4fbce545d46687d5a94de9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename TIMER, board::DigitalPin PIN&gt;<br />
-class devices::servo::Servo&lt; TIMER, PIN &gt;</h3>
+<div class="textblock"><h3>template&lt;typename TIMER_, board::DigitalPin PIN_&gt;<br />
+class devices::servo::Servo&lt; TIMER_, PIN_ &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00028">28</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00027">27</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="servo_8h_source.html">servo.h</a></li>
 </ul>

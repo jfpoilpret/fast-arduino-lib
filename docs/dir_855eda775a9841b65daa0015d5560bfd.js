@@ -12,8 +12,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
       [ "EmptyOutput", "classstreams_1_1_empty_output.html", null ]
     ] ],
     [ "errors.h", "errors_8h_source.html", null ],
-    [ "events.cpp", "events_8cpp_source.html", null ],
-    [ "events.h", "events_8h_source.html", null ],
+    [ "events.h", "events_8h.html", "events_8h" ],
     [ "flash.h", "flash_8h.html", "flash_8h" ],
     [ "gpio.h", "gpio_8h.html", "gpio_8h" ],
     [ "i2c.h", "i2c_8h_source.html", null ],
@@ -27,7 +26,9 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "main.cpp", "main_8cpp_source.html", null ],
     [ "pci.h", "pci_8h.html", "pci_8h" ],
     [ "power.cpp", "power_8cpp_source.html", null ],
-    [ "power.h", "power_8h_source.html", null ],
+    [ "power.h", "power_8h.html", [
+      [ "Power", "classpower_1_1_power.html", "classpower_1_1_power" ]
+    ] ],
     [ "pulse_timer.h", "pulse__timer_8h_source.html", null ],
     [ "pwm.h", "pwm_8h.html", [
       [ "PWMOutput", "classanalog_1_1_p_w_m_output.html", "classanalog_1_1_p_w_m_output" ]
@@ -47,6 +48,5 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "uart.h", "uart_8h.html", "uart_8h" ],
     [ "uart_commons.h", "uart__commons_8h.html", "uart__commons_8h" ],
     [ "utilities.h", "utilities_8h.html", "utilities_8h" ],
-    [ "watchdog.cpp", "watchdog_8cpp_source.html", null ],
     [ "watchdog.h", "watchdog_8h.html", "watchdog_8h" ]
 ];

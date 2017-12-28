@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: events::Scheduler&lt; CLOCK &gt; Class Template Reference</title>
+<title>FastArduino: events::Scheduler&lt; CLOCK_, EVENT_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -81,90 +81,124 @@ $(document).ready(function(){initNavTree('classevents_1_1_scheduler.html','');})
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classevents_1_1_scheduler-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">events::Scheduler&lt; CLOCK &gt; Class Template Reference</div>  </div>
+<div class="title">events::Scheduler&lt; CLOCK_, EVENT_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="dynheader">
-Inheritance diagram for events::Scheduler&lt; CLOCK &gt;:</div>
+Inheritance diagram for events::Scheduler&lt; CLOCK_, EVENT_ &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classevents_1_1_scheduler__inherit__graph.png" border="0" usemap="#events_1_1_scheduler_3_01_c_l_o_c_k_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="events_1_1_scheduler_3_01_c_l_o_c_k_01_4_inherit__map" id="events_1_1_scheduler_3_01_c_l_o_c_k_01_4_inherit__map">
-<area shape="rect" id="node2" href="classevents_1_1_event_handler.html" title="events::EventHandler" alt="" coords="63,162,211,189"/>
-<area shape="rect" id="node3" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler \&gt;" alt="" coords="5,80,223,107"/>
-<area shape="rect" id="node4" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="45,5,183,32"/>
-<area shape="rect" id="node5" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; Job \&gt;" alt="" coords="247,155,397,196"/>
-<area shape="rect" id="node6" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="247,80,421,107"/>
+<div class="center"><img src="classevents_1_1_scheduler__inherit__graph.png" border="0" usemap="#events_1_1_scheduler_3_01_c_l_o_c_k___00_01_e_v_e_n_t___01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="events_1_1_scheduler_3_01_c_l_o_c_k___00_01_e_v_e_n_t___01_4_inherit__map" id="events_1_1_scheduler_3_01_c_l_o_c_k___00_01_e_v_e_n_t___01_4_inherit__map">
+<area shape="rect" id="node2" href="classevents_1_1_event_handler.html" title="events::EventHandler\l\&lt; EVENT_ \&gt;" alt="" coords="54,169,202,211"/>
+<area shape="rect" id="node3" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler\l\&lt; EVENT_ \&gt; \&gt;" alt="" coords="5,80,211,121"/>
+<area shape="rect" id="node4" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="39,5,177,32"/>
+<area shape="rect" id="node5" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; Job \&gt;" alt="" coords="237,169,387,211"/>
+<area shape="rect" id="node6" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="235,87,410,114"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for events::Scheduler&lt; CLOCK &gt;:</div>
+Collaboration diagram for events::Scheduler&lt; CLOCK_, EVENT_ &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classevents_1_1_scheduler__coll__graph.png" border="0" usemap="#events_1_1_scheduler_3_01_c_l_o_c_k_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="events_1_1_scheduler_3_01_c_l_o_c_k_01_4_coll__map" id="events_1_1_scheduler_3_01_c_l_o_c_k_01_4_coll__map">
-<area shape="rect" id="node2" href="classevents_1_1_event_handler.html" title="events::EventHandler" alt="" coords="75,178,223,205"/>
-<area shape="rect" id="node3" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler \&gt;" alt="" coords="5,95,223,121"/>
-<area shape="rect" id="node4" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="154,5,293,32"/>
-<area shape="rect" id="node6" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="247,95,421,121"/>
-<area shape="rect" id="node5" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; Job \&gt;" alt="" coords="253,171,402,212"/>
+<div class="center"><img src="classevents_1_1_scheduler__coll__graph.png" border="0" usemap="#events_1_1_scheduler_3_01_c_l_o_c_k___00_01_e_v_e_n_t___01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="events_1_1_scheduler_3_01_c_l_o_c_k___00_01_e_v_e_n_t___01_4_coll__map" id="events_1_1_scheduler_3_01_c_l_o_c_k___00_01_e_v_e_n_t___01_4_coll__map">
+<area shape="rect" id="node2" href="classevents_1_1_event_handler.html" title="events::EventHandler\l\&lt; EVENT_ \&gt;" alt="" coords="65,185,213,227"/>
+<area shape="rect" id="node3" href="classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler\l\&lt; EVENT_ \&gt; \&gt;" alt="" coords="5,95,211,136"/>
+<area shape="rect" id="node4" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="145,5,284,32"/>
+<area shape="rect" id="node6" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="235,102,410,129"/>
+<area shape="rect" id="node5" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; Job \&gt;" alt="" coords="243,185,392,227"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:afec660953213969f4e4f7e81b2256110"><td class="memItemLeft" align="right" valign="top"><a id="afec660953213969f4e4f7e81b2256110"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>CLOCK</b> = CLOCK_</td></tr>
+<tr class="separator:afec660953213969f4e4f7e81b2256110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8099104b97bb2573fdc4ce91b0f2652"><td class="memItemLeft" align="right" valign="top"><a id="ad8099104b97bb2573fdc4ce91b0f2652"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>EVENT</b> = EVENT_</td></tr>
+<tr class="separator:ad8099104b97bb2573fdc4ce91b0f2652"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classcontainers_1_1_link"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classcontainers_1_1_link')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classcontainers_1_1_link.html">containers::Link&lt; EventHandler&lt; EVENT_ &gt; &gt;</a></td></tr>
+<tr class="memitem:a6b64035a31450f45e1395c0f20b4aa14 inherit pub_types_classcontainers_1_1_link"><td class="memItemLeft" align="right" valign="top"><a id="a6b64035a31450f45e1395c0f20b4aa14"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>T</b> = EventHandler&lt; EVENT_ &gt;</td></tr>
+<tr class="separator:a6b64035a31450f45e1395c0f20b4aa14 inherit pub_types_classcontainers_1_1_link"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classcontainers_1_1_linked_list"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classcontainers_1_1_linked_list')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList&lt; Job &gt;</a></td></tr>
+<tr class="memitem:af07a8b8e2b75d77751a541dd494d4e91 inherit pub_types_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="af07a8b8e2b75d77751a541dd494d4e91"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>T</b> = Job</td></tr>
+<tr class="separator:af07a8b8e2b75d77751a541dd494d4e91 inherit pub_types_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab2b494b703adca5e3ef5cb642fb286d8"><td class="memItemLeft" align="right" valign="top"><a id="ab2b494b703adca5e3ef5cb642fb286d8"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Scheduler</b> (const CLOCK &amp;clock, uint8_t type) INLINE</td></tr>
-<tr class="separator:ab2b494b703adca5e3ef5cb642fb286d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b02cb1e1269e644978b65b08ed1a71f"><td class="memItemLeft" align="right" valign="top"><a id="a9b02cb1e1269e644978b65b08ed1a71f"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>on_event</b> (UNUSED const <a class="el" href="classevents_1_1_event.html">Event</a> &amp;event) override INLINE</td></tr>
-<tr class="separator:a9b02cb1e1269e644978b65b08ed1a71f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac830ee65f3597e99fa3b58a87fb7e8f0"><td class="memItemLeft" align="right" valign="top"><a id="ac830ee65f3597e99fa3b58a87fb7e8f0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (<a class="el" href="classevents_1_1_job.html">Job</a> &amp;job)</td></tr>
-<tr class="separator:ac830ee65f3597e99fa3b58a87fb7e8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c67f6dea48c3c9bc75ab3a89316d7fa"><td class="memItemLeft" align="right" valign="top"><a id="a4c67f6dea48c3c9bc75ab3a89316d7fa"></a>
+<tr class="memitem:a4b39d6c6759fdb97c4844eb3816e975a"><td class="memItemLeft" align="right" valign="top"><a id="a4b39d6c6759fdb97c4844eb3816e975a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Scheduler</b> (const CLOCK &amp;clock, uint8_t <a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">type</a>) INLINE</td></tr>
+<tr class="separator:a4b39d6c6759fdb97c4844eb3816e975a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92d66252e1454ff7eff6fa7a2fa04bf4"><td class="memItemLeft" align="right" valign="top"><a id="a92d66252e1454ff7eff6fa7a2fa04bf4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>schedule</b> (<a class="el" href="classevents_1_1_job.html">Job</a> &amp;job) INLINE</td></tr>
-<tr class="separator:a4c67f6dea48c3c9bc75ab3a89316d7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17571bfb66ad99359e269e4f2d9d9999"><td class="memItemLeft" align="right" valign="top"><a id="a17571bfb66ad99359e269e4f2d9d9999"></a>
+<tr class="separator:a92d66252e1454ff7eff6fa7a2fa04bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6886f399f31429c4aa4ec1dbbdd5d801"><td class="memItemLeft" align="right" valign="top"><a id="a6886f399f31429c4aa4ec1dbbdd5d801"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>unschedule</b> (<a class="el" href="classevents_1_1_job.html">Job</a> &amp;job) INLINE</td></tr>
-<tr class="separator:a17571bfb66ad99359e269e4f2d9d9999"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classevents_1_1_event_handler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classevents_1_1_event_handler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classevents_1_1_event_handler.html">events::EventHandler</a></td></tr>
-<tr class="memitem:aa32c5ba6754c5757bae5b29329ca37d6 inherit pub_methods_classevents_1_1_event_handler"><td class="memItemLeft" align="right" valign="top"><a id="aa32c5ba6754c5757bae5b29329ca37d6"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> () const INLINE</td></tr>
-<tr class="separator:aa32c5ba6754c5757bae5b29329ca37d6 inherit pub_methods_classevents_1_1_event_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae412f4a1004787224c4fa18d29265b2d inherit pub_methods_classevents_1_1_event_handler"><td class="memItemLeft" align="right" valign="top"><a id="ae412f4a1004787224c4fa18d29265b2d"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>on_event</b> (const <a class="el" href="classevents_1_1_event.html">Event</a> &amp;event)=0</td></tr>
-<tr class="separator:ae412f4a1004787224c4fa18d29265b2d inherit pub_methods_classevents_1_1_event_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a6886f399f31429c4aa4ec1dbbdd5d801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classevents_1_1_event_handler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classevents_1_1_event_handler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classevents_1_1_event_handler.html">events::EventHandler&lt; EVENT_ &gt;</a></td></tr>
+<tr class="memitem:ab3ce6db961c671fec9475507d17a65d0 inherit pub_methods_classevents_1_1_event_handler"><td class="memItemLeft" align="right" valign="top"><a id="ab3ce6db961c671fec9475507d17a65d0"></a>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">type</a> () const INLINE</td></tr>
+<tr class="memdesc:ab3ce6db961c671fec9475507d17a65d0 inherit pub_methods_classevents_1_1_event_handler"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of event that this handler accepts and can act upon. <br /></td></tr>
+<tr class="separator:ab3ce6db961c671fec9475507d17a65d0 inherit pub_methods_classevents_1_1_event_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1504447f58fbe5060bf2218dee9c09 inherit pub_methods_classevents_1_1_event_handler"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09">on_event</a> (const EVENT_ &amp;event)=0</td></tr>
+<tr class="memdesc:adf1504447f58fbe5060bf2218dee9c09 inherit pub_methods_classevents_1_1_event_handler"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pure virtual method is called by <code>Dispatcher::dispatch()</code> when <code>event.type()</code> matches the type supported by this <code>EventHandler</code>.  <a href="classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09">More...</a><br /></td></tr>
+<tr class="separator:adf1504447f58fbe5060bf2218dee9c09 inherit pub_methods_classevents_1_1_event_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcontainers_1_1_linked_list"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcontainers_1_1_linked_list')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList&lt; Job &gt;</a></td></tr>
-<tr class="memitem:ae5e539e0010aea5ed8026731304b5a7c inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="ae5e539e0010aea5ed8026731304b5a7c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (Job &amp;item) INLINE</td></tr>
-<tr class="separator:ae5e539e0010aea5ed8026731304b5a7c inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bbfaf7d4dde55c044ca2cde560da049 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="a1bbfaf7d4dde55c044ca2cde560da049"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (Job &amp;item) INLINE</td></tr>
-<tr class="separator:a1bbfaf7d4dde55c044ca2cde560da049 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7853c1b72ee664b8ce23b91dfb1b053 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="af7853c1b72ee664b8ce23b91dfb1b053"></a>
+<tr class="memitem:ac44c93a96f2aaffe0411565798c6cd67 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="ac44c93a96f2aaffe0411565798c6cd67"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (T &amp;item) INLINE</td></tr>
+<tr class="separator:ac44c93a96f2aaffe0411565798c6cd67 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad122223e314aa7adb16637e09ceb20d8 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="ad122223e314aa7adb16637e09ceb20d8"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (T &amp;item) INLINE</td></tr>
+<tr class="separator:ad122223e314aa7adb16637e09ceb20d8 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a974fb6a46b9477e005b9c17a5b47ae72 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="a974fb6a46b9477e005b9c17a5b47ae72"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>traverse</b> (<a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> f)</td></tr>
-<tr class="separator:af7853c1b72ee664b8ce23b91dfb1b053 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a974fb6a46b9477e005b9c17a5b47ae72 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:ad3d7697ecef4c812f2982f178c8bb77a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><b>clock_</b></td></tr>
+<tr class="separator:ad3d7697ecef4c812f2982f178c8bb77a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classevents_1_1_event_handler"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classevents_1_1_event_handler')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classevents_1_1_event_handler.html">events::EventHandler</a></td></tr>
-<tr class="memitem:a84f5fbdd8f5a9f60e2664c4ef74347bd inherit pro_methods_classevents_1_1_event_handler"><td class="memItemLeft" align="right" valign="top"><a id="a84f5fbdd8f5a9f60e2664c4ef74347bd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>EventHandler</b> (uint8_t type=Type::NO_EVENT) INLINE</td></tr>
-<tr class="separator:a84f5fbdd8f5a9f60e2664c4ef74347bd inherit pro_methods_classevents_1_1_event_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classevents_1_1_event_handler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classevents_1_1_event_handler')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classevents_1_1_event_handler.html">events::EventHandler</a></td></tr>
-<tr class="memitem:a85da0917169465a8f47dc0c8fe2eeeaa inherit pro_attribs_classevents_1_1_event_handler"><td class="memItemLeft" align="right" valign="top"><a id="a85da0917169465a8f47dc0c8fe2eeeaa"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_type</b></td></tr>
-<tr class="separator:a85da0917169465a8f47dc0c8fe2eeeaa inherit pro_attribs_classevents_1_1_event_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classevents_1_1_event_handler"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classevents_1_1_event_handler')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classevents_1_1_event_handler.html">events::EventHandler&lt; EVENT_ &gt;</a></td></tr>
+<tr class="memitem:a3a1b6e45fb04ed611dc09c71a30d2341 inherit pro_methods_classevents_1_1_event_handler"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#a3a1b6e45fb04ed611dc09c71a30d2341">EventHandler</a> (uint8_t <a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">type</a>=Type::NO_EVENT) INLINE</td></tr>
+<tr class="memdesc:a3a1b6e45fb04ed611dc09c71a30d2341 inherit pro_methods_classevents_1_1_event_handler"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an Event Handler for given <code>type</code> of event.  <a href="classevents_1_1_event_handler.html#a3a1b6e45fb04ed611dc09c71a30d2341">More...</a><br /></td></tr>
+<tr class="separator:a3a1b6e45fb04ed611dc09c71a30d2341 inherit pro_methods_classevents_1_1_event_handler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename CLOCK&gt;<br />
-class events::Scheduler&lt; CLOCK &gt;</h3>
+<div class="textblock"><h3>template&lt;typename CLOCK_, typename EVENT_&gt;<br />
+class events::Scheduler&lt; CLOCK_, EVENT_ &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="scheduler_8h_source.html#l00026">26</a> of file <a class="el" href="scheduler_8h_source.html">scheduler.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="scheduler_8h_source.html#l00025">25</a> of file <a class="el" href="scheduler_8h_source.html">scheduler.h</a>.</p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad3d7697ecef4c812f2982f178c8bb77a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3d7697ecef4c812f2982f178c8bb77a">&#9670;&nbsp;</a></span>clock_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename CLOCK_ , typename EVENT_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classevents_1_1_scheduler.html">events::Scheduler</a>&lt; CLOCK_, EVENT_ &gt;::clock_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{clock}</div><div class="line">        {</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09">on_event</a>(UNUSED <span class="keyword">const</span> EVENT&amp; event) <span class="keyword">override</span> INLINE</div><div class="line">        {</div><div class="line">            traverse(*<span class="keyword">this</span>);</div><div class="line">        }</div><div class="line"></div><div class="line">        <span class="keywordtype">bool</span> operator()(Job&amp; job)</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="scheduler_8h_source.html#l00031">31</a> of file <a class="el" href="scheduler_8h_source.html">scheduler.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="scheduler_8h_source.html">scheduler.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -172,7 +206,7 @@ class events::Scheduler&lt; CLOCK &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>events</b></li><li class="navelem"><a class="el" href="classevents_1_1_scheduler.html">Scheduler</a></li>
+    <li class="navelem"><a class="el" href="namespaceevents.html">events</a></li><li class="navelem"><a class="el" href="classevents_1_1_scheduler.html">Scheduler</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

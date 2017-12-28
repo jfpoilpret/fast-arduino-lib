@@ -1,8 +1,8 @@
 var classwatchdog_1_1_watchdog =
 [
-    [ "Watchdog", "classwatchdog_1_1_watchdog.html#a5b6545920c68ee7620a74d603568c88e", null ],
-    [ "register_watchdog_handler", "classwatchdog_1_1_watchdog.html#a60f58af63c79fbbeb90760f76368cc0f", null ],
-    [ "begin", "classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765", null ],
-    [ "millis", "classwatchdog_1_1_watchdog.html#a01cdedd19e0374266cdbf431f39897fb", null ],
-    [ "delay", "classwatchdog_1_1_watchdog.html#af47f9fc304d16f777fc85d13f7b6826a", null ]
+    [ "Watchdog", "classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731", null ],
+    [ "register_watchdog_handler", "classwatchdog_1_1_watchdog.html#ac562bd99d2f2483d1544efd31e5693be", null ],
+    [ "begin", "classwatchdog_1_1_watchdog.html#af39bf871603b19dc10cbeeceee3307c3", null ],
+    [ "millis", "classwatchdog_1_1_watchdog.html#a659381a0ce623f8cb90bca7485761d56", null ],
+    [ "delay", "classwatchdog_1_1_watchdog.html#ae024a7d20ea33f4731ff7ca981a3879a", null ]
 ];

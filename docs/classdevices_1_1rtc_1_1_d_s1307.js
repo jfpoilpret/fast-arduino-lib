@@ -1,8 +1,8 @@
 var classdevices_1_1rtc_1_1_d_s1307 =
 [
     [ "DS1307", "classdevices_1_1rtc_1_1_d_s1307.html#a4f5ff1c8b22610e679eba4b017b03606", null ],
-    [ "setDateTime", "classdevices_1_1rtc_1_1_d_s1307.html#afe1e1743ee7d6b94cbe175daedef62bd", null ],
-    [ "getDateTime", "classdevices_1_1rtc_1_1_d_s1307.html#a056ee2f3600e9ee5803deedb011d9008", null ],
+    [ "set_datetime", "classdevices_1_1rtc_1_1_d_s1307.html#a75e144efe62944755f6ee9a6d5b9fd44", null ],
+    [ "get_datetime", "classdevices_1_1rtc_1_1_d_s1307.html#adaad5864aee51fa23be267184f411978", null ],
     [ "halt_clock", "classdevices_1_1rtc_1_1_d_s1307.html#ae9f34a23d85cdd4ae9e9db4c167a6658", null ],
     [ "enable_output", "classdevices_1_1rtc_1_1_d_s1307.html#a373317ef94a24978c453ca1395dcacfb", null ],
     [ "disable_output", "classdevices_1_1rtc_1_1_d_s1307.html#a08df70d5bee312e7f04d40384b6ef155", null ],

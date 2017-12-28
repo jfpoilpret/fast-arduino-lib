@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: events::Dispatcher Class Reference</title>
+<title>FastArduino: events::Dispatcher&lt; EVENT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -81,61 +81,125 @@ $(document).ready(function(){initNavTree('classevents_1_1_dispatcher.html','');}
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classevents_1_1_dispatcher-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">events::Dispatcher Class Reference</div>  </div>
+<div class="title">events::Dispatcher&lt; EVENT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Utility to dispatch an event to a list of <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>s that are registered for its type.  
+ <a href="classevents_1_1_dispatcher.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="events_8h_source.html">fastarduino/events.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for events::Dispatcher:</div>
+Inheritance diagram for events::Dispatcher&lt; EVENT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classevents_1_1_dispatcher__inherit__graph.png" border="0" usemap="#events_1_1_dispatcher_inherit__map" alt="Inheritance graph"/></div>
-<map name="events_1_1_dispatcher_inherit__map" id="events_1_1_dispatcher_inherit__map">
-<area shape="rect" id="node2" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; EventHandler \&gt;" alt="" coords="18,80,167,121"/>
-<area shape="rect" id="node3" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="5,5,180,32"/>
+<div class="center"><img src="classevents_1_1_dispatcher__inherit__graph.png" border="0" usemap="#events_1_1_dispatcher_3_01_e_v_e_n_t_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="events_1_1_dispatcher_3_01_e_v_e_n_t_01_4_inherit__map" id="events_1_1_dispatcher_3_01_e_v_e_n_t_01_4_inherit__map">
+<area shape="rect" id="node2" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; EventHandler\&lt; EVENT \&gt; \&gt;" alt="" coords="5,80,200,121"/>
+<area shape="rect" id="node3" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="15,5,190,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for events::Dispatcher:</div>
+Collaboration diagram for events::Dispatcher&lt; EVENT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classevents_1_1_dispatcher__coll__graph.png" border="0" usemap="#events_1_1_dispatcher_coll__map" alt="Collaboration graph"/></div>
-<map name="events_1_1_dispatcher_coll__map" id="events_1_1_dispatcher_coll__map">
-<area shape="rect" id="node2" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; EventHandler \&gt;" alt="" coords="18,171,167,212"/>
-<area shape="rect" id="node3" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="5,95,180,121"/>
-<area shape="rect" id="node4" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="23,5,162,32"/>
+<div class="center"><img src="classevents_1_1_dispatcher__coll__graph.png" border="0" usemap="#events_1_1_dispatcher_3_01_e_v_e_n_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="events_1_1_dispatcher_3_01_e_v_e_n_t_01_4_coll__map" id="events_1_1_dispatcher_3_01_e_v_e_n_t_01_4_coll__map">
+<area shape="rect" id="node2" href="classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; EventHandler\&lt; EVENT \&gt; \&gt;" alt="" coords="5,171,200,212"/>
+<area shape="rect" id="node3" href="classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="15,95,190,121"/>
+<area shape="rect" id="node4" href="classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="33,5,172,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a99c7927aa5a2a01b55e42b2beddd84a2"><td class="memItemLeft" align="right" valign="top"><a id="a99c7927aa5a2a01b55e42b2beddd84a2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>dispatch</b> (const <a class="el" href="classevents_1_1_event.html">Event</a> &amp;event)</td></tr>
-<tr class="separator:a99c7927aa5a2a01b55e42b2beddd84a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classcontainers_1_1_linked_list"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcontainers_1_1_linked_list')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList&lt; EventHandler &gt;</a></td></tr>
-<tr class="memitem:ae5e539e0010aea5ed8026731304b5a7c inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="ae5e539e0010aea5ed8026731304b5a7c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (EventHandler &amp;item) INLINE</td></tr>
-<tr class="separator:ae5e539e0010aea5ed8026731304b5a7c inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bbfaf7d4dde55c044ca2cde560da049 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="a1bbfaf7d4dde55c044ca2cde560da049"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (EventHandler &amp;item) INLINE</td></tr>
-<tr class="separator:a1bbfaf7d4dde55c044ca2cde560da049 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7853c1b72ee664b8ce23b91dfb1b053 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="af7853c1b72ee664b8ce23b91dfb1b053"></a>
+<tr class="memitem:a97998440c7f6f351f57fb501df3c0dd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7">dispatch</a> (const EVENT &amp;event)</td></tr>
+<tr class="memdesc:a97998440c7f6f351f57fb501df3c0dd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch the given <code>event</code> to the right <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>, based on the event type.  <a href="#a97998440c7f6f351f57fb501df3c0dd7">More...</a><br /></td></tr>
+<tr class="separator:a97998440c7f6f351f57fb501df3c0dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classcontainers_1_1_linked_list"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcontainers_1_1_linked_list')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList&lt; EventHandler&lt; EVENT &gt; &gt;</a></td></tr>
+<tr class="memitem:ac44c93a96f2aaffe0411565798c6cd67 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="ac44c93a96f2aaffe0411565798c6cd67"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (T &amp;item) INLINE</td></tr>
+<tr class="separator:ac44c93a96f2aaffe0411565798c6cd67 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad122223e314aa7adb16637e09ceb20d8 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="ad122223e314aa7adb16637e09ceb20d8"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>remove</b> (T &amp;item) INLINE</td></tr>
+<tr class="separator:ad122223e314aa7adb16637e09ceb20d8 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a974fb6a46b9477e005b9c17a5b47ae72 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="a974fb6a46b9477e005b9c17a5b47ae72"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>traverse</b> (<a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> f)</td></tr>
-<tr class="separator:af7853c1b72ee664b8ce23b91dfb1b053 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a974fb6a46b9477e005b9c17a5b47ae72 inherit pub_methods_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classcontainers_1_1_linked_list"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classcontainers_1_1_linked_list')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList&lt; EventHandler&lt; EVENT &gt; &gt;</a></td></tr>
+<tr class="memitem:af07a8b8e2b75d77751a541dd494d4e91 inherit pub_types_classcontainers_1_1_linked_list"><td class="memItemLeft" align="right" valign="top"><a id="af07a8b8e2b75d77751a541dd494d4e91"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>T</b> = EventHandler&lt; EVENT &gt;</td></tr>
+<tr class="separator:af07a8b8e2b75d77751a541dd494d4e91 inherit pub_types_classcontainers_1_1_linked_list"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00057">57</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<div class="textblock"><h3>template&lt;typename EVENT&gt;<br />
+class events::Dispatcher&lt; EVENT &gt;</h3>
+
+<p>Utility to dispatch an event to a list of <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>s that are registered for its type. </p>
+<p>You first create an <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code> subclass, intantiate it and register it to a <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code>; for this, you use <code><a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList</a></code> API which <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code> derives from.</p>
+<p>NOTE: you should never call any <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code> method from an ISR because these methods may last too long for an ISR.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList</a> </dd>
+<dd>
+<a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a> </dd>
+<dd>
+<a class="el" href="classevents_1_1_event.html#a4cc68c5a6710d276baa534b61a25f611" title="The type of this event. ">Event::type()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00237">237</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a97998440c7f6f351f57fb501df3c0dd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97998440c7f6f351f57fb501df3c0dd7">&#9670;&nbsp;</a></span>dispatch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classevents_1_1_dispatcher.html">events::Dispatcher</a>&lt; EVENT &gt;::dispatch </td>
+          <td>(</td>
+          <td class="paramtype">const EVENT &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dispatch the given <code>event</code> to the right <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>, based on the event type. </p>
+<p>Note that if several registered <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>s match this <code>event</code> type, then they will all be called with that event.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td>the event to dispatch to the right event handler </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09" title="This pure virtual method is called by Dispatcher::dispatch() when event.type() matches the type suppo...">EventHandler::on_event()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00250">250</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="events_8h_source.html">events.h</a></li>
-<li>fastarduino/<a class="el" href="events_8cpp_source.html">events.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>events</b></li><li class="navelem"><a class="el" href="classevents_1_1_dispatcher.html">Dispatcher</a></li>
+    <li class="navelem"><a class="el" href="namespaceevents.html">events</a></li><li class="navelem"><a class="el" href="classevents_1_1_dispatcher.html">Dispatcher</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

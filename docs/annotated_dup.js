@@ -33,7 +33,10 @@ var annotated_dup =
         [ "Servo", "classdevices_1_1servo_1_1_servo.html", "classdevices_1_1servo_1_1_servo" ]
       ] ],
       [ "sonar", null, [
-        [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html", "classdevices_1_1sonar_1_1_h_c_s_r04" ]
+        [ "AbstractSonar", "classdevices_1_1sonar_1_1_abstract_sonar.html", "classdevices_1_1sonar_1_1_abstract_sonar" ],
+        [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html", "classdevices_1_1sonar_1_1_h_c_s_r04" ],
+        [ "MultiHCSR04", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html", "classdevices_1_1sonar_1_1_multi_h_c_s_r04" ],
+        [ "SonarEvent", "structdevices_1_1sonar_1_1_sonar_event.html", "structdevices_1_1sonar_1_1_sonar_event" ]
       ] ],
       [ "SIPO", "classdevices_1_1_s_i_p_o.html", "classdevices_1_1_s_i_p_o" ],
       [ "WinBond", "classdevices_1_1_win_bond.html", "classdevices_1_1_win_bond" ]
@@ -42,13 +45,7 @@ var annotated_dup =
       [ "EEPROM", "classeeprom_1_1_e_e_p_r_o_m.html", "classeeprom_1_1_e_e_p_r_o_m" ],
       [ "QueuedWriter", "classeeprom_1_1_queued_writer.html", "classeeprom_1_1_queued_writer" ]
     ] ],
-    [ "events", null, [
-      [ "Dispatcher", "classevents_1_1_dispatcher.html", "classevents_1_1_dispatcher" ],
-      [ "Event", "classevents_1_1_event.html", "classevents_1_1_event" ],
-      [ "EventHandler", "classevents_1_1_event_handler.html", "classevents_1_1_event_handler" ],
-      [ "Job", "classevents_1_1_job.html", "classevents_1_1_job" ],
-      [ "Scheduler", "classevents_1_1_scheduler.html", "classevents_1_1_scheduler" ]
-    ] ],
+    [ "events", "namespaceevents.html", "namespaceevents" ],
     [ "gpio", "namespacegpio.html", "namespacegpio" ],
     [ "i2c", null, [
       [ "I2CDevice", "classi2c_1_1_i2_c_device.html", "classi2c_1_1_i2_c_device" ],
@@ -56,9 +53,7 @@ var annotated_dup =
       [ "I2CManager", "classi2c_1_1_i2_c_manager.html", "classi2c_1_1_i2_c_manager" ]
     ] ],
     [ "interrupt", "namespaceinterrupt.html", "namespaceinterrupt" ],
-    [ "power", null, [
-      [ "Power", "classpower_1_1_power.html", "classpower_1_1_power" ]
-    ] ],
+    [ "power", "namespacepower.html", "namespacepower" ],
     [ "serial", "namespaceserial.html", "namespaceserial" ],
     [ "spi", null, [
       [ "AbstractSPIDevice", "classspi_1_1_abstract_s_p_i_device.html", "classspi_1_1_abstract_s_p_i_device" ],

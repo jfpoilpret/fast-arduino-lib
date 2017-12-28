@@ -3,6 +3,6 @@
 <area shape="rect" id="node5" href="$classserial_1_1soft_1_1_abstract_u_a_r_x.html" title="serial::soft::AbstractUARX" alt="" coords="162,177,341,203"/>
 <area shape="rect" id="node2" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="93,5,229,47"/>
 <area shape="rect" id="node4" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. " alt="" coords="6,259,137,300"/>
-<area shape="rect" id="node6" href="$classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX \&gt;" alt="" coords="187,259,316,300"/>
-<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; RX \&gt;" alt="" coords="187,348,315,389"/>
+<area shape="rect" id="node6" href="$classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX_ \&gt;" alt="" coords="187,259,316,300"/>
+<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; RX_ \&gt;" alt="" coords="187,348,315,389"/>
 </map>

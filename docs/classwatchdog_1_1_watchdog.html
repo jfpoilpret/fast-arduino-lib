@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: watchdog::Watchdog Class Reference</title>
+<title>FastArduino: watchdog::Watchdog&lt; EVENT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -84,7 +84,7 @@ $(document).ready(function(){initNavTree('classwatchdog_1_1_watchdog.html','');}
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classwatchdog_1_1_watchdog-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">watchdog::Watchdog Class Reference</div>  </div>
+<div class="title">watchdog::Watchdog&lt; EVENT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -93,39 +93,39 @@ $(document).ready(function(){initNavTree('classwatchdog_1_1_watchdog.html','');}
 
 <p><code>#include &lt;<a class="el" href="watchdog_8h_source.html">fastarduino/watchdog.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for watchdog::Watchdog:</div>
+Inheritance diagram for watchdog::Watchdog&lt; EVENT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classwatchdog_1_1_watchdog__inherit__graph.png" border="0" usemap="#watchdog_1_1_watchdog_inherit__map" alt="Inheritance graph"/></div>
-<map name="watchdog_1_1_watchdog_inherit__map" id="watchdog_1_1_watchdog_inherit__map">
+<div class="center"><img src="classwatchdog_1_1_watchdog__inherit__graph.png" border="0" usemap="#watchdog_1_1_watchdog_3_01_e_v_e_n_t_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="watchdog_1_1_watchdog_3_01_e_v_e_n_t_01_4_inherit__map" id="watchdog_1_1_watchdog_3_01_e_v_e_n_t_01_4_inherit__map">
 <area shape="rect" id="node2" href="classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. " alt="" coords="5,5,187,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for watchdog::Watchdog:</div>
+Collaboration diagram for watchdog::Watchdog&lt; EVENT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classwatchdog_1_1_watchdog__coll__graph.png" border="0" usemap="#watchdog_1_1_watchdog_coll__map" alt="Collaboration graph"/></div>
-<map name="watchdog_1_1_watchdog_coll__map" id="watchdog_1_1_watchdog_coll__map">
+<div class="center"><img src="classwatchdog_1_1_watchdog__coll__graph.png" border="0" usemap="#watchdog_1_1_watchdog_3_01_e_v_e_n_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="watchdog_1_1_watchdog_3_01_e_v_e_n_t_01_4_coll__map" id="watchdog_1_1_watchdog_3_01_e_v_e_n_t_01_4_coll__map">
 <area shape="rect" id="node2" href="classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. " alt="" coords="5,5,187,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5b6545920c68ee7620a74d603568c88e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#a5b6545920c68ee7620a74d603568c88e">Watchdog</a> (<a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; <a class="el" href="classevents_1_1_event.html">events::Event</a> &gt; &amp;event_queue)</td></tr>
-<tr class="memdesc:a5b6545920c68ee7620a74d603568c88e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new watchdog-based clock that will, for each watchdog timeout, add an event to the given <code>event_queue</code> for further processing.  <a href="#a5b6545920c68ee7620a74d603568c88e">More...</a><br /></td></tr>
-<tr class="separator:a5b6545920c68ee7620a74d603568c88e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60f58af63c79fbbeb90760f76368cc0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#a60f58af63c79fbbeb90760f76368cc0f">register_watchdog_handler</a> ()</td></tr>
-<tr class="memdesc:a60f58af63c79fbbeb90760f76368cc0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this watchdog instance with the matching ISR that should have been registered with <a class="el" href="watchdog_8h.html#ad060c52a2a6ab7f8db2dfc957736c390" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a>.  <a href="#a60f58af63c79fbbeb90760f76368cc0f">More...</a><br /></td></tr>
-<tr class="separator:a60f58af63c79fbbeb90760f76368cc0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae89dd8e1384d6603e9fb4123a9216765"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765">begin</a> (<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">TimeOut</a> timeout=<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</td></tr>
-<tr class="memdesc:ae89dd8e1384d6603e9fb4123a9216765"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the watchdog clock with the given <code>timeout</code> period.  <a href="#ae89dd8e1384d6603e9fb4123a9216765">More...</a><br /></td></tr>
-<tr class="separator:ae89dd8e1384d6603e9fb4123a9216765"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01cdedd19e0374266cdbf431f39897fb"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#a01cdedd19e0374266cdbf431f39897fb">millis</a> () const</td></tr>
-<tr class="memdesc:a01cdedd19e0374266cdbf431f39897fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of milliseconds that elapsed since <code><a class="el" href="classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> was called.  <a href="#a01cdedd19e0374266cdbf431f39897fb">More...</a><br /></td></tr>
-<tr class="separator:a01cdedd19e0374266cdbf431f39897fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af47f9fc304d16f777fc85d13f7b6826a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#af47f9fc304d16f777fc85d13f7b6826a">delay</a> (uint32_t ms)</td></tr>
-<tr class="memdesc:af47f9fc304d16f777fc85d13f7b6826a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay program execution for the given amount of milliseconds.  <a href="#af47f9fc304d16f777fc85d13f7b6826a">More...</a><br /></td></tr>
-<tr class="separator:af47f9fc304d16f777fc85d13f7b6826a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a981e579a4e24b0cf9cb3d1031f5a1731"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">Watchdog</a> (<a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; EVENT &gt; &amp;event_queue)</td></tr>
+<tr class="memdesc:a981e579a4e24b0cf9cb3d1031f5a1731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new watchdog-based clock that will, for each watchdog timeout, add an event to the given <code>event_queue</code> for further processing.  <a href="#a981e579a4e24b0cf9cb3d1031f5a1731">More...</a><br /></td></tr>
+<tr class="separator:a981e579a4e24b0cf9cb3d1031f5a1731"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac562bd99d2f2483d1544efd31e5693be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#ac562bd99d2f2483d1544efd31e5693be">register_watchdog_handler</a> ()</td></tr>
+<tr class="memdesc:ac562bd99d2f2483d1544efd31e5693be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this watchdog instance with the matching ISR that should have been registered with <a class="el" href="watchdog_8h.html#a6998639a03718afa44f5626c17ce8994" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a>.  <a href="#ac562bd99d2f2483d1544efd31e5693be">More...</a><br /></td></tr>
+<tr class="separator:ac562bd99d2f2483d1544efd31e5693be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af39bf871603b19dc10cbeeceee3307c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#af39bf871603b19dc10cbeeceee3307c3">begin</a> (<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">TimeOut</a> timeout=<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</td></tr>
+<tr class="memdesc:af39bf871603b19dc10cbeeceee3307c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the watchdog clock with the given <code>timeout</code> period.  <a href="#af39bf871603b19dc10cbeeceee3307c3">More...</a><br /></td></tr>
+<tr class="separator:af39bf871603b19dc10cbeeceee3307c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a659381a0ce623f8cb90bca7485761d56"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#a659381a0ce623f8cb90bca7485761d56">millis</a> () const</td></tr>
+<tr class="memdesc:a659381a0ce623f8cb90bca7485761d56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of milliseconds that elapsed since <code><a class="el" href="classwatchdog_1_1_watchdog.html#af39bf871603b19dc10cbeeceee3307c3" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> was called.  <a href="#a659381a0ce623f8cb90bca7485761d56">More...</a><br /></td></tr>
+<tr class="separator:a659381a0ce623f8cb90bca7485761d56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae024a7d20ea33f4731ff7ca981a3879a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html#ae024a7d20ea33f4731ff7ca981a3879a">delay</a> (uint32_t ms)</td></tr>
+<tr class="memdesc:ae024a7d20ea33f4731ff7ca981a3879a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay program execution for the given amount of milliseconds.  <a href="#ae024a7d20ea33f4731ff7ca981a3879a">More...</a><br /></td></tr>
+<tr class="separator:ae024a7d20ea33f4731ff7ca981a3879a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classwatchdog_1_1_watchdog_signal"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwatchdog_1_1_watchdog_signal')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classwatchdog_1_1_watchdog_signal.html">watchdog::WatchdogSignal</a></td></tr>
 <tr class="memitem:a3040c8929991e081f02619ed89513b5a inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">begin</a> (<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">TimeOut</a> timeout=<a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</td></tr>
 <tr class="memdesc:a3040c8929991e081f02619ed89513b5a inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the watchdog timer with the given <code>timeout</code> period.  <a href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">More...</a><br /></td></tr>
@@ -163,24 +163,29 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ab781ec34d67a0ad552cf76a33e5f2353 inherit pub_types_classwatchdog_1_1_watchdog_signal"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Simple API to use watchdog timer as a clock for events generation. </p>
-<p>For this to work correctly, you need to register the proper ISR through <code><a class="el" href="watchdog_8h.html#ad060c52a2a6ab7f8db2dfc957736c390" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a></code> macro first, then ensure you call <code><a class="el" href="classwatchdog_1_1_watchdog.html#a60f58af63c79fbbeb90760f76368cc0f" title="Register this watchdog instance with the matching ISR that should have been registered with REGISTER_...">register_watchdog_handler()</a></code>. </p>
+<div class="textblock"><h3>template&lt;typename EVENT&gt;<br />
+class watchdog::Watchdog&lt; EVENT &gt;</h3>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00154">154</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p>Simple API to use watchdog timer as a clock for events generation. </p>
+<p>For this to work correctly, you need to register the proper ISR through <code><a class="el" href="watchdog_8h.html#a6998639a03718afa44f5626c17ce8994" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a></code> macro first, then ensure you call <code><a class="el" href="classwatchdog_1_1_watchdog.html#ac562bd99d2f2483d1544efd31e5693be" title="Register this watchdog instance with the matching ISR that should have been registered with REGISTER_...">register_watchdog_handler()</a></code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00160">160</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5b6545920c68ee7620a74d603568c88e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b6545920c68ee7620a74d603568c88e">&#9670;&nbsp;</a></span>Watchdog()</h2>
+<a id="a981e579a4e24b0cf9cb3d1031f5a1731"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a981e579a4e24b0cf9cb3d1031f5a1731">&#9670;&nbsp;</a></span>Watchdog()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">watchdog::Watchdog::Watchdog </td>
+          <td class="memname"><a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt; EVENT &gt;::<a class="el" href="classwatchdog_1_1_watchdog.html">Watchdog</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; <a class="el" href="classevents_1_1_event.html">events::Event</a> &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; EVENT &gt; &amp;&#160;</td>
           <td class="paramname"><em>event_queue</em></td><td>)</td>
           <td></td>
         </tr>
@@ -193,29 +198,31 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Construct a new watchdog-based clock that will, for each watchdog timeout, add an event to the given <code>event_queue</code> for further processing. </p>
-<p>This clock also counts elapsed milliseconds since it was started with <code><a class="el" href="classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765" title="Start the watchdog clock with the given timeout period. ">begin()</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This clock also counts elapsed milliseconds since it was started with <code><a class="el" href="classwatchdog_1_1_watchdog.html#af39bf871603b19dc10cbeeceee3307c3" title="Start the watchdog clock with the given timeout period. ">begin()</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">event_queue</td><td>the queue to which <code>Event</code>s will be pushed on each watchdog tick </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00166">166</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00174">174</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a60f58af63c79fbbeb90760f76368cc0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60f58af63c79fbbeb90760f76368cc0f">&#9670;&nbsp;</a></span>register_watchdog_handler()</h2>
+<a id="ac562bd99d2f2483d1544efd31e5693be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac562bd99d2f2483d1544efd31e5693be">&#9670;&nbsp;</a></span>register_watchdog_handler()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void watchdog::Watchdog::register_watchdog_handler </td>
+          <td class="memname">void <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt; EVENT &gt;::register_watchdog_handler </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -228,27 +235,37 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Register this watchdog instance with the matching ISR that should have been registered with <a class="el" href="watchdog_8h.html#ad060c52a2a6ab7f8db2dfc957736c390" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a>. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="watchdog_8h.html#ad060c52a2a6ab7f8db2dfc957736c390" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a> </dd></dl>
+<p>Register this watchdog instance with the matching ISR that should have been registered with <a class="el" href="watchdog_8h.html#a6998639a03718afa44f5626c17ce8994" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="watchdog_8h.html#a6998639a03718afa44f5626c17ce8994" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00178">178</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00188">188</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
-<a id="ae89dd8e1384d6603e9fb4123a9216765"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae89dd8e1384d6603e9fb4123a9216765">&#9670;&nbsp;</a></span>begin()</h2>
+<a id="af39bf871603b19dc10cbeeceee3307c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af39bf871603b19dc10cbeeceee3307c3">&#9670;&nbsp;</a></span>begin()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void watchdog::Watchdog::begin </td>
+          <td class="memname">void <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt; EVENT &gt;::begin </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">TimeOut</a>&#160;</td>
           <td class="paramname"><em>timeout</em> = <code><a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a></code></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Start the watchdog clock with the given <code>timeout</code> period. </p>
@@ -259,21 +276,23 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8cpp_source.html#l00027">27</a> of file <a class="el" href="watchdog_8cpp_source.html">watchdog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00199">199</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
-<a id="a01cdedd19e0374266cdbf431f39897fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01cdedd19e0374266cdbf431f39897fb">&#9670;&nbsp;</a></span>millis()</h2>
+<a id="a659381a0ce623f8cb90bca7485761d56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a659381a0ce623f8cb90bca7485761d56">&#9670;&nbsp;</a></span>millis()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t watchdog::Watchdog::millis </td>
+          <td class="memname">uint32_t <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt; EVENT &gt;::millis </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -286,31 +305,41 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Get the number of milliseconds that elapsed since <code><a class="el" href="classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> was called. </p>
-<p>Note: the precision is limited by the <code>timeout</code> value used with <code><a class="el" href="classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765" title="Start the watchdog clock with the given timeout period. ">begin()</a></code>. </p><dl class="section return"><dt>Returns</dt><dd>number of milliseconds elpased since watchdog was started </dd></dl>
+<p>Get the number of milliseconds that elapsed since <code><a class="el" href="classwatchdog_1_1_watchdog.html#af39bf871603b19dc10cbeeceee3307c3" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> was called. </p>
+<p>Note: the precision is limited by the <code>timeout</code> value used with <code><a class="el" href="classwatchdog_1_1_watchdog.html#af39bf871603b19dc10cbeeceee3307c3" title="Start the watchdog clock with the given timeout period. ">begin()</a></code>. </p><dl class="section return"><dt>Returns</dt><dd>number of milliseconds elpased since watchdog was started </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00197">197</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00218">218</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
-<a id="af47f9fc304d16f777fc85d13f7b6826a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af47f9fc304d16f777fc85d13f7b6826a">&#9670;&nbsp;</a></span>delay()</h2>
+<a id="ae024a7d20ea33f4731ff7ca981a3879a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae024a7d20ea33f4731ff7ca981a3879a">&#9670;&nbsp;</a></span>delay()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename EVENT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void watchdog::Watchdog::delay </td>
+          <td class="memname">void <a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a>&lt; EVENT &gt;::delay </td>
           <td>(</td>
           <td class="paramtype">uint32_t&#160;</td>
           <td class="paramname"><em>ms</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Delay program execution for the given amount of milliseconds. </p>
-<p>Contrarily to <code><a class="el" href="namespacetime.html#af13fd17ddf6b751b8161691e608892b2" title="Delay program execution for the given amount of milliseconds. ">time::delay_ms()</a></code>, this method does not perform a busy loop, but it calls <code><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a></code> which will put the MCU in sleep mode but will be awakened by the watchdog interrupt and check if required delay has elapsed already. Note that the delay precision depends on the actual timeout value passed when <code><a class="el" href="classwatchdog_1_1_watchdog.html#ae89dd8e1384d6603e9fb4123a9216765" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> has been called.</p>
+<p>Contrarily to <code><a class="el" href="namespacetime.html#af13fd17ddf6b751b8161691e608892b2" title="Delay program execution for the given amount of milliseconds. ">time::delay_ms()</a></code>, this method does not perform a busy loop, but it calls <code><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a></code> which will put the MCU in sleep mode but will be awakened by the watchdog interrupt and check if required delay has elapsed already. Note that the delay precision depends on the actual timeout value passed when <code><a class="el" href="classwatchdog_1_1_watchdog.html#af39bf871603b19dc10cbeeceee3307c3" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> has been called.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ms</td><td>the number of milliseconds to hold program execution </td></tr>
@@ -319,13 +348,12 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8cpp_source.html#l00040">40</a> of file <a class="el" href="watchdog_8cpp_source.html">watchdog.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00235">235</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="watchdog_8h_source.html">watchdog.h</a></li>
-<li>fastarduino/<a class="el" href="watchdog_8cpp_source.html">watchdog.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

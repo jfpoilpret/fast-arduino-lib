@@ -102,7 +102,7 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Set a new <code><a class="el" href="namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf" title="Delay program execution for the given amount of milliseconds. ">time::delay</a></code> function for the duration of the current scope; when the scope is left, the previous <code><a class="el" href="namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf" title="Delay program execution for the given amount of milliseconds. ">time::delay</a></code> function is restored. </p>
 <p>Usage example: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> my_delay(uint32_t ms)</div><div class="line">{</div><div class="line">    ...</div><div class="line">}</div><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <span class="comment">// Set new time::delay function</span></div><div class="line">    <a class="code" href="classtime_1_1auto__delay.html#af9ffd33d155ba2ff39cb3f6fea96fdb4">auto_delay</a> d{my_delay};</div><div class="line">    <span class="comment">// call API that rely on time::delay</span></div><div class="line">    ...</div><div class="line">    <span class="comment">// Restore previous time::delay function</span></div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00253">253</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00254">254</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af9ffd33d155ba2ff39cb3f6fea96fdb4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9ffd33d155ba2ff39cb3f6fea96fdb4">&#9670;&nbsp;</a></span>auto_delay()</h2>
@@ -136,7 +136,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00261">261</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00262">262</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>

@@ -84,27 +84,25 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 
 <h3><a id="index_t"></a>- t -</h3><ul>
 <li>tick_prescaler()
-: <a class="el" href="structtimer_1_1_calculator.html#a3af87e51b4091606d74dc06fd42a5203">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#a319ea208456b508d34bc7b65e6f90e59">timer::Calculator&lt; NTIMER_ &gt;</a>
+</li>
+<li>ticks()
+: <a class="el" href="classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56">timer::Timer&lt; NTIMER_ &gt;</a>
+</li>
+<li>ticks_()
+: <a class="el" href="classtimer_1_1_timer.html#a7c939960ca27edadffbd275959b2ef3a">timer::Timer&lt; NTIMER_ &gt;</a>
 </li>
 <li>TimeOut
 : <a class="el" href="classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353">watchdog::WatchdogSignal</a>
 </li>
 <li>TIMER
-: <a class="el" href="classanalog_1_1_p_w_m_output.html#ab8f0381e39f522b7a5473445534707c8">analog::PWMOutput&lt; PIN, PULSED &gt;</a>
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#af6aa7f4cbd8574ac3e1fd2858982c38c">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
 </li>
 <li>Timer()
-: <a class="el" href="classtimer_1_1_timer.html#af49a72d954cc17901d92d04d818f578c">timer::Timer&lt; TIMER &gt;</a>
+: <a class="el" href="classtimer_1_1_timer.html#a1f7f3052c127cad79c654f351bc68ae3">timer::Timer&lt; NTIMER_ &gt;</a>
 </li>
 <li>TIMER_MAX
-: <a class="el" href="classtimer_1_1_timer.html#aa4a34b03ca03819b9c3a9fcc5ceaf29f">timer::Timer&lt; TIMER &gt;</a>
-</li>
-<li>TIMER_PRESCALER
-: <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">timer::Calculator&lt; TIMER &gt;</a>
-, <a class="el" href="classtimer_1_1_timer.html#ade1d7f8efd6c214d36d2f6fe549a2ee1">timer::Timer&lt; TIMER &gt;</a>
-</li>
-<li>TIMER_TYPE
-: <a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">timer::Calculator&lt; TIMER &gt;</a>
-, <a class="el" href="classtimer_1_1_timer.html#ab5073343302f7e2699c0b9cb598ca451">timer::Timer&lt; TIMER &gt;</a>
+: <a class="el" href="classtimer_1_1_timer.html#a90885b96ac06c3d91ae01566bbe578e0">timer::Timer&lt; NTIMER_ &gt;</a>
 </li>
 <li>tm_hour
 : <a class="el" href="structdevices_1_1rtc_1_1tm.html#ac3254d60c37414fa101638a8081a3e35">devices::rtc::tm</a>
@@ -129,7 +127,7 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 </li>
 <li>toggle()
 : <a class="el" href="classgpio_1_1_fast_pin.html#aa163ea832ed19672f76e8ae270f0d64d">gpio::FastPin&lt; PORT_, BIT_ &gt;</a>
-, <a class="el" href="classgpio_1_1_fast_pin_type.html#a5f3139c04fa7528f72e6440d19d3f16c">gpio::FastPinType&lt; DPIN &gt;</a>
+, <a class="el" href="classgpio_1_1_fast_pin_type.html#a6e3644253729ca175a250154ee553225">gpio::FastPinType&lt; DPIN_ &gt;</a>
 </li>
 <li>tx_ds
 : <a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a9e57f8a230f2db6cbda717aa97196a22">devices::rf::NRF24L01&lt; CSN, CE &gt;::status_t</a>
@@ -145,10 +143,19 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 : <a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html#a12123937d9935646e6c28a92d1aa31cd">devices::rf::NRF24L01&lt; CSN, CE &gt;::fifo_status_t</a>
 </li>
 <li>TYPE
-: <a class="el" href="classanalog_1_1_analog_input.html#a1da7ef5f6f828c02277c59bb189b6006">analog::AnalogInput&lt; APIN, AREF, SAMPLE_TYPE, MAXFREQ &gt;</a>
-, <a class="el" href="classanalog_1_1_p_w_m_output.html#a944e19010ae3ef032386c9e1b809e556">analog::PWMOutput&lt; PIN, PULSED &gt;</a>
-, <a class="el" href="classgpio_1_1_fast_pin_type.html#a839f5e379fc75c2aaa9565a18fd0757d">gpio::FastPinType&lt; DPIN &gt;</a>
+: <a class="el" href="classanalog_1_1_analog_input.html#ab51a3f532b4dca786eabd0ace09b9595">analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;</a>
+, <a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
+, <a class="el" href="classevents_1_1_event.html#a4b1eb7c8f86774b57ae77b5951e73c5b">events::Event&lt; T &gt;</a>
+</li>
+<li>type()
+: <a class="el" href="classevents_1_1_event.html#a4cc68c5a6710d276baa534b61a25f611">events::Event&lt; T &gt;</a>
+, <a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">events::EventHandler&lt; EVENT &gt;</a>
+</li>
+<li>TYPE
+: <a class="el" href="classgpio_1_1_fast_pin_type.html#a042fde27c2748f1401523090025b03ea">gpio::FastPinType&lt; DPIN_ &gt;</a>
 , <a class="el" href="structinterrupt_1_1_p_c_i_type.html#aa5d4aea33dcfb5047b9c8e692e727e01">interrupt::PCIType&lt; PIN &gt;</a>
+, <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">timer::Calculator&lt; NTIMER_ &gt;</a>
+, <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">timer::Timer&lt; NTIMER_ &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

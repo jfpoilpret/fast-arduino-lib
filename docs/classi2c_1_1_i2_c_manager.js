@@ -1,8 +1,9 @@
 var classi2c_1_1_i2_c_manager =
 [
-    [ "I2CManager", "classi2c_1_1_i2_c_manager.html#a3d471ddfa129fb1f03230aef042320ce", null ],
-    [ "begin", "classi2c_1_1_i2_c_manager.html#a896b8968b61715e02c65c72a3c596a2a", null ],
-    [ "end", "classi2c_1_1_i2_c_manager.html#aa7900ffbbc28003fabefeae004e8b6d2", null ],
-    [ "status", "classi2c_1_1_i2_c_manager.html#a38efbea6de6469956da2f1d7843bd9e3", null ],
-    [ "I2CDevice", "classi2c_1_1_i2_c_manager.html#a787499b46e8ad88439f896ceefe1da54", null ]
+    [ "I2CManager", "classi2c_1_1_i2_c_manager.html#a2d9e4e95760af5ab03cd2eaf165b1aaf", null ],
+    [ "begin", "classi2c_1_1_i2_c_manager.html#a890a9498da6705782b629bd2c50ae285", null ],
+    [ "end", "classi2c_1_1_i2_c_manager.html#afc4a8c8a0fbc30fe5f7d310f68a060fe", null ],
+    [ "status", "classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78", null ],
+    [ "I2CDevice", "classi2c_1_1_i2_c_manager.html#a787499b46e8ad88439f896ceefe1da54", null ],
+    [ "MODE", "classi2c_1_1_i2_c_manager.html#a7df8908c31eb3fca3005ed243f0253f4", null ]
 ];

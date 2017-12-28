@@ -7,5 +7,5 @@ var classserial_1_1_u_a_r_t_errors =
     [ "data_overrun", "classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa", null ],
     [ "queue_overflow", "classserial_1_1_u_a_r_t_errors.html#a9a081f3f71e4cecb74a8cb4f3877c252", null ],
     [ "parity_error", "classserial_1_1_u_a_r_t_errors.html#ae4776a3526396c1b7d9c097a7a0a20d3", null ],
-    [ "_errors", "classserial_1_1_u_a_r_t_errors.html#a829ce0a529cbfb631a31fd5288bd9e07", null ]
+    [ "errors_", "classserial_1_1_u_a_r_t_errors.html#a2160eae1e743f61184ed5847a0f74b3a", null ]
 ];

@@ -170,6 +170,9 @@ operator").  <a href="#a3525bf2bf63c9f906bc9b952f0d54355">More...</a><br /></td>
 <tr class="memitem:a6ed4721feb889faa1f72fc2629d71271"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271">calculate_delay1_count</a> (float time_us)</td></tr>
 <tr class="memdesc:a6ed4721feb889faa1f72fc2629d71271"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the count to pass to <code>delay1()</code> in order to reach <code>time_us</code> microseconds delay.  <a href="#a6ed4721feb889faa1f72fc2629d71271">More...</a><br /></td></tr>
 <tr class="separator:a6ed4721feb889faa1f72fc2629d71271"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadb785961c9199701ce9025177b243c6"><td class="memItemLeft" align="right" valign="top"><a id="aadb785961c9199701ce9025177b243c6"></a>
+constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>num_bits</b> (uint8_t mask, uint8_t num=0)</td></tr>
+<tr class="separator:aadb785961c9199701ce9025177b243c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains all generic utility methods. </p>
@@ -197,7 +200,7 @@ operator").  <a href="#a3525bf2bf63c9f906bc9b952f0d54355">More...</a><br /></td>
 <p>Common prefixes for measurement units. </p>
 <p>Used by <code><a class="el" href="namespaceutils.html#a610e02474f969fc747fa1725b79e252c" title="Convert the raw value, obtained from a electronics device, using precision_bit number of bits (that d...">map_raw_to_physical()</a></code> and <code><a class="el" href="namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32" title="Convert an absolute physical value, expressed in some given measurement unit, scaled with prefix...">map_physical_to_raw()</a></code> for units conversion. To avoid large arithmetic calculation, we limit these prefixes to power of 10 that can hold within 32 bits; this is why TERA or PICO are absent. </p>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00108">108</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00105">105</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -253,7 +256,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the value constrained to be between <code>min</code> and <code>max</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00074">74</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00071">71</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -324,7 +327,7 @@ template&lt;typename TI , typename TO &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>transformed <code>value</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00096">96</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00093">93</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -353,7 +356,7 @@ template&lt;typename TI , typename TO &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>10 ^ |<code>n|</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00131">131</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00128">128</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -409,7 +412,7 @@ template&lt;typename TI , typename TO &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the physical value calculated from <code>value</code>, scaled according to <code>prefix</code> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32" title="Convert an absolute physical value, expressed in some given measurement unit, scaled with prefix...">map_physical_to_raw()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00192">192</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00187">187</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -465,7 +468,7 @@ template&lt;typename TI , typename TO &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the raw value calculated from <code>value</code>, as if directly returned by the device sensor </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceutils.html#a610e02474f969fc747fa1725b79e252c" title="Convert the raw value, obtained from a electronics device, using precision_bit number of bits (that d...">map_raw_to_physical()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00251">251</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00245">245</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -505,7 +508,7 @@ template&lt;typename TI , typename TO &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the unsigned integer computed from <code>high</code> and <code>low</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00265">265</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00258">258</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -548,7 +551,7 @@ operator"). </p>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>value</code> if <code>value</code> is not false (or 0) otherwise <code>default_value</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00278">278</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00270">270</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -596,7 +599,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00291">291</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00282">282</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -633,7 +636,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>bcd</code> converted to natural integer </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00302">302</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00293">293</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -670,7 +673,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>binary</code> converted to BCD </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00316">316</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00307">307</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -706,7 +709,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00332">332</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00323">323</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -742,7 +745,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00342">342</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00333">333</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -773,7 +776,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>input</code> casted as a byte </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00366">366</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00357">357</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -802,7 +805,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the count to pass to <code>delay</code>()` AVR function </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00379">379</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00370">370</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>

@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('realtime__timer_8h.html','');});
 <code>#include &quot;<a class="el" href="interrupts_8h_source.html">interrupts.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="timer_8h_source.html">timer.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="time_8h_source.html">time.h</a>&quot;</code><br />
-<code>#include &quot;events.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="events_8h_source.html">events.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for realtime_timer.h:</div>
 <div class="dyncontent">
@@ -104,7 +104,7 @@ Include dependency graph for realtime_timer.h:</div>
 <area shape="rect" id="node3" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="21,169,108,196"/>
 <area shape="rect" id="node4" href="timer_8h.html" title="Timer API. " alt="" coords="229,95,292,121"/>
 <area shape="rect" id="node10" href="time_8h.html" title="Simple time utilities. " alt="" coords="319,244,378,271"/>
-<area shape="rect" id="node13" href="events_8h_source.html" title="events.h" alt="" coords="498,95,570,121"/>
+<area shape="rect" id="node13" href="events_8h.html" title="Support for events management. " alt="" coords="498,95,570,121"/>
 <area shape="rect" id="node6" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="490,319,564,345"/>
 <area shape="rect" id="node14" href="queue_8h_source.html" title="queue.h" alt="" coords="546,169,614,196"/>
 <area shape="rect" id="node15" href="linked__list_8h_source.html" title="linked_list.h" alt="" coords="583,244,674,271"/>
@@ -123,10 +123,10 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT&lt; TIMER &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT&lt; NTIMER_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">API to handle a real-time timer.  <a href="classtimer_1_1_r_t_t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t_event_callback.html">timer::RTTEventCallback&lt; PERIOD_MS &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t_event_callback.html">timer::RTTEventCallback&lt; EVENT, PERIOD_MS &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -137,7 +137,7 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:afc2dfeccc5d417ae872d836d4cfb5d8c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c">REGISTER_RTT_ISR</a>(TIMER_NUM)&#160;&#160;&#160;<a class="el" href="timer_8h.html#acfce0d4d6115510756da8d720409ed26">REGISTER_TIMER_COMPARE_ISR_METHOD</a>(TIMER_NUM, CAT(<a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;board::Timer::TIMER, TIMER_NUM) &gt;, CAT(&amp;<a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;board::Timer::TIMER, TIMER_NUM) &gt;::on_timer)</td></tr>
+<tr class="memitem:afc2dfeccc5d417ae872d836d4cfb5d8c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c">REGISTER_RTT_ISR</a>(TIMER_NUM)</td></tr>
 <tr class="memdesc:afc2dfeccc5d417ae872d836d4cfb5d8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> to work properly.  <a href="#afc2dfeccc5d417ae872d836d4cfb5d8c">More...</a><br /></td></tr>
 <tr class="separator:afc2dfeccc5d417ae872d836d4cfb5d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9594e8631a41e420c6e4d824ff033f3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="realtime__timer_8h.html#af9594e8631a41e420c6e4d824ff033f3">REGISTER_RTT_ISR_METHOD</a>(TIMER_NUM,  HANDLER,  CALLBACK)</td></tr>
@@ -146,6 +146,8 @@ Macros</h2></td></tr>
 <tr class="memitem:acdffb09ffebb0ca4df57018ef82ad967"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="realtime__timer_8h.html#acdffb09ffebb0ca4df57018ef82ad967">REGISTER_RTT_ISR_FUNCTION</a>(TIMER_NUM,  CALLBACK)</td></tr>
 <tr class="memdesc:acdffb09ffebb0ca4df57018ef82ad967"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> to work properly, along with a callback function that will be notified every millisecond.  <a href="#acdffb09ffebb0ca4df57018ef82ad967">More...</a><br /></td></tr>
 <tr class="separator:acdffb09ffebb0ca4df57018ef82ad967"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fa7e6297d6f853dea35cc5a9f213c46"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>REGISTER_RTT_EVENT_ISR</b>(TIMER_NUM,  EVENT,  PERIOD)</td></tr>
+<tr class="separator:a2fa7e6297d6f853dea35cc5a9f213c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Real-time Timer API. </p>
@@ -163,11 +165,13 @@ Macros</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">TIMER_NUM</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="timer_8h.html#acfce0d4d6115510756da8d720409ed26">REGISTER_TIMER_COMPARE_ISR_METHOD</a>(TIMER_NUM, CAT(<a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;board::Timer::TIMER, TIMER_NUM) &gt;, CAT(&amp;<a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;board::Timer::TIMER, TIMER_NUM) &gt;::on_timer)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="timer_8h.html#acfce0d4d6115510756da8d720409ed26">REGISTER_TIMER_COMPARE_ISR_METHOD</a>(TIMER_NUM, CAT(<a class="code" href="classtimer_1_1_r_t_t.html">timer::RTT</a> &lt; board::Timer::TIMER, TIMER_NUM) &gt;, \</div><div class="line">                                      CAT(&amp;<a class="code" href="classtimer_1_1_r_t_t.html">timer::RTT</a> &lt; board::Timer::TIMER, TIMER_NUM) &gt; ::on_timer)</div><div class="ttc" id="timer_8h_html_acfce0d4d6115510756da8d720409ed26"><div class="ttname"><a href="timer_8h.html#acfce0d4d6115510756da8d720409ed26">REGISTER_TIMER_COMPARE_ISR_METHOD</a></div><div class="ttdeci">#define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)</div><div class="ttdoc">Register the necessary ISR (interrupt Service Routine) for a timer::Timer with a callback method in C...</div><div class="ttdef"><b>Definition:</b> <a href="timer_8h_source.html#l00041">timer.h:41</a></div></div>
+<div class="ttc" id="classtimer_1_1_r_t_t_html"><div class="ttname"><a href="classtimer_1_1_r_t_t.html">timer::RTT</a></div><div class="ttdoc">API to handle a real-time timer. </div><div class="ttdef"><b>Definition:</b> <a href="realtime__timer_8h_source.html#l00122">realtime_timer.h:122</a></div></div>
+</div><!-- fragment -->
 <p>Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> to work properly. </p>
 <p>This will not register any user callback though; if you need to register a method or function to be called back every time one millsiecond has elapsed, you need to use <code>REGISTER_RTT_ISR_METHOD</code> or <code>REGISTER_RTT_ISR_FUNCTION</code> instead.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -215,7 +219,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                \</div><div class="line">{                                                                                       \</div><div class="line">    using RTT_HANDLER = CAT(<a class="code" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;board::Timer::TIMER, TIMER_NUM) &gt;;               \</div><div class="line">    using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                    \</div><div class="line">    using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &amp;RTT_HANDLER::on_timer);   \</div><div class="line">    RTT_HANDLE::handle();                                                               \</div><div class="line">    CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()-&gt;millis());        \</div><div class="line">}</div><div class="ttc" id="classtimer_1_1_r_t_t_html"><div class="ttname"><a href="classtimer_1_1_r_t_t.html">timer::RTT</a></div><div class="ttdoc">API to handle a real-time timer. </div><div class="ttdef"><b>Definition:</b> <a href="realtime__timer_8h_source.html#l00110">realtime_timer.h:110</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                    \</div><div class="line">    {                                                                                           \</div><div class="line">        using RTT_HANDLER = CAT(<a class="code" href="classtimer_1_1_r_t_t.html">timer::RTT</a> &lt; board::Timer::TIMER, TIMER_NUM) &gt; ;                \</div><div class="line">        using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                        \</div><div class="line">        using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &amp;RTT_HANDLER::on_timer, <span class="keywordtype">void</span>); \</div><div class="line">        RTT_HANDLE::handle();                                                                   \</div><div class="line">        CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()-&gt;millis());            \</div><div class="line">    }</div><div class="ttc" id="classtimer_1_1_r_t_t_html"><div class="ttname"><a href="classtimer_1_1_r_t_t.html">timer::RTT</a></div><div class="ttdoc">API to handle a real-time timer. </div><div class="ttdef"><b>Definition:</b> <a href="realtime__timer_8h_source.html#l00122">realtime_timer.h:122</a></div></div>
 </div><!-- fragment -->
 <p>Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> to work properly, along with a callback method that will be notified every millisecond. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -230,7 +234,7 @@ Macros</h2></td></tr>
 <dd>
 <a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00060">60</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00061">61</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
 
 </div>
 </div>
@@ -259,7 +263,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                \</div><div class="line">{                                                                                       \</div><div class="line">    using RTT_HANDLER = CAT(<a class="code" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;board::Timer::TIMER, TIMER_NUM) &gt;;               \</div><div class="line">    using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                    \</div><div class="line">    using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &amp;RTT_HANDLER::on_timer);   \</div><div class="line">    RTT_HANDLE::handle();                                                               \</div><div class="line">    CALLBACK (RTT_HOLDER::handler()-&gt;<a class="code" href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70">millis</a>());                                         \</div><div class="line">}</div><div class="ttc" id="classtimer_1_1_r_t_t_html"><div class="ttname"><a href="classtimer_1_1_r_t_t.html">timer::RTT</a></div><div class="ttdoc">API to handle a real-time timer. </div><div class="ttdef"><b>Definition:</b> <a href="realtime__timer_8h_source.html#l00110">realtime_timer.h:110</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                              \</div><div class="line">    {                                                                                     \</div><div class="line">        using RTT_HANDLER = CAT(<a class="code" href="classtimer_1_1_r_t_t.html">timer::RTT</a> &lt; board::Timer::TIMER, TIMER_NUM) &gt; ;          \</div><div class="line">        using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                  \</div><div class="line">        using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &amp;RTT_HANDLER::on_timer); \</div><div class="line">        RTT_HANDLE::handle();                                                             \</div><div class="line">        CALLBACK(RTT_HOLDER::handler()-&gt;<a class="code" href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70">millis</a>());                                        \</div><div class="line">    }</div><div class="ttc" id="classtimer_1_1_r_t_t_html"><div class="ttname"><a href="classtimer_1_1_r_t_t.html">timer::RTT</a></div><div class="ttdoc">API to handle a real-time timer. </div><div class="ttdef"><b>Definition:</b> <a href="realtime__timer_8h_source.html#l00122">realtime_timer.h:122</a></div></div>
 <div class="ttc" id="namespacetime_html_a173df6ce2b6d3d6ed1418807e1b70a70"><div class="ttname"><a href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70">time::millis</a></div><div class="ttdeci">MILLIS_PTR millis</div><div class="ttdoc">Count number of milliseconds elapsed since some time base reference (generally since MCU startup)...</div><div class="ttdef"><b>Definition:</b> <a href="time_8cpp_source.html#l00020">time.cpp:20</a></div></div>
 </div><!-- fragment -->
 <p>Register the necessary ISR (interrupt Service Routine) for a <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> to work properly, along with a callback function that will be notified every millisecond. </p>
@@ -274,7 +278,45 @@ Macros</h2></td></tr>
 <dd>
 <a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00082">82</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00083">83</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
+
+</div>
+</div>
+<a id="a2fa7e6297d6f853dea35cc5a9f213c46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fa7e6297d6f853dea35cc5a9f213c46">&#9670;&nbsp;</a></span>REGISTER_RTT_EVENT_ISR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REGISTER_RTT_EVENT_ISR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TIMER_NUM, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">EVENT, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">PERIOD&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                                        \</div><div class="line">    {                                                                                                               \</div><div class="line">        using RTT_HANDLER = CAT(<a class="code" href="classtimer_1_1_r_t_t.html">timer::RTT</a> &lt; board::Timer::TIMER, TIMER_NUM) &gt; ;                                    \</div><div class="line">        using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                                            \</div><div class="line">        using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &amp;RTT_HANDLER::on_timer, <span class="keywordtype">void</span>);                     \</div><div class="line">        RTT_HANDLE::handle();                                                                                       \</div><div class="line">        using RTT_CB_HANDLER = <a class="code" href="classtimer_1_1_r_t_t_event_callback.html">timer::RTTEventCallback&lt; EVENT , PERIOD &gt;</a> ;                                          \</div><div class="line">        CALL_HANDLER_(RTT_CB_HANDLER, &amp;RTT_CB_HANDLER::on_rtt_change, uint32_t)(RTT_HOLDER::handler()-&gt;millis());   \</div><div class="line">    }</div><div class="ttc" id="classtimer_1_1_r_t_t_html"><div class="ttname"><a href="classtimer_1_1_r_t_t.html">timer::RTT</a></div><div class="ttdoc">API to handle a real-time timer. </div><div class="ttdef"><b>Definition:</b> <a href="realtime__timer_8h_source.html#l00122">realtime_timer.h:122</a></div></div>
+<div class="ttc" id="classtimer_1_1_r_t_t_event_callback_html"><div class="ttname"><a href="classtimer_1_1_r_t_t_event_callback.html">timer::RTTEventCallback</a></div><div class="ttdef"><b>Definition:</b> <a href="realtime__timer_8h_source.html#l00327">realtime_timer.h:327</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00094">94</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
 
 </div>
 </div>

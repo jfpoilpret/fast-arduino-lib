@@ -90,13 +90,18 @@ $(document).ready(function(){initNavTree('functions_p.html','');});
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ade723eac06149ca77f8063d06756e891">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
 </li>
 <li>PCINT
-: <a class="el" href="structinterrupt_1_1_p_c_i_type.html#ade102a62db31cff23ad88bb268037e5b">interrupt::PCIType&lt; PIN &gt;</a>
+: <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8bf0e1fa0d38470572293e43d4e13305">interrupt::PCISignal&lt; PORT_ &gt;</a>
+, <a class="el" href="structinterrupt_1_1_p_c_i_type.html#ade102a62db31cff23ad88bb268037e5b">interrupt::PCIType&lt; PIN &gt;</a>
 </li>
 <li>PhaseCorrectPWM_frequency()
-: <a class="el" href="structtimer_1_1_calculator.html#abe5b358eb6efdbcca601653a394d72c3">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#a8eec5399160940b02b5ab12b79962f4c">timer::Calculator&lt; NTIMER_ &gt;</a>
 </li>
 <li>PhaseCorrectPWM_prescaler()
-: <a class="el" href="structtimer_1_1_calculator.html#a6c6b1b88e6ffe96b41c078a025840d21">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1">timer::Calculator&lt; NTIMER_ &gt;</a>
+</li>
+<li>PIN
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#a7c5cb3437be029f487da004f1a932f9a">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
+, <a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a680bc3d1051770fe9e84b2a6f83c7e4c">interrupt::INTSignal&lt; PIN_ &gt;</a>
 </li>
 <li>plos_cnt
 : <a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#a9c8601854f0b92601fd197a8358a7075">devices::rf::NRF24L01&lt; CSN, CE &gt;::observe_tx_t</a>
@@ -104,11 +109,12 @@ $(document).ready(function(){initNavTree('functions_p.html','');});
 <li>PORT
 : <a class="el" href="classgpio_1_1_fast_masked_port.html#a61ed0ca3e9997ed8133294c30c4765ff">gpio::FastMaskedPort&lt; PORT_ &gt;</a>
 , <a class="el" href="classgpio_1_1_fast_pin.html#a3a54cab72f69b0194d51a2b3b5afdf88">gpio::FastPin&lt; PORT_, BIT_ &gt;</a>
-, <a class="el" href="classgpio_1_1_fast_pin_type.html#ae96c82f43853fcbea8390e39f68792f7">gpio::FastPinType&lt; DPIN &gt;</a>
+, <a class="el" href="classgpio_1_1_fast_pin_type.html#a9b79040d09c151361c55fd543070c845">gpio::FastPinType&lt; DPIN_ &gt;</a>
 , <a class="el" href="classgpio_1_1_fast_port.html#a968f6fce6710b6a655391f1a6e589872">gpio::FastPort&lt; PORT_ &gt;</a>
+, <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a13a3e5d369e6beb06c05b01715308f0a">interrupt::PCISignal&lt; PORT_ &gt;</a>
 </li>
 <li>PORT_TYPE
-: <a class="el" href="classgpio_1_1_fast_pin_type.html#ad6235bdb9a6f0fccb3b192161ee2bbc8">gpio::FastPinType&lt; DPIN &gt;</a>
+: <a class="el" href="classgpio_1_1_fast_pin_type.html#a7b7dc71e82eba871bdb45b1fe063f8de">gpio::FastPinType&lt; DPIN_ &gt;</a>
 </li>
 <li>powerdown()
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a1d1a753fa86ed08feeb3e3dd8a95c8cd">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
@@ -120,37 +126,42 @@ $(document).ready(function(){initNavTree('functions_p.html','');});
 : <a class="el" href="classstreams_1_1_format_base.html#a82571a0d1604e46ebb9aa95fe9be3b35">streams::FormatBase</a>
 </li>
 <li>PRESCALER
-: <a class="el" href="classanalog_1_1_analog_input.html#a1f1720987eac7d431bbf033faaaac9f5">analog::AnalogInput&lt; APIN, AREF, SAMPLE_TYPE, MAXFREQ &gt;</a>
+: <a class="el" href="classanalog_1_1_analog_input.html#a55510fc4cb79562a68a71aa61117935a">analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;</a>
+, <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">timer::Calculator&lt; NTIMER_ &gt;</a>
+, <a class="el" href="classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c">timer::Timer&lt; NTIMER_ &gt;</a>
+</li>
+<li>PULSED
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#a8157e700b6b6c750bd8d37db84a86fb2">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
 </li>
 <li>PulseTimer_prescaler()
-: <a class="el" href="structtimer_1_1_calculator.html#ad98900e92b31bff2f77b31c27328ff99">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#af4475e3f5db80e50cd1133a121bd954a">timer::Calculator&lt; NTIMER_ &gt;</a>
 </li>
 <li>PulseTimer_value()
-: <a class="el" href="structtimer_1_1_calculator.html#a3fa3135fd3c6310cad81027597e578e9">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#a52f8badc8b0d337d876530b7164fefd3">timer::Calculator&lt; NTIMER_ &gt;</a>
 </li>
 <li>put()
-: <a class="el" href="classstreams_1_1_formatted_output.html#a4a830e549b214156c20fc7dd32ddf62f">streams::FormattedOutput&lt; STREAM &gt;</a>
-, <a class="el" href="classstreams_1_1_output_buffer.html#a13930bc6824f8a30beb2e0034981a30d">streams::OutputBuffer</a>
+: <a class="el" href="classstreams_1_1_formatted_output.html#a9c930d38eb4f601059b3c03a010efdea">streams::FormattedOutput&lt; STREAM_ &gt;</a>
+, <a class="el" href="classstreams_1_1_output_buffer.html#a9e56188860122ecde913568da279dfbd">streams::OutputBuffer</a>
 </li>
 <li>puts()
-: <a class="el" href="classstreams_1_1_formatted_output.html#aa81741006a95cb454f1f9e4fc90adf6a">streams::FormattedOutput&lt; STREAM &gt;</a>
+: <a class="el" href="classstreams_1_1_formatted_output.html#a0f727634ce6d2c673ab3614edb5f54e4">streams::FormattedOutput&lt; STREAM_ &gt;</a>
 , <a class="el" href="classstreams_1_1_output_buffer.html#a37f1a7f65ba4abf7c946ba1bfb144917">streams::OutputBuffer</a>
 </li>
 <li>PWM_ICR_counter()
-: <a class="el" href="structtimer_1_1_calculator.html#aa548bd45663084e400f63829b23444b4">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951">timer::Calculator&lt; NTIMER_ &gt;</a>
 </li>
 <li>PWM_ICR_frequency()
-: <a class="el" href="structtimer_1_1_calculator.html#a9a70c00e9100f56fcc275a8085b5ac5e">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e">timer::Calculator&lt; NTIMER_ &gt;</a>
 </li>
 <li>PWM_ICR_prescaler()
-: <a class="el" href="structtimer_1_1_calculator.html#a49d54dd04c7296fcbb033443567bbfd0">timer::Calculator&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#a477b522376339b0166772dc842b46374">timer::Calculator&lt; NTIMER_ &gt;</a>
 </li>
 <li>PWM_MAX
-: <a class="el" href="structtimer_1_1_calculator.html#a772f2150f4dbd4cfa58197b436e859fb">timer::Calculator&lt; TIMER &gt;</a>
-, <a class="el" href="classtimer_1_1_timer.html#a9165e68e0050cc46f07bb52b2064d3e9">timer::Timer&lt; TIMER &gt;</a>
+: <a class="el" href="structtimer_1_1_calculator.html#aa9cc28cbfd459e483725bc58751ea87c">timer::Calculator&lt; NTIMER_ &gt;</a>
+, <a class="el" href="classtimer_1_1_timer.html#ab733459f1a47b14a227a41a609174e82">timer::Timer&lt; NTIMER_ &gt;</a>
 </li>
 <li>PWMOutput()
-: <a class="el" href="classanalog_1_1_p_w_m_output.html#a23f43b87ae467b32eaf2fb0c098adb97">analog::PWMOutput&lt; PIN, PULSED &gt;</a>
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#abe4e79680a95585223ec740e9a770ca7">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

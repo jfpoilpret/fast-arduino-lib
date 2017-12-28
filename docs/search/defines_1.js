@@ -23,7 +23,7 @@ var searchData=
   ['register_5fuart_5fisr',['REGISTER_UART_ISR',['../uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29',1,'uart.h']]],
   ['register_5fuarx_5fisr',['REGISTER_UARX_ISR',['../uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0',1,'uart.h']]],
   ['register_5fuatx_5fisr',['REGISTER_UATX_ISR',['../uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10',1,'uart.h']]],
-  ['register_5fwatchdog_5fclock_5fisr',['REGISTER_WATCHDOG_CLOCK_ISR',['../watchdog_8h.html#ad060c52a2a6ab7f8db2dfc957736c390',1,'watchdog.h']]],
+  ['register_5fwatchdog_5fclock_5fisr',['REGISTER_WATCHDOG_CLOCK_ISR',['../watchdog_8h.html#a6998639a03718afa44f5626c17ce8994',1,'watchdog.h']]],
   ['register_5fwatchdog_5fisr_5fempty',['REGISTER_WATCHDOG_ISR_EMPTY',['../watchdog_8h.html#adb4cc81538efc2536ee6e1d06ae4b92f',1,'watchdog.h']]],
   ['register_5fwatchdog_5fisr_5ffunction',['REGISTER_WATCHDOG_ISR_FUNCTION',['../watchdog_8h.html#adb0bf0158356e2965afaae4fefb39248',1,'watchdog.h']]],
   ['register_5fwatchdog_5fisr_5fmethod',['REGISTER_WATCHDOG_ISR_METHOD',['../watchdog_8h.html#a04cf0d3a526304c80ae5bf73ee63edb0',1,'watchdog.h']]]

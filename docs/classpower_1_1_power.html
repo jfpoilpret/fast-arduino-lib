@@ -87,23 +87,131 @@ $(document).ready(function(){initNavTree('classpower_1_1_power.html','');});
 <div class="title">power::Power Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This class contains the API for handling power sleep modes.  
+ <a href="classpower_1_1_power.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="power_8h_source.html">fastarduino/power.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a0b8a9b4738866a8c71d10d50f6668e3d"><td class="memItemLeft" align="right" valign="top"><a id="a0b8a9b4738866a8c71d10d50f6668e3d"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>set_default_mode</b> (<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a> mode)</td></tr>
+<tr class="memitem:a0b8a9b4738866a8c71d10d50f6668e3d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d">set_default_mode</a> (<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a> mode)</td></tr>
+<tr class="memdesc:a0b8a9b4738866a8c71d10d50f6668e3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the default sleep mode, that will be used by next calls to <code><a class="el" href="classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b" title="Enter power sleep mode as defined by Power::set_default_mode(). ">Power::sleep()</a></code> and <code><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a></code>.  <a href="#a0b8a9b4738866a8c71d10d50f6668e3d">More...</a><br /></td></tr>
 <tr class="separator:a0b8a9b4738866a8c71d10d50f6668e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0bfb70818b6e364f8e6e0d5745ba254b"><td class="memItemLeft" align="right" valign="top"><a id="a0bfb70818b6e364f8e6e0d5745ba254b"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>sleep</b> ()</td></tr>
+<tr class="memitem:a0bfb70818b6e364f8e6e0d5745ba254b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b">sleep</a> ()</td></tr>
+<tr class="memdesc:a0bfb70818b6e364f8e6e0d5745ba254b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enter power sleep mode as defined by <code><a class="el" href="classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d" title="Set the default sleep mode, that will be used by next calls to Power::sleep() and time::yield()...">Power::set_default_mode()</a></code>.  <a href="#a0bfb70818b6e364f8e6e0d5745ba254b">More...</a><br /></td></tr>
 <tr class="separator:a0bfb70818b6e364f8e6e0d5745ba254b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8380885011701d1936ea37b64a1e6b61"><td class="memItemLeft" align="right" valign="top"><a id="a8380885011701d1936ea37b64a1e6b61"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>sleep</b> (<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a> mode)</td></tr>
+<tr class="memitem:a8380885011701d1936ea37b64a1e6b61"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpower_1_1_power.html#a8380885011701d1936ea37b64a1e6b61">sleep</a> (<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a> mode)</td></tr>
+<tr class="memdesc:a8380885011701d1936ea37b64a1e6b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enter a specific power sleep mode.  <a href="#a8380885011701d1936ea37b64a1e6b61">More...</a><br /></td></tr>
 <tr class="separator:a8380885011701d1936ea37b64a1e6b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="power_8h_source.html#l00025">25</a> of file <a class="el" href="power_8h_source.html">power.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<div class="textblock"><p>This class contains the API for handling power sleep modes. </p>
+<p>It is not aimed for instantiation, as all its methods are static. </p>
+
+<p class="definition">Definition at line <a class="el" href="power_8h_source.html#l00038">38</a> of file <a class="el" href="power_8h_source.html">power.h</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0b8a9b4738866a8c71d10d50f6668e3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b8a9b4738866a8c71d10d50f6668e3d">&#9670;&nbsp;</a></span>set_default_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void power::Power::set_default_mode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the default sleep mode, that will be used by next calls to <code><a class="el" href="classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b" title="Enter power sleep mode as defined by Power::set_default_mode(). ">Power::sleep()</a></code> and <code><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a></code>. </p>
+<p>Before this method is called, the default mode is set to <code>board::SleepMode::IDLE</code>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b" title="Enter power sleep mode as defined by Power::set_default_mode(). ">Power::sleep()</a> </dd>
+<dd>
+<a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="power_8h_source.html#l00052">52</a> of file <a class="el" href="power_8h_source.html">power.h</a>.</p>
+
+</div>
+</div>
+<a id="a0bfb70818b6e364f8e6e0d5745ba254b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bfb70818b6e364f8e6e0d5745ba254b">&#9670;&nbsp;</a></span>sleep() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void power::Power::sleep </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enter power sleep mode as defined by <code><a class="el" href="classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d" title="Set the default sleep mode, that will be used by next calls to Power::sleep() and time::yield()...">Power::set_default_mode()</a></code>. </p>
+<p>This method will return only when MCU is awakened (the awakening signals depend on the selected sleep mode).</p>
+<p>If you want your program to enter a different sleep mode than the default, you should call <code><a class="el" href="classpower_1_1_power.html#a8380885011701d1936ea37b64a1e6b61" title="Enter a specific power sleep mode. ">Power::sleep(board::SleepMode)</a></code> instead.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d" title="Set the default sleep mode, that will be used by next calls to Power::sleep() and time::yield()...">Power::set_default_mode()</a> </dd>
+<dd>
+<a class="el" href="classpower_1_1_power.html#a8380885011701d1936ea37b64a1e6b61" title="Enter a specific power sleep mode. ">Power::sleep(board::SleepMode)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="power_8h_source.html#l00068">68</a> of file <a class="el" href="power_8h_source.html">power.h</a>.</p>
+
+</div>
+</div>
+<a id="a8380885011701d1936ea37b64a1e6b61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8380885011701d1936ea37b64a1e6b61">&#9670;&nbsp;</a></span>sleep() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void power::Power::sleep </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enter a specific power sleep mode. </p>
+<p>This method will return only when MCU is awakened (the awakening signals depend on the selected sleep mode).</p>
+<p>If you want your program to enter the default sleep mode (as defined by <code><a class="el" href="classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d" title="Set the default sleep mode, that will be used by next calls to Power::sleep() and time::yield()...">Power::set_default_mode()</a></code>), you should call <code><a class="el" href="classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b" title="Enter power sleep mode as defined by Power::set_default_mode(). ">Power::sleep()</a></code> instead.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b" title="Enter power sleep mode as defined by Power::set_default_mode(). ">Power::sleep()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="power_8h_source.html#l00083">83</a> of file <a class="el" href="power_8h_source.html">power.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>fastarduino/<a class="el" href="power_8h_source.html">power.h</a></li>
 <li>fastarduino/<a class="el" href="power_8cpp_source.html">power.cpp</a></li>
 </ul>
@@ -112,7 +220,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>sleep</b> (<a 
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>power</b></li><li class="navelem"><a class="el" href="classpower_1_1_power.html">Power</a></li>
+    <li class="navelem"><a class="el" href="namespacepower.html">power</a></li><li class="navelem"><a class="el" href="classpower_1_1_power.html">Power</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

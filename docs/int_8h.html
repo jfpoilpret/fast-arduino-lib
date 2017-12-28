@@ -121,7 +121,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt; PIN &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt; PIN_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler of an External Interrupt.  <a href="classinterrupt_1_1_i_n_t_signal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -200,7 +200,7 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">static_assert(board_traits::DigitalPin_trait&lt; PIN &gt;::IS_INT, <span class="stringliteral">&quot;PIN must be an INT pin.&quot;</span>);                                \</div><div class="line">static_assert(board_traits::ExternalInterruptPin_trait&lt; PIN &gt;::INT == INT_NUM , <span class="stringliteral">&quot;PIN INT number must match INT_NUM&quot;</span>);   \</div><div class="line">REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">static_assert(board_traits::DigitalPin_trait&lt;PIN&gt;::IS_INT, <span class="stringliteral">&quot;PIN must be an INT pin.&quot;</span>);                             \</div><div class="line">    static_assert(board_traits::ExternalInterruptPin_trait&lt;PIN&gt;::INT == INT_NUM, <span class="stringliteral">&quot;PIN INT number must match INT_NUM&quot;</span>); \</div><div class="line">    REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)</div></div><!-- fragment -->
 <p>Register the necessary ISR (Interrupt Service Routine) for an External Interrupt pin. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -247,7 +247,7 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">static_assert(board_traits::DigitalPin_trait&lt; PIN &gt;::IS_INT, <span class="stringliteral">&quot;PIN must be an INT pin.&quot;</span>);                                \</div><div class="line">static_assert(board_traits::ExternalInterruptPin_trait&lt; PIN &gt;::INT == INT_NUM , <span class="stringliteral">&quot;PIN INT number must match INT_NUM&quot;</span>);   \</div><div class="line">REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">static_assert(board_traits::DigitalPin_trait&lt;PIN&gt;::IS_INT, <span class="stringliteral">&quot;PIN must be an INT pin.&quot;</span>);                             \</div><div class="line">    static_assert(board_traits::ExternalInterruptPin_trait&lt;PIN&gt;::INT == INT_NUM, <span class="stringliteral">&quot;PIN INT number must match INT_NUM&quot;</span>); \</div><div class="line">    REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)</div></div><!-- fragment -->
 <p>Register the necessary ISR (Interrupt Service Routine) for an External Interrupt pin. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -287,7 +287,7 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">static_assert(board_traits::DigitalPin_trait&lt; PIN &gt;::IS_INT, <span class="stringliteral">&quot;PIN must be an INT pin.&quot;</span>);                                \</div><div class="line">static_assert(board_traits::ExternalInterruptPin_trait&lt; PIN &gt;::INT == INT_NUM , <span class="stringliteral">&quot;PIN INT number must match INT_NUM&quot;</span>);   \</div><div class="line">EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">static_assert(board_traits::DigitalPin_trait&lt;PIN&gt;::IS_INT, <span class="stringliteral">&quot;PIN must be an INT pin.&quot;</span>);                             \</div><div class="line">    static_assert(board_traits::ExternalInterruptPin_trait&lt;PIN&gt;::INT == INT_NUM, <span class="stringliteral">&quot;PIN INT number must match INT_NUM&quot;</span>); \</div><div class="line">    EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));</div></div><!-- fragment -->
 <p>Register an empty ISR (Interrupt Service Routine) for an External Interrupt pin. </p>
 <p>This can be useful if you just need to wake up the MCU from an external signal, but do not need to perform any sepcific stuff with a callback. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

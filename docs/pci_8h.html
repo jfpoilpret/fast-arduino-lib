@@ -121,7 +121,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal&lt; PORT &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal&lt; PORT_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler of a Pin Change Interrupt vector, i.e.  <a href="classinterrupt_1_1_p_c_i_signal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structinterrupt_1_1_p_c_i_type.html">interrupt::PCIType&lt; PIN &gt;</a></td></tr>
@@ -195,7 +195,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)                           \</div><div class="line">REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)             \</div><div class="line">    REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)</div></div><!-- fragment -->
 <p>Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -248,7 +248,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)                           \</div><div class="line">REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)      \</div><div class="line">    REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)</div></div><!-- fragment -->
 <p>Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -295,7 +295,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)                           \</div><div class="line">EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__) \</div><div class="line">    EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))</div></div><!-- fragment -->
 <p>Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt vector. </p>
 <p>This can be useful if you just need to wake up the MCU from an external signal, but do not need to perform any sepcific stuff with a callback. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

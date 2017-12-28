@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: timer::Calculator&lt; TIMER &gt; Struct Template Reference</title>
+<title>FastArduino: timer::Calculator&lt; NTIMER_ &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -86,102 +86,111 @@ $(document).ready(function(){initNavTree('structtimer_1_1_calculator.html','');}
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structtimer_1_1_calculator-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">timer::Calculator&lt; TIMER &gt; Struct Template Reference</div>  </div>
+<div class="title">timer::Calculator&lt; NTIMER_ &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Defines a set of calculation methods for the given <code>TIMER</code> The behavior of these methods is specific to each AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> are there can be many important differences between 2 timers on AVR.  
+<p>Defines a set of calculation methods for the given <code>NTIMER_</code> The behavior of these methods is specific to each AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> are there can be many important differences between 2 timers on AVR.  
  <a href="structtimer_1_1_calculator.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="timer_8h_source.html">fastarduino/timer.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a44e39b59192f128840b456348e24a1c0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">TIMER_TYPE</a> = typename TRAIT::TYPE</td></tr>
-<tr class="memdesc:a44e39b59192f128840b456348e24a1c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The timer type: either <code>uint8_t</code> or <code>uint16_t</code>; this is defined and not changeable for each <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>.  <a href="#a44e39b59192f128840b456348e24a1c0">More...</a><br /></td></tr>
-<tr class="separator:a44e39b59192f128840b456348e24a1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae34afaa9adb2f263d2db42ba628c71d8"><td class="memItemLeft" align="right" valign="top"><a id="ae34afaa9adb2f263d2db42ba628c71d8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> = typename PRESCALERS_TRAIT::TYPE</td></tr>
-<tr class="memdesc:ae34afaa9adb2f263d2db42ba628c71d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type (<code>enum</code>) of the possible prescaler values for this timer; this is defined and not changeable for each <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>. <br /></td></tr>
-<tr class="separator:ae34afaa9adb2f263d2db42ba628c71d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77c46427baeaa86aff4787b6c75f807c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> = typename TRAIT::TYPE</td></tr>
+<tr class="memdesc:a77c46427baeaa86aff4787b6c75f807c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The timer type: either <code>uint8_t</code> or <code>uint16_t</code>; this is defined and not changeable for each <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>.  <a href="#a77c46427baeaa86aff4787b6c75f807c">More...</a><br /></td></tr>
+<tr class="separator:a77c46427baeaa86aff4787b6c75f807c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a892cea8920e7d5b2621fcd7ccfd0c8d0"><td class="memItemLeft" align="right" valign="top"><a id="a892cea8920e7d5b2621fcd7ccfd0c8d0"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> = typename PRESCALERS_TRAIT::TYPE</td></tr>
+<tr class="memdesc:a892cea8920e7d5b2621fcd7ccfd0c8d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type (<code>enum</code>) of the possible prescaler values for this timer; this is defined and not changeable for each <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>. <br /></td></tr>
+<tr class="separator:a892cea8920e7d5b2621fcd7ccfd0c8d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3af87e51b4091606d74dc06fd42a5203"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a3af87e51b4091606d74dc06fd42a5203">tick_prescaler</a> (uint32_t us_per_tick)</td></tr>
-<tr class="memdesc:a3af87e51b4091606d74dc06fd42a5203"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler to use for this timer, in order to generate timer ticks of <code>us_per_tick</code> microseconds or less.  <a href="#a3af87e51b4091606d74dc06fd42a5203">More...</a><br /></td></tr>
-<tr class="separator:a3af87e51b4091606d74dc06fd42a5203"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a493755c4f41b27f11b37657d378341a9"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a493755c4f41b27f11b37657d378341a9">CTC_prescaler</a> (uint32_t us)</td></tr>
-<tr class="memdesc:a493755c4f41b27f11b37657d378341a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, in order to be able to count up to <code>us</code> microseconds.  <a href="#a493755c4f41b27f11b37657d378341a9">More...</a><br /></td></tr>
-<tr class="separator:a493755c4f41b27f11b37657d378341a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4892832813ae14347bc4299d779a0331"><td class="memItemLeft" align="right" valign="top">static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a4892832813ae14347bc4299d779a0331">CTC_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> prescaler)</td></tr>
-<tr class="memdesc:a4892832813ae14347bc4299d779a0331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, if it was using <code>prescaler</code>.  <a href="#a4892832813ae14347bc4299d779a0331">More...</a><br /></td></tr>
-<tr class="separator:a4892832813ae14347bc4299d779a0331"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44116fbe0411b953c2337d1ad3709f1c"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">TIMER_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a44116fbe0411b953c2337d1ad3709f1c">CTC_counter</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> prescaler, uint32_t us)</td></tr>
-<tr class="memdesc:a44116fbe0411b953c2337d1ad3709f1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the value of counter to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, with <code>prescaler</code>, in order to reach <code>us</code> microseconds.  <a href="#a44116fbe0411b953c2337d1ad3709f1c">More...</a><br /></td></tr>
-<tr class="separator:a44116fbe0411b953c2337d1ad3709f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa39cad0439ffd091468d04900e6ba50a"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aa39cad0439ffd091468d04900e6ba50a">is_adequate_for_CTC</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> p, uint32_t us)</td></tr>
-<tr class="memdesc:aa39cad0439ffd091468d04900e6ba50a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that the given prescaler <code>p</code> is suitable for this timer in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> in ordeer to be able to reach <code>us</code> microseconds.  <a href="#aa39cad0439ffd091468d04900e6ba50a">More...</a><br /></td></tr>
-<tr class="separator:aa39cad0439ffd091468d04900e6ba50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d48b90c4296e8b2cdce1f7ae29391c1"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a1d48b90c4296e8b2cdce1f7ae29391c1">FastPWM_prescaler</a> (uint16_t pwm_frequency)</td></tr>
-<tr class="memdesc:a1d48b90c4296e8b2cdce1f7ae29391c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a3c777f2debe013caa4c85ae201e9bda0" title="Timer &quot;Fast Phase Width Modulation&quot; mode: counter is incremented until it reaches MAX value (0xFF for...">TimerMode::FAST_PWM</a> mode, in order to be able to reach at least <code>pwm_frequency</code>.  <a href="#a1d48b90c4296e8b2cdce1f7ae29391c1">More...</a><br /></td></tr>
-<tr class="separator:a1d48b90c4296e8b2cdce1f7ae29391c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac378c076955bb22926c53b52fdfa8278"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#ac378c076955bb22926c53b52fdfa8278">FastPWM_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> prescaler)</td></tr>
-<tr class="memdesc:ac378c076955bb22926c53b52fdfa8278"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a3c777f2debe013caa4c85ae201e9bda0" title="Timer &quot;Fast Phase Width Modulation&quot; mode: counter is incremented until it reaches MAX value (0xFF for...">TimerMode::FAST_PWM</a> mode, if it was using <code>prescaler</code>.  <a href="#ac378c076955bb22926c53b52fdfa8278">More...</a><br /></td></tr>
-<tr class="separator:ac378c076955bb22926c53b52fdfa8278"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c6b1b88e6ffe96b41c078a025840d21"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a6c6b1b88e6ffe96b41c078a025840d21">PhaseCorrectPWM_prescaler</a> (uint16_t pwm_frequency)</td></tr>
-<tr class="memdesc:a6c6b1b88e6ffe96b41c078a025840d21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770" title="Timer &quot;Phase Correct Pulse Width Modulation&quot; mode: counter is incremented until MAX (0xFF for 8-bits ...">TimerMode::PHASE_CORRECT_PWM</a> mode, in order to be able to reach at least <code>pwm_frequency</code>.  <a href="#a6c6b1b88e6ffe96b41c078a025840d21">More...</a><br /></td></tr>
-<tr class="separator:a6c6b1b88e6ffe96b41c078a025840d21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe5b358eb6efdbcca601653a394d72c3"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#abe5b358eb6efdbcca601653a394d72c3">PhaseCorrectPWM_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> prescaler)</td></tr>
-<tr class="memdesc:abe5b358eb6efdbcca601653a394d72c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770" title="Timer &quot;Phase Correct Pulse Width Modulation&quot; mode: counter is incremented until MAX (0xFF for 8-bits ...">TimerMode::PHASE_CORRECT_PWM</a> mode, if it was using <code>prescaler</code>.  <a href="#abe5b358eb6efdbcca601653a394d72c3">More...</a><br /></td></tr>
-<tr class="separator:abe5b358eb6efdbcca601653a394d72c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad98900e92b31bff2f77b31c27328ff99"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#ad98900e92b31bff2f77b31c27328ff99">PulseTimer_prescaler</a> (uint16_t max_pulse_width_us, uint16_t pulse_frequency)</td></tr>
-<tr class="memdesc:ad98900e92b31bff2f77b31c27328ff99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#ad98900e92b31bff2f77b31c27328ff99">More...</a><br /></td></tr>
-<tr class="separator:ad98900e92b31bff2f77b31c27328ff99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fa3135fd3c6310cad81027597e578e9"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">TIMER_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a3fa3135fd3c6310cad81027597e578e9">PulseTimer_value</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> prescaler, uint16_t period_us)</td></tr>
-<tr class="memdesc:a3fa3135fd3c6310cad81027597e578e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to produce a pulse of the required width <code>period_us</code> with the given <code>prescaler</code>.  <a href="#a3fa3135fd3c6310cad81027597e578e9">More...</a><br /></td></tr>
-<tr class="separator:a3fa3135fd3c6310cad81027597e578e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49d54dd04c7296fcbb033443567bbfd0"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a49d54dd04c7296fcbb033443567bbfd0">PWM_ICR_prescaler</a> (uint16_t pwm_frequency)</td></tr>
-<tr class="memdesc:a49d54dd04c7296fcbb033443567bbfd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#a49d54dd04c7296fcbb033443567bbfd0">More...</a><br /></td></tr>
-<tr class="separator:a49d54dd04c7296fcbb033443567bbfd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a70c00e9100f56fcc275a8085b5ac5e"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a9a70c00e9100f56fcc275a8085b5ac5e">PWM_ICR_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> prescaler, uint16_t counter)</td></tr>
-<tr class="memdesc:a9a70c00e9100f56fcc275a8085b5ac5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, if it was using <code>prescaler</code> and <code>counter</code>.  <a href="#a9a70c00e9100f56fcc275a8085b5ac5e">More...</a><br /></td></tr>
-<tr class="separator:a9a70c00e9100f56fcc275a8085b5ac5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa548bd45663084e400f63829b23444b4"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aa548bd45663084e400f63829b23444b4">PWM_ICR_counter</a> (<a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> prescaler, uint16_t pwm_frequency)</td></tr>
-<tr class="memdesc:aa548bd45663084e400f63829b23444b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal counter TOP value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with the given <code>prescaler</code>.  <a href="#aa548bd45663084e400f63829b23444b4">More...</a><br /></td></tr>
-<tr class="separator:aa548bd45663084e400f63829b23444b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a319ea208456b508d34bc7b65e6f90e59"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a319ea208456b508d34bc7b65e6f90e59">tick_prescaler</a> (uint32_t us_per_tick)</td></tr>
+<tr class="memdesc:a319ea208456b508d34bc7b65e6f90e59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler to use for this timer, in order to generate timer ticks of <code>us_per_tick</code> microseconds or less.  <a href="#a319ea208456b508d34bc7b65e6f90e59">More...</a><br /></td></tr>
+<tr class="separator:a319ea208456b508d34bc7b65e6f90e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53ed70bbedba38aea55fd24a375753bd"><td class="memItemLeft" align="right" valign="top"><a id="a53ed70bbedba38aea55fd24a375753bd"></a>
+static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>ticks_to_us</b> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> ticks)</td></tr>
+<tr class="separator:a53ed70bbedba38aea55fd24a375753bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa7329a7d3fa0263f7f3311617228067"><td class="memItemLeft" align="right" valign="top"><a id="afa7329a7d3fa0263f7f3311617228067"></a>
+static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><b>us_to_ticks</b> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint32_t us)</td></tr>
+<tr class="separator:afa7329a7d3fa0263f7f3311617228067"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf6b1350daffe0bee6a1ffcdd3941c29"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29">CTC_prescaler</a> (uint32_t us)</td></tr>
+<tr class="memdesc:aaf6b1350daffe0bee6a1ffcdd3941c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, in order to be able to count up to <code>us</code> microseconds.  <a href="#aaf6b1350daffe0bee6a1ffcdd3941c29">More...</a><br /></td></tr>
+<tr class="separator:aaf6b1350daffe0bee6a1ffcdd3941c29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceb36f26794f7d23319db3c964d21fc4"><td class="memItemLeft" align="right" valign="top">static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4">CTC_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler)</td></tr>
+<tr class="memdesc:aceb36f26794f7d23319db3c964d21fc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, if it was using <code>prescaler</code>.  <a href="#aceb36f26794f7d23319db3c964d21fc4">More...</a><br /></td></tr>
+<tr class="separator:aceb36f26794f7d23319db3c964d21fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a673be501023fdf70bd06dff90839d455"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455">CTC_counter</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint32_t us)</td></tr>
+<tr class="memdesc:a673be501023fdf70bd06dff90839d455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the value of counter to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, with <code>prescaler</code>, in order to reach <code>us</code> microseconds.  <a href="#a673be501023fdf70bd06dff90839d455">More...</a><br /></td></tr>
+<tr class="separator:a673be501023fdf70bd06dff90839d455"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f53878ea0179bdc8fba364f8fb629e2"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a3f53878ea0179bdc8fba364f8fb629e2">is_adequate_for_CTC</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> p, uint32_t us)</td></tr>
+<tr class="memdesc:a3f53878ea0179bdc8fba364f8fb629e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that the given prescaler <code>p</code> is suitable for this timer in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> in ordeer to be able to reach <code>us</code> microseconds.  <a href="#a3f53878ea0179bdc8fba364f8fb629e2">More...</a><br /></td></tr>
+<tr class="separator:a3f53878ea0179bdc8fba364f8fb629e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c53597343b9f3f8094d90a6618e7507"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a4c53597343b9f3f8094d90a6618e7507">FastPWM_prescaler</a> (uint16_t pwm_frequency)</td></tr>
+<tr class="memdesc:a4c53597343b9f3f8094d90a6618e7507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a3c777f2debe013caa4c85ae201e9bda0" title="Timer &quot;Fast Phase Width Modulation&quot; mode: counter is incremented until it reaches MAX value (0xFF for...">TimerMode::FAST_PWM</a> mode, in order to be able to reach at least <code>pwm_frequency</code>.  <a href="#a4c53597343b9f3f8094d90a6618e7507">More...</a><br /></td></tr>
+<tr class="separator:a4c53597343b9f3f8094d90a6618e7507"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab25ea1fa8d73227cdac44b75ae130161"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#ab25ea1fa8d73227cdac44b75ae130161">FastPWM_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler)</td></tr>
+<tr class="memdesc:ab25ea1fa8d73227cdac44b75ae130161"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a3c777f2debe013caa4c85ae201e9bda0" title="Timer &quot;Fast Phase Width Modulation&quot; mode: counter is incremented until it reaches MAX value (0xFF for...">TimerMode::FAST_PWM</a> mode, if it was using <code>prescaler</code>.  <a href="#ab25ea1fa8d73227cdac44b75ae130161">More...</a><br /></td></tr>
+<tr class="separator:ab25ea1fa8d73227cdac44b75ae130161"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a466c0e2c7768c6f95672ab9c5a371aa1"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1">PhaseCorrectPWM_prescaler</a> (uint16_t pwm_frequency)</td></tr>
+<tr class="memdesc:a466c0e2c7768c6f95672ab9c5a371aa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770" title="Timer &quot;Phase Correct Pulse Width Modulation&quot; mode: counter is incremented until MAX (0xFF for 8-bits ...">TimerMode::PHASE_CORRECT_PWM</a> mode, in order to be able to reach at least <code>pwm_frequency</code>.  <a href="#a466c0e2c7768c6f95672ab9c5a371aa1">More...</a><br /></td></tr>
+<tr class="separator:a466c0e2c7768c6f95672ab9c5a371aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8eec5399160940b02b5ab12b79962f4c"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a8eec5399160940b02b5ab12b79962f4c">PhaseCorrectPWM_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler)</td></tr>
+<tr class="memdesc:a8eec5399160940b02b5ab12b79962f4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770" title="Timer &quot;Phase Correct Pulse Width Modulation&quot; mode: counter is incremented until MAX (0xFF for 8-bits ...">TimerMode::PHASE_CORRECT_PWM</a> mode, if it was using <code>prescaler</code>.  <a href="#a8eec5399160940b02b5ab12b79962f4c">More...</a><br /></td></tr>
+<tr class="separator:a8eec5399160940b02b5ab12b79962f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4475e3f5db80e50cd1133a121bd954a"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#af4475e3f5db80e50cd1133a121bd954a">PulseTimer_prescaler</a> (uint16_t max_pulse_width_us, uint16_t pulse_frequency)</td></tr>
+<tr class="memdesc:af4475e3f5db80e50cd1133a121bd954a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#af4475e3f5db80e50cd1133a121bd954a">More...</a><br /></td></tr>
+<tr class="separator:af4475e3f5db80e50cd1133a121bd954a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52f8badc8b0d337d876530b7164fefd3"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a52f8badc8b0d337d876530b7164fefd3">PulseTimer_value</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint16_t period_us)</td></tr>
+<tr class="memdesc:a52f8badc8b0d337d876530b7164fefd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to produce a pulse of the required width <code>period_us</code> with the given <code>prescaler</code>.  <a href="#a52f8badc8b0d337d876530b7164fefd3">More...</a><br /></td></tr>
+<tr class="separator:a52f8badc8b0d337d876530b7164fefd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a477b522376339b0166772dc842b46374"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a477b522376339b0166772dc842b46374">PWM_ICR_prescaler</a> (uint16_t pwm_frequency)</td></tr>
+<tr class="memdesc:a477b522376339b0166772dc842b46374"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#a477b522376339b0166772dc842b46374">More...</a><br /></td></tr>
+<tr class="separator:a477b522376339b0166772dc842b46374"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0cccab647282b92d832d1607afea3e"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e">PWM_ICR_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint16_t counter)</td></tr>
+<tr class="memdesc:aab0cccab647282b92d832d1607afea3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, if it was using <code>prescaler</code> and <code>counter</code>.  <a href="#aab0cccab647282b92d832d1607afea3e">More...</a><br /></td></tr>
+<tr class="separator:aab0cccab647282b92d832d1607afea3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0efa69f8b7fb5f7a53ce85fe0769e951"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951">PWM_ICR_counter</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint16_t pwm_frequency)</td></tr>
+<tr class="memdesc:a0efa69f8b7fb5f7a53ce85fe0769e951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal counter TOP value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with the given <code>prescaler</code>.  <a href="#a0efa69f8b7fb5f7a53ce85fe0769e951">More...</a><br /></td></tr>
+<tr class="separator:a0efa69f8b7fb5f7a53ce85fe0769e951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a772f2150f4dbd4cfa58197b436e859fb"><td class="memItemLeft" align="right" valign="top"><a id="a772f2150f4dbd4cfa58197b436e859fb"></a>
-static constexpr const <a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">TIMER_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a772f2150f4dbd4cfa58197b436e859fb">PWM_MAX</a> = TRAIT::MAX_PWM</td></tr>
-<tr class="memdesc:a772f2150f4dbd4cfa58197b436e859fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum value you can use for this timer in PWM modes: using this value will set PWM duty as 100%. <br /></td></tr>
-<tr class="separator:a772f2150f4dbd4cfa58197b436e859fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1d170c81cc5fe9c43b79d8ca2aec14b"><td class="memItemLeft" align="right" valign="top"><a id="ac1d170c81cc5fe9c43b79d8ca2aec14b"></a>
+static constexpr const <a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>NTIMER</b> = NTIMER_</td></tr>
+<tr class="separator:ac1d170c81cc5fe9c43b79d8ca2aec14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9cc28cbfd459e483725bc58751ea87c"><td class="memItemLeft" align="right" valign="top"><a id="aa9cc28cbfd459e483725bc58751ea87c"></a>
+static constexpr const <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aa9cc28cbfd459e483725bc58751ea87c">PWM_MAX</a> = TRAIT::MAX_PWM</td></tr>
+<tr class="memdesc:aa9cc28cbfd459e483725bc58751ea87c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum value you can use for this timer in PWM modes: using this value will set PWM duty as 100%. <br /></td></tr>
+<tr class="separator:aa9cc28cbfd459e483725bc58751ea87c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;board::Timer TIMER&gt;<br />
-struct timer::Calculator&lt; TIMER &gt;</h3>
+<div class="textblock"><h3>template&lt;board::Timer NTIMER_&gt;<br />
+struct timer::Calculator&lt; NTIMER_ &gt;</h3>
 
-<p>Defines a set of calculation methods for the given <code>TIMER</code> The behavior of these methods is specific to each AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> are there can be many important differences between 2 timers on AVR. </p>
+<p>Defines a set of calculation methods for the given <code>NTIMER_</code> The behavior of these methods is specific to each AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> are there can be many important differences between 2 timers on AVR. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">TIMER</td><td>the timer for which we need calculation methods </td></tr>
+    <tr><td class="paramname">NTIMER_</td><td>the timer for which we need calculation methods </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb" title="Defines all timers available for target MCU. ">board::Timer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00263">263</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00262">262</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a44e39b59192f128840b456348e24a1c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44e39b59192f128840b456348e24a1c0">&#9670;&nbsp;</a></span>TIMER_TYPE</h2>
+<a id="a77c46427baeaa86aff4787b6c75f807c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77c46427baeaa86aff4787b6c75f807c">&#9670;&nbsp;</a></span>TYPE</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::<a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">TIMER_TYPE</a> =  typename TRAIT::TYPE</td>
+          <td class="memname">using <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::<a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> =  typename TRAIT::TYPE</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -189,24 +198,24 @@ template&lt;board::Timer TIMER&gt; </div>
 <p>The timer type: either <code>uint8_t</code> or <code>uint16_t</code>; this is defined and not changeable for each <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>. </p>
 <p><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> counter and max values have this type. </p>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00275">275</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00276">276</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3af87e51b4091606d74dc06fd42a5203"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3af87e51b4091606d74dc06fd42a5203">&#9670;&nbsp;</a></span>tick_prescaler()</h2>
+<a id="a319ea208456b508d34bc7b65e6f90e59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a319ea208456b508d34bc7b65e6f90e59">&#9670;&nbsp;</a></span>tick_prescaler()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::tick_prescaler </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::tick_prescaler </td>
           <td>(</td>
           <td class="paramtype">uint32_t&#160;</td>
           <td class="paramname"><em>us_per_tick</em></td><td>)</td>
@@ -230,23 +239,23 @@ template&lt;board::Timer TIMER&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00297">297</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00298">298</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a493755c4f41b27f11b37657d378341a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a493755c4f41b27f11b37657d378341a9">&#9670;&nbsp;</a></span>CTC_prescaler()</h2>
+<a id="aaf6b1350daffe0bee6a1ffcdd3941c29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf6b1350daffe0bee6a1ffcdd3941c29">&#9670;&nbsp;</a></span>CTC_prescaler()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::CTC_prescaler </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::CTC_prescaler </td>
           <td>(</td>
           <td class="paramtype">uint32_t&#160;</td>
           <td class="paramname"><em>us</em></td><td>)</td>
@@ -269,29 +278,29 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a44116fbe0411b953c2337d1ad3709f1c" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">CTC_counter()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">CTC_counter()</a> </dd>
 <dd>
-<a class="el" href="structtimer_1_1_calculator.html#a4892832813ae14347bc4299d779a0331" title="Computes the frequency at which this timer would perform, in TimerMode::CTC mode, if it was using pre...">CTC_frequency()</a> </dd></dl>
+<a class="el" href="structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4" title="Computes the frequency at which this timer would perform, in TimerMode::CTC mode, if it was using pre...">CTC_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00314">314</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00327">327</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a4892832813ae14347bc4299d779a0331"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4892832813ae14347bc4299d779a0331">&#9670;&nbsp;</a></span>CTC_frequency()</h2>
+<a id="aceb36f26794f7d23319db3c964d21fc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aceb36f26794f7d23319db3c964d21fc4">&#9670;&nbsp;</a></span>CTC_frequency()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr uint32_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::CTC_frequency </td>
+          <td class="memname">static constexpr uint32_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::CTC_frequency </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>prescaler</em></td><td>)</td>
           <td></td>
         </tr>
@@ -312,27 +321,27 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a493755c4f41b27f11b37657d378341a9" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00330">330</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00343">343</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a44116fbe0411b953c2337d1ad3709f1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44116fbe0411b953c2337d1ad3709f1c">&#9670;&nbsp;</a></span>CTC_counter()</h2>
+<a id="a673be501023fdf70bd06dff90839d455"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a673be501023fdf70bd06dff90839d455">&#9670;&nbsp;</a></span>CTC_counter()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">TIMER_TYPE</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::CTC_counter </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::CTC_counter </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>prescaler</em>, </td>
         </tr>
         <tr>
@@ -364,29 +373,29 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the MAX value to be used in order to reach <code>us</code> </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a493755c4f41b27f11b37657d378341a9" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd>
 <dd>
-Timer::begin(TIMER_PRESCALER, TIMER_TYPE) </dd></dl>
+Timer::begin(PRESCALER, TYPE) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00347">347</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00360">360</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="aa39cad0439ffd091468d04900e6ba50a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa39cad0439ffd091468d04900e6ba50a">&#9670;&nbsp;</a></span>is_adequate_for_CTC()</h2>
+<a id="a3f53878ea0179bdc8fba364f8fb629e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f53878ea0179bdc8fba364f8fb629e2">&#9670;&nbsp;</a></span>is_adequate_for_CTC()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr bool <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::is_adequate_for_CTC </td>
+          <td class="memname">static constexpr bool <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::is_adequate_for_CTC </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>p</em>, </td>
         </tr>
         <tr>
@@ -424,27 +433,27 @@ template&lt;board::Timer TIMER&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a493755c4f41b27f11b37657d378341a9" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd>
 <dd>
-<a class="el" href="structtimer_1_1_calculator.html#a44116fbe0411b953c2337d1ad3709f1c" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">CTC_counter()</a> </dd></dl>
+<a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">CTC_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00369">369</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00382">382</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a1d48b90c4296e8b2cdce1f7ae29391c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d48b90c4296e8b2cdce1f7ae29391c1">&#9670;&nbsp;</a></span>FastPWM_prescaler()</h2>
+<a id="a4c53597343b9f3f8094d90a6618e7507"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c53597343b9f3f8094d90a6618e7507">&#9670;&nbsp;</a></span>FastPWM_prescaler()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::FastPWM_prescaler </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::FastPWM_prescaler </td>
           <td>(</td>
           <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>pwm_frequency</em></td><td>)</td>
@@ -467,27 +476,27 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#ac378c076955bb22926c53b52fdfa8278" title="Computes the frequency at which this timer would perform, in TimerMode::FAST_PWM mode, if it was using prescaler. ">FastPWM_frequency()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#ab25ea1fa8d73227cdac44b75ae130161" title="Computes the frequency at which this timer would perform, in TimerMode::FAST_PWM mode, if it was using prescaler. ">FastPWM_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00385">385</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00398">398</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="ac378c076955bb22926c53b52fdfa8278"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac378c076955bb22926c53b52fdfa8278">&#9670;&nbsp;</a></span>FastPWM_frequency()</h2>
+<a id="ab25ea1fa8d73227cdac44b75ae130161"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab25ea1fa8d73227cdac44b75ae130161">&#9670;&nbsp;</a></span>FastPWM_frequency()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::FastPWM_frequency </td>
+          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::FastPWM_frequency </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>prescaler</em></td><td>)</td>
           <td></td>
         </tr>
@@ -508,25 +517,25 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a1d48b90c4296e8b2cdce1f7ae29391c1" title="Computes the ideal prescaler value to use for this timer, in TimerMode::FAST_PWM mode, in order to be able to reach at least pwm_frequency. ">FastPWM_prescaler()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a4c53597343b9f3f8094d90a6618e7507" title="Computes the ideal prescaler value to use for this timer, in TimerMode::FAST_PWM mode, in order to be able to reach at least pwm_frequency. ">FastPWM_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00402">402</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00414">414</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a6c6b1b88e6ffe96b41c078a025840d21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c6b1b88e6ffe96b41c078a025840d21">&#9670;&nbsp;</a></span>PhaseCorrectPWM_prescaler()</h2>
+<a id="a466c0e2c7768c6f95672ab9c5a371aa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a466c0e2c7768c6f95672ab9c5a371aa1">&#9670;&nbsp;</a></span>PhaseCorrectPWM_prescaler()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::PhaseCorrectPWM_prescaler </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::PhaseCorrectPWM_prescaler </td>
           <td>(</td>
           <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>pwm_frequency</em></td><td>)</td>
@@ -549,27 +558,27 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#abe5b358eb6efdbcca601653a394d72c3" title="Computes the frequency at which this timer would perform, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_frequency()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a8eec5399160940b02b5ab12b79962f4c" title="Computes the frequency at which this timer would perform, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00418">418</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00430">430</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="abe5b358eb6efdbcca601653a394d72c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe5b358eb6efdbcca601653a394d72c3">&#9670;&nbsp;</a></span>PhaseCorrectPWM_frequency()</h2>
+<a id="a8eec5399160940b02b5ab12b79962f4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8eec5399160940b02b5ab12b79962f4c">&#9670;&nbsp;</a></span>PhaseCorrectPWM_frequency()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::PhaseCorrectPWM_frequency </td>
+          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::PhaseCorrectPWM_frequency </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>prescaler</em></td><td>)</td>
           <td></td>
         </tr>
@@ -590,25 +599,25 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a6c6b1b88e6ffe96b41c078a025840d21" title="Computes the ideal prescaler value to use for this timer, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_prescaler()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1" title="Computes the ideal prescaler value to use for this timer, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00435">435</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00446">446</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="ad98900e92b31bff2f77b31c27328ff99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad98900e92b31bff2f77b31c27328ff99">&#9670;&nbsp;</a></span>PulseTimer_prescaler()</h2>
+<a id="af4475e3f5db80e50cd1133a121bd954a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4475e3f5db80e50cd1133a121bd954a">&#9670;&nbsp;</a></span>PulseTimer_prescaler()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::PulseTimer_prescaler </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::PulseTimer_prescaler </td>
           <td>(</td>
           <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>max_pulse_width_us</em>, </td>
@@ -642,27 +651,27 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a3fa3135fd3c6310cad81027597e578e9" title="Computes the ideal value to use for this timer, when used in timer::PulseTimer, in order to produce a...">PulseTimer_value()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a52f8badc8b0d337d876530b7164fefd3" title="Computes the ideal value to use for this timer, when used in timer::PulseTimer, in order to produce a...">PulseTimer_value()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00453">453</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00464">464</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a3fa3135fd3c6310cad81027597e578e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3fa3135fd3c6310cad81027597e578e9">&#9670;&nbsp;</a></span>PulseTimer_value()</h2>
+<a id="a52f8badc8b0d337d876530b7164fefd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52f8badc8b0d337d876530b7164fefd3">&#9670;&nbsp;</a></span>PulseTimer_value()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a44e39b59192f128840b456348e24a1c0">TIMER_TYPE</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::PulseTimer_value </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::PulseTimer_value </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>prescaler</em>, </td>
         </tr>
         <tr>
@@ -695,25 +704,25 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the value to use to produce the required pulse </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#ad98900e92b31bff2f77b31c27328ff99" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PulseTimer_prescaler()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#af4475e3f5db80e50cd1133a121bd954a" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PulseTimer_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00473">473</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00484">484</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a49d54dd04c7296fcbb033443567bbfd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49d54dd04c7296fcbb033443567bbfd0">&#9670;&nbsp;</a></span>PWM_ICR_prescaler()</h2>
+<a id="a477b522376339b0166772dc842b46374"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a477b522376339b0166772dc842b46374">&#9670;&nbsp;</a></span>PWM_ICR_prescaler()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::PWM_ICR_prescaler </td>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::PWM_ICR_prescaler </td>
           <td>(</td>
           <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>pwm_frequency</em></td><td>)</td>
@@ -737,29 +746,29 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a9a70c00e9100f56fcc275a8085b5ac5e" title="Computes the frequency at which this timer would perform, when used in timer::PulseTimer, if it was using prescaler and counter. ">PWM_ICR_frequency()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e" title="Computes the frequency at which this timer would perform, when used in timer::PulseTimer, if it was using prescaler and counter. ">PWM_ICR_frequency()</a> </dd>
 <dd>
-<a class="el" href="structtimer_1_1_calculator.html#aa548bd45663084e400f63829b23444b4" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
+<a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00495">495</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00506">506</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="a9a70c00e9100f56fcc275a8085b5ac5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a70c00e9100f56fcc275a8085b5ac5e">&#9670;&nbsp;</a></span>PWM_ICR_frequency()</h2>
+<a id="aab0cccab647282b92d832d1607afea3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab0cccab647282b92d832d1607afea3e">&#9670;&nbsp;</a></span>PWM_ICR_frequency()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::PWM_ICR_frequency </td>
+          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::PWM_ICR_frequency </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>prescaler</em>, </td>
         </tr>
         <tr>
@@ -792,29 +801,29 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a49d54dd04c7296fcbb033443567bbfd0" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PWM_ICR_prescaler()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a477b522376339b0166772dc842b46374" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PWM_ICR_prescaler()</a> </dd>
 <dd>
-<a class="el" href="structtimer_1_1_calculator.html#aa548bd45663084e400f63829b23444b4" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
+<a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00518">518</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00528">528</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
-<a id="aa548bd45663084e400f63829b23444b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa548bd45663084e400f63829b23444b4">&#9670;&nbsp;</a></span>PWM_ICR_counter()</h2>
+<a id="a0efa69f8b7fb5f7a53ce85fe0769e951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0efa69f8b7fb5f7a53ce85fe0769e951">&#9670;&nbsp;</a></span>PWM_ICR_counter()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer TIMER&gt; </div>
+template&lt;board::Timer NTIMER_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; TIMER &gt;::PWM_ICR_counter </td>
+          <td class="memname">static constexpr uint16_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::PWM_ICR_counter </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#ae34afaa9adb2f263d2db42ba628c71d8">TIMER_PRESCALER</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
           <td class="paramname"><em>prescaler</em>, </td>
         </tr>
         <tr>
@@ -847,11 +856,11 @@ template&lt;board::Timer TIMER&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>ideal value to set for <code>ICR</code> register </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a49d54dd04c7296fcbb033443567bbfd0" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PWM_ICR_prescaler()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a477b522376339b0166772dc842b46374" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PWM_ICR_prescaler()</a> </dd>
 <dd>
-<a class="el" href="structtimer_1_1_calculator.html#a9a70c00e9100f56fcc275a8085b5ac5e" title="Computes the frequency at which this timer would perform, when used in timer::PulseTimer, if it was using prescaler and counter. ">PWM_ICR_frequency()</a> </dd></dl>
+<a class="el" href="structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e" title="Computes the frequency at which this timer would perform, when used in timer::PulseTimer, if it was using prescaler and counter. ">PWM_ICR_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00540">540</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00550">550</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
