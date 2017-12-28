@@ -62,8 +62,8 @@ namespace power
 		 * If you want your program to enter a different sleep mode than the default,
 		 * you should call `Power::sleep(board::SleepMode)` instead.
 		 * 
-		 * @sa power::set_default_mode()
-		 * @sa power::sleep(board::SleepMode)
+		 * @sa Power::set_default_mode()
+		 * @sa Power::sleep(board::SleepMode)
 		 */
 		static void sleep()
 		{
@@ -78,7 +78,7 @@ namespace power
 		 * If you want your program to enter the default sleep mode (as defined by 
 		 * `Power::set_default_mode()`), you should call `Power::sleep()` instead.
 		 * 
-		 * @sa power::sleep()
+		 * @sa Power::sleep()
 		 */
 		static void sleep(board::SleepMode mode)
 		{
