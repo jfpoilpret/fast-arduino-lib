@@ -393,9 +393,12 @@ namespace gpio
 	 * not as efficient as using only one single `FastPort` to handle all its pins.
 	 * 
 	 * @tparam PORT_ the target port
+	 * @tparam MASK_ the bit mask determining which pins of the port are handled
+	 * by this instance; only these pins will be impacted by `FastMaskedPort` 
+	 * methods.
 	 * @sa board::Port
 	 */
-	template<board::Port PORT_> class FastMaskedPort
+	template<board::Port PORT_, uint8_t MASK_> class FastMaskedPort
 	{
 	private:
 		using TRAIT = board_traits::Port_trait<PORT_>;
@@ -403,6 +406,9 @@ namespace gpio
 	public:
 		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;
+
+		/** The bit mask used for this FastMaskedPort. */
+		static constexpr const uint8_t MASK = MASK_;
 
 		/**
 		 * Construct a `FastMaskedPort` without any physical setup on target MCU.
@@ -413,7 +419,7 @@ namespace gpio
 		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
 		 * methods.
 		 */
-		FastMaskedPort(uint8_t mask = 0) : mask_{mask}
+		FastMaskedPort()
 		{
 		}
 
@@ -436,7 +442,7 @@ namespace gpio
 		 * @sa set_DDR()
 		 * @sa set_PORT()
 		 */
-		FastMaskedPort(uint8_t mask, uint8_t ddr, uint8_t port = 0) : mask_{mask}
+		FastMaskedPort(uint8_t ddr, uint8_t port = 0)
 		{
 			set_DDR(ddr);
 			set_PORT(port);
@@ -458,7 +464,7 @@ namespace gpio
 		 */
 		void set_PORT(uint8_t port) INLINE
 		{
-			TRAIT::PORT = (TRAIT::PORT & ~mask_) | (port & mask_);
+			TRAIT::PORT = (TRAIT::PORT & ~MASK) | (port & MASK);
 		}
 
 		/**
@@ -474,7 +480,7 @@ namespace gpio
 		 */
 		uint8_t get_PORT() INLINE
 		{
-			return TRAIT::PORT & mask_;
+			return TRAIT::PORT & MASK;
 		}
 
 		/**
@@ -489,7 +495,7 @@ namespace gpio
 		 */
 		void set_DDR(uint8_t ddr) INLINE
 		{
-			TRAIT::DDR = (TRAIT::DDR & ~mask_) | (ddr & mask_);
+			TRAIT::DDR = (TRAIT::DDR & ~MASK) | (ddr & MASK);
 		}
 
 		/**
@@ -502,7 +508,7 @@ namespace gpio
 		 */
 		uint8_t get_DDR() INLINE
 		{
-			return TRAIT::DDR & mask_;
+			return TRAIT::DDR & MASK;
 		}
 
 		/**
@@ -515,7 +521,7 @@ namespace gpio
 		 */
 		void set_PIN(uint8_t pin) INLINE
 		{
-			TRAIT::PIN = pin & mask_;
+			TRAIT::PIN = pin & MASK;
 		}
 
 		/**
@@ -526,11 +532,8 @@ namespace gpio
 		 */
 		uint8_t get_PIN() INLINE
 		{
-			return TRAIT::PIN & mask_;
+			return TRAIT::PIN & MASK;
 		}
-
-	private:
-		uint8_t mask_;
 	};
 
 	/**

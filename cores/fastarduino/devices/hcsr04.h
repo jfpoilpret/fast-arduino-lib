@@ -483,7 +483,7 @@ namespace devices
 			static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
 			MultiHCSR04(TIMER& timer)
-				:timer_{timer}, started_{}, ready_{}, active_{false}, trigger_{gpio::PinMode::OUTPUT}, echo_{ECHO_MASK, 0}
+				:timer_{timer}, started_{}, ready_{}, active_{false}, trigger_{gpio::PinMode::OUTPUT}, echo_{0}
 			{
 				interrupt::register_handler(*this);
 			}
@@ -546,7 +546,7 @@ namespace devices
 			volatile uint8_t ready_;
 			volatile bool active_;
 			typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
-			gpio::FastMaskedPort<ECHO_PORT> echo_;
+			gpio::FastMaskedPort<ECHO_PORT, ECHO_MASK> echo_;
 		};
 	}
 }

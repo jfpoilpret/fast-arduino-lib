@@ -49,20 +49,50 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to write to LEDs
-	gpio::FastMaskedPort<LED_PORT> pins[NUM_LEDS];
-	for (uint8_t i = 0; i < NUM_LEDS; ++i)
-		pins[i] = gpio::FastMaskedPort<LED_PORT>{_BV(i), 0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(0)> pins0{0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(1)> pins1{0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(2)> pins2{0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(3)> pins3{0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(4)> pins4{0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(5)> pins5{0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(6)> pins6{0xFF};
+	gpio::FastMaskedPort<LED_PORT, _BV(7)> pins7{0xFF};
 	
 	// Loop of the LED chaser
 	while (true)
 	{
-		for (uint8_t i = 0; i < 8; ++i)
-		{
-			pins[i].set_PORT(0xFF);
-			time::delay_ms(250);
-			pins[i].set_PORT(0x00);
-			time::delay_ms(250);
-		}
+		pins0.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins0.set_PORT(0x00);
+		time::delay_ms(250);
+		pins1.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins1.set_PORT(0x00);
+		time::delay_ms(250);
+		pins2.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins2.set_PORT(0x00);
+		time::delay_ms(250);
+		pins3.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins3.set_PORT(0x00);
+		time::delay_ms(250);
+		pins4.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins4.set_PORT(0x00);
+		time::delay_ms(250);
+		pins5.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins5.set_PORT(0x00);
+		time::delay_ms(250);
+		pins6.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins6.set_PORT(0x00);
+		time::delay_ms(250);
+		pins7.set_PORT(0xFF);
+		time::delay_ms(250);
+		pins7.set_PORT(0x00);
+		time::delay_ms(250);
 	}
 	return 0;
 }

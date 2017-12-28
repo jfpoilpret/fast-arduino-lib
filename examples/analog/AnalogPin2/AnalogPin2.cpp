@@ -60,7 +60,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	gpio::FastMaskedPort<LED_PORT> leds{LED_MASK, 0xFF};
+	gpio::FastMaskedPort<LED_PORT, LED_MASK> leds{0xFF};
 	// Declare Analog input
 	ANALOG_INPUT pot;
 

@@ -164,7 +164,7 @@ int main()
 	QUEUE queue{event_buffer};
 	
 	// Setup LED outputs
-	gpio::FastMaskedPort<LED_PORT> leds{LED_MASK, 0xFF};
+	gpio::FastMaskedPort<LED_PORT, LED_MASK> leds{0xFF};
 
 	// Setup timer
 	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
