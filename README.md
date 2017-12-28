@@ -106,16 +106,16 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-December 2017
--------------
-1. Finalize sonar ranger API
-2. Improve streams support ala C++
-3. Refactor Event system to allow any value type for events
-
 1st Quarter 2018
 ----------------
+1. Refactor and improve FastMaskedPort code size and speed
+2. Improve streams support ala C++
+3. Finalize sonar ranger API
 4. Add support for ATtinyX5
 5. Support other I2C devices: MCP23017 (IO multiplexer)
+
+2nd Quarter 2018
+----------------
 6. Improve Analog Input support and code
 7. Improve I2C master support (asynchronous mode)
 8. Improve SPI to support slave mode
