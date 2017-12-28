@@ -375,8 +375,6 @@ namespace gpio
 		}
 	};
 
-	//TODO Infer whether mask should be a template parameter instead?
-	//TODO or at least a const?
 	/**
 	 * API that manipulates a part of a digital IO port.
 	 * Implementation is highly optimized for size and speed: instances use
