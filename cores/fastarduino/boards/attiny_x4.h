@@ -281,11 +281,7 @@ namespace board
 		/**
 		 * This mode is exactly the same `POWER_SAVE`.
 		 */
-		EXTENDED_STANDBY = SLEEP_MODE_PWR_SAVE,
-		
-		//FIXME it seems that this enum value is just plain useless, why did I
-		// introduce it? If no justification, then simply remove it!
-		DEFAULT_MODE = 0xFF
+		EXTENDED_STANDBY = SLEEP_MODE_PWR_SAVE
 	};
 };
 

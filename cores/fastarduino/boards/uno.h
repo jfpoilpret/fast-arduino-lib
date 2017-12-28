@@ -385,11 +385,7 @@ namespace board
 		 * This mode is similar to `POWER_SAVE`, except the oscillator is kept
 		 * running, hence waking up from this mode takes only 6 clock cycles.
 		 */
-		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY,
-
-		//FIXME it seems that this enum value is just plain useless, why did I
-		// introduce it? If no justification, then simply remove it!
-		DEFAULT_MODE = 0xFF
+		EXTENDED_STANDBY = SLEEP_MODE_EXT_STANDBY
 	};
 };
 
