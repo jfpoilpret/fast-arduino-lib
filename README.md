@@ -108,20 +108,19 @@ The roadmap of next activities and new supported features is the following:
 
 1st Quarter 2018
 ----------------
-1. Refactor and improve FastMaskedPort code size and speed
-2. Improve streams support ala C++
-3. Finalize sonar ranger API
-4. Add support for ATtinyX5
-5. Support other I2C devices: MCP23017 (IO multiplexer)
+1. Improve streams support ala C++
+2. Finalize sonar ranger API
+3. Add support for ATtinyX5
+4. Support other I2C devices: MCP23017 (IO multiplexer)
 
 2nd Quarter 2018
 ----------------
-6. Improve Analog Input support and code
-7. Improve I2C master support (asynchronous mode)
-8. Improve SPI to support slave mode
-9. Improve I2C to support slave mode
-10. Add USB support for Arduino Leonardo
-11. Add high-speed timer support of Arduino Leonardo
+5. Improve Analog Input support and code
+6. Improve I2C master support (asynchronous mode)
+7. Improve SPI to support slave mode
+8. Improve I2C to support slave mode
+9. Add USB support for Arduino Leonardo
+10. Add high-speed timer support of Arduino Leonardo
 
 In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
