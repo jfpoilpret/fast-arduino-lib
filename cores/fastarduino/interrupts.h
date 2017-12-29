@@ -107,8 +107,9 @@
  * **before** the macro is used.
  * @param CALLBACK the @p HANDLER method that will be called back by the ISR;
  * must be a proper Pointer to Member Function of @p HANDLER. This method takes 
- * no argument.
+ * no argument and must return `void`.
  * @sa interrupt::register_handler()
+ * @sa REGISTER_ISR_METHOD_RETURN_
  */
 #define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)                 \
 	ISR(VECTOR)                                                         \
@@ -116,7 +117,26 @@
 		CALL_HANDLER_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK))(); \
 	}
 
-//TODO DOC
+/**
+ * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK method
+ * of @p HANDLER class.
+ * Note that a proper instance needs to be first registered with
+ * `interrupt::register_handler()` before the first call to this ISR.
+ * This macro is normally used only by FastArduino to define higher-level macros 
+ * for registration of specific ISR; you normally won't need to use this macro in 
+ * your own programs.
+ * @param VECTOR the name of the interrupt vector for which to generate the ISR;
+ * must exist for the current AVR target.
+ * @param HANDLER the class which registered instance will be used to call 
+ * @p CALLBACK method when the ISR is called; this class must have been defined
+ * **before** the macro is used.
+ * @param CALLBACK the @p HANDLER method that will be called back by the ISR;
+ * must be a proper Pointer to Member Function of @p HANDLER. This method takes 
+ * no argument and must return type @p RET.
+ * @param RET the type returned by method @p CALLBACK
+ * @sa interrupt::register_handler()
+ * @sa REGISTER_ISR_METHOD_
+ */
 #define REGISTER_ISR_METHOD_RETURN_(VECTOR, HANDLER, CALLBACK, RET)                 \
 	ISR(VECTOR)                                                                     \
 	{                                                                               \

@@ -372,7 +372,11 @@ namespace utils
 		return uint8_t(F_CPU / 1000000UL / 3.0 * time_us);
 	}
 
-	//TODO DOC
+	/**
+	 * Calculate the number of `1` bits in a byte. Calculation is performed at 
+	 * compile-time, provided that @p mask is a constant when the method is called.
+	 * @param mask the byte which you want to count the number of `1` bits
+	 */
 	constexpr uint8_t num_bits(uint8_t mask, uint8_t num = 0)
 	{
 		return (mask == 0 ? num : mask & 1 ? num_bits(mask >> 1, num + 1) : num_bits(mask >> 1, num));

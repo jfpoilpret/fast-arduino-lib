@@ -300,13 +300,33 @@ namespace timer
 			return best_tick_prescaler(PRESCALERS_TRAIT::ALL_PRESCALERS, us_per_tick);
 		}
 
-		//TODO DOC
+		/**
+		 * Computes the number of microseconds reached for a given number of @p ticks
+		 * with a given @p prescaler.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 * 
+		 * @param prescaler the prescaler used for this calculation
+		 * @param ticks the number of ticks for which we want to know the number of 
+		 * microseconds elapsed
+		 * @return the number of microseconds elapsed for @p ticks with @p prescaler
+		 */
 		static constexpr uint32_t ticks_to_us(PRESCALER prescaler, TYPE ticks)
 		{
 			return uint32_t(ticks) * _BV(uint8_t(prescaler)) / (F_CPU / 1000000UL);
 		}
 
-		//TODO DOC
+		/**
+		 * Computes the number of ticks needed for reaching the given @p us microseconds
+		 * with a given @p prescaler.
+		 * Note this is a `constexpr` method, i.e. it allows compile-time 
+		 * computation when provided a constant argument.
+		 * 
+		 * @param prescaler the prescaler used for this calculation
+		 * @param us the number of microseconds we want to reach
+		 * @return the number of ticks needed in order to reach @p us 
+		 * microseconds elapsed
+		 */
 		static constexpr TYPE us_to_ticks(PRESCALER prescaler, uint32_t us)
 		{
 			return TYPE(us * (F_CPU / 1000000UL) / _BV(uint8_t(prescaler)));
@@ -746,7 +766,9 @@ namespace timer
 			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
 		}
 
-		//TODO DOC
+		/** 
+		 * Return the current `TimerInputCapture` used by this timer.
+		 */
 		inline TimerInputCapture input_capture() const
 		{
 			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");

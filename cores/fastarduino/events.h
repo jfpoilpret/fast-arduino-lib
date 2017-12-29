@@ -229,6 +229,8 @@ namespace events
 	 * NOTE: you should never call any `Dispatcher` method from an ISR because these methods
 	 * may last too long for an ISR.
 	 * 
+	 * @tparam EVENT the `events::Event<T>` handled
+	 * 
 	 * @sa containers::LinkedList
 	 * @sa EventHandler
 	 * @sa Event::type()
@@ -273,6 +275,8 @@ namespace events
 	/**
 	 * Abstract event handler, used by `Dispatcher` to get called back when an 
 	 * event of the expected type is dispatched.
+	 * 
+	 * @tparam EVENT the `events::Event<T>` dispatched
 	 * 
 	 * @sa Dispatcher::dispatch()
 	 */
