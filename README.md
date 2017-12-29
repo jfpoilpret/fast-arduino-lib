@@ -49,7 +49,7 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-The project has started a bit more than one year ago, it covers a lot already, but is not fully complete yet; also its API may still change, more or less drastically, during Fall 2017 (see roadmap).
+It has been one year and a half since the project was started, it covers a lot already, but is not fully complete yet (see roadmap below for missing features); current features API is deemed stable and should not change in the future.
 
 What the project already has:
 
@@ -99,7 +99,7 @@ I intend to later add support for:
 - Breadboard ATtiny85 at 8MHz
 - Arduino Leonardo with USB support
 
-I have started writing a [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) to learn FastArduino API, which shall be finished by end 2017, but it can already be used to understand some of FastArduino API. In parallel to that, I am documenting [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) through [doxygen](http://www.stack.nl/~dimitri/doxygen/) and that should also be finished by end 2017.
+A [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) is available for those who want to learn FastArduino API; although not fully complete yet, (a few missing features will be documented early 2018), it can already be used to understand most FastArduino API. In parallel to that, I am documenting [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) through [doxygen](http://www.stack.nl/~dimitri/doxygen/) and that should also be completed early 2018.
 
 Roadmap
 =======
@@ -113,8 +113,8 @@ The roadmap of next activities and new supported features is the following:
 3. Add support for ATtinyX5
 4. Support other I2C devices: MCP23017 (IO multiplexer)
 
-2nd Quarter 2018
-----------------
+2nd Quarter 2018 (to be revisited)
+----------------------------------
 5. Improve Analog Input support and code
 6. Improve I2C master support (asynchronous mode)
 7. Improve SPI to support slave mode
@@ -124,7 +124,7 @@ The roadmap of next activities and new supported features is the following:
 
 In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
-- coding guidelines applied across the library code (not necessarily example code)
+- [coding guidelines](CodingGuidelines.md) applied across the library code (not necessarily example code)
 - complete documentation (Tutorial, API, ISR handling, Board support adding...)
 
 The following features are not in FastArduino roadmap currently (but may be in the future):
