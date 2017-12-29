@@ -18,13 +18,13 @@ namespace streams
 {
 	char get(InputBuffer& in)
 	{
-		return containers::pull<char>(in);
+		return containers::pull<char>(in.queue());
 	}
 
 	char* get(InputBuffer& in, char* content, size_t size)
 	{
 		char* current = content;
-		for (size_t i = 0; i < size; ++i) *current++ = containers::pull(in);
+		for (size_t i = 0; i < size; ++i) *current++ = containers::pull(in.queue());
 		return content;
 	}
 
@@ -33,7 +33,7 @@ namespace streams
 		size_t size = 0;
 		while (size < max - 1)
 		{
-			char value = containers::pull(in);
+			char value = containers::pull(in.queue());
 			*str++ = value;
 			++size;
 			if (value == end) break;
@@ -47,7 +47,7 @@ namespace streams
 		char* next = str;
 		while (max > 1)
 		{
-			char value = containers::pull(*this);
+			char value = containers::pull(queue());
 			if (isspace(value)) break;
 			*next++ = value;
 			--max;

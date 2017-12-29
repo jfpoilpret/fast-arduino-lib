@@ -203,11 +203,10 @@ namespace serial
 			{
 				errors_.has_errors = 0;
 				char value;
-				if (out().pull_(value))
+				if (queue().pull_(value))
 					TRAIT::UDR = value;
 				else
 				{
-					errors_.all_errors.queue_overflow = true;
 					transmitting_ = false;
 					// Clear UDRIE to prevent UDR interrupt to go on forever
 					TRAIT::UCSRB &= ~TRAIT::UDRIE_MASK;
@@ -220,6 +219,7 @@ namespace serial
 			// Listeners of events on the buffer
 			virtual void on_put() override
 			{
+				errors_.all_errors.queue_overflow = OutputBuffer::overflow();
 				synchronized
 				{
 					// Check if TX is not currently active, if so, activate it
@@ -227,7 +227,7 @@ namespace serial
 					{
 						// Yes, trigger TX
 						char value;
-						if (OutputBuffer::pull_(value))
+						if (queue().pull_(value))
 						{
 							// Set UDR interrupt to be notified when we can send the next character
 							TRAIT::UCSRB |= TRAIT::UDRIE_MASK;
@@ -236,10 +236,6 @@ namespace serial
 						}
 					}
 				}
-			}
-			virtual void on_overflow(UNUSED char c) override
-			{
-				errors_.all_errors.queue_overflow = true;
 			}
 			/// @endcond
 
@@ -346,7 +342,7 @@ namespace serial
 				errors_.all_errors.frame_error = status & TRAIT::FE_MASK;
 				errors_.all_errors.parity_error = status & TRAIT::UPE_MASK;
 				char value = TRAIT::UDR;
-				errors_.all_errors.queue_overflow = !in().push_(value);
+				errors_.all_errors.queue_overflow = !in().queue().push_(value);
 			}
 			/// @endcond
 		};

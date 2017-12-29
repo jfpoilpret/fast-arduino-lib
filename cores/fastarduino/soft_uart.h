@@ -94,12 +94,9 @@ namespace serial
 			virtual void on_put() override
 			{
 				//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+				errors_.all_errors.queue_overflow = out().overflow();
 				char value;
-				while (out().pull(value)) write(value);
-			}
-			virtual void on_overflow(UNUSED char c) override
-			{
-				errors_.all_errors.queue_overflow = true;
+				while (out().queue().pull(value)) write(value);
 			}
 
 		private:
@@ -275,7 +272,7 @@ namespace serial
 			// Push value if no error
 			if (!errors.has_errors)
 			{
-				errors.all_errors.queue_overflow = !in().push_(value);
+				errors.all_errors.queue_overflow = !in().queue().push_(value);
 				// Wait for 1st stop bit
 				_delay_loop_2(stop_bit_rx_time_push_);
 			}

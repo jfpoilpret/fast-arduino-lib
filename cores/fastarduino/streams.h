@@ -57,8 +57,6 @@
  */
 namespace streams
 {
-	//TODO do we really need on_overflow() why not just use a bool flag?
-	//TODO make queue private but delegate pull methods?
 	/**
 	 * Output API based on a ring buffer.
 	 * Provides general methods to push characters or strings to the buffer;
@@ -71,48 +69,53 @@ namespace streams
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
 	 */
-	class OutputBuffer : public containers::Queue<char, char>
+	class OutputBuffer : private containers::Queue<char, char>
 	{
+	private:
+		using QUEUE = Queue<char, char>;
+
 	public:
-		template<uint8_t SIZE> OutputBuffer(char (&buffer)[SIZE]) : Queue<char, char>{buffer}
+		template<uint8_t SIZE> OutputBuffer(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false}
 		{
 			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
+		 * This method clear the count of overflows that have occurred until now.
 		 */
 		void flush()
 		{
+			overflow_ = false;
 			while (items()) time::yield();
 		}
 
 		/**
 		 * Append a character to the buffer.
-		 * If the buffer is full, then `on_overflow()` will be called.
+		 * If the buffer is full, then `overflow()` flag will be set.
 		 * @param c the character to append
 		 * @param call_on_put `true` if `on_put()` should be called after @p c has
 		 * been appended, `false` otherwise; when directly calling this method,
 		 * you should keep the default value.
 		 * @sa on_put()
-		 * @sa on_overflow()
+		 * @sa overflow()
 		 */
 		void put(char c, bool call_on_put = true)
 		{
-			if (!push(c)) on_overflow(c);
+			if (!push(c)) overflow_ = true;
 			if (call_on_put) on_put();
 		}
 
 		/**
 		 * Append several characters to the buffer.
-		 * If the buffer is full, then `on_overflow()` will be called.
+		 * If the buffer is full, then `overflow()` flag will be set.
 		 * Once all characters have been appended, `on_put()` will be called,
 		 * even if an overflow has occurred.
 		 * 
 		 * @param content the array of characters to be appended
 		 * @param size the number of characters in @p content to append
 		 * @sa on_put()
-		 * @sa on_overflow()
+		 * @sa overflow()
 		 */
 		void put(const char* content, size_t size)
 		{
@@ -123,13 +126,13 @@ namespace streams
 		/**
 		 * Append a string to the buffer.
 		 * The `'\0'` end character of @p str is not transmitted.
-		 * If the buffer is full, then `on_overflow()` will be called.
+		 * If the buffer is full, then `overflow()` flag will be set.
 		 * Once all string content has been appended, `on_put()` will be called,
 		 * even if an overflow has occurred.
 		 * 
 		 * @param str the '\0' ended string (standard C-string) to append
 		 * @sa on_put()
-		 * @sa on_overflow()
+		 * @sa overflow()
 		 */
 		void puts(const char* str)
 		{
@@ -140,7 +143,7 @@ namespace streams
 		/**
 		 * Append a string, stored on flash memory, to the buffer.
 		 * The `'\0'` end character of @p str is not transmitted.
-		 * If the buffer is full, then `on_overflow()` will be called.
+		 * If the buffer is full, then `overflow()` flag will be set.
 		 * Once all string content has been appended, `on_put()` will be called,
 		 * even if an overflow has occurred.
 		 * Example:
@@ -152,7 +155,7 @@ namespace streams
 		 * to append
 		 * @sa F()
 		 * @sa on_put()
-		 * @sa on_overflow()
+		 * @sa overflow()
 		 */
 		void puts(const flash::FlashStorage* str)
 		{
@@ -161,17 +164,36 @@ namespace streams
 			on_put();
 		}
 
-	protected:
 		/**
-		 * Callback method called when an attempt to add new content has failed
-		 * because the current buffer is full.
-		 * @param c the character that could not be appended due to buffer
-		 * overflow
+		 * Indicate if a buffer overflow has occurred since last time `flush()` or
+		 * `reset_overflow()` was called. 
+		 * @sa flush()
+		 * @sa reset_overflow()
 		 */
-		virtual void on_overflow(UNUSED char c)
+		inline bool overflow() const
 		{
+			return overflow_;
 		}
 
+		/**
+		 * Reset the overflow flag.
+		 * @sa overflow()
+		 */
+		inline void reset_overflow()
+		{
+			overflow_ = false;
+		}
+
+		/**
+		 * Return the underlying queue.
+		 * Normally you will not need this method.
+		 */
+		QUEUE& queue()
+		{
+			return *this;
+		}
+		
+	protected:
 		/**
 		 * Callback method called when new content has been added to the buffer.
 		 * This can be overridden by a subclass to trigger interrupt-driven
@@ -181,9 +203,11 @@ namespace streams
 		virtual void on_put()
 		{
 		}
+
+	private:
+		bool overflow_;
 	};
 
-	//TODO make queue private but provide delegate push()
 	/**
 	 * Input API based on a ring buffer.
 	 * Provides general methods to pull characters or strings from the buffer;
@@ -194,15 +218,18 @@ namespace streams
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
 	 */
-	class InputBuffer : public containers::Queue<char, char>
+	class InputBuffer : private containers::Queue<char, char>
 	{
+	private:
+		using QUEUE = Queue<char, char>;
+
 	public:
 		/**
 		 * Special value returned by `get()` when buffer is empty.
 		 */
 		static const int EOF = -1;
 
-		template<uint8_t SIZE> InputBuffer(char (&buffer)[SIZE]) : Queue<char, char>{buffer}
+		template<uint8_t SIZE> InputBuffer(char (&buffer)[SIZE]) : QUEUE{buffer}
 		{
 			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
@@ -236,11 +263,14 @@ namespace streams
 		 */
 		char* scan(char* str, size_t max);
 
-	protected:
-		//FIXME these never get called???
-		// Listeners of events on the buffer
-		//		virtual void on_empty() {}
-		//		virtual void on_get(UNUSED char c) {}
+		/**
+		 * Return the underlying queue.
+		 * Normally you will not need this method.
+		 */
+		QUEUE& queue()
+		{
+			return *this;
+		}
 	};
 
 	/**
@@ -771,7 +801,7 @@ namespace streams
 		FormattedInput<STREAM>& operator>>(bool& v)
 		{
 			skip_whitespaces(skipws_);
-			char c = containers::pull(stream_);
+			char c = containers::pull(stream_.queue());
 			v = (c != '0');
 			return *this;
 		}
@@ -791,7 +821,7 @@ namespace streams
 		FormattedInput<STREAM>& operator>>(char& v)
 		{
 			skip_whitespaces(skipws_);
-			v = containers::pull(stream_);
+			v = containers::pull(stream_.queue());
 			return *this;
 		}
 
@@ -927,7 +957,7 @@ namespace streams
 		void skip_whitespaces(bool skip = true)
 		{
 			if (skip)
-				while (isspace(containers::peek(stream_))) containers::pull(stream_);
+				while (isspace(containers::peek(stream_.queue()))) containers::pull(stream_.queue());
 		}
 
 		STREAM& stream_;
