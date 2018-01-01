@@ -439,7 +439,11 @@ namespace streams
 		// conversions from string to numeric value
 		bool convert(const char* token, bool& b)
 		{
-			//TODO
+			if (flags() & boolalpha)
+				b = (strcmp(token, "true") != 0);
+			else
+				b = (atol(token) != 0);
+			return true;
 		}
 		bool convert(const char* token, double& v)
 		{
