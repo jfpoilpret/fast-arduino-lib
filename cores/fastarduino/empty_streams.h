@@ -89,6 +89,14 @@ namespace streams
 		{
 		}
 
+		EmptyOutput& operator<<(const void* p UNUSED)
+		{
+			return *this;
+		}
+		EmptyOutput& operator<<(bool b UNUSED)
+		{
+			return *this;
+		}
 		EmptyOutput& operator<<(char c UNUSED)
 		{
 			return *this;
@@ -144,6 +152,44 @@ namespace streams
 	}
 	inline void endl(EmptyOutput& stream UNUSED)
 	{
+	}
+
+	class empty_
+	{
+	public:
+		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		{
+		}
+	private:
+		constexpr empty_()
+		{
+		}
+		friend constexpr const setw_ setw(uint8_t width);
+	};
+
+	constexpr const empty_ setw(uint8_t width UNUSED)
+	{
+		return empty_{};
+	}
+	constexpr const empty_ setprecision(uint8_t precision UNUSED)
+	{
+		return empty_{};
+	}
+	constexpr const empty_ setbase(int base UNUSED)
+	{
+		return empty_{};
+	}
+	constexpr const empty_ setfill(char fill UNUSED)
+	{
+		return empty_{};
+	}
+	constexpr const empty_ setiosflags(ios::fmtflags mask UNUSED)
+	{
+		return empty_{};
+	}
+	constexpr const empty_ resetiosflags(ios::fmtflags mask UNUSED)
+	{
+		return empty_{};
 	}
 	/// @endcond
 }
