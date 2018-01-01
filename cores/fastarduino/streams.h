@@ -508,8 +508,9 @@ namespace streams
 			else if (flags() & scientific)
 				buffer = dtostre(v, conversion_buffer, precision(), 0);
 			else
-				buffer = dtostrf(v, 0, 0, conversion_buffer);
-			return justify(add_sign(buffer));
+				// default is fixed currently (no satisfying conversion function exists)
+				buffer = dtostrf(v, 0, precision(), conversion_buffer);
+			return justify(add_sign(upper(buffer), true));
 		}
 		const char* convert(bool b)
 		{
@@ -536,9 +537,9 @@ namespace streams
 			}
 			return input;
 		}
-		char* add_sign(char* input) const
+		char* add_sign(char* input, bool is_float = false) const
 		{
-			if ((flags() & dec) && (flags() & showpos) && (input[0] != '+') && (input[0] != '-'))
+			if (((flags() & dec) || is_float) && (flags() & showpos) && (input[0] != '+') && (input[0] != '-'))
 			{
 				// Add + sign if not exist
 				memmove(input + 1, input, strlen(input) + 1);
@@ -553,17 +554,18 @@ namespace streams
 		}
 
 		//TODO this method would be better if it could directly write to the stream
+		//FIXME if width is big enough (>64) then this method could crash
 		char* justify(char* input) const
 		{
 			if (strlen(input) < width())
 			{
 				uint8_t add = width() - strlen(input);
-				if (flags() & left)
+				if (flags() & right)
 				{
 					memmove(input + add, input, strlen(input) + 1);
 					memset(input, fill(), add);
 				}
-				else if (flags() & right)
+				else if (flags() & left)
 				{
 					memset(input + strlen(input), fill(), add);
 					input[width() + 1] = 0;
@@ -589,28 +591,6 @@ namespace streams
 		uint8_t precision_;
 		char fill_;
 		char conversion_buffer[MAX_BUF_LEN];
-
-		// template<typename FSTREAM> friend void bin(FSTREAM&);
-		// template<typename FSTREAM> friend void oct(FSTREAM&);
-		// template<typename FSTREAM> friend void dec(FSTREAM&);
-		// template<typename FSTREAM> friend void hex(FSTREAM&);
-		// template<typename FSTREAM> friend void skipws(FSTREAM&);
-		// template<typename FSTREAM> friend void noskipws(FSTREAM&);
-		// template<typename FSTREAM> friend void boolalpha(FSTREAM&);
-		// template<typename FSTREAM> friend void noboolalpha(FSTREAM&);
-		// template<typename FSTREAM> friend void showbase(FSTREAM&);
-		// template<typename FSTREAM> friend void noshowbase(FSTREAM&);
-		// template<typename FSTREAM> friend void showpos(FSTREAM&);
-		// template<typename FSTREAM> friend void noshowpos(FSTREAM&);
-		// template<typename FSTREAM> friend void uppercase(FSTREAM&);
-		// template<typename FSTREAM> friend void nouppercase(FSTREAM&);
-		// template<typename FSTREAM> friend void unitbuf(FSTREAM&);
-		// template<typename FSTREAM> friend void nounitbuf(FSTREAM&);
-		// template<typename FSTREAM> friend void left(FSTREAM&);
-		// template<typename FSTREAM> friend void right(FSTREAM&);
-		// template<typename FSTREAM> friend void fixed(FSTREAM&);
-		// template<typename FSTREAM> friend void scientific(FSTREAM&);
-		// template<typename FSTREAM> friend void defaultfloat(FSTREAM&);
 	};
 
 	/**
@@ -735,13 +715,13 @@ namespace streams
 			if (len < width())
 			{
 				uint8_t add = width() - len;
-				if (flags() & left)
+				if (flags() & right)
 				{
 					while (add--)
 						stream_.put(fill(), false);
 					stream_.puts(s);
 				}
-				else if (flags() & right)
+				else if (flags() & left)
 				{
 					stream_.puts(s);
 					while (add--)
@@ -874,9 +854,6 @@ namespace streams
 		}
 
 		STREAM& stream_;
-
-		// template<typename FSTREAM> friend void flush(FSTREAM&);
-		// template<typename FSTREAM> friend void endl(FSTREAM&);
 	};
 
 	/**
@@ -1391,11 +1368,6 @@ namespace streams
 	template<typename FSTREAM> inline void scientific(FSTREAM& stream)
 	{
 		stream.setf(ios::scientific, ios::floatfield);
-	}
-
-	template<typename FSTREAM> inline void defaultfloat(FSTREAM& stream)
-	{
-		stream.unsetf(ios::floatfield);
 	}
 }
 
