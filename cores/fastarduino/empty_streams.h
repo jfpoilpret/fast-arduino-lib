@@ -153,6 +153,54 @@ namespace streams
 	inline void endl(EmptyOutput& stream UNUSED)
 	{
 	}
+	inline void skipws(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void noskipws(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void boolalpha(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void noboolalpha(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void showbase(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void noshowbase(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void showpos(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void noshowpos(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void uppercase(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void nouppercase(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void unitbuf(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void nounitbuf(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void left(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void right(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void fixed(EmptyOutput& stream UNUSED)
+	{
+	}
+	inline void scientific(EmptyOutput& stream UNUSED)
+	{
+	}
 
 	class empty_
 	{
