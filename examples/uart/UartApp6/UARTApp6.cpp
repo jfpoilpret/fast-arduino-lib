@@ -84,6 +84,34 @@ static void handle_num(OUTPUT& out, T value, const flash::FlashStorage* type)
 	out << noshowpos;
 }
 
+static void handle_float(OUTPUT& out, double value)
+{
+	out << F("testing output of double (") << defaultfloat << value << ')' << endl;
+	display_num<double>(out, value);
+
+	out << showbase;
+	display_num<double>(out, value);
+	out << noshowbase;
+
+	out << defaultfloat << value << endl;
+	out << fixed << value << endl;
+	out << scientific << value << endl;
+
+	out << uppercase;
+	out << defaultfloat << value << endl;
+	out << fixed << value << endl;
+	out << scientific << value << endl;
+	out << nouppercase;
+
+	out << showpos;
+	out << defaultfloat << value << endl;
+	out << fixed << value << endl;
+	out << scientific << value << endl;
+	out << noshowpos;
+
+	//TODO check precision too
+}
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -106,7 +134,11 @@ int main()
 	handle_num<int32_t>(out, 123456, F("int32_t"));
 	handle_num<int32_t>(out, -123456, F("int32_t"));
 
-	//TODO check floats
+	// check floats
+	handle_float(out, 123.456);
+	handle_float(out, -123.456);
+	handle_float(out, -12345678901234567890.12345);
+
 	//TODO check other types
 
 	//TODO check justification: setw(), setfill(), left, right...
