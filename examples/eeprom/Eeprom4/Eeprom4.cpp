@@ -118,14 +118,14 @@ int main()
 
 	OUTPUT out = uart.fout();
 
-	out << F("\nInitial EEPROM content\n") << streams::flush;
+	out << F("\nInitial EEPROM content") << streams::endl;
 	trace_eeprom(out);
 	
 	// Write values
 	EEPROM::write(&sample1, Dummy{1, 2, true, -1, '9'});
 	EEPROM::write(&sample2, Dummy{0, 0, false, 0, '0'});
 	
-	out << F("\nEEPROM after sync. write\n") << streams::flush;
+	out << F("\nEEPROM after sync. write") << streams::endl;
 	trace_eeprom(out);
 	
 	// Async. write
@@ -134,7 +134,7 @@ int main()
 	writer.write(&sample2, Dummy{15, 25, true, -15, '8'});
 	writer.wait_until_done();
 	
-	out << F("\nEEPROM after async. write\n") << streams::flush;
+	out << F("\nEEPROM after async. write") << streams::endl;
 	trace_eeprom(out);
 	
 	return 0;

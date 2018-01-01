@@ -61,7 +61,7 @@ using devices::magneto::DLPF;
 
 using streams::dec;
 using streams::hex;
-using streams::flush;
+using streams::endl;
 
 static constexpr const GyroRange GYRO_RANGE = GyroRange::RANGE_250;
 static constexpr const AccelRange ACCEL_RANGE = AccelRange::RANGE_2G;
@@ -80,7 +80,7 @@ inline int16_t accel(int16_t value)
 void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
 {
 	if (expected_status != actual_status)
-		out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << '\n' << flush;
+		out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
 }
 
 using ACCELEROMETER = MPU6050<i2c::I2CMode::Fast>;
@@ -96,11 +96,11 @@ int main()
 #endif
 	uart.begin(115200);
 	out.width(2);
-	out << F("Start\n") << flush;
+	out << F("Start") << endl;
 
 	ACCELEROMETER::MANAGER manager;
 	manager.begin();
-	out << F("I2C interface started\n") << flush;
+	out << F("I2C interface started") << endl;
 
 	ACCELEROMETER mpu{manager};
 	
@@ -110,46 +110,32 @@ int main()
 	int_enable.data_ready = 1;
 	bool ok = mpu.begin(fifo_enable, int_enable, SAMPLE_RATE_DIVIDER, 
 						GyroRange::RANGE_250, AccelRange::RANGE_2G, DLPF::ACCEL_BW_5HZ);
-	out << dec << F("begin() ") << ok << '\n' << flush;
+	out << dec << F("begin() ") << ok << endl;
 	ok = mpu.reset_fifo();
-	out << dec << F("reset_fifo() ") << ok << '\n' << flush;
+	out << dec << F("reset_fifo() ") << ok << endl;
 	while (true)
 	{
-//		INTStatus status = mpu.interrupt_status();
-//		out << hex << F("INTStatus = ") << utils::as_uint8_t(status) << '\n' << flush;
-//		uint16_t count = mpu.fifo_count();
-//		out << dec << F("FIFO count = ") << count << '\n' << flush;
-
 		AllSensors sensors;
 		if (mpu.fifo_pop(sensors, true))
 		{
-//					out	<< dec 
-//						<< F("raw Gyro x = ") << sensors.gyro.x 
-//						<< F(", y = ") << sensors.gyro.y 
-//						<< F(", z = ") << sensors.gyro.z << '\n' << flush;
-//					out	<< dec 
-//						<< F("raw Accel x = ") << sensors.accel.x 
-//						<< F(", y = ") << sensors.accel.y 
-//						<< F(", z = ") << sensors.accel.z << '\n' << flush;
-					
 			out	<< dec 
 				<< F("cdps Gyro x = ") << gyro(sensors.gyro.x)
 				<< F(", y = ") << gyro(sensors.gyro.y) 
-				<< F(", z = ") << gyro(sensors.gyro.z) << '\n' << flush;
+				<< F(", z = ") << gyro(sensors.gyro.z) << endl;
 			out	<< dec 
 				<< F("mG Accel x = ") << accel(sensors.accel.x) 
 				<< F(", y = ") << accel(sensors.accel.y) 
-				<< F(", z = ") << accel(sensors.accel.z) << '\n' << flush;
+				<< F(", z = ") << accel(sensors.accel.z) << endl;
 			// Also check the temperature precision as per datasheet
-			out << dec << F("Temp = ") << mpu.convert_temp_to_centi_degrees(sensors.temperature) << F(" centi-C\n") << flush;
+			out << dec << F("Temp = ") << mpu.convert_temp_to_centi_degrees(sensors.temperature) << F(" centi-C") << endl;
 		}
 		else
-			out << F("fifo_pop() KO\n") << flush;
+			out << F("fifo_pop() KO") << endl;
 		time::delay_ms(10);
 	}
 	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << F("End\n") << flush;
+	out << F("End") << endl;
 }

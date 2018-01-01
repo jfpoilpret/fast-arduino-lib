@@ -80,7 +80,6 @@ int main()
 			<< streams::oct << input << ' ' 
 			<< streams::hex << input << ' ' 
 			<< streams::bin << input << streams::endl;
-		out.flush();
 		time::delay_ms(1000);
 	}
 }

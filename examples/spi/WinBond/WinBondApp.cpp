@@ -101,65 +101,65 @@ int main()
 	devices::WinBond<CS> flash;
 	_delay_ms(1000);
 	
-	out << "S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "S: " << streams::hex << flash.status().value << streams::endl;
 	uint64_t id = flash.read_unique_ID();
 	out << "UID: " << streams::hex << uint16_t(id >> 48) << ' ' << uint16_t(id >> 32) << ' ' 
 					<< uint16_t(id >> 16) << ' ' << uint16_t(id) << streams::endl;
 	devices::WinBond<CS>::Device device = flash.read_device();
 	out << "M ID: " << streams::hex << device.manufacturer_ID << streams::endl;
-	out << "D ID: " << streams::hex << device.device_ID << streams::endl << streams::flush;
+	out << "D ID: " << streams::hex << device.device_ID << streams::endl;
 
-	out << "B4 RD 1 pg, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "B4 RD 1 pg, S: " << streams::hex << flash.status().value << streams::endl;
 	flash.read_data(PAGE, data, sizeof data);
-	out << "Af RD, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "Af RD, S: " << streams::hex << flash.status().value << streams::endl;
 
-	out << "Pg RD:" << streams::endl << streams::flush;
+	out << "Pg RD:" << streams::endl;
 	for (uint16_t i = 0; i < sizeof data; ++i)
 	{
 		out << streams::hex << data[i] << ' ';
 		if ((i + 1) % 16 == 0)
-			out << streams::endl << streams::flush;
+			out << streams::endl;
 	}
-	out << streams::endl << streams::flush;
+	out << streams::endl;
 	
-	out << "B4 erase, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "B4 erase, S: " << streams::hex << flash.status().value << streams::endl;
 	flash.enable_write();
-	out << "Af enable WR, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "Af enable WR, S: " << streams::hex << flash.status().value << streams::endl;
 	flash.erase_sector(PAGE);
-	out << "Af erase, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "Af erase, S: " << streams::hex << flash.status().value << streams::endl;
 
 	flash.wait_until_ready(10);
-	out << "Af wait, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "Af wait, S: " << streams::hex << flash.status().value << streams::endl;
 
 	for (uint16_t i = 0; i < sizeof data; ++i)
 		data[i] = uint8_t(i);
 
-	out << "B4 WR, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "B4 WR, S: " << streams::hex << flash.status().value << streams::endl;
 	flash.enable_write();
 	flash.write_page(PAGE, data, sizeof data);
-	out << "Af WR, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "Af WR, S: " << streams::hex << flash.status().value << streams::endl;
 	
 	flash.wait_until_ready(10);
-	out << "Af wait, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "Af wait, S: " << streams::hex << flash.status().value << streams::endl;
 	
 	for (uint16_t i = 0; i < sizeof data; ++i)
 		data[i] = 0;
 	
-	out << "B4 RD 1 byte, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "B4 RD 1 byte, S: " << streams::hex << flash.status().value << streams::endl;
 	uint8_t value = flash.read_data(PAGE + sizeof(data) / 2);
-	out << "RD " << value << ", S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "RD " << value << ", S: " << streams::hex << flash.status().value << streams::endl;
 	
-	out << "B4 RD 1 pg, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "B4 RD 1 pg, S: " << streams::hex << flash.status().value << streams::endl;
 	flash.read_data(PAGE, data, sizeof data);
-	out << "Af RD, S: " << streams::hex << flash.status().value << streams::endl << streams::flush;
+	out << "Af RD, S: " << streams::hex << flash.status().value << streams::endl;
 
-	out << "Pg RD:" << streams::endl << streams::flush;
+	out << "Pg RD:" << streams::endl;
 	for (uint16_t i = 0; i < sizeof data; ++i)
 	{
 		out << streams::hex << data[i] << ' ';
 		if ((i + 1) % 16 == 0)
-			out << streams::endl << streams::flush;
+			out << streams::endl;
 	}
 
-	out << "\nFinished\n" << streams::flush;
+	out << "\nFinished" << streams::endl;
 }

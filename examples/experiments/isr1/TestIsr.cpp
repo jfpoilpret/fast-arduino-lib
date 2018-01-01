@@ -41,28 +41,28 @@ int main()
 	uart.register_handler();
 	uart.begin(115200);
 	out.width(0);
-	out << "Start\n" << streams::flush;
+	out << "Start" << streams::endl;
 
 	// Start timer
 	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER, timer::TimerInterrupt::INPUT_CAPTURE};
 	// TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
 	timer.begin();
-	out << "Timer started.\n" << streams::flush;
+	out << "Timer started." << streams::endl;
 
 	SONAR sonar{timer};
 	sonar.register_handler();
 	time::delay_ms(5000);
 	while (true)
 	{
-		out << "#1\n" << streams::flush;
+		out << "#1" << streams::endl;
 		sonar.async_echo();
-		out << "#2\n" << streams::flush;
+		out << "#2" << streams::endl;
 		SONAR::TYPE echo = sonar.await_echo_ticks(TIMEOUT);
 		// SONAR::TYPE echo = sonar.echo_ticks(TIMEOUT);
-		out << "#3\n" << streams::flush;
+		out << "#3" << streams::endl;
 		uint32_t us = CALC::ticks_to_us(PRESCALER, echo);
 		uint16_t distance = devices::sonar::echo_us_to_distance_mm(us);
-		out << "# " << echo << " ticks, " << us << "us, " << distance << "mm\n" << streams::flush;
+		out << "# " << echo << " ticks, " << us << "us, " << distance << "mm" << streams::endl;
 		time::delay_ms(500);
 	}
 }

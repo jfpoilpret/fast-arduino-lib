@@ -92,14 +92,14 @@ int main()
 	uart.begin(115200);
 	out.width(0);
 	out.setf(streams::ios::hex, streams::ios::basefield);
-	out << "Start\n" << streams::flush;
+	out << "Start" << streams::endl;
 	
 	// Start TWI interface
 	//====================
 	i2c::I2CManager<i2c::I2CMode::Standard> manager;
 	manager.begin();
-	out << "I2C interface started\n" << streams::flush;
-	out << "status #1 " << manager.status() << '\n' << streams::flush;
+	out << "I2C interface started" << streams::endl;
+	out << "status #1 " << manager.status() << streams::endl;
 	time::delay_ms(1000);
 	
 	PublicDevice rtc{manager};
@@ -117,7 +117,7 @@ int main()
 	//=======================
 	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
 	rtc.write(DEVICE_ADDRESS, init_time, i2c::BusConditions::NO_START_STOP);
-	out << "status #2 " << manager.status() << '\n' << streams::flush;
+	out << "status #2 " << manager.status() << streams::endl;
 
 	time::delay_ms(2000);
 	
@@ -125,9 +125,9 @@ int main()
 	//============
 	RealTime time;
 	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
-	out << "status #3 " << manager.status() << '\n' << streams::flush;
+	out << "status #3 " << manager.status() << streams::endl;
 	rtc.read(DEVICE_ADDRESS, time, i2c::BusConditions::REPEAT_START_STOP);
-	out << "status #4 " << manager.status() << '\n' << streams::flush;
+	out << "status #4 " << manager.status() << streams::endl;
 	
 	out	<< "RTC: " 
 		<< time.day.tens << time.day.units << '.'
@@ -135,12 +135,12 @@ int main()
 		<< time.year.tens << time.year.units << ' '
 		<< time.hours.tens << time.hours.units << ':'
 		<< time.minutes.tens << time.minutes.units << ':'
-		<< time.seconds.tens << time.seconds.units << '\n'
-		<< streams::flush;
+		<< time.seconds.tens << time.seconds.units
+		<< streams::endl;
 	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "status #5 " << manager.status() << '\n' << streams::flush;
-	out << "End\n" << streams::flush;
+	out << "status #5 " << manager.status() << streams::endl;
+	out << "End" << streams::endl;
 }

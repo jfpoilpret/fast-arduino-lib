@@ -176,11 +176,11 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		out << F("Waiting for button push...\n") << streams::flush;
+		out << F("Waiting for button push...") << streams::endl;
 		capture.start();
 		TYPE duration = capture.capture();
 		uint16_t overflows = capture.overflows();
-		out << F("Push lasted ") << duration << F(" ticks, ") << overflows << F(" overflows\n") << streams::flush;
-		out << F("Push lasted ") << milliseconds(duration, overflows) << F(" ms\n") << streams::flush;
+		out << F("Push lasted ") << duration << F(" ticks, ") << overflows << F(" overflows") << streams::endl;
+		out << F("Push lasted ") << milliseconds(duration, overflows) << F(" ms") << streams::endl;
 	}
 }

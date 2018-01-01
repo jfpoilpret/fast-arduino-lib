@@ -47,7 +47,7 @@ static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)
 	out << type << F(": ") << streams::flush;
 	T value{};
 	in >> streams::skipws >> value;
-	out << value << streams::endl << streams::flush;
+	out << value << streams::endl;
 }
 
 int main() __attribute__((OS_main));

@@ -107,7 +107,7 @@ int main()
 	timer.begin();
 	SONAR sonar{timer};
 	
-	out << F("Starting...\n") << streams::flush;
+	out << F("Starting...") << streams::endl;
 	
 	while (true)
 	{
@@ -115,7 +115,7 @@ int main()
 		uint32_t us = CALC::ticks_to_us(PRESCALER, pulse);
 		uint16_t mm = echo_us_to_distance_mm(us);
 		// trace value to output
-		out << F("Pulse: ") << pulse << F(" ticks, ") << us << F("us. Distance: ") << mm << F("mm\n") << streams::flush;
+		out << F("Pulse: ") << pulse << F(" ticks, ") << us << F("us. Distance: ") << mm << F("mm") << streams::endl;
 		time::delay_ms(1000);
 	}
 }

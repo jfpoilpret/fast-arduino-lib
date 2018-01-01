@@ -61,17 +61,17 @@ using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
 using streams::dec;
 using streams::hex;
-using streams::flush;
+using streams::endl;
 
 void trace_status(uint8_t expected_status, uint8_t actual_status)
 {
-//	out << hex << F("status expected = ") << expected_status << F(", actual = ") << actual_status << '\n' << flush;
+//	out << hex << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
 }
 
 void display_status(char index, uint8_t status)
 {
 	out.width(2);
-	out << hex << F("status #") << index << ' ' << status << '\n' << flush;
+	out << hex << F("status #") << index << ' ' << status << endl;
 }
 
 void display_ram(const uint8_t* data, uint8_t size)
@@ -80,10 +80,10 @@ void display_ram(const uint8_t* data, uint8_t size)
 	out << hex << F("RAM content\n");
 	for (uint8_t i = 0; i < size; ++i)
 	{
-		if (!(i % 8)) out << '\n' << flush;
+		if (!(i % 8)) out << endl;
 		out << data[i] << ' ';
 	}
-	out << '\n' << flush;
+	out << endl;
 }
 
 void display_time(const tm& time)
@@ -96,8 +96,8 @@ void display_time(const tm& time)
 		<< time.tm_year << ' '
 		<< time.tm_hour << ':'
 		<< time.tm_min << ':'
-		<< time.tm_sec << '\n'
-		<< flush;
+		<< time.tm_sec
+		<< endl;
 }
 
 int main() __attribute__((OS_main));
@@ -109,13 +109,13 @@ int main()
 	uart.register_handler();
 #endif
 	uart.begin(115200);
-	out << F("Start\n") << flush;
+	out << F("Start") << endl;
 	
 	// Start TWI interface
 	//====================
 	i2c::I2CManager<> manager{trace_status};
 	manager.begin();
-	out << F("I2C interface started\n") << flush;
+	out << F("I2C interface started") << endl;
 	display_status('1', manager.status());
 	time::delay_ms(1000);
 	
@@ -169,5 +169,5 @@ int main()
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << F("End\n") << flush;
+	out << F("End") << endl;
 }

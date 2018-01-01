@@ -78,7 +78,6 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 using ANALOG_INPUT = analog::AnalogInput<POT, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_1MHz>;
 
 using streams::endl;
-using streams::flush;
 
 int main()
 {
@@ -99,13 +98,13 @@ int main()
 	ANALOG_INPUT pot;
 	analog::PowerVoltage<> power;
 
-	out << "Prescaler: " << ANALOG_INPUT::PRESCALER << endl << flush;
+	out << "Prescaler: " << ANALOG_INPUT::PRESCALER << endl;
 	
 	// Loop of samplings
 	while (true)
 	{
 		ANALOG_INPUT::TYPE value = pot.sample();
-		out << value << " (" << power.voltage_mV() << " mV)\n" << flush;
+		out << value << " (" << power.voltage_mV() << " mV)" << endl;
 		time::delay_ms(1000);
 	}
 	return 0;

@@ -79,7 +79,7 @@ OUTPUT& operator<< (OUTPUT& out, const Dummy& item)
 		<< F("\n\tc: ") << item.c 
 		<< F("\n\td: ") << item.d 
 		<< F("\n\te: ") << item.e 
-		<< F("\n}\n") << streams::flush;
+		<< F("\n}") << streams::endl;
 	return out;
 }
 

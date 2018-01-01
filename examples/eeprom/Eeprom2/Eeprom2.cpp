@@ -99,10 +99,10 @@ static void write_eeprom(streams::FormattedOutput<streams::OutputBuffer>& out, Q
 {
 	if (!writer.write(address, content))
 	{
-		out << "Could not write to " << address << streams::endl << streams::flush;
+		out << "Could not write to " << address << streams::endl;
 		writer.wait_until_done();
 		if (!writer.write(address, content))
-			out << "Could not again write to " << address << streams::endl << streams::flush;
+			out << "Could not again write to " << address << streams::endl;
 	}
 }
 
@@ -120,13 +120,13 @@ int main()
 
 	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
 	out << streams::hex;
-	out << "\nInitial EEPROM content\n" << streams::flush;	
+	out << "\nInitial EEPROM content" << streams::endl;	
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 	
 	QueuedWriter writer{eeprom_buffer};
 	
 	writer.erase();
-	out << "After EEPROM erase\n" << streams::flush;
+	out << "After EEPROM erase" << streams::endl;
 	writer.wait_until_done();
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 
@@ -136,18 +136,18 @@ int main()
 
 	for (uint16_t address = 0; address < 512; address += 16)
 		write_eeprom(out, writer, address, content);
-	out << "After 512 EEPROM writes\n" << streams::flush;
+	out << "After 512 EEPROM writes" << streams::endl;
 	writer.wait_until_done();
 	trace_eeprom(out, 0, 32);
 
 	char buffer[] = "abcdefghijklmnopqrstuvwxyz";
 	write_eeprom(out, writer, 512, buffer);
-	out << "After EEPROM string write\n" << streams::flush;
+	out << "After EEPROM string write" << streams::endl;
 	writer.wait_until_done();
 	trace_eeprom(out, 512, 3);
 
 	writer.write(768, buffer, 6);
-	out << "After EEPROM partial string write\n" << streams::flush;
+	out << "After EEPROM partial string write" << streams::endl;
 	writer.wait_until_done();
 	trace_eeprom(out, 768, 3);
 	

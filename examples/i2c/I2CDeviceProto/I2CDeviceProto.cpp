@@ -41,14 +41,14 @@ public:
 	friend int main();
 };
 
-using streams::flush;
+using streams::endl;
 using streams::dec;
 using streams::hex;
 
 void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
 {
 	if (expected_status != actual_status)
-		out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << '\n' << flush;
+		out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
 }
 
 int main() __attribute__((OS_main));
@@ -65,8 +65,7 @@ int main()
 	//====================
 	PublicDevice::MANAGER manager{trace_i2c_status};
 	manager.begin();
-	out << F("I2C interface started\n") << flush;
-//	out << hex << F("status #1 ") << manager.status() << '\n' << flush;
+	out << F("I2C interface started") << endl;
 	
 	PublicDevice device{manager};
 	
@@ -82,6 +81,5 @@ int main()
 	// Stop TWI interface
 	//===================
 	manager.end();
-//	out << hex << F("status #4 ") << manager.status() << '\n' << flush;
-	out << F("End\n") << flush;
+	out << F("End") << endl;
 }

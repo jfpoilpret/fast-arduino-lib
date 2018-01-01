@@ -136,7 +136,7 @@ int main()
 	bool master = is_master();
 	uint8_t self_device = master ? MASTER : SLAVE;
 	uint8_t other_device = master ? SLAVE : MASTER;
-	trace << "RF24App1 started as " << (master ? "Master" : "Slave") << streams::endl << streams::flush;
+	trace << "RF24App1 started as " << (master ? "Master" : "Slave") << streams::endl;
 
 	// Setup RTT
 	timer::RTT<RTT_TIMER> rtt;
@@ -144,13 +144,13 @@ int main()
 	rtt.begin();
 	// Set RTT instance as default clock from now
 	time::set_clock(rtt);
-	trace << "RTT started\n" << streams::flush;
+	trace << "RTT started" << streams::endl;
 
 	// Start SPI and setup NRF24
 	spi::init();
 	devices::rf::NRF24L01<PIN_CSN, PIN_CE> rf{NETWORK, self_device};
 	rf.begin();
-	trace << "NRF24L01+ started\n" << streams::flush;
+	trace << "NRF24L01+ started" << streams::endl;
 	
 	// Event Loop
 	uint8_t sent_port = 0;
@@ -167,14 +167,14 @@ int main()
 			if (result < 0)
 				trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 						<< " #Retrans=" << rf.get_retrans() 
-						<< " #Drops=" << rf.get_drops() << '\n' << streams::flush;
+						<< " #Drops=" << rf.get_drops() << streams::endl;
 			
 			// Then wait for slave reply
 			trace << " R " << streams::flush;
 			uint8_t src, port;
 			result = rf.recv(src, port, 0, 0, REPLY_MAX_WAIT_MS);
 			if (result < 0)
-				trace << "\nError " << result << "!\n" << streams::flush;
+				trace << "\nError " << result << '!' << streams::endl;
 			else
 				trace << uint16_t(port) << " (" << uint16_t(src) << ") " << streams::flush;
 			
@@ -189,7 +189,7 @@ int main()
 			uint8_t src, port;
 			int result = rf.recv(src, port, 0, 0);
 			if (result < 0)
-				trace << "\nError " << result << "!\n" << streams::flush;
+				trace << "\nError " << result << '!' << streams::endl;
 			else
 			{
 				trace << uint16_t(port) << " (" << uint16_t(src) << ") RR " << streams::flush;
@@ -198,12 +198,12 @@ int main()
 				if (result < 0)
 					trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 							<< " #Retrans=" << rf.get_retrans() 
-							<< " #Drops=" << rf.get_drops() << '\n' << streams::flush;
+							<< " #Drops=" << rf.get_drops() << streams::endl;
 			}
 		}
 		if (++count % 1000 == 0)
 			trace << "\n count = " << count << "\n#Trans=" << rf.get_trans() 
 					<< " #Retrans=" << rf.get_retrans() 
-					<< " #Drops=" << rf.get_drops() << '\n' << streams::flush;
+					<< " #Drops=" << rf.get_drops() << streams::endl;
 	}
 }

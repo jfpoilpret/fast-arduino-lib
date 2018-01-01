@@ -131,7 +131,7 @@ int main()
 	signal.enable_pin<ECHO2>();
 	signal.enable();
 	
-	out << F("Starting...\n") << streams::flush;
+	out << F("Starting...") << streams::endl;
 	
 	while (true)
 	{
@@ -145,8 +145,8 @@ int main()
 		uint32_t us2 = CALC::ticks_to_us(PRESCALER, pulse2);
 		uint16_t mm2 = echo_us_to_distance_mm(us2);
 		// trace value to output
-		out << F("Pulse1: ") << pulse1 << F(" ticks, ") << us1 << F("us. Distance: ") << mm1 << F("mm\n") << streams::flush;
-		out << F("Pulse2: ") << pulse2 << F(" ticks, ") << us2 << F("us. Distance: ") << mm2 << F("mm\n") << streams::flush;
+		out << F("Pulse1: ") << pulse1 << F(" ticks, ") << us1 << F("us. Distance: ") << mm1 << F("mm") << streams::endl;
+		out << F("Pulse2: ") << pulse2 << F(" ticks, ") << us2 << F("us. Distance: ") << mm2 << F("mm") << streams::endl;
 		time::delay_ms(1000);
 	}
 }
