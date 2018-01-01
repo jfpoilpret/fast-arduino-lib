@@ -681,7 +681,7 @@ namespace streams
 		 * @param p the pointer which address to output
 		 * @return @p this formatted output
 		 */
-		FormattedOutput<STREAM>& operator<<(void* p)
+		FormattedOutput<STREAM>& operator<<(const void* p)
 		{
 			stream_.puts(convert((uint16_t) p));
 			after_insertion();
