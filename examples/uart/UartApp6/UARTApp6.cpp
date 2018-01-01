@@ -38,16 +38,50 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char input_buffer[INPUT_BUFFER_SIZE];
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using INPUT = streams::FormattedInput<streams::InputBuffer>;
-using OUTPUT = streams::FormattedOutput<streams::OutputBuffer>;
+using namespace streams;
+
+using INPUT = FormattedInput<InputBuffer>;
+using OUTPUT = FormattedOutput<OutputBuffer>;
 
 template<typename T>
 static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)
 {
-	out << type << F(": ") << streams::flush;
+	out << type << F(": ") << flush;
 	T value{};
-	in >> streams::skipws >> value;
-	out << value << streams::endl;
+	in >> skipws >> value;
+	out << value << endl;
+}
+
+template<typename T>
+static void display_num(OUTPUT& out, T value)
+{
+	out << bin << value << endl;
+	out << dec << value << endl;
+	out << oct << value << endl;
+	out << hex << value << endl;
+}
+
+template<typename T>
+static void handle_num(OUTPUT& out, T value, const flash::FlashStorage* type)
+{
+	out << F("testing output of ") << type << F(" (") << dec << value << ')' << endl;
+	display_num<T>(out, value);
+
+	out << showbase;
+	display_num<T>(out, value);
+	out << noshowbase;
+
+	out << uppercase;
+	display_num<T>(out, value);
+	out << nouppercase;
+
+	out << uppercase << showbase;
+	display_num<T>(out, value);
+	out << nouppercase << noshowbase;
+
+	out << showpos;
+	display_num<T>(out, value);
+	out << noshowpos;
 }
 
 int main() __attribute__((OS_main));
@@ -62,6 +96,20 @@ int main()
 	uart.begin(115200);
 	INPUT in = uart.fin();
 	OUTPUT out = uart.fout();
+
+	// Check all output manipulators
+	handle_num<uint16_t>(out, 1234, F("uint16_t"));
+	handle_num<int16_t>(out, 1234, F("int16_t"));
+	handle_num<int16_t>(out, -1234, F("int16_t"));
+
+	handle_num<uint32_t>(out, 123456, F("uint32_t"));
+	handle_num<int32_t>(out, 123456, F("int32_t"));
+	handle_num<int32_t>(out, -123456, F("int32_t"));
+
+	//TODO check floats
+	//TODO check other types
+
+	//TODO check justification: setw(), setfill(), left, right...
 
 	// Event Loop
 	while (true)
