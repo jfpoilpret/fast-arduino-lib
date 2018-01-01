@@ -91,7 +91,7 @@ int main()
 #endif
 	uart.begin(115200);
 	out.width(0);
-	out.base(streams::FormatBase::Base::hex);
+	out.setf(streams::FormatBase::hex, streams::FormatBase::basefield);
 	out << "Start\n" << streams::flush;
 	
 	// Start TWI interface
