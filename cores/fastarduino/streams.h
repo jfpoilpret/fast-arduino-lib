@@ -589,6 +589,28 @@ namespace streams
 		uint8_t precision_;
 		char fill_;
 		char conversion_buffer[MAX_BUF_LEN];
+
+		// template<typename FSTREAM> friend void bin(FSTREAM&);
+		// template<typename FSTREAM> friend void oct(FSTREAM&);
+		// template<typename FSTREAM> friend void dec(FSTREAM&);
+		// template<typename FSTREAM> friend void hex(FSTREAM&);
+		// template<typename FSTREAM> friend void skipws(FSTREAM&);
+		// template<typename FSTREAM> friend void noskipws(FSTREAM&);
+		// template<typename FSTREAM> friend void boolalpha(FSTREAM&);
+		// template<typename FSTREAM> friend void noboolalpha(FSTREAM&);
+		// template<typename FSTREAM> friend void showbase(FSTREAM&);
+		// template<typename FSTREAM> friend void noshowbase(FSTREAM&);
+		// template<typename FSTREAM> friend void showpos(FSTREAM&);
+		// template<typename FSTREAM> friend void noshowpos(FSTREAM&);
+		// template<typename FSTREAM> friend void uppercase(FSTREAM&);
+		// template<typename FSTREAM> friend void nouppercase(FSTREAM&);
+		// template<typename FSTREAM> friend void unitbuf(FSTREAM&);
+		// template<typename FSTREAM> friend void nounitbuf(FSTREAM&);
+		// template<typename FSTREAM> friend void left(FSTREAM&);
+		// template<typename FSTREAM> friend void right(FSTREAM&);
+		// template<typename FSTREAM> friend void fixed(FSTREAM&);
+		// template<typename FSTREAM> friend void scientific(FSTREAM&);
+		// template<typename FSTREAM> friend void defaultfloat(FSTREAM&);
 	};
 
 	/**
@@ -853,29 +875,8 @@ namespace streams
 
 		STREAM& stream_;
 
-		template<typename FSTREAM> friend void flush(FSTREAM&);
-		template<typename FSTREAM> friend void endl(FSTREAM&);
-
-		//TODO those friends should be in ios_base
-		template<typename FSTREAM> friend void bin(FSTREAM&);
-		template<typename FSTREAM> friend void oct(FSTREAM&);
-		template<typename FSTREAM> friend void dec(FSTREAM&);
-		template<typename FSTREAM> friend void hex(FSTREAM&);
-		template<typename FSTREAM> friend void boolalpha(FSTREAM&);
-		template<typename FSTREAM> friend void noboolalpha(FSTREAM&);
-		template<typename FSTREAM> friend void showbase(FSTREAM&);
-		template<typename FSTREAM> friend void noshowbase(FSTREAM&);
-		template<typename FSTREAM> friend void showpos(FSTREAM&);
-		template<typename FSTREAM> friend void noshowpos(FSTREAM&);
-		template<typename FSTREAM> friend void uppercase(FSTREAM&);
-		template<typename FSTREAM> friend void nouppercase(FSTREAM&);
-		template<typename FSTREAM> friend void unitbuf(FSTREAM&);
-		template<typename FSTREAM> friend void nounitbuf(FSTREAM&);
-		template<typename FSTREAM> friend void left(FSTREAM&);
-		template<typename FSTREAM> friend void right(FSTREAM&);
-		template<typename FSTREAM> friend void fixed(FSTREAM&);
-		template<typename FSTREAM> friend void scientific(FSTREAM&);
-		template<typename FSTREAM> friend void defaultfloat(FSTREAM&);
+		// template<typename FSTREAM> friend void flush(FSTREAM&);
+		// template<typename FSTREAM> friend void endl(FSTREAM&);
 	};
 
 	/**
@@ -1117,18 +1118,123 @@ namespace streams
 
 		STREAM& stream_;
 
-		template<typename FSTREAM> friend void bin(FSTREAM&);
-		template<typename FSTREAM> friend void oct(FSTREAM&);
-		template<typename FSTREAM> friend void dec(FSTREAM&);
-		template<typename FSTREAM> friend void hex(FSTREAM&);
 		template<typename FSTREAM> friend void ws(FSTREAM&);
-		template<typename FSTREAM> friend void skipws(FSTREAM&);
-		template<typename FSTREAM> friend void noskipws(FSTREAM&);
 	};
 
 	using ios = ios_base;
 
-	//TODO define argumented manipulators for width, precision, filler
+	/// @cond notdocumented
+	class setw_
+	{
+	public:
+		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		{
+			stream.width(width_);
+		}
+	private:
+		constexpr setw_(uint8_t width):width_{width}
+		{
+		}
+		const uint8_t width_;
+		friend constexpr const setw_ setw(uint8_t width);
+	};
+	class setprecision_
+	{
+	public:
+		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		{
+			stream.precision(precision_);
+		}
+	private:
+		constexpr setprecision_(uint8_t precision):precision_{precision}
+		{
+		}
+		const uint8_t precision_;
+		friend constexpr const setprecision_ setprecision(uint8_t precision);
+	};
+	class setfill_
+	{
+	public:
+		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		{
+			stream.fill(fill_);
+		}
+	private:
+		constexpr setfill_(char fill):fill_{fill}
+		{
+		}
+		const char fill_;
+		friend constexpr const setfill_ setfill(char fill);
+	};
+	class setbase_
+	{
+	public:
+		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		{
+			stream.setf(base_, ios::basefield);
+		}
+	private:
+		constexpr setbase_(int b):base_{b == 2 ? ios::bin : b == 8 ? ios::oct : b == 16 ? ios::hex : ios::dec}
+		{
+		}
+		const ios::fmtflags base_;
+		friend constexpr const setbase_ setbase(int base);
+	};
+	class setiosflags_
+	{
+	public:
+		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		{
+			stream.setf(mask_);
+		}
+	private:
+		constexpr setiosflags_(ios::fmtflags mask):mask_{mask}
+		{
+		}
+		const ios::fmtflags mask_;
+		friend constexpr const setiosflags_ setiosflags(ios::fmtflags mask);
+	};
+	class resetiosflags_
+	{
+	public:
+		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		{
+			stream.unsetf(mask_);
+		}
+	private:
+		constexpr resetiosflags_(ios::fmtflags mask):mask_{mask}
+		{
+		}
+		const ios::fmtflags mask_;
+		friend constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask);
+	};
+	/// @endcond
+
+	//TODO DOCS
+	constexpr const setw_ setw(uint8_t width)
+	{
+		return setw_{width};
+	}
+	constexpr const setprecision_ setprecision(uint8_t precision)
+	{
+		return setprecision_{precision};
+	}
+	constexpr const setbase_ setbase(int base)
+	{
+		return setbase_{base};
+	}
+	constexpr const setfill_ setfill(char fill)
+	{
+		return setfill_{fill};
+	}
+	constexpr const setiosflags_ setiosflags(ios::fmtflags mask)
+	{
+		return setiosflags_{mask};
+	}
+	constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask)
+	{
+		return resetiosflags_{mask};
+	}
 
 	/**
 	 * Manipulator for an input stream, which will swallow all white spaces from
