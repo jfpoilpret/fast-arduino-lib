@@ -30,7 +30,7 @@
 #include "utilities.h"
 
 //TODO better alignment with C++ iostreams? class names, method names, behvior, missing methods...
-//TODO improve data size by removing conversion_buffer from FormatBase fields.
+//TODO improve data size by removing conversion_buffer from ios_base fields.
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
  * Typical usage of an output "stream":
@@ -300,14 +300,13 @@ namespace streams
 	 */
 	int gets(InputBuffer& in, char* str, size_t max, char end = 0);
 
-	//TODO rename ios_base (like C++ std::ios_base)?
 	//TODO infer on a way to define callbacks to stream put/flush/other for output
 	//TODO same for input LATER
 	/**
 	 * Base class for formatted streams.
 	 * Allows defining base, width and precision for numbers display.
 	 */
-	class FormatBase
+	class ios_base
 	{
 	public:
 		//TODO DOC refer to C++11 std::fmtflags (note some flags are not supported)
@@ -335,7 +334,7 @@ namespace streams
 		static constexpr fmtflags unitbuf = 0x4000;
 		static constexpr fmtflags uppercase = 0x8000;
 
-		FormatBase() : flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
+		ios_base() : flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
 		{
 		}
 
@@ -596,7 +595,7 @@ namespace streams
 	 * Output stream wrapper to provide formatted output API, a la C++.
 	 * @tparam STREAM_ the output stream to wrap, typically OutputBuffer.
 	 */
-	template<typename STREAM_> class FormattedOutput : public FormatBase
+	template<typename STREAM_> class FormattedOutput : public ios_base
 	{
 	public:
 		/** The output stream wrapped by this FormattedOutput. */
@@ -857,7 +856,7 @@ namespace streams
 		template<typename FSTREAM> friend void flush(FSTREAM&);
 		template<typename FSTREAM> friend void endl(FSTREAM&);
 
-		//TODO those friends should be in FormatBase
+		//TODO those friends should be in ios_base
 		template<typename FSTREAM> friend void bin(FSTREAM&);
 		template<typename FSTREAM> friend void oct(FSTREAM&);
 		template<typename FSTREAM> friend void dec(FSTREAM&);
@@ -883,7 +882,7 @@ namespace streams
 	 * Input stream wrapper to provide formatted input API, a la C++.
 	 * @tparam STREAM_ the input stream to wrap, typically InputBuffer.
 	 */
-	template<typename STREAM_> class FormattedInput : public FormatBase
+	template<typename STREAM_> class FormattedInput : public ios_base
 	{
 	public:
 		/** The input stream wrapped by FormattedInput. */
@@ -1127,6 +1126,8 @@ namespace streams
 		template<typename FSTREAM> friend void noskipws(FSTREAM&);
 	};
 
+	using ios = ios_base;
+
 	//TODO define argumented manipulators for width, precision, filler
 
 	/**
@@ -1150,7 +1151,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void skipws(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::skipws);
+		stream.setf(ios::skipws);
 	}
 
 	/**
@@ -1159,7 +1160,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void noskipws(FSTREAM& stream)
 	{
-		stream.unsetf(FormatBase::skipws);
+		stream.unsetf(ios::skipws);
 	}
 
 	/**
@@ -1168,7 +1169,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void bin(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::bin, FormatBase::basefield);
+		stream.setf(ios::bin, ios::basefield);
 	}
 
 	/**
@@ -1177,7 +1178,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void oct(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::oct, FormatBase::basefield);
+		stream.setf(ios::oct, ios::basefield);
 	}
 
 	/**
@@ -1186,7 +1187,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void dec(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::dec, FormatBase::basefield);
+		stream.setf(ios::dec, ios::basefield);
 	}
 
 	/**
@@ -1195,7 +1196,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void hex(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::hex, FormatBase::basefield);
+		stream.setf(ios::hex, ios::basefield);
 	}
 
 	/**
@@ -1218,77 +1219,77 @@ namespace streams
 
 	template<typename FSTREAM> inline void boolalpha(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::boolalpha);
+		stream.setf(ios::boolalpha);
 	}
 
 	template<typename FSTREAM> inline void noboolalpha(FSTREAM& stream)
 	{
-		stream.unsetf(FormatBase::boolalpha);
+		stream.unsetf(ios::boolalpha);
 	}
 	
 	template<typename FSTREAM> inline void showbase(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::showbase);
+		stream.setf(ios::showbase);
 	}
 	
 	template<typename FSTREAM> inline void noshowbase(FSTREAM& stream)
 	{
-		stream.unsetf(FormatBase::showbase);
+		stream.unsetf(ios::showbase);
 	}
 	
 	template<typename FSTREAM> inline void showpos(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::showpos);
+		stream.setf(ios::showpos);
 	}
 	
 	template<typename FSTREAM> inline void noshowpos(FSTREAM& stream)
 	{
-		stream.unsetf(FormatBase::showpos);
+		stream.unsetf(ios::showpos);
 	}
 	
 	template<typename FSTREAM> inline void uppercase(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::uppercase);
+		stream.setf(ios::uppercase);
 	}
 	
 	template<typename FSTREAM> inline void nouppercase(FSTREAM& stream)
 	{
-		stream.unsetf(FormatBase::uppercase);
+		stream.unsetf(ios::uppercase);
 	}
 	
 	template<typename FSTREAM> inline void unitbuf(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::unitbuf);
+		stream.setf(ios::unitbuf);
 	}
 	
 	template<typename FSTREAM> inline void nounitbuf(FSTREAM& stream)
 	{
-		stream.unsetf(FormatBase::unitbuf);
+		stream.unsetf(ios::unitbuf);
 	}
 	
 	template<typename FSTREAM> inline void left(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::left, FormatBase::adjustfield);
+		stream.setf(ios::left, ios::adjustfield);
 	}
 	
 	template<typename FSTREAM> inline void right(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::right, FormatBase::adjustfield);
+		stream.setf(ios::right, ios::adjustfield);
 	}
 	
 	template<typename FSTREAM> inline void fixed(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::fixed, FormatBase::floatfield);
+		stream.setf(ios::fixed, ios::floatfield);
 	}
 	
 	template<typename FSTREAM> inline void scientific(FSTREAM& stream)
 	{
-		stream.setf(FormatBase::scientific, FormatBase::floatfield);
+		stream.setf(ios::scientific, ios::floatfield);
 	}
 
 	template<typename FSTREAM> inline void defaultfloat(FSTREAM& stream)
 	{
-		stream.unsetf(FormatBase::floatfield);
+		stream.unsetf(ios::floatfield);
 	}
 }
 
