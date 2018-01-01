@@ -531,7 +531,7 @@ namespace streams
 			if ((flags() & showbase) && (flags() & (bin | oct | hex)))
 			{
 				const char* prefix = (flags() & bin) ? "0b" : (flags() & oct) ? "0" : "0x";
-				memmove(input, input + strlen(prefix), strlen(input) + 1);
+				memmove(input + strlen(prefix), input, strlen(input) + 1);
 				strncpy(input, prefix, strlen(prefix));
 			}
 			return input;
@@ -574,9 +574,9 @@ namespace streams
 
 		int base() const
 		{
-			if (flags() | bin) return 2;
-			if (flags() | oct) return 8;
-			if (flags() | hex) return 16;
+			if (flags() & bin) return 2;
+			if (flags() & oct) return 8;
+			if (flags() & hex) return 16;
 			return 10;
 		}
 
