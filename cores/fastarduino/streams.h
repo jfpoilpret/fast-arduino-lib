@@ -650,7 +650,22 @@ namespace streams
 			stream_.puts(str);
 		}
 
-		//TODO add support for void* (address)
+		/**
+		 * Output the address of a pointer.
+		 * @code
+		 * int i = 0;
+		 * int* p = &i;
+		 * out << p;
+		 * @endcode
+		 * @param p the pointer which address to output
+		 * @return @p this formatted output
+		 */
+		FormattedOutput<STREAM>& operator<<(void* p)
+		{
+			stream_.puts(convert((uint16_t) p));
+			after_insertion();
+			return *this;
+		}
 
 		/**
 		 * Output a single character.
