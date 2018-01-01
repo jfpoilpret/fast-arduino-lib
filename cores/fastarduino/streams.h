@@ -30,7 +30,7 @@
 #include "utilities.h"
 
 //TODO better alignment with C++ iostreams? class names, method names, behvior, missing methods...
-
+//TODO improve data size by removing conversion_buffer from FormatBase fields.
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
  * Typical usage of an output "stream":
@@ -77,7 +77,6 @@ namespace streams
 	public:
 		template<uint8_t SIZE> OutputBuffer(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false}
 		{
-			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
 
 		/**
@@ -231,7 +230,6 @@ namespace streams
 
 		template<uint8_t SIZE> InputBuffer(char (&buffer)[SIZE]) : QUEUE{buffer}
 		{
-			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
 
 		/**
@@ -302,6 +300,9 @@ namespace streams
 	 */
 	int gets(InputBuffer& in, char* str, size_t max, char end = 0);
 
+	//TODO rename ios_base (like C++ std::ios_base)?
+	//TODO infer on a way to define callbacks to stream put/flush/other for output
+	//TODO same for input LATER
 	/**
 	 * Base class for formatted streams.
 	 * Allows defining base, width and precision for numbers display.
@@ -309,51 +310,98 @@ namespace streams
 	class FormatBase
 	{
 	public:
-		/**
-		 * Base for numbers representation.
-		 */
-		enum class Base : uint8_t
-		{
-			//		bcd = 0,
-			/** Binary */
-			bin = 2,
-			/** Octal */
-			oct = 8,
-			/** Decimal */
-			dec = 10,
-			/** Hexadecimal */
-			hex = 16
-		};
+		//TODO DOC refer to C++11 std::fmtflags (note some flags are not supported)
+		using fmtflags = uint16_t;
 
-		FormatBase() : width_{6}, precision_{4}, base_{Base::dec}
+		//TODO handle for input also!
+		static constexpr fmtflags dec = 0x0001;
+		static constexpr fmtflags bin = 0x0002;
+		static constexpr fmtflags oct = 0x0004;
+		static constexpr fmtflags hex = 0x0008;
+		static constexpr fmtflags basefield = dec | bin | oct | hex;
+
+		static constexpr fmtflags left = 0x0010;
+		static constexpr fmtflags right = 0x0020;
+		static constexpr fmtflags adjustfield = left | right;
+
+		static constexpr fmtflags scientific = 0x0040;
+		static constexpr fmtflags fixed = 0x0080;
+		static constexpr fmtflags floatfield = scientific | fixed;
+		
+		static constexpr fmtflags boolalpha = 0x0200;
+		static constexpr fmtflags showbase = 0x0400;
+		static constexpr fmtflags showpos = 0x1000;
+		static constexpr fmtflags skipws = 0x2000;
+		static constexpr fmtflags unitbuf = 0x4000;
+		static constexpr fmtflags uppercase = 0x8000;
+
+		FormatBase() : flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
 		{
+		}
+
+		//TODO DOCs
+		inline void flags(fmtflags flags)
+		{
+			flags_ = flags;
+		}
+
+		inline fmtflags flags() const
+		{
+			return flags_;
+		}
+
+		inline void setf(fmtflags flags)
+		{
+			flags_ |= flags;
+		}
+
+		inline void setf(fmtflags flags, fmtflags mask)
+		{
+			flags_ = (flags_ & ~mask) | (flags & mask);
+		}
+
+		inline void unsetf(fmtflags flags)
+		{
+			flags_ &= ~flags;
+		}
+
+		inline char fill() const
+		{
+			return fill_;
+		}
+
+		inline void fill(char fill)
+		{
+			fill_ = fill;
 		}
 
 		/**
 		 * Set minimum width used for displaying values. If a value's 
 		 * representation needs less than @p width characters for display, then
-		 * additional characters will be added before the value.
-		 * For numbers, the base defines the filler character, either `0` for
-		 * binary, octal and hexadecimal, or ` ` for decimal.
-		 * For strings, a space is added.
-		 * If @p width is `>0` then text is right aligned, if @p width is `<0`,
-		 * then text is left aligned.
+		 * additional characters will be added before or after the value.
+		 * The filler character is determined by `fill()`, a space by default.
+		 * Padding side is determined by `flags()`: `left` or `right`.
 		 * Note that if the value representation needs more than @p width 
 		 * characters, then @p width will have no effect on display.
 		 * 
 		 * @param width the new width to use for next formatted output
+		 * 
+		 * @sa fill(char)
+		 * @sa flags(fmtflags)
+		 * @sa left
+		 * @sa right
 		 */
-		inline void width(int8_t width)
+		inline void width(uint8_t width)
 		{
 			width_ = width;
 		}
 
 		/**
-		 * Get the current minimum width value (default = `6`) used for formatted 
+		 * Get the current minimum width value (default = `0`) used for formatted 
 		 * output.
 		 * @return current minimum width 
 		 */
-		inline int8_t width()
+		inline uint8_t width() const
 		{
 			return width_;
 		}
@@ -370,43 +418,29 @@ namespace streams
 		}
 
 		/**
-		 * Get the current precision (default = `4`) used for formatted 
+		 * Get the current precision (default = `6`) used for formatted 
 		 * floating values output.
 		 * @return current precision
 		 */
-		inline uint8_t precision()
+		inline uint8_t precision() const
 		{
 			return precision_;
 		}
 
-		/**
-		 * Set new base to use for next outputs of numbers.
-		 * 
-		 * @param base new base used for numbers display
-		 */
-		inline void base(Base base)
-		{
-			base_ = base;
-		}
-
-		/**
-		 * Get the current base used for numbers representation (default = `Base::dec`).
-		 * @return current base
-		 */
-		inline Base base()
-		{
-			return base_;
-		}
-
 	protected:
 		/// @cond notdocumented
-		void reset()
+		void init()
 		{
-			width_ = 6;
-			precision_ = 4;
-			base_ = Base::dec;
+			width_ = 0;
+			precision_ = 6;
+			flags_ = skipws | dec;
+			fill_ = ' ';
 		}
 		// conversions from string to numeric value
+		bool convert(const char* token, bool& b)
+		{
+			//TODO
+		}
 		bool convert(const char* token, double& v)
 		{
 			char* endptr;
@@ -418,7 +452,7 @@ namespace streams
 		bool convert(const char* token, long& v)
 		{
 			char* endptr;
-			long value = strtol(token, &endptr, (uint8_t) base_);
+			long value = strtol(token, &endptr, base());
 			if (endptr == token) return false;
 			v = value;
 			return true;
@@ -426,7 +460,7 @@ namespace streams
 		bool convert(const char* token, unsigned long& v)
 		{
 			char* endptr;
-			unsigned long value = strtoul(token, &endptr, (uint8_t) base_);
+			unsigned long value = strtoul(token, &endptr, base());
 			if (endptr == token) return false;
 			v = value;
 			return true;
@@ -449,59 +483,111 @@ namespace streams
 		// conversions from numeric value to string
 		const char* convert(int v)
 		{
-			return justify(itoa(v, conversion_buffer, (uint8_t) base_), filler());
+			return format_number(itoa(v, conversion_buffer, base()));
 		}
 		const char* convert(unsigned int v)
 		{
-			return justify(utoa(v, conversion_buffer, (uint8_t) base_), filler());
+			return format_number(utoa(v, conversion_buffer, base()));
 		}
 		const char* convert(long v)
 		{
-			return justify(ltoa(v, conversion_buffer, (uint8_t) base_), filler());
+			return format_number(ltoa(v, conversion_buffer, base()));
 		}
 		const char* convert(unsigned long v)
 		{
-			return justify(ultoa(v, conversion_buffer, (uint8_t) base_), filler());
+			return format_number(ultoa(v, conversion_buffer, base()));
 		}
 		const char* convert(double v)
 		{
-			return dtostrf(v, width_, precision_, conversion_buffer);
+			char* buffer;
+			if (flags() & fixed)
+				buffer = dtostrf(v, 0, precision(), conversion_buffer);
+			else if (flags() & scientific)
+				buffer = dtostre(v, conversion_buffer, precision(), 0);
+			else
+				buffer = dtostrf(v, 0, 0, conversion_buffer);
+			return justify(add_sign(buffer));
 		}
-		const char* justify(char* input, char filler = ' ')
+		const char* convert(bool b)
 		{
-			uint8_t width = (width_ >= 0 ? width_ : -width_);
-			if (strlen(input) < width)
+			if (flags() & boolalpha)
+				return justify(strcpy(conversion_buffer, b ? "true" : "false"));
+			else
+				return convert(b ? 1 : 0);
+		}
+
+		//TODO avoid memmove as much as possible.
+		char* upper(char* input) const
+		{
+			if ((flags() & uppercase) && (flags() & hex))
+				strupr(input);
+			return input;
+		}
+		char* add_base(char* input) const
+		{
+			if ((flags() & showbase) && (flags() & (bin | oct | hex)))
 			{
-				uint8_t add = width - strlen(input);
-				memmove(input + add, input, strlen(input) + 1);
-				memset(input, filler, add);
+				const char* prefix = (flags() & bin) ? "0b" : (flags() & oct) ? "0" : "0x";
+				memmove(input, input + strlen(prefix), strlen(input) + 1);
+				strncpy(input, prefix, strlen(prefix));
 			}
 			return input;
 		}
-		char filler()
+		char* add_sign(char* input) const
 		{
-			switch (base_)
+			if ((flags() & dec) && (flags() & showpos) && (input[0] != '+') && (input[0] != '-'))
 			{
-			case Base::bin:
-			case Base::hex:
-			case Base::oct:
-				return '0';
-			case Base::dec:
-				return ' ';
+				// Add + sign if not exist
+				memmove(input + 1, input, strlen(input) + 1);
+				input[0] = '+';
 			}
+			return input;
+		}
+
+		char* format_number(char* input) const
+		{
+			return justify(add_sign(add_base(upper(input))));
+		}
+
+		//TODO this method would be better if it could directly write to the stream
+		char* justify(char* input) const
+		{
+			if (strlen(input) < width())
+			{
+				uint8_t add = width() - strlen(input);
+				if (flags() & left)
+				{
+					memmove(input + add, input, strlen(input) + 1);
+					memset(input, fill(), add);
+				}
+				else if (flags() & right)
+				{
+					memset(input + strlen(input), fill(), add);
+					input[width() + 1] = 0;
+				}
+			}
+			return input;
+		}
+
+		int base() const
+		{
+			if (flags() | bin) return 2;
+			if (flags() | oct) return 8;
+			if (flags() | hex) return 16;
+			return 10;
 		}
 
 		static const uint8_t MAX_BUF_LEN = 64;
 		/// @endcond
 
 	private:
-		int8_t width_;
+		fmtflags flags_;
+		uint8_t width_;
 		uint8_t precision_;
-		Base base_;
+		char fill_;
 		char conversion_buffer[MAX_BUF_LEN];
 	};
 
-	//TODO Add reset of latest format used
 	/**
 	 * Output stream wrapper to provide formatted output API, a la C++.
 	 * @tparam STREAM_ the output stream to wrap, typically OutputBuffer.
@@ -573,6 +659,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(char c)
 		{
 			stream_.put(c);
+			after_insertion();
 			return *this;
 		}
 
@@ -586,8 +673,10 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(const char* s)
 		{
-			//TODO Add justify with width if <0
+			//FIXME need to implement padding here (justify())
+			// stream_.puts(justify(s));
 			stream_.puts(s);
+			after_insertion();
 			return *this;
 		}
 
@@ -601,8 +690,27 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(const flash::FlashStorage* s)
 		{
-			//TODO Add justify with width if <0
-			stream_.puts(s);
+			// Specific case: perform justification manually here
+			size_t len = strlen_P((const char*) s);
+			if (len < width())
+			{
+				uint8_t add = width() - len;
+				if (flags() & left)
+				{
+					while (add--)
+						stream_.put(fill(), false);
+					stream_.puts(s);
+				}
+				else if (flags() & right)
+				{
+					stream_.puts(s);
+					while (add--)
+						stream_.put(fill(), false);
+				}
+			}
+			else
+				stream_.puts(s);
+			after_insertion();
 			return *this;
 		}
 
@@ -619,6 +727,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(int v)
 		{
 			stream_.puts(convert(v));
+			after_insertion();
 			return *this;
 		}
 
@@ -635,6 +744,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(unsigned int v)
 		{
 			stream_.puts(convert(v));
+			after_insertion();
 			return *this;
 		}
 
@@ -651,6 +761,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(long v)
 		{
 			stream_.puts(convert(v));
+			after_insertion();
 			return *this;
 		}
 
@@ -667,6 +778,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(unsigned long v)
 		{
 			stream_.puts(convert(v));
+			after_insertion();
 			return *this;
 		}
 
@@ -683,6 +795,7 @@ namespace streams
 		FormattedOutput<STREAM>& operator<<(double v)
 		{
 			stream_.puts(convert(v));
+			after_insertion();
 			return *this;
 		}
 
@@ -714,17 +827,37 @@ namespace streams
 		}
 
 	private:
+		void after_insertion()
+		{
+			if (flags() & unitbuf) stream_.flush();
+			width(0);
+		}
+
 		STREAM& stream_;
 
-		/// @cond notdocumented
+		template<typename FSTREAM> friend void flush(FSTREAM&);
+		template<typename FSTREAM> friend void endl(FSTREAM&);
+
+		//TODO those friends should be in FormatBase
 		template<typename FSTREAM> friend void bin(FSTREAM&);
 		template<typename FSTREAM> friend void oct(FSTREAM&);
 		template<typename FSTREAM> friend void dec(FSTREAM&);
 		template<typename FSTREAM> friend void hex(FSTREAM&);
-
-		template<typename FSTREAM> friend void flush(FSTREAM&);
-		template<typename FSTREAM> friend void endl(FSTREAM&);
-		/// @endcond
+		template<typename FSTREAM> friend void boolalpha(FSTREAM&);
+		template<typename FSTREAM> friend void noboolalpha(FSTREAM&);
+		template<typename FSTREAM> friend void showbase(FSTREAM&);
+		template<typename FSTREAM> friend void noshowbase(FSTREAM&);
+		template<typename FSTREAM> friend void showpos(FSTREAM&);
+		template<typename FSTREAM> friend void noshowpos(FSTREAM&);
+		template<typename FSTREAM> friend void uppercase(FSTREAM&);
+		template<typename FSTREAM> friend void nouppercase(FSTREAM&);
+		template<typename FSTREAM> friend void unitbuf(FSTREAM&);
+		template<typename FSTREAM> friend void nounitbuf(FSTREAM&);
+		template<typename FSTREAM> friend void left(FSTREAM&);
+		template<typename FSTREAM> friend void right(FSTREAM&);
+		template<typename FSTREAM> friend void fixed(FSTREAM&);
+		template<typename FSTREAM> friend void scientific(FSTREAM&);
+		template<typename FSTREAM> friend void defaultfloat(FSTREAM&);
 	};
 
 	/**
@@ -741,7 +874,7 @@ namespace streams
 		 * Construct a formatted input wrapper of @p stream
 		 * @param stream the input stream to be wrapped
 		 */
-		FormattedInput(STREAM& stream) : stream_{stream}, skipws_{true}
+		FormattedInput(STREAM& stream) : stream_{stream}
 		{
 		}
 
@@ -800,7 +933,7 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(bool& v)
 		{
-			skip_whitespaces(skipws_);
+			skipws_if_needed();
 			char c = containers::pull(stream_.queue());
 			v = (c != '0');
 			return *this;
@@ -820,7 +953,7 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(char& v)
 		{
-			skip_whitespaces(skipws_);
+			skipws_if_needed();
 			v = containers::pull(stream_.queue());
 			return *this;
 		}
@@ -839,7 +972,7 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(int& v)
 		{
-			skip_whitespaces(skipws_);
+			skipws_if_needed();
 			char buffer[sizeof(int) * 8 + 1];
 			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
@@ -859,7 +992,7 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(unsigned int& v)
 		{
-			skip_whitespaces(skipws_);
+			skipws_if_needed();
 			char buffer[sizeof(int) * 8 + 1];
 			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
@@ -879,7 +1012,7 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(long& v)
 		{
-			skip_whitespaces(skipws_);
+			skipws_if_needed();
 			char buffer[sizeof(long) * 8 + 1];
 			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
@@ -899,7 +1032,7 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(unsigned long& v)
 		{
-			skip_whitespaces(skipws_);
+			skipws_if_needed();
 			char buffer[sizeof(long) * 8 + 1];
 			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
@@ -919,7 +1052,7 @@ namespace streams
 		 */
 		FormattedInput<STREAM>& operator>>(double& v)
 		{
-			skip_whitespaces(skipws_);
+			skipws_if_needed();
 			char buffer[MAX_BUF_LEN];
 			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
@@ -954,16 +1087,18 @@ namespace streams
 		}
 
 	private:
-		void skip_whitespaces(bool skip = true)
+		void skipws_if_needed()
 		{
-			if (skip)
-				while (isspace(containers::peek(stream_.queue()))) containers::pull(stream_.queue());
+			if (flags() & skipws) skip_whitespace();
+		}
+
+		void skip_whitespace()
+		{
+			while (isspace(containers::peek(stream_.queue()))) containers::pull(stream_.queue());
 		}
 
 		STREAM& stream_;
-		bool skipws_;
 
-		/// @cond notdocumented
 		template<typename FSTREAM> friend void bin(FSTREAM&);
 		template<typename FSTREAM> friend void oct(FSTREAM&);
 		template<typename FSTREAM> friend void dec(FSTREAM&);
@@ -971,7 +1106,6 @@ namespace streams
 		template<typename FSTREAM> friend void ws(FSTREAM&);
 		template<typename FSTREAM> friend void skipws(FSTREAM&);
 		template<typename FSTREAM> friend void noskipws(FSTREAM&);
-		/// @endcond
 	};
 
 	//TODO define argumented manipulators for width, precision, filler
@@ -988,7 +1122,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void ws(FSTREAM& stream)
 	{
-		stream.skip_whitespaces();
+		stream.skip_whitespace();
 	}
 
 	/**
@@ -997,7 +1131,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void skipws(FSTREAM& stream)
 	{
-		stream.skipws_ = true;
+		stream.setf(FormatBase::skipws);
 	}
 
 	/**
@@ -1006,7 +1140,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void noskipws(FSTREAM& stream)
 	{
-		stream.skipws_ = false;
+		stream.unsetf(FormatBase::skipws);
 	}
 
 	/**
@@ -1015,7 +1149,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void bin(FSTREAM& stream)
 	{
-		stream.base(FormatBase::Base::bin);
+		stream.setf(FormatBase::bin, FormatBase::basefield);
 	}
 
 	/**
@@ -1024,7 +1158,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void oct(FSTREAM& stream)
 	{
-		stream.base(FormatBase::Base::oct);
+		stream.setf(FormatBase::oct, FormatBase::basefield);
 	}
 
 	/**
@@ -1033,7 +1167,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void dec(FSTREAM& stream)
 	{
-		stream.base(FormatBase::Base::dec);
+		stream.setf(FormatBase::dec, FormatBase::basefield);
 	}
 
 	/**
@@ -1042,7 +1176,7 @@ namespace streams
 	 */
 	template<typename FSTREAM> inline void hex(FSTREAM& stream)
 	{
-		stream.base(FormatBase::Base::hex);
+		stream.setf(FormatBase::hex, FormatBase::basefield);
 	}
 
 	/**
@@ -1061,6 +1195,81 @@ namespace streams
 	{
 		stream.put('\n');
 		stream.flush();
+	}
+
+	template<typename FSTREAM> inline void boolalpha(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::boolalpha);
+	}
+
+	template<typename FSTREAM> inline void noboolalpha(FSTREAM& stream)
+	{
+		stream.unsetf(FormatBase::boolalpha);
+	}
+	
+	template<typename FSTREAM> inline void showbase(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::showbase);
+	}
+	
+	template<typename FSTREAM> inline void noshowbase(FSTREAM& stream)
+	{
+		stream.unsetf(FormatBase::showbase);
+	}
+	
+	template<typename FSTREAM> inline void showpos(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::showpos);
+	}
+	
+	template<typename FSTREAM> inline void noshowpos(FSTREAM& stream)
+	{
+		stream.unsetf(FormatBase::showpos);
+	}
+	
+	template<typename FSTREAM> inline void uppercase(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::uppercase);
+	}
+	
+	template<typename FSTREAM> inline void nouppercase(FSTREAM& stream)
+	{
+		stream.unsetf(FormatBase::uppercase);
+	}
+	
+	template<typename FSTREAM> inline void unitbuf(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::unitbuf);
+	}
+	
+	template<typename FSTREAM> inline void nounitbuf(FSTREAM& stream)
+	{
+		stream.unsetf(FormatBase::unitbuf);
+	}
+	
+	template<typename FSTREAM> inline void left(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::left, FormatBase::adjustfield);
+	}
+	
+	template<typename FSTREAM> inline void right(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::right, FormatBase::adjustfield);
+	}
+	
+	template<typename FSTREAM> inline void fixed(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::fixed, FormatBase::floatfield);
+	}
+	
+	template<typename FSTREAM> inline void scientific(FSTREAM& stream)
+	{
+		stream.setf(FormatBase::scientific, FormatBase::floatfield);
+	}
+
+	template<typename FSTREAM> inline void defaultfloat(FSTREAM& stream)
+	{
+		stream.unsetf(FormatBase::floatfield);
 	}
 }
 
