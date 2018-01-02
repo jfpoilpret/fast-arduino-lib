@@ -317,7 +317,6 @@ namespace streams
 		// NOTE defaults are: dec, right, fixed (FIXME) and skipws
 		using fmtflags = uint16_t;
 
-		//TODO handle for input also!
 		static constexpr fmtflags dec = 0x0001;
 		static constexpr fmtflags bin = 0x0002;
 		static constexpr fmtflags oct = 0x0004;
@@ -444,7 +443,7 @@ namespace streams
 		bool convert(const char* token, bool& b)
 		{
 			if (flags() & boolalpha)
-				b = (strcmp(token, "true") != 0);
+				b = (strcmp(token, "true") == 0);
 			else
 				b = (atol(token) != 0);
 			return true;
@@ -938,6 +937,8 @@ namespace streams
 			return gets(stream_, str, max);
 		}
 
+		//TODO missing operator>>(char*)
+		
 		/**
 		 * Input and interpret next character from buffer as a boolean value.
 		 * If read character is '0' then, it will be interpreted as `false`,
@@ -955,8 +956,8 @@ namespace streams
 		FormattedInput<STREAM>& operator>>(bool& v)
 		{
 			skipws_if_needed();
-			char c = containers::pull(stream_.queue());
-			v = (c != '0');
+			char buffer[10 + 1];
+			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 

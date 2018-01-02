@@ -168,34 +168,56 @@ int main()
 	// handle_float(out, -123.456);
 	// handle_float(out, -12345678901234567890.12345);
 
-	//TODO check other types
+	// check justification: setw(), setfill(), left, right...
+	// handle_alignments(out, 5, ' ', false);
+	// handle_alignments(out, 5, ' ', true);
+	// handle_alignments(out, 5, '~', false);
+	// handle_alignments(out, 5, '~', true);
 
-	//TODO check justification: setw(), setfill(), left, right...
-	handle_alignments(out, 5, ' ', false);
-	handle_alignments(out, 5, ' ', true);
-	handle_alignments(out, 5, '~', false);
-	handle_alignments(out, 5, '~', true);
+	// handle_alignments(out, 10, ' ', false);
+	// handle_alignments(out, 10, ' ', true);
+	// handle_alignments(out, 10, '~', false);
+	// handle_alignments(out, 10, '~', true);
 
-	handle_alignments(out, 10, ' ', false);
-	handle_alignments(out, 10, ' ', true);
-	handle_alignments(out, 10, '~', false);
-	handle_alignments(out, 10, '~', true);
-
-	handle_alignments(out, 30, ' ', false);
-	handle_alignments(out, 30, ' ', true);
-	handle_alignments(out, 30, '~', false);
-	handle_alignments(out, 30, '~', true);
+	// handle_alignments(out, 30, ' ', false);
+	// handle_alignments(out, 30, ' ', true);
+	// handle_alignments(out, 30, '~', false);
+	// handle_alignments(out, 30, '~', true);
 
 	// Event Loop
-	// while (true)
-	// {
-	// 	handle<char>(out, in, F("char"));
-	// 	handle<uint16_t>(out, in, F("uint16_t"));
-	// 	handle<int16_t>(out, in, F("int16_t"));
-	// 	handle<uint32_t>(out, in, F("uint32_t"));
-	// 	handle<int32_t>(out, in, F("int32_t"));
-	// 	handle<bool>(out, in, F("bool"));
+	while (true)
+	{
+		// handle<char>(out, in, F("char"));
+		// handle<uint16_t>(out, in, F("uint16_t"));
+		// handle<int16_t>(out, in, F("int16_t"));
+		// handle<uint32_t>(out, in, F("uint32_t"));
+		// handle<int32_t>(out, in, F("int32_t"));
+		// handle<bool>(out, in, F("bool"));
 		
-	// 	time::delay_ms(1000);
-	// }
+		// check formatted inputs: bool
+		bool v1;
+		out << F("bool as alpha: ") << flush;
+		in >> boolalpha >> skipws >> v1;
+		out << v1 << endl;
+		out << F("bool as num: ") << flush;
+		in >> noboolalpha >> skipws >> v1;
+		out << v1 << endl;
+
+		// check formatted inputs: numeric with base
+		uint16_t v2;
+		out << F("num as dec: ") << flush;
+		in >> dec >> skipws >> v2;
+		out << v2 << endl;
+		out << F("num as hex: ") << flush;
+		in >> hex >> skipws >> v2;
+		out << v2 << endl;
+		out << F("num as bin: ") << flush;
+		in >> bin >> skipws >> v2;
+		out << v2 << endl;
+		out << F("num as oct: ") << flush;
+		in >> oct >> skipws >> v2;
+		out << v2 << endl;
+		
+		time::delay_ms(1000);
+	}
 }
