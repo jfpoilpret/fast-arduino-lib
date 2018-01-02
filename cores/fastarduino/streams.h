@@ -22,6 +22,7 @@
 #define STREAMS_HH
 
 #include <ctype.h>
+#include <math.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,10 +31,6 @@
 #include "utilities.h"
 
 //TODO better alignment with C++ iostreams? class names, method names, behvior, missing methods...
-//TODO improve design to have conversion functions specific to each flag & type and let manipulators
-// define these functions:
-// - benefits: simpler functions, only used functions get linked (optimized code size)
-// - disadvantages: more functions, bigger ios_base class (function pointers), more complex manipulators, more friends
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
  * Typical usage of an output "stream":
@@ -437,6 +434,8 @@ namespace streams
 
 	protected:
 		/// @cond notdocumented
+		static constexpr uint8_t DOUBLE_BUFFER_SIZE = MAX_PRECISION + 7 + 1;
+
 		void init()
 		{
 			width_ = 0;
@@ -517,18 +516,32 @@ namespace streams
 			char buffer[sizeof(unsigned long) * 8 + 1];
 			format_number(out, ultoa(v, buffer, base()));
 		}
+		static size_t double_digits(double v)
+		{
+			int digits = int(log10(fabs(v)));
+			if (digits < 0)
+				return 1;
+			else
+				return size_t(digits + 1);
+		}
+		bool is_too_large(double v) const
+		{
+			// Number of chars = sign + digits before DP + DP + precision + \0
+			return (1 + double_digits(v) + 1 + precision() + 1 > DOUBLE_BUFFER_SIZE);
+		}
 		void convert(OutputBuffer& out, double v) const
 		{
 			// Allocate sufficient size for fixed/scientific representation with precision max = 16
 			// Need 1 more for sign, 1 for DP, 1 for first digit, 4 for e+00
-			char buffer[MAX_PRECISION + 7 + 1];
-			if (flags() & fixed)
-				dtostrf(v, 0, precision(), buffer);
-			else if (flags() & scientific)
+			char buffer[DOUBLE_BUFFER_SIZE];
+			// If v is too large, force scientific anyway
+			if ((flags() & scientific) || is_too_large(v))
 			{
 				//FIXME if precision() > 7, then it is limited to 7 by dtostre(), add 0 manually then
 				dtostre(v, buffer, precision(), 0);
 			}
+			else if (flags() & fixed)
+				dtostrf(v, 0, precision(), buffer);
 			else
 				// default is fixed currently (no satisfying conversion function exists)
 				dtostrf(v, 0, precision(), buffer);
@@ -1112,7 +1125,7 @@ namespace streams
 			skipws_if_needed();
 			// Allocate sufficient size for fixed/scientific representation with precision max = 16
 			// Need 1 more for sign, 1 for DP, 1 for first digit, 4 for e+00
-			char buffer[MAX_PRECISION + 7 + 1];
+			char buffer[DOUBLE_BUFFER_SIZE];
 			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
