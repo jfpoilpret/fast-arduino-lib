@@ -86,30 +86,59 @@ static void handle_num(OUTPUT& out, T value, const flash::FlashStorage* type)
 
 static void handle_float(OUTPUT& out, double value)
 {
-	out << F("testing output of double (") << defaultfloat << value << ')' << endl;
+	out << F("testing output of double (") << defaultfloat << setprecision(6) << value << ')' << endl;
 	display_num<double>(out, value);
 
 	out << showbase;
 	display_num<double>(out, value);
 	out << noshowbase;
 
-	out << defaultfloat << value << endl;
 	out << fixed << value << endl;
 	out << scientific << value << endl;
 
 	out << uppercase;
-	out << defaultfloat << value << endl;
 	out << fixed << value << endl;
 	out << scientific << value << endl;
 	out << nouppercase;
 
 	out << showpos;
-	out << defaultfloat << value << endl;
 	out << fixed << value << endl;
 	out << scientific << value << endl;
 	out << noshowpos;
 
-	//TODO check precision too
+	// check precision too
+	out << setprecision(12) << fixed << value << endl;
+	out << setprecision(12) << scientific << value << endl;
+
+	out << setprecision(3) << fixed << value << endl;
+	out << setprecision(3) << scientific << value << endl;
+
+	out << setprecision(0) << fixed << value << endl;
+	out << setprecision(0) << scientific << value << endl;
+}
+
+static void handle_alignments(OUTPUT& out, uint8_t width, char filler, bool is_left = true)
+{
+	out << F("testing alignments") << endl;
+	out << setfill(filler);
+	if (is_left) out << left; else out << right;
+
+	out << setw(width) << 'a' << endl;
+	out << setw(width) << "abcdefghij" << endl;
+	out << setw(width) << F("abcdefghij") << endl;
+	out << setw(width) << 1234 << endl;
+	out << setw(width) << 1234U << endl;
+	out << setw(width) << 123456L << endl;
+	out << setw(width) << 123456UL << endl;
+	out << setw(width) << 123.456 << endl;
+	out << setw(width) << true << endl;
+	out << setw(width) << false << endl;
+	out << boolalpha;
+	out << setw(width) << true << endl;
+	out << setw(width) << false << endl;
+	out << noboolalpha;
+
+	out << setfill(' ');
 }
 
 int main() __attribute__((OS_main));
@@ -126,33 +155,47 @@ int main()
 	OUTPUT out = uart.fout();
 
 	// Check all output manipulators
-	handle_num<uint16_t>(out, 1234, F("uint16_t"));
-	handle_num<int16_t>(out, 1234, F("int16_t"));
-	handle_num<int16_t>(out, -1234, F("int16_t"));
+	// handle_num<uint16_t>(out, 1234, F("uint16_t"));
+	// handle_num<int16_t>(out, 1234, F("int16_t"));
+	// handle_num<int16_t>(out, -1234, F("int16_t"));
 
-	handle_num<uint32_t>(out, 123456, F("uint32_t"));
-	handle_num<int32_t>(out, 123456, F("int32_t"));
-	handle_num<int32_t>(out, -123456, F("int32_t"));
+	// handle_num<uint32_t>(out, 123456, F("uint32_t"));
+	// handle_num<int32_t>(out, 123456, F("int32_t"));
+	// handle_num<int32_t>(out, -123456, F("int32_t"));
 
 	// check floats
-	handle_float(out, 123.456);
-	handle_float(out, -123.456);
-	handle_float(out, -12345678901234567890.12345);
+	// handle_float(out, 123.456);
+	// handle_float(out, -123.456);
+	// handle_float(out, -12345678901234567890.12345);
 
 	//TODO check other types
 
 	//TODO check justification: setw(), setfill(), left, right...
+	handle_alignments(out, 5, ' ', false);
+	handle_alignments(out, 5, ' ', true);
+	handle_alignments(out, 5, '~', false);
+	handle_alignments(out, 5, '~', true);
+
+	handle_alignments(out, 10, ' ', false);
+	handle_alignments(out, 10, ' ', true);
+	handle_alignments(out, 10, '~', false);
+	handle_alignments(out, 10, '~', true);
+
+	handle_alignments(out, 30, ' ', false);
+	handle_alignments(out, 30, ' ', true);
+	handle_alignments(out, 30, '~', false);
+	handle_alignments(out, 30, '~', true);
 
 	// Event Loop
-	while (true)
-	{
-		handle<char>(out, in, F("char"));
-		handle<uint16_t>(out, in, F("uint16_t"));
-		handle<int16_t>(out, in, F("int16_t"));
-		handle<uint32_t>(out, in, F("uint32_t"));
-		handle<int32_t>(out, in, F("int32_t"));
-		handle<bool>(out, in, F("bool"));
+	// while (true)
+	// {
+	// 	handle<char>(out, in, F("char"));
+	// 	handle<uint16_t>(out, in, F("uint16_t"));
+	// 	handle<int16_t>(out, in, F("int16_t"));
+	// 	handle<uint32_t>(out, in, F("uint32_t"));
+	// 	handle<int32_t>(out, in, F("int32_t"));
+	// 	handle<bool>(out, in, F("bool"));
 		
-		time::delay_ms(1000);
-	}
+	// 	time::delay_ms(1000);
+	// }
 }

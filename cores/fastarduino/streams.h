@@ -31,6 +31,10 @@
 
 //TODO better alignment with C++ iostreams? class names, method names, behvior, missing methods...
 //TODO improve data size by removing conversion_buffer from ios_base fields.
+//TODO improve design to have conversion functions specific to each flag & type and let manipulators
+// define these functions:
+// - benefits: simpler functions, only used functions get linked (optimized code size)
+// - disadvantages: more functions, bigger ios_base class (function pointers), more complex manipulators, more friends
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
  * Typical usage of an output "stream":
@@ -310,6 +314,7 @@ namespace streams
 	{
 	public:
 		//TODO DOC refer to C++11 std::fmtflags (note some flags are not supported)
+		// NOTE defaults are: dec, right, fixed (FIXME) and skipws
 		using fmtflags = uint16_t;
 
 		//TODO handle for input also!
@@ -506,7 +511,10 @@ namespace streams
 			if (flags() & fixed)
 				buffer = dtostrf(v, 0, precision(), conversion_buffer);
 			else if (flags() & scientific)
+			{
+				//FIXME if precision() > 7, then it is limited to 7 by dtostre(), add 0 manually then
 				buffer = dtostre(v, conversion_buffer, precision(), 0);
+			}
 			else
 				// default is fixed currently (no satisfying conversion function exists)
 				buffer = dtostrf(v, 0, precision(), conversion_buffer);
@@ -560,16 +568,17 @@ namespace streams
 			if (strlen(input) < width())
 			{
 				uint8_t add = width() - strlen(input);
-				if (flags() & right)
+				if (flags() & left)
 				{
+					memset(input + strlen(input), fill(), add);
+				}
+				else
+				{
+					// right alignment is per default
 					memmove(input + add, input, strlen(input) + 1);
 					memset(input, fill(), add);
 				}
-				else if (flags() & left)
-				{
-					memset(input + strlen(input), fill(), add);
-					input[width() + 1] = 0;
-				}
+				input[width()] = 0;
 			}
 			return input;
 		}
@@ -669,6 +678,21 @@ namespace streams
 		}
 
 		/**
+		 * Output a boolean value.
+		 * @code
+		 * out << true;
+		 * @endcode
+		 * @param b the bool to output
+		 * @return @p this formatted output
+		 */
+		FormattedOutput<STREAM>& operator<<(bool b)
+		{
+			stream_.puts(convert(b));
+			after_insertion();
+			return *this;
+		}
+
+		/**
 		 * Output a single character.
 		 * @code
 		 * out << '\n';
@@ -678,6 +702,7 @@ namespace streams
 		 */
 		FormattedOutput<STREAM>& operator<<(char c)
 		{
+			//FIXME justification needed also here
 			stream_.put(c);
 			after_insertion();
 			return *this;
@@ -1115,6 +1140,13 @@ namespace streams
 		const uint8_t width_;
 		friend constexpr const setw_ setw(uint8_t width);
 	};
+	//TODO do the same definitions for operator>>
+	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setw_ f)
+	{
+		f(stream);
+		return stream;
+	}
+
 	class setprecision_
 	{
 	public:
@@ -1129,6 +1161,12 @@ namespace streams
 		const uint8_t precision_;
 		friend constexpr const setprecision_ setprecision(uint8_t precision);
 	};
+	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setprecision_ f)
+	{
+		f(stream);
+		return stream;
+	}
+
 	class setfill_
 	{
 	public:
@@ -1143,6 +1181,12 @@ namespace streams
 		const char fill_;
 		friend constexpr const setfill_ setfill(char fill);
 	};
+	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setfill_ f)
+	{
+		f(stream);
+		return stream;
+	}
+
 	class setbase_
 	{
 	public:
@@ -1157,6 +1201,12 @@ namespace streams
 		const ios::fmtflags base_;
 		friend constexpr const setbase_ setbase(int base);
 	};
+	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setbase_ f)
+	{
+		f(stream);
+		return stream;
+	}
+
 	class setiosflags_
 	{
 	public:
@@ -1171,6 +1221,12 @@ namespace streams
 		const ios::fmtflags mask_;
 		friend constexpr const setiosflags_ setiosflags(ios::fmtflags mask);
 	};
+	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setiosflags_ f)
+	{
+		f(stream);
+		return stream;
+	}
+
 	class resetiosflags_
 	{
 	public:
@@ -1185,6 +1241,11 @@ namespace streams
 		const ios::fmtflags mask_;
 		friend constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask);
 	};
+	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const resetiosflags_ f)
+	{
+		f(stream);
+		return stream;
+	}
 	/// @endcond
 
 	//TODO DOCS
@@ -1300,6 +1361,7 @@ namespace streams
 		stream.flush();
 	}
 
+	//TODO DOC
 	template<typename FSTREAM> inline void boolalpha(FSTREAM& stream)
 	{
 		stream.setf(ios::boolalpha);
@@ -1358,6 +1420,11 @@ namespace streams
 	template<typename FSTREAM> inline void right(FSTREAM& stream)
 	{
 		stream.setf(ios::right, ios::adjustfield);
+	}
+	
+	template<typename FSTREAM> inline void defaultfloat(FSTREAM& stream)
+	{
+		stream.unsetf(ios::floatfield);
 	}
 	
 	template<typename FSTREAM> inline void fixed(FSTREAM& stream)
