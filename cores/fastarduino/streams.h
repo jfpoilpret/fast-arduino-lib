@@ -29,9 +29,7 @@
 #include "flash.h"
 #include "utilities.h"
 
-//TODO do not make FormattedOutput/FormattedInput templates
 //TODO better alignment with C++ iostreams? class names, method names, behvior, missing methods...
-//TODO improve data size by removing conversion_buffer from ios_base fields.
 //TODO improve design to have conversion functions specific to each flag & type and let manipulators
 // define these functions:
 // - benefits: simpler functions, only used functions get linked (optimized code size)
@@ -210,6 +208,8 @@ namespace streams
 
 	private:
 		bool overflow_;
+
+		friend class ios_base;
 	};
 
 	/**
@@ -305,8 +305,6 @@ namespace streams
 	 */
 	int gets(InputBuffer& in, char* str, size_t max, char end = 0);
 
-	//TODO infer on a way to define callbacks to stream put/flush/other for output
-	//TODO same for input LATER
 	/**
 	 * Base class for formatted streams.
 	 * Allows defining base, width and precision for numbers display.
@@ -418,7 +416,7 @@ namespace streams
 		 */
 		inline void precision(uint8_t precision)
 		{
-			precision_ = precision;
+			precision_ = (precision < MAX_PRECISION ? precision : MAX_PRECISION);
 		}
 
 		/**
@@ -431,6 +429,12 @@ namespace streams
 			return precision_;
 		}
 
+		/**
+		 * The maximum allowed precision.
+		 * @sa precision()
+		 */
+		static constexpr uint8_t MAX_PRECISION = 16;
+
 	protected:
 		/// @cond notdocumented
 		void init()
@@ -440,8 +444,8 @@ namespace streams
 			flags_ = skipws | dec;
 			fill_ = ' ';
 		}
-		// conversions from string to numeric value
-		bool convert(const char* token, bool& b)
+		// Conversions from string
+		bool convert(const char* token, bool& b) const
 		{
 			if (flags() & boolalpha)
 				b = (strcmp(token, "true") == 0);
@@ -449,7 +453,7 @@ namespace streams
 				b = (atol(token) != 0);
 			return true;
 		}
-		bool convert(const char* token, double& v)
+		bool convert(const char* token, double& v) const
 		{
 			char* endptr;
 			double value = strtod(token, &endptr);
@@ -457,7 +461,7 @@ namespace streams
 			v = value;
 			return true;
 		}
-		bool convert(const char* token, long& v)
+		bool convert(const char* token, long& v) const
 		{
 			char* endptr;
 			long value = strtol(token, &endptr, base());
@@ -465,7 +469,7 @@ namespace streams
 			v = value;
 			return true;
 		}
-		bool convert(const char* token, unsigned long& v)
+		bool convert(const char* token, unsigned long& v) const
 		{
 			char* endptr;
 			unsigned long value = strtoul(token, &endptr, base());
@@ -473,14 +477,14 @@ namespace streams
 			v = value;
 			return true;
 		}
-		bool convert(const char* token, int& v)
+		bool convert(const char* token, int& v) const
 		{
 			long value;
 			if (!convert(token, value)) return false;
 			v = (int) value;
 			return true;
 		}
-		bool convert(const char* token, unsigned int& v)
+		bool convert(const char* token, unsigned int& v) const
 		{
 			unsigned long value;
 			if (!convert(token, value)) return false;
@@ -488,99 +492,141 @@ namespace streams
 			return true;
 		}
 
-		// conversions from numeric value to string
-		const char* convert(int v)
+		// Conversions to string
+		void convert(OutputBuffer& out, int v) const
 		{
-			return format_number(itoa(v, conversion_buffer, base()));
+			// Allocate sufficient size for bin representation
+			char buffer[sizeof(int) * 8 + 1];
+			format_number(out, itoa(v, buffer, base()));
 		}
-		const char* convert(unsigned int v)
+		void convert(OutputBuffer& out, unsigned int v) const
 		{
-			return format_number(utoa(v, conversion_buffer, base()));
+			// Allocate sufficient size for bin representation
+			char buffer[sizeof(unsigned int) * 8 + 1];
+			format_number(out, utoa(v, buffer, base()));
 		}
-		const char* convert(long v)
+		void convert(OutputBuffer& out, long v) const
 		{
-			return format_number(ltoa(v, conversion_buffer, base()));
+			// Allocate sufficient size for bin representation
+			char buffer[sizeof(long) * 8 + 1];
+			format_number(out, ltoa(v, buffer, base()));
 		}
-		const char* convert(unsigned long v)
+		void convert(OutputBuffer& out, unsigned long v) const
 		{
-			return format_number(ultoa(v, conversion_buffer, base()));
+			// Allocate sufficient size for bin representation
+			char buffer[sizeof(unsigned long) * 8 + 1];
+			format_number(out, ultoa(v, buffer, base()));
 		}
-		const char* convert(double v)
+		void convert(OutputBuffer& out, double v) const
 		{
-			char* buffer;
+			// Allocate sufficient size for fixed/scientific representation with precision max = 16
+			// Need 1 more for sign, 1 for DP, 1 for first digit, 4 for e+00
+			char buffer[MAX_PRECISION + 7 + 1];
 			if (flags() & fixed)
-				buffer = dtostrf(v, 0, precision(), conversion_buffer);
+				dtostrf(v, 0, precision(), buffer);
 			else if (flags() & scientific)
 			{
 				//FIXME if precision() > 7, then it is limited to 7 by dtostre(), add 0 manually then
-				buffer = dtostre(v, conversion_buffer, precision(), 0);
+				dtostre(v, buffer, precision(), 0);
 			}
 			else
 				// default is fixed currently (no satisfying conversion function exists)
-				buffer = dtostrf(v, 0, precision(), conversion_buffer);
-			return justify(add_sign(upper(buffer), true));
+				dtostrf(v, 0, precision(), buffer);
+			justify(out, buffer, add_sign(buffer), 0);
 		}
-		const char* convert(bool b)
+		void convert(OutputBuffer& out, char c) const
+		{
+			char buffer[1 + 1];
+			buffer[0] = c;
+			buffer[1] = 0;
+			justify(out, buffer, false, 0);
+		}
+		void convert(OutputBuffer& out, bool b) const
 		{
 			if (flags() & boolalpha)
-				return justify(strcpy(conversion_buffer, b ? "true" : "false"));
+				justify(out, (b ? "true" : "false"), false, 0);
 			else
-				return convert(b ? 1 : 0);
+				convert(out, (b ? 1 : 0));
 		}
 
-		//TODO avoid memmove as much as possible.
-		char* upper(char* input) const
+		void upper(char* input) const
 		{
 			if ((flags() & uppercase) && (flags() & hex))
 				strupr(input);
-			return input;
 		}
-		char* add_base(char* input) const
+
+		const char* prefix_base() const
 		{
 			if ((flags() & showbase) && (flags() & (bin | oct | hex)))
-			{
-				const char* prefix = (flags() & bin) ? "0b" : (flags() & oct) ? "0" : "0x";
-				memmove(input + strlen(prefix), input, strlen(input) + 1);
-				strncpy(input, prefix, strlen(prefix));
-			}
-			return input;
-		}
-		char* add_sign(char* input, bool is_float = false) const
-		{
-			if (((flags() & dec) || is_float) && (flags() & showpos) && (input[0] != '+') && (input[0] != '-'))
-			{
-				// Add + sign if not exist
-				memmove(input + 1, input, strlen(input) + 1);
-				input[0] = '+';
-			}
-			return input;
+				return (flags() & bin) ? "0b" : (flags() & oct) ? "0" : "0x";
+			return 0;
 		}
 
-		char* format_number(char* input) const
+		bool add_sign(const char* input, bool is_float = false) const
 		{
-			return justify(add_sign(add_base(upper(input))));
+			return ((flags() & dec) || is_float) && (flags() & showpos) && (input[0] != '+') && (input[0] != '-');
 		}
 
-		//TODO this method would be better if it could directly write to the stream
-		//FIXME if width is big enough (>64) then this method could crash
-		char* justify(char* input) const
+		void format_number(OutputBuffer& out, char* input) const
 		{
-			if (strlen(input) < width())
+			upper(input);
+			justify(out, input, add_sign(input), prefix_base());
+		}
+
+		void output_number(OutputBuffer& out, const char* input, bool add_sign, const char* prefix) const
+		{
+			if (add_sign) out.put('+', false);
+			if (prefix && strlen(prefix)) out.puts(prefix);
+			out.puts(input);
+		}
+
+		void output_filler(OutputBuffer& out, char filler, uint8_t size) const
+		{
+			while (size--) out.put(filler, false);
+		}
+
+		void justify(OutputBuffer& out, const char* input, bool add_sign, const char* prefix) const
+		{
+			size_t len = strlen(input) + (prefix ? strlen(prefix) : 0) + (add_sign ? 1 : 0);
+			if (len < width())
 			{
-				uint8_t add = width() - strlen(input);
+				uint8_t add = width() - len;
 				if (flags() & left)
 				{
-					memset(input + strlen(input), fill(), add);
+					output_number(out, input, add_sign, prefix);
+					output_filler(out, fill(), add);
+					out.on_put();
 				}
 				else
 				{
-					// right alignment is per default
-					memmove(input + add, input, strlen(input) + 1);
-					memset(input, fill(), add);
+					output_filler(out, fill(), add);
+					output_number(out, input, add_sign, prefix);
 				}
-				input[width()] = 0;
 			}
-			return input;
+			else
+				output_number(out, input, add_sign, prefix);
+		}
+
+		void justify(OutputBuffer& out, const flash::FlashStorage* input) const
+		{
+			size_t len = strlen_P((const char*) input);
+			if (len < width())
+			{
+				uint8_t add = width() - len;
+				if (flags() & left)
+				{
+					out.puts(input);
+					output_filler(out, fill(), add);
+					out.on_put();
+				}
+				else
+				{
+					output_filler(out, fill(), add);
+					out.puts(input);
+				}
+			}
+			else
+				out.puts(input);
 		}
 
 		int base() const
@@ -590,8 +636,6 @@ namespace streams
 			if (flags() & hex) return 16;
 			return 10;
 		}
-
-		static const uint8_t MAX_BUF_LEN = 64;
 		/// @endcond
 
 	private:
@@ -599,7 +643,6 @@ namespace streams
 		uint8_t width_;
 		uint8_t precision_;
 		char fill_;
-		char conversion_buffer[MAX_BUF_LEN];
 	};
 
 	/**
@@ -668,7 +711,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(const void* p)
 		{
-			stream_.puts(convert((uint16_t) p));
+			convert(stream_, uint16_t(p));
 			after_insertion();
 			return *this;
 		}
@@ -683,7 +726,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(bool b)
 		{
-			stream_.puts(convert(b));
+			convert(stream_, b);
 			after_insertion();
 			return *this;
 		}
@@ -698,8 +741,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(char c)
 		{
-			//FIXME justification needed also here
-			stream_.put(c);
+			convert(stream_, c);
 			after_insertion();
 			return *this;
 		}
@@ -714,9 +756,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(const char* s)
 		{
-			//FIXME need to implement padding here (justify())
-			// stream_.puts(justify(s));
-			stream_.puts(s);
+			justify(stream_, s, false, 0);
 			after_insertion();
 			return *this;
 		}
@@ -731,26 +771,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(const flash::FlashStorage* s)
 		{
-			// Specific case: perform justification manually here
-			size_t len = strlen_P((const char*) s);
-			if (len < width())
-			{
-				uint8_t add = width() - len;
-				if (flags() & right)
-				{
-					while (add--)
-						stream_.put(fill(), false);
-					stream_.puts(s);
-				}
-				else if (flags() & left)
-				{
-					stream_.puts(s);
-					while (add--)
-						stream_.put(fill(), false);
-				}
-			}
-			else
-				stream_.puts(s);
+			justify(stream_, s);
 			after_insertion();
 			return *this;
 		}
@@ -767,7 +788,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(int v)
 		{
-			stream_.puts(convert(v));
+			convert(stream_, v);
 			after_insertion();
 			return *this;
 		}
@@ -784,7 +805,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(unsigned int v)
 		{
-			stream_.puts(convert(v));
+			convert(stream_, v);
 			after_insertion();
 			return *this;
 		}
@@ -801,7 +822,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(long v)
 		{
-			stream_.puts(convert(v));
+			convert(stream_, v);
 			after_insertion();
 			return *this;
 		}
@@ -818,7 +839,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(unsigned long v)
 		{
-			stream_.puts(convert(v));
+			convert(stream_, v);
 			after_insertion();
 			return *this;
 		}
@@ -835,7 +856,7 @@ namespace streams
 		 */
 		FormattedOutput& operator<<(double v)
 		{
-			stream_.puts(convert(v));
+			convert(stream_, v);
 			after_insertion();
 			return *this;
 		}
@@ -930,7 +951,28 @@ namespace streams
 			return streams::gets(stream_, str, max);
 		}
 
-		//TODO missing operator>>(char*)
+		/**
+		 * Read characters from buffer into @p buf until one of these conditions happen:
+		 * - a space has been encountered (not read)
+		 * - `width() - 1` characters have been read
+		 * An `'\0'` character is added in last position of @p buf.
+		 * If `skipws()` is in action, then any white spaces read from the input
+		 * will be skipped and the first non white space character will be copied first
+		 * to @p buf. 
+		 * @param buf the char array to be filled from the input stream; it must have
+		 * a minimum size of `width()`.
+		 * @return @p this formatted input
+		 */
+		FormattedInput& operator>>(char* buf)
+		{
+			if (width() > 0)
+			{
+				skipws_if_needed();
+				stream_.scan(buf, width());
+				width(0);
+			}
+			return *this;
+		}
 
 		/**
 		 * Input and interpret next character from buffer as a boolean value.
@@ -1068,7 +1110,9 @@ namespace streams
 		FormattedInput& operator>>(double& v)
 		{
 			skipws_if_needed();
-			char buffer[MAX_BUF_LEN];
+			// Allocate sufficient size for fixed/scientific representation with precision max = 16
+			// Need 1 more for sign, 1 for DP, 1 for first digit, 4 for e+00
+			char buffer[MAX_PRECISION + 7 + 1];
 			convert(stream_.scan(buffer, sizeof buffer), v);
 			return *this;
 		}
@@ -1134,8 +1178,12 @@ namespace streams
 		const uint8_t width_;
 		friend constexpr const setw_ setw(uint8_t width);
 	};
-	//TODO do the same definitions for operator>>
 	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setw_ f)
+	{
+		f(stream);
+		return stream;
+	}
+	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setw_ f)
 	{
 		f(stream);
 		return stream;
@@ -1160,6 +1208,11 @@ namespace streams
 		f(stream);
 		return stream;
 	}
+	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setprecision_ f)
+	{
+		f(stream);
+		return stream;
+	}
 
 	class setfill_
 	{
@@ -1176,6 +1229,11 @@ namespace streams
 		friend constexpr const setfill_ setfill(char fill);
 	};
 	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setfill_ f)
+	{
+		f(stream);
+		return stream;
+	}
+	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setfill_ f)
 	{
 		f(stream);
 		return stream;
@@ -1200,6 +1258,11 @@ namespace streams
 		f(stream);
 		return stream;
 	}
+	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setbase_ f)
+	{
+		f(stream);
+		return stream;
+	}
 
 	class setiosflags_
 	{
@@ -1220,6 +1283,11 @@ namespace streams
 		f(stream);
 		return stream;
 	}
+	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setiosflags_ f)
+	{
+		f(stream);
+		return stream;
+	}
 
 	class resetiosflags_
 	{
@@ -1236,6 +1304,11 @@ namespace streams
 		friend constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask);
 	};
 	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const resetiosflags_ f)
+	{
+		f(stream);
+		return stream;
+	}
+	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const resetiosflags_ f)
 	{
 		f(stream);
 		return stream;
