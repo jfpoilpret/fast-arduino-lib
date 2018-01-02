@@ -309,34 +309,110 @@ namespace streams
 	class ios_base
 	{
 	public:
-		//TODO DOC refer to C++11 std::fmtflags (note some flags are not supported)
-		// NOTE defaults are: dec, right, fixed (FIXME) and skipws
+		/**
+		 * Bitmask type to represent stream format flags.
+		 * This type is used as parameter or return value by methods `flags`, `setf`
+		 * and `unsetf`.
+		 * The values passed an retrieved by these methods can be any valid combination
+		 * of the predefined constants:
+		 * - basefield flags
+		 *     - dec (default)
+		 *     - bin
+		 *     - oct
+		 *     - hex
+		 * - floatfield flags
+		 *     - fixed (default)
+		 *     - scientific
+		 * - adjustfield flags
+		 *     - left
+		 *     - right (default)
+		 * - independent flags
+		 *     - boolalpha
+		 *     - showbase
+		 *     - showpos
+		 *     - skipws (default)
+		 *     - unitbuf
+		 *     - uppercase
+		 * 
+		 * @sa flags()
+		 * @sa flags(fmtflags)
+		 * @sa setf(fmtflags)
+		 * @sa setf(fmtflags, fmtflags)
+		 * @sa unsetf(fmtflags)
+		 */
 		using fmtflags = uint16_t;
 
+		/** Read or write integral values using decimal (0..9) base format. */
 		static constexpr fmtflags dec = 0x0001;
+		/** Read or write integral values using binary (0,1) base format. */
 		static constexpr fmtflags bin = 0x0002;
+		/** Read or write integral values using octal (0..7) base format. */
 		static constexpr fmtflags oct = 0x0004;
+		/** Read or write integral values using hexadecimal (0..9,A..F) base format. */
 		static constexpr fmtflags hex = 0x0008;
+		/**
+		 * Bitmask constant used with `setf(fmtflags, fmtflags)` when changing the
+		 * output base format.
+		 * @sa dec
+		 * @sa bin
+		 * @sa oct
+		 * @sa hex
+		 */
 		static constexpr fmtflags basefield = dec | bin | oct | hex;
 
+		/** 
+		 * Pad all output to `width()` characters, with `fill()` character appended 
+		 * at the end so that the output appears left-adjusted.
+		 */
 		static constexpr fmtflags left = 0x0010;
+		/** 
+		 * Pad all output to `width()` characters, with `fill()` character added 
+		 * at the beginning so that the output appears right-adjusted.
+		 */
 		static constexpr fmtflags right = 0x0020;
+		/**
+		 * Bitmask constant used with `setf(fmtflags, fmtflags)` when changing the
+		 * output adjustment.
+		 * @sa left
+		 * @sa right
+		 */
 		static constexpr fmtflags adjustfield = left | right;
 
+		/** Write floating point values in fixed-point notation. */
 		static constexpr fmtflags scientific = 0x0040;
+		/** Write floating point values in scientific notation. */
 		static constexpr fmtflags fixed = 0x0080;
+		/**
+		 * Bitmask constant used with `setf(fmtflags, fmtflags)` when changing the
+		 * floating point output representation.
+		 * @sa fixed
+		 * @sa scientific
+		 */
 		static constexpr fmtflags floatfield = scientific | fixed;
 		
+		/** Read or write bool values as alphabetic string (`true` or `false`). */
 		static constexpr fmtflags boolalpha = 0x0200;
+		/** 
+		 * Write integral values prefixed by their base:
+		 * - decimal: no prefix
+		 * - binary: `0b` prefix
+		 * - octal: `0` prefix
+		 * - hexadecimal: `0x` prefix
+		 */
 		static constexpr fmtflags showbase = 0x0400;
+		/** Write non-negative numerical values preceded by `+`. */
 		static constexpr fmtflags showpos = 0x1000;
+		/** Skip leading spaces on certain extraction (read) operations. */
 		static constexpr fmtflags skipws = 0x2000;
+		/** Flush output after each insertion oepration. */
 		static constexpr fmtflags unitbuf = 0x4000;
+		/** 
+		 * Write uppercase letters instead of lowercase in certain insertion operations. 
+		 * This applies to hexadecimal letters when writing integral numbers and exponent
+		 * letter when writing floating point numbers. Base prefixes (`0x` or `0b`) are
+		 * not affected.
+		 */
 		static constexpr fmtflags uppercase = 0x8000;
-
-		ios_base() : flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
-		{
-		}
 
 		//TODO DOCs
 		inline void flags(fmtflags flags)
@@ -434,6 +510,10 @@ namespace streams
 
 	protected:
 		/// @cond notdocumented
+		ios_base() : flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
+		{
+		}
+
 		static constexpr uint8_t DOUBLE_BUFFER_SIZE = MAX_PRECISION + 7 + 1;
 
 		void init()
