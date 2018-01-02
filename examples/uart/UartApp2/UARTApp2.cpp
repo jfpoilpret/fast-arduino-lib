@@ -108,7 +108,7 @@ int main()
 //	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 
 	streams::InputBuffer& in = uarx.in();
-	streams::FormattedOutput<streams::OutputBuffer> out = uatx.fout();
+	streams::FormattedOutput out = uatx.fout();
 
 	while (true)
 	{

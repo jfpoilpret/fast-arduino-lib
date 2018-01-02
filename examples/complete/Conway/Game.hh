@@ -20,7 +20,7 @@
 #if defined(ARDUINO_UNO)
 #define HAS_TRACE 1
 #include <fastarduino/streams.h>
-extern streams::FormattedOutput<streams::OutputBuffer> trace;
+extern streams::FormattedOutput trace;
 using streams::bin;
 using streams::dec;
 using streams::endl;

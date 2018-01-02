@@ -70,7 +70,7 @@ struct Dummy
 	char e;
 };
 
-using OUTPUT = streams::FormattedOutput<streams::OutputBuffer>;
+using OUTPUT = streams::FormattedOutput;
 
 OUTPUT& operator<< (OUTPUT& out, const Dummy& item)
 {
@@ -98,7 +98,7 @@ int main()
 	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
-	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+	streams::FormattedOutput out = uart.fout();
 
 	Dummy value;
 	out << F("sample1 = ") << flash::read_flash(&sample1, value);

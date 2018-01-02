@@ -93,7 +93,7 @@ int main()
 	uart.register_handler();
 	uart.begin(115200);
 #endif
-	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+	streams::FormattedOutput out = uart.fout();
 	
 	out << "Started\n";
 

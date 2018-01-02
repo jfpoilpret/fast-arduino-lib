@@ -43,9 +43,9 @@ namespace serial
 				return (OutputBuffer&) *this;
 			}
 
-			streams::FormattedOutput<OutputBuffer> fout()
+			streams::FormattedOutput fout()
 			{
-				return streams::FormattedOutput<streams::OutputBuffer>(*this);
+				return streams::FormattedOutput(*this);
 			}
 
 			// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
@@ -153,9 +153,9 @@ namespace serial
 				return (streams::InputBuffer&) *this;
 			}
 
-			streams::FormattedInput<streams::InputBuffer> fin()
+			streams::FormattedInput fin()
 			{
-				return streams::FormattedInput<streams::InputBuffer>(*this);
+				return streams::FormattedInput(*this);
 			}
 
 		protected:

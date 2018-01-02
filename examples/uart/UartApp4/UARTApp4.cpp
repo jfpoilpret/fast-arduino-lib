@@ -91,7 +91,7 @@ int main()
 //	uart.begin(pci, 115200, Serial::Parity::EVEN);
 
 	streams::InputBuffer& in = uart.in();
-	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+	streams::FormattedOutput out = uart.fout();
 
 	while (true)
 	{

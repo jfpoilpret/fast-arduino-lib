@@ -63,8 +63,8 @@ int main()
 	uart.begin(115200);
 //	uart.begin(230400);
 	streams::InputBuffer& in = uart.in();
-//	streams::FormattedInput<streams::InputBuffer> in = uart.fin();
-	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+//	streams::FormattedInput in = uart.fin();
+	streams::FormattedOutput out = uart.fout();
 
 	// Event Loop
 	while (true)

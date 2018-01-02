@@ -18,7 +18,7 @@ static constexpr const board::DigitalPin ECHO = TIMER_TYPE::ICP_PIN;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+static streams::FormattedOutput out = uart.fout();
 
 using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, devices::sonar::SonarType::ASYNC_ICP>;
 // using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, false>;

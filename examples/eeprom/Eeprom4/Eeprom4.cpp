@@ -78,7 +78,7 @@ struct Dummy
 	char e;
 };
 
-using OUTPUT = streams::FormattedOutput<streams::OutputBuffer>;
+using OUTPUT = streams::FormattedOutput;
 
 OUTPUT& operator<< (OUTPUT& out, const Dummy& item)
 {

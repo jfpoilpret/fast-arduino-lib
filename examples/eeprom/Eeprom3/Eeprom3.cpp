@@ -89,12 +89,12 @@ static uint8_t eeprom_buffer[EEPROM_BUFFER_SIZE];
 
 using namespace eeprom;
 
-static void trace_ready(streams::FormattedOutput<streams::OutputBuffer>& out, EepromReady& notifier)
+static void trace_ready(streams::FormattedOutput& out, EepromReady& notifier)
 {
 	out << "on_ready callback called " << streams::dec << notifier.count() << " times." << streams::endl;
 }
 
-static void trace_eeprom(streams::FormattedOutput<streams::OutputBuffer>& out, uint16_t address, uint16_t loops = 1)
+static void trace_eeprom(streams::FormattedOutput& out, uint16_t address, uint16_t loops = 1)
 {
 	for (uint16_t i = 0; i < loops; ++i)
 	{
@@ -117,7 +117,7 @@ struct Content
 };
 
 template<typename T>
-static void write_eeprom(streams::FormattedOutput<streams::OutputBuffer>& out, QueuedWriter& writer, uint16_t address, const T& content)
+static void write_eeprom(streams::FormattedOutput& out, QueuedWriter& writer, uint16_t address, const T& content)
 {
 	if (!writer.write(address, content))
 	{
@@ -140,7 +140,7 @@ int main()
 #endif
 	uart.begin(115200);
 
-	streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+	streams::FormattedOutput out = uart.fout();
 	out << "\nInitial EEPROM content" << streams::endl;	
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 	

@@ -40,8 +40,8 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace streams;
 
-using INPUT = FormattedInput<InputBuffer>;
-using OUTPUT = FormattedOutput<OutputBuffer>;
+using INPUT = FormattedInput;
+using OUTPUT = FormattedOutput;
 
 template<typename T>
 static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)
@@ -155,44 +155,44 @@ int main()
 	OUTPUT out = uart.fout();
 
 	// Check all output manipulators
-	// handle_num<uint16_t>(out, 1234, F("uint16_t"));
-	// handle_num<int16_t>(out, 1234, F("int16_t"));
-	// handle_num<int16_t>(out, -1234, F("int16_t"));
+	handle_num<uint16_t>(out, 1234, F("uint16_t"));
+	handle_num<int16_t>(out, 1234, F("int16_t"));
+	handle_num<int16_t>(out, -1234, F("int16_t"));
 
-	// handle_num<uint32_t>(out, 123456, F("uint32_t"));
-	// handle_num<int32_t>(out, 123456, F("int32_t"));
-	// handle_num<int32_t>(out, -123456, F("int32_t"));
+	handle_num<uint32_t>(out, 123456, F("uint32_t"));
+	handle_num<int32_t>(out, 123456, F("int32_t"));
+	handle_num<int32_t>(out, -123456, F("int32_t"));
 
 	// check floats
-	// handle_float(out, 123.456);
-	// handle_float(out, -123.456);
-	// handle_float(out, -12345678901234567890.12345);
+	handle_float(out, 123.456);
+	handle_float(out, -123.456);
+	handle_float(out, -12345678901234567890.12345);
 
 	// check justification: setw(), setfill(), left, right...
-	// handle_alignments(out, 5, ' ', false);
-	// handle_alignments(out, 5, ' ', true);
-	// handle_alignments(out, 5, '~', false);
-	// handle_alignments(out, 5, '~', true);
+	handle_alignments(out, 5, ' ', false);
+	handle_alignments(out, 5, ' ', true);
+	handle_alignments(out, 5, '~', false);
+	handle_alignments(out, 5, '~', true);
 
-	// handle_alignments(out, 10, ' ', false);
-	// handle_alignments(out, 10, ' ', true);
-	// handle_alignments(out, 10, '~', false);
-	// handle_alignments(out, 10, '~', true);
+	handle_alignments(out, 10, ' ', false);
+	handle_alignments(out, 10, ' ', true);
+	handle_alignments(out, 10, '~', false);
+	handle_alignments(out, 10, '~', true);
 
-	// handle_alignments(out, 30, ' ', false);
-	// handle_alignments(out, 30, ' ', true);
-	// handle_alignments(out, 30, '~', false);
-	// handle_alignments(out, 30, '~', true);
+	handle_alignments(out, 30, ' ', false);
+	handle_alignments(out, 30, ' ', true);
+	handle_alignments(out, 30, '~', false);
+	handle_alignments(out, 30, '~', true);
 
 	// Event Loop
 	while (true)
 	{
-		// handle<char>(out, in, F("char"));
-		// handle<uint16_t>(out, in, F("uint16_t"));
-		// handle<int16_t>(out, in, F("int16_t"));
-		// handle<uint32_t>(out, in, F("uint32_t"));
-		// handle<int32_t>(out, in, F("int32_t"));
-		// handle<bool>(out, in, F("bool"));
+		handle<char>(out, in, F("char"));
+		handle<uint16_t>(out, in, F("uint16_t"));
+		handle<int16_t>(out, in, F("int16_t"));
+		handle<uint32_t>(out, in, F("uint32_t"));
+		handle<int32_t>(out, in, F("int32_t"));
+		handle<bool>(out, in, F("bool"));
 		
 		// check formatted inputs: bool
 		bool v1;

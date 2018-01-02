@@ -45,7 +45,7 @@ static serial::hard::UATX<UART> uart{output_buffer};
 #else
 static serial::soft::UATX<TX> uart{output_buffer};
 #endif
-static streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+static streams::FormattedOutput out = uart.fout();
 
 // Subclass I2CDevice to make protected methods available
 class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::Standard>

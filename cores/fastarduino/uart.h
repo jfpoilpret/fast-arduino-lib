@@ -193,9 +193,9 @@ namespace serial
 			 * Get the formatted output stream used to send content through this serial
 			 * transmitter.
 			 */
-			inline streams::FormattedOutput<streams::OutputBuffer> fout()
+			inline streams::FormattedOutput fout()
 			{
-				return streams::FormattedOutput<streams::OutputBuffer>(*this);
+				return streams::FormattedOutput(*this);
 			}
 
 			/// @cond notdocumented
@@ -329,9 +329,9 @@ namespace serial
 			 * Get the formatted input stream used to read content received through
 			 * this serial transmitter.
 			 */
-			inline streams::FormattedInput<streams::InputBuffer> fin()
+			inline streams::FormattedInput fin()
 			{
-				return streams::FormattedInput<streams::InputBuffer>(*this);
+				return streams::FormattedInput(*this);
 			}
 
 			/// @cond notdocumented
