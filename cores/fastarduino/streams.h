@@ -31,7 +31,7 @@
 #include "utilities.h"
 
 //TODO better alignment with C++ iostreams? method names, behavior, missing methods...
-// but keep cuatious about code/data size and performance (avoid virtual)
+// but keep cautious about code/data size and performance (avoid virtual)
 //TODO error handling for extraction operators?
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
@@ -1508,8 +1508,8 @@ namespace streams
 	}
 
 	/**
-	 * Set the basefield to one of its possible values (dec, bin, oct or hex)
-	 * according to @p base, which must be one of 10, 2, 8 or 16.
+	 * Set the ios::basefield to one of its possible values (ios::dec, ios::bin, 
+	 * ios::oct or ios::hex) according to @p base, which must be one of 10, 2, 8 or 16.
 	 * This method should only be used as a stream manipulator.
 	 * 
 	 * The folowing example displays `123` under all available bases:
@@ -1531,19 +1531,50 @@ namespace streams
 		return setbase_{base};
 	}
 
-	//TODO DOCS
+	/**
+	 * Set a new *fill* character.
+	 * This method should only be used as a stream manipulator.
+	 * 
+	 * The following example displays `123` in hexadecimal form on 4 positions,
+	 * padded with `0` if necessary:
+	 * @code
+	 * out << setfill(`0`) << setw(4) << hex << right << 123 << endl;
+	 * @endcode
+	 */
 	constexpr const setfill_ setfill(char fill)
 	{
 		return setfill_{fill};
 	}
 
-	//TODO DOCS
+	/**
+	 * Set the format flags specified by @p mask.
+	 * This method should only be used as a stream manipulator.
+	 * 
+	 * Behaves as if `ios::setf` was called with @p mask as argument, on the 
+	 * stream on which it is inserted/extracted as a manipulator (it can be 
+	 * inserted/extracted on input streams or output streams).
+	 * See ios::fmtflags for more information on the particular flags that can
+	 * be modified with this manipulator function.
+	 * @sa ios::fmtflags
+	 * @sa ios::setf()
+	 */
 	constexpr const setiosflags_ setiosflags(ios::fmtflags mask)
 	{
 		return setiosflags_{mask};
 	}
 
-	//TODO DOCS
+	/**
+	 * Unset the format flags specified by @p mask.
+	 * This method should only be used as a stream manipulator.
+	 * 
+	 * Behaves as if `ios::unsetf` was called with @p mask as argument, on the 
+	 * stream on which it is inserted/extracted as a manipulator (it can be 
+	 * inserted/extracted on input streams or output streams).
+	 * See ios::fmtflags for more information on the particular flags that can
+	 * be modified with this manipulator function.
+	 * @sa ios::fmtflags
+	 * @sa ios::unsetf()
+	 */
 	constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask)
 	{
 		return resetiosflags_{mask};
