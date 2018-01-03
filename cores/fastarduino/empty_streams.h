@@ -212,7 +212,12 @@ namespace streams
 		constexpr empty_()
 		{
 		}
-		friend constexpr const setw_ setw(uint8_t width);
+		friend constexpr const empty_ setw(uint8_t);
+		friend constexpr const empty_ setprecision(uint8_t);
+		friend constexpr const empty_ setbase(int);
+		friend constexpr const empty_ setfill(char);
+		friend constexpr const empty_ setiosflags(ios::fmtflags);
+		friend constexpr const empty_ resetiosflags(ios::fmtflags);
 	};
 
 	constexpr const empty_ setw(uint8_t width UNUSED)
