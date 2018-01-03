@@ -35,24 +35,24 @@ namespace serial
 {
 	namespace soft
 	{
-		class AbstractUATX : virtual public UARTErrors, private streams::OutputBuffer
+		class AbstractUATX : virtual public UARTErrors, private streams::ostreambuf
 		{
 		public:
-			streams::OutputBuffer& out()
+			streams::ostreambuf& out()
 			{
-				return (OutputBuffer&) *this;
+				return (ostreambuf&) *this;
 			}
 
-			streams::FormattedOutput fout()
+			streams::ostream fout()
 			{
-				return streams::FormattedOutput(*this);
+				return streams::ostream(*this);
 			}
 
 			// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
 			// Fixed in 4.9.4 (currently using 4.9.2 only)
 			// We have to make the constructor public to allow virtual inheritance...
 			//	protected:
-			template<uint8_t SIZE_TX> AbstractUATX(char (&output)[SIZE_TX]) : OutputBuffer{output}
+			template<uint8_t SIZE_TX> AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output}
 			{
 			}
 
@@ -145,21 +145,21 @@ namespace serial
 			_delay_loop_2(stop_bit_tx_time_);
 		}
 
-		class AbstractUARX : virtual public UARTErrors, private streams::InputBuffer
+		class AbstractUARX : virtual public UARTErrors, private streams::istreambuf
 		{
 		public:
-			streams::InputBuffer& in()
+			streams::istreambuf& in()
 			{
-				return (streams::InputBuffer&) *this;
+				return (streams::istreambuf&) *this;
 			}
 
-			streams::FormattedInput fin()
+			streams::istream fin()
 			{
-				return streams::FormattedInput(*this);
+				return streams::istream(*this);
 			}
 
 		protected:
-			template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : InputBuffer{input}
+			template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input}
 			{
 			}
 

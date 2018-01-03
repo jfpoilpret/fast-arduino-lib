@@ -33,7 +33,7 @@ namespace streams
 {
 	/**
 	 * Implements an empty formatted output that does nothing.
-	 * It can be used everywhere a `streams::FormattedOutput` is expected but 
+	 * It can be used everywhere a `streams::ostream` is expected but 
 	 * produces no code at all.
 	 * The following example shows how to add traces that can be disabled at 
 	 * compile time by defining a specific macro:

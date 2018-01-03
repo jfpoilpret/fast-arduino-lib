@@ -46,7 +46,7 @@ static serial::hard::UATX<UART> uart{output_buffer};
 #else
 static serial::soft::UATX<TX> uart{output_buffer};
 #endif
-static streams::FormattedOutput out = uart.fout();
+static streams::ostream out = uart.fout();
 
 using devices::magneto::DataOutput;
 using devices::magneto::Gain;

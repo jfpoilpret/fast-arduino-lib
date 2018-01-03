@@ -116,7 +116,7 @@ namespace serial
 		 * @tparam USART_ the hardware `board::USART` to use
 		 * @sa REGISTER_UATX_ISR()
 		 */
-		template<board::USART USART_> class UATX : virtual public AbstractUART, private streams::OutputBuffer
+		template<board::USART USART_> class UATX : virtual public AbstractUART, private streams::ostreambuf
 		{
 		public:
 			/** The hardware `board::USART` used by this UATX. */
@@ -134,7 +134,7 @@ namespace serial
 			 * blocking.
 			 */
 			template<uint8_t SIZE_TX>
-			UATX(char (&output)[SIZE_TX]) : streams::OutputBuffer{output}, transmitting_{false}
+			UATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false}
 			{
 			}
 
@@ -184,18 +184,18 @@ namespace serial
 			 * Get the raw output stream used to send content through this serial
 			 * transmitter.
 			 */
-			inline streams::OutputBuffer& out()
+			inline streams::ostreambuf& out()
 			{
-				return (OutputBuffer&) *this;
+				return (ostreambuf&) *this;
 			}
 
 			/**
 			 * Get the formatted output stream used to send content through this serial
 			 * transmitter.
 			 */
-			inline streams::FormattedOutput fout()
+			inline streams::ostream fout()
 			{
-				return streams::FormattedOutput(*this);
+				return streams::ostream(*this);
 			}
 
 			/// @cond notdocumented
@@ -219,7 +219,7 @@ namespace serial
 			// Listeners of events on the buffer
 			virtual void on_put() override
 			{
-				errors_.all_errors.queue_overflow = OutputBuffer::overflow();
+				errors_.all_errors.queue_overflow = ostreambuf::overflow();
 				synchronized
 				{
 					// Check if TX is not currently active, if so, activate it
@@ -252,7 +252,7 @@ namespace serial
 		 * @tparam USART_ the hardware `board::USART` to use
 		 * @sa REGISTER_UARX_ISR()
 		 */
-		template<board::USART USART_> class UARX : virtual public AbstractUART, private streams::InputBuffer
+		template<board::USART USART_> class UARX : virtual public AbstractUART, private streams::istreambuf
 		{
 		public:
 			/** The hardware `board::USART` used by this UARX. */
@@ -270,7 +270,7 @@ namespace serial
 			 * store content received through serial line, buffered until read through
 			 * `in()` or `fin()`.
 			 */
-			template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : InputBuffer{input}
+			template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : istreambuf{input}
 			{
 			}
 
@@ -320,18 +320,18 @@ namespace serial
 			 * Get the raw input stream used to read content received through this 
 			 * serial transmitter.
 			 */
-			inline streams::InputBuffer& in()
+			inline streams::istreambuf& in()
 			{
-				return (streams::InputBuffer&) *this;
+				return (streams::istreambuf&) *this;
 			}
 
 			/**
 			 * Get the formatted input stream used to read content received through
 			 * this serial transmitter.
 			 */
-			inline streams::FormattedInput fin()
+			inline streams::istream fin()
 			{
-				return streams::FormattedInput(*this);
+				return streams::istream(*this);
 			}
 
 			/// @cond notdocumented

@@ -40,8 +40,8 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace streams;
 
-using INPUT = FormattedInput;
-using OUTPUT = FormattedOutput;
+using INPUT = istream;
+using OUTPUT = ostream;
 
 template<typename T>
 static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)

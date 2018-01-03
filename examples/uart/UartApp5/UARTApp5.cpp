@@ -51,7 +51,7 @@ int main()
 	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
-	streams::FormattedOutput out = uart.fout();
+	streams::ostream out = uart.fout();
 
 	// Event Loop
 	while (true)

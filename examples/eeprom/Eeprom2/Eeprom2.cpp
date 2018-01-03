@@ -72,7 +72,7 @@ static uint8_t eeprom_buffer[EEPROM_BUFFER_SIZE];
 
 using namespace eeprom;
 
-static void trace_eeprom(streams::FormattedOutput& out, uint16_t address, uint16_t loops = 1)
+static void trace_eeprom(streams::ostream& out, uint16_t address, uint16_t loops = 1)
 {
 	for (uint16_t i = 0; i < loops; ++i)
 	{
@@ -95,7 +95,7 @@ struct Content
 };
 
 template<typename T>
-static void write_eeprom(streams::FormattedOutput& out, QueuedWriter& writer, uint16_t address, const T& content)
+static void write_eeprom(streams::ostream& out, QueuedWriter& writer, uint16_t address, const T& content)
 {
 	if (!writer.write(address, content))
 	{
@@ -118,7 +118,7 @@ int main()
 #endif
 	uart.begin(115200);
 
-	streams::FormattedOutput out = uart.fout();
+	streams::ostream out = uart.fout();
 	out << streams::hex;
 	out << "\nInitial EEPROM content" << streams::endl;	
 	trace_eeprom(out, 0, EEPROM::size() / 16);

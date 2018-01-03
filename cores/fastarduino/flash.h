@@ -87,12 +87,12 @@ namespace flash
  * Here is a classical usage here:
  * @code
  * char buffer[64];
- * streams::OutputBuffer out{buffer};
+ * streams::ostreambuf out{buffer};
  * out << F("Hello, world!\n");
  * @endcode
  * 
  * @param ptr the string to be automatically stored on flash
- * @sa streams::OutputBuffer::puts(const flash::FlashStorage*)
+ * @sa streams::ostreambuf::puts(const flash::FlashStorage*)
  */
 #define F(ptr)                                   \
 	(__extension__({                             \

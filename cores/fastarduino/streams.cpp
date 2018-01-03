@@ -16,19 +16,19 @@
 
 namespace streams
 {
-	char get(InputBuffer& in)
+	char get(istreambuf& in)
 	{
 		return containers::pull<char>(in.queue());
 	}
 
-	char* get(InputBuffer& in, char* content, size_t size)
+	char* get(istreambuf& in, char* content, size_t size)
 	{
 		char* current = content;
 		for (size_t i = 0; i < size; ++i) *current++ = containers::pull(in.queue());
 		return content;
 	}
 
-	int gets(InputBuffer& in, char* str, size_t max, char end)
+	int gets(istreambuf& in, char* str, size_t max, char end)
 	{
 		size_t size = 0;
 		while (size < max - 1)
@@ -42,7 +42,7 @@ namespace streams
 		return size;
 	}
 
-	char* InputBuffer::scan(char* str, size_t max)
+	char* istreambuf::scan(char* str, size_t max)
 	{
 		char* next = str;
 		while (max > 1)

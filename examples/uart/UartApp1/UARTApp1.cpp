@@ -62,9 +62,9 @@ int main()
 	uart.register_handler();
 	uart.begin(115200);
 //	uart.begin(230400);
-	streams::InputBuffer& in = uart.in();
-//	streams::FormattedInput in = uart.fin();
-	streams::FormattedOutput out = uart.fout();
+	streams::istreambuf& in = uart.in();
+//	streams::istream in = uart.fin();
+	streams::ostream out = uart.fout();
 
 	// Event Loop
 	while (true)

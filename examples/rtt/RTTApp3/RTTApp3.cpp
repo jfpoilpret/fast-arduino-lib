@@ -79,7 +79,7 @@ int main()
 	uatx.begin(115200);
 #endif
 
-	streams::FormattedOutput out = uatx.fout();
+	streams::ostream out = uatx.fout();
 	out << "Started\n";
 	
 	timer::RTT<board::Timer::TIMER0> rtt;

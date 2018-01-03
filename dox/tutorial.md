@@ -243,7 +243,7 @@ int main()
     uart.register_handler();
     uart.begin(115200);
 
-    streams::OutputBuffer out = uart.out();
+    streams::ostreambuf out = uart.out();
     out.puts("Hello, World!\n");
     out.flush();
     return 0;
@@ -259,7 +259,7 @@ The code that follows instantiates a `uart::hard::UATX` object that is using `bo
 
 Once created, `uart` needs to be *linked* to the ISR previously registered, this is done through `uart.register_handler()`. Then we can set `uart` ready for transmission, at serial speed of 115200 bps.
 
-Next step consists in extracting, from `uart`, a `streams::OutputBuffer` that will allow us to send characters or strings to USB:
+Next step consists in extracting, from `uart`, a `streams::ostreambuf` that will allow us to send characters or strings to USB:
 
     out.puts("Hello, World!\n");
 
@@ -373,7 +373,7 @@ int main()
     uart.register_handler();
     uart.begin(115200);
 
-    streams::FormattedOutput<streams::OutputBuffer> out = uart.fout();
+    streams::ostream<streams::ostreambuf> out = uart.fout();
     uint16_t value = 0x8000;
     out << F("value = 0x") << hex << value 
         << F(", ") << dec << value 
@@ -382,7 +382,7 @@ int main()
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Here, we use `uart.fout()` instead of `uart.out()` to get a `streams::FormattedOutput` on which we can use the "insertion operator" `<<`.
+Here, we use `uart.fout()` instead of `uart.out()` to get a `streams::ostream` on which we can use the "insertion operator" `<<`.
 
 If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::ostream` API](http://www.cplusplus.com/reference/ostream/ostream/operator%3C%3C/) which FastArduino library tries to implement with some level of fidelity.
 
@@ -435,11 +435,11 @@ int main()
     uart.register_handler();
     uart.begin(115200);
 
-    streams::InputBuffer in = uart.in();
+    streams::istreambuf in = uart.in();
 
     // Get one character if any
     int input = in.get();
-    if (input != InputBuffer:EOF)
+    if (input != istreambuf:EOF)
     {
         char value = char(input);
     }
@@ -458,12 +458,12 @@ Note the similarities between this example and UATX example above for all the se
 The main differences are:
 - use `UARX` type instead of `UATX`
 - `REGISTER_UARX_ISR()` instead of `REGISTER_UATX_ISR()` macro for ISR registration
-- use `InputBuffer` instead of `OutputBuffer` and `uart.in()` instead of `uart.out()`
+- use `istreambuf` instead of `ostreambuf` and `uart.in()` instead of `uart.out()`
 
-Then `UARX` mainly offers one method, `get()`, which returns the next character serially received and buffered; if the input buffer is currently empty, then `get()` returns `InputBuffer::EOF`, which must be tested before dealing with the returned value.
+Then `UARX` mainly offers one method, `get()`, which returns the next character serially received and buffered; if the input buffer is currently empty, then `get()` returns `istreambuf::EOF`, which must be tested before dealing with the returned value.
 
 Then the example uses 2 functions defined directly within `streams` namespace:
-- `get()`: this is similar to `InputBuffer.get()` except that it **blocks** until one character is available on serial input.
+- `get()`: this is similar to `istreambuf.get()` except that it **blocks** until one character is available on serial input.
 - `gets()`: this blocks until a complete string (terminated by `'\0'`) gets read on serial input and fills the given buffer parameter with that string content.
 
 Note that these 2 functions use `time::yield()` while waiting; this may be linked to `power` management. Please take a look at the documentation for this API for further details.
@@ -483,7 +483,7 @@ REGISTER_UARX_ISR(0)
 static const uint8_t INPUT_BUFFER_SIZE = 64;
 static char input_buffer[INPUT_BUFFER_SIZE];
 
-using INPUT = streams::FormattedInput<streams::InputBuffer>;
+using INPUT = streams::istream<streams::istreambuf>;
 
 int main()
 {
@@ -507,7 +507,7 @@ int main()
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Here, we use `uart.fin()` instead of `uart.in()` to get a `streams::FormattedInput` on which we can use the "extraction operator" `>>`. All extractions are blocking and will not return until the required type can be read from the buffer.
+Here, we use `uart.fin()` instead of `uart.in()` to get a `streams::istream` on which we can use the "extraction operator" `>>`. All extractions are blocking and will not return until the required type can be read from the buffer.
 
 If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::istream` API](http://www.cplusplus.com/reference/istream/istream/operator%3E%3E/) which FastArduino library tries to implement with some level of fidelity.
 
@@ -1967,7 +1967,7 @@ Note that the `time::yield()` method just calls `Power::sleep()` (with current d
 is used by other FastArduino API on several occasions whenever these API need to wait for something:
 - `watchdog::Watchdog::delay()` while waiting for time to elapse for the given delay
 - `timer::RTT::delay()` while waiting for time to elapse for the given delay
-- `streams::OutputBuffer::flush()` while waiting until all stream content has been read by a consumer (e.g. UART)
+- `streams::ostreambuf::flush()` while waiting until all stream content has been read by a consumer (e.g. UART)
 - `containers::pull()` and `containers::peek()` while waiting for an item to be pushed to a queue
 - `devices::rf::NRF24L01` when sending or receving payload
 

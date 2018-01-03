@@ -64,7 +64,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace eeprom;
 
-static void trace_eeprom(streams::FormattedOutput& out, uint16_t address, uint16_t loops = 1)
+static void trace_eeprom(streams::ostream& out, uint16_t address, uint16_t loops = 1)
 {
 	for (uint16_t i = 0; i < loops; ++i)
 	{
@@ -94,7 +94,7 @@ int main()
 #endif
 	uart.begin(115200);
 
-	streams::FormattedOutput out = uart.fout();
+	streams::ostream out = uart.fout();
 	out << streams::hex;
 	out << "\nInitial EEPROM content\n";	
 	trace_eeprom(out, 0, EEPROM::size() / 16);
