@@ -31,6 +31,7 @@
 #include "utilities.h"
 
 //TODO better alignment with C++ iostreams? class names, method names, behvior, missing methods...
+//TODO error handling for extraction operators?
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
  * Typical usage of an output "stream":
@@ -540,10 +541,16 @@ namespace streams
 			v = value;
 			return true;
 		}
+		const char* binary_token(const char* token) const
+		{
+			if (base() == 2 && ((strncmp(token, "0b0", 3) == 0) || (strncmp(token, "0b1", 3) == 0)))
+				return token + 2;
+			return token;
+		}
 		bool convert(const char* token, long& v) const
 		{
 			char* endptr;
-			long value = strtol(token, &endptr, base());
+			long value = strtol(binary_token(token), &endptr, base());
 			if (endptr == token) return false;
 			v = value;
 			return true;
@@ -551,7 +558,7 @@ namespace streams
 		bool convert(const char* token, unsigned long& v) const
 		{
 			char* endptr;
-			unsigned long value = strtoul(token, &endptr, base());
+			unsigned long value = strtoul(binary_token(token), &endptr, base());
 			if (endptr == token) return false;
 			v = value;
 			return true;

@@ -214,16 +214,16 @@ int main()
 		// out << v1 << endl;
 
 		// check formatted inputs: numeric with base
-		// uint16_t v2;
+		uint16_t v2;
 		// out << F("num as dec: ") << flush;
 		// in >> dec >> skipws >> v2;
 		// out << v2 << endl;
 		// out << F("num as hex: ") << flush;
 		// in >> hex >> skipws >> v2;
 		// out << v2 << endl;
-		// out << F("num as bin: ") << flush;
-		// in >> bin >> skipws >> v2;
-		// out << v2 << endl;
+		out << F("num as bin: ") << flush;
+		in >> bin >> skipws >> v2;
+		out << v2 << endl;
 		// out << F("num as oct: ") << flush;
 		// in >> oct >> skipws >> v2;
 		// out << v2 << endl;
