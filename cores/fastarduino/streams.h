@@ -30,7 +30,8 @@
 #include "flash.h"
 #include "utilities.h"
 
-//TODO better alignment with C++ iostreams? class names, method names, behvior, missing methods...
+//TODO better alignment with C++ iostreams? method names, behavior, missing methods...
+// but keep cuatious about code/data size and performance (avoid virtual)
 //TODO error handling for extraction operators?
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
@@ -415,37 +416,92 @@ namespace streams
 		 */
 		static constexpr fmtflags uppercase = 0x8000;
 
-		//TODO DOCs
+		/**
+		 * Set new format flags for this stream.
+		 * @sa fmtflags
+		 */
 		inline void flags(fmtflags flags)
 		{
 			flags_ = flags;
 		}
 
+		/**
+		 * Return the format flags currently selected in this stream.
+		 * @sa fmtflags
+		 */
 		inline fmtflags flags() const
 		{
 			return flags_;
 		}
 
+		/**
+		 * Set this stream's format flags whose bits are set in @p flags, leaving 
+		 * unchanged the rest.
+		 * This is equivalent to `flags(flags | flags());`.
+		 * 
+		 * This method is used to set independent flags.
+		 * 
+		 * @sa fmtflags
+		 * @sa setf(fmtflags, fmtflags)
+		 * @sa flags(fmtflags)
+		 */
 		inline void setf(fmtflags flags)
 		{
 			flags_ |= flags;
 		}
 
+		/**
+		 * Set this stream's format flags whose bits are set in both @p flags and @p mask,
+		 * and clears the format flags whose bits are set in @p mask but not in @p flags.
+		 * This is equivalent to `flags((flags & mask) | (flags() & ~mask));`.
+		 * 
+		 * This method is used to set a value for one of a group of related flags,
+		 * using one of the field bitmasks as the @p mask argument:
+		 * 
+		 * flags              | mask
+		 * -------------------|--------------
+		 * left, right        | adjustfield
+		 * dec, bin, oct, hex | basefield
+		 * scientific, fixed  | floatfield
+		 * 
+		 * @sa fmtflags
+		 * @sa setf(fmtflags)
+		 * @sa flags(fmtflags)
+		 */
 		inline void setf(fmtflags flags, fmtflags mask)
 		{
 			flags_ = (flags_ & ~mask) | (flags & mask);
 		}
 
+		/**
+		 * Clear this stream's format flags whose bits are set in @p flags.
+		 * @sa fmtflags
+		 * @sa setf(fmtflags)
+		 * @sa flags(fmtflags)
+		 */
 		inline void unsetf(fmtflags flags)
 		{
 			flags_ &= ~flags;
 		}
 
+		/**
+		 * Return the *fill* character.
+		 * The fill character is the character used by output insertion functions to 
+		 * fill spaces when padding results to the field width.
+		 * Default fill character is a space.
+		 * @sa width()
+		 */
 		inline char fill() const
 		{
 			return fill_;
 		}
 
+		/**
+		 * Set @p fill as new *fill* character for this stream.
+		 * The fill character is the character used by output insertion functions to 
+		 * fill spaces when padding results to the field width.
+		 * @sa width()
+		 */
 		inline void fill(char fill)
 		{
 			fill_ = fill;
@@ -1415,27 +1471,79 @@ namespace streams
 	}
 	/// @endcond
 
-	//TODO DOCS
+	/**
+	 * Set the field width to be used on output (and some input) operations.
+	 * This method should only be used as a stream manipulator.
+	 * 
+	 * The folowing example displays `123` right-aligned on 10 positions, i.e.
+	 * with 7 *fill* characters prepended:
+	 * @code
+	 * out << setw(10) << dec << right << 123 << endl;
+	 * @endcode
+	 * Note that `setw()` is effective only for one input or output operation,
+	 * and thus must be called before each operation.
+	 */
 	constexpr const setw_ setw(uint8_t width)
 	{
 		return setw_{width};
 	}
+
+	/**
+	 * Set the decimal precision to be used to format floating-point values on 
+	 * output operations.
+	 * This method should only be used as a stream manipulator.
+	 * 
+	 * The folowing example displays `123.456789` with various precision, i.e.
+	 * various number of decimals afeter the decimal point:
+	 * @code
+	 * out << setprecision(2) << 123.456789 << endl;
+	 * out << setprecision(4) << 123.456789 << endl;
+	 * out << setprecision(6) << 123.456789 << endl;
+	 * out << setprecision(8) << 123.456789 << endl;
+	 * @endcode
+	 */
 	constexpr const setprecision_ setprecision(uint8_t precision)
 	{
 		return setprecision_{precision};
 	}
+
+	/**
+	 * Set the basefield to one of its possible values (dec, bin, oct or hex)
+	 * according to @p base, which must be one of 10, 2, 8 or 16.
+	 * This method should only be used as a stream manipulator.
+	 * 
+	 * The folowing example displays `123` under all available bases:
+	 * @code
+	 * out << setbase(10) << 123 << endl;
+	 * out << setbase(2) << 123 << endl;
+	 * out << setbase(8) << 123 << endl;
+	 * out << setbase(16) << 123 << endl;
+	 * @endcode
+	 * 
+	 * Note that it is generally preferrable to use the other manipulators.
+	 * @sa dec()
+	 * @sa bin()
+	 * @sa oct()
+	 * @sa hex()
+	 */
 	constexpr const setbase_ setbase(int base)
 	{
 		return setbase_{base};
 	}
+
+	//TODO DOCS
 	constexpr const setfill_ setfill(char fill)
 	{
 		return setfill_{fill};
 	}
+
+	//TODO DOCS
 	constexpr const setiosflags_ setiosflags(ios::fmtflags mask)
 	{
 		return setiosflags_{mask};
 	}
+
+	//TODO DOCS
 	constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask)
 	{
 		return resetiosflags_{mask};
@@ -1534,71 +1642,85 @@ namespace streams
 		stream.setf(ios::boolalpha);
 	}
 
+	//TODO DOCS
 	template<typename FSTREAM> inline void noboolalpha(FSTREAM& stream)
 	{
 		stream.unsetf(ios::boolalpha);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void showbase(FSTREAM& stream)
 	{
 		stream.setf(ios::showbase);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void noshowbase(FSTREAM& stream)
 	{
 		stream.unsetf(ios::showbase);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void showpos(FSTREAM& stream)
 	{
 		stream.setf(ios::showpos);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void noshowpos(FSTREAM& stream)
 	{
 		stream.unsetf(ios::showpos);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void uppercase(FSTREAM& stream)
 	{
 		stream.setf(ios::uppercase);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void nouppercase(FSTREAM& stream)
 	{
 		stream.unsetf(ios::uppercase);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void unitbuf(FSTREAM& stream)
 	{
 		stream.setf(ios::unitbuf);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void nounitbuf(FSTREAM& stream)
 	{
 		stream.unsetf(ios::unitbuf);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void left(FSTREAM& stream)
 	{
 		stream.setf(ios::left, ios::adjustfield);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void right(FSTREAM& stream)
 	{
 		stream.setf(ios::right, ios::adjustfield);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void defaultfloat(FSTREAM& stream)
 	{
 		stream.unsetf(ios::floatfield);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void fixed(FSTREAM& stream)
 	{
 		stream.setf(ios::fixed, ios::floatfield);
 	}
 	
+	//TODO DOCS
 	template<typename FSTREAM> inline void scientific(FSTREAM& stream)
 	{
 		stream.setf(ios::scientific, ios::floatfield);
