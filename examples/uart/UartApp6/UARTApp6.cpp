@@ -204,7 +204,7 @@ int main()
 		// handle<int32_t>(out, in, F("int32_t"));
 		// handle<bool>(out, in, F("bool"));
 		
-		// check formatted inputs: bool
+		// // check formatted inputs: bool
 		// bool v1;
 		// out << F("bool as alpha: ") << flush;
 		// in >> boolalpha >> skipws >> v1;
@@ -215,20 +215,20 @@ int main()
 
 		// check formatted inputs: numeric with base
 		uint16_t v2;
-		// out << F("num as dec: ") << flush;
-		// in >> dec >> skipws >> v2;
-		// out << v2 << endl;
-		// out << F("num as hex: ") << flush;
-		// in >> hex >> skipws >> v2;
-		// out << v2 << endl;
+		out << F("num as dec: ") << flush;
+		in >> dec >> skipws >> v2;
+		out << v2 << endl;
+		out << F("num as hex: ") << flush;
+		in >> hex >> skipws >> v2;
+		out << v2 << endl;
 		out << F("num as bin: ") << flush;
 		in >> bin >> skipws >> v2;
 		out << v2 << endl;
-		// out << F("num as oct: ") << flush;
-		// in >> oct >> skipws >> v2;
-		// out << v2 << endl;
+		out << F("num as oct: ") << flush;
+		in >> oct >> skipws >> v2;
+		out << v2 << endl;
 
-		// check input to char*
+		// // check input to char*
 		// input_string<10>(out, in);
 		// input_string<50>(out, in);
 		// input_string<200>(out, in);
@@ -236,12 +236,12 @@ int main()
 		time::delay_ms(1000);
 	}
 
-	// check unitbuf: with unitbuf the program should not exit until every character has been output
+	// // check unitbuf: with unitbuf the program should not exit until every character has been output
 	// out << unitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
 	// out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
 	// out << F("1234567890\n");
 
-	// check nounitbuf: with nounitbuf the program will exit before all characters have been output
+	// // check nounitbuf: with nounitbuf the program will exit before all characters have been output
 	// out << nounitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
 	// out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
 	// out << F("1234567890\n");
