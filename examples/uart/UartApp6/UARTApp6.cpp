@@ -28,6 +28,7 @@
 
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
+#include <fastarduino/iomanip.h>
 
 // Define vectors we need in the example
 REGISTER_UART_ISR(0)

@@ -12,7 +12,9 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "streams.h"
+#include <ctype.h>
+#include "queue.h"
+#include "streambuf.h"
 
 namespace streams
 {

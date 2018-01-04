@@ -26,9 +26,11 @@
 #define EMPTYSTREAMS_HH
 
 #include <stddef.h>
+#include "ios.h"
 #include "flash.h"
 #include "utilities.h"
 
+//TODO rename to better fit new FastArduino iostreams "conventions"
 namespace streams
 {
 	/**
