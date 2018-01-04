@@ -1667,91 +1667,227 @@ namespace streams
 		stream.flush();
 	}
 
-	//TODO DOC
+	/**
+	 * Set the ios::boolalpha format flag for @p stream.
+	 * When the boolalpha format flag is set, bool values are inserted/extracted
+	 * by their textual representation: either `true` or `false`, instead of 
+	 * integral values.
+	 * 
+	 * This flag can be unset with the `noboolalpha` manipulator.
+	 * @sa noboolalpha
+	 */
 	template<typename FSTREAM> inline void boolalpha(FSTREAM& stream)
 	{
 		stream.setf(ios::boolalpha);
 	}
 
-	//TODO DOCS
+	/**
+	 * Clear the ios::boolalpha format flag for @p stream.
+	 * When the boolalpha format flag is not set, bool values are inserted/extracted
+	 * as integral values (`0` and `1`) instead of their textual representations:
+	 * `true` or `false`.
+	 * This flag can be set with the `boolalpha` manipulator.
+	 * @sa boolalpha
+	 */
 	template<typename FSTREAM> inline void noboolalpha(FSTREAM& stream)
 	{
 		stream.unsetf(ios::boolalpha);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::showbase format flag for @p stream.
+	 * When the showbase format flag is set, numerical integer values inserted 
+	 * into output streams are prefixed with the same prefixes used by C++ 
+	 * literal constants: `0x` for hexadecimal values (see `hex`), `0` for octal 
+	 * values (see `oct`), `0b` for binary values (see `bin`) and no prefix for
+	 * decimal-base values (see `dec`).
+	 * 
+	 * This option can be unset with the `noshowbase` manipulator. 
+	 * @sa noshowbase
+	 * @sa dec
+	 * @sa hex
+	 * @sa oct
+	 * @sa bin
+	 */
 	template<typename FSTREAM> inline void showbase(FSTREAM& stream)
 	{
 		stream.setf(ios::showbase);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Clear the ios::showbase format flag for @p stream.
+	 * When the showbase format flag is not set, numerical integer values are inserted 
+	 * into @p stream without prefixing them with any numerical base prefix (i.e.
+	 * `0x` for hexadecimal values, `0` for octal values, `0b` for binary values 
+	 * and no prefix for decimal-base values).
+	 * 
+	 * This option can be set with the `showbase` manipulator.
+	 * @sa showbase
+	 */
 	template<typename FSTREAM> inline void noshowbase(FSTREAM& stream)
 	{
 		stream.unsetf(ios::showbase);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::showpos format flag for @p stream.
+	 * When the showpos format flag is set, a plus sign (+) precedes every 
+	 * non-negative numerical value inserted into @p stream (including zeros).
+	 * 
+	 * This flag can be unset with the `noshowpos` manipulator.
+	 * @sa noshowpos
+	 */
 	template<typename FSTREAM> inline void showpos(FSTREAM& stream)
 	{
 		stream.setf(ios::showpos);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Clear the ios::showpos format flag for @p stream.
+	 * When the showpos format flag is not set, no plus signs precede positive
+	 * values inserted into @p stream.
+	 * 
+	 * This flag can be set with the `noshowpos` manipulator.
+	 * @sa showpos
+	 */
 	template<typename FSTREAM> inline void noshowpos(FSTREAM& stream)
 	{
 		stream.unsetf(ios::showpos);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::uppercase format flag for @p stream.
+	 * When the uppercase format flag is set, uppercase (capital) letters are used 
+	 * instead of lowercase for representations on output operations involving 
+	 * stream-generated letters, like hexadecimal representations.
+	 * 
+	 * This flag can be unset with the `nouppercase` manipulator, not forcing the
+	 * use of uppercase for generated letters.
+	 * @sa nouppercase
+	 */
 	template<typename FSTREAM> inline void uppercase(FSTREAM& stream)
 	{
 		stream.setf(ios::uppercase);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Clear the ios::uppercase format flag for @p stream.
+	 * When the uppercase format flag is notset, the letters automatically generated
+	 * by @p stream for certain representations (like hexadecimal representations)
+	 * are displayed as lwoercase.
+	 * 
+	 * This flag can be set with the `uppercase` manipulator, forcing the
+	 * use of uppercase for generated letters.
+	 * @sa uppercase
+	 */
 	template<typename FSTREAM> inline void nouppercase(FSTREAM& stream)
 	{
 		stream.unsetf(ios::uppercase);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::unitbuf format flag for @p stream.
+	 * When the unitbuf flag is set, the associated buffer is flushed after each
+	 * insertion operation.
+	 * 
+	 * This flag can be unset with the `nounitbuf` manipulator, not forcing flushes
+	 * after every insertion.
+	 * @sa nounitbuf
+	 */
 	template<typename FSTREAM> inline void unitbuf(FSTREAM& stream)
 	{
 		stream.setf(ios::unitbuf);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Clear the ios::unitbuf format flag for @p stream.
+	 * When the unitbuf flag is not set, the associated buffer is not forced to
+	 * be flushed after every insertion operation.
+	 * With this mode, you can force buffer flush any time by using `flush` manipulator,
+	 * or using `endl` which will output a new line follwoed by a buffer flush.
+	 * 
+	 * This flag can be set with the `unitbuf` manipulator, forcing flushes
+	 * after every insertion.
+	 * @sa unitbuf
+	 */
 	template<typename FSTREAM> inline void nounitbuf(FSTREAM& stream)
 	{
 		stream.unsetf(ios::unitbuf);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::adjustfield format flag for @p stream to ios::left, thus
+	 * adjusting next output to the left.
+	 * When adjustfield is set to left, the output is padded to the field width 
+	 * (`ios::width()`) by inserting fill characters (`ios::fill()`) at the end, 
+	 * effectively adjusting the field to the left.
+	 * @sa right
+	 */
 	template<typename FSTREAM> inline void left(FSTREAM& stream)
 	{
 		stream.setf(ios::left, ios::adjustfield);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::adjustfield format flag for @p stream to ios::right, thus
+	 * adjusting next output to the right.
+	 * When adjustfield is set to right, the output is padded to the field width 
+	 * (`ios::width()`) by inserting fill characters (`ios::fill()`) at the beginning, 
+	 * effectively adjusting the field to the right.
+	 * @sa left
+	 */
 	template<typename FSTREAM> inline void right(FSTREAM& stream)
 	{
 		stream.setf(ios::right, ios::adjustfield);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::floatfield format flag for @p stream to ios::defaultfloat.
+	 * When floatfield is set to defaultfloat, floating-point values are written 
+	 * using the default notation: the representation uses as many meaningful digits 
+	 * as needed up to the stream's decimal precision (`ios::precision()`), 
+	 * counting both the digits before and after the decimal point (if any).
+	 * 
+	 * NOTE: current implementation behaves the same as `fixed`.
+	 * @sa fixed
+	 * @sa scientific
+	 * @sa ios::precision()
+	 * @sa ios::precision(uint8_t)
+	 */
 	template<typename FSTREAM> inline void defaultfloat(FSTREAM& stream)
 	{
 		stream.unsetf(ios::floatfield);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::floatfield format flag for @p stream to ios::fixed.
+	 * When floatfield is set to fixed, floating-point values are written using 
+	 * fixed-point notation: the value is represented with exactly as many digits 
+	 * in the decimal part as specified by the precision field (`ios::precision()`)
+	 * and with no exponent part.
+	 * @sa defaultfloat
+	 * @sa scientific
+	 * @sa ios::precision()
+	 * @sa ios::precision(uint8_t)
+	 */
 	template<typename FSTREAM> inline void fixed(FSTREAM& stream)
 	{
 		stream.setf(ios::fixed, ios::floatfield);
 	}
 	
-	//TODO DOCS
+	/**
+	 * Set the ios::floatfield format flag for @p stream to ios::scientific.
+	 * When floatfield is set to scientific, floating-point values are written 
+	 * using scientific notation: the value is represented always with only one 
+	 * digit before the decimal point, followed by the decimal point and as many 
+	 * decimal digits as the precision field (`ios::precision()`). Finally, this 
+	 * notation always includes an exponential part consisting on the letter `e` 
+	 * followed by an optional sign and two exponential digits.
+	 * @sa defaultfloat
+	 * @sa fixed
+	 * @sa ios::precision()
+	 * @sa ios::precision(uint8_t)
+	 */
 	template<typename FSTREAM> inline void scientific(FSTREAM& stream)
 	{
 		stream.setf(ios::scientific, ios::floatfield);
