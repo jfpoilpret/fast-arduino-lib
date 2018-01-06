@@ -30,7 +30,6 @@
 #include "flash.h"
 #include "utilities.h"
 
-//TODO rename to better fit new FastArduino iostreams "conventions"
 namespace streams
 {
 	/**
