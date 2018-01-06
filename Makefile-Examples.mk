@@ -25,7 +25,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					events/EventApp1 events/EventApp2 events/EventApp3 events/EventApp4		\
 					int/ExternalInterrupt1 int/ExternalInterrupt2							\
 					io/FastPin1 io/FastPin2 io/FastPin3 io/FastPin4 io/FastPin5				\
-					misc/Flash1																\
+					misc/Flash1	misc/IOStreams2												\
 					i2c/Magneto1															\
 					pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
 					analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4							\
@@ -74,6 +74,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3				\
 								uart/UartApp6					
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
+								misc/IOStreams1					\
 								pci/PinChangeInterrupt4			
 
 
