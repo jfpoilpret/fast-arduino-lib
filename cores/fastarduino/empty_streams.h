@@ -75,6 +75,30 @@ namespace streams
 		{
 		}
 
+		inline void setf(ios::fmtflags flags UNUSED)
+		{
+		}
+
+		inline void setf(ios::fmtflags flags UNUSED, ios::fmtflags mask UNUSED)
+		{
+		}
+
+		inline void unsetf(ios::fmtflags flags UNUSED)
+		{
+		}
+
+		inline void fill(char fill UNUSED)
+		{
+		}
+
+		inline void width(uint8_t width UNUSED)
+		{
+		}
+
+		inline void precision(uint8_t precision UNUSED)
+		{
+		}
+
 		void flush()
 		{
 		}
@@ -202,49 +226,6 @@ namespace streams
 	}
 	inline void scientific(EmptyOutput& stream UNUSED)
 	{
-	}
-
-	class empty_
-	{
-	public:
-		template<typename FSTREAM> void operator() (FSTREAM& stream) const
-		{
-		}
-	private:
-		constexpr empty_()
-		{
-		}
-		friend constexpr const empty_ setw(uint8_t);
-		friend constexpr const empty_ setprecision(uint8_t);
-		friend constexpr const empty_ setbase(int);
-		friend constexpr const empty_ setfill(char);
-		friend constexpr const empty_ setiosflags(ios::fmtflags);
-		friend constexpr const empty_ resetiosflags(ios::fmtflags);
-	};
-
-	constexpr const empty_ setw(uint8_t width UNUSED)
-	{
-		return empty_{};
-	}
-	constexpr const empty_ setprecision(uint8_t precision UNUSED)
-	{
-		return empty_{};
-	}
-	constexpr const empty_ setbase(int base UNUSED)
-	{
-		return empty_{};
-	}
-	constexpr const empty_ setfill(char fill UNUSED)
-	{
-		return empty_{};
-	}
-	constexpr const empty_ setiosflags(ios::fmtflags mask UNUSED)
-	{
-		return empty_{};
-	}
-	constexpr const empty_ resetiosflags(ios::fmtflags mask UNUSED)
-	{
-		return empty_{};
 	}
 	/// @endcond
 }
