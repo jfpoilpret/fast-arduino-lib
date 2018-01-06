@@ -87,6 +87,7 @@ namespace streams
 		void put(char c, bool call_on_put = true)
 		{
 			stream_.put(c, call_on_put);
+			check_overflow();
 		}
 
 		/**
@@ -95,6 +96,7 @@ namespace streams
 		void put(const char* content, size_t size)
 		{
 			stream_.put(content, size);
+			check_overflow();
 		}
 
 		/**
@@ -103,6 +105,7 @@ namespace streams
 		void puts(const char* str)
 		{
 			stream_.puts(str);
+			check_overflow();
 		}
 
 		/**
@@ -111,6 +114,7 @@ namespace streams
 		void puts(const flash::FlashStorage* str)
 		{
 			stream_.puts(str);
+			check_overflow();
 		}
 
 		/**
@@ -305,8 +309,16 @@ namespace streams
 	private:
 		void after_insertion()
 		{
-			if (flags() & unitbuf) stream_.flush();
+			if (flags() & unitbuf)
+				stream_.flush();
+			else
+				check_overflow();
 			width(0);
+		}
+
+		void check_overflow()
+		{
+			if (stream_.overflow()) setstate(badbit);
 		}
 
 		ostreambuf& stream_;

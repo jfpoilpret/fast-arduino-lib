@@ -39,6 +39,53 @@ namespace streams
 	class ios_base
 	{
 	public:
+		using iostate = uint8_t;
+
+		// input only: is that possible really?
+		static constexpr iostate eofbit = 0x01;
+		// input only? when format error
+		static constexpr iostate failbit = 0x02;
+		// when cannot write (buffer full) or read overflow
+		static constexpr iostate badbit = 0x04;
+		static constexpr iostate goodbit = 0;
+
+		inline iostate rdstate() const
+		{
+			return state_;
+		}
+		inline void setstate(iostate state)
+		{
+			clear(rdstate() | state);
+		}
+		inline void clear(iostate state = goodbit)
+		{
+			state_ = state;
+		}
+		inline bool good() const
+		{
+			return rdstate() == goodbit;
+		}
+		inline bool eof() const
+		{
+			return rdstate() & eofbit;
+		}
+		inline bool fail() const
+		{
+			return rdstate() & (failbit | badbit);
+		}
+		inline bool bad() const
+		{
+			return rdstate() & badbit;
+		}
+		inline bool operator!() const
+		{
+			return fail();
+		}
+		inline explicit operator bool() const
+		{
+			return !fail();
+		}
+
 		/**
 		 * Bitmask type to represent stream format flags.
 		 * This type is used as parameter or return value by methods `flags`, `setf`
@@ -309,21 +356,21 @@ namespace streams
 			fill_ = ' ';
 		}
 		// Conversions from string
-		bool convert(const char* token, bool& b) const
+		void convert(const char* token, bool& b)
 		{
 			if (flags() & boolalpha)
 				b = (strcmp(token, "true") == 0);
 			else
 				b = (atol(token) != 0);
-			return true;
 		}
-		bool convert(const char* token, double& v) const
+		void convert(const char* token, double& v)
 		{
 			char* endptr;
 			double value = strtod(token, &endptr);
-			if (endptr == token) return false;
-			v = value;
-			return true;
+			if (endptr != token)
+				v = value;
+			else
+				setstate(failbit);
 		}
 		const char* binary_token(const char* token) const
 		{
@@ -331,35 +378,37 @@ namespace streams
 				return token + 2;
 			return token;
 		}
-		bool convert(const char* token, long& v) const
+		bool convert(const char* token, long& v)
 		{
 			char* endptr;
 			long value = strtol(binary_token(token), &endptr, base());
-			if (endptr == token) return false;
-			v = value;
-			return true;
+			if (endptr != token)
+				v = value;
+			else
+				setstate(failbit);
+			return (endptr != token);
 		}
-		bool convert(const char* token, unsigned long& v) const
+		bool convert(const char* token, unsigned long& v)
 		{
 			char* endptr;
 			unsigned long value = strtoul(binary_token(token), &endptr, base());
-			if (endptr == token) return false;
-			v = value;
-			return true;
+			if (endptr != token)
+				v = value;
+			else
+				setstate(failbit);
+			return (endptr != token);
 		}
-		bool convert(const char* token, int& v) const
+		void convert(const char* token, int& v)
 		{
 			long value;
-			if (!convert(token, value)) return false;
-			v = (int) value;
-			return true;
+			if (convert(token, value))
+				v = (int) value;
 		}
-		bool convert(const char* token, unsigned int& v) const
+		void convert(const char* token, unsigned int& v)
 		{
 			unsigned long value;
-			if (!convert(token, value)) return false;
-			v = (unsigned int) value;
-			return true;
+			if (convert(token, value))
+				v = (unsigned int) value;
 		}
 
 		// Conversions to string
@@ -523,6 +572,7 @@ namespace streams
 		/// @endcond
 
 	private:
+		iostate state_;
 		fmtflags flags_;
 		uint8_t width_;
 		uint8_t precision_;
