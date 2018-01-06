@@ -49,7 +49,7 @@ namespace streams
 	 * //...
 	 * // Instantiate the right output
 	 * #ifdef NO_TRACE
-	 * streams::EmptyOutput trace;
+	 * streams::null_ostream trace;
 	 * #else
 	 * // We use UART for tracing
 	 * static char output_buffer[64];
@@ -67,11 +67,11 @@ namespace streams
 	 * }
 	 * @endcode
 	 */
-	class EmptyOutput
+	class null_ostream
 	{
 	public:
 		/// @cond notdocumented
-		EmptyOutput()
+		null_ostream()
 		{
 		}
 
@@ -115,45 +115,45 @@ namespace streams
 		{
 		}
 
-		EmptyOutput& operator<<(const void* p UNUSED)
+		null_ostream& operator<<(const void* p UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(bool b UNUSED)
+		null_ostream& operator<<(bool b UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(char c UNUSED)
+		null_ostream& operator<<(char c UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(const char* s UNUSED)
+		null_ostream& operator<<(const char* s UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(int v UNUSED)
+		null_ostream& operator<<(int v UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(unsigned int v UNUSED)
+		null_ostream& operator<<(unsigned int v UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(long v UNUSED)
+		null_ostream& operator<<(long v UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(unsigned long v UNUSED)
+		null_ostream& operator<<(unsigned long v UNUSED)
 		{
 			return *this;
 		}
-		EmptyOutput& operator<<(double v UNUSED)
+		null_ostream& operator<<(double v UNUSED)
 		{
 			return *this;
 		}
 
-		typedef void (*Manipulator)(EmptyOutput&);
-		EmptyOutput& operator<<(Manipulator f UNUSED)
+		typedef void (*Manipulator)(null_ostream&);
+		null_ostream& operator<<(Manipulator f UNUSED)
 		{
 			return *this;
 		}
@@ -161,70 +161,70 @@ namespace streams
 	};
 
 	/// @cond notdocumented
-	inline void bin(EmptyOutput& stream UNUSED)
+	inline void bin(null_ostream& stream UNUSED)
 	{
 	}
-	inline void oct(EmptyOutput& stream UNUSED)
+	inline void oct(null_ostream& stream UNUSED)
 	{
 	}
-	inline void dec(EmptyOutput& stream UNUSED)
+	inline void dec(null_ostream& stream UNUSED)
 	{
 	}
-	inline void hex(EmptyOutput& stream UNUSED)
+	inline void hex(null_ostream& stream UNUSED)
 	{
 	}
-	inline void flush(EmptyOutput& stream UNUSED)
+	inline void flush(null_ostream& stream UNUSED)
 	{
 	}
-	inline void endl(EmptyOutput& stream UNUSED)
+	inline void endl(null_ostream& stream UNUSED)
 	{
 	}
-	inline void skipws(EmptyOutput& stream UNUSED)
+	inline void skipws(null_ostream& stream UNUSED)
 	{
 	}
-	inline void noskipws(EmptyOutput& stream UNUSED)
+	inline void noskipws(null_ostream& stream UNUSED)
 	{
 	}
-	inline void boolalpha(EmptyOutput& stream UNUSED)
+	inline void boolalpha(null_ostream& stream UNUSED)
 	{
 	}
-	inline void noboolalpha(EmptyOutput& stream UNUSED)
+	inline void noboolalpha(null_ostream& stream UNUSED)
 	{
 	}
-	inline void showbase(EmptyOutput& stream UNUSED)
+	inline void showbase(null_ostream& stream UNUSED)
 	{
 	}
-	inline void noshowbase(EmptyOutput& stream UNUSED)
+	inline void noshowbase(null_ostream& stream UNUSED)
 	{
 	}
-	inline void showpos(EmptyOutput& stream UNUSED)
+	inline void showpos(null_ostream& stream UNUSED)
 	{
 	}
-	inline void noshowpos(EmptyOutput& stream UNUSED)
+	inline void noshowpos(null_ostream& stream UNUSED)
 	{
 	}
-	inline void uppercase(EmptyOutput& stream UNUSED)
+	inline void uppercase(null_ostream& stream UNUSED)
 	{
 	}
-	inline void nouppercase(EmptyOutput& stream UNUSED)
+	inline void nouppercase(null_ostream& stream UNUSED)
 	{
 	}
-	inline void unitbuf(EmptyOutput& stream UNUSED)
+	inline void unitbuf(null_ostream& stream UNUSED)
 	{
 	}
-	inline void nounitbuf(EmptyOutput& stream UNUSED)
+	inline void nounitbuf(null_ostream& stream UNUSED)
 	{
 	}
-	inline void left(EmptyOutput& stream UNUSED)
+	inline void left(null_ostream& stream UNUSED)
 	{
 	}
-	inline void right(EmptyOutput& stream UNUSED)
+	inline void right(null_ostream& stream UNUSED)
 	{
 	}
-	inline void fixed(EmptyOutput& stream UNUSED)
+	inline void fixed(null_ostream& stream UNUSED)
 	{
 	}
-	inline void scientific(EmptyOutput& stream UNUSED)
+	inline void scientific(null_ostream& stream UNUSED)
 	{
 	}
 	/// @endcond

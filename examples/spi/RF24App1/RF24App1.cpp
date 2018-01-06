@@ -130,7 +130,7 @@ int main()
 	auto trace = uatx.fout();
 	trace.width(0);
 #else
-	streams::EmptyOutput trace;
+	streams::null_ostream trace;
 #endif
 	
 	bool master = is_master();

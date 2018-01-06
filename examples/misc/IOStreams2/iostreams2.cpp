@@ -67,11 +67,11 @@ int main()
 	board::init();
 	// Enable interrupts at startup time
 	sei();
-	// ostreambuf buf{output_buffer};
-	// ostream out{buf};
-	// check(out);
+	ostreambuf buf{output_buffer};
+	ostream out{buf};
+	check(out);
 
-	EmptyOutput nul;
+	null_ostream nul;
 	check(nul);
 
 	return 0;
