@@ -29,7 +29,6 @@
 #include "flash.h"
 #include "utilities.h"
 
-//TODO error handling for extraction operators?
 namespace streams
 {
 	/**
@@ -39,48 +38,139 @@ namespace streams
 	class ios_base
 	{
 	public:
+		/**
+		 * Bitmask type to represent stream state flags.
+		 * This type is used as parameter or return value by methods `setstate`, 
+		 * `rdstate` and `clear`.
+		 * 
+		 * The values passed and retrieved by these methods can be any valid combination
+		 * of the predefined constants:
+		 *     - goodbit (no error)
+		 *     - badbit
+		 *     - failbit
+		 *     - eofbit
+		 * 
+		 * @sa setstate(iostate)
+		 * @sa rdstate()
+		 * @sa clear(iostate)
+		 */
 		using iostate = uint8_t;
 
-		// input only: is that possible really?
+		/** 
+		 * This bit is set if the stream has unexpected reached its end during
+		 * an extraction.
+		 * Note that this bit is currently never set by istreambuf, as istreambuf
+		 * is blocked until characters are input.
+		 */
 		static constexpr iostate eofbit = 0x01;
-		// input only? when format error
+		/** 
+		 * This bit is set when an input or operation failed due to a formatting 
+		 * error during extraction. 
+		 */
 		static constexpr iostate failbit = 0x02;
-		// when cannot write (buffer full) or read overflow
+		/**
+		 * This bit is set when an irrecoverable stream error has occurred, e.g.
+		 * if an overflow occurs when writing to ostreambuf.
+		 */
 		static constexpr iostate badbit = 0x04;
+		/** No error; always `0`. */
 		static constexpr iostate goodbit = 0;
 
+		/**
+		 * Return the current stream error state.
+		 */
 		inline iostate rdstate() const
 		{
 			return state_;
 		}
+
+		/**
+		 * Set the stream error flags state in addition to currently set flags. 
+		 * Essentially calls `clear(rdstate() | state)`.
+		 */
 		inline void setstate(iostate state)
 		{
 			clear(rdstate() | state);
 		}
+
+		/**
+		 * Set the stream error state flags by assigning them the value of @p state. 
+		 * By default, assigns ios::goodbit which has the effect of clearing all
+		 * error state flags.
+		 */
 		inline void clear(iostate state = goodbit)
 		{
 			state_ = state;
 		}
+
+		/**
+		 * @retval `true` if the most recent I/O operation on the stream completed 
+		 * successfully. 
+		 * @retval `false` if any I/O operation has failed since last call to
+		 * `ios::clear()`.
+		 * @sa rdstate()
+		 * @sa goodbit
+		 * @sa clear()
+		 */
 		inline bool good() const
 		{
 			return rdstate() == goodbit;
 		}
+
+		/**
+		 * Return `true` if the associated stream has reached end-of-file. 
+		 * Specifically, returns `true` if `ios::eofbit` is set in `rdstate()`.
+		 * @sa rdstate()
+		 * @sa eofbit
+		 */
 		inline bool eof() const
 		{
 			return rdstate() & eofbit;
 		}
+
+		/**
+		 * Return `true` if an error has occurred on the associated stream,
+		 * since last time state was reset (`clear()` was called). 
+		 * Specifically, returns `true` if `ios::badbit` or `ios::failbit` is set
+		 * in `rdstate()`.
+		 * @sa rdstate()
+		 * @sa failbit
+		 * @sa badbit
+		 * @sa clear()
+		 */
 		inline bool fail() const
 		{
 			return rdstate() & (failbit | badbit);
 		}
+
+		/**
+		 * Return `true` if a non-recoverable error has occurred on the associated
+		 * stream. 
+		 * Specifically, returns `true` if `ios::badbit` is set in `rdstate()`.
+		 * @sa rdstate()
+		 * @sa badbit
+		 */
 		inline bool bad() const
 		{
 			return rdstate() & badbit;
 		}
+
+		/**
+		 * Return `true` if an error has occurred on the associated stream,
+		 * since last time state was reset (`clear()` was called). 
+		 * Actually, this is equivalent to calling `fail()`.
+		 * @sa fail()
+		 */
 		inline bool operator!() const
 		{
 			return fail();
 		}
+
+		/**
+		 * Check that the current stream has no errors.
+		 * Returns `true` if the stream has no errors and is ready for I/O operations.
+		 * @sa fail()
+		 */
 		inline explicit operator bool() const
 		{
 			return !fail();
@@ -90,7 +180,7 @@ namespace streams
 		 * Bitmask type to represent stream format flags.
 		 * This type is used as parameter or return value by methods `flags`, `setf`
 		 * and `unsetf`.
-		 * The values passed an retrieved by these methods can be any valid combination
+		 * The values passed and retrieved by these methods can be any valid combination
 		 * of the predefined constants:
 		 * - basefield flags
 		 *     - dec (default)
