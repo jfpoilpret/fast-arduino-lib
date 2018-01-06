@@ -30,7 +30,6 @@
 
 //TODO better alignment with C++ iostreams? method names, behavior, missing methods...
 // but keep cautious about code/data size and performance (avoid virtual)
-//TODO error handling for extraction operators?
 namespace streams
 {
 	/**

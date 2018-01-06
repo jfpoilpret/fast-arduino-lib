@@ -32,7 +32,6 @@
 
 //TODO better alignment with C++ iostreams? method names, behavior, missing methods...
 // but keep cautious about code/data size and performance (avoid virtual)
-//TODO error handling for extraction operators?
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
  * Typical usage of an output "stream":
