@@ -27,8 +27,6 @@
 #include "ios.h"
 #include "streambuf.h"
 
-//TODO better alignment with C++ iostreams? method names, behavior, missing methods...
-// but keep cautious about code/data size and performance (avoid virtual)
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
  * Typical usage of an output "stream":
@@ -67,6 +65,17 @@ namespace streams
 		 */
 		ostream(ostreambuf& stream) : stream_{stream}
 		{
+		}
+
+		ostream(const ostream&) = delete;
+		ostream& operator=(const ostream&) = delete;
+
+		/**
+		 * Return the stream buffer associated with this stream.
+		 */
+		ostreambuf& rdbuf() const
+		{
+			return stream_;
 		}
 
 		/**
@@ -319,6 +328,10 @@ namespace streams
 		ostreambuf& stream_;
 	};
 
+	//TODO better alignment with C++ iostreams:
+	// - get() Vs. getline()
+	//		getline() discards the delimiter, but get() does not?
+	// - ignore()
 	/**
 	 * Input stream wrapper to provide formatted input API, a la C++.
 	 */
@@ -331,6 +344,17 @@ namespace streams
 		 */
 		istream(istreambuf& stream) : stream_{stream}
 		{
+		}
+
+		istream(const istream&) = delete;
+		istream& operator=(const istream&) = delete;
+
+		/**
+		 * Return the stream buffer associated with this stream.
+		 */
+		istreambuf& rdbuf() const
+		{
+			return stream_;
 		}
 
 		/**

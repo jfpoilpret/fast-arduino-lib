@@ -424,6 +424,23 @@ namespace streams
 		}
 
 		/**
+		 * Copy formatting information from @p rhs to `this` stream.
+		 * Formatting information is:
+		 * - flags()
+		 * - width()
+		 * - precision()
+		 * - fill()
+		 */
+		ios_base& copyfmt(const ios_base& rhs)
+		{
+			flags_ = rhs.flags_;
+			width_ = rhs.width_;
+			precision_ = rhs.precision_;
+			fill_ = rhs.fill_;
+			return *this;
+		}
+
+		/**
 		 * The maximum allowed precision.
 		 * @sa precision()
 		 */
@@ -434,6 +451,9 @@ namespace streams
 		ios_base() : state_{0}, flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
 		{
 		}
+
+		ios_base(const ios_base&) = delete;
+		ios_base& operator=(const ios_base&) = delete;
 
 		static constexpr uint8_t DOUBLE_BUFFER_SIZE = MAX_PRECISION + 7 + 1;
 
@@ -610,25 +630,30 @@ namespace streams
 
 		void justify(ostreambuf& out, const char* input, bool add_sign, const char* prefix) const
 		{
-			//TODO optimize perf when width() == 0 (no need to calculate len...)
-			size_t len = strlen(input) + (prefix ? strlen(prefix) : 0) + (add_sign ? 1 : 0);
-			if (len < width())
+			// Handle case where padding must be added
+			// Speed optimization: handle padding situation ONLY if width is != 0
+			if (width())
 			{
-				uint8_t add = width() - len;
-				if (flags() & left)
+				size_t len = strlen(input) + (prefix ? strlen(prefix) : 0) + (add_sign ? 1 : 0);
+				if (len < width())
 				{
-					output_number(out, input, add_sign, prefix);
-					output_filler(out, fill(), add);
-					out.on_put();
+					uint8_t add = width() - len;
+					if (flags() & left)
+					{
+						output_number(out, input, add_sign, prefix);
+						output_filler(out, fill(), add);
+						out.on_put();
+					}
+					else
+					{
+						output_filler(out, fill(), add);
+						output_number(out, input, add_sign, prefix);
+					}
 				}
-				else
-				{
-					output_filler(out, fill(), add);
-					output_number(out, input, add_sign, prefix);
-				}
+				return;
 			}
-			else
-				output_number(out, input, add_sign, prefix);
+			// Handle case where no padding is needed
+			output_number(out, input, add_sign, prefix);
 		}
 
 		void justify(ostreambuf& out, const flash::FlashStorage* input) const
