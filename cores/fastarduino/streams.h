@@ -308,10 +308,9 @@ namespace streams
 	private:
 		void after_insertion()
 		{
+			check_overflow();
 			if (flags() & unitbuf)
 				stream_.flush();
-			else
-				check_overflow();
 			width(0);
 		}
 
@@ -350,7 +349,10 @@ namespace streams
 		 */
 		int get()
 		{
-			return stream_.get();
+			int value = stream_.get();
+			if (value == istreambuf::EOF)
+				setstate(eofbit);
+			return value;
 		}
 
 		/**

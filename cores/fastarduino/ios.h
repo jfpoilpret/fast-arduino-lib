@@ -432,7 +432,7 @@ namespace streams
 
 	protected:
 		/// @cond notdocumented
-		ios_base() : flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
+		ios_base() : state_{0}, flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
 		{
 		}
 
@@ -567,7 +567,8 @@ namespace streams
 		void convert(ostreambuf& out, bool b) const
 		{
 			if (flags() & boolalpha)
-				justify(out, (b ? "true" : "false"), false, 0);
+				justify(out, (b ? F("true") : F("false")));
+				// justify(out, (b ? "true" : "false"), false, 0);
 			else
 				convert(out, (b ? 1 : 0));
 		}
@@ -599,7 +600,7 @@ namespace streams
 		void output_number(ostreambuf& out, const char* input, bool add_sign, const char* prefix) const
 		{
 			if (add_sign) out.put('+', false);
-			if (prefix && strlen(prefix)) out.puts(prefix);
+			if (prefix) out.puts(prefix);
 			out.puts(input);
 		}
 
@@ -610,6 +611,7 @@ namespace streams
 
 		void justify(ostreambuf& out, const char* input, bool add_sign, const char* prefix) const
 		{
+			//TODO optimize perf when width() == 0 (no need to calculate len...)
 			size_t len = strlen(input) + (prefix ? strlen(prefix) : 0) + (add_sign ? 1 : 0);
 			if (len < width())
 			{
