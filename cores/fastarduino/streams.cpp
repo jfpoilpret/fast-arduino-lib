@@ -20,7 +20,7 @@ namespace streams
 {
 	char get(istreambuf& in)
 	{
-		return containers::pull<char>(in.queue());
+		return containers::pull(in.queue());
 	}
 
 	char* get(istreambuf& in, char* content, size_t size)
