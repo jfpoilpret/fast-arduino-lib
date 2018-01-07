@@ -41,6 +41,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						events/EventApp5 events/EventApp6		\
 						int/ExternalInterrupt3					\
+						misc/IOStreams3							\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10							\
 						uart/UartApp1							\
