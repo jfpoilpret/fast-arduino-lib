@@ -27,7 +27,6 @@
 #include <string.h>
 #include "streambuf.h"
 #include "flash.h"
-#include "utilities.h"
 
 namespace streams
 {

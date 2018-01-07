@@ -22,11 +22,8 @@
 #define STREAMS_HH
 
 #include <ctype.h>
-#include <stddef.h>
-#include <stdlib.h>
 #include "queue.h"
 #include "flash.h"
-#include "utilities.h"
 #include "ios.h"
 #include "streambuf.h"
 

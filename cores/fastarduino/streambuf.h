@@ -21,12 +21,8 @@
 #ifndef STREAMBUF_H
 #define STREAMBUF_H
 
-// #include <ctype.h>
-// #include <stddef.h>
-// #include <stdlib.h>
 #include "queue.h"
 #include "flash.h"
-// #include "utilities.h"
 
 //TODO better alignment with C++ iostreams? method names, behavior, missing methods...
 // but keep cautious about code/data size and performance (avoid virtual)
