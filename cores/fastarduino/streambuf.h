@@ -24,8 +24,6 @@
 #include "queue.h"
 #include "flash.h"
 
-//TODO better alignment with C++ iostreams? method names, behavior, missing methods...
-// but keep cautious about code/data size and performance (avoid virtual)
 namespace streams
 {
 	/**
