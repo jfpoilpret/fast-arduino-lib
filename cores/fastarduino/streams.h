@@ -359,13 +359,12 @@ namespace streams
 			return stream_;
 		}
 
-		/**
-		 * @copydoc istreambuf::available()
-		 */
-		int available() const
-		{
-			return stream_.in_avail();
-		}
+		//TODO important question: blocking Vs non-blocking get()
+		// from tests on cpp.sh int get() (for std::cin) is blocking until \n
+		// from tests on cpp.sh std::cin.rdbuf()->sbumpc() is also blocking until \n...
+		// Suggestion: make istream blocking, but keep istreambuf non blocking
+
+		//TODO put all get() methods, getline, ignore, peek, read, readsome?
 
 		/**
 		 * @copydoc istreambuf::sbumpc()
