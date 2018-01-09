@@ -97,27 +97,27 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc ostreambuf::put(const char*, size_t)
+		 * @copydoc ostreambuf::sputn(const char*, size_t)
 		 */
-		void put(const char* content, size_t size)
+		void write(const char* content, size_t size)
 		{
 			stream_.sputn(content, size);
 			check_overflow();
 		}
 
 		/**
-		 * @copydoc ostreambuf::puts(const char*)
+		 * @copydoc ostreambuf::sputn(const char*)
 		 */
-		void puts(const char* str)
+		void write(const char* str)
 		{
 			stream_.sputn(str);
 			check_overflow();
 		}
 
 		/**
-		 * @copydoc ostreambuf::puts(const flash::FlashStorage*)
+		 * @copydoc ostreambuf::sputn(const flash::FlashStorage*)
 		 */
-		void puts(const flash::FlashStorage* str)
+		void write(const flash::FlashStorage* str)
 		{
 			stream_.sputn(str);
 			check_overflow();

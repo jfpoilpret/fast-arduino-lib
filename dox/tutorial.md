@@ -244,7 +244,7 @@ int main()
     uart.begin(115200);
 
     streams::ostreambuf out = uart.out();
-    out.puts("Hello, World!\n");
+    out.sputn("Hello, World!\n");
     out.pubsync();
     return 0;
 }
@@ -261,7 +261,7 @@ Once created, `uart` needs to be *linked* to the ISR previously registered, this
 
 Next step consists in extracting, from `uart`, a `streams::ostreambuf` that will allow us to send characters or strings to USB:
 
-    out.puts("Hello, World!\n");
+    out.sputn("Hello, World!\n");
 
 The last important instruction waits for all characters to be transmitted before leaving the program.
 
@@ -302,9 +302,9 @@ As you can see in the table above, the constant string `"Hello, World!\n"` occup
 
 How do we change our program so that this string is only stored in Flash? We can use FastArduino `flash` API for that, by changing only one line of code:
 
-    out.puts(F("Hello, World!\n"));
+    out.sputn(F("Hello, World!\n"));
 
-Note the use of `F()` macro here: this makes the string reside in Flash only, and then it is being read from Flash "on the fly" by `out.puts()` method; the latter method is overloaded for usual C-strings (initial example) and for C-strings stored in Flash only.
+Note the use of `F()` macro here: this makes the string reside in Flash only, and then it is being read from Flash "on the fly" by `out.sputn()` method; the latter method is overloaded for usual C-strings (initial example) and for C-strings stored in Flash only.
 
 We can compare the impact on sizes:
 |           | without %F() | with %F()   |

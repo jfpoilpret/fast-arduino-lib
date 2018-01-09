@@ -92,7 +92,7 @@ namespace flash
  * @endcode
  * 
  * @param ptr the string to be automatically stored on flash
- * @sa streams::ostreambuf::puts(const flash::FlashStorage*)
+ * @sa streams::ostreambuf::sputn(const flash::FlashStorage*)
  */
 #define F(ptr)                                   \
 	(__extension__({                             \

@@ -56,9 +56,9 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		out.puts("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
+		out.write("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
 		out.flush();
-		out.puts(F("abcdefghijklmnopqrstuvwxyz\n"));
+		out.write(F("abcdefghijklmnopqrstuvwxyz\n"));
 		out.flush();
 		time::delay_ms(1000);
 	}

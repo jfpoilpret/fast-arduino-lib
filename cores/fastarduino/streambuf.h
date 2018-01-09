@@ -111,7 +111,7 @@ namespace streams
 		 * even if an overflow has occurred.
 		 * Example:
 		 * @code
-		 * output.puts(F("Hello, World!\n"));
+		 * output.sputn(F("Hello, World!\n"));
 		 * @endcode
 		 * 
 		 * @param str the '\0' ended string (standard C-string), stored on flash,
@@ -245,7 +245,7 @@ namespace streams
 			return EOF;
 		}
 
-		//TODO move this method to istreambuf
+		//TODO move this method to istream
 		/**
 		 * Read one word from buffer, blocking until a space is read or @p max
 		 * characters have been read already.

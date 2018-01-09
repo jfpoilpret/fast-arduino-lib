@@ -69,7 +69,7 @@ int main()
 	// Event Loop
 	while (true)
 	{
-		out.puts("Enter a letter: ");
+		out.write("Enter a letter: ");
 		out.flush();
 //		int input = in.sbumpc();
 		int input = streams::get(in);

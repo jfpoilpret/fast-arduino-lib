@@ -101,16 +101,16 @@ namespace streams
 		void flush()
 		{
 		}
-		void put(char c UNUSED, bool call_on_put UNUSED = true)
+		void put(char c UNUSED)
 		{
 		}
-		void put(const char* content UNUSED, size_t size UNUSED)
+		void write(const char* content UNUSED, size_t size UNUSED)
 		{
 		}
-		void puts(const char* str UNUSED)
+		void write(const char* str UNUSED)
 		{
 		}
-		void puts(const flash::FlashStorage* str UNUSED)
+		void write(const flash::FlashStorage* str UNUSED)
 		{
 		}
 
