@@ -67,7 +67,8 @@ namespace streams
 		{
 		}
 
-		ostream(const ostream&) = delete;
+		//TODO This make compilation failures...
+		// ostream(const ostream&) = delete;
 		ostream& operator=(const ostream&) = delete;
 
 		/**
@@ -346,7 +347,8 @@ namespace streams
 		{
 		}
 
-		istream(const istream&) = delete;
+		//TODO This make compilation failures...
+		// istream(const istream&) = delete;
 		istream& operator=(const istream&) = delete;
 
 		/**
@@ -366,11 +368,11 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc istreambuf::get()
+		 * @copydoc istreambuf::sbumpc()
 		 */
 		int get()
 		{
-			int value = stream_.get();
+			int value = stream_.sbumpc();
 			if (value == istreambuf::EOF)
 				setstate(eofbit);
 			return value;

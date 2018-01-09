@@ -95,7 +95,7 @@ int main()
 
 	while (true)
 	{
-		int value = in.get();
+		int value = in.sbumpc();
 		if (value != streams::istreambuf::EOF)
 			out.put(value);
 		if (uart.has_errors())

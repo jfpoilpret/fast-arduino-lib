@@ -438,7 +438,7 @@ int main()
     streams::istreambuf in = uart.in();
 
     // Get one character if any
-    int input = in.get();
+    int input = in.sbumpc();
     if (input != istreambuf:EOF)
     {
         char value = char(input);
@@ -463,7 +463,7 @@ The main differences are:
 Then `UARX` mainly offers one method, `get()`, which returns the next character serially received and buffered; if the input buffer is currently empty, then `get()` returns `istreambuf::EOF`, which must be tested before dealing with the returned value.
 
 Then the example uses 2 functions defined directly within `streams` namespace:
-- `get()`: this is similar to `istreambuf.get()` except that it **blocks** until one character is available on serial input.
+- `get()`: this is similar to `istreambuf.sbumpc()` except that it **blocks** until one character is available on serial input.
 - `gets()`: this blocks until a complete string (terminated by `'\0'`) gets read on serial input and fills the given buffer parameter with that string content.
 
 Note that these 2 functions use `time::yield()` while waiting; this may be linked to `power` management. Please take a look at the documentation for this API for further details.

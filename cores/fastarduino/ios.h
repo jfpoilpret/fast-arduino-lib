@@ -452,7 +452,8 @@ namespace streams
 		{
 		}
 
-		ios_base(const ios_base&) = delete;
+		//TODO This make compilation failures...
+		// ios_base(const ios_base&) = delete;
 		ios_base& operator=(const ios_base&) = delete;
 
 		static constexpr uint8_t DOUBLE_BUFFER_SIZE = MAX_PRECISION + 7 + 1;

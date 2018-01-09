@@ -195,7 +195,7 @@ namespace streams
 
 	public:
 		/**
-		 * Special value returned by `get()` when buffer is empty.
+		 * Special value returned by `sbumpc()` when buffer is empty.
 		 */
 		static const int EOF = -1;
 
@@ -215,13 +215,25 @@ namespace streams
 		 * @return next character to be read from buffer, or `EOF` if buffer is
 		 * empty
 		 */
-		int get()
+		int sbumpc()
 		{
 			char value;
 			if (pull(value)) return value;
 			return EOF;
 		}
 
+		/**
+		 * @return next character to be read from buffer (or `EOF` if buffer is
+		 * empty) but does not remove it from the buffer.
+		 */
+		int sgetc()
+		{
+			char value;
+			if (peek(value)) return value;
+			return EOF;
+		}
+
+		//TODO move this method to istreambuf
 		/**
 		 * Read one word from buffer, blocking until a space is read or @p max
 		 * characters have been read already.
@@ -242,6 +254,7 @@ namespace streams
 		}
 	};
 
+	//TODO These methods should not exist or operate on istream directly
 	/**
 	 * Wait for @p in to have at least one character in buffer and get it.
 	 * @param in the `istreambuf` to read one character from

@@ -71,7 +71,7 @@ int main()
 	{
 		out.puts("Enter a letter: ");
 		out.flush();
-//		int input = in.get();
+//		int input = in.sbumpc();
 		int input = streams::get(in);
 		out.put(input);
 		out.put('\n');
