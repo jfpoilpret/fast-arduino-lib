@@ -619,14 +619,14 @@ namespace streams
 
 		void output_number(ostreambuf& out, const char* input, bool add_sign, const char* prefix) const
 		{
-			if (add_sign) out.put('+', false);
-			if (prefix) out.puts(prefix);
-			out.puts(input);
+			if (add_sign) out.put_('+', false);
+			if (prefix) out.sputn(prefix);
+			out.sputn(input);
 		}
 
 		void output_filler(ostreambuf& out, char filler, uint8_t size) const
 		{
-			while (size--) out.put(filler, false);
+			while (size--) out.put_(filler, false);
 		}
 
 		void justify(ostreambuf& out, const char* input, bool add_sign, const char* prefix) const
@@ -665,18 +665,18 @@ namespace streams
 				uint8_t add = width() - len;
 				if (flags() & left)
 				{
-					out.puts(input);
+					out.sputn(input);
 					output_filler(out, fill(), add);
 					out.on_put();
 				}
 				else
 				{
 					output_filler(out, fill(), add);
-					out.puts(input);
+					out.sputn(input);
 				}
 			}
 			else
-				out.puts(input);
+				out.sputn(input);
 		}
 
 		int base() const

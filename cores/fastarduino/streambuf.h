@@ -68,10 +68,9 @@ namespace streams
 		 * @sa on_put()
 		 * @sa overflow()
 		 */
-		void put(char c, bool call_on_put = true)
+		void sputc(char c)
 		{
-			if (!push(c)) overflow_ = true;
-			if (call_on_put) on_put();
+			put_(c, true);
 		}
 
 		/**
@@ -85,9 +84,9 @@ namespace streams
 		 * @sa on_put()
 		 * @sa overflow()
 		 */
-		void put(const char* content, size_t size)
+		void sputn(const char* content, size_t size)
 		{
-			while (size--) put(*content++, false);
+			while (size--) put_(*content++, false);
 			on_put();
 		}
 
@@ -102,9 +101,9 @@ namespace streams
 		 * @sa on_put()
 		 * @sa overflow()
 		 */
-		void puts(const char* str)
+		void sputn(const char* str)
 		{
-			while (*str) put(*str++, false);
+			while (*str) put_(*str++, false);
 			on_put();
 		}
 
@@ -125,13 +124,14 @@ namespace streams
 		 * @sa on_put()
 		 * @sa overflow()
 		 */
-		void puts(const flash::FlashStorage* str)
+		void sputn(const flash::FlashStorage* str)
 		{
 			uint16_t address = (uint16_t) str;
-			while (char value = pgm_read_byte(address++)) put(value, false);
+			while (char value = pgm_read_byte(address++)) put_(value, false);
 			on_put();
 		}
 
+		//TODO make private and declare ostream as friend
 		/**
 		 * Indicate if a buffer overflow has occurred since last time `flush()` or
 		 * `reset_overflow()` was called. 
@@ -143,6 +143,7 @@ namespace streams
 			return overflow_;
 		}
 
+		//TODO make private and declare ostream as friend
 		/**
 		 * Reset the overflow flag.
 		 * @sa overflow()
@@ -172,10 +173,27 @@ namespace streams
 		{
 		}
 
+		/**
+		 * Append a character to the buffer.
+		 * If the buffer is full, then `overflow()` flag will be set.
+		 * @param c the character to append
+		 * @param call_on_put `true` if `on_put()` should be called after @p c has
+		 * been appended, `false` otherwise; when directly calling this method,
+		 * you should keep the default value.
+		 * @sa on_put()
+		 * @sa overflow()
+		 */
+		void put_(char c, bool call_on_put = true)
+		{
+			if (!push(c)) overflow_ = true;
+			if (call_on_put) on_put();
+		}
+
 	private:
 		bool overflow_;
 
 		friend class ios_base;
+		friend class ostream;
 	};
 
 	/**
@@ -206,7 +224,7 @@ namespace streams
 		/**
 		 * @return number of available characters in buffer
 		 */
-		int available() const
+		int in_avail() const
 		{
 			return items();
 		}

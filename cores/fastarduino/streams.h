@@ -92,7 +92,7 @@ namespace streams
 		 */
 		void put(char c, bool call_on_put = true)
 		{
-			stream_.put(c, call_on_put);
+			stream_.put_(c, call_on_put);
 			check_overflow();
 		}
 
@@ -101,7 +101,7 @@ namespace streams
 		 */
 		void put(const char* content, size_t size)
 		{
-			stream_.put(content, size);
+			stream_.sputn(content, size);
 			check_overflow();
 		}
 
@@ -110,7 +110,7 @@ namespace streams
 		 */
 		void puts(const char* str)
 		{
-			stream_.puts(str);
+			stream_.sputn(str);
 			check_overflow();
 		}
 
@@ -119,7 +119,7 @@ namespace streams
 		 */
 		void puts(const flash::FlashStorage* str)
 		{
-			stream_.puts(str);
+			stream_.sputn(str);
 			check_overflow();
 		}
 
@@ -364,7 +364,7 @@ namespace streams
 		 */
 		int available() const
 		{
-			return stream_.available();
+			return stream_.in_avail();
 		}
 
 		/**
