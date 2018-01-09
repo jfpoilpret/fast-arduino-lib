@@ -88,11 +88,11 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc ostreambuf::put(char, bool)
+		 * @copydoc ostreambuf::sputc(char)
 		 */
-		void put(char c, bool call_on_put = true)
+		void put(char c)
 		{
-			stream_.put_(c, call_on_put);
+			stream_.sputc(c);
 			check_overflow();
 		}
 
