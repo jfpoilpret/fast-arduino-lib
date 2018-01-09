@@ -80,11 +80,11 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc ostreambuf::flush()
+		 * @copydoc ostreambuf::pubsync()
 		 */
 		void flush()
 		{
-			stream_.flush();
+			stream_.pubsync();
 		}
 
 		/**
@@ -317,7 +317,7 @@ namespace streams
 		{
 			check_overflow();
 			if (flags() & unitbuf)
-				stream_.flush();
+				stream_.pubsync();
 			width(0);
 		}
 

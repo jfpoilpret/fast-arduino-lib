@@ -245,7 +245,7 @@ int main()
 
     streams::ostreambuf out = uart.out();
     out.puts("Hello, World!\n");
-    out.flush();
+    out.pubsync();
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1967,7 +1967,7 @@ Note that the `time::yield()` method just calls `Power::sleep()` (with current d
 is used by other FastArduino API on several occasions whenever these API need to wait for something:
 - `watchdog::Watchdog::delay()` while waiting for time to elapse for the given delay
 - `timer::RTT::delay()` while waiting for time to elapse for the given delay
-- `streams::ostreambuf::flush()` while waiting until all stream content has been read by a consumer (e.g. UART)
+- `streams::ostreambuf::pubsync()` while waiting until all stream content has been read by a consumer (e.g. UART)
 - `containers::pull()` and `containers::peek()` while waiting for an item to be pushed to a queue
 - `devices::rf::NRF24L01` when sending or receving payload
 

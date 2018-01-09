@@ -60,6 +60,11 @@ namespace serial
 			void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 			static Parity calculate_parity(Parity parity, uint8_t value);
 
+			void check_overflow()
+			{
+				errors_.all_errors.queue_overflow = overflow();
+			}
+
 			Parity parity_;
 			// Various timing constants based on rate
 			uint16_t interbit_tx_time_;
@@ -94,7 +99,7 @@ namespace serial
 			virtual void on_put() override
 			{
 				//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-				errors_.all_errors.queue_overflow = out().overflow();
+				check_overflow();
 				char value;
 				while (out().queue().pull(value)) write(value);
 			}

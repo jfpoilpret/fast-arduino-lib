@@ -52,7 +52,7 @@ namespace streams
 		 * Wait until all buffer content has been pulled by a consumer.
 		 * This method clear the count of overflows that have occurred until now.
 		 */
-		void flush()
+		void pubsync()
 		{
 			overflow_ = false;
 			while (items()) time::yield();
@@ -62,10 +62,6 @@ namespace streams
 		 * Append a character to the buffer.
 		 * If the buffer is full, then `overflow()` flag will be set.
 		 * @param c the character to append
-		 * @param call_on_put `true` if `on_put()` should be called after @p c has
-		 * been appended, `false` otherwise; when directly calling this method,
-		 * you should keep the default value.
-		 * @sa on_put()
 		 * @sa overflow()
 		 */
 		void sputc(char c)
@@ -131,28 +127,6 @@ namespace streams
 			on_put();
 		}
 
-		//TODO make private and declare ostream as friend
-		/**
-		 * Indicate if a buffer overflow has occurred since last time `flush()` or
-		 * `reset_overflow()` was called. 
-		 * @sa flush()
-		 * @sa reset_overflow()
-		 */
-		inline bool overflow() const
-		{
-			return overflow_;
-		}
-
-		//TODO make private and declare ostream as friend
-		/**
-		 * Reset the overflow flag.
-		 * @sa overflow()
-		 */
-		inline void reset_overflow()
-		{
-			overflow_ = false;
-		}
-
 		/**
 		 * Return the underlying queue.
 		 * Normally you will not need this method.
@@ -187,6 +161,26 @@ namespace streams
 		{
 			if (!push(c)) overflow_ = true;
 			if (call_on_put) on_put();
+		}
+
+		/**
+		 * Indicate if a buffer overflow has occurred since last time `pubsync()` or
+		 * `reset_overflow()` was called. 
+		 * @sa pubsync()
+		 * @sa reset_overflow()
+		 */
+		inline bool overflow() const
+		{
+			return overflow_;
+		}
+
+		/**
+		 * Reset the overflow flag.
+		 * @sa overflow()
+		 */
+		inline void reset_overflow()
+		{
+			overflow_ = false;
 		}
 
 	private:
