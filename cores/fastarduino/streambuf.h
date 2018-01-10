@@ -245,17 +245,6 @@ namespace streams
 			return EOF;
 		}
 
-		//TODO move this method to istream
-		/**
-		 * Read one word from buffer, blocking until a space is read or @p max
-		 * characters have been read already.
-		 * @param str the character array that will receive the next word
-		 * @param max the maximum number of characters that can be stored in 
-		 * @p str including the ending `'\0'`
-		 * @return the next word read from buffer
-		 */
-		char* scan(char* str, size_t max);
-
 		/**
 		 * Return the underlying queue.
 		 * Normally you will not need this method.
@@ -265,36 +254,6 @@ namespace streams
 			return *this;
 		}
 	};
-
-	//TODO These methods should not exist or operate on istream directly
-	/**
-	 * Wait for @p in to have at least one character in buffer and get it.
-	 * @param in the `istreambuf` to read one character from
-	 * @return next character to be read from @p in
-	 */
-	// char get(istreambuf& in);
-
-	/**
-	 * Wait for @p in to have at least @p size characters in buffer and get them.
-	 * @param in the `istreambuf` to read characters from
-	 * @param content the character array that will receive all characters read 
-	 * from @p in
-	 * @param size the number of characters to read from @p in
-	 * @return @p content
-	 */
-	// char* get(istreambuf& in, char* content, size_t size);
-
-	/**
-	 * Wait for @p in to have either at least @p size characters in buffer,
-	 * or to reach character value @p end, then copy read string into @p str.
-	 * @param in the `istreambuf` to read characters from
-	 * @param str the character array that will receive all characters read 
-	 * from @p in
-	 * @param max the maximum number to read from @p in
-	 * @param end the character marking the end of string to read
-	 * @return the number of characters read from @p in and copied into @p str
-	 */
-	// int gets(istreambuf& in, char* str, size_t max, char end = 0);
 }
 
 #endif /* STREAMBUF_H */

@@ -80,6 +80,7 @@ namespace streams
 			return stream_;
 		}
 
+		//TODO rework API docs
 		/**
 		 * @copydoc ostreambuf::pubsync()
 		 */
@@ -330,10 +331,7 @@ namespace streams
 		ostreambuf& stream_;
 	};
 
-	//TODO better alignment with C++ iostreams:
-	// - get() Vs. getline()
-	//		getline() discards the delimiter, but get() does not?
-	// - ignore()
+	// NOTE: istream API is blocking, while istreambuf is not
 	/**
 	 * Input stream wrapper to provide formatted input API, a la C++.
 	 */
@@ -360,9 +358,6 @@ namespace streams
 			return stream_;
 		}
 
-		//NOTE Suggestion: make istream blocking, but keep istreambuf non blocking
-
-		//TODO readsome() method?
 
 		//TODO DOCS
 		int peek()
@@ -427,29 +422,6 @@ namespace streams
 		}
 
 		/**
-		 * Wait for this buffer to have at least @p size characters and get them.
-		 * @param content the character array that will receive all characters read
-		 * @param size the number of characters to read
-		 * @return @p content
-		 */
-		// char* get(char* content, size_t size)
-		// {
-		// 	return streams::get(stream_, content, size);
-		// }
-
-		/**
-		 * Wait for this buffer to have either at least @p size characters,
-		 * or to reach character `\0`, then copy read string into @p str.
-		 * @param str the character array that will receive all characters read 
-		 * @param max the maximum number to read
-		 * @return the number of characters read and copied into @p str
-		 */
-		// int gets(char* str, size_t max)
-		// {
-		// 	return streams::gets(stream_, str, max);
-		// }
-
-		/**
 		 * Read characters from buffer into @p buf until one of these conditions happen:
 		 * - a space has been encountered (not read)
 		 * - `width() - 1` characters have been read
@@ -466,7 +438,7 @@ namespace streams
 			if (width() > 0)
 			{
 				skipws_if_needed();
-				stream_.scan(buf, width());
+				scan(buf, width());
 				width(0);
 			}
 			return *this;
@@ -490,7 +462,7 @@ namespace streams
 		{
 			skipws_if_needed();
 			char buffer[10 + 1];
-			convert(stream_.scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -529,7 +501,7 @@ namespace streams
 		{
 			skipws_if_needed();
 			char buffer[sizeof(int) * 8 + 1];
-			convert(stream_.scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -549,7 +521,7 @@ namespace streams
 		{
 			skipws_if_needed();
 			char buffer[sizeof(int) * 8 + 1];
-			convert(stream_.scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -569,7 +541,7 @@ namespace streams
 		{
 			skipws_if_needed();
 			char buffer[sizeof(long) * 8 + 1];
-			convert(stream_.scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -589,7 +561,7 @@ namespace streams
 		{
 			skipws_if_needed();
 			char buffer[sizeof(long) * 8 + 1];
-			convert(stream_.scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -611,7 +583,7 @@ namespace streams
 			// Allocate sufficient size for fixed/scientific representation with precision max = 16
 			// Need 1 more for sign, 1 for DP, 1 for first digit, 4 for e+00
 			char buffer[DOUBLE_BUFFER_SIZE];
-			convert(stream_.scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), v);
 			return *this;
 		}
 
@@ -653,6 +625,8 @@ namespace streams
 		{
 			while (isspace(containers::peek(stream_.queue()))) containers::pull(stream_.queue());
 		}
+
+		char* scan(char* str, size_t max);
 
 		istreambuf& stream_;
 
