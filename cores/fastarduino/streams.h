@@ -26,6 +26,7 @@
 #include "flash.h"
 #include "ios.h"
 #include "streambuf.h"
+#include "time.h"
 
 /**
  * Defines C++-like streams API, based on circular buffers for input or output.
@@ -359,22 +360,70 @@ namespace streams
 			return stream_;
 		}
 
-		//TODO important question: blocking Vs non-blocking get()
-		// from tests on cpp.sh int get() (for std::cin) is blocking until \n
-		// from tests on cpp.sh std::cin.rdbuf()->sbumpc() is also blocking until \n...
-		// Suggestion: make istream blocking, but keep istreambuf non blocking
+		//NOTE Suggestion: make istream blocking, but keep istreambuf non blocking
 
-		//TODO put all get() methods, getline, ignore, peek, read, readsome?
+		//TODO readsome() method?
 
-		/**
-		 * @copydoc istreambuf::sbumpc()
-		 */
+		//TODO DOCS
+		int peek()
+		{
+			int value;
+			while ((value = stream_.sgetc()) == istreambuf::EOF) time::yield();
+			return value;
+		}
+
 		int get()
 		{
-			int value = stream_.sbumpc();
-			if (value == istreambuf::EOF)
-				setstate(eofbit);
+			int value;
+			while ((value = stream_.sbumpc()) == istreambuf::EOF) time::yield();
 			return value;
+		}
+
+		istream& get(char& c)
+		{
+			c = get();
+			return *this;
+		}
+
+		istream& get(char* s, size_t n, char delim = '\n')
+		{
+			char* current = s;
+			for (size_t i = 1; i < n; ++i)
+			{
+				int c = peek();
+				if (c == delim) break;
+				*current++ = get();
+			}
+			*current = 0;
+			return *this;
+		}
+
+		istream& getline(char* s, size_t n, char delim = '\n')
+		{
+			char* current = s;
+			for (size_t i = 1; i < n; ++i)
+			{
+				int c = get();
+				if (c == delim) break;
+				*current++ = c;
+			}
+			*current = 0;
+			return *this;
+		}
+
+		istream& ignore(size_t n = 1, int delim = istreambuf::EOF)
+		{
+			for (size_t i = 0; i < n; ++i)
+				if (get() == delim) break;
+			return *this;
+		}
+
+		istream& read(char* s, size_t n)
+		{
+			char* current = s;
+			for (size_t i = 0; i < n; ++i)
+				*current++ = get();
+			return *this;
 		}
 
 		/**
@@ -383,10 +432,10 @@ namespace streams
 		 * @param size the number of characters to read
 		 * @return @p content
 		 */
-		char* get(char* content, size_t size)
-		{
-			return streams::get(stream_, content, size);
-		}
+		// char* get(char* content, size_t size)
+		// {
+		// 	return streams::get(stream_, content, size);
+		// }
 
 		/**
 		 * Wait for this buffer to have either at least @p size characters,
@@ -395,10 +444,10 @@ namespace streams
 		 * @param max the maximum number to read
 		 * @return the number of characters read and copied into @p str
 		 */
-		int gets(char* str, size_t max)
-		{
-			return streams::gets(stream_, str, max);
-		}
+		// int gets(char* str, size_t max)
+		// {
+		// 	return streams::gets(stream_, str, max);
+		// }
 
 		/**
 		 * Read characters from buffer into @p buf until one of these conditions happen:

@@ -272,7 +272,7 @@ namespace streams
 	 * @param in the `istreambuf` to read one character from
 	 * @return next character to be read from @p in
 	 */
-	char get(istreambuf& in);
+	// char get(istreambuf& in);
 
 	/**
 	 * Wait for @p in to have at least @p size characters in buffer and get them.
@@ -282,7 +282,7 @@ namespace streams
 	 * @param size the number of characters to read from @p in
 	 * @return @p content
 	 */
-	char* get(istreambuf& in, char* content, size_t size);
+	// char* get(istreambuf& in, char* content, size_t size);
 
 	/**
 	 * Wait for @p in to have either at least @p size characters in buffer,
@@ -294,7 +294,7 @@ namespace streams
 	 * @param end the character marking the end of string to read
 	 * @return the number of characters read from @p in and copied into @p str
 	 */
-	int gets(istreambuf& in, char* str, size_t max, char end = 0);
+	// int gets(istreambuf& in, char* str, size_t max, char end = 0);
 }
 
 #endif /* STREAMBUF_H */

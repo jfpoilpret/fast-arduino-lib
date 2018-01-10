@@ -165,54 +165,54 @@ int main()
 	INPUT in = uart.fin();
 	OUTPUT out = uart.fout();
 
-	// // Check all output manipulators
-	// handle_num<uint16_t>(out, 1234, F("uint16_t"));
-	// handle_num<int16_t>(out, 1234, F("int16_t"));
-	// handle_num<int16_t>(out, -1234, F("int16_t"));
+	// Check all output manipulators
+	handle_num<uint16_t>(out, 1234, F("uint16_t"));
+	handle_num<int16_t>(out, 1234, F("int16_t"));
+	handle_num<int16_t>(out, -1234, F("int16_t"));
 
-	// handle_num<uint32_t>(out, 123456, F("uint32_t"));
-	// handle_num<int32_t>(out, 123456, F("int32_t"));
-	// handle_num<int32_t>(out, -123456, F("int32_t"));
+	handle_num<uint32_t>(out, 123456, F("uint32_t"));
+	handle_num<int32_t>(out, 123456, F("int32_t"));
+	handle_num<int32_t>(out, -123456, F("int32_t"));
 
-	// // check floats
-	// handle_float(out, 123.456);
-	// handle_float(out, -123.456);
-	// handle_float(out, -12345678901234567890.12345);
+	// check floats
+	handle_float(out, 123.456);
+	handle_float(out, -123.456);
+	handle_float(out, -12345678901234567890.12345);
 
-	// // check justification: setw(), setfill(), left, right...
-	// handle_alignments(out, 5, ' ', false);
-	// handle_alignments(out, 5, ' ', true);
-	// handle_alignments(out, 5, '~', false);
-	// handle_alignments(out, 5, '~', true);
+	// check justification: setw(), setfill(), left, right...
+	handle_alignments(out, 5, ' ', false);
+	handle_alignments(out, 5, ' ', true);
+	handle_alignments(out, 5, '~', false);
+	handle_alignments(out, 5, '~', true);
 
-	// handle_alignments(out, 10, ' ', false);
-	// handle_alignments(out, 10, ' ', true);
-	// handle_alignments(out, 10, '~', false);
-	// handle_alignments(out, 10, '~', true);
+	handle_alignments(out, 10, ' ', false);
+	handle_alignments(out, 10, ' ', true);
+	handle_alignments(out, 10, '~', false);
+	handle_alignments(out, 10, '~', true);
 
-	// handle_alignments(out, 30, ' ', false);
-	// handle_alignments(out, 30, ' ', true);
-	// handle_alignments(out, 30, '~', false);
-	// handle_alignments(out, 30, '~', true);
+	handle_alignments(out, 30, ' ', false);
+	handle_alignments(out, 30, ' ', true);
+	handle_alignments(out, 30, '~', false);
+	handle_alignments(out, 30, '~', true);
 
 	// Event Loop
 	while (true)
 	{
-		// handle<char>(out, in, F("char"));
-		// handle<uint16_t>(out, in, F("uint16_t"));
-		// handle<int16_t>(out, in, F("int16_t"));
-		// handle<uint32_t>(out, in, F("uint32_t"));
-		// handle<int32_t>(out, in, F("int32_t"));
-		// handle<bool>(out, in, F("bool"));
+		handle<char>(out, in, F("char"));
+		handle<uint16_t>(out, in, F("uint16_t"));
+		handle<int16_t>(out, in, F("int16_t"));
+		handle<uint32_t>(out, in, F("uint32_t"));
+		handle<int32_t>(out, in, F("int32_t"));
+		handle<bool>(out, in, F("bool"));
 		
-		// // check formatted inputs: bool
-		// bool v1;
-		// out << F("bool as alpha: ") << flush;
-		// in >> boolalpha >> skipws >> v1;
-		// out << v1 << endl;
-		// out << F("bool as num: ") << flush;
-		// in >> noboolalpha >> skipws >> v1;
-		// out << v1 << endl;
+		// check formatted inputs: bool
+		bool v1;
+		out << F("bool as alpha: ") << flush;
+		in >> boolalpha >> skipws >> v1;
+		out << v1 << endl;
+		out << F("bool as num: ") << flush;
+		in >> noboolalpha >> skipws >> v1;
+		out << v1 << endl;
 
 		// check formatted inputs: numeric with base
 		uint16_t v2;
@@ -229,21 +229,21 @@ int main()
 		in >> oct >> skipws >> v2;
 		out << v2 << endl;
 
-		// // check input to char*
-		// input_string<10>(out, in);
-		// input_string<50>(out, in);
-		// input_string<200>(out, in);
+		// check input to char*
+		input_string<10>(out, in);
+		input_string<50>(out, in);
+		input_string<200>(out, in);
 
 		time::delay_ms(1000);
 	}
 
-	// // check unitbuf: with unitbuf the program should not exit until every character has been output
-	// out << unitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
-	// out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
-	// out << F("1234567890\n");
+	// check unitbuf: with unitbuf the program should not exit until every character has been output
+	out << unitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
+	out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
+	out << F("1234567890\n");
 
-	// // check nounitbuf: with nounitbuf the program will exit before all characters have been output
-	// out << nounitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
-	// out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
-	// out << F("1234567890\n");
+	// check nounitbuf: with nounitbuf the program will exit before all characters have been output
+	out << nounitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
+	out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
+	out << F("1234567890\n");
 }

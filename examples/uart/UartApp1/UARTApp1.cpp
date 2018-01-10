@@ -62,8 +62,8 @@ int main()
 	uart.register_handler();
 	uart.begin(115200);
 //	uart.begin(230400);
-	streams::istreambuf& in = uart.in();
-//	streams::istream in = uart.fin();
+	// streams::istreambuf& in = uart.in();
+	streams::istream in = uart.fin();
 	streams::ostream out = uart.fout();
 
 	// Event Loop
@@ -72,7 +72,7 @@ int main()
 		out.write("Enter a letter: ");
 		out.flush();
 //		int input = in.sbumpc();
-		int input = streams::get(in);
+		int input = in.get();
 		out.put(input);
 		out.put('\n');
 		out << (char) input << ' ' 

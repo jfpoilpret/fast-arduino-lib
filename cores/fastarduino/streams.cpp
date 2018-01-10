@@ -18,31 +18,31 @@
 
 namespace streams
 {
-	char get(istreambuf& in)
-	{
-		return containers::pull(in.queue());
-	}
+	// char get(istreambuf& in)
+	// {
+	// 	return containers::pull(in.queue());
+	// }
 
-	char* get(istreambuf& in, char* content, size_t size)
-	{
-		char* current = content;
-		for (size_t i = 0; i < size; ++i) *current++ = containers::pull(in.queue());
-		return content;
-	}
+	// char* get(istreambuf& in, char* content, size_t size)
+	// {
+	// 	char* current = content;
+	// 	for (size_t i = 0; i < size; ++i) *current++ = containers::pull(in.queue());
+	// 	return content;
+	// }
 
-	int gets(istreambuf& in, char* str, size_t max, char end)
-	{
-		size_t size = 0;
-		while (size < max - 1)
-		{
-			char value = containers::pull(in.queue());
-			*str++ = value;
-			++size;
-			if (value == end) break;
-		}
-		*str = 0;
-		return size;
-	}
+	// int gets(istreambuf& in, char* str, size_t max, char end)
+	// {
+	// 	size_t size = 0;
+	// 	while (size < max - 1)
+	// 	{
+	// 		char value = containers::pull(in.queue());
+	// 		*str++ = value;
+	// 		++size;
+	// 		if (value == end) break;
+	// 	}
+	// 	*str = 0;
+	// 	return size;
+	// }
 
 	char* istreambuf::scan(char* str, size_t max)
 	{
