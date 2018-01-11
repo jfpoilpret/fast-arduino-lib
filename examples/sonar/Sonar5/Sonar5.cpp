@@ -113,7 +113,7 @@ int main()
 	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
-	auto out = uart.fout();
+	auto out = uart.out();
 	
 	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
 	timer.begin();

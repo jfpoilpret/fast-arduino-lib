@@ -116,7 +116,7 @@ int main()
 #endif
 	uart.begin(115200);
 
-	OUTPUT out = uart.fout();
+	OUTPUT out = uart.out();
 
 	out << F("\nInitial EEPROM content") << streams::endl;
 	trace_eeprom(out);

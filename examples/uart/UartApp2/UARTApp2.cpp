@@ -107,8 +107,8 @@ int main()
 //	uatx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 //	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 
-	streams::istream in = uarx.fin();
-	streams::ostream out = uatx.fout();
+	streams::istream in = uarx.in();
+	streams::ostream out = uatx.out();
 
 	while (true)
 	{

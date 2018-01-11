@@ -98,7 +98,7 @@ int main()
 	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
-	streams::ostream out = uart.fout();
+	streams::ostream out = uart.out();
 
 	Dummy value;
 	out << F("sample1 = ") << flash::read_flash(&sample1, value);

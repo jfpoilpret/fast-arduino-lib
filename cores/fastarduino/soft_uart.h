@@ -38,7 +38,7 @@ namespace serial
 		class AbstractUATX : virtual public UARTErrors, private streams::ostreambuf
 		{
 		public:
-			streams::ostream fout()
+			streams::ostream out()
 			{
 				return streams::ostream(*this);
 			}
@@ -55,7 +55,7 @@ namespace serial
 			void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 			static Parity calculate_parity(Parity parity, uint8_t value);
 
-			streams::ostreambuf& out()
+			streams::ostreambuf& out_()
 			{
 				return (streams::ostreambuf&) *this;
 			}
@@ -101,7 +101,7 @@ namespace serial
 				//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 				check_overflow();
 				char value;
-				while (out().queue().pull(value)) write(value);
+				while (out_().queue().pull(value)) write(value);
 			}
 
 		private:
@@ -153,7 +153,7 @@ namespace serial
 		class AbstractUARX : virtual public UARTErrors, private streams::istreambuf
 		{
 		public:
-			streams::istream fin()
+			streams::istream in()
 			{
 				return streams::istream(*this);
 			}
@@ -163,7 +163,7 @@ namespace serial
 			{
 			}
 
-			streams::istreambuf& in()
+			streams::istreambuf& in_()
 			{
 				return (streams::istreambuf&) *this;
 			}
@@ -277,7 +277,7 @@ namespace serial
 			// Push value if no error
 			if (!errors.has_errors)
 			{
-				errors.all_errors.queue_overflow = !in().queue().push_(value);
+				errors.all_errors.queue_overflow = !in_().queue().push_(value);
 				// Wait for 1st stop bit
 				_delay_loop_2(stop_bit_rx_time_push_);
 			}

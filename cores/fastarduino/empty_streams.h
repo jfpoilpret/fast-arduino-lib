@@ -53,7 +53,7 @@ namespace streams
 	 * // We use UART for tracing
 	 * static char output_buffer[64];
 	 * serial::hard::UATX<board::USART::USART0> uatx{output_buffer};
-	 * auto trace = uatx.fout();
+	 * auto trace = uatx.out();
 	 * #endif
 	 * //...
 	 * // Directly use trace anywhere, this won't generate any code if `NO_TRACE`

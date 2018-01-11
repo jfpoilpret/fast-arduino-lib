@@ -151,7 +151,7 @@ namespace serial
 			/**
 			 * Enable the transmitter. 
 			 * This is needed before any transmission can take place.
-			 * Once called, it is possible to push content to `out()` or `fout()`,
+			 * Once called, it is possible to push content to `out()`,
 			 * which will be then transmitted though the serial connection.
 			 * 
 			 * @param rate the transmission rate in bits per second (bps)
@@ -184,7 +184,7 @@ namespace serial
 			 * Get the formatted output stream used to send content through this serial
 			 * transmitter.
 			 */
-			inline streams::ostream fout()
+			inline streams::ostream out()
 			{
 				return streams::ostream(*this);
 			}
@@ -259,7 +259,7 @@ namespace serial
 			 * Reception is asynchronous.
 			 * @param input an array of characters used by this receiver to
 			 * store content received through serial line, buffered until read through
-			 * `in()` or `fin()`.
+			 * `in()`.
 			 */
 			template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : istreambuf{input}
 			{
@@ -279,7 +279,7 @@ namespace serial
 			 * Enable the receiver. 
 			 * This is needed before any reception can take place.
 			 * Once called, it is possible to read content, received through serial
-			 * connection, by using `in()` or `fin()`.
+			 * connection, by using `in()`.
 			 * 
 			 * @param rate the transmission rate in bits per second (bps)
 			 * @param parity the kind of parity check used by transmission
@@ -311,7 +311,7 @@ namespace serial
 			 * Get the formatted input stream used to read content received through
 			 * this serial transmitter.
 			 */
-			inline streams::istream fin()
+			inline streams::istream in()
 			{
 				return streams::istream(*this);
 			}
@@ -325,7 +325,6 @@ namespace serial
 				errors_.all_errors.parity_error = status & TRAIT::UPE_MASK;
 				char value = TRAIT::UDR;
 				errors_.all_errors.queue_overflow = !queue().push_(value);
-				// errors_.all_errors.queue_overflow = !in().queue().push_(value);
 			}
 			/// @endcond
 		};
@@ -356,7 +355,7 @@ namespace serial
 			 * 
 			 * @param input an array of characters used by this receiver to
 			 * store content received through serial line, buffered until read through
-			 * `in()` or `fin()`.
+			 * `in()`.
 			 * @param output an array of characters used by this transmitter to
 			 * buffer output during transmission so that write methods are not
 			 * blocking.
@@ -380,8 +379,7 @@ namespace serial
 			 * Enable the receiver/transceiver. 
 			 * This is needed before any transmission or reception can take place.
 			 * Once called, it is possible to send and receive content through serial
-			 * connection, by using `in()` or `fin()` for reading and `out()` or
-			 * `fout()` for writing.
+			 * connection, by using `in()` for reading and `out()` for writing.
 			 * 
 			 * @param rate the transmission rate in bits per second (bps)
 			 * @param parity the kind of parity check used by transmission

@@ -92,7 +92,7 @@ int main()
 #endif
 	uart.begin(115200);
 
-	auto out = uart.fout();
+	auto out = uart.out();
 	
 	// Declare Analog input
 	ANALOG_INPUT pot;

@@ -26,7 +26,7 @@ REGISTER_UATX_ISR(0)
 // UART for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-static streams::ostream out = uart.fout();
+static streams::ostream out = uart.out();
 
 // I2C Device specific stuff goes here
 //=====================================

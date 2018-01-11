@@ -103,7 +103,7 @@ REGISTER_UATX_ISR(0)
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uatx{output_buffer};
-streams::ostream trace = uatx.fout();
+streams::ostream trace = uatx.out();
 #endif
 
 // Uncomment these lines if you want to quickly generate a program for a 16x16 LED matrix (default is 8x8))

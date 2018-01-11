@@ -90,8 +90,8 @@ int main()
 //	uart.begin(pci, 115200, Serial::Parity::ODD);
 //	uart.begin(pci, 115200, Serial::Parity::EVEN);
 
-	streams::istream in = uart.fin();
-	streams::ostream out = uart.fout();
+	streams::istream in = uart.in();
+	streams::ostream out = uart.out();
 
 	while (true)
 	{

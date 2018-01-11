@@ -163,7 +163,7 @@ int main()
 #endif
 	uatx.begin(115200);
 
-	streams::ostream out = uatx.fout();
+	streams::ostream out = uatx.out();
 	out.width(0);
 	out << F("Started\n");
 	

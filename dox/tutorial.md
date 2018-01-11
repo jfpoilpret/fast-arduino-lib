@@ -373,7 +373,7 @@ int main()
     uart.register_handler();
     uart.begin(115200);
 
-    streams::ostream<streams::ostreambuf> out = uart.fout();
+    streams::ostream<streams::ostreambuf> out = uart.out();
     uint16_t value = 0x8000;
     out << F("value = 0x") << hex << value 
         << F(", ") << dec << value 
@@ -382,7 +382,7 @@ int main()
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Here, we use `uart.fout()` instead of `uart.out()` to get a `streams::ostream` on which we can use the "insertion operator" `<<`.
+Here, we use `uart.out()` instead of `uart.out()` to get a `streams::ostream` on which we can use the "insertion operator" `<<`.
 
 If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::ostream` API](http://www.cplusplus.com/reference/ostream/ostream/operator%3C%3C/) which FastArduino library tries to implement with some level of fidelity.
 
@@ -494,7 +494,7 @@ int main()
     serial::hard::UARX<board::USART::USART0> uarx{input_buffer};
     uarx.register_handler();
     uarx.begin(115200);
-    INPUT in = uarx.fin();
+    INPUT in = uarx.in();
 
     // Wait for a char
     char value1;
@@ -507,7 +507,7 @@ int main()
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Here, we use `uart.fin()` instead of `uart.in()` to get a `streams::istream` on which we can use the "extraction operator" `>>`. All extractions are blocking and will not return until the required type can be read from the buffer.
+Here, we use `uart.in()` instead of `uart.in()` to get a `streams::istream` on which we can use the "extraction operator" `>>`. All extractions are blocking and will not return until the required type can be read from the buffer.
 
 If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::istream` API](http://www.cplusplus.com/reference/istream/istream/operator%3E%3E/) which FastArduino library tries to implement with some level of fidelity.
 

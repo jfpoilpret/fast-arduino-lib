@@ -39,7 +39,7 @@ int main()
 	sei();
 	serial::soft::UATX<TX> uart{output_buffer};
 	uart.begin(9600);
-	ostream out = uart.fout();
+	ostream out = uart.out();
 
 	const double v = 123.456;
 	out << fixed << v << endl;

@@ -137,7 +137,7 @@ int main()
 	serial::hard::UATX<UART> uatx{output_buffer};
 	uatx.register_handler();
 	uatx.begin(115200);
-	auto trace = uatx.fout();
+	auto trace = uatx.out();
 	trace.width(0);
 #else
 	streams::null_ostream trace;

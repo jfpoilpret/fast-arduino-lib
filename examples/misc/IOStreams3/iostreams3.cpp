@@ -71,8 +71,8 @@ int main()
 	uart.register_handler();
 	uart.begin(9600);
 
-	istream in = uart.fin();
-	ostream out = uart.fout();
+	istream in = uart.in();
+	ostream out = uart.out();
 
 	// Show initial state value of out stream
 	trace_state(out);

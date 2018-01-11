@@ -184,8 +184,8 @@ int main()
 	serial::hard::UART<board::USART::USART0> uart{input_buffer, output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
-	INPUT in = uart.fin();
-	OUTPUT out = uart.fout();
+	INPUT in = uart.in();
+	OUTPUT out = uart.out();
 
 #ifdef CHECK_OUT_MANIPULATORS
 	// Check all output manipulators
