@@ -181,15 +181,6 @@ namespace serial
 			}
 
 			/**
-			 * Get the raw output stream used to send content through this serial
-			 * transmitter.
-			 */
-			inline streams::ostreambuf& out()
-			{
-				return (ostreambuf&) *this;
-			}
-
-			/**
 			 * Get the formatted output stream used to send content through this serial
 			 * transmitter.
 			 */
@@ -317,15 +308,6 @@ namespace serial
 			}
 
 			/**
-			 * Get the raw input stream used to read content received through this 
-			 * serial transmitter.
-			 */
-			inline streams::istreambuf& in()
-			{
-				return (streams::istreambuf&) *this;
-			}
-
-			/**
 			 * Get the formatted input stream used to read content received through
 			 * this serial transmitter.
 			 */
@@ -342,7 +324,8 @@ namespace serial
 				errors_.all_errors.frame_error = status & TRAIT::FE_MASK;
 				errors_.all_errors.parity_error = status & TRAIT::UPE_MASK;
 				char value = TRAIT::UDR;
-				errors_.all_errors.queue_overflow = !in().queue().push_(value);
+				errors_.all_errors.queue_overflow = !queue().push_(value);
+				// errors_.all_errors.queue_overflow = !in().queue().push_(value);
 			}
 			/// @endcond
 		};

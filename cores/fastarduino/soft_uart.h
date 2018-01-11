@@ -38,11 +38,6 @@ namespace serial
 		class AbstractUATX : virtual public UARTErrors, private streams::ostreambuf
 		{
 		public:
-			streams::ostreambuf& out()
-			{
-				return (ostreambuf&) *this;
-			}
-
 			streams::ostream fout()
 			{
 				return streams::ostream(*this);
@@ -59,6 +54,11 @@ namespace serial
 		protected:
 			void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 			static Parity calculate_parity(Parity parity, uint8_t value);
+
+			streams::ostreambuf& out()
+			{
+				return (streams::ostreambuf&) *this;
+			}
 
 			void check_overflow()
 			{
@@ -153,11 +153,6 @@ namespace serial
 		class AbstractUARX : virtual public UARTErrors, private streams::istreambuf
 		{
 		public:
-			streams::istreambuf& in()
-			{
-				return (streams::istreambuf&) *this;
-			}
-
 			streams::istream fin()
 			{
 				return streams::istream(*this);
@@ -166,6 +161,11 @@ namespace serial
 		protected:
 			template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input}
 			{
+			}
+
+			streams::istreambuf& in()
+			{
+				return (streams::istreambuf&) *this;
 			}
 
 			void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);

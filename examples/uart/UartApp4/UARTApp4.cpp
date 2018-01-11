@@ -90,14 +90,13 @@ int main()
 //	uart.begin(pci, 115200, Serial::Parity::ODD);
 //	uart.begin(pci, 115200, Serial::Parity::EVEN);
 
-	streams::istreambuf& in = uart.in();
+	streams::istream in = uart.fin();
 	streams::ostream out = uart.fout();
 
 	while (true)
 	{
-		int value = in.sbumpc();
-		if (value != streams::istreambuf::EOF)
-			out.put(value);
+		int value = in.get();
+		out.put(value);
 		if (uart.has_errors())
 		{
 			out.put(' ');

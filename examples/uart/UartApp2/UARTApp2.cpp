@@ -107,14 +107,13 @@ int main()
 //	uatx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 //	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 
-	streams::istreambuf& in = uarx.in();
+	streams::istream in = uarx.fin();
 	streams::ostream out = uatx.fout();
 
 	while (true)
 	{
-		int value = in.sbumpc();
-		if (value != streams::istreambuf::EOF)
-			out.put(value);
+		int value = in.get();
+		out.put(value);
 		if (uarx.has_errors())
 		{
 			out.put(' ');
