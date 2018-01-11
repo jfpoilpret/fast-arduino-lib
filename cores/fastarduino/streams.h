@@ -382,42 +382,40 @@ namespace streams
 
 		istream& get(char* s, size_t n, char delim = '\n')
 		{
-			char* current = s;
-			for (size_t i = 1; i < n; ++i)
+			while (--n)
 			{
 				int c = peek();
 				if (c == delim) break;
-				*current++ = get();
+				*s++ = get();
 			}
-			*current = 0;
+			*s = 0;
 			return *this;
 		}
 
 		istream& getline(char* s, size_t n, char delim = '\n')
 		{
-			char* current = s;
-			for (size_t i = 1; i < n; ++i)
+			while (--n)
 			{
 				int c = get();
 				if (c == delim) break;
-				*current++ = c;
+				*s++ = c;
 			}
-			*current = 0;
+			*s = 0;
 			return *this;
 		}
 
 		istream& ignore(size_t n = 1, int delim = istreambuf::EOF)
 		{
-			for (size_t i = 0; i < n; ++i)
+			bool forever = !n;
+			while (forever || n--)
 				if (get() == delim) break;
 			return *this;
 		}
 
 		istream& read(char* s, size_t n)
 		{
-			char* current = s;
-			for (size_t i = 0; i < n; ++i)
-				*current++ = get();
+			while (n--)
+				*s++ = get();
 			return *this;
 		}
 

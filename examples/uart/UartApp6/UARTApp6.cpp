@@ -30,6 +30,16 @@
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 
+// Macros to define what we want to test: just comment/uncomment according to what you want to test
+// #define CHECK_OUT_MANIPULATORS
+// #define CHECK_OUT_FLOAT
+// #define CHECK_OUT_ALIGNMENTS
+// #define CHECK_IN_EXTRACTORS
+// #define CHECK_IN_MANIPULATORS
+// #define CHECK_IN_STRING
+// #define CHECK_OUT_UNITBUF
+#define CHECK_IN_GET
+
 // Define vectors we need in the example
 REGISTER_UART_ISR(0)
 
@@ -44,6 +54,7 @@ using namespace streams;
 using INPUT = istream;
 using OUTPUT = ostream;
 
+#ifdef CHECK_IN_EXTRACTORS
 template<typename T>
 static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)
 {
@@ -52,7 +63,9 @@ static void handle(OUTPUT& out, INPUT& in, const flash::FlashStorage* type)
 	in >> skipws >> value;
 	out << value << endl;
 }
+#endif
 
+#if defined(CHECK_OUT_MANIPULATORS) || defined(CHECK_OUT_FLOAT)
 template<typename T>
 static void display_num(OUTPUT& out, T value)
 {
@@ -61,7 +74,9 @@ static void display_num(OUTPUT& out, T value)
 	out << oct << value << endl;
 	out << hex << value << endl;
 }
+#endif
 
+#ifdef CHECK_OUT_MANIPULATORS
 template<typename T>
 static void handle_num(OUTPUT& out, T value, const flash::FlashStorage* type)
 {
@@ -84,7 +99,9 @@ static void handle_num(OUTPUT& out, T value, const flash::FlashStorage* type)
 	display_num<T>(out, value);
 	out << noshowpos;
 }
+#endif
 
+#ifdef CHECK_OUT_FLOAT
 static void handle_float(OUTPUT& out, double value)
 {
 	out << F("testing output of double (") << defaultfloat << setprecision(6) << value << ')' << endl;
@@ -117,7 +134,9 @@ static void handle_float(OUTPUT& out, double value)
 	out << setprecision(0) << fixed << value << endl;
 	out << setprecision(0) << scientific << value << endl;
 }
+#endif
 
+#ifdef CHECK_OUT_ALIGNMENTS
 static void handle_alignments(OUTPUT& out, uint8_t width, char filler, bool is_left = true)
 {
 	out << F("testing alignments") << endl;
@@ -141,7 +160,9 @@ static void handle_alignments(OUTPUT& out, uint8_t width, char filler, bool is_l
 
 	out << setfill(' ');
 }
+#endif
 
+#ifdef CHECK_IN_STRING
 template<uint8_t WIDTH>
 void input_string(OUTPUT& out, INPUT& in)
 {
@@ -151,6 +172,7 @@ void input_string(OUTPUT& out, INPUT& in)
 	out << buffer << endl;
 	in >> skipws;
 }
+#endif
 
 int main() __attribute__((OS_main));
 int main()
@@ -165,6 +187,7 @@ int main()
 	INPUT in = uart.fin();
 	OUTPUT out = uart.fout();
 
+#ifdef CHECK_OUT_MANIPULATORS
 	// Check all output manipulators
 	handle_num<uint16_t>(out, 1234, F("uint16_t"));
 	handle_num<int16_t>(out, 1234, F("int16_t"));
@@ -173,12 +196,16 @@ int main()
 	handle_num<uint32_t>(out, 123456, F("uint32_t"));
 	handle_num<int32_t>(out, 123456, F("int32_t"));
 	handle_num<int32_t>(out, -123456, F("int32_t"));
+#endif
 
+#ifdef CHECK_OUT_FLOAT
 	// check floats
 	handle_float(out, 123.456);
 	handle_float(out, -123.456);
 	handle_float(out, -12345678901234567890.12345);
+#endif
 
+#ifdef CHECK_OUT_ALIGNMENTS
 	// check justification: setw(), setfill(), left, right...
 	handle_alignments(out, 5, ' ', false);
 	handle_alignments(out, 5, ' ', true);
@@ -194,17 +221,21 @@ int main()
 	handle_alignments(out, 30, ' ', true);
 	handle_alignments(out, 30, '~', false);
 	handle_alignments(out, 30, '~', true);
+#endif
 
 	// Event Loop
 	while (true)
 	{
+#ifdef CHECK_IN_EXTRACTORS
 		handle<char>(out, in, F("char"));
 		handle<uint16_t>(out, in, F("uint16_t"));
 		handle<int16_t>(out, in, F("int16_t"));
 		handle<uint32_t>(out, in, F("uint32_t"));
 		handle<int32_t>(out, in, F("int32_t"));
 		handle<bool>(out, in, F("bool"));
+#endif
 		
+#ifdef CHECK_IN_MANIPULATORS
 		// check formatted inputs: bool
 		bool v1;
 		out << F("bool as alpha: ") << flush;
@@ -228,15 +259,39 @@ int main()
 		out << F("num as oct: ") << flush;
 		in >> oct >> skipws >> v2;
 		out << v2 << endl;
+#endif
 
+#ifdef CHECK_IN_STRING
 		// check input to char*
 		input_string<10>(out, in);
 		input_string<50>(out, in);
 		input_string<200>(out, in);
+#endif
+
+#ifdef CHECK_IN_GET
+		// check istream get(), getline(), ignore()
+		out << F("get 1 char: ") << flush;
+		int c = in.get();
+		out << char(c) << endl;
+		in.ignore(0, '\n');
+		out << F("get 10 char max: ") << flush;
+		char buf[10 + 1];
+		in.get(buf, sizeof buf);
+		out << buf << endl;
+		in.ignore(0, '\n');
+		out << F("getline 10 char max: ") << flush;
+		in.getline(buf, sizeof buf);
+		out << buf << endl;
+		out << F("ignore 5 then get 10 char max: ") << flush;
+		in.ignore(5).get(buf, sizeof buf);
+		in.ignore(0, '\n');
+		out << buf << endl;
+#endif
 
 		time::delay_ms(1000);
 	}
 
+#ifdef CHECK_OUT_UNITBUF
 	// check unitbuf: with unitbuf the program should not exit until every character has been output
 	out << unitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
 	out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
@@ -246,4 +301,5 @@ int main()
 	out << nounitbuf << F("abcdefghijklmnopqrstuvwxyz\n");
 	out << F("ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");
 	out << F("1234567890\n");
+#endif
 }
