@@ -234,6 +234,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 REGISTER_UATX_ISR(0)
 
+int main() __attribute__((OS_main));
 int main()
 {
     board::init();
@@ -243,9 +244,9 @@ int main()
     uart.register_handler();
     uart.begin(115200);
 
-    streams::ostreambuf out = uart.out();
-    out.sputn("Hello, World!\n");
-    out.pubsync();
+    streams::ostream out = uart.out();
+    out.write("Hello, World!\n");
+    out.flush();
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -259,11 +260,13 @@ The code that follows instantiates a `uart::hard::UATX` object that is using `bo
 
 Once created, `uart` needs to be *linked* to the ISR previously registered, this is done through `uart.register_handler()`. Then we can set `uart` ready for transmission, at serial speed of 115200 bps.
 
-Next step consists in extracting, from `uart`, a `streams::ostreambuf` that will allow us to send characters or strings to USB:
+Next step consists in extracting, from `uart`, a `streams::ostream` that will allow us to send characters or strings to USB:
 
-    out.sputn("Hello, World!\n");
+    out.write("Hello, World!\n");
 
-The last important instruction waits for all characters to be transmitted before leaving the program.
+The last important instruction, `out.flush()`, waits for all characters to be transmitted before leaving the program.
+
+Do note the specific `main` declaration line before its definition: `int main() __attribute__((OS_main));`. This helps the compiler perform some optimization on this function, and may avoid generating several dozens code instructions in some circumstances. In some situations though, this may increase code size by a few bytes; for your own programs, you would have to compile with and without this line if you want to find what is the best for you.
 
 Here is the equivalent code with Arduino API:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -282,19 +285,19 @@ Of course, we can see here that the code looks simpler, although one may wonder 
 Now let's compare the size of both:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1440 bytes  | 768 bytes   |
-| data size | 200 bytes   | 93 bytes    |
+| code size | 1440 bytes  | 662 bytes   |
+| data size | 200 bytes   | 91 bytes    |
 The data size is big because the buffer used by `Serial` has a hard-coded size (you cannot change it without modifying and recompiling Arduino API). Moreover, when using `Serial`, 2 buffers are created, one for input and one for output, even though you may only need the latter one!
 
-Now let's take a look at the 93 bytes of data used in the FastArduino version of this example, how are they broken down?
+Now let's take a look at the 91 bytes of data used in the FastArduino version of this example, how are they broken down?
 | Source            | data size   |
 |-------------------|-------------|
 | `output_buffer`   | 64 bytes    |
 | power API         | 1 byte      |
 | `UATX` ISR        | 2 bytes     |
-| `UATX` vtable     | 10 bytes    |
+| `UATX` vtable     | 8 bytes     |
 | "Hello, World!\n" | 16 bytes    |
-| **TOTAL**         | 93 bytes    |
+| **TOTAL**         | 91 bytes    |
 
 *vtable* is specific data created by C++ compiler for classes with `virtual` methods: every time you use virtual methods in classes, this will add more data size, this is why FastArduino avoids `virtual` as much as possible.
 
@@ -302,15 +305,15 @@ As you can see in the table above, the constant string `"Hello, World!\n"` occup
 
 How do we change our program so that this string is only stored in Flash? We can use FastArduino `flash` API for that, by changing only one line of code:
 
-    out.sputn(F("Hello, World!\n"));
+    out.write(F("Hello, World!\n"));
 
-Note the use of `F()` macro here: this makes the string reside in Flash only, and then it is being read from Flash "on the fly" by `out.sputn()` method; the latter method is overloaded for usual C-strings (initial example) and for C-strings stored in Flash only.
+Note the use of `F()` macro here: this makes the string reside in Flash only, and then it is being read from Flash "on the fly" by `out.write()` method; the latter method is overloaded for usual C-strings (initial example) and for C-strings stored in Flash only.
 
 We can compare the impact on sizes:
 |           | without %F() | with %F()   |
 |-----------|--------------|-------------|
-| code size | 768 bytes    | 776 bytes   |
-| data size | 93 bytes     | 77 bytes    |
+| code size | 662 bytes    | 668 bytes   |
+| data size | 91 bytes     | 75 bytes    |
 Although a bit more code has been added (the code to read the string from Flash into SRAM on the fly), we see 16 bytes have been removed from data, this is the size of the string constant.
 
 You may wonder why `"Hello, World!\n"` occupies 16 bytes, although it should use only 15 bytes (if we account for the terminating `'\0'` character); this is because the string is stored in Flash and Flash is word-addressable, not byte-addressable on AVR.
@@ -353,7 +356,7 @@ void read_and_use_sample1()
 
 ### Formatted Output example ###
 
-Compared to Arduino API, FastArduino brings formatted streams as can be found in standard C++; although more verbose than usual C `printf()` function, formatted streams allow compile-time safety.
+Compared to Arduino API, FastArduino brings formatted streams as can be [found in standard C++](https://en.wikipedia.org/wiki/Input/output_(C%2B%2B)); although more verbose than usual C `printf()` function, formatted streams allow compile-time safety.
 
 Here is an example that prints formatted data to USB:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -364,6 +367,8 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 REGISTER_UATX_ISR(0)
 
+using namespace streams;
+
 int main()
 {
     board::init();
@@ -373,7 +378,7 @@ int main()
     uart.register_handler();
     uart.begin(115200);
 
-    streams::ostream<streams::ostreambuf> out = uart.out();
+    ostream out = uart.out();
     uint16_t value = 0x8000;
     out << F("value = 0x") << hex << value 
         << F(", ") << dec << value 
@@ -382,7 +387,7 @@ int main()
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Here, we use `uart.out()` instead of `uart.out()` to get a `streams::ostream` on which we can use the "insertion operator" `<<`.
+Here, we still use `uart.out()`, but here we use its "insertion operator" `<<`.
 
 If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::ostream` API](http://www.cplusplus.com/reference/ostream/ostream/operator%3C%3C/) which FastArduino library tries to implement with some level of fidelity.
 
@@ -412,8 +417,8 @@ void loop()
 Once again, we can compare the size of both:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1808 bytes  | 1412 bytes  |
-| data size | 186 bytes   | 77 bytes    |
+| code size | 1808 bytes  | 1804 bytes  |
+| data size | 186 bytes   | 83 bytes    |
 
 ### Serial Input example ###
 
@@ -435,21 +440,15 @@ int main()
     uart.register_handler();
     uart.begin(115200);
 
-    streams::istreambuf in = uart.in();
-
-    // Get one character if any
-    int input = in.sbumpc();
-    if (input != istreambuf:EOF)
-    {
-        char value = char(input);
-    }
+    streams::istream in = uart.in();
 
     // Wait until a character is ready and get it
-    char value = streams::get(in);
+    char value;
+    in.get(value);
 
     // Wait until a complete string is ready and get it
     char str[64+1];
-    int len = streams::gets(in, str, 64);
+	in.get(str, 64+1);
 
     return 0;
 }
@@ -458,15 +457,15 @@ Note the similarities between this example and UATX example above for all the se
 The main differences are:
 - use `UARX` type instead of `UATX`
 - `REGISTER_UARX_ISR()` instead of `REGISTER_UATX_ISR()` macro for ISR registration
-- use `istreambuf` instead of `ostreambuf` and `uart.in()` instead of `uart.out()`
+- use `istream` instead of `ostream` and `uart.in()` instead of `uart.out()`
 
-Then `UARX` mainly offers one method, `get()`, which returns the next character serially received and buffered; if the input buffer is currently empty, then `get()` returns `istreambuf::EOF`, which must be tested before dealing with the returned value.
+Then `UARX` mainly offers one method, `get()`, which returns the next character serially received and buffered; if the input buffer is currently empty, then `get()` will block.
 
-Then the example uses 2 functions defined directly within `streams` namespace:
-- `get()`: this is similar to `istreambuf.sbumpc()` except that it **blocks** until one character is available on serial input.
-- `gets()`: this blocks until a complete string (terminated by `'\0'`) gets read on serial input and fills the given buffer parameter with that string content.
+The example uses 2 flavors of this `istream` method:
+- `get(char&)`: this method **blocks** until one character is available on serial input.
+- `get(char*, size_t, char)`: this blocks until a complete string (terminated by a specified delimiter character, `'\n'` by default) gets read on serial input and fills the given buffer parameter with that string content.
 
-Note that these 2 functions use `time::yield()` while waiting; this may be linked to `power` management. Please take a look at the documentation for this API for further details.
+Note that these 2 methods use `time::yield()` while waiting; this may be linked to `power` management. Please take a look at the documentation for this API for further details.
 
 ### Formatted Input example ###
 
@@ -483,7 +482,7 @@ REGISTER_UARX_ISR(0)
 static const uint8_t INPUT_BUFFER_SIZE = 64;
 static char input_buffer[INPUT_BUFFER_SIZE];
 
-using INPUT = streams::istream<streams::istreambuf>;
+using INPUT = streams::istream;
 
 int main()
 {
@@ -507,7 +506,7 @@ int main()
     return 0;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Here, we use `uart.in()` instead of `uart.in()` to get a `streams::istream` on which we can use the "extraction operator" `>>`. All extractions are blocking and will not return until the required type can be read from the buffer.
+Here, we still use `uart.in()` but we use its "extraction operator" `>>`. All extractions are blocking and will not return until the required type can be read from the buffer.
 
 If you are used to programming with C++ for more usual systems (e.g. Linux), then you will immediately recognize [`std::istream` API](http://www.cplusplus.com/reference/istream/istream/operator%3E%3E/) which FastArduino library tries to implement with some level of fidelity.
 
@@ -515,7 +514,7 @@ You can also find more details in `streams` namespace documentation.
 
 We have already seen `UATX` and `UARX` as classes for sending, resp. receiving, data through serial. There is also `UARX` which combines both.
 
-As you know, the number of physical (hardware) UART available on an MCU target is limited, some targets (ATtiny) don't even have any hardware UART at all. For this reason, if you need extra UART featurs to connect to some devices, you can use software UART API, documented in [namespace `serial::soft`](TODO). As this more complicated to use, it is not part of this basic tutorial, but will be addressed later on.
+As you know, the number of physical (hardware) UART available on an MCU target is limited, some targets (ATtiny) don't even have any hardware UART at all. For this reason, if you need extra UART featurs to connect to some devices, you can use software UART API, documented in [namespace `serial::soft`](TODO). As this is more complicated to use, it is not part of this basic tutorial, but will be addressed later on.
 
 
 @anchor analoginput Basics: analog input
@@ -736,8 +735,6 @@ int main()
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Past the usual initialization stuff, this code performs an important task regarding interrupt handling: it creates `handler`, an instance of the `Handler` class that has been defined before as the class to handle interrupts for the selected timer, and then it **registers** this handler instance with FastArduino. Now we are sure that interrupts for our timer will call `handler.on_timer()`.
-
-Do note the specific `main` declaration line before its definition: `int main() __attribute__((OS_main));`. This helps the compiler perform some optimization on this function, and may avoid generating several dozens code instructions in some circumstances. In some situations though, this may increase code size by a few bytes; for your own programs, you would have to compile with and without this line if you want to find what is the best for you.
 
 The last part of the code creates and starts the timer we need in our program:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
