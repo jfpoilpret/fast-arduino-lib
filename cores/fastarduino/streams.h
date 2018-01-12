@@ -68,8 +68,6 @@ namespace streams
 		{
 		}
 
-		//TODO This make compilation failures...
-		// ostream(const ostream&) = delete;
 		ostream& operator=(const ostream&) = delete;
 
 		/**
@@ -369,8 +367,6 @@ namespace streams
 		{
 		}
 
-		//TODO This make compilation failures...
-		// istream(const istream&) = delete;
 		istream& operator=(const istream&) = delete;
 
 		/**
