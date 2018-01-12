@@ -80,9 +80,12 @@ namespace streams
 			return stream_;
 		}
 
-		//TODO rework API docs
 		/**
-		 * @copydoc ostreambuf::pubsync()
+		 * Flush this ostream and blocks until all its buffer has been written to
+		 * the underlying device.
+		 * A manipulator exists with the same name and behavior.
+		 * @sa ostreambuf::pubsync()
+		 * @sa streams::flush()
 		 */
 		void flush()
 		{
@@ -90,7 +93,11 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc ostreambuf::sputc(char)
+		 * Insert character @p c into this stream. The character is buffered by 
+		 * the underlying ostreambuf and transmitted to the connected device when 
+		 * possible. 
+		 * If the underlying ostreambuf overflows, then `badbit` is set for this stream.
+		 * @sa ostreambuf::sputc(char)
 		 */
 		void put(char c)
 		{
@@ -99,7 +106,13 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc ostreambuf::sputn(const char*, size_t)
+		 * Write a block of data to this stream. @p content gets buffered by the
+		 * underlying ostreambuf and transmitted to the connected device when 
+		 * possible.
+		 * If the underlying ostreambuf overflows, then `badbit` is set for this stream.
+		 * @param content data to be transmitted
+		 * @param size the number of bytes from @p content to be transmitted
+		 * @sa ostreambuf::sputn(const char*, size_t)
 		 */
 		void write(const char* content, size_t size)
 		{
@@ -108,7 +121,12 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc ostreambuf::sputn(const char*)
+		 * Write a string (null-terminated) to this stream. @p str gets buffered
+		 * by the underlying ostreambuf and transmitted to the connected device when 
+		 * possible. The terminating `\0` is not transmitted.
+		 * If the underlying ostreambuf overflows, then `badbit` is set for this stream.
+		 * @param str the string to be transmitted
+		 * @sa ostreambuf::sputn(const char*)
 		 */
 		void write(const char* str)
 		{
@@ -117,7 +135,12 @@ namespace streams
 		}
 
 		/**
-		 * @copydoc ostreambuf::sputn(const flash::FlashStorage*)
+		 * Write a flash-stored string (null-terminated) to this stream. @p str 
+		 * gets buffered by the underlying ostreambuf and transmitted to the 
+		 * connected device when possible. The terminating `\0` is not transmitted.
+		 * If the underlying ostreambuf overflows, then `badbit` is set for this stream.
+		 * @param str the string to be transmitted
+		 * @sa ostreambuf::sputn(const flash::FlashStorage*)
 		 */
 		void write(const flash::FlashStorage* str)
 		{
@@ -359,7 +382,12 @@ namespace streams
 		}
 
 
-		//TODO DOCS
+		/**
+		 * Return the next character in this input stream, without extracting it.
+		 * The method blocks until one character is available in the underlying 
+		 * istreambuf.
+		 * @sa istreambuf::sgetc()
+		 */
 		int peek()
 		{
 			int value;
@@ -367,6 +395,12 @@ namespace streams
 			return value;
 		}
 
+		/**
+		 * Extract a single character from this input stream.
+		 * The method blocks until one character is available in the underlying 
+		 * istreambuf.
+		 * @sa istreambuf::sbumpc()
+		 */
 		int get()
 		{
 			int value;
@@ -374,12 +408,27 @@ namespace streams
 			return value;
 		}
 
+		/**
+		 * Extract a single character from this input stream.
+		 * The method blocks until one character is available in the underlying 
+		 * istreambuf.
+		 * @sa get()
+		 * @sa istreambuf::sbumpc()
+		 */
 		istream& get(char& c)
 		{
 			c = get();
 			return *this;
 		}
 
+		/**
+		 * Extract characters from this input stream and stores them as a C-string,
+		 * until either `(n - 1)` characters have been extracted or the @p delim
+		 * character is encountered. The delimiting character is not extracted 
+		 * from the stream and also not added to @p s.
+		 * A null character `\0` is automatically appended to @p s.
+		 * @sa getline()
+		 */
 		istream& get(char* s, size_t n, char delim = '\n')
 		{
 			while (--n)
@@ -392,6 +441,14 @@ namespace streams
 			return *this;
 		}
 
+		/**
+		 * Extract characters from this input stream and stores them as a C-string,
+		 * until either `(n - 1)` characters have been extracted or the @p delim
+		 * character is encountered. The delimiting character is extracted 
+		 * from the stream but is not added to @p s.
+		 * A null character `\0` is automatically appended to @p s.
+		 * @sa get(char*, size_t, char)
+		 */
 		istream& getline(char* s, size_t n, char delim = '\n')
 		{
 			while (--n)
@@ -404,6 +461,13 @@ namespace streams
 			return *this;
 		}
 
+		/**
+		 * Extract characters from this inp0ut stream and discards them, until
+		 * either `n` characters have been extracted, or the @p delim character
+		 * is encountered. The delimiting character, if found, is also discarded.
+		 * If @p n is `0`, then **all** characters are discarded (no number limit)
+		 * until @p delim is encountered.
+		 */
 		istream& ignore(size_t n = 1, int delim = istreambuf::EOF)
 		{
 			bool forever = !n;
@@ -412,6 +476,11 @@ namespace streams
 			return *this;
 		}
 
+		/**
+		 * Read a block of data from this input stream.
+		 * Extracts exactly @p n characters and copies them to @p s.
+		 * The method blocks until @p n characters have been read.
+		 */
 		istream& read(char* s, size_t n)
 		{
 			while (n--)
