@@ -565,14 +565,30 @@ namespace streams
 			// If v is too large, force scientific anyway
 			if ((flags() & scientific) || is_too_large(v))
 			{
-				//FIXME if precision() > 7, then it is limited to 7 by dtostre(), add 0 manually then
+				const uint8_t DTOSTRE_MAX_PRECISION = 7;
 				dtostre(v, buffer, precision(), 0);
+				if (precision() > DTOSTRE_MAX_PRECISION)
+				{
+					// If precision() > 7, then it is limited to 7 by dtostre(), add 0 manually then
+					// Size of the exponent part, always e+00 or e-00
+					const uint8_t EXPONENT_SIZE = 1 + 1 + 2;
+					// Find exponent marker 'e' and move exponent part right (including null)
+					char* exp = strchr(buffer, 'e');
+					uint8_t added_zeros = precision() - DTOSTRE_MAX_PRECISION;
+					memmove(exp + added_zeros, exp, EXPONENT_SIZE + 1);
+					// Add '0' in the added space before exponent
+					memset(exp, '0', added_zeros);
+				}
 			}
 			else if (flags() & fixed)
 				dtostrf(v, 0, precision(), buffer);
 			else
+			{
 				// default is fixed currently (no satisfying conversion function exists)
+				//FIXME in this mode any trailing 0 after DP is discarded
+				// DP is also discarded if there are only 0 after it
 				dtostrf(v, 0, precision(), buffer);
+			}
 			justify(out, buffer, add_sign(buffer), 0);
 		}
 		void convert(ostreambuf& out, char c) const
