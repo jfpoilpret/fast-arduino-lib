@@ -1,9 +1,10 @@
 var searchData=
 [
   ['data_5foverrun',['data_overrun',['../classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa',1,'serial::UARTErrors']]],
-  ['dec',['dec',['../classstreams_1_1_format_base.html#ad4f9e8bcc82ed50a3a5607067630c8ada1feea25ecb958229287f885aebe7c49b',1,'streams::FormatBase::dec()'],['../namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2',1,'streams::dec()']]],
+  ['dec',['dec',['../classstreams_1_1ios__base.html#a2a9b1d330a6408608b21ea3cd7044ae1',1,'streams::ios_base::dec()'],['../namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2',1,'streams::dec()']]],
   ['default_5fdelay',['default_delay',['../namespacetime.html#a4b83c440a676e0c7063a65d7c8476c12',1,'time']]],
   ['default_5fsend_5ftimeout',['DEFAULT_SEND_TIMEOUT',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a151fc3f129fb468663e1cdd1c69ba5e3',1,'devices::rf::NRF24L01']]],
+  ['defaultfloat',['defaultfloat',['../namespacestreams.html#aa57ff0ec726dc31ec8aa59884914450e',1,'streams']]],
   ['delay',['delay',['../classwatchdog_1_1_watchdog.html#ae024a7d20ea33f4731ff7ca981a3879a',1,'watchdog::Watchdog::delay()'],['../namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf',1,'time::delay()']]],
   ['delay_5fms',['delay_ms',['../namespacetime.html#af13fd17ddf6b751b8161691e608892b2',1,'time']]],
   ['delay_5fptr',['DELAY_PTR',['../namespacetime.html#a0980f7cbb448c562b0081484031f325e',1,'time']]],

@@ -143,13 +143,19 @@ class events::Dispatcher&lt; EVENT &gt;</h3>
 <p>Utility to dispatch an event to a list of <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>s that are registered for its type. </p>
 <p>You first create an <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code> subclass, intantiate it and register it to a <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code>; for this, you use <code><a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList</a></code> API which <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code> derives from.</p>
 <p>NOTE: you should never call any <code><a class="el" href="classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type...">Dispatcher</a></code> method from an ISR because these methods may last too long for an ISR.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">EVENT</td><td>the <code><a class="el" href="classevents_1_1_event.html" title="A standard Event as managed by FastArduino event API. ">events::Event</a>&lt;T&gt;</code> handled</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_linked_list.html">containers::LinkedList</a> </dd>
 <dd>
 <a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a> </dd>
 <dd>
 <a class="el" href="classevents_1_1_event.html#a4cc68c5a6710d276baa534b61a25f611" title="The type of this event. ">Event::type()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00237">237</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00239">239</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a97998440c7f6f351f57fb501df3c0dd7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a97998440c7f6f351f57fb501df3c0dd7">&#9670;&nbsp;</a></span>dispatch()</h2>
@@ -187,7 +193,7 @@ template&lt;typename EVENT&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09" title="This pure virtual method is called by Dispatcher::dispatch() when event.type() matches the type suppo...">EventHandler::on_event()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00250">250</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00252">252</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
 
 </div>
 </div>

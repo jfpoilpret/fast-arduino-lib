@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['base',['Base',['../classstreams_1_1_format_base.html#ad4f9e8bcc82ed50a3a5607067630c8ad',1,'streams::FormatBase']]]
+  ['command',['Command',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30',1,'devices::rf::NRF24L01']]]
 ];

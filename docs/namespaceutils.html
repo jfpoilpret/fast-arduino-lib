@@ -170,8 +170,8 @@ operator").  <a href="#a3525bf2bf63c9f906bc9b952f0d54355">More...</a><br /></td>
 <tr class="memitem:a6ed4721feb889faa1f72fc2629d71271"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271">calculate_delay1_count</a> (float time_us)</td></tr>
 <tr class="memdesc:a6ed4721feb889faa1f72fc2629d71271"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the count to pass to <code>delay1()</code> in order to reach <code>time_us</code> microseconds delay.  <a href="#a6ed4721feb889faa1f72fc2629d71271">More...</a><br /></td></tr>
 <tr class="separator:a6ed4721feb889faa1f72fc2629d71271"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadb785961c9199701ce9025177b243c6"><td class="memItemLeft" align="right" valign="top"><a id="aadb785961c9199701ce9025177b243c6"></a>
-constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>num_bits</b> (uint8_t mask, uint8_t num=0)</td></tr>
+<tr class="memitem:aadb785961c9199701ce9025177b243c6"><td class="memItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#aadb785961c9199701ce9025177b243c6">num_bits</a> (uint8_t mask, uint8_t num=0)</td></tr>
+<tr class="memdesc:aadb785961c9199701ce9025177b243c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the number of <code>1</code> bits in a byte.  <a href="#aadb785961c9199701ce9025177b243c6">More...</a><br /></td></tr>
 <tr class="separator:aadb785961c9199701ce9025177b243c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -806,6 +806,44 @@ template&lt;typename T &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the count to pass to <code>delay</code>()` AVR function </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00370">370</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+
+</div>
+</div>
+<a id="aadb785961c9199701ce9025177b243c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadb785961c9199701ce9025177b243c6">&#9670;&nbsp;</a></span>num_bits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr uint8_t utils::num_bits </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>mask</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>num</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the number of <code>1</code> bits in a byte. </p>
+<p>Calculation is performed at compile-time, provided that <code>mask</code> is a constant when the method is called. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mask</td><td>the byte which you want to count the number of <code>1</code> bits </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00380">380</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>

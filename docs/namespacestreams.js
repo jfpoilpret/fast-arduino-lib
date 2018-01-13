@@ -1,9 +1,9 @@
 var namespacestreams =
 [
-    [ "EmptyOutput", "classstreams_1_1_empty_output.html", null ],
-    [ "FormatBase", "classstreams_1_1_format_base.html", "classstreams_1_1_format_base" ],
-    [ "FormattedInput", "classstreams_1_1_formatted_input.html", "classstreams_1_1_formatted_input" ],
-    [ "FormattedOutput", "classstreams_1_1_formatted_output.html", "classstreams_1_1_formatted_output" ],
-    [ "InputBuffer", "classstreams_1_1_input_buffer.html", "classstreams_1_1_input_buffer" ],
-    [ "OutputBuffer", "classstreams_1_1_output_buffer.html", "classstreams_1_1_output_buffer" ]
+    [ "ios_base", "classstreams_1_1ios__base.html", "classstreams_1_1ios__base" ],
+    [ "istream", "classstreams_1_1istream.html", "classstreams_1_1istream" ],
+    [ "istreambuf", "classstreams_1_1istreambuf.html", "classstreams_1_1istreambuf" ],
+    [ "null_ostream", "classstreams_1_1null__ostream.html", null ],
+    [ "ostream", "classstreams_1_1ostream.html", "classstreams_1_1ostream" ],
+    [ "ostreambuf", "classstreams_1_1ostreambuf.html", "classstreams_1_1ostreambuf" ]
 ];

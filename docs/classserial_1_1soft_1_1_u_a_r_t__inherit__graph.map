@@ -1,10 +1,10 @@
 <map id="serial::soft::UART&lt; RX_, TX_ &gt;" name="serial::soft::UART&lt; RX_, TX_ &gt;">
-<area shape="rect" id="node2" href="$classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX_ \&gt;" alt="" coords="98,244,227,285"/>
-<area shape="rect" id="node3" href="$classserial_1_1soft_1_1_abstract_u_a_r_x.html" title="serial::soft::AbstractUARX" alt="" coords="49,169,228,196"/>
-<area shape="rect" id="node4" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="171,95,304,121"/>
-<area shape="rect" id="node8" href="$classserial_1_1soft_1_1_abstract_u_a_t_x.html" title="serial::soft::AbstractUATX" alt="" coords="252,169,428,196"/>
-<area shape="rect" id="node5" href="$classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="5,95,147,121"/>
-<area shape="rect" id="node6" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="172,5,308,47"/>
-<area shape="rect" id="node9" href="$classstreams_1_1_output_buffer.html" title="Output API based on a ring buffer. " alt="" coords="329,95,479,121"/>
-<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="serial::soft::UATX\l\&lt; TX_ \&gt;" alt="" coords="263,244,390,285"/>
+<area shape="rect" id="node2" href="$classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX_ \&gt;" alt="" coords="94,244,223,285"/>
+<area shape="rect" id="node3" href="$classserial_1_1soft_1_1_abstract_u_a_r_x.html" title="serial::soft::AbstractUARX" alt="" coords="45,169,224,196"/>
+<area shape="rect" id="node4" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="168,95,301,121"/>
+<area shape="rect" id="node8" href="$classserial_1_1soft_1_1_abstract_u_a_t_x.html" title="serial::soft::AbstractUATX" alt="" coords="248,169,424,196"/>
+<area shape="rect" id="node5" href="$classstreams_1_1istreambuf.html" title="Input API based on a ring buffer. " alt="" coords="5,95,144,121"/>
+<area shape="rect" id="node6" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="168,5,304,47"/>
+<area shape="rect" id="node9" href="$classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer. " alt="" coords="326,95,469,121"/>
+<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="serial::soft::UATX\l\&lt; TX_ \&gt;" alt="" coords="259,244,386,285"/>
 </map>

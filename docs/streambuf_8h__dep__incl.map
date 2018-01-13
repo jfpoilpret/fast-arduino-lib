@@ -1,0 +1,9 @@
+<map id="fastarduino/streambuf.h" name="fastarduino/streambuf.h">
+<area shape="rect" id="node2" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="137,80,256,107"/>
+<area shape="rect" id="node4" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="220,155,368,181"/>
+<area shape="rect" id="node3" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,155,196,181"/>
+<area shape="rect" id="node5" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="37,229,189,256"/>
+<area shape="rect" id="node7" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="213,229,375,256"/>
+<area shape="rect" id="node8" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="399,229,522,256"/>
+<area shape="rect" id="node6" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="29,304,196,331"/>
+</map>

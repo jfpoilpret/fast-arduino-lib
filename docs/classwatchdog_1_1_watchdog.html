@@ -167,7 +167,12 @@ Additional Inherited Members</h2></td></tr>
 class watchdog::Watchdog&lt; EVENT &gt;</h3>
 
 <p>Simple API to use watchdog timer as a clock for events generation. </p>
-<p>For this to work correctly, you need to register the proper ISR through <code><a class="el" href="watchdog_8h.html#a6998639a03718afa44f5626c17ce8994" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a></code> macro first, then ensure you call <code><a class="el" href="classwatchdog_1_1_watchdog.html#ac562bd99d2f2483d1544efd31e5693be" title="Register this watchdog instance with the matching ISR that should have been registered with REGISTER_...">register_watchdog_handler()</a></code>. </p>
+<p>For this to work correctly, you need to register the proper ISR through <code><a class="el" href="watchdog_8h.html#a6998639a03718afa44f5626c17ce8994" title="Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog to work properly...">REGISTER_WATCHDOG_CLOCK_ISR()</a></code> macro first, then ensure you call <code><a class="el" href="classwatchdog_1_1_watchdog.html#ac562bd99d2f2483d1544efd31e5693be" title="Register this watchdog instance with the matching ISR that should have been registered with REGISTER_...">register_watchdog_handler()</a></code>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">EVENT</td><td>the <code><a class="el" href="classevents_1_1_event.html" title="A standard Event as managed by FastArduino event API. ">events::Event</a>&lt;T&gt;</code> generated </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00160">160</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>

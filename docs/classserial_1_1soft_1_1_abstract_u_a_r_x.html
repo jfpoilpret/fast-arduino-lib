@@ -96,8 +96,8 @@ Inheritance diagram for serial::soft::AbstractUARX:</div>
 <map name="serial_1_1soft_1_1_abstract_u_a_r_x_inherit__map" id="serial_1_1soft_1_1_abstract_u_a_r_x_inherit__map">
 <area shape="rect" id="node5" href="classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX_ \&gt;" alt="" coords="87,244,217,285"/>
 <area shape="rect" id="node2" href="classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="5,95,139,121"/>
-<area shape="rect" id="node3" href="classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="163,95,304,121"/>
-<area shape="rect" id="node4" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="165,5,301,47"/>
+<area shape="rect" id="node3" href="classstreams_1_1istreambuf.html" title="Input API based on a ring buffer. " alt="" coords="163,95,301,121"/>
+<area shape="rect" id="node4" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="164,5,300,47"/>
 <area shape="rect" id="node6" href="classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; RX_ \&gt;" alt="" coords="88,333,216,375"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
@@ -107,19 +107,16 @@ Collaboration diagram for serial::soft::AbstractUARX:</div>
 <div class="center"><img src="classserial_1_1soft_1_1_abstract_u_a_r_x__coll__graph.png" border="0" usemap="#serial_1_1soft_1_1_abstract_u_a_r_x_coll__map" alt="Collaboration graph"/></div>
 <map name="serial_1_1soft_1_1_abstract_u_a_r_x_coll__map" id="serial_1_1soft_1_1_abstract_u_a_r_x_coll__map">
 <area shape="rect" id="node2" href="classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="5,95,139,121"/>
-<area shape="rect" id="node3" href="classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="163,95,304,121"/>
-<area shape="rect" id="node4" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="165,5,301,47"/>
+<area shape="rect" id="node3" href="classstreams_1_1istreambuf.html" title="Input API based on a ring buffer. " alt="" coords="163,95,301,121"/>
+<area shape="rect" id="node4" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="164,5,300,47"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a50f87df2232f6495d37a01aee0de4f04"><td class="memItemLeft" align="right" valign="top"><a id="a50f87df2232f6495d37a01aee0de4f04"></a>
-<a class="el" href="classstreams_1_1_input_buffer.html">streams::InputBuffer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>in</b> ()</td></tr>
-<tr class="separator:a50f87df2232f6495d37a01aee0de4f04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89164109a15b3b835b85db3201692e34"><td class="memItemLeft" align="right" valign="top"><a id="a89164109a15b3b835b85db3201692e34"></a>
-<a class="el" href="classstreams_1_1_formatted_input.html">streams::FormattedInput</a>&lt; <a class="el" href="classstreams_1_1_input_buffer.html">streams::InputBuffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fin</b> ()</td></tr>
-<tr class="separator:a89164109a15b3b835b85db3201692e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac534ac17374167557aeaad8b2dfd4bf7"><td class="memItemLeft" align="right" valign="top"><a id="ac534ac17374167557aeaad8b2dfd4bf7"></a>
+<a class="el" href="classstreams_1_1istream.html">streams::istream</a>&#160;</td><td class="memItemRight" valign="bottom"><b>in</b> ()</td></tr>
+<tr class="separator:ac534ac17374167557aeaad8b2dfd4bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classserial_1_1_u_a_r_t_errors"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classserial_1_1_u_a_r_t_errors')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classserial_1_1_u_a_r_t_errors.html">serial::UARTErrors</a></td></tr>
 <tr class="memitem:aad35c22c4adaaa09bddf0542eb9f128f inherit pub_methods_classserial_1_1_u_a_r_t_errors"><td class="memItemLeft" align="right" valign="top"><a id="aad35c22c4adaaa09bddf0542eb9f128f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1_u_a_r_t_errors.html#aad35c22c4adaaa09bddf0542eb9f128f">clear_errors</a> ()</td></tr>
@@ -147,6 +144,9 @@ Protected Member Functions</h2></td></tr>
 template&lt;uint8_t SIZE_RX&gt; </td></tr>
 <tr class="memitem:aeeb6e85a1dc998c1b901baea3eb2016d"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>AbstractUARX</b> (char(&amp;input)[SIZE_RX])</td></tr>
 <tr class="separator:aeeb6e85a1dc998c1b901baea3eb2016d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e2e186f42e9b6edea267662bcacc31b"><td class="memItemLeft" align="right" valign="top"><a id="a1e2e186f42e9b6edea267662bcacc31b"></a>
+<a class="el" href="classstreams_1_1istreambuf.html">streams::istreambuf</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>in_</b> ()</td></tr>
+<tr class="separator:a1e2e186f42e9b6edea267662bcacc31b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95e66cc52067df796a3f713a0d2ca990"><td class="memItemLeft" align="right" valign="top"><a id="a95e66cc52067df796a3f713a0d2ca990"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>begin_serial</b> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits)</td></tr>
 <tr class="separator:a95e66cc52067df796a3f713a0d2ca990"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,14 +171,10 @@ uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>stop_bit_rx_time_
 <tr class="memitem:a434bcb7a69720e1044ad9692b0b2da9a"><td class="memItemLeft" align="right" valign="top"><a id="a434bcb7a69720e1044ad9692b0b2da9a"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>stop_bit_rx_time_no_push_</b></td></tr>
 <tr class="separator:a434bcb7a69720e1044ad9692b0b2da9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classserial_1_1_u_a_r_t_errors"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classserial_1_1_u_a_r_t_errors')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classserial_1_1_u_a_r_t_errors.html">serial::UARTErrors</a></td></tr>
-<tr class="memitem:a2160eae1e743f61184ed5847a0f74b3a inherit pro_attribs_classserial_1_1_u_a_r_t_errors"><td class="memItemLeft" align="right" valign="top"><a id="a2160eae1e743f61184ed5847a0f74b3a"></a>
-UARTErrors_&#160;</td><td class="memItemRight" valign="bottom"><b>errors_</b></td></tr>
-<tr class="separator:a2160eae1e743f61184ed5847a0f74b3a inherit pro_attribs_classserial_1_1_u_a_r_t_errors"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00151">151</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00153">153</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>fastarduino/<a class="el" href="soft__uart_8h_source.html">soft_uart.h</a></li>
 <li>fastarduino/<a class="el" href="soft__uart_8cpp_source.html">soft_uart.cpp</a></li>

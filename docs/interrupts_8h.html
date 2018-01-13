@@ -132,7 +132,8 @@ Macros</h2></td></tr>
 <tr class="memitem:afc531d17aa9334779bbc42a308bdce49"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49">REGISTER_ISR_METHOD_</a>(VECTOR,  HANDLER,  CALLBACK)</td></tr>
 <tr class="memdesc:afc531d17aa9334779bbc42a308bdce49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define an ISR for <code>VECTOR</code>; this ISR will simply call the <code>CALLBACK</code> method of <code>HANDLER</code> class.  <a href="#afc531d17aa9334779bbc42a308bdce49">More...</a><br /></td></tr>
 <tr class="separator:afc531d17aa9334779bbc42a308bdce49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a46c07baa4d96bc6d7f911817ff0100"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>REGISTER_ISR_METHOD_RETURN_</b>(VECTOR,  HANDLER,  CALLBACK,  RET)</td></tr>
+<tr class="memitem:a0a46c07baa4d96bc6d7f911817ff0100"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a0a46c07baa4d96bc6d7f911817ff0100">REGISTER_ISR_METHOD_RETURN_</a>(VECTOR,  HANDLER,  CALLBACK,  RET)</td></tr>
+<tr class="memdesc:a0a46c07baa4d96bc6d7f911817ff0100"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define an ISR for <code>VECTOR</code>; this ISR will simply call the <code>CALLBACK</code> method of <code>HANDLER</code> class.  <a href="#a0a46c07baa4d96bc6d7f911817ff0100">More...</a><br /></td></tr>
 <tr class="separator:a0a46c07baa4d96bc6d7f911817ff0100"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e21bdc04462c5c326663df9e838bc6b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interrupts_8h.html#a2e21bdc04462c5c326663df9e838bc6b">REGISTER_ISR_FUNCTION_</a>(VECTOR,  CALLBACK)</td></tr>
 <tr class="memdesc:a2e21bdc04462c5c326663df9e838bc6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define an ISR for <code>VECTOR</code>; this ISR will simply call the <code>CALLBACK</code> function.  <a href="#a2e21bdc04462c5c326663df9e838bc6b">More...</a><br /></td></tr>
@@ -204,13 +205,15 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">VECTOR</td><td>the name of the interrupt vector for which to generate the ISR; must exist for the current AVR target. </td></tr>
     <tr><td class="paramname">HANDLER</td><td>the class which registered instance will be used to call <code>CALLBACK</code> method when the ISR is called; this class must have been defined <b>before</b> the macro is used. </td></tr>
-    <tr><td class="paramname">CALLBACK</td><td>the <code>HANDLER</code> method that will be called back by the ISR; must be a proper Pointer to Member Function of <code>HANDLER</code>. This method takes no argument. </td></tr>
+    <tr><td class="paramname">CALLBACK</td><td>the <code>HANDLER</code> method that will be called back by the ISR; must be a proper Pointer to Member Function of <code>HANDLER</code>. This method takes no argument and must return <code>void</code>. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR. ...">interrupt::register_handler()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR. ...">interrupt::register_handler()</a> </dd>
+<dd>
+<a class="el" href="interrupts_8h.html#a0a46c07baa4d96bc6d7f911817ff0100" title="Define an ISR for VECTOR; this ISR will simply call the CALLBACK method of HANDLER class...">REGISTER_ISR_METHOD_RETURN_</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00113">113</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00114">114</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>
@@ -252,7 +255,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">ISR(VECTOR)                                                                     \</div><div class="line">    {                                                                               \</div><div class="line">        CALL_HANDLER_RETURN_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK), RET)(); \</div><div class="line">    }</div></div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00120">120</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p>Define an ISR for <code>VECTOR</code>; this ISR will simply call the <code>CALLBACK</code> method of <code>HANDLER</code> class. </p>
+<p>Note that a proper instance needs to be first registered with <code><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR. ...">interrupt::register_handler()</a></code> before the first call to this ISR. This macro is normally used only by FastArduino to define higher-level macros for registration of specific ISR; you normally won't need to use this macro in your own programs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">VECTOR</td><td>the name of the interrupt vector for which to generate the ISR; must exist for the current AVR target. </td></tr>
+    <tr><td class="paramname">HANDLER</td><td>the class which registered instance will be used to call <code>CALLBACK</code> method when the ISR is called; this class must have been defined <b>before</b> the macro is used. </td></tr>
+    <tr><td class="paramname">CALLBACK</td><td>the <code>HANDLER</code> method that will be called back by the ISR; must be a proper Pointer to Member Function of <code>HANDLER</code>. This method takes no argument and must return type <code>RET</code>. </td></tr>
+    <tr><td class="paramname">RET</td><td>the type returned by method <code>CALLBACK</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR. ...">interrupt::register_handler()</a> </dd>
+<dd>
+<a class="el" href="interrupts_8h.html#afc531d17aa9334779bbc42a308bdce49" title="Define an ISR for VECTOR; this ISR will simply call the CALLBACK method of HANDLER class...">REGISTER_ISR_METHOD_</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00140">140</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>
@@ -291,7 +308,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00137">137</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00157">157</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>

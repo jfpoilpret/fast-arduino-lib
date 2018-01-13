@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sample_5ftype',['SAMPLE_TYPE',['../classanalog_1_1_analog_input.html#af1e0b20586168cd44b55eb930e5f4b6c',1,'analog::AnalogInput']]],
-  ['stream',['STREAM',['../classstreams_1_1_formatted_output.html#adbc7f44479516f20f0ccb912d3a19a71',1,'streams::FormattedOutput::STREAM()'],['../classstreams_1_1_formatted_input.html#ab4690c257597c1b1277d25a6efd24ca9',1,'streams::FormattedInput::STREAM()']]]
+  ['manipulator',['Manipulator',['../classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050',1,'streams::ostream::Manipulator()'],['../classstreams_1_1istream.html#aed4a47070eed37c6d9544166bcf58545',1,'streams::istream::Manipulator()']]],
+  ['millis_5fptr',['MILLIS_PTR',['../namespacetime.html#abe5f682f4654fd7af7c744d41fd2efdd',1,'time']]]
 ];

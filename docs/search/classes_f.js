@@ -8,6 +8,6 @@ var searchData=
   ['spidevice',['SPIDevice',['../classspi_1_1_s_p_i_device.html',1,'spi']]],
   ['spidevice_3c_20cs_2c_20spi_3a_3achipselect_3a_3aactive_5flow_2c_20spi_3a_3aclockrate_3a_3aclock_5fdiv_5f2_20_3e',['SPIDevice&lt; CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2 &gt;',['../classspi_1_1_s_p_i_device.html',1,'spi']]],
   ['spidevice_3c_20csn_20_3e',['SPIDevice&lt; CSN &gt;',['../classspi_1_1_s_p_i_device.html',1,'spi']]],
-  ['status',['Status',['../structdevices_1_1magneto_1_1_status.html',1,'devices::magneto::Status'],['../structdevices_1_1_win_bond_1_1_status.html',1,'devices::WinBond&lt; CS &gt;::Status']]],
+  ['status',['Status',['../structdevices_1_1_win_bond_1_1_status.html',1,'devices::WinBond&lt; CS &gt;::Status'],['../structdevices_1_1magneto_1_1_status.html',1,'devices::magneto::Status']]],
   ['status_5ft',['status_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html',1,'devices::rf::NRF24L01']]]
 ];

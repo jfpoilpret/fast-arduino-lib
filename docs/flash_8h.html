@@ -102,12 +102,14 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="flash_8h__dep__incl.png" border="0" usemap="#fastarduino_2flash_8hdep" alt=""/></div>
 <map name="fastarduino_2flash_8hdep" id="fastarduino_2flash_8hdep">
-<area shape="rect" id="node2" href="empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,80,196,107"/>
-<area shape="rect" id="node3" href="streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="220,80,368,107"/>
-<area shape="rect" id="node4" href="soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="37,155,189,181"/>
-<area shape="rect" id="node6" href="streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="213,155,375,181"/>
-<area shape="rect" id="node7" href="uart_8h.html" title="Hardware serial API. " alt="" coords="399,155,522,181"/>
-<area shape="rect" id="node5" href="soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="29,229,196,256"/>
+<area shape="rect" id="node2" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="188,80,347,107"/>
+<area shape="rect" id="node3" href="ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="137,155,256,181"/>
+<area shape="rect" id="node4" href="empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,229,196,256"/>
+<area shape="rect" id="node5" href="streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="220,229,368,256"/>
+<area shape="rect" id="node6" href="soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="37,304,189,331"/>
+<area shape="rect" id="node8" href="streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="213,304,375,331"/>
+<area shape="rect" id="node9" href="uart_8h.html" title="Hardware serial API. " alt="" coords="399,304,522,331"/>
+<area shape="rect" id="node7" href="soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="29,379,196,405"/>
 </map>
 </div>
 </div>
@@ -158,13 +160,13 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">(__extension__({                             \</div><div class="line">        static <span class="keyword">const</span> <span class="keywordtype">char</span> __c[] PROGMEM = (ptr); \</div><div class="line">        (<span class="keyword">const</span> flash::FlashStorage*) &amp;__c[0];    \</div><div class="line">    }))</div></div><!-- fragment -->
 <p>Force string constant to be stored as flash storage. </p>
-<p>Here is a classical usage here: </p><div class="fragment"><div class="line"><span class="keywordtype">char</span> buffer[64];</div><div class="line"><a class="code" href="classstreams_1_1_output_buffer.html">streams::OutputBuffer</a> out{buffer};</div><div class="line">out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Hello, world!\n&quot;</span>);</div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+<p>Here is a classical usage here: </p><div class="fragment"><div class="line"><span class="keywordtype">char</span> buffer[64];</div><div class="line"><a class="code" href="classstreams_1_1ostreambuf.html">streams::ostreambuf</a> out{buffer};</div><div class="line">out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Hello, world!\n&quot;</span>);</div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ptr</td><td>the string to be automatically stored on flash </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1_output_buffer.html#a28ddce2ee7cc838d7cbcb883cb895737" title="Append a string, stored on flash memory, to the buffer. ">streams::OutputBuffer::puts(const flash::FlashStorage*)</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a5ae9b4a7aeef87bcec0ca2bf5c3c3204" title="Append a string, stored on flash memory, to the buffer. ">streams::ostreambuf::sputn(const flash::FlashStorage*)</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00097">97</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
 

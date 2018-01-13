@@ -6,8 +6,10 @@ var searchData=
   ['i2chandler',['I2CHandler',['../classi2c_1_1_i2_c_handler.html',1,'i2c']]],
   ['i2chandler_3c_20mode_20_3e',['I2CHandler&lt; MODE &gt;',['../classi2c_1_1_i2_c_handler.html',1,'i2c']]],
   ['i2cmanager',['I2CManager',['../classi2c_1_1_i2_c_manager.html',1,'i2c']]],
-  ['inputbuffer',['InputBuffer',['../classstreams_1_1_input_buffer.html',1,'streams']]],
   ['intsignal',['INTSignal',['../classinterrupt_1_1_i_n_t_signal.html',1,'interrupt']]],
   ['intstatus',['INTStatus',['../structdevices_1_1magneto_1_1_i_n_t_status.html',1,'devices::magneto']]],
-  ['irq_5fnrf24l01',['IRQ_NRF24L01',['../classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html',1,'devices::rf']]]
+  ['ios_5fbase',['ios_base',['../classstreams_1_1ios__base.html',1,'streams']]],
+  ['irq_5fnrf24l01',['IRQ_NRF24L01',['../classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html',1,'devices::rf']]],
+  ['istream',['istream',['../classstreams_1_1istream.html',1,'streams']]],
+  ['istreambuf',['istreambuf',['../classstreams_1_1istreambuf.html',1,'streams']]]
 ];

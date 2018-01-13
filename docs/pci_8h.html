@@ -202,7 +202,7 @@ Macros</h2></td></tr>
     <tr><td class="paramname">PCI_NUM</td><td>the number of the <code>PCINT</code> vector for the given <code>PIN</code> pins </td></tr>
     <tr><td class="paramname">HANDLER</td><td>the class holding the callback method </td></tr>
     <tr><td class="paramname">CALLBACK</td><td>the method of <code>HANDLER</code> that will be called when the interrupt is triggered; this must be a proper PTMF (pointer to member function). </td></tr>
-    <tr><td class="paramname">PIN...</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> pins for <code>PCI_NUM</code>; if any of the given <code>PIN</code> does not match with <code>PCI_NUM</code>, compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> pins for <code>PCI_NUM</code>; if any of the given <code>PIN</code> does not match with <code>PCI_NUM</code>, compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>
@@ -253,14 +253,13 @@ Macros</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">PCI_NUM</td><td>the number of the <code>PCINT</code> vector for the given <code>PIN</code> pins </td></tr>
-    <tr><td class="paramname">HANDLER</td><td>the class holding the callback method </td></tr>
     <tr><td class="paramname">CALLBACK</td><td>the function that will be called when the interrupt is triggered </td></tr>
-    <tr><td class="paramname">PIN...</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> pins for <code>PCI_NUM</code>; if any of the given <code>PIN</code> does not match with <code>PCI_NUM</code>, compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> pins for <code>PCI_NUM</code>; if any of the given <code>PIN</code> does not match with <code>PCI_NUM</code>, compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00068">68</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00067">67</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -300,12 +299,12 @@ Macros</h2></td></tr>
 <p>This can be useful if you just need to wake up the MCU from an external signal, but do not need to perform any sepcific stuff with a callback. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">PCI_NUM</td><td>the number of the <code>PCINT</code> vector for the given <code>PIN</code> pins </td></tr>
-    <tr><td class="paramname">PIN...</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> pins for <code>PCI_NUM</code>; if any of the given <code>PIN</code> does not match with <code>PCI_NUM</code>, compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> pins for <code>PCI_NUM</code>; if any of the given <code>PIN</code> does not match with <code>PCI_NUM</code>, compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00081">81</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00080">80</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>

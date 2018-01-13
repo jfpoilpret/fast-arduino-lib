@@ -1,8 +1,10 @@
 <map id="fastarduino/flash.h" name="fastarduino/flash.h">
-<area shape="rect" id="node2" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,80,196,107"/>
-<area shape="rect" id="node3" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="220,80,368,107"/>
-<area shape="rect" id="node4" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="37,155,189,181"/>
-<area shape="rect" id="node6" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="213,155,375,181"/>
-<area shape="rect" id="node7" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="399,155,522,181"/>
-<area shape="rect" id="node5" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="29,229,196,256"/>
+<area shape="rect" id="node2" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="188,80,347,107"/>
+<area shape="rect" id="node3" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="137,155,256,181"/>
+<area shape="rect" id="node4" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,229,196,256"/>
+<area shape="rect" id="node5" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="220,229,368,256"/>
+<area shape="rect" id="node6" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="37,304,189,331"/>
+<area shape="rect" id="node8" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="213,304,375,331"/>
+<area shape="rect" id="node9" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="399,304,522,331"/>
+<area shape="rect" id="node7" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="29,379,196,405"/>
 </map>

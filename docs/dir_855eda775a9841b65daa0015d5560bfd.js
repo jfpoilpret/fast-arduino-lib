@@ -9,7 +9,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     ] ],
     [ "eeprom.h", "eeprom_8h_source.html", null ],
     [ "empty_streams.h", "empty__streams_8h.html", [
-      [ "EmptyOutput", "classstreams_1_1_empty_output.html", null ]
+      [ "null_ostream", "classstreams_1_1null__ostream.html", null ]
     ] ],
     [ "errors.h", "errors_8h_source.html", null ],
     [ "events.h", "events_8h.html", "events_8h" ],
@@ -21,6 +21,8 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "i2c_manager.h", "i2c__manager_8h_source.html", null ],
     [ "int.h", "int_8h.html", "int_8h" ],
     [ "interrupts.h", "interrupts_8h.html", "interrupts_8h" ],
+    [ "iomanip.h", "iomanip_8h.html", "iomanip_8h" ],
+    [ "ios.h", "ios_8h.html", "ios_8h" ],
     [ "linked_list.cpp", "linked__list_8cpp_source.html", null ],
     [ "linked_list.h", "linked__list_8h_source.html", null ],
     [ "main.cpp", "main_8cpp_source.html", null ],
@@ -40,6 +42,10 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "soft_uart.h", "soft__uart_8h_source.html", null ],
     [ "spi.cpp", "spi_8cpp_source.html", null ],
     [ "spi.h", "spi_8h_source.html", null ],
+    [ "streambuf.h", "streambuf_8h.html", [
+      [ "ostreambuf", "classstreams_1_1ostreambuf.html", "classstreams_1_1ostreambuf" ],
+      [ "istreambuf", "classstreams_1_1istreambuf.html", "classstreams_1_1istreambuf" ]
+    ] ],
     [ "streams.cpp", "streams_8cpp_source.html", null ],
     [ "streams.h", "streams_8h.html", "streams_8h" ],
     [ "time.cpp", "time_8cpp_source.html", null ],

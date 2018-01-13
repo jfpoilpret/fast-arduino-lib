@@ -36,10 +36,9 @@ var hierarchy =
     [ "eeprom::EEPROM", "classeeprom_1_1_e_e_p_r_o_m.html", [
       [ "eeprom::QueuedWriter", "classeeprom_1_1_queued_writer.html", null ]
     ] ],
-    [ "streams::EmptyOutput", "classstreams_1_1_empty_output.html", null ],
     [ "events::Event< T >", "classevents_1_1_event.html", null ],
-    [ "gpio::FastMaskedPort< PORT_ >", "classgpio_1_1_fast_masked_port.html", null ],
-    [ "gpio::FastMaskedPort< ECHO_PORT >", "classgpio_1_1_fast_masked_port.html", null ],
+    [ "gpio::FastMaskedPort< PORT_, MASK_ >", "classgpio_1_1_fast_masked_port.html", null ],
+    [ "gpio::FastMaskedPort< ECHO_PORT, ECHO_MASK >", "classgpio_1_1_fast_masked_port.html", null ],
     [ "gpio::FastPin< PORT_, BIT_ >", "classgpio_1_1_fast_pin.html", null ],
     [ "gpio::FastPinType< DPIN_ >", "classgpio_1_1_fast_pin_type.html", null ],
     [ "gpio::FastPinType< CE >", "classgpio_1_1_fast_pin_type.html", null ],
@@ -54,10 +53,6 @@ var hierarchy =
     [ "gpio::FastPort< PORT_ >", "classgpio_1_1_fast_port.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::fifo_status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html", null ],
     [ "devices::magneto::FIFOEnable", "structdevices_1_1magneto_1_1_f_i_f_o_enable.html", null ],
-    [ "streams::FormatBase", "classstreams_1_1_format_base.html", [
-      [ "streams::FormattedInput< STREAM_ >", "classstreams_1_1_formatted_input.html", null ],
-      [ "streams::FormattedOutput< STREAM_ >", "classstreams_1_1_formatted_output.html", null ]
-    ] ],
     [ "i2c::I2CDevice< MODE_ >", "classi2c_1_1_i2_c_device.html", [
       [ "devices::magneto::HMC5883L< MODE_ >", "classdevices_1_1magneto_1_1_h_m_c5883_l.html", null ]
     ] ],
@@ -72,6 +67,10 @@ var hierarchy =
     [ "i2c::I2CManager< MODE_ >", "classi2c_1_1_i2_c_manager.html", null ],
     [ "interrupt::INTSignal< PIN_ >", "classinterrupt_1_1_i_n_t_signal.html", null ],
     [ "devices::magneto::INTStatus", "structdevices_1_1magneto_1_1_i_n_t_status.html", null ],
+    [ "streams::ios_base", "classstreams_1_1ios__base.html", [
+      [ "streams::istream", "classstreams_1_1istream.html", null ],
+      [ "streams::ostream", "classstreams_1_1ostream.html", null ]
+    ] ],
     [ "containers::LinkedListImpl", "classcontainers_1_1_linked_list_impl.html", [
       [ "containers::LinkedList< T_ >", "classcontainers_1_1_linked_list.html", null ],
       [ "containers::LinkedList< EventHandler< EVENT > >", "classcontainers_1_1_linked_list.html", [
@@ -97,6 +96,7 @@ var hierarchy =
     ] ],
     [ "devices::magneto::MagneticFields", "structdevices_1_1magneto_1_1_magnetic_fields.html", null ],
     [ "devices::sonar::MultiHCSR04< NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ >", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html", null ],
+    [ "streams::null_ostream", "classstreams_1_1null__ostream.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::observe_tx_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html", null ],
     [ "interrupt::PCISignal< PORT_ >", "classinterrupt_1_1_p_c_i_signal.html", null ],
     [ "interrupt::PCIType< PIN >", "structinterrupt_1_1_p_c_i_type.html", null ],
@@ -106,7 +106,7 @@ var hierarchy =
     [ "analog::PWMOutput< PIN, true >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "containers::Queue< T_, TREF_ >", "classcontainers_1_1_queue.html", null ],
     [ "containers::Queue< char, char >", "classcontainers_1_1_queue.html", [
-      [ "streams::InputBuffer", "classstreams_1_1_input_buffer.html", [
+      [ "streams::istreambuf", "classstreams_1_1istreambuf.html", [
         [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", null ],
         [ "serial::soft::AbstractUARX", "classserial_1_1soft_1_1_abstract_u_a_r_x.html", [
           [ "serial::soft::UARX< RX_ >", "classserial_1_1soft_1_1_u_a_r_x.html", [
@@ -114,7 +114,7 @@ var hierarchy =
           ] ]
         ] ]
       ] ],
-      [ "streams::OutputBuffer", "classstreams_1_1_output_buffer.html", [
+      [ "streams::ostreambuf", "classstreams_1_1ostreambuf.html", [
         [ "serial::hard::UATX< USART_ >", "classserial_1_1hard_1_1_u_a_t_x.html", null ],
         [ "serial::soft::AbstractUATX", "classserial_1_1soft_1_1_abstract_u_a_t_x.html", [
           [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", [
@@ -131,8 +131,8 @@ var hierarchy =
     [ "devices::servo::Servo< TIMER_, PIN_ >", "classdevices_1_1servo_1_1_servo.html", null ],
     [ "devices::SIPO< CLOCK_, LATCH_, DATA_ >", "classdevices_1_1_s_i_p_o.html", null ],
     [ "devices::sonar::SonarEvent< TIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
-    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
+    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
     [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", [
       [ "timer::PulseTimer< NTIMER_, PRESCALER, T >", "classtimer_1_1_pulse_timer.html", null ],

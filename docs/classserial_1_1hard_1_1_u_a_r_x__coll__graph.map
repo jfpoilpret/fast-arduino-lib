@@ -1,4 +1,4 @@
 <map id="serial::hard::UARX&lt; USART_ &gt;" name="serial::hard::UARX&lt; USART_ &gt;">
-<area shape="rect" id="node3" href="$classstreams_1_1_input_buffer.html" title="Input API based on a ring buffer. " alt="" coords="138,95,279,121"/>
-<area shape="rect" id="node4" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="141,5,277,47"/>
+<area shape="rect" id="node3" href="$classstreams_1_1istreambuf.html" title="Input API based on a ring buffer. " alt="" coords="138,95,277,121"/>
+<area shape="rect" id="node4" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="139,5,275,47"/>
 </map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['digitalpin',['DigitalPin',['../namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404',1,'board']]]
+  ['interrupttrigger',['InterruptTrigger',['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b',1,'interrupt']]]
 ];

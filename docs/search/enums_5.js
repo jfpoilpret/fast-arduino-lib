@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['parity',['Parity',['../namespaceserial.html#a770c86bfde96ad529293b7b322422032',1,'serial']]],
-  ['pinmode',['PinMode',['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041',1,'gpio']]],
-  ['port',['Port',['../namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1',1,'board']]]
+  ['register',['Register',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a',1,'devices::rf::NRF24L01']]]
 ];

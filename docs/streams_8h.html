@@ -92,21 +92,22 @@ $(document).ready(function(){initNavTree('streams_8h.html','');});
 <p>C++-like std::iostream facilities.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;ctype.h&gt;</code><br />
-<code>#include &lt;stddef.h&gt;</code><br />
-<code>#include &lt;stdlib.h&gt;</code><br />
-<code>#include &lt;string.h&gt;</code><br />
 <code>#include &quot;queue.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="flash_8h_source.html">flash.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="utilities_8h_source.html">utilities.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ios_8h_source.html">ios.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="streambuf_8h_source.html">streambuf.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="time_8h_source.html">time.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for streams.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="streams_8h__incl.png" border="0" usemap="#fastarduino_2streams_8h" alt=""/></div>
 <map name="fastarduino_2streams_8h" id="fastarduino_2streams_8h">
-<area shape="rect" id="node6" href="queue_8h_source.html" title="queue.h" alt="" coords="367,80,435,107"/>
-<area shape="rect" id="node7" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="435,229,510,256"/>
-<area shape="rect" id="node13" href="flash_8h.html" title="Flash memory utilities. " alt="" coords="523,80,585,107"/>
-<area shape="rect" id="node10" href="time_8h.html" title="Simple time utilities. " alt="" coords="323,155,382,181"/>
+<area shape="rect" id="node3" href="queue_8h_source.html" title="queue.h" alt="" coords="232,229,300,256"/>
+<area shape="rect" id="node7" href="time_8h.html" title="Simple time utilities. " alt="" coords="153,304,211,331"/>
+<area shape="rect" id="node10" href="flash_8h.html" title="Flash memory utilities. " alt="" coords="458,229,519,256"/>
+<area shape="rect" id="node12" href="ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="463,80,514,107"/>
+<area shape="rect" id="node17" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="270,155,361,181"/>
+<area shape="rect" id="node4" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="242,379,317,405"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -125,20 +126,11 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1_output_buffer.html">streams::OutputBuffer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output API based on a ring buffer.  <a href="classstreams_1_1_output_buffer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html">streams::ostream</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output stream wrapper to provide formatted output API, a la C++.  <a href="classstreams_1_1ostream.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1_input_buffer.html">streams::InputBuffer</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input API based on a ring buffer.  <a href="classstreams_1_1_input_buffer.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1_format_base.html">streams::FormatBase</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for formatted streams.  <a href="classstreams_1_1_format_base.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1_formatted_output.html">streams::FormattedOutput&lt; STREAM_ &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output stream wrapper to provide formatted output API, a la C++.  <a href="classstreams_1_1_formatted_output.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1_formatted_input.html">streams::FormattedInput&lt; STREAM_ &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input stream wrapper to provide formatted input API, a la C++.  <a href="classstreams_1_1_formatted_input.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1istream.html">streams::istream</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Input stream wrapper to provide formatted input API, a la C++.  <a href="classstreams_1_1istream.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -149,49 +141,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae9231fdc3188b9bbcd5cca8c30b6ce56"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestreams.html#ae9231fdc3188b9bbcd5cca8c30b6ce56">streams::get</a> (InputBuffer &amp;in)</td></tr>
-<tr class="memdesc:ae9231fdc3188b9bbcd5cca8c30b6ce56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for <code>in</code> to have at least one character in buffer and get it.  <a href="namespacestreams.html#ae9231fdc3188b9bbcd5cca8c30b6ce56">More...</a><br /></td></tr>
-<tr class="separator:ae9231fdc3188b9bbcd5cca8c30b6ce56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47d9c74a3baad11f971c361d5def9603"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a47d9c74a3baad11f971c361d5def9603">streams::get</a> (InputBuffer &amp;in, char *content, size_t size)</td></tr>
-<tr class="memdesc:a47d9c74a3baad11f971c361d5def9603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for <code>in</code> to have at least <code>size</code> characters in buffer and get them.  <a href="namespacestreams.html#a47d9c74a3baad11f971c361d5def9603">More...</a><br /></td></tr>
-<tr class="separator:a47d9c74a3baad11f971c361d5def9603"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7e71752619ba753c5c01d6c61719b2a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestreams.html#ac7e71752619ba753c5c01d6c61719b2a">streams::gets</a> (InputBuffer &amp;in, char *str, size_t max, char end=0)</td></tr>
-<tr class="memdesc:ac7e71752619ba753c5c01d6c61719b2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait for <code>in</code> to have either at least <code>size</code> characters in buffer, or to reach character value <code>end</code>, then copy read string into <code>str</code>.  <a href="namespacestreams.html#ac7e71752619ba753c5c01d6c61719b2a">More...</a><br /></td></tr>
-<tr class="separator:ac7e71752619ba753c5c01d6c61719b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84d5769aaef1f1710e6c2c16c05b4c7e"><td class="memTemplParams" colspan="2">template&lt;typename FSTREAM &gt; </td></tr>
 <tr class="memitem:a84d5769aaef1f1710e6c2c16c05b4c7e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a84d5769aaef1f1710e6c2c16c05b4c7e">streams::ws</a> (FSTREAM &amp;stream)</td></tr>
 <tr class="memdesc:a84d5769aaef1f1710e6c2c16c05b4c7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator for an input stream, which will swallow all white spaces from that stream.  <a href="namespacestreams.html#a84d5769aaef1f1710e6c2c16c05b4c7e">More...</a><br /></td></tr>
 <tr class="separator:a84d5769aaef1f1710e6c2c16c05b4c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76316854cb7b9c0c7688d02c660ed369"><td class="memTemplParams" colspan="2"><a id="a76316854cb7b9c0c7688d02c660ed369"></a>
-template&lt;typename FSTREAM &gt; </td></tr>
-<tr class="memitem:a76316854cb7b9c0c7688d02c660ed369"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a76316854cb7b9c0c7688d02c660ed369">streams::skipws</a> (FSTREAM &amp;stream)</td></tr>
-<tr class="memdesc:a76316854cb7b9c0c7688d02c660ed369"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator for an input stream, which will activate whitespace discarding before formatted input operations on that stream . <br /></td></tr>
-<tr class="separator:a76316854cb7b9c0c7688d02c660ed369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69896b602e1678789bbad7b9fa98e3a3"><td class="memTemplParams" colspan="2"><a id="a69896b602e1678789bbad7b9fa98e3a3"></a>
-template&lt;typename FSTREAM &gt; </td></tr>
-<tr class="memitem:a69896b602e1678789bbad7b9fa98e3a3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a69896b602e1678789bbad7b9fa98e3a3">streams::noskipws</a> (FSTREAM &amp;stream)</td></tr>
-<tr class="memdesc:a69896b602e1678789bbad7b9fa98e3a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator for an input stream, which will deactivate whitespace discarding before formatted input operations on that stream . <br /></td></tr>
-<tr class="separator:a69896b602e1678789bbad7b9fa98e3a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79c81dc9afb0ca3ce0495fb7a95e85e1"><td class="memTemplParams" colspan="2"><a id="a79c81dc9afb0ca3ce0495fb7a95e85e1"></a>
-template&lt;typename FSTREAM &gt; </td></tr>
-<tr class="memitem:a79c81dc9afb0ca3ce0495fb7a95e85e1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1">streams::bin</a> (FSTREAM &amp;stream)</td></tr>
-<tr class="memdesc:a79c81dc9afb0ca3ce0495fb7a95e85e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator for an output or input stream, which will set the base, used to represent (output) or interpret (input) integral numerical values, to binary. <br /></td></tr>
-<tr class="separator:a79c81dc9afb0ca3ce0495fb7a95e85e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c09ef93f2d071416214cbe8ed0e1710"><td class="memTemplParams" colspan="2"><a id="a9c09ef93f2d071416214cbe8ed0e1710"></a>
-template&lt;typename FSTREAM &gt; </td></tr>
-<tr class="memitem:a9c09ef93f2d071416214cbe8ed0e1710"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a9c09ef93f2d071416214cbe8ed0e1710">streams::oct</a> (FSTREAM &amp;stream)</td></tr>
-<tr class="memdesc:a9c09ef93f2d071416214cbe8ed0e1710"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator for an output or input stream, which will set the base, used to represent (output) or interpret (input) integral numerical values, to octal. <br /></td></tr>
-<tr class="separator:a9c09ef93f2d071416214cbe8ed0e1710"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaf650921b3a5d448f8aac51dba924d2"><td class="memTemplParams" colspan="2"><a id="adaf650921b3a5d448f8aac51dba924d2"></a>
-template&lt;typename FSTREAM &gt; </td></tr>
-<tr class="memitem:adaf650921b3a5d448f8aac51dba924d2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">streams::dec</a> (FSTREAM &amp;stream)</td></tr>
-<tr class="memdesc:adaf650921b3a5d448f8aac51dba924d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator for an output or input stream, which will set the base, used to represent (output) or interpret (input) integral numerical values, to decimal. <br /></td></tr>
-<tr class="separator:adaf650921b3a5d448f8aac51dba924d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91675bd61b31e7382e8655930606f62f"><td class="memTemplParams" colspan="2"><a id="a91675bd61b31e7382e8655930606f62f"></a>
-template&lt;typename FSTREAM &gt; </td></tr>
-<tr class="memitem:a91675bd61b31e7382e8655930606f62f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">streams::hex</a> (FSTREAM &amp;stream)</td></tr>
-<tr class="memdesc:a91675bd61b31e7382e8655930606f62f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manipulator for an output or input stream, which will set the base, used to represent (output) or interpret (input) integral numerical values, to hexadecimal. <br /></td></tr>
-<tr class="separator:a91675bd61b31e7382e8655930606f62f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a155684415ba442e665f551819429b3a0"><td class="memTemplParams" colspan="2"><a id="a155684415ba442e665f551819429b3a0"></a>
 template&lt;typename FSTREAM &gt; </td></tr>
 <tr class="memitem:a155684415ba442e665f551819429b3a0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">streams::flush</a> (FSTREAM &amp;stream)</td></tr>

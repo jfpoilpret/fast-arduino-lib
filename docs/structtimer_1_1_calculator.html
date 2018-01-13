@@ -110,11 +110,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a319ea208456b508d34bc7b65e6f90e59"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a319ea208456b508d34bc7b65e6f90e59">tick_prescaler</a> (uint32_t us_per_tick)</td></tr>
 <tr class="memdesc:a319ea208456b508d34bc7b65e6f90e59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler to use for this timer, in order to generate timer ticks of <code>us_per_tick</code> microseconds or less.  <a href="#a319ea208456b508d34bc7b65e6f90e59">More...</a><br /></td></tr>
 <tr class="separator:a319ea208456b508d34bc7b65e6f90e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53ed70bbedba38aea55fd24a375753bd"><td class="memItemLeft" align="right" valign="top"><a id="a53ed70bbedba38aea55fd24a375753bd"></a>
-static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>ticks_to_us</b> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> ticks)</td></tr>
+<tr class="memitem:a53ed70bbedba38aea55fd24a375753bd"><td class="memItemLeft" align="right" valign="top">static constexpr uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a53ed70bbedba38aea55fd24a375753bd">ticks_to_us</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> ticks)</td></tr>
+<tr class="memdesc:a53ed70bbedba38aea55fd24a375753bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the number of microseconds reached for a given number of <code>ticks</code> with a given <code>prescaler</code>.  <a href="#a53ed70bbedba38aea55fd24a375753bd">More...</a><br /></td></tr>
 <tr class="separator:a53ed70bbedba38aea55fd24a375753bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa7329a7d3fa0263f7f3311617228067"><td class="memItemLeft" align="right" valign="top"><a id="afa7329a7d3fa0263f7f3311617228067"></a>
-static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><b>us_to_ticks</b> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint32_t us)</td></tr>
+<tr class="memitem:afa7329a7d3fa0263f7f3311617228067"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#afa7329a7d3fa0263f7f3311617228067">us_to_ticks</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint32_t us)</td></tr>
+<tr class="memdesc:afa7329a7d3fa0263f7f3311617228067"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the number of ticks needed for reaching the given <code>us</code> microseconds with a given <code>prescaler</code>.  <a href="#afa7329a7d3fa0263f7f3311617228067">More...</a><br /></td></tr>
 <tr class="separator:afa7329a7d3fa0263f7f3311617228067"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf6b1350daffe0bee6a1ffcdd3941c29"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29">CTC_prescaler</a> (uint32_t us)</td></tr>
 <tr class="memdesc:aaf6b1350daffe0bee6a1ffcdd3941c29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, in order to be able to count up to <code>us</code> microseconds.  <a href="#aaf6b1350daffe0bee6a1ffcdd3941c29">More...</a><br /></td></tr>
@@ -159,7 +159,8 @@ static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427ba
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ac1d170c81cc5fe9c43b79d8ca2aec14b"><td class="memItemLeft" align="right" valign="top"><a id="ac1d170c81cc5fe9c43b79d8ca2aec14b"></a>
-static constexpr const <a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>NTIMER</b> = NTIMER_</td></tr>
+static constexpr const <a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#ac1d170c81cc5fe9c43b79d8ca2aec14b">NTIMER</a> = NTIMER_</td></tr>
+<tr class="memdesc:ac1d170c81cc5fe9c43b79d8ca2aec14b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The timer for which calculation methods are provided. <br /></td></tr>
 <tr class="separator:ac1d170c81cc5fe9c43b79d8ca2aec14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9cc28cbfd459e483725bc58751ea87c"><td class="memItemLeft" align="right" valign="top"><a id="aa9cc28cbfd459e483725bc58751ea87c"></a>
 static constexpr const <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aa9cc28cbfd459e483725bc58751ea87c">PWM_MAX</a> = TRAIT::MAX_PWM</td></tr>
@@ -198,7 +199,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>The timer type: either <code>uint8_t</code> or <code>uint16_t</code>; this is defined and not changeable for each <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>. </p>
 <p><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> counter and max values have this type. </p>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00276">276</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00279">279</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -239,7 +240,109 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00298">298</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00301">301</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+
+</div>
+</div>
+<a id="a53ed70bbedba38aea55fd24a375753bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53ed70bbedba38aea55fd24a375753bd">&#9670;&nbsp;</a></span>ticks_to_us()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr uint32_t <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::ticks_to_us </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
+          <td class="paramname"><em>prescaler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td>
+          <td class="paramname"><em>ticks</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the number of microseconds reached for a given number of <code>ticks</code> with a given <code>prescaler</code>. </p>
+<p>Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prescaler</td><td>the prescaler used for this calculation </td></tr>
+    <tr><td class="paramname">ticks</td><td>the number of ticks for which we want to know the number of microseconds elapsed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of microseconds elapsed for <code>ticks</code> with <code>prescaler</code> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00317">317</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+
+</div>
+</div>
+<a id="afa7329a7d3fa0263f7f3311617228067"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa7329a7d3fa0263f7f3311617228067">&#9670;&nbsp;</a></span>us_to_ticks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a> <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::us_to_ticks </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
+          <td class="paramname"><em>prescaler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>us</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the number of ticks needed for reaching the given <code>us</code> microseconds with a given <code>prescaler</code>. </p>
+<p>Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prescaler</td><td>the prescaler used for this calculation </td></tr>
+    <tr><td class="paramname">us</td><td>the number of microseconds we want to reach </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of ticks needed in order to reach <code>us</code> microseconds elapsed </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00333">333</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -282,7 +385,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4" title="Computes the frequency at which this timer would perform, in TimerMode::CTC mode, if it was using pre...">CTC_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00327">327</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00350">350</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -323,7 +426,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00343">343</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00366">366</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -377,7 +480,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 Timer::begin(PRESCALER, TYPE) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00360">360</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00383">383</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -437,7 +540,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">CTC_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00382">382</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00405">405</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -478,7 +581,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#ab25ea1fa8d73227cdac44b75ae130161" title="Computes the frequency at which this timer would perform, in TimerMode::FAST_PWM mode, if it was using prescaler. ">FastPWM_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00398">398</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00421">421</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -519,7 +622,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a4c53597343b9f3f8094d90a6618e7507" title="Computes the ideal prescaler value to use for this timer, in TimerMode::FAST_PWM mode, in order to be able to reach at least pwm_frequency. ">FastPWM_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00414">414</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00437">437</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -560,7 +663,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a8eec5399160940b02b5ab12b79962f4c" title="Computes the frequency at which this timer would perform, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00430">430</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00453">453</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -601,7 +704,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1" title="Computes the ideal prescaler value to use for this timer, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00446">446</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00469">469</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -653,7 +756,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a52f8badc8b0d337d876530b7164fefd3" title="Computes the ideal value to use for this timer, when used in timer::PulseTimer, in order to produce a...">PulseTimer_value()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00464">464</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00487">487</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -706,7 +809,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the value to use to produce the required pulse </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#af4475e3f5db80e50cd1133a121bd954a" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PulseTimer_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00484">484</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00507">507</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -750,7 +853,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00506">506</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00529">529</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -805,7 +908,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00528">528</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00551">551</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -860,7 +963,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e" title="Computes the frequency at which this timer would perform, when used in timer::PulseTimer, if it was using prescaler and counter. ">PWM_ICR_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00550">550</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00573">573</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
