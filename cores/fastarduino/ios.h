@@ -721,6 +721,7 @@ namespace streams
 		char fill_;
 	};
 
+	/** Alias for `ios_base`, allowing to write shorter code, eg `ios::eofbit`. */
 	using ios = ios_base;
 
 	/**

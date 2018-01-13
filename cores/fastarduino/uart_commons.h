@@ -138,7 +138,9 @@ namespace serial
 		}
 
 	protected:
+		/// @cond notdocumented
 		UARTErrors_ errors_;
+		/// @endcond
 	};
 };
 

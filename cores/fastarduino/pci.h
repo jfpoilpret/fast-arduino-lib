@@ -48,7 +48,7 @@
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
- * @param PIN... the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
+ * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
 #define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...) \
@@ -59,10 +59,9 @@
  * Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt 
  * vector.
  * @param PCI_NUM the number of the `PCINT` vector for the given @p PIN pins
- * @param HANDLER the class holding the callback method
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
- * @param PIN... the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
+ * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
 #define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...) \
@@ -75,7 +74,7 @@
  * This can be useful if you just need to wake up the MCU from an external signal,
  * but do not need to perform any sepcific stuff with a callback.
  * @param PCI_NUM the number of the `PCINT` vector for the given @p PIN pins
- * @param PIN... the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
+ * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
 #define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)         \

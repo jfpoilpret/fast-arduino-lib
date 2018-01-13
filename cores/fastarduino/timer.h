@@ -262,6 +262,9 @@ namespace timer
 	template<board::Timer NTIMER_> struct Calculator
 	{
 	public:
+		/**
+		 * The timer for which calculation methods are provided.
+		 */
 		static constexpr const board::Timer NTIMER = NTIMER_;
 	private:
 		using TRAIT = board_traits::Timer_trait<NTIMER>;

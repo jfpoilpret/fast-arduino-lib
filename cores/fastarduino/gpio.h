@@ -412,10 +412,6 @@ namespace gpio
 		 * Construct a `FastMaskedPort` without any physical setup on target MCU.
 		 * This is useful if default pins directions and values are OK for you and 
 		 * you want to avoid calling mode setup on target MCU.
-		 * 
-		 * @param mask the bit mask determining which pins of the port are handled
-		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
-		 * methods.
 		 */
 		FastMaskedPort()
 		{
@@ -427,9 +423,6 @@ namespace gpio
 		 * byte.
 		 * The pins mode are forced on the target MCU.
 		 * 
-		 * @param mask the bit mask determining which pins of the port are handled
-		 * by this instance; only these pins will be impacted by `FastMaskedPort` 
-		 * methods.
 		 * @param ddr the direction to set (in `DDR` register of this port) for 
 		 * each pin (1 bit is one pin, when `1` the pin is set as output, 
 		 * when `0` as input).

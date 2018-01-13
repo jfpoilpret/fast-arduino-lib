@@ -18,7 +18,7 @@ MCU selection at compile-time is done by setting the following pre-processor mac
 
 In addition, the following option shall be set at compile time:
 
-- `-mmcu=<MCU>` where <MCU> is the code of the target MCU as understood by the AVR build toolchain:
+- `-mmcu=<MCU>` where `<MCU>` is the code of the target MCU as understood by the AVR build toolchain:
     - `atmega328`
     - `atmega32u4`
     - `attiny84`

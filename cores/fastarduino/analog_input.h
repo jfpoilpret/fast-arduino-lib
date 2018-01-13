@@ -131,6 +131,9 @@ namespace analog
 		: public AnalogInput<BANDGAP_, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz>
 	{
 	public:
+		/**
+		 * The bandgap analog pin of the MCU target, used for this `PowerVoltage`.
+		 */
 		static constexpr const board::AnalogPin BANDGAP = BANDGAP_;
 
 	private:
