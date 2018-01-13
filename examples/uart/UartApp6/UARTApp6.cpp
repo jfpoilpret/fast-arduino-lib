@@ -127,15 +127,15 @@ static void handle_float(OUTPUT& out, double value)
 	// check precision too
 	out << setprecision(12) << fixed << value << endl;
 	out << setprecision(12) << scientific << value << endl;
-	// out << setprecision(12) << defaultfloat << value << endl;
+	out << setprecision(12) << defaultfloat << value << endl;
 
 	out << setprecision(3) << fixed << value << endl;
 	out << setprecision(3) << scientific << value << endl;
-	// out << setprecision(3) << defaultfloat << value << endl;
+	out << setprecision(3) << defaultfloat << value << endl;
 
 	out << setprecision(0) << fixed << value << endl;
 	out << setprecision(0) << scientific << value << endl;
-	// out << setprecision(0) << defaultfloat << value << endl;
+	out << setprecision(0) << defaultfloat << value << endl;
 }
 #endif
 

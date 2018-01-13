@@ -584,12 +584,23 @@ namespace streams
 				dtostrf(v, 0, precision(), buffer);
 			else
 			{
-				// default is fixed currently (no satisfying conversion function exists)
-				//FIXME in this mode any trailing 0 after DP is discarded
+				// In this mode any trailing 0 after DP is discarded
 				// DP is also discarded if there are only 0 after it
 				dtostrf(v, 0, precision(), buffer);
+				char* dp = strchr(buffer, '.');
+				if (dp)
+				{
+					// Number has a decimal point, remove all trailing zeros
+					char* reverse = buffer + strlen(buffer) - 1;
+					while (reverse != dp && *reverse == '0')
+						*reverse-- = 0;
+					// If there is no significant digit after DP, remove DP 
+					if (reverse == dp)
+						*reverse = 0;
+				}
 			}
-			justify(out, buffer, add_sign(buffer), 0);
+			upper(buffer, true);
+			justify(out, buffer, add_sign(buffer, true), 0);
 		}
 		void convert(ostreambuf& out, char c) const
 		{
@@ -607,9 +618,9 @@ namespace streams
 				convert(out, (b ? 1 : 0));
 		}
 
-		void upper(char* input) const
+		void upper(char* input, bool is_float = false) const
 		{
-			if ((flags() & uppercase) && (flags() & hex))
+			if ((flags() & uppercase) && ((flags() & hex) || is_float))
 				strupr(input);
 		}
 
@@ -622,7 +633,7 @@ namespace streams
 
 		bool add_sign(const char* input, bool is_float = false) const
 		{
-			return ((flags() & dec) || is_float) && (flags() & showpos) && (input[0] != '+') && (input[0] != '-');
+			return ((flags() & showpos) && (flags() & dec) || is_float) && (input[0] != '+') && (input[0] != '-');
 		}
 
 		void format_number(ostreambuf& out, char* input) const
