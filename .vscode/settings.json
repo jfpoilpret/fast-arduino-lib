@@ -67,6 +67,18 @@
             "board": "ATtinyX4",
             "frequency": 8,
             "programmer": "ArduinoISP.cc"
+        },
+        "ATtiny85-8MHz":
+        {
+            "board": "ATtinyX5",
+            "frequency": 8,
+            "programmer": "ArduinoISP.cc",
+            "fuses": 
+            {
+                "hfuse": "0xDD",
+                "lfuse": "0xE2",
+                "efuse": "0xFF"
+            }
         }
     },
     "terminal.integrated.scrollback": 5000
