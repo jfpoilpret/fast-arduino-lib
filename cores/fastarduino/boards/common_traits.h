@@ -338,6 +338,7 @@ namespace board_traits
 	{
 		PRESCALERS_1_8_64_256_1024,
 		PRESCALERS_1_8_32_64_128_256_1024,
+		PRESCALERS_1_TO_16384,
 		PRESCALERS_NONE
 	};
 	
@@ -390,6 +391,46 @@ namespace board_traits
 			TimerPrescaler::DIV_128,
 			TimerPrescaler::DIV_256,
 			TimerPrescaler::DIV_1024
+		};
+	};
+	template<> struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_TO_16384>
+	{
+		enum class TimerPrescaler: uint8_t
+		{
+			NO_PRESCALING	= 0,
+			DIV_2			= 1,
+			DIV_4			= 2,
+			DIV_8			= 3,
+			DIV_16			= 4,
+			DIV_32			= 5,
+			DIV_64			= 6,
+			DIV_128			= 7,
+			DIV_256			= 8,
+			DIV_512			= 9,
+			DIV_1024		= 10,
+			DIV_2048		= 11,
+			DIV_4096		= 12,
+			DIV_8192		= 13,
+			DIV_16384		= 14
+		};
+		using TYPE = TimerPrescaler;
+		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
+		{
+			TimerPrescaler::NO_PRESCALING,
+			TimerPrescaler::DIV_2,
+			TimerPrescaler::DIV_4,
+			TimerPrescaler::DIV_8,
+			TimerPrescaler::DIV_16,
+			TimerPrescaler::DIV_32,
+			TimerPrescaler::DIV_64,
+			TimerPrescaler::DIV_128,
+			TimerPrescaler::DIV_256,
+			TimerPrescaler::DIV_512,
+			TimerPrescaler::DIV_1024,
+			TimerPrescaler::DIV_2048,
+			TimerPrescaler::DIV_4096,
+			TimerPrescaler::DIV_8192,
+			TimerPrescaler::DIV_16384
 		};
 	};
 	
@@ -482,8 +523,8 @@ namespace board_traits
 		static constexpr const uint8_t PC_PWM_ICR_TCCRB = 0;
 		static constexpr const uint8_t PC_PWM_ICR_TCCRA = 0;
 
-		static constexpr const REG8 TIMSK{};
-		static constexpr const REG8 TIFR{};
+		static constexpr const REG8 TIMSK_{};
+		static constexpr const REG8 TIFR_{};
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
 			return 0;
@@ -505,7 +546,7 @@ namespace board_traits
 			uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, 
 			uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, 
 			REG TCCRA_, REG TCCRB_, REG TCNT_, REG OCRA_, 
-			REG TIMSK_, REG TIFR_,
+			REG TIMSK__, REG TIFR__,
 			REG ICR_ = 0, 
 			uint8_t CTC_ICR_TCCRA_ = 0, uint8_t CTC_ICR_TCCRB_ = 0, 
 			uint8_t F_PWM_ICR_TCCRA_ = 0, uint8_t F_PWM_ICR_TCCRB_ = 0, 
@@ -550,8 +591,8 @@ namespace board_traits
 		static constexpr const REGISTER<TYPE> OCRA = OCRA_;
 		static constexpr const REGISTER<TYPE> ICR = ICR_;
 		
-		static constexpr const REG8 TIMSK = TIMSK_;
-		static constexpr const REG8 TIFR = TIFR_;
+		static constexpr const REG8 TIMSK_ = TIMSK__;
+		static constexpr const REG8 TIFR_ = TIFR__;
 
 		static constexpr const board::DigitalPin ICP_PIN = ICP_PIN_;
 		static constexpr const uint8_t ICES_TCCRB = ICES_TCCRB_;

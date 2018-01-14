@@ -102,18 +102,18 @@ namespace timer
 		using TPRESCALER = typename CALCULATOR::PRESCALER;
 		static constexpr const TPRESCALER PRESCALER = PRESCALER_;
 
-		PulseTimer16(uint16_t pulse_frequency) : Timer<NTIMER>{TCCRA(), TCCRB()}
+		PulseTimer16(uint16_t pulse_frequency) : Timer<NTIMER>{TCCRA_MASK(), TCCRB_MASK()}
 		{
 			TRAIT::ICR = CALCULATOR::PWM_ICR_counter(PRESCALER, pulse_frequency);
 		}
 
 	private:
-		static constexpr uint8_t TCCRA()
+		static constexpr uint8_t TCCRA_MASK()
 		{
 			// If 16 bits, use ICR1 FastPWM
 			return TRAIT::F_PWM_ICR_TCCRA;
 		}
-		static constexpr uint8_t TCCRB()
+		static constexpr uint8_t TCCRB_MASK()
 		{
 			// If 16 bits, use ICR1 FastPWM and prescaler forced to best fit all pulse frequency
 			return TRAIT::F_PWM_ICR_TCCRB | TRAIT::TCCRB_prescaler(PRESCALER);
@@ -141,7 +141,7 @@ namespace timer
 		static constexpr const TPRESCALER PRESCALER = PRESCALER_;
 
 		PulseTimer8(uint16_t pulse_frequency)
-			: Timer<NTIMER>{TCCRA(), TCCRB(), TIMSK()}, MAX{OVERFLOW_COUNTER(pulse_frequency)}
+			: Timer<NTIMER>{TCCRA_MASK(), TCCRB_MASK(), TIMSK_MASK()}, MAX{OVERFLOW_COUNTER(pulse_frequency)}
 		{
 			// If 8 bits timer, then we need ISR on Overflow and Compare A/B
 			interrupt::register_handler(*this);
@@ -154,17 +154,17 @@ namespace timer
 		}
 
 	private:
-		static constexpr uint8_t TCCRA()
+		static constexpr uint8_t TCCRA_MASK()
 		{
 			// If 8 bits, use CTC/TOV ISR
 			return 0;
 		}
-		static constexpr uint8_t TCCRB()
+		static constexpr uint8_t TCCRB_MASK()
 		{
 			// If 8 bits, use CTC/TOV ISR with prescaler forced best fit max pulse width
 			return TRAIT::TCCRB_prescaler(PRESCALER);
 		}
-		static constexpr uint8_t TIMSK()
+		static constexpr uint8_t TIMSK_MASK()
 		{
 			return TRAIT::TIMSK_MASK(uint8_t(TimerInterrupt::OVERFLOW | TimerInterrupt::OUTPUT_COMPARE_A |
 											 TimerInterrupt::OUTPUT_COMPARE_B));
