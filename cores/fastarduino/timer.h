@@ -747,7 +747,7 @@ namespace timer
 		{
 			timsk_ = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB) TRAIT::TIMSK = TRAIT::TIMSK_MASK(uint8_t(interrupts));
+			if (TRAIT::TCCRB) TRAIT::TIMSK_ = TRAIT::TIMSK_MASK(uint8_t(interrupts));
 		}
 
 		//TODO method to check if some interrupt is enabled
@@ -848,7 +848,7 @@ namespace timer
 			TRAIT::OCRA = max;
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK = timsk_;
+			TRAIT::TIMSK_ = timsk_;
 		}
 
 		/**
@@ -935,7 +935,7 @@ namespace timer
 		inline void suspend_()
 		{
 			// Clear timer interrupt mode
-			TRAIT::TIMSK = 0;
+			TRAIT::TIMSK_ = 0;
 		}
 
 		/**
@@ -968,7 +968,7 @@ namespace timer
 			// Reset timer counter
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK = timsk_;
+			TRAIT::TIMSK_ = timsk_;
 		}
 
 		/**
@@ -979,7 +979,7 @@ namespace timer
 		 */
 		inline bool is_suspended()
 		{
-			return TRAIT::TIMSK == 0;
+			return TRAIT::TIMSK_ == 0;
 		}
 
 		/**
@@ -1012,7 +1012,7 @@ namespace timer
 			// Stop timer
 			TRAIT::TCCRB = 0;
 			// Clear timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK = 0;
+			TRAIT::TIMSK_ = 0;
 		}
 
 		/**

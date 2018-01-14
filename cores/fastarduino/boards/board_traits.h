@@ -29,6 +29,8 @@
 // Breadboards
 #elif defined(BREADBOARD_ATTINYX4)
 #include "attiny_x4_traits.h"
+#elif defined(BREADBOARD_ATTINYX5)
+#include "attiny_x5_traits.h"
 
 #else
 #error "board_traits.h: board not supported"
