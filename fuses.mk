@@ -27,3 +27,14 @@ DEF_EFUSE=0x01
 # - External crystal oscillator (freq 8.0+), startup time PWRDWN/RESET 16CK/14CK +65ms
 DEF_LFUSE=0xff
 
+# Default fuses configuration for ATtiny85 (8MHz)
+# - Internal RC clock 8MHz, startup time PWRDWN/RESET 6CK/14CK + 64ms
+# - Reset enabled
+# - SPI programming enabled
+# - BOD enabled at 2.7V
+# - WDT off
+# Internal RC 8MHz, BOD 2.7V, SPI enabled
+DEF_LFUSE=0xe2
+DEF_HFUSE=0xdd
+DEF_EFUSE=0xff
+

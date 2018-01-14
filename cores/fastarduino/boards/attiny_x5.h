@@ -261,12 +261,6 @@ namespace board
 
 /// @cond notdocumented
 #define ANALOG_COMP_vect ANA_COMP_vect
-#define TIMER0_OVF_vect TIM0_OVF_vect
-#define TIMER0_COMPA_vect TIM0_COMPA_vect
-#define TIMER0_COMPB_vect TIM0_COMPB_vect
-#define TIMER1_OVF_vect TIM1_OVF_vect
-#define TIMER1_COMPA_vect TIM1_COMPA_vect
-#define TIMER1_COMPB_vect TIM1_COMPB_vect
 #define EE_READY_vect EE_RDY_vect
 
 // Forward declare interrupt service routines to allow them as friends.

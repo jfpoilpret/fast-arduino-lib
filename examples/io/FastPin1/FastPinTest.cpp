@@ -39,6 +39,11 @@ static gpio::FastPort<board::Port::PORT_B> PortB;
 static gpio::FastPinType<board::DigitalPin::D0_PA0>::TYPE PinD0{gpio::PinMode::INPUT};
 static gpio::FastPinType<board::DigitalPin::D1_PA1>::TYPE PinD1{gpio::PinMode::INPUT_PULLUP};
 static gpio::FastPinType<board::DigitalPin::D2_PA2>::TYPE PinD2{gpio::PinMode::OUTPUT};
+#elif defined (BREADBOARD_ATTINYX5)
+static gpio::FastPort<board::Port::PORT_B> PortB;
+static gpio::FastPinType<board::DigitalPin::D0_PB0>::TYPE PinD0{gpio::PinMode::INPUT};
+static gpio::FastPinType<board::DigitalPin::D1_PB1>::TYPE PinD1{gpio::PinMode::INPUT_PULLUP};
+static gpio::FastPinType<board::DigitalPin::D2_PB2>::TYPE PinD2{gpio::PinMode::OUTPUT};
 #else
 #error "Current target is not yet supported!"
 #endif
