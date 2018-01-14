@@ -78,6 +78,8 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
 								pci/PinChangeInterrupt4			
 
+#TODO probably ATtinyX5 will need its own 9reduced) set of examples (because of many limitations)
+EXAMPLES_BREADBOARD_ATTINYX5=				
 
 # Finally define all examples supported for the current variant (defined by current configuration)
 ALL_EXAMPLES = ${COMMON_EXAMPLES} ${EXAMPLES_${VARIANT}}

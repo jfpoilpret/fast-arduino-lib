@@ -70,6 +70,14 @@ else ifeq ($(findstring ATtiny84,$(CONF)),ATtiny84)
 	ifeq ($(PROGRAMMER),)
 		PROGRAMMER:=ISP
 	endif
+else ifeq ($(findstring ATtiny85,$(CONF)),ATtiny85)
+	VARIANT:=BREADBOARD_ATTINYX5
+	MCU:=attiny85
+	ARCH:=avr25
+	F_CPU:=8000000UL
+	ifeq ($(PROGRAMMER),)
+		PROGRAMMER:=ISP
+	endif
 else ifeq ($(findstring MEGA,$(CONF)),MEGA)
 	VARIANT:=ARDUINO_MEGA
 	MCU:=atmega2560
