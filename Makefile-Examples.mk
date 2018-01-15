@@ -79,10 +79,16 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								pci/PinChangeInterrupt4			
 
 #TODO probably ATtinyX5 will need its own 9reduced) set of examples (because of many limitations)
-EXAMPLES_BREADBOARD_ATTINYX5=				
+EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
+								uart/UartApp2
 
 # Finally define all examples supported for the current variant (defined by current configuration)
-ALL_EXAMPLES = ${COMMON_EXAMPLES} ${EXAMPLES_${VARIANT}}
+#TODO probably ATtinyX5 will need its own 9reduced) set of examples (because of many limitations)
+ifeq ($(VARIANT), BREADBOARD_ATTINYX5)
+	ALL_EXAMPLES = ${EXAMPLES_${VARIANT}}
+else
+	ALL_EXAMPLES = ${COMMON_EXAMPLES} ${EXAMPLES_${VARIANT}}
+endif
 
 # Special build target for all fastArduino examples
 # Need to export all necessary variables to submakes
