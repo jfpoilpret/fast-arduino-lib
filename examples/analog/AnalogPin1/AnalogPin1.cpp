@@ -68,6 +68,12 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+#elif defined (BREADBOARD_ATTINYX5)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::AnalogPin POT = board::AnalogPin::A1;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -75,7 +81,7 @@ constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using ANALOG_INPUT = analog::AnalogInput<POT, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_1MHz>;
+using ANALOG_INPUT = analog::AnalogInput<POT, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 
 using streams::endl;
 
@@ -104,7 +110,8 @@ int main()
 	while (true)
 	{
 		ANALOG_INPUT::TYPE value = pot.sample();
-		out << value << " (" << power.voltage_mV() << " mV)" << endl;
+		out << value << endl;
+		out << power.voltage_mV() << " mV" << endl;
 		time::delay_ms(1000);
 	}
 	return 0;
