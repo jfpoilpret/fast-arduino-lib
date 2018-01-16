@@ -19,6 +19,10 @@
 #include "attiny_x5.h"
 #include "common_traits.h"
 
+// For an unknown reason, register WDTCSR for all AVR is named WDTCR for ATtinyX5
+// Just define a macro to use the same name everywhere needed
+#define WDTCSR WDTCR
+
 namespace board_traits
 {
 	//====
