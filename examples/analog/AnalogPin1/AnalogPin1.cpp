@@ -111,6 +111,7 @@ int main()
 	{
 		ANALOG_INPUT::TYPE value = pot.sample();
 		out << value << endl;
+		out << power.sample() << "u" << endl;
 		out << power.voltage_mV() << " mV" << endl;
 		time::delay_ms(1000);
 	}
