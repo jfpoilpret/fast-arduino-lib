@@ -789,7 +789,8 @@ namespace timer
 			// Check if timer is currently running
 			if (TRAIT::TCCRB)
 			{
-				TRAIT::TCCRA = tccra_;
+				if (!TRAIT::TCCRA.is_no_reg())
+					TRAIT::TCCRA = tccra_;
 				TRAIT::TCCRB = tccrb_;
 			}
 		}
@@ -842,7 +843,8 @@ namespace timer
 		 */
 		inline void begin_(TYPE max = 0)
 		{
-			TRAIT::TCCRA = tccra_;
+			if (!TRAIT::TCCRA.is_no_reg())
+				TRAIT::TCCRA = tccra_;
 			TRAIT::TCCRB = tccrb_;
 			// Set timer counter compare match
 			TRAIT::OCRA = max;
@@ -968,6 +970,7 @@ namespace timer
 			// Reset timer counter
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
+			//FIXME for ATtinyX5 TIMSK is shared between 2 timers: we should only set the right bits here!
 			TRAIT::TIMSK_ = timsk_;
 		}
 
@@ -979,6 +982,7 @@ namespace timer
 		 */
 		inline bool is_suspended()
 		{
+			//FIXME for ATtinyX5 TIMSK is shared between 2 timers: we should only check the right bits here!
 			return TRAIT::TIMSK_ == 0;
 		}
 
@@ -1012,6 +1016,7 @@ namespace timer
 			// Stop timer
 			TRAIT::TCCRB = 0;
 			// Clear timer interrupt mode (set interrupt on OCRnA compare match)
+			//FIXME for ATtinyX5 TIMSK is shared between 2 timers: we should only clear the right bits here!
 			TRAIT::TIMSK_ = 0;
 		}
 

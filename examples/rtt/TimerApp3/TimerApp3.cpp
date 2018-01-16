@@ -28,10 +28,17 @@
 #include <fastarduino/gpio.h>
 #include <fastarduino/timer.h>
 
+#if defined(BREADBOARD_ATTINYX5)
+// ATtinyX5 timers are only 8 bits, even with max prescaler (16384), it is not 
+// possible to generate ticks at 1s period, only 0.5s is possible (counter = 244)
+constexpr const uint32_t PERIOD_US = 500000;
+#else
+constexpr const uint32_t PERIOD_US = 1000000;
+#endif
+
 constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 using CALCULATOR = timer::Calculator<NTIMER>;
 using TIMER = timer::Timer<NTIMER>;
-constexpr const uint32_t PERIOD_US = 1000000;
 
 constexpr const TIMER::PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
 static_assert(CALCULATOR::is_adequate_for_CTC(PRESCALER, PERIOD_US), "TIMER_TYPE::is_adequate(PRESCALER, PERIOD_US)");
@@ -61,7 +68,7 @@ int main()
 	sei();
 	Handler handler;
 	interrupt::register_handler(handler);
-	TIMER timer{timer::TimerMode::CTC, PRESCALER};
+	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	timer.begin(COUNTER);
 	
 	while (true) ;
