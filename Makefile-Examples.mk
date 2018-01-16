@@ -81,7 +81,8 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 #TODO probably ATtinyX5 will need its own 9reduced) set of examples (because of many limitations)
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								uart/UartApp2					\
-								analog/AnalogPin1
+								analog/AnalogPin1				\
+								events/EventApp6
 
 # Finally define all examples supported for the current variant (defined by current configuration)
 #TODO probably ATtinyX5 will need its own 9reduced) set of examples (because of many limitations)
