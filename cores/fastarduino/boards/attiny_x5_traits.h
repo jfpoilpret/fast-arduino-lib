@@ -138,16 +138,17 @@ namespace board_traits
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_TO_16384, 
 							0,
-							_BV(CTC1), 0, _BV(CS10) | _BV(CS11) | _BV(CS12) | _BV(CS13),
+							0, _BV(CTC1), _BV(CS10) | _BV(CS11) | _BV(CS12) | _BV(CS13),
 							0, 0,
 							0, 0,
-							_BV(CTC1), 0,
-							R_(TCCR1), R_(TCCR1), R_(TCNT1), R_(OCR1A), 
+							0, _BV(CTC1),
+							//TODO Use 0 instead of R_(TCCR1) for TCCRB_
+							NO_REG, R_(TCCR1), R_(TCNT1), R_(OCR1A), 
 							R_(TIMSK), R_(TIFR)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
-			return uint8_t(p);
+			return uint8_t(p) + 1;
 		}
 		static constexpr uint8_t TIMSK_MASK(uint8_t i)
 		{
