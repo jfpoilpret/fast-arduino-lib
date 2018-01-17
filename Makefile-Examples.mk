@@ -78,14 +78,15 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
 								pci/PinChangeInterrupt4			
 
-#TODO probably ATtinyX5 will need its own 9reduced) set of examples (because of many limitations)
+# ATtinyX5 needs its own (reduced) set of examples (because of many limitations)
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								uart/UartApp2					\
 								analog/AnalogPin1				\
-								events/EventApp6
+								events/EventApp6				\
+								rtt/TimerApp3 rtt/TimerApp4
 
 # Finally define all examples supported for the current variant (defined by current configuration)
-#TODO probably ATtinyX5 will need its own 9reduced) set of examples (because of many limitations)
+# Note that ATtinyX5 needs its own (reduced) set of examples (because of many limitations)
 ifeq ($(VARIANT), BREADBOARD_ATTINYX5)
 	ALL_EXAMPLES = ${EXAMPLES_${VARIANT}}
 else
