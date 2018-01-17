@@ -534,7 +534,7 @@ namespace board_traits
 		{
 			return 0;
 		}
-		static constexpr uint8_t TIMSK_MASK(uint8_t interrupt)
+		static constexpr uint8_t TIMSK_INT_MASK(uint8_t interrupt)
 		{
 			return 0;
 		}
