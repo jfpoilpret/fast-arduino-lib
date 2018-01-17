@@ -28,9 +28,6 @@
 #include "utilities.h"
 #include "boards/board_traits.h"
 
-//FIXME Timer_trait: add an `bool SHARED_TIMSK` (false by default)
-// if true (eg ATtinyX5), then never directly assign TIMSK
-
 // Generic macros to register ISR on Timer
 //=========================================
 /**
@@ -750,7 +747,8 @@ namespace timer
 		{
 			timsk_ = TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB) TRAIT::TIMSK_ = TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			if (TRAIT::TCCRB)
+				utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}
 
 		//TODO method to check if some interrupt is enabled
@@ -853,7 +851,7 @@ namespace timer
 			TRAIT::OCRA = max;
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			TRAIT::TIMSK_ = timsk_;
+			utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}
 
 		/**
@@ -940,7 +938,7 @@ namespace timer
 		inline void suspend_()
 		{
 			// Clear timer interrupt mode
-			TRAIT::TIMSK_ = 0;
+			utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, uint8_t(0));
 		}
 
 		/**
@@ -973,8 +971,7 @@ namespace timer
 			// Reset timer counter
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
-			//FIXME for ATtinyX5 TIMSK is shared between 2 timers: we should only set the right bits here!
-			TRAIT::TIMSK_ = timsk_;
+			utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}
 
 		/**
@@ -985,8 +982,7 @@ namespace timer
 		 */
 		inline bool is_suspended()
 		{
-			//FIXME for ATtinyX5 TIMSK is shared between 2 timers: we should only check the right bits here!
-			return TRAIT::TIMSK_ == 0;
+			return (TRAIT::TIMSK_ & TRAIT::TIMSK_MASK) == 0;
 		}
 
 		/**
@@ -1019,8 +1015,7 @@ namespace timer
 			// Stop timer
 			TRAIT::TCCRB = 0;
 			// Clear timer interrupt mode (set interrupt on OCRnA compare match)
-			//FIXME for ATtinyX5 TIMSK is shared between 2 timers: we should only clear the right bits here!
-			TRAIT::TIMSK_ = 0;
+			utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, uint8_t(0));
 		}
 
 		/**

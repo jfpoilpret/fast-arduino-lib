@@ -115,7 +115,7 @@ namespace board_traits
 							_BV(WGM00), 0,
 							_BV(WGM01), 0,
 							R_(TCCR0A), R_(TCCR0B), R_(TCNT0), R_(OCR0A), 
-							R_(TIMSK), R_(TIFR)>
+							R_(TIMSK), R_(TIFR), _BV(TOIE0) | _BV(OCIE0A) | _BV(OCIE0B)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -143,7 +143,7 @@ namespace board_traits
 							0, 0,
 							0, _BV(CTC1),
 							NO_REG, R_(TCCR1), R_(TCNT1), R_(OCR1A), 
-							R_(TIMSK), R_(TIFR)>
+							R_(TIMSK), R_(TIFR), _BV(TOIE1) | _BV(OCIE1A) | _BV(OCIE1B)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
