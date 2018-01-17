@@ -216,7 +216,7 @@ namespace board_traits
 							_BV(WGM10) | _BV(WGM11), 0,
 							0, _BV(WGM12), 
 							R_(TCCR1A), R_(TCCR1B), R_(TCNT1), R_(OCR1A), 
-							R_(TIMSK1), R_(TIFR1),
+							R_(TIMSK1), R_(TIFR1), 0xFF,
 							R_(ICR1),
 							0, _BV(WGM12) | _BV(WGM13),
 							_BV(WGM11), _BV(WGM12) | _BV(WGM13),
