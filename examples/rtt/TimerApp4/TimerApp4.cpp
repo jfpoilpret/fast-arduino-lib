@@ -29,6 +29,14 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/time.h>
 
+#if defined(BREADBOARD_ATTINYX5)
+// ATtinyX5 timers are only 8 bits, even with max prescaler (16384), it is not 
+// possible to generate ticks at 4s period, only 0.5s is possible (counter = 244)
+constexpr const uint32_t SUSPEND_PERIOD_US = 500000;
+#else
+constexpr const uint32_t SUSPEND_PERIOD_US = 4000000;
+#endif
+
 constexpr const board::Timer BLINK_NTIMER = board::Timer::TIMER0;
 using BLINK_CALC = timer::Calculator<BLINK_NTIMER>;
 using BLINK_TIMER = timer::Timer<BLINK_NTIMER>;
@@ -41,7 +49,6 @@ constexpr const BLINK_TIMER::TYPE BLINK_COUNTER = BLINK_CALC::CTC_counter(BLINK_
 constexpr const board::Timer SUSPEND_NTIMER = board::Timer::TIMER1;
 using SUSPEND_CALC = timer::Calculator<SUSPEND_NTIMER>;
 using SUSPEND_TIMER = timer::Timer<SUSPEND_NTIMER>;
-constexpr const uint32_t SUSPEND_PERIOD_US = 4000000;
 constexpr const SUSPEND_TIMER::PRESCALER SUSPEND_PRESCALER = SUSPEND_CALC::CTC_prescaler(SUSPEND_PERIOD_US);
 static_assert(SUSPEND_CALC::is_adequate_for_CTC(SUSPEND_PRESCALER, SUSPEND_PERIOD_US), 
 		"SUSPEND_TIMER_TYPE::is_adequate(SUSPEND_PRESCALER, SUSPEND_PERIOD_US)");
@@ -89,9 +96,9 @@ int main()
 {
 	board::init();
 	BlinkHandler blink_handler;
-	BLINK_TIMER blink_timer{timer::TimerMode::CTC, BLINK_PRESCALER};
+	BLINK_TIMER blink_timer{timer::TimerMode::CTC, BLINK_PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	SuspendHandler suspend_handler{blink_timer};
-	SUSPEND_TIMER suspend_timer{timer::TimerMode::CTC, SUSPEND_PRESCALER};
+	SUSPEND_TIMER suspend_timer{timer::TimerMode::CTC, SUSPEND_PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	interrupt::register_handler(blink_handler);
 	interrupt::register_handler(suspend_handler);
 	blink_timer.begin_(BLINK_COUNTER);
