@@ -22,4 +22,7 @@ namespace board_traits
 
 	using TIMER_PRESCALERS_TRAIT2 = TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024>;
 	constexpr const TIMER_PRESCALERS_TRAIT2::TYPE TIMER_PRESCALERS_TRAIT2::ALL_PRESCALERS[];
+
+	using TIMER_PRESCALERS_TRAIT3 = TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_TO_16384>;
+	constexpr const TIMER_PRESCALERS_TRAIT3::TYPE TIMER_PRESCALERS_TRAIT3::ALL_PRESCALERS[];
 }
