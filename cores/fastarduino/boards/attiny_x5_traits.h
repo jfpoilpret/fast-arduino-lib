@@ -125,7 +125,7 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
 					_BV(CS02) | _BV(CS00));
 		}
-		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE0) : 0)
@@ -134,7 +134,7 @@ namespace board_traits
 		}
 	};
 	
-	//TODO FROM HERE
+	//TODO define some kind of mask for TIMSK when same REG is used for several timers
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_TO_16384, 
 							0,
@@ -142,7 +142,6 @@ namespace board_traits
 							0, 0,
 							0, 0,
 							0, _BV(CTC1),
-							//TODO Use 0 instead of R_(TCCR1) for TCCRB_
 							NO_REG, R_(TCCR1), R_(TCNT1), R_(OCR1A), 
 							R_(TIMSK), R_(TIFR)>
 	{
@@ -150,7 +149,7 @@ namespace board_traits
 		{
 			return uint8_t(p) + 1;
 		}
-		static constexpr uint8_t TIMSK_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE1) : 0)

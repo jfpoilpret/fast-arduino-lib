@@ -28,6 +28,9 @@
 #include "utilities.h"
 #include "boards/board_traits.h"
 
+//FIXME Timer_trait: add an `bool SHARED_TIMSK` (false by default)
+// if true (eg ATtinyX5), then never directly assign TIMSK
+
 // Generic macros to register ISR on Timer
 //=========================================
 /**
@@ -726,7 +729,7 @@ namespace timer
 		Timer(TimerMode timer_mode, PRESCALER prescaler, TimerInterrupt interrupts = TimerInterrupt(0))
 			: tccra_{timer_mode_TCCRA(timer_mode)}, tccrb_{uint8_t(timer_mode_TCCRB(timer_mode) |
 																   TRAIT::TCCRB_prescaler(prescaler))},
-			  timsk_{TRAIT::TIMSK_MASK(uint8_t(interrupts))}
+			  timsk_{TRAIT::TIMSK_INT_MASK(uint8_t(interrupts))}
 		{
 		}
 
@@ -745,9 +748,9 @@ namespace timer
 		 */
 		inline void set_interrupts(TimerInterrupt interrupts = TimerInterrupt(0))
 		{
-			timsk_ = TRAIT::TIMSK_MASK(uint8_t(interrupts));
+			timsk_ = TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
 			// Check if timer is currently running
-			if (TRAIT::TCCRB) TRAIT::TIMSK_ = TRAIT::TIMSK_MASK(uint8_t(interrupts));
+			if (TRAIT::TCCRB) TRAIT::TIMSK_ = TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
 		}
 
 		//TODO method to check if some interrupt is enabled
@@ -1075,10 +1078,10 @@ namespace timer
 						output_mode == TimerOutputMode::NON_INVERTING ? COM_TRAIT::COM_CLEAR : COM_TRAIT::COM_NORMAL);
 		}
 
-		static constexpr bool TIMSK_MASK_IS_SUPPORTED(TimerInterrupt interrupt)
+		static constexpr bool TIMSK_INT_MASK_IS_SUPPORTED(TimerInterrupt interrupt)
 		{
-			return (TRAIT::TIMSK_MASK(0xFF) & TRAIT::TIMSK_MASK(uint8_t(interrupt))) ==
-				   TRAIT::TIMSK_MASK(uint8_t(interrupt));
+			return (TRAIT::TIMSK_INT_MASK(0xFF) & TRAIT::TIMSK_INT_MASK(uint8_t(interrupt))) ==
+				   TRAIT::TIMSK_INT_MASK(uint8_t(interrupt));
 		}
 
 		static constexpr uint8_t timer_mode_TCCRA(TimerMode timer_mode)
