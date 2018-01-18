@@ -57,6 +57,12 @@ static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
+#elif defined (BREADBOARD_ATTINYX5)
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -70,7 +76,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Start UART
-#if defined (BREADBOARD_ATTINYX4)
+#if defined (BREADBOARD_ATTINYX4) || defined(BREADBOARD_ATTINYX5)
 	serial::soft::UATX<TX> uatx{output_buffer};
 	uatx.begin(115200);
 #else
