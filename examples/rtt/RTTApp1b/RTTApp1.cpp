@@ -52,6 +52,10 @@ REGISTER_RTT_ISR(5)
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_RTT_ISR(1)
+#elif defined(BREADBOARD_ATTINYX5)
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -61,15 +65,15 @@ const constexpr uint32_t BLINK_DELAY = 10000;
 template<board::Timer TIMER>
 void check_timer()
 {
-	typename gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT, false};
+	typename gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT, true};
 	timer::RTT<TIMER> rtt;
 	rtt.register_rtt_handler();
 	rtt.begin();
 	// Event Loop
 	for (uint8_t i = 0; i < 5; ++i)
 	{
-		led.toggle();
 		rtt.delay(BLINK_DELAY);
+		led.toggle();
 	}
 	rtt.end();
 }
@@ -82,6 +86,9 @@ int main()
 	sei();
 
 #if defined (BREADBOARD_ATTINYX4)
+	check_timer<board::Timer::TIMER0>();
+	check_timer<board::Timer::TIMER1>();
+#elif defined(BREADBOARD_ATTINYX5)
 	check_timer<board::Timer::TIMER0>();
 	check_timer<board::Timer::TIMER1>();
 #elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
