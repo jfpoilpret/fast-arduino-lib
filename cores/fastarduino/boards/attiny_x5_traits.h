@@ -52,7 +52,7 @@ namespace board_traits
 		:AnalogReference_trait_impl<_BV(REFS2) | _BV(REFS1) | _BV(REFS0)> {};
 	
 	template<> struct AnalogSampleType_trait<uint16_t>: AnalogSampleType_trait_impl<uint16_t, 0, 0, R_(ADC)> {};
-	template<> struct AnalogSampleType_trait<uint8_t>: AnalogSampleType_trait_impl<uint8_t, 0, _BV(ADLAR), R_(ADCH)> {};
+	template<> struct AnalogSampleType_trait<uint8_t>: AnalogSampleType_trait_impl<uint8_t, _BV(ADLAR), 0, R_(ADCH)> {};
 
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_50KHz>: AnalogClock_trait_impl<50000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_100KHz>: AnalogClock_trait_impl<100000UL> {};
@@ -134,7 +134,6 @@ namespace board_traits
 		}
 	};
 	
-	//TODO define some kind of mask for TIMSK when same REG is used for several timers
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_TO_16384, 
 							0,
