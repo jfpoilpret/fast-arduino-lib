@@ -84,6 +84,7 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								analog/AnalogPin1				\
 								events/EventApp6				\
 								rtt/RTTApp1	rtt/RTTApp3			\
+								rtt/RTTApp4						\
 								rtt/TimerApp3 rtt/TimerApp4
 
 # Finally define all examples supported for the current variant (defined by current configuration)
