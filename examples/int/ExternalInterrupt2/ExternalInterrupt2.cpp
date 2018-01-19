@@ -49,6 +49,10 @@ REGISTER_INT_ISR_EMPTY(0, SWITCH)
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
+#elif defined (BREADBOARD_ATTINYX5)
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
+// Define vectors we need in the example
+REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -71,7 +75,7 @@ int main()
 			led.clear();
 		else
 			led.set();
-#if defined(BREADBOARD_ATTINYX4)
+#if defined(BREADBOARD_ATTINYX4) || defined(BREADBOARD_ATTINYX5)
 		// Not sure why, but INT0 ANY_CHANGE does not seem to wake up MCU in POWER_SAVE mode, 
 		// although that works well with UNO and MEGA...
 		power::Power::sleep(board::SleepMode::IDLE);
