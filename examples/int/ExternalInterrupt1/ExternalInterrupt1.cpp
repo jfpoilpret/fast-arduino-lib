@@ -44,6 +44,8 @@ constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D3_PD0_E
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
+#elif defined (BREADBOARD_ATTINYX5)
+constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -87,7 +89,7 @@ int main()
 	// Event Loop
 	while (true)
 	{
-#if defined(BREADBOARD_ATTINYX4)
+#if defined(BREADBOARD_ATTINYX4) || defined(BREADBOARD_ATTINYX5)
 		// Not sure why, but INT0 ANY_CHANGE does not seem to wake up MCU in POWER_SAVE mode, 
 		// although that works well with UNO and MEGA...
 		power::Power::sleep(board::SleepMode::IDLE);
