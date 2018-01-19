@@ -82,7 +82,7 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								uart/UartApp2					\
 								analog/AnalogPin1				\
-								analog/PWM1						\
+								analog/PWM1 analog/PWM2			\
 								events/EventApp6				\
 								rtt/RTTApp1	rtt/RTTApp3			\
 								rtt/RTTApp4						\
