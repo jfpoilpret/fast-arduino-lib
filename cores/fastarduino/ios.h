@@ -633,7 +633,7 @@ namespace streams
 
 		bool add_sign(const char* input, bool is_float = false) const
 		{
-			return ((flags() & showpos) && (flags() & dec) || is_float) && (input[0] != '+') && (input[0] != '-');
+			return (flags() & showpos) && ((flags() & dec) || is_float) && (input[0] != '+') && (input[0] != '-');
 		}
 
 		void format_number(ostreambuf& out, char* input) const
