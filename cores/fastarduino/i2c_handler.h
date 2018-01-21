@@ -20,6 +20,8 @@
 #include "boards/board_traits.h"
 #include "i2c.h"
 
+// NOTE: ATtiny implementation provides no pullup, hence you must ensure your 
+// I2C bus has pullups where needed
 namespace i2c
 {
 	template<I2CMode MODE_> class I2CManager;
@@ -194,7 +196,7 @@ namespace i2c
 	{
 		// set SDA/SCL default directions
 		TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
-		TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+		// TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
 		TRAIT::DDR |= _BV(TRAIT::BIT_SCL);
 		TRAIT::PORT |= _BV(TRAIT::BIT_SCL);
 	}
@@ -219,7 +221,7 @@ namespace i2c
 	template<I2CMode MODE> void I2CHandler<MODE>::SDA_INPUT()
 	{
 		TRAIT::DDR &= ~_BV(TRAIT::BIT_SDA);
-		TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
+		// TRAIT::PORT |= _BV(TRAIT::BIT_SDA);
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::SDA_OUTPUT()
 	{
