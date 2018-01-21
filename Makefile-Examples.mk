@@ -90,7 +90,8 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								pci/PinChangeInterrupt1			\
 								rtt/RTTApp1	rtt/RTTApp3			\
 								rtt/RTTApp4						\
-								rtt/TimerApp3 rtt/TimerApp4
+								rtt/TimerApp3 rtt/TimerApp4		\
+								i2c/DS1307RTC1 i2c/DS1307RTC2
 
 # Finally define all examples supported for the current variant (defined by current configuration)
 # Note that ATtinyX5 needs its own (reduced) set of examples (because of many limitations)
