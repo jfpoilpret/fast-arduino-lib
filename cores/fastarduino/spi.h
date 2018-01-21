@@ -113,7 +113,7 @@ namespace spi
 		{
 			while (size--)
 			{
-				register uint8_t value = *data;
+				uint8_t value = *data;
 				*data++ = transfer(value);
 			}
 		}
