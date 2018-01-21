@@ -40,8 +40,6 @@ constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D62_PK0_PCI2
 #define PCINT_ON	0
 #define PCINT_OFF	2
 #elif defined(BREADBOARD_ATTINYX4)
-#define PCINT_ON	0
-#define PCINT_OFF	1
 constexpr const board::DigitalPin SWITCH_ON = board::InterruptPin::D0_PA0_PCI0;
 constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI1;
 #define PCINT_ON	0
