@@ -34,18 +34,17 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#elif defined(BREADBOARD_ATTINYX5)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D3_PB3;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-// UART for traces
+// UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-#if HARDWARE_UART
-static serial::hard::UATX<UART> uart{output_buffer};
-#else
-static serial::soft::UATX<TX> uart{output_buffer};
-#endif
-static streams::ostream out = uart.out();
 
 // Subclass I2CDevice to make protected methods available
 class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::Standard>
@@ -80,6 +79,8 @@ struct RealTime
 
 const uint32_t I2C_FREQUENCY = 100000;
 
+using namespace streams;
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -87,19 +88,23 @@ int main()
 	sei();
 	
 #if HARDWARE_UART
+	serial::hard::UATX<UART> uart{output_buffer};
 	uart.register_handler();
+#else
+	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
+	ostream out = uart.out();
 	out.width(0);
-	out.setf(streams::ios::hex, streams::ios::basefield);
-	out << "Start" << streams::endl;
+	out.setf(ios::hex, ios::basefield);
+	out << "Start" << endl;
 	
 	// Start TWI interface
 	//====================
 	i2c::I2CManager<i2c::I2CMode::Standard> manager;
 	manager.begin();
-	out << "I2C interface started" << streams::endl;
-	out << "status #1 " << manager.status() << streams::endl;
+	out << "I2C interface started" << endl;
+	out << "status #1 " << manager.status() << endl;
 	time::delay_ms(1000);
 	
 	PublicDevice rtc{manager};
@@ -117,7 +122,7 @@ int main()
 	//=======================
 	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
 	rtc.write(DEVICE_ADDRESS, init_time, i2c::BusConditions::NO_START_STOP);
-	out << "status #2 " << manager.status() << streams::endl;
+	out << "status #2 " << manager.status() << endl;
 
 	time::delay_ms(2000);
 	
@@ -125,9 +130,9 @@ int main()
 	//============
 	RealTime time;
 	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
-	out << "status #3 " << manager.status() << streams::endl;
+	out << "status #3 " << manager.status() << endl;
 	rtc.read(DEVICE_ADDRESS, time, i2c::BusConditions::REPEAT_START_STOP);
-	out << "status #4 " << manager.status() << streams::endl;
+	out << "status #4 " << manager.status() << endl;
 	
 	out	<< "RTC: " 
 		<< time.day.tens << time.day.units << '.'
@@ -136,11 +141,11 @@ int main()
 		<< time.hours.tens << time.hours.units << ':'
 		<< time.minutes.tens << time.minutes.units << ':'
 		<< time.seconds.tens << time.seconds.units
-		<< streams::endl;
+		<< endl;
 	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "status #5 " << manager.status() << streams::endl;
-	out << "End" << streams::endl;
+	out << "status #5 " << manager.status() << endl;
+	out << "End" << endl;
 }

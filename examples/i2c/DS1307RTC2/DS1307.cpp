@@ -15,6 +15,7 @@
 #include <fastarduino/time.h>
 #include <fastarduino/i2c_manager.h>
 #include <fastarduino/devices/ds1307.h>
+#include <fastarduino/iomanip.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
@@ -42,53 +43,48 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#elif defined(BREADBOARD_ATTINYX5)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D3_PB3;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-// UART for traces
+// UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-#if HARDWARE_UART
-static serial::hard::UATX<UART> uart{output_buffer};
-#else
-static serial::soft::UATX<TX> uart{output_buffer};
-#endif
-static streams::ostream out = uart.out();
 
 using devices::rtc::DS1307;
 using devices::rtc::WeekDay;
 using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
-using streams::dec;
-using streams::hex;
-using streams::endl;
+using namespace streams;
 
+//FIXME out is not a global variable anymore hence it must be "passed" somehow to trace_status
 void trace_status(uint8_t expected_status, uint8_t actual_status)
 {
 //	out << hex << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
 }
 
-void display_status(char index, uint8_t status)
+void display_status(ostream& out, char index, uint8_t status)
 {
-	out.width(2);
 	out << hex << F("status #") << index << ' ' << status << endl;
 }
 
-void display_ram(const uint8_t* data, uint8_t size)
+void display_ram(ostream& out, const uint8_t* data, uint8_t size)
 {
-	out.width(2);
 	out << hex << F("RAM content\n");
 	for (uint8_t i = 0; i < size; ++i)
 	{
 		if (!(i % 8)) out << endl;
-		out << data[i] << ' ';
+		out << setw(2) << data[i] << ' ';
 	}
 	out << endl;
 }
 
-void display_time(const tm& time)
+void display_time(ostream& out, const tm& time)
 {
-	out.width(0);
 	out	<< dec << F("RTC: [") 
 		<< uint8_t(time.tm_wday) << ']'
 		<< time.tm_mday << '.'
@@ -106,9 +102,13 @@ int main()
 	board::init();
 	sei();
 #if HARDWARE_UART
+	serial::hard::UATX<UART> uart{output_buffer};
 	uart.register_handler();
+#else
+	serial::soft::UATX<TX> uart{output_buffer};
 #endif
 	uart.begin(115200);
+	ostream out = uart.out();
 	out << F("Start") << endl;
 	
 	// Start TWI interface
@@ -116,16 +116,17 @@ int main()
 	i2c::I2CManager<> manager{trace_status};
 	manager.begin();
 	out << F("I2C interface started") << endl;
-	display_status('1', manager.status());
+	display_status(out, '1', manager.status());
 	time::delay_ms(1000);
 	
 	DS1307 rtc{manager};
 	
 	// read RAM content and print out
 	uint8_t data[DS1307::ram_size()];
+	memset(data, 0,sizeof data);
 	rtc.get_ram(0, data, sizeof data);
-	display_status('2', manager.status());
-	display_ram(data, sizeof data);
+	display_status(out, '2', manager.status());
+	display_ram(out, data, sizeof data);
 	
 	tm time1;
 	time1.tm_hour = 8;
@@ -139,32 +140,34 @@ int main()
 	// Initialize clock date
 	//=======================
 	rtc.set_datetime(time1);
-	display_status('3', manager.status());
+	display_status(out, '3', manager.status());
 
 	time::delay_ms(2000);
 	
 	// Read clock
 	//============
 	tm time2;
+	memset(&time2, 0,sizeof time2);
 	rtc.get_datetime(time2);
-	display_status('4', manager.status());
-	display_time(time2);
+	display_status(out, '4', manager.status());
+	display_time(out, time2);
 	
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
-	display_status('5', manager.status());
+	display_status(out, '5', manager.status());
 	
+	// Provide 10 seconds delay to allow checking square ave output with an oscilloscope
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
-	display_status('6', manager.status());
+	display_status(out, '6', manager.status());
 
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
 	rtc.set_ram(0, data, sizeof data);
-	display_status('7', manager.status());
+	display_status(out, '7', manager.status());
 	
 	// Stop TWI interface
 	//===================
