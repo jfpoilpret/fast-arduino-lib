@@ -23,6 +23,7 @@
 
 #include <ctype.h>
 #include <stddef.h>
+#include "ios.h"
 
 namespace streams
 {
