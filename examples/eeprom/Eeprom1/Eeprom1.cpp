@@ -28,6 +28,7 @@
 
 #include <fastarduino/time.h>
 #include <fastarduino/eeprom.h>
+#include <fastarduino/iomanip.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HARDWARE_UART 1
@@ -55,6 +56,11 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/soft_uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+#elif defined (BREADBOARD_ATTINYX5)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -63,21 +69,22 @@ constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace eeprom;
+using namespace streams;
 
-static void trace_eeprom(streams::ostream& out, uint16_t address, uint16_t loops = 1)
+static void trace_eeprom(ostream& out, uint16_t address, uint16_t loops = 1)
 {
 	for (uint16_t i = 0; i < loops; ++i)
 	{
-		out.width(4);
-		out << address << ": ";
-		out.width(2);
+		out << hex << setw(4) << address << ": ";
 		for (uint8_t j = 0 ; j < 16; ++j)
 		{
 			uint8_t value;
 			EEPROM::read(address++, value);
-			out << value << ' ' << streams::flush;
+			//FIXME the following lines displays only spaces when value is 2 digits?
+			// out << hex << setw(2) << value << ' ' << flush;
+			out << hex << value << ' ' << flush;
 		}
-		out << '\n';
+		out << endl;
 	}
 }
 
@@ -94,27 +101,26 @@ int main()
 #endif
 	uart.begin(115200);
 
-	streams::ostream out = uart.out();
-	out << streams::hex;
-	out << "\nInitial EEPROM content\n";	
+	ostream out = uart.out();
+	out << F("Initial EEPROM content") << endl;	
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 	
 	EEPROM::erase();
-	out << "After EEPROM erase\n";	
+	out << F("After EEPROM erase") << endl;
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 
 	for (uint16_t i = 0 ; i < 256; ++i)
 		EEPROM::write(i, (uint8_t) i);
-	out << "After 256 EEPROM writes\n";	
+	out << F("After 256 EEPROM writes") << endl;	
 	trace_eeprom(out, 0, EEPROM::size() / 16);
 	
 	char buffer[] = "abcdefghijklmnopqrstuvwxyz";
 	EEPROM::write(256, buffer);
-	out << "After EEPROM string write\n";	
+	out << F("After EEPROM string write") << endl;
 	trace_eeprom(out, 256, 3);
 
 	EEPROM::write(256 + 64, buffer, 6);
-	out << "After EEPROM partial string write\n";	
+	out << F("After EEPROM partial string write") << endl;
 	trace_eeprom(out, 256 + 64, 3);
 	
 	// Check out of ranges read/writes
@@ -122,21 +128,21 @@ int main()
 	bool ok;
 	ok = EEPROM::read(E2END + 1, value);
 	if (ok)
-		out << "ERROR! read(E2END + 1) did not fail!" << streams::flush;
+		out << F("ERROR! read(E2END + 1) did not fail!") << endl;
 	ok = EEPROM::read(E2END, buffer);
 	if (ok)
-		out << "ERROR! read(E2END, 27) did not fail!" << streams::flush;
+		out << F("ERROR! read(E2END, 27) did not fail!") << endl;
 	ok = EEPROM::read(E2END, buffer, 0);
 	if (ok)
-		out << "ERROR! read(E2END, x, 0) did not fail!" << streams::flush;
+		out << F("ERROR! read(E2END, x, 0) did not fail!") << endl;
 	ok = EEPROM::write(E2END + 1, value);
 	if (ok)
-		out << "ERROR! write(E2END + 1) did not fail!" << streams::flush;
+		out << F("ERROR! write(E2END + 1) did not fail!") << endl;
 	ok = EEPROM::write(E2END, buffer);
 	if (ok)
-		out << "ERROR! write(E2END, 27) did not fail!" << streams::flush;
+		out << F("ERROR! write(E2END, 27) did not fail!") << endl;
 	ok = EEPROM::write(E2END, buffer, 0);
 	if (ok)
-		out << "ERROR! write(E2END, x, 0) did not fail!" << streams::flush;
+		out << F("ERROR! write(E2END, x, 0) did not fail!") << endl;
 	return 0;
 }
