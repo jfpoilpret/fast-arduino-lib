@@ -84,6 +84,7 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								analog/AnalogPin1				\
 								analog/PWM1 analog/PWM2			\
 								analog/PWM4						\
+								eeprom/Eeprom1					\
 								events/EventApp6				\
 								int/ExternalInterrupt1			\
 								int/ExternalInterrupt2			\
