@@ -99,11 +99,8 @@ namespace spi
 			USISR = _BV(USIOIF);
 			synchronized
 			{
-				do
-				{
+				while (bit_is_clear(USISR, USIOIF))
 					USICR |= _BV(USITC);
-				}
-				while (bit_is_clear(USISR, USIOIF));
 			}
 			return USIDR;
 		}
