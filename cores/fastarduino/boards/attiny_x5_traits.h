@@ -90,8 +90,7 @@ namespace board_traits
 	//=====
 	// SPI
 	//=====
-	//TODO recheck MOSI/MISO (as this must be DO/DI instead on ATtiny MCU)
-	struct SPI_trait: SPI_trait_impl<Port::PORT_B, 0, PB0, PB1, PB2> {};
+	struct SPI_trait: SPI_trait_impl<Port::PORT_B, 0, PB1, PB0, PB2> {};
 
 	//=====
 	// I2C
