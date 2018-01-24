@@ -43,8 +43,9 @@ void spi::init()
 		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~_BV(board_traits::SPI_trait::MISO)) |
 									   _BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK);
 		// Set MISO as pullup and force MOSI and SCK low
-		board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | _BV(board_traits::SPI_trait::MISO)) &
-										~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
+		//TODO not sure this is really needed
+		// board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | _BV(board_traits::SPI_trait::MISO)) &
+		// 								~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
 	}
 }
 #endif
