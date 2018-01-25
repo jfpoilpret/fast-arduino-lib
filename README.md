@@ -93,10 +93,10 @@ As of now, the following platforms are supported (and tested):
 - Arduino Leonardo (without USB support)
 - Breadboard ATmega328 at 8MHz and 16MHz
 - Breadboard ATtiny84 at 8MHz
+- Breadboard ATtiny85 at 8MHz
 
 I intend to later add support for:
 
-- Breadboard ATtiny85 at 8MHz
 - Arduino Leonardo with USB support
 
 A [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) is available for those who want to learn FastArduino API; although not fully complete yet, (a few missing features will be documented early 2018), it can already be used to understand most FastArduino API. In parallel to that, I am documenting [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) through [doxygen](http://www.stack.nl/~dimitri/doxygen/) and that should also be completed early 2018.
@@ -108,18 +108,17 @@ The roadmap of next activities and new supported features is the following:
 
 1st Quarter 2018
 ----------------
-1. Add support for ATtinyX5
-2. Finalize sonar ranger API
-3. Support other I2C devices: MCP23017 (IO multiplexer)
+1. Finalize sonar ranger API
+2. Support other I2C devices: MCP23017 (IO multiplexer)
 
 2nd Quarter 2018 (to be revisited)
 ----------------------------------
-4. Improve Analog Input support and code
-5. Improve I2C master support (asynchronous mode)
-6. Improve SPI to support slave mode
-7. Improve I2C to support slave mode
-8. Add USB support for Arduino Leonardo
-9. Add high-speed timer support of Arduino Leonardo
+3. Improve Analog Input support and code
+4. Improve I2C master support (asynchronous mode)
+5. Improve SPI to support slave mode
+6. Improve I2C to support slave mode
+7. Add USB support for Arduino Leonardo
+8. Add high-speed timer support of Arduino Leonardo
 
 In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
 
