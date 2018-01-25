@@ -37,6 +37,9 @@
  *   - D7 master/slave configuration pin
  *   - D4 (SCK), D6 (MISO), D5 (MOSI), D2 (CSN): SPI interface to NRF24L01+
  *   - D3 (CE): interface to NRF24L01+
+ * - on ATtinyX5 based boards (slave only):
+ *   - D2 (SCK), D0 (MISO), D1 (MOSI), D3 (CSN): SPI interface to NRF24L01+
+ *   - D4 (CE): interface to NRF24L01+
  * 
  * Note: this example does not use NRF24L01+ IRQ pin to wake up the active waiting loop during reception.
  */
@@ -57,6 +60,7 @@ static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(2)
+
 #elif defined(ARDUINO_LEONARDO)
 #define HAS_TRACE 1
 #define USART_NUM 1
@@ -68,6 +72,7 @@ static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER1;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(1)
+
 #elif defined(ARDUINO_MEGA)
 #define HAS_TRACE 1
 #define USART_NUM 0
@@ -79,6 +84,7 @@ static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(2)
+
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_TRACE 0
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PA7;
@@ -88,6 +94,17 @@ static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER0;
 
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
+
+#elif defined (BREADBOARD_ATTINYX5)
+#define HAS_TRACE 0
+#define IS_SLAVE 1
+static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D3_PB3;
+static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D4_PB4;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER0;
+
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
+
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -110,11 +127,18 @@ static const uint32_t REPLY_MAX_WAIT_MS = 1000L;
 static const uint32_t RECEIVE_MAX_WAIT_MS = 10000L;
 static const uint32_t DELAY_BETWEEN_2_FRAMES_MS = 100L;
 
+#ifdef IS_SLAVE
+static bool is_master()
+{
+	return false;
+}
+#else
 static bool is_master()
 {
 	gpio::FastPinType<PIN_CONFIG>::TYPE config{gpio::PinMode::INPUT_PULLUP};
 	return config.value();
 }
+#endif
 
 int main()
 {
