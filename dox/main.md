@@ -40,6 +40,7 @@ Note that `make` builds one version of FastArduino library for a specific target
 - ATmega328-8Mhz: bare ATmega328P MCU at 8 MHz
 - ATmega328-16MHz: bare ATmega328P MCU at 16 MHz
 - ATtinyX4-8MHz: bare ATtinyX4 MCU at 8 MHz
+- ATtinyX5-8MHz: bare ATtinyX5 MCU at 8 MHz
 
 Building a project using FastArduino
 ------------------------------------

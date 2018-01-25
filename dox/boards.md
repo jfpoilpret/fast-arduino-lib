@@ -13,6 +13,7 @@ MCU selection at compile-time is done by setting the following pre-processor mac
     - `ARDUINO_LEONARDO`
     - `BREADBOARD_ATMEGA328P`
     - `BREADBOARD_ATTINYX4`
+    - `BREADBOARD_ATTINYX5`
     - `ARDUINO_MEGA`
 - `F_CPU`
 
@@ -22,6 +23,7 @@ In addition, the following option shall be set at compile time:
     - `atmega328`
     - `atmega32u4`
     - `attiny84`
+    - `attiny85`
     - `atmega2560`
 
 When using FastArduino makefile, then you first need to create your project under netbeans, generate a proper configuration for it, and pass it to `make`. This is described in further details in [ArduinoDevSetup](https://github.com/jfpoilpret/fast-arduino-lib/blob/master/ArduinoDevSetup.docx?raw=true).
@@ -37,6 +39,7 @@ For each of the following supported targets, you can find the documentation of i
 - [Arduino NANO](boards/nano/namespaceboard.html)
 - [ATmega328P based board](boards/atmega328/namespaceboard.html)
 - [ATtinyX4 based board](boards/attinyx4/namespaceboard.html)
+- [ATtinyX5 based board](boards/attinyx5/namespaceboard.html)
 - [Arduino LEONARDO](boards/leonardo/namespaceboard.html)
 - [Arduino MEGA](boards/mega/namespaceboard.html)
 
