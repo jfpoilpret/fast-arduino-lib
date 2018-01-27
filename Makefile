@@ -43,6 +43,7 @@ doco:
 	doxygen ./dox/doxyfile-mega
 	doxygen ./dox/doxyfile-atmega328
 	doxygen ./dox/doxyfile-attinyx4
+	doxygen ./dox/doxyfile-attinyx5
 
 # include list of all examples
 include Makefile-Examples.mk
