@@ -849,6 +849,8 @@ namespace timer
 			TRAIT::TCCRB = tccrb_;
 			// Set timer counter compare match
 			TRAIT::OCRA = max;
+			if (!TRAIT::CTC_MAX.is_no_reg())
+				TRAIT::CTC_MAX = max;
 			TRAIT::TCNT = 0;
 			// Set timer interrupt mode (set interrupt on OCRnA compare match)
 			utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);

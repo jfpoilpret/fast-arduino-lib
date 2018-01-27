@@ -75,14 +75,43 @@ int main()
 	LED_COMPA::set_mode(gpio::PinMode::OUTPUT);
 	LED_COMPB::set_mode(gpio::PinMode::OUTPUT);
 	LED_OVF::set_mode(gpio::PinMode::OUTPUT);
+	sei();
 
+	// Wait long enough in order to start a digital analyzer
+	time::delay_ms(10000);
+
+	// First off, try timer in CTC mode
 	TIMER timer{
 		TimerMode::CTC, PRESCALER, 
 		TimerInterrupt::OUTPUT_COMPARE_A | TimerInterrupt::OUTPUT_COMPARE_B | TimerInterrupt::OVERFLOW};
+	timer.begin(COUNTER);
+	time::delay_ms(2000);
+	timer.end();
 
-	sei();
+	LED_COMPA::clear();
+	LED_COMPB::clear();
+	LED_OVF::clear();
+	time::delay_ms(1000);
 
-	timer.begin_(COUNTER);
-	
-	while (true) ;
+	// Then try timer in Normal mode
+	timer.set_timer_mode(TimerMode::NORMAL);
+	timer.begin(COUNTER);
+	time::delay_ms(2000);
+	timer.end();
+
+	LED_COMPA::clear();
+	LED_COMPB::clear();
+	LED_OVF::clear();
+	time::delay_ms(1000);
+
+	// Then try PWM
+	timer.set_timer_mode(TimerMode::FAST_PWM);
+	timer.begin(COUNTER);
+	time::delay_ms(2000);
+	timer.end();
+
+	// Switch off all LEDs
+	LED_COMPA::clear();
+	LED_COMPB::clear();
+	LED_OVF::clear();
 }

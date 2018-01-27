@@ -140,7 +140,14 @@ namespace board_traits
 							0, 0,
 							0, _BV(CTC1),
 							NO_REG, R_(TCCR1), R_(TCNT1), R_(OCR1A), 
-							R_(TIMSK), R_(TIFR), _BV(TOIE1) | _BV(OCIE1A) | _BV(OCIE1B)>
+							R_(TIMSK), R_(TIFR), _BV(TOIE1) | _BV(OCIE1A) | _BV(OCIE1B),
+							NO_REG,
+							0, 0,
+							0, 0,
+							0, 0,
+							board::DigitalPin::NONE,
+							0,
+							R_(OCR1C)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
