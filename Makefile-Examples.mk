@@ -104,6 +104,10 @@ else
 	ALL_EXAMPLES = ${COMMON_EXAMPLES} ${EXAMPLES_${VARIANT}}
 endif
 
+REALLY_ALL_EXAMPLES =	${COMMON_EXAMPLES} ${EXAMPLES_ARDUINO_UNO} ${EXAMPLES_ARDUINO_LEONARDO} \
+						${EXAMPLES_ARDUINO_MEGA} ${EXAMPLES_ARDUINO_NANO} ${EXAMPLES_BREADBOARD_ATMEGA328P} \
+						${EXAMPLES_BREADBOARD_ATTINYX4} ${EXAMPLES_BREADBOARD_ATTINYX5}
+
 # Special build target for all fastArduino examples
 # Need to export all necessary variables to submakes
 export CONF PROGRAMMER COM
@@ -115,4 +119,7 @@ examples: build
 
 clean-examples: clean
 	$(foreach example, $(ALL_EXAMPLES), $(MAKE) -C examples/$(example) clean;)
+
+clean-examples-all: clean-all
+	$(foreach example, $(REALLY_ALL_EXAMPLES), $(MAKE) -C examples/$(example) clean-all;)
 

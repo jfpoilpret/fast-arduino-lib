@@ -41,6 +41,19 @@
                 "panel": "shared"
             },
             "problemMatcher": [ "$avrgcc" ]
+        },
+        {
+            "taskName": "Clean all examples in all targets",
+            "type": "shell",
+            "command": "make clean-examples-all ${FA_MAKE_OPTIONS}",
+            "group": "none",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
         }
     ]
 }
