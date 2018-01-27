@@ -543,6 +543,9 @@ namespace board_traits
 		// Input-capture stuff
 		static constexpr const board::DigitalPin ICP_PIN = board::DigitalPin::NONE;
 		static constexpr const uint8_t ICES_TCCRB = 0;
+
+		// ATtinyX5 Timer1 specific stuff
+		static constexpr const REGISTER<TYPE> CTC_MAX{};
 	};
 
 	template<typename TYPE_, TimerPrescalers PRESCALERS_, 
@@ -558,7 +561,8 @@ namespace board_traits
 			uint8_t F_PWM_ICR_TCCRA_ = 0, uint8_t F_PWM_ICR_TCCRB_ = 0, 
 			uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0,
 			board::DigitalPin ICP_PIN_ = board::DigitalPin::NONE,
-			uint8_t ICES_TCCRB_ = 0>
+			uint8_t ICES_TCCRB_ = 0,
+			REG CTC_MAX_ = NO_REG>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -603,6 +607,8 @@ namespace board_traits
 
 		static constexpr const board::DigitalPin ICP_PIN = ICP_PIN_;
 		static constexpr const uint8_t ICES_TCCRB = ICES_TCCRB_;
+
+		static constexpr const REGISTER<TYPE> CTC_MAX = CTC_MAX_;
 	};
 	
 	template<DigitalPin PIN>
