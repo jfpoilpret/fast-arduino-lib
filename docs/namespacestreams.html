@@ -290,7 +290,7 @@ serial::soft </dd></dl>
 <p>This method should only be used as a stream manipulator.</p>
 <p>The folowing example displays <code>123</code> right-aligned on 10 positions, i.e. with 7 <em>fill</em> characters prepended: </p><div class="fragment"><div class="line">out &lt;&lt; <a class="code" href="namespacestreams.html#a7a0d6060f80c47ca76bce32ce26950d2">setw</a>(10) &lt;&lt; <a class="code" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">dec</a> &lt;&lt; <a class="code" href="namespacestreams.html#a6ffd9b1de5fcffbb31c425a2218c6b09">right</a> &lt;&lt; 123 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div></div><!-- fragment --><p> Note that <code><a class="el" href="namespacestreams.html#a7a0d6060f80c47ca76bce32ce26950d2" title="Set the field width to be used on output (and some input) operations. ">setw()</a></code> is effective only for one input or output operation, and thus must be called before each operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00193">193</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00194">194</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
 
 </div>
 </div>
@@ -313,7 +313,7 @@ serial::soft </dd></dl>
 <p>Set the decimal precision to be used to format floating-point values on output operations. </p>
 <p>This method should only be used as a stream manipulator.</p>
 <p>The folowing example displays <code>123.456789</code> with various precision, i.e. various number of decimals afeter the decimal point: </p><div class="fragment"><div class="line">out &lt;&lt; <a class="code" href="namespacestreams.html#a47b832c75cfff7d1d585f5c808f07d20">setprecision</a>(2) &lt;&lt; 123.456789 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div><div class="line">out &lt;&lt; <a class="code" href="namespacestreams.html#a47b832c75cfff7d1d585f5c808f07d20">setprecision</a>(4) &lt;&lt; 123.456789 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div><div class="line">out &lt;&lt; <a class="code" href="namespacestreams.html#a47b832c75cfff7d1d585f5c808f07d20">setprecision</a>(6) &lt;&lt; 123.456789 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div><div class="line">out &lt;&lt; <a class="code" href="namespacestreams.html#a47b832c75cfff7d1d585f5c808f07d20">setprecision</a>(8) &lt;&lt; 123.456789 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00212">212</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00213">213</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
 
 </div>
 </div>
@@ -343,7 +343,7 @@ serial::soft </dd></dl>
 <dd>
 <a class="el" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f" title="Manipulator for an output or input stream, which will set the base, used to represent (output) or int...">hex()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00236">236</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00237">237</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
 
 </div>
 </div>
@@ -366,7 +366,7 @@ serial::soft </dd></dl>
 <p>Set a new <em>fill</em> character. </p>
 <p>This method should only be used as a stream manipulator.</p>
 <p>The following example displays <code>123</code> in hexadecimal form on 4 positions, padded with <code>0</code> if necessary: </p><div class="fragment"><div class="line">out &lt;&lt; <a class="code" href="namespacestreams.html#acef42f5bb71d718ec9db80d4f4bb608b">setfill</a>(`0`) &lt;&lt; <a class="code" href="namespacestreams.html#a7a0d6060f80c47ca76bce32ce26950d2">setw</a>(4) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespacestreams.html#a6ffd9b1de5fcffbb31c425a2218c6b09">right</a> &lt;&lt; 123 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00251">251</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00252">252</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
 
 </div>
 </div>
@@ -392,7 +392,7 @@ serial::soft </dd></dl>
 <dd>
 <a class="el" href="classstreams_1_1ios__base.html#a47fa7608c0e74a39d8c95b52fbccf2cd" title="Set this stream&#39;s format flags whose bits are set in flags, leaving unchanged the rest...">ios::setf()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00268">268</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00269">269</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
 
 </div>
 </div>
@@ -418,7 +418,7 @@ serial::soft </dd></dl>
 <dd>
 <a class="el" href="classstreams_1_1ios__base.html#a7ce5897064ad025f995125b2a59194ff" title="Clear this stream&#39;s format flags whose bits are set in flags. ">ios::unsetf()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00285">285</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="iomanip_8h_source.html#l00286">286</a> of file <a class="el" href="iomanip_8h_source.html">iomanip.h</a>.</p>
 
 </div>
 </div>

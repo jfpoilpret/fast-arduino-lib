@@ -1,9 +1,9 @@
 <map id="fastarduino/watchdog.h" name="fastarduino/watchdog.h">
-<area shape="rect" id="node4" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="5,80,92,107"/>
-<area shape="rect" id="node5" href="$events_8h.html" title="Support for events management. " alt="" coords="267,80,339,107"/>
-<area shape="rect" id="node15" href="$board_8h_source.html" title="boards/board.h" alt="" coords="364,80,472,107"/>
-<area shape="rect" id="node7" href="$queue_8h_source.html" title="queue.h" alt="" coords="269,155,337,181"/>
-<area shape="rect" id="node14" href="$linked__list_8h_source.html" title="linked_list.h" alt="" coords="175,229,266,256"/>
-<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="238,304,313,331"/>
-<area shape="rect" id="node11" href="$time_8h.html" title="Simple time utilities. " alt="" coords="341,229,399,256"/>
+<area shape="rect" id="node4" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="137,80,224,107"/>
+<area shape="rect" id="node5" href="$events_8h.html" title="Support for events management. " alt="" coords="249,80,321,107"/>
+<area shape="rect" id="node15" href="$board_8h_source.html" title="boards/board.h" alt="" coords="345,80,453,107"/>
+<area shape="rect" id="node7" href="$queue_8h_source.html" title="queue.h" alt="" coords="251,155,319,181"/>
+<area shape="rect" id="node14" href="$linked__list_8h_source.html" title="linked_list.h" alt="" coords="157,229,247,256"/>
+<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="219,304,294,331"/>
+<area shape="rect" id="node11" href="$time_8h.html" title="Simple time utilities. " alt="" coords="322,229,381,256"/>
 </map>
