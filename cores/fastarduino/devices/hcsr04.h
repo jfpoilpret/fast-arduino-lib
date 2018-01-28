@@ -173,8 +173,8 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))												\
 	static_assert(SONAR::ECHO_PORT == board_traits::PCI_trait< PCI_NUM >::PORT,	\
 		"SONAR::ECHO_PORT port must match PCI_NUM port");						\
 	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
-	auto handler = SONAR_HOLDER::handler();										\
-	auto event = handler->on_pin_change();										\
+	using TRAIT = board_traits::Timer_trait<SONAR::NTIMER>;						\
+	auto event = SONAR_HOLDER::handler()->on_pin_change(TRAIT::TCNT);			\
 	if (event.ready() || event.started())										\
 		CALL_HANDLER_(HANDLER, CALLBACK, decltype(event))(event);				\
 }
@@ -185,8 +185,8 @@ ISR(CAT3(PCINT, PCI_NUM, _vect))												\
 	static_assert(SONAR::ECHO_PORT == board_traits::PCI_trait< PCI_NUM >::PORT,	\
 		"SONAR::ECHO_PORT port must match PCI_NUM port");						\
 	using SONAR_HOLDER = HANDLER_HOLDER_(SONAR);								\
-	auto handler = SONAR_HOLDER::handler();										\
-	auto event = handler->on_pin_change();										\
+	using TRAIT = board_traits::Timer_trait<SONAR::NTIMER>;						\
+	auto event = SONAR_HOLDER::handler()->on_pin_change(TRAIT::TCNT);			\
 	if (event.ready || event.started)											\
 		CALLBACK (event);														\
 }
@@ -224,7 +224,6 @@ namespace devices
 		// The following struct template is a utility to ensure we will avoid
 		// failing static_assert() on ICP when ICP is not used.
 		// Not very beautiful, but I could not find a better way so far
-		//TODO Find a cleaner way to avoid static_assert errors if not using ICP
 		template<bool CAPTURE> struct TimerTrigger
 		{
 			template<typename TIMER_> static void trigger(UNUSED TIMER_& timer)
@@ -519,10 +518,8 @@ namespace devices
 				trigger_.clear();
 			}
 
-			EVENT on_pin_change()
+			EVENT on_pin_change(TYPE ticks)
 			{
-				//TODO Better get ticks from ISR and pass it along as argument
-				TYPE ticks = timer_.ticks_();
 				if (!active_)
 					return EVENT{};
 				// Compute the newly started echoes
