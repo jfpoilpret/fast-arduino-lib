@@ -187,13 +187,13 @@ namespace serial
 
 			using PIN_TRAIT = board_traits::DigitalPin_trait<RX>;
 			using PCI_TYPE = typename interrupt::PCIType<RX>::TYPE;
-			using PORT_TRAIT = typename PCI_TYPE::TRAIT;
+			using PCI_TRAIT = typename PCI_TYPE::TRAIT;
 			using INT_TYPE = interrupt::INTSignal<RX>;
 
 			template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX(input), rx_{gpio::PinMode::INPUT}
 			{
 				static_assert(
-					(PORT_TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<RX>::BIT)) || (PIN_TRAIT::IS_INT),
+					(PCI_TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<RX>::BIT)) || (PIN_TRAIT::IS_INT),
 					"RX must be a PinChangeInterrupt or an ExternalInterrupt pin");
 			}
 

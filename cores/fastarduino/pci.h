@@ -111,8 +111,16 @@ namespace interrupt
 		/// @cond notdocumented
 		//TODO why is that public? should be private!
 		using PORT_TRAIT = board_traits::Port_trait<PORT>;
-		static_assert(PORT_TRAIT::PCINT != 0xFF, "PORT_ must support PCINT");
 		using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
+		/// @endcond
+
+		/// @cond notdocumented
+		//NOTE this constructor exists only to add a static_assert checked when 
+		// PCISignal is constructed not when its template type gets instantiated.
+		PCISignal()
+		{
+			static_assert(PORT_TRAIT::PCINT != 0xFF, "PORT_ must support PCINT");
+		}
 		/// @endcond
 
 		/** The PCINT vector number for this PCISignal. */
