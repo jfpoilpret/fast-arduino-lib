@@ -212,7 +212,7 @@ namespace devices
 			return uint16_t(distance_mm * 1000UL * 2UL / SPEED_OF_SOUND);
 		}
 
-		enum class SonarType
+		enum class SonarType: uint8_t
 		{
 			BLOCKING,
 			ASYNC_INT,
@@ -322,7 +322,7 @@ namespace devices
 
 			inline bool pulse_captured(TYPE capture)
 			{
-				//TODO static_assert
+				static_assert(CAPTURE, "pulse_captured() shall be called only when CAPTURE == true");
 				bool rising = (timer_.input_capture() == timer::TimerInputCapture::RISING_EDGE);
 				if (rising)
 					timer_.set_input_capture(timer::TimerInputCapture::FALLING_EDGE);
