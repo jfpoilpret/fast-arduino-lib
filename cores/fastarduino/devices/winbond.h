@@ -195,7 +195,7 @@ namespace devices
 		bool ready = false;
 		this->start_transfer();
 		this->transfer(0x05);
-		//TODO add timing check (once RTT is available)
+		uint32_t start = time::millis();
 		while (true)
 		{
 			uint8_t status = this->transfer(0x00);
@@ -204,6 +204,8 @@ namespace devices
 				ready = true;
 				break;
 			}
+			if ((timeout_ms != 0) && (time::since(start) > timeout_ms)) break;
+			time::yield();
 		}
 		this->end_transfer();
 		return ready;
@@ -218,11 +220,20 @@ namespace devices
 
 	template<board::DigitalPin CS> uint64_t WinBond<CS>::read_unique_ID()
 	{
-		uint8_t buffer[9];
-		send(0x4B, 0, buffer, 9);
-		//FIXME check if we need to exchange bytes (endianness)
-		uint64_t id = *((uint64_t*) &buffer[1]);
-		return id;
+		// Since the Read ID instruction must be followed by 4 dummy bytes before
+		// returning the 8 bytes ID, we must use a 9-bytes buffer and skip its 
+		// first byte (the 3 other dummy bytes are already sent by send() as the
+		// 0 address)
+		using PAYLOAD = struct
+		{
+			uint8_t dummy;
+			uint64_t id;
+		};
+		PAYLOAD buffer;
+		send(0x4B, 0, (uint8_t*) &buffer, sizeof buffer);
+		// WinBond ID is big-endian (high byte first) but AVR is little-endian
+		// hence we need to convert result (using GCC builtin utility)
+		return __builtin_bswap64(buffer.id);
 	}
 
 	template<board::DigitalPin CS> uint8_t WinBond<CS>::read_data(uint32_t address)

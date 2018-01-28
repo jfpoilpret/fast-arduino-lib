@@ -149,7 +149,7 @@ int main()
 
 	out << F("B4 WR, S: ") << hex << flash.status().value << endl;
 	flash.enable_write();
-	flash.write_page(PAGE, data, sizeof data);
+	flash.write_page(PAGE, data, (DATA_SIZE >= 256 ? 0 : DATA_SIZE));
 	out << F("Af WR, S: ") << hex << flash.status().value << endl;
 	
 	flash.wait_until_ready(10);
