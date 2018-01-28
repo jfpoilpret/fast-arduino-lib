@@ -224,7 +224,7 @@ namespace devices
 		// returning the 8 bytes ID, we must use a 9-bytes buffer and skip its 
 		// first byte (the 3 other dummy bytes are already sent by send() as the
 		// 0 address)
-		using PAYLOAD = struct
+		struct PAYLOAD
 		{
 			uint8_t dummy;
 			uint64_t id;

@@ -61,10 +61,12 @@ using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
 using namespace streams;
 
-//FIXME out is not a global variable anymore hence it must be "passed" somehow to trace_status
-void trace_status(uint8_t expected_status, uint8_t actual_status)
+// Have to somehow declare this ugly global pointer so that trace_status()
+// knwos where to display its content.
+static ostream* pout = 0;
+void trace_status(uint8_t expected_status UNUSED, uint8_t actual_status UNUSED)
 {
-//	out << hex << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
+	(*pout) << hex << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
 }
 
 void display_status(ostream& out, char index, uint8_t status)
@@ -109,6 +111,7 @@ int main()
 #endif
 	uart.begin(115200);
 	ostream out = uart.out();
+	pout = &out;
 	out << F("Start") << endl;
 	
 	// Start TWI interface
