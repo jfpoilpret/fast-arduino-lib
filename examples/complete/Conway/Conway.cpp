@@ -161,7 +161,6 @@ static constexpr const uint8_t BUTTONS_MASK = gpio::FastPinType<SELECT>::MASK | 
 static constexpr const uint8_t ALL_PORT = MULTIPLEXER::PORT_MASK | BUTTONS_MASK;
 
 //NOTE: on the stripboards-based circuit, rows and columns are inverted
-//FIXME make it size-agnostic (how??)
 static constexpr const ROW_TYPE SMILEY[] =
 {
 	0B01110000,
