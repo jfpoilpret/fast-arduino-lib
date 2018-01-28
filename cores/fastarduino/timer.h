@@ -751,8 +751,59 @@ namespace timer
 				utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}
 
-		//TODO method to check if some interrupt is enabled
-		//TODO methods to add/remove interrupts?
+		/**
+		 * Add new interrupts to be enabled to the current list of interrupts
+		 * that must be triggered by this timer.
+		 * To select several interrupts, just "or" them together:
+		 * @code
+		 * timer.enable_interrupts(TimerInterrupt::OVERFLOW | TimerInterrupt::INPUT_CAPTURE);
+		 * @endcode
+		 * 
+		 * @param interrupts additional interrupts that will be used when timer is 
+		 * started; note that some interrupts are not supported by all timers, if
+		 * used here, they will silently be ignored.
+		 */
+		inline void enable_interrupts(TimerInterrupt interrupts)
+		{
+			timsk_ |= TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			// Check if timer is currently running
+			if (TRAIT::TCCRB)
+				utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
+		}
+
+		/**
+		 * Remove interrupts from the current list of enabled interrupts triggered
+		 * by this timer.
+		 * To select several interrupts to be disabled, just "or" them together:
+		 * @code
+		 * timer.disable_interrupts(TimerInterrupt::OVERFLOW | TimerInterrupt::INPUT_CAPTURE);
+		 * @endcode
+		 * 
+		 * @param interrupts interrupts that will not be used when timer is 
+		 * started
+		 */
+		inline void disable_interrupts(TimerInterrupt interrupts)
+		{
+			timsk_ &= ~TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			// Check if timer is currently running
+			if (TRAIT::TCCRB)
+				utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
+		}
+
+		/**
+		 * Test if interrupts are currently enabled for this timers.
+		 * To select several interrupts to be tested, just "or" them together:
+		 * @code
+		 * if (timer.are_interrupts_enabled(TimerInterrupt::OVERFLOW | TimerInterrupt::INPUT_CAPTURE)) ...
+		 * @endcode
+		 * 
+		 * @param interrupts interrupts to be checked
+		 */
+		inline bool are_interrupts_enabled(TimerInterrupt interrupts) const
+		{
+			uint8_t mask = TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			return (TRAIT::TIMSK_ & mask) == mask;
+		}
 
 		/**
 		 * Set the input capture mode fr this timer.
