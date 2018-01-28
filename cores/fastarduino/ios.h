@@ -675,8 +675,8 @@ namespace streams
 						output_filler(out, fill(), add);
 						output_number(out, input, add_sign, prefix);
 					}
+					return;
 				}
-				return;
 			}
 			// Handle case where no padding is needed
 			output_number(out, input, add_sign, prefix);

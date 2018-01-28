@@ -80,9 +80,7 @@ static void trace_eeprom(ostream& out, uint16_t address, uint16_t loops = 1)
 		{
 			uint8_t value;
 			EEPROM::read(address++, value);
-			//FIXME the following lines displays only spaces when value is 2 digits?
-			// out << hex << setw(2) << value << ' ' << flush;
-			out << hex << value << ' ' << flush;
+			out << hex << setw(2) << value << ' ' << flush;
 		}
 		out << endl;
 	}
