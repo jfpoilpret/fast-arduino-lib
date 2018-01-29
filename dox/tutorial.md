@@ -1776,7 +1776,7 @@ FastArduino `Scheduler` API is defined in its own header, but under the same `ev
 #include <fastarduino/scheduler.h>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This API is based on FastArduino events management, hence we need to define the `event` type we need:
+This API is based on FastArduino events management, hence we need to define the `Event` type we need:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 using EVENT = Event<void>;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
