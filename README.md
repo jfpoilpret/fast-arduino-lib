@@ -23,7 +23,7 @@ After usage of Cosa libraries for several projects on ATmega328 and particularly
 - code size (for small AVR MCU)
 - speed (for specific situations such as software UART)
 
-From my viewpoint, the main source of those drawbacks is essentially heavy usage of `virtual` methods, which quickly increases code size when you start to define deep classes hierarchies; this also can have a slight impact on speed due to additional indirection when calling methods. Calling `virtual` methods from an ISR also has a big impact on code size as the generated code for ISR will push all registers to the stack, then call your ISR code, and finally pop all regsiters back from the stack; of course, this also has a dramatic impact on ISR execution speed. Avoiding `virtual` methods calls from an ISR ensures the compiler generates only the strict minimum of push and pop necessary.
+From my viewpoint, the main source of those drawbacks is essentially heavy usage of `virtual` methods, which quickly increases code size when you start to define deep classes hierarchies; this also can have a slight impact on speed due to additional indirection when calling methods. Calling `virtual` methods from an ISR also has a big impact on code size as the generated code for ISR will push all registers to the stack, then call your ISR code, and finally pop all registers back from the stack; of course, this also has a dramatic impact on ISR execution speed. Avoiding `virtual` methods calls from an ISR ensures the compiler generates only the strict minimum of push and pop necessary.
 
 FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one abstract parent and direct children). 
 
@@ -84,6 +84,7 @@ In addition, FastArduino brings support for the following devices:
 - DS1307 RTC device support (I2C-based)
 - HMC5883L magnetometer device support (I2C-based)
 - MPU-6050 accelerometer/gyroscope device support (I2C-based)
+- HC-SR04 sonar device support
 
 As of now, the following platforms are supported (and tested):
 
@@ -106,21 +107,35 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-1st Quarter 2018
+Milestone V1.0 (28.02.2018)
+---------------------------
+1. Support other I2C devices: MCP23017 (IO multiplexer)
+2. Document most important API (scheduler, containers, eeprom)
+3. Improved Queue container
+
+Milestone V1.1 (30.04.2018)
+---------------------------
+1. Document SPI and I2C API
+2. Document API of supported SPI and I2C devices
+3. Bugs fixes (software UART mainly)
+4. Various improvements: prevent or implement move- and copy- constructors and assignment operators
+
+Milestone V2.0 (31.08.2018, content to be revisited)
+----------------------------------------------------
+1. Allow PWM on pins linked to 2 timers
+2. Improve Analog Input support and code
+3. Improve I2C master support (asynchronous mode)
+4. Improve I2C to support slave mode
+
+4th Quarter 2018
 ----------------
-1. Finalize sonar ranger API
-2. Support other I2C devices: MCP23017 (IO multiplexer)
+1. Add USB support for Arduino Leonardo
+2. Add high-speed timer support of Arduino Leonardo
+3. Improve SPI to support slave mode
 
-2nd Quarter 2018 (to be revisited)
-----------------------------------
-3. Improve Analog Input support and code
-4. Improve I2C master support (asynchronous mode)
-5. Improve SPI to support slave mode
-6. Improve I2C to support slave mode
-7. Add USB support for Arduino Leonardo
-8. Add high-speed timer support of Arduino Leonardo
+Milestones dates are "best effort" and may changed based on contributors' availability.
 
-In addition to these activities, I intend to perform various continuous improvements in the following months, regarding:
+In addition to these activities, various continuous improvements are planned in the following months, regarding:
 
 - [coding guidelines](CodingGuidelines.md) applied across the library code (not necessarily example code)
 - complete documentation (Tutorial, API, ISR handling, Board support adding...)
