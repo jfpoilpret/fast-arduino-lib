@@ -21,12 +21,12 @@ Advanced:
 2. [interrupts](@ref interrupts)
 3. [events, scheduler](@ref events)
 4. [power](@ref power)
-5. SPI devices management
-6. I2C devices management
-7. eeprom
+5. eeprom
+6. SPI devices management
+7. I2C devices management
 8. software UART
 
-Devices:
+Devices (not yet documented):
 1. SPI
 2. I2C
 3. Other devices: sonar, servo, SIPO
