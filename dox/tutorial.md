@@ -21,7 +21,7 @@ Advanced:
 2. [interrupts](@ref interrupts)
 3. [events, scheduler](@ref events)
 4. [power](@ref power)
-5. eeprom
+5. [EEPROM](@ref eeprom)
 6. SPI devices management
 7. I2C devices management
 8. software UART
@@ -1970,4 +1970,33 @@ is used by other FastArduino API on several occasions whenever these API need to
 
 Hence when using any of these API, it is important to select the proper sleep mode, based on your power 
 consumption requirements.
+
+
+@anchor eeprom Advanced: EEPROM
+-------------------------------
+
+All AVR MCU include an EEPROM (Electrically Erasable Programmable Read-Only Memory) which can be useful for storing
+data that:
+- is quite stable but may change from time to time
+- is fixed but different for every MCU (for a large series of similar circuits)
+
+Typical examples of use of EEPROM cells include (but are not limited to):
+- Circuit unique ID (e.g. used in a network of devices)
+- WIFI credentials
+- Calibration value (for internal RC clock)
+- Sequence of tones frequencies & periods for an alarm melody
+
+In these examples, writing EEPROM cells would happen only once (or a few times), while reading would occur at startup.
+
+Often, writing EEPROM can be done directly through an ISP programmer (UNO USB programming does not support EEPROM writing) and only readinf is needed in a program. The next example illustrates this situation.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+TODO Simple EEPROM Example read config from EEPROM (written by ISP programmer)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TODO example explanation
+
+
+TODO 2nd example write config to EEPROM
 
