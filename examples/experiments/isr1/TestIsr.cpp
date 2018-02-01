@@ -21,25 +21,75 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
 static constexpr const board::AnalogPin FREQ_INPUT = board::AnalogPin::A0;
 
+template<board::Timer NTIMER_, board::DigitalPin OUTPUT_>
+class SquareWave
+{
+public:
+	static constexpr const board::Timer NTIMER = NTIMER_;
+	static constexpr const board::DigitalPin OUTPUT = OUTPUT_;
+
+	using CALC = timer::Calculator<NTIMER>;
+	using TIMER = timer::Timer<NTIMER>;
+	using PWMPIN = analog::PWMOutput<OUTPUT>;
+
+	SquareWave()
+		:timer_{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING}, output_{timer_, timer::TimerOutputMode::TOGGLE}
+	{
+	}
+
+	TIMER& timer() const
+	{
+		return timer_;
+	}
+	
+	void start_frequency(uint32_t frequency)
+	{
+		timer_.end();
+		const uint32_t period = 1000000UL / 2 / frequency;
+		typename TIMER::PRESCALER prescaler = CALC::CTC_prescaler(period);
+		typename TIMER::TYPE counter = CALC::CTC_counter(prescaler, period);
+		timer_.set_prescaler(prescaler);
+		timer_.begin();
+		output_.set_duty(counter);
+	}
+
+	void stop()
+	{
+		timer_.end();
+	}
+
+private:
+	TIMER timer_;
+	PWMPIN output_;
+};
+
+enum class TONE: uint16_t
+{
+	C = 262,
+	Cs = 277,
+	D = 294,
+	Ds = 311,
+	E = 330,
+	F = 349,
+	Fs = 370,
+	G = 392,
+	Gs = 415,
+	A = 440,
+	As = 466,
+	B = 494
+};
+
 using FREQ = analog::AnalogInput<FREQ_INPUT, uint8_t>;
-using CALC = timer::Calculator<NTIMER>;
-using TIMER = timer::Timer<NTIMER>;
-using PWMPIN = analog::PWMOutput<OUTPUT>;
+using GENERATOR = SquareWave<NTIMER, OUTPUT>;
 
 // Frequency range
 static constexpr const uint32_t MIN_FREQ = 40UL;
 static constexpr const uint32_t DEFAULT_FREQ = 440UL;
 static constexpr const uint32_t MAX_FREQ = 20000UL;
 
-static void init_frequency(TIMER& timer, PWMPIN& output, uint32_t frequency)
+static void tone(TONE t, uint16_t ms)
 {
-	timer.end();
-	const uint32_t period = 1000000UL / 2 / frequency;
-	TIMER::PRESCALER prescaler = CALC::CTC_prescaler(period);
-	TIMER::TYPE counter = CALC::CTC_counter(prescaler, period);
-	timer.set_prescaler(prescaler);
-	timer.begin();
-	output.set_duty(counter);
+	//TODO
 }
 
 int main() __attribute__((OS_main));
@@ -47,10 +97,9 @@ int main()
 {
 	sei();
 
-	FREQ input;
-	TIMER timer{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING};
-	PWMPIN output = PWMPIN{timer, timer::TimerOutputMode::TOGGLE};
+	GENERATOR generator;
 
+	FREQ input;
 	FREQ::SAMPLE_TYPE sample = 0xFF;
 	while (true)
 	{
@@ -62,9 +111,9 @@ int main()
 			// Convert to frequency
 			uint32_t frequency = utils::map(sample, uint8_t(0), uint8_t(255), MIN_FREQ, MAX_FREQ);
 			// Set new frequency
-			init_frequency(timer, output, frequency);
+			generator.start_frequency(frequency);
 		}
-		// Generate square wave for 100 milliseconds
+		// Generate square wave for 1000 milliseconds
 		time::delay_ms(1000);
 	}
 }
