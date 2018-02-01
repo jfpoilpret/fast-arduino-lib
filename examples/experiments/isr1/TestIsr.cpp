@@ -10,7 +10,7 @@
 //TODO store melody to EEPROM and read it from there
 
 // Example of square wave generation, using CTC mode and COM toggle
-#include <fastarduino/analog_input.h>
+#include <fastarduino/gpio.h>
 #include <fastarduino/pwm.h>
 #include <fastarduino/time.h>
 #include <fastarduino/timer.h>
@@ -19,7 +19,6 @@
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
-static constexpr const board::AnalogPin FREQ_INPUT = board::AnalogPin::A0;
 
 template<board::Timer NTIMER_, board::DigitalPin OUTPUT_>
 class SquareWave
@@ -79,41 +78,83 @@ enum class TONE: uint16_t
 	B = 494
 };
 
-using FREQ = analog::AnalogInput<FREQ_INPUT, uint8_t>;
-using GENERATOR = SquareWave<NTIMER, OUTPUT>;
-
-// Frequency range
-static constexpr const uint32_t MIN_FREQ = 40UL;
-static constexpr const uint32_t DEFAULT_FREQ = 440UL;
-static constexpr const uint32_t MAX_FREQ = 20000UL;
-
-static void tone(TONE t, uint16_t ms)
+template<board::Timer NTIMER, board::DigitalPin OUTPUT>
+class ToneGenerator
 {
-	//TODO
-}
+private:
+	using GENERATOR = SquareWave<NTIMER, OUTPUT>;
+
+public:
+	ToneGenerator():generator_{}
+	{
+	}
+
+	void tone(TONE t, uint16_t ms)
+	{
+		generator_.start_frequency(uint32_t(t));
+		if (ms != 0)
+		{
+			time::delay_ms(ms);
+			generator_.stop();
+		}
+	}
+
+	void tone(TONE t, int8_t octave, uint16_t ms)
+	{
+		uint32_t frequency = uint32_t(t);
+		if (octave < 0)
+			frequency >>= -octave;
+		else if (octave > 0)
+			frequency <<= octave;
+		generator_.start_frequency(frequency);
+		if (ms != 0)
+		{
+			time::delay_ms(ms);
+			generator_.stop();
+		}
+	}
+
+	void no_tone()
+	{
+		generator_.stop();
+	}
+
+private:
+	GENERATOR generator_;
+};
+
+using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
+static constexpr const uint16_t DEFAULT_DURATION_MS = 1000;
 
 int main() __attribute__((OS_main));
 int main()
 {
 	sei();
 
+	gpio::FastPinType<board::DigitalPin::LED>::set_mode(gpio::PinMode::OUTPUT);
+	gpio::FastPinType<board::DigitalPin::LED>::set();
+	time::delay_ms(5000);
+	gpio::FastPinType<board::DigitalPin::LED>::clear();
+
 	GENERATOR generator;
 
-	FREQ input;
-	FREQ::SAMPLE_TYPE sample = 0xFF;
 	while (true)
 	{
-		// Read analog pin
-		FREQ::SAMPLE_TYPE new_sample = input.sample();
-		if (new_sample != sample)
-		{
-			sample = new_sample;
-			// Convert to frequency
-			uint32_t frequency = utils::map(sample, uint8_t(0), uint8_t(255), MIN_FREQ, MAX_FREQ);
-			// Set new frequency
-			generator.start_frequency(frequency);
-		}
-		// Generate square wave for 1000 milliseconds
+		generator.tone(TONE::C, DEFAULT_DURATION_MS);
+		generator.tone(TONE::D, DEFAULT_DURATION_MS);
+		generator.tone(TONE::E, DEFAULT_DURATION_MS);
+		generator.tone(TONE::F, DEFAULT_DURATION_MS);
+		generator.tone(TONE::G, DEFAULT_DURATION_MS);
+		generator.tone(TONE::A, DEFAULT_DURATION_MS);
+		generator.tone(TONE::B, DEFAULT_DURATION_MS);
+		time::delay_ms(1000);
+		generator.tone(TONE::C, 1, DEFAULT_DURATION_MS);
+		generator.tone(TONE::D, 1, DEFAULT_DURATION_MS);
+		generator.tone(TONE::E, 1, DEFAULT_DURATION_MS);
+		generator.tone(TONE::F, 1, DEFAULT_DURATION_MS);
+		generator.tone(TONE::G, 1, DEFAULT_DURATION_MS);
+		generator.tone(TONE::A, 1, DEFAULT_DURATION_MS);
+		generator.tone(TONE::B, 1, DEFAULT_DURATION_MS);
 		time::delay_ms(1000);
 	}
 }
