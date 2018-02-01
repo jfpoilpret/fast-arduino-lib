@@ -4,13 +4,11 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-//TODO try it with a buzzer (direct wire or amplified?)
-//TODO write a SquareWave class or namespace with utility methods
-//TODO create simple melody
 //TODO store melody to EEPROM and read it from there
+// Imperial march tones thanks:
+// http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
 // Example of square wave generation, using CTC mode and COM toggle
-#include <fastarduino/gpio.h>
 #include <fastarduino/pwm.h>
 #include <fastarduino/time.h>
 #include <fastarduino/timer.h>
@@ -55,6 +53,7 @@ public:
 	void stop()
 	{
 		timer_.end();
+		output_.set_duty(0);
 	}
 
 private:
@@ -111,6 +110,8 @@ public:
 		{
 			time::delay_ms(ms);
 			generator_.stop();
+			// Short delay between tones
+			time::delay_ms(20);
 		}
 	}
 
@@ -130,31 +131,69 @@ int main() __attribute__((OS_main));
 int main()
 {
 	sei();
-
-	gpio::FastPinType<board::DigitalPin::LED>::set_mode(gpio::PinMode::OUTPUT);
-	gpio::FastPinType<board::DigitalPin::LED>::set();
 	time::delay_ms(5000);
-	gpio::FastPinType<board::DigitalPin::LED>::clear();
 
 	GENERATOR generator;
-
 	while (true)
 	{
-		generator.tone(TONE::C, DEFAULT_DURATION_MS);
-		generator.tone(TONE::D, DEFAULT_DURATION_MS);
-		generator.tone(TONE::E, DEFAULT_DURATION_MS);
-		generator.tone(TONE::F, DEFAULT_DURATION_MS);
-		generator.tone(TONE::G, DEFAULT_DURATION_MS);
-		generator.tone(TONE::A, DEFAULT_DURATION_MS);
-		generator.tone(TONE::B, DEFAULT_DURATION_MS);
-		time::delay_ms(1000);
-		generator.tone(TONE::C, 1, DEFAULT_DURATION_MS);
-		generator.tone(TONE::D, 1, DEFAULT_DURATION_MS);
-		generator.tone(TONE::E, 1, DEFAULT_DURATION_MS);
-		generator.tone(TONE::F, 1, DEFAULT_DURATION_MS);
-		generator.tone(TONE::G, 1, DEFAULT_DURATION_MS);
-		generator.tone(TONE::A, 1, DEFAULT_DURATION_MS);
-		generator.tone(TONE::B, 1, DEFAULT_DURATION_MS);
-		time::delay_ms(1000);
+		generator.tone(TONE::A, 500);
+		generator.tone(TONE::A, 500);
+		generator.tone(TONE::A, 500);
+		generator.tone(TONE::F, 350);
+		generator.tone(TONE::C, 1, 150);
+		generator.tone(TONE::A, 500);
+		generator.tone(TONE::F, 350);
+		generator.tone(TONE::C, 1, 150);
+		generator.tone(TONE::A, 650);
+
+		time::delay_ms(150);
+
+		generator.tone(TONE::E, 1, 500);
+		generator.tone(TONE::E, 1, 500);
+		generator.tone(TONE::E, 1, 500);
+		generator.tone(TONE::F, 1, 350);
+		generator.tone(TONE::C, 1, 150);
+		generator.tone(TONE::Gs, 500);
+		generator.tone(TONE::F, 350);
+		generator.tone(TONE::C, 1, 150);
+		generator.tone(TONE::A, 650);
+
+		time::delay_ms(150);
+
+		for (uint8_t i = 0; i < 2; ++i)
+		{
+			generator.tone(TONE::A, 1, 500);
+			generator.tone(TONE::A, 300);
+			generator.tone(TONE::A, 150);
+			generator.tone(TONE::A, 1, 400);
+			generator.tone(TONE::Gs, 1, 200);
+			generator.tone(TONE::G, 1, 200);
+			generator.tone(TONE::Fs, 1, 125);
+			generator.tone(TONE::F, 1, 125);
+			generator.tone(TONE::Fs, 1, 125);
+			
+			time::delay_ms(250);
+
+			generator.tone(TONE::As, 250);
+			generator.tone(TONE::Ds, 1, 400);
+			generator.tone(TONE::D, 1, 200);
+			generator.tone(TONE::Cs, 1, 200);
+			generator.tone(TONE::C, 1, 125);
+			generator.tone(TONE::B, 125);
+			generator.tone(TONE::C, 1, 250);
+
+			time::delay_ms(250);
+
+			generator.tone(TONE::F, 125);
+			generator.tone(TONE::Gs, 500);
+			generator.tone(TONE::F, 375);
+			generator.tone(TONE::A, 125);
+			generator.tone(TONE::C, 1, 500);
+			generator.tone(TONE::A, 375);
+			generator.tone(TONE::C, 1, 125);
+			generator.tone(TONE::E, 1, 650);
+		}
+
+		time::delay_ms(5000);
 	}
 }
