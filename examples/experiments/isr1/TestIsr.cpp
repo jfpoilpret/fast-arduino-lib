@@ -5,6 +5,7 @@
  */
 
 //TODO store melody to EEPROM and read it from there
+//TODO put all octaves in Tone enum to reduce TonePlay struct size
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
@@ -61,8 +62,9 @@ private:
 	PWMPIN output_;
 };
 
-enum class TONE: uint16_t
+enum class Tone: uint16_t
 {
+	NONE = 0,
 	C = 262,
 	Cs = 277,
 	D = 294,
@@ -88,7 +90,7 @@ public:
 	{
 	}
 
-	void tone(TONE t, uint16_t ms)
+	void tone(Tone t, uint16_t ms)
 	{
 		generator_.start_frequency(uint32_t(t));
 		if (ms != 0)
@@ -98,7 +100,7 @@ public:
 		}
 	}
 
-	void tone(TONE t, int8_t octave, uint16_t ms)
+	void tone(Tone t, int8_t octave, uint16_t ms)
 	{
 		uint32_t frequency = uint32_t(t);
 		if (octave < 0)
@@ -127,6 +129,102 @@ private:
 using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
 static constexpr const uint16_t DEFAULT_DURATION_MS = 1000;
 
+struct TonePlay
+{
+	Tone tone;
+	int8_t octave;
+	uint16_t ms;
+};
+
+static TonePlay music[] =
+{
+	// First part
+	{Tone::A, 0, 500},
+	{Tone::A, 0, 500},
+	{Tone::A, 0, 500},
+	{Tone::F, 0, 350},
+	{Tone::C, 1, 150},
+	{Tone::A, 0, 500},
+	{Tone::F, 0, 350},
+	{Tone::C, 1, 150},
+	{Tone::A, 0, 650},
+	{Tone::NONE, 0, 150},
+
+	// Second part
+	{Tone::E, 1, 500},
+	{Tone::E, 1, 500},
+	{Tone::E, 1, 500},
+	{Tone::F, 1, 350},
+	{Tone::C, 1, 150},
+	{Tone::Gs, 0, 500},
+	{Tone::F, 0, 350},
+	{Tone::C, 1, 150},
+	{Tone::A, 0, 650},
+	{Tone::NONE, 0, 150},
+
+	// Third part (repeated once)
+	{Tone::A, 1, 500},
+	{Tone::A, 0, 300},
+	{Tone::A, 0, 150},
+	{Tone::A, 1, 400},
+	{Tone::Gs, 1, 200},
+	{Tone::G, 1, 200},
+	{Tone::Fs, 1, 125},
+	{Tone::F, 1, 125},
+	{Tone::Fs, 1, 250},
+	{Tone::NONE, 0, 250},
+
+	{Tone::As, 0, 250},
+	{Tone::Ds, 1, 400},
+	{Tone::D, 1, 200},
+	{Tone::Cs, 1, 200},
+	{Tone::C, 1, 125},
+	{Tone::B, 0, 125},
+	{Tone::C, 1, 250},
+	{Tone::NONE, 0, 250},
+
+	{Tone::F, 0, 125},
+	{Tone::Gs, 0, 500},
+	{Tone::F, 0, 375},
+	{Tone::A, 0, 125},
+	{Tone::C, 1, 500},
+	{Tone::A, 0, 375},
+	{Tone::C, 1, 125},
+	{Tone::E, 1, 650},
+
+	// Third part (second time)
+	{Tone::A, 1, 500},
+	{Tone::A, 0, 300},
+	{Tone::A, 0, 150},
+	{Tone::A, 1, 400},
+	{Tone::Gs, 1, 200},
+	{Tone::G, 1, 200},
+	{Tone::Fs, 1, 125},
+	{Tone::F, 1, 125},
+	{Tone::Fs, 1, 250},
+	{Tone::NONE, 0, 250},
+
+	{Tone::As, 0, 250},
+	{Tone::Ds, 1, 400},
+	{Tone::D, 1, 200},
+	{Tone::Cs, 1, 200},
+	{Tone::C, 1, 125},
+	{Tone::B, 0, 125},
+	{Tone::C, 1, 250},
+	{Tone::NONE, 0, 250},
+
+	{Tone::F, 0, 125},
+	{Tone::Gs, 0, 500},
+	{Tone::F, 0, 375},
+	{Tone::A, 0, 125},
+	{Tone::C, 1, 500},
+	{Tone::A, 0, 375},
+	{Tone::C, 1, 125},
+	{Tone::E, 1, 650},
+};
+
+static constexpr const size_t NUM_TONES = sizeof music / sizeof music[0];
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -136,64 +234,15 @@ int main()
 	GENERATOR generator;
 	while (true)
 	{
-		generator.tone(TONE::A, 500);
-		generator.tone(TONE::A, 500);
-		generator.tone(TONE::A, 500);
-		generator.tone(TONE::F, 350);
-		generator.tone(TONE::C, 1, 150);
-		generator.tone(TONE::A, 500);
-		generator.tone(TONE::F, 350);
-		generator.tone(TONE::C, 1, 150);
-		generator.tone(TONE::A, 650);
-
-		time::delay_ms(150);
-
-		generator.tone(TONE::E, 1, 500);
-		generator.tone(TONE::E, 1, 500);
-		generator.tone(TONE::E, 1, 500);
-		generator.tone(TONE::F, 1, 350);
-		generator.tone(TONE::C, 1, 150);
-		generator.tone(TONE::Gs, 500);
-		generator.tone(TONE::F, 350);
-		generator.tone(TONE::C, 1, 150);
-		generator.tone(TONE::A, 650);
-
-		time::delay_ms(150);
-
-		for (uint8_t i = 0; i < 2; ++i)
+		for (size_t i = 0; i < NUM_TONES; ++i)
 		{
-			generator.tone(TONE::A, 1, 500);
-			generator.tone(TONE::A, 300);
-			generator.tone(TONE::A, 150);
-			generator.tone(TONE::A, 1, 400);
-			generator.tone(TONE::Gs, 1, 200);
-			generator.tone(TONE::G, 1, 200);
-			generator.tone(TONE::Fs, 1, 125);
-			generator.tone(TONE::F, 1, 125);
-			generator.tone(TONE::Fs, 1, 125);
-			
-			time::delay_ms(250);
-
-			generator.tone(TONE::As, 250);
-			generator.tone(TONE::Ds, 1, 400);
-			generator.tone(TONE::D, 1, 200);
-			generator.tone(TONE::Cs, 1, 200);
-			generator.tone(TONE::C, 1, 125);
-			generator.tone(TONE::B, 125);
-			generator.tone(TONE::C, 1, 250);
-
-			time::delay_ms(250);
-
-			generator.tone(TONE::F, 125);
-			generator.tone(TONE::Gs, 500);
-			generator.tone(TONE::F, 375);
-			generator.tone(TONE::A, 125);
-			generator.tone(TONE::C, 1, 500);
-			generator.tone(TONE::A, 375);
-			generator.tone(TONE::C, 1, 125);
-			generator.tone(TONE::E, 1, 650);
+			TonePlay tone = music[i];
+			if (tone.tone == Tone::NONE)
+				time::delay_ms(tone.ms);
+			else
+				generator.tone(tone.tone, tone.octave, tone.ms);
 		}
 
-		time::delay_ms(5000);
+		time::delay_ms(2000);
 	}
 }
