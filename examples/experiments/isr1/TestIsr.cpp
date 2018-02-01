@@ -4,65 +4,68 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-#include <fastarduino/devices/hcsr04.h>
+//TODO try it with a buzzer (direct wire or amplified?)
+//TODO write a SquareWave class or namespace with utility methods
+//TODO create simple melody
+//TODO store melody to EEPROM and read it from there
+
+// Example of square wave generation, using CTC mode and COM toggle
+#include <fastarduino/analog_input.h>
+#include <fastarduino/pwm.h>
 #include <fastarduino/time.h>
-#include <fastarduino/uart.h>
+#include <fastarduino/timer.h>
+#include <fastarduino/utilities.h>
 
-#define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-using TIMER_TYPE = timer::Timer<TIMER>;
-static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2;
-static constexpr const board::DigitalPin ECHO = TIMER_TYPE::ICP_PIN;
+// Board-dependent settings
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
+static constexpr const board::AnalogPin FREQ_INPUT = board::AnalogPin::A0;
 
-// UART for traces
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-static char output_buffer[OUTPUT_BUFFER_SIZE];
-static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-static streams::ostream out = uart.out();
+using FREQ = analog::AnalogInput<FREQ_INPUT, uint8_t>;
+using CALC = timer::Calculator<NTIMER>;
+using TIMER = timer::Timer<NTIMER>;
+using PWMPIN = analog::PWMOutput<OUTPUT>;
 
-using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, devices::sonar::SonarType::ASYNC_ICP>;
-// using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, false>;
-static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
-using CALC = timer::Calculator<TIMER>;
-static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
+// Frequency range
+static constexpr const uint32_t MIN_FREQ = 40UL;
+static constexpr const uint32_t DEFAULT_FREQ = 440UL;
+static constexpr const uint32_t MAX_FREQ = 20000UL;
 
-static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
-
-// Define vectors we need in the example
-REGISTER_UATX_ISR(0)
-REGISTER_HCSR04_ICP_ISR(TIMER_NUM, TRIGGER, ECHO)
+static void init_frequency(TIMER& timer, PWMPIN& output, uint32_t frequency)
+{
+	timer.suspend();
+	const uint32_t period = 1000000UL / 2 / frequency;
+	TIMER::PRESCALER prescaler = CALC::CTC_prescaler(period);
+	TIMER::TYPE counter = CALC::CTC_counter(prescaler, period);
+	timer.set_prescaler(prescaler);
+	output.set_duty(counter);
+	timer.resume();
+}
 
 int main() __attribute__((OS_main));
 int main()
 {
 	sei();
 
-	// Start trace
-	uart.register_handler();
-	uart.begin(115200);
-	out.width(0);
-	out << "Start" << streams::endl;
-
-	// Start timer
-	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER, timer::TimerInterrupt::INPUT_CAPTURE};
-	// TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
+	FREQ input;
+	TIMER timer{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING};
+	PWMPIN output = PWMPIN{timer, timer::TimerOutputMode::TOGGLE};
 	timer.begin();
-	out << "Timer started." << streams::endl;
 
-	SONAR sonar{timer};
-	sonar.register_handler();
-	time::delay_ms(5000);
+	FREQ::SAMPLE_TYPE sample = 0xFF;
 	while (true)
 	{
-		out << "#1" << streams::endl;
-		sonar.async_echo();
-		out << "#2" << streams::endl;
-		SONAR::TYPE echo = sonar.await_echo_ticks(TIMEOUT);
-		// SONAR::TYPE echo = sonar.echo_ticks(TIMEOUT);
-		out << "#3" << streams::endl;
-		uint32_t us = CALC::ticks_to_us(PRESCALER, echo);
-		uint16_t distance = devices::sonar::echo_us_to_distance_mm(us);
-		out << "# " << echo << " ticks, " << us << "us, " << distance << "mm" << streams::endl;
-		time::delay_ms(500);
+		// Read analog pin
+		FREQ::SAMPLE_TYPE new_sample = input.sample();
+		if (new_sample != sample)
+		{
+			sample = new_sample;
+			// Convert to frequency
+			uint32_t frequency = utils::map(sample, uint8_t(0), uint8_t(255), MIN_FREQ, MAX_FREQ);
+			// Set new frequency
+			init_frequency(timer, output, frequency);
+		}
+		// Generate square wave for 100 milliseconds
+		time::delay_ms(1000);
 	}
 }
