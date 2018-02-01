@@ -33,13 +33,13 @@ static constexpr const uint32_t MAX_FREQ = 20000UL;
 
 static void init_frequency(TIMER& timer, PWMPIN& output, uint32_t frequency)
 {
-	timer.suspend();
+	timer.end();
 	const uint32_t period = 1000000UL / 2 / frequency;
 	TIMER::PRESCALER prescaler = CALC::CTC_prescaler(period);
 	TIMER::TYPE counter = CALC::CTC_counter(prescaler, period);
 	timer.set_prescaler(prescaler);
+	timer.begin();
 	output.set_duty(counter);
-	timer.resume();
 }
 
 int main() __attribute__((OS_main));
@@ -50,7 +50,6 @@ int main()
 	FREQ input;
 	TIMER timer{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING};
 	PWMPIN output = PWMPIN{timer, timer::TimerOutputMode::TOGGLE};
-	timer.begin();
 
 	FREQ::SAMPLE_TYPE sample = 0xFF;
 	while (true)
