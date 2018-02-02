@@ -11,170 +11,17 @@
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
 // Example of square wave generation, using CTC mode and COM toggle
-#include <fastarduino/pwm.h>
+#include <fastarduino/tones.h>
 #include <fastarduino/time.h>
-#include <fastarduino/timer.h>
 #include <fastarduino/utilities.h>
 
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
 
-template<board::Timer NTIMER_, board::DigitalPin OUTPUT_>
-class SquareWave
-{
-public:
-	static constexpr const board::Timer NTIMER = NTIMER_;
-	static constexpr const board::DigitalPin OUTPUT = OUTPUT_;
+using devices::audio::Tone;
 
-	using CALC = timer::Calculator<NTIMER>;
-	using TIMER = timer::Timer<NTIMER>;
-	using PWMPIN = analog::PWMOutput<OUTPUT>;
-
-	SquareWave()
-		:timer_{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING}, output_{timer_, timer::TimerOutputMode::TOGGLE}
-	{
-	}
-
-	TIMER& timer() const
-	{
-		return timer_;
-	}
-	
-	void start_frequency(uint32_t frequency)
-	{
-		timer_.end();
-		const uint32_t period = 1000000UL / 2 / frequency;
-		typename TIMER::PRESCALER prescaler = CALC::CTC_prescaler(period);
-		typename TIMER::TYPE counter = CALC::CTC_counter(prescaler, period);
-		timer_.set_prescaler(prescaler);
-		timer_.begin();
-		output_.set_duty(counter);
-	}
-
-	void stop()
-	{
-		timer_.end();
-		output_.set_duty(0);
-	}
-
-private:
-	TIMER timer_;
-	PWMPIN output_;
-};
-
-enum class Tone: uint16_t
-{
-	// Use this tone for pause (no tone)
-	NONE = 0,
-
-	// Use this "tone" to mark the beginning of a sequence that shall be repeated when REPEAT_END is encountered
-	REPEAT_START = 1,
-	// Use this "tone" to mark the end of a sequence to repeat from REPEAT_START
-	// In TonePlay, ms then contains the number of times to repeat the sequence
-	REPEAT_END = 2,
-
-	C0 = 131,
-	Cs0 = 139,
-	D0 = 147,
-	Ds0 = 156,
-	E0 = 165,
-	F0 = 175,
-	Fs0 = 185,
-	G0 = 196,
-	Gs0 = 208,
-	A0 = 220,
-	As0 = 233,
-	B0 = 247,
-
-	C1 = 262,
-	Cs1 = 277,
-	D1 = 294,
-	Ds1 = 311,
-	E1 = 330,
-	F1 = 349,
-	Fs1 = 370,
-	G1 = 392,
-	Gs1 = 415,
-	A1 = 440,
-	As1 = 466,
-	B1 = 494,
-
-	C2 = 523,
-	Cs2 = 554,
-	D2 = 587,
-	Ds2 = 622,
-	E2 = 659,
-	F2 = 698,
-	Fs2 = 740,
-	G2 = 784,
-	Gs2 = 831,
-	A2 = 880,
-	As2 = 932,
-	B2 = 988,
-
-	C3 = 1046,
-	Cs3 = 1109,
-	D3 = 1175,
-	Ds3 = 1245,
-	E3 = 1319,
-	F3 = 1397,
-	Fs3 = 1480,
-	G3 = 1568,
-	Gs3 = 1662,
-	A3 = 1760,
-	As3 = 1865,
-	B3 = 1976,
-
-	C4 = 2093,
-	Cs4 = 2217,
-	D4 = 2349,
-	Ds4 = 2489,
-	E4 = 2637,
-	F4 = 2794,
-	Fs4 = 2960,
-	G4 = 3136,
-	Gs4 = 3322,
-	A4 = 3520,
-	As4 = 3729,
-	B4 = 3951,
-};
-
-//TODO specialize API to avoid specific if (ms != 0) ...
-template<board::Timer NTIMER, board::DigitalPin OUTPUT>
-class ToneGenerator
-{
-private:
-	using GENERATOR = SquareWave<NTIMER, OUTPUT>;
-
-public:
-	ToneGenerator():generator_{}
-	{
-	}
-
-	void tone(Tone t, uint16_t ms)
-	{
-		//TODO specific handling of "symbolic" tones (NONE, REPEAT_START, REPEAT_END)
-		generator_.start_frequency(uint32_t(t));
-		if (ms != 0)
-		{
-			time::delay_ms(ms);
-			generator_.stop();
-			// Short delay between tones
-			time::delay_ms(20);
-		}
-	}
-
-	void no_tone()
-	{
-		generator_.stop();
-	}
-
-private:
-	GENERATOR generator_;
-};
-
-using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
+using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
 static constexpr const uint16_t DEFAULT_DURATION_MS = 1000;
 
 struct TonePlay
@@ -254,7 +101,7 @@ int main()
 	GENERATOR generator;
 	while (true)
 	{
-		size_t repeat_index = -1;
+		int16_t repeat_index = -1;
 		int8_t repeat_times;
 		for (size_t i = 0; i < NUM_TONES; ++i)
 		{
