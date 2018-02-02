@@ -4,9 +4,9 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-//TODO improve Tone to include repeat "loops"
 //TODO store melody to EEPROM and read it from there
 //TODO add generic stuff (SquareWaveGenerator, ToneGenerator... to FastArduino core library)
+//TODO improve play to make it asynchronous?
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
@@ -65,10 +65,14 @@ private:
 
 enum class Tone: uint16_t
 {
+	// Use this tone for pause (no tone)
 	NONE = 0,
-	//TODO special "tones" for repeating measures
-	// LABEL = 1,
-	// GOTO = 2,
+
+	// Use this "tone" to mark the beginning of a sequence that shall be repeated when REPEAT_END is encountered
+	REPEAT_START = 1,
+	// Use this "tone" to mark the end of a sequence to repeat from REPEAT_START
+	// In TonePlay, ms then contains the number of times to repeat the sequence
+	REPEAT_END = 2,
 
 	C0 = 131,
 	Cs0 = 139,
@@ -121,8 +125,22 @@ enum class Tone: uint16_t
 	A3 = 1760,
 	As3 = 1865,
 	B3 = 1976,
+
+	C4 = 2093,
+	Cs4 = 2217,
+	D4 = 2349,
+	Ds4 = 2489,
+	E4 = 2637,
+	F4 = 2794,
+	Fs4 = 2960,
+	G4 = 3136,
+	Gs4 = 3322,
+	A4 = 3520,
+	As4 = 3729,
+	B4 = 3951,
 };
 
+//TODO specialize API to avoid specific if (ms != 0) ...
 template<board::Timer NTIMER, board::DigitalPin OUTPUT>
 class ToneGenerator
 {
@@ -136,6 +154,7 @@ public:
 
 	void tone(Tone t, uint16_t ms)
 	{
+		//TODO specific handling of "symbolic" tones (NONE, REPEAT_START, REPEAT_END)
 		generator_.start_frequency(uint32_t(t));
 		if (ms != 0)
 		{
@@ -191,6 +210,7 @@ static TonePlay music[] =
 	{Tone::NONE, 150},
 
 	// Third part (repeated once)
+	{Tone::REPEAT_START, 0},
 	{Tone::A2, 500},
 	{Tone::A1, 300},
 	{Tone::A1, 150},
@@ -219,36 +239,8 @@ static TonePlay music[] =
 	{Tone::A1, 375},
 	{Tone::C2, 125},
 	{Tone::E2, 650},
-
-	// Third part (second time)
-	{Tone::A2, 500},
-	{Tone::A1, 300},
-	{Tone::A1, 150},
-	{Tone::A2, 400},
-	{Tone::Gs2, 200},
-	{Tone::G2, 200},
-	{Tone::Fs2, 125},
-	{Tone::F2, 125},
-	{Tone::Fs2, 250},
 	{Tone::NONE, 250},
-
-	{Tone::As1, 250},
-	{Tone::Ds2, 400},
-	{Tone::D2, 200},
-	{Tone::Cs2, 200},
-	{Tone::C2, 125},
-	{Tone::B1, 125},
-	{Tone::C2, 250},
-	{Tone::NONE, 250},
-
-	{Tone::F1, 125},
-	{Tone::Gs1, 500},
-	{Tone::F1, 375},
-	{Tone::A1, 125},
-	{Tone::C2, 500},
-	{Tone::A1, 375},
-	{Tone::C2, 125},
-	{Tone::E2, 650},
+	{Tone::REPEAT_END, 1},
 };
 
 static constexpr const size_t NUM_TONES = sizeof music / sizeof music[0];
@@ -262,11 +254,30 @@ int main()
 	GENERATOR generator;
 	while (true)
 	{
+		size_t repeat_index = -1;
+		int8_t repeat_times;
 		for (size_t i = 0; i < NUM_TONES; ++i)
 		{
 			TonePlay tone = music[i];
 			if (tone.tone == Tone::NONE)
 				time::delay_ms(tone.ms);
+			else if (tone.tone == Tone::REPEAT_START)
+			{
+				repeat_index = i;
+				repeat_times = -1;
+			}
+			else if (tone.tone == Tone::REPEAT_END)
+			{
+				if (repeat_index != -1)
+				{
+					if (repeat_times == -1)
+						repeat_times = tone.ms;
+					if (repeat_times--)
+						i = repeat_index;
+					else
+						repeat_index = -1;
+				}
+			}
 			else
 				generator.tone(tone.tone, tone.ms);
 		}
