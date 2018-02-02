@@ -4,8 +4,9 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
+//TODO improve Tone to include repeat "loops"
 //TODO store melody to EEPROM and read it from there
-//TODO put all octaves in Tone enum to reduce TonePlay struct size
+//TODO add generic stuff (SquareWaveGenerator, ToneGenerator... to FastArduino core library)
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
@@ -65,18 +66,61 @@ private:
 enum class Tone: uint16_t
 {
 	NONE = 0,
-	C = 262,
-	Cs = 277,
-	D = 294,
-	Ds = 311,
-	E = 330,
-	F = 349,
-	Fs = 370,
-	G = 392,
-	Gs = 415,
-	A = 440,
-	As = 466,
-	B = 494
+	//TODO special "tones" for repeating measures
+	// LABEL = 1,
+	// GOTO = 2,
+
+	C0 = 131,
+	Cs0 = 139,
+	D0 = 147,
+	Ds0 = 156,
+	E0 = 165,
+	F0 = 175,
+	Fs0 = 185,
+	G0 = 196,
+	Gs0 = 208,
+	A0 = 220,
+	As0 = 233,
+	B0 = 247,
+
+	C1 = 262,
+	Cs1 = 277,
+	D1 = 294,
+	Ds1 = 311,
+	E1 = 330,
+	F1 = 349,
+	Fs1 = 370,
+	G1 = 392,
+	Gs1 = 415,
+	A1 = 440,
+	As1 = 466,
+	B1 = 494,
+
+	C2 = 523,
+	Cs2 = 554,
+	D2 = 587,
+	Ds2 = 622,
+	E2 = 659,
+	F2 = 698,
+	Fs2 = 740,
+	G2 = 784,
+	Gs2 = 831,
+	A2 = 880,
+	As2 = 932,
+	B2 = 988,
+
+	C3 = 1046,
+	Cs3 = 1109,
+	D3 = 1175,
+	Ds3 = 1245,
+	E3 = 1319,
+	F3 = 1397,
+	Fs3 = 1480,
+	G3 = 1568,
+	Gs3 = 1662,
+	A3 = 1760,
+	As3 = 1865,
+	B3 = 1976,
 };
 
 template<board::Timer NTIMER, board::DigitalPin OUTPUT>
@@ -93,21 +137,6 @@ public:
 	void tone(Tone t, uint16_t ms)
 	{
 		generator_.start_frequency(uint32_t(t));
-		if (ms != 0)
-		{
-			time::delay_ms(ms);
-			generator_.stop();
-		}
-	}
-
-	void tone(Tone t, int8_t octave, uint16_t ms)
-	{
-		uint32_t frequency = uint32_t(t);
-		if (octave < 0)
-			frequency >>= -octave;
-		else if (octave > 0)
-			frequency <<= octave;
-		generator_.start_frequency(frequency);
 		if (ms != 0)
 		{
 			time::delay_ms(ms);
@@ -132,95 +161,94 @@ static constexpr const uint16_t DEFAULT_DURATION_MS = 1000;
 struct TonePlay
 {
 	Tone tone;
-	int8_t octave;
 	uint16_t ms;
 };
 
 static TonePlay music[] =
 {
 	// First part
-	{Tone::A, 0, 500},
-	{Tone::A, 0, 500},
-	{Tone::A, 0, 500},
-	{Tone::F, 0, 350},
-	{Tone::C, 1, 150},
-	{Tone::A, 0, 500},
-	{Tone::F, 0, 350},
-	{Tone::C, 1, 150},
-	{Tone::A, 0, 650},
-	{Tone::NONE, 0, 150},
+	{Tone::A1, 500},
+	{Tone::A1, 500},
+	{Tone::A1, 500},
+	{Tone::F1, 350},
+	{Tone::C2, 150},
+	{Tone::A1, 500},
+	{Tone::F1, 350},
+	{Tone::C2, 150},
+	{Tone::A1, 650},
+	{Tone::NONE, 150},
 
 	// Second part
-	{Tone::E, 1, 500},
-	{Tone::E, 1, 500},
-	{Tone::E, 1, 500},
-	{Tone::F, 1, 350},
-	{Tone::C, 1, 150},
-	{Tone::Gs, 0, 500},
-	{Tone::F, 0, 350},
-	{Tone::C, 1, 150},
-	{Tone::A, 0, 650},
-	{Tone::NONE, 0, 150},
+	{Tone::E2, 500},
+	{Tone::E2, 500},
+	{Tone::E2, 500},
+	{Tone::F2, 350},
+	{Tone::C2, 150},
+	{Tone::Gs1, 500},
+	{Tone::F1, 350},
+	{Tone::C2, 150},
+	{Tone::A1, 650},
+	{Tone::NONE, 150},
 
 	// Third part (repeated once)
-	{Tone::A, 1, 500},
-	{Tone::A, 0, 300},
-	{Tone::A, 0, 150},
-	{Tone::A, 1, 400},
-	{Tone::Gs, 1, 200},
-	{Tone::G, 1, 200},
-	{Tone::Fs, 1, 125},
-	{Tone::F, 1, 125},
-	{Tone::Fs, 1, 250},
-	{Tone::NONE, 0, 250},
+	{Tone::A2, 500},
+	{Tone::A1, 300},
+	{Tone::A1, 150},
+	{Tone::A2, 400},
+	{Tone::Gs2, 200},
+	{Tone::G2, 200},
+	{Tone::Fs2, 125},
+	{Tone::F2, 125},
+	{Tone::Fs2, 250},
+	{Tone::NONE, 250},
 
-	{Tone::As, 0, 250},
-	{Tone::Ds, 1, 400},
-	{Tone::D, 1, 200},
-	{Tone::Cs, 1, 200},
-	{Tone::C, 1, 125},
-	{Tone::B, 0, 125},
-	{Tone::C, 1, 250},
-	{Tone::NONE, 0, 250},
+	{Tone::As1, 250},
+	{Tone::Ds2, 400},
+	{Tone::D2, 200},
+	{Tone::Cs2, 200},
+	{Tone::C2, 125},
+	{Tone::B1, 125},
+	{Tone::C2, 250},
+	{Tone::NONE, 250},
 
-	{Tone::F, 0, 125},
-	{Tone::Gs, 0, 500},
-	{Tone::F, 0, 375},
-	{Tone::A, 0, 125},
-	{Tone::C, 1, 500},
-	{Tone::A, 0, 375},
-	{Tone::C, 1, 125},
-	{Tone::E, 1, 650},
+	{Tone::F1, 125},
+	{Tone::Gs1, 500},
+	{Tone::F1, 375},
+	{Tone::A1, 125},
+	{Tone::C2, 500},
+	{Tone::A1, 375},
+	{Tone::C2, 125},
+	{Tone::E2, 650},
 
 	// Third part (second time)
-	{Tone::A, 1, 500},
-	{Tone::A, 0, 300},
-	{Tone::A, 0, 150},
-	{Tone::A, 1, 400},
-	{Tone::Gs, 1, 200},
-	{Tone::G, 1, 200},
-	{Tone::Fs, 1, 125},
-	{Tone::F, 1, 125},
-	{Tone::Fs, 1, 250},
-	{Tone::NONE, 0, 250},
+	{Tone::A2, 500},
+	{Tone::A1, 300},
+	{Tone::A1, 150},
+	{Tone::A2, 400},
+	{Tone::Gs2, 200},
+	{Tone::G2, 200},
+	{Tone::Fs2, 125},
+	{Tone::F2, 125},
+	{Tone::Fs2, 250},
+	{Tone::NONE, 250},
 
-	{Tone::As, 0, 250},
-	{Tone::Ds, 1, 400},
-	{Tone::D, 1, 200},
-	{Tone::Cs, 1, 200},
-	{Tone::C, 1, 125},
-	{Tone::B, 0, 125},
-	{Tone::C, 1, 250},
-	{Tone::NONE, 0, 250},
+	{Tone::As1, 250},
+	{Tone::Ds2, 400},
+	{Tone::D2, 200},
+	{Tone::Cs2, 200},
+	{Tone::C2, 125},
+	{Tone::B1, 125},
+	{Tone::C2, 250},
+	{Tone::NONE, 250},
 
-	{Tone::F, 0, 125},
-	{Tone::Gs, 0, 500},
-	{Tone::F, 0, 375},
-	{Tone::A, 0, 125},
-	{Tone::C, 1, 500},
-	{Tone::A, 0, 375},
-	{Tone::C, 1, 125},
-	{Tone::E, 1, 650},
+	{Tone::F1, 125},
+	{Tone::Gs1, 500},
+	{Tone::F1, 375},
+	{Tone::A1, 125},
+	{Tone::C2, 500},
+	{Tone::A1, 375},
+	{Tone::C2, 125},
+	{Tone::E2, 650},
 };
 
 static constexpr const size_t NUM_TONES = sizeof music / sizeof music[0];
@@ -240,7 +268,7 @@ int main()
 			if (tone.tone == Tone::NONE)
 				time::delay_ms(tone.ms);
 			else
-				generator.tone(tone.tone, tone.octave, tone.ms);
+				generator.tone(tone.tone, tone.ms);
 		}
 
 		time::delay_ms(2000);
