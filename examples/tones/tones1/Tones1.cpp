@@ -20,7 +20,6 @@ static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
 using devices::audio::Tone;
 
 using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
-static constexpr const uint16_t DEFAULT_DURATION_MS = 1000;
 
 struct TonePlay
 {
