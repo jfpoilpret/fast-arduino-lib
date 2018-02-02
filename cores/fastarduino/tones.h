@@ -27,11 +27,15 @@ namespace devices
 			// Use this tone for pause (no tone)
 			NONE = 0,
 
+			// Special marker for a tone sequence, meaning there is no more tone in the sequence
+			// This is useful when you don't know the sequence size in advance
+			END = 1,
+
 			// Use this "tone" to mark the beginning of a sequence that shall be repeated when REPEAT_END is encountered
-			REPEAT_START = 1,
+			REPEAT_START = 2,
 			// Use this "tone" to mark the end of a sequence to repeat from REPEAT_START
 			// In TonePlay, ms then contains the number of times to repeat the sequence
-			REPEAT_END = 2,
+			REPEAT_END = 3,
 
 			C0 = 131,
 			Cs0 = 139,
