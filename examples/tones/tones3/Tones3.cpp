@@ -21,7 +21,7 @@ using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
 
 using devices::audio::TonePlay;
 
-const TonePlay music[] EEMEM =
+const TonePlay music[] PROGMEM =
 {
 	// First part
 	{Tone::A1, 500},
@@ -90,5 +90,5 @@ int main()
 
 	GENERATOR generator;
 	PLAYER player{generator};
-	player.play_eeprom(music);
+	player.play_flash(music);
 }

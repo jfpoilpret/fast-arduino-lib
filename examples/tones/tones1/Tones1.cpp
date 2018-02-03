@@ -9,21 +9,17 @@
 
 // Example of square wave generation, using CTC mode and COM toggle
 #include <fastarduino/time.h>
-#include <fastarduino/devices/tones.h>
+#include <fastarduino/devices/tone_player.h>
 
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
 
 using devices::audio::Tone;
-
 using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
+using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
 
-struct TonePlay
-{
-	Tone tone;
-	uint16_t ms;
-};
+using devices::audio::TonePlay;
 
 static TonePlay music[] =
 {
@@ -83,9 +79,9 @@ static TonePlay music[] =
 	{Tone::E2, 650},
 	{Tone::NONE, 250},
 	{Tone::REPEAT_END, 1},
-};
 
-static constexpr const size_t NUM_TONES = sizeof music / sizeof music[0];
+	{Tone::END, 0}
+};
 
 int main() __attribute__((OS_main));
 int main()
@@ -94,30 +90,6 @@ int main()
 	time::delay_ms(5000);
 
 	GENERATOR generator;
-
-	int16_t repeat_index = -1;
-	int8_t repeat_times;
-	for (size_t i = 0; i < NUM_TONES; ++i)
-	{
-		TonePlay tone = music[i];
-		if (tone.tone == Tone::REPEAT_START)
-		{
-			repeat_index = i;
-			repeat_times = -1;
-		}
-		else if (tone.tone == Tone::REPEAT_END)
-		{
-			if (repeat_index != -1)
-			{
-				if (repeat_times == -1)
-					repeat_times = tone.ms;
-				if (repeat_times--)
-					i = repeat_index;
-				else
-					repeat_index = -1;
-			}
-		}
-		else
-			generator.tone(tone.tone, tone.ms);
-	}
+	PLAYER player{generator};
+	player.play(music);
 }
