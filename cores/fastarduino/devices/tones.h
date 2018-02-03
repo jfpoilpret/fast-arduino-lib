@@ -15,8 +15,8 @@
 #ifndef TONES_HH
 #define TONES_HH
 
-#include "square_wave.h"
-#include "time.h"
+#include "../square_wave.h"
+#include "../time.h"
 
 namespace devices
 {
