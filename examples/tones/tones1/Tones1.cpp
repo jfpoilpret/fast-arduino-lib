@@ -8,8 +8,8 @@
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
 // Example of square wave generation, using CTC mode and COM toggle
-#include <fastarduino/tones.h>
 #include <fastarduino/time.h>
+#include <fastarduino/devices/tones.h>
 
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
