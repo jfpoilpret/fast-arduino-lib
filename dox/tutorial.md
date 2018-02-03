@@ -1988,15 +1988,164 @@ Typical examples of use of EEPROM cells include (but are not limited to):
 
 In these examples, writing EEPROM cells would happen only once (or a few times), while reading would occur at startup.
 
-Often, writing EEPROM can be done directly through an ISP programmer (UNO USB programming does not support EEPROM writing) and only readinf is needed in a program. The next example illustrates this situation.
+### Reading EEPROM content
 
+Often, writing EEPROM can be done directly through an ISP programmer (UNO USB programming does not support EEPROM writing) and only reading is needed in a program. The next example illustrates this situation.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-TODO Simple EEPROM Example read config from EEPROM (written by ISP programmer)
+#include <fastarduino/eeprom.h>
+#include <fastarduino/tones.h>
+#include <fastarduino/time.h>
 
+// Board-dependent settings
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
+
+using devices::audio::Tone;
+using namespace eeprom;
+using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
+
+struct TonePlay
+{
+	Tone tone;
+	uint16_t ms;
+};
+
+// Melody to be played
+TonePlay music[] EEMEM =
+{
+	// Intro
+	{Tone::A1, 500},
+	{Tone::A1, 500},
+	{Tone::A1, 500},
+	{Tone::F1, 350},
+	{Tone::C2, 150},
+	{Tone::A1, 500},
+	{Tone::F1, 350},
+	{Tone::C2, 150},
+	{Tone::A1, 650},
+
+	// Marker for end of melody
+	{Tone::END, 0}
+};
+
+int main()
+{
+	sei();
+	GENERATOR generator;
+	TonePlay* play = music;
+	while (true)
+	{
+		TonePlay tone;
+		EEPROM::read(play, tone);
+		if (tone.tone == Tone::END)
+			break;
+		generator.tone(tone.tone, tone.ms);
+		++play;
+	}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This example plays a short melody, stored in EEPROM, to a buzzer wired on Arduino UNO D9 pin.
+It uses FastArduino `devices::audio::ToneGenerator` support to generate square waves at the required
+frequencies, in order to generate a melody intro that Star Wars fan will recognize!
+
+Past the headers inclusion, UNO-specific definitions (timer and output pin) and various `using` directives,
+the example defines `struct TonePlay` which embeds a `Tone` (frequency) and a duration, which is then used 
+in an array of notes to be played:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+struct TonePlay
+{
+	Tone tone;
+	uint16_t ms;
+};
+
+// Melody to be played
+TonePlay music[] EEMEM =
+{
+	// Intro
+	{Tone::A1, 500},
+	{Tone::A1, 500},
+	{Tone::A1, 500},
+	{Tone::F1, 350},
+	{Tone::C2, 150},
+	{Tone::A1, 500},
+	{Tone::F1, 350},
+	{Tone::C2, 150},
+	{Tone::A1, 650},
+
+	// Marker for end of melody
+	{Tone::END, 0}
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note that `music` array is defined with `EEMEM` attribute, which tells the compiler that
+this array shall be stored in EEPROM and not in Flash or SRAM.
+
+The advantages of storing the melody in EEPROM are:
+- it can easily be changed to another melody without any change to the program (flash)
+- it does not use Flash memory for storage
+- it does not use SRAM memory in runtime (although it might, if entirely read from EEPROM
+to SRAM, but why would you do that?)
+
+Note, however, that for some Arduino boards (e.g. UNO), storing a melody to the EEPROM may require using a
+specific device, called an ISP programmer. This is beacuse some Arduino bootloaders do not support EEPROM upload.
+
+The important part of the program is the loop where each note is read for EEPROM before being played:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	TonePlay* play = music;
+	while (true)
+	{
+		TonePlay tone;
+		EEPROM::read(play, tone);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In this snippet, `play` is used just as an "index" (an address actually) to the current note
+in `music` array. Beware that `play` cannot be used directly in your program because it points nowhere 
+actually, really.
+
+The interesting bit here is `EEPROM::read(play, tone);` which uses `play` address as a reference to the next note
+in EEPROM, reads the EEPROM content at this location and copies it into `tone`.
+
+At the end of the loop, `play` address gets incremented in order to point to the next note of `music` in EEPROM:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+		++play;
+	}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TODO example explanation
+At this point, you may wonder when the `while (true)` loop exits. Since the program does not in advance what melody
+it is going to play, it it not possible to use a `for` loop with an upper boundary as we could do if `music` was
+directly in SRAM.
 
+Thus, we use another way to determine the end of the meoldy to play: we use a special `Tone`, `Tone::END`, which is
+just a marker of the end of the melody; we check it for every tone read from EEPROM:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+		EEPROM::read(play, tone);
+		if (tone.tone == Tone::END)
+			break;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+All this is all good but how do we upload the melody to the EEPROM the first time?
+
+FastArduino make system takes care of this:
+
+1. `make build` not only generates a `.hex` file for code upload to the flash, it also generates a `.eep` file
+with all content to be uploaded to EEPROM: this is based on all variables defined with attribute `EEMEM` in your 
+program.
+2. `make eeprom` uses the above `.eep` file an upload it to the MCU to program EEPROM content.
+
+TODO add remark once tones.h includes a "MelodyPlayer" that does all the same...
+
+### Writing content to EEPROM
+
+There are also programs that may need to store content to EEPROM during their execution. This is possible
+with FastArduino EEPROM support.
+
+Please do note, however, that the number of writes an EEPROM can support is rather limited (100'000 as per 
+AVR MCU datasheet), hence you should refrain from writing too many times to the EEPROM.
+
+Also, do note that writing a byte to the EEPROM is not the same as writing a byte to SRAM, this is much slower 
+(typically between 1.8ms and 3.4ms).
+
+The following example demonstrates... TODO
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 TODO 2nd example write config to EEPROM
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 
