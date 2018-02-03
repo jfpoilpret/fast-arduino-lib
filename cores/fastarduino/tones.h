@@ -105,15 +105,17 @@ namespace devices
 			B4 = 3951,
 		};
 		
-		//TODO specialize API to avoid specific if (ms != 0) ...
 		template<board::Timer NTIMER, board::DigitalPin OUTPUT>
 		class ToneGenerator
 		{
 		private:
-			using GENERATOR = timer::SquareWave<NTIMER, OUTPUT>;
+			using SQWGEN = timer::SquareWave<NTIMER, OUTPUT>;
 			static constexpr const uint32_t INTERTONE_DELAY_MS = 20;
 
 		public:
+			using PRESCALER = typename SQWGEN::TIMER::PRESCALER;
+			using COUNTER = typename SQWGEN::TIMER::TYPE;
+			
 			ToneGenerator():generator_{}
 			{
 			}
@@ -125,7 +127,11 @@ namespace devices
 				if (t > Tone::END)
 					generator_.start_frequency(uint32_t(t));
 			}
-			void stop_tone()
+			inline void start_tone(PRESCALER prescaler, COUNTER counter)
+			{
+				generator_.start_frequency(prescaler, counter);
+			}
+			inline void stop_tone()
 			{
 				generator_.stop();
 			}
@@ -135,16 +141,23 @@ namespace devices
 				if (t > Tone::NONE)
 					generator_.start_frequency(uint32_t(t));
 				if (t >= Tone::NONE)
-				{
-					time::delay_ms(ms);
-					generator_.stop();
-					// Short delay between tones
-					time::delay_ms(INTERTONE_DELAY_MS);
-				}
+					pause(ms);
+			}
+			inline void tone(PRESCALER prescaler, COUNTER counter, uint16_t ms)
+			{
+				generator_.start_frequency(prescaler, counter);
+				pause(ms);
+			}
+			inline void pause(uint16_t ms)
+			{
+				time::delay_ms(ms);
+				generator_.stop();
+				// Short delay between tones
+				time::delay_ms(INTERTONE_DELAY_MS);
 			}
 
 		private:
-			GENERATOR generator_;
+			SQWGEN generator_;
 		};
 
 	}
