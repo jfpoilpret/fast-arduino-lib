@@ -20,7 +20,6 @@
 
 namespace timer
 {
-	//FIXME this can only work with OCnA pin, not OCnB: add assertions and document!
 	template<board::Timer NTIMER_, board::DigitalPin OUTPUT_> class SquareWave
 	{
 	public:
@@ -35,6 +34,8 @@ namespace timer
 			: timer_{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING},
 			  output_{timer_, timer::TimerOutputMode::TOGGLE}
 		{
+			using TRAIT = board_traits::PWMPin_trait<OUTPUT>;
+			static_assert(TRAIT::COM == 0, "Only OCnA pin is supported for wave generation");
 		}
 
 		TIMER& timer() const
