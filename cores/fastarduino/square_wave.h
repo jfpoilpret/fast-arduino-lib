@@ -20,6 +20,7 @@
 
 namespace timer
 {
+	//FIXME this can only work with OCnA pin, not OCnB: add assertions and document!
 	template<board::Timer NTIMER_, board::DigitalPin OUTPUT_> class SquareWave
 	{
 	public:
