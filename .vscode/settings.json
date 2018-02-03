@@ -35,6 +35,10 @@
             "programmer": "UNO USB",
             "serial": "/dev/ttyACM0"
         },
+        "UNO-ISP": {
+            "board": "Arduino UNO",
+            "programmer": "ArduinoISP.cc"
+        },
         "NANO": {
             "board": "Arduino NANO",
             "programmer": "NANO USB",
