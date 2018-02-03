@@ -4,14 +4,12 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-//TODO improve play to make it asynchronous?
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
 // Example of square wave generation, using CTC mode and COM toggle
 #include <fastarduino/tones.h>
 #include <fastarduino/time.h>
-#include <fastarduino/utilities.h>
 
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
@@ -102,9 +100,7 @@ int main()
 	for (size_t i = 0; i < NUM_TONES; ++i)
 	{
 		TonePlay tone = music[i];
-		if (tone.tone == Tone::NONE)
-			time::delay_ms(tone.ms);
-		else if (tone.tone == Tone::REPEAT_START)
+		if (tone.tone == Tone::REPEAT_START)
 		{
 			repeat_index = i;
 			repeat_times = -1;

@@ -4,7 +4,6 @@
  * It does not do anything interesting as far as hardware is concerned.
  */
 
-//TODO store melody to EEPROM and read it from there
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
@@ -12,7 +11,6 @@
 #include <fastarduino/eeprom.h>
 #include <fastarduino/tones.h>
 #include <fastarduino/time.h>
-#include <fastarduino/utilities.h>
 
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
@@ -107,9 +105,7 @@ int main()
 		EEPROM::read(play, tone);
 		if (tone.tone == Tone::END)
 			break;
-		if (tone.tone == Tone::NONE)
-			time::delay_ms(tone.ms);
-		else if (tone.tone == Tone::REPEAT_START)
+		if (tone.tone == Tone::REPEAT_START)
 		{
 			repeat_play = play;
 			repeat_times = -1;

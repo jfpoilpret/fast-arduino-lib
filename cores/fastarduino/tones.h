@@ -22,20 +22,22 @@ namespace devices
 {
 	namespace audio
 	{
+		//TODO reserve a set of codes between END and NONE and then define constants for REAPEAT_START...
+		// so that the current implementation is open enough and not specific to a future TonePlayer class.
 		enum class Tone: uint16_t
 		{
-			// Use this tone for pause (no tone)
-			NONE = 0,
-
 			// Special marker for a tone sequence, meaning there is no more tone in the sequence
 			// This is useful when you don't know the sequence size in advance
-			END = 1,
+			END = 0,
 
 			// Use this "tone" to mark the beginning of a sequence that shall be repeated when REPEAT_END is encountered
-			REPEAT_START = 2,
+			REPEAT_START = 1,
 			// Use this "tone" to mark the end of a sequence to repeat from REPEAT_START
 			// In TonePlay, ms then contains the number of times to repeat the sequence
-			REPEAT_END = 3,
+			REPEAT_END = 2,
+
+			// Use this tone for pause (no tone)
+			NONE = 3,
 
 			C0 = 131,
 			Cs0 = 139,
@@ -109,28 +111,36 @@ namespace devices
 		{
 		private:
 			using GENERATOR = timer::SquareWave<NTIMER, OUTPUT>;
+			static constexpr const uint32_t INTERTONE_DELAY_MS = 20;
 
 		public:
 			ToneGenerator():generator_{}
 			{
 			}
 
+			//TODO complete API
+			// - overloaded methods with specialized arguments prescaler/counter to optimize code size
+			void start_tone(Tone t)
+			{
+				if (t > Tone::END)
+					generator_.start_frequency(uint32_t(t));
+			}
+			void stop_tone()
+			{
+				generator_.stop();
+			}
+
 			void tone(Tone t, uint16_t ms)
 			{
-				//TODO specific handling of "symbolic" tones (NONE, REPEAT_START, REPEAT_END)
-				generator_.start_frequency(uint32_t(t));
-				if (ms != 0)
+				if (t > Tone::NONE)
+					generator_.start_frequency(uint32_t(t));
+				if (t >= Tone::NONE)
 				{
 					time::delay_ms(ms);
 					generator_.stop();
 					// Short delay between tones
-					time::delay_ms(20);
+					time::delay_ms(INTERTONE_DELAY_MS);
 				}
-			}
-
-			void no_tone()
-			{
-				generator_.stop();
 			}
 
 		private:
