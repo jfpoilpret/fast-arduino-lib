@@ -60,7 +60,7 @@ TonePlay music[] EEMEM =
 	{Tone::A1, 300},
 	{Tone::A1, 150},
 	{Tone::A2, 400},
-	{Tone::Gs2, 200},
+	{Tone::Gs2, 200},	//too short
 	{Tone::G2, 200},
 	{Tone::Fs2, 125},
 	{Tone::F2, 125},
@@ -70,7 +70,7 @@ TonePlay music[] EEMEM =
 	{Tone::As1, 250},
 	{Tone::Ds2, 400},
 	{Tone::D2, 200},
-	{Tone::Cs2, 200},
+	{Tone::Cs2, 200},	// this frequency produces "bad buzz" :-)
 	{Tone::C2, 125},
 	{Tone::B1, 125},
 	{Tone::C2, 250},
@@ -101,7 +101,6 @@ int main()
 	TonePlay* repeat_play = 0;
 	int8_t repeat_times;
 	TonePlay* play = music;
-	size_t i = 0;
 	while (true)
 	{
 		TonePlay tone;
@@ -129,6 +128,6 @@ int main()
 		}
 		else
 			generator.tone(tone.tone, tone.ms);
-		++repeat_play;
+		++play;
 	}
 }
