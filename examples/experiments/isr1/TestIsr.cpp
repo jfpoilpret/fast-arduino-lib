@@ -8,9 +8,8 @@
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
 
 // Example of square wave generation, using CTC mode and COM toggle
-#include <fastarduino/eeprom.h>
 #include <fastarduino/time.h>
-#include <fastarduino/devices/tones.h>
+#include <fastarduino/devices/tone_player.h>
 
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
@@ -19,14 +18,13 @@ static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
 using devices::audio::Tone;
 using namespace eeprom;
 using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
+using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
 
-struct TonePlay
-{
-	Tone tone;
-	uint16_t ms;
-};
+using devices::audio::TonePlay;
 
-TonePlay music[] EEMEM =
+// TonePlay music[] EEMEM =
+const TonePlay music[] PROGMEM =
+// TonePlay music[] =
 {
 	// Intro
 	{Tone::A1, 500},
@@ -50,14 +48,8 @@ int main()
 	time::delay_ms(5000);
 
 	GENERATOR generator;
-	TonePlay* play = music;
-	while (true)
-	{
-		TonePlay tone;
-		EEPROM::read(play, tone);
-		if (tone.tone == Tone::END)
-			break;
-		generator.tone(tone.tone, tone.ms);
-		++play;
-	}
+	PLAYER player{generator};
+	// player.play_eeprom(music);
+	player.play_flash(music);
+	// player.play(music);
 }
