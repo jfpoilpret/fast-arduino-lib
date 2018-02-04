@@ -2130,7 +2130,10 @@ with all content to be uploaded to EEPROM: this is based on all variables define
 program.
 2. `make eeprom` uses the above `.eep` file an upload it to the MCU to program EEPROM content.
 
-TODO add remark once tones.h includes a "MelodyPlayer" that does all the same...
+IMPORTANT: note that, as relevant as this example can be for this tutorial, you do not need to write 
+all this code, with FastArduino, to play a sequence of tones: you may use `TonePlayer` class
+that odes it all for you, and can handle arrays stored in SRAM, EEPROM or Flash memory.
+
 
 ### Writing content to EEPROM
 
