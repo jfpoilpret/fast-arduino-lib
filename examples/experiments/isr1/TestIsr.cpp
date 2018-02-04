@@ -12,32 +12,35 @@
 #include <fastarduino/devices/tone_player.h>
 
 // Board-dependent settings
-static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
+// static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+// static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D6_PD6_OC0A;
 
 using devices::audio::Tone;
+using namespace devices::audio::SpecialTone;
 using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
 using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
 
-using devices::audio::TonePlay;
+using QTONEPLAY = PLAYER::QTonePlay;
 
-// TonePlay music[] EEMEM =
-const TonePlay music[] PROGMEM =
-// TonePlay music[] =
+const QTONEPLAY music[] EEMEM =
+// const QTONEPLAY music[] PROGMEM =
+// const QTONEPLAY music[] =
 {
 	// Intro
-	{Tone::A1, 500},
-	{Tone::A1, 500},
-	{Tone::A1, 500},
-	{Tone::F1, 350},
-	{Tone::C2, 150},
-	{Tone::A1, 500},
-	{Tone::F1, 350},
-	{Tone::C2, 150},
-	{Tone::A1, 650},
+	QTONEPLAY{Tone::A1, 500},
+	QTONEPLAY{Tone::A1, 500},
+	QTONEPLAY{Tone::A1, 500},
+	QTONEPLAY{Tone::F1, 350},
+	QTONEPLAY{Tone::C2, 150},
+	QTONEPLAY{Tone::A1, 500},
+	QTONEPLAY{Tone::F1, 350},
+	QTONEPLAY{Tone::C2, 150},
+	QTONEPLAY{Tone::A1, 650},
 
 	// Marker for end of melody
-	{Tone::END, 0}
+	QTONEPLAY{END}
 };
 
 int main() __attribute__((OS_main));
@@ -48,7 +51,7 @@ int main()
 
 	GENERATOR generator;
 	PLAYER player{generator};
-	// player.play_eeprom(music);
-	player.play_flash(music);
+	player.play_eeprom(music);
+	// player.play_flash(music);
 	// player.play(music);
 }
