@@ -90,7 +90,7 @@ namespace devices
 				}
 				inline bool is_repeat_end() const
 				{
-					return flags_ == REPEAT_START;
+					return flags_ == REPEAT_END;
 				}
 				inline uint16_t repeat_count() const
 				{
@@ -104,10 +104,6 @@ namespace devices
 				static constexpr uint8_t REPEAT_START = 0x04;
 				static constexpr uint8_t REPEAT_END = 0x08;
 				
-				// const uint8_t flags_;
-				// const PRESCALER prescaler_;
-				// const COUNTER counter_;
-				// const uint16_t ms_;
 				uint8_t flags_;
 				PRESCALER prescaler_;
 				COUNTER counter_;
