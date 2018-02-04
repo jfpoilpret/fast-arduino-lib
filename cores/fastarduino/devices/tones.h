@@ -26,18 +26,26 @@ namespace devices
 		// so that the current implementation is open enough and not specific to a future TonePlayer class.
 		enum class Tone: uint16_t
 		{
-			// Special marker for a tone sequence, meaning there is no more tone in the sequence
-			// This is useful when you don't know the sequence size in advance
-			END = 0,
+			USER0 = 0,
+			USER1,
+			USER2,
+			USER3,
+			USER4,
+			USER5,
+			USER6,
+			USER7,
+			// // Special marker for a tone sequence, meaning there is no more tone in the sequence
+			// // This is useful when you don't know the sequence size in advance
+			// END = 0,
 
-			// Use this "tone" to mark the beginning of a sequence that shall be repeated when REPEAT_END is encountered
-			REPEAT_START = 1,
-			// Use this "tone" to mark the end of a sequence to repeat from REPEAT_START
-			// In TonePlay, ms then contains the number of times to repeat the sequence
-			REPEAT_END = 2,
+			// // Use this "tone" to mark the beginning of a sequence that shall be repeated when REPEAT_END is encountered
+			// REPEAT_START = 1,
+			// // Use this "tone" to mark the end of a sequence to repeat from REPEAT_START
+			// // In TonePlay, ms then contains the number of times to repeat the sequence
+			// REPEAT_END = 2,
 
 			// Use this tone for pause (no tone)
-			NONE = 3,
+			SILENCE = USER7 + 1,
 
 			C0 = 131,
 			Cs0 = 139,
@@ -120,11 +128,9 @@ namespace devices
 			{
 			}
 
-			//TODO complete API
-			// - overloaded methods with specialized arguments prescaler/counter to optimize code size
 			void start_tone(Tone t)
 			{
-				if (t > Tone::END)
+				if (t > Tone::SILENCE)
 					generator_.start_frequency(uint32_t(t));
 			}
 			inline void start_tone(PRESCALER prescaler, COUNTER counter)
@@ -138,9 +144,9 @@ namespace devices
 
 			void tone(Tone t, uint16_t ms)
 			{
-				if (t > Tone::NONE)
+				if (t > Tone::SILENCE)
 					generator_.start_frequency(uint32_t(t));
-				if (t >= Tone::NONE)
+				if (t >= Tone::SILENCE)
 					pause(ms);
 			}
 			inline void tone(PRESCALER prescaler, COUNTER counter, uint16_t ms)
