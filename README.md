@@ -61,7 +61,7 @@ What the project already has:
 - EEPROM support, with synchronous or asynchronous write
 - General Events handling
 - Watchdog timer
-- Timer modes support, including Input Capture
+- Timer modes support, including Input Capture and Square Waves generation
 - Timed (periodic or not) jobs scheduling
 - Real Time Timer with microsecond precision
 - PWM output support
@@ -77,6 +77,7 @@ What the project already has:
 
 In addition, FastArduino brings support for the following devices:
 
+- Tones generation & melody player (e.g. to produce notes through a buzzer)
 - SIPO (*Serial in Parallel out*) chips
 - Servo control API
 - WinBond flash memory support (SPI-based)
@@ -109,16 +110,17 @@ The roadmap of next activities and new supported features is the following:
 
 Milestone V1.0 (28.02.2018)
 ---------------------------
-1. Support other I2C devices: MCP23017 (IO multiplexer)
-2. Document most important API (scheduler, containers, eeprom)
-3. Improved Queue container
+1. Document most important API (scheduler, containers, eeprom)
+2. Improved Queue container
+3. Code cleanup
 
 Milestone V1.1 (30.04.2018)
 ---------------------------
-1. Document SPI and I2C API
-2. Document API of supported SPI and I2C devices
-3. Bugs fixes (software UART mainly)
-4. Various improvements: prevent or implement move- and copy- constructors and assignment operators
+1. Support other I2C devices: MCP23017 (IO multiplexer)
+2. Document SPI and I2C API
+3. Document API of supported SPI and I2C devices
+4. Bugs fixes (software UART mainly)
+5. Various improvements: prevent or implement move- and copy- constructors and assignment operators
 
 Milestone V2.0 (31.08.2018, content to be revisited)
 ----------------------------------------------------
