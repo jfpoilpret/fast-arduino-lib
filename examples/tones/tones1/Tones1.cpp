@@ -12,8 +12,10 @@
 #include <fastarduino/devices/tone_player.h>
 
 // Board-dependent settings
-static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
+// static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+// static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D6_PD6_OC0A;
 
 using devices::audio::Tone;
 using namespace devices::audio::SpecialTone;
