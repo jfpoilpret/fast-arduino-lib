@@ -22,8 +22,6 @@ namespace devices
 {
 	namespace audio
 	{
-		//TODO reserve a set of codes between END and NONE and then define constants for REAPEAT_START...
-		// so that the current implementation is open enough and not specific to a future TonePlayer class.
 		enum class Tone: uint16_t
 		{
 			USER0 = 0,
