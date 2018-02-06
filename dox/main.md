@@ -74,12 +74,13 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [analog](namespaceanalog.html): contains the API to handle analog input and "pseudo-analog" output (PWM).
 - [containers](TODO): utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.
 - [devices](TODO): this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:
+    - [audio](TODO): API for tone generation to buzzers or small audio amplifiers
     - [magneto](TODO): API for magnetometers, gyroscopes, accelerometers
     - [rf](TODO): API for radio-frequency chips
     - [rtc](TODO): API for real time clock chips
     - [servo](TODO): API to handle servomotors
     - [sonar](TODO): API to handle sonar range sensors
-- [eeprom](TODO): contains the API to handle read and write to and from the internal MCU EEPROM.
+- [eeprom](namespaceeeprom.html): contains the API to handle read and write to and from the internal MCU EEPROM.
 - [errors](TODO): all errors that can be returned by FastArduino API are defined here as constants.
 - [events](namespaceevents.html): this namespace defines general event handling that can be used in your programs. Most FastArduino are able to generate events on specific conditions. This namespace also contain the scheduler API which permits scheduling of jobs at specific times or periods.
 - [flash](namespaceflash.html): contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.
@@ -93,7 +94,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [spi](TODO): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.
 - [streams](namespacestreams.html): this namespace provide a C++ streams like API for input and output (used by serial UART API).
 - [time](namespacetime.html): provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.
-- [timer](namespacetime.html): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.
+- [timer](namespacetime.html): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, generating square waves, and an API dedicated to track real time through MCU timers, with microsecond precision.
 - [utils](namespaceutils.html): provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".
 - [watchdog](namespacewatchdog.html): this namespace defines an API to deal with MCU watchdog timer as a way 
 

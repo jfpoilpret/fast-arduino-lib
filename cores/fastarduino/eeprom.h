@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * API to handle EEPROM access in read and write modes.
+ */
 #ifndef EEPROM_H
 #define EEPROM_H
 
@@ -23,6 +29,7 @@
 #include "utilities.h"
 #include "queue.h"
 
+//TODO DOC
 // Utilities to handle ISR callbacks
 #define REGISTER_EEPROM_ISR() \
 	REGISTER_ISR_METHOD_RETURN_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready, bool)
@@ -43,6 +50,7 @@
 		if (WRT_HOLDER::handler()->on_ready()) CALLBACK(); \
 	}
 
+//TODO DOC
 namespace eeprom
 {
 	// Blocking EEPROM handler
@@ -415,3 +423,4 @@ namespace eeprom
 }
 
 #endif /* EEPROM_H */
+/// @endcond
