@@ -2233,19 +2233,46 @@ static const uint8_t MAX_LEN = 64;
 char wifi_name[MAX_LEN+1] EEMEM = "";
 char wifi_password[MAX_LEN+1] EEMEM = "";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TODO explain
+Here we define `wifi_name` and `wifi_password` as strings of 64 characters maximum (+ terminating `'\0'`),
+stored in EEPROM and both "initialized" as empty strings.
 
+Initialization here does not mean that these variables will automatically be empty string the first 
+time this program is executed. It means that after `make build`  is invoked, an `.eep` file is
+generated in order to be uploaded to EEPROM, and that file contains both variables as empty strings.
+Hence, provided you have uploaded that `.eep` file to your MCU EEPROM, both variables will then
+be empty strings when first read from EEPTOM by your program. 
+
+In the `main()` function, we then read both variables from EEPROM into local variables:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	char wifi[MAX_LEN+1];
 	EEPROM::read(wifi_name, wifi, MAX_LEN+1);
 	char password[MAX_LEN+1];
 	EEPROM::read(wifi_password, password, MAX_LEN+1);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TODO explain
+Here we use `EEPROM::read(uint16_t address, T* value, uint16_t count)` function template,
+instantiated with `T = char`: we have to specify the count of characters to be read, i.e. the maximum
+allowed string size, plus the null termination.
 
+As in the previous example, we use `wifi_name` and `wifi_password` variables to provide the address 
+in EEPROM, of the location of these 2 strings.
+
+Later in `main()`, if the user decided to enter a new WIFI netwrok name and pasword, those are
+written immediately to EEPROM:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 		EEPROM::write(wifi_name, wifi, strlen(wifi) + 1);
 		EEPROM::write(wifi_password, password, strlen(password) + 1);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TODO explain example
+The `EEPROM::write()` function arguments are similar to `EEPROM::read()` arguments. 
 
+Note that here, we do not have to write the full string allocated space to the EEPROM but only the currently 
+relevant count of characters, e.g. if `wifi` was input as `"Dummy"`, we will write only `6` characters
+for `wifi_name` in EEPROM, i.e. the actual string length `5` + `1` for null termination.
+This is particularly improtant to do this as writing bytes to EEPROM is very slow (up to ~4ms) so we want to limit
+that writing time to the strict minimum necessary.
+
+Because writing content to the EEPROM is a very slow operation, there are situations where you do not want
+to "stop" your program running because it is waiting for `EEPROM::write()` operations to complete.
+
+This is the reason why `eeprom` namespace also defines a `QueuedWriter` class that uses interruptions to
+write content to EEPROM, allowing your `main()` function to run normally during EEPROM writes. For more
+details, please check the API.
