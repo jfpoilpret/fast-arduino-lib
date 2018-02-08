@@ -29,11 +29,26 @@
 #include "utilities.h"
 #include "queue.h"
 
-//TODO DOC
-// Utilities to handle ISR callbacks
+/**
+ * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
+ * to work properly.
+ * @sa eeprom::QueuedWriter
+ */
 #define REGISTER_EEPROM_ISR() \
 	REGISTER_ISR_METHOD_RETURN_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready, bool)
 
+/**
+ * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
+ * to work properly, along with a callback method taht will be called everytime
+ * all pending queued write operations are complete.
+ * 
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
+ * is triggered; this must be a proper PTMF (pointer to member function).
+ * 
+ * @sa eeprom::QueuedWriter
+ * @sa eeprom::QueuedWriter::on_ready()
+ */
 #define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)                              \
 	ISR(EE_READY_vect)                                                             \
 	{                                                                              \
@@ -42,6 +57,17 @@
 		if (WRT_HOLDER::handler()->on_ready()) CALL_HANDLER_(HANDLER, CALLBACK)(); \
 	}
 
+/**
+ * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
+ * to work properly, along with a callback method taht will be called everytime
+ * all pending queued write operations are complete.
+ * 
+ * @param CALLBACK the function that will be called when the interrupt is
+ * triggered
+ * 
+ * @sa eeprom::QueuedWriter
+ * @sa eeprom::QueuedWriter::on_ready()
+ */
 #define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)             \
 	ISR(EE_READY_vect)                                     \
 	{                                                      \
