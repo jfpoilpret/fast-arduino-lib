@@ -81,7 +81,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
     - [servo](TODO): API to handle servomotors
     - [sonar](TODO): API to handle sonar range sensors
 - [eeprom](namespaceeeprom.html): contains the API to handle read and write to and from the internal MCU EEPROM.
-- [errors](TODO): all errors that can be returned by FastArduino API are defined here as constants.
+- [errors](namespaceerrors.html): all errors that can be returned by FastArduino API are defined here as constants.
 - [events](namespaceevents.html): this namespace defines general event handling that can be used in your programs. Most FastArduino are able to generate events on specific conditions. This namespace also contain the scheduler API which permits scheduling of jobs at specific times or periods.
 - [flash](namespaceflash.html): contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.
 - [gpio](namespacegpio.html): that namespace deals with all API to manage digital input and outputs.
