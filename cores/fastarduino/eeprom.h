@@ -50,17 +50,86 @@
 		if (WRT_HOLDER::handler()->on_ready()) CALLBACK(); \
 	}
 
-//TODO DOC
+/**
+ * Defines the API for accessing the EEPROM embedded in each AVR MCU.
+ * The API offers blocking read, blocking write and queued (asynchronous) write.
+ */
 namespace eeprom
 {
-	// Blocking EEPROM handler
+	/**
+	 * Collection of static methods to read or write the AVR EEPROM.
+	 * All API here is blocking, i.e. will not return until read or write is
+	 * complete.
+	 * 
+	 * All API here exist in 2 flavors, differing in how the EEPROM cell address
+	 * is passed :
+	 * - as an aboslute `uint16_t`  location, from `0` to max EEPROM size
+	 * - as the address of a variable that was declared with `EEMEM` attribute
+	 * 
+	 * The second is generally more convenient as it allows you to:
+	 * - not care about actual variable locations in EEPROM (if you have many
+	 * distinct content to store, defined in different source files); location
+	 * will be determined for you at compile-time
+	 * - prepare initial values for EEPROM content, for which `make` will generate
+	 * an `.eep` file that you can seperately upload to EEPROM
+	 * 
+	 * The following snippet shows briefly how you can use the `EEMEM` flavor:
+	 * @code
+	 * // Declare EEPROM stored content
+	 * static uint32_t eeprom_hash EEMEM = 0;
+	 * ...
+	 * uint32_t read_hash()
+	 * {
+	 *     uint32_t hash;
+	 *     // Read uint32_t value located at "eeprom_hash" in EEPROM, and put it into hash varaibel
+	 *     EEPROM::read(&eeprom_hash, hash);
+	 *     return hash;
+	 * }
+	 * void write_hash(uint32_t hash)
+	 * {
+	 *     EEPROM::write(&eeprom_hash, hash);
+	 * }
+	 * @endcode  
+	 */
 	class EEPROM
 	{
 	public:
+		/**
+		 * Read value of type @p T stored in EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from EEPROM to internal 
+		 * content of the type, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be read (determines the number of bytes to read)
+		 * @param address the location to be read in EEPROM; @p address is typically
+		 * obtained as `&variable` where `variable` is a global variable that was
+		 * declared with `EEMEM` attribute.
+		 * @param value a reference to the variable that will be assigned the content read
+		 * from EEPROM
+		 * @retval true if read was successful
+		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa read(uint16_t, T&)
+		 */
 		template<typename T> inline static bool read(const T* address, T& value)
 		{
 			return read((uint16_t) address, value);
 		}
+
+		/**
+		 * Read value of type @p T stored in EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from EEPROM to internal 
+		 * content of the type, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be read (determines the number of bytes to read)
+		 * @param address the location to be read in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value a reference to the variable that will be assigned the content read
+		 * from EEPROM
+		 * @retval true if read was successful
+		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa read(const T*, T&)
+		 */
 		template<typename T> static bool read(uint16_t address, T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
@@ -69,10 +138,44 @@ namespace eeprom
 			return true;
 		}
 
+		/**
+		 * Read an array of @p count values of type @p T stored in EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from EEPROM to internal 
+		 * content of the type, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be read (determines the number of bytes to read)
+		 * @param address the location to be read in EEPROM; @p address is typically
+		 * obtained as `variable` where `variable` is a global variable array that was
+		 * declared with `EEMEM` attribute.
+		 * @param value a pointer to the variable array that will be assigned the content read
+		 * from EEPROM
+		 * @param count the number of items of type @p T to be read
+		 * @retval true if read was successful
+		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa read(uint16_t, T*, uint16_t)
+		 */
 		template<typename T> inline static bool read(const T* address, T* value, uint16_t count)
 		{
 			return read((uint16_t) address, value, count);
 		}
+
+		/**
+		 * Read an array of @p count values of type @p T stored in EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from EEPROM to internal 
+		 * content of the type, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be read (determines the number of bytes to read)
+		 * @param address the location to be read in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value a pointer to the variable array that will be assigned the content read
+		 * from EEPROM
+		 * @param count the number of items of type @p T to be read
+		 * @retval true if read was successful
+		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa read(const T*, T*, uint16_t)
+		 */
 		template<typename T> static bool read(uint16_t address, T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
@@ -81,10 +184,34 @@ namespace eeprom
 			return true;
 		}
 
+		/**
+		 * Read one byte stored in EEPROM at @p address.
+		 * 
+		 * @param address the location to be read in EEPROM; @p address is typically
+		 * obtained as `&variable` where `variable` is a global variable that was
+		 * declared with `EEMEM` attribute.
+		 * @param value a reference to the variable that will be assigned the content read
+		 * from EEPROM
+		 * @retval true if read was successful
+		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa read(uint16_t, uint8_t&)
+		 */
 		inline static bool read(const uint8_t* address, uint8_t& value)
 		{
 			return read((uint16_t) address, value);
 		}
+
+		/**
+		 * Read one byte stored in EEPROM at @p address.
+		 * 
+		 * @param address the location to be read in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value a reference to the variable that will be assigned the content read
+		 * from EEPROM
+		 * @retval true if read was successful
+		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa read(const uint8_t*, uint8_t&)
+		 */
 		inline static bool read(uint16_t address, uint8_t& value)
 		{
 			if (!check(address, 1))
@@ -96,10 +223,42 @@ namespace eeprom
 			return true;
 		}
 
+		/**
+		 * Write the content of @p value of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is typically
+		 * obtained as `&variable` where `variable` is a global variable that was
+		 * declared with `EEMEM` attribute.
+		 * @param value a reference to the variable which content will be copied
+		 * to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa write(uint16_t, const T&)
+		 */
 		template<typename T> inline static bool write(const T* address, const T& value)
 		{
 			return write((uint16_t) address, value);
 		}
+
+		/**
+		 * Write the content of @p value of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value a reference to the variable which content will be copied
+		 * to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa write(uint16_t, const T&)
+		 */
 		template<typename T> static bool write(uint16_t address, const T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
@@ -108,10 +267,44 @@ namespace eeprom
 			return true;
 		}
 
+		/**
+		 * Write @p value, an array of @p count values of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is typically
+		 * obtained as `variable` where `variable` is a global variable array that was
+		 * declared with `EEMEM` attribute.
+		 * @param value a pointer to the variable array which content will be copied
+		 * to EEPROM
+		 * @param count the number of items of type @p T to be written
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa write(uint16_t, const T*, uint16_t)
+		 */
 		template<typename T> inline static bool write(const T* address, const T* value, uint16_t count)
 		{
 			return write((uint16_t) address, value, count);
 		}
+
+		/**
+		 * Write @p value, an array of @p count values of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value a pointer to the variable array which content will be copied
+		 * to EEPROM
+		 * @param count the number of items of type @p T to be written
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa write(const T*, const T*, uint16_t)
+		 */
 		template<typename T> static bool write(uint16_t address, const T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
@@ -120,10 +313,32 @@ namespace eeprom
 			return true;
 		}
 
+		/**
+		 * Write one byte to the EEPROM at @p address.
+		 * 
+		 * @param address the location to be written in EEPROM; @p address is typically
+		 * obtained as `&variable` where `variable` is a global variable that was
+		 * declared with `EEMEM` attribute.
+		 * @param value the byte value that will be written to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa write(uint16_t, uint8_t)
+		 */
 		inline static bool write(const uint8_t* address, uint8_t value)
 		{
 			return write((uint16_t) address, value);
 		}
+
+		/**
+		 * Write one byte to the EEPROM at @p address.
+		 * 
+		 * @param address the location to be written in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value the byte value that will be written to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * @sa write(const uint8_t*, uint8_t)
+		 */
 		inline static bool write(uint16_t address, uint8_t value)
 		{
 			if (!check(address, 1)) return false;
@@ -131,6 +346,11 @@ namespace eeprom
 			return true;
 		}
 
+		/**
+		 * Erase the full EEPROM content.
+		 * Note that "erasing" means setting all EEPROM cells to `0xFF`.
+		 * The method will block until all EEPROM content has been erased.
+		 */
 		static void erase()
 		{
 			for (uint16_t address = 0; address < size(); ++address)
@@ -140,11 +360,20 @@ namespace eeprom
 			}
 		}
 
+		/**
+		 * Return the size (in bytes) of the embedded EEPROM.
+		 */
 		static constexpr uint16_t size()
 		{
 			return E2END + 1;
 		}
 
+		/**
+		 * Block until the current EEPROM operation, whetever it is (e.g. read, write,
+		 * erase), is complete.
+		 * Normally, you would not need this method as any `EEPROM` method calls it 
+		 * before starting its operation.
+		 */
 		inline static void wait_until_ready()
 		{
 			while (EECR & _BV(EEPE))
@@ -152,6 +381,7 @@ namespace eeprom
 		}
 
 	protected:
+		/// @cond notdocumented
 		inline static bool check(uint16_t address, uint16_t size)
 		{
 			return size && (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
@@ -230,50 +460,178 @@ namespace eeprom
 			}
 			return true;
 		}
+		/// @endcond
 	};
 
+	/**
+	 * API that allows asynchronous writing to EEPROM; this can be useful when you
+	 * have large amount of data to write but cannot afford to wait until all bytes
+	 * have been written.
+	 * The class uses a ring buffer which array must be provided at construction time.
+	 * 
+	 * In order for QueueWriter to function properly, you must register a proper ISR.
+	 * FastArduino provides 3 possible ISR registrations:
+	 * - REGISTER_EEPROM_ISR() basic ISR, ensures that all queued writes get written
+	 * asynchronously
+	 * - REGISTER_EEPROM_ISR_METHOD() enhanced ISR, first ensures that all queued
+	 * writes get handled and when the last byte is written, calls a back a method
+	 * of a handler class
+	 * - REGISTER_EEPROM_ISR_FUNCTION() enhanced ISR, first ensures that all queued
+	 * writes get handled and when the last byte is written, calls a back a function
+	 * 
+	 * Basically it has the same `write()` and `erase()` methods as `EEPROM` class,
+	 * except:
+	 * - its methods are not `static`
+	 * - methods return immediately without waiting for the operation to be finished
+	 * - methods may return `false` if the operation overflows the ring buffer
+	 */
 	class QueuedWriter : private EEPROM
 	{
 	public:
+		/**
+		 * Construct a QueuedWriter from a given @p buffer array.
+		 * 
+		 * @tparam SIZE the size of @p buffer; this size limits the amount of writes
+		 * that can be queued and the content size of each write
+		 * @param buffer the buffer that will be used by this QueuedWriter
+		 */
 		template<uint16_t SIZE>
 		QueuedWriter(uint8_t (&buffer)[SIZE]) : buffer_{buffer}, current_{}, erase_{false}, done_{true}
 		{
 			interrupt::register_handler(*this);
 		}
 
+		/**
+		 * Write the content of @p value of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is typically
+		 * obtained as `&variable` where `variable` is a global variable that was
+		 * declared with `EEMEM` attribute.
+		 * @param value a reference to the variable which content will be copied
+		 * to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * or if the ring buffer would overflow
+		 * @sa write(uint16_t, const T&) 
+		 */
 		template<typename T> inline bool write(const T* address, const T& value)
 		{
 			return write((uint16_t) address, value);
 		}
 
+		/**
+		 * Write the content of @p value of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value a reference to the variable which content will be copied
+		 * to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * or if the ring buffer would overflow
+		 * @sa write(const T*, const T&)
+		 */
 		template<typename T> bool write(uint16_t address, const T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
 			synchronized return write_data(address, (uint8_t*) &value, sizeof(T));
 		}
 
+		/**
+		 * Write @p value, an array of @p count values of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is typically
+		 * obtained as `variable` where `variable` is a global variable array that was
+		 * declared with `EEMEM` attribute.
+		 * @param value a pointer to the variable array which content will be copied
+		 * to EEPROM
+		 * @param count the number of items of type @p T to be written
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * or if the ring buffer would overflow
+		 * @sa write(uint16_t, const T*, uint16_t) or if the ring buffer would overflow
+		 */
 		template<typename T> inline bool write(const T* address, const T* value, uint16_t count)
 		{
 			return write((uint16_t) address, value, count);
 		}
 
+		/**
+		 * Write @p value, an array of @p count values of type @p T to the EEPROM at @p address.
+		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * operator but simply copies, byte per byte, content from local variable content
+		 * to EEPROM, no @p T code gets executed.
+		 * 
+		 * @tparam T the type of content to be written (determines the number of bytes to write)
+		 * @param address the location to be written in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value a pointer to the variable array which content will be copied
+		 * to EEPROM
+		 * @param count the number of items of type @p T to be written
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * or if the ring buffer would overflow
+		 * @sa write(const T*, const T*, uint16_t)
+		 */
 		template<typename T> bool write(uint16_t address, const T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
 			synchronized return write_data(address, (uint8_t*) value, count * sizeof(T));
 		}
 
+		/**
+		 * Write one byte to the EEPROM at @p address.
+		 * 
+		 * @param address the location to be written in EEPROM; @p address is typically
+		 * obtained as `&variable` where `variable` is a global variable that was
+		 * declared with `EEMEM` attribute.
+		 * @param value the byte value that will be written to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * or if the ring buffer would overflow
+		 * @sa write(uint16_t, uint8_t)
+		 */
 		inline bool write(const uint8_t* address, uint8_t value)
 		{
 			return write((uint16_t) address, value);
 		}
 
+		/**
+		 * Write one byte to the EEPROM at @p address.
+		 * 
+		 * @param address the location to be written in EEPROM; @p address is provided as an 
+		 * absolute location, from `0` to the maximum EEPROM size
+		 * @param value the byte value that will be written to EEPROM
+		 * @retval true if write was successful
+		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
+		 * or if the ring buffer would overflow
+		 * @sa write(const uint8_t*, uint8_t)
+		 */
 		bool write(uint16_t address, uint8_t value)
 		{
 			if (!check(address, 1)) return false;
 			synchronized return write_data(address, &value, 1);
 		}
 
+		/**
+		 * Erase the full EEPROM content.
+		 * Note that "erasing" means setting all EEPROM cells to `0xFF`.
+		 * The method will first remove any pending writes from the ring buffer,
+		 * wait for any currently on-going 1-byte write operation to completem,
+		 * then it will start asynchronous erase operation.
+		 */
 		void erase()
 		{
 			// First remove all pending writes
@@ -296,17 +654,29 @@ namespace eeprom
 			}
 		}
 
-		void wait_until_done()
+		/**
+		 * Block until all pending operations (queued in the ring buffer) are
+		 * complete.
+		 * This can be useful if your program is about to exit but you want to
+		 * first ensure that any EEPROM write operations are finished before exit
+		 * (otherwise, the EEPROM content may not be as expected).
+		 */
+		void wait_until_done() const
 		{
 			while (!done_)
 				;
 		}
 
-		bool is_done()
+		/**
+		 * Tell if there is no queued, nor on-going write operation.
+		 */
+		bool is_done() const
 		{
 			return done_;
 		}
 
+		//TODO should better be private
+		/// @cond notdocumented
 		bool on_ready()
 		{
 			if (erase_)
@@ -343,6 +713,7 @@ namespace eeprom
 			}
 			return done_;
 		}
+		/// @endcond
 
 	private:
 		static const uint16_t ITEM_SIZE = 3;
