@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * Utility API to handle ring-buffer queue containers.
+ */
 #ifndef QUEUE_HH
 #define QUEUE_HH
 
@@ -20,42 +26,108 @@
 
 namespace containers
 {
+	//TODO try to avoid SIZE contraint to be a power of 2, or at least give the choice
+	// the developer
 	//TODO imprvoe code size by creating a non-template base class with all common stuff
 	//TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?
+	/**
+	 * Queue of type @p T_ items.
+	 * This is a FIFO (*first in first out*) queue, built upon a ring buffer of 
+	 * fixed size, passed at construction time.
+	 * 
+	 * This queue offers only a few operations:
+	 * - push an item at "the end" of the queue
+	 * - pull an item from "the beginning" of the queue
+	 * - clear the whole queue
+	 * - get various information without changing the queue, including peeking
+	 * one or several items from the beginning of the queue without removing them
+	 * 
+	 * All operations exist in two flavors:
+	 * - **synchronized**: you should use this flavor whenever the caller cannot 
+	 * guarantee no interruption will occur during the operation, i.e. when the caller
+	 * is neither part of an ISR, nor embedded itself in a `synchronized` block.
+	 * - **not synchronized**: you should use this flavor when the caller can guarantee
+	 * that no interruption will occur during the operation, e.g. when called from
+	 * an ISR or from within a `synchronized` block; these methods bear the same
+	 * name as their **synchronized** counterparts, with an additional trailing
+	 * **_** underscore.
+	 * 
+	 * @tparam T_ the type of items in this queue
+	 * @tparam TREF_ the constant reference type of items in this queue; this is
+	 * `const T_&` by default, but this may be changed, for small size types
+	 * (one or two bytes long) to `T_` itself, in order to avoid additional code
+	 * to handle reference extraction of an item. This type is used by `push()`
+	 * methods.
+	 */
 	template<typename T_, typename TREF_ = const T_&> class Queue
 	{
 	public:
+		/** The type of items in this queue. */
 		using T = T_;
+
+		/** The constant reference type of items in this queue. */
 		using TREF = TREF_;
 
+		/**
+		 * Create a new queue, based on the provided @p buffer array.
+		 * The queue size is determined by the size of `buffer`.
+		 * @tparam SIZE the number of @p T items that `buffer` can hold; for
+		 * performance optimization, this must be a power of 2; if not, compilation
+		 * will fail.
+		 * @param buffer the buffer used by this queue to store its items
+		 */
 		template<uint8_t SIZE>
 		Queue(T (&buffer)[SIZE]) : buffer_{buffer}, mask_{(uint8_t)(SIZE - 1)}, head_{0}, tail_{0}
 		{
 			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
 
-		// Those methods are not interrupt-safe hence must be called only from an ISR
+		/**
+		 * Push @p item to the end of this queue, provided there is still available
+		 * space in its ring buffer.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `push()` instead.
+		 * 
+		 * @param item a constant reference to the item to be pushed to thsi queue
+		 * @retval true if @p item could be pushed
+		 * @retval false if this queue is full and thus @p item could not be pushed
+		 * 
+		 * @sa push()
+		 * @sa pull_()
+		 * @sa free_()
+		 */
 		bool push_(TREF item);
+
+		//TODO DOC
 		bool pull_(T& item);
+
 		bool peek_(T& item) const;
+
 		uint8_t peek_(T* buffer, uint8_t size) const;
+
 		template<uint8_t SIZE> uint8_t peek_(T (&buffer)[SIZE]) const;
+
 		inline uint8_t size() const
 		{
 			return mask_;
 		}
+
 		inline bool empty_() const
 		{
 			return (tail_ == head_);
 		}
+
 		inline uint8_t items_() const
 		{
 			return (tail_ - head_) & mask_;
 		}
+
 		inline uint8_t free_() const
 		{
 			return (head_ - tail_ - 1) & mask_;
 		}
+
 		inline void clear_()
 		{
 			head_ = tail_ = 0;
@@ -66,34 +138,42 @@ namespace containers
 		{
 			synchronized return push_(item);
 		}
+
 		inline bool pull(T& item)
 		{
 			synchronized return pull_(item);
 		}
+
 		inline bool peek(T& item) const
 		{
 			synchronized return peek_(item);
 		}
+
 		inline uint8_t peek(T* buffer, uint8_t size) const
 		{
 			synchronized return peek_(buffer, size);
 		}
+
 		template<uint8_t SIZE> inline uint8_t peek(T (&buffer)[SIZE]) const
 		{
 			synchronized return peek_(buffer);
 		}
+
 		inline bool empty() const
 		{
 			synchronized return empty_();
 		}
+
 		inline uint8_t items() const
 		{
 			synchronized return items_();
 		}
+
 		inline uint8_t free() const
 		{
 			synchronized return free_();
 		}
+
 		inline void clear()
 		{
 			synchronized clear_();
@@ -166,3 +246,4 @@ namespace containers
 }
 
 #endif /* QUEUE_HH */
+/// @endcond
