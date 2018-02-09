@@ -138,31 +138,111 @@ namespace containers
 		 */
 		bool peek_(T& item) const;
 
-		//TODO DOC
+		/**
+		 * Peek up to @p size items from the beginning of this queue, if not empty, 
+		 * and copy these into @p buffer array. The queue is NOT modified, no item 
+		 * is removed from the queue.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `peek()` instead.
+		 * 
+		 * @param buffer a pointer to an array of @p size items of type @p T,
+		 * that will be assigned the first @p size elements of this queue
+		 * @param size the maximum number of items to peek from this queue and
+		 * copy to @p buffer; @p buffer size must be at least @p size
+		 * @return the number of elements copied from the queue into @p buffer;
+		 * this may be `0` if the queue is empty, or any number lower or equal to
+		 * @p size; this will be @p size if the queue has at least @p size elements
+		 * 
+		 * @sa peek()
+		 * @sa pull_()
+		 * @sa push_()
+		 * @sa items_()
+		 */
 		uint8_t peek_(T* buffer, uint8_t size) const;
 
+		/**
+		 * Peek up to @p SIZE items from the beginning of this queue, if not empty, 
+		 * and copy these into @p buffer array. The queue is NOT modified, no item 
+		 * is removed from the queue.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `peek()` instead.
+		 * 
+		 * @tparam SIZE the number of items that @p buffer can hold; this is also
+		 * the maximum number of items to peek from this queue and
+		 * copy to @p buffer
+		 * @param buffer an array of @p SIZE items of type @p T,
+		 * that will be assigned the first @p SIZE elements of this queue
+		 * @return the number of elements copied from the queue into @p buffer;
+		 * this may be `0` if the queue is empty, or any number lower or equal to
+		 * @p SIZE; this will be @p SIZE if the queue has at least @p SIZE elements
+		 * 
+		 * @sa peek()
+		 * @sa pull_()
+		 * @sa push_()
+		 * @sa items_()
+		 */
 		template<uint8_t SIZE> uint8_t peek_(T (&buffer)[SIZE]) const;
 
+		/**
+		 * Get the maximum size of this queue.
+		 * This is the maximum number of items that can be present at the same time
+		 * in this queue.
+		 */
 		inline uint8_t size() const
 		{
 			return mask_;
 		}
 
+		/**
+		 * Tell if this queue is currently empty.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `empty()` instead.
+		 * @sa empty()
+		 * @sa free_()
+		 */
 		inline bool empty_() const
 		{
 			return (tail_ == head_);
 		}
 
+		/**
+		 * Tell the current number of items currently present in this queue.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `items()` instead.
+		 * @sa items()
+		 * @sa size()
+		 */
 		inline uint8_t items_() const
 		{
 			return (tail_ - head_) & mask_;
 		}
 
+		/**
+		 * Tell the current number of available locations for items to be pushed 
+		 * to this queue.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `free()` instead.
+		 * @sa free()
+		 * @sa empty_()
+		 */
 		inline uint8_t free_() const
 		{
 			return (head_ - tail_ - 1) & mask_;
 		}
 
+		/**
+		 * Completely clear this queue. All present items, if any, are lost.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `clear()` instead.
+		 * @sa clear()
+		 * @sa empty_()
+		 */
 		inline void clear_()
 		{
 			head_ = tail_ = 0;
@@ -233,32 +313,104 @@ namespace containers
 			synchronized return peek_(item);
 		}
 
-		//TODO DOC
+		/**
+		 * Peek up to @p size items from the beginning of this queue, if not empty, 
+		 * and copy these into @p buffer array. The queue is NOT modified, no item 
+		 * is removed from the queue.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `peek_()` instead.
+		 * 
+		 * @param buffer a pointer to an array of @p size items of type @p T,
+		 * that will be assigned the first @p size elements of this queue
+		 * @param size the maximum number of items to peek from this queue and
+		 * copy to @p buffer; @p buffer size must be at least @p size
+		 * @return the number of elements copied from the queue into @p buffer;
+		 * this may be `0` if the queue is empty, or any number lower or equal to
+		 * @p size; this will be @p size if the queue has at least @p size elements
+		 * 
+		 * @sa peek_()
+		 * @sa pull()
+		 * @sa push()
+		 * @sa items()
+		 */
 		inline uint8_t peek(T* buffer, uint8_t size) const
 		{
 			synchronized return peek_(buffer, size);
 		}
 
+		/**
+		 * Peek up to @p SIZE items from the beginning of this queue, if not empty, 
+		 * and copy these into @p buffer array. The queue is NOT modified, no item 
+		 * is removed from the queue.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `peek_()` instead.
+		 * 
+		 * @tparam SIZE the number of items that @p buffer can hold; this is also
+		 * the maximum number of items to peek from this queue and
+		 * copy to @p buffer
+		 * @param buffer an array of @p SIZE items of type @p T,
+		 * that will be assigned the first @p SIZE elements of this queue
+		 * @return the number of elements copied from the queue into @p buffer;
+		 * this may be `0` if the queue is empty, or any number lower or equal to
+		 * @p SIZE; this will be @p SIZE if the queue has at least @p SIZE elements
+		 * 
+		 * @sa peek_()
+		 * @sa pull()
+		 * @sa push()
+		 * @sa items()
+		 */
 		template<uint8_t SIZE> inline uint8_t peek(T (&buffer)[SIZE]) const
 		{
 			synchronized return peek_(buffer);
 		}
 
+		/**
+		 * Tell if this queue is currently empty.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `empty_()` instead.
+		 */
 		inline bool empty() const
 		{
 			synchronized return empty_();
 		}
 
+		/**
+		 * Tell the current number of items currently present in this queue.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `items_()` instead.
+		 * @sa items_()
+		 */
 		inline uint8_t items() const
 		{
 			synchronized return items_();
 		}
 
+		/**
+		 * Tell the current number of available locations for items to be pushed 
+		 * to this queue.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `free_()` instead.
+		 * @sa free_()
+		 * @sa empty()
+		 */
 		inline uint8_t free() const
 		{
 			synchronized return free_();
 		}
 
+		/**
+		 * Completely clear this queue. All present items, if any, are lost.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `free()` instead.
+		 * @sa clear_()
+		 * @sa empty()
+		 */
 		inline void clear()
 		{
 			synchronized clear_();
