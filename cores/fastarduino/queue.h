@@ -99,11 +99,46 @@ namespace containers
 		 */
 		bool push_(TREF item);
 
-		//TODO DOC
+		/**
+		 * Pull an item from the beginning of this queue, if not empty, and copy
+		 * it into @p item. The item is removed from the queue.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `pull()` instead.
+		 * 
+		 * @param item a reference to the item variable that will be assigned the
+		 * first element of this queue
+		 * @retval true if the queue is not empty and thus an item has been copied
+		 * to @p item
+		 * @retval false if this queue is empty and thus @p item has not changed
+		 * 
+		 * @sa pull()
+		 * @sa push_()
+		 * @sa empty_()
+		 */
 		bool pull_(T& item);
 
+		/**
+		 * Peek an item from the beginning of this queue, if not empty, and copy
+		 * it into @p item. The queue is NOT modified, no item is removed from the queue.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `peek()` instead.
+		 * 
+		 * @param item a reference to the item variable that will be assigned the
+		 * first element of this queue
+		 * @retval true if the queue is not empty and thus an item has been copied
+		 * to @p item
+		 * @retval false if this queue is empty and thus @p item has not changed
+		 * 
+		 * @sa peek()
+		 * @sa pull_()
+		 * @sa push_()
+		 * @sa empty_()
+		 */
 		bool peek_(T& item) const;
 
+		//TODO DOC
 		uint8_t peek_(T* buffer, uint8_t size) const;
 
 		template<uint8_t SIZE> uint8_t peek_(T (&buffer)[SIZE]) const;
@@ -133,22 +168,72 @@ namespace containers
 			head_ = tail_ = 0;
 		}
 
-		// Those methods are interrupt-safe hence can be called outside any ISR
+		/**
+		 * Push @p item to the end of this queue, provided there is still available
+		 * space in its ring buffer.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `push_()` instead.
+		 * 
+		 * @param item a constant reference to the item to be pushed to thsi queue
+		 * @retval true if @p item could be pushed
+		 * @retval false if this queue is full and thus @p item could not be pushed
+		 * 
+		 * @sa push_()
+		 * @sa pull()
+		 * @sa free()
+		 */
 		inline bool push(TREF item)
 		{
 			synchronized return push_(item);
 		}
 
+		/**
+		 * Pull an item from the beginning of this queue, if not empty, and copy
+		 * it into @p item. The item is removed from the queue.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `pull_()` instead.
+		 * 
+		 * @param item a reference to the item variable that will be assigned the
+		 * first element of this queue
+		 * @retval true if the queue is not empty and thus an item has been copied
+		 * to @p item
+		 * @retval false if this queue is empty and thus @p item has not changed
+		 * 
+		 * @sa pull_()
+		 * @sa push()
+		 * @sa empty()
+		 */
 		inline bool pull(T& item)
 		{
 			synchronized return pull_(item);
 		}
 
+		/**
+		 * Peek an item from the beginning of this queue, if not empty, and copy
+		 * it into @p item. The queue is NOT modified, no item is removed from the queue.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `peek_()` instead.
+		 * 
+		 * @param item a reference to the item variable that will be assigned the
+		 * first element of this queue
+		 * @retval true if the queue is not empty and thus an item has been copied
+		 * to @p item
+		 * @retval false if this queue is empty and thus @p item has not changed
+		 * 
+		 * @sa peek_()
+		 * @sa pull()
+		 * @sa push()
+		 * @sa empty()
+		 */
 		inline bool peek(T& item) const
 		{
 			synchronized return peek_(item);
 		}
 
+		//TODO DOC
 		inline uint8_t peek(T* buffer, uint8_t size) const
 		{
 			synchronized return peek_(buffer, size);
