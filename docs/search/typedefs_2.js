@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fmtflags',['fmtflags',['../classstreams_1_1ios__base.html#a21f734427c657b09a8e9a14cd11950bb',1,'streams::ios_base']]]
+  ['event',['EVENT',['../classevents_1_1_scheduler.html#ad8099104b97bb2573fdc4ce91b0f2652',1,'events::Scheduler']]]
 ];

@@ -1,16 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classcontainers_1_1_linked_list_impl.html" title="containers::LinkedListImpl" alt="" coords="207,78,382,105"/>
-<area shape="rect" id="node2" href="$classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; T_ \&gt;" alt="" coords="468,5,617,47"/>
-<area shape="rect" id="node3" href="$classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; EventHandler\&lt; EVENT \&gt; \&gt;" alt="" coords="445,71,640,112"/>
-<area shape="rect" id="node5" href="$classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; Job \&gt;" alt="" coords="468,136,617,177"/>
-<area shape="rect" id="node4" href="$classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type..." alt="" coords="697,71,829,112"/>
-<area shape="rect" id="node6" href="$classevents_1_1_scheduler.html" title="events::Scheduler\&lt;\l CLOCK_, EVENT_ \&gt;" alt="" coords="688,201,839,243"/>
-<area shape="rect" id="node7" href="$classcontainers_1_1_link_impl.html" title="containers::LinkImpl" alt="" coords="5,242,144,269"/>
-<area shape="rect" id="node8" href="$classcontainers_1_1_link.html" title="containers::Link\&lt; T_ \&gt;" alt="" coords="218,150,371,177"/>
-<area shape="rect" id="node9" href="$classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler\l\&lt; EVENT \&gt; \&gt;" alt="" coords="192,201,397,243"/>
-<area shape="rect" id="node11" href="$classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler\l\&lt; EVENT_ \&gt; \&gt;" alt="" coords="192,267,397,308"/>
-<area shape="rect" id="node13" href="$classcontainers_1_1_link.html" title="containers::Link\&lt; Job \&gt;" alt="" coords="215,333,374,359"/>
-<area shape="rect" id="node10" href="$classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d..." alt="" coords="469,201,617,243"/>
-<area shape="rect" id="node12" href="$classevents_1_1_event_handler.html" title="events::EventHandler\l\&lt; EVENT_ \&gt;" alt="" coords="469,267,617,308"/>
-<area shape="rect" id="node14" href="$classevents_1_1_job.html" title="events::Job" alt="" coords="497,333,588,359"/>
+<area shape="rect" id="node1" href="$classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. " alt="" coords="5,5,153,47"/>
 </map>

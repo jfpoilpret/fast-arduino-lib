@@ -423,6 +423,7 @@ namespace containers
 		volatile uint8_t tail_;
 	};
 
+	/// @cond notdocumented
 	template<typename T, typename TREF> bool Queue<T, TREF>::peek_(T& item) const
 	{
 		if (tail_ == head_) return false;
@@ -480,6 +481,7 @@ namespace containers
 		while (!queue.peek(item)) time::yield();
 		return item;
 	}
+	/// @endcond
 }
 
 #endif /* QUEUE_HH */

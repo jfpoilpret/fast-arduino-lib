@@ -1,7 +1,10 @@
 var searchData=
 [
+  ['empty',['empty',['../classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f',1,'containers::Queue']]],
+  ['empty_5f',['empty_',['../classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678',1,'containers::Queue']]],
   ['enable',['enable',['../classinterrupt_1_1_i_n_t_signal.html#a72228b0e74171cc89f3907a29d361e8b',1,'interrupt::INTSignal::enable()'],['../classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e',1,'interrupt::PCISignal::enable()']]],
   ['enable_5f',['enable_',['../classinterrupt_1_1_i_n_t_signal.html#a1d346fd2ec783c625c89e4c6b566906b',1,'interrupt::INTSignal::enable_()'],['../classinterrupt_1_1_p_c_i_signal.html#ae98ac09553f3a113afc438a2f2e74d07',1,'interrupt::PCISignal::enable_()']]],
+  ['enable_5finterrupts',['enable_interrupts',['../classtimer_1_1_timer.html#a2d9a1f5f960345ab0c5abbf68c38593c',1,'timer::Timer']]],
   ['enable_5fpin',['enable_pin',['../classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699',1,'interrupt::PCISignal']]],
   ['enable_5fpin_5f',['enable_pin_',['../classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a',1,'interrupt::PCISignal']]],
   ['enable_5fpins',['enable_pins',['../classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6',1,'interrupt::PCISignal']]],
@@ -10,6 +13,7 @@ var searchData=
   ['end_5f',['end_',['../classtimer_1_1_timer.html#a996b44c8a60d4d14a9cdc159e385282d',1,'timer::Timer']]],
   ['endl',['endl',['../namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22',1,'streams']]],
   ['eof',['eof',['../classstreams_1_1ios__base.html#ad85b4ac8316bdfb945c33589e25c1db0',1,'streams::ios_base']]],
+  ['erase',['erase',['../classeeprom_1_1_e_e_p_r_o_m.html#ace5a82d71896ab870d162c32a7627d5c',1,'eeprom::EEPROM::erase()'],['../classeeprom_1_1_queued_writer.html#ad2933f1803b50189ced1361ee0292ac8',1,'eeprom::QueuedWriter::erase()']]],
   ['event',['Event',['../classevents_1_1_event.html#a70ff55a428a1aaab417f281031d6672d',1,'events::Event']]],
   ['eventhandler',['EventHandler',['../classevents_1_1_event_handler.html#a3a1b6e45fb04ed611dc09c71a30d2341',1,'events::EventHandler']]]
 ];

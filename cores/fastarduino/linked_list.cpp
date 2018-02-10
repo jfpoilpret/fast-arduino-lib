@@ -16,6 +16,7 @@
 
 namespace containers
 {
+	/// @cond notdocumented
 	void LinkedListImpl::insert(LinkImpl* item)
 	{
 		item->next_ = head_;
@@ -46,4 +47,5 @@ namespace containers
 		}
 		return false;
 	}
+	/// @endcond
 }

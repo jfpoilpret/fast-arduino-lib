@@ -1,6 +1,6 @@
 <map id="fastarduino/events.h" name="fastarduino/events.h">
-<area shape="rect" id="node3" href="$queue_8h_source.html" title="queue.h" alt="" coords="155,80,223,107"/>
-<area shape="rect" id="node10" href="$linked__list_8h_source.html" title="linked_list.h" alt="" coords="61,155,152,181"/>
+<area shape="rect" id="node3" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="155,80,223,107"/>
+<area shape="rect" id="node10" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="61,155,152,181"/>
 <area shape="rect" id="node4" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="124,229,199,256"/>
 <area shape="rect" id="node7" href="$time_8h.html" title="Simple time utilities. " alt="" coords="227,155,285,181"/>
 </map>

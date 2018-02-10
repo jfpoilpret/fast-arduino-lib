@@ -88,12 +88,17 @@ $(document).ready(function(){initNavTree('classeeprom_1_1_queued_writer.html',''
 <div class="title">eeprom::QueuedWriter Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>API that allows asynchronous writing to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; this can be useful when you have large amount of data to write but cannot afford to wait until all bytes have been written.  
+ <a href="classeeprom_1_1_queued_writer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="eeprom_8h_source.html">fastarduino/eeprom.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for eeprom::QueuedWriter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeeprom_1_1_queued_writer__inherit__graph.png" border="0" usemap="#eeprom_1_1_queued_writer_inherit__map" alt="Inheritance graph"/></div>
 <map name="eeprom_1_1_queued_writer_inherit__map" id="eeprom_1_1_queued_writer_inherit__map">
-<area shape="rect" id="node2" href="classeeprom_1_1_e_e_p_r_o_m.html" title="eeprom::EEPROM" alt="" coords="17,5,147,32"/>
+<area shape="rect" id="node2" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. " alt="" coords="17,5,147,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -101,55 +106,551 @@ Collaboration diagram for eeprom::QueuedWriter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeeprom_1_1_queued_writer__coll__graph.png" border="0" usemap="#eeprom_1_1_queued_writer_coll__map" alt="Collaboration graph"/></div>
 <map name="eeprom_1_1_queued_writer_coll__map" id="eeprom_1_1_queued_writer_coll__map">
-<area shape="rect" id="node2" href="classeeprom_1_1_e_e_p_r_o_m.html" title="eeprom::EEPROM" alt="" coords="17,5,147,32"/>
+<area shape="rect" id="node2" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. " alt="" coords="17,5,147,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a07fab062394e8e75fcb4ea57ae061fa1"><td class="memTemplParams" colspan="2"><a id="a07fab062394e8e75fcb4ea57ae061fa1"></a>
-template&lt;uint16_t SIZE&gt; </td></tr>
-<tr class="memitem:a07fab062394e8e75fcb4ea57ae061fa1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>QueuedWriter</b> (uint8_t(&amp;buffer)[SIZE])</td></tr>
+<tr class="memitem:a07fab062394e8e75fcb4ea57ae061fa1"><td class="memTemplParams" colspan="2">template&lt;uint16_t SIZE&gt; </td></tr>
+<tr class="memitem:a07fab062394e8e75fcb4ea57ae061fa1"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#a07fab062394e8e75fcb4ea57ae061fa1">QueuedWriter</a> (uint8_t(&amp;buffer)[SIZE])</td></tr>
+<tr class="memdesc:a07fab062394e8e75fcb4ea57ae061fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">QueuedWriter</a> from a given <code>buffer</code> array.  <a href="#a07fab062394e8e75fcb4ea57ae061fa1">More...</a><br /></td></tr>
 <tr class="separator:a07fab062394e8e75fcb4ea57ae061fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ef427e050a320c7f38a57a61afb69e6"><td class="memTemplParams" colspan="2"><a id="a4ef427e050a320c7f38a57a61afb69e6"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a4ef427e050a320c7f38a57a61afb69e6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>write</b> (const T *address, const T &amp;value)</td></tr>
+<tr class="memitem:a4ef427e050a320c7f38a57a61afb69e6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4ef427e050a320c7f38a57a61afb69e6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#a4ef427e050a320c7f38a57a61afb69e6">write</a> (const T *address, const T &amp;value)</td></tr>
+<tr class="memdesc:a4ef427e050a320c7f38a57a61afb69e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the content of <code>value</code> of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>.  <a href="#a4ef427e050a320c7f38a57a61afb69e6">More...</a><br /></td></tr>
 <tr class="separator:a4ef427e050a320c7f38a57a61afb69e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c0b5c3c61beb977e3c116c329b7e7eb"><td class="memTemplParams" colspan="2"><a id="a8c0b5c3c61beb977e3c116c329b7e7eb"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8c0b5c3c61beb977e3c116c329b7e7eb"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>write</b> (uint16_t address, const T &amp;value)</td></tr>
+<tr class="memitem:a8c0b5c3c61beb977e3c116c329b7e7eb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a8c0b5c3c61beb977e3c116c329b7e7eb"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#a8c0b5c3c61beb977e3c116c329b7e7eb">write</a> (uint16_t address, const T &amp;value)</td></tr>
+<tr class="memdesc:a8c0b5c3c61beb977e3c116c329b7e7eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the content of <code>value</code> of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>.  <a href="#a8c0b5c3c61beb977e3c116c329b7e7eb">More...</a><br /></td></tr>
 <tr class="separator:a8c0b5c3c61beb977e3c116c329b7e7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e0da0ee5d855f140fdc6a46028bc7f8"><td class="memTemplParams" colspan="2"><a id="a5e0da0ee5d855f140fdc6a46028bc7f8"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a5e0da0ee5d855f140fdc6a46028bc7f8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>write</b> (const T *address, const T *value, uint16_t count)</td></tr>
+<tr class="memitem:a5e0da0ee5d855f140fdc6a46028bc7f8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5e0da0ee5d855f140fdc6a46028bc7f8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#a5e0da0ee5d855f140fdc6a46028bc7f8">write</a> (const T *address, const T *value, uint16_t count)</td></tr>
+<tr class="memdesc:a5e0da0ee5d855f140fdc6a46028bc7f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write <code>value</code>, an array of <code>count</code> values of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>.  <a href="#a5e0da0ee5d855f140fdc6a46028bc7f8">More...</a><br /></td></tr>
 <tr class="separator:a5e0da0ee5d855f140fdc6a46028bc7f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81b30ec67df85358de3f6bb030123de9"><td class="memTemplParams" colspan="2"><a id="a81b30ec67df85358de3f6bb030123de9"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a81b30ec67df85358de3f6bb030123de9"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>write</b> (uint16_t address, const T *value, uint16_t count)</td></tr>
+<tr class="memitem:a81b30ec67df85358de3f6bb030123de9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a81b30ec67df85358de3f6bb030123de9"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#a81b30ec67df85358de3f6bb030123de9">write</a> (uint16_t address, const T *value, uint16_t count)</td></tr>
+<tr class="memdesc:a81b30ec67df85358de3f6bb030123de9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write <code>value</code>, an array of <code>count</code> values of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>.  <a href="#a81b30ec67df85358de3f6bb030123de9">More...</a><br /></td></tr>
 <tr class="separator:a81b30ec67df85358de3f6bb030123de9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afeed372bb362cbec5e4ba5f39ec5c678"><td class="memItemLeft" align="right" valign="top"><a id="afeed372bb362cbec5e4ba5f39ec5c678"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (const uint8_t *address, uint8_t value)</td></tr>
+<tr class="memitem:afeed372bb362cbec5e4ba5f39ec5c678"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#afeed372bb362cbec5e4ba5f39ec5c678">write</a> (const uint8_t *address, uint8_t value)</td></tr>
+<tr class="memdesc:afeed372bb362cbec5e4ba5f39ec5c678"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write one byte to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>.  <a href="#afeed372bb362cbec5e4ba5f39ec5c678">More...</a><br /></td></tr>
 <tr class="separator:afeed372bb362cbec5e4ba5f39ec5c678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a86a0ccca7c307ac80b3aa8dc83fb42"><td class="memItemLeft" align="right" valign="top"><a id="a8a86a0ccca7c307ac80b3aa8dc83fb42"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (uint16_t address, uint8_t value)</td></tr>
+<tr class="memitem:a8a86a0ccca7c307ac80b3aa8dc83fb42"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#a8a86a0ccca7c307ac80b3aa8dc83fb42">write</a> (uint16_t address, uint8_t value)</td></tr>
+<tr class="memdesc:a8a86a0ccca7c307ac80b3aa8dc83fb42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write one byte to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>.  <a href="#a8a86a0ccca7c307ac80b3aa8dc83fb42">More...</a><br /></td></tr>
 <tr class="separator:a8a86a0ccca7c307ac80b3aa8dc83fb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2933f1803b50189ced1361ee0292ac8"><td class="memItemLeft" align="right" valign="top"><a id="ad2933f1803b50189ced1361ee0292ac8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> ()</td></tr>
+<tr class="memitem:ad2933f1803b50189ced1361ee0292ac8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#ad2933f1803b50189ced1361ee0292ac8">erase</a> ()</td></tr>
+<tr class="memdesc:ad2933f1803b50189ced1361ee0292ac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase the full <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> content.  <a href="#ad2933f1803b50189ced1361ee0292ac8">More...</a><br /></td></tr>
 <tr class="separator:ad2933f1803b50189ced1361ee0292ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0353f95d047cb009060412e5e783731e"><td class="memItemLeft" align="right" valign="top"><a id="a0353f95d047cb009060412e5e783731e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>wait_until_done</b> ()</td></tr>
-<tr class="separator:a0353f95d047cb009060412e5e783731e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe13f318a8ff6cd77a5d7e2088a08683"><td class="memItemLeft" align="right" valign="top"><a id="afe13f318a8ff6cd77a5d7e2088a08683"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_done</b> ()</td></tr>
-<tr class="separator:afe13f318a8ff6cd77a5d7e2088a08683"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a6772e7be98434376867ef5f87a0199"><td class="memItemLeft" align="right" valign="top"><a id="a0a6772e7be98434376867ef5f87a0199"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>on_ready</b> ()</td></tr>
-<tr class="separator:a0a6772e7be98434376867ef5f87a0199"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcb0db4d2c3b11232a0dcbbf373d88d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#abcb0db4d2c3b11232a0dcbbf373d88d8">wait_until_done</a> () const</td></tr>
+<tr class="memdesc:abcb0db4d2c3b11232a0dcbbf373d88d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Block until all pending operations (queued in the ring buffer) are complete.  <a href="#abcb0db4d2c3b11232a0dcbbf373d88d8">More...</a><br /></td></tr>
+<tr class="separator:abcb0db4d2c3b11232a0dcbbf373d88d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eadcc47c689bf3f885f1bc1a17e4a00"><td class="memItemLeft" align="right" valign="top"><a id="a4eadcc47c689bf3f885f1bc1a17e4a00"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html#a4eadcc47c689bf3f885f1bc1a17e4a00">is_done</a> () const</td></tr>
+<tr class="memdesc:a4eadcc47c689bf3f885f1bc1a17e4a00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if there is no queued, nor on-going write operation. <br /></td></tr>
+<tr class="separator:a4eadcc47c689bf3f885f1bc1a17e4a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00227">227</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<div class="textblock"><p>API that allows asynchronous writing to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; this can be useful when you have large amount of data to write but cannot afford to wait until all bytes have been written. </p>
+<p>The class uses a ring buffer which array must be provided at construction time.</p>
+<p>In order for QueueWriter to function properly, you must register a proper ISR. FastArduino provides 3 possible ISR registrations:</p><ul>
+<li><a class="el" href="eeprom_8h.html#a24aa9951e4fd46ce3fb158d64748e2ac" title="Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter to work properly...">REGISTER_EEPROM_ISR()</a> basic ISR, ensures that all queued writes get written asynchronously</li>
+<li><a class="el" href="eeprom_8h.html#ab599dc3c4a3ca26f5d6e3dda1a022f5e" title="Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter to work properly...">REGISTER_EEPROM_ISR_METHOD()</a> enhanced ISR, first ensures that all queued writes get handled and when the last byte is written, calls a back a method of a handler class</li>
+<li><a class="el" href="eeprom_8h.html#a3e98083ea0d85e7fad253e419373cb8d" title="Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter to work properly...">REGISTER_EEPROM_ISR_FUNCTION()</a> enhanced ISR, first ensures that all queued writes get handled and when the last byte is written, calls a back a function</li>
+</ul>
+<p>Basically it has the same <code><a class="el" href="classeeprom_1_1_queued_writer.html#a4ef427e050a320c7f38a57a61afb69e6" title="Write the content of value of type T to the EEPROM at address. ">write()</a></code> and <code><a class="el" href="classeeprom_1_1_queued_writer.html#ad2933f1803b50189ced1361ee0292ac8" title="Erase the full EEPROM content. ">erase()</a></code> methods as <code><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a></code> class, except:</p><ul>
+<li>its methods are not <code>static</code></li>
+<li>methods return immediately without waiting for the operation to be finished</li>
+<li>methods may return <code>false</code> if the operation overflows the ring buffer </li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00514">514</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a07fab062394e8e75fcb4ea57ae061fa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07fab062394e8e75fcb4ea57ae061fa1">&#9670;&nbsp;</a></span>QueuedWriter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint16_t SIZE&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">eeprom::QueuedWriter::QueuedWriter </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t(&amp;)&#160;</td>
+          <td class="paramname"><em>buffer</em>[SIZE]</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">QueuedWriter</a> from a given <code>buffer</code> array. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SIZE</td><td>the size of <code>buffer</code>; this size limits the amount of writes that can be queued and the content size of each write </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>the buffer that will be used by this <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">QueuedWriter</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00525">525</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4ef427e050a320c7f38a57a61afb69e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ef427e050a320c7f38a57a61afb69e6">&#9670;&nbsp;</a></span>write() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool eeprom::QueuedWriter::write </td>
+          <td>(</td>
+          <td class="paramtype">const T *&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write the content of <code>value</code> of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>. </p>
+<dl class="section note"><dt>Note</dt><dd>Whatever <code>T</code> type, this method never calls its assignment operator but simply copies, byte per byte, content from local variable content to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>, no <code>T</code> code gets executed.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of content to be written (determines the number of bytes to write) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>the location to be written in <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; <code>address</code> is typically obtained as <code>&amp;variable</code> where <code>variable</code> is a global variable that was declared with <code>EEMEM</code> attribute. </td></tr>
+    <tr><td class="paramname">value</td><td>a reference to the variable which content will be copied to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if write was successful </td></tr>
+    <tr><td class="paramname">false</td><td>if write failed, i.e. if <code>address</code> is outside <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> bounds or if the ring buffer would overflow </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html#a8c0b5c3c61beb977e3c116c329b7e7eb" title="Write the content of value of type T to the EEPROM at address. ">write(uint16_t, const T&amp;)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00547">547</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<a id="a8c0b5c3c61beb977e3c116c329b7e7eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c0b5c3c61beb977e3c116c329b7e7eb">&#9670;&nbsp;</a></span>write() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool eeprom::QueuedWriter::write </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write the content of <code>value</code> of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>. </p>
+<dl class="section note"><dt>Note</dt><dd>NOTE: whatever <code>T</code> type, this method never calls its assignment operator but simply copies, byte per byte, content from local variable content to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>, no <code>T</code> code gets executed.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of content to be written (determines the number of bytes to write) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>the location to be written in <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; <code>address</code> is provided as an absolute location, from <code>0</code> to the maximum <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> size </td></tr>
+    <tr><td class="paramname">value</td><td>a reference to the variable which content will be copied to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if write was successful </td></tr>
+    <tr><td class="paramname">false</td><td>if write failed, i.e. if <code>address</code> is outside <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> bounds or if the ring buffer would overflow </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html#a4ef427e050a320c7f38a57a61afb69e6" title="Write the content of value of type T to the EEPROM at address. ">write(const T*, const T&amp;)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00568">568</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<a id="a5e0da0ee5d855f140fdc6a46028bc7f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e0da0ee5d855f140fdc6a46028bc7f8">&#9670;&nbsp;</a></span>write() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool eeprom::QueuedWriter::write </td>
+          <td>(</td>
+          <td class="paramtype">const T *&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write <code>value</code>, an array of <code>count</code> values of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>. </p>
+<dl class="section note"><dt>Note</dt><dd>NOTE: whatever <code>T</code> type, this method never calls its assignment operator but simply copies, byte per byte, content from local variable content to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>, no <code>T</code> code gets executed.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of content to be written (determines the number of bytes to write) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>the location to be written in <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; <code>address</code> is typically obtained as <code>variable</code> where <code>variable</code> is a global variable array that was declared with <code>EEMEM</code> attribute. </td></tr>
+    <tr><td class="paramname">value</td><td>a pointer to the variable array which content will be copied to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> </td></tr>
+    <tr><td class="paramname">count</td><td>the number of items of type <code>T</code> to be written </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if write was successful </td></tr>
+    <tr><td class="paramname">false</td><td>if write failed, i.e. if <code>address</code> is outside <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> bounds or if the ring buffer would overflow </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html#a81b30ec67df85358de3f6bb030123de9" title="Write value, an array of count values of type T to the EEPROM at address. ">write(uint16_t, const T*, uint16_t)</a> or if the ring buffer would overflow </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00592">592</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<a id="a81b30ec67df85358de3f6bb030123de9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81b30ec67df85358de3f6bb030123de9">&#9670;&nbsp;</a></span>write() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool eeprom::QueuedWriter::write </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T *&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write <code>value</code>, an array of <code>count</code> values of type <code>T</code> to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>. </p>
+<dl class="section note"><dt>Note</dt><dd>NOTE: whatever <code>T</code> type, this method never calls its assignment operator but simply copies, byte per byte, content from local variable content to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>, no <code>T</code> code gets executed.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of content to be written (determines the number of bytes to write) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>the location to be written in <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; <code>address</code> is provided as an absolute location, from <code>0</code> to the maximum <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> size </td></tr>
+    <tr><td class="paramname">value</td><td>a pointer to the variable array which content will be copied to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> </td></tr>
+    <tr><td class="paramname">count</td><td>the number of items of type <code>T</code> to be written </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if write was successful </td></tr>
+    <tr><td class="paramname">false</td><td>if write failed, i.e. if <code>address</code> is outside <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> bounds or if the ring buffer would overflow </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html#a5e0da0ee5d855f140fdc6a46028bc7f8" title="Write value, an array of count values of type T to the EEPROM at address. ">write(const T*, const T*, uint16_t)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00614">614</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<a id="afeed372bb362cbec5e4ba5f39ec5c678"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afeed372bb362cbec5e4ba5f39ec5c678">&#9670;&nbsp;</a></span>write() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool eeprom::QueuedWriter::write </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write one byte to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>the location to be written in <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; <code>address</code> is typically obtained as <code>&amp;variable</code> where <code>variable</code> is a global variable that was declared with <code>EEMEM</code> attribute. </td></tr>
+    <tr><td class="paramname">value</td><td>the byte value that will be written to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if write was successful </td></tr>
+    <tr><td class="paramname">false</td><td>if write failed, i.e. if <code>address</code> is outside <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> bounds or if the ring buffer would overflow </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html#a8a86a0ccca7c307ac80b3aa8dc83fb42" title="Write one byte to the EEPROM at address. ">write(uint16_t, uint8_t)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00632">632</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<a id="a8a86a0ccca7c307ac80b3aa8dc83fb42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a86a0ccca7c307ac80b3aa8dc83fb42">&#9670;&nbsp;</a></span>write() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool eeprom::QueuedWriter::write </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write one byte to the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> at <code>address</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>the location to be written in <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; <code>address</code> is provided as an absolute location, from <code>0</code> to the maximum <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> size </td></tr>
+    <tr><td class="paramname">value</td><td>the byte value that will be written to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if write was successful </td></tr>
+    <tr><td class="paramname">false</td><td>if write failed, i.e. if <code>address</code> is outside <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> bounds or if the ring buffer would overflow </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html#afeed372bb362cbec5e4ba5f39ec5c678" title="Write one byte to the EEPROM at address. ">write(const uint8_t*, uint8_t)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00648">648</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<a id="ad2933f1803b50189ced1361ee0292ac8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2933f1803b50189ced1361ee0292ac8">&#9670;&nbsp;</a></span>erase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void eeprom::QueuedWriter::erase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Erase the full <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> content. </p>
+<p>Note that "erasing" means setting all <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> cells to <code>0xFF</code>. The method will first remove any pending writes from the ring buffer, wait for any currently on-going 1-byte write operation to completem, then it will start asynchronous erase operation. </p>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00661">661</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<a id="abcb0db4d2c3b11232a0dcbbf373d88d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcb0db4d2c3b11232a0dcbbf373d88d8">&#9670;&nbsp;</a></span>wait_until_done()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void eeprom::QueuedWriter::wait_until_done </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Block until all pending operations (queued in the ring buffer) are complete. </p>
+<p>This can be useful if your program is about to exit but you want to first ensure that any <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> write operations are finished before exit (otherwise, the <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> content may not be as expected). </p>
+
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00690">690</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="eeprom_8h_source.html">eeprom.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -157,7 +658,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>on_ready</b> ()</td><
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>eeprom</b></li><li class="navelem"><a class="el" href="classeeprom_1_1_queued_writer.html">QueuedWriter</a></li>
+    <li class="navelem"><a class="el" href="namespaceeeprom.html">eeprom</a></li><li class="navelem"><a class="el" href="classeeprom_1_1_queued_writer.html">QueuedWriter</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

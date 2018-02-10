@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['port_5ftype',['PORT_TYPE',['../classgpio_1_1_fast_pin_type.html#a7b7dc71e82eba871bdb45b1fe063f8de',1,'gpio::FastPinType']]],
-  ['prescaler',['PRESCALER',['../structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0',1,'timer::Calculator::PRESCALER()'],['../classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c',1,'timer::Timer::PRESCALER()']]]
+  ['manipulator',['Manipulator',['../classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050',1,'streams::ostream::Manipulator()'],['../classstreams_1_1istream.html#aed4a47070eed37c6d9544166bcf58545',1,'streams::istream::Manipulator()']]],
+  ['millis_5fptr',['MILLIS_PTR',['../namespacetime.html#abe5f682f4654fd7af7c744d41fd2efdd',1,'time']]]
 ];

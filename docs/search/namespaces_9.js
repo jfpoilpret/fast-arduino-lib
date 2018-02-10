@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['utils',['utils',['../namespaceutils.html',1,'']]]
+  ['time',['time',['../namespacetime.html',1,'']]],
+  ['timer',['timer',['../namespacetimer.html',1,'']]]
 ];

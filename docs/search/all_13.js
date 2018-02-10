@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['uart',['UART',['../classserial_1_1soft_1_1_u_a_r_t.html',1,'serial::soft::UART&lt; RX_, TX_ &gt;'],['../classserial_1_1hard_1_1_u_a_r_t.html',1,'serial::hard::UART&lt; USART_ &gt;'],['../classserial_1_1hard_1_1_u_a_r_t.html#aa4220cac127ba38d00c8facf49ed038b',1,'serial::hard::UART::UART()']]],
+  ['uart',['UART',['../classserial_1_1hard_1_1_u_a_r_t.html',1,'serial::hard::UART&lt; USART_ &gt;'],['../classserial_1_1soft_1_1_u_a_r_t.html',1,'serial::soft::UART&lt; RX_, TX_ &gt;'],['../classserial_1_1hard_1_1_u_a_r_t.html#aa4220cac127ba38d00c8facf49ed038b',1,'serial::hard::UART::UART()']]],
   ['uart_2eh',['uart.h',['../uart_8h.html',1,'']]],
   ['uart_5fcommons_2eh',['uart_commons.h',['../uart__commons_8h.html',1,'']]],
   ['uarterrors',['UARTErrors',['../classserial_1_1_u_a_r_t_errors.html',1,'serial']]],

@@ -2,7 +2,7 @@ var classserial_1_1soft_1_1_u_a_r_x =
 [
     [ "PIN_TRAIT", "classserial_1_1soft_1_1_u_a_r_x.html#a329050cd30060efb9b141a74c335671c", null ],
     [ "PCI_TYPE", "classserial_1_1soft_1_1_u_a_r_x.html#a737c2152bab3656ed5a2f2cd964573fe", null ],
-    [ "PORT_TRAIT", "classserial_1_1soft_1_1_u_a_r_x.html#a9fd9716d2f09b3ee2bcbcf1b6e7c5b18", null ],
+    [ "PCI_TRAIT", "classserial_1_1soft_1_1_u_a_r_x.html#a1165d6f0a21842d1763a4d66f67654e2", null ],
     [ "INT_TYPE", "classserial_1_1soft_1_1_u_a_r_x.html#ac3b1d02cc48d3e2eb2245b9f91e19b83", null ],
     [ "UARX", "classserial_1_1soft_1_1_u_a_r_x.html#affb52467dd93ed3a642741e8d92bff7b", null ],
     [ "register_rx_handler", "classserial_1_1soft_1_1_u_a_r_x.html#a1582421218bbb13aa99f49bbd9dc735d", null ],

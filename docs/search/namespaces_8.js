@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['time',['time',['../namespacetime.html',1,'']]],
-  ['timer',['timer',['../namespacetimer.html',1,'']]]
+  ['hard',['hard',['../namespaceserial_1_1hard.html',1,'serial']]],
+  ['serial',['serial',['../namespaceserial.html',1,'']]],
+  ['streams',['streams',['../namespacestreams.html',1,'']]]
 ];

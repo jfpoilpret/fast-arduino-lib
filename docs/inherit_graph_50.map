@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classinterrupt_1_1_i_n_t_signal.html" title="Handler of an External Interrupt. " alt="" coords="5,5,140,47"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_i2_c_device.html" title="i2c::I2CDevice\&lt; MODE \&gt;" alt="" coords="5,13,179,39"/>
+<area shape="rect" id="node2" href="$classdevices_1_1magneto_1_1_m_p_u6050.html" title="devices::magneto::MPU6050\l\&lt; MODE, AD0 \&gt;" alt="" coords="227,5,417,47"/>
 </map>

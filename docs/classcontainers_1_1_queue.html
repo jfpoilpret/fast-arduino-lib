@@ -88,89 +88,988 @@ $(document).ready(function(){initNavTree('classcontainers_1_1_queue.html','');})
 <div class="title">containers::Queue&lt; T_, TREF_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classcontainers_1_1_queue.html" title="Queue of type T_ items. ">Queue</a> of type <code>T_</code> items.  
+ <a href="classcontainers_1_1_queue.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="queue_8h_source.html">fastarduino/queue.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a6611f442aefd7dac3184b146ce42631a"><td class="memItemLeft" align="right" valign="top"><a id="a6611f442aefd7dac3184b146ce42631a"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>T</b> = T_</td></tr>
+<tr class="memitem:a6611f442aefd7dac3184b146ce42631a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> = T_</td></tr>
+<tr class="memdesc:a6611f442aefd7dac3184b146ce42631a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of items in this queue.  <a href="#a6611f442aefd7dac3184b146ce42631a">More...</a><br /></td></tr>
 <tr class="separator:a6611f442aefd7dac3184b146ce42631a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58435f1392a29022e767c72f9c2a6278"><td class="memItemLeft" align="right" valign="top"><a id="a58435f1392a29022e767c72f9c2a6278"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TREF</b> = TREF_</td></tr>
+<tr class="memitem:a58435f1392a29022e767c72f9c2a6278"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278">TREF</a> = TREF_</td></tr>
+<tr class="memdesc:a58435f1392a29022e767c72f9c2a6278"><td class="mdescLeft">&#160;</td><td class="mdescRight">The constant reference type of items in this queue.  <a href="#a58435f1392a29022e767c72f9c2a6278">More...</a><br /></td></tr>
 <tr class="separator:a58435f1392a29022e767c72f9c2a6278"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aca99c22736f50f3e357702fb02bb2834"><td class="memTemplParams" colspan="2"><a id="aca99c22736f50f3e357702fb02bb2834"></a>
-template&lt;uint8_t SIZE&gt; </td></tr>
-<tr class="memitem:aca99c22736f50f3e357702fb02bb2834"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Queue</b> (T(&amp;buffer)[SIZE])</td></tr>
+<tr class="memitem:aca99c22736f50f3e357702fb02bb2834"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE&gt; </td></tr>
+<tr class="memitem:aca99c22736f50f3e357702fb02bb2834"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#aca99c22736f50f3e357702fb02bb2834">Queue</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;buffer)[SIZE])</td></tr>
+<tr class="memdesc:aca99c22736f50f3e357702fb02bb2834"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new queue, based on the provided <code>buffer</code> array.  <a href="#aca99c22736f50f3e357702fb02bb2834">More...</a><br /></td></tr>
 <tr class="separator:aca99c22736f50f3e357702fb02bb2834"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab143ccea2d5d73854ed3013a318beda2"><td class="memItemLeft" align="right" valign="top"><a id="ab143ccea2d5d73854ed3013a318beda2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>push_</b> (TREF item)</td></tr>
-<tr class="separator:ab143ccea2d5d73854ed3013a318beda2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace3872d821b24ac9cb515573b3c687b3"><td class="memItemLeft" align="right" valign="top"><a id="ace3872d821b24ac9cb515573b3c687b3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>pull_</b> (T &amp;item)</td></tr>
-<tr class="separator:ace3872d821b24ac9cb515573b3c687b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11986454de8b5b3bd5eb0d50a8f59967"><td class="memItemLeft" align="right" valign="top"><a id="a11986454de8b5b3bd5eb0d50a8f59967"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>peek_</b> (T &amp;item) const</td></tr>
-<tr class="separator:a11986454de8b5b3bd5eb0d50a8f59967"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b4a8b5159020caab00abba67903fc39"><td class="memItemLeft" align="right" valign="top"><a id="a8b4a8b5159020caab00abba67903fc39"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek_</b> (T *buffer, uint8_t size) const</td></tr>
-<tr class="separator:a8b4a8b5159020caab00abba67903fc39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f9e5cede6b5f8e2875516e7d4bc86a7"><td class="memTemplParams" colspan="2"><a id="a5f9e5cede6b5f8e2875516e7d4bc86a7"></a>
-template&lt;uint8_t SIZE&gt; </td></tr>
-<tr class="memitem:a5f9e5cede6b5f8e2875516e7d4bc86a7"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><b>peek_</b> (T(&amp;buffer)[SIZE]) const</td></tr>
-<tr class="separator:a5f9e5cede6b5f8e2875516e7d4bc86a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dde204e519e98fbacbabdc7d456e11e"><td class="memItemLeft" align="right" valign="top"><a id="a7dde204e519e98fbacbabdc7d456e11e"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="memitem:ae506aa92e594cbac6f338c2b65d1e3b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6">push_</a> (<a class="el" href="classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278">TREF</a> item)</td></tr>
+<tr class="memdesc:ae506aa92e594cbac6f338c2b65d1e3b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push <code>item</code> to the end of this queue, provided there is still available space in its ring buffer.  <a href="#ae506aa92e594cbac6f338c2b65d1e3b6">More...</a><br /></td></tr>
+<tr class="separator:ae506aa92e594cbac6f338c2b65d1e3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a572b2ba5883b2d1fb6cce68cbabb417f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f">pull_</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;item)</td></tr>
+<tr class="memdesc:a572b2ba5883b2d1fb6cce68cbabb417f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pull an item from the beginning of this queue, if not empty, and copy it into <code>item</code>.  <a href="#a572b2ba5883b2d1fb6cce68cbabb417f">More...</a><br /></td></tr>
+<tr class="separator:a572b2ba5883b2d1fb6cce68cbabb417f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af165b93d21c777f07c56f13d99289234"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234">peek_</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;item) const</td></tr>
+<tr class="memdesc:af165b93d21c777f07c56f13d99289234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek an item from the beginning of this queue, if not empty, and copy it into <code>item</code>.  <a href="#af165b93d21c777f07c56f13d99289234">More...</a><br /></td></tr>
+<tr class="separator:af165b93d21c777f07c56f13d99289234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae15154a0000abe7e0d95009de441cff"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#aae15154a0000abe7e0d95009de441cff">peek_</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> *buffer, uint8_t <a class="el" href="classcontainers_1_1_queue.html#a7dde204e519e98fbacbabdc7d456e11e">size</a>) const</td></tr>
+<tr class="memdesc:aae15154a0000abe7e0d95009de441cff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek up to <code>size</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array.  <a href="#aae15154a0000abe7e0d95009de441cff">More...</a><br /></td></tr>
+<tr class="separator:aae15154a0000abe7e0d95009de441cff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad21e0a4c9c816f8bf2586882a3c1e7d7"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE&gt; </td></tr>
+<tr class="memitem:ad21e0a4c9c816f8bf2586882a3c1e7d7"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#ad21e0a4c9c816f8bf2586882a3c1e7d7">peek_</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;buffer)[SIZE]) const</td></tr>
+<tr class="memdesc:ad21e0a4c9c816f8bf2586882a3c1e7d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek up to <code>SIZE</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array.  <a href="#ad21e0a4c9c816f8bf2586882a3c1e7d7">More...</a><br /></td></tr>
+<tr class="separator:ad21e0a4c9c816f8bf2586882a3c1e7d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dde204e519e98fbacbabdc7d456e11e"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a7dde204e519e98fbacbabdc7d456e11e">size</a> () const</td></tr>
+<tr class="memdesc:a7dde204e519e98fbacbabdc7d456e11e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the maximum size of this queue.  <a href="#a7dde204e519e98fbacbabdc7d456e11e">More...</a><br /></td></tr>
 <tr class="separator:a7dde204e519e98fbacbabdc7d456e11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bfd0803a08aa7363b9608ed64474678"><td class="memItemLeft" align="right" valign="top"><a id="a4bfd0803a08aa7363b9608ed64474678"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty_</b> () const</td></tr>
+<tr class="memitem:a4bfd0803a08aa7363b9608ed64474678"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678">empty_</a> () const</td></tr>
+<tr class="memdesc:a4bfd0803a08aa7363b9608ed64474678"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if this queue is currently empty.  <a href="#a4bfd0803a08aa7363b9608ed64474678">More...</a><br /></td></tr>
 <tr class="separator:a4bfd0803a08aa7363b9608ed64474678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56649c6345bdb582a15bc66dc853bfdd"><td class="memItemLeft" align="right" valign="top"><a id="a56649c6345bdb582a15bc66dc853bfdd"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>items_</b> () const</td></tr>
+<tr class="memitem:a56649c6345bdb582a15bc66dc853bfdd"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd">items_</a> () const</td></tr>
+<tr class="memdesc:a56649c6345bdb582a15bc66dc853bfdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell the current number of items currently present in this queue.  <a href="#a56649c6345bdb582a15bc66dc853bfdd">More...</a><br /></td></tr>
 <tr class="separator:a56649c6345bdb582a15bc66dc853bfdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab561b57e48848788f3ed6c429df9920f"><td class="memItemLeft" align="right" valign="top"><a id="ab561b57e48848788f3ed6c429df9920f"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>free_</b> () const</td></tr>
+<tr class="memitem:ab561b57e48848788f3ed6c429df9920f"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f">free_</a> () const</td></tr>
+<tr class="memdesc:ab561b57e48848788f3ed6c429df9920f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell the current number of available locations for items to be pushed to this queue.  <a href="#ab561b57e48848788f3ed6c429df9920f">More...</a><br /></td></tr>
 <tr class="separator:ab561b57e48848788f3ed6c429df9920f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37080cc6d5631ec3cfb859a4de0fb6c2"><td class="memItemLeft" align="right" valign="top"><a id="a37080cc6d5631ec3cfb859a4de0fb6c2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear_</b> ()</td></tr>
+<tr class="memitem:a37080cc6d5631ec3cfb859a4de0fb6c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a37080cc6d5631ec3cfb859a4de0fb6c2">clear_</a> ()</td></tr>
+<tr class="memdesc:a37080cc6d5631ec3cfb859a4de0fb6c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Completely clear this queue.  <a href="#a37080cc6d5631ec3cfb859a4de0fb6c2">More...</a><br /></td></tr>
 <tr class="separator:a37080cc6d5631ec3cfb859a4de0fb6c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a202901193e7b1bf3d940094ff2d6219a"><td class="memItemLeft" align="right" valign="top"><a id="a202901193e7b1bf3d940094ff2d6219a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>push</b> (TREF item)</td></tr>
+<tr class="memitem:a202901193e7b1bf3d940094ff2d6219a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a">push</a> (<a class="el" href="classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278">TREF</a> item)</td></tr>
+<tr class="memdesc:a202901193e7b1bf3d940094ff2d6219a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push <code>item</code> to the end of this queue, provided there is still available space in its ring buffer.  <a href="#a202901193e7b1bf3d940094ff2d6219a">More...</a><br /></td></tr>
 <tr class="separator:a202901193e7b1bf3d940094ff2d6219a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02f9e08c4deadbfb0f9d6885a73930e4"><td class="memItemLeft" align="right" valign="top"><a id="a02f9e08c4deadbfb0f9d6885a73930e4"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>pull</b> (T &amp;item)</td></tr>
+<tr class="memitem:a02f9e08c4deadbfb0f9d6885a73930e4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4">pull</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;item)</td></tr>
+<tr class="memdesc:a02f9e08c4deadbfb0f9d6885a73930e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pull an item from the beginning of this queue, if not empty, and copy it into <code>item</code>.  <a href="#a02f9e08c4deadbfb0f9d6885a73930e4">More...</a><br /></td></tr>
 <tr class="separator:a02f9e08c4deadbfb0f9d6885a73930e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a811a466ef9dcecbe8c9324e9a818efde"><td class="memItemLeft" align="right" valign="top"><a id="a811a466ef9dcecbe8c9324e9a818efde"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (T &amp;item) const</td></tr>
+<tr class="memitem:a811a466ef9dcecbe8c9324e9a818efde"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde">peek</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;item) const</td></tr>
+<tr class="memdesc:a811a466ef9dcecbe8c9324e9a818efde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek an item from the beginning of this queue, if not empty, and copy it into <code>item</code>.  <a href="#a811a466ef9dcecbe8c9324e9a818efde">More...</a><br /></td></tr>
 <tr class="separator:a811a466ef9dcecbe8c9324e9a818efde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09ef8dc6eadb8a11f057ba5804871790"><td class="memItemLeft" align="right" valign="top"><a id="a09ef8dc6eadb8a11f057ba5804871790"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>peek</b> (T *buffer, uint8_t size) const</td></tr>
+<tr class="memitem:a09ef8dc6eadb8a11f057ba5804871790"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a09ef8dc6eadb8a11f057ba5804871790">peek</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> *buffer, uint8_t <a class="el" href="classcontainers_1_1_queue.html#a7dde204e519e98fbacbabdc7d456e11e">size</a>) const</td></tr>
+<tr class="memdesc:a09ef8dc6eadb8a11f057ba5804871790"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek up to <code>size</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array.  <a href="#a09ef8dc6eadb8a11f057ba5804871790">More...</a><br /></td></tr>
 <tr class="separator:a09ef8dc6eadb8a11f057ba5804871790"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b2efcc589462a0b3fe8acbb44c1a4a9"><td class="memTemplParams" colspan="2"><a id="a1b2efcc589462a0b3fe8acbb44c1a4a9"></a>
-template&lt;uint8_t SIZE&gt; </td></tr>
-<tr class="memitem:a1b2efcc589462a0b3fe8acbb44c1a4a9"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><b>peek</b> (T(&amp;buffer)[SIZE]) const</td></tr>
+<tr class="memitem:a1b2efcc589462a0b3fe8acbb44c1a4a9"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE&gt; </td></tr>
+<tr class="memitem:a1b2efcc589462a0b3fe8acbb44c1a4a9"><td class="memTemplItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a1b2efcc589462a0b3fe8acbb44c1a4a9">peek</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;buffer)[SIZE]) const</td></tr>
+<tr class="memdesc:a1b2efcc589462a0b3fe8acbb44c1a4a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek up to <code>SIZE</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array.  <a href="#a1b2efcc589462a0b3fe8acbb44c1a4a9">More...</a><br /></td></tr>
 <tr class="separator:a1b2efcc589462a0b3fe8acbb44c1a4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a594a05c1cd32c640317d91c5928ff43f"><td class="memItemLeft" align="right" valign="top"><a id="a594a05c1cd32c640317d91c5928ff43f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const</td></tr>
+<tr class="memitem:a594a05c1cd32c640317d91c5928ff43f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f">empty</a> () const</td></tr>
+<tr class="memdesc:a594a05c1cd32c640317d91c5928ff43f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if this queue is currently empty.  <a href="#a594a05c1cd32c640317d91c5928ff43f">More...</a><br /></td></tr>
 <tr class="separator:a594a05c1cd32c640317d91c5928ff43f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac27c87f9de54ecb11a96d40074a2b069"><td class="memItemLeft" align="right" valign="top"><a id="ac27c87f9de54ecb11a96d40074a2b069"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>items</b> () const</td></tr>
+<tr class="memitem:ac27c87f9de54ecb11a96d40074a2b069"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069">items</a> () const</td></tr>
+<tr class="memdesc:ac27c87f9de54ecb11a96d40074a2b069"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell the current number of items currently present in this queue.  <a href="#ac27c87f9de54ecb11a96d40074a2b069">More...</a><br /></td></tr>
 <tr class="separator:ac27c87f9de54ecb11a96d40074a2b069"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad3c8f009898e3b10976ae2c7b650308"><td class="memItemLeft" align="right" valign="top"><a id="aad3c8f009898e3b10976ae2c7b650308"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>free</b> () const</td></tr>
+<tr class="memitem:aad3c8f009898e3b10976ae2c7b650308"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308">free</a> () const</td></tr>
+<tr class="memdesc:aad3c8f009898e3b10976ae2c7b650308"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell the current number of available locations for items to be pushed to this queue.  <a href="#aad3c8f009898e3b10976ae2c7b650308">More...</a><br /></td></tr>
 <tr class="separator:aad3c8f009898e3b10976ae2c7b650308"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a757d9a4b0cceee0a2db3e93d36970603"><td class="memItemLeft" align="right" valign="top"><a id="a757d9a4b0cceee0a2db3e93d36970603"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="memitem:a757d9a4b0cceee0a2db3e93d36970603"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a757d9a4b0cceee0a2db3e93d36970603">clear</a> ()</td></tr>
+<tr class="memdesc:a757d9a4b0cceee0a2db3e93d36970603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Completely clear this queue.  <a href="#a757d9a4b0cceee0a2db3e93d36970603">More...</a><br /></td></tr>
 <tr class="separator:a757d9a4b0cceee0a2db3e93d36970603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T_, typename TREF_ = const T_&amp;&gt;<br />
 class containers::Queue&lt; T_, TREF_ &gt;</h3>
 
+<p><a class="el" href="classcontainers_1_1_queue.html" title="Queue of type T_ items. ">Queue</a> of type <code>T_</code> items. </p>
+<p>This is a FIFO (<em>first in first out</em>) queue, built upon a ring buffer of fixed size, passed at construction time.</p>
+<p>This queue offers only a few operations:</p><ul>
+<li>push an item at "the end" of the queue</li>
+<li>pull an item from "the beginning" of the queue</li>
+<li>clear the whole queue</li>
+<li>get various information without changing the queue, including peeking one or several items from the beginning of the queue without removing them</li>
+</ul>
+<p>All operations exist in two flavors:</p><ul>
+<li><b>synchronized</b>: you should use this flavor whenever the caller cannot guarantee no interruption will occur during the operation, i.e. when the caller is neither part of an ISR, nor embedded itself in a <code>synchronized</code> block.</li>
+<li><b>not synchronized</b>: you should use this flavor when the caller can guarantee that no interruption will occur during the operation, e.g. when called from an ISR or from within a <code>synchronized</code> block; these methods bear the same name as their <b>synchronized</b> counterparts, with an additional trailing **_** underscore.</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T_</td><td>the type of items in this queue </td></tr>
+    <tr><td class="paramname">TREF_</td><td>the constant reference type of items in this queue; this is <code>const T_&amp;</code> by default, but this may be changed, for small size types (one or two bytes long) to <code>T_</code> itself, in order to avoid additional code to handle reference extraction of an item. This type is used by <code><a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push()</a></code> methods. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00025">25</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00062">62</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a6611f442aefd7dac3184b146ce42631a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6611f442aefd7dac3184b146ce42631a">&#9670;&nbsp;</a></span>T</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> =  T_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type of items in this queue. </p>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00066">66</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a58435f1392a29022e767c72f9c2a6278"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58435f1392a29022e767c72f9c2a6278">&#9670;&nbsp;</a></span>TREF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::<a class="el" href="classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278">TREF</a> =  TREF_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The constant reference type of items in this queue. </p>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00069">69</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aca99c22736f50f3e357702fb02bb2834"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca99c22736f50f3e357702fb02bb2834">&#9670;&nbsp;</a></span>Queue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<div class="memtemplate">
+template&lt;uint8_t SIZE&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::<a class="el" href="classcontainers_1_1_queue.html">Queue</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;)&#160;</td>
+          <td class="paramname"><em>buffer</em>[SIZE]</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a new queue, based on the provided <code>buffer</code> array. </p>
+<p>The queue size is determined by the size of <code>buffer</code>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SIZE</td><td>the number of <code>T</code> items that <code>buffer</code> can hold; for performance optimization, this must be a power of 2; if not, compilation will fail. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>the buffer used by this queue to store its items </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00080">80</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae506aa92e594cbac6f338c2b65d1e3b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae506aa92e594cbac6f338c2b65d1e3b6">&#9670;&nbsp;</a></span>push_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::push_ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278">TREF</a>&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Push <code>item</code> to the end of this queue, provided there is still available space in its ring buffer. </p>
+<p>This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>a constant reference to the item to be pushed to thsi queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if <code>item</code> could be pushed </td></tr>
+    <tr><td class="paramname">false</td><td>if this queue is full and thus <code>item</code> could not be pushed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f" title="Tell the current number of available locations for items to be pushed to this queue. ">free_()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a572b2ba5883b2d1fb6cce68cbabb417f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a572b2ba5883b2d1fb6cce68cbabb417f">&#9670;&nbsp;</a></span>pull_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::pull_ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pull an item from the beginning of this queue, if not empty, and copy it into <code>item</code>. </p>
+<p>The item is removed from the queue. This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>a reference to the item variable that will be assigned the first element of this queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the queue is not empty and thus an item has been copied to <code>item</code> </td></tr>
+    <tr><td class="paramname">false</td><td>if this queue is empty and thus <code>item</code> has not changed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a> </dd></dl>
+
+</div>
+</div>
+<a id="af165b93d21c777f07c56f13d99289234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af165b93d21c777f07c56f13d99289234">&#9670;&nbsp;</a></span>peek_() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::peek_ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Peek an item from the beginning of this queue, if not empty, and copy it into <code>item</code>. </p>
+<p>The queue is NOT modified, no item is removed from the queue. This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>a reference to the item variable that will be assigned the first element of this queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the queue is not empty and thus an item has been copied to <code>item</code> </td></tr>
+    <tr><td class="paramname">false</td><td>if this queue is empty and thus <code>item</code> has not changed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a> </dd></dl>
+
+</div>
+</div>
+<a id="aae15154a0000abe7e0d95009de441cff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae15154a0000abe7e0d95009de441cff">&#9670;&nbsp;</a></span>peek_() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::peek_ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Peek up to <code>size</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array. </p>
+<p>The queue is NOT modified, no item is removed from the queue. This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>a pointer to an array of <code>size</code> items of type <code>T</code>, that will be assigned the first <code>size</code> elements of this queue </td></tr>
+    <tr><td class="paramname">size</td><td>the maximum number of items to peek from this queue and copy to <code>buffer</code>; <code>buffer</code> size must be at least <code>size</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of elements copied from the queue into <code>buffer</code>; this may be <code>0</code> if the queue is empty, or any number lower or equal to <code>size</code>; this will be <code>size</code> if the queue has at least <code>size</code> elements</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd" title="Tell the current number of items currently present in this queue. ">items_()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ad21e0a4c9c816f8bf2586882a3c1e7d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad21e0a4c9c816f8bf2586882a3c1e7d7">&#9670;&nbsp;</a></span>peek_() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<div class="memtemplate">
+template&lt;uint8_t SIZE&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::peek_ </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;)&#160;</td>
+          <td class="paramname"><em>buffer</em>[SIZE]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Peek up to <code>SIZE</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array. </p>
+<p>The queue is NOT modified, no item is removed from the queue. This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek()</a></code> instead.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SIZE</td><td>the number of items that <code>buffer</code> can hold; this is also the maximum number of items to peek from this queue and copy to <code>buffer</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>an array of <code>SIZE</code> items of type <code>T</code>, that will be assigned the first <code>SIZE</code> elements of this queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of elements copied from the queue into <code>buffer</code>; this may be <code>0</code> if the queue is empty, or any number lower or equal to <code>SIZE</code>; this will be <code>SIZE</code> if the queue has at least <code>SIZE</code> elements</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd" title="Tell the current number of items currently present in this queue. ">items_()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a7dde204e519e98fbacbabdc7d456e11e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dde204e519e98fbacbabdc7d456e11e">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the maximum size of this queue. </p>
+<p>This is the maximum number of items that can be present at the same time in this queue. </p>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00193">193</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a4bfd0803a08aa7363b9608ed64474678"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bfd0803a08aa7363b9608ed64474678">&#9670;&nbsp;</a></span>empty_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::empty_ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell if this queue is currently empty. </p>
+<p>This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f" title="Tell the current number of available locations for items to be pushed to this queue. ">free_()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00206">206</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a56649c6345bdb582a15bc66dc853bfdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56649c6345bdb582a15bc66dc853bfdd">&#9670;&nbsp;</a></span>items_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::items_ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell the current number of items currently present in this queue. </p>
+<p>This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069" title="Tell the current number of items currently present in this queue. ">items()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069" title="Tell the current number of items currently present in this queue. ">items()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a7dde204e519e98fbacbabdc7d456e11e" title="Get the maximum size of this queue. ">size()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00219">219</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="ab561b57e48848788f3ed6c429df9920f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab561b57e48848788f3ed6c429df9920f">&#9670;&nbsp;</a></span>free_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::free_ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell the current number of available locations for items to be pushed to this queue. </p>
+<p>This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308" title="Tell the current number of available locations for items to be pushed to this queue. ">free()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308" title="Tell the current number of available locations for items to be pushed to this queue. ">free()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00233">233</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a37080cc6d5631ec3cfb859a4de0fb6c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37080cc6d5631ec3cfb859a4de0fb6c2">&#9670;&nbsp;</a></span>clear_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::clear_ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Completely clear this queue. </p>
+<p>All present items, if any, are lost. This method is not synchronized, hence you must ensure it is called from an interrupt-safe context; otherwise, you should use the synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a757d9a4b0cceee0a2db3e93d36970603" title="Completely clear this queue. ">clear()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a757d9a4b0cceee0a2db3e93d36970603" title="Completely clear this queue. ">clear()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00246">246</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a202901193e7b1bf3d940094ff2d6219a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a202901193e7b1bf3d940094ff2d6219a">&#9670;&nbsp;</a></span>push()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::push </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278">TREF</a>&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Push <code>item</code> to the end of this queue, provided there is still available space in its ring buffer. </p>
+<p>This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push_()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>a constant reference to the item to be pushed to thsi queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if <code>item</code> could be pushed </td></tr>
+    <tr><td class="paramname">false</td><td>if this queue is full and thus <code>item</code> could not be pushed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308" title="Tell the current number of available locations for items to be pushed to this queue. ">free()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00266">266</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a02f9e08c4deadbfb0f9d6885a73930e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02f9e08c4deadbfb0f9d6885a73930e4">&#9670;&nbsp;</a></span>pull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::pull </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pull an item from the beginning of this queue, if not empty, and copy it into <code>item</code>. </p>
+<p>The item is removed from the queue. This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull_()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>a reference to the item variable that will be assigned the first element of this queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the queue is not empty and thus an item has been copied to <code>item</code> </td></tr>
+    <tr><td class="paramname">false</td><td>if this queue is empty and thus <code>item</code> has not changed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00288">288</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a811a466ef9dcecbe8c9324e9a818efde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a811a466ef9dcecbe8c9324e9a818efde">&#9670;&nbsp;</a></span>peek() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::peek </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> &amp;&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Peek an item from the beginning of this queue, if not empty, and copy it into <code>item</code>. </p>
+<p>The queue is NOT modified, no item is removed from the queue. This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek_()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>a reference to the item variable that will be assigned the first element of this queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the queue is not empty and thus an item has been copied to <code>item</code> </td></tr>
+    <tr><td class="paramname">false</td><td>if this queue is empty and thus <code>item</code> has not changed</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00311">311</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a09ef8dc6eadb8a11f057ba5804871790"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09ef8dc6eadb8a11f057ba5804871790">&#9670;&nbsp;</a></span>peek() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::peek </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a> *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Peek up to <code>size</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array. </p>
+<p>The queue is NOT modified, no item is removed from the queue. This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek_()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>a pointer to an array of <code>size</code> items of type <code>T</code>, that will be assigned the first <code>size</code> elements of this queue </td></tr>
+    <tr><td class="paramname">size</td><td>the maximum number of items to peek from this queue and copy to <code>buffer</code>; <code>buffer</code> size must be at least <code>size</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of elements copied from the queue into <code>buffer</code>; this may be <code>0</code> if the queue is empty, or any number lower or equal to <code>size</code>; this will be <code>size</code> if the queue has at least <code>size</code> elements</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069" title="Tell the current number of items currently present in this queue. ">items()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00337">337</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a1b2efcc589462a0b3fe8acbb44c1a4a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b2efcc589462a0b3fe8acbb44c1a4a9">&#9670;&nbsp;</a></span>peek() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<div class="memtemplate">
+template&lt;uint8_t SIZE&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::peek </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;)&#160;</td>
+          <td class="paramname"><em>buffer</em>[SIZE]</td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Peek up to <code>SIZE</code> items from the beginning of this queue, if not empty, and copy these into <code>buffer</code> array. </p>
+<p>The queue is NOT modified, no item is removed from the queue. This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek_()</a></code> instead.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">SIZE</td><td>the number of items that <code>buffer</code> can hold; this is also the maximum number of items to peek from this queue and copy to <code>buffer</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>an array of <code>SIZE</code> items of type <code>T</code>, that will be assigned the first <code>SIZE</code> elements of this queue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the number of elements copied from the queue into <code>buffer</code>; this may be <code>0</code> if the queue is empty, or any number lower or equal to <code>SIZE</code>; this will be <code>SIZE</code> if the queue has at least <code>SIZE</code> elements</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">peek_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">pull()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a" title="Push item to the end of this queue, provided there is still available space in its ring buffer...">push()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069" title="Tell the current number of items currently present in this queue. ">items()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00364">364</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a594a05c1cd32c640317d91c5928ff43f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a594a05c1cd32c640317d91c5928ff43f">&#9670;&nbsp;</a></span>empty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::empty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell if this queue is currently empty. </p>
+<p>This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a></code> instead. </p>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00375">375</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="ac27c87f9de54ecb11a96d40074a2b069"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac27c87f9de54ecb11a96d40074a2b069">&#9670;&nbsp;</a></span>items()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::items </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell the current number of items currently present in this queue. </p>
+<p>This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd" title="Tell the current number of items currently present in this queue. ">items_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd" title="Tell the current number of items currently present in this queue. ">items_()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00387">387</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="aad3c8f009898e3b10976ae2c7b650308"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad3c8f009898e3b10976ae2c7b650308">&#9670;&nbsp;</a></span>free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::free </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell the current number of available locations for items to be pushed to this queue. </p>
+<p>This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f" title="Tell the current number of available locations for items to be pushed to this queue. ">free_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f" title="Tell the current number of available locations for items to be pushed to this queue. ">free_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00401">401</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="a757d9a4b0cceee0a2db3e93d36970603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a757d9a4b0cceee0a2db3e93d36970603">&#9670;&nbsp;</a></span>clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Completely clear this queue. </p>
+<p>All present items, if any, are lost. This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308" title="Tell the current number of available locations for items to be pushed to this queue. ">free()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a37080cc6d5631ec3cfb859a4de0fb6c2" title="Completely clear this queue. ">clear_()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00414">414</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="queue_8h_source.html">queue.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -178,7 +1077,7 @@ class containers::Queue&lt; T_, TREF_ &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>containers</b></li><li class="navelem"><a class="el" href="classcontainers_1_1_queue.html">Queue</a></li>
+    <li class="navelem"><a class="el" href="namespacecontainers.html">containers</a></li><li class="navelem"><a class="el" href="classcontainers_1_1_queue.html">Queue</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

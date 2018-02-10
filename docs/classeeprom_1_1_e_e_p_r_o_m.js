@@ -14,11 +14,5 @@ var classeeprom_1_1_e_e_p_r_o_m =
     [ "write", "classeeprom_1_1_e_e_p_r_o_m.html#a874e1f73cd1018c21171ac3910952720", null ],
     [ "erase", "classeeprom_1_1_e_e_p_r_o_m.html#ace5a82d71896ab870d162c32a7627d5c", null ],
     [ "size", "classeeprom_1_1_e_e_p_r_o_m.html#a0436da8b147296088a2903e65f1618c0", null ],
-    [ "wait_until_ready", "classeeprom_1_1_e_e_p_r_o_m.html#a61cd403aa529aed8d2f8fd9d746b4073", null ],
-    [ "check", "classeeprom_1_1_e_e_p_r_o_m.html#a31366e966deeeb5a31d555f2100d010e", null ],
-    [ "blocked_read", "classeeprom_1_1_e_e_p_r_o_m.html#a7d4962cf7fd32a59b4bbebe238bc2e3d", null ],
-    [ "read_byte", "classeeprom_1_1_e_e_p_r_o_m.html#a2cf388b4b305e7eab32d8ef779ad6a83", null ],
-    [ "blocked_write", "classeeprom_1_1_e_e_p_r_o_m.html#ad88f23e522a8e70627876e7b5d564e62", null ],
-    [ "write_byte", "classeeprom_1_1_e_e_p_r_o_m.html#a6d694a0605a8faabe44dd153e0cd42dd", null ],
-    [ "erase_address", "classeeprom_1_1_e_e_p_r_o_m.html#a22d40a2c7bea67699b5e5a5ff4158744", null ]
+    [ "wait_until_ready", "classeeprom_1_1_e_e_p_r_o_m.html#a61cd403aa529aed8d2f8fd9d746b4073", null ]
 ];

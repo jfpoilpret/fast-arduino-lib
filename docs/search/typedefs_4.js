@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['manipulator',['Manipulator',['../classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050',1,'streams::ostream::Manipulator()'],['../classstreams_1_1istream.html#aed4a47070eed37c6d9544166bcf58545',1,'streams::istream::Manipulator()']]],
-  ['millis_5fptr',['MILLIS_PTR',['../namespacetime.html#abe5f682f4654fd7af7c744d41fd2efdd',1,'time']]]
+  ['ios',['ios',['../namespacestreams.html#a9666e4bfa7b60ffba7c8ee7d9fe95492',1,'streams']]],
+  ['iostate',['iostate',['../classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378',1,'streams::ios_base']]]
 ];

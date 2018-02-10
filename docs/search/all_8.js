@@ -14,6 +14,7 @@ var searchData=
   ['input',['INPUT',['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041aa84cc046d48610b05c21fd3670d0c829',1,'gpio']]],
   ['input_5fcapture',['input_capture',['../classtimer_1_1_timer.html#ac9b50f7485c4624f2969c6eef5039282',1,'timer::Timer::input_capture()'],['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a59c3ffa1d28f462f0a3a1812cface9d3',1,'timer::INPUT_CAPTURE()']]],
   ['input_5fpullup',['INPUT_PULLUP',['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041ace9c2fb3e41547f8dfb11145f7485786',1,'gpio']]],
+  ['insert',['insert',['../classcontainers_1_1_linked_list.html#ac44c93a96f2aaffe0411565798c6cd67',1,'containers::LinkedList']]],
   ['int_2eh',['int.h',['../int_8h.html',1,'']]],
   ['interrupt',['interrupt',['../namespaceinterrupt.html',1,'']]],
   ['interrupts_2eh',['interrupts.h',['../interrupts_8h.html',1,'']]],
@@ -29,8 +30,12 @@ var searchData=
   ['irq_5fnrf24l01',['IRQ_NRF24L01',['../classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html',1,'devices::rf::IRQ_NRF24L01&lt; CSN, CE, IRQ &gt;'],['../classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html#a1137cd45cf6ee0c58f8dc9762a84e6b3',1,'devices::rf::IRQ_NRF24L01::IRQ_NRF24L01()']]],
   ['is_5fadequate_5ffor_5fctc',['is_adequate_for_CTC',['../structtimer_1_1_calculator.html#a3f53878ea0179bdc8fba364f8fb629e2',1,'timer::Calculator']]],
   ['is_5fbroadcast',['is_broadcast',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aa20eb7c9fc9e17dcd1159fed98d2422a',1,'devices::rf::NRF24L01']]],
+  ['is_5fdone',['is_done',['../classeeprom_1_1_queued_writer.html#a4eadcc47c689bf3f885f1bc1a17e4a00',1,'eeprom::QueuedWriter']]],
+  ['is_5fperiodic',['is_periodic',['../classevents_1_1_job.html#a49a38e6f375fdb320d6c920c71bad398',1,'events::Job']]],
   ['is_5fsuspended',['is_suspended',['../classtimer_1_1_timer.html#ae6b17fe07b82e343aa0360430bfb8671',1,'timer::Timer']]],
   ['is_5fzero',['is_zero',['../namespaceutils.html#a3525bf2bf63c9f906bc9b952f0d54355',1,'utils']]],
   ['istream',['istream',['../classstreams_1_1istream.html',1,'streams::istream'],['../classstreams_1_1istream.html#adbaadc46ce28fed5aa1abb91fe15c02b',1,'streams::istream::istream()']]],
-  ['istreambuf',['istreambuf',['../classstreams_1_1istreambuf.html',1,'streams']]]
+  ['istreambuf',['istreambuf',['../classstreams_1_1istreambuf.html',1,'streams']]],
+  ['items',['items',['../classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069',1,'containers::Queue']]],
+  ['items_5f',['items_',['../classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd',1,'containers::Queue']]]
 ];

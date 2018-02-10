@@ -4,6 +4,6 @@
 <area shape="rect" id="node10" href="$time_8h.html" title="Simple time utilities. " alt="" coords="319,244,378,271"/>
 <area shape="rect" id="node13" href="$events_8h.html" title="Support for events management. " alt="" coords="498,95,570,121"/>
 <area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="490,319,564,345"/>
-<area shape="rect" id="node14" href="$queue_8h_source.html" title="queue.h" alt="" coords="546,169,614,196"/>
-<area shape="rect" id="node15" href="$linked__list_8h_source.html" title="linked_list.h" alt="" coords="583,244,674,271"/>
+<area shape="rect" id="node14" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="546,169,614,196"/>
+<area shape="rect" id="node15" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="583,244,674,271"/>
 </map>

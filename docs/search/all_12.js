@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['t',['T',['../classcontainers_1_1_linked_list.html#af07a8b8e2b75d77751a541dd494d4e91',1,'containers::LinkedList::T()'],['../classcontainers_1_1_link.html#a6b64035a31450f45e1395c0f20b4aa14',1,'containers::Link::T()'],['../classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a',1,'containers::Queue::T()']]],
   ['tick_5fprescaler',['tick_prescaler',['../structtimer_1_1_calculator.html#a319ea208456b508d34bc7b65e6f90e59',1,'timer::Calculator']]],
   ['ticks',['ticks',['../classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56',1,'timer::Timer']]],
   ['ticks_5f',['ticks_',['../classtimer_1_1_timer.html#a7c939960ca27edadffbd275959b2ef3a',1,'timer::Timer']]],
@@ -9,6 +10,7 @@ var searchData=
   ['timeout',['TimeOut',['../classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353',1,'watchdog::WatchdogSignal']]],
   ['timer',['Timer',['../classtimer_1_1_timer.html',1,'timer::Timer&lt; NTIMER_ &gt;'],['../namespacetimer.html',1,'timer'],['../classanalog_1_1_p_w_m_output.html#af6aa7f4cbd8574ac3e1fd2858982c38c',1,'analog::PWMOutput::TIMER()'],['../classtimer_1_1_timer.html#a1f7f3052c127cad79c654f351bc68ae3',1,'timer::Timer::Timer()'],['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb',1,'board::Timer()']]],
   ['timer_2eh',['timer.h',['../timer_8h.html',1,'']]],
+  ['timer_3c_20ntimer_20_3e',['Timer&lt; NTIMER &gt;',['../classtimer_1_1_timer.html',1,'timer']]],
   ['timer_5fmax',['TIMER_MAX',['../classtimer_1_1_timer.html#a90885b96ac06c3d91ae01566bbe578e0',1,'timer::Timer']]],
   ['timerinputcapture',['TimerInputCapture',['../namespacetimer.html#a908aa72c1bb077bec67565b637350bf4',1,'timer']]],
   ['timerinterrupt',['TimerInterrupt',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7',1,'timer']]],
@@ -33,6 +35,11 @@ var searchData=
   ['to_5f64ms',['TO_64ms',['../classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353aa242d79167431204d86c7aa65a03c14a',1,'watchdog::WatchdogSignal']]],
   ['to_5f8s',['TO_8s',['../classwatchdog_1_1_watchdog_signal.html#ab781ec34d67a0ad552cf76a33e5f2353a20bf5a68c13809216a5ec3d321a7a7b2',1,'watchdog::WatchdogSignal']]],
   ['toggle',['toggle',['../classgpio_1_1_fast_pin.html#aa163ea832ed19672f76e8ae270f0d64d',1,'gpio::FastPin::toggle()'],['../classgpio_1_1_fast_pin_type.html#a6e3644253729ca175a250154ee553225',1,'gpio::FastPinType::toggle()'],['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a1252c45651289c0b553a30d27bb5ae9b',1,'timer::TOGGLE()']]],
+  ['tonegenerator',['ToneGenerator',['../classdevices_1_1audio_1_1_tone_generator.html',1,'devices::audio']]],
+  ['toneplay',['TonePlay',['../structdevices_1_1audio_1_1_tone_play.html',1,'devices::audio']]],
+  ['toneplayer',['TonePlayer',['../classdevices_1_1audio_1_1_tone_player.html',1,'devices::audio']]],
+  ['traverse',['traverse',['../classcontainers_1_1_linked_list.html#a974fb6a46b9477e005b9c17a5b47ae72',1,'containers::LinkedList']]],
+  ['tref',['TREF',['../classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278',1,'containers::Queue']]],
   ['two',['TWO',['../namespaceserial.html#a1cc0a59518594157f23ddf16842243b3a0f82d86afa0f5dc965c5c15aca58dcfb',1,'serial']]],
   ['tx_5faddr',['TX_ADDR',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa10782da1a478719a7eb721e504eaca2e',1,'devices::rf::NRF24L01']]],
   ['tx_5fds',['tx_ds',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a9e57f8a230f2db6cbda717aa97196a22',1,'devices::rf::NRF24L01::status_t']]],

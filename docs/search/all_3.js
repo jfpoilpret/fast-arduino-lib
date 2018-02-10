@@ -15,6 +15,7 @@ var searchData=
   ['digitalpin',['DigitalPin',['../namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404',1,'board']]],
   ['disable',['disable',['../classinterrupt_1_1_i_n_t_signal.html#af2f7f2150b01e0827e87bf68d0c15a1f',1,'interrupt::INTSignal::disable()'],['../classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb',1,'interrupt::PCISignal::disable()']]],
   ['disable_5f',['disable_',['../classinterrupt_1_1_i_n_t_signal.html#abec0afa523dae7eb3016c38960c6bbe8',1,'interrupt::INTSignal::disable_()'],['../classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1',1,'interrupt::PCISignal::disable_()']]],
+  ['disable_5finterrupts',['disable_interrupts',['../classtimer_1_1_timer.html#a4b395e9080df860556af9c2ea1a8c6d6',1,'timer::Timer']]],
   ['disable_5fpin',['disable_pin',['../classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b',1,'interrupt::PCISignal']]],
   ['disable_5fpin_5f',['disable_pin_',['../classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df',1,'interrupt::PCISignal']]],
   ['disable_5fpins',['disable_pins',['../classinterrupt_1_1_p_c_i_signal.html#ab8bde46b21b64a778abf23a4a553db44',1,'interrupt::PCISignal']]],

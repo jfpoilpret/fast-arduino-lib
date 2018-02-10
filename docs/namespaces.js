@@ -2,6 +2,9 @@ var namespaces =
 [
     [ "analog", "namespaceanalog.html", null ],
     [ "board", "namespaceboard.html", "namespaceboard" ],
+    [ "containers", "namespacecontainers.html", null ],
+    [ "eeprom", "namespaceeeprom.html", null ],
+    [ "errors", "namespaceerrors.html", null ],
     [ "events", "namespaceevents.html", "namespaceevents" ],
     [ "flash", "namespaceflash.html", null ],
     [ "gpio", "namespacegpio.html", null ],

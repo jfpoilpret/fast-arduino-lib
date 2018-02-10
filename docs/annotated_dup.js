@@ -2,14 +2,13 @@ var annotated_dup =
 [
     [ "analog", "namespaceanalog.html", "namespaceanalog" ],
     [ "board", "namespaceboard.html", null ],
-    [ "containers", null, [
-      [ "Link", "classcontainers_1_1_link.html", "classcontainers_1_1_link" ],
-      [ "LinkedList", "classcontainers_1_1_linked_list.html", "classcontainers_1_1_linked_list" ],
-      [ "LinkedListImpl", "classcontainers_1_1_linked_list_impl.html", "classcontainers_1_1_linked_list_impl" ],
-      [ "LinkImpl", "classcontainers_1_1_link_impl.html", "classcontainers_1_1_link_impl" ],
-      [ "Queue", "classcontainers_1_1_queue.html", "classcontainers_1_1_queue" ]
-    ] ],
+    [ "containers", "namespacecontainers.html", "namespacecontainers" ],
     [ "devices", null, [
+      [ "audio", null, [
+        [ "ToneGenerator", "classdevices_1_1audio_1_1_tone_generator.html", "classdevices_1_1audio_1_1_tone_generator" ],
+        [ "TonePlay", "structdevices_1_1audio_1_1_tone_play.html", "structdevices_1_1audio_1_1_tone_play" ],
+        [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html", "classdevices_1_1audio_1_1_tone_player" ]
+      ] ],
       [ "magneto", null, [
         [ "AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", "structdevices_1_1magneto_1_1_all_sensors" ],
         [ "FIFOEnable", "structdevices_1_1magneto_1_1_f_i_f_o_enable.html", "structdevices_1_1magneto_1_1_f_i_f_o_enable" ],
@@ -41,10 +40,7 @@ var annotated_dup =
       [ "SIPO", "classdevices_1_1_s_i_p_o.html", "classdevices_1_1_s_i_p_o" ],
       [ "WinBond", "classdevices_1_1_win_bond.html", "classdevices_1_1_win_bond" ]
     ] ],
-    [ "eeprom", null, [
-      [ "EEPROM", "classeeprom_1_1_e_e_p_r_o_m.html", "classeeprom_1_1_e_e_p_r_o_m" ],
-      [ "QueuedWriter", "classeeprom_1_1_queued_writer.html", "classeeprom_1_1_queued_writer" ]
-    ] ],
+    [ "eeprom", "namespaceeeprom.html", "namespaceeeprom" ],
     [ "events", "namespaceevents.html", "namespaceevents" ],
     [ "gpio", "namespacegpio.html", "namespacegpio" ],
     [ "i2c", null, [

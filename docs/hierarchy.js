@@ -71,7 +71,7 @@ var hierarchy =
       [ "streams::istream", "classstreams_1_1istream.html", null ],
       [ "streams::ostream", "classstreams_1_1ostream.html", null ]
     ] ],
-    [ "containers::LinkedListImpl", "classcontainers_1_1_linked_list_impl.html", [
+    [ "LinkedListImpl", null, [
       [ "containers::LinkedList< T_ >", "classcontainers_1_1_linked_list.html", null ],
       [ "containers::LinkedList< EventHandler< EVENT > >", "classcontainers_1_1_linked_list.html", [
         [ "events::Dispatcher< EVENT >", "classevents_1_1_dispatcher.html", null ]
@@ -80,7 +80,7 @@ var hierarchy =
         [ "events::Scheduler< CLOCK_, EVENT_ >", "classevents_1_1_scheduler.html", null ]
       ] ]
     ] ],
-    [ "containers::LinkImpl", "classcontainers_1_1_link_impl.html", [
+    [ "LinkImpl", null, [
       [ "containers::Link< T_ >", "classcontainers_1_1_link.html", null ],
       [ "containers::Link< EventHandler< EVENT > >", "classcontainers_1_1_link.html", [
         [ "events::EventHandler< EVENT >", "classevents_1_1_event_handler.html", null ]
@@ -103,7 +103,9 @@ var hierarchy =
     [ "power::Power", "classpower_1_1_power.html", null ],
     [ "devices::magneto::PowerManagement", "structdevices_1_1magneto_1_1_power_management.html", null ],
     [ "analog::PWMOutput< PIN_, PULSED_ >", "classanalog_1_1_p_w_m_output.html", null ],
+    [ "analog::PWMOutput< OUTPUT >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "analog::PWMOutput< PIN, true >", "classanalog_1_1_p_w_m_output.html", null ],
+    [ "devices::audio::TonePlayer< NTIMER, OUTPUT >::QTonePlay", "classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html", null ],
     [ "containers::Queue< T_, TREF_ >", "classcontainers_1_1_queue.html", null ],
     [ "containers::Queue< char, char >", "classcontainers_1_1_queue.html", [
       [ "streams::istreambuf", "classstreams_1_1istreambuf.html", [
@@ -131,6 +133,8 @@ var hierarchy =
     [ "devices::servo::Servo< TIMER_, PIN_ >", "classdevices_1_1servo_1_1_servo.html", null ],
     [ "devices::SIPO< CLOCK_, LATCH_, DATA_ >", "classdevices_1_1_s_i_p_o.html", null ],
     [ "devices::sonar::SonarEvent< TIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
+    [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],
+    [ "timer::SquareWave< NTIMER, OUTPUT >", "classtimer_1_1_square_wave.html", null ],
     [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
@@ -144,7 +148,11 @@ var hierarchy =
       ] ],
       [ "timer::RTT< NTIMER_ >", "classtimer_1_1_r_t_t.html", null ]
     ] ],
+    [ "timer::Timer< NTIMER >", "classtimer_1_1_timer.html", null ],
     [ "devices::rtc::tm", "structdevices_1_1rtc_1_1tm.html", null ],
+    [ "devices::audio::ToneGenerator< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_generator.html", null ],
+    [ "devices::audio::TonePlay", "structdevices_1_1audio_1_1_tone_play.html", null ],
+    [ "devices::audio::TonePlayer< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_player.html", null ],
     [ "serial::UARTErrors", "classserial_1_1_u_a_r_t_errors.html", [
       [ "serial::soft::AbstractUARX", "classserial_1_1soft_1_1_abstract_u_a_r_x.html", null ],
       [ "serial::soft::AbstractUATX", "classserial_1_1soft_1_1_abstract_u_a_t_x.html", null ]

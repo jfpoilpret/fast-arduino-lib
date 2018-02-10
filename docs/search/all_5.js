@@ -36,6 +36,8 @@ var searchData=
   ['flush_5ftx',['FLUSH_TX',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a59312c99e76152bfe9223dfd339db8b7',1,'devices::rf::NRF24L01']]],
   ['fmtflags',['fmtflags',['../classstreams_1_1ios__base.html#a21f734427c657b09a8e9a14cd11950bb',1,'streams::ios_base']]],
   ['frame_5ferror',['frame_error',['../classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7',1,'serial::UARTErrors']]],
+  ['free',['free',['../classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308',1,'containers::Queue']]],
+  ['free_5f',['free_',['../classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f',1,'containers::Queue']]],
   ['fastarduino_20documentation',['FastArduino Documentation',['../index.html',1,'']]],
   ['fastarduino_20api_20tutorial',['FastArduino API Tutorial',['../tutorial.html',1,'']]]
 ];

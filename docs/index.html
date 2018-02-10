@@ -137,8 +137,9 @@ $(document).ready(function(){initNavTree('index.html','');});
 <p>Most of the library's source code is inside <code>.h</code> header files, only a small part of it is in <code>.cpp</code> files. This is due to heavy C++ template usage which requires most source code to be present on header files.</p>
 <p>All FastArduino source code is defined inside namespaces, in order to avoid names conflicts across programs. Namespaces can include sub-namespaces in some occasions. Namespaces are organized as follows:</p><ul>
 <li><a href="namespaceanalog.html">analog</a>: contains the API to handle analog input and "pseudo-analog" output (PWM).</li>
-<li>[containers](TODO): utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.</li>
+<li><a href="namespacecontainers.html">containers</a>: utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.</li>
 <li>[devices](TODO): this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:<ul>
+<li>[audio](TODO): API for tone generation to buzzers or small audio amplifiers</li>
 <li>[magneto](TODO): API for magnetometers, gyroscopes, accelerometers</li>
 <li>[rf](TODO): API for radio-frequency chips</li>
 <li>[rtc](TODO): API for real time clock chips</li>
@@ -146,8 +147,8 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li>[sonar](TODO): API to handle sonar range sensors</li>
 </ul>
 </li>
-<li>[eeprom](TODO): contains the API to handle read and write to and from the internal MCU EEPROM.</li>
-<li>[errors](TODO): all errors that can be returned by FastArduino API are defined here as constants.</li>
+<li><a href="namespaceeeprom.html">eeprom</a>: contains the API to handle read and write to and from the internal MCU EEPROM.</li>
+<li><a href="namespaceerrors.html">errors</a>: all errors that can be returned by FastArduino API are defined here as constants.</li>
 <li><a href="namespaceevents.html">events</a>: this namespace defines general event handling that can be used in your programs. Most FastArduino are able to generate events on specific conditions. This namespace also contain the scheduler API which permits scheduling of jobs at specific times or periods.</li>
 <li><a href="namespaceflash.html">flash</a>: contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.</li>
 <li><a href="namespacegpio.html">gpio</a>: that namespace deals with all API to manage digital input and outputs.</li>
@@ -162,7 +163,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li>[spi](TODO): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.</li>
 <li><a href="namespacestreams.html">streams</a>: this namespace provide a C++ streams like API for input and output (used by serial UART API).</li>
 <li><a href="namespacetime.html">time</a>: provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.</li>
-<li><a href="namespacetime.html">timer</a>: defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, and an API dedicated to track real time through MCU timers, with microsecond precision.</li>
+<li><a href="namespacetime.html">timer</a>: defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, generating square waves, and an API dedicated to track real time through MCU timers, with microsecond precision.</li>
 <li><a href="namespaceutils.html">utils</a>: provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".</li>
 <li><a href="namespacewatchdog.html">watchdog</a>: this namespace defines an API to deal with MCU watchdog timer as a way</li>
 </ul>

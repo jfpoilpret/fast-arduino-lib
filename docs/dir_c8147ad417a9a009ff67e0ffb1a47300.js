@@ -8,5 +8,7 @@ var dir_c8147ad417a9a009ff67e0ffb1a47300 =
     [ "nrf24l01p_internals.h", "nrf24l01p__internals_8h_source.html", null ],
     [ "servo.h", "servo_8h_source.html", null ],
     [ "sipo.h", "sipo_8h_source.html", null ],
+    [ "tone_player.h", "tone__player_8h_source.html", null ],
+    [ "tones.h", "tones_8h_source.html", null ],
     [ "winbond.h", "winbond_8h_source.html", null ]
 ];

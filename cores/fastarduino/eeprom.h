@@ -87,17 +87,17 @@ namespace eeprom
 	 * All API here is blocking, i.e. will not return until read or write is
 	 * complete.
 	 * 
-	 * All API here exist in 2 flavors, differing in how the EEPROM cell address
+	 * All API here exists in 2 flavors, differing in how the EEPROM cell address
 	 * is passed :
-	 * - as an aboslute `uint16_t`  location, from `0` to max EEPROM size
+	 * - as an absolute `uint16_t`  location, from `0` to max EEPROM size
 	 * - as the address of a variable that was declared with `EEMEM` attribute
 	 * 
 	 * The second is generally more convenient as it allows you to:
 	 * - not care about actual variable locations in EEPROM (if you have many
 	 * distinct content to store, defined in different source files); location
 	 * will be determined for you at compile-time
-	 * - prepare initial values for EEPROM content, for which `make` will generate
-	 * an `.eep` file that you can seperately upload to EEPROM
+	 * - prepare initial values for EEPROM content, for which **make** will generate
+	 * an `.eep` file that you can separately upload to EEPROM
 	 * 
 	 * The following snippet shows briefly how you can use the `EEMEM` flavor:
 	 * @code
@@ -107,7 +107,7 @@ namespace eeprom
 	 * uint32_t read_hash()
 	 * {
 	 *     uint32_t hash;
-	 *     // Read uint32_t value located at "eeprom_hash" in EEPROM, and put it into hash varaibel
+	 *     // Read uint32_t value located at "eeprom_hash" in EEPROM, and put it into hash variable
 	 *     EEPROM::read(&eeprom_hash, hash);
 	 *     return hash;
 	 * }
@@ -122,7 +122,7 @@ namespace eeprom
 	public:
 		/**
 		 * Read value of type @p T stored in EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from EEPROM to internal 
 		 * content of the type, no @p T code gets executed.
 		 * 
@@ -143,7 +143,7 @@ namespace eeprom
 
 		/**
 		 * Read value of type @p T stored in EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from EEPROM to internal 
 		 * content of the type, no @p T code gets executed.
 		 * 
@@ -166,7 +166,7 @@ namespace eeprom
 
 		/**
 		 * Read an array of @p count values of type @p T stored in EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from EEPROM to internal 
 		 * content of the type, no @p T code gets executed.
 		 * 
@@ -188,7 +188,7 @@ namespace eeprom
 
 		/**
 		 * Read an array of @p count values of type @p T stored in EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from EEPROM to internal 
 		 * content of the type, no @p T code gets executed.
 		 * 
@@ -251,7 +251,7 @@ namespace eeprom
 
 		/**
 		 * Write the content of @p value of type @p T to the EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from local variable content
 		 * to EEPROM, no @p T code gets executed.
 		 * 
@@ -272,7 +272,7 @@ namespace eeprom
 
 		/**
 		 * Write the content of @p value of type @p T to the EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from local variable content
 		 * to EEPROM, no @p T code gets executed.
 		 * 
@@ -295,7 +295,7 @@ namespace eeprom
 
 		/**
 		 * Write @p value, an array of @p count values of type @p T to the EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from local variable content
 		 * to EEPROM, no @p T code gets executed.
 		 * 
@@ -317,7 +317,7 @@ namespace eeprom
 
 		/**
 		 * Write @p value, an array of @p count values of type @p T to the EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from local variable content
 		 * to EEPROM, no @p T code gets executed.
 		 * 
@@ -529,7 +529,7 @@ namespace eeprom
 
 		/**
 		 * Write the content of @p value of type @p T to the EEPROM at @p address.
-		 * @note NOTE: whatever @p T type, this method never calls its assignment 
+		 * @note Whatever @p T type, this method never calls its assignment 
 		 * operator but simply copies, byte per byte, content from local variable content
 		 * to EEPROM, no @p T code gets executed.
 		 * 
