@@ -1,32 +1,33 @@
 /*
  * This program is just for personal experiments here on AVR features and C++ stuff
- * to check compilation and link of FastArduino port and pin API.
  * It does not do anything interesting as far as hardware is concerned.
+ * It is just try-and-throw-away code.
  */
 
-#include <string.h>
-#include <fastarduino/eeprom.h>
-#include <fastarduino/uart.h>
 
 // Define vectors we need in the example
-REGISTER_UART_ISR(0)
-static const board::USART USART = board::USART::USART0;
+#include <fastarduino/queue.h>
+#include <fastarduino/time.h>
+#include <fastarduino/int.h>
+#include <fastarduino/boards/board.h>
 
-// Buffers for UART
-static const uint8_t INPUT_BUFFER_SIZE = 64;
-static const uint8_t OUTPUT_BUFFER_SIZE = 64;
-static char input_buffer[INPUT_BUFFER_SIZE];
-static char output_buffer[OUTPUT_BUFFER_SIZE];
+// Board-specifics are here only to check INT ISR
+#define INT_NUM 0
+static const board::DigitalPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 
-static const uint8_t MAX_LEN = 64;
-char wifi_name[MAX_LEN+1] EEMEM = "";
-char wifi_password[MAX_LEN+1] EEMEM = "";
+static const uint8_t SIZE = 64;
+static char buffer[SIZE];
 
-using namespace eeprom;
-using streams::endl;
-using streams::flush;
-using streams::noskipws;
-using streams::skipws;
+using QUEUE = containers::Queue<char, char>;
+static QUEUE queue{buffer};
+
+static void callback()
+{
+	queue.push_('z');
+}
+
+// Use an ISR to check the size of push_() with registers save/restore
+REGISTER_INT_ISR_FUNCTION(INT_NUM, INT_PIN, callback)
 
 // int main() __attribute__((OS_main));
 int main()
@@ -34,46 +35,29 @@ int main()
 	board::init();
 	// Enable interrupts at startup time
 	sei();
-	
-	// Start UART
-	serial::hard::UART<USART> uart{input_buffer, output_buffer};
-	uart.register_handler();
-	uart.begin(115200);
 
-	streams::istream in = uart.in();
-	streams::ostream out = uart.out();
+	// Use delay_ms() as marker in generated code, in order to properly isolate code sections
+	time::delay_ms(1000);
 
-	// Get current WIFI name/password from EEPROM
-	char wifi[MAX_LEN+1];
-	EEPROM::read(wifi_name, wifi, MAX_LEN+1);
-	char password[MAX_LEN+1];
-	EEPROM::read(wifi_password, password, MAX_LEN+1);
-
-	// If WIFI present check if user wants to keep it
-	bool ask = true;
-	if (strlen(wifi))
+	while (true)
 	{
-		char answer;
-		out << F("Do you want to use WIFI `") << wifi << F("`? [Y/n] :") << flush;
-		in >> skipws >> answer;
-		in.ignore(0, '\n');
-		ask = (toupper(answer) == 'N');
-	}
+		queue.push('a');
+		time::delay_us(1000);
 
-	// Ask for WIKI name & password if needed
-	if (ask)
-	{
-		out << F("Enter WIFI name: ") << flush;
-		in.getline(wifi, MAX_LEN+1);
-		out << F("Enter WIFI password: ") << flush;
-		in.getline(password, MAX_LEN+1);
-		// Store to EEPROM
-		EEPROM::write(wifi_name, wifi, strlen(wifi) + 1);
-		EEPROM::write(wifi_password, password, strlen(password) + 1);
-	}
+		char c;
+		queue.peek(c);
+		time::delay_us(1000);
 
-	// Start real program here, using wifi and password
-	//...
-	out << F("WIFI: ") << wifi << endl;
-	out << F("Password: ") << password << endl;
+		queue.pull(c);
+		time::delay_us(1000);
+
+		if (queue.items())
+			time::delay_us(10000);
+		if (queue.free())
+			time::delay_us(10000);
+		if (queue.empty())
+			time::delay_us(10000);
+		queue.clear();
+		time::delay_us(1000);
+	}
 }
