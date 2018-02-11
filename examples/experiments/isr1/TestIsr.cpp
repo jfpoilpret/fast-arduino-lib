@@ -16,32 +16,45 @@
 static const board::DigitalPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 
 static const uint8_t SIZE = 64;
-static char buffer[SIZE];
 
 using QUEUE = containers::Queue<char, char>;
-static QUEUE queue{buffer};
 
-static void callback()
+class Callback
 {
-	queue.push_('z');
-}
+public:
+	Callback(QUEUE& queue):queue_{queue}
+	{
+		interrupt::register_handler(*this);
+	}
+
+	void callback()
+	{
+		queue_.push_('z');
+	}
+
+private:
+	QUEUE& queue_;
+};
 
 // Use an ISR to check the size of push_() with registers save/restore
-REGISTER_INT_ISR_FUNCTION(INT_NUM, INT_PIN, callback)
+REGISTER_INT_ISR_METHOD(INT_NUM, INT_PIN, Callback, &Callback::callback)
 
-// int main() __attribute__((OS_main));
+int main() __attribute__((OS_main));
 int main()
 {
 	board::init();
+
+	char buffer[SIZE];
+	QUEUE queue{buffer};
+	Callback callback{queue};
+
 	// Enable interrupts at startup time
 	sei();
-
-	// Use delay_ms() as marker in generated code, in order to properly isolate code sections
-	time::delay_ms(1000);
 
 	while (true)
 	{
 		queue.push('a');
+		// Use delay_us() as a marker in generated code, in order to properly isolate code sections
 		time::delay_us(1000);
 
 		char c;
@@ -52,11 +65,11 @@ int main()
 		time::delay_us(1000);
 
 		if (queue.items())
-			time::delay_us(10000);
+			time::delay_us(1000);
 		if (queue.free())
-			time::delay_us(10000);
+			time::delay_us(1000);
 		if (queue.empty())
-			time::delay_us(10000);
+			time::delay_us(1000);
 		queue.clear();
 		time::delay_us(1000);
 	}
