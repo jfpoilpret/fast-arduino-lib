@@ -27,8 +27,6 @@
 
 namespace containers
 {
-	//TODO try to avoid SIZE contraint to be a power of 2, or at least give the choice
-	// the developer
 	//TODO imprvoe code size by creating a non-template base class with all common stuff
 	//TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?
 	/**
