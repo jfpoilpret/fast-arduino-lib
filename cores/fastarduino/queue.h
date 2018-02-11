@@ -21,6 +21,7 @@
 #ifndef QUEUE_HH
 #define QUEUE_HH
 
+#include <math.h>
 #include "utilities.h"
 #include "time.h"
 
@@ -71,15 +72,12 @@ namespace containers
 		/**
 		 * Create a new queue, based on the provided @p buffer array.
 		 * The queue size is determined by the size of `buffer`.
-		 * @tparam SIZE the number of @p T items that `buffer` can hold; for
-		 * performance optimization, this must be a power of 2; if not, compilation
-		 * will fail.
+		 * @tparam SIZE the number of @p T items that `buffer` can hold
 		 * @param buffer the buffer used by this queue to store its items
 		 */
 		template<uint8_t SIZE>
-		Queue(T (&buffer)[SIZE]) : buffer_{buffer}, mask_{(uint8_t)(SIZE - 1)}, head_{0}, tail_{0}
+		Queue(T (&buffer)[SIZE]) : buffer_{buffer}, size_{SIZE}, head_{0}, tail_{0}
 		{
-			static_assert(SIZE && !(SIZE & (SIZE - 1)), "SIZE must be a power of 2");
 		}
 
 		/**
@@ -192,7 +190,7 @@ namespace containers
 		 */
 		inline uint8_t size() const
 		{
-			return mask_;
+			return size_;
 		}
 
 		/**
@@ -218,7 +216,7 @@ namespace containers
 		 */
 		inline uint8_t items_() const
 		{
-			return (tail_ - head_) & mask_;
+			return tail_ - head_ + (tail_ < head_ ? size_ : 0);
 		}
 
 		/**
@@ -232,7 +230,7 @@ namespace containers
 		 */
 		inline uint8_t free_() const
 		{
-			return (head_ - tail_ - 1) & mask_;
+			return head_ - tail_ + (tail_ >= head_ ? size_ : 0);
 		}
 
 		/**
@@ -418,7 +416,7 @@ namespace containers
 
 	private:
 		T* const buffer_;
-		const uint8_t mask_;
+		const uint8_t size_;
 		volatile uint8_t head_;
 		volatile uint8_t tail_;
 	};
@@ -433,10 +431,29 @@ namespace containers
 
 	template<typename T, typename TREF> uint8_t Queue<T, TREF>::peek_(T* buffer, uint8_t size) const
 	{
-		uint8_t actual = (tail_ - head_) & mask_;
-		if (size > actual) size = actual;
-		//TODO optimize copy (index calculation is simple if split in 2 parts)
-		for (uint8_t i = 0; i < size; ++i) buffer[i] = buffer_[(head_ + i) & mask_];
+		//TODO optimize code?
+		size = min(size, items());
+		if (size)
+		{
+			// Split peek in 2 parts if needed
+			if (head_ < tail_)
+			{
+				const T* source = &buffer_[head_];
+				for (uint8_t i = 0; i < size; ++i)
+					*buffer++ = *source++;
+			}
+			else
+			{
+				uint8_t part_size = size_ - head_;
+				const T* source = &buffer_[head_];
+				for (uint8_t i = 0; i < part_size; ++i)
+					*buffer++ = *source++;
+				part_size = size - part_size;
+				source = buffer_;
+				for (uint8_t i = 0; i < part_size; ++i)
+					*buffer++ = *source++;
+			}
+		}
 		return size;
 	}
 
@@ -447,10 +464,10 @@ namespace containers
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::push_(TREF item)
 	{
-		if ((head_ - tail_ - 1) & mask_)
+		if (free_())
 		{
 			buffer_[tail_] = item;
-			tail_ = (tail_ + 1) & mask_;
+			if (++tail_ == size_) tail_ = 0;
 			return true;
 		}
 		return false;
@@ -461,12 +478,14 @@ namespace containers
 		if (tail_ != head_)
 		{
 			item = buffer_[head_];
-			head_ = (head_ + 1) & mask_;
+			if (++head_ == size_) head_ = 0;
 			return true;
 		}
 		return false;
 	}
+	/// @endcond
 
+	//TODO DOC
 	// Utility method that waits until a Queue has an item available
 	template<typename T, typename TREF> T pull(Queue<T, TREF>& queue)
 	{
@@ -481,7 +500,6 @@ namespace containers
 		while (!queue.peek(item)) time::yield();
 		return item;
 	}
-	/// @endcond
 }
 
 #endif /* QUEUE_HH */
