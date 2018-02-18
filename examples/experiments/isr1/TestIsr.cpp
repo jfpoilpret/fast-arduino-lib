@@ -70,6 +70,8 @@ int main()
 			time::delay_us(1000);
 		if (queue.empty())
 			time::delay_us(1000);
+		if (queue.full())
+			time::delay_us(1000);
 		queue.clear();
 		time::delay_us(1000);
 	}
