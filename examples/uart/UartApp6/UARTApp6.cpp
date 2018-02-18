@@ -32,12 +32,12 @@
 
 // Macros to define what we want to test: just comment/uncomment according to what you want to test
 // #define CHECK_OUT_MANIPULATORS
-#define CHECK_OUT_FLOAT
+// #define CHECK_OUT_FLOAT
 // #define CHECK_OUT_ALIGNMENTS
 // #define CHECK_IN_EXTRACTORS
 // #define CHECK_IN_MANIPULATORS
 // #define CHECK_IN_STRING
-// #define CHECK_OUT_UNITBUF
+#define CHECK_OUT_UNITBUF
 // #define CHECK_IN_GET
 
 // Define vectors we need in the example
@@ -73,6 +73,8 @@ static void display_num(OUTPUT& out, T value)
 	out << dec << value << endl;
 	out << oct << value << endl;
 	out << hex << value << endl;
+	// restore decimal output
+	out << dec;
 }
 #endif
 
@@ -226,6 +228,7 @@ int main()
 	handle_alignments(out, 30, '~', true);
 #endif
 
+#ifndef CHECK_OUT_UNITBUF
 	// Event Loop
 	while (true)
 	{
@@ -293,6 +296,7 @@ int main()
 
 		time::delay_ms(1000);
 	}
+#endif
 
 #ifdef CHECK_OUT_UNITBUF
 	// check unitbuf: with unitbuf the program should not exit until every character has been output
