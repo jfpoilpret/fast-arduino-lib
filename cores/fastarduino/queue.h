@@ -231,6 +231,12 @@ namespace containers
 			return head_ - tail_ + (tail_ >= head_ ? size_ : 0);
 		}
 
+		//TODO DOC
+		inline bool full_() const
+		{
+			return (tail_ + 1 == head_) || (head_ == 0 && tail_ + 1 == size_);
+		}
+
 		/**
 		 * Completely clear this queue. All present items, if any, are lost.
 		 * This method is not synchronized, hence you must ensure it is called from
@@ -399,6 +405,12 @@ namespace containers
 			synchronized return free_();
 		}
 
+		//TODO DOC
+		inline bool full() const
+		{
+			synchronized return full_();
+		}
+
 		/**
 		 * Completely clear this queue. All present items, if any, are lost.
 		 * This method is synchronized, hence you can call it from an
@@ -462,24 +474,20 @@ namespace containers
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::push_(TREF item)
 	{
-		if (free_())
-		{
-			buffer_[tail_] = item;
-			if (++tail_ == size_) tail_ = 0;
-			return true;
-		}
-		return false;
+		if (full_())
+			return false;
+		buffer_[tail_] = item;
+		if (++tail_ == size_) tail_ = 0;
+		return true;
 	}
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::pull_(T& item)
 	{
-		if (tail_ != head_)
-		{
-			item = buffer_[head_];
-			if (++head_ == size_) head_ = 0;
-			return true;
-		}
-		return false;
+		if (empty_())
+			return false;
+		item = buffer_[head_];
+		if (++head_ == size_) head_ = 0;
+		return true;
 	}
 	/// @endcond
 
