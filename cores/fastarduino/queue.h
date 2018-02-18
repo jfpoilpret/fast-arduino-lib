@@ -27,8 +27,6 @@
 
 namespace containers
 {
-	//TODO imprvoe code size by creating a non-template base class with all common stuff
-	//TODO need to add some "peeking" API or iterator API, or some kind of deep-copy to another queue?
 	/**
 	 * Queue of type @p T_ items.
 	 * This is a FIFO (*first in first out*) queue, built upon a ring buffer of 
@@ -198,6 +196,7 @@ namespace containers
 		 * `empty()` instead.
 		 * @sa empty()
 		 * @sa free_()
+		 * @sa full_()
 		 */
 		inline bool empty_() const
 		{
@@ -231,10 +230,17 @@ namespace containers
 			return head_ - tail_ + (tail_ >= head_ ? size_ : 0);
 		}
 
-		//TODO DOC
+		/**
+		 * Tell if this queue is currently full.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `full()` instead.
+		 * @sa full()
+		 * @sa free_()
+		 */
 		inline bool full_() const
 		{
-			return (tail_ + 1 == head_) || (head_ == 0 && tail_ + 1 == size_);
+			return !free_();
 		}
 
 		/**
@@ -405,7 +411,14 @@ namespace containers
 			synchronized return free_();
 		}
 
-		//TODO DOC
+		/**
+		 * Tell if this queue is currently full.
+		 * This method is synchronized, hence you can call it from an
+		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
+		 * you should use the not synchronized flavor `full_()` instead.
+		 * @sa full_()
+		 * @sa free()
+		 */
 		inline bool full() const
 		{
 			synchronized return full_();
@@ -441,7 +454,6 @@ namespace containers
 
 	template<typename T, typename TREF> uint8_t Queue<T, TREF>::peek_(T* buffer, uint8_t size) const
 	{
-		//TODO optimize code?
 		size = min(size, items());
 		if (size)
 		{
@@ -491,8 +503,16 @@ namespace containers
 	}
 	/// @endcond
 
-	//TODO DOC
-	// Utility method that waits until a Queue has an item available
+	/**
+	 * Pull an item from the beginning of @p queue. 
+	 * The item is removed from the queue.
+	 * This method wait until one item is available in @p queue.
+	 * 
+	 * @return the first item pulled from @p queue
+	 * 
+	 * @sa Queue::pull()
+	 * @sa time::yield()
+	 */
 	template<typename T, typename TREF> T pull(Queue<T, TREF>& queue)
 	{
 		T item;
@@ -500,6 +520,16 @@ namespace containers
 		return item;
 	}
 
+	/**
+	 * Peek an item from the beginning of @p queue.
+	 * The queue is NOT modified, no item is removed from the queue.
+	 * This method wait until one item is available in @p queue.
+	 * 
+	 * @return the first item peeked from @p queue
+	 * 
+	 * @sa Queue::peek()
+	 * @sa time::yield()
+	 */
 	template<typename T, typename TREF> T peek(Queue<T, TREF>& queue)
 	{
 		T item;
