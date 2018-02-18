@@ -458,7 +458,7 @@ namespace streams
 		}
 
 		/**
-		 * Extract characters from this inp0ut stream and discards them, until
+		 * Extract characters from this input stream and discards them, until
 		 * either `n` characters have been extracted, or the @p delim character
 		 * is encountered. The delimiting character, if found, is also discarded.
 		 * If @p n is `0`, then **all** characters are discarded (no number limit)
