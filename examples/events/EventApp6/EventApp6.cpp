@@ -35,6 +35,8 @@ class LedBlinkerJob: public Job
 {
 public:
 	LedBlinkerJob() : Job{0, PERIOD}, led_{gpio::PinMode::OUTPUT} {}
+
+protected:
 	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		led_.toggle();

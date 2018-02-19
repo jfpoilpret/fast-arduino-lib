@@ -57,6 +57,8 @@ class LedHandler: public Job, private gpio::FastPort<LED_PORT>
 {
 public:
 	LedHandler() : Job{0, PERIOD}, FastPort{0xFF}, _value{0} {}
+
+protected:
 	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		uint8_t value = _value;

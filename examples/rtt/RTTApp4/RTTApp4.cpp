@@ -45,6 +45,8 @@ class LedHandler: public Job
 {
 public:
 	LedHandler() : Job{0, PERIOD}, _led{gpio::PinMode::OUTPUT, false} {}
+
+protected:
 	virtual void on_schedule(UNUSED uint32_t millis) override
 	{
 		_led.toggle();

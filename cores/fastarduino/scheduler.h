@@ -190,7 +190,7 @@ namespace events
 			next_time_ = when;
 		}
 
-		//TODO why is it public? should be protected only!
+	protected:
 		/**
 		 * This method is called by `Scheduler` whenever  current clock time is
 		 * greater or equal to `next_time()`.
@@ -200,7 +200,6 @@ namespace events
 		 */
 		virtual void on_schedule(uint32_t millis) = 0;
 
-	protected:
 		/**
 		 * Construct a new `Job`.
 		 * @param next next time (in ms) at which this job shall be executed the 
