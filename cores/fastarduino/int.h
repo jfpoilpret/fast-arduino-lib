@@ -107,12 +107,9 @@ namespace interrupt
 		/** The External Interrupt pin managed by this INTSignal. */
 		static constexpr const board::DigitalPin PIN = PIN_;
 
-	protected:
-		/// @cond notdocumented
-		//TODO why is that protected? should be private!
+	private:
 		using PIN_TRAIT = board_traits::DigitalPin_trait<PIN>;
 		using INT_TRAIT = board_traits::ExternalInterruptPin_trait<PIN>;
-		/// @endcond
 
 	public:
 		/**
