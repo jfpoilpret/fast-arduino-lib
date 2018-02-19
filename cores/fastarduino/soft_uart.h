@@ -184,12 +184,15 @@ namespace serial
 		{
 		public:
 			static constexpr const board::DigitalPin RX = RX_;
-
-			using PIN_TRAIT = board_traits::DigitalPin_trait<RX>;
 			using PCI_TYPE = typename interrupt::PCIType<RX>::TYPE;
-			using PCI_TRAIT = typename PCI_TYPE::TRAIT;
 			using INT_TYPE = interrupt::INTSignal<RX>;
 
+		private:
+			using PIN_TRAIT = board_traits::DigitalPin_trait<RX>;
+			using PORT_TRAIT = board_traits::Port_trait<PIN_TRAIT::PORT>;
+			using PCI_TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
+
+		public:
 			template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX(input), rx_{gpio::PinMode::INPUT}
 			{
 				static_assert(

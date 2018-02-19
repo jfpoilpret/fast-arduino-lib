@@ -104,14 +104,18 @@ namespace interrupt
 	 */
 	template<board::Port PORT_> class PCISignal
 	{
+	private:
+		using PORT_TRAIT = board_traits::Port_trait<PORT_>;
+		using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
+
 	public:
 		/** The IO port which PCINT vector is managed by this PCISignal. */
 		static constexpr const board::Port PORT = PORT_;
 
 		/// @cond notdocumented
 		//TODO why is that public? should be private!
-		using PORT_TRAIT = board_traits::Port_trait<PORT>;
-		using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
+		// using PORT_TRAIT = board_traits::Port_trait<PORT>;
+		// using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
 		/// @endcond
 
 		/// @cond notdocumented
