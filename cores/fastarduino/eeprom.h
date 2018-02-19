@@ -25,6 +25,7 @@
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 
+#include "boards/board.h"
 #include "interrupts.h"
 #include "utilities.h"
 #include "queue.h"
@@ -701,8 +702,9 @@ namespace eeprom
 			return done_;
 		}
 
-		//TODO should better be private
-		/// @cond notdocumented
+	private:
+		static const uint16_t ITEM_SIZE = 3;
+
 		bool on_ready()
 		{
 			if (erase_)
@@ -739,11 +741,7 @@ namespace eeprom
 			}
 			return done_;
 		}
-		/// @endcond
-
-	private:
-		static const uint16_t ITEM_SIZE = 3;
-
+		
 		void write_next()
 		{
 			uint8_t value;
@@ -816,6 +814,8 @@ namespace eeprom
 		WriteItem current_;
 		volatile bool erase_;
 		volatile bool done_;
+
+		friend void ::EE_READY_vect(void);
 	};
 }
 
