@@ -113,12 +113,6 @@ namespace interrupt
 		static constexpr const board::Port PORT = PORT_;
 
 		/// @cond notdocumented
-		//TODO why is that public? should be private!
-		// using PORT_TRAIT = board_traits::Port_trait<PORT>;
-		// using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
-		/// @endcond
-
-		/// @cond notdocumented
 		//NOTE this constructor exists only to add a static_assert checked when 
 		// PCISignal is constructed not when its template type gets instantiated.
 		PCISignal()
