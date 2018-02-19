@@ -69,6 +69,37 @@ REGISTER_ISR_METHOD_(WDT_vect, watchdog::Watchdog<EVENT>, &watchdog::Watchdog<EV
 namespace watchdog
 {
 	/**
+	 * Defines the watchdog timeout period; watchdog interrupts will be 
+	 * triggered at the selected period. The MCU will be awakened at this 
+	 * period too.
+	 * Note that watchdog timeout period is not very accurate, you would
+	 * normally not use for real-time counting.
+	 */
+	enum class TimeOut : uint8_t
+	{
+		/** Watchdog timeout 16 ms. */
+		TO_16ms = 0,
+		/** Watchdog timeout 32 ms. */
+		TO_32ms,
+		/** Watchdog timeout 64 ms. */
+		TO_64ms,
+		/** Watchdog timeout 125 ms. */
+		TO_125ms,
+		/** Watchdog timeout 250 ms. */
+		TO_250ms,
+		/** Watchdog timeout 500 ms. */
+		TO_500ms,
+		/** Watchdog timeout 1 second. */
+		TO_1s,
+		/** Watchdog timeout 2 seconds. */
+		TO_2s,
+		/** Watchdog timeout 4 seconds. */
+		TO_4s,
+		/** Watchdog timeout 8 seconds. */
+		TO_8s
+	};
+
+	/**
 	 * Simple API to handle watchdog signals. In this mode, the AVR watchdog
 	 * timer is used to wake up the MCU at a specific timer period, in order to
 	 * leave a low-power sleep mode, to e.g. perform periodic tasks.
@@ -82,38 +113,6 @@ namespace watchdog
 	class WatchdogSignal
 	{
 	public:
-		//TODO move to namespace rather than inside class
-		/**
-		 * Defines the watchdog timeout period; watchdog interrupts will be 
-		 * triggered at the selected period. The MCU will be awakened at this 
-		 * period too.
-		 * Note that watchdog timeout period is not very accurate, you would
-		 * normally not use for real-time counting.
-		 */
-		enum class TimeOut : uint8_t
-		{
-			/** Watchdog timeout 16 ms. */
-			TO_16ms = 0,
-			/** Watchdog timeout 32 ms. */
-			TO_32ms,
-			/** Watchdog timeout 64 ms. */
-			TO_64ms,
-			/** Watchdog timeout 125 ms. */
-			TO_125ms,
-			/** Watchdog timeout 250 ms. */
-			TO_250ms,
-			/** Watchdog timeout 500 ms. */
-			TO_500ms,
-			/** Watchdog timeout 1 second. */
-			TO_1s,
-			/** Watchdog timeout 2 seconds. */
-			TO_2s,
-			/** Watchdog timeout 4 seconds. */
-			TO_4s,
-			/** Watchdog timeout 8 seconds. */
-			TO_8s
-		};
-
 		/**
 		 * Start the watchdog timer with the given @p timeout period.
 		 * From now on, watchdog interrupts get generated at @p timeout period,

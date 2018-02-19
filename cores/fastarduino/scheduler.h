@@ -63,7 +63,7 @@ namespace events
 	 *     scheduler.schedule(job);
 	 * 
 	 *     // Start clock (watchdog)
-	 *     watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_64ms);
+	 *     watchdog.begin(watchdog::TimeOut::TO_64ms);
 	 * 
 	 *     // Main event loop
 	 *     while (true)

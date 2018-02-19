@@ -1093,7 +1093,7 @@ int main()
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
 
 	watchdog::WatchdogSignal watchdog;
-	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_500ms);
+	watchdog.begin(watchdog::TimeOut::TO_500ms);
 	
 	while (true)
 	{
@@ -1112,7 +1112,7 @@ REGISTER_WATCHDOG_ISR_EMPTY()
 Then we have the usual `main()` function which, after defining `led` output pin, starts the watchdog timer:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	watchdog::WatchdogSignal watchdog;
-	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_500ms);
+	watchdog.begin(watchdog::TimeOut::TO_500ms);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Here we use a 500ms timeout period, which means our sleeping code will be awakened every 500ms.
 
@@ -1760,7 +1760,7 @@ int main()
 	scheduler.schedule(job);
 	
 	// Start watchdog
-	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_64ms);
+	watchdog.begin(watchdog::TimeOut::TO_64ms);
 	
 	// Event Loop
 	while (true)
@@ -1842,7 +1842,7 @@ Next, we instantiate the job that will make the LED blink, and schedule with `Sc
 We can then start the watchdog with any suitable timeout value (the selected value impacts the accuracy of the 
 watchdog clock):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_64ms);
+	watchdog.begin(watchdog::TimeOut::TO_64ms);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Finally, then event loop is quite usual:
@@ -1943,7 +1943,7 @@ int main()
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
 
 	watchdog::WatchdogSignal watchdog;
-	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_500ms);
+	watchdog.begin(watchdog::TimeOut::TO_500ms);
 	
 	while (true)
 	{

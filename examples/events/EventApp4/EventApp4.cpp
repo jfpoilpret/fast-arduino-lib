@@ -96,7 +96,7 @@ int main()
 	scheduler.schedule(job);
 	
 	// Start watchdog
-	watchdog.begin(watchdog::WatchdogSignal::TimeOut::TO_125ms);
+	watchdog.begin(watchdog::TimeOut::TO_125ms);
 	
 	// Event Loop
 	while (true)
