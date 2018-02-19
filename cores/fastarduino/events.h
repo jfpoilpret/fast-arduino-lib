@@ -294,6 +294,7 @@ namespace events
 			return type_;
 		}
 
+	protected:
 		/**
 		 * This pure virtual method is called by `Dispatcher::dispatch()` when
 		 * @p event.type() matches the type supported by this `EventHandler`.
@@ -301,7 +302,6 @@ namespace events
 		 */
 		virtual void on_event(const EVENT& event) = 0;
 
-	protected:
 		/**
 		 * Create an Event Handler for given @p type of event.
 		 * @param type the evnt type handled by this handler
@@ -312,7 +312,6 @@ namespace events
 
 	private:
 		uint8_t type_;
-		//TODO is this really needed?
 		friend class Dispatcher<EVENT>;
 	};
 };
