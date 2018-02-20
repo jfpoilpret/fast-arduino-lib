@@ -273,8 +273,9 @@ namespace utils
 	}
 
 	/**
-	 * Common utility to force a part of the value of a register, desognated by a 
+	 * Common utility to force a part of the value of a register, designated by a 
 	 * bit mask.
+	 * @tparam T the type of values to handle
 	 * @param reg the value to change  part of
 	 * @param mask the bit mask indicating which bits shall change
 	 * @param value the new value for @p reg
@@ -282,6 +283,18 @@ namespace utils
 	template<typename T> void set_mask(volatile T& reg, T mask, T value)
 	{
 		reg = (reg & ~mask) | (value & mask);
+	}
+
+	/**
+	 * Common utility to check if 2 values are equal according to a mask.
+	 * @tparam T the type of values to compare
+	 * @param actual the actual value to compare
+	 * @param mask the bit mask indicating which bits shall change
+	 * @param expected the expected value
+	 */
+	template<typename T> constexpr bool is_mask_equal(T actual, T mask, T expected)
+	{
+		return (actual & mask) == (expected & mask);
 	}
 
 	/**

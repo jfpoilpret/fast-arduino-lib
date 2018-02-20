@@ -70,6 +70,8 @@ int main()
 	interrupt::register_handler(handler);
 	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	timer.begin(COUNTER);
+	if (timer.get_timer_mode() == timer::TimerMode::CTC)
+		timer.end();
 	
 	while (true) ;
 }

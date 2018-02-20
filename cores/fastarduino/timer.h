@@ -847,7 +847,13 @@ namespace timer
 			}
 		}
 
-		//TODO getter method for current TimerMode
+		/**
+		 * Get current time mode.
+		 */
+		inline TimerMode get_timer_mode()
+		{
+			return timer_mode(tccra_, tccrb_);
+		}
 
 		/**
 		 * Change prescaler for this timer.
@@ -1148,6 +1154,28 @@ namespace timer
 						TRAIT::F_PWM_TCCRB :
 						timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRB : 0);
 		}
+
+		static constexpr bool is_TCCRA_equal(uint8_t actual, uint8_t expected)
+		{
+			return utils::is_mask_equal(actual, TRAIT::MODE_MASK_TCCRA, expected);
+		}
+		static constexpr bool is_TCCRB_equal(uint8_t actual, uint8_t expected)
+		{
+			return utils::is_mask_equal(actual, TRAIT::MODE_MASK_TCCRB, expected);
+		}
+		static constexpr bool is_TCCRAB_equal(
+			uint8_t TCCRA_actual, uint8_t TCCRA_expected, uint8_t TCCRB_actual, uint8_t TCCRB_expected)
+		{
+			return is_TCCRA_equal(TCCRA_actual, TCCRA_expected) && is_TCCRB_equal(TCCRB_actual, TCCRB_expected);
+		}
+		static constexpr TimerMode timer_mode(uint8_t TCCRA, uint8_t TCCRB)
+		{
+			return (is_TCCRAB_equal(TCCRA, TRAIT::CTC_TCCRA, TCCRB, TRAIT::CTC_TCCRB) ? TimerMode::CTC :
+					is_TCCRAB_equal(TCCRA, TRAIT::F_PWM_TCCRA, TCCRB, TRAIT::F_PWM_TCCRB) ? TimerMode::FAST_PWM :
+					is_TCCRAB_equal(TCCRA, TRAIT::PC_PWM_TCCRA, TCCRB, TRAIT::PC_PWM_TCCRB) ? TimerMode::PHASE_CORRECT_PWM :
+					TimerMode::NORMAL);
+		}
+
 		static constexpr uint8_t input_capture_TCCRB(TimerInputCapture input_capture)
 		{
 			return (input_capture == TimerInputCapture::RISING_EDGE ? TRAIT::ICES_TCCRB : 0);
