@@ -1155,24 +1155,16 @@ namespace timer
 						timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRB : 0);
 		}
 
-		static constexpr bool is_TCCRA_equal(uint8_t actual, uint8_t expected)
+		static constexpr bool is_timer_mode(TimerMode mode, uint8_t TCCRA, uint8_t TCCRB)
 		{
-			return utils::is_mask_equal(actual, TRAIT::MODE_MASK_TCCRA, expected);
-		}
-		static constexpr bool is_TCCRB_equal(uint8_t actual, uint8_t expected)
-		{
-			return utils::is_mask_equal(actual, TRAIT::MODE_MASK_TCCRB, expected);
-		}
-		static constexpr bool is_TCCRAB_equal(
-			uint8_t TCCRA_actual, uint8_t TCCRA_expected, uint8_t TCCRB_actual, uint8_t TCCRB_expected)
-		{
-			return is_TCCRA_equal(TCCRA_actual, TCCRA_expected) && is_TCCRB_equal(TCCRB_actual, TCCRB_expected);
+			return		utils::is_mask_equal(TCCRA, TRAIT::MODE_MASK_TCCRA, timer_mode_TCCRA(mode))
+					&&	utils::is_mask_equal(TCCRB, TRAIT::MODE_MASK_TCCRB, timer_mode_TCCRB(mode));
 		}
 		static constexpr TimerMode timer_mode(uint8_t TCCRA, uint8_t TCCRB)
 		{
-			return (is_TCCRAB_equal(TCCRA, TRAIT::CTC_TCCRA, TCCRB, TRAIT::CTC_TCCRB) ? TimerMode::CTC :
-					is_TCCRAB_equal(TCCRA, TRAIT::F_PWM_TCCRA, TCCRB, TRAIT::F_PWM_TCCRB) ? TimerMode::FAST_PWM :
-					is_TCCRAB_equal(TCCRA, TRAIT::PC_PWM_TCCRA, TCCRB, TRAIT::PC_PWM_TCCRB) ? TimerMode::PHASE_CORRECT_PWM :
+			return (is_timer_mode(TimerMode::CTC, TCCRA, TCCRB) ? TimerMode::CTC :
+					is_timer_mode(TimerMode::FAST_PWM, TCCRA, TCCRB) ? TimerMode::FAST_PWM :
+					is_timer_mode(TimerMode::PHASE_CORRECT_PWM, TCCRA, TCCRB) ? TimerMode::PHASE_CORRECT_PWM :
 					TimerMode::NORMAL);
 		}
 
