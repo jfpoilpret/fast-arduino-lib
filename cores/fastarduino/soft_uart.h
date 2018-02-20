@@ -62,7 +62,7 @@ namespace serial
 
 			void check_overflow()
 			{
-				errors_.all_errors.queue_overflow = overflow();
+				errors_.queue_overflow = overflow();
 			}
 
 			Parity parity_;
@@ -229,6 +229,7 @@ namespace serial
 			}
 
 			//	protected:
+			//TODO should be private
 			void on_pin_change();
 
 		private:
@@ -246,7 +247,7 @@ namespace serial
 			if (rx_.value()) return;
 			uint8_t value = 0;
 			bool odd = false;
-			UARTErrors_ errors;
+			Errors errors;
 			errors.has_errors = 0;
 			// Wait for start bit to finish
 			_delay_loop_2(start_bit_rx_time_);
@@ -274,13 +275,13 @@ namespace serial
 				_delay_loop_2(parity_bit_rx_time_);
 				bool parity_bit = (parity_ == Parity::ODD ? !odd : odd);
 				// Check parity bit
-				errors.all_errors.parity_error = (rx_.value() != parity_bit);
+				errors.parity_error = (rx_.value() != parity_bit);
 			}
 
 			// Push value if no error
 			if (!errors.has_errors)
 			{
-				errors.all_errors.queue_overflow = !in_().queue().push_(value);
+				errors.queue_overflow = !in_().queue().push_(value);
 				// Wait for 1st stop bit
 				_delay_loop_2(stop_bit_rx_time_push_);
 			}

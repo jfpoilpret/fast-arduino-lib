@@ -190,6 +190,7 @@ namespace serial
 			}
 
 			/// @cond notdocumented
+			//TODO should be private
 			inline void data_register_empty()
 			{
 				errors_.has_errors = 0;
@@ -210,7 +211,7 @@ namespace serial
 			// Listeners of events on the buffer
 			virtual void on_put() override
 			{
-				errors_.all_errors.queue_overflow = ostreambuf::overflow();
+				errors_.queue_overflow = ostreambuf::overflow();
 				synchronized
 				{
 					// Check if TX is not currently active, if so, activate it
@@ -317,14 +318,15 @@ namespace serial
 			}
 
 			/// @cond notdocumented
+			//TODO should be private
 			inline void data_receive_complete()
 			{
 				char status = TRAIT::UCSRA;
-				errors_.all_errors.data_overrun = status & TRAIT::DOR_MASK;
-				errors_.all_errors.frame_error = status & TRAIT::FE_MASK;
-				errors_.all_errors.parity_error = status & TRAIT::UPE_MASK;
+				errors_.data_overrun = status & TRAIT::DOR_MASK;
+				errors_.frame_error = status & TRAIT::FE_MASK;
+				errors_.parity_error = status & TRAIT::UPE_MASK;
 				char value = TRAIT::UDR;
-				errors_.all_errors.queue_overflow = !queue().push_(value);
+				errors_.queue_overflow = !queue().push_(value);
 			}
 			/// @endcond
 		};
@@ -409,6 +411,7 @@ namespace serial
 			}
 
 			/// @cond notdocumented
+			//TODO should be private
 			// Workaround trick to make REGISTER_UART_ISR work properly
 			inline void data_register_empty()
 			{

@@ -52,21 +52,6 @@ namespace serial
 		TWO = 2
 	};
 
-	/// @cond notdocumented
-	//TODO Do we really need this public union here? Cam't it be private inside UARTErrors class?
-	union UARTErrors_
-	{
-		uint8_t has_errors;
-		struct
-		{
-			bool frame_error : 1;
-			bool data_overrun : 1;
-			bool queue_overflow : 1;
-			bool parity_error : 1;
-		} all_errors;
-	};
-	/// @endcond
-
 	/**
 	 * Holder of latest UART errors.
 	 */
@@ -104,7 +89,7 @@ namespace serial
 		 */
 		inline bool frame_error() const
 		{
-			return errors_.all_errors.frame_error;
+			return errors_.frame_error;
 		}
 
 		/**
@@ -114,7 +99,7 @@ namespace serial
 		 */
 		inline bool data_overrun() const
 		{
-			return errors_.all_errors.data_overrun;
+			return errors_.data_overrun;
 		}
 
 		/**
@@ -124,7 +109,7 @@ namespace serial
 		 */
 		inline bool queue_overflow() const
 		{
-			return errors_.all_errors.queue_overflow;
+			return errors_.queue_overflow;
 		}
 
 		/**
@@ -134,12 +119,23 @@ namespace serial
 		 */
 		inline bool parity_error() const
 		{
-			return errors_.all_errors.parity_error;
+			return errors_.parity_error;
 		}
 
 	protected:
 		/// @cond notdocumented
-		UARTErrors_ errors_;
+		union Errors
+		{
+			uint8_t has_errors;
+			struct
+			{
+				bool frame_error : 1;
+				bool data_overrun : 1;
+				bool queue_overflow : 1;
+				bool parity_error : 1;
+			};
+		};
+		Errors errors_;
 		/// @endcond
 	};
 };
