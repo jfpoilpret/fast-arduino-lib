@@ -849,8 +849,11 @@ namespace timer
 
 		/**
 		 * Get current time mode.
+		 * This method exists only for the sake of completeness; if not really
+		 * needed, do not use it, as it will generate extra code with no real
+		 * added value.
 		 */
-		inline TimerMode get_timer_mode()
+		inline TimerMode get_timer_mode() const
 		{
 			return timer_mode(tccra_, tccrb_);
 		}
@@ -865,8 +868,6 @@ namespace timer
 			// Check if timer is currently running
 			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
 		}
-
-		//TODO getter method for current prescaler
 
 		/**
 		 * Start this timer in the currently selected mode, with the provided
