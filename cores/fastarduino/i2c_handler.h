@@ -12,6 +12,8 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond notdocumented
+
 #ifndef I2C_HANDLER_HH
 #define I2C_HANDLER_HH
 
@@ -352,3 +354,4 @@ namespace i2c
 }
 
 #endif /* I2C_HANDLER_HH */
+/// @endcond

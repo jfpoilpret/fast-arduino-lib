@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file 
+ * I2C API common definitions.
+ */
 #ifndef I2C_HH
 #define I2C_HH
 
@@ -21,11 +27,41 @@
 //TODO register ISR macro?
 
 //NOTE only Master operation is supported for the moment
+/**
+ * Define API to define and manage I2C devices.
+ * I2C is available to all MCU supported by FastArduino, even in ATtiny MCU, for which
+ * I2C is implemented with *Universal Serial Interface* (USI).
+ * @note Current implementation supports only synchronous operation. Future FastArduino 
+ * versions may also support asynchronous (non-blocking) operation.
+ * 
+ * The following snippet shows how to use an I2C device, the DS1307 Real Time Clock:
+ * @code
+ * int main()
+ * {
+ *     i2c::I2CManager<i2c::I2CMode::Standard> manager;
+ *     manager.begin();
+ *     devices::rtc::DS1307 rtc{manager};
+ *     devices::rtc::tm now;
+ *     rtc.get_datetime(now);
+ *     ...
+ *     manager.end();
+ * }
+ * @endcode
+ */
 namespace i2c
 {
-	// Hook function type, useful for debugging new I2C devices implementation
+	/**
+	 * Hook function type, useful for debugging new I2C devices implementation.
+	 * @sa i2c::I2CManager
+	 */
 	using I2C_STATUS_HOOK = void (*)(uint8_t expected_status, uint8_t actual_status);
 
+	/**
+	 * Transmission status codes.
+	 * Transmission status is returned by all `i2c::I2CDevice` read and write methods.
+	 * This status is also transmitted to an optional hook function for debug purposes.
+	 * @sa i2c::I2CManager::status()
+	 */
 	namespace Status
 	{
 		constexpr const uint8_t OK = 0x00;
@@ -43,11 +79,20 @@ namespace i2c
 		constexpr const uint8_t DATA_RECEIVED_NACK = 0x58;
 	}
 
+	/**
+	 * I2C available transmission modes. This defines the maximum bus transmission 
+	 * frequency.
+	 * @sa i2c::I2CManager
+	 * @sa i2c::I2CManager
+	 */
 	enum class I2CMode : uint8_t
 	{
+		/** I2C Standard mode, less than 100KHz. */
 		Standard,
+		/** I2C Fast mode, less than 400KHz. */
 		Fast
 	};
 };
 
 #endif /* I2C_HH */
+/// @endcond
