@@ -35,7 +35,6 @@ namespace i2c
 	public:
 		static constexpr const I2CMode MODE = MODE_;
 		using MANAGER = I2CManager<MODE>;
-		using HANDLER = typename MANAGER::HANDLER;
 
 	protected:
 		I2CDevice(MANAGER& manager) : manager_{manager.handler()}
@@ -90,6 +89,7 @@ namespace i2c
 		}
 
 	private:
+		using HANDLER = typename MANAGER::HANDLER;
 		HANDLER& manager_;
 	};
 };
