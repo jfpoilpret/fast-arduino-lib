@@ -250,6 +250,13 @@ namespace board_traits
 };
 
 // Macros to declare some ISR friends
+#define DECL_INT_ISR_FRIENDS 		\
+	friend void ::INT0_vect(void);	\
+	friend void ::INT1_vect(void);
+#define DECL_PCINT_ISR_FRIENDS		\
+	friend void ::PCINT0_vect(void);\
+	friend void ::PCINT1_vect(void);\
+	friend void ::PCINT2_vect(void);
 #define DECL_UDRE_ISR_FRIENDS friend void ::USART0_UDRE_vect(void);
 #define DECL_RX_ISR_FRIENDS friend void ::USART0_RX_vect(void);
 

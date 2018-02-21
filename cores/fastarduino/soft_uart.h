@@ -228,17 +228,18 @@ namespace serial
 					pci_->template disable_pin<RX>();
 			}
 
-			//	protected:
-			//TODO should be private
+		private:
 			void on_pin_change();
 
-		private:
 			typename gpio::FastPinType<RX>::TYPE rx_;
 			union
 			{
 				PCI_TYPE* pci_;
 				INT_TYPE* int_;
 			};
+
+			DECL_INT_ISR_FRIENDS
+			DECL_PCINT_ISR_FRIENDS
 		};
 
 		template<board::DigitalPin RX> void UARX<RX>::on_pin_change()
