@@ -147,6 +147,7 @@ namespace timer
 			interrupt::register_handler(*this);
 		}
 
+		//TODO should be private
 		bool overflow()
 		{
 			if (++count_ == MAX) count_ = 0;

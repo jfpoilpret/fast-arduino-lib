@@ -306,6 +306,7 @@ namespace timer
 			Timer<NTIMER>::end_();
 		}
 
+		//TODO should be private
 		/// @cond notdocumented
 		void on_timer()
 		{

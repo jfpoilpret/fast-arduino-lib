@@ -401,6 +401,7 @@ namespace devices
 				if (trigger) this->trigger();
 			}
 
+			//TODO should be private
 			bool on_pin_change(TYPE ticks)
 			{
 				static_assert(SONAR_TYPE == SonarType::ASYNC_INT || SONAR_TYPE == SonarType::ASYNC_PCINT, 
@@ -408,6 +409,7 @@ namespace devices
 				return this->pulse_edge(echo_.value(), ticks);
 			}
 
+			//TODO should be private
 			bool on_capture(TYPE capture)
 			{
 				static_assert(SONAR_TYPE == SonarType::ASYNC_ICP, 

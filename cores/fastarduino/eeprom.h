@@ -48,7 +48,6 @@
  * is triggered; this must be a proper PTMF (pointer to member function).
  * 
  * @sa eeprom::QueuedWriter
- * @sa eeprom::QueuedWriter::on_ready()
  */
 #define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)                              \
 	ISR(EE_READY_vect)                                                             \
@@ -67,7 +66,6 @@
  * triggered
  * 
  * @sa eeprom::QueuedWriter
- * @sa eeprom::QueuedWriter::on_ready()
  */
 #define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)             \
 	ISR(EE_READY_vect)                                     \

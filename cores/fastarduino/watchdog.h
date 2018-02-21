@@ -241,6 +241,7 @@ namespace watchdog
 			}
 		}
 
+		//TODO should be private
 		/// @cond notdocumented
 		void on_tick()
 		{
