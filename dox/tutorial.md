@@ -285,7 +285,7 @@ Of course, we can see here that the code looks simpler, although one may wonder 
 Now let's compare the size of both:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1440 bytes  | 662 bytes   |
+| code size | 1440 bytes  | 690 bytes   |
 | data size | 200 bytes   | 91 bytes    |
 The data size is big because the buffer used by `Serial` has a hard-coded size (you cannot change it without modifying and recompiling Arduino API). Moreover, when using `Serial`, 2 buffers are created, one for input and one for output, even though you may only need the latter one!
 
@@ -312,7 +312,7 @@ Note the use of `F()` macro here: this makes the string reside in Flash only, an
 We can compare the impact on sizes:
 |           | without %F() | with %F()   |
 |-----------|--------------|-------------|
-| code size | 662 bytes    | 668 bytes   |
+| code size | 690 bytes    | 700 bytes   |
 | data size | 91 bytes     | 75 bytes    |
 Although a bit more code has been added (the code to read the string from Flash into SRAM on the fly), we see 16 bytes have been removed from data, this is the size of the string constant.
 
@@ -417,7 +417,7 @@ void loop()
 Once again, we can compare the size of both:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1808 bytes  | 1804 bytes  |
+| code size | 1808 bytes  | 1844 bytes  |
 | data size | 186 bytes   | 83 bytes    |
 
 ### Serial Input example ###
@@ -625,13 +625,13 @@ Rather than explaining the theory further, we will start studying a simple examp
 #include <fastarduino/gpio.h>
 #include <fastarduino/timer.h>
 
-constexpr const board::Timer TIMER = board::Timer::TIMER1;
-using CALCULATOR = timer::Calculator<TIMER>;
-using TIMER_TYPE = timer::Timer<TIMER>;
+constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+using CALCULATOR = timer::Calculator<NTIMER>;
+using TIMER = timer::Timer<NTIMER>;
 constexpr const uint32_t PERIOD_US = 1000000;
 
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
-constexpr const TIMER_TYPE::TIMER_TYPE COUNTER = CALCULATOR::CTC_counter(PRESCALER, PERIOD_US);
+constexpr const TIMER::PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
+constexpr const TIMER::TYPE COUNTER = CALCULATOR::CTC_counter(PRESCALER, PERIOD_US);
 
 class Handler
 {
@@ -657,7 +657,7 @@ int main()
 	sei();
 	Handler handler;
 	interrupt::register_handler(handler);
-	TIMER_TYPE timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
+	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	timer.begin(COUNTER);
 	
 	while (true) ;
@@ -673,21 +673,21 @@ In addition to GPIO, we include the header containing all Timer API.
 
 For this example, we use Arduino UNO, which MCU (ATmega328P) includes 3 timers (named respectively `Timer0`, `Timer1`, `Timer2` in its datasheet), we use Timer1 which is 16-bits in size:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-constexpr const board::Timer TIMER = board::Timer::TIMER1;
-using CALCULATOR = timer::Calculator<TIMER>;
-using TIMER_TYPE = timer::Timer<TIMER>;
+constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+using CALCULATOR = timer::Calculator<NTIMER>;
+using TIMER = timer::Timer<NTIMER>;
 constexpr const uint32_t PERIOD_US = 1000000;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Although not needed, it is a good practice to define a `const`, named `TIMER` in this snippet, valued with the real timer we intend to use.
+Although not needed, it is a good practice to define a `const`, named `NTIMER` in this snippet, valued with the real timer we intend to use.
 Then we define 2 new type aliases, `CALCULATOR` and `TIMER` that will help us type less code (this is common recommended practice when using C++ templates heavily in programs):
 - `CALCULATOR` is the type of a class which provides `static` utility methods that will help us configure the timer we have selected; do note that, since all timers are different, `CALCULATOR` is specific to one timer only; hence if our program was using 2 distinct timers, we would have to define two distinct calculator type aliases, one for each timer.
-- `TIMER_TYPE` is the type of the class that embed all timer API for the specific timer we have selected.
+- `TIMER` is the type of the class that embed all timer API for the specific timer we have selected.
 
 Finally we define `PERIOD_US` the period, in microseconds, at which we want the LED to blink. Please note that this is in fact half the actual period, because this is the time at which we will toggle the LED light.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
-constexpr const TIMER_TYPE::TIMER_TYPE COUNTER = CALCULATOR::CTC_counter(PRESCALER, PERIOD_US);
+constexpr const TIMER::PRESCALER PRESCALER = CALCULATOR::CTC_prescaler(PERIOD_US);
+constexpr const TIMER::TYPE COUNTER = CALCULATOR::CTC_counter(PRESCALER, PERIOD_US);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The above snippet defines constant settings, computed by `CALCULATOR` utility class, that we will later use to initialize our timer:
 - `PRESCALER` is the **optimum** prescaler value that we can use for our timer in order to be able to count up to the requested period, i.e. 1 second; the type of prescaler is an `enum` that depends on each timer (because the list of available prescaler values differ from one timer to another). The prescaler defines the number by which the MCU clock frequency will be divided to provide the pulses used to increment the timer. We don't need to know this value or fix it ourselves because `CALCULATOR::CTC_prescaler` calculates the best choice for us.
@@ -738,7 +738,7 @@ Past the usual initialization stuff, this code performs an important task regard
 
 The last part of the code creates and starts the timer we need in our program:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-	TIMER_TYPE timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
+	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 	timer.begin(COUNTER);
 	
 	while (true) ;
@@ -757,7 +757,7 @@ Note the infinite loop `while (true);` at the end of `main()`: without it the pr
 I would have liked to perform a size comparison with Arduino API, but unfortunately, the basic Arduino API does not provide an equivalent way to directly access a timer, hence we cannot produce the equivalent code here. Anyway, here is the size for the example above:
 |           | FastArduino |
 |-----------|-------------|
-| code size | 248 bytes   |
+| code size | 252 bytes   |
 | data size | 2 bytes     |
 
 
@@ -822,12 +822,12 @@ Finally, we have the usual loop, toogling the LED, and then delay for 10s, using
 Let's examine the size of this program and compare it with the first example of this tutorial, which used `time::delay_ms()`:
 |           | delay_ms   | RTT::delay  |
 |-----------|------------|-------------|
-| code size | 154 bytes  | 404 bytes   |
+| code size | 154 bytes  | 420 bytes   |
 | data size | 0 bytes    | 3 bytes     |
 
 As you can see, code and data size is higher here, so what is the point of using `RTT::delay()` instead of `time::delay_ms()`? The answer is **power consumption**:
 - `time::delay_ms` is a busy loop which requires the MCU to be running during the whole delay, hence consuming "active supply current" (about 15mA for an ATmega328P at 16MHz)
-- `RTT::delay()` will set the MCU to pre-defined sleep mode and will still continue to operate well under most available sleep modes (this depends on which timer gets used, refer to [AVR datasheet](TODO) for further details); this will alow reduction of supply current, hence power consumption. Current supply will be reduced more or less dramatically according to the selected sleep mode.
+- `RTT::delay()` will set the MCU to pre-defined sleep mode and will still continue to operate well under most available sleep modes (this depends on which timer gets used, refer to [AVR datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Datasheet.pdf) for further details); this will alow reduction of supply current, hence power consumption. Current supply will be reduced more or less dramatically according to the selected sleep mode.
 
 Another practical use of RTT is to measure the elapsed time between two events. For instance it can be used with an ultrasonic ranging device to measure the duration of an ultrasound wave to do a roundript from the device to an obstacle, then calculate the actual distance in mm. The following snippet shows how it could look like for an HC-SR04 sensor:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
@@ -871,11 +871,11 @@ FastArduino includes special support for PWM. The following example demonstrates
 #include <fastarduino/time.h>
 #include <fastarduino/pwm.h>
 
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
-using TIMER_TYPE = timer::Timer<TIMER>;
-using CALC = timer::Calculator<TIMER>;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+using TIMER = timer::Timer<NTIMER>;
+using CALC = timer::Calculator<NTIMER>;
 static constexpr const uint16_t PWM_FREQUENCY = 450;
-static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
+static constexpr const TIMER::PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
 
 static constexpr const board::DigitalPin LED = board::PWMPin::D6_PD6_OC0A;
 using LED_PWM = analog::PWMOutput<LED>;
@@ -886,8 +886,8 @@ int main()
 	sei();
 
 	// Initialize timer
-	TIMER_TYPE timer{timer::TimerMode::FAST_PWM};
-	timer.begin(PRESCALER);
+	TIMER timer{timer::TimerMode::FAST_PWM, PRESCALER};
+	timer.begin();
 	
 	LED_PWM led{timer};
 	// Loop of samplings
@@ -911,11 +911,11 @@ The program starts by including the header for PWM API; this will automatically 
 
 Then a timer is selected for PWM (note that the choice of a timer imposes the choice of possible pins) and a prescaler value computed for it, based on the PWM frequency we want to use, 450Hz, which is generally good enough for most use cases (dimming a LED, rotating a DC motor...):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
-static constexpr const board::Timer TIMER = board::Timer::TIMER0;
-using TIMER_TYPE = timer::Timer<TIMER>;
-using CALC = timer::Calculator<TIMER>;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+using TIMER = timer::Timer<NTIMER>;
+using CALC = timer::Calculator<NTIMER>;
 static constexpr const uint16_t PWM_FREQUENCY = 450;
-static constexpr const TIMER_TYPE::TIMER_PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
+static constexpr const TIMER::PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Then we define the pin that will be connected to the LED and the PWMOutput type for this pin:
@@ -931,8 +931,8 @@ Note that `board::PWMPin` namespace limits the pins to PWM-enabled pins; also no
 Then, in `main()`, after the usual initialization code, we initialize and start the timer:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	// Initialize timer
-	TIMER_TYPE timer{timer::TimerMode::FAST_PWM};
-	timer.begin(PRESCALER);
+	TIMER_TYPE timer{timer::TimerMode::FAST_PWM, PRESCALER};
+	timer.begin();
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Notice we use the *Fast PWM* mode here, but we might as well use *Phase Correct PWM* mode.
 
@@ -988,7 +988,7 @@ Nothing special to comment here, except:
 Comparing sizes once again shows big differences:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1302 bytes  | 288 bytes   |
+| code size | 1302 bytes  | 296 bytes   |
 | data size | 9 bytes     | 0 byte      |
 
 
@@ -1129,7 +1129,7 @@ As explained [later](@ref power), `power::Power::sleep(board::SleepMode::POWER_D
 The size of this example is not much bigger than the first example of this tutorial:
 |           | FastArduino |
 |-----------|-------------|
-| code size | 262 bytes   |
+| code size | 190 bytes   |
 | data size | 0 byte      |
 
 FastArduino defines another class, `Watchdog`. This class allows to use the AVR watchdog timer as a clock for events generation. This will be demonstrated when [events scheduling](@ref events) is described.
