@@ -218,6 +218,7 @@ namespace events
 		template<typename CLOCK, typename T> friend class Scheduler;
 	};
 
+	/// @cond notdocumented
 	template<typename CLOCK, typename T> bool Scheduler<CLOCK, T>::operator()(Job& job)
 	{
 		uint32_t now = clock_.millis();
@@ -229,6 +230,7 @@ namespace events
 		}
 		return false;
 	}
+	/// @endcond
 }
 
 #endif /* SCHEDULER_HH */
