@@ -249,4 +249,8 @@ namespace board_traits
 	template<> struct PWMPin_trait<PWMPin::D3_PD3_OC2B>: PWMPin_trait_impl<Timer::TIMER2, 1> {};
 };
 
+// Macros to declare some ISR friends
+#define DECL_UDRE_ISR_FRIENDS friend void ::USART0_UDRE_vect(void);
+#define DECL_RX_ISR_FRIENDS friend void ::USART0_RX_vect(void);
+
 #endif /* BOARDS_UNO_TRAITS_HH */

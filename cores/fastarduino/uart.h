@@ -189,6 +189,7 @@ namespace serial
 				return streams::ostream(*this);
 			}
 
+		protected:
 			/// @cond notdocumented
 			//TODO should be private
 			inline void data_register_empty()
@@ -233,6 +234,7 @@ namespace serial
 
 		private:
 			bool transmitting_;
+			DECL_UDRE_ISR_FRIENDS
 		};
 
 		/**
@@ -317,6 +319,7 @@ namespace serial
 				return streams::istream(*this);
 			}
 
+		protected:
 			/// @cond notdocumented
 			//TODO should be private
 			inline void data_receive_complete()
@@ -329,6 +332,8 @@ namespace serial
 				errors_.queue_overflow = !queue().push_(value);
 			}
 			/// @endcond
+
+			DECL_RX_ISR_FRIENDS
 		};
 
 		/**
@@ -410,8 +415,7 @@ namespace serial
 				synchronized TRAIT::UCSRB = 0;
 			}
 
-			/// @cond notdocumented
-			//TODO should be private
+		private:
 			// Workaround trick to make REGISTER_UART_ISR work properly
 			inline void data_register_empty()
 			{
@@ -422,6 +426,9 @@ namespace serial
 				UARX<USART>::data_receive_complete();
 			}
 			/// @endcond
+
+			DECL_UDRE_ISR_FRIENDS
+			DECL_RX_ISR_FRIENDS
 		};
 	}
 }
