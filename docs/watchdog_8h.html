@@ -83,7 +83,8 @@ $(document).ready(function(){initNavTree('watchdog_8h.html','');});
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">watchdog.h File Reference</div>  </div>
 </div><!--header-->
@@ -102,13 +103,13 @@ Include dependency graph for watchdog.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="watchdog_8h__incl.png" border="0" usemap="#fastarduino_2watchdog_8h" alt=""/></div>
 <map name="fastarduino_2watchdog_8h" id="fastarduino_2watchdog_8h">
-<area shape="rect" id="node4" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="137,80,224,107"/>
-<area shape="rect" id="node5" href="events_8h.html" title="Support for events management. " alt="" coords="249,80,321,107"/>
-<area shape="rect" id="node15" href="board_8h_source.html" title="boards/board.h" alt="" coords="345,80,453,107"/>
-<area shape="rect" id="node7" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="251,155,319,181"/>
-<area shape="rect" id="node14" href="linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="157,229,247,256"/>
-<area shape="rect" id="node8" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="219,304,294,331"/>
-<area shape="rect" id="node11" href="time_8h.html" title="Simple time utilities. " alt="" coords="322,229,381,256"/>
+<area shape="rect" id="node4" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="53,80,140,107"/>
+<area shape="rect" id="node5" href="events_8h.html" title="Support for events management. " alt="" coords="265,80,337,107"/>
+<area shape="rect" id="node16" href="board_8h_source.html" title="boards/board.h" alt="" coords="361,80,469,107"/>
+<area shape="rect" id="node7" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="361,155,429,181"/>
+<area shape="rect" id="node15" href="linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="181,229,271,256"/>
+<area shape="rect" id="node9" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="331,304,406,331"/>
+<area shape="rect" id="node12" href="time_8h.html" title="Simple time utilities. " alt="" coords="434,229,493,256"/>
 </map>
 </div>
 </div>
@@ -143,6 +144,33 @@ Macros</h2></td></tr>
 <tr class="memitem:adb4cc81538efc2536ee6e1d06ae4b92f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="watchdog_8h.html#adb4cc81538efc2536ee6e1d06ae4b92f">REGISTER_WATCHDOG_ISR_EMPTY</a>()&#160;&#160;&#160;EMPTY_INTERRUPT(WDT_vect)</td></tr>
 <tr class="memdesc:adb4cc81538efc2536ee6e1d06ae4b92f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register an empty ISR (interrupt Service Routine) for a <a class="el" href="classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. ">watchdog::WatchdogSignal</a>.  <a href="#adb4cc81538efc2536ee6e1d06ae4b92f">More...</a><br /></td></tr>
 <tr class="separator:adb4cc81538efc2536ee6e1d06ae4b92f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ae2234bf414f2a2e1b774538e7cecd01b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">watchdog::TimeOut</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c">watchdog::TimeOut::TO_16ms</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba5c127bc3e865ef5b3f22a5a89f088bfa">watchdog::TimeOut::TO_32ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01baa242d79167431204d86c7aa65a03c14a">watchdog::TimeOut::TO_64ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01bad7219a43d3bfae8995c16e4cd3188fe4">watchdog::TimeOut::TO_125ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01bae313983d43e7304bffbd4d82cdb9ecfc">watchdog::TimeOut::TO_250ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01bafb811591cc29f5e01ef24eeb560868b1">watchdog::TimeOut::TO_500ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01babf2e5dd4acceb83564e09d08753331fc">watchdog::TimeOut::TO_1s</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01badc12ed02078a2edaa012491658089e28">watchdog::TimeOut::TO_2s</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01baf043bc9855a6e47ea123ff80769e7870">watchdog::TimeOut::TO_4s</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba20bf5a68c13809216a5ec3d321a7a7b2">watchdog::TimeOut::TO_8s</a>
+<br />
+ }<tr class="memdesc:ae2234bf414f2a2e1b774538e7cecd01b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the watchdog timeout period; watchdog interrupts will be triggered at the selected period.  <a href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:ae2234bf414f2a2e1b774538e7cecd01b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Watchdog API. </p>

@@ -170,7 +170,7 @@ static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a 
 <li>prepare initial values for <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> content, for which <b>make</b> will generate an <code>.eep</code> file that you can separately upload to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a></li>
 </ul>
 <p>The following snippet shows briefly how you can use the <code>EEMEM</code> flavor: </p><div class="fragment"><div class="line"><span class="comment">// Declare EEPROM stored content</span></div><div class="line"><span class="keyword">static</span> uint32_t eeprom_hash EEMEM = 0;</div><div class="line">...</div><div class="line">uint32_t read_hash()</div><div class="line">{</div><div class="line">    uint32_t hash;</div><div class="line">    <span class="comment">// Read uint32_t value located at &quot;eeprom_hash&quot; in EEPROM, and put it into hash variable</span></div><div class="line">    <a class="code" href="classeeprom_1_1_e_e_p_r_o_m.html#a046768eae9f26564b1039a13b88bb8c1">EEPROM::read</a>(&amp;eeprom_hash, hash);</div><div class="line">    <span class="keywordflow">return</span> hash;</div><div class="line">}</div><div class="line"><span class="keywordtype">void</span> write_hash(uint32_t hash)</div><div class="line">{</div><div class="line">    <a class="code" href="classeeprom_1_1_e_e_p_r_o_m.html#a8d2e713b0deef40dcccadfc6c67afacd">EEPROM::write</a>(&amp;eeprom_hash, hash);</div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00120">120</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00119">119</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a046768eae9f26564b1039a13b88bb8c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a046768eae9f26564b1039a13b88bb8c1">&#9670;&nbsp;</a></span>read() <span class="overload">[1/6]</span></h2>
@@ -232,7 +232,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#a53098f3e30521e9f2f86d42ed2a89450" title="Read value of type T stored in EEPROM at address. ">read(uint16_t, T&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00139">139</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00138">138</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -296,7 +296,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#a046768eae9f26564b1039a13b88bb8c1" title="Read value of type T stored in EEPROM at address. ">read(const T*, T&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00159">159</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00158">158</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -367,7 +367,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#ac2e5af4f9136b8371b4d36cbe3a428cc" title="Read an array of count values of type T stored in EEPROM at address. ">read(uint16_t, T*, uint16_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00184">184</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00183">183</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -438,7 +438,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#acfbee6f42a0fa46de7e3fa2fd486053d" title="Read an array of count values of type T stored in EEPROM at address. ">read(const T*, T*, uint16_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00205">205</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00204">204</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -493,7 +493,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#ae7099b3afca54eb52e4873c4fd799534" title="Read one byte stored in EEPROM at address. ">read(uint16_t, uint8_t&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00225">225</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00224">224</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -548,7 +548,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#a0982b1807616840c7477727a7ea7f1fa" title="Read one byte stored in EEPROM at address. ">read(const uint8_t*, uint8_t&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00241">241</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00240">240</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -612,7 +612,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#a3705ce9a3dbfe9b84d23b6daf6c01d49" title="Write the content of value of type T to the EEPROM at address. ">write(uint16_t, const T&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00268">268</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00267">267</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -676,7 +676,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#a3705ce9a3dbfe9b84d23b6daf6c01d49" title="Write the content of value of type T to the EEPROM at address. ">write(uint16_t, const T&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00288">288</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00287">287</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -747,7 +747,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#ab4e70925657bd8c8e9f21e3ea7d82155" title="Write value, an array of count values of type T to the EEPROM at address. ">write(uint16_t, const T*, uint16_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00313">313</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00312">312</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -818,7 +818,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#aae5666cb7c829afceca7aa04fcb51c80" title="Write value, an array of count values of type T to the EEPROM at address. ">write(const T*, const T*, uint16_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00334">334</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00333">333</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -873,7 +873,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#a874e1f73cd1018c21171ac3910952720" title="Write one byte to the EEPROM at address. ">write(uint16_t, uint8_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00353">353</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00352">352</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -928,7 +928,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html#a8d6b30acf5d3230698d70520e70b9515" title="Write one byte to the EEPROM at address. ">write(const uint8_t*, uint8_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00368">368</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00367">367</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -958,7 +958,7 @@ template&lt;typename T &gt; </div>
 <p>Erase the full <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> content. </p>
 <p>Note that "erasing" means setting all <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> cells to <code>0xFF</code>. The method will block until all <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> content has been erased. </p>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00380">380</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00379">379</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -988,7 +988,7 @@ template&lt;typename T &gt; </div>
 <p>Block until the current <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a> operation, whetever it is (e.g. </p>
 <p>read, write, erase), is complete. Normally, you would not need this method as any <code><a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a></code> method calls it before starting its operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00403">403</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00402">402</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>

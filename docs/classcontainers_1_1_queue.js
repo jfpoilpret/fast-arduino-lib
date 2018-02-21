@@ -12,6 +12,7 @@ var classcontainers_1_1_queue =
     [ "empty_", "classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678", null ],
     [ "items_", "classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd", null ],
     [ "free_", "classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f", null ],
+    [ "full_", "classcontainers_1_1_queue.html#ae11324e5034406bd864a2b9bb1d3470b", null ],
     [ "clear_", "classcontainers_1_1_queue.html#a37080cc6d5631ec3cfb859a4de0fb6c2", null ],
     [ "push", "classcontainers_1_1_queue.html#a202901193e7b1bf3d940094ff2d6219a", null ],
     [ "pull", "classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4", null ],
@@ -21,5 +22,6 @@ var classcontainers_1_1_queue =
     [ "empty", "classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f", null ],
     [ "items", "classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069", null ],
     [ "free", "classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308", null ],
+    [ "full", "classcontainers_1_1_queue.html#a9325c329a5241b3b53655bf7cfced0fc", null ],
     [ "clear", "classcontainers_1_1_queue.html#a757d9a4b0cceee0a2db3e93d36970603", null ]
 ];

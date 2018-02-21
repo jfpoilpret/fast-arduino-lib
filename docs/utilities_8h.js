@@ -22,6 +22,7 @@ var utilities_8h =
     [ "as_uint16_t", "utilities_8h.html#a9d48a47fd601d3b960ce55b26a4d5194", null ],
     [ "is_zero", "utilities_8h.html#a3525bf2bf63c9f906bc9b952f0d54355", null ],
     [ "set_mask", "utilities_8h.html#a983d6f3839652d22e2353e7cfeff63af", null ],
+    [ "is_mask_equal", "utilities_8h.html#a719f3f44a5cf8093953fbb97486bbee9", null ],
     [ "bcd_to_binary", "utilities_8h.html#af5b3426ba48caf5ee96ed71fa8b7bb5e", null ],
     [ "binary_to_bcd", "utilities_8h.html#a76076365828136f5178f279fb3c129de", null ],
     [ "swap_bytes", "utilities_8h.html#a53f4a46843c0030ed1388d10c0ad6179", null ],

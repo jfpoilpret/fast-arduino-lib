@@ -1,6 +1,7 @@
 var searchData=
 [
   ['data_5foverrun',['data_overrun',['../classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa',1,'serial::UARTErrors']]],
+  ['dataorder',['DataOrder',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7',1,'spi']]],
   ['dec',['dec',['../classstreams_1_1ios__base.html#a2a9b1d330a6408608b21ea3cd7044ae1',1,'streams::ios_base::dec()'],['../namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2',1,'streams::dec()']]],
   ['default_5fdelay',['default_delay',['../namespacetime.html#a4b83c440a676e0c7063a65d7c8476c12',1,'time']]],
   ['default_5fsend_5ftimeout',['DEFAULT_SEND_TIMEOUT',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a151fc3f129fb468663e1cdd1c69ba5e3',1,'devices::rf::NRF24L01']]],

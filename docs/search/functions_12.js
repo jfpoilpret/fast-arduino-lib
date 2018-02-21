@@ -6,6 +6,7 @@ var searchData=
   ['ticks_5fto_5fus',['ticks_to_us',['../structtimer_1_1_calculator.html#a53ed70bbedba38aea55fd24a375753bd',1,'timer::Calculator']]],
   ['timer',['Timer',['../classtimer_1_1_timer.html#a1f7f3052c127cad79c654f351bc68ae3',1,'timer::Timer']]],
   ['toggle',['toggle',['../classgpio_1_1_fast_pin.html#aa163ea832ed19672f76e8ae270f0d64d',1,'gpio::FastPin::toggle()'],['../classgpio_1_1_fast_pin_type.html#a6e3644253729ca175a250154ee553225',1,'gpio::FastPinType::toggle()']]],
+  ['transfer',['transfer',['../classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc',1,'spi::AbstractSPIDevice::transfer(uint8_t data)'],['../classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7',1,'spi::AbstractSPIDevice::transfer(uint8_t *data, uint16_t size)'],['../classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62',1,'spi::AbstractSPIDevice::transfer(uint8_t *data, uint16_t size, uint8_t sent)']]],
   ['traverse',['traverse',['../classcontainers_1_1_linked_list.html#a974fb6a46b9477e005b9c17a5b47ae72',1,'containers::LinkedList']]],
   ['type',['type',['../classevents_1_1_event.html#a4cc68c5a6710d276baa534b61a25f611',1,'events::Event::type()'],['../classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0',1,'events::EventHandler::type()']]]
 ];

@@ -35,7 +35,7 @@
 <area shape="rect" id="node21" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="229,341,387,367"/>
 <area shape="rect" id="node26" href="$i2c__manager_8h_source.html" title="fastarduino/i2c_manager.h" alt="" coords="2729,162,2903,189"/>
 <area shape="rect" id="node27" href="$i2c__device_8h_source.html" title="fastarduino/i2c_device.h" alt="" coords="2739,251,2901,278"/>
-<area shape="rect" id="node32" href="$spi_8h_source.html" title="fastarduino/spi.h" alt="" coords="1483,162,1602,189"/>
+<area shape="rect" id="node32" href="$spi_8h.html" title="SPI support for AVR MCU. " alt="" coords="1483,162,1602,189"/>
 <area shape="rect" id="node34" href="$sipo_8h_source.html" title="fastarduino/devices\l/sipo.h" alt="" coords="1934,155,2069,196"/>
 <area shape="rect" id="node35" href="$pwm_8h.html" title="PWM API. " alt="" coords="1729,162,1858,189"/>
 <area shape="rect" id="node33" href="$spi_8cpp_source.html" title="fastarduino/spi.cpp" alt="" coords="1575,251,1707,278"/>

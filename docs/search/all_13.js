@@ -5,7 +5,7 @@ var searchData=
   ['uart_5fcommons_2eh',['uart_commons.h',['../uart__commons_8h.html',1,'']]],
   ['uarterrors',['UARTErrors',['../classserial_1_1_u_a_r_t_errors.html',1,'serial']]],
   ['uarx',['UARX',['../classserial_1_1soft_1_1_u_a_r_x.html',1,'serial::soft::UARX&lt; RX_ &gt;'],['../classserial_1_1hard_1_1_u_a_r_x.html',1,'serial::hard::UARX&lt; USART_ &gt;'],['../classserial_1_1hard_1_1_u_a_r_x.html#a5e4adca3a15c030fde986c65e0971f3e',1,'serial::hard::UARX::UARX()']]],
-  ['uatx',['UATX',['../classserial_1_1hard_1_1_u_a_t_x.html',1,'serial::hard::UATX&lt; USART_ &gt;'],['../classserial_1_1soft_1_1_u_a_t_x.html',1,'serial::soft::UATX&lt; TX_ &gt;'],['../classserial_1_1hard_1_1_u_a_t_x.html#aac216368224107002b59b0400626306e',1,'serial::hard::UATX::UATX()']]],
+  ['uatx',['UATX',['../classserial_1_1soft_1_1_u_a_t_x.html',1,'serial::soft::UATX&lt; TX_ &gt;'],['../classserial_1_1hard_1_1_u_a_t_x.html',1,'serial::hard::UATX&lt; USART_ &gt;'],['../classserial_1_1hard_1_1_u_a_t_x.html#aac216368224107002b59b0400626306e',1,'serial::hard::UATX::UATX()']]],
   ['unitbuf',['unitbuf',['../classstreams_1_1ios__base.html#adf13f8be7e7aadff99dc440276d23e69',1,'streams::ios_base::unitbuf()'],['../namespacestreams.html#ae5c27f1451f13e2158abbf5abe491830',1,'streams::unitbuf()']]],
   ['unitprefix',['UnitPrefix',['../namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0',1,'utils']]],
   ['unsetf',['unsetf',['../classstreams_1_1ios__base.html#a7ce5897064ad025f995125b2a59194ff',1,'streams::ios_base']]],

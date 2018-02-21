@@ -5,6 +5,8 @@ var searchData=
   ['abstractspidevice',['AbstractSPIDevice',['../classspi_1_1_abstract_s_p_i_device.html',1,'spi']]],
   ['abstractuarx',['AbstractUARX',['../classserial_1_1soft_1_1_abstract_u_a_r_x.html',1,'serial::soft']]],
   ['abstractuatx',['AbstractUATX',['../classserial_1_1soft_1_1_abstract_u_a_t_x.html',1,'serial::soft']]],
+  ['active_5fhigh',['ACTIVE_HIGH',['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bab868e37f0edfdbea9838600657b6f4b3',1,'spi']]],
+  ['active_5flow',['ACTIVE_LOW',['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bae434209643a0d01f383a46eece525679',1,'spi']]],
   ['addr_5ft',['addr_t',['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html',1,'devices::rf::NRF24L01']]],
   ['adjustfield',['adjustfield',['../classstreams_1_1ios__base.html#aeb6a15be95b2ef5e32d8584f07f6aba8',1,'streams::ios_base']]],
   ['allsensors',['AllSensors',['../structdevices_1_1magneto_1_1_all_sensors.html',1,'devices::magneto']]],

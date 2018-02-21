@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('eeprom_8h.html','');});
 <div class="textblock"><code>#include &lt;avr/io.h&gt;</code><br />
 <code>#include &lt;avr/interrupt.h&gt;</code><br />
 <code>#include &lt;avr/eeprom.h&gt;</code><br />
+<code>#include &quot;boards/board.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="interrupts_8h_source.html">interrupts.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utilities_8h_source.html">utilities.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="queue_8h_source.html">queue.h</a>&quot;</code><br />
@@ -102,10 +103,11 @@ Include dependency graph for eeprom.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="eeprom_8h__incl.png" border="0" usemap="#fastarduino_2eeprom_8h" alt=""/></div>
 <map name="fastarduino_2eeprom_8h" id="fastarduino_2eeprom_8h">
-<area shape="rect" id="node5" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="167,80,253,107"/>
-<area shape="rect" id="node6" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="259,229,334,256"/>
-<area shape="rect" id="node8" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="329,80,397,107"/>
-<area shape="rect" id="node9" href="time_8h.html" title="Simple time utilities. " alt="" coords="379,155,438,181"/>
+<area shape="rect" id="node5" href="board_8h_source.html" title="boards/board.h" alt="" coords="168,80,276,107"/>
+<area shape="rect" id="node6" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="300,80,387,107"/>
+<area shape="rect" id="node7" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="413,229,488,256"/>
+<area shape="rect" id="node9" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="487,80,555,107"/>
+<area shape="rect" id="node11" href="time_8h.html" title="Simple time utilities. " alt="" coords="601,155,660,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -169,7 +171,7 @@ Macros</h2></td></tr>
 <p>Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00037">37</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00038">38</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>
@@ -198,7 +200,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">ISR(EE_READY_vect)                                                             \</div><div class="line">    {                                                                              \</div><div class="line">        using WRT_HANDLER = <a class="code" href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a>;                                  \</div><div class="line">        using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);                           \</div><div class="line">        if (WRT_HOLDER::handler()-&gt;on_ready()) CALL_HANDLER_(HANDLER, CALLBACK)(); \</div><div class="line">    }</div><div class="ttc" id="classeeprom_1_1_queued_writer_html"><div class="ttname"><a href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a></div><div class="ttdoc">API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...</div><div class="ttdef"><b>Definition:</b> <a href="eeprom_8h_source.html#l00514">eeprom.h:514</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line">ISR(EE_READY_vect)                                                             \</div><div class="line">    {                                                                              \</div><div class="line">        using WRT_HANDLER = <a class="code" href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a>;                                  \</div><div class="line">        using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);                           \</div><div class="line">        if (WRT_HOLDER::handler()-&gt;on_ready()) CALL_HANDLER_(HANDLER, CALLBACK)(); \</div><div class="line">    }</div><div class="ttc" id="classeeprom_1_1_queued_writer_html"><div class="ttname"><a href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a></div><div class="ttdoc">API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...</div><div class="ttdef"><b>Definition:</b> <a href="eeprom_8h_source.html#l00513">eeprom.h:513</a></div></div>
 </div><!-- fragment -->
 <p>Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -208,9 +210,7 @@ Macros</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> </dd>
-<dd>
-eeprom::QueuedWriter::on_ready() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00052">52</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
@@ -231,7 +231,7 @@ eeprom::QueuedWriter::on_ready() </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">ISR(EE_READY_vect)                                     \</div><div class="line">    {                                                      \</div><div class="line">        using WRT_HANDLER = <a class="code" href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a>;          \</div><div class="line">        using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);   \</div><div class="line">        if (WRT_HOLDER::handler()-&gt;on_ready()) CALLBACK(); \</div><div class="line">    }</div><div class="ttc" id="classeeprom_1_1_queued_writer_html"><div class="ttname"><a href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a></div><div class="ttdoc">API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...</div><div class="ttdef"><b>Definition:</b> <a href="eeprom_8h_source.html#l00514">eeprom.h:514</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line">ISR(EE_READY_vect)                                     \</div><div class="line">    {                                                      \</div><div class="line">        using WRT_HANDLER = <a class="code" href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a>;          \</div><div class="line">        using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);   \</div><div class="line">        if (WRT_HOLDER::handler()-&gt;on_ready()) CALLBACK(); \</div><div class="line">    }</div><div class="ttc" id="classeeprom_1_1_queued_writer_html"><div class="ttname"><a href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a></div><div class="ttdoc">API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...</div><div class="ttdef"><b>Definition:</b> <a href="eeprom_8h_source.html#l00513">eeprom.h:513</a></div></div>
 </div><!-- fragment -->
 <p>Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete. </p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -240,11 +240,9 @@ eeprom::QueuedWriter::on_ready() </dd></dl>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> </dd>
-<dd>
-eeprom::QueuedWriter::on_ready() </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00071">71</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00070">70</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>
 </div>

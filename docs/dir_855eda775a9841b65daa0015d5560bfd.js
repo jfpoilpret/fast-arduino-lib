@@ -38,9 +38,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "pwm.h", "pwm_8h.html", [
       [ "PWMOutput", "classanalog_1_1_p_w_m_output.html", "classanalog_1_1_p_w_m_output" ]
     ] ],
-    [ "queue.h", "queue_8h.html", [
-      [ "Queue", "classcontainers_1_1_queue.html", "classcontainers_1_1_queue" ]
-    ] ],
+    [ "queue.h", "queue_8h.html", "queue_8h" ],
     [ "realtime_timer.h", "realtime__timer_8h.html", "realtime__timer_8h" ],
     [ "scheduler.h", "scheduler_8h.html", [
       [ "Scheduler", "classevents_1_1_scheduler.html", "classevents_1_1_scheduler" ],
@@ -49,7 +47,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "soft_uart.cpp", "soft__uart_8cpp_source.html", null ],
     [ "soft_uart.h", "soft__uart_8h_source.html", null ],
     [ "spi.cpp", "spi_8cpp_source.html", null ],
-    [ "spi.h", "spi_8h_source.html", null ],
+    [ "spi.h", "spi_8h.html", "spi_8h" ],
     [ "square_wave.h", "square__wave_8h_source.html", null ],
     [ "streambuf.h", "streambuf_8h.html", [
       [ "ostreambuf", "classstreams_1_1ostreambuf.html", "classstreams_1_1ostreambuf" ],

@@ -95,7 +95,7 @@ Inheritance diagram for devices::WinBond&lt; CS &gt;:</div>
 <div class="center"><img src="classdevices_1_1_win_bond__inherit__graph.png" border="0" usemap="#devices_1_1_win_bond_3_01_c_s_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="devices_1_1_win_bond_3_01_c_s_01_4_inherit__map" id="devices_1_1_win_bond_3_01_c_s_01_4_inherit__map">
 <area shape="rect" id="node2" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CS,\l spi::ChipSelect::ACTIVE\l_LOW, spi::ClockRate::CLOCK\l_DIV_2 \&gt;" alt="" coords="5,80,213,151"/>
-<area shape="rect" id="node3" href="classspi_1_1_abstract_s_p_i_device.html" title="spi::AbstractSPIDevice" alt="" coords="30,5,189,32"/>
+<area shape="rect" id="node3" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="30,5,189,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -104,7 +104,7 @@ Collaboration diagram for devices::WinBond&lt; CS &gt;:</div>
 <div class="center"><img src="classdevices_1_1_win_bond__coll__graph.png" border="0" usemap="#devices_1_1_win_bond_3_01_c_s_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="devices_1_1_win_bond_3_01_c_s_01_4_coll__map" id="devices_1_1_win_bond_3_01_c_s_01_4_coll__map">
 <area shape="rect" id="node2" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CS,\l spi::ChipSelect::ACTIVE\l_LOW, spi::ClockRate::CLOCK\l_DIV_2 \&gt;" alt="" coords="5,80,213,151"/>
-<area shape="rect" id="node3" href="classspi_1_1_abstract_s_p_i_device.html" title="spi::AbstractSPIDevice" alt="" coords="30,5,189,32"/>
+<area shape="rect" id="node3" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="30,5,189,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -220,21 +220,25 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>read_data</b> (uint32
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classspi_1_1_s_p_i_device"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classspi_1_1_s_p_i_device')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classspi_1_1_s_p_i_device.html">spi::SPIDevice&lt; CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2 &gt;</a></td></tr>
-<tr class="memitem:a4a6860cb1a7a09cc75a3b98abcb3dd0e inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a4a6860cb1a7a09cc75a3b98abcb3dd0e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>start_transfer</b> ()</td></tr>
+<tr class="memitem:af475ac99b2405d338d7a511709bb98a0 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="af475ac99b2405d338d7a511709bb98a0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#af475ac99b2405d338d7a511709bb98a0">SPIDevice</a> () INLINE</td></tr>
+<tr class="memdesc:af475ac99b2405d338d7a511709bb98a0 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <code>SPIDevice</code>; this sets up the <code>CS</code> pin for later use during transfers. <br /></td></tr>
+<tr class="separator:af475ac99b2405d338d7a511709bb98a0 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a6860cb1a7a09cc75a3b98abcb3dd0e inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e">start_transfer</a> ()</td></tr>
+<tr class="memdesc:a4a6860cb1a7a09cc75a3b98abcb3dd0e inherit pro_methods_classspi_1_1_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start an SPI transfer to this device.  <a href="classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e">More...</a><br /></td></tr>
 <tr class="separator:a4a6860cb1a7a09cc75a3b98abcb3dd0e inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7966a43f4b18fa308a637e28a5633722 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a7966a43f4b18fa308a637e28a5633722"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>end_transfer</b> () INLINE</td></tr>
+<tr class="memitem:a7966a43f4b18fa308a637e28a5633722 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722">end_transfer</a> () INLINE</td></tr>
+<tr class="memdesc:a7966a43f4b18fa308a637e28a5633722 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">End the current SPI ransfer tot hsi device.  <a href="classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722">More...</a><br /></td></tr>
 <tr class="separator:a7966a43f4b18fa308a637e28a5633722 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classspi_1_1_abstract_s_p_i_device"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classspi_1_1_abstract_s_p_i_device')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classspi_1_1_abstract_s_p_i_device.html">spi::AbstractSPIDevice</a></td></tr>
-<tr class="memitem:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a5439aabb817119e079f29a8eddfd3edc"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>transfer</b> (uint8_t data)</td></tr>
+<tr class="memitem:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a> (uint8_t data)</td></tr>
+<tr class="memdesc:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte returned by the device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">More...</a><br /></td></tr>
 <tr class="separator:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a63111d80e27d147a46e9654346a0b0b7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>transfer</b> (uint8_t *data, uint16_t size)</td></tr>
+<tr class="memitem:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">transfer</a> (uint8_t *data, uint16_t size)</td></tr>
+<tr class="memdesc:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">More...</a><br /></td></tr>
 <tr class="separator:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a3a92225a72e5136406cadaabbef0cb62"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>transfer</b> (uint8_t *data, uint16_t size, uint8_t sent)</td></tr>
+<tr class="memitem:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">transfer</a> (uint8_t *data, uint16_t size, uint8_t sent)</td></tr>
+<tr class="memdesc:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">More...</a><br /></td></tr>
 <tr class="separator:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>

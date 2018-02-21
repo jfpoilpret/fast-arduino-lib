@@ -81,7 +81,8 @@ $(document).ready(function(){initNavTree('namespacewatchdog.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">watchdog Namespace Reference</div>  </div>
 </div><!--header-->
@@ -98,10 +99,87 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple API to handle watchdog signals.  <a href="classwatchdog_1_1_watchdog_signal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ae2234bf414f2a2e1b774538e7cecd01b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">TimeOut</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba5c127bc3e865ef5b3f22a5a89f088bfa">TimeOut::TO_32ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01baa242d79167431204d86c7aa65a03c14a">TimeOut::TO_64ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01bad7219a43d3bfae8995c16e4cd3188fe4">TimeOut::TO_125ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01bae313983d43e7304bffbd4d82cdb9ecfc">TimeOut::TO_250ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01bafb811591cc29f5e01ef24eeb560868b1">TimeOut::TO_500ms</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01babf2e5dd4acceb83564e09d08753331fc">TimeOut::TO_1s</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01badc12ed02078a2edaa012491658089e28">TimeOut::TO_2s</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01baf043bc9855a6e47ea123ff80769e7870">TimeOut::TO_4s</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba20bf5a68c13809216a5ec3d321a7a7b2">TimeOut::TO_8s</a>
+<br />
+ }<tr class="memdesc:ae2234bf414f2a2e1b774538e7cecd01b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the watchdog timeout period; watchdog interrupts will be triggered at the selected period.  <a href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:ae2234bf414f2a2e1b774538e7cecd01b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines the simple API for <a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timer management. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ae2234bf414f2a2e1b774538e7cecd01b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2234bf414f2a2e1b774538e7cecd01b">&#9670;&nbsp;</a></span>TimeOut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">watchdog::TimeOut</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Defines the watchdog timeout period; watchdog interrupts will be triggered at the selected period. </p>
+<p>The MCU will be awakened at this period too. Note that watchdog timeout period is not very accurate, you would normally not use for real-time counting. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c"></a>TO_16ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 16 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01ba5c127bc3e865ef5b3f22a5a89f088bfa"></a>TO_32ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 32 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01baa242d79167431204d86c7aa65a03c14a"></a>TO_64ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 64 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01bad7219a43d3bfae8995c16e4cd3188fe4"></a>TO_125ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 125 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01bae313983d43e7304bffbd4d82cdb9ecfc"></a>TO_250ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 250 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01bafb811591cc29f5e01ef24eeb560868b1"></a>TO_500ms&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 500 ms. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01babf2e5dd4acceb83564e09d08753331fc"></a>TO_1s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 1 second. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01badc12ed02078a2edaa012491658089e28"></a>TO_2s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 2 seconds. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01baf043bc9855a6e47ea123ff80769e7870"></a>TO_4s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 4 seconds. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae2234bf414f2a2e1b774538e7cecd01ba20bf5a68c13809216a5ec3d321a7a7b2"></a>TO_8s&#160;</td><td class="fielddoc"><p><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">Watchdog</a> timeout 8 seconds. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00078">78</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

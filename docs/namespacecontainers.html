@@ -81,7 +81,8 @@ $(document).ready(function(){initNavTree('namespacecontainers.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">containers Namespace Reference</div>  </div>
 </div><!--header-->
@@ -101,6 +102,17 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html">Queue</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcontainers_1_1_queue.html" title="Queue of type T_ items. ">Queue</a> of type <code>T_</code> items.  <a href="classcontainers_1_1_queue.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ad31e49a84cd01e80e5c66859820ca8c9"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TREF &gt; </td></tr>
+<tr class="memitem:ad31e49a84cd01e80e5c66859820ca8c9"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecontainers.html#ad31e49a84cd01e80e5c66859820ca8c9">pull</a> (<a class="el" href="classcontainers_1_1_queue.html">Queue</a>&lt; T, TREF &gt; &amp;queue)</td></tr>
+<tr class="memdesc:ad31e49a84cd01e80e5c66859820ca8c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pull an item from the beginning of <code>queue</code>.  <a href="#ad31e49a84cd01e80e5c66859820ca8c9">More...</a><br /></td></tr>
+<tr class="separator:ad31e49a84cd01e80e5c66859820ca8c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb750042e76f224f2e2a7baeb2e5998a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TREF &gt; </td></tr>
+<tr class="memitem:abb750042e76f224f2e2a7baeb2e5998a"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecontainers.html#abb750042e76f224f2e2a7baeb2e5998a">peek</a> (<a class="el" href="classcontainers_1_1_queue.html">Queue</a>&lt; T, TREF &gt; &amp;queue)</td></tr>
+<tr class="memdesc:abb750042e76f224f2e2a7baeb2e5998a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek an item from the beginning of <code>queue</code>.  <a href="#abb750042e76f224f2e2a7baeb2e5998a">More...</a><br /></td></tr>
+<tr class="separator:abb750042e76f224f2e2a7baeb2e5998a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains all FastArduino generic containers: </p>
@@ -108,7 +120,66 @@ Classes</h2></td></tr>
 <li>linked list</li>
 <li>ring buffer queue Those containers are often used directly by several FastArduino API but you may also use them for your own needs. </li>
 </ul>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ad31e49a84cd01e80e5c66859820ca8c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad31e49a84cd01e80e5c66859820ca8c9">&#9670;&nbsp;</a></span>pull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename TREF &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T containers::pull </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html">Queue</a>&lt; T, TREF &gt; &amp;&#160;</td>
+          <td class="paramname"><em>queue</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pull an item from the beginning of <code>queue</code>. </p>
+<p>The item is removed from the queue. This method wait until one item is available in <code>queue</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>the first item pulled from <code>queue</code> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4" title="Pull an item from the beginning of this queue, if not empty, and copy it into item. ">Queue::pull()</a> </dd>
+<dd>
+<a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00516">516</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="abb750042e76f224f2e2a7baeb2e5998a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb750042e76f224f2e2a7baeb2e5998a">&#9670;&nbsp;</a></span>peek()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename TREF &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T containers::peek </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html">Queue</a>&lt; T, TREF &gt; &amp;&#160;</td>
+          <td class="paramname"><em>queue</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Peek an item from the beginning of <code>queue</code>. </p>
+<p>The queue is NOT modified, no item is removed from the queue. This method wait until one item is available in <code>queue</code>.</p>
+<dl class="section return"><dt>Returns</dt><dd>the first item peeked from <code>queue</code> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde" title="Peek an item from the beginning of this queue, if not empty, and copy it into item. ">Queue::peek()</a> </dd>
+<dd>
+<a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00533">533</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

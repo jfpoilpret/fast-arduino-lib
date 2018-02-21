@@ -11,6 +11,7 @@ var classtimer_1_1_timer =
     [ "set_input_capture", "classtimer_1_1_timer.html#aaf3b504cc37e25a8f3b5e45d8654d56f", null ],
     [ "input_capture", "classtimer_1_1_timer.html#ac9b50f7485c4624f2969c6eef5039282", null ],
     [ "set_timer_mode", "classtimer_1_1_timer.html#adc0a234beadd50acf07c9f6d4b7b51a2", null ],
+    [ "get_timer_mode", "classtimer_1_1_timer.html#aab067b194a8fb9c434e38685d26d7bca", null ],
     [ "set_prescaler", "classtimer_1_1_timer.html#ac06e4933474b879f70fca5b247726dfd", null ],
     [ "begin", "classtimer_1_1_timer.html#a49223d1ed23608153551adbf07248130", null ],
     [ "begin_", "classtimer_1_1_timer.html#aca09928402314708df17ca6507acf007", null ],

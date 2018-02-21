@@ -20,6 +20,7 @@ var searchData=
   ['enable_5fpins_5f',['enable_pins_',['../classinterrupt_1_1_p_c_i_signal.html#ae1dab5eae5175b5ccf2f6b2f01f9ba04',1,'interrupt::PCISignal']]],
   ['end',['end',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123',1,'devices::rf::NRF24L01::end()'],['../classtimer_1_1_timer.html#ab519c9b538f35b2d691c4509dd05e90b',1,'timer::Timer::end()'],['../classserial_1_1hard_1_1_u_a_t_x.html#aefd9bfc4341322aba0b7e6875ec2fbba',1,'serial::hard::UATX::end()'],['../classserial_1_1hard_1_1_u_a_r_x.html#aa71b459ae36f387311f6558c5400926a',1,'serial::hard::UARX::end()'],['../classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab',1,'watchdog::WatchdogSignal::end()']]],
   ['end_5f',['end_',['../classtimer_1_1_timer.html#a996b44c8a60d4d14a9cdc159e385282d',1,'timer::Timer']]],
+  ['end_5ftransfer',['end_transfer',['../classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722',1,'spi::SPIDevice']]],
   ['endl',['endl',['../namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22',1,'streams']]],
   ['eof',['EOF',['../classstreams_1_1istreambuf.html#a99e49d98dc017ef8d9a34619f0c9bc38',1,'streams::istreambuf::EOF()'],['../classstreams_1_1ios__base.html#ad85b4ac8316bdfb945c33589e25c1db0',1,'streams::ios_base::eof()']]],
   ['eofbit',['eofbit',['../classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70',1,'streams::ios_base']]],

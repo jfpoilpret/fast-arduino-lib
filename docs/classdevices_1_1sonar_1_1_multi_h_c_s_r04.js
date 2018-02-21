@@ -8,7 +8,6 @@ var classdevices_1_1sonar_1_1_multi_h_c_s_r04 =
     [ "all_ready", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a91a6278019999628c1b7552272567a55", null ],
     [ "set_ready", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#adaa8097e1fb62f58f28c4d0cc105ae22", null ],
     [ "trigger", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a3e68f7569defd1991744094cbbbe8960", null ],
-    [ "on_pin_change", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a0fa3887fba5ed4340e59fca44d93b9d7", null ],
     [ "NTIMER", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#ad416c8c9cf3de34894fd8e3fd281927a", null ],
     [ "TRIGGER", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#af153ac82a0b22b25ec77c6e8444ce37f", null ],
     [ "ECHO_PORT", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a864143a05372dfa850e3aacca778ef7f", null ],

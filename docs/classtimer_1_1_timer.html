@@ -150,6 +150,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adc0a234beadd50acf07c9f6d4b7b51a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_timer.html#adc0a234beadd50acf07c9f6d4b7b51a2">set_timer_mode</a> (<a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097">TimerMode</a> timer_mode)</td></tr>
 <tr class="memdesc:adc0a234beadd50acf07c9f6d4b7b51a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change timer mode.  <a href="#adc0a234beadd50acf07c9f6d4b7b51a2">More...</a><br /></td></tr>
 <tr class="separator:adc0a234beadd50acf07c9f6d4b7b51a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab067b194a8fb9c434e38685d26d7bca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097">TimerMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_timer.html#aab067b194a8fb9c434e38685d26d7bca">get_timer_mode</a> () const</td></tr>
+<tr class="memdesc:aab067b194a8fb9c434e38685d26d7bca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get current time mode.  <a href="#aab067b194a8fb9c434e38685d26d7bca">More...</a><br /></td></tr>
+<tr class="separator:aab067b194a8fb9c434e38685d26d7bca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac06e4933474b879f70fca5b247726dfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_timer.html#ac06e4933474b879f70fca5b247726dfd">set_prescaler</a> (<a class="el" href="classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c">PRESCALER</a> prescaler)</td></tr>
 <tr class="memdesc:ac06e4933474b879f70fca5b247726dfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change prescaler for this timer.  <a href="#ac06e4933474b879f70fca5b247726dfd">More...</a><br /></td></tr>
 <tr class="separator:ac06e4933474b879f70fca5b247726dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -527,6 +530,38 @@ template&lt;board::Timer NTIMER_&gt; </div>
 
 </div>
 </div>
+<a id="aab067b194a8fb9c434e38685d26d7bca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab067b194a8fb9c434e38685d26d7bca">&#9670;&nbsp;</a></span>get_timer_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097">TimerMode</a> <a class="el" href="classtimer_1_1_timer.html">timer::Timer</a>&lt; NTIMER_ &gt;::get_timer_mode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get current time mode. </p>
+<p>This method exists only for the sake of completeness; if not really needed, do not use it, as it will generate extra code with no real added value. </p>
+
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00856">856</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+
+</div>
+</div>
 <a id="ac06e4933474b879f70fca5b247726dfd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac06e4933474b879f70fca5b247726dfd">&#9670;&nbsp;</a></span>set_prescaler()</h2>
 
@@ -561,7 +596,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00856">856</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00865">865</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -602,7 +637,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#aca09928402314708df17ca6507acf007" title="Start this timer in the currently selected mode, with the provided prescaler value and max value...">begin_(TYPE)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00878">878</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00885">885</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -643,7 +678,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#a49223d1ed23608153551adbf07248130" title="Start this timer in the currently selected mode, with the provided prescaler value and max value...">begin(TYPE)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00896">896</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00903">903</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -675,7 +710,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>Reset current counter to 0. </p>
 <p>This method is synchronized if needed (i.e. if this timer is 16 bits). If you do not need synchronization, then you should better use <code><a class="el" href="classtimer_1_1_timer.html#a497b0367ce1029ef94300dc845b13912" title="Reset current counter to 0. ">reset_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_timer.html#a497b0367ce1029ef94300dc845b13912" title="Reset current counter to 0. ">reset_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00917">917</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00924">924</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -707,7 +742,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>Reset current counter to 0. </p>
 <p>Note that this method is not synchronized, hence you should ensure it is called only while interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classtimer_1_1_timer.html#a1efbbfd198ed05ba360e9e537e16f255" title="Reset current counter to 0. ">reset()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_timer.html#a1efbbfd198ed05ba360e9e537e16f255" title="Reset current counter to 0. ">reset()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00933">933</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00940">940</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -739,7 +774,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>Return the current counter value for this timer. </p>
 <p>This method is synchronized if needed (i.e. if this timer is 16 bits). If you do not need synchronization, then you should better use <code><a class="el" href="classtimer_1_1_timer.html#a7c939960ca27edadffbd275959b2ef3a" title="Return the current counter value for this timer. ">ticks_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_timer.html#a7c939960ca27edadffbd275959b2ef3a" title="Return the current counter value for this timer. ">ticks_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00945">945</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00952">952</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -771,7 +806,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>Return the current counter value for this timer. </p>
 <p>Note that this method is not synchronized, hence you should ensure it is called only while interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56" title="Return the current counter value for this timer. ">ticks()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56" title="Return the current counter value for this timer. ">ticks()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00961">961</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00968">968</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -805,7 +840,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#a4d0cc43223d237155093ae82b2a9ac46" title="Temporarily suspend this timer: the timer does not generate any interrupt any longer. ">suspend_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00976">976</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00983">983</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -839,7 +874,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#a7f48e7e02140100e2d6a7216efbeab64" title="Temporarily suspend this timer: the timer does not generate any interrupt any longer. ">suspend()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00991">991</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00998">998</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -873,7 +908,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#abcb42e79a7b037d368cc050212ee7f70" title="Resume this timer if it was previously suspended: the timer&#39;s counter is reset and the timer starts g...">resume_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01007">1007</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01014">1014</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -907,7 +942,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#afe042f3db2c961f846587cfb53b27fd8" title="Resume this timer if it was previously suspended: the timer&#39;s counter is reset and the timer starts g...">resume()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01022">1022</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01029">1029</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -945,7 +980,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01036">1036</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01043">1043</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -979,7 +1014,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#a996b44c8a60d4d14a9cdc159e385282d" title="Completely stop this timer: timer interrupts are disabled and counter is stopped. ...">end_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01051">1051</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01058">1058</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -1013,7 +1048,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="classtimer_1_1_timer.html#ab519c9b538f35b2d691c4509dd05e90b" title="Completely stop this timer: timer interrupts are disabled and counter is stopped. ...">end()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01066">1066</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01073">1073</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -1059,7 +1094,7 @@ template&lt;uint8_t COM&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01081">1081</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01088">1088</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -1106,7 +1141,7 @@ template&lt;uint8_t COM&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01098">1098</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l01105">1105</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>

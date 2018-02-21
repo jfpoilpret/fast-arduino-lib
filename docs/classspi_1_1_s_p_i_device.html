@@ -87,12 +87,17 @@ $(document).ready(function(){initNavTree('classspi_1_1_s_p_i_device.html','');})
 <div class="title">spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Base class for any SPI slave device.  
+ <a href="classspi_1_1_s_p_i_device.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="spi_8h_source.html">fastarduino/spi.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classspi_1_1_s_p_i_device__inherit__graph.png" border="0" usemap="#spi_1_1_s_p_i_device_3_01_c_s_00_01_c_s___m_o_d_e_00_01_r_a_t_e_00_01_m_o_d_e_00_01_o_r_d_e_r_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="spi_1_1_s_p_i_device_3_01_c_s_00_01_c_s___m_o_d_e_00_01_r_a_t_e_00_01_m_o_d_e_00_01_o_r_d_e_r_01_4_inherit__map" id="spi_1_1_s_p_i_device_3_01_c_s_00_01_c_s___m_o_d_e_00_01_r_a_t_e_00_01_m_o_d_e_00_01_o_r_d_e_r_01_4_inherit__map">
-<area shape="rect" id="node2" href="classspi_1_1_abstract_s_p_i_device.html" title="spi::AbstractSPIDevice" alt="" coords="20,5,179,32"/>
+<area shape="rect" id="node2" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="20,5,179,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -100,36 +105,118 @@ Collaboration diagram for spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;
 <div class="dyncontent">
 <div class="center"><img src="classspi_1_1_s_p_i_device__coll__graph.png" border="0" usemap="#spi_1_1_s_p_i_device_3_01_c_s_00_01_c_s___m_o_d_e_00_01_r_a_t_e_00_01_m_o_d_e_00_01_o_r_d_e_r_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="spi_1_1_s_p_i_device_3_01_c_s_00_01_c_s___m_o_d_e_00_01_r_a_t_e_00_01_m_o_d_e_00_01_o_r_d_e_r_01_4_coll__map" id="spi_1_1_s_p_i_device_3_01_c_s_00_01_c_s___m_o_d_e_00_01_r_a_t_e_00_01_m_o_d_e_00_01_o_r_d_e_r_01_4_coll__map">
-<area shape="rect" id="node2" href="classspi_1_1_abstract_s_p_i_device.html" title="spi::AbstractSPIDevice" alt="" coords="20,5,179,32"/>
+<area shape="rect" id="node2" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="20,5,179,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a4a6860cb1a7a09cc75a3b98abcb3dd0e"><td class="memItemLeft" align="right" valign="top"><a id="a4a6860cb1a7a09cc75a3b98abcb3dd0e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>start_transfer</b> ()</td></tr>
+<tr class="memitem:af475ac99b2405d338d7a511709bb98a0"><td class="memItemLeft" align="right" valign="top"><a id="af475ac99b2405d338d7a511709bb98a0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#af475ac99b2405d338d7a511709bb98a0">SPIDevice</a> () INLINE</td></tr>
+<tr class="memdesc:af475ac99b2405d338d7a511709bb98a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <code><a class="el" href="classspi_1_1_s_p_i_device.html" title="Base class for any SPI slave device. ">SPIDevice</a></code>; this sets up the <code>CS</code> pin for later use during transfers. <br /></td></tr>
+<tr class="separator:af475ac99b2405d338d7a511709bb98a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a6860cb1a7a09cc75a3b98abcb3dd0e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e">start_transfer</a> ()</td></tr>
+<tr class="memdesc:a4a6860cb1a7a09cc75a3b98abcb3dd0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start an SPI transfer to this device.  <a href="#a4a6860cb1a7a09cc75a3b98abcb3dd0e">More...</a><br /></td></tr>
 <tr class="separator:a4a6860cb1a7a09cc75a3b98abcb3dd0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7966a43f4b18fa308a637e28a5633722"><td class="memItemLeft" align="right" valign="top"><a id="a7966a43f4b18fa308a637e28a5633722"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>end_transfer</b> () INLINE</td></tr>
+<tr class="memitem:a7966a43f4b18fa308a637e28a5633722"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722">end_transfer</a> () INLINE</td></tr>
+<tr class="memdesc:a7966a43f4b18fa308a637e28a5633722"><td class="mdescLeft">&#160;</td><td class="mdescRight">End the current SPI ransfer tot hsi device.  <a href="#a7966a43f4b18fa308a637e28a5633722">More...</a><br /></td></tr>
 <tr class="separator:a7966a43f4b18fa308a637e28a5633722"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classspi_1_1_abstract_s_p_i_device"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classspi_1_1_abstract_s_p_i_device')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classspi_1_1_abstract_s_p_i_device.html">spi::AbstractSPIDevice</a></td></tr>
-<tr class="memitem:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a5439aabb817119e079f29a8eddfd3edc"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>transfer</b> (uint8_t data)</td></tr>
+<tr class="memitem:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a> (uint8_t data)</td></tr>
+<tr class="memdesc:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte returned by the device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">More...</a><br /></td></tr>
 <tr class="separator:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a63111d80e27d147a46e9654346a0b0b7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>transfer</b> (uint8_t *data, uint16_t size)</td></tr>
+<tr class="memitem:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">transfer</a> (uint8_t *data, uint16_t size)</td></tr>
+<tr class="memdesc:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">More...</a><br /></td></tr>
 <tr class="separator:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="a3a92225a72e5136406cadaabbef0cb62"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>transfer</b> (uint8_t *data, uint16_t size, uint8_t sent)</td></tr>
+<tr class="memitem:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">transfer</a> (uint8_t *data, uint16_t size, uint8_t sent)</td></tr>
+<tr class="memdesc:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">More...</a><br /></td></tr>
 <tr class="separator:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::DigitalPin CS, ChipSelect CS_MODE = ChipSelect::ACTIVE_LOW, ClockRate RATE = ClockRate::CLOCK_DIV_4, Mode MODE = Mode::MODE_0, DataOrder ORDER = DataOrder::MSB_FIRST&gt;<br />
 class spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;</h3>
 
+<p>Base class for any SPI slave device. </p>
+<p>It contains the barebones API for implementing a real device.</p>
+<p>Implementing a new SPI device consists mainly in subclassing <code><a class="el" href="classspi_1_1_s_p_i_device.html" title="Base class for any SPI slave device. ">SPIDevice</a></code> and add <code>public</code> device-specific methods that will use <code><a class="el" href="classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e" title="Start an SPI transfer to this device. ">start_transfer()</a></code>, <code><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc" title="Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte retur...">transfer()</a></code> and <code><a class="el" href="classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722" title="End the current SPI ransfer tot hsi device. ">end_transfer()</a></code> to communicate with the actual device.</p>
+<p>The snippet below illustrates this and summarizes the definition of an SPI based device, the Winbond W25Q80BV flash-memory chip: </p><div class="fragment"><div class="line"><span class="keyword">template</span>&lt;board::DigitalPin CS&gt;</div><div class="line"><span class="keyword">class </span>WinBond : <span class="keyword">public</span> <a class="code" href="classspi_1_1_s_p_i_device.html">spi::SPIDevice</a>&lt;CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2&gt;</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">inline</span> <span class="keywordtype">void</span> write_page(uint32_t address, uint8_t* data, uint8_t size)</div><div class="line">    {</div><div class="line">        send(0x02, address, data, (size == 0 ? 256 : size));</div><div class="line">    }</div><div class="line">    uint8_t read_data(uint32_t address);</div><div class="line">    <span class="keywordtype">void</span> read_data(uint32_t address, uint8_t* data, uint16_t size);</div><div class="line">    ...</div><div class="line">private:</div><div class="line">    <span class="keywordtype">void</span> send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size)</div><div class="line">    {</div><div class="line">        this-&gt;<a class="code" href="classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e">start_transfer</a>();</div><div class="line">        this-&gt;<a class="code" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a>(code);</div><div class="line">        this-&gt;<a class="code" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a>(address &gt;&gt; 16);</div><div class="line">        this-&gt;<a class="code" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a>(address &gt;&gt; 8);</div><div class="line">        this-&gt;<a class="code" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a>(address);</div><div class="line">        this-&gt;<a class="code" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a>(data, size);</div><div class="line">        this-&gt;<a class="code" href="classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722">end_transfer</a>();</div><div class="line">    }</div><div class="line">    ...</div><div class="line">};</div></div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">CS</td><td>the pin used to select the slave device </td></tr>
+    <tr><td class="paramname">CS_MODE</td><td>the chip select active mode </td></tr>
+    <tr><td class="paramname">RATE</td><td>the SPI clock rate for this device </td></tr>
+    <tr><td class="paramname">MODE</td><td>the SPI mode used for this device </td></tr>
+    <tr><td class="paramname">ORDER</td><td>the bit order for this device </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00128">128</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00272">272</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4a6860cb1a7a09cc75a3b98abcb3dd0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a6860cb1a7a09cc75a3b98abcb3dd0e">&#9670;&nbsp;</a></span>start_transfer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS, ChipSelect CS_MODE = ChipSelect::ACTIVE_LOW, ClockRate RATE = ClockRate::CLOCK_DIV_4, Mode MODE = Mode::MODE_0, DataOrder ORDER = DataOrder::MSB_FIRST&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classspi_1_1_s_p_i_device.html">spi::SPIDevice</a>&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;::start_transfer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start an SPI transfer to this device. </p>
+<p>Concretely this sets the active level on <code>CS</code> pin. </p>
+
+<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00288">288</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
+
+</div>
+</div>
+<a id="a7966a43f4b18fa308a637e28a5633722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7966a43f4b18fa308a637e28a5633722">&#9670;&nbsp;</a></span>end_transfer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS, ChipSelect CS_MODE = ChipSelect::ACTIVE_LOW, ClockRate RATE = ClockRate::CLOCK_DIV_4, Mode MODE = Mode::MODE_0, DataOrder ORDER = DataOrder::MSB_FIRST&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classspi_1_1_s_p_i_device.html">spi::SPIDevice</a>&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;::end_transfer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>End the current SPI ransfer tot hsi device. </p>
+<p>Concretely this clears the active level on <code>CS</code> pin. </p>
+
+<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00306">306</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="spi_8h_source.html">spi.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -137,7 +224,7 @@ class spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>spi</b></li><li class="navelem"><a class="el" href="classspi_1_1_s_p_i_device.html">SPIDevice</a></li>
+    <li class="navelem"><a class="el" href="namespacespi.html">spi</a></li><li class="navelem"><a class="el" href="classspi_1_1_s_p_i_device.html">SPIDevice</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

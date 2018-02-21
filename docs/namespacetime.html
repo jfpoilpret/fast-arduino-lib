@@ -278,7 +278,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00158">158</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00162">162</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>
@@ -315,7 +315,7 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00170">170</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00174">174</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>
@@ -381,7 +381,7 @@ template&lt;typename CLOCK &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00230">230</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00234">234</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>
@@ -424,8 +424,12 @@ template&lt;typename CLOCK &gt; </div>
 </div><div class="memdoc">
 
 <p>Count number of milliseconds elapsed since some time base reference (generally since MCU startup). </p>
-<p><code>millis</code> is not actually a function but a function pointer; this allows FastArduino to set the best implementation based on currently used features. By default, <code>millis</code> is not pointing to any concrete implementation, hence you should not call it if it has not been initialized yet. The following API initialize this pointer with specific implementations: TODO list implementations</p>
+<p><code>millis</code> is not actually a function but a function pointer; this allows FastArduino to set the best implementation based on currently used features. By default, <code>millis</code> is not pointing to any concrete implementation, hence you should not call it if it has not been initialized yet. You can initialize it with <code><a class="el" href="namespacetime.html#a91174eeb5231a67f897360fede29a0f6" title="Utility method to transform millis() and delay() methods of a clock instance of any CLOCK class into ...">timer::set_clock()</a></code> provided with the instance of a class implementing a minimal "clock" API. The following classes implement this minimal clock API:</p><ul>
+<li><code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code></li>
+<li><code><a class="el" href="classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation. ">watchdog::Watchdog</a></code></li>
+</ul>
 <dl class="section return"><dt>Returns</dt><dd>number of milliseconds elapsed since some given time base base reference </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacetime.html#a91174eeb5231a67f897360fede29a0f6" title="Utility method to transform millis() and delay() methods of a clock instance of any CLOCK class into ...">time::set_clock()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="time_8cpp_source.html#l00020">20</a> of file <a class="el" href="time_8cpp_source.html">time.cpp</a>.</p>
 

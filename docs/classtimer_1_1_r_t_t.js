@@ -1,6 +1,8 @@
 var classtimer_1_1_r_t_t =
 [
+    [ "CALC", "classtimer_1_1_r_t_t.html#a0ef2947e3c680508cd88407afaf00abd", null ],
     [ "RTT", "classtimer_1_1_r_t_t.html#aa75448a1d268c8c5aaec4111230c3d70", null ],
+    [ "on_timer", "classtimer_1_1_r_t_t.html#a72326103a8124a199be1961f123ecf1e", null ],
     [ "compute_micros", "classtimer_1_1_r_t_t.html#a7bb8128e7a27f22b38f4d2837d444202", null ],
     [ "NTIMER", "classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083", null ],
     [ "millis_", "classtimer_1_1_r_t_t.html#afc688bbc499251c6fe6490127d25b447", null ],

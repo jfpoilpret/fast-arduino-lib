@@ -11,6 +11,7 @@ var namespaces =
     [ "interrupt", "namespaceinterrupt.html", null ],
     [ "power", "namespacepower.html", null ],
     [ "serial", "namespaceserial.html", "namespaceserial" ],
+    [ "spi", "namespacespi.html", null ],
     [ "streams", "namespacestreams.html", null ],
     [ "time", "namespacetime.html", null ],
     [ "timer", "namespacetimer.html", null ],

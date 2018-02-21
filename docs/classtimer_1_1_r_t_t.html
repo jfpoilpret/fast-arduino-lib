@@ -81,6 +81,7 @@ $(document).ready(function(){initNavTree('classtimer_1_1_r_t_t.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
@@ -111,11 +112,20 @@ Collaboration diagram for timer::RTT&lt; NTIMER_ &gt;:</div>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a0ef2947e3c680508cd88407afaf00abd"><td class="memItemLeft" align="right" valign="top"><a id="a0ef2947e3c680508cd88407afaf00abd"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>CALC</b> = <a class="el" href="structtimer_1_1_calculator.html">Calculator</a>&lt; <a class="el" href="classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083">NTIMER</a> &gt;</td></tr>
+<tr class="separator:a0ef2947e3c680508cd88407afaf00abd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa75448a1d268c8c5aaec4111230c3d70"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t.html#aa75448a1d268c8c5aaec4111230c3d70">RTT</a> ()</td></tr>
 <tr class="memdesc:aa75448a1d268c8c5aaec4111230c3d70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new real-time timer handler and initializes its current time to 0ms.  <a href="#aa75448a1d268c8c5aaec4111230c3d70">More...</a><br /></td></tr>
 <tr class="separator:aa75448a1d268c8c5aaec4111230c3d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72326103a8124a199be1961f123ecf1e"><td class="memItemLeft" align="right" valign="top"><a id="a72326103a8124a199be1961f123ecf1e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>on_timer</b> ()</td></tr>
+<tr class="separator:a72326103a8124a199be1961f123ecf1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7bb8128e7a27f22b38f4d2837d444202"><td class="memItemLeft" align="right" valign="top"><a id="a7bb8128e7a27f22b38f4d2837d444202"></a>
 uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>compute_micros</b> () const</td></tr>
 <tr class="separator:a7bb8128e7a27f22b38f4d2837d444202"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,10 +145,10 @@ Static Public Attributes</h2></td></tr>
 static constexpr const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>ONE_MILLI</b> = 1000UL</td></tr>
 <tr class="separator:a500741e50a6e02422b855a318d5778cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5c7bcd3be6c2542594b86ddef5dc01c"><td class="memItemLeft" align="right" valign="top"><a id="af5c7bcd3be6c2542594b86ddef5dc01c"></a>
-static constexpr const PRESCALER&#160;</td><td class="memItemRight" valign="bottom"><b>MILLI_PRESCALER</b> = CALC::CTC_prescaler(ONE_MILLI)</td></tr>
+static constexpr const PRESCALER&#160;</td><td class="memItemRight" valign="bottom"><b>MILLI_PRESCALER</b> = <a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29">CALC::CTC_prescaler</a>(ONE_MILLI)</td></tr>
 <tr class="separator:af5c7bcd3be6c2542594b86ddef5dc01c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a058b6796457d756108eef7d8fac8b7a4"><td class="memItemLeft" align="right" valign="top"><a id="a058b6796457d756108eef7d8fac8b7a4"></a>
-static constexpr const TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>MILLI_COUNTER</b> = CALC::CTC_counter(MILLI_PRESCALER, ONE_MILLI)</td></tr>
+static constexpr const TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>MILLI_COUNTER</b> = <a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455">CALC::CTC_counter</a>(MILLI_PRESCALER, ONE_MILLI)</td></tr>
 <tr class="separator:a058b6796457d756108eef7d8fac8b7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>

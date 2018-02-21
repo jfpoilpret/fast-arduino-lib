@@ -38,6 +38,8 @@ var searchData=
   ['frame_5ferror',['frame_error',['../classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7',1,'serial::UARTErrors']]],
   ['free',['free',['../classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308',1,'containers::Queue']]],
   ['free_5f',['free_',['../classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f',1,'containers::Queue']]],
+  ['full',['full',['../classcontainers_1_1_queue.html#a9325c329a5241b3b53655bf7cfced0fc',1,'containers::Queue']]],
+  ['full_5f',['full_',['../classcontainers_1_1_queue.html#ae11324e5034406bd864a2b9bb1d3470b',1,'containers::Queue']]],
   ['fastarduino_20documentation',['FastArduino Documentation',['../index.html',1,'']]],
   ['fastarduino_20api_20tutorial',['FastArduino API Tutorial',['../tutorial.html',1,'']]]
 ];

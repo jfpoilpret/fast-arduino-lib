@@ -82,7 +82,8 @@ $(document).ready(function(){initNavTree('queue_8h.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">queue.h File Reference</div>  </div>
 </div><!--header-->
@@ -90,15 +91,16 @@ $(document).ready(function(){initNavTree('queue_8h.html','');});
 
 <p>Utility API to handle ring-buffer queue containers.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="utilities_8h_source.html">utilities.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;math.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="utilities_8h_source.html">utilities.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="time_8h_source.html">time.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for queue.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="queue_8h__incl.png" border="0" usemap="#fastarduino_2queue_8h" alt=""/></div>
 <map name="fastarduino_2queue_8h" id="fastarduino_2queue_8h">
-<area shape="rect" id="node2" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="53,155,127,181"/>
-<area shape="rect" id="node5" href="time_8h.html" title="Simple time utilities. " alt="" coords="147,80,206,107"/>
+<area shape="rect" id="node3" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="62,155,137,181"/>
+<area shape="rect" id="node6" href="time_8h.html" title="Simple time utilities. " alt="" coords="157,80,215,107"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -138,6 +140,17 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacecontainers"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecontainers.html">containers</a></td></tr>
 <tr class="memdesc:namespacecontainers"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains all FastArduino generic containers: <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ad31e49a84cd01e80e5c66859820ca8c9"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TREF &gt; </td></tr>
+<tr class="memitem:ad31e49a84cd01e80e5c66859820ca8c9"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecontainers.html#ad31e49a84cd01e80e5c66859820ca8c9">containers::pull</a> (Queue&lt; T, TREF &gt; &amp;queue)</td></tr>
+<tr class="memdesc:ad31e49a84cd01e80e5c66859820ca8c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pull an item from the beginning of <code>queue</code>.  <a href="namespacecontainers.html#ad31e49a84cd01e80e5c66859820ca8c9">More...</a><br /></td></tr>
+<tr class="separator:ad31e49a84cd01e80e5c66859820ca8c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb750042e76f224f2e2a7baeb2e5998a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TREF &gt; </td></tr>
+<tr class="memitem:abb750042e76f224f2e2a7baeb2e5998a"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacecontainers.html#abb750042e76f224f2e2a7baeb2e5998a">containers::peek</a> (Queue&lt; T, TREF &gt; &amp;queue)</td></tr>
+<tr class="memdesc:abb750042e76f224f2e2a7baeb2e5998a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peek an item from the beginning of <code>queue</code>.  <a href="namespacecontainers.html#abb750042e76f224f2e2a7baeb2e5998a">More...</a><br /></td></tr>
+<tr class="separator:abb750042e76f224f2e2a7baeb2e5998a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Utility API to handle ring-buffer queue containers. </p>

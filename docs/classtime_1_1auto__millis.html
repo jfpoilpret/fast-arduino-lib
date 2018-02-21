@@ -102,7 +102,7 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Set a new <code><a class="el" href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70" title="Count number of milliseconds elapsed since some time base reference (generally since MCU startup)...">time::millis</a></code> function for the duration of the current scope; when the scope is left, the previous <code><a class="el" href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70" title="Count number of milliseconds elapsed since some time base reference (generally since MCU startup)...">time::millis</a></code> function is restored. </p>
 <p>Usage example: </p><div class="fragment"><div class="line">uint32_t my_millis()</div><div class="line">{</div><div class="line">    ...</div><div class="line">}</div><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <span class="comment">// Set new time::millis function</span></div><div class="line">    <a class="code" href="classtime_1_1auto__millis.html#a98fad2c2c88e941ea0bd505d657e1cfb">auto_millis</a> d{my_millis};</div><div class="line">    <span class="comment">// call API that rely on time::millis</span></div><div class="line">    ...</div><div class="line">    <span class="comment">// Restore previous time::millis function</span></div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00295">295</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00299">299</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a98fad2c2c88e941ea0bd505d657e1cfb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a98fad2c2c88e941ea0bd505d657e1cfb">&#9670;&nbsp;</a></span>auto_millis()</h2>
@@ -136,7 +136,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00303">303</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00307">307</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>

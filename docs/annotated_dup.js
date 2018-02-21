@@ -51,10 +51,7 @@ var annotated_dup =
     [ "interrupt", "namespaceinterrupt.html", "namespaceinterrupt" ],
     [ "power", "namespacepower.html", "namespacepower" ],
     [ "serial", "namespaceserial.html", "namespaceserial" ],
-    [ "spi", null, [
-      [ "AbstractSPIDevice", "classspi_1_1_abstract_s_p_i_device.html", "classspi_1_1_abstract_s_p_i_device" ],
-      [ "SPIDevice", "classspi_1_1_s_p_i_device.html", "classspi_1_1_s_p_i_device" ]
-    ] ],
+    [ "spi", "namespacespi.html", "namespacespi" ],
     [ "streams", "namespacestreams.html", "namespacestreams" ],
     [ "time", "namespacetime.html", "namespacetime" ],
     [ "timer", "namespacetimer.html", "namespacetimer" ],

@@ -9,6 +9,7 @@ var searchData=
   ['get_5fpin',['get_pin',['../classgpio_1_1_fast_port.html#abf6495c92e849cb2432eded57b0347f9',1,'gpio::FastPort::get_pin(PinMode mode, bool value=false)'],['../classgpio_1_1_fast_port.html#ad239b42e4388126afe8242a01cd8eb2d',1,'gpio::FastPort::get_pin()'],['../classgpio_1_1_fast_port.html#a57a77753702bf9d527a3320b38db0a8b',1,'gpio::FastPort::get_PIN() INLINE'],['../classgpio_1_1_fast_masked_port.html#a27c8fcdeea61bce7f1912177747a4549',1,'gpio::FastMaskedPort::get_PIN()']]],
   ['get_5fport',['get_PORT',['../classgpio_1_1_fast_port.html#a2d17c01a12e2b5648f0956c36164e4c3',1,'gpio::FastPort::get_PORT()'],['../classgpio_1_1_fast_masked_port.html#a26e4ee9d06d3c9c906c63d2c1d478d17',1,'gpio::FastMaskedPort::get_PORT()']]],
   ['get_5fretrans',['get_retrans',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a0e95d3ea4f07cd023238bfa1969be98d',1,'devices::rf::NRF24L01']]],
+  ['get_5ftimer_5fmode',['get_timer_mode',['../classtimer_1_1_timer.html#aab067b194a8fb9c434e38685d26d7bca',1,'timer::Timer']]],
   ['get_5ftrans',['get_trans',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a060d6151100e55bdb2adc607d8884c8b',1,'devices::rf::NRF24L01']]],
   ['getline',['getline',['../classstreams_1_1istream.html#a3aec885e6da8c3274c579bc80384ffd6',1,'streams::istream']]],
   ['good',['good',['../classstreams_1_1ios__base.html#a0d6c236b3c0807bf269cc49bcb0fa7c7',1,'streams::ios_base']]]
