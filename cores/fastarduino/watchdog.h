@@ -215,7 +215,7 @@ namespace watchdog
 		 * `begin()`.
 		 * @return number of milliseconds elpased since watchdog was started
 		 */
-		uint32_t millis() const
+		inline uint32_t millis() const
 		{
 			synchronized return millis_;
 		}
