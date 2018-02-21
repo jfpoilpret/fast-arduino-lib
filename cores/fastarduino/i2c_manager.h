@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file 
+ * I2C Manager API.
+ */
 #ifndef I2C_MANAGER_HH
 #define I2C_MANAGER_HH
 
@@ -20,23 +26,52 @@
 
 namespace i2c
 {
+	/**
+	 * General I2C Manager.
+	 * It is used by all I2C devices for transmission.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_ = I2CMode::Standard> class I2CManager
 	{
 	public:
+		/** The I2C mode for this manager. */
 		static constexpr const I2CMode MODE = MODE_;
 
+		/**
+		 * Create an I2C Manager with an optional hook function for debugging.
+		 * @param hook an optional hook function that will be called back after
+		 * each transmission operation.
+		 */
 		I2CManager(I2C_STATUS_HOOK hook = 0) : handler_{hook}
 		{
 		}
 
+		/**
+		 * Prepare and enable the MCU for I2C transmission.
+		 * Preparation includes setup of I2C pins (SDA and SCL).
+		 */
 		void begin() INLINE
 		{
 			handler_.begin();
 		}
+
+		/**
+		 * Disable MCU I2C transmission.
+		 */		
 		void end() INLINE
 		{
 			handler_.end();
 		}
+
+		/**
+		 * Return latest transmission status.
+		 * Possible statuses are defined in namespace `i2c::Status`.
+		 * If latest operation was OK, then `i2c::Status::OK` (`0`) is returned.
+		 * Any non zero value indicates an error.
+		 * @sa i2c::Status
+		 */
 		uint8_t status() const
 		{
 			return handler_.status();
@@ -56,3 +91,4 @@ namespace i2c
 };
 
 #endif /* I2C_MANAGER_HH */
+/// @endcond
