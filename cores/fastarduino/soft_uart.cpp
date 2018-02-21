@@ -31,8 +31,7 @@ void serial::soft::AbstractUATX::begin_serial(uint32_t rate, Parity parity, Stop
 	if (stop_bits == StopBits::TWO) stop_bit_tx_time_ *= 2;
 }
 
-//TODO Can this really be considered constexpr?
-constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
+static constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 {
 	// We add 3 cycles to allow rounding
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
