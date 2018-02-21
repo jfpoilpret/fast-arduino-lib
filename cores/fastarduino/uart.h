@@ -107,6 +107,9 @@ namespace serial
 		};
 		/// @endcond
 
+		// Forward declaration for use as friend
+		template<board::USART USART_> class UART;
+
 		/**
 		 * Hardware serial transmitter API.
 		 * For this API to be fully functional, you must register the right ISR in your
@@ -189,9 +192,7 @@ namespace serial
 				return streams::ostream(*this);
 			}
 
-		protected:
-			/// @cond notdocumented
-			//TODO should be private
+		private:
 			inline void data_register_empty()
 			{
 				errors_.has_errors = 0;
@@ -205,7 +206,6 @@ namespace serial
 					TRAIT::UCSRB &= ~TRAIT::UDRIE_MASK;
 				}
 			}
-			/// @endcond
 
 		protected:
 			/// @cond notdocumented
@@ -234,6 +234,7 @@ namespace serial
 
 		private:
 			bool transmitting_;
+			friend class UART<USART>;
 			DECL_UDRE_ISR_FRIENDS
 		};
 
@@ -319,9 +320,7 @@ namespace serial
 				return streams::istream(*this);
 			}
 
-		protected:
-			/// @cond notdocumented
-			//TODO should be private
+		private:
 			inline void data_receive_complete()
 			{
 				char status = TRAIT::UCSRA;
@@ -331,8 +330,8 @@ namespace serial
 				char value = TRAIT::UDR;
 				errors_.queue_overflow = !queue().push_(value);
 			}
-			/// @endcond
 
+			friend class UART<USART>;
 			DECL_RX_ISR_FRIENDS
 		};
 
