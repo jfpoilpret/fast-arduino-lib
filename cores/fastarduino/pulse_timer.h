@@ -147,14 +147,13 @@ namespace timer
 			interrupt::register_handler(*this);
 		}
 
-		//TODO should be private
+	private:
 		bool overflow()
 		{
 			if (++count_ == MAX) count_ = 0;
 			return !count_;
 		}
 
-	private:
 		static constexpr uint8_t TCCRA_MASK()
 		{
 			// If 8 bits, use CTC/TOV ISR
@@ -178,6 +177,7 @@ namespace timer
 	private:
 		const uint8_t MAX;
 		uint8_t count_;
+		DECL_TIMER_OVF_FRIENDS
 	};
 
 	// Unified API for PulseTimer whatever the timer bits size (no need to use PulseTimer8 or PulseTimer16)

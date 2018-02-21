@@ -257,6 +257,18 @@ namespace board_traits
 	friend void ::PCINT0_vect(void);\
 	friend void ::PCINT1_vect(void);\
 	friend void ::PCINT2_vect(void);
+#define DECL_TIMER_COMP_FRIENDS				\
+	friend void ::TIMER0_COMPA_vect(void);	\
+	friend void ::TIMER1_COMPA_vect(void);	\
+	friend void ::TIMER2_COMPA_vect(void);	\
+	friend void ::TIMER0_COMPB_vect(void);	\
+	friend void ::TIMER1_COMPB_vect(void);	\
+	friend void ::TIMER2_COMPB_vect(void);
+#define DECL_TIMER_OVF_FRIENDS			\
+	friend void ::TIMER0_OVF_vect(void);\
+	friend void ::TIMER1_OVF_vect(void);\
+	friend void ::TIMER2_OVF_vect(void);
+#define DECL_TIMER_CAPT_FRIENDS friend void ::TIMER1_CAPT_vect(void);
 #define DECL_UDRE_ISR_FRIENDS friend void ::USART0_UDRE_vect(void);
 #define DECL_RX_ISR_FRIENDS friend void ::USART0_RX_vect(void);
 

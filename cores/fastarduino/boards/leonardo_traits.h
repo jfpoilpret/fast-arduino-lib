@@ -262,4 +262,35 @@ namespace board_traits
 	template<> struct PWMPin_trait<PWMPin::D5_PC6_OC3A>: PWMPin_trait_impl<Timer::TIMER3, 0> {};
 };
 
+// Macros to declare some ISR friends
+#define DECL_INT_ISR_FRIENDS 		\
+	friend void ::INT0_vect(void);	\
+	friend void ::INT1_vect(void);	\
+	friend void ::INT2_vect(void);	\
+	friend void ::INT3_vect(void);	\
+	friend void ::INT6_vect(void);
+#define DECL_PCINT_ISR_FRIENDS friend void ::PCINT0_vect(void);
+#define DECL_TIMER_COMP_FRIENDS				\
+	friend void ::TIMER0_COMPA_vect(void);	\
+	friend void ::TIMER1_COMPA_vect(void);	\
+	friend void ::TIMER3_COMPA_vect(void);	\
+	friend void ::TIMER4_COMPA_vect(void);	\
+	friend void ::TIMER0_COMPB_vect(void);	\
+	friend void ::TIMER1_COMPB_vect(void);	\
+	friend void ::TIMER3_COMPB_vect(void);	\
+	friend void ::TIMER4_COMPB_vect(void);	\
+	friend void ::TIMER1_COMPC_vect(void);	\
+	friend void ::TIMER3_COMPC_vect(void);	\
+	friend void ::TIMER4_COMPD_vect(void);
+#define DECL_TIMER_OVF_FRIENDS			\
+	friend void ::TIMER0_OVF_vect(void);\
+	friend void ::TIMER1_OVF_vect(void);\
+	friend void ::TIMER3_OVF_vect(void);\
+	friend void ::TIMER4_OVF_vect(void);
+#define DECL_TIMER_CAPT_FRIENDS				\
+	friend void ::TIMER1_CAPT_vect(void);	\
+	friend void ::TIMER3_CAPT_vect(void);
+#define DECL_UDRE_ISR_FRIENDS friend void ::USART1_UDRE_vect(void);
+#define DECL_RX_ISR_FRIENDS friend void ::USART1_RX_vect(void);
+
 #endif /* BOARDS_LEONARDO_TRAITS_HH */

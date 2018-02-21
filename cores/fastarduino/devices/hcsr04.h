@@ -401,7 +401,7 @@ namespace devices
 				if (trigger) this->trigger();
 			}
 
-			//TODO should be private
+		private:
 			bool on_pin_change(TYPE ticks)
 			{
 				static_assert(SONAR_TYPE == SonarType::ASYNC_INT || SONAR_TYPE == SonarType::ASYNC_PCINT, 
@@ -409,7 +409,6 @@ namespace devices
 				return this->pulse_edge(echo_.value(), ticks);
 			}
 
-			//TODO should be private
 			bool on_capture(TYPE capture)
 			{
 				static_assert(SONAR_TYPE == SonarType::ASYNC_ICP, 
@@ -417,7 +416,6 @@ namespace devices
 				return this->pulse_captured(capture);
 			}
 
-		private:
 			inline void trigger()
 			{
 				// Pulse TRIGGER for 10us
@@ -430,6 +428,10 @@ namespace devices
 
 			typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 			typename gpio::FastPinType<ECHO>::TYPE echo_;
+
+			DECL_INT_ISR_FRIENDS
+			DECL_PCINT_ISR_FRIENDS
+			DECL_TIMER_CAPT_FRIENDS
 		};
 
 		template<board::Timer TIMER_>
@@ -520,6 +522,7 @@ namespace devices
 				trigger_.clear();
 			}
 
+		private:
 			EVENT on_pin_change(TYPE ticks)
 			{
 				if (!active_)
@@ -537,7 +540,6 @@ namespace devices
 				return EVENT{started, ready, ticks};
 			}
 
-		private:
 			static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
 			TIMER& timer_;
@@ -546,6 +548,8 @@ namespace devices
 			volatile bool active_;
 			typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 			gpio::FastMaskedPort<ECHO_PORT, ECHO_MASK> echo_;
+
+			DECL_PCINT_ISR_FRIENDS
 		};
 	}
 }

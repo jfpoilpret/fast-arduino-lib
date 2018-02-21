@@ -166,4 +166,19 @@ namespace board_traits
 	template<> struct PWMPin_trait<PWMPin::D1_PB1_OC0B>: PWMPin_trait_impl<Timer::TIMER0, 1> {};
 };
 
+// Macros to declare some ISR friends
+#define DECL_INT_ISR_FRIENDS friend void ::INT0_vect(void);
+#define DECL_PCINT_ISR_FRIENDS friend void ::PCINT0_vect(void);
+#define DECL_TIMER_COMP_FRIENDS				\
+	friend void ::TIMER0_COMPA_vect(void);	\
+	friend void ::TIMER1_COMPA_vect(void);	\
+	friend void ::TIMER0_COMPB_vect(void);	\
+	friend void ::TIMER1_COMPB_vect(void);
+#define DECL_TIMER_OVF_FRIENDS			\
+	friend void ::TIMER0_OVF_vect(void);\
+	friend void ::TIMER1_OVF_vect(void);
+#define DECL_TIMER_CAPT_FRIENDS 
+#define DECL_UDRE_ISR_FRIENDS 
+#define DECL_RX_ISR_FRIENDS 
+
 #endif /* BOARDS_ATTINYX5_TRAITS_HH */

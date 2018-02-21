@@ -306,14 +306,6 @@ namespace timer
 			Timer<NTIMER>::end_();
 		}
 
-		//TODO should be private
-		/// @cond notdocumented
-		void on_timer()
-		{
-			++millis_;
-		}
-		/// @endcond
-
 		/**
 		 * Get a reference to the underlying `Timer` of this `RTT`.
 		 */
@@ -322,12 +314,14 @@ namespace timer
 			return *this;
 		}
 
-	protected:
-		/// @cond notdocumented
-		volatile uint32_t millis_;
-		/// @endcond
-
 	private:
+		volatile uint32_t millis_;
+
+		void on_timer()
+		{
+			++millis_;
+		}
+
 		using CALC = Calculator<NTIMER>;
 		static constexpr const uint32_t ONE_MILLI = 1000UL;
 		static constexpr const PRESCALER MILLI_PRESCALER = CALC::CTC_prescaler(ONE_MILLI);
@@ -337,6 +331,8 @@ namespace timer
 		{
 			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1 + (volatile TYPE&) TRAIT::OCRA));
 		}
+
+		DECL_TIMER_COMP_FRIENDS
 	};
 
 	/**

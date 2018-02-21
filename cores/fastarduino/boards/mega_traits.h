@@ -501,4 +501,58 @@ namespace board_traits
 	template<> struct PWMPin_trait<PWMPin::D44_PL5_OC5C>: PWMPin_trait_impl<Timer::TIMER5, 2> {};
 };
 
+// Macros to declare some ISR friends
+#define DECL_INT_ISR_FRIENDS 		\
+	friend void ::INT0_vect(void);	\
+	friend void ::INT1_vect(void);	\
+	friend void ::INT2_vect(void);	\
+	friend void ::INT3_vect(void);	\
+	friend void ::INT4_vect(void);	\
+	friend void ::INT5_vect(void);	\
+	friend void ::INT6_vect(void);	\
+	friend void ::INT7_vect(void);
+#define DECL_PCINT_ISR_FRIENDS		\
+	friend void ::PCINT0_vect(void);\
+	friend void ::PCINT1_vect(void);\
+	friend void ::PCINT2_vect(void);
+#define DECL_TIMER_COMP_FRIENDS				\
+	friend void ::TIMER0_COMPA_vect(void);	\
+	friend void ::TIMER1_COMPA_vect(void);	\
+	friend void ::TIMER2_COMPA_vect(void);	\
+	friend void ::TIMER3_COMPA_vect(void);	\
+	friend void ::TIMER4_COMPA_vect(void);	\
+	friend void ::TIMER5_COMPA_vect(void);	\
+	friend void ::TIMER0_COMPB_vect(void);	\
+	friend void ::TIMER1_COMPB_vect(void);	\
+	friend void ::TIMER2_COMPB_vect(void);	\
+	friend void ::TIMER3_COMPB_vect(void);	\
+	friend void ::TIMER4_COMPB_vect(void);	\
+	friend void ::TIMER5_COMPB_vect(void);	\
+	friend void ::TIMER1_COMPC_vect(void);	\
+	friend void ::TIMER3_COMPC_vect(void);	\
+	friend void ::TIMER4_COMPC_vect(void);	\
+	friend void ::TIMER5_COMPC_vect(void);
+#define DECL_TIMER_OVF_FRIENDS			\
+	friend void ::TIMER0_OVF_vect(void);\
+	friend void ::TIMER1_OVF_vect(void);\
+	friend void ::TIMER2_OVF_vect(void);\
+	friend void ::TIMER3_OVF_vect(void);\
+	friend void ::TIMER4_OVF_vect(void);\
+	friend void ::TIMER5_OVF_vect(void);
+#define DECL_TIMER_CAPT_FRIENDS				\
+	friend void ::TIMER1_CAPT_vect(void);	\
+	friend void ::TIMER3_CAPT_vect(void);	\
+	friend void ::TIMER4_CAPT_vect(void);	\
+	friend void ::TIMER5_CAPT_vect(void);
+#define DECL_UDRE_ISR_FRIENDS				\
+	friend void ::USART0_UDRE_vect(void);	\
+	friend void ::USART1_UDRE_vect(void);	\
+	friend void ::USART2_UDRE_vect(void);	\
+	friend void ::USART3_UDRE_vect(void);
+#define DECL_RX_ISR_FRIENDS				\
+	friend void ::USART0_RX_vect(void);	\
+	friend void ::USART1_RX_vect(void);	\
+	friend void ::USART2_RX_vect(void);	\
+	friend void ::USART3_RX_vect(void);
+
 #endif /* BOARDS_MEGA_TRAITS_HH */

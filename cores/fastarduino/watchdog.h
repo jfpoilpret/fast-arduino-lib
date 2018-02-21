@@ -241,19 +241,18 @@ namespace watchdog
 			}
 		}
 
-		//TODO should be private
-		/// @cond notdocumented
+	private:
 		void on_tick()
 		{
 			millis_ += millis_per_tick_;
 			event_queue_.push_(EVENT{events::Type::WDT_TIMER});
 		}
-		/// @endcond
 
-	private:
 		volatile uint32_t millis_;
 		uint16_t millis_per_tick_;
 		containers::Queue<EVENT>& event_queue_;
+
+		friend void ::WDT_vect(void);
 	};
 }
 
