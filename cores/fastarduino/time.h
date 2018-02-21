@@ -140,11 +140,15 @@ namespace time
 	 * features.
 	 * By default, `millis` is not pointing to any concrete implementation, hence
 	 * you should not call it if it has not been initialized yet.
-	 * The following API initialize this pointer with specific implementations:
-	 * TODO list implementations
+	 * You can initialize it with `timer::set_clock()` provided with the instance of
+	 * a class implementing a minimal "clock" API.
+	 * The following classes implement this minimal clock API:
+	 * - `timer::RTT`
+	 * - `watchdog::Watchdog`
 	 * 
 	 * @return number of milliseconds elapsed since some given time base base 
 	 * reference
+	 * @sa time::set_clock()
 	 */
 	extern MILLIS_PTR millis;
 
