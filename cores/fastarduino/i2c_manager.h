@@ -29,6 +29,8 @@ namespace i2c
 	/**
 	 * General I2C Manager.
 	 * It is used by all I2C devices for transmission.
+	 * For the time being, the MCU must always act as the only master on the bus.
+	 * Using MCU as a slave will be supported in a later version of FastArduino.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @sa i2c::I2CMode
