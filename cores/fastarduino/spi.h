@@ -138,7 +138,7 @@ namespace spi
 
 	/**
 	 * Contain general payload transfer API for an SPI device.
-	 * This is not suppsoed to be sued directly, as it does not include start/end
+	 * This is not supposed to be used directly, as it does not include start/end
 	 * transfer methods. SPI device implementers shall use `SPIDevice` template class
 	 * instead.
 	 * @sa SPIDevice
