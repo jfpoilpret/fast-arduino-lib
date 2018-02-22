@@ -110,30 +110,38 @@ The roadmap of next activities and new supported features is the following:
 
 Milestone V1.0 (28.02.2018)
 ---------------------------
-1. Document most important API (scheduler, containers, eeprom)
-2. Improved Queue container
-3. Code cleanup
+- no remaining activity, just need to prepare the release
 
 Milestone V1.1 (30.04.2018)
 ---------------------------
 1. Support other I2C devices: MCP23017 (IO multiplexer)
-2. Document SPI and I2C API
-3. Document API of supported SPI and I2C devices
-4. Bugs fixes (software UART mainly)
-5. Various improvements: prevent or implement move- and copy- constructors and assignment operators
+2. Document last core API remaining
+3. Add SPI and I2C usage to Tutorial
+4. Update toolchain to latest release (3.6.1)
+
+Milestone V1.2 (30.06.2018)
+---------------------------
+1. Refactor board traits to support PWM pin attached to several timers
+2. Document API of supported SPI and I2C devices
+3. Code cleanup (software UART mainly)
+4. Various code improvements: prevent or implement move- and copy- constructors and assignment operators
+
+Milestone V1.3 (31.07.2018)
+---------------------------
+1. Support ATtinyX5 Timer1 PWM pins (extended feature)
+2. Document how to add support for another board target in Tutorial
 
 Milestone V2.0 (31.08.2018, content to be revisited)
 ----------------------------------------------------
-1. Allow PWM on pins linked to 2 timers
-2. Improve Analog Input support and code
-3. Improve I2C master support (asynchronous mode)
-4. Improve I2C to support slave mode
+1. Improve I2C master support (asynchronous mode)
+2. Improve I2C to support slave mode
+3. Improve SPI to support slave mode
 
 4th Quarter 2018
 ----------------
-1. Add USB support for Arduino Leonardo
-2. Add high-speed timer support of Arduino Leonardo
-3. Improve SPI to support slave mode
+1. Improve Analog Input support and code
+2. Add USB support for Arduino Leonardo
+3. Add high-speed timer support of Arduino Leonardo
 
 Milestones dates are "best effort" and may changed based on contributors' availability.
 
