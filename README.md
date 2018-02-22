@@ -49,7 +49,9 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-It has been one year and a half since the project was started, it covers a lot already, but is not fully complete yet (see roadmap below for missing features); current features API is deemed stable and should not change in the future.
+First FastArduino official release [**v1.0**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.0) has just been published (22.02.2018)!
+
+The project covers a lot of features already, a few missing, less improtant, features will be released in future versions (see roadmap below); current features API is deemed stable and should not change in the future.
 
 What the project already has:
 
@@ -108,9 +110,9 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-Milestone V1.0 (28.02.2018)
+Milestone V1.0 (22.02.2018)
 ---------------------------
-- no remaining activity, just need to prepare the release
+- already released
 
 Milestone V1.1 (30.04.2018)
 ---------------------------
@@ -143,7 +145,7 @@ Milestone V2.0 (31.08.2018, content to be revisited)
 2. Add USB support for Arduino Leonardo
 3. Add high-speed timer support of Arduino Leonardo
 
-Milestones dates are "best effort" and may changed based on contributors' availability.
+Milestones dates are "best effort" and may change based on contributors' availability.
 
 In addition to these activities, various continuous improvements are planned in the following months, regarding:
 
