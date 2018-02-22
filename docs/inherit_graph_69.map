@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classtimer_1_1_square_wave.html" title="timer::SquareWave\&lt;\l NTIMER_, OUTPUT_ \&gt;" alt="" coords="5,5,172,47"/>
+<area shape="rect" id="node1" href="$classtimer_1_1_timer.html" title="General API to handle an AVR timer. " alt="" coords="5,111,180,138"/>
+<area shape="rect" id="node2" href="$classtimer_1_1_pulse_timer.html" title="timer::PulseTimer\&lt;\l NTIMER_, PRESCALER, T \&gt;" alt="" coords="228,5,431,47"/>
+<area shape="rect" id="node3" href="$classtimer_1_1_pulse_timer16.html" title="timer::PulseTimer16\l\&lt; NTIMER_, PRESCALER_ \&gt;" alt="" coords="228,71,431,112"/>
+<area shape="rect" id="node5" href="$classtimer_1_1_pulse_timer8.html" title="timer::PulseTimer8\l\&lt; NTIMER_, PRESCALER_ \&gt;" alt="" coords="228,136,431,177"/>
+<area shape="rect" id="node7" href="$classtimer_1_1_r_t_t.html" title="API to handle a real&#45;time timer. " alt="" coords="245,202,413,229"/>
+<area shape="rect" id="node4" href="$classtimer_1_1_pulse_timer_3_01_n_t_i_m_e_r___00_01_p_r_e_s_c_a_l_e_r___00_01uint16__t_01_4.html" title="timer::PulseTimer\&lt;\l NTIMER_, PRESCALER\l_, uint16_t \&gt;" alt="" coords="479,55,653,111"/>
+<area shape="rect" id="node6" href="$classtimer_1_1_pulse_timer_3_01_n_t_i_m_e_r___00_01_p_r_e_s_c_a_l_e_r___00_01uint8__t_01_4.html" title="timer::PulseTimer\&lt;\l NTIMER_, PRESCALER\l_, uint8_t \&gt;" alt="" coords="479,135,653,191"/>
 </map>

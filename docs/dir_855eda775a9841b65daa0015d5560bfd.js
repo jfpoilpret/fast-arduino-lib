@@ -15,10 +15,12 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "events.h", "events_8h.html", "events_8h" ],
     [ "flash.h", "flash_8h.html", "flash_8h" ],
     [ "gpio.h", "gpio_8h.html", "gpio_8h" ],
-    [ "i2c.h", "i2c_8h_source.html", null ],
-    [ "i2c_device.h", "i2c__device_8h_source.html", null ],
+    [ "i2c.h", "i2c_8h.html", "i2c_8h" ],
+    [ "i2c_device.h", "i2c__device_8h.html", "i2c__device_8h" ],
     [ "i2c_handler.h", "i2c__handler_8h_source.html", null ],
-    [ "i2c_manager.h", "i2c__manager_8h_source.html", null ],
+    [ "i2c_manager.h", "i2c__manager_8h.html", [
+      [ "I2CManager", "classi2c_1_1_i2_c_manager.html", "classi2c_1_1_i2_c_manager" ]
+    ] ],
     [ "int.h", "int_8h.html", "int_8h" ],
     [ "interrupts.h", "interrupts_8h.html", "interrupts_8h" ],
     [ "iomanip.h", "iomanip_8h.html", "iomanip_8h" ],

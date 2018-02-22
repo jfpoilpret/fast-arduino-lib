@@ -4,6 +4,7 @@ var searchData=
   ['fail',['fail',['../classstreams_1_1ios__base.html#a2ec964b9c5a25ea0ca744517379cb7be',1,'streams::ios_base']]],
   ['failbit',['failbit',['../classstreams_1_1ios__base.html#abf31341bed00d5096e93ed67d6808150',1,'streams::ios_base']]],
   ['falling_5fedge',['FALLING_EDGE',['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba297f5ea19073f4b51715b029f48d5d52',1,'interrupt::FALLING_EDGE()'],['../namespacetimer.html#a908aa72c1bb077bec67565b637350bf4a297f5ea19073f4b51715b029f48d5d52',1,'timer::FALLING_EDGE()']]],
+  ['fast',['Fast',['../namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36ae16b5b7f26f54214445cbe38d72c2828',1,'i2c']]],
   ['fast_5fpwm',['FAST_PWM',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a3c777f2debe013caa4c85ae201e9bda0',1,'timer']]],
   ['fastmaskedport',['FastMaskedPort',['../classgpio_1_1_fast_masked_port.html',1,'gpio::FastMaskedPort&lt; PORT_, MASK_ &gt;'],['../classgpio_1_1_fast_masked_port.html#a5e8e1934c91978ab0b14f003e88c5aca',1,'gpio::FastMaskedPort::FastMaskedPort()'],['../classgpio_1_1_fast_masked_port.html#a1c9f03f61a8279b5f2a6fda9c9dd0809',1,'gpio::FastMaskedPort::FastMaskedPort(uint8_t ddr, uint8_t port=0)']]],
   ['fastmaskedport_3c_20echo_5fport_2c_20echo_5fmask_20_3e',['FastMaskedPort&lt; ECHO_PORT, ECHO_MASK &gt;',['../classgpio_1_1_fast_masked_port.html',1,'gpio']]],

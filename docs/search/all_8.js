@@ -1,11 +1,15 @@
 var searchData=
 [
-  ['i2cdevice',['I2CDevice',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
+  ['i2c',['i2c',['../namespacei2c.html',1,'']]],
+  ['i2c_2eh',['i2c.h',['../i2c_8h.html',1,'']]],
+  ['i2c_5fdevice_2eh',['i2c_device.h',['../i2c__device_8h.html',1,'']]],
+  ['i2c_5fmanager_2eh',['i2c_manager.h',['../i2c__manager_8h.html',1,'']]],
+  ['i2c_5fstatus_5fhook',['I2C_STATUS_HOOK',['../namespacei2c.html#a30a5217313a148f7da0b484c60f3fd00',1,'i2c']]],
+  ['i2cdevice',['I2CDevice',['../classi2c_1_1_i2_c_device.html',1,'i2c::I2CDevice&lt; MODE_ &gt;'],['../classi2c_1_1_i2_c_device.html#aebdca1702bbc4d1a624861af251160ae',1,'i2c::I2CDevice::I2CDevice()']]],
   ['i2cdevice_3c_20i2c_3a_3ai2cmode_3a_3astandard_20_3e',['I2CDevice&lt; i2c::I2CMode::Standard &gt;',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
   ['i2cdevice_3c_20mode_20_3e',['I2CDevice&lt; MODE &gt;',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
-  ['i2chandler',['I2CHandler',['../classi2c_1_1_i2_c_handler.html',1,'i2c']]],
-  ['i2chandler_3c_20mode_20_3e',['I2CHandler&lt; MODE &gt;',['../classi2c_1_1_i2_c_handler.html',1,'i2c']]],
-  ['i2cmanager',['I2CManager',['../classi2c_1_1_i2_c_manager.html',1,'i2c']]],
+  ['i2cmanager',['I2CManager',['../classi2c_1_1_i2_c_manager.html',1,'i2c::I2CManager&lt; MODE_ &gt;'],['../classi2c_1_1_i2_c_manager.html#a2d9e4e95760af5ab03cd2eaf165b1aaf',1,'i2c::I2CManager::I2CManager()']]],
+  ['i2cmode',['I2CMode',['../namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36',1,'i2c']]],
   ['icp_5fpin',['ICP_PIN',['../classtimer_1_1_timer.html#acec93e3211e93603f63180a4dd366cae',1,'timer::Timer']]],
   ['ignore',['ignore',['../classstreams_1_1istream.html#a99dafd2dce58830708b65dd4f4b6136f',1,'streams::istream']]],
   ['in',['in',['../classserial_1_1hard_1_1_u_a_r_x.html#a6d0cb08bc1813b28849fba0837bf7c4f',1,'serial::hard::UARX']]],
@@ -38,5 +42,6 @@ var searchData=
   ['istream',['istream',['../classstreams_1_1istream.html',1,'streams::istream'],['../classstreams_1_1istream.html#adbaadc46ce28fed5aa1abb91fe15c02b',1,'streams::istream::istream()']]],
   ['istreambuf',['istreambuf',['../classstreams_1_1istreambuf.html',1,'streams']]],
   ['items',['items',['../classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069',1,'containers::Queue']]],
-  ['items_5f',['items_',['../classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd',1,'containers::Queue']]]
+  ['items_5f',['items_',['../classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd',1,'containers::Queue']]],
+  ['status',['Status',['../namespacei2c_1_1_status.html',1,'i2c']]]
 ];

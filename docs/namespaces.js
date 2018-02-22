@@ -8,6 +8,7 @@ var namespaces =
     [ "events", "namespaceevents.html", "namespaceevents" ],
     [ "flash", "namespaceflash.html", null ],
     [ "gpio", "namespacegpio.html", null ],
+    [ "i2c", "namespacei2c.html", "namespacei2c" ],
     [ "interrupt", "namespaceinterrupt.html", null ],
     [ "power", "namespacepower.html", null ],
     [ "serial", "namespaceserial.html", "namespaceserial" ],

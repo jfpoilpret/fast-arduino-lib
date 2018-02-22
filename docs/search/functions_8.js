@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['i2cdevice',['I2CDevice',['../classi2c_1_1_i2_c_device.html#aebdca1702bbc4d1a624861af251160ae',1,'i2c::I2CDevice']]],
+  ['i2cmanager',['I2CManager',['../classi2c_1_1_i2_c_manager.html#a2d9e4e95760af5ab03cd2eaf165b1aaf',1,'i2c::I2CManager']]],
   ['ignore',['ignore',['../classstreams_1_1istream.html#a99dafd2dce58830708b65dd4f4b6136f',1,'streams::istream']]],
   ['in',['in',['../classserial_1_1hard_1_1_u_a_r_x.html#a6d0cb08bc1813b28849fba0837bf7c4f',1,'serial::hard::UARX']]],
   ['in_5favail',['in_avail',['../classstreams_1_1istreambuf.html#a0f0d8b518b00e5fe7949d300c83b934f',1,'streams::istreambuf']]],

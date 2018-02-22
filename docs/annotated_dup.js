@@ -43,11 +43,7 @@ var annotated_dup =
     [ "eeprom", "namespaceeeprom.html", "namespaceeeprom" ],
     [ "events", "namespaceevents.html", "namespaceevents" ],
     [ "gpio", "namespacegpio.html", "namespacegpio" ],
-    [ "i2c", null, [
-      [ "I2CDevice", "classi2c_1_1_i2_c_device.html", "classi2c_1_1_i2_c_device" ],
-      [ "I2CHandler", "classi2c_1_1_i2_c_handler.html", "classi2c_1_1_i2_c_handler" ],
-      [ "I2CManager", "classi2c_1_1_i2_c_manager.html", "classi2c_1_1_i2_c_manager" ]
-    ] ],
+    [ "i2c", "namespacei2c.html", "namespacei2c" ],
     [ "interrupt", "namespaceinterrupt.html", "namespaceinterrupt" ],
     [ "power", "namespacepower.html", "namespacepower" ],
     [ "serial", "namespaceserial.html", "namespaceserial" ],

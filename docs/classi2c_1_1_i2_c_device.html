@@ -89,6 +89,11 @@ $(document).ready(function(){initNavTree('classi2c_1_1_i2_c_device.html','');});
 <div class="title">i2c::I2CDevice&lt; MODE_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Base class for all I2C devices.  
+ <a href="classi2c_1_1_i2_c_device.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="i2c__device_8h_source.html">fastarduino/i2c_device.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for i2c::I2CDevice&lt; MODE_ &gt;:</div>
 <div class="dyncontent">
@@ -100,49 +105,508 @@ Inheritance diagram for i2c::I2CDevice&lt; MODE_ &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:aafb695d2281ebc69499703e7a18913e8"><td class="memItemLeft" align="right" valign="top"><a id="aafb695d2281ebc69499703e7a18913e8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>MANAGER</b> = <a class="el" href="classi2c_1_1_i2_c_manager.html">I2CManager</a>&lt; MODE &gt;</td></tr>
+<tr class="memitem:aafb695d2281ebc69499703e7a18913e8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8">MANAGER</a> = <a class="el" href="classi2c_1_1_i2_c_manager.html">I2CManager</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#a6450cfc9e9475eafc62d42aedec8fef3">MODE</a> &gt;</td></tr>
+<tr class="memdesc:aafb695d2281ebc69499703e7a18913e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">the type of <code><a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">I2CManager</a></code> that can handle this device.  <a href="#aafb695d2281ebc69499703e7a18913e8">More...</a><br /></td></tr>
 <tr class="separator:aafb695d2281ebc69499703e7a18913e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5c2f77ce4f370a5d04d32b354da1a2a"><td class="memItemLeft" align="right" valign="top"><a id="ae5c2f77ce4f370a5d04d32b354da1a2a"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>HANDLER</b> = typename <a class="el" href="classi2c_1_1_i2_c_handler.html">MANAGER::HANDLER</a></td></tr>
-<tr class="separator:ae5c2f77ce4f370a5d04d32b354da1a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a6450cfc9e9475eafc62d42aedec8fef3"><td class="memItemLeft" align="right" valign="top"><a id="a6450cfc9e9475eafc62d42aedec8fef3"></a>
-static constexpr const I2CMode&#160;</td><td class="memItemRight" valign="bottom"><b>MODE</b> = MODE_</td></tr>
+<tr class="memitem:a6450cfc9e9475eafc62d42aedec8fef3"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">I2CMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a6450cfc9e9475eafc62d42aedec8fef3">MODE</a> = MODE_</td></tr>
+<tr class="memdesc:a6450cfc9e9475eafc62d42aedec8fef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">the I2C mode for this device.  <a href="#a6450cfc9e9475eafc62d42aedec8fef3">More...</a><br /></td></tr>
 <tr class="separator:a6450cfc9e9475eafc62d42aedec8fef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:aebdca1702bbc4d1a624861af251160ae"><td class="memItemLeft" align="right" valign="top"><a id="aebdca1702bbc4d1a624861af251160ae"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>I2CDevice</b> (<a class="el" href="classi2c_1_1_i2_c_manager.html">MANAGER</a> &amp;manager)</td></tr>
+<tr class="memitem:aebdca1702bbc4d1a624861af251160ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aebdca1702bbc4d1a624861af251160ae">I2CDevice</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8">MANAGER</a> &amp;manager)</td></tr>
+<tr class="memdesc:aebdca1702bbc4d1a624861af251160ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new I2C device.  <a href="#aebdca1702bbc4d1a624861af251160ae">More...</a><br /></td></tr>
 <tr class="separator:aebdca1702bbc4d1a624861af251160ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af52330bb110ac9e62ffb4b7507ac28d7"><td class="memItemLeft" align="right" valign="top"><a id="af52330bb110ac9e62ffb4b7507ac28d7"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>read</b> (uint8_t address, uint8_t *data, uint8_t size, BusConditions conditions=BusConditions::START_STOP)</td></tr>
+<tr class="memitem:af52330bb110ac9e62ffb4b7507ac28d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#af52330bb110ac9e62ffb4b7507ac28d7">read</a> (uint8_t address, uint8_t *data, uint8_t size, <a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a> conditions=<a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a>)</td></tr>
+<tr class="memdesc:af52330bb110ac9e62ffb4b7507ac28d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a given number of bytes from an I2C device at the given address.  <a href="#af52330bb110ac9e62ffb4b7507ac28d7">More...</a><br /></td></tr>
 <tr class="separator:af52330bb110ac9e62ffb4b7507ac28d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67054dc6a02073b006b5346f2eab6e9c"><td class="memTemplParams" colspan="2"><a id="a67054dc6a02073b006b5346f2eab6e9c"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a67054dc6a02073b006b5346f2eab6e9c"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>read</b> (uint8_t address, T &amp;data, BusConditions conditions=BusConditions::START_STOP)</td></tr>
+<tr class="memitem:a67054dc6a02073b006b5346f2eab6e9c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a67054dc6a02073b006b5346f2eab6e9c"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a67054dc6a02073b006b5346f2eab6e9c">read</a> (uint8_t address, T &amp;data, <a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a> conditions=<a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a>)</td></tr>
+<tr class="memdesc:a67054dc6a02073b006b5346f2eab6e9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a given number of bytes from an I2C device at the given address and store it into the given type reference.  <a href="#a67054dc6a02073b006b5346f2eab6e9c">More...</a><br /></td></tr>
 <tr class="separator:a67054dc6a02073b006b5346f2eab6e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a767eedb19009c88839483bc607af16f9"><td class="memItemLeft" align="right" valign="top"><a id="a767eedb19009c88839483bc607af16f9"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (uint8_t address, const uint8_t *data, uint8_t size, BusConditions conditions=BusConditions::START_STOP)</td></tr>
+<tr class="memitem:a767eedb19009c88839483bc607af16f9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a767eedb19009c88839483bc607af16f9">write</a> (uint8_t address, const uint8_t *data, uint8_t size, <a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a> conditions=<a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a>)</td></tr>
+<tr class="memdesc:a767eedb19009c88839483bc607af16f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the given number of bytes to an I2C device at the given address.  <a href="#a767eedb19009c88839483bc607af16f9">More...</a><br /></td></tr>
 <tr class="separator:a767eedb19009c88839483bc607af16f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4c1b5c91ee76684ebb3b55085831a98"><td class="memTemplParams" colspan="2"><a id="ae4c1b5c91ee76684ebb3b55085831a98"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ae4c1b5c91ee76684ebb3b55085831a98"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>write</b> (uint8_t address, const T &amp;data, BusConditions conditions=BusConditions::START_STOP)</td></tr>
+<tr class="memitem:ae4c1b5c91ee76684ebb3b55085831a98"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae4c1b5c91ee76684ebb3b55085831a98"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#ae4c1b5c91ee76684ebb3b55085831a98">write</a> (uint8_t address, const T &amp;data, <a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a> conditions=<a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a>)</td></tr>
+<tr class="memdesc:ae4c1b5c91ee76684ebb3b55085831a98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write, byte after byte, the content of <code>data</code> to an I2C device at the given address.  <a href="#ae4c1b5c91ee76684ebb3b55085831a98">More...</a><br /></td></tr>
 <tr class="separator:ae4c1b5c91ee76684ebb3b55085831a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3267675aecc9f77c729afa6988cf6ee"><td class="memItemLeft" align="right" valign="top"><a id="ab3267675aecc9f77c729afa6988cf6ee"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (uint8_t address, uint8_t data, BusConditions conditions=BusConditions::START_STOP)</td></tr>
+<tr class="memitem:ab3267675aecc9f77c729afa6988cf6ee"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#ab3267675aecc9f77c729afa6988cf6ee">write</a> (uint8_t address, uint8_t data, <a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a> conditions=<a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a>)</td></tr>
+<tr class="memdesc:ab3267675aecc9f77c729afa6988cf6ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write one data byte to an I2C device at the given address.  <a href="#ab3267675aecc9f77c729afa6988cf6ee">More...</a><br /></td></tr>
 <tr class="separator:ab3267675aecc9f77c729afa6988cf6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;I2CMode MODE_ = I2CMode::Standard&gt;<br />
 class i2c::I2CDevice&lt; MODE_ &gt;</h3>
 
+<p>Base class for all I2C devices. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">MODE_</td><td>the I2C mode for this device; this determines the <code><a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">I2CManager</a></code> type that can manage this device. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36" title="I2C available transmission modes. ">i2c::I2CMode</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">i2c::I2CManager</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00033">33</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00058">58</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="aafb695d2281ebc69499703e7a18913e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafb695d2281ebc69499703e7a18913e8">&#9670;&nbsp;</a></span>MANAGER</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::<a class="el" href="classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8">MANAGER</a> =  <a class="el" href="classi2c_1_1_i2_c_manager.html">I2CManager</a>&lt;<a class="el" href="classi2c_1_1_i2_c_device.html#a6450cfc9e9475eafc62d42aedec8fef3">MODE</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>the type of <code><a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">I2CManager</a></code> that can handle this device. </p>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00064">64</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aebdca1702bbc4d1a624861af251160ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebdca1702bbc4d1a624861af251160ae">&#9670;&nbsp;</a></span>I2CDevice()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::<a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8">MANAGER</a> &amp;&#160;</td>
+          <td class="paramname"><em>manager</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a new I2C device. </p>
+<p>This constructor must be called by a subclass implementing an actua I2C device. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">manager</td><td>the I2C Manager that is in charge of I2C bus </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00072">72</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="af52330bb110ac9e62ffb4b7507ac28d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af52330bb110ac9e62ffb4b7507ac28d7">&#9670;&nbsp;</a></span>read() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::read </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a>&#160;</td>
+          <td class="paramname"><em>conditions</em> = <code><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a given number of bytes from an I2C device at the given address. </p>
+<p>I2C transmission may include START and STOP conditions, and device address, based on <code>conditions</code> argument. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>I2C device address (only 7 MSB are used for the actual address the LSB is not used and should always be <code>0</code>); will be used only if <code>conditions</code> requires a START or repeated START condition </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to an array of bytes that will receive data received from this device; the array must have an allocated size of at least <code>size</code> bytes </td></tr>
+    <tr><td class="paramname">size</td><td>the number of bytes to read from this device </td></tr>
+    <tr><td class="paramname">conditions</td><td>which bus conditions should be transmitted on the bus; by default, it indicates to transmit both START and STOP conditions, i.e. a full I2C frame. If you need to implement a more complex device protocol, e.g. mixing read and write or with several read operations in one frame, then you can use other conditions. Just do not forget that the first operation should always include the START condition and the last operation the STOP condition. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the I2C transmission status, <code>i2c::Status::OK</code> if the operation was successful, or any other <code><a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a></code> code if it failed.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e" title="Bus condition (see I2C) to be generated by I2CDevice read and write methods. ">i2c::BusConditions</a> </dd>
+<dd>
+<a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a67054dc6a02073b006b5346f2eab6e9c" title="Read a given number of bytes from an I2C device at the given address and store it into the given type...">read(uint8_t, T&amp;, BusConditions)</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a767eedb19009c88839483bc607af16f9" title="Write the given number of bytes to an I2C device at the given address. ">write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00100">100</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="a67054dc6a02073b006b5346f2eab6e9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67054dc6a02073b006b5346f2eab6e9c">&#9670;&nbsp;</a></span>read() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::read </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a>&#160;</td>
+          <td class="paramname"><em>conditions</em> = <code><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a given number of bytes from an I2C device at the given address and store it into the given type reference. </p>
+<p>The number of bytes to be received is determined by the type <code>T</code>. </p><dl class="section note"><dt>Note</dt><dd>no <code>T</code> constructor or assignment operator will be called by this method, only storage will be affected.</dd></dl>
+<p>I2C transmission may include START and STOP conditions, and device address, based on <code>conditions</code> argument.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type ot <code>data</code>, which will determine the number of bytes to receive</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>I2C device address (only 7 MSB are used for the actual address the LSB is not used and should always be <code>0</code>); will be used only if <code>conditions</code> requires a START or repeated START condition </td></tr>
+    <tr><td class="paramname">data</td><td>reference to a <code>T</code> object which content will receive data obtained from this device </td></tr>
+    <tr><td class="paramname">conditions</td><td>which bus conditions should be transmitted on the bus; by default, it indicates to transmit both START and STOP conditions, i.e. a full I2C frame. If you need to implement a more complex device protocol, e.g. mixing read and write or with several read operations in one frame, then you can use other conditions. Just do not forget that the first operation should always include the START condition and the last operation the STOP condition. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the I2C transmission status, <code>i2c::Status::OK</code> if the operation was successful, or any other <code><a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a></code> code if it failed.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e" title="Bus condition (see I2C) to be generated by I2CDevice read and write methods. ">i2c::BusConditions</a> </dd>
+<dd>
+<a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#af52330bb110ac9e62ffb4b7507ac28d7" title="Read a given number of bytes from an I2C device at the given address. ">read(uint8_t, uint8_t*, uint8_t, BusConditions)</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a767eedb19009c88839483bc607af16f9" title="Write the given number of bytes to an I2C device at the given address. ">write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00146">146</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="a767eedb19009c88839483bc607af16f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a767eedb19009c88839483bc607af16f9">&#9670;&nbsp;</a></span>write() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::write </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a>&#160;</td>
+          <td class="paramname"><em>conditions</em> = <code><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write the given number of bytes to an I2C device at the given address. </p>
+<p>I2C transmission may include START and STOP conditions, and device address, based on <code>conditions</code> argument.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>I2C device address (only 7 MSB are used for the actual address the LSB is not used and should always be <code>0</code>); will be used only if <code>conditions</code> requires a START or repeated START condition </td></tr>
+    <tr><td class="paramname">data</td><td>pointer to an array of bytes that contain data to be sent to this device; the array must have an allocated size of at least <code>size</code> bytes </td></tr>
+    <tr><td class="paramname">size</td><td>the number of bytes to write to this device </td></tr>
+    <tr><td class="paramname">conditions</td><td>which bus conditions should be transmitted on the bus; by default, it indicates to transmit both START and STOP conditions, i.e. a full I2C frame. If you need to implement a more complex device protocol, e.g. mixing read and write or with several write operations in one frame, then you can use other conditions. Just do not forget that the first operation should always include the START condition and the last operation the STOP condition. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the I2C transmission status, <code>i2c::Status::OK</code> if the operation was successful, or any other <code><a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a></code> code if it failed.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e" title="Bus condition (see I2C) to be generated by I2CDevice read and write methods. ">i2c::BusConditions</a> </dd>
+<dd>
+<a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#af52330bb110ac9e62ffb4b7507ac28d7" title="Read a given number of bytes from an I2C device at the given address. ">read()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#ae4c1b5c91ee76684ebb3b55085831a98" title="Write, byte after byte, the content of data to an I2C device at the given address. ">write(uint8_t, const T&amp;, BusConditions)</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#ab3267675aecc9f77c729afa6988cf6ee" title="Write one data byte to an I2C device at the given address. ">write(uint8_t, uint8_t, BusConditions)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00178">178</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="ae4c1b5c91ee76684ebb3b55085831a98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4c1b5c91ee76684ebb3b55085831a98">&#9670;&nbsp;</a></span>write() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::write </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a>&#160;</td>
+          <td class="paramname"><em>conditions</em> = <code><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write, byte after byte, the content of <code>data</code> to an I2C device at the given address. </p>
+<p>The number of bytes to be received is determined by type <code>T</code>.</p>
+<p>I2C transmission may include START and STOP conditions, and device address, based on <code>conditions</code> argument.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type ot <code>data</code>, which will determine the number of bytes to send</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>I2C device address (only 7 MSB are used for the actual address the LSB is not used and should always be <code>0</code>); will be used only if <code>conditions</code> requires a START or repeated START condition </td></tr>
+    <tr><td class="paramname">data</td><td>reference to a <code>T</code> object which content will be sent to this device </td></tr>
+    <tr><td class="paramname">conditions</td><td>which bus conditions should be transmitted on the bus; by default, it indicates to transmit both START and STOP conditions, i.e. a full I2C frame. If you need to implement a more complex device protocol, e.g. mixing read and write or with several write operations in one frame, then you can use other conditions. Just do not forget that the first operation should always include the START condition and the last operation the STOP condition. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the I2C transmission status, <code>i2c::Status::OK</code> if the operation was successful, or any other <code><a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a></code> code if it failed.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e" title="Bus condition (see I2C) to be generated by I2CDevice read and write methods. ">i2c::BusConditions</a> </dd>
+<dd>
+<a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#af52330bb110ac9e62ffb4b7507ac28d7" title="Read a given number of bytes from an I2C device at the given address. ">read()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a767eedb19009c88839483bc607af16f9" title="Write the given number of bytes to an I2C device at the given address. ">write(uint8_t, const uint8_t*, uint8_t, BusConditions)</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#ab3267675aecc9f77c729afa6988cf6ee" title="Write one data byte to an I2C device at the given address. ">write(uint8_t, uint8_t, BusConditions)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00220">220</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="ab3267675aecc9f77c729afa6988cf6ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3267675aecc9f77c729afa6988cf6ee">&#9670;&nbsp;</a></span>write() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::write </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e">BusConditions</a>&#160;</td>
+          <td class="paramname"><em>conditions</em> = <code><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef">BusConditions::START_STOP</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write one data byte to an I2C device at the given address. </p>
+<p>I2C transmission may include START and STOP conditions, and device address, based on <code>conditions</code> argument.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>I2C device address (only 7 MSB are used for the actual address the LSB is not used and should always be <code>0</code>); will be used only if <code>conditions</code> requires a START or repeated START condition </td></tr>
+    <tr><td class="paramname">data</td><td>the byte to send to this device </td></tr>
+    <tr><td class="paramname">conditions</td><td>which bus conditions should be transmitted on the bus; by default, it indicates to transmit both START and STOP conditions, i.e. a full I2C frame. If you need to implement a more complex device protocol, e.g. mixing read and write or with several write operations in one frame, then you can use other conditions. Just do not forget that the first operation should always include the START condition and the last operation the STOP condition. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the I2C transmission status, <code>i2c::Status::OK</code> if the operation was successful, or any other <code><a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a></code> code if it failed.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e" title="Bus condition (see I2C) to be generated by I2CDevice read and write methods. ">i2c::BusConditions</a> </dd>
+<dd>
+<a class="el" href="namespacei2c_1_1_status.html" title="Transmission status codes. ">i2c::Status</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#af52330bb110ac9e62ffb4b7507ac28d7" title="Read a given number of bytes from an I2C device at the given address. ">read()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a767eedb19009c88839483bc607af16f9" title="Write the given number of bytes to an I2C device at the given address. ">write(uint8_t, const uint8_t*, uint8_t, BusConditions)</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#ae4c1b5c91ee76684ebb3b55085831a98" title="Write, byte after byte, the content of data to an I2C device at the given address. ">write(uint8_t, const T&amp;, BusConditions)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00250">250</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6450cfc9e9475eafc62d42aedec8fef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6450cfc9e9475eafc62d42aedec8fef3">&#9670;&nbsp;</a></span>MODE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">I2CMode</a> <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE_ &gt;::MODE = MODE_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>the I2C mode for this device. </p>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00062">62</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="i2c__device_8h_source.html">i2c_device.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -150,7 +614,7 @@ class i2c::I2CDevice&lt; MODE_ &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>i2c</b></li><li class="navelem"><a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a></li>
+    <li class="navelem"><a class="el" href="namespacei2c.html">i2c</a></li><li class="navelem"><a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>

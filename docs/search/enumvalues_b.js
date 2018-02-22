@@ -4,6 +4,8 @@ var searchData=
   ['r_5frx_5fpayload',['R_RX_PAYLOAD',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a38f74d809dee65e3baba3479ba9245e1',1,'devices::rf::NRF24L01']]],
   ['r_5frx_5fpl_5fwid',['R_RX_PL_WID',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a42a3b104c89cc1dbe42c183f14a79bcf',1,'devices::rf::NRF24L01']]],
   ['reg_5fmask',['REG_MASK',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30ac552a779611bf869dce38645b7819877',1,'devices::rf::NRF24L01']]],
+  ['repeat_5fstart_5fno_5fstop',['REPEAT_START_NO_STOP',['../namespacei2c.html#ae97c327132c21ce93c129f34d3b5101ea3400df9d5f6b1e31606e5134c52e4c2a',1,'i2c']]],
+  ['repeat_5fstart_5fstop',['REPEAT_START_STOP',['../namespacei2c.html#ae97c327132c21ce93c129f34d3b5101ea1982935da94c33f3d4540a8ae015dfa2',1,'i2c']]],
   ['reuse_5ftx_5fpl',['REUSE_TX_PL',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30ace522bddb25f12bbdd75d9c074988f13',1,'devices::rf::NRF24L01']]],
   ['rf_5fch',['RF_CH',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa87bdea4abfaf96d6dfa5e3e4c7a0c1e5',1,'devices::rf::NRF24L01']]],
   ['rf_5fsetup',['RF_SETUP',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa00178892c119a0acadd84e32ff2a7bd7',1,'devices::rf::NRF24L01']]],

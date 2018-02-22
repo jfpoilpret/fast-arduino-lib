@@ -46,6 +46,7 @@ var searchData=
   ['sputn',['sputn',['../classstreams_1_1ostreambuf.html#aec033507c6f9c2fe741ea03a7fb6cda3',1,'streams::ostreambuf::sputn(const char *content, size_t size)'],['../classstreams_1_1ostreambuf.html#a539d9780be35a7082615f4b4cc20dbc9',1,'streams::ostreambuf::sputn(const char *str)'],['../classstreams_1_1ostreambuf.html#a5ae9b4a7aeef87bcec0ca2bf5c3c3204',1,'streams::ostreambuf::sputn(const flash::FlashStorage *str)']]],
   ['standby',['standby',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ac6ab7ec353225fec36d49130cb9d6786',1,'devices::rf::NRF24L01']]],
   ['start_5ftransfer',['start_transfer',['../classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e',1,'spi::SPIDevice']]],
+  ['status',['status',['../classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78',1,'i2c::I2CManager']]],
   ['status_5ft',['status_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a1b1df9c01cf13da3e71011631b3d4efa',1,'devices::rf::NRF24L01::status_t']]],
   ['suspend',['suspend',['../classtimer_1_1_timer.html#a7f48e7e02140100e2d6a7216efbeab64',1,'timer::Timer']]],
   ['suspend_5f',['suspend_',['../classtimer_1_1_timer.html#a4d0cc43223d237155093ae82b2a9ac46',1,'timer::Timer']]],

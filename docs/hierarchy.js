@@ -62,8 +62,6 @@ var hierarchy =
     [ "i2c::I2CDevice< MODE >", "classi2c_1_1_i2_c_device.html", [
       [ "devices::magneto::MPU6050< MODE, AD0 >", "classdevices_1_1magneto_1_1_m_p_u6050.html", null ]
     ] ],
-    [ "i2c::I2CHandler< MODE_ >", "classi2c_1_1_i2_c_handler.html", null ],
-    [ "i2c::I2CHandler< MODE >", "classi2c_1_1_i2_c_handler.html", null ],
     [ "i2c::I2CManager< MODE_ >", "classi2c_1_1_i2_c_manager.html", null ],
     [ "interrupt::INTSignal< PIN_ >", "classinterrupt_1_1_i_n_t_signal.html", null ],
     [ "devices::magneto::INTStatus", "structdevices_1_1magneto_1_1_i_n_t_status.html", null ],
@@ -135,8 +133,8 @@ var hierarchy =
     [ "devices::sonar::SonarEvent< TIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],
     [ "timer::SquareWave< NTIMER, OUTPUT >", "classtimer_1_1_square_wave.html", null ],
-    [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
+    [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
     [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", [
       [ "timer::PulseTimer< NTIMER_, PRESCALER, T >", "classtimer_1_1_pulse_timer.html", null ],
