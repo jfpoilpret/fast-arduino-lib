@@ -51,7 +51,7 @@ Status
 
 First FastArduino official release [**v1.0**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.0) has just been published (22.02.2018)!
 
-The project covers a lot of features already, a few missing, less improtant, features will be released in future versions (see roadmap below); current features API is deemed stable and should not change in the future.
+The project covers a lot of features already, a few missing, less important, features will be released in future versions (see roadmap below); current features API is deemed stable and should not change in the future.
 
 What the project already has:
 
