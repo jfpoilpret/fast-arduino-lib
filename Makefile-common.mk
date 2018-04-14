@@ -23,6 +23,16 @@ can_build:=$(and $(VARIANT),$(ARCH),$(MCU),$(F_CPU),true)
 can_upload:=$(and $(DUDE_OPTION),$(can_build))
 has_fuses:=$(and $(LFUSE),$(HFUSE),$(EFUSE),true)
 
+# Prepare additional compiler options (optional)
+ifndef ADDITIONAL_CXX_OPTIONS
+	ADDITIONAL_CXX_OPTIONS:=
+endif
+
+# Prepare additional linker options (optional)
+ifndef ADDITIONAL_LD_OPTIONS
+	ADDITIONAL_LD_OPTIONS:=
+endif
+
 # Output directories
 config:=$(VARIANT)-$(subst 000000UL,MHz,$(F_CPU))
 objdir:=build/$(config)
@@ -70,10 +80,10 @@ cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -W
 ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
 depflags = -MT $@ -MMD -MP -MF $(depdir)/$*.Td
 
-compile.cc = $(cxx) $(depflags) $(cxxflags) -c -o $@
+compile.cc = $(cxx) $(depflags) $(cxxflags) $(ADDITIONAL_CXX_OPTIONS) -c -o $@
 precompile =
 postcompile = mv -f $(depdir)/$*.Td $(depdir)/$*.d
-link.o = $(cxx) $(ldflags) -o $@
+link.o = $(cxx) $(ldflags) $(ADDITIONAL_LD_OPTIONS) -o $@
 
 # Flags for target programming (upload)
 avrdude_options:=-p $(MCU) $(DUDE_OPTION) $(if $(DUDE_SERIAL),-P $(DUDE_SERIAL))
