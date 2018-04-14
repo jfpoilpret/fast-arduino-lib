@@ -365,15 +365,15 @@ namespace timer
 		{
 		}
 
-		/// @cond notdocumented
+	private:
 		void on_rtt_change(uint32_t millis)
 		{
 			if ((millis & (PERIOD_MS - 1)) == 0) event_queue_.push_(EVENT{events::Type::RTT_TIMER});
 		}
-		/// @endcond
 
-	private:
 		containers::Queue<EVENT>& event_queue_;
+
+		DECL_TIMER_COMP_FRIENDS
 	};
 }
 
