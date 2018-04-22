@@ -67,8 +67,8 @@ endif
 
 # Environment
 rm:=rm -f
-ar:=ar
-ranlib:=ranlib
+ar:=avr-gcc-ar
+ranlib:=avr-gcc-ranlib
 cxx:=avr-g++
 nm:=avr-nm
 objcopy:=avr-objcopy
