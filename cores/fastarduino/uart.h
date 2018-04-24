@@ -89,8 +89,11 @@ namespace serial
 			};
 			static constexpr SpeedSetup compute_speed(uint32_t rate)
 			{
-				return (UBRR_double(rate) < DOUBLE_SPEED_RATE_LIMIT) ? SpeedSetup(UBRR_double(rate), true) :
-																	   SpeedSetup(UBRR_single(rate), false);
+				const uint16_t double_rate = UBRR_double(rate);
+				if (double_rate < DOUBLE_SPEED_RATE_LIMIT)
+					return SpeedSetup(double_rate, true);
+				else
+					return SpeedSetup(UBRR_single(rate), false);
 			}
 
 		private:
