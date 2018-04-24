@@ -67,8 +67,8 @@ endif
 
 # Environment
 rm:=rm -f
-ar:=ar
-ranlib:=ranlib
+ar:=avr-gcc-ar
+ranlib:=avr-gcc-ranlib
 cxx:=avr-g++
 nm:=avr-nm
 objcopy:=avr-objcopy
@@ -76,8 +76,8 @@ objdump:=avr-objdump
 objsize:=avr-size
 
 # Flags for compilation and build
-cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++11 
-ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=gnu++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
+cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++11 
+ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=c++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
 depflags = -MT $@ -MMD -MP -MF $(depdir)/$*.Td
 
 compile.cc = $(cxx) $(depflags) $(cxxflags) $(ADDITIONAL_CXX_OPTIONS) -c -o $@
