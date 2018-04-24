@@ -65,13 +65,13 @@ namespace spi
 	 */
 	constexpr ClockRate compute_clockrate(uint32_t frequency)
 	{
-		return	frequency >= (F_CPU / 2) ? ClockRate::CLOCK_DIV_2 :
-				frequency >= (F_CPU / 4) ? ClockRate::CLOCK_DIV_4 :
-				frequency >= (F_CPU / 8) ? ClockRate::CLOCK_DIV_8 :
-				frequency >= (F_CPU / 16) ? ClockRate::CLOCK_DIV_16 :
-				frequency >= (F_CPU / 32) ? ClockRate::CLOCK_DIV_32 :
-				frequency >= (F_CPU / 64) ? ClockRate::CLOCK_DIV_64 :
-				ClockRate::CLOCK_DIV_128;
+		if (frequency >= (F_CPU / 2)) return ClockRate::CLOCK_DIV_2;
+		else if (frequency >= (F_CPU / 4)) return ClockRate::CLOCK_DIV_4;
+		else if (frequency >= (F_CPU / 8)) return ClockRate::CLOCK_DIV_8;
+		else if (frequency >= (F_CPU / 16)) return ClockRate::CLOCK_DIV_16;
+		else if (frequency >= (F_CPU / 32)) return ClockRate::CLOCK_DIV_32;
+		else if (frequency >= (F_CPU / 64)) return ClockRate::CLOCK_DIV_64;
+		else return ClockRate::CLOCK_DIV_128;
 	}
 
 #ifdef SPDR
