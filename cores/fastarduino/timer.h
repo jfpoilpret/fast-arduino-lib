@@ -591,6 +591,7 @@ namespace timer
 			return quotient > 1 and quotient < TRAIT::MAX_COUNTER;
 		}
 
+		//TODO BEGIN replace all 3 methods with just one with for loop
 		static constexpr PRESCALER best_prescaler_in_2(PRESCALER p1, PRESCALER p2, uint32_t us)
 		{
 			return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ?
@@ -613,12 +614,14 @@ namespace timer
 		{
 			return best_prescaler(prescalers, prescalers + N, us);
 		}
+		//TODO END replace all 3 methods with just one with for loop
 
 		static constexpr bool prescaler_is_adequate_for_frequency(PRESCALER p, uint32_t freq)
 		{
 			return (F_CPU / (uint32_t) _BV(uint8_t(p)) > freq);
 		}
 
+		//TODO BEGIN replace all 3 methods with just one with for loop
 		static constexpr PRESCALER best_frequency_prescaler_in_2(PRESCALER p1, PRESCALER p2, uint32_t freq)
 		{
 			return prescaler_is_adequate_for_frequency(p2, freq) ? p2 : p1;
@@ -635,6 +638,7 @@ namespace timer
 		{
 			return best_frequency_prescaler(prescalers, prescalers + N, freq);
 		}
+		//TODO END replace all 3 methods with just one with for loop
 
 		static constexpr bool prescaler_is_adequate_for_tick(PRESCALER p, uint32_t us)
 		{
