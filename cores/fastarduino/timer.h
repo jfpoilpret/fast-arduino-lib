@@ -591,74 +591,69 @@ namespace timer
 			return quotient > 1 and quotient < TRAIT::MAX_COUNTER;
 		}
 
-		//TODO BEGIN replace all 3 methods with just one with for loop
-		static constexpr PRESCALER best_prescaler_in_2(PRESCALER p1, PRESCALER p2, uint32_t us)
-		{
-			return (!prescaler_is_adequate(prescaler_quotient(p1, us)) ?
-						p2 :
-						!prescaler_is_adequate(prescaler_quotient(p2, us)) ?
-						p1 :
-						prescaler_remainder(p1, us) < prescaler_remainder(p2, us) ?
-						p1 :
-						prescaler_remainder(p1, us) > prescaler_remainder(p2, us) ?
-						p2 :
-						prescaler_quotient(p1, us) > prescaler_quotient(p2, us) ? p1 : p2);
-		}
-
-		static constexpr PRESCALER best_prescaler(const PRESCALER* begin, const PRESCALER* end, uint32_t us)
-		{
-			return (begin + 1 == end ? *begin : best_prescaler_in_2(*begin, best_prescaler(begin + 1, end, us), us));
-		}
-
 		template<size_t N> static constexpr PRESCALER best_prescaler(const PRESCALER (&prescalers)[N], uint32_t us)
 		{
-			return best_prescaler(prescalers, prescalers + N, us);
+			// Find the best prescaler:
+			// - quotient is in ]1; MAX_COUNTER[
+			// - smallest remainder
+			// - largest quotient
+			uint32_t smallest_remainder = 0xFFFFFFFF;
+			uint32_t largest_quotient = 0;
+			PRESCALER current = prescalers[N - 1];
+			for (size_t i = 0; i < N; ++i)
+			{
+				PRESCALER prescaler = prescalers[i];
+				uint32_t quotient = prescaler_quotient(prescaler,us);
+				if (prescaler_is_adequate(quotient))
+				{
+					uint32_t remainder = prescaler_remainder(prescaler, us);
+					if (remainder > smallest_remainder)
+						continue;
+					if (remainder == smallest_remainder && quotient <= largest_quotient)
+						continue;
+					current = prescaler;
+					smallest_remainder = remainder;
+					largest_quotient = quotient;
+				}
+			}
+			return current;
 		}
-		//TODO END replace all 3 methods with just one with for loop
 
 		static constexpr bool prescaler_is_adequate_for_frequency(PRESCALER p, uint32_t freq)
 		{
 			return (F_CPU / (uint32_t) _BV(uint8_t(p)) > freq);
 		}
 
-		//TODO BEGIN replace all 3 methods with just one with for loop
-		static constexpr PRESCALER best_frequency_prescaler_in_2(PRESCALER p1, PRESCALER p2, uint32_t freq)
-		{
-			return prescaler_is_adequate_for_frequency(p2, freq) ? p2 : p1;
-		}
-
-		static constexpr PRESCALER best_frequency_prescaler(const PRESCALER* begin, const PRESCALER* end, uint32_t freq)
-		{
-			return (begin + 1 == end ? *begin : best_frequency_prescaler_in_2(
-													*begin, best_frequency_prescaler(begin + 1, end, freq), freq));
-		}
-
 		template<size_t N>
 		static constexpr PRESCALER best_frequency_prescaler(const PRESCALER (&prescalers)[N], uint32_t freq)
 		{
-			return best_frequency_prescaler(prescalers, prescalers + N, freq);
+			// Best prescaler is biggest possible divider, hence try all prescalers from largest to smallest
+			for (size_t i = 0; i < N; ++i)
+			{
+				PRESCALER prescaler = prescalers[N - 1 - i];
+				if (prescaler_is_adequate_for_frequency(prescaler, freq))
+					return prescaler;
+			}
+			// If no prescaler is adequate then return largest divider
+			return prescalers[N - 1];
 		}
-		//TODO END replace all 3 methods with just one with for loop
 
 		static constexpr bool prescaler_is_adequate_for_tick(PRESCALER p, uint32_t us)
 		{
 			return (prescaler_quotient(p, us) >= 1);
 		}
 
-		static constexpr PRESCALER best_tick_prescaler_in_2(PRESCALER p1, PRESCALER p2, uint32_t us)
-		{
-			return (prescaler_is_adequate_for_tick(p2, us) ? p2 : p1);
-		}
-
-		static constexpr PRESCALER best_tick_prescaler(const PRESCALER* begin, const PRESCALER* end, uint32_t us)
-		{
-			return (begin + 1 == end ? *begin :
-									   best_tick_prescaler_in_2(*begin, best_tick_prescaler(begin + 1, end, us), us));
-		}
-
 		template<size_t N> static constexpr PRESCALER best_tick_prescaler(const PRESCALER (&prescalers)[N], uint32_t us)
 		{
-			return best_frequency_prescaler(prescalers, prescalers + N, us);
+			// Best prescaler is biggest possible divider, hence try all prescalers from largest to smallest
+			for (size_t i = 0; i < N; ++i)
+			{
+				PRESCALER prescaler = prescalers[N - 1 - i];
+				if (prescaler_is_adequate_for_tick(prescaler, us))
+					return prescaler;
+			}
+			// If no prescaler is adequate then return largest divider
+			return prescalers[N - 1];
 		}
 	};
 
