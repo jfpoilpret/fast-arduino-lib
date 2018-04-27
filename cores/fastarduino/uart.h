@@ -65,15 +65,13 @@
 	REGISTER_UATX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &UART_CLASS_(UART_NUM)::data_register_empty) \
 	REGISTER_UARX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &UART_CLASS_(UART_NUM)::data_receive_complete)
 
-namespace serial
+/**
+ * Defines API types used by hardware UART features.
+ * Note this API is only available to MCU that have hardware UART, such as all
+ * ATmega, but not other MCU, like ATtiny.
+ */
+namespace serial::hard
 {
-	/**
-	 * Defines API types used by hardware UART features.
-	 * Note this API is only available to MCU that have hardware UART, such as all
-	 * ATmega, but not other MCU, like ATtiny.
-	 */
-	namespace hard
-	{
 		//TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
 		/// @cond notdocumented
 		class AbstractUART : public UARTErrors
@@ -432,7 +430,6 @@ namespace serial
 			DECL_UDRE_ISR_FRIENDS
 			DECL_RX_ISR_FRIENDS
 		};
-	}
 }
 
 #endif /* UCSR0A */
