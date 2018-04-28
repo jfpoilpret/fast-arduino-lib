@@ -23,6 +23,14 @@ can_build:=$(and $(VARIANT),$(ARCH),$(MCU),$(F_CPU),true)
 can_upload:=$(and $(DUDE_OPTION),$(can_build))
 has_fuses:=$(and $(LFUSE),$(HFUSE),$(EFUSE),true)
 
+# Explicitly set path to AVR-GCC binaries if needed (default is to use $PATH)
+ifndef AVR_TOOL_PATH
+	avr_tool_path:=
+else
+	# Add / at the end if needed
+	avr_tool_path:=$(realpath $(AVR_TOOL_PATH))/
+endif
+
 # Prepare additional compiler options (optional)
 ifndef ADDITIONAL_CXX_OPTIONS
 	ADDITIONAL_CXX_OPTIONS:=
@@ -67,16 +75,16 @@ endif
 
 # Environment
 rm:=rm -f
-ar:=avr-gcc-ar
-ranlib:=avr-gcc-ranlib
-cxx:=avr-g++
-nm:=avr-nm
-objcopy:=avr-objcopy
-objdump:=avr-objdump
-objsize:=avr-size
+ar:=$(avr_tool_path)avr-gcc-ar
+ranlib:=$(avr_tool_path)avr-gcc-ranlib
+cxx:=$(avr_tool_path)avr-g++
+nm:=$(avr_tool_path)avr-nm
+objcopy:=$(avr_tool_path)avr-objcopy
+objdump:=$(avr_tool_path)avr-objdump
+objsize:=$(avr_tool_path)avr-size
 
 # Flags for compilation and build
-cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++14 
+cxxflags:= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++14 
 ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=c++14 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
 depflags = -MT $@ -MMD -MP -MF $(depdir)/$*.Td
 
