@@ -21,9 +21,7 @@
 #include "../uart_commons.h"
 
 // This internal macro is used by individual boards headers
-// Calling __builtin_constant_p() is mandatory with avr-gcc-6.3.0
-// otherwise constexpr uses of R_ will not compile
-#define R_(REG) (uint16_t(__builtin_constant_p(&REG)))
+#define R_(REG) (uint16_t(&REG))
 
 #ifndef INLINE
 #define INLINE __attribute__((always_inline))
