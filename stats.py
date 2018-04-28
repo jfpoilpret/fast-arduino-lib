@@ -9,7 +9,7 @@ def filter(args):
     with args.output:
         with args.input:
             for line in args.input:
-                if line.startswith("avr-size"):
+                if line.find("avr-size") >= 0:
                     # Find example name (everything after last /)
                     example = line[line.rfind("/") + 1:-1]
                 elif line.startswith("Program:"):
