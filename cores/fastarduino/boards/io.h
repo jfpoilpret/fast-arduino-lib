@@ -12,8 +12,11 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#ifndef BOARDS_BOARD_TRAITS_HH
-#define BOARDS_BOARD_TRAITS_HH
+// This file wraps "avr/io.h" header, in order to override all _SFR_XXX() macros
+// to allow usage of all defines (such as PINB) to work in constexpr evalutations.
+
+#ifndef BOARDS_IO_HH
+#define BOARDS_IO_HH
 
 #include <avr/io.h>
 
@@ -38,31 +41,4 @@
 #endif
 #define _SFR_MEM16(x) (x)
 
-// Arduino Boards
-#if defined(ARDUINO_MEGA)
-#include "mega_traits.h"
-#elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-#include "uno_traits.h"
-#elif defined(ARDUINO_LEONARDO)
-#include "leonardo_traits.h"
-#elif defined(ARDUINO_NANO)
-#define HAS_8_ANALOG_INPUTS
-#include "uno_traits.h"
-
-// Breadboards
-#elif defined(BREADBOARD_ATTINYX4)
-#include "attiny_x4_traits.h"
-#elif defined(BREADBOARD_ATTINYX5)
-#include "attiny_x5_traits.h"
-
-#else
-#error "board_traits.h: board not supported"
-#endif
-
-// Override all _SFR_XXX() macros to simply return a const integer value
-#undef _SFR_IO8
-#undef _SFR_IO16
-#undef _SFR_MEM8
-#undef _SFR_MEM16
-
-#endif /* BOARDS_BOARD_TRAITS_HH */
+#endif /* BOARDS_IO_HH */

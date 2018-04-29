@@ -21,12 +21,11 @@
 #ifndef TIMER_HH
 #define TIMER_HH
 
+#include "boards/board_traits.h"
 #include <avr/interrupt.h>
 #include <stddef.h>
-
 #include "interrupts.h"
 #include "utilities.h"
-#include "boards/board_traits.h"
 
 // Generic macros to register ISR on Timer
 //=========================================

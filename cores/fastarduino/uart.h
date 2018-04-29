@@ -21,10 +21,10 @@
 #ifndef UART_HH
 #define UART_HH
 
+#include "boards/board_traits.h"
 #include "interrupts.h"
 #include "uart_commons.h"
 #include "streams.h"
-#include "boards/board_traits.h"
 
 // Only MCU with physical USART are supported (not ATtiny then)
 #if defined(UCSR0A) || defined(UCSR1A)

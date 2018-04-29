@@ -21,7 +21,7 @@
 #ifndef UTILITIES_HH
 #define UTILITIES_HH
 
-#include <avr/io.h>
+#include "boards/io.h"
 #include <util/atomic.h>
 
 /// @cond notdocumented
@@ -53,6 +53,8 @@
  * @endcode
  */
 #define synchronized _Pragma("GCC diagnostic ignored \"-Wreturn-type\"") ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+
+#include "boards/io.h"
 
 /**
  * Contains all generic utility methods.

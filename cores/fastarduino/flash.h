@@ -21,6 +21,7 @@
 #ifndef FLASH_HH
 #define FLASH_HH
 
+#include "boards/io.h"
 #include <avr/pgmspace.h>
 
 /**

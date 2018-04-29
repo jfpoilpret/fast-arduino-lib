@@ -25,12 +25,11 @@
 #ifndef PCI_HH
 #define PCI_HH
 
-#include <avr/interrupt.h>
-
-#include "interrupts.h"
-#include "utilities.h"
 #include "boards/board.h"
 #include "boards/board_traits.h"
+#include <avr/interrupt.h>
+#include "interrupts.h"
+#include "utilities.h"
 
 /// @cond notdocumented
 #define CHECK_PCI_PIN_(PIN, PCI_NUM)                                                                          \

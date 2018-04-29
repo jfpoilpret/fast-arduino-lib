@@ -21,12 +21,12 @@
 #ifndef WATCHDOG_HH
 #define WATCHDOG_HH
 
+#include "boards/board.h"
+#include "boards/board_traits.h"
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
 #include "interrupts.h"
 #include "events.h"
-#include "boards/board.h"
-#include "boards/board_traits.h"
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog

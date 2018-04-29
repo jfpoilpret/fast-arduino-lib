@@ -24,13 +24,13 @@
 #define NRF24L01_HH
 
 #include <stddef.h>
-#include <util/delay.h>
 #include "../utilities.h"
 #include "../errors.h"
 #include "../time.h"
 #include "../spi.h"
 #include "../int.h"
 #include "nrf24l01p_internals.h"
+// #include <util/delay.h>
 
 namespace devices::rf
 {

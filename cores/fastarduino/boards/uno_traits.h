@@ -15,7 +15,7 @@
 #ifndef BOARDS_UNO_TRAITS_HH
 #define BOARDS_UNO_TRAITS_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include "uno.h"
 #include "common_traits.h"
 

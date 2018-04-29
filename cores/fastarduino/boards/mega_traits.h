@@ -15,7 +15,7 @@
 #ifndef BOARDS_MEGA_TRAITS_HH
 #define BOARDS_MEGA_TRAITS_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include "mega.h"
 #include "common_traits.h"
 

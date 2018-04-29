@@ -21,11 +21,11 @@
 #ifndef EEPROM_H
 #define EEPROM_H
 
-#include <avr/io.h>
+#include "io.h"
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 
-#include "boards/board.h"
+#include "boards/board_traits.h"
 #include "interrupts.h"
 #include "utilities.h"
 #include "queue.h"
@@ -401,8 +401,7 @@ namespace eeprom
 		 */
 		inline static void wait_until_ready()
 		{
-			while (EECR & _BV(EEPE))
-				;
+			EECR_.loop_until_bit_clear(EEPE);
 		}
 
 	protected:
@@ -420,9 +419,9 @@ namespace eeprom
 
 		inline static void read_byte(uint16_t address, uint8_t& value)
 		{
-			EEAR = address;
-			EECR = _BV(EERE);
-			value = EEDR;
+			EEAR_ = address;
+			EECR_ = _BV(EERE);
+			value = EEDR_;
 		}
 
 		inline static void blocked_write(uint16_t address, uint8_t value)
@@ -437,55 +436,62 @@ namespace eeprom
 		// http://www.atmel.com/images/doc2578.pdf
 		inline static void write_byte(uint16_t address, uint8_t value)
 		{
-			EEAR = address;
-			EECR = _BV(EERE);
-			uint8_t old_value = EEDR;
+			EEAR_ = address;
+			EECR_ = _BV(EERE);
+			uint8_t old_value = EEDR_;
 			uint8_t diff = old_value ^ value;
 			if (diff & value)
 			{
 				// Some bits need to be erased (ie set to 1)
 				if (value == 0xFF)
 					// Erase only
-					EECR = EEPM0;
+					EECR_ = EEPM0;
 				else
 					// Combine Erase/Write operation
-					EECR = 0;
+					EECR_ = 0;
 			}
 			else
 			{
 				// No bit to be erased
 				if (diff)
 					// Some bits to be programmed (set to 0): Write only
-					EECR = EEPM1;
+					EECR_ = EEPM1;
 				else
 					// old value == new value => do nothing
 					return;
 			}
-			EEDR = value;
+			EEDR_ = value;
 			synchronized
 			{
-				EECR |= _BV(EEMPE);
-				EECR |= _BV(EEPE);
+				EECR_ |= _BV(EEMPE);
+				EECR_ |= _BV(EEPE);
 			}
 		}
 
 		inline static bool erase_address(uint16_t address)
 		{
-			EEAR = address;
-			EECR = _BV(EERE);
+			EEAR_ = address;
+			EECR_ = _BV(EERE);
 			uint8_t value = EEDR;
 			// Some bits need to be erased (ie set to 1)
 			if (value == 0xFF) return false;
-			EECR = EEPM0;
-			EEDR = 0xFF;
+			EECR_ = EEPM0;
+			EEDR_ = 0xFF;
 			synchronized
 			{
-				EECR |= _BV(EEMPE);
-				EECR |= _BV(EEPE);
+				EECR_ |= _BV(EEMPE);
+				EECR_ |= _BV(EEPE);
 			}
 			return true;
 		}
 		/// @endcond
+
+	private:
+		using REG8 = board_traits::REG8;
+		using REG16 = board_traits::REG16;
+		static constexpr const REG16 EEAR_{EEAR};
+		static constexpr const REG8 EECR_{EECR};
+		static constexpr const REG8 EEDR_{EEDR};
 	};
 
 	/**
@@ -675,7 +681,7 @@ namespace eeprom
 				current_.address = 0;
 				current_.size = size();
 				// Start transmission if not done yet
-				EECR = _BV(EERIE);
+				EECR_ = _BV(EERIE);
 			}
 		}
 
@@ -717,7 +723,7 @@ namespace eeprom
 					if (buffer_.empty_())
 					{
 						done_ = true;
-						EECR = 0;
+						EECR_ = 0;
 					}
 				}
 			}
@@ -735,7 +741,7 @@ namespace eeprom
 			{
 				// All writes are finished
 				done_ = true;
-				EECR = 0;
+				EECR_ = 0;
 			}
 			return done_;
 		}
@@ -746,14 +752,14 @@ namespace eeprom
 			buffer_.pull_(value);
 			EEPROM::write_byte(current_.address++, value);
 			--current_.size;
-			EECR |= _BV(EERIE);
+			EECR_ |= _BV(EERIE);
 		}
 
 		void erase_next()
 		{
 			EEPROM::erase_address(current_.address++);
 			--current_.size;
-			EECR |= _BV(EERIE);
+			EECR_ |= _BV(EERIE);
 		}
 
 		bool write_data(uint16_t address, uint8_t* value, uint16_t size)
@@ -768,7 +774,7 @@ namespace eeprom
 			for (uint16_t i = 0; i < size; ++i) buffer_.push_(*value++);
 
 			// Start transmission if not done yet
-			EECR = _BV(EERIE);
+			EECR_ = _BV(EERIE);
 			return true;
 		}
 
@@ -807,6 +813,12 @@ namespace eeprom
 			buffer_.pull_(value3);
 			return WriteItem{value1, value2, value3};
 		}
+
+		using REG8 = board_traits::REG8;
+		using REG16 = board_traits::REG16;
+		static constexpr const REG16 EEAR_{EEAR};
+		static constexpr const REG8 EECR_{EECR};
+		static constexpr const REG8 EEDR_{EEDR};
 
 		containers::Queue<uint8_t, uint8_t> buffer_;
 		WriteItem current_;

@@ -22,7 +22,7 @@
 #ifndef BOARDS_LEONARDO_HH
 #define BOARDS_LEONARDO_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented

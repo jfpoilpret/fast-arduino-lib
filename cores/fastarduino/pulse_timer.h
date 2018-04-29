@@ -15,12 +15,11 @@
 #ifndef PULSE_TIMER_HH
 #define PULSE_TIMER_HH
 
+#include "boards/board_traits.h"
 #include <avr/interrupt.h>
 #include <stddef.h>
-
 #include "interrupts.h"
 #include "utilities.h"
-#include "boards/board_traits.h"
 #include "timer.h"
 #include "gpio.h"
 

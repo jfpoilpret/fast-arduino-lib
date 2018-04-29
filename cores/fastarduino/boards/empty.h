@@ -25,7 +25,8 @@
 #ifndef BOARDS_EMPTY_HH
 #define BOARDS_EMPTY_HH
 
-#include <stddef.h>
+#include "io.h"
+#include <avr/sleep.h>
 
 /**
  * Defines all types and constants specific to support a specific MCU target.

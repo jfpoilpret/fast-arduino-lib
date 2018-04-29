@@ -21,6 +21,7 @@
 #ifndef RTT_HH
 #define RTT_HH
 
+#include "boards/io.h"
 #include <avr/interrupt.h>
 #include "interrupts.h"
 #include "timer.h"

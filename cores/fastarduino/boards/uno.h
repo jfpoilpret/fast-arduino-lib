@@ -22,7 +22,7 @@
 #ifndef BOARDS_UNO_HH
 #define BOARDS_UNO_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented

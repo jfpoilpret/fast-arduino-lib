@@ -15,11 +15,11 @@
 #ifndef SOFTUART_HH
 #define SOFTUART_HH
 
+#include "boards/board.h"
 #include "interrupts.h"
 #include "utilities.h"
 #include "uart_commons.h"
 #include "streams.h"
-#include "boards/board.h"
 #include "gpio.h"
 #include "pci.h"
 #include "int.h"

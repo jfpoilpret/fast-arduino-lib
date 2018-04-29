@@ -12,9 +12,8 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include <util/delay_basic.h>
-
 #include "soft_uart.h"
+// #include <util/delay_basic.h>
 
 void serial::soft::AbstractUATX::begin_serial(uint32_t rate, Parity parity, StopBits stop_bits)
 {

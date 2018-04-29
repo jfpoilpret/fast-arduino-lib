@@ -21,8 +21,8 @@
 #ifndef FASTIO_HH
 #define FASTIO_HH
 
-#include "utilities.h"
 #include "boards/board_traits.h"
+#include "utilities.h"
 
 /**
  * Defines all API to manipulate general-purpose digital input/output pins.

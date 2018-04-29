@@ -22,7 +22,7 @@
 #ifndef BOARDS_ATTINYX5_HH
 #define BOARDS_ATTINYX5_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented
