@@ -345,7 +345,8 @@ namespace i2c
 			_delay_loop_1(T_HIGH);
 			// clock strobe (SCL falling edge)
 			USICR_ |= _BV(USITC);
-		} while (bit_is_clear(USISR_, USIOIF));
+		}
+		while ((USISR_ & _BV(USIOIF)) == 0);
 		_delay_loop_1(T_LOW);
 		// Read data
 		uint8_t data = USIDR_;
