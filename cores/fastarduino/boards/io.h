@@ -41,4 +41,10 @@
 #endif
 #define _SFR_MEM16(x) (x)
 
+// Force SREG which is used by <util/atomic.h>
+#ifdef SREG
+#undef SREG
+#define SREG (*((volatile uint8_t*) 0x3F))
+#endif
+
 #endif /* BOARDS_IO_HH */

@@ -21,10 +21,6 @@
 #ifndef POWER_HH
 #define POWER_HH
 
-// #include "boards/board.h"
-#include <avr/interrupt.h>
-#include <avr/power.h>
-#include <avr/sleep.h>
 #include "boards/board.h"
 
 /**
@@ -32,6 +28,10 @@
  */
 namespace power
 {
+	/// @cond notdocumented
+	extern void sleep(uint8_t mode);
+	/// @endcond
+
 	/**
 	 * This class contains the API for handling power sleep modes.
 	 * It is not aimed for instantiation, as all its methods are static.
@@ -83,12 +83,7 @@ namespace power
 		 */
 		static void sleep(board::SleepMode mode)
 		{
-			set_sleep_mode((uint8_t) mode);
-			cli();
-			sleep_enable();
-			sei();
-			sleep_cpu();
-			sleep_disable();
+			::power::sleep((uint8_t) mode);
 		}
 
 	private:

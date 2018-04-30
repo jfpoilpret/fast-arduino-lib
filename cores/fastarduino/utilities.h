@@ -54,8 +54,6 @@
  */
 #define synchronized _Pragma("GCC diagnostic ignored \"-Wreturn-type\"") ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 
-#include "boards/io.h"
-
 /**
  * Contains all generic utility methods.
  */

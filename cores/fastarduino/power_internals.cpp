@@ -12,30 +12,18 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#ifndef BOARDS_BOARD_TRAITS_HH
-#define BOARDS_BOARD_TRAITS_HH
+#include <avr/interrupt.h>
+#include <avr/sleep.h>
 
-#include "io.h"
-
-// Arduino Boards
-#if defined(ARDUINO_MEGA)
-#include "mega_traits.h"
-#elif defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P)
-#include "uno_traits.h"
-#elif defined(ARDUINO_LEONARDO)
-#include "leonardo_traits.h"
-#elif defined(ARDUINO_NANO)
-#define HAS_8_ANALOG_INPUTS
-#include "uno_traits.h"
-
-// Breadboards
-#elif defined(BREADBOARD_ATTINYX4)
-#include "attiny_x4_traits.h"
-#elif defined(BREADBOARD_ATTINYX5)
-#include "attiny_x5_traits.h"
-
-#else
-#error "board_traits.h: board not supported"
-#endif
-
-#endif /* BOARDS_BOARD_TRAITS_HH */
+namespace power
+{
+	void sleep(uint8_t mode)
+	{
+		set_sleep_mode(mode);
+		cli();
+		sleep_enable();
+		sei();
+		sleep_cpu();
+		sleep_disable();
+	}
+}
