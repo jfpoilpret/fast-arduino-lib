@@ -55,14 +55,25 @@ namespace i2c
 		inline void stop() INLINE;
 
 	private:
-// Implementation part is specific to AVR architecture: ATmega (TWCR) or ATtiny (USICR)
+		using REG8 = board_traits::REG8;
+
+	// Implementation part is specific to AVR architecture: ATmega (TWCR) or ATtiny (USICR)
 #if defined(TWCR)
+		static constexpr const REG8 TWBR_{TWBR};
+		static constexpr const REG8 TWSR_{TWSR};
+		static constexpr const REG8 TWCR_{TWCR};
+		static constexpr const REG8 TWDR_{TWDR};
+
 		bool wait_twint(uint8_t expected_status);
 
 		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100000UL - 16UL) / 2;
 		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400000UL - 16UL) / 2;
 		static constexpr const uint8_t TWBR_VALUE = (MODE == I2CMode::Standard ? STANDARD_FREQUENCY : FAST_FREQUENCY);
 #else
+		static constexpr const REG8 USIDR_{USIDR};
+		static constexpr const REG8 USISR_{USISR};
+		static constexpr const REG8 USICR_{USICR};
+
 		inline void SCL_HIGH() INLINE;
 		inline void SCL_LOW() INLINE;
 		inline void SDA_HIGH() INLINE;
@@ -112,45 +123,45 @@ namespace i2c
 		// 1. set SDA/SCL pullups
 		TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
 		// 2. set I2C frequency
-		TWBR = TWBR_VALUE;
-		TWSR = 0;
+		TWBR_ = TWBR_VALUE;
+		TWSR_ = 0;
 		// 3. Enable TWI
-		TWCR = _BV(TWEN);
+		TWCR_ = _BV(TWEN);
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::end()
 	{
 		// 1. Disable TWI
-		TWCR = 0;
+		TWCR_ = 0;
 		// 2. remove SDA/SCL pullups
 		TRAIT::PORT &= ~TRAIT::SCL_SDA_MASK;
 	}
 
 	template<I2CMode MODE> bool I2CHandler<MODE>::start()
 	{
-		TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
+		TWCR_ = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
 		return wait_twint(Status::START_TRANSMITTED);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::repeat_start()
 	{
-		TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
+		TWCR_ = _BV(TWEN) | _BV(TWINT) | _BV(TWSTA);
 		return wait_twint(Status::REPEAT_START_TRANSMITTED);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slar(uint8_t address)
 	{
-		TWDR = address | 0x01;
-		TWCR = _BV(TWEN) | _BV(TWINT);
+		TWDR_ = address | 0x01;
+		TWCR_ = _BV(TWEN) | _BV(TWINT);
 		return wait_twint(Status::SLA_R_TRANSMITTED_ACK);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slaw(uint8_t address)
 	{
-		TWDR = address;
-		TWCR = _BV(TWEN) | _BV(TWINT);
+		TWDR_ = address;
+		TWCR_ = _BV(TWEN) | _BV(TWINT);
 		return wait_twint(Status::SLA_W_TRANSMITTED_ACK);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_data(uint8_t data)
 	{
-		TWDR = data;
-		TWCR = _BV(TWEN) | _BV(TWINT);
+		TWDR_ = data;
+		TWCR_ = _BV(TWEN) | _BV(TWINT);
 		return wait_twint(Status::DATA_TRANSMITTED_ACK);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::receive_data(uint8_t& data, bool last_byte)
@@ -160,26 +171,26 @@ namespace i2c
 		bool ok;
 		if (last_byte)
 		{
-			TWCR = _BV(TWEN) | _BV(TWINT);
+			TWCR_ = _BV(TWEN) | _BV(TWINT);
 			ok = wait_twint(Status::DATA_RECEIVED_NACK);
 		}
 		else
 		{
-			TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
+			TWCR_ = _BV(TWEN) | _BV(TWINT) | _BV(TWEA);
 			ok = wait_twint(Status::DATA_RECEIVED_ACK);
 		}
-		if (ok) data = TWDR;
+		if (ok) data = TWDR_;
 		return ok;
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::stop()
 	{
-		TWCR = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
+		TWCR_ = _BV(TWEN) | _BV(TWINT) | _BV(TWSTO);
 	}
 
 	template<I2CMode MODE> bool I2CHandler<MODE>::wait_twint(uint8_t expected_status)
 	{
-		loop_until_bit_is_set(TWCR, TWINT);
-		status_ = TWSR & 0xF8;
+		TWCR_.loop_until_bit_set(TWINT);
+		status_ = TWSR_ & 0xF8;
 		if (hook_) hook_(expected_status, status_);
 		if (status_ == expected_status)
 		{
@@ -233,19 +244,19 @@ namespace i2c
 	template<I2CMode MODE> void I2CHandler<MODE>::begin()
 	{
 		// 1. Force 1 to data
-		USIDR = 0xFF;
+		USIDR_ = 0xFF;
 		// 2. Enable TWI
 		// Set USI I2C mode, enable software clock strobe (USITC)
-		USICR = _BV(USIWM1) | _BV(USICS1) | _BV(USICLK);
+		USICR_ = _BV(USIWM1) | _BV(USICS1) | _BV(USICLK);
 		// Clear all interrupt flags
-		USISR = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
+		USISR_ = _BV(USISIF) | _BV(USIOIF) | _BV(USIPF) | _BV(USIDC);
 		// 3. Set SDA as output
 		SDA_OUTPUT();
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::end()
 	{
 		// Disable TWI
-		USICR = 0;
+		USICR_ = 0;
 		//TODO should we set SDA back to INPUT?
 	}
 
@@ -274,7 +285,7 @@ namespace i2c
 		SDA_INPUT();
 		data = transfer(USISR_DATA);
 		// Send ACK (or NACK if last byte)
-		USIDR = (last_byte ? 0xFF : 0x00);
+		USIDR_ = (last_byte ? 0xFF : 0x00);
 		uint8_t good_status = (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
 		transfer(USISR_ACK);
 		return callback_hook(true, good_status, good_status);
@@ -315,7 +326,7 @@ namespace i2c
 		// Set SCL low TODO is this line really needed for every byte transferred?
 		SCL_LOW();
 		// Transfer address byte
-		USIDR = data;
+		USIDR_ = data;
 		transfer(USISR_DATA);
 		// For acknowledge, first set SDA as input
 		SDA_INPUT();
@@ -324,21 +335,21 @@ namespace i2c
 	template<I2CMode MODE> uint8_t I2CHandler<MODE>::transfer(uint8_t USISR_count)
 	{
 		// Init counter (8 bits or 1 bit for acknowledge)
-		USISR = USISR_count;
+		USISR_ = USISR_count;
 		do
 		{
 			_delay_loop_1(T_LOW);
 			// clock strobe (SCL raising edge)
-			USICR |= _BV(USITC);
+			USICR_ |= _BV(USITC);
 			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
 			_delay_loop_1(T_HIGH);
 			// clock strobe (SCL falling edge)
-			USICR |= _BV(USITC);
-		} while (bit_is_clear(USISR, USIOIF));
+			USICR_ |= _BV(USITC);
+		} while (bit_is_clear(USISR_, USIOIF));
 		_delay_loop_1(T_LOW);
 		// Read data
-		uint8_t data = USIDR;
-		USIDR = 0xFF;
+		uint8_t data = USIDR_;
+		USIDR_ = 0xFF;
 		// Release SDA
 		SDA_OUTPUT();
 		return data;

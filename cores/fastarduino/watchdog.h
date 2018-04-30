@@ -24,7 +24,6 @@
 #include "boards/board.h"
 #include "boards/board_traits.h"
 #include <avr/interrupt.h>
-#include <avr/wdt.h>
 #include "interrupts.h"
 #include "events.h"
 
@@ -132,8 +131,8 @@ namespace watchdog
 		{
 			synchronized
 			{
-				WDTCSR = _BV(WDCE) | _BV(WDE);
-				WDTCSR = 0;
+				WDTCSR_ = _BV(WDCE) | _BV(WDE);
+				WDTCSR_ = 0;
 			}
 		}
 
@@ -141,12 +140,17 @@ namespace watchdog
 		/// @cond notdocumented
 		inline void begin_with_config(uint8_t config) INLINE
 		{
-			wdt_reset();
-			MCUSR |= 1 << WDRF;
-			WDTCSR = _BV(WDCE) | _BV(WDE);
-			WDTCSR = config;
+			__asm__ __volatile__ ("wdr");
+			MCUSR_ |= 1 << WDRF;
+			WDTCSR_ = _BV(WDCE) | _BV(WDE);
+			WDTCSR_ = config;
 		}
 		/// @endcond
+
+	private:
+		using REG8 = board_traits::REG8;
+		static constexpr const REG8 MCUSR_{MCUSR};
+		static constexpr const REG8 WDTCSR_{WDTCSR};
 	};
 
 	/**

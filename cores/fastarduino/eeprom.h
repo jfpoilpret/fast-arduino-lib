@@ -21,11 +21,9 @@
 #ifndef EEPROM_H
 #define EEPROM_H
 
-#include "io.h"
+#include "boards/board_traits.h"
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
-
-#include "boards/board_traits.h"
 #include "interrupts.h"
 #include "utilities.h"
 #include "queue.h"
