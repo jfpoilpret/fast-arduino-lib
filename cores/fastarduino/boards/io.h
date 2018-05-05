@@ -44,7 +44,7 @@
 // Force SREG which is used by <util/atomic.h>
 #ifdef SREG
 #undef SREG
-#define SREG (*((volatile uint8_t*) 0x3F))
+#define SREG (*((volatile uint8_t*) (0x3F + __SFR_OFFSET)))
 #endif
 
 #endif /* BOARDS_IO_HH */
