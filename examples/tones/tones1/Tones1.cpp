@@ -1,7 +1,23 @@
+//   Copyright 2016-2018 Jean-Francois Poilpret
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
 /*
- * This program is just for personal experiments here on AVR features and C++ stuff
- * to check compilation and link of FastArduino port and pin API.
- * It does not do anything interesting as far as hardware is concerned.
+ * Frequency generator example, used to play the Imperial March.
+ * 
+ * Wiring:
+ * - on Arduino UNO and Arduino MEGA:
+ *   - D6: connect to a 5V piezo buzzer with the othe lead connected to ground
  */
 
 // Imperial march tones thanks:
