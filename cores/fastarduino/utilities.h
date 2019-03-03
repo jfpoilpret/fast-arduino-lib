@@ -21,7 +21,7 @@
 #ifndef UTILITIES_HH
 #define UTILITIES_HH
 
-#include <avr/io.h>
+#include "boards/io.h"
 #include <util/atomic.h>
 
 /// @cond notdocumented
@@ -187,8 +187,11 @@ namespace utils
 	constexpr int16_t map_raw_to_physical(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
 	{
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
-		return (int8_t(prefix) > 0 ? value * range / power_of_10(int8_t(prefix)) / (1UL << precision_bits) :
-									 value * range * power_of_10(int8_t(prefix)) / (1UL << precision_bits));
+		const int8_t prefix_value = int8_t(prefix);
+		if (prefix_value > 0)
+			return value * range / power_of_10(int8_t(prefix)) / (1UL << precision_bits);
+		else
+			return value * range * power_of_10(int8_t(prefix)) / (1UL << precision_bits);
 	}
 
 	/**
@@ -245,8 +248,11 @@ namespace utils
 	constexpr int16_t map_physical_to_raw(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
 	{
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
-		return (int8_t(prefix) > 0 ? value * (1UL << precision_bits) * power_of_10(int8_t(prefix)) / range :
-									 value * (1UL << precision_bits) / power_of_10(int8_t(prefix)) / range);
+		const int8_t prefix_value = int8_t(prefix);
+		if (prefix_value > 0)
+			return value * (1UL << precision_bits) * power_of_10(prefix_value) / range;
+		else
+			return value * (1UL << precision_bits) / power_of_10(prefix_value) / range;
 	}
 
 	/**
@@ -392,7 +398,12 @@ namespace utils
 	 */
 	constexpr uint8_t num_bits(uint8_t mask, uint8_t num = 0)
 	{
-		return (mask == 0 ? num : mask & 1 ? num_bits(mask >> 1, num + 1) : num_bits(mask >> 1, num));
+		if (mask == 0) 
+			return num;
+		else if (mask & 1)
+			return num_bits(mask >> 1, num + 1);
+		else
+			return num_bits(mask >> 1, num);
 	}
 }
 

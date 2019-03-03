@@ -21,12 +21,11 @@
 #ifndef WATCHDOG_HH
 #define WATCHDOG_HH
 
-#include <avr/interrupt.h>
-#include <avr/wdt.h>
-#include "interrupts.h"
-#include "events.h"
 #include "boards/board.h"
 #include "boards/board_traits.h"
+#include <avr/interrupt.h>
+#include "interrupts.h"
+#include "events.h"
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a watchdog::Watchdog
@@ -36,6 +35,14 @@
  */
 #define REGISTER_WATCHDOG_CLOCK_ISR(EVENT)	\
 REGISTER_ISR_METHOD_(WDT_vect, watchdog::Watchdog<EVENT>, &watchdog::Watchdog<EVENT>::on_tick)
+
+/**
+ * Register the necessary ISR (interrupt Service Routine) for a watchdog::WatchdogRTT
+ * to work properly.
+ * @sa watchdog::WatchdogRTT
+ */
+#define REGISTER_WATCHDOG_RTT_ISR()	\
+REGISTER_ISR_METHOD_(WDT_vect, watchdog::WatchdogRTT, &watchdog::WatchdogRTT::on_tick)
 
 /**
  * Register the necessary ISR (interrupt Service Routine) with a callback method
@@ -132,8 +139,8 @@ namespace watchdog
 		{
 			synchronized
 			{
-				WDTCSR = _BV(WDCE) | _BV(WDE);
-				WDTCSR = 0;
+				WDTCSR_ = _BV(WDCE) | _BV(WDE);
+				WDTCSR_ = 0;
 			}
 		}
 
@@ -141,43 +148,38 @@ namespace watchdog
 		/// @cond notdocumented
 		inline void begin_with_config(uint8_t config) INLINE
 		{
-			wdt_reset();
-			MCUSR |= 1 << WDRF;
-			WDTCSR = _BV(WDCE) | _BV(WDE);
-			WDTCSR = config;
+			__asm__ __volatile__ ("wdr");
+			MCUSR_ |= 1 << WDRF;
+			WDTCSR_ = _BV(WDCE) | _BV(WDE);
+			WDTCSR_ = config;
 		}
 		/// @endcond
+
+	private:
+		using REG8 = board_traits::REG8;
+		static constexpr const REG8 MCUSR_{MCUSR};
+		static constexpr const REG8 WDTCSR_{WDTCSR};
 	};
 
 	/**
-	 * Simple API to use watchdog timer as a clock for events generation.
+	 * Simple API to use watchdog timer as a real-time clock.
 	 * For this to work correctly, you need to register the proper ISR through
-	 * `REGISTER_WATCHDOG_CLOCK_ISR()` macro first, then ensure you call
+	 * `REGISTER_WATCHDOG_RTT_ISR()` macro first, then ensure you call
 	 * `register_watchdog_handler()`.
-	 * @tparam EVENT the `events::Event<T>` generated
 	 */
-	template<typename EVENT>
-	class Watchdog : public WatchdogSignal
+	class WatchdogRTT : public WatchdogSignal
 	{
-		static_assert(events::Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
-
 	public:
 		/**
-		 * Construct a new watchdog-based clock that will, for each watchdog 
-		 * timeout, add an event to the given @p event_queue for further 
-		 * processing.
-		 * This clock also counts elapsed milliseconds since it was started with
-		 * `begin()`.
-		 * @param event_queue the queue to which `Event`s will be pushed on each 
-		 * watchdog tick
+		 * Construct a new watchdog-based clock that will count elapsed
+		 * milliseconds since it was started with `begin()`.
 		 */
-		Watchdog(containers::Queue<EVENT>& event_queue)
-			: millis_{0}, millis_per_tick_{0}, event_queue_{event_queue}
+		WatchdogRTT(): millis_{0}, millis_per_tick_{0}
 		{
 		}
 
 		/// @cond notdocumented
-		Watchdog(const Watchdog&) = delete;
+		WatchdogRTT(const WatchdogRTT&) = delete;
 		/// @endcond
 
 		/**
@@ -185,7 +187,7 @@ namespace watchdog
 		 * have been registered with REGISTER_WATCHDOG_CLOCK_ISR().
 		 * @sa REGISTER_WATCHDOG_CLOCK_ISR()
 		 */
-		void register_watchdog_handler()
+		void register_watchdog_rtt_handler()
 		{
 			interrupt::register_handler(*this);
 		}
@@ -241,15 +243,66 @@ namespace watchdog
 			}
 		}
 
-	private:
+	protected:
 		void on_tick()
 		{
 			millis_ += millis_per_tick_;
+		}
+
+	private:
+		volatile uint32_t millis_;
+		uint16_t millis_per_tick_;
+
+		friend void ::WDT_vect(void);
+	};
+
+	/**
+	 * Simple API to use watchdog timer as a clock for events generation.
+	 * For this to work correctly, you need to register the proper ISR through
+	 * `REGISTER_WATCHDOG_CLOCK_ISR()` macro first, then ensure you call
+	 * `register_watchdog_handler()`.
+	 * @tparam EVENT the `events::Event<T>` generated
+	 */
+	template<typename EVENT>
+	class Watchdog : public WatchdogRTT
+	{
+		static_assert(events::Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
+
+	public:
+		/**
+		 * Construct a new watchdog-based clock that will, for each watchdog 
+		 * timeout, add an event to the given @p event_queue for further 
+		 * processing.
+		 * This clock also counts elapsed milliseconds since it was started with
+		 * `begin()`.
+		 * @param event_queue the queue to which `Event`s will be pushed on each 
+		 * watchdog tick
+		 */
+		Watchdog(containers::Queue<EVENT>& event_queue): event_queue_{event_queue}
+		{
+		}
+
+		/// @cond notdocumented
+		Watchdog(const Watchdog&) = delete;
+		/// @endcond
+
+		/**
+		 * Register this watchdog instance with the matching ISR that should 
+		 * have been registered with REGISTER_WATCHDOG_CLOCK_ISR().
+		 * @sa REGISTER_WATCHDOG_CLOCK_ISR()
+		 */
+		void register_watchdog_handler()
+		{
+			interrupt::register_handler(*this);
+		}
+
+	private:
+		void on_tick()
+		{
+			WatchdogRTT::on_tick();
 			event_queue_.push_(EVENT{events::Type::WDT_TIMER});
 		}
 
-		volatile uint32_t millis_;
-		uint16_t millis_per_tick_;
 		containers::Queue<EVENT>& event_queue_;
 
 		friend void ::WDT_vect(void);

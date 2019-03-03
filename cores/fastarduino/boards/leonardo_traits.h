@@ -15,7 +15,7 @@
 #ifndef BOARDS_LEONARDO_TRAITS_HH
 #define BOARDS_LEONARDO_TRAITS_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include "leonardo.h"
 #include "common_traits.h"
 

@@ -15,7 +15,7 @@
 #ifndef BOARDS_ATTINYX5_TRAITS_HH
 #define BOARDS_ATTINYX5_TRAITS_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include "attiny_x5.h"
 #include "common_traits.h"
 

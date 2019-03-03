@@ -22,7 +22,7 @@
 #ifndef BOARDS_LEONARDO_HH
 #define BOARDS_LEONARDO_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented
@@ -49,11 +49,11 @@ namespace board
 	inline static void init()
 	{
 		// Disable USB controller by default
-		USBCON = 0;
-		UDCON = 0;
+		*((volatile uint8_t*) USBCON) = 0;
+		*((volatile uint8_t*) UDCON) = 0;
 		// Disable all interrupts
-		UDINT = 0;
-		UDIEN = 0;
+		*((volatile uint8_t*) UDINT) = 0;
+		*((volatile uint8_t*) UDIEN) = 0;
 	}
 	
 	/**

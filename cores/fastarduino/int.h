@@ -21,11 +21,10 @@
 #ifndef INT_HH
 #define INT_HH
 
+#include "boards/board_traits.h"
 #include <avr/interrupt.h>
-
 #include "interrupts.h"
 #include "utilities.h"
-#include "boards/board_traits.h"
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an External Interrupt 

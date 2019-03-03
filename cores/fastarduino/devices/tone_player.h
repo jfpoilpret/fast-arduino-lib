@@ -19,256 +19,253 @@
 #include "../flash.h"
 #include "tones.h"
 
-namespace devices
+namespace devices::audio
 {
-	namespace audio
+	namespace SpecialTone
 	{
-		namespace SpecialTone
+		static constexpr const Tone END = Tone::USER0;
+		static constexpr const Tone REPEAT_START = Tone::USER1;
+		static constexpr const Tone REPEAT_END = Tone::USER2;
+	}
+
+	//NOTE prefer using QTonePlay as it is more code size and speed efficient
+	struct TonePlay
+	{
+		Tone tone;
+		uint16_t ms;
+	};
+
+	template<board::Timer NTIMER, board::DigitalPin OUTPUT>
+	class TonePlayer
+	{
+	private:
+		using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
+
+	public:
+		class QTonePlay
 		{
-			static constexpr const Tone END = Tone::USER0;
-			static constexpr const Tone REPEAT_START = Tone::USER1;
-			static constexpr const Tone REPEAT_END = Tone::USER2;
+			using CALC = timer::Calculator<NTIMER>;
+			using TIMER = timer::Timer<NTIMER>;
+			using PRESCALER = typename TIMER::PRESCALER;
+			using COUNTER = typename TIMER::TYPE;
+			
+		public:
+			QTonePlay()
+			{
+			}
+			constexpr QTonePlay(Tone t, uint16_t ms = 0)
+				:flags_{flags(t)}, prescaler_{prescaler(t)}, counter_{counter(t)}, ms_{ms}
+			{
+			}
+
+			inline PRESCALER prescaler() const
+			{
+				return prescaler_;
+			}
+			inline COUNTER counter() const
+			{
+				return counter_;
+			}
+			inline uint16_t duration() const
+			{
+				return ms_;
+			}
+			inline bool is_tone() const
+			{
+				return flags_ == TONE;
+			}
+			inline bool is_pause() const
+			{
+				return flags_ == NONE;
+			}
+			inline bool is_end() const
+			{
+				return flags_ == END;
+			}
+			inline bool is_repeat_start() const
+			{
+				return flags_ == REPEAT_START;
+			}
+			inline bool is_repeat_end() const
+			{
+				return flags_ == REPEAT_END;
+			}
+			inline uint16_t repeat_count() const
+			{
+				return ms_;
+			}
+
+		private:
+			static constexpr uint8_t TONE = 0x00;
+			static constexpr uint8_t NONE = 0x01;
+			static constexpr uint8_t END = 0x02;
+			static constexpr uint8_t REPEAT_START = 0x04;
+			static constexpr uint8_t REPEAT_END = 0x08;
+			
+			uint8_t flags_;
+			PRESCALER prescaler_;
+			COUNTER counter_;
+			uint16_t ms_;
+
+			static constexpr uint32_t period(Tone tone)
+			{
+				return 1000000UL / 2 / uint16_t(tone);
+			}
+			static constexpr PRESCALER prescaler(Tone tone)
+			{
+				return (tone > Tone::SILENCE ? CALC::CTC_prescaler(period(tone)) : PRESCALER::NO_PRESCALING);
+			}
+			static constexpr COUNTER counter(Tone tone)
+			{
+				return (tone > Tone::SILENCE ? CALC::CTC_counter(prescaler(tone), period(tone)) : 0);
+			}
+			static constexpr uint8_t flags(Tone tone)
+			{
+				return (tone == Tone::SILENCE ? NONE :
+						tone == SpecialTone::END ? END :
+						tone == SpecialTone::REPEAT_START ? REPEAT_START :
+						tone == SpecialTone::REPEAT_END ? REPEAT_END :
+						TONE);
+			}
+		};
+
+		TonePlayer(GENERATOR& tone_generator):generator_{tone_generator}
+		{
 		}
 
-		//NOTE prefer using QTonePlay as it is more code size and speed efficient
-		struct TonePlay
+		inline void play(const TonePlay* melody)
 		{
-			Tone tone;
-			uint16_t ms;
-		};
-
-		template<board::Timer NTIMER, board::DigitalPin OUTPUT>
-		class TonePlayer
+			play_(melody, load_sram);
+		}
+		inline void play_eeprom(const TonePlay* melody)
 		{
-		private:
-			using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
+			play_(melody, load_eeprom);
+		}
+		inline void play_flash(const TonePlay* melody)
+		{
+			play_(melody, load_flash);
+		}
 
-		public:
-			class QTonePlay
-			{
-				using CALC = timer::Calculator<NTIMER>;
-				using TIMER = timer::Timer<NTIMER>;
-				using PRESCALER = typename TIMER::PRESCALER;
-				using COUNTER = typename TIMER::TYPE;
-				
-			public:
-				QTonePlay()
-				{
-				}
-				constexpr QTonePlay(Tone t, uint16_t ms = 0)
-					:flags_{flags(t)}, prescaler_{prescaler(t)}, counter_{counter(t)}, ms_{ms}
-				{
-				}
+		inline void play(const QTonePlay* melody)
+		{
+			play_(melody, load_sram);
+		}
+		inline void play_eeprom(const QTonePlay* melody)
+		{
+			play_(melody, load_eeprom);
+		}
+		inline void play_flash(const QTonePlay* melody)
+		{
+			play_(melody, load_flash);
+		}
 
-				inline PRESCALER prescaler() const
-				{
-					return prescaler_;
-				}
-				inline COUNTER counter() const
-				{
-					return counter_;
-				}
-				inline uint16_t duration() const
-				{
-					return ms_;
-				}
-				inline bool is_tone() const
-				{
-					return flags_ == TONE;
-				}
-				inline bool is_pause() const
-				{
-					return flags_ == NONE;
-				}
-				inline bool is_end() const
-				{
-					return flags_ == END;
-				}
-				inline bool is_repeat_start() const
-				{
-					return flags_ == REPEAT_START;
-				}
-				inline bool is_repeat_end() const
-				{
-					return flags_ == REPEAT_END;
-				}
-				inline uint16_t repeat_count() const
-				{
-					return ms_;
-				}
+	private:
+		using LOAD_TONE = const TonePlay* (*)(const TonePlay* address, TonePlay& holder);
 
-			private:
-				static constexpr uint8_t TONE = 0x00;
-				static constexpr uint8_t NONE = 0x01;
-				static constexpr uint8_t END = 0x02;
-				static constexpr uint8_t REPEAT_START = 0x04;
-				static constexpr uint8_t REPEAT_END = 0x08;
-				
-				uint8_t flags_;
-				PRESCALER prescaler_;
-				COUNTER counter_;
-				uint16_t ms_;
+		static const TonePlay* load_sram(const TonePlay* address, TonePlay& holder UNUSED)
+		{
+			return address;
+		}
+		static const TonePlay* load_eeprom(const TonePlay* address, TonePlay& holder)
+		{
+			eeprom::EEPROM::read(address, holder);
+			return &holder;
+		}
+		static const TonePlay* load_flash(const TonePlay* address, TonePlay& holder)
+		{
+			flash::read_flash(address, holder);
+			return &holder;
+		}
 
-				static constexpr uint32_t period(Tone tone)
+		void play_(const TonePlay* melody, LOAD_TONE load_tone)
+		{
+			const TonePlay* repeat_play = 0;
+			int8_t repeat_times;
+			const TonePlay* play = melody;
+			while (true)
+			{
+				TonePlay holder;
+				const TonePlay* current = load_tone(play, holder);
+				if (current->tone == SpecialTone::END)
+					break;
+				if (current->tone == SpecialTone::REPEAT_START)
 				{
-					return 1000000UL / 2 / uint16_t(tone);
+					repeat_play = play;
+					repeat_times = -1;
 				}
-				static constexpr PRESCALER prescaler(Tone tone)
+				else if (current->tone == SpecialTone::REPEAT_END)
 				{
-					return (tone > Tone::SILENCE ? CALC::CTC_prescaler(period(tone)) : PRESCALER::NO_PRESCALING);
-				}
-				static constexpr COUNTER counter(Tone tone)
-				{
-					return (tone > Tone::SILENCE ? CALC::CTC_counter(prescaler(tone), period(tone)) : 0);
-				}
-				static constexpr uint8_t flags(Tone tone)
-				{
-					return (tone == Tone::SILENCE ? NONE :
-							tone == SpecialTone::END ? END :
-							tone == SpecialTone::REPEAT_START ? REPEAT_START :
-							tone == SpecialTone::REPEAT_END ? REPEAT_END :
-							TONE);
-				}
-			};
-
-			TonePlayer(GENERATOR& tone_generator):generator_{tone_generator}
-			{
-			}
-
-			inline void play(const TonePlay* melody)
-			{
-				play_(melody, load_sram);
-			}
-			inline void play_eeprom(const TonePlay* melody)
-			{
-				play_(melody, load_eeprom);
-			}
-			inline void play_flash(const TonePlay* melody)
-			{
-				play_(melody, load_flash);
-			}
-
-			inline void play(const QTonePlay* melody)
-			{
-				play_(melody, load_sram);
-			}
-			inline void play_eeprom(const QTonePlay* melody)
-			{
-				play_(melody, load_eeprom);
-			}
-			inline void play_flash(const QTonePlay* melody)
-			{
-				play_(melody, load_flash);
-			}
-
-		private:
-			using LOAD_TONE = const TonePlay* (*)(const TonePlay* address, TonePlay& holder);
-
-			static const TonePlay* load_sram(const TonePlay* address, TonePlay& holder UNUSED)
-			{
-				return address;
-			}
-			static const TonePlay* load_eeprom(const TonePlay* address, TonePlay& holder)
-			{
-				eeprom::EEPROM::read(address, holder);
-				return &holder;
-			}
-			static const TonePlay* load_flash(const TonePlay* address, TonePlay& holder)
-			{
-				flash::read_flash(address, holder);
-				return &holder;
-			}
-
-			void play_(const TonePlay* melody, LOAD_TONE load_tone)
-			{
-				const TonePlay* repeat_play = 0;
-				int8_t repeat_times;
-				const TonePlay* play = melody;
-				while (true)
-				{
-					TonePlay holder;
-					const TonePlay* current = load_tone(play, holder);
-					if (current->tone == SpecialTone::END)
-						break;
-					if (current->tone == SpecialTone::REPEAT_START)
+					if (repeat_play != 0)
 					{
-						repeat_play = play;
-						repeat_times = -1;
+						if (repeat_times == -1)
+							repeat_times = current->ms;
+						if (repeat_times--)
+							play = repeat_play;
+						else
+							repeat_play = 0;
 					}
-					else if (current->tone == SpecialTone::REPEAT_END)
-					{
-						if (repeat_play != 0)
-						{
-							if (repeat_times == -1)
-								repeat_times = current->ms;
-							if (repeat_times--)
-								play = repeat_play;
-							else
-								repeat_play = 0;
-						}
-					}
-					else
-						generator_.tone(current->tone, current->ms);
-					++play;
 				}
+				else
+					generator_.tone(current->tone, current->ms);
+				++play;
 			}
+		}
 
-			using LOAD_QTONE = const QTonePlay* (*)(const QTonePlay* address, QTonePlay& holder);
+		using LOAD_QTONE = const QTonePlay* (*)(const QTonePlay* address, QTonePlay& holder);
 
-			static const QTonePlay* load_sram(const QTonePlay* address, QTonePlay& holder UNUSED)
-			{
-				return address;
-			}
-			static const QTonePlay* load_eeprom(const QTonePlay* address, QTonePlay& holder)
-			{
-				eeprom::EEPROM::read(address, holder);
-				return &holder;
-			}
-			static const QTonePlay* load_flash(const QTonePlay* address, QTonePlay& holder)
-			{
-				flash::read_flash(address, holder);
-				return &holder;
-			}
+		static const QTonePlay* load_sram(const QTonePlay* address, QTonePlay& holder UNUSED)
+		{
+			return address;
+		}
+		static const QTonePlay* load_eeprom(const QTonePlay* address, QTonePlay& holder)
+		{
+			eeprom::EEPROM::read(address, holder);
+			return &holder;
+		}
+		static const QTonePlay* load_flash(const QTonePlay* address, QTonePlay& holder)
+		{
+			flash::read_flash(address, holder);
+			return &holder;
+		}
 
-			void play_(const QTonePlay* melody, LOAD_QTONE load_tone)
+		void play_(const QTonePlay* melody, LOAD_QTONE load_tone)
+		{
+			const QTonePlay* repeat_play = 0;
+			int8_t repeat_times;
+			const QTonePlay* play = melody;
+			while (true)
 			{
-				const QTonePlay* repeat_play = 0;
-				int8_t repeat_times;
-				const QTonePlay* play = melody;
-				while (true)
+				QTonePlay holder;
+				const QTonePlay* current = load_tone(play, holder);
+				if (current->is_end())
+					break;
+				if (current->is_repeat_start())
 				{
-					QTonePlay holder;
-					const QTonePlay* current = load_tone(play, holder);
-					if (current->is_end())
-						break;
-					if (current->is_repeat_start())
-					{
-						repeat_play = play;
-						repeat_times = -1;
-					}
-					else if (current->is_repeat_end())
-					{
-						if (repeat_play != 0)
-						{
-							if (repeat_times == -1)
-								repeat_times = current->repeat_count();
-							if (repeat_times--)
-								play = repeat_play;
-							else
-								repeat_play = 0;
-						}
-					}
-					else if (current->is_pause())
-						generator_.pause(current->duration());
-					else
-						generator_.tone(current->prescaler(), current->counter(), current->duration());
-					++play;
+					repeat_play = play;
+					repeat_times = -1;
 				}
+				else if (current->is_repeat_end())
+				{
+					if (repeat_play != 0)
+					{
+						if (repeat_times == -1)
+							repeat_times = current->repeat_count();
+						if (repeat_times--)
+							play = repeat_play;
+						else
+							repeat_play = 0;
+					}
+				}
+				else if (current->is_pause())
+					generator_.pause(current->duration());
+				else
+					generator_.tone(current->prescaler(), current->counter(), current->duration());
+				++play;
 			}
+		}
 
-			GENERATOR& generator_;
-		};
-	}
+		GENERATOR& generator_;
+	};
 }
 
 #endif /* TONE_PLAYER_HH */

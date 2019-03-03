@@ -65,13 +65,13 @@ namespace spi
 	 */
 	constexpr ClockRate compute_clockrate(uint32_t frequency)
 	{
-		return	frequency >= (F_CPU / 2) ? ClockRate::CLOCK_DIV_2 :
-				frequency >= (F_CPU / 4) ? ClockRate::CLOCK_DIV_4 :
-				frequency >= (F_CPU / 8) ? ClockRate::CLOCK_DIV_8 :
-				frequency >= (F_CPU / 16) ? ClockRate::CLOCK_DIV_16 :
-				frequency >= (F_CPU / 32) ? ClockRate::CLOCK_DIV_32 :
-				frequency >= (F_CPU / 64) ? ClockRate::CLOCK_DIV_64 :
-				ClockRate::CLOCK_DIV_128;
+		if (frequency >= (F_CPU / 2)) return ClockRate::CLOCK_DIV_2;
+		else if (frequency >= (F_CPU / 4)) return ClockRate::CLOCK_DIV_4;
+		else if (frequency >= (F_CPU / 8)) return ClockRate::CLOCK_DIV_8;
+		else if (frequency >= (F_CPU / 16)) return ClockRate::CLOCK_DIV_16;
+		else if (frequency >= (F_CPU / 32)) return ClockRate::CLOCK_DIV_32;
+		else if (frequency >= (F_CPU / 64)) return ClockRate::CLOCK_DIV_64;
+		else return ClockRate::CLOCK_DIV_128;
 	}
 
 #ifdef SPDR
@@ -158,23 +158,23 @@ namespace spi
 		 */
 		inline uint8_t transfer(uint8_t data)
 		{
-			SPDR = data;
-			loop_until_bit_is_set(SPSR, SPIF);
-			return SPDR;
+			SPDR_ = data;
+			SPSR_.loop_until_bit_set(SPIF);
+			return SPDR_;
 		}
 #else
 		inline uint8_t transfer(uint8_t data)
 		{
 			//TODO check produced assembly code
-			USIDR = data;
+			USIDR_ = data;
 			// Clear counter overflow before transmission
-			USISR = _BV(USIOIF);
+			USISR_ = _BV(USIOIF);
 			synchronized
 			{
-				while (bit_is_clear(USISR, USIOIF))
-					USICR |= _BV(USITC);
+				while ((USISR_ & _BV(USIOIF)) == 0)
+					USICR_ |= _BV(USITC);
 			}
-			return USIDR;
+			return USIDR_;
 		}
 #endif
 		
@@ -219,6 +219,17 @@ namespace spi
 		{
 			while (size--) *data++ = transfer(sent);
 		}
+
+	private:
+		using REG8 = board_traits::REG8;
+#ifdef SPDR
+		static constexpr const REG8 SPDR_{SPDR};
+		static constexpr const REG8 SPSR_{SPSR};
+#else
+		static constexpr const REG8 USIDR_{USIDR};
+		static constexpr const REG8 USISR_{USISR};
+		static constexpr const REG8 USICR_{USICR};
+#endif
 	};
 
 	/**
@@ -288,15 +299,15 @@ namespace spi
 		inline void start_transfer()
 		{
 			cs_.toggle();
-			SPCR = SPCR_;
-			SPSR = SPSR_;
+			SPCR_ = SPCR__;
+			SPSR_ = SPSR__;
 		}
 #else
 		inline void start_transfer()
 		{
 			cs_.toggle();
 			// Set 3-wire mode (SPI) and requested SPI mode (0 or 1) and use software clock strobe (through USITC)
-			USICR = USICR_;
+			USICR_ = USICR__;
 		}
 #endif
 		/**
@@ -309,13 +320,20 @@ namespace spi
 		}
 
 	private:
+		using REG8 = board_traits::REG8;
 #ifdef SPDR
+		static constexpr const REG8 SPCR_{SPCR};
+		static constexpr const REG8 SPDR_{SPDR};
+		static constexpr const REG8 SPSR_{SPSR};
 		// Configuration values to reset at beginning of each transfer
-		static const constexpr uint8_t SPCR_ = 
+		static const constexpr uint8_t SPCR__ = 
 			_BV(SPE) | _BV(MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
-		static const constexpr uint8_t SPSR_ = (uint8_t(RATE) & 0x10) ? _BV(SPI2X) : 0;
+		static const constexpr uint8_t SPSR__ = (uint8_t(RATE) & 0x10) ? _BV(SPI2X) : 0;
 #else
-		static const constexpr uint8_t USICR_ = uint8_t(MODE);
+		static constexpr const REG8 USIDR_{USIDR};
+		static constexpr const REG8 USISR_{USISR};
+		static constexpr const REG8 USICR_{USICR};
+		static const constexpr uint8_t USICR__ = uint8_t(MODE);
 #endif
 		typename gpio::FastPinType<CS>::TYPE cs_;
 	};

@@ -43,6 +43,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						int/ExternalInterrupt3					\
 						misc/IOStreams3							\
 						pci/PinChangeInterrupt4					\
+						rtt/InputCapture1						\
 						sonar/Sonar10							\
 						tones/tones1 tones/tones2 tones/tones3	\
 						uart/UartApp1							\
@@ -51,10 +52,12 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 
 EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 							int/ExternalInterrupt3				\
+							rtt/InputCapture1					\
 							uart/UartApp1						
 
 EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						pci/PinChangeInterrupt4					\
+						rtt/InputCapture1						\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							
@@ -62,6 +65,7 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						events/EventApp5 events/EventApp6		\
 						pci/PinChangeInterrupt4					\
+						rtt/InputCapture1						\
 						sonar/Sonar10							\
 						uart/UartApp1							\
 						uart/UartApp5							\
@@ -70,6 +74,7 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3				\
 								events/EventApp5 events/EventApp6	\
 								pci/PinChangeInterrupt4				\
+								rtt/InputCapture1					\
 								sonar/Sonar10						\
 								uart/UartApp1						\
 								uart/UartApp5						\
@@ -77,7 +82,8 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3				\
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
-								pci/PinChangeInterrupt4			
+								pci/PinChangeInterrupt4			\
+								rtt/InputCapture1
 
 # ATtinyX5 needs its own (reduced) set of examples (because of many limitations)
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\

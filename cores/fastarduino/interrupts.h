@@ -65,6 +65,7 @@
 #ifndef INTERRUPTS_HH
 #define INTERRUPTS_HH
 
+#include "boards/io.h"
 #include <avr/interrupt.h>
 
 /// @cond notdocumented

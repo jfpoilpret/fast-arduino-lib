@@ -84,8 +84,8 @@ objdump:=$(avr_tool_path)avr-objdump
 objsize:=$(avr_tool_path)avr-size
 
 # Flags for compilation and build
-cxxflags:=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++11 
-ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=c++11 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
+cxxflags:= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++14 
+ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=c++14 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
 depflags = -MT $@ -MMD -MP -MF $(depdir)/$*.Td
 
 compile.cc = $(cxx) $(depflags) $(cxxflags) $(ADDITIONAL_CXX_OPTIONS) -c -o $@

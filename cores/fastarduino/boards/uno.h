@@ -22,7 +22,7 @@
 #ifndef BOARDS_UNO_HH
 #define BOARDS_UNO_HH
 
-#include <avr/io.h>
+#include "io.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented
@@ -134,28 +134,42 @@ namespace board
 		D14_PC0,
 		/** Pin PC0 (A0, D14 on Arduino UNO) */
 		A0 = D14_PC0,
+		/** Pin PC0 (A0, D14 on Arduino UNO) */
+		A0_PC0 = D14_PC0,
 		/** Pin PC1 (A1, D15 on Arduino UNO) */
 		D15_PC1,
 		/** Pin PC1 (A1, D15 on Arduino UNO) */
 		A1 = D15_PC1,
+		/** Pin PC1 (A1, D15 on Arduino UNO) */
+		A1_PC1 = D15_PC1,
 		/** Pin PC2 (A2, D16 on Arduino UNO) */
 		D16_PC2,
 		/** Pin PC2 (A2, D16 on Arduino UNO) */
 		A2 = D16_PC2,
+		/** Pin PC2 (A2, D16 on Arduino UNO) */
+		A2_PC2 = D16_PC2,
 		/** Pin PC3 (A3, D17 on Arduino UNO) */
 		D17_PC3,
 		/** Pin PC3 (A3, D17 on Arduino UNO) */
 		A3 = D17_PC3,
+		/** Pin PC3 (A3, D17 on Arduino UNO) */
+		A3_PC3 = D17_PC3,
 		/** Pin PC4 (A4, D18 on Arduino UNO) */
 		D18_PC4,
 		/** Pin PC4 (A4, D18 on Arduino UNO) */
 		A4 = D18_PC4,
+		/** Pin PC4 (A4, D18 on Arduino UNO) */
+		A4_PC4 = D18_PC4,
 		/** Pin PC5 (A5, D19 on Arduino UNO) */
 		D19_PC5,
 		/** Pin PC5 (A5, D19 on Arduino UNO) */
 		A5 = D19_PC5,
+		/** Pin PC5 (A5, D19 on Arduino UNO) */
+		A5_PC5 = D19_PC5,
 		/** Shortcut for LED pin on Arduino */
 		LED = D13_PB5,
+		/** Shortcut for LED pin on Arduino */
+		LED_PB5 = D13_PB5,
 		// FastArduino internal: DO NOT USE
 		NONE = 0xFF
 	};
@@ -319,6 +333,13 @@ namespace board
 		constexpr const DigitalPin A3 = DigitalPin::D17_PC3;
 		constexpr const DigitalPin A4 = DigitalPin::D18_PC4;
 		constexpr const DigitalPin A5 = DigitalPin::D19_PC5;
+		
+		constexpr const DigitalPin A0_PC0_PCI1 = DigitalPin::D14_PC0;
+		constexpr const DigitalPin A1_PC1_PCI1 = DigitalPin::D15_PC1;
+		constexpr const DigitalPin A2_PC2_PCI1 = DigitalPin::D16_PC2;
+		constexpr const DigitalPin A3_PC3_PCI1 = DigitalPin::D17_PC3;
+		constexpr const DigitalPin A4_PC4_PCI1 = DigitalPin::D18_PC4;
+		constexpr const DigitalPin A5_PC5_PCI1 = DigitalPin::D19_PC5;
 	};
 
 	/**
