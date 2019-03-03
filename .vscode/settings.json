@@ -44,6 +44,10 @@
             "programmer": "NANO USB",
             "serial": "/dev/ttyUSB0"
         },
+        "NANO-ISP": {
+            "board": "Arduino NANO",
+            "programmer": "ArduinoISP.cc"
+        },
         "MEGA": {
             "board": "Arduino MEGA",
             "programmer": "MEGA USB",
