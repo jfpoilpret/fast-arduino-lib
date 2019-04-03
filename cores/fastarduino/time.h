@@ -44,12 +44,22 @@ namespace time
 	 */
 	struct RTTTime
 	{
+		//FIXME this new constructor may break usage of the other constructor!
+		// We must check all usage and fix if needed.
+		/**
+		 * Construct a new `RTTTime` value.
+		 * @param micros number of microseconds (can be > 1000us)
+		 */
+		RTTTime(uint32_t micros = 0UL) : millis(micros / 1000UL), micros(micros % 1000UL)
+		{
+		}
+
 		/**
 		 * Construct a new `RTTTime` value.
 		 * @param millis number of milliseconds
 		 * @param micros number of microseconds (0..999)
 		 */
-		RTTTime(uint32_t millis = 0, uint16_t micros = 0) : millis(millis), micros(micros)
+		RTTTime(uint32_t millis, uint16_t micros) : millis(millis), micros(micros)
 		{
 		}
 
@@ -72,11 +82,60 @@ namespace time
 			micros = that.micros;
 			return *this;
 		}
+
+		RTTTime& operator+=(uint32_t microseconds)
+		{
+			return *this = RTTTime{total_micros() + microseconds};
+		}
+
+		RTTTime& operator-=(uint32_t microseconds)
+		{
+			return *this = RTTTime{total_micros() - microseconds};
+		}
+
+		uint32_t total_micros() const
+		{
+			return millis * 1000UL + micros;
+		}
+
 		/** Number of elapsed milliseconds. */
 		uint32_t millis;
 		/** Number of elapsed microseconds (0..999). */
 		uint16_t micros;
 	};
+
+	inline bool operator>(const RTTTime& a, const RTTTime& b)
+	{
+		return a.total_micros() > b.total_micros();
+	}
+	inline bool operator>=(const RTTTime& a, const RTTTime& b)
+	{
+		return a.total_micros() >= b.total_micros();
+	}
+	inline bool operator<(const RTTTime& a, const RTTTime& b)
+	{
+		return a.total_micros() < b.total_micros();
+	}
+	inline bool operator<=(const RTTTime& a, const RTTTime& b)
+	{
+		return a.total_micros() <= b.total_micros();
+	}
+	inline bool operator==(const RTTTime& a, const RTTTime& b)
+	{
+		return a.total_micros() == b.total_micros();
+	}
+	inline bool operator!=(const RTTTime& a, const RTTTime& b)
+	{
+		return a.total_micros() != b.total_micros();
+	}
+	inline RTTTime operator+(const RTTTime& a, const RTTTime& b)
+	{
+		return RTTTime{a.total_micros() + b.total_micros()};
+	}
+	inline RTTTime operator-(const RTTTime& a, const RTTTime& b)
+	{
+		return RTTTime{a.total_micros() - b.total_micros()};
+	}
 
 	/**
 	 * Utility method used by many FastArduino API in order to "yield" some 

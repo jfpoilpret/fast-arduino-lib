@@ -228,7 +228,12 @@ namespace timer
 		 */
 		time::RTTTime time() const
 		{
-			synchronized return time::RTTTime(millis_, compute_micros());
+			synchronized return time_();
+		}
+
+		time::RTTTime time_() const
+		{
+			return time::RTTTime(millis_, compute_micros());
 		}
 
 		/**

@@ -36,7 +36,8 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					oldsonar/Sonar7 oldsonar/Sonar8 oldsonar/Sonar9							\
 					rtt/TimerApp3 rtt/TimerApp4												\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
-					uart/UartApp2 uart/UartApp3 uart/UartApp4
+					uart/UartApp2 uart/UartApp3 uart/UartApp4								\
+					sonar/Sonar1
 
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						events/EventApp5 events/EventApp6		\
