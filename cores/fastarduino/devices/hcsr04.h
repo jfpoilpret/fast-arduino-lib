@@ -240,29 +240,36 @@ namespace devices::sonar
 
 		inline bool ready() const
 		{
-			return status_ & READY;
+			return status_ == READY;
 		}
 
 		inline TYPE latest_echo_ticks() const
 		{
-			if (sizeof(TYPE) > 1)
-				synchronized return echo_pulse_;
-			else
-				return echo_pulse_;
+			synchronized
+			{
+				if (status_ == READY)
+					return echo_pulse_;
+				else
+					return 0;
+			}
 		}
 
 	protected:
-		AbstractSonar(TIMER& timer) : timer_{timer}, echo_pulse_{0}, status_{0}
+		AbstractSonar(TIMER& timer) : timer_{timer}, echo_pulse_{0}, status_{UNKNOWN}
 		{
 		}
 
 		TYPE async_echo_ticks(TYPE timeout_ticks)
 		{
 			// Wait for echo signal start
-			while (!(status_ & READY))
+			while (status_ != READY)
 				if (timer_.ticks() >= timeout_ticks)
 				{
-					status_ = READY;
+					synchronized
+					{
+						status_ = READY;
+						echo_pulse_ = 0;
+					}
 					return 0;
 				}
 			return echo_pulse_;
@@ -274,35 +281,44 @@ namespace devices::sonar
 			timer_.reset();
 			while (!echo.value())
 				if (timer_.ticks() >= timeout_ticks) return 0;
-			echo_pulse_ = timer_.ticks();
-			status_ = STARTED;
+			synchronized
+			{
+				status_ = ECHO_STARTED;
+				echo_pulse_ = timer_.ticks();
+			}
 			// Wait for echo signal end
 			while (echo.value())
 				if (timer_.ticks() >= timeout_ticks) return 0;
-			echo_pulse_ = timer_.ticks() - echo_pulse_;
-			status_ = READY;
+			synchronized
+			{
+				status_ = READY;
+				echo_pulse_ = timer_.ticks() - echo_pulse_;
+			}
 			return echo_pulse_;
 		}
 
 		inline void trigger_sent(bool reset)
 		{
-			// Trigger capture if needed (compile-time decision)
-			TimerTrigger<CAPTURE>::trigger(timer_);
-			if (reset) timer_.reset();
-			status_ = 0;
+			synchronized
+			{
+				// Trigger capture if needed (compile-time decision)
+				TimerTrigger<CAPTURE>::trigger(timer_);
+				if (reset) timer_.reset();
+				status_ = TRIGGERED;
+			}
 		}
 
 		inline bool pulse_edge(bool rising, TYPE ticks)
 		{
-			if (rising && status_ == 0)
+			if (rising && status_ == TRIGGERED)
 			{
+				status_ = ECHO_STARTED;
 				echo_pulse_ = ticks;
-				status_ = STARTED;
 			}
-			else if ((!rising) && status_ == STARTED)
+			else if ((!rising) && status_ == ECHO_STARTED)
 			{
-				echo_pulse_ = ticks - echo_pulse_;
 				status_ = READY;
+				echo_pulse_ = ticks - echo_pulse_;
 				return true;
 			}
 			return false;
@@ -320,8 +336,10 @@ namespace devices::sonar
 		TIMER& timer_;
 		volatile TYPE echo_pulse_;
 
-		static constexpr const uint8_t READY = 0x01;
-		static constexpr const uint8_t STARTED = 0x02;
+		static constexpr const uint8_t UNKNOWN = 0x00;
+		static constexpr const uint8_t TRIGGERED = 0x10;
+		static constexpr const uint8_t ECHO_STARTED = 0x11;
+		static constexpr const uint8_t READY = 0x20;
 		volatile uint8_t status_;
 	};
 
