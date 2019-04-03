@@ -29,7 +29,7 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/pci.h>
-#include <fastarduino/devices/hcsr04.h>
+#include <fastarduino/devices/old_sonar.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HARDWARE_UART 1
@@ -91,14 +91,14 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using TIMER_TYPE = timer::Timer<TIMER>;
 using CALC = timer::Calculator<TIMER>;
-using devices::sonar::SonarType;
-using SONAR1 = devices::sonar::HCSR04<TIMER, TRIGGER1, ECHO1, SonarType::ASYNC_PCINT>;
-using SONAR2 = devices::sonar::HCSR04<TIMER, TRIGGER2, ECHO2, SonarType::ASYNC_PCINT>;
+using devices::old_sonar::SonarType;
+using SONAR1 = devices::old_sonar::HCSR04<TIMER, TRIGGER1, ECHO1, SonarType::ASYNC_PCINT>;
+using SONAR2 = devices::old_sonar::HCSR04<TIMER, TRIGGER2, ECHO2, SonarType::ASYNC_PCINT>;
 static constexpr const uint32_t PRECISION = SONAR1::DEFAULT_TIMEOUT_MS * 1000UL;
 static constexpr const TIMER_TYPE::PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
 static constexpr const SONAR1::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
 
-using devices::sonar::echo_us_to_distance_mm;
+using devices::old_sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
 REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, SONAR1, SONAR2)

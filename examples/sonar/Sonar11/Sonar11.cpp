@@ -33,7 +33,7 @@
 #include <fastarduino/queue.h>
 #include <fastarduino/utilities.h>
 #include <fastarduino/pci.h>
-#include <fastarduino/devices/hcsr04.h>
+#include <fastarduino/devices/old_sonar.h>
 
 using board::DigitalPin;
 using gpio::FastPinType;
@@ -104,7 +104,7 @@ static constexpr const uint8_t ECHO_MASK = echo_mask();
 static constexpr const uint8_t LED_MASK = led_mask();
 
 // Declate device type to handle all sonars
-using SONAR = devices::sonar::MultiHCSR04<NTIMER, TRIGGER, ECHO_PORT, ECHO_MASK>;
+using SONAR = devices::old_sonar::MultiHCSR04<NTIMER, TRIGGER, ECHO_PORT, ECHO_MASK>;
 
 // Declare timer types and constants
 using TIMER = timer::Timer<NTIMER>;
@@ -113,7 +113,7 @@ static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
 static constexpr const TIMER::PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
 static constexpr const TIMER::TYPE TIMEOUT_MAX = CALC::CTC_counter(PRESCALER, PRECISION);
 
-using devices::sonar::distance_mm_to_echo_us;
+using devices::old_sonar::distance_mm_to_echo_us;
 
 static constexpr const uint16_t DISTANCE_THRESHOLD_MM = 150;
 static constexpr const SONAR::TYPE DISTANCE_THRESHOLD_TICKS = 
@@ -166,7 +166,7 @@ int main()
 	QUEUE queue{event_buffer};
 	
 	// Setup LED outputs
-	gpio::FastMaskedPort<LED_PORT> leds{LED_MASK, 0xFF};
+	gpio::FastMaskedPort<LED_PORT, LED_MASK> leds{0xFF};
 
 	// Setup timer
 	TIMER timer{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};

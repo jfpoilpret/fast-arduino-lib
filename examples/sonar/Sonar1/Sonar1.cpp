@@ -28,7 +28,7 @@
 #include <fastarduino/time.h>
 #include <fastarduino/timer.h>
 #include <fastarduino/flash.h>
-#include <fastarduino/devices/hcsr04.h>
+#include <fastarduino/devices/old_sonar.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HARDWARE_UART 1
@@ -78,12 +78,12 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using TIMER = timer::Timer<NTIMER>;
 using CALC = timer::Calculator<NTIMER>;
-using SONAR = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO>;
+using SONAR = devices::old_sonar::HCSR04<NTIMER, TRIGGER, ECHO>;
 static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
 static constexpr const TIMER::PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
 static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
 
-using devices::sonar::echo_us_to_distance_mm;
+using devices::old_sonar::echo_us_to_distance_mm;
 
 // No ISR needed here as we work in pure blocking mode
 
