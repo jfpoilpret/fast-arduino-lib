@@ -31,9 +31,9 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4							\
 					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4 rtt/InputCapture1		\
 					motors/Servo1 motors/Servo2												\
-					sonar/Sonar1 sonar/Sonar2 sonar/Sonar3									\
-					sonar/Sonar4 sonar/Sonar5 sonar/Sonar6									\
-					sonar/Sonar7 sonar/Sonar8 sonar/Sonar9									\
+					oldsonar/Sonar1 oldsonar/Sonar2 oldsonar/Sonar3							\
+					oldsonar/Sonar4 oldsonar/Sonar5 oldsonar/Sonar6							\
+					oldsonar/Sonar7 oldsonar/Sonar8 oldsonar/Sonar9							\
 					rtt/TimerApp3 rtt/TimerApp4												\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
 					uart/UartApp2 uart/UartApp3 uart/UartApp4
@@ -44,7 +44,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/IOStreams3							\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
-						sonar/Sonar10							\
+						oldsonar/Sonar10						\
 						tones/tones1 tones/tones2 tones/tones3	\
 						uart/UartApp1							\
 						uart/UartApp5							\
@@ -66,7 +66,7 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						events/EventApp5 events/EventApp6		\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
-						sonar/Sonar10							\
+						oldsonar/Sonar10						\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							
@@ -75,7 +75,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3				\
 								events/EventApp5 events/EventApp6	\
 								pci/PinChangeInterrupt4				\
 								rtt/InputCapture1					\
-								sonar/Sonar10						\
+								oldsonar/Sonar10					\
 								uart/UartApp1						\
 								uart/UartApp5						\
 								uart/UartApp6					
