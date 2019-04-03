@@ -222,6 +222,11 @@ namespace watchdog
 			synchronized return millis_;
 		}
 
+		inline void reset()
+		{
+			synchronized millis_ = 0;
+		}
+
 		/**
 		 * Delay program execution for the given amount of milliseconds.
 		 * Contrarily to `time::delay_ms()`, this method does not perform a busy
