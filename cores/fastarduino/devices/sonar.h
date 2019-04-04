@@ -59,7 +59,6 @@
 		FOR_EACH(CALL_DISTINCT_HCSR4_, EMPTY, SONAR, ##__VA_ARGS__)  \
 	}
 
-//FIXME CALLBACK shall receive the microseconds count now
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            \
 	static_assert(board_traits::DigitalPin_trait<ECHO>::IS_INT, "PIN must be an INT pin.");         \
 	static_assert(board_traits::ExternalInterruptPin_trait<ECHO>::INT == INT_NUM,                   \
@@ -70,10 +69,9 @@
 		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;              \
 		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                        \
 		auto handler = SONAR_HOLDER::handler();                                                     \
-		if (handler->on_pin_change()) CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(counter);		\
+		if (handler->on_pin_change()) CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)();				\
 	}
 
-//FIXME CALLBACK shall receive the microseconds count now
 #define REGISTER_HCSR04_INT_ISR_FUNCTION(TIMER, INT_NUM, TRIGGER, ECHO, CALLBACK)                	\
 	static_assert(board_traits::DigitalPin_trait<ECHO>::IS_INT, "PIN must be an INT pin.");      	\
 	static_assert(board_traits::ExternalInterruptPin_trait<ECHO>::INT == INT_NUM,                	\
@@ -84,22 +82,20 @@
 		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;           	\
 		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                     	\
 		auto handler = SONAR_HOLDER::handler();                                                  	\
-		if (handler->on_pin_change()) CALLBACK(counter);                                  			\
+		if (handler->on_pin_change()) CALLBACK();		                                  			\
 	}
 
-//FIXME CALLBACK shall receive the microseconds count now
-#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)             	\
-	CHECK_PCI_PIN_(ECHO, PCI_NUM)                                                                    	\
-	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                 	\
-	{                                                                                                	\
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_PCINT;  	\
-		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;               	\
-		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                         	\
-		auto handler = SONAR_HOLDER::handler();                                                      	\
-		if (handler->on_pin_change()) CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(counter);			\
+#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            \
+	CHECK_PCI_PIN_(ECHO, PCI_NUM)                                                                   \
+	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                \
+	{                                                                                               \
+		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_PCINT;  \
+		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;              \
+		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                        \
+		auto handler = SONAR_HOLDER::handler();                                                     \
+		if (handler->on_pin_change()) CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)();				\
 	}
 
-//FIXME CALLBACK shall receive the microseconds count now
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)                  	\
 	CHECK_PCI_PIN_(ECHO, PCI_NUM)                                                                  	\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                               	\
@@ -108,7 +104,7 @@
 		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;             	\
 		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                       	\
 		auto handler = SONAR_HOLDER::handler();                                                    	\
-		if (handler->on_pin_change()) CALLBACK(counter);                                    		\
+		if (handler->on_pin_change()) CALLBACK();                                    				\
 	}
 
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, SONAR, HANDLER, CALLBACK)                         \
@@ -167,62 +163,61 @@ namespace devices::sonar
 			return status_ == READY;
 		}
 
-		inline uint32_t latest_echo_us() const
+		inline uint16_t latest_echo_us() const
 		{
 			synchronized
 			{
 				if (status_ == READY)
-					return echo_time().total_micros();
+					return echo_time_();
 				else
-					return 0UL;
+					return 0;
 			}
 		}
 
 	protected:
-		AbstractSonar(const RTT& rtt) : rtt_{rtt}, status_{UNKNOWN}, echo_{}
+		AbstractSonar(const RTT& rtt) : rtt_{rtt}, status_{UNKNOWN}, echo_start_{}, echo_end_{}
 		{
 		}
 
-		uint32_t async_echo_us(uint32_t timeout_us)
+		uint16_t async_echo_us(uint16_t timeout_ms)
 		{
-			time::RTTTime now = rtt_.time();
-			now += timeout_us;
+			uint32_t now = rtt_.millis();
+			now += timeout_ms;
 			// Wait for echo signal start
 			while (status_ != READY)
-				if (rtt_.time() >= now)
+				if (rtt_.millis() >= now)
 				{
 					synchronized
 					{
 						status_ = READY;
-						echo_time() = time::RTTTime{};
-						// echo_ = time::RTTTime{};
+						echo_start_ = echo_end_ = time::RTTTime{};
 					}
-					return 0UL;
+					return 0;
 				}
-			return echo_time().total_micros();
+			return echo_time_();
 		}
 
 		template<board::DigitalPin ECHO>
-		uint32_t blocking_echo_us(typename gpio::FastPinType<ECHO>::TYPE& echo, uint32_t timeout_us)
+		uint16_t blocking_echo_us(typename gpio::FastPinType<ECHO>::TYPE& echo, uint16_t timeout_ms)
 		{
-			time::RTTTime now = rtt_.time();
-			now += timeout_us;
+			uint32_t now = rtt_.millis();
+			now += timeout_ms;
 			while (!echo.value())
-				if (rtt_.time() >= now) return 0UL;
+				if (rtt_.millis() >= now) return 0;
 			synchronized
 			{
 				status_ = ECHO_STARTED;
-				echo_time() = rtt_.time();
+				echo_start_ = rtt_.time();
 			}
 			// Wait for echo signal end
 			while (echo.value())
-				if (rtt_.time() >= now) return 0UL;
+				if (rtt_.millis() >= now) return 0;
 			synchronized
 			{
 				status_ = READY;
-				echo_time() = rtt_.time() - echo_time();
+				echo_end_ = rtt_.time();
+				return echo_time_();
 			}
-			return echo_time().total_micros();
 		}
 
 		inline void trigger_sent()
@@ -235,25 +230,21 @@ namespace devices::sonar
 			if (rising && status_ == TRIGGERED)
 			{
 				status_ = ECHO_STARTED;
-				echo_ = rtt_.time_();
+				echo_start_ = rtt_.time_();
 			}
 			else if ((!rising) && status_ == ECHO_STARTED)
 			{
 				status_ = READY;
-				echo_ = rtt_.time_() - echo_;
+				echo_end_ = rtt_.time_();
 				return true;
 			}
 			return false;
 		}
 
 	private:
-		const time::RTTTime& echo_time() const INLINE
+		uint16_t echo_time_() const
 		{
-			return (const time::RTTTime&) echo_;
-		}
-		time::RTTTime& echo_time() INLINE
-		{
-			return (time::RTTTime&) echo_;
+			return uint16_t((echo_end_ - echo_start_).total_micros());
 		}
 
 		const RTT& rtt_;
@@ -264,7 +255,8 @@ namespace devices::sonar
 		static constexpr const uint8_t READY = 0x20;
 
 		volatile uint8_t status_;
-		volatile time::RTTTime echo_;
+		time::RTTTime echo_start_;
+		time::RTTTime echo_end_;
 	};
 
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_,
@@ -304,18 +296,18 @@ namespace devices::sonar
 		// Blocking API
 		// Do note that timeout here is for the whole method not just for the sound echo, hence it
 		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
-		uint32_t echo_us(uint32_t timeout_us)
+		uint16_t echo_us(uint16_t timeout_ms)
 		{
 			async_echo();
-			return await_echo_us(timeout_us);
+			return await_echo_us(timeout_ms);
 		}
 
-		uint32_t await_echo_us(uint32_t timeout_us)
+		uint16_t await_echo_us(uint16_t timeout_ms)
 		{
 			if (SONAR_TYPE != SonarType::BLOCKING)
-				return this->async_echo_us(timeout_us);
+				return this->async_echo_us(timeout_ms);
 			else
-				return this->template blocking_echo_us<ECHO_>(echo_, timeout_us);
+				return this->template blocking_echo_us<ECHO>(echo_, timeout_ms);
 		}
 
 		// We want to avoid using await_echo_us() to handle state & timeout!
@@ -353,10 +345,10 @@ namespace devices::sonar
 	struct SonarEvent
 	{
 	public:
-		SonarEvent() : started_{}, ready_{}, micros_{}
+		SonarEvent() : started_{}, ready_{}, time_{}
 		{
 		}
-		SonarEvent(uint8_t started, uint8_t ready, uint32_t micros) : started_{started}, ready_{ready}, micros_{micros}
+		SonarEvent(uint8_t started, uint8_t ready, time::RTTTime time) : started_{started}, ready_{ready}, time_{time}
 		{
 		}
 
@@ -368,15 +360,15 @@ namespace devices::sonar
 		{
 			return ready_;
 		}
-		uint32_t micros() const
+		time::RTTTime time() const
 		{
-			return micros_;
+			return time_;
 		}
 
 	private:
 		uint8_t started_;
 		uint8_t ready_;
-		uint32_t micros_;
+		time::RTTTime time_;
 	};
 
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_>
@@ -447,7 +439,7 @@ namespace devices::sonar
 			started_ |= started;
 			ready_ |= ready;
 			if (ready_ == ECHO_MASK) active_ = false;
-			return SonarEvent{started, ready, rtt_.time_().total_micros()};
+			return SonarEvent{started, ready, rtt_.time_()};
 		}
 
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
