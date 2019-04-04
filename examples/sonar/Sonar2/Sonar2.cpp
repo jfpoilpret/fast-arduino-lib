@@ -28,6 +28,7 @@
 #include <fastarduino/time.h>
 #include <fastarduino/realtime_timer.h>
 #include <fastarduino/flash.h>
+#include <fastarduino/int.h>
 #include <fastarduino/devices/sonar.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
@@ -36,10 +37,11 @@
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
-#define TIMER_NUM 1
-static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define TIMER_NUM 0
+#define INT_NUM 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PD3;
+static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD3_EXT1;
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -73,13 +75,14 @@ static constexpr const board::DigitalPin ECHO = board::DigitalPin::D10_PB2;
 #error "Current target is not yet supported!"
 #endif
 
+REGISTER_HCSR04_INT_ISR(NTIMER, INT_NUM, TRIGGER, ECHO)
 REGISTER_RTT_ISR(TIMER_NUM)
 
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using RTT = timer::RTT<NTIMER>;
-using SONAR = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO, devices::sonar::SonarType::BLOCKING>;
+using SONAR = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO, devices::sonar::SonarType::ASYNC_INT>;
 static constexpr const uint16_t TIMEOUT = SONAR::DEFAULT_TIMEOUT_MS;
 
 using devices::sonar::echo_us_to_distance_mm;
@@ -103,8 +106,12 @@ int main()
 	RTT rtt;
 	SONAR sonar{rtt};
 	rtt.register_rtt_handler();
+	sonar.register_handler();
 	rtt.begin();
 	
+	interrupt::INTSignal<ECHO> signal;
+	signal.enable();
+
 	out << F("Starting...") << streams::endl;
 	
 	while (true)
