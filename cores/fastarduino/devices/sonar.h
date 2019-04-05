@@ -36,18 +36,37 @@
 		CALL_HANDLER_RETURN_(SONAR_HANDLER, &SONAR_HANDLER::on_pin_change, bool)(); 				\
 	}
 
-#define CALL_HCSR4_(ECHO, DUMMY)                                                                    \
-	{                                                                                               \
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_PCINT;  \
-		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;              \
-		CALL_HANDLER_RETURN_(SONAR_HANDLER, &SONAR_HANDLER::on_pin_change, bool)();					\
+// Try more C++ oriented way to hold ISR source code
+//TODO make it consistent acros all REGISTER_XXX macros!
+namespace devices::sonar
+{
+	template<typename HANDLER, typename CALLBACK, typename RET, typename... ARGS>
+	RET isr_callback(ARGS... args)
+	{
+		return interrupt::HandlerHolder<HANDLER>::ArgsHolder<RET, args...>::CallbackHolder<CALLBACK>::handle(args);
 	}
 
-#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...) \
-	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, ECHO, ##__VA_ARGS__)          \
-	ISR(CAT3(PCINT, PCI_NUM, _vect))                                \
-	{                                                               \
-		FOR_EACH(CALL_HCSR4_, EMPTY, ECHO, ##__VA_ARGS__)           \
+	template<int PCI_NUM, board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO1, board::DigitalPin... ECHOS>
+	void isr_handler_sonar_pci()
+	{
+		// handle first echo pin
+		static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");
+		static_assert(board_traits::DigitalPin_trait<ECHO1>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,
+					"ECHO port must match PCI_NUM port");
+		static_assert(_BV(board_traits::DigitalPin_trait<ECHO1>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK,
+					"ECHO must be a PCINT pin");
+		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_PCINT;
+		using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO1, SONARTYPE>;
+		isr_callback<SONAR, &SONAR::on_pin_change, bool>();
+		// handle other echo pins
+		isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHOS>();
+	}
+}
+
+#define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)								\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))                                							\
+	{                                                               							\
+		devices::sonar::isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>();	\
 	}
 
 #define CALL_DISTINCT_HCSR4_(SONAR, DUMMY) \
