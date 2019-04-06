@@ -34,7 +34,10 @@
  * @sa eeprom::QueuedWriter
  */
 #define REGISTER_EEPROM_ISR() \
-	REGISTER_ISR_METHOD_RETURN_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready, bool)
+	ISR(EE_READY_vect)															\
+	{																			\
+		interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready();	\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
@@ -47,12 +50,11 @@
  * 
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)                              \
-	ISR(EE_READY_vect)                                                             \
-	{                                                                              \
-		using WRT_HANDLER = eeprom::QueuedWriter;                                  \
-		using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);                           \
-		if (WRT_HOLDER::handler()->on_ready()) CALL_HANDLER_(HANDLER, CALLBACK)(); \
+#define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)                              	\
+	ISR(EE_READY_vect)                                                             	\
+	{                                                                              	\
+		if (interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready())	\
+			interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();		\
 	}
 
 /**
@@ -65,12 +67,11 @@
  * 
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)             \
-	ISR(EE_READY_vect)                                     \
-	{                                                      \
-		using WRT_HANDLER = eeprom::QueuedWriter;          \
-		using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);   \
-		if (WRT_HOLDER::handler()->on_ready()) CALLBACK(); \
+#define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)             							\
+	ISR(EE_READY_vect)                                     							\
+	{                                                      							\
+		if (interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready())	\
+			CALLBACK();																\
 	}
 
 /**
