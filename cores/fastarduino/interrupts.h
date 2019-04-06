@@ -201,6 +201,18 @@ namespace interrupt
 	};
 
 	template<typename Handler> Handler* HandlerHolder<Handler>::handler_ = 0;
+
+	// Used by ISR to perform a callback to a PTMF
+	template<typename HANDLER, typename CALLBACK, typename RET, typename... ARGS>
+	RET isr_callback(ARGS... args)
+	{
+		// NOTE the following line does not compile, it must be broken down for the compiler to understand
+		// return HandlerHolder<HANDLER>::ArgsHolder<RET, ARGS...>::CallbackHolder<CALLBACK>::handle(args...);
+		using HOLDER = HandlerHolder<HANDLER>;
+		using ARGS_HOLDER = typename HOLDER::template ArgsHolder<RET, ARGS...>;
+		using CALLBACK_HOLDER = typename ARGS_HOLDER::template CallbackHolder<CALLBACK>;
+		return CALLBACK_HOLDER::handle(args...);
+	}
 	/// @endcond
 
 	/**

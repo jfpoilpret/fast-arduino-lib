@@ -25,43 +25,11 @@
 #include <fastarduino/pci.h>
 
 // Utilities to handle ISR callbacks
-#define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)                                      \
-	static_assert(board_traits::DigitalPin_trait<ECHO>::IS_INT, "ECHO must be an INT pin.");        \
-	static_assert(board_traits::ExternalInterruptPin_trait<ECHO>::INT == INT_NUM,                   \
-				  "ECHO INT number must match INT_NUM");                                            \
-	ISR(CAT3(INT, INT_NUM, _vect))                                                                  \
-	{                                                                                               \
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_INT;	\
-		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;              \
-		CALL_HANDLER_RETURN_(SONAR_HANDLER, &SONAR_HANDLER::on_pin_change, bool)(); 				\
+#define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)					\
+	ISR(CAT3(INT, INT_NUM, _vect))												\
+	{																			\
+		devices::sonar::isr_handler_sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>();	\
 	}
-
-// Try more C++ oriented way to hold ISR source code
-//TODO make it consistent acros all REGISTER_XXX macros!
-namespace devices::sonar
-{
-	template<typename HANDLER, typename CALLBACK, typename RET, typename... ARGS>
-	RET isr_callback(ARGS... args)
-	{
-		return interrupt::HandlerHolder<HANDLER>::ArgsHolder<RET, args...>::CallbackHolder<CALLBACK>::handle(args);
-	}
-
-	template<int PCI_NUM, board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO1, board::DigitalPin... ECHOS>
-	void isr_handler_sonar_pci()
-	{
-		// handle first echo pin
-		static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");
-		static_assert(board_traits::DigitalPin_trait<ECHO1>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,
-					"ECHO port must match PCI_NUM port");
-		static_assert(_BV(board_traits::DigitalPin_trait<ECHO1>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK,
-					"ECHO must be a PCINT pin");
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_PCINT;
-		using SONAR = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO1, SONARTYPE>;
-		isr_callback<SONAR, &SONAR::on_pin_change, bool>();
-		// handle other echo pins
-		isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHOS>();
-	}
-}
 
 #define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)								\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                							\
@@ -69,41 +37,25 @@ namespace devices::sonar
 		devices::sonar::isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>();	\
 	}
 
-#define CALL_DISTINCT_HCSR4_(SONAR, DUMMY) \
-	CALL_HANDLER_RETURN_(SONAR, &SONAR::on_pin_change, bool)();
-
-#define REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, SONAR, ...) \
-	ISR(CAT3(PCINT, PCI_NUM, _vect))                                 \
-	{                                                                \
-		FOR_EACH(CALL_DISTINCT_HCSR4_, EMPTY, SONAR, ##__VA_ARGS__)  \
+#define REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)								\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))                                 										\
+	{                                                                										\
+		devices::sonar::isr_handler_sonar_distinct_pci<PCI_NUM, TIMER, TRIGGER, ECHO,  ##__VA_ARGS__>();	\
 	}
 
-#define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            \
-	static_assert(board_traits::DigitalPin_trait<ECHO>::IS_INT, "PIN must be an INT pin.");         \
-	static_assert(board_traits::ExternalInterruptPin_trait<ECHO>::INT == INT_NUM,                   \
-				  "PIN INT number must match INT_NUM");                                             \
-	ISR(CAT3(INT, INT_NUM, _vect))                                                                  \
-	{                                                                                               \
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_INT;	\
-		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;              \
-		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                        \
-		auto handler = SONAR_HOLDER::handler();                                                     \
-		if (handler->on_pin_change()) CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)();				\
+#define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            		\
+	ISR(CAT3(INT, INT_NUM, _vect))                                                                  		\
+	{                                                                                               		\
+		devices::sonar::isr_handler_sonar_int_method<INT_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>();	\
 	}
 
 #define REGISTER_HCSR04_INT_ISR_FUNCTION(TIMER, INT_NUM, TRIGGER, ECHO, CALLBACK)                	\
-	static_assert(board_traits::DigitalPin_trait<ECHO>::IS_INT, "PIN must be an INT pin.");      	\
-	static_assert(board_traits::ExternalInterruptPin_trait<ECHO>::INT == INT_NUM,                	\
-				  "PIN INT number must match INT_NUM");                                          	\
 	ISR(CAT3(INT, INT_NUM, _vect))                                                               	\
 	{                                                                                            	\
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_INT;	\
-		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;           	\
-		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                     	\
-		auto handler = SONAR_HOLDER::handler();                                                  	\
-		if (handler->on_pin_change()) CALLBACK();		                                  			\
+		devices::sonar::isr_handler_sonar_int_function<INT_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
 	}
 
+//TODO change to new ISR way
 #define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            \
 	CHECK_PCI_PIN_(ECHO, PCI_NUM)                                                                   \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                \
@@ -115,6 +67,7 @@ namespace devices::sonar
 		if (handler->on_pin_change()) CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)();				\
 	}
 
+//TODO change to new ISR way
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)                  	\
 	CHECK_PCI_PIN_(ECHO, PCI_NUM)                                                                  	\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                               	\
@@ -126,6 +79,7 @@ namespace devices::sonar
 		if (handler->on_pin_change()) CALLBACK();                                    				\
 	}
 
+//TODO change to new ISR way
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, SONAR, HANDLER, CALLBACK)                         \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                    \
 	{                                                                                                   \
@@ -136,6 +90,7 @@ namespace devices::sonar
 		if (event.ready() || event.started()) CALL_HANDLER_(HANDLER, CALLBACK, decltype(event))(event); \
 	}
 
+//TODO change to new ISR way
 #define REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(PCI_NUM, SONAR, CALLBACK)          \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                              \
 	{                                                                             \
@@ -357,8 +312,13 @@ namespace devices::sonar
 		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 		typename gpio::FastPinType<ECHO>::TYPE echo_;
 
-		DECL_INT_ISR_FRIENDS
-		DECL_PCINT_ISR_FRIENDS
+		// Make friends with all ISR handlers
+		template<int, board::Timer, board::DigitalPin, board::DigitalPin>
+		friend bool isr_handler_sonar_int();
+		template<int, board::Timer, board::DigitalPin, board::DigitalPin, board::DigitalPin...>
+		friend bool isr_handler_sonar_pci();
+		template<int, board::Timer, board::DigitalPin, board::DigitalPin, board::DigitalPin...>
+		friend bool isr_handler_sonar_distinct_pci();
 	};
 
 	struct SonarEvent
@@ -472,6 +432,79 @@ namespace devices::sonar
 
 		DECL_PCINT_ISR_FRIENDS
 	};
+
+	/// @cond notdocumented
+	// All sonar-related methods called by pre-defined ISR are defined here
+	template<int INT_NUM, board::Timer TIMER, board::DigitalPin TRIGGER, board::DigitalPin ECHO>
+	bool isr_handler_sonar_int()
+	{
+		static_assert(board_traits::DigitalPin_trait<ECHO>::IS_INT, "ECHO must be an INT pin.");
+		static_assert(board_traits::ExternalInterruptPin_trait<ECHO>::INT == INT_NUM,
+					"ECHO INT number must match INT_NUM");
+		using SONAR = HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;
+		return interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
+	}
+
+	template<int INT_NUM, board::Timer TIMER,
+		board::DigitalPin TRIGGER, board::DigitalPin ECHO, typename HANDLER, typename CALLBACK>
+	void isr_handler_sonar_int_method()
+	{
+		if (isr_handler_sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>())
+			interrupt::isr_callback<HANDLER, CALLBACK, void>();
+	}
+
+	template<int INT_NUM, board::Timer TIMER,
+		board::DigitalPin TRIGGER, board::DigitalPin ECHO, typename CALLBACK>
+	void isr_handler_sonar_int_function()
+	{
+		if (isr_handler_sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>())
+			CALLBACK();
+	}
+
+	template<int PCI_NUM, board::Timer TIMER, board::DigitalPin TRIGGER>
+	bool isr_handler_sonar_pci()
+	{
+		return false;
+	}
+
+	template<int PCI_NUM, board::Timer TIMER, 
+		board::DigitalPin TRIGGER, board::DigitalPin ECHO1, board::DigitalPin... ECHOS>
+	bool isr_handler_sonar_pci()
+	{
+		// handle first echo pin
+		static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");
+		static_assert(board_traits::DigitalPin_trait<ECHO1>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,
+					"ECHO port must match PCI_NUM port");
+		static_assert(_BV(board_traits::DigitalPin_trait<ECHO1>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK,
+					"ECHO must be a PCINT pin");
+		using SONAR = HCSR04<TIMER, TRIGGER, ECHO1, SonarType::ASYNC_PCINT>;
+		bool result = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
+		// handle other echo pins
+		return result || isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHOS...>();
+	}
+
+	template<int PCI_NUM, board::Timer TIMER>
+	bool isr_handler_sonar_distinct_pci()
+	{
+		return false;
+	}
+
+	template<int PCI_NUM, board::Timer TIMER, 
+		board::DigitalPin TRIGGER, board::DigitalPin ECHO, board::DigitalPin... TRIGGER_ECHOS>
+	bool isr_handler_sonar_distinct_pci()
+	{
+		// handle first echo pin
+		static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");
+		static_assert(board_traits::DigitalPin_trait<ECHO>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,
+					"ECHO port must match PCI_NUM port");
+		static_assert(_BV(board_traits::DigitalPin_trait<ECHO>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK,
+					"ECHO must be a PCINT pin");
+		using SONAR = HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;
+		bool result = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
+		// handle other echo pins
+		return result || isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER_ECHOS...>();
+	}
+	/// @endcond
 }
 
 #endif /* SONAR_H */
