@@ -14,8 +14,8 @@
 
 /*
  * Asynchronous sonar sensor read and conversion.
- * This program shows usage of FastArduino HCSR04 device API with PCINT ISR on 2 pins.
- * In this example, both sonar devices use the same TRIGGER pin.
+ * This program shows usage of FastArduino HCSR04 device API with EXT ISR 
+ * on 1 pin and callback.
  * 
  * Wiring: TODO
  * - on ATmega328P based boards (including Arduino UNO):
@@ -40,9 +40,9 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-#define PCI_NUM 2
+#define INT_NUM 1
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D3_PD3_PCI2;
+static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD3_EXT1;
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -51,9 +51,9 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-#define PCI_NUM 0
+#define INT_NUM 5
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PE4;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D53_PB0_PCI0;
+static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PE5_EXT5;
 #elif defined(ARDUINO_LEONARDO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -62,9 +62,9 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(1)
 #define TIMER_NUM 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-#define PCI_NUM 0
+#define INT_NUM 0
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD1;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D8_PB4_PCI0;
+static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD0_EXT0;
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
@@ -72,9 +72,9 @@ static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #define TIMER_NUM 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-#define PCI_NUM 1
-static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D0_PA0;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D10_PB2_PCI1;
+#define INT_NUM 0
+static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
+static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D10_PB2_EXT0;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -87,7 +87,7 @@ REGISTER_RTT_ISR(TIMER_NUM)
 using RTT = timer::RTT<NTIMER>;
 
 using devices::sonar::SonarType;
-using SONAR = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;
+using SONAR = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;
 static constexpr const uint16_t TIMEOUT = SONAR::DEFAULT_TIMEOUT_MS;
 
 using devices::sonar::echo_us_to_distance_mm;
@@ -121,7 +121,7 @@ private:
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
 };
 
-REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER, PCI_NUM, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
+REGISTER_HCSR04_INT_ISR_METHOD(NTIMER, INT_NUM, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
 
 int main() __attribute__((OS_main));
 int main()
@@ -147,11 +147,11 @@ int main()
 
 	SonarListener listener{sonar, DISTANCE_THRESHOLD_MM};
 
-	typename interrupt::PCIType<ECHO>::TYPE signal;
-	signal.enable_pin<ECHO>();
+	typename interrupt::INTSignal<ECHO> signal;
 	signal.enable();
 	
 	out << F("Starting...") << streams::endl;
+	
 	while (true)
 	{
 		sonar.async_echo();
