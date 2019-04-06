@@ -231,6 +231,8 @@ namespace timer
 			synchronized return time_();
 		}
 
+		//TODO document
+		//TODO defined another method, more performant, that returns a "DeferredRTTTime"
 		time::RTTTime time_() const
 		{
 			return time::RTTTime(millis_, compute_micros());

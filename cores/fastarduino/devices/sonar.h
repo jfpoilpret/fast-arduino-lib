@@ -24,6 +24,7 @@
 #include <fastarduino/int.h>
 #include <fastarduino/pci.h>
 
+//TODO document!
 // Utilities to handle ISR callbacks
 #define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)					\
 	ISR(CAT3(INT, INT_NUM, _vect))												\
@@ -55,28 +56,16 @@
 		devices::sonar::isr_handler_sonar_int_function<INT_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
 	}
 
-//TODO change to new ISR way
-#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            \
-	CHECK_PCI_PIN_(ECHO, PCI_NUM)                                                                   \
-	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                \
-	{                                                                                               \
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_PCINT;  \
-		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;              \
-		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                        \
-		auto handler = SONAR_HOLDER::handler();                                                     \
-		if (handler->on_pin_change()) CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)();				\
+#define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            		\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                		\
+	{                                                                                               		\
+		devices::sonar::isr_handler_sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>();	\
 	}
 
-//TODO change to new ISR way
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)                  	\
-	CHECK_PCI_PIN_(ECHO, PCI_NUM)                                                                  	\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                               	\
 	{                                                                                              	\
-		static const devices::sonar::SonarType SONARTYPE = devices::sonar::SonarType::ASYNC_PCINT; 	\
-		using SONAR_HANDLER = devices::sonar::HCSR04<TIMER, TRIGGER, ECHO, SONARTYPE>;             	\
-		using SONAR_HOLDER = HANDLER_HOLDER_(SONAR_HANDLER);                                       	\
-		auto handler = SONAR_HOLDER::handler();                                                    	\
-		if (handler->on_pin_change()) CALLBACK();                                    				\
+		devices::sonar::isr_handler_sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
 	}
 
 //TODO change to new ISR way
@@ -127,6 +116,7 @@ namespace devices::sonar
 		ASYNC_PCINT
 	};
 
+	//FIXME missing timeout
 	template<board::Timer NTIMER_> class AbstractSonar
 	{
 	public:
@@ -350,6 +340,7 @@ namespace devices::sonar
 		time::RTTTime time_;
 	};
 
+	//FIXME missing timeout
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_>
 	class MultiHCSR04
 	{
@@ -446,11 +437,11 @@ namespace devices::sonar
 	}
 
 	template<int INT_NUM, board::Timer TIMER,
-		board::DigitalPin TRIGGER, board::DigitalPin ECHO, typename HANDLER, typename CALLBACK>
+		board::DigitalPin TRIGGER, board::DigitalPin ECHO, typename HANDLER, void (HANDLER::*CALLBACK)()>
 	void isr_handler_sonar_int_method()
 	{
 		if (isr_handler_sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>())
-			interrupt::isr_callback<HANDLER, CALLBACK, void>();
+			interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
 	}
 
 	template<int INT_NUM, board::Timer TIMER,
@@ -481,6 +472,22 @@ namespace devices::sonar
 		bool result = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
 		// handle other echo pins
 		return result || isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHOS...>();
+	}
+
+	template<int PCI_NUM, board::Timer TIMER, 
+		board::DigitalPin TRIGGER, board::DigitalPin ECHO, typename HANDLER, void (HANDLER::*CALLBACK)()>
+	void isr_handler_sonar_pci_method()
+	{
+		if (isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO>())
+			interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
+	}
+
+	template<int PCI_NUM, board::Timer TIMER, 
+		board::DigitalPin TRIGGER, board::DigitalPin ECHO, typename CALLBACK>
+	void isr_handler_sonar_pci_function()
+	{
+		if (isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO>())
+			CALLBACK();
 	}
 
 	template<int PCI_NUM, board::Timer TIMER>
