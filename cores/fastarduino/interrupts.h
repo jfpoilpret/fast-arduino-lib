@@ -112,10 +112,10 @@
  * @sa interrupt::register_handler()
  * @sa REGISTER_ISR_METHOD_RETURN_
  */
-#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)                 \
-	ISR(VECTOR)                                                         \
-	{                                                                   \
-		CALL_HANDLER_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK))(); \
+#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)                 	\
+	ISR(VECTOR)                                                         	\
+	{                                                                   	\
+		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
 	}
 
 /**
@@ -138,10 +138,10 @@
  * @sa interrupt::register_handler()
  * @sa REGISTER_ISR_METHOD_
  */
-#define REGISTER_ISR_METHOD_RETURN_(VECTOR, HANDLER, CALLBACK, RET)                 \
-	ISR(VECTOR)                                                                     \
-	{                                                                               \
-		CALL_HANDLER_RETURN_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK), RET)(); \
+#define REGISTER_ISR_METHOD_RETURN_(VECTOR, HANDLER, CALLBACK, RET)			\
+	ISR(VECTOR)																\
+	{																		\
+		interrupt::CallbackHandler<RET (HANDLER::*)(), CALLBACK>::call();	\
 	}
 
 /**
