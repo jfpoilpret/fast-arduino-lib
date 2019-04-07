@@ -65,10 +65,10 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)									\
-	ISR(CAT3(PCINT, PCI_NUM, _vect))															\
-	{																							\
-		interrupt::isr_handler_pci_function<PCI_NUM, HANDLER, CALLBACK, PIN, ##__VA_ARGS__>();	\
+#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)							\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))													\
+	{																					\
+		interrupt::isr_handler_pci_function<PCI_NUM, CALLBACK, PIN, ##__VA_ARGS__>();	\
 	}
 
 /**
@@ -80,9 +80,14 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)         \
-	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__) \
-	EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))
+#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)								\
+	extern "C" void CAT3(PCINT, PCI_NUM, _vect) (void)							\
+		__attribute__ ((signal,naked,__INTR_ATTRS));							\
+	void CAT3(PCINT, PCI_NUM, _vect) (void)										\
+	{																			\
+		interrupt::isr_handler_check_pci_pins<PCI_NUM, PIN, ## __VA_ARGS__>();	\
+		__asm__ __volatile__ ("reti" ::);										\
+	}
 
 namespace interrupt
 {
@@ -495,38 +500,22 @@ namespace interrupt
 		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS...>();
 	}
 
-	template<int PCI_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)()>
-	void isr_handler_pci_method()
-	{
-	}
-
-	template<int PCI_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)(), 
-		board::DigitalPin PCIPIN1, board::DigitalPin... PCIPINS>
+	template<int PCI_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)(), board::DigitalPin... PCIPINS>
 	void isr_handler_pci_method()
 	{
 		// Check pin is compliant
-		isr_handler_check_pci_pins<PCI_NUM_, PCIPIN1>();
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS...>();
 		// Call handler back
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
-		// Handle other pins
-		isr_handler_pci_method<PCI_NUM_, HANDLER, CALLBACK, PCIPINS...>();
 	}
 
-	template<int PCI_NUM_, typename HANDLER, void (*CALLBACK)()>
-	void isr_handler_pci_function()
-	{
-	}
-
-	template<int PCI_NUM_, void (*CALLBACK)(), 
-		board::DigitalPin PCIPIN1, board::DigitalPin... PCIPINS>
+	template<int PCI_NUM_, void (*CALLBACK)(), board::DigitalPin... PCIPINS>
 	void isr_handler_pci_function()
 	{
 		// Check pin is compliant
-		isr_handler_check_pci_pins<PCI_NUM_, PCIPIN1>();
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS...>();
 		// Call handler back
 		CALLBACK();
-		// Handle other pins
-		isr_handler_pci_function<PCI_NUM_, CALLBACK, PCIPINS...>();
 	}
 
 	/// @endcond

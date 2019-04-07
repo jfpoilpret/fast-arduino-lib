@@ -240,28 +240,28 @@ namespace interrupt
 	// All INT-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	template<int INT_NUM_, board::DigitalPin INT_PIN>
+	template<int INT_NUM_, board::DigitalPin INT_PIN_>
 	void isr_handler_check_int_pin()
 	{
-		static_assert(board_traits::DigitalPin_trait<INT_PIN>::IS_INT, "PIN must be an INT pin.");
-		static_assert(board_traits::ExternalInterruptPin_trait<INT_PIN>::INT == INT_NUM_,
+		static_assert(board_traits::DigitalPin_trait<INT_PIN_>::IS_INT, "PIN must be an INT pin.");
+		static_assert(board_traits::ExternalInterruptPin_trait<INT_PIN_>::INT == INT_NUM_,
 			"PIN INT number must match INT_NUM");
 	}
 
-	template<int INT_NUM_, board::DigitalPin INT_PIN, typename HANDLER, void (HANDLER::*CALLBACK)()>
+	template<int INT_NUM_, board::DigitalPin INT_PIN_, typename HANDLER, void (HANDLER::*CALLBACK)()>
 	void isr_handler_int_method()
 	{
 		// Check pin is compliant
-		isr_handler_check_int_pin<INT_NUM_, INT_PIN>();
+		isr_handler_check_int_pin<INT_NUM_, INT_PIN_>();
 		// Call handler back
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
 	}
 
-	template<int INT_NUM_, board::DigitalPin INT_PIN, void (*CALLBACK)()>
+	template<int INT_NUM_, board::DigitalPin INT_PIN_, void (*CALLBACK)()>
 	void isr_handler_int_function()
 	{
 		// Check pin is compliant
-		isr_handler_check_int_pin<INT_NUM_, INT_PIN>();
+		isr_handler_check_int_pin<INT_NUM_, INT_PIN_>();
 		// Call handler back
 		CALLBACK();
 	}
