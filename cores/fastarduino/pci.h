@@ -31,15 +31,6 @@
 #include "interrupts.h"
 #include "utilities.h"
 
-/// @cond notdocumented
-#define CHECK_PCI_PIN_(PIN, PCI_NUM)                                                                          \
-	static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");      \
-	static_assert(board_traits::DigitalPin_trait<PIN>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,        \
-				  "PIN port must match PCI_NUM port");                                                        \
-	static_assert(_BV(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK, \
-				  "PIN must be a PCINT pin");
-/// @endcond
-
 /**
  * Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt 
  * vector.

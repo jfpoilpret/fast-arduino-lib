@@ -80,9 +80,8 @@
  * of @p HANDLER class.
  * Note that a proper instance needs to be first registered with
  * `interrupt::register_handler()` before the first call to this ISR.
- * This macro is normally used only by FastArduino to define higher-level macros 
- * for registration of specific ISR; you normally won't need to use this macro in 
- * your own programs.
+ * This macro is provided for the sake of completeness but you normally won't
+ * need to use it in your programs.
  * @param VECTOR the name of the interrupt vector for which to generate the ISR;
  * must exist for the current AVR target.
  * @param HANDLER the class which registered instance will be used to call 
@@ -92,9 +91,9 @@
  * must be a proper Pointer to Member Function of @p HANDLER. This method takes 
  * no argument and must return `void`.
  * @sa interrupt::register_handler()
- * @sa REGISTER_ISR_METHOD_RETURN_
+ * @sa REGISTER_ISR_METHOD_RETURN
  */
-#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)                 	\
+#define REGISTER_ISR_METHOD(VECTOR, HANDLER, CALLBACK)                 		\
 	ISR(VECTOR)                                                         	\
 	{                                                                   	\
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
@@ -105,9 +104,8 @@
  * of @p HANDLER class.
  * Note that a proper instance needs to be first registered with
  * `interrupt::register_handler()` before the first call to this ISR.
- * This macro is normally used only by FastArduino to define higher-level macros 
- * for registration of specific ISR; you normally won't need to use this macro in 
- * your own programs.
+ * This macro is provided for the sake of completeness but you normally won't
+ * need to use it in your programs.
  * @param VECTOR the name of the interrupt vector for which to generate the ISR;
  * must exist for the current AVR target.
  * @param HANDLER the class which registered instance will be used to call 
@@ -118,9 +116,9 @@
  * no argument and must return type @p RET.
  * @param RET the type returned by method @p CALLBACK
  * @sa interrupt::register_handler()
- * @sa REGISTER_ISR_METHOD_
+ * @sa REGISTER_ISR_METHOD
  */
-#define REGISTER_ISR_METHOD_RETURN_(VECTOR, HANDLER, CALLBACK, RET)			\
+#define REGISTER_ISR_METHOD_RETURN(VECTOR, HANDLER, CALLBACK, RET)			\
 	ISR(VECTOR)																\
 	{																		\
 		interrupt::CallbackHandler<RET (HANDLER::*)(), CALLBACK>::call();	\
@@ -128,19 +126,18 @@
 
 /**
  * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK function.
- * This macro is normally used only by FastArduino to define higher-level macros 
- * for registration of specific ISR; you normally won't need to use this macro in 
- * your own programs.
+ * This macro is provided for the sake of completeness but you normally won't
+ * need to use it in your programs.
  * @param VECTOR the name of the interrupt vector for which to generate the ISR;
  * must exist for the current AVR target.
  * @param CALLBACK the global or static function that will be called back by the ISR;
  * this function takes no argument. This function must have been defined (or at 
  * least declared) **before** the macro is used.
  */
-#define REGISTER_ISR_FUNCTION_(VECTOR, CALLBACK) \
-	ISR(VECTOR)                                  \
-	{                                            \
-		CALLBACK();                              \
+#define REGISTER_ISR_FUNCTION(VECTOR, CALLBACK)	\
+	ISR(VECTOR)                                 \
+	{                                           \
+		CALLBACK();                             \
 	}
 
 /**
@@ -222,46 +219,9 @@ namespace interrupt
 
 /// @cond notdocumented
 
-// Useful macro to iterate
-// NOTE: these macros have been inspired by several readings:
-// http://stackoverflow.com/questions/11761703/overloading-macro-on-number-of-arguments
-// http://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros
-// https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
-
-#define EMPTY(...)
+// Macro often used to build vector names from parameters
 #define CAT3(X, Y, Z) X##Y##Z
 
-#define FE_0_(M, DATA, FIRST, SEP, LAST)
-
-#define FE_1_(M, DATA, FIRST, SEP, LAST, X1) FIRST() M(X1, DATA) LAST()
-#define FE_2_(M, DATA, FIRST, SEP, LAST, X1, X2) FIRST() M(X1, DATA) SEP() M(X2, DATA) LAST()
-#define FE_3_(M, DATA, FIRST, SEP, LAST, X1, X2, X3) FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) LAST()
-#define FE_4_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4) \
-	FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) LAST()
-#define FE_5_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5) \
-	FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) LAST()
-#define FE_6_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6) \
-	FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) LAST()
-#define FE_7_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6, X7)                                            \
-	FIRST()                                                                                                     \
-	M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) SEP() \
-		M(X7, DATA) LAST()
-#define FE_8_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6, X7, X8)                                        \
-	FIRST()                                                                                                     \
-	M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) SEP() \
-		M(X7, DATA) SEP() M(X8, DATA) LAST()
-#define FE_9_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6, X7, X8, X9)                                    \
-	FIRST()                                                                                                     \
-	M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) SEP() \
-		M(X7, DATA) SEP() M(X8, DATA) SEP() M(X9, DATA) LAST()
-
-#define GET_MACRO_9_(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, NAME, ...) NAME
-
-// FOR_EACH executes M macro for each argument passed to it, returns empty if passed an empty list.
-// Number of arguments in variadic list must be between 0 and 9
-#define FOR_EACH(M, DATA, ...)                                                                                \
-	GET_MACRO_9_(unused, ##__VA_ARGS__, FE_9_, FE_8_, FE_7_, FE_6_, FE_5_, FE_4_, FE_3_, FE_2_, FE_1_, FE_0_) \
-	(M, DATA, EMPTY, EMPTY, EMPTY, ##__VA_ARGS__)
 /// @endcond
 
 #endif /* INTERRUPTS_HH */
