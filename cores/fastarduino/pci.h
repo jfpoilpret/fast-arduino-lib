@@ -474,45 +474,59 @@ namespace interrupt
 	};
 
 	/// @cond notdocumented
+
 	// All PCI-related methods called by pre-defined ISR are defined here
-	template<int PCI_NUM, typename HANDLER, void (HANDLER::*CALLBACK)()>
+	//====================================================================
+
+	template<int PCI_NUM_>
+	void isr_handler_check_pci_pins()
+	{
+	}
+
+	template<int PCI_NUM_, board::DigitalPin PCIPIN1, board::DigitalPin... PCIPINS>
+	void isr_handler_check_pci_pins()
+	{
+		static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
+		static_assert(board_traits::DigitalPin_trait<PCIPIN1>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
+					"PIN port must match PCI_NUM port");
+		static_assert(_BV(board_traits::DigitalPin_trait<PCIPIN1>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK, \
+					"PIN must be a PCINT pin");
+		// Check other pins
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS...>();
+	}
+
+	template<int PCI_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)()>
 	void isr_handler_pci_method()
 	{
 	}
 
-	template<int PCI_NUM, typename HANDLER, void (HANDLER::*CALLBACK)(), 
+	template<int PCI_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)(), 
 		board::DigitalPin PCIPIN1, board::DigitalPin... PCIPINS>
 	void isr_handler_pci_method()
 	{
-		static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");
-		static_assert(board_traits::DigitalPin_trait<PCIPIN1>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,
-					"PIN port must match PCI_NUM port");
-		static_assert(_BV(board_traits::DigitalPin_trait<PCIPIN1>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK, \
-					"PIN must be a PCINT pin");
+		// Check pin is compliant
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPIN1>();
 		// Call handler back
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
 		// Handle other pins
-		isr_handler_pci_method<PCI_NUM, HANDLER, CALLBACK, PCIPINS...>();
+		isr_handler_pci_method<PCI_NUM_, HANDLER, CALLBACK, PCIPINS...>();
 	}
 
-	template<int PCI_NUM, typename HANDLER, void (*CALLBACK)()>
+	template<int PCI_NUM_, typename HANDLER, void (*CALLBACK)()>
 	void isr_handler_pci_function()
 	{
 	}
 
-	template<int PCI_NUM, void (*CALLBACK)(), 
+	template<int PCI_NUM_, void (*CALLBACK)(), 
 		board::DigitalPin PCIPIN1, board::DigitalPin... PCIPINS>
 	void isr_handler_pci_function()
 	{
-		static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");
-		static_assert(board_traits::DigitalPin_trait<PCIPIN1>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,
-					"PIN port must match PCI_NUM port");
-		static_assert(_BV(board_traits::DigitalPin_trait<PCIPIN1>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK, \
-					"PIN must be a PCINT pin");
+		// Check pin is compliant
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPIN1>();
 		// Call handler back
 		CALLBACK();
 		// Handle other pins
-		isr_handler_pci_function<PCI_NUM, CALLBACK, PCIPINS...>();
+		isr_handler_pci_function<PCI_NUM_, CALLBACK, PCIPINS...>();
 	}
 
 	/// @endcond

@@ -36,10 +36,11 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)                                                       \
-	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
-	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
-	REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)
+#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)				\
+	ISR(CAT3(INT, INT_NUM, _vect))												\
+	{																			\
+		interrupt::isr_handler_int_method<INT_NUM, PIN, HANDLER, CALLBACK>();	\
+	}
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an External Interrupt 
@@ -50,10 +51,11 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)                                                              \
-	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
-	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
-	REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)
+#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)				\
+	ISR(CAT3(INT, INT_NUM, _vect))										\
+	{																	\
+		interrupt::isr_handler_int_function<INT_NUM, PIN, CALLBACK>();	\
+	}
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for an External Interrupt 
@@ -64,9 +66,11 @@
  * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
  * do not match, compilation will fail.
  */
-#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                                                                           \
-	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
-	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
+#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)										\
+	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT,						\
+		"PIN must be an INT pin.");													\
+	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM,	\
+		"PIN INT number must match INT_NUM");										\
 	EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
 
 namespace interrupt
@@ -230,6 +234,37 @@ namespace interrupt
 			INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
 		}
 	};
+
+	/// @cond notdocumented
+
+	// All INT-related methods called by pre-defined ISR are defined here
+	//====================================================================
+
+	template<int INT_NUM_, board::DigitalPin INT_PIN>
+	void isr_handler_check_int_pin()
+	{
+		static_assert(board_traits::DigitalPin_trait<INT_PIN>::IS_INT, "PIN must be an INT pin.");
+		static_assert(board_traits::ExternalInterruptPin_trait<INT_PIN>::INT == INT_NUM_,
+			"PIN INT number must match INT_NUM");
+	}
+
+	template<int INT_NUM_, board::DigitalPin INT_PIN, typename HANDLER, void (HANDLER::*CALLBACK)()>
+	void isr_handler_int_method()
+	{
+		// Check pin is compliant
+		isr_handler_check_int_pin<INT_NUM_, INT_PIN>();
+		// Call handler back
+		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
+	}
+
+	template<int INT_NUM_, board::DigitalPin INT_PIN, void (*CALLBACK)()>
+	void isr_handler_int_function()
+	{
+		// Check pin is compliant
+		isr_handler_check_int_pin<INT_NUM_, INT_PIN>();
+		// Call handler back
+		CALLBACK();
+	}
 }
 
 #endif /* INT_HH */
