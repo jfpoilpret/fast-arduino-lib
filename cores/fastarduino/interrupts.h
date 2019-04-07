@@ -73,24 +73,6 @@
 // This allows processing pointers to SRAM data be performed directly from Y, Z registers
 // this may optimize code size on some circumstances
 #define FIX_BASE_POINTER(_ptr) __asm__ __volatile__("" : "=b"(_ptr) : "0"(_ptr))
-
-// Useful macros to pass arguments containing a comma
-#define AS_ONE_ARG(...) __VA_ARGS__
-#define SINGLE_ARG1_(...) __VA_ARGS__
-#define SINGLE_ARG2_(...) __VA_ARGS__
-#define SINGLE_ARG3_(...) __VA_ARGS__
-
-// Utilities to handle ISR callbacks
-#define HANDLER_HOLDER_(HANDLER) interrupt::HandlerHolder<HANDLER>
-
-#define CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK, RET, ...) \
-	interrupt::HandlerHolder<HANDLER>::ArgsHolder<RET, ##__VA_ARGS__>::CallbackHolder<CALLBACK>
-
-#define CALL_HANDLER_(HANDLER, CALLBACK, ...) \
-	CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), void, ##__VA_ARGS__)::handle
-
-#define CALL_HANDLER_RETURN_(HANDLER, CALLBACK, RET, ...) \
-	CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), RET, ##__VA_ARGS__)::handle
 /// @endcond
 
 /**
@@ -247,11 +229,7 @@ namespace interrupt
 // https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
 
 #define EMPTY(...)
-#define CAT(X, Y) X##Y
 #define CAT3(X, Y, Z) X##Y##Z
-#define COMMA() ,
-#define STRINGIFY(X, ...) #X
-#define ID(X, ...) X
 
 #define FE_0_(M, DATA, FIRST, SEP, LAST)
 
@@ -284,12 +262,6 @@ namespace interrupt
 #define FOR_EACH(M, DATA, ...)                                                                                \
 	GET_MACRO_9_(unused, ##__VA_ARGS__, FE_9_, FE_8_, FE_7_, FE_6_, FE_5_, FE_4_, FE_3_, FE_2_, FE_1_, FE_0_) \
 	(M, DATA, EMPTY, EMPTY, EMPTY, ##__VA_ARGS__)
-// FOR_EACH_SEP executes M macro for each argument passed to it, separates each transformed value with SEP(),
-// prepends FIRST() and appends LAST() if result list is not empty; returns empty if passed an empty list
-// Number of arguments in variadic list must be between 0 and 9
-#define FOR_EACH_SEP(M, DATA, FIRST, SEP, LAST, ...)                                                          \
-	GET_MACRO_9_(unused, ##__VA_ARGS__, FE_9_, FE_8_, FE_7_, FE_6_, FE_5_, FE_4_, FE_3_, FE_2_, FE_1_, FE_0_) \
-	(M, DATA, FIRST, SEP, LAST, ##__VA_ARGS__)
 /// @endcond
 
 #endif /* INTERRUPTS_HH */
