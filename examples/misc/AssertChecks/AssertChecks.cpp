@@ -27,10 +27,14 @@
 #include <fastarduino/timer.h>
 
 void callback() {}
+void callback8(uint8_t) {}
+void callback16(uint16_t) {}
 void callback32(uint32_t) {}
 struct Callback
 {
 	void callback() {}
+	void callback8(uint8_t) {}
+	void callback16(uint16_t) {}
 	void callback32(uint32_t) {}
 };
 
@@ -75,30 +79,44 @@ struct Callback
 // // but only "normal" compilation errors, due to use of non existing value for an enum, with plenty of consequent errors
 
 // // Try to register HW UART for non existing UART NUM
-//FIXME This generates no error, only a small warning!
 // #pragma message "CHECK: register HW UATX for non existing UART NUM (1 check)"
 // REGISTER_UATX_ISR(1)
-//FIXME This generates no error, only a small warning!
 // #pragma message "CHECK: register HW UARX for non existing UART NUM (1 check)"
 // REGISTER_UARX_ISR(1)
-//FIXME This generates no error, only a small warning!
 // #pragma message "CHECK: register HW UART for non existing UART NUM (1 check)"
 // REGISTER_UART_ISR(1)
 
-//TODO FIXME Old checks must be updated (these macros do not exist anymore and there are many more in timer now)
 // // Try to register TIMER vector for non existing TIMER NUM
-// #pragma message "CHECK: register TIMER ISR for non existing TIMER NUM (3 checks)"
-// REGISTER_TIMER_ISR_EMPTY(3)
-// REGISTER_TIMER_ISR_METHOD(3, Callback, &Callback::callback)
-// REGISTER_TIMER_ISR_FUNCTION(3, callback)
+// #pragma message "CHECK: register TIMER ISR for non existing TIMER NUM (10 checks)"
+//FIXME The following line only generates a warning!
+// REGISTER_TIMER_COMPARE_ISR_EMPTY(3)
+// REGISTER_TIMER_COMPARE_ISR_METHOD(3, Callback, &Callback::callback)
+// REGISTER_TIMER_COMPARE_ISR_FUNCTION(3, callback)
+//FIXME The following line only generates a warning!
+// REGISTER_TIMER_OVERFLOW_ISR_EMPTY(3)
+// REGISTER_TIMER_OVERFLOW_ISR_METHOD(3, Callback, &Callback::callback)
+// REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(3, callback)
+//FIXME The following line only generates a warning!
+// REGISTER_TIMER_CAPTURE_ISR_EMPTY(3)
+// REGISTER_TIMER_CAPTURE_ISR_METHOD(3, Callback, &Callback::callback8)
+// REGISTER_TIMER_CAPTURE_ISR_METHOD(3, Callback, &Callback::callback16)
+// REGISTER_TIMER_CAPTURE_ISR_FUNCTION(3, callback16)
+
+// #pragma message "CHECK: register TIMER CAPTURE ISR for TIMER NUM without ICP (4 checks)"
+//FIXME The following 4 lines only generates a warning!
+// REGISTER_TIMER_CAPTURE_ISR_METHOD(0, Callback, &Callback::callback8)
+// REGISTER_TIMER_CAPTURE_ISR_METHOD(0, Callback, &Callback::callback16)
+// REGISTER_TIMER_CAPTURE_ISR_FUNCTION(0, callback8)
+// REGISTER_TIMER_CAPTURE_ISR_FUNCTION(0, callback16)
+
+// #pragma message "CHECK: register TIMER CAPTURE ISR for TIMER NUM with wrong callback argument size (2 checks)"
+// REGISTER_TIMER_CAPTURE_ISR_METHOD(1, Callback, &Callback::callback8)
+// REGISTER_TIMER_CAPTURE_ISR_FUNCTION(1, callback8)
 
 // // Try to register TIMER vector for RTT for non existing TIMER NUM
-//FIXME This generates no error, only a small warning!
 // #pragma message "CHECK: register TIMER ISR for RTT for non existing TIMER NUM (3 checks)"
 // REGISTER_RTT_ISR(3)
-//FIXME This generates no error, only a small warning!
 // REGISTER_RTT_ISR_METHOD(3, Callback, &Callback::callback32)
-//FIXME This generates no error, only a small warning!
 // REGISTER_RTT_ISR_FUNCTION(3, callback32)
 
 //TODO FIXME Better checks must be put there
