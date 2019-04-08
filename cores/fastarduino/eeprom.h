@@ -71,7 +71,7 @@
 	ISR(EE_READY_vect)                                     							\
 	{                                                      							\
 		if (interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready())	\
-			CALLBACK();																\
+			interrupt::CallbackHandler<void (*)(), CALLBACK):call();				\
 	}
 
 /**

@@ -71,10 +71,10 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_WATCHDOG_ISR_FUNCTION(CALLBACK)	\
-	ISR(WDT_vect)									\
-	{												\
-		CALLBACK();									\
+#define REGISTER_WATCHDOG_ISR_FUNCTION(CALLBACK)					\
+	ISR(WDT_vect)													\
+	{																\
+		interrupt::CallbackHandler<void (*)(), CALLBACK>::call();	\
 	}
 
 /**

@@ -40,6 +40,7 @@
 #define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)		\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
+		timer::isr_handler_check_timer<TIMER_NUM>();						\
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
 	}
 
@@ -53,7 +54,8 @@
 #define REGISTER_TIMER_COMPARE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
-		CALLBACK();															\
+		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		interrupt::CallbackHandler<void (*)(), CALLBACK>::call();			\
 	}
 
 /**
@@ -76,6 +78,7 @@
 #define REGISTER_TIMER_OVERFLOW_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
 	{																		\
+		timer::isr_handler_check_timer<TIMER_NUM>();						\
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
 	}
 
@@ -89,7 +92,8 @@
 #define REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
 	{																		\
-		CALLBACK();															\
+		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		interrupt::CallbackHandler<void (*)(), CALLBACK>::call();			\
 	}
 
 /**
@@ -134,7 +138,8 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM) EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
+#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)	\
+	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
 
 /**
  * Defines all API to manipulate AVR Timers.
@@ -1191,50 +1196,60 @@ namespace timer
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	template<int TIMER_NUM_, typename T, typename HANDLER, void (HANDLER::*CALLBACK)(T)>
+	template<uint8_t TIMER_NUM_>
+	constexpr board::Timer isr_handler_check_timer()
+	{
+		constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		using TRAIT = board_traits::Timer_trait<NTIMER>;
+		static_assert(TRAIT::PRESCALERS != board_traits::TimerPrescalers::PRESCALERS_NONE,
+			"TIMER_NUM must be an actual Timer in target MCU");
+		return NTIMER;
+	}
+
+	template<uint8_t TIMER_NUM_, typename T, typename HANDLER_, void (HANDLER_::*CALLBACK_)(T)>
 	void isr_handler_timer_capture_method_helper()
 	{
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();						\
 		using TRAIT = board_traits::Timer_trait<NTIMER>;
 		static_assert(sizeof(typename TRAIT::TYPE) == sizeof(T), 
 			"CALLBACK argument is not the proper type (should be same as Timer bits size)");
 		T capture = TRAIT::ICR;
-		interrupt::CallbackHandler<void (HANDLER::*)(T), CALLBACK>::call(capture);
+		interrupt::CallbackHandler<void (HANDLER_::*)(T), CALLBACK_>::call(capture);
 	}
 
-	template<int TIMER_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)(uint8_t)>
+	template<uint8_t TIMER_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(uint8_t)>
 	void isr_handler_timer_capture_method()
 	{
-		isr_handler_timer_capture_method_helper<TIMER_NUM_, uint8_t, HANDLER, CALLBACK>();
+		isr_handler_timer_capture_method_helper<TIMER_NUM_, uint8_t, HANDLER_, CALLBACK_>();
 	}
 
-	template<int TIMER_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)(uint16_t)>
+	template<uint8_t TIMER_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(uint16_t)>
 	void isr_handler_timer_capture_method()
 	{
-		isr_handler_timer_capture_method_helper<TIMER_NUM_, uint16_t, HANDLER, CALLBACK>();
+		isr_handler_timer_capture_method_helper<TIMER_NUM_, uint16_t, HANDLER_, CALLBACK_>();
 	}
 
-	template<int TIMER_NUM_, typename T, void (*CALLBACK)(T)>
+	template<uint8_t TIMER_NUM_, typename T, void (*CALLBACK_)(T)>
 	void isr_handler_timer_capture_function_helper()
 	{
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();						\
 		using TRAIT = board_traits::Timer_trait<NTIMER>;
 		static_assert(sizeof(typename TRAIT::TYPE) == sizeof(T), 
 			"CALLBACK argument is not the proper type (should be same as Timer bits size)");
 		T capture = TRAIT::ICR;
-		CALLBACK(capture);
+		CALLBACK_(capture);
 	}
 
-	template<int TIMER_NUM_, void (*CALLBACK)(uint8_t)>
+	template<uint8_t TIMER_NUM_, void (*CALLBACK_)(uint8_t)>
 	void isr_handler_timer_capture_function()
 	{
-		isr_handler_timer_capture_function_helper<TIMER_NUM_, uint8_t, CALLBACK>();
+		isr_handler_timer_capture_function_helper<TIMER_NUM_, uint8_t, CALLBACK_>();
 	}
 
-	template<int TIMER_NUM_, void (*CALLBACK)(uint16_t)>
+	template<uint8_t TIMER_NUM_, void (*CALLBACK_)(uint16_t)>
 	void isr_handler_timer_capture_function()
 	{
-		isr_handler_timer_capture_function_helper<TIMER_NUM_, uint16_t, CALLBACK>();
+		isr_handler_timer_capture_function_helper<TIMER_NUM_, uint16_t, CALLBACK_>();
 	}
 
 	/// @endcond

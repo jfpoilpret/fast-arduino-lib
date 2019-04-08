@@ -398,33 +398,33 @@ namespace timer
 
 	template<uint8_t TIMER_NUM_> void isr_handler_rtt()
 	{
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
 		interrupt::HandlerHolder<RTT<NTIMER>>::handler()->on_timer();
 	}
 
-	template<uint8_t TIMER_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)(uint32_t)>
+	template<uint8_t TIMER_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(uint32_t)>
 	void isr_handler_rtt_method()
 	{
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
 		auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
 		handler->on_timer();
-		interrupt::CallbackHandler<void (HANDLER::*)(uint32_t), CALLBACK>::call(
+		interrupt::CallbackHandler<void (HANDLER_::*)(uint32_t), CALLBACK_>::call(
 			handler->millis());
 	}
 
-	template<uint8_t TIMER_NUM_, void (*CALLBACK)(uint32_t)>
+	template<uint8_t TIMER_NUM_, void (*CALLBACK_)(uint32_t)>
 	void isr_handler_rtt_function()
 	{
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
 		auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
 		handler->on_timer();
-		CALLBACK(handler->millis());
+		CALLBACK_(handler->millis());
 	}
 
 	template<uint8_t TIMER_NUM_, typename EVENT_, uint32_t PERIOD_>
 	void isr_handler_rtt_event()
 	{
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
 		auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
 		handler->on_timer();
 		interrupt::HandlerHolder<RTTEventCallback<EVENT_, PERIOD_>>::handler()->on_rtt_change(

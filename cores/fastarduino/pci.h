@@ -474,39 +474,39 @@ namespace interrupt
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	template<int PCI_NUM_>
+	template<uint8_t PCI_NUM_>
 	void isr_handler_check_pci_pins()
 	{
 	}
 
-	template<int PCI_NUM_, board::DigitalPin PCIPIN1, board::DigitalPin... PCIPINS>
+	template<uint8_t PCI_NUM_, board::DigitalPin PCIPIN1_, board::DigitalPin... PCIPINS_>
 	void isr_handler_check_pci_pins()
 	{
 		static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
-		static_assert(board_traits::DigitalPin_trait<PCIPIN1>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
+		static_assert(board_traits::DigitalPin_trait<PCIPIN1_>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
 					"PIN port must match PCI_NUM port");
-		static_assert(_BV(board_traits::DigitalPin_trait<PCIPIN1>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK, \
+		static_assert(_BV(board_traits::DigitalPin_trait<PCIPIN1_>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK, \
 					"PIN must be a PCINT pin");
 		// Check other pins
-		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS...>();
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS_...>();
 	}
 
-	template<int PCI_NUM_, typename HANDLER, void (HANDLER::*CALLBACK)(), board::DigitalPin... PCIPINS>
+	template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::DigitalPin... PCIPINS_>
 	void isr_handler_pci_method()
 	{
 		// Check pin is compliant
-		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS...>();
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS_...>();
 		// Call handler back
-		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
+		interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
 	}
 
-	template<int PCI_NUM_, void (*CALLBACK)(), board::DigitalPin... PCIPINS>
+	template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::DigitalPin... PCIPINS_>
 	void isr_handler_pci_function()
 	{
 		// Check pin is compliant
-		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS...>();
+		isr_handler_check_pci_pins<PCI_NUM_, PCIPINS_...>();
 		// Call handler back
-		CALLBACK();
+		CALLBACK_();
 	}
 
 	/// @endcond
