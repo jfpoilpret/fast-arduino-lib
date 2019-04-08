@@ -76,71 +76,6 @@
 /// @endcond
 
 /**
- * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK method
- * of @p HANDLER class.
- * Note that a proper instance needs to be first registered with
- * `interrupt::register_handler()` before the first call to this ISR.
- * This macro is provided for the sake of completeness but you normally won't
- * need to use it in your programs.
- * @param VECTOR the name of the interrupt vector for which to generate the ISR;
- * must exist for the current AVR target.
- * @param HANDLER the class which registered instance will be used to call 
- * @p CALLBACK method when the ISR is called; this class must have been defined
- * **before** the macro is used.
- * @param CALLBACK the @p HANDLER method that will be called back by the ISR;
- * must be a proper Pointer to Member Function of @p HANDLER. This method takes 
- * no argument and must return `void`.
- * @sa interrupt::register_handler()
- * @sa REGISTER_ISR_METHOD_RETURN
- */
-#define REGISTER_ISR_METHOD(VECTOR, HANDLER, CALLBACK)                 		\
-	ISR(VECTOR)                                                         	\
-	{                                                                   	\
-		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
-	}
-
-/**
- * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK method
- * of @p HANDLER class.
- * Note that a proper instance needs to be first registered with
- * `interrupt::register_handler()` before the first call to this ISR.
- * This macro is provided for the sake of completeness but you normally won't
- * need to use it in your programs.
- * @param VECTOR the name of the interrupt vector for which to generate the ISR;
- * must exist for the current AVR target.
- * @param HANDLER the class which registered instance will be used to call 
- * @p CALLBACK method when the ISR is called; this class must have been defined
- * **before** the macro is used.
- * @param CALLBACK the @p HANDLER method that will be called back by the ISR;
- * must be a proper Pointer to Member Function of @p HANDLER. This method takes 
- * no argument and must return type @p RET.
- * @param RET the type returned by method @p CALLBACK
- * @sa interrupt::register_handler()
- * @sa REGISTER_ISR_METHOD
- */
-#define REGISTER_ISR_METHOD_RETURN(VECTOR, HANDLER, CALLBACK, RET)			\
-	ISR(VECTOR)																\
-	{																		\
-		interrupt::CallbackHandler<RET (HANDLER::*)(), CALLBACK>::call();	\
-	}
-
-/**
- * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK function.
- * This macro is provided for the sake of completeness but you normally won't
- * need to use it in your programs.
- * @param VECTOR the name of the interrupt vector for which to generate the ISR;
- * must exist for the current AVR target.
- * @param CALLBACK the global or static function that will be called back by the ISR;
- * this function takes no argument. This function must have been defined (or at 
- * least declared) **before** the macro is used.
- */
-#define REGISTER_ISR_FUNCTION(VECTOR, CALLBACK)	\
-	ISR(VECTOR)                                 \
-	{                                           \
-		CALLBACK();                             \
-	}
-
-/**
  * Defines API to handle AVR interruptions.
  * In particular, the following API are provided:
  * - generically handle interrupts callbacks
@@ -185,17 +120,25 @@ namespace interrupt
 	// Found great inspiration for this pattern there: 
 	// https://stackoverflow.com/questions/9779105/generic-member-function-pointer-as-a-template-parameter
 	template<typename T, T> struct CallbackHandler;
-	template<typename Handler, typename Ret, typename... Args, Ret (Handler::*Callback)(Args...)>
-	struct CallbackHandler<Ret (Handler::*)(Args...), Callback>
+	template<typename HANDLER, typename RET, typename... ARGS, RET (HANDLER::*CALLBACK)(ARGS...)>
+	struct CallbackHandler<RET (HANDLER::*)(ARGS...), CALLBACK>
 	{
-		static Ret call(Args... args)
+		static RET call(ARGS... args)
 		{
 			// NOTE the following line does not compile, it must be broken down for the compiler to understand
 			// return HandlerHolder<HANDLER>::ArgsHolder<RET, ARGS...>::CallbackHolder<CALLBACK>::handle(args...);
-			using HOLDER = HandlerHolder<Handler>;
-			using ARGS_HOLDER = typename HOLDER::template ArgsHolder<Ret, Args...>;
-			using CALLBACK_HOLDER = typename ARGS_HOLDER::template CallbackHolder<Callback>;
+			using HOLDER = HandlerHolder<HANDLER>;
+			using ARGS_HOLDER = typename HOLDER::template ArgsHolder<RET, ARGS...>;
+			using CALLBACK_HOLDER = typename ARGS_HOLDER::template CallbackHolder<CALLBACK>;
 			return CALLBACK_HOLDER::handle(args...);
+		}
+	};
+	template<typename RET, typename... ARGS, RET (*CALLBACK)(ARGS...)>
+	struct CallbackHandler<RET (*)(ARGS...), CALLBACK>
+	{
+		static RET call(ARGS... args)
+		{
+			return CALLBACK(args...);
 		}
 	};
 	/// @endcond
