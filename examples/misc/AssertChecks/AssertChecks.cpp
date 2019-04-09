@@ -100,7 +100,6 @@ struct Callback
 // REGISTER_TIMER_CAPTURE_ISR_FUNCTION(3, callback16)
 
 // #pragma message "CHECK: register TIMER CAPTURE ISR for TIMER NUM without ICP (4 checks)"
-//FIXME The following 4 lines only generates a warning!
 // REGISTER_TIMER_CAPTURE_ISR_METHOD(0, Callback, &Callback::callback8)
 // REGISTER_TIMER_CAPTURE_ISR_METHOD(0, Callback, &Callback::callback16)
 // REGISTER_TIMER_CAPTURE_ISR_FUNCTION(0, callback8)
