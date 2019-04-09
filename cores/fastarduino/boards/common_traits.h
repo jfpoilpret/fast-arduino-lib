@@ -35,7 +35,7 @@ namespace board_traits
 		constexpr REGISTER():ADDR(0xFFFF) {}
 		constexpr REGISTER(uint16_t ADDR) INLINE:ADDR(ADDR) {}
 
-		bool is_no_reg() const INLINE
+		constexpr bool is_no_reg() const INLINE
 		{
 			return ADDR == 0xFFFF;
 		}
