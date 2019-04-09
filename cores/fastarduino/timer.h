@@ -150,13 +150,12 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-//TODO also check capture
 #define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)							\
 	extern "C" void CAT3(TIMER, TIMER_NUM, _CAPT_vect) (void)				\
 		__attribute__ ((signal,naked,__INTR_ATTRS));						\
 	void CAT3(TIMER, TIMER_NUM, _CAPT_vect) (void)							\
 	{																		\
-		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		timer::isr_handler_check_timer_capture<TIMER_NUM>();				\
 		__asm__ __volatile__ ("reti" ::);									\
 	}
 
@@ -1225,10 +1224,19 @@ namespace timer
 		return NTIMER;
 	}
 
+	template<uint8_t TIMER_NUM_>
+	constexpr board::Timer isr_handler_check_timer_capture()
+	{
+		constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+		static_assert(board_traits::Timer_trait<NTIMER>::ICP_PIN != board::DigitalPin::NONE,
+			"TIMER_NUM must be Timer supporting capture");
+		return NTIMER;
+	}
+
 	template<uint8_t TIMER_NUM_, typename T, typename HANDLER_, void (HANDLER_::*CALLBACK_)(T)>
 	void isr_handler_timer_capture_method_helper()
 	{
-		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();						\
+		static constexpr board::Timer NTIMER = isr_handler_check_timer_capture<TIMER_NUM_>();
 		using TRAIT = board_traits::Timer_trait<NTIMER>;
 		static_assert(sizeof(typename TRAIT::TYPE) == sizeof(T), 
 			"CALLBACK argument is not the proper type (should be same as Timer bits size)");
@@ -1251,7 +1259,7 @@ namespace timer
 	template<uint8_t TIMER_NUM_, typename T, void (*CALLBACK_)(T)>
 	void isr_handler_timer_capture_function_helper()
 	{
-		static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();						\
+		static constexpr board::Timer NTIMER = isr_handler_check_timer_capture<TIMER_NUM_>();
 		using TRAIT = board_traits::Timer_trait<NTIMER>;
 		static_assert(sizeof(typename TRAIT::TYPE) == sizeof(T), 
 			"CALLBACK argument is not the proper type (should be same as Timer bits size)");
