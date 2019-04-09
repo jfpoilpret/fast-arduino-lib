@@ -88,15 +88,12 @@ struct Callback
 
 // // Try to register TIMER vector for non existing TIMER NUM
 // #pragma message "CHECK: register TIMER ISR for non existing TIMER NUM (10 checks)"
-//FIXME The following line only generates a warning!
 // REGISTER_TIMER_COMPARE_ISR_EMPTY(3)
 // REGISTER_TIMER_COMPARE_ISR_METHOD(3, Callback, &Callback::callback)
 // REGISTER_TIMER_COMPARE_ISR_FUNCTION(3, callback)
-//FIXME The following line only generates a warning!
 // REGISTER_TIMER_OVERFLOW_ISR_EMPTY(3)
 // REGISTER_TIMER_OVERFLOW_ISR_METHOD(3, Callback, &Callback::callback)
 // REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(3, callback)
-//FIXME The following line only generates a warning!
 // REGISTER_TIMER_CAPTURE_ISR_EMPTY(3)
 // REGISTER_TIMER_CAPTURE_ISR_METHOD(3, Callback, &Callback::callback8)
 // REGISTER_TIMER_CAPTURE_ISR_METHOD(3, Callback, &Callback::callback16)

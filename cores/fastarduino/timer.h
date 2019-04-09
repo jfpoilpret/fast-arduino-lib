@@ -64,8 +64,14 @@
  * callback.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)		\
-	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
+#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)							\
+	extern "C" void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)				\
+		__attribute__ ((signal,naked,__INTR_ATTRS));						\
+	void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)							\
+	{																		\
+		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		__asm__ __volatile__ ("reti" ::);									\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
@@ -102,8 +108,14 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM)	\
-	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _OVF_vect));
+#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM)						\
+	extern "C" void CAT3(TIMER, TIMER_NUM, _OVF_vect) (void)				\
+		__attribute__ ((signal,naked,__INTR_ATTRS));						\
+	void CAT3(TIMER, TIMER_NUM, _OVF_vect) (void)							\
+	{																		\
+		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		__asm__ __volatile__ ("reti" ::);									\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Input Capture
@@ -138,8 +150,15 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)	\
-	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
+//TODO also check capture
+#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)							\
+	extern "C" void CAT3(TIMER, TIMER_NUM, _CAPT_vect) (void)				\
+		__attribute__ ((signal,naked,__INTR_ATTRS));						\
+	void CAT3(TIMER, TIMER_NUM, _CAPT_vect) (void)							\
+	{																		\
+		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		__asm__ __volatile__ ("reti" ::);									\
+	}
 
 /**
  * Defines all API to manipulate AVR Timers.
