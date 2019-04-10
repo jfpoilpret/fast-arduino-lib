@@ -112,10 +112,6 @@ namespace serial::hard
 
 	// Forward declarations for use as friend
 	template<board::USART USART_> class UART;
-	template<uint8_t> void isr_handler_uatx();
-	template<uint8_t> void isr_handler_uarx();
-	template<uint8_t> void isr_handler_uart_tx();
-	template<uint8_t> void isr_handler_uart_rx();
 
 	/**
 	 * Hardware serial transmitter API.
@@ -241,7 +237,7 @@ namespace serial::hard
 	private:
 		bool transmitting_;
 		friend class UART<USART>;
-		friend void isr_handler_uatx<uint8_t(USART)>();
+		friend struct isr_handler;
 	};
 
 	/**
@@ -338,7 +334,7 @@ namespace serial::hard
 		}
 
 		friend class UART<USART>;
-		friend void isr_handler_uarx<uint8_t(USART)>();
+		friend struct isr_handler;
 	};
 
 	/**
@@ -430,8 +426,7 @@ namespace serial::hard
 			UARX<USART>::data_receive_complete();
 		}
 
-		friend void isr_handler_uart_tx<uint8_t(USART)>();
-		friend void isr_handler_uart_rx<uint8_t(USART)>();
+		friend struct isr_handler;
 	};
 
 	/// @cond notdocumented
@@ -439,38 +434,41 @@ namespace serial::hard
 	// All UART-related methods called by pre-defined ISR are defined here
 	//=====================================================================
 
-	template<uint8_t UART_NUM_> 
-	constexpr board::USART isr_handler_check_uart()
+	struct isr_handler
 	{
-		constexpr board::USART USART = (board::USART) UART_NUM_;
-		static_assert(board_traits::USART_trait<USART>::U2X_MASK != 0,
-			"UART_NUM must be an actual USART in target MCU");
-		return USART;
-	}
+		template<uint8_t UART_NUM_> 
+		static constexpr board::USART check_uart()
+		{
+			constexpr board::USART USART = (board::USART) UART_NUM_;
+			static_assert(board_traits::USART_trait<USART>::U2X_MASK != 0,
+				"UART_NUM must be an actual USART in target MCU");
+			return USART;
+		}
 
-	template<uint8_t UART_NUM_> void isr_handler_uatx()
-	{
-		static constexpr board::USART USART = isr_handler_check_uart<UART_NUM_>();
-		interrupt::HandlerHolder<UATX<USART>>::handler()->data_register_empty();
-	}
+		template<uint8_t UART_NUM_> static void uatx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UATX<USART>>::handler()->data_register_empty();
+		}
 
-	template<uint8_t UART_NUM_> void isr_handler_uarx()
-	{
-		static constexpr board::USART USART = isr_handler_check_uart<UART_NUM_>();
-		interrupt::HandlerHolder<UARX<USART>>::handler()->data_receive_complete();
-	}
+		template<uint8_t UART_NUM_> static void uarx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UARX<USART>>::handler()->data_receive_complete();
+		}
 
-	template<uint8_t UART_NUM_> void isr_handler_uart_tx()
-	{
-		static constexpr board::USART USART = isr_handler_check_uart<UART_NUM_>();
-		interrupt::HandlerHolder<UART<USART>>::handler()->data_register_empty();
-	}
+		template<uint8_t UART_NUM_> static void uart_tx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UART<USART>>::handler()->data_register_empty();
+		}
 
-	template<uint8_t UART_NUM_> void isr_handler_uart_rx()
-	{
-		static constexpr board::USART USART = isr_handler_check_uart<UART_NUM_>();
-		interrupt::HandlerHolder<UART<USART>>::handler()->data_receive_complete();
-	}
+		template<uint8_t UART_NUM_> static void uart_rx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UART<USART>>::handler()->data_receive_complete();
+		}
+	};
 	/// @endcond
 }
 

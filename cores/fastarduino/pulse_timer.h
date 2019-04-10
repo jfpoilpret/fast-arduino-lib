@@ -162,12 +162,7 @@ namespace timer
 		const uint8_t MAX;
 		uint8_t count_;
 
-		template<uint8_t T_, typename timer::Calculator<(board::Timer) T_>::PRESCALER,
-			board::DigitalPin, uint8_t>
-		friend void isr_handler_pulse_timer_overflow();
-		template<uint8_t T_, typename timer::Calculator<(board::Timer) T_>::PRESCALER, 
-			board::DigitalPin, uint8_t, board::DigitalPin, uint8_t>
-		friend void isr_handler_pulse_timer_overflow();
+		friend struct isr_handler;
 	};
 
 	// Unified API for PulseTimer whatever the timer bits size (no need to use PulseTimer8 or PulseTimer16)
@@ -212,52 +207,54 @@ namespace timer
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	template<uint8_t TIMER_NUM_, board::DigitalPin PIN_, uint8_t COM_NUM_>
-	constexpr board::Timer isr_handler_pulse_timer_check()
+	struct isr_handler
 	{
-		constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
-		using TRAIT = board_traits::Timer_trait<NTIMER>;
-		static_assert(!TRAIT::IS_16BITS, "TIMER_NUM must be an 8 bits Timer");
-		using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
-		static_assert(PIN_ == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");
-		return NTIMER;
-	}
-
-	template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
-		board::DigitalPin PIN_, uint8_t COM_NUM_>
-	void isr_handler_pulse_timer_overflow()
-	{
-		static constexpr board::Timer NTIMER = isr_handler_pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
-		using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
-		if (interrupt::HandlerHolder<PT>::handler()->overflow())
-			gpio::FastPinType<PIN_>::set();
-	}
-
-	template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
-		board::DigitalPin PINA_, uint8_t COMA_NUM_, board::DigitalPin PINB_, uint8_t COMB_NUM_>
-	void isr_handler_pulse_timer_overflow()
-	{
-		static constexpr board::Timer NTIMER = isr_handler_pulse_timer_check<TIMER_NUM_, PINA_, COMA_NUM_>();
-		isr_handler_pulse_timer_check<TIMER_NUM_, PINB_, COMB_NUM_>();
-		using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
-		if (interrupt::HandlerHolder<PT>::handler()->overflow())
+		template<uint8_t TIMER_NUM_, board::DigitalPin PIN_, uint8_t COM_NUM_>
+		static constexpr board::Timer pulse_timer_check()
 		{
-			using PINTA = board_traits::Timer_COM_trait<NTIMER, COMA_NUM_>;
-			using PINTB = board_traits::Timer_COM_trait<NTIMER, COMB_NUM_>;
-			if (PINTA::OCR != 0) gpio::FastPinType<PINA_>::set();
-			if (PINTB::OCR != 0) gpio::FastPinType<PINB_>::set();
+			constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+			using TRAIT = board_traits::Timer_trait<NTIMER>;
+			static_assert(!TRAIT::IS_16BITS, "TIMER_NUM must be an 8 bits Timer");
+			using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
+			static_assert(PIN_ == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");
+			return NTIMER;
 		}
-	}
 
-	template<uint8_t TIMER_NUM_, uint8_t COM_NUM_, board::DigitalPin PIN_>
-	void isr_handler_pulse_timer_compare()
-	{
-		static constexpr board::Timer NTIMER = isr_handler_pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
-		using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
-		static_assert(PIN_ == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");
-		gpio::FastPinType<PIN_>::clear();
-	}
+		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
+			board::DigitalPin PIN_, uint8_t COM_NUM_>
+		static void pulse_timer_overflow()
+		{
+			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
+			using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
+			if (interrupt::HandlerHolder<PT>::handler()->overflow())
+				gpio::FastPinType<PIN_>::set();
+		}
 
+		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
+			board::DigitalPin PINA_, uint8_t COMA_NUM_, board::DigitalPin PINB_, uint8_t COMB_NUM_>
+		static void pulse_timer_overflow()
+		{
+			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PINA_, COMA_NUM_>();
+			pulse_timer_check<TIMER_NUM_, PINB_, COMB_NUM_>();
+			using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
+			if (interrupt::HandlerHolder<PT>::handler()->overflow())
+			{
+				using PINTA = board_traits::Timer_COM_trait<NTIMER, COMA_NUM_>;
+				using PINTB = board_traits::Timer_COM_trait<NTIMER, COMB_NUM_>;
+				if (PINTA::OCR != 0) gpio::FastPinType<PINA_>::set();
+				if (PINTB::OCR != 0) gpio::FastPinType<PINB_>::set();
+			}
+		}
+
+		template<uint8_t TIMER_NUM_, uint8_t COM_NUM_, board::DigitalPin PIN_>
+		static void pulse_timer_compare()
+		{
+			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
+			using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
+			static_assert(PIN_ == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");
+			gpio::FastPinType<PIN_>::clear();
+		}
+	};
 	/// @endcond
 }
 
