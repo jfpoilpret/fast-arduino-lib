@@ -27,59 +27,100 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/pulse_timer.h>
 
+#include <fastarduino/devices/sonar.h>
+
+using namespace board;
+
 void callback() {}
 void callback8(uint8_t) {}
 void callback16(uint16_t) {}
 void callback32(uint32_t) {}
+void sonar_callback(const devices::sonar::SonarEvent&) {}
 struct Callback
 {
 	void callback() {}
 	void callback8(uint8_t) {}
 	void callback16(uint16_t) {}
 	void callback32(uint32_t) {}
+	void sonar_callback(const devices::sonar::SonarEvent&) {}
 };
 
+constexpr Timer NTIMER0 = Timer::TIMER0;
+constexpr Timer NTIMER1 = Timer::TIMER1;
+constexpr Timer NTIMER3 = (Timer) 3;
+
+// // Try to register Sonar with bad args
+// #pragma message "CHECK: register sonar with not existing TIMER (9 checks)"
+// REGISTER_HCSR04_INT_ISR(NTIMER3, 0, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0)
+// REGISTER_HCSR04_INT_ISR_FUNCTION(NTIMER3, 0, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0, callback)
+// REGISTER_HCSR04_INT_ISR_METHOD(NTIMER3, 0, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0, Callback, &Callback::callback)
+// REGISTER_HCSR04_PCI_ISR(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0)
+// REGISTER_HCSR04_PCI_ISR_FUNCTION(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, callback)
+// REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, Callback, &Callback::callback)
+// REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0)
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(0, NTIMER3, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(0, NTIMER3, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
+
+// #pragma message "CHECK: register sonar with bad pin(s) (10 checks)"
+// REGISTER_HCSR04_INT_ISR(NTIMER0, 1, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0)
+// REGISTER_HCSR04_INT_ISR_FUNCTION(NTIMER0, 1, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0, callback)
+// REGISTER_HCSR04_INT_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0, Callback, &Callback::callback)
+// REGISTER_HCSR04_PCI_ISR(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0)
+// REGISTER_HCSR04_PCI_ISR(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, InterruptPin::D14_PC0_PCI1)
+// REGISTER_HCSR04_PCI_ISR_FUNCTION(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, callback)
+// REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, Callback, &Callback::callback)
+// REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0)
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
+
+// #pragma message "CHECK: register multi sonar with bad callback (2 checks)"
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(0, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(0, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::callback)
+
+// #pragma message "CHECK: register multi sonar with bad mask for echo port (2 checks)"
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_C, 0xFF, sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_C, 0xFF, Callback, &Callback::sonar_callback)
 
 // // Try to register INT0 vector for a non INT pin
 // #pragma message "CHECK: register INT0 vector for a non INT pin (3 checks)"
-// REGISTER_INT_ISR_EMPTY(0, board::DigitalPin::D0_PD0)
-// REGISTER_INT_ISR_METHOD(0, board::DigitalPin::D0_PD0, Callback, &Callback::callback)
-// REGISTER_INT_ISR_FUNCTION(0, board::DigitalPin::D0_PD0, callback)
+// REGISTER_INT_ISR_EMPTY(0, DigitalPin::D0_PD0)
+// REGISTER_INT_ISR_METHOD(0, DigitalPin::D0_PD0, Callback, &Callback::callback)
+// REGISTER_INT_ISR_FUNCTION(0, DigitalPin::D0_PD0, callback)
 // // Try to register INT0 vector for an INT1 pin
 // #pragma message "CHECK: register INT0 vector for an INT1 pin (3 checks)"
-// REGISTER_INT_ISR_EMPTY(0, board::ExternalInterruptPin::D3_PD3_EXT1)
-// REGISTER_INT_ISR_METHOD(0, board::ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
-// REGISTER_INT_ISR_FUNCTION(0, board::ExternalInterruptPin::D3_PD3_EXT1, callback)
+// REGISTER_INT_ISR_EMPTY(0, ExternalInterruptPin::D3_PD3_EXT1)
+// REGISTER_INT_ISR_METHOD(0, ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
+// REGISTER_INT_ISR_FUNCTION(0, ExternalInterruptPin::D3_PD3_EXT1, callback)
 // // Try to register INT2 (not existing) vector for an INT1 pin
 // #pragma message "CHECK: register INT2 vector for an INT1 pin (3 checks)"
-// REGISTER_INT_ISR_EMPTY(2, board::ExternalInterruptPin::D3_PD3_EXT1)
-// REGISTER_INT_ISR_METHOD(2, board::ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
-// REGISTER_INT_ISR_FUNCTION(2, board::ExternalInterruptPin::D3_PD3_EXT1, callback)
+// REGISTER_INT_ISR_EMPTY(2, ExternalInterruptPin::D3_PD3_EXT1)
+// REGISTER_INT_ISR_METHOD(2, ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
+// REGISTER_INT_ISR_FUNCTION(2, ExternalInterruptPin::D3_PD3_EXT1, callback)
 
 // //TODO Try to register PCINT0 vector for a non PCINT pin
 // //NOTE this is not possible with UNO as all pins are mapped to a PCINT (only possible with MEGA)
 // // Try to register PCINT0 vector for a PCINT2 pin
 // #pragma message "CHECK: register PCINT0 vector for a PCINT2 pin (3 checks)"
-// REGISTER_PCI_ISR_EMPTY(0, board::InterruptPin::D0_PD0_PCI2)
-// REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, board::InterruptPin::D0_PD0_PCI2)
-// REGISTER_PCI_ISR_FUNCTION(0, callback, board::InterruptPin::D0_PD0_PCI2)
+// REGISTER_PCI_ISR_EMPTY(0, InterruptPin::D0_PD0_PCI2)
+// REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, InterruptPin::D0_PD0_PCI2)
+// REGISTER_PCI_ISR_FUNCTION(0, callback, InterruptPin::D0_PD0_PCI2)
 // // Try to register PCINT0 vector for several PCINT0 pins and one PCINT2 pin
 // #pragma message "CHECK: register PCINT0 vector for several PCINT0 and one PCINT2 pin (3 checks)"
-// REGISTER_PCI_ISR_EMPTY(0, board::InterruptPin::D8_PB0_PCI0, board::InterruptPin::D10_PB2_PCI0, board::InterruptPin::D0_PD0_PCI2)
-// REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, board::InterruptPin::D8_PB0_PCI0, board::InterruptPin::D10_PB2_PCI0, board::InterruptPin::D0_PD0_PCI2)
-// REGISTER_PCI_ISR_FUNCTION(0, callback, board::InterruptPin::D8_PB0_PCI0, board::InterruptPin::D10_PB2_PCI0, board::InterruptPin::D0_PD0_PCI2)
+// REGISTER_PCI_ISR_EMPTY(0, InterruptPin::D8_PB0_PCI0, InterruptPin::D10_PB2_PCI0, InterruptPin::D0_PD0_PCI2)
+// REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, InterruptPin::D8_PB0_PCI0, InterruptPin::D10_PB2_PCI0, InterruptPin::D0_PD0_PCI2)
+// REGISTER_PCI_ISR_FUNCTION(0, callback, InterruptPin::D8_PB0_PCI0, InterruptPin::D10_PB2_PCI0, InterruptPin::D0_PD0_PCI2)
 
 // //TODO Try to register SW UART for a non PCINT pin
 // //NOTE this is not possible with UNO as all pins are mapped to a PCINT (only possible with MEGA)
 // // Try to register SW UART with bad PCINT pin
 // #pragma message "CHECK: register SW UART with bad PCINT pin (1 check)"
-// REGISTER_UART_PCI_ISR(board::InterruptPin::D0_PD0_PCI2, 0)
+// REGISTER_UART_PCI_ISR(InterruptPin::D0_PD0_PCI2, 0)
 // // Try to register SW UART with a non INT pin
 // #pragma message "CHECK: register SW UART with non INT pin (1 check)"
-// REGISTER_UART_INT_ISR(board::DigitalPin::D0_PD0, 0)
+// REGISTER_UART_INT_ISR(DigitalPin::D0_PD0, 0)
 // // Try to register SW UART with a bad INT pin
 // #pragma message "CHECK: register SW UART with bad INT pin (1 check)"
-// REGISTER_UART_INT_ISR(board::ExternalInterruptPin::D3_PD3_EXT1, 0)
+// REGISTER_UART_INT_ISR(ExternalInterruptPin::D3_PD3_EXT1, 0)
 
 // //IMPORTANT NOTE the following checks generate each a whole bunch of errors because there is no static_assert
 // // but only "normal" compilation errors, due to use of non existing value for an enum, with plenty of consequent errors
@@ -122,32 +163,30 @@ struct Callback
 // REGISTER_RTT_ISR_FUNCTION(3, callback32)
 
 // Try to register PulseTimer8 ISR for a 16bits timer
-constexpr board::Timer NTIMER0 = board::Timer::TIMER0;
 constexpr timer::Calculator<NTIMER0>::PRESCALER PRESCALER0 = timer::Calculator<NTIMER0>::PRESCALER::NO_PRESCALING;
-constexpr board::Timer NTIMER1 = board::Timer::TIMER1;
 constexpr timer::Calculator<NTIMER1>::PRESCALER PRESCALER1 = timer::Calculator<NTIMER1>::PRESCALER::NO_PRESCALING;
 using PRESCALER_NONE = board_traits::TimerPrescalers_trait<
 	board_traits::TimerPrescalers::PRESCALERS_NONE>::TimerPrescaler;
 constexpr PRESCALER_NONE PRESCALER3 = PRESCALER_NONE(0);
 
 // #pragma message "CHECK: register PulseTimer8 ISR for a 16 bits TIMER (3 checks)"
-// REGISTER_PULSE_TIMER8_AB_ISR(1, PRESCALER1, board::PWMPin::D9_PB1_OC1A, board::PWMPin::D10_PB2_OC1B)
-// REGISTER_PULSE_TIMER8_A_ISR(1, PRESCALER1, board::PWMPin::D9_PB1_OC1A)
-// REGISTER_PULSE_TIMER8_B_ISR(1, PRESCALER1, board::PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_AB_ISR(1, PRESCALER1, PWMPin::D9_PB1_OC1A, PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_A_ISR(1, PRESCALER1, PWMPin::D9_PB1_OC1A)
+// REGISTER_PULSE_TIMER8_B_ISR(1, PRESCALER1, PWMPin::D10_PB2_OC1B)
 
 // #pragma message "CHECK: register PulseTimer8 ISR for a non existing TIMER(3 checks)"
-// REGISTER_PULSE_TIMER8_AB_ISR(3, PRESCALER3, board::PWMPin::D9_PB1_OC1A, board::PWMPin::D10_PB2_OC1B)
-// REGISTER_PULSE_TIMER8_A_ISR(3, PRESCALER3, board::PWMPin::D9_PB1_OC1A)
-// REGISTER_PULSE_TIMER8_B_ISR(3, PRESCALER3, board::PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_AB_ISR(3, PRESCALER3, PWMPin::D9_PB1_OC1A, PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_A_ISR(3, PRESCALER3, PWMPin::D9_PB1_OC1A)
+// REGISTER_PULSE_TIMER8_B_ISR(3, PRESCALER3, PWMPin::D10_PB2_OC1B)
 
 // #pragma message "CHECK: register PulseTimer8 ISR for bad pins (6 checks)"
-// REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, board::PWMPin::D9_PB1_OC1A, board::PWMPin::D10_PB2_OC1B)
-// REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, board::PWMPin::D9_PB1_OC1A)
-// REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, board::PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, PWMPin::D9_PB1_OC1A, PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, PWMPin::D9_PB1_OC1A)
+// REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, PWMPin::D10_PB2_OC1B)
 
-// REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, board::PWMPin::D5_PD5_OC0B, board::PWMPin::D6_PD6_OC0A)
-// REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, board::PWMPin::D5_PD5_OC0B)
-// REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, board::PWMPin::D6_PD6_OC0A)
+// REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, PWMPin::D5_PD5_OC0B, PWMPin::D6_PD6_OC0A)
+// REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, PWMPin::D5_PD5_OC0B)
+// REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, PWMPin::D6_PD6_OC0A)
 
 int main()
 {

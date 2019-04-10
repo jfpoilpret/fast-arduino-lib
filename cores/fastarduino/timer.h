@@ -1214,13 +1214,19 @@ namespace timer
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
+	template<board::Timer NTIMER_>
+	void isr_handler_check_timer()
+	{
+		using TRAIT = board_traits::Timer_trait<NTIMER_>;
+		static_assert(TRAIT::PRESCALERS != board_traits::TimerPrescalers::PRESCALERS_NONE,
+			"TIMER_NUM must be an actual Timer in target MCU");
+	}
+
 	template<uint8_t TIMER_NUM_>
 	constexpr board::Timer isr_handler_check_timer()
 	{
 		constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
-		using TRAIT = board_traits::Timer_trait<NTIMER>;
-		static_assert(TRAIT::PRESCALERS != board_traits::TimerPrescalers::PRESCALERS_NONE,
-			"TIMER_NUM must be an actual Timer in target MCU");
+		isr_handler_check_timer<NTIMER>();
 		return NTIMER;
 	}
 

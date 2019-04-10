@@ -66,12 +66,14 @@
  * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
  * do not match, compilation will fail.
  */
-#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)										\
-	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT,						\
-		"PIN must be an INT pin.");													\
-	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM,	\
-		"PIN INT number must match INT_NUM");										\
-	EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
+#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)							\
+	extern "C" void CAT3(INT, INT_NUM, _vect) (void)					\
+		__attribute__ ((signal,naked,__INTR_ATTRS));					\
+	void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)						\
+	{																	\
+		interrupt::isr_handler_check_int_pin<INT_NUM, PIN>();			\
+		__asm__ __volatile__ ("reti" ::);								\
+	}
 
 namespace interrupt
 {
