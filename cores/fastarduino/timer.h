@@ -1215,19 +1215,19 @@ namespace timer
 	//====================================================================
 
 	template<board::Timer NTIMER_>
-	void isr_handler_check_timer()
+	constexpr board::Timer isr_handler_check_timer()
 	{
 		using TRAIT = board_traits::Timer_trait<NTIMER_>;
 		static_assert(TRAIT::PRESCALERS != board_traits::TimerPrescalers::PRESCALERS_NONE,
 			"TIMER_NUM must be an actual Timer in target MCU");
+		return NTIMER_;
 	}
 
 	template<uint8_t TIMER_NUM_>
 	constexpr board::Timer isr_handler_check_timer()
 	{
 		constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
-		isr_handler_check_timer<NTIMER>();
-		return NTIMER;
+		return isr_handler_check_timer<NTIMER>();
 	}
 
 	template<uint8_t TIMER_NUM_>
