@@ -44,7 +44,7 @@
 #define REGISTER_RTT_ISR(TIMER_NUM)											\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
-		timer::isr_handler_rtt<TIMER_NUM>();								\
+		timer::isr_handler_rtt::rtt<TIMER_NUM>();							\
 	}
 
 /**
@@ -64,7 +64,7 @@
 #define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)				\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
-		timer::isr_handler_rtt_method<TIMER_NUM, HANDLER, CALLBACK>();		\
+		timer::isr_handler_rtt::rtt_method<TIMER_NUM, HANDLER, CALLBACK>();	\
 	}
 
 /**
@@ -82,7 +82,7 @@
 #define REGISTER_RTT_ISR_FUNCTION(TIMER_NUM, CALLBACK)						\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
-		timer::isr_handler_rtt_function<TIMER_NUM, CALLBACK>();				\
+		timer::isr_handler_rtt::rtt_function<TIMER_NUM, CALLBACK>();		\
 	}
 
 /**
@@ -102,7 +102,7 @@
 #define REGISTER_RTT_EVENT_ISR(TIMER_NUM, EVENT, PERIOD)					\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
-		timer::isr_handler_rtt_event<TIMER_NUM, EVENT, PERIOD>();			\
+		timer::isr_handler_rtt::rtt_event<TIMER_NUM, EVENT, PERIOD>();		\
 	}
 
 namespace timer
@@ -329,7 +329,7 @@ namespace timer
 			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1 + (volatile TYPE&) TRAIT::OCRA));
 		}
 
-		friend struct isr_handler;
+		friend struct isr_handler_rtt;
 	};
 
 	/**
@@ -370,7 +370,7 @@ namespace timer
 
 		containers::Queue<EVENT>& event_queue_;
 
-		friend struct isr_handler;
+		friend struct isr_handler_rtt;
 	};
 
 	/// @cond notdocumented
@@ -378,18 +378,18 @@ namespace timer
 	// All RTT-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	struct isr_handler
+	struct isr_handler_rtt
 	{
 		template<uint8_t TIMER_NUM_> static void rtt()
 		{
-			static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
 			interrupt::HandlerHolder<RTT<NTIMER>>::handler()->on_timer();
 		}
 
 		template<uint8_t TIMER_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(uint32_t)>
 		static void rtt_method()
 		{
-			static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
 			auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
 			handler->on_timer();
 			interrupt::CallbackHandler<void (HANDLER_::*)(uint32_t), CALLBACK_>::call(
@@ -399,7 +399,7 @@ namespace timer
 		template<uint8_t TIMER_NUM_, void (*CALLBACK_)(uint32_t)>
 		static void rtt_function()
 		{
-			static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
 			auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
 			handler->on_timer();
 			CALLBACK_(handler->millis());
@@ -408,7 +408,7 @@ namespace timer
 		template<uint8_t TIMER_NUM_, typename EVENT_, uint32_t PERIOD_>
 		static void rtt_event()
 		{
-			static constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
 			auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
 			handler->on_timer();
 			interrupt::HandlerHolder<RTTEventCallback<EVENT_, PERIOD_>>::handler()->on_rtt_change(

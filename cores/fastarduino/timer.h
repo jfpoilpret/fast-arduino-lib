@@ -40,7 +40,7 @@
 #define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)		\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
-		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
 	}
 
@@ -54,7 +54,7 @@
 #define REGISTER_TIMER_COMPARE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
-		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
 		interrupt::CallbackHandler<void (*)(), CALLBACK>::call();			\
 	}
 
@@ -69,7 +69,7 @@
 		__attribute__ ((signal,naked,__INTR_ATTRS));						\
 	void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)							\
 	{																		\
-		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
 		__asm__ __volatile__ ("reti" ::);									\
 	}
 
@@ -84,7 +84,7 @@
 #define REGISTER_TIMER_OVERFLOW_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
 	{																		\
-		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
 		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
 	}
 
@@ -98,7 +98,7 @@
 #define REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
 	{																		\
-		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
 		interrupt::CallbackHandler<void (*)(), CALLBACK>::call();			\
 	}
 
@@ -113,7 +113,7 @@
 		__attribute__ ((signal,naked,__INTR_ATTRS));						\
 	void CAT3(TIMER, TIMER_NUM, _OVF_vect) (void)							\
 	{																		\
-		timer::isr_handler_check_timer<TIMER_NUM>();						\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
 		__asm__ __volatile__ ("reti" ::);									\
 	}
 
@@ -128,7 +128,7 @@
 #define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)				\
 	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))											\
 	{																				\
-		timer::isr_handler_timer_capture_method<TIMER_NUM, HANDLER, CALLBACK>();	\
+		timer::isr_handler::timer_capture_method<TIMER_NUM, HANDLER, CALLBACK>();	\
 	}
 
 /**
@@ -141,7 +141,7 @@
 #define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
 	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))									\
 	{																		\
-		timer::isr_handler_timer_capture_function<TIMER_NUM, CALLBACK>();	\
+		timer::isr_handler::timer_capture_function<TIMER_NUM, CALLBACK>();	\
 	}
 
 /**
@@ -155,7 +155,7 @@
 		__attribute__ ((signal,naked,__INTR_ATTRS));						\
 	void CAT3(TIMER, TIMER_NUM, _CAPT_vect) (void)							\
 	{																		\
-		timer::isr_handler_check_timer_capture<TIMER_NUM>();				\
+		timer::isr_handler::check_timer_capture<TIMER_NUM>();				\
 		__asm__ __volatile__ ("reti" ::);									\
 	}
 

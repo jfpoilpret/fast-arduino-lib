@@ -27,14 +27,14 @@
 #define REGISTER_UART_PCI_ISR(RX, PCI_NUM)												\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))													\
 	{																					\
-		interrupt::isr_handler_check_pci_pins<PCI_NUM, RX>();							\
+		interrupt::isr_handler_pci::check_pci_pins<PCI_NUM, RX>();						\
 		interrupt::HandlerHolder<serial::soft::UARX<RX>>::handler()->on_pin_change();	\
 	}
 
 #define REGISTER_UART_INT_ISR(RX, INT_NUM)												\
 	ISR(CAT3(INT, INT_NUM, _vect))														\
 	{																					\
-		interrupt::isr_handler_check_int_pin<INT_NUM, RX>();							\
+		interrupt::isr_handler_int::check_int_pin<INT_NUM, RX>();						\
 		interrupt::HandlerHolder<serial::soft::UARX<RX>>::handler()->on_pin_change();	\
 	}
 

@@ -29,50 +29,50 @@
 #define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)					\
 	ISR(CAT3(INT, INT_NUM, _vect))												\
 	{																			\
-		devices::sonar::isr_handler_sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>();	\
+		devices::sonar::isr_handler::sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>();	\
 	}
 
 #define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)								\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                							\
 	{                                                               							\
-		devices::sonar::isr_handler_sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>();	\
+		devices::sonar::isr_handler::sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>();	\
 	}
 
 #define REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)								\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                 										\
 	{                                                                										\
-		devices::sonar::isr_handler_sonar_distinct_pci<PCI_NUM, TIMER, TRIGGER, ECHO,  ##__VA_ARGS__>();	\
+		devices::sonar::isr_handler::sonar_distinct_pci<PCI_NUM, TIMER, TRIGGER, ECHO,  ##__VA_ARGS__>();	\
 	}
 
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            		\
 	ISR(CAT3(INT, INT_NUM, _vect))                                                                  		\
 	{                                                                                               		\
-		devices::sonar::isr_handler_sonar_int_method<INT_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>();	\
+		devices::sonar::isr_handler::sonar_int_method<INT_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>();	\
 	}
 
 #define REGISTER_HCSR04_INT_ISR_FUNCTION(TIMER, INT_NUM, TRIGGER, ECHO, CALLBACK)                	\
 	ISR(CAT3(INT, INT_NUM, _vect))                                                               	\
 	{                                                                                            	\
-		devices::sonar::isr_handler_sonar_int_function<INT_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
+		devices::sonar::isr_handler::sonar_int_function<INT_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
 	}
 
 #define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)            		\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                		\
 	{                                                                                               		\
-		devices::sonar::isr_handler_sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>();	\
+		devices::sonar::isr_handler::sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>();	\
 	}
 
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)                  	\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                               	\
 	{                                                                                              	\
-		devices::sonar::isr_handler_sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
+		devices::sonar::isr_handler::sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
 	}
 
 //TODO invert PCI_NUM and TIMER to be consistent
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK)	\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                    		\
 	{                                                                                                   		\
-		devices::sonar::isr_handler_multi_sonar_pci_method<PCI_NUM, TIMER, TRIGGER, 							\
+		devices::sonar::isr_handler::multi_sonar_pci_method<PCI_NUM, TIMER, TRIGGER, 							\
 			ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK>();															\
 	}
 
@@ -80,7 +80,7 @@
 #define REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK)	\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                              						\
 	{                                                                             						\
-		devices::sonar::isr_handler_multi_sonar_pci_function<PCI_NUM, TIMER, TRIGGER, 					\
+		devices::sonar::isr_handler::multi_sonar_pci_function<PCI_NUM, TIMER, TRIGGER, 					\
 			ECHO_PORT, ECHO_MASK, CALLBACK>();															\
 	}
 

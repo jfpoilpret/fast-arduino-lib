@@ -41,10 +41,11 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...)							\
-	ISR(CAT3(PCINT, PCI_NUM, _vect))															\
-	{																							\
-		interrupt::isr_handler_pci_method<PCI_NUM, HANDLER, CALLBACK, PIN, ##__VA_ARGS__>();	\
+#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...)	\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))									\
+	{																	\
+		interrupt::isr_handler_pci::pci_method<							\
+			PCI_NUM, HANDLER, CALLBACK, PIN, ##__VA_ARGS__>();			\
 	}
 
 /**
@@ -56,10 +57,11 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)							\
-	ISR(CAT3(PCINT, PCI_NUM, _vect))													\
-	{																					\
-		interrupt::isr_handler_pci_function<PCI_NUM, CALLBACK, PIN, ##__VA_ARGS__>();	\
+#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)			\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))									\
+	{																	\
+		interrupt::isr_handler_pci::pci_function<						\
+			PCI_NUM, CALLBACK, PIN, ##__VA_ARGS__>();					\
 	}
 
 /**
@@ -71,13 +73,13 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)								\
-	extern "C" void CAT3(PCINT, PCI_NUM, _vect) (void)							\
-		__attribute__ ((signal,naked,__INTR_ATTRS));							\
-	void CAT3(PCINT, PCI_NUM, _vect) (void)										\
-	{																			\
-		interrupt::isr_handler_check_pci_pins<PCI_NUM, PIN, ## __VA_ARGS__>();	\
-		__asm__ __volatile__ ("reti" ::);										\
+#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)									\
+	extern "C" void CAT3(PCINT, PCI_NUM, _vect) (void)								\
+		__attribute__ ((signal,naked,__INTR_ATTRS));								\
+	void CAT3(PCINT, PCI_NUM, _vect) (void)											\
+	{																				\
+		interrupt::isr_handler_pci::check_pci_pins<PCI_NUM, PIN, ## __VA_ARGS__>();	\
+		__asm__ __volatile__ ("reti" ::);											\
 	}
 
 namespace interrupt
@@ -474,7 +476,7 @@ namespace interrupt
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	struct isr_handler
+	struct isr_handler_pci
 	{
 		template<uint8_t PCI_NUM_>
 		static void check_pci_pins()

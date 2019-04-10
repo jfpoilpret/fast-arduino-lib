@@ -36,10 +36,10 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)				\
-	ISR(CAT3(INT, INT_NUM, _vect))												\
-	{																			\
-		interrupt::isr_handler_int_method<INT_NUM, PIN, HANDLER, CALLBACK>();	\
+#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)					\
+	ISR(CAT3(INT, INT_NUM, _vect))													\
+	{																				\
+		interrupt::isr_handler_int::int_method<INT_NUM, PIN, HANDLER, CALLBACK>();	\
 	}
 
 /**
@@ -51,10 +51,10 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)				\
-	ISR(CAT3(INT, INT_NUM, _vect))										\
-	{																	\
-		interrupt::isr_handler_int_function<INT_NUM, PIN, CALLBACK>();	\
+#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)						\
+	ISR(CAT3(INT, INT_NUM, _vect))												\
+	{																			\
+		interrupt::isr_handler_int::int_function<INT_NUM, PIN, CALLBACK>();		\
 	}
 
 /**
@@ -71,7 +71,7 @@
 		__attribute__ ((signal,naked,__INTR_ATTRS));					\
 	void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)						\
 	{																	\
-		interrupt::isr_handler_check_int_pin<INT_NUM, PIN>();			\
+		interrupt::isr_handler_int::check_int_pin<INT_NUM, PIN>();		\
 		__asm__ __volatile__ ("reti" ::);								\
 	}
 
@@ -242,7 +242,7 @@ namespace interrupt
 	// All INT-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	struct isr_handler
+	struct isr_handler_int
 	{
 		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_>
 		static void check_int_pin()

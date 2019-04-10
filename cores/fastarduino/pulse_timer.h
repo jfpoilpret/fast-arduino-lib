@@ -27,41 +27,43 @@
 
 // Macros to register ISR for PWM on PulseTimer8
 //==============================================
-#define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)	\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
-	{																		\
-		timer::isr_handler_pulse_timer_overflow<							\
-			TIMER_NUM, PRESCALER, PIN_A, 0, PIN_B, 1>();					\
-	}																		\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
-	{																		\
-		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 0, PIN_A>();		\
-	}																		\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))								\
-	{																		\
-		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 1, PIN_B>();		\
+#define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)		\
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
+	{																			\
+		timer::isr_handler_pulse::pulse_timer_overflow<							\
+			TIMER_NUM, PRESCALER, PIN_A, 0, PIN_B, 1>();						\
+	}																			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))									\
+	{																			\
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 0, PIN_A>();	\
+	}																			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))									\
+	{																			\
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 1, PIN_B>();	\
 	}
 
-#define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)					\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))											\
-	{																				\
-		timer::isr_handler_pulse_timer_overflow<TIMER_NUM, PRESCALER, PIN_A, 0>();	\
-	}																				\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))										\
-	{																				\
-		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 0, PIN_A>();				\
-	}																				\
+#define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)				\
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
+	{																			\
+		timer::isr_handler_pulse::pulse_timer_overflow<							\
+			TIMER_NUM, PRESCALER, PIN_A, 0>();									\
+	}																			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))									\
+	{																			\
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 0, PIN_A>();	\
+	}																			\
 	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
 
-#define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)					\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))											\
-	{																				\
-		timer::isr_handler_pulse_timer_overflow<TIMER_NUM, PRESCALER, PIN_B, 1>();	\
-	}																				\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))										\
-	{																				\
-		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 1, PIN_B>();				\
-	}																				\
+#define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)				\
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
+	{																			\
+		timer::isr_handler_pulse::pulse_timer_overflow<							\
+			TIMER_NUM, PRESCALER, PIN_B, 1>();									\
+	}																			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))									\
+	{																			\
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 1, PIN_B>();	\
+	}																			\
 	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect))
 
 namespace timer
@@ -162,7 +164,7 @@ namespace timer
 		const uint8_t MAX;
 		uint8_t count_;
 
-		friend struct isr_handler;
+		friend struct isr_handler_pulse;
 	};
 
 	// Unified API for PulseTimer whatever the timer bits size (no need to use PulseTimer8 or PulseTimer16)
@@ -207,12 +209,12 @@ namespace timer
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
 
-	struct isr_handler
+	struct isr_handler_pulse
 	{
 		template<uint8_t TIMER_NUM_, board::DigitalPin PIN_, uint8_t COM_NUM_>
 		static constexpr board::Timer pulse_timer_check()
 		{
-			constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+			constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
 			using TRAIT = board_traits::Timer_trait<NTIMER>;
 			static_assert(!TRAIT::IS_16BITS, "TIMER_NUM must be an 8 bits Timer");
 			using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
