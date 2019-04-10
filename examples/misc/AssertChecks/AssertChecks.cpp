@@ -25,6 +25,7 @@
 
 #include <fastarduino/realtime_timer.h>
 #include <fastarduino/timer.h>
+#include <fastarduino/pulse_timer.h>
 
 void callback() {}
 void callback8(uint8_t) {}
@@ -49,6 +50,11 @@ struct Callback
 // REGISTER_INT_ISR_EMPTY(0, board::ExternalInterruptPin::D3_PD3_EXT1)
 // REGISTER_INT_ISR_METHOD(0, board::ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
 // REGISTER_INT_ISR_FUNCTION(0, board::ExternalInterruptPin::D3_PD3_EXT1, callback)
+// // Try to register INT2 (not existing) vector for an INT1 pin
+// #pragma message "CHECK: register INT2 vector for an INT1 pin (3 checks)"
+// REGISTER_INT_ISR_EMPTY(2, board::ExternalInterruptPin::D3_PD3_EXT1)
+// REGISTER_INT_ISR_METHOD(2, board::ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
+// REGISTER_INT_ISR_FUNCTION(2, board::ExternalInterruptPin::D3_PD3_EXT1, callback)
 
 // //TODO Try to register PCINT0 vector for a non PCINT pin
 // //NOTE this is not possible with UNO as all pins are mapped to a PCINT (only possible with MEGA)
@@ -115,23 +121,33 @@ struct Callback
 // REGISTER_RTT_ISR_METHOD(3, Callback, &Callback::callback32)
 // REGISTER_RTT_ISR_FUNCTION(3, callback32)
 
-//TODO FIXME Better checks must be put there
-// // Try to register PulseTimer8 ISR for a 16bits timer
-// #pragma message "CHECK: register PulseTimer8 ISR for a 16 bits TIMER (2 checks)"
-// REGISTER_PULSE_TIMER_OVF2_ISR_(1, _, _, _)
-// REGISTER_PULSE_TIMER_OVF1_ISR_(1, _, _)
+// Try to register PulseTimer8 ISR for a 16bits timer
+constexpr board::Timer NTIMER0 = board::Timer::TIMER0;
+constexpr timer::Calculator<NTIMER0>::PRESCALER PRESCALER0 = timer::Calculator<NTIMER0>::PRESCALER::NO_PRESCALING;
+constexpr board::Timer NTIMER1 = board::Timer::TIMER1;
+constexpr timer::Calculator<NTIMER1>::PRESCALER PRESCALER1 = timer::Calculator<NTIMER1>::PRESCALER::NO_PRESCALING;
+using PRESCALER_NONE = board_traits::TimerPrescalers_trait<
+	board_traits::TimerPrescalers::PRESCALERS_NONE>::TimerPrescaler;
+constexpr PRESCALER_NONE PRESCALER3 = PRESCALER_NONE(0);
 
-//TODO FIXME Better checks must be put there
-// // Try to register PulseTimer8 ISR with bad PIN_A
-// #pragma message "CHECK: register PulseTimer8 ISR with bad PIN_A (3 checks)"
-// REGISTER_PULSE_TIMER_COMP_ISR_(0, 0, _COMPA_vect, board::DigitalPin::D0_PD0)
-// REGISTER_PULSE_TIMER_COMP_ISR_(0, 0, _COMPA_vect, board::PWMPin::D9_PB1_OC1A)
-// REGISTER_PULSE_TIMER_COMP_ISR_(0, 0, _COMPA_vect, board::PWMPin::D5_PD5_OC0B)
-// // Try to register PulseTimer8 ISR with bad PIN_B
-// #pragma message "CHECK: register PulseTimer8 ISR with bad PIN_B (3 checks)"
-// REGISTER_PULSE_TIMER_COMP_ISR_(0, 1, _COMPB_vect, board::DigitalPin::D0_PD0)
-// REGISTER_PULSE_TIMER_COMP_ISR_(0, 1, _COMPB_vect, board::PWMPin::D10_PB2_OC1B)
-// REGISTER_PULSE_TIMER_COMP_ISR_(0, 1, _COMPB_vect, board::PWMPin::D6_PD6_OC0A)
+// #pragma message "CHECK: register PulseTimer8 ISR for a 16 bits TIMER (3 checks)"
+// REGISTER_PULSE_TIMER8_AB_ISR(1, PRESCALER1, board::PWMPin::D9_PB1_OC1A, board::PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_A_ISR(1, PRESCALER1, board::PWMPin::D9_PB1_OC1A)
+// REGISTER_PULSE_TIMER8_B_ISR(1, PRESCALER1, board::PWMPin::D10_PB2_OC1B)
+
+// #pragma message "CHECK: register PulseTimer8 ISR for a non existing TIMER(3 checks)"
+// REGISTER_PULSE_TIMER8_AB_ISR(3, PRESCALER3, board::PWMPin::D9_PB1_OC1A, board::PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_A_ISR(3, PRESCALER3, board::PWMPin::D9_PB1_OC1A)
+// REGISTER_PULSE_TIMER8_B_ISR(3, PRESCALER3, board::PWMPin::D10_PB2_OC1B)
+
+// #pragma message "CHECK: register PulseTimer8 ISR for bad pins (6 checks)"
+// REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, board::PWMPin::D9_PB1_OC1A, board::PWMPin::D10_PB2_OC1B)
+// REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, board::PWMPin::D9_PB1_OC1A)
+// REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, board::PWMPin::D10_PB2_OC1B)
+
+// REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, board::PWMPin::D5_PD5_OC0B, board::PWMPin::D6_PD6_OC0A)
+// REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, board::PWMPin::D5_PD5_OC0B)
+// REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, board::PWMPin::D6_PD6_OC0A)
 
 int main()
 {

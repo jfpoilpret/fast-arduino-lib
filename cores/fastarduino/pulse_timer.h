@@ -30,9 +30,8 @@
 #define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)	\
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
 	{																		\
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM;	\
 		timer::isr_handler_pulse_timer_overflow<							\
-			NTIMER, PRESCALER, PIN_A, 0, PIN_B, 1>();						\
+			TIMER_NUM, PRESCALER, PIN_A, 0, PIN_B, 1>();					\
 	}																		\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
 	{																		\
@@ -43,28 +42,26 @@
 		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 1, PIN_B>();		\
 	}
 
-#define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)				\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
-	{																			\
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM;		\
-		timer::isr_handler_pulse_timer_overflow<NTIMER, PRESCALER, PIN_A, 0>();	\
-	}																			\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))									\
-	{																			\
-		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 0, PIN_A>();			\
-	}																			\
+#define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)					\
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))											\
+	{																				\
+		timer::isr_handler_pulse_timer_overflow<TIMER_NUM, PRESCALER, PIN_A, 0>();	\
+	}																				\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))										\
+	{																				\
+		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 0, PIN_A>();				\
+	}																				\
 	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
 
-#define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)				\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
-	{																			\
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM;		\
-		timer::isr_handler_pulse_timer_overflow<NTIMER, PRESCALER, PIN_B, 1>();	\
-	}																			\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))									\
-	{																			\
-		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 1, PIN_B>();			\
-	}																			\
+#define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)					\
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))											\
+	{																				\
+		timer::isr_handler_pulse_timer_overflow<TIMER_NUM, PRESCALER, PIN_B, 1>();	\
+	}																				\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))										\
+	{																				\
+		timer::isr_handler_pulse_timer_compare<TIMER_NUM, 1, PIN_B>();				\
+	}																				\
 	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect))
 
 namespace timer
@@ -165,9 +162,10 @@ namespace timer
 		const uint8_t MAX;
 		uint8_t count_;
 
-		template<board::Timer T_, typename timer::Calculator<T_>::PRESCALER, board::DigitalPin, uint8_t>
+		template<uint8_t T_, typename timer::Calculator<(board::Timer) T_>::PRESCALER,
+			board::DigitalPin, uint8_t>
 		friend void isr_handler_pulse_timer_overflow();
-		template<board::Timer T_, typename timer::Calculator<T_>::PRESCALER, 
+		template<uint8_t T_, typename timer::Calculator<(board::Timer) T_>::PRESCALER, 
 			board::DigitalPin, uint8_t, board::DigitalPin, uint8_t>
 		friend void isr_handler_pulse_timer_overflow();
 	};
@@ -213,36 +211,39 @@ namespace timer
 
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
-	template<board::Timer NTIMER_, board::DigitalPin PIN_, uint8_t COM_NUM_>
-	void isr_handler_pulse_timer_check()
+
+	template<uint8_t TIMER_NUM_, board::DigitalPin PIN_, uint8_t COM_NUM_>
+	constexpr board::Timer isr_handler_pulse_timer_check()
 	{
-		using TT = board_traits::Timer_trait<NTIMER_>;
-		static_assert(!TT::IS_16BITS, "TIMER_NUM must be an 8 bits Timer");
-		using PINT = board_traits::Timer_COM_trait<NTIMER_, COM_NUM_>;
+		constexpr board::Timer NTIMER = isr_handler_check_timer<TIMER_NUM_>();
+		using TRAIT = board_traits::Timer_trait<NTIMER>;
+		static_assert(!TRAIT::IS_16BITS, "TIMER_NUM must be an 8 bits Timer");
+		using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
 		static_assert(PIN_ == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");
+		return NTIMER;
 	}
 
-	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_, 
+	template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
 		board::DigitalPin PIN_, uint8_t COM_NUM_>
 	void isr_handler_pulse_timer_overflow()
 	{
-		isr_handler_pulse_timer_check<NTIMER_, PIN_, COM_NUM_>();
-		using PT = timer::PulseTimer8<NTIMER_, PRESCALER_>;
+		static constexpr board::Timer NTIMER = isr_handler_pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
+		using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
 		if (interrupt::HandlerHolder<PT>::handler()->overflow())
 			gpio::FastPinType<PIN_>::set();
 	}
 
-	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_, 
+	template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
 		board::DigitalPin PINA_, uint8_t COMA_NUM_, board::DigitalPin PINB_, uint8_t COMB_NUM_>
 	void isr_handler_pulse_timer_overflow()
 	{
-		isr_handler_pulse_timer_check<NTIMER_, PINA_, COMA_NUM_>();
-		isr_handler_pulse_timer_check<NTIMER_, PINB_, COMB_NUM_>();
-		using PT = timer::PulseTimer8<NTIMER_, PRESCALER_>;
+		static constexpr board::Timer NTIMER = isr_handler_pulse_timer_check<TIMER_NUM_, PINA_, COMA_NUM_>();
+		isr_handler_pulse_timer_check<TIMER_NUM_, PINB_, COMB_NUM_>();
+		using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
 		if (interrupt::HandlerHolder<PT>::handler()->overflow())
 		{
-			using PINTA = board_traits::Timer_COM_trait<NTIMER_, COMA_NUM_>;
-			using PINTB = board_traits::Timer_COM_trait<NTIMER_, COMB_NUM_>;
+			using PINTA = board_traits::Timer_COM_trait<NTIMER, COMA_NUM_>;
+			using PINTB = board_traits::Timer_COM_trait<NTIMER, COMB_NUM_>;
 			if (PINTA::OCR != 0) gpio::FastPinType<PINA_>::set();
 			if (PINTB::OCR != 0) gpio::FastPinType<PINB_>::set();
 		}
@@ -251,7 +252,7 @@ namespace timer
 	template<uint8_t TIMER_NUM_, uint8_t COM_NUM_, board::DigitalPin PIN_>
 	void isr_handler_pulse_timer_compare()
 	{
-		static constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+		static constexpr board::Timer NTIMER = isr_handler_pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
 		using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
 		static_assert(PIN_ == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");
 		gpio::FastPinType<PIN_>::clear();
