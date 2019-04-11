@@ -26,6 +26,8 @@
 #include <fastarduino/realtime_timer.h>
 #include <fastarduino/timer.h>
 #include <fastarduino/pulse_timer.h>
+#include <fastarduino/watchdog.h>
+#include <fastarduino/eeprom.h>
 
 #include <fastarduino/devices/sonar.h>
 
@@ -38,16 +40,39 @@ void callback32(uint32_t) {}
 void sonar_callback(const devices::sonar::SonarEvent&) {}
 struct Callback
 {
+	private:
 	void callback() {}
 	void callback8(uint8_t) {}
 	void callback16(uint16_t) {}
 	void callback32(uint32_t) {}
 	void sonar_callback(const devices::sonar::SonarEvent&) {}
+
+	DECL_INT_ISR_HANDLERS_FRIEND
+	DECL_PCI_ISR_HANDLERS_FRIEND
+	DECL_RTT_ISR_HANDLERS_FRIEND
+	DECL_SONAR_ISR_HANDLERS_FRIEND
+	DECL_TIMER_ISR_HANDLERS_FRIEND
+	DECL_EEPROM_ISR_HANDLERS_FRIEND
+	DECL_WATCHDOG_ISR_HANDLES_FRIEND
 };
 
 constexpr Timer NTIMER0 = Timer::TIMER0;
 constexpr Timer NTIMER1 = Timer::TIMER1;
 constexpr Timer NTIMER3 = (Timer) 3;
+
+// // Check all PTMF callback macros and friends declaration macros
+// #pragma message "CHECK: private callback as friends (11 checks, should generate NO error)"
+// REGISTER_HCSR04_INT_ISR_METHOD(NTIMER0, 0, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0, Callback, &Callback::callback)
+// REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER0, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, Callback, &Callback::callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, Port::PORT_C, 0x3F, Callback, &Callback::sonar_callback)
+// REGISTER_INT_ISR_METHOD(1, ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
+// REGISTER_PCI_ISR_METHOD(2, Callback, &Callback::callback, InterruptPin::D0_PD0_PCI2)
+// REGISTER_RTT_ISR_METHOD(0, Callback, &Callback::callback32)
+// REGISTER_TIMER_CAPTURE_ISR_METHOD(1, Callback, &Callback::callback16)
+// REGISTER_TIMER_COMPARE_ISR_METHOD(1, Callback, &Callback::callback)
+// REGISTER_TIMER_OVERFLOW_ISR_METHOD(1, Callback, &Callback::callback)
+// REGISTER_WATCHDOG_ISR_METHOD(Callback, &Callback::callback)
+// REGISTER_EEPROM_ISR_METHOD(Callback, &Callback::callback)
 
 // // Try to register Sonar with bad args
 // #pragma message "CHECK: register sonar with not existing TIMER (9 checks)"
@@ -58,8 +83,8 @@ constexpr Timer NTIMER3 = (Timer) 3;
 // REGISTER_HCSR04_PCI_ISR_FUNCTION(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, callback)
 // REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, Callback, &Callback::callback)
 // REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0)
-// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(0, NTIMER3, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
-// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(0, NTIMER3, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(NTIMER3, 0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER3, 0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
 
 // #pragma message "CHECK: register sonar with bad pin(s) (10 checks)"
 // REGISTER_HCSR04_INT_ISR(NTIMER0, 1, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0)
@@ -70,16 +95,16 @@ constexpr Timer NTIMER3 = (Timer) 3;
 // REGISTER_HCSR04_PCI_ISR_FUNCTION(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, callback)
 // REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, Callback, &Callback::callback)
 // REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0)
-// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
-// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(NTIMER0, 1, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
 
 // #pragma message "CHECK: register multi sonar with bad callback (2 checks)"
-// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(0, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, callback)
-// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(0, NTIMER0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(NTIMER0, 0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER0, 0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::callback)
 
 // #pragma message "CHECK: register multi sonar with bad mask for echo port (2 checks)"
-// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_C, 0xFF, sonar_callback)
-// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(1, NTIMER0, DigitalPin::D0_PD0, Port::PORT_C, 0xFF, Callback, &Callback::sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(NTIMER0, 1, DigitalPin::D0_PD0, Port::PORT_C, 0xFF, sonar_callback)
+// REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, Port::PORT_C, 0xFF, Callback, &Callback::sonar_callback)
 
 // // Try to register INT0 vector for a non INT pin
 // #pragma message "CHECK: register INT0 vector for a non INT pin (3 checks)"

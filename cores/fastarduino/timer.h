@@ -163,7 +163,11 @@
  * Declare ISR handlers for Timers as friend of a class 
  * containing a private callback.
  */
-#define DECL_TIMER_ISR_HANDLERS_FRIEND friend struct timer::isr_handler;
+#define DECL_TIMER_ISR_HANDLERS_FRIEND	\
+	friend struct timer::isr_handler;	\
+	DECL_TIMER_COMP_FRIENDS				\
+	DECL_TIMER_OVF_FRIENDS				\
+	DECL_TIMER_CAPT_FRIENDS
 
 /**
  * Defines all API to manipulate AVR Timers.

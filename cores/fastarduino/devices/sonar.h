@@ -82,7 +82,10 @@
 			ECHO_PORT, ECHO_MASK, CALLBACK>();															\
 	}
 
-#define DECL_SONAR_ISR_HANDLERS_FRIEND friend struct devices::sonar::isr_handler;
+#define DECL_SONAR_ISR_HANDLERS_FRIEND			\
+	friend struct devices::sonar::isr_handler;	\
+	DECL_INT_ISR_FRIENDS						\
+	DECL_PCINT_ISR_FRIENDS
 
 namespace devices::sonar
 {

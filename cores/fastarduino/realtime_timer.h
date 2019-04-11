@@ -109,7 +109,9 @@
  * Declare ISR handlers for Real-Time Timers as friend of a class 
  * containing a private callback.
  */
-#define DECL_RTT_ISR_HANDLERS_FRIEND friend struct timer::isr_handler_rtt;
+#define DECL_RTT_ISR_HANDLERS_FRIEND		\
+	friend struct timer::isr_handler_rtt;	\
+	DECL_TIMER_COMP_FRIENDS
 
 namespace timer
 {
