@@ -24,16 +24,16 @@
 #include "pci.h"
 #include "int.h"
 
-#define REGISTER_UART_PCI_ISR(RX, PCI_NUM)					\
-	ISR(CAT3(PCINT, PCI_NUM, _vect))						\
-	{														\
-		serial::soft::check_uart_pci<PCI_NUM, RX>();		\
+#define REGISTER_UART_PCI_ISR(RX, PCI_NUM)							\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))								\
+	{																\
+		serial::soft::isr_handler::check_uart_pci<PCI_NUM, RX>();	\
 	}
 
-#define REGISTER_UART_INT_ISR(RX, INT_NUM)					\
-	ISR(CAT3(INT, INT_NUM, _vect))							\
-	{														\
-		serial::soft::check_uart_int<INT_NUM, RX>();		\
+#define REGISTER_UART_INT_ISR(RX, INT_NUM)							\
+	ISR(CAT3(INT, INT_NUM, _vect))									\
+	{																\
+		serial::soft::isr_handler::check_uart_int<INT_NUM, RX>();	\
 	}
 
 //FIXME Handle begin/end properly in relation to current queue content
