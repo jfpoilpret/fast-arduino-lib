@@ -37,7 +37,7 @@
 #define REGISTER_UATX_ISR(UART_NUM)						\
 	ISR(CAT3(USART, UART_NUM, _UDRE_vect))				\
 	{													\
-		serial::hard::isr_handler::uatx<UART_NUM>();		\
+		serial::hard::isr_handler::uatx<UART_NUM>();	\
 	}
 
 /**
@@ -48,7 +48,7 @@
 #define REGISTER_UARX_ISR(UART_NUM)						\
 	ISR(CAT3(USART, UART_NUM, _RX_vect))				\
 	{													\
-		serial::hard::isr_handler::uarx<UART_NUM>();		\
+		serial::hard::isr_handler::uarx<UART_NUM>();	\
 	}
 
 /**
