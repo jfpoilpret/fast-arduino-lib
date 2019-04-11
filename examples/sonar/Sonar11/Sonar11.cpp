@@ -152,7 +152,7 @@ private:
 // Register ISR callbacks
 //TODO handle timeout!
 // REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, SonarListener, &SonarListener::on_timeout)
-REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(PCI_NUM, NTIMER, TRIGGER, ECHO_PORT, ECHO_MASK,
+REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK,
 	SonarListener, &SonarListener::on_sonar)
 
 // Queue buffer for SonarEvent triggered by MultiHCSR04: 8 is needed to handle 4 sonars 
