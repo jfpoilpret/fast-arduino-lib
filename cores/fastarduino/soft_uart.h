@@ -24,11 +24,17 @@
 #include "pci.h"
 #include "int.h"
 
-#define REGISTER_UART_PCI_ISR(RX, PCI_NUM) \
-	REGISTER_PCI_ISR_METHOD(PCI_NUM, serial::soft::UARX<RX>, &serial::soft::UARX<RX>::on_pin_change, RX)
+#define REGISTER_UART_PCI_ISR(RX, PCI_NUM)							\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))								\
+	{																\
+		serial::soft::isr_handler::check_uart_pci<PCI_NUM, RX>();	\
+	}
 
-#define REGISTER_UART_INT_ISR(RX, INT_NUM) \
-	REGISTER_INT_ISR_METHOD(INT_NUM, RX, serial::soft::UARX<RX>, &serial::soft::UARX<RX>::on_pin_change)
+#define REGISTER_UART_INT_ISR(RX, INT_NUM)							\
+	ISR(CAT3(INT, INT_NUM, _vect))									\
+	{																\
+		serial::soft::isr_handler::check_uart_int<INT_NUM, RX>();	\
+	}
 
 //FIXME Handle begin/end properly in relation to current queue content
 namespace serial::soft
@@ -232,8 +238,7 @@ namespace serial::soft
 			INT_TYPE* int_;
 		};
 
-		DECL_INT_ISR_FRIENDS
-		DECL_PCINT_ISR_FRIENDS
+		friend struct isr_handler;
 	};
 
 	template<board::DigitalPin RX> void UARX<RX>::on_pin_change()
@@ -320,6 +325,23 @@ namespace serial::soft
 		{
 			UARX<RX>::end();
 			UATX<TX>::end();
+		}
+	};
+
+	struct isr_handler
+	{
+		template<uint8_t PCI_NUM_, board::DigitalPin RX_>
+		static void check_uart_pci()
+		{
+			interrupt::isr_handler_pci::check_pci_pins<PCI_NUM_, RX_>();
+			interrupt::HandlerHolder<serial::soft::UARX<RX_>>::handler()->on_pin_change();
+		}
+
+		template<uint8_t INT_NUM_, board::DigitalPin RX_>
+		static void check_uart_int()
+		{
+			interrupt::isr_handler_int::check_int_pin<INT_NUM_, RX_>();
+			interrupt::HandlerHolder<serial::soft::UARX<RX_>>::handler()->on_pin_change();
 		}
 	};
 }

@@ -31,15 +31,6 @@
 #include "interrupts.h"
 #include "utilities.h"
 
-/// @cond notdocumented
-#define CHECK_PCI_PIN_(PIN, PCI_NUM)                                                                          \
-	static_assert(board_traits::PCI_trait<PCI_NUM>::PORT != board::Port::NONE, "PORT must support PCI");      \
-	static_assert(board_traits::DigitalPin_trait<PIN>::PORT == board_traits::PCI_trait<PCI_NUM>::PORT,        \
-				  "PIN port must match PCI_NUM port");                                                        \
-	static_assert(_BV(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM>::PCI_MASK, \
-				  "PIN must be a PCINT pin");
-/// @endcond
-
 /**
  * Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt 
  * vector.
@@ -50,9 +41,12 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...) \
-	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)             \
-	REGISTER_ISR_METHOD_(CAT3(PCINT, PCI_NUM, _vect), HANDLER, CALLBACK)
+#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...)	\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))									\
+	{																	\
+		interrupt::isr_handler_pci::pci_method<							\
+			PCI_NUM, HANDLER, CALLBACK, PIN, ##__VA_ARGS__>();			\
+	}
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt 
@@ -63,9 +57,12 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...) \
-	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__)      \
-	REGISTER_ISR_FUNCTION_(CAT3(PCINT, PCI_NUM, _vect), CALLBACK)
+#define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)			\
+	ISR(CAT3(PCINT, PCI_NUM, _vect))									\
+	{																	\
+		interrupt::isr_handler_pci::pci_function<						\
+			PCI_NUM, CALLBACK, PIN, ##__VA_ARGS__>();					\
+	}
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt 
@@ -76,9 +73,20 @@
  * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)         \
-	FOR_EACH(CHECK_PCI_PIN_, PCI_NUM, PIN, ##__VA_ARGS__) \
-	EMPTY_INTERRUPT(CAT3(PCINT, PCI_NUM, _vect))
+#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)									\
+	extern "C" void CAT3(PCINT, PCI_NUM, _vect) (void)								\
+		__attribute__ ((signal,naked,__INTR_ATTRS));								\
+	void CAT3(PCINT, PCI_NUM, _vect) (void)											\
+	{																				\
+		interrupt::isr_handler_pci::check_pci_pins<PCI_NUM, PIN, ## __VA_ARGS__>();	\
+		__asm__ __volatile__ ("reti" ::);											\
+	}
+
+/**
+ * Declare ISR handlers for Pin Change Interrupt pins as friend of a class 
+ * containing a private callback.
+ */
+#define DECL_PCI_ISR_HANDLERS_FRIEND friend struct interrupt::isr_handler_pci;
 
 namespace interrupt
 {
@@ -468,6 +476,50 @@ namespace interrupt
 		static constexpr const uint8_t PCINT =
 			board_traits::Port_trait<board_traits::DigitalPin_trait<PIN>::PORT>::PCINT;
 	};
+
+	/// @cond notdocumented
+
+	// All PCI-related methods called by pre-defined ISR are defined here
+	//====================================================================
+
+	struct isr_handler_pci
+	{
+		template<uint8_t PCI_NUM_>
+		static void check_pci_pins()
+		{
+		}
+
+		template<uint8_t PCI_NUM_, board::DigitalPin PCIPIN1_, board::DigitalPin... PCIPINS_>
+		static void check_pci_pins()
+		{
+			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
+			static_assert(board_traits::DigitalPin_trait<PCIPIN1_>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
+						"PIN port must match PCI_NUM port");
+			static_assert(_BV(board_traits::DigitalPin_trait<PCIPIN1_>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK, \
+						"PIN must be a PCINT pin");
+			// Check other pins
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+		}
+
+		template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::DigitalPin... PCIPINS_>
+		static void pci_method()
+		{
+			// Check pin is compliant
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+			// Call handler back
+			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
+		}
+
+		template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::DigitalPin... PCIPINS_>
+		static void pci_function()
+		{
+			// Check pin is compliant
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+			// Call handler back
+			CALLBACK_();
+		}
+	};
+	/// @endcond
 }
 
 #endif /* PCI_HH */

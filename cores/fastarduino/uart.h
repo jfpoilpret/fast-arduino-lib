@@ -29,41 +29,43 @@
 // Only MCU with physical USART are supported (not ATtiny then)
 #if defined(UCSR0A) || defined(UCSR1A)
 
-/// @cond notdocumented
-#define REGISTER_UATX_ISR_METHOD_(UART_NUM, HANDLER, CALLBACK) \
-	REGISTER_ISR_METHOD_(CAT3(USART, UART_NUM, _UDRE_vect), HANDLER, CALLBACK)
-#define REGISTER_UARX_ISR_METHOD_(UART_NUM, HANDLER, CALLBACK) \
-	REGISTER_ISR_METHOD_(CAT3(USART, UART_NUM, _RX_vect), HANDLER, CALLBACK)
-
-#define UATX_CLASS_(UART_NUM) CAT(serial::hard::UATX < board::USART::USART, UART_NUM) >
-#define UARX_CLASS_(UART_NUM) CAT(serial::hard::UARX < board::USART::USART, UART_NUM) >
-#define UART_CLASS_(UART_NUM) CAT(serial::hard::UART < board::USART::USART, UART_NUM) >
-/// @endcond
-
 /**
  * Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
-#define REGISTER_UATX_ISR(UART_NUM) \
-	REGISTER_UATX_ISR_METHOD_(UART_NUM, UATX_CLASS_(UART_NUM), &UATX_CLASS_(UART_NUM)::data_register_empty)
+#define REGISTER_UATX_ISR(UART_NUM)						\
+	ISR(CAT3(USART, UART_NUM, _UDRE_vect))				\
+	{													\
+		serial::hard::isr_handler::uatx<UART_NUM>();	\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
-#define REGISTER_UARX_ISR(UART_NUM) \
-	REGISTER_UARX_ISR_METHOD_(UART_NUM, UARX_CLASS_(UART_NUM), &UARX_CLASS_(UART_NUM)::data_receive_complete)
+#define REGISTER_UARX_ISR(UART_NUM)						\
+	ISR(CAT3(USART, UART_NUM, _RX_vect))				\
+	{													\
+		serial::hard::isr_handler::uarx<UART_NUM>();	\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for an serial::hard::UART
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
-#define REGISTER_UART_ISR(UART_NUM)                                                                         \
-	REGISTER_UATX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &UART_CLASS_(UART_NUM)::data_register_empty) \
-	REGISTER_UARX_ISR_METHOD_(UART_NUM, UART_CLASS_(UART_NUM), &UART_CLASS_(UART_NUM)::data_receive_complete)
+#define REGISTER_UART_ISR(UART_NUM)						\
+	ISR(CAT3(USART, UART_NUM, _UDRE_vect))				\
+	{													\
+		serial::hard::isr_handler::uart_tx<UART_NUM>();	\
+	}													\
+														\
+	ISR(CAT3(USART, UART_NUM, _RX_vect))				\
+	{													\
+		serial::hard::isr_handler::uart_rx<UART_NUM>();	\
+	}
 
 /**
  * Defines API types used by hardware UART features.
@@ -108,7 +110,7 @@ namespace serial::hard
 	};
 	/// @endcond
 
-	// Forward declaration for use as friend
+	// Forward declarations for use as friend
 	template<board::USART USART_> class UART;
 
 	/**
@@ -235,7 +237,7 @@ namespace serial::hard
 	private:
 		bool transmitting_;
 		friend class UART<USART>;
-		DECL_UDRE_ISR_FRIENDS
+		friend struct isr_handler;
 	};
 
 	/**
@@ -332,7 +334,7 @@ namespace serial::hard
 		}
 
 		friend class UART<USART>;
-		DECL_RX_ISR_FRIENDS
+		friend struct isr_handler;
 	};
 
 	/**
@@ -423,11 +425,51 @@ namespace serial::hard
 		{
 			UARX<USART>::data_receive_complete();
 		}
-		/// @endcond
 
-		DECL_UDRE_ISR_FRIENDS
-		DECL_RX_ISR_FRIENDS
+		friend struct isr_handler;
 	};
+
+	/// @cond notdocumented
+
+	// All UART-related methods called by pre-defined ISR are defined here
+	//=====================================================================
+
+	struct isr_handler
+	{
+		template<uint8_t UART_NUM_> 
+		static constexpr board::USART check_uart()
+		{
+			constexpr board::USART USART = (board::USART) UART_NUM_;
+			static_assert(board_traits::USART_trait<USART>::U2X_MASK != 0,
+				"UART_NUM must be an actual USART in target MCU");
+			return USART;
+		}
+
+		template<uint8_t UART_NUM_> static void uatx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UATX<USART>>::handler()->data_register_empty();
+		}
+
+		template<uint8_t UART_NUM_> static void uarx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UARX<USART>>::handler()->data_receive_complete();
+		}
+
+		template<uint8_t UART_NUM_> static void uart_tx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UART<USART>>::handler()->data_register_empty();
+		}
+
+		template<uint8_t UART_NUM_> static void uart_rx()
+		{
+			static constexpr board::USART USART = check_uart<UART_NUM_>();
+			interrupt::HandlerHolder<UART<USART>>::handler()->data_receive_complete();
+		}
+	};
+	/// @endcond
 }
 
 #endif /* UCSR0A */

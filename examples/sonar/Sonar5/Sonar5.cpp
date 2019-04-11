@@ -14,7 +14,8 @@
 
 /*
  * Asynchronous sonar sensor read and conversion.
- * This program shows usage of FastArduino HCSR04 device API with INT ISR.
+ * This program shows usage of FastArduino HCSR04 device API with PCINT ISR on 2 pins.
+ * In this example, both sonar devices use the same TRIGGER pin.
  * 
  * Wiring: TODO
  * - on ATmega328P based boards (including Arduino UNO):
@@ -28,8 +29,8 @@
 #include <fastarduino/time.h>
 #include <fastarduino/timer.h>
 #include <fastarduino/flash.h>
-#include <fastarduino/int.h>
-#include <fastarduino/devices/old_sonar.h>
+#include <fastarduino/pci.h>
+#include <fastarduino/devices/sonar.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HARDWARE_UART 1
@@ -38,10 +39,11 @@ static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 2
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD3_EXT1;
+static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D3_PD3_PCI2;
+static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D5_PD5_PCI2;
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -49,10 +51,11 @@ static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 5
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PE4;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PE5_EXT5;
+static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D53_PB0_PCI0;
+static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D52_PB1_PCI0;
 #elif defined(ARDUINO_LEONARDO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -60,20 +63,22 @@ static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(1)
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 0
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD1;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD0_EXT0;
+static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D8_PB4_PCI0;
+static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D9_PB5_PCI0;
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 0
-static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D10_PB2_EXT0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 1
+static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D0_PA0;
+static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D10_PB2_PCI1;
+static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D9_PB1_PCI1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -81,18 +86,19 @@ static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D10
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using TIMER_TYPE = timer::Timer<TIMER>;
-using CALC = timer::Calculator<TIMER>;
-using devices::old_sonar::SonarType;
-using SONAR = devices::old_sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;
-static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
-static constexpr const TIMER_TYPE::PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
-static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
+REGISTER_RTT_ISR(TIMER_NUM)
 
-using devices::old_sonar::echo_us_to_distance_mm;
+using RTT = timer::RTT<NTIMER>;
+
+using devices::sonar::SonarType;
+using SONAR1 = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO1, SonarType::ASYNC_PCINT>;
+using SONAR2 = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO2, SonarType::ASYNC_PCINT>;
+static constexpr const uint16_t TIMEOUT = SONAR1::DEFAULT_TIMEOUT_MS;
+
+using devices::sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
-REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)		
+REGISTER_HCSR04_PCI_ISR(NTIMER, PCI_NUM, TRIGGER, ECHO1, ECHO2)
 
 int main() __attribute__((OS_main));
 int main()
@@ -109,25 +115,36 @@ int main()
 	uart.begin(115200);
 	auto out = uart.out();
 	
-	// Start timer
-	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
-	timer.begin();
-	SONAR sonar{timer};
-	sonar.register_handler();
-
-	interrupt::INTSignal<ECHO> signal;
+	// Start RTT & sonar
+	RTT rtt;
+	SONAR1 sonar1{rtt};
+	SONAR2 sonar2{rtt};
+	rtt.register_rtt_handler();
+	sonar1.register_handler();
+	sonar2.register_handler();
+	rtt.begin();
+	
+	typename interrupt::PCIType<ECHO1>::TYPE signal;
+	//TODO replace with only one call to enable_pins()
+	signal.enable_pin<ECHO1>();
+	signal.enable_pin<ECHO2>();
 	signal.enable();
 	
 	out << F("Starting...") << streams::endl;
 	
 	while (true)
 	{
-		sonar.async_echo();
-		SONAR::TYPE pulse = sonar.await_echo_ticks(TIMEOUT);
-		uint32_t us = CALC::ticks_to_us(PRESCALER, pulse);
-		uint16_t mm = echo_us_to_distance_mm(us);
+		// Trigger both sensors in first call
+		sonar1.async_echo(true);
+		sonar2.async_echo(false);
+		// time::delay_ms(25);
+		uint16_t us1 = sonar1.await_echo_us(TIMEOUT);
+		uint16_t us2 = sonar2.await_echo_us(TIMEOUT);
+		uint16_t mm1 = echo_us_to_distance_mm(us1);
+		uint16_t mm2 = echo_us_to_distance_mm(us2);
 		// trace value to output
-		out << F("Pulse: ") << pulse << F(" ticks, ") << us << F("us. Distance: ") << mm << F("mm") << streams::endl;
+		out << F("Time1: ") << us1 << F("us. Distance: ") << mm1 << F("mm") << streams::endl;
+		out << F("Time2: ") << us2 << F("us. Distance: ") << mm2 << F("mm") << streams::endl;
 		time::delay_ms(1000);
 	}
 }

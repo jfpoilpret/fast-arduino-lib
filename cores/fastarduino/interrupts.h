@@ -73,93 +73,7 @@
 // This allows processing pointers to SRAM data be performed directly from Y, Z registers
 // this may optimize code size on some circumstances
 #define FIX_BASE_POINTER(_ptr) __asm__ __volatile__("" : "=b"(_ptr) : "0"(_ptr))
-
-// Useful macros to pass arguments containing a comma
-#define AS_ONE_ARG(...) __VA_ARGS__
-#define SINGLE_ARG1_(...) __VA_ARGS__
-#define SINGLE_ARG2_(...) __VA_ARGS__
-#define SINGLE_ARG3_(...) __VA_ARGS__
-
-// Utilities to handle ISR callbacks
-#define HANDLER_HOLDER_(HANDLER) interrupt::HandlerHolder<HANDLER>
-
-#define CALLBACK_HANDLER_HOLDER_(HANDLER, CALLBACK, RET, ...) \
-	interrupt::HandlerHolder<HANDLER>::ArgsHolder<RET, ##__VA_ARGS__>::CallbackHolder<CALLBACK>
-
-#define CALL_HANDLER_(HANDLER, CALLBACK, ...) \
-	CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), void, ##__VA_ARGS__)::handle
-
-#define CALL_HANDLER_RETURN_(HANDLER, CALLBACK, RET, ...) \
-	CALLBACK_HANDLER_HOLDER_(SINGLE_ARG1_(HANDLER), SINGLE_ARG1_(CALLBACK), RET, ##__VA_ARGS__)::handle
 /// @endcond
-
-/**
- * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK method
- * of @p HANDLER class.
- * Note that a proper instance needs to be first registered with
- * `interrupt::register_handler()` before the first call to this ISR.
- * This macro is normally used only by FastArduino to define higher-level macros 
- * for registration of specific ISR; you normally won't need to use this macro in 
- * your own programs.
- * @param VECTOR the name of the interrupt vector for which to generate the ISR;
- * must exist for the current AVR target.
- * @param HANDLER the class which registered instance will be used to call 
- * @p CALLBACK method when the ISR is called; this class must have been defined
- * **before** the macro is used.
- * @param CALLBACK the @p HANDLER method that will be called back by the ISR;
- * must be a proper Pointer to Member Function of @p HANDLER. This method takes 
- * no argument and must return `void`.
- * @sa interrupt::register_handler()
- * @sa REGISTER_ISR_METHOD_RETURN_
- */
-#define REGISTER_ISR_METHOD_(VECTOR, HANDLER, CALLBACK)                 \
-	ISR(VECTOR)                                                         \
-	{                                                                   \
-		CALL_HANDLER_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK))(); \
-	}
-
-/**
- * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK method
- * of @p HANDLER class.
- * Note that a proper instance needs to be first registered with
- * `interrupt::register_handler()` before the first call to this ISR.
- * This macro is normally used only by FastArduino to define higher-level macros 
- * for registration of specific ISR; you normally won't need to use this macro in 
- * your own programs.
- * @param VECTOR the name of the interrupt vector for which to generate the ISR;
- * must exist for the current AVR target.
- * @param HANDLER the class which registered instance will be used to call 
- * @p CALLBACK method when the ISR is called; this class must have been defined
- * **before** the macro is used.
- * @param CALLBACK the @p HANDLER method that will be called back by the ISR;
- * must be a proper Pointer to Member Function of @p HANDLER. This method takes 
- * no argument and must return type @p RET.
- * @param RET the type returned by method @p CALLBACK
- * @sa interrupt::register_handler()
- * @sa REGISTER_ISR_METHOD_
- */
-#define REGISTER_ISR_METHOD_RETURN_(VECTOR, HANDLER, CALLBACK, RET)                 \
-	ISR(VECTOR)                                                                     \
-	{                                                                               \
-		CALL_HANDLER_RETURN_(SINGLE_ARG2_(HANDLER), SINGLE_ARG2_(CALLBACK), RET)(); \
-	}
-
-/**
- * Define an ISR for @p VECTOR; this ISR will simply call the @p CALLBACK function.
- * This macro is normally used only by FastArduino to define higher-level macros 
- * for registration of specific ISR; you normally won't need to use this macro in 
- * your own programs.
- * @param VECTOR the name of the interrupt vector for which to generate the ISR;
- * must exist for the current AVR target.
- * @param CALLBACK the global or static function that will be called back by the ISR;
- * this function takes no argument. This function must have been defined (or at 
- * least declared) **before** the macro is used.
- */
-#define REGISTER_ISR_FUNCTION_(VECTOR, CALLBACK) \
-	ISR(VECTOR)                                  \
-	{                                            \
-		CALLBACK();                              \
-	}
 
 /**
  * Defines API to handle AVR interruptions.
@@ -201,6 +115,32 @@ namespace interrupt
 	};
 
 	template<typename Handler> Handler* HandlerHolder<Handler>::handler_ = 0;
+
+	// Used by ISR to perform a callback to a PTMF
+	// Found great inspiration for this pattern there: 
+	// https://stackoverflow.com/questions/9779105/generic-member-function-pointer-as-a-template-parameter
+	template<typename T, T> struct CallbackHandler;
+	template<typename HANDLER, typename RET, typename... ARGS, RET (HANDLER::*CALLBACK)(ARGS...)>
+	struct CallbackHandler<RET (HANDLER::*)(ARGS...), CALLBACK>
+	{
+		static RET call(ARGS... args)
+		{
+			// NOTE the following line does not compile, it must be broken down for the compiler to understand
+			// return HandlerHolder<HANDLER>::ArgsHolder<RET, ARGS...>::CallbackHolder<CALLBACK>::handle(args...);
+			using HOLDER = HandlerHolder<HANDLER>;
+			using ARGS_HOLDER = typename HOLDER::template ArgsHolder<RET, ARGS...>;
+			using CALLBACK_HOLDER = typename ARGS_HOLDER::template CallbackHolder<CALLBACK>;
+			return CALLBACK_HOLDER::handle(args...);
+		}
+	};
+	template<typename RET, typename... ARGS, RET (*CALLBACK)(ARGS...)>
+	struct CallbackHandler<RET (*)(ARGS...), CALLBACK>
+	{
+		static RET call(ARGS... args)
+		{
+			return CALLBACK(args...);
+		}
+	};
 	/// @endcond
 
 	/**
@@ -222,56 +162,9 @@ namespace interrupt
 
 /// @cond notdocumented
 
-// Useful macro to iterate
-// NOTE: these macros have been inspired by several readings:
-// http://stackoverflow.com/questions/11761703/overloading-macro-on-number-of-arguments
-// http://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros
-// https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
-
-#define EMPTY(...)
-#define CAT(X, Y) X##Y
+// Macro often used to build vector names from parameters
 #define CAT3(X, Y, Z) X##Y##Z
-#define COMMA() ,
-#define STRINGIFY(X, ...) #X
-#define ID(X, ...) X
 
-#define FE_0_(M, DATA, FIRST, SEP, LAST)
-
-#define FE_1_(M, DATA, FIRST, SEP, LAST, X1) FIRST() M(X1, DATA) LAST()
-#define FE_2_(M, DATA, FIRST, SEP, LAST, X1, X2) FIRST() M(X1, DATA) SEP() M(X2, DATA) LAST()
-#define FE_3_(M, DATA, FIRST, SEP, LAST, X1, X2, X3) FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) LAST()
-#define FE_4_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4) \
-	FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) LAST()
-#define FE_5_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5) \
-	FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) LAST()
-#define FE_6_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6) \
-	FIRST() M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) LAST()
-#define FE_7_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6, X7)                                            \
-	FIRST()                                                                                                     \
-	M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) SEP() \
-		M(X7, DATA) LAST()
-#define FE_8_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6, X7, X8)                                        \
-	FIRST()                                                                                                     \
-	M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) SEP() \
-		M(X7, DATA) SEP() M(X8, DATA) LAST()
-#define FE_9_(M, DATA, FIRST, SEP, LAST, X1, X2, X3, X4, X5, X6, X7, X8, X9)                                    \
-	FIRST()                                                                                                     \
-	M(X1, DATA) SEP() M(X2, DATA) SEP() M(X3, DATA) SEP() M(X4, DATA) SEP() M(X5, DATA) SEP() M(X6, DATA) SEP() \
-		M(X7, DATA) SEP() M(X8, DATA) SEP() M(X9, DATA) LAST()
-
-#define GET_MACRO_9_(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, NAME, ...) NAME
-
-// FOR_EACH executes M macro for each argument passed to it, returns empty if passed an empty list.
-// Number of arguments in variadic list must be between 0 and 9
-#define FOR_EACH(M, DATA, ...)                                                                                \
-	GET_MACRO_9_(unused, ##__VA_ARGS__, FE_9_, FE_8_, FE_7_, FE_6_, FE_5_, FE_4_, FE_3_, FE_2_, FE_1_, FE_0_) \
-	(M, DATA, EMPTY, EMPTY, EMPTY, ##__VA_ARGS__)
-// FOR_EACH_SEP executes M macro for each argument passed to it, separates each transformed value with SEP(),
-// prepends FIRST() and appends LAST() if result list is not empty; returns empty if passed an empty list
-// Number of arguments in variadic list must be between 0 and 9
-#define FOR_EACH_SEP(M, DATA, FIRST, SEP, LAST, ...)                                                          \
-	GET_MACRO_9_(unused, ##__VA_ARGS__, FE_9_, FE_8_, FE_7_, FE_6_, FE_5_, FE_4_, FE_3_, FE_2_, FE_1_, FE_0_) \
-	(M, DATA, FIRST, SEP, LAST, ##__VA_ARGS__)
 /// @endcond
 
 #endif /* INTERRUPTS_HH */

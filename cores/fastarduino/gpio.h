@@ -44,6 +44,7 @@ namespace gpio
 
 	/// @cond experimental
 	// Experimental API, maybe removed if judged bad
+	//TODO reassess the need (or not) for that API
 	template<board::Port PORT, uint8_t BIT> class FastPin;
 	class SlowPin
 	{

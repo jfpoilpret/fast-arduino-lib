@@ -37,8 +37,12 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK) \
-	REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), HANDLER, CALLBACK)
+#define REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)		\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
+	{																		\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
+		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a timer::Timer
@@ -47,8 +51,12 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_TIMER_COMPARE_ISR_FUNCTION(TIMER_NUM, CALLBACK) \
-	REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _COMPA_vect), CALLBACK)
+#define REGISTER_TIMER_COMPARE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
+	{																		\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
+		interrupt::CallbackHandler<void (*)(), CALLBACK>::call();			\
+	}
 
 /**
  * Register an empty ISR (interrupt Service Routine) for a timer::Timer.
@@ -56,7 +64,14 @@
  * callback.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM) EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect));
+#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)							\
+	extern "C" void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)				\
+		__attribute__ ((signal,naked,__INTR_ATTRS));						\
+	void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)							\
+	{																		\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
+		__asm__ __volatile__ ("reti" ::);									\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
@@ -66,8 +81,12 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK) \
-	REGISTER_ISR_METHOD_(CAT3(TIMER, TIMER_NUM, _OVF_vect), HANDLER, CALLBACK)
+#define REGISTER_TIMER_OVERFLOW_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)	\
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
+	{																		\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
+		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
@@ -76,8 +95,12 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(TIMER_NUM, CALLBACK) \
-	REGISTER_ISR_FUNCTION_(CAT3(TIMER, TIMER_NUM, _OVF_vect), CALLBACK)
+#define REGISTER_TIMER_OVERFLOW_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))									\
+	{																		\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
+		interrupt::CallbackHandler<void (*)(), CALLBACK>::call();			\
+	}
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for the Counter Overflow
@@ -85,7 +108,14 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM) EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _OVF_vect));
+#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM)						\
+	extern "C" void CAT3(TIMER, TIMER_NUM, _OVF_vect) (void)				\
+		__attribute__ ((signal,naked,__INTR_ATTRS));						\
+	void CAT3(TIMER, TIMER_NUM, _OVF_vect) (void)							\
+	{																		\
+		timer::isr_handler::check_timer<TIMER_NUM>();						\
+		__asm__ __volatile__ ("reti" ::);									\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for the Input Capture
@@ -95,13 +125,10 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)     \
-	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))                                 \
-	{                                                                       \
-		constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM); \
-		using TRAIT = board_traits::Timer_trait<TIMER>;                     \
-		TRAIT::TYPE capture = TRAIT::ICR;                                   \
-		CALL_HANDLER_(HANDLER, CALLBACK, TRAIT::TYPE)(capture);             \
+#define REGISTER_TIMER_CAPTURE_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)				\
+	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))											\
+	{																				\
+		timer::isr_handler::timer_capture_method<TIMER_NUM, HANDLER, CALLBACK>();	\
 	}
 
 /**
@@ -111,13 +138,10 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)            \
-	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))                                 \
-	{                                                                       \
-		constexpr board::Timer TIMER = CAT(board::Timer::TIMER, TIMER_NUM); \
-		using TRAIT = board_traits::Timer_trait<TIMER>;                     \
-		TRAIT::TYPE capture = TRAIT::ICR;                                   \
-		CALLBACK(capture);                                                  \
+#define REGISTER_TIMER_CAPTURE_ISR_FUNCTION(TIMER_NUM, CALLBACK)			\
+	ISR(CAT3(TIMER, TIMER_NUM, _CAPT_vect))									\
+	{																		\
+		timer::isr_handler::timer_capture_function<TIMER_NUM, CALLBACK>();	\
 	}
 
 /**
@@ -126,7 +150,24 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM) EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _CAPT_vect));
+#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)							\
+	extern "C" void CAT3(TIMER, TIMER_NUM, _CAPT_vect) (void)				\
+		__attribute__ ((signal,naked,__INTR_ATTRS));						\
+	void CAT3(TIMER, TIMER_NUM, _CAPT_vect) (void)							\
+	{																		\
+		timer::isr_handler::check_timer_capture<TIMER_NUM>();				\
+		__asm__ __volatile__ ("reti" ::);									\
+	}
+
+/**
+ * Declare ISR handlers for Timers as friend of a class 
+ * containing a private callback.
+ */
+#define DECL_TIMER_ISR_HANDLERS_FRIEND	\
+	friend struct timer::isr_handler;	\
+	DECL_TIMER_COMP_FRIENDS				\
+	DECL_TIMER_OVF_FRIENDS				\
+	DECL_TIMER_CAPT_FRIENDS
 
 /**
  * Defines all API to manipulate AVR Timers.
@@ -1177,6 +1218,86 @@ namespace timer
 		uint8_t timsk_;
 		/// @endcond
 	};
+
+	/// @cond notdocumented
+
+	// All PCI-related methods called by pre-defined ISR are defined here
+	//====================================================================
+
+	struct isr_handler
+	{
+		template<board::Timer NTIMER_>
+		static constexpr board::Timer check_timer()
+		{
+			using TRAIT = board_traits::Timer_trait<NTIMER_>;
+			static_assert(TRAIT::PRESCALERS != board_traits::TimerPrescalers::PRESCALERS_NONE,
+				"TIMER_NUM must be an actual Timer in target MCU");
+			return NTIMER_;
+		}
+
+		template<uint8_t TIMER_NUM_>
+		static constexpr board::Timer check_timer()
+		{
+			constexpr board::Timer NTIMER = (board::Timer) TIMER_NUM_;
+			return check_timer<NTIMER>();
+		}
+
+		template<uint8_t TIMER_NUM_>
+		static constexpr board::Timer check_timer_capture()
+		{
+			constexpr board::Timer NTIMER = check_timer<TIMER_NUM_>();
+			static_assert(board_traits::Timer_trait<NTIMER>::ICP_PIN != board::DigitalPin::NONE,
+				"TIMER_NUM must be Timer supporting capture");
+			return NTIMER;
+		}
+
+		template<uint8_t TIMER_NUM_, typename T, typename HANDLER_, void (HANDLER_::*CALLBACK_)(T)>
+		static void timer_capture_method_helper()
+		{
+			static constexpr board::Timer NTIMER = check_timer_capture<TIMER_NUM_>();
+			using TRAIT = board_traits::Timer_trait<NTIMER>;
+			static_assert(sizeof(typename TRAIT::TYPE) == sizeof(T), 
+				"CALLBACK argument is not the proper type (should be same as Timer bits size)");
+			T capture = TRAIT::ICR;
+			interrupt::CallbackHandler<void (HANDLER_::*)(T), CALLBACK_>::call(capture);
+		}
+
+		template<uint8_t TIMER_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(uint8_t)>
+		static void timer_capture_method()
+		{
+			timer_capture_method_helper<TIMER_NUM_, uint8_t, HANDLER_, CALLBACK_>();
+		}
+
+		template<uint8_t TIMER_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(uint16_t)>
+		static void timer_capture_method()
+		{
+			timer_capture_method_helper<TIMER_NUM_, uint16_t, HANDLER_, CALLBACK_>();
+		}
+
+		template<uint8_t TIMER_NUM_, typename T, void (*CALLBACK_)(T)>
+		static void timer_capture_function_helper()
+		{
+			static constexpr board::Timer NTIMER = check_timer_capture<TIMER_NUM_>();
+			using TRAIT = board_traits::Timer_trait<NTIMER>;
+			static_assert(sizeof(typename TRAIT::TYPE) == sizeof(T), 
+				"CALLBACK argument is not the proper type (should be same as Timer bits size)");
+			T capture = TRAIT::ICR;
+			CALLBACK_(capture);
+		}
+
+		template<uint8_t TIMER_NUM_, void (*CALLBACK_)(uint8_t)>
+		static void timer_capture_function()
+		{
+			timer_capture_function_helper<TIMER_NUM_, uint8_t, CALLBACK_>();
+		}
+
+		template<uint8_t TIMER_NUM_, void (*CALLBACK_)(uint16_t)>
+		static void timer_capture_function()
+		{
+			timer_capture_function_helper<TIMER_NUM_, uint16_t, CALLBACK_>();
+		}
+	};
+	/// @endcond
 }
 
 #endif /* TIMER_HH */

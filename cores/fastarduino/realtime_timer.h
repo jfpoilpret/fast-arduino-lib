@@ -41,9 +41,11 @@
  * @sa REGISTER_RTT_ISR_METHOD
  * @sa REGISTER_RTT_ISR_FUNCTION
  */
-#define REGISTER_RTT_ISR(TIMER_NUM)                                                                  \
-	REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) >, \
-									  CAT(&timer::RTT < board::Timer::TIMER, TIMER_NUM) > ::on_timer)
+#define REGISTER_RTT_ISR(TIMER_NUM)											\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
+	{																		\
+		timer::isr_handler_rtt::rtt<TIMER_NUM>();							\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
@@ -59,14 +61,10 @@
  * @sa REGISTER_RTT_ISR_FUNCTION
  * @sa REGISTER_RTT_ISR
  */
-#define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)                                   \
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                    \
-	{                                                                                           \
-		using RTT_HANDLER = CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) > ;                \
-		using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                        \
-		using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer, void); \
-		RTT_HANDLE::handle();                                                                   \
-		CALL_HANDLER_(HANDLER, CALLBACK, uint32_t)(RTT_HOLDER::handler()->millis());            \
+#define REGISTER_RTT_ISR_METHOD(TIMER_NUM, HANDLER, CALLBACK)				\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
+	{																		\
+		timer::isr_handler_rtt::rtt_method<TIMER_NUM, HANDLER, CALLBACK>();	\
 	}
 
 /**
@@ -81,14 +79,10 @@
  * @sa REGISTER_RTT_ISR_METHOD
  * @sa REGISTER_RTT_ISR
  */
-#define REGISTER_RTT_ISR_FUNCTION(TIMER_NUM, CALLBACK)                                    \
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                              \
-	{                                                                                     \
-		using RTT_HANDLER = CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) > ;          \
-		using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                  \
-		using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer); \
-		RTT_HANDLE::handle();                                                             \
-		CALLBACK(RTT_HOLDER::handler()->millis());                                        \
+#define REGISTER_RTT_ISR_FUNCTION(TIMER_NUM, CALLBACK)						\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
+	{																		\
+		timer::isr_handler_rtt::rtt_function<TIMER_NUM, CALLBACK>();		\
 	}
 
 /**
@@ -105,16 +99,19 @@
  * 
  * @sa RTTEventCallback
  */
-#define REGISTER_RTT_EVENT_ISR(TIMER_NUM, EVENT, PERIOD)															\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                    					\
-	{                                                                                           					\
-		using RTT_HANDLER = CAT(timer::RTT < board::Timer::TIMER, TIMER_NUM) > ;                					\
-		using RTT_HOLDER = HANDLER_HOLDER_(RTT_HANDLER);                                        					\
-		using RTT_HANDLE = CALLBACK_HANDLER_HOLDER_(RTT_HANDLER, &RTT_HANDLER::on_timer, void); 					\
-		RTT_HANDLE::handle();                                                                   					\
-		using RTT_CB_HANDLER = timer::RTTEventCallback< EVENT , PERIOD > ;											\
-		CALL_HANDLER_(RTT_CB_HANDLER, &RTT_CB_HANDLER::on_rtt_change, uint32_t)(RTT_HOLDER::handler()->millis());	\
+#define REGISTER_RTT_EVENT_ISR(TIMER_NUM, EVENT, PERIOD)					\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))								\
+	{																		\
+		timer::isr_handler_rtt::rtt_event<TIMER_NUM, EVENT, PERIOD>();		\
 	}
+
+/**
+ * Declare ISR handlers for Real-Time Timers as friend of a class 
+ * containing a private callback.
+ */
+#define DECL_RTT_ISR_HANDLERS_FRIEND		\
+	friend struct timer::isr_handler_rtt;	\
+	DECL_TIMER_COMP_FRIENDS
 
 namespace timer
 {
@@ -231,6 +228,8 @@ namespace timer
 			synchronized return time_();
 		}
 
+		//TODO document
+		//TODO defined another method, more performant, that returns a "DeferredRTTTime"
 		time::RTTTime time_() const
 		{
 			return time::RTTTime(millis_, compute_micros());
@@ -338,7 +337,7 @@ namespace timer
 			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1 + (volatile TYPE&) TRAIT::OCRA));
 		}
 
-		DECL_TIMER_COMP_FRIENDS
+		friend struct isr_handler_rtt;
 	};
 
 	/**
@@ -379,8 +378,52 @@ namespace timer
 
 		containers::Queue<EVENT>& event_queue_;
 
-		DECL_TIMER_COMP_FRIENDS
+		friend struct isr_handler_rtt;
 	};
+
+	/// @cond notdocumented
+
+	// All RTT-related methods called by pre-defined ISR are defined here
+	//====================================================================
+
+	struct isr_handler_rtt
+	{
+		template<uint8_t TIMER_NUM_> static void rtt()
+		{
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
+			interrupt::HandlerHolder<RTT<NTIMER>>::handler()->on_timer();
+		}
+
+		template<uint8_t TIMER_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(uint32_t)>
+		static void rtt_method()
+		{
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
+			auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
+			handler->on_timer();
+			interrupt::CallbackHandler<void (HANDLER_::*)(uint32_t), CALLBACK_>::call(
+				handler->millis());
+		}
+
+		template<uint8_t TIMER_NUM_, void (*CALLBACK_)(uint32_t)>
+		static void rtt_function()
+		{
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
+			auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
+			handler->on_timer();
+			CALLBACK_(handler->millis());
+		}
+
+		template<uint8_t TIMER_NUM_, typename EVENT_, uint32_t PERIOD_>
+		static void rtt_event()
+		{
+			static constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
+			auto handler = interrupt::HandlerHolder<RTT<NTIMER>>::handler();
+			handler->on_timer();
+			interrupt::HandlerHolder<RTTEventCallback<EVENT_, PERIOD_>>::handler()->on_rtt_change(
+				handler->millis());
+		}
+	};
+	/// @endcond
 }
 
 #endif /* RTT_HH */

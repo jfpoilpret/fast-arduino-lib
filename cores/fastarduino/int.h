@@ -36,10 +36,11 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)                                                       \
-	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
-	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
-	REGISTER_ISR_METHOD_(CAT3(INT, INT_NUM, _vect), HANDLER, CALLBACK)
+#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)					\
+	ISR(CAT3(INT, INT_NUM, _vect))													\
+	{																				\
+		interrupt::isr_handler_int::int_method<INT_NUM, PIN, HANDLER, CALLBACK>();	\
+	}
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an External Interrupt 
@@ -50,10 +51,11 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)                                                              \
-	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
-	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
-	REGISTER_ISR_FUNCTION_(CAT3(INT, INT_NUM, _vect), CALLBACK)
+#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)						\
+	ISR(CAT3(INT, INT_NUM, _vect))												\
+	{																			\
+		interrupt::isr_handler_int::int_function<INT_NUM, PIN, CALLBACK>();		\
+	}
 
 /**
  * Register an empty ISR (Interrupt Service Routine) for an External Interrupt 
@@ -64,10 +66,20 @@
  * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
  * do not match, compilation will fail.
  */
-#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                                                                           \
-	static_assert(board_traits::DigitalPin_trait<PIN>::IS_INT, "PIN must be an INT pin.");                             \
-	static_assert(board_traits::ExternalInterruptPin_trait<PIN>::INT == INT_NUM, "PIN INT number must match INT_NUM"); \
-	EMPTY_INTERRUPT(CAT3(INT, INT_NUM, _vect));
+#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)							\
+	extern "C" void CAT3(INT, INT_NUM, _vect) (void)					\
+		__attribute__ ((signal,naked,__INTR_ATTRS));					\
+	void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)						\
+	{																	\
+		interrupt::isr_handler_int::check_int_pin<INT_NUM, PIN>();		\
+		__asm__ __volatile__ ("reti" ::);								\
+	}
+
+/**
+ * Declare ISR handlers for External Interrupt pins as friend of a class 
+ * containing a private callback.
+ */
+#define DECL_INT_ISR_HANDLERS_FRIEND friend struct interrupt::isr_handler_int;
 
 namespace interrupt
 {
@@ -228,6 +240,40 @@ namespace interrupt
 		inline void clear_()
 		{
 			INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
+		}
+	};
+
+	/// @cond notdocumented
+
+	// All INT-related methods called by pre-defined ISR are defined here
+	//====================================================================
+
+	struct isr_handler_int
+	{
+		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_>
+		static void check_int_pin()
+		{
+			static_assert(board_traits::DigitalPin_trait<INT_PIN_>::IS_INT, "PIN must be an INT pin.");
+			static_assert(board_traits::ExternalInterruptPin_trait<INT_PIN_>::INT == INT_NUM_,
+				"PIN INT number must match INT_NUM");
+		}
+
+		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_, typename HANDLER_, void (HANDLER_::*CALLBACK_)()>
+		static void int_method()
+		{
+			// Check pin is compliant
+			check_int_pin<INT_NUM_, INT_PIN_>();
+			// Call handler back
+			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
+		}
+
+		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_, void (*CALLBACK_)()>
+		static void int_function()
+		{
+			// Check pin is compliant
+			check_int_pin<INT_NUM_, INT_PIN_>();
+			// Call handler back
+			CALLBACK_();
 		}
 	};
 }

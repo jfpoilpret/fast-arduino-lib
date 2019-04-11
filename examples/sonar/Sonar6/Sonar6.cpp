@@ -30,7 +30,7 @@
 #include <fastarduino/timer.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/pci.h>
-#include <fastarduino/devices/old_sonar.h>
+#include <fastarduino/devices/sonar.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HARDWARE_UART 1
@@ -39,10 +39,10 @@ static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 2
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD3_EXT1;
+static constexpr const board::DigitalPin ECHO = board::InterruptPin::D3_PD3_PCI2;
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -50,10 +50,10 @@ static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 5
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PE4;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PE5_EXT5;
+static constexpr const board::DigitalPin ECHO = board::InterruptPin::D53_PB0_PCI0;
 #elif defined(ARDUINO_LEONARDO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -61,20 +61,20 @@ static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(1)
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 0
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD1;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D3_PD0_EXT0;
+static constexpr const board::DigitalPin ECHO = board::InterruptPin::D8_PB4_PCI0;
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #define TIMER_NUM 1
-static constexpr const board::Timer TIMER = board::Timer::TIMER1;
-#define INT_NUM 0
-static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
-static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D10_PB2_EXT0;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 1
+static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D0_PA0;
+static constexpr const board::DigitalPin ECHO = board::InterruptPin::D10_PB2_PCI1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -82,43 +82,46 @@ static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D10
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using TIMER_TYPE = timer::Timer<TIMER>;
-using CALC = timer::Calculator<TIMER>;
-using devices::old_sonar::SonarType;
-using SONAR = devices::old_sonar::HCSR04<TIMER, TRIGGER, ECHO, SonarType::ASYNC_INT>;
-static constexpr const uint32_t PRECISION = SONAR::DEFAULT_TIMEOUT_MS * 1000UL;
-static constexpr const TIMER_TYPE::PRESCALER PRESCALER = CALC::CTC_prescaler(PRECISION);
-static constexpr const SONAR::TYPE TIMEOUT = CALC::us_to_ticks(PRESCALER, PRECISION);
+REGISTER_RTT_ISR(TIMER_NUM)
 
-using devices::old_sonar::echo_us_to_distance_mm;
-using devices::old_sonar::distance_mm_to_echo_us;
+using RTT = timer::RTT<NTIMER>;
+
+using devices::sonar::SonarType;
+using SONAR = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO, SonarType::ASYNC_PCINT>;
+static constexpr const uint16_t TIMEOUT = SONAR::DEFAULT_TIMEOUT_MS;
+
+using devices::sonar::echo_us_to_distance_mm;
+using devices::sonar::distance_mm_to_echo_us;
 
 static constexpr const uint16_t DISTANCE_THRESHOLD_MM = 150;
 
 class SonarListener
 {
 public:
-	SonarListener(uint16_t min_mm)
-	:	MIN_TICKS{CALC::us_to_ticks(PRESCALER, distance_mm_to_echo_us(min_mm))}, 
+	SonarListener(const SONAR& sonar, uint16_t min_mm)
+	:	MIN_US{distance_mm_to_echo_us(min_mm)}, 
+		sonar_{sonar},
 		led_{gpio::PinMode::OUTPUT}
 	{
 		interrupt::register_handler(*this);
 	}
 	
-	void on_sonar(SONAR::TYPE echo_ticks)
+	void on_sonar()
 	{
-		if (echo_ticks && echo_ticks <= MIN_TICKS)
+		uint16_t latest_echo_us = sonar_.latest_echo_us();
+		if (latest_echo_us && latest_echo_us <= MIN_US)
 			led_.set();
 		else
 			led_.clear();
 	}
 	
 private:
-	const SONAR::TYPE MIN_TICKS;
+	const uint16_t MIN_US;
+	const SONAR& sonar_;
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
 };
 
-REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
+REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER, PCI_NUM, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
 
 int main() __attribute__((OS_main));
 int main()
@@ -135,25 +138,27 @@ int main()
 	uart.begin(115200);
 	auto out = uart.out();
 	
-	SonarListener listener{DISTANCE_THRESHOLD_MM};
-	TIMER_TYPE timer{timer::TimerMode::NORMAL, PRESCALER};
-	timer.begin();
-	SONAR sonar{timer};
+	// Start RTT & sonar
+	RTT rtt;
+	SONAR sonar{rtt};
+	rtt.register_rtt_handler();
 	sonar.register_handler();
+	rtt.begin();
 
-	typename interrupt::INTSignal<ECHO> signal;
+	SonarListener listener{sonar, DISTANCE_THRESHOLD_MM};
+
+	typename interrupt::PCIType<ECHO>::TYPE signal;
+	signal.enable_pin<ECHO>();
 	signal.enable();
 	
 	out << F("Starting...") << streams::endl;
-	
 	while (true)
 	{
 		sonar.async_echo();
-		SONAR::TYPE pulse = sonar.await_echo_ticks(TIMEOUT);
-		uint32_t us = CALC::ticks_to_us(PRESCALER, pulse);
+		uint16_t us = sonar.await_echo_us(TIMEOUT);
 		uint16_t mm = echo_us_to_distance_mm(us);
 		// trace value to output
-		out << F("Pulse: ") << pulse << F(" ticks, ") << us << F("us. Distance: ") << mm << F("mm") << streams::endl;
+		out << F("Time: ") << us << F("us. Distance: ") << mm << F("mm") << streams::endl;
 		time::delay_ms(1000);
 	}
 }

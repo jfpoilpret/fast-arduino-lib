@@ -33,8 +33,11 @@
  * to work properly.
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR() \
-	REGISTER_ISR_METHOD_RETURN_(EE_READY_vect, eeprom::QueuedWriter, &eeprom::QueuedWriter::on_ready, bool)
+#define REGISTER_EEPROM_ISR()					 \
+	ISR(EE_READY_vect)							\
+	{											\
+		eeprom::isr_handler::eeprom_ready();	\
+	}
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
@@ -47,12 +50,10 @@
  * 
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)                              \
-	ISR(EE_READY_vect)                                                             \
-	{                                                                              \
-		using WRT_HANDLER = eeprom::QueuedWriter;                                  \
-		using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);                           \
-		if (WRT_HOLDER::handler()->on_ready()) CALL_HANDLER_(HANDLER, CALLBACK)(); \
+#define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)					\
+	ISR(EE_READY_vect)													\
+	{																	\
+		eeprom::isr_handler::eeprom_ready_method<HANDLER, CALLBACK>();	\
 	}
 
 /**
@@ -65,13 +66,15 @@
  * 
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)             \
-	ISR(EE_READY_vect)                                     \
-	{                                                      \
-		using WRT_HANDLER = eeprom::QueuedWriter;          \
-		using WRT_HOLDER = HANDLER_HOLDER_(WRT_HANDLER);   \
-		if (WRT_HOLDER::handler()->on_ready()) CALLBACK(); \
+#define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)             				\
+	ISR(EE_READY_vect)                                     				\
+	{                                                      				\
+		eeprom::isr_handler::eeprom_ready_function<CALLBACK>();			\
 	}
+
+#define DECL_EEPROM_ISR_HANDLERS_FRIEND		\
+	friend struct eeprom::isr_handler;		\
+	friend void ::EE_READY_vect();
 
 /**
  * Defines the API for accessing the EEPROM embedded in each AVR MCU.
@@ -823,7 +826,29 @@ namespace eeprom
 		volatile bool erase_;
 		volatile bool done_;
 
-		friend void ::EE_READY_vect(void);
+		friend struct isr_handler;
+	};
+
+	struct isr_handler
+	{
+		static void eeprom_ready()
+		{
+			interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready();
+		}
+
+		template<void (*CALLBACK)()>
+		static void eeprom_ready_function()
+		{
+			if (interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready())
+				interrupt::CallbackHandler<void (*)(), CALLBACK>::call();
+		}
+
+		template<typename HANDLER, void(HANDLER::*CALLBACK)()>
+		static void eeprom_ready_method()
+		{
+			if (interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready())
+				interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
+		}
 	};
 }
 
