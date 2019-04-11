@@ -105,6 +105,12 @@
 		timer::isr_handler_rtt::rtt_event<TIMER_NUM, EVENT, PERIOD>();		\
 	}
 
+/**
+ * Declare ISR handlers for Real-Time Timers as friend of a class 
+ * containing a private callback.
+ */
+#define DECL_RTT_ISR_HANDLERS_FRIEND friend struct timer::isr_handler_rtt;
+
 namespace timer
 {
 	/**

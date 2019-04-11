@@ -82,6 +82,8 @@
 			ECHO_PORT, ECHO_MASK, CALLBACK>();															\
 	}
 
+#define DECL_SONAR_ISR_HANDLERS_FRIEND friend struct devices::sonar::isr_handler;
+
 namespace devices::sonar
 {
 	static constexpr const uint32_t SPEED_OF_SOUND = 340UL;

@@ -75,6 +75,12 @@
 		__asm__ __volatile__ ("reti" ::);								\
 	}
 
+/**
+ * Declare ISR handlers for External Interrupt pins as friend of a class 
+ * containing a private callback.
+ */
+#define DECL_INT_ISR_HANDLERS_FRIEND friend struct interrupt::isr_handler_int;
+
 namespace interrupt
 {
 	/**

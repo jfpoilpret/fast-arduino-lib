@@ -160,6 +160,12 @@
 	}
 
 /**
+ * Declare ISR handlers for Timers as friend of a class 
+ * containing a private callback.
+ */
+#define DECL_TIMER_ISR_HANDLERS_FRIEND friend struct timer::isr_handler;
+
+/**
  * Defines all API to manipulate AVR Timers.
  * In order to properly use Timers, some concepts are important to understand:
  * - Frequency and Prescaler
