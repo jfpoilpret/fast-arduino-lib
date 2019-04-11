@@ -34,9 +34,9 @@ All this comes at a cost:
 1. Template usage is often more complex in applications. The provided examples are here to help.
 2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included); for this point however, please note that compile time difference is hardly noticeable.
 
-Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use the complete [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) and the numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++11 standard.
+Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use the complete [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) and the numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++14 standard.
 
-In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino) are now built with [Visual Studio Code](https://code.visualstudio.com/) along with a [small extension](https://github.com/jfpoilpret/vscode-fastarduino) I developed specifically for FastArduino. Once properly setup, I find VS Code environment much easier and friendlier to use than Arduino IDE or even [netbeans](https://netbeans.org/) which I originally used for FastArduino but finally ditched out.
+In the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino itself) are now built with [Visual Studio Code](https://code.visualstudio.com/) along with a [small extension](https://github.com/jfpoilpret/vscode-fastarduino) I developed specifically for FastArduino. Once properly setup, I find VS Code environment much easier and friendlier to use than Arduino IDE or even [netbeans](https://netbeans.org/) which I originally used for FastArduino but finally ditched out.
 
 FastArduino is also buildable from the command line (on a linux system) through the standard `make`. Its make system can also be used for projects using the FastArduino library.
 
@@ -49,9 +49,9 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-First FastArduino official release [**v1.0**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.0) has just been published (22.02.2018)!
+First FastArduino official release [**v1.0**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.0) has been published on 22.02.2018.
 
-The project covers a lot of features already, a few missing, less important, features will be released in future versions (see roadmap below); current features API is deemed stable and should not change in the future.
+In this version, the project covers a lot of features; a few missing, less important, features will be released in future versions (see roadmap below); current features API is deemed stable and should not change in the future.
 
 What the project already has:
 
@@ -87,7 +87,7 @@ In addition, FastArduino brings support for the following devices:
 - DS1307 RTC device support (I2C-based)
 - HMC5883L magnetometer device support (I2C-based)
 - MPU-6050 accelerometer/gyroscope device support (I2C-based)
-- HC-SR04 sonar device support
+- HC-SR04 sonar device support in synchronous and asynchromous modes
 
 As of now, the following platforms are supported (and tested):
 
@@ -103,7 +103,7 @@ I intend to later add support for:
 
 - Arduino Leonardo with USB support
 
-A [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) is available for those who want to learn FastArduino API; although not fully complete yet, (a few missing features will be documented early 2018), it can already be used to understand most FastArduino API. In parallel to that, I am documenting [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) through [doxygen](http://www.stack.nl/~dimitri/doxygen/) and that should also be completed early 2018.
+A [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) is available for those who want to learn FastArduino API; although not fully complete yet, (a few missing features will be documented current 2019), it can already be used to understand most FastArduino API. In parallel to that, I am documenting [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) through [doxygen](http://www.stack.nl/~dimitri/doxygen/) and that should also be completed by mid-2019.
 
 Roadmap
 =======
@@ -114,33 +114,36 @@ Milestone V1.0 (22.02.2018)
 ---------------------------
 - already released
 
-Milestone V1.1 (30.04.2018)
----------------------------
-1. Support other I2C devices: MCP23017 (IO multiplexer)
-2. Document last core API remaining
-3. Add SPI and I2C usage to Tutorial
-4. Update toolchain to latest release (3.6.1)
+Documentation - no milestones
+-----------------------------
+1. Document last core API remaining (30.06.2019)
+2. Document API of supported SPI and I2C devices (30.09.2019)
+3. Add SPI and I2C usage to Tutorial (31.12.2019)
+4. Document how to add support for another board target in Tutorial (31.12.2019)
 
-Milestone V1.2 (30.06.2018)
+Milestone V1.1 (30.05.2019)
+---------------------------
+1. Refactor and improve sonar API
+2. Support other I2C devices: MCP23017 (IO multiplexer)
+
+Milestone V1.2 (31.07.2019)
 ---------------------------
 1. Refactor board traits to support PWM pin attached to several timers
-2. Document API of supported SPI and I2C devices
-3. Code cleanup (software UART mainly)
-4. Various code improvements: prevent or implement move- and copy- constructors and assignment operators
+2. Code cleanup (software UART mainly)
+3. Various code improvements: prevent or implement move- and copy- constructors and assignment operators
 
-Milestone V1.3 (31.07.2018)
+Milestone V1.4 (31.08.2019)
 ---------------------------
 1. Support ATtinyX5 Timer1 PWM pins (extended feature)
-2. Document how to add support for another board target in Tutorial
 
-Milestone V2.0 (31.08.2018, content to be revisited)
+Milestone V2.0 (31.12.2019, content to be revisited)
 ----------------------------------------------------
 1. Improve I2C master support (asynchronous mode)
 2. Improve I2C to support slave mode
 3. Improve SPI to support slave mode
 
-4th Quarter 2018
-----------------
+2020 and later
+--------------
 1. Improve Analog Input support and code
 2. Add USB support for Arduino Leonardo
 3. Add high-speed timer support of Arduino Leonardo
