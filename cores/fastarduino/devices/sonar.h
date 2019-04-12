@@ -102,6 +102,32 @@
 			ECHO_PORT, ECHO_MASK, CALLBACK>();															\
 	}
 
+#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT(TIMER, SONAR)								\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))										\
+	{																				\
+		devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR>();	\
+	}
+
+#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, HANDLER, CALLBACK)			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))													\
+	{																							\
+		using EVENT = devices::sonar::SonarEvent;												\
+		EVENT event = 																			\
+			devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR>();			\
+		if (event.timeout())																	\
+			interrupt::CallbackHandler<void (HANDLER::*)(const EVENT&), CALLBACK>::call(event);	\
+	}
+
+#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, SONAR,  CALLBACK)			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))											\
+	{																					\
+		using EVENT = devices::sonar::SonarEvent;										\
+		EVENT event = 																	\
+			devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR>();	\
+		if (event.timeout())															\
+			interrupt::CallbackHandler<void (*)(const EVENT&), CALLBACK>::call(event);	\
+	}
+
 #define DECL_SONAR_ISR_HANDLERS_FRIEND			\
 	friend struct devices::sonar::isr_handler;	\
 	DECL_INT_ISR_FRIENDS						\
@@ -348,13 +374,17 @@ namespace devices::sonar
 	struct SonarEvent
 	{
 	public:
-		SonarEvent() : started_{}, ready_{}, time_{}
+		SonarEvent(bool timeout = false) : timeout_{timeout}, started_{}, ready_{}, time_{}
 		{
 		}
 		SonarEvent(uint8_t started, uint8_t ready, time::RTTTime time) : started_{started}, ready_{ready}, time_{time}
 		{
 		}
 
+		bool timeout() const
+		{
+			return timeout_;
+		}
 		uint8_t started() const
 		{
 			return started_;
@@ -369,6 +399,7 @@ namespace devices::sonar
 		}
 
 	private:
+		bool timeout_;
 		uint8_t started_;
 		uint8_t ready_;
 		time::RTTTime time_;
@@ -394,7 +425,8 @@ namespace devices::sonar
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
 		MultiHCSR04(RTT& rtt)
-			: rtt_{rtt}, started_{}, ready_{}, active_{false}, trigger_{gpio::PinMode::OUTPUT}, echo_{0}
+			:	rtt_{rtt}, started_{}, ready_{}, active_{false}, timeout_time_ms_{}, 
+				trigger_{gpio::PinMode::OUTPUT}, echo_{0}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -418,10 +450,11 @@ namespace devices::sonar
 			}
 		}
 
-		void trigger()
+		void trigger(uint16_t timeout_ms)
 		{
 			started_ = 0;
 			ready_ = 0;
+			timeout_time_ms_ = rtt_.millis() + timeout_ms;
 			active_ = true;
 			// Pulse TRIGGER for 10us
 			trigger_.set();
@@ -445,9 +478,14 @@ namespace devices::sonar
 			return SonarEvent{started, ready, rtt_.time_()};
 		}
 
-		void on_rtt_change()
+		SonarEvent on_rtt_change()
 		{
-			//TODO
+			if (active_ && rtt_.millis_() >= timeout_time_ms_)
+			{
+				active_ = false;
+				return SonarEvent{true};
+			}
+			return SonarEvent{};
 		}
 
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
@@ -456,6 +494,7 @@ namespace devices::sonar
 		volatile uint8_t started_;
 		volatile uint8_t ready_;
 		volatile bool active_;
+		uint32_t timeout_time_ms_;
 		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
 		gpio::FastMaskedPort<ECHO_PORT, ECHO_MASK> echo_;
 
@@ -531,7 +570,6 @@ namespace devices::sonar
 			return result || sonar_rtt_change_helper<DUMMY_, SONARS_...>();
 		}
 
-		//TODO allow callbacks also
 		template<uint8_t TIMER_NUM_, typename... SONARS_>
 		static bool sonar_rtt_change()
 		{
@@ -608,6 +646,14 @@ namespace devices::sonar
 			SonarEvent event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
 			if (event.ready() || event.started())
 				CALLBACK_(event);
+		}
+
+		template<uint8_t TIMER_NUM_, typename SONAR_>
+		static SonarEvent multi_sonar_rtt_change()
+		{
+			// Update RTT time
+			timer::isr_handler_rtt::rtt<TIMER_NUM_>();
+			return interrupt::HandlerHolder<SONAR_>::handler()->on_rtt_change();
 		}
 	};
 	/// @endcond

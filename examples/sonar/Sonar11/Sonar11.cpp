@@ -103,8 +103,6 @@ static constexpr uint8_t led_mask(uint8_t index = 0, uint8_t mask = 0)
 static constexpr const uint8_t ECHO_MASK = echo_mask();
 static constexpr const uint8_t LED_MASK = led_mask();
 
-REGISTER_RTT_ISR(TIMER_NUM)
-
 using RTT = timer::RTT<NTIMER>;
 
 // Declate device type to handle all sonars
@@ -137,11 +135,10 @@ public:
 			queue_.push_(event);
 	}
 
-	//TODO not usable yet
-	void on_timeout()
+	void on_timeout(const SonarEvent&)
 	{
 		sonar_.set_ready();
-		sonar_.trigger();
+		sonar_.trigger(TIMEOUT_MAX);
 	}
 	
 private:
@@ -150,8 +147,8 @@ private:
 };
 
 // Register ISR callbacks
-//TODO handle timeout!
-// REGISTER_TIMER_COMPARE_ISR_METHOD(TIMER_NUM, SonarListener, &SonarListener::on_timeout)
+// REGISTER_RTT_ISR(TIMER_NUM)
+REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, SonarListener, &SonarListener::on_timeout)
 REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK,
 	SonarListener, &SonarListener::on_sonar)
 
