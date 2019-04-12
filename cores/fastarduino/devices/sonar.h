@@ -26,9 +26,9 @@
 
 //TODO document!
 // Utilities to handle ISR callbacks
-#define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)					\
-	ISR(CAT3(INT, INT_NUM, _vect))												\
-	{																			\
+#define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)						\
+	ISR(CAT3(INT, INT_NUM, _vect))													\
+	{																				\
 		devices::sonar::isr_handler::sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>();	\
 	}
 
@@ -68,6 +68,26 @@
 		devices::sonar::isr_handler::sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO, CALLBACK>();	\
 	}
 
+#define REGISTER_HCSR04_RTT_TIMEOUT(TIMER, SONAR, ...)										\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))												\
+	{																						\
+		devices::sonar::isr_handler::sonar_rtt_change<TIMER_NUM, SONAR, ##__VA_ARGS__>();	\
+	}
+
+#define REGISTER_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, HANDLER, CALLBACK, SONAR, ...)			\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))													\
+	{																							\
+		if (devices::sonar::isr_handler::sonar_rtt_change<TIMER_NUM, SONAR, ##__VA_ARGS__>())	\
+			interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();					\
+	}
+
+#define REGISTER_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, CALLBACK, SONAR, ...)					\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))													\
+	{																							\
+		if (devices::sonar::isr_handler::sonar_rtt_change<TIMER_NUM, SONAR, ##__VA_ARGS__>())	\
+			interrupt::CallbackHandler<void (*)(), CALLBACK>::call();							\
+	}
+
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK)	\
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                    		\
 	{                                                                                                   		\
@@ -85,7 +105,8 @@
 #define DECL_SONAR_ISR_HANDLERS_FRIEND			\
 	friend struct devices::sonar::isr_handler;	\
 	DECL_INT_ISR_FRIENDS						\
-	DECL_PCINT_ISR_FRIENDS
+	DECL_PCINT_ISR_FRIENDS						\
+	DECL_TIMER_COMP_FRIENDS
 
 namespace devices::sonar
 {
@@ -113,7 +134,6 @@ namespace devices::sonar
 		ASYNC_PCINT
 	};
 
-	//FIXME missing timeout
 	template<board::Timer NTIMER_> class AbstractSonar
 	{
 	public:
@@ -136,7 +156,8 @@ namespace devices::sonar
 		}
 
 	protected:
-		AbstractSonar(const RTT& rtt) : rtt_{rtt}, status_{UNKNOWN}, echo_start_{}, echo_end_{}
+		AbstractSonar(const RTT& rtt)
+			:rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{}, echo_start_{}, echo_end_{}
 		{
 		}
 
@@ -181,9 +202,13 @@ namespace devices::sonar
 			}
 		}
 
-		inline void trigger_sent()
+		inline void trigger_sent(uint16_t timeout_ms)
 		{
-			status_ = TRIGGERED;
+			synchronized
+			{
+				status_ = TRIGGERED;
+				timeout_time_ms_ = rtt_.millis_() + timeout_ms;
+			}
 		}
 
 		inline bool pulse_edge(bool rising)
@@ -197,6 +222,17 @@ namespace devices::sonar
 			{
 				status_ = READY;
 				echo_end_ = rtt_.time_();
+				return true;
+			}
+			return false;
+		}
+
+		inline bool rtt_time_changed()
+		{
+			if (status_ != READY && rtt_.millis_() >= timeout_time_ms_)
+			{
+				status_ = READY;
+				echo_start_ = echo_end_ = time::RTTTime{};
 				return true;
 			}
 			return false;
@@ -216,6 +252,7 @@ namespace devices::sonar
 		static constexpr const uint8_t READY = 0x20;
 
 		volatile uint8_t status_;
+		uint32_t timeout_time_ms_;
 		time::RTTTime echo_start_;
 		time::RTTTime echo_end_;
 	};
@@ -259,7 +296,7 @@ namespace devices::sonar
 		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
 		uint16_t echo_us(uint16_t timeout_ms)
 		{
-			async_echo();
+			async_echo(timeout_ms);
 			return await_echo_us(timeout_ms);
 		}
 
@@ -272,9 +309,9 @@ namespace devices::sonar
 		}
 
 		// We want to avoid using await_echo_us() to handle state & timeout!
-		void async_echo(bool trigger = true)
+		void async_echo(uint16_t timeout_ms, bool trigger = true)
 		{
-			this->trigger_sent();
+			this->trigger_sent(timeout_ms);
 			if (trigger) this->trigger();
 		}
 
@@ -284,6 +321,11 @@ namespace devices::sonar
 			static_assert(SONAR_TYPE == SonarType::ASYNC_INT || SONAR_TYPE == SonarType::ASYNC_PCINT,
 						  "on_pin_change() must be called only with SonarType::ASYNC_INT or ASYNC_PCINT");
 			return this->pulse_edge(echo_.value());
+		}
+
+		bool on_rtt_change()
+		{
+			return this->rtt_time_changed();
 		}
 
 		inline void trigger()
@@ -332,7 +374,6 @@ namespace devices::sonar
 		time::RTTTime time_;
 	};
 
-	//FIXME missing timeout
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_>
 	class MultiHCSR04
 	{
@@ -404,6 +445,11 @@ namespace devices::sonar
 			return SonarEvent{started, ready, rtt_.time_()};
 		}
 
+		void on_rtt_change()
+		{
+			//TODO
+		}
+
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
 		RTT& rtt_;
@@ -469,6 +515,30 @@ namespace devices::sonar
 			bool result = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
 			// handle other echo pins
 			return result || sonar_pci<PCI_NUM_, TIMER_, TRIGGER_, ECHOS_...>();
+		}
+
+		template<bool DUMMY_>
+		static bool sonar_rtt_change_helper()
+		{
+			return false;
+		}
+
+		template<bool DUMMY_, typename SONAR1_, typename... SONARS_>
+		static bool sonar_rtt_change_helper()
+		{
+			bool result = interrupt::HandlerHolder<SONAR1_>::handler()->on_rtt_change();
+			// handle other sonars
+			return result || sonar_rtt_change_helper<DUMMY_, SONARS_...>();
+		}
+
+		//TODO allow callbacks also
+		template<uint8_t TIMER_NUM_, typename... SONARS_>
+		static bool sonar_rtt_change()
+		{
+			// Update RTT time
+			timer::isr_handler_rtt::rtt<TIMER_NUM_>();
+			// Ask each sonar to check if timeout is elapsed
+			return sonar_rtt_change_helper<false, SONARS_...>();
 		}
 
 		template<uint8_t PCI_NUM_, board::Timer TIMER_, 

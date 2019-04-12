@@ -82,8 +82,6 @@ static constexpr const board::DigitalPin ECHO = board::ExternalInterruptPin::D10
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-REGISTER_RTT_ISR(TIMER_NUM)
-
 using RTT = timer::RTT<NTIMER>;
 
 using devices::sonar::SonarType;
@@ -121,6 +119,8 @@ private:
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
 };
 
+// REGISTER_RTT_ISR(TIMER_NUM)
+REGISTER_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SonarListener, &SonarListener::on_sonar, SONAR)
 REGISTER_HCSR04_INT_ISR_METHOD(NTIMER, INT_NUM, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
 
 int main() __attribute__((OS_main));
@@ -154,7 +154,7 @@ int main()
 	
 	while (true)
 	{
-		sonar.async_echo();
+		sonar.async_echo(TIMEOUT);
 		uint16_t us = sonar.await_echo_us(TIMEOUT);
 		uint16_t mm = echo_us_to_distance_mm(us);
 		// trace value to output

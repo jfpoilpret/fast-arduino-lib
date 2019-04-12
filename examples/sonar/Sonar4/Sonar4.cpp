@@ -137,11 +137,11 @@ int main()
 	while (true)
 	{
 		// When we use one timer with 2 triggers, we cannot operate both at the same time
-		sonar1.async_echo();
+		sonar1.async_echo(TIMEOUT);
 		uint16_t us1 = sonar1.await_echo_us(TIMEOUT);
 		uint16_t mm1 = echo_us_to_distance_mm(us1);
 
-		sonar2.async_echo();
+		sonar2.async_echo(TIMEOUT);
 		uint16_t us2 = sonar2.await_echo_us(TIMEOUT);
 		uint16_t mm2 = echo_us_to_distance_mm(us2);
 

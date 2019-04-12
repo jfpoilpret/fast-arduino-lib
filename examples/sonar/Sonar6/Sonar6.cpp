@@ -154,7 +154,7 @@ int main()
 	out << F("Starting...") << streams::endl;
 	while (true)
 	{
-		sonar.async_echo();
+		sonar.async_echo(TIMEOUT);
 		uint16_t us = sonar.await_echo_us(TIMEOUT);
 		uint16_t mm = echo_us_to_distance_mm(us);
 		// trace value to output
