@@ -132,7 +132,7 @@ Milestone V1.2 (31.07.2019)
 2. Code cleanup (software UART mainly)
 3. Various code improvements: prevent or implement move- and copy- constructors and assignment operators
 
-Milestone V1.4 (31.08.2019)
+Milestone V1.3 (31.08.2019)
 ---------------------------
 1. Support ATtinyX5 Timer1 PWM pins (extended feature)
 
