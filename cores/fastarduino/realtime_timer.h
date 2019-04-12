@@ -149,7 +149,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER, TimerInterrupt::OUTPUT_COMPARE_A}, millis_{}
+		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER, TimerInterrupt::OUTPUT_COMPARE_A}, milliseconds_{}
 		{
 		}
 
@@ -177,7 +177,12 @@ namespace timer
 		 */
 		inline uint32_t millis() const
 		{
-			synchronized return millis_;
+			synchronized return milliseconds_;
+		}
+
+		inline uint32_t millis_() const
+		{
+			return milliseconds_;
 		}
 
 		/**
@@ -232,7 +237,7 @@ namespace timer
 		//TODO defined another method, more performant, that returns a "DeferredRTTTime"
 		time::RTTTime time_() const
 		{
-			return time::RTTTime(millis_, compute_micros());
+			return time::RTTTime(milliseconds_, compute_micros());
 		}
 
 		/**
@@ -244,7 +249,7 @@ namespace timer
 		{
 			synchronized
 			{
-				millis_ = ms;
+				milliseconds_ = ms;
 				// Reset timer counter
 				TRAIT::TCNT = 0;
 			}
@@ -277,7 +282,7 @@ namespace timer
 		 */
 		inline void begin_()
 		{
-			millis_ = 0;
+			milliseconds_ = 0;
 			Timer<NTIMER>::begin_(MILLI_COUNTER);
 		}
 
@@ -320,11 +325,11 @@ namespace timer
 		}
 
 	private:
-		volatile uint32_t millis_;
+		volatile uint32_t milliseconds_;
 
 		void on_timer()
 		{
-			++millis_;
+			++milliseconds_;
 		}
 
 		using CALC = Calculator<NTIMER>;
