@@ -181,9 +181,13 @@ namespace devices::sonar
 			}
 		}
 
+	private:
+		using RAW_TIME = typename RTT::RAW_TIME;
+
 	protected:
 		AbstractSonar(const RTT& rtt)
-			:rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{}, echo_start_{}, echo_end_{}
+			:	rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{}, 
+				echo_start_{RAW_TIME::EMPTY_TIME}, echo_end_{RAW_TIME::EMPTY_TIME}
 		{
 		}
 
@@ -198,7 +202,7 @@ namespace devices::sonar
 					synchronized
 					{
 						status_ = READY;
-						echo_start_ = echo_end_ = typename RTT::RAW_TIME{};
+						echo_start_ = echo_end_ = RAW_TIME::EMPTY_TIME;
 					}
 					return 0;
 				}
@@ -258,7 +262,7 @@ namespace devices::sonar
 			if (status_ != READY && rtt_.millis_() >= timeout_time_ms_)
 			{
 				status_ = READY;
-				echo_start_ = echo_end_ = typename RTT::RAW_TIME{};
+				echo_start_ = echo_end_ = RAW_TIME::EMPTY_TIME;
 				return true;
 			}
 			return false;
@@ -279,8 +283,9 @@ namespace devices::sonar
 
 		volatile uint8_t status_;
 		uint32_t timeout_time_ms_;
-		typename RTT::RAW_TIME echo_start_;
-		typename RTT::RAW_TIME echo_end_;
+
+		RAW_TIME echo_start_;
+		RAW_TIME echo_end_;
 	};
 
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_,

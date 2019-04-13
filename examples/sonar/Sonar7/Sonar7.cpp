@@ -119,7 +119,6 @@ private:
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
 };
 
-// REGISTER_RTT_ISR(TIMER_NUM)
 REGISTER_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SonarListener, &SonarListener::on_sonar, SONAR)
 REGISTER_HCSR04_INT_ISR_METHOD(NTIMER, INT_NUM, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
 

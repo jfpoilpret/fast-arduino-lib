@@ -120,14 +120,12 @@ namespace timer
 	class RTTRawTime
 	{
 		public:
-		RTTRawTime():millis_{}, counter_{}, max_counter_{}
-		{
-		}
-
 		RTTRawTime(uint32_t millis, T counter, T max_counter)
 			:millis_{millis}, counter_{counter}, max_counter_{max_counter}
 		{
 		}
+
+		static constexpr RTTRawTime<T> EMPTY_TIME{};
 
 		time::RTTTime as_real_time() const
 		{
@@ -135,11 +133,25 @@ namespace timer
 		}
 
 		private:
+		constexpr RTTRawTime():buffer_{}
+		{
+		}
+
 		static constexpr const uint32_t ONE_MILLI = 1000UL;
 
-		uint32_t millis_;
-		T counter_;
-		T max_counter_;
+		// This union is an ugly hack to trick the compiler so that it understands
+		// the default constructor just needs 0 initialization for EMPTY_TIME constant,
+		// and thus can accept the fact EMPTY_TIME is a pure constexpr
+		union
+		{
+			struct
+			{
+				uint32_t millis_;
+				T counter_;
+				T max_counter_;
+			};
+			uint64_t buffer_;
+		};
 	};
 
 	/**
