@@ -115,7 +115,7 @@
 
 namespace timer
 {
-	//TODO limit this time to only uint8 and uint16: how to do it?
+	//TODO limit this struct to only uint8 and uint16: how to do it?
 	template<typename T>
 	class RTTRawTime
 	{
@@ -150,7 +150,7 @@ namespace timer
 				T counter_;
 				T max_counter_;
 			};
-			uint64_t buffer_;
+			uint8_t buffer_[sizeof(uint32_t) + 2 * sizeof(T)];
 		};
 	};
 
