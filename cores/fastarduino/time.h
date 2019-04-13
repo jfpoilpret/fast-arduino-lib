@@ -81,10 +81,18 @@ namespace time
 			return *this;
 		}
 
-		//TODO code can probably be optimized
 		RTTTime& operator+=(uint32_t microseconds)
 		{
-			return *this = RTTTime{total_micros() + microseconds};
+			uint32_t extra_millis = microseconds / 1000UL;
+			uint16_t extra_micros = microseconds % 1000UL;
+			millis += extra_millis;
+			micros += extra_micros;
+			if (micros >= 1000UL)
+			{
+				++millis;
+				micros -= 1000UL;
+			}
+			return *this;
 		}
 
 		//TODO code can probably be optimized
@@ -104,39 +112,55 @@ namespace time
 		uint16_t micros;
 	};
 
-	//TODO code for all comparison operators can probably be optimized
 	inline bool operator>(const RTTTime& a, const RTTTime& b)
 	{
-		return a.total_micros() > b.total_micros();
+		if (a.millis > b.millis) return true;
+		if (a.millis < b.millis) return false;
+		return a.micros > b.micros;
 	}
 	inline bool operator>=(const RTTTime& a, const RTTTime& b)
 	{
-		return a.total_micros() >= b.total_micros();
+		if (a.millis > b.millis) return true;
+		if (a.millis < b.millis) return false;
+		return a.micros >= b.micros;
 	}
 	inline bool operator<(const RTTTime& a, const RTTTime& b)
 	{
-		return a.total_micros() < b.total_micros();
+		if (a.millis < b.millis) return true;
+		if (a.millis > b.millis) return false;
+		return a.micros < b.micros;
 	}
 	inline bool operator<=(const RTTTime& a, const RTTTime& b)
 	{
-		return a.total_micros() <= b.total_micros();
+		if (a.millis < b.millis) return true;
+		if (a.millis > b.millis) return false;
+		return a.micros <= b.micros;
 	}
 	inline bool operator==(const RTTTime& a, const RTTTime& b)
 	{
-		return a.total_micros() == b.total_micros();
+		return a.millis == b.millis && a.micros == b.micros;
 	}
 	inline bool operator!=(const RTTTime& a, const RTTTime& b)
 	{
-		return a.total_micros() != b.total_micros();
+		return a.millis != b.millis || a.micros != b.micros;
 	}
-	//TODO code can probably be optimized
 	inline RTTTime operator+(const RTTTime& a, const RTTTime& b)
 	{
-		return RTTTime{a.total_micros() + b.total_micros()};
+		uint32_t millis = a.millis + b.millis;
+		uint16_t micros = a.micros + b.micros;
+		if (micros >= 1000UL)
+		{
+			++millis;
+			micros -= 1000UL;
+		}
+		return RTTTime{millis, micros};
 	}
 	inline RTTTime operator-(const RTTTime& a, const RTTTime& b)
 	{
-		return RTTTime{a.total_micros() - b.total_micros()};
+		if (a <= b) return RTTTime{0, 0};
+		uint32_t millis = a.millis - b.millis;
+		if (a.micros > b.micros) return RTTTime{millis, a.micros - b.micros};
+		return RTTTime{millis + 1, 1000 + a.micros - b.micros};
 	}
 
 	/**
