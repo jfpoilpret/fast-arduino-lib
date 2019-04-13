@@ -115,6 +115,33 @@
 
 namespace timer
 {
+	//TODO limit this time to only uint8 and uint16: how to do it?
+	template<typename T>
+	class RTTRawTime
+	{
+		public:
+		RTTRawTime():millis_{}, counter_{}, max_counter_{}
+		{
+		}
+
+		RTTRawTime(uint32_t millis, T counter, T max_counter)
+			:millis_{millis}, counter_{counter}, max_counter_{max_counter}
+		{
+		}
+
+		time::RTTTime as_real_time() const
+		{
+			return time::RTTTime{millis_, uint16_t(ONE_MILLI * counter_ / (1UL + max_counter_))};
+		}
+
+		private:
+		static constexpr const uint32_t ONE_MILLI = 1000UL;
+
+		uint32_t millis_;
+		T counter_;
+		T max_counter_;
+	};
+
 	/**
 	 * API to handle a real-time timer.
 	 * A real-time timer keeps track of time with micro-second precision.
@@ -142,6 +169,8 @@ namespace timer
 		using PRESCALER = typename Timer<NTIMER>::PRESCALER;
 
 	public:
+		using RAW_TIME = RTTRawTime<TYPE>;
+
 		/**
 		 * Construct a new real-time timer handler and initializes its current
 		 * time to 0ms.
@@ -234,10 +263,19 @@ namespace timer
 		}
 
 		//TODO document
-		//TODO defined another method, more performant, that returns a "DeferredRTTTime"
 		time::RTTTime time_() const
 		{
 			return time::RTTTime(milliseconds_, compute_micros());
+		}
+
+		RAW_TIME raw_time() const
+		{
+			synchronized return raw_time_();
+		}
+
+		RAW_TIME raw_time_() const
+		{
+			return RAW_TIME{milliseconds_, (volatile TYPE&) TRAIT::TCNT, (volatile TYPE&) TRAIT::OCRA};
 		}
 
 		/**
@@ -339,7 +377,7 @@ namespace timer
 
 		inline uint16_t compute_micros() const
 		{
-			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1 + (volatile TYPE&) TRAIT::OCRA));
+			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1UL + (volatile TYPE&) TRAIT::OCRA));
 		}
 
 		friend struct isr_handler_rtt;

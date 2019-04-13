@@ -198,7 +198,7 @@ namespace devices::sonar
 					synchronized
 					{
 						status_ = READY;
-						echo_start_ = echo_end_ = time::RTTTime{};
+						echo_start_ = echo_end_ = typename RTT::RAW_TIME{};
 					}
 					return 0;
 				}
@@ -215,7 +215,7 @@ namespace devices::sonar
 			synchronized
 			{
 				status_ = ECHO_STARTED;
-				echo_start_ = rtt_.time();
+				echo_start_ = rtt_.raw_time();
 			}
 			// Wait for echo signal end
 			while (echo.value())
@@ -223,7 +223,7 @@ namespace devices::sonar
 			synchronized
 			{
 				status_ = READY;
-				echo_end_ = rtt_.time();
+				echo_end_ = rtt_.raw_time();
 				return echo_time_();
 			}
 		}
@@ -242,12 +242,12 @@ namespace devices::sonar
 			if (rising && status_ == TRIGGERED)
 			{
 				status_ = ECHO_STARTED;
-				echo_start_ = rtt_.time_();
+				echo_start_ = rtt_.raw_time_();
 			}
 			else if ((!rising) && status_ == ECHO_STARTED)
 			{
 				status_ = READY;
-				echo_end_ = rtt_.time_();
+				echo_end_ = rtt_.raw_time_();
 				return true;
 			}
 			return false;
@@ -258,7 +258,7 @@ namespace devices::sonar
 			if (status_ != READY && rtt_.millis_() >= timeout_time_ms_)
 			{
 				status_ = READY;
-				echo_start_ = echo_end_ = time::RTTTime{};
+				echo_start_ = echo_end_ = typename RTT::RAW_TIME{};
 				return true;
 			}
 			return false;
@@ -267,7 +267,7 @@ namespace devices::sonar
 	private:
 		uint16_t echo_time_() const
 		{
-			return uint16_t((echo_end_ - echo_start_).total_micros());
+			return uint16_t((echo_end_.as_real_time() - echo_start_.as_real_time()).total_micros());
 		}
 
 		const RTT& rtt_;
@@ -279,8 +279,8 @@ namespace devices::sonar
 
 		volatile uint8_t status_;
 		uint32_t timeout_time_ms_;
-		time::RTTTime echo_start_;
-		time::RTTTime echo_end_;
+		typename RTT::RAW_TIME echo_start_;
+		typename RTT::RAW_TIME echo_end_;
 	};
 
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_,
@@ -371,6 +371,7 @@ namespace devices::sonar
 		friend struct isr_handler;
 	};
 
+	//FIXME replace RTTTime with RAW_TIME (need to change SonarEvent to a template then)
 	struct SonarEvent
 	{
 	public:
