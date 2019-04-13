@@ -84,11 +84,13 @@ namespace time
 			return *this;
 		}
 
+		//TODO code can probably be optimized
 		RTTTime& operator+=(uint32_t microseconds)
 		{
 			return *this = RTTTime{total_micros() + microseconds};
 		}
 
+		//TODO code can probably be optimized
 		RTTTime& operator-=(uint32_t microseconds)
 		{
 			return *this = RTTTime{total_micros() - microseconds};
@@ -105,6 +107,7 @@ namespace time
 		uint16_t micros;
 	};
 
+	//TODO code for all comparison operators can probably be optimized
 	inline bool operator>(const RTTTime& a, const RTTTime& b)
 	{
 		return a.total_micros() > b.total_micros();
@@ -129,6 +132,7 @@ namespace time
 	{
 		return a.total_micros() != b.total_micros();
 	}
+	//TODO code can probably be optimized
 	inline RTTTime operator+(const RTTTime& a, const RTTTime& b)
 	{
 		return RTTTime{a.total_micros() + b.total_micros()};
