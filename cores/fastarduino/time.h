@@ -31,7 +31,6 @@
  */
 namespace time
 {
-	//TODO improve performance whe created e.g. from an ISR: defer microseconds calculation
 	/**
 	 * Structure used to hold a time value with microsecond precision.
 	 * Note that this value is not absolute but relative to some time base, not
