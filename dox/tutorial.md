@@ -856,6 +856,8 @@ uint16_t echo_us = uint16_t(end.millis * 1000UL + end.micros);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Note that this snippet is just an example and is not usable as is: it does not include a timeout mechanism to avoid waiting the echo signal forever (which can happen if the ultrasonic wave does not encounter an obstacle within its possible range, i.e. 4 meters). Also, this approach could be improved by making it interrupt-driven (i.e. having interrupts generated when the `echo_pin` changes state).
 
+Actually, if you want a complete implementation of HC-SR04 ultrasonic ranging device, then you should take a look at FastArduino provided API in namespace `devices::sonar`.
+
 Another interesting use of RTT is to perform some periodic actions. FastArduino implements an events handling mechanism that can be connected to an RTT in order to deliver periodic events. This mechanism is [described later](@ref events) in this tutorial.
 
 
