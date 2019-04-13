@@ -45,8 +45,6 @@ namespace time
 	 */
 	struct RTTTime
 	{
-		//FIXME this new constructor may break usage of the other constructor!
-		// We must check all usage and fix if needed.
 		/**
 		 * Construct a new `RTTTime` value.
 		 * @param micros number of microseconds (can be > 1000us)
