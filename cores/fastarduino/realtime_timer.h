@@ -115,6 +115,7 @@
 
 namespace timer
 {
+	//TODO document
 	//TODO limit this struct to only uint8 and uint16: how to do it?
 	template<typename T>
 	class RTTRawTime
