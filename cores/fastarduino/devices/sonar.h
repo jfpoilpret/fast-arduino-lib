@@ -105,25 +105,27 @@
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT(TIMER, SONAR)								\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))										\
 	{																				\
-		devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR>();	\
+		using EVENT = typename SONAR::EVENT;										\
+		devices::sonar::isr_handler::multi_sonar_rtt_change<						\
+			TIMER_NUM, SONAR, EVENT>();												\
 	}
 
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, HANDLER, CALLBACK)			\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))													\
 	{																							\
-		using EVENT = devices::sonar::SonarEvent;												\
-		EVENT event = 																			\
-			devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR>();			\
+		using EVENT = typename SONAR::EVENT;													\
+		EVENT event = devices::sonar::isr_handler::multi_sonar_rtt_change<						\
+			TIMER_NUM, SONAR, EVENT>();															\
 		if (event.timeout())																	\
 			interrupt::CallbackHandler<void (HANDLER::*)(const EVENT&), CALLBACK>::call(event);	\
 	}
 
-#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, SONAR,  CALLBACK)			\
+#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, SONAR, CALLBACK)			\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))											\
 	{																					\
-		using EVENT = devices::sonar::SonarEvent;										\
-		EVENT event = 																	\
-			devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR>();	\
+		using EVENT = typename SONAR::EVENT;											\
+		EVENT event = devices::sonar::isr_handler::multi_sonar_rtt_change<				\
+			TIMER_NUM, SONAR, EVENT>();													\
 		if (event.timeout())															\
 			interrupt::CallbackHandler<void (*)(const EVENT&), CALLBACK>::call(event);	\
 	}
@@ -376,14 +378,19 @@ namespace devices::sonar
 		friend struct isr_handler;
 	};
 
-	//FIXME replace RTTTime with RAW_TIME (need to change SonarEvent to a template then)
+	template<board::Timer NTIMER_>
 	struct SonarEvent
 	{
 	public:
-		SonarEvent(bool timeout = false) : timeout_{timeout}, started_{}, ready_{}, time_{}
+		using RTT = timer::RTT<NTIMER_>;
+		using RAW_TIME = typename RTT::RAW_TIME;
+
+		SonarEvent(bool timeout = false)
+			:timeout_{timeout}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME}
 		{
 		}
-		SonarEvent(uint8_t started, uint8_t ready, time::RTTTime time) : started_{started}, ready_{ready}, time_{time}
+		SonarEvent(uint8_t started, uint8_t ready, const RAW_TIME& time)
+			:started_{started}, ready_{ready}, time_{time}
 		{
 		}
 
@@ -399,7 +406,7 @@ namespace devices::sonar
 		{
 			return ready_;
 		}
-		time::RTTTime time() const
+		RAW_TIME time() const
 		{
 			return time_;
 		}
@@ -408,7 +415,7 @@ namespace devices::sonar
 		bool timeout_;
 		uint8_t started_;
 		uint8_t ready_;
-		time::RTTTime time_;
+		RAW_TIME time_;
 	};
 
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_>
@@ -426,6 +433,7 @@ namespace devices::sonar
 
 	public:
 		using RTT = timer::RTT<NTIMER_>;
+		using EVENT = SonarEvent<NTIMER_>;
 
 		static constexpr const uint16_t MAX_RANGE_M = 4;
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
@@ -469,9 +477,9 @@ namespace devices::sonar
 		}
 
 	private:
-		SonarEvent on_pin_change()
+		EVENT on_pin_change()
 		{
-			if (!active_) return SonarEvent{};
+			if (!active_) return EVENT{};
 			// Compute the newly started echoes
 			uint8_t pins = echo_.get_PIN();
 			uint8_t started = pins & ~started_;
@@ -481,17 +489,17 @@ namespace devices::sonar
 			started_ |= started;
 			ready_ |= ready;
 			if (ready_ == ECHO_MASK) active_ = false;
-			return SonarEvent{started, ready, rtt_.time_()};
+			return EVENT{started, ready, rtt_.raw_time_()};
 		}
 
-		SonarEvent on_rtt_change()
+		EVENT on_rtt_change()
 		{
 			if (active_ && rtt_.millis_() >= timeout_time_ms_)
 			{
 				active_ = false;
-				return SonarEvent{true};
+				return EVENT{true};
 			}
-			return SonarEvent{};
+			return EVENT{};
 		}
 
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
@@ -626,7 +634,7 @@ namespace devices::sonar
 
 		template<uint8_t PCI_NUM_, board::Timer TIMER_, 
 			board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_,
-			typename HANDLER_, void (HANDLER_::*CALLBACK_)(const SonarEvent&)>
+			typename HANDLER_, void (HANDLER_::*CALLBACK_)(const SonarEvent<TIMER_>&)>
 		static void multi_sonar_pci_method()
 		{
 			timer::isr_handler::check_timer<TIMER_>();
@@ -634,14 +642,14 @@ namespace devices::sonar
 			using PTRAIT = board_traits::Port_trait<ECHO_PORT_>;
 			static_assert((PTRAIT::DPIN_MASK & ECHO_MASK_) == ECHO_MASK_, "ECHO_MASK must contain available PORT pins");
 			using SONAR = MultiHCSR04<TIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>;
-			SonarEvent event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
+			SonarEvent<TIMER_> event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
 			if (event.ready() || event.started())
-				interrupt::CallbackHandler<void (HANDLER_::*)(const SonarEvent&), CALLBACK_>::call(event);
+				interrupt::CallbackHandler<void (HANDLER_::*)(const SonarEvent<TIMER_>&), CALLBACK_>::call(event);
 		}
 
 		template<uint8_t PCI_NUM_, board::Timer TIMER_, 
 			board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_, 
-			void (*CALLBACK_)(const SonarEvent&)>
+			void (*CALLBACK_)(const SonarEvent<TIMER_>&)>
 		static void multi_sonar_pci_function()
 		{
 			timer::isr_handler::check_timer<TIMER_>();
@@ -649,13 +657,13 @@ namespace devices::sonar
 			using PTRAIT = board_traits::Port_trait<ECHO_PORT_>;
 			static_assert((PTRAIT::DPIN_MASK & ECHO_MASK_) == ECHO_MASK_, "ECHO_MASK must contain available PORT pins");
 			using SONAR = MultiHCSR04<TIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>;
-			SonarEvent event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
+			SonarEvent<TIMER_> event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
 			if (event.ready() || event.started())
 				CALLBACK_(event);
 		}
 
-		template<uint8_t TIMER_NUM_, typename SONAR_>
-		static SonarEvent multi_sonar_rtt_change()
+		template<uint8_t TIMER_NUM_, typename SONAR_, typename EVENT_>
+		static EVENT_ multi_sonar_rtt_change()
 		{
 			// Update RTT time
 			timer::isr_handler_rtt::rtt<TIMER_NUM_>();
