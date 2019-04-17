@@ -21,6 +21,4 @@ int main()
 }
 
 void exit(int status) __attribute__((weak));
-void exit(int status UNUSED)
-{
-}
+void exit(int status UNUSED) {}

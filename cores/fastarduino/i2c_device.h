@@ -69,9 +69,7 @@ namespace i2c
 		 * implementing an actua I2C device.
 		 * @param manager the I2C Manager that is in charge of I2C bus
 		 */
-		I2CDevice(MANAGER& manager) : manager_{manager.handler()}
-		{
-		}
+		I2CDevice(MANAGER& manager) : manager_{manager.handler()} {}
 
 		/**
 		 * Read a given number of bytes from an I2C device at the given address.
@@ -101,8 +99,8 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start()) &&
-					 manager_.send_slar(address);
+				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
+					 && manager_.send_slar(address);
 			while (ok && --size) ok = manager_.receive_data(*data++);
 			if (uint8_t(conditions) & 0x04)
 			{
@@ -180,13 +178,13 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start()) &&
-					 manager_.send_slaw(address);
+				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
+					 && manager_.send_slaw(address);
 			while (ok && size--) ok = manager_.send_data(*data++);
 			if (uint8_t(conditions) & 0x04) manager_.stop();
 			return manager_.status();
 		}
-		
+
 		/**
 		 * Write, byte after byte, the content of @p data to an I2C device at the given 
 		 * address. The number of bytes to be received is determined by type @p T.
@@ -221,7 +219,7 @@ namespace i2c
 		{
 			return write(address, (const uint8_t*) &data, sizeof(T), conditions);
 		}
-		
+
 		/**
 		 * Write one data byte to an I2C device at the given address.
 		 * 
@@ -251,8 +249,8 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start()) &&
-					 manager_.send_slaw(address);
+				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
+					 && manager_.send_slaw(address);
 			ok = ok && manager_.send_data(data);
 			if (uint8_t(conditions) & 0x04) manager_.stop();
 			return manager_.status();

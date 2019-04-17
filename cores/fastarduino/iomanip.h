@@ -31,23 +31,22 @@ namespace streams
 	class setw_
 	{
 	public:
-		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		template<typename FSTREAM> void operator()(FSTREAM& stream) const
 		{
 			stream.width(width_);
 		}
+
 	private:
-		constexpr setw_(uint8_t width):width_{width}
-		{
-		}
+		constexpr setw_(uint8_t width) : width_{width} {}
 		const uint8_t width_;
 		friend constexpr const setw_ setw(uint8_t width);
 	};
-	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setw_ f)
+	template<typename FSTREAM> FSTREAM& operator<<(FSTREAM& stream, const setw_ f)
 	{
 		f(stream);
 		return stream;
 	}
-	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setw_ f)
+	template<typename FSTREAM> FSTREAM& operator>>(FSTREAM& stream, const setw_ f)
 	{
 		f(stream);
 		return stream;
@@ -56,23 +55,22 @@ namespace streams
 	class setprecision_
 	{
 	public:
-		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		template<typename FSTREAM> void operator()(FSTREAM& stream) const
 		{
 			stream.precision(precision_);
 		}
+
 	private:
-		constexpr setprecision_(uint8_t precision):precision_{precision}
-		{
-		}
+		constexpr setprecision_(uint8_t precision) : precision_{precision} {}
 		const uint8_t precision_;
 		friend constexpr const setprecision_ setprecision(uint8_t precision);
 	};
-	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setprecision_ f)
+	template<typename FSTREAM> FSTREAM& operator<<(FSTREAM& stream, const setprecision_ f)
 	{
 		f(stream);
 		return stream;
 	}
-	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setprecision_ f)
+	template<typename FSTREAM> FSTREAM& operator>>(FSTREAM& stream, const setprecision_ f)
 	{
 		f(stream);
 		return stream;
@@ -81,23 +79,22 @@ namespace streams
 	class setfill_
 	{
 	public:
-		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		template<typename FSTREAM> void operator()(FSTREAM& stream) const
 		{
 			stream.fill(fill_);
 		}
+
 	private:
-		constexpr setfill_(char fill):fill_{fill}
-		{
-		}
+		constexpr setfill_(char fill) : fill_{fill} {}
 		const char fill_;
 		friend constexpr const setfill_ setfill(char fill);
 	};
-	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setfill_ f)
+	template<typename FSTREAM> FSTREAM& operator<<(FSTREAM& stream, const setfill_ f)
 	{
 		f(stream);
 		return stream;
 	}
-	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setfill_ f)
+	template<typename FSTREAM> FSTREAM& operator>>(FSTREAM& stream, const setfill_ f)
 	{
 		f(stream);
 		return stream;
@@ -106,23 +103,22 @@ namespace streams
 	class setbase_
 	{
 	public:
-		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		template<typename FSTREAM> void operator()(FSTREAM& stream) const
 		{
 			stream.setf(base_, ios::basefield);
 		}
+
 	private:
-		constexpr setbase_(int b):base_{b == 2 ? ios::bin : b == 8 ? ios::oct : b == 16 ? ios::hex : ios::dec}
-		{
-		}
+		constexpr setbase_(int b) : base_{b == 2 ? ios::bin : b == 8 ? ios::oct : b == 16 ? ios::hex : ios::dec} {}
 		const ios::fmtflags base_;
 		friend constexpr const setbase_ setbase(int base);
 	};
-	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setbase_ f)
+	template<typename FSTREAM> FSTREAM& operator<<(FSTREAM& stream, const setbase_ f)
 	{
 		f(stream);
 		return stream;
 	}
-	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setbase_ f)
+	template<typename FSTREAM> FSTREAM& operator>>(FSTREAM& stream, const setbase_ f)
 	{
 		f(stream);
 		return stream;
@@ -131,23 +127,22 @@ namespace streams
 	class setiosflags_
 	{
 	public:
-		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		template<typename FSTREAM> void operator()(FSTREAM& stream) const
 		{
 			stream.setf(mask_);
 		}
+
 	private:
-		constexpr setiosflags_(ios::fmtflags mask):mask_{mask}
-		{
-		}
+		constexpr setiosflags_(ios::fmtflags mask) : mask_{mask} {}
 		const ios::fmtflags mask_;
 		friend constexpr const setiosflags_ setiosflags(ios::fmtflags mask);
 	};
-	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const setiosflags_ f)
+	template<typename FSTREAM> FSTREAM& operator<<(FSTREAM& stream, const setiosflags_ f)
 	{
 		f(stream);
 		return stream;
 	}
-	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const setiosflags_ f)
+	template<typename FSTREAM> FSTREAM& operator>>(FSTREAM& stream, const setiosflags_ f)
 	{
 		f(stream);
 		return stream;
@@ -156,23 +151,22 @@ namespace streams
 	class resetiosflags_
 	{
 	public:
-		template<typename FSTREAM> void operator() (FSTREAM& stream) const
+		template<typename FSTREAM> void operator()(FSTREAM& stream) const
 		{
 			stream.unsetf(mask_);
 		}
+
 	private:
-		constexpr resetiosflags_(ios::fmtflags mask):mask_{mask}
-		{
-		}
+		constexpr resetiosflags_(ios::fmtflags mask) : mask_{mask} {}
 		const ios::fmtflags mask_;
 		friend constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask);
 	};
-	template<typename FSTREAM> FSTREAM& operator<< (FSTREAM& stream, const resetiosflags_ f)
+	template<typename FSTREAM> FSTREAM& operator<<(FSTREAM& stream, const resetiosflags_ f)
 	{
 		f(stream);
 		return stream;
 	}
-	template<typename FSTREAM> FSTREAM& operator>> (FSTREAM& stream, const resetiosflags_ f)
+	template<typename FSTREAM> FSTREAM& operator>>(FSTREAM& stream, const resetiosflags_ f)
 	{
 		f(stream);
 		return stream;

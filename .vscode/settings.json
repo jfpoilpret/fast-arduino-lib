@@ -17,6 +17,7 @@
     "editor.tabSize": 4,
     "editor.autoIndent": true,
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+    "C_Cpp.clang_format_style": "file",
     "C_Cpp.autocomplete": "Default",
     "C_Cpp.intelliSenseEngine": "Default",
     "todohighlight.include": ["**/*.h","**/*.cpp"],
@@ -89,5 +90,7 @@
             }
         }
     },
-    "terminal.integrated.scrollback": 5000
+    "terminal.integrated.scrollback": 5000,
+    "C_Cpp.default.cppStandard": "c++14",
+    "C_Cpp.default.intelliSenseMode": "gcc-x64"
 }

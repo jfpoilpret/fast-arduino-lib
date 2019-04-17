@@ -44,7 +44,7 @@ namespace spi
 	 * Define SPI clock rate as a divider of MCU clock frequency.
 	 * @note this is not used in ATtiny.
 	 * @sa compute_clockrate()
-	 */	
+	 */
 	enum class ClockRate : uint8_t
 	{
 		CLOCK_DIV_4 = 0x00,
@@ -55,7 +55,7 @@ namespace spi
 		CLOCK_DIV_8 = 0x11,
 		CLOCK_DIV_32 = 0x12
 	};
-	
+
 	/**
 	 * Calculate `ClockRate` for the given @p frequency.
 	 * Computations done by this method will be performed at compile-time as long
@@ -65,13 +65,20 @@ namespace spi
 	 */
 	constexpr ClockRate compute_clockrate(uint32_t frequency)
 	{
-		if (frequency >= (F_CPU / 2)) return ClockRate::CLOCK_DIV_2;
-		else if (frequency >= (F_CPU / 4)) return ClockRate::CLOCK_DIV_4;
-		else if (frequency >= (F_CPU / 8)) return ClockRate::CLOCK_DIV_8;
-		else if (frequency >= (F_CPU / 16)) return ClockRate::CLOCK_DIV_16;
-		else if (frequency >= (F_CPU / 32)) return ClockRate::CLOCK_DIV_32;
-		else if (frequency >= (F_CPU / 64)) return ClockRate::CLOCK_DIV_64;
-		else return ClockRate::CLOCK_DIV_128;
+		if (frequency >= (F_CPU / 2))
+			return ClockRate::CLOCK_DIV_2;
+		else if (frequency >= (F_CPU / 4))
+			return ClockRate::CLOCK_DIV_4;
+		else if (frequency >= (F_CPU / 8))
+			return ClockRate::CLOCK_DIV_8;
+		else if (frequency >= (F_CPU / 16))
+			return ClockRate::CLOCK_DIV_16;
+		else if (frequency >= (F_CPU / 32))
+			return ClockRate::CLOCK_DIV_32;
+		else if (frequency >= (F_CPU / 64))
+			return ClockRate::CLOCK_DIV_64;
+		else
+			return ClockRate::CLOCK_DIV_128;
 	}
 
 #ifdef SPDR
@@ -124,7 +131,7 @@ namespace spi
 		MODE_1 = _BV(USIWM0) | _BV(USICLK) | _BV(USICS1) | _BV(USICS0)
 	};
 #endif
-	
+
 	/**
 	 * Active polarity of slave selection pin.
 	 */
@@ -171,13 +178,12 @@ namespace spi
 			USISR_ = _BV(USIOIF);
 			synchronized
 			{
-				while ((USISR_ & _BV(USIOIF)) == 0)
-					USICR_ |= _BV(USITC);
+				while ((USISR_ & _BV(USIOIF)) == 0) USICR_ |= _BV(USITC);
 			}
 			return USIDR_;
 		}
 #endif
-		
+
 		/**
 		 * Transfer an array of payload data to the currently selected SPI slave device
 		 * through MOSI pin, and get all data bytes simultaneously received from that
@@ -275,11 +281,8 @@ namespace spi
 	 * @tparam MODE the SPI mode used for this device
 	 * @tparam ORDER the bit order for this device
 	 */
-	template<board::DigitalPin CS,
-			ChipSelect CS_MODE = ChipSelect::ACTIVE_LOW, 
-			ClockRate RATE = ClockRate::CLOCK_DIV_4, 
-			Mode MODE = Mode::MODE_0,
-			DataOrder ORDER = DataOrder::MSB_FIRST>
+	template<board::DigitalPin CS, ChipSelect CS_MODE = ChipSelect::ACTIVE_LOW, ClockRate RATE = ClockRate::CLOCK_DIV_4,
+			 Mode MODE = Mode::MODE_0, DataOrder ORDER = DataOrder::MSB_FIRST>
 	class SPIDevice : public AbstractSPIDevice
 	{
 	protected:
@@ -287,9 +290,7 @@ namespace spi
 		 * Create a new `SPIDevice`; this sets up the @p CS pin for later use 
 		 * during transfers.
 		 */
-		SPIDevice() INLINE : cs_{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW}
-		{
-		}
+		SPIDevice() INLINE : cs_{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW} {}
 
 #ifdef SPDR
 		/**
@@ -326,7 +327,7 @@ namespace spi
 		static constexpr const REG8 SPDR_{SPDR};
 		static constexpr const REG8 SPSR_{SPSR};
 		// Configuration values to reset at beginning of each transfer
-		static const constexpr uint8_t SPCR__ = 
+		static const constexpr uint8_t SPCR__ =
 			_BV(SPE) | _BV(MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
 		static const constexpr uint8_t SPSR__ = (uint8_t(RATE) & 0x10) ? _BV(SPI2X) : 0;
 #else

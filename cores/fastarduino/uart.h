@@ -34,10 +34,10 @@
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
-#define REGISTER_UATX_ISR(UART_NUM)						\
-	ISR(CAT3(USART, UART_NUM, _UDRE_vect))				\
-	{													\
-		serial::hard::isr_handler::uatx<UART_NUM>();	\
+#define REGISTER_UATX_ISR(UART_NUM)                  \
+	ISR(CAT3(USART, UART_NUM, _UDRE_vect))           \
+	{                                                \
+		serial::hard::isr_handler::uatx<UART_NUM>(); \
 	}
 
 /**
@@ -45,10 +45,10 @@
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
-#define REGISTER_UARX_ISR(UART_NUM)						\
-	ISR(CAT3(USART, UART_NUM, _RX_vect))				\
-	{													\
-		serial::hard::isr_handler::uarx<UART_NUM>();	\
+#define REGISTER_UARX_ISR(UART_NUM)                  \
+	ISR(CAT3(USART, UART_NUM, _RX_vect))             \
+	{                                                \
+		serial::hard::isr_handler::uarx<UART_NUM>(); \
 	}
 
 /**
@@ -56,15 +56,15 @@
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
-#define REGISTER_UART_ISR(UART_NUM)						\
-	ISR(CAT3(USART, UART_NUM, _UDRE_vect))				\
-	{													\
-		serial::hard::isr_handler::uart_tx<UART_NUM>();	\
-	}													\
-														\
-	ISR(CAT3(USART, UART_NUM, _RX_vect))				\
-	{													\
-		serial::hard::isr_handler::uart_rx<UART_NUM>();	\
+#define REGISTER_UART_ISR(UART_NUM)                     \
+	ISR(CAT3(USART, UART_NUM, _UDRE_vect))              \
+	{                                                   \
+		serial::hard::isr_handler::uart_tx<UART_NUM>(); \
+	}                                                   \
+                                                        \
+	ISR(CAT3(USART, UART_NUM, _RX_vect))                \
+	{                                                   \
+		serial::hard::isr_handler::uart_rx<UART_NUM>(); \
 	}
 
 /**
@@ -81,9 +81,7 @@ namespace serial::hard
 	protected:
 		struct SpeedSetup
 		{
-			constexpr SpeedSetup(uint16_t ubrr_value, bool u2x) : ubrr_value{ubrr_value}, u2x{u2x}
-			{
-			}
+			constexpr SpeedSetup(uint16_t ubrr_value, bool u2x) : ubrr_value{ubrr_value}, u2x{u2x} {}
 			const uint16_t ubrr_value;
 			const bool u2x;
 		};
@@ -139,9 +137,7 @@ namespace serial::hard
 		 * buffer output during transmission so that write methods are not
 		 * blocking.
 		 */
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false}
-		{
-		}
+		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false} {}
 
 		/**
 		 * Register this transmitter with the matching ISR that should have been
@@ -267,9 +263,7 @@ namespace serial::hard
 		 * store content received through serial line, buffered until read through
 		 * `in()`.
 		 */
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : istreambuf{input}
-		{
-		}
+		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : istreambuf{input} {}
 
 		/**
 		 * Register this receiver with the matching ISR that should have been
@@ -370,8 +364,7 @@ namespace serial::hard
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX<USART>{input}, UATX<USART>{output}
-		{
-		}
+		{}
 
 		/**
 		 * Register this receiver/transmitter with the matching ISR that should 
@@ -436,12 +429,11 @@ namespace serial::hard
 
 	struct isr_handler
 	{
-		template<uint8_t UART_NUM_> 
-		static constexpr board::USART check_uart()
+		template<uint8_t UART_NUM_> static constexpr board::USART check_uart()
 		{
 			constexpr board::USART USART = (board::USART) UART_NUM_;
 			static_assert(board_traits::USART_trait<USART>::U2X_MASK != 0,
-				"UART_NUM must be an actual USART in target MCU");
+						  "UART_NUM must be an actual USART in target MCU");
 			return USART;
 		}
 

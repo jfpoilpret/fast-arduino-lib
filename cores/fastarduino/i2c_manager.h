@@ -46,9 +46,7 @@ namespace i2c
 		 * @param hook an optional hook function that will be called back after
 		 * each transmission operation.
 		 */
-		I2CManager(I2C_STATUS_HOOK hook = 0) : handler_{hook}
-		{
-		}
+		I2CManager(I2C_STATUS_HOOK hook = 0) : handler_{hook} {}
 
 		/**
 		 * Prepare and enable the MCU for I2C transmission.
@@ -61,7 +59,7 @@ namespace i2c
 
 		/**
 		 * Disable MCU I2C transmission.
-		 */		
+		 */
 		void end() INLINE
 		{
 			handler_.end();

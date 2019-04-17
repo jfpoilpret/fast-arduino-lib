@@ -181,9 +181,7 @@ namespace gpio
 		 * This is useful if default pins directions and values are OK for you and 
 		 * you want to avoid calling mode setup on target MCU.
 		 */
-		FastPort()
-		{
-		}
+		FastPort() {}
 
 		/**
 		 * Construct a `FastPort` with the given direction byte and initial values
@@ -357,9 +355,7 @@ namespace gpio
 		 * This is useful if default pins directions and values are OK for you and 
 		 * you want to avoid calling mode setup on target MCU.
 		 */
-		FastMaskedPort()
-		{
-		}
+		FastMaskedPort() {}
 
 		/**
 		 * Construct a `FastMaskedPort` for the pins selected by the provide 
@@ -599,18 +595,10 @@ namespace gpio
 		using TYPE = FastPin<PORT, BIT>;
 		using PORT_TYPE = FastPort<PORT>;
 
-		static void set_mode(UNUSED PinMode mode, UNUSED bool value = false)
-		{
-		}
-		static void set()
-		{
-		}
-		static void clear()
-		{
-		}
-		static void toggle()
-		{
-		}
+		static void set_mode(UNUSED PinMode mode, UNUSED bool value = false) {}
+		static void set() {}
+		static void clear() {}
+		static void toggle() {}
 		static bool value()
 		{
 			return false;
@@ -622,21 +610,11 @@ namespace gpio
 	template<> class FastPin<board::Port::NONE, 0>
 	{
 	public:
-		FastPin() INLINE
-		{
-		}
-		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE
-		{
-		}
-		void set() INLINE
-		{
-		}
-		void clear() INLINE
-		{
-		}
-		void toggle() INLINE
-		{
-		}
+		FastPin() INLINE {}
+		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
+		void set() INLINE {}
+		void clear() INLINE {}
+		void toggle() INLINE {}
 		bool value() INLINE
 		{
 			return false;

@@ -70,49 +70,25 @@ namespace streams
 	{
 	public:
 		/// @cond notdocumented
-		null_ostream()
-		{
-		}
+		null_ostream() {}
 
-		inline void setf(ios::fmtflags flags UNUSED)
-		{
-		}
+		inline void setf(ios::fmtflags flags UNUSED) {}
 
-		inline void setf(ios::fmtflags flags UNUSED, ios::fmtflags mask UNUSED)
-		{
-		}
+		inline void setf(ios::fmtflags flags UNUSED, ios::fmtflags mask UNUSED) {}
 
-		inline void unsetf(ios::fmtflags flags UNUSED)
-		{
-		}
+		inline void unsetf(ios::fmtflags flags UNUSED) {}
 
-		inline void fill(char fill UNUSED)
-		{
-		}
+		inline void fill(char fill UNUSED) {}
 
-		inline void width(uint8_t width UNUSED)
-		{
-		}
+		inline void width(uint8_t width UNUSED) {}
 
-		inline void precision(uint8_t precision UNUSED)
-		{
-		}
+		inline void precision(uint8_t precision UNUSED) {}
 
-		void flush()
-		{
-		}
-		void put(char c UNUSED)
-		{
-		}
-		void write(const char* content UNUSED, size_t size UNUSED)
-		{
-		}
-		void write(const char* str UNUSED)
-		{
-		}
-		void write(const flash::FlashStorage* str UNUSED)
-		{
-		}
+		void flush() {}
+		void put(char c UNUSED) {}
+		void write(const char* content UNUSED, size_t size UNUSED) {}
+		void write(const char* str UNUSED) {}
+		void write(const flash::FlashStorage* str UNUSED) {}
 
 		null_ostream& operator<<(const void* p UNUSED)
 		{
@@ -160,72 +136,28 @@ namespace streams
 	};
 
 	/// @cond notdocumented
-	inline void bin(null_ostream& stream UNUSED)
-	{
-	}
-	inline void oct(null_ostream& stream UNUSED)
-	{
-	}
-	inline void dec(null_ostream& stream UNUSED)
-	{
-	}
-	inline void hex(null_ostream& stream UNUSED)
-	{
-	}
-	inline void flush(null_ostream& stream UNUSED)
-	{
-	}
-	inline void endl(null_ostream& stream UNUSED)
-	{
-	}
-	inline void skipws(null_ostream& stream UNUSED)
-	{
-	}
-	inline void noskipws(null_ostream& stream UNUSED)
-	{
-	}
-	inline void boolalpha(null_ostream& stream UNUSED)
-	{
-	}
-	inline void noboolalpha(null_ostream& stream UNUSED)
-	{
-	}
-	inline void showbase(null_ostream& stream UNUSED)
-	{
-	}
-	inline void noshowbase(null_ostream& stream UNUSED)
-	{
-	}
-	inline void showpos(null_ostream& stream UNUSED)
-	{
-	}
-	inline void noshowpos(null_ostream& stream UNUSED)
-	{
-	}
-	inline void uppercase(null_ostream& stream UNUSED)
-	{
-	}
-	inline void nouppercase(null_ostream& stream UNUSED)
-	{
-	}
-	inline void unitbuf(null_ostream& stream UNUSED)
-	{
-	}
-	inline void nounitbuf(null_ostream& stream UNUSED)
-	{
-	}
-	inline void left(null_ostream& stream UNUSED)
-	{
-	}
-	inline void right(null_ostream& stream UNUSED)
-	{
-	}
-	inline void fixed(null_ostream& stream UNUSED)
-	{
-	}
-	inline void scientific(null_ostream& stream UNUSED)
-	{
-	}
+	inline void bin(null_ostream& stream UNUSED) {}
+	inline void oct(null_ostream& stream UNUSED) {}
+	inline void dec(null_ostream& stream UNUSED) {}
+	inline void hex(null_ostream& stream UNUSED) {}
+	inline void flush(null_ostream& stream UNUSED) {}
+	inline void endl(null_ostream& stream UNUSED) {}
+	inline void skipws(null_ostream& stream UNUSED) {}
+	inline void noskipws(null_ostream& stream UNUSED) {}
+	inline void boolalpha(null_ostream& stream UNUSED) {}
+	inline void noboolalpha(null_ostream& stream UNUSED) {}
+	inline void showbase(null_ostream& stream UNUSED) {}
+	inline void noshowbase(null_ostream& stream UNUSED) {}
+	inline void showpos(null_ostream& stream UNUSED) {}
+	inline void noshowpos(null_ostream& stream UNUSED) {}
+	inline void uppercase(null_ostream& stream UNUSED) {}
+	inline void nouppercase(null_ostream& stream UNUSED) {}
+	inline void unitbuf(null_ostream& stream UNUSED) {}
+	inline void nounitbuf(null_ostream& stream UNUSED) {}
+	inline void left(null_ostream& stream UNUSED) {}
+	inline void right(null_ostream& stream UNUSED) {}
+	inline void fixed(null_ostream& stream UNUSED) {}
+	inline void scientific(null_ostream& stream UNUSED) {}
 	/// @endcond
 }
 

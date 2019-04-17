@@ -36,10 +36,10 @@
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
  */
-#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)					\
-	ISR(CAT3(INT, INT_NUM, _vect))													\
-	{																				\
-		interrupt::isr_handler_int::int_method<INT_NUM, PIN, HANDLER, CALLBACK>();	\
+#define REGISTER_INT_ISR_METHOD(INT_NUM, PIN, HANDLER, CALLBACK)                   \
+	ISR(CAT3(INT, INT_NUM, _vect))                                                 \
+	{                                                                              \
+		interrupt::isr_handler_int::int_method<INT_NUM, PIN, HANDLER, CALLBACK>(); \
 	}
 
 /**
@@ -51,10 +51,10 @@
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
-#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)						\
-	ISR(CAT3(INT, INT_NUM, _vect))												\
-	{																			\
-		interrupt::isr_handler_int::int_function<INT_NUM, PIN, CALLBACK>();		\
+#define REGISTER_INT_ISR_FUNCTION(INT_NUM, PIN, CALLBACK)                   \
+	ISR(CAT3(INT, INT_NUM, _vect))                                          \
+	{                                                                       \
+		interrupt::isr_handler_int::int_function<INT_NUM, PIN, CALLBACK>(); \
 	}
 
 /**
@@ -66,13 +66,12 @@
  * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
  * do not match, compilation will fail.
  */
-#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)							\
-	extern "C" void CAT3(INT, INT_NUM, _vect) (void)					\
-		__attribute__ ((signal,naked,__INTR_ATTRS));					\
-	void CAT3(TIMER, TIMER_NUM, _COMPA_vect) (void)						\
-	{																	\
-		interrupt::isr_handler_int::check_int_pin<INT_NUM, PIN>();		\
-		__asm__ __volatile__ ("reti" ::);								\
+#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                                                      \
+	extern "C" void CAT3(INT, INT_NUM, _vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \
+	void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                                                \
+	{                                                                                             \
+		interrupt::isr_handler_int::check_int_pin<INT_NUM, PIN>();                                \
+		__asm__ __volatile__("reti" ::);                                                          \
 	}
 
 /**
@@ -250,12 +249,11 @@ namespace interrupt
 
 	struct isr_handler_int
 	{
-		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_>
-		static void check_int_pin()
+		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_> static void check_int_pin()
 		{
 			static_assert(board_traits::DigitalPin_trait<INT_PIN_>::IS_INT, "PIN must be an INT pin.");
 			static_assert(board_traits::ExternalInterruptPin_trait<INT_PIN_>::INT == INT_NUM_,
-				"PIN INT number must match INT_NUM");
+						  "PIN INT number must match INT_NUM");
 		}
 
 		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_, typename HANDLER_, void (HANDLER_::*CALLBACK_)()>
@@ -267,8 +265,7 @@ namespace interrupt
 			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
 		}
 
-		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_, void (*CALLBACK_)()>
-		static void int_function()
+		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_, void (*CALLBACK_)()> static void int_function()
 		{
 			// Check pin is compliant
 			check_int_pin<INT_NUM_, INT_PIN_>();

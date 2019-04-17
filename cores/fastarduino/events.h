@@ -140,8 +140,7 @@ namespace events
 	 * 
 	 * @sa events::Type
 	 */
-	template<typename T>
-	class Event
+	template<typename T> class Event
 	{
 	public:
 		/**
@@ -154,10 +153,8 @@ namespace events
 		 * @param type the type of this event, `Type::NO_EVENT` by default.
 		 * @param value the value of this event, `T{}` by default; for an `Event<void>`, 
 		 * this argument shall not be provided or a compile error will occur.
-		 */		
-		Event(uint8_t type = Type::NO_EVENT, T value = T{}) INLINE : type_{type}, value_{value}
-		{
-		}
+		 */
+		Event(uint8_t type = Type::NO_EVENT, T value = T{}) INLINE : type_{type}, value_{value} {}
 
 		/**
 		 * The type of this event.
@@ -183,15 +180,12 @@ namespace events
 	};
 
 	/// @cond notdocumented
-	template<>
-	class Event<void>
+	template<> class Event<void>
 	{
 	public:
 		using TYPE = void;
-		
-		Event(uint8_t type = Type::NO_EVENT) INLINE : type_{type}
-		{
-		}
+
+		Event(uint8_t type = Type::NO_EVENT) INLINE : type_{type} {}
 		uint8_t type() const INLINE
 		{
 			return type_;
@@ -207,16 +201,14 @@ namespace events
 	{
 		static constexpr const bool IS_EVENT = false;
 	};
-	template<>
-	template<typename T> struct Event_trait<Event<T>>
+	template<> template<typename T> struct Event_trait<Event<T>>
 	{
 		static constexpr const bool IS_EVENT = true;
 	};
 	/// @endcond
 
 	/// @cond notdocumented
-	template<typename EVENT>
-	class EventHandler;
+	template<typename EVENT> class EventHandler;
 	/// @endcond
 
 	/**
@@ -235,8 +227,7 @@ namespace events
 	 * @sa EventHandler
 	 * @sa Event::type()
 	 */
-	template<typename EVENT>
-	class Dispatcher : public containers::LinkedList<EventHandler<EVENT>>
+	template<typename EVENT> class Dispatcher : public containers::LinkedList<EventHandler<EVENT>>
 	{
 		static_assert(Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
 
@@ -253,14 +244,12 @@ namespace events
 		{
 			this->traverse(HandlerCaller(event));
 		}
-	
+
 	private:
 		class HandlerCaller
 		{
 		public:
-			HandlerCaller(const EVENT& event) INLINE : event_{event}
-			{
-			}
+			HandlerCaller(const EVENT& event) INLINE : event_{event} {}
 			bool operator()(EventHandler<EVENT>& handler) INLINE
 			{
 				if (handler.type() == event_.type()) handler.on_event(event_);
@@ -280,11 +269,10 @@ namespace events
 	 * 
 	 * @sa Dispatcher::dispatch()
 	 */
-	template<typename EVENT>
-	class EventHandler : public containers::Link<EventHandler<EVENT>>
+	template<typename EVENT> class EventHandler : public containers::Link<EventHandler<EVENT>>
 	{
 		static_assert(Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
-		
+
 	public:
 		/**
 		 * The type of event that this handler accepts and can act upon.
@@ -306,9 +294,7 @@ namespace events
 		 * Create an Event Handler for given @p type of event.
 		 * @param type the evnt type handled by this handler
 		 */
-		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : type_{type}
-		{
-		}
+		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : type_{type} {}
 
 	private:
 		uint8_t type_;

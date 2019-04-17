@@ -33,10 +33,10 @@
  * to work properly.
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR()					 \
-	ISR(EE_READY_vect)							\
-	{											\
-		eeprom::isr_handler::eeprom_ready();	\
+#define REGISTER_EEPROM_ISR()                \
+	ISR(EE_READY_vect)                       \
+	{                                        \
+		eeprom::isr_handler::eeprom_ready(); \
 	}
 
 /**
@@ -50,10 +50,10 @@
  * 
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)					\
-	ISR(EE_READY_vect)													\
-	{																	\
-		eeprom::isr_handler::eeprom_ready_method<HANDLER, CALLBACK>();	\
+#define REGISTER_EEPROM_ISR_METHOD(HANDLER, CALLBACK)                  \
+	ISR(EE_READY_vect)                                                 \
+	{                                                                  \
+		eeprom::isr_handler::eeprom_ready_method<HANDLER, CALLBACK>(); \
 	}
 
 /**
@@ -66,14 +66,14 @@
  * 
  * @sa eeprom::QueuedWriter
  */
-#define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)             				\
-	ISR(EE_READY_vect)                                     				\
-	{                                                      				\
-		eeprom::isr_handler::eeprom_ready_function<CALLBACK>();			\
+#define REGISTER_EEPROM_ISR_FUNCTION(CALLBACK)                  \
+	ISR(EE_READY_vect)                                          \
+	{                                                           \
+		eeprom::isr_handler::eeprom_ready_function<CALLBACK>(); \
 	}
 
-#define DECL_EEPROM_ISR_HANDLERS_FRIEND		\
-	friend struct eeprom::isr_handler;		\
+#define DECL_EEPROM_ISR_HANDLERS_FRIEND \
+	friend struct eeprom::isr_handler;  \
 	friend void ::EE_READY_vect();
 
 /**
@@ -746,7 +746,7 @@ namespace eeprom
 			}
 			return done_;
 		}
-		
+
 		void write_next()
 		{
 			uint8_t value;
@@ -781,14 +781,11 @@ namespace eeprom
 
 		struct WriteItem
 		{
-			WriteItem() : address{0}, size{0}
-			{
-			}
+			WriteItem() : address{0}, size{0} {}
 			WriteItem(uint8_t value1, uint8_t value2, uint8_t value3)
 				: address{uint16_t(value1 << 4 | value2 >> 4)}, size{uint16_t(utils::is_zero(
 																	(value2 & 0x0F) << 8 | value3, E2END + 1))}
-			{
-			}
+			{}
 			inline static uint8_t value1(uint16_t address, uint16_t size UNUSED)
 			{
 				return address >> 4;
@@ -836,15 +833,13 @@ namespace eeprom
 			interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready();
 		}
 
-		template<void (*CALLBACK)()>
-		static void eeprom_ready_function()
+		template<void (*CALLBACK)()> static void eeprom_ready_function()
 		{
 			if (interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready())
 				interrupt::CallbackHandler<void (*)(), CALLBACK>::call();
 		}
 
-		template<typename HANDLER, void(HANDLER::*CALLBACK)()>
-		static void eeprom_ready_method()
+		template<typename HANDLER, void (HANDLER::*CALLBACK)()> static void eeprom_ready_method()
 		{
 			if (interrupt::HandlerHolder<eeprom::QueuedWriter>::handler()->on_ready())
 				interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();

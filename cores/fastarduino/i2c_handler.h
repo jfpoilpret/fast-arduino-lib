@@ -22,7 +22,7 @@
 #include "i2c.h"
 // #include <util/delay_basic.h>
 
-// NOTE: ATtiny implementation provides no pullup, hence you must ensure your 
+// NOTE: ATtiny implementation provides no pullup, hence you must ensure your
 // I2C bus has pullups where needed
 namespace i2c
 {
@@ -57,7 +57,7 @@ namespace i2c
 	private:
 		using REG8 = board_traits::REG8;
 
-	// Implementation part is specific to AVR architecture: ATmega (TWCR) or ATtiny (USICR)
+		// Implementation part is specific to AVR architecture: ATmega (TWCR) or ATtiny (USICR)
 #if defined(TWCR)
 		static constexpr const REG8 TWBR_{TWBR};
 		static constexpr const REG8 TWSR_{TWSR};
@@ -107,16 +107,14 @@ namespace i2c
 		friend class I2CManager<MODE>;
 	};
 
-// IMPLEMENTATION
-//================
+	// IMPLEMENTATION
+	//================
 
 #if defined(TWCR)
 
 	// ATmega implementation
 	//----------------------
-	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : status_{}, hook_{hook}
-	{
-	}
+	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : status_{}, hook_{hook} {}
 
 	template<I2CMode MODE> void I2CHandler<MODE>::begin()
 	{

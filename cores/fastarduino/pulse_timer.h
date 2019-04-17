@@ -27,43 +27,40 @@
 
 // Macros to register ISR for PWM on PulseTimer8
 //==============================================
-#define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)		\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
-	{																			\
-		timer::isr_handler_pulse::pulse_timer_overflow<							\
-			TIMER_NUM, PRESCALER, PIN_A, 0, PIN_B, 1>();						\
-	}																			\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))									\
-	{																			\
-		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 0, PIN_A>();	\
-	}																			\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))									\
-	{																			\
-		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 1, PIN_B>();	\
+#define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)                            \
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))                                                          \
+	{                                                                                               \
+		timer::isr_handler_pulse::pulse_timer_overflow<TIMER_NUM, PRESCALER, PIN_A, 0, PIN_B, 1>(); \
+	}                                                                                               \
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                        \
+	{                                                                                               \
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 0, PIN_A>();                       \
+	}                                                                                               \
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))                                                        \
+	{                                                                                               \
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 1, PIN_B>();                       \
 	}
 
-#define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)				\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
-	{																			\
-		timer::isr_handler_pulse::pulse_timer_overflow<							\
-			TIMER_NUM, PRESCALER, PIN_A, 0>();									\
-	}																			\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))									\
-	{																			\
-		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 0, PIN_A>();	\
-	}																			\
+#define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)                          \
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))                                                \
+	{                                                                                     \
+		timer::isr_handler_pulse::pulse_timer_overflow<TIMER_NUM, PRESCALER, PIN_A, 0>(); \
+	}                                                                                     \
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                              \
+	{                                                                                     \
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 0, PIN_A>();             \
+	}                                                                                     \
 	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
 
-#define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)				\
-	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))										\
-	{																			\
-		timer::isr_handler_pulse::pulse_timer_overflow<							\
-			TIMER_NUM, PRESCALER, PIN_B, 1>();									\
-	}																			\
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))									\
-	{																			\
-		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 1, PIN_B>();	\
-	}																			\
+#define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)                          \
+	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))                                                \
+	{                                                                                     \
+		timer::isr_handler_pulse::pulse_timer_overflow<TIMER_NUM, PRESCALER, PIN_B, 1>(); \
+	}                                                                                     \
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPB_vect))                                              \
+	{                                                                                     \
+		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 1, PIN_B>();             \
+	}                                                                                     \
 	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPA_vect))
 
 namespace timer
@@ -152,8 +149,8 @@ namespace timer
 		}
 		static constexpr uint8_t TIMSK_INT_MASK()
 		{
-			return TRAIT::TIMSK_INT_MASK(uint8_t(TimerInterrupt::OVERFLOW | TimerInterrupt::OUTPUT_COMPARE_A |
-											 TimerInterrupt::OUTPUT_COMPARE_B));
+			return TRAIT::TIMSK_INT_MASK(uint8_t(TimerInterrupt::OVERFLOW | TimerInterrupt::OUTPUT_COMPARE_A
+												 | TimerInterrupt::OUTPUT_COMPARE_B));
 		}
 		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t pulse_frequency)
 		{
@@ -175,33 +172,23 @@ namespace timer
 	public:
 		static constexpr const board::Timer NTIMER = NTIMER_;
 
-		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER>{0, 0}
-		{
-		}
-		inline void begin()
-		{
-		}
-		inline void begin_()
-		{
-		}
+		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER>{0, 0} {}
+		inline void begin() {}
+		inline void begin_() {}
 	};
 
 	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_>
 	class PulseTimer<NTIMER_, PRESCALER_, uint8_t> : public timer::PulseTimer8<NTIMER_, PRESCALER_>
 	{
 	public:
-		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer8<NTIMER_, PRESCALER_>{pulse_frequency}
-		{
-		}
+		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer8<NTIMER_, PRESCALER_>{pulse_frequency} {}
 	};
 
 	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_>
 	class PulseTimer<NTIMER_, PRESCALER_, uint16_t> : public timer::PulseTimer16<NTIMER_, PRESCALER_>
 	{
 	public:
-		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer16<NTIMER_, PRESCALER_>{pulse_frequency}
-		{
-		}
+		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer16<NTIMER_, PRESCALER_>{pulse_frequency} {}
 	};
 
 	/// @cond notdocumented
@@ -222,18 +209,17 @@ namespace timer
 			return NTIMER;
 		}
 
-		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
-			board::DigitalPin PIN_, uint8_t COM_NUM_>
+		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_,
+				 board::DigitalPin PIN_, uint8_t COM_NUM_>
 		static void pulse_timer_overflow()
 		{
 			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
 			using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
-			if (interrupt::HandlerHolder<PT>::handler()->overflow())
-				gpio::FastPinType<PIN_>::set();
+			if (interrupt::HandlerHolder<PT>::handler()->overflow()) gpio::FastPinType<PIN_>::set();
 		}
 
-		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_, 
-			board::DigitalPin PINA_, uint8_t COMA_NUM_, board::DigitalPin PINB_, uint8_t COMB_NUM_>
+		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_,
+				 board::DigitalPin PINA_, uint8_t COMA_NUM_, board::DigitalPin PINB_, uint8_t COMB_NUM_>
 		static void pulse_timer_overflow()
 		{
 			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PINA_, COMA_NUM_>();
@@ -248,8 +234,7 @@ namespace timer
 			}
 		}
 
-		template<uint8_t TIMER_NUM_, uint8_t COM_NUM_, board::DigitalPin PIN_>
-		static void pulse_timer_compare()
+		template<uint8_t TIMER_NUM_, uint8_t COM_NUM_, board::DigitalPin PIN_> static void pulse_timer_compare()
 		{
 			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
 			using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;

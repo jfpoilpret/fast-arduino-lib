@@ -38,9 +38,7 @@ namespace containers
 	class LinkImpl
 	{
 	public:
-		LinkImpl() INLINE : next_{0}
-		{
-		}
+		LinkImpl() INLINE : next_{0} {}
 
 	protected:
 		LinkImpl* next_;
@@ -50,9 +48,7 @@ namespace containers
 	class LinkedListImpl
 	{
 	public:
-		LinkedListImpl() INLINE : head_{0}
-		{
-		}
+		LinkedListImpl() INLINE : head_{0} {}
 		void insert(LinkImpl* item);
 		bool remove(LinkImpl* item);
 		template<typename F> void traverse(F f);

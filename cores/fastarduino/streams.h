@@ -64,9 +64,7 @@ namespace streams
 		 * Construct a formatted output wrapper of @p stream
 		 * @param stream the output stream to be wrapped
 		 */
-		ostream(ostreambuf& stream) : stream_{stream}
-		{
-		}
+		ostream(ostreambuf& stream) : stream_{stream} {}
 
 		ostream& operator=(const ostream&) = delete;
 
@@ -339,8 +337,7 @@ namespace streams
 		void after_insertion()
 		{
 			check_overflow();
-			if (flags() & unitbuf)
-				stream_.pubsync();
+			if (flags() & unitbuf) stream_.pubsync();
 			width(0);
 		}
 
@@ -363,9 +360,7 @@ namespace streams
 		 * Construct a formatted input wrapper of @p stream
 		 * @param stream the input stream to be wrapped
 		 */
-		istream(istreambuf& stream) : stream_{stream}
-		{
-		}
+		istream(istreambuf& stream) : stream_{stream} {}
 
 		istream& operator=(const istream&) = delete;
 
@@ -376,7 +371,6 @@ namespace streams
 		{
 			return stream_;
 		}
-
 
 		/**
 		 * Return the next character in this input stream, without extracting it.
@@ -479,8 +473,7 @@ namespace streams
 		 */
 		istream& read(char* s, size_t n)
 		{
-			while (n--)
-				*s++ = get();
+			while (n--) *s++ = get();
 			return *this;
 		}
 

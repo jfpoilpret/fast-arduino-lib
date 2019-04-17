@@ -48,26 +48,20 @@ namespace time
 		 * Construct a new `RTTTime` value.
 		 * @param micros number of microseconds (can be > 1000us)
 		 */
-		RTTTime(uint32_t micros = 0UL) : millis(micros / 1000UL), micros(micros % 1000UL)
-		{
-		}
+		RTTTime(uint32_t micros = 0UL) : millis(micros / 1000UL), micros(micros % 1000UL) {}
 
 		/**
 		 * Construct a new `RTTTime` value.
 		 * @param millis number of milliseconds
 		 * @param micros number of microseconds (0..999)
 		 */
-		RTTTime(uint32_t millis, uint16_t micros) : millis(millis), micros(micros)
-		{
-		}
+		RTTTime(uint32_t millis, uint16_t micros) : millis(millis), micros(micros) {}
 
 		/**
 		 * Construct a copy of @p that.
 		 * @param that
 		 */
-		RTTTime(const RTTTime& that) : millis{that.millis}, micros{that.micros}
-		{
-		}
+		RTTTime(const RTTTime& that) : millis{that.millis}, micros{that.micros} {}
 
 		/**
 		 * Assign this `RTTTime` instance from @p that.

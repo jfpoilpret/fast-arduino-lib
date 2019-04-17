@@ -44,9 +44,7 @@ namespace streams
 		using QUEUE = Queue<char, char>;
 
 	public:
-		template<uint8_t SIZE> ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false}
-		{
-		}
+		template<uint8_t SIZE> ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -135,7 +133,7 @@ namespace streams
 		{
 			return *this;
 		}
-		
+
 	protected:
 		/**
 		 * Callback method called when new content has been added to the buffer.
@@ -143,9 +141,7 @@ namespace streams
 		 * transmission of buffer data.
 		 * Default implementation does nothing.
 		 */
-		virtual void on_put()
-		{
-		}
+		virtual void on_put() {}
 
 		/**
 		 * Append a character to the buffer.
@@ -211,9 +207,7 @@ namespace streams
 		 */
 		static const int EOF = -1;
 
-		template<uint8_t SIZE> istreambuf(char (&buffer)[SIZE]) : QUEUE{buffer}
-		{
-		}
+		template<uint8_t SIZE> istreambuf(char (&buffer)[SIZE]) : QUEUE{buffer} {}
 
 		/**
 		 * @return number of available characters in buffer

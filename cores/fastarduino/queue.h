@@ -71,10 +71,7 @@ namespace containers
 		 * @tparam SIZE the number of @p T items that `buffer` can hold
 		 * @param buffer the buffer used by this queue to store its items
 		 */
-		template<uint8_t SIZE>
-		Queue(T (&buffer)[SIZE]) : buffer_{buffer}, size_{SIZE}, head_{0}, tail_{0}
-		{
-		}
+		template<uint8_t SIZE> Queue(T (&buffer)[SIZE]) : buffer_{buffer}, size_{SIZE}, head_{0}, tail_{0} {}
 
 		/**
 		 * Push @p item to the end of this queue, provided there is still available
@@ -461,19 +458,16 @@ namespace containers
 			if (head_ < tail_)
 			{
 				const T* source = &buffer_[head_];
-				for (uint8_t i = 0; i < size; ++i)
-					*buffer++ = *source++;
+				for (uint8_t i = 0; i < size; ++i) *buffer++ = *source++;
 			}
 			else
 			{
 				uint8_t part_size = size_ - head_;
 				const T* source = &buffer_[head_];
-				for (uint8_t i = 0; i < part_size; ++i)
-					*buffer++ = *source++;
+				for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
 				part_size = size - part_size;
 				source = buffer_;
-				for (uint8_t i = 0; i < part_size; ++i)
-					*buffer++ = *source++;
+				for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
 			}
 		}
 		return size;
@@ -486,8 +480,7 @@ namespace containers
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::push_(TREF item)
 	{
-		if (full_())
-			return false;
+		if (full_()) return false;
 		buffer_[tail_] = item;
 		if (++tail_ == size_) tail_ = 0;
 		return true;
@@ -495,8 +488,7 @@ namespace containers
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::pull_(T& item)
 	{
-		if (empty_())
-			return false;
+		if (empty_()) return false;
 		item = buffer_[head_];
 		if (++head_ == size_) head_ = 0;
 		return true;

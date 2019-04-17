@@ -24,16 +24,16 @@
 #include "pci.h"
 #include "int.h"
 
-#define REGISTER_UART_PCI_ISR(RX, PCI_NUM)							\
-	ISR(CAT3(PCINT, PCI_NUM, _vect))								\
-	{																\
-		serial::soft::isr_handler::check_uart_pci<PCI_NUM, RX>();	\
+#define REGISTER_UART_PCI_ISR(RX, PCI_NUM)                        \
+	ISR(CAT3(PCINT, PCI_NUM, _vect))                              \
+	{                                                             \
+		serial::soft::isr_handler::check_uart_pci<PCI_NUM, RX>(); \
 	}
 
-#define REGISTER_UART_INT_ISR(RX, INT_NUM)							\
-	ISR(CAT3(INT, INT_NUM, _vect))									\
-	{																\
-		serial::soft::isr_handler::check_uart_int<INT_NUM, RX>();	\
+#define REGISTER_UART_INT_ISR(RX, INT_NUM)                        \
+	ISR(CAT3(INT, INT_NUM, _vect))                                \
+	{                                                             \
+		serial::soft::isr_handler::check_uart_int<INT_NUM, RX>(); \
 	}
 
 //FIXME Handle begin/end properly in relation to current queue content
@@ -51,9 +51,7 @@ namespace serial::soft
 		// Fixed in 4.9.4 (currently using 4.9.2 only)
 		// We have to make the constructor public to allow virtual inheritance...
 		//	protected:
-		template<uint8_t SIZE_TX> AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output}
-		{
-		}
+		template<uint8_t SIZE_TX> AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
 
 	protected:
 		void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
@@ -82,8 +80,7 @@ namespace serial::soft
 		static constexpr const board::DigitalPin TX = TX_;
 
 		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}
-		{
-		}
+		{}
 
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
@@ -162,9 +159,7 @@ namespace serial::soft
 		}
 
 	protected:
-		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input}
-		{
-		}
+		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input} {}
 
 		streams::istreambuf& in_()
 		{
@@ -306,8 +301,7 @@ namespace serial::soft
 
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX<RX>{input}, UATX<TX>{output}
-		{
-		}
+		{}
 
 		void begin(typename UARX<RX>::PCI_TYPE& pci_enabler, uint32_t rate, Parity parity = Parity::NONE,
 				   StopBits stop_bits = StopBits::ONE)
@@ -330,15 +324,13 @@ namespace serial::soft
 
 	struct isr_handler
 	{
-		template<uint8_t PCI_NUM_, board::DigitalPin RX_>
-		static void check_uart_pci()
+		template<uint8_t PCI_NUM_, board::DigitalPin RX_> static void check_uart_pci()
 		{
 			interrupt::isr_handler_pci::check_pci_pins<PCI_NUM_, RX_>();
 			interrupt::HandlerHolder<serial::soft::UARX<RX_>>::handler()->on_pin_change();
 		}
 
-		template<uint8_t INT_NUM_, board::DigitalPin RX_>
-		static void check_uart_int()
+		template<uint8_t INT_NUM_, board::DigitalPin RX_> static void check_uart_int()
 		{
 			interrupt::isr_handler_int::check_int_pin<INT_NUM_, RX_>();
 			interrupt::HandlerHolder<serial::soft::UARX<RX_>>::handler()->on_pin_change();

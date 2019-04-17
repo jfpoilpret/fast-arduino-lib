@@ -255,7 +255,7 @@ namespace streams
 		 * @sa scientific
 		 */
 		static constexpr fmtflags floatfield = scientific | fixed;
-		
+
 		/** Read or write bool values as alphabetic string (`true` or `false`). */
 		static constexpr fmtflags boolalpha = 0x0200;
 		/** 
@@ -448,9 +448,7 @@ namespace streams
 
 	protected:
 		/// @cond notdocumented
-		ios_base() : state_{0}, flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '}
-		{
-		}
+		ios_base() : state_{0}, flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '} {}
 
 		ios_base& operator=(const ios_base&) = delete;
 
@@ -482,8 +480,7 @@ namespace streams
 		}
 		const char* binary_token(const char* token) const
 		{
-			if (base() == 2 && ((strncmp(token, "0b0", 3) == 0) || (strncmp(token, "0b1", 3) == 0)))
-				return token + 2;
+			if (base() == 2 && ((strncmp(token, "0b0", 3) == 0) || (strncmp(token, "0b1", 3) == 0))) return token + 2;
 			return token;
 		}
 		bool convert(const char* token, long& v)
@@ -509,14 +506,12 @@ namespace streams
 		void convert(const char* token, int& v)
 		{
 			long value;
-			if (convert(token, value))
-				v = (int) value;
+			if (convert(token, value)) v = (int) value;
 		}
 		void convert(const char* token, unsigned int& v)
 		{
 			unsigned long value;
-			if (convert(token, value))
-				v = (unsigned int) value;
+			if (convert(token, value)) v = (unsigned int) value;
 		}
 
 		// Conversions to string
@@ -592,11 +587,9 @@ namespace streams
 				{
 					// Number has a decimal point, remove all trailing zeros
 					char* reverse = buffer + strlen(buffer) - 1;
-					while (reverse != dp && *reverse == '0')
-						*reverse-- = 0;
-					// If there is no significant digit after DP, remove DP 
-					if (reverse == dp)
-						*reverse = 0;
+					while (reverse != dp && *reverse == '0') *reverse-- = 0;
+					// If there is no significant digit after DP, remove DP
+					if (reverse == dp) *reverse = 0;
 				}
 			}
 			upper(buffer, true);
@@ -613,15 +606,13 @@ namespace streams
 		{
 			if (flags() & boolalpha)
 				justify(out, (b ? F("true") : F("false")));
-				// justify(out, (b ? "true" : "false"), false, 0);
 			else
 				convert(out, (b ? 1 : 0));
 		}
 
 		void upper(char* input, bool is_float = false) const
 		{
-			if ((flags() & uppercase) && ((flags() & hex) || is_float))
-				strupr(input);
+			if ((flags() & uppercase) && ((flags() & hex) || is_float)) strupr(input);
 		}
 
 		const char* prefix_base() const
@@ -804,7 +795,7 @@ namespace streams
 	{
 		stream.unsetf(ios::boolalpha);
 	}
-	
+
 	/**
 	 * Set the ios::showbase format flag for @p stream.
 	 * When the showbase format flag is set, numerical integer values inserted 
@@ -824,7 +815,7 @@ namespace streams
 	{
 		stream.setf(ios::showbase);
 	}
-	
+
 	/**
 	 * Clear the ios::showbase format flag for @p stream.
 	 * When the showbase format flag is not set, numerical integer values are inserted 
@@ -839,7 +830,7 @@ namespace streams
 	{
 		stream.unsetf(ios::showbase);
 	}
-	
+
 	/**
 	 * Set the ios::showpos format flag for @p stream.
 	 * When the showpos format flag is set, a plus sign (+) precedes every 
@@ -852,7 +843,7 @@ namespace streams
 	{
 		stream.setf(ios::showpos);
 	}
-	
+
 	/**
 	 * Clear the ios::showpos format flag for @p stream.
 	 * When the showpos format flag is not set, no plus signs precede positive
@@ -865,7 +856,7 @@ namespace streams
 	{
 		stream.unsetf(ios::showpos);
 	}
-	
+
 	/**
 	 * Set the ios::uppercase format flag for @p stream.
 	 * When the uppercase format flag is set, uppercase (capital) letters are used 
@@ -880,7 +871,7 @@ namespace streams
 	{
 		stream.setf(ios::uppercase);
 	}
-	
+
 	/**
 	 * Clear the ios::uppercase format flag for @p stream.
 	 * When the uppercase format flag is notset, the letters automatically generated
@@ -895,7 +886,7 @@ namespace streams
 	{
 		stream.unsetf(ios::uppercase);
 	}
-	
+
 	/**
 	 * Set the ios::unitbuf format flag for @p stream.
 	 * When the unitbuf flag is set, the associated buffer is flushed after each
@@ -909,7 +900,7 @@ namespace streams
 	{
 		stream.setf(ios::unitbuf);
 	}
-	
+
 	/**
 	 * Clear the ios::unitbuf format flag for @p stream.
 	 * When the unitbuf flag is not set, the associated buffer is not forced to
@@ -925,7 +916,7 @@ namespace streams
 	{
 		stream.unsetf(ios::unitbuf);
 	}
-	
+
 	/**
 	 * Set the ios::adjustfield format flag for @p stream to ios::left, thus
 	 * adjusting next output to the left.
@@ -938,7 +929,7 @@ namespace streams
 	{
 		stream.setf(ios::left, ios::adjustfield);
 	}
-	
+
 	/**
 	 * Set the ios::adjustfield format flag for @p stream to ios::right, thus
 	 * adjusting next output to the right.
@@ -951,7 +942,7 @@ namespace streams
 	{
 		stream.setf(ios::right, ios::adjustfield);
 	}
-	
+
 	/**
 	 * Set the ios::floatfield format flag for @p stream to ios::defaultfloat.
 	 * When floatfield is set to defaultfloat, floating-point values are written 
@@ -969,7 +960,7 @@ namespace streams
 	{
 		stream.unsetf(ios::floatfield);
 	}
-	
+
 	/**
 	 * Set the ios::floatfield format flag for @p stream to ios::fixed.
 	 * When floatfield is set to fixed, floating-point values are written using 
@@ -985,7 +976,7 @@ namespace streams
 	{
 		stream.setf(ios::fixed, ios::floatfield);
 	}
-	
+
 	/**
 	 * Set the ios::floatfield format flag for @p stream to ios::scientific.
 	 * When floatfield is set to scientific, floating-point values are written 

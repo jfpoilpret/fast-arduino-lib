@@ -358,9 +358,7 @@ namespace utils
 	template<typename T> union ToUint8
 	{
 		static_assert(sizeof(T) == 1, "T must be a one-byte size type");
-		ToUint8(T value) : value(value)
-		{
-		}
+		ToUint8(T value) : value(value) {}
 		T value;
 		uint8_t as_uint8;
 	};
@@ -398,7 +396,7 @@ namespace utils
 	 */
 	constexpr uint8_t num_bits(uint8_t mask, uint8_t num = 0)
 	{
-		if (mask == 0) 
+		if (mask == 0)
 			return num;
 		else if (mask & 1)
 			return num_bits(mask >> 1, num + 1);

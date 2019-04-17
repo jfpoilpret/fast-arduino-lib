@@ -117,7 +117,7 @@ namespace interrupt
 	template<typename Handler> Handler* HandlerHolder<Handler>::handler_ = 0;
 
 	// Used by ISR to perform a callback to a PTMF
-	// Found great inspiration for this pattern there: 
+	// Found great inspiration for this pattern there:
 	// https://stackoverflow.com/questions/9779105/generic-member-function-pointer-as-a-template-parameter
 	template<typename T, T> struct CallbackHandler;
 	template<typename HANDLER, typename RET, typename... ARGS, RET (HANDLER::*CALLBACK)(ARGS...)>
