@@ -55,9 +55,7 @@ namespace devices::rtc
 	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::Standard>
 	{
 	public:
-		DS1307(MANAGER& manager) : I2CDevice(manager)
-		{
-		}
+		DS1307(MANAGER& manager) : I2CDevice(manager) {}
 
 		bool set_datetime(tm& datetime)
 		{
@@ -70,16 +68,16 @@ namespace devices::rtc
 			datetime.tm_year = utils::binary_to_bcd(datetime.tm_year);
 			// send register address to write to (0)
 			// send datetime at address 0
-			return write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-				   write(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+			return write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+				   && write(DEVICE_ADDRESS, datetime, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 
 		bool get_datetime(tm& datetime)
 		{
 			// send register address to read from (0)
 			// read datetime at address 0
-			if (write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-				read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+			if (write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+				&& read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
 			{
 				// convert DS1307 output (BCD) to integer type
 				datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
@@ -96,8 +94,8 @@ namespace devices::rtc
 		bool halt_clock()
 		{
 			// just write 0x80 at address 0
-			return write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-				   write(DEVICE_ADDRESS, uint8_t(0x80), i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+			return write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+				   && write(DEVICE_ADDRESS, uint8_t(0x80), i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 
 		bool enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
@@ -105,15 +103,15 @@ namespace devices::rtc
 			ControlRegister control;
 			control.sqwe = 1;
 			control.rs = uint8_t(frequency);
-			return write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-				   write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+			return write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+				   && write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 		bool disable_output(bool output_value = false)
 		{
 			ControlRegister control;
 			control.out = output_value;
-			return write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-				   write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+			return write(DEVICE_ADDRESS, CONTROL_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+				   && write(DEVICE_ADDRESS, control, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 
 		static constexpr uint8_t ram_size()
@@ -124,8 +122,8 @@ namespace devices::rtc
 		{
 			address += RAM_START;
 			if (address < RAM_END)
-				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-					   write(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					   && write(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 			else
 				return false;
 		}
@@ -145,8 +143,8 @@ namespace devices::rtc
 		{
 			address += RAM_START;
 			if (address + size <= RAM_END)
-				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-					   write(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					   && write(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 			else
 				return false;
 		}
@@ -154,8 +152,8 @@ namespace devices::rtc
 		{
 			address += RAM_START;
 			if (address + size <= RAM_END)
-				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK &&
-					   read(DEVICE_ADDRESS, data, size, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK;
+				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+					   && read(DEVICE_ADDRESS, data, size, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK;
 			else
 				return false;
 		}
@@ -179,9 +177,7 @@ namespace devices::rtc
 
 		union ControlRegister
 		{
-			ControlRegister(uint8_t data = 0) : data{data}
-			{
-			}
+			ControlRegister(uint8_t data = 0) : data{data} {}
 
 			uint8_t data;
 			struct
