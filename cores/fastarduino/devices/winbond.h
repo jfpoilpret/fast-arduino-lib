@@ -41,9 +41,7 @@ namespace devices
 	class WinBond : public spi::SPIDevice<CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2>
 	{
 	public:
-		WinBond()
-		{
-		}
+		WinBond() {}
 
 		// This type maps to status SEC/TB/BP2/BP1/BP0
 		enum class BlockProtect : uint16_t
@@ -106,9 +104,7 @@ namespace devices
 			const uint16_t value;
 
 		private:
-			inline Status(uint8_t sr1, uint8_t sr2) : value(sr2 << 8 | sr1)
-			{
-			}
+			inline Status(uint8_t sr1, uint8_t sr2) : value(sr2 << 8 | sr1) {}
 
 			friend class WinBond<CS>;
 		};
@@ -221,7 +217,7 @@ namespace devices
 	template<board::DigitalPin CS> uint64_t WinBond<CS>::read_unique_ID()
 	{
 		// Since the Read ID instruction must be followed by 4 dummy bytes before
-		// returning the 8 bytes ID, we must use a 9-bytes buffer and skip its 
+		// returning the 8 bytes ID, we must use a 9-bytes buffer and skip its
 		// first byte (the 3 other dummy bytes are already sent by send() as the
 		// 0 address)
 		struct PAYLOAD

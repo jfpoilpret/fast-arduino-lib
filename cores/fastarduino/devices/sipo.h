@@ -25,7 +25,7 @@ namespace devices
 		static constexpr const board::DigitalPin CLOCK = CLOCK_;
 		static constexpr const board::DigitalPin LATCH = LATCH_;
 		static constexpr const board::DigitalPin DATA = DATA_;
-		
+
 		static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
 		static constexpr const uint8_t DDR_MASK =
 			gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;

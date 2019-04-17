@@ -35,8 +35,7 @@ namespace devices::audio
 		uint16_t ms;
 	};
 
-	template<board::Timer NTIMER, board::DigitalPin OUTPUT>
-	class TonePlayer
+	template<board::Timer NTIMER, board::DigitalPin OUTPUT> class TonePlayer
 	{
 	private:
 		using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
@@ -48,15 +47,12 @@ namespace devices::audio
 			using TIMER = timer::Timer<NTIMER>;
 			using PRESCALER = typename TIMER::PRESCALER;
 			using COUNTER = typename TIMER::TYPE;
-			
+
 		public:
-			QTonePlay()
-			{
-			}
+			QTonePlay() {}
 			constexpr QTonePlay(Tone t, uint16_t ms = 0)
-				:flags_{flags(t)}, prescaler_{prescaler(t)}, counter_{counter(t)}, ms_{ms}
-			{
-			}
+				: flags_{flags(t)}, prescaler_{prescaler(t)}, counter_{counter(t)}, ms_{ms}
+			{}
 
 			inline PRESCALER prescaler() const
 			{
@@ -101,7 +97,7 @@ namespace devices::audio
 			static constexpr uint8_t END = 0x02;
 			static constexpr uint8_t REPEAT_START = 0x04;
 			static constexpr uint8_t REPEAT_END = 0x08;
-			
+
 			uint8_t flags_;
 			PRESCALER prescaler_;
 			COUNTER counter_;
@@ -124,14 +120,11 @@ namespace devices::audio
 				return (tone == Tone::SILENCE ? NONE :
 						tone == SpecialTone::END ? END :
 						tone == SpecialTone::REPEAT_START ? REPEAT_START :
-						tone == SpecialTone::REPEAT_END ? REPEAT_END :
-						TONE);
+						tone == SpecialTone::REPEAT_END ? REPEAT_END : TONE);
 			}
 		};
 
-		TonePlayer(GENERATOR& tone_generator):generator_{tone_generator}
-		{
-		}
+		TonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
 
 		inline void play(const TonePlay* melody)
 		{
@@ -160,7 +153,7 @@ namespace devices::audio
 		}
 
 	private:
-		using LOAD_TONE = const TonePlay* (*)(const TonePlay* address, TonePlay& holder);
+		using LOAD_TONE = const TonePlay* (*) (const TonePlay* address, TonePlay& holder);
 
 		static const TonePlay* load_sram(const TonePlay* address, TonePlay& holder UNUSED)
 		{
@@ -186,8 +179,7 @@ namespace devices::audio
 			{
 				TonePlay holder;
 				const TonePlay* current = load_tone(play, holder);
-				if (current->tone == SpecialTone::END)
-					break;
+				if (current->tone == SpecialTone::END) break;
 				if (current->tone == SpecialTone::REPEAT_START)
 				{
 					repeat_play = play;
@@ -197,8 +189,7 @@ namespace devices::audio
 				{
 					if (repeat_play != 0)
 					{
-						if (repeat_times == -1)
-							repeat_times = current->ms;
+						if (repeat_times == -1) repeat_times = current->ms;
 						if (repeat_times--)
 							play = repeat_play;
 						else
@@ -211,7 +202,7 @@ namespace devices::audio
 			}
 		}
 
-		using LOAD_QTONE = const QTonePlay* (*)(const QTonePlay* address, QTonePlay& holder);
+		using LOAD_QTONE = const QTonePlay* (*) (const QTonePlay* address, QTonePlay& holder);
 
 		static const QTonePlay* load_sram(const QTonePlay* address, QTonePlay& holder UNUSED)
 		{
@@ -237,8 +228,7 @@ namespace devices::audio
 			{
 				QTonePlay holder;
 				const QTonePlay* current = load_tone(play, holder);
-				if (current->is_end())
-					break;
+				if (current->is_end()) break;
 				if (current->is_repeat_start())
 				{
 					repeat_play = play;
@@ -248,8 +238,7 @@ namespace devices::audio
 				{
 					if (repeat_play != 0)
 					{
-						if (repeat_times == -1)
-							repeat_times = current->repeat_count();
+						if (repeat_times == -1) repeat_times = current->repeat_count();
 						if (repeat_times--)
 							play = repeat_play;
 						else

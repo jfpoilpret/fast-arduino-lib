@@ -20,7 +20,7 @@
 
 namespace devices::audio
 {
-	enum class Tone: uint16_t
+	enum class Tone : uint16_t
 	{
 		USER0 = 0,
 		USER1,
@@ -108,9 +108,8 @@ namespace devices::audio
 		As4 = 3729,
 		B4 = 3951,
 	};
-	
-	template<board::Timer NTIMER, board::DigitalPin OUTPUT>
-	class ToneGenerator
+
+	template<board::Timer NTIMER, board::DigitalPin OUTPUT> class ToneGenerator
 	{
 	private:
 		using SQWGEN = timer::SquareWave<NTIMER, OUTPUT>;
@@ -119,15 +118,12 @@ namespace devices::audio
 	public:
 		using PRESCALER = typename SQWGEN::TIMER::PRESCALER;
 		using COUNTER = typename SQWGEN::TIMER::TYPE;
-		
-		ToneGenerator():generator_{}
-		{
-		}
+
+		ToneGenerator() : generator_{} {}
 
 		void start_tone(Tone t)
 		{
-			if (t > Tone::SILENCE)
-				generator_.start_frequency(uint32_t(t));
+			if (t > Tone::SILENCE) generator_.start_frequency(uint32_t(t));
 		}
 		inline void start_tone(PRESCALER prescaler, COUNTER counter)
 		{
@@ -140,10 +136,8 @@ namespace devices::audio
 
 		void tone(Tone t, uint16_t ms)
 		{
-			if (t > Tone::SILENCE)
-				generator_.start_frequency(uint32_t(t));
-			if (t >= Tone::SILENCE)
-				pause(ms);
+			if (t > Tone::SILENCE) generator_.start_frequency(uint32_t(t));
+			if (t >= Tone::SILENCE) pause(ms);
 		}
 		inline void tone(PRESCALER prescaler, COUNTER counter, uint16_t ms)
 		{
