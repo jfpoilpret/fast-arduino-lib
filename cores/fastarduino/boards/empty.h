@@ -45,57 +45,79 @@ namespace board
 	/**
 	 * Defines all available ports of the target MCU.
 	 */
-	enum class Port : uint8_t {};
+	enum class Port : uint8_t
+	{
+	};
 
 	/**
 	 * Defines all available digital input/output pins of the target MCU.
 	 */
-	enum class DigitalPin : uint8_t {};
+	enum class DigitalPin : uint8_t
+	{
+	};
 
 	/**
 	 * Defines available clocks of the target MCU, used for analog input.
 	 */
-	enum class AnalogClock : uint8_t {};
+	enum class AnalogClock : uint8_t
+	{
+	};
 
 	/**
 	 * Defines available voltage references of the target MCU, used for analog input.
 	 */
-	enum class AnalogReference : uint8_t {};
-	
+	enum class AnalogReference : uint8_t
+	{
+	};
+
 	/**
 	 * Defines all available analog input pins of the target MCU.
 	 */
-	enum class AnalogPin : uint8_t {};
-	
+	enum class AnalogPin : uint8_t
+	{
+	};
+
 	/**
 	 * Defines all digital output pins of target MCU, capable of PWM output.
 	 */
-	namespace PWMPin {};
-	
+	namespace PWMPin
+	{
+	};
+
 	/**
 	 * Defines all digital output pins of target MCU, usable as direct external interrupt pins.
 	 */
-	namespace ExternalInterruptPin {};
+	namespace ExternalInterruptPin
+	{
+	};
 
 	/**
 	 * Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.
 	 */
-	namespace InterruptPin {};
+	namespace InterruptPin
+	{
+	};
 
 	/**
 	 * Defines all USART modules of target MCU. This may be empty e.g. for ATtiny MCU.
 	 */
-	enum class USART : uint8_t {};
-	
+	enum class USART : uint8_t
+	{
+	};
+
 	/**
 	 * Defines all timers available for target MCU.
 	 */
-	enum class Timer : uint8_t {};
-	
+	enum class Timer : uint8_t
+	{
+	};
+
 	/**
 	 * Defines all available sleep modes for target MCU.
 	 */
-	enum class SleepMode : uint8_t {};
+	enum class SleepMode : uint8_t
+	{
+	};
 };
 
 #endif /* BOARDS_EMPTY_HH */

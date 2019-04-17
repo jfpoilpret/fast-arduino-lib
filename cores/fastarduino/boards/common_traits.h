@@ -28,66 +28,67 @@
 
 namespace board_traits
 {
-	template<typename T>
-	class REGISTER
+	template<typename T> class REGISTER
 	{
 	public:
-		constexpr REGISTER():ADDR(0xFFFF) {}
-		constexpr REGISTER(uint16_t ADDR) INLINE:ADDR(ADDR) {}
+		constexpr REGISTER() : ADDR(0xFFFF) {}
+		constexpr REGISTER(uint16_t ADDR) INLINE : ADDR(ADDR) {}
 
 		constexpr bool is_no_reg() const INLINE
 		{
 			return ADDR == 0xFFFF;
 		}
-		void operator =(int value) const INLINE 
+		void operator=(int value) const INLINE
 		{
 			*((volatile T*) ADDR) = (T) value;
 		}
-		void operator |=(int value) const INLINE 
+		void operator|=(int value) const INLINE
 		{
 			*((volatile T*) ADDR) |= (T) value;
 		}
-		void operator &=(int value) const INLINE 
+		void operator&=(int value) const INLINE
 		{
 			*((volatile T*) ADDR) &= (T) value;
 		}
-		void operator ^=(int value) const INLINE 
+		void operator^=(int value) const INLINE
 		{
 			*((volatile T*) ADDR) ^= (T) value;
 		}
-		T operator ~() const INLINE 
+		T operator~() const INLINE
 		{
 			return ~(*((volatile T*) ADDR));
 		}
 		void loop_until_bit_set(uint8_t bit) const INLINE
 		{
-			while (!(*((volatile T*) ADDR) & _BV(bit))) ;
+			while (!(*((volatile T*) ADDR) & _BV(bit)))
+				;
 		}
 		void loop_until_bit_clear(uint8_t bit) const INLINE
 		{
-			while (*((volatile T*) ADDR) & _BV(bit)) ;
+			while (*((volatile T*) ADDR) & _BV(bit))
+				;
 		}
-		bool operator ==(int value) const INLINE
+		bool operator==(int value) const INLINE
 		{
 			return *((volatile T*) ADDR) == (T) value;
 		}
-		bool operator !=(int value) const INLINE
+		bool operator!=(int value) const INLINE
 		{
 			return *((volatile T*) ADDR) != (T) value;
 		}
-		bool operator >(int value) const INLINE
+		bool operator>(int value) const INLINE
 		{
 			return *((volatile T*) ADDR) > (T) value;
 		}
-		bool operator >=(int value) const INLINE
+		bool operator>=(int value) const INLINE
 		{
 			return *((volatile T*) ADDR) >= (T) value;
 		}
-		bool operator <(int value) const INLINE
+		bool operator<(int value) const INLINE
 		{
 			return *((volatile T*) ADDR) < (T) value;
 		}
-		bool operator <=(int value) const INLINE
+		bool operator<=(int value) const INLINE
 		{
 			return *((volatile T*) ADDR) <= (T) value;
 		}
@@ -96,7 +97,7 @@ namespace board_traits
 			return *((volatile T*) ADDR);
 		}
 
-	private:	
+	private:
 		const uint16_t ADDR;
 	};
 
@@ -106,9 +107,8 @@ namespace board_traits
 	using namespace ::board;
 	using REG = uint16_t;
 	static constexpr REG NO_REG = 0xFFFF;
-	
-	template<Port P>
-	struct Port_trait
+
+	template<Port P> struct Port_trait
 	{
 		static constexpr const REG8 PIN{};
 		static constexpr const REG8 DDR{};
@@ -116,8 +116,7 @@ namespace board_traits
 		static constexpr const uint8_t DPIN_MASK = 0x00;
 		static constexpr const uint8_t PCINT = 0xFF;
 	};
-	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_ = 0xFF>
-	struct Port_trait_impl
+	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_ = 0xFF> struct Port_trait_impl
 	{
 		static constexpr const REG8 PIN{PIN_};
 		static constexpr const REG8 DDR{DDR_};
@@ -125,56 +124,48 @@ namespace board_traits
 		static constexpr const uint8_t DPIN_MASK = DPIN_MASK_;
 		static constexpr const uint8_t PCINT = PCINT_;
 	};
-	
-	template<DigitalPin DPIN>
-	struct DigitalPin_trait
+
+	template<DigitalPin DPIN> struct DigitalPin_trait
 	{
 		static constexpr const Port PORT = Port::NONE;
 		static constexpr const uint8_t BIT = 0;
 		static constexpr const bool IS_INT = false;
 	};
-	template<Port P, uint8_t B, bool INT = false>
-	struct DigitalPin_trait_impl
+	template<Port P, uint8_t B, bool INT = false> struct DigitalPin_trait_impl
 	{
 		static constexpr const Port PORT = P;
 		static constexpr const uint8_t BIT = B;
 		static constexpr const bool IS_INT = INT;
 	};
 
-	template<AnalogReference AREF> 
-	struct AnalogReference_trait
+	template<AnalogReference AREF> struct AnalogReference_trait
 	{
 		static constexpr const uint8_t MASK = 0;
 	};
-	template<uint8_t MASK_>
-	struct AnalogReference_trait_impl
+	template<uint8_t MASK_> struct AnalogReference_trait_impl
 	{
 		static constexpr const uint8_t MASK = MASK_;
 	};
-	
-	template<typename SAMPLE_TYPE> 
-	struct AnalogSampleType_trait
+
+	template<typename SAMPLE_TYPE> struct AnalogSampleType_trait
 	{
 		static constexpr const uint8_t ADLAR1 = 0;
 		static constexpr const uint8_t ADLAR2 = 0;
 		static constexpr const REGISTER<SAMPLE_TYPE> ADC_{};
 	};
-	template<typename SAMPLE_TYPE, uint8_t ADLAR1_, uint8_t ADLAR2_, REG ADC__>
-	struct AnalogSampleType_trait_impl
+	template<typename SAMPLE_TYPE, uint8_t ADLAR1_, uint8_t ADLAR2_, REG ADC__> struct AnalogSampleType_trait_impl
 	{
 		static constexpr const uint8_t ADLAR1 = ADLAR1_;
 		static constexpr const uint8_t ADLAR2 = ADLAR2_;
 		static constexpr const REGISTER<SAMPLE_TYPE> ADC_ = ADC__;
 	};
-	
-	template<AnalogClock MAXFREQ> 
-	struct AnalogClock_trait
+
+	template<AnalogClock MAXFREQ> struct AnalogClock_trait
 	{
 		static constexpr const uint8_t PRESCALER = 0;
 		static constexpr const uint8_t PRESCALER_MASK = 0;
 	};
-	template<uint32_t MAXFREQ>
-	struct AnalogClock_trait_impl
+	template<uint32_t MAXFREQ> struct AnalogClock_trait_impl
 	{
 		static constexpr uint8_t round_prescaler(uint16_t rate)
 		{
@@ -183,8 +174,7 @@ namespace board_traits
 					rate > 16 ? 32 :
 					rate > 8 ? 16 :
 					rate > 4 ? 8 :
-					rate > 2 ? 4 :
-					2);
+					rate > 2 ? 4 : 2);
 		}
 		static constexpr uint8_t prescaler_mask(uint8_t prescaler)
 		{
@@ -193,41 +183,36 @@ namespace board_traits
 					prescaler == 32 ? _BV(ADPS2) | _BV(ADPS0) :
 					prescaler == 16 ? _BV(ADPS2) :
 					prescaler == 8 ? _BV(ADPS1) | _BV(ADPS0) :
-					prescaler == 4 ? _BV(ADPS1) :
-					_BV(ADPS0));
+					prescaler == 4 ? _BV(ADPS1) : _BV(ADPS0));
 		}
 
 		static constexpr const uint8_t PRESCALER = round_prescaler(uint16_t(F_CPU / MAXFREQ));
 		static constexpr const uint8_t PRESCALER_MASK = prescaler_mask(PRESCALER);
 	};
-	
-	template<REG ADMUX__, REG ADCSRA__, REG ADCSRB__>
-	struct GlobalAnalogPin_trait_impl
+
+	template<REG ADMUX__, REG ADCSRA__, REG ADCSRB__> struct GlobalAnalogPin_trait_impl
 	{
 		static constexpr const REG8 ADMUX_ = ADMUX__;
 		static constexpr const REG8 ADCSRA_ = ADCSRA__;
 		static constexpr const REG8 ADCSRB_ = ADCSRB__;
 	};
-	
-	template<AnalogPin APIN> 
-	struct AnalogPin_trait
+
+	template<AnalogPin APIN> struct AnalogPin_trait
 	{
 		static constexpr const uint8_t MUX_MASK1 = 0;
 		static constexpr const uint8_t MUX_MASK2 = 0;
 		static constexpr const bool IS_BANDGAP = false;
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFF;
 	};
-	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFF> 
-	struct AnalogPin_trait_impl
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFF> struct AnalogPin_trait_impl
 	{
 		static constexpr const uint8_t MUX_MASK1 = MUXM1;
 		static constexpr const uint8_t MUX_MASK2 = MUXM2;
 		static constexpr const bool IS_BANDGAP = (VOLTAGE != 0xFFFF);
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
 	};
-	
-	template<DigitalPin DPIN> 
-	struct ExternalInterruptPin_trait
+
+	template<DigitalPin DPIN> struct ExternalInterruptPin_trait
 	{
 		static constexpr const uint8_t INT = 0;
 		static constexpr const REG8 EICR_{};
@@ -237,7 +222,8 @@ namespace board_traits
 		static constexpr const REG8 EIFR_{};
 		static constexpr const uint8_t EIFR_MASK = 0x00;
 	};
-	template<uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_, REG EIFR__, uint8_t EIFR_MASK_>
+	template<uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_, REG EIFR__,
+			 uint8_t EIFR_MASK_>
 	struct ExternalInterruptPin_trait_impl
 	{
 		static constexpr const uint8_t INT = INT_;
@@ -249,31 +235,30 @@ namespace board_traits
 		static constexpr const uint8_t EIFR_MASK = EIFR_MASK_;
 	};
 
-	template<uint8_t PCINT> 
-	struct PCI_trait
+	template<uint8_t PCINT> struct PCI_trait
 	{
 		static constexpr const Port PORT = Port::NONE;
 		static constexpr const uint8_t PCI_MASK = 0x00;
-		static constexpr const uint8_t PCICR_MASK = 0x00; 
+		static constexpr const uint8_t PCICR_MASK = 0x00;
 		static constexpr const uint8_t PCIFR_MASK = 0x00;
 		static constexpr const REG8 PCICR_{};
 		static constexpr const REG8 PCIFR_{};
 		static constexpr const REG8 PCMSK_{};
 	};
-	template<Port PORT_, uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__, REG PCMSK__>
+	template<Port PORT_, uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__,
+			 REG PCMSK__>
 	struct PCI_trait_impl
 	{
 		static constexpr const Port PORT = PORT_;
 		static constexpr const uint8_t PCI_MASK = PCI_MASK_;
-		static constexpr const uint8_t PCICR_MASK = PCICR_MASK_; 
+		static constexpr const uint8_t PCICR_MASK = PCICR_MASK_;
 		static constexpr const uint8_t PCIFR_MASK = PCIFR_MASK_;
 		static constexpr const REG8 PCICR_ = PCICR__;
 		static constexpr const REG8 PCIFR_ = PCIFR__;
 		static constexpr const REG8 PCMSK_ = PCMSK__;
 	};
 
-	template<USART USART> 
-	struct USART_trait
+	template<USART USART> struct USART_trait
 	{
 		static constexpr const REG8 UCSRA{};
 		static constexpr const REG8 UCSRB{};
@@ -293,9 +278,9 @@ namespace board_traits
 			return 0;
 		}
 	};
-	template<REG UCSRA_, REG UCSRB_, REG UCSRC_, REG UDR_, REG UBRR_, 
-			uint8_t U2X_BIT, uint8_t TX_ENABLE_BIT, uint8_t RX_ENABLE_BIT, uint8_t UDRIE_BIT, uint8_t RXCIE_BIT,
-			uint8_t DOR_BIT, uint8_t FE_BIT, uint8_t UPE_BIT>
+	template<REG UCSRA_, REG UCSRB_, REG UCSRC_, REG UDR_, REG UBRR_, uint8_t U2X_BIT, uint8_t TX_ENABLE_BIT,
+			 uint8_t RX_ENABLE_BIT, uint8_t UDRIE_BIT, uint8_t RXCIE_BIT, uint8_t DOR_BIT, uint8_t FE_BIT,
+			 uint8_t UPE_BIT>
 	struct USART_trait_impl
 	{
 		static constexpr const REG8 UCSRA = UCSRA_;
@@ -312,22 +297,20 @@ namespace board_traits
 		static constexpr const uint8_t FE_MASK = _BV(FE_BIT);
 		static constexpr const uint8_t UPE_MASK = _BV(UPE_BIT);
 	};
-	
-	template<Port PORT_, uint8_t SS_, uint8_t MOSI_, uint8_t MISO_, uint8_t SCK_>
-	struct SPI_trait_impl
+
+	template<Port PORT_, uint8_t SS_, uint8_t MOSI_, uint8_t MISO_, uint8_t SCK_> struct SPI_trait_impl
 	{
 		using PORT_TRAIT = Port_trait<PORT_>;
 		static constexpr const REG8 DDR = PORT_TRAIT::DDR;
 		static constexpr const REG8 PORT = PORT_TRAIT::PORT;
-		
+
 		static constexpr const uint8_t SS = SS_;
 		static constexpr const uint8_t MOSI = MOSI_;
 		static constexpr const uint8_t MISO = MISO_;
 		static constexpr const uint8_t SCK = SCK_;
 	};
-	
-	template<Port PORT_, uint8_t SCL_, uint8_t SDA_>
-	struct TWI_trait_impl
+
+	template<Port PORT_, uint8_t SCL_, uint8_t SDA_> struct TWI_trait_impl
 	{
 		using PORT_TRAIT = Port_trait<PORT_>;
 		static constexpr const REG8 PORT = PORT_TRAIT::PORT;
@@ -338,33 +321,34 @@ namespace board_traits
 		static constexpr const uint8_t BIT_SDA = SDA_;
 	};
 
-	enum TimerPrescalers: uint8_t
+	enum TimerPrescalers : uint8_t
 	{
 		PRESCALERS_1_8_64_256_1024,
 		PRESCALERS_1_8_32_64_128_256_1024,
 		PRESCALERS_1_TO_16384,
 		PRESCALERS_NONE
 	};
-	
-	template<TimerPrescalers PRESCALERS>
-	struct TimerPrescalers_trait
+
+	template<TimerPrescalers PRESCALERS> struct TimerPrescalers_trait
 	{
-		enum class TimerPrescaler: uint8_t {};
+		enum class TimerPrescaler : uint8_t
+		{
+		};
 		using TYPE = TimerPrescaler;
 		static constexpr const TimerPrescaler ALL_PRESCALERS[] = {};
 	};
 	template<> struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_8_64_256_1024>
 	{
-		enum class TimerPrescaler: uint8_t
+		enum class TimerPrescaler : uint8_t
 		{
-			NO_PRESCALING	= 0,
-			DIV_8			= 3,
-			DIV_64			= 6,
-			DIV_256			= 8,
-			DIV_1024		= 10
+			NO_PRESCALING = 0,
+			DIV_8 = 3,
+			DIV_64 = 6,
+			DIV_256 = 8,
+			DIV_1024 = 10
 		};
 		using TYPE = TimerPrescaler;
-		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
+		static constexpr const TimerPrescaler ALL_PRESCALERS[] =
 		{
 			TimerPrescaler::NO_PRESCALING,
 			TimerPrescaler::DIV_8,
@@ -375,18 +359,18 @@ namespace board_traits
 	};
 	template<> struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024>
 	{
-		enum class TimerPrescaler: uint8_t
+		enum class TimerPrescaler : uint8_t
 		{
-			NO_PRESCALING	= 0,
-			DIV_8			= 3,
-			DIV_32			= 5,
-			DIV_64			= 6,
-			DIV_128			= 7,
-			DIV_256			= 8,
-			DIV_1024		= 10
+			NO_PRESCALING = 0,
+			DIV_8 = 3,
+			DIV_32 = 5,
+			DIV_64 = 6,
+			DIV_128 = 7,
+			DIV_256 = 8,
+			DIV_1024 = 10
 		};
 		using TYPE = TimerPrescaler;
-		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
+		static constexpr const TimerPrescaler ALL_PRESCALERS[] =
 		{
 			TimerPrescaler::NO_PRESCALING,
 			TimerPrescaler::DIV_8,
@@ -399,26 +383,26 @@ namespace board_traits
 	};
 	template<> struct TimerPrescalers_trait<TimerPrescalers::PRESCALERS_1_TO_16384>
 	{
-		enum class TimerPrescaler: uint8_t
+		enum class TimerPrescaler : uint8_t
 		{
-			NO_PRESCALING	= 0,
-			DIV_2			= 1,
-			DIV_4			= 2,
-			DIV_8			= 3,
-			DIV_16			= 4,
-			DIV_32			= 5,
-			DIV_64			= 6,
-			DIV_128			= 7,
-			DIV_256			= 8,
-			DIV_512			= 9,
-			DIV_1024		= 10,
-			DIV_2048		= 11,
-			DIV_4096		= 12,
-			DIV_8192		= 13,
-			DIV_16384		= 14
+			NO_PRESCALING = 0,
+			DIV_2 = 1,
+			DIV_4 = 2,
+			DIV_8 = 3,
+			DIV_16 = 4,
+			DIV_32 = 5,
+			DIV_64 = 6,
+			DIV_128 = 7,
+			DIV_256 = 8,
+			DIV_512 = 9,
+			DIV_1024 = 10,
+			DIV_2048 = 11,
+			DIV_4096 = 12,
+			DIV_8192 = 13,
+			DIV_16384 = 14
 		};
 		using TYPE = TimerPrescaler;
-		static constexpr const TimerPrescaler ALL_PRESCALERS[] = 
+		static constexpr const TimerPrescaler ALL_PRESCALERS[] =
 		{
 			TimerPrescaler::NO_PRESCALING,
 			TimerPrescaler::DIV_2,
@@ -437,22 +421,19 @@ namespace board_traits
 			TimerPrescaler::DIV_16384
 		};
 	};
-	
-	template<typename TYPE>
-	struct Timer_type_trait
+
+	template<typename TYPE> struct Timer_type_trait
 	{
 		static constexpr const uint32_t MAX_COUNTER = 1UL << (8 * sizeof(TYPE));
 		static constexpr const uint16_t MAX_PWM = MAX_COUNTER - 1;
 	};
-	template<>
-	struct Timer_type_trait<uint16_t>
+	template<> struct Timer_type_trait<uint16_t>
 	{
 		static constexpr const uint32_t MAX_COUNTER = 1UL << (8 * sizeof(uint16_t));
 		static constexpr const uint16_t MAX_PWM = 0x3FF;
 	};
-	
-	template<Timer TIMER, uint8_t COM>
-	struct Timer_COM_trait
+
+	template<Timer TIMER, uint8_t COM> struct Timer_COM_trait
 	{
 		using TYPE = uint8_t;
 		static constexpr const DigitalPin PIN_OCR = DigitalPin::NONE;
@@ -463,8 +444,8 @@ namespace board_traits
 		static constexpr const uint8_t COM_CLEAR = 0;
 		static constexpr const uint8_t COM_SET = 0;
 	};
-	template<typename TYPE_, DigitalPin PIN_OCR_, REG OCR_, uint8_t COM_MASK_, 
-			uint8_t COM_NORMAL_, uint8_t COM_TOGGLE_, uint8_t COM_CLEAR_, uint8_t COM_SET_>
+	template<typename TYPE_, DigitalPin PIN_OCR_, REG OCR_, uint8_t COM_MASK_, uint8_t COM_NORMAL_, uint8_t COM_TOGGLE_,
+			 uint8_t COM_CLEAR_, uint8_t COM_SET_>
 	struct Timer_COM_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -487,8 +468,7 @@ namespace board_traits
 		static constexpr const uint8_t INPUT_CAPTURE = 0x10;
 	};
 
-	template<Timer TIMER>
-	struct Timer_trait
+	template<Timer TIMER> struct Timer_trait
 	{
 		using TYPE = uint8_t;
 		static constexpr const bool IS_16BITS = false;
@@ -498,7 +478,7 @@ namespace board_traits
 		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_NONE;
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
-		
+
 		static constexpr const uint8_t COM_COUNT = 0;
 		static constexpr const uint8_t COM_MASK = 0;
 
@@ -506,13 +486,13 @@ namespace board_traits
 		static constexpr const uint8_t F_PWM_TCCRB = 0;
 		static constexpr const uint8_t PC_PWM_TCCRA = 0;
 		static constexpr const uint8_t PC_PWM_TCCRB = 0;
-		static constexpr const uint8_t CTC_TCCRA  = 0;
-		static constexpr const uint8_t CTC_TCCRB  = 0;
+		static constexpr const uint8_t CTC_TCCRA = 0;
+		static constexpr const uint8_t CTC_TCCRB = 0;
 
 		static constexpr const uint8_t CS_MASK_TCCRB = 0;
 		static constexpr const uint8_t MODE_MASK_TCCRA = 0;
 		static constexpr const uint8_t MODE_MASK_TCCRB = 0;
-		
+
 		static constexpr const REG8 TCCRA{};
 		static constexpr const REG8 TCCRB{};
 		static constexpr const REGISTER<TYPE> TCNT{};
@@ -547,21 +527,13 @@ namespace board_traits
 		static constexpr const REGISTER<TYPE> CTC_MAX{};
 	};
 
-	template<typename TYPE_, TimerPrescalers PRESCALERS_, 
-			uint8_t COM_COUNT_,
-			uint8_t MODE_MASK_TCCRA_, uint8_t MODE_MASK_TCCRB_, uint8_t CS_MASK_TCCRB_,
-			uint8_t F_PWM_TCCRA_, uint8_t F_PWM_TCCRB_, 
-			uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, 
-			uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, 
-			REG TCCRA_, REG TCCRB_, REG TCNT_, REG OCRA_, 
-			REG TIMSK__, REG TIFR__, uint8_t TIMSK_MASK_ = 0xFF,
-			REG ICR_ = 0, 
-			uint8_t CTC_ICR_TCCRA_ = 0, uint8_t CTC_ICR_TCCRB_ = 0, 
-			uint8_t F_PWM_ICR_TCCRA_ = 0, uint8_t F_PWM_ICR_TCCRB_ = 0, 
-			uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0,
-			board::DigitalPin ICP_PIN_ = board::DigitalPin::NONE,
-			uint8_t ICES_TCCRB_ = 0,
-			REG CTC_MAX_ = NO_REG>
+	template<typename TYPE_, TimerPrescalers PRESCALERS_, uint8_t COM_COUNT_, uint8_t MODE_MASK_TCCRA_,
+			 uint8_t MODE_MASK_TCCRB_, uint8_t CS_MASK_TCCRB_, uint8_t F_PWM_TCCRA_, uint8_t F_PWM_TCCRB_,
+			 uint8_t PC_PWM_TCCRA_, uint8_t PC_PWM_TCCRB_, uint8_t CTC_TCCRA_, uint8_t CTC_TCCRB_, REG TCCRA_,
+			 REG TCCRB_, REG TCNT_, REG OCRA_, REG TIMSK__, REG TIFR__, uint8_t TIMSK_MASK_ = 0xFF, REG ICR_ = 0,
+			 uint8_t CTC_ICR_TCCRA_ = 0, uint8_t CTC_ICR_TCCRB_ = 0, uint8_t F_PWM_ICR_TCCRA_ = 0,
+			 uint8_t F_PWM_ICR_TCCRB_ = 0, uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0,
+			 board::DigitalPin ICP_PIN_ = board::DigitalPin::NONE, uint8_t ICES_TCCRB_ = 0, REG CTC_MAX_ = NO_REG>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -572,7 +544,7 @@ namespace board_traits
 		static constexpr const TimerPrescalers PRESCALERS = PRESCALERS_;
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
-		
+
 		static constexpr const uint8_t COM_COUNT = COM_COUNT_;
 		static constexpr const uint8_t COM_MASK = ~(0xFF >> (2 * COM_COUNT));
 
@@ -584,9 +556,9 @@ namespace board_traits
 		static constexpr const uint8_t F_PWM_TCCRB = F_PWM_TCCRB_;
 		static constexpr const uint8_t PC_PWM_TCCRA = PC_PWM_TCCRA_;
 		static constexpr const uint8_t PC_PWM_TCCRB = PC_PWM_TCCRB_;
-		static constexpr const uint8_t CTC_TCCRA  = CTC_TCCRA_;
-		static constexpr const uint8_t CTC_TCCRB  = CTC_TCCRB_;
-		
+		static constexpr const uint8_t CTC_TCCRA = CTC_TCCRA_;
+		static constexpr const uint8_t CTC_TCCRB = CTC_TCCRB_;
+
 		static constexpr const uint8_t CTC_ICR_TCCRA = CTC_ICR_TCCRA_;
 		static constexpr const uint8_t CTC_ICR_TCCRB = CTC_ICR_TCCRB_;
 		static constexpr const uint8_t F_PWM_ICR_TCCRA = F_PWM_ICR_TCCRA_;
@@ -599,7 +571,7 @@ namespace board_traits
 		static constexpr const REGISTER<TYPE> TCNT = TCNT_;
 		static constexpr const REGISTER<TYPE> OCRA = OCRA_;
 		static constexpr const REGISTER<TYPE> ICR = ICR_;
-		
+
 		static constexpr const REG8 TIMSK_ = TIMSK__;
 		static constexpr const uint8_t TIMSK_MASK = TIMSK_MASK_;
 		static constexpr const REG8 TIFR_ = TIFR__;
@@ -609,9 +581,8 @@ namespace board_traits
 
 		static constexpr const REGISTER<TYPE> CTC_MAX = CTC_MAX_;
 	};
-	
-	template<DigitalPin PIN>
-	struct PWMPin_trait
+
+	template<DigitalPin PIN> struct PWMPin_trait
 	{
 		static constexpr const bool HAS_PWM = false;
 		static constexpr const uint8_t COM = 0;
@@ -619,8 +590,7 @@ namespace board_traits
 		using TIMER_TRAIT = Timer_trait<TIMER>;
 		using TYPE = uint8_t;
 	};
-	template<Timer TIMER_, uint8_t COM_> 
-	struct PWMPin_trait_impl
+	template<Timer TIMER_, uint8_t COM_> struct PWMPin_trait_impl
 	{
 		static constexpr const bool HAS_PWM = true;
 		static constexpr const uint8_t COM = COM_;
@@ -632,13 +602,11 @@ namespace board_traits
 
 namespace board
 {
-	template<DigitalPin PIN>
-	constexpr uint8_t BIT() INLINE;
-	template<DigitalPin PIN>
-	constexpr uint8_t BIT()
+	template<DigitalPin PIN> constexpr uint8_t BIT() INLINE;
+	template<DigitalPin PIN> constexpr uint8_t BIT()
 	{
 		return board_traits::DigitalPin_trait<PIN>::BIT;
 	}
-};	
+};
 
 #endif /* BOARDS_COMMON_TRAITS_HH */
