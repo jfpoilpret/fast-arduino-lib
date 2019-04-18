@@ -39,13 +39,9 @@ Coding Style
 ------------
 All other conventions for coding styles are directly defined within project's `.clang-format` file rules.
 
-Currently FastArduino uses clang-format 4.0 because this is the most supported version across Linux distributions; however, its current settings are not fully satisfactory and are not up to my expectations for FastArduino, in particular, I am not happy with the results obtained from the current settings on the following topics:
+Currently FastArduino uses clang-format 6.0 because this is the latest supported version on my Linux distribution (Fedora); however, its current settings are not fully satisfactory and are not up to my expectations for FastArduino, in particular, I am not happy with the results obtained from the current settings on the following topics:
 - spaces used instead of tabs when aligning `\` at end of lines (used for macros)
 - spaces used in addition to tabs when aligning 2 lines (e.g. template or function arguments)
 - line breaking of ternary operator after both `?` and `:` where I would like breaking only after `:`
-- short `for` loops on 2 lines instead of only one
 - template arguments not broken at one per line if I want so
 - buggy value alignment in assignments
-- no line break before `{` in `extern "C" {` construct (new setting in clang-format 5.0)
-- empty function not properly written as one line e.g. `void f() {}` (that setting exists but does not work properly in many situations)
-
