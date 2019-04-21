@@ -27,6 +27,7 @@ namespace devices
 		ACTIVE_HIGH = 1
 	};
 
+	//TODO do we want to decide in template if we want to work at port level or dual-port?
 	//TODO do we want to support individual pin addressing? That maybe costly in use! Could be done as separate utility
 	//TODO provide 3 API per action: one for each port, one for both ports simulatenously
 	// This device is always used in mode BANK 0 (ie 16 bits at a time)
@@ -48,7 +49,8 @@ namespace devices
 			// Initialize device
 			if (this->write(device_, IOCON, BusCond::START_NO_STOP) == i2c::Status::OK)
 				this->write(device_,
-							build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH));
+							build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH),
+							BusCond::NO_START_STOP);
 		}
 
 		// API to define for configuration
@@ -63,7 +65,8 @@ namespace devices
 			return this->write(device_, IODIR_A, BusCond::START_NO_STOP) == OK
 				   && this->write(device_, direction, BusCond::NO_START_NO_STOP) == OK
 				   && this->write(device_, polarity, BusCond::NO_START_STOP) == OK
-				   && this->write(device_, pullup, BusCond::START_STOP) == OK;
+				   && this->write(device_, GPPU_A, BusCond::START_NO_STOP) == OK
+				   && this->write(device_, pullup, BusCond::NO_START_STOP) == OK;
 		}
 
 		// Configure INTerrupts
@@ -115,8 +118,37 @@ namespace devices
 		}
 
 		//TODO Port-level API
-		bool portA_values(uint8_t output_values) {}
-		uint8_t portA_values() {}
+		// Configure all IO with a call including all needed uint16 args
+		bool configure_portA_gpio(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
+		{
+			using namespace i2c::Status;
+			return this->write(device_, IODIR_A, BusCond::START_NO_STOP) == OK
+				   && this->write(device_, direction, BusCond::NO_START_STOP) == OK
+				   && this->write(device_, IPOL_A, BusCond::START_NO_STOP) == OK
+				   && this->write(device_, polarity, BusCond::NO_START_STOP) == OK
+				   && this->write(device_, GPPU_A, BusCond::START_NO_STOP) == OK
+				   && this->write(device_, pullup, BusCond::NO_START_STOP) == OK;
+		}
+
+		//TODO refactor common code to read/write one (or more registers)
+		bool portA_values(uint8_t output_values)
+		{
+			using namespace i2c::Status;
+			return this->write(device_, GPIO_A, BusCond::START_NO_STOP) == OK
+				   && this->write(device_, output_values, BusCond::NO_START_STOP) == OK;
+		}
+
+		uint8_t portA_values()
+		{
+			using namespace i2c::Status;
+			uint8_t value;
+			if (this->write(device_, GPIO_A, BusCond::START_NO_STOP) == OK
+				&& this->read(device_, value, BusCond::REPEAT_START_STOP) == OK)
+				return value;
+			else
+				return 0;
+		}
+
 		uint8_t portA_interrupt_flags() {}
 		uint8_t portA_captured_values() {}
 
