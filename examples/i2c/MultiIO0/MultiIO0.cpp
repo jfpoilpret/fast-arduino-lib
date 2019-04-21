@@ -24,14 +24,6 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-// Subclass I2CDevice to make protected methods available
-class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::Standard>
-{
-public:
-	PublicDevice(MANAGER& manager): i2c::I2CDevice<i2c::I2CMode::Standard>{manager} {}
-	friend int main();
-};
-
 // MCP23017 specific
 const uint8_t DEVICE_ADDRESS = 0x20 << 1;
 // All registers addresses (in BANK 0 mode only)
@@ -65,6 +57,33 @@ constexpr const uint8_t IOCON_HAEN = _BV(3);
 constexpr const uint8_t IOCON_ODR = _BV(2);
 constexpr const uint8_t IOCON_INTPOL = _BV(1);
 
+// constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Standard;
+constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Fast;
+
+// Subclass I2CDevice to make protected methods available
+class PublicDevice : public i2c::I2CDevice<I2C_MODE>
+{
+public:
+	PublicDevice(MANAGER& manager) : i2c::I2CDevice<I2C_MODE>{manager} {}
+
+	void write_register(uint8_t address, uint8_t data)
+	{
+		write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+		&& write(DEVICE_ADDRESS, data, i2c::BusConditions::NO_START_STOP);
+	}
+
+	uint8_t read_register(uint8_t address)
+	{
+		uint8_t data;
+		if (write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
+			&& read(DEVICE_ADDRESS, data, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+			return data;
+		return 0;
+	}
+
+	friend int main();
+};
+
 using namespace streams;
 
 int main() __attribute__((OS_main));
@@ -72,7 +91,7 @@ int main()
 {
 	board::init();
 	sei();
-	
+
 	serial::hard::UATX<UART> uart{output_buffer};
 	uart.register_handler();
 	uart.begin(115200);
@@ -80,37 +99,38 @@ int main()
 	out.width(0);
 	out.setf(ios::hex, ios::basefield);
 	out << "Start" << endl;
-	
+
 	// Start TWI interface
-	i2c::I2CManager<i2c::I2CMode::Standard> manager;
+	i2c::I2CManager<I2C_MODE> manager;
 	manager.begin();
 	out << "I2C interface started" << endl;
 	out << "status #1 " << manager.status() << endl;
-	time::delay_ms(1000);
-	
-	PublicDevice rtc{manager};
-	
+	time::delay_ms(100);
+
+	PublicDevice mcp{manager};
+
 	// Initialize IOCON
-	rtc.write(DEVICE_ADDRESS, IOCON, i2c::BusConditions::START_NO_STOP);
-	rtc.write(DEVICE_ADDRESS, 0x00, i2c::BusConditions::NO_START_STOP);
+	mcp.write_register(IOCON, IOCON_INTPOL);
 	out << "status #2 " << manager.status() << endl;
-	time::delay_ms(2000);
+	time::delay_ms(100);
 
 	// Read IOCON
-	uint8_t data;
-	rtc.write(DEVICE_ADDRESS, IOCON, i2c::BusConditions::START_NO_STOP);
-	out << "status #3 " << manager.status() << endl;
-	rtc.read(DEVICE_ADDRESS, data, i2c::BusConditions::REPEAT_START_STOP);
+	uint8_t data = mcp.read_register(IOCON);
 	out << "status #4 " << manager.status() << endl;
-	out	<< "IOCON: " << data << endl;
+	out << "IOCON: " << data << endl;
 
 	//TODO More tests: set GPIO direction, set GPIO value...
-	rtc.write(DEVICE_ADDRESS, IODIR_A, i2c::BusConditions::START_NO_STOP);
-	rtc.write(DEVICE_ADDRESS, 0x00, i2c::BusConditions::NO_START_STOP);
+	mcp.write_register(IODIR_A, 0x00);
+	out << "status #5 " << manager.status() << endl;
+	mcp.write_register(IPOL_A, 0x00);
+	out << "status #5 " << manager.status() << endl;
+	mcp.write_register(GPPU_A, 0x00);
 	out << "status #5 " << manager.status() << endl;
 
-	rtc.write(DEVICE_ADDRESS, GPIO_A, i2c::BusConditions::START_NO_STOP);
-	rtc.write(DEVICE_ADDRESS, 0x11, i2c::BusConditions::NO_START_STOP);
+	mcp.write_register(GPIO_A, 0x11);
+	out << "status #6 " << manager.status() << endl;
+	time::delay_ms(1000);
+	mcp.write_register(GPIO_A, 0x00);
 	out << "status #6 " << manager.status() << endl;
 
 	// Stop TWI interface
