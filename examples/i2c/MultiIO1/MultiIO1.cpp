@@ -73,6 +73,7 @@ int main()
 	//=================
 	time::delay_ms(100);
 	MCP mcp{manager, 0x00};
+	mcp.begin();
 	mcp.configure_gpio<MCP_PORT::PORT_A>(0x00);
 	mcp.configure_gpio<MCP_PORT::PORT_B>(0x0F, 0x0F);
 

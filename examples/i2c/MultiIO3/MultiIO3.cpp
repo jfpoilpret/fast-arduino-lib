@@ -17,7 +17,6 @@
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/devices/mcp23017.h>
 
-
 constexpr const board::DigitalPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Fast;
 
@@ -89,6 +88,7 @@ int main()
 	//=================
 	time::delay_ms(100);
 	MCP mcp{manager, 0x00};
+	mcp.begin();
 	pmcp = &mcp;
 	mcp.configure_gpio<MCP_PORT::PORT_A>(0x00);
 	mcp.configure_gpio<MCP_PORT::PORT_B>(0x0F, 0x0F);

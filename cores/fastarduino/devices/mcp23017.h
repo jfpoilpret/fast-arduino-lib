@@ -74,9 +74,12 @@ namespace devices
 
 		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
 
-		MCP23017(MANAGER& manager, uint8_t address, bool mirror_interrupts = false,
-				 InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
+		MCP23017(MANAGER& manager, uint8_t address)
 			: i2c::I2CDevice<MODE>(manager), device_{uint8_t((BASE_ADDRESS | (address & 0x07)) << 1)}
+		{}
+
+		void begin(bool mirror_interrupts = false,
+				   InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
 			// Initialize device
 			write_register(IOCON, build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH));
