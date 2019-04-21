@@ -25,7 +25,7 @@ namespace devices
 	{
 		PORT_A,
 		PORT_B,
-		PORTS_AB
+		PORT_AB
 	};
 
 	enum InterruptPolarity : uint8_t
@@ -54,7 +54,7 @@ namespace devices
 			static constexpr const uint8_t REG_SHIFT = 1;
 		};
 
-		template<> struct Port_trait<MCP23017Port::PORTS_AB>
+		template<> struct Port_trait<MCP23017Port::PORT_AB>
 		{
 			using TYPE = uint16_t;
 			static constexpr const uint8_t REG_SHIFT = 0;
