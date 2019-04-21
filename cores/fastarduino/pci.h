@@ -83,7 +83,9 @@
  * Declare ISR handlers for Pin Change Interrupt pins as friend of a class 
  * containing a private callback.
  */
-#define DECL_PCI_ISR_HANDLERS_FRIEND friend struct interrupt::isr_handler_pci;
+#define DECL_PCI_ISR_HANDLERS_FRIEND			\
+	friend struct interrupt::isr_handler_pci;	\
+	DECL_PCINT_ISR_FRIENDS
 
 namespace interrupt
 {
