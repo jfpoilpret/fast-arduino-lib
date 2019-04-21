@@ -20,7 +20,6 @@
 #define INT_NUM 0
 static constexpr const board::DigitalPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 
-//FIXME this does not work at all!
 class LedChaser
 {
 public:
