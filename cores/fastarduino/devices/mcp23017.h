@@ -17,7 +17,6 @@
 
 #include <math.h>
 #include "../i2c_device.h"
-#include "../utilities.h"
 
 namespace devices
 {
@@ -62,7 +61,7 @@ namespace devices
 	}
 
 	// This device is always used in mode BANK 0 (ie possibly 16 bits at a time)
-	// In uint16_t mode, port A is the low byte, port B is the high byte (TODO double check)
+	// In uint16_t mode, port A is the low byte, port B is the high byte
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class MCP23017 : public i2c::I2CDevice<MODE_>
 	{
 	private:
@@ -90,51 +89,59 @@ namespace devices
 		template<MCP23017Port P_> bool configure_gpio(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
-			//TODO Check if we need to swap bytes on uint16_t or not
 			return write_register(IODIR_A + SHIFT, direction) && write_register(IPOL_A + SHIFT, polarity)
 				   && write_register(GPPU_A + SHIFT, pullup);
 		}
 
 		// Configure INTerrupts
 		template<MCP23017Port P_>
-		bool configure_interrupts(T<P_> int_pins, T<P_> compare_values = T<P_>{}, T<P_> on_change = T<P_>{})
+		bool configure_interrupts(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
-			//TODO Check if we need to swap bytes on uint16_t or not
-			return write_register(GPINTEN_A + SHIFT, int_pins) && write_register(DEFVAL_A + SHIFT, compare_values)
-				   && write_register(INTCON_A + SHIFT, on_change);
+			return write_register(GPINTEN_A + SHIFT, int_pins) && write_register(DEFVAL_A + SHIFT, ref)
+				   && write_register(INTCON_A + SHIFT, compare_ref);
 		}
 
 		// API to access IOs
 		//===================
 
-		template<MCP23017Port P_> bool values(T<P_> output_values)
+		template<MCP23017Port P_> bool values(T<P_> value)
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
-			//TODO Check if we need to swap bytes on uint16_t or not
-			return write_register(GPIO_A + SHIFT, output_values);
+			return write_register(GPIO_A + SHIFT, value);
 		}
 
 		//TODO Do we need an Optional value here?
 		template<MCP23017Port P_> T<P_> values()
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
-			T<P_> gpio_values;
-			if (read_register(GPIO_A + SHIFT, gpio_values))
-				//TODO Check if we need to swap bytes on uint16_t or not
-				return gpio_values;
+			T<P_> value;
+			if (read_register(GPIO_A + SHIFT, value))
+				return value;
 			else
 				return T<P_>{};
 		}
 
+		//TODO Do we need an Optional value here?
 		template<MCP23017Port P_> T<P_> interrupt_flags()
 		{
-			//TODO
+			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
+			T<P_> value;
+			if (read_register(INTF_A + SHIFT, value))
+				return value;
+			else
+				return T<P_>{};
 		}
 
+		//TODO Do we need an Optional value here?
 		template<MCP23017Port P_> T<P_> captured_values()
 		{
-			//TODO
+			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
+			T<P_> value;
+			if (read_register(INTCAP_A + SHIFT, value))
+				return value;
+			else
+				return T<P_>{};
 		}
 
 	private:
