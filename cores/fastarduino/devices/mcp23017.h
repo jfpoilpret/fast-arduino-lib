@@ -21,21 +21,54 @@
 
 namespace devices
 {
+	enum MCP23017Port : uint8_t
+	{
+		PORT_A,
+		PORT_B,
+		PORTS_AB
+	};
+
 	enum InterruptPolarity : uint8_t
 	{
 		ACTIVE_LOW = 0,
 		ACTIVE_HIGH = 1
 	};
 
-	//TODO do we want to decide in template if we want to work at port level or dual-port?
-	//TODO do we want to support individual pin addressing? That maybe costly in use! Could be done as separate utility
-	//TODO provide 3 API per action: one for each port, one for both ports simulatenously
-	// This device is always used in mode BANK 0 (ie 16 bits at a time)
+	namespace mcp23017_traits
+	{
+		template<MCP23017Port PORT_> struct Port_trait
+		{
+			using TYPE = uint8_t;
+			static constexpr const uint8_t REG_SHIFT = 0;
+		};
+
+		template<> struct Port_trait<MCP23017Port::PORT_A>
+		{
+			using TYPE = uint8_t;
+			static constexpr const uint8_t REG_SHIFT = 0;
+		};
+
+		template<> struct Port_trait<MCP23017Port::PORT_B>
+		{
+			using TYPE = uint8_t;
+			static constexpr const uint8_t REG_SHIFT = 1;
+		};
+
+		template<> struct Port_trait<MCP23017Port::PORTS_AB>
+		{
+			using TYPE = uint16_t;
+			static constexpr const uint8_t REG_SHIFT = 0;
+		};
+	}
+
+	// This device is always used in mode BANK 0 (ie possibly 16 bits at a time)
 	// In uint16_t mode, port A is the low byte, port B is the high byte (TODO double check)
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class MCP23017 : public i2c::I2CDevice<MODE_>
 	{
 	private:
 		using BusCond = i2c::BusConditions;
+		template<MCP23017Port P> using TRAIT = mcp23017_traits::Port_trait<P>;
+		template<MCP23017Port P> using T = typename TRAIT<P>::TYPE;
 
 	public:
 		static constexpr const i2c::I2CMode MODE = MODE_;
@@ -47,115 +80,62 @@ namespace devices
 			: i2c::I2CDevice<MODE>(manager), device_{uint8_t((BASE_ADDRESS | (address & 0x07)) << 1)}
 		{
 			// Initialize device
-			if (this->write(device_, IOCON, BusCond::START_NO_STOP) == i2c::Status::OK)
-				this->write(device_,
-							build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH),
-							BusCond::NO_START_STOP);
+			write_register(IOCON, build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH));
 		}
 
 		// API to define for configuration
 		//=================================
 
-		// Configure all IO with a call including all needed uint16 args
-		bool configure_gpio(uint16_t direction, uint16_t pullup = 0, uint16_t polarity = 0)
+		// Configure all IO
+		template<MCP23017Port P_> bool configure_gpio(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 		{
-			using namespace i2c::Status;
-
+			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
 			//TODO Check if we need to swap bytes on uint16_t or not
-			return this->write(device_, IODIR_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, direction, BusCond::NO_START_NO_STOP) == OK
-				   && this->write(device_, polarity, BusCond::NO_START_STOP) == OK
-				   && this->write(device_, GPPU_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, pullup, BusCond::NO_START_STOP) == OK;
+			return write_register(IODIR_A + SHIFT, direction) && write_register(IPOL_A + SHIFT, polarity)
+				   && write_register(GPPU_A + SHIFT, pullup);
 		}
 
 		// Configure INTerrupts
-		bool configure_interrupts(uint16_t int_pins, uint16_t compare_values = 0, uint16_t on_change = 0)
+		template<MCP23017Port P_>
+		bool configure_interrupts(T<P_> int_pins, T<P_> compare_values = T<P_>{}, T<P_> on_change = T<P_>{})
 		{
-			using namespace i2c::Status;
-
+			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
 			//TODO Check if we need to swap bytes on uint16_t or not
-			return this->write(device_, GPINTEN_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, int_pins, BusCond::NO_START_NO_STOP) == OK
-				   && this->write(device_, compare_values, BusCond::NO_START_NO_STOP) == OK
-				   && this->write(device_, on_change, BusCond::NO_START_STOP) == OK;
+			return write_register(GPINTEN_A + SHIFT, int_pins) && write_register(DEFVAL_A + SHIFT, compare_values)
+				   && write_register(INTCON_A + SHIFT, on_change);
 		}
 
 		// API to access IOs
 		//===================
 
-		bool values(uint16_t output_values)
+		template<MCP23017Port P_> bool values(T<P_> output_values)
 		{
-			using namespace i2c::Status;
-
+			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
 			//TODO Check if we need to swap bytes on uint16_t or not
-			return this->write(device_, GPIO_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, output_values, BusCond::NO_START_STOP) == OK;
+			return write_register(GPIO_A + SHIFT, output_values);
 		}
 
 		//TODO Do we need an Optional value here?
-		uint16_t values()
+		template<MCP23017Port P_> T<P_> values()
 		{
-			using namespace i2c::Status;
-
-			uint16_t gpio_values;
-			if (this->write(device_, GPIO_A, BusCond::START_NO_STOP) == OK
-				&& this->read(device_, gpio_values, BusCond::REPEAT_START_STOP) == OK)
+			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
+			T<P_> gpio_values;
+			if (read_register(GPIO_A + SHIFT, gpio_values))
 				//TODO Check if we need to swap bytes on uint16_t or not
 				return gpio_values;
 			else
-				return 0;
+				return T<P_>{};
 		}
 
-		uint16_t interrupt_flags()
+		template<MCP23017Port P_> T<P_> interrupt_flags()
 		{
 			//TODO
 		}
 
-		uint16_t captured_values()
+		template<MCP23017Port P_> T<P_> captured_values()
 		{
 			//TODO
 		}
-
-		//TODO Port-level API
-		// Configure all IO with a call including all needed uint16 args
-		bool configure_portA_gpio(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
-		{
-			using namespace i2c::Status;
-			return this->write(device_, IODIR_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, direction, BusCond::NO_START_STOP) == OK
-				   && this->write(device_, IPOL_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, polarity, BusCond::NO_START_STOP) == OK
-				   && this->write(device_, GPPU_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, pullup, BusCond::NO_START_STOP) == OK;
-		}
-
-		//TODO refactor common code to read/write one (or more registers)
-		bool portA_values(uint8_t output_values)
-		{
-			using namespace i2c::Status;
-			return this->write(device_, GPIO_A, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, output_values, BusCond::NO_START_STOP) == OK;
-		}
-
-		uint8_t portA_values()
-		{
-			using namespace i2c::Status;
-			uint8_t value;
-			if (this->write(device_, GPIO_A, BusCond::START_NO_STOP) == OK
-				&& this->read(device_, value, BusCond::REPEAT_START_STOP) == OK)
-				return value;
-			else
-				return 0;
-		}
-
-		uint8_t portA_interrupt_flags() {}
-		uint8_t portA_captured_values() {}
-
-		bool portB_values(uint8_t output_values) {}
-		uint8_t portB_values() {}
-		uint8_t portB_interrupt_flags() {}
-		uint8_t portB_captured_values() {}
 
 	private:
 		// Base address of the device (actual address can be in 0x20-0x27)
@@ -201,6 +181,20 @@ namespace devices
 		static constexpr uint8_t build_IOCON(bool mirror, bool int_polarity)
 		{
 			return (mirror ? IOCON_MIRROR : 0) | (int_polarity ? IOCON_INTPOL : 0);
+		}
+
+		template<typename T> bool write_register(uint8_t address, T value)
+		{
+			using namespace i2c::Status;
+			return this->write(device_, address, BusCond::START_NO_STOP) == OK
+				   && this->write(device_, value, BusCond::NO_START_STOP) == OK;
+		}
+
+		template<typename T> bool read_register(uint8_t address, T& value)
+		{
+			using namespace i2c::Status;
+			return this->write(device_, address, BusCond::START_NO_STOP) == OK
+				   && this->read(device_, value, BusCond::REPEAT_START_STOP) == OK;
 		}
 
 		const uint8_t device_;

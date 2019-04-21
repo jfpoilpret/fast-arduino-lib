@@ -20,6 +20,7 @@
 constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Fast;
 
 using MCP = devices::MCP23017<I2C_MODE>;
+using MCP_PORT = devices::MCP23017Port;
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift)
 {
@@ -42,18 +43,18 @@ int main()
 	//=================
 	time::delay_ms(100);
 	MCP mcp{manager, 0x00};
-	mcp.configure_portA_gpio(0x00);
+	mcp.configure_gpio<MCP_PORT::PORT_A>(0x00);
 	// mcp.configure_gpio(SWITCH_MASK, SWITCH_MASK);
 
-	mcp.portA_values(0x11);
+	mcp.values<MCP_PORT::PORT_A>(0x11);
 	time::delay_ms(1000);
-	mcp.portA_values(0x00);
+	mcp.values<MCP_PORT::PORT_A>(0x00);
 	// Loop of the LED chaser
 	while (true)
 	{
 		for (uint8_t i = 0; i < 8; ++i)
 		{
-			mcp.portA_values(shift_pattern(0x01, i));
+			mcp.values<MCP_PORT::PORT_A>(shift_pattern(0x01, i));
 			time::delay_ms(250);
 		}
 	}
