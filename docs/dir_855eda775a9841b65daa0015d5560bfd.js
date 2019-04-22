@@ -36,6 +36,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "power.h", "power_8h.html", [
       [ "Power", "classpower_1_1_power.html", "classpower_1_1_power" ]
     ] ],
+    [ "power_internals.cpp", "power__internals_8cpp_source.html", null ],
     [ "pulse_timer.h", "pulse__timer_8h_source.html", null ],
     [ "pwm.h", "pwm_8h.html", [
       [ "PWMOutput", "classanalog_1_1_p_w_m_output.html", "classanalog_1_1_p_w_m_output" ]

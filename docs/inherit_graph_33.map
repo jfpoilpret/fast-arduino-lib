@@ -1,4 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. " alt="" coords="5,5,136,32"/>
-<area shape="rect" id="node2" href="$classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data..." alt="" coords="184,5,337,32"/>
+<area shape="rect" id="node1" href="$structeeprom_1_1isr__handler.html" title="eeprom::isr_handler" alt="" coords="5,5,157,32"/>
 </map>

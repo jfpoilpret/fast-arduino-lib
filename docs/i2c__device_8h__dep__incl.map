@@ -1,5 +1,6 @@
 <map id="fastarduino/i2c_device.h" name="fastarduino/i2c_device.h">
-<area shape="rect" id="node2" href="$ds1307_8h_source.html" title="fastarduino/devices\l/ds1307.h" alt="" coords="5,80,140,121"/>
-<area shape="rect" id="node3" href="$hmc5883l_8h_source.html" title="fastarduino/devices\l/hmc5883l.h" alt="" coords="164,80,299,121"/>
-<area shape="rect" id="node4" href="$mpu6050_8h_source.html" title="fastarduino/devices\l/mpu6050.h" alt="" coords="323,80,457,121"/>
+<area shape="rect" id="node2" href="$ds1307_8h_source.html" title="fastarduino/devices\l/ds1307.h" alt="" coords="5,80,156,121"/>
+<area shape="rect" id="node3" href="$hmc5883l_8h_source.html" title="fastarduino/devices\l/hmc5883l.h" alt="" coords="180,80,331,121"/>
+<area shape="rect" id="node4" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface). " alt="" coords="355,80,505,121"/>
+<area shape="rect" id="node5" href="$mpu6050_8h_source.html" title="fastarduino/devices\l/mpu6050.h" alt="" coords="529,80,680,121"/>
 </map>

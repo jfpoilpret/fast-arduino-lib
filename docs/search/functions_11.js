@@ -2,6 +2,7 @@ var searchData=
 [
   ['sample',['sample',['../classanalog_1_1_analog_input.html#a56e3701a8e1594347b99b3e0d300e598',1,'analog::AnalogInput']]],
   ['sbumpc',['sbumpc',['../classstreams_1_1istreambuf.html#a8d026dce29fbb1c111db3170ed814b7f',1,'streams::istreambuf']]],
+  ['schedule',['schedule',['../classevents_1_1_scheduler.html#a92d66252e1454ff7eff6fa7a2fa04bf4',1,'events::Scheduler']]],
   ['scheduler',['Scheduler',['../classevents_1_1_scheduler.html#a4b39d6c6759fdb97c4844eb3816e975a',1,'events::Scheduler']]],
   ['scientific',['scientific',['../namespacestreams.html#a9aee705e3b3b3be671608788721c5090',1,'streams']]],
   ['send',['send',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#adfd5e54d4d5ecdc575774c137be3d01f',1,'devices::rf::NRF24L01']]],
@@ -25,8 +26,6 @@ var searchData=
   ['set_5fport',['set_PORT',['../classgpio_1_1_fast_port.html#a910c81c3668585199f4d1dbd669438a8',1,'gpio::FastPort::set_PORT()'],['../classgpio_1_1_fast_masked_port.html#a6beeba48d59f52d78707da1c4d54005b',1,'gpio::FastMaskedPort::set_PORT()']]],
   ['set_5fprescaler',['set_prescaler',['../classtimer_1_1_timer.html#ac06e4933474b879f70fca5b247726dfd',1,'timer::Timer']]],
   ['set_5ftimer_5fmode',['set_timer_mode',['../classtimer_1_1_timer.html#adc0a234beadd50acf07c9f6d4b7b51a2',1,'timer::Timer']]],
-  ['set_5ftrigger',['set_trigger',['../classinterrupt_1_1_i_n_t_signal.html#a2ed3344f68e3ed91d1221a4eff7088d4',1,'interrupt::INTSignal']]],
-  ['set_5ftrigger_5f',['set_trigger_',['../classinterrupt_1_1_i_n_t_signal.html#a34dc95e45b5cec9e65e0c7c3e4ff2772',1,'interrupt::INTSignal']]],
   ['setbase',['setbase',['../namespacestreams.html#a08c31b7d39eec4dd90b7475ba11dd431',1,'streams']]],
   ['setf',['setf',['../classstreams_1_1ios__base.html#a47fa7608c0e74a39d8c95b52fbccf2cd',1,'streams::ios_base::setf(fmtflags flags)'],['../classstreams_1_1ios__base.html#a30ebcb8fb29a463f5f5cdeda1f1e4093',1,'streams::ios_base::setf(fmtflags flags, fmtflags mask)']]],
   ['setfill',['setfill',['../namespacestreams.html#acef42f5bb71d718ec9db80d4f4bb608b',1,'streams']]],

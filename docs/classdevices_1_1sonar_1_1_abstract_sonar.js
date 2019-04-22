@@ -1,15 +1,12 @@
 var classdevices_1_1sonar_1_1_abstract_sonar =
 [
-    [ "TIMER", "classdevices_1_1sonar_1_1_abstract_sonar.html#aced22c7d464cff7a3b70a34c35c37d35", null ],
-    [ "TYPE", "classdevices_1_1sonar_1_1_abstract_sonar.html#a9ee3b20c572afecf908a1d66a977b07e", null ],
-    [ "AbstractSonar", "classdevices_1_1sonar_1_1_abstract_sonar.html#a93390275219ee8a081730a1aa8c32eae", null ],
-    [ "ready", "classdevices_1_1sonar_1_1_abstract_sonar.html#a8cda7aebc082a2ff82f5b8da02da5ee7", null ],
-    [ "latest_echo_ticks", "classdevices_1_1sonar_1_1_abstract_sonar.html#a655587d4beef543785cd4dbfdbaad336", null ],
-    [ "async_echo_ticks", "classdevices_1_1sonar_1_1_abstract_sonar.html#a60aee8d092733fede36350610e8e1e09", null ],
-    [ "blocking_echo_ticks", "classdevices_1_1sonar_1_1_abstract_sonar.html#a78296c8f94c737f7986ddaece61023d4", null ],
-    [ "trigger_sent", "classdevices_1_1sonar_1_1_abstract_sonar.html#a133d4de6b907518d3739fc075998283f", null ],
-    [ "pulse_edge", "classdevices_1_1sonar_1_1_abstract_sonar.html#a77c8a3665c4779d266de2bafd0fbe023", null ],
-    [ "pulse_captured", "classdevices_1_1sonar_1_1_abstract_sonar.html#a71d4fc48f4661f46fd012f175ee427ba", null ],
-    [ "NTIMER", "classdevices_1_1sonar_1_1_abstract_sonar.html#a712c1e514b31eb0a9d4567d2737884cd", null ],
-    [ "CAPTURE", "classdevices_1_1sonar_1_1_abstract_sonar.html#a8890edfbeed80577b18c141222eead55", null ]
+    [ "RTT", "classdevices_1_1sonar_1_1_abstract_sonar.html#acecf70120857f544d562d7f11a03077e", null ],
+    [ "AbstractSonar", "classdevices_1_1sonar_1_1_abstract_sonar.html#a6f84bcecd9980cdc5ce55bc8247965da", null ],
+    [ "ready", "classdevices_1_1sonar_1_1_abstract_sonar.html#a9809f9dcad1c112d90a9a070877e1b5a", null ],
+    [ "latest_echo_us", "classdevices_1_1sonar_1_1_abstract_sonar.html#ad9d0de079be71ec9e3c4ad0097a5129d", null ],
+    [ "async_echo_us", "classdevices_1_1sonar_1_1_abstract_sonar.html#a30bc781ab5433a01f96202e971bf13b2", null ],
+    [ "blocking_echo_us", "classdevices_1_1sonar_1_1_abstract_sonar.html#a842569c592ca2222df790f1919ced87b", null ],
+    [ "trigger_sent", "classdevices_1_1sonar_1_1_abstract_sonar.html#a49131d9f74ab38ae48a66975048594bd", null ],
+    [ "pulse_edge", "classdevices_1_1sonar_1_1_abstract_sonar.html#a774720debbd43d36ca43ee73f241f9fb", null ],
+    [ "rtt_time_changed", "classdevices_1_1sonar_1_1_abstract_sonar.html#a8cdab2d82b5016fa14b89a26ab562ab5", null ]
 ];

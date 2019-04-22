@@ -1,7 +1,6 @@
 var hierarchy =
 [
-    [ "devices::sonar::AbstractSonar< NTIMER_, CAPTURE_ >", "classdevices_1_1sonar_1_1_abstract_sonar.html", null ],
-    [ "devices::sonar::AbstractSonar< NTIMER_, SONAR_TYPE_==SonarType::ASYNC_ICP >", "classdevices_1_1sonar_1_1_abstract_sonar.html", [
+    [ "devices::sonar::AbstractSonar< NTIMER_ >", "classdevices_1_1sonar_1_1_abstract_sonar.html", [
       [ "devices::sonar::HCSR04< NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ >", "classdevices_1_1sonar_1_1_h_c_s_r04.html", null ]
     ] ],
     [ "spi::AbstractSPIDevice", "classspi_1_1_abstract_s_p_i_device.html", [
@@ -54,7 +53,8 @@ var hierarchy =
     [ "devices::rf::NRF24L01< CSN, CE >::fifo_status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html", null ],
     [ "devices::magneto::FIFOEnable", "structdevices_1_1magneto_1_1_f_i_f_o_enable.html", null ],
     [ "i2c::I2CDevice< MODE_ >", "classi2c_1_1_i2_c_device.html", [
-      [ "devices::magneto::HMC5883L< MODE_ >", "classdevices_1_1magneto_1_1_h_m_c5883_l.html", null ]
+      [ "devices::magneto::HMC5883L< MODE_ >", "classdevices_1_1magneto_1_1_h_m_c5883_l.html", null ],
+      [ "devices::mcp23017::MCP23017< MODE_ >", "classdevices_1_1mcp23017_1_1_m_c_p23017.html", null ]
     ] ],
     [ "i2c::I2CDevice< i2c::I2CMode::Standard >", "classi2c_1_1_i2_c_device.html", [
       [ "devices::rtc::DS1307", "classdevices_1_1rtc_1_1_d_s1307.html", null ]
@@ -63,12 +63,14 @@ var hierarchy =
       [ "devices::magneto::MPU6050< MODE, AD0 >", "classdevices_1_1magneto_1_1_m_p_u6050.html", null ]
     ] ],
     [ "i2c::I2CManager< MODE_ >", "classi2c_1_1_i2_c_manager.html", null ],
-    [ "interrupt::INTSignal< PIN_ >", "classinterrupt_1_1_i_n_t_signal.html", null ],
     [ "devices::magneto::INTStatus", "structdevices_1_1magneto_1_1_i_n_t_status.html", null ],
     [ "streams::ios_base", "classstreams_1_1ios__base.html", [
       [ "streams::istream", "classstreams_1_1istream.html", null ],
       [ "streams::ostream", "classstreams_1_1ostream.html", null ]
     ] ],
+    [ "serial::soft::isr_handler", "structserial_1_1soft_1_1isr__handler.html", null ],
+    [ "eeprom::isr_handler", "structeeprom_1_1isr__handler.html", null ],
+    [ "watchdog::isr_handler", "structwatchdog_1_1isr__handler.html", null ],
     [ "LinkedListImpl", null, [
       [ "containers::LinkedList< T_ >", "classcontainers_1_1_linked_list.html", null ],
       [ "containers::LinkedList< EventHandler< EVENT > >", "classcontainers_1_1_linked_list.html", [
@@ -126,11 +128,12 @@ var hierarchy =
     [ "containers::Queue< EVENT >", "classcontainers_1_1_queue.html", null ],
     [ "containers::Queue< uint8_t, uint8_t >", "classcontainers_1_1_queue.html", null ],
     [ "timer::RTTEventCallback< EVENT, PERIOD_MS >", "classtimer_1_1_r_t_t_event_callback.html", null ],
+    [ "timer::RTTRawTime< T >", "classtimer_1_1_r_t_t_raw_time.html", null ],
     [ "time::RTTTime", "structtime_1_1_r_t_t_time.html", null ],
     [ "devices::magneto::Sensor3D", "structdevices_1_1magneto_1_1_sensor3_d.html", null ],
     [ "devices::servo::Servo< TIMER_, PIN_ >", "classdevices_1_1servo_1_1_servo.html", null ],
     [ "devices::SIPO< CLOCK_, LATCH_, DATA_ >", "classdevices_1_1_s_i_p_o.html", null ],
-    [ "devices::sonar::SonarEvent< TIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
+    [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],
     [ "timer::SquareWave< NTIMER, OUTPUT >", "classtimer_1_1_square_wave.html", null ],
     [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
@@ -156,6 +159,8 @@ var hierarchy =
       [ "serial::soft::AbstractUATX", "classserial_1_1soft_1_1_abstract_u_a_t_x.html", null ]
     ] ],
     [ "watchdog::WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", [
-      [ "watchdog::Watchdog< EVENT >", "classwatchdog_1_1_watchdog.html", null ]
+      [ "watchdog::WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", [
+        [ "watchdog::Watchdog< EVENT >", "classwatchdog_1_1_watchdog.html", null ]
+      ] ]
     ] ]
 ];

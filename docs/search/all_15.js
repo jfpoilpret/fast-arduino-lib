@@ -8,6 +8,7 @@ var searchData=
   ['wait_5funtil_5fready',['wait_until_ready',['../classeeprom_1_1_e_e_p_r_o_m.html#a61cd403aa529aed8d2f8fd9d746b4073',1,'eeprom::EEPROM']]],
   ['watchdog',['Watchdog',['../classwatchdog_1_1_watchdog.html',1,'watchdog::Watchdog&lt; EVENT &gt;'],['../namespacewatchdog.html',1,'watchdog'],['../classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731',1,'watchdog::Watchdog::Watchdog()']]],
   ['watchdog_2eh',['watchdog.h',['../watchdog_8h.html',1,'']]],
+  ['watchdogrtt',['WatchdogRTT',['../classwatchdog_1_1_watchdog_r_t_t.html',1,'watchdog::WatchdogRTT'],['../classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477',1,'watchdog::WatchdogRTT::WatchdogRTT()']]],
   ['watchdogsignal',['WatchdogSignal',['../classwatchdog_1_1_watchdog_signal.html',1,'watchdog']]],
   ['wdt_5ftimer',['WDT_TIMER',['../namespaceevents_1_1_type.html#a89956491c3bf31c616baf63fcd335405',1,'events::Type']]],
   ['width',['width',['../classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f',1,'streams::ios_base::width(uint8_t width)'],['../classstreams_1_1ios__base.html#a79ac9c6989af1fff3d9c0d5881d48c5c',1,'streams::ios_base::width() const']]],

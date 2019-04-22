@@ -1,12 +1,11 @@
 var searchData=
 [
   ['abstractsonar',['AbstractSonar',['../classdevices_1_1sonar_1_1_abstract_sonar.html',1,'devices::sonar']]],
-  ['abstractsonar_3c_20ntimer_5f_2c_20sonar_5ftype_5f_3d_3dsonartype_3a_3aasync_5ficp_20_3e',['AbstractSonar&lt; NTIMER_, SONAR_TYPE_==SonarType::ASYNC_ICP &gt;',['../classdevices_1_1sonar_1_1_abstract_sonar.html',1,'devices::sonar']]],
   ['abstractspidevice',['AbstractSPIDevice',['../classspi_1_1_abstract_s_p_i_device.html',1,'spi']]],
   ['abstractuarx',['AbstractUARX',['../classserial_1_1soft_1_1_abstract_u_a_r_x.html',1,'serial::soft']]],
   ['abstractuatx',['AbstractUATX',['../classserial_1_1soft_1_1_abstract_u_a_t_x.html',1,'serial::soft']]],
-  ['active_5fhigh',['ACTIVE_HIGH',['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bab868e37f0edfdbea9838600657b6f4b3',1,'spi']]],
-  ['active_5flow',['ACTIVE_LOW',['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bae434209643a0d01f383a46eece525679',1,'spi']]],
+  ['active_5fhigh',['ACTIVE_HIGH',['../mcp23017_8h.html#a027b5cd825760f8fa2f4723e92d3a523a736450632635bcd4954bb040b9a25979',1,'devices::mcp23017::ACTIVE_HIGH()'],['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bab868e37f0edfdbea9838600657b6f4b3',1,'spi::ACTIVE_HIGH()']]],
+  ['active_5flow',['ACTIVE_LOW',['../mcp23017_8h.html#a027b5cd825760f8fa2f4723e92d3a523a34fa880249d16ccf8cd8d2fb27a8492c',1,'devices::mcp23017::ACTIVE_LOW()'],['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bae434209643a0d01f383a46eece525679',1,'spi::ACTIVE_LOW()']]],
   ['addr_5ft',['addr_t',['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html',1,'devices::rf::NRF24L01']]],
   ['adjustfield',['adjustfield',['../classstreams_1_1ios__base.html#aeb6a15be95b2ef5e32d8584f07f6aba8',1,'streams::ios_base']]],
   ['allsensors',['AllSensors',['../structdevices_1_1magneto_1_1_all_sensors.html',1,'devices::magneto']]],
@@ -17,7 +16,6 @@ var searchData=
   ['analoginput_3c_20bandgap_5f_2c_20uint16_5ft_2c_20board_3a_3aanalogreference_3a_3aavcc_2c_20board_3a_3aanalogclock_3a_3amax_5ffreq_5f50khz_20_3e',['AnalogInput&lt; BANDGAP_, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz &gt;',['../classanalog_1_1_analog_input.html',1,'analog']]],
   ['analogpin',['AnalogPin',['../namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313',1,'board']]],
   ['analogreference',['AnalogReference',['../namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9',1,'board']]],
-  ['any_5fchange',['ANY_CHANGE',['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba1d6fe09476721a54c07d90573d84a1f2',1,'interrupt']]],
   ['apin',['APIN',['../classanalog_1_1_analog_input.html#a504bffcb042051f57014d694f648c70d',1,'analog::AnalogInput']]],
   ['arc_5fcnt',['arc_cnt',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#abdf2eabf22bfd408ba008dcd4251692a',1,'devices::rf::NRF24L01::observe_tx_t']]],
   ['are_5finterrupts_5fenabled',['are_interrupts_enabled',['../classtimer_1_1_timer.html#a54448770d116b18757554946ff89578f',1,'timer::Timer']]],

@@ -1,11 +1,34 @@
+/*
+@ @licstart  The following is the entire license notice for the
+JavaScript code in this file.
+
+Copyright (C) 1997-2017 by Dimitri van Heesch
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+@licend  The above is the entire license notice
+for the JavaScript code in this file
+*/
 var NAVTREE =
 [
   [ "FastArduino", "index.html", [
     [ "FastArduino Documentation", "index.html", null ],
     [ "Supported MCU and Arduino boards", "supportedboards.html", null ],
     [ "FastArduino API Tutorial", "tutorial.html", null ],
-    [ "Namespaces", null, [
-      [ "Namespace List", "namespaces.html", "namespaces" ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
@@ -27,8 +50,8 @@ var NAVTREE =
         [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
-    [ "Files", null, [
-      [ "File List", "files.html", "files" ],
+    [ "Files", "files.html", [
+      [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Macros", "globals_defs.html", null ]
@@ -40,11 +63,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa62eac1511adfbd0eaeb03081918a3351",
-"classserial_1_1hard_1_1_u_a_t_x.html",
-"classtimer_1_1_timer.html#afe042f3db2c961f846587cfb53b27fd8",
-"power_8h.html",
-"utilities_8h.html#a610e02474f969fc747fa1725b79e252c"
+"classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a",
+"classserial_1_1hard_1_1_u_a_r_x.html#a5e4adca3a15c030fde986c65e0971f3e",
+"classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56",
+"namespaceflash.html",
+"timer_8h.html#a1dec37d0ac500f2d0dfc9b50fcf6e71f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

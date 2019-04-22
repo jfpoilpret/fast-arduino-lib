@@ -1,18 +1,18 @@
 <map id="fastarduino/queue.h" name="fastarduino/queue.h">
-<area shape="rect" id="node2" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="123,80,267,107"/>
-<area shape="rect" id="node4" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="295,80,453,107"/>
-<area shape="rect" id="node8" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="392,251,540,278"/>
-<area shape="rect" id="node13" href="$events_8h.html" title="Support for events management. " alt="" coords="644,80,784,107"/>
-<area shape="rect" id="node3" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="125,155,260,196"/>
-<area shape="rect" id="node5" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="284,162,403,189"/>
-<area shape="rect" id="node6" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,251,196,278"/>
-<area shape="rect" id="node7" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="221,251,367,278"/>
-<area shape="rect" id="node9" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="209,333,361,360"/>
-<area shape="rect" id="node11" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="385,333,547,360"/>
-<area shape="rect" id="node12" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="571,333,694,360"/>
-<area shape="rect" id="node10" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="201,408,368,435"/>
-<area shape="rect" id="node14" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="561,155,697,196"/>
-<area shape="rect" id="node16" href="$scheduler_8h.html" title="Support for jobs scheduling. " alt="" coords="721,162,878,189"/>
-<area shape="rect" id="node17" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="902,162,1059,189"/>
-<area shape="rect" id="node15" href="$hcsr04_8h_source.html" title="fastarduino/devices\l/hcsr04.h" alt="" coords="564,244,699,285"/>
+<area shape="rect" id="node2" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="141,80,303,107"/>
+<area shape="rect" id="node4" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="327,80,506,107"/>
+<area shape="rect" id="node8" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="434,251,599,278"/>
+<area shape="rect" id="node13" href="$events_8h.html" title="Support for events management. " alt="" coords="708,80,864,107"/>
+<area shape="rect" id="node3" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="147,155,297,196"/>
+<area shape="rect" id="node5" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="323,162,454,189"/>
+<area shape="rect" id="node6" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,251,220,278"/>
+<area shape="rect" id="node7" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="245,251,410,278"/>
+<area shape="rect" id="node9" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="231,333,402,360"/>
+<area shape="rect" id="node11" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="427,333,607,360"/>
+<area shape="rect" id="node12" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="631,333,770,360"/>
+<area shape="rect" id="node10" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="224,408,409,435"/>
+<area shape="rect" id="node14" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="614,155,769,196"/>
+<area shape="rect" id="node16" href="$scheduler_8h.html" title="Support for jobs scheduling. " alt="" coords="793,162,968,189"/>
+<area shape="rect" id="node17" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="992,162,1167,189"/>
+<area shape="rect" id="node15" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="624,244,775,285"/>
 </map>

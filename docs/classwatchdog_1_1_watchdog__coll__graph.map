@@ -1,3 +1,4 @@
 <map id="watchdog::Watchdog&lt; EVENT &gt;" name="watchdog::Watchdog&lt; EVENT &gt;">
-<area shape="rect" id="node2" href="$classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. " alt="" coords="5,5,187,32"/>
+<area shape="rect" id="node2" href="$classwatchdog_1_1_watchdog_r_t_t.html" title="Simple API to use watchdog timer as a real&#45;time clock. " alt="" coords="13,80,195,107"/>
+<area shape="rect" id="node3" href="$classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. " alt="" coords="5,5,203,32"/>
 </map>

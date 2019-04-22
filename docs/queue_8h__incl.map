@@ -1,4 +1,5 @@
 <map id="fastarduino/queue.h" name="fastarduino/queue.h">
-<area shape="rect" id="node3" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="62,155,137,181"/>
-<area shape="rect" id="node6" href="$time_8h.html" title="Simple time utilities. " alt="" coords="157,80,215,107"/>
+<area shape="rect" id="node3" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="66,155,149,181"/>
+<area shape="rect" id="node7" href="$time_8h.html" title="Simple time utilities. " alt="" coords="154,80,218,107"/>
+<area shape="rect" id="node4" href="$io_8h_source.html" title="boards/io.h" alt="" coords="139,229,233,256"/>
 </map>

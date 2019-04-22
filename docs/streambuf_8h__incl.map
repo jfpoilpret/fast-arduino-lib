@@ -1,6 +1,7 @@
 <map id="fastarduino/streambuf.h" name="fastarduino/streambuf.h">
-<area shape="rect" id="node2" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="105,80,173,107"/>
-<area shape="rect" id="node10" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="225,80,286,107"/>
-<area shape="rect" id="node4" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="55,229,130,256"/>
-<area shape="rect" id="node7" href="$time_8h.html" title="Simple time utilities. " alt="" coords="143,155,202,181"/>
+<area shape="rect" id="node2" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="124,80,199,107"/>
+<area shape="rect" id="node11" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="433,80,498,107"/>
+<area shape="rect" id="node4" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="39,229,121,256"/>
+<area shape="rect" id="node8" href="$time_8h.html" title="Simple time utilities. " alt="" coords="164,155,228,181"/>
+<area shape="rect" id="node5" href="$io_8h_source.html" title="boards/io.h" alt="" coords="134,304,229,331"/>
 </map>

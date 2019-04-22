@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['pci_2eh',['pci.h',['../pci_8h.html',1,'']]],
-  ['power_2eh',['power.h',['../power_8h.html',1,'']]],
-  ['pwm_2eh',['pwm.h',['../pwm_8h.html',1,'']]]
+  ['mcp23017_2eh',['mcp23017.h',['../mcp23017_8h.html',1,'']]]
 ];

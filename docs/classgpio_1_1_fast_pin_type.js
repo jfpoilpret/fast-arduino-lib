@@ -10,5 +10,6 @@ var classgpio_1_1_fast_pin_type =
     [ "DPIN", "classgpio_1_1_fast_pin_type.html#acefb55483053582508b27c3abe76f351", null ],
     [ "PORT", "classgpio_1_1_fast_pin_type.html#a9b79040d09c151361c55fd543070c845", null ],
     [ "BIT", "classgpio_1_1_fast_pin_type.html#a97461624e5f46544284655f9eb401567", null ],
-    [ "MASK", "classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0", null ]
+    [ "MASK", "classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0", null ],
+    [ "HAS_PWM", "classgpio_1_1_fast_pin_type.html#abf8fce945aaa2c505f9b4d6f689119d2", null ]
 ];

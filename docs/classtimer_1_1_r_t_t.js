@@ -1,12 +1,22 @@
 var classtimer_1_1_r_t_t =
 [
-    [ "CALC", "classtimer_1_1_r_t_t.html#a0ef2947e3c680508cd88407afaf00abd", null ],
+    [ "RAW_TIME", "classtimer_1_1_r_t_t.html#aecb24e63db68d362d56e435224444d9b", null ],
     [ "RTT", "classtimer_1_1_r_t_t.html#aa75448a1d268c8c5aaec4111230c3d70", null ],
-    [ "on_timer", "classtimer_1_1_r_t_t.html#a72326103a8124a199be1961f123ecf1e", null ],
-    [ "compute_micros", "classtimer_1_1_r_t_t.html#a7bb8128e7a27f22b38f4d2837d444202", null ],
-    [ "NTIMER", "classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083", null ],
-    [ "millis_", "classtimer_1_1_r_t_t.html#afc688bbc499251c6fe6490127d25b447", null ],
-    [ "ONE_MILLI", "classtimer_1_1_r_t_t.html#a500741e50a6e02422b855a318d5778cd", null ],
-    [ "MILLI_PRESCALER", "classtimer_1_1_r_t_t.html#af5c7bcd3be6c2542594b86ddef5dc01c", null ],
-    [ "MILLI_COUNTER", "classtimer_1_1_r_t_t.html#a058b6796457d756108eef7d8fac8b7a4", null ]
+    [ "register_rtt_handler", "classtimer_1_1_r_t_t.html#a22f40fce0ca23a3cb26426dd7d37ce5c", null ],
+    [ "millis", "classtimer_1_1_r_t_t.html#a7a6aaedc91de46926931990538c8ae26", null ],
+    [ "millis_", "classtimer_1_1_r_t_t.html#a96f540c172d78ac30366240ecfa3ddb2", null ],
+    [ "delay", "classtimer_1_1_r_t_t.html#a7d5c189655b98446f08ccd5cf078c912", null ],
+    [ "micros", "classtimer_1_1_r_t_t.html#ac55b6e30571ddacfa28824133fa8824c", null ],
+    [ "time", "classtimer_1_1_r_t_t.html#ac5c7807d1cb3f77fc54685f85b193e32", null ],
+    [ "time_", "classtimer_1_1_r_t_t.html#a00d4ac1636b0dbe49e6c198a2be0f4ff", null ],
+    [ "raw_time", "classtimer_1_1_r_t_t.html#a2bcffff30fb331b9fb7ada737fcacf2d", null ],
+    [ "raw_time_", "classtimer_1_1_r_t_t.html#af839f927ace75a919383c841d1b6135d", null ],
+    [ "millis", "classtimer_1_1_r_t_t.html#a6779d4fc23c939a3c33d46f9e33f7664", null ],
+    [ "begin", "classtimer_1_1_r_t_t.html#a9f2975201cfb390d7fb15e930d0c5489", null ],
+    [ "begin_", "classtimer_1_1_r_t_t.html#a6b23a2de5d3adb282bf69e76a21e1e44", null ],
+    [ "end", "classtimer_1_1_r_t_t.html#a54d7b6121f3533023b7ecf132698d92e", null ],
+    [ "end_", "classtimer_1_1_r_t_t.html#a71cf589caa0e50683ca48bbdca306e8f", null ],
+    [ "timer", "classtimer_1_1_r_t_t.html#a024ba8a84801b1200ca055adb5777cb3", null ],
+    [ "isr_handler_rtt", "classtimer_1_1_r_t_t.html#a859c9a33530adb9969b3ca793ed14f46", null ],
+    [ "NTIMER", "classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083", null ]
 ];

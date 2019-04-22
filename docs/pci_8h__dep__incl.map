@@ -1,5 +1,5 @@
 <map id="fastarduino/pci.h" name="fastarduino/pci.h">
-<area shape="rect" id="node2" href="$hcsr04_8h_source.html" title="fastarduino/devices\l/hcsr04.h" alt="" coords="5,80,140,121"/>
-<area shape="rect" id="node3" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="165,87,317,114"/>
-<area shape="rect" id="node4" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="157,169,324,196"/>
+<area shape="rect" id="node2" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="5,80,156,121"/>
+<area shape="rect" id="node3" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="181,87,351,114"/>
+<area shape="rect" id="node4" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="173,169,359,196"/>
 </map>

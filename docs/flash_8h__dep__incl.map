@@ -1,12 +1,12 @@
 <map id="fastarduino/flash.h" name="fastarduino/flash.h">
-<area shape="rect" id="node2" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="8,80,143,121"/>
-<area shape="rect" id="node3" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="269,87,428,114"/>
-<area shape="rect" id="node4" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="235,169,353,196"/>
-<area shape="rect" id="node5" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,244,196,271"/>
-<area shape="rect" id="node7" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="392,244,540,271"/>
-<area shape="rect" id="node6" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="221,244,367,271"/>
-<area shape="rect" id="node8" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="209,319,361,345"/>
-<area shape="rect" id="node10" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="385,319,547,345"/>
-<area shape="rect" id="node11" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="571,319,694,345"/>
-<area shape="rect" id="node9" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="201,393,368,420"/>
+<area shape="rect" id="node2" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="24,80,175,121"/>
+<area shape="rect" id="node3" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="301,87,479,114"/>
+<area shape="rect" id="node4" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="262,169,393,196"/>
+<area shape="rect" id="node5" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,244,220,271"/>
+<area shape="rect" id="node7" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="434,244,599,271"/>
+<area shape="rect" id="node6" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="245,244,410,271"/>
+<area shape="rect" id="node8" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="231,319,402,345"/>
+<area shape="rect" id="node10" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="427,319,607,345"/>
+<area shape="rect" id="node11" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="631,319,770,345"/>
+<area shape="rect" id="node9" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="224,393,409,420"/>
 </map>

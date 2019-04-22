@@ -1,19 +1,19 @@
 <map id="fastarduino/interrupts.h" name="fastarduino/interrupts.h">
-<area shape="rect" id="node2" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="267,80,382,107"/>
-<area shape="rect" id="node5" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="43,162,195,189"/>
-<area shape="rect" id="node7" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="383,341,527,367"/>
-<area shape="rect" id="node9" href="$timer_8h.html" title="Timer API. " alt="" coords="558,80,689,107"/>
-<area shape="rect" id="node14" href="$pulse__timer_8h_source.html" title="fastarduino/pulse_timer.h" alt="" coords="846,162,1014,189"/>
-<area shape="rect" id="node15" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="481,155,617,196"/>
-<area shape="rect" id="node16" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="60,80,179,107"/>
-<area shape="rect" id="node17" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="763,80,886,107"/>
-<area shape="rect" id="node18" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="910,80,1067,107"/>
-<area shape="rect" id="node3" href="$hcsr04_8h_source.html" title="fastarduino/devices\l/hcsr04.h" alt="" coords="196,244,331,285"/>
-<area shape="rect" id="node4" href="$nrf24l01p_8h_source.html" title="fastarduino/devices\l/nrf24l01p.h" alt="" coords="271,155,405,196"/>
-<area shape="rect" id="node6" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="5,251,172,278"/>
-<area shape="rect" id="node8" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="469,423,604,464"/>
-<area shape="rect" id="node10" href="$square__wave_8h_source.html" title="fastarduino/square\l_wave.h" alt="" coords="589,244,719,285"/>
-<area shape="rect" id="node12" href="$pwm_8h.html" title="PWM API. " alt="" coords="692,162,821,189"/>
-<area shape="rect" id="node11" href="$tones_8h_source.html" title="fastarduino/devices\l/tones.h" alt="" coords="575,333,709,375"/>
-<area shape="rect" id="node13" href="$servo_8h_source.html" title="fastarduino/devices\l/servo.h" alt="" coords="803,244,937,285"/>
+<area shape="rect" id="node2" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="139,80,268,107"/>
+<area shape="rect" id="node5" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="282,162,453,189"/>
+<area shape="rect" id="node7" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="983,341,1146,367"/>
+<area shape="rect" id="node9" href="$timer_8h.html" title="Timer API. " alt="" coords="642,80,789,107"/>
+<area shape="rect" id="node14" href="$pulse__timer_8h_source.html" title="fastarduino/pulse_timer.h" alt="" coords="875,162,1063,189"/>
+<area shape="rect" id="node15" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="477,155,631,196"/>
+<area shape="rect" id="node16" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="302,80,433,107"/>
+<area shape="rect" id="node17" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="1138,80,1277,107"/>
+<area shape="rect" id="node18" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="1301,80,1476,107"/>
+<area shape="rect" id="node3" href="$nrf24l01p_8h_source.html" title="fastarduino/devices\l/nrf24l01p.h" alt="" coords="5,155,156,196"/>
+<area shape="rect" id="node4" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="144,244,295,285"/>
+<area shape="rect" id="node6" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="319,251,504,278"/>
+<area shape="rect" id="node8" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="864,423,1015,464"/>
+<area shape="rect" id="node10" href="$square__wave_8h_source.html" title="fastarduino/square\l_wave.h" alt="" coords="706,244,850,285"/>
+<area shape="rect" id="node12" href="$pwm_8h.html" title="PWM API. " alt="" coords="706,162,850,189"/>
+<area shape="rect" id="node11" href="$tones_8h_source.html" title="fastarduino/devices\l/tones.h" alt="" coords="773,333,924,375"/>
+<area shape="rect" id="node13" href="$servo_8h_source.html" title="fastarduino/devices\l/servo.h" alt="" coords="884,244,1035,285"/>
 </map>

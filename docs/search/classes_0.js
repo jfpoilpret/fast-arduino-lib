@@ -1,7 +1,6 @@
 var searchData=
 [
   ['abstractsonar',['AbstractSonar',['../classdevices_1_1sonar_1_1_abstract_sonar.html',1,'devices::sonar']]],
-  ['abstractsonar_3c_20ntimer_5f_2c_20sonar_5ftype_5f_3d_3dsonartype_3a_3aasync_5ficp_20_3e',['AbstractSonar&lt; NTIMER_, SONAR_TYPE_==SonarType::ASYNC_ICP &gt;',['../classdevices_1_1sonar_1_1_abstract_sonar.html',1,'devices::sonar']]],
   ['abstractspidevice',['AbstractSPIDevice',['../classspi_1_1_abstract_s_p_i_device.html',1,'spi']]],
   ['abstractuarx',['AbstractUARX',['../classserial_1_1soft_1_1_abstract_u_a_r_x.html',1,'serial::soft']]],
   ['abstractuatx',['AbstractUATX',['../classserial_1_1soft_1_1_abstract_u_a_t_x.html',1,'serial::soft']]],

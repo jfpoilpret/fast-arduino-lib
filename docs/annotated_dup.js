@@ -20,6 +20,9 @@ var annotated_dup =
         [ "Sensor3D", "structdevices_1_1magneto_1_1_sensor3_d.html", "structdevices_1_1magneto_1_1_sensor3_d" ],
         [ "Status", "structdevices_1_1magneto_1_1_status.html", "structdevices_1_1magneto_1_1_status" ]
       ] ],
+      [ "mcp23017", null, [
+        [ "MCP23017", "classdevices_1_1mcp23017_1_1_m_c_p23017.html", "classdevices_1_1mcp23017_1_1_m_c_p23017" ]
+      ] ],
       [ "rf", null, [
         [ "IRQ_NRF24L01", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01" ],
         [ "NRF24L01", "classdevices_1_1rf_1_1_n_r_f24_l01.html", "classdevices_1_1rf_1_1_n_r_f24_l01" ]

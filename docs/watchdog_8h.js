@@ -1,11 +1,15 @@
 var watchdog_8h =
 [
     [ "WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", "classwatchdog_1_1_watchdog_signal" ],
+    [ "WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", "classwatchdog_1_1_watchdog_r_t_t" ],
     [ "Watchdog", "classwatchdog_1_1_watchdog.html", "classwatchdog_1_1_watchdog" ],
+    [ "isr_handler", "structwatchdog_1_1isr__handler.html", "structwatchdog_1_1isr__handler" ],
     [ "REGISTER_WATCHDOG_CLOCK_ISR", "watchdog_8h.html#a6998639a03718afa44f5626c17ce8994", null ],
+    [ "REGISTER_WATCHDOG_RTT_ISR", "watchdog_8h.html#acf8c96f84107c380f8208e0e8f22a879", null ],
     [ "REGISTER_WATCHDOG_ISR_METHOD", "watchdog_8h.html#a04cf0d3a526304c80ae5bf73ee63edb0", null ],
     [ "REGISTER_WATCHDOG_ISR_FUNCTION", "watchdog_8h.html#adb0bf0158356e2965afaae4fefb39248", null ],
     [ "REGISTER_WATCHDOG_ISR_EMPTY", "watchdog_8h.html#adb4cc81538efc2536ee6e1d06ae4b92f", null ],
+    [ "DECL_WATCHDOG_ISR_HANDLES_FRIEND", "watchdog_8h.html#a69951b60902ba314a50763e1d36bf838", null ],
     [ "TimeOut", "watchdog_8h.html#ae2234bf414f2a2e1b774538e7cecd01b", [
       [ "TO_16ms", "watchdog_8h.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c", null ],
       [ "TO_32ms", "watchdog_8h.html#ae2234bf414f2a2e1b774538e7cecd01ba5c127bc3e865ef5b3f22a5a89f088bfa", null ],

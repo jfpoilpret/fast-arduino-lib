@@ -11,6 +11,7 @@ var timer_8h =
     [ "REGISTER_TIMER_CAPTURE_ISR_METHOD", "timer_8h.html#aa2b78ab0ec16c3af01c22b9690cf3600", null ],
     [ "REGISTER_TIMER_CAPTURE_ISR_FUNCTION", "timer_8h.html#a978c0a84d3c5973bd5feba2a41b70142", null ],
     [ "REGISTER_TIMER_CAPTURE_ISR_EMPTY", "timer_8h.html#a1dec37d0ac500f2d0dfc9b50fcf6e71f", null ],
+    [ "DECL_TIMER_ISR_HANDLERS_FRIEND", "timer_8h.html#aa27556302e5902b12c0a49a32792a01f", null ],
     [ "TimerMode", "timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097", [
       [ "NORMAL", "timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097a1e23852820b9154316c7c06e2b7ba051", null ],
       [ "CTC", "timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77", null ],

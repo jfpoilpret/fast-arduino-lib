@@ -1,4 +1,5 @@
 <map id="fastarduino/timer.h" name="fastarduino/timer.h">
-<area shape="rect" id="node4" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="117,80,203,107"/>
-<area shape="rect" id="node5" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="228,80,303,107"/>
+<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="339,80,437,107"/>
+<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="461,80,544,107"/>
+<area shape="rect" id="node6" href="$io_8h_source.html" title="boards/io.h" alt="" coords="341,155,435,181"/>
 </map>

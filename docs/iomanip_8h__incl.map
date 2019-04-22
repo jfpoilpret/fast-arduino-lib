@@ -1,8 +1,9 @@
 <map id="fastarduino/iomanip.h" name="fastarduino/iomanip.h">
-<area shape="rect" id="node4" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="186,80,237,107"/>
-<area shape="rect" id="node8" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="358,155,449,181"/>
-<area shape="rect" id="node16" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="414,229,475,256"/>
-<area shape="rect" id="node9" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="265,229,333,256"/>
-<area shape="rect" id="node10" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="213,379,287,405"/>
-<area shape="rect" id="node13" href="$time_8h.html" title="Simple time utilities. " alt="" coords="303,304,362,331"/>
+<area shape="rect" id="node4" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="194,80,247,107"/>
+<area shape="rect" id="node8" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="375,155,475,181"/>
+<area shape="rect" id="node17" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="484,229,549,256"/>
+<area shape="rect" id="node9" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="219,229,294,256"/>
+<area shape="rect" id="node10" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="94,379,177,405"/>
+<area shape="rect" id="node14" href="$time_8h.html" title="Simple time utilities. " alt="" coords="255,304,319,331"/>
+<area shape="rect" id="node11" href="$io_8h_source.html" title="boards/io.h" alt="" coords="189,453,284,480"/>
 </map>
