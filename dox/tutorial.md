@@ -22,9 +22,9 @@ Advanced:
 3. [events, scheduler](@ref events)
 4. [power](@ref power)
 5. [EEPROM](@ref eeprom)
-6. SPI devices management
-7. I2C devices management
-8. software UART
+6. [SPI devices example](@ref spi)
+7. [I2C devices example](@ref i2c)
+8. [software UART](@ref softuart)
 
 Devices (not yet documented):
 1. SPI
@@ -514,7 +514,7 @@ You can also find more details in `streams` namespace documentation.
 
 We have already seen `UATX` and `UARX` as classes for sending, resp. receiving, data through serial. There is also `UARX` which combines both.
 
-As you know, the number of physical (hardware) UART available on an MCU target is limited, some targets (ATtiny) don't even have any hardware UART at all. For this reason, if you need extra UART featurs to connect to some devices, you can use software UART API, documented in [namespace `serial::soft`](TODO). As this is more complicated to use, it is not part of this basic tutorial, but will be addressed later on.
+As you know, the number of physical (hardware) UART available on an MCU target is limited, some targets (ATtiny) don't even have any hardware UART at all. For this reason, if you need extra UART featurs to connect to some devices, you can use software UART API, documented in namespace `serial::soft`. As this is more complicated to use, it is not part of this basic tutorial, but will be addressed later on.
 
 
 @anchor analoginput Basics: analog input
@@ -1026,7 +1026,7 @@ The few examples in this section will introduce you to a few functions that may 
     }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2. `utils::bcd_to_binary`: this function is useful when you use a sensor device that provides values coded as *BCD* (binary-coded decimal), i.e. where each half-byte (*nibble*) contains the value of one digit (i.e. `0` to `9`), thus holding a range of values from `0` to `99`. Many RTC devices use BCD representation for time. In order to performa calculation on BCD values, you need to first convert them to binary. The opposite function is also provided as `utils::binary_to_bcd`. The following example is an excerpt of `ds1307.h` provided by FastArduino, where each datetime field (seconds, minutes, hours...) have to be covnerted from BCD to binary:
+2. `utils::bcd_to_binary`: this function is useful when you use a sensor device that provides values coded as *BCD* (binary-coded decimal), i.e. where each half-byte (*nibble*) contains the value of one digit (i.e. `0` to `9`), thus holding a range of values from `0` to `99`. Many RTC devices use BCD representation for time. In order to performa calculation on BCD values, you need to first convert them to binary. The opposite function is also provided as `utils::binary_to_bcd`. The following example is an excerpt of `ds1307.h` provided by FastArduino, where each datetime field (seconds, minutes, hours...) have to be converted from BCD to binary:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
     bool getDateTime(tm& datetime)
     {
@@ -2282,3 +2282,357 @@ to "stop" your program running because it is waiting for `EEPROM::write()` opera
 This is the reason why `eeprom` namespace also defines a `QueuedWriter` class that uses interruptions to
 write content to EEPROM, allowing your `main()` function to run normally during EEPROM writes. For more
 details, please check the API.
+
+
+@anchor spi Advanced: SPI devices example
+-----------------------------------------
+
+FastArduino supports SPI ([Serial Periheral Interface](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface))
+as provided by all AVR MCU (ATmega MCU support SPI natively, ATtiny MCU support it through their USI, Universal 
+Serial Interface).
+
+FastArduino also brings specific support to some SPI devices:
+- NRF24L01P (radio-frequency device)
+- WinBond chips (flash memory devices)
+
+Basically, FastArduino core SPI API is limited to the following:
+- `spi::init()` function to call once before any use of SPI in your program
+- `spi::SPIDevice` class that is the abstract base class of all concrete SPI devices
+
+Although very important, this sole API is useless for any tutorial example! If you want to develop an API for 
+your own SPI device then please refer to `spi::SPIDevice` API documentation.
+
+Hence, to illustrate SPI usage in this tutorial, we will focus on a concrete example with the WinBond memory chip.
+
+The following example reads, erases, writes and reads again flash memory:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/devices/winbond.h>
+#include <fastarduino/time.h>
+#include <fastarduino/uart.h>
+
+static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static char output_buffer[OUTPUT_BUFFER_SIZE];
+constexpr const board::USART UART = board::USART::USART0;
+REGISTER_UATX_ISR(0)
+
+using namespace streams;
+
+constexpr const board::DigitalPin CS = board::DigitalPin::D7_PD7;
+constexpr const size_t DATA_SIZE = 256;
+static uint8_t data[DATA_SIZE];
+constexpr const uint32_t PAGE = 0x010000;
+
+int main()
+{
+	board::init();
+	sei();
+
+	serial::hard::UATX<UART> uart{output_buffer};
+	uart.register_handler();
+	uart.begin(115200);
+	ostream out = uart.out();
+
+	// Initialize SPI and device
+	spi::init();
+	devices::WinBond<CS> flash;
+	time::delay_ms(1000);	
+	out << F("S: ") << hex << flash.status().value << endl;
+
+	// Read and display one page of flash memory
+	flash.read_data(PAGE, data, sizeof data);
+	out << F("RD, S: ") << hex << flash.status().value << endl;
+	out << F("Pg RD:") << endl;
+	for (uint16_t i = 0; i < sizeof data; ++i)
+	{
+		out << hex << data[i] << ' ';
+		if ((i + 1) % 16 == 0) out << endl;
+	}
+	out << endl;
+	
+	// Erase one page of flash memory before writing
+	flash.enable_write();
+	flash.erase_sector(PAGE);
+	out << F("Erase, S: ") << hex << flash.status().value << endl;
+	flash.wait_until_ready(10);
+	out << F("Wait, S: ") << hex << flash.status().value << endl;
+
+	// Write one page of flash memory
+	for (uint16_t i = 0; i < sizeof data; ++i) data[i] = uint8_t(i);
+	flash.enable_write();
+	flash.write_page(PAGE, data, (DATA_SIZE >= 256 ? 0 : DATA_SIZE));
+	out << F("Write, S: ") << hex << flash.status().value << endl;
+	flash.wait_until_ready(10);
+	out << F("Wait, S: ") << hex << flash.status().value << endl;
+	
+	// Read back and display page of flash memory just written
+	for (uint16_t i = 0; i < sizeof data; ++i) data[i] = 0;
+	flash.read_data(PAGE, data, sizeof data);
+	out << F("Read, S: ") << hex << flash.status().value << endl;
+	out << F("Pg RD:") << endl;
+	for (uint16_t i = 0; i < sizeof data; ++i)
+	{
+		out << hex << data[i] << ' ';
+		if ((i + 1) % 16 == 0) out << endl;
+	}
+	out << endl;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first important piece of code initializes the SPI system and the WinBond device:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	// Initialize SPI and device
+	spi::init();
+	devices::WinBond<CS> flash;
+	time::delay_ms(1000);	
+	out << F("S: ") << hex << flash.status().value << endl;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note that `devices::WinBond` is a template that takes as parameter the `gpio::DigitalPin` that
+will be used as "Chip Select" pin (**CS**, part of SPI wiring).
+
+`status()` returns the WinBond status as specified in the chip datasheet and implemented
+in FastArduino `winbond.h`.
+
+Next code piece is reading a part of a flash page from the device:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	flash.read_data(PAGE, data, sizeof data);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There is nothing special to mention here, the API is straightforward.
+
+Then the example write one page of flash memory. This must be done in 2 steps:
+1. Erase flash page
+2. Write flash page
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	// Erase one page of flash memory before writing
+	flash.enable_write();
+	flash.erase_sector(PAGE);
+	out << F("Erase, S: ") << hex << flash.status().value << endl;
+	flash.wait_until_ready(10);
+	out << F("Wait, S: ") << hex << flash.status().value << endl;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Any write action must be preceded with a call to `enable_write()` and followed by
+`wait_until_ready()` (because writing to flash memory is rather long, all timing values can 
+be found in the datasheet). FastArduino provides API for every case.
+
+Erasing, like writing, cannot be done on single bytes, but must be done on packs of bytes
+(e.g. pages, sectors, blocks, as defined in WinBond datasheet).
+
+Here is the code performing the writing:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	// Write one page of flash memory
+	for (uint16_t i = 0; i < sizeof data; ++i) data[i] = uint8_t(i);
+	flash.enable_write();
+	flash.write_page(PAGE, data, (DATA_SIZE >= 256 ? 0 : DATA_SIZE));
+	out << F("Write, S: ") << hex << flash.status().value << endl;
+	flash.wait_until_ready(10);
+	out << F("Wait, S: ") << hex << flash.status().value << endl;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There is only one API, writing at most one page (256 bytes) at once.
+Please note the last argument of `write_page()` which is the size of data to write.
+For performance reasons, size is an `uint8_t`, consequently, `0` is used to mean `256` bytes,
+i.e. a complete page.
+
+The last part of the example reads again the data page and displays it for control. This is
+the same code as the reading code presented above.
+
+
+@anchor i2c Advanced: I2C devices example
+-----------------------------------------
+
+FastArduino supports I2C ([Inter-Integrated Circuit](https://en.wikipedia.org/wiki/I%C2%B2C))
+as provided by all AVR MCU (ATmega MCU support I2C natively, ATtiny MCU support it through their USI, Universal 
+Serial Interface). I2C is also often called *TWI* for Two-Wires Interface.
+
+FastArduino also brings specific support to several I2C devices:
+- DS1307 (real-time clock)
+- MPU6050 (accelerometer and gyroscope)
+- HMC5883L (compass)
+- MCP23017 (16-Bit I/O Expander)
+
+FastArduino core I2C API is defined in several headers and made of a few types:
+- `i2c.h` contains a few constants and enumerations used everywhere else in the I2C API
+- `i2c_manager.h` defines the `i2c::I2CManager` template class which is central to the API
+- `i2c_device.h` mainly defines `i2c::I2CDevice` template class, which is the abstract base
+class of all concrete I2C devices
+
+In order to illustrate concretely I2C API usage in this tutorial, we will focus on a concrete
+example with the DS1307 RTC chip. If you want to develop an API for your own I2C device then
+please refer to `i2c::I2CDevice` API documentation.
+
+The following example reads the current clock time from a DS1307 chip:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/time.h>
+#include <fastarduino/i2c_manager.h>
+#include <fastarduino/devices/ds1307.h>
+#include <fastarduino/uart.h>
+
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static char output_buffer[OUTPUT_BUFFER_SIZE];
+
+REGISTER_UATX_ISR(0)
+
+using devices::rtc::DS1307;
+using devices::rtc::tm;
+using namespace streams;
+
+int main() __attribute__((OS_main));
+int main()
+{
+	board::init();
+	sei();
+	serial::hard::UATX<UART> uart{output_buffer};
+	uart.register_handler();
+	uart.begin(115200);
+	ostream out = uart.out();
+	
+	i2c::I2CManager<> manager;
+	manager.begin();
+	DS1307 rtc{manager};
+	
+	tm now;
+	rtc.get_datetime(now);
+	out	<< dec << F("RTC: [") 
+		<< uint8_t(time.tm_wday) << ']'
+		<< time.tm_mday << '.'
+		<< time.tm_mon << '.'
+		<< time.tm_year << ' '
+		<< time.tm_hour << ':'
+		<< time.tm_min << ':'
+		<< time.tm_sec << endl;
+	
+	manager.end();
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This example has 3 important parts.
+
+The first part is the I2C and the RTC device initialization:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	i2c::I2CManager<> manager;
+	manager.begin();
+	DS1307 rtc{manager};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`i2c::I2CManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
+- `i2c::I2CMode::Standard`: slow I2C mode (100 kHz), this the default
+- `i2c::I2CMode::Fast`: fast I2C mode (400 kHz)
+
+The mode selection depends on all devices you wire on the I2C bus, if one is using standard mode, 
+then all the bus must be set to standard mode. Since DS1307 chip does not support fast mode,
+its device forces standard mode, and that mode must be used for the `I2CManager`.
+
+It is important to ensure `begin()` has been called on `i2c::I2CManager` before any use of 
+the I2C bus by devices.
+
+Next code piece is reading current clock date and time from the RTC chip:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	tm now;
+	rtc.get_datetime(now);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In that code, `tm` is a structure containing all fields related to a date/time, `get_datetime()`
+just fills it with every information, as can be seen in the following lines of code that 
+display the current date and time.
+
+The last line just stops the I2C circuitry of the AVR MCU.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+	manager.end();
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+@anchor softuart Advanced: software UART
+----------------------------------------
+
+AVR ATtiny MCU do not include hardware UART. For these MCU, UART can be simulated if needed.
+FastArduino has support for software UART. That support can also be useful with ATmega MCU, 
+where one would need more UART ports than available.
+
+It is important to note that it is not possible, with software UART, to reach bitrates as high
+as with hardware UART.
+
+Here a simple example using software UATX for output through USB on an Arduino UNO:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/soft_uart.h>
+
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PD1;
+
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static char output_buffer[OUTPUT_BUFFER_SIZE];
+
+using namespace streams;
+
+int main()
+{
+    board::init();
+    sei();
+
+    serial::soft::UATX<TX> uart{output_buffer};
+    uart.begin(115200);
+
+    ostream out = uart.out();
+    uint16_t value = 0x8000;
+    out << F("value = 0x") << hex << value 
+        << F(", ") << dec << value 
+        << F(", 0") << oct << value 
+        << F(", B") << bin << value << endl;
+    return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Except for a few lines, this is the same example as one hardware UART example above in 
+this tutorial.
+
+The main difference is in `serial::soft::UATX<TX> uart{output_buffer};` where `TX` is the
+`gpio::DigitalPin` where the serial output will be directed.
+
+Besides, the same operations as for `serial::hard::UATX` are available, in particular output
+streams work the same with `serial::soft::UATX`.
+
+There is also an `serial::soft::UARX` that works similarly as `serial::hard::UARX`:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
+#include <fastarduino/soft_uart.h>
+
+constexpr const board::DigitalPin RX = board::InterruptPin::D0_PD0_PCI2;
+#define PCI_NUM 0
+
+REGISTER_UART_PCI_ISR(RX, PCI_NUM)
+
+// Buffers for UARX
+static const uint8_t INPUT_BUFFER_SIZE = 64;
+static char input_buffer[INPUT_BUFFER_SIZE];
+
+int main()
+{
+    board::init();
+    sei();
+	
+    // Start UART
+	serial::soft::UARX<RX> uarx{input_buffer};
+	uarx.register_rx_handler();
+	typename interrupt::PCIType<RX>::TYPE pci;
+	pci.enable();
+	uarx.begin(pci, 115200);
+
+    streams::istream in = uarx.in();
+
+    // Wait for a char
+    char value1;
+    in >> streams::skipws >> value1;
+
+    // Wait for an uint16_t
+    uint16_t value2;
+    in >> streams::skipws >> value2;
+
+    return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Note the following differences with a previous example using `serial::hard::UARX`:
+
+1. `RX` must be an interrupt pin (either `board::InterruptPin` 
+or `board::ExternalInterruptPin`)
+2. `REGISTER_UART_PCI_ISR` (or `REGISTER_UART_INT_ISR`) is needed to register an ISR on 
+pin `RX` changes
+3. `register_rx_handler()` must be called on `serial::soft::UARX` before use
+4. an interrupt handler must be setup (either `interrupt::PCISignal` or 
+`interrupt::INTSignal`) and enabled
+5. `begin()` is passed the interrupt handler as an extra argument
+
+Finally, there is also an `serial::soft::UART` that combines `serial::soft::UATX`
+and `serial::soft::UARX`, and works similarly as `serial::hard::UART`.

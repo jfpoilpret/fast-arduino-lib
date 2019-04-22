@@ -35,7 +35,7 @@
 namespace spi
 {
 	/**
-	 * This function must be called once in yur program, before any use of an SPI device.
+	 * This function must be called once in your program, before any use of an SPI device.
 	 * It simply sets up the pins used by SPI interface: MOSI, MISO, SCK.
 	 */
 	void init();

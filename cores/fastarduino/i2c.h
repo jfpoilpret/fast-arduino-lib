@@ -83,7 +83,6 @@ namespace i2c
 	 * I2C available transmission modes. This defines the maximum bus transmission 
 	 * frequency.
 	 * @sa i2c::I2CManager
-	 * @sa i2c::I2CManager
 	 */
 	enum class I2CMode : uint8_t
 	{
