@@ -26,7 +26,7 @@ Advanced:
 7. [I2C devices example](@ref i2c)
 8. [software UART](@ref softuart)
 
-Devices (not yet documented):
+Supported devices (not yet documented):
 1. SPI
 2. I2C
 3. Other devices: sonar, servo, SIPO

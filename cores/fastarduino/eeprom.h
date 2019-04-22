@@ -826,6 +826,7 @@ namespace eeprom
 		friend struct isr_handler;
 	};
 
+	/// @cond notdocumented
 	struct isr_handler
 	{
 		static void eeprom_ready()
@@ -845,6 +846,7 @@ namespace eeprom
 				interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();
 		}
 	};
+	/// @endcond
 }
 
 #endif /* EEPROM_H */
