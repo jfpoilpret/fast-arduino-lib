@@ -2287,7 +2287,7 @@ details, please check the API.
 @anchor spi Advanced: SPI devices example
 -----------------------------------------
 
-FastArduino supports SPI ([Serial Periheral Interface](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface))
+FastArduino supports SPI ([Serial Peripheral Interface](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface))
 as provided by all AVR MCU (ATmega MCU support SPI natively, ATtiny MCU support it through their USI, Universal 
 Serial Interface).
 
@@ -2386,7 +2386,7 @@ The first important piece of code initializes the SPI system and the WinBond dev
 	time::delay_ms(1000);	
 	out << F("S: ") << hex << flash.status().value << endl;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Note that `devices::WinBond` is a template that takes as parameter the `gpio::DigitalPin` that
+Note that `devices::WinBond` is a template that takes as parameter the `board::DigitalPin` that
 will be used as "Chip Select" pin (**CS**, part of SPI wiring).
 
 `status()` returns the WinBond status as specified in the chip datasheet and implemented
@@ -2401,6 +2401,7 @@ There is nothing special to mention here, the API is straightforward.
 Then the example write one page of flash memory. This must be done in 2 steps:
 1. Erase flash page
 2. Write flash page
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	// Erase one page of flash memory before writing
 	flash.enable_write();
@@ -2580,7 +2581,7 @@ Except for a few lines, this is the same example as one hardware UART example ab
 this tutorial.
 
 The main difference is in `serial::soft::UATX<TX> uart{output_buffer};` where `TX` is the
-`gpio::DigitalPin` where the serial output will be directed.
+`board::DigitalPin` where the serial output will be directed.
 
 Besides, the same operations as for `serial::hard::UATX` are available, in particular output
 streams work the same with `serial::soft::UATX`.
@@ -2627,7 +2628,7 @@ Note the following differences with a previous example using `serial::hard::UARX
 
 1. `RX` must be an interrupt pin (either `board::InterruptPin` 
 or `board::ExternalInterruptPin`)
-2. `REGISTER_UART_PCI_ISR` (or `REGISTER_UART_INT_ISR`) is needed to register an ISR on 
+2. `REGISTER_UART_PCI_ISR(RX, PCI_NUM` (or `REGISTER_UART_INT_ISR(RX, INT_NUM)`) is needed to register an ISR on 
 pin `RX` changes
 3. `register_rx_handler()` must be called on `serial::soft::UARX` before use
 4. an interrupt handler must be setup (either `interrupt::PCISignal` or 
