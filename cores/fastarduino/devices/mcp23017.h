@@ -136,11 +136,15 @@ namespace devices::mcp23017
 		 * Arduino if you are lacking available pins.
 		 * @param interrupt_polarity the level triggerred on INTA or INTB pin when 
 		 * an interrupt occurs
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
 		 */
-		void begin(bool mirror_interrupts = false,
+		bool begin(bool mirror_interrupts = false,
 				   InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
-			write_register(IOCON, build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH));
+			return write_register(IOCON,
+								  build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH));
 		}
 
 		/**
@@ -157,6 +161,9 @@ namespace devices::mcp23017
 		 * @param polarity each bit (only for input pins) let you invert polarity of
 		 * the matching input pin; if `1`, polarity is inverted, ie one the level
 		 * on the input pin is `0`, then it is read as `1`, and conversely.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
 		 */
 		template<MCP23017Port P_> bool configure_gpio(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 		{
@@ -165,7 +172,24 @@ namespace devices::mcp23017
 				   && write_register(GPPU_A + SHIFT, pullup);
 		}
 
-		//TODO docs
+		/**
+		 * Configure interrupts on one or both ports of this MCP23017 chip.
+		 * 
+		 * @tparam P_ which port to configure, may be A, B or both; if both, then
+		 * all arguments will be `uint16_t`, with low byte for port A configuration,
+		 * and high byte for port B.
+		 * @param int_pins each bit sets if the matching pin shall generate interrupts
+		 * @param ref contains the reference value for comparison with the actual 
+		 * input pin; if input differs, then an interrupt will be triggered for that
+		 * pin, provided that @p compare_ref for that bit is also `1`.
+		 * @param compare_ref each bit indicates the condition for which the matching 
+		 * input pin can generate interrupts; if `0`, an interrupt is generated every
+		 * time the input pin changes level, if `1`, an interrupt is generated every
+		 * time the input pin level changes to be diferent than @ref matching bit.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 */
 		template<MCP23017Port P_>
 		bool configure_interrupts(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 		{
@@ -174,14 +198,33 @@ namespace devices::mcp23017
 				   && write_register(INTCON_A + SHIFT, compare_ref);
 		}
 
-		//TODO docs
+		/**
+		 * Set output levels of output pins on one or both ports of this MCP23017 chip.
+		 * 
+		 * @tparam P_ which port to write to, may be A, B or both; if both, then
+		 * all arguments will be `uint16_t`, with low byte for port A,
+		 * and high byte for port B.
+		 * @param value each bit indicates the new level of the matching output pin
+		 * of the selected port
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 */
 		template<MCP23017Port P_> bool values(T<P_> value)
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
 			return write_register(GPIO_A + SHIFT, value);
 		}
 
-		//TODO docs
+		/**
+		 * Get levels of pins on one or both ports of this MCP23017 chip.
+		 * 
+		 * @tparam P_ which port to read from, may be A, B or both; if both, then
+		 * the return type will be `uint16_t`, with low byte for port A,
+		 * and high byte for port B.
+		 * @return a value where each bit indicates the current level of the 
+		 * matching pin of the selected port
+		 */
 		template<MCP23017Port P_> T<P_> values()
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
@@ -192,7 +235,16 @@ namespace devices::mcp23017
 				return T<P_>{};
 		}
 
-		//TODO docs
+		/**
+		 * Get the pins that generated the latest interrupt on one or both ports
+		 * of the MCP23017 chip.
+		 * 
+		 * @tparam P_ which port to read from, may be A, B or both; if both, then
+		 * the return type will be `uint16_t`, with low byte for port A,
+		 * and high byte for port B.
+		 * @return a value where each bit indicates if a pin generated the latest
+		 * interrupt or not
+		 */
 		template<MCP23017Port P_> T<P_> interrupt_flags()
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
@@ -203,7 +255,18 @@ namespace devices::mcp23017
 				return T<P_>{};
 		}
 
-		//TODO docs
+		/**
+		 * Get captured levels, at the time an interrupt was triggered, of pins
+		 * on one or both ports of this MCP23017 chip.
+		 * This allows to know what generated an interrupt, even if input pins
+		 * were modified afterwards.
+		 * 
+		 * @tparam P_ which port to read from, may be A, B or both; if both, then
+		 * the return type will be `uint16_t`, with low byte for port A,
+		 * and high byte for port B.
+		 * @return a value where each bit indicates the level of the matching pin,
+		 * captured at the interrupt time.
+		 */
 		template<MCP23017Port P_> T<P_> captured_values()
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
