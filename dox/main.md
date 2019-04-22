@@ -13,7 +13,7 @@ FastArduino is a C++ object-oriented library for Arduino boards based on AVR MCU
 - supports both ATmega and ATtiny chips
 
 FastArduino implementation:
-- is based on C++11 standard
+- is based on C++14 standard
 - favours C++ templates rather than virtual methods whenever possible
 - virtual methods are used only when needed (mostly for event handlers)
 - never automatically registers any ISR but requires explicit registration through provided macros
@@ -22,7 +22,7 @@ The rest of this guide provides indications where to start and proceed with lear
 
 Building FastArduino
 --------------------
-First off, ensure your Linux box contains the ATmel AVR 8 bit toolchain (I use 3.5.3, latest is 3.5.4) and your `$PATH` points to its `bin` directory.
+First off, ensure your Linux box contains the ATmel AVR 8 bit toolchain and your `$PATH` points to its `bin` directory.
 
 The following commands show how to build the FastArduino library:
 
