@@ -44,6 +44,8 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
 						sonar/Sonar10 sonar/Sonar11				\
+						i2c/MultiIO0 i2c/MultiIO1 i2c/MultiIO2	\
+						i2c/MultiIO3 i2c/MultiIO4				\
 						tones/tones1 tones/tones2 tones/tones3	\
 						uart/UartApp1							\
 						uart/UartApp5							\
