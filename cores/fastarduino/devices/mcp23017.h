@@ -12,27 +12,60 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * API to handle the MCP23017 chip (16-Bit I/O Expander with I2C interface).
+ */
 #ifndef MCP23017_H
 #define MCP23017_H
 
 #include <math.h>
 #include "../i2c_device.h"
 
-namespace devices
+namespace devices::mcp23017
 {
+	/**
+	 * The port(s) to use in MCP23017 API. Most API are templates which argument
+	 * selects which MCP23017 port the API shall apply to.
+	 */
 	enum MCP23017Port : uint8_t
 	{
+		/** The A port of MCP23017. The API applies only on Port A. */
 		PORT_A,
+		/** The B port of MCP23017. The API applies only on Port B. */
 		PORT_B,
+		/**
+		 * Both A and B ports of MCP23017. The API applies to both ports
+		 * at the same time.
+		 * In this configuration, the API takes `uint16_t` type to pass or
+		 * return values for both ports at once.
+		 * Each `uint16_t` argument is broken down as follows:
+		 * - low byte maps to A port
+		 * - high byte maps to B port
+		 */
 		PORT_AB
 	};
 
+	/**
+	 * The polarity of the MCP23017 INTA and INTB pins.
+	 */
 	enum InterruptPolarity : uint8_t
 	{
+		/**
+		 * The INT pins shall be active low, ie they are high by default, and 
+		 * changed to low when an interrupt is triggered.
+		 */
 		ACTIVE_LOW = 0,
+		/**
+		 * The INT pins shall be active high, ie they are low by default, and 
+		 * changed to high when an interrupt is triggered.
+		 */
 		ACTIVE_HIGH = 1
 	};
 
+	/// @cond notdocumented
 	namespace mcp23017_traits
 	{
 		template<MCP23017Port PORT_> struct Port_trait
@@ -59,9 +92,16 @@ namespace devices
 			static constexpr const uint8_t REG_SHIFT = 0;
 		};
 	}
+	/// @endcond
 
-	// This device is always used in mode BANK 0 (ie possibly 16 bits at a time)
 	// In uint16_t mode, port A is the low byte, port B is the high byte
+	/**
+	 * I2C device driver for Microchip MCP23017 support.
+	 * The MCP23017 chip is a 16-Bit I/O Expander with I2C interface.
+	 * 
+	 * @tparam MODE_ the I2C mode to use; MCP23017 supports both `i2c::I2CMode::Standard`
+	 * and `i2c:I2CMode::Fast`
+	 */
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class MCP23017 : public i2c::I2CDevice<MODE_>
 	{
 	private:
@@ -70,25 +110,54 @@ namespace devices
 		template<MCP23017Port P> using T = typename TRAIT<P>::TYPE;
 
 	public:
+		/** The I2C mode (speed) used by this instance. */
 		static constexpr const i2c::I2CMode MODE = MODE_;
 
+		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
 		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
 
+		/**
+		 * Create a new device driver for an MCP23017 chip. The @p address must match
+		 * the actual address set for that chip (through pins A0, A1, A3).
+		 * 
+		 * @param manager reference to a suitable i2c::I2CManager for this device
+		 * @param address the address part (0-7) set by A0-3 pins of the chip
+		 */
 		MCP23017(MANAGER& manager, uint8_t address)
 			: i2c::I2CDevice<MODE>(manager), device_{uint8_t((BASE_ADDRESS | (address & 0x07)) << 1)}
 		{}
 
+		/**
+		 * Initialize the chip before operation.
+		 * 
+		 * @param mirror_interrupts if true then INTA and INTB are mirrored, hence
+		 * any interrupt occurring on A or B port will generate a level change on
+		 * both pins; hence you can connect any pin to only one interrupt pin on
+		 * Arduino if you are lacking available pins.
+		 * @param interrupt_polarity the level triggerred on INTA or INTB pin when 
+		 * an interrupt occurs
+		 */
 		void begin(bool mirror_interrupts = false,
 				   InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
-			// Initialize device
 			write_register(IOCON, build_IOCON(mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH));
 		}
 
-		// API to define for configuration
-		//=================================
-
-		// Configure all IO
+		/**
+		 * Configure GPIO on one or both ports of this MCP23017 chip.
+		 * 
+		 * @tparam P_ which port to configure, may be A, B or both; if both, then
+		 * all arguments will be `uint16_t`, with low byte for port A configuration,
+		 * and high byte for port B.
+		 * @param direction each bit sets the direction of one pin of the selected
+		 * port; `1` means **I**nput, `0` means **O**utput.
+		 * @param pullup each bit (only for input pins) sets if a pullup resistor
+		 * shall be internally connected to the pin; if `1`, a pullup is added,
+		 * if `0`, no pullup is added.
+		 * @param polarity each bit (only for input pins) let you invert polarity of
+		 * the matching input pin; if `1`, polarity is inverted, ie one the level
+		 * on the input pin is `0`, then it is read as `1`, and conversely.
+		 */
 		template<MCP23017Port P_> bool configure_gpio(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
@@ -96,7 +165,7 @@ namespace devices
 				   && write_register(GPPU_A + SHIFT, pullup);
 		}
 
-		// Configure INTerrupts
+		//TODO docs
 		template<MCP23017Port P_>
 		bool configure_interrupts(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 		{
@@ -105,16 +174,14 @@ namespace devices
 				   && write_register(INTCON_A + SHIFT, compare_ref);
 		}
 
-		// API to access IOs
-		//===================
-
+		//TODO docs
 		template<MCP23017Port P_> bool values(T<P_> value)
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
 			return write_register(GPIO_A + SHIFT, value);
 		}
 
-		//TODO Do we need an Optional value here?
+		//TODO docs
 		template<MCP23017Port P_> T<P_> values()
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
@@ -125,7 +192,7 @@ namespace devices
 				return T<P_>{};
 		}
 
-		//TODO Do we need an Optional value here?
+		//TODO docs
 		template<MCP23017Port P_> T<P_> interrupt_flags()
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
@@ -136,7 +203,7 @@ namespace devices
 				return T<P_>{};
 		}
 
-		//TODO Do we need an Optional value here?
+		//TODO docs
 		template<MCP23017Port P_> T<P_> captured_values()
 		{
 			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
@@ -212,3 +279,4 @@ namespace devices
 }
 
 #endif /* MCP23017_H */
+/// @endcond
