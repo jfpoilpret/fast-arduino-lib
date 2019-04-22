@@ -134,8 +134,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classeeprom_1_1_queued_writer.html">eeprom::QueuedWriter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">API that allows asynchronous writing to <a class="el" href="classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. ">EEPROM</a>; this can be useful when you have large amount of data to write but cannot afford to wait until all bytes have been written.  <a href="classeeprom_1_1_queued_writer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structeeprom_1_1isr__handler.html">eeprom::isr_handler</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -264,8 +262,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span><a class="code" href="structeeprom_1_1isr__handler.html">eeprom::isr_handler</a>;  \</div><div class="line">    friend void ::EE_READY_vect();</div><div class="ttc" id="structeeprom_1_1isr__handler_html"><div class="ttname"><a href="structeeprom_1_1isr__handler.html">eeprom::isr_handler</a></div><div class="ttdef"><b>Definition:</b> <a href="eeprom_8h_source.html#l00829">eeprom.h:829</a></div></div>
-</div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span>eeprom::isr_handler;  \</div><div class="line">    friend void ::EE_READY_vect();</div></div><!-- fragment -->
 <p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00075">75</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 
 </div>

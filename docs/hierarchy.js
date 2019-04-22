@@ -69,7 +69,6 @@ var hierarchy =
       [ "streams::ostream", "classstreams_1_1ostream.html", null ]
     ] ],
     [ "serial::soft::isr_handler", "structserial_1_1soft_1_1isr__handler.html", null ],
-    [ "eeprom::isr_handler", "structeeprom_1_1isr__handler.html", null ],
     [ "watchdog::isr_handler", "structwatchdog_1_1isr__handler.html", null ],
     [ "LinkedListImpl", null, [
       [ "containers::LinkedList< T_ >", "classcontainers_1_1_linked_list.html", null ],

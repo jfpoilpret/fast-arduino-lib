@@ -67,7 +67,7 @@ var NAVTREEINDEX =
 "classserial_1_1hard_1_1_u_a_r_x.html#a5e4adca3a15c030fde986c65e0971f3e",
 "classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56",
 "namespaceflash.html",
-"timer_8h.html#a1dec37d0ac500f2d0dfc9b50fcf6e71f"
+"timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
