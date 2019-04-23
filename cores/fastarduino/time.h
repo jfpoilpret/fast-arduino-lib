@@ -66,7 +66,7 @@ namespace time
 		/**
 		 * Assign this `RTTTime` instance from @p that.
 		 * @param that the source real time value
-		 * @return 
+		 * @return this instance
 		 */
 		RTTTime& operator=(const RTTTime& that)
 		{
@@ -75,6 +75,11 @@ namespace time
 			return *this;
 		}
 
+		/**
+		 * Add @p microseconds to this RTTTime instance.
+		 * @param microseconds the number of us to add to this RTTTime
+		 * @return this instance
+		 */
 		RTTTime& operator+=(uint32_t microseconds)
 		{
 			uint32_t extra_millis = microseconds / 1000UL;
@@ -89,12 +94,21 @@ namespace time
 			return *this;
 		}
 
-		//TODO code can probably be optimized
+		/**
+		 * Remove @p microseconds from this RTTTime instance.
+		 * @param microseconds the number of us to subtract from this RTTTime;
+		 * results are undetermined if @p microseconds is larger than `total_micros()`.
+		 * @return this instance
+		 */
 		RTTTime& operator-=(uint32_t microseconds)
 		{
+			//TODO code can probably be optimized
 			return *this = RTTTime{total_micros() - microseconds};
 		}
 
+		/**
+		 * Return current elapsed time in microseconds only.
+		 */
 		uint32_t total_micros() const
 		{
 			return millis * 1000UL + micros;
@@ -106,38 +120,92 @@ namespace time
 		uint16_t micros;
 	};
 
+	/**
+	 * Compare 2 RTTTime instances.
+	 * @param a the first RTTTime instance in comparison
+	 * @param b the second RTTTime instance in comparison
+	 * @retval true if a > b
+	 * @retval false if a <= b
+	 */
 	inline bool operator>(const RTTTime& a, const RTTTime& b)
 	{
 		if (a.millis > b.millis) return true;
 		if (a.millis < b.millis) return false;
 		return a.micros > b.micros;
 	}
+
+	/**
+	 * Compare 2 RTTTime instances.
+	 * @param a the first RTTTime instance in comparison
+	 * @param b the second RTTTime instance in comparison
+	 * @retval true if a >= b
+	 * @retval false if a < b
+	 */
 	inline bool operator>=(const RTTTime& a, const RTTTime& b)
 	{
 		if (a.millis > b.millis) return true;
 		if (a.millis < b.millis) return false;
 		return a.micros >= b.micros;
 	}
+
+	/**
+	 * Compare 2 RTTTime instances.
+	 * @param a the first RTTTime instance in comparison
+	 * @param b the second RTTTime instance in comparison
+	 * @retval true if a < b
+	 * @retval false if a >= b
+	 */
 	inline bool operator<(const RTTTime& a, const RTTTime& b)
 	{
 		if (a.millis < b.millis) return true;
 		if (a.millis > b.millis) return false;
 		return a.micros < b.micros;
 	}
+
+	/**
+	 * Compare 2 RTTTime instances.
+	 * @param a the first RTTTime instance in comparison
+	 * @param b the second RTTTime instance in comparison
+	 * @retval true if a <= b
+	 * @retval false if a > b
+	 */
 	inline bool operator<=(const RTTTime& a, const RTTTime& b)
 	{
 		if (a.millis < b.millis) return true;
 		if (a.millis > b.millis) return false;
 		return a.micros <= b.micros;
 	}
+
+	/**
+	 * Compare 2 RTTTime instances.
+	 * @param a the first RTTTime instance in comparison
+	 * @param b the second RTTTime instance in comparison
+	 * @retval true if a == b
+	 * @retval false if a != b
+	 */
 	inline bool operator==(const RTTTime& a, const RTTTime& b)
 	{
 		return a.millis == b.millis && a.micros == b.micros;
 	}
+
+	/**
+	 * Compare 2 RTTTime instances.
+	 * @param a the first RTTTime instance in comparison
+	 * @param b the second RTTTime instance in comparison
+	 * @retval true if a != b
+	 * @retval false if a == b
+	 */
 	inline bool operator!=(const RTTTime& a, const RTTTime& b)
 	{
 		return a.millis != b.millis || a.micros != b.micros;
 	}
+
+	/**
+	 * Add 2 RTTTime instances.
+	 * @param a the first RTTTime instance in addition
+	 * @param b the second RTTTime instance in addition
+	 * @return a + b
+	 */
 	inline RTTTime operator+(const RTTTime& a, const RTTTime& b)
 	{
 		uint32_t millis = a.millis + b.millis;
@@ -149,6 +217,13 @@ namespace time
 		}
 		return RTTTime{millis, micros};
 	}
+
+	/**
+	 * Subtract 2 RTTTime instances.
+	 * @param a the first RTTTime instance in subtraction
+	 * @param b the RTTTime instance to be subtracted from @p a
+	 * @return a - b if a > b, 0 if a <= b
+	 */
 	inline RTTTime operator-(const RTTTime& a, const RTTTime& b)
 	{
 		if (a <= b) return RTTTime{0, 0};
