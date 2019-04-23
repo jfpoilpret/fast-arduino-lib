@@ -3,6 +3,7 @@ var namespaces_dup =
     [ "analog", "namespaceanalog.html", null ],
     [ "board", "namespaceboard.html", "namespaceboard" ],
     [ "containers", "namespacecontainers.html", null ],
+    [ "devices", "namespacedevices.html", "namespacedevices" ],
     [ "eeprom", "namespaceeeprom.html", null ],
     [ "errors", "namespaceerrors.html", null ],
     [ "events", "namespaceevents.html", "namespaceevents" ],

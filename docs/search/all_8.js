@@ -22,7 +22,7 @@ var searchData=
   ['int_2eh',['int.h',['../int_8h.html',1,'']]],
   ['interrupt',['interrupt',['../namespaceinterrupt.html',1,'']]],
   ['interrupt_5fflags',['interrupt_flags',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a6c43d6272eb5f3883cf90e85e7a08b27',1,'devices::mcp23017::MCP23017']]],
-  ['interruptpolarity',['InterruptPolarity',['../mcp23017_8h.html#a027b5cd825760f8fa2f4723e92d3a523',1,'devices::mcp23017']]],
+  ['interruptpolarity',['InterruptPolarity',['../namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523',1,'devices::mcp23017']]],
   ['interrupts_2eh',['interrupts.h',['../interrupts_8h.html',1,'']]],
   ['intstatus',['INTStatus',['../structdevices_1_1magneto_1_1_i_n_t_status.html',1,'devices::magneto']]],
   ['inverting',['INVERTING',['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a6bc15f455c55707fa8b803b159cfc88b',1,'timer']]],

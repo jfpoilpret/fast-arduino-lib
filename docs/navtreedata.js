@@ -34,7 +34,8 @@ var NAVTREE =
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ]
+        [ "Enumerations", "namespacemembers_enum.html", null ],
+        [ "Enumerator", "namespacemembers_eval.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -63,11 +64,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a",
-"classserial_1_1hard_1_1_u_a_r_x.html#a5e4adca3a15c030fde986c65e0971f3e",
-"classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56",
-"namespaceflash.html",
-"timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77"
+"classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa06682baf0f2e398711abc9d83eed21fd",
+"classserial_1_1hard_1_1_u_a_r_x.html#aa71b459ae36f387311f6558c5400926a",
+"classtimer_1_1_timer.html#a1efbbfd198ed05ba360e9e537e16f255",
+"namespaceevents.html",
+"timer_8h.html#a3d38220cfa628f7eafe0119472ff3bb1"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

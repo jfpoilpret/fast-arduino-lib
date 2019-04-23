@@ -1,7 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56":[4,0,14,10,17],
-"classtimer_1_1_timer.html#a1e064d32c8b73ccf433e2eb01707db22":[4,0,14,10,27],
 "classtimer_1_1_timer.html#a1efbbfd198ed05ba360e9e537e16f255":[4,0,14,10,15],
 "classtimer_1_1_timer.html#a1f7f3052c127cad79c654f351bc68ae3":[4,0,14,10,3],
 "classtimer_1_1_timer.html#a260ddf8df1436604859a07ebb30d9e23":[4,0,14,10,28],
@@ -237,17 +235,19 @@ var NAVTREEINDEX3 =
 "mpu6050_8h_source.html":[5,0,0,1,3],
 "namespaceanalog.html":[3,0,0],
 "namespaceanalog.html":[4,0,0],
-"namespaceboard.html":[4,0,1],
 "namespaceboard.html":[3,0,1],
+"namespaceboard.html":[4,0,1],
 "namespaceboard_1_1_external_interrupt_pin.html":[3,0,1,0],
 "namespaceboard_1_1_interrupt_pin.html":[3,0,1,1],
 "namespaceboard_1_1_p_w_m_pin.html":[3,0,1,2],
 "namespacecontainers.html":[3,0,2],
 "namespacecontainers.html":[4,0,2],
+"namespacedevices.html":[4,0,3],
+"namespacedevices.html":[3,0,3],
+"namespacedevices_1_1mcp23017.html":[3,0,3,0],
+"namespacedevices_1_1mcp23017.html":[4,0,3,2],
 "namespaceeeprom.html":[4,0,4],
-"namespaceeeprom.html":[3,0,3],
-"namespaceerrors.html":[3,0,4],
-"namespaceevents.html":[4,0,5],
-"namespaceevents.html":[3,0,5],
-"namespaceevents_1_1_type.html":[3,0,5,0]
+"namespaceeeprom.html":[3,0,4],
+"namespaceerrors.html":[3,0,5],
+"namespaceevents.html":[3,0,6]
 };
