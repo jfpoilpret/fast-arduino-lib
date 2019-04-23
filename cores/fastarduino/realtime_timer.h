@@ -115,16 +115,48 @@
 
 namespace timer
 {
-	//TODO document
+	/**
+	 * Utility class to avoid costly instantiation of `time::RTTTime` from an
+	 * interrupt routine. It can be later (outside an ISR) converted into a
+	 * real `time::RTTTime`.
+	 * 
+	 * It is usually created from raw Timer registers values.
+	 * This type shall usually not be directly used as RTTRawTime<T> but actually
+	 * obtained from an RTT<NTIMER> instance, as `RTT::RAW_TIME`.
+	 * 
+	 * @tparam T the type of registers for the Timer providing raw values,
+	 * either `uint8_t` or `uint16_t`
+	 * 
+	 * @sa time::RTTTime
+	 * @sa RTT::RAW_TIME
+	 */
 	template<typename T> class RTTRawTime
 	{
 	public:
+		/**
+		 * Create a new `RTTRawTime` from @p millis milliseconds, and values
+		 * from Timer @p counter value that will allow microseconds calculation
+		 * later on.
+		 * 
+		 * @param millis the milliseconds elapsed as accounted by an `RTT` instance
+		 * @param counter the counter of the Timer used by the `RTT` instance
+		 * @param max_counter the maximum counter value for the Timer
+		 */
 		RTTRawTime(uint32_t millis, T counter, T max_counter)
 			: millis_{millis}, counter_{counter}, max_counter_{max_counter}
 		{}
 
+		/**
+		 * A constant to signify "no time". This constant takes no code to build,
+		 * compared with `RTTRawTime{0, 0, 0}`.
+		 */
 		static constexpr RTTRawTime<T> EMPTY_TIME{};
 
+		/**
+		 * Convert this `RTTRawTime` instance to a fully usable `time::RTTTime`.
+		 * This method performs potentially costly computation and hence should
+		 * not be used inside an ISR.
+		 */
 		time::RTTTime as_real_time() const
 		{
 			return time::RTTTime{millis_, uint16_t(ONE_MILLI * counter_ / (1UL + max_counter_))};
@@ -177,6 +209,10 @@ namespace timer
 		using PRESCALER = typename Timer<NTIMER>::PRESCALER;
 
 	public:
+		/**
+		 * The adequate `RTTRawTime` type for this `RTT`.
+		 * @sa RTTRawTime
+		 */
 		using RAW_TIME = RTTRawTime<TYPE>;
 
 		/**
@@ -206,15 +242,36 @@ namespace timer
 		 * If you want to get more precision about the elpased time, you can get
 		 * the number of microsecond elapsed, **in addition to `millis()`**, by
 		 * calling `micros()`.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `millis_()` instead.
 		 * @return elapsed time in ms
 		 * @sa millis(uint32_t)
 		 * @sa micros()
+		 * @sa millis_()
 		 */
 		inline uint32_t millis() const
 		{
 			synchronized return milliseconds_;
 		}
 
+		/**
+		 * Elapsed time, in milliseconds, since this timer has started.
+		 * If `millis(uint32_t)` is called, this sets a new time reference point
+		 * to count elapsed time from.
+		 * If you want to get more precision about the elpased time, you can get
+		 * the number of microsecond elapsed, **in addition to `millis()`**, by
+		 * calling `micros()`.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `millis()` instead.
+		 * @return elapsed time in ms
+		 * @sa millis(uint32_t)
+		 * @sa micros()
+		 * @sa millis()
+		 */
 		inline uint32_t millis_() const
 		{
 			return milliseconds_;
@@ -245,9 +302,14 @@ namespace timer
 		 * If you need the elapsed time with microsecond precision, then you
 		 * should call `time()` which returns an `time::RTTTime` structure that
 		 * contains both milliseconds and microseconds.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `micros_()` instead.
 		 * @return the us part of elapsed time
 		 * @sa millis()
 		 * @sa time()
+		 * @sa micros_()
 		 */
 		inline uint16_t micros() const
 		{
@@ -255,30 +317,103 @@ namespace timer
 		}
 
 		/**
+		 * Compute the microseconds part (from `0` to `999`) of the time that has
+		 * elapsed, since this timer has started. The milliseconds part is
+		 * provided by `millis()`.
+		 * In general, you will not call this method unless you are sure the
+		 * elapsed time is strictly less than 1ms.
+		 * If you need the elapsed time with microsecond precision, then you
+		 * should call `time()` which returns an `time::RTTTime` structure that
+		 * contains both milliseconds and microseconds.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `micros()` instead.
+		 * @return the us part of elapsed time
+		 * @sa millis()
+		 * @sa time()
+		 * @sa micros()
+		 */
+		inline uint16_t micros_() const
+		{
+			return compute_micros();
+		}
+
+		/**
 		 * Elapsed time, in milliseconds and microseconds, since this timer has
 		 * started.
 		 * If you do not need microsecond precision, you should instead use 
 		 * `millis()`.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `time_()` instead.
 		 * @return elapsed time in ms and us
 		 * @sa millis()
 		 * @sa micros()
+		 * @sa time_()
 		 */
 		time::RTTTime time() const
 		{
 			synchronized return time_();
 		}
 
-		//TODO document
+		/**
+		 * Elapsed time, in milliseconds and microseconds, since this timer has
+		 * started.
+		 * If you do not need microsecond precision, you should instead use 
+		 * `millis()`.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `time()` instead.
+		 * @return elapsed time in ms and us
+		 * @sa millis()
+		 * @sa micros()
+		 * @sa time()
+		 */
 		time::RTTTime time_() const
 		{
 			return time::RTTTime(milliseconds_, compute_micros());
 		}
 
+		/**
+		 * Elapsed time, in raw representation, since this timer has
+		 * started.
+		 * This method is a fast substitute for `time()`; instead of returning
+		 * a `time::RTTTime` which takes longer to instantiate, it returns a
+		 * simpler, faster `RTTRawTime` which contains the same information
+		 * but unprocessed yet.
+		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `raw_time_()` instead.
+		 * @return elapsed time in ms and us
+		 * @sa time()
+		 * @sa raw_time_()
+		 * @sa RTTRawTime
+		 */
 		RAW_TIME raw_time() const
 		{
 			synchronized return raw_time_();
 		}
 
+		/**
+		 * Elapsed time, in raw representation, since this timer has
+		 * started.
+		 * This method is a fast substitute for `time_()`; instead of returning
+		 * a `time::RTTTime` which takes longer to instantiate, it returns a
+		 * simpler, faster `RTTRawTime` which contains the same information
+		 * but unprocessed yet.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `raw_time()` instead.
+		 * @return elapsed time in ms and us
+		 * @sa time_()
+		 * @sa raw_time()
+		 * @sa RTTRawTime
+		 */
 		RAW_TIME raw_time_() const
 		{
 			return RAW_TIME{milliseconds_, (volatile TYPE&) TRAIT::TCNT, (volatile TYPE&) TRAIT::OCRA};
