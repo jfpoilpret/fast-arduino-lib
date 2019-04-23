@@ -84,6 +84,12 @@
  */
 #define REGISTER_WATCHDOG_ISR_EMPTY() EMPTY_INTERRUPT(WDT_vect)
 
+/**
+ * This macro shall be used in a class containing a private callback method,
+ * registered by `REGISTER_WATCHDOG_ISR_METHOD`.
+ * It declares the class wher it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
+ */
 #define DECL_WATCHDOG_ISR_HANDLES_FRIEND \
 	friend struct watchdog::isr_handler; \
 	friend void ::WDT_vect();

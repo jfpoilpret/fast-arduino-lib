@@ -75,8 +75,10 @@
 	}
 
 /**
- * Declare ISR handlers for External Interrupt pins as friend of a class 
- * containing a private callback.
+ * This macro shall be used in a class containing a private callback method,
+ * registered by `REGISTER_INT_ISR_METHOD`.
+ * It declares the class wher it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
  */
 #define DECL_INT_ISR_HANDLERS_FRIEND			\
 	friend struct interrupt::isr_handler_int;	\

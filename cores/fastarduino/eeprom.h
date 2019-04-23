@@ -72,6 +72,12 @@
 		eeprom::isr_handler::eeprom_ready_function<CALLBACK>(); \
 	}
 
+/**
+ * This macro shall be used in a class containing a private callback method,
+ * registered by `REGISTER_EEPROM_ISR_METHOD`.
+ * It declares the class wher it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
+ */
 #define DECL_EEPROM_ISR_HANDLERS_FRIEND \
 	friend struct eeprom::isr_handler;  \
 	friend void ::EE_READY_vect();

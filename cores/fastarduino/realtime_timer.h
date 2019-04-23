@@ -106,8 +106,10 @@
 	}
 
 /**
- * Declare ISR handlers for Real-Time Timers as friend of a class 
- * containing a private callback.
+ * This macro shall be used in a class containing a private callback method,
+ * registered by `REGISTER_RTT_ISR_METHOD`.
+ * It declares the class wher it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
  */
 #define DECL_RTT_ISR_HANDLERS_FRIEND      \
 	friend struct timer::isr_handler_rtt; \

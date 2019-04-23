@@ -157,8 +157,11 @@
 	}
 
 /**
- * Declare ISR handlers for Timers as friend of a class 
- * containing a private callback.
+ * This macro shall be used in a class containing a private callback method,
+ * registered by `REGISTER_TIMER_COMPARE_ISR_METHOD`, `REGISTER_TIMER_OVERFLOW_ISR_METHOD`
+ * or `REGISTER_TIMER_CAPTURE_ISR_METHOD`.
+ * It declares the class wher it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
  */
 #define DECL_TIMER_ISR_HANDLERS_FRIEND \
 	friend struct timer::isr_handler;  \
