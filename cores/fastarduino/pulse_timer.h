@@ -22,6 +22,7 @@
 #include "utilities.h"
 #include "timer.h"
 #include "gpio.h"
+#include "types_traits.h"
 
 //TODO Add documentation!
 
@@ -65,6 +66,8 @@
 
 namespace timer
 {
+	/// @cond notdocumented
+
 	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
 	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every
 	// 20ms, ie with a 50Hz frequency.
@@ -164,19 +167,20 @@ namespace timer
 		friend struct isr_handler_pulse;
 	};
 
+	/// @endcond
+
 	// Unified API for PulseTimer whatever the timer bits size (no need to use PulseTimer8 or PulseTimer16)
 	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER,
 			 typename T = typename board_traits::Timer_trait<NTIMER_>::TYPE>
 	class PulseTimer : public timer::Timer<NTIMER_>
 	{
-	public:
-		static constexpr const board::Timer NTIMER = NTIMER_;
+		static_assert(types_traits::is_uint8_or_uint16<T>(), "T must be either uint8_t or uint16_t");
 
-		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER>{0, 0} {}
-		inline void begin() {}
-		inline void begin_() {}
+	public:
+		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER_>{0, 0} {}
 	};
 
+	/// @cond notdocumented
 	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_>
 	class PulseTimer<NTIMER_, PRESCALER_, uint8_t> : public timer::PulseTimer8<NTIMER_, PRESCALER_>
 	{
@@ -190,12 +194,10 @@ namespace timer
 	public:
 		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer16<NTIMER_, PRESCALER_>{pulse_frequency} {}
 	};
+	/// @endcond
 
 	/// @cond notdocumented
-
 	// All PCI-related methods called by pre-defined ISR are defined here
-	//====================================================================
-
 	struct isr_handler_pulse
 	{
 		template<uint8_t TIMER_NUM_, board::DigitalPin PIN_, uint8_t COM_NUM_>

@@ -62,6 +62,11 @@ struct Callback
 	DECL_WATCHDOG_ISR_HANDLES_FRIEND
 };
 
+// // Check PulseTimer is limited to uint8_t and uint16_t
+// #pragma message "CHECK: timer::PulseTimer with bad type"
+// using BAD_PULSE_TIMER = timer::PulseTimer<NTIMER0, timer::Timer<NTIMER0>::PRESCALER::NO_PRESCALING, char>;
+// BAD_PULSE_TIMER stuff{2000};
+
 // // Check all PTMF callback macros and friends declaration macros
 // #pragma message "CHECK: private callback as friends (11 checks, should generate NO error)"
 // REGISTER_HCSR04_INT_ISR_METHOD(NTIMER0, 0, DigitalPin::D0_PD0, ExternalInterruptPin::D2_PD2_EXT0, Callback, &Callback::callback)
