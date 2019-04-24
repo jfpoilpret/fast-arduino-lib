@@ -90,8 +90,8 @@
  * It declares the class wher it is used as a friend of all necessary functions
  * so that the private callback method can be called properly.
  */
-#define DECL_WATCHDOG_ISR_HANDLES_FRIEND \
-	friend struct watchdog::isr_handler; \
+#define DECL_WATCHDOG_ISR_HANDLERS_FRIEND \
+	friend struct watchdog::isr_handler;  \
 	friend void ::WDT_vect();
 
 /**
