@@ -699,7 +699,7 @@ namespace timer
 	 * Note that many timer usages will require ISR registration with one of
 	 * the macros defined in this header file.
 	 * 
-	 * @tparam NTIMER_ the AVR timer forto use for this Timer
+	 * @tparam NTIMER_ the AVR timer to use for this Timer
 	 * @sa board::Timer
 	 */
 	template<board::Timer NTIMER_> class Timer
