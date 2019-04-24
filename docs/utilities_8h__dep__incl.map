@@ -11,7 +11,7 @@
 <area shape="rect" id="node27" href="$mpu6050_8h_source.html" title="fastarduino/devices\l/mpu6050.h" alt="" coords="2116,80,2267,121"/>
 <area shape="rect" id="node28" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="2291,87,2431,114"/>
 <area shape="rect" id="node33" href="$servo_8h_source.html" title="fastarduino/devices\l/servo.h" alt="" coords="2137,259,2288,300"/>
-<area shape="rect" id="node35" href="$pulse__timer_8h_source.html" title="fastarduino/pulse_timer.h" alt="" coords="2119,177,2307,203"/>
+<area shape="rect" id="node35" href="$pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="2119,177,2307,203"/>
 <area shape="rect" id="node36" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="2557,177,2687,203"/>
 <area shape="rect" id="node37" href="$timer_8h.html" title="Timer API. " alt="" coords="1595,87,1742,114"/>
 <area shape="rect" id="node38" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="671,169,811,211"/>

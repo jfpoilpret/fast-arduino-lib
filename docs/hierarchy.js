@@ -135,17 +135,11 @@ var hierarchy =
     [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],
     [ "timer::SquareWave< NTIMER, OUTPUT >", "classtimer_1_1_square_wave.html", null ],
-    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
+    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
     [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", [
-      [ "timer::PulseTimer< NTIMER_, PRESCALER, T >", "classtimer_1_1_pulse_timer.html", null ],
-      [ "timer::PulseTimer16< NTIMER_, PRESCALER_ >", "classtimer_1_1_pulse_timer16.html", [
-        [ "timer::PulseTimer< NTIMER_, PRESCALER_, uint16_t >", "classtimer_1_1_pulse_timer_3_01_n_t_i_m_e_r___00_01_p_r_e_s_c_a_l_e_r___00_01uint16__t_01_4.html", null ]
-      ] ],
-      [ "timer::PulseTimer8< NTIMER_, PRESCALER_ >", "classtimer_1_1_pulse_timer8.html", [
-        [ "timer::PulseTimer< NTIMER_, PRESCALER_, uint8_t >", "classtimer_1_1_pulse_timer_3_01_n_t_i_m_e_r___00_01_p_r_e_s_c_a_l_e_r___00_01uint8__t_01_4.html", null ]
-      ] ],
+      [ "timer::PulseTimer< NTIMER_, PRESCALER_, T >", "classtimer_1_1_pulse_timer.html", null ],
       [ "timer::RTT< NTIMER_ >", "classtimer_1_1_r_t_t.html", null ]
     ] ],
     [ "timer::Timer< NTIMER >", "classtimer_1_1_timer.html", null ],
@@ -153,6 +147,7 @@ var hierarchy =
     [ "devices::audio::ToneGenerator< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_generator.html", null ],
     [ "devices::audio::TonePlay", "structdevices_1_1audio_1_1_tone_play.html", null ],
     [ "devices::audio::TonePlayer< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_player.html", null ],
+    [ "types_traits::Type_trait< T >", "structtypes__traits_1_1_type__trait.html", null ],
     [ "serial::UARTErrors", "classserial_1_1_u_a_r_t_errors.html", [
       [ "serial::soft::AbstractUARX", "classserial_1_1soft_1_1_abstract_u_a_r_x.html", null ],
       [ "serial::soft::AbstractUATX", "classserial_1_1soft_1_1_abstract_u_a_t_x.html", null ]

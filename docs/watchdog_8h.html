@@ -158,8 +158,9 @@ Macros</h2></td></tr>
 <tr class="memitem:adb4cc81538efc2536ee6e1d06ae4b92f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="watchdog_8h.html#adb4cc81538efc2536ee6e1d06ae4b92f">REGISTER_WATCHDOG_ISR_EMPTY</a>()&#160;&#160;&#160;EMPTY_INTERRUPT(WDT_vect)</td></tr>
 <tr class="memdesc:adb4cc81538efc2536ee6e1d06ae4b92f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register an empty ISR (interrupt Service Routine) for a <a class="el" href="classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals. ">watchdog::WatchdogSignal</a>.  <a href="#adb4cc81538efc2536ee6e1d06ae4b92f">More...</a><br /></td></tr>
 <tr class="separator:adb4cc81538efc2536ee6e1d06ae4b92f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69951b60902ba314a50763e1d36bf838"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>DECL_WATCHDOG_ISR_HANDLES_FRIEND</b></td></tr>
-<tr class="separator:a69951b60902ba314a50763e1d36bf838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8241e4f4aa0b4776545287e1e9c14286"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="watchdog_8h.html#a8241e4f4aa0b4776545287e1e9c14286">DECL_WATCHDOG_ISR_HANDLERS_FRIEND</a></td></tr>
+<tr class="memdesc:a8241e4f4aa0b4776545287e1e9c14286"><td class="mdescLeft">&#160;</td><td class="mdescRight">This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_WATCHDOG_ISR_METHOD</code>.  <a href="#a8241e4f4aa0b4776545287e1e9c14286">More...</a><br /></td></tr>
+<tr class="separator:a8241e4f4aa0b4776545287e1e9c14286"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -333,20 +334,23 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
-<a id="a69951b60902ba314a50763e1d36bf838"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69951b60902ba314a50763e1d36bf838">&#9670;&nbsp;</a></span>DECL_WATCHDOG_ISR_HANDLES_FRIEND</h2>
+<a id="a8241e4f4aa0b4776545287e1e9c14286"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8241e4f4aa0b4776545287e1e9c14286">&#9670;&nbsp;</a></span>DECL_WATCHDOG_ISR_HANDLERS_FRIEND</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define DECL_WATCHDOG_ISR_HANDLES_FRIEND</td>
+          <td class="memname">#define DECL_WATCHDOG_ISR_HANDLERS_FRIEND</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span><a class="code" href="structwatchdog_1_1isr__handler.html">watchdog::isr_handler</a>; \</div><div class="line">    friend void ::WDT_vect();</div><div class="ttc" id="structwatchdog_1_1isr__handler_html"><div class="ttname"><a href="structwatchdog_1_1isr__handler.html">watchdog::isr_handler</a></div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00329">watchdog.h:329</a></div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span><a class="code" href="structwatchdog_1_1isr__handler.html">watchdog::isr_handler</a>;  \</div><div class="line">    friend void ::WDT_vect();</div><div class="ttc" id="structwatchdog_1_1isr__handler_html"><div class="ttname"><a href="structwatchdog_1_1isr__handler.html">watchdog::isr_handler</a></div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00335">watchdog.h:335</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00087">87</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p>This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_WATCHDOG_ISR_METHOD</code>. </p>
+<p>It declares the class wher it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00093">93</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>

@@ -16,6 +16,7 @@ var searchData=
   ['is_5fmask_5fequal',['is_mask_equal',['../namespaceutils.html#a719f3f44a5cf8093953fbb97486bbee9',1,'utils']]],
   ['is_5fperiodic',['is_periodic',['../classevents_1_1_job.html#a49a38e6f375fdb320d6c920c71bad398',1,'events::Job']]],
   ['is_5fsuspended',['is_suspended',['../classtimer_1_1_timer.html#ae6b17fe07b82e343aa0360430bfb8671',1,'timer::Timer']]],
+  ['is_5fuint8_5for_5fuint16',['is_uint8_or_uint16',['../namespacetypes__traits.html#a739ba92939efc7c21dbe34a19234373e',1,'types_traits']]],
   ['is_5fzero',['is_zero',['../namespaceutils.html#a3525bf2bf63c9f906bc9b952f0d54355',1,'utils']]],
   ['istream',['istream',['../classstreams_1_1istream.html#adbaadc46ce28fed5aa1abb91fe15c02b',1,'streams::istream']]],
   ['items',['items',['../classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069',1,'containers::Queue']]],

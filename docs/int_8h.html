@@ -135,7 +135,7 @@ Macros</h2></td></tr>
 <tr class="memdesc:a797c88ca60edb14f5189217ad50a65cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register an empty ISR (Interrupt Service Routine) for an External Interrupt pin.  <a href="#a797c88ca60edb14f5189217ad50a65cb">More...</a><br /></td></tr>
 <tr class="separator:a797c88ca60edb14f5189217ad50a65cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8d31ae95551a7ba072fd11cd7339f68"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="int_8h.html#ac8d31ae95551a7ba072fd11cd7339f68">DECL_INT_ISR_HANDLERS_FRIEND</a></td></tr>
-<tr class="memdesc:ac8d31ae95551a7ba072fd11cd7339f68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare ISR handlers for External Interrupt pins as friend of a class containing a private callback.  <a href="#ac8d31ae95551a7ba072fd11cd7339f68">More...</a><br /></td></tr>
+<tr class="memdesc:ac8d31ae95551a7ba072fd11cd7339f68"><td class="mdescLeft">&#160;</td><td class="mdescRight">This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_INT_ISR_METHOD</code>.  <a href="#ac8d31ae95551a7ba072fd11cd7339f68">More...</a><br /></td></tr>
 <tr class="separator:ac8d31ae95551a7ba072fd11cd7339f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -293,9 +293,10 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span>interrupt::isr_handler_int;   \</div><div class="line">    DECL_INT_ISR_FRIENDS</div></div><!-- fragment -->
-<p>Declare ISR handlers for External Interrupt pins as friend of a class containing a private callback. </p>
+<p>This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_INT_ISR_METHOD</code>. </p>
+<p>It declares the class wher it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00081">81</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00083">83</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>

@@ -104,14 +104,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines a set of calculation methods for the given <code>NTIMER_</code> The behavior of these methods is specific to each AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> are there can be many important differences between 2 timers on AVR.  <a href="structtimer_1_1_calculator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_pulse_timer.html">PulseTimer</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_pulse_timer16.html">PulseTimer16</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_pulse_timer8.html">PulseTimer8</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_pulse_timer_3_01_n_t_i_m_e_r___00_01_p_r_e_s_c_a_l_e_r___00_01uint16__t_01_4.html">PulseTimer&lt; NTIMER_, PRESCALER_, uint16_t &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_pulse_timer_3_01_n_t_i_m_e_r___00_01_p_r_e_s_c_a_l_e_r___00_01uint8__t_01_4.html">PulseTimer&lt; NTIMER_, PRESCALER_, uint8_t &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special kind of <code><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a></code>, specialized in emitting pulses with accurate width, according to a slow frequency.  <a href="classtimer_1_1_pulse_timer.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t.html">RTT</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">API to handle a real-time timer.  <a href="classtimer_1_1_r_t_t.html#details">More...</a><br /></td></tr>
@@ -120,6 +113,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility to generate events from an <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">RTT</a></code> instance at a given period.  <a href="classtimer_1_1_r_t_t_event_callback.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t_raw_time.html">RTTRawTime</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utility class to avoid costly instantiation of <code><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code> from an interrupt routine.  <a href="classtimer_1_1_r_t_t_raw_time.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html">SquareWave</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -234,7 +228,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00184">184</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00187">187</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -275,7 +269,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00225">225</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00228">228</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -313,7 +307,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00259">259</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00262">262</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -345,7 +339,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00283">283</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00286">286</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -379,7 +373,7 @@ Functions</h2></td></tr>
 <p>Combine 2 timer interrupts for use with <code><a class="el" href="classtimer_1_1_timer.html#ad14b212cdb392c587274f6bdc8fd494c" title="Set the list of interrupts that must be triggered by this timer. ">Timer.set_interrupts()</a></code>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_timer.html#ad14b212cdb392c587274f6bdc8fd494c" title="Set the list of interrupts that must be triggered by this timer. ">Timer.set_interrupts()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00251">251</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00254">254</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>

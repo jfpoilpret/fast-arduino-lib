@@ -17,6 +17,7 @@ var namespaces_dup =
     [ "streams", "namespacestreams.html", null ],
     [ "time", "namespacetime.html", null ],
     [ "timer", "namespacetimer.html", null ],
+    [ "types_traits", "namespacetypes__traits.html", null ],
     [ "utils", "namespaceutils.html", null ],
     [ "watchdog", "namespacewatchdog.html", null ]
 ];

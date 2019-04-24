@@ -15,5 +15,6 @@ var annotated_dup =
     [ "streams", "namespacestreams.html", "namespacestreams" ],
     [ "time", "namespacetime.html", "namespacetime" ],
     [ "timer", "namespacetimer.html", "namespacetimer" ],
+    [ "types_traits", "namespacetypes__traits.html", "namespacetypes__traits" ],
     [ "watchdog", "namespacewatchdog.html", "namespacewatchdog" ]
 ];

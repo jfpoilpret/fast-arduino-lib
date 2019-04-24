@@ -147,19 +147,19 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a8eec5399160940b02b5ab12b79962f4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770" title="Timer &quot;Phase Correct Pulse Width Modulation&quot; mode: counter is incremented until MAX (0xFF for 8-bits ...">TimerMode::PHASE_CORRECT_PWM</a> mode, if it was using <code>prescaler</code>.  <a href="#a8eec5399160940b02b5ab12b79962f4c">More...</a><br /></td></tr>
 <tr class="separator:a8eec5399160940b02b5ab12b79962f4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4475e3f5db80e50cd1133a121bd954a"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#af4475e3f5db80e50cd1133a121bd954a">PulseTimer_prescaler</a> (uint16_t max_pulse_width_us, uint16_t pulse_frequency)</td></tr>
-<tr class="memdesc:af4475e3f5db80e50cd1133a121bd954a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#af4475e3f5db80e50cd1133a121bd954a">More...</a><br /></td></tr>
+<tr class="memdesc:af4475e3f5db80e50cd1133a121bd954a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#af4475e3f5db80e50cd1133a121bd954a">More...</a><br /></td></tr>
 <tr class="separator:af4475e3f5db80e50cd1133a121bd954a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52f8badc8b0d337d876530b7164fefd3"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a52f8badc8b0d337d876530b7164fefd3">PulseTimer_value</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint16_t period_us)</td></tr>
-<tr class="memdesc:a52f8badc8b0d337d876530b7164fefd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to produce a pulse of the required width <code>period_us</code> with the given <code>prescaler</code>.  <a href="#a52f8badc8b0d337d876530b7164fefd3">More...</a><br /></td></tr>
+<tr class="memdesc:a52f8badc8b0d337d876530b7164fefd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to produce a pulse of the required width <code>period_us</code> with the given <code>prescaler</code>.  <a href="#a52f8badc8b0d337d876530b7164fefd3">More...</a><br /></td></tr>
 <tr class="separator:a52f8badc8b0d337d876530b7164fefd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a477b522376339b0166772dc842b46374"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a477b522376339b0166772dc842b46374">PWM_ICR_prescaler</a> (uint16_t pwm_frequency)</td></tr>
-<tr class="memdesc:a477b522376339b0166772dc842b46374"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#a477b522376339b0166772dc842b46374">More...</a><br /></td></tr>
+<tr class="memdesc:a477b522376339b0166772dc842b46374"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>.  <a href="#a477b522376339b0166772dc842b46374">More...</a><br /></td></tr>
 <tr class="separator:a477b522376339b0166772dc842b46374"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab0cccab647282b92d832d1607afea3e"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e">PWM_ICR_frequency</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint16_t counter)</td></tr>
-<tr class="memdesc:aab0cccab647282b92d832d1607afea3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, if it was using <code>prescaler</code> and <code>counter</code>.  <a href="#aab0cccab647282b92d832d1607afea3e">More...</a><br /></td></tr>
+<tr class="memdesc:aab0cccab647282b92d832d1607afea3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the frequency at which this timer would perform, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, if it was using <code>prescaler</code> and <code>counter</code>.  <a href="#aab0cccab647282b92d832d1607afea3e">More...</a><br /></td></tr>
 <tr class="separator:aab0cccab647282b92d832d1607afea3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0efa69f8b7fb5f7a53ce85fe0769e951"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951">PWM_ICR_counter</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint16_t pwm_frequency)</td></tr>
-<tr class="memdesc:a0efa69f8b7fb5f7a53ce85fe0769e951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal counter TOP value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with the given <code>prescaler</code>.  <a href="#a0efa69f8b7fb5f7a53ce85fe0769e951">More...</a><br /></td></tr>
+<tr class="memdesc:a0efa69f8b7fb5f7a53ce85fe0769e951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal counter TOP value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with the given <code>prescaler</code>.  <a href="#a0efa69f8b7fb5f7a53ce85fe0769e951">More...</a><br /></td></tr>
 <tr class="separator:a0efa69f8b7fb5f7a53ce85fe0769e951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
@@ -186,7 +186,7 @@ struct timer::Calculator&lt; NTIMER_ &gt;</h3>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb" title="Defines all timers available for target MCU. ">board::Timer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00299">299</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00302">302</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a77c46427baeaa86aff4787b6c75f807c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a77c46427baeaa86aff4787b6c75f807c">&#9670;&nbsp;</a></span>TYPE</h2>
@@ -205,7 +205,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>The timer type: either <code>uint8_t</code> or <code>uint16_t</code>; this is defined and not changeable for each <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>. </p>
 <p><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> counter and max values have this type. </p>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00317">317</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00320">320</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -246,7 +246,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00339">339</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00342">342</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -297,7 +297,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of microseconds elapsed for <code>ticks</code> with <code>prescaler</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00355">355</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00358">358</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -348,7 +348,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the number of ticks needed in order to reach <code>us</code> microseconds elapsed </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00371">371</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00374">374</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -391,7 +391,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4" title="Computes the frequency at which this timer would perform, in TimerMode::CTC mode, if it was using pre...">CTC_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00388">388</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00391">391</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -432,7 +432,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CTC_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00404">404</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00407">407</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -486,7 +486,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 Timer::begin(PRESCALER, TYPE) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00421">421</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00424">424</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -546,7 +546,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">CTC_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00443">443</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00446">446</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -587,7 +587,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#ab25ea1fa8d73227cdac44b75ae130161" title="Computes the frequency at which this timer would perform, in TimerMode::FAST_PWM mode, if it was using prescaler. ">FastPWM_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00459">459</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00462">462</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -628,7 +628,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a4c53597343b9f3f8094d90a6618e7507" title="Computes the ideal prescaler value to use for this timer, in TimerMode::FAST_PWM mode, in order to be able to reach at least pwm_frequency. ">FastPWM_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00475">475</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00478">478</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -669,7 +669,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a8eec5399160940b02b5ab12b79962f4c" title="Computes the frequency at which this timer would perform, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00491">491</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00494">494</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -710,7 +710,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>timer frequency when using <code>prescaler</code> </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1" title="Computes the ideal prescaler value to use for this timer, in TimerMode::PHASE_CORRECT_PWM mode...">PhaseCorrectPWM_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00507">507</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00510">510</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -750,7 +750,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>. </p>
+<p>Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>. </p>
 <p>Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -762,7 +762,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the best prescaler to use </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#a52f8badc8b0d337d876530b7164fefd3" title="Computes the ideal value to use for this timer, when used in timer::PulseTimer, in order to produce a...">PulseTimer_value()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00525">525</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00528">528</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -802,9 +802,9 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Computes the ideal value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to produce a pulse of the required width <code>period_us</code> with the given <code>prescaler</code>. </p>
+<p>Computes the ideal value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to produce a pulse of the required width <code>period_us</code> with the given <code>prescaler</code>. </p>
 <p>Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
-<p>Note that this method is directly called as needed by <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, hence you generally won't need to call it yourself.</p>
+<p>Note that this method is directly called as needed by <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, hence you generally won't need to call it yourself.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">prescaler</td><td>the prescaler value for which to compute value </td></tr>
@@ -815,7 +815,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the value to use to produce the required pulse </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structtimer_1_1_calculator.html#af4475e3f5db80e50cd1133a121bd954a" title="Computes the ideal prescaler value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with a maximum pulse width of max_pulse_width_us. ">PulseTimer_prescaler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00545">545</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00548">548</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -845,9 +845,9 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>. </p>
-<p>This method applies only to 16-bits timers, for which <a class="el" href="classtimer_1_1_pulse_timer.html">PulseTimer</a> uses FastPWM mode with register <code>ICR</code> as TOP value. Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
-<p>Note that this method is directly called as needed by <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, hence you generally won't need to call it yourself.</p>
+<p>Computes the ideal prescaler value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with a maximum pulse width of <code>max_pulse_width_us</code>. </p>
+<p>This method applies only to 16-bits timers, for which <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">PulseTimer</a> uses FastPWM mode with register <code>ICR</code> as TOP value. Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
+<p>Note that this method is directly called as needed by <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, hence you generally won't need to call it yourself.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pwm_frequency</td><td>the pulse frequency we want to reach </td></tr>
@@ -859,7 +859,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00567">567</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00570">570</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -899,8 +899,8 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Computes the frequency at which this timer would perform, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, if it was using <code>prescaler</code> and <code>counter</code>. </p>
-<p>This method applies only to 16-bits timers, for which <a class="el" href="classtimer_1_1_pulse_timer.html">PulseTimer</a> uses FastPWM mode with register <code>ICR</code> as TOP value.</p>
+<p>Computes the frequency at which this timer would perform, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, if it was using <code>prescaler</code> and <code>counter</code>. </p>
+<p>This method applies only to 16-bits timers, for which <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">PulseTimer</a> uses FastPWM mode with register <code>ICR</code> as TOP value.</p>
 <p>Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -914,7 +914,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951" title="Computes the ideal counter TOP value to use for this timer, when used in timer::PulseTimer, in order to be able to reach at least pulse_frequency with the given prescaler. ">PWM_ICR_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00589">589</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00592">592</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>
@@ -954,8 +954,8 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Computes the ideal counter TOP value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with the given <code>prescaler</code>. </p>
-<p>This method applies only to 16-bits timers, for which <a class="el" href="classtimer_1_1_pulse_timer.html">PulseTimer</a> uses FastPWM mode with register <code>ICR</code> as TOP value.</p>
+<p>Computes the ideal counter TOP value to use for this timer, when used in <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a>, in order to be able to reach at least <code>pulse_frequency</code> with the given <code>prescaler</code>. </p>
+<p>This method applies only to 16-bits timers, for which <a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">PulseTimer</a> uses FastPWM mode with register <code>ICR</code> as TOP value.</p>
 <p>Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided a constant argument.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -969,7 +969,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e" title="Computes the frequency at which this timer would perform, when used in timer::PulseTimer, if it was using prescaler and counter. ">PWM_ICR_frequency()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00611">611</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00614">614</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>

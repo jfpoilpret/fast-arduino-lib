@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['raw_5ftime',['raw_time',['../classtimer_1_1_r_t_t.html#a2bcffff30fb331b9fb7ada737fcacf2d',1,'timer::RTT']]],
+  ['raw_5ftime_5f',['raw_time_',['../classtimer_1_1_r_t_t.html#af839f927ace75a919383c841d1b6135d',1,'timer::RTT']]],
   ['rdbuf',['rdbuf',['../classstreams_1_1ostream.html#af874202c30293f8c8cd4ce05e17d477f',1,'streams::ostream::rdbuf()'],['../classstreams_1_1istream.html#a01e1d69745e71dc050356351db3016a0',1,'streams::istream::rdbuf()']]],
   ['rdstate',['rdstate',['../classstreams_1_1ios__base.html#a3234d1e22f867e22439efa53c9bf9271',1,'streams::ios_base']]],
   ['read',['read',['../classeeprom_1_1_e_e_p_r_o_m.html#a046768eae9f26564b1039a13b88bb8c1',1,'eeprom::EEPROM::read(const T *address, T &amp;value)'],['../classeeprom_1_1_e_e_p_r_o_m.html#a53098f3e30521e9f2f86d42ed2a89450',1,'eeprom::EEPROM::read(uint16_t address, T &amp;value)'],['../classeeprom_1_1_e_e_p_r_o_m.html#acfbee6f42a0fa46de7e3fa2fd486053d',1,'eeprom::EEPROM::read(const T *address, T *value, uint16_t count)'],['../classeeprom_1_1_e_e_p_r_o_m.html#ac2e5af4f9136b8371b4d36cbe3a428cc',1,'eeprom::EEPROM::read(uint16_t address, T *value, uint16_t count)'],['../classeeprom_1_1_e_e_p_r_o_m.html#a0982b1807616840c7477727a7ea7f1fa',1,'eeprom::EEPROM::read(const uint8_t *address, uint8_t &amp;value)'],['../classeeprom_1_1_e_e_p_r_o_m.html#ae7099b3afca54eb52e4873c4fd799534',1,'eeprom::EEPROM::read(uint16_t address, uint8_t &amp;value)'],['../classi2c_1_1_i2_c_device.html#af52330bb110ac9e62ffb4b7507ac28d7',1,'i2c::I2CDevice::read(uint8_t address, uint8_t *data, uint8_t size, BusConditions conditions=BusConditions::START_STOP)'],['../classi2c_1_1_i2_c_device.html#a67054dc6a02073b006b5346f2eab6e9c',1,'i2c::I2CDevice::read(uint8_t address, T &amp;data, BusConditions conditions=BusConditions::START_STOP)'],['../classstreams_1_1istream.html#a905ddf8098acebf9b67247969141ce70',1,'streams::istream::read()']]],
@@ -20,5 +22,6 @@ var searchData=
   ['right',['right',['../namespacestreams.html#a6ffd9b1de5fcffbb31c425a2218c6b09',1,'streams']]],
   ['rtt',['RTT',['../classtimer_1_1_r_t_t.html#aa75448a1d268c8c5aaec4111230c3d70',1,'timer::RTT']]],
   ['rtteventcallback',['RTTEventCallback',['../classtimer_1_1_r_t_t_event_callback.html#a41ca339f4780aae1b793dd16ad9701a9',1,'timer::RTTEventCallback']]],
+  ['rttrawtime',['RTTRawTime',['../classtimer_1_1_r_t_t_raw_time.html#a272a897e13e597aec2eb7da6f919943d',1,'timer::RTTRawTime']]],
   ['rtttime',['RTTTime',['../structtime_1_1_r_t_t_time.html#a3ce11fdbe3da158b9c3c1d7d4a0d80cb',1,'time::RTTTime::RTTTime(uint32_t micros=0UL)'],['../structtime_1_1_r_t_t_time.html#a037345112c94343780bb9efd42cdf42e',1,'time::RTTTime::RTTTime(uint32_t millis, uint16_t micros)'],['../structtime_1_1_r_t_t_time.html#a66a2c129d92d6a867e581efab4a881bd',1,'time::RTTTime::RTTTime(const RTTTime &amp;that)']]]
 ];

@@ -37,7 +37,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
       [ "Power", "classpower_1_1_power.html", "classpower_1_1_power" ]
     ] ],
     [ "power_internals.cpp", "power__internals_8cpp_source.html", null ],
-    [ "pulse_timer.h", "pulse__timer_8h_source.html", null ],
+    [ "pulse_timer.h", "pulse__timer_8h.html", "pulse__timer_8h" ],
     [ "pwm.h", "pwm_8h.html", [
       [ "PWMOutput", "classanalog_1_1_p_w_m_output.html", "classanalog_1_1_p_w_m_output" ]
     ] ],
@@ -61,6 +61,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "time.cpp", "time_8cpp_source.html", null ],
     [ "time.h", "time_8h.html", "time_8h" ],
     [ "timer.h", "timer_8h.html", "timer_8h" ],
+    [ "types_traits.h", "types__traits_8h.html", "types__traits_8h" ],
     [ "uart.h", "uart_8h.html", "uart_8h" ],
     [ "uart_commons.h", "uart__commons_8h.html", "uart__commons_8h" ],
     [ "utilities.h", "utilities_8h.html", "utilities_8h" ],

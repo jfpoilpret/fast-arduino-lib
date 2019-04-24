@@ -1,7 +1,7 @@
 <map id="fastarduino/timer.h" name="fastarduino/timer.h">
 <area shape="rect" id="node2" href="$square__wave_8h_source.html" title="fastarduino/square\l_wave.h" alt="" coords="9,169,153,211"/>
 <area shape="rect" id="node5" href="$pwm_8h.html" title="PWM API. " alt="" coords="63,87,207,114"/>
-<area shape="rect" id="node7" href="$pulse__timer_8h_source.html" title="fastarduino/pulse_timer.h" alt="" coords="232,87,420,114"/>
+<area shape="rect" id="node7" href="$pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="232,87,420,114"/>
 <area shape="rect" id="node8" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="445,80,599,121"/>
 <area shape="rect" id="node3" href="$tones_8h_source.html" title="fastarduino/devices\l/tones.h" alt="" coords="5,259,156,300"/>
 <area shape="rect" id="node4" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="5,348,156,389"/>

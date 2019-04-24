@@ -7,6 +7,7 @@ var classtimer_1_1_r_t_t =
     [ "millis_", "classtimer_1_1_r_t_t.html#a96f540c172d78ac30366240ecfa3ddb2", null ],
     [ "delay", "classtimer_1_1_r_t_t.html#a7d5c189655b98446f08ccd5cf078c912", null ],
     [ "micros", "classtimer_1_1_r_t_t.html#ac55b6e30571ddacfa28824133fa8824c", null ],
+    [ "micros_", "classtimer_1_1_r_t_t.html#a16abe10fac6ce8b6d043a46e4803c89c", null ],
     [ "time", "classtimer_1_1_r_t_t.html#ac5c7807d1cb3f77fc54685f85b193e32", null ],
     [ "time_", "classtimer_1_1_r_t_t.html#a00d4ac1636b0dbe49e6c198a2be0f4ff", null ],
     [ "raw_time", "classtimer_1_1_r_t_t.html#a2bcffff30fb331b9fb7ada737fcacf2d", null ],

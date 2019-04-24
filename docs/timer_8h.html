@@ -121,7 +121,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <map name="fastarduino_2timer_8hdep" id="fastarduino_2timer_8hdep">
 <area shape="rect" id="node2" href="square__wave_8h_source.html" title="fastarduino/square\l_wave.h" alt="" coords="9,169,153,211"/>
 <area shape="rect" id="node5" href="pwm_8h.html" title="PWM API. " alt="" coords="63,87,207,114"/>
-<area shape="rect" id="node7" href="pulse__timer_8h_source.html" title="fastarduino/pulse_timer.h" alt="" coords="232,87,420,114"/>
+<area shape="rect" id="node7" href="pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="232,87,420,114"/>
 <area shape="rect" id="node8" href="realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="445,80,599,121"/>
 <area shape="rect" id="node3" href="tones_8h_source.html" title="fastarduino/devices\l/tones.h" alt="" coords="5,259,156,300"/>
 <area shape="rect" id="node4" href="tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="5,348,156,389"/>
@@ -177,7 +177,7 @@ Macros</h2></td></tr>
 <tr class="memdesc:a1dec37d0ac500f2d0dfc9b50fcf6e71f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register an empty ISR (Interrupt Service Routine) for the Input Capture of a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a>.  <a href="#a1dec37d0ac500f2d0dfc9b50fcf6e71f">More...</a><br /></td></tr>
 <tr class="separator:a1dec37d0ac500f2d0dfc9b50fcf6e71f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa27556302e5902b12c0a49a32792a01f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer_8h.html#aa27556302e5902b12c0a49a32792a01f">DECL_TIMER_ISR_HANDLERS_FRIEND</a></td></tr>
-<tr class="memdesc:aa27556302e5902b12c0a49a32792a01f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare ISR handlers for Timers as friend of a class containing a private callback.  <a href="#aa27556302e5902b12c0a49a32792a01f">More...</a><br /></td></tr>
+<tr class="memdesc:aa27556302e5902b12c0a49a32792a01f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_TIMER_COMPARE_ISR_METHOD</code>, <code>REGISTER_TIMER_OVERFLOW_ISR_METHOD</code> or <code>REGISTER_TIMER_CAPTURE_ISR_METHOD</code>.  <a href="#aa27556302e5902b12c0a49a32792a01f">More...</a><br /></td></tr>
 <tr class="separator:aa27556302e5902b12c0a49a32792a01f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -591,9 +591,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span>timer::isr_handler;  \</div><div class="line">    DECL_TIMER_COMP_FRIENDS            \</div><div class="line">    DECL_TIMER_OVF_FRIENDS             \</div><div class="line">    DECL_TIMER_CAPT_FRIENDS</div></div><!-- fragment -->
-<p>Declare ISR handlers for Timers as friend of a class containing a private callback. </p>
+<p>This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_TIMER_COMPARE_ISR_METHOD</code>, <code>REGISTER_TIMER_OVERFLOW_ISR_METHOD</code> or <code>REGISTER_TIMER_CAPTURE_ISR_METHOD</code>. </p>
+<p>It declares the class wher it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
 
-<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00163">163</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="timer_8h_source.html#l00166">166</a> of file <a class="el" href="timer_8h_source.html">timer.h</a>.</p>
 
 </div>
 </div>

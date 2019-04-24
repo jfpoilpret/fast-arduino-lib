@@ -114,14 +114,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e7fbc5e09298b94ab381e432f0ecd7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtime_1_1_r_t_t_time.html#a3e7fbc5e09298b94ab381e432f0ecd7d">operator=</a> (const <a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a> &amp;that)</td></tr>
 <tr class="memdesc:a3e7fbc5e09298b94ab381e432f0ecd7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign this <code><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">RTTTime</a></code> instance from <code>that</code>.  <a href="#a3e7fbc5e09298b94ab381e432f0ecd7d">More...</a><br /></td></tr>
 <tr class="separator:a3e7fbc5e09298b94ab381e432f0ecd7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a352cd6b38e38a8989be4f1513a62dbc2"><td class="memItemLeft" align="right" valign="top"><a id="a352cd6b38e38a8989be4f1513a62dbc2"></a>
-<a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (uint32_t microseconds)</td></tr>
+<tr class="memitem:a352cd6b38e38a8989be4f1513a62dbc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtime_1_1_r_t_t_time.html#a352cd6b38e38a8989be4f1513a62dbc2">operator+=</a> (uint32_t microseconds)</td></tr>
+<tr class="memdesc:a352cd6b38e38a8989be4f1513a62dbc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add <code>microseconds</code> to this <a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">RTTTime</a> instance.  <a href="#a352cd6b38e38a8989be4f1513a62dbc2">More...</a><br /></td></tr>
 <tr class="separator:a352cd6b38e38a8989be4f1513a62dbc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e70c33d1cebe576244ec344822aa112"><td class="memItemLeft" align="right" valign="top"><a id="a0e70c33d1cebe576244ec344822aa112"></a>
-<a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-=</b> (uint32_t microseconds)</td></tr>
+<tr class="memitem:a0e70c33d1cebe576244ec344822aa112"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtime_1_1_r_t_t_time.html#a0e70c33d1cebe576244ec344822aa112">operator-=</a> (uint32_t microseconds)</td></tr>
+<tr class="memdesc:a0e70c33d1cebe576244ec344822aa112"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove <code>microseconds</code> from this <a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">RTTTime</a> instance.  <a href="#a0e70c33d1cebe576244ec344822aa112">More...</a><br /></td></tr>
 <tr class="separator:a0e70c33d1cebe576244ec344822aa112"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6950cc1ff18e7c4fb7b31bebb06dac04"><td class="memItemLeft" align="right" valign="top"><a id="a6950cc1ff18e7c4fb7b31bebb06dac04"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>total_micros</b> () const</td></tr>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtime_1_1_r_t_t_time.html#a6950cc1ff18e7c4fb7b31bebb06dac04">total_micros</a> () const</td></tr>
+<tr class="memdesc:a6950cc1ff18e7c4fb7b31bebb06dac04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return current elapsed time in microseconds only. <br /></td></tr>
 <tr class="separator:a6950cc1ff18e7c4fb7b31bebb06dac04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -297,9 +298,83 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>this instance </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00071">71</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+
+</div>
+</div>
+<a id="a352cd6b38e38a8989be4f1513a62dbc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a352cd6b38e38a8989be4f1513a62dbc2">&#9670;&nbsp;</a></span>operator+=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a>&amp; time::RTTTime::operator+= </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>microseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Add <code>microseconds</code> to this <a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">RTTTime</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">microseconds</td><td>the number of us to add to this <a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">RTTTime</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this instance </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00083">83</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+
+</div>
+</div>
+<a id="a0e70c33d1cebe576244ec344822aa112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e70c33d1cebe576244ec344822aa112">&#9670;&nbsp;</a></span>operator-=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structtime_1_1_r_t_t_time.html">RTTTime</a>&amp; time::RTTTime::operator-= </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>microseconds</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Remove <code>microseconds</code> from this <a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">RTTTime</a> instance. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">microseconds</td><td>the number of us to subtract from this <a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">RTTTime</a>; results are undetermined if <code>microseconds</code> is larger than <code><a class="el" href="structtime_1_1_r_t_t_time.html#a6950cc1ff18e7c4fb7b31bebb06dac04" title="Return current elapsed time in microseconds only. ">total_micros()</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>this instance </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00103">103</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>
@@ -318,7 +393,7 @@ Public Attributes</h2></td></tr>
 
 <p>Number of elapsed milliseconds. </p>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00104">104</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00118">118</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>
@@ -336,7 +411,7 @@ Public Attributes</h2></td></tr>
 
 <p>Number of elapsed microseconds (0..999). </p>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00106">106</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00120">120</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>
