@@ -217,15 +217,16 @@ namespace timer
 	 * 
 	 * Note: if @p NTIMER_ is an 8-bits Timer, then one of the following macros
 	 * must be used to register the necessary ISR for the PulseTimer to work correctly:
-	 * - REGISTER_PULSE_TIMER8_AB_ISR
-	 * - REGISTER_PULSE_TIMER8_A_ISR
-	 * - REGISTER_PULSE_TIMER8_B_ISR
+	 * - REGISTER_PULSE_TIMER8_AB_ISR()
+	 * - REGISTER_PULSE_TIMER8_A_ISR()
+	 * - REGISTER_PULSE_TIMER8_B_ISR()
 	 * 
-	 * For concrete examples, you can check:
-	 * - PWM3
-	 * - PWM4
-	 * - Servo1
-	 * - Servo2
+	 * For concrete usage, you can check the following examples, provided with
+	 * FastArduino source:
+	 * - analog/PWM3
+	 * - analog/PWM4
+	 * - motors/Servo1
+	 * - motors/Servo2
 	 * 
 	 * @tparam NTIMER_ the board::Timer to use for this PulseTimer
 	 * @tparam PRESCALER_ the prescaler value to use for this PulseTimer; it shall
