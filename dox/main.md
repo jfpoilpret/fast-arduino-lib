@@ -85,16 +85,16 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [events](namespaceevents.html): this namespace defines general event handling that can be used in your programs. Most FastArduino are able to generate events on specific conditions. This namespace also contain the scheduler API which permits scheduling of jobs at specific times or periods.
 - [flash](namespaceflash.html): contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.
 - [gpio](namespacegpio.html): that namespace deals with all API to manage digital input and outputs.
-- [i2c](TODO): that namespace contains all API to deal with I2C (also known as *Two Wires Interface*), including a base class to help you define support for new devices based on I2C protocol.
+- [i2c](namespacei2c.html): that namespace contains all API to deal with I2C (also known as *Two Wires Interface*), including a base class to help you define support for new devices based on I2C protocol.
 - [interrupt](namespaceinterrupt.html): this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.
 - [power](namespacepower.html): contains the API to handle AVR power modes.
 - [serial](namespaceserial.html): contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:
     - [hard](namespaceserial_1_1hard.html): this namespace support AVR embedded UART (for ATmega MCU only, as ATtiny do not have this feature)
     - [soft](TODO): this namespace supports software UART (for all MCU); software serial is less efficient and bigger in code size than its hardware equivalent
-- [spi](TODO): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.
+- [spi](namespacespi.html): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.
 - [streams](namespacestreams.html): this namespace provide a C++ streams like API for input and output (used by serial UART API).
-- [time](namespacetime.html): provides API to delay your program for some amount of time (through busy loops) and a few to deal with time data.
-- [timer](namespacetime.html): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, generating square waves, and an API dedicated to track real time through MCU timers, with microsecond precision.
+- [time](namespacetime.html): provides API to delay your program for some amount of time (through busy loops) and a few more API to deal with time data.
+- [timer](namespacetimer.html): defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, generating square waves, and an API dedicated to track real time through MCU timers, with microsecond precision.
 - [utils](namespaceutils.html): provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".
 - [watchdog](namespacewatchdog.html): this namespace defines an API to deal with MCU watchdog timer as a way 
 
@@ -106,7 +106,7 @@ However, please note that FastArduino defines a few specific namespaces, which n
 
 FastArduino is **heavily** based on C++ templates as you will see when developing with it. Although many people will tell you that "C++ templates are evil and generate bloated code, they are not for embedded", don't believe them! C++ templates, when properly used, bring many advantages without the abovementioned "drawback".
 
-One downside of templates is its syntax, that may sound less familiar to many developers, but that should not be barrier against its use.
+One downside of templates is its syntax, that may sound less familiar to many developers, but that should not be a barrier against its use.
 
 In FastArduino, templates offer a huge advantage over competing libraries: type-safety is guaranteed at compile-time whatever the MCU/Arduino board target of your program: for instance, it is **not possible**, with FastArduino, to compile a program that would try to access an IO pin that does not exist on the target; most other libraries I know allow you to do that without complaining.
 
