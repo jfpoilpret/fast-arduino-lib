@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file 
+ * PulseTimer API.
+ */
 #ifndef PULSE_TIMER_HH
 #define PULSE_TIMER_HH
 
@@ -24,10 +30,24 @@
 #include "gpio.h"
 #include "types_traits.h"
 
-//TODO Add documentation!
-
 // Macros to register ISR for PWM on PulseTimer8
 //==============================================
+/**
+ * Register all necessary ISR (Tnterrupt Service Routines) for a timer::PulseTimer
+ * to work properly, when both its PWM pins are connected.
+ * 
+ * Note: this is necessary only for PulseTimer based on an 8-bits Timer. If you are
+ * using a 16-bits based PulseTimer, then you don't need to use this macro.
+ * 
+ * @param TIMER_NUM the timer number (as defined in MCU datasheet)
+ * @param PRESCALER the prescaler value used to instantiate the PulseTimer template
+ * @param PIN_A the board::DigitalPin connected to first PWM pin of the PulseTimer;
+ * this is used for control only, to avoid bugs due to code typos.
+ * @param PIN_B the board::DigitalPin connected to second PWM pin of the PulseTimer;
+ * this is used for control only, to avoid bugs due to code typos.
+ * 
+ * @sa timer::PulseTimer
+ */
 #define REGISTER_PULSE_TIMER8_AB_ISR(TIMER_NUM, PRESCALER, PIN_A, PIN_B)                            \
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))                                                          \
 	{                                                                                               \
@@ -42,6 +62,20 @@
 		timer::isr_handler_pulse::pulse_timer_compare<TIMER_NUM, 1, PIN_B>();                       \
 	}
 
+/**
+ * Register all necessary ISR (Tnterrupt Service Routines) for a timer::PulseTimer
+ * to work properly, when only its first PWM pins is connected.
+ * 
+ * Note: this is necessary only for PulseTimer based on an 8-bits Timer. If you are
+ * using a 16-bits based PulseTimer, then you don't need to use this macro.
+ * 
+ * @param TIMER_NUM the timer number (as defined in MCU datasheet)
+ * @param PRESCALER the prescaler value used to instantiate the PulseTimer template
+ * @param PIN_A the board::DigitalPin connected to first PWM pin of the PulseTimer;
+ * this is used for control only, to avoid bugs due to code typos.
+ * 
+ * @sa timer::PulseTimer
+ */
 #define REGISTER_PULSE_TIMER8_A_ISR(TIMER_NUM, PRESCALER, PIN_A)                          \
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))                                                \
 	{                                                                                     \
@@ -53,6 +87,20 @@
 	}                                                                                     \
 	EMPTY_INTERRUPT(CAT3(TIMER, TIMER_NUM, _COMPB_vect))
 
+/**
+ * Register all necessary ISR (Tnterrupt Service Routines) for a timer::PulseTimer
+ * to work properly, when only its second PWM pins is connected.
+ * 
+ * Note: this is necessary only for PulseTimer based on an 8-bits Timer. If you are
+ * using a 16-bits based PulseTimer, then you don't need to use this macro.
+ * 
+ * @param TIMER_NUM the timer number (as defined in MCU datasheet)
+ * @param PRESCALER the prescaler value used to instantiate the PulseTimer template
+ * @param PIN_B the board::DigitalPin connected to second PWM pin of the PulseTimer;
+ * this is used for control only, to avoid bugs due to code typos.
+ * 
+ * @sa timer::PulseTimer
+ */
 #define REGISTER_PULSE_TIMER8_B_ISR(TIMER_NUM, PRESCALER, PIN_B)                          \
 	ISR(CAT3(TIMER, TIMER_NUM, _OVF_vect))                                                \
 	{                                                                                     \
@@ -67,11 +115,6 @@
 namespace timer
 {
 	/// @cond notdocumented
-
-	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
-	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every
-	// 20ms, ie with a 50Hz frequency.
-	// This implementation ensures a good pulse width precision for 16-bits timer.
 	template<board::Timer NTIMER_, typename Calculator<NTIMER_>::PRESCALER PRESCALER_>
 	class PulseTimer16 : public Timer<NTIMER_>
 	{
@@ -106,10 +149,6 @@ namespace timer
 		}
 	};
 
-	// Timer specialized in emitting pulses with accurate width, according to a slow frequency; this is typically
-	// useful for controlling servos, which need a pulse with a width range from ~1000us to ~2000us, send every
-	// 20ms, ie with a 50Hz frequency.
-	// This implementation ensures a good pulse width precision for 8-bits timers.
 	template<board::Timer NTIMER_, typename Calculator<NTIMER_>::PRESCALER PRESCALER_>
 	class PulseTimer8 : public Timer<NTIMER_>
 	{
@@ -166,17 +205,52 @@ namespace timer
 
 		friend struct isr_handler_pulse;
 	};
-
 	/// @endcond
 
-	// Unified API for PulseTimer whatever the timer bits size (no need to use PulseTimer8 or PulseTimer16)
-	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER,
+	/**
+	 * Special kind of `timer::Timer`, specialized in emitting pulses with accurate
+	 * width, according to a slow frequency.
+	 * This is typically useful for controlling servos, which need a pulse with a
+	 * width range from ~1000us to ~2000us, send every 20ms, ie with a 50Hz frequency.
+	 * This implementation ensures a good pulse width precision for both 16-bits
+	 * and 8-bits timers.
+	 * 
+	 * Note: if @p NTIMER_ is an 8-bits Timer, then one of the following macros
+	 * must be used to register the necessary ISR for the PulseTimer to work correctly:
+	 * - REGISTER_PULSE_TIMER8_AB_ISR
+	 * - REGISTER_PULSE_TIMER8_A_ISR
+	 * - REGISTER_PULSE_TIMER8_B_ISR
+	 * 
+	 * For concrete examples, you can check:
+	 * - PWM3
+	 * - PWM4
+	 * - Servo1
+	 * - Servo2
+	 * 
+	 * @tparam NTIMER_ the board::Timer to use for this PulseTimer
+	 * @tparam PRESCALER_ the prescaler value to use for this PulseTimer; it shall
+	 * be calculated with `timer::Calculator<NTIMER_>::PulseTimer_prescaler()`
+	 * @tparam T the type (`uint8_t` or `uint16_t`) of the Timer determined by @p NTIMER_;
+	 * you should not specify it yourself, as its default value alwayy matches @p NTIMER_.
+	 * 
+	 * @sa timer::Timer
+	 * @sa timer::Calculator::PulseTimer_prescaler
+	 * @sa REGISTER_PULSE_TIMER8_AB_ISR
+	 * @sa REGISTER_PULSE_TIMER8_A_ISR
+	 * @sa REGISTER_PULSE_TIMER8_B_ISR
+	 */
+	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_,
 			 typename T = typename board_traits::Timer_trait<NTIMER_>::TYPE>
 	class PulseTimer : public timer::Timer<NTIMER_>
 	{
 		static_assert(types_traits::is_uint8_or_uint16<T>(), "T must be either uint8_t or uint16_t");
 
 	public:
+		/**
+		 * Create a PulseTimer with the provided @p pulse_frequency.
+		 * @param pulse_frequency the frequency, in Hz, at which pulses will be
+		 * generated; this frequency must match the @p PRESCALER_ template parameter. 
+		 */
 		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER_>{0, 0} {}
 	};
 
@@ -248,3 +322,4 @@ namespace timer
 }
 
 #endif /* PULSE_TIMER_HH */
+/// @endcond
