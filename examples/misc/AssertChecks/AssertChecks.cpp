@@ -33,11 +33,16 @@
 
 using namespace board;
 
+constexpr Timer NTIMER0 = Timer::TIMER0;
+constexpr Timer NTIMER1 = Timer::TIMER1;
+constexpr Timer NTIMER3 = (Timer) 3;
+
 void callback() {}
 void callback8(uint8_t) {}
 void callback16(uint16_t) {}
 void callback32(uint32_t) {}
-void sonar_callback(const devices::sonar::SonarEvent&) {}
+void sonar_callback(const devices::sonar::SonarEvent<NTIMER0>&) {}
+void sonar_callback(const devices::sonar::SonarEvent<NTIMER1>&) {}
 struct Callback
 {
 	private:
@@ -45,7 +50,8 @@ struct Callback
 	void callback8(uint8_t) {}
 	void callback16(uint16_t) {}
 	void callback32(uint32_t) {}
-	void sonar_callback(const devices::sonar::SonarEvent&) {}
+	void sonar_callback(const devices::sonar::SonarEvent<NTIMER0>&) {}
+	void sonar_callback(const devices::sonar::SonarEvent<NTIMER1>&) {}
 
 	DECL_INT_ISR_HANDLERS_FRIEND
 	DECL_PCI_ISR_HANDLERS_FRIEND
@@ -55,10 +61,6 @@ struct Callback
 	DECL_EEPROM_ISR_HANDLERS_FRIEND
 	DECL_WATCHDOG_ISR_HANDLES_FRIEND
 };
-
-constexpr Timer NTIMER0 = Timer::TIMER0;
-constexpr Timer NTIMER1 = Timer::TIMER1;
-constexpr Timer NTIMER3 = (Timer) 3;
 
 // // Check all PTMF callback macros and friends declaration macros
 // #pragma message "CHECK: private callback as friends (11 checks, should generate NO error)"
