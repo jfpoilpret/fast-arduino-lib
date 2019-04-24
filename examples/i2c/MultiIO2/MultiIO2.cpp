@@ -33,6 +33,7 @@ static inline uint8_t calculate_pattern(uint8_t switches)
 	switch ((~switches) & 0x07)
 	{
 		case 0x00:
+		default:
 		return 0x01;
 
 		case 0x01:
