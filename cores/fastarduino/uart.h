@@ -153,7 +153,7 @@ namespace serial::hard
 		 * Enable the transmitter. 
 		 * This is needed before any transmission can take place.
 		 * Once called, it is possible to push content to `out()`,
-		 * which will be then transmitted though the serial connection.
+		 * which will be then transmitted through the serial connection.
 		 * 
 		 * @param rate the transmission rate in bits per second (bps)
 		 * @param parity the kind of parity check used by transmission
@@ -409,6 +409,7 @@ namespace serial::hard
 		}
 
 	private:
+		//FIXME check if this is still needed with the new ISR handling approach?
 		// Workaround trick to make REGISTER_UART_ISR work properly
 		inline void data_register_empty()
 		{

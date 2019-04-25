@@ -368,7 +368,7 @@ namespace time
 	};
 
 	template<typename CLOCK> const CLOCK* ClockDelegate<CLOCK>::clock_ = 0;
-	// @endcond
+	/// @endcond
 
 	/**
 	 * Utility method to transform `millis()` and `delay()` methods of a @p clock

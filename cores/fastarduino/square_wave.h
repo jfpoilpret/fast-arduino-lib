@@ -140,4 +140,4 @@ namespace timer
 }
 
 #endif /* SQUARE_WAVE_HH */
-/// @endcod
+/// @endcond

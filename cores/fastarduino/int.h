@@ -277,6 +277,7 @@ namespace interrupt
 			CALLBACK_();
 		}
 	};
+	/// @endcond
 }
 
 #endif /* INT_HH */
