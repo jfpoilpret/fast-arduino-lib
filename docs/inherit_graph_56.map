@@ -1,14 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. " alt="" coords="436,5,576,47"/>
-<area shape="rect" id="node4" href="$classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. " alt="" coords="437,71,575,112"/>
-<area shape="rect" id="node3" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. " alt="" coords="649,31,788,72"/>
-<area shape="rect" id="node5" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="5,88,156,129"/>
-<area shape="rect" id="node6" href="$classstreams_1_1istreambuf.html" title="Input API based on a ring buffer. " alt="" coords="206,70,361,97"/>
-<area shape="rect" id="node10" href="$classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer. " alt="" coords="204,121,363,147"/>
-<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_abstract_u_a_r_x.html" title="serial::soft::AbstractUARX" alt="" coords="411,137,601,163"/>
-<area shape="rect" id="node8" href="$classserial_1_1soft_1_1_u_a_r_x.html" title="serial::soft::UARX\l\&lt; RX_ \&gt;" alt="" coords="651,121,787,163"/>
-<area shape="rect" id="node9" href="$classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; RX_, TX_ \&gt;" alt="" coords="836,155,971,196"/>
-<area shape="rect" id="node11" href="$classserial_1_1soft_1_1_abstract_u_a_t_x.html" title="serial::soft::AbstractUATX" alt="" coords="412,187,600,214"/>
-<area shape="rect" id="node12" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="serial::soft::UATX\l\&lt; TX_ \&gt;" alt="" coords="651,187,786,228"/>
-<area shape="rect" id="node13" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="214,177,353,203"/>
+<area shape="rect" id="node1" href="$structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal. " alt="" coords="5,5,143,47"/>
 </map>

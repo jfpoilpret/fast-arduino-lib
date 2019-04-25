@@ -1,0 +1,9 @@
+<map id="fastarduino/square_wave.h" name="fastarduino/square_wave.h">
+<area shape="rect" id="node2" href="$timer_8h.html" title="Timer API. " alt="" coords="333,169,401,196"/>
+<area shape="rect" id="node11" href="$pwm_8h.html" title="PWM API. " alt="" coords="216,95,283,121"/>
+<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="297,244,394,271"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="189,244,272,271"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title="boards/io.h" alt="" coords="255,319,350,345"/>
+<area shape="rect" id="node12" href="$board_8h_source.html" title="boards/board.h" alt="" coords="190,169,309,196"/>
+<area shape="rect" id="node13" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="103,169,166,196"/>
+</map>

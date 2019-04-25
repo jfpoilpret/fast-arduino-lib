@@ -22,6 +22,16 @@ var hierarchy =
         [ "serial::hard::UART< USART_ >", "classserial_1_1hard_1_1_u_a_r_t.html", null ]
       ] ]
     ] ],
+    [ "AbstractUARX", null, [
+      [ "serial::soft::UARX< RX_ >", "classserial_1_1soft_1_1_u_a_r_x.html", [
+        [ "serial::soft::UART< RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t.html", null ]
+      ] ]
+    ] ],
+    [ "AbstractUATX", null, [
+      [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", [
+        [ "serial::soft::UART< RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t.html", null ]
+      ] ]
+    ] ],
     [ "devices::rf::NRF24L01< CSN, CE >::addr_t", "structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html", null ],
     [ "devices::magneto::AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", null ],
     [ "analog::AnalogInput< APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ >", "classanalog_1_1_analog_input.html", null ],
@@ -63,12 +73,13 @@ var hierarchy =
       [ "devices::magneto::MPU6050< MODE, AD0 >", "classdevices_1_1magneto_1_1_m_p_u6050.html", null ]
     ] ],
     [ "i2c::I2CManager< MODE_ >", "classi2c_1_1_i2_c_manager.html", null ],
+    [ "interrupt::INTSignal< PIN_ >", "classinterrupt_1_1_i_n_t_signal.html", null ],
+    [ "interrupt::INTSignal< IRQ >", "classinterrupt_1_1_i_n_t_signal.html", null ],
     [ "devices::magneto::INTStatus", "structdevices_1_1magneto_1_1_i_n_t_status.html", null ],
     [ "streams::ios_base", "classstreams_1_1ios__base.html", [
       [ "streams::istream", "classstreams_1_1istream.html", null ],
       [ "streams::ostream", "classstreams_1_1ostream.html", null ]
     ] ],
-    [ "serial::soft::isr_handler", "structserial_1_1soft_1_1isr__handler.html", null ],
     [ "watchdog::isr_handler", "structwatchdog_1_1isr__handler.html", null ],
     [ "LinkedListImpl", null, [
       [ "containers::LinkedList< T_ >", "classcontainers_1_1_linked_list.html", null ],
@@ -108,20 +119,10 @@ var hierarchy =
     [ "containers::Queue< T_, TREF_ >", "classcontainers_1_1_queue.html", null ],
     [ "containers::Queue< char, char >", "classcontainers_1_1_queue.html", [
       [ "streams::istreambuf", "classstreams_1_1istreambuf.html", [
-        [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", null ],
-        [ "serial::soft::AbstractUARX", "classserial_1_1soft_1_1_abstract_u_a_r_x.html", [
-          [ "serial::soft::UARX< RX_ >", "classserial_1_1soft_1_1_u_a_r_x.html", [
-            [ "serial::soft::UART< RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t.html", null ]
-          ] ]
-        ] ]
+        [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", null ]
       ] ],
       [ "streams::ostreambuf", "classstreams_1_1ostreambuf.html", [
-        [ "serial::hard::UATX< USART_ >", "classserial_1_1hard_1_1_u_a_t_x.html", null ],
-        [ "serial::soft::AbstractUATX", "classserial_1_1soft_1_1_abstract_u_a_t_x.html", [
-          [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", [
-            [ "serial::soft::UART< RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t.html", null ]
-          ] ]
-        ] ]
+        [ "serial::hard::UATX< USART_ >", "classserial_1_1hard_1_1_u_a_t_x.html", null ]
       ] ]
     ] ],
     [ "containers::Queue< EVENT >", "classcontainers_1_1_queue.html", null ],
@@ -135,8 +136,8 @@ var hierarchy =
     [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],
     [ "timer::SquareWave< NTIMER, OUTPUT >", "classtimer_1_1_square_wave.html", null ],
-    [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
+    [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
     [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", [
       [ "timer::PulseTimer< NTIMER_, PRESCALER_, T >", "classtimer_1_1_pulse_timer.html", null ],
@@ -148,10 +149,7 @@ var hierarchy =
     [ "devices::audio::TonePlay", "structdevices_1_1audio_1_1_tone_play.html", null ],
     [ "devices::audio::TonePlayer< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_player.html", null ],
     [ "types_traits::Type_trait< T >", "structtypes__traits_1_1_type__trait.html", null ],
-    [ "serial::UARTErrors", "classserial_1_1_u_a_r_t_errors.html", [
-      [ "serial::soft::AbstractUARX", "classserial_1_1soft_1_1_abstract_u_a_r_x.html", null ],
-      [ "serial::soft::AbstractUATX", "classserial_1_1soft_1_1_abstract_u_a_t_x.html", null ]
-    ] ],
+    [ "serial::UARTErrors", "classserial_1_1_u_a_r_t_errors.html", null ],
     [ "watchdog::WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", [
       [ "watchdog::WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", [
         [ "watchdog::Watchdog< EVENT >", "classwatchdog_1_1_watchdog.html", null ]

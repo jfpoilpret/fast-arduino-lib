@@ -5,7 +5,7 @@
 <area shape="rect" id="node6" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="393,177,545,203"/>
 <area shape="rect" id="node7" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="433,266,595,293"/>
 <area shape="rect" id="node11" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,445,220,471"/>
-<area shape="rect" id="node14" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="2638,527,2809,553"/>
+<area shape="rect" id="node14" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="2638,527,2809,553"/>
 <area shape="rect" id="node25" href="$ds1307_8h_source.html" title="fastarduino/devices\l/ds1307.h" alt="" coords="1767,80,1917,121"/>
 <area shape="rect" id="node26" href="$hmc5883l_8h_source.html" title="fastarduino/devices\l/hmc5883l.h" alt="" coords="1941,80,2092,121"/>
 <area shape="rect" id="node27" href="$mpu6050_8h_source.html" title="fastarduino/devices\l/mpu6050.h" alt="" coords="2116,80,2267,121"/>
@@ -36,6 +36,6 @@
 <area shape="rect" id="node31" href="$sipo_8h_source.html" title="fastarduino/devices\l/sipo.h" alt="" coords="2331,169,2481,211"/>
 <area shape="rect" id="node32" href="$pwm_8h.html" title="PWM API. " alt="" coords="1899,177,2043,203"/>
 <area shape="rect" id="node30" href="$spi_8cpp_source.html" title="fastarduino/spi.cpp" alt="" coords="1687,266,1834,293"/>
-<area shape="rect" id="node34" href="$square__wave_8h_source.html" title="fastarduino/square\l_wave.h" alt="" coords="1909,259,2053,300"/>
+<area shape="rect" id="node34" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="1909,259,2053,300"/>
 <area shape="rect" id="node39" href="$linked__list_8cpp_source.html" title="fastarduino/linked\l_list.cpp" alt="" coords="903,259,1043,300"/>
 </map>

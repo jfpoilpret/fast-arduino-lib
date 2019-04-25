@@ -8,6 +8,7 @@ var searchData=
   ['tm_5fsec',['tm_sec',['../structdevices_1_1rtc_1_1tm.html#ae85ca03686e69896d00d08bd544ee42b',1,'devices::rtc::tm']]],
   ['tm_5fwday',['tm_wday',['../structdevices_1_1rtc_1_1tm.html#a4c82bd550b4fbfb6f0c720afc2881550',1,'devices::rtc::tm']]],
   ['tm_5fyear',['tm_year',['../structdevices_1_1rtc_1_1tm.html#a5170fd32257196dc05db53c71787e10a',1,'devices::rtc::tm']]],
+  ['tx',['TX',['../classserial_1_1soft_1_1_u_a_t_x.html#aee7e52d834bae3c16d9768f789336a3e',1,'serial::soft::UATX::TX()'],['../classserial_1_1soft_1_1_u_a_r_t.html#ad3837953b18ff0601f9bf0b4930c28fc',1,'serial::soft::UART::TX()']]],
   ['tx_5fds',['tx_ds',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a9e57f8a230f2db6cbda717aa97196a22',1,'devices::rf::NRF24L01::status_t']]],
   ['tx_5fempty',['tx_empty',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html#a5af0aabad0040100c79e73eb0356e859',1,'devices::rf::NRF24L01::fifo_status_t']]],
   ['tx_5ffull',['tx_full',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html#afcef0ccb482c028180ce4f499d55b61e',1,'devices::rf::NRF24L01::fifo_status_t::tx_full()'],['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a09496b277315ce8c9b4bc18f22d8d91d',1,'devices::rf::NRF24L01::status_t::tx_full()']]],

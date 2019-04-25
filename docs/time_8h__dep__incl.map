@@ -15,7 +15,7 @@
 <area shape="rect" id="node9" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="235,266,365,293"/>
 <area shape="rect" id="node10" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="195,355,410,382"/>
 <area shape="rect" id="node11" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="5,355,171,382"/>
-<area shape="rect" id="node13" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="239,437,409,464"/>
+<area shape="rect" id="node13" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="239,437,409,464"/>
 <area shape="rect" id="node15" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="434,437,614,464"/>
 <area shape="rect" id="node16" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="639,437,777,464"/>
 <area shape="rect" id="node14" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="231,512,417,539"/>

@@ -95,50 +95,318 @@ $(document).ready(function(){initNavTree('classtimer_1_1_square_wave.html','');}
 <div class="title">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Simple API to generate a square wave to an output pin.  
+ <a href="classtimer_1_1_square_wave.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="square__wave_8h_source.html">fastarduino/square_wave.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:adb84f1958c289ebdd7c7f98446762b71"><td class="memItemLeft" align="right" valign="top"><a id="adb84f1958c289ebdd7c7f98446762b71"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>CALC</b> = <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER &gt;</td></tr>
+<tr class="memitem:adb84f1958c289ebdd7c7f98446762b71"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#adb84f1958c289ebdd7c7f98446762b71">CALC</a> = <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; <a class="el" href="classtimer_1_1_square_wave.html#a422ed6d2a96b86a09f25fbcb9a0999a0">NTIMER</a> &gt;</td></tr>
+<tr class="memdesc:adb84f1958c289ebdd7c7f98446762b71"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="structtimer_1_1_calculator.html" title="Defines a set of calculation methods for the given NTIMER_ The behavior of these methods is specific ...">timer::Calculator</a> type for the underlying timer.  <a href="#adb84f1958c289ebdd7c7f98446762b71">More...</a><br /></td></tr>
 <tr class="separator:adb84f1958c289ebdd7c7f98446762b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab99d321b342f811a8389d9983e95df31"><td class="memItemLeft" align="right" valign="top"><a id="ab99d321b342f811a8389d9983e95df31"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TIMER</b> = <a class="el" href="classtimer_1_1_timer.html">timer::Timer</a>&lt; NTIMER &gt;</td></tr>
+<tr class="memitem:ab99d321b342f811a8389d9983e95df31"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#ab99d321b342f811a8389d9983e95df31">TIMER</a> = <a class="el" href="classtimer_1_1_timer.html">timer::Timer</a>&lt; <a class="el" href="classtimer_1_1_square_wave.html#a422ed6d2a96b86a09f25fbcb9a0999a0">NTIMER</a> &gt;</td></tr>
+<tr class="memdesc:ab99d321b342f811a8389d9983e95df31"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a> used by this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator.  <a href="#ab99d321b342f811a8389d9983e95df31">More...</a><br /></td></tr>
 <tr class="separator:ab99d321b342f811a8389d9983e95df31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a660428b574371c6be4d97f13aace52c1"><td class="memItemLeft" align="right" valign="top"><a id="a660428b574371c6be4d97f13aace52c1"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>PWMPIN</b> = <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; OUTPUT &gt;</td></tr>
+<tr class="memitem:a660428b574371c6be4d97f13aace52c1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a660428b574371c6be4d97f13aace52c1">PWMPIN</a> = <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; <a class="el" href="classtimer_1_1_square_wave.html#a67d2833bc1361ceecb97b1abfd1de079">OUTPUT</a> &gt;</td></tr>
+<tr class="memdesc:a660428b574371c6be4d97f13aace52c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. ">analog::PWMOutput</a> type for the <code>OUTPUT</code> <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a>.  <a href="#a660428b574371c6be4d97f13aace52c1">More...</a><br /></td></tr>
 <tr class="separator:a660428b574371c6be4d97f13aace52c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ad6ea4ef6bc5df31f3259eb9f040c2c5f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#ad6ea4ef6bc5df31f3259eb9f040c2c5f">SquareWave</a> ()</td></tr>
+<tr class="memdesc:ad6ea4ef6bc5df31f3259eb9f040c2c5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate a <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator.  <a href="#ad6ea4ef6bc5df31f3259eb9f040c2c5f">More...</a><br /></td></tr>
+<tr class="separator:ad6ea4ef6bc5df31f3259eb9f040c2c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c2925ea83ce38fd89dcc5b8dfaafcbe"><td class="memItemLeft" align="right" valign="top"><a id="a9c2925ea83ce38fd89dcc5b8dfaafcbe"></a>
-<a class="el" href="classtimer_1_1_timer.html">TIMER</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>timer</b> () const</td></tr>
+<a class="el" href="classtimer_1_1_square_wave.html#ab99d321b342f811a8389d9983e95df31">TIMER</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a9c2925ea83ce38fd89dcc5b8dfaafcbe">timer</a> () const</td></tr>
+<tr class="memdesc:a9c2925ea83ce38fd89dcc5b8dfaafcbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a> of this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator. <br /></td></tr>
 <tr class="separator:a9c2925ea83ce38fd89dcc5b8dfaafcbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5af097fb81eb221897b2311907459198"><td class="memItemLeft" align="right" valign="top"><a id="a5af097fb81eb221897b2311907459198"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>start_frequency</b> (uint32_t frequency)</td></tr>
+<tr class="memitem:a5af097fb81eb221897b2311907459198"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198">start_frequency</a> (uint32_t frequency)</td></tr>
+<tr class="memdesc:a5af097fb81eb221897b2311907459198"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start producing, on the ouput pin, a square wave with the specified frequency.  <a href="#a5af097fb81eb221897b2311907459198">More...</a><br /></td></tr>
 <tr class="separator:a5af097fb81eb221897b2311907459198"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ffd0e4aac44a9e3d915c2500b8993fe"><td class="memItemLeft" align="right" valign="top"><a id="a0ffd0e4aac44a9e3d915c2500b8993fe"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>start_frequency</b> (typename <a class="el" href="classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c">TIMER::PRESCALER</a> prescaler, typename <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">TIMER::TYPE</a> counter)</td></tr>
+<tr class="memitem:a0ffd0e4aac44a9e3d915c2500b8993fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a0ffd0e4aac44a9e3d915c2500b8993fe">start_frequency</a> (typename <a class="el" href="classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c">TIMER::PRESCALER</a> prescaler, typename <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">TIMER::TYPE</a> counter)</td></tr>
+<tr class="memdesc:a0ffd0e4aac44a9e3d915c2500b8993fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start producing, on the output pin, a square wave, which frequency matches the specified <code>prescaler</code> and <code>counter</code> arguments.  <a href="#a0ffd0e4aac44a9e3d915c2500b8993fe">More...</a><br /></td></tr>
 <tr class="separator:a0ffd0e4aac44a9e3d915c2500b8993fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf44dbb0e6275dcd9f04e83f0a004072"><td class="memItemLeft" align="right" valign="top"><a id="adf44dbb0e6275dcd9f04e83f0a004072"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#adf44dbb0e6275dcd9f04e83f0a004072">stop</a> ()</td></tr>
+<tr class="memdesc:adf44dbb0e6275dcd9f04e83f0a004072"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop square wave generation. <br /></td></tr>
 <tr class="separator:adf44dbb0e6275dcd9f04e83f0a004072"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a422ed6d2a96b86a09f25fbcb9a0999a0"><td class="memItemLeft" align="right" valign="top"><a id="a422ed6d2a96b86a09f25fbcb9a0999a0"></a>
-static constexpr const <a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a>&#160;</td><td class="memItemRight" valign="bottom"><b>NTIMER</b> = NTIMER_</td></tr>
+<tr class="memitem:a422ed6d2a96b86a09f25fbcb9a0999a0"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a422ed6d2a96b86a09f25fbcb9a0999a0">NTIMER</a> = NTIMER_</td></tr>
+<tr class="memdesc:a422ed6d2a96b86a09f25fbcb9a0999a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The AVR timer used for the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>.  <a href="#a422ed6d2a96b86a09f25fbcb9a0999a0">More...</a><br /></td></tr>
 <tr class="separator:a422ed6d2a96b86a09f25fbcb9a0999a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67d2833bc1361ceecb97b1abfd1de079"><td class="memItemLeft" align="right" valign="top"><a id="a67d2833bc1361ceecb97b1abfd1de079"></a>
-static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><b>OUTPUT</b> = OUTPUT_</td></tr>
+<tr class="memitem:a67d2833bc1361ceecb97b1abfd1de079"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a67d2833bc1361ceecb97b1abfd1de079">OUTPUT</a> = OUTPUT_</td></tr>
+<tr class="memdesc:a67d2833bc1361ceecb97b1abfd1de079"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a> connected to this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator.  <a href="#a67d2833bc1361ceecb97b1abfd1de079">More...</a><br /></td></tr>
 <tr class="separator:a67d2833bc1361ceecb97b1abfd1de079"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt;<br />
 class timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</h3>
 
+<p>Simple API to generate a square wave to an output pin. </p>
+<p>This uses a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> and the Ouput pin OCxA of that <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>.</p>
+<p>This class can be useful in many situations where you need to generate a square wave of a given frequency (or several frequencies) on an output pin. For example, it can be used to produce "music" with a buzzer. This is what <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a></code> and <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a></code> do.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER_</td><td>the AVR timer to use for the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> </td></tr>
+    <tr><td class="paramname">OUTPUT_</td><td>the DigitalPin connected to this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator; this must be the pin OCnA, where n is the AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> number</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00023">23</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00046">46</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="adb84f1958c289ebdd7c7f98446762b71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb84f1958c289ebdd7c7f98446762b71">&#9670;&nbsp;</a></span>CALC</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::<a class="el" href="classtimer_1_1_square_wave.html#adb84f1958c289ebdd7c7f98446762b71">CALC</a> =  <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt;<a class="el" href="classtimer_1_1_square_wave.html#a422ed6d2a96b86a09f25fbcb9a0999a0">NTIMER</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="structtimer_1_1_calculator.html" title="Defines a set of calculation methods for the given NTIMER_ The behavior of these methods is specific ...">timer::Calculator</a> type for the underlying timer. </p>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00055">55</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<a id="ab99d321b342f811a8389d9983e95df31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab99d321b342f811a8389d9983e95df31">&#9670;&nbsp;</a></span>TIMER</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::<a class="el" href="classtimer_1_1_square_wave.html#ab99d321b342f811a8389d9983e95df31">TIMER</a> =  <a class="el" href="classtimer_1_1_timer.html">timer::Timer</a>&lt;<a class="el" href="classtimer_1_1_square_wave.html#a422ed6d2a96b86a09f25fbcb9a0999a0">NTIMER</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type of underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">timer::Timer</a> used by this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator. </p>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00057">57</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<a id="a660428b574371c6be4d97f13aace52c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a660428b574371c6be4d97f13aace52c1">&#9670;&nbsp;</a></span>PWMPIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::<a class="el" href="classtimer_1_1_square_wave.html#a660428b574371c6be4d97f13aace52c1">PWMPIN</a> =  <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt;<a class="el" href="classtimer_1_1_square_wave.html#a67d2833bc1361ceecb97b1abfd1de079">OUTPUT</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin. ">analog::PWMOutput</a> type for the <code>OUTPUT</code> <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00059">59</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad6ea4ef6bc5df31f3259eb9f040c2c5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6ea4ef6bc5df31f3259eb9f040c2c5f">&#9670;&nbsp;</a></span>SquareWave()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::<a class="el" href="classtimer_1_1_square_wave.html">SquareWave</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Instantiate a <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator. </p>
+<p>This will create the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> with the proper arguments. </p>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00065">65</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5af097fb81eb221897b2311907459198"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5af097fb81eb221897b2311907459198">&#9670;&nbsp;</a></span>start_frequency() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::start_frequency </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>frequency</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start producing, on the ouput pin, a square wave with the specified frequency. </p>
+<p>This method performs heavy calculation to set the proper attributes for the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>. If possible, you should prefer the other <a class="el" href="classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198" title="Start producing, on the ouput pin, a square wave with the specified frequency. ">start_frequency()</a> that directly takes a prescaler and a counter value (those can be pre-calculated at compile-time). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">the</td><td>frequency, in Hz, of the square wave t generate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_square_wave.html#a0ffd0e4aac44a9e3d915c2500b8993fe" title="Start producing, on the output pin, a square wave, which frequency matches the specified prescaler an...">start_frequency(typename TIMER::PRESCALER, typename TIMER::TYPE)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00095">95</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<a id="a0ffd0e4aac44a9e3d915c2500b8993fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ffd0e4aac44a9e3d915c2500b8993fe">&#9670;&nbsp;</a></span>start_frequency() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::start_frequency </td>
+          <td>(</td>
+          <td class="paramtype">typename <a class="el" href="classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c">TIMER::PRESCALER</a>&#160;</td>
+          <td class="paramname"><em>prescaler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">typename <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">TIMER::TYPE</a>&#160;</td>
+          <td class="paramname"><em>counter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start producing, on the output pin, a square wave, which frequency matches the specified <code>prescaler</code> and <code>counter</code> arguments. </p>
+<p>This method performs no heavy calculation and should be preferred over <code><a class="el" href="classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198" title="Start producing, on the ouput pin, a square wave with the specified frequency. ">start_frequency(uint32_t)</a></code> if the used frequency is known at compile-time. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prescaler</td><td>the prescaler to use on the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>, in order to produce the desired frequency. It can be calculated by <code><a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">CALC::CTC_prescaler()</a></code> </td></tr>
+    <tr><td class="paramname">counter</td><td>the counter value to use on the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>, in order to produce the desired frequency. It can be calculated by <code><a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">CALC::CTC_counter()</a></code></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198" title="Start producing, on the ouput pin, a square wave with the specified frequency. ">start_frequency(uint32_t)</a> </dd>
+<dd>
+<a class="el" href="structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29" title="Computes the ideal prescaler value to use for this timer, in TimerMode::CTC mode, in order to be able...">timer::Calculator&lt;NTIMER_&gt;::CTC_prescaler()</a> </dd>
+<dd>
+<a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455" title="Computes the value of counter to use for this timer, in TimerMode::CTC mode, with prescaler...">timer::Calculator&lt;NTIMER_&gt;::CTC_counter()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00119">119</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a422ed6d2a96b86a09f25fbcb9a0999a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a422ed6d2a96b86a09f25fbcb9a0999a0">&#9670;&nbsp;</a></span>NTIMER</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a> <a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::NTIMER = NTIMER_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The AVR timer used for the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00050">50</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<a id="a67d2833bc1361ceecb97b1abfd1de079"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67d2833bc1361ceecb97b1abfd1de079">&#9670;&nbsp;</a></span>OUTPUT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin OUTPUT_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classtimer_1_1_square_wave.html">timer::SquareWave</a>&lt; NTIMER_, OUTPUT_ &gt;::OUTPUT = OUTPUT_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a> connected to this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin. ">SquareWave</a> generator. </p>
+
+<p class="definition">Definition at line <a class="el" href="square__wave_8h_source.html#l00052">52</a> of file <a class="el" href="square__wave_8h_source.html">square_wave.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="square__wave_8h_source.html">square_wave.h</a></li>
 </ul>
 </div><!-- contents -->

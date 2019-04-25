@@ -9,6 +9,7 @@ var searchData=
   ['recv',['recv',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aabd6e2565ff08d172ea94204177d0520',1,'devices::rf::NRF24L01']]],
   ['register_5fhandler',['register_handler',['../classserial_1_1hard_1_1_u_a_t_x.html#a4608d77079869a3fb2aecb1757b1d2cc',1,'serial::hard::UATX::register_handler()'],['../classserial_1_1hard_1_1_u_a_r_x.html#ace25979d5084b5f30214601c336920e6',1,'serial::hard::UARX::register_handler()'],['../classserial_1_1hard_1_1_u_a_r_t.html#a9dbc7597b50634688cd225bdd12a8f63',1,'serial::hard::UART::register_handler()'],['../namespaceinterrupt.html#abfd5857208f49006bde8c472497273de',1,'interrupt::register_handler()']]],
   ['register_5frtt_5fhandler',['register_rtt_handler',['../classtimer_1_1_r_t_t.html#a22f40fce0ca23a3cb26426dd7d37ce5c',1,'timer::RTT']]],
+  ['register_5frx_5fhandler',['register_rx_handler',['../classserial_1_1soft_1_1_u_a_r_x.html#a1582421218bbb13aa99f49bbd9dc735d',1,'serial::soft::UARX']]],
   ['register_5fwatchdog_5fhandler',['register_watchdog_handler',['../classwatchdog_1_1_watchdog.html#ac562bd99d2f2483d1544efd31e5693be',1,'watchdog::Watchdog']]],
   ['register_5fwatchdog_5frtt_5fhandler',['register_watchdog_rtt_handler',['../classwatchdog_1_1_watchdog_r_t_t.html#aea9d9636e02de1d2ba2611a5a6cefd6c',1,'watchdog::WatchdogRTT']]],
   ['remove',['remove',['../classcontainers_1_1_linked_list.html#ad122223e314aa7adb16637e09ceb20d8',1,'containers::LinkedList']]],

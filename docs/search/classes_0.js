@@ -2,8 +2,6 @@ var searchData=
 [
   ['abstractsonar',['AbstractSonar',['../classdevices_1_1sonar_1_1_abstract_sonar.html',1,'devices::sonar']]],
   ['abstractspidevice',['AbstractSPIDevice',['../classspi_1_1_abstract_s_p_i_device.html',1,'spi']]],
-  ['abstractuarx',['AbstractUARX',['../classserial_1_1soft_1_1_abstract_u_a_r_x.html',1,'serial::soft']]],
-  ['abstractuatx',['AbstractUATX',['../classserial_1_1soft_1_1_abstract_u_a_t_x.html',1,'serial::soft']]],
   ['addr_5ft',['addr_t',['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html',1,'devices::rf::NRF24L01']]],
   ['allsensors',['AllSensors',['../structdevices_1_1magneto_1_1_all_sensors.html',1,'devices::magneto']]],
   ['analoginput',['AnalogInput',['../classanalog_1_1_analog_input.html',1,'analog']]],

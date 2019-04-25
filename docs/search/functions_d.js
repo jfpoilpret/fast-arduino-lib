@@ -3,7 +3,7 @@ var searchData=
   ['observe_5ftx_5ft',['observe_tx_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#a018c22c31c2ef9ad46eb57ab6f31ea7b',1,'devices::rf::NRF24L01::observe_tx_t']]],
   ['oct',['oct',['../namespacestreams.html#a9c09ef93f2d071416214cbe8ed0e1710',1,'streams']]],
   ['on_5fevent',['on_event',['../classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09',1,'events::EventHandler']]],
-  ['on_5fput',['on_put',['../classserial_1_1soft_1_1_u_a_t_x.html#a163f31e1b6bb7bf354e761e583daabed',1,'serial::soft::UATX::on_put()'],['../classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079',1,'streams::ostreambuf::on_put()']]],
+  ['on_5fput',['on_put',['../classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079',1,'streams::ostreambuf']]],
   ['on_5fschedule',['on_schedule',['../classevents_1_1_job.html#a09270ba4033ca2fffc8134d6f1b428a1',1,'events::Job']]],
   ['operator_20bool',['operator bool',['../classstreams_1_1ios__base.html#affa809dbba9357b2c671b08ab5dca0f2',1,'streams::ios_base']]],
   ['operator_21',['operator!',['../classstreams_1_1ios__base.html#a2cc8fbf83729f31cb9750c1805e31f5f',1,'streams::ios_base']]],
@@ -22,6 +22,6 @@ var searchData=
   ['operator_3e_3e',['operator&gt;&gt;',['../classstreams_1_1istream.html#a8091739a9d814baa489d238a0706bce1',1,'streams::istream::operator&gt;&gt;(char *buf)'],['../classstreams_1_1istream.html#a4c143975911af31d2be73fd4c4f23c83',1,'streams::istream::operator&gt;&gt;(bool &amp;v)'],['../classstreams_1_1istream.html#a34b7dc3860f7a6bbd024d352dbe6576e',1,'streams::istream::operator&gt;&gt;(char &amp;v)'],['../classstreams_1_1istream.html#acf181965f3a7fb3072c972b5504988c5',1,'streams::istream::operator&gt;&gt;(int &amp;v)'],['../classstreams_1_1istream.html#a76779484577bfbb09346832c544e5977',1,'streams::istream::operator&gt;&gt;(unsigned int &amp;v)'],['../classstreams_1_1istream.html#a8ef90438927ec83a3b48945de7c87b55',1,'streams::istream::operator&gt;&gt;(long &amp;v)'],['../classstreams_1_1istream.html#a182e1fed75d5901de5d67dbac282fe9e',1,'streams::istream::operator&gt;&gt;(unsigned long &amp;v)'],['../classstreams_1_1istream.html#a916b4369a996c58a82c32e2fed6b9dec',1,'streams::istream::operator&gt;&gt;(double &amp;v)'],['../classstreams_1_1istream.html#a42f73910b3dbc948217a023ead7df277',1,'streams::istream::operator&gt;&gt;(Manipulator f)']]],
   ['operator_7c',['operator|',['../namespacetimer.html#a10762dd286296623f6262a801cd925a9',1,'timer']]],
   ['ostream',['ostream',['../classstreams_1_1ostream.html#a2b72abee7fbf597915ceeb5d8ba9d9c4',1,'streams::ostream']]],
-  ['out',['out',['../classserial_1_1hard_1_1_u_a_t_x.html#a9139b33a84768290bf43eefbc55aa749',1,'serial::hard::UATX']]],
+  ['out',['out',['../classserial_1_1soft_1_1_u_a_t_x.html#ace5f8275d6848fc850d652f6149b7c39',1,'serial::soft::UATX::out()'],['../classserial_1_1hard_1_1_u_a_t_x.html#a9139b33a84768290bf43eefbc55aa749',1,'serial::hard::UATX::out()']]],
   ['overflow',['overflow',['../classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251',1,'streams::ostreambuf']]]
 ];

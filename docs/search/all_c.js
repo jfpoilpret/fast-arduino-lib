@@ -16,7 +16,7 @@ var searchData=
   ['nounitbuf',['nounitbuf',['../namespacestreams.html#a39826014ca5f8f4b8177fb11872f02c5',1,'streams']]],
   ['nouppercase',['nouppercase',['../namespacestreams.html#a6391db4c7eae38731fe0660ab7cfc7e8',1,'streams']]],
   ['nrf24l01',['NRF24L01',['../classdevices_1_1rf_1_1_n_r_f24_l01.html',1,'devices::rf::NRF24L01&lt; CSN, CE &gt;'],['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a98152bba08b4fe4bf11259ec01b32b99',1,'devices::rf::NRF24L01::NRF24L01()']]],
-  ['ntimer',['NTIMER',['../classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083',1,'timer::RTT::NTIMER()'],['../structtimer_1_1_calculator.html#ac1d170c81cc5fe9c43b79d8ca2aec14b',1,'timer::Calculator::NTIMER()'],['../classtimer_1_1_timer.html#a260ddf8df1436604859a07ebb30d9e23',1,'timer::Timer::NTIMER()']]],
+  ['ntimer',['NTIMER',['../classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083',1,'timer::RTT::NTIMER()'],['../classtimer_1_1_square_wave.html#a422ed6d2a96b86a09f25fbcb9a0999a0',1,'timer::SquareWave::NTIMER()'],['../structtimer_1_1_calculator.html#ac1d170c81cc5fe9c43b79d8ca2aec14b',1,'timer::Calculator::NTIMER()'],['../classtimer_1_1_timer.html#a260ddf8df1436604859a07ebb30d9e23',1,'timer::Timer::NTIMER()']]],
   ['null_5fostream',['null_ostream',['../classstreams_1_1null__ostream.html',1,'streams']]],
   ['num_5fbits',['num_bits',['../namespaceutils.html#aadb785961c9199701ce9025177b243c6',1,'utils']]]
 ];

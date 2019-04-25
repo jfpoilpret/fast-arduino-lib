@@ -1,6 +1,6 @@
 <map id="fastarduino/int.h" name="fastarduino/int.h">
 <area shape="rect" id="node2" href="$nrf24l01p_8h_source.html" title="fastarduino/devices\l/nrf24l01p.h" alt="" coords="5,80,156,121"/>
 <area shape="rect" id="node3" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="180,80,331,121"/>
-<area shape="rect" id="node4" href="$soft__uart_8h_source.html" title="fastarduino/soft_uart.h" alt="" coords="355,87,526,114"/>
+<area shape="rect" id="node4" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="355,87,526,114"/>
 <area shape="rect" id="node5" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="348,169,533,196"/>
 </map>

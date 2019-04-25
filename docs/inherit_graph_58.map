@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classstreams_1_1ios__base.html" title="Base class for formatted streams. " alt="" coords="5,31,145,57"/>
-<area shape="rect" id="node2" href="$classstreams_1_1istream.html" title="Input stream wrapper to provide formatted input API, a la C++. " alt="" coords="195,5,329,32"/>
-<area shape="rect" id="node3" href="$classstreams_1_1ostream.html" title="Output stream wrapper to provide formatted output API, a la C++. " alt="" coords="193,56,331,83"/>
+<area shape="rect" id="node2" href="$classserial_1_1soft_1_1_u_a_r_x.html" title="Software&#45;emulated serial receiver API. " alt="" coords="167,5,303,47"/>
+<area shape="rect" id="node3" href="$classserial_1_1soft_1_1_u_a_r_t.html" title="Software&#45;emulated serial receiver/transceiver API. " alt="" coords="351,39,485,80"/>
+<area shape="rect" id="node5" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="Software&#45;emulated serial transmitter API. " alt="" coords="167,71,302,112"/>
 </map>

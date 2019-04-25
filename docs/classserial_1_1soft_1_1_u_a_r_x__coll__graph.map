@@ -1,6 +1,2 @@
 <map id="serial::soft::UARX&lt; RX_ &gt;" name="serial::soft::UARX&lt; RX_ &gt;">
-<area shape="rect" id="node2" href="$classserial_1_1soft_1_1_abstract_u_a_r_x.html" title="serial::soft::AbstractUARX" alt="" coords="65,169,255,196"/>
-<area shape="rect" id="node3" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="5,95,144,121"/>
-<area shape="rect" id="node4" href="$classstreams_1_1istreambuf.html" title="Input API based on a ring buffer. " alt="" coords="168,95,323,121"/>
-<area shape="rect" id="node5" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="170,5,321,47"/>
 </map>

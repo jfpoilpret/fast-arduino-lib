@@ -48,10 +48,12 @@ var dir_855eda775a9841b65daa0015d5560bfd =
       [ "Job", "classevents_1_1_job.html", "classevents_1_1_job" ]
     ] ],
     [ "soft_uart.cpp", "soft__uart_8cpp_source.html", null ],
-    [ "soft_uart.h", "soft__uart_8h_source.html", null ],
+    [ "soft_uart.h", "soft__uart_8h.html", "soft__uart_8h" ],
     [ "spi.cpp", "spi_8cpp_source.html", null ],
     [ "spi.h", "spi_8h.html", "spi_8h" ],
-    [ "square_wave.h", "square__wave_8h_source.html", null ],
+    [ "square_wave.h", "square__wave_8h.html", [
+      [ "SquareWave", "classtimer_1_1_square_wave.html", "classtimer_1_1_square_wave" ]
+    ] ],
     [ "streambuf.h", "streambuf_8h.html", [
       [ "ostreambuf", "classstreams_1_1ostreambuf.html", "classstreams_1_1ostreambuf" ],
       [ "istreambuf", "classstreams_1_1istreambuf.html", "classstreams_1_1istreambuf" ]

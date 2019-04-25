@@ -1,6 +1,2 @@
 <map id="serial::soft::UATX&lt; TX_ &gt;" name="serial::soft::UATX&lt; TX_ &gt;">
-<area shape="rect" id="node2" href="$classserial_1_1soft_1_1_abstract_u_a_t_x.html" title="serial::soft::AbstractUATX" alt="" coords="65,169,241,196"/>
-<area shape="rect" id="node3" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="5,95,139,121"/>
-<area shape="rect" id="node4" href="$classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer. " alt="" coords="163,95,306,121"/>
-<area shape="rect" id="node5" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="167,5,303,47"/>
 </map>
