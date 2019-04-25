@@ -69,15 +69,9 @@ namespace serial::soft
 	/// @cond notdocumented
 	class AbstractUATX : virtual public UARTErrors, private streams::ostreambuf
 	{
-	public:
-		//FIXME check if latest GNU AVR toolchain fixes this bug and obsoletes this workaround
-		// Workaround for gcc bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=66957
-		// Fixed in 4.9.4 (currently using 4.9.2 only)
-		// We have to make the constructor public to allow virtual inheritance...
-		//	protected:
+	protected:
 		template<uint8_t SIZE_TX> AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
 
-	protected:
 		streams::ostream out()
 		{
 			return streams::ostream(*this);
