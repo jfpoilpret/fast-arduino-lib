@@ -408,26 +408,12 @@ namespace serial::hard
 			synchronized TRAIT::UCSRB = 0;
 		}
 
-	private:
-		//FIXME check if this is still needed with the new ISR handling approach?
-		// Workaround trick to make REGISTER_UART_ISR work properly
-		inline void data_register_empty()
-		{
-			UATX<USART>::data_register_empty();
-		}
-		inline void data_receive_complete()
-		{
-			UARX<USART>::data_receive_complete();
-		}
-
 		friend struct isr_handler;
 	};
 
-	/// @cond notdocumented
-
 	// All UART-related methods called by pre-defined ISR are defined here
 	//=====================================================================
-
+	/// @cond notdocumented
 	struct isr_handler
 	{
 		template<uint8_t UART_NUM_> static constexpr board::USART check_uart()
