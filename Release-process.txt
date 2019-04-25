@@ -1,0 +1,37 @@
+Release procedure
+=================
+
+1. Update README.md and push
+2. Regenerate and push all doc as needed
+3. Regenerate SonarQube analysis
+4. Tag master
+5. Prepare Release note (as below)
+6. Official release in github
+
+FastArduino 1.1 release
+
+I am happy to announce the 2nd major release of FastArduino platform.
+
+Since release 1.0 (February 2018), the following main changes have been implemented:
+
+- Build is now using C++14, with AVR-GCC 7.2.0 (tested on fedora 28 distribution)
+- Updated Watchdog API to add WatchdogRTT class
+- Reworked sonar API to support timeout, higher performance and higher precision
+- Redesigned ISR registration (no change in API though), reduce macros usage
+- Updated coding guidelines to fit clang-format 6 (latest available package on fedora 28)
+- Implemented MCP23017 chip support
+- Completed core API documentation
+- Completed tutorial for core API
+
+All features have been tested on all supported targets.
+
+Known bugs and enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a tutorial allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is publihed here
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform and submit enhancements you would like 
+to see in future versions or report issues you may discover.

@@ -3,7 +3,7 @@ FastArduino
 
 FastArduino is a C++ object-oriented library for Arduino boards based on AVR MCU and also bare AVR MCU.
 
-FastArduino API is documented [here](http://jfpoilpret.github.io/fast-arduino-lib/) and documentation also includes a [simple tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html).
+FastArduino API is documented [here](http://jfpoilpret.github.io/fast-arduino-lib/) and documentation also includes a [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html).
 
 FastArduino C++ code is also analyzed by SonarQube and results of this analysis are published from time to time [here](https://sonarcloud.io/dashboard?id=FastArduino-UNO).
 
@@ -49,7 +49,9 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-First FastArduino official release [**v1.0**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.0) has been published on 22.02.2018.
+Latest FastArduino release [**v1.1**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.1) has been published on 26.04.2019.
+
+First FastArduino official release [**v1.0**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.0) was published on 22.02.2018.
 
 In this version, the project covers a lot of features; a few missing, less important, features will be released in future versions (see roadmap below); current features API is deemed stable and should not change in the future.
 
@@ -114,17 +116,15 @@ Milestone V1.0 (22.02.2018)
 ---------------------------
 - already released
 
+Milestone V1.1 (26.04.2019)
+---------------------------
+- already released
+
 Documentation - no milestones
 -----------------------------
-1. Document last core API remaining (30.06.2019)
-2. Document API of supported SPI and I2C devices (30.09.2019)
-3. Add SPI and I2C usage to Tutorial (31.12.2019)
-4. Document how to add support for another board target in Tutorial (31.12.2019)
-
-Milestone V1.1 (30.05.2019)
----------------------------
-1. Refactor and improve sonar API
-2. Support other I2C devices: MCP23017 (IO multiplexer)
+1. Document API of supported SPI and I2C devices (30.09.2019)
+2. Add SPI and I2C device creation to Tutorial (31.12.2019)
+3. Document how to add support for another board target in Tutorial (31.12.2019)
 
 Milestone V1.2 (31.07.2019)
 ---------------------------
