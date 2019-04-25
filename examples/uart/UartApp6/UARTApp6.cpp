@@ -31,14 +31,14 @@
 #include <fastarduino/iomanip.h>
 
 // Macros to define what we want to test: just comment/uncomment according to what you want to test
-// #define CHECK_OUT_MANIPULATORS
-// #define CHECK_OUT_FLOAT
-// #define CHECK_OUT_ALIGNMENTS
-// #define CHECK_IN_EXTRACTORS
-// #define CHECK_IN_MANIPULATORS
-// #define CHECK_IN_STRING
-#define CHECK_OUT_UNITBUF
-// #define CHECK_IN_GET
+#define CHECK_OUT_MANIPULATORS
+#define CHECK_OUT_FLOAT
+#define CHECK_OUT_ALIGNMENTS
+#define CHECK_IN_EXTRACTORS
+#define CHECK_IN_MANIPULATORS
+#define CHECK_IN_STRING
+// #define CHECK_OUT_UNITBUF
+#define CHECK_IN_GET
 
 // Define vectors we need in the example
 REGISTER_UART_ISR(0)
