@@ -90,7 +90,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [power](namespacepower.html): contains the API to handle AVR power modes.
 - [serial](namespaceserial.html): contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:
     - [hard](namespaceserial_1_1hard.html): this namespace support AVR embedded UART (for ATmega MCU only, as ATtiny do not have this feature)
-    - [soft](TODO): this namespace supports software UART (for all MCU); software serial is less efficient and bigger in code size than its hardware equivalent
+    - [soft](namespaceserial_1_1soft.html): this namespace supports software UART (for all MCU); software serial is less efficient and bigger in code size than its hardware equivalent
 - [spi](namespacespi.html): that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.
 - [streams](namespacestreams.html): this namespace provide a C++ streams like API for input and output (used by serial UART API).
 - [time](namespacetime.html): provides API to delay your program for some amount of time (through busy loops) and a few more API to deal with time data.
