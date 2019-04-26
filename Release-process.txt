@@ -7,6 +7,7 @@ Release procedure
 4. Tag master
 5. Prepare Release note (as below)
 6. Official release in github
+7. Close milestone in github
 
 FastArduino 1.1 release
 
