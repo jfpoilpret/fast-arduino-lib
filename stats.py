@@ -1,6 +1,13 @@
 #!/usr/bin/python
 # encoding: utf-8
 
+# In order to use this script from shell:
+# > make CONF=UNO clean-examples
+# > make CONF=UNO examples >tempsizes
+# > cat tempsizes | ./stats.py >sizes
+# > rm tempsizes
+# Then sizes file can be opened in LibreOffice Calc
+
 from __future__ import with_statement
 import argparse, re, sys
 
