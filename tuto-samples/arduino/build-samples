@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# Build all ino files in the current directory
+#
+# Notes:
+# - this uses arduino-cli which must be installed and available in $PATH
+#   https://github.com/arduino/arduino-cli/releases
+#      arduino-cli-latest-linux64.tar.bz2
+# - arduno-cli must be first setup (only once on your machine)
+#   > arduino-cli core install arduino:avr
+
+# First replace ino extension of all ino files (because arduino-cli will try to compile
+# all ino as dependencies of the same program, which will generate duplicate errors for
+# setup() and loop() functions.
+export INO_LIST=`ls *.ino`
+for INO in $INO_LIST
+do
+	mv $INO $INO.tmp
+done
+# Build each individual ino file
+for INO in $INO_LIST
+do
+	mv $INO.tmp $INO
+	echo "Building... $INO"
+	arduino-cli compile -b arduino:avr:uno $INO
+	mv $INO $INO.tmp
+done
+# Restore extension of all ino files
+for INO in $INO_LIST
+do
+	mv $INO.tmp $INO
+done
+
