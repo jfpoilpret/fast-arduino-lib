@@ -31,7 +31,7 @@ TonePlay music[] EEMEM =
 	{Tone::A1, 650},
 
 	// Marker for end of melody
-	{Tone::END, 0}
+	{Tone::USER0, 0}
 };
 
 int main()
@@ -43,7 +43,7 @@ int main()
 	{
 		TonePlay tone;
 		EEPROM::read(play, tone);
-		if (tone.tone == Tone::END)
+		if (tone.tone == Tone::USER0)
 			break;
 		generator.tone(tone.tone, tone.ms);
 		++play;

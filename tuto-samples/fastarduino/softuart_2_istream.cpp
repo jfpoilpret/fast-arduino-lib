@@ -1,7 +1,7 @@
 #include <fastarduino/soft_uart.h>
 
 constexpr const board::DigitalPin RX = board::InterruptPin::D0_PD0_PCI2;
-#define PCI_NUM 0
+#define PCI_NUM 2
 
 REGISTER_UART_PCI_ISR(RX, PCI_NUM)
 

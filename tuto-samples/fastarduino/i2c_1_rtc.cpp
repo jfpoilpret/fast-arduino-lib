@@ -30,13 +30,13 @@ int main()
 	tm now;
 	rtc.get_datetime(now);
 	out	<< dec << F("RTC: [") 
-		<< uint8_t(time.tm_wday) << ']'
-		<< time.tm_mday << '.'
-		<< time.tm_mon << '.'
-		<< time.tm_year << ' '
-		<< time.tm_hour << ':'
-		<< time.tm_min << ':'
-		<< time.tm_sec << endl;
+		<< uint8_t(now.tm_wday) << ']'
+		<< now.tm_mday << '.'
+		<< now.tm_mon << '.'
+		<< now.tm_year << ' '
+		<< now.tm_hour << ':'
+		<< now.tm_min << ':'
+		<< now.tm_sec << endl;
 	
 	manager.end();
 }
