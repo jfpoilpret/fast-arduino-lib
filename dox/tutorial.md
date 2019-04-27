@@ -398,7 +398,7 @@ Here is the equivalent code with Arduino API:
 void setup()
 {
     Serial.begin(115200);
-    byte value = 0x8000;
+    unsigned int value = 0x8000;
     Serial.print(F("value = 0x"));
     Serial.print(value, 16);
     Serial.print(F(", "));
@@ -1171,6 +1171,7 @@ All FastArduino API respects some guidelines for naming ISR registration macros.
 - `REGISTER_XXX_ISR_CALLBACK()` for method callback
 - `REGISTER_XXX_ISR_FUNCTION()` for function callback
 
+TODO update this table!
 Here is a table showing all FastArduino macros to register ISR (*Name* is to be replaced in macro name `REGISTER_NAME_ISR`, `REGISTER_NAME_ISR_EMPTY`, `REGISTER_NAME_ISR_CALLBACK` or `REGISTER_NAME_ISR_FUNCTION`):
 | Header             | Name              | Flavours | Comments                                                           |
 |--------------------|-------------------|----------|--------------------------------------------------------------------|
@@ -1999,7 +2000,7 @@ In these examples, writing EEPROM cells would happen only once (or a few times),
 Often, writing EEPROM can be done directly through an ISP programmer (UNO USB programming does not support EEPROM writing) and only reading is needed in a program. The next example illustrates this situation.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 #include <fastarduino/eeprom.h>
-#include <fastarduino/tones.h>
+#include <fastarduino/devices/tones.h>
 #include <fastarduino/time.h>
 
 // Board-dependent settings
