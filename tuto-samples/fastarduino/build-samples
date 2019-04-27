@@ -4,7 +4,7 @@
 #
 
 # Clean all dist
-#TODO
+rm -f -r build deps dist
 
 export CPP_LIST=`ls *.cpp`
 # Build each individual .cpp as an app
