@@ -2039,7 +2039,7 @@ TonePlay music[] EEMEM =
 	{Tone::A1, 650},
 
 	// Marker for end of melody
-	{Tone::END, 0}
+	{Tone::USER0, 0}
 };
 
 int main()
@@ -2051,7 +2051,7 @@ int main()
 	{
 		TonePlay tone;
 		EEPROM::read(play, tone);
-		if (tone.tone == Tone::END)
+		if (tone.tone == Tone::USER0)
 			break;
 		generator.tone(tone.tone, tone.ms);
 		++play;
@@ -2501,13 +2501,13 @@ int main()
 	tm now;
 	rtc.get_datetime(now);
 	out	<< dec << F("RTC: [") 
-		<< uint8_t(time.tm_wday) << ']'
-		<< time.tm_mday << '.'
-		<< time.tm_mon << '.'
-		<< time.tm_year << ' '
-		<< time.tm_hour << ':'
-		<< time.tm_min << ':'
-		<< time.tm_sec << endl;
+		<< uint8_t(now.tm_wday) << ']'
+		<< now.tm_mday << '.'
+		<< now.tm_mon << '.'
+		<< now.tm_year << ' '
+		<< now.tm_hour << ':'
+		<< now.tm_min << ':'
+		<< now.tm_sec << endl;
 	
 	manager.end();
 }
@@ -2599,7 +2599,7 @@ There is also an `serial::soft::UARX` that works similarly as `serial::hard::UAR
 #include <fastarduino/soft_uart.h>
 
 constexpr const board::DigitalPin RX = board::InterruptPin::D0_PD0_PCI2;
-#define PCI_NUM 0
+#define PCI_NUM 2
 
 REGISTER_UART_PCI_ISR(RX, PCI_NUM)
 
