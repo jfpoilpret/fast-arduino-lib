@@ -1171,27 +1171,34 @@ All FastArduino API respects some guidelines for naming ISR registration macros.
 - `REGISTER_XXX_ISR_CALLBACK()` for method callback
 - `REGISTER_XXX_ISR_FUNCTION()` for function callback
 
-TODO update this table!
 Here is a table showing all FastArduino macros to register ISR (*Name* is to be replaced in macro name `REGISTER_NAME_ISR`, `REGISTER_NAME_ISR_EMPTY`, `REGISTER_NAME_ISR_CALLBACK` or `REGISTER_NAME_ISR_FUNCTION`):
-| Header             | Name              | Flavours | Comments                                                           |
-|--------------------|-------------------|----------|--------------------------------------------------------------------|
-| `eeprom.h`         | `EEPROM`          | 1,3,4    | Called when asynchronous EEPROM write is finished.                 |
-| `int.h`            | `INT`             | 2,3,4    | Called when an INT pin changes level.                              |
-| `pci.h`            | `PCI`             | 2,3,4    | Called when a PCINT pin changes level.                             |
-| `pulse_timer.h`    | `PULSE_TIMER8_A`  | 1        | Called when a PulseTimer8 overflows or equals OCRA.                |
-| `pulse_timer.h`    | `PULSE_TIMER8_B`  | 1        | Called when a PulseTimer8 overflows or equals OCRB.                |
-| `pulse_timer.h`    | `PULSE_TIMER8_AB` | 1        | Called when a PulseTimer8 overflows or equals OCRA or OCRB.        |
-| `realtime_timer.h` | `RTT`             | 1,3,4    | Called when RTT timer has one more millisecond elapsed.            |
-| `soft_uart.h`      | `UART_PCI`        | 1        | Called when a start bit is received on a PCINT pin linked to UATX. |
-| `soft_uart.h`      | `UART_INT`        | 1        | Called when a start bit is received on an INT pin linked to UATX.  |
-| `timer.h`          | `COMPARE`         | 2,3,4    | Called when a Timer counter reaches OCRA.                          |
-| `timer.h`          | `OVERFLOW`        | 2,3,4    | Called when a Timer counter overflows.                             |
-| `timer.h`          | `CAPTURE`         | 2,3,4    | Called when a Timer counter gets captured (when ICP level changes).|
-| `uart.h`           | `UATX`            | 1        | Called when one character is finished transmitted on UATX.         |
-| `uart.h`           | `UARX`            | 1        | Called when one character is finished received on UARX.            |
-| `uart.h`           | `UART`            | 1        | Called when one character is finished transmitted/received on UART.|
-| `watchdog.h`       | `WATCHDOG_CLOCK`  | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
-| `watchdog.h`       | `WATCHDOG`        | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
+| Header            | Name                      | Flavours | Comments                                                           |
+|-------------------|---------------------------|----------|--------------------------------------------------------------------|
+| `eeprom.h`        | `EEPROM`                  | 1,3,4    | Called when asynchronous EEPROM write is finished.                 |
+| `int.h`           | `INT`                     | 2,3,4    | Called when an INT pin changes level.                              |
+| `pci.h`           | `PCI`                     | 2,3,4    | Called when a PCINT pin changes level.                             |
+| `pulse_timer.h`   | `PULSE_TIMER8_A`          | 1        | Called when a PulseTimer8 overflows or equals OCRA.                |
+| `pulse_timer.h`   | `PULSE_TIMER8_B`          | 1        | Called when a PulseTimer8 overflows or equals OCRB.                |
+| `pulse_timer.h`   | `PULSE_TIMER8_AB`         | 1        | Called when a PulseTimer8 overflows or equals OCRA or OCRB.        |
+| `realtime_timer.h`| `RTT`                     | 1,3,4    | Called when RTT timer has one more millisecond elapsed.            |
+| `realtime_timer.h`| `RTT_EVENT`               | 1        | Same as above, and trigger RTTEventCallback.                       |
+| `soft_uart.h`     | `UART_PCI`                | 1        | Called when a start bit is received on a PCINT pin linked to UATX. |
+| `soft_uart.h`     | `UART_INT`                | 1        | Called when a start bit is received on an INT pin linked to UATX.  |
+| `timer.h`         | `COMPARE`                 | 2,3,4    | Called when a Timer counter reaches OCRA.                          |
+| `timer.h`         | `OVERFLOW`                | 2,3,4    | Called when a Timer counter overflows.                             |
+| `timer.h`         | `CAPTURE`                 | 2,3,4    | Called when a Timer counter gets captured (when ICP level changes).|
+| `uart.h`          | `UATX`                    | 1        | Called when one character is finished transmitted on UATX.         |
+| `uart.h`          | `UARX`                    | 1        | Called when one character is finished received on UARX.            |
+| `uart.h`          | `UART`                    | 1        | Called when one character is finished transmitted/received on UART.|
+| `watchdog.h`      | `WATCHDOG_CLOCK`          | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
+| `watchdog.h`      | `WATCHDOG_RTT`            | 1        | Called when Watchdog timeout occurs, and RTT clock must be updated.|
+| `watchdog.h`      | `WATCHDOG`                | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
+| `devices/sonar.h` | `HCSR04_INT`              | 1,3,4    | Called when HCSR04 echo INT pin changes level.                     |
+| `devices/sonar.h` | `HCSR04_PCI`              | 1,3,4    | Called when HCSR04 echo PCINT pin changes level.                   |
+| `devices/sonar.h` | `HCSR04_RTT_TIMEOUT`      | 1,3,4    | Called when HCSR04 RTT times out (without any echo).               |
+| `devices/sonar.h` | `DISTINCT_HCSR04_PCI`     | 1        | Called when HCSR04 any echo PCINT pin changes level.               |
+| `devices/sonar.h` | `MULTI_HCSR04_PCI`        | 3,4      | Called when MultiHCSR04 any echo PCINT pin changes level.          |
+| `devices/sonar.h` | `MULTI_HCSR04_RTT_TIMEOUT`| 1,3,4    | Called when MultiHCSR04 RTT times out (without any echo).          |
 
 For further details on ISR registration in FastArduino, you can check [`interrutps.h` API](interrupts_8h.html) for the general approach, and each individual API documentation for specific interrupts.
 
