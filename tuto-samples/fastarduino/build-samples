@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Build all .cpp files in current directory
+#
+
+# Clean all dist
+#TODO
+
+export CPP_LIST=`ls *.cpp`
+# Build each individual .cpp as an app
+for CPP in $CPP_LIST
+do
+	echo "Building... $CPP"
+	make MAIN_CPP=$CPP
+done
+
