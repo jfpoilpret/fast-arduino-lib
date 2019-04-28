@@ -105,7 +105,6 @@ namespace devices::mcp23017
 	}
 	/// @endcond
 
-	// In uint16_t mode, port A is the low byte, port B is the high byte
 	/**
 	 * I2C device driver for Microchip MCP23017 support.
 	 * The MCP23017 chip is a 16-Bit I/O Expander with I2C interface.
