@@ -140,7 +140,7 @@ The problem here is that Arduino API accept a simple number when they need a pin
 
 This problem cannot occur with FastArduino as the available pins are stored in a strong enum and it becomes impossible to select a pin that does not exist for the board we target!
 
-Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR Toolchain 3.5.3, Arduino API project built with Arduino IDE 1.8.2):
+Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR GCC 7.2.0, Arduino API project built with Arduino CLI 0.3.6-alpha.preview):
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
 | code size | 928 bytes   | 154 bytes   |
@@ -285,23 +285,22 @@ Of course, we can see here that the code looks simpler, although one may wonder 
 Now let's compare the size of both:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1440 bytes  | 690 bytes   |
-| data size | 200 bytes   | 91 bytes    |
+| code size | 1480 bytes  | 674 bytes   |
+| data size | 202 bytes   | 90 bytes    |
 The data size is big because the buffer used by `Serial` has a hard-coded size (you cannot change it without modifying and recompiling Arduino API). Moreover, when using `Serial`, 2 buffers are created, one for input and one for output, even though you may only need the latter one!
 
-Now let's take a look at the 91 bytes of data used in the FastArduino version of this example, how are they broken down?
+Now let's take a look at the 90 bytes of data used in the FastArduino version of this example, how are they broken down?
 | Source            | data size   |
 |-------------------|-------------|
 | `output_buffer`   | 64 bytes    |
-| power API         | 1 byte      |
 | `UATX` ISR        | 2 bytes     |
 | `UATX` vtable     | 8 bytes     |
 | "Hello, World!\n" | 16 bytes    |
-| **TOTAL**         | 91 bytes    |
+| **TOTAL**         | 90 bytes    |
 
 *vtable* is specific data created by C++ compiler for classes with `virtual` methods: every time you use virtual methods in classes, this will add more data size, this is why FastArduino avoids `virtual` as much as possible.
 
-As you can see in the table above, the constant string `"Hello, World!\n"` occupies 16 bytes of data (i.e. AVR SRAM) in addition to 16 bytes of Flash (as it is part of the program and must be stored permanently). If your program deals with a lot of constant strings like this, you may quickly meet a memory problem with SRAM usage. This is why it is more effective to keep these strings exclusively in Flash (you have no choice) but load them t SRAM only when they are needed, i.e. when they get printed to `UATX` as in the sample code.
+As you can see in the table above, the constant string `"Hello, World!\n"` occupies 16 bytes of data (i.e. AVR SRAM) in addition to 16 bytes of Flash (as it is part of the program and must be stored permanently). If your program deals with a lot of constant strings like this, you may quickly meet a memory problem with SRAM usage. This is why it is more effective to keep these strings exclusively in Flash (you have no choice) but load them to SRAM only when they are needed, i.e. when they get printed to `UATX` as in the sample code.
 
 How do we change our program so that this string is only stored in Flash? We can use FastArduino `flash` API for that, by changing only one line of code:
 
@@ -312,8 +311,8 @@ Note the use of `F()` macro here: this makes the string reside in Flash only, an
 We can compare the impact on sizes:
 |           | without %F() | with %F()   |
 |-----------|--------------|-------------|
-| code size | 690 bytes    | 700 bytes   |
-| data size | 91 bytes     | 75 bytes    |
+| code size | 674 bytes    | 682 bytes   |
+| data size | 90 bytes     | 74 bytes    |
 Although a bit more code has been added (the code to read the string from Flash into SRAM on the fly), we see 16 bytes have been removed from data, this is the size of the string constant.
 
 You may wonder why `"Hello, World!\n"` occupies 16 bytes, although it should use only 15 bytes (if we account for the terminating `'\0'` character); this is because the string is stored in Flash and Flash is word-addressable, not byte-addressable on AVR.
@@ -417,8 +416,8 @@ void loop()
 Once again, we can compare the size of both:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1808 bytes  | 1844 bytes  |
-| data size | 186 bytes   | 83 bytes    |
+| code size | 1856 bytes  | 1814 bytes  |
+| data size | 188 bytes   | 82 bytes    |
 
 ### Serial Input example ###
 
@@ -822,8 +821,8 @@ Finally, we have the usual loop, toogling the LED, and then delay for 10s, using
 Let's examine the size of this program and compare it with the first example of this tutorial, which used `time::delay_ms()`:
 |           | delay_ms   | RTT::delay  |
 |-----------|------------|-------------|
-| code size | 154 bytes  | 420 bytes   |
-| data size | 0 bytes    | 3 bytes     |
+| code size | 154 bytes  | 430 bytes   |
+| data size | 0 bytes    | 2 bytes     |
 
 As you can see, code and data size is higher here, so what is the point of using `RTT::delay()` instead of `time::delay_ms()`? The answer is **power consumption**:
 - `time::delay_ms` is a busy loop which requires the MCU to be running during the whole delay, hence consuming "active supply current" (about 15mA for an ATmega328P at 16MHz)
@@ -990,7 +989,7 @@ Nothing special to comment here, except:
 Comparing sizes once again shows big differences:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1302 bytes  | 296 bytes   |
+| code size | 1102 bytes  | 292 bytes   |
 | data size | 9 bytes     | 0 byte      |
 
 
@@ -1345,7 +1344,7 @@ Also note that you can only attach a function to an interrupt. Arduino API offer
 Now let's just compare examples sizes, as usual:
 |           | Arduino API | FastArduino |
 |-----------|-------------|-------------|
-| code size | 1238 bytes  | 266 bytes   |
+| code size | 1114 bytes  | 266 bytes   |
 | data size | 13 bytes    | 2 bytes     |
 
 
