@@ -42,6 +42,7 @@ var searchData=
   ['showbase',['showbase',['../namespacestreams.html#a45afa8e386fab7a290452f31eef9ef83',1,'streams']]],
   ['showpos',['showpos',['../namespacestreams.html#a8d4403f70b177048857b79d4e012922b',1,'streams']]],
   ['since',['since',['../namespacetime.html#ad482508d5954e833f1d2e605b881b263',1,'time']]],
+  ['sipo',['SIPO',['../classdevices_1_1_s_i_p_o.html#abe61784dd2474010f326d529a832fa60',1,'devices::SIPO']]],
   ['size',['size',['../classeeprom_1_1_e_e_p_r_o_m.html#a0436da8b147296088a2903e65f1618c0',1,'eeprom::EEPROM::size()'],['../classcontainers_1_1_queue.html#a7dde204e519e98fbacbabdc7d456e11e',1,'containers::Queue::size()']]],
   ['skipws',['skipws',['../namespacestreams.html#a76316854cb7b9c0c7688d02c660ed369',1,'streams']]],
   ['sleep',['sleep',['../classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b',1,'power::Power::sleep()'],['../classpower_1_1_power.html#a8380885011701d1936ea37b64a1e6b61',1,'power::Power::sleep(board::SleepMode mode)']]],

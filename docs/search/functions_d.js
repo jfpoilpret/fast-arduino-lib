@@ -23,5 +23,6 @@ var searchData=
   ['operator_7c',['operator|',['../namespacetimer.html#a10762dd286296623f6262a801cd925a9',1,'timer']]],
   ['ostream',['ostream',['../classstreams_1_1ostream.html#a2b72abee7fbf597915ceeb5d8ba9d9c4',1,'streams::ostream']]],
   ['out',['out',['../classserial_1_1soft_1_1_u_a_t_x.html#ace5f8275d6848fc850d652f6149b7c39',1,'serial::soft::UATX::out()'],['../classserial_1_1hard_1_1_u_a_t_x.html#a9139b33a84768290bf43eefbc55aa749',1,'serial::hard::UATX::out()']]],
+  ['output',['output',['../classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0',1,'devices::SIPO']]],
   ['overflow',['overflow',['../classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251',1,'streams::ostreambuf']]]
 ];

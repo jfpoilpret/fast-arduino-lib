@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['icp_5fpin',['ICP_PIN',['../classtimer_1_1_timer.html#acec93e3211e93603f63180a4dd366cae',1,'timer::Timer']]],
-  ['is_5fint',['IS_INT',['../structtypes__traits_1_1_type__trait.html#a3a55c8919dd10f8282fe34d6d230d02c',1,'types_traits::Type_trait']]],
-  ['is_5fsigned',['IS_SIGNED',['../structtypes__traits_1_1_type__trait.html#a55e88938a8eee1a331b63bcebab81b79',1,'types_traits::Type_trait']]]
+  ['has_5fpwm',['HAS_PWM',['../classgpio_1_1_fast_pin_type.html#abf8fce945aaa2c505f9b4d6f689119d2',1,'gpio::FastPinType']]],
+  ['hex',['hex',['../classstreams_1_1ios__base.html#aafd29f140be78e8402102dba405d9b61',1,'streams::ios_base']]]
 ];

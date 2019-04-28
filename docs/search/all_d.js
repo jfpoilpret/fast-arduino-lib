@@ -27,7 +27,7 @@ var searchData=
   ['ostream',['ostream',['../classstreams_1_1ostream.html',1,'streams::ostream'],['../classstreams_1_1ostream.html#a2b72abee7fbf597915ceeb5d8ba9d9c4',1,'streams::ostream::ostream()']]],
   ['ostreambuf',['ostreambuf',['../classstreams_1_1ostreambuf.html',1,'streams']]],
   ['out',['out',['../classserial_1_1soft_1_1_u_a_t_x.html#ace5f8275d6848fc850d652f6149b7c39',1,'serial::soft::UATX::out()'],['../classserial_1_1hard_1_1_u_a_t_x.html#a9139b33a84768290bf43eefbc55aa749',1,'serial::hard::UATX::out()']]],
-  ['output',['OUTPUT',['../classtimer_1_1_square_wave.html#a67d2833bc1361ceecb97b1abfd1de079',1,'timer::SquareWave::OUTPUT()'],['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34',1,'gpio::OUTPUT()']]],
+  ['output',['OUTPUT',['../classtimer_1_1_square_wave.html#a67d2833bc1361ceecb97b1abfd1de079',1,'timer::SquareWave::OUTPUT()'],['../classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0',1,'devices::SIPO::output()'],['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34',1,'gpio::OUTPUT()']]],
   ['output_5fcompare_5fa',['OUTPUT_COMPARE_A',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a1aac1f38fe13831901945888f2a3998d',1,'timer']]],
   ['output_5fcompare_5fb',['OUTPUT_COMPARE_B',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a2ec54b766f810d959b45fe0149db994c',1,'timer']]],
   ['output_5fcompare_5fc',['OUTPUT_COMPARE_C',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a152b06238f6e18dc172a755417314a5a',1,'timer']]],

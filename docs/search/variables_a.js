@@ -1,6 +1,11 @@
 var searchData=
 [
-  ['network',['network',['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html#ab96267277742b5d81046be3bd6476858',1,'devices::rf::NRF24L01::addr_t']]],
-  ['no_5fevent',['NO_EVENT',['../namespaceevents_1_1_type.html#a2c33d039e5fdd277900219bd3cd74eb0',1,'events::Type']]],
-  ['ntimer',['NTIMER',['../classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083',1,'timer::RTT::NTIMER()'],['../classtimer_1_1_square_wave.html#a422ed6d2a96b86a09f25fbcb9a0999a0',1,'timer::SquareWave::NTIMER()'],['../structtimer_1_1_calculator.html#ac1d170c81cc5fe9c43b79d8ca2aec14b',1,'timer::Calculator::NTIMER()'],['../classtimer_1_1_timer.html#a260ddf8df1436604859a07ebb30d9e23',1,'timer::Timer::NTIMER()']]]
+  ['mask',['MASK',['../classgpio_1_1_fast_masked_port.html#a9fec25a1788301cd9ba3bfc3d7adbe6b',1,'gpio::FastMaskedPort::MASK()'],['../classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0',1,'gpio::FastPinType::MASK()']]],
+  ['max',['MAX',['../classanalog_1_1_p_w_m_output.html#a6b1fdf788fa1f9e717280f459b09a135',1,'analog::PWMOutput']]],
+  ['max_5fprecision',['MAX_PRECISION',['../classstreams_1_1ios__base.html#afb443852e1cbb99456e06f78532f2974',1,'streams::ios_base']]],
+  ['max_5frt',['max_rt',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a6c4a43f0613197e7f9831b882ef18fb3',1,'devices::rf::NRF24L01::status_t']]],
+  ['maxfreq',['MAXFREQ',['../classanalog_1_1_analog_input.html#a742690b56df7fb84554142bdcaba0ad1',1,'analog::AnalogInput']]],
+  ['micros',['micros',['../structtime_1_1_r_t_t_time.html#ad612e0350274ff0eea2769599617a923',1,'time::RTTTime']]],
+  ['millis',['millis',['../structtime_1_1_r_t_t_time.html#aaded1d29763b09e1c3564e5735676742',1,'time::RTTTime::millis()'],['../namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70',1,'time::millis()']]],
+  ['mode',['MODE',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#abfc14a2b520c4e0d0b0c662fbf1cc713',1,'devices::mcp23017::MCP23017::MODE()'],['../classi2c_1_1_i2_c_device.html#a6450cfc9e9475eafc62d42aedec8fef3',1,'i2c::I2CDevice::MODE()'],['../classi2c_1_1_i2_c_manager.html#a7df8908c31eb3fca3005ed243f0253f4',1,'i2c::I2CManager::MODE()']]]
 ];

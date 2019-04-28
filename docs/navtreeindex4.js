@@ -1,20 +1,15 @@
 var NAVTREEINDEX4 =
 {
-"namespaceserial_1_1soft.html":[4,0,10,1],
-"namespaceserial_1_1soft.html":[3,0,12,1],
-"namespacespi.html":[3,0,13],
-"namespacespi.html":[4,0,11],
-"namespacestreams.html":[4,0,12],
 "namespacestreams.html":[3,0,14],
-"namespacetime.html":[3,0,15],
 "namespacetime.html":[4,0,13],
+"namespacetime.html":[3,0,15],
 "namespacetimer.html":[3,0,16],
 "namespacetimer.html":[4,0,14],
 "namespacetypes__traits.html":[3,0,17],
 "namespacetypes__traits.html":[4,0,15],
 "namespaceutils.html":[3,0,18],
-"namespacewatchdog.html":[4,0,16],
 "namespacewatchdog.html":[3,0,19],
+"namespacewatchdog.html":[4,0,16],
 "nrf24l01p_8h_source.html":[5,0,0,1,4],
 "nrf24l01p__internals_8h_source.html":[5,0,0,1,5],
 "pages.html":[],
@@ -50,6 +45,7 @@ var NAVTREEINDEX4 =
 "scheduler_8h_source.html":[5,0,0,29],
 "servo_8h.html":[5,0,0,1,6],
 "servo_8h_source.html":[5,0,0,1,6],
+"sipo_8h.html":[5,0,0,1,7],
 "sipo_8h_source.html":[5,0,0,1,7],
 "soft__uart_8cpp_source.html":[5,0,0,30],
 "soft__uart_8h.html":[5,0,0,31],
@@ -249,5 +245,9 @@ var NAVTREEINDEX4 =
 "timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770":[5,0,0,40,12,3],
 "timer_8h.html#a908aa72c1bb077bec67565b637350bf4":[5,0,0,40,15],
 "timer_8h.html#a908aa72c1bb077bec67565b637350bf4a297f5ea19073f4b51715b029f48d5d52":[5,0,0,40,15,1],
-"timer_8h.html#a908aa72c1bb077bec67565b637350bf4ad85243a747ac5537ef0b7adde99c3e98":[5,0,0,40,15,0]
+"timer_8h.html#a908aa72c1bb077bec67565b637350bf4ad85243a747ac5537ef0b7adde99c3e98":[5,0,0,40,15,0],
+"timer_8h.html#a978c0a84d3c5973bd5feba2a41b70142":[5,0,0,40,9],
+"timer_8h.html#a97efa79149bd7e075e9cff2473356cee":[5,0,0,40,3],
+"timer_8h.html#a98b209585f558b1b52fb14d14f50bdc7":[5,0,0,40,13],
+"timer_8h.html#a98b209585f558b1b52fb14d14f50bdc7a0134b04a942cbc5336958c8cd09b82f3":[5,0,0,40,13,0]
 };

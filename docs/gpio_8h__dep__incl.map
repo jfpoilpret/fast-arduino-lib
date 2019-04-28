@@ -1,6 +1,6 @@
 <map id="fastarduino/gpio.h" name="fastarduino/gpio.h">
 <area shape="rect" id="node2" href="$spi_8h.html" title="SPI support for AVR MCU. " alt="" coords="190,87,321,114"/>
-<area shape="rect" id="node6" href="$sipo_8h_source.html" title="fastarduino/devices\l/sipo.h" alt="" coords="345,80,496,121"/>
+<area shape="rect" id="node6" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;, like the 74HC595. " alt="" coords="345,80,496,121"/>
 <area shape="rect" id="node7" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="520,80,671,121"/>
 <area shape="rect" id="node8" href="$pwm_8h.html" title="PWM API. " alt="" coords="907,87,1051,114"/>
 <area shape="rect" id="node13" href="$pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="695,87,883,114"/>

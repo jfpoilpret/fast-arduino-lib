@@ -1,10 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classwatchdog_1_1_watchdog.html#a028eda424aae2c386a5fd6ed74c0cfff":[4,0,16,1,2],
-"classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731":[4,0,16,1,0],
-"classwatchdog_1_1_watchdog.html#ac562bd99d2f2483d1544efd31e5693be":[4,0,16,1,1],
-"classwatchdog_1_1_watchdog_r_t_t.html":[4,0,16,2],
-"classwatchdog_1_1_watchdog_r_t_t.html#a028eda424aae2c386a5fd6ed74c0cfff":[4,0,16,2,7],
 "classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77":[4,0,16,2,3],
 "classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b":[4,0,16,2,4],
 "classwatchdog_1_1_watchdog_r_t_t.html#abe59eb36f67eb5054137506969b739a3":[4,0,16,2,6],
@@ -145,8 +140,8 @@ var NAVTREEINDEX3 =
 "i2c__handler_8h_source.html":[5,0,0,12],
 "i2c__manager_8h.html":[5,0,0,13],
 "i2c__manager_8h_source.html":[5,0,0,13],
-"index.html":[0],
 "index.html":[],
+"index.html":[0],
 "int_8h.html":[5,0,0,14],
 "int_8h.html#a27eee51cf0393a75a91aac0425e65d1b":[5,0,0,14,5],
 "int_8h.html#a27eee51cf0393a75a91aac0425e65d1ba1d6fe09476721a54c07d90573d84a1f2":[5,0,0,14,5,1],
@@ -208,8 +203,8 @@ var NAVTREEINDEX3 =
 "mcp23017_8h.html#a1deedbcfa66c2d000cc9e9293ec00d5dae604f78cbd0b3061f5fac81029e8466c":[5,0,0,1,2,1,0],
 "mcp23017_8h_source.html":[5,0,0,1,2],
 "mpu6050_8h_source.html":[5,0,0,1,3],
-"namespaceanalog.html":[4,0,0],
 "namespaceanalog.html":[3,0,0],
+"namespaceanalog.html":[4,0,0],
 "namespaceboard.html":[3,0,1],
 "namespaceboard.html":[4,0,1],
 "namespaceboard_1_1_external_interrupt_pin.html":[3,0,1,0],
@@ -226,8 +221,8 @@ var NAVTREEINDEX3 =
 "namespaceeeprom.html":[3,0,4],
 "namespaceeeprom.html":[4,0,4],
 "namespaceerrors.html":[3,0,5],
-"namespaceevents.html":[4,0,5],
 "namespaceevents.html":[3,0,6],
+"namespaceevents.html":[4,0,5],
 "namespaceevents_1_1_type.html":[3,0,6,0],
 "namespaceflash.html":[3,0,7],
 "namespacegpio.html":[3,0,8],
@@ -248,6 +243,11 @@ var NAVTREEINDEX3 =
 "namespaces.html":[3,0],
 "namespaceserial.html":[4,0,10],
 "namespaceserial.html":[3,0,12],
+"namespaceserial_1_1hard.html":[4,0,10,0],
 "namespaceserial_1_1hard.html":[3,0,12,0],
-"namespaceserial_1_1hard.html":[4,0,10,0]
+"namespaceserial_1_1soft.html":[4,0,10,1],
+"namespaceserial_1_1soft.html":[3,0,12,1],
+"namespacespi.html":[3,0,13],
+"namespacespi.html":[4,0,11],
+"namespacestreams.html":[4,0,12]
 };

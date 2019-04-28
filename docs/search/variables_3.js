@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['einval',['EINVAL',['../namespaceerrors.html#a24d0c302dd23c25975e5a98ed5850142',1,'errors']]],
-  ['eio',['EIO',['../namespaceerrors.html#a4b234f4e31c1a1c0afbbbc08f98658dd',1,'errors']]],
-  ['empty_5ftime',['EMPTY_TIME',['../classtimer_1_1_r_t_t_raw_time.html#ad2ff52140151062a1f93675fc028067c',1,'timer::RTTRawTime']]],
-  ['emsgsize',['EMSGSIZE',['../namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2',1,'errors']]],
-  ['eof',['EOF',['../classstreams_1_1istreambuf.html#a99e49d98dc017ef8d9a34619f0c9bc38',1,'streams::istreambuf']]],
-  ['eofbit',['eofbit',['../classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70',1,'streams::ios_base']]],
-  ['etime',['ETIME',['../namespaceerrors.html#ad4ec1e37e74c959b9f0c60673b7f793d',1,'errors']]]
+  ['data',['DATA',['../classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8',1,'devices::SIPO']]],
+  ['dec',['dec',['../classstreams_1_1ios__base.html#a2a9b1d330a6408608b21ea3cd7044ae1',1,'streams::ios_base']]],
+  ['default_5fsend_5ftimeout',['DEFAULT_SEND_TIMEOUT',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a151fc3f129fb468663e1cdd1c69ba5e3',1,'devices::rf::NRF24L01']]],
+  ['delay',['delay',['../namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf',1,'time']]],
+  ['device',['device',['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html#a36ea329cfb9b26e7f1c471903084abfe',1,'devices::rf::NRF24L01::addr_t']]],
+  ['device_5fpayload_5fmax',['DEVICE_PAYLOAD_MAX',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a80d3a609d7f7c5a2e3a41674ea7ff60a',1,'devices::rf::NRF24L01']]],
+  ['dpin',['DPIN',['../classgpio_1_1_fast_pin_type.html#acefb55483053582508b27c3abe76f351',1,'gpio::FastPinType']]]
 ];

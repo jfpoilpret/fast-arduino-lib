@@ -5,7 +5,7 @@ var searchData=
   ['ignore',['ignore',['../classstreams_1_1istream.html#a99dafd2dce58830708b65dd4f4b6136f',1,'streams::istream']]],
   ['in',['in',['../classserial_1_1soft_1_1_u_a_r_x.html#a931540095fe35fbebef743f95aa89661',1,'serial::soft::UARX::in()'],['../classserial_1_1hard_1_1_u_a_r_x.html#a6d0cb08bc1813b28849fba0837bf7c4f',1,'serial::hard::UARX::in()']]],
   ['in_5favail',['in_avail',['../classstreams_1_1istreambuf.html#a0f0d8b518b00e5fe7949d300c83b934f',1,'streams::istreambuf']]],
-  ['init',['init',['../namespaceboard.html#a2529f85498783a75dc75c281e0b754d3',1,'board::init()'],['../namespacespi.html#a7829182c423612511a05fa0434d7673e',1,'spi::init()']]],
+  ['init',['init',['../classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2',1,'devices::SIPO::init()'],['../namespaceboard.html#a2529f85498783a75dc75c281e0b754d3',1,'board::init()'],['../namespacespi.html#a7829182c423612511a05fa0434d7673e',1,'spi::init()']]],
   ['input_5fcapture',['input_capture',['../classtimer_1_1_timer.html#ac9b50f7485c4624f2969c6eef5039282',1,'timer::Timer']]],
   ['insert',['insert',['../classcontainers_1_1_linked_list.html#ac44c93a96f2aaffe0411565798c6cd67',1,'containers::LinkedList']]],
   ['interrupt_5fflags',['interrupt_flags',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a6c43d6272eb5f3883cf90e85e7a08b27',1,'devices::mcp23017::MCP23017']]],

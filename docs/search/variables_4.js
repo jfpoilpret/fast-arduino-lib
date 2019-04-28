@@ -1,6 +1,10 @@
 var searchData=
 [
-  ['failbit',['failbit',['../classstreams_1_1ios__base.html#abf31341bed00d5096e93ed67d6808150',1,'streams::ios_base']]],
-  ['fixed',['fixed',['../classstreams_1_1ios__base.html#a1ae32df42a47193f1cf80d9ac7c139d2',1,'streams::ios_base']]],
-  ['floatfield',['floatfield',['../classstreams_1_1ios__base.html#a552f033b4b63cf821f32c64acc00265c',1,'streams::ios_base']]]
+  ['einval',['EINVAL',['../namespaceerrors.html#a24d0c302dd23c25975e5a98ed5850142',1,'errors']]],
+  ['eio',['EIO',['../namespaceerrors.html#a4b234f4e31c1a1c0afbbbc08f98658dd',1,'errors']]],
+  ['empty_5ftime',['EMPTY_TIME',['../classtimer_1_1_r_t_t_raw_time.html#ad2ff52140151062a1f93675fc028067c',1,'timer::RTTRawTime']]],
+  ['emsgsize',['EMSGSIZE',['../namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2',1,'errors']]],
+  ['eof',['EOF',['../classstreams_1_1istreambuf.html#a99e49d98dc017ef8d9a34619f0c9bc38',1,'streams::istreambuf']]],
+  ['eofbit',['eofbit',['../classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70',1,'streams::ios_base']]],
+  ['etime',['ETIME',['../namespaceerrors.html#ad4ec1e37e74c959b9f0c60673b7f793d',1,'errors']]]
 ];

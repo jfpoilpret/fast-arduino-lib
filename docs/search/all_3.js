@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['data',['DATA',['../classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8',1,'devices::SIPO']]],
   ['data_5foverrun',['data_overrun',['../classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa',1,'serial::UARTErrors']]],
   ['dataorder',['DataOrder',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7',1,'spi']]],
   ['dec',['dec',['../classstreams_1_1ios__base.html#a2a9b1d330a6408608b21ea3cd7044ae1',1,'streams::ios_base::dec()'],['../namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2',1,'streams::dec()']]],

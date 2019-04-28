@@ -94,52 +94,61 @@ $(document).ready(function(){initNavTree('classdevices_1_1_s_i_p_o.html','');});
 <div class="title">devices::SIPO&lt; CLOCK_, LATCH_, DATA_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This template class supports one <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> chip, connected to the MCU through 3 pins.  
+ <a href="classdevices_1_1_s_i_p_o.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sipo_8h_source.html">fastarduino/devices/sipo.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aacceaec314ea0e24b6f6803892c494a2"><td class="memItemLeft" align="right" valign="top"><a id="aacceaec314ea0e24b6f6803892c494a2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
+<tr class="memitem:abe61784dd2474010f326d529a832fa60"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#abe61784dd2474010f326d529a832fa60">SIPO</a> ()</td></tr>
+<tr class="memdesc:abe61784dd2474010f326d529a832fa60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> handler, according to pins defined by class template parameters.  <a href="#abe61784dd2474010f326d529a832fa60">More...</a><br /></td></tr>
+<tr class="separator:abe61784dd2474010f326d529a832fa60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacceaec314ea0e24b6f6803892c494a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">init</a> ()</td></tr>
+<tr class="memdesc:aacceaec314ea0e24b6f6803892c494a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize (direction, value) all used pins.  <a href="#aacceaec314ea0e24b6f6803892c494a2">More...</a><br /></td></tr>
 <tr class="separator:aacceaec314ea0e24b6f6803892c494a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e967a43abad23c0fa00fe00f76205f0"><td class="memTemplParams" colspan="2"><a id="a4e967a43abad23c0fa00fe00f76205f0"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a4e967a43abad23c0fa00fe00f76205f0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>output</b> (T data)</td></tr>
+<tr class="memitem:a4e967a43abad23c0fa00fe00f76205f0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4e967a43abad23c0fa00fe00f76205f0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">output</a> (T data)</td></tr>
+<tr class="memdesc:a4e967a43abad23c0fa00fe00f76205f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles output and latching of all bits in <code>data</code> to the <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> chip.  <a href="#a4e967a43abad23c0fa00fe00f76205f0">More...</a><br /></td></tr>
 <tr class="separator:a4e967a43abad23c0fa00fe00f76205f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dd7dcbe6cdc48bd62f3669b5ffe9140"><td class="memItemLeft" align="right" valign="top"><a id="a2dd7dcbe6cdc48bd62f3669b5ffe9140"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>output</b> (uint8_t data) INLINE</td></tr>
-<tr class="separator:a2dd7dcbe6cdc48bd62f3669b5ffe9140"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bfbedf8178c07e495fea85e6e652d88"><td class="memItemLeft" align="right" valign="top"><a id="a9bfbedf8178c07e495fea85e6e652d88"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>output</b> (uint16_t data) INLINE</td></tr>
-<tr class="separator:a9bfbedf8178c07e495fea85e6e652d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a29dd88c71a634007146d6ff3bbedbcfd"><td class="memItemLeft" align="right" valign="top"><a id="a29dd88c71a634007146d6ff3bbedbcfd"></a>
-static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><b>CLOCK</b> = CLOCK_</td></tr>
+<tr class="memitem:a29dd88c71a634007146d6ff3bbedbcfd"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#a29dd88c71a634007146d6ff3bbedbcfd">CLOCK</a> = CLOCK_</td></tr>
+<tr class="memdesc:a29dd88c71a634007146d6ff3bbedbcfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The output pin that will send the clock signal to the chip.  <a href="#a29dd88c71a634007146d6ff3bbedbcfd">More...</a><br /></td></tr>
 <tr class="separator:a29dd88c71a634007146d6ff3bbedbcfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f698804766863c127d1fab0a0820dbb"><td class="memItemLeft" align="right" valign="top"><a id="a2f698804766863c127d1fab0a0820dbb"></a>
-static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><b>LATCH</b> = LATCH_</td></tr>
+<tr class="memitem:a2f698804766863c127d1fab0a0820dbb"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#a2f698804766863c127d1fab0a0820dbb">LATCH</a> = LATCH_</td></tr>
+<tr class="memdesc:a2f698804766863c127d1fab0a0820dbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The output pin that will tell the chip to copy its shift register content to its output pins.  <a href="#a2f698804766863c127d1fab0a0820dbb">More...</a><br /></td></tr>
 <tr class="separator:a2f698804766863c127d1fab0a0820dbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65ba8db33cb58fb001e5f3fe6f1bf2e8"><td class="memItemLeft" align="right" valign="top"><a id="a65ba8db33cb58fb001e5f3fe6f1bf2e8"></a>
-static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><b>DATA</b> = DATA_</td></tr>
+<tr class="memitem:a65ba8db33cb58fb001e5f3fe6f1bf2e8"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8">DATA</a> = DATA_</td></tr>
+<tr class="memdesc:a65ba8db33cb58fb001e5f3fe6f1bf2e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The output pin that will send serial data to the chip.  <a href="#a65ba8db33cb58fb001e5f3fe6f1bf2e8">More...</a><br /></td></tr>
 <tr class="separator:a65ba8db33cb58fb001e5f3fe6f1bf2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d889d999e60740c78a8d937c024050f"><td class="memItemLeft" align="right" valign="top"><a id="a3d889d999e60740c78a8d937c024050f"></a>
-static constexpr const <a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a>&#160;</td><td class="memItemRight" valign="bottom"><b>PORT</b> = <a class="el" href="classgpio_1_1_fast_pin_type.html">gpio::FastPinType</a>&lt;CLOCK&gt;::PORT</td></tr>
-<tr class="separator:a3d889d999e60740c78a8d937c024050f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ff5e2bdc33d0d19564f416bc4e27cf6"><td class="memItemLeft" align="right" valign="top">static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>DDR_MASK</b></td></tr>
-<tr class="separator:a2ff5e2bdc33d0d19564f416bc4e27cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a3fe2ecc2e2f3b9cc66caced622c926"><td class="memItemLeft" align="right" valign="top"><a id="a2a3fe2ecc2e2f3b9cc66caced622c926"></a>
-static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>PORT_MASK</b> = <a class="el" href="classgpio_1_1_fast_pin_type.html">gpio::FastPinType</a>&lt;LATCH&gt;::MASK</td></tr>
-<tr class="separator:a2a3fe2ecc2e2f3b9cc66caced622c926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_&gt;<br />
 class devices::SIPO&lt; CLOCK_, LATCH_, DATA_ &gt;</h3>
 
+<p>This template class supports one <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> chip, connected to the MCU through 3 pins. </p>
+<p>These 3 pins are described below (different chips may have different naming for each pin but you should expect the 3 pins in all <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> chips):</p><ul>
+<li>CLOCK pin: this is used to clock data input to DATA pin: one cycle per bit.</li>
+<li>DATA pin: this is used to pass serial in data to the chip, one bit per CLOCK cycle.</li>
+<li>LATCH pin: this pin is used to let the chip know that all data bits have been transferred and should now be made available to the actual output pins of the chip.</li>
+</ul>
+<p>Some <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> chips (e.g. the 74HC595) allow daisy-chaining, allowing you to use several chips but only 3 pins on the MCU. Daisy-chained <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> are transparently supported by this class.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">CLOCK_</td><td>the output pin that will send the clock signal to the chip </td></tr>
+    <tr><td class="paramname">LATCH_</td><td>the output pin that will tell the chip to copy its shift register content to its output pins </td></tr>
+    <tr><td class="paramname">DATA_</td><td>the output pin that will send serial data to the chip </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00022">22</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a2ff5e2bdc33d0d19564f416bc4e27cf6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ff5e2bdc33d0d19564f416bc4e27cf6">&#9670;&nbsp;</a></span>DDR_MASK</h2>
+<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00052">52</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="abe61784dd2474010f326d529a832fa60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe61784dd2474010f326d529a832fa60">&#9670;&nbsp;</a></span>SIPO()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,7 +159,119 @@ template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPi
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr const uint8_t <a class="el" href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt;::DDR_MASK</td>
+          <td class="memname"><a class="el" href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt;::<a class="el" href="classdevices_1_1_s_i_p_o.html">SIPO</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a new <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> handler, according to pins defined by class template parameters. </p>
+<p>This does not initialize the 3 output pins, for this you shall use <code><a class="el" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2" title="Initialize (direction, value) all used pins. ">init()</a></code>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2" title="Initialize (direction, value) all used pins. ">init()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00069">69</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aacceaec314ea0e24b6f6803892c494a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacceaec314ea0e24b6f6803892c494a2">&#9670;&nbsp;</a></span>init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt;::init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize (direction, value) all used pins. </p>
+<p>This must be executed before any other API. This is not executed directly from constructor, in order to allow more optimized initialization with other pins, at port level, in the final program. </p>
+
+<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00078">78</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
+
+</div>
+</div>
+<a id="a4e967a43abad23c0fa00fe00f76205f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e967a43abad23c0fa00fe00f76205f0">&#9670;&nbsp;</a></span>output()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_&gt; </div>
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt;::output </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Handles output and latching of all bits in <code>data</code> to the <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> chip. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of <code>data</code>; this allows pushing more than 8 bits of data, e.g. if you have connected several chips in daisy-chain. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>the data to serialize to <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. ">SIPO</a> chip (or chips if daisy chained). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00092">92</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a29dd88c71a634007146d6ff3bbedbcfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29dd88c71a634007146d6ff3bbedbcfd">&#9670;&nbsp;</a></span>CLOCK</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt;::CLOCK = CLOCK_</td>
         </tr>
       </table>
   </td>
@@ -159,8 +280,66 @@ template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPi
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div><div class="line">            <a class="code" href="classgpio_1_1_fast_pin_type.html">gpio::FastPinType&lt;CLOCK&gt;::MASK</a> | <a class="code" href="classgpio_1_1_fast_pin_type.html">gpio::FastPinType&lt;LATCH&gt;::MASK</a> | <a class="code" href="classgpio_1_1_fast_pin_type.html">gpio::FastPinType&lt;DATA&gt;::MASK</a></div></div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00030">30</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
+
+<p>The output pin that will send the clock signal to the chip. </p>
+
+<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00056">56</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
+
+</div>
+</div>
+<a id="a2f698804766863c127d1fab0a0820dbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f698804766863c127d1fab0a0820dbb">&#9670;&nbsp;</a></span>LATCH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt;::LATCH = LATCH_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The output pin that will tell the chip to copy its shift register content to its output pins. </p>
+
+<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00058">58</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
+
+</div>
+</div>
+<a id="a65ba8db33cb58fb001e5f3fe6f1bf2e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65ba8db33cb58fb001e5f3fe6f1bf2e8">&#9670;&nbsp;</a></span>DATA</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt;::DATA = DATA_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The output pin that will send serial data to the chip. </p>
+
+<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00060">60</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
 
 </div>
 </div>
