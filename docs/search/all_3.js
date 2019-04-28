@@ -17,6 +17,7 @@ var searchData=
   ['delay_5fptr',['DELAY_PTR',['../namespacetime.html#a0980f7cbb448c562b0081484031f325e',1,'time']]],
   ['delay_5fus',['delay_us',['../namespacetime.html#a258d2da0bcb268278406d4c8cb0dda1c',1,'time']]],
   ['delta',['delta',['../namespacetime.html#a62f1fe32506038b9c045c3506329531f',1,'time']]],
+  ['detach',['detach',['../classdevices_1_1servo_1_1_servo.html#ade9487997d8d90df4abb47405a5efaff',1,'devices::servo::Servo']]],
   ['device',['Device',['../structdevices_1_1_win_bond_1_1_device.html',1,'devices::WinBond&lt; CS &gt;::Device'],['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html#a36ea329cfb9b26e7f1c471903084abfe',1,'devices::rf::NRF24L01::addr_t::device()']]],
   ['device_5fpayload_5fmax',['DEVICE_PAYLOAD_MAX',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a80d3a609d7f7c5a2e3a41674ea7ff60a',1,'devices::rf::NRF24L01']]],
   ['devices',['devices',['../namespacedevices.html',1,'']]],
@@ -34,5 +35,6 @@ var searchData=
   ['dpin',['DPIN',['../classgpio_1_1_fast_pin_type.html#acefb55483053582508b27c3abe76f351',1,'gpio::FastPinType']]],
   ['ds1307',['DS1307',['../classdevices_1_1rtc_1_1_d_s1307.html',1,'devices::rtc']]],
   ['dynpd',['DYNPD',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aacb1b9f244ff1623c34531781e1f22ea4',1,'devices::rf::NRF24L01']]],
-  ['mcp23017',['mcp23017',['../namespacedevices_1_1mcp23017.html',1,'devices']]]
+  ['mcp23017',['mcp23017',['../namespacedevices_1_1mcp23017.html',1,'devices']]],
+  ['servo',['servo',['../namespacedevices_1_1servo.html',1,'devices']]]
 ];

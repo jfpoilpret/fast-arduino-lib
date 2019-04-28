@@ -1,6 +1,7 @@
 var searchData=
 [
   ['calc',['CALC',['../classtimer_1_1_square_wave.html#adb84f1958c289ebdd7c7f98446762b71',1,'timer::SquareWave']]],
+  ['calculate_5fcounter',['calculate_counter',['../classdevices_1_1servo_1_1_servo.html#aa3daa60b68bac8cb6a0b6a3bdfb00be2',1,'devices::servo::Servo']]],
   ['calculate_5fdelay1_5fcount',['calculate_delay1_count',['../namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271',1,'utils']]],
   ['calculator',['Calculator',['../structtimer_1_1_calculator.html',1,'timer::Calculator&lt; NTIMER_ &gt;'],['../classtimer_1_1_timer.html#af8f2e6de6693fdeb023771acce3ec2a2',1,'timer::Timer::CALCULATOR()']]],
   ['captured_5fvalues',['captured_values',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a2e14774540fd75dfda8a527ea792d996',1,'devices::mcp23017::MCP23017']]],

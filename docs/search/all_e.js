@@ -14,7 +14,7 @@ var searchData=
   ['phase_5fcorrect_5fpwm',['PHASE_CORRECT_PWM',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770',1,'timer']]],
   ['phasecorrectpwm_5ffrequency',['PhaseCorrectPWM_frequency',['../structtimer_1_1_calculator.html#a8eec5399160940b02b5ab12b79962f4c',1,'timer::Calculator']]],
   ['phasecorrectpwm_5fprescaler',['PhaseCorrectPWM_prescaler',['../structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1',1,'timer::Calculator']]],
-  ['pin',['PIN',['../classinterrupt_1_1_i_n_t_signal.html#a680bc3d1051770fe9e84b2a6f83c7e4c',1,'interrupt::INTSignal::PIN()'],['../classanalog_1_1_p_w_m_output.html#a7c5cb3437be029f487da004f1a932f9a',1,'analog::PWMOutput::PIN()']]],
+  ['pin',['PIN',['../classdevices_1_1servo_1_1_servo.html#a4f405699b4fbce545d46687d5a94de9c',1,'devices::servo::Servo::PIN()'],['../classinterrupt_1_1_i_n_t_signal.html#a680bc3d1051770fe9e84b2a6f83c7e4c',1,'interrupt::INTSignal::PIN()'],['../classanalog_1_1_p_w_m_output.html#a7c5cb3437be029f487da004f1a932f9a',1,'analog::PWMOutput::PIN()']]],
   ['pinmode',['PinMode',['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041',1,'gpio']]],
   ['pipe_5fmask',['PIPE_MASK',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30ab9f475993c1dd99db529c27f80f1642d',1,'devices::rf::NRF24L01']]],
   ['plos_5fcnt',['plos_cnt',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#a9c8601854f0b92601fd197a8358a7075',1,'devices::rf::NRF24L01::observe_tx_t']]],

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: fastarduino/pwm.h File Reference</title>
+<title>FastArduino: fastarduino/devices/servo.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -67,7 +67,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('pwm_8h.html','');});
+$(document).ready(function(){initNavTree('servo_8h.html','');});
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -90,65 +90,56 @@ $(document).ready(function(){initNavTree('pwm_8h.html','');});
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
   <div class="headertitle">
-<div class="title">pwm.h File Reference</div>  </div>
+<div class="title">servo.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>PWM API.  
+<p>API to handle servomotors.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;boards/board.h&quot;</code><br />
-<code>#include &quot;boards/board_traits.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="gpio_8h_source.html">gpio.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="timer_8h_source.html">timer.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;<a class="el" href="pulse__timer_8h_source.html">fastarduino/pulse_timer.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="pwm_8h_source.html">fastarduino/pwm.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="utilities_8h_source.html">fastarduino/utilities.h</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for pwm.h:</div>
+Include dependency graph for servo.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="pwm_8h__incl.png" border="0" usemap="#fastarduino_2pwm_8h" alt=""/></div>
-<map name="fastarduino_2pwm_8h" id="fastarduino_2pwm_8h">
-<area shape="rect" id="node2" href="board_8h_source.html" title="boards/board.h" alt="" coords="5,80,124,107"/>
-<area shape="rect" id="node4" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="200,80,263,107"/>
-<area shape="rect" id="node9" href="timer_8h.html" title="Timer API. " alt="" coords="337,80,405,107"/>
-<area shape="rect" id="node5" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="227,155,310,181"/>
-<area shape="rect" id="node6" href="io_8h_source.html" title="boards/io.h" alt="" coords="293,229,388,256"/>
-<area shape="rect" id="node12" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="335,155,432,181"/>
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="pwm_8h__dep__incl.png" border="0" usemap="#fastarduino_2pwm_8hdep" alt=""/></div>
-<map name="fastarduino_2pwm_8hdep" id="fastarduino_2pwm_8hdep">
-<area shape="rect" id="node2" href="servo_8h.html" title="API to handle servomotors. " alt="" coords="5,80,156,121"/>
-<area shape="rect" id="node3" href="square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="181,80,325,121"/>
-<area shape="rect" id="node4" href="tones_8h_source.html" title="fastarduino/devices\l/tones.h" alt="" coords="177,169,328,211"/>
-<area shape="rect" id="node5" href="tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="177,259,328,300"/>
+<div class="center"><img src="servo_8h__incl.png" border="0" usemap="#fastarduino_2devices_2servo_8h" alt=""/></div>
+<map name="fastarduino_2devices_2servo_8h" id="fastarduino_2devices_2servo_8h">
+<area shape="rect" id="node2" href="pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="380,95,568,121"/>
+<area shape="rect" id="node9" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="315,244,398,271"/>
+<area shape="rect" id="node15" href="pwm_8h.html" title="PWM API. " alt="" coords="119,95,263,121"/>
+<area shape="rect" id="node6" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="473,244,571,271"/>
+<area shape="rect" id="node11" href="timer_8h.html" title="Timer API. " alt="" coords="440,169,508,196"/>
+<area shape="rect" id="node12" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="200,169,263,196"/>
+<area shape="rect" id="node13" href="types__traits_8h.html" title="Useful traits for common types. " alt="" coords="635,169,745,196"/>
+<area shape="rect" id="node7" href="io_8h_source.html" title="boards/io.h" alt="" coords="389,319,484,345"/>
+<area shape="rect" id="node16" href="board_8h_source.html" title="boards/board.h" alt="" coords="5,169,124,196"/>
 </map>
 </div>
 </div>
-<p><a href="pwm_8h_source.html">Go to the source code of this file.</a></p>
+<p><a href="servo_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new handler for a PWM output pin.  <a href="classanalog_1_1_p_w_m_output.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo&lt; TIMER_, PIN_ &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This template class supports one servomotor connected to a PWM pin.  <a href="classdevices_1_1servo_1_1_servo.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:namespaceanalog"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanalog.html">analog</a></td></tr>
-<tr class="memdesc:namespaceanalog"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all API to manipulate analog input/output. <br /></td></tr>
+<tr class="memitem:namespacedevices_1_1servo"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1servo.html">devices::servo</a></td></tr>
+<tr class="memdesc:namespacedevices_1_1servo"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the API for servomotor support. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>PWM API. </p>
+<div class="textblock"><p>API to handle servomotors. </p>
 
-<p class="definition">Definition in file <a class="el" href="pwm_8h_source.html">pwm.h</a>.</p>
+<p class="definition">Definition in file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_855eda775a9841b65daa0015d5560bfd.html">fastarduino</a></li><li class="navelem"><a class="el" href="pwm_8h.html">pwm.h</a></li>
+    <li class="navelem"><a class="el" href="dir_855eda775a9841b65daa0015d5560bfd.html">fastarduino</a></li><li class="navelem"><a class="el" href="dir_c8147ad417a9a009ff67e0ffb1a47300.html">devices</a></li><li class="navelem"><a class="el" href="servo_8h.html">servo.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>

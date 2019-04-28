@@ -25,9 +25,7 @@ var namespacedevices =
       [ "DS1307", "classdevices_1_1rtc_1_1_d_s1307.html", "classdevices_1_1rtc_1_1_d_s1307" ],
       [ "tm", "structdevices_1_1rtc_1_1tm.html", "structdevices_1_1rtc_1_1tm" ]
     ] ],
-    [ "servo", null, [
-      [ "Servo", "classdevices_1_1servo_1_1_servo.html", "classdevices_1_1servo_1_1_servo" ]
-    ] ],
+    [ "servo", "namespacedevices_1_1servo.html", "namespacedevices_1_1servo" ],
     [ "sonar", null, [
       [ "AbstractSonar", "classdevices_1_1sonar_1_1_abstract_sonar.html", "classdevices_1_1sonar_1_1_abstract_sonar" ],
       [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html", "classdevices_1_1sonar_1_1_h_c_s_r04" ],
