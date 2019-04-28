@@ -12,6 +12,15 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * API to handle "SIPO" (*serial in parallel out*) chips also known as "shift
+ * registers", like the **74HC595**.
+ * These chips provide an easy and cheap way to increase the number of digital
+ * outputs when the MCU is limited.
+ */
 #ifndef SIPO_HH
 #define SIPO_HH
 
@@ -19,24 +28,53 @@
 
 namespace devices
 {
+	/**
+	 * This template class supports one SIPO chip, connected to the MCU through 
+	 * 3 pins.
+	 * These 3 pins are described below (different chips may have different naming
+	 * for each pin but you should expect the 3 pins in all SIPO chips):
+	 * - CLOCK pin: this is used to clock data input to DATA pin: one cycle per bit.
+	 * - DATA pin: this is used to pass serial in data to the chip, one bit per
+	 * CLOCK cycle.
+	 * - LATCH pin: this pin is used to let the chip know that all data bits have
+	 * been transferred and should now be made available to the actual output pins
+	 * of the chip.
+	 * 
+	 * Some SIPO chips (e.g. the 74HC595) allow daisy-chaining, allowing
+	 * you to use several chips but only 3 pins on the MCU.
+	 * Daisy-chained SIPO are transparently supported by this class.
+	 * 
+	 * @tparam CLOCK_ the output pin that will send the clock signal to the chip
+	 * @tparam LATCH_ the output pin that will tell the chip to copy its shift 
+	 * register content to its output pins
+	 * @tparam DATA_ the output pin that will send serial data to the chip
+	 */
 	template<board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPin DATA_> class SIPO
 	{
 	public:
+		/** The output pin that will send the clock signal to the chip. */
 		static constexpr const board::DigitalPin CLOCK = CLOCK_;
+		/** The output pin that will tell the chip to copy its shift register content to its output pins. */
 		static constexpr const board::DigitalPin LATCH = LATCH_;
+		/** The output pin that will send serial data to the chip. */
 		static constexpr const board::DigitalPin DATA = DATA_;
 
-		static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
-		static constexpr const uint8_t DDR_MASK =
-			gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;
-		static constexpr const uint8_t PORT_MASK = gpio::FastPinType<LATCH>::MASK;
+		/**
+		 * Create a new SIPO handler, according to pins defined by class template
+		 * parameters.
+		 * This does not initialize the 3 output pins, for this you shall use
+		 * `init()`.
+		 * @sa init()
+		 */
+		SIPO() : clock_{}, latch_{}, data_{} {}
 
-		SIPO() : clock_{}, latch_{}, data_{}
-		{
-			static_assert(PORT == gpio::FastPinType<LATCH>::PORT && PORT == gpio::FastPinType<DATA>::PORT,
-						  "CLOCK, LATCH and DATA pins must belong to the same PORT");
-		}
-
+		/**
+		 * Initialize (direction, value) all used pins. This must be executed
+		 * before any other API.
+		 * This is not executed directly from constructor, in order to allow
+		 * more optimized initialization with other pins, at port level, in the
+		 * final program.
+		 */
 		inline void init()
 		{
 			clock_.set_mode(gpio::PinMode::OUTPUT, false);
@@ -44,6 +82,13 @@ namespace devices
 			data_.set_mode(gpio::PinMode::OUTPUT, false);
 		}
 
+		/**
+		 * Handles output and latching of all bits in @p data to the SIPO chip.
+		 * @tparam T the type of @p data; this allows pushing more than 8 bits of 
+		 * data, e.g. if you have connected several chips in daisy-chain.
+		 * @param data the data to serialize to SIPO chip (or chips if daisy 
+		 * chained).
+		 */
 		template<typename T> void output(T data)
 		{
 			uint8_t* pdata = (uint8_t*) data;
@@ -52,6 +97,7 @@ namespace devices
 			latch_.set();
 		}
 
+		/// @cond notdocumented
 		// Specialized output for most common types
 		inline void output(uint8_t data) INLINE
 		{
@@ -67,6 +113,7 @@ namespace devices
 			bit_bang_data(data);
 			latch_.set();
 		}
+		/// @endcond
 
 	private:
 		void bit_bang_data(uint8_t data)
@@ -91,3 +138,4 @@ namespace devices
 }
 
 #endif /* SIPO_HH */
+/// @endcond
