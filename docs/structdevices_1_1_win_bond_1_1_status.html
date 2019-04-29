@@ -95,6 +95,11 @@ $(document).ready(function(){initNavTree('structdevices_1_1_win_bond_1_1_status.
 <div class="title">devices::WinBond&lt; CS &gt;::Status Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This type maps <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register (§6.1) to more readable pieces.  
+ <a href="structdevices_1_1_win_bond_1_1_status.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="winbond_8h_source.html">fastarduino/devices/winbond.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -104,9 +109,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>busy</b> () const</td
 <tr class="memitem:ac4efb14f34364f547eb9aaf372c1febb"><td class="memItemLeft" align="right" valign="top"><a id="ac4efb14f34364f547eb9aaf372c1febb"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>write_enable_latch</b> () const</td></tr>
 <tr class="separator:ac4efb14f34364f547eb9aaf372c1febb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba412c1114802ad9b81e582d92fff304"><td class="memItemLeft" align="right" valign="top"><a id="aba412c1114802ad9b81e582d92fff304"></a>
-BlockProtect&#160;</td><td class="memItemRight" valign="bottom"><b>block_protect</b> () const</td></tr>
-<tr class="separator:aba412c1114802ad9b81e582d92fff304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8576c880bd4c5336df3a59f6aa6e16df"><td class="memItemLeft" align="right" valign="top"><a id="a8576c880bd4c5336df3a59f6aa6e16df"></a>
+<a class="el" href="classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342">BlockProtect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>block_protecwrit</b> () const</td></tr>
+<tr class="separator:a8576c880bd4c5336df3a59f6aa6e16df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd5efef68439d83a6e2ad219c7a11f5c"><td class="memItemLeft" align="right" valign="top"><a id="abd5efef68439d83a6e2ad219c7a11f5c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>complement_protect</b> () const</td></tr>
 <tr class="separator:abd5efef68439d83a6e2ad219c7a11f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -114,7 +119,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>complement_protect</b
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>suspend_status</b> () const</td></tr>
 <tr class="separator:ae7c0ac7316241417e6f995431c3c3d10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cbf972008b9cf8f2af6558bced2aa5f"><td class="memItemLeft" align="right" valign="top"><a id="a2cbf972008b9cf8f2af6558bced2aa5f"></a>
-StatusRegisterProtect&#160;</td><td class="memItemRight" valign="bottom"><b>status_register_protect</b> () const</td></tr>
+<a class="el" href="classdevices_1_1_win_bond.html#a92195e06aea5dce195d5e9f5c21201d8">StatusRegisterProtect</a>&#160;</td><td class="memItemRight" valign="bottom"><b>status_register_protect</b> () const</td></tr>
 <tr class="separator:a2cbf972008b9cf8f2af6558bced2aa5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -133,8 +138,10 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>WinBond&lt; CS &gt;<
 <div class="textblock"><h3>template&lt;board::DigitalPin CS&gt;<br />
 struct devices::WinBond&lt; CS &gt;::Status</h3>
 
+<p>This type maps <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register (§6.1) to more readable pieces. </p>
+<p>Note however that some bits (LB1-3, QE) are not mapped to understanble methods but can be tested directly on <code>value</code> field. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63" title="Get the value of the chip&#39;s Status register (§6.1, §6.2.8). ">status()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00077">77</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00112">112</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="winbond_8h_source.html">winbond.h</a></li>
 </ul>

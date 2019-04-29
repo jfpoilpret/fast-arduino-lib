@@ -1,6 +1,6 @@
 var NAVTREEINDEX4 =
 {
-"namespacestreams.html":[3,0,14],
+"namespacestreams.html":[4,0,12],
 "namespacetime.html":[4,0,13],
 "namespacetime.html":[3,0,15],
 "namespacetimer.html":[3,0,16],
@@ -93,8 +93,8 @@ var NAVTREEINDEX4 =
 "structdevices_1_1_win_bond_1_1_status.html":[4,0,3,8,1],
 "structdevices_1_1_win_bond_1_1_status.html#a2cbf972008b9cf8f2af6558bced2aa5f":[4,0,3,8,1,5],
 "structdevices_1_1_win_bond_1_1_status.html#a68a46a061967eec0bb8ac8a19125001d":[4,0,3,8,1,6],
+"structdevices_1_1_win_bond_1_1_status.html#a8576c880bd4c5336df3a59f6aa6e16df":[4,0,3,8,1,2],
 "structdevices_1_1_win_bond_1_1_status.html#a8dbe040639a4a13923bf2c36c03c4f43":[4,0,3,8,1,0],
-"structdevices_1_1_win_bond_1_1_status.html#aba412c1114802ad9b81e582d92fff304":[4,0,3,8,1,2],
 "structdevices_1_1_win_bond_1_1_status.html#abd5efef68439d83a6e2ad219c7a11f5c":[4,0,3,8,1,3],
 "structdevices_1_1_win_bond_1_1_status.html#ac4efb14f34364f547eb9aaf372c1febb":[4,0,3,8,1,1],
 "structdevices_1_1_win_bond_1_1_status.html#ae06d6a423e3d3b09e7fb6b884db75d82":[4,0,3,8,1,7],

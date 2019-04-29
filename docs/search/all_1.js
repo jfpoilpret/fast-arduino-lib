@@ -10,6 +10,7 @@ var searchData=
   ['bin',['bin',['../classstreams_1_1ios__base.html#a84ef195a4086e70ce1104198b0611cf6',1,'streams::ios_base::bin()'],['../namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1',1,'streams::bin()']]],
   ['binary_5fto_5fbcd',['binary_to_bcd',['../namespaceutils.html#a76076365828136f5178f279fb3c129de',1,'utils']]],
   ['bit',['BIT',['../classgpio_1_1_fast_pin.html#ae969e28f3a5b17b87749abe88a8cbedd',1,'gpio::FastPin::BIT()'],['../classgpio_1_1_fast_pin_type.html#a97461624e5f46544284655f9eb401567',1,'gpio::FastPinType::BIT()']]],
+  ['blockprotect',['BlockProtect',['../classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342',1,'devices::WinBond']]],
   ['board',['board',['../namespaceboard.html',1,'']]],
   ['boolalpha',['boolalpha',['../classstreams_1_1ios__base.html#acdd922cbde0c96cd39ee8c87cc484550',1,'streams::ios_base::boolalpha()'],['../namespacestreams.html#a7f0401ee59ec02e764b1ab85f32659b6',1,'streams::boolalpha()']]],
   ['broadcast',['BROADCAST',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a8c2acf00e8c02cfe3644550c7e675270',1,'devices::rf::NRF24L01::BROADCAST()'],['../classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4',1,'devices::rf::NRF24L01::broadcast(uint8_t port, const void *buf, size_t len)']]],

@@ -15,5 +15,9 @@ var dir_c8147ad417a9a009ff67e0ffb1a47300 =
     [ "sonar.h", "sonar_8h_source.html", null ],
     [ "tone_player.h", "tone__player_8h_source.html", null ],
     [ "tones.h", "tones_8h_source.html", null ],
-    [ "winbond.h", "winbond_8h_source.html", null ]
+    [ "winbond.h", "winbond_8h.html", [
+      [ "WinBond", "classdevices_1_1_win_bond.html", "classdevices_1_1_win_bond" ],
+      [ "Status", "structdevices_1_1_win_bond_1_1_status.html", "structdevices_1_1_win_bond_1_1_status" ],
+      [ "Device", "structdevices_1_1_win_bond_1_1_device.html", "structdevices_1_1_win_bond_1_1_device" ]
+    ] ]
 ];

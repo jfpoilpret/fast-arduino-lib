@@ -1,0 +1,8 @@
+<map id="fastarduino/devices/winbond.h" name="fastarduino/devices/winbond.h">
+<area shape="rect" id="node2" href="$spi_8h.html" title="SPI support for AVR MCU. " alt="" coords="190,95,255,121"/>
+<area shape="rect" id="node10" href="$time_8h.html" title="Simple time utilities. " alt="" coords="278,169,354,196"/>
+<area shape="rect" id="node3" href="$board_8h_source.html" title="boards/board.h" alt="" coords="49,169,167,196"/>
+<area shape="rect" id="node4" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="191,169,254,196"/>
+<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="189,244,272,271"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title="boards/io.h" alt="" coords="262,319,357,345"/>
+</map>

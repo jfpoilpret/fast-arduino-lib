@@ -95,6 +95,11 @@ $(document).ready(function(){initNavTree('classdevices_1_1_win_bond.html','');})
 <div class="title">devices::WinBond&lt; CS &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>SPI device driver for <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> flash memory chips, like W25Q80BV (8 Mbit flash).  
+ <a href="classdevices_1_1_win_bond.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="winbond_8h_source.html">fastarduino/devices/winbond.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for devices::WinBond&lt; CS &gt;:</div>
 <div class="dyncontent">
@@ -117,13 +122,15 @@ Collaboration diagram for devices::WinBond&lt; CS &gt;:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1_win_bond_1_1_device.html">Device</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structdevices_1_1_win_bond_1_1_device.html" title="Device information (§6.2.31) ">Device</a> information (§6.2.31)  <a href="structdevices_1_1_win_bond_1_1_device.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1_win_bond_1_1_status.html">Status</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This type maps <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register (§6.1) to more readable pieces.  <a href="structdevices_1_1_win_bond_1_1_status.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad46d5ac3e447b751e0c17e07e143b342"><td class="memItemLeft" align="right" valign="top"><a id="ad46d5ac3e447b751e0c17e07e143b342"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>BlockProtect</b> : uint16_t { <br />
+<tr class="memitem:ad46d5ac3e447b751e0c17e07e143b342"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342">BlockProtect</a> : uint16_t { <br />
 &#160;&#160;<b>BLOCK_NONE</b> = 0x00, 
 <br />
 &#160;&#160;<b>BLOCK_UPPER_64KB</b> = 0x01 &lt;&lt; 2, 
@@ -161,8 +168,9 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>BLOCK_LOWER_32KB</b> = 0x1C &lt;&lt; 2
 <br />
  }</td></tr>
+<tr class="memdesc:ad46d5ac3e447b751e0c17e07e143b342"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum provides information about block protection (bits BP0-2, TB and SEC of <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register, §6.1.3, §6.1.4 &amp; §6.1.5) in a more readable way.  <a href="classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342">More...</a><br /></td></tr>
 <tr class="separator:ad46d5ac3e447b751e0c17e07e143b342"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92195e06aea5dce195d5e9f5c21201d8"><td class="memItemLeft" align="right" valign="top"><a id="a92195e06aea5dce195d5e9f5c21201d8"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>StatusRegisterProtect</b> : uint16_t { <br />
+<tr class="memitem:a92195e06aea5dce195d5e9f5c21201d8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a92195e06aea5dce195d5e9f5c21201d8">StatusRegisterProtect</a> : uint16_t { <br />
 &#160;&#160;<b>SOFTWARE_PROTECTION</b> = 0x0000, 
 <br />
 &#160;&#160;<b>HARDWARE_PROTECTION</b> = 0x0080, 
@@ -170,57 +178,67 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>POWER_SUPPLY_LOCKDOWN</b> = 0x0100
 <br />
  }</td></tr>
+<tr class="memdesc:a92195e06aea5dce195d5e9f5c21201d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum provides information about the method of write protection of the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register itself (bits SRP0-1 of <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register, §6.1.7).  <a href="classdevices_1_1_win_bond.html#a92195e06aea5dce195d5e9f5c21201d8">More...</a><br /></td></tr>
 <tr class="separator:a92195e06aea5dce195d5e9f5c21201d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a35b591123d1c9fef7c70f1be1ebb2098"><td class="memItemLeft" align="right" valign="top"><a id="a35b591123d1c9fef7c70f1be1ebb2098"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a35b591123d1c9fef7c70f1be1ebb2098">WinBond</a> ()</td></tr>
+<tr class="memdesc:a35b591123d1c9fef7c70f1be1ebb2098"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new device driver for a <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> chip. <br /></td></tr>
+<tr class="separator:a35b591123d1c9fef7c70f1be1ebb2098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c6302795b108cf7a54e0a927b748e63"><td class="memItemLeft" align="right" valign="top"><a id="a2c6302795b108cf7a54e0a927b748e63"></a>
-<a class="el" href="structdevices_1_1_win_bond_1_1_status.html">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><b>status</b> ()</td></tr>
+<a class="el" href="structdevices_1_1_win_bond_1_1_status.html">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63">status</a> ()</td></tr>
+<tr class="memdesc:a2c6302795b108cf7a54e0a927b748e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of the chip's <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register (§6.1, §6.2.8). <br /></td></tr>
 <tr class="separator:a2c6302795b108cf7a54e0a927b748e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b36056bc755fa0b2d189b386d553521"><td class="memItemLeft" align="right" valign="top"><a id="a0b36056bc755fa0b2d189b386d553521"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_status</b> (uint16_t status)</td></tr>
+<tr class="memitem:a0b36056bc755fa0b2d189b386d553521"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a0b36056bc755fa0b2d189b386d553521">set_status</a> (uint16_t <a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63">status</a>)</td></tr>
+<tr class="memdesc:a0b36056bc755fa0b2d189b386d553521"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register (only writable bits, §6.2.9).  <a href="#a0b36056bc755fa0b2d189b386d553521">More...</a><br /></td></tr>
 <tr class="separator:a0b36056bc755fa0b2d189b386d553521"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6f442d91ad487e97c68db6f1e97cc33"><td class="memItemLeft" align="right" valign="top"><a id="ad6f442d91ad487e97c68db6f1e97cc33"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>wait_until_ready</b> (uint16_t timeout_ms)</td></tr>
+<tr class="memitem:ad6f442d91ad487e97c68db6f1e97cc33"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#ad6f442d91ad487e97c68db6f1e97cc33">wait_until_ready</a> (uint16_t timeout_ms)</td></tr>
+<tr class="memdesc:ad6f442d91ad487e97c68db6f1e97cc33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until any erase or write operation is finished.  <a href="#ad6f442d91ad487e97c68db6f1e97cc33">More...</a><br /></td></tr>
 <tr class="separator:ad6f442d91ad487e97c68db6f1e97cc33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b5cc4c9f6f51c4879e55f29dde36f57"><td class="memItemLeft" align="right" valign="top"><a id="a2b5cc4c9f6f51c4879e55f29dde36f57"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>power_down</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a2b5cc4c9f6f51c4879e55f29dde36f57">power_down</a> ()</td></tr>
+<tr class="memdesc:a2b5cc4c9f6f51c4879e55f29dde36f57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the chip to low power mode (§6.2.29). <br /></td></tr>
 <tr class="separator:a2b5cc4c9f6f51c4879e55f29dde36f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71b818fbbc7daa76ba22c74cb98f9581"><td class="memItemLeft" align="right" valign="top"><a id="a71b818fbbc7daa76ba22c74cb98f9581"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>power_up</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a71b818fbbc7daa76ba22c74cb98f9581">power_up</a> ()</td></tr>
+<tr class="memdesc:a71b818fbbc7daa76ba22c74cb98f9581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Release power-down mode (§6.2.30). <br /></td></tr>
 <tr class="separator:a71b818fbbc7daa76ba22c74cb98f9581"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1922cb41515666c7efe145f0e9bd529"><td class="memItemLeft" align="right" valign="top"><a id="ad1922cb41515666c7efe145f0e9bd529"></a>
-<a class="el" href="structdevices_1_1_win_bond_1_1_device.html">Device</a>&#160;</td><td class="memItemRight" valign="bottom"><b>read_device</b> ()</td></tr>
+<a class="el" href="structdevices_1_1_win_bond_1_1_device.html">Device</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#ad1922cb41515666c7efe145f0e9bd529">read_device</a> ()</td></tr>
+<tr class="memdesc:ad1922cb41515666c7efe145f0e9bd529"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get device informaton §6.2.31). <br /></td></tr>
 <tr class="separator:ad1922cb41515666c7efe145f0e9bd529"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4178f8fc99464006764e922da8daa6bf"><td class="memItemLeft" align="right" valign="top"><a id="a4178f8fc99464006764e922da8daa6bf"></a>
-uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>read_unique_ID</b> ()</td></tr>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a4178f8fc99464006764e922da8daa6bf">read_unique_ID</a> ()</td></tr>
+<tr class="memdesc:a4178f8fc99464006764e922da8daa6bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get chip unique ID (§6.2.34). <br /></td></tr>
 <tr class="separator:a4178f8fc99464006764e922da8daa6bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9dbcb9f582388501554018e638d1401"><td class="memItemLeft" align="right" valign="top"><a id="aa9dbcb9f582388501554018e638d1401"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>enable_write</b> ()</td></tr>
+<tr class="memitem:aa9dbcb9f582388501554018e638d1401"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401">enable_write</a> ()</td></tr>
+<tr class="memdesc:aa9dbcb9f582388501554018e638d1401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable write mode for the chip (§6.2.5).  <a href="#aa9dbcb9f582388501554018e638d1401">More...</a><br /></td></tr>
 <tr class="separator:aa9dbcb9f582388501554018e638d1401"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11a1577660d2089d1e938d0c78557e86"><td class="memItemLeft" align="right" valign="top"><a id="a11a1577660d2089d1e938d0c78557e86"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>disable_write</b> ()</td></tr>
+<tr class="memitem:a11a1577660d2089d1e938d0c78557e86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a11a1577660d2089d1e938d0c78557e86">disable_write</a> ()</td></tr>
+<tr class="memdesc:a11a1577660d2089d1e938d0c78557e86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable chip write mode (§6.2.7).  <a href="#a11a1577660d2089d1e938d0c78557e86">More...</a><br /></td></tr>
 <tr class="separator:a11a1577660d2089d1e938d0c78557e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14d31d93750ad0ec11a7ea99c8614fd0"><td class="memItemLeft" align="right" valign="top"><a id="a14d31d93750ad0ec11a7ea99c8614fd0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>erase_sector</b> (uint32_t address)</td></tr>
+<tr class="memitem:a14d31d93750ad0ec11a7ea99c8614fd0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a14d31d93750ad0ec11a7ea99c8614fd0">erase_sector</a> (uint32_t address)</td></tr>
+<tr class="memdesc:a14d31d93750ad0ec11a7ea99c8614fd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase the sector (4KB) at <code>address</code> (§6.2.23).  <a href="#a14d31d93750ad0ec11a7ea99c8614fd0">More...</a><br /></td></tr>
 <tr class="separator:a14d31d93750ad0ec11a7ea99c8614fd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9efbece1443d9e747e8558bb6944cabb"><td class="memItemLeft" align="right" valign="top"><a id="a9efbece1443d9e747e8558bb6944cabb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>erase_block_32K</b> (uint32_t address)</td></tr>
+<tr class="memitem:a9efbece1443d9e747e8558bb6944cabb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a9efbece1443d9e747e8558bb6944cabb">erase_block_32K</a> (uint32_t address)</td></tr>
+<tr class="memdesc:a9efbece1443d9e747e8558bb6944cabb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase the block (32KB) at <code>address</code> (§6.2.24).  <a href="#a9efbece1443d9e747e8558bb6944cabb">More...</a><br /></td></tr>
 <tr class="separator:a9efbece1443d9e747e8558bb6944cabb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5b635fd93dc2ad9b1b0b9149e21b44b"><td class="memItemLeft" align="right" valign="top"><a id="aa5b635fd93dc2ad9b1b0b9149e21b44b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>erase_block_64K</b> (uint32_t address)</td></tr>
+<tr class="memitem:aa5b635fd93dc2ad9b1b0b9149e21b44b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#aa5b635fd93dc2ad9b1b0b9149e21b44b">erase_block_64K</a> (uint32_t address)</td></tr>
+<tr class="memdesc:aa5b635fd93dc2ad9b1b0b9149e21b44b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase the sector (64KB) at <code>address</code> (§6.2.25).  <a href="#aa5b635fd93dc2ad9b1b0b9149e21b44b">More...</a><br /></td></tr>
 <tr class="separator:aa5b635fd93dc2ad9b1b0b9149e21b44b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75a52c0e5d9a7aba4444ed08fd1f4075"><td class="memItemLeft" align="right" valign="top"><a id="a75a52c0e5d9a7aba4444ed08fd1f4075"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>erase_chip</b> ()</td></tr>
+<tr class="memitem:a75a52c0e5d9a7aba4444ed08fd1f4075"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a75a52c0e5d9a7aba4444ed08fd1f4075">erase_chip</a> ()</td></tr>
+<tr class="memdesc:a75a52c0e5d9a7aba4444ed08fd1f4075"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase the whole chip memory (§6.2.26).  <a href="#a75a52c0e5d9a7aba4444ed08fd1f4075">More...</a><br /></td></tr>
 <tr class="separator:a75a52c0e5d9a7aba4444ed08fd1f4075"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72e9ed2b76b1afed52806b4fcc73d351"><td class="memItemLeft" align="right" valign="top"><a id="a72e9ed2b76b1afed52806b4fcc73d351"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write_page</b> (uint32_t address, uint8_t *data, uint8_t size)</td></tr>
+<tr class="memitem:a72e9ed2b76b1afed52806b4fcc73d351"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a72e9ed2b76b1afed52806b4fcc73d351">write_page</a> (uint32_t address, uint8_t *data, uint8_t size)</td></tr>
+<tr class="memdesc:a72e9ed2b76b1afed52806b4fcc73d351"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write data (max 256 bytes) to a page (§6.2.21).  <a href="#a72e9ed2b76b1afed52806b4fcc73d351">More...</a><br /></td></tr>
 <tr class="separator:a72e9ed2b76b1afed52806b4fcc73d351"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3712532fd0c0b275f2a4e6695eb894b"><td class="memItemLeft" align="right" valign="top"><a id="af3712532fd0c0b275f2a4e6695eb894b"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>read_data</b> (uint32_t address)</td></tr>
+<tr class="memitem:af3712532fd0c0b275f2a4e6695eb894b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#af3712532fd0c0b275f2a4e6695eb894b">read_data</a> (uint32_t address)</td></tr>
+<tr class="memdesc:af3712532fd0c0b275f2a4e6695eb894b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read one byte of flash memory (§6.2.10).  <a href="#af3712532fd0c0b275f2a4e6695eb894b">More...</a><br /></td></tr>
 <tr class="separator:af3712532fd0c0b275f2a4e6695eb894b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab02286009d5f419e408c925d140cc622"><td class="memItemLeft" align="right" valign="top"><a id="ab02286009d5f419e408c925d140cc622"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>read_data</b> (uint32_t address, uint8_t *data, uint16_t size)</td></tr>
+<tr class="memitem:ab02286009d5f419e408c925d140cc622"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#ab02286009d5f419e408c925d140cc622">read_data</a> (uint32_t address, uint8_t *data, uint16_t size)</td></tr>
+<tr class="memdesc:ab02286009d5f419e408c925d140cc622"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read several bytes of flash memory (§6.2.10).  <a href="#ab02286009d5f419e408c925d140cc622">More...</a><br /></td></tr>
 <tr class="separator:ab02286009d5f419e408c925d140cc622"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
@@ -251,9 +269,504 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><h3>template&lt;board::DigitalPin CS&gt;<br />
 class devices::WinBond&lt; CS &gt;</h3>
 
+<p>SPI device driver for <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> flash memory chips, like W25Q80BV (8 Mbit flash). </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">CS</td><td>the output pin used for Chip Selection of the <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> chip on the SPI bus. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00041">41</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00053">53</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="ad46d5ac3e447b751e0c17e07e143b342"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad46d5ac3e447b751e0c17e07e143b342">&#9670;&nbsp;</a></span>BlockProtect</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342">devices::WinBond::BlockProtect</a> : uint16_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This enum provides information about block protection (bits BP0-2, TB and SEC of <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register, §6.1.3, §6.1.4 &amp; §6.1.5) in a more readable way. </p>
+<dl class="section see"><dt>See also</dt><dd>Status::block_protect() </dd>
+<dd>
+<a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63" title="Get the value of the chip&#39;s Status register (§6.1, §6.2.8). ">status()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00068">68</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="a92195e06aea5dce195d5e9f5c21201d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92195e06aea5dce195d5e9f5c21201d8">&#9670;&nbsp;</a></span>StatusRegisterProtect</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classdevices_1_1_win_bond.html#a92195e06aea5dce195d5e9f5c21201d8">devices::WinBond::StatusRegisterProtect</a> : uint16_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This enum provides information about the method of write protection of the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register itself (bits SRP0-1 of <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register, §6.1.7). </p>
+<dl class="section see"><dt>See also</dt><dd>Status::status_register_protect() </dd>
+<dd>
+<a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63" title="Get the value of the chip&#39;s Status register (§6.1, §6.2.8). ">status()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00099">99</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0b36056bc755fa0b2d189b386d553521"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b36056bc755fa0b2d189b386d553521">&#9670;&nbsp;</a></span>set_status()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::set_status </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>status</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Change the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register (only writable bits, §6.2.9). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">status</td><td>the new value for the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00310">310</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="ad6f442d91ad487e97c68db6f1e97cc33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6f442d91ad487e97c68db6f1e97cc33">&#9670;&nbsp;</a></span>wait_until_ready()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::wait_until_ready </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>timeout_ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wait until any erase or write operation is finished. </p>
+<p>This method continuously reads the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register and check the BUSY bit (§6.1.1). If the chip is busy, then the method yields time, i.e. put the MCU to sleep according to the default <code><a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d" title="Defines all available sleep modes for target MCU. ">board::SleepMode</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeout_ms</td><td>the maximum time, in milliseconds, to wait for the chip to be ready </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the chip is ready </td></tr>
+    <tr><td class="paramname">false</td><td>if the chip is still busy after <code>timeout_ms</code> delay</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a> </dd>
+<dd>
+<a class="el" href="classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d" title="Set the default sleep mode, that will be used by next calls to Power::sleep() and time::yield()...">power::Power::set_default_mode()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00318">318</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="aa9dbcb9f582388501554018e638d1401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9dbcb9f582388501554018e638d1401">&#9670;&nbsp;</a></span>enable_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::enable_write </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enable write mode for the chip (§6.2.5). </p>
+<p>This must becalled before every erase or write instruction. </p>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00217">217</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="a11a1577660d2089d1e938d0c78557e86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11a1577660d2089d1e938d0c78557e86">&#9670;&nbsp;</a></span>disable_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::disable_write </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Disable chip write mode (§6.2.7). </p>
+<p>This method is seldom used, as any erase or write instruction will automatically disable write mode. </p>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00226">226</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="a14d31d93750ad0ec11a7ea99c8614fd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14d31d93750ad0ec11a7ea99c8614fd0">&#9670;&nbsp;</a></span>erase_sector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::erase_sector </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>address</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Erase the sector (4KB) at <code>address</code> (§6.2.23). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>address (24 bits) of the sector to erase </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00236">236</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="a9efbece1443d9e747e8558bb6944cabb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9efbece1443d9e747e8558bb6944cabb">&#9670;&nbsp;</a></span>erase_block_32K()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::erase_block_32K </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>address</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Erase the block (32KB) at <code>address</code> (§6.2.24). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>address (24 bits) of the sector to erase </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00246">246</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="aa5b635fd93dc2ad9b1b0b9149e21b44b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5b635fd93dc2ad9b1b0b9149e21b44b">&#9670;&nbsp;</a></span>erase_block_64K()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::erase_block_64K </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>address</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Erase the sector (64KB) at <code>address</code> (§6.2.25). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>address (24 bits) of the sector to erase </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00256">256</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="a75a52c0e5d9a7aba4444ed08fd1f4075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75a52c0e5d9a7aba4444ed08fd1f4075">&#9670;&nbsp;</a></span>erase_chip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::erase_chip </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Erase the whole chip memory (§6.2.26). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>address (24 bits) of the sector to erase </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00266">266</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="a72e9ed2b76b1afed52806b4fcc73d351"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72e9ed2b76b1afed52806b4fcc73d351">&#9670;&nbsp;</a></span>write_page()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::write_page </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Write data (max 256 bytes) to a page (§6.2.21). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>address (24 bits) of the first flash byte to write </td></tr>
+    <tr><td class="paramname">data</td><td>the data to be written to the flash page at <code>address</code>; <code>data</code> may be overwritten by this operation. </td></tr>
+    <tr><td class="paramname">size</td><td>the number of bytes to write; if <code>0</code>, then 256 bytes (one full page) will be written. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00279">279</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="af3712532fd0c0b275f2a4e6695eb894b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3712532fd0c0b275f2a4e6695eb894b">&#9670;&nbsp;</a></span>read_data() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::read_data </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>address</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read one byte of flash memory (§6.2.10). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>address (24 bits) of the flash byte to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the value read from flash memory </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00364">364</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<a id="ab02286009d5f419e408c925d140cc622"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab02286009d5f419e408c925d140cc622">&#9670;&nbsp;</a></span>read_data() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CS&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1_win_bond.html">devices::WinBond</a>&lt; CS &gt;::read_data </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read several bytes of flash memory (§6.2.10). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>address (24 bits) of the first flash byte to read </td></tr>
+    <tr><td class="paramname">data</td><td>the buffer that shall receive the value of all read bytes; this must have been allocated at leat <code>size</code> bytes </td></tr>
+    <tr><td class="paramname">size</td><td>the number of bytes to read from flash memory </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00371">371</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="winbond_8h_source.html">winbond.h</a></li>
 </ul>
 </div><!-- contents -->

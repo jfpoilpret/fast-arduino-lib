@@ -30,6 +30,7 @@ var searchData=
   ['disable_5fpin_5f',['disable_pin_',['../classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df',1,'interrupt::PCISignal']]],
   ['disable_5fpins',['disable_pins',['../classinterrupt_1_1_p_c_i_signal.html#ab8bde46b21b64a778abf23a4a553db44',1,'interrupt::PCISignal']]],
   ['disable_5fpins_5f',['disable_pins_',['../classinterrupt_1_1_p_c_i_signal.html#a5b6ca8e3436f39eea424a4fa0dd57a36',1,'interrupt::PCISignal']]],
+  ['disable_5fwrite',['disable_write',['../classdevices_1_1_win_bond.html#a11a1577660d2089d1e938d0c78557e86',1,'devices::WinBond']]],
   ['disconnected',['DISCONNECTED',['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a99c8ce56e7ab246445d3b134724428f3',1,'timer']]],
   ['dispatch',['dispatch',['../classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7',1,'events::Dispatcher']]],
   ['dispatcher',['Dispatcher',['../classevents_1_1_dispatcher.html',1,'events']]],
