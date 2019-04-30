@@ -12,6 +12,12 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * API to handle ultrasonic distance rangers (aka "sonar") such as the HC-SR04.
+ */
 #ifndef SONAR_H
 #define SONAR_H
 
@@ -24,56 +30,74 @@
 #include <fastarduino/int.h>
 #include <fastarduino/pci.h>
 
-//TODO document!
-// Utilities to handle ISR callbacks
+/**
+ * Register the necessary ISR (interrupt Service Routine) for a 
+ * `devices::sonar::HCSR04` to listen to echo pulses when the echo pin is a
+ * `board::ExternalInterruptPin`.
+ * @param TIMER the `board::Timer` type used to instantiate the `devices::sonar::HCSR04`
+ * template class.
+ * @param INT_NUM TODO
+ * @param TRIGGER TODO
+ * @param ECHO TODO
+ * 
+ * @sa devices::sonar::HCSR04
+ */
 #define REGISTER_HCSR04_INT_ISR(TIMER, INT_NUM, TRIGGER, ECHO)                   \
 	ISR(CAT3(INT, INT_NUM, _vect))                                               \
 	{                                                                            \
 		devices::sonar::isr_handler::sonar_int<INT_NUM, TIMER, TRIGGER, ECHO>(); \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)                             \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                            \
 	{                                                                                           \
 		devices::sonar::isr_handler::sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>(); \
 	}
 
+//TODO document!
 #define REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)                             \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                     \
 	{                                                                                                    \
 		devices::sonar::isr_handler::sonar_distinct_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>(); \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)                   \
 	ISR(CAT3(INT, INT_NUM, _vect))                                                                         \
 	{                                                                                                      \
 		devices::sonar::isr_handler::sonar_int_method<INT_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>(); \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_INT_ISR_FUNCTION(TIMER, INT_NUM, TRIGGER, ECHO, CALLBACK)                   \
 	ISR(CAT3(INT, INT_NUM, _vect))                                                                  \
 	{                                                                                               \
 		devices::sonar::isr_handler::sonar_int_function<INT_NUM, TIMER, TRIGGER, ECHO, CALLBACK>(); \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)                   \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                       \
 	{                                                                                                      \
 		devices::sonar::isr_handler::sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>(); \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)                   \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                \
 	{                                                                                               \
 		devices::sonar::isr_handler::sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO, CALLBACK>(); \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_RTT_TIMEOUT(TIMER, SONAR, ...)                                    \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                              \
 	{                                                                                     \
 		devices::sonar::isr_handler::sonar_rtt_change<TIMER_NUM, SONAR, ##__VA_ARGS__>(); \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, HANDLER, CALLBACK, SONAR, ...)          \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                  \
 	{                                                                                         \
@@ -81,6 +105,7 @@
 			interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();                \
 	}
 
+//TODO document!
 #define REGISTER_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, CALLBACK, SONAR, ...)                 \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                  \
 	{                                                                                         \
@@ -88,6 +113,7 @@
 			interrupt::CallbackHandler<void (*)(), CALLBACK>::call();                         \
 	}
 
+//TODO document!
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK)      \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                                \
 	{                                                                                                               \
@@ -95,6 +121,7 @@
 															CALLBACK>();                                            \
 	}
 
+//TODO document!
 #define REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK)      \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                         \
 	{                                                                                                        \
@@ -102,6 +129,7 @@
 															  CALLBACK>();                                   \
 	}
 
+//TODO document!
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT(TIMER, SONAR)                                 \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                            \
 	{                                                                                   \
@@ -109,6 +137,7 @@
 		devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR, EVENT>(); \
 	}
 
+//TODO document!
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, HANDLER, CALLBACK)                            \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                                     \
 	{                                                                                                            \
@@ -117,6 +146,7 @@
 		if (event.timeout()) interrupt::CallbackHandler<void (HANDLER::*)(const EVENT&), CALLBACK>::call(event); \
 	}
 
+//TODO document!
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, SONAR, CALLBACK)                          \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \
 	{                                                                                                   \
@@ -125,17 +155,50 @@
 		if (event.timeout()) interrupt::CallbackHandler<void (*)(const EVENT&), CALLBACK>::call(event); \
 	}
 
+//TODO document!
 #define DECL_SONAR_ISR_HANDLERS_FRIEND         \
 	friend struct devices::sonar::isr_handler; \
 	DECL_INT_ISR_FRIENDS                       \
 	DECL_PCINT_ISR_FRIENDS                     \
 	DECL_TIMER_COMP_FRIENDS
 
+/**
+ * Defines the API for sonar support.
+ * Supported ultrasonic sensors have 2 pins:
+ * - one "trigger" pin that, upon a short pulse, will generate ultrasonic waves
+ * to be emitted by the sensor
+ * - one "echo" pin that, upon reception of the echoed ultrasonic wave, will
+ * generate a pulse which duration is the time during which the ultrasonic wave
+ * has travelled from the sensor back to the sensor, after reflecting on some
+ * obstacle.
+ * This API has been tested on HC-SR04 sensors (cheap ultrasonic sensors with
+ * a range of 4 meters).
+ */
 namespace devices::sonar
 {
+	/**
+	 * The approximate speed of sound (and ultrasonic) waves, in the air,
+	 * expressed in meters per second.
+	 * This constant is useful everytime we need to convert echo durations from
+	 * the ultrasonic sensor to a concrete distance.
+	 */
 	static constexpr const uint32_t SPEED_OF_SOUND = 340UL;
 
-	// Conversion methods
+	/**
+	 * This method converts the echo duration, in microseconds, to the distance
+	 * between the sensor and the reflecting obstacle, in millimeters.
+	 * This method is `constexpr` hence it can be evaluated at compile-time (for
+	 * more code size and speed efficiency) when provided a constant argument.
+	 * 
+	 * Note that the calculation accounts for the fact that @p echo_us is the time
+	 * for a complete roundtrip of the ultrasonic wave, i.e. the time needed for
+	 * the wave to cover twice the distance between the sensor and the reflecting
+	 * obstacle.
+	 * 
+	 * @param echo_us the echo pulse duration, in microseconds
+	 * @return the distance, in millimeters, between the sensor and the
+	 * obstacle
+	 */
 	static constexpr uint16_t echo_us_to_distance_mm(uint16_t echo_us)
 	{
 		// 340 m/s => 340000mm in 1000000us => 340/1000 mm/us
@@ -143,6 +206,23 @@ namespace devices::sonar
 		return uint16_t(echo_us * SPEED_OF_SOUND / 1000UL / 2UL);
 	}
 
+	/**
+	 * This method converts the disatnce, in millimeters, between the sensor and
+	 * a reflecting object, into the expected echo duration, in microseconds.
+	 * This method is `constexpr` hence it can be evaluated at compile-time (for
+	 * more code size and speed efficiency) when provided a constant argument.
+	 * It can thus be used to calculate constant echo durations based on "threshold"
+	 * distances that your program may need to specifically address.
+	 * 
+	 * Note that the calculation accounts for the fact that the echo duration is
+	 * the time for a complete roundtrip of the ultrasonic wave, i.e. the time
+	 * needed for the wave to cover twice the distance between the sensor and
+	 * the reflecting obstacle.
+	 * 
+	 * @param distance_mm the distance, in millimeters, between the sensor and the
+	 * obstacle
+	 * @return the echo pulse duration, in microseconds, expected for @p distance_mm
+	 */
 	static constexpr uint16_t distance_mm_to_echo_us(uint16_t distance_mm)
 	{
 		// 340 m/s => 340000mm in 1000000us => 340/1000 mm/us
@@ -150,23 +230,70 @@ namespace devices::sonar
 		return uint16_t(distance_mm * 1000UL * 2UL / SPEED_OF_SOUND);
 	}
 
+	/**
+	 * This enum defines the different approaches, supported by `HCSR04`, to
+	 * calculate the echo pin pulse duration.
+	 * @sa HCSR04
+	 * @sa HCSR04::echo_us()
+	 */
 	enum class SonarType : uint8_t
 	{
+		/** In this mode, the `HCSR04` will block until the echo pulse is received. */
 		BLOCKING,
+		/**
+		 * In this mode, the echo pin is a `board::ExternalInterruptPin` and the
+		 * HCSR04 will use interrupts to calculate the echo pulse duration.
+		 * When this mode is used, one registration macro must be called among
+		 * `REGISTER_HCSR04_INT_ISR*`.
+		 */
 		ASYNC_INT,
+		/**
+		 * In this mode, the echo pin is a `board::InterruptPin` and the
+		 * HCSR04 will use interrupts to calculate the echo pulse duration.
+		 * When this mode is used, one registration macro must be called among
+		 * `REGISTER_HCSR04_PCI_ISR*`.
+		 */
 		ASYNC_PCINT
 	};
 
+	/**
+	 * Am abstract base class for some sonar classes defined as part of this API.
+	 * You should not need to subclass `AbstractSonar` yourself in general.
+	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` to use for this sonar
+	 * @sa board::Timer
+	 * @sa timer::RTT
+	 * @sa HCSR04
+	 */
 	template<board::Timer NTIMER_> class AbstractSonar
 	{
 	public:
+		/** The type of `timer::RTT` used by this sonar instance. */
 		using RTT = timer::RTT<NTIMER_>;
 
+		/**
+		 * Indicate if an echo pulse measure is ready to read.
+		 * This can be useful when using asynchronous modes, and checking from 
+		 * time to time if, after a trigger pulse, an echo pulse has already been 
+		 * received or not yet.
+		 * @retval true an echo pulse duration is available
+		 * @retval false an echo pulse duration is not yet available
+		 * @sa latest_echo_us()
+		 */
 		inline bool ready() const
 		{
 			return status_ == READY;
 		}
 
+		/**
+		 * Get the latest measured echo pulse duration.
+		 * If a trigger pulse was sent but no echo received yet, then the method
+		 * immediataly returns `0`.
+		 * It also returns `0`, as a convention, if a timeout occurred, i.e. no 
+		 * echo pulse was received in expected time.
+		 * @return the latest measured echo pulse duration in microseconds
+		 * @sa HCSR04::echo_us()
+		 * @sa HCSR04::await_echo_us()
+		 */
 		inline uint16_t latest_echo_us() const
 		{
 			synchronized
@@ -181,6 +308,7 @@ namespace devices::sonar
 	private:
 		using RAW_TIME = typename RTT::RAW_TIME;
 
+	/// @cond notdocumented
 	protected:
 		AbstractSonar(const RTT& rtt)
 			: rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{},
@@ -263,6 +391,7 @@ namespace devices::sonar
 			}
 			return false;
 		}
+	/// @endcond
 
 	private:
 		uint16_t echo_time_() const
@@ -284,11 +413,13 @@ namespace devices::sonar
 		RAW_TIME echo_end_;
 	};
 
+	//TODO document!
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_,
 			 SonarType SONAR_TYPE_ = SonarType::BLOCKING>
 	class HCSR04 : public AbstractSonar<NTIMER_>
 	{
 	public:
+		//TODO document!
 		using RTT = timer::RTT<NTIMER_>;
 		static constexpr const board::DigitalPin TRIGGER = TRIGGER_;
 		static constexpr const board::DigitalPin ECHO = ECHO_;
@@ -304,11 +435,14 @@ namespace devices::sonar
 					  "SONAR_TYPE == ASYNC_PCINT but ECHO is not an PCI pin");
 
 	public:
+		//TODO document!
 		static constexpr const uint16_t MAX_RANGE_M = 4;
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
+		//TODO document!
 		HCSR04(const RTT& rtt) : PARENT{rtt}, trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT} {}
 
+		//TODO document!
 		inline void register_handler()
 		{
 			static_assert(SONAR_TYPE != SonarType::BLOCKING,
@@ -319,12 +453,14 @@ namespace devices::sonar
 		// Blocking API
 		// Do note that timeout here is for the whole method not just for the sound echo, hence it
 		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
+		//TODO document!
 		uint16_t echo_us(uint16_t timeout_ms)
 		{
 			async_echo(timeout_ms);
 			return await_echo_us(timeout_ms);
 		}
 
+		//TODO document!
 		uint16_t await_echo_us(uint16_t timeout_ms)
 		{
 			if (SONAR_TYPE != SonarType::BLOCKING)
@@ -334,6 +470,7 @@ namespace devices::sonar
 		}
 
 		// We want to avoid using await_echo_us() to handle state & timeout!
+		//TODO document!
 		void async_echo(uint16_t timeout_ms, bool trigger = true)
 		{
 			this->trigger_sent(timeout_ms);
@@ -370,6 +507,7 @@ namespace devices::sonar
 		friend struct isr_handler;
 	};
 
+	//TODO document!
 	template<board::Timer NTIMER_> struct SonarEvent
 	{
 	public:
@@ -404,6 +542,7 @@ namespace devices::sonar
 		RAW_TIME time_;
 	};
 
+	//TODO document!
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_>
 	class MultiHCSR04
 	{
@@ -650,3 +789,4 @@ namespace devices::sonar
 }
 
 #endif /* SONAR_H */
+/// @endcond
