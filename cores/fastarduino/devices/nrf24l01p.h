@@ -20,6 +20,15 @@
  * it has been adapted and refactored to FastArduino library.
  */
 
+/// @cond api
+
+/**
+ * @file
+ * API to handle "nRF24L01+" chip that allows bi-directional wireless communication
+ * in the 2.4GHz band.
+ * These chips provide a cheap way to implement wireless communication between 2
+ * MCU or between 1 MCU and another board (e.g. a Raspberry Pi).
+ */
 #ifndef NRF24L01_HH
 #define NRF24L01_HH
 
@@ -30,12 +39,18 @@
 #include "../spi.h"
 #include "../int.h"
 #include "nrf24l01p_internals.h"
-// #include <util/delay.h>
 
+/**
+ * Defines the API for radio-frequency (wireless) communication support.
+ * Current support is for Nordic Semiconductor nRF24L01+ chip (SPI-based).
+ * API is provided in 2 flavours, IRQ-based or not, through two template classes.
+ * IRQ-based flavour is encouraged but is sometimes impossible as it requires an
+ * available `board::ExternalInterruptPin` on the MCU.
+ */
 namespace devices::rf
 {
 	/**
-	 * SPI device driver for Nordic Semiconductor nRF24L01+ support.
+	 * SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support.
 	 * nRF24L01+ is a cheap 2.4GHz RX/TX chip.
 	 *
 	 * It must be powered at 3.3V maximum but all its input pins are 5V tolerant, hence no
@@ -50,13 +65,15 @@ namespace devices::rf
 	 * (SCK)---------------5-|SCK         |
 	 * (MOSI)--------------6-|MOSI        |
 	 * (MISO)--------------7-|MISO        |
-	 * (PCIn/EXTn)---------8-|IRQ         |
+	 *                   --8-|IRQ         |
 	 *                       +------------+
 	 * Notes:
-	 * - IRQ can be linked to any EXT or PCI pin. However, on some AVR chips, some pins will not awaken
-	 * the MCU from some "deep" sleep modes. Hence one has to think about this when selecting the pin.
 	 * - CSN is the usual CS pin used by SPI to select the device and can be set to any AVR pin
-	 * IMPORTANT: PCI pin is not yet supported actually.
+	 * 
+	 * @tparam CSN the `board::DigitalPin` connected to the CSN pin
+	 * @tparam CE the `board::DigitalPin` connected to the CE pin
+	 * 
+	 * @sa IRQ_NRF24L01
 	 */
 	template<board::DigitalPin CSN, board::DigitalPin CE> class NRF24L01 : private spi::SPIDevice<CSN>
 	{
@@ -74,14 +91,6 @@ namespace devices::rf
 		 * The source address one byte and port one byte as header.
 		 */
 		static const size_t PAYLOAD_MAX = DEVICE_PAYLOAD_MAX - 2;
-
-		/**
-		 * Default timeout (in ms) to ensure send() is never stuck forever waiting 
-		 * for active IRQ (this can happen for an undetermined reason).
-		 * 10ms is high enough, considering 15 retransmits * 500us = 7.5ms
-		 */
-		//TODO Remove if useless, reintroduce if system gets stuck
-		static const uint32_t DEFAULT_SEND_TIMEOUT = 10;
 
 		/**
 		 * Construct NRF transceiver with given channel and pin numbers
@@ -144,15 +153,13 @@ namespace devices::rf
 		}
 
 		/**
-		 * Start up the device driver. Return true(1) if successful
-		 * otherwise false(0).
-		 * @param[in] config device configuration (default NULL).
+		 * Start up the device driver. This must be called before any transmission
+		 * or reception can take place.
 		 */
 		void begin();
 
 		/**
-		 * Shut down the device driver. Return true(1) if successful
-		 * otherwise false(0).
+		 * Shut down the device driver.
 		 */
 		inline void end()
 		{
@@ -176,34 +183,43 @@ namespace devices::rf
 		void powerdown();
 
 		/**
-		 * Send message in given buffer, with given number of bytes. Returns
-		 * number of bytes sent. Returns error code(-1) if number of bytes
-		 * is greater than PAYLOAD_MAX. Return error code(-2) if fails to
-		 * set transmit mode. Note that port numbers (128 and higher are
-		 * reserved for system protocols).
+		 * Send message in given buffer, with given number of bytes.
+		 * 
 		 * @param[in] dest destination network address.
 		 * @param[in] port device port (or message type).
 		 * @param[in] buf buffer to transmit.
 		 * @param[in] len number of bytes in buffer.
 		 * @return number of bytes send or negative error code.
+		 * @retval errors::EINVAL if @p buf is null or @p len is 0
+		 * @retval errors::EMSGSIZE if @p len > `PAYLOAD_MAX`
+		 * @retval errors::EIO if a transmission failure happened
+		 * 
+		 * @sa errors::EINVAL
+		 * @sa errors::EMSGSIZE
+		 * @sa errors::EIO
 		 */
 		int send(uint8_t dest, uint8_t port, const void* buf, size_t len);
 
 		/**
 		 * Receive message and store into given buffer with given maximum
 		 * size. The source network address is returned in the parameter src.
-		 * Returns error code(-2) if no message is available and/or a
-		 * timeout occured. Returns error code(-1) if the buffer size if to
-		 * small for incoming message or if the receiver fifo has overflowed.
-		 * Otherwise the actual number of received bytes is returned
+		 * 
 		 * @param[out] src source network address.
 		 * @param[out] port device port (or message type).
 		 * @param[in] buf buffer to store incoming message.
-		 * @param[in] count maximum number of bytes to receive.
+		 * @param[in] size maximum number of bytes to receive.
 		 * @param[in] ms maximum time out period.
 		 * @return number of bytes received or negative error code.
+		 * @retval errors::ETIME if nothing was received and a timeout occurred
+		 * after @p ms elapsed
+		 * @retval errors::EMSGSIZE if a payload error occurred from the chip
+		 * (Tab. 20, pp. 51, R_RX_PL_WID) or the received payload size is bigger
+		 * than the requested @p size 
+		 * 
+		 * @sa errors::ETIME
+		 * @sa errors::EMSGSIZE
 		 */
-		int recv(uint8_t& src, uint8_t& port, void* buf, size_t count, uint32_t ms = 0L);
+		int recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t ms = 0L);
 
 		/**
 		 * Set output power level (-30..10 dBm)
@@ -253,8 +269,8 @@ namespace devices::rf
 		}
 
 		/**
-		 * Return true(1) if the latest received message was a broadcast
-		 * otherwise false(0).
+		 * Return true if the latest received message was a broadcast
+		 * otherwise false.
 		 */
 		inline bool is_broadcast() const
 		{
@@ -425,6 +441,7 @@ namespace devices::rf
 			}
 		};
 
+		/// @cond notdocumented
 		// Lowest-level methods to access NRF24L01 device
 		inline uint8_t read(uint8_t cmd)
 		{
@@ -523,6 +540,7 @@ namespace devices::rf
 		{
 			return read_register(Register::OBSERVE_TX);
 		}
+		/// @endcond
 
 	private:
 		static const uint8_t DEFAULT_CHANNEL = 64;
@@ -541,6 +559,37 @@ namespace devices::rf
 		uint16_t drops_;   //!< Dropped messages.
 	};
 
+	/**
+	 * SPI device driver for Nordic Semiconductor nRF24L01+ support, with IRQ.
+	 * nRF24L01+ is a cheap 2.4GHz RX/TX chip.
+	 *
+	 * It must be powered at 3.3V maximum but all its input pins are 5V tolerant, hence no
+	 * level shifting is needed to operate it.
+	 *
+	 *                          NRF24L01P
+	 *                       +------------+
+	 * (GND)---------------1-|GND         |
+	 * (3V3)---------------2-|VCC         |
+	 * (Dn)----------------3-|CE          |
+	 * (Dn)----------------4-|CSN         |
+	 * (SCK)---------------5-|SCK         |
+	 * (MOSI)--------------6-|MOSI        |
+	 * (MISO)--------------7-|MISO        |
+	 * (PCIn/EXTn)---------8-|IRQ         |
+	 *                       +------------+
+	 * Notes:
+	 * - IRQ can normally be linked to any EXT or PCI pin. However, on some AVR chips, 
+	 * some pins will not awaken the MCU from some "deep" sleep modes. Hence one has 
+	 * to think about this when selecting the pin.
+	 * - CSN is the usual CS pin used by SPI to select the device and can be set to any AVR pin
+	 * IMPORTANT: PCI pin is not yet supported actually.
+	 * 
+	 * @tparam CSN the `board::DigitalPin` connected to the CSN pin
+	 * @tparam CE the `board::DigitalPin` connected to the CE pin
+	 * @tparam IRQ the `board::ExternalInterruptPin` connected to the IRQ pin
+	 * 
+	 * @sa NRF24L01
+	 */
 	template<board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ>
 	class IRQ_NRF24L01 : public NRF24L01<CSN, CE>
 	{
@@ -551,8 +600,6 @@ namespace devices::rf
 		 * in parenthesis (Standard/Mega Arduino/TinyX4).
 		 * @param[in] net network address.
 		 * @param[in] dev device address.
-		 * @param[in] csn spi slave select pin number (default CS0).
-		 * @param[in] ce chip enable activates pin number (default GPIO P1-22).
 		 */
 		IRQ_NRF24L01(uint16_t net, uint8_t dev)
 			: NRF24L01<CSN, CE>{net, dev}, irq_signal_{interrupt::InterruptTrigger::FALLING_EDGE}
@@ -560,12 +607,19 @@ namespace devices::rf
 			gpio::FastPinType<IRQ>::set_mode(gpio::PinMode::INPUT_PULLUP);
 		}
 
+		/**
+		 * Start up the device driver. This must be called before any transmission
+		 * or reception can take place.
+		 */
 		inline void begin()
 		{
 			NRF24L01<CSN, CE>::begin();
 			irq_signal_.enable();
 		}
 
+		/**
+		 * Shut down the device driver.
+		 */
 		inline void end()
 		{
 			irq_signal_.disable();
@@ -797,3 +851,4 @@ namespace devices::rf
 }
 
 #endif /* NRF24L01_HH */
+/// @endcond

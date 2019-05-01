@@ -20,6 +20,7 @@
  * it has been adapted and refactored to FastArduino library.
  */
 
+/// @cond notdocumented
 #ifndef NRF24L01_INTERNALS_HH
 #define NRF24L01_INTERNALS_HH
 
@@ -161,3 +162,4 @@ namespace devices::rf::nrf24l01p_internals
 	const uint8_t PIPE_MAX = 6; //!< Max number of pipes.
 }
 #endif /* NRF24L01_INTERNALS_HH */
+/// @endcond
