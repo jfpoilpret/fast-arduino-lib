@@ -58,7 +58,7 @@
 
 /**
  * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
- * to work properly, along with a callback method taht will be called everytime
+ * to work properly, along with a callback method that will be called everytime
  * all pending queued write operations are complete.
  * 
  * @param CALLBACK the function that will be called when the interrupt is
@@ -75,7 +75,7 @@
 /**
  * This macro shall be used in a class containing a private callback method,
  * registered by `REGISTER_EEPROM_ISR_METHOD`.
- * It declares the class wher it is used as a friend of all necessary functions
+ * It declares the class where it is used as a friend of all necessary functions
  * so that the private callback method can be called properly.
  */
 #define DECL_EEPROM_ISR_HANDLERS_FRIEND \
