@@ -30,7 +30,7 @@
 // Generic macros to register ISR on Timer
 //=========================================
 /**
- * Register the necessary ISR (interrupt Service Routine) for a timer::Timer
+ * Register the necessary ISR (Interrupt Service Routine) for a timer::Timer
  * with a callback method in CTC mode.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  * @param HANDLER the class holding the callback method
@@ -45,7 +45,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for a timer::Timer
+ * Register the necessary ISR (Interrupt Service Routine) for a timer::Timer
  * with a callback function in CTC mode.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  * @param CALLBACK the function that will be called when the interrupt is
@@ -59,7 +59,7 @@
 	}
 
 /**
- * Register an empty ISR (interrupt Service Routine) for a timer::Timer.
+ * Register an empty ISR (Interrupt Service Routine) for a timer::Timer.
  * This may be needed when using timer CTC mode but when you don't need any
  * callback.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
@@ -73,7 +73,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
+ * Register the necessary ISR (Interrupt Service Routine) for the Counter Overflow
  * of a timer::Timer.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  * @param HANDLER the class holding the callback method
@@ -88,7 +88,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for the Counter Overflow
+ * Register the necessary ISR (Interrupt Service Routine) for the Counter Overflow
  * of a timer::Timer.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  * @param CALLBACK the function that will be called when the interrupt is
@@ -116,7 +116,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for the Input Capture
+ * Register the necessary ISR (Interrupt Service Routine) for the Input Capture
  * of a timer::Timer.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  * @param HANDLER the class holding the callback method
@@ -130,7 +130,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for the Input Capture
+ * Register the necessary ISR (Interrupt Service Routine) for the Input Capture
  * of a timer::Timer.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  * @param CALLBACK the function that will be called when the interrupt is

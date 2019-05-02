@@ -31,7 +31,7 @@
 #include "int.h"
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for an serial::soft::UARX
+ * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX
  * to work correctly. This applies to an `UARX` (or `UART`) which @p RX pin is
  * a PCINT pin.
  * @param RX the `board::DigitalPin` used as RX for the UARX (or UART)
@@ -44,7 +44,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for an serial::soft::UARX
+ * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX
  * to work correctly. This applies to an `UARX` (or `UART`) which @p RX pin is
  * a External INT pin.
  * @param RX the `board::DigitalPin` used as RX for the UARX (or UART)

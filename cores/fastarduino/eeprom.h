@@ -29,7 +29,7 @@
 #include "queue.h"
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
+ * Register the necessary ISR (Interrupt Service Routine) for eeprom::QueuedWriter 
  * to work properly.
  * @sa eeprom::QueuedWriter
  */
@@ -40,7 +40,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
+ * Register the necessary ISR (Interrupt Service Routine) for eeprom::QueuedWriter 
  * to work properly, along with a callback method taht will be called everytime
  * all pending queued write operations are complete.
  * 
@@ -57,7 +57,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for eeprom::QueuedWriter 
+ * Register the necessary ISR (Interrupt Service Routine) for eeprom::QueuedWriter 
  * to work properly, along with a callback method that will be called everytime
  * all pending queued write operations are complete.
  * 

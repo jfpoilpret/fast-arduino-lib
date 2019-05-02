@@ -30,7 +30,7 @@
 #if defined(UCSR0A) || defined(UCSR1A)
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX
+ * Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
@@ -41,7 +41,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX
+ * Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UARX
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */
@@ -52,7 +52,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for an serial::hard::UART
+ * Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UART
  * to work correctly.
  * @param UART_NUM the number of the USART feature for the target MCU
  */

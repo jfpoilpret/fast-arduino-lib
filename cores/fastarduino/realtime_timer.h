@@ -29,7 +29,7 @@
 #include "events.h"
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
+ * Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work
  * properly.
  * This will not register any user callback though; if you need to register a
  * method or function to be called back every time one millsiecond has elapsed,
@@ -48,7 +48,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
+ * Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work
  * properly, along with a callback method that will be notified every millisecond.
  * 
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
@@ -68,7 +68,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
+ * Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work
  * properly, along with a callback function that will be notified every millisecond.
  * 
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
@@ -86,7 +86,7 @@
 	}
 
 /**
- * Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work
+ * Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work
  * properly, along with a callback to timer::RTTEventCallback.
  * 
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
