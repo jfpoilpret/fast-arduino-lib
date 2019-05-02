@@ -114,8 +114,8 @@
  * function).
  * 
  * @sa devices::sonar::HCSR04
- * @sa REGISTER_HCSR04_PCI_ISR()
- * @sa REGISTER_HCSR04_PCI_ISR_FUNCTION()
+ * @sa REGISTER_HCSR04_INT_ISR()
+ * @sa REGISTER_HCSR04_INT_ISR_FUNCTION()
  */
 #define REGISTER_HCSR04_INT_ISR_METHOD(TIMER, INT_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)                   \
 	ISR(CAT3(INT, INT_NUM, _vect))                                                                         \
@@ -135,10 +135,10 @@
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
  * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
  * @param CALLBACK the function that will be called when the sonar has received
- * the echo pulse; this must be a proper PTMF (pointer to member function).
+ * the echo pulse
  * 
  * @sa devices::sonar::HCSR04
- * @sa REGISTER_HCSR04_PCI_ISR()
+ * @sa REGISTER_HCSR04_INT_ISR()
  * @sa REGISTER_HCSR04_INT_ISR_METHOD()
  */
 #define REGISTER_HCSR04_INT_ISR_FUNCTION(TIMER, INT_NUM, TRIGGER, ECHO, CALLBACK)                   \
@@ -147,21 +147,77 @@
 		devices::sonar::isr_handler::sonar_int_function<INT_NUM, TIMER, TRIGGER, ECHO, CALLBACK>(); \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a 
+ * `devices::sonar::HCSR04` to listen to echo pulses when the echo pin is a
+ * `board::InterruptPin`, and call back a handler's method if the sonar
+ * has finished receiving the echo pulse.
+ * 
+ * @param TIMER the `board::Timer` type used to instantiate the `devices::sonar::HCSR04`
+ * template class.
+ * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
+ * connected to the echo pin
+ * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
+ * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when the sonar
+ * has received the echo pulse; this must be a proper PTMF (pointer to member 
+ * function).
+ * 
+ * @sa devices::sonar::HCSR04
+ * @sa REGISTER_DISTINCT_HCSR04_PCI_ISR()
+ * @sa REGISTER_HCSR04_PCI_ISR()
+ * @sa REGISTER_HCSR04_PCI_ISR_FUNCTION()
+ */
 #define REGISTER_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO, HANDLER, CALLBACK)                   \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                       \
 	{                                                                                                      \
 		devices::sonar::isr_handler::sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO, HANDLER, CALLBACK>(); \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a 
+ * `devices::sonar::HCSR04` to listen to echo pulses when the echo pin is a
+ * `board::InterruptPin`,  along with a callback function that will be 
+ * notified when the sonar has finished receiving the echo pulse.
+ * 
+ * @param TIMER the `board::Timer` type used to instantiate the `devices::sonar::HCSR04`
+ * template class.
+ * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
+ * connected to the echo pin
+ * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
+ * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the function that will be called when the sonar has received
+ * the echo pulse
+ * 
+ * @sa devices::sonar::HCSR04
+ * @sa REGISTER_HCSR04_PCI_ISR()
+ * @sa REGISTER_HCSR04_PCI_ISR_METHOD()
+ */
 #define REGISTER_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO, CALLBACK)                   \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                \
 	{                                                                                               \
 		devices::sonar::isr_handler::sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO, CALLBACK>(); \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a set of
+ * `devices::sonar::HCSR04` to be notified when a timeout occurs; this ISR is 
+ * also in charge of the associated `timer::RTT` time update.
+ * 
+ * @param TIMER the `board::Timer` type used to instantiate the related
+ * `devices::sonar::HCSR04` template classes.
+ * @param SONAR the actual type of the first sonar to notify (instantiated
+ * template of `devices::sonar::HCSR04`)
+ * @param ... the actual types of other sonars to notify
+ * 
+ * @sa devices::sonar::HCSR04
+ * @sa HCSR04::echo_us()
+ * @sa HCSR04::await_echo_us()
+ * @sa HCSR04::async_echo()
+ * @sa REGISTER_RTT_ISR()
+ */
 #define REGISTER_HCSR04_RTT_TIMEOUT(TIMER, SONAR, ...)                                    \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                              \
 	{                                                                                     \
@@ -545,13 +601,35 @@ namespace devices::sonar
 		 * pulse from the sensor.
 		 */
 		static constexpr const uint16_t MAX_RANGE_M = 4;
-		//TODO document!
+
+		/**
+		 * The default timeout duration, in milliseconds, to use if you want to
+		 * cover the maximum range of the sensor.
+		 * Using any greater timeout value would be pointless.
+		 * @sa MAX_RANGE_M
+		 * @sa echo_us()
+		 * @sa await_echo_us()
+		 * @sa async_echo()
+		 */
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
-		//TODO document!
+		/**
+		 * Construct a new a sonar sensor handler.
+		 * @param rtt a reference to an existing `timer::RTT` for echo pulse 
+		 * duration counting; this RTT shall be started before using any other
+		 * methods of this sonar.
+		 */
 		HCSR04(const RTT& rtt) : PARENT{rtt}, trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT} {}
 
-		//TODO document!
+		/**
+		 * Register this HCSR04 with the matching ISR that should have been
+		 * registered with REGISTER_HCSR04_INT_ISR(), REGISTER_HCSR04_PCI_ISR(),
+		 * REGISTER_DISTINCT_HCSR04_PCI_ISR(), REGISTER_HCSR04_RTT_TIMEOUT(), or
+		 * any derived macros (with function or method callback).
+		 * This method must be called if `SONAR_TYPE` is not `SonarType::BLOCKING`.
+		 * This method shall not be called if `SONAR_TYPE` is `SonarType::BLOCKING`,
+		 * otherwise compilation will fail.
+		 */
 		inline void register_handler()
 		{
 			static_assert(SONAR_TYPE != SonarType::BLOCKING,
@@ -559,31 +637,73 @@ namespace devices::sonar
 			interrupt::register_handler(*this);
 		}
 
-		// Blocking API
-		// Do note that timeout here is for the whole method not just for the sound echo, hence it
-		// must be bigger than just the time to echo the maximum roundtrip distance (typically x2)
-		//TODO document!
+		/**
+		 * Send a trigger pulse on this sonar and wait until an echo pulse is
+		 * received, or @p timeout_ms has elapsed.
+		 * This method is blocking, whatever the value of `SONAR_TYPE` for this 
+		 * sonar. If you want to start a sonar ranging asynchronously, then you
+		 * should use `async_echo` instead.
+		 * 
+		 * @param timeout_ms the timeout, in milliseconds, after which the method
+		 * will return if no echo pulse has been received
+		 * @return the echo pulse duration in microseconds
+		 * @retval 0 if no echo pulse was received before @p timeout_ms elapsed
+		 * 
+		 * @sa async_echo()
+		 */
 		uint16_t echo_us(uint16_t timeout_ms)
 		{
 			async_echo(timeout_ms);
 			return await_echo_us(timeout_ms);
 		}
 
-		//TODO document!
+		/**
+		 * Send a trigger pulse on this sonar and return immediately, without 
+		 * waiting for the echo pulse.
+		 * There are several ways then to get the echo pulse duration:
+		 * - call `await_echo_us()` and then wait for the echo pulse to be received
+		 * - call `ready()` to check if echo pulse has been received already and
+		 * then call `latest_echo_us()` to get the echo pulse duration
+		 * - use callbacks to be notified when the echo pulse is received, then
+		 * `latest_echo_us()` can be called to obtain the pulse duration
+		 * 
+		 * @param timeout_ms the timeout, in milliseconds, after which the ranging
+		 * will stop if no echo pulse has been received
+		 * @param trigger indicate if the method should generate a trigger pulse
+		 * on the `TRIGGER` pin; by default it is `true`, but you may want to
+		 * use `false` if you have several HCSR04 sensors, which you want to
+		 * trigger all at the same time (i.e. all their trigger pins are connected
+		 * to the same MCU pin).
+		 * 
+		 * @sa await_echo_us()
+		 * @sa ready()
+		 * @sa latest_echo_us()
+		 */
+		void async_echo(uint16_t timeout_ms, bool trigger = true)
+		{
+			this->trigger_sent(timeout_ms);
+			if (trigger) this->trigger();
+		}
+
+		/**
+		 * Wait until an echo pulse is received, or @p timeout_ms has elapsed.
+		 * You must call `async_echo()` before calling this method.
+		 * This method is blocking, whatever the value of `SONAR_TYPE` for this 
+		 * sonar.
+		 * 
+		 * @param timeout_ms the timeout, in milliseconds, after which the method
+		 * will return if no echo pulse has been received
+		 * @return the echo pulse duration in microseconds
+		 * @retval 0 if no echo pulse was received before @p timeout_ms elapsed
+		 * 
+		 * @sa async_echo()
+		 */
 		uint16_t await_echo_us(uint16_t timeout_ms)
 		{
 			if (SONAR_TYPE != SonarType::BLOCKING)
 				return this->async_echo_us(timeout_ms);
 			else
 				return this->template blocking_echo_us<ECHO>(echo_, timeout_ms);
-		}
-
-		// We want to avoid using await_echo_us() to handle state & timeout!
-		//TODO document!
-		void async_echo(uint16_t timeout_ms, bool trigger = true)
-		{
-			this->trigger_sent(timeout_ms);
-			if (trigger) this->trigger();
 		}
 
 	private:
