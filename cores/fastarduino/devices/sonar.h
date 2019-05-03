@@ -244,16 +244,16 @@
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK) \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                           \
 	{                                                                                                          \
-		using devices::sonar::isr_handler::multi_sonar_pci_method;                                             \
-		multi_sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK>();            \
+		using isr = devices::sonar::isr_handler;                                                               \
+		isr::multi_sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK>();       \
 	}
 
 //TODO document!
 #define REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK) \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                    \
 	{                                                                                                   \
-		using devices::sonar::isr_handler::multi_sonar_pci_method;                                      \
-		multi_sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK>();            \
+		using isr = devices::sonar::isr_handler;                                                        \
+		isr::multi_sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK>();       \
 	}
 
 //TODO document!
@@ -447,8 +447,8 @@ namespace devices::sonar
 	private:
 		using RAW_TIME = typename RTT::RAW_TIME;
 
-	/// @cond notdocumented
 	protected:
+		/// @cond notdocumented
 		AbstractSonar(const RTT& rtt)
 			: rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{},
 			  echo_start_{RAW_TIME::EMPTY_TIME}, echo_end_{RAW_TIME::EMPTY_TIME}
@@ -530,7 +530,7 @@ namespace devices::sonar
 			}
 			return false;
 		}
-	/// @endcond
+		/// @endcond
 
 	private:
 		uint16_t echo_time_() const
@@ -736,39 +736,112 @@ namespace devices::sonar
 		friend struct isr_handler;
 	};
 
-	//TODO document!
+	/**
+	 * This type holds information about events occurring within `MultiHCSR04`
+	 * handler.
+	 * One event can contain information for up to 8 sonars.
+	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` used by the `MultiHCSR04`
+	 * producing this `SonarEvent`
+	 * 
+	 * TODO more details about why we need this SonarEvent.
+	 * 
+	 * @sa MultiHCSR04
+	 * @sa MultiHCSR04::EVENT
+	 */
 	template<board::Timer NTIMER_> struct SonarEvent
 	{
 	public:
+		/** 
+		 * The type of `timer::RTT` used by the `MultiHCSR04` producing this `SonarEvent`. 
+		 * @sa MultiHCSR04::RTT
+		 */
 		using RTT = timer::RTT<NTIMER_>;
+
+		/**
+		 * The `timer::RTTRawTime` type used by the `MultiHCSR04` producing this
+		 * `SonarEvent`.
+		 * @sa timer::RTTRawTime
+		 */
 		using RAW_TIME = typename RTT::RAW_TIME;
 
-		SonarEvent(bool timeout = false) : timeout_{timeout}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME} {}
-		SonarEvent(uint8_t started, uint8_t ready, const RAW_TIME& time) : started_{started}, ready_{ready}, time_{time}
-		{}
+		/**
+		 * Default constructor. This is here to allow direct declaration in your
+		 * code:
+		 * @code
+		 * SonarEvent<NTIMER> event;
+		 * ...
+		 * @endcode
+		 */
+		SonarEvent() : timeout_{false}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME} {}
 
+		/**
+		 * Indicate if this event was produced by a timeout while waiting for 
+		 * echo pulses. If so, no other field in this `SonarEvent` is relevant.
+		 * Hence this is the first method you should call on a `SonarEvent` you
+		 * need to handle.
+		 */
 		bool timeout() const
 		{
 			return timeout_;
 		}
+
+		/**
+		 * Indicate if this event was produced due to an echo pulse starting edge
+		 * just received by the related `MultiHCSR04`.
+		 * Each bit maps to one sonar handled by the producing `MultHCSR04`;
+		 * when `1`, the echo pulse just started on the matching sonar.
+		 * `time()` will then provide the exact time at which the pulse egde 
+		 * occurred.
+		 * 
+		 * @sa time()
+		 */
 		uint8_t started() const
 		{
 			return started_;
 		}
+
+		/**
+		 * Indicate if this event was produced tdue to an echo pulse ending edge
+		 * just received by the related `MultiHCSR04`.
+		 * Each bit maps to one sonar handled by the producing `MultHCSR04`;
+		 * when `1`, the echo pulse just ended on the matching sonar.
+		 * `time()` will then provide the exact time at which the pulse egde 
+		 * occurred.
+		 * For a given bit (sonar), the difference of `time()` between `started()`
+		 * and `ready()` will determine the echo pulse duration.
+		 * 
+		 * @sa started()
+		 * @sa time()
+		 */
 		uint8_t ready() const
 		{
 			return ready_;
 		}
+
+		/**
+		 * The `timer::RTTRawTime` at which this event occurred.
+		 * This is not relevant when `timeout()` is `true`.
+		 * 
+		 * @sa started()
+		 * @sa ready()
+		 */
 		RAW_TIME time() const
 		{
 			return time_;
 		}
 
 	private:
+		SonarEvent(bool timeout) : timeout_{timeout}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME} {}
+		SonarEvent(uint8_t started, uint8_t ready, const RAW_TIME& time)
+			: timeout_{}, started_{started}, ready_{ready}, time_{time}
+		{}
+
 		bool timeout_;
 		uint8_t started_;
 		uint8_t ready_;
 		RAW_TIME time_;
+
+		template<board::Timer, board::DigitalPin, board::Port, uint8_t> friend class MultiHCSR04;
 	};
 
 	//TODO document!
@@ -776,6 +849,7 @@ namespace devices::sonar
 	class MultiHCSR04
 	{
 	public:
+		//TODO document!
 		static constexpr const board::DigitalPin TRIGGER = TRIGGER_;
 		static constexpr const board::Port ECHO_PORT = ECHO_PORT_;
 		static constexpr const uint8_t ECHO_MASK = ECHO_MASK_;
@@ -786,12 +860,15 @@ namespace devices::sonar
 		static_assert((PTRAIT::DPIN_MASK & ECHO_MASK) == ECHO_MASK, "ECHO_MASK_ must contain available PORT pins");
 
 	public:
+		//TODO document!
 		using RTT = timer::RTT<NTIMER_>;
 		using EVENT = SonarEvent<NTIMER_>;
 
+		//TODO document!
 		static constexpr const uint16_t MAX_RANGE_M = 4;
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
+		//TODO document!
 		MultiHCSR04(RTT& rtt)
 			: rtt_{rtt}, started_{}, ready_{}, active_{false},
 			  timeout_time_ms_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{0}
@@ -799,16 +876,19 @@ namespace devices::sonar
 			interrupt::register_handler(*this);
 		}
 
+		//TODO document!
 		uint8_t ready() const
 		{
 			return ready_;
 		}
 
+		//TODO document!
 		bool all_ready() const
 		{
 			return ready_ == ECHO_MASK;
 		}
 
+		//TODO document!
 		void set_ready()
 		{
 			if (active_)
@@ -818,6 +898,7 @@ namespace devices::sonar
 			}
 		}
 
+		//TODO document!
 		void trigger(uint16_t timeout_ms)
 		{
 			started_ = 0;
