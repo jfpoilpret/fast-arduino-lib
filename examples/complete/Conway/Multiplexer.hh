@@ -79,9 +79,10 @@ public:
 	static constexpr const uint8_t ROWS = ROWS_;
 	static constexpr const uint8_t COLUMNS = COLUMNS_;
 	
-	static constexpr const board::Port PORT = SIPO_TYPE::PORT;
-	static constexpr const uint8_t DDR_MASK = SIPO_TYPE::DDR_MASK;
-	static constexpr const uint8_t PORT_MASK = SIPO_TYPE::PORT_MASK;
+	static constexpr const board::Port PORT = gpio::FastPinType<CLOCK>::PORT;
+	static constexpr const uint8_t DDR_MASK = 
+		gpio::FastPinType<CLOCK>::MASK | gpio::FastPinType<LATCH>::MASK | gpio::FastPinType<DATA>::MASK;
+	static constexpr const uint8_t PORT_MASK = gpio::FastPinType<LATCH>::MASK;
 
 	MatrixMultiplexer():_data(), _blinks(), _row(), _blink_count() {}
 	
