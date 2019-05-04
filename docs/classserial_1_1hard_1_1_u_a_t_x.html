@@ -127,7 +127,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aac216368224107002b59b0400626306e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial transmitter and provide it with a buffer for interrupt-based transmission.  <a href="#aac216368224107002b59b0400626306e">More...</a><br /></td></tr>
 <tr class="separator:aac216368224107002b59b0400626306e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4608d77079869a3fb2aecb1757b1d2cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a4608d77079869a3fb2aecb1757b1d2cc">register_handler</a> ()</td></tr>
-<tr class="memdesc:a4608d77079869a3fb2aecb1757b1d2cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this transmitter with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a>.  <a href="#a4608d77079869a3fb2aecb1757b1d2cc">More...</a><br /></td></tr>
+<tr class="memdesc:a4608d77079869a3fb2aecb1757b1d2cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this transmitter with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a>.  <a href="#a4608d77079869a3fb2aecb1757b1d2cc">More...</a><br /></td></tr>
 <tr class="separator:a4608d77079869a3fb2aecb1757b1d2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64b04d0617b28fd343a01f865dee787e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
 <tr class="memdesc:a64b04d0617b28fd343a01f865dee787e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the transmitter.  <a href="#a64b04d0617b28fd343a01f865dee787e">More...</a><br /></td></tr>
@@ -160,14 +160,14 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 class serial::hard::UATX&lt; USART_ &gt;</h3>
 
 <p>Hardware serial transmitter API. </p>
-<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a></code>, then call <code><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a4608d77079869a3fb2aecb1757b1d2cc" title="Register this transmitter with the matching ISR that should have been registered with REGISTER_UATX_I...">register_handler()</a></code> immediately after the <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. ">UATX</a> instance has been constructed.</p>
+<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a></code>, then call <code><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html#a4608d77079869a3fb2aecb1757b1d2cc" title="Register this transmitter with the matching ISR that should have been registered with REGISTER_UATX_I...">register_handler()</a></code> immediately after the <a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. ">UATX</a> instance has been constructed.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">USART_</td><td>the hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> to use </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00123">123</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -237,8 +237,8 @@ template&lt;board::USART USART_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Register this transmitter with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a>. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a> </dd></dl>
+<p>Register this transmitter with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly...">REGISTER_UATX_ISR()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00147">147</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 

@@ -1,7 +1,7 @@
 <map id="fastarduino/utilities.h" name="fastarduino/utilities.h">
 <area shape="rect" id="node2" href="$time_8h.html" title="Simple time utilities. " alt="" coords="1152,87,1295,114"/>
-<area shape="rect" id="node4" href="$nrf24l01p_8h_source.html" title="fastarduino/devices\l/nrf24l01p.h" alt="" coords="1512,259,1663,300"/>
-<area shape="rect" id="node5" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="2367,437,2517,479"/>
+<area shape="rect" id="node4" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2..." alt="" coords="1512,259,1663,300"/>
+<area shape="rect" id="node5" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="2367,437,2517,479"/>
 <area shape="rect" id="node6" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="393,177,545,203"/>
 <area shape="rect" id="node7" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="433,266,595,293"/>
 <area shape="rect" id="node11" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,445,220,471"/>

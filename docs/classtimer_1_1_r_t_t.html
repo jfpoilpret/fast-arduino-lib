@@ -130,7 +130,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa75448a1d268c8c5aaec4111230c3d70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new real-time timer handler and initializes its current time to 0ms.  <a href="#aa75448a1d268c8c5aaec4111230c3d70">More...</a><br /></td></tr>
 <tr class="separator:aa75448a1d268c8c5aaec4111230c3d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22f40fce0ca23a3cb26426dd7d37ce5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t.html#a22f40fce0ca23a3cb26426dd7d37ce5c">register_rtt_handler</a> ()</td></tr>
-<tr class="memdesc:a22f40fce0ca23a3cb26426dd7d37ce5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">RTT</a> with the matching ISR that should have been registered with <a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a>.  <a href="#a22f40fce0ca23a3cb26426dd7d37ce5c">More...</a><br /></td></tr>
+<tr class="memdesc:a22f40fce0ca23a3cb26426dd7d37ce5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">RTT</a> with the matching ISR that should have been registered with <a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a>.  <a href="#a22f40fce0ca23a3cb26426dd7d37ce5c">More...</a><br /></td></tr>
 <tr class="separator:a22f40fce0ca23a3cb26426dd7d37ce5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a6aaedc91de46926931990538c8ae26"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t.html#a7a6aaedc91de46926931990538c8ae26">millis</a> () const</td></tr>
 <tr class="memdesc:a7a6aaedc91de46926931990538c8ae26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Elapsed time, in milliseconds, since this timer has started.  <a href="#a7a6aaedc91de46926931990538c8ae26">More...</a><br /></td></tr>
@@ -211,7 +211,7 @@ class timer::RTT&lt; NTIMER_ &gt;</h3>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb" title="Defines all timers available for target MCU. ">board::Timer</a> </dd>
 <dd>
-<a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a> </dd></dl>
+<a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00202">202</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
@@ -297,8 +297,8 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Register this <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">RTT</a> with the matching ISR that should have been registered with <a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a>. </p>
-<p>Calling this method is mandatory for this timer to work. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a> </dd></dl>
+<p>Register this <a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">RTT</a> with the matching ISR that should have been registered with <a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a>. </p>
+<p>Calling this method is mandatory for this timer to work. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00235">235</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>
 

@@ -96,50 +96,55 @@ $(document).ready(function(){initNavTree('classdevices_1_1sonar_1_1_multi_h_c_s_
 <div class="title">devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins gathered and connected to only one MCU pin, and all echo pins connected to the same MCU <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU. ">board::Port</a></code>.  
+ <a href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sonar_8h_source.html">fastarduino/devices/sonar.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:aaef6b674165a7bd5dcf4976bed3fc1a5"><td class="memItemLeft" align="right" valign="top"><a id="aaef6b674165a7bd5dcf4976bed3fc1a5"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>RTT</b> = <a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt; NTIMER_ &gt;</td></tr>
+<tr class="memitem:aaef6b674165a7bd5dcf4976bed3fc1a5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#aaef6b674165a7bd5dcf4976bed3fc1a5">RTT</a> = <a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt; NTIMER_ &gt;</td></tr>
+<tr class="memdesc:aaef6b674165a7bd5dcf4976bed3fc1a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> used by this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> instance.  <a href="#aaef6b674165a7bd5dcf4976bed3fc1a5">More...</a><br /></td></tr>
 <tr class="separator:aaef6b674165a7bd5dcf4976bed3fc1a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a343b9784151711d186327284c347d236"><td class="memItemLeft" align="right" valign="top"><a id="a343b9784151711d186327284c347d236"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>EVENT</b> = <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a>&lt; NTIMER_ &gt;</td></tr>
+<tr class="memitem:a343b9784151711d186327284c347d236"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a343b9784151711d186327284c347d236">EVENT</a> = <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a>&lt; NTIMER_ &gt;</td></tr>
+<tr class="memdesc:a343b9784151711d186327284c347d236"><td class="mdescLeft">&#160;</td><td class="mdescRight">The exact <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code> type produced by this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> instance.  <a href="#a343b9784151711d186327284c347d236">More...</a><br /></td></tr>
 <tr class="separator:a343b9784151711d186327284c347d236"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a41fd653b0e93076b8038114d6e466cb7"><td class="memItemLeft" align="right" valign="top"><a id="a41fd653b0e93076b8038114d6e466cb7"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MultiHCSR04</b> (<a class="el" href="classtimer_1_1_r_t_t.html">RTT</a> &amp;rtt)</td></tr>
+<tr class="memitem:a41fd653b0e93076b8038114d6e466cb7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a41fd653b0e93076b8038114d6e466cb7">MultiHCSR04</a> (<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#aaef6b674165a7bd5dcf4976bed3fc1a5">RTT</a> &amp;rtt)</td></tr>
+<tr class="memdesc:a41fd653b0e93076b8038114d6e466cb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new a multi-sonar sensors handler.  <a href="#a41fd653b0e93076b8038114d6e466cb7">More...</a><br /></td></tr>
 <tr class="separator:a41fd653b0e93076b8038114d6e466cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2df1e7d175287c7775e72d84a031a427"><td class="memItemLeft" align="right" valign="top"><a id="a2df1e7d175287c7775e72d84a031a427"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ready</b> () const</td></tr>
-<tr class="separator:a2df1e7d175287c7775e72d84a031a427"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91a6278019999628c1b7552272567a55"><td class="memItemLeft" align="right" valign="top"><a id="a91a6278019999628c1b7552272567a55"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>all_ready</b> () const</td></tr>
-<tr class="separator:a91a6278019999628c1b7552272567a55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaa8097e1fb62f58f28c4d0cc105ae22"><td class="memItemLeft" align="right" valign="top"><a id="adaa8097e1fb62f58f28c4d0cc105ae22"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_ready</b> ()</td></tr>
-<tr class="separator:adaa8097e1fb62f58f28c4d0cc105ae22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a002878e5c75fb4fb513e855629b68027"><td class="memItemLeft" align="right" valign="top"><a id="a002878e5c75fb4fb513e855629b68027"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>trigger</b> (uint16_t timeout_ms)</td></tr>
+<tr class="memitem:a002878e5c75fb4fb513e855629b68027"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027">trigger</a> (uint16_t timeout_ms)</td></tr>
+<tr class="memdesc:a002878e5c75fb4fb513e855629b68027"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start ranging on all sonars connected to this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code>.  <a href="#a002878e5c75fb4fb513e855629b68027">More...</a><br /></td></tr>
 <tr class="separator:a002878e5c75fb4fb513e855629b68027"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2df1e7d175287c7775e72d84a031a427"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a2df1e7d175287c7775e72d84a031a427">ready</a> () const</td></tr>
+<tr class="memdesc:a2df1e7d175287c7775e72d84a031a427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell, for which of the connected sonars, the latest ranging, started by <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04. ">trigger()</a></code>, is finished, ie the echo pulse has been received.  <a href="#a2df1e7d175287c7775e72d84a031a427">More...</a><br /></td></tr>
+<tr class="separator:a2df1e7d175287c7775e72d84a031a427"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91a6278019999628c1b7552272567a55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a91a6278019999628c1b7552272567a55">all_ready</a> () const</td></tr>
+<tr class="memdesc:a91a6278019999628c1b7552272567a55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tell if the latest ranging, started by <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04. ">trigger()</a></code>, is finished for all connected sonars, ie the echo pulse has been received.  <a href="#a91a6278019999628c1b7552272567a55">More...</a><br /></td></tr>
+<tr class="separator:a91a6278019999628c1b7552272567a55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa8097e1fb62f58f28c4d0cc105ae22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#adaa8097e1fb62f58f28c4d0cc105ae22">set_ready</a> ()</td></tr>
+<tr class="memdesc:adaa8097e1fb62f58f28c4d0cc105ae22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force readiness of all connected sensors, ie the end of current ranging.  <a href="#adaa8097e1fb62f58f28c4d0cc105ae22">More...</a><br /></td></tr>
+<tr class="separator:adaa8097e1fb62f58f28c4d0cc105ae22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:af153ac82a0b22b25ec77c6e8444ce37f"><td class="memItemLeft" align="right" valign="top"><a id="af153ac82a0b22b25ec77c6e8444ce37f"></a>
-static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><b>TRIGGER</b> = TRIGGER_</td></tr>
+<tr class="memitem:af153ac82a0b22b25ec77c6e8444ce37f"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#af153ac82a0b22b25ec77c6e8444ce37f">TRIGGER</a> = TRIGGER_</td></tr>
+<tr class="memdesc:af153ac82a0b22b25ec77c6e8444ce37f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sensors trigger pins.  <a href="#af153ac82a0b22b25ec77c6e8444ce37f">More...</a><br /></td></tr>
 <tr class="separator:af153ac82a0b22b25ec77c6e8444ce37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a864143a05372dfa850e3aacca778ef7f"><td class="memItemLeft" align="right" valign="top"><a id="a864143a05372dfa850e3aacca778ef7f"></a>
-static constexpr const <a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a>&#160;</td><td class="memItemRight" valign="bottom"><b>ECHO_PORT</b> = ECHO_PORT_</td></tr>
+<tr class="memitem:a864143a05372dfa850e3aacca778ef7f"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a864143a05372dfa850e3aacca778ef7f">ECHO_PORT</a> = ECHO_PORT_</td></tr>
+<tr class="memdesc:a864143a05372dfa850e3aacca778ef7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The MCU port to which all echo pins of sonars handled by this class are connected.  <a href="#a864143a05372dfa850e3aacca778ef7f">More...</a><br /></td></tr>
 <tr class="separator:a864143a05372dfa850e3aacca778ef7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a836cac835991740e97cd05e70590fe4b"><td class="memItemLeft" align="right" valign="top"><a id="a836cac835991740e97cd05e70590fe4b"></a>
-static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ECHO_MASK</b> = ECHO_MASK_</td></tr>
+<tr class="memitem:a836cac835991740e97cd05e70590fe4b"><td class="memItemLeft" align="right" valign="top">static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a836cac835991740e97cd05e70590fe4b">ECHO_MASK</a> = ECHO_MASK_</td></tr>
+<tr class="memdesc:a836cac835991740e97cd05e70590fe4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mask determining which pins of <code>ECHO_PORT</code> are actually connected to a real sonar echo pin.  <a href="#a836cac835991740e97cd05e70590fe4b">More...</a><br /></td></tr>
 <tr class="separator:a836cac835991740e97cd05e70590fe4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ff91a2361b03432c5e72f5a4defa750"><td class="memItemLeft" align="right" valign="top"><a id="a8ff91a2361b03432c5e72f5a4defa750"></a>
-static constexpr const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>MAX_RANGE_M</b> = 4</td></tr>
+<tr class="memitem:a8ff91a2361b03432c5e72f5a4defa750"><td class="memItemLeft" align="right" valign="top">static constexpr const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> = 4</td></tr>
+<tr class="memdesc:a8ff91a2361b03432c5e72f5a4defa750"><td class="mdescLeft">&#160;</td><td class="mdescRight">The approximate maximum range, in meters, that this sonar sensor supports.  <a href="#a8ff91a2361b03432c5e72f5a4defa750">More...</a><br /></td></tr>
 <tr class="separator:a8ff91a2361b03432c5e72f5a4defa750"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a568791a5cba1f49509f380aff1101f38"><td class="memItemLeft" align="right" valign="top"><a id="a568791a5cba1f49509f380aff1101f38"></a>
-static constexpr const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>DEFAULT_TIMEOUT_MS</b> = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1</td></tr>
+<tr class="memitem:a568791a5cba1f49509f380aff1101f38"><td class="memItemLeft" align="right" valign="top">static constexpr const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a568791a5cba1f49509f380aff1101f38">DEFAULT_TIMEOUT_MS</a> = <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> * 2 * 1000UL / SPEED_OF_SOUND + 1</td></tr>
+<tr class="memdesc:a568791a5cba1f49509f380aff1101f38"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default timeout duration, in milliseconds, to use if you want to cover the maximum range of the sensor.  <a href="#a568791a5cba1f49509f380aff1101f38">More...</a><br /></td></tr>
 <tr class="separator:a568791a5cba1f49509f380aff1101f38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -152,9 +157,412 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <div class="textblock"><h3>template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt;<br />
 class devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;</h3>
 
+<p>This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins gathered and connected to only one MCU pin, and all echo pins connected to the same MCU <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU. ">board::Port</a></code>. </p>
+<p>With this class, all connected sonars start ranging at the same time. This method works exclusively in asynchronous mode.</p>
+<p>Note that, contrarily to the <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a></code> class, this class does not handle calculation or storeage of echo pulse duration for all connected sonars; instead, it produces <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>s upon each sonar event occurring:</p><ul>
+<li>echo pulse leading edge received</li>
+<li>echo pulse trailing edge received</li>
+<li>timeout occurred while waiting for echo pulse reception You need to register proper callbacks in order to receive these events and process them. It is the responsibility your callbacks to calculate (and optionally store) echo pulse duration, based on all received <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>s.</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER_</td><td>the AVR timer of the <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> to use for this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> </td></tr>
+    <tr><td class="paramname">TRIGGER_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sensors trigger pins; that can be any available pin. </td></tr>
+    <tr><td class="paramname">ECHO_PORT_</td><td>the MCU port to which all echo pins of sonars handled by this class are connected; this port must support PCINT interrupts. </td></tr>
+    <tr><td class="paramname">ECHO_MASK_</td><td>the mask determining which pins of <code>ECHO_PORT_</code> are actually connected to a real sonar echo pin; for each bit set, the matching pin must be able to generate a PCINT interrupt when its level changes.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a9bbf49fca181e73c8780e5fe68e49f90" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to listen to...">REGISTER_MULTI_HCSR04_PCI_ISR_METHOD()</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a2e5344136bf09598861c164a152c9694" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a2e550e3a88e29f081b3009d7b462475e" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to listen to...">REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION()</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00408">408</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00983">983</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="aaef6b674165a7bd5dcf4976bed3fc1a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaef6b674165a7bd5dcf4976bed3fc1a5">&#9670;&nbsp;</a></span>RTT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#aaef6b674165a7bd5dcf4976bed3fc1a5">RTT</a> =  <a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;NTIMER_&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type of <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> used by this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> instance. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01000">1000</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a343b9784151711d186327284c347d236"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a343b9784151711d186327284c347d236">&#9670;&nbsp;</a></span>EVENT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a343b9784151711d186327284c347d236">EVENT</a> =  <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a>&lt;NTIMER_&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The exact <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code> type produced by this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> instance. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01002">1002</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a41fd653b0e93076b8038114d6e466cb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41fd653b0e93076b8038114d6e466cb7">&#9670;&nbsp;</a></span>MultiHCSR04()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">MultiHCSR04</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#aaef6b674165a7bd5dcf4976bed3fc1a5">RTT</a> &amp;&#160;</td>
+          <td class="paramname"><em>rtt</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new a multi-sonar sensors handler. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rtt</td><td>a reference to an existing <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> for echo pulse duration counting; this RTT shall be started before using any other methods of this sonar. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01026">1026</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a002878e5c75fb4fb513e855629b68027"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a002878e5c75fb4fb513e855629b68027">&#9670;&nbsp;</a></span>trigger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::trigger </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>timeout_ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start ranging on all sonars connected to this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code>. </p>
+<p>When calling this method, a trigger pulse is sent to all connected sonars. After this call, <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>s will be generated and propagated to callbacks whenever any of the following occurs:</p><ul>
+<li>an echo pulse leading edge is detected on a sonar</li>
+<li>an echo pulse trailing edge is detected on a sonar</li>
+<li>timeout occurred while waiting for echo pulses</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeout_ms</td><td>the timeout, in milliseconds, after which the ranging will stop if no echo pulse has been received</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="sonar_8h.html#a9bbf49fca181e73c8780e5fe68e49f90" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to listen to...">REGISTER_MULTI_HCSR04_PCI_ISR_METHOD()</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a2e5344136bf09598861c164a152c9694" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a2e550e3a88e29f081b3009d7b462475e" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to listen to...">REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION()</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01050">1050</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a2df1e7d175287c7775e72d84a031a427"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2df1e7d175287c7775e72d84a031a427">&#9670;&nbsp;</a></span>ready()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::ready </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell, for which of the connected sonars, the latest ranging, started by <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04. ">trigger()</a></code>, is finished, ie the echo pulse has been received. </p>
+<p>If you want to know if ranging for all connected sonars is finished, then use <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a91a6278019999628c1b7552272567a55" title="Tell if the latest ranging, started by trigger(), is finished for all connected sonars, ie the echo pulse has been received. ">all_ready()</a></code> instead.</p>
+<dl class="section return"><dt>Returns</dt><dd>a bit mask where each set bit indicates that ranging is finished for the corresponding sonar.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04. ">trigger()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a91a6278019999628c1b7552272567a55" title="Tell if the latest ranging, started by trigger(), is finished for all connected sonars, ie the echo pulse has been received. ">all_ready()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#adaa8097e1fb62f58f28c4d0cc105ae22" title="Force readiness of all connected sensors, ie the end of current ranging. ">set_ready()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01075">1075</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a91a6278019999628c1b7552272567a55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91a6278019999628c1b7552272567a55">&#9670;&nbsp;</a></span>all_ready()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::all_ready </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tell if the latest ranging, started by <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04. ">trigger()</a></code>, is finished for all connected sonars, ie the echo pulse has been received. </p>
+<p>If you want to know for which connected sonars ranging is finished, then use <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a2df1e7d175287c7775e72d84a031a427" title="Tell, for which of the connected sonars, the latest ranging, started by trigger(), is finished, ie the echo pulse has been received. ">ready()</a></code> instead. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01086">1086</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="adaa8097e1fb62f58f28c4d0cc105ae22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaa8097e1fb62f58f28c4d0cc105ae22">&#9670;&nbsp;</a></span>set_ready()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::set_ready </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Force readiness of all connected sensors, ie the end of current ranging. </p>
+<p>This can be used by callbacks e.g. to stop current ranging when a timeout has occurred. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01096">1096</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af153ac82a0b22b25ec77c6e8444ce37f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af153ac82a0b22b25ec77c6e8444ce37f">&#9670;&nbsp;</a></span>TRIGGER</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::TRIGGER = TRIGGER_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sensors trigger pins. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00987">987</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a864143a05372dfa850e3aacca778ef7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a864143a05372dfa850e3aacca778ef7f">&#9670;&nbsp;</a></span>ECHO_PORT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a> <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::ECHO_PORT = ECHO_PORT_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The MCU port to which all echo pins of sonars handled by this class are connected. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00989">989</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a836cac835991740e97cd05e70590fe4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a836cac835991740e97cd05e70590fe4b">&#9670;&nbsp;</a></span>ECHO_MASK</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const uint8_t <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::ECHO_MASK = ECHO_MASK_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The mask determining which pins of <code>ECHO_PORT</code> are actually connected to a real sonar echo pin. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00991">991</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a8ff91a2361b03432c5e72f5a4defa750"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ff91a2361b03432c5e72f5a4defa750">&#9670;&nbsp;</a></span>MAX_RANGE_M</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const uint16_t <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::MAX_RANGE_M = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The approximate maximum range, in meters, that this sonar sensor supports. </p>
+<p>Any obstacle beyond this distance will generate no echo pulse from the sensor. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01009">1009</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a568791a5cba1f49509f380aff1101f38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a568791a5cba1f49509f380aff1101f38">&#9670;&nbsp;</a></span>DEFAULT_TIMEOUT_MS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const uint16_t <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::DEFAULT_TIMEOUT_MS = <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> * 2 * 1000UL / SPEED_OF_SOUND + 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The default timeout duration, in milliseconds, to use if you want to cover the maximum range of the sensor. </p>
+<p>Using any greater timeout value would be pointless. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750" title="The approximate maximum range, in meters, that this sonar sensor supports. ">MAX_RANGE_M</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04. ">trigger()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01018">1018</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="sonar_8h_source.html">sonar.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -162,7 +570,7 @@ class devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ 
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>sonar</b></li><li class="navelem"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">MultiHCSR04</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1sonar.html">sonar</a></li><li class="navelem"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">MultiHCSR04</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>

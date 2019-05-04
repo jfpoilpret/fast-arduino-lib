@@ -158,10 +158,10 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:afdd3cf98b9ada95f5065f7d08ab16729"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="soft__uart_8h.html#afdd3cf98b9ada95f5065f7d08ab16729">REGISTER_UART_PCI_ISR</a>(RX,  PCI_NUM)</td></tr>
-<tr class="memdesc:afdd3cf98b9ada95f5065f7d08ab16729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly.  <a href="#afdd3cf98b9ada95f5065f7d08ab16729">More...</a><br /></td></tr>
+<tr class="memdesc:afdd3cf98b9ada95f5065f7d08ab16729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly.  <a href="#afdd3cf98b9ada95f5065f7d08ab16729">More...</a><br /></td></tr>
 <tr class="separator:afdd3cf98b9ada95f5065f7d08ab16729"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2115e390cf296a93ae05c29a6a4b25a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="soft__uart_8h.html#ae2115e390cf296a93ae05c29a6a4b25a">REGISTER_UART_INT_ISR</a>(RX,  INT_NUM)</td></tr>
-<tr class="memdesc:ae2115e390cf296a93ae05c29a6a4b25a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly.  <a href="#ae2115e390cf296a93ae05c29a6a4b25a">More...</a><br /></td></tr>
+<tr class="memdesc:ae2115e390cf296a93ae05c29a6a4b25a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly.  <a href="#ae2115e390cf296a93ae05c29a6a4b25a">More...</a><br /></td></tr>
 <tr class="separator:ae2115e390cf296a93ae05c29a6a4b25a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -195,7 +195,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(PCINT, PCI_NUM, _vect))                              \</div><div class="line">    {                                                             \</div><div class="line">        serial::soft::isr_handler::check_uart_pci&lt;PCI_NUM, RX&gt;(); \</div><div class="line">    }</div></div><!-- fragment -->
-<p>Register the necessary ISR (interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly. </p>
+<p>Register the necessary ISR (Interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly. </p>
 <p>This applies to an <code>UARX</code> (or <code>UART</code>) which <code>RX</code> pin is a PCINT pin. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">RX</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> used as RX for the UARX (or UART) </td></tr>
@@ -234,7 +234,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(INT, INT_NUM, _vect))                                \</div><div class="line">    {                                                             \</div><div class="line">        serial::soft::isr_handler::check_uart_int&lt;INT_NUM, RX&gt;(); \</div><div class="line">    }</div></div><!-- fragment -->
-<p>Register the necessary ISR (interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly. </p>
+<p>Register the necessary ISR (Interrupt Service Routine) for an <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">serial::soft::UARX</a> to work correctly. </p>
 <p>This applies to an <code>UARX</code> (or <code>UART</code>) which <code>RX</code> pin is a External INT pin. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">RX</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> used as RX for the UARX (or UART) </td></tr>

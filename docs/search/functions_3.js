@@ -17,5 +17,6 @@ var searchData=
   ['disable_5fpins',['disable_pins',['../classinterrupt_1_1_p_c_i_signal.html#ab8bde46b21b64a778abf23a4a553db44',1,'interrupt::PCISignal']]],
   ['disable_5fpins_5f',['disable_pins_',['../classinterrupt_1_1_p_c_i_signal.html#a5b6ca8e3436f39eea424a4fa0dd57a36',1,'interrupt::PCISignal']]],
   ['disable_5fwrite',['disable_write',['../classdevices_1_1_win_bond.html#a11a1577660d2089d1e938d0c78557e86',1,'devices::WinBond']]],
-  ['dispatch',['dispatch',['../classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7',1,'events::Dispatcher']]]
+  ['dispatch',['dispatch',['../classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7',1,'events::Dispatcher']]],
+  ['distance_5fmm_5fto_5fecho_5fus',['distance_mm_to_echo_us',['../namespacedevices_1_1sonar.html#af3bc97f71928347fa7b883f166235916',1,'devices::sonar']]]
 ];

@@ -9,6 +9,7 @@ var searchData=
   ['mask',['MASK',['../classgpio_1_1_fast_masked_port.html#a9fec25a1788301cd9ba3bfc3d7adbe6b',1,'gpio::FastMaskedPort::MASK()'],['../classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0',1,'gpio::FastPinType::MASK()']]],
   ['max',['MAX',['../classanalog_1_1_p_w_m_output.html#a6b1fdf788fa1f9e717280f459b09a135',1,'analog::PWMOutput']]],
   ['max_5fprecision',['MAX_PRECISION',['../classstreams_1_1ios__base.html#afb443852e1cbb99456e06f78532f2974',1,'streams::ios_base']]],
+  ['max_5frange_5fm',['MAX_RANGE_M',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#ac33ea5af29450962ac8033b3f8685814',1,'devices::sonar::HCSR04::MAX_RANGE_M()'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750',1,'devices::sonar::MultiHCSR04::MAX_RANGE_M()']]],
   ['max_5frt',['max_rt',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a6c4a43f0613197e7f9831b882ef18fb3',1,'devices::rf::NRF24L01::status_t']]],
   ['maxfreq',['MAXFREQ',['../classanalog_1_1_analog_input.html#a742690b56df7fb84554142bdcaba0ad1',1,'analog::AnalogInput']]],
   ['mcp23017',['MCP23017',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html',1,'devices::mcp23017::MCP23017&lt; MODE_ &gt;'],['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a6be9b53ec7fa8895a1a497db05f78028',1,'devices::mcp23017::MCP23017::MCP23017()']]],
@@ -26,5 +27,5 @@ var searchData=
   ['mode_5f3',['MODE_3',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbac5b781763a4c930367500c96e64a0166',1,'spi']]],
   ['mpu6050',['MPU6050',['../classdevices_1_1magneto_1_1_m_p_u6050.html',1,'devices::magneto']]],
   ['msb_5ffirst',['MSB_FIRST',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7a89488e0251a0b2be79602890ef16ddb3',1,'spi']]],
-  ['multihcsr04',['MultiHCSR04',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html',1,'devices::sonar']]]
+  ['multihcsr04',['MultiHCSR04',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html',1,'devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a41fd653b0e93076b8038114d6e466cb7',1,'devices::sonar::MultiHCSR04::MultiHCSR04()']]]
 ];

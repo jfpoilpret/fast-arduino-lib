@@ -1,11 +1,11 @@
 <map id="fastarduino/gpio.h" name="fastarduino/gpio.h">
 <area shape="rect" id="node2" href="$spi_8h.html" title="SPI support for AVR MCU. " alt="" coords="190,87,321,114"/>
 <area shape="rect" id="node6" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;, like the 74HC595. " alt="" coords="345,80,496,121"/>
-<area shape="rect" id="node7" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="520,80,671,121"/>
+<area shape="rect" id="node7" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="520,80,671,121"/>
 <area shape="rect" id="node8" href="$pwm_8h.html" title="PWM API. " alt="" coords="907,87,1051,114"/>
 <area shape="rect" id="node13" href="$pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="695,87,883,114"/>
 <area shape="rect" id="node14" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="1079,87,1250,114"/>
-<area shape="rect" id="node3" href="$nrf24l01p_8h_source.html" title="fastarduino/devices\l/nrf24l01p.h" alt="" coords="5,169,156,211"/>
+<area shape="rect" id="node3" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2..." alt="" coords="5,169,156,211"/>
 <area shape="rect" id="node4" href="$winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface. " alt="" coords="180,169,331,211"/>
 <area shape="rect" id="node5" href="$spi_8cpp_source.html" title="fastarduino/spi.cpp" alt="" coords="355,177,502,203"/>
 <area shape="rect" id="node9" href="$servo_8h.html" title="API to handle servomotors. " alt="" coords="721,169,872,211"/>

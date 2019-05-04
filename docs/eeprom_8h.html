@@ -144,13 +144,13 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a24aa9951e4fd46ce3fb158d64748e2ac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eeprom_8h.html#a24aa9951e4fd46ce3fb158d64748e2ac">REGISTER_EEPROM_ISR</a>()</td></tr>
-<tr class="memdesc:a24aa9951e4fd46ce3fb158d64748e2ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly.  <a href="#a24aa9951e4fd46ce3fb158d64748e2ac">More...</a><br /></td></tr>
+<tr class="memdesc:a24aa9951e4fd46ce3fb158d64748e2ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly.  <a href="#a24aa9951e4fd46ce3fb158d64748e2ac">More...</a><br /></td></tr>
 <tr class="separator:a24aa9951e4fd46ce3fb158d64748e2ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab599dc3c4a3ca26f5d6e3dda1a022f5e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eeprom_8h.html#ab599dc3c4a3ca26f5d6e3dda1a022f5e">REGISTER_EEPROM_ISR_METHOD</a>(HANDLER,  CALLBACK)</td></tr>
-<tr class="memdesc:ab599dc3c4a3ca26f5d6e3dda1a022f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete.  <a href="#ab599dc3c4a3ca26f5d6e3dda1a022f5e">More...</a><br /></td></tr>
+<tr class="memdesc:ab599dc3c4a3ca26f5d6e3dda1a022f5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete.  <a href="#ab599dc3c4a3ca26f5d6e3dda1a022f5e">More...</a><br /></td></tr>
 <tr class="separator:ab599dc3c4a3ca26f5d6e3dda1a022f5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e98083ea0d85e7fad253e419373cb8d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eeprom_8h.html#a3e98083ea0d85e7fad253e419373cb8d">REGISTER_EEPROM_ISR_FUNCTION</a>(CALLBACK)</td></tr>
-<tr class="memdesc:a3e98083ea0d85e7fad253e419373cb8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete.  <a href="#a3e98083ea0d85e7fad253e419373cb8d">More...</a><br /></td></tr>
+<tr class="memdesc:a3e98083ea0d85e7fad253e419373cb8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method that will be called everytime all pending queued write operations are complete.  <a href="#a3e98083ea0d85e7fad253e419373cb8d">More...</a><br /></td></tr>
 <tr class="separator:a3e98083ea0d85e7fad253e419373cb8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33edc31dd3d8f8d4d6a31e3decea5701"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="eeprom_8h.html#a33edc31dd3d8f8d4d6a31e3decea5701">DECL_EEPROM_ISR_HANDLERS_FRIEND</a></td></tr>
 <tr class="memdesc:a33edc31dd3d8f8d4d6a31e3decea5701"><td class="mdescLeft">&#160;</td><td class="mdescRight">This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_EEPROM_ISR_METHOD</code>.  <a href="#a33edc31dd3d8f8d4d6a31e3decea5701">More...</a><br /></td></tr>
@@ -176,7 +176,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">ISR(EE_READY_vect)                       \</div><div class="line">    {                                        \</div><div class="line">        eeprom::isr_handler::eeprom_ready(); \</div><div class="line">    }</div></div><!-- fragment -->
-<p>Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly. </p>
+<p>Register the necessary ISR (Interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00036">36</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
@@ -209,7 +209,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">ISR(EE_READY_vect)                                                 \</div><div class="line">    {                                                                  \</div><div class="line">        eeprom::isr_handler::eeprom_ready_method&lt;HANDLER, CALLBACK&gt;(); \</div><div class="line">    }</div></div><!-- fragment -->
-<p>Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete. </p>
+<p>Register the necessary ISR (Interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">HANDLER</td><td>the class holding the callback method </td></tr>
@@ -239,7 +239,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line">ISR(EE_READY_vect)                                          \</div><div class="line">    {                                                           \</div><div class="line">        eeprom::isr_handler::eeprom_ready_function&lt;CALLBACK&gt;(); \</div><div class="line">    }</div></div><!-- fragment -->
-<p>Register the necessary ISR (interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method taht will be called everytime all pending queued write operations are complete. </p>
+<p>Register the necessary ISR (Interrupt Service Routine) for <a class="el" href="classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data...">eeprom::QueuedWriter</a> to work properly, along with a callback method that will be called everytime all pending queued write operations are complete. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">CALLBACK</td><td>the function that will be called when the interrupt is triggered</td></tr>
@@ -265,7 +265,7 @@ Macros</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span>eeprom::isr_handler;  \</div><div class="line">    friend void ::EE_READY_vect();</div></div><!-- fragment -->
 <p>This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_EEPROM_ISR_METHOD</code>. </p>
-<p>It declares the class wher it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
+<p>It declares the class where it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
 
 <p class="definition">Definition at line <a class="el" href="eeprom_8h_source.html#l00081">81</a> of file <a class="el" href="eeprom_8h_source.html">eeprom.h</a>.</p>
 

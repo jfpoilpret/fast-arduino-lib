@@ -93,14 +93,19 @@ $(document).ready(function(){initNavTree('classdevices_1_1rf_1_1_i_r_q___n_r_f24
 <div class="title">devices::rf::IRQ_NRF24L01&lt; CSN, CE, IRQ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>SPI device driver for Nordic Semiconductor nRF24L01+ support, with IRQ.  
+ <a href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="nrf24l01p_8h_source.html">fastarduino/devices/nrf24l01p.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for devices::rf::IRQ_NRF24L01&lt; CSN, CE, IRQ &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01__inherit__graph.png" border="0" usemap="#devices_1_1rf_1_1_i_r_q___n_r_f24_l01_3_01_c_s_n_00_01_c_e_00_01_i_r_q_01_4_inherit__map" alt="Inheritance graph"/></div>
 <map name="devices_1_1rf_1_1_i_r_q___n_r_f24_l01_3_01_c_s_n_00_01_c_e_00_01_i_r_q_01_4_inherit__map" id="devices_1_1rf_1_1_i_r_q___n_r_f24_l01_3_01_c_s_n_00_01_c_e_00_01_i_r_q_01_4_inherit__map">
-<area shape="rect" id="node2" href="classdevices_1_1rf_1_1_n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support. " alt="" coords="21,155,175,196"/>
-<area shape="rect" id="node3" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="17,80,179,107"/>
-<area shape="rect" id="node4" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="19,5,177,32"/>
+<area shape="rect" id="node2" href="classdevices_1_1rf_1_1_n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support. " alt="" coords="21,155,183,196"/>
+<area shape="rect" id="node3" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="17,80,187,107"/>
+<area shape="rect" id="node4" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="18,5,186,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -108,9 +113,9 @@ Collaboration diagram for devices::rf::IRQ_NRF24L01&lt; CSN, CE, IRQ &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01__coll__graph.png" border="0" usemap="#devices_1_1rf_1_1_i_r_q___n_r_f24_l01_3_01_c_s_n_00_01_c_e_00_01_i_r_q_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="devices_1_1rf_1_1_i_r_q___n_r_f24_l01_3_01_c_s_n_00_01_c_e_00_01_i_r_q_01_4_coll__map" id="devices_1_1rf_1_1_i_r_q___n_r_f24_l01_3_01_c_s_n_00_01_c_e_00_01_i_r_q_01_4_coll__map">
-<area shape="rect" id="node2" href="classdevices_1_1rf_1_1_n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support. " alt="" coords="21,155,175,196"/>
-<area shape="rect" id="node3" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="17,80,179,107"/>
-<area shape="rect" id="node4" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="19,5,177,32"/>
+<area shape="rect" id="node2" href="classdevices_1_1rf_1_1_n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support. " alt="" coords="21,155,183,196"/>
+<area shape="rect" id="node3" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="17,80,187,107"/>
+<area shape="rect" id="node4" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="18,5,186,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -119,11 +124,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1137cd45cf6ee0c58f8dc9762a84e6b3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html#a1137cd45cf6ee0c58f8dc9762a84e6b3">IRQ_NRF24L01</a> (uint16_t net, uint8_t dev)</td></tr>
 <tr class="memdesc:a1137cd45cf6ee0c58f8dc9762a84e6b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct NRF transceiver with given channel and pin numbers for SPI slave select, activity enable and interrupt.  <a href="#a1137cd45cf6ee0c58f8dc9762a84e6b3">More...</a><br /></td></tr>
 <tr class="separator:a1137cd45cf6ee0c58f8dc9762a84e6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fab53c2be64509529338afc7cdb8ace"><td class="memItemLeft" align="right" valign="top"><a id="a8fab53c2be64509529338afc7cdb8ace"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
+<tr class="memitem:a8fab53c2be64509529338afc7cdb8ace"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html#a8fab53c2be64509529338afc7cdb8ace">begin</a> ()</td></tr>
+<tr class="memdesc:a8fab53c2be64509529338afc7cdb8ace"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start up the device driver.  <a href="#a8fab53c2be64509529338afc7cdb8ace">More...</a><br /></td></tr>
 <tr class="separator:a8fab53c2be64509529338afc7cdb8ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17664e21cfa9baf6d7092ee15c559f33"><td class="memItemLeft" align="right" valign="top"><a id="a17664e21cfa9baf6d7092ee15c559f33"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html#a17664e21cfa9baf6d7092ee15c559f33">end</a> ()</td></tr>
+<tr class="memdesc:a17664e21cfa9baf6d7092ee15c559f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shut down the device driver. <br /></td></tr>
 <tr class="separator:a17664e21cfa9baf6d7092ee15c559f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html">devices::rf::NRF24L01&lt; CSN, CE &gt;</a></td></tr>
 <tr class="memitem:a98152bba08b4fe4bf11259ec01b32b99 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a98152bba08b4fe4bf11259ec01b32b99">NRF24L01</a> (uint16_t net, uint8_t dev)</td></tr>
@@ -147,8 +153,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
 <tr class="memitem:af21a2da55c1e496022cdf9e88ed2d1dd inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd">begin</a> ()</td></tr>
 <tr class="memdesc:af21a2da55c1e496022cdf9e88ed2d1dd inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start up the device driver.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd">More...</a><br /></td></tr>
 <tr class="separator:af21a2da55c1e496022cdf9e88ed2d1dd inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a646a51b914e7ccb782f9119294c2b123 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123">end</a> ()</td></tr>
-<tr class="memdesc:a646a51b914e7ccb782f9119294c2b123 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shut down the device driver.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123">More...</a><br /></td></tr>
+<tr class="memitem:a646a51b914e7ccb782f9119294c2b123 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a646a51b914e7ccb782f9119294c2b123"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a646a51b914e7ccb782f9119294c2b123">end</a> ()</td></tr>
+<tr class="memdesc:a646a51b914e7ccb782f9119294c2b123 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shut down the device driver. <br /></td></tr>
 <tr class="separator:a646a51b914e7ccb782f9119294c2b123 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab177f9f3d3a35c41079ec8843436f967 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ab177f9f3d3a35c41079ec8843436f967">powerup</a> ()</td></tr>
 <tr class="memdesc:ab177f9f3d3a35c41079ec8843436f967 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set power up mode.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ab177f9f3d3a35c41079ec8843436f967">More...</a><br /></td></tr>
@@ -163,9 +170,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:adfd5e54d4d5ecdc575774c137be3d01f inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#adfd5e54d4d5ecdc575774c137be3d01f">send</a> (uint8_t dest, uint8_t port, const void *buf, size_t len)</td></tr>
 <tr class="memdesc:adfd5e54d4d5ecdc575774c137be3d01f inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send message in given buffer, with given number of bytes.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#adfd5e54d4d5ecdc575774c137be3d01f">More...</a><br /></td></tr>
 <tr class="separator:adfd5e54d4d5ecdc575774c137be3d01f inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabd6e2565ff08d172ea94204177d0520 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aabd6e2565ff08d172ea94204177d0520">recv</a> (uint8_t &amp;src, uint8_t &amp;port, void *buf, size_t count, uint32_t ms=0L)</td></tr>
-<tr class="memdesc:aabd6e2565ff08d172ea94204177d0520 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive message and store into given buffer with given maximum size.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aabd6e2565ff08d172ea94204177d0520">More...</a><br /></td></tr>
-<tr class="separator:aabd6e2565ff08d172ea94204177d0520 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac47b25e3543775985c309a3c43b360ec inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ac47b25e3543775985c309a3c43b360ec">recv</a> (uint8_t &amp;src, uint8_t &amp;port, void *buf, size_t size, uint32_t ms=0L)</td></tr>
+<tr class="memdesc:ac47b25e3543775985c309a3c43b360ec inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive message and store into given buffer with given maximum size.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ac47b25e3543775985c309a3c43b360ec">More...</a><br /></td></tr>
+<tr class="separator:ac47b25e3543775985c309a3c43b360ec inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02068822f1d2c882e34afff2ce4270a1 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a02068822f1d2c882e34afff2ce4270a1">set_output_power_level</a> (int8_t dBm)</td></tr>
 <tr class="memdesc:a02068822f1d2c882e34afff2ce4270a1 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set output power level (-30..10 dBm)  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a02068822f1d2c882e34afff2ce4270a1">More...</a><br /></td></tr>
 <tr class="separator:a02068822f1d2c882e34afff2ce4270a1 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,7 +190,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:afd216ea94b6db1a4e4bde74170961dd4 inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa20eb7c9fc9e17dcd1159fed98d2422a inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="aa20eb7c9fc9e17dcd1159fed98d2422a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aa20eb7c9fc9e17dcd1159fed98d2422a">is_broadcast</a> () const</td></tr>
-<tr class="memdesc:aa20eb7c9fc9e17dcd1159fed98d2422a inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true(1) if the latest received message was a broadcast otherwise false(0). <br /></td></tr>
+<tr class="memdesc:aa20eb7c9fc9e17dcd1159fed98d2422a inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if the latest received message was a broadcast otherwise false. <br /></td></tr>
 <tr class="separator:aa20eb7c9fc9e17dcd1159fed98d2422a inherit pub_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
@@ -199,9 +206,6 @@ static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class=
 <tr class="memitem:ade723eac06149ca77f8063d06756e891 inherit pub_static_attribs_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ade723eac06149ca77f8063d06756e891">PAYLOAD_MAX</a> = <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a80d3a609d7f7c5a2e3a41674ea7ff60a">DEVICE_PAYLOAD_MAX</a> - 2</td></tr>
 <tr class="memdesc:ade723eac06149ca77f8063d06756e891 inherit pub_static_attribs_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum size of payload.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ade723eac06149ca77f8063d06756e891">More...</a><br /></td></tr>
 <tr class="separator:ade723eac06149ca77f8063d06756e891 inherit pub_static_attribs_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a151fc3f129fb468663e1cdd1c69ba5e3 inherit pub_static_attribs_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">static const uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a151fc3f129fb468663e1cdd1c69ba5e3">DEFAULT_SEND_TIMEOUT</a> = 10</td></tr>
-<tr class="memdesc:a151fc3f129fb468663e1cdd1c69ba5e3 inherit pub_static_attribs_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default timeout (in ms) to ensure <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#adfd5e54d4d5ecdc575774c137be3d01f" title="Send message in given buffer, with given number of bytes. ">send()</a> is never stuck forever waiting for active IRQ (this can happen for an undetermined reason).  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a151fc3f129fb468663e1cdd1c69ba5e3">More...</a><br /></td></tr>
-<tr class="separator:a151fc3f129fb468663e1cdd1c69ba5e3 inherit pub_static_attribs_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_types_classdevices_1_1rf_1_1_n_r_f24_l01"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classdevices_1_1rf_1_1_n_r_f24_l01')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html">devices::rf::NRF24L01&lt; CSN, CE &gt;</a></td></tr>
 <tr class="memitem:acffff70f3fa128ad21602236aa20ef30 inherit pro_types_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30">Command</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a3295926361cc0acaf70d3a54f25247e6">Command::R_REGISTER</a> = 0x00, 
@@ -301,77 +305,30 @@ static const size_t&#160;</td><td class="memItemRight" valign="bottom"><a class=
  }</td></tr>
 <tr class="memdesc:ac665b346c57c2fb75ecbc8265ff2f74f"><td class="mdescLeft">&#160;</td><td class="mdescRight">NRF transceiver states (See chap.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ac665b346c57c2fb75ecbc8265ff2f74f">More...</a><br /></td></tr>
 <tr class="separator:ac665b346c57c2fb75ecbc8265ff2f74f inherit pro_types_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html">devices::rf::NRF24L01&lt; CSN, CE &gt;</a></td></tr>
-<tr class="memitem:a9b1f25ce642617f1cd6212381d577b95 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a9b1f25ce642617f1cd6212381d577b95"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>read</b> (uint8_t cmd)</td></tr>
-<tr class="separator:a9b1f25ce642617f1cd6212381d577b95 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a510fbbda1139efecb7ece0c4a3097690 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a510fbbda1139efecb7ece0c4a3097690"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>read</b> (uint8_t cmd, void *buf, size_t size)</td></tr>
-<tr class="separator:a510fbbda1139efecb7ece0c4a3097690 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af12d3486f939486fba147ecdd02d7385 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="af12d3486f939486fba147ecdd02d7385"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (uint8_t cmd)</td></tr>
-<tr class="separator:af12d3486f939486fba147ecdd02d7385 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb68c96f4518d8744f9bdef2963bdb2b inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="aeb68c96f4518d8744f9bdef2963bdb2b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (uint8_t cmd, uint8_t data)</td></tr>
-<tr class="separator:aeb68c96f4518d8744f9bdef2963bdb2b inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3007fa4efac3073e06da99df319c0e74 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a3007fa4efac3073e06da99df319c0e74"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write</b> (uint8_t cmd, const void *buf, size_t size)</td></tr>
-<tr class="separator:a3007fa4efac3073e06da99df319c0e74 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a4888e4f659a4c9b97809ad5afaa988 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a2a4888e4f659a4c9b97809ad5afaa988"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>read_command</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30">Command</a> cmd)</td></tr>
-<tr class="separator:a2a4888e4f659a4c9b97809ad5afaa988 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ed49985611857659ddaf253fb2634aa inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a6ed49985611857659ddaf253fb2634aa"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>read_command</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30">Command</a> cmd, void *buf, size_t size)</td></tr>
-<tr class="separator:a6ed49985611857659ddaf253fb2634aa inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fe91c972770ae20e9bf1bfeae9d6e0f inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a4fe91c972770ae20e9bf1bfeae9d6e0f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write_command</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30">Command</a> cmd)</td></tr>
-<tr class="separator:a4fe91c972770ae20e9bf1bfeae9d6e0f inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2ad7ad13575fe50e89c26bdf567ab1b inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="af2ad7ad13575fe50e89c26bdf567ab1b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write_command</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30">Command</a> cmd, uint8_t data)</td></tr>
-<tr class="separator:af2ad7ad13575fe50e89c26bdf567ab1b inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa103cb5342a9bd1cb51e1b0a9072b001 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="aa103cb5342a9bd1cb51e1b0a9072b001"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write_command</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30">Command</a> cmd, const void *buf, size_t size)</td></tr>
-<tr class="separator:aa103cb5342a9bd1cb51e1b0a9072b001 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d0cffc285ff511b9c9d725173d326a5 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a7d0cffc285ff511b9c9d725173d326a5"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>read_register</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a">Register</a> reg)</td></tr>
-<tr class="separator:a7d0cffc285ff511b9c9d725173d326a5 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b4818db5b533583791a5fd8d8941b04 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a6b4818db5b533583791a5fd8d8941b04"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>read_register</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a">Register</a> reg, void *buf, size_t size)</td></tr>
-<tr class="separator:a6b4818db5b533583791a5fd8d8941b04 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78c9b3f826468a0df95ba7df44525c37 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a78c9b3f826468a0df95ba7df44525c37"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write_register</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a">Register</a> reg, uint8_t data)</td></tr>
-<tr class="separator:a78c9b3f826468a0df95ba7df44525c37 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa263588e8603d3d553f72b947029f104 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="aa263588e8603d3d553f72b947029f104"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>write_register</b> (<a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a">Register</a> reg, const void *buf, size_t size)</td></tr>
-<tr class="separator:aa263588e8603d3d553f72b947029f104 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a9804985f72e27ff2196d760cc3d8ed inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a9a9804985f72e27ff2196d760cc3d8ed"></a>
-<a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html">status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>read_status</b> ()</td></tr>
-<tr class="separator:a9a9804985f72e27ff2196d760cc3d8ed inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac461ca05244b04920ab70be1ab973aa inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="aac461ca05244b04920ab70be1ab973aa"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>transmit_mode</b> (uint8_t dest)</td></tr>
-<tr class="separator:aac461ca05244b04920ab70be1ab973aa inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64a13aa8b3ce04a6cabced314471d3b8 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a64a13aa8b3ce04a6cabced314471d3b8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>receive_mode</b> ()</td></tr>
-<tr class="separator:a64a13aa8b3ce04a6cabced314471d3b8 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb430afa0fad55bb80622b58c1f66ed8 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="acb430afa0fad55bb80622b58c1f66ed8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>available</b> ()</td></tr>
-<tr class="separator:acb430afa0fad55bb80622b58c1f66ed8 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c2a7558a004eb21524b40cfa520e6c5 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a1c2a7558a004eb21524b40cfa520e6c5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>read_fifo_payload</b> (uint8_t &amp;src, uint8_t &amp;port, void *buf, size_t count)</td></tr>
-<tr class="separator:a1c2a7558a004eb21524b40cfa520e6c5 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f97234cf8c0934a4ca37f32df5e523c inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a8f97234cf8c0934a4ca37f32df5e523c"></a>
-<a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html">fifo_status_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>read_fifo_status</b> ()</td></tr>
-<tr class="separator:a8f97234cf8c0934a4ca37f32df5e523c inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d8e700e2af2e615b1b137e91ec04f80 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memItemLeft" align="right" valign="top"><a id="a2d8e700e2af2e615b1b137e91ec04f80"></a>
-<a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html">observe_tx_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>read_observe_tx</b> ()</td></tr>
-<tr class="separator:a2d8e700e2af2e615b1b137e91ec04f80 inherit pro_methods_classdevices_1_1rf_1_1_n_r_f24_l01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ&gt;<br />
 class devices::rf::IRQ_NRF24L01&lt; CSN, CE, IRQ &gt;</h3>
 
+<p>SPI device driver for Nordic Semiconductor nRF24L01+ support, with IRQ. </p>
+<p>nRF24L01+ is a cheap 2.4GHz RX/TX chip.</p>
+<p>It must be powered at 3.3V maximum but all its input pins are 5V tolerant, hence no level shifting is needed to operate it. </p><pre class="fragment">                     NRF24L01P
+                  +------------+
+</pre><p> (GND)------------&mdash;1-|GND | (3V3)------------&mdash;2-|VCC | (Dn)-------------&mdash;3-|CE | (Dn)-------------&mdash;4-|CSN | (SCK)------------&mdash;5-|SCK | (MOSI)-----------&mdash;6-|MOSI | (MISO)-----------&mdash;7-|MISO | (PCIn/EXTn)------&mdash;8-|IRQ | +---------&mdash;+ Notes:</p><ul>
+<li>IRQ can normally be linked to any EXT or PCI pin. However, on some AVR chips, some pins will not awaken the MCU from some "deep" sleep modes. Hence one has to think about this when selecting the pin.</li>
+<li>CSN is the usual CS pin used by SPI to select the device and can be set to any AVR pin IMPORTANT: PCI pin is not yet supported actually.</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">CSN</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the CSN pin </td></tr>
+    <tr><td class="paramname">CE</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the CE pin </td></tr>
+    <tr><td class="paramname">IRQ</td><td>the <code><a class="el" href="namespaceboard_1_1_external_interrupt_pin.html" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code> connected to the IRQ pin</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support. ">NRF24L01</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00545">545</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00594">594</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1137cd45cf6ee0c58f8dc9762a84e6b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1137cd45cf6ee0c58f8dc9762a84e6b3">&#9670;&nbsp;</a></span>IRQ_NRF24L01()</h2>
@@ -414,13 +371,44 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ&g
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">net</td><td>network address. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">dev</td><td>device address. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">csn</td><td>spi slave select pin number (default CS0). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ce</td><td>chip enable activates pin number (default GPIO P1-22). </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00557">557</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00604">604</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8fab53c2be64509529338afc7cdb8ace"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fab53c2be64509529338afc7cdb8ace">&#9670;&nbsp;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html">devices::rf::IRQ_NRF24L01</a>&lt; CSN, CE, IRQ &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start up the device driver. </p>
+<p>This must be called before any transmission or reception can take place. </p>
+
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00614">614</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -432,7 +420,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ&g
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>rf</b></li><li class="navelem"><a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html">IRQ_NRF24L01</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1rf.html">rf</a></li><li class="navelem"><a class="el" href="classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html">IRQ_NRF24L01</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>

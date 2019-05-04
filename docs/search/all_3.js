@@ -8,10 +8,11 @@ var searchData=
   ['decl_5fint_5fisr_5fhandlers_5ffriend',['DECL_INT_ISR_HANDLERS_FRIEND',['../int_8h.html#ac8d31ae95551a7ba072fd11cd7339f68',1,'int.h']]],
   ['decl_5fpci_5fisr_5fhandlers_5ffriend',['DECL_PCI_ISR_HANDLERS_FRIEND',['../pci_8h.html#a9555afa641897359e7083321db93d9a2',1,'pci.h']]],
   ['decl_5frtt_5fisr_5fhandlers_5ffriend',['DECL_RTT_ISR_HANDLERS_FRIEND',['../realtime__timer_8h.html#a461a04dc95555e06a5b9d76c8cf3ef84',1,'realtime_timer.h']]],
+  ['decl_5fsonar_5fisr_5fhandlers_5ffriend',['DECL_SONAR_ISR_HANDLERS_FRIEND',['../sonar_8h.html#a5f7a29b725906be15817aa805fc18f15',1,'sonar.h']]],
   ['decl_5ftimer_5fisr_5fhandlers_5ffriend',['DECL_TIMER_ISR_HANDLERS_FRIEND',['../timer_8h.html#aa27556302e5902b12c0a49a32792a01f',1,'timer.h']]],
   ['decl_5fwatchdog_5fisr_5fhandlers_5ffriend',['DECL_WATCHDOG_ISR_HANDLERS_FRIEND',['../watchdog_8h.html#a8241e4f4aa0b4776545287e1e9c14286',1,'watchdog.h']]],
   ['default_5fdelay',['default_delay',['../namespacetime.html#a4b83c440a676e0c7063a65d7c8476c12',1,'time']]],
-  ['default_5fsend_5ftimeout',['DEFAULT_SEND_TIMEOUT',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a151fc3f129fb468663e1cdd1c69ba5e3',1,'devices::rf::NRF24L01']]],
+  ['default_5ftimeout_5fms',['DEFAULT_TIMEOUT_MS',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#ae864aa0d54918613423c7d92ce6be44d',1,'devices::sonar::HCSR04::DEFAULT_TIMEOUT_MS()'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a568791a5cba1f49509f380aff1101f38',1,'devices::sonar::MultiHCSR04::DEFAULT_TIMEOUT_MS()']]],
   ['defaultfloat',['defaultfloat',['../namespacestreams.html#aa57ff0ec726dc31ec8aa59884914450e',1,'streams']]],
   ['delay',['delay',['../classtimer_1_1_r_t_t.html#a7d5c189655b98446f08ccd5cf078c912',1,'timer::RTT::delay()'],['../classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d',1,'watchdog::WatchdogRTT::delay()'],['../namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf',1,'time::delay()']]],
   ['delay_5fms',['delay_ms',['../namespacetime.html#af13fd17ddf6b751b8161691e608892b2',1,'time']]],
@@ -34,9 +35,12 @@ var searchData=
   ['disconnected',['DISCONNECTED',['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a99c8ce56e7ab246445d3b134724428f3',1,'timer']]],
   ['dispatch',['dispatch',['../classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7',1,'events::Dispatcher']]],
   ['dispatcher',['Dispatcher',['../classevents_1_1_dispatcher.html',1,'events']]],
+  ['distance_5fmm_5fto_5fecho_5fus',['distance_mm_to_echo_us',['../namespacedevices_1_1sonar.html#af3bc97f71928347fa7b883f166235916',1,'devices::sonar']]],
   ['dpin',['DPIN',['../classgpio_1_1_fast_pin_type.html#acefb55483053582508b27c3abe76f351',1,'gpio::FastPinType']]],
   ['ds1307',['DS1307',['../classdevices_1_1rtc_1_1_d_s1307.html',1,'devices::rtc']]],
   ['dynpd',['DYNPD',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aacb1b9f244ff1623c34531781e1f22ea4',1,'devices::rf::NRF24L01']]],
   ['mcp23017',['mcp23017',['../namespacedevices_1_1mcp23017.html',1,'devices']]],
-  ['servo',['servo',['../namespacedevices_1_1servo.html',1,'devices']]]
+  ['rf',['rf',['../namespacedevices_1_1rf.html',1,'devices']]],
+  ['servo',['servo',['../namespacedevices_1_1servo.html',1,'devices']]],
+  ['sonar',['sonar',['../namespacedevices_1_1sonar.html',1,'devices']]]
 ];

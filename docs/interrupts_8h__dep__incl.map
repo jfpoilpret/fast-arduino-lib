@@ -8,8 +8,8 @@
 <area shape="rect" id="node16" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="302,80,433,107"/>
 <area shape="rect" id="node17" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="1138,80,1277,107"/>
 <area shape="rect" id="node18" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="1301,80,1476,107"/>
-<area shape="rect" id="node3" href="$nrf24l01p_8h_source.html" title="fastarduino/devices\l/nrf24l01p.h" alt="" coords="5,155,156,196"/>
-<area shape="rect" id="node4" href="$sonar_8h_source.html" title="fastarduino/devices\l/sonar.h" alt="" coords="144,244,295,285"/>
+<area shape="rect" id="node3" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2..." alt="" coords="5,155,156,196"/>
+<area shape="rect" id="node4" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="144,244,295,285"/>
 <area shape="rect" id="node6" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="319,251,504,278"/>
 <area shape="rect" id="node8" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="864,423,1015,464"/>
 <area shape="rect" id="node10" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="706,244,850,285"/>

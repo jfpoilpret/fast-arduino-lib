@@ -89,49 +89,282 @@ $(document).ready(function(){initNavTree('structdevices_1_1sonar_1_1_sonar_event
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="structdevices_1_1sonar_1_1_sonar_event-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">devices::sonar::SonarEvent&lt; NTIMER_ &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This type holds information about events occurring within <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> handler.  
+ <a href="structdevices_1_1sonar_1_1_sonar_event.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="sonar_8h_source.html">fastarduino/devices/sonar.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ac070d4377cd1219c62db54d21257ee54"><td class="memItemLeft" align="right" valign="top"><a id="ac070d4377cd1219c62db54d21257ee54"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>RTT</b> = <a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt; NTIMER_ &gt;</td></tr>
+<tr class="memitem:ac070d4377cd1219c62db54d21257ee54"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#ac070d4377cd1219c62db54d21257ee54">RTT</a> = <a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt; NTIMER_ &gt;</td></tr>
+<tr class="memdesc:ac070d4377cd1219c62db54d21257ee54"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> used by the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> producing this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>.  <a href="#ac070d4377cd1219c62db54d21257ee54">More...</a><br /></td></tr>
 <tr class="separator:ac070d4377cd1219c62db54d21257ee54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a138e285a4ab71b34de21642fc7a167be"><td class="memItemLeft" align="right" valign="top"><a id="a138e285a4ab71b34de21642fc7a167be"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>RAW_TIME</b> = typename <a class="el" href="classtimer_1_1_r_t_t.html#aecb24e63db68d362d56e435224444d9b">RTT::RAW_TIME</a></td></tr>
+<tr class="memitem:a138e285a4ab71b34de21642fc7a167be"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a138e285a4ab71b34de21642fc7a167be">RAW_TIME</a> = typename <a class="el" href="classtimer_1_1_r_t_t.html#aecb24e63db68d362d56e435224444d9b">RTT::RAW_TIME</a></td></tr>
+<tr class="memdesc:a138e285a4ab71b34de21642fc7a167be"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">timer::RTTRawTime</a></code> type used by the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> producing this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>.  <a href="#a138e285a4ab71b34de21642fc7a167be">More...</a><br /></td></tr>
 <tr class="separator:a138e285a4ab71b34de21642fc7a167be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae551df32e17d88b496ff5e168441c6f9"><td class="memItemLeft" align="right" valign="top"><a id="ae551df32e17d88b496ff5e168441c6f9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SonarEvent</b> (bool timeout=false)</td></tr>
-<tr class="separator:ae551df32e17d88b496ff5e168441c6f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f38f698b95e8478c28856fe274b2f7b"><td class="memItemLeft" align="right" valign="top"><a id="a1f38f698b95e8478c28856fe274b2f7b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SonarEvent</b> (uint8_t started, uint8_t ready, const RAW_TIME &amp;time)</td></tr>
-<tr class="separator:a1f38f698b95e8478c28856fe274b2f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a438cded47e35742f2da72fcbd1c2c3d6"><td class="memItemLeft" align="right" valign="top"><a id="a438cded47e35742f2da72fcbd1c2c3d6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>timeout</b> () const</td></tr>
+<tr class="memitem:ad8775814aef11f07d6785511407bb245"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#ad8775814aef11f07d6785511407bb245">SonarEvent</a> ()</td></tr>
+<tr class="memdesc:ad8775814aef11f07d6785511407bb245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#ad8775814aef11f07d6785511407bb245">More...</a><br /></td></tr>
+<tr class="separator:ad8775814aef11f07d6785511407bb245"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a438cded47e35742f2da72fcbd1c2c3d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a438cded47e35742f2da72fcbd1c2c3d6">timeout</a> () const</td></tr>
+<tr class="memdesc:a438cded47e35742f2da72fcbd1c2c3d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate if this event was produced by a timeout while waiting for echo pulses.  <a href="#a438cded47e35742f2da72fcbd1c2c3d6">More...</a><br /></td></tr>
 <tr class="separator:a438cded47e35742f2da72fcbd1c2c3d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45487c0872a470eb3a6e641963b384d2"><td class="memItemLeft" align="right" valign="top"><a id="a45487c0872a470eb3a6e641963b384d2"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>started</b> () const</td></tr>
+<tr class="memitem:a45487c0872a470eb3a6e641963b384d2"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2">started</a> () const</td></tr>
+<tr class="memdesc:a45487c0872a470eb3a6e641963b384d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate if this event was produced due to an echo pulse leading edge just received by the related <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code>.  <a href="#a45487c0872a470eb3a6e641963b384d2">More...</a><br /></td></tr>
 <tr class="separator:a45487c0872a470eb3a6e641963b384d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa9fe430fd043ca3992f37ac66a24ec1"><td class="memItemLeft" align="right" valign="top"><a id="aaa9fe430fd043ca3992f37ac66a24ec1"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>ready</b> () const</td></tr>
+<tr class="memitem:aaa9fe430fd043ca3992f37ac66a24ec1"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#aaa9fe430fd043ca3992f37ac66a24ec1">ready</a> () const</td></tr>
+<tr class="memdesc:aaa9fe430fd043ca3992f37ac66a24ec1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate if this event was produced tdue to an echo pulse trailing edge just received by the related <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code>.  <a href="#aaa9fe430fd043ca3992f37ac66a24ec1">More...</a><br /></td></tr>
 <tr class="separator:aaa9fe430fd043ca3992f37ac66a24ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a686cdd819d7d4fb5f0f419b263196f65"><td class="memItemLeft" align="right" valign="top"><a id="a686cdd819d7d4fb5f0f419b263196f65"></a>
-RAW_TIME&#160;</td><td class="memItemRight" valign="bottom"><b>time</b> () const</td></tr>
+<tr class="memitem:a686cdd819d7d4fb5f0f419b263196f65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a138e285a4ab71b34de21642fc7a167be">RAW_TIME</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65">time</a> () const</td></tr>
+<tr class="memdesc:a686cdd819d7d4fb5f0f419b263196f65"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">timer::RTTRawTime</a></code> at which this event occurred.  <a href="#a686cdd819d7d4fb5f0f419b263196f65">More...</a><br /></td></tr>
 <tr class="separator:a686cdd819d7d4fb5f0f419b263196f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a63f29743ef7a523c2adfa6424b2efec7"><td class="memTemplParams" colspan="2"><a id="a63f29743ef7a523c2adfa6424b2efec7"></a>
+template&lt;board::Timer , board::DigitalPin , board::Port , uint8_t &gt; </td></tr>
+<tr class="memitem:a63f29743ef7a523c2adfa6424b2efec7"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>MultiHCSR04</b></td></tr>
+<tr class="separator:a63f29743ef7a523c2adfa6424b2efec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::Timer NTIMER_&gt;<br />
 struct devices::sonar::SonarEvent&lt; NTIMER_ &gt;</h3>
 
+<p>This type holds information about events occurring within <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> handler. </p>
+<p>One event can contain information for up to 8 sonars.</p>
+<p>You need to register callbacks to <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> in order to receive these events and process them. These events exist because <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> does not process them by itself i.e. it does not calculate or hold pulse information about all connected sonar sensors. It is the responsibility of callbacks to manage this information, based on all received <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>s.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER_</td><td>the AVR timer of the <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> used by the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> producing this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a343b9784151711d186327284c347d236" title="The exact SonarEvent type produced by this MultiHCSR04 instance. ">MultiHCSR04::EVENT</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00373">373</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00854">854</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ac070d4377cd1219c62db54d21257ee54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac070d4377cd1219c62db54d21257ee54">&#9670;&nbsp;</a></span>RTT</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">devices::sonar::SonarEvent</a>&lt; NTIMER_ &gt;::<a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#ac070d4377cd1219c62db54d21257ee54">RTT</a> =  <a class="el" href="classtimer_1_1_r_t_t.html">timer::RTT</a>&lt;NTIMER_&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type of <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> used by the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> producing this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#aaef6b674165a7bd5dcf4976bed3fc1a5" title="The type of timer::RTT used by this MultiHCSR04 instance. ">MultiHCSR04::RTT</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00861">861</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a138e285a4ab71b34de21642fc7a167be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a138e285a4ab71b34de21642fc7a167be">&#9670;&nbsp;</a></span>RAW_TIME</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">devices::sonar::SonarEvent</a>&lt; NTIMER_ &gt;::<a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a138e285a4ab71b34de21642fc7a167be">RAW_TIME</a> =  typename <a class="el" href="classtimer_1_1_r_t_t.html#aecb24e63db68d362d56e435224444d9b">RTT::RAW_TIME</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">timer::RTTRawTime</a></code> type used by the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> producing this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">timer::RTTRawTime</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00868">868</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad8775814aef11f07d6785511407bb245"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8775814aef11f07d6785511407bb245">&#9670;&nbsp;</a></span>SonarEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">devices::sonar::SonarEvent</a>&lt; NTIMER_ &gt;::<a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>This is here to allow direct declaration in your code: </p><div class="fragment"><div class="line">SonarEvent&lt;NTIMER&gt; event;</div><div class="line">...</div></div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00878">878</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a438cded47e35742f2da72fcbd1c2c3d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a438cded47e35742f2da72fcbd1c2c3d6">&#9670;&nbsp;</a></span>timeout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">devices::sonar::SonarEvent</a>&lt; NTIMER_ &gt;::timeout </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicate if this event was produced by a timeout while waiting for echo pulses. </p>
+<p>If so, no other field in this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code> is relevant. Hence this is the first method you should call on a <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">SonarEvent</a></code> you need to handle. </p>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00886">886</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a45487c0872a470eb3a6e641963b384d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45487c0872a470eb3a6e641963b384d2">&#9670;&nbsp;</a></span>started()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">devices::sonar::SonarEvent</a>&lt; NTIMER_ &gt;::started </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicate if this event was produced due to an echo pulse leading edge just received by the related <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code>. </p>
+<p>Each bit maps to one sonar handled by the producing <code>MultHCSR04</code>; when <code>1</code>, the echo pulse just started on the matching sonar. <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred. ">time()</a></code> will then provide the exact time at which the pulse egde occurred.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred. ">time()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00901">901</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="aaa9fe430fd043ca3992f37ac66a24ec1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa9fe430fd043ca3992f37ac66a24ec1">&#9670;&nbsp;</a></span>ready()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">devices::sonar::SonarEvent</a>&lt; NTIMER_ &gt;::ready </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicate if this event was produced tdue to an echo pulse trailing edge just received by the related <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code>. </p>
+<p>Each bit maps to one sonar handled by the producing <code>MultHCSR04</code>; when <code>1</code>, the echo pulse just ended on the matching sonar. <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred. ">time()</a></code> will then provide the exact time at which the pulse egde occurred. For a given bit (sonar), the difference of <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred. ">time()</a></code> between <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2" title="Indicate if this event was produced due to an echo pulse leading edge just received by the related Mu...">started()</a></code> and <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#aaa9fe430fd043ca3992f37ac66a24ec1" title="Indicate if this event was produced tdue to an echo pulse trailing edge just received by the related ...">ready()</a></code> will determine the echo pulse duration.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2" title="Indicate if this event was produced due to an echo pulse leading edge just received by the related Mu...">started()</a> </dd>
+<dd>
+<a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred. ">time()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00919">919</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a686cdd819d7d4fb5f0f419b263196f65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a686cdd819d7d4fb5f0f419b263196f65">&#9670;&nbsp;</a></span>time()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a138e285a4ab71b34de21642fc7a167be">RAW_TIME</a> <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">devices::sonar::SonarEvent</a>&lt; NTIMER_ &gt;::time </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">timer::RTTRawTime</a></code> at which this event occurred. </p>
+<p>This is not relevant when <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a438cded47e35742f2da72fcbd1c2c3d6" title="Indicate if this event was produced by a timeout while waiting for echo pulses. ">timeout()</a></code> is <code>true</code>.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2" title="Indicate if this event was produced due to an echo pulse leading edge just received by the related Mu...">started()</a> </dd>
+<dd>
+<a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#aaa9fe430fd043ca3992f37ac66a24ec1" title="Indicate if this event was produced tdue to an echo pulse trailing edge just received by the related ...">ready()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00931">931</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="sonar_8h_source.html">sonar.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -139,7 +372,7 @@ struct devices::sonar::SonarEvent&lt; NTIMER_ &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>sonar</b></li><li class="navelem"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1sonar.html">sonar</a></li><li class="navelem"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>

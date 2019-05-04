@@ -127,7 +127,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a5e4adca3a15c030fde986c65e0971f3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new hardware serial receiver and provide it with a buffer for interrupt-based reception.  <a href="#a5e4adca3a15c030fde986c65e0971f3e">More...</a><br /></td></tr>
 <tr class="separator:a5e4adca3a15c030fde986c65e0971f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace25979d5084b5f30214601c336920e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ace25979d5084b5f30214601c336920e6">register_handler</a> ()</td></tr>
-<tr class="memdesc:ace25979d5084b5f30214601c336920e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this receiver with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a>.  <a href="#ace25979d5084b5f30214601c336920e6">More...</a><br /></td></tr>
+<tr class="memdesc:ace25979d5084b5f30214601c336920e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this receiver with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a>.  <a href="#ace25979d5084b5f30214601c336920e6">More...</a><br /></td></tr>
 <tr class="separator:ace25979d5084b5f30214601c336920e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab990e6d4b45a811a451f1eeaa96faf1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ab990e6d4b45a811a451f1eeaa96faf1b">begin</a> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
 <tr class="memdesc:ab990e6d4b45a811a451f1eeaa96faf1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the receiver.  <a href="#ab990e6d4b45a811a451f1eeaa96faf1b">More...</a><br /></td></tr>
@@ -160,14 +160,14 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 class serial::hard::UARX&lt; USART_ &gt;</h3>
 
 <p>Hardware serial receiver API. </p>
-<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a></code>, then call <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ace25979d5084b5f30214601c336920e6" title="Register this receiver with the matching ISR that should have been registered with REGISTER_UARX_ISR(...">register_handler()</a></code> immediately after the <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. ">UARX</a> instance has been constructed.</p>
+<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a></code>, then call <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html#ace25979d5084b5f30214601c336920e6" title="Register this receiver with the matching ISR that should have been registered with REGISTER_UARX_ISR(...">register_handler()</a></code> immediately after the <a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API. ">UARX</a> instance has been constructed.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">USART_</td><td>the hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of target MCU. ">board::USART</a></code> to use </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00248">248</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -237,8 +237,8 @@ template&lt;board::USART USART_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Register this receiver with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a>. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a> </dd></dl>
+<p>Register this receiver with the matching ISR that should have been registered with <a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UARX to work correctly...">REGISTER_UARX_ISR()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00273">273</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 

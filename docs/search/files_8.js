@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['queue_2eh',['queue.h',['../queue_8h.html',1,'']]]
+  ['pci_2eh',['pci.h',['../pci_8h.html',1,'']]],
+  ['power_2eh',['power.h',['../power_8h.html',1,'']]],
+  ['pulse_5ftimer_2eh',['pulse_timer.h',['../pulse__timer_8h.html',1,'']]],
+  ['pwm_2eh',['pwm.h',['../pwm_8h.html',1,'']]]
 ];
