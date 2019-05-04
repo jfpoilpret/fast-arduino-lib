@@ -156,7 +156,7 @@ namespace devices::audio
 		using COUNTER = typename SQWGEN::TIMER::TYPE;
 
 		/**
-		 * Create an ew generator of tones.
+		 * Create a new generator of tones.
 		 */
 		ToneGenerator() : generator_{} {}
 
@@ -232,7 +232,7 @@ namespace devices::audio
 		 * @param t the tone to play
 		 * @param ms the duration, in milliseconds, of the tone to generate
 		 * 
-		 * @start_tone(Tone)
+		 * @sa start_tone(Tone)
 		 */
 		void tone(Tone t, uint16_t ms)
 		{
@@ -248,7 +248,7 @@ namespace devices::audio
 		 * @param counter the timer counter value to use to produce the required tone
 		 * @param ms the duration, in milliseconds, of the tone to generate
 		 * 
-		 * @start_tone(PRESCALER, COUNTER)
+		 * @sa start_tone(PRESCALER, COUNTER)
 		 */
 		inline void tone(PRESCALER prescaler, COUNTER counter, uint16_t ms)
 		{
