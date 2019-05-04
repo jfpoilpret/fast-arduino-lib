@@ -178,7 +178,7 @@
 /**
  * Register the necessary ISR (Interrupt Service Routine) for a 
  * `devices::sonar::HCSR04` to listen to echo pulses when the echo pin is a
- * `board::InterruptPin`,  along with a callback function that will be 
+ * `board::InterruptPin`, along with a callback function that will be 
  * notified when the sonar has finished receiving the echo pulse.
  * 
  * @param TIMER the `board::Timer` type used to instantiate the `devices::sonar::HCSR04`
@@ -206,8 +206,7 @@
  * `devices::sonar::HCSR04` to be notified when a timeout occurs; this ISR is 
  * also in charge of the associated `timer::RTT` time update.
  * 
- * @param TIMER the `board::Timer` type used to instantiate the related
- * `devices::sonar::HCSR04` template classes.
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
  * @param SONAR the actual type of the first sonar to notify (instantiated
  * template of `devices::sonar::HCSR04`)
  * @param ... the actual types of other sonars to notify
@@ -218,13 +217,31 @@
  * @sa HCSR04::async_echo()
  * @sa REGISTER_RTT_ISR()
  */
-#define REGISTER_HCSR04_RTT_TIMEOUT(TIMER, SONAR, ...)                                    \
+#define REGISTER_HCSR04_RTT_TIMEOUT(TIMER_NUM, SONAR, ...)                                \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                              \
 	{                                                                                     \
 		devices::sonar::isr_handler::sonar_rtt_change<TIMER_NUM, SONAR, ##__VA_ARGS__>(); \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a set of
+ * `devices::sonar::HCSR04` to be notified, and call back a handler's method,
+ * when a timeout occurs; this ISR is also in charge of the associated 
+ * `timer::RTT` time update.
+ * 
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the function that will be called when the timeout has occurred
+ * @param SONAR the actual type of the first sonar to notify (instantiated
+ * template of `devices::sonar::HCSR04`)
+ * @param ... the actual types of other sonars to notify
+ * 
+ * @sa devices::sonar::HCSR04
+ * @sa HCSR04::echo_us()
+ * @sa HCSR04::await_echo_us()
+ * @sa HCSR04::async_echo()
+ * @sa REGISTER_HCSR04_RTT_TIMEOUT()
+ */
 #define REGISTER_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, HANDLER, CALLBACK, SONAR, ...)          \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                  \
 	{                                                                                         \
@@ -232,7 +249,24 @@
 			interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();                \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a set of
+ * `devices::sonar::HCSR04` to be notified, and call back a function,
+ * when a timeout occurs; this ISR is also in charge of the associated 
+ * `timer::RTT` time update.
+ * 
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param CALLBACK the function that will be called when the timeout has occurred
+ * @param SONAR the actual type of the first sonar to notify (instantiated
+ * template of `devices::sonar::HCSR04`)
+ * @param ... the actual types of other sonars to notify
+ * 
+ * @sa devices::sonar::HCSR04
+ * @sa HCSR04::echo_us()
+ * @sa HCSR04::await_echo_us()
+ * @sa HCSR04::async_echo()
+ * @sa REGISTER_HCSR04_RTT_TIMEOUT()
+ */
 #define REGISTER_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, CALLBACK, SONAR, ...)                 \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                  \
 	{                                                                                         \
@@ -240,7 +274,28 @@
 			interrupt::CallbackHandler<void (*)(), CALLBACK>::call();                         \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a 
+ * `devices::sonar::MultiHCSR04` to listen to echo pulses on all sonars connected
+ * to it, and call back a handler's method.
+ * 
+ * @param TIMER the `board::Timer` type used to instantiate the 
+ * `devices::sonar::MultiHCSR04` template class.
+ * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
+ * connected to the echo pin
+ * @param TRIGGER the `board::DigitalPin` connected to the sonars trigger pins
+ * @param ECHO_PORT the `board::Port` connected to all sonar echo pins
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when one sonar
+ * echo pin changes level, i.e. when a leading or trailing edge of the echo pulse
+ * is received; this must be a proper PTMF (pointer to member function) which
+ * takes one argument of type `const SonarEvent<TIMER>&`.
+ * 
+ * @sa devices::sonar::MultiHCSR04
+ * @sa devices::sonar::SonarEvent
+ * @sa REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION()
+ * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()
+ */
 #define REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(TIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK) \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                           \
 	{                                                                                                          \
@@ -248,7 +303,26 @@
 		isr::multi_sonar_pci_method<PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK>();       \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a 
+ * `devices::sonar::MultiHCSR04` to listen to echo pulses on all sonars connected
+ * to it, and call back a function.
+ * 
+ * @param TIMER the `board::Timer` type used to instantiate the 
+ * `devices::sonar::MultiHCSR04` template class.
+ * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
+ * connected to the echo pin
+ * @param TRIGGER the `board::DigitalPin` connected to the sonars trigger pins
+ * @param ECHO_PORT the `board::Port` connected to all sonar echo pins
+ * @param CALLBACK the function that will be called when one sonar echo pin 
+ * changes level, i.e. when a leading or trailing edge of the echo pulse
+ * is received; this must take one argument of type `const SonarEvent<TIMER>&`.
+ * 
+ * @sa devices::sonar::MultiHCSR04
+ * @sa devices::sonar::SonarEvent
+ * @sa REGISTER_MULTI_HCSR04_PCI_ISR_METHOD()
+ * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()
+ */
 #define REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(TIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK) \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                    \
 	{                                                                                                   \
@@ -256,15 +330,24 @@
 		isr::multi_sonar_pci_function<PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK>();       \
 	}
 
-//TODO document!
-#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT(TIMER, SONAR)                                 \
-	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                            \
-	{                                                                                   \
-		using EVENT = typename SONAR::EVENT;                                            \
-		devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR, EVENT>(); \
-	}
-
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a
+ * `devices::sonar::MultiHCSR04` to be notified, and call back a handler's method,
+ * when a timeout occurs; this ISR is also in charge of the associated 
+ * `timer::RTT` time update.
+ * 
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param SONAR the actual type of the `devices::sonar::MultiHCSR04` for which
+ * this ISR is registered
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when a timeout
+ * occurs; this must be a proper PTMF (pointer to member function) which
+ * takes one argument of type `const SonarEvent<TIMER>&`.
+ * 
+ * @sa devices::sonar::MultiHCSR04
+ * @sa devices::sonar::SonarEvent
+ * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()
+ */
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, HANDLER, CALLBACK)                            \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                                     \
 	{                                                                                                            \
@@ -273,7 +356,22 @@
 		if (event.timeout()) interrupt::CallbackHandler<void (HANDLER::*)(const EVENT&), CALLBACK>::call(event); \
 	}
 
-//TODO document!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a
+ * `devices::sonar::MultiHCSR04` to be notified, and call back a function,
+ * when a timeout occurs; this ISR is also in charge of the associated 
+ * `timer::RTT` time update.
+ * 
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param SONAR the actual type of the `devices::sonar::MultiHCSR04` for which
+ * this ISR is registered
+ * @param CALLBACK the function that will be called when a timeout
+ * occurs; this must take one argument of type `const SonarEvent<TIMER>&`.
+ * 
+ * @sa devices::sonar::MultiHCSR04
+ * @sa devices::sonar::SonarEvent
+ * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()
+ */
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION(TIMER_NUM, SONAR, CALLBACK)                          \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \
 	{                                                                                                   \
@@ -740,10 +838,15 @@ namespace devices::sonar
 	 * This type holds information about events occurring within `MultiHCSR04`
 	 * handler.
 	 * One event can contain information for up to 8 sonars.
+	 * 
+	 * You need to register callbacks to `MultiHCSR04` in order to receive these
+	 * events and process them. These events exist because `MultiHCSR04` does
+	 * not process them by itself i.e. it does not calculate or hold pulse
+	 * information about all connected sonar sensors. It is the responsibility
+	 * of callbacks to manage this information, based on all received `SonarEvent`s.
+	 * 
 	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` used by the `MultiHCSR04`
 	 * producing this `SonarEvent`
-	 * 
-	 * TODO more details about why we need this SonarEvent.
 	 * 
 	 * @sa MultiHCSR04
 	 * @sa MultiHCSR04::EVENT
@@ -786,7 +889,7 @@ namespace devices::sonar
 		}
 
 		/**
-		 * Indicate if this event was produced due to an echo pulse starting edge
+		 * Indicate if this event was produced due to an echo pulse leading edge
 		 * just received by the related `MultiHCSR04`.
 		 * Each bit maps to one sonar handled by the producing `MultHCSR04`;
 		 * when `1`, the echo pulse just started on the matching sonar.
@@ -801,7 +904,7 @@ namespace devices::sonar
 		}
 
 		/**
-		 * Indicate if this event was produced tdue to an echo pulse ending edge
+		 * Indicate if this event was produced tdue to an echo pulse trailing edge
 		 * just received by the related `MultiHCSR04`.
 		 * Each bit maps to one sonar handled by the producing `MultHCSR04`;
 		 * when `1`, the echo pulse just ended on the matching sonar.
@@ -844,14 +947,47 @@ namespace devices::sonar
 		template<board::Timer, board::DigitalPin, board::Port, uint8_t> friend class MultiHCSR04;
 	};
 
-	//TODO document!
+	/**
+	 * This template class supports up to 8 HC-SR04 sonars (or equivalent sensors),
+	 * with their trigger pins gathered and connected to only one MCU pin, and all
+	 * echo pins connected to the same MCU `board::Port`.
+	 * With this class, all connected sonars start ranging at the same time.
+	 * This method works exclusively in asynchronous mode.
+	 * 
+	 * Note that, contrarily to the `HCSR04` class, this class does not handle 
+	 * calculation or storeage of echo pulse duration for all connected sonars;
+	 * instead, it produces `SonarEvent`s upon each sonar event occurring:
+	 * - echo pulse leading edge received
+	 * - echo pulse trailing edge received
+	 * - timeout occurred while waiting for echo pulse reception
+	 * You need to register proper callbacks in order to receive these events and
+	 * process them. It is the responsibility your callbacks to calculate (and
+	 * optionally store) echo pulse duration, based on all received `SonarEvent`s.
+	 * 
+	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` to use for this `MultiHCSR04`
+	 * @tparam TRIGGER_ the `board::DigitalPin` connected to the sensors trigger 
+	 * pins; that can be any available pin.
+	 * @tparam ECHO_PORT_ the MCU port to which all echo pins of sonars handled
+	 * by this class are connected; this port must support PCINT interrupts.
+	 * @tparam ECHO_MASK_ the mask determining which pins of @p ECHO_PORT_ are
+	 * actually connected to a real sonar echo pin; for each bit set, the matching
+	 * pin must be able to generate a PCINT interrupt when its level changes.
+	 * 
+	 * @sa SonarEvent
+	 * @sa REGISTER_MULTI_HCSR04_PCI_ISR_METHOD()
+	 * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()
+	 * @sa REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION()
+	 * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()
+	 */
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_>
 	class MultiHCSR04
 	{
 	public:
-		//TODO document!
+		/** The `board::DigitalPin` connected to the sensors trigger pins. */
 		static constexpr const board::DigitalPin TRIGGER = TRIGGER_;
+		/** The MCU port to which all echo pins of sonars handled by this class are connected. */
 		static constexpr const board::Port ECHO_PORT = ECHO_PORT_;
+		/** The mask determining which pins of `ECHO_PORT` are actually connected to a real sonar echo pin. */
 		static constexpr const uint8_t ECHO_MASK = ECHO_MASK_;
 
 	private:
@@ -860,15 +996,33 @@ namespace devices::sonar
 		static_assert((PTRAIT::DPIN_MASK & ECHO_MASK) == ECHO_MASK, "ECHO_MASK_ must contain available PORT pins");
 
 	public:
-		//TODO document!
+		/** The type of `timer::RTT` used by this `MultiHCSR04` instance. */
 		using RTT = timer::RTT<NTIMER_>;
+		/** The exact `SonarEvent` type produced by this `MultiHCSR04` instance. */
 		using EVENT = SonarEvent<NTIMER_>;
 
-		//TODO document!
+		/**
+		 * The approximate maximum range, in meters, that this sonar sensor
+		 * supports. Any obstacle beyond this distance will generate no echo 
+		 * pulse from the sensor.
+		 */
 		static constexpr const uint16_t MAX_RANGE_M = 4;
+
+		/**
+		 * The default timeout duration, in milliseconds, to use if you want to
+		 * cover the maximum range of the sensor.
+		 * Using any greater timeout value would be pointless.
+		 * @sa MAX_RANGE_M
+		 * @sa trigger()
+		 */
 		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
 
-		//TODO document!
+		/**
+		 * Construct a new a multi-sonar sensors handler.
+		 * @param rtt a reference to an existing `timer::RTT` for echo pulse 
+		 * duration counting; this RTT shall be started before using any other
+		 * methods of this sonar.
+		 */
 		MultiHCSR04(RTT& rtt)
 			: rtt_{rtt}, started_{}, ready_{}, active_{false},
 			  timeout_time_ms_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{0}
@@ -876,29 +1030,23 @@ namespace devices::sonar
 			interrupt::register_handler(*this);
 		}
 
-		//TODO document!
-		uint8_t ready() const
-		{
-			return ready_;
-		}
-
-		//TODO document!
-		bool all_ready() const
-		{
-			return ready_ == ECHO_MASK;
-		}
-
-		//TODO document!
-		void set_ready()
-		{
-			if (active_)
-			{
-				ready_ = ECHO_MASK;
-				active_ = false;
-			}
-		}
-
-		//TODO document!
+		/**
+		 * Start ranging on all sonars connected to this `MultiHCSR04`.
+		 * When calling this method, a trigger pulse is sent to all connected 
+		 * sonars. After this call, `SonarEvent`s will be generated and propagated
+		 * to callbacks whenever any of the following occurs:
+		 * - an echo pulse leading edge is detected on a sonar
+		 * - an echo pulse trailing edge is detected on a sonar
+		 * - timeout occurred while waiting for echo pulses
+		 * 
+		 * @param timeout_ms the timeout, in milliseconds, after which the ranging
+		 * will stop if no echo pulse has been received
+		 * 
+		 * @sa REGISTER_MULTI_HCSR04_PCI_ISR_METHOD()
+		 * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()
+		 * @sa REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION()
+		 * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()
+		 */
 		void trigger(uint16_t timeout_ms)
 		{
 			started_ = 0;
@@ -909,6 +1057,49 @@ namespace devices::sonar
 			trigger_.set();
 			time::delay_us(TRIGGER_PULSE_US);
 			trigger_.clear();
+		}
+
+		/**
+		 * Tell, for which of the connected sonars, the latest ranging, started
+		 * by `trigger()`, is finished, ie the echo pulse has been received.
+		 * If you want to know if ranging for all connected sonars is finished,
+		 * then use `all_ready()` instead.
+		 * 
+		 * @return a bit mask where each set bit indicates that ranging is 
+		 * finished for the corresponding sonar.
+		 * 
+		 * @sa trigger()
+		 * @sa all_ready()
+		 * @sa set_ready()
+		 */
+		uint8_t ready() const
+		{
+			return ready_;
+		}
+
+		/**
+		 * Tell if the latest ranging, started by `trigger()`, is finished for
+		 * all connected sonars, ie the echo pulse has been received.
+		 * If you want to know for which connected sonars ranging is finished,
+		 * then use `ready()` instead.
+		 */
+		bool all_ready() const
+		{
+			return ready_ == ECHO_MASK;
+		}
+
+		/**
+		 * Force readiness of all connected sensors, ie the end of current ranging.
+		 * This can be used by callbacks e.g. to stop current ranging when a timeout
+		 * has occurred.
+		 */
+		void set_ready()
+		{
+			if (active_)
+			{
+				active_ = false;
+				ready_ = ECHO_MASK;
+			}
 		}
 
 	private:
