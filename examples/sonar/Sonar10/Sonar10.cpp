@@ -145,7 +145,6 @@ private:
 };
 
 // Register ISR callbacks
-// REGISTER_RTT_ISR(TIMER_NUM)
 REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, SonarListener, &SonarListener::on_timeout)
 REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK,
 	SonarListener, &SonarListener::on_sonar)
