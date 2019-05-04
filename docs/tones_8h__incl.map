@@ -1,0 +1,11 @@
+<map id="fastarduino/devices/tones.h" name="fastarduino/devices/tones.h">
+<area shape="rect" id="node2" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="265,95,397,121"/>
+<area shape="rect" id="node15" href="$time_8h.html" title="Simple time utilities. " alt="" coords="550,244,626,271"/>
+<area shape="rect" id="node3" href="$timer_8h.html" title="Timer API. " alt="" coords="177,244,245,271"/>
+<area shape="rect" id="node12" href="$pwm_8h.html" title="PWM API. " alt="" coords="297,169,364,196"/>
+<area shape="rect" id="node7" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="155,319,253,345"/>
+<area shape="rect" id="node10" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="461,319,544,345"/>
+<area shape="rect" id="node8" href="$io_8h_source.html" title="boards/io.h" alt="" coords="393,393,487,420"/>
+<area shape="rect" id="node13" href="$board_8h_source.html" title="boards/board.h" alt="" coords="321,244,439,271"/>
+<area shape="rect" id="node14" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="463,244,526,271"/>
+</map>

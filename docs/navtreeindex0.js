@@ -1,6 +1,5 @@
 var NAVTREEINDEX0 =
 {
-".html":[4,0,3,0],
 ".html":[4,0,3,1],
 ".html":[4,0,3,4],
 "abi_8cpp_source.html":[5,0,0,2],
@@ -112,13 +111,13 @@ var NAVTREEINDEX0 =
 "classdevices_1_1audio_1_1_tone_generator.html":[4,0,3,0,0],
 "classdevices_1_1audio_1_1_tone_generator.html#a48ef1dbf1e0cdfa71cc7428d3f4230e6":[4,0,3,0,0,3],
 "classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88":[4,0,3,0,0,1],
-"classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb":[4,0,3,0,0,5],
+"classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb":[4,0,3,0,0,6],
 "classdevices_1_1audio_1_1_tone_generator.html#a8edbc25118181a60719fe731ba75f62c":[4,0,3,0,0,2],
-"classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd":[4,0,3,0,0,8],
-"classdevices_1_1audio_1_1_tone_generator.html#ad1ef6d87cfd68bf2a5704a5ce72e9469":[4,0,3,0,0,6],
+"classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd":[4,0,3,0,0,5],
+"classdevices_1_1audio_1_1_tone_generator.html#ad1ef6d87cfd68bf2a5704a5ce72e9469":[4,0,3,0,0,7],
 "classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67":[4,0,3,0,0,4],
 "classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1":[4,0,3,0,0,0],
-"classdevices_1_1audio_1_1_tone_generator.html#af55c0724e6de7271593f26137271e5cf":[4,0,3,0,0,7],
+"classdevices_1_1audio_1_1_tone_generator.html#af55c0724e6de7271593f26137271e5cf":[4,0,3,0,0,8],
 "classdevices_1_1audio_1_1_tone_player.html":[4,0,3,0,2],
 "classdevices_1_1audio_1_1_tone_player.html#a07807774066b59ae95c33e7426c88e19":[4,0,3,0,2,7],
 "classdevices_1_1audio_1_1_tone_player.html#a142aa8ecaa187cea0063a6dbfeea8da6":[4,0,3,0,2,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classdevices_1_1rf_1_1_n_r_f24_l01.html#af21a2da55c1e496022cdf9e88ed2d1dd":[4,0,3,3,1,13],
 "classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4":[4,0,3,3,1,24],
 "classdevices_1_1rtc_1_1_d_s1307.html":[4,0,3,4,0],
-"classdevices_1_1rtc_1_1_d_s1307.html#a08df70d5bee312e7f04d40384b6ef155":[4,0,3,4,0,5]
+"classdevices_1_1rtc_1_1_d_s1307.html#a08df70d5bee312e7f04d40384b6ef155":[4,0,3,4,0,5],
+"classdevices_1_1rtc_1_1_d_s1307.html#a373317ef94a24978c453ca1395dcacfb":[4,0,3,4,0,4]
 };

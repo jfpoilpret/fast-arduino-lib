@@ -94,44 +94,394 @@ $(document).ready(function(){initNavTree('classdevices_1_1audio_1_1_tone_generat
 <div class="title">devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>API class for tone generation to a buzzer (or better an amplifier) connected to pin <code>OUTPUT</code>.  
+ <a href="classdevices_1_1audio_1_1_tone_generator.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="tones_8h_source.html">fastarduino/devices/tones.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:aee0c351832dfafbd7b29a90f7dbc70b1"><td class="memItemLeft" align="right" valign="top"><a id="aee0c351832dfafbd7b29a90f7dbc70b1"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>PRESCALER</b> = typename SQWGEN::TIMER::PRESCALER</td></tr>
+<tr class="memitem:aee0c351832dfafbd7b29a90f7dbc70b1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1">PRESCALER</a> = typename SQWGEN::TIMER::PRESCALER</td></tr>
+<tr class="memdesc:aee0c351832dfafbd7b29a90f7dbc70b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code>TimerPrescaler</code> type matching the selected NTIMER.  <a href="#aee0c351832dfafbd7b29a90f7dbc70b1">More...</a><br /></td></tr>
 <tr class="separator:aee0c351832dfafbd7b29a90f7dbc70b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77d606199215682c22535439bcfd1e88"><td class="memItemLeft" align="right" valign="top"><a id="a77d606199215682c22535439bcfd1e88"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>COUNTER</b> = typename <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">SQWGEN::TIMER::TYPE</a></td></tr>
+<tr class="memitem:a77d606199215682c22535439bcfd1e88"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88">COUNTER</a> = typename <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">SQWGEN::TIMER::TYPE</a></td></tr>
+<tr class="memdesc:a77d606199215682c22535439bcfd1e88"><td class="mdescLeft">&#160;</td><td class="mdescRight">The counter type (<code>uint8_t</code> or <code>uint16_t</code>) for the selected NTIMER.  <a href="#a77d606199215682c22535439bcfd1e88">More...</a><br /></td></tr>
 <tr class="separator:a77d606199215682c22535439bcfd1e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a48ef1dbf1e0cdfa71cc7428d3f4230e6"><td class="memItemLeft" align="right" valign="top"><a id="a48ef1dbf1e0cdfa71cc7428d3f4230e6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>start_tone</b> (Tone t)</td></tr>
+<tr class="memitem:a8edbc25118181a60719fe731ba75f62c"><td class="memItemLeft" align="right" valign="top"><a id="a8edbc25118181a60719fe731ba75f62c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a8edbc25118181a60719fe731ba75f62c">ToneGenerator</a> ()</td></tr>
+<tr class="memdesc:a8edbc25118181a60719fe731ba75f62c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new generator of tones. <br /></td></tr>
+<tr class="separator:a8edbc25118181a60719fe731ba75f62c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48ef1dbf1e0cdfa71cc7428d3f4230e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a48ef1dbf1e0cdfa71cc7428d3f4230e6">start_tone</a> (<a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> t)</td></tr>
+<tr class="memdesc:a48ef1dbf1e0cdfa71cc7428d3f4230e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start generating a tone on the connected buzzer until <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb" title="Stop the tone being currently generated to the connected buzzer. ">stop_tone()</a></code> or <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd" title="Force a delay of the required duration and stop the tone being currently generated to the connected b...">pause()</a></code> is called.  <a href="#a48ef1dbf1e0cdfa71cc7428d3f4230e6">More...</a><br /></td></tr>
 <tr class="separator:a48ef1dbf1e0cdfa71cc7428d3f4230e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1b285ecb998f46504de143cc4ce1a67"><td class="memItemLeft" align="right" valign="top"><a id="ae1b285ecb998f46504de143cc4ce1a67"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>start_tone</b> (PRESCALER prescaler, COUNTER counter)</td></tr>
+<tr class="memitem:ae1b285ecb998f46504de143cc4ce1a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67">start_tone</a> (<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1">PRESCALER</a> prescaler, <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88">COUNTER</a> counter)</td></tr>
+<tr class="memdesc:ae1b285ecb998f46504de143cc4ce1a67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start generating a tone on the connected buzzer until <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb" title="Stop the tone being currently generated to the connected buzzer. ">stop_tone()</a></code> or <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd" title="Force a delay of the required duration and stop the tone being currently generated to the connected b...">pause()</a></code> is called.  <a href="#ae1b285ecb998f46504de143cc4ce1a67">More...</a><br /></td></tr>
 <tr class="separator:ae1b285ecb998f46504de143cc4ce1a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84b3c1b940adde79a79cca43ffcfc5eb"><td class="memItemLeft" align="right" valign="top"><a id="a84b3c1b940adde79a79cca43ffcfc5eb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop_tone</b> ()</td></tr>
-<tr class="separator:a84b3c1b940adde79a79cca43ffcfc5eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1ef6d87cfd68bf2a5704a5ce72e9469"><td class="memItemLeft" align="right" valign="top"><a id="ad1ef6d87cfd68bf2a5704a5ce72e9469"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tone</b> (Tone t, uint16_t ms)</td></tr>
-<tr class="separator:ad1ef6d87cfd68bf2a5704a5ce72e9469"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af55c0724e6de7271593f26137271e5cf"><td class="memItemLeft" align="right" valign="top"><a id="af55c0724e6de7271593f26137271e5cf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>tone</b> (PRESCALER prescaler, COUNTER counter, uint16_t ms)</td></tr>
-<tr class="separator:af55c0724e6de7271593f26137271e5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa61fbde651584a45e6bd1f43613844cd"><td class="memItemLeft" align="right" valign="top"><a id="aa61fbde651584a45e6bd1f43613844cd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>pause</b> (uint16_t ms)</td></tr>
+<tr class="memitem:aa61fbde651584a45e6bd1f43613844cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd">pause</a> (uint16_t ms)</td></tr>
+<tr class="memdesc:aa61fbde651584a45e6bd1f43613844cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Force a delay of the required duration and stop the tone being currently generated to the connected buzzer.  <a href="#aa61fbde651584a45e6bd1f43613844cd">More...</a><br /></td></tr>
 <tr class="separator:aa61fbde651584a45e6bd1f43613844cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84b3c1b940adde79a79cca43ffcfc5eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb">stop_tone</a> ()</td></tr>
+<tr class="memdesc:a84b3c1b940adde79a79cca43ffcfc5eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop the tone being currently generated to the connected buzzer.  <a href="#a84b3c1b940adde79a79cca43ffcfc5eb">More...</a><br /></td></tr>
+<tr class="separator:a84b3c1b940adde79a79cca43ffcfc5eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1ef6d87cfd68bf2a5704a5ce72e9469"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ad1ef6d87cfd68bf2a5704a5ce72e9469">tone</a> (<a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> t, uint16_t ms)</td></tr>
+<tr class="memdesc:ad1ef6d87cfd68bf2a5704a5ce72e9469"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the required tone for the given duration.  <a href="#ad1ef6d87cfd68bf2a5704a5ce72e9469">More...</a><br /></td></tr>
+<tr class="separator:ad1ef6d87cfd68bf2a5704a5ce72e9469"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af55c0724e6de7271593f26137271e5cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#af55c0724e6de7271593f26137271e5cf">tone</a> (<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1">PRESCALER</a> prescaler, <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88">COUNTER</a> counter, uint16_t ms)</td></tr>
+<tr class="memdesc:af55c0724e6de7271593f26137271e5cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play the required tone for the given duration.  <a href="#af55c0724e6de7271593f26137271e5cf">More...</a><br /></td></tr>
+<tr class="separator:af55c0724e6de7271593f26137271e5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt;<br />
 class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 
+<p>API class for tone generation to a buzzer (or better an amplifier) connected to pin <code>OUTPUT</code>. </p>
+<p>This is a rather low-level API. If you want to play suites of tones ("melodies"), then you should better use <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a></code>. Most provided methods come in two flavours:</p><ul>
+<li>one that takes a <code>Tone</code> argument (that will be converted to a note frequency)</li>
+<li>one that takes a TimerPrescaler and a counter value, that will be used to generate the note frequency from raw timer values. The first flavour is more readable but less efficient (code size and performance). The second flavour allows for performance optimization (compile-time calculations) but is less easy to read and understand.</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER</td><td>the AVR timer to use for the underlying Timer </td></tr>
+    <tr><td class="paramname">OUTPUT</td><td>the DigitalPin connected to the buzzer; this must be the pin OCnA, where n is the AVR Timer number</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa" title="This enum defines all possible audio tones that can be generated. ">Tone</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_player.html">TonePlayer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00112">112</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00146">146</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="aee0c351832dfafbd7b29a90f7dbc70b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee0c351832dfafbd7b29a90f7dbc70b1">&#9670;&nbsp;</a></span>PRESCALER</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1">PRESCALER</a> =  typename SQWGEN::TIMER::PRESCALER</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The <code>TimerPrescaler</code> type matching the selected NTIMER. </p>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00154">154</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<a id="a77d606199215682c22535439bcfd1e88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77d606199215682c22535439bcfd1e88">&#9670;&nbsp;</a></span>COUNTER</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88">COUNTER</a> =  typename <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">SQWGEN::TIMER::TYPE</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The counter type (<code>uint8_t</code> or <code>uint16_t</code>) for the selected NTIMER. </p>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00156">156</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a48ef1dbf1e0cdfa71cc7428d3f4230e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48ef1dbf1e0cdfa71cc7428d3f4230e6">&#9670;&nbsp;</a></span>start_tone() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::start_tone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start generating a tone on the connected buzzer until <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb" title="Stop the tone being currently generated to the connected buzzer. ">stop_tone()</a></code> or <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd" title="Force a delay of the required duration and stop the tone being currently generated to the connected b...">pause()</a></code> is called. </p>
+<p>If you would like to generate a tone for a given duration, you should use <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ad1ef6d87cfd68bf2a5704a5ce72e9469" title="Play the required tone for the given duration. ">tone()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>the tone to generate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb" title="Stop the tone being currently generated to the connected buzzer. ">stop_tone()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd" title="Force a delay of the required duration and stop the tone being currently generated to the connected b...">pause()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ad1ef6d87cfd68bf2a5704a5ce72e9469" title="Play the required tone for the given duration. ">tone(Tone, uint16_t)</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67" title="Start generating a tone on the connected buzzer until stop_tone() or pause() is called. ">start_tone(PRESCALER, COUNTER)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00176">176</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<a id="ae1b285ecb998f46504de143cc4ce1a67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1b285ecb998f46504de143cc4ce1a67">&#9670;&nbsp;</a></span>start_tone() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::start_tone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1">PRESCALER</a>&#160;</td>
+          <td class="paramname"><em>prescaler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88">COUNTER</a>&#160;</td>
+          <td class="paramname"><em>counter</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start generating a tone on the connected buzzer until <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb" title="Stop the tone being currently generated to the connected buzzer. ">stop_tone()</a></code> or <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd" title="Force a delay of the required duration and stop the tone being currently generated to the connected b...">pause()</a></code> is called. </p>
+<p>If you would like to generate a tone for a given duration, you should use <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ad1ef6d87cfd68bf2a5704a5ce72e9469" title="Play the required tone for the given duration. ">tone()</a></code> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prescaler</td><td>the timer prescaler value to use to produce the required tone </td></tr>
+    <tr><td class="paramname">counter</td><td>the timer counter value to use to produce the required tone</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb" title="Stop the tone being currently generated to the connected buzzer. ">stop_tone()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd" title="Force a delay of the required duration and stop the tone being currently generated to the connected b...">pause()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#af55c0724e6de7271593f26137271e5cf" title="Play the required tone for the given duration. ">tone(PRESCALER, COUNTER, uint16_t)</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a48ef1dbf1e0cdfa71cc7428d3f4230e6" title="Start generating a tone on the connected buzzer until stop_tone() or pause() is called. ">start_tone(Tone)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00195">195</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<a id="aa61fbde651584a45e6bd1f43613844cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa61fbde651584a45e6bd1f43613844cd">&#9670;&nbsp;</a></span>pause()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::pause </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Force a delay of the required duration and stop the tone being currently generated to the connected buzzer. </p>
+<p>Note that, after the note generation has been stopped, a short silence of 20ms is forced.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ms</td><td>the time to wait, in milliseconds, until note generation is stopped</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a48ef1dbf1e0cdfa71cc7428d3f4230e6" title="Start generating a tone on the connected buzzer until stop_tone() or pause() is called. ">start_tone()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00211">211</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<a id="a84b3c1b940adde79a79cca43ffcfc5eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84b3c1b940adde79a79cca43ffcfc5eb">&#9670;&nbsp;</a></span>stop_tone()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::stop_tone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stop the tone being currently generated to the connected buzzer. </p>
+<dl class="section see"><dt>See also</dt><dd>start_toner() </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00223">223</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<a id="ad1ef6d87cfd68bf2a5704a5ce72e9469"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1ef6d87cfd68bf2a5704a5ce72e9469">&#9670;&nbsp;</a></span>tone() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::tone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play the required tone for the given duration. </p>
+<p>Note that at the end of the tone, a short silence of 20ms is forced.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">t</td><td>the tone to play </td></tr>
+    <tr><td class="paramname">ms</td><td>the duration, in milliseconds, of the tone to generate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a48ef1dbf1e0cdfa71cc7428d3f4230e6" title="Start generating a tone on the connected buzzer until stop_tone() or pause() is called. ">start_tone(Tone)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00237">237</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<a id="af55c0724e6de7271593f26137271e5cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af55c0724e6de7271593f26137271e5cf">&#9670;&nbsp;</a></span>tone() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::tone </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1">PRESCALER</a>&#160;</td>
+          <td class="paramname"><em>prescaler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88">COUNTER</a>&#160;</td>
+          <td class="paramname"><em>counter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>ms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play the required tone for the given duration. </p>
+<p>Note that at the end of the tone, a short silence of 20ms is forced.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prescaler</td><td>the timer prescaler value to use to produce the required tone </td></tr>
+    <tr><td class="paramname">counter</td><td>the timer counter value to use to produce the required tone </td></tr>
+    <tr><td class="paramname">ms</td><td>the duration, in milliseconds, of the tone to generate</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67" title="Start generating a tone on the connected buzzer until stop_tone() or pause() is called. ">start_tone(PRESCALER, COUNTER)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00253">253</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="tones_8h_source.html">tones.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -139,7 +489,7 @@ class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>audio</b></li><li class="navelem"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">ToneGenerator</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1audio.html">audio</a></li><li class="navelem"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">ToneGenerator</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>

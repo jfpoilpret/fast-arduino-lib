@@ -55,11 +55,13 @@ var searchData=
   ['squarewave',['SquareWave',['../classtimer_1_1_square_wave.html#ad6ea4ef6bc5df31f3259eb9f040c2c5f',1,'timer::SquareWave']]],
   ['standby',['standby',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ac6ab7ec353225fec36d49130cb9d6786',1,'devices::rf::NRF24L01']]],
   ['start_5ffrequency',['start_frequency',['../classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198',1,'timer::SquareWave::start_frequency(uint32_t frequency)'],['../classtimer_1_1_square_wave.html#a0ffd0e4aac44a9e3d915c2500b8993fe',1,'timer::SquareWave::start_frequency(typename TIMER::PRESCALER prescaler, typename TIMER::TYPE counter)']]],
+  ['start_5ftone',['start_tone',['../classdevices_1_1audio_1_1_tone_generator.html#a48ef1dbf1e0cdfa71cc7428d3f4230e6',1,'devices::audio::ToneGenerator::start_tone(Tone t)'],['../classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67',1,'devices::audio::ToneGenerator::start_tone(PRESCALER prescaler, COUNTER counter)']]],
   ['start_5ftransfer',['start_transfer',['../classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e',1,'spi::SPIDevice']]],
   ['started',['started',['../structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2',1,'devices::sonar::SonarEvent']]],
   ['status',['status',['../classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63',1,'devices::WinBond::status()'],['../classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78',1,'i2c::I2CManager::status()']]],
   ['status_5ft',['status_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a1b1df9c01cf13da3e71011631b3d4efa',1,'devices::rf::NRF24L01::status_t']]],
   ['stop',['stop',['../classtimer_1_1_square_wave.html#adf44dbb0e6275dcd9f04e83f0a004072',1,'timer::SquareWave']]],
+  ['stop_5ftone',['stop_tone',['../classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb',1,'devices::audio::ToneGenerator']]],
   ['suspend',['suspend',['../classtimer_1_1_timer.html#a7f48e7e02140100e2d6a7216efbeab64',1,'timer::Timer']]],
   ['suspend_5f',['suspend_',['../classtimer_1_1_timer.html#a4d0cc43223d237155093ae82b2a9ac46',1,'timer::Timer']]],
   ['swap_5fbytes',['swap_bytes',['../namespaceutils.html#a53f4a46843c0030ed1388d10c0ad6179',1,'utils::swap_bytes(uint16_t &amp;value)'],['../namespaceutils.html#aa520b3da671862f180de0fa3499ae293',1,'utils::swap_bytes(int16_t &amp;value)']]]

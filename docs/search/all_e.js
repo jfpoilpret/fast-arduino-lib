@@ -2,6 +2,7 @@ var searchData=
 [
   ['parity',['Parity',['../namespaceserial.html#a770c86bfde96ad529293b7b322422032',1,'serial']]],
   ['parity_5ferror',['parity_error',['../classserial_1_1_u_a_r_t_errors.html#ae4776a3526396c1b7d9c097a7a0a20d3',1,'serial::UARTErrors']]],
+  ['pause',['pause',['../classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd',1,'devices::audio::ToneGenerator']]],
   ['payload_5fmax',['PAYLOAD_MAX',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ade723eac06149ca77f8063d06756e891',1,'devices::rf::NRF24L01']]],
   ['pci_2eh',['pci.h',['../pci_8h.html',1,'']]],
   ['pci_5ftype',['PCI_TYPE',['../classserial_1_1soft_1_1_u_a_r_x.html#a737c2152bab3656ed5a2f2cd964573fe',1,'serial::soft::UARX']]],
@@ -33,7 +34,7 @@ var searchData=
   ['powerup',['powerup',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ab177f9f3d3a35c41079ec8843436f967',1,'devices::rf::NRF24L01']]],
   ['powervoltage',['PowerVoltage',['../classanalog_1_1_power_voltage.html',1,'analog']]],
   ['precision',['precision',['../classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59',1,'streams::ios_base::precision(uint8_t precision)'],['../classstreams_1_1ios__base.html#a19275827f0fadef367261d4ac8cf0d09',1,'streams::ios_base::precision() const']]],
-  ['prescaler',['PRESCALER',['../structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0',1,'timer::Calculator::PRESCALER()'],['../classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c',1,'timer::Timer::PRESCALER()'],['../classanalog_1_1_analog_input.html#a55510fc4cb79562a68a71aa61117935a',1,'analog::AnalogInput::PRESCALER()']]],
+  ['prescaler',['PRESCALER',['../classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1',1,'devices::audio::ToneGenerator::PRESCALER()'],['../structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0',1,'timer::Calculator::PRESCALER()'],['../classtimer_1_1_timer.html#a96ccf3fd7f9464cda2112fd97d2e375c',1,'timer::Timer::PRESCALER()'],['../classanalog_1_1_analog_input.html#a55510fc4cb79562a68a71aa61117935a',1,'analog::AnalogInput::PRESCALER()']]],
   ['pubsync',['pubsync',['../classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e',1,'streams::ostreambuf']]],
   ['pull',['pull',['../classcontainers_1_1_queue.html#a02f9e08c4deadbfb0f9d6885a73930e4',1,'containers::Queue::pull()'],['../namespacecontainers.html#ad31e49a84cd01e80e5c66859820ca8c9',1,'containers::pull()']]],
   ['pull_5f',['pull_',['../classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f',1,'containers::Queue']]],

@@ -19,6 +19,7 @@ var searchData=
   ['constrain',['constrain',['../namespaceutils.html#af1acb8c6f0e6493f88d42b2192e68ba3',1,'utils']]],
   ['containers',['containers',['../namespacecontainers.html',1,'']]],
   ['copyfmt',['copyfmt',['../classstreams_1_1ios__base.html#a5f9eb4a35402d3de9d17c4c9cc87dd5a',1,'streams::ios_base']]],
+  ['counter',['COUNTER',['../classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88',1,'devices::audio::ToneGenerator']]],
   ['ctc',['CTC',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77',1,'timer']]],
   ['ctc_5fcounter',['CTC_counter',['../structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455',1,'timer::Calculator']]],
   ['ctc_5ffrequency',['CTC_frequency',['../structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4',1,'timer::Calculator']]],

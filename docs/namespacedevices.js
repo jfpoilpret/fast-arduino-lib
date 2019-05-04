@@ -1,10 +1,6 @@
 var namespacedevices =
 [
-    [ "audio", null, [
-      [ "ToneGenerator", "classdevices_1_1audio_1_1_tone_generator.html", "classdevices_1_1audio_1_1_tone_generator" ],
-      [ "TonePlay", "structdevices_1_1audio_1_1_tone_play.html", "structdevices_1_1audio_1_1_tone_play" ],
-      [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html", "classdevices_1_1audio_1_1_tone_player" ]
-    ] ],
+    [ "audio", "namespacedevices_1_1audio.html", "namespacedevices_1_1audio" ],
     [ "magneto", null, [
       [ "AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", "structdevices_1_1magneto_1_1_all_sensors" ],
       [ "FIFOEnable", "structdevices_1_1magneto_1_1_f_i_f_o_enable.html", "structdevices_1_1magneto_1_1_f_i_f_o_enable" ],

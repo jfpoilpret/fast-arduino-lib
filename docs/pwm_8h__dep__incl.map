@@ -1,6 +1,6 @@
 <map id="fastarduino/pwm.h" name="fastarduino/pwm.h">
 <area shape="rect" id="node2" href="$servo_8h.html" title="API to handle servomotors. " alt="" coords="5,80,156,121"/>
 <area shape="rect" id="node3" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="181,80,325,121"/>
-<area shape="rect" id="node4" href="$tones_8h_source.html" title="fastarduino/devices\l/tones.h" alt="" coords="177,169,328,211"/>
+<area shape="rect" id="node4" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer. " alt="" coords="177,169,328,211"/>
 <area shape="rect" id="node5" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="177,259,328,300"/>
 </map>
