@@ -25,7 +25,7 @@
 #include "../time.h"
 
 /**
- * Defines API for audio tones (square waves) generation.
+ * Defines API for audio tones (square waves) generation and simple melodies playing.
  */
 namespace devices::audio
 {
