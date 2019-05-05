@@ -77,7 +77,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
     - [audio](namespacedevices_1_1audio.html): API for tone generation to buzzers or small audio amplifiers
     - [magneto](TODO): API for magnetometers, gyroscopes, accelerometers
     - [rf](namespacedevices_1_1rf.html): API for radio-frequency chips
-    - [rtc](TODO): API for real time clock chips
+    - [rtc](namespacedevices_1_1rtc.html): API for real time clock chips
     - [servo](namespacedevices_1_1servo.html): API to handle servomotors
     - [sonar](namespacedevices_1_1sonar.html): API to handle sonar range sensors
 - [eeprom](namespaceeeprom.html): contains the API to handle read and write to and from the internal MCU EEPROM.
