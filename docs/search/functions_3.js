@@ -12,11 +12,13 @@ var searchData=
   ['disable',['disable',['../classinterrupt_1_1_i_n_t_signal.html#af2f7f2150b01e0827e87bf68d0c15a1f',1,'interrupt::INTSignal::disable()'],['../classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb',1,'interrupt::PCISignal::disable()']]],
   ['disable_5f',['disable_',['../classinterrupt_1_1_i_n_t_signal.html#abec0afa523dae7eb3016c38960c6bbe8',1,'interrupt::INTSignal::disable_()'],['../classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1',1,'interrupt::PCISignal::disable_()']]],
   ['disable_5finterrupts',['disable_interrupts',['../classtimer_1_1_timer.html#a4b395e9080df860556af9c2ea1a8c6d6',1,'timer::Timer']]],
+  ['disable_5foutput',['disable_output',['../classdevices_1_1rtc_1_1_d_s1307.html#a08df70d5bee312e7f04d40384b6ef155',1,'devices::rtc::DS1307']]],
   ['disable_5fpin',['disable_pin',['../classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b',1,'interrupt::PCISignal']]],
   ['disable_5fpin_5f',['disable_pin_',['../classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df',1,'interrupt::PCISignal']]],
   ['disable_5fpins',['disable_pins',['../classinterrupt_1_1_p_c_i_signal.html#ab8bde46b21b64a778abf23a4a553db44',1,'interrupt::PCISignal']]],
   ['disable_5fpins_5f',['disable_pins_',['../classinterrupt_1_1_p_c_i_signal.html#a5b6ca8e3436f39eea424a4fa0dd57a36',1,'interrupt::PCISignal']]],
   ['disable_5fwrite',['disable_write',['../classdevices_1_1_win_bond.html#a11a1577660d2089d1e938d0c78557e86',1,'devices::WinBond']]],
   ['dispatch',['dispatch',['../classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7',1,'events::Dispatcher']]],
-  ['distance_5fmm_5fto_5fecho_5fus',['distance_mm_to_echo_us',['../namespacedevices_1_1sonar.html#af3bc97f71928347fa7b883f166235916',1,'devices::sonar']]]
+  ['distance_5fmm_5fto_5fecho_5fus',['distance_mm_to_echo_us',['../namespacedevices_1_1sonar.html#af3bc97f71928347fa7b883f166235916',1,'devices::sonar']]],
+  ['ds1307',['DS1307',['../classdevices_1_1rtc_1_1_d_s1307.html#a4f5ff1c8b22610e679eba4b017b03606',1,'devices::rtc::DS1307']]]
 ];

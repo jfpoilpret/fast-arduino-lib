@@ -3,6 +3,7 @@ var searchData=
   ['r_5fregister',['R_REGISTER',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a3295926361cc0acaf70d3a54f25247e6',1,'devices::rf::NRF24L01']]],
   ['r_5frx_5fpayload',['R_RX_PAYLOAD',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a38f74d809dee65e3baba3479ba9245e1',1,'devices::rf::NRF24L01']]],
   ['r_5frx_5fpl_5fwid',['R_RX_PL_WID',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a42a3b104c89cc1dbe42c183f14a79bcf',1,'devices::rf::NRF24L01']]],
+  ['ram_5fsize',['ram_size',['../classdevices_1_1rtc_1_1_d_s1307.html#a9a85a5a7d5163a8d2d08901d1f0d4183',1,'devices::rtc::DS1307']]],
   ['raw_5ftime',['raw_time',['../classtimer_1_1_r_t_t.html#a2bcffff30fb331b9fb7ada737fcacf2d',1,'timer::RTT::raw_time()'],['../structdevices_1_1sonar_1_1_sonar_event.html#a138e285a4ab71b34de21642fc7a167be',1,'devices::sonar::SonarEvent::RAW_TIME()'],['../classtimer_1_1_r_t_t.html#aecb24e63db68d362d56e435224444d9b',1,'timer::RTT::RAW_TIME()']]],
   ['raw_5ftime_5f',['raw_time_',['../classtimer_1_1_r_t_t.html#af839f927ace75a919383c841d1b6135d',1,'timer::RTT']]],
   ['rdbuf',['rdbuf',['../classstreams_1_1ostream.html#af874202c30293f8c8cd4ce05e17d477f',1,'streams::ostream::rdbuf()'],['../classstreams_1_1istream.html#a01e1d69745e71dc050356351db3016a0',1,'streams::istream::rdbuf()']]],

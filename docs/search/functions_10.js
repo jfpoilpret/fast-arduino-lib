@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['ram_5fsize',['ram_size',['../classdevices_1_1rtc_1_1_d_s1307.html#a9a85a5a7d5163a8d2d08901d1f0d4183',1,'devices::rtc::DS1307']]],
   ['raw_5ftime',['raw_time',['../classtimer_1_1_r_t_t.html#a2bcffff30fb331b9fb7ada737fcacf2d',1,'timer::RTT']]],
   ['raw_5ftime_5f',['raw_time_',['../classtimer_1_1_r_t_t.html#af839f927ace75a919383c841d1b6135d',1,'timer::RTT']]],
   ['rdbuf',['rdbuf',['../classstreams_1_1ostream.html#af874202c30293f8c8cd4ce05e17d477f',1,'streams::ostream::rdbuf()'],['../classstreams_1_1istream.html#a01e1d69745e71dc050356351db3016a0',1,'streams::istream::rdbuf()']]],

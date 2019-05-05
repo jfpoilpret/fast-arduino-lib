@@ -11,6 +11,7 @@ var searchData=
   ['watchdogrtt',['WatchdogRTT',['../classwatchdog_1_1_watchdog_r_t_t.html',1,'watchdog::WatchdogRTT'],['../classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477',1,'watchdog::WatchdogRTT::WatchdogRTT()']]],
   ['watchdogsignal',['WatchdogSignal',['../classwatchdog_1_1_watchdog_signal.html',1,'watchdog']]],
   ['wdt_5ftimer',['WDT_TIMER',['../namespaceevents_1_1_type.html#a89956491c3bf31c616baf63fcd335405',1,'events::Type']]],
+  ['weekday',['WeekDay',['../namespacedevices_1_1rtc.html#a765e5fb8599fbfc007de3b47a81593b3',1,'devices::rtc']]],
   ['width',['width',['../classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f',1,'streams::ios_base::width(uint8_t width)'],['../classstreams_1_1ios__base.html#a79ac9c6989af1fff3d9c0d5881d48c5c',1,'streams::ios_base::width() const']]],
   ['winbond',['WinBond',['../classdevices_1_1_win_bond.html',1,'devices::WinBond&lt; CS &gt;'],['../classdevices_1_1_win_bond.html#a35b591123d1c9fef7c70f1be1ebb2098',1,'devices::WinBond::WinBond()']]],
   ['winbond_2eh',['winbond.h',['../winbond_8h.html',1,'']]],

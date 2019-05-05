@@ -14,10 +14,7 @@ var namespacedevices =
     ] ],
     [ "mcp23017", "namespacedevices_1_1mcp23017.html", "namespacedevices_1_1mcp23017" ],
     [ "rf", "namespacedevices_1_1rf.html", "namespacedevices_1_1rf" ],
-    [ "rtc", null, [
-      [ "DS1307", "classdevices_1_1rtc_1_1_d_s1307.html", "classdevices_1_1rtc_1_1_d_s1307" ],
-      [ "tm", "structdevices_1_1rtc_1_1tm.html", "structdevices_1_1rtc_1_1tm" ]
-    ] ],
+    [ "rtc", "namespacedevices_1_1rtc.html", "namespacedevices_1_1rtc" ],
     [ "servo", "namespacedevices_1_1servo.html", "namespacedevices_1_1servo" ],
     [ "sonar", "namespacedevices_1_1sonar.html", "namespacedevices_1_1sonar" ],
     [ "SIPO", "classdevices_1_1_s_i_p_o.html", "classdevices_1_1_s_i_p_o" ],
