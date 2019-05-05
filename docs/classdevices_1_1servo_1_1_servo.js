@@ -7,6 +7,6 @@ var classdevices_1_1servo_1_1_servo =
     [ "set_counter", "classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9", null ],
     [ "set_pulse", "classdevices_1_1servo_1_1_servo.html#aa5aa1fd487bd521e40bbab790ad47928", null ],
     [ "rotate", "classdevices_1_1servo_1_1_servo.html#a10154f3587089ed6f93b58d896a64e3b", null ],
-    [ "calculate_counter", "classdevices_1_1servo_1_1_servo.html#aa3daa60b68bac8cb6a0b6a3bdfb00be2", null ],
+    [ "calculate_counter", "classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf", null ],
     [ "PIN", "classdevices_1_1servo_1_1_servo.html#a4f405699b4fbce545d46687d5a94de9c", null ]
 ];

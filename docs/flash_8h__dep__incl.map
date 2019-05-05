@@ -1,5 +1,5 @@
 <map id="fastarduino/flash.h" name="fastarduino/flash.h">
-<area shape="rect" id="node2" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="24,80,175,121"/>
+<area shape="rect" id="node2" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer. " alt="" coords="24,80,175,121"/>
 <area shape="rect" id="node3" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="301,87,479,114"/>
 <area shape="rect" id="node4" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="262,169,393,196"/>
 <area shape="rect" id="node5" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,244,220,271"/>

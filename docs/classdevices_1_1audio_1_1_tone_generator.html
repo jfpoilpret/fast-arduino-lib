@@ -139,7 +139,7 @@ Public Member Functions</h2></td></tr>
 class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 
 <p>API class for tone generation to a buzzer (or better an amplifier) connected to pin <code>OUTPUT</code>. </p>
-<p>This is a rather low-level API. If you want to play suites of tones ("melodies"), then you should better use <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a></code>. Most provided methods come in two flavours:</p><ul>
+<p>This is a rather low-level API. If you want to play suites of tones ("melodies"), then you should better use <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">devices::audio::TonePlayer</a></code>. Most provided methods come in two flavours:</p><ul>
 <li>one that takes a <code>Tone</code> argument (that will be converted to a note frequency)</li>
 <li>one that takes a TimerPrescaler and a counter value, that will be used to generate the note frequency from raw timer values. The first flavour is more readable but less efficient (code size and performance). The second flavour allows for performance optimization (compile-time calculations) but is less easy to read and understand.</li>
 </ul>
@@ -152,7 +152,7 @@ class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa" title="This enum defines all possible audio tones that can be generated. ">Tone</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1audio_1_1_tone_player.html">TonePlayer</a> </dd></dl>
+<a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">TonePlayer</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00146">146</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>

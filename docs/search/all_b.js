@@ -26,6 +26,7 @@ var searchData=
   ['mode_5f2',['MODE_2',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbacac4185dc8a44d8ae07bfb94c2830017',1,'spi']]],
   ['mode_5f3',['MODE_3',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbac5b781763a4c930367500c96e64a0166',1,'spi']]],
   ['mpu6050',['MPU6050',['../classdevices_1_1magneto_1_1_m_p_u6050.html',1,'devices::magneto']]],
+  ['ms',['ms',['../structdevices_1_1audio_1_1_tone_play.html#adc102e5aa464e91ac65c5ff09e322ec5',1,'devices::audio::TonePlay']]],
   ['msb_5ffirst',['MSB_FIRST',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7a89488e0251a0b2be79602890ef16ddb3',1,'spi']]],
   ['multihcsr04',['MultiHCSR04',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html',1,'devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a41fd653b0e93076b8038114d6e466cb7',1,'devices::sonar::MultiHCSR04::MultiHCSR04()']]]
 ];

@@ -20,7 +20,7 @@ var dir_c8147ad417a9a009ff67e0ffb1a47300 =
       [ "SIPO", "classdevices_1_1_s_i_p_o.html", "classdevices_1_1_s_i_p_o" ]
     ] ],
     [ "sonar.h", "sonar_8h.html", "sonar_8h" ],
-    [ "tone_player.h", "tone__player_8h_source.html", null ],
+    [ "tone_player.h", "tone__player_8h.html", "tone__player_8h" ],
     [ "tones.h", "tones_8h.html", "tones_8h" ],
     [ "winbond.h", "winbond_8h.html", [
       [ "WinBond", "classdevices_1_1_win_bond.html", "classdevices_1_1_win_bond" ],

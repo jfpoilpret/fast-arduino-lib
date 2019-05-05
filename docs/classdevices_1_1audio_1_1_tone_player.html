@@ -94,43 +94,337 @@ $(document).ready(function(){initNavTree('classdevices_1_1audio_1_1_tone_player.
 <div class="title">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This API defines a player of melodies, defined as a sequence of tones and durations.  
+ <a href="classdevices_1_1audio_1_1_tone_player.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="tone__player_8h_source.html">fastarduino/devices/tone_player.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An optimized surrogate to <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> structure.  <a href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a142aa8ecaa187cea0063a6dbfeea8da6"><td class="memItemLeft" align="right" valign="top"><a id="a142aa8ecaa187cea0063a6dbfeea8da6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TonePlayer</b> (<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">GENERATOR</a> &amp;tone_generator)</td></tr>
+<tr class="memitem:a142aa8ecaa187cea0063a6dbfeea8da6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a142aa8ecaa187cea0063a6dbfeea8da6">TonePlayer</a> (<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">GENERATOR</a> &amp;tone_generator)</td></tr>
+<tr class="memdesc:a142aa8ecaa187cea0063a6dbfeea8da6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new tone player, based on an existing <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html" title="API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT...">ToneGenerator</a></code>.  <a href="#a142aa8ecaa187cea0063a6dbfeea8da6">More...</a><br /></td></tr>
 <tr class="separator:a142aa8ecaa187cea0063a6dbfeea8da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b66076721319f6d3e6c9037e01fe965"><td class="memItemLeft" align="right" valign="top"><a id="a9b66076721319f6d3e6c9037e01fe965"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> (const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *melody)</td></tr>
+<tr class="memitem:a9b66076721319f6d3e6c9037e01fe965"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a9b66076721319f6d3e6c9037e01fe965">play</a> (const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *melody)</td></tr>
+<tr class="memdesc:a9b66076721319f6d3e6c9037e01fe965"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play a melody, defined by a sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>s, stored in SRAM.  <a href="#a9b66076721319f6d3e6c9037e01fe965">More...</a><br /></td></tr>
 <tr class="separator:a9b66076721319f6d3e6c9037e01fe965"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f4229a9228eb9cdda2d99d58baef84a"><td class="memItemLeft" align="right" valign="top"><a id="a1f4229a9228eb9cdda2d99d58baef84a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play_eeprom</b> (const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *melody)</td></tr>
+<tr class="memitem:a1f4229a9228eb9cdda2d99d58baef84a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a1f4229a9228eb9cdda2d99d58baef84a">play_eeprom</a> (const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *melody)</td></tr>
+<tr class="memdesc:a1f4229a9228eb9cdda2d99d58baef84a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play a melody, defined by a sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>s, stored in EEPROM.  <a href="#a1f4229a9228eb9cdda2d99d58baef84a">More...</a><br /></td></tr>
 <tr class="separator:a1f4229a9228eb9cdda2d99d58baef84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a769aaafb0a81435806d7317edc9f9e63"><td class="memItemLeft" align="right" valign="top"><a id="a769aaafb0a81435806d7317edc9f9e63"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play_flash</b> (const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *melody)</td></tr>
+<tr class="memitem:a769aaafb0a81435806d7317edc9f9e63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a769aaafb0a81435806d7317edc9f9e63">play_flash</a> (const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *melody)</td></tr>
+<tr class="memdesc:a769aaafb0a81435806d7317edc9f9e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play a melody, defined by a sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>s, stored in Flash.  <a href="#a769aaafb0a81435806d7317edc9f9e63">More...</a><br /></td></tr>
 <tr class="separator:a769aaafb0a81435806d7317edc9f9e63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb7992dc1517178e677d01b984e00e0f"><td class="memItemLeft" align="right" valign="top"><a id="afb7992dc1517178e677d01b984e00e0f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play</b> (const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *melody)</td></tr>
+<tr class="memitem:afb7992dc1517178e677d01b984e00e0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html#afb7992dc1517178e677d01b984e00e0f">play</a> (const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *melody)</td></tr>
+<tr class="memdesc:afb7992dc1517178e677d01b984e00e0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play a melody, defined by a sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code>s, stored in SRAM.  <a href="#afb7992dc1517178e677d01b984e00e0f">More...</a><br /></td></tr>
 <tr class="separator:afb7992dc1517178e677d01b984e00e0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6c611fc69de8fd2e5236d22bfb4707d"><td class="memItemLeft" align="right" valign="top"><a id="ac6c611fc69de8fd2e5236d22bfb4707d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play_eeprom</b> (const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *melody)</td></tr>
+<tr class="memitem:ac6c611fc69de8fd2e5236d22bfb4707d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html#ac6c611fc69de8fd2e5236d22bfb4707d">play_eeprom</a> (const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *melody)</td></tr>
+<tr class="memdesc:ac6c611fc69de8fd2e5236d22bfb4707d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play a melody, defined by a sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code>s, stored in EEPROM.  <a href="#ac6c611fc69de8fd2e5236d22bfb4707d">More...</a><br /></td></tr>
 <tr class="separator:ac6c611fc69de8fd2e5236d22bfb4707d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07807774066b59ae95c33e7426c88e19"><td class="memItemLeft" align="right" valign="top"><a id="a07807774066b59ae95c33e7426c88e19"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>play_flash</b> (const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *melody)</td></tr>
+<tr class="memitem:a07807774066b59ae95c33e7426c88e19"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a07807774066b59ae95c33e7426c88e19">play_flash</a> (const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *melody)</td></tr>
+<tr class="memdesc:a07807774066b59ae95c33e7426c88e19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Play a melody, defined by a sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code>s, stored in Flash.  <a href="#a07807774066b59ae95c33e7426c88e19">More...</a><br /></td></tr>
 <tr class="separator:a07807774066b59ae95c33e7426c88e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt;<br />
 class devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</h3>
 
+<p>This API defines a player of melodies, defined as a sequence of tones and durations. </p>
+<p>Melodies are defined as sequence of unit information, which can be either:</p><ul>
+<li><code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>s: easy to write in source code but not efficient in size of generated code</li>
+<li><code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">TonePlayer::QTonePlay</a></code>s: requires more effort in source code, but reduces generated code size Most methods exist in two flavours, one for each type.</li>
+</ul>
+<p>With this API, played melodies can be stored on 3 possible locations:</p><ul>
+<li>in SRAM: this is useful when you get the melody from another support e.g. an external flash device</li>
+<li>in Flash: this is the mostly used way as flash s the more abundant storage in AVR MCU</li>
+<li>in EEPROM: this can be useful for short melodies, when you do not want to waste precious SRAM and Flash Each play API has 3 distinct methods, one for each storage strategy.</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER</td><td>the AVR timer to use for the underlying Timer </td></tr>
+    <tr><td class="paramname">OUTPUT</td><td>the DigitalPin connected to the buzzer; this must be the pin OCnA, where n is the AVR Timer number</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">TonePlayer::QTonePlay</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00038">38</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00118">118</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a142aa8ecaa187cea0063a6dbfeea8da6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a142aa8ecaa187cea0063a6dbfeea8da6">&#9670;&nbsp;</a></span>TonePlayer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a>&lt; NTIMER, OUTPUT &gt;::<a class="el" href="classdevices_1_1audio_1_1_tone_player.html">TonePlayer</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">GENERATOR</a> &amp;&#160;</td>
+          <td class="paramname"><em>tone_generator</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a new tone player, based on an existing <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html" title="API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT...">ToneGenerator</a></code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tone_generator</td><td>the <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html" title="API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT...">ToneGenerator</a></code> used to actually produce tones. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00241">241</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9b66076721319f6d3e6c9037e01fe965"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b66076721319f6d3e6c9037e01fe965">&#9670;&nbsp;</a></span>play() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a>&lt; NTIMER, OUTPUT &gt;::play </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *&#160;</td>
+          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play a melody, defined by a sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>s, stored in SRAM. </p>
+<p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">melody</td><td>a pointer, in SRAM, to the sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00250">250</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="a1f4229a9228eb9cdda2d99d58baef84a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f4229a9228eb9cdda2d99d58baef84a">&#9670;&nbsp;</a></span>play_eeprom() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a>&lt; NTIMER, OUTPUT &gt;::play_eeprom </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *&#160;</td>
+          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play a melody, defined by a sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>s, stored in EEPROM. </p>
+<p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">melody</td><td>a pointer, in EEPROM, to the sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00262">262</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="a769aaafb0a81435806d7317edc9f9e63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a769aaafb0a81435806d7317edc9f9e63">&#9670;&nbsp;</a></span>play_flash() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a>&lt; NTIMER, OUTPUT &gt;::play_flash </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a> *&#160;</td>
+          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play a melody, defined by a sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>s, stored in Flash. </p>
+<p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">melody</td><td>a pointer, in Flash, to the sequence of <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00274">274</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="afb7992dc1517178e677d01b984e00e0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb7992dc1517178e677d01b984e00e0f">&#9670;&nbsp;</a></span>play() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a>&lt; NTIMER, OUTPUT &gt;::play </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *&#160;</td>
+          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play a melody, defined by a sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code>s, stored in SRAM. </p>
+<p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">melody</td><td>a pointer, in SRAM, to the sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00286">286</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="ac6c611fc69de8fd2e5236d22bfb4707d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6c611fc69de8fd2e5236d22bfb4707d">&#9670;&nbsp;</a></span>play_eeprom() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a>&lt; NTIMER, OUTPUT &gt;::play_eeprom </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *&#160;</td>
+          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play a melody, defined by a sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code>s, stored in EEPROM. </p>
+<p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">melody</td><td>a pointer, in EEPROM, to the sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00298">298</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="a07807774066b59ae95c33e7426c88e19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07807774066b59ae95c33e7426c88e19">&#9670;&nbsp;</a></span>play_flash() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a>&lt; NTIMER, OUTPUT &gt;::play_flash </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">QTonePlay</a> *&#160;</td>
+          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Play a melody, defined by a sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code>s, stored in Flash. </p>
+<p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">melody</td><td>a pointer, in Flash, to the sequence of <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00310">310</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="tone__player_8h_source.html">tone_player.h</a></li>
 </ul>
 </div><!-- contents -->

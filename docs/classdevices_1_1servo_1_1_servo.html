@@ -89,7 +89,6 @@ $(document).ready(function(){initNavTree('classdevices_1_1servo_1_1_servo.html',
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classdevices_1_1servo_1_1_servo-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -129,12 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a10154f3587089ed6f93b58d896a64e3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a10154f3587089ed6f93b58d896a64e3b">rotate</a> (int8_t angle)</td></tr>
 <tr class="memdesc:a10154f3587089ed6f93b58d896a64e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotate the servomotor at the given <code>angle</code> position.  <a href="#a10154f3587089ed6f93b58d896a64e3b">More...</a><br /></td></tr>
 <tr class="separator:a10154f3587089ed6f93b58d896a64e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aa3daa60b68bac8cb6a0b6a3bdfb00be2"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#aa3daa60b68bac8cb6a0b6a3bdfb00be2">calculate_counter</a> (uint16_t pulse_us)</td></tr>
-<tr class="memdesc:aa3daa60b68bac8cb6a0b6a3bdfb00be2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the counter value to use with <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> in order to generate a pulse of the given width.  <a href="#aa3daa60b68bac8cb6a0b6a3bdfb00be2">More...</a><br /></td></tr>
-<tr class="separator:aa3daa60b68bac8cb6a0b6a3bdfb00be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82a7326a70d9f9b3e52991136603ecdf"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf">calculate_counter</a> (uint16_t pulse_us) const</td></tr>
+<tr class="memdesc:a82a7326a70d9f9b3e52991136603ecdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the counter value to use with <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> in order to generate a pulse of the given width.  <a href="#a82a7326a70d9f9b3e52991136603ecdf">More...</a><br /></td></tr>
+<tr class="separator:a82a7326a70d9f9b3e52991136603ecdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -303,14 +299,14 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 </div><div class="memdoc">
 
 <p>Set the Timer counter that will change the pulse width, hence the servo angle. </p>
-<p>This method is the most optimized way to change the servo angle. However, it requires preliminary calculation of counter values from the desired angles. Calculation can be performed by <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#aa3daa60b68bac8cb6a0b6a3bdfb00be2" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a></code>.</p>
+<p>This method is the most optimized way to change the servo angle. However, it requires preliminary calculation of counter values from the desired angles. Calculation can be performed by <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>the new counter value to use for fixing pulse width</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#aa3daa60b68bac8cb6a0b6a3bdfb00be2" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1servo_1_1_servo.html#aa5aa1fd487bd521e40bbab790ad47928" title="Set the pulse width in microsecond, hence the servo angle. ">set_pulse()</a> </dd>
 <dd>
@@ -401,8 +397,8 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 
 </div>
 </div>
-<a id="aa3daa60b68bac8cb6a0b6a3bdfb00be2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3daa60b68bac8cb6a0b6a3bdfb00be2">&#9670;&nbsp;</a></span>calculate_counter()</h2>
+<a id="a82a7326a70d9f9b3e52991136603ecdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82a7326a70d9f9b3e52991136603ecdf">&#9670;&nbsp;</a></span>calculate_counter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -413,16 +409,16 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a> <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::calculate_counter </td>
+          <td class="memname">constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a> <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::calculate_counter </td>
           <td>(</td>
           <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>pulse_us</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

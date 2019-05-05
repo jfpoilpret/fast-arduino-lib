@@ -24,7 +24,7 @@
 <area shape="rect" id="node24" href="$time_8cpp_source.html" title="fastarduino/time.cpp" alt="" coords="835,177,993,203"/>
 <area shape="rect" id="node9" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="179,266,358,293"/>
 <area shape="rect" id="node18" href="$events_8h.html" title="Support for events management. " alt="" coords="671,266,827,293"/>
-<area shape="rect" id="node8" href="$tone__player_8h_source.html" title="fastarduino/devices\l/tone_player.h" alt="" coords="903,437,1053,479"/>
+<area shape="rect" id="node8" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer. " alt="" coords="903,437,1053,479"/>
 <area shape="rect" id="node10" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="177,355,307,382"/>
 <area shape="rect" id="node12" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="245,445,410,471"/>
 <area shape="rect" id="node16" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="519,527,699,553"/>
