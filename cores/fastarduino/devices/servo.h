@@ -158,7 +158,7 @@ namespace devices::servo
 		 * 
 		 * @sa set_counter()
 		 */
-		static constexpr TYPE calculate_counter(uint16_t pulse_us)
+		constexpr TYPE calculate_counter(uint16_t pulse_us) const
 		{
 			return counter(utils::constrain(pulse_us, US_MINIMUM_, US_MAXIMUM_));
 		}
