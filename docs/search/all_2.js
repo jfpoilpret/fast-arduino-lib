@@ -18,6 +18,7 @@ var searchData=
   ['configure_5finterrupts',['configure_interrupts',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4ae230409c27a1fafc1867861a28b269',1,'devices::mcp23017::MCP23017']]],
   ['constrain',['constrain',['../namespaceutils.html#af1acb8c6f0e6493f88d42b2192e68ba3',1,'utils']]],
   ['containers',['containers',['../namespacecontainers.html',1,'']]],
+  ['convert_5ffields_5fto_5fmga',['convert_fields_to_mGA',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4a47c367d282b383220d732641610bd9',1,'devices::magneto::HMC5883L']]],
   ['copyfmt',['copyfmt',['../classstreams_1_1ios__base.html#a5f9eb4a35402d3de9d17c4c9cc87dd5a',1,'streams::ios_base']]],
   ['counter',['COUNTER',['../classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88',1,'devices::audio::ToneGenerator']]],
   ['ctc',['CTC',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77',1,'timer']]],

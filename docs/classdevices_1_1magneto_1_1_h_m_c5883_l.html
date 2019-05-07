@@ -95,6 +95,11 @@ $(document).ready(function(){initNavTree('classdevices_1_1magneto_1_1_h_m_c5883_
 <div class="title">devices::magneto::HMC5883L&lt; MODE_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>I2C device driver for the <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> compass chip.  
+ <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="hmc5883l_8h_source.html">fastarduino/devices/hmc5883l.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for devices::magneto::HMC5883L&lt; MODE_ &gt;:</div>
 <div class="dyncontent">
@@ -114,8 +119,8 @@ Collaboration diagram for devices::magneto::HMC5883L&lt; MODE_ &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad385a7db4270f602df52a2eb06bc903a"><td class="memItemLeft" align="right" valign="top"><a id="ad385a7db4270f602df52a2eb06bc903a"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>MANAGER</b> = typename <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MODE &gt;::MANAGER</td></tr>
+<tr class="memitem:ad385a7db4270f602df52a2eb06bc903a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a> = typename <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ac624623c870359549b72bd1ecc260874">MODE</a> &gt;::<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a></td></tr>
+<tr class="memdesc:ad385a7db4270f602df52a2eb06bc903a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of <code><a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">i2c::I2CManager</a></code> that must be used to handle this device.  <a href="#ad385a7db4270f602df52a2eb06bc903a">More...</a><br /></td></tr>
 <tr class="separator:ad385a7db4270f602df52a2eb06bc903a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classi2c_1_1_i2_c_device"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classi2c_1_1_i2_c_device')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice&lt; MODE_ &gt;</a></td></tr>
 <tr class="memitem:aafb695d2281ebc69499703e7a18913e8 inherit pub_types_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8">MANAGER</a> = <a class="el" href="classi2c_1_1_i2_c_manager.html">I2CManager</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#a6450cfc9e9475eafc62d42aedec8fef3">MODE</a> &gt;</td></tr>
@@ -124,29 +129,30 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>MANAGER</b> = typena
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1e7d1dcbb4cf9d5d5066c54f0ea76962"><td class="memItemLeft" align="right" valign="top"><a id="a1e7d1dcbb4cf9d5d5066c54f0ea76962"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>HMC5883L</b> (MANAGER &amp;manager)</td></tr>
+<tr class="memitem:a1e7d1dcbb4cf9d5d5066c54f0ea76962"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a1e7d1dcbb4cf9d5d5066c54f0ea76962">HMC5883L</a> (<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a> &amp;manager)</td></tr>
+<tr class="memdesc:a1e7d1dcbb4cf9d5d5066c54f0ea76962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new device driver for a <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> chip.  <a href="#a1e7d1dcbb4cf9d5d5066c54f0ea76962">More...</a><br /></td></tr>
 <tr class="separator:a1e7d1dcbb4cf9d5d5066c54f0ea76962"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dcdec10c70d8e928edc301f4e4c3994"><td class="memItemLeft" align="right" valign="top"><a id="a7dcdec10c70d8e928edc301f4e4c3994"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> (OperatingMode mode=OperatingMode::SINGLE, Gain gain=Gain::GAIN_1_3GA, DataOutput rate=DataOutput::RATE_15HZ, SamplesAveraged samples=SamplesAveraged::ONE_SAMPLE, MeasurementMode measurement=MeasurementMode::NORMAL)</td></tr>
+<tr class="memitem:a7dcdec10c70d8e928edc301f4e4c3994"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a7dcdec10c70d8e928edc301f4e4c3994">begin</a> (<a class="el" href="namespacedevices_1_1magneto.html#ab5a939dc4c5640584198a3ae0a7914f0">OperatingMode</a> mode=OperatingMode::SINGLE, <a class="el" href="namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d">Gain</a> gain=Gain::GAIN_1_3GA, <a class="el" href="namespacedevices_1_1magneto.html#af2ffe07596a9831289b3eb76e83ec2aa">DataOutput</a> rate=DataOutput::RATE_15HZ, <a class="el" href="namespacedevices_1_1magneto.html#a9e686e1825471f8625d03061992dc76e">SamplesAveraged</a> samples=SamplesAveraged::ONE_SAMPLE, <a class="el" href="namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc">MeasurementMode</a> measurement=MeasurementMode::NORMAL)</td></tr>
+<tr class="memdesc:a7dcdec10c70d8e928edc301f4e4c3994"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start operation of this compass chip.  <a href="#a7dcdec10c70d8e928edc301f4e4c3994">More...</a><br /></td></tr>
 <tr class="separator:a7dcdec10c70d8e928edc301f4e4c3994"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a410918e25423e3eb921fccad77456096"><td class="memItemLeft" align="right" valign="top"><a id="a410918e25423e3eb921fccad77456096"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () INLINE</td></tr>
+<tr class="memitem:a410918e25423e3eb921fccad77456096"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a410918e25423e3eb921fccad77456096">end</a> () INLINE</td></tr>
+<tr class="memdesc:a410918e25423e3eb921fccad77456096"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop operation of this compass chip.  <a href="#a410918e25423e3eb921fccad77456096">More...</a><br /></td></tr>
 <tr class="separator:a410918e25423e3eb921fccad77456096"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec0c6c47f03076462d2fe6e78fed6160"><td class="memItemLeft" align="right" valign="top"><a id="aec0c6c47f03076462d2fe6e78fed6160"></a>
-<a class="el" href="structdevices_1_1magneto_1_1_status.html">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><b>status</b> () INLINE</td></tr>
+<a class="el" href="structdevices_1_1magneto_1_1_status.html">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#aec0c6c47f03076462d2fe6e78fed6160">status</a> () INLINE</td></tr>
+<tr class="memdesc:aec0c6c47f03076462d2fe6e78fed6160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the curent chip status. <br /></td></tr>
 <tr class="separator:aec0c6c47f03076462d2fe6e78fed6160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae418196599a262fceba02f02860c8866"><td class="memItemLeft" align="right" valign="top"><a id="ae418196599a262fceba02f02860c8866"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>magnetic_fields</b> (<a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html">MagneticFields</a> &amp;fields)</td></tr>
+<tr class="memitem:ae418196599a262fceba02f02860c8866"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866">magnetic_fields</a> (<a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html">MagneticFields</a> &amp;fields)</td></tr>
+<tr class="memdesc:ae418196599a262fceba02f02860c8866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).  <a href="#ae418196599a262fceba02f02860c8866">More...</a><br /></td></tr>
 <tr class="separator:ae418196599a262fceba02f02860c8866"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a47c367d282b383220d732641610bd9"><td class="memItemLeft" align="right" valign="top"><a id="a4a47c367d282b383220d732641610bd9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>convert_fields_to_mGA</b> (<a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html">MagneticFields</a> &amp;fields)</td></tr>
+<tr class="memitem:a4a47c367d282b383220d732641610bd9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4a47c367d282b383220d732641610bd9">convert_fields_to_mGA</a> (<a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html">MagneticFields</a> &amp;fields)</td></tr>
+<tr class="memdesc:a4a47c367d282b383220d732641610bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert raw fields measured obtained with <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). ">magnetic_fields()</a></code> to actual physical values, using the <code>Gain</code> configured for the device.  <a href="#a4a47c367d282b383220d732641610bd9">More...</a><br /></td></tr>
 <tr class="separator:a4a47c367d282b383220d732641610bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:ac624623c870359549b72bd1ecc260874"><td class="memItemLeft" align="right" valign="top"><a id="ac624623c870359549b72bd1ecc260874"></a>
-static constexpr const <a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">i2c::I2CMode</a>&#160;</td><td class="memItemRight" valign="bottom"><b>MODE</b> = MODE_</td></tr>
+<tr class="memitem:ac624623c870359549b72bd1ecc260874"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">i2c::I2CMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ac624623c870359549b72bd1ecc260874">MODE</a> = MODE_</td></tr>
+<tr class="memdesc:ac624623c870359549b72bd1ecc260874"><td class="mdescLeft">&#160;</td><td class="mdescRight">The I2C transmission mode (speed) used for this device.  <a href="#ac624623c870359549b72bd1ecc260874">More...</a><br /></td></tr>
 <tr class="separator:ac624623c870359549b72bd1ecc260874"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_attribs_classi2c_1_1_i2_c_device"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classi2c_1_1_i2_c_device')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice&lt; MODE_ &gt;</a></td></tr>
 <tr class="memitem:a6450cfc9e9475eafc62d42aedec8fef3 inherit pub_static_attribs_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">I2CMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a6450cfc9e9475eafc62d42aedec8fef3">MODE</a> = MODE_</td></tr>
@@ -181,9 +187,299 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><h3>template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt;<br />
 class devices::magneto::HMC5883L&lt; MODE_ &gt;</h3>
 
+<p>I2C device driver for the <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> compass chip. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">MODE_</td><td>the I2C transmission mode to use for this device; this chip supports both available modes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00094">94</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00138">138</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ad385a7db4270f602df52a2eb06bc903a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad385a7db4270f602df52a2eb06bc903a">&#9670;&nbsp;</a></span>MANAGER</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a> =  typename <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt;<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ac624623c870359549b72bd1ecc260874">MODE</a>&gt;::<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The type of <code><a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">i2c::I2CManager</a></code> that must be used to handle this device. </p>
+
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00145">145</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1e7d1dcbb4cf9d5d5066c54f0ea76962"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e7d1dcbb4cf9d5d5066c54f0ea76962">&#9670;&nbsp;</a></span>HMC5883L()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">HMC5883L</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a> &amp;&#160;</td>
+          <td class="paramname"><em>manager</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a new device driver for a <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> chip. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">manager</td><td>reference to a suitable <a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">i2c::I2CManager</a> for this device </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00151">151</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7dcdec10c70d8e928edc301f4e4c3994"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dcdec10c70d8e928edc301f4e4c3994">&#9670;&nbsp;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::begin </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1magneto.html#ab5a939dc4c5640584198a3ae0a7914f0">OperatingMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em> = <code>OperatingMode::SINGLE</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d">Gain</a>&#160;</td>
+          <td class="paramname"><em>gain</em> = <code>Gain::GAIN_1_3GA</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1magneto.html#af2ffe07596a9831289b3eb76e83ec2aa">DataOutput</a>&#160;</td>
+          <td class="paramname"><em>rate</em> = <code>DataOutput::RATE_15HZ</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1magneto.html#a9e686e1825471f8625d03061992dc76e">SamplesAveraged</a>&#160;</td>
+          <td class="paramname"><em>samples</em> = <code>SamplesAveraged::ONE_SAMPLE</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc">MeasurementMode</a>&#160;</td>
+          <td class="paramname"><em>measurement</em> = <code>MeasurementMode::NORMAL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start operation of this compass chip. </p>
+<p>Once this method has been called, you may use <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). ">magnetic_fields()</a></code> to find out the directions of the device.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mode</td><td>the <code>OperatingMode</code> to operate this chip </td></tr>
+    <tr><td class="paramname">gain</td><td>the <code>Gain</code> to use to increase measured magnetic fields </td></tr>
+    <tr><td class="paramname">rate</td><td>the <code>DataOutput</code> rate to use in <code>OperatingMode::CONTINUOUS</code> mode </td></tr>
+    <tr><td class="paramname">samples</td><td>the <code>SamplesAveraged</code> to use for each measurement </td></tr>
+    <tr><td class="paramname">measurement</td><td>the <code>MeasurementMode</code> to use on the chip sensors</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a410918e25423e3eb921fccad77456096" title="Stop operation of this compass chip. ">end()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00165">165</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+
+</div>
+</div>
+<a id="a410918e25423e3eb921fccad77456096"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a410918e25423e3eb921fccad77456096">&#9670;&nbsp;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stop operation of this compass chip. </p>
+<p>You should not call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). ">magnetic_fields()</a></code> after calling this method.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a7dcdec10c70d8e928edc301f4e4c3994" title="Start operation of this compass chip. ">begin()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00180">180</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+
+</div>
+</div>
+<a id="ae418196599a262fceba02f02860c8866"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae418196599a262fceba02f02860c8866">&#9670;&nbsp;</a></span>magnetic_fields()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::magnetic_fields </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html">MagneticFields</a> &amp;&#160;</td>
+          <td class="paramname"><em>fields</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). </p>
+<p>In order to convert raw measurements to physical values, you should call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4a47c367d282b383220d732641610bd9" title="Convert raw fields measured obtained with magnetic_fields() to actual physical values, using the Gain configured for the device. ">convert_fields_to_mGA()</a></code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fields</td><td>a reference to a <code><a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html" title="Structure to store 3 axis data about magnetic fields. ">MagneticFields</a></code> variable that will be filled with values upon method return </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the operation succeeded </td></tr>
+    <tr><td class="paramname">false</td><td>if the operation failed; if so, <code><a class="el" href="classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78" title="Return latest transmission status. ">i2c::I2CManager.status()</a></code> shall be called for further information on the error.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4a47c367d282b383220d732641610bd9" title="Convert raw fields measured obtained with magnetic_fields() to actual physical values, using the Gain configured for the device. ">convert_fields_to_mGA()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00208">208</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+
+</div>
+</div>
+<a id="a4a47c367d282b383220d732641610bd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a47c367d282b383220d732641610bd9">&#9670;&nbsp;</a></span>convert_fields_to_mGA()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::convert_fields_to_mGA </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html">MagneticFields</a> &amp;&#160;</td>
+          <td class="paramname"><em>fields</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Convert raw fields measured obtained with <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). ">magnetic_fields()</a></code> to actual physical values, using the <code>Gain</code> configured for the device. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fields</td><td>a reference to a <code><a class="el" href="structdevices_1_1magneto_1_1_magnetic_fields.html" title="Structure to store 3 axis data about magnetic fields. ">MagneticFields</a></code> variable that will be converted from raw to physical values</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). ">magnetic_fields()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a7dcdec10c70d8e928edc301f4e4c3994" title="Start operation of this compass chip. ">begin()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00232">232</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac624623c870359549b72bd1ecc260874"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac624623c870359549b72bd1ecc260874">&#9670;&nbsp;</a></span>MODE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">i2c::I2CMode</a> <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::MODE = MODE_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The I2C transmission mode (speed) used for this device. </p>
+
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00142">142</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -191,7 +487,7 @@ class devices::magneto::HMC5883L&lt; MODE_ &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>magneto</b></li><li class="navelem"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">HMC5883L</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1magneto.html">magneto</a></li><li class="navelem"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">HMC5883L</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.14 </li>

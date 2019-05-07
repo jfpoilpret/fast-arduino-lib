@@ -1,7 +1,7 @@
 var dir_c8147ad417a9a009ff67e0ffb1a47300 =
 [
     [ "ds1307.h", "ds1307_8h.html", "ds1307_8h" ],
-    [ "hmc5883l.h", "hmc5883l_8h_source.html", null ],
+    [ "hmc5883l.h", "hmc5883l_8h.html", "hmc5883l_8h" ],
     [ "mcp23017.h", "mcp23017_8h.html", "mcp23017_8h" ],
     [ "mpu6050.h", "mpu6050_8h_source.html", null ],
     [ "nrf24l01p.h", "nrf24l01p_8h.html", [

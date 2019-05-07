@@ -60,7 +60,7 @@ var searchData=
   ['start_5ftone',['start_tone',['../classdevices_1_1audio_1_1_tone_generator.html#a48ef1dbf1e0cdfa71cc7428d3f4230e6',1,'devices::audio::ToneGenerator::start_tone(Tone t)'],['../classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67',1,'devices::audio::ToneGenerator::start_tone(PRESCALER prescaler, COUNTER counter)']]],
   ['start_5ftransfer',['start_transfer',['../classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e',1,'spi::SPIDevice']]],
   ['started',['started',['../structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2',1,'devices::sonar::SonarEvent']]],
-  ['status',['status',['../classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63',1,'devices::WinBond::status()'],['../classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78',1,'i2c::I2CManager::status()']]],
+  ['status',['status',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#aec0c6c47f03076462d2fe6e78fed6160',1,'devices::magneto::HMC5883L::status()'],['../classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63',1,'devices::WinBond::status()'],['../classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78',1,'i2c::I2CManager::status()']]],
   ['status_5ft',['status_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a1b1df9c01cf13da3e71011631b3d4efa',1,'devices::rf::NRF24L01::status_t']]],
   ['stop',['stop',['../classtimer_1_1_square_wave.html#adf44dbb0e6275dcd9f04e83f0a004072',1,'timer::SquareWave']]],
   ['stop_5ftone',['stop_tone',['../classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb',1,'devices::audio::ToneGenerator']]],

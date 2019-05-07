@@ -1,6 +1,5 @@
 var NAVTREEINDEX0 =
 {
-".html":[4,0,3,1],
 "abi_8cpp_source.html":[5,0,0,2],
 "analog__input_8h.html":[5,0,0,3],
 "analog__input_8h_source.html":[5,0,0,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classdevices_1_1rtc_1_1_d_s1307.html#a9a85a5a7d5163a8d2d08901d1f0d4183":[4,0,3,4,0,6],
 "classdevices_1_1rtc_1_1_d_s1307.html#ab9bfe2332ee38665a6624d84008ab17e":[4,0,3,4,0,7],
 "classdevices_1_1rtc_1_1_d_s1307.html#ad10038c7429b572fb1ad571e798fd3ef":[4,0,3,4,0,12],
-"classdevices_1_1rtc_1_1_d_s1307.html#adaad5864aee51fa23be267184f411978":[4,0,3,4,0,2]
+"classdevices_1_1rtc_1_1_d_s1307.html#adaad5864aee51fa23be267184f411978":[4,0,3,4,0,2],
+"classdevices_1_1rtc_1_1_d_s1307.html#ae9f34a23d85cdd4ae9e9db4c167a6658":[4,0,3,4,0,3]
 };

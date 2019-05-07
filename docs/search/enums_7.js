@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['register',['Register',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0a',1,'devices::rf::NRF24L01']]]
+  ['operatingmode',['OperatingMode',['../namespacedevices_1_1magneto.html#ab5a939dc4c5640584198a3ae0a7914f0',1,'devices::magneto']]]
 ];

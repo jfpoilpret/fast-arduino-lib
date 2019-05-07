@@ -2,6 +2,7 @@ var searchData=
 [
   ['audio',['audio',['../namespacedevices_1_1audio.html',1,'devices']]],
   ['devices',['devices',['../namespacedevices.html',1,'']]],
+  ['magneto',['magneto',['../namespacedevices_1_1magneto.html',1,'devices']]],
   ['mcp23017',['mcp23017',['../namespacedevices_1_1mcp23017.html',1,'devices']]],
   ['rf',['rf',['../namespacedevices_1_1rf.html',1,'devices']]],
   ['rtc',['rtc',['../namespacedevices_1_1rtc.html',1,'devices']]],

@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['magnetic_5ffields',['magnetic_fields',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866',1,'devices::magneto::HMC5883L']]],
+  ['magnetic_5fheading',['magnetic_heading',['../namespacedevices_1_1magneto.html#a3b4ef6b88b5accbf034aa8728c711715',1,'devices::magneto']]],
   ['map',['map',['../namespaceutils.html#a608f8edf36fb4a7c58dd01232e07c0c8',1,'utils']]],
   ['map_5fphysical_5fto_5fraw',['map_physical_to_raw',['../namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32',1,'utils']]],
   ['map_5fraw_5fto_5fphysical',['map_raw_to_physical',['../namespaceutils.html#a610e02474f969fc747fa1725b79e252c',1,'utils']]],

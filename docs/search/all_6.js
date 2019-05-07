@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['gain',['Gain',['../namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d',1,'devices::magneto']]],
   ['get',['get',['../classstreams_1_1istream.html#a32740ec0eb870f855232b32d56fa0ef5',1,'streams::istream::get()'],['../classstreams_1_1istream.html#ae409e103e253f334292458af664135ff',1,'streams::istream::get(char &amp;c)'],['../classstreams_1_1istream.html#ad12377696d7affe9f80dee1dd0e4c9bd',1,'streams::istream::get(char *s, size_t n, char delim=&apos;\n&apos;)']]],
   ['get_5fchannel',['get_channel',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ab94595c2c57ae43f2de904605751bec2',1,'devices::rf::NRF24L01']]],
   ['get_5fdatetime',['get_datetime',['../classdevices_1_1rtc_1_1_d_s1307.html#adaad5864aee51fa23be267184f411978',1,'devices::rtc::DS1307']]],

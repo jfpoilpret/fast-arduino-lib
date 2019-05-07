@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['parity',['Parity',['../namespaceserial.html#a770c86bfde96ad529293b7b322422032',1,'serial']]],
-  ['pinmode',['PinMode',['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041',1,'gpio']]],
-  ['port',['Port',['../namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1',1,'board']]]
+  ['mcp23017port',['MCP23017Port',['../namespacedevices_1_1mcp23017.html#a1deedbcfa66c2d000cc9e9293ec00d5d',1,'devices::mcp23017']]],
+  ['measurementmode',['MeasurementMode',['../namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc',1,'devices::magneto']]],
+  ['mode',['Mode',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bb',1,'spi']]]
 ];
