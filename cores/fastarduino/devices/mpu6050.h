@@ -28,6 +28,7 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
+//TODO reformat further
 //FIXME rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
 namespace devices::magneto
 {
@@ -75,12 +76,12 @@ namespace devices::magneto
 	{
 		PowerManagement() : clock_select{}, temp_disable{}, reserved{}, cycle{}, sleep{}, device_reset{} {}
 
-		uint8_t clock_select :3;
-		uint8_t temp_disable :1;
-		uint8_t reserved :1;
-		uint8_t cycle :1;
-		uint8_t sleep :1;
-		uint8_t device_reset :1;
+		uint8_t clock_select : 3;
+		uint8_t temp_disable : 1;
+		uint8_t reserved : 1;
+		uint8_t cycle : 1;
+		uint8_t sleep : 1;
+		uint8_t device_reset : 1;
 	};
 
 	//TODO document
@@ -94,7 +95,7 @@ namespace devices::magneto
 		PLL_EXTERNAL_19MHZ = 5,
 		STOPPED = 7
 	};
-	
+
 	//TODO document
 	enum class DLPF : uint8_t
 	{
@@ -105,7 +106,7 @@ namespace devices::magneto
 		ACCEL_BW_21HZ = 4,
 		ACCEL_BW_10HZ = 5,
 		ACCEL_BW_5HZ = 6,
-		
+
 		GYRO_BW_256HZ = 0,
 		GYRO_BW_188HZ = 1,
 		GYRO_BW_98HZ = 2,
@@ -118,31 +119,31 @@ namespace devices::magneto
 	//TODO document
 	struct FIFOEnable
 	{
-		FIFOEnable(): reserved{}, accel{}, gyro_z{}, gyro_y{}, gyro_x{}, temperature{} {}
+		FIFOEnable() : reserved{}, accel{}, gyro_z{}, gyro_y{}, gyro_x{}, temperature{} {}
 
-		uint8_t reserved :3;
-		uint8_t accel :1;
-		uint8_t gyro_z :1;
-		uint8_t gyro_y :1;
-		uint8_t gyro_x :1;
-		uint8_t temperature :1;
+		uint8_t reserved : 3;
+		uint8_t accel : 1;
+		uint8_t gyro_z : 1;
+		uint8_t gyro_y : 1;
+		uint8_t gyro_x : 1;
+		uint8_t temperature : 1;
 	};
 
 	//TODO document
 	struct INTStatus
 	{
-		uint8_t data_ready :1;
-		uint8_t reserved1 :3;
-		uint8_t overflow :1;
-		uint8_t reserved2 :3;
+		uint8_t data_ready : 1;
+		uint8_t reserved1 : 3;
+		uint8_t overflow : 1;
+		uint8_t reserved2 : 3;
 	};
 
 	//TODO document
 	struct Sensor3D
 	{
-		int16_t	x;
-		int16_t	y;
-		int16_t	z;
+		int16_t x;
+		int16_t y;
+		int16_t z;
 	};
 
 	//TODO document
@@ -152,7 +153,7 @@ namespace devices::magneto
 		int16_t temperature;
 		Sensor3D accel;
 	};
-	
+
 	//TODO document
 	enum class AD0 : uint8_t
 	{
@@ -163,8 +164,7 @@ namespace devices::magneto
 	//TODO document
 	//TODO Add some using in code in order to use shorter LOCs
 	//NOTE: MPU6050 auxiliary I2C is not supported.
-	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW>
-	class MPU6050 : public i2c::I2CDevice<MODE>
+	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW> class MPU6050 : public i2c::I2CDevice<MODE>
 	{
 	private:
 		using BusCond = i2c::BusConditions;
@@ -192,7 +192,7 @@ namespace devices::magneto
 					&&	this->write(DEVICE_ADDRESS, PWR_MGMT_1, BusCond::REPEAT_START_NO_STOP) == OK
 					&&	this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
 		}
-		
+
 		//TODO document
 		bool begin( FIFOEnable fifo_enable,
 					INTStatus int_enable,
@@ -228,7 +228,7 @@ namespace devices::magneto
 					&&	this->write(DEVICE_ADDRESS, uint8_t(0x40), BusCond::NO_START_NO_STOP) == OK
 					&&	this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
 		}
-		
+
 		//TODO document
 		inline bool end() INLINE
 		{
@@ -237,7 +237,7 @@ namespace devices::magneto
 			power.sleep = 1;
 			return write_power(power);
 		}
-		
+
 		//TODO document
 		inline bool reset() INLINE
 		{
@@ -269,7 +269,7 @@ namespace devices::magneto
 				this->read(DEVICE_ADDRESS, temperature, BusCond::REPEAT_START_STOP);
 			return temperature;
 		}
-		
+
 		//TODO document
 		static constexpr int16_t convert_temp_to_centi_degrees(int16_t temp)
 		{
@@ -290,7 +290,7 @@ namespace devices::magneto
 			else
 				return false;
 		}
-		
+
 		//TODO document
 		bool all_measures(AllSensors& sensors)
 		{
@@ -306,7 +306,7 @@ namespace devices::magneto
 			else
 				return false;
 		}
-		
+
 		//TODO document
 		INTStatus interrupt_status()
 		{
@@ -316,7 +316,7 @@ namespace devices::magneto
 				this->read(DEVICE_ADDRESS, status, BusCond::REPEAT_START_STOP);
 			return status;
 		}
-		
+
 		//TODO document
 		bool reset_fifo()
 		{
@@ -324,7 +324,7 @@ namespace devices::magneto
 			return		this->write(DEVICE_ADDRESS, USER_CTRL, BusCond::START_NO_STOP) == OK
 					&&	this->write(DEVICE_ADDRESS, uint8_t(0x44), BusCond::NO_START_STOP) == OK;
 		}
-		
+
 		//TODO document
 		uint16_t fifo_count()
 		{
@@ -335,7 +335,7 @@ namespace devices::magneto
 			utils::swap_bytes(count);
 			return count;
 		}
-		
+
 		//TODO document
 		template<typename T> inline bool fifo_pop(T& output, bool wait = false)
 		{
@@ -349,20 +349,20 @@ namespace devices::magneto
 		static constexpr const uint8_t CONFIG = 0x1A;
 		static constexpr const uint8_t GYRO_CONFIG = 0x1B;
 		static constexpr const uint8_t ACCEL_CONFIG = 0x1C;
-		
+
 		static constexpr const uint8_t FIFO_EN = 0x23;
 		static constexpr const uint8_t INT_PIN_CFG = 0x37;
 		static constexpr const uint8_t INT_ENABLE = 0x38;
 		static constexpr const uint8_t INT_STATUS = 0x3A;
-		
+
 		static constexpr const uint8_t ACCEL_XOUT = 0x3B;
 		static constexpr const uint8_t TEMP_OUT = 0x41;
 		static constexpr const uint8_t GYRO_XOUT = 0x43;
-		
+
 		static constexpr const uint8_t USER_CTRL = 0x6A;
 		static constexpr const uint8_t PWR_MGMT_1 = 0x6B;
 		static constexpr const uint8_t PWR_MGMT_2 = 0x6C;
-		
+
 		static constexpr const uint8_t FIFO_COUNT = 0x72;
 		static constexpr const uint8_t FIFO_R_W = 0x74;
 
@@ -374,14 +374,14 @@ namespace devices::magneto
 			return		this->write(DEVICE_ADDRESS, PWR_MGMT_1, BusCond::START_NO_STOP) == OK
 					&&	this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
 		}
-		
+
 		void format_sensors(Sensor3D& sensors)
 		{
 			utils::swap_bytes(sensors.x);
 			utils::swap_bytes(sensors.y);
 			utils::swap_bytes(sensors.z);
 		}
-		
+
 		bool fifo_pop(uint8_t* buffer, uint8_t size, bool wait)
 		{
 			using namespace i2c::Status;
