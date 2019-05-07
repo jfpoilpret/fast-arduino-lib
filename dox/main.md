@@ -75,7 +75,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [containers](namespacecontainers.html): utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.
 - [devices](namespacedevices.html): this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:
     - [audio](namespacedevices_1_1audio.html): API for tone generation to buzzers or small audio amplifiers
-    - [magneto](TODO): API for magnetometers, gyroscopes, accelerometers
+    - [magneto](namespacedevices_1_1magneto.html): API for magnetometers, gyroscopes, accelerometers
     - [rf](namespacedevices_1_1rf.html): API for radio-frequency chips
     - [rtc](namespacedevices_1_1rtc.html): API for real time clock chips
     - [servo](namespacedevices_1_1servo.html): API to handle servomotors

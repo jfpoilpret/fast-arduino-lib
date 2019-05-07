@@ -12,6 +12,13 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * API to handle HMC5883L 3-axis digital compass I2C chip.
+ * @sa https://github.com/jfpoilpret/fast-arduino-lib/blob/master/refs/devices/HMC5883L.pdf
+ */
 #ifndef HMC5883L_H
 #define HMC5883L_H
 
@@ -19,10 +26,17 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-//TODO Add optional support for DRDY pin (but it does not seem to work?)
+//TODO Add (or just document) optional support for DRDY pin (but it does not seem to work?)
 //TODO Check and optimize source code size
+/**
+ * Defines API for magnetic sensors for direction, speed and acceleration properties.
+ */
 namespace devices::magneto
 {
+	//TODO reuse Sensor3D defined in mpu9050.h
+	/**
+	 * Structure to store 3 axis data about magnetic fields.
+	 */
 	struct MagneticFields
 	{
 		int16_t x;
@@ -30,12 +44,20 @@ namespace devices::magneto
 		int16_t y;
 	};
 
+	/**
+	 * Calculate the magnetic heading (heading measured clockwise from magnetic 
+	 * north) from X and Y magnetic fields.
+	 */
 	inline float magnetic_heading(int16_t x, int16_t y)
 	{
 		float theta = atan2(y, x);
 		return theta;
 	}
 
+	/**
+	 * The number of samples to average every time a measurement is required from
+	 * the HMC5883L chip (datasheet p12).
+	 */
 	enum class SamplesAveraged : uint8_t
 	{
 		ONE_SAMPLE = 0 << 5,
@@ -44,6 +66,10 @@ namespace devices::magneto
 		EIGHT_SAMPLES = 3 << 5
 	};
 
+	/**
+	 * The output rate when used in continuous mode (datasheet p12).
+	 * @sa OperatingMode
+	 */
 	enum class DataOutput : uint8_t
 	{
 		RATE_0_75HZ = 0 << 2,
@@ -55,6 +81,9 @@ namespace devices::magneto
 		RATE_75HZ = 6 << 2
 	};
 
+	/**
+	 * The measurement mode as defined in datasheet p12, table6.
+	 */
 	enum class MeasurementMode : uint8_t
 	{
 		NORMAL = 0,
@@ -62,6 +91,9 @@ namespace devices::magneto
 		NEGATIVE_BIAS = 2
 	};
 
+	/**
+	 * The operating mode of the chip as defined in datasheet p10, p14 table 12.
+	 */
 	enum class OperatingMode : uint8_t
 	{
 		CONTINUOUS = 0,
@@ -69,6 +101,9 @@ namespace devices::magneto
 		IDLE = 2
 	};
 
+	/**
+	 * The gain to set for the chip, as defined in datasheet p13, table9.
+	 */
 	enum class Gain : uint8_t
 	{
 		GAIN_0_88GA = 0 << 5,
@@ -81,25 +116,52 @@ namespace devices::magneto
 		GAIN_8_1GA = 7 << 5
 	};
 
+	/**
+	 * The chip status, as defined in datasheet p16.
+	 */
 	struct Status
 	{
 		Status() : ready{}, lock{}, error{1}, reserved{} {}
 
 		uint8_t ready : 1;
 		uint8_t lock : 1;
+		//FIXME there is no error bit in status register, where does this bit come from?
 		uint8_t error : 1;
 		uint8_t reserved : 5;
 	};
 
+	/**
+	 * I2C device driver for the HMC5883L compass chip.
+	 * @tparam MODE_ the I2C transmission mode to use for this device; this chip
+	 * supports both available modes.
+	 */
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class HMC5883L : public i2c::I2CDevice<MODE_>
 	{
 	public:
+		/** The I2C transmission mode (speed) used for this device. */
 		static constexpr const i2c::I2CMode MODE = MODE_;
 
+		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
 		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
 
+		/**
+		 * Create a new device driver for a HMC5883L chip.
+		 * @param manager reference to a suitable i2c::I2CManager for this device
+		 */
 		HMC5883L(MANAGER& manager) : i2c::I2CDevice<MODE>(manager) {}
 
+		/**
+		 * Start operation of this compass chip. Once this method has been called,
+		 * you may use `magnetic_fields()` to find out the directions of the device.
+		 * 
+		 * @param mode the `OperatingMode` to operate this chip
+		 * @param gain the `Gain` to use to increase measured magnetic fields
+		 * @param rate the `DataOutput` rate to use in `OperatingMode::CONTINUOUS` mode
+		 * @param samples the `SamplesAveraged` to use for each measurement
+		 * @param measurement the `MeasurementMode` to use on the chip sensors
+		 * 
+		 * @sa end()
+		 */
 		bool begin(OperatingMode mode = OperatingMode::SINGLE, Gain gain = Gain::GAIN_1_3GA,
 				   DataOutput rate = DataOutput::RATE_15HZ, SamplesAveraged samples = SamplesAveraged::ONE_SAMPLE,
 				   MeasurementMode measurement = MeasurementMode::NORMAL)
@@ -109,11 +171,20 @@ namespace devices::magneto
 				   && write_register(CONFIG_REG_B, uint8_t(gain)) && write_register(MODE_REG, uint8_t(mode));
 		}
 
+		/**
+		 * Stop operation of this compass chip. You should not call `magnetic_fields()`
+		 * after calling this method.
+		 * 
+		 * @sa begin()
+		 */
 		inline bool end() INLINE
 		{
 			return write_register(MODE_REG, uint8_t(OperatingMode::IDLE));
 		}
 
+		/**
+		 * Get the curent chip status.
+		 */
 		inline Status status() INLINE
 		{
 			Status status;
@@ -121,6 +192,19 @@ namespace devices::magneto
 			return status;
 		}
 
+		/**
+		 * Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).
+		 * In order to convert raw measurements to physical values, you should
+		 * call `convert_fields_to_mGA()`.
+		 * 
+		 * @param fields a reference to a `MagneticFields` variable that will be
+		 * filled with values upon method return
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 * 
+		 * @sa convert_fields_to_mGA()
+		 */
 		bool magnetic_fields(MagneticFields& fields)
 		{
 			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
@@ -135,6 +219,16 @@ namespace devices::magneto
 				return false;
 		}
 
+		/**
+		 * Convert raw fields measured obtained with `magnetic_fields()` to actual
+		 * physical values, using the `Gain` configured for the device.
+		 * 
+		 * @param fields a reference to a `MagneticFields` variable that will be
+		 * converted from raw to physical values
+		 * 
+		 * @sa magnetic_fields()
+		 * @sa begin()
+		 */
 		void convert_fields_to_mGA(MagneticFields& fields)
 		{
 			convert_field_to_mGa(fields.x);
@@ -187,3 +281,4 @@ namespace devices::magneto
 }
 
 #endif /* HMC5883L_H */
+/// @endcond
