@@ -235,7 +235,7 @@ namespace devices::magneto
 			return temperature;
 		}
 		
-		static int16_t convert_temp_to_centi_degrees(int16_t temp)
+		static constexpr int16_t convert_temp_to_centi_degrees(int16_t temp)
 		{
 			// MPU-6000 Register Map datasheet §4.18 formula: Tc = TEMP / 340 + 36.53
 			return int16_t(temp * 10L / 34L + 3653);
