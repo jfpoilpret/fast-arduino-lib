@@ -12,6 +12,14 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file
+ * API to handle MPU6050 3-axis gyroscope/accelerometer I2C chip.
+ * @sa https://github.com/jfpoilpret/fast-arduino-lib/blob/master/refs/devices/MPU-6000-Datasheet1.pdf
+ * @sa https://github.com/jfpoilpret/fast-arduino-lib/blob/master/refs/devices/MPU-6000-Register-Map1.pdf
+ */
 #ifndef MPU6050_H
 #define MPU6050_H
 
@@ -21,10 +29,12 @@
 #include "../utilities.h"
 
 //FIXME rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
-//TODO should we review all devices namespace to split into: sensors, actuators, displays and circuits maybe?
-//TODO then should we also change directories structure or not necessarily (yet)
 namespace devices::magneto
 {
+	//TODO document
+	/**
+	 * 
+	 */
 	enum class GyroRange : uint8_t
 	{
 		RANGE_250	= 0 << 3,
@@ -33,6 +43,7 @@ namespace devices::magneto
 		RANGE_2000	= 3 << 3,
 	};
 	
+	//TODO document
 	static constexpr uint16_t GYRO_RANGE_DPS(GyroRange range)
 	{
 		return (range == GyroRange::RANGE_2000 ? 2000 :
@@ -41,6 +52,7 @@ namespace devices::magneto
 				250);
 	}
 	
+	//TODO document
 	enum class AccelRange : uint8_t
 	{
 		RANGE_2G	= 0 << 3,
@@ -49,6 +61,7 @@ namespace devices::magneto
 		RANGE_16G	= 3 << 3,
 	};
 	
+	//TODO document
 	static constexpr uint16_t ACCEL_RANGE_G(AccelRange range)
 	{
 		return (range == AccelRange::RANGE_16G ? 16 :
@@ -57,6 +70,7 @@ namespace devices::magneto
 				2);
 	}
 	
+	//TODO document
 	struct PowerManagement
 	{
 		PowerManagement(): clock_select{}, temp_disable{}, reserved{}, cycle{}, sleep{}, device_reset{}
@@ -69,6 +83,8 @@ namespace devices::magneto
 		uint8_t sleep			:1;
 		uint8_t device_reset	:1;
 	};
+
+	//TODO document
 	enum class ClockSelect : uint8_t
 	{
 		INTERNAL_8MHZ		= 0,
@@ -80,6 +96,7 @@ namespace devices::magneto
 		STOPPED				= 7
 	};
 	
+	//TODO document
 	enum class DLPF : uint8_t
 	{
 		ACCEL_BW_260HZ		= 0,
@@ -99,6 +116,7 @@ namespace devices::magneto
 		GYRO_BW_5HZ			= 6
 	};
 	
+	//TODO document
 	struct FIFOEnable
 	{
 		FIFOEnable(): reserved{}, accel{}, gyro_z{}, gyro_y{}, gyro_x{}, temperature{}
@@ -111,6 +129,8 @@ namespace devices::magneto
 		uint8_t gyro_x		:1;
 		uint8_t temperature	:1;
 	};
+
+	//TODO document
 	struct INTStatus
 	{
 		uint8_t data_ready	:1;
@@ -119,6 +139,7 @@ namespace devices::magneto
 		uint8_t reserved2	:3;
 	};
 
+	//TODO document
 	struct Sensor3D
 	{
 		int16_t	x;
@@ -126,6 +147,7 @@ namespace devices::magneto
 		int16_t	z;
 	};
 
+	//TODO document
 	struct AllSensors
 	{
 		Sensor3D	gyro;
@@ -133,24 +155,29 @@ namespace devices::magneto
 		Sensor3D	accel;
 	};
 	
+	//TODO document
 	enum class AD0 : uint8_t
 	{
 		LOW		= 0,
 		HIGH	= 1
 	};
 
+	//TODO document
 	//TODO Add some using in code in order to use shorter LOCs
 	//NOTE: MPU6050 auxiliary I2C is not supported.
 	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW>
 	class MPU6050 : public i2c::I2CDevice<MODE>
 	{
 	public:
+		//TODO document
 		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
 
+		//TODO document
 		MPU6050(MANAGER& manager): i2c::I2CDevice<MODE>(manager)
 		{
 		}
 
+		//TODO document
 		bool begin( GyroRange gyro_range = GyroRange::RANGE_250,
 					AccelRange accel_range = AccelRange::RANGE_2G,
 					DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
@@ -166,6 +193,7 @@ namespace devices::magneto
 					&&	this->write(DEVICE_ADDRESS, power, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 		
+		//TODO document
 		bool begin( FIFOEnable fifo_enable,
 					INTStatus int_enable,
 					uint8_t sample_rate_divider,
@@ -200,6 +228,7 @@ namespace devices::magneto
 					&&	this->write(DEVICE_ADDRESS, power, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 		
+		//TODO document
 		inline bool end() INLINE
 		{
 			// Put to sleep mode
@@ -208,6 +237,7 @@ namespace devices::magneto
 			return write_power(power);
 		}
 		
+		//TODO document
 		inline bool reset() INLINE
 		{
 			PowerManagement power;
@@ -215,6 +245,7 @@ namespace devices::magneto
 			return write_power(power);
 		}
 
+		//TODO document
 		bool gyro_measures(Sensor3D& gyro)
 		{
 			if (	this->write(DEVICE_ADDRESS, GYRO_XOUT, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
@@ -227,6 +258,7 @@ namespace devices::magneto
 				return false;
 		}
 
+		//TODO document
 		int16_t temperature()
 		{
 			int16_t temperature = -32768;
@@ -235,12 +267,14 @@ namespace devices::magneto
 			return temperature;
 		}
 		
+		//TODO document
 		static constexpr int16_t convert_temp_to_centi_degrees(int16_t temp)
 		{
 			// MPU-6000 Register Map datasheet §4.18 formula: Tc = TEMP / 340 + 36.53
 			return int16_t(temp * 10L / 34L + 3653);
 		}
 
+		//TODO document
 		bool accel_measures(Sensor3D& accel)
 		{
 			if (	this->write(DEVICE_ADDRESS, ACCEL_XOUT, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
@@ -253,6 +287,7 @@ namespace devices::magneto
 				return false;
 		}
 		
+		//TODO document
 		bool all_measures(AllSensors& sensors)
 		{
 			if (	this->write(DEVICE_ADDRESS, ACCEL_XOUT, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
@@ -267,6 +302,7 @@ namespace devices::magneto
 				return false;
 		}
 		
+		//TODO document
 		INTStatus interrupt_status()
 		{
 			INTStatus status;
@@ -275,12 +311,14 @@ namespace devices::magneto
 			return status;
 		}
 		
+		//TODO document
 		bool reset_fifo()
 		{
 			return		this->write(DEVICE_ADDRESS, USER_CTRL, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
 					&&	this->write(DEVICE_ADDRESS, uint8_t(0x44), i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 		
+		//TODO document
 		uint16_t fifo_count()
 		{
 			uint16_t count = 0;
@@ -290,6 +328,7 @@ namespace devices::magneto
 			return count;
 		}
 		
+		//TODO document
 		template<typename T>
 		inline bool fifo_pop(T& output, bool wait = false)
 		{
@@ -360,3 +399,4 @@ namespace devices::magneto
 }
 
 #endif /* MPU6050_H */
+/// @endcond
