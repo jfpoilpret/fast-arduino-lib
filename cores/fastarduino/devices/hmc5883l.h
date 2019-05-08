@@ -159,6 +159,9 @@ namespace devices::magneto
 		 * @param rate the `DataOutput` rate to use in `OperatingMode::CONTINUOUS` mode
 		 * @param samples the `SamplesAveraged` to use for each measurement
 		 * @param measurement the `MeasurementMode` to use on the chip sensors
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
 		 * 
 		 * @sa end()
 		 */
@@ -174,6 +177,9 @@ namespace devices::magneto
 		/**
 		 * Stop operation of this compass chip. You should not call `magnetic_fields()`
 		 * after calling this method.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
 		 * 
 		 * @sa begin()
 		 */
