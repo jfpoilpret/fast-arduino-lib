@@ -204,29 +204,62 @@ namespace devices::magneto
 		Sensor3D accel;
 	};
 
-	//TODO document
+	/**
+	 * Possible values of I2C address lower bit for the chip (the chip may have
+	 * one of two possible addresses, based on the level of pin AD0, datasheet 
+	 * §6.4, §7.1).
+	 * @sa MPU6050
+	 */
 	enum class AD0 : uint8_t
 	{
+		/** When `AD0` pin is low, I2C address is `0x68`. */
 		LOW = 0,
+		/** When `AD0` pin is high, I2C address is `0x69`. */
 		HIGH = 1
 	};
 
-	//TODO document
-	//TODO Add some using in code in order to use shorter LOCs
-	//NOTE: MPU6050 auxiliary I2C is not supported.
+	/**
+	 * I2C device driver for the MPU6050 gyroscope/accelerometer chip.
+	 * Note that the I2C auxiliary mode of the chip is not supported by the driver.
+	 * 
+	 * @tparam MODE the I2C transmission mode to use for this device; this chip
+	 * supports both available modes.
+	 * @tparam AD0 the level of the AD0 pin, which fixes the chip address on the
+	 * I2C bus 
+	 * 
+	 * @sa AD0
+	 */
 	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW> class MPU6050 : public i2c::I2CDevice<MODE>
 	{
 	private:
 		using BusCond = i2c::BusConditions;
 
 	public:
-		//TODO document
+		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
 		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
 
-		//TODO document
+		/**
+		 * Create a new device driver for a MPU6050 chip.
+		 * @param manager reference to a suitable i2c::I2CManager for this device
+		 */
 		MPU6050(MANAGER& manager) : i2c::I2CDevice<MODE>(manager) {}
 
-		//TODO document
+		/**
+		 * Start operation of this gyroscope/accelerometer chip. Once this method
+		 * has been called, you may use other methods such as `gyro_measures()` 
+		 * to get sensors measurements from the device.
+		 * 
+		 * @param gyro_range the `GyroRange` to use for the gyroscope measurements
+		 * @param accel_range the `AccelRange` to use for the accelerometer measurements
+		 * @param low_pass_filter the `DLPF` bandwidth to use for operations
+		 * @param clock_select the `ClockSelect` to use as the device clock source
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 * 
+		 * @sa end()
+		 * @sa begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)
+		 */
 		bool begin( GyroRange gyro_range = GyroRange::RANGE_250,
 					AccelRange accel_range = AccelRange::RANGE_2G,
 					DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
@@ -243,7 +276,32 @@ namespace devices::magneto
 					&&	this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
 		}
 
-		//TODO document
+		/**
+		 * Start operation of this gyroscope/accelerometer chip. Once this method
+		 * has been called, you may use other methods such as `gyro_measures()` 
+		 * to get sensors measurements from the device.
+		 * This shall be used when you want continuous measurements performed by 
+		 * the device.
+		 * 
+		 * @param fifo_enable the `FIFOEnable` settings for continuous measurements
+		 * @param int_enable the `INTEnable` settings for interrupt generation; note 
+		 * that the device driver does not handle interrupts (ISR) itself, you need
+		 * to use other FastArduino API for that.
+		 * @param sample_rate_divider the divider from the gyroscope output rate
+		 * to generate the Sample Rate of the chip (register map §4.2)
+		 * @param gyro_range the `GyroRange` to use for the gyroscope measurements
+		 * @param accel_range the `AccelRange` to use for the accelerometer measurements
+		 * @param low_pass_filter the `DLPF` bandwidth to use for operations
+		 * @param clock_select the `ClockSelect` to use as the device clock source
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 * 
+		 * @sa end()
+		 * @sa begin(GyroRange, AccelRange, DLPF, ClockSelect)
+		 * @sa interrupts::INTSignal
+		 * @sa interrupts::PCISignal
+		 */
 		bool begin( FIFOEnable fifo_enable,
 					INTEnable int_enable,
 					uint8_t sample_rate_divider,
@@ -279,7 +337,15 @@ namespace devices::magneto
 					&&	this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
 		}
 
-		//TODO document
+		/**
+		 * Put the chip to sleep mode (low-power mode); stops sampling operations 
+		 * if any.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 * 
+		 * @sa begin()
+		 */
 		inline bool end() INLINE
 		{
 			// Put to sleep mode
@@ -288,7 +354,12 @@ namespace devices::magneto
 			return write_power(power);
 		}
 
-		//TODO document
+		/**
+		 * Reset the chip (register map §4.28).
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 */
 		inline bool reset() INLINE
 		{
 			PowerManagement power;
