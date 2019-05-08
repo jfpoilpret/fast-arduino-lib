@@ -367,7 +367,14 @@ namespace devices::magneto
 			return write_power(power);
 		}
 
-		//TODO document
+		/**
+		 * Get latest gyroscope measurements from the device (register map §4.19).
+		 * @param gyro a reference to a `Sensor3D` variable that will be filled
+		 * with latest gyroscope measurements on 3 axis.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 */
 		bool gyro_measures(Sensor3D& gyro)
 		{
 			using namespace i2c::Status;
@@ -381,7 +388,17 @@ namespace devices::magneto
 				return false;
 		}
 
-		//TODO document
+		/**
+		 * Get latest chip temperature measurement (register map §4.18).
+		 * The returned value is nternal raw value from the chip, it can be 
+		 * converted to human-readable temperature with `convert_temp_to_centi_degrees()`.
+		 * 
+		 * @return the latest raw temperature in degrees if no error occurred
+		 * @retval -32768 if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 * 
+		 * @sa convert_temp_to_centi_degrees()
+		 */
 		int16_t temperature()
 		{
 			using namespace i2c::Status;
@@ -391,14 +408,24 @@ namespace devices::magneto
 			return temperature;
 		}
 
-		//TODO document
+		/**
+		 * Convert the raw temperature obtained from `temperature()` to 
+		 * centi-degrees Celsius.
+		 */
 		static constexpr int16_t convert_temp_to_centi_degrees(int16_t temp)
 		{
 			// MPU-6000 Register Map datasheet §4.18 formula: Tc = TEMP / 340 + 36.53
 			return int16_t(temp * 10L / 34L + 3653);
 		}
 
-		//TODO document
+		/**
+		 * Get latest accelerometer measurements from the device (register map §4.17).
+		 * @param accel a reference to a `Sensor3D` variable that will be filled
+		 * with latest accelerometer measurements on 3 axis.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 */
 		bool accel_measures(Sensor3D& accel)
 		{
 			using namespace i2c::Status;
