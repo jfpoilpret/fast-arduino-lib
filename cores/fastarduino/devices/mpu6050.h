@@ -32,9 +32,9 @@
 //FIXME rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
 namespace devices::magneto
 {
-	//TODO document
 	/**
-	 * 
+	 * The full-scale range of the gyroscope in dps (datasheet §6.1).
+	 * @sa MPU6050::begin()
 	 */
 	enum class GyroRange : uint8_t
 	{
@@ -44,7 +44,9 @@ namespace devices::magneto
 		RANGE_2000 = 3 << 3,
 	};
 	
-	//TODO document
+	/**
+	 * Convert a `GyroRange` constant to the real gyroscope range in dps.
+	 */
 	static constexpr uint16_t GYRO_RANGE_DPS(GyroRange range)
 	{
 		return (range == GyroRange::RANGE_2000 ? 2000 :
@@ -53,7 +55,10 @@ namespace devices::magneto
 				250);
 	}
 	
-	//TODO document
+	/**
+	 * The full-scale range of the accelerometer in g (datasheet §6.2).
+	 * @sa MPU6050::begin()
+	 */
 	enum class AccelRange : uint8_t
 	{
 		RANGE_2G = 0 << 3,
@@ -62,7 +67,9 @@ namespace devices::magneto
 		RANGE_16G = 3 << 3,
 	};
 	
-	//TODO document
+	/**
+	 * Convert an `AccelRange` constant to the real accelerometer range in g.
+	 */
 	static constexpr uint16_t ACCEL_RANGE_G(AccelRange range)
 	{
 		return (range == AccelRange::RANGE_16G ? 16 :
@@ -71,7 +78,7 @@ namespace devices::magneto
 				2);
 	}
 	
-	//TODO document
+	//FIXME not part of public API! Hide it within MPU6050 class?
 	struct PowerManagement
 	{
 		PowerManagement() : clock_select{}, temp_disable{}, reserved{}, cycle{}, sleep{}, device_reset{} {}
@@ -84,7 +91,10 @@ namespace devices::magneto
 		uint8_t device_reset : 1;
 	};
 
-	//TODO document
+	/**
+	 * The clock to select for the chip (datasheet §6.6).
+	 * @sa MPU6050::begin()
+	 */
 	enum class ClockSelect : uint8_t
 	{
 		INTERNAL_8MHZ = 0,
@@ -96,7 +106,15 @@ namespace devices::magneto
 		STOPPED = 7
 	};
 
-	//TODO document
+	/**
+	 * The Digital Low Pass Filter bandwidth to select for the chip
+	 * (register map §4.3).
+	 * This can be expressed either from the gyroscope viewpoint ot from the
+	 * accelerometer viewpoint, but any setting is common to both features, i.e.
+	 * selecting a DLPF setting for the accelerometer will force the matching
+	 * setting for the gyroscope.
+	 * @sa MPU6050::begin()
+	 */
 	enum class DLPF : uint8_t
 	{
 		ACCEL_BW_260HZ = 0,
@@ -116,29 +134,57 @@ namespace devices::magneto
 		GYRO_BW_5HZ = 6
 	};
 	
-	//TODO document
+	/**
+	 * Configuration for MPU6050 FIFO Enable register (register map §4.6).
+	 * This allows setting which sensor measurements should be loaded in the chip
+	 * FIFO buffer (see also datasheet §7.17).
+	 * @sa MPU6050::begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)
+	 */
 	struct FIFOEnable
 	{
 		FIFOEnable() : reserved{}, accel{}, gyro_z{}, gyro_y{}, gyro_x{}, temperature{} {}
 
 		uint8_t reserved : 3;
+		/** If `1`, accelerometer measures on 3 axes will be loaded to FIFO buffer. */
 		uint8_t accel : 1;
+		/** If `1`, gyroscope measures on Z axis will be loaded to FIFO buffer. */
 		uint8_t gyro_z : 1;
+		/** If `1`, gyroscope measures on Y axis will be loaded to FIFO buffer. */
 		uint8_t gyro_y : 1;
+		/** If `1`, gyroscope measures on X axis will be loaded to FIFO buffer. */
 		uint8_t gyro_x : 1;
+		/** If `1`, chip temperature will be loaded to FIFO buffer. */
 		uint8_t temperature : 1;
 	};
 
-	//TODO document
+	/** 
+	 * The structure of the Interrupt Status register (register map §4.16).
+	 * @sa MPU6050::interrupt_status()
+	 * @sa INTEnable
+	 */
 	struct INTStatus
 	{
+		/** If `1`, the Data Ready interrupt is enabled. */
 		uint8_t data_ready : 1;
 		uint8_t reserved1 : 3;
+		/** If `1`, a FIFO buffer overflow will generate an interrupt. */
 		uint8_t overflow : 1;
 		uint8_t reserved2 : 3;
 	};
 
-	//TODO document
+	/**
+	 * The structure of the Interrupt Enable register (register map §4.15).
+	 * @sa MPU6050::begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)
+	 * @sa INTStatus
+	 */
+	using INTEnable = INTStatus;
+
+	/**
+	 * Structure to store 3 axis data for one sensor (gyroscope or accelerometer).
+	 * @sa AllSensors
+	 * @sa MPU6050::gyro_measures()
+	 * @sa MPU6050::accel_measures()
+	 */
 	struct Sensor3D
 	{
 		int16_t x;
@@ -146,7 +192,11 @@ namespace devices::magneto
 		int16_t z;
 	};
 
-	//TODO document
+	/**
+	 * Structure to store all MPU6050 sensors data (3 axis gyroscope and 
+	 * accelerometer, chip temperature).
+	 * @sa MPU6050::all_measures()
+	 */
 	struct AllSensors
 	{
 		Sensor3D gyro;
@@ -195,7 +245,7 @@ namespace devices::magneto
 
 		//TODO document
 		bool begin( FIFOEnable fifo_enable,
-					INTStatus int_enable,
+					INTEnable int_enable,
 					uint8_t sample_rate_divider,
 					GyroRange gyro_range = GyroRange::RANGE_250,
 					AccelRange accel_range = AccelRange::RANGE_2G,
