@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. " alt="" coords="5,5,176,47"/>
+<area shape="rect" id="node1" href="$classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM. " alt="" coords="5,5,140,32"/>
+<area shape="rect" id="node2" href="$classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data..." alt="" coords="188,5,357,32"/>
 </map>

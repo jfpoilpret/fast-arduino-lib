@@ -33,7 +33,6 @@ var searchData=
   ['power_5fof_5f10',['power_of_10',['../namespaceutils.html#a1f09c3ac0739c934fa0b975fa827f993',1,'utils']]],
   ['power_5fup',['power_up',['../classdevices_1_1_win_bond.html#a71b818fbbc7daa76ba22c74cb98f9581',1,'devices::WinBond']]],
   ['powerdown',['powerdown',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a1d1a753fa86ed08feeb3e3dd8a95c8cd',1,'devices::rf::NRF24L01']]],
-  ['powermanagement',['PowerManagement',['../structdevices_1_1magneto_1_1_power_management.html',1,'devices::magneto']]],
   ['powerup',['powerup',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ab177f9f3d3a35c41079ec8843436f967',1,'devices::rf::NRF24L01']]],
   ['powervoltage',['PowerVoltage',['../classanalog_1_1_power_voltage.html',1,'analog']]],
   ['precision',['precision',['../classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59',1,'streams::ios_base::precision(uint8_t precision)'],['../classstreams_1_1ios__base.html#a19275827f0fadef367261d4ac8cf0d09',1,'streams::ios_base::precision() const']]],

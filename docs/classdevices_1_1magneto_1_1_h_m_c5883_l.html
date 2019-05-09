@@ -319,13 +319,20 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
     <tr><td class="paramname">gain</td><td>the <code>Gain</code> to use to increase measured magnetic fields </td></tr>
     <tr><td class="paramname">rate</td><td>the <code>DataOutput</code> rate to use in <code>OperatingMode::CONTINUOUS</code> mode </td></tr>
     <tr><td class="paramname">samples</td><td>the <code>SamplesAveraged</code> to use for each measurement </td></tr>
-    <tr><td class="paramname">measurement</td><td>the <code>MeasurementMode</code> to use on the chip sensors</td></tr>
+    <tr><td class="paramname">measurement</td><td>the <code>MeasurementMode</code> to use on the chip sensors </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the operation succeeded </td></tr>
+    <tr><td class="paramname">false</td><td>if the operation failed; if so, <code><a class="el" href="classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78" title="Return latest transmission status. ">i2c::I2CManager.status()</a></code> shall be called for further information on the error.</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a410918e25423e3eb921fccad77456096" title="Stop operation of this compass chip. ">end()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00165">165</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00168">168</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -355,10 +362,16 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 </div><div class="memdoc">
 
 <p>Stop operation of this compass chip. </p>
-<p>You should not call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). ">magnetic_fields()</a></code> after calling this method.</p>
+<p>You should not call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16). ">magnetic_fields()</a></code> after calling this method. </p><dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the operation succeeded </td></tr>
+    <tr><td class="paramname">false</td><td>if the operation failed; if so, <code><a class="el" href="classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78" title="Return latest transmission status. ">i2c::I2CManager.status()</a></code> shall be called for further information on the error.</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a7dcdec10c70d8e928edc301f4e4c3994" title="Start operation of this compass chip. ">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00180">180</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00186">186</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -405,7 +418,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4a47c367d282b383220d732641610bd9" title="Convert raw fields measured obtained with magnetic_fields() to actual physical values, using the Gain configured for the device. ">convert_fields_to_mGA()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00208">208</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00214">214</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -446,7 +459,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <dd>
 <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a7dcdec10c70d8e928edc301f4e4c3994" title="Start operation of this compass chip. ">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00232">232</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00238">238</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>

@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins. " alt="" coords="5,5,175,47"/>
+<area shape="rect" id="node1" href="$classdevices_1_1sonar_1_1_abstract_sonar.html" title="Am abstract base class for some sonar classes defined as part of this API. " alt="" coords="5,13,184,54"/>
+<area shape="rect" id="node2" href="$classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC&#45;SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin..." alt="" coords="232,5,444,61"/>
 </map>

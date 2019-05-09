@@ -1,6 +1,7 @@
 var searchData=
 [
   ['data',['DATA',['../classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8',1,'devices::SIPO']]],
+  ['data_5fready',['data_ready',['../structdevices_1_1magneto_1_1_i_n_t_status.html#a823fa93f355bc7d15cafa5e211bfdb62',1,'devices::magneto::INTStatus']]],
   ['dec',['dec',['../classstreams_1_1ios__base.html#a2a9b1d330a6408608b21ea3cd7044ae1',1,'streams::ios_base']]],
   ['default_5ftimeout_5fms',['DEFAULT_TIMEOUT_MS',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#ae864aa0d54918613423c7d92ce6be44d',1,'devices::sonar::HCSR04::DEFAULT_TIMEOUT_MS()'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a568791a5cba1f49509f380aff1101f38',1,'devices::sonar::MultiHCSR04::DEFAULT_TIMEOUT_MS()']]],
   ['delay',['delay',['../namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf',1,'time']]],

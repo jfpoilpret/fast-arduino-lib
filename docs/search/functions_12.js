@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['temperature',['temperature',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a7bdd4b3b90b972c8fcd97abfcb545613',1,'devices::magneto::MPU6050']]],
   ['tick_5fprescaler',['tick_prescaler',['../structtimer_1_1_calculator.html#a319ea208456b508d34bc7b65e6f90e59',1,'timer::Calculator']]],
   ['ticks',['ticks',['../classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56',1,'timer::Timer']]],
   ['ticks_5f',['ticks_',['../classtimer_1_1_timer.html#a7c939960ca27edadffbd275959b2ef3a',1,'timer::Timer']]],

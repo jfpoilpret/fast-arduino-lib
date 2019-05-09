@@ -111,7 +111,6 @@ var hierarchy =
     [ "interrupt::PCISignal< PORT_ >", "classinterrupt_1_1_p_c_i_signal.html", null ],
     [ "interrupt::PCIType< PIN >", "structinterrupt_1_1_p_c_i_type.html", null ],
     [ "power::Power", "classpower_1_1_power.html", null ],
-    [ "devices::magneto::PowerManagement", "structdevices_1_1magneto_1_1_power_management.html", null ],
     [ "analog::PWMOutput< PIN_, PULSED_ >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "analog::PWMOutput< OUTPUT >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "analog::PWMOutput< PIN, true >", "classanalog_1_1_p_w_m_output.html", null ],
@@ -136,8 +135,8 @@ var hierarchy =
     [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],
     [ "timer::SquareWave< NTIMER, OUTPUT >", "classtimer_1_1_square_wave.html", null ],
-    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
+    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
     [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", [
       [ "timer::PulseTimer< NTIMER_, PRESCALER_, T >", "classtimer_1_1_pulse_timer.html", null ],

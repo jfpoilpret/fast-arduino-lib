@@ -93,26 +93,72 @@ $(document).ready(function(){initNavTree('structdevices_1_1magneto_1_1_i_n_t_sta
 <div class="title">devices::magneto::INTStatus Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The structure of the Interrupt <a class="el" href="structdevices_1_1magneto_1_1_status.html" title="The chip status, as defined in datasheet p16. ">Status</a> register (register map §4.16).  
+ <a href="structdevices_1_1magneto_1_1_i_n_t_status.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="mpu6050_8h_source.html">fastarduino/devices/mpu6050.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a823fa93f355bc7d15cafa5e211bfdb62"><td class="memItemLeft" align="right" valign="top"><a id="a823fa93f355bc7d15cafa5e211bfdb62"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>data_ready</b>:1</td></tr>
+<tr class="memitem:a823fa93f355bc7d15cafa5e211bfdb62"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1magneto_1_1_i_n_t_status.html#a823fa93f355bc7d15cafa5e211bfdb62">data_ready</a>: 1</td></tr>
+<tr class="memdesc:a823fa93f355bc7d15cafa5e211bfdb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>1</code>, the Data Ready interrupt is enabled.  <a href="#a823fa93f355bc7d15cafa5e211bfdb62">More...</a><br /></td></tr>
 <tr class="separator:a823fa93f355bc7d15cafa5e211bfdb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65de79415bb17afe171db9b8bc081932"><td class="memItemLeft" align="right" valign="top"><a id="a65de79415bb17afe171db9b8bc081932"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved1</b>:3</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved1</b>: 3</td></tr>
 <tr class="separator:a65de79415bb17afe171db9b8bc081932"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac80b3f096b6883d132f76221027560b8"><td class="memItemLeft" align="right" valign="top"><a id="ac80b3f096b6883d132f76221027560b8"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>overflow</b>:1</td></tr>
+<tr class="memitem:ac80b3f096b6883d132f76221027560b8"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1magneto_1_1_i_n_t_status.html#ac80b3f096b6883d132f76221027560b8">overflow</a>: 1</td></tr>
+<tr class="memdesc:ac80b3f096b6883d132f76221027560b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>1</code>, a FIFO buffer overflow will generate an interrupt.  <a href="#ac80b3f096b6883d132f76221027560b8">More...</a><br /></td></tr>
 <tr class="separator:ac80b3f096b6883d132f76221027560b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65fc10f1d4a84deb3b75a88923f6ec55"><td class="memItemLeft" align="right" valign="top"><a id="a65fc10f1d4a84deb3b75a88923f6ec55"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved2</b>:3</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved2</b>: 3</td></tr>
 <tr class="separator:a65fc10f1d4a84deb3b75a88923f6ec55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00114">114</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<div class="textblock"><p>The structure of the Interrupt <a class="el" href="structdevices_1_1magneto_1_1_status.html" title="The chip status, as defined in datasheet p16. ">Status</a> register (register map §4.16). </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a8329bcb49704040579abee759752757d" title="Get the interrupt status (register map §4.16) after an interrupt has occurred. ">MPU6050::interrupt_status()</a> </dd>
+<dd>
+<a class="el" href="namespacedevices_1_1magneto.html#af1a3dfb463a3ed6edaa3d7dcbdd2352d" title="The structure of the Interrupt Enable register (register map §4.15). ">INTEnable</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00151">151</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a823fa93f355bc7d15cafa5e211bfdb62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a823fa93f355bc7d15cafa5e211bfdb62">&#9670;&nbsp;</a></span>data_ready</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t devices::magneto::INTStatus::data_ready</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If <code>1</code>, the Data Ready interrupt is enabled. </p>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00156">156</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+
+</div>
+</div>
+<a id="ac80b3f096b6883d132f76221027560b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac80b3f096b6883d132f76221027560b8">&#9670;&nbsp;</a></span>overflow</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t devices::magneto::INTStatus::overflow</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If <code>1</code>, a FIFO buffer overflow will generate an interrupt. </p>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00159">159</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="mpu6050_8h_source.html">mpu6050.h</a></li>
 </ul>
 </div><!-- contents -->

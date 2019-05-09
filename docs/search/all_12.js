@@ -1,6 +1,7 @@
 var searchData=
 [
   ['t',['T',['../classcontainers_1_1_linked_list.html#af07a8b8e2b75d77751a541dd494d4e91',1,'containers::LinkedList::T()'],['../classcontainers_1_1_link.html#a6b64035a31450f45e1395c0f20b4aa14',1,'containers::Link::T()'],['../classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a',1,'containers::Queue::T()']]],
+  ['temperature',['temperature',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#aef62a43023a336710838679ec8fca073',1,'devices::magneto::FIFOEnable::temperature()'],['../classdevices_1_1magneto_1_1_m_p_u6050.html#a7bdd4b3b90b972c8fcd97abfcb545613',1,'devices::magneto::MPU6050::temperature()']]],
   ['tick_5fprescaler',['tick_prescaler',['../structtimer_1_1_calculator.html#a319ea208456b508d34bc7b65e6f90e59',1,'timer::Calculator']]],
   ['ticks',['ticks',['../classtimer_1_1_timer.html#a0cc068684bb87dd7a5c3602b6eb96a56',1,'timer::Timer']]],
   ['ticks_5f',['ticks_',['../classtimer_1_1_timer.html#a7c939960ca27edadffbd275959b2ef3a',1,'timer::Timer']]],
@@ -46,7 +47,7 @@ var searchData=
   ['transfer',['transfer',['../classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc',1,'spi::AbstractSPIDevice::transfer(uint8_t data)'],['../classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7',1,'spi::AbstractSPIDevice::transfer(uint8_t *data, uint16_t size)'],['../classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62',1,'spi::AbstractSPIDevice::transfer(uint8_t *data, uint16_t size, uint8_t sent)']]],
   ['traverse',['traverse',['../classcontainers_1_1_linked_list.html#a974fb6a46b9477e005b9c17a5b47ae72',1,'containers::LinkedList']]],
   ['tref',['TREF',['../classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278',1,'containers::Queue']]],
-  ['trigger',['trigger',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027',1,'devices::sonar::MultiHCSR04::trigger()'],['../classdevices_1_1sonar_1_1_h_c_s_r04.html#a9dafeb3856a963e8dff9e67a64f55149',1,'devices::sonar::HCSR04::TRIGGER()'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#af153ac82a0b22b25ec77c6e8444ce37f',1,'devices::sonar::MultiHCSR04::TRIGGER()']]],
+  ['trigger',['TRIGGER',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#a9dafeb3856a963e8dff9e67a64f55149',1,'devices::sonar::HCSR04::TRIGGER()'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#af153ac82a0b22b25ec77c6e8444ce37f',1,'devices::sonar::MultiHCSR04::TRIGGER()'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027',1,'devices::sonar::MultiHCSR04::trigger(uint16_t timeout_ms)']]],
   ['two',['TWO',['../namespaceserial.html#a1cc0a59518594157f23ddf16842243b3a0f82d86afa0f5dc965c5c15aca58dcfb',1,'serial']]],
   ['tx',['TX',['../classserial_1_1soft_1_1_u_a_t_x.html#aee7e52d834bae3c16d9768f789336a3e',1,'serial::soft::UATX::TX()'],['../classserial_1_1soft_1_1_u_a_r_t.html#ad3837953b18ff0601f9bf0b4930c28fc',1,'serial::soft::UART::TX()']]],
   ['tx_5faddr',['TX_ADDR',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa10782da1a478719a7eb721e504eaca2e',1,'devices::rf::NRF24L01']]],

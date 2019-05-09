@@ -32,5 +32,5 @@ var searchData=
   ['output_5fcompare_5fa',['OUTPUT_COMPARE_A',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a1aac1f38fe13831901945888f2a3998d',1,'timer']]],
   ['output_5fcompare_5fb',['OUTPUT_COMPARE_B',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a2ec54b766f810d959b45fe0149db994c',1,'timer']]],
   ['output_5fcompare_5fc',['OUTPUT_COMPARE_C',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a152b06238f6e18dc172a755417314a5a',1,'timer']]],
-  ['overflow',['overflow',['../classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251',1,'streams::ostreambuf::overflow()'],['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a0134b04a942cbc5336958c8cd09b82f3',1,'timer::OVERFLOW()']]]
+  ['overflow',['overflow',['../structdevices_1_1magneto_1_1_i_n_t_status.html#ac80b3f096b6883d132f76221027560b8',1,'devices::magneto::INTStatus::overflow()'],['../classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251',1,'streams::ostreambuf::overflow()'],['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a0134b04a942cbc5336958c8cd09b82f3',1,'timer::OVERFLOW()']]]
 ];

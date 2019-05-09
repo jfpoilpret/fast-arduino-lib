@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['temperature',['temperature',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#aef62a43023a336710838679ec8fca073',1,'devices::magneto::FIFOEnable']]],
   ['timer_5fmax',['TIMER_MAX',['../classtimer_1_1_timer.html#a90885b96ac06c3d91ae01566bbe578e0',1,'timer::Timer']]],
   ['tm_5fhour',['tm_hour',['../structdevices_1_1rtc_1_1tm.html#ac3254d60c37414fa101638a8081a3e35',1,'devices::rtc::tm']]],
   ['tm_5fmday',['tm_mday',['../structdevices_1_1rtc_1_1tm.html#a5cf662ebd192a0a84afceaf4a1105b49',1,'devices::rtc::tm']]],

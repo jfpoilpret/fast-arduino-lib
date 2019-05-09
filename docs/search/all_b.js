@@ -3,7 +3,7 @@ var searchData=
   ['magnetic_5ffields',['magnetic_fields',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866',1,'devices::magneto::HMC5883L']]],
   ['magnetic_5fheading',['magnetic_heading',['../namespacedevices_1_1magneto.html#a3b4ef6b88b5accbf034aa8728c711715',1,'devices::magneto']]],
   ['magneticfields',['MagneticFields',['../structdevices_1_1magneto_1_1_magnetic_fields.html',1,'devices::magneto']]],
-  ['manager',['MANAGER',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a',1,'devices::magneto::HMC5883L::MANAGER()'],['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4d87168983b0d46ffd73668f77350141',1,'devices::mcp23017::MCP23017::MANAGER()'],['../classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8',1,'i2c::I2CDevice::MANAGER()']]],
+  ['manager',['MANAGER',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a',1,'devices::magneto::HMC5883L::MANAGER()'],['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4d87168983b0d46ffd73668f77350141',1,'devices::mcp23017::MCP23017::MANAGER()'],['../classdevices_1_1magneto_1_1_m_p_u6050.html#af1e0ae03e7121d9f33aa12862554f61f',1,'devices::magneto::MPU6050::MANAGER()'],['../classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8',1,'i2c::I2CDevice::MANAGER()']]],
   ['manipulator',['Manipulator',['../classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050',1,'streams::ostream::Manipulator()'],['../classstreams_1_1istream.html#aed4a47070eed37c6d9544166bcf58545',1,'streams::istream::Manipulator()']]],
   ['map',['map',['../namespaceutils.html#a608f8edf36fb4a7c58dd01232e07c0c8',1,'utils']]],
   ['map_5fphysical_5fto_5fraw',['map_physical_to_raw',['../namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32',1,'utils']]],
@@ -28,7 +28,8 @@ var searchData=
   ['mode_5f1',['MODE_1',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbaf7ede748a6b41c7c91c18ed2d155b33e',1,'spi']]],
   ['mode_5f2',['MODE_2',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbacac4185dc8a44d8ae07bfb94c2830017',1,'spi']]],
   ['mode_5f3',['MODE_3',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbac5b781763a4c930367500c96e64a0166',1,'spi']]],
-  ['mpu6050',['MPU6050',['../classdevices_1_1magneto_1_1_m_p_u6050.html',1,'devices::magneto']]],
+  ['mpu6050',['MPU6050',['../classdevices_1_1magneto_1_1_m_p_u6050.html',1,'devices::magneto::MPU6050&lt; MODE, AD0 &gt;'],['../classdevices_1_1magneto_1_1_m_p_u6050.html#a3bf724c05164c56c1252d78cb988ee81',1,'devices::magneto::MPU6050::MPU6050()']]],
+  ['mpu6050_2eh',['mpu6050.h',['../mpu6050_8h.html',1,'']]],
   ['ms',['ms',['../structdevices_1_1audio_1_1_tone_play.html#adc102e5aa464e91ac65c5ff09e322ec5',1,'devices::audio::TonePlay']]],
   ['msb_5ffirst',['MSB_FIRST',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7a89488e0251a0b2be79602890ef16ddb3',1,'spi']]],
   ['multihcsr04',['MultiHCSR04',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html',1,'devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a41fd653b0e93076b8038114d6e466cb7',1,'devices::sonar::MultiHCSR04::MultiHCSR04()']]]

@@ -93,32 +93,130 @@ $(document).ready(function(){initNavTree('structdevices_1_1magneto_1_1_f_i_f_o_e
 <div class="title">devices::magneto::FIFOEnable Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Configuration for <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html" title="I2C device driver for the MPU6050 gyroscope/accelerometer chip. ">MPU6050</a> FIFO Enable register (register map §4.6).  
+ <a href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="mpu6050_8h_source.html">fastarduino/devices/mpu6050.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a626e56e6111caadfa11203f17b2c4c7f"><td class="memItemLeft" align="right" valign="top"><a id="a626e56e6111caadfa11203f17b2c4c7f"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved</b>:3</td></tr>
+uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>reserved</b>: 3</td></tr>
 <tr class="separator:a626e56e6111caadfa11203f17b2c4c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6268d8f1b4236538926df52627cd1b4"><td class="memItemLeft" align="right" valign="top"><a id="aa6268d8f1b4236538926df52627cd1b4"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>accel</b>:1</td></tr>
+<tr class="memitem:aa6268d8f1b4236538926df52627cd1b4"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html#aa6268d8f1b4236538926df52627cd1b4">accel</a>: 1</td></tr>
+<tr class="memdesc:aa6268d8f1b4236538926df52627cd1b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>1</code>, accelerometer measures on 3 axes will be loaded to FIFO buffer.  <a href="#aa6268d8f1b4236538926df52627cd1b4">More...</a><br /></td></tr>
 <tr class="separator:aa6268d8f1b4236538926df52627cd1b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2b70828e0e7fe729623a47b11bc5e12"><td class="memItemLeft" align="right" valign="top"><a id="aa2b70828e0e7fe729623a47b11bc5e12"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>gyro_z</b>:1</td></tr>
+<tr class="memitem:aa2b70828e0e7fe729623a47b11bc5e12"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html#aa2b70828e0e7fe729623a47b11bc5e12">gyro_z</a>: 1</td></tr>
+<tr class="memdesc:aa2b70828e0e7fe729623a47b11bc5e12"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>1</code>, gyroscope measures on Z axis will be loaded to FIFO buffer.  <a href="#aa2b70828e0e7fe729623a47b11bc5e12">More...</a><br /></td></tr>
 <tr class="separator:aa2b70828e0e7fe729623a47b11bc5e12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e99edcee3a6939461fcee742afbdba0"><td class="memItemLeft" align="right" valign="top"><a id="a1e99edcee3a6939461fcee742afbdba0"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>gyro_y</b>:1</td></tr>
+<tr class="memitem:a1e99edcee3a6939461fcee742afbdba0"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html#a1e99edcee3a6939461fcee742afbdba0">gyro_y</a>: 1</td></tr>
+<tr class="memdesc:a1e99edcee3a6939461fcee742afbdba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>1</code>, gyroscope measures on Y axis will be loaded to FIFO buffer.  <a href="#a1e99edcee3a6939461fcee742afbdba0">More...</a><br /></td></tr>
 <tr class="separator:a1e99edcee3a6939461fcee742afbdba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae951ab13db65b201b986ec0a6538d31e"><td class="memItemLeft" align="right" valign="top"><a id="ae951ab13db65b201b986ec0a6538d31e"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>gyro_x</b>:1</td></tr>
+<tr class="memitem:ae951ab13db65b201b986ec0a6538d31e"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html#ae951ab13db65b201b986ec0a6538d31e">gyro_x</a>: 1</td></tr>
+<tr class="memdesc:ae951ab13db65b201b986ec0a6538d31e"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>1</code>, gyroscope measures on X axis will be loaded to FIFO buffer.  <a href="#ae951ab13db65b201b986ec0a6538d31e">More...</a><br /></td></tr>
 <tr class="separator:ae951ab13db65b201b986ec0a6538d31e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef62a43023a336710838679ec8fca073"><td class="memItemLeft" align="right" valign="top"><a id="aef62a43023a336710838679ec8fca073"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>temperature</b>:1</td></tr>
+<tr class="memitem:aef62a43023a336710838679ec8fca073"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html#aef62a43023a336710838679ec8fca073">temperature</a>: 1</td></tr>
+<tr class="memdesc:aef62a43023a336710838679ec8fca073"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>1</code>, chip temperature will be loaded to FIFO buffer.  <a href="#aef62a43023a336710838679ec8fca073">More...</a><br /></td></tr>
 <tr class="separator:aef62a43023a336710838679ec8fca073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00102">102</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<div class="textblock"><p>Configuration for <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html" title="I2C device driver for the MPU6050 gyroscope/accelerometer chip. ">MPU6050</a> FIFO Enable register (register map §4.6). </p>
+<p>This allows setting which sensor measurements should be loaded in the chip FIFO buffer (see also datasheet §7.17). </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a4cc5aa59dbf612a80f2fda7018796d67" title="Start operation of this gyroscope/accelerometer chip. ">MPU6050::begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00129">129</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="aa6268d8f1b4236538926df52627cd1b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6268d8f1b4236538926df52627cd1b4">&#9670;&nbsp;</a></span>accel</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t devices::magneto::FIFOEnable::accel</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If <code>1</code>, accelerometer measures on 3 axes will be loaded to FIFO buffer. </p>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00135">135</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+
+</div>
+</div>
+<a id="aa2b70828e0e7fe729623a47b11bc5e12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2b70828e0e7fe729623a47b11bc5e12">&#9670;&nbsp;</a></span>gyro_z</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t devices::magneto::FIFOEnable::gyro_z</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If <code>1</code>, gyroscope measures on Z axis will be loaded to FIFO buffer. </p>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00137">137</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+
+</div>
+</div>
+<a id="a1e99edcee3a6939461fcee742afbdba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e99edcee3a6939461fcee742afbdba0">&#9670;&nbsp;</a></span>gyro_y</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t devices::magneto::FIFOEnable::gyro_y</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If <code>1</code>, gyroscope measures on Y axis will be loaded to FIFO buffer. </p>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00139">139</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+
+</div>
+</div>
+<a id="ae951ab13db65b201b986ec0a6538d31e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae951ab13db65b201b986ec0a6538d31e">&#9670;&nbsp;</a></span>gyro_x</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t devices::magneto::FIFOEnable::gyro_x</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If <code>1</code>, gyroscope measures on X axis will be loaded to FIFO buffer. </p>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00141">141</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+
+</div>
+</div>
+<a id="aef62a43023a336710838679ec8fca073"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef62a43023a336710838679ec8fca073">&#9670;&nbsp;</a></span>temperature</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t devices::magneto::FIFOEnable::temperature</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>If <code>1</code>, chip temperature will be loaded to FIFO buffer. </p>
+
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00143">143</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="mpu6050_8h_source.html">mpu6050.h</a></li>
 </ul>
 </div><!-- contents -->

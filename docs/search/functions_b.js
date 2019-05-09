@@ -10,5 +10,6 @@ var searchData=
   ['micros_5f',['micros_',['../classtimer_1_1_r_t_t.html#a16abe10fac6ce8b6d043a46e4803c89c',1,'timer::RTT']]],
   ['millis',['millis',['../classtimer_1_1_r_t_t.html#a7a6aaedc91de46926931990538c8ae26',1,'timer::RTT::millis() const'],['../classtimer_1_1_r_t_t.html#a6779d4fc23c939a3c33d46f9e33f7664',1,'timer::RTT::millis(uint32_t ms)'],['../classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77',1,'watchdog::WatchdogRTT::millis()']]],
   ['millis_5f',['millis_',['../classtimer_1_1_r_t_t.html#a96f540c172d78ac30366240ecfa3ddb2',1,'timer::RTT']]],
+  ['mpu6050',['MPU6050',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a3bf724c05164c56c1252d78cb988ee81',1,'devices::magneto::MPU6050']]],
   ['multihcsr04',['MultiHCSR04',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a41fd653b0e93076b8038114d6e466cb7',1,'devices::sonar::MultiHCSR04']]]
 ];

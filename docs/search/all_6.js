@@ -18,5 +18,11 @@ var searchData=
   ['good',['good',['../classstreams_1_1ios__base.html#a0d6c236b3c0807bf269cc49bcb0fa7c7',1,'streams::ios_base']]],
   ['goodbit',['goodbit',['../classstreams_1_1ios__base.html#af0fa321bcbcac24b58dd9e01fa2063ed',1,'streams::ios_base']]],
   ['gpio',['gpio',['../namespacegpio.html',1,'']]],
-  ['gpio_2eh',['gpio.h',['../gpio_8h.html',1,'']]]
+  ['gpio_2eh',['gpio.h',['../gpio_8h.html',1,'']]],
+  ['gyro_5fmeasures',['gyro_measures',['../classdevices_1_1magneto_1_1_m_p_u6050.html#aae3fc49d5b6c7f733d98c83ed74fa32e',1,'devices::magneto::MPU6050']]],
+  ['gyro_5frange_5fdps',['GYRO_RANGE_DPS',['../namespacedevices_1_1magneto.html#a85e20b9728762df0bfd884bbd040199d',1,'devices::magneto']]],
+  ['gyro_5fx',['gyro_x',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#ae951ab13db65b201b986ec0a6538d31e',1,'devices::magneto::FIFOEnable']]],
+  ['gyro_5fy',['gyro_y',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#a1e99edcee3a6939461fcee742afbdba0',1,'devices::magneto::FIFOEnable']]],
+  ['gyro_5fz',['gyro_z',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#aa2b70828e0e7fe729623a47b11bc5e12',1,'devices::magneto::FIFOEnable']]],
+  ['gyrorange',['GyroRange',['../namespacedevices_1_1magneto.html#af1ab54980b0620a7f3c95ff2318604f4',1,'devices::magneto']]]
 ];
