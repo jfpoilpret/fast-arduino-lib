@@ -78,19 +78,6 @@ namespace devices::magneto
 				2);
 	}
 	
-	//FIXME not part of public API! Hide it within MPU6050 class?
-	struct PowerManagement
-	{
-		PowerManagement() : clock_select{}, temp_disable{}, reserved{}, cycle{}, sleep{}, device_reset{} {}
-
-		uint8_t clock_select : 3;
-		uint8_t temp_disable : 1;
-		uint8_t reserved : 1;
-		uint8_t cycle : 1;
-		uint8_t sleep : 1;
-		uint8_t device_reset : 1;
-	};
-
 	/**
 	 * The clock to select for the chip (datasheet §6.6).
 	 * @sa MPU6050::begin()
@@ -520,7 +507,7 @@ namespace devices::magneto
 		}
 
 		/**
-		 * Get one sample out of the FIFO buffer.
+		 * Get one sample out of the FIFO buffer (register map §4.31).
 		 * This method may block until a full sample is available in the FIFO
 		 * buffer; if you do not want to wait, first call `fifo_count()` to ensure
 		 * a sample is available.
@@ -546,6 +533,18 @@ namespace devices::magneto
 		}
 
 	private:
+		struct PowerManagement
+		{
+			PowerManagement() : clock_select{}, temp_disable{}, reserved{}, cycle{}, sleep{}, device_reset{} {}
+
+			uint8_t clock_select : 3;
+			uint8_t temp_disable : 1;
+			uint8_t reserved : 1;
+			uint8_t cycle : 1;
+			uint8_t sleep : 1;
+			uint8_t device_reset : 1;
+		};
+
 		static constexpr const uint8_t DEVICE_ADDRESS = (0x68 | uint8_t(AD0)) << 1;
 
 		static constexpr const uint8_t SMPRT_DIV = 0x19;
