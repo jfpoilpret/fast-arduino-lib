@@ -164,6 +164,8 @@ namespace devices::magneto
 	 */
 	struct INTStatus
 	{
+		INTStatus() : data_ready{}, reserved1{}, overflow{}, reserved2{} {}
+
 		/** If `1`, the Data Ready interrupt is enabled. */
 		uint8_t data_ready : 1;
 		uint8_t reserved1 : 3;
@@ -439,7 +441,15 @@ namespace devices::magneto
 				return false;
 		}
 
-		//TODO document
+		/**
+		 * Get latest measurements of all device sensors (gyroscope, accelerometer,
+		 * temperature).
+		 * @param sensors a reference to an `AllSensors` variable that will be filled
+		 * with all latest measurements.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 */
 		bool all_measures(AllSensors& sensors)
 		{
 			using namespace i2c::Status;
@@ -455,7 +465,15 @@ namespace devices::magneto
 				return false;
 		}
 
-		//TODO document
+		/**
+		 * Get the interrupt status (register map §4.16) after an interrupt has 
+		 * occurred. After this method is called, the Interrupt Status register
+		 * is cleared.
+		 * @return the latest interrupt status as an `INTStatus` structure where
+		 * each field maps to the interrupt that occurred; in case of an error,
+		 * the returned status is fully cleared. In order to ensure the returned
+		 * status can be inspected, you should first call `i2c::I2CManager.status()`.
+		 */
 		INTStatus interrupt_status()
 		{
 			using namespace i2c::Status;
@@ -465,7 +483,12 @@ namespace devices::magneto
 			return status;
 		}
 
-		//TODO document
+		/**
+		 * Reset the FIFO buffer (parameter map §4.27).
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 */
 		bool reset_fifo()
 		{
 			using namespace i2c::Status;
@@ -473,7 +496,19 @@ namespace devices::magneto
 					&&	this->write(DEVICE_ADDRESS, uint8_t(0x44), BusCond::NO_START_STOP) == OK;
 		}
 
-		//TODO document
+		/**
+		 * Get the number of bytes currently stored in the FIFO buffer (register 
+		 * map §4.30). This number is a multiple of the size of sensor samples as
+		 * selected by `FIFOEnable` in
+		 * `begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)`.
+		 * @return the number of bytes currently present in the FIFO buffer; when not `0`,
+		 * you should read the samples with `fifo_pop()`.
+		 * @retval 0 if the FIFO buffer is empty or if the operation failed; 
+		 * in order to ensure the returned count is cactually `0`, you should first
+		 * call `i2c::I2CManager.status()`.
+		 * 
+		 * @sa fifo_pop()
+		 */
 		uint16_t fifo_count()
 		{
 			using namespace i2c::Status;
@@ -484,7 +519,27 @@ namespace devices::magneto
 			return count;
 		}
 
-		//TODO document
+		/**
+		 * Get one sample out of the FIFO buffer.
+		 * This method may block until a full sample is available in the FIFO
+		 * buffer; if you do not want to wait, first call `fifo_count()` to ensure
+		 * a sample is available.
+		 * 
+		 * @tparam T the type of sample to get from the FIFO buffer; must be one
+		 * of `Sensor3D`, `int16_t` or `AllSensors`, based on the sensor samples
+		 * selected by `FIFOEnable` in
+		 * `begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)`.
+		 * @param output a reference to a `T`-type variable that will be filled
+		 * with the required sample.
+		 * @param wait set to `true` if the method shall block until a sample of 
+		 * the required size is available in the FIFO buffer
+		 * @retval true if a sample has been read into @p output
+		 * @retval false if no sample was ready or if the operation failed; when
+		 * so, `i2c::I2CManager.status()` shall be called for further information
+		 * on the error.
+		 * 
+		 * @sa fifo_count()
+		 */
 		template<typename T> inline bool fifo_pop(T& output, bool wait = false)
 		{
 			return fifo_pop((uint8_t*) &output, sizeof(T), wait);
