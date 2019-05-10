@@ -197,22 +197,16 @@ namespace watchdog
 		/**
 		 * Construct a new watchdog-based clock that will count elapsed
 		 * milliseconds since it was started with `begin()`.
+		 * @sa REGISTER_WATCHDOG_RTT_ISR()
 		 */
-		WatchdogRTT() : millis_{0}, millis_per_tick_{0} {}
+		WatchdogRTT() : millis_{0}, millis_per_tick_{0}
+		{
+			interrupt::register_handler(*this);
+		}
 
 		/// @cond notdocumented
 		WatchdogRTT(const WatchdogRTT&) = delete;
 		/// @endcond
-
-		/**
-		 * Register this watchdog instance with the matching ISR that should 
-		 * have been registered with REGISTER_WATCHDOG_CLOCK_ISR().
-		 * @sa REGISTER_WATCHDOG_CLOCK_ISR()
-		 */
-		void register_watchdog_rtt_handler()
-		{
-			interrupt::register_handler(*this);
-		}
 
 		/**
 		 * Start the watchdog clock with the given @p timeout period.
@@ -271,10 +265,15 @@ namespace watchdog
 		}
 
 	protected:
+		/// @cond notdocumented
+		// This constructor is used by subclass to avoid calling register_handler()
+		WatchdogRTT(bool dummy UNUSED) : millis_{0}, millis_per_tick_{0} {}
+
 		void on_tick()
 		{
 			millis_ += millis_per_tick_;
 		}
+		/// @endcond
 
 	private:
 		volatile uint32_t millis_;
@@ -303,22 +302,16 @@ namespace watchdog
 		 * `begin()`.
 		 * @param event_queue the queue to which `Event`s will be pushed on each 
 		 * watchdog tick
+		 * @sa REGISTER_WATCHDOG_CLOCK_ISR()
 		 */
-		Watchdog(containers::Queue<EVENT>& event_queue) : event_queue_{event_queue} {}
+		Watchdog(containers::Queue<EVENT>& event_queue) : WatchdogRTT{true}, event_queue_{event_queue}
+		{
+			interrupt::register_handler(*this);
+		}
 
 		/// @cond notdocumented
 		Watchdog(const Watchdog&) = delete;
 		/// @endcond
-
-		/**
-		 * Register this watchdog instance with the matching ISR that should 
-		 * have been registered with REGISTER_WATCHDOG_CLOCK_ISR().
-		 * @sa REGISTER_WATCHDOG_CLOCK_ISR()
-		 */
-		void register_watchdog_handler()
-		{
-			interrupt::register_handler(*this);
-		}
 
 	private:
 		void on_tick()
