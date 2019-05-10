@@ -106,7 +106,6 @@ int main()
 	RTT rtt;
 	SONAR sonar{rtt};
 	rtt.register_rtt_handler();
-	sonar.register_handler();
 	rtt.begin();
 	
 	typename interrupt::PCIType<ECHO>::TYPE signal;

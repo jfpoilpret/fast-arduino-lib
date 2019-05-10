@@ -717,22 +717,10 @@ namespace devices::sonar
 		 * duration counting; this RTT shall be started before using any other
 		 * methods of this sonar.
 		 */
-		HCSR04(const RTT& rtt) : PARENT{rtt}, trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT} {}
-
-		/**
-		 * Register this HCSR04 with the matching ISR that should have been
-		 * registered with REGISTER_HCSR04_INT_ISR(), REGISTER_HCSR04_PCI_ISR(),
-		 * REGISTER_DISTINCT_HCSR04_PCI_ISR(), REGISTER_HCSR04_RTT_TIMEOUT(), or
-		 * any derived macros (with function or method callback).
-		 * This method must be called if `SONAR_TYPE` is not `SonarType::BLOCKING`.
-		 * This method shall not be called if `SONAR_TYPE` is `SonarType::BLOCKING`,
-		 * otherwise compilation will fail.
-		 */
-		inline void register_handler()
+		HCSR04(const RTT& rtt) : PARENT{rtt}, trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}
 		{
-			static_assert(SONAR_TYPE != SonarType::BLOCKING,
-						  "register_handler() must not be called with SonarType::BLOCKING");
-			interrupt::register_handler(*this);
+			if (SONAR_TYPE != SonarType::BLOCKING)
+				interrupt::register_handler(*this);
 		}
 
 		/**

@@ -123,8 +123,6 @@ int main()
 	SONAR1 sonar1{rtt};
 	SONAR2 sonar2{rtt};
 	rtt.register_rtt_handler();
-	sonar1.register_handler();
-	sonar2.register_handler();
 	rtt.begin();
 	
 	typename interrupt::PCIType<ECHO1>::TYPE signal;
