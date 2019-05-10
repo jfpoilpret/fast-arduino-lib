@@ -76,7 +76,6 @@ int main()
 	
 	// Setup UART
 	serial::soft::UART<RX, TX> uart{input_buffer, output_buffer};
-	uart.register_rx_handler();
 	serial::soft::UART<RX, TX>::INT_TYPE int_signal;
 	
 	// Start UART
