@@ -81,9 +81,6 @@ int main()
 {
 	board::init();
 	sei();
-#if HARDWARE_UART
-	uart.register_handler();
-#endif
 	uart.begin(115200);
 	out.width(2);
 	out << F("Start\n") << flush;

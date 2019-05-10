@@ -130,7 +130,6 @@ int main()
 	
 #if HARDWARE_UART
 	serial::hard::UATX<UART> uart{output_buffer};
-	uart.register_handler();
 #else
 	serial::soft::UATX<TX> uart{output_buffer};
 #endif
