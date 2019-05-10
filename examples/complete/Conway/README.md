@@ -193,7 +193,7 @@ Making all the program for this game to fit within 1KB of flash has been a big c
 
 Here is a summary of the general guideline I used to squeeze code size in this project:
 
-- Don't use global variables as accessing them requires special `LDS`/`STS` instructions which are 4 bytes (instead of 2 bytes useed by most AVR instructions). Also, global variables will trigger initialization code by GCC, which takes a few extra dozen bytes. Hence, exclusively use local variables everywhere.
+- Don't use global variables as accessing them requires special `LDS`/`STS` instructions which are 4 bytes (instead of 2 bytes used by most AVR instructions). Also, global variables will trigger initialization code by GCC, which takes a few extra dozen bytes. Hence, exclusively use local variables everywhere.
 - Don't use ISR (Interrupt Service Routines) as each ISR will generate more than 50 bytes of code, just to save current registers context to the stack and restore it before the end of ISR. Also using an ISR generally implies using one global variable (or more) to communicate information between the ISR and the main program loop.
 - Avoid virtual methods in C++ classes as it generates `vtable` data for each class containing virtual methods (typically 4 bytes + 2 bytes per virtual method), stored in Flash and copied to SRAM at startup. Also, the code to call a virtual method is more instructions than for a non virtual method.
 - Use C++ templates in a smart way, i.e. for all code that takes only one or a few instructions, e.g. for digital IO, FastArduino FastIO templates just generate inlined `CBI`/`SBI` instruction to clear or set the pin.

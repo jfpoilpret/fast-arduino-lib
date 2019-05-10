@@ -200,7 +200,7 @@ namespace serial::hard
 
 	protected:
 		/// @cond notdocumented
-		// This constructor is useed by subclass to avoid calling register_handler()
+		// This constructor is used by subclass to avoid calling register_handler()
 		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX], bool dummy UNUSED)
 		: streams::ostreambuf{output}, transmitting_{false} {}
 
@@ -308,7 +308,7 @@ namespace serial::hard
 
 	protected:
 		/// @cond notdocumented
-		// This constructor is useed by subclass to avoid calling register_handler()
+		// This constructor is used by subclass to avoid calling register_handler()
 		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX], bool dummy UNUSED) : istreambuf{input} {}
 		/// @endcond
 
