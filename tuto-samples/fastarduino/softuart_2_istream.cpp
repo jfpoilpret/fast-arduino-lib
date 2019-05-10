@@ -16,7 +16,6 @@ int main()
 	
     // Start UART
 	serial::soft::UARX<RX> uarx{input_buffer};
-	uarx.register_rx_handler();
 	typename interrupt::PCIType<RX>::TYPE pci;
 	pci.enable();
 	uarx.begin(pci, 115200);

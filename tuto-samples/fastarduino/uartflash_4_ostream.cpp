@@ -13,7 +13,6 @@ int main()
     sei();
 	
     serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-    uart.register_handler();
     uart.begin(115200);
 
     ostream out = uart.out();

@@ -11,7 +11,6 @@ int main()
 	sei();
 
 	timer::RTT<board::Timer::TIMER0> rtt;
-	rtt.register_rtt_handler();
 	rtt.begin();
 
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
