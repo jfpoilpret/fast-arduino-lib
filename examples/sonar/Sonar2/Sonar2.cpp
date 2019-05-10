@@ -105,7 +105,6 @@ int main()
 	// Start RTT & sonar
 	RTT rtt;
 	SONAR sonar{rtt};
-	rtt.register_rtt_handler();
 	rtt.begin();
 	
 	interrupt::INTSignal<ECHO> signal;

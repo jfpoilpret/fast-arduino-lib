@@ -141,7 +141,6 @@ int main()
 	// Start RTT & sonar
 	RTT rtt;
 	SONAR sonar{rtt};
-	rtt.register_rtt_handler();
 	rtt.begin();
 
 	SonarListener listener{sonar, DISTANCE_THRESHOLD_MM};

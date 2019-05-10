@@ -224,15 +224,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER, TimerInterrupt::OUTPUT_COMPARE_A}, milliseconds_{} {}
-
-		/**
-		 * Register this RTT with the matching ISR that should have been
-		 * registered with REGISTER_RTT_ISR().
-		 * Calling this method is mandatory for this timer to work.
-		 * @sa REGISTER_RTT_ISR()
-		 */
-		void register_rtt_handler()
+		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER, TimerInterrupt::OUTPUT_COMPARE_A}, milliseconds_{}
 		{
 			interrupt::register_handler(*this);
 		}
