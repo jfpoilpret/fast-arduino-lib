@@ -228,8 +228,8 @@ namespace time
 	{
 		if (a <= b) return RTTTime{0, 0};
 		uint32_t millis = a.millis - b.millis;
-		if (a.micros > b.micros) return RTTTime{millis, a.micros - b.micros};
-		return RTTTime{millis + 1, 1000 + a.micros - b.micros};
+		if (a.micros >= b.micros) return RTTTime{millis, a.micros - b.micros};
+		return RTTTime{millis - 1, 1000 + a.micros - b.micros};
 	}
 
 	/**
