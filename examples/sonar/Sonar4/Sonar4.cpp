@@ -111,7 +111,6 @@ int main()
 	
 #if HARDWARE_UART
 	serial::hard::UATX<UART> uart{output_buffer};
-	uart.register_handler();
 #else
 	serial::soft::UATX<TX> uart{output_buffer};
 #endif
@@ -122,9 +121,6 @@ int main()
 	RTT rtt;
 	SONAR1 sonar1{rtt};
 	SONAR2 sonar2{rtt};
-	rtt.register_rtt_handler();
-	sonar1.register_handler();
-	sonar2.register_handler();
 	rtt.begin();
 	
 	typename interrupt::PCIType<ECHO1>::TYPE signal;

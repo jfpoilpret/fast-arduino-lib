@@ -16,7 +16,6 @@ int main()
 	
     // Start UART
     serial::hard::UARX<board::USART::USART0> uarx{input_buffer};
-    uarx.register_handler();
     uarx.begin(115200);
     INPUT in = uarx.in();
 

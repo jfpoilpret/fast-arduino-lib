@@ -95,7 +95,6 @@ int main()
 	
 #if HARDWARE_UART
 	serial::hard::UATX<UART> uart{output_buffer};
-	uart.register_handler();
 #else
 	serial::soft::UATX<TX> uart{output_buffer};
 #endif
@@ -105,8 +104,6 @@ int main()
 	// Start RTT & sonar
 	RTT rtt;
 	SONAR sonar{rtt};
-	rtt.register_rtt_handler();
-	sonar.register_handler();
 	rtt.begin();
 	
 	interrupt::INTSignal<ECHO> signal;

@@ -149,7 +149,6 @@ int main()
 #if HAS_TRACE
 	// Setup traces
 	serial::hard::UATX<UART> uatx{output_buffer};
-	uatx.register_handler();
 	uatx.begin(115200);
 	auto trace = uatx.out();
 	trace.width(0);
@@ -164,7 +163,6 @@ int main()
 
 	// Setup RTT
 	timer::RTT<RTT_TIMER> rtt;
-	rtt.register_rtt_handler();
 	rtt.begin();
 	// Set RTT instance as default clock from now
 	time::set_clock(rtt);

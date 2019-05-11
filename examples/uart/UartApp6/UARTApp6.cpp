@@ -187,7 +187,6 @@ int main()
 	
 	// Start UART
 	serial::hard::UART<board::USART::USART0> uart{input_buffer, output_buffer};
-	uart.register_handler();
 	uart.begin(115200);
 	INPUT in = uart.in();
 	OUTPUT out = uart.out();

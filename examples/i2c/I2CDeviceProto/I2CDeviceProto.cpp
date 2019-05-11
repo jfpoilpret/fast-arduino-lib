@@ -57,7 +57,6 @@ int main()
 	board::init();
 	sei();
 	
-	uart.register_handler();
 	uart.begin(115200);
 	out.width(2);
 	

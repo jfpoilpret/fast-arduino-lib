@@ -78,19 +78,15 @@ int main()
 	// Start UART
 #if defined (BREADBOARD_ATTINYX4) || defined(BREADBOARD_ATTINYX5)
 	serial::soft::UATX<TX> uatx{output_buffer};
-	uatx.begin(115200);
 #else
 	serial::hard::UATX<UART> uatx{output_buffer};
-	uatx.register_handler();
-	uatx.begin(115200);
 #endif
+	uatx.begin(115200);
 
 	streams::ostream out = uatx.out();
 	out << "Started\n";
 	
 	timer::RTT<board::Timer::TIMER0> rtt;
-	rtt.register_rtt_handler();
-
 	rtt.begin();
 	// Event Loop
 	while (true)

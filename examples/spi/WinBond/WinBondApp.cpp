@@ -103,7 +103,6 @@ int main()
 	serial::soft::UATX<TX> uart{output_buffer};
 #else
 	serial::hard::UATX<UART> uart{output_buffer};
-	uart.register_handler();
 #endif
 	uart.begin(115200);
 	ostream out = uart.out();

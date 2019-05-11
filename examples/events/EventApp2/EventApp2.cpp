@@ -87,7 +87,6 @@ int main()
 	
 	// Start watchdog
 	watchdog::Watchdog<EVENT> watchdog{event_queue};
-	watchdog.register_watchdog_handler();
 	watchdog.begin(watchdog::TimeOut::TO_64ms);
 	
 	// Event Loop

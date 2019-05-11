@@ -189,7 +189,6 @@ int main()
 	
 #if HAS_TRACE
 	// Setup traces (Arduino only)
-	uatx.register_handler();
 	uatx.begin(57600);
 	trace.width(0);
 #endif

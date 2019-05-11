@@ -67,7 +67,6 @@ void check_timer()
 {
 	typename gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT, true};
 	timer::RTT<TIMER> rtt;
-	rtt.register_rtt_handler();
 	rtt.begin();
 	// Event Loop
 	for (uint8_t i = 0; i < 5; ++i)

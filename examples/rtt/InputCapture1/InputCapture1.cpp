@@ -152,7 +152,6 @@ int main()
 	// Start UART
 #if HAS_UART
 	serial::hard::UATX<UART> uatx{output_buffer};
-	uatx.register_handler();
 #else
 	serial::soft::UATX<TX> uatx{output_buffer};
 #endif

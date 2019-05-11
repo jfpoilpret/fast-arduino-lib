@@ -69,7 +69,6 @@ int main()
 
 	timer::RTTEventCallback<EVENT, RTT_EVENT_PERIOD> callback{event_queue};
 	timer::RTT<board::Timer::TIMER0> rtt;
-	rtt.register_rtt_handler();
 	interrupt::register_handler(callback);
 	
 	// Prepare Dispatcher and Handlers

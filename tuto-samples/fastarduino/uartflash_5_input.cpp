@@ -11,7 +11,6 @@ int main()
     sei();
 	
     serial::hard::UARX<board::USART::USART0> uart{input_buffer};
-    uart.register_handler();
     uart.begin(115200);
 
     streams::istream in = uart.in();

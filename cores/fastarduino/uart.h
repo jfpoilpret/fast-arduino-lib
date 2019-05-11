@@ -114,8 +114,7 @@ namespace serial::hard
 	/**
 	 * Hardware serial transmitter API.
 	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UATX_ISR()`, then call `register_handler()`
-	 * immediately after the UATX instance has been constructed.
+	 * program, through `REGISTER_UATX_ISR()`.
 	 * 
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UATX_ISR()
@@ -136,15 +135,9 @@ namespace serial::hard
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission so that write methods are not
 		 * blocking.
-		 */
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false} {}
-
-		/**
-		 * Register this transmitter with the matching ISR that should have been
-		 * registered with REGISTER_UATX_ISR().
 		 * @sa REGISTER_UATX_ISR()
 		 */
-		inline void register_handler()
+		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -207,6 +200,10 @@ namespace serial::hard
 
 	protected:
 		/// @cond notdocumented
+		// This constructor is used by subclass to avoid calling register_handler()
+		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX], bool dummy UNUSED)
+		: streams::ostreambuf{output}, transmitting_{false} {}
+
 		// Listeners of events on the buffer
 		virtual void on_put() override
 		{
@@ -239,8 +236,7 @@ namespace serial::hard
 	/**
 	 * Hardware serial receiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UARX_ISR()`, then call `register_handler()`
-	 * immediately after the UARX instance has been constructed.
+	 * program, through `REGISTER_UARX_ISR()`.
 	 * 
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UARX_ISR()
@@ -262,15 +258,9 @@ namespace serial::hard
 		 * @param input an array of characters used by this receiver to
 		 * store content received through serial line, buffered until read through
 		 * `in()`.
-		 */
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : istreambuf{input} {}
-
-		/**
-		 * Register this receiver with the matching ISR that should have been
-		 * registered with REGISTER_UARX_ISR().
 		 * @sa REGISTER_UARX_ISR()
 		 */
-		inline void register_handler()
+		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : istreambuf{input}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -316,6 +306,12 @@ namespace serial::hard
 			return streams::istream(*this);
 		}
 
+	protected:
+		/// @cond notdocumented
+		// This constructor is used by subclass to avoid calling register_handler()
+		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX], bool dummy UNUSED) : istreambuf{input} {}
+		/// @endcond
+
 	private:
 		inline void data_receive_complete()
 		{
@@ -334,8 +330,7 @@ namespace serial::hard
 	/**
 	 * Hardware serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_ISR()`, then call `register_handler()`
-	 * immediately after the UART instance has been constructed.
+	 * program, through `REGISTER_UART_ISR()`.
 	 * 
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UART_ISR()
@@ -361,17 +356,11 @@ namespace serial::hard
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission so that write methods are not
 		 * blocking.
-		 */
-		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX<USART>{input}, UATX<USART>{output}
-		{}
-
-		/**
-		 * Register this receiver/transmitter with the matching ISR that should 
-		 * have been registered with REGISTER_UART_ISR().
+		 * 
 		 * @sa REGISTER_UART_ISR()
 		 */
-		inline void register_handler()
+		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX<USART>{input, true}, UATX<USART>{output, true}
 		{
 			interrupt::register_handler(*this);
 		}

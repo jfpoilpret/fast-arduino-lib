@@ -241,7 +241,6 @@ int main()
     sei();
 	
     serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-    uart.register_handler();
     uart.begin(115200);
 
     streams::ostream out = uart.out();
@@ -258,7 +257,7 @@ Then we *register an ISR* necessary for transmissions to take place; this is don
 
 The code that follows instantiates a `uart::hard::UATX` object that is using `board::USART::USART0` (the only one available on UNO) and based on the previously created buffer. Note that `UATX` class is in charge of **only** transmitting characters, not receiving. Other classes exist for only receiving (`UARX`), or for doing both (`UART`).
 
-Once created, `uart` needs to be *linked* to the ISR previously registered, this is done through `uart.register_handler()`. Then we can set `uart` ready for transmission, at serial speed of 115200 bps.
+Once created, we can set `uart` ready for transmission, at serial speed of 115200 bps.
 
 Next step consists in extracting, from `uart`, a `streams::ostream` that will allow us to send characters or strings to USB:
 
@@ -374,7 +373,6 @@ int main()
     sei();
 	
     serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-    uart.register_handler();
     uart.begin(115200);
 
     ostream out = uart.out();
@@ -436,7 +434,6 @@ int main()
     sei();
 	
     serial::hard::UARX<board::USART::USART0> uart{input_buffer};
-    uart.register_handler();
     uart.begin(115200);
 
     streams::istream in = uart.in();
@@ -490,7 +487,6 @@ int main()
 	
     // Start UART
     serial::hard::UARX<board::USART::USART0> uarx{input_buffer};
-    uarx.register_handler();
     uarx.begin(115200);
     INPUT in = uarx.in();
 
@@ -786,7 +782,6 @@ int main()
 	sei();
 
 	timer::RTT<board::Timer::TIMER0> rtt;
-	rtt.register_rtt_handler();
 	rtt.begin();
 
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
@@ -807,10 +802,9 @@ Then we need to register an ISR for the RTT feature to work properly:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 REGISTER_RTT_ISR(0)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Then, in `main()`, after the usual initialization stuff, we create a real-time timer instance, based on AVR UNO Timer0 (8-bits timer), register it with the ISR previously registered with `REGISTER_RTT_ISR(0)` macro, and finally starts it counting time.
+Then, in `main()`, after the usual initialization stuff, we create a real-time timer instance, based on AVR UNO Timer0 (8-bits timer), and start it counting time.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	timer::RTT<board::Timer::TIMER0> rtt;
-	rtt.register_rtt_handler();
 	rtt.begin();
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Finally, we have the usual loop, toogling the LED, and then delay for 10s, using the RTT API: 
@@ -1763,7 +1757,6 @@ int main()
 	// Prepare Dispatcher and Handlers
 	Dispatcher<EVENT> dispatcher;
 	watchdog::Watchdog<EVENT> watchdog{event_queue};
-	watchdog.register_watchdog_handler();
 	Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
@@ -1840,7 +1833,6 @@ determine which `Job`s to call.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	Dispatcher<EVENT> dispatcher;
 	watchdog::Watchdog<EVENT> watchdog{event_queue};
-	watchdog.register_watchdog_handler();
 	Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1884,7 +1876,6 @@ void main()
 {
     ...
 	timer::RTT<board::Timer::TIMER0> rtt;
-	rtt.register_rtt_handler();
 	timer::RTTEventCallback<EVENT, RTT_EVENT_PERIOD> callback{event_queue};
 	interrupt::register_handler(callback);
     ...
@@ -1898,7 +1889,6 @@ void main()
 Since this code uses a realtime timer, two lines of code instantiate, then start one such timer:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	timer::RTT<board::Timer::TIMER0> rtt;
-	rtt.register_rtt_handler();
     ...
 	rtt.begin();
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2196,7 +2186,6 @@ int main()
 	
 	// Start UART
 	serial::hard::UART<USART> uart{input_buffer, output_buffer};
-	uart.register_handler();
 	uart.begin(115200);
 
 	streams::istream in = uart.in();
@@ -2335,7 +2324,6 @@ int main()
 	sei();
 
 	serial::hard::UATX<UART> uart{output_buffer};
-	uart.register_handler();
 	uart.begin(115200);
 	ostream out = uart.out();
 
@@ -2489,7 +2477,6 @@ int main()
 	board::init();
 	sei();
 	serial::hard::UATX<UART> uart{output_buffer};
-	uart.register_handler();
 	uart.begin(115200);
 	ostream out = uart.out();
 	
@@ -2613,7 +2600,6 @@ int main()
 	
     // Start UART
 	serial::soft::UARX<RX> uarx{input_buffer};
-	uarx.register_rx_handler();
 	typename interrupt::PCIType<RX>::TYPE pci;
 	pci.enable();
 	uarx.begin(pci, 115200);
@@ -2637,10 +2623,9 @@ Note the following differences with a previous example using `serial::hard::UARX
 or `board::ExternalInterruptPin`)
 2. `REGISTER_UART_PCI_ISR(RX, PCI_NUM` (or `REGISTER_UART_INT_ISR(RX, INT_NUM)`) is needed to register an ISR on 
 pin `RX` changes
-3. `register_rx_handler()` must be called on `serial::soft::UARX` before use
-4. an interrupt handler must be setup (either `interrupt::PCISignal` or 
+3. an interrupt handler must be setup (either `interrupt::PCISignal` or 
 `interrupt::INTSignal`) and enabled
-5. `begin()` is passed the interrupt handler as an extra argument
+4. `begin()` is passed the interrupt handler as an extra argument
 
 Finally, there is also an `serial::soft::UART` that combines `serial::soft::UATX`
 and `serial::soft::UARX`, and works similarly as `serial::hard::UART`.

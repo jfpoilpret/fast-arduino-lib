@@ -49,7 +49,6 @@ int main()
 	
 	// Start UART
 	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-	uart.register_handler();
 	uart.begin(115200);
 	streams::ostream out = uart.out();
 

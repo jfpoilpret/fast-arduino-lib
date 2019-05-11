@@ -248,9 +248,7 @@ namespace serial::soft
 	/**
 	 * Software-emulated serial receiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_PCI_ISR()` or `REGISTER_UART_INT_ISR()`,
-	 * then call `register_rx_handler()` immediately after the UARX instance has
-	 * been constructed.
+	 * program, through `REGISTER_UART_PCI_ISR()` or `REGISTER_UART_INT_ISR()`.
 	 * 
 	 * @tparam RX_ the `board::DigitalPin` which shall receive serial signal; this
 	 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
@@ -296,21 +294,13 @@ namespace serial::soft
 		 * @param input an array of characters used by this receiver to
 		 * store content received through serial line, buffered until read through
 		 * `in()`.
+		 * @sa REGISTER_UART_PCI_ISR()
+		 * @sa REGISTER_UART_INT_ISR()
 		 */
 		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX(input), rx_{gpio::PinMode::INPUT}
 		{
 			static_assert((PCI_TRAIT::PCI_MASK & _BV(PIN_TRAIT::BIT)) || (PIN_TRAIT::IS_INT),
 						  "RX must be a PinChangeInterrupt or an ExternalInterrupt pin");
-		}
-
-		/**
-		 * Register this receiver with the matching ISR that should have been
-		 * registered with REGISTER_UART_PCI_ISR() or REGISTER_UART_INT_ISR().
-		 * @sa REGISTER_UART_PCI_ISR()
-		 * @sa REGISTER_UART_INT_ISR()
-		 */
-		void register_rx_handler()
-		{
 			interrupt::register_handler(*this);
 		}
 
@@ -451,9 +441,7 @@ namespace serial::soft
 	/**
 	 * Software-emulated serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_PCI_ISR()` or `REGISTER_UART_INT_ISR()`,
-	 * then call `register_rx_handler()` immediately after the UATX instance has
-	 * been constructed.
+	 * program, through `REGISTER_UART_PCI_ISR()` or `REGISTER_UART_INT_ISR()`.
 	 * 
 	 * @tparam RX_ the `board::DigitalPin` which shall receive serial signal; this
 	 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 

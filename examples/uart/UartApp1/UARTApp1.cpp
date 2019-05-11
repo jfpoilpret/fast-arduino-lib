@@ -59,7 +59,6 @@ int main()
 	
 	// Start UART
 	serial::hard::UART<USART> uart{input_buffer, output_buffer};
-	uart.register_handler();
 	uart.begin(115200);
 //	uart.begin(230400);
 	streams::istream in = uart.in();
