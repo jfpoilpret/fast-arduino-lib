@@ -188,8 +188,7 @@ namespace watchdog
 	/**
 	 * Simple API to use watchdog timer as a real-time clock.
 	 * For this to work correctly, you need to register the proper ISR through
-	 * `REGISTER_WATCHDOG_RTT_ISR()` macro first, then ensure you call
-	 * `register_watchdog_handler()`.
+	 * `REGISTER_WATCHDOG_RTT_ISR()` macro first.
 	 */
 	class WatchdogRTT : public WatchdogSignal
 	{
@@ -285,8 +284,7 @@ namespace watchdog
 	/**
 	 * Simple API to use watchdog timer as a clock for events generation.
 	 * For this to work correctly, you need to register the proper ISR through
-	 * `REGISTER_WATCHDOG_CLOCK_ISR()` macro first, then ensure you call
-	 * `register_watchdog_handler()`.
+	 * `REGISTER_WATCHDOG_CLOCK_ISR()` macro first.
 	 * @tparam EVENT the `events::Event<T>` generated
 	 */
 	template<typename EVENT> class Watchdog : public WatchdogRTT

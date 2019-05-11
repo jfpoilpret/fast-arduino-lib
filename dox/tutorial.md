@@ -1757,7 +1757,6 @@ int main()
 	// Prepare Dispatcher and Handlers
 	Dispatcher<EVENT> dispatcher;
 	watchdog::Watchdog<EVENT> watchdog{event_queue};
-	watchdog.register_watchdog_handler();
 	Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 
@@ -1834,7 +1833,6 @@ determine which `Job`s to call.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp}
 	Dispatcher<EVENT> dispatcher;
 	watchdog::Watchdog<EVENT> watchdog{event_queue};
-	watchdog.register_watchdog_handler();
 	Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
 	dispatcher.insert(scheduler);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
