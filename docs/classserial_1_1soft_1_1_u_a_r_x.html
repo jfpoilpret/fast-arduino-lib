@@ -130,9 +130,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:affb52467dd93ed3a642741e8d92bff7b"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#affb52467dd93ed3a642741e8d92bff7b">UARX</a> (char(&amp;input)[SIZE_RX])</td></tr>
 <tr class="memdesc:affb52467dd93ed3a642741e8d92bff7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new software serial receiver and provide it with a buffer for interrupt-based reception.  <a href="#affb52467dd93ed3a642741e8d92bff7b">More...</a><br /></td></tr>
 <tr class="separator:affb52467dd93ed3a642741e8d92bff7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1582421218bbb13aa99f49bbd9dc735d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a1582421218bbb13aa99f49bbd9dc735d">register_rx_handler</a> ()</td></tr>
-<tr class="memdesc:a1582421218bbb13aa99f49bbd9dc735d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this receiver with the matching ISR that should have been registered with <a class="el" href="soft__uart_8h.html#afdd3cf98b9ada95f5065f7d08ab16729" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_PCI_ISR()</a> or <a class="el" href="soft__uart_8h.html#ae2115e390cf296a93ae05c29a6a4b25a" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_INT_ISR()</a>.  <a href="#a1582421218bbb13aa99f49bbd9dc735d">More...</a><br /></td></tr>
-<tr class="separator:a1582421218bbb13aa99f49bbd9dc735d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a8172b68846fe35cd9a2885dd58baa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a3a8172b68846fe35cd9a2885dd58baa7">begin</a> (<a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a737c2152bab3656ed5a2f2cd964573fe">PCI_TYPE</a> &amp;enabler, uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
 <tr class="memdesc:a3a8172b68846fe35cd9a2885dd58baa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable the receiver.  <a href="#a3a8172b68846fe35cd9a2885dd58baa7">More...</a><br /></td></tr>
 <tr class="separator:a3a8172b68846fe35cd9a2885dd58baa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,7 +162,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 class serial::soft::UARX&lt; RX_ &gt;</h3>
 
 <p>Software-emulated serial receiver API. </p>
-<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="soft__uart_8h.html#afdd3cf98b9ada95f5065f7d08ab16729" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_PCI_ISR()</a></code> or <code><a class="el" href="soft__uart_8h.html#ae2115e390cf296a93ae05c29a6a4b25a" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_INT_ISR()</a></code>, then call <code><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a1582421218bbb13aa99f49bbd9dc735d" title="Register this receiver with the matching ISR that should have been registered with REGISTER_UART_PCI_...">register_rx_handler()</a></code> immediately after the <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html" title="Software-emulated serial receiver API. ">UARX</a> instance has been constructed.</p>
+<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="soft__uart_8h.html#afdd3cf98b9ada95f5065f7d08ab16729" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_PCI_ISR()</a></code> or <code><a class="el" href="soft__uart_8h.html#ae2115e390cf296a93ae05c29a6a4b25a" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_INT_ISR()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">RX_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> which shall receive serial signal; this must be either an External INT pin (<code><a class="el" href="namespaceboard_1_1_external_interrupt_pin.html" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code>) or a PinChangeInterrupt pin (<code><a class="el" href="namespaceboard_1_1_interrupt_pin.html" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code>).</td></tr>
@@ -180,7 +177,7 @@ class serial::soft::UARX&lt; RX_ &gt;</h3>
 <dd>
 <a class="el" href="classserial_1_1soft_1_1_u_a_r_t.html" title="Software-emulated serial receiver/transceiver API. ">UART</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00264">264</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00262">262</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a737c2152bab3656ed5a2f2cd964573fe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a737c2152bab3656ed5a2f2cd964573fe">&#9670;&nbsp;</a></span>PCI_TYPE</h2>
@@ -199,7 +196,7 @@ template&lt;board::DigitalPin RX_&gt; </div>
 <p>The <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">interrupt::PCISignal</a> type for <code>RX_</code> pin, if it is a PinChangeInterrupt pin. </p>
 <p>This type is used in <code><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a3a8172b68846fe35cd9a2885dd58baa7" title="Enable the receiver. ">begin()</a></code> call. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a3a8172b68846fe35cd9a2885dd58baa7" title="Enable the receiver. ">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00278">278</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00276">276</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -220,7 +217,7 @@ template&lt;board::DigitalPin RX_&gt; </div>
 <p>The <a class="el" href="classinterrupt_1_1_i_n_t_signal.html" title="Handler of an External Interrupt. ">interrupt::INTSignal</a> type for <code>RX_</code> pin, if it is a External Interrupt pin. </p>
 <p>This type is used in <code><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a3a8172b68846fe35cd9a2885dd58baa7" title="Enable the receiver. ">begin()</a></code> call. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a3a8172b68846fe35cd9a2885dd58baa7" title="Enable the receiver. ">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00284">284</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00282">282</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -260,46 +257,15 @@ template&lt;uint8_t SIZE_RX&gt; </div>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="soft__uart_8h.html#afdd3cf98b9ada95f5065f7d08ab16729" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_PCI_ISR()</a> </dd>
+<dd>
+<a class="el" href="soft__uart_8h.html#ae2115e390cf296a93ae05c29a6a4b25a" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_INT_ISR()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00300">300</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1582421218bbb13aa99f49bbd9dc735d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1582421218bbb13aa99f49bbd9dc735d">&#9670;&nbsp;</a></span>register_rx_handler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;board::DigitalPin RX_&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html">serial::soft::UARX</a>&lt; RX_ &gt;::register_rx_handler </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Register this receiver with the matching ISR that should have been registered with <a class="el" href="soft__uart_8h.html#afdd3cf98b9ada95f5065f7d08ab16729" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_PCI_ISR()</a> or <a class="el" href="soft__uart_8h.html#ae2115e390cf296a93ae05c29a6a4b25a" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_INT_ISR()</a>. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="soft__uart_8h.html#afdd3cf98b9ada95f5065f7d08ab16729" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_PCI_ISR()</a> </dd>
-<dd>
-<a class="el" href="soft__uart_8h.html#ae2115e390cf296a93ae05c29a6a4b25a" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly...">REGISTER_UART_INT_ISR()</a> </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00312">312</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
-
-</div>
-</div>
 <a id="a3a8172b68846fe35cd9a2885dd58baa7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3a8172b68846fe35cd9a2885dd58baa7">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
@@ -361,7 +327,7 @@ template&lt;board::DigitalPin RX_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#abe203f43b76e0e57a5f90c7f9a05bdc8" title="Enable the receiver. ">begin(INT_TYPE&amp;, uint32_t, Parity, StopBits)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00331">331</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00321">321</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -426,7 +392,7 @@ template&lt;board::DigitalPin RX_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a3a8172b68846fe35cd9a2885dd58baa7" title="Enable the receiver. ">begin(PCI_TYPE&amp;, uint32_t, Parity, StopBits)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00352">352</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00342">342</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -458,7 +424,7 @@ template&lt;board::DigitalPin RX_&gt; </div>
 <p>Stop reception. </p>
 <p>Once called, it is possible to re-enable reception again by calling <code><a class="el" href="classserial_1_1soft_1_1_u_a_r_x.html#a3a8172b68846fe35cd9a2885dd58baa7" title="Enable the receiver. ">begin()</a></code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00373">373</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00363">363</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>

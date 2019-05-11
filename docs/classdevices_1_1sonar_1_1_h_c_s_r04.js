@@ -2,7 +2,6 @@ var classdevices_1_1sonar_1_1_h_c_s_r04 =
 [
     [ "RTT", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a917cd3ed772f68da662e766ea97f26fd", null ],
     [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a941b39cf6e4fc8e3f20789211e76da85", null ],
-    [ "register_handler", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a6789b466cc58841a7b645e0fb417103d", null ],
     [ "echo_us", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a20893e3685ab8e1774496ba4fe4de911", null ],
     [ "async_echo", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a804424433c4ebce79b5660150dd1ecd7", null ],
     [ "await_echo_us", "classdevices_1_1sonar_1_1_h_c_s_r04.html#a9d1da4b7c4046b063a27506d9fe235c0", null ],

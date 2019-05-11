@@ -133,9 +133,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a941b39cf6e4fc8e3f20789211e76da85"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a941b39cf6e4fc8e3f20789211e76da85">HCSR04</a> (const <a class="el" href="classdevices_1_1sonar_1_1_abstract_sonar.html#acecf70120857f544d562d7f11a03077e">RTT</a> &amp;rtt)</td></tr>
 <tr class="memdesc:a941b39cf6e4fc8e3f20789211e76da85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new a sonar sensor handler.  <a href="#a941b39cf6e4fc8e3f20789211e76da85">More...</a><br /></td></tr>
 <tr class="separator:a941b39cf6e4fc8e3f20789211e76da85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6789b466cc58841a7b645e0fb417103d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a6789b466cc58841a7b645e0fb417103d">register_handler</a> ()</td></tr>
-<tr class="memdesc:a6789b466cc58841a7b645e0fb417103d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register this <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a> with the matching ISR that should have been registered with <a class="el" href="sonar_8h.html#a669cf6b5ffc13aada097587cae9b2721" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::HCSR04 to listen to echo...">REGISTER_HCSR04_INT_ISR()</a>, <a class="el" href="sonar_8h.html#a5a25a16ab0d5dda23519eeb8f2a3fabe" title="Register the necessary ISR (Interrupt Service Routine) for a set of several devices::sonar::HCSR04 to...">REGISTER_HCSR04_PCI_ISR()</a>, <a class="el" href="sonar_8h.html#af7e923271e3e5b21c9eb1113578f29c5" title="Register the necessary ISR (Interrupt Service Routine) for a set of several devices::sonar::HCSR04 to...">REGISTER_DISTINCT_HCSR04_PCI_ISR()</a>, <a class="el" href="sonar_8h.html#ac36a8561dfc7a239085ed273e72ba3f7" title="Register the necessary ISR (Interrupt Service Routine) for a set of devices::sonar::HCSR04 to be noti...">REGISTER_HCSR04_RTT_TIMEOUT()</a>, or any derived macros (with function or method callback).  <a href="#a6789b466cc58841a7b645e0fb417103d">More...</a><br /></td></tr>
-<tr class="separator:a6789b466cc58841a7b645e0fb417103d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20893e3685ab8e1774496ba4fe4de911"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a20893e3685ab8e1774496ba4fe4de911">echo_us</a> (uint16_t timeout_ms)</td></tr>
 <tr class="memdesc:a20893e3685ab8e1774496ba4fe4de911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a trigger pulse on this sonar and wait until an echo pulse is received, or <code>timeout_ms</code> has elapsed.  <a href="#a20893e3685ab8e1774496ba4fe4de911">More...</a><br /></td></tr>
 <tr class="separator:a20893e3685ab8e1774496ba4fe4de911"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,38 +254,6 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6789b466cc58841a7b645e0fb417103d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6789b466cc58841a7b645e0fb417103d">&#9670;&nbsp;</a></span>register_handler()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_, SonarType SONAR_TYPE_ = SonarType::BLOCKING&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">devices::sonar::HCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ &gt;::register_handler </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Register this <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a> with the matching ISR that should have been registered with <a class="el" href="sonar_8h.html#a669cf6b5ffc13aada097587cae9b2721" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::HCSR04 to listen to echo...">REGISTER_HCSR04_INT_ISR()</a>, <a class="el" href="sonar_8h.html#a5a25a16ab0d5dda23519eeb8f2a3fabe" title="Register the necessary ISR (Interrupt Service Routine) for a set of several devices::sonar::HCSR04 to...">REGISTER_HCSR04_PCI_ISR()</a>, <a class="el" href="sonar_8h.html#af7e923271e3e5b21c9eb1113578f29c5" title="Register the necessary ISR (Interrupt Service Routine) for a set of several devices::sonar::HCSR04 to...">REGISTER_DISTINCT_HCSR04_PCI_ISR()</a>, <a class="el" href="sonar_8h.html#ac36a8561dfc7a239085ed273e72ba3f7" title="Register the necessary ISR (Interrupt Service Routine) for a set of devices::sonar::HCSR04 to be noti...">REGISTER_HCSR04_RTT_TIMEOUT()</a>, or any derived macros (with function or method callback). </p>
-<p>This method must be called if <code>SONAR_TYPE</code> is not <code><a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74a72323e5457d8fb855145bfee934aa415" title="In this mode, the HCSR04 will block until the echo pulse is received. ">SonarType::BLOCKING</a></code>. This method shall not be called if <code>SONAR_TYPE</code> is <code><a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74a72323e5457d8fb855145bfee934aa415" title="In this mode, the HCSR04 will block until the echo pulse is received. ">SonarType::BLOCKING</a></code>, otherwise compilation will fail. </p>
-
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00731">731</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
-
-</div>
-</div>
 <a id="a20893e3685ab8e1774496ba4fe4de911"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a20893e3685ab8e1774496ba4fe4de911">&#9670;&nbsp;</a></span>echo_us()</h2>
 
@@ -332,7 +297,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin 
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a804424433c4ebce79b5660150dd1ecd7" title="Send a trigger pulse on this sonar and return immediately, without waiting for the echo pulse...">async_echo()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00752">752</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00740">740</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -391,7 +356,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin 
 <dd>
 <a class="el" href="classdevices_1_1sonar_1_1_abstract_sonar.html#ad9d0de079be71ec9e3c4ad0097a5129d" title="Get the latest measured echo pulse duration. ">latest_echo_us()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00780">780</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00768">768</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -438,7 +403,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin 
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a804424433c4ebce79b5660150dd1ecd7" title="Send a trigger pulse on this sonar and return immediately, without waiting for the echo pulse...">async_echo()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00799">799</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00787">787</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
