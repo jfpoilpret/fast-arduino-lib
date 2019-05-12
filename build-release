@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# This script helps preparing a release:
+# 0. Clean all code for all targets
+# 1. Build all examples for all targets
+# 2. Gather make output and prepare new code size sheet for all targets
+# 3. Compare old and new sizes and alert in case of changed
+# LATER:
+# 4. Build all tutorial samples (both Arduino API and FastArduino)
+# 5. Collect size information and prepare integration to doxygen tutorial size tables
+# 6. Regenerate docs
+
+echo "Clean up all generated code"
+make clean-all >/dev/null 2>&1
+make clean-examples-all >/dev/null 2>&1
+
+echo "Build all examples for all targets"
+export TARGETS="UNO LEONARDO MEGA ATtiny84 ATtiny85"
+for TARGET in $TARGETS
+do
+	echo "Target: $TARGET"
+	make CONF=$TARGET examples 2>errors | ./stats.py >newsizes-$TARGET
+	grep "Error" errors
+	# check if error found, then abort
+	if [ $? -ne 1 ]; then
+		echo "Error occurred, aborting."
+		exit 1
+	fi
+done
+
+echo "Generate size data sheets"
+#TODO I don't think that will work,as TARGETS will probably be passed as a single argument :-(
+./gen-size-sheet.py new-examples-data.xlxs $TARGETS
