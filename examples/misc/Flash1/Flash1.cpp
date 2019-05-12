@@ -13,11 +13,10 @@
 //   limitations under the License.
 
 /*
- * Blocking EEPROM Read and Writes.
- * This program shows usage of FastArduino EEPROM API.
+ * Blocking Flash Read.
+ * This program shows usage of FastArduino Flash API.
  * It interfaces with user through the UART console and allows:
- * - writing values to EEPROM
- * - reading values to EEPROM
+ * - reading values from Flash
  * 
  * Wiring: TODO
  * - on ATmega328P based boards (including Arduino UNO):
