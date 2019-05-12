@@ -29,7 +29,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					i2c/Magneto1															\
 					pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
 					analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4							\
-					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4 rtt/InputCapture1		\
+					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4						\
 					motors/Servo1 motors/Servo2												\
 					rtt/TimerApp3 rtt/TimerApp4												\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
