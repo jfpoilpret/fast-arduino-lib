@@ -1,0 +1,74 @@
+FastPin1	Simple IOPin, IOPort program (compile only, does nothing)
+FastPin2	LED blinker (IOPin)
+FastPin3	LED chaser (IOPort)
+FastPin4	Configurable LED chaser (IOPort in/out)
+FastPin5	LED chaser (IOMaskedPort)
+PinChangeInterrupt1	Use PCI on push button to light LED
+PinChangeInterrupt2	Use PCI on 3 push buttons to light 4 LEDs (IOPin)
+PinChangeInterrupt3	Use PCI on 3 push buttons to light 4 LEDs (IOPort)
+PinChangeInterrupt4	LED command by 2 buttons (2 PCI ISR).
+ExternalInterrupt1	LED switch based on button (INT ISR, power down)
+ExternalInterrupt2	LED switch based on button (empty ISR, power down)
+ExternalInterrupt3	LED switch based on 2 buttons (2 INT ISR, power down)
+UartApp1	HW UART check with formatted output
+UartApp2	SW UARX/UATX with PCI
+UartApp3	SW UART with PCI
+UartApp4	SW UART with INT
+UartApp5	HW UATX with flash string output
+UartApp6	HW UART with iostream conversion checks
+Flash1	Display (UATX) strings and structures from Flash
+InputCapture1	Measure button switch duration through timer ICP (UATX)
+RTTApp1b	Check all timers with RTT to blink a LED based on delay
+RTTApp2	LED blinker based on RTT delay
+RTTApp3	Display (UART) RTT microseconds
+RTTApp4	LED blinker based on RTTEventCallback (ISR)
+TimerApp3	LED blinker based on CTC Timer (ISR)
+TimerApp4	LED blinker with dimmer based on 2 CTC Timers (2 ISR)
+TimerTinyX5	LEDs blinker with ATtinyX5 timer mode specificities
+AnalogPin1	Display (UATX) analog value/voltage
+AnalogPin2	Display analog input on 8 LEDs
+PWM1	Dim 1 LED with a pot through 8bits PWM
+PWM2	Dim 2 LEDs with 2 pots through 8bits PWM
+PWM3	Dim 1 LEDs with 1 pot through 16bits PulseTimer
+PWM4	Dim 2 LEDs with 2 pots through 8bits PulseTimer
+EventApp1	8 LEDs chaser: events dispatcher, delay, IOPin
+EventApp2	8 LEDs chaser: events dispatcher, watchdog, IOPort
+EventApp3	8 LEDs chaser: jobs scheduler, watchdog, IOPort
+EventApp4	8 LEDs chaser: jobs scheduler, watchdog (power down), IOPort
+EventApp5	LED blinker triggered and configured by buttons-generated events
+EventApp6	LED blinker handled by watchdog-generated events
+Eeprom1	Blocking EEPROM read/writes (UATX)
+Eeprom2	Asynchronous EEPROM writes (UATX)
+Eeprom3	Asynchronous EEPROM writes with callback (UATX)
+Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)
+IOStreams1	Check ostream (SW UATX)
+IOStreams2	Check real Vs. null ostream
+IOStreams3	Check ostream error handling (UART)
+AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)
+AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)
+DS1307RTC1	Change RTC and display (UATX) date/time (i2c)
+DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)
+Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)
+MultiIO0	Direct MCP23017 command and trace (UATX) for testing chip (i2c)
+MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)
+MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)
+MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)
+MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)
+Servo1	Servo controlled by a pot through 8bits pulse timer
+Servo2	Servo controlled by a pot through 16bits pulse timer
+RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)
+RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)
+WinBond	Trace (UATX) WinBond flash chip read/writes (spi)
+Sonar1	Display (UATX) sonar range meaures in blocking mode
+Sonar2	Display (UATX) sonar range meaures in INT mode
+Sonar3	Display (UATX) sonar range meaures in PCINT mode
+Sonar4	Display (UATX) range meaures in PCINT mode from 2 distinct sonars
+Sonar5	Display (UATX) range meaures in PCINT mode from 2 sonars sharing trigger 
+Sonar6	Display (UATX) sonar range meaures in PCINT mode with PCI callback
+Sonar7	Display (UATX) sonar range meaures in PCINT mode with PCI/TIMEOUT callback
+Sonar10	Light LEDS based on multiple sonars alarms with callbacks
+Sonar11	Light LEDS based on auto-trigger multiple sonars alarms with callbacks
+tones1	Tone player from SRAM
+tones2	Tone player from EEPROM
+tones3	Tone player from Flash
+Conway	Game of Life (8x8 LED) 1KB Hackaday
