@@ -370,7 +370,7 @@ namespace board
 	 */
 	enum class USART: uint8_t
 	{
-		USART1 = 0
+		USART1 = 1
 	};
 	
 	/**
@@ -380,11 +380,11 @@ namespace board
 	enum class Timer: uint8_t
 	{
 		/** Timer0 (8 bits) */
-		TIMER0,
+		TIMER0 = 0,
 		/** Timer1 (16 bits) */
-		TIMER1,
+		TIMER1 = 1,
 		/** Timer3 (16 bits) */
-		TIMER3
+		TIMER3 = 3
 	};
 	
 	//TODO Add specific enumeration for High-speed timer? (or specific traits?)

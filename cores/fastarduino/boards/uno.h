@@ -356,11 +356,11 @@ namespace board
 	enum class Timer: uint8_t
 	{
 		/** Timer0 (8 bits) */
-		TIMER0,
+		TIMER0 = 0,
 		/** Timer1 (16 bits) */
-		TIMER1,
+		TIMER1 = 1,
 		/** Timer2 (8 bits) */
-		TIMER2
+		TIMER2 = 2
 	};
 	
 	/**
