@@ -97,7 +97,7 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								int/ExternalInterrupt1			\
 								int/ExternalInterrupt2			\
 								pci/PinChangeInterrupt1			\
-								rtt/RTTApp1	rtt/RTTApp3			\
+								rtt/RTTApp1b rtt/RTTApp3		\
 								rtt/RTTApp4						\
 								rtt/TimerApp3 rtt/TimerApp4		\
 								rtt/TimerTinyX5					\
