@@ -26,8 +26,17 @@ do
 		echo "Error occurred, aborting."
 		exit 1
 	fi
+	rm -f errors
 done
 
 echo "Generate size data sheets"
-#TODO I don't think that will work,as TARGETS will probably be passed as a single argument :-(
-./gen-size-sheet.py new-examples-data.xlxs $TARGETS
+./gen-size-sheet.py new-examples-data.xlsx $TARGETS
+
+echo "Remove intermediate result files"
+for TARGET in $TARGETS
+do
+	rm -f newsizes-$TARGET
+done
+
+echo "Compare new sizes with previous release sizes"
+./compare-size-sheets.py examples-data.xlsx new-examples-date.xlsx >sizes-diff.xlsx
