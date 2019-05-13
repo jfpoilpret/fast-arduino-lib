@@ -119,7 +119,7 @@ namespace devices
 			{
 				return value & 0x0002;
 			}
-			inline BlockProtect block_protecwrit() const
+			inline BlockProtect block_protect() const
 			{
 				return static_cast<BlockProtect>(value & 0x007C);
 			}
