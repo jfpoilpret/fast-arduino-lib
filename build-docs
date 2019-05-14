@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# This script helps preparing documentation for a release:
+# 1. Build all tutorial samples (for Arduino API and FastArduino)
+# 2. Gather make output and prepare code size sheets of samples
+# 3. Generate size tables for inclusion into tutorial doc
+# 4. Regenerate docs
+
+echo "Build all samples for Arduino API"
+cd tuto-samples/arduino
+./build-samples | ./stats.py >sizes.txt
+cd ../..
+
+echo "Build all samples for FastArduino"
+cd tuto-samples/fastarduino
+./build-samples 2>errors| ./stats.py >sizes.txt
+cd ../..
+
+# check if error found, then abort
+grep "Error" tuto-samples/fastarduino/errors
+if [ $? -ne 1 ]; then
+	echo "Error occurred, aborting."
+	exit 1
+fi
+
+# Generate size tables 
+echo "Generate size data sheets"
+./gen-sample-size-tables.py tuto-samples/arduino/sizes.txt tuto-samples/fastarduino/sizes.txt samples-list.txt >tuto-samples/tables.txt
+
+echo "Generate docs"
+#make doco
