@@ -8,3 +8,5 @@ apidoc/**
 **/build
 **/*BAK
 **/*.OLD
+tuto-samples/tables.txt
+tuto-samples/*/sizes.txt
