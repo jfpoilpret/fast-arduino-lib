@@ -41,6 +41,9 @@ TABLE_ROW_2 = """
 	</tr>"""
 TABLE_ROW_COL = """		<td class="markdownTableBodyNone">%s</td>"""
 
+def format_size(size):
+    return size + (" byte" if size in ["0", "1"] else " bytes")
+
 def create_tables(config, sizes, output):
     with output:
         with config:
@@ -51,9 +54,12 @@ def create_tables(config, sizes, output):
                 labels = [cell.strip() for i, cell in enumerate(data[1:]) if i % 2 == 0]
                 programs = [cell.strip() for i, cell in enumerate(data[1:]) if i % 2 == 1]
 
+                code_sizes = [sizes[p]['code'] for p in programs]
+                data_sizes = [sizes[p]['data'] for p in programs]
+
                 header_cols = [TABLE_HEADER_COL % label for label in labels]
-                code_cols = [TABLE_ROW_COL % sizes[p]['code'] for p in programs]
-                data_cols = [TABLE_ROW_COL % sizes[p]['data'] for p in programs]
+                code_cols = [TABLE_ROW_COL % format_size(size) for size in code_sizes]
+                data_cols = [TABLE_ROW_COL % format_size(size) for size in data_sizes]
                 
                 header = TABLE_HEADER % '\n'.join(header_cols)
                 row1 = TABLE_ROW_1 % '\n'.join(code_cols)

@@ -28,4 +28,4 @@ echo "Generate size data sheets"
 ./gen-sample-size-tables.py tuto-samples/arduino/sizes.txt tuto-samples/fastarduino/sizes.txt samples-list.txt >tuto-samples/tables.txt
 
 echo "Generate docs"
-#make doco
+make doco

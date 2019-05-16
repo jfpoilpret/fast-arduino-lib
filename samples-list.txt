@@ -1,2 +1,11 @@
 gpiotime_1_blink	Arduino API	gpiotime_1_blink.ino	FastArduino	gpiotime_1_blink.cpp
 gpiotime_2_led_chaser	Arduino API	gpiotime_3_led_chaser.ino	FastArduino	gpiotime_2_led_chaser.cpp
+uartflash_1_helloworld	Arduino API	uartflash_1_helloworld.ino	FastArduino	uartflash_1_helloworld.cpp
+uartflash_2_helloworld	without %F()	uartflash_1_helloworld.cpp	with %F()	uartflash_2_helloworld.cpp
+uartflash_4_ostream	Arduino API	uartflash_4_ostream.ino	FastArduino	uartflash_4_ostream.cpp
+analoginput_1_input	Arduino API	analoginput_1_input.ino	FastArduino	analoginput_1_input.cpp
+timer_1_ctc	FastArduino	timer_1_ctc.cpp
+rtt_1_rtt	delay_ms	gpiotime_1_blink.cpp	RTT::delay	rtt_1_rtt.cpp
+pwm_1_pwm	Arduino API	pwm_1_pwm.ino	FastArduino	pwm_1_pwm.cpp
+watchdog_1_blink	FastArduino	watchdog_1_blink.cpp
+interrupts_1_ext_blink	Arduino API	interrupts_1_ext_blink.ino	FastArduino	interrupts_1_ext_blink.cpp
