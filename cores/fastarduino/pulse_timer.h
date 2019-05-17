@@ -41,9 +41,9 @@
  * 
  * @param TIMER_NUM the timer number (as defined in MCU datasheet)
  * @param PRESCALER the prescaler value used to instantiate the PulseTimer template
- * @param PIN_A the board::DigitalPin connected to first PWM pin of the PulseTimer;
+ * @param PIN_A the board::PWMPin connected to first PWM pin of the PulseTimer;
  * this is used for control only, to avoid bugs due to code typos.
- * @param PIN_B the board::DigitalPin connected to second PWM pin of the PulseTimer;
+ * @param PIN_B the board::PWMPin connected to second PWM pin of the PulseTimer;
  * this is used for control only, to avoid bugs due to code typos.
  * 
  * @sa timer::PulseTimer
@@ -71,7 +71,7 @@
  * 
  * @param TIMER_NUM the timer number (as defined in MCU datasheet)
  * @param PRESCALER the prescaler value used to instantiate the PulseTimer template
- * @param PIN_A the board::DigitalPin connected to first PWM pin of the PulseTimer;
+ * @param PIN_A the board::PWMPin connected to first PWM pin of the PulseTimer;
  * this is used for control only, to avoid bugs due to code typos.
  * 
  * @sa timer::PulseTimer
@@ -96,7 +96,7 @@
  * 
  * @param TIMER_NUM the timer number (as defined in MCU datasheet)
  * @param PRESCALER the prescaler value used to instantiate the PulseTimer template
- * @param PIN_B the board::DigitalPin connected to second PWM pin of the PulseTimer;
+ * @param PIN_B the board::PWMPin connected to second PWM pin of the PulseTimer;
  * this is used for control only, to avoid bugs due to code typos.
  * 
  * @sa timer::PulseTimer
@@ -275,7 +275,7 @@ namespace timer
 	// All PCI-related methods called by pre-defined ISR are defined here
 	struct isr_handler_pulse
 	{
-		template<uint8_t TIMER_NUM_, board::DigitalPin PIN_, uint8_t COM_NUM_>
+		template<uint8_t TIMER_NUM_, board::PWMPin PIN_, uint8_t COM_NUM_>
 		static constexpr board::Timer pulse_timer_check()
 		{
 			constexpr board::Timer NTIMER = isr_handler::check_timer<TIMER_NUM_>();
@@ -287,16 +287,20 @@ namespace timer
 		}
 
 		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_,
-				 board::DigitalPin PIN_, uint8_t COM_NUM_>
+				 board::PWMPin PIN_, uint8_t COM_NUM_>
 		static void pulse_timer_overflow()
 		{
 			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
 			using PT = timer::PulseTimer8<NTIMER, PRESCALER_>;
-			if (interrupt::HandlerHolder<PT>::handler()->overflow()) gpio::FastPinType<PIN_>::set();
+			if (interrupt::HandlerHolder<PT>::handler()->overflow())
+			{
+				using PWMTRAIT = board_traits::PWMPin_trait<PIN_>;
+				gpio::FastPinType<PWMTRAIT::ACTUAL_PIN>::set();
+			}
 		}
 
 		template<uint8_t TIMER_NUM_, typename timer::Calculator<(board::Timer) TIMER_NUM_>::PRESCALER PRESCALER_,
-				 board::DigitalPin PINA_, uint8_t COMA_NUM_, board::DigitalPin PINB_, uint8_t COMB_NUM_>
+				 board::PWMPin PINA_, uint8_t COMA_NUM_, board::PWMPin PINB_, uint8_t COMB_NUM_>
 		static void pulse_timer_overflow()
 		{
 			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PINA_, COMA_NUM_>();
@@ -306,17 +310,26 @@ namespace timer
 			{
 				using PINTA = board_traits::Timer_COM_trait<NTIMER, COMA_NUM_>;
 				using PINTB = board_traits::Timer_COM_trait<NTIMER, COMB_NUM_>;
-				if (PINTA::OCR != 0) gpio::FastPinType<PINA_>::set();
-				if (PINTB::OCR != 0) gpio::FastPinType<PINB_>::set();
+				if (PINTA::OCR != 0)
+				{
+					using PWMTRAIT = board_traits::PWMPin_trait<PINA_>;
+					gpio::FastPinType<PWMTRAIT::ACTUAL_PIN>::set();
+				}
+				if (PINTB::OCR != 0)
+				{
+					using PWMTRAIT = board_traits::PWMPin_trait<PINB_>;
+					gpio::FastPinType<PWMTRAIT::ACTUAL_PIN>::set();
+				}
 			}
 		}
 
-		template<uint8_t TIMER_NUM_, uint8_t COM_NUM_, board::DigitalPin PIN_> static void pulse_timer_compare()
+		template<uint8_t TIMER_NUM_, uint8_t COM_NUM_, board::PWMPin PIN_> static void pulse_timer_compare()
 		{
 			static constexpr board::Timer NTIMER = pulse_timer_check<TIMER_NUM_, PIN_, COM_NUM_>();
 			using PINT = board_traits::Timer_COM_trait<NTIMER, COM_NUM_>;
 			static_assert(PIN_ == PINT::PIN_OCR, "PIN must be connected to TIMER_NUM OCxA/OCxB");
-			gpio::FastPinType<PIN_>::clear();
+			using PWMTRAIT = board_traits::PWMPin_trait<PIN_>;
+			gpio::FastPinType<PWMTRAIT::ACTUAL_PIN>::clear();
 		}
 	};
 	/// @endcond

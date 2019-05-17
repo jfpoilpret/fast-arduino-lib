@@ -33,25 +33,25 @@
 #define TIMER_NUM 1
 constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D9_PB1_OC1A;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D9_PB1_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #elif defined(ARDUINO_MEGA)
 #define TIMER_NUM 1
 constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D11_PB5_OC1A;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D11_PB5_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #elif defined(ARDUINO_LEONARDO)
 #define TIMER_NUM 1
 constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D9_PB5_OC1A;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D9_PB5_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #elif defined(BREADBOARD_ATTINYX4)
 #define TIMER_NUM 1
 constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D6_PA6_OC1A;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D6_PA6_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #else
 #error "Current target is not yet supported!"

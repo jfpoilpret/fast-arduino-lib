@@ -33,28 +33,28 @@
 #define TIMER_NUM 0
 constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D6_PD6_OC0A;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D6_PD6_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
 #elif defined(ARDUINO_MEGA)
 #define TIMER_NUM 0
 constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D4_PG5_OC0B;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D4_PG5_OC0B;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_B_ISR
 #elif defined(ARDUINO_LEONARDO)
 #define TIMER_NUM 0
 constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D11_PB7_OC0A;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D11_PB7_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
 #elif defined(BREADBOARD_ATTINYX4)
 #define TIMER_NUM 0
 constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
-constexpr const board::DigitalPin SERVO_PIN1 = board::PWMPin::D10_PB2_OC0A;
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D10_PB2_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
 #else

@@ -241,12 +241,12 @@ namespace board_traits
 		}
 	};
 	
-	template<> struct PWMPin_trait<PWMPin::D6_PD6_OC0A>: PWMPin_trait_impl<Timer::TIMER0, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D5_PD5_OC0B>: PWMPin_trait_impl<Timer::TIMER0, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D9_PB1_OC1A>: PWMPin_trait_impl<Timer::TIMER1, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D10_PB2_OC1B>: PWMPin_trait_impl<Timer::TIMER1, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D11_PB3_OC2A>: PWMPin_trait_impl<Timer::TIMER2, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D3_PD3_OC2B>: PWMPin_trait_impl<Timer::TIMER2, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D6_PD6_OC0A> : PWMPin_trait_impl<DigitalPin::D6_PD6, Timer::TIMER0, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D5_PD5_OC0B> : PWMPin_trait_impl<DigitalPin::D5_PD5, Timer::TIMER0, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D9_PB1_OC1A> : PWMPin_trait_impl<DigitalPin::D9_PB1, Timer::TIMER1, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D10_PB2_OC1B> : PWMPin_trait_impl<DigitalPin::D10_PB2, Timer::TIMER1, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D11_PB3_OC2A> : PWMPin_trait_impl<DigitalPin::D11_PB3, Timer::TIMER2, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D3_PD3_OC2B> : PWMPin_trait_impl<DigitalPin::D3_PD3, Timer::TIMER2, 1> {};
 };
 
 // Macros to declare some ISR friends

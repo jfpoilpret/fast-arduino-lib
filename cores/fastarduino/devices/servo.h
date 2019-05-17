@@ -45,13 +45,13 @@ namespace devices::servo
 	 * 
 	 * @sa timer::PulseTimer
 	 */
-	template<typename TIMER_, board::DigitalPin PIN_> class Servo
+	template<typename TIMER_, board::PWMPin PIN_> class Servo
 	{
 	public:
 		/** The type of timer used to handle the connected servomotor. */
 		using TIMER = TIMER_;
 		/** The pin to which the servomotor is connected. */
-		static constexpr const board::DigitalPin PIN = PIN_;
+		static constexpr const board::PWMPin PIN = PIN_;
 		/** The type of counter for @p TIMER_ */
 		using TYPE = typename TIMER::TYPE;
 
