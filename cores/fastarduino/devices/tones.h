@@ -137,7 +137,7 @@ namespace devices::audio
 	 * but is less easy to read and understand.
 	 * 
 	 * @tparam NTIMER the AVR timer to use for the underlying Timer
-	 * @tparam OUTPUT the PWMPin connected to the buzzer;
+	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
 	 * this must be the pin OCnA, where n is the AVR Timer number
 	 * 
 	 * @sa Tone

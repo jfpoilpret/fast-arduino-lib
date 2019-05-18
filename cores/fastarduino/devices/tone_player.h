@@ -109,7 +109,7 @@ namespace devices::audio
 	 * Each play API has 3 distinct methods, one for each storage strategy.
 	 * 
 	 * @tparam NTIMER the AVR timer to use for the underlying Timer
-	 * @tparam OUTPUT the PWMPin connected to the buzzer;
+	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
 	 * this must be the pin OCnA, where n is the AVR Timer number
 	 * 
 	 * @sa TonePlay

@@ -37,7 +37,7 @@ namespace timer
 	 * do.
 	 * 
 	 * @tparam NTIMER_ the AVR timer to use for the underlying Timer
-	 * @tparam OUTPUT_ the PWMPin connected to this SquareWave generator;
+	 * @tparam OUTPUT_ the `board::PWMPin` connected to this SquareWave generator;
 	 * this must be the pin OCnA, where n is the AVR Timer number
 	 * 
 	 * @sa devices::audio::ToneGenerator
@@ -50,6 +50,8 @@ namespace timer
 		static constexpr const board::Timer NTIMER = NTIMER_;
 		/** The board::PWMPin connected to this SquareWave generator. */
 		static constexpr const board::PWMPin OUTPUT = OUTPUT_;
+		/** The pin to which this SquareWave generator is connected. */
+		static constexpr const board::DigitalPin PIN = board_traits::PWMPin_trait<OUTPUT>::ACTUAL_PIN;
 
 		/** The timer::Calculator type for the underlying timer. */
 		using CALC = timer::Calculator<NTIMER>;
@@ -70,11 +72,18 @@ namespace timer
 			static_assert(TRAIT::COM == 0, "Only OCnA pin is supported for wave generation");
 		}
 
-		//FIXME I doubt this method can really be "const": why doesn't the compiler complain?
 		/**
 		 * Return the underlying timer::Timer of this SquareWave generator.
 		 */
-		TIMER& timer() const
+		const TIMER& timer() const
+		{
+			return timer_;
+		}
+
+		/**
+		 * Return the underlying timer::Timer of this SquareWave generator.
+		 */
+		TIMER& timer()
 		{
 			return timer_;
 		}

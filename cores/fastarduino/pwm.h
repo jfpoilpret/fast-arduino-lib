@@ -32,12 +32,11 @@ namespace analog
 
 	/**
 	 * Construct a new handler for a PWM output pin.
-	 * @tparam PWMPIN_ the PWM pin to use as PWM output
+	 * @tparam PWMPIN_ the `board::PWMPin` to use as PWM output
 	 * @tparam PULSED_ whether to use a `timer::PulseTimer` instead of a 
 	 * `timer::Timer`; this is useful when e.g. you want to use a PWM pin to
 	 * manage a servo motor, where pulses shall be limited to a few ms but 
 	 * triggered every few dozen ms.
-	 * @sa board::DigitalPin
 	 */
 	template<board::PWMPin PWMPIN_, bool PULSED_ = false> class PWMOutput
 	{
