@@ -162,8 +162,8 @@ namespace board_traits
 		}
 	};
 	
-	template<> struct PWMPin_trait<PWMPin::D0_PB0_OC0A>: PWMPin_trait_impl<Timer::TIMER0, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D1_PB1_OC0B>: PWMPin_trait_impl<Timer::TIMER0, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D0_PB0_OC0A> : PWMPin_trait_impl<DigitalPin::D0_PB0, Timer::TIMER0, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D1_PB1_OC0B> : PWMPin_trait_impl<DigitalPin::D1_PB1, Timer::TIMER0, 1> {};
 };
 
 // Macros to declare some ISR friends

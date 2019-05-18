@@ -23,7 +23,7 @@ var searchData=
   ['resume',['resume',['../classtimer_1_1_timer.html#afe042f3db2c961f846587cfb53b27fd8',1,'timer::Timer']]],
   ['resume_5f',['resume_',['../classtimer_1_1_timer.html#abcb42e79a7b037d368cc050212ee7f70',1,'timer::Timer']]],
   ['right',['right',['../namespacestreams.html#a6ffd9b1de5fcffbb31c425a2218c6b09',1,'streams']]],
-  ['rotate',['rotate',['../classdevices_1_1servo_1_1_servo.html#a10154f3587089ed6f93b58d896a64e3b',1,'devices::servo::Servo']]],
+  ['rotate',['rotate',['../classdevices_1_1servo_1_1_servo.html#a9b663ac0c8f5f95dd808b18fb50ff9f8',1,'devices::servo::Servo']]],
   ['rtt',['RTT',['../classtimer_1_1_r_t_t.html#aa75448a1d268c8c5aaec4111230c3d70',1,'timer::RTT']]],
   ['rtteventcallback',['RTTEventCallback',['../classtimer_1_1_r_t_t_event_callback.html#a41ca339f4780aae1b793dd16ad9701a9',1,'timer::RTTEventCallback']]],
   ['rttrawtime',['RTTRawTime',['../classtimer_1_1_r_t_t_raw_time.html#a272a897e13e597aec2eb7da6f919943d',1,'timer::RTTRawTime']]],

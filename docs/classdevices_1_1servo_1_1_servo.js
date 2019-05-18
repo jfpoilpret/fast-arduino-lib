@@ -1,12 +1,13 @@
 var classdevices_1_1servo_1_1_servo =
 [
-    [ "TIMER", "classdevices_1_1servo_1_1_servo.html#a366bd6dc01be89d7be23e197e87827a0", null ],
-    [ "TYPE", "classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3", null ],
-    [ "Servo", "classdevices_1_1servo_1_1_servo.html#a028a4772a90a2938f441aadf07f2bae1", null ],
-    [ "detach", "classdevices_1_1servo_1_1_servo.html#ade9487997d8d90df4abb47405a5efaff", null ],
-    [ "set_counter", "classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9", null ],
-    [ "set_pulse", "classdevices_1_1servo_1_1_servo.html#aa5aa1fd487bd521e40bbab790ad47928", null ],
-    [ "rotate", "classdevices_1_1servo_1_1_servo.html#a10154f3587089ed6f93b58d896a64e3b", null ],
-    [ "calculate_counter", "classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf", null ],
-    [ "PIN", "classdevices_1_1servo_1_1_servo.html#a4f405699b4fbce545d46687d5a94de9c", null ]
+    [ "TIMER", "classdevices_1_1servo_1_1_servo.html#a5c79c968e4c54072f27c4bc3ff1a7311", null ],
+    [ "TYPE", "classdevices_1_1servo_1_1_servo.html#a632c73afe2689697b19469dd40c08c75", null ],
+    [ "Servo", "classdevices_1_1servo_1_1_servo.html#aa4a78f3d6b35cc0252cbae435b181b2e", null ],
+    [ "detach", "classdevices_1_1servo_1_1_servo.html#ae50498f7c4d8b66e1b703eaf76f60f3f", null ],
+    [ "set_counter", "classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed", null ],
+    [ "set_pulse", "classdevices_1_1servo_1_1_servo.html#a165bc69c89e2f2a5802d3c58bc1781cf", null ],
+    [ "rotate", "classdevices_1_1servo_1_1_servo.html#a9b663ac0c8f5f95dd808b18fb50ff9f8", null ],
+    [ "calculate_counter", "classdevices_1_1servo_1_1_servo.html#a206b12e8bdc3bc717f954460cb697d1c", null ],
+    [ "PWMPIN", "classdevices_1_1servo_1_1_servo.html#a8e0ed9898cd31ddc7886015a73682a57", null ],
+    [ "PIN", "classdevices_1_1servo_1_1_servo.html#afcbba500748c7191e1a0e0026564ad7d", null ]
 ];

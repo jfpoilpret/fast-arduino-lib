@@ -142,10 +142,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:aca949d07a25a1d15a2a43b4cdd5b72c0"><td class="memItemLeft" align="right" valign="top">static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0">MASK</a> = _BV(<a class="el" href="classgpio_1_1_fast_pin_type.html#a97461624e5f46544284655f9eb401567">BIT</a>)</td></tr>
 <tr class="memdesc:aca949d07a25a1d15a2a43b4cdd5b72c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bit-mask to use when accessing <code>DPIN</code> through <code>PORT</code>.  <a href="#aca949d07a25a1d15a2a43b4cdd5b72c0">More...</a><br /></td></tr>
 <tr class="separator:aca949d07a25a1d15a2a43b4cdd5b72c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf8fce945aaa2c505f9b4d6f689119d2"><td class="memItemLeft" align="right" valign="top"><a id="abf8fce945aaa2c505f9b4d6f689119d2"></a>
-static constexpr const bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_pin_type.html#abf8fce945aaa2c505f9b4d6f689119d2">HAS_PWM</a> = PWMTRAIT::HAS_PWM</td></tr>
-<tr class="memdesc:abf8fce945aaa2c505f9b4d6f689119d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is this pin a potential PWM output? <br /></td></tr>
-<tr class="separator:abf8fce945aaa2c505f9b4d6f689119d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::DigitalPin DPIN_&gt;<br />
@@ -184,7 +180,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 
 <p>The exact <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port. ">FastPin</a></code> parameterized type for <code>DPIN</code> IO pin. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00526">526</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00523">523</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -204,7 +200,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 
 <p>The exact <code><a class="el" href="classgpio_1_1_fast_port.html" title="API that manipulates a whole digital IO port. ">FastPort</a></code> parameterized type that <code>DPIN</code> IO pin belongs to. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00528">528</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00525">525</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -254,7 +250,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00537">537</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00534">534</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -286,7 +282,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 <p>Set pin level to <code>HIGH</code> (i.e. </p>
 <p>Vcc). This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00553">553</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00550">550</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -318,7 +314,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 <p>Set pin level to <code>LOW</code> (i.e. </p>
 <p>GND). This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00562">562</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00559">559</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -350,7 +346,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 <p>Toggle pin level, i.e. </p>
 <p>set it to <code>LOW</code> if it was <code>HIGH</code>, and <code>HIGH</code> if it was <code>LOW</code>. This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00572">572</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00569">569</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -388,7 +384,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00582">582</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00579">579</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -417,7 +413,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 
 <p>The digital pin for this <a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU. ">FastPinType</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00515">515</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00514">514</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -445,7 +441,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 
 <p>The port to which <code>DPIN</code> belongs. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00517">517</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00516">516</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -473,7 +469,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 
 <p>The bit position of <code>DPIN</code> within its port. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00519">519</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00518">518</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -501,7 +497,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 
 <p>The bit-mask to use when accessing <code>DPIN</code> through <code>PORT</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00521">521</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00520">520</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>

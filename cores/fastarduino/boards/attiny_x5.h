@@ -157,13 +157,15 @@ namespace board
 	 * pin and `v` the letter indicating which compare register of the timer this 
 	 * PWM pin is mapped to.
 	 */
-	namespace PWMPin
+	enum class PWMPin : uint8_t
 	{
-		constexpr const DigitalPin D0_PB0_OC0A = DigitalPin::D0_PB0;
-		constexpr const DigitalPin D1_PB1_OC0B = DigitalPin::D1_PB1;
+		D0_PB0_OC0A = 0,
+		D1_PB1_OC0B,
 		//TODO Currently PWM for Timer1 is not supported (setup is too much
 		// different compared to other MCU, even ATtinyX4)
 		// constexpr const DigitalPin D4_PB4_OC1B = DigitalPin::D4_PB4;
+		// FastArduino internal: DO NOT USE
+		NONE = 0xFF
 	};
 	
 	/**

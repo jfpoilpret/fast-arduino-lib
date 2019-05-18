@@ -27,7 +27,7 @@
 
 // Board-dependent settings
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
+static constexpr const board::PWMPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
 
 using devices::audio::Tone;
 using namespace devices::audio::SpecialTone;

@@ -186,9 +186,12 @@ namespace board_traits
 	template<> struct Timer_COM_trait<Timer::TIMER1, 1>: Timer_COM_trait_impl<
 		uint16_t, PWMPin::D10_PB6_OC1B, R_(OCR1B), 
 		_BV(COM1B0) | _BV(COM1B1), 0, _BV(COM1B0), _BV(COM1B1), _BV(COM1B0) | _BV(COM1B1)> {};
+	template<> struct Timer_COM_trait<Timer::TIMER1, 2>: Timer_COM_trait_impl<
+		uint16_t, PWMPin::D11_PB7_OC1C, R_(OCR1C), 
+		_BV(COM1C0) | _BV(COM1C1), 0, _BV(COM1C0), _BV(COM1C1), _BV(COM1C0) | _BV(COM1C1)> {};
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
-							2,
+							3,
 							_BV(WGM10) | _BV(WGM11), _BV(WGM12) | _BV(WGM13), _BV(CS10) | _BV(CS11) | _BV(CS12),
 							_BV(WGM10) | _BV(WGM11), _BV(WGM12),
 							_BV(WGM10) | _BV(WGM11), 0,
@@ -255,11 +258,12 @@ namespace board_traits
 		}
 	};
 	
-	template<> struct PWMPin_trait<PWMPin::D11_PB7_OC0A>: PWMPin_trait_impl<Timer::TIMER0, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D3_PD0_OC0B>: PWMPin_trait_impl<Timer::TIMER0, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D9_PB5_OC1A>: PWMPin_trait_impl<Timer::TIMER1, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D10_PB6_OC1B>: PWMPin_trait_impl<Timer::TIMER1, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D5_PC6_OC3A>: PWMPin_trait_impl<Timer::TIMER3, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D11_PB7_OC0A> : PWMPin_trait_impl<DigitalPin::D11_PB7, Timer::TIMER0, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D3_PD0_OC0B> : PWMPin_trait_impl<DigitalPin::D3_PD0, Timer::TIMER0, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D9_PB5_OC1A> : PWMPin_trait_impl<DigitalPin::D9_PB5, Timer::TIMER1, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D10_PB6_OC1B> : PWMPin_trait_impl<DigitalPin::D10_PB6, Timer::TIMER1, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D11_PB7_OC1C> : PWMPin_trait_impl<DigitalPin::D11_PB7, Timer::TIMER1, 2> {};
+	template<> struct PWMPin_trait<PWMPin::D5_PC6_OC3A> : PWMPin_trait_impl<DigitalPin::D5_PC6, Timer::TIMER3, 0> {};
 };
 
 // Macros to declare some ISR friends

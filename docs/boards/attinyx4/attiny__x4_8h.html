@@ -93,9 +93,6 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceboard"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html">board</a></td></tr>
 <tr class="memdesc:namespaceboard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all types and constants specific to support ATtinyX4 MCU targets. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceboard_1_1_p_w_m_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_p_w_m_pin.html">board::PWMPin</a></td></tr>
-<tr class="memdesc:namespaceboard_1_1_p_w_m_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATtinyX4, capable of PWM output. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceboard_1_1_external_interrupt_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_external_interrupt_pin.html">board::ExternalInterruptPin</a></td></tr>
 <tr class="memdesc:namespaceboard_1_1_external_interrupt_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATtinyX4, usable as direct external interrupt pins. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,6 +192,20 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a6ed32fa64dbf9169ccc11a040e11d313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available analog input pins of ATtinyX4, with reference to Arduino UNO pins.  <a href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313">More...</a><br /></td></tr>
 <tr class="separator:a6ed32fa64dbf9169ccc11a040e11d313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a> : uint8_t { <br />
+&#160;&#160;<b>D10_PB2_OC0A</b> = 0, 
+<br />
+&#160;&#160;<b>D7_PA7_OC0B</b>, 
+<br />
+&#160;&#160;<b>D6_PA6_OC1A</b>, 
+<br />
+&#160;&#160;<b>D5_PA5_OC1B</b>, 
+<br />
+&#160;&#160;<b>NONE</b> = 0xFF
+<br />
+ }</td></tr>
+<tr class="memdesc:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATtinyX4, capable of PWM output.  <a href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">More...</a><br /></td></tr>
+<tr class="separator:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memItemLeft" align="right" valign="top"><a id="a8541ca1f10a050c4356d6ccd76d9a907"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a> : uint8_t </td></tr>
 <tr class="memdesc:a8541ca1f10a050c4356d6ccd76d9a907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all USART modules of ATtinyX4, actually none at all. <br /></td></tr>
 <tr class="separator:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,18 +242,6 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:adf3f174a1e768272537c8090e7464c3f"><td class="memItemLeft" align="right" valign="top"><a id="adf3f174a1e768272537c8090e7464c3f"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D10_PB2_OC0A</b> = DigitalPin::D10_PB2</td></tr>
-<tr class="separator:adf3f174a1e768272537c8090e7464c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a99582c4c77e76d61a8bf03e48d7e21"><td class="memItemLeft" align="right" valign="top"><a id="a1a99582c4c77e76d61a8bf03e48d7e21"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D7_PA7_OC0B</b> = DigitalPin::D7_PA7</td></tr>
-<tr class="separator:a1a99582c4c77e76d61a8bf03e48d7e21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8685ffdac7652f5436c9dfa72626c2d9"><td class="memItemLeft" align="right" valign="top"><a id="a8685ffdac7652f5436c9dfa72626c2d9"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D6_PA6_OC1A</b> = DigitalPin::D6_PA6</td></tr>
-<tr class="separator:a8685ffdac7652f5436c9dfa72626c2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06033cbbc29f864a81fc9a16a014da9b"><td class="memItemLeft" align="right" valign="top"><a id="a06033cbbc29f864a81fc9a16a014da9b"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D5_PA5_OC1B</b> = DigitalPin::D5_PA5</td></tr>
-<tr class="separator:a06033cbbc29f864a81fc9a16a014da9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af89b4c3749aec5b5487261e4ff8c37db"><td class="memItemLeft" align="right" valign="top"><a id="af89b4c3749aec5b5487261e4ff8c37db"></a>
 constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D10_PB2_EXT0</b> = DigitalPin::D10_PB2</td></tr>
 <tr class="separator:af89b4c3749aec5b5487261e4ff8c37db"><td class="memSeparator" colspan="2">&#160;</td></tr>

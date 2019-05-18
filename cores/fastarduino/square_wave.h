@@ -37,25 +37,27 @@ namespace timer
 	 * do.
 	 * 
 	 * @tparam NTIMER_ the AVR timer to use for the underlying Timer
-	 * @tparam OUTPUT_ the DigitalPin connected to this SquareWave generator;
+	 * @tparam OUTPUT_ the `board::PWMPin` connected to this SquareWave generator;
 	 * this must be the pin OCnA, where n is the AVR Timer number
 	 * 
 	 * @sa devices::audio::ToneGenerator
 	 * @sa devices::audio::TonePlayer
 	 */
-	template<board::Timer NTIMER_, board::DigitalPin OUTPUT_> class SquareWave
+	template<board::Timer NTIMER_, board::PWMPin OUTPUT_> class SquareWave
 	{
 	public:
 		/** The AVR timer used for the underlying Timer. */
 		static constexpr const board::Timer NTIMER = NTIMER_;
-		/** The board::DigitalPin connected to this SquareWave generator. */
-		static constexpr const board::DigitalPin OUTPUT = OUTPUT_;
+		/** The board::PWMPin connected to this SquareWave generator. */
+		static constexpr const board::PWMPin OUTPUT = OUTPUT_;
+		/** The pin to which this SquareWave generator is connected. */
+		static constexpr const board::DigitalPin PIN = board_traits::PWMPin_trait<OUTPUT>::ACTUAL_PIN;
 
 		/** The timer::Calculator type for the underlying timer. */
 		using CALC = timer::Calculator<NTIMER>;
 		/** The type of underlying timer::Timer used by this SquareWave generator. */
 		using TIMER = timer::Timer<NTIMER>;
-		/** The analog::PWMOutput type for the @p OUTPUT board::DigitalPin. */
+		/** The analog::PWMOutput type for the @p OUTPUT board::PWMPin. */
 		using PWMPIN = analog::PWMOutput<OUTPUT>;
 
 		/**
@@ -70,11 +72,18 @@ namespace timer
 			static_assert(TRAIT::COM == 0, "Only OCnA pin is supported for wave generation");
 		}
 
-		//FIXME I doubt this method can really be "const": why doesn't the compiler complain?
 		/**
 		 * Return the underlying timer::Timer of this SquareWave generator.
 		 */
-		TIMER& timer() const
+		const TIMER& timer() const
+		{
+			return timer_;
+		}
+
+		/**
+		 * Return the underlying timer::Timer of this SquareWave generator.
+		 */
+		TIMER& timer()
 		{
 			return timer_;
 		}

@@ -456,7 +456,7 @@ Then a timer is selected for PWM (note that the choice of a timer imposes the ch
 Then we define the pin that will be connected to the LED and the PWMOutput type for this pin:
 @line LED
 @line LED_PWM
-Note that `board::PWMPin` namespace limits the pins to PWM-enabled pins; also note the pin name `D6_PD6_OC0A` includes useful information:
+Note that `board::PWMPin` enum limits the pins to PWM-enabled pins; also note the pin name `D6_PD6_OC0A` includes useful information:
 - this is pin `D6` on Arduino UNO
 - this pin is on `PD6` i.e. Port D bit #6
 - this pin is connectable to `OC0A` i.e. Timer 0 COM A

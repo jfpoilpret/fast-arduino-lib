@@ -34,19 +34,19 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D9_PB1_OC1A;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D9_PB1_OC1A;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #elif defined (ARDUINO_LEONARDO)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D9_PB5_OC1A;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D9_PB5_OC1A;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D11_PB5_OC1A;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D11_PB5_OC1A;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D6_PA6_OC1A;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D6_PA6_OC1A;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #else
 #error "Current target is not yet supported!"

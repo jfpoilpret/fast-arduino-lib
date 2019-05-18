@@ -1,5 +1,9 @@
 var NAVTREEINDEX3 =
 {
+"empty__streams_8h_source.html":[5,0,0,5],
+"errors_8h.html":[5,0,0,6],
+"errors_8h.html#a24d0c302dd23c25975e5a98ed5850142":[5,0,0,6,1],
+"errors_8h.html#a4b234f4e31c1a1c0afbbbc08f98658dd":[5,0,0,6,0],
 "errors_8h.html#a50aa2617c63d80c22e337f78926aa7a2":[5,0,0,6,3],
 "errors_8h.html#ad4ec1e37e74c959b9f0c60673b7f793d":[5,0,0,6,2],
 "errors_8h_source.html":[5,0,0,6],
@@ -15,8 +19,8 @@ var NAVTREEINDEX3 =
 "flash_8h.html#a3308e6ce737b046264e113ced6ba610f":[5,0,0,8,1],
 "flash_8h.html#aad20c401fce8e390b25dfcc30b85224d":[5,0,0,8,2],
 "flash_8h_source.html":[5,0,0,8],
-"functions.html":[4,3,0],
 "functions.html":[4,3,0,0],
+"functions.html":[4,3,0],
 "functions_b.html":[4,3,0,1],
 "functions_c.html":[4,3,0,2],
 "functions_d.html":[4,3,0,3],
@@ -240,14 +244,10 @@ var NAVTREEINDEX3 =
 "mpu6050_8h.html#af1ab54980b0620a7f3c95ff2318604f4aa15ff0dd3d2b338f1f24e178c104d667":[5,0,0,1,3,6,2],
 "mpu6050_8h.html#af1ab54980b0620a7f3c95ff2318604f4ae7e56984bb3dd29494cdd08eed1d3d16":[5,0,0,1,3,6,0],
 "mpu6050_8h_source.html":[5,0,0,1,3],
-"namespaceanalog.html":[3,0,0],
 "namespaceanalog.html":[4,0,0],
+"namespaceanalog.html":[3,0,0],
 "namespaceboard.html":[4,0,1],
 "namespaceboard.html":[3,0,1],
 "namespaceboard_1_1_external_interrupt_pin.html":[3,0,1,0],
-"namespaceboard_1_1_interrupt_pin.html":[3,0,1,1],
-"namespaceboard_1_1_p_w_m_pin.html":[3,0,1,2],
-"namespacecontainers.html":[4,0,2],
-"namespacecontainers.html":[3,0,2],
-"namespacedevices.html":[3,0,3]
+"namespaceboard_1_1_interrupt_pin.html":[3,0,1,1]
 };

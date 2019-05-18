@@ -17,6 +17,5 @@ var searchData=
   ['broadcast',['BROADCAST',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a8c2acf00e8c02cfe3644550c7e675270',1,'devices::rf::NRF24L01::BROADCAST()'],['../classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4',1,'devices::rf::NRF24L01::broadcast(uint8_t port, const void *buf, size_t len)']]],
   ['busconditions',['BusConditions',['../namespacei2c.html#ae97c327132c21ce93c129f34d3b5101e',1,'i2c']]],
   ['externalinterruptpin',['ExternalInterruptPin',['../namespaceboard_1_1_external_interrupt_pin.html',1,'board']]],
-  ['interruptpin',['InterruptPin',['../namespaceboard_1_1_interrupt_pin.html',1,'board']]],
-  ['pwmpin',['PWMPin',['../namespaceboard_1_1_p_w_m_pin.html',1,'board']]]
+  ['interruptpin',['InterruptPin',['../namespaceboard_1_1_interrupt_pin.html',1,'board']]]
 ];

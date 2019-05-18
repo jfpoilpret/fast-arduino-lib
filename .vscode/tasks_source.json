@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "Generate Documentation",
+            "label": "Generate Documentation",
             "type": "shell",
             "command": "make doco",
             "group": "none",
@@ -17,7 +17,7 @@
             "problemMatcher": []
         },
         {
-            "taskName": "Clean all examples",
+            "label": "Clean all examples",
             "type": "shell",
             "command": "make clean-examples ${FA_MAKE_OPTIONS}",
             "group": "none",
@@ -30,7 +30,7 @@
             "problemMatcher": []
         },
         {
-            "taskName": "Build all examples",
+            "label": "Build all examples",
             "type": "shell",
             "command": "make examples ${FA_MAKE_OPTIONS}",
             "group": "build",
@@ -43,7 +43,7 @@
             "problemMatcher": [ "$avrgcc" ]
         },
         {
-            "taskName": "Clean all examples in all targets",
+            "label": "Clean all examples in all targets",
             "type": "shell",
             "command": "make clean-examples-all ${FA_MAKE_OPTIONS}",
             "group": "none",

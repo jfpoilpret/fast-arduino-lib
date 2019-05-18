@@ -40,18 +40,20 @@ namespace devices::servo
 	 * 
 	 * @tparam TIMER_ the type of timer used to handle the connected servomotor;
 	 * this must be a `timer::PulseTimer` type.
-	 * @tparam PIN_ the pin to which the servomotor is connected; this must be a
-	 * PWM pin, connected to @p TIMER_.
+	 * @tparam PWMPIN_ the `board::PWMPin` to which the servomotor is connected;
+	 * this must be a PWM pin, connected to @p TIMER_.
 	 * 
 	 * @sa timer::PulseTimer
 	 */
-	template<typename TIMER_, board::DigitalPin PIN_> class Servo
+	template<typename TIMER_, board::PWMPin PWMPIN_> class Servo
 	{
 	public:
 		/** The type of timer used to handle the connected servomotor. */
 		using TIMER = TIMER_;
+		/** The PWM pin for this PWMOutput. */
+		static constexpr const board::PWMPin PWMPIN = PWMPIN_;
 		/** The pin to which the servomotor is connected. */
-		static constexpr const board::DigitalPin PIN = PIN_;
+		static constexpr const board::DigitalPin PIN = board_traits::PWMPin_trait<PWMPIN>::ACTUAL_PIN;
 		/** The type of counter for @p TIMER_ */
 		using TYPE = typename TIMER::TYPE;
 
@@ -172,7 +174,7 @@ namespace devices::servo
 		static const int8_t MAX = +90;
 		static const int8_t MIN = -90;
 
-		analog::PWMOutput<PIN, true> out_;
+		analog::PWMOutput<PWMPIN, true> out_;
 
 		const uint16_t US_MINIMUM_;
 		const uint16_t US_MAXIMUM_;

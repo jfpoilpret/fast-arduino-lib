@@ -137,13 +137,13 @@ namespace devices::audio
 	 * but is less easy to read and understand.
 	 * 
 	 * @tparam NTIMER the AVR timer to use for the underlying Timer
-	 * @tparam OUTPUT the DigitalPin connected to the buzzer;
+	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
 	 * this must be the pin OCnA, where n is the AVR Timer number
 	 * 
 	 * @sa Tone
 	 * @sa TonePlayer
 	 */
-	template<board::Timer NTIMER, board::DigitalPin OUTPUT> class ToneGenerator
+	template<board::Timer NTIMER, board::PWMPin OUTPUT> class ToneGenerator
 	{
 	private:
 		using SQWGEN = timer::SquareWave<NTIMER, OUTPUT>;

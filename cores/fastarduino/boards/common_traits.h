@@ -436,7 +436,7 @@ namespace board_traits
 	template<Timer TIMER, uint8_t COM> struct Timer_COM_trait
 	{
 		using TYPE = uint8_t;
-		static constexpr const DigitalPin PIN_OCR = DigitalPin::NONE;
+		static constexpr const PWMPin PIN_OCR = PWMPin::NONE;
 		static constexpr const REGISTER<TYPE> OCR{};
 		static constexpr const uint8_t COM_MASK = 0;
 		static constexpr const uint8_t COM_NORMAL = 0;
@@ -444,12 +444,12 @@ namespace board_traits
 		static constexpr const uint8_t COM_CLEAR = 0;
 		static constexpr const uint8_t COM_SET = 0;
 	};
-	template<typename TYPE_, DigitalPin PIN_OCR_, REG OCR_, uint8_t COM_MASK_, uint8_t COM_NORMAL_, uint8_t COM_TOGGLE_,
+	template<typename TYPE_, PWMPin PIN_OCR_, REG OCR_, uint8_t COM_MASK_, uint8_t COM_NORMAL_, uint8_t COM_TOGGLE_,
 			 uint8_t COM_CLEAR_, uint8_t COM_SET_>
 	struct Timer_COM_trait_impl
 	{
 		using TYPE = TYPE_;
-		static constexpr const DigitalPin PIN_OCR = PIN_OCR_;
+		static constexpr const PWMPin PIN_OCR = PIN_OCR_;
 		static constexpr const REGISTER<TYPE> OCR = OCR_;
 		static constexpr const uint8_t COM_MASK = COM_MASK_;
 		static constexpr const uint8_t COM_NORMAL = COM_NORMAL_;
@@ -582,17 +582,17 @@ namespace board_traits
 		static constexpr const REGISTER<TYPE> CTC_MAX = CTC_MAX_;
 	};
 
-	template<DigitalPin PIN> struct PWMPin_trait
+	template<PWMPin PIN> struct PWMPin_trait
 	{
-		static constexpr const bool HAS_PWM = false;
+		static constexpr const board::DigitalPin ACTUAL_PIN = board::DigitalPin::NONE;
 		static constexpr const uint8_t COM = 0;
 		static constexpr const Timer TIMER = Timer::TIMER0;
 		using TIMER_TRAIT = Timer_trait<TIMER>;
 		using TYPE = uint8_t;
 	};
-	template<Timer TIMER_, uint8_t COM_> struct PWMPin_trait_impl
+	template<board::DigitalPin ACTUAL_PIN_, Timer TIMER_, uint8_t COM_> struct PWMPin_trait_impl
 	{
-		static constexpr const bool HAS_PWM = true;
+		static constexpr const board::DigitalPin ACTUAL_PIN = ACTUAL_PIN_;
 		static constexpr const uint8_t COM = COM_;
 		static constexpr const Timer TIMER = TIMER_;
 		using TIMER_TRAIT = Timer_trait<TIMER>;

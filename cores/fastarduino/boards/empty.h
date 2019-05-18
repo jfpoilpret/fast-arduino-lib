@@ -80,7 +80,7 @@ namespace board
 	/**
 	 * Defines all digital output pins of target MCU, capable of PWM output.
 	 */
-	namespace PWMPin
+	enum class PWMPin : uint8_t
 	{
 	};
 

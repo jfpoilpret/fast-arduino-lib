@@ -242,20 +242,22 @@ namespace board
 	 * pin and `v` the letter indicating which compare register of the timer this 
 	 * PWM pin is mapped to.
 	 */
-	namespace PWMPin
+	enum class PWMPin : uint8_t
 	{
-		constexpr const DigitalPin D6_PD6_OC0A = DigitalPin::D6_PD6;
-		constexpr const DigitalPin D5_PD5_OC0B = DigitalPin::D5_PD5;
-		constexpr const DigitalPin D9_PB1_OC1A = DigitalPin::D9_PB1;
-		constexpr const DigitalPin D10_PB2_OC1B = DigitalPin::D10_PB2;
-		constexpr const DigitalPin D11_PB3_OC2A = DigitalPin::D11_PB3;
-		constexpr const DigitalPin D3_PD3_OC2B = DigitalPin::D3_PD3;
-		constexpr const DigitalPin D6 = DigitalPin::D6_PD6;
-		constexpr const DigitalPin D5 = DigitalPin::D5_PD5;
-		constexpr const DigitalPin D9 = DigitalPin::D9_PB1;
-		constexpr const DigitalPin D10 = DigitalPin::D10_PB2;
-		constexpr const DigitalPin D11 = DigitalPin::D11_PB3;
-		constexpr const DigitalPin D3 = DigitalPin::D3_PD3;
+		D6_PD6_OC0A = 0,
+		D5_PD5_OC0B,
+		D9_PB1_OC1A,
+		D10_PB2_OC1B,
+		D11_PB3_OC2A,
+		D3_PD3_OC2B,
+		D6 = D6_PD6_OC0A,
+		D5 = D5_PD5_OC0B,
+		D9 = D9_PB1_OC1A,
+		D10 = D10_PB2_OC1B,
+		D11 = D11_PB3_OC2A,
+		D3 = D3_PD3_OC2B,
+		// FastArduino internal: DO NOT USE
+		NONE = 0xFF
 	};
 	
 	/**

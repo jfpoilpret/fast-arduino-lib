@@ -36,33 +36,33 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
-static constexpr const board::DigitalPin LED0 = board::PWMPin::D6_PD6_OC0A;
+static constexpr const board::PWMPin LED0 = board::PWMPin::D6_PD6_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D5_PD5_OC0B;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D5_PD5_OC0B;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_LEONARDO)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
-static constexpr const board::DigitalPin LED0 = board::PWMPin::D11_PB7_OC0A;
+static constexpr const board::PWMPin LED0 = board::PWMPin::D11_PB7_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D3_PD0_OC0B;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D3_PD0_OC0B;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (ARDUINO_MEGA)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
-static constexpr const board::DigitalPin LED0 = board::PWMPin::D13_PB7_OC0A;
+static constexpr const board::PWMPin LED0 = board::PWMPin::D13_PB7_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D4_PG5_OC0B;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D4_PG5_OC0B;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
-static constexpr const board::DigitalPin LED0 = board::PWMPin::D10_PB2_OC0A;
+static constexpr const board::PWMPin LED0 = board::PWMPin::D10_PB2_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D7_PA7_OC0B;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D7_PA7_OC0B;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #elif defined (BREADBOARD_ATTINYX5)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A1;
-static constexpr const board::DigitalPin LED0 = board::PWMPin::D0_PB0_OC0A;
+static constexpr const board::PWMPin LED0 = board::PWMPin::D0_PB0_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A2;
-static constexpr const board::DigitalPin LED1 = board::PWMPin::D1_PB1_OC0B;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D1_PB1_OC0B;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"
@@ -87,8 +87,8 @@ static_assert(PRESCALER0 == PRESCALER::DIV_256, "");
 // Register ISR needed for PulseTimer (8 bits specific)
 // NOTE ISR to register are different based on pins used and their number (1 or 2)
 REGISTER_PULSE_TIMER8_AB_ISR(0, PRESCALER0, LED0, LED1)
-//REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, LED0)
-//REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, LED1)
+// REGISTER_PULSE_TIMER8_A_ISR(0, PRESCALER0, LED0)
+// REGISTER_PULSE_TIMER8_B_ISR(0, PRESCALER0, LED1)
 
 using ANALOG0_INPUT = analog::AnalogInput<POT0, uint8_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_200KHz>;
 using LED0_OUTPUT = analog::PWMOutput<LED0, true>;

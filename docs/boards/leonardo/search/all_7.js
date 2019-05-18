@@ -7,5 +7,6 @@ var searchData=
   ['port_5fe',['PORT_E',['../namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a64bb64c8e661adef9e657a1b51817328',1,'board']]],
   ['port_5ff',['PORT_F',['../namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a4bba392ebdda32d944c2703b71610991',1,'board']]],
   ['power_5fdown',['POWER_DOWN',['../namespaceboard.html#ae62717162088fee094efad7ff669183da62f255a0405c1614801a52285695c501',1,'board']]],
-  ['power_5fsave',['POWER_SAVE',['../namespaceboard.html#ae62717162088fee094efad7ff669183daf7b4def42367ade4dd11ac8ddc9ebd10',1,'board']]]
+  ['power_5fsave',['POWER_SAVE',['../namespaceboard.html#ae62717162088fee094efad7ff669183daf7b4def42367ade4dd11ac8ddc9ebd10',1,'board']]],
+  ['pwmpin',['PWMPin',['../namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f',1,'board']]]
 ];

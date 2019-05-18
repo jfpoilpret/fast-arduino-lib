@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: devices::servo::Servo&lt; TIMER_, PIN_ &gt; Class Template Reference</title>
+<title>FastArduino: devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('classdevices_1_1servo_1_1_servo.html',
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classdevices_1_1servo_1_1_servo-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">devices::servo::Servo&lt; TIMER_, PIN_ &gt; Class Template Reference</div>  </div>
+<div class="title">devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -103,51 +103,54 @@ $(document).ready(function(){initNavTree('classdevices_1_1servo_1_1_servo.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a366bd6dc01be89d7be23e197e87827a0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a366bd6dc01be89d7be23e197e87827a0">TIMER</a> = TIMER_</td></tr>
-<tr class="memdesc:a366bd6dc01be89d7be23e197e87827a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of timer used to handle the connected servomotor.  <a href="#a366bd6dc01be89d7be23e197e87827a0">More...</a><br /></td></tr>
-<tr class="separator:a366bd6dc01be89d7be23e197e87827a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a361e07e9cd4979b41d4953e7ab1ce7c3"><td class="memItemLeft" align="right" valign="top"><a id="a361e07e9cd4979b41d4953e7ab1ce7c3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a> = typename TIMER::TYPE</td></tr>
-<tr class="memdesc:a361e07e9cd4979b41d4953e7ab1ce7c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of counter for <code>TIMER_</code>. <br /></td></tr>
-<tr class="separator:a361e07e9cd4979b41d4953e7ab1ce7c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c79c968e4c54072f27c4bc3ff1a7311"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a5c79c968e4c54072f27c4bc3ff1a7311">TIMER</a> = TIMER_</td></tr>
+<tr class="memdesc:a5c79c968e4c54072f27c4bc3ff1a7311"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of timer used to handle the connected servomotor.  <a href="#a5c79c968e4c54072f27c4bc3ff1a7311">More...</a><br /></td></tr>
+<tr class="separator:a5c79c968e4c54072f27c4bc3ff1a7311"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a632c73afe2689697b19469dd40c08c75"><td class="memItemLeft" align="right" valign="top"><a id="a632c73afe2689697b19469dd40c08c75"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a632c73afe2689697b19469dd40c08c75">TYPE</a> = typename TIMER::TYPE</td></tr>
+<tr class="memdesc:a632c73afe2689697b19469dd40c08c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of counter for <code>TIMER_</code>. <br /></td></tr>
+<tr class="separator:a632c73afe2689697b19469dd40c08c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a028a4772a90a2938f441aadf07f2bae1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a028a4772a90a2938f441aadf07f2bae1">Servo</a> (<a class="el" href="classdevices_1_1servo_1_1_servo.html#a366bd6dc01be89d7be23e197e87827a0">TIMER</a> &amp;timer, uint16_t us_minimum, uint16_t us_maximum, uint16_t us_neutral=0)</td></tr>
-<tr class="memdesc:a028a4772a90a2938f441aadf07f2bae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new servo handler, based on the provided <code>timer</code> (which will provide the frequency for pulse generation), and the additional parameters for pulse width.  <a href="#a028a4772a90a2938f441aadf07f2bae1">More...</a><br /></td></tr>
-<tr class="separator:a028a4772a90a2938f441aadf07f2bae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade9487997d8d90df4abb47405a5efaff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#ade9487997d8d90df4abb47405a5efaff">detach</a> () INLINE</td></tr>
-<tr class="memdesc:ade9487997d8d90df4abb47405a5efaff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detach the servomotor from this handler.  <a href="#ade9487997d8d90df4abb47405a5efaff">More...</a><br /></td></tr>
-<tr class="separator:ade9487997d8d90df4abb47405a5efaff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ff9678aef2121dd1e4389dc60fde0b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9">set_counter</a> (<a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a> value) INLINE</td></tr>
-<tr class="memdesc:a2ff9678aef2121dd1e4389dc60fde0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Timer counter that will change the pulse width, hence the servo angle.  <a href="#a2ff9678aef2121dd1e4389dc60fde0b9">More...</a><br /></td></tr>
-<tr class="separator:a2ff9678aef2121dd1e4389dc60fde0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5aa1fd487bd521e40bbab790ad47928"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#aa5aa1fd487bd521e40bbab790ad47928">set_pulse</a> (uint16_t pulse_us)</td></tr>
-<tr class="memdesc:aa5aa1fd487bd521e40bbab790ad47928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the pulse width in microsecond, hence the servo angle.  <a href="#aa5aa1fd487bd521e40bbab790ad47928">More...</a><br /></td></tr>
-<tr class="separator:aa5aa1fd487bd521e40bbab790ad47928"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10154f3587089ed6f93b58d896a64e3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a10154f3587089ed6f93b58d896a64e3b">rotate</a> (int8_t angle)</td></tr>
-<tr class="memdesc:a10154f3587089ed6f93b58d896a64e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotate the servomotor at the given <code>angle</code> position.  <a href="#a10154f3587089ed6f93b58d896a64e3b">More...</a><br /></td></tr>
-<tr class="separator:a10154f3587089ed6f93b58d896a64e3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82a7326a70d9f9b3e52991136603ecdf"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf">calculate_counter</a> (uint16_t pulse_us) const</td></tr>
-<tr class="memdesc:a82a7326a70d9f9b3e52991136603ecdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the counter value to use with <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> in order to generate a pulse of the given width.  <a href="#a82a7326a70d9f9b3e52991136603ecdf">More...</a><br /></td></tr>
-<tr class="separator:a82a7326a70d9f9b3e52991136603ecdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4a78f3d6b35cc0252cbae435b181b2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#aa4a78f3d6b35cc0252cbae435b181b2e">Servo</a> (<a class="el" href="classdevices_1_1servo_1_1_servo.html#a5c79c968e4c54072f27c4bc3ff1a7311">TIMER</a> &amp;timer, uint16_t us_minimum, uint16_t us_maximum, uint16_t us_neutral=0)</td></tr>
+<tr class="memdesc:aa4a78f3d6b35cc0252cbae435b181b2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new servo handler, based on the provided <code>timer</code> (which will provide the frequency for pulse generation), and the additional parameters for pulse width.  <a href="#aa4a78f3d6b35cc0252cbae435b181b2e">More...</a><br /></td></tr>
+<tr class="separator:aa4a78f3d6b35cc0252cbae435b181b2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae50498f7c4d8b66e1b703eaf76f60f3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#ae50498f7c4d8b66e1b703eaf76f60f3f">detach</a> () INLINE</td></tr>
+<tr class="memdesc:ae50498f7c4d8b66e1b703eaf76f60f3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detach the servomotor from this handler.  <a href="#ae50498f7c4d8b66e1b703eaf76f60f3f">More...</a><br /></td></tr>
+<tr class="separator:ae50498f7c4d8b66e1b703eaf76f60f3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44942d6c0f800757ec3c4e8fad8419ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed">set_counter</a> (<a class="el" href="classdevices_1_1servo_1_1_servo.html#a632c73afe2689697b19469dd40c08c75">TYPE</a> value) INLINE</td></tr>
+<tr class="memdesc:a44942d6c0f800757ec3c4e8fad8419ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Timer counter that will change the pulse width, hence the servo angle.  <a href="#a44942d6c0f800757ec3c4e8fad8419ed">More...</a><br /></td></tr>
+<tr class="separator:a44942d6c0f800757ec3c4e8fad8419ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a165bc69c89e2f2a5802d3c58bc1781cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a165bc69c89e2f2a5802d3c58bc1781cf">set_pulse</a> (uint16_t pulse_us)</td></tr>
+<tr class="memdesc:a165bc69c89e2f2a5802d3c58bc1781cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the pulse width in microsecond, hence the servo angle.  <a href="#a165bc69c89e2f2a5802d3c58bc1781cf">More...</a><br /></td></tr>
+<tr class="separator:a165bc69c89e2f2a5802d3c58bc1781cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b663ac0c8f5f95dd808b18fb50ff9f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a9b663ac0c8f5f95dd808b18fb50ff9f8">rotate</a> (int8_t angle)</td></tr>
+<tr class="memdesc:a9b663ac0c8f5f95dd808b18fb50ff9f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotate the servomotor at the given <code>angle</code> position.  <a href="#a9b663ac0c8f5f95dd808b18fb50ff9f8">More...</a><br /></td></tr>
+<tr class="separator:a9b663ac0c8f5f95dd808b18fb50ff9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a206b12e8bdc3bc717f954460cb697d1c"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a632c73afe2689697b19469dd40c08c75">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a206b12e8bdc3bc717f954460cb697d1c">calculate_counter</a> (uint16_t pulse_us) const</td></tr>
+<tr class="memdesc:a206b12e8bdc3bc717f954460cb697d1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the counter value to use with <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> in order to generate a pulse of the given width.  <a href="#a206b12e8bdc3bc717f954460cb697d1c">More...</a><br /></td></tr>
+<tr class="separator:a206b12e8bdc3bc717f954460cb697d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a4f405699b4fbce545d46687d5a94de9c"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a4f405699b4fbce545d46687d5a94de9c">PIN</a> = PIN_</td></tr>
-<tr class="memdesc:a4f405699b4fbce545d46687d5a94de9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pin to which the servomotor is connected.  <a href="#a4f405699b4fbce545d46687d5a94de9c">More...</a><br /></td></tr>
-<tr class="separator:a4f405699b4fbce545d46687d5a94de9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e0ed9898cd31ddc7886015a73682a57"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a8e0ed9898cd31ddc7886015a73682a57">PWMPIN</a> = PWMPIN_</td></tr>
+<tr class="memdesc:a8e0ed9898cd31ddc7886015a73682a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PWM pin for this PWMOutput.  <a href="#a8e0ed9898cd31ddc7886015a73682a57">More...</a><br /></td></tr>
+<tr class="separator:a8e0ed9898cd31ddc7886015a73682a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcbba500748c7191e1a0e0026564ad7d"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1servo_1_1_servo.html#afcbba500748c7191e1a0e0026564ad7d">PIN</a> = board_traits::PWMPin_trait&lt;<a class="el" href="classdevices_1_1servo_1_1_servo.html#a8e0ed9898cd31ddc7886015a73682a57">PWMPIN</a>&gt;::ACTUAL_PIN</td></tr>
+<tr class="memdesc:afcbba500748c7191e1a0e0026564ad7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pin to which the servomotor is connected.  <a href="#afcbba500748c7191e1a0e0026564ad7d">More...</a><br /></td></tr>
+<tr class="separator:afcbba500748c7191e1a0e0026564ad7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename TIMER_, board::DigitalPin PIN_&gt;<br />
-class devices::servo::Servo&lt; TIMER_, PIN_ &gt;</h3>
+<div class="textblock"><h3>template&lt;typename TIMER_, board::PWMPin PWMPIN_&gt;<br />
+class devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt;</h3>
 
 <p>This template class supports one servomotor connected to a PWM pin. </p>
 <p>Servomotors are driven by the width of pulses generated at a specific frequency (specific to each model, but typically around 50Hz, i.e. one pulse every 20ms), a specific width matches a specific rotation angle of the servo.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">TIMER_</td><td>the type of timer used to handle the connected servomotor; this must be a <code><a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a></code> type. </td></tr>
-    <tr><td class="paramname">PIN_</td><td>the pin to which the servomotor is connected; this must be a PWM pin, connected to <code>TIMER_</code>.</td></tr>
+    <tr><td class="paramname">PWMPIN_</td><td>the <code><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of target MCU, capable of PWM output. ">board::PWMPin</a></code> to which the servomotor is connected; this must be a PWM pin, connected to <code>TIMER_</code>.</td></tr>
   </table>
   </dd>
 </dl>
@@ -155,16 +158,16 @@ class devices::servo::Servo&lt; TIMER_, PIN_ &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00048">48</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a366bd6dc01be89d7be23e197e87827a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a366bd6dc01be89d7be23e197e87827a0">&#9670;&nbsp;</a></span>TIMER</h2>
+<a id="a5c79c968e4c54072f27c4bc3ff1a7311"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c79c968e4c54072f27c4bc3ff1a7311">&#9670;&nbsp;</a></span>TIMER</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::<a class="el" href="classdevices_1_1servo_1_1_servo.html#a366bd6dc01be89d7be23e197e87827a0">TIMER</a> =  TIMER_</td>
+          <td class="memname">using <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::<a class="el" href="classdevices_1_1servo_1_1_servo.html#a5c79c968e4c54072f27c4bc3ff1a7311">TIMER</a> =  TIMER_</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -176,21 +179,21 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a028a4772a90a2938f441aadf07f2bae1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a028a4772a90a2938f441aadf07f2bae1">&#9670;&nbsp;</a></span>Servo()</h2>
+<a id="aa4a78f3d6b35cc0252cbae435b181b2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4a78f3d6b35cc0252cbae435b181b2e">&#9670;&nbsp;</a></span>Servo()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::<a class="el" href="classdevices_1_1servo_1_1_servo.html">Servo</a> </td>
+          <td class="memname"><a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::<a class="el" href="classdevices_1_1servo_1_1_servo.html">Servo</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a366bd6dc01be89d7be23e197e87827a0">TIMER</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a5c79c968e4c54072f27c4bc3ff1a7311">TIMER</a> &amp;&#160;</td>
           <td class="paramname"><em>timer</em>, </td>
         </tr>
         <tr>
@@ -235,24 +238,24 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00079">79</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00081">81</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ade9487997d8d90df4abb47405a5efaff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade9487997d8d90df4abb47405a5efaff">&#9670;&nbsp;</a></span>detach()</h2>
+<a id="ae50498f7c4d8b66e1b703eaf76f60f3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae50498f7c4d8b66e1b703eaf76f60f3f">&#9670;&nbsp;</a></span>detach()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::detach </td>
+          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::detach </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -268,25 +271,25 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 <p>Detach the servomotor from this handler. </p>
 <p>Concretely, this means that no pulse will be generated at all, i.e. the servo will not be able to hold its position anymore. </p>
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00092">92</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00094">94</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 
 </div>
 </div>
-<a id="a2ff9678aef2121dd1e4389dc60fde0b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ff9678aef2121dd1e4389dc60fde0b9">&#9670;&nbsp;</a></span>set_counter()</h2>
+<a id="a44942d6c0f800757ec3c4e8fad8419ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44942d6c0f800757ec3c4e8fad8419ed">&#9670;&nbsp;</a></span>set_counter()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::set_counter </td>
+          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::set_counter </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1servo_1_1_servo.html#a632c73afe2689697b19469dd40c08c75">TYPE</a>&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -299,36 +302,36 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 </div><div class="memdoc">
 
 <p>Set the Timer counter that will change the pulse width, hence the servo angle. </p>
-<p>This method is the most optimized way to change the servo angle. However, it requires preliminary calculation of counter values from the desired angles. Calculation can be performed by <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a></code>.</p>
+<p>This method is the most optimized way to change the servo angle. However, it requires preliminary calculation of counter values from the desired angles. Calculation can be performed by <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a206b12e8bdc3bc717f954460cb697d1c" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">value</td><td>the new counter value to use for fixing pulse width</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#a82a7326a70d9f9b3e52991136603ecdf" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#a206b12e8bdc3bc717f954460cb697d1c" title="Calculate the counter value to use with set_counter() in order to generate a pulse of the given width...">calculate_counter()</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1servo_1_1_servo.html#aa5aa1fd487bd521e40bbab790ad47928" title="Set the pulse width in microsecond, hence the servo angle. ">set_pulse()</a> </dd>
+<a class="el" href="classdevices_1_1servo_1_1_servo.html#a165bc69c89e2f2a5802d3c58bc1781cf" title="Set the pulse width in microsecond, hence the servo angle. ">set_pulse()</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1servo_1_1_servo.html#a10154f3587089ed6f93b58d896a64e3b" title="Rotate the servomotor at the given angle position. ">rotate()</a> </dd></dl>
+<a class="el" href="classdevices_1_1servo_1_1_servo.html#a9b663ac0c8f5f95dd808b18fb50ff9f8" title="Rotate the servomotor at the given angle position. ">rotate()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00110">110</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00112">112</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 
 </div>
 </div>
-<a id="aa5aa1fd487bd521e40bbab790ad47928"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5aa1fd487bd521e40bbab790ad47928">&#9670;&nbsp;</a></span>set_pulse()</h2>
+<a id="a165bc69c89e2f2a5802d3c58bc1781cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a165bc69c89e2f2a5802d3c58bc1781cf">&#9670;&nbsp;</a></span>set_pulse()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::set_pulse </td>
+          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::set_pulse </td>
           <td>(</td>
           <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>pulse_us</em></td><td>)</td>
@@ -343,34 +346,34 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 </div><div class="memdoc">
 
 <p>Set the pulse width in microsecond, hence the servo angle. </p>
-<p>This method is less optimized way than <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> to change the servo angle.</p>
+<p>This method is less optimized way than <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> to change the servo angle.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pulse_us</td><td>the new pulse width in microseconds</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1servo_1_1_servo.html#a10154f3587089ed6f93b58d896a64e3b" title="Rotate the servomotor at the given angle position. ">rotate()</a> </dd></dl>
+<a class="el" href="classdevices_1_1servo_1_1_servo.html#a9b663ac0c8f5f95dd808b18fb50ff9f8" title="Rotate the servomotor at the given angle position. ">rotate()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00125">125</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00127">127</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 
 </div>
 </div>
-<a id="a10154f3587089ed6f93b58d896a64e3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10154f3587089ed6f93b58d896a64e3b">&#9670;&nbsp;</a></span>rotate()</h2>
+<a id="a9b663ac0c8f5f95dd808b18fb50ff9f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b663ac0c8f5f95dd808b18fb50ff9f8">&#9670;&nbsp;</a></span>rotate()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::rotate </td>
+          <td class="memname">void <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::rotate </td>
           <td>(</td>
           <td class="paramtype">int8_t&#160;</td>
           <td class="paramname"><em>angle</em></td><td>)</td>
@@ -385,7 +388,7 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 </div><div class="memdoc">
 
 <p>Rotate the servomotor at the given <code>angle</code> position. </p>
-<p>This method is less optimized than <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> and more efficient than <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#aa5aa1fd487bd521e40bbab790ad47928" title="Set the pulse width in microsecond, hence the servo angle. ">set_pulse()</a></code>, but it provides a more friendly API as it uses real physical parameters.</p>
+<p>This method is less optimized than <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> and more efficient than <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a165bc69c89e2f2a5802d3c58bc1781cf" title="Set the pulse width in microsecond, hence the servo angle. ">set_pulse()</a></code>, but it provides a more friendly API as it uses real physical parameters.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">angle</td><td>the new angle, in degrees, to rotate the servo to; it must be between <code>-90</code> and <code>+90</code>. </td></tr>
@@ -393,23 +396,23 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00140">140</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00142">142</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 
 </div>
 </div>
-<a id="a82a7326a70d9f9b3e52991136603ecdf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82a7326a70d9f9b3e52991136603ecdf">&#9670;&nbsp;</a></span>calculate_counter()</h2>
+<a id="a206b12e8bdc3bc717f954460cb697d1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a206b12e8bdc3bc717f954460cb697d1c">&#9670;&nbsp;</a></span>calculate_counter()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">TYPE</a> <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::calculate_counter </td>
+          <td class="memname">constexpr <a class="el" href="classdevices_1_1servo_1_1_servo.html#a632c73afe2689697b19469dd40c08c75">TYPE</a> <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::calculate_counter </td>
           <td>(</td>
           <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>pulse_us</em></td><td>)</td>
@@ -423,7 +426,7 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Calculate the counter value to use with <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> in order to generate a pulse of the given width. </p>
+<p>Calculate the counter value to use with <code><a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a></code> in order to generate a pulse of the given width. </p>
 <p>This method is <code>constexpr</code> hence it can be evaluated at compile-time if provided with a constant value.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -432,26 +435,54 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the counter value to use for a <code>pulse_us</code> width</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#a2ff9678aef2121dd1e4389dc60fde0b9" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed" title="Set the Timer counter that will change the pulse width, hence the servo angle. ">set_counter()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00161">161</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00163">163</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4f405699b4fbce545d46687d5a94de9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f405699b4fbce545d46687d5a94de9c">&#9670;&nbsp;</a></span>PIN</h2>
+<a id="a8e0ed9898cd31ddc7886015a73682a57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e0ed9898cd31ddc7886015a73682a57">&#9670;&nbsp;</a></span>PWMPIN</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PIN_ &gt;::PIN = PIN_</td>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a> <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::PWMPIN = PWMPIN_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The PWM pin for this PWMOutput. </p>
+
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00054">54</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+
+</div>
+</div>
+<a id="afcbba500748c7191e1a0e0026564ad7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcbba500748c7191e1a0e0026564ad7d">&#9670;&nbsp;</a></span>PIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TIMER_ , board::PWMPin PWMPIN_&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="el" href="classdevices_1_1servo_1_1_servo.html">devices::servo::Servo</a>&lt; TIMER_, PWMPIN_ &gt;::PIN = board_traits::PWMPin_trait&lt;<a class="el" href="classdevices_1_1servo_1_1_servo.html#a8e0ed9898cd31ddc7886015a73682a57">PWMPIN</a>&gt;::ACTUAL_PIN</td>
         </tr>
       </table>
   </td>
@@ -463,7 +494,7 @@ template&lt;typename TIMER_ , board::DigitalPin PIN_&gt; </div>
 
 <p>The pin to which the servomotor is connected. </p>
 
-<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00054">54</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="servo_8h_source.html#l00056">56</a> of file <a class="el" href="servo_8h_source.html">servo.h</a>.</p>
 
 </div>
 </div>
