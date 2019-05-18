@@ -44,25 +44,26 @@ template<Timer NTIMER, PWMPin PIN> void check_PWM()
 	using TIMER = timer::Timer<NTIMER>;
 	using CALC = timer::Calculator<NTIMER>;
 	using LED_OUTPUT = analog::PWMOutput<PIN>;
-	constexpr const TIMER::PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
+	constexpr const typename TIMER::PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
 
 	TIMER timer{timer::TimerMode::FAST_PWM, PRESCALER};
 	LED_OUTPUT led{timer};
 	// Start timer
-	timer.begin();
+	timer.begin_();
 	// Loop of samplings
-	using TYPE = LED_OUTPUT::TYPE;
-	constexpr const MAX = LED_OUTPUT::MAX;
+	using TYPE = typename LED_OUTPUT::TYPE;
+	constexpr const TYPE MAX = LED_OUTPUT::MAX;
 	for (uint16_t duty = 0; duty < MAX; duty += MAX / 10)
 	{
 		led.set_duty(TYPE(duty));
 		time::delay_ms(1000);
 	}
 	led.set_duty(0);
-	timer.end();
+	timer.end_();
+	time::delay_ms(2000);
 }
 
-
+int main() __attribute__((OS_main));
 int main()
 {
 	init();
