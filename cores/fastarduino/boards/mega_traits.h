@@ -327,9 +327,12 @@ namespace board_traits
 	template<> struct Timer_COM_trait<Timer::TIMER1, 1>: Timer_COM_trait_impl<
 		uint16_t, PWMPin::D12_PB6_OC1B, R_(OCR1B), 
 		_BV(COM1B0) | _BV(COM1B1), 0, _BV(COM1B0), _BV(COM1B1), _BV(COM1B0) | _BV(COM1B1)> {};
+	template<> struct Timer_COM_trait<Timer::TIMER1, 2>: Timer_COM_trait_impl<
+		uint16_t, PWMPin::D13_PB7_OC1C, R_(OCR1C), 
+		_BV(COM1C0) | _BV(COM1C1), 0, _BV(COM1C0), _BV(COM1C1), _BV(COM1C0) | _BV(COM1C1)> {};
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
-							2,
+							3,
 							_BV(WGM10) | _BV(WGM11), _BV(WGM12) | _BV(WGM13), _BV(CS10) | _BV(CS11) | _BV(CS12),
 							_BV(WGM10) | _BV(WGM11), _BV(WGM12),
 							_BV(WGM10) | _BV(WGM11), 0,
@@ -484,21 +487,22 @@ namespace board_traits
 		}
 	};
 	
-	template<> struct PWMPin_trait<PWMPin::D13_PB7_OC0A>: PWMPin_trait_impl<Timer::TIMER0, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D4_PG5_OC0B>: PWMPin_trait_impl<Timer::TIMER0, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D11_PB5_OC1A>: PWMPin_trait_impl<Timer::TIMER1, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D12_PB6_OC1B>: PWMPin_trait_impl<Timer::TIMER1, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D10_PB4_OC2A>: PWMPin_trait_impl<Timer::TIMER2, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D9_PH6_OC2B>: PWMPin_trait_impl<Timer::TIMER2, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D5_PE3_OC3A>: PWMPin_trait_impl<Timer::TIMER3, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D2_PE4_OC3B>: PWMPin_trait_impl<Timer::TIMER3, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D3_PE5_OC3C>: PWMPin_trait_impl<Timer::TIMER3, 2> {};
-	template<> struct PWMPin_trait<PWMPin::D6_PH3_OC4A>: PWMPin_trait_impl<Timer::TIMER4, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D7_PH4_OC4B>: PWMPin_trait_impl<Timer::TIMER4, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D8_PH5_OC4C>: PWMPin_trait_impl<Timer::TIMER4, 2> {};
-	template<> struct PWMPin_trait<PWMPin::D46_PL3_OC5A>: PWMPin_trait_impl<Timer::TIMER5, 0> {};
-	template<> struct PWMPin_trait<PWMPin::D45_PL4_OC5B>: PWMPin_trait_impl<Timer::TIMER5, 1> {};
-	template<> struct PWMPin_trait<PWMPin::D44_PL5_OC5C>: PWMPin_trait_impl<Timer::TIMER5, 2> {};
+	template<> struct PWMPin_trait<PWMPin::D13_PB7_OC0A> : PWMPin_trait_impl<DigitalPin::D13_PB7, Timer::TIMER0, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D4_PG5_OC0B> : PWMPin_trait_impl<DigitalPin::D4_PG5, Timer::TIMER0, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D11_PB5_OC1A> : PWMPin_trait_impl<DigitalPin::D11_PB5, Timer::TIMER1, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D12_PB6_OC1B> : PWMPin_trait_impl<DigitalPin::D12_PB6, Timer::TIMER1, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D13_PB7_OC1C> : PWMPin_trait_impl<DigitalPin::D13_PB7, Timer::TIMER1, 2> {};
+	template<> struct PWMPin_trait<PWMPin::D10_PB4_OC2A> : PWMPin_trait_impl<DigitalPin::D10_PB4, Timer::TIMER2, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D9_PH6_OC2B> : PWMPin_trait_impl<DigitalPin::D9_PH6, Timer::TIMER2, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D5_PE3_OC3A> : PWMPin_trait_impl<DigitalPin::D5_PE3, Timer::TIMER3, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D2_PE4_OC3B> : PWMPin_trait_impl<DigitalPin::D2_PE4, Timer::TIMER3, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D3_PE5_OC3C> : PWMPin_trait_impl<DigitalPin::D3_PE5, Timer::TIMER3, 2> {};
+	template<> struct PWMPin_trait<PWMPin::D6_PH3_OC4A> : PWMPin_trait_impl<DigitalPin::D6_PH3, Timer::TIMER4, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D7_PH4_OC4B> : PWMPin_trait_impl<DigitalPin::D7_PH4, Timer::TIMER4, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D8_PH5_OC4C> : PWMPin_trait_impl<DigitalPin::D8_PH5, Timer::TIMER4, 2> {};
+	template<> struct PWMPin_trait<PWMPin::D46_PL3_OC5A> : PWMPin_trait_impl<DigitalPin::D46_PL3, Timer::TIMER5, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D45_PL4_OC5B> : PWMPin_trait_impl<DigitalPin::D45_PL4, Timer::TIMER5, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D44_PL5_OC5C> : PWMPin_trait_impl<DigitalPin::D44_PL5, Timer::TIMER5, 2> {};
 };
 
 // Macros to declare some ISR friends

@@ -468,50 +468,42 @@ namespace board
 	 * channels A and B first. In the future, support for pins with multiple
 	 * timers linked may be added.
 	 */
-	namespace PWMPin
+	enum class PWMPin : uint8_t
 	{
 		// This pin is also OC1C! We can handle only one timer for one pin!
-		constexpr const DigitalPin D13_PB7_OC0A = DigitalPin::D13_PB7;
-		constexpr const DigitalPin D4_PG5_OC0B = DigitalPin::D4_PG5;
-		
-		constexpr const DigitalPin D11_PB5_OC1A = DigitalPin::D11_PB5;
-		constexpr const DigitalPin D12_PB6_OC1B = DigitalPin::D12_PB6;
-		
-		constexpr const DigitalPin D10_PB4_OC2A = DigitalPin::D10_PB4;
-		constexpr const DigitalPin D9_PH6_OC2B = DigitalPin::D9_PH6;
+		D13_PB7_OC0A = 0,
+		D4_PG5_OC0B,
+		D11_PB5_OC1A,
+		D12_PB6_OC1B,
+		D13_PB7_OC1C,
+		D10_PB4_OC2A,
+		D9_PH6_OC2B,
+		D5_PE3_OC3A,
+		D2_PE4_OC3B,
+		D3_PE5_OC3C,
+		D6_PH3_OC4A,
+		D7_PH4_OC4B,
+		D8_PH5_OC4C,
+		D46_PL3_OC5A,
+		D45_PL4_OC5B,
+		D44_PL5_OC5C,
 
-		constexpr const DigitalPin D5_PE3_OC3A = DigitalPin::D5_PE3;
-		constexpr const DigitalPin D2_PE4_OC3B = DigitalPin::D2_PE4;
-		constexpr const DigitalPin D3_PE5_OC3C = DigitalPin::D3_PE5;
-		
-		constexpr const DigitalPin D6_PH3_OC4A = DigitalPin::D6_PH3;
-		constexpr const DigitalPin D7_PH4_OC4B = DigitalPin::D7_PH4;
-		constexpr const DigitalPin D8_PH5_OC4C = DigitalPin::D8_PH5;
-
-		constexpr const DigitalPin D44_PL5_OC5C = DigitalPin::D44_PL5;
-		constexpr const DigitalPin D45_PL4_OC5B = DigitalPin::D45_PL4;
-		constexpr const DigitalPin D46_PL3_OC5A = DigitalPin::D46_PL3;
-
-		constexpr const DigitalPin D13 = DigitalPin::D13_PB7;
-		constexpr const DigitalPin D4 = DigitalPin::D4_PG5;
-		
-		constexpr const DigitalPin D11 = DigitalPin::D11_PB5;
-		constexpr const DigitalPin D12 = DigitalPin::D12_PB6;
-		
-		constexpr const DigitalPin D10 = DigitalPin::D10_PB4;
-		constexpr const DigitalPin D9 = DigitalPin::D9_PH6;
-
-		constexpr const DigitalPin D5 = DigitalPin::D5_PE3;
-		constexpr const DigitalPin D2 = DigitalPin::D2_PE4;
-		constexpr const DigitalPin D3 = DigitalPin::D3_PE5;
-		
-		constexpr const DigitalPin D6 = DigitalPin::D6_PH3;
-		constexpr const DigitalPin D7 = DigitalPin::D7_PH4;
-		constexpr const DigitalPin D8 = DigitalPin::D8_PH5;
-
-		constexpr const DigitalPin D44 = DigitalPin::D44_PL5;
-		constexpr const DigitalPin D45 = DigitalPin::D45_PL4;
-		constexpr const DigitalPin D46 = DigitalPin::D46_PL3;
+		D2 = D2_PE4_OC3B,
+		D3 = D3_PE5_OC3C,
+		D4 = D4_PG5_OC0B,
+		D5 = D5_PE3_OC3A,
+		D6 = D6_PH3_OC4A,
+		D7 = D7_PH4_OC4B,
+		D8 = D8_PH5_OC4C,
+		D9 = D9_PH6_OC2B,
+		D10 = D10_PB4_OC2A,
+		D11 = D11_PB5_OC1A,
+		D12 = D12_PB6_OC1B,
+		D44 = D44_PL5_OC5C,
+		D45 = D45_PL4_OC5B,
+		D46 = D46_PL3_OC5A,
+		// FastArduino internal: DO NOT USE
+		NONE = 0xFF
 	};
 	
 	/**

@@ -294,20 +294,22 @@ namespace board
 	 * channels A and B first. In the future, support for pins with multiple
 	 * timers linked may be added.
 	 */
-	namespace PWMPin
+	enum class PWMPin : uint8_t
 	{
-		constexpr const DigitalPin D11_PB7_OC0A = DigitalPin::D11_PB7;
-		constexpr const DigitalPin D3_PD0_OC0B = DigitalPin::D3_PD0;
-		constexpr const DigitalPin D9_PB5_OC1A = DigitalPin::D9_PB5;
-		constexpr const DigitalPin D10_PB6_OC1B = DigitalPin::D10_PB6;
-		constexpr const DigitalPin D5_PC6_OC3A = DigitalPin::D5_PC6;
+		D11_PB7_OC0A = 0,
+		D3_PD0_OC0B,
+		D9_PB5_OC1A,
+		D10_PB6_OC1B,
+		D11_PB7_OC1C,
+		D5_PC6_OC3A,
 		//TODO High-speed timer (Timer4) related PWM pins are not listed here because Timer4 is not supported yer
 
-		constexpr const DigitalPin D11 = DigitalPin::D11_PB7;
-		constexpr const DigitalPin D3 = DigitalPin::D3_PD0;
-		constexpr const DigitalPin D9 = DigitalPin::D9_PB5;
-		constexpr const DigitalPin D10 = DigitalPin::D10_PB6;
-		constexpr const DigitalPin D5 = DigitalPin::D5_PC6;
+		D3 = D3_PD0_OC0B,
+		D9 = D9_PB5_OC1A,
+		D10 = D10_PB6_OC1B,
+		D5 = D5_PC6_OC3A,
+		// FastArduino internal: DO NOT USE
+		NONE = 0xFF
 	};
 	
 	/**
