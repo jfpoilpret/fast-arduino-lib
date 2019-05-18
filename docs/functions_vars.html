@@ -223,9 +223,6 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 
 
 <h3><a id="index_h"></a>- h -</h3><ul>
-<li>HAS_PWM
-: <a class="el" href="classgpio_1_1_fast_pin_type.html#abf8fce945aaa2c505f9b4d6f689119d2">gpio::FastPinType&lt; DPIN_ &gt;</a>
-</li>
 <li>hex
 : <a class="el" href="classstreams_1_1ios__base.html#aafd29f140be78e8402102dba405d9b61">streams::ios_base</a>
 </li>
@@ -261,7 +258,7 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 , <a class="el" href="classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0">gpio::FastPinType&lt; DPIN_ &gt;</a>
 </li>
 <li>MAX
-: <a class="el" href="classanalog_1_1_p_w_m_output.html#a6b1fdf788fa1f9e717280f459b09a135">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#a8061b4ae8b66b3027e2dce08f5a8ae01">analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</a>
 </li>
 <li>MAX_PRECISION
 : <a class="el" href="classstreams_1_1ios__base.html#afb443852e1cbb99456e06f78532f2974">streams::ios_base</a>
@@ -312,7 +309,7 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="classstreams_1_1ios__base.html#a345081e2763697e99665dbd025d16a58">streams::ios_base</a>
 </li>
 <li>OUTPUT
-: <a class="el" href="classtimer_1_1_square_wave.html#a67d2833bc1361ceecb97b1abfd1de079">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
+: <a class="el" href="classtimer_1_1_square_wave.html#a7c00e91969d0c1773bfa444ed4207188">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
 </li>
 <li>overflow
 : <a class="el" href="structdevices_1_1magneto_1_1_i_n_t_status.html#ac80b3f096b6883d132f76221027560b8">devices::magneto::INTStatus</a>
@@ -329,9 +326,10 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 , <a class="el" href="structinterrupt_1_1_p_c_i_type.html#ade102a62db31cff23ad88bb268037e5b">interrupt::PCIType&lt; PIN &gt;</a>
 </li>
 <li>PIN
-: <a class="el" href="classanalog_1_1_p_w_m_output.html#a7c5cb3437be029f487da004f1a932f9a">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
-, <a class="el" href="classdevices_1_1servo_1_1_servo.html#a4f405699b4fbce545d46687d5a94de9c">devices::servo::Servo&lt; TIMER_, PIN_ &gt;</a>
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#a344b9268d0d3d2793bb418142c34feb4">analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</a>
+, <a class="el" href="classdevices_1_1servo_1_1_servo.html#afcbba500748c7191e1a0e0026564ad7d">devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt;</a>
 , <a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a680bc3d1051770fe9e84b2a6f83c7e4c">interrupt::INTSignal&lt; PIN_ &gt;</a>
+, <a class="el" href="classtimer_1_1_square_wave.html#a5ffcf5a70f1b2e49f4c4b4422a8a5800">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
 </li>
 <li>plos_cnt
 : <a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#a9c8601854f0b92601fd197a8358a7075">devices::rf::NRF24L01&lt; CSN, CE &gt;::observe_tx_t</a>
@@ -347,11 +345,15 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="classanalog_1_1_analog_input.html#a55510fc4cb79562a68a71aa61117935a">analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;</a>
 </li>
 <li>PULSED
-: <a class="el" href="classanalog_1_1_p_w_m_output.html#a8157e700b6b6c750bd8d37db84a86fb2">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#ad91eb8945fc3a80f89498e18ee9594aa">analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</a>
 </li>
 <li>PWM_MAX
 : <a class="el" href="structtimer_1_1_calculator.html#aa9cc28cbfd459e483725bc58751ea87c">timer::Calculator&lt; NTIMER_ &gt;</a>
 , <a class="el" href="classtimer_1_1_timer.html#ab733459f1a47b14a227a41a609174e82">timer::Timer&lt; NTIMER_ &gt;</a>
+</li>
+<li>PWMPIN
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#a93782b9fe0429b20792f65419b6888a9">analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</a>
+, <a class="el" href="classdevices_1_1servo_1_1_servo.html#a8e0ed9898cd31ddc7886015a73682a57">devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt;</a>
 </li>
 </ul>
 

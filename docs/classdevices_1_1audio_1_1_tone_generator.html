@@ -135,7 +135,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af55c0724e6de7271593f26137271e5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt;<br />
+<div class="textblock"><h3>template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt;<br />
 class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 
 <p>API class for tone generation to a buzzer (or better an amplifier) connected to pin <code>OUTPUT</code>. </p>
@@ -146,7 +146,7 @@ class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">NTIMER</td><td>the AVR timer to use for the underlying Timer </td></tr>
-    <tr><td class="paramname">OUTPUT</td><td>the DigitalPin connected to the buzzer; this must be the pin OCnA, where n is the AVR Timer number</td></tr>
+    <tr><td class="paramname">OUTPUT</td><td>the <code><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of target MCU, capable of PWM output. ">board::PWMPin</a></code> connected to the buzzer; this must be the pin OCnA, where n is the AVR Timer number</td></tr>
   </table>
   </dd>
 </dl>
@@ -162,7 +162,7 @@ class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1">PRESCALER</a> =  typename SQWGEN::TIMER::PRESCALER</td>
@@ -182,7 +182,7 @@ template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a>&lt; NTIMER, OUTPUT &gt;::<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88">COUNTER</a> =  typename <a class="el" href="classtimer_1_1_timer.html#a55f4149206c269820e18e53f6e7e263b">SQWGEN::TIMER::TYPE</a></td>
@@ -203,7 +203,7 @@ template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -249,7 +249,7 @@ template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -306,7 +306,7 @@ template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -346,7 +346,7 @@ template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -378,7 +378,7 @@ template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -429,7 +429,7 @@ template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Timer NTIMER, board::DigitalPin OUTPUT&gt; </div>
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

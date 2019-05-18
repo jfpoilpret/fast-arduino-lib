@@ -29,5 +29,5 @@ var searchData=
   ['pwm_5ficr_5fcounter',['PWM_ICR_counter',['../structtimer_1_1_calculator.html#a0efa69f8b7fb5f7a53ce85fe0769e951',1,'timer::Calculator']]],
   ['pwm_5ficr_5ffrequency',['PWM_ICR_frequency',['../structtimer_1_1_calculator.html#aab0cccab647282b92d832d1607afea3e',1,'timer::Calculator']]],
   ['pwm_5ficr_5fprescaler',['PWM_ICR_prescaler',['../structtimer_1_1_calculator.html#a477b522376339b0166772dc842b46374',1,'timer::Calculator']]],
-  ['pwmoutput',['PWMOutput',['../classanalog_1_1_p_w_m_output.html#abe4e79680a95585223ec740e9a770ca7',1,'analog::PWMOutput']]]
+  ['pwmoutput',['PWMOutput',['../classanalog_1_1_p_w_m_output.html#a16c149cfcfd7969d2f5985b1209b0c72',1,'analog::PWMOutput']]]
 ];

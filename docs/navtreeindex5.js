@@ -1,5 +1,8 @@
 var NAVTREEINDEX5 =
 {
+"structtimer_1_1_calculator.html#a52f8badc8b0d337d876530b7164fefd3":[4,0,14,0,14],
+"structtimer_1_1_calculator.html#a53ed70bbedba38aea55fd24a375753bd":[4,0,14,0,3],
+"structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455":[4,0,14,0,7],
 "structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c":[4,0,14,0,0],
 "structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0":[4,0,14,0,1],
 "structtimer_1_1_calculator.html#a8eec5399160940b02b5ab12b79962f4c":[4,0,14,0,12],

@@ -93,9 +93,6 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceboard"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html">board</a></td></tr>
 <tr class="memdesc:namespaceboard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all types and constants specific to support ATmega328P MCU target. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceboard_1_1_p_w_m_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_p_w_m_pin.html">board::PWMPin</a></td></tr>
-<tr class="memdesc:namespaceboard_1_1_p_w_m_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega328P, capable of PWM output. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceboard_1_1_external_interrupt_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_external_interrupt_pin.html">board::ExternalInterruptPin</a></td></tr>
 <tr class="memdesc:namespaceboard_1_1_external_interrupt_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega328P, usable as direct external interrupt pins. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,6 +266,36 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a6ed32fa64dbf9169ccc11a040e11d313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available analog input pins of ATmega328P, with reference to Arduino UNO pins.  <a href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313">More...</a><br /></td></tr>
 <tr class="separator:a6ed32fa64dbf9169ccc11a040e11d313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a> : uint8_t { <br />
+&#160;&#160;<b>D6_PD6_OC0A</b> = 0, 
+<br />
+&#160;&#160;<b>D5_PD5_OC0B</b>, 
+<br />
+&#160;&#160;<b>D9_PB1_OC1A</b>, 
+<br />
+&#160;&#160;<b>D10_PB2_OC1B</b>, 
+<br />
+&#160;&#160;<b>D11_PB3_OC2A</b>, 
+<br />
+&#160;&#160;<b>D3_PD3_OC2B</b>, 
+<br />
+&#160;&#160;<b>D6</b> = D6_PD6_OC0A, 
+<br />
+&#160;&#160;<b>D5</b> = D5_PD5_OC0B, 
+<br />
+&#160;&#160;<b>D9</b> = D9_PB1_OC1A, 
+<br />
+&#160;&#160;<b>D10</b> = D10_PB2_OC1B, 
+<br />
+&#160;&#160;<b>D11</b> = D11_PB3_OC2A, 
+<br />
+&#160;&#160;<b>D3</b> = D3_PD3_OC2B, 
+<br />
+&#160;&#160;<b>NONE</b> = 0xFF
+<br />
+ }</td></tr>
+<tr class="memdesc:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega328P, capable of PWM output.  <a href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">More...</a><br /></td></tr>
+<tr class="separator:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memItemLeft" align="right" valign="top"><a id="a8541ca1f10a050c4356d6ccd76d9a907"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a> : uint8_t { <b>USART0</b> = 0
  }</td></tr>
 <tr class="memdesc:a8541ca1f10a050c4356d6ccd76d9a907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all USART modules of ATmega328P, actually only one. <br /></td></tr>
@@ -308,42 +335,6 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:aa59589fbdf3fea55e7263ff9921f4e56"><td class="memItemLeft" align="right" valign="top"><a id="aa59589fbdf3fea55e7263ff9921f4e56"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D6_PD6_OC0A</b> = DigitalPin::D6_PD6</td></tr>
-<tr class="separator:aa59589fbdf3fea55e7263ff9921f4e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adabe091d60fd9fac1c39bd66a4abd74f"><td class="memItemLeft" align="right" valign="top"><a id="adabe091d60fd9fac1c39bd66a4abd74f"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D5_PD5_OC0B</b> = DigitalPin::D5_PD5</td></tr>
-<tr class="separator:adabe091d60fd9fac1c39bd66a4abd74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af55976da9d2a38fa88edbfaa0a9bf728"><td class="memItemLeft" align="right" valign="top"><a id="af55976da9d2a38fa88edbfaa0a9bf728"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D9_PB1_OC1A</b> = DigitalPin::D9_PB1</td></tr>
-<tr class="separator:af55976da9d2a38fa88edbfaa0a9bf728"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a185abca211a9d3be679c10482aa0380f"><td class="memItemLeft" align="right" valign="top"><a id="a185abca211a9d3be679c10482aa0380f"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D10_PB2_OC1B</b> = DigitalPin::D10_PB2</td></tr>
-<tr class="separator:a185abca211a9d3be679c10482aa0380f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d5c91cc3e624cf3ec5a4c173861bf7b"><td class="memItemLeft" align="right" valign="top"><a id="a0d5c91cc3e624cf3ec5a4c173861bf7b"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D11_PB3_OC2A</b> = DigitalPin::D11_PB3</td></tr>
-<tr class="separator:a0d5c91cc3e624cf3ec5a4c173861bf7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a2c300c9441ebe353491a7987502935"><td class="memItemLeft" align="right" valign="top"><a id="a3a2c300c9441ebe353491a7987502935"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D3_PD3_OC2B</b> = DigitalPin::D3_PD3</td></tr>
-<tr class="separator:a3a2c300c9441ebe353491a7987502935"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6d54d8693189d472fa6352454037938"><td class="memItemLeft" align="right" valign="top"><a id="af6d54d8693189d472fa6352454037938"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D6</b> = DigitalPin::D6_PD6</td></tr>
-<tr class="separator:af6d54d8693189d472fa6352454037938"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b1e6cbba5509fcdc7db654f54518e07"><td class="memItemLeft" align="right" valign="top"><a id="a1b1e6cbba5509fcdc7db654f54518e07"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D5</b> = DigitalPin::D5_PD5</td></tr>
-<tr class="separator:a1b1e6cbba5509fcdc7db654f54518e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adba8a5b482d0b1a7f4fbfff5b9c91cec"><td class="memItemLeft" align="right" valign="top"><a id="adba8a5b482d0b1a7f4fbfff5b9c91cec"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D9</b> = DigitalPin::D9_PB1</td></tr>
-<tr class="separator:adba8a5b482d0b1a7f4fbfff5b9c91cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2503c5f49f69791d6ecece4c6156901"><td class="memItemLeft" align="right" valign="top"><a id="ac2503c5f49f69791d6ecece4c6156901"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D10</b> = DigitalPin::D10_PB2</td></tr>
-<tr class="separator:ac2503c5f49f69791d6ecece4c6156901"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d9a2fce375af85bb5c9a6ae2f1c2c04"><td class="memItemLeft" align="right" valign="top"><a id="a7d9a2fce375af85bb5c9a6ae2f1c2c04"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D11</b> = DigitalPin::D11_PB3</td></tr>
-<tr class="separator:a7d9a2fce375af85bb5c9a6ae2f1c2c04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64a408af517d3a10584f5d68160ff1d3"><td class="memItemLeft" align="right" valign="top"><a id="a64a408af517d3a10584f5d68160ff1d3"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::PWMPin::D3</b> = DigitalPin::D3_PD3</td></tr>
-<tr class="separator:a64a408af517d3a10584f5d68160ff1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07cdaa5a7c06616a55de39e2c42ca27b"><td class="memItemLeft" align="right" valign="top"><a id="a07cdaa5a7c06616a55de39e2c42ca27b"></a>
 constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D2_PD2_EXT0</b> = DigitalPin::D2_PD2</td></tr>
 <tr class="separator:a07cdaa5a7c06616a55de39e2c42ca27b"><td class="memSeparator" colspan="2">&#160;</td></tr>

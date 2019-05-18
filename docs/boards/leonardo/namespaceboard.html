@@ -82,9 +82,6 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceboard_1_1_interrupt_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_interrupt_pin.html">InterruptPin</a></td></tr>
 <tr class="memdesc:namespaceboard_1_1_interrupt_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, usable as pin change interrupt (PCI) pins. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceboard_1_1_p_w_m_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_p_w_m_pin.html">PWMPin</a></td></tr>
-<tr class="memdesc:namespaceboard_1_1_p_w_m_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, capable of PWM output. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -284,6 +281,32 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a6ed32fa64dbf9169ccc11a040e11d313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available analog input pins of ATmega32u4, with reference to Arduino LEONARDO pins.  <a href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313">More...</a><br /></td></tr>
 <tr class="separator:a6ed32fa64dbf9169ccc11a040e11d313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">PWMPin</a> : uint8_t { <br />
+&#160;&#160;<b>D11_PB7_OC0A</b> = 0, 
+<br />
+&#160;&#160;<b>D3_PD0_OC0B</b>, 
+<br />
+&#160;&#160;<b>D9_PB5_OC1A</b>, 
+<br />
+&#160;&#160;<b>D10_PB6_OC1B</b>, 
+<br />
+&#160;&#160;<b>D11_PB7_OC1C</b>, 
+<br />
+&#160;&#160;<b>D5_PC6_OC3A</b>, 
+<br />
+&#160;&#160;<b>D3</b> = D3_PD0_OC0B, 
+<br />
+&#160;&#160;<b>D9</b> = D9_PB5_OC1A, 
+<br />
+&#160;&#160;<b>D10</b> = D10_PB6_OC1B, 
+<br />
+&#160;&#160;<b>D5</b> = D5_PC6_OC3A, 
+<br />
+&#160;&#160;<b>NONE</b> = 0xFF
+<br />
+ }</td></tr>
+<tr class="memdesc:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, capable of PWM output.  <a href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">More...</a><br /></td></tr>
+<tr class="separator:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a> : uint8_t { <b>USART1</b> = 1
  }</td></tr>
 <tr class="memdesc:a8541ca1f10a050c4356d6ccd76d9a907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all USART modules of ATmega32u4, actually only one.  <a href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">More...</a><br /></td></tr>
@@ -599,6 +622,35 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a1283eb94244413c14c80cc2f3e8bcb3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1283eb94244413c14c80cc2f3e8bcb3f">&#9670;&nbsp;</a></span>PWMPin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Defines all digital output pins of ATmega32u4, capable of PWM output. </p>
+<p>Each symbol is in the form <code>Dxx_Pyz_OCuv</code>, where <code>xx</code> is the pin number on Arduino, <code>y</code> is the port letter (B, C or D), <code>z</code> is the bit number for that pin within its port, <code>u</code> is the number of the timer used by this PWM pin and <code>v</code> the letter indicating which compare register of the timer this PWM pin is mapped to.</p>
+<p>Note that Timer4, which is specific (high speed) is not present here, as it is not supported (yet) by FastArduino.</p>
+<p>Also note that ATmega32u4 has pins that can be linked to several timers (e.g. pin PB7 is connected to OC0A and OC1C) but FastArduino is currently limited to pins linked to only one timer, hence for each pin, a choice had to be made: the main principles for this choice were to take timer comparison channels A and B first. In the future, support for pins with multiple timers linked may be added. </p>
+
+<p class="definition">Definition at line <a class="el" href="leonardo_8h_source.html#l00297">297</a> of file <a class="el" href="leonardo_8h_source.html">leonardo.h</a>.</p>
+
+</div>
+</div>
 <a id="a8541ca1f10a050c4356d6ccd76d9a907"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8541ca1f10a050c4356d6ccd76d9a907">&#9670;&nbsp;</a></span>USART</h2>
 
@@ -622,7 +674,7 @@ Functions</h2></td></tr>
 <p>Defines all USART modules of ATmega32u4, actually only one. </p>
 <p>Note that USB device is not represented here as it is not supported yet by FastArduino. </p>
 
-<p class="definition">Definition at line <a class="el" href="leonardo_8h_source.html#l00371">371</a> of file <a class="el" href="leonardo_8h_source.html">leonardo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="leonardo_8h_source.html#l00373">373</a> of file <a class="el" href="leonardo_8h_source.html">leonardo.h</a>.</p>
 
 </div>
 </div>
@@ -657,7 +709,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="leonardo_8h_source.html#l00380">380</a> of file <a class="el" href="leonardo_8h_source.html">leonardo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="leonardo_8h_source.html#l00382">382</a> of file <a class="el" href="leonardo_8h_source.html">leonardo.h</a>.</p>
 
 </div>
 </div>
@@ -700,7 +752,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="leonardo_8h_source.html#l00395">395</a> of file <a class="el" href="leonardo_8h_source.html">leonardo.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="leonardo_8h_source.html#l00397">397</a> of file <a class="el" href="leonardo_8h_source.html">leonardo.h</a>.</p>
 
 </div>
 </div>

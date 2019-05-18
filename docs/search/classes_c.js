@@ -7,5 +7,5 @@ var searchData=
   ['pulsetimer',['PulseTimer',['../classtimer_1_1_pulse_timer.html',1,'timer']]],
   ['pwmoutput',['PWMOutput',['../classanalog_1_1_p_w_m_output.html',1,'analog']]],
   ['pwmoutput_3c_20output_20_3e',['PWMOutput&lt; OUTPUT &gt;',['../classanalog_1_1_p_w_m_output.html',1,'analog']]],
-  ['pwmoutput_3c_20pin_2c_20true_20_3e',['PWMOutput&lt; PIN, true &gt;',['../classanalog_1_1_p_w_m_output.html',1,'analog']]]
+  ['pwmoutput_3c_20pwmpin_2c_20true_20_3e',['PWMOutput&lt; PWMPIN, true &gt;',['../classanalog_1_1_p_w_m_output.html',1,'analog']]]
 ];

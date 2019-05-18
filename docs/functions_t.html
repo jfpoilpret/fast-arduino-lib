@@ -121,17 +121,18 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 : <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a438cded47e35742f2da72fcbd1c2c3d6">devices::sonar::SonarEvent&lt; NTIMER_ &gt;</a>
 </li>
 <li>TIMER
-: <a class="el" href="classanalog_1_1_p_w_m_output.html#af6aa7f4cbd8574ac3e1fd2858982c38c">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
-, <a class="el" href="classdevices_1_1servo_1_1_servo.html#a366bd6dc01be89d7be23e197e87827a0">devices::servo::Servo&lt; TIMER_, PIN_ &gt;</a>
+: <a class="el" href="classanalog_1_1_p_w_m_output.html#a1969f69344b32964ffcbcdc24b50f635">analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</a>
+, <a class="el" href="classdevices_1_1servo_1_1_servo.html#a5c79c968e4c54072f27c4bc3ff1a7311">devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt;</a>
 </li>
 <li>timer()
 : <a class="el" href="classtimer_1_1_r_t_t.html#a024ba8a84801b1200ca055adb5777cb3">timer::RTT&lt; NTIMER_ &gt;</a>
+, <a class="el" href="classtimer_1_1_square_wave.html#accdbec5094e6f930398f4be30175bb28">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
 </li>
 <li>TIMER
 : <a class="el" href="classtimer_1_1_square_wave.html#ab99d321b342f811a8389d9983e95df31">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
 </li>
 <li>timer()
-: <a class="el" href="classtimer_1_1_square_wave.html#a9c2925ea83ce38fd89dcc5b8dfaafcbe">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
+: <a class="el" href="classtimer_1_1_square_wave.html#a8ac1739aebb9599a18fba6fe01026f2f">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
 </li>
 <li>Timer()
 : <a class="el" href="classtimer_1_1_timer.html#a1f7f3052c127cad79c654f351bc68ae3">timer::Timer&lt; NTIMER_ &gt;</a>
@@ -165,7 +166,7 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 , <a class="el" href="classgpio_1_1_fast_pin_type.html#a6e3644253729ca175a250154ee553225">gpio::FastPinType&lt; DPIN_ &gt;</a>
 </li>
 <li>tone()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#af55c0724e6de7271593f26137271e5cf">devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</a>
+: <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ad1ef6d87cfd68bf2a5704a5ce72e9469">devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</a>
 , <a class="el" href="structdevices_1_1audio_1_1_tone_play.html#a9aa0b768b2befb64f2ea105ad8cbf8a6">devices::audio::TonePlay</a>
 </li>
 <li>ToneGenerator()
@@ -212,13 +213,17 @@ $(document).ready(function(){initNavTree('functions_t.html','');});
 </li>
 <li>TYPE
 : <a class="el" href="classanalog_1_1_analog_input.html#ab51a3f532b4dca786eabd0ace09b9595">analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;</a>
-, <a class="el" href="classanalog_1_1_p_w_m_output.html#a5b5ec6328d9f534c0012a712b83ae601">analog::PWMOutput&lt; PIN_, PULSED_ &gt;</a>
-, <a class="el" href="classdevices_1_1servo_1_1_servo.html#a361e07e9cd4979b41d4953e7ab1ce7c3">devices::servo::Servo&lt; TIMER_, PIN_ &gt;</a>
-, <a class="el" href="classevents_1_1_event.html#a4b1eb7c8f86774b57ae77b5951e73c5b">events::Event&lt; T &gt;</a>
+, <a class="el" href="classanalog_1_1_p_w_m_output.html#afc6fc544b991bb50cddfc8c7b102ae88">analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</a>
+, <a class="el" href="classdevices_1_1servo_1_1_servo.html#a632c73afe2689697b19469dd40c08c75">devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt;</a>
 </li>
 <li>type()
 : <a class="el" href="classevents_1_1_event.html#a4cc68c5a6710d276baa534b61a25f611">events::Event&lt; T &gt;</a>
-, <a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">events::EventHandler&lt; EVENT &gt;</a>
+</li>
+<li>TYPE
+: <a class="el" href="classevents_1_1_event.html#a4b1eb7c8f86774b57ae77b5951e73c5b">events::Event&lt; T &gt;</a>
+</li>
+<li>type()
+: <a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">events::EventHandler&lt; EVENT &gt;</a>
 </li>
 <li>TYPE
 : <a class="el" href="classgpio_1_1_fast_pin_type.html#a042fde27c2748f1401523090025b03ea">gpio::FastPinType&lt; DPIN_ &gt;</a>
