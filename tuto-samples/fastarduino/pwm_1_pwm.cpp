@@ -7,7 +7,7 @@ using CALC = timer::Calculator<NTIMER>;
 static constexpr const uint16_t PWM_FREQUENCY = 450;
 static constexpr const TIMER::PRESCALER PRESCALER = CALC::FastPWM_prescaler(PWM_FREQUENCY);
 
-static constexpr const board::DigitalPin LED = board::PWMPin::D6_PD6_OC0A;
+static constexpr const board::PWMPin LED = board::PWMPin::D6_PD6_OC0A;
 using LED_PWM = analog::PWMOutput<LED>;
 
 int main()
