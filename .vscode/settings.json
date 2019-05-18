@@ -1,12 +1,25 @@
 {
     "files.exclude": {
         "**/.git": true,
+        ".vscode/ipch": true,
         "apidoc": true,
         "build": true,
         "deps": true,
         "dist": true,
         "docs": true,
-        "example-boards": true
+        "example-boards": true,
+        "refs": true
+    },
+    "files.watcherExclude": {
+        "**/.git": true,
+        ".vscode/ipch": true,
+        "apidoc": true,
+        "build": true,
+        "deps": true,
+        "dist": true,
+        "docs": true,
+        "example-boards": true,
+        "refs": true
     },
     "files.insertFinalNewline": true,
     "editor.insertSpaces": false,
