@@ -262,6 +262,7 @@ namespace board_traits
 	template<> struct PWMPin_trait<PWMPin::D3_PD0_OC0B> : PWMPin_trait_impl<DigitalPin::D3_PD0, Timer::TIMER0, 1> {};
 	template<> struct PWMPin_trait<PWMPin::D9_PB5_OC1A> : PWMPin_trait_impl<DigitalPin::D9_PB5, Timer::TIMER1, 0> {};
 	template<> struct PWMPin_trait<PWMPin::D10_PB6_OC1B> : PWMPin_trait_impl<DigitalPin::D10_PB6, Timer::TIMER1, 1> {};
+	template<> struct PWMPin_trait<PWMPin::D11_PB7_OC1C> : PWMPin_trait_impl<DigitalPin::D11_PB7, Timer::TIMER1, 2> {};
 	template<> struct PWMPin_trait<PWMPin::D5_PC6_OC3A> : PWMPin_trait_impl<DigitalPin::D5_PC6, Timer::TIMER3, 0> {};
 };
 
