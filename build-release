@@ -39,4 +39,4 @@ do
 done
 
 echo "Compare new sizes with previous release sizes"
-./compare-size-sheets.py examples-data.xlsx new-examples-date.xlsx >sizes-diff.xlsx
+./compare-size-sheets.py examples-data.xlsx new-examples-data.xlsx >sizes-diff.xlsx
