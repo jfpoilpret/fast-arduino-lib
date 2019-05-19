@@ -35,22 +35,22 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (ARDUINO_LEONARDO)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D3_PD0_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D3_PD0_EXT0;
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (ARDUINO_MEGA)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #elif defined (BREADBOARD_ATTINYX5)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
 #else
@@ -63,7 +63,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	gpio::FastPinType<SWITCH>::TYPE button{gpio::PinMode::INPUT_PULLUP};
+	gpio::FastPinType<board::EXT_PIN<SWITCH>()>::TYPE button{gpio::PinMode::INPUT_PULLUP};
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};	
 	interrupt::INTSignal<SWITCH> int0{interrupt::InterruptTrigger::ANY_CHANGE};
 	int0.enable();
