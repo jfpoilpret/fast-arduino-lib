@@ -17,7 +17,7 @@
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/devices/mcp23017.h>
 
-constexpr const board::DigitalPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Fast;
 
 using MCP = devices::mcp23017::MCP23017<I2C_MODE>;
