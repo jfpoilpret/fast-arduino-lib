@@ -523,10 +523,6 @@ namespace interrupt
 		}
 	};
 
-	/// @cond notdocumented
-	template<typename T, T VAL> struct PCIType {};
-	/// @endcond
-
 	/**
 	 * Helper class that easily converts a @p PIN into the right `PCISignal`.
 	 * The following snippet demonstrates usage of `PCIType` to declare a 
@@ -545,40 +541,13 @@ namespace interrupt
 	 * @endcode
 	 * @sa board::InterruptPin
 	 */
-	template<board::InterruptPin PIN> struct PCIType<board::InterruptPin, PIN>
+	template<board::InterruptPin PIN> struct PCIType
 	{
 		/** PCISignal type for @p PIN */
 		using TYPE = PCISignal<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>;
 		/** `PCINT` vector number for this @p PIN */
 		static constexpr const uint8_t PCINT =
 			board_traits::Port_trait<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>::PCINT;
-	};
-
-	/**
-	 * Helper class that easily converts a @p PIN into the right `PCISignal`.
-	 * The following snippet demonstrates usage of `PCIType` to declare a 
-	 * `PCISignal` instance for later use in a function:
-	 * 
-	 * @code
-	 * void f()
-	 * {
-	 *     constexpr const board::DigitalPin PIN = board::DigitalPin::D7;
-	 *     interrupt::PCIType<PIN>::TYPE pci;
-	 *     pci.enable_pin<PIN>();
-	 *     pci.enable();
-	 *     ...
-	 *     pci.disable();
-	 * }
-	 * @endcode
-	 * @sa board::DigitalPin
-	 */
-	template<board::DigitalPin PIN> struct PCIType<board::DigitalPin, PIN>
-	{
-		/** PCISignal type for @p PIN */
-		using TYPE = PCISignal<board_traits::DigitalPin_trait<PIN>::PORT>;
-		/** `PCINT` vector number for this @p PIN */
-		static constexpr const uint8_t PCINT =
-			board_traits::Port_trait<board_traits::DigitalPin_trait<PIN>::PORT>::PCINT;
 	};
 
 	/// @cond notdocumented

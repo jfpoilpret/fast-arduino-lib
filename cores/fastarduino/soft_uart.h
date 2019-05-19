@@ -426,8 +426,7 @@ namespace serial::soft
 		 * PinChangeInterrupt pin. This type is used in `begin()` call.
 		 * @sa begin()
 		 */
-		//TODO why PCIType<RX_> does not compile
-		using PCI_TYPE = typename interrupt::PCIType<board::InterruptPin, RX_>::TYPE;
+		using PCI_TYPE = typename interrupt::PCIType<RX_>::TYPE;
 
 		/**
 		 * Construct a new software serial receiver and provide it with a
