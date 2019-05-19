@@ -34,7 +34,7 @@
  * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX
  * to work correctly. This applies to an `UARX` (or `UART`) which @p RX pin is
  * a PCINT pin.
- * @param RX the `board::DigitalPin` used as RX for the UARX (or UART)
+ * @param RX the `board::InterruptPin` used as RX for the UARX (or UART)
  * @param PCI_NUM the number of the `PCINT` vector for the given @p RX pin
  */
 #define REGISTER_UART_PCI_ISR(RX, PCI_NUM)                        \
@@ -47,7 +47,7 @@
  * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX
  * to work correctly. This applies to an `UARX` (or `UART`) which @p RX pin is
  * a External INT pin.
- * @param RX the `board::DigitalPin` used as RX for the UARX (or UART)
+ * @param RX the `board::ExternalInterruptPin` used as RX for the UARX (or UART)
  * @param INT_NUM the number of the `INT` vector for the given @p RX pin
  */
 #define REGISTER_UART_INT_ISR(RX, INT_NUM)                        \
@@ -234,6 +234,8 @@ namespace serial::soft
 
 		void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 
+		template<board::DigitalPin RX> void pin_change();
+
 		// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
 		Parity parity_;
 		// Various timing constants based on rate
@@ -245,21 +247,76 @@ namespace serial::soft
 	};
 	/// @endcond
 
+	template<board::DigitalPin RX_> void AbstractUARX::pin_change()
+	{
+		using RX = gpio::FastPinType<RX_>;
+		// Check RX is low (start bit)
+		if (RX::value()) return;
+		uint8_t value = 0;
+		bool odd = false;
+		Errors errors;
+		errors.has_errors = 0;
+		// Wait for start bit to finish
+		_delay_loop_2(start_bit_rx_time_);
+		// Read first 7 bits
+		for (uint8_t i = 0; i < 7; ++i)
+		{
+			if (RX::value())
+			{
+				value |= 0x80;
+				odd = !odd;
+			}
+			value >>= 1;
+			_delay_loop_2(interbit_rx_time_);
+		}
+		// Read last bit
+		if (RX::value())
+		{
+			value |= 0x80;
+			odd = !odd;
+		}
+
+		if (parity_ != Parity::NONE)
+		{
+			// Wait for parity bit TODO NEED SPECIFIC DELAY HERE
+			_delay_loop_2(parity_bit_rx_time_);
+			bool parity_bit = (parity_ == Parity::ODD ? !odd : odd);
+			// Check parity bit
+			errors.parity_error = (RX::value() != parity_bit);
+		}
+
+		// Push value if no error
+		if (!errors.has_errors)
+		{
+			errors.queue_overflow = !in_().queue().push_(value);
+			// Wait for 1st stop bit
+			_delay_loop_2(stop_bit_rx_time_push_);
+		}
+		else
+		{
+			errors_ = errors;
+			// Wait for 1st stop bit
+			_delay_loop_2(stop_bit_rx_time_no_push_);
+		}
+	}
+
+	/// @cond notdocumented
+	template<typename T, T IRQ> class UARX {};
+	/// @endcond
+
 	/**
 	 * Software-emulated serial receiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_PCI_ISR()` or `REGISTER_UART_INT_ISR()`.
+	 * program, through `REGISTER_UART_INT_ISR()`.
 	 * 
-	 * @tparam RX_ the `board::DigitalPin` which shall receive serial signal; this
-	 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
-	 * PinChangeInterrupt pin (`board::InterruptPin`).
+	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
 	 * 
-	 * @sa REGISTER_UART_PCI_ISR()
 	 * @sa REGISTER_UART_INT_ISR()
 	 * @sa UATX
 	 * @sa UART
 	 */
-	template<board::DigitalPin RX_> class UARX : public AbstractUARX
+	template<board::ExternalInterruptPin RX_>
+	class UARX<board::ExternalInterruptPin, RX_> : public AbstractUARX
 	{
 	public:
 		/**
@@ -267,26 +324,111 @@ namespace serial::soft
 		 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
 		 * PinChangeInterrupt pin (`board::InterruptPin`).
 		 */
-		static constexpr const board::DigitalPin RX = RX_;
-		/**
-		 * The interrupt::PCISignal type for `RX_` pin, if it is a
-		 * PinChangeInterrupt pin. This type is used in `begin()` call.
-		 * @sa begin()
-		 */
-		using PCI_TYPE = typename interrupt::PCIType<RX>::TYPE;
+		static constexpr const board::DigitalPin RX = board::EXT_PIN<RX_>;
+
+	public:
 		/**
 		 * The interrupt::INTSignal type for `RX_` pin, if it is a
 		 * External Interrupt pin. This type is used in `begin()` call.
 		 * @sa begin()
 		 */
-		using INT_TYPE = typename interrupt::INTSignal<RX>;
+		using INT_TYPE = typename interrupt::INTSignal<RX_>;
+
+		/**
+		 * Construct a new software serial receiver and provide it with a
+		 * buffer for interrupt-based reception.
+		 * Reception is asynchronous.
+		 * @param input an array of characters used by this receiver to
+		 * store content received through serial line, buffered until read through
+		 * `in()`.
+		 * @sa REGISTER_UART_INT_ISR()
+		 */
+		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
+		{
+			interrupt::register_handler(*this);
+		}
+
+		/**
+		 * Get the formatted input stream used to read content received through
+		 * this serial transmitter.
+		 */
+		streams::istream in()
+		{
+			return AbstractUARX::in();
+		}
+
+		/**
+		 * Enable the receiver. 
+		 * This is needed before any reception can take place.
+		 * Once called, it is possible to read content, received through serial
+		 * connection, by using `in()`.
+		 * 
+		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
+		 * enable interrupts on that pin.
+		 * @param rate the transmission rate in bits per second (bps)
+		 * @param parity the kind of parity check used by transmission
+		 * @param stop_bits the number of stop bits used by transmission
+		 */
+		void begin(INT_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		{
+			int_ = &enabler;
+			AbstractUARX::begin_serial(rate, parity, stop_bits);
+			int_->enable();
+		}
+		
+		/**
+		 * Stop reception.
+		 * Once called, it is possible to re-enable reception again by
+		 * calling `begin()`.
+		 */
+		void end()
+		{
+			int_->disable();
+		}
 
 	private:
-		using PIN_TRAIT = board_traits::DigitalPin_trait<RX>;
-		using PORT_TRAIT = board_traits::Port_trait<PIN_TRAIT::PORT>;
-		using PCI_TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
+		void on_pin_change()
+		{
+			this->pin_change<RX>();
+			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
+			int_->clear_();
+		}
+
+		typename gpio::FastPinType<RX>::TYPE rx_;
+		INT_TYPE* int_;
+		friend struct isr_handler;
+	};
+
+	/**
+	 * Software-emulated serial receiver API.
+	 * For this API to be fully functional, you must register the right ISR in your
+	 * program, through `REGISTER_UART_PCI_ISR()`.
+	 * 
+	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
+	 * 
+	 * @sa REGISTER_UART_PCI_ISR()
+	 * @sa UATX
+	 * @sa UART
+	 */
+	template<board::InterruptPin RX_> class UARX<board::InterruptPin, RX_> : public AbstractUARX
+	{
+	public:
+		/**
+		 * The `board::DigitalPin` which shall receive serial signal; this
+		 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
+		 * PinChangeInterrupt pin (`board::InterruptPin`).
+		 */
+		static constexpr const board::DigitalPin RX = board::PCI_PIN<RX_>;
 
 	public:
+		/**
+		 * The interrupt::PCISignal type for `RX_` pin, if it is a
+		 * PinChangeInterrupt pin. This type is used in `begin()` call.
+		 * @sa begin()
+		 */
+		//TODO why PCIType<RX_> does not compile
+		using PCI_TYPE = typename interrupt::PCIType<board::InterruptPin, RX_>::TYPE;
+
 		/**
 		 * Construct a new software serial receiver and provide it with a
 		 * buffer for interrupt-based reception.
@@ -295,13 +437,19 @@ namespace serial::soft
 		 * store content received through serial line, buffered until read through
 		 * `in()`.
 		 * @sa REGISTER_UART_PCI_ISR()
-		 * @sa REGISTER_UART_INT_ISR()
 		 */
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX(input), rx_{gpio::PinMode::INPUT}
+		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
 		{
-			static_assert((PCI_TRAIT::PCI_MASK & _BV(PIN_TRAIT::BIT)) || (PIN_TRAIT::IS_INT),
-						  "RX must be a PinChangeInterrupt or an ExternalInterrupt pin");
 			interrupt::register_handler(*this);
+		}
+
+		/**
+		 * Get the formatted input stream used to read content received through
+		 * this serial transmitter.
+		 */
+		streams::istream in()
+		{
+			return AbstractUARX::in();
 		}
 
 		/**
@@ -321,38 +469,8 @@ namespace serial::soft
 		void begin(PCI_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			pci_ = &enabler;
-			begin_serial(rate, parity, stop_bits);
-			pci_->template enable_pin<RX>();
-		}
-
-		/**
-		 * Enable the receiver. 
-		 * This is needed before any reception can take place.
-		 * Once called, it is possible to read content, received through serial
-		 * connection, by using `in()`.
-		 * 
-		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
-		 * enable interrupts on that pin.
-		 * @param rate the transmission rate in bits per second (bps)
-		 * @param parity the kind of parity check used by transmission
-		 * @param stop_bits the number of stop bits used by transmission
-		 * 
-		 * @sa begin(PCI_TYPE&, uint32_t, Parity, StopBits)
-		 */
-		void begin(INT_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
-		{
-			int_ = &enabler;
-			begin_serial(rate, parity, stop_bits);
-			int_->enable();
-		}
-		
-		/**
-		 * Get the formatted input stream used to read content received through
-		 * this serial transmitter.
-		 */
-		streams::istream in()
-		{
-			return AbstractUARX::in();
+			AbstractUARX::begin_serial(rate, parity, stop_bits);
+			pci_->template enable_pin<RX_>();
 		}
 
 		/**
@@ -362,108 +480,52 @@ namespace serial::soft
 		 */
 		void end()
 		{
-			if (PIN_TRAIT::IS_INT)
-				int_->disable();
-			else
-				pci_->template disable_pin<RX>();
+			pci_->template disable_pin<RX_>();
 		}
 
 	private:
-		void on_pin_change();
+		void on_pin_change()
+		{
+			this->pin_change<RX>();
+			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
+			pci_->clear_();
+		}
 
 		typename gpio::FastPinType<RX>::TYPE rx_;
-		union
-		{
-			PCI_TYPE* pci_;
-			INT_TYPE* int_;
-		};
-
+		PCI_TYPE* pci_;
 		friend struct isr_handler;
 	};
 
-	template<board::DigitalPin RX> void UARX<RX>::on_pin_change()
-	{
-		// Check RX is low (start bit)
-		if (rx_.value()) return;
-		uint8_t value = 0;
-		bool odd = false;
-		Errors errors;
-		errors.has_errors = 0;
-		// Wait for start bit to finish
-		_delay_loop_2(start_bit_rx_time_);
-		// Read first 7 bits
-		for (uint8_t i = 0; i < 7; ++i)
-		{
-			if (rx_.value())
-			{
-				value |= 0x80;
-				odd = !odd;
-			}
-			value >>= 1;
-			_delay_loop_2(interbit_rx_time_);
-		}
-		// Read last bit
-		if (rx_.value())
-		{
-			value |= 0x80;
-			odd = !odd;
-		}
-
-		if (parity_ != Parity::NONE)
-		{
-			// Wait for parity bit TODO NEED SPECIFIC DELAY HERE
-			_delay_loop_2(parity_bit_rx_time_);
-			bool parity_bit = (parity_ == Parity::ODD ? !odd : odd);
-			// Check parity bit
-			errors.parity_error = (rx_.value() != parity_bit);
-		}
-
-		// Push value if no error
-		if (!errors.has_errors)
-		{
-			errors.queue_overflow = !in_().queue().push_(value);
-			// Wait for 1st stop bit
-			_delay_loop_2(stop_bit_rx_time_push_);
-		}
-		else
-		{
-			errors_ = errors;
-			// Wait for 1st stop bit
-			_delay_loop_2(stop_bit_rx_time_no_push_);
-		}
-		// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
-		if (PIN_TRAIT::IS_INT)
-			int_->clear_();
-		else
-			pci_->clear_();
-	}
+	/// @cond notdocumented
+	template<typename T, T IRQ, board::DigitalPin TX> class UART {};
+	/// @endcond
 
 	/**
 	 * Software-emulated serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_PCI_ISR()` or `REGISTER_UART_INT_ISR()`.
+	 * program, through `REGISTER_UART_INT_ISR()`.
 	 * 
-	 * @tparam RX_ the `board::DigitalPin` which shall receive serial signal; this
-	 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
-	 * PinChangeInterrupt pin (`board::InterruptPin`).
+	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
 	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
 	 * 
-	 * @sa REGISTER_UART_PCI_ISR()
 	 * @sa REGISTER_UART_INT_ISR()
 	 * @sa UATX
 	 * @sa UARX
 	 */
-	template<board::DigitalPin RX_, board::DigitalPin TX_> class UART : public UARX<RX_>, public UATX<TX_>
+	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
+	class UART<board::ExternalInterruptPin, RX_, TX_> : public UARX<board::ExternalInterruptPin, RX_>, public UATX<TX_>
 	{
+	private:
+		using UARX_TYPE = UARX<board::ExternalInterruptPin, RX_>;
+		using UATX_TYPE = UATX<TX_>;
+
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
 		/**
-		 * The `board::DigitalPin` which shall receive serial signal; this
-		 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
-		 * PinChangeInterrupt pin (`board::InterruptPin`).
+		 * The `board::DigitalPin` which shall receive serial signal.
 		 */
-		static constexpr const board::DigitalPin RX = RX_;
+		static constexpr const board::DigitalPin RX = board::EXT_PIN<RX_>;
 
 		/**
 		 * Construct a new software serial receiver/transceiver and provide it 
@@ -476,8 +538,80 @@ namespace serial::soft
 		 * buffer output during transmission.
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX<RX>{input}, UATX<TX>{output}
-		{}
+		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX_TYPE{input}, UATX_TYPE{output} {}
+
+		/**
+		 * Enable the receiver/transceiver. 
+		 * This is needed before any transmission or reception can take place.
+		 * Once called, it is possible to send and receive content through serial
+		 * connection, by using `in()` for reading and `out()` for writing.
+		 * 
+		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
+		 * enable interrupts on that pin.
+		 * @param rate the transmission rate in bits per second (bps)
+		 * @param parity the kind of parity check used by transmission
+		 * @param stop_bits the number of stop bits used by transmission
+		 * 
+		 * @sa begin(INT_TYPE&, uint32_t, Parity, StopBits)
+		 */
+		void begin(typename UARX_TYPE::INT_TYPE& int_enabler, uint32_t rate, Parity parity = Parity::NONE,
+				   StopBits stop_bits = StopBits::ONE)
+		{
+			UARX_TYPE::begin(int_enabler, rate, parity, stop_bits);
+			UATX_TYPE::begin(rate, parity, stop_bits);
+		}
+
+		/**
+		 * Stop all transmissions and receptions.
+		 * Once called, it is possible to re-enable transmission and reception 
+		 * again by calling `begin()`.
+		 */
+		void end()
+		{
+			UARX_TYPE::end();
+			UATX_TYPE::end();
+		}
+	};
+
+	/**
+	 * Software-emulated serial receiver/transceiver API.
+	 * For this API to be fully functional, you must register the right ISR in your
+	 * program, through `REGISTER_UART_PCI_ISR()`.
+	 * 
+	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
+	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
+	 * 
+	 * @sa REGISTER_UART_PCI_ISR()
+	 * @sa UATX
+	 * @sa UARX
+	 */
+	template<board::InterruptPin RX_, board::DigitalPin TX_>
+	class UART<board::InterruptPin, RX_, TX_> : public UARX<board::InterruptPin, RX_>, public UATX<TX_>
+	{
+	private:
+		using UARX_TYPE = UARX<board::InterruptPin, RX_>;
+		using UATX_TYPE = UATX<TX_>;
+
+	public:
+		/** The `board::DigitalPin` to which transmitted signal is sent */
+		static constexpr const board::DigitalPin TX = TX_;
+		/**
+		 * The `board::DigitalPin` which shall receive serial signal.
+		 */
+		static constexpr const board::DigitalPin RX = board::PCI_PIN<RX_>;
+
+		/**
+		 * Construct a new software serial receiver/transceiver and provide it 
+		 * with 2 buffers, one for interrupt-based reception, one for transmission.
+		 * 
+		 * @param input an array of characters used by this receiver to
+		 * store content received through serial line, buffered until read through
+		 * `in()`.
+		 * @param output an array of characters used by this transmitter to
+		 * buffer output during transmission.
+		 */
+		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
+		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX_TYPE{input}, UATX_TYPE{output} {}
 
 		/**
 		 * Enable the receiver/transceiver. 
@@ -493,32 +627,11 @@ namespace serial::soft
 		 * 
 		 * @sa begin(INT_TYPE&, uint32_t, Parity, StopBits)
 		 */
-		void begin(typename UARX<RX>::PCI_TYPE& pci_enabler, uint32_t rate, Parity parity = Parity::NONE,
+		void begin(typename UARX_TYPE::PCI_TYPE& pci_enabler, uint32_t rate, Parity parity = Parity::NONE,
 				   StopBits stop_bits = StopBits::ONE)
 		{
-			UARX<RX>::begin(pci_enabler, rate, parity, stop_bits);
-			UATX<TX>::begin(rate, parity, stop_bits);
-		}
-
-		/**
-		 * Enable the receiver/transceiver. 
-		 * This is needed before any transmission or reception can take place.
-		 * Once called, it is possible to send and receive content through serial
-		 * connection, by using `in()` for reading and `out()` for writing.
-		 * 
-		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
-		 * enable interrupts on that pin.
-		 * @param rate the transmission rate in bits per second (bps)
-		 * @param parity the kind of parity check used by transmission
-		 * @param stop_bits the number of stop bits used by transmission
-		 * 
-		 * @sa begin(INT_TYPE&, uint32_t, Parity, StopBits)
-		 */
-		void begin(typename UARX<RX>::INT_TYPE& int_enabler, uint32_t rate, Parity parity = Parity::NONE,
-				   StopBits stop_bits = StopBits::ONE)
-		{
-			UARX<RX>::begin(int_enabler, rate, parity, stop_bits);
-			UATX<TX>::begin(rate, parity, stop_bits);
+			UARX_TYPE::begin(pci_enabler, rate, parity, stop_bits);
+			UATX_TYPE::begin(rate, parity, stop_bits);
 		}
 
 		/**
@@ -528,24 +641,24 @@ namespace serial::soft
 		 */
 		void end()
 		{
-			UARX<RX>::end();
-			UATX<TX>::end();
+			UARX_TYPE::end();
+			UATX_TYPE::end();
 		}
 	};
 
 	/// @cond notdocumented
 	struct isr_handler
 	{
-		template<uint8_t PCI_NUM_, board::DigitalPin RX_> static void check_uart_pci()
+		template<uint8_t PCI_NUM_, board::InterruptPin RX_> static void check_uart_pci()
 		{
 			interrupt::isr_handler_pci::check_pci_pins<PCI_NUM_, RX_>();
-			interrupt::HandlerHolder<serial::soft::UARX<RX_>>::handler()->on_pin_change();
+			interrupt::HandlerHolder<serial::soft::UARX<board::InterruptPin, RX_>>::handler()->on_pin_change();
 		}
 
-		template<uint8_t INT_NUM_, board::DigitalPin RX_> static void check_uart_int()
+		template<uint8_t INT_NUM_, board::ExternalInterruptPin RX_> static void check_uart_int()
 		{
 			interrupt::isr_handler_int::check_int_pin<INT_NUM_, RX_>();
-			interrupt::HandlerHolder<serial::soft::UARX<RX_>>::handler()->on_pin_change();
+			interrupt::HandlerHolder<serial::soft::UARX<board::ExternalInterruptPin, RX_>>::handler()->on_pin_change();
 		}
 	};
 	/// @endcond
