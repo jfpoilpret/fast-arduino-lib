@@ -212,8 +212,9 @@ namespace board_traits
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
 	};
 
-	template<DigitalPin DPIN> struct ExternalInterruptPin_trait
+	template<ExternalInterruptPin DPIN> struct ExternalInterruptPin_trait
 	{
+		static constexpr const DigitalPin ACTUAL_PIN = DigitalPin::NONE;
 		static constexpr const uint8_t INT = 0;
 		static constexpr const REG8 EICR_{};
 		static constexpr const uint8_t EICR_MASK = 0x00;
@@ -222,10 +223,11 @@ namespace board_traits
 		static constexpr const REG8 EIFR_{};
 		static constexpr const uint8_t EIFR_MASK = 0x00;
 	};
-	template<uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_, REG EIFR__,
-			 uint8_t EIFR_MASK_>
+	template<DigitalPin ACTUAL_PIN_, uint8_t INT_, REG EICR__, uint8_t EICR_MASK_, REG EIMSK__, uint8_t EIMSK_MASK_,
+			 REG EIFR__, uint8_t EIFR_MASK_>
 	struct ExternalInterruptPin_trait_impl
 	{
+		static constexpr const DigitalPin ACTUAL_PIN = ACTUAL_PIN_;
 		static constexpr const uint8_t INT = INT_;
 		static constexpr const REG8 EICR_ = EICR__;
 		static constexpr const uint8_t EICR_MASK = EICR_MASK_;
@@ -520,7 +522,7 @@ namespace board_traits
 		}
 
 		// Input-capture stuff
-		static constexpr const board::DigitalPin ICP_PIN = board::DigitalPin::NONE;
+		static constexpr const DigitalPin ICP_PIN = DigitalPin::NONE;
 		static constexpr const uint8_t ICES_TCCRB = 0;
 
 		// ATtinyX5 Timer1 specific stuff
@@ -533,7 +535,7 @@ namespace board_traits
 			 REG TCCRB_, REG TCNT_, REG OCRA_, REG TIMSK__, REG TIFR__, uint8_t TIMSK_MASK_ = 0xFF, REG ICR_ = 0,
 			 uint8_t CTC_ICR_TCCRA_ = 0, uint8_t CTC_ICR_TCCRB_ = 0, uint8_t F_PWM_ICR_TCCRA_ = 0,
 			 uint8_t F_PWM_ICR_TCCRB_ = 0, uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0,
-			 board::DigitalPin ICP_PIN_ = board::DigitalPin::NONE, uint8_t ICES_TCCRB_ = 0, REG CTC_MAX_ = NO_REG>
+			 DigitalPin ICP_PIN_ = DigitalPin::NONE, uint8_t ICES_TCCRB_ = 0, REG CTC_MAX_ = NO_REG>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -576,7 +578,7 @@ namespace board_traits
 		static constexpr const uint8_t TIMSK_MASK = TIMSK_MASK_;
 		static constexpr const REG8 TIFR_ = TIFR__;
 
-		static constexpr const board::DigitalPin ICP_PIN = ICP_PIN_;
+		static constexpr const DigitalPin ICP_PIN = ICP_PIN_;
 		static constexpr const uint8_t ICES_TCCRB = ICES_TCCRB_;
 
 		static constexpr const REGISTER<TYPE> CTC_MAX = CTC_MAX_;
@@ -584,15 +586,15 @@ namespace board_traits
 
 	template<PWMPin PIN> struct PWMPin_trait
 	{
-		static constexpr const board::DigitalPin ACTUAL_PIN = board::DigitalPin::NONE;
+		static constexpr const DigitalPin ACTUAL_PIN = DigitalPin::NONE;
 		static constexpr const uint8_t COM = 0;
 		static constexpr const Timer TIMER = Timer::TIMER0;
 		using TIMER_TRAIT = Timer_trait<TIMER>;
 		using TYPE = uint8_t;
 	};
-	template<board::DigitalPin ACTUAL_PIN_, Timer TIMER_, uint8_t COM_> struct PWMPin_trait_impl
+	template<DigitalPin ACTUAL_PIN_, Timer TIMER_, uint8_t COM_> struct PWMPin_trait_impl
 	{
-		static constexpr const board::DigitalPin ACTUAL_PIN = ACTUAL_PIN_;
+		static constexpr const DigitalPin ACTUAL_PIN = ACTUAL_PIN_;
 		static constexpr const uint8_t COM = COM_;
 		static constexpr const Timer TIMER = TIMER_;
 		using TIMER_TRAIT = Timer_trait<TIMER>;
@@ -606,6 +608,18 @@ namespace board
 	template<DigitalPin PIN> constexpr uint8_t BIT()
 	{
 		return board_traits::DigitalPin_trait<PIN>::BIT;
+	}
+
+	template<ExternalInterruptPin EXT> constexpr DigitalPin EXT_PIN() INLINE;
+	template<ExternalInterruptPin EXT> constexpr DigitalPin EXT_PIN()
+	{
+		return board_traits::ExternalInterruptPin_trait<EXT>::ACTUAL_PIN;
+	}
+
+	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN() INLINE;
+	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN()
+	{
+		return DigitalPin(uint8_t(PCI));
 	}
 };
 

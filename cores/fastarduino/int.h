@@ -30,8 +30,8 @@
  * Register the necessary ISR (Interrupt Service Routine) for an External Interrupt 
  * pin.
  * @param INT_NUM the number of the `INT` vector for this @p PIN
- * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
- * do not match, compilation will fail.
+ * @param PIN the `board::ExternalInterruptPin` for @p INT_NUM; if @p PIN and 
+ * @p INT_NUM do not match, compilation will fail.
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
@@ -46,8 +46,8 @@
  * Register the necessary ISR (Interrupt Service Routine) for an External Interrupt 
  * pin.
  * @param INT_NUM the number of the `INT` vector for this @p PIN
- * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
- * do not match, compilation will fail.
+ * @param PIN the `board::ExternalInterruptPin` for @p INT_NUM; if @p PIN and 
+ * @p INT_NUM do not match, compilation will fail.
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  */
@@ -63,8 +63,8 @@
  * This can be useful if you just need to wake up the MCU from an external signal,
  * but do not need to perform any sepcific stuff with a callback.
  * @param INT_NUM the number of the `INT` vector for this @p PIN
- * @param PIN the `board::DigitalPin` for @p INT_NUM; if @p PIN and @p INT_NUM
- * do not match, compilation will fail.
+ * @param PIN the `board::ExternalInterruptPin` for @p INT_NUM; if @p PIN and 
+ * @p INT_NUM do not match, compilation will fail.
  */
 #define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                                                      \
 	extern "C" void CAT3(INT, INT_NUM, _vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \
@@ -107,42 +107,41 @@ namespace interrupt
 	 * If you need a function or method to be called back when an External Interrupt
 	 * occurs for @p PIN, then you have to use `REGISTER_INT_ISR_FUNCTION` or 
 	 * `REGISTER_INT_ISR_METHOD()` macros.
-	 * If you don't then use `REGISTER_INT_ISR_EMPTY` macro.
-	 * @tparam PIN_ the External Interrupt pin; if @p PIN_ is not an External Interrupt 
-	 * pin, then the program will not compile.
+	 * If you don't, then use `REGISTER_INT_ISR_EMPTY` macro.
+	 * @tparam EXTPIN_ the External Interrupt pin
 	 * @sa board::ExternalInterruptPin
 	 * @sa REGISTER_INT_ISR_FUNCTION
 	 * @sa REGISTER_INT_ISR_METHOD
 	 * @sa REGISTER_INT_ISR_EMPTY
 	 */
-	template<board::DigitalPin PIN_> class INTSignal
+	template<board::ExternalInterruptPin EXTPIN_> class INTSignal
 	{
 	public:
 		/** The External Interrupt pin managed by this INTSignal. */
-		static constexpr const board::DigitalPin PIN = PIN_;
+		static constexpr const board::ExternalInterruptPin EXTPIN = EXTPIN_;
+		/** The actual connected pin managed by this INTSignal. */
+		static constexpr const board::DigitalPin PIN = board::EXT_PIN<EXTPIN>();
 
 	private:
-		using PIN_TRAIT = board_traits::DigitalPin_trait<PIN>;
-		using INT_TRAIT = board_traits::ExternalInterruptPin_trait<PIN>;
+		using INT_TRAIT = board_traits::ExternalInterruptPin_trait<EXTPIN>;
 
 	public:
 		/**
-		 * Create a handler for @p PIN external interrupt pin.
+		 * Create a handler for @p EXTPIN external interrupt pin.
 		 * This does not automatically enable the interrupt.
 		 * @param trigger the kind of level event that shall trigger an External 
-		 * Interrupt for @p PIN
+		 * Interrupt for @p EXTPIN
 		 * @sa enable()
 		 * @sa set_trigger()
 		 */
 		INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)
 		{
-			static_assert(PIN_TRAIT::IS_INT, "PIN must be an external interrupt pin");
 			set_trigger_(trigger);
 		}
 
 		/**
 		 * Change the kind of level event that shall trigger an External 
-		 * Interrupt for @p PIN.
+		 * Interrupt for @p EXTPIN.
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
@@ -253,14 +252,13 @@ namespace interrupt
 
 	struct isr_handler_int
 	{
-		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_> static void check_int_pin()
+		template<uint8_t INT_NUM_, board::ExternalInterruptPin INT_PIN_> static void check_int_pin()
 		{
-			static_assert(board_traits::DigitalPin_trait<INT_PIN_>::IS_INT, "PIN must be an INT pin.");
 			static_assert(board_traits::ExternalInterruptPin_trait<INT_PIN_>::INT == INT_NUM_,
 						  "PIN INT number must match INT_NUM");
 		}
 
-		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_, typename HANDLER_, void (HANDLER_::*CALLBACK_)()>
+		template<uint8_t INT_NUM_, board::ExternalInterruptPin INT_PIN_, typename HANDLER_, void (HANDLER_::*CALLBACK_)()>
 		static void int_method()
 		{
 			// Check pin is compliant
@@ -269,7 +267,7 @@ namespace interrupt
 			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
 		}
 
-		template<uint8_t INT_NUM_, board::DigitalPin INT_PIN_, void (*CALLBACK_)()> static void int_function()
+		template<uint8_t INT_NUM_, board::ExternalInterruptPin INT_PIN_, void (*CALLBACK_)()> static void int_function()
 		{
 			// Check pin is compliant
 			check_int_pin<INT_NUM_, INT_PIN_>();

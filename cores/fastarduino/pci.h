@@ -31,6 +31,8 @@
 #include "interrupts.h"
 #include "utilities.h"
 
+//TODO Do we want to keep API with DigitalPin args, deprecate it or remove it?
+
 /**
  * Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt 
  * vector.
@@ -263,12 +265,47 @@ namespace interrupt
 		 * @sa disable_pin()
 		 * @sa enable_pins()
 		 */
+		template<board::InterruptPin PIN> inline void enable_pin()
+		{
+			enable_pin<board::PCI_PIN<PIN>()>();
+		}
+
+		/**
+		 * Enable Pin Change Interrupts for @p PIN.
+		 * Note that this method is synchronized, i.e. it disables all interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `enable_pin_()` instead.
+		 * @tparam PIN the pin for which to enable Pin Change Interrupts; this must
+		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * otherwise compilation will fail.
+		 * @sa enable_pin_()
+		 * @sa disable_pin()
+		 * @sa enable_pins()
+		 */
 		template<board::DigitalPin PIN> inline void enable_pin()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
 						  "PIN must be a PCI within PORT");
 			enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
+		}
+
+		/**
+		 * Disable Pin Change Interrupts for @p PIN.
+		 * Note that this method is synchronized, i.e. it disables all interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `disable_pin_()` instead.
+		 * @tparam PIN the pin for which to disable Pin Change Interrupts; this must
+		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * otherwise compilation will fail.
+		 * @sa disable_pin_()
+		 * @sa enable_pin()
+		 */
+		template<board::InterruptPin PIN> inline void disable_pin()
+		{
+			disable_pin<board::PCI_PIN<PIN>()>();
 		}
 
 		/**
@@ -422,12 +459,47 @@ namespace interrupt
 		 * @sa disable_pin_()
 		 * @sa enable_pins_()
 		 */
+		template<board::InterruptPin PIN> inline void enable_pin_()
+		{
+			enable_pin_<board::PCI_PIN<PIN>()>();
+		}
+
+		/**
+		 * Enable Pin Change Interrupts for @p PIN.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while global interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `enable_pin()` instead.
+		 * @tparam PIN the pin for which to enable Pin Change Interrupts; this must
+		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * otherwise compilation will fail.
+		 * @sa enable_pin()
+		 * @sa disable_pin_()
+		 * @sa enable_pins_()
+		 */
 		template<board::DigitalPin PIN> inline void enable_pin_()
 		{
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
 						  "PIN must be a PCI within PORT");
 			enable_pins_(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
+		}
+
+		/**
+		 * Disable Pin Change Interrupts for @p PIN.
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while global interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `disable_pin()` instead.
+		 * @tparam PIN the pin for which to disable Pin Change Interrupts; this must
+		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * otherwise compilation will fail.
+		 * @sa disable_pin()
+		 * @sa enable_pin_()
+		 */
+		template<board::InterruptPin PIN> inline void disable_pin_()
+		{
+			disable_pin_<board::PCI_PIN<PIN>()>();
 		}
 
 		/**
@@ -451,6 +523,37 @@ namespace interrupt
 		}
 	};
 
+	/// @cond notdocumented
+	template<typename T, T VAL> struct PCIType {};
+	/// @endcond
+
+	/**
+	 * Helper class that easily converts a @p PIN into the right `PCISignal`.
+	 * The following snippet demonstrates usage of `PCIType` to declare a 
+	 * `PCISignal` instance for later use in a function:
+	 * 
+	 * @code
+	 * void f()
+	 * {
+	 *     constexpr const board::InterruptPin PIN = board::InterruptPin::D7;
+	 *     interrupt::PCIType<PIN>::TYPE pci;
+	 *     pci.enable_pin<PIN>();
+	 *     pci.enable();
+	 *     ...
+	 *     pci.disable();
+	 * }
+	 * @endcode
+	 * @sa board::InterruptPin
+	 */
+	template<board::InterruptPin PIN> struct PCIType<board::InterruptPin, PIN>
+	{
+		/** PCISignal type for @p PIN */
+		using TYPE = PCISignal<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>;
+		/** `PCINT` vector number for this @p PIN */
+		static constexpr const uint8_t PCINT =
+			board_traits::Port_trait<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>::PCINT;
+	};
+
 	/**
 	 * Helper class that easily converts a @p PIN into the right `PCISignal`.
 	 * The following snippet demonstrates usage of `PCIType` to declare a 
@@ -469,7 +572,7 @@ namespace interrupt
 	 * @endcode
 	 * @sa board::DigitalPin
 	 */
-	template<board::DigitalPin PIN> struct PCIType
+	template<board::DigitalPin PIN> struct PCIType<board::DigitalPin, PIN>
 	{
 		/** PCISignal type for @p PIN */
 		using TYPE = PCISignal<board_traits::DigitalPin_trait<PIN>::PORT>;
@@ -500,6 +603,20 @@ namespace interrupt
 			check_pci_pins<PCI_NUM_, PCIPINS_...>();
 		}
 
+		template<uint8_t PCI_NUM_, board::InterruptPin PCIPIN1_, board::InterruptPin... PCIPINS_>
+		static void check_pci_pins()
+		{
+			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
+			constexpr board::DigitalPin PIN = board::PCI_PIN<PCIPIN1_>();
+			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
+						  "PIN port must match PCI_NUM port");
+			static_assert(
+				_BV(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK,
+				"PIN must be a PCINT pin");
+			// Check other pins
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+		}
+
 		template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::DigitalPin... PCIPINS_>
 		static void pci_method()
 		{
@@ -509,7 +626,24 @@ namespace interrupt
 			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
 		}
 
+		template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::InterruptPin... PCIPINS_>
+		static void pci_method()
+		{
+			// Check pin is compliant
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+			// Call handler back
+			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
+		}
+
 		template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::DigitalPin... PCIPINS_> static void pci_function()
+		{
+			// Check pin is compliant
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+			// Call handler back
+			CALLBACK_();
+		}
+
+		template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::InterruptPin... PCIPINS_> static void pci_function()
 		{
 			// Check pin is compliant
 			check_pci_pins<PCI_NUM_, PCIPINS_...>();
