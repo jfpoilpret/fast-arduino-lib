@@ -324,7 +324,7 @@ namespace serial::soft
 		 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
 		 * PinChangeInterrupt pin (`board::InterruptPin`).
 		 */
-		static constexpr const board::DigitalPin RX = board::EXT_PIN<RX_>;
+		static constexpr const board::DigitalPin RX = board::EXT_PIN<RX_>();
 
 	public:
 		/**
