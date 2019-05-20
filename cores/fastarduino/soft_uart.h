@@ -418,7 +418,7 @@ namespace serial::soft
 		 * must be either an External INT pin (`board::ExternalInterruptPin`) or a 
 		 * PinChangeInterrupt pin (`board::InterruptPin`).
 		 */
-		static constexpr const board::DigitalPin RX = board::PCI_PIN<RX_>;
+		static constexpr const board::DigitalPin RX = board::PCI_PIN<RX_>();
 
 	public:
 		/**
@@ -644,6 +644,15 @@ namespace serial::soft
 			UATX_TYPE::end();
 		}
 	};
+
+	// Useful type aliases
+	//TODO docs
+	template<board::ExternalInterruptPin RX_> using UARX_EXT = UARX<board::ExternalInterruptPin, RX_>;
+	template<board::InterruptPin RX_> using UARX_PCI = UARX<board::InterruptPin, RX_>;
+	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
+	using UART_EXT = UART<board::ExternalInterruptPin, RX_, TX_>;
+	template<board::InterruptPin RX_, board::DigitalPin TX_>
+	using UART_PCI = UART<board::InterruptPin, RX_, TX_>;
 
 	/// @cond notdocumented
 	struct isr_handler
