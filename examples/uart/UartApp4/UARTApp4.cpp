@@ -75,8 +75,8 @@ int main()
 	sei();
 	
 	// Setup UART
-	serial::soft::UART<RX, TX> uart{input_buffer, output_buffer};
-	serial::soft::UART<RX, TX>::INT_TYPE int_signal;
+	serial::soft::UART_EXT<RX, TX> uart{input_buffer, output_buffer};
+	serial::soft::UART_EXT<RX, TX>::INT_TYPE int_signal;
 	
 	// Start UART
 	// Uncomment the line with the configuration you want to test
