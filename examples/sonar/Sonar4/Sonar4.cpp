@@ -100,7 +100,7 @@ static constexpr const uint16_t TIMEOUT = SONAR1::DEFAULT_TIMEOUT_MS;
 using devices::sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
-REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER, PCI_NUM, TRIGGER1, ECHO1, TRIGGER2, ECHO2)
+REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER, PCI_NUM, SONAR_PINS(TRIGGER1, ECHO1), SONAR_PINS(TRIGGER2, ECHO2))
 
 int main() __attribute__((OS_main));
 int main()

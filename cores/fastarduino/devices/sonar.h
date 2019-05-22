@@ -73,6 +73,9 @@
 		devices::sonar::isr_handler::sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>(); \
 	}
 
+//TODO DOCS
+#define SONAR_PINS(TRIGGER, ECHO) devices::sonar::isr_handler::TriggerEcho<TRIGGER, ECHO>
+
 /**
  * Register the necessary ISR (Interrupt Service Routine) for a set of several
  * `devices::sonar::HCSR04` to listen to echo pulses when the echo pin is a
@@ -84,17 +87,18 @@
  * template class.
  * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
  * connected to the echo pin
- * @param TRIGGER the `board::DigitalPin` connected to the 1st sonar trigger pin
- * @param ECHO the `board::DigitalPin` connected to the 1st sonar echo pin
+ * @param SONAR_PINS the pair of pins connected to the 1st sonar; this is a 
+ * specific type, created by `SONAR_PINS()` macro.
  * @param ... other pairs of (trigger pin, echo pin) for other `HCSR04`
  * 
  * @sa devices::sonar::HCSR04
+ * @sa SONAR_PINS()
  * @sa REGISTER_HCSR04_PCI_ISR()
  */
-#define REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, TRIGGER, ECHO, ...)                             \
-	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                     \
-	{                                                                                                    \
-		devices::sonar::isr_handler::sonar_distinct_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>(); \
+#define REGISTER_DISTINCT_HCSR04_PCI_ISR(TIMER, PCI_NUM, SONAR_PINS1, ...)                             \
+	ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                   \
+	{                                                                                                  \
+		devices::sonar::isr_handler::sonar_distinct_pci<PCI_NUM, TIMER, SONAR_PINS1, ##__VA_ARGS__>(); \
 	}
 
 /**
@@ -1224,27 +1228,36 @@ namespace devices::sonar
 			if (sonar_pci<PCI_NUM_, TIMER_, TRIGGER_, ECHO_>()) CALLBACK_();
 		}
 
+		template<board::DigitalPin TRIGGER_, board::InterruptPin ECHO_> struct TriggerEcho
+		{
+			static constexpr const board::DigitalPin TRIGGER = TRIGGER_;
+			static constexpr const board::InterruptPin ECHO = ECHO_;
+		};
+
 		template<uint8_t PCI_NUM_, board::Timer TIMER_> static bool sonar_distinct_pci()
 		{
 			return false;
 		}
 
-		//TODO How to have variadic template args (DigitalPin, InterruptPin)...?
-		template<uint8_t PCI_NUM_, board::Timer TIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_,
-				 board::DigitalPin... TRIGGER_ECHOS_>
-		static bool sonar_distinct_pci()
+		template<uint8_t PCI_NUM_, board::Timer TIMER_, board::DigitalPin TRIGGER_, board::InterruptPin ECHO_>
+		static bool sonar_distinct_pci_one()
 		{
 			timer::isr_handler::check_timer<TIMER_>();
 			// handle first echo pin
 			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
-			static_assert(board_traits::DigitalPin_trait<ECHO_>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
+			constexpr const board::DigitalPin ECHO_PIN = board::PCI_PIN<ECHO_>();
+			static_assert(board_traits::DigitalPin_trait<ECHO_PIN>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
 						  "ECHO port must match PCI_NUM port");
-			static_assert(_BV(board_traits::DigitalPin_trait<ECHO_>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK,
-						  "ECHO must be a PCINT pin");
-			using SONAR = HCSR04<TIMER_, TRIGGER_, ECHO_, SonarType::ASYNC_PCINT>;
-			bool result = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
+			using SONAR = ASYNC_PCINT_HCSR04<TIMER_, TRIGGER_, ECHO_>;
+			return interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
+		}
+
+		template<uint8_t PCI_NUM_, board::Timer TIMER_, typename TRIGGER_ECHO1_, typename ...TRIGGER_ECHOS_>
+		static bool sonar_distinct_pci()
+		{
+			bool result = sonar_distinct_pci_one<PCI_NUM_, TIMER_, TRIGGER_ECHO1_::TRIGGER, TRIGGER_ECHO1_::ECHO>();
 			// handle other echo pins
-			return result || sonar_pci<PCI_NUM_, TIMER_, TRIGGER_ECHOS_...>();
+			return result || sonar_distinct_pci<PCI_NUM_, TIMER_, TRIGGER_ECHOS_...>();
 		}
 
 		template<uint8_t PCI_NUM_, board::Timer TIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_,
