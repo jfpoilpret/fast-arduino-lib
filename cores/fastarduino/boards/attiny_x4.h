@@ -184,12 +184,10 @@ namespace board
 	 * number , `y` is the port letter (B, C or D), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the interrupt for that
 	 * pin.
-	 * This namespace exists for the sole purpose of quickly finding an external
-	 * interrupt pin among all digital IO pins.
 	 */
-	namespace ExternalInterruptPin
+	enum class ExternalInterruptPin : uint8_t
 	{
-		constexpr const DigitalPin D10_PB2_EXT0 = DigitalPin::D10_PB2;
+		D10_PB2_EXT0 = 0
 	};
 
 	/**
@@ -199,23 +197,21 @@ namespace board
 	 * number, `y` is the port letter (B, C or D), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the PCI vector for that
 	 * pin.
-	 * This namespace exists for the sole purpose of quickly finding an pin change
-	 * interrupt pin among all digital IO pins.
 	 */
-	namespace InterruptPin
+	enum class InterruptPin : uint8_t
 	{
-		constexpr const DigitalPin D0_PA0_PCI0 = DigitalPin::D0_PA0;
-		constexpr const DigitalPin D1_PA1_PCI0 = DigitalPin::D1_PA1;
-		constexpr const DigitalPin D2_PA2_PCI0 = DigitalPin::D2_PA2;
-		constexpr const DigitalPin D3_PA3_PCI0 = DigitalPin::D3_PA3;
-		constexpr const DigitalPin D4_PA4_PCI0 = DigitalPin::D4_PA4;
-		constexpr const DigitalPin D5_PA5_PCI0 = DigitalPin::D5_PA5;
-		constexpr const DigitalPin D6_PA6_PCI0 = DigitalPin::D6_PA6;
-		constexpr const DigitalPin D7_PA7_PCI0 = DigitalPin::D7_PA7;
+		D0_PA0_PCI0 = uint8_t(DigitalPin::D0_PA0),
+		D1_PA1_PCI0 = uint8_t(DigitalPin::D1_PA1),
+		D2_PA2_PCI0 = uint8_t(DigitalPin::D2_PA2),
+		D3_PA3_PCI0 = uint8_t(DigitalPin::D3_PA3),
+		D4_PA4_PCI0 = uint8_t(DigitalPin::D4_PA4),
+		D5_PA5_PCI0 = uint8_t(DigitalPin::D5_PA5),
+		D6_PA6_PCI0 = uint8_t(DigitalPin::D6_PA6),
+		D7_PA7_PCI0 = uint8_t(DigitalPin::D7_PA7),
 		
-		constexpr const DigitalPin D8_PB0_PCI1 = DigitalPin::D8_PB0;
-		constexpr const DigitalPin D9_PB1_PCI1 = DigitalPin::D9_PB1;
-		constexpr const DigitalPin D10_PB2_PCI1 = DigitalPin::D10_PB2;
+		D8_PB0_PCI1 = uint8_t(DigitalPin::D8_PB0),
+		D9_PB1_PCI1 = uint8_t(DigitalPin::D9_PB1),
+		D10_PB2_PCI1 = uint8_t(DigitalPin::D10_PB2)
 	};
 
 	/**
