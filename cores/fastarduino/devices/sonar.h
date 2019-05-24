@@ -39,7 +39,7 @@
  * @param INT_NUM the number of the `INT` vector for the `board::ExternalInterruptPin`
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
- * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param ECHO the `board::ExternalInterruptPin` connected to the sonar echo pin
  * 
  * @sa devices::sonar::HCSR04
  */
@@ -61,7 +61,7 @@
  * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
- * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param ECHO the `board::InterruptPin` connected to the sonar echo pin
  * @param ... other echo pins for other `HCSR04`
  * 
  * @sa devices::sonar::HCSR04
@@ -73,7 +73,16 @@
 		devices::sonar::isr_handler::sonar_pci<PCI_NUM, TIMER, TRIGGER, ECHO, ##__VA_ARGS__>(); \
 	}
 
-//TODO DOCS
+/**
+ * Macro used to build proper arguments for `REGISTER_DISTINCT_HCSR04_PCI_ISR()`.
+ * Each constructed argument is actually a pair of pins, one `board::DigitalPin`
+ * (the trigger pin of the sonar), one `board::InterruptPin` (the echo pin of the
+ * sonar). 
+ * @param TRIGGER the `board::DigitalPin` connected to the trigger pin of the sonar
+ * @param ECHO the `board::InterruptPin` connected to the echo pin of the sonar
+ * 
+ * @sa REGISTER_DISTINCT_HCSR04_PCI_ISR()
+ */
 #define SONAR_PINS(TRIGGER, ECHO) devices::sonar::isr_handler::TriggerEcho<TRIGGER, ECHO>
 
 /**
@@ -111,7 +120,7 @@
  * @param INT_NUM the number of the `INT` vector for the `board::ExternalInterruptPin`
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
- * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param ECHO the `board::ExternalInterruptPin` connected to the sonar echo pin
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the sonar
  * has received the echo pulse; this must be a proper PTMF (pointer to member 
@@ -137,7 +146,7 @@
  * @param INT_NUM the number of the `INT` vector for the `board::ExternalInterruptPin`
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
- * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param ECHO the `board::ExternalInterruptPin` connected to the sonar echo pin
  * @param CALLBACK the function that will be called when the sonar has received
  * the echo pulse
  * 
@@ -162,7 +171,7 @@
  * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
- * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param ECHO the `board::InterruptPin` connected to the sonar echo pin
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the sonar
  * has received the echo pulse; this must be a proper PTMF (pointer to member 
@@ -190,7 +199,7 @@
  * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
- * @param ECHO the `board::DigitalPin` connected to the sonar echo pin
+ * @param ECHO the `board::InterruptPin` connected to the sonar echo pin
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the function that will be called when the sonar has received
  * the echo pulse
@@ -473,6 +482,13 @@ namespace devices::sonar
 	/**
 	 * This enum defines the different modes, supported by `HCSR04`, to
 	 * calculate the echo pin pulse duration.
+	 * Note that you typically do not need this type, neither `HCSR04`; you should
+	 * rather use type aliases instead: `BLOCKING_HCSR04`, `ASYNC_INT_HCSR04` or
+	 * `ASYNC_PCINT_HCSR04`.
+	 * 
+	 * @sa BLOCKING_HCSR04
+	 * @sa ASYNC_INT_HCSR04
+	 * @sa ASYNC_PCIINT_HCSR04
 	 * @sa HCSR04
 	 * @sa HCSR04::echo_us()
 	 */
@@ -497,7 +513,7 @@ namespace devices::sonar
 	};
 
 	/**
-	 * Am abstract base class for some sonar classes defined as part of this API.
+	 * An abstract base class for some sonar classes defined as part of this API.
 	 * You should not need to subclass `AbstractSonar` yourself in general.
 	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` to use for this sonar
 	 * 
@@ -655,23 +671,9 @@ namespace devices::sonar
 	};
 
 	/**
-	 * This template class supports one HC-SR04 sonar (or equivalent sensor), 
-	 * connected to the MCU via 2 pins.
-	 * 
-	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` to use for this sonar
-	 * @tparam TRIGGER_ the `board::DigitalPin` connected to the sensor trigger 
-	 * pin; that can be any available pin.
-	 * @tparam ECHO_ the `board::DigitalPin` connected to the sensor echo pin;
-	 * based on @p SONAR_TYPE_ value, this may be any available pin.
-	 * (`SONAR_TYPE_ == SonarType::BLOCKING`), only a `board::InterruptPin`
-	 * (`SONAR_TYPE_ == SonarType::ASYNC_PCINT`), or only a `board::ExternalInterruptPin`
-	 * (`SONAR_TYPE_ == SonarType::ASYNC_INT`).
-	 * @tparam SONAR_TYPE_ the mode used by this class to calculate the echo pin 
-	 * pulse duration. This parameter has an impact on the asynchronicity of some 
-	 * methods.
-	 * 
-	 * @sa timer::RTT
-	 * @sa SonarType
+	 * @sa BLOCKING_HCSR04
+	 * @sa ASYNC_INT_HCSR04
+	 * @sa ASYNC_PCINT_HCSR04
 	 */
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_,
 			 SonarType SONAR_TYPE_ = SonarType::BLOCKING>
@@ -826,12 +828,52 @@ namespace devices::sonar
 		friend struct isr_handler;
 	};
 
+	/**
+	 * This template class supports one HC-SR04 sonar (or equivalent sensor), 
+	 * connected to the MCU via 2 pins. Sonar ranging is performed in blocking 
+	 * mode, i.e. `HCSR04::echo_us()` method is blocked until ranging is finished
+	 * or timeout has occurred.
+	 * 
+	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` to use for this sonar
+	 * @tparam TRIGGER_ the `board::DigitalPin` connected to the sensor trigger 
+	 * pin; that can be any available pin.
+	 * @tparam ECHO_ the `board::DigitalPin` connected to the sensor echo pin
+	 * 
+	 * @sa timer::RTT
+	 * @sa HCSR04
+	 */
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_>
 	using BLOCKING_HCSR04 = HCSR04<NTIMER_, TRIGGER_, ECHO_, SonarType::BLOCKING>;
 
+	/**
+	 * This template class supports one HC-SR04 sonar (or equivalent sensor), 
+	 * connected to the MCU via 2 pins. Sonar ranging is performed in asynchronous
+	 * mode through an `board::ExternalInterruptPin`.
+	 * 
+	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` to use for this sonar
+	 * @tparam TRIGGER_ the `board::DigitalPin` connected to the sensor trigger 
+	 * pin; that can be any available pin.
+	 * @tparam ECHO_ the `board::ExternalInterruptPin` connected to the sensor echo pin
+	 * 
+	 * @sa timer::RTT
+	 * @sa HCSR04
+	 */
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::ExternalInterruptPin ECHO_>
 	using ASYNC_INT_HCSR04 = HCSR04<NTIMER_, TRIGGER_, board::EXT_PIN<ECHO_>(), SonarType::ASYNC_INT>;
 
+	/**
+	 * This template class supports one HC-SR04 sonar (or equivalent sensor), 
+	 * connected to the MCU via 2 pins. Sonar ranging is performed in asynchronous
+	 * mode through an `board::InterruptPin`.
+	 * 
+	 * @tparam NTIMER_ the AVR timer of the `timer::RTT` to use for this sonar
+	 * @tparam TRIGGER_ the `board::DigitalPin` connected to the sensor trigger 
+	 * pin; that can be any available pin.
+	 * @tparam ECHO_ the `board::InterruptPin` connected to the sensor echo pin
+	 * 
+	 * @sa timer::RTT
+	 * @sa HCSR04
+	 */
 	template<board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::InterruptPin ECHO_>
 	using ASYNC_PCINT_HCSR04 = HCSR04<NTIMER_, TRIGGER_, board::PCI_PIN<ECHO_>(), SonarType::ASYNC_PCINT>;
 
