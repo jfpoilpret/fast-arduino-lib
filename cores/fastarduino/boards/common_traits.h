@@ -604,22 +604,11 @@ namespace board_traits
 
 namespace board
 {
+	//TODO should this be moved and documented?
 	template<DigitalPin PIN> constexpr uint8_t BIT() INLINE;
 	template<DigitalPin PIN> constexpr uint8_t BIT()
 	{
 		return board_traits::DigitalPin_trait<PIN>::BIT;
-	}
-
-	template<ExternalInterruptPin EXT> constexpr DigitalPin EXT_PIN() INLINE;
-	template<ExternalInterruptPin EXT> constexpr DigitalPin EXT_PIN()
-	{
-		return board_traits::ExternalInterruptPin_trait<EXT>::ACTUAL_PIN;
-	}
-
-	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN() INLINE;
-	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN()
-	{
-		return DigitalPin(uint8_t(PCI));
 	}
 };
 

@@ -89,6 +89,18 @@
 	friend struct interrupt::isr_handler_pci;	\
 	DECL_PCINT_ISR_FRIENDS
 
+namespace board
+{
+	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN() INLINE;
+	/**
+	 * Convert an `InterruptPin` to the matching `DigitalPin`.
+	 */
+	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN()
+	{
+		return DigitalPin(uint8_t(PCI));
+	}
+};
+
 namespace interrupt
 {
 	/**

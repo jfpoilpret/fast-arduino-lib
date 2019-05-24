@@ -84,6 +84,18 @@
 	friend struct interrupt::isr_handler_int;	\
 	DECL_INT_ISR_FRIENDS
 
+namespace board
+{
+	template<ExternalInterruptPin EXT> constexpr DigitalPin EXT_PIN() INLINE;
+	/**
+	 * Convert an `ExternalInterruptPin` to the matching `DigitalPin`.
+	 */
+	template<ExternalInterruptPin EXT> constexpr DigitalPin EXT_PIN()
+	{
+		return board_traits::ExternalInterruptPin_trait<EXT>::ACTUAL_PIN;
+	}
+};
+
 namespace interrupt
 {
 	/**
