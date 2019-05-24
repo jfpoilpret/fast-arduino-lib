@@ -105,9 +105,9 @@ namespace interrupt
 	 * Handler of an External Interrupt. You must create as many as you have pins 
 	 * you want to handle as External Interrupts.
 	 * If you need a function or method to be called back when an External Interrupt
-	 * occurs for @p PIN, then you have to use `REGISTER_INT_ISR_FUNCTION` or 
+	 * occurs for @p PIN, then you have to use `REGISTER_INT_ISR_FUNCTION()` or 
 	 * `REGISTER_INT_ISR_METHOD()` macros.
-	 * If you don't, then use `REGISTER_INT_ISR_EMPTY` macro.
+	 * If you don't, then use `REGISTER_INT_ISR_EMPTY()` macro.
 	 * @tparam EXTPIN_ the External Interrupt pin
 	 * @sa board::ExternalInterruptPin
 	 * @sa REGISTER_INT_ISR_FUNCTION
