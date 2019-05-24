@@ -2,7 +2,7 @@
 #include <fastarduino/int.h>
 #include <fastarduino/power.h>
 
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
 
 class PinChangeHandler
 {
@@ -18,7 +18,7 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::EXT_PIN<SWITCH>()>::TYPE _switch;
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 
