@@ -304,17 +304,7 @@ namespace serial::soft
 	template<typename T, T IRQ> class UARX {};
 	/// @endcond
 
-	/**
-	 * Software-emulated serial receiver API.
-	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_INT_ISR()`.
-	 * 
-	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
-	 * 
-	 * @sa REGISTER_UART_INT_ISR()
-	 * @sa UATX
-	 * @sa UART
-	 */
+	/** @sa UARX_EXT */
 	template<board::ExternalInterruptPin RX_>
 	class UARX<board::ExternalInterruptPin, RX_> : public AbstractUARX
 	{
@@ -399,17 +389,7 @@ namespace serial::soft
 		friend struct isr_handler;
 	};
 
-	/**
-	 * Software-emulated serial receiver API.
-	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_PCI_ISR()`.
-	 * 
-	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
-	 * 
-	 * @sa REGISTER_UART_PCI_ISR()
-	 * @sa UATX
-	 * @sa UART
-	 */
+	/** @sa UARX_PCI */
 	template<board::InterruptPin RX_> class UARX<board::InterruptPin, RX_> : public AbstractUARX
 	{
 	public:
@@ -499,18 +479,7 @@ namespace serial::soft
 	template<typename T, T IRQ, board::DigitalPin TX> class UART {};
 	/// @endcond
 
-	/**
-	 * Software-emulated serial receiver/transceiver API.
-	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_INT_ISR()`.
-	 * 
-	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
-	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
-	 * 
-	 * @sa REGISTER_UART_INT_ISR()
-	 * @sa UATX
-	 * @sa UARX
-	 */
+	/** @sa UART_EXT */
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::ExternalInterruptPin, RX_, TX_> : public UARX<board::ExternalInterruptPin, RX_>, public UATX<TX_>
 	{
@@ -572,18 +541,7 @@ namespace serial::soft
 		}
 	};
 
-	/**
-	 * Software-emulated serial receiver/transceiver API.
-	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UART_PCI_ISR()`.
-	 * 
-	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
-	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
-	 * 
-	 * @sa REGISTER_UART_PCI_ISR()
-	 * @sa UATX
-	 * @sa UARX
-	 */
+	/** @sa UART_PCI */
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::InterruptPin, RX_, TX_> : public UARX<board::InterruptPin, RX_>, public UATX<TX_>
 	{
@@ -646,11 +604,65 @@ namespace serial::soft
 	};
 
 	// Useful type aliases
-	//TODO docs
+	//=====================
+
+	/**
+	 * Software-emulated serial receiver API.
+	 * For this API to be fully functional, you must register the right ISR in your
+	 * program, through `REGISTER_UART_INT_ISR()`.
+	 * 
+	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
+	 * 
+	 * @sa REGISTER_UART_INT_ISR()
+	 * @sa UARX
+	 * @sa UATX
+	 * @sa UART
+	 */
 	template<board::ExternalInterruptPin RX_> using UARX_EXT = UARX<board::ExternalInterruptPin, RX_>;
+
+	/**
+	 * Software-emulated serial receiver API.
+	 * For this API to be fully functional, you must register the right ISR in your
+	 * program, through `REGISTER_UART_PCI_ISR()`.
+	 * 
+	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
+	 * 
+	 * @sa REGISTER_UART_PCI_ISR()
+	 * @sa UARX
+	 * @sa UATX
+	 * @sa UART
+	 */
 	template<board::InterruptPin RX_> using UARX_PCI = UARX<board::InterruptPin, RX_>;
+
+	/**
+	 * Software-emulated serial receiver/transceiver API.
+	 * For this API to be fully functional, you must register the right ISR in your
+	 * program, through `REGISTER_UART_INT_ISR()`.
+	 * 
+	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
+	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
+	 * 
+	 * @sa REGISTER_UART_INT_ISR()
+	 * @sa UART
+	 * @sa UATX
+	 * @sa UARX
+	 */
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
 	using UART_EXT = UART<board::ExternalInterruptPin, RX_, TX_>;
+
+	/**
+	 * Software-emulated serial receiver/transceiver API.
+	 * For this API to be fully functional, you must register the right ISR in your
+	 * program, through `REGISTER_UART_PCI_ISR()`.
+	 * 
+	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
+	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
+	 * 
+	 * @sa REGISTER_UART_PCI_ISR()
+	 * @sa UART
+	 * @sa UATX
+	 * @sa UARX
+	 */
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
 	using UART_PCI = UART<board::InterruptPin, RX_, TX_>;
 
