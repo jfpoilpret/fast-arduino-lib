@@ -10,3 +10,5 @@ apidoc/**
 **/*.OLD
 tuto-samples/tables.txt
 tuto-samples/*/sizes.txt
+new-examples-data.xlsx
+sizes-diff.xlsx
