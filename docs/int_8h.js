@@ -10,5 +10,6 @@ var int_8h =
       [ "ANY_CHANGE", "int_8h.html#a27eee51cf0393a75a91aac0425e65d1ba1d6fe09476721a54c07d90573d84a1f2", null ],
       [ "FALLING_EDGE", "int_8h.html#a27eee51cf0393a75a91aac0425e65d1ba297f5ea19073f4b51715b029f48d5d52", null ],
       [ "RISING_EDGE", "int_8h.html#a27eee51cf0393a75a91aac0425e65d1bad85243a747ac5537ef0b7adde99c3e98", null ]
-    ] ]
+    ] ],
+    [ "EXT_PIN", "int_8h.html#a8a587b48884f6b62938abfbcf1484130", null ]
 ];

@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['i2c_5fstatus_5fhook',['I2C_STATUS_HOOK',['../namespacei2c.html#a30a5217313a148f7da0b484c60f3fd00',1,'i2c']]],
-  ['int_5ftype',['INT_TYPE',['../classserial_1_1soft_1_1_u_a_r_x.html#ae0d10eab03905ee51194d85ae917e4b3',1,'serial::soft::UARX']]],
-  ['intenable',['INTEnable',['../namespacedevices_1_1magneto.html#af1a3dfb463a3ed6edaa3d7dcbdd2352d',1,'devices::magneto']]],
-  ['ios',['ios',['../namespacestreams.html#a9666e4bfa7b60ffba7c8ee7d9fe95492',1,'streams']]],
-  ['iostate',['iostate',['../classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378',1,'streams::ios_base']]]
+  ['event',['EVENT',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a343b9784151711d186327284c347d236',1,'devices::sonar::MultiHCSR04::EVENT()'],['../classevents_1_1_scheduler.html#ad8099104b97bb2573fdc4ce91b0f2652',1,'events::Scheduler::EVENT()']]]
 ];

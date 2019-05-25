@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['usart',['USART',['../namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907',1,'board']]]
+  ['sleepmode',['SleepMode',['../namespaceboard.html#ae62717162088fee094efad7ff669183d',1,'board']]]
 ];

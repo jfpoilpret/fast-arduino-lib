@@ -90,7 +90,8 @@ $(document).ready(function(){initNavTree('int_8h.html','');});
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">int.h File Reference</div>  </div>
 </div><!--header-->
@@ -128,12 +129,15 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt; PIN_ &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt; EXTPIN_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler of an External Interrupt.  <a href="classinterrupt_1_1_i_n_t_signal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
+<tr class="memitem:namespaceboard"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html">board</a></td></tr>
+<tr class="memdesc:namespaceboard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all types and constants specific to support a specific MCU target. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceinterrupt"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html">interrupt</a></td></tr>
 <tr class="memdesc:namespaceinterrupt"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API to handle AVR interruptions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,6 +171,14 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a27eee51cf0393a75a91aac0425e65d1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kind of change that will trigger an External Interrupt for a given pin.  <a href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b">More...</a><br /></td></tr>
 <tr class="separator:a27eee51cf0393a75a91aac0425e65d1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a8a587b48884f6b62938abfbcf1484130"><td class="memTemplParams" colspan="2"><a id="a8a587b48884f6b62938abfbcf1484130"></a>
+template&lt;ExternalInterruptPin EXT&gt; </td></tr>
+<tr class="memitem:a8a587b48884f6b62938abfbcf1484130"><td class="memTemplItemLeft" align="right" valign="top">constexpr DigitalPin&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a8a587b48884f6b62938abfbcf1484130">board::EXT_PIN</a> ()</td></tr>
+<tr class="memdesc:a8a587b48884f6b62938abfbcf1484130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an <code>ExternalInterruptPin</code> to the matching <code>DigitalPin</code>. <br /></td></tr>
+<tr class="separator:a8a587b48884f6b62938abfbcf1484130"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>General API for handling External Interrupt pins. </p>
@@ -215,7 +227,7 @@ Enumerations</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">INT_NUM</td><td>the number of the <code>INT</code> vector for this <code>PIN</code> </td></tr>
-    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> for <code>INT_NUM</code>; if <code>PIN</code> and <code>INT_NUM</code> do not match, compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code> for <code>INT_NUM</code>; if <code>PIN</code> and <code>INT_NUM</code> do not match, compilation will fail. </td></tr>
     <tr><td class="paramname">HANDLER</td><td>the class holding the callback method </td></tr>
     <tr><td class="paramname">CALLBACK</td><td>the method of <code>HANDLER</code> that will be called when the interrupt is triggered; this must be a proper PTMF (pointer to member function). </td></tr>
   </table>
@@ -262,7 +274,7 @@ Enumerations</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">INT_NUM</td><td>the number of the <code>INT</code> vector for this <code>PIN</code> </td></tr>
-    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> for <code>INT_NUM</code>; if <code>PIN</code> and <code>INT_NUM</code> do not match, compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code> for <code>INT_NUM</code>; if <code>PIN</code> and <code>INT_NUM</code> do not match, compilation will fail. </td></tr>
     <tr><td class="paramname">CALLBACK</td><td>the function that will be called when the interrupt is triggered </td></tr>
   </table>
   </dd>
@@ -302,7 +314,7 @@ Enumerations</h2></td></tr>
 <p>This can be useful if you just need to wake up the MCU from an external signal, but do not need to perform any sepcific stuff with a callback. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">INT_NUM</td><td>the number of the <code>INT</code> vector for this <code>PIN</code> </td></tr>
-    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> for <code>INT_NUM</code>; if <code>PIN</code> and <code>INT_NUM</code> do not match, compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code> for <code>INT_NUM</code>; if <code>PIN</code> and <code>INT_NUM</code> do not match, compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>

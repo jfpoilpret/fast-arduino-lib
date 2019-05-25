@@ -1,3 +1,4 @@
 <map id="serial::soft::UATX&lt; TX_ &gt;" name="serial::soft::UATX&lt; TX_ &gt;">
-<area shape="rect" id="node3" href="$classserial_1_1soft_1_1_u_a_r_t.html" title="Software&#45;emulated serial receiver/transceiver API. " alt="" coords="5,169,140,211"/>
+<area shape="rect" id="node3" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title="serial::soft::UART\l\&lt; board::ExternalInterrupt\lPin, RX_, TX_ \&gt;" alt="" coords="347,5,539,61"/>
+<area shape="rect" id="node4" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title="serial::soft::UART\l\&lt; board::InterruptPin,\l RX_, TX_ \&gt;" alt="" coords="361,85,524,141"/>
 </map>

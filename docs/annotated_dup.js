@@ -1,7 +1,6 @@
 var annotated_dup =
 [
     [ "analog", "namespaceanalog.html", "namespaceanalog" ],
-    [ "board", "namespaceboard.html", null ],
     [ "containers", "namespacecontainers.html", "namespacecontainers" ],
     [ "devices", "namespacedevices.html", "namespacedevices" ],
     [ "eeprom", "namespaceeeprom.html", "namespaceeeprom" ],

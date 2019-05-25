@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['event',['EVENT',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a343b9784151711d186327284c347d236',1,'devices::sonar::MultiHCSR04::EVENT()'],['../classevents_1_1_scheduler.html#ad8099104b97bb2573fdc4ce91b0f2652',1,'events::Scheduler::EVENT()']]]
+  ['calc',['CALC',['../classtimer_1_1_square_wave.html#adb84f1958c289ebdd7c7f98446762b71',1,'timer::SquareWave']]],
+  ['calculator',['CALCULATOR',['../classtimer_1_1_timer.html#af8f2e6de6693fdeb023771acce3ec2a2',1,'timer::Timer']]],
+  ['clock',['CLOCK',['../classevents_1_1_scheduler.html#afec660953213969f4e4f7e81b2256110',1,'events::Scheduler']]],
+  ['counter',['COUNTER',['../classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88',1,'devices::audio::ToneGenerator']]]
 ];

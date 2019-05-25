@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('namespacedevices_1_1sonar.html','');})
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
@@ -102,10 +103,9 @@ $(document).ready(function(){initNavTree('namespacedevices_1_1sonar.html','');})
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_abstract_sonar.html">AbstractSonar</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Am abstract base class for some sonar classes defined as part of this API.  <a href="classdevices_1_1sonar_1_1_abstract_sonar.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An abstract base class for some sonar classes defined as part of this API.  <a href="classdevices_1_1sonar_1_1_abstract_sonar.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pins.  <a href="classdevices_1_1sonar_1_1_h_c_s_r04.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">MultiHCSR04</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins gathered and connected to only one MCU pin, and all echo pins connected to the same MCU <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU. ">board::Port</a></code>.  <a href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#details">More...</a><br /></td></tr>
@@ -113,6 +113,21 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This type holds information about events occurring within <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> handler.  <a href="structdevices_1_1sonar_1_1_sonar_event.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a1609913f480a742890ace74e1882ac5e"><td class="memTemplParams" colspan="2">template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_&gt; </td></tr>
+<tr class="memitem:a1609913f480a742890ace74e1882ac5e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1sonar.html#a1609913f480a742890ace74e1882ac5e">BLOCKING_HCSR04</a> = <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_, <a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74a72323e5457d8fb855145bfee934aa415">SonarType::BLOCKING</a> &gt;</td></tr>
+<tr class="memdesc:a1609913f480a742890ace74e1882ac5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pins.  <a href="#a1609913f480a742890ace74e1882ac5e">More...</a><br /></td></tr>
+<tr class="separator:a1609913f480a742890ace74e1882ac5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a549182f59f1965da0341ffc4137f3a1e"><td class="memTemplParams" colspan="2">template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::ExternalInterruptPin ECHO_&gt; </td></tr>
+<tr class="memitem:a549182f59f1965da0341ffc4137f3a1e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1sonar.html#a549182f59f1965da0341ffc4137f3a1e">ASYNC_INT_HCSR04</a> = <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a>&lt; NTIMER_, TRIGGER_, <a class="el" href="namespaceboard.html#a8a587b48884f6b62938abfbcf1484130">board::EXT_PIN</a>&lt; ECHO_ &gt;(), <a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74adea23c77e6b206537cb20a44485130be">SonarType::ASYNC_INT</a> &gt;</td></tr>
+<tr class="memdesc:a549182f59f1965da0341ffc4137f3a1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pins.  <a href="#a549182f59f1965da0341ffc4137f3a1e">More...</a><br /></td></tr>
+<tr class="separator:a549182f59f1965da0341ffc4137f3a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bba9656cf69f00d94ab7b571be82457"><td class="memTemplParams" colspan="2">template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::InterruptPin ECHO_&gt; </td></tr>
+<tr class="memitem:a7bba9656cf69f00d94ab7b571be82457"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1sonar.html#a7bba9656cf69f00d94ab7b571be82457">ASYNC_PCINT_HCSR04</a> = <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a>&lt; NTIMER_, TRIGGER_, <a class="el" href="namespaceboard.html#a817ea24e897a7672b250053baec872a4">board::PCI_PIN</a>&lt; ECHO_ &gt;(), <a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74a4a15eb39b3355ce7db6b06e422f8b322">SonarType::ASYNC_PCINT</a> &gt;</td></tr>
+<tr class="memdesc:a7bba9656cf69f00d94ab7b571be82457"><td class="mdescLeft">&#160;</td><td class="mdescRight">This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pins.  <a href="#a7bba9656cf69f00d94ab7b571be82457">More...</a><br /></td></tr>
+<tr class="separator:a7bba9656cf69f00d94ab7b571be82457"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -148,7 +163,104 @@ Variables</h2></td></tr>
 <li>one "trigger" pin that, upon a short pulse, will generate ultrasonic waves to be emitted by the sensor</li>
 <li>one "echo" pin that, upon reception of the echoed ultrasonic wave, will generate a pulse which duration is the time during which the ultrasonic wave has travelled from the sensor back to the sensor, after reflecting on some obstacle. This API has been tested on HC-SR04 sensors (cheap ultrasonic sensors with a range of 4 meters). </li>
 </ul>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="a1609913f480a742890ace74e1882ac5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1609913f480a742890ace74e1882ac5e">&#9670;&nbsp;</a></span>BLOCKING_HCSR04</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::DigitalPin ECHO_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacedevices_1_1sonar.html#a1609913f480a742890ace74e1882ac5e">devices::sonar::BLOCKING_HCSR04</a> = typedef <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a>&lt;NTIMER_, TRIGGER_, ECHO_, <a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74a72323e5457d8fb855145bfee934aa415">SonarType::BLOCKING</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pins. </p>
+<p>Sonar ranging is performed in blocking mode, i.e. <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a20893e3685ab8e1774496ba4fe4de911" title="Send a trigger pulse on this sonar and wait until an echo pulse is received, or timeout_ms has elapse...">HCSR04::echo_us()</a></code> method is blocked until ranging is finished or timeout has occurred.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER_</td><td>the AVR timer of the <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> to use for this sonar </td></tr>
+    <tr><td class="paramname">TRIGGER_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sensor trigger pin; that can be any available pin. </td></tr>
+    <tr><td class="paramname">ECHO_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sensor echo pin</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00846">846</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a549182f59f1965da0341ffc4137f3a1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a549182f59f1965da0341ffc4137f3a1e">&#9670;&nbsp;</a></span>ASYNC_INT_HCSR04</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::ExternalInterruptPin ECHO_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacedevices_1_1sonar.html#a549182f59f1965da0341ffc4137f3a1e">devices::sonar::ASYNC_INT_HCSR04</a> = typedef <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a>&lt;NTIMER_, TRIGGER_, <a class="el" href="namespaceboard.html#a8a587b48884f6b62938abfbcf1484130">board::EXT_PIN</a>&lt;ECHO_&gt;(), <a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74adea23c77e6b206537cb20a44485130be">SonarType::ASYNC_INT</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pins. </p>
+<p>Sonar ranging is performed in asynchronous mode through an <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code>.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER_</td><td>the AVR timer of the <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> to use for this sonar </td></tr>
+    <tr><td class="paramname">TRIGGER_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sensor trigger pin; that can be any available pin. </td></tr>
+    <tr><td class="paramname">ECHO_</td><td>the <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code> connected to the sensor echo pin</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00862">862</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a7bba9656cf69f00d94ab7b571be82457"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bba9656cf69f00d94ab7b571be82457">&#9670;&nbsp;</a></span>ASYNC_PCINT_HCSR04</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::InterruptPin ECHO_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacedevices_1_1sonar.html#a7bba9656cf69f00d94ab7b571be82457">devices::sonar::ASYNC_PCINT_HCSR04</a> = typedef <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a>&lt;NTIMER_, TRIGGER_, <a class="el" href="namespaceboard.html#a817ea24e897a7672b250053baec872a4">board::PCI_PIN</a>&lt;ECHO_&gt;(), <a class="el" href="namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74a4a15eb39b3355ce7db6b06e422f8b322">SonarType::ASYNC_PCINT</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pins. </p>
+<p>Sonar ranging is performed in asynchronous mode through an <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code>.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NTIMER_</td><td>the AVR timer of the <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> to use for this sonar </td></tr>
+    <tr><td class="paramname">TRIGGER_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sensor trigger pin; that can be any available pin. </td></tr>
+    <tr><td class="paramname">ECHO_</td><td>the <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> connected to the sensor echo pin</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00878">878</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="aaf92144d703d09314a02aaf53bdc9b74"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf92144d703d09314a02aaf53bdc9b74">&#9670;&nbsp;</a></span>SonarType</h2>
 
@@ -169,22 +281,29 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>This enum defines the different modes, supported by <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a></code>, to calculate the echo pin pulse duration. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a> </dd>
+<p>This enum defines the different modes, supported by <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a></code>, to calculate the echo pin pulse duration. </p>
+<p>Note that you typically do not need this type, neither <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a></code>; you should rather use type aliases instead: <code>BLOCKING_HCSR04</code>, <code>ASYNC_INT_HCSR04</code> or <code>ASYNC_PCINT_HCSR04</code>.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1sonar.html#a1609913f480a742890ace74e1882ac5e" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">BLOCKING_HCSR04</a> </dd>
+<dd>
+<a class="el" href="namespacedevices_1_1sonar.html#a549182f59f1965da0341ffc4137f3a1e" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">ASYNC_INT_HCSR04</a> </dd>
+<dd>
+ASYNC_PCIINT_HCSR04 </dd>
+<dd>
+<a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a20893e3685ab8e1774496ba4fe4de911" title="Send a trigger pulse on this sonar and wait until an echo pulse is received, or timeout_ms has elapse...">HCSR04::echo_us()</a> </dd></dl>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aaf92144d703d09314a02aaf53bdc9b74a72323e5457d8fb855145bfee934aa415"></a>BLOCKING&#160;</td><td class="fielddoc"><p>In this mode, the <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a></code> will block until the echo pulse is received. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aaf92144d703d09314a02aaf53bdc9b74a72323e5457d8fb855145bfee934aa415"></a>BLOCKING&#160;</td><td class="fielddoc"><p>In this mode, the <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a></code> will block until the echo pulse is received. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aaf92144d703d09314a02aaf53bdc9b74adea23c77e6b206537cb20a44485130be"></a>ASYNC_INT&#160;</td><td class="fielddoc"><p>In this mode, the echo pin is a <code><a class="el" href="namespaceboard_1_1_external_interrupt_pin.html" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code> and the <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a> will use interrupts to calculate the echo pulse duration. </p>
+<tr><td class="fieldname"><a id="aaf92144d703d09314a02aaf53bdc9b74adea23c77e6b206537cb20a44485130be"></a>ASYNC_INT&#160;</td><td class="fielddoc"><p>In this mode, the echo pin is a <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins...">board::ExternalInterruptPin</a></code> and the <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a> will use interrupts to calculate the echo pulse duration. </p>
 <p>When this mode is used, one registration macro must be called among <code>REGISTER_HCSR04_INT_ISR*</code>. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="aaf92144d703d09314a02aaf53bdc9b74a4a15eb39b3355ce7db6b06e422f8b322"></a>ASYNC_PCINT&#160;</td><td class="fielddoc"><p>In this mode, the echo pin is a <code><a class="el" href="namespaceboard_1_1_interrupt_pin.html" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> and the <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html" title="This template class supports one HC-SR04 sonar (or equivalent sensor), connected to the MCU via 2 pin...">HCSR04</a> will use interrupts to calculate the echo pulse duration. </p>
+<tr><td class="fieldname"><a id="aaf92144d703d09314a02aaf53bdc9b74a4a15eb39b3355ce7db6b06e422f8b322"></a>ASYNC_PCINT&#160;</td><td class="fielddoc"><p>In this mode, the echo pin is a <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> and the <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a> will use interrupts to calculate the echo pulse duration. </p>
 <p>When this mode is used, one registration macro must be called among <code>REGISTER_HCSR04_PCI_ISR*</code>. </p>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00475">475</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00495">495</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -224,7 +343,7 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the distance, in millimeters, between the sensor and the obstacle </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00438">438</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00451">451</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -263,7 +382,7 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the echo pulse duration, in microseconds, expected for <code>distance_mm</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00462">462</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00475">475</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -291,7 +410,7 @@ Variables</h2></td></tr>
 <p>The approximate speed of sound (and ultrasonic) waves, in the air, expressed in meters per second. </p>
 <p>This constant is useful everytime we need to convert echo durations from the ultrasonic sensor to a concrete distance. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00421">421</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00434">434</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>

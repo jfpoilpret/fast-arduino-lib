@@ -69,8 +69,7 @@ $(function() {
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">leonardo.h File Reference</div>  </div>
 </div><!--header-->
@@ -92,12 +91,6 @@ Include dependency graph for leonardo.h:</div>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceboard"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html">board</a></td></tr>
 <tr class="memdesc:namespaceboard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all types and constants specific to support Arduino LEONARDO board (ATmega32u4 MCU target). <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceboard_1_1_external_interrupt_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_external_interrupt_pin.html">board::ExternalInterruptPin</a></td></tr>
-<tr class="memdesc:namespaceboard_1_1_external_interrupt_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, usable as direct external interrupt pins. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespaceboard_1_1_interrupt_pin"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard_1_1_interrupt_pin.html">board::InterruptPin</a></td></tr>
-<tr class="memdesc:namespaceboard_1_1_interrupt_pin"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, usable as pin change interrupt (PCI) pins. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -324,6 +317,58 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, capable of PWM output.  <a href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">More...</a><br /></td></tr>
 <tr class="separator:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adea66670db50b076b2c145657aa587f7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7">board::ExternalInterruptPin</a> : uint8_t { <br />
+&#160;&#160;<b>D3_PD0_EXT0</b> = 0, 
+<br />
+&#160;&#160;<b>D2_PD1_EXT1</b>, 
+<br />
+&#160;&#160;<b>D0_PD2_EXT2</b>, 
+<br />
+&#160;&#160;<b>D1_PD3_EXT3</b>, 
+<br />
+&#160;&#160;<b>D7_PE6_EXT6</b>, 
+<br />
+&#160;&#160;<b>D3</b> = D3_PD0_EXT0, 
+<br />
+&#160;&#160;<b>D2</b> = D2_PD1_EXT1, 
+<br />
+&#160;&#160;<b>D0</b> = D0_PD2_EXT2, 
+<br />
+&#160;&#160;<b>D1</b> = D1_PD3_EXT3, 
+<br />
+&#160;&#160;<b>D7</b> = D7_PE6_EXT6
+<br />
+ }</td></tr>
+<tr class="memdesc:adea66670db50b076b2c145657aa587f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, usable as direct external interrupt pins.  <a href="namespaceboard.html#adea66670db50b076b2c145657aa587f7">More...</a><br /></td></tr>
+<tr class="separator:adea66670db50b076b2c145657aa587f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7abd24b042402c0691c0ad6db604e7da"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a> : uint8_t { <br />
+&#160;&#160;<b>RXLED_PB0_PCI0</b> = uint8_t(DigitalPin::RXLED_PB0), 
+<br />
+&#160;&#160;<b>SCK_PB1_PCI0</b> = uint8_t(DigitalPin::SCK_PB1), 
+<br />
+&#160;&#160;<b>MOSI_PB2_PCI0</b> = uint8_t(DigitalPin::MOSI_PB2), 
+<br />
+&#160;&#160;<b>MISO_PB3_PCI0</b> = uint8_t(DigitalPin::MISO_PB3), 
+<br />
+&#160;&#160;<b>D8_PB4_PCI0</b> = uint8_t(DigitalPin::D8_PB4), 
+<br />
+&#160;&#160;<b>D9_PB5_PCI0</b> = uint8_t(DigitalPin::D9_PB5), 
+<br />
+&#160;&#160;<b>D10_PB6_PCI0</b> = uint8_t(DigitalPin::D10_PB6), 
+<br />
+&#160;&#160;<b>D11_PB7_PCI0</b> = uint8_t(DigitalPin::D11_PB7), 
+<br />
+&#160;&#160;<b>D8</b> = D8_PB4_PCI0, 
+<br />
+&#160;&#160;<b>D9</b> = D9_PB5_PCI0, 
+<br />
+&#160;&#160;<b>D10</b> = D10_PB6_PCI0, 
+<br />
+&#160;&#160;<b>D11</b> = D11_PB7_PCI0
+<br />
+ }</td></tr>
+<tr class="memdesc:a7abd24b042402c0691c0ad6db604e7da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of ATmega32u4, usable as pin change interrupt (PCI) pins.  <a href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">More...</a><br /></td></tr>
+<tr class="separator:a7abd24b042402c0691c0ad6db604e7da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a> : uint8_t { <b>USART1</b> = 1
  }</td></tr>
 <tr class="memdesc:a8541ca1f10a050c4356d6ccd76d9a907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all USART modules of ATmega32u4, actually only one.  <a href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">More...</a><br /></td></tr>
@@ -360,75 +405,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a2529f85498783a75dc75c281e0b754d3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a> ()</td></tr>
 <tr class="memdesc:a2529f85498783a75dc75c281e0b754d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs special initialization for ATmega32u4, actually disabling USB related interrupts, to avoid strange behavior at reset time.  <a href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">More...</a><br /></td></tr>
 <tr class="separator:a2529f85498783a75dc75c281e0b754d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a1664b0856721a9348a10b3dc6ef67541"><td class="memItemLeft" align="right" valign="top"><a id="a1664b0856721a9348a10b3dc6ef67541"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D3_PD0_EXT0</b> = DigitalPin::D3_PD0</td></tr>
-<tr class="separator:a1664b0856721a9348a10b3dc6ef67541"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad99ea07605f33d2673a8fdd0aef08ac9"><td class="memItemLeft" align="right" valign="top"><a id="ad99ea07605f33d2673a8fdd0aef08ac9"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D2_PD1_EXT1</b> = DigitalPin::D2_PD1</td></tr>
-<tr class="separator:ad99ea07605f33d2673a8fdd0aef08ac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbc076d9d47d16483d400210a54a26e9"><td class="memItemLeft" align="right" valign="top"><a id="abbc076d9d47d16483d400210a54a26e9"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D0_PD2_EXT2</b> = DigitalPin::D0_PD2</td></tr>
-<tr class="separator:abbc076d9d47d16483d400210a54a26e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99063f0dd4ef9ac4a1a07175455ae001"><td class="memItemLeft" align="right" valign="top"><a id="a99063f0dd4ef9ac4a1a07175455ae001"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D1_PD3_EXT3</b> = DigitalPin::D1_PD3</td></tr>
-<tr class="separator:a99063f0dd4ef9ac4a1a07175455ae001"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1171a3e78072150a558043bfaed47d4"><td class="memItemLeft" align="right" valign="top"><a id="ab1171a3e78072150a558043bfaed47d4"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D7_PE6_EXT6</b> = DigitalPin::D7_PE6</td></tr>
-<tr class="separator:ab1171a3e78072150a558043bfaed47d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99e0108bdecb1b1d843a82328162d5ce"><td class="memItemLeft" align="right" valign="top"><a id="a99e0108bdecb1b1d843a82328162d5ce"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D3</b> = DigitalPin::D3_PD0</td></tr>
-<tr class="separator:a99e0108bdecb1b1d843a82328162d5ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ad6248e96e6f0a4cd0a5c288a8470b2"><td class="memItemLeft" align="right" valign="top"><a id="a0ad6248e96e6f0a4cd0a5c288a8470b2"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D2</b> = DigitalPin::D2_PD1</td></tr>
-<tr class="separator:a0ad6248e96e6f0a4cd0a5c288a8470b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8c0af4c6aabe4935d6bac507a3fc750"><td class="memItemLeft" align="right" valign="top"><a id="ad8c0af4c6aabe4935d6bac507a3fc750"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D0</b> = DigitalPin::D0_PD2</td></tr>
-<tr class="separator:ad8c0af4c6aabe4935d6bac507a3fc750"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a585977933066556e7c6c730201a629c5"><td class="memItemLeft" align="right" valign="top"><a id="a585977933066556e7c6c730201a629c5"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D1</b> = DigitalPin::D1_PD3</td></tr>
-<tr class="separator:a585977933066556e7c6c730201a629c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab93e92e84d7831c59a9402997d332a0"><td class="memItemLeft" align="right" valign="top"><a id="aab93e92e84d7831c59a9402997d332a0"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::ExternalInterruptPin::D7</b> = DigitalPin::D7_PE6</td></tr>
-<tr class="separator:aab93e92e84d7831c59a9402997d332a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0de72825da53c595fb6f7653eb29f8b7"><td class="memItemLeft" align="right" valign="top"><a id="a0de72825da53c595fb6f7653eb29f8b7"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::RXLED_PB0_PCI0</b> = DigitalPin::RXLED_PB0</td></tr>
-<tr class="separator:a0de72825da53c595fb6f7653eb29f8b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92f60d927f4a8478989bad53b40bf97b"><td class="memItemLeft" align="right" valign="top"><a id="a92f60d927f4a8478989bad53b40bf97b"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::SCK_PB1_PCI0</b> = DigitalPin::SCK_PB1</td></tr>
-<tr class="separator:a92f60d927f4a8478989bad53b40bf97b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbd6193a828a9bada24ec6fc276ddd41"><td class="memItemLeft" align="right" valign="top"><a id="abbd6193a828a9bada24ec6fc276ddd41"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::MOSI_PB2_PCI0</b> = DigitalPin::MOSI_PB2</td></tr>
-<tr class="separator:abbd6193a828a9bada24ec6fc276ddd41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa25c5c0d3d9a833b44560df930648c18"><td class="memItemLeft" align="right" valign="top"><a id="aa25c5c0d3d9a833b44560df930648c18"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::MISO_PB3_PCI0</b> = DigitalPin::MISO_PB3</td></tr>
-<tr class="separator:aa25c5c0d3d9a833b44560df930648c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac80886417d7e17c52d2306b782a9e623"><td class="memItemLeft" align="right" valign="top"><a id="ac80886417d7e17c52d2306b782a9e623"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D8_PB4_PCI0</b> = DigitalPin::D8_PB4</td></tr>
-<tr class="separator:ac80886417d7e17c52d2306b782a9e623"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ac8be54e96c63b2bf22dd28b000b6b6"><td class="memItemLeft" align="right" valign="top"><a id="a5ac8be54e96c63b2bf22dd28b000b6b6"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D9_PB5_PCI0</b> = DigitalPin::D9_PB5</td></tr>
-<tr class="separator:a5ac8be54e96c63b2bf22dd28b000b6b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fbee0652056ea2a4c802e33fc18c0bc"><td class="memItemLeft" align="right" valign="top"><a id="a1fbee0652056ea2a4c802e33fc18c0bc"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D10_PB6_PCI0</b> = DigitalPin::D10_PB6</td></tr>
-<tr class="separator:a1fbee0652056ea2a4c802e33fc18c0bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9fbd03428f1fd8853b63af3b1070ec1c"><td class="memItemLeft" align="right" valign="top"><a id="a9fbd03428f1fd8853b63af3b1070ec1c"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D11_PB7_PCI0</b> = DigitalPin::D11_PB7</td></tr>
-<tr class="separator:a9fbd03428f1fd8853b63af3b1070ec1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af06b8243c18e3aa8cec82e5c2ac66fc8"><td class="memItemLeft" align="right" valign="top"><a id="af06b8243c18e3aa8cec82e5c2ac66fc8"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D8</b> = DigitalPin::D8_PB4</td></tr>
-<tr class="separator:af06b8243c18e3aa8cec82e5c2ac66fc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebfbc85cd019cd4e3b2754b1566135c6"><td class="memItemLeft" align="right" valign="top"><a id="aebfbc85cd019cd4e3b2754b1566135c6"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D9</b> = DigitalPin::D9_PB5</td></tr>
-<tr class="separator:aebfbc85cd019cd4e3b2754b1566135c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab53fd68a270ae03636b158e158ab6dbe"><td class="memItemLeft" align="right" valign="top"><a id="ab53fd68a270ae03636b158e158ab6dbe"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D10</b> = DigitalPin::D10_PB6</td></tr>
-<tr class="separator:ab53fd68a270ae03636b158e158ab6dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45b4ca0a5f3e1a38d6e85de91096f75c"><td class="memItemLeft" align="right" valign="top"><a id="a45b4ca0a5f3e1a38d6e85de91096f75c"></a>
-constexpr const DigitalPin&#160;</td><td class="memItemRight" valign="bottom"><b>board::InterruptPin::D11</b> = DigitalPin::D11_PB7</td></tr>
-<tr class="separator:a45b4ca0a5f3e1a38d6e85de91096f75c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>ATmega32u4 (Arduino LEONARDO) specific features and pins. </p>
