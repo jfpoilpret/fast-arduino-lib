@@ -38,7 +38,7 @@
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
- * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
+ * @param PIN the `board::InterruptPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
 #define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN, ...)                             \
@@ -53,7 +53,7 @@
  * @param PCI_NUM the number of the `PCINT` vector for the given @p PIN pins
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
- * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
+ * @param PIN the `board::InterruptPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
 #define REGISTER_PCI_ISR_FUNCTION(PCI_NUM, CALLBACK, PIN, ...)                             \
@@ -68,7 +68,7 @@
  * This can be useful if you just need to wake up the MCU from an external signal,
  * but do not need to perform any sepcific stuff with a callback.
  * @param PCI_NUM the number of the `PCINT` vector for the given @p PIN pins
- * @param PIN the `board::DigitalPin` pins for @p PCI_NUM; if any of the given 
+ * @param PIN the `board::InterruptPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
 #define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)                                                   \
@@ -88,6 +88,18 @@
 #define DECL_PCI_ISR_HANDLERS_FRIEND			\
 	friend struct interrupt::isr_handler_pci;	\
 	DECL_PCINT_ISR_FRIENDS
+
+namespace board
+{
+	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN() INLINE;
+	/**
+	 * Convert an `InterruptPin` to the matching `DigitalPin`.
+	 */
+	template<InterruptPin PCI> constexpr DigitalPin PCI_PIN()
+	{
+		return DigitalPin(uint8_t(PCI));
+	}
+};
 
 namespace interrupt
 {
@@ -263,12 +275,13 @@ namespace interrupt
 		 * @sa disable_pin()
 		 * @sa enable_pins()
 		 */
-		template<board::DigitalPin PIN> inline void enable_pin()
+		template<board::InterruptPin PIN> inline void enable_pin()
 		{
-			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
+			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			enable_pins(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
+			enable_pins(_BV(board_traits::DigitalPin_trait<DPIN>::BIT));
 		}
 
 		/**
@@ -283,12 +296,13 @@ namespace interrupt
 		 * @sa disable_pin_()
 		 * @sa enable_pin()
 		 */
-		template<board::DigitalPin PIN> inline void disable_pin()
+		template<board::InterruptPin PIN> inline void disable_pin()
 		{
-			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
+			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			synchronized TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
+			synchronized TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<DPIN>::BIT);
 		}
 
 		/**
@@ -422,12 +436,13 @@ namespace interrupt
 		 * @sa disable_pin_()
 		 * @sa enable_pins_()
 		 */
-		template<board::DigitalPin PIN> inline void enable_pin_()
+		template<board::InterruptPin PIN> inline void enable_pin_()
 		{
-			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
+			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			enable_pins_(_BV(board_traits::DigitalPin_trait<PIN>::BIT));
+			enable_pins_(_BV(board_traits::DigitalPin_trait<DPIN>::BIT));
 		}
 
 		/**
@@ -442,12 +457,13 @@ namespace interrupt
 		 * @sa disable_pin()
 		 * @sa enable_pin_()
 		 */
-		template<board::DigitalPin PIN> inline void disable_pin_()
+		template<board::InterruptPin PIN> inline void disable_pin_()
 		{
-			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<PIN>::BIT),
+			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
+			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
+			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<PIN>::BIT);
+			TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<DPIN>::BIT);
 		}
 	};
 
@@ -459,7 +475,7 @@ namespace interrupt
 	 * @code
 	 * void f()
 	 * {
-	 *     constexpr const board::DigitalPin PIN = board::DigitalPin::D7;
+	 *     constexpr const board::InterruptPin PIN = board::InterruptPin::D7;
 	 *     interrupt::PCIType<PIN>::TYPE pci;
 	 *     pci.enable_pin<PIN>();
 	 *     pci.enable();
@@ -467,15 +483,15 @@ namespace interrupt
 	 *     pci.disable();
 	 * }
 	 * @endcode
-	 * @sa board::DigitalPin
+	 * @sa board::InterruptPin
 	 */
-	template<board::DigitalPin PIN> struct PCIType
+	template<board::InterruptPin PIN> struct PCIType
 	{
 		/** PCISignal type for @p PIN */
-		using TYPE = PCISignal<board_traits::DigitalPin_trait<PIN>::PORT>;
+		using TYPE = PCISignal<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>;
 		/** `PCINT` vector number for this @p PIN */
 		static constexpr const uint8_t PCINT =
-			board_traits::Port_trait<board_traits::DigitalPin_trait<PIN>::PORT>::PCINT;
+			board_traits::Port_trait<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>::PCINT;
 	};
 
 	/// @cond notdocumented
@@ -487,20 +503,21 @@ namespace interrupt
 	{
 		template<uint8_t PCI_NUM_> static void check_pci_pins() {}
 
-		template<uint8_t PCI_NUM_, board::DigitalPin PCIPIN1_, board::DigitalPin... PCIPINS_>
+		template<uint8_t PCI_NUM_, board::InterruptPin PCIPIN1_, board::InterruptPin... PCIPINS_>
 		static void check_pci_pins()
 		{
 			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
-			static_assert(board_traits::DigitalPin_trait<PCIPIN1_>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
+			constexpr board::DigitalPin PIN = board::PCI_PIN<PCIPIN1_>();
+			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
 						  "PIN port must match PCI_NUM port");
 			static_assert(
-				_BV(board_traits::DigitalPin_trait<PCIPIN1_>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK,
+				_BV(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK,
 				"PIN must be a PCINT pin");
 			// Check other pins
 			check_pci_pins<PCI_NUM_, PCIPINS_...>();
 		}
 
-		template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::DigitalPin... PCIPINS_>
+		template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::InterruptPin... PCIPINS_>
 		static void pci_method()
 		{
 			// Check pin is compliant
@@ -509,7 +526,7 @@ namespace interrupt
 			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
 		}
 
-		template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::DigitalPin... PCIPINS_> static void pci_function()
+		template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::InterruptPin... PCIPINS_> static void pci_function()
 		{
 			// Check pin is compliant
 			check_pci_pins<PCI_NUM_, PCIPINS_...>();

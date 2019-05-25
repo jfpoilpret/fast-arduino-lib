@@ -590,7 +590,7 @@ namespace devices::rf
 	 * 
 	 * @sa NRF24L01
 	 */
-	template<board::DigitalPin CSN, board::DigitalPin CE, board::DigitalPin IRQ>
+	template<board::DigitalPin CSN, board::DigitalPin CE, board::ExternalInterruptPin IRQ>
 	class IRQ_NRF24L01 : public NRF24L01<CSN, CE>
 	{
 	public:
@@ -604,7 +604,7 @@ namespace devices::rf
 		IRQ_NRF24L01(uint16_t net, uint8_t dev)
 			: NRF24L01<CSN, CE>{net, dev}, irq_signal_{interrupt::InterruptTrigger::FALLING_EDGE}
 		{
-			gpio::FastPinType<IRQ>::set_mode(gpio::PinMode::INPUT_PULLUP);
+			gpio::FastPinType<board::EXT_PIN<IRQ>()>::set_mode(gpio::PinMode::INPUT_PULLUP);
 		}
 
 		/**

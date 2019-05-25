@@ -41,7 +41,7 @@ REGISTER_UATX_ISR(0)
 #define PCI_NUM 2
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D3_PD3_PCI2;
+static constexpr const board::InterruptPin ECHO = board::InterruptPin::D3_PD3_PCI2;
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -52,7 +52,7 @@ REGISTER_UATX_ISR(0)
 #define PCI_NUM 0
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PE4;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D10_PB4_PCI0;
+static constexpr const board::InterruptPin ECHO = board::InterruptPin::D10_PB4_PCI0;
 #elif defined(ARDUINO_LEONARDO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -63,7 +63,7 @@ REGISTER_UATX_ISR(1)
 #define PCI_NUM 0
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D2_PD1;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D8_PB4_PCI0;
+static constexpr const board::InterruptPin ECHO = board::InterruptPin::D8_PB4_PCI0;
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
@@ -73,7 +73,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #define PCI_NUM 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
-static constexpr const board::DigitalPin ECHO = board::InterruptPin::D10_PB2_PCI1;
+static constexpr const board::InterruptPin ECHO = board::InterruptPin::D10_PB2_PCI1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -85,7 +85,7 @@ REGISTER_RTT_ISR(TIMER_NUM)
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using RTT = timer::RTT<NTIMER>;
-using SONAR = devices::sonar::HCSR04<NTIMER, TRIGGER, ECHO, devices::sonar::SonarType::ASYNC_PCINT>;
+using SONAR = devices::sonar::ASYNC_PCINT_HCSR04<NTIMER, TRIGGER, ECHO>;
 static constexpr const uint16_t TIMEOUT = SONAR::DEFAULT_TIMEOUT_MS;
 
 using devices::sonar::echo_us_to_distance_mm;

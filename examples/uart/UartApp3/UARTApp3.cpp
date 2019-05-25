@@ -40,19 +40,19 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PD1;
-constexpr const board::DigitalPin RX = board::InterruptPin::D0_PD0_PCI2;
+constexpr const board::InterruptPin RX = board::InterruptPin::D0_PD0_PCI2;
 #define PCI_NUM 2
 #elif defined (ARDUINO_LEONARDO)
 constexpr const board::DigitalPin TX = board::DigitalPin::D9_PB5;
-constexpr const board::DigitalPin RX = board::InterruptPin::D8_PB4_PCI0;
+constexpr const board::InterruptPin RX = board::InterruptPin::D8_PB4_PCI0;
 #define PCI_NUM 0
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin TX = board::DigitalPin::D52_PB1;
-constexpr const board::DigitalPin RX = board::InterruptPin::D53_PB0_PCI0;
+constexpr const board::InterruptPin RX = board::InterruptPin::D53_PB0_PCI0;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
-constexpr const board::DigitalPin RX = board::InterruptPin::D0_PA0_PCI0;
+constexpr const board::InterruptPin RX = board::InterruptPin::D0_PA0_PCI0;
 #define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"
@@ -74,7 +74,7 @@ int main()
 	sei();
 	
 	// Setup UART
-	serial::soft::UART<RX, TX> uart{input_buffer, output_buffer};
+	serial::soft::UART_PCI<RX, TX> uart{input_buffer, output_buffer};
 	typename interrupt::PCIType<RX>::TYPE pci;
 	pci.enable();
 

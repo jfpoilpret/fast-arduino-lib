@@ -34,19 +34,19 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
-constexpr const board::DigitalPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
+constexpr const board::InterruptPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
 #define PCI_NUM 1
 #elif defined (ARDUINO_LEONARDO)
-constexpr const board::DigitalPin SWITCH = board::InterruptPin::D8_PB4_PCI0;
+constexpr const board::InterruptPin SWITCH = board::InterruptPin::D8_PB4_PCI0;
 #define PCI_NUM 0
 #elif defined (ARDUINO_MEGA)
-constexpr const board::DigitalPin SWITCH = board::InterruptPin::D53_PB0_PCI0;
+constexpr const board::InterruptPin SWITCH = board::InterruptPin::D53_PB0_PCI0;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const board::DigitalPin SWITCH = board::InterruptPin::D8_PB0_PCI1;
+constexpr const board::InterruptPin SWITCH = board::InterruptPin::D8_PB0_PCI1;
 #define PCI_NUM 1
 #elif defined (BREADBOARD_ATTINYX5)
-constexpr const board::DigitalPin SWITCH = board::InterruptPin::D1_PB1_PCI0;
+constexpr const board::InterruptPin SWITCH = board::InterruptPin::D1_PB1_PCI0;
 #define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"
@@ -69,7 +69,7 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::PCI_PIN<SWITCH>()>::TYPE _switch;
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 

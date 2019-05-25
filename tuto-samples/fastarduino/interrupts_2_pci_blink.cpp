@@ -2,7 +2,7 @@
 #include <fastarduino/pci.h>
 #include <fastarduino/power.h>
 
-constexpr const board::DigitalPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
+constexpr const board::InterruptPin SWITCH = board::InterruptPin::D14_PC0_PCI1;
 #define PCI_NUM 1
 
 class PinChangeHandler
@@ -19,7 +19,7 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::PCI_PIN<SWITCH>()>::TYPE _switch;
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 

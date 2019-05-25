@@ -37,15 +37,15 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D2_PD2_EXT0;
 #elif defined (ARDUINO_LEONARDO)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D3_PD0_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D3_PD0_EXT0;
 #elif defined (ARDUINO_MEGA)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D21_PD0_EXT0;
 #elif defined (BREADBOARD_ATTINYX4)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
 #elif defined (BREADBOARD_ATTINYX5)
-constexpr const board::DigitalPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -67,7 +67,7 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<SWITCH>::TYPE _switch;
+	gpio::FastPinType<board::EXT_PIN<SWITCH>()>::TYPE _switch;
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 

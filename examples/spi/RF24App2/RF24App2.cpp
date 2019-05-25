@@ -53,7 +53,7 @@
 #define HAS_TRACE 1
 #define USART_NUM 0
 static const constexpr board::USART UART = board::USART::USART0;
-static const constexpr board::DigitalPin PIN_IRQ = board::ExternalInterruptPin::D2_PD2_EXT0;
+static const constexpr board::ExternalInterruptPin PIN_IRQ = board::ExternalInterruptPin::D2_PD2_EXT0;
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PD7;
 static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PB0;
 static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D9_PB1;
@@ -65,7 +65,7 @@ REGISTER_RTT_ISR(2)
 #define HAS_TRACE 1
 #define USART_NUM 1
 static const constexpr board::USART UART = board::USART::USART1;
-static const constexpr board::DigitalPin PIN_IRQ = board::ExternalInterruptPin::D3_PD0_EXT0;
+static const constexpr board::ExternalInterruptPin PIN_IRQ = board::ExternalInterruptPin::D3_PD0_EXT0;
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D8_PB4;
 static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D9_PB5;
 static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D10_PB6;
@@ -77,7 +77,7 @@ REGISTER_RTT_ISR(1)
 #define HAS_TRACE 1
 #define USART_NUM 0
 static const constexpr board::USART UART = board::USART::USART0;
-static const constexpr board::DigitalPin PIN_IRQ = board::ExternalInterruptPin::D21_PD0_EXT0;
+static const constexpr board::ExternalInterruptPin PIN_IRQ = board::ExternalInterruptPin::D21_PD0_EXT0;
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PH4;
 static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PH5;
 static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D9_PH6;
@@ -87,7 +87,7 @@ static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
 REGISTER_RTT_ISR(2)
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_TRACE 0
-static const constexpr board::DigitalPin PIN_IRQ = board::ExternalInterruptPin::D10_PB2_EXT0;
+static const constexpr board::ExternalInterruptPin PIN_IRQ = board::ExternalInterruptPin::D10_PB2_EXT0;
 static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D7_PA7;
 static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D2_PA2;
 static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D3_PA3;

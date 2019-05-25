@@ -40,19 +40,19 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 constexpr const board::DigitalPin TX = board::DigitalPin::D3_PD3;
-constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D2_PD2_EXT0;
+constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D2_PD2_EXT0;
 #define INT_NUM 0
 #elif defined (ARDUINO_LEONARDO)
 constexpr const board::DigitalPin TX = board::DigitalPin::D2_PD1;
-constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D3_PD0_EXT0;
+constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D3_PD0_EXT0;
 #define INT_NUM 0
 #elif defined (ARDUINO_MEGA)
 constexpr const board::DigitalPin TX = board::DigitalPin::D52_PB1;
-constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D21_PD0_EXT0;
+constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D21_PD0_EXT0;
 #define INT_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
-constexpr const board::DigitalPin RX = board::ExternalInterruptPin::D10_PB2_EXT0;
+constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D10_PB2_EXT0;
 #define INT_NUM 0
 #else
 #error "Current target is not yet supported!"
@@ -75,8 +75,8 @@ int main()
 	sei();
 	
 	// Setup UART
-	serial::soft::UART<RX, TX> uart{input_buffer, output_buffer};
-	serial::soft::UART<RX, TX>::INT_TYPE int_signal;
+	serial::soft::UART_EXT<RX, TX> uart{input_buffer, output_buffer};
+	serial::soft::UART_EXT<RX, TX>::INT_TYPE int_signal;
 	
 	// Start UART
 	// Uncomment the line with the configuration you want to test

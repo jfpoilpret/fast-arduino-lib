@@ -18,7 +18,7 @@
 #include <fastarduino/devices/mcp23017.h>
 
 #define INT_NUM 0
-static constexpr const board::DigitalPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
+static constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 
 class LedChaser
 {

@@ -87,14 +87,14 @@ namespace board
 	/**
 	 * Defines all digital output pins of target MCU, usable as direct external interrupt pins.
 	 */
-	namespace ExternalInterruptPin
+	enum class ExternalInterruptPin : uint8_t
 	{
 	};
 
 	/**
 	 * Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.
 	 */
-	namespace InterruptPin
+	enum class InterruptPin : uint8_t
 	{
 	};
 

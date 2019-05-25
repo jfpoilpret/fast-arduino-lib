@@ -1,6 +1,6 @@
 #include <fastarduino/soft_uart.h>
 
-constexpr const board::DigitalPin RX = board::InterruptPin::D0_PD0_PCI2;
+constexpr const board::InterruptPin RX = board::InterruptPin::D0_PD0_PCI2;
 #define PCI_NUM 2
 
 REGISTER_UART_PCI_ISR(RX, PCI_NUM)
@@ -15,7 +15,7 @@ int main()
     sei();
 	
     // Start UART
-	serial::soft::UARX<RX> uarx{input_buffer};
+	serial::soft::UARX_PCI<RX> uarx{input_buffer};
 	typename interrupt::PCIType<RX>::TYPE pci;
 	pci.enable();
 	uarx.begin(pci, 115200);

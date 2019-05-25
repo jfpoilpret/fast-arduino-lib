@@ -41,9 +41,9 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #define PCI_NUM 2
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D2_PD2;
-static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D3_PD3_PCI2;
+static constexpr const board::InterruptPin ECHO1 = board::InterruptPin::D3_PD3_PCI2;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D4_PD4;
-static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D5_PD5_PCI2;
+static constexpr const board::InterruptPin ECHO2 = board::InterruptPin::D5_PD5_PCI2;
 #elif defined (ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -54,9 +54,9 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D2_PE4;
-static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D53_PB0_PCI0;
+static constexpr const board::InterruptPin ECHO1 = board::InterruptPin::D53_PB0_PCI0;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D3_PE5;
-static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D52_PB1_PCI0;
+static constexpr const board::InterruptPin ECHO2 = board::InterruptPin::D52_PB1_PCI0;
 #elif defined(ARDUINO_LEONARDO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -67,9 +67,9 @@ REGISTER_UATX_ISR(1)
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #define PCI_NUM 0
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D2_PD1;
-static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D8_PB4_PCI0;
+static constexpr const board::InterruptPin ECHO1 = board::InterruptPin::D8_PB4_PCI0;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D3_PD0;
-static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D9_PB5_PCI0;
+static constexpr const board::InterruptPin ECHO2 = board::InterruptPin::D9_PB5_PCI0;
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
@@ -79,9 +79,9 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #define PCI_NUM 1
 static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D0_PA0;
-static constexpr const board::DigitalPin ECHO1 = board::InterruptPin::D10_PB2_PCI1;
+static constexpr const board::InterruptPin ECHO1 = board::InterruptPin::D10_PB2_PCI1;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D1_PA1;
-static constexpr const board::DigitalPin ECHO2 = board::InterruptPin::D9_PB1_PCI1;
+static constexpr const board::InterruptPin ECHO2 = board::InterruptPin::D9_PB1_PCI1;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -93,15 +93,14 @@ REGISTER_RTT_ISR(TIMER_NUM)
 
 using RTT = timer::RTT<NTIMER>;
 
-using devices::sonar::SonarType;
-using SONAR1 = devices::sonar::HCSR04<NTIMER, TRIGGER1, ECHO1, devices::sonar::SonarType::ASYNC_PCINT>;
-using SONAR2 = devices::sonar::HCSR04<NTIMER, TRIGGER2, ECHO2, devices::sonar::SonarType::ASYNC_PCINT>;
+using SONAR1 = devices::sonar::ASYNC_PCINT_HCSR04<NTIMER, TRIGGER1, ECHO1>;
+using SONAR2 = devices::sonar::ASYNC_PCINT_HCSR04<NTIMER, TRIGGER2, ECHO2>;
 static constexpr const uint16_t TIMEOUT = SONAR1::DEFAULT_TIMEOUT_MS;
 
 using devices::sonar::echo_us_to_distance_mm;
 
 // Register all needed ISR
-REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER, PCI_NUM, TRIGGER1, ECHO1, TRIGGER2, ECHO2)
+REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER, PCI_NUM, SONAR_PINS(TRIGGER1, ECHO1), SONAR_PINS(TRIGGER2, ECHO2))
 
 int main() __attribute__((OS_main));
 int main()

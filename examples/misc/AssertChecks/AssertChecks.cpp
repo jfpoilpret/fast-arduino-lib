@@ -89,7 +89,7 @@ struct Callback
 // REGISTER_HCSR04_PCI_ISR(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0)
 // REGISTER_HCSR04_PCI_ISR_FUNCTION(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, callback)
 // REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, Callback, &Callback::callback)
-// REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER3, 0, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0)
+// REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER3, 0, SONAR_PINS(DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0), SONAR_PINS(DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0))
 // REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(NTIMER3, 0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
 // REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER3, 0, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
 
@@ -101,7 +101,7 @@ struct Callback
 // REGISTER_HCSR04_PCI_ISR(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, InterruptPin::D14_PC0_PCI1)
 // REGISTER_HCSR04_PCI_ISR_FUNCTION(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, callback)
 // REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, Callback, &Callback::callback)
-// REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER0, 1, DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0, DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0)
+// REGISTER_DISTINCT_HCSR04_PCI_ISR(NTIMER0, 1, SONAR_PINS(DigitalPin::D0_PD0, InterruptPin::D8_PB0_PCI0), SONAR_PINS(DigitalPin::D1_PD1, InterruptPin::D9_PB1_PCI0))
 // REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION(NTIMER0, 1, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, sonar_callback)
 // REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER0, 1, DigitalPin::D0_PD0, Port::PORT_B, 0xFF, Callback, &Callback::sonar_callback)
 

@@ -102,15 +102,15 @@ namespace board_traits
 	// IO interrupts
 	//===============
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D3_PD0_EXT0>: 
-		ExternalInterruptPin_trait_impl<0, R_(EICRA), _BV(ISC00) | _BV(ISC01), R_(EIMSK), _BV(INT0), R_(EIFR), _BV(INTF0)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D3_PD0, 0, R_(EICRA), _BV(ISC00) | _BV(ISC01), R_(EIMSK), _BV(INT0), R_(EIFR), _BV(INTF0)> {};
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D2_PD1_EXT1>: 
-		ExternalInterruptPin_trait_impl<1, R_(EICRA), _BV(ISC10) | _BV(ISC11), R_(EIMSK), _BV(INT1), R_(EIFR), _BV(INTF1)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D2_PD1, 1, R_(EICRA), _BV(ISC10) | _BV(ISC11), R_(EIMSK), _BV(INT1), R_(EIFR), _BV(INTF1)> {};
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D0_PD2_EXT2>: 
-		ExternalInterruptPin_trait_impl<2, R_(EICRA), _BV(ISC20) | _BV(ISC21), R_(EIMSK), _BV(INT2), R_(EIFR), _BV(INTF2)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D0_PD2, 2, R_(EICRA), _BV(ISC20) | _BV(ISC21), R_(EIMSK), _BV(INT2), R_(EIFR), _BV(INTF2)> {};
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D1_PD3_EXT3>: 
-		ExternalInterruptPin_trait_impl<3, R_(EICRA), _BV(ISC30) | _BV(ISC31), R_(EIMSK), _BV(INT3), R_(EIFR), _BV(INTF3)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D1_PD3, 3, R_(EICRA), _BV(ISC30) | _BV(ISC31), R_(EIMSK), _BV(INT3), R_(EIFR), _BV(INTF3)> {};
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D7_PE6_EXT6>: 
-		ExternalInterruptPin_trait_impl<6, R_(EICRB), _BV(ISC60) | _BV(ISC61), R_(EIMSK), _BV(INT6), R_(EIFR), _BV(INTF6)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D7_PE6, 6, R_(EICRB), _BV(ISC60) | _BV(ISC61), R_(EIMSK), _BV(INT6), R_(EIFR), _BV(INTF6)> {};
 
 	/**
 	 * Pin change interrupt (PCI) pins.

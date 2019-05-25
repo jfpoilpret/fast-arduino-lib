@@ -28,7 +28,7 @@ private:
 	gpio::FastPort<BUTTONS_PORT> buttons_;
 };
 
-REGISTER_PCI_ISR_METHOD(PCI_NUM, EventGenerator, &EventGenerator::on_pin_change, board::DigitalPin::D0_PD0)
+REGISTER_PCI_ISR_METHOD(PCI_NUM, EventGenerator, &EventGenerator::on_pin_change, board::InterruptPin::D0_PD0_PCI2)
 
 void blink(uint8_t buttons)
 {

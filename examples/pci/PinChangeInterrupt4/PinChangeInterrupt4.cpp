@@ -30,18 +30,18 @@
 #include <fastarduino/power.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
-constexpr const board::DigitalPin SWITCH_ON = board::InterruptPin::D14_PC0_PCI1;
-constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI0;
+constexpr const board::InterruptPin SWITCH_ON = board::InterruptPin::D14_PC0_PCI1;
+constexpr const board::InterruptPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI0;
 #define PCINT_ON	1
 #define PCINT_OFF	0
 #elif defined(ARDUINO_MEGA)
-constexpr const board::DigitalPin SWITCH_ON = board::InterruptPin::D53_PB0_PCI0;
-constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D62_PK0_PCI2;
+constexpr const board::InterruptPin SWITCH_ON = board::InterruptPin::D53_PB0_PCI0;
+constexpr const board::InterruptPin SWITCH_OFF = board::InterruptPin::D62_PK0_PCI2;
 #define PCINT_ON	0
 #define PCINT_OFF	2
 #elif defined(BREADBOARD_ATTINYX4)
-constexpr const board::DigitalPin SWITCH_ON = board::InterruptPin::D0_PA0_PCI0;
-constexpr const board::DigitalPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI1;
+constexpr const board::InterruptPin SWITCH_ON = board::InterruptPin::D0_PA0_PCI0;
+constexpr const board::InterruptPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI1;
 #define PCINT_ON	0
 #define PCINT_OFF	1
 #else
@@ -70,8 +70,8 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<SWITCH_ON>::TYPE _switch_on;
-	gpio::FastPinType<SWITCH_OFF>::TYPE _switch_off;
+	gpio::FastPinType<board::PCI_PIN<SWITCH_ON>()>::TYPE _switch_on;
+	gpio::FastPinType<board::PCI_PIN<SWITCH_OFF>()>::TYPE _switch_off;
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
 };
 

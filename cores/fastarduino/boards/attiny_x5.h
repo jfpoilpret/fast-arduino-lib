@@ -175,12 +175,10 @@ namespace board
 	 * number , `y` is the port letter (B, C or D), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the interrupt for that
 	 * pin.
-	 * This namespace exists for the sole purpose of quickly finding an external
-	 * interrupt pin among all digital IO pins.
 	 */
-	namespace ExternalInterruptPin
+	enum class ExternalInterruptPin : uint8_t
 	{
-		constexpr const DigitalPin D2_PB2_EXT0 = DigitalPin::D2_PB2;
+		D2_PB2_EXT0 = 0
 	};
 
 	/**
@@ -190,16 +188,14 @@ namespace board
 	 * number, `y` is the port letter (B, C or D), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the PCI vector for that
 	 * pin.
-	 * This namespace exists for the sole purpose of quickly finding an pin change
-	 * interrupt pin among all digital IO pins.
 	 */
-	namespace InterruptPin
+	enum class InterruptPin : uint8_t
 	{
-		constexpr const DigitalPin D0_PB0_PCI0 = DigitalPin::D0_PB0;
-		constexpr const DigitalPin D1_PB1_PCI0 = DigitalPin::D1_PB1;
-		constexpr const DigitalPin D2_PB2_PCI0 = DigitalPin::D2_PB2;
-		constexpr const DigitalPin D3_PB3_PCI0 = DigitalPin::D3_PB3;
-		constexpr const DigitalPin D4_PB4_PCI0 = DigitalPin::D4_PB4;
+		D0_PB0_PCI0 = uint8_t(DigitalPin::D0_PB0),
+		D1_PB1_PCI0 = uint8_t(DigitalPin::D1_PB1),
+		D2_PB2_PCI0 = uint8_t(DigitalPin::D2_PB2),
+		D3_PB3_PCI0 = uint8_t(DigitalPin::D3_PB3),
+		D4_PB4_PCI0 = uint8_t(DigitalPin::D4_PB4)
 	};
 
 	/**

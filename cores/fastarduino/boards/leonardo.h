@@ -319,22 +319,20 @@ namespace board
 	 * Arduino, `y` is the port letter (D or E), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the interrupt for that
 	 * pin.
-	 * This namespace exists for the sole purpose of quickly finding an external
-	 * interrupt pin among all digital IO pins.
 	 */
-	namespace ExternalInterruptPin
+	enum class ExternalInterruptPin : uint8_t
 	{
-		constexpr const DigitalPin D3_PD0_EXT0 = DigitalPin::D3_PD0;
-		constexpr const DigitalPin D2_PD1_EXT1 = DigitalPin::D2_PD1;
-		constexpr const DigitalPin D0_PD2_EXT2 = DigitalPin::D0_PD2;
-		constexpr const DigitalPin D1_PD3_EXT3 = DigitalPin::D1_PD3;
-		constexpr const DigitalPin D7_PE6_EXT6 = DigitalPin::D7_PE6;
+		D3_PD0_EXT0 = 0,
+		D2_PD1_EXT1,
+		D0_PD2_EXT2,
+		D1_PD3_EXT3,
+		D7_PE6_EXT6,
 
-		constexpr const DigitalPin D3 = DigitalPin::D3_PD0;
-		constexpr const DigitalPin D2 = DigitalPin::D2_PD1;
-		constexpr const DigitalPin D0 = DigitalPin::D0_PD2;
-		constexpr const DigitalPin D1 = DigitalPin::D1_PD3;
-		constexpr const DigitalPin D7 = DigitalPin::D7_PE6;
+		D3 = D3_PD0_EXT0,
+		D2 = D2_PD1_EXT1,
+		D0 = D0_PD2_EXT2,
+		D1 = D1_PD3_EXT3,
+		D7 = D7_PE6_EXT6
 	};
 
 	/**
@@ -345,24 +343,22 @@ namespace board
 	 * Arduino, `y` is the port letter (always B), `z` is the bit number for 
 	 * that pin within its port and `u` is the number of the PCI vector for that
 	 * pin.
-	 * This namespace exists for the sole purpose of quickly finding an pin change
-	 * interrupt pin among all digital IO pins.
 	 */
-	namespace InterruptPin
+	enum class InterruptPin : uint8_t
 	{
-		constexpr const DigitalPin RXLED_PB0_PCI0 = DigitalPin::RXLED_PB0;
-		constexpr const DigitalPin SCK_PB1_PCI0 = DigitalPin::SCK_PB1;
-		constexpr const DigitalPin MOSI_PB2_PCI0 = DigitalPin::MOSI_PB2;
-		constexpr const DigitalPin MISO_PB3_PCI0 = DigitalPin::MISO_PB3;
-		constexpr const DigitalPin D8_PB4_PCI0 = DigitalPin::D8_PB4;
-		constexpr const DigitalPin D9_PB5_PCI0 = DigitalPin::D9_PB5;
-		constexpr const DigitalPin D10_PB6_PCI0 = DigitalPin::D10_PB6;
-		constexpr const DigitalPin D11_PB7_PCI0 = DigitalPin::D11_PB7;
+		RXLED_PB0_PCI0 = uint8_t(DigitalPin::RXLED_PB0),
+		SCK_PB1_PCI0 = uint8_t(DigitalPin::SCK_PB1),
+		MOSI_PB2_PCI0 = uint8_t(DigitalPin::MOSI_PB2),
+		MISO_PB3_PCI0 = uint8_t(DigitalPin::MISO_PB3),
+		D8_PB4_PCI0 = uint8_t(DigitalPin::D8_PB4),
+		D9_PB5_PCI0 = uint8_t(DigitalPin::D9_PB5),
+		D10_PB6_PCI0 = uint8_t(DigitalPin::D10_PB6),
+		D11_PB7_PCI0 = uint8_t(DigitalPin::D11_PB7),
 
-		constexpr const DigitalPin D8 = DigitalPin::D8_PB4;
-		constexpr const DigitalPin D9 = DigitalPin::D9_PB5;
-		constexpr const DigitalPin D10 = DigitalPin::D10_PB6;
-		constexpr const DigitalPin D11 = DigitalPin::D11_PB7;
+		D8 = D8_PB4_PCI0,
+		D9 = D9_PB5_PCI0,
+		D10 = D10_PB6_PCI0,
+		D11 = D11_PB7_PCI0
 	};
 
 	/**

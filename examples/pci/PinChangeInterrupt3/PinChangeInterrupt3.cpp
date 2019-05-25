@@ -44,12 +44,9 @@ static constexpr const uint8_t LED2 = _BV(board::BIT<board::DigitalPin::D3_PD3>(
 static constexpr const uint8_t LED3 = _BV(board::BIT<board::DigitalPin::D5_PD5>());
 static constexpr const uint8_t LED4 = _BV(board::BIT<board::DigitalPin::D7_PD7>());
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
-static constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D14_PC0_PCI1;
-static constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D16_PC2_PCI1;
-static constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D17_PC3_PCI1;
-static constexpr const uint8_t SW1 = _BV(board::BIT<SWITCH1>());
-static constexpr const uint8_t SW2 = _BV(board::BIT<SWITCH2>());
-static constexpr const uint8_t SW3 = _BV(board::BIT<SWITCH3>());
+static constexpr const board::InterruptPin SWITCH1 = board::InterruptPin::D14_PC0_PCI1;
+static constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D16_PC2_PCI1;
+static constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D17_PC3_PCI1;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_C;
 #define PCI_NUM 1
 #elif defined (ARDUINO_LEONARDO)
@@ -58,12 +55,9 @@ static constexpr const uint8_t LED2 = _BV(board::BIT<board::DigitalPin::D1_PD3>(
 static constexpr const uint8_t LED3 = _BV(board::BIT<board::DigitalPin::D2_PD1>());
 static constexpr const uint8_t LED4 = _BV(board::BIT<board::DigitalPin::D3_PD0>());
 static constexpr const board::Port LED_PORT = board::Port::PORT_D;
-static constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D8_PB4_PCI0;
-static constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D9_PB5_PCI0;
-static constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D10_PB6_PCI0;
-static constexpr const uint8_t SW1 = _BV(board::BIT<SWITCH1>());
-static constexpr const uint8_t SW2 = _BV(board::BIT<SWITCH2>());
-static constexpr const uint8_t SW3 = _BV(board::BIT<SWITCH3>());
+static constexpr const board::InterruptPin SWITCH1 = board::InterruptPin::D8_PB4_PCI0;
+static constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D9_PB5_PCI0;
+static constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D10_PB6_PCI0;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 #define PCI_NUM 0
 #elif defined (ARDUINO_MEGA)
@@ -72,12 +66,9 @@ static constexpr const uint8_t LED2 = _BV(board::BIT<board::DigitalPin::D23_PA1>
 static constexpr const uint8_t LED3 = _BV(board::BIT<board::DigitalPin::D24_PA2>());
 static constexpr const uint8_t LED4 = _BV(board::BIT<board::DigitalPin::D25_PA3>());
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
-static constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D53_PB0_PCI0;
-static constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D52_PB1_PCI0;
-static constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D51_PB2_PCI0;
-static constexpr const uint8_t SW1 = _BV(board::BIT<SWITCH1>());
-static constexpr const uint8_t SW2 = _BV(board::BIT<SWITCH2>());
-static constexpr const uint8_t SW3 = _BV(board::BIT<SWITCH3>());
+static constexpr const board::InterruptPin SWITCH1 = board::InterruptPin::D53_PB0_PCI0;
+static constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D52_PB1_PCI0;
+static constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D51_PB2_PCI0;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
@@ -86,17 +77,18 @@ static constexpr const uint8_t LED2 = _BV(board::BIT<board::DigitalPin::D1_PA1>(
 static constexpr const uint8_t LED3 = _BV(board::BIT<board::DigitalPin::D2_PA2>());
 static constexpr const uint8_t LED4 = _BV(board::BIT<board::DigitalPin::D3_PA3>());
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
-static constexpr const board::DigitalPin SWITCH1 = board::InterruptPin::D8_PB0_PCI1;
-static constexpr const board::DigitalPin SWITCH2 = board::InterruptPin::D9_PB1_PCI1;
-static constexpr const board::DigitalPin SWITCH3 = board::InterruptPin::D10_PB2_PCI1;
-static constexpr const uint8_t SW1 = _BV(board::BIT<SWITCH1>());
-static constexpr const uint8_t SW2 = _BV(board::BIT<SWITCH2>());
-static constexpr const uint8_t SW3 = _BV(board::BIT<SWITCH3>());
+static constexpr const board::InterruptPin SWITCH1 = board::InterruptPin::D8_PB0_PCI1;
+static constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D9_PB1_PCI1;
+static constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D10_PB2_PCI1;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 #define PCI_NUM 1
 #else
 #error "Current target is not yet supported!"
 #endif
+
+static constexpr const uint8_t SW1 = _BV(board::BIT<board::PCI_PIN<SWITCH1>()>());
+static constexpr const uint8_t SW2 = _BV(board::BIT<board::PCI_PIN<SWITCH2>()>());
+static constexpr const uint8_t SW3 = _BV(board::BIT<board::PCI_PIN<SWITCH3>()>());
 
 class PinChangeHandler
 {
