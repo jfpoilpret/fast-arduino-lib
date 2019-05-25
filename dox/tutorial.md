@@ -657,7 +657,7 @@ Then we define the class that will handle interrupts occurring when the button p
 The interesting code here is the `on_pin_change()` method which be called back when the button is pushed or relaxed, i.e. on any level change.
 Since this method is called whatever the new pin level, it must explicitly check the button status (i.e. the pin level) to set the right output for the LED pin. Note that, since we use `gpio::PinMode::INPUT_PULLUP`, the pin value will be `false` when the button is pushed, and `true` when it is not.
 
-You should also note the use of `EXT_PIN<SWITCH>()` in the definition of the `_switch` FastPin member; that template method converts an `board::ExternalInterruptPin` value to a `board::DigitalPin` value.
+You should also note the use of `board::EXT_PIN<SWITCH>()` in the definition of the `_switch` FastPin member; that template method converts an `board::ExternalInterruptPin` value to a `board::DigitalPin` value.
 
 The next line of code registers `PinChangeHandler` class and `on_pin_change()` method as callback for `INT0` interrupt.
 @skipline REGISTER
@@ -703,7 +703,7 @@ The first difference is in the way we define the pin to use as interrupt source:
 @until PCI_NUM
 Here we use `board::InterruptPin` enum to find out the possible pins that can be used as Pin Change Interrupt pins. We select pin D14 and see from its name that is belonging to `PCINT1` interrupt vector. We also define the `PCINT` number as a constant, `PCI_NUM`, for later use.
 
-You should also note the use of `PCI_PIN<SWITCH>()` in the definition of the `_switch` FastPin member; that template method converts an `board::InterruptPin` value to a `board::DigitalPin` value.
+You should also note the use of `board::PCI_PIN<SWITCH>()` in the definition of the `_switch` FastPin member; that template method converts an `board::InterruptPin` value to a `board::DigitalPin` value.
 
 Then we register `PinChangeHandler` class and `on_pin_change()` method as callback for `PCINT1` interrupt.
 @skipline REGISTER
@@ -1233,7 +1233,7 @@ Note the following differences with a previous example using `serial::hard::UARX
 
 1. `RX` must be an interrupt pin (either `board::InterruptPin` 
 or `board::ExternalInterruptPin`)
-2. `REGISTER_UART_PCI_ISR(RX, PCI_NUM` (or `REGISTER_UART_INT_ISR(RX, INT_NUM)`) is needed to register an ISR on 
+2. `REGISTER_UART_PCI_ISR(RX, PCI_NUM)` (or `REGISTER_UART_INT_ISR(RX, INT_NUM)`) is needed to register an ISR on 
 pin `RX` changes
 3. the `uarx` variable must be defined as a `serial::soft::UARX_PCI` if it is connected to an `board::InterruptPin` or a `serial::soft::UARX_EXT` if it is connected to an `board::ExternalInterruptPin`
 3. an interrupt handler must be setup (either `interrupt::PCISignal` or 
