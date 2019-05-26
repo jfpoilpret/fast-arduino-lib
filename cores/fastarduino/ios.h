@@ -56,7 +56,7 @@ namespace streams
 		using iostate = uint8_t;
 
 		/** 
-		 * This bit is set if the stream has unexpected reached its end during
+		 * This bit is set if the stream has unexpectedly reached its end during
 		 * an extraction.
 		 * Note that this bit is currently never set by istreambuf, as istreambuf
 		 * is blocked until characters are input.
