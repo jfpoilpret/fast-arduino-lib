@@ -19,9 +19,8 @@
  * - writing values to EEPROM
  * - reading values to EEPROM
  * 
- * Wiring: TODO
- * - on ATmega328P based boards (including Arduino UNO):
- * - on Arduino MEGA:
+ * Wiring: 
+ * - on Arduino boards: direct USB access
  * - on ATtinyX4 based boards:
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
  */

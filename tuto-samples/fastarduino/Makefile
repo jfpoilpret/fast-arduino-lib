@@ -26,7 +26,7 @@ CONF:=UNO
 # We use the fact that find dummy.cpp -name "*.cpp" returns always dummy.cpp
 SOURCE_ROOT:=./$(MAIN_CPP)
 # Name of target (binary and derivatives)
-#TODO remove .cpp
+# remove .cpp
 TARGET:=$(subst .cpp,,$(MAIN_CPP))
 
 # Where FastArduino project is located (used to find library and includes)

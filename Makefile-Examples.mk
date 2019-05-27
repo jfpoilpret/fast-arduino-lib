@@ -14,10 +14,7 @@
 
 # Makefile defining all FastArduino examples to build in various configurations (targets)
 
-# Examples common to all targets
-#FIXME this list is in fact wrong because most examples have been set to work only on UNO,MEGA,ATmega328 and ATtiny
-# Not all examples have been updated when LEONARDO and NANO boards have been added to FastArduino support
-# For NANO, adding support is straightforward (same as UNO) but not for LEONARDO
+# Examples common to all targets (except ATtinyX5)
 COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					analog/AnalogPin1 analog/AnalogPin2										\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\

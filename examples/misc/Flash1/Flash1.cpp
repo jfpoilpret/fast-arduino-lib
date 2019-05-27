@@ -18,9 +18,8 @@
  * It interfaces with user through the UART console and allows:
  * - reading values from Flash
  * 
- * Wiring: TODO
- * - on ATmega328P based boards (including Arduino UNO):
- * - on Arduino MEGA:
+ * Wiring: 
+ * - on Arduino boards: direct USB access
  * - on ATtinyX4 based boards:
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
  */

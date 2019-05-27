@@ -16,7 +16,7 @@
  * Timer compilation example.
  * Shows how to use 2 CTC Timers (not RTT) to blink 1 LED for some period of time, then stop completely.
  * 
- * Wiring: TODO
+ * Wiring: 
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D13 (PB5) LED connected to ground through a resistor
  * - on Arduino MEGA:

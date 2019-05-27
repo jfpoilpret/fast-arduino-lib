@@ -10,7 +10,7 @@
 from __future__ import with_statement
 import argparse, re, sys
 
-#TODO from example name, extract tutorial tag, index, and postfix
+# from example name, extract tutorial tag, index, and postfix
 def filter(args):
     bytes_extractor = re.compile(r"([0-9]+) bytes")
     with args.output:
