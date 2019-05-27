@@ -53,7 +53,7 @@ namespace streams
 		void pubsync()
 		{
 			overflow_ = false;
-			while (items()) time::yield();
+			while (!empty()) time::yield();
 		}
 
 		/**
