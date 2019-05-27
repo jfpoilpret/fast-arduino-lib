@@ -68,7 +68,8 @@ namespace containers
 		/**
 		 * Create a new queue, based on the provided @p buffer array.
 		 * The queue size is determined by the size of `buffer`.
-		 * @tparam SIZE the number of @p T items that `buffer` can hold
+		 * @tparam SIZE the number of @p T items that `buffer` can hold; note that,
+		 * for optimization reasons, only `SIZE - 1` items can be held in the buffer.
 		 * @param buffer the buffer used by this queue to store its items
 		 */
 		template<uint8_t SIZE> Queue(T (&buffer)[SIZE]) : buffer_{buffer}, size_{SIZE}, head_{0}, tail_{0} {}
@@ -183,7 +184,7 @@ namespace containers
 		 */
 		inline uint8_t size() const
 		{
-			return size_;
+			return size_ - 1;
 		}
 
 		/**
@@ -197,7 +198,20 @@ namespace containers
 		 */
 		inline bool empty_() const
 		{
-			return (tail_ == head_);
+			return tail_ == head_;
+		}
+
+		/**
+		 * Tell if this queue is currently full.
+		 * This method is not synchronized, hence you must ensure it is called from
+		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
+		 * `full()` instead.
+		 * @sa full()
+		 * @sa free_()
+		 */
+		inline bool full_() const
+		{
+			return tail_ + 1 == (head_ ? head_ : size_);
 		}
 
 		/**
@@ -210,7 +224,9 @@ namespace containers
 		 */
 		inline uint8_t items_() const
 		{
-			return tail_ - head_ + (tail_ < head_ ? size_ : 0);
+			// - must be 0 when head_ = tail_
+			// - must be size_ - 1 max, when tail_ = head_ - 1
+			return tail_ - head_ + (tail_ >= head_ ? 0 : size_);
 		}
 
 		/**
@@ -224,20 +240,10 @@ namespace containers
 		 */
 		inline uint8_t free_() const
 		{
-			return head_ - tail_ + (tail_ >= head_ ? size_ : 0);
-		}
-
-		/**
-		 * Tell if this queue is currently full.
-		 * This method is not synchronized, hence you must ensure it is called from
-		 * an interrupt-safe context; otherwise, you should use the synchronized flavor
-		 * `full()` instead.
-		 * @sa full()
-		 * @sa free_()
-		 */
-		inline bool full_() const
-		{
-			return !free_();
+			// - must be 0 when tail_ = head_ - 1
+			// - must be size_ - 1, when head_ == tail_
+			// We simply return size_ - 1 - items_() but we optimize it a bit
+			return head_ - tail_ - 1 + (tail_ >= head_ ? size_ : 0);
 		}
 
 		/**
