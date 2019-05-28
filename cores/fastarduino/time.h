@@ -102,8 +102,7 @@ namespace time
 		 */
 		RTTTime& operator-=(uint32_t microseconds)
 		{
-			//TODO code can probably be optimized
-			return *this = RTTTime{total_micros() - microseconds};
+			return *this = *this - RTTTime{microseconds};
 		}
 
 		/**
