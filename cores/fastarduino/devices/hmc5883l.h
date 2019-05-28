@@ -28,7 +28,6 @@
 #include "../utilities.h"
 
 //TODO Add (or just document) optional support for DRDY pin (but it does not seem to work?)
-//TODO Check and optimize source code size
 /**
  * Defines API for magnetic sensors for direction, speed and acceleration properties.
  */
@@ -127,6 +126,9 @@ namespace devices::magneto
 	 */
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class HMC5883L : public i2c::I2CDevice<MODE_>
 	{
+	private:
+		using BusCond = i2c::BusConditions;
+
 	public:
 		/** The I2C transmission mode (speed) used for this device. */
 		static constexpr const i2c::I2CMode MODE = MODE_;
@@ -203,8 +205,9 @@ namespace devices::magneto
 		 */
 		bool magnetic_fields(Sensor3D& fields)
 		{
-			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-				&& this->read(DEVICE_ADDRESS, fields, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+			using namespace i2c::Status;
+			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, BusCond::START_NO_STOP) == OK
+				&& this->read(DEVICE_ADDRESS, fields, BusCond::REPEAT_START_STOP) == OK)
 			{
 				utils::swap_bytes(fields.x);
 				utils::swap_bytes(fields.y);
@@ -246,14 +249,16 @@ namespace devices::magneto
 
 		bool write_register(uint8_t address, uint8_t value)
 		{
-			return (this->write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-					&& this->write(DEVICE_ADDRESS, value, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK);
+			using namespace i2c::Status;
+			return (this->write(DEVICE_ADDRESS, address, BusCond::START_NO_STOP) == OK
+					&& this->write(DEVICE_ADDRESS, value, BusCond::NO_START_STOP) == OK);
 		}
 
 		bool read_register(uint8_t address, uint8_t& value)
 		{
-			return (this->write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-					&& this->read(DEVICE_ADDRESS, value, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK);
+			using namespace i2c::Status;
+			return (this->write(DEVICE_ADDRESS, address, BusCond::START_NO_STOP) == OK
+					&& this->read(DEVICE_ADDRESS, value, BusCond::REPEAT_START_STOP) == OK);
 		}
 
 		void convert_field_to_mGa(int16_t& value)
