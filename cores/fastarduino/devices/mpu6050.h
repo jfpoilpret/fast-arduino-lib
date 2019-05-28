@@ -25,6 +25,7 @@
 
 #include <math.h>
 #include <stdint.h>
+#include "common_magneto.h"
 #include "../i2c_device.h"
 #include "../utilities.h"
 
@@ -166,19 +167,6 @@ namespace devices::magneto
 	 * @sa INTStatus
 	 */
 	using INTEnable = INTStatus;
-
-	/**
-	 * Structure to store 3 axis data for one sensor (gyroscope or accelerometer).
-	 * @sa AllSensors
-	 * @sa MPU6050::gyro_measures()
-	 * @sa MPU6050::accel_measures()
-	 */
-	struct Sensor3D
-	{
-		int16_t x;
-		int16_t y;
-		int16_t z;
-	};
 
 	/**
 	 * Structure to store all MPU6050 sensors data (3 axis gyroscope and 

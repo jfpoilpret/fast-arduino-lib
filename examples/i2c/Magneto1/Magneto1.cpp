@@ -51,7 +51,7 @@ static streams::ostream out = uart.out();
 using devices::magneto::DataOutput;
 using devices::magneto::Gain;
 using devices::magneto::HMC5883L;
-using devices::magneto::MagneticFields;
+using devices::magneto::Sensor3D;
 using devices::magneto::MeasurementMode;
 using devices::magneto::OperatingMode;
 using devices::magneto::SamplesAveraged;
@@ -69,7 +69,7 @@ void trace_status(Status status)
 		<< F(", ready = ") << status.ready << '\n' << flush;
 }
 
-void trace_fields(const MagneticFields& fields)
+void trace_fields(const Sensor3D& fields)
 {
 	out << dec << F("Fields x = ") << fields.x << F(", y = ") << fields.y << F(", z = ") << fields.z << '\n' << flush;
 }
@@ -101,7 +101,7 @@ int main()
 	{
 		while (!compass.status().ready) ;
 		trace_status(compass.status());
-		MagneticFields fields;
+		Sensor3D fields;
 		ok = compass.magnetic_fields(fields);
 
 		float heading = magnetic_heading(fields.x, fields.y);

@@ -23,6 +23,7 @@
 #define HMC5883L_H
 
 #include <math.h>
+#include "common_magneto.h"
 #include "../i2c_device.h"
 #include "../utilities.h"
 
@@ -33,17 +34,6 @@
  */
 namespace devices::magneto
 {
-	//TODO reuse Sensor3D defined in mpu9050.h
-	/**
-	 * Structure to store 3 axis data about magnetic fields.
-	 */
-	struct MagneticFields
-	{
-		int16_t x;
-		int16_t z;
-		int16_t y;
-	};
-
 	/**
 	 * Calculate the magnetic heading (heading measured clockwise from magnetic 
 	 * north) from X and Y magnetic fields.
@@ -203,7 +193,7 @@ namespace devices::magneto
 		 * In order to convert raw measurements to physical values, you should
 		 * call `convert_fields_to_mGA()`.
 		 * 
-		 * @param fields a reference to a `MagneticFields` variable that will be
+		 * @param fields a reference to a `Sensor3D` variable that will be
 		 * filled with values upon method return
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
@@ -211,7 +201,7 @@ namespace devices::magneto
 		 * 
 		 * @sa convert_fields_to_mGA()
 		 */
-		bool magnetic_fields(MagneticFields& fields)
+		bool magnetic_fields(Sensor3D& fields)
 		{
 			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
 				&& this->read(DEVICE_ADDRESS, fields, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
@@ -229,13 +219,13 @@ namespace devices::magneto
 		 * Convert raw fields measured obtained with `magnetic_fields()` to actual
 		 * physical values, using the `Gain` configured for the device.
 		 * 
-		 * @param fields a reference to a `MagneticFields` variable that will be
+		 * @param fields a reference to a `Sensor3D` variable that will be
 		 * converted from raw to physical values
 		 * 
 		 * @sa magnetic_fields()
 		 * @sa begin()
 		 */
-		void convert_fields_to_mGA(MagneticFields& fields)
+		void convert_fields_to_mGA(Sensor3D& fields)
 		{
 			convert_field_to_mGa(fields.x);
 			convert_field_to_mGa(fields.y);
