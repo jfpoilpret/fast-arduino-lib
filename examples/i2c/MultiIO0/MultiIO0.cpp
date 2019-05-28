@@ -118,7 +118,7 @@ int main()
 	out << "status #4 " << manager.status() << endl;
 	out << "IOCON: " << data << endl;
 
-	//TODO More tests: set GPIO direction, set GPIO value...
+	// More tests: set GPIO direction, set GPIO value...
 	mcp.write_register(IODIR_A, 0x00);
 	out << "status #5 " << manager.status() << endl;
 	mcp.write_register(IPOL_A, 0x00);
