@@ -30,7 +30,6 @@
  */
 namespace devices::servo
 {
-	//TODO add static asserts to check TIMER_ is OK and PIN_ is OK
 	/**
 	 * This template class supports one servomotor connected to a PWM pin.
 	 * Servomotors are driven by the width of pulses generated at a specific

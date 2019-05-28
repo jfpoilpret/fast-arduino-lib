@@ -130,7 +130,6 @@ namespace utils
 		return (n > 0 ? 10UL * power_of_10(n - 1) : n == 0 ? 1 : power_of_10(-n));
 	}
 
-	//TODO make it templatized on input type? output type?
 	/**
 	 * Convert the raw @p value, obtained from a electronics device, using
 	 * @p precision_bit number of bits (that defines the input range) into a
