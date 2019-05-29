@@ -21,6 +21,11 @@
  *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D5: LED connected to GND through a 1K resistor 
  *   - D6: LED connected to GND through a 1K resistor 
+ * - on Arduino LEONARDO:
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D11: LED connected to GND through a 1K resistor 
+ *   - D3: LED connected to GND through a 1K resistor 
  * - on Arduino MEGA:
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
@@ -31,6 +36,11 @@
  *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D10 (PB2): LED connected to GND through a 1K resistor 
  *   - D7 (PA7): LED connected to GND through a 1K resistor 
+ * - on ATtinyX5 based boards:
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A2 (PA2): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D0 (PB0): LED connected to GND through a 1K resistor 
+ *   - D1 (PB1): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>

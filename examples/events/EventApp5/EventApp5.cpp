@@ -14,13 +14,13 @@
 
 /*
  * Simple Event loop example.
- * This program shows usage of FastArduino events support and port API.
+ * This program shows usage of FastArduino events support and GPIO port API.
  * The example takes input from 8 buttons, each button triggers a specific sequence of
- * LED blinks. When a button is pushed, this triggers an event that is then read by
+ * LED13 blinks. When a button is pushed, this triggers an event that is then read by
  * the event loop and acted upon.
  * 
  * Wiring:
- * - on ATmega328P based boards (including Arduino UNO) and on Leonardo:
+ * - on ATmega328P based boards (including Arduino UNO):
  *   - D0-D7 (port D) branch 8 push buttons connected to ground
  */
 

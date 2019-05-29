@@ -17,14 +17,17 @@
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
- *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D6: LED connected to GND through a 1K resistor 
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D9: LED connected to GND through a 1K resistor 
+ * - on Arduino LEONARDO:
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D9: LED connected to GND through a 1K resistor 
  * - on Arduino MEGA:
- *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D4: LED connected to GND through a 1K resistor 
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D11: LED connected to GND through a 1K resistor 
  * - on ATtinyX4 based boards:
- *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D10 (PB2): LED connected to GND through a 1K resistor 
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D6 (PA6): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>

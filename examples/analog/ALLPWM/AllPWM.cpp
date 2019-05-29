@@ -15,15 +15,14 @@
 /*
  * Check all PWM pins on the built target.
  * For each PWM pin, a LED is lit from 0% to 100%, then switched off.
- * TODO review after program written for all targets
  * Wiring:
  * - connect a LED to each PWM pin (detailed later) and a 1K resistor to GND
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D3, D5, D6, D9, D10, D11
  * - on Arduino LENOARDO:
- *   - D3, D5, D9, D10, D11
+ *   - D3, D5, D9, D10, D11 (2 timers)
  * - on Arduino MEGA:
- *   - D2-D13, D44-46
+ *   - D2-D12, D13 (2 timers), D44-46
  * - on ATtinyX4 based boards:
  *   - PA5-7, PB2
  * - on ATtinyX5 based boards:

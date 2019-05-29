@@ -15,7 +15,19 @@
 /*
  * Simple LED blinker.
  * This program shows usage of FastArduino periodic jobs support, triggered by Watchdog.
- * It simply blinks LED D13 (Arduino UNO).
+ * It simply blinks one LED.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D13 (PB5) Arduino LED (or external LED connected to ground through a resistor)
+ * - on Arduino LEONARDO:
+ *   - D13 (PC7) Arduino LED
+ * - on Arduino MEGA:
+ *   - D13 (PB7) Arduino LED
+ * - on ATtinyX4 based boards:
+ *   - D7 (PA7) LED connected to ground through a resistor
+ * - on ATtinyX5 based boards:
+ *   - D0 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

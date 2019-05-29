@@ -20,11 +20,13 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\
 					eeprom/Eeprom1 eeprom/Eeprom2 eeprom/Eeprom3 eeprom/Eeprom4				\
 					events/EventApp1 events/EventApp2 events/EventApp3 events/EventApp4		\
+					events/EventApp6														\
 					int/ExternalInterrupt1 int/ExternalInterrupt2							\
 					io/FastPin1 io/FastPin2 io/FastPin3 io/FastPin4 io/FastPin5				\
 					misc/Flash1	misc/IOStreams2												\
 					i2c/Magneto1															\
 					pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
+					analog/AllPWM															\
 					analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4							\
 					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4						\
 					motors/Servo1 motors/Servo2												\
@@ -35,7 +37,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					sonar/Sonar5 sonar/Sonar6 sonar/Sonar7
 
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
-						events/EventApp5 events/EventApp6		\
+						events/EventApp5						\
 						int/ExternalInterrupt3					\
 						misc/IOStreams3							\
 						pci/PinChangeInterrupt4					\
@@ -61,7 +63,7 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						uart/UartApp6							
 
 EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
-						events/EventApp5 events/EventApp6		\
+						events/EventApp5						\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
 						sonar/Sonar10 sonar/Sonar11				\
@@ -70,7 +72,7 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						uart/UartApp6							
 
 EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3				\
-								events/EventApp5 events/EventApp6	\
+								events/EventApp5					\
 								pci/PinChangeInterrupt4				\
 								rtt/InputCapture1					\
 								sonar/Sonar10 sonar/Sonar11			\
@@ -87,6 +89,7 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								uart/UartApp2					\
 								analog/AnalogPin1				\
+								analog/AllPWM					\
 								analog/PWM1 analog/PWM2			\
 								analog/PWM4						\
 								eeprom/Eeprom1					\

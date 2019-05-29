@@ -14,7 +14,8 @@
 
 /*
  * Simple LED chaser. Take #3
- * This program shows usage of FastArduino periodic jobs support, triggered by Watchdog, and port API.
+ * This program shows usage of FastArduino periodic jobs support, triggered by Watchdog, 
+ * and GPIO port API.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):

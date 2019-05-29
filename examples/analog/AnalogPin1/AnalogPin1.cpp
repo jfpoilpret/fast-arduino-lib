@@ -18,12 +18,19 @@
  * It reads and converts the analog level on a pin and displays it to the UART console.
  * 
  * Wiring:
- * - on ATmega328P based boards (including Arduino UNO):
+ * - on ATmega328P based boards (including Arduino UNO, but not NANO):
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ * - on Arduino NANO:
+ *   - A7: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ * - on Arduino LEONARDO:
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  * - on Arduino MEGA:
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  * - on ATtinyX4 based boards:
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATtinyX5 based boards:
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 

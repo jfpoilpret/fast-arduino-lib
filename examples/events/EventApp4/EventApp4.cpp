@@ -14,8 +14,10 @@
 
 /*
  * Simple LED chaser. Take #4
- * This program shows usage of FastArduino periodic jobs support, triggered by Watchdog, and port API.
- * It is similar to EventApp3 except that it consumes less power, by spending most time in POWER DOWN mode.
+ * This program shows usage of FastArduino periodic jobs support, triggered by 
+ * Watchdog, and GPIO port API.
+ * It is similar to EventApp3 except that it consumes less power, by spending 
+ * most time in POWER DOWN mode.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):

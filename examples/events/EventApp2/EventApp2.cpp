@@ -14,17 +14,22 @@
 
 /*
  * Simple LED chaser. Take #2
- * This program shows usage of FastArduino events support, with Watchdog generated events, and port API.
+ * This program shows usage of FastArduino events support, with Watchdog generated 
+ * events, and GPIO port API.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
- *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  * - on Arduino LEONARDO:
- *	- D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in series with 330 Ohm resistors
+ *	 - D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in 
+ *     series with 330 Ohm resistors
  * - on Arduino MEGA:
- *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  * - on ATtinyX4 based boards:
- *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  */
 
 #include <fastarduino/gpio.h>

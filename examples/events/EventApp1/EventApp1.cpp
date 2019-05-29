@@ -14,16 +14,20 @@
 
 /*
  * Simple LED chaser. Take #1
- * This program shows usage of FastArduino events support and port API.
- * The number of LED roundtrips is limited to one because all events are pushed at startup and not regenerated.
+ * This program shows usage of FastArduino events support and GPIO port API.
+ * The number of LED roundtrips is limited to one because all events are pushed 
+ * at startup and not regenerated.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO) and on Leonardo:
- *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  * - on Arduino MEGA:
- *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  * - on ATtinyX4 based boards:
- *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  */
 
 #include <fastarduino/gpio.h>

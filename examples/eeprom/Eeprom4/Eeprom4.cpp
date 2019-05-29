@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 /*
- * Blocking EEPROM Read and Writes.
+ * Blocking and asynchronous EEPROM Read and Writes of structured content.
  * This program shows usage of FastArduino EEPROM API.
  * It interfaces with user through the UART console and allows:
  * - writing values to EEPROM
@@ -22,7 +22,7 @@
  * Wiring: 
  * - on Arduino boards: direct USB access
  * - on ATtinyX4 based boards:
- *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ *   - D1 (PA1): TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/time.h>

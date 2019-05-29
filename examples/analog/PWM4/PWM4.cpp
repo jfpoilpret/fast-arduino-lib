@@ -13,7 +13,7 @@
 //   limitations under the License.
 
 /*
- * Use potentiometer to set 2 LEDs light level through PulseTimer-based PWM.
+ * Use 2 potentiometers to set 2 LEDs light level through PulseTimer-based PWM.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
@@ -21,12 +21,26 @@
  *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D5: LED connected to GND through a 1K resistor 
  *   - D6: LED connected to GND through a 1K resistor 
+ * - on Arduino LEONARDO:
+ *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D3: LED connected to GND through a 1K resistor 
+ *   - D11: LED connected to GND through a 1K resistor 
  * - on Arduino MEGA:
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D4: LED connected to GND through a 1K resistor 
+ *   - D13: LED connected to GND through a 1K resistor 
  * - on ATtinyX4 based boards:
  *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D7 (PA7): LED connected to GND through a 1K resistor 
  *   - D10 (PB2): LED connected to GND through a 1K resistor 
+ * - on ATtinyX5 based boards:
+ *   - A1 (PB2): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A2 (PB4): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D0 (PB0): LED connected to GND through a 1K resistor 
+ *   - D1 (PB1): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>
