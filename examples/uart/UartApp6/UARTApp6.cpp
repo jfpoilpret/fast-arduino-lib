@@ -14,15 +14,19 @@
 
 /*
  * Hardware UART example.
- * This program demonstrates usage of FastArduino Hardware UART support (on target supporting it) and formatted
- * input streams.
+ * This program demonstrates usage of FastArduino Hardware UART support (on target 
+ * supporting it) and formatted input/output streams.
+ * This example enables several formatted in/out checks, based on #define in the
+ * first lines. 
  * 
  * Wiring:
  * - on Arduino UNO, Arduino NANO and Arduino MEGA:
  *   - Use standard TX/RX
  * - on ATmega328P based boards:
  *   - Use standard TX/RX connected to an Serial-USB converter
- * - on ATtinyX4 based boards:
+ * - on Arduino LEONARDO:
+ *   - NOT PORTED
+ * - on ATtinyX4/ATtinyX5 based boards:
  *   - NOT SUPPORTED
  */
 

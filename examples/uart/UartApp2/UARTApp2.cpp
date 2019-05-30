@@ -14,7 +14,9 @@
 
 /*
  * Software UART example. Take #1
- * This program demonstrates usage of FastArduino Software (emulated) UART support and formatted output streams.
+ * This program demonstrates usage of FastArduino Software (emulated) UART support
+ * and formatted output streams.
+ * For RX pin we use PCI ISR.
  * In this example, UATX and UARX are used individually.
  * Serial errors are traced as they occur.
  * 
@@ -24,13 +26,18 @@
  * - stop bits (1 or 2)
  * 
  * Wiring:
- * - on Arduino UNO:
+ * - on Arduino UNO and NANO:
  *   - Use standard TX/RX but without hardware UART
- * - on Arduino MEGA:
- *   - TODO
  * - on ATmega328P based boards:
- *   - Use standard TX/RX but without hardware UART, connected to an Serial-USB converter
+ *   - Use standard TX/RX but without hardware UART, connected to an Serial-USB 
+ *   converter
+ * - on Arduino LEONARDO:
+ *   - Use D9/D8 as TX/RX, connected to an Serial-USB converter
+ * - on Arduino MEGA:
+ *   - Use D52/D53 as TX/RX, connected to an Serial-USB converter
  * - on ATtinyX4 based boards:
+ *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
+ * - on ATtinyX5 based boards:
  *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
  */
 

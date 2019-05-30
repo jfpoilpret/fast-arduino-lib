@@ -13,8 +13,9 @@
 //   limitations under the License.
 
 /*
- * Software UART example. take #2
- * This program demonstrates usage of FastArduino Software (emulated) UART support and formatted output streams.
+ * Software UART example. take #3
+ * This program demonstrates usage of FastArduino Software (emulated) UART support
+ * and formatted output streams.
  * For RX pin we use INT ISR.
  * In this example, we used just a single UART instead of individual UATX and UARX.
  * Serial errors are traced as they occur.
@@ -25,14 +26,16 @@
  * - stop bits (1 or 2)
  * 
  * Wiring:
- * - on Arduino UNO:
- *   - Use standard TX/RX but without hardware UART
- * - on Arduino MEGA:
- *   - TODO
+ * - on Arduino UNO and NANO:
+ *   - Use D3/D2 as TX/RX, connected to an Serial-USB converter
  * - on ATmega328P based boards:
- *   - Use standard TX/RX but without hardware UART, connected to an Serial-USB converter
+ *   - Use D3/D2 as TX/RX, connected to an Serial-USB converter
+ * - on Arduino LEONARDO:
+ *   - Use D2/D3 as TX/RX, connected to an Serial-USB converter
+ * - on Arduino MEGA:
+ *   - Use D52/D21 as TX/RX, connected to an Serial-USB converter
  * - on ATtinyX4 based boards:
- *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
+ *   - Use D1-D10 as TX-RX, connected to an Serial-USB converter
  */
 
 #include <fastarduino/soft_uart.h>

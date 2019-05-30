@@ -14,7 +14,8 @@
 
 /*
  * Software UART example. take #2
- * This program demonstrates usage of FastArduino Software (emulated) UART support and formatted output streams.
+ * This program demonstrates usage of FastArduino Software (emulated) UART support 
+ * and formatted output streams.
  * For RX pin we use PCI ISR.
  * In this example, we used just a single UART instead of individual UATX and UARX.
  * Serial errors are traced as they occur.
@@ -25,13 +26,18 @@
  * - stop bits (1 or 2)
  * 
  * Wiring:
- * - on Arduino UNO:
+ * - on Arduino UNO and NANO:
  *   - Use standard TX/RX but without hardware UART
- * - on Arduino MEGA:
- *   - TODO
  * - on ATmega328P based boards:
- *   - Use standard TX/RX but without hardware UART, connected to an Serial-USB converter
+ *   - Use standard TX/RX but without hardware UART, connected to an Serial-USB 
+ *   converter
+ * - on Arduino LEONARDO:
+ *   - Use D9/D8 as TX/RX, connected to an Serial-USB converter
+ * - on Arduino MEGA:
+ *   - Use D52/D53 as TX/RX, connected to an Serial-USB converter
  * - on ATtinyX4 based boards:
+ *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
+ * - on ATtinyX5 based boards:
  *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
  */
 
@@ -53,6 +59,10 @@ constexpr const board::InterruptPin RX = board::InterruptPin::D53_PB0_PCI0;
 #elif defined (BREADBOARD_ATTINYX4)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 constexpr const board::InterruptPin RX = board::InterruptPin::D0_PA0_PCI0;
+#define PCI_NUM 0
+#elif defined (BREADBOARD_ATTINYX5)
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
+constexpr const board::InterruptPin RX = board::InterruptPin::D0_PB0_PCI0;
 #define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"

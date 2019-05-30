@@ -14,8 +14,8 @@
 
 /*
  * Hardware UART example.
- * This program demonstrates usage of FastArduino Hardware UART support (on target supporting it) and formatted
- * output streams.
+ * This program demonstrates usage of FastArduino Hardware UART support (on 
+ * target supporting it) and formatted output streams.
  * 
  * It can be modified and recompiled in order to check various serial configurations:
  * - speed (tested up to 230400 bps)
@@ -23,11 +23,11 @@
  * - stop bits (1 or 2)
  * 
  * Wiring:
- * - on Arduino UNO and Arduino MEGA:
+ * - on Arduino UNO, LEONARDO and MEGA:
  *   - Use standard TX/RX
  * - on ATmega328P based boards:
  *   - Use standard TX/RX connected to an Serial-USB converter
- * - on ATtinyX4 based boards:
+ * - on ATtinyX4/ATtinyX5 based boards:
  *   - NOT SUPPORTED
  */
 

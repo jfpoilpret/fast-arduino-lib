@@ -86,7 +86,7 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 
 # ATtinyX5 needs its own (reduced) set of examples (because of many limitations)
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
-								uart/UartApp2					\
+								uart/UartApp2 uart/UartApp3		\
 								analog/AnalogPin1				\
 								analog/AllPWM					\
 								analog/PWM1 analog/PWM2			\
