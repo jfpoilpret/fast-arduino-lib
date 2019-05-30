@@ -425,7 +425,7 @@ namespace board_traits
 							0, _BV(WGM42) | _BV(WGM43),
 							_BV(WGM41), _BV(WGM42) | _BV(WGM43),
 							_BV(WGM41), _BV(WGM43),
-							board::DigitalPin::D48_PL1, _BV(ICES4)>
+							board::DigitalPin::D49_PL0, _BV(ICES4)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
