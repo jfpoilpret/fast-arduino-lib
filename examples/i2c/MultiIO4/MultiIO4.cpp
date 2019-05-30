@@ -12,6 +12,28 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/*
+ * Configurable LED chaser example, using MCP23017 I2C device (GPIO expander).
+ * This program uses FastArduino MCP23017 support API, by addressing each MCP23017
+ * port individually. It also uses MCP23017 interrupts to be notified when an
+ * input switch changes states.
+ * This example is similar to MultiIO3, except it better encapsulates LED chaser
+ * functionality to a class.
+ * 
+ * Wiring:
+ * - MCP23017:
+ *   - GPA0-GPA7: each pin is connected to LED through a ~1K resistor to the ground
+ *   - GPB0-GPB3: each pin shall be connected to a DIP switch, itself connected to the ground. 
+ *     3 first switches define a "LED pattern" that will progress through the 8 LEDs chain
+ *     last switch defines the progress direction of the pattern
+ * 
+ * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - A4 (PC4, SDA): connected to MCP23017 SDA pin
+ *   - A5 (PC5, SCL): connected to MCP23017 SCL pin
+ *   - D2 (PD2): connected to MCP23017 INTB pin
+ */
+
 #include <fastarduino/int.h>
 #include <fastarduino/time.h>
 #include <fastarduino/i2c_device.h>

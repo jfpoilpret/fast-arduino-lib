@@ -12,6 +12,30 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/*
+ * This is a skeleton program to help connect, debug and understand how a given
+ * I2C device (not already supported by FastArduino) works.
+ * That helps creating a new specific support API for that device for reuse in 
+ * other programs and potential integration to FastArduino project.
+ * To ease wiring and debugging, I suggest using a real Arduino board (I typically 
+ * use UNO) and a small breadboard for connecting the I2C device.
+ * 
+ * Wiring:
+ * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - A4 (PC4, SDA): connected to DS1307 SDA pin
+ *   - A5 (PC5, SCL): connected to DS1307 SCL pin
+ *   - direct USB access (traces output)
+ * - on Arduino LEONARDO:
+ *   - D2 (PD1, SDA): connected to DS1307 SDA pin
+ *   - D3 (PD0, SCL): connected to DS1307 SDA pin
+ *   - direct USB access (traces output)
+ * - on Arduino MEGA:
+ *   - D20 (PD1, SDA): connected to DS1307 SDA pin
+ *   - D21 (PD0, SCL): connected to DS1307 SDA pin
+ *   - direct USB access (traces output)
+ */
+
 #include <fastarduino/time.h>
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/utilities.h>
@@ -68,7 +92,7 @@ int main()
 	
 	PublicDevice device{manager};
 	
-	// Init MPU6050: wake it up, set ranges for accelerometer and gyroscope
+	// Init I2C device if needed
 	
 	//TODO loop to show measures
 	while (true)

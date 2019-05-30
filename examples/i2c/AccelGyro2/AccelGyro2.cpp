@@ -12,6 +12,31 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/*
+ * Read and display sensor values, in FIFO mode, from MPU6050 3D 
+ * gyroscope/accelerometer (I2C device).
+ * Values are displayed to the UART console.
+ * 
+ * Wiring:
+ * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - A4 (PC4, SDA): connected to MPU6050 SDA pin
+ *   - A5 (PC5, SCL): connected to MPU6050 SCL pin
+ *   - direct USB access
+ * - on Arduino LEONARDO:
+ *   - D2 (PD1, SDA): connected to MPU6050 SDA pin
+ *   - D3 (PD0, SCL): connected to MPU6050 SDA pin
+ *   - direct USB access
+ * - on Arduino MEGA:
+ *   - D20 (PD1, SDA): connected to MPU6050 SDA pin
+ *   - D21 (PD0, SCL): connected to MPU6050 SDA pin
+ *   - direct USB access
+ * - on ATtinyX4 based boards:
+ *   - D6 (PA6, SDA): connected to MPU6050 SDA pin
+ *   - D4 (PA4, SCL): connected to MPU6050 SDA pin
+ *   - D8 (PB0, TX): connected to SerialUSB converter
+ */
+
 #include <fastarduino/time.h>
 #include <fastarduino/devices/mpu6050.h>
 

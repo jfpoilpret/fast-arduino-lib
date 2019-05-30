@@ -12,6 +12,24 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/*
+ * Check MCP23017 I2C device (GPIO expander) and display output to the UART console.
+ * This program does not use FastArduino MCP23017 device and directly uses 
+ * i2c::I2CDevice instead; it was originally used as a way to understand the device
+ * and then build the FastArduino MCP23017 API.
+ * 
+ * Wiring:
+ * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - A4 (PC4, SDA): connected to MCP23017 SDA pin
+ *   - A5 (PC5, SCL): connected to MCP23017 SCL pin
+ *   - direct USB access
+ * - on Arduino MEGA (not tested):
+ *   - D20 (PD1, SDA): connected to MCP23017 SDA pin
+ *   - D21 (PD0, SCL): connected to MCP23017 SDA pin
+ *   - direct USB access
+ */
+
 #include <fastarduino/time.h>
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/uart.h>

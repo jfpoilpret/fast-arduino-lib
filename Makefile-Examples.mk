@@ -25,6 +25,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					io/FastPin1 io/FastPin2 io/FastPin3 io/FastPin4 io/FastPin5				\
 					misc/Flash1	misc/IOStreams2												\
 					i2c/Magneto1															\
+					i2c/MultiIO1 i2c/MultiIO2												\
 					pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
 					analog/AllPWM															\
 					analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4							\
@@ -43,8 +44,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
 						sonar/Sonar10 sonar/Sonar11				\
-						i2c/MultiIO0 i2c/MultiIO1 i2c/MultiIO2	\
-						i2c/MultiIO3 i2c/MultiIO4				\
+						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 						tones/tones1 tones/tones2 tones/tones3	\
 						uart/UartApp1							\
 						uart/UartApp5							\
@@ -58,6 +58,7 @@ EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
+						i2c/MultiIO0							\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							
@@ -66,18 +67,20 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						events/EventApp5						\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
+						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 						sonar/Sonar10 sonar/Sonar11				\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							
 
-EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3				\
-								events/EventApp5					\
-								pci/PinChangeInterrupt4				\
-								rtt/InputCapture1					\
-								sonar/Sonar10 sonar/Sonar11			\
-								uart/UartApp1						\
-								uart/UartApp5						\
+EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
+								events/EventApp5						\
+								pci/PinChangeInterrupt4					\
+								rtt/InputCapture1						\
+								i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
+								sonar/Sonar10 sonar/Sonar11				\
+								uart/UartApp1							\
+								uart/UartApp5							\
 								uart/UartApp6					
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
@@ -102,6 +105,7 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								rtt/TimerApp3 rtt/TimerApp4		\
 								rtt/TimerTinyX5					\
 								i2c/DS1307RTC1 i2c/DS1307RTC2	\
+								i2c/MultiIO1 i2c/MultiIO2		\
 								spi/RF24App1 spi/WinBond
 
 # Finally define all examples supported for the current variant (defined by current configuration)
