@@ -13,9 +13,12 @@
 //   limitations under the License.
 
 /*
- * This program is just for personal experiments here on AVR features and C++ stuff
- * to check compilation and link of FastArduino port and pin API.
- * It does not do anything interesting as far as hardware is concerned.
+ * Frequency generator example, used to play the Imperial March.
+ * In this example, the melody is stored in Flash.
+ * 
+ * Wiring:
+ * - on Arduino UNO:
+ *   - D9: connect to a 5V piezo buzzer with the othe lead connected to ground
  */
 
 // Imperial march tones thanks:

@@ -14,9 +14,10 @@
 
 /*
  * Frequency generator example, used to play the Imperial March.
+ * In this example, the melody is stored in SRAM.
  * 
  * Wiring:
- * - on Arduino UNO and Arduino MEGA:
+ * - on Arduino UNO:
  *   - D6: connect to a 5V piezo buzzer with the othe lead connected to ground
  */
 
