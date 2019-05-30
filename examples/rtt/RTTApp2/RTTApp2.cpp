@@ -18,7 +18,8 @@
  * It checks RTT with the timer that can awake from sleep mode, for the target board.
  * The program blinks a LED at a period of 10 seconds, forever.
  * 
- * This examples differs from RTTApp1 in that it sleeps to POWER_SAVE mode, thus reducing energy consumption.
+ * This examples differs from RTTApp1 in that it sleeps to POWER_SAVE mode, thus 
+ * reducing energy consumption.
  * 
  * Wiring:
  * - on Arduino UNO and Arduino MEGA:
@@ -27,6 +28,8 @@
  *   - D13 (PB5) connected to a LED through a 330Ohm resistor then linked to GND
  * - on ATtinyX4 based boards:
  *   - D7 (LED, PA7) connected to a LED through a 330Ohm resistor then linked to GND
+ * - on ATtinyX5 based boards:
+ *   - D0 (LED, PB0) connected to a LED through a 330Ohm resistor then linked to GND
  */
 
 #include <fastarduino/power.h>

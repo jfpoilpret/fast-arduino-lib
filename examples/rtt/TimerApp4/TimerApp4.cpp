@@ -23,6 +23,8 @@
  *   - D13 (PB7) LED connected to ground through a resistor
  * - on ATtinyX4 based boards:
  *   - D7 (PA7) LED connected to ground through a resistor
+ * - on ATtinyX5 based boards:
+ *   - D0 (PB7) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

@@ -13,16 +13,25 @@
 //   limitations under the License.
 
 /*
- * Pin Change Interrupt example. Take #1
- * This program shows usage of Pin Change Interrupt (PCI) FastArduino support to light a LED when a button is pushed.
+ * Pin Change Interrupt example. Take #4
+ * This program shows usage of Pin Change Interrupt (PCI) FastArduino support to 
+ * light a LED when a button is pushed.
  * This sample uses a handler called by 2 PCINT vectors.
- * NOTE: this is not testablen Leonardo ad it has only one PCINT port.
+ * NOTE: this is not testable on Leonardo ad it has only one PCINT port.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D14 (PC0, ADC0) branch a push button connected to ground
  *   - D8 (PB0) branch a push button connected to ground
  *   - D13 (PB5) LED connected to ground through a resistor
+ * - on Arduino MEGA:
+ *   - D53 (PB0) branch a push button connected to ground
+ *   - D62 (PK0) branch a push button connected to ground
+ *   - D13 (PB7) LED connected to ground through a resistor
+ * - on ATtinyX4 based boards:
+ *   - D0 (PA0) branch a push button connected to ground
+ *   - D8 (PB0) branch a push button connected to ground
+ *   - D13 (PA7) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

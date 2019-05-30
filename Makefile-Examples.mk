@@ -29,6 +29,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
 					analog/AllPWM															\
 					analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4							\
+					rtt/InputCapture1														\
 					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4						\
 					motors/Servo1 motors/Servo2												\
 					rtt/TimerApp3 rtt/TimerApp4												\
@@ -43,7 +44,6 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/IOStreams3							\
 						misc/QueueCheck							\
 						pci/PinChangeInterrupt4					\
-						rtt/InputCapture1						\
 						sonar/Sonar10 sonar/Sonar11				\
 						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 						tones/tones1 tones/tones2 tones/tones3	\
@@ -53,12 +53,10 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 
 EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 							int/ExternalInterrupt3				\
-							rtt/InputCapture1					\
 							uart/UartApp1						
 
 EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						pci/PinChangeInterrupt4					\
-						rtt/InputCapture1						\
 						i2c/MultiIO0							\
 						uart/UartApp1							\
 						uart/UartApp5							\
@@ -67,7 +65,6 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						events/EventApp5						\
 						pci/PinChangeInterrupt4					\
-						rtt/InputCapture1						\
 						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 						sonar/Sonar10 sonar/Sonar11				\
 						uart/UartApp1							\
@@ -77,7 +74,6 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								events/EventApp5						\
 								pci/PinChangeInterrupt4					\
-								rtt/InputCapture1						\
 								i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 								sonar/Sonar10 sonar/Sonar11				\
 								uart/UartApp1							\
@@ -86,8 +82,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
-								pci/PinChangeInterrupt4			\
-								rtt/InputCapture1
+								pci/PinChangeInterrupt4
 
 # ATtinyX5 needs its own (reduced) set of examples (because of many limitations)
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
@@ -102,8 +97,8 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								int/ExternalInterrupt2			\
 								misc/IOStreams2					\
 								pci/PinChangeInterrupt1			\
-								rtt/RTTApp1b rtt/RTTApp3		\
-								rtt/RTTApp4						\
+								rtt/RTTApp1b rtt/RTTApp2		\
+								rtt/RTTApp3 rtt/RTTApp4			\
 								rtt/TimerApp3 rtt/TimerApp4		\
 								rtt/TimerTinyX5					\
 								i2c/DS1307RTC1 i2c/DS1307RTC2	\

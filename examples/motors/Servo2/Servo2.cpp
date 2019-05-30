@@ -19,8 +19,21 @@
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
- *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D6: connected to servo signal pin (orange wire)
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are 
+ *     connected between Vcc and Gnd
+ *   - D9: connected to servo signal pin (orange wire)
+ * - on Arduino MEGA:
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are 
+ *     connected between Vcc and Gnd
+ *   - D11: connected to servo signal pin (orange wire)
+ * - on Arduino LEONARDO:
+ *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are 
+ *     connected between Vcc and Gnd
+ *   - D9: connected to servo signal pin (orange wire)
+ * - on ATtinyX4:
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are 
+ *     connected between Vcc and Gnd
+ *   - D6 (PA6): connected to servo signal pin (orange wire)
  */
 
 #include <fastarduino/boards/board.h>

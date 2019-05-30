@@ -13,11 +13,23 @@
 //   limitations under the License.
 
 /*
- * Input Capture Timer example. Take #1
- * TODO
+ * Input Capture Timer example.
+ * This program demonstrates the use of Timer Input Capture facility by measuring
+ * and displaying the time during which a button is pressed.
  * 
  * Wiring:
- * - TODO
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D8 (PB0, ICP1): connected to a push button connected to GND
+ *   - standard USB connected to console for display
+ * - on Arduino MEGA:
+ *   - D49 (PL0, ICP4): connected to a push button connected to GND
+ *   - standard USB connected to console for display
+ * - on Arduino LEONARDO:
+ *   - D4 (PD4, ICP1): connected to a push button connected to GND
+ *   - standard USB connected to console for display
+ * - on ATtinyX4 based boards:
+ *   - D7 (PA7, ICP): connected to a push button connected to GND
+ *   - D1 (PA1, TX): connected through USB Serial converter to console for display
  */
 
 #include <fastarduino/flash.h>

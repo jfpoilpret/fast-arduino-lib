@@ -14,7 +14,8 @@
 
 /*
  * Real Time Timer example. Take #3
- * This program shows usage of FastArduino Timer-based RTT (Real Time Timer) support, with microsecond precision.
+ * This program shows usage of FastArduino Timer-based RTT (Real Time Timer) 
+ * support, with microsecond precision.
  * It traces elapsed microseconds after a hard-coded microsecond delay.
  * 
  * Wiring:
@@ -25,6 +26,8 @@
  *   - use TX pin to send traces to (115200 bps)
  * - on ATtinyX4 based boards:
  *   - D1 (PA1) as TX to a Serial-USB converter
+ * - on ATtinyX5 based boards:
+ *   - D1 (PB1) as TX to a Serial-USB converter
  */
 
 #include <fastarduino/realtime_timer.h>

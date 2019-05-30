@@ -16,7 +16,8 @@
  * Real Time Timer example. Take #1
  * This program shows usage of FastArduino Timer-based RTT (Real Time Timer) support.
  * It checks RTT with all available timers of the target board.
- * For each available timer on the target platform, the program blinks a LED 5 times with a period of 10 seconds.
+ * For each available timer on the target platform, the program blinks a LED 5 
+ * times with a period of 10 seconds.
  * 
  * Wiring:
  * - on Arduino UNO, Arduino LEONARDO and Arduino MEGA:
@@ -25,6 +26,8 @@
  *   - D13 (PB5) connected to a LED through a 330Ohm resistor then linked to GND
  * - on ATtinyX4 based boards:
  *   - D7 (LED, PA7) connected to a LED through a 330Ohm resistor then linked to GND
+ * - on ATtinyX5 based boards:
+ *   - D0 (LED, PB0) connected to a LED through a 330Ohm resistor then linked to GND
  */
 
 #include <fastarduino/gpio.h>

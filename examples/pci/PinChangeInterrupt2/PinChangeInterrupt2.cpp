@@ -14,20 +14,29 @@
 
 /*
  * Pin Change Interrupt example. Multiple PCI.
- * This program shows usage of Pin Change Interrupt (PCI) FastArduino support to light LEDs when buttons are pushed.
+ * This program shows usage of Pin Change Interrupt (PCI) FastArduino support to
+ * light LEDs when buttons are pushed.
  * This sample uses a handler called by PCINT vector.
- * Concretely, the example takes PCI input from 3 switches and lights one of 3 LEDs (1 LED per button).
+ * Concretely, the example takes PCI input from 3 switches and lights one of 3 
+ * LEDs (1 LED per button).
  * It also toggles a 4th LED on each PCI interrupt.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
- *   - D1, D3, D5, D7 (port D) branch 4 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D1, D3, D5, D7 (port D) branch 4 LED (in series with 330 Ohm resistors to 
+ *     limit current) connected to ground
  *   - D14, D16, D17 (port C, ADC0, ADC2, ADC3) branch 3 buttons connected to ground
+ * - on Arduino LEONARDO:
+ *   - D0-D3 (port D) branch 4 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
+ *   - D8-D10 (port B) branch 3 buttons connected to ground
  * - on Arduino MEGA:
- *   - D22-D25 (port A) branch 4 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D22-D25 (port A) branch 4 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  *   - D53-D51 (port B) branch 3 buttons connected to ground
  * - on ATtinyX4 based boards:
- *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
  *   - D8-D10 (port B) branch 3 buttons connected to ground
  */
 

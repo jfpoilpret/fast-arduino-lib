@@ -19,9 +19,10 @@
  * LED0 toggles at every COMPARE MATCH A
  * LED1 toggles at every COMPARE MATCH B
  * LED2 toggles at every OVERFLOW
- * Actual pulses should be measure and checked with an oscilloscope.
+ * Actual pulses should be measured and checked with an oscilloscope (or a digital 
+ * analyzer).
  * 
- * Wiring: TODO
+ * Wiring:
  *   - D0 (PB0) LED0 connected to ground through a resistor
  *   - D1 (PB1) LED1 connected to ground through a resistor
  *   - D2 (PB2) LED2 connected to ground through a resistor
