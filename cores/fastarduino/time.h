@@ -31,6 +31,10 @@
  */
 namespace time
 {
+	// Forward declaration to avoid compilation error
+	struct RTTTime;
+	inline RTTTime operator-(const RTTTime& a, const RTTTime& b);
+
 	/**
 	 * Structure used to hold a time value with microsecond precision.
 	 * Note that this value is not absolute but relative to some time base, not
