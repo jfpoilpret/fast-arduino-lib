@@ -13,14 +13,37 @@
 //   limitations under the License.
 
 /*
- * Asynchronous sonar sensor read and conversion.
- * This program shows usage of FastArduino HCSR04 device API with PCINT ISR om 2 pins.
+ * Asynchronous sonar (PCINT pins) sensors read and conversion.
+ * This program shows usage of FastArduino HCSR04 device API with PCINT ISR on 2 pins
+ * (same PCI port).
+ * 2 sonars are attached to the board and are independent of each other (no common 
+ * trigger pin).
  * 
- * Wiring: TODO
+ * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
+ *   - D2: connected to sonar 1 trigger pin
+ *   - D3: connected to sonar 1 echo pin
+ *   - D4: connected to sonar 2 trigger pin
+ *   - D5: connected to sonar 3 echo pin
+ *   - Standard USB connected to console for measures display
  * - on Arduino MEGA:
+ *   - D2: connected to sonar 1 trigger pin
+ *   - D53: connected to sonar 1 echo pin
+ *   - D3: connected to sonar 2 trigger pin
+ *   - D52: connected to sonar 2 echo pin
+ *   - Standard USB connected to console for measures display
+ * - on Arduino LEONARDO:
+ *   - D2: connected to sonar 1 trigger pin
+ *   - D8: connected to sonar 1 echo pin
+ *   - D3: connected to sonar 2 trigger pin
+ *   - D9: connected to sonar 2 echo pin
+ *   - Standard USB connected to console for measures display
  * - on ATtinyX4 based boards:
- *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ *   - D0 (PA0): connected to sonar 1 trigger pin
+ *   - D10 (PB2): connected to sonar 1 echo pin
+ *   - D1 (PA1): connected to sonar 1 trigger pin
+ *   - D9 (PB1): connected to sonar 1 echo pin
+ *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>

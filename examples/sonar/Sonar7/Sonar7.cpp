@@ -13,15 +13,31 @@
 //   limitations under the License.
 
 /*
- * Asynchronous sonar sensor read and conversion.
- * This program shows usage of FastArduino HCSR04 device API with EXT ISR 
- * on 1 pin and callback.
+ * Asynchronous sonar (EXT pin) sensor read and conversion.
+ * When a sonar range is obtained, a callback is notified and switches a LED on 
+ * if the distance is less than 150mm.
  * 
- * Wiring: TODO
+ * Wiring: 
  * - on ATmega328P based boards (including Arduino UNO):
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - D13: LED connected to GND through 330 Ohm resistor
+ *   - Standard USB connected to console for measures display
  * - on Arduino MEGA:
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - D13: LED connected to GND through 330 Ohm resistor
+ *   - Standard USB connected to console for measures display
+ * - on Arduino LEONARDO:
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - D13: LED connected to GND through 330 Ohm resistor
+ *   - Standard USB connected to console for measures display
  * - on ATtinyX4 based boards:
- *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ *   - D9 (PB1): connected to sonar trigger pin
+ *   - D10 (PB2): connected to sonar echo pin
+ *   - D7 (PA7): LED connected to GND through 330 Ohm resistor
+ *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>

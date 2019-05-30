@@ -13,14 +13,28 @@
 //   limitations under the License.
 
 /*
- * Blocking sonar sensor read and conversion.
+ * Asynchronous sonar (EXT pin) sensor read and conversion.
+ * Note that, although this example uses a Sonar in asynchronous mode, it actually
+ * blocks until echo is received before displaying the measures.
  * This program shows usage of FastArduino HCSR04 device API.
  * 
- * Wiring: TODO
+ * Wiring: 
  * - on ATmega328P based boards (including Arduino UNO):
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - Standard USB connected to console for measures display
  * - on Arduino MEGA:
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - Standard USB connected to console for measures display
+ * - on Arduino LEONARDO:
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - Standard USB connected to console for measures display
  * - on ATtinyX4 based boards:
- *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ *   - D9 (PB1): connected to sonar trigger pin
+ *   - D10 (PB2): connected to sonar echo pin
+ *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>

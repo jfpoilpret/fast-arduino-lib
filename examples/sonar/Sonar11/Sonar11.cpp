@@ -15,7 +15,7 @@
 /*
  * Asynchronous multiple sonar sensor read and threshold detection.
  * This program shows usage of FastArduino HCSR04 device API with PCI ISR and callbacks.
- * It is wired to several HCSR04, triggered at the same time, and as many feedback
+ * It is wired to 4 HCSR04, triggered at the same time, and as many feedback
  * LEDs, lit upon sonar echo value compared to a threshold.
  * 
  * Wiring:
@@ -23,7 +23,22 @@
  * 		- D0-D3: 4 echo pins of HCSR04
  * 		- D4-D7: 4 LEDs (in series with 330 Ohm resistors)
  * 		- D8: connected to all 4 trigger pins of HCSR04
+ * 
+ * Asynchronous multiple sonar sensor read and threshold detection.
+ * This program shows usage of FastArduino HCSR04 device API with PCI ISR and callbacks.
+ * It is wired to 4 HCSR04, triggered at the same time, and as many feedback
+ * LEDs, lit upon sonar echo value compared to a threshold.
+ * This example is similar to Sonar10 with the difference that new ranging is
+ * automaticaly restarted when timeout occurs.
+ * 
+ * Wiring:
+ * - on ATmega328P based boards (including Arduino UNO):
+ *   - D0-D3: 4 echo pins of HCSR04
+ *   - D4-D7: 4 LEDs (in series with 330 Ohm resistors)
+ * 	 - D8: connected to all 4 trigger pins of HCSR04
  */
+
+//TODO I don't think this actually works as expected, as first trigger is never done!
 
 #include <fastarduino/boards/board.h>
 

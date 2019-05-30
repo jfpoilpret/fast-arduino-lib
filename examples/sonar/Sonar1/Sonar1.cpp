@@ -16,11 +16,23 @@
  * Blocking sonar sensor read and conversion.
  * This program shows usage of FastArduino HCSR04 device API.
  * 
- * Wiring: TODO
+ * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - Standard USB connected to console for measures display
  * - on Arduino MEGA:
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - Standard USB connected to console for measures display
+ * - on Arduino LEONARDO:
+ *   - D2: connected to sonar trigger pin
+ *   - D3: connected to sonar echo pin
+ *   - Standard USB connected to console for measures display
  * - on ATtinyX4 based boards:
- *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ *   - D9 (PB1): connected to sonar trigger pin
+ *   - D10 (PB2): connected to sonar echo pin
+ *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>
