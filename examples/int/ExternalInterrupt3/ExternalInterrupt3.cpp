@@ -13,9 +13,10 @@
 //   limitations under the License.
 
 /*
- * Pin External Interrupt example. Take #1
- * This program shows usage of External Interrupt Pin FastArduino support to light a LED when a button is pushed, and
- * switch it off when another button is pushed.
+ * Pin External Interrupt example. Take #3
+ * This program shows usage of External Interrupt Pin FastArduino support to 
+ * light a LED when a button is pushed, and switch it off when another button 
+ * is pushed.
  * This sample uses a handler called by INT vector.
  * 
  * Wiring:
@@ -23,10 +24,14 @@
  *   - D2 (INT0, PD2) branch a push button connected to ground
  *   - D3 (INT1, PD3) branch a push button connected to ground
  *   - D13 (PB5) LED connected to ground through a resistor
- * - on Arduino MEGA: TODO
+ * - on Arduino LEONARDO:
+ *   - D3 (INT0) branch a push button connected to ground
+ *   - D2 (INT1) branch a push button connected to ground
+ *   - D13 (PC7) LED connected to ground through a resistor
+ * - on Arduino MEGA:
  *   - D21 (INT0) branch a push button connected to ground
  *   - D20 (INT1) branch a push button connected to ground
- *   - D13 LED connected to ground through a resistor
+ *   - D13 (PB7) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

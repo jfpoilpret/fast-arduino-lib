@@ -15,7 +15,7 @@
 /*
  * This program is the Hello World of Arduino: blink LEDs in sequence.
  * It checks FastArduino FastPort support.
- * So far this is just an active loop with a active wait delay.
+ * So far this is just an active loop with a busy loop wait delay.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):

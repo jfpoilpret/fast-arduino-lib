@@ -13,8 +13,10 @@
 //   limitations under the License.
 
 /*
- * Example that checks compilation failures (static_assert) due to bad usage of FastArduino library.
- * This example shall never compile successfully but only expose a list of compile-time errors.
+ * Example that checks compilation failures (static_assert) due to bad usage of
+ * FastArduino library.
+ * This example shall never compile successfully but only expose a list of 
+ * compile-time errors.
  */
 
 #include <fastarduino/gpio.h>

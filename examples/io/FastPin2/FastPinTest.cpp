@@ -15,15 +15,19 @@
 /*
  * This program is the Hello World of Arduino: blink LED on D13.
  * It checks FastArduino FastPin support.
- * So far this is just an active loop with a active wait delay.
+ * So far this is just an active loop with a busy loop wait delay.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D13 (PB5) LED connected to ground through a resistor
+ * - on Arduino LEONARDO:
+ *   - D13 (PC7) LED connected to ground through a resistor
  * - on Arduino MEGA:
  *   - D13 (PB7) LED connected to ground through a resistor
  * - on ATtinyX4 based boards:
  *   - D7 (PA7) LED connected to ground through a resistor
+ * - on ATtinyX5 based boards:
+ *   - D0 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

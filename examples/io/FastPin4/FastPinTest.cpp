@@ -14,7 +14,7 @@
 
 /*
  * FastIO LED chaser.
- * This program shows usage of FastArduino FastIO API with both outputs and inputs.
+ * This program shows usage of FastArduino FastPort API with both outputs and inputs.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):

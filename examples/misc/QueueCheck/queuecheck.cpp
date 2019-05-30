@@ -13,7 +13,10 @@
 //   limitations under the License.
 
 /*
- * Special check for Queue container.
+ * Special check for Queue container (kind of unit tests).
+ * Wiring:
+ * - Arduino UNO
+ *   - Standard USB to console
  */
 
 #include <fastarduino/queue.h>

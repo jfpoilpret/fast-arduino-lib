@@ -14,6 +14,9 @@
 
 /*
  * Special check for iostreams: error handling.
+ * Wiring:
+ * - Arduino UNO
+ *   - Standard USB to console
  */
 
 #include <fastarduino/time.h>

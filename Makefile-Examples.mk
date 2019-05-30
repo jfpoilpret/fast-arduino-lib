@@ -41,6 +41,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						events/EventApp5						\
 						int/ExternalInterrupt3					\
 						misc/IOStreams3							\
+						misc/QueueCheck							\
 						pci/PinChangeInterrupt4					\
 						rtt/InputCapture1						\
 						sonar/Sonar10 sonar/Sonar11				\
@@ -99,6 +100,7 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								events/EventApp6				\
 								int/ExternalInterrupt1			\
 								int/ExternalInterrupt2			\
+								misc/IOStreams2					\
 								pci/PinChangeInterrupt1			\
 								rtt/RTTApp1b rtt/RTTApp3		\
 								rtt/RTTApp4						\

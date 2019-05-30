@@ -14,7 +14,8 @@
 
 /*
  * Pin External Interrupt example. Take #1
- * This program shows usage of External Interrupt Pin FastArduino support to light a LED when a button is pushed.
+ * This program shows usage of External Interrupt Pin FastArduino support to 
+ * light a LED when a button is pushed.
  * This sample uses a handler called by INT vector.
  * 
  * Wiring:
@@ -30,6 +31,9 @@
  * - on ATtinyX4 based boards:
  *   - D10 (INT0, PB0) branch a push button connected to ground
  *   - D7 (PA7) LED connected to ground through a resistor
+ * - on ATtinyX5 based boards:
+ *   - D2 (INT0, PB2) branch a push button connected to ground
+ *   - D0 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>
