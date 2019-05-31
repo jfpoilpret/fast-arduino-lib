@@ -15,6 +15,7 @@
 /*
  * Example that checks compilation failures (static_assert) due to bad usage of
  * FastArduino library.
+ * Build is only for target UNO.
  * This example shall never compile successfully but only expose a list of 
  * compile-time errors.
  */
@@ -32,6 +33,10 @@
 #include <fastarduino/eeprom.h>
 
 #include <fastarduino/devices/sonar.h>
+
+#ifndef ARDUINO_UNO
+#error "Current target is not yet supported!"
+#endif
 
 using namespace board;
 
@@ -131,8 +136,6 @@ struct Callback
 // REGISTER_INT_ISR_METHOD(2, ExternalInterruptPin::D3_PD3_EXT1, Callback, &Callback::callback)
 // REGISTER_INT_ISR_FUNCTION(2, ExternalInterruptPin::D3_PD3_EXT1, callback)
 
-// //TODO Try to register PCINT0 vector for a non PCINT pin
-// //NOTE this is not possible with UNO as all pins are mapped to a PCINT (only possible with MEGA)
 // // Try to register PCINT0 vector for a PCINT2 pin
 // #pragma message "CHECK: register PCINT0 vector for a PCINT2 pin (3 checks)"
 // REGISTER_PCI_ISR_EMPTY(0, InterruptPin::D0_PD0_PCI2)
@@ -144,8 +147,6 @@ struct Callback
 // REGISTER_PCI_ISR_METHOD(0, Callback, &Callback::callback, InterruptPin::D8_PB0_PCI0, InterruptPin::D10_PB2_PCI0, InterruptPin::D0_PD0_PCI2)
 // REGISTER_PCI_ISR_FUNCTION(0, callback, InterruptPin::D8_PB0_PCI0, InterruptPin::D10_PB2_PCI0, InterruptPin::D0_PD0_PCI2)
 
-// //TODO Try to register SW UART for a non PCINT pin
-// //NOTE this is not possible with UNO as all pins are mapped to a PCINT (only possible with MEGA)
 // // Try to register SW UART with bad PCINT pin
 // #pragma message "CHECK: register SW UART with bad PCINT pin (1 check)"
 // REGISTER_UART_PCI_ISR(InterruptPin::D0_PD0_PCI2, 0)
