@@ -116,6 +116,10 @@ REGISTER_RTT_ISR(TIMER_NUM)
 
 using RTT = timer::RTT<NTIMER>;
 
+static constexpr const uint8_t ECHO_MASK = 
+	gpio::FastPinType<board::PCI_PIN<ECHO1>()>::MASK |
+	gpio::FastPinType<board::PCI_PIN<ECHO2>()>::MASK;
+
 using SONAR1 = devices::sonar::ASYNC_PCINT_HCSR04<NTIMER, TRIGGER1, ECHO1>;
 using SONAR2 = devices::sonar::ASYNC_PCINT_HCSR04<NTIMER, TRIGGER2, ECHO2>;
 static constexpr const uint16_t TIMEOUT = SONAR1::DEFAULT_TIMEOUT_MS;
@@ -146,9 +150,7 @@ int main()
 	rtt.begin();
 	
 	typename interrupt::PCIType<ECHO1>::TYPE signal;
-	//TODO replace with only one call to enable_pins()
-	signal.enable_pin<ECHO1>();
-	signal.enable_pin<ECHO2>();
+	signal.set_enable_pins(ECHO_MASK);
 	signal.enable();
 	
 	out << F("Starting...") << streams::endl;
