@@ -22,6 +22,7 @@
 #define LINKEDLIST_HH
 
 #include "utilities.h"
+#include "types_traits.h"
 
 //TODO maybe define a LinkWrapper (Link subclass) that is real wrapper of item?
 
@@ -43,6 +44,7 @@ namespace containers
 	protected:
 		LinkImpl* next_;
 		friend class LinkedListImpl;
+		template<class T, class B> friend struct types_traits::derives_from;
 	};
 
 	class LinkedListImpl
@@ -76,7 +78,12 @@ namespace containers
 	template<typename T_> class LinkedList : private LinkedListImpl
 	{
 	public:
-		//TODO static assert that T is a Link<?>: need specific traits
+		LinkedList()
+		{
+			// Check that T_ is a LinkImpl subclass
+			using DERIVES_FROM_LINK = types_traits::derives_from<T_, LinkImpl>;
+			UNUSED DERIVES_FROM_LINK dummy = DERIVES_FROM_LINK();
+		}
 
 		/**
 		 * The type of items in this list.
@@ -165,6 +172,7 @@ namespace containers
 			return (T*) next_;
 		}
 		friend class LinkedList<T>;
+		template<class T, class B> friend struct types_traits::derives_from;
 	};
 }
 

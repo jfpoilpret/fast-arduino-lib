@@ -81,6 +81,25 @@ namespace types_traits
 		using TRAIT = Type_trait<T>;
 		return TRAIT::IS_INT && TRAIT::SIZE <= 2 && !TRAIT::IS_SIGNED;
 	}
+
+	/**
+	 * Utility class that checks, at compile-time, that type @p T is a subtype of
+	 * type @p B.
+	 * This is inspired from https://stackoverflow.com/a/3178315.
+	 * Trying to instantiate this type when T is not a subtype of B will fail
+	 * compilation.
+	 */
+	template<class T, class B> struct derives_from
+	{
+		static void constraints(T* p)
+		{
+			UNUSED B* pb = p;
+		}
+		constexpr derives_from()
+		{
+			UNUSED void (*p)(T*) = constraints;
+		}
+	};
 }
 
 #endif /* TYPES_TRAITS_HH */
