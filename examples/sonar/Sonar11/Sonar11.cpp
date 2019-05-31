@@ -38,7 +38,7 @@
  * 	 - D8: connected to all 4 trigger pins of HCSR04
  */
 
-//TODO I don't think this actually works as expected, as first trigger is never done!
+//FIXME I don't think this actually works as expected, as first trigger is never done!
 
 #include <fastarduino/boards/board.h>
 
