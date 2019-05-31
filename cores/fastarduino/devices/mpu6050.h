@@ -27,9 +27,10 @@
 #include <stdint.h>
 #include "common_magneto.h"
 #include "../i2c_device.h"
+#include "../time.h"
 #include "../utilities.h"
 
-//FIXME rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
+//TODO rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
 namespace devices::magneto
 {
 	/**
@@ -507,6 +508,10 @@ namespace devices::magneto
 		 * with the required sample.
 		 * @param wait set to `true` if the method shall block until a sample of 
 		 * the required size is available in the FIFO buffer
+		 * @param yield set to `true` if you want the method to yield time (i.e. 
+		 * enter default pwoer sleep mode) while waiting; this is effective only 
+		 * when @p wait is `true`. When @p wait is `true` and @p yield is `false`,
+		 * then waiting is performed by a busy loop.
 		 * @retval true if a sample has been read into @p output
 		 * @retval false if no sample was ready or if the operation failed; when
 		 * so, `i2c::I2CManager.status()` shall be called for further information
@@ -514,9 +519,9 @@ namespace devices::magneto
 		 * 
 		 * @sa fifo_count()
 		 */
-		template<typename T> inline bool fifo_pop(T& output, bool wait = false)
+		template<typename T> inline bool fifo_pop(T& output, bool wait = false, bool yield = false)
 		{
-			return fifo_pop((uint8_t*) &output, sizeof(T), wait);
+			return fifo_pop((uint8_t*) &output, sizeof(T), wait, yield);
 		}
 
 	private:
@@ -571,16 +576,15 @@ namespace devices::magneto
 			utils::swap_bytes(sensors.z);
 		}
 
-		bool fifo_pop(uint8_t* buffer, uint8_t size, bool wait)
+		bool fifo_pop(uint8_t* buffer, uint8_t size, bool wait, bool yield)
 		{
 			using namespace i2c::Status;
 			while (fifo_count() < size)
 				if (!wait) 
 					return false;
-				else
-				{
-					//TODO yield here instead?
-				}
+				else if (yield)
+					time::yield();
+
 			if (this->write(DEVICE_ADDRESS, FIFO_R_W, BusCond::START_NO_STOP) == OK
 				&& this->read(DEVICE_ADDRESS, buffer, size, BusCond::REPEAT_START_STOP) == OK)
 			{
