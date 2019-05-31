@@ -94,10 +94,10 @@ int main()
 	
 	// Init I2C device if needed
 	
-	//TODO loop to show measures
+	// Loop to show measures
 	while (true)
 	{
-		// Read accel/temperature/gyro in one read
+		// Read measures and display them to UART
 		time::delay_ms(1000);
 	}
 	

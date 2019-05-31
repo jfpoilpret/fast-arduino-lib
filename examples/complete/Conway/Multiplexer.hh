@@ -56,9 +56,6 @@ struct MATRIX_TRAIT_IMPL
 
 template<> struct MATRIX_TRAIT<8, 8>: MATRIX_TRAIT_IMPL<uint8_t, uint8_t, uint16_t> {};
 template<> struct MATRIX_TRAIT<16, 16>: MATRIX_TRAIT_IMPL<uint16_t, uint16_t, uint32_t> {};
-//TODO other template for more special cases: 16+8, 8+16, 24+8...
-
-//TODO do we need BLINK_COUNT as class template argument, or just as method template argument?
 
 template<	board::DigitalPin CLOCK, 
 			board::DigitalPin LATCH, 

@@ -17,8 +17,6 @@
 
 #include <fastarduino/gpio.h>
 
-//TODO Possibly use same header for both classes Buttons and Button
-//TODO Some more refactoring is possible (AbstractButton<type> to use also with Buttons)
 class AbstractButton
 {
 protected:
