@@ -103,6 +103,11 @@ namespace board
 
 namespace interrupt
 {
+	/// @cond notdocumented
+	// Forward declaration
+	template<board::InterruptPin PIN> void check_mega_bug();
+	/// @endcond
+
 	/**
 	 * Handler of a Pin Change Interrupt vector, i.e. a @p PORT_. For each PCINT
 	 * vector you need, you must create one instance of this handler. 
@@ -277,6 +282,7 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> inline void enable_pin()
 		{
+			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
@@ -298,6 +304,7 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> inline void disable_pin()
 		{
+			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
@@ -438,6 +445,7 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> inline void enable_pin_()
 		{
+			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
@@ -459,6 +467,7 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> inline void disable_pin_()
 		{
+			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
@@ -495,6 +504,17 @@ namespace interrupt
 	};
 
 	/// @cond notdocumented
+	// Work-around for https://github.com/jfpoilpret/fast-arduino-lib/issues/40
+	// MEGA-only: prevent template arguments D15_PJ0_PCI1 and D14_PJ1_PCI1
+	template<board::InterruptPin PIN> void check_mega_bug()
+	{
+#ifdef ARDUINO_MEGA
+		static_assert(PIN != board::InterruptPin::D14_PJ1_PCI1,
+					  "Do not use this API with D14_PJ1_PCI1 (see issue #40)");
+		static_assert(PIN != board::InterruptPin::D15_PJ0_PCI1,
+					  "Do not use this API with D15_PJ0_PCI1 (see issue #40)");
+#endif
+	}
 
 	// All PCI-related methods called by pre-defined ISR are defined here
 	//====================================================================
