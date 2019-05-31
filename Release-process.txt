@@ -1,13 +1,16 @@
 Release procedure
 =================
 
-1. Update README.md and push
-2. Regenerate and push all doc as needed
-3. Regenerate SonarQube analysis
-4. Tag master
-5. Prepare Release note (as below)
-6. Official release in github
-7. Close milestone in github
+1. Rebuild all examples and size; check all build OK and sizes are stable
+2. Rebuild all docs (including tutorial samples) and check sizes are stable
+3. Update README.md
+4. Copy new-examples-data.xlsx to examples-data.xlsx
+5. Push all to github
+6. Regenerate SonarQube analysis
+7. Tag master
+8. Prepare Release note (as below)
+9. Official release in github
+10. Close milestone in github
 
 FastArduino 1.1 release
 
