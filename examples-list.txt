@@ -44,6 +44,7 @@ Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)
 IOStreams1	Check ostream (SW UATX)
 IOStreams2	Check real Vs. null ostream
 IOStreams3	Check ostream error handling (UART)
+QueueCheck	Unit Tests of queue container
 AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)
 AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)
 DS1307RTC1	Change RTC and display (UATX) date/time (i2c)
