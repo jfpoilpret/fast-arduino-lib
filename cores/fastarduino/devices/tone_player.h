@@ -86,7 +86,6 @@ namespace devices::audio
 		static constexpr const Tone REPEAT_END = Tone::USER2;
 	}
 
-	//TODO allow stopping a play (from an ISR)
 	//TODO allow asynchronous play (will need ISR registration)
 	/**
 	 * This API defines a player of melodies, defined as a sequence of tones and
@@ -312,6 +311,15 @@ namespace devices::audio
 			play_(melody, load_flash);
 		}
 
+		/**
+		 * Stop playing current melody (if any).
+		 * Playing is not immediate but will stop at the end of the current tone.
+		 */
+		inline void stop()
+		{
+			stop_ = true;
+		}
+
 	private:
 		using LOAD_TONE = const TonePlay* (*) (const TonePlay* address, TonePlay& holder);
 
@@ -332,10 +340,11 @@ namespace devices::audio
 
 		void play_(const TonePlay* melody, LOAD_TONE load_tone)
 		{
+			stop_ = false;
 			const TonePlay* repeat_play = 0;
 			int8_t repeat_times;
 			const TonePlay* play = melody;
-			while (true)
+			while (!stop_)
 			{
 				TonePlay holder;
 				const TonePlay* current = load_tone(play, holder);
@@ -381,10 +390,11 @@ namespace devices::audio
 
 		void play_(const QTonePlay* melody, LOAD_QTONE load_tone)
 		{
+			stop_ = false;
 			const QTonePlay* repeat_play = 0;
 			int8_t repeat_times;
 			const QTonePlay* play = melody;
-			while (true)
+			while (!stop_)
 			{
 				QTonePlay holder;
 				const QTonePlay* current = load_tone(play, holder);
@@ -414,6 +424,7 @@ namespace devices::audio
 		}
 
 		GENERATOR& generator_;
+		volatile bool stop_;
 	};
 }
 
