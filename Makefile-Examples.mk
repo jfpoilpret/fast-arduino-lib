@@ -27,7 +27,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					i2c/Magneto1															\
 					i2c/MultiIO1 i2c/MultiIO2												\
 					pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
-					analog/AllPWM															\
+					analog/ALLPWM															\
 					analog/PWM1 analog/PWM2 analog/PWM3 analog/PWM4							\
 					rtt/InputCapture1														\
 					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4						\
@@ -89,7 +89,7 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								uart/UartApp2 uart/UartApp3		\
 								analog/AnalogPin1				\
-								analog/AllPWM					\
+								analog/ALLPWM					\
 								analog/PWM1 analog/PWM2			\
 								analog/PWM4						\
 								eeprom/Eeprom1					\
