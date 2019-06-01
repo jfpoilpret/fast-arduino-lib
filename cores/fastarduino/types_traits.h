@@ -50,7 +50,6 @@ namespace types_traits
 		static constexpr bool IS_SIGNED = false;
 		/** Indicates the size in bytes of `T`. */
 		static constexpr size_t SIZE = 0;
-		//TODO more to put here: pointer? reference? boolean? char? array?
 	};
 
 	/// @cond notdocumented
