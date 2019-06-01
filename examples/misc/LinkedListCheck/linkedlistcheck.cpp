@@ -150,7 +150,6 @@ static LINK3 links3[] = {'a', 'b', 'c', 'd', 'e'};
 
 // List-checking functions
 //=========================
-//TODO check remove first and remove last
 template<typename LINK> void check_link_list(ostream& out, LINK links[5])
 {
 	LinkedList<LINK> list;
