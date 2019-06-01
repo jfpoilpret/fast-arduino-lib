@@ -602,14 +602,4 @@ namespace board_traits
 	};
 };
 
-namespace board
-{
-	//TODO should this be moved and documented?
-	template<DigitalPin PIN> constexpr uint8_t BIT() INLINE;
-	template<DigitalPin PIN> constexpr uint8_t BIT()
-	{
-		return board_traits::DigitalPin_trait<PIN>::BIT;
-	}
-};
-
 #endif /* BOARDS_COMMON_TRAITS_HH */

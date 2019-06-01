@@ -24,6 +24,28 @@
 #include "boards/board_traits.h"
 #include "utilities.h"
 
+namespace board
+{
+	template<DigitalPin PIN> constexpr uint8_t BIT() INLINE;
+	template<DigitalPin PIN> constexpr uint8_t MASK() INLINE;
+
+	/**
+	 * Determine the bit position, inside its IO port, of the given `DigitalPin`.
+	 */
+	template<DigitalPin PIN> constexpr uint8_t BIT()
+	{
+		return board_traits::DigitalPin_trait<PIN>::BIT;
+	}
+
+	/**
+	 * Determine the bit mask representing the given `DigitalPin` inside its port.
+	 */
+	template<DigitalPin PIN> constexpr uint8_t MASK()
+	{
+		return _BV(board_traits::DigitalPin_trait<PIN>::BIT);
+	}
+};
+
 /**
  * Defines all API to manipulate general-purpose digital input/output pins.
  */
