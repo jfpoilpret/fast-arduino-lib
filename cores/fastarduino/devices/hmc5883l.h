@@ -110,13 +110,11 @@ namespace devices::magneto
 	 */
 	struct Status
 	{
-		Status() : ready{}, lock{}, error{1}, reserved{} {}
+		Status() : ready{}, lock{}, reserved{} {}
 
 		uint8_t ready : 1;
 		uint8_t lock : 1;
-		//FIXME there is no error bit in status register, where does this bit come from?
-		uint8_t error : 1;
-		uint8_t reserved : 5;
+		uint8_t reserved : 6;
 	};
 
 	/**

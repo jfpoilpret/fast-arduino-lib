@@ -88,7 +88,7 @@ using streams::flush;
 
 void trace_status(Status status)
 {
-	out	<< dec << F("status error = ") << status.error 
+	out	<< dec << F("status reserved = ") << status.reserved 
 		<< F(", lock = ") << status.lock 
 		<< F(", ready = ") << status.ready << '\n' << flush;
 }
