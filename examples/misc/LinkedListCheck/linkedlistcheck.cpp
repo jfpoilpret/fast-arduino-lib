@@ -178,6 +178,25 @@ template<typename LINK> void check_link_list(ostream& out, LINK links[5])
 	LINK expected4[] = {links[4], links[3], links[1], links[0]};
 	list.traverse(TraversalAssert<LINK>{out, expected4});
 
+	out << "after remove() #3 second time" << endl;
+	list.remove(links[2]);
+	list.traverse(TraversalAssert<LINK>{out, expected4});
+
+	out << "after remove() #1" << endl;
+	list.remove(links[0]);
+	LINK expected5[] = {links[4], links[3], links[1]};
+	list.traverse(TraversalAssert<LINK>{out, expected5});
+
+	out << "after remove() #5" << endl;
+	list.remove(links[4]);
+	LINK expected6[] = {links[3], links[1]};
+	list.traverse(TraversalAssert<LINK>{out, expected6});
+
+	out << "after remove all" << endl;
+	list.remove(links[1]);
+	list.remove(links[3]);
+	list.traverse(TraversalAssert<LINK>{out});
+
 	out << endl;
 }
 
