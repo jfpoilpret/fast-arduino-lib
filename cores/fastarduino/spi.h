@@ -172,7 +172,6 @@ namespace spi
 #else
 		inline uint8_t transfer(uint8_t data)
 		{
-			//TODO check produced assembly code
 			USIDR_ = data;
 			// Clear counter overflow before transmission
 			USISR_ = _BV(USIOIF);
