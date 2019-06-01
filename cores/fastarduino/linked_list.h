@@ -24,8 +24,6 @@
 #include "utilities.h"
 #include "types_traits.h"
 
-//TODO maybe define a LinkWrapper (Link subclass) that is real wrapper of item?
-
 /**
  * Contains all FastArduino generic containers:
  * - linked list
@@ -155,7 +153,11 @@ namespace containers
 	 * A concrete example of `Link` use in FastArduino API can be found 
 	 * in `events::EventHandler`. 
 	 * 
+	 * If you have an existing class which you want to directly use as a `LinkedList`
+	 * item type, but cannot modify it, then you should use `LinkWrapper` instead.
+	 * 
 	 * @tparam T_ the type of item wrapped by this class
+	 * @sa LinkWrapper
 	 * @sa LinkedList
 	 */
 	template<typename T_> class Link : private LinkImpl
@@ -172,6 +174,84 @@ namespace containers
 			return (T*) next_;
 		}
 		friend class LinkedList<T>;
+		template<class T, class B> friend struct types_traits::derives_from;
+	};
+
+	/**
+	 * A wrapper for items stored in a `LinkedList`.
+	 * Contrarily to `Link` class, you may wrap any existing type (even a simple
+	 * type such as `bool`, `uint16_t`, `char`...)
+	 * 
+	 * The follwoing snippet shows how to use this class:
+	 * @code
+	 * class MyType {...};
+	 * 
+	 * using LINK = LinkWrapper<MyType>;
+	 * 
+	 * LinkedList<LINK> list;
+	 * LINK item1 = LINK{MyType{...}};
+	 * list.insert(item1);
+	 * @endcode
+	 * 
+	 * @tparam T_ the type of item wrapped by this class
+	 * @tparam TREF_ the default reference type to @p T_
+	 * @tparam TREF_ the reference type of items wrapped; this is `T_&` by default,
+	 * but this may be changed, for small size types (one or two bytes long) to 
+	 * `T_` itself, in order to avoid additional code to handle reference extraction
+	 * of an item.
+	 * @tparam CTREF_ the constant reference type of items wrapped; this is
+	 * `const T_&` by default, but this may be changed, for small size types
+	 * (one or two bytes long) to `T_` itself, in order to avoid additional code
+	 * to handle reference extraction of an item. 
+	 * 
+	 * @sa LinkedList
+	 * @sa Link
+	 */
+	template<typename T_, typename TREF_ = T_&, typename CTREF_ = const T_&>
+	class LinkWrapper : private LinkImpl
+	{
+	public:
+		/** The type of item wrapped by this class. */
+		using T = T_;
+
+		/** The reference type of item wrapped by this class. */
+		using TREF = TREF_;
+
+		/** The constant reference type of item wrapped by this class. */
+		using CTREF = CTREF_;
+
+		/**
+		 * Create a wrapper, usable in a `LinkedList`, for @p item.
+		 */
+		LinkWrapper(CTREF item) : item_{item} {}
+
+		/**
+		 * Return a reference to the wrapped item.
+		 */
+		TREF item()
+		{
+			return item_;
+		}
+
+		/**
+		 * Return a constant reference to the wrapped item.
+		 */
+		CTREF item() const
+		{
+			return item_;
+		}
+
+	private:
+		using TYPE = LinkWrapper<T, TREF, CTREF>;
+
+		TYPE* next() INLINE
+		{
+			return (TYPE*) next_;
+		}
+
+		T item_;
+
+		friend class LinkedList<TYPE>;
 		template<class T, class B> friend struct types_traits::derives_from;
 	};
 }

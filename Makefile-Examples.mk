@@ -43,6 +43,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						int/ExternalInterrupt3					\
 						misc/IOStreams3							\
 						misc/QueueCheck							\
+						misc/LinkedListCheck					\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10 sonar/Sonar11				\
 						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
