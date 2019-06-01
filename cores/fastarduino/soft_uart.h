@@ -278,7 +278,7 @@ namespace serial::soft
 
 		if (parity_ != Parity::NONE)
 		{
-			// Wait for parity bit TODO NEED SPECIFIC DELAY HERE
+			// Wait for parity bit
 			_delay_loop_2(parity_bit_rx_time_);
 			bool parity_bit = (parity_ == Parity::ODD ? !odd : odd);
 			// Check parity bit
