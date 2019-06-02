@@ -24,7 +24,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					int/ExternalInterrupt1 int/ExternalInterrupt2							\
 					io/FastPin1 io/FastPin2 io/FastPin3 io/FastPin4 io/FastPin5				\
 					misc/Flash1	misc/IOStreams2												\
-					i2c/Magneto1															\
+					i2c/Magneto1 i2c/Magneto2												\
 					i2c/MultiIO1 i2c/MultiIO2												\
 					pci/PinChangeInterrupt1 pci/PinChangeInterrupt2 pci/PinChangeInterrupt3	\
 					analog/ALLPWM															\

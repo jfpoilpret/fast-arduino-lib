@@ -25,16 +25,19 @@
  *   - direct USB access
  * - on Arduino LEONARDO:
  *   - D2 (PD1, SDA): connected to HMC5883L SDA pin
- *   - D3 (PD0, SCL): connected to HMC5883L SDA pin
+ *   - D3 (PD0, SCL): connected to HMC5883L SCL pin
+ *   - D7 (PE7, EXT6): connected to HMC5883L DRDY pin
  *   - direct USB access
  * - on Arduino MEGA:
  *   - D20 (PD1, SDA): connected to HMC5883L SDA pin
- *   - D21 (PD0, SCL): connected to HMC5883L SDA pin
+ *   - D21 (PD0, SCL): connected to HMC5883L SCL pin
+ *   - D18 (PD3, EXT3): connected to HMC5883L DRDY pin
  *   - direct USB access
  * - on ATtinyX4 based boards:
  *   - D6 (PA6, SDA): connected to HMC5883L SDA pin
- *   - D4 (PA4, SCL): connected to HMC5883L SDA pin
+ *   - D4 (PA4, SCL): connected to HMC5883L SCL pin
  *   - D8 (PB0, TX): connected to SerialUSB converter
+ *   - D10 (PB2, EXT0): connected to HMC5883L DRDY pin
  */
 
 #include <fastarduino/int.h>
@@ -42,26 +45,40 @@
 #include <fastarduino/i2c_manager.h>
 #include <fastarduino/devices/hmc5883l.h>
 
-#if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
+#if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D2_PD2_EXT0;
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#define INT_NUM 0
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
+static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D7_PE6_EXT6;
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#define INT_NUM 6
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
+#elif defined(ARDUINO_MEGA)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D18_PD3_EXT3;
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#define INT_NUM 3
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
+static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D10_PB2_EXT0;
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#define INT_NUM 0
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -120,7 +137,7 @@ private:
 	DECL_INT_ISR_HANDLERS_FRIEND
 };
 
-REGISTER_INT_ISR_METHOD(0, DRDY, DataReadyHandler, &DataReadyHandler::data_ready)
+REGISTER_INT_ISR_METHOD(INT_NUM, DRDY, DataReadyHandler, &DataReadyHandler::data_ready)
 
 using MAGNETOMETER = devices::magneto::HMC5883L<i2c::I2CMode::Fast>;
 
