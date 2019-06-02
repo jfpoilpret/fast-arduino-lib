@@ -26,19 +26,19 @@
  *   - direct USB access
  * - on Arduino LEONARDO:
  *   - D2 (PD1, SDA): connected to DS1307 SDA pin
- *   - D3 (PD0, SCL): connected to DS1307 SDA pin
+ *   - D3 (PD0, SCL): connected to DS1307 SCL pin
  *   - direct USB access
  * - on Arduino MEGA:
  *   - D20 (PD1, SDA): connected to DS1307 SDA pin
- *   - D21 (PD0, SCL): connected to DS1307 SDA pin
+ *   - D21 (PD0, SCL): connected to DS1307 SCL pin
  *   - direct USB access
  * - on ATtinyX4 based boards:
  *   - D6 (PA6, SDA): connected to DS1307 SDA pin
- *   - D4 (PA4, SCL): connected to DS1307 SDA pin
+ *   - D4 (PA4, SCL): connected to DS1307 SCL pin
  *   - D8 (PB0, TX): connected to SerialUSB converter
  * - on ATtinyX5 based boards:
  *   - D0 (PB0, SDA): connected to DS1307 SDA pin
- *   - D2 (PB2, SCL): connected to DS1307 SDA pin
+ *   - D2 (PB2, SCL): connected to DS1307 SCL pin
  *   - D3 (PB3, TX): connected to SerialUSB converter
  */
 
