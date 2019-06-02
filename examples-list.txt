@@ -27,6 +27,7 @@ TimerApp4	LED blinker with dimmer based on 2 CTC Timers (2 ISR)
 TimerTinyX5	LEDs blinker with ATtinyX5 timer mode specificities
 AnalogPin1	Display (UATX) analog value/voltage
 AnalogPin2	Display analog input on 8 LEDs
+ALLPWM	Dim LEDs connected to all available PWM pins of target MCU
 PWM1	Dim 1 LED with a pot through 8bits PWM
 PWM2	Dim 2 LEDs with 2 pots through 8bits PWM
 PWM3	Dim 1 LEDs with 1 pot through 16bits PulseTimer
@@ -45,11 +46,13 @@ IOStreams1	Check ostream (SW UATX)
 IOStreams2	Check real Vs. null ostream
 IOStreams3	Check ostream error handling (UART)
 QueueCheck	Unit Tests of queue container
+LinkedListCheck	Unit Tests of linked list container
 AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)
 AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)
 DS1307RTC1	Change RTC and display (UATX) date/time (i2c)
 DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)
 Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)
+Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)
 MultiIO0	Direct MCP23017 command and trace (UATX) for testing chip (i2c)
 MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)
 MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)
@@ -72,4 +75,5 @@ Sonar11	Light LEDS based on auto-trigger multiple sonars alarms with callbacks
 tones1	Tone player from SRAM
 tones2	Tone player from EEPROM
 tones3	Tone player from Flash
+tones4	Tone player from SRAM, stoppable from external interrupt
 Conway	Game of Life (8x8 LED) 1KB Hackaday
