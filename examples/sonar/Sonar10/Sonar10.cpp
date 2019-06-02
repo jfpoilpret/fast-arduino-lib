@@ -84,9 +84,8 @@ struct EchoLed
 
 static constexpr const EchoLed ECHO_LEDS[] =
 {
-	EchoLed::create<SFRONT, LFRONT>(),
-	EchoLed::create<SREAR, LREAR>(),
-	EchoLed::create<SLEFT, LLEFT>()
+	EchoLed::create<SLEFT, LLEFT>(),
+	EchoLed::create<SRIGHT, LRIGHT>()
 };
 static constexpr const uint8_t NUM_SONARS = sizeof(ECHO_LEDS) / sizeof(EchoLed);
 
@@ -113,7 +112,7 @@ static constexpr const uint16_t TIMEOUT_MAX = SONAR::DEFAULT_TIMEOUT_MS;
 
 using devices::sonar::distance_mm_to_echo_us;
 
-static constexpr const uint16_t DISTANCE_THRESHOLD_MM = 150;
+static constexpr const uint16_t DISTANCE_THRESHOLD_MM = 100;
 static constexpr const uint16_t DISTANCE_THRESHOLD = 
 	distance_mm_to_echo_us(DISTANCE_THRESHOLD_MM);
 
@@ -134,9 +133,10 @@ public:
 		queue_.push_(event);
 	}
 
-	void on_timeout(const EVENT&)
+	void on_timeout(const EVENT& event)
 	{
 		sonar_.set_ready();
+		queue_.push_(event);
 	}
 	
 private:
@@ -179,18 +179,20 @@ int main()
 
 	// Enable interrupts now
 	sei();
-	
+
 	// Infinite loop to trigger sonar and light LEDs when near object is detected 
 	while (true)
 	{
 		sonar.trigger(TIMEOUT_MAX);
 
 		time::RTTTime times[NUM_SONARS];
-		while (!sonar.all_ready())
+		while (sonar.active())
 		{
 			EVENT event;
 			while (queue.pull(event))
 			{
+				if (event.timeout())
+					break;
 				// Calculate new status of LEDs for finished sonar echoes
 				uint8_t alarms = 0;
 				uint8_t ready_leds = 0;
@@ -211,5 +213,6 @@ int main()
 		}
 		//The following line seems required, otherwise LEDs lighting seems unstable
 		time::delay_ms(10);
+		leds.set_PORT(0);
 	}
 }

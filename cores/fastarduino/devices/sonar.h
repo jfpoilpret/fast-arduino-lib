@@ -1103,6 +1103,19 @@ namespace devices::sonar
 		}
 
 		/**
+		 * Tell if a ranging is under way on any sonar managed by this `MultiHCSR04`
+		 * instance.
+		 * Ranging is started when calling `trigger()` and finishes when one of the 
+		 * following conditions is true:
+		 * - all connected sonars have received an echo pulse
+		 * - timeout has occurred while waiting for one (or more) echo pulses
+		 */
+		bool active() const
+		{
+			return active_;
+		}
+
+		/**
 		 * Tell, for which of the connected sonars, the latest ranging, started
 		 * by `trigger()`, is finished, ie the echo pulse has been received.
 		 * If you want to know if ranging for all connected sonars is finished,
