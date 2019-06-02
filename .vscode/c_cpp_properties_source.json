@@ -33,7 +33,7 @@
             "includePath": [
                 "/usr/avr/include",
                 "/usr/avr/include/avr",
-                "/usr/lib/gcc/avr/7.2.0/include",
+                "/usr/lib/gcc/avr/7.4.0/include",
                 "${workspaceRoot}/cores"
             ],
             "defines": [
@@ -45,7 +45,7 @@
             "browse": {
                 "path": [
 	                "/usr/avr/include",
-	                "/usr/lib/gcc/avr/7.2.0/include",
+	                "/usr/lib/gcc/avr/7.4.0/include",
                     "${workspaceRoot}/cores"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
