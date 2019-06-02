@@ -27,7 +27,6 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-//TODO Add (or just document) optional support for DRDY pin (but it does not seem to work?)
 /**
  * Defines API for magnetic sensors for direction, speed and acceleration properties.
  */
@@ -121,6 +120,74 @@ namespace devices::magneto
 	 * I2C device driver for the HMC5883L compass chip.
 	 * @tparam MODE_ the I2C transmission mode to use for this device; this chip
 	 * supports both available modes.
+	 * 
+	 * The HMC5883L also has a DRDY pin that you can use to an EXT or PCI pin, 
+	 * in order to be notified when sensor data is ready for reading; this is
+	 * particularly useful in continuous mode, where you would try to avoid busy
+	 * waits against HMC5883L status register. The following snippet (excerpt
+	 * from `Magneto2` example) show this:
+	 * @code
+	 * // This handler gets notified when HMC5883L data is ready to read
+	 * class DataReadyHandler
+	 * {
+	 * public:
+	 *     DataReadyHandler() : ready_{false}
+	 *     {
+	 *         interrupt::register_handler(*this);
+	 *     }
+	 *     void reset()
+	 *     {
+	 *         ready_ = false;
+	 *     }
+	 *     bool ready() const
+	 *     {
+	 *         return ready_;
+	 *     }
+	 * private:
+	 *     void data_ready()
+	 *     {
+	 *         ready_ = true;
+	 *     }
+	 *     volatile bool ready_;
+	 *     DECL_INT_ISR_HANDLERS_FRIEND
+	 * };
+	 * 
+	 * // EXT pin connected to HMC5883L DRDY pin
+	 * static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D2_PD2_EXT0;
+	 * // Register our handler with DRDY EXT pin interrupts
+	 * REGISTER_INT_ISR_METHOD(0, DRDY, DataReadyHandler, &DataReadyHandler::data_ready)
+	 * 
+	 * int main()
+	 * {
+	 *     // Perform other necessary initializations here,
+	 *     // including I2CManager and HMC5883L device (named compass in hte following code)
+	 *     ...
+	 *     // Initialize DRDY notifications handler
+	 *     DataReadyHandler handler;
+	 *     interrupt::INTSignal<DRDY> signal{interrupt::InterruptTrigger::RISING_EDGE};
+	 *     signal.enable();
+	 * 
+	 *     // Start compass in continuous mode
+	 *     compass.begin(OperatingMode::CONTINUOUS,
+	 *                   Gain::GAIN_1_9GA,
+	 *                   DataOutput::RATE_0_75HZ,
+	 *                   SamplesAveraged::EIGHT_SAMPLES);
+	 *     while (true)
+	 *     {
+	 *         // Wait until data is ready (time::yield() will put MCU to sleep)
+	 *         while (!handler.ready()) time::yield();
+	 *         handler.reset();
+	 *         // Read compass fields
+	 *         Sensor3D fields;
+	 *         compass.magnetic_fields(fields);
+	 *         // Use compass fields in your program
+	 *         ...
+	 *     }
+	 * }
+	 * @endcode
+	 * 
+	 * @tparam MODE_ the I2C mode to use; HMC5883L supports both `i2c::I2CMode::Standard`
+	 * and `i2c:I2CMode::Fast`
 	 */
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class HMC5883L : public i2c::I2CDevice<MODE_>
 	{

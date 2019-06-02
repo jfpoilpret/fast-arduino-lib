@@ -108,6 +108,7 @@ void trace_fields(const Sensor3D& fields)
 	out << dec << F("x=") << fields.x << F(",y=") << fields.y << F(",z=") << fields.z << endl;
 }
 
+// This handler gets notified when HMC5883L data is ready to read
 class DataReadyHandler
 {
 public:
