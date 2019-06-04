@@ -393,6 +393,28 @@
 		if (event.timeout()) interrupt::CallbackHandler<void (*)(const EVENT&), CALLBACK>::call(event); \
 	}
 
+//TODO DOCS!
+#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD(TIMER_NUM, SONAR, HANDLER, CB_TIMEOUT, CB_RTT)	\
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \
+	{                                                                                                   \
+		using EVENT = typename SONAR::EVENT;                                                            \
+		EVENT event = devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR, EVENT>();   \
+		if (event.timeout())                                                                            \
+			interrupt::CallbackHandler<void (HANDLER::*)(const EVENT&), CB_TIMEOUT>::call(event);       \
+		interrupt::CallbackHandler<void (HANDLER::*)(), CB_RTT>::call();                                \
+	}
+
+//TODO DOCS!
+#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION(TIMER_NUM, SONAR, CB_TIMEOUT, CB_RTT)        \
+	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \
+	{                                                                                                   \
+		using EVENT = typename SONAR::EVENT;                                                            \
+		EVENT event = devices::sonar::isr_handler::multi_sonar_rtt_change<TIMER_NUM, SONAR, EVENT>();   \
+		if (event.timeout())                                                                            \
+			interrupt::CallbackHandler<void (*)(const EVENT&), CB_TIMEOUT>::call(event);                \
+		interrupt::CallbackHandler<void (*)(), CB_RTT>::call();                                         \
+	}
+
 /**
  * This macro shall be used in a class containing a private callback method,
  * registered by one (or more) of:
