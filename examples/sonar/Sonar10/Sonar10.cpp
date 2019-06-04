@@ -84,6 +84,8 @@ struct EchoLed
 
 static constexpr const EchoLed ECHO_LEDS[] =
 {
+	// EchoLed::create<SFRONT, LFRONT>(),
+	// EchoLed::create<SREAR, LREAR>(),
 	EchoLed::create<SLEFT, LLEFT>(),
 	EchoLed::create<SRIGHT, LRIGHT>()
 };
@@ -133,19 +135,13 @@ public:
 		queue_.push_(event);
 	}
 
-	void on_timeout(const EVENT& event)
-	{
-		sonar_.set_ready();
-		queue_.push_(event);
-	}
-	
 private:
 	SONAR& sonar_;
 	QUEUE& queue_;
 };
 
 // Register ISR callbacks
-REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, SonarListener, &SonarListener::on_timeout)
+REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SONAR, SonarListener, &SonarListener::on_sonar)
 REGISTER_MULTI_HCSR04_PCI_ISR_METHOD(NTIMER, PCI_NUM, TRIGGER, ECHO_PORT, ECHO_MASK,
 	SonarListener, &SonarListener::on_sonar)
 
@@ -191,8 +187,6 @@ int main()
 			EVENT event;
 			while (queue.pull(event))
 			{
-				if (event.timeout())
-					break;
 				// Calculate new status of LEDs for finished sonar echoes
 				uint8_t alarms = 0;
 				uint8_t ready_leds = 0;
