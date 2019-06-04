@@ -20,7 +20,6 @@
  * Compared to Sonar10 example, this example auto triggers itself at a fixed
  * frequency. All logic is coded inside a dedicated class.
  * 
- * TODO update doc
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  * 		- D0-D3: 4 echo pins of HCSR04
@@ -154,8 +153,9 @@ class SonarListener
 	using EVENT = devices::sonar::SonarEvent<NTIMER>;
 
 public:
+	//FIXME times_ initialization shall work whatever NUM_SONAR value!
 	SonarListener(QUEUE& queue)
-	: rtt_{}, sonar_{rtt_}, queue_{queue}, times_{RTT::RAW_TIME::EMPTY_TIME, RTT::RAW_TIME::EMPTY_TIME}
+	: signal_{}, rtt_{}, sonar_{rtt_}, queue_{queue}, times_{RTT::RAW_TIME::EMPTY_TIME, RTT::RAW_TIME::EMPTY_TIME}
 	{
 		for (uint8_t i = 0; i < NUM_SONARS; ++i)
 			times_[i] = RTT::RAW_TIME::EMPTY_TIME;
@@ -166,9 +166,13 @@ public:
 	// new range triggers are auto-generated
 	void start()
 	{
-		rtt_.begin();
-		sonar_.trigger(TIMEOUT_MAX);
-		next_trigger_time_ = rtt_.millis() + TRIGGER_REPEAT_MS;
+		synchronized
+		{
+			signal_.set_enable_pins_(ECHO_MASK);
+			signal_.enable_();
+			rtt_.begin_();
+			trigger();
+		}
 	}
 
 private:
@@ -197,9 +201,11 @@ private:
 
 	void on_rtt()
 	{
-		if (rtt_.millis_() >= next_trigger_time_) trigger();
+		if (rtt_.millis_() >= next_trigger_time_)
+			trigger();
 	}
 	
+	interrupt::PCISignal<ECHO_PORT> signal_;
 	RTT rtt_;
 	SONAR sonar_;
 	QUEUE& queue_;
@@ -229,12 +235,6 @@ int main()
 	
 	// Setup LED outputs
 	gpio::FastMaskedPort<LED_PORT, LED_MASK> leds{0xFF};
-
-	//TODO move that to SonarListener as it does not belong here
-	// Setup PCI for all sonar echo pins
-	interrupt::PCISignal<ECHO_PORT> signal;
-	signal.set_enable_pins_(ECHO_MASK);
-	signal.enable_();
 
 	// Enable interrupts now
 	sei();
