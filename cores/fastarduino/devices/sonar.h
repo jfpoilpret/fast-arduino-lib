@@ -393,7 +393,30 @@
 		if (event.timeout()) interrupt::CallbackHandler<void (*)(const EVENT&), CALLBACK>::call(event); \
 	}
 
-//TODO DOCS!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a
+ * `devices::sonar::MultiHCSR04` to be notified, and call back one of two 
+ * handler's methods, for each of the following events:
+ * - a range timeout occurs
+ * - the associated `timer::RTT` is updated (one ms elapsed)
+ * This ISR is also in charge of the associated `timer::RTT` time update.
+ * 
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param SONAR the actual type of the `devices::sonar::MultiHCSR04` for which
+ * this ISR is registered
+ * @param HANDLER the class holding the callback method
+ * @param CB_TIMEOUT the method of @p HANDLER that will be called when a timeout
+ * occurs; this must be a proper PTMF (pointer to member function) which
+ * takes one argument of type `const SonarEvent<TIMER>&`.
+ * @param CB_RTT the method of @p HANDLER that will be called when the associated
+ * `timer::RTT` is updated; this must be a proper PTMF (pointer to member function)
+ * which takes no argument. This is typically used by @p HANDLER to retrigger
+ * sonars ranging on a periodic basis.
+ * 
+ * @sa devices::sonar::MultiHCSR04
+ * @sa devices::sonar::SonarEvent
+ * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION()
+ */
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD(TIMER_NUM, SONAR, HANDLER, CB_TIMEOUT, CB_RTT)	\
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \
 	{                                                                                                   \
@@ -404,7 +427,27 @@
 		interrupt::CallbackHandler<void (HANDLER::*)(), CB_RTT>::call();                                \
 	}
 
-//TODO DOCS!
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for a
+ * `devices::sonar::MultiHCSR04` to be notified, and call back one of two 
+ * functions, for each of the following events:
+ * - a range timeout occurs
+ * - the associated `timer::RTT` is updated (one ms elapsed)
+ * This ISR is also in charge of the associated `timer::RTT` time update.
+ * 
+ * @param TIMER_NUM the number of the TIMER feature for the target MCU
+ * @param SONAR the actual type of the `devices::sonar::MultiHCSR04` for which
+ * this ISR is registered
+ * @param CB_TIMEOUT the function that will be called when a timeout
+ * occurs; this must take one argument of type `const SonarEvent<TIMER>&`.
+ * @param CB_RTT the function that will be called when the associated
+ * `timer::RTT` is updated; this must take no argument. This is typically used
+ * to retrigger sonars ranging on a periodic basis.
+ * 
+ * @sa devices::sonar::MultiHCSR04
+ * @sa devices::sonar::SonarEvent
+ * @sa REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD()
+ */
 #define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION(TIMER_NUM, SONAR, CB_TIMEOUT, CB_RTT)        \
 	ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \
 	{                                                                                                   \
