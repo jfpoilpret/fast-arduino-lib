@@ -16,7 +16,7 @@
  * Check HMC5883L I2C device (3D compass) and display output to the UART console.
  * This program uses FastArduino HMC5883L support API.
  * 
- * Wiring:TODO add DRDY pin to all targets
+ * Wiring:
  * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
  * - on ATmega328P based boards (including Arduino UNO):
  *   - A4 (PC4, SDA): connected to HMC5883L SDA pin
