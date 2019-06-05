@@ -153,9 +153,8 @@ class SonarListener
 	using EVENT = devices::sonar::SonarEvent<NTIMER>;
 
 public:
-	//FIXME times_ initialization shall work whatever NUM_SONAR value!
 	SonarListener(QUEUE& queue)
-	: signal_{}, rtt_{}, sonar_{rtt_}, queue_{queue}, times_{RTT::RAW_TIME::EMPTY_TIME, RTT::RAW_TIME::EMPTY_TIME}
+	: signal_{}, rtt_{}, sonar_{rtt_}, queue_{queue}, times_buffer_{}
 	{
 		for (uint8_t i = 0; i < NUM_SONARS; ++i)
 			times_[i] = RTT::RAW_TIME::EMPTY_TIME;
@@ -209,7 +208,15 @@ private:
 	RTT rtt_;
 	SONAR sonar_;
 	QUEUE& queue_;
-	RTT::RAW_TIME times_[NUM_SONARS];
+	// This union is an ugly hack to allow 0 initialization of all times_
+	// which is not possible otherwise because default RAW_TIME ctor is private.
+	// otherwise, we would have to use times_{RTT::RAW_TIME::EMPTY_TIME, RTT::RAW_TIME::EMPTY_TIME}
+	// as initializer but this must be changed if NUM_SONARS change...
+	union
+	{
+		RTT::RAW_TIME times_[NUM_SONARS];
+		uint8_t times_buffer_[sizeof(times_)];
+	};
 	uint32_t next_trigger_time_;
 
 	DECL_SONAR_ISR_HANDLERS_FRIEND
