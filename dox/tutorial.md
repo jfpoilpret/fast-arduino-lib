@@ -572,14 +572,14 @@ FastArduino defines another class, `Watchdog`. This class allows to use the AVR 
 
 ### Introduction to AVR interrupts
 
-Many AVR MCU features are based upon interrupts, so that the MCU can efficiently react to events such as timer overflow, pin level change, without having to poll for these conditions. Using AVR interrupts makes your program responsive to events relevant to you. This alos allows taking advantage of power sleep modes thus reducing energy consumption while the MCU has nothing to do other than wait for events to occur.
+Many AVR MCU features are based upon interrupts, so that the MCU can efficiently react to events such as timer overflow, pin level change, without having to poll for these conditions. Using AVR interrupts makes your program responsive to events relevant to you. This also allows taking advantage of power sleep modes thus reducing energy consumption while the MCU has nothing to do other than wait for events to occur.
 
-Each AVR MCU has a predefined list of interrupts sources, each individually activable, and each with an associated *vector* which is the address of an Interrupt Service Routine (**ISR**), executed whenver the matching interrupt occurs. Each ISR is imposed a specific name.
+Each AVR MCU has a predefined list of interrupts sources, each individually activable, and each with an associated *vector* which is the address of an Interrupt Service Routine (**ISR**), executed whenever the matching interrupt occurs. Each ISR is imposed a specific name.
 
 Among common interrupt vectors, you will find for example:
 - `TIMERn_OVF_vect`: triggered when Timer *n* overflows
 - `INTn_vect`: triggered when input pin *INTn* changes level
-- `UARTn_RX_vect`: triggered when a new character has been received on serial receiver *UARTn`
+- `UARTn_RX_vect`: triggered when a new character has been received on serial receiver `UARTn`
 - ...
 
 ### AVR interrupts handling in FastArduino
@@ -590,7 +590,7 @@ ISR registration is performed through macros provided by FastArduino. There are 
 1. API-specific registration: in this flavour, a FastArduino feature requires to directly be linked to an ISR, through a dedicated macro and a specific registration method (either implicitly called by constructor or explicitly through a specific method). In the previous examples of this tutorial, you have already encountered `REGISTER_UATX_ISR()`, `REGISTER_UARX_ISR()`, `REGISTER_UART_ISR()` and `REGISTER_RTT_ISR()`.
 All macros in this flavour follow the same naming scheme: `REGISTER_XXX_ISR`, where *XXX* is the feature handled.
 2. Empty ISR registration: in this flavour, you activate an interrupt but do not want any callback for it, but then you have to define an empty ISR for it; this empty ISR will not increase code size of your program. You may wonder why you would want to enable an interrupt but do nothing when it occurs, in fact this is often used to make the MCU sleep (low power consumption) and wake it once an interrupt occurs. You have already seen such usage in a previous example, where `REGISTER_WATCHDOG_ISR_EMPTY()` was used.
-3. Method callback registration: with this flavour, you activate an interrupt and want a sepcific method of a given class to be called back when the interrupt occurs; in this flavour, a second step is required inside your code: you need to register an instance of the class that was registered. In this tutorial, previous examples used this approach with `REGISTER_TIMER_COMPARE_ISR_METHOD()` macro and `interrupt::register_handler(handler);` instance registration in `main()`. This is probably the most useful approach as it allows to pass an implicit context (`this` class instance) to the callback.
+3. Method callback registration: with this flavour, you activate an interrupt and want a specific method of a given class to be called back when the interrupt occurs; in this flavour, a second step is required inside your code: you need to register an instance of the class that was registered. In this tutorial, previous examples used this approach with `REGISTER_TIMER_COMPARE_ISR_METHOD()` macro and `interrupt::register_handler(handler);` instance registration in `main()`. This is probably the most useful approach as it allows to pass an implicit context (`this` class instance) to the callback.
 4. Function callback registration: with this flavour, you can register one of your functions (global or static) as a callback of an ISR. This approach does not require an extra registration step. This is not used as often as the Method callback registration flavour above.
 
 Whenever method callback is needed (typically for flavours 1 and 3 above), then a second registration step is needed.
