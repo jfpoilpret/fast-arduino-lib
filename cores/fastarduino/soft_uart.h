@@ -286,7 +286,7 @@ namespace serial::soft
 		}
 
 		// Push value if no error
-		if (!errors.has_errors)
+		if (errors.has_errors == 0)
 		{
 			errors.queue_overflow = !in_().queue().push_(value);
 			// Wait for 1st stop bit
