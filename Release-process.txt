@@ -12,6 +12,38 @@ Release procedure
 9. Official release in github
 10. Close milestone in github
 
+FastArduino 1.2 release
+
+I am happy to announce the 3rd major release of FastArduino platform.
+
+Since release 1.1 (April 2019), the main changes are liste [there](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.2).
+
+Do note that the following API changes that break compatibility with programs developed with FastArduino 1.1:
+
+- all `register_XXX()` methods but `interrupt::register_handler()` have been removed from API as now, all ISR registration 
+is implicitly performed by constructors.
+- `namespace PWMPin` has been replaced with `enum class PWMPin` to ensure you cannot use any `DigitalPin` when a PWM pin
+is required; this allows usage of PWM pins that are linked to more than one timer (e.g. on Arduino LEONARDO and MEGA).
+- `namespace InterruptPin` has been replaced with `enum class InterruptPin` to ensure you cannot use any `DigitalPin` when a
+PCINT pin is required.
+- `namespace ExternalInterruptPin` has been replaced with `enum class ExternalInterruptPin` to ensure you cannot use any
+`DigitalPin` when an INT pin is required.
+
+All features have been tested on all supported targets.
+
+Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a tutorial allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is publihed here
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform and submit enhancements you would like 
+to see in future versions or report issues you may discover.
+
+
+
 FastArduino 1.1 release
 
 I am happy to announce the 2nd major release of FastArduino platform.
