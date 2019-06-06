@@ -112,41 +112,18 @@ Roadmap
 
 The roadmap of next activities and new supported features is the following:
 
-Milestone V1.0 (22.02.2018)
----------------------------
-- already released
-
-Milestone V1.1 (26.04.2019)
----------------------------
-- already released
+- [Milestone V1.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/1?closed=1) (released on 22.02.2018)
+- [Milestone V1.1](https://github.com/jfpoilpret/fast-arduino-lib/milestone/2?closed=1) (released on 26.04.2019)
+- [Milestone V1.2](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1) (30.06.2019)
+- [Milestone V1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5) (31.08.2019)
+- [Milestone V1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6) (31.10.2019)
+- [Milestone V2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (31.12.2019)
+- [2020 and later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 Documentation - no milestones
 -----------------------------
-1. Document concept of interrupt handling (31.08.2019)
-2. Add SPI and I2C new device creation to Tutorial (31.12.2019)
-3. Document how to add support for another board target in Tutorial (31.12.2019)
-
-Milestone V1.2 (30.06.2019)
----------------------------
-1. Refactor board traits to support PWM pin attached to several timers
-2. Code cleanup (software UART mainly)
-3. Various code improvements: prevent or implement move- and copy- constructors and assignment operators
-
-Milestone V1.3 (31.08.2019)
----------------------------
-1. Support ATtinyX5 Timer1 PWM pins (extended feature)
-
-Milestone V2.0 (31.12.2019, content to be revisited)
-----------------------------------------------------
-1. Improve I2C master support (asynchronous mode)
-2. Improve I2C to support slave mode
-3. Improve SPI to support slave mode
-
-2020 and later
---------------
-1. Improve Analog Input support and code
-2. Add USB support for Arduino Leonardo
-3. Add high-speed timer support of Arduino Leonardo
+1. Add SPI and I2C new device creation to Tutorial (31.12.2019)
+2. Document how to add support for another board target in Tutorial (31.12.2019)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
