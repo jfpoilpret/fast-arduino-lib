@@ -14,5 +14,5 @@ var classdevices_1_1magneto_1_1_m_p_u6050 =
     [ "interrupt_status", "classdevices_1_1magneto_1_1_m_p_u6050.html#a8329bcb49704040579abee759752757d", null ],
     [ "reset_fifo", "classdevices_1_1magneto_1_1_m_p_u6050.html#a622dd517bb795165e2cbf27c33d303ee", null ],
     [ "fifo_count", "classdevices_1_1magneto_1_1_m_p_u6050.html#acf1319a053cf8d190e9e342c23f5e459", null ],
-    [ "fifo_pop", "classdevices_1_1magneto_1_1_m_p_u6050.html#a9499539988fd48c1957e371febe6255d", null ]
+    [ "fifo_pop", "classdevices_1_1magneto_1_1_m_p_u6050.html#ab573f4d46fceebcf8630b8d3bfbce5f8", null ]
 ];

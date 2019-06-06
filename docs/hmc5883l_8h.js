@@ -1,6 +1,5 @@
 var hmc5883l_8h =
 [
-    [ "MagneticFields", "structdevices_1_1magneto_1_1_magnetic_fields.html", "structdevices_1_1magneto_1_1_magnetic_fields" ],
     [ "Status", "structdevices_1_1magneto_1_1_status.html", "structdevices_1_1magneto_1_1_status" ],
     [ "HMC5883L", "classdevices_1_1magneto_1_1_h_m_c5883_l.html", "classdevices_1_1magneto_1_1_h_m_c5883_l" ],
     [ "SamplesAveraged", "hmc5883l_8h.html#a9e686e1825471f8625d03061992dc76e", [

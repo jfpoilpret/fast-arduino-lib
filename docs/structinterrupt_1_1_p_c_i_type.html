@@ -121,7 +121,7 @@ struct interrupt::PCIType&lt; PIN &gt;</h3>
 <p>The following snippet demonstrates usage of <code><a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal. ">PCIType</a></code> to declare a <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code> instance for later use in a function:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a> PIN = board::InterruptPin::D7;</div><div class="line">    <a class="code" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCIType&lt;PIN&gt;::TYPE</a> pci;</div><div class="line">    pci.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699">enable_pin</a>&lt;PIN&gt;();</div><div class="line">    pci.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e">enable</a>();</div><div class="line">    ...</div><div class="line">    pci.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb">disable</a>();</div><div class="line">}</div></div><!-- fragment --> <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00488">488</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00497">497</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ade102a62db31cff23ad88bb268037e5b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ade102a62db31cff23ad88bb268037e5b">&#9670;&nbsp;</a></span>PCINT</h2>
@@ -147,7 +147,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
 <b>Initial value:</b><div class="fragment"><div class="line">=</div><div class="line">            board_traits::Port_trait&lt;board_traits::DigitalPin_trait&lt;board::PCI_PIN&lt;PIN&gt;()&gt;::PORT&gt;::<a class="code" href="structinterrupt_1_1_p_c_i_type.html#ade102a62db31cff23ad88bb268037e5b">PCINT</a></div></div><!-- fragment -->
 <p><code>PCINT</code> vector number for this <code>PIN</code> </p>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00493">493</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00502">502</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>

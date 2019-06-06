@@ -1,10 +1,11 @@
 <map id="fastarduino/realtime_timer.h" name="fastarduino/realtime_timer.h">
-<area shape="rect" id="node2" href="$io_8h_source.html" title="boards/io.h" alt="" coords="159,393,254,420"/>
-<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="43,169,141,196"/>
-<area shape="rect" id="node6" href="$timer_8h.html" title="Timer API. " alt="" coords="271,95,339,121"/>
-<area shape="rect" id="node11" href="$time_8h.html" title="Simple time utilities. " alt="" coords="363,244,427,271"/>
-<area shape="rect" id="node14" href="$events_8h.html" title="Support for events management. " alt="" coords="651,95,730,121"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="455,319,537,345"/>
-<area shape="rect" id="node15" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="651,169,725,196"/>
-<area shape="rect" id="node17" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="712,244,813,271"/>
+<area shape="rect" id="node2" href="$io_8h_source.html" title="boards/io.h" alt="" coords="231,393,326,420"/>
+<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="94,169,191,196"/>
+<area shape="rect" id="node6" href="$timer_8h.html" title="Timer API. " alt="" coords="254,95,322,121"/>
+<area shape="rect" id="node11" href="$time_8h.html" title="Simple time utilities. " alt="" coords="483,244,547,271"/>
+<area shape="rect" id="node14" href="$events_8h.html" title="Support for events management. " alt="" coords="626,95,705,121"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="515,319,597,345"/>
+<area shape="rect" id="node15" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="567,169,641,196"/>
+<area shape="rect" id="node17" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="677,169,779,196"/>
+<area shape="rect" id="node18" href="$types__traits_8h.html" title="Useful traits for common types. " alt="" coords="766,244,877,271"/>
 </map>

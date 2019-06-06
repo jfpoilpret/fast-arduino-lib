@@ -89,7 +89,8 @@ $(document).ready(function(){initNavTree('gpio_8h.html','');});
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">gpio.h File Reference</div>  </div>
 </div><!--header-->
@@ -149,6 +150,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
+<tr class="memitem:namespaceboard"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html">board</a></td></tr>
+<tr class="memdesc:namespaceboard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all types and constants specific to support a specific MCU target. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacegpio"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegpio.html">gpio</a></td></tr>
 <tr class="memdesc:namespacegpio"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all API to manipulate general-purpose digital input/output pins. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,6 +169,19 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ae18fafd08668ee17aa5dd415ee3b6041"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the configurable mode of a digital IO pin.  <a href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041">More...</a><br /></td></tr>
 <tr class="separator:ae18fafd08668ee17aa5dd415ee3b6041"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a1424210697e9c37fc24ba71d561ed5be"><td class="memTemplParams" colspan="2"><a id="a1424210697e9c37fc24ba71d561ed5be"></a>
+template&lt;DigitalPin PIN&gt; </td></tr>
+<tr class="memitem:a1424210697e9c37fc24ba71d561ed5be"><td class="memTemplItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a1424210697e9c37fc24ba71d561ed5be">board::BIT</a> ()</td></tr>
+<tr class="memdesc:a1424210697e9c37fc24ba71d561ed5be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the bit position, inside its IO port, of the given <code>DigitalPin</code>. <br /></td></tr>
+<tr class="separator:a1424210697e9c37fc24ba71d561ed5be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afafce89c5522c90e23ac41931c4a8430"><td class="memTemplParams" colspan="2"><a id="afafce89c5522c90e23ac41931c4a8430"></a>
+template&lt;DigitalPin PIN&gt; </td></tr>
+<tr class="memitem:afafce89c5522c90e23ac41931c4a8430"><td class="memTemplItemLeft" align="right" valign="top">constexpr uint8_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceboard.html#afafce89c5522c90e23ac41931c4a8430">board::MASK</a> ()</td></tr>
+<tr class="memdesc:afafce89c5522c90e23ac41931c4a8430"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the bit mask representing the given <code>DigitalPin</code> inside its port. <br /></td></tr>
+<tr class="separator:afafce89c5522c90e23ac41931c4a8430"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>General Purpose (digital) Input Output API. </p>

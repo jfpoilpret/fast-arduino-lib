@@ -10,7 +10,7 @@ var searchData=
   ['configure_5fgpio',['configure_gpio',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#afcf580d86cce5ebd761e4a6fc8c1e9ff',1,'devices::mcp23017::MCP23017']]],
   ['configure_5finterrupts',['configure_interrupts',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4ae230409c27a1fafc1867861a28b269',1,'devices::mcp23017::MCP23017']]],
   ['constrain',['constrain',['../namespaceutils.html#af1acb8c6f0e6493f88d42b2192e68ba3',1,'utils']]],
-  ['convert_5ffields_5fto_5fmga',['convert_fields_to_mGA',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4a47c367d282b383220d732641610bd9',1,'devices::magneto::HMC5883L']]],
+  ['convert_5ffields_5fto_5fmga',['convert_fields_to_mGA',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ac3e4ac0ae51499999d81a3aa06bb5295',1,'devices::magneto::HMC5883L']]],
   ['convert_5ftemp_5fto_5fcenti_5fdegrees',['convert_temp_to_centi_degrees',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a00ebddd7ff7e9bfb28a8a10f8368db7d',1,'devices::magneto::MPU6050']]],
   ['copyfmt',['copyfmt',['../classstreams_1_1ios__base.html#a5f9eb4a35402d3de9d17c4c9cc87dd5a',1,'streams::ios_base']]],
   ['ctc_5fcounter',['CTC_counter',['../structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455',1,'timer::Calculator']]],

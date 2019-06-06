@@ -20,6 +20,8 @@ var searchData=
   ['register_5fmulti_5fhcsr04_5fpci_5fisr_5fmethod',['REGISTER_MULTI_HCSR04_PCI_ISR_METHOD',['../sonar_8h.html#a9bbf49fca181e73c8780e5fe68e49f90',1,'sonar.h']]],
   ['register_5fmulti_5fhcsr04_5frtt_5ftimeout_5ffunction',['REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION',['../sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade',1,'sonar.h']]],
   ['register_5fmulti_5fhcsr04_5frtt_5ftimeout_5fmethod',['REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD',['../sonar_8h.html#a2e5344136bf09598861c164a152c9694',1,'sonar.h']]],
+  ['register_5fmulti_5fhcsr04_5frtt_5ftimeout_5ftrigger_5ffunction',['REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION',['../sonar_8h.html#a19777a99a5fd97d4fed4561306f0f869',1,'sonar.h']]],
+  ['register_5fmulti_5fhcsr04_5frtt_5ftimeout_5ftrigger_5fmethod',['REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD',['../sonar_8h.html#a16fb5a94c4ec0a8909528ec8592564e8',1,'sonar.h']]],
   ['register_5fpci_5fisr_5fempty',['REGISTER_PCI_ISR_EMPTY',['../pci_8h.html#ae3388141a0b77e8bb9c5ab66943e3998',1,'pci.h']]],
   ['register_5fpci_5fisr_5ffunction',['REGISTER_PCI_ISR_FUNCTION',['../pci_8h.html#a5ab3e54f184df812f4686e650ab24034',1,'pci.h']]],
   ['register_5fpci_5fisr_5fmethod',['REGISTER_PCI_ISR_METHOD',['../pci_8h.html#a64be10f04dd31643ee243b564a0d910c',1,'pci.h']]],

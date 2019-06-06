@@ -9,7 +9,7 @@ var searchData=
   ['begin_5f',['begin_',['../classtimer_1_1_r_t_t.html#a6b23a2de5d3adb282bf69e76a21e1e44',1,'timer::RTT::begin_()'],['../classtimer_1_1_timer.html#aca09928402314708df17ca6507acf007',1,'timer::Timer::begin_()']]],
   ['bin',['bin',['../classstreams_1_1ios__base.html#a84ef195a4086e70ce1104198b0611cf6',1,'streams::ios_base::bin()'],['../namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1',1,'streams::bin()']]],
   ['binary_5fto_5fbcd',['binary_to_bcd',['../namespaceutils.html#a76076365828136f5178f279fb3c129de',1,'utils']]],
-  ['bit',['BIT',['../classgpio_1_1_fast_pin.html#ae969e28f3a5b17b87749abe88a8cbedd',1,'gpio::FastPin::BIT()'],['../classgpio_1_1_fast_pin_type.html#a97461624e5f46544284655f9eb401567',1,'gpio::FastPinType::BIT()']]],
+  ['bit',['BIT',['../classgpio_1_1_fast_pin.html#ae969e28f3a5b17b87749abe88a8cbedd',1,'gpio::FastPin::BIT()'],['../classgpio_1_1_fast_pin_type.html#a97461624e5f46544284655f9eb401567',1,'gpio::FastPinType::BIT()'],['../namespaceboard.html#a1424210697e9c37fc24ba71d561ed5be',1,'board::BIT()']]],
   ['blocking',['BLOCKING',['../namespacedevices_1_1sonar.html#aaf92144d703d09314a02aaf53bdc9b74a72323e5457d8fb855145bfee934aa415',1,'devices::sonar']]],
   ['blocking_5fhcsr04',['BLOCKING_HCSR04',['../namespacedevices_1_1sonar.html#a1609913f480a742890ace74e1882ac5e',1,'devices::sonar']]],
   ['blockprotect',['BlockProtect',['../classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342',1,'devices::WinBond']]],

@@ -122,6 +122,10 @@ Friends</h2></td></tr>
 <tr class="memitem:a1598265399225902707369edc915e3d2"><td class="memItemLeft" align="right" valign="top"><a id="a1598265399225902707369edc915e3d2"></a>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>LinkedList&lt; T &gt;</b></td></tr>
 <tr class="separator:a1598265399225902707369edc915e3d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9f586af1306b785afa41611a0febf31"><td class="memTemplParams" colspan="2"><a id="ae9f586af1306b785afa41611a0febf31"></a>
+template&lt;class T , class B &gt; </td></tr>
+<tr class="memitem:ae9f586af1306b785afa41611a0febf31"><td class="memTemplItemLeft" align="right" valign="top">struct&#160;</td><td class="memTemplItemRight" valign="bottom"><b>types_traits::derives_from</b></td></tr>
+<tr class="separator:ae9f586af1306b785afa41611a0febf31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T_&gt;<br />
@@ -129,15 +133,18 @@ class containers::Link&lt; T_ &gt;</h3>
 
 <p>A wrapper for items stored in a <code><a class="el" href="classcontainers_1_1_linked_list.html" title="Linked list of type T_ items. ">LinkedList</a></code>. </p>
 <p>To use this class, you have to use the following idiom: </p><div class="fragment"><div class="line"><span class="keyword">class </span>MyType: <span class="keyword">public</span> Link&lt;MyType&gt; {...}</div></div><!-- fragment --><p>A concrete example of <code><a class="el" href="classcontainers_1_1_link.html" title="A wrapper for items stored in a LinkedList. ">Link</a></code> use in FastArduino API can be found in <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">events::EventHandler</a></code>.</p>
+<p>If you have an existing class which you want to directly use as a <code><a class="el" href="classcontainers_1_1_linked_list.html" title="Linked list of type T_ items. ">LinkedList</a></code> item type, but cannot modify it, then you should use <code><a class="el" href="classcontainers_1_1_link_wrapper.html" title="A wrapper for items stored in a LinkedList. ">LinkWrapper</a></code> instead.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T_</td><td>the type of item wrapped by this class </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_linked_list.html" title="Linked list of type T_ items. ">LinkedList</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_link_wrapper.html" title="A wrapper for items stored in a LinkedList. ">LinkWrapper</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_linked_list.html" title="Linked list of type T_ items. ">LinkedList</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="linked__list_8h_source.html#l00154">154</a> of file <a class="el" href="linked__list_8h_source.html">linked_list.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="linked__list_8h_source.html#l00163">163</a> of file <a class="el" href="linked__list_8h_source.html">linked_list.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="linked__list_8h_source.html">linked_list.h</a></li>
 </ul>

@@ -2,7 +2,6 @@ var mpu6050_8h =
 [
     [ "FIFOEnable", "structdevices_1_1magneto_1_1_f_i_f_o_enable.html", "structdevices_1_1magneto_1_1_f_i_f_o_enable" ],
     [ "INTStatus", "structdevices_1_1magneto_1_1_i_n_t_status.html", "structdevices_1_1magneto_1_1_i_n_t_status" ],
-    [ "Sensor3D", "structdevices_1_1magneto_1_1_sensor3_d.html", "structdevices_1_1magneto_1_1_sensor3_d" ],
     [ "AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", "structdevices_1_1magneto_1_1_all_sensors" ],
     [ "MPU6050", "classdevices_1_1magneto_1_1_m_p_u6050.html", "classdevices_1_1magneto_1_1_m_p_u6050" ],
     [ "INTEnable", "mpu6050_8h.html#af1a3dfb463a3ed6edaa3d7dcbdd2352d", null ],

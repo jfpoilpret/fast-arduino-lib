@@ -188,7 +188,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a1bf5d3cf53901af8bd2a3739b8290a70"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378">iostate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70">eofbit</a> = 0x01</td></tr>
-<tr class="memdesc:a1bf5d3cf53901af8bd2a3739b8290a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">This bit is set if the stream has unexpected reached its end during an extraction.  <a href="#a1bf5d3cf53901af8bd2a3739b8290a70">More...</a><br /></td></tr>
+<tr class="memdesc:a1bf5d3cf53901af8bd2a3739b8290a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">This bit is set if the stream has unexpectedly reached its end during an extraction.  <a href="#a1bf5d3cf53901af8bd2a3739b8290a70">More...</a><br /></td></tr>
 <tr class="separator:a1bf5d3cf53901af8bd2a3739b8290a70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf31341bed00d5096e93ed67d6808150"><td class="memItemLeft" align="right" valign="top"><a id="abf31341bed00d5096e93ed67d6808150"></a>
 static constexpr <a class="el" href="classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378">iostate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#abf31341bed00d5096e93ed67d6808150">failbit</a> = 0x02</td></tr>
@@ -474,9 +474,9 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </div><div class="memdoc">
 
 <p>Return <code>true</code> if the associated stream has reached end-of-file. </p>
-<p>Specifically, returns <code>true</code> if <code><a class="el" href="classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70" title="This bit is set if the stream has unexpected reached its end during an extraction. ">ios::eofbit</a></code> is set in <code><a class="el" href="classstreams_1_1ios__base.html#a3234d1e22f867e22439efa53c9bf9271" title="Return the current stream error state. ">rdstate()</a></code>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ios__base.html#a3234d1e22f867e22439efa53c9bf9271" title="Return the current stream error state. ">rdstate()</a> </dd>
+<p>Specifically, returns <code>true</code> if <code><a class="el" href="classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70" title="This bit is set if the stream has unexpectedly reached its end during an extraction. ">ios::eofbit</a></code> is set in <code><a class="el" href="classstreams_1_1ios__base.html#a3234d1e22f867e22439efa53c9bf9271" title="Return the current stream error state. ">rdstate()</a></code>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ios__base.html#a3234d1e22f867e22439efa53c9bf9271" title="Return the current stream error state. ">rdstate()</a> </dd>
 <dd>
-<a class="el" href="classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70" title="This bit is set if the stream has unexpected reached its end during an extraction. ">eofbit</a> </dd></dl>
+<a class="el" href="classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70" title="This bit is set if the stream has unexpectedly reached its end during an extraction. ">eofbit</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="ios_8h_source.html#l00125">125</a> of file <a class="el" href="ios_8h_source.html">ios.h</a>.</p>
 
@@ -1058,7 +1058,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </table>
 </div><div class="memdoc">
 
-<p>This bit is set if the stream has unexpected reached its end during an extraction. </p>
+<p>This bit is set if the stream has unexpectedly reached its end during an extraction. </p>
 <p>Note that this bit is currently never set by istreambuf, as istreambuf is blocked until characters are input. </p>
 
 <p class="definition">Definition at line <a class="el" href="ios_8h_source.html#l00064">64</a> of file <a class="el" href="ios_8h_source.html">ios.h</a>.</p>

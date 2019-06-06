@@ -64,12 +64,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "abi_8cpp_source.html",
-"classdevices_1_1rtc_1_1_d_s1307.html#ae9f34a23d85cdd4ae9e9db4c167a6658",
-"classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#ac38fbe4e304eebf438c08e9f8f07ff87",
-"empty_8h.html#a2529f85498783a75dc75c281e0b754d3",
-"mpu6050_8h.html#af1a3dfb463a3ed6edaa3d7dcbdd2352d",
-"structinterrupt_1_1_p_c_i_type.html#a2f60b609ef4e4476ce8b2d4f2bf8a9b3",
-"watchdog_8h.html#a8241e4f4aa0b4776545287e1e9c14286"
+"classdevices_1_1rtc_1_1_d_s1307.html",
+"classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html#a028eda424aae2c386a5fd6ed74c0cfff",
+"ds1307_8h.html#a765e5fb8599fbfc007de3b47a81593b3a78ae6f0cd191d25147e252dc54768238",
+"mpu6050_8h.html#a293a7ee50fc4bbf24e89858a328e1775a54e49aece18753b8a945a440215c3d20",
+"structdevices_1_1rtc_1_1tm.html#a5cf662ebd192a0a84afceaf4a1105b49",
+"utilities_8h.html#a6ba012c3dd675cf1eabcf14e55cea0e0ac236475a2d098d9e27c22aefc4a371ee"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

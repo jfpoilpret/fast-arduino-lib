@@ -1,15 +1,16 @@
 <map id="fastarduino/devices/sonar.h" name="fastarduino/devices/sonar.h">
 <area shape="rect" id="node2" href="$board_8h_source.html" title="fastarduino/boards\l/board.h" alt="" coords="43,259,187,300"/>
-<area shape="rect" id="node3" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="169,184,309,211"/>
-<area shape="rect" id="node5" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="661,423,744,449"/>
-<area shape="rect" id="node9" href="$time_8h.html" title="Simple time utilities. " alt="" coords="1138,348,1281,375"/>
-<area shape="rect" id="node12" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="757,95,912,136"/>
-<area shape="rect" id="node21" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="494,184,623,211"/>
-<area shape="rect" id="node22" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="333,184,464,211"/>
-<area shape="rect" id="node6" href="$io_8h_source.html" title="boards/io.h" alt="" coords="870,497,965,524"/>
-<area shape="rect" id="node14" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="699,266,797,293"/>
-<area shape="rect" id="node15" href="$timer_8h.html" title="Timer API. " alt="" coords="801,184,869,211"/>
-<area shape="rect" id="node17" href="$events_8h.html" title="Support for events management. " alt="" coords="958,184,1037,211"/>
-<area shape="rect" id="node18" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="1072,266,1147,293"/>
-<area shape="rect" id="node20" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="869,348,971,375"/>
+<area shape="rect" id="node3" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="170,184,310,211"/>
+<area shape="rect" id="node5" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="519,423,601,449"/>
+<area shape="rect" id="node9" href="$time_8h.html" title="Simple time utilities. " alt="" coords="1061,348,1203,375"/>
+<area shape="rect" id="node12" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="808,95,963,136"/>
+<area shape="rect" id="node22" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="495,184,625,211"/>
+<area shape="rect" id="node23" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="335,184,465,211"/>
+<area shape="rect" id="node6" href="$io_8h_source.html" title="boards/io.h" alt="" coords="861,497,955,524"/>
+<area shape="rect" id="node14" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="598,266,695,293"/>
+<area shape="rect" id="node15" href="$timer_8h.html" title="Timer API. " alt="" coords="765,184,833,211"/>
+<area shape="rect" id="node17" href="$events_8h.html" title="Support for events management. " alt="" coords="978,184,1057,211"/>
+<area shape="rect" id="node18" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="923,266,997,293"/>
+<area shape="rect" id="node20" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="1021,266,1123,293"/>
+<area shape="rect" id="node21" href="$types__traits_8h.html" title="Useful traits for common types. " alt="" coords="1227,348,1338,375"/>
 </map>

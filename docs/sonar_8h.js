@@ -19,6 +19,8 @@ var sonar_8h =
     [ "REGISTER_MULTI_HCSR04_PCI_ISR_FUNCTION", "sonar_8h.html#a2e550e3a88e29f081b3009d7b462475e", null ],
     [ "REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD", "sonar_8h.html#a2e5344136bf09598861c164a152c9694", null ],
     [ "REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION", "sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade", null ],
+    [ "REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD", "sonar_8h.html#a16fb5a94c4ec0a8909528ec8592564e8", null ],
+    [ "REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION", "sonar_8h.html#a19777a99a5fd97d4fed4561306f0f869", null ],
     [ "DECL_SONAR_ISR_HANDLERS_FRIEND", "sonar_8h.html#a5f7a29b725906be15817aa805fc18f15", null ],
     [ "BLOCKING_HCSR04", "sonar_8h.html#a1609913f480a742890ace74e1882ac5e", null ],
     [ "ASYNC_INT_HCSR04", "sonar_8h.html#a549182f59f1965da0341ffc4137f3a1e", null ],

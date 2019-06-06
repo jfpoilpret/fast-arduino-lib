@@ -114,18 +114,19 @@ Include dependency graph for sonar.h:</div>
 <div class="center"><img src="sonar_8h__incl.png" border="0" usemap="#fastarduino_2devices_2sonar_8h" alt=""/></div>
 <map name="fastarduino_2devices_2sonar_8h" id="fastarduino_2devices_2sonar_8h">
 <area shape="rect" id="node2" href="board_8h_source.html" title="fastarduino/boards\l/board.h" alt="" coords="43,259,187,300"/>
-<area shape="rect" id="node3" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="169,184,309,211"/>
-<area shape="rect" id="node5" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="661,423,744,449"/>
-<area shape="rect" id="node9" href="time_8h.html" title="Simple time utilities. " alt="" coords="1138,348,1281,375"/>
-<area shape="rect" id="node12" href="realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="757,95,912,136"/>
-<area shape="rect" id="node21" href="int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="494,184,623,211"/>
-<area shape="rect" id="node22" href="pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="333,184,464,211"/>
-<area shape="rect" id="node6" href="io_8h_source.html" title="boards/io.h" alt="" coords="870,497,965,524"/>
-<area shape="rect" id="node14" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="699,266,797,293"/>
-<area shape="rect" id="node15" href="timer_8h.html" title="Timer API. " alt="" coords="801,184,869,211"/>
-<area shape="rect" id="node17" href="events_8h.html" title="Support for events management. " alt="" coords="958,184,1037,211"/>
-<area shape="rect" id="node18" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="1072,266,1147,293"/>
-<area shape="rect" id="node20" href="linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="869,348,971,375"/>
+<area shape="rect" id="node3" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="170,184,310,211"/>
+<area shape="rect" id="node5" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="519,423,601,449"/>
+<area shape="rect" id="node9" href="time_8h.html" title="Simple time utilities. " alt="" coords="1061,348,1203,375"/>
+<area shape="rect" id="node12" href="realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="808,95,963,136"/>
+<area shape="rect" id="node22" href="int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="495,184,625,211"/>
+<area shape="rect" id="node23" href="pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="335,184,465,211"/>
+<area shape="rect" id="node6" href="io_8h_source.html" title="boards/io.h" alt="" coords="861,497,955,524"/>
+<area shape="rect" id="node14" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="598,266,695,293"/>
+<area shape="rect" id="node15" href="timer_8h.html" title="Timer API. " alt="" coords="765,184,833,211"/>
+<area shape="rect" id="node17" href="events_8h.html" title="Support for events management. " alt="" coords="978,184,1057,211"/>
+<area shape="rect" id="node18" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="923,266,997,293"/>
+<area shape="rect" id="node20" href="linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="1021,266,1123,293"/>
+<area shape="rect" id="node21" href="types__traits_8h.html" title="Useful traits for common types. " alt="" coords="1227,348,1338,375"/>
 </map>
 </div>
 </div>
@@ -198,6 +199,12 @@ Macros</h2></td></tr>
 <tr class="memitem:a3a9689da1c2cb01a59ea8a6bde709ade"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION</a>(TIMER_NUM,  SONAR,  CALLBACK)</td></tr>
 <tr class="memdesc:a3a9689da1c2cb01a59ea8a6bde709ade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for a <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> to be notified, and call back a function, when a timeout occurs; this ISR is also in charge of the associated <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> time update.  <a href="#a3a9689da1c2cb01a59ea8a6bde709ade">More...</a><br /></td></tr>
 <tr class="separator:a3a9689da1c2cb01a59ea8a6bde709ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16fb5a94c4ec0a8909528ec8592564e8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sonar_8h.html#a16fb5a94c4ec0a8909528ec8592564e8">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD</a>(TIMER_NUM,  SONAR,  HANDLER,  CB_TIMEOUT,  CB_RTT)</td></tr>
+<tr class="memdesc:a16fb5a94c4ec0a8909528ec8592564e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for a <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> to be notified, and call back one of two handler's methods, for each of the following events:  <a href="#a16fb5a94c4ec0a8909528ec8592564e8">More...</a><br /></td></tr>
+<tr class="separator:a16fb5a94c4ec0a8909528ec8592564e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19777a99a5fd97d4fed4561306f0f869"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sonar_8h.html#a19777a99a5fd97d4fed4561306f0f869">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION</a>(TIMER_NUM,  SONAR,  CB_TIMEOUT,  CB_RTT)</td></tr>
+<tr class="memdesc:a19777a99a5fd97d4fed4561306f0f869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary ISR (Interrupt Service Routine) for a <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> to be notified, and call back one of two functions, for each of the following events:  <a href="#a19777a99a5fd97d4fed4561306f0f869">More...</a><br /></td></tr>
+<tr class="separator:a19777a99a5fd97d4fed4561306f0f869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f7a29b725906be15817aa805fc18f15"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sonar_8h.html#a5f7a29b725906be15817aa805fc18f15">DECL_SONAR_ISR_HANDLERS_FRIEND</a></td></tr>
 <tr class="memdesc:a5f7a29b725906be15817aa805fc18f15"><td class="mdescLeft">&#160;</td><td class="mdescRight">This macro shall be used in a class containing a private callback method, registered by one (or more) of:  <a href="#a5f7a29b725906be15817aa805fc18f15">More...</a><br /></td></tr>
 <tr class="separator:a5f7a29b725906be15817aa805fc18f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1192,6 +1199,137 @@ HCSR04::async_echo() </dd>
 
 </div>
 </div>
+<a id="a16fb5a94c4ec0a8909528ec8592564e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16fb5a94c4ec0a8909528ec8592564e8">&#9670;&nbsp;</a></span>REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TIMER_NUM, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">SONAR, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">HANDLER, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CB_TIMEOUT, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CB_RTT&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \</div><div class="line">    {                                                                                                   \</div><div class="line">        using EVENT = <span class="keyword">typename</span> SONAR::EVENT;                                                            \</div><div class="line">        EVENT <span class="keyword">event</span> = devices::sonar::isr_handler::multi_sonar_rtt_change&lt;TIMER_NUM, SONAR, EVENT&gt;();   \</div><div class="line">        if (event.timeout())                                                                            \</div><div class="line">            interrupt::CallbackHandler&lt;<span class="keywordtype">void</span> (HANDLER::*)(<span class="keyword">const</span> EVENT&amp;), CB_TIMEOUT&gt;::call(event);       \</div><div class="line">        interrupt::CallbackHandler&lt;void (HANDLER::*)(), CB_RTT&gt;::call();                                \</div><div class="line">    }</div></div><!-- fragment -->
+<p>Register the necessary ISR (Interrupt Service Routine) for a <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> to be notified, and call back one of two handler's methods, for each of the following events: </p>
+<ul>
+<li>a range timeout occurs</li>
+<li>the associated <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> is updated (one ms elapsed) This ISR is also in charge of the associated <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> time update.</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">TIMER_NUM</td><td>the number of the TIMER feature for the target MCU </td></tr>
+    <tr><td class="paramname">SONAR</td><td>the actual type of the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> for which this ISR is registered </td></tr>
+    <tr><td class="paramname">HANDLER</td><td>the class holding the callback method </td></tr>
+    <tr><td class="paramname">CB_TIMEOUT</td><td>the method of <code>HANDLER</code> that will be called when a timeout occurs; this must be a proper PTMF (pointer to member function) which takes one argument of type <code>const SonarEvent&lt;TIMER&gt;&amp;</code>. </td></tr>
+    <tr><td class="paramname">CB_RTT</td><td>the method of <code>HANDLER</code> that will be called when the associated <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> is updated; this must be a proper PTMF (pointer to member function) which takes no argument. This is typically used by <code>HANDLER</code> to retrigger sonars ranging on a periodic basis.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a> </dd>
+<dd>
+<a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">devices::sonar::SonarEvent</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a19777a99a5fd97d4fed4561306f0f869" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00420">420</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
+<a id="a19777a99a5fd97d4fed4561306f0f869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19777a99a5fd97d4fed4561306f0f869">&#9670;&nbsp;</a></span>REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">TIMER_NUM, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">SONAR, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CB_TIMEOUT, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">CB_RTT&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(TIMER, TIMER_NUM, _COMPA_vect))                                                            \</div><div class="line">    {                                                                                                   \</div><div class="line">        using EVENT = <span class="keyword">typename</span> SONAR::EVENT;                                                            \</div><div class="line">        EVENT <span class="keyword">event</span> = devices::sonar::isr_handler::multi_sonar_rtt_change&lt;TIMER_NUM, SONAR, EVENT&gt;();   \</div><div class="line">        if (event.timeout())                                                                            \</div><div class="line">            interrupt::CallbackHandler&lt;<span class="keywordtype">void</span> (*)(<span class="keyword">const</span> EVENT&amp;), CB_TIMEOUT&gt;::call(event);                \</div><div class="line">        interrupt::CallbackHandler&lt;void (*)(), CB_RTT&gt;::call();                                         \</div><div class="line">    }</div></div><!-- fragment -->
+<p>Register the necessary ISR (Interrupt Service Routine) for a <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> to be notified, and call back one of two functions, for each of the following events: </p>
+<ul>
+<li>a range timeout occurs</li>
+<li>the associated <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> is updated (one ms elapsed) This ISR is also in charge of the associated <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> time update.</li>
+</ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">TIMER_NUM</td><td>the number of the TIMER feature for the target MCU </td></tr>
+    <tr><td class="paramname">SONAR</td><td>the actual type of the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> for which this ISR is registered </td></tr>
+    <tr><td class="paramname">CB_TIMEOUT</td><td>the function that will be called when a timeout occurs; this must take one argument of type <code>const SonarEvent&lt;TIMER&gt;&amp;</code>. </td></tr>
+    <tr><td class="paramname">CB_RTT</td><td>the function that will be called when the associated <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer. ">timer::RTT</a></code> is updated; this must take no argument. This is typically used to retrigger sonars ranging on a periodic basis.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a> </dd>
+<dd>
+<a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler. ">devices::sonar::SonarEvent</a> </dd>
+<dd>
+<a class="el" href="sonar_8h.html#a16fb5a94c4ec0a8909528ec8592564e8" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00451">451</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+
+</div>
+</div>
 <a id="a5f7a29b725906be15817aa805fc18f15"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f7a29b725906be15817aa805fc18f15">&#9670;&nbsp;</a></span>DECL_SONAR_ISR_HANDLERS_FRIEND</h2>
 
@@ -1214,7 +1352,7 @@ HCSR04::async_echo() </dd>
 </ul>
 <p>It declares the class where it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00408">408</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00473">473</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>

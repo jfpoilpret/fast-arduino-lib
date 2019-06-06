@@ -4,6 +4,7 @@ var classdevices_1_1sonar_1_1_multi_h_c_s_r04 =
     [ "EVENT", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a343b9784151711d186327284c347d236", null ],
     [ "MultiHCSR04", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a41fd653b0e93076b8038114d6e466cb7", null ],
     [ "trigger", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027", null ],
+    [ "active", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#afacb4049db334728566e5bb77f76d759", null ],
     [ "ready", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a2df1e7d175287c7775e72d84a031a427", null ],
     [ "all_ready", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a91a6278019999628c1b7552272567a55", null ],
     [ "set_ready", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#adaa8097e1fb62f58f28c4d0cc105ae22", null ],

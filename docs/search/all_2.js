@@ -13,18 +13,20 @@ var searchData=
   ['clockrate',['ClockRate',['../namespacespi.html#a030761907666e27c3a2236d68792a30b',1,'spi']]],
   ['clockselect',['ClockSelect',['../namespacedevices_1_1magneto.html#a3eb67bba736029c8e9267803a614fe63',1,'devices::magneto']]],
   ['command',['Command',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30',1,'devices::rf::NRF24L01']]],
+  ['common_5fmagneto_2eh',['common_magneto.h',['../common__magneto_8h.html',1,'']]],
   ['compute_5fclockrate',['compute_clockrate',['../namespacespi.html#a52df46fb17ceb1ad77644d145d3d3b59',1,'spi']]],
   ['config',['CONFIG',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa73e99d350a4aa6f1a5af04ec29173f73',1,'devices::rf::NRF24L01']]],
   ['configure_5fgpio',['configure_gpio',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#afcf580d86cce5ebd761e4a6fc8c1e9ff',1,'devices::mcp23017::MCP23017']]],
   ['configure_5finterrupts',['configure_interrupts',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4ae230409c27a1fafc1867861a28b269',1,'devices::mcp23017::MCP23017']]],
   ['constrain',['constrain',['../namespaceutils.html#af1acb8c6f0e6493f88d42b2192e68ba3',1,'utils']]],
   ['containers',['containers',['../namespacecontainers.html',1,'']]],
-  ['convert_5ffields_5fto_5fmga',['convert_fields_to_mGA',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4a47c367d282b383220d732641610bd9',1,'devices::magneto::HMC5883L']]],
+  ['convert_5ffields_5fto_5fmga',['convert_fields_to_mGA',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ac3e4ac0ae51499999d81a3aa06bb5295',1,'devices::magneto::HMC5883L']]],
   ['convert_5ftemp_5fto_5fcenti_5fdegrees',['convert_temp_to_centi_degrees',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a00ebddd7ff7e9bfb28a8a10f8368db7d',1,'devices::magneto::MPU6050']]],
   ['copyfmt',['copyfmt',['../classstreams_1_1ios__base.html#a5f9eb4a35402d3de9d17c4c9cc87dd5a',1,'streams::ios_base']]],
   ['counter',['COUNTER',['../classdevices_1_1audio_1_1_tone_generator.html#a77d606199215682c22535439bcfd1e88',1,'devices::audio::ToneGenerator']]],
   ['ctc',['CTC',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77',1,'timer']]],
   ['ctc_5fcounter',['CTC_counter',['../structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455',1,'timer::Calculator']]],
   ['ctc_5ffrequency',['CTC_frequency',['../structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4',1,'timer::Calculator']]],
-  ['ctc_5fprescaler',['CTC_prescaler',['../structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29',1,'timer::Calculator']]]
+  ['ctc_5fprescaler',['CTC_prescaler',['../structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29',1,'timer::Calculator']]],
+  ['ctref',['CTREF',['../classcontainers_1_1_link_wrapper.html#a8b5dbba1842e1d243efb5c24b8863b2b',1,'containers::LinkWrapper']]]
 ];

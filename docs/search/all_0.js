@@ -6,6 +6,7 @@ var searchData=
   ['accel_5fmeasures',['accel_measures',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a9ccd7c0782612f0d7a619f6a548e4ead',1,'devices::magneto::MPU6050']]],
   ['accel_5frange_5fg',['ACCEL_RANGE_G',['../namespacedevices_1_1magneto.html#acd40d82344b841bb27d70c80361b9145',1,'devices::magneto']]],
   ['accelrange',['AccelRange',['../namespacedevices_1_1magneto.html#a293a7ee50fc4bbf24e89858a328e1775',1,'devices::magneto']]],
+  ['active',['active',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#afacb4049db334728566e5bb77f76d759',1,'devices::sonar::MultiHCSR04']]],
   ['active_5fhigh',['ACTIVE_HIGH',['../namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523a736450632635bcd4954bb040b9a25979',1,'devices::mcp23017::ACTIVE_HIGH()'],['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bab868e37f0edfdbea9838600657b6f4b3',1,'spi::ACTIVE_HIGH()']]],
   ['active_5flow',['ACTIVE_LOW',['../namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523a34fa880249d16ccf8cd8d2fb27a8492c',1,'devices::mcp23017::ACTIVE_LOW()'],['../namespacespi.html#a4ef7145a7687905b0095d6a09b2bb12bae434209643a0d01f383a46eece525679',1,'spi::ACTIVE_LOW()']]],
   ['ad0',['AD0',['../namespacedevices_1_1magneto.html#acce78d7a9c22e2b1d83bb320326075b1',1,'devices::magneto']]],

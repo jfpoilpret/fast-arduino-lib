@@ -28,7 +28,8 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "linked_list.cpp", "linked__list_8cpp_source.html", null ],
     [ "linked_list.h", "linked__list_8h.html", [
       [ "LinkedList", "classcontainers_1_1_linked_list.html", "classcontainers_1_1_linked_list" ],
-      [ "Link", "classcontainers_1_1_link.html", "classcontainers_1_1_link" ]
+      [ "Link", "classcontainers_1_1_link.html", "classcontainers_1_1_link" ],
+      [ "LinkWrapper", "classcontainers_1_1_link_wrapper.html", "classcontainers_1_1_link_wrapper" ]
     ] ],
     [ "main.cpp", "main_8cpp_source.html", null ],
     [ "pci.h", "pci_8h.html", "pci_8h" ],

@@ -166,10 +166,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acf1319a053cf8d190e9e342c23f5e459"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#acf1319a053cf8d190e9e342c23f5e459">fifo_count</a> ()</td></tr>
 <tr class="memdesc:acf1319a053cf8d190e9e342c23f5e459"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of bytes currently stored in the FIFO buffer (register map §4.30).  <a href="#acf1319a053cf8d190e9e342c23f5e459">More...</a><br /></td></tr>
 <tr class="separator:acf1319a053cf8d190e9e342c23f5e459"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9499539988fd48c1957e371febe6255d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a9499539988fd48c1957e371febe6255d"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a9499539988fd48c1957e371febe6255d">fifo_pop</a> (T &amp;output, bool wait=false)</td></tr>
-<tr class="memdesc:a9499539988fd48c1957e371febe6255d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get one sample out of the FIFO buffer (register map §4.31).  <a href="#a9499539988fd48c1957e371febe6255d">More...</a><br /></td></tr>
-<tr class="separator:a9499539988fd48c1957e371febe6255d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab573f4d46fceebcf8630b8d3bfbce5f8"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab573f4d46fceebcf8630b8d3bfbce5f8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#ab573f4d46fceebcf8630b8d3bfbce5f8">fifo_pop</a> (T &amp;output, bool wait=false, bool yield=false)</td></tr>
+<tr class="memdesc:ab573f4d46fceebcf8630b8d3bfbce5f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get one sample out of the FIFO buffer (register map §4.31).  <a href="#ab573f4d46fceebcf8630b8d3bfbce5f8">More...</a><br /></td></tr>
+<tr class="separator:ab573f4d46fceebcf8630b8d3bfbce5f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -219,7 +219,7 @@ class devices::magneto::MPU6050&lt; MODE, AD0 &gt;</h3>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1magneto.html#acce78d7a9c22e2b1d83bb320326075b1" title="Possible values of I2C address lower bit for the chip (the chip may have one of two possible addresse...">AD0</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00220">220</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00209">209</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="af1e0ae03e7121d9f33aa12862554f61f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af1e0ae03e7121d9f33aa12862554f61f">&#9670;&nbsp;</a></span>MANAGER</h2>
@@ -237,7 +237,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
 
 <p>The type of <code><a class="el" href="classi2c_1_1_i2_c_manager.html" title="General I2C Manager. ">i2c::I2CManager</a></code> that must be used to handle this device. </p>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00227">227</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00216">216</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -276,7 +276,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00233">233</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00222">222</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -351,7 +351,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
 <dd>
 <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a4cc5aa59dbf612a80f2fda7018796d67" title="Start operation of this gyroscope/accelerometer chip. ">begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00251">251</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00240">240</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -450,7 +450,7 @@ interrupts::INTSignal </dd>
 <dd>
 interrupts::PCISignal </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00293">293</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00282">282</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -489,7 +489,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a663ba59840b57e7bf8329ecccedadb57" title="Start operation of this gyroscope/accelerometer chip. ">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00337">337</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00326">326</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -527,7 +527,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00351">351</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00340">340</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -572,7 +572,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00366">366</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00355">355</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -612,7 +612,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a00ebddd7ff7e9bfb28a8a10f8368db7d" title="Convert the raw temperature obtained from temperature() to centi-degrees Celsius. ...">convert_temp_to_centi_degrees()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00390">390</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00379">379</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -657,7 +657,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00417">417</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00406">406</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -702,7 +702,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00439">439</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00428">428</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -734,7 +734,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
 <p>Get the interrupt status (register map §4.16) after an interrupt has occurred. </p>
 <p>After this method is called, the Interrupt <a class="el" href="structdevices_1_1magneto_1_1_status.html" title="The chip status, as defined in datasheet p16. ">Status</a> register is cleared. </p><dl class="section return"><dt>Returns</dt><dd>the latest interrupt status as an <code><a class="el" href="structdevices_1_1magneto_1_1_i_n_t_status.html" title="The structure of the Interrupt Status register (register map §4.16). ">INTStatus</a></code> structure where each field maps to the interrupt that occurred; in case of an error, the returned status is fully cleared. In order to ensure the returned status can be inspected, you should first call <code><a class="el" href="classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78" title="Return latest transmission status. ">i2c::I2CManager.status()</a></code>. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00463">463</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00452">452</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -772,7 +772,7 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00478">478</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00467">467</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
@@ -802,21 +802,21 @@ template&lt;i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW&gt; </div
 </div><div class="memdoc">
 
 <p>Get the number of bytes currently stored in the FIFO buffer (register map §4.30). </p>
-<p>This number is a multiple of the size of sensor samples as selected by <code><a class="el" href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html" title="Configuration for MPU6050 FIFO Enable register (register map §4.6). ">FIFOEnable</a></code> in <code><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a4cc5aa59dbf612a80f2fda7018796d67" title="Start operation of this gyroscope/accelerometer chip. ">begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)</a></code>. </p><dl class="section return"><dt>Returns</dt><dd>the number of bytes currently present in the FIFO buffer; when not <code>0</code>, you should read the samples with <code><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a9499539988fd48c1957e371febe6255d" title="Get one sample out of the FIFO buffer (register map §4.31). ">fifo_pop()</a></code>. </dd></dl>
+<p>This number is a multiple of the size of sensor samples as selected by <code><a class="el" href="structdevices_1_1magneto_1_1_f_i_f_o_enable.html" title="Configuration for MPU6050 FIFO Enable register (register map §4.6). ">FIFOEnable</a></code> in <code><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a4cc5aa59dbf612a80f2fda7018796d67" title="Start operation of this gyroscope/accelerometer chip. ">begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)</a></code>. </p><dl class="section return"><dt>Returns</dt><dd>the number of bytes currently present in the FIFO buffer; when not <code>0</code>, you should read the samples with <code><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#ab573f4d46fceebcf8630b8d3bfbce5f8" title="Get one sample out of the FIFO buffer (register map §4.31). ">fifo_pop()</a></code>. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
     <tr><td class="paramname">0</td><td>if the FIFO buffer is empty or if the operation failed; in order to ensure the returned count is cactually <code>0</code>, you should first call <code><a class="el" href="classi2c_1_1_i2_c_manager.html#a3d41a8fba32b3b5eb57d26780eb77c78" title="Return latest transmission status. ">i2c::I2CManager.status()</a></code>.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a9499539988fd48c1957e371febe6255d" title="Get one sample out of the FIFO buffer (register map §4.31). ">fifo_pop()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#ab573f4d46fceebcf8630b8d3bfbce5f8" title="Get one sample out of the FIFO buffer (register map §4.31). ">fifo_pop()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00498">498</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00487">487</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>
-<a id="a9499539988fd48c1957e371febe6255d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9499539988fd48c1957e371febe6255d">&#9670;&nbsp;</a></span>fifo_pop()</h2>
+<a id="ab573f4d46fceebcf8630b8d3bfbce5f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab573f4d46fceebcf8630b8d3bfbce5f8">&#9670;&nbsp;</a></span>fifo_pop()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -838,7 +838,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>wait</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>wait</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>yield</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -865,6 +871,7 @@ template&lt;typename T &gt; </div>
   <table class="params">
     <tr><td class="paramname">output</td><td>a reference to a <code>T</code>-type variable that will be filled with the required sample. </td></tr>
     <tr><td class="paramname">wait</td><td>set to <code>true</code> if the method shall block until a sample of the required size is available in the FIFO buffer </td></tr>
+    <tr><td class="paramname">yield</td><td>set to <code>true</code> if you want the method to yield time (i.e. enter default pwoer sleep mode) while waiting; this is effective only when <code>wait</code> is <code>true</code>. When <code>wait</code> is <code>true</code> and <code>yield</code> is <code>false</code>, then waiting is performed by a busy loop. </td></tr>
   </table>
   </dd>
 </dl>
@@ -877,7 +884,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#acf1319a053cf8d190e9e342c23f5e459" title="Get the number of bytes currently stored in the FIFO buffer (register map §4.30). ...">fifo_count()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00529">529</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="mpu6050_8h_source.html#l00522">522</a> of file <a class="el" href="mpu6050_8h_source.html">mpu6050.h</a>.</p>
 
 </div>
 </div>

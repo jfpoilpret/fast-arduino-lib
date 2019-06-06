@@ -1,41 +1,41 @@
 <map id="fastarduino/utilities.h" name="fastarduino/utilities.h">
-<area shape="rect" id="node2" href="$time_8h.html" title="Simple time utilities. " alt="" coords="1152,87,1295,114"/>
-<area shape="rect" id="node4" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2..." alt="" coords="1512,259,1663,300"/>
-<area shape="rect" id="node5" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="2367,437,2517,479"/>
-<area shape="rect" id="node6" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="393,177,545,203"/>
-<area shape="rect" id="node7" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="433,266,595,293"/>
-<area shape="rect" id="node11" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,445,220,471"/>
-<area shape="rect" id="node14" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="2638,527,2809,553"/>
-<area shape="rect" id="node25" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip. " alt="" coords="1767,80,1917,121"/>
-<area shape="rect" id="node26" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip. " alt="" coords="1941,80,2092,121"/>
-<area shape="rect" id="node27" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip. " alt="" coords="2116,80,2267,121"/>
-<area shape="rect" id="node28" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="2291,87,2431,114"/>
-<area shape="rect" id="node33" href="$servo_8h.html" title="API to handle servomotors. " alt="" coords="2137,259,2288,300"/>
-<area shape="rect" id="node35" href="$pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="2119,177,2307,203"/>
-<area shape="rect" id="node36" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="2557,177,2687,203"/>
-<area shape="rect" id="node37" href="$timer_8h.html" title="Timer API. " alt="" coords="1595,87,1742,114"/>
-<area shape="rect" id="node38" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="671,169,811,211"/>
-<area shape="rect" id="node40" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="2761,355,2891,382"/>
-<area shape="rect" id="node3" href="$analog__input_8h.html" title="Analog Input API. " alt="" coords="1017,169,1161,211"/>
-<area shape="rect" id="node13" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="434,445,599,471"/>
-<area shape="rect" id="node19" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="1031,348,1186,389"/>
-<area shape="rect" id="node22" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer. " alt="" coords="1211,348,1361,389"/>
-<area shape="rect" id="node23" href="$winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface. " alt="" coords="1337,259,1488,300"/>
-<area shape="rect" id="node24" href="$time_8cpp_source.html" title="fastarduino/time.cpp" alt="" coords="835,177,993,203"/>
-<area shape="rect" id="node9" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="179,266,358,293"/>
-<area shape="rect" id="node18" href="$events_8h.html" title="Support for events management. " alt="" coords="671,266,827,293"/>
-<area shape="rect" id="node8" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer. " alt="" coords="903,437,1053,479"/>
-<area shape="rect" id="node10" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="177,355,307,382"/>
-<area shape="rect" id="node12" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="245,445,410,471"/>
-<area shape="rect" id="node16" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="519,527,699,553"/>
-<area shape="rect" id="node17" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="355,527,494,553"/>
-<area shape="rect" id="node15" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="2631,601,2816,628"/>
-<area shape="rect" id="node20" href="$scheduler_8h.html" title="Support for jobs scheduling. " alt="" coords="832,355,1007,382"/>
-<area shape="rect" id="node21" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="633,355,808,382"/>
-<area shape="rect" id="node29" href="$spi_8h.html" title="SPI support for AVR MCU. " alt="" coords="1619,177,1750,203"/>
-<area shape="rect" id="node31" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;, like the 74HC595. " alt="" coords="2331,169,2481,211"/>
-<area shape="rect" id="node32" href="$pwm_8h.html" title="PWM API. " alt="" coords="1899,177,2043,203"/>
-<area shape="rect" id="node30" href="$spi_8cpp_source.html" title="fastarduino/spi.cpp" alt="" coords="1687,266,1834,293"/>
-<area shape="rect" id="node34" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="1909,259,2053,300"/>
-<area shape="rect" id="node39" href="$linked__list_8cpp_source.html" title="fastarduino/linked\l_list.cpp" alt="" coords="903,259,1043,300"/>
+<area shape="rect" id="node2" href="$time_8h.html" title="Simple time utilities. " alt="" coords="1145,87,1288,114"/>
+<area shape="rect" id="node4" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip. " alt="" coords="401,169,552,211"/>
+<area shape="rect" id="node5" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2..." alt="" coords="1583,259,1733,300"/>
+<area shape="rect" id="node6" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="1867,437,2017,479"/>
+<area shape="rect" id="node7" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="577,177,729,203"/>
+<area shape="rect" id="node8" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="695,266,858,293"/>
+<area shape="rect" id="node12" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="25,445,240,471"/>
+<area shape="rect" id="node15" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="2009,527,2179,553"/>
+<area shape="rect" id="node26" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip. " alt="" coords="1628,80,1779,121"/>
+<area shape="rect" id="node27" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip. " alt="" coords="1803,80,1953,121"/>
+<area shape="rect" id="node28" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="2029,87,2169,114"/>
+<area shape="rect" id="node33" href="$servo_8h.html" title="API to handle servomotors. " alt="" coords="2452,259,2603,300"/>
+<area shape="rect" id="node35" href="$pulse__timer_8h.html" title="PulseTimer API. " alt="" coords="2433,177,2621,203"/>
+<area shape="rect" id="node36" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="1783,177,1912,203"/>
+<area shape="rect" id="node37" href="$timer_8h.html" title="Timer API. " alt="" coords="2263,87,2410,114"/>
+<area shape="rect" id="node38" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="152,169,292,211"/>
+<area shape="rect" id="node40" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="1763,355,1894,382"/>
+<area shape="rect" id="node3" href="$analog__input_8h.html" title="Analog Input API. " alt="" coords="1035,169,1179,211"/>
+<area shape="rect" id="node14" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="597,445,762,471"/>
+<area shape="rect" id="node20" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="1009,348,1163,389"/>
+<area shape="rect" id="node23" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer. " alt="" coords="1188,348,1339,389"/>
+<area shape="rect" id="node24" href="$winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface. " alt="" coords="1356,259,1507,300"/>
+<area shape="rect" id="node25" href="$time_8cpp_source.html" title="fastarduino/time.cpp" alt="" coords="854,177,1011,203"/>
+<area shape="rect" id="node10" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="442,266,621,293"/>
+<area shape="rect" id="node19" href="$events_8h.html" title="Support for events management. " alt="" coords="261,266,417,293"/>
+<area shape="rect" id="node9" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer. " alt="" coords="1033,437,1184,479"/>
+<area shape="rect" id="node11" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="442,355,573,382"/>
+<area shape="rect" id="node13" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="407,445,573,471"/>
+<area shape="rect" id="node17" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="681,527,861,553"/>
+<area shape="rect" id="node18" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="518,527,657,553"/>
+<area shape="rect" id="node16" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="2001,601,2187,628"/>
+<area shape="rect" id="node21" href="$scheduler_8h.html" title="Support for jobs scheduling. " alt="" coords="44,355,219,382"/>
+<area shape="rect" id="node22" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="243,355,417,382"/>
+<area shape="rect" id="node29" href="$spi_8h.html" title="SPI support for AVR MCU. " alt="" coords="1627,177,1758,203"/>
+<area shape="rect" id="node31" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;, like the 74HC595. " alt="" coords="2039,169,2189,211"/>
+<area shape="rect" id="node32" href="$pwm_8h.html" title="PWM API. " alt="" coords="2265,177,2409,203"/>
+<area shape="rect" id="node30" href="$spi_8cpp_source.html" title="fastarduino/spi.cpp" alt="" coords="1758,266,1905,293"/>
+<area shape="rect" id="node34" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="2155,259,2299,300"/>
+<area shape="rect" id="node39" href="$linked__list_8cpp_source.html" title="fastarduino/linked\l_list.cpp" alt="" coords="97,259,237,300"/>
 </map>

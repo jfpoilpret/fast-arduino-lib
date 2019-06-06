@@ -1,5 +1,8 @@
 var dir_c8147ad417a9a009ff67e0ffb1a47300 =
 [
+    [ "common_magneto.h", "common__magneto_8h.html", [
+      [ "Sensor3D", "structdevices_1_1magneto_1_1_sensor3_d.html", "structdevices_1_1magneto_1_1_sensor3_d" ]
+    ] ],
     [ "ds1307.h", "ds1307_8h.html", "ds1307_8h" ],
     [ "hmc5883l.h", "hmc5883l_8h.html", "hmc5883l_8h" ],
     [ "mcp23017.h", "mcp23017_8h.html", "mcp23017_8h" ],

@@ -1,14 +1,13 @@
 var searchData=
 [
-  ['magnetic_5ffields',['magnetic_fields',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae418196599a262fceba02f02860c8866',1,'devices::magneto::HMC5883L']]],
+  ['magnetic_5ffields',['magnetic_fields',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#abc2da0e52ab8a01b39c420741e9369af',1,'devices::magneto::HMC5883L']]],
   ['magnetic_5fheading',['magnetic_heading',['../namespacedevices_1_1magneto.html#a3b4ef6b88b5accbf034aa8728c711715',1,'devices::magneto']]],
-  ['magneticfields',['MagneticFields',['../structdevices_1_1magneto_1_1_magnetic_fields.html',1,'devices::magneto']]],
   ['manager',['MANAGER',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a',1,'devices::magneto::HMC5883L::MANAGER()'],['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4d87168983b0d46ffd73668f77350141',1,'devices::mcp23017::MCP23017::MANAGER()'],['../classdevices_1_1magneto_1_1_m_p_u6050.html#af1e0ae03e7121d9f33aa12862554f61f',1,'devices::magneto::MPU6050::MANAGER()'],['../classi2c_1_1_i2_c_device.html#aafb695d2281ebc69499703e7a18913e8',1,'i2c::I2CDevice::MANAGER()']]],
   ['manipulator',['Manipulator',['../classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050',1,'streams::ostream::Manipulator()'],['../classstreams_1_1istream.html#aed4a47070eed37c6d9544166bcf58545',1,'streams::istream::Manipulator()']]],
   ['map',['map',['../namespaceutils.html#a608f8edf36fb4a7c58dd01232e07c0c8',1,'utils']]],
   ['map_5fphysical_5fto_5fraw',['map_physical_to_raw',['../namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32',1,'utils']]],
   ['map_5fraw_5fto_5fphysical',['map_raw_to_physical',['../namespaceutils.html#a610e02474f969fc747fa1725b79e252c',1,'utils']]],
-  ['mask',['MASK',['../classgpio_1_1_fast_masked_port.html#a9fec25a1788301cd9ba3bfc3d7adbe6b',1,'gpio::FastMaskedPort::MASK()'],['../classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0',1,'gpio::FastPinType::MASK()']]],
+  ['mask',['MASK',['../classgpio_1_1_fast_masked_port.html#a9fec25a1788301cd9ba3bfc3d7adbe6b',1,'gpio::FastMaskedPort::MASK()'],['../classgpio_1_1_fast_pin_type.html#aca949d07a25a1d15a2a43b4cdd5b72c0',1,'gpio::FastPinType::MASK()'],['../namespaceboard.html#afafce89c5522c90e23ac41931c4a8430',1,'board::MASK()']]],
   ['max',['MAX',['../classanalog_1_1_p_w_m_output.html#a8061b4ae8b66b3027e2dce08f5a8ae01',1,'analog::PWMOutput']]],
   ['max_5fprecision',['MAX_PRECISION',['../classstreams_1_1ios__base.html#afb443852e1cbb99456e06f78532f2974',1,'streams::ios_base']]],
   ['max_5frange_5fm',['MAX_RANGE_M',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#ac33ea5af29450962ac8033b3f8685814',1,'devices::sonar::HCSR04::MAX_RANGE_M()'],['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750',1,'devices::sonar::MultiHCSR04::MAX_RANGE_M()']]],

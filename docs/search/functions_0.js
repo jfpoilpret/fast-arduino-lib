@@ -2,6 +2,7 @@ var searchData=
 [
   ['accel_5fmeasures',['accel_measures',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a9ccd7c0782612f0d7a619f6a548e4ead',1,'devices::magneto::MPU6050']]],
   ['accel_5frange_5fg',['ACCEL_RANGE_G',['../namespacedevices_1_1magneto.html#acd40d82344b841bb27d70c80361b9145',1,'devices::magneto']]],
+  ['active',['active',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#afacb4049db334728566e5bb77f76d759',1,'devices::sonar::MultiHCSR04']]],
   ['all_5fmeasures',['all_measures',['../classdevices_1_1magneto_1_1_m_p_u6050.html#ac3ab03f8e8c81c4e373f9700e8904e20',1,'devices::magneto::MPU6050']]],
   ['all_5fready',['all_ready',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a91a6278019999628c1b7552272567a55',1,'devices::sonar::MultiHCSR04']]],
   ['are_5finterrupts_5fenabled',['are_interrupts_enabled',['../classtimer_1_1_timer.html#a54448770d116b18757554946ff89578f',1,'timer::Timer']]],

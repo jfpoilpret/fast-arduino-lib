@@ -45,6 +45,7 @@ var hierarchy =
     [ "time::auto_delay", "classtime_1_1auto__delay.html", null ],
     [ "time::auto_millis", "classtime_1_1auto__millis.html", null ],
     [ "timer::Calculator< NTIMER_ >", "structtimer_1_1_calculator.html", null ],
+    [ "types_traits::derives_from< T, B >", "structtypes__traits_1_1derives__from.html", null ],
     [ "devices::WinBond< CS >::Device", "structdevices_1_1_win_bond_1_1_device.html", null ],
     [ "eeprom::EEPROM", "classeeprom_1_1_e_e_p_r_o_m.html", [
       [ "eeprom::QueuedWriter", "classeeprom_1_1_queued_writer.html", null ]
@@ -96,6 +97,7 @@ var hierarchy =
     ] ],
     [ "LinkImpl", null, [
       [ "containers::Link< T_ >", "classcontainers_1_1_link.html", null ],
+      [ "containers::LinkWrapper< T_, TREF_, CTREF_ >", "classcontainers_1_1_link_wrapper.html", null ],
       [ "containers::Link< EventHandler< EVENT > >", "classcontainers_1_1_link.html", [
         [ "events::EventHandler< EVENT >", "classevents_1_1_event_handler.html", null ]
       ] ],
@@ -108,7 +110,6 @@ var hierarchy =
         [ "events::Job", "classevents_1_1_job.html", null ]
       ] ]
     ] ],
-    [ "devices::magneto::MagneticFields", "structdevices_1_1magneto_1_1_magnetic_fields.html", null ],
     [ "devices::sonar::MultiHCSR04< NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ >", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html", null ],
     [ "streams::null_ostream", "classstreams_1_1null__ostream.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::observe_tx_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html", null ],

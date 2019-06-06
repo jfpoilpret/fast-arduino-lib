@@ -6,6 +6,7 @@ var searchData=
   ['begin_5f',['begin_',['../classtimer_1_1_r_t_t.html#a6b23a2de5d3adb282bf69e76a21e1e44',1,'timer::RTT::begin_()'],['../classtimer_1_1_timer.html#aca09928402314708df17ca6507acf007',1,'timer::Timer::begin_()']]],
   ['bin',['bin',['../namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1',1,'streams']]],
   ['binary_5fto_5fbcd',['binary_to_bcd',['../namespaceutils.html#a76076365828136f5178f279fb3c129de',1,'utils']]],
+  ['bit',['BIT',['../namespaceboard.html#a1424210697e9c37fc24ba71d561ed5be',1,'board']]],
   ['boolalpha',['boolalpha',['../namespacestreams.html#a7f0401ee59ec02e764b1ab85f32659b6',1,'streams']]],
   ['broadcast',['broadcast',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4',1,'devices::rf::NRF24L01']]]
 ];

@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classgpio_1_1_fast_port.html" title="API that manipulates a whole digital IO port. " alt="" coords="5,5,187,32"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_i2_c_device.html" title="i2c::I2CDevice\&lt; i2c\l::I2CMode::Standard \&gt;" alt="" coords="5,5,172,47"/>
+<area shape="rect" id="node2" href="$classdevices_1_1rtc_1_1_d_s1307.html" title="I2C device driver for the DS1307 RTC chip. " alt="" coords="220,13,375,39"/>
 </map>

@@ -7,5 +7,6 @@ var classdevices_1_1audio_1_1_tone_player =
     [ "play_flash", "classdevices_1_1audio_1_1_tone_player.html#a769aaafb0a81435806d7317edc9f9e63", null ],
     [ "play", "classdevices_1_1audio_1_1_tone_player.html#afb7992dc1517178e677d01b984e00e0f", null ],
     [ "play_eeprom", "classdevices_1_1audio_1_1_tone_player.html#ac6c611fc69de8fd2e5236d22bfb4707d", null ],
-    [ "play_flash", "classdevices_1_1audio_1_1_tone_player.html#a07807774066b59ae95c33e7426c88e19", null ]
+    [ "play_flash", "classdevices_1_1audio_1_1_tone_player.html#a07807774066b59ae95c33e7426c88e19", null ],
+    [ "stop", "classdevices_1_1audio_1_1_tone_player.html#a7435df818813e53569faeba66bf839c9", null ]
 ];

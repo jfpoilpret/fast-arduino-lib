@@ -122,7 +122,7 @@ class devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;::QTonePlay</h3>
 <p>An optimized surrogate to <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> structure. </p>
 <p>Contrarily to <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>, it does not store <code>Tone</code> (i.e. frequency) but Timer prescaler and counter for the desired frequency. The advantage is that when you construct a <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code> from constant tones, each tone wll be converted to timer prescaler and counter at compile-time, hence the generated code is smaller and more efficient; this can be useful when your MCU is limited in data size. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00133">133</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00132">132</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="adc0540c33cf3ef773cc9966166a59cb6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adc0540c33cf3ef773cc9966166a59cb6">&#9670;&nbsp;</a></span>QTonePlay() <span class="overload">[1/2]</span></h2>
@@ -152,7 +152,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <p>Default constructor, used only to declare an uninitialized <code><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a></code> variable. </p>
 <p>You should always ensure you replace such a variable with one constructed with the next constructor. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html#a4e3f64b23e817511b6f8b2742b351c44" title="Construct an optimized tone play for the provided tone and duration. ">QTonePlay(Tone, uint16_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00148">148</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00147">147</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -201,7 +201,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00159">159</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00158">158</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
