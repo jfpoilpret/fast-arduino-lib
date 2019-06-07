@@ -278,7 +278,7 @@ namespace streams
 		 * letter when writing floating point numbers. Base prefixes (`0x` or `0b`) are
 		 * not affected.
 		 */
-		static constexpr fmtflags uppercase = 0x8000;
+		static constexpr fmtflags uppercase = 0x8000U;
 
 		/**
 		 * Set new format flags for this stream.
@@ -462,19 +462,19 @@ namespace streams
 			fill_ = ' ';
 		}
 		// Conversions from string
-		void convert(const char* token, bool& b)
+		void convert(const char* token, bool& value)
 		{
 			if (flags() & boolalpha)
-				b = (strcmp(token, "true") == 0);
+				value = (strcmp(token, "true") == 0);
 			else
-				b = (atol(token) != 0);
+				value = (atol(token) != 0);
 		}
-		void convert(const char* token, double& v)
+		void convert(const char* token, double& value)
 		{
 			char* endptr;
-			double value = strtod(token, &endptr);
+			double val = strtod(token, &endptr);
 			if (endptr != token)
-				v = value;
+				value = val;
 			else
 				setstate(failbit);
 		}
@@ -483,85 +483,85 @@ namespace streams
 			if ((base() == 2) && ((strncmp(token, "0b0", 3) == 0) || (strncmp(token, "0b1", 3) == 0))) return token + 2;
 			return token;
 		}
-		bool convert(const char* token, long& v)
+		bool convert(const char* token, long& value)
 		{
 			char* endptr;
-			long value = strtol(binary_token(token), &endptr, base());
+			long val = strtol(binary_token(token), &endptr, base());
 			if (endptr != token)
-				v = value;
+				value = val;
 			else
 				setstate(failbit);
 			return (endptr != token);
 		}
-		bool convert(const char* token, unsigned long& v)
+		bool convert(const char* token, unsigned long& value)
 		{
 			char* endptr;
-			unsigned long value = strtoul(binary_token(token), &endptr, base());
+			unsigned long val = strtoul(binary_token(token), &endptr, base());
 			if (endptr != token)
-				v = value;
+				value = val;
 			else
 				setstate(failbit);
 			return (endptr != token);
 		}
-		void convert(const char* token, int& v)
+		void convert(const char* token, int& value)
 		{
-			long value;
-			if (convert(token, value)) v = (int) value;
+			long val;
+			if (convert(token, val)) value = (int) val;
 		}
-		void convert(const char* token, unsigned int& v)
+		void convert(const char* token, unsigned int& value)
 		{
-			unsigned long value;
-			if (convert(token, value)) v = (unsigned int) value;
+			unsigned long val;
+			if (convert(token, val)) value = (unsigned int) val;
 		}
 
 		// Conversions to string
-		void convert(ostreambuf& out, int v) const
+		void convert(ostreambuf& out, int value) const
 		{
 			// Allocate sufficient size for bin representation
 			char buffer[sizeof(int) * 8 + 1];
-			format_number(out, itoa(v, buffer, base()));
+			format_number(out, itoa(value, buffer, base()));
 		}
-		void convert(ostreambuf& out, unsigned int v) const
+		void convert(ostreambuf& out, unsigned int value) const
 		{
 			// Allocate sufficient size for bin representation
 			char buffer[sizeof(unsigned int) * 8 + 1];
-			format_number(out, utoa(v, buffer, base()));
+			format_number(out, utoa(value, buffer, base()));
 		}
-		void convert(ostreambuf& out, long v) const
+		void convert(ostreambuf& out, long value) const
 		{
 			// Allocate sufficient size for bin representation
 			char buffer[sizeof(long) * 8 + 1];
-			format_number(out, ltoa(v, buffer, base()));
+			format_number(out, ltoa(value, buffer, base()));
 		}
-		void convert(ostreambuf& out, unsigned long v) const
+		void convert(ostreambuf& out, unsigned long value) const
 		{
 			// Allocate sufficient size for bin representation
 			char buffer[sizeof(unsigned long) * 8 + 1];
-			format_number(out, ultoa(v, buffer, base()));
+			format_number(out, ultoa(value, buffer, base()));
 		}
-		static size_t double_digits(double v)
+		static size_t double_digits(double value)
 		{
-			int digits = int(log10(fabs(v)));
+			int digits = int(log10(fabs(value)));
 			if (digits < 0)
 				return 1;
 			else
 				return size_t(digits + 1);
 		}
-		bool is_too_large(double v) const
+		bool is_too_large(double value) const
 		{
 			// Number of chars = sign + digits before DP + DP + precision + \0
-			return (1 + double_digits(v) + 1 + precision() + 1 > DOUBLE_BUFFER_SIZE);
+			return (1 + double_digits(value) + 1 + precision() + 1 > DOUBLE_BUFFER_SIZE);
 		}
-		void convert(ostreambuf& out, double v) const
+		void convert(ostreambuf& out, double value) const
 		{
 			// Allocate sufficient size for fixed/scientific representation with precision max = 16
 			// Need 1 more for sign, 1 for DP, 1 for first digit, 4 for e+00
 			char buffer[DOUBLE_BUFFER_SIZE];
-			// If v is too large, force scientific anyway
-			if ((flags() & scientific) || is_too_large(v))
+			// If value is too large, force scientific anyway
+			if ((flags() & scientific) || is_too_large(value))
 			{
 				const uint8_t DTOSTRE_MAX_PRECISION = 7;
-				dtostre(v, buffer, precision(), 0);
+				dtostre(value, buffer, precision(), 0);
 				if (precision() > DTOSTRE_MAX_PRECISION)
 				{
 					// If precision() > 7, then it is limited to 7 by dtostre(), add 0 manually then
@@ -576,12 +576,12 @@ namespace streams
 				}
 			}
 			else if (flags() & fixed)
-				dtostrf(v, 0, precision(), buffer);
+				dtostrf(value, 0, precision(), buffer);
 			else
 			{
 				// In this mode any trailing 0 after DP is discarded
 				// DP is also discarded if there are only 0 after it
-				dtostrf(v, 0, precision(), buffer);
+				dtostrf(value, 0, precision(), buffer);
 				char* dp = strchr(buffer, '.');
 				if (dp)
 				{
@@ -595,19 +595,19 @@ namespace streams
 			upper(buffer, true);
 			justify(out, buffer, add_sign(buffer, true), 0);
 		}
-		void convert(ostreambuf& out, char c) const
+		void convert(ostreambuf& out, char value) const
 		{
 			char buffer[1 + 1];
-			buffer[0] = c;
+			buffer[0] = value;
 			buffer[1] = 0;
 			justify(out, buffer, false, 0);
 		}
-		void convert(ostreambuf& out, bool b) const
+		void convert(ostreambuf& out, bool value) const
 		{
 			if (flags() & boolalpha)
-				justify(out, (b ? F("true") : F("false")));
+				justify(out, (value ? F("true") : F("false")));
 			else
-				convert(out, (b ? 1 : 0));
+				convert(out, (value ? 1 : 0));
 		}
 
 		void upper(char* input, bool is_float = false) const

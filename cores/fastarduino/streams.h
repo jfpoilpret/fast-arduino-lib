@@ -64,7 +64,7 @@ namespace streams
 		 * Construct a formatted output wrapper of @p stream
 		 * @param stream the output stream to be wrapped
 		 */
-		ostream(ostreambuf& stream) : stream_{stream} {}
+		explicit ostream(ostreambuf& stream) : stream_{stream} {}
 
 		ostream& operator=(const ostream&) = delete;
 
@@ -360,7 +360,7 @@ namespace streams
 		 * Construct a formatted input wrapper of @p stream
 		 * @param stream the input stream to be wrapped
 		 */
-		istream(istreambuf& stream) : stream_{stream} {}
+		explicit istream(istreambuf& stream) : stream_{stream} {}
 
 		istream& operator=(const istream&) = delete;
 

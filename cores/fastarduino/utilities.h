@@ -357,7 +357,7 @@ namespace utils
 	template<typename T> union ToUint8
 	{
 		static_assert(sizeof(T) == 1, "T must be a one-byte size type");
-		ToUint8(T value) : value(value) {}
+		explicit ToUint8(T value) : value(value) {}
 		T value;
 		uint8_t as_uint8;
 	};

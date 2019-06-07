@@ -72,7 +72,7 @@ namespace containers
 		 * for optimization reasons, only `SIZE - 1` items can be held in the buffer.
 		 * @param buffer the buffer used by this queue to store its items
 		 */
-		template<uint8_t SIZE> Queue(T (&buffer)[SIZE]) : buffer_{buffer}, size_{SIZE}, head_{0}, tail_{0} {}
+		template<uint8_t SIZE> explicit Queue(T (&buffer)[SIZE]) : buffer_{buffer}, size_{SIZE}, head_{0}, tail_{0} {}
 
 		/**
 		 * Push @p item to the end of this queue, provided there is still available
@@ -211,7 +211,7 @@ namespace containers
 		 */
 		inline bool full_() const
 		{
-			return tail_ + 1 == (head_ ? head_ : size_);
+			return (tail_ + 1) == (head_ ? head_ : size_);
 		}
 
 		/**

@@ -44,7 +44,7 @@ namespace streams
 		using QUEUE = Queue<char, char>;
 
 	public:
-		template<uint8_t SIZE> ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false} {}
+		template<uint8_t SIZE> explicit ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -207,7 +207,7 @@ namespace streams
 		 */
 		static const int EOF = -1;
 
-		template<uint8_t SIZE> istreambuf(char (&buffer)[SIZE]) : QUEUE{buffer} {}
+		template<uint8_t SIZE> explicit istreambuf(char (&buffer)[SIZE]) : QUEUE{buffer} {}
 
 		/**
 		 * @return number of available characters in buffer

@@ -146,7 +146,7 @@ namespace interrupt
 		 * @sa enable()
 		 * @sa set_trigger()
 		 */
-		INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)
+		explicit INTSignal(InterruptTrigger trigger = InterruptTrigger::ANY_CHANGE)
 		{
 			set_trigger_(trigger);
 		}

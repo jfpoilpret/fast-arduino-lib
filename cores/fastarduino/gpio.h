@@ -203,7 +203,7 @@ namespace gpio
 		 * This is useful if default pins directions and values are OK for you and 
 		 * you want to avoid calling mode setup on target MCU.
 		 */
-		FastPort() {}
+		FastPort() = default;
 
 		/**
 		 * Construct a `FastPort` with the given direction byte and initial values
@@ -377,7 +377,7 @@ namespace gpio
 		 * This is useful if default pins directions and values are OK for you and 
 		 * you want to avoid calling mode setup on target MCU.
 		 */
-		FastMaskedPort() {}
+		FastMaskedPort() = default;
 
 		/**
 		 * Construct a `FastMaskedPort` for the pins selected by the provide 
@@ -629,7 +629,7 @@ namespace gpio
 	template<> class FastPin<board::Port::NONE, 0>
 	{
 	public:
-		FastPin() INLINE {}
+		FastPin() INLINE = default;
 		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
 		void set() INLINE {}
 		void clear() INLINE {}

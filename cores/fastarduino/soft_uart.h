@@ -70,7 +70,7 @@ namespace serial::soft
 	class AbstractUATX : virtual public UARTErrors, private streams::ostreambuf
 	{
 	protected:
-		template<uint8_t SIZE_TX> AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
+		template<uint8_t SIZE_TX> explicit AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
 
 		streams::ostream out()
 		{
@@ -118,8 +118,8 @@ namespace serial::soft
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission
 		 */
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}
-		{}
+		template<uint8_t SIZE_TX> 
+		explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true} {}
 
 		/**
 		 * Enable the transmitter. 
@@ -220,7 +220,7 @@ namespace serial::soft
 	class AbstractUARX : virtual public UARTErrors, private streams::istreambuf
 	{
 	protected:
-		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input} {}
+		template<uint8_t SIZE_RX> explicit AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input} {}
 
 		streams::istreambuf& in_()
 		{
@@ -333,7 +333,8 @@ namespace serial::soft
 		 * `in()`.
 		 * @sa REGISTER_UART_INT_ISR()
 		 */
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
+		template<uint8_t SIZE_RX> 
+		explicit UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -417,7 +418,8 @@ namespace serial::soft
 		 * `in()`.
 		 * @sa REGISTER_UART_PCI_ISR()
 		 */
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
+		template<uint8_t SIZE_RX>
+		explicit UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}

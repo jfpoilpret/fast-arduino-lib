@@ -197,7 +197,7 @@ int main()
 					else if (ECHO_LEDS[i].echo & event.ready())
 					{
 						ready_leds |= ECHO_LEDS[i].led; 
-						if	(event.time().as_real_time() - times[i] <= DISTANCE_THRESHOLD)
+						if	(event.time().as_real_time() - times[i] <= time::RTTTime{DISTANCE_THRESHOLD})
 							alarms |= ECHO_LEDS[i].led;
 					}
 				}

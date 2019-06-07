@@ -31,12 +31,12 @@ namespace board_traits
 	template<typename T> class REGISTER
 	{
 	public:
-		constexpr REGISTER() : ADDR(0xFFFF) {}
+		constexpr REGISTER() : ADDR(0xFFFFU) {}
 		constexpr REGISTER(uint16_t ADDR) INLINE : ADDR(ADDR) {}
 
 		constexpr bool is_no_reg() const INLINE
 		{
-			return ADDR == 0xFFFF;
+			return ADDR == 0xFFFFU;
 		}
 		void operator=(int value) const INLINE
 		{
@@ -106,7 +106,7 @@ namespace board_traits
 
 	using namespace ::board;
 	using REG = uint16_t;
-	static constexpr REG NO_REG = 0xFFFF;
+	static constexpr REG NO_REG = 0xFFFFU;
 
 	template<Port P> struct Port_trait
 	{
@@ -202,13 +202,13 @@ namespace board_traits
 		static constexpr const uint8_t MUX_MASK1 = 0;
 		static constexpr const uint8_t MUX_MASK2 = 0;
 		static constexpr const bool IS_BANDGAP = false;
-		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFF;
+		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFFU;
 	};
-	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFF> struct AnalogPin_trait_impl
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFFU> struct AnalogPin_trait_impl
 	{
 		static constexpr const uint8_t MUX_MASK1 = MUXM1;
 		static constexpr const uint8_t MUX_MASK2 = MUXM2;
-		static constexpr const bool IS_BANDGAP = (VOLTAGE != 0xFFFF);
+		static constexpr const bool IS_BANDGAP = (VOLTAGE != 0xFFFFU);
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
 	};
 

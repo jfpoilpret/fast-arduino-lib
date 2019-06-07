@@ -52,7 +52,7 @@ namespace time
 		 * Construct a new `RTTTime` value.
 		 * @param micros number of microseconds (can be > 1000us)
 		 */
-		RTTTime(uint32_t micros = 0UL) : millis(micros / 1000UL), micros(micros % 1000UL) {}
+		explicit RTTTime(uint32_t micros = 0UL) : millis(micros / 1000UL), micros(micros % 1000UL) {}
 
 		/**
 		 * Construct a new `RTTTime` value.
@@ -420,7 +420,7 @@ namespace time
 		 * for later restore.
 		 * @param new_delay new function pointer to replace `time::delay`
 		 */
-		auto_delay(DELAY_PTR new_delay) INLINE : old_delay_{delay}
+		explicit auto_delay(DELAY_PTR new_delay) INLINE : old_delay_{delay}
 		{
 			delay = new_delay;
 		}
@@ -461,7 +461,7 @@ namespace time
 		 * for later restore.
 		 * @param new_millis new function pointer to replace `time::millis`
 		 */
-		auto_millis(MILLIS_PTR new_millis) INLINE : old_millis_{millis}
+		explicit auto_millis(MILLIS_PTR new_millis) INLINE : old_millis_{millis}
 		{
 			millis = new_millis;
 		}
