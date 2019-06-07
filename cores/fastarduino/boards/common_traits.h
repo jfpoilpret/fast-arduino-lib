@@ -28,15 +28,18 @@
 
 namespace board_traits
 {
+	using REG = uint16_t;
+	static constexpr REG NO_REG = 0xFFFFU;
+
 	template<typename T> class REGISTER
 	{
 	public:
-		constexpr REGISTER() : ADDR(0xFFFFU) {}
+		constexpr REGISTER() : ADDR(NO_REG) {}
 		constexpr REGISTER(uint16_t ADDR) INLINE : ADDR(ADDR) {}
 
 		constexpr bool is_no_reg() const INLINE
 		{
-			return ADDR == 0xFFFFU;
+			return ADDR == NO_REG;
 		}
 		void operator=(int value) const INLINE
 		{
@@ -105,8 +108,6 @@ namespace board_traits
 	using REG16 = REGISTER<uint16_t>;
 
 	using namespace ::board;
-	using REG = uint16_t;
-	static constexpr REG NO_REG = 0xFFFFU;
 
 	template<Port P> struct Port_trait
 	{
