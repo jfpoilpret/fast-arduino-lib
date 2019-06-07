@@ -488,7 +488,8 @@ namespace containers
 	{
 		if (full_()) return false;
 		buffer_[tail_] = item;
-		if (++tail_ == size_) tail_ = 0;
+		++tail_;
+		if (tail_ == size_) tail_ = 0;
 		return true;
 	}
 
@@ -496,7 +497,8 @@ namespace containers
 	{
 		if (empty_()) return false;
 		item = buffer_[head_];
-		if (++head_ == size_) head_ = 0;
+		++head_;
+		if (head_ == size_) head_ = 0;
 		return true;
 	}
 	/// @endcond

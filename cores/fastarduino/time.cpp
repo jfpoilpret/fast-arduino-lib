@@ -26,7 +26,7 @@ void time::yield()
 
 time::RTTTime time::delta(const RTTTime& time1, const RTTTime& time2)
 {
-	uint32_t millis = (time1.millis <= time2.millis ? time2.millis - time1.millis : 0);
+	uint32_t millis = ((time1.millis <= time2.millis) ? (time2.millis - time1.millis) : 0);
 	uint16_t micros = 0;
 	if (time1.micros <= time2.micros)
 		micros = time2.micros - time1.micros;
@@ -41,7 +41,7 @@ time::RTTTime time::delta(const RTTTime& time1, const RTTTime& time2)
 uint32_t time::since(uint32_t start_ms)
 {
 	uint32_t now = time::millis();
-	return (start_ms <= now ? now - start_ms : 0);
+	return ((start_ms <= now) ? (now - start_ms) : 0);
 }
 
 void time::default_delay(uint32_t ms)

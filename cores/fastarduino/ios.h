@@ -550,7 +550,7 @@ namespace streams
 		bool is_too_large(double value) const
 		{
 			// Number of chars = sign + digits before DP + DP + precision + \0
-			return (1 + double_digits(value) + 1 + precision() + 1 > DOUBLE_BUFFER_SIZE);
+			return (1 + double_digits(value) + 1 + precision() + 1) > DOUBLE_BUFFER_SIZE;
 		}
 		void convert(ostreambuf& out, double value) const
 		{
@@ -587,7 +587,7 @@ namespace streams
 				{
 					// Number has a decimal point, remove all trailing zeros
 					char* reverse = buffer + strlen(buffer) - 1;
-					while (reverse != dp && *reverse == '0') *reverse-- = 0;
+					while ((reverse != dp) && (*reverse == '0')) *reverse-- = 0;
 					// If there is no significant digit after DP, remove DP
 					if (reverse == dp) *reverse = 0;
 				}
@@ -617,8 +617,15 @@ namespace streams
 
 		const char* prefix_base() const
 		{
-			if ((flags() & showbase) && (flags() & (bin | oct | hex)))
-				return (flags() & bin) ? "0b" : (flags() & oct) ? "0" : "0x";
+			if (flags() & showbase)
+			{
+				if (flags() & bin)
+					return "0b";
+				if (flags() & oct)
+					return "0";
+				if (flags() & hex)
+					return "0x";
+			}
 			return nullptr;
 		}
 

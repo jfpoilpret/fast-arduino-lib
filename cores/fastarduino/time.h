@@ -188,7 +188,7 @@ namespace time
 	 */
 	inline bool operator==(const RTTTime& a, const RTTTime& b)
 	{
-		return a.millis == b.millis && a.micros == b.micros;
+		return (a.millis == b.millis) && (a.micros == b.micros);
 	}
 
 	/**
@@ -200,7 +200,7 @@ namespace time
 	 */
 	inline bool operator!=(const RTTTime& a, const RTTTime& b)
 	{
-		return a.millis != b.millis || a.micros != b.micros;
+		return (a.millis != b.millis) || (a.micros != b.micros);
 	}
 
 	/**

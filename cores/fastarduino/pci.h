@@ -264,7 +264,7 @@ namespace interrupt
 		 */
 		inline void disable_pins(uint8_t mask)
 		{
-			synchronized TRAIT::PCMSK_ &= ~mask;
+			synchronized TRAIT::PCMSK_ &= uint8_t(~mask);
 		}
 
 		/**
@@ -427,7 +427,7 @@ namespace interrupt
 		 */
 		inline void disable_pins_(uint8_t mask)
 		{
-			TRAIT::PCMSK_ &= ~mask;
+			TRAIT::PCMSK_ &= uint8_t(~mask);
 		}
 
 		/**

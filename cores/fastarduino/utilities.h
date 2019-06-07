@@ -70,7 +70,12 @@ namespace utils
 	 */
 	template<typename T> constexpr T constrain(T value, T min, T max)
 	{
-		return value < min ? min : value > max ? max : value;
+		if (value < min)
+			return min;
+		else if (value > max)
+			return max;
+		else
+			return value;
 	}
 
 	/**
@@ -127,7 +132,12 @@ namespace utils
 	 */
 	constexpr uint32_t power_of_10(int8_t n)
 	{
-		return (n > 0 ? 10UL * power_of_10(n - 1) : n == 0 ? 1 : power_of_10(-n));
+		if (n > 0)
+			return 10UL * power_of_10(n - 1);
+		else if (n < 0)
+			return power_of_10(-n);
+		else
+			return 1;
 	}
 
 	/**
@@ -262,7 +272,7 @@ namespace utils
 	 */
 	constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 	{
-		return (high << 8) | low;
+		return uint16_t(high << 8) | low;
 	}
 
 	/**

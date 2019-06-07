@@ -460,9 +460,12 @@ namespace streams
 		 */
 		istream& ignore(size_t n = 1, int delim = istreambuf::EOF)
 		{
-			bool forever = !n;
-			while (forever || n--)
+			bool forever = (n == 0);
+			while (forever || (n > 0))
+			{
+				--n;
 				if (get() == delim) break;
+			}
 			return *this;
 		}
 
