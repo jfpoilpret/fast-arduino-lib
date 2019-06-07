@@ -3,7 +3,7 @@ Latest News
 
 FastArduino v1.2 has just been released on 6th June 2019.
 The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1).
-Please note that this version breaks compatibility on some API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.1).
+Please note that this version breaks compatibility on some API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.2).
 
 FastArduino
 ===========
