@@ -22,6 +22,10 @@
 // This internal macro is used by individual boards headers
 #define R_(REG) (uint16_t(REG))
 
+#ifndef UNUSED
+#define UNUSED __attribute__((unused))
+#endif
+
 #ifndef INLINE
 #define INLINE __attribute__((always_inline))
 #endif
@@ -276,7 +280,7 @@ namespace board_traits
 		static constexpr const uint8_t DOR_MASK = 0;
 		static constexpr const uint8_t FE_MASK = 0;
 		static constexpr const uint8_t UPE_MASK = 0;
-		static constexpr uint8_t UCSRC_value(serial::Parity parity, serial::StopBits stopbits)
+		static constexpr uint8_t UCSRC_value(serial::Parity parity UNUSED, serial::StopBits stopbits UNUSED)
 		{
 			return 0;
 		}
@@ -513,11 +517,11 @@ namespace board_traits
 		static constexpr const REG8 TIMSK_{};
 		static constexpr const uint8_t TIMSK_MASK = 0xFF;
 		static constexpr const REG8 TIFR_{};
-		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p UNUSED)
 		{
 			return 0;
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t interrupt)
+		static constexpr uint8_t TIMSK_INT_MASK(uint8_t interrupt UNUSED)
 		{
 			return 0;
 		}

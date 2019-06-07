@@ -17,7 +17,7 @@
 #include "power.h"
 
 time::DELAY_PTR time::delay = time::default_delay;
-time::MILLIS_PTR time::millis = 0;
+time::MILLIS_PTR time::millis = nullptr;
 
 void time::yield()
 {

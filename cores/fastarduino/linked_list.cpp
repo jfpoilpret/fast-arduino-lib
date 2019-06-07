@@ -25,21 +25,21 @@ namespace containers
 
 	bool LinkedListImpl::remove(LinkImpl* item)
 	{
-		if (head_ == 0) return false;
+		if (head_ == nullptr) return false;
 		if (head_ == item)
 		{
 			head_ = head_->next_;
-			item->next_ = 0;
+			item->next_ = nullptr;
 			return true;
 		}
 		LinkImpl* previous = head_;
 		LinkImpl* current = head_->next_;
-		while (current != 0)
+		while (current != nullptr)
 		{
 			if (current == item)
 			{
 				previous->next_ = current->next_;
-				item->next_ = 0;
+				item->next_ = nullptr;
 				return true;
 			}
 			previous = current;

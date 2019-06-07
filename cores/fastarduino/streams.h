@@ -201,7 +201,7 @@ namespace streams
 		 */
 		ostream& operator<<(const char* s)
 		{
-			justify(stream_, s, false, 0);
+			justify(stream_, s, false, nullptr);
 			after_insertion();
 			return *this;
 		}

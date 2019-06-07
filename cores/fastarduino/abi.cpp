@@ -19,7 +19,7 @@ namespace __cxxabiv1
 {
 	typedef int __guard;
 
-	void* __dso_handle = 0;
+	void* __dso_handle = nullptr;
 
 	extern "C"
 	{

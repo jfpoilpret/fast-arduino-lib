@@ -593,14 +593,14 @@ namespace streams
 				}
 			}
 			upper(buffer, true);
-			justify(out, buffer, add_sign(buffer, true), 0);
+			justify(out, buffer, add_sign(buffer, true), nullptr);
 		}
 		void convert(ostreambuf& out, char value) const
 		{
 			char buffer[1 + 1];
 			buffer[0] = value;
 			buffer[1] = 0;
-			justify(out, buffer, false, 0);
+			justify(out, buffer, false, nullptr);
 		}
 		void convert(ostreambuf& out, bool value) const
 		{
@@ -619,7 +619,7 @@ namespace streams
 		{
 			if ((flags() & showbase) && (flags() & (bin | oct | hex)))
 				return (flags() & bin) ? "0b" : (flags() & oct) ? "0" : "0x";
-			return 0;
+			return nullptr;
 		}
 
 		bool add_sign(const char* input, bool is_float = false) const
