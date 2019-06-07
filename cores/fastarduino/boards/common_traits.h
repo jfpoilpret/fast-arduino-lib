@@ -328,7 +328,7 @@ namespace board_traits
 		static constexpr const uint8_t BIT_SDA = SDA_;
 	};
 
-	enum TimerPrescalers : uint8_t
+	enum class TimerPrescalers : uint8_t
 	{
 		PRESCALERS_1_8_64_256_1024,
 		PRESCALERS_1_8_32_64_128_256_1024,

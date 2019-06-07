@@ -78,7 +78,7 @@ namespace types_traits
 	template<typename T> static constexpr bool is_uint8_or_uint16()
 	{
 		using TRAIT = Type_trait<T>;
-		return TRAIT::IS_INT && (TRAIT::SIZE <= sizeof(uint16_t)) && !TRAIT::IS_SIGNED;
+		return TRAIT::IS_INT && (TRAIT::SIZE <= sizeof(uint16_t)) && (!TRAIT::IS_SIGNED);
 	}
 
 	/**

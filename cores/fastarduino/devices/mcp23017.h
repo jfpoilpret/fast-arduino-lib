@@ -41,7 +41,7 @@ namespace devices::mcp23017
 	 * The port(s) to use in MCP23017 API. Most API are templates which argument
 	 * selects which MCP23017 port the API shall apply to.
 	 */
-	enum MCP23017Port : uint8_t
+	enum class MCP23017Port : uint8_t
 	{
 		/** The A port of MCP23017. The API applies only on Port A. */
 		PORT_A,
@@ -62,7 +62,7 @@ namespace devices::mcp23017
 	/**
 	 * The polarity of the MCP23017 INTA and INTB pins.
 	 */
-	enum InterruptPolarity : uint8_t
+	enum class InterruptPolarity : uint8_t
 	{
 		/**
 		 * The INT pins shall be active low, ie they are high by default, and 
