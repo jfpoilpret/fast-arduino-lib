@@ -39,7 +39,7 @@ namespace streams
 	public:
 		/**
 		 * Bitmask type to represent stream state flags.
-		 * This type is used as parameter or return value by methods `setstate`, 
+		 * This type is used as parameter or return value by methods `setstate`,
 		 * `rdstate` and `clear`.
 		 * 
 		 * The values passed and retrieved by these methods can be any valid combination
@@ -63,8 +63,8 @@ namespace streams
 		 */
 		static constexpr iostate eofbit = 0x01;
 		/** 
-		 * This bit is set when an input or operation failed due to a formatting 
-		 * error during extraction. 
+		 * This bit is set when an input or operation failed due to a formatting
+		 * error during extraction.
 		 */
 		static constexpr iostate failbit = 0x02;
 		/**
@@ -84,7 +84,7 @@ namespace streams
 		}
 
 		/**
-		 * Set the stream error flags state in addition to currently set flags. 
+		 * Set the stream error flags state in addition to currently set flags.
 		 * Essentially calls `clear(rdstate() | state)`.
 		 */
 		inline void setstate(iostate state)
@@ -93,7 +93,7 @@ namespace streams
 		}
 
 		/**
-		 * Set the stream error state flags by assigning them the value of @p state. 
+		 * Set the stream error state flags by assigning them the value of @p state.
 		 * By default, assigns ios::goodbit which has the effect of clearing all
 		 * error state flags.
 		 */
@@ -103,7 +103,7 @@ namespace streams
 		}
 
 		/**
-		 * @retval `true` if the most recent I/O operation on the stream completed 
+		 * @retval `true` if the most recent I/O operation on the stream completed
 		 * successfully. 
 		 * @retval `false` if any I/O operation has failed since last call to
 		 * `ios::clear()`.
@@ -117,7 +117,7 @@ namespace streams
 		}
 
 		/**
-		 * Return `true` if the associated stream has reached end-of-file. 
+		 * Return `true` if the associated stream has reached end-of-file.
 		 * Specifically, returns `true` if `ios::eofbit` is set in `rdstate()`.
 		 * @sa rdstate()
 		 * @sa eofbit
@@ -129,7 +129,7 @@ namespace streams
 
 		/**
 		 * Return `true` if an error has occurred on the associated stream,
-		 * since last time state was reset (`clear()` was called). 
+		 * since last time state was reset (`clear()` was called).
 		 * Specifically, returns `true` if `ios::badbit` or `ios::failbit` is set
 		 * in `rdstate()`.
 		 * @sa rdstate()
@@ -144,7 +144,7 @@ namespace streams
 
 		/**
 		 * Return `true` if a non-recoverable error has occurred on the associated
-		 * stream. 
+		 * stream.
 		 * Specifically, returns `true` if `ios::badbit` is set in `rdstate()`.
 		 * @sa rdstate()
 		 * @sa badbit
@@ -156,7 +156,7 @@ namespace streams
 
 		/**
 		 * Return `true` if an error has occurred on the associated stream,
-		 * since last time state was reset (`clear()` was called). 
+		 * since last time state was reset (`clear()` was called).
 		 * Actually, this is equivalent to calling `fail()`.
 		 * @sa fail()
 		 */
@@ -227,12 +227,12 @@ namespace streams
 		static constexpr fmtflags basefield = dec | bin | oct | hex;
 
 		/** 
-		 * Pad all output to `width()` characters, with `fill()` character appended 
+		 * Pad all output to `width()` characters, with `fill()` character appended
 		 * at the end so that the output appears left-adjusted.
 		 */
 		static constexpr fmtflags left = 0x0010;
 		/** 
-		 * Pad all output to `width()` characters, with `fill()` character added 
+		 * Pad all output to `width()` characters, with `fill()` character added
 		 * at the beginning so that the output appears right-adjusted.
 		 */
 		static constexpr fmtflags right = 0x0020;
@@ -273,7 +273,7 @@ namespace streams
 		/** Flush output after each insertion oepration. */
 		static constexpr fmtflags unitbuf = 0x4000;
 		/** 
-		 * Write uppercase letters instead of lowercase in certain insertion operations. 
+		 * Write uppercase letters instead of lowercase in certain insertion operations.
 		 * This applies to hexadecimal letters when writing integral numbers and exponent
 		 * letter when writing floating point numbers. Base prefixes (`0x` or `0b`) are
 		 * not affected.
@@ -299,7 +299,7 @@ namespace streams
 		}
 
 		/**
-		 * Set this stream's format flags whose bits are set in @p flags, leaving 
+		 * Set this stream's format flags whose bits are set in @p flags, leaving
 		 * unchanged the rest.
 		 * This is equivalent to `flags(flags | flags());`.
 		 * 
@@ -350,7 +350,7 @@ namespace streams
 
 		/**
 		 * Return the *fill* character.
-		 * The fill character is the character used by output insertion functions to 
+		 * The fill character is the character used by output insertion functions to
 		 * fill spaces when padding results to the field width.
 		 * Default fill character is a space.
 		 * @sa width()
@@ -362,7 +362,7 @@ namespace streams
 
 		/**
 		 * Set @p fill as new *fill* character for this stream.
-		 * The fill character is the character used by output insertion functions to 
+		 * The fill character is the character used by output insertion functions to
 		 * fill spaces when padding results to the field width.
 		 * @sa width()
 		 */
@@ -372,12 +372,12 @@ namespace streams
 		}
 
 		/**
-		 * Set minimum width used for displaying values. If a value's 
+		 * Set minimum width used for displaying values. If a value's
 		 * representation needs less than @p width characters for display, then
 		 * additional characters will be added before or after the value.
 		 * The filler character is determined by `fill()`, a space by default.
 		 * Padding side is determined by `flags()`: `left` or `right`.
-		 * Note that if the value representation needs more than @p width 
+		 * Note that if the value representation needs more than @p width
 		 * characters, then @p width will have no effect on display.
 		 * 
 		 * @param width the new width to use for next formatted output
@@ -393,9 +393,9 @@ namespace streams
 		}
 
 		/**
-		 * Get the current minimum width value (default = `0`) used for formatted 
+		 * Get the current minimum width value (default = `0`) used for formatted
 		 * output.
-		 * @return current minimum width 
+		 * @return current minimum width
 		 */
 		inline uint8_t width() const
 		{
@@ -403,7 +403,7 @@ namespace streams
 		}
 
 		/**
-		 * Set precision (number of digits after decimal point) used for 
+		 * Set precision (number of digits after decimal point) used for
 		 * displaying floating values. 
 		 * 
 		 * @param precision the new precision for next formatted output
@@ -414,7 +414,7 @@ namespace streams
 		}
 
 		/**
-		 * Get the current precision (default = `6`) used for formatted 
+		 * Get the current precision (default = `6`) used for formatted
 		 * floating values output.
 		 * @return current precision
 		 */
@@ -480,7 +480,7 @@ namespace streams
 		}
 		const char* binary_token(const char* token) const
 		{
-			if (base() == 2 && ((strncmp(token, "0b0", 3) == 0) || (strncmp(token, "0b1", 3) == 0))) return token + 2;
+			if ((base() == 2) && ((strncmp(token, "0b0", 3) == 0) || (strncmp(token, "0b1", 3) == 0))) return token + 2;
 			return token;
 		}
 		bool convert(const char* token, long& v)
@@ -568,11 +568,11 @@ namespace streams
 					// Size of the exponent part, always e+00 or e-00
 					const uint8_t EXPONENT_SIZE = 1 + 1 + 2;
 					// Find exponent marker 'e' and move exponent part right (including null)
-					char* exp = strchr(buffer, 'e');
+					char* exponent = strchr(buffer, 'e');
 					uint8_t added_zeros = precision() - DTOSTRE_MAX_PRECISION;
-					memmove(exp + added_zeros, exp, EXPONENT_SIZE + 1);
+					memmove(exponent + added_zeros, exponent, EXPONENT_SIZE + 1);
 					// Add '0' in the added space before exponent
-					memset(exp, '0', added_zeros);
+					memset(exponent, '0', added_zeros);
 				}
 			}
 			else if (flags() & fixed)
@@ -717,7 +717,7 @@ namespace streams
 
 	/**
 	 * Manipulator for an input stream, which will activate whitespace discarding
-	 * before formatted input operations on that stream .
+	 * before formatted input operations on that stream.
 	 */
 	template<typename FSTREAM> inline void skipws(FSTREAM& stream)
 	{
@@ -726,7 +726,7 @@ namespace streams
 
 	/**
 	 * Manipulator for an input stream, which will deactivate whitespace discarding
-	 * before formatted input operations on that stream .
+	 * before formatted input operations on that stream.
 	 */
 	template<typename FSTREAM> inline void noskipws(FSTREAM& stream)
 	{
@@ -772,7 +772,7 @@ namespace streams
 	/**
 	 * Set the ios::boolalpha format flag for @p stream.
 	 * When the boolalpha format flag is set, bool values are inserted/extracted
-	 * by their textual representation: either `true` or `false`, instead of 
+	 * by their textual representation: either `true` or `false`, instead of
 	 * integral values.
 	 * 
 	 * This flag can be unset with the `noboolalpha` manipulator.
@@ -798,13 +798,13 @@ namespace streams
 
 	/**
 	 * Set the ios::showbase format flag for @p stream.
-	 * When the showbase format flag is set, numerical integer values inserted 
-	 * into output streams are prefixed with the same prefixes used by C++ 
-	 * literal constants: `0x` for hexadecimal values (see `hex`), `0` for octal 
+	 * When the showbase format flag is set, numerical integer values inserted
+	 * into output streams are prefixed with the same prefixes used by C++
+	 * literal constants: `0x` for hexadecimal values (see `hex`), `0` for octal
 	 * values (see `oct`), `0b` for binary values (see `bin`) and no prefix for
 	 * decimal-base values (see `dec`).
 	 * 
-	 * This option can be unset with the `noshowbase` manipulator. 
+	 * This option can be unset with the `noshowbase` manipulator.
 	 * @sa noshowbase
 	 * @sa dec
 	 * @sa hex
@@ -818,9 +818,9 @@ namespace streams
 
 	/**
 	 * Clear the ios::showbase format flag for @p stream.
-	 * When the showbase format flag is not set, numerical integer values are inserted 
+	 * When the showbase format flag is not set, numerical integer values are inserted
 	 * into @p stream without prefixing them with any numerical base prefix (i.e.
-	 * `0x` for hexadecimal values, `0` for octal values, `0b` for binary values 
+	 * `0x` for hexadecimal values, `0` for octal values, `0b` for binary values
 	 * and no prefix for decimal-base values).
 	 * 
 	 * This option can be set with the `showbase` manipulator.
@@ -833,7 +833,7 @@ namespace streams
 
 	/**
 	 * Set the ios::showpos format flag for @p stream.
-	 * When the showpos format flag is set, a plus sign (+) precedes every 
+	 * When the showpos format flag is set, a plus sign (+) precedes every
 	 * non-negative numerical value inserted into @p stream (including zeros).
 	 * 
 	 * This flag can be unset with the `noshowpos` manipulator.
@@ -859,8 +859,8 @@ namespace streams
 
 	/**
 	 * Set the ios::uppercase format flag for @p stream.
-	 * When the uppercase format flag is set, uppercase (capital) letters are used 
-	 * instead of lowercase for representations on output operations involving 
+	 * When the uppercase format flag is set, uppercase (capital) letters are used
+	 * instead of lowercase for representations on output operations involving
 	 * stream-generated letters, like hexadecimal representations.
 	 * 
 	 * This flag can be unset with the `nouppercase` manipulator, not forcing the
@@ -920,8 +920,8 @@ namespace streams
 	/**
 	 * Set the ios::adjustfield format flag for @p stream to ios::left, thus
 	 * adjusting next output to the left.
-	 * When adjustfield is set to left, the output is padded to the field width 
-	 * (`ios::width()`) by inserting fill characters (`ios::fill()`) at the end, 
+	 * When adjustfield is set to left, the output is padded to the field width
+	 * (`ios::width()`) by inserting fill characters (`ios::fill()`) at the end,
 	 * effectively adjusting the field to the left.
 	 * @sa right
 	 */
@@ -933,8 +933,8 @@ namespace streams
 	/**
 	 * Set the ios::adjustfield format flag for @p stream to ios::right, thus
 	 * adjusting next output to the right.
-	 * When adjustfield is set to right, the output is padded to the field width 
-	 * (`ios::width()`) by inserting fill characters (`ios::fill()`) at the beginning, 
+	 * When adjustfield is set to right, the output is padded to the field width
+	 * (`ios::width()`) by inserting fill characters (`ios::fill()`) at the beginning,
 	 * effectively adjusting the field to the right.
 	 * @sa left
 	 */
@@ -945,9 +945,9 @@ namespace streams
 
 	/**
 	 * Set the ios::floatfield format flag for @p stream to ios::defaultfloat.
-	 * When floatfield is set to defaultfloat, floating-point values are written 
-	 * using the default notation: the representation uses as many meaningful digits 
-	 * as needed up to the stream's decimal precision (`ios::precision()`), 
+	 * When floatfield is set to defaultfloat, floating-point values are written
+	 * using the default notation: the representation uses as many meaningful digits
+	 * as needed up to the stream's decimal precision (`ios::precision()`),
 	 * counting both the digits before and after the decimal point (if any).
 	 * 
 	 * NOTE: current implementation behaves the same as `fixed`.
@@ -963,8 +963,8 @@ namespace streams
 
 	/**
 	 * Set the ios::floatfield format flag for @p stream to ios::fixed.
-	 * When floatfield is set to fixed, floating-point values are written using 
-	 * fixed-point notation: the value is represented with exactly as many digits 
+	 * When floatfield is set to fixed, floating-point values are written using
+	 * fixed-point notation: the value is represented with exactly as many digits
 	 * in the decimal part as specified by the precision field (`ios::precision()`)
 	 * and with no exponent part.
 	 * @sa defaultfloat
@@ -979,11 +979,11 @@ namespace streams
 
 	/**
 	 * Set the ios::floatfield format flag for @p stream to ios::scientific.
-	 * When floatfield is set to scientific, floating-point values are written 
-	 * using scientific notation: the value is represented always with only one 
-	 * digit before the decimal point, followed by the decimal point and as many 
-	 * decimal digits as the precision field (`ios::precision()`). Finally, this 
-	 * notation always includes an exponential part consisting on the letter `e` 
+	 * When floatfield is set to scientific, floating-point values are written
+	 * using scientific notation: the value is represented always with only one
+	 * digit before the decimal point, followed by the decimal point and as many
+	 * decimal digits as the precision field (`ios::precision()`). Finally, this
+	 * notation always includes an exponential part consisting on the letter `e`
 	 * followed by an optional sign and two exponential digits.
 	 * @sa defaultfloat
 	 * @sa fixed
