@@ -74,8 +74,11 @@ namespace time
 		 */
 		RTTTime& operator=(const RTTTime& that)
 		{
-			millis = that.millis;
-			micros = that.micros;
+			if (this != &that)
+			{
+				millis = that.millis;
+				micros = that.micros;
+			}
 			return *this;
 		}
 
@@ -287,7 +290,7 @@ namespace time
 	/**
 	 * Function pointer type used for `time::millis` global variable.
 	 */
-	using MILLIS_PTR = uint32_t (*)(void);
+	using MILLIS_PTR = uint32_t (*)();
 
 	/**
 	 * Count number of milliseconds elapsed since some time base reference 

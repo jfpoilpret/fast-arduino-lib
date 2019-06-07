@@ -316,7 +316,6 @@ namespace serial::soft
 		 */
 		static constexpr const board::DigitalPin RX = board::EXT_PIN<RX_>();
 
-	public:
 		/**
 		 * The interrupt::INTSignal type for `RX_` pin, if it is a
 		 * External Interrupt pin. This type is used in `begin()` call.
@@ -401,7 +400,6 @@ namespace serial::soft
 		 */
 		static constexpr const board::DigitalPin RX = board::PCI_PIN<RX_>();
 
-	public:
 		/**
 		 * The interrupt::PCISignal type for `RX_` pin, if it is a
 		 * PinChangeInterrupt pin. This type is used in `begin()` call.
