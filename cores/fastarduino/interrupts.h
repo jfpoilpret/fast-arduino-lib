@@ -114,7 +114,7 @@ namespace interrupt
 		friend void register_handler<Handler>(Handler&);
 	};
 
-	template<typename Handler> Handler* HandlerHolder<Handler>::handler_ = 0;
+	template<typename Handler> Handler* HandlerHolder<Handler>::handler_ = nullptr;
 
 	// Used by ISR to perform a callback to a PTMF
 	// Found great inspiration for this pattern there:

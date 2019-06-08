@@ -534,7 +534,7 @@ namespace eeprom
 		 * @param buffer the buffer that will be used by this QueuedWriter
 		 */
 		template<uint16_t SIZE>
-		QueuedWriter(uint8_t (&buffer)[SIZE]) : buffer_{buffer}, current_{}, erase_{false}, done_{true}
+		explicit QueuedWriter(uint8_t (&buffer)[SIZE]) : buffer_{buffer}, current_{}, erase_{false}, done_{true}
 		{
 			interrupt::register_handler(*this);
 		}

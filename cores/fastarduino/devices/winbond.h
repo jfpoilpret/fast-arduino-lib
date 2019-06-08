@@ -56,7 +56,7 @@ namespace devices
 		/**
 		 * Create a new device driver for a WinBond chip.
 		 */
-		WinBond() {}
+		WinBond() = default;
 
 		/**
 		 * This enum provides information about block protection (bits BP0-2,
@@ -129,7 +129,7 @@ namespace devices
 			}
 			inline bool suspend_status() const
 			{
-				return value & 0x8000;
+				return value & 0x8000U;
 			}
 			inline StatusRegisterProtect status_register_protect() const
 			{

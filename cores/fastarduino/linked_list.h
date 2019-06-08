@@ -128,7 +128,7 @@ namespace containers
 		template<typename F> void traverse(F f)
 		{
 			T* current = head();
-			while (current != 0)
+			while (current != nullptr)
 			{
 				T* next = current->next();
 				if (f(*current)) remove(*current);

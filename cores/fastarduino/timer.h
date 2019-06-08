@@ -629,7 +629,7 @@ namespace timer
 
 		static constexpr bool prescaler_is_adequate(uint32_t quotient)
 		{
-			return quotient > 1 and quotient < TRAIT::MAX_COUNTER;
+			return (quotient > 1) && (quotient < TRAIT::MAX_COUNTER);
 		}
 
 		template<size_t N> static constexpr PRESCALER best_prescaler(const PRESCALER (&prescalers)[N], uint32_t us)
@@ -638,7 +638,7 @@ namespace timer
 			// - quotient is in ]1; MAX_COUNTER[
 			// - smallest remainder
 			// - largest quotient
-			uint32_t smallest_remainder = 0xFFFFFFFF;
+			uint32_t smallest_remainder = 0xFFFFFFFFUL;
 			uint32_t largest_quotient = 0;
 			PRESCALER current = prescalers[N - 1];
 			for (size_t i = 0; i < N; ++i)

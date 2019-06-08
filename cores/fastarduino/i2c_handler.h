@@ -33,7 +33,7 @@ namespace i2c
 	private:
 		using TRAIT = board_traits::TWI_trait;
 
-		inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;
+		explicit inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;
 
 		inline void begin() INLINE;
 		inline void end() INLINE;

@@ -544,7 +544,7 @@ namespace timer
 		 * 
 		 * @sa REGISTER_RTT_EVENT_ISR
 		 */
-		RTTEventCallback(containers::Queue<EVENT>& event_queue) : event_queue_{event_queue} {}
+		explicit RTTEventCallback(containers::Queue<EVENT>& event_queue) : event_queue_{event_queue} {}
 
 	private:
 		void on_rtt_change(uint32_t millis)

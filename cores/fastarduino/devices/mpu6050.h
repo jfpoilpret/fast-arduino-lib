@@ -219,7 +219,7 @@ namespace devices::magneto
 		 * Create a new device driver for a MPU6050 chip.
 		 * @param manager reference to a suitable i2c::I2CManager for this device
 		 */
-		MPU6050(MANAGER& manager) : i2c::I2CDevice<MODE>(manager) {}
+		explicit MPU6050(MANAGER& manager) : i2c::I2CDevice<MODE>(manager) {}
 
 		/**
 		 * Start operation of this gyroscope/accelerometer chip. Once this method
@@ -580,10 +580,10 @@ namespace devices::magneto
 		{
 			using namespace i2c::Status;
 			while (fifo_count() < size)
-				if (!wait) 
-					return false;
-				else if (yield)
-					time::yield();
+			{
+				if (!wait) return false;
+				if (yield) time::yield();
+			}
 
 			if (this->write(DEVICE_ADDRESS, FIFO_R_W, BusCond::START_NO_STOP) == OK
 				&& this->read(DEVICE_ADDRESS, buffer, size, BusCond::REPEAT_START_STOP) == OK)

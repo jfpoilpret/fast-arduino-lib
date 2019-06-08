@@ -632,7 +632,7 @@ namespace devices::sonar
 
 	protected:
 		/// @cond notdocumented
-		AbstractSonar(const RTT& rtt)
+		explicit AbstractSonar(const RTT& rtt)
 			: rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{},
 			  echo_start_{RAW_TIME::EMPTY_TIME}, echo_end_{RAW_TIME::EMPTY_TIME}
 		{}
@@ -693,8 +693,9 @@ namespace devices::sonar
 			{
 				status_ = ECHO_STARTED;
 				echo_start_ = rtt_.raw_time_();
+				return false;
 			}
-			else if ((!rising) && status_ == ECHO_STARTED)
+			if ((!rising) && status_ == ECHO_STARTED)
 			{
 				status_ = READY;
 				echo_end_ = rtt_.raw_time_();
@@ -788,7 +789,7 @@ namespace devices::sonar
 		 * duration counting; this RTT shall be started before using any other
 		 * methods of this sonar.
 		 */
-		HCSR04(const RTT& rtt) : PARENT{rtt}, trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}
+		explicit HCSR04(const RTT& rtt) : PARENT{rtt}, trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}
 		{
 			if (SONAR_TYPE != SonarType::BLOCKING)
 				interrupt::register_handler(*this);
@@ -1042,7 +1043,7 @@ namespace devices::sonar
 		}
 
 	private:
-		SonarEvent(bool timeout) : timeout_{timeout}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME} {}
+		explicit SonarEvent(bool timeout) : timeout_{timeout}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME} {}
 		SonarEvent(uint8_t started, uint8_t ready, const RAW_TIME& time)
 			: timeout_{}, started_{started}, ready_{ready}, time_{time}
 		{}
@@ -1131,7 +1132,7 @@ namespace devices::sonar
 		 * duration counting; this RTT shall be started before using any other
 		 * methods of this sonar.
 		 */
-		MultiHCSR04(RTT& rtt)
+		explicit MultiHCSR04(RTT& rtt)
 			: rtt_{rtt}, started_{}, ready_{}, active_{false},
 			  timeout_time_ms_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{0}
 		{

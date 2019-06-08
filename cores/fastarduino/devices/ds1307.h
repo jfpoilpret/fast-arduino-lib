@@ -82,7 +82,7 @@ namespace devices::rtc
 		 * Create a new device driver for a DS1307 chip.
 		 * @param manager reference to a suitable i2c::I2CManager for this device
 		 */
-		DS1307(MANAGER& manager) : I2CDevice(manager) {}
+		explicit DS1307(MANAGER& manager) : I2CDevice(manager) {}
 
 		/**
 		 * Change date and time of the RTC chip connected to this driver.
@@ -313,7 +313,7 @@ namespace devices::rtc
 
 		union ControlRegister
 		{
-			ControlRegister(uint8_t data = 0) : data{data} {}
+			explicit ControlRegister(uint8_t data = 0) : data{data} {}
 
 			uint8_t data;
 			struct

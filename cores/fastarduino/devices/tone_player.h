@@ -144,7 +144,7 @@ namespace devices::audio
 			 * constructed with the next constructor.
 			 * @sa QTonePlay(Tone, uint16_t)
 			 */
-			QTonePlay() {}
+			QTonePlay() = default;
 
 			/**
 			 * Construct an optimized tone play for the provided tone and duration.
@@ -223,10 +223,11 @@ namespace devices::audio
 			}
 			static constexpr uint8_t flags(Tone tone)
 			{
-				return (tone == Tone::SILENCE ? NONE :
-						tone == SpecialTone::END ? END :
-						tone == SpecialTone::REPEAT_START ? REPEAT_START :
-						tone == SpecialTone::REPEAT_END ? REPEAT_END : TONE);
+				if (tone == Tone::SILENCE) return NONE;
+				if (tone == SpecialTone::END) return END;
+				if (tone == SpecialTone::REPEAT_START) return REPEAT_START;
+				if (tone == SpecialTone::REPEAT_END) return REPEAT_END;
+				return TONE;
 			}
 
 			friend class TonePlayer<NTIMER, OUTPUT>;
@@ -237,7 +238,7 @@ namespace devices::audio
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
-		TonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
+		explicit TonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
 
 		/**
 		 * Play a melody, defined by a sequence of `TonePlay`s, stored in SRAM.
@@ -341,7 +342,7 @@ namespace devices::audio
 		void play_(const TonePlay* melody, LOAD_TONE load_tone)
 		{
 			stop_ = false;
-			const TonePlay* repeat_play = 0;
+			const TonePlay* repeat_play = nullptr;
 			int8_t repeat_times;
 			const TonePlay* play = melody;
 			while (!stop_)
@@ -356,13 +357,13 @@ namespace devices::audio
 				}
 				else if (current->tone == SpecialTone::REPEAT_END)
 				{
-					if (repeat_play != 0)
+					if (repeat_play != nullptr)
 					{
 						if (repeat_times == -1) repeat_times = current->ms;
 						if (repeat_times--)
 							play = repeat_play;
 						else
-							repeat_play = 0;
+							repeat_play = nullptr;
 					}
 				}
 				else
@@ -391,7 +392,7 @@ namespace devices::audio
 		void play_(const QTonePlay* melody, LOAD_QTONE load_tone)
 		{
 			stop_ = false;
-			const QTonePlay* repeat_play = 0;
+			const QTonePlay* repeat_play = nullptr;
 			int8_t repeat_times;
 			const QTonePlay* play = melody;
 			while (!stop_)
@@ -406,13 +407,13 @@ namespace devices::audio
 				}
 				else if (current->is_repeat_end())
 				{
-					if (repeat_play != 0)
+					if (repeat_play != nullptr)
 					{
 						if (repeat_times == -1) repeat_times = current->repeat_count();
 						if (repeat_times--)
 							play = repeat_play;
 						else
-							repeat_play = 0;
+							repeat_play = nullptr;
 					}
 				}
 				else if (current->is_pause())

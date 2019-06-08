@@ -154,7 +154,7 @@ namespace events
 		 * @param value the value of this event, `T{}` by default; for an `Event<void>`, 
 		 * this argument shall not be provided or a compile error will occur.
 		 */
-		Event(uint8_t type = Type::NO_EVENT, T value = T{}) INLINE : type_{type}, value_{value} {}
+		explicit Event(uint8_t type = Type::NO_EVENT, T value = T{}) INLINE : type_{type}, value_{value} {}
 
 		/**
 		 * The type of this event.
@@ -185,7 +185,7 @@ namespace events
 	public:
 		using TYPE = void;
 
-		Event(uint8_t type = Type::NO_EVENT) INLINE : type_{type} {}
+		explicit Event(uint8_t type = Type::NO_EVENT) INLINE : type_{type} {}
 		uint8_t type() const INLINE
 		{
 			return type_;
@@ -249,7 +249,7 @@ namespace events
 		class HandlerCaller
 		{
 		public:
-			HandlerCaller(const EVENT& event) INLINE : event_{event} {}
+			explicit HandlerCaller(const EVENT& event) INLINE : event_{event} {}
 			bool operator()(EventHandler<EVENT>& handler) INLINE
 			{
 				if (handler.type() == event_.type()) handler.on_event(event_);
@@ -294,7 +294,7 @@ namespace events
 		 * Create an Event Handler for given @p type of event.
 		 * @param type the evnt type handled by this handler
 		 */
-		EventHandler(uint8_t type = Type::NO_EVENT) INLINE : type_{type} {}
+		explicit EventHandler(uint8_t type = Type::NO_EVENT) INLINE : type_{type} {}
 
 	private:
 		uint8_t type_;

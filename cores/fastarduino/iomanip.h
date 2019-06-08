@@ -37,7 +37,7 @@ namespace streams
 		}
 
 	private:
-		constexpr setw_(uint8_t width) : width_{width} {}
+		explicit constexpr setw_(uint8_t width) : width_{width} {}
 		const uint8_t width_;
 		friend constexpr const setw_ setw(uint8_t width);
 	};
@@ -61,7 +61,7 @@ namespace streams
 		}
 
 	private:
-		constexpr setprecision_(uint8_t precision) : precision_{precision} {}
+		explicit constexpr setprecision_(uint8_t precision) : precision_{precision} {}
 		const uint8_t precision_;
 		friend constexpr const setprecision_ setprecision(uint8_t precision);
 	};
@@ -85,7 +85,7 @@ namespace streams
 		}
 
 	private:
-		constexpr setfill_(char fill) : fill_{fill} {}
+		explicit constexpr setfill_(char fill) : fill_{fill} {}
 		const char fill_;
 		friend constexpr const setfill_ setfill(char fill);
 	};
@@ -109,7 +109,8 @@ namespace streams
 		}
 
 	private:
-		constexpr setbase_(int b) : base_{b == 2 ? ios::bin : b == 8 ? ios::oct : b == 16 ? ios::hex : ios::dec} {}
+		explicit constexpr setbase_(int b)
+		: base_{b == 2 ? ios::bin : b == 8 ? ios::oct : b == 16 ? ios::hex : ios::dec} {}
 		const ios::fmtflags base_;
 		friend constexpr const setbase_ setbase(int base);
 	};
@@ -133,7 +134,7 @@ namespace streams
 		}
 
 	private:
-		constexpr setiosflags_(ios::fmtflags mask) : mask_{mask} {}
+		explicit constexpr setiosflags_(ios::fmtflags mask) : mask_{mask} {}
 		const ios::fmtflags mask_;
 		friend constexpr const setiosflags_ setiosflags(ios::fmtflags mask);
 	};
@@ -157,7 +158,7 @@ namespace streams
 		}
 
 	private:
-		constexpr resetiosflags_(ios::fmtflags mask) : mask_{mask} {}
+		explicit constexpr resetiosflags_(ios::fmtflags mask) : mask_{mask} {}
 		const ios::fmtflags mask_;
 		friend constexpr const resetiosflags_ resetiosflags(ios::fmtflags mask);
 	};

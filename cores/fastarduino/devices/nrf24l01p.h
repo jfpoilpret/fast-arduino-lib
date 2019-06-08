@@ -355,10 +355,7 @@ namespace devices::rf
 			 * reading.
 			 * @param[in] value register reading.
 			 */
-			observe_tx_t(uint8_t value) INLINE
-			{
-				as_byte = value;
-			}
+			explicit observe_tx_t(uint8_t value) INLINE : as_byte{value} {}
 		};
 
 		/**
@@ -383,10 +380,7 @@ namespace devices::rf
 			 * Construct transmitter queue status from register reading.
 			 * @param[in] value register reading.
 			 */
-			fifo_status_t(uint8_t value) INLINE
-			{
-				as_byte = value;
-			}
+			explicit fifo_status_t(uint8_t value) INLINE : as_byte{value} {}
 		};
 
 		/**
@@ -397,11 +391,7 @@ namespace devices::rf
 			uint8_t device;   //!< Device address (LSB).
 			uint16_t network; //!< Network address.
 
-			addr_t(uint16_t net, uint8_t dev) INLINE
-			{
-				network = net;
-				device = dev;
-			}
+			addr_t(uint16_t net, uint8_t dev) INLINE : device{dev}, network{net} {}
 		};
 
 		/**
@@ -435,10 +425,7 @@ namespace devices::rf
 			 * Construct status from register reading.
 			 * @param[in] value register reading.
 			 */
-			status_t(uint8_t value) INLINE
-			{
-				as_byte = value;
-			}
+			explicit status_t(uint8_t value) INLINE : as_byte{value} {}
 		};
 
 		/// @cond notdocumented
@@ -446,7 +433,7 @@ namespace devices::rf
 		inline uint8_t read(uint8_t cmd)
 		{
 			this->start_transfer();
-			status_ = this->transfer(cmd);
+			status_ = status_t{this->transfer(cmd)};
 			uint8_t result = this->transfer(uint8_t(Command::NOP));
 			this->end_transfer();
 			return result;
@@ -454,27 +441,27 @@ namespace devices::rf
 		inline void read(uint8_t cmd, void* buf, size_t size)
 		{
 			this->start_transfer();
-			status_ = this->transfer(cmd);
+			status_ = status_t{this->transfer(cmd)};
 			this->transfer((uint8_t*) buf, size, uint8_t(Command::NOP));
 			this->end_transfer();
 		}
 		inline void write(uint8_t cmd)
 		{
 			this->start_transfer();
-			status_ = this->transfer(cmd);
+			status_ = status_t{this->transfer(cmd)};
 			this->end_transfer();
 		}
 		inline void write(uint8_t cmd, uint8_t data)
 		{
 			this->start_transfer();
-			status_ = this->transfer(cmd);
+			status_ = status_t{this->transfer(cmd)};
 			this->transfer(data);
 			this->end_transfer();
 		}
 		inline void write(uint8_t cmd, const void* buf, size_t size)
 		{
 			this->start_transfer();
-			status_ = this->transfer(cmd);
+			status_ = status_t{this->transfer(cmd)};
 			this->transfer((uint8_t*) buf, size);
 			this->end_transfer();
 		}
@@ -522,7 +509,7 @@ namespace devices::rf
 		inline status_t read_status()
 		{
 			this->start_transfer();
-			status_ = this->transfer(uint8_t(Command::NOP));
+			status_ = status_t{this->transfer(uint8_t(Command::NOP))};
 			this->end_transfer();
 			return status_;
 		}
@@ -534,11 +521,11 @@ namespace devices::rf
 		int read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t count);
 		inline fifo_status_t read_fifo_status()
 		{
-			return read_register(Register::FIFO_STATUS);
+			return fifo_status_t{read_register(Register::FIFO_STATUS)};
 		}
 		inline observe_tx_t read_observe_tx()
 		{
-			return read_register(Register::OBSERVE_TX);
+			return observe_tx_t{read_register(Register::OBSERVE_TX)};
 		}
 		/// @endcond
 
@@ -697,7 +684,7 @@ namespace devices::rf
 	template<board::DigitalPin CSN, board::DigitalPin CE>
 	int NRF24L01<CSN, CE>::send(uint8_t dest, uint8_t port, const void* buf, size_t len)
 	{
-		if (buf == 0 && len > 0) return errors::EINVAL;
+		if (buf == nullptr && len > 0) return errors::EINVAL;
 		if (len > PAYLOAD_MAX) return errors::EMSGSIZE;
 
 		// Setting transmit destination first (needs to ensure standby mode)
@@ -706,7 +693,7 @@ namespace devices::rf
 		// Write source address and payload to the transmit fifo
 		Command command = ((dest != BROADCAST) ? Command::W_TX_PAYLOAD : Command::W_TX_PAYLOAD_NO_ACK);
 		this->start_transfer();
-		status_ = this->transfer(uint8_t(command));
+		status_ = status_t{this->transfer(uint8_t(command))};
 		this->transfer(addr_.device);
 		this->transfer(port);
 		this->transfer((uint8_t*) buf, len);
@@ -723,7 +710,7 @@ namespace devices::rf
 		}
 
 		// Wait for transmission
-		status_t status = 0;
+		status_t status = status_t{0};
 		while (true)
 		{
 			status = read_status();
@@ -773,13 +760,15 @@ namespace devices::rf
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::set_output_power_level(int8_t dBm)
 	{
-		uint8_t pwr = RF_PWR_0DBM;
+		uint8_t pwr;
 		if (dBm < -12)
 			pwr = RF_PWR_18DBM;
 		else if (dBm < -6)
 			pwr = RF_PWR_12DBM;
 		else if (dBm < 0)
 			pwr = RF_PWR_6DBM;
+		else
+			pwr = RF_PWR_0DBM;
 		write_register(Register::RF_SETUP, RF_DR_2MBPS | pwr);
 	}
 
@@ -841,7 +830,7 @@ namespace devices::rf
 
 		// Read the source address, port and payload
 		this->start_transfer();
-		status_ = this->transfer(uint8_t(Command::R_RX_PAYLOAD));
+		status_ = status_t{this->transfer(uint8_t(Command::R_RX_PAYLOAD))};
 		src = this->transfer(0);
 		port = this->transfer(0);
 		this->transfer((uint8_t*) buf, count, uint8_t(Command::NOP));

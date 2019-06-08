@@ -266,7 +266,7 @@ namespace watchdog
 	protected:
 		/// @cond notdocumented
 		// This constructor is used by subclass to avoid calling register_handler()
-		WatchdogRTT(bool dummy UNUSED) : millis_{0}, millis_per_tick_{0} {}
+		explicit WatchdogRTT(bool dummy UNUSED) : millis_{0}, millis_per_tick_{0} {}
 
 		void on_tick()
 		{
@@ -302,7 +302,7 @@ namespace watchdog
 		 * watchdog tick
 		 * @sa REGISTER_WATCHDOG_CLOCK_ISR()
 		 */
-		Watchdog(containers::Queue<EVENT>& event_queue) : WatchdogRTT{true}, event_queue_{event_queue}
+		explicit Watchdog(containers::Queue<EVENT>& event_queue) : WatchdogRTT{true}, event_queue_{event_queue}
 		{
 			interrupt::register_handler(*this);
 		}

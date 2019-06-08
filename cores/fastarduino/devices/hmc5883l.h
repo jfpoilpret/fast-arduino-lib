@@ -205,7 +205,7 @@ namespace devices::magneto
 		 * Create a new device driver for a HMC5883L chip.
 		 * @param manager reference to a suitable i2c::I2CManager for this device
 		 */
-		HMC5883L(MANAGER& manager) : i2c::I2CDevice<MODE>(manager) {}
+		explicit HMC5883L(MANAGER& manager) : i2c::I2CDevice<MODE>(manager) {}
 
 		/**
 		 * Start operation of this compass chip. Once this method has been called,
@@ -333,13 +333,14 @@ namespace devices::magneto
 
 		static constexpr uint16_t GAIN(Gain gain)
 		{
-			return (gain == Gain::GAIN_0_88GA ? 1370 :
-					gain == Gain::GAIN_1_3GA ? 1090 :
-					gain == Gain::GAIN_1_9GA ? 820 :
-					gain == Gain::GAIN_2_5GA ? 660 :
-					gain == Gain::GAIN_4_0GA ? 440 :
-					gain == Gain::GAIN_4_7GA ? 390 : 
-					gain == Gain::GAIN_5_6GA ? 330 : 230);
+			if (gain == Gain::GAIN_0_88GA) return 1370;
+			if (gain == Gain::GAIN_1_3GA) return 1090;
+			if (gain == Gain::GAIN_1_9GA) return 820;
+			if (gain == Gain::GAIN_2_5GA) return 660;
+			if (gain == Gain::GAIN_4_0GA) return 440;
+			if (gain == Gain::GAIN_4_7GA) return 390; 
+			if (gain == Gain::GAIN_5_6GA) return 330;
+			return 230;
 		}
 
 		uint16_t gain_;

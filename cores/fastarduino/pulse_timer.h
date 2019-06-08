@@ -131,7 +131,7 @@ namespace timer
 		using TPRESCALER = typename CALCULATOR::PRESCALER;
 		static constexpr const TPRESCALER PRESCALER = PRESCALER_;
 
-		PulseTimer16(uint16_t pulse_frequency) : Timer<NTIMER>{TCCRA_MASK(), TCCRB_MASK()}
+		explicit PulseTimer16(uint16_t pulse_frequency) : Timer<NTIMER>{TCCRA_MASK(), TCCRB_MASK()}
 		{
 			TRAIT::ICR = CALCULATOR::PWM_ICR_counter(PRESCALER, pulse_frequency);
 		}
@@ -165,7 +165,7 @@ namespace timer
 		using TPRESCALER = typename CALCULATOR::PRESCALER;
 		static constexpr const TPRESCALER PRESCALER = PRESCALER_;
 
-		PulseTimer8(uint16_t pulse_frequency)
+		explicit PulseTimer8(uint16_t pulse_frequency)
 			: Timer<NTIMER>{TCCRA_MASK(), TCCRB_MASK(), TIMSK_int_mask()}, MAX{OVERFLOW_COUNTER(pulse_frequency)}
 		{
 			// If 8 bits timer, then we need ISR on Overflow and Compare A/B
@@ -252,7 +252,7 @@ namespace timer
 		 * @param pulse_frequency the frequency, in Hz, at which pulses will be
 		 * generated; this frequency must match the @p PRESCALER_ template parameter. 
 		 */
-		PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER_>{0, 0} {}
+		explicit PulseTimer(UNUSED uint16_t pulse_frequency) : timer::Timer<NTIMER_>{0, 0} {}
 	};
 
 	/// @cond notdocumented
@@ -260,14 +260,14 @@ namespace timer
 	class PulseTimer<NTIMER_, PRESCALER_, uint8_t> : public timer::PulseTimer8<NTIMER_, PRESCALER_>
 	{
 	public:
-		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer8<NTIMER_, PRESCALER_>{pulse_frequency} {}
+		explicit PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer8<NTIMER_, PRESCALER_>{pulse_frequency} {}
 	};
 
 	template<board::Timer NTIMER_, typename timer::Calculator<NTIMER_>::PRESCALER PRESCALER_>
 	class PulseTimer<NTIMER_, PRESCALER_, uint16_t> : public timer::PulseTimer16<NTIMER_, PRESCALER_>
 	{
 	public:
-		PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer16<NTIMER_, PRESCALER_>{pulse_frequency} {}
+		explicit PulseTimer(uint16_t pulse_frequency) : timer::PulseTimer16<NTIMER_, PRESCALER_>{pulse_frequency} {}
 	};
 	/// @endcond
 

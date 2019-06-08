@@ -69,7 +69,7 @@ namespace i2c
 		 * implementing an actua I2C device.
 		 * @param manager the I2C Manager that is in charge of I2C bus
 		 */
-		I2CDevice(MANAGER& manager) : manager_{manager.handler()} {}
+		explicit I2CDevice(MANAGER& manager) : manager_{manager.handler()} {}
 
 		/**
 		 * Read a given number of bytes from an I2C device at the given address.
