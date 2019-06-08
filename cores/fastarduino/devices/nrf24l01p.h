@@ -107,7 +107,7 @@ namespace devices::rf
 		 * Get driver channel.
 		 * @return channel.
 		 */
-		inline uint8_t get_channel() const
+		uint8_t get_channel() const
 		{
 			return channel_;
 		}
@@ -116,7 +116,7 @@ namespace devices::rf
 		 * Get driver network address.
 		 * @return network address.
 		 */
-		inline uint16_t get_network_address() const
+		uint16_t get_network_address() const
 		{
 			return addr_.network;
 		}
@@ -125,7 +125,7 @@ namespace devices::rf
 		 * Get driver device address.
 		 * @return device address.
 		 */
-		inline uint8_t get_device_address() const
+		uint8_t get_device_address() const
 		{
 			return addr_.device;
 		}
@@ -136,7 +136,7 @@ namespace devices::rf
 		 * @param[in] net network address.
 		 * @param[in] dev device address.
 		 */
-		inline void set_address(int16_t net, uint8_t dev)
+		void set_address(int16_t net, uint8_t dev)
 		{
 			addr_.network = net;
 			addr_.device = dev;
@@ -147,7 +147,7 @@ namespace devices::rf
 		 * begin().
 		 * @param[in] channel.
 		 */
-		inline void set_channel(uint8_t channel)
+		void set_channel(uint8_t channel)
 		{
 			channel_ = channel;
 		}
@@ -161,7 +161,7 @@ namespace devices::rf
 		/**
 		 * Shut down the device driver.
 		 */
-		inline void end()
+		void end()
 		{
 			powerdown();
 		}
@@ -231,7 +231,7 @@ namespace devices::rf
 		 * Return number of transmitted messages.
 		 * @return transmit count.
 		 */
-		inline uint16_t get_trans() const
+		uint16_t get_trans() const
 		{
 			return trans_;
 		}
@@ -240,7 +240,7 @@ namespace devices::rf
 		 * Return number of retransmissions.
 		 * @return retransmit count.
 		 */
-		inline uint16_t get_retrans() const
+		uint16_t get_retrans() const
 		{
 			return retrans_;
 		}
@@ -249,7 +249,7 @@ namespace devices::rf
 		 * Return number of dropped messages.
 		 * @return drop count.
 		 */
-		inline uint16_t get_drops() const
+		uint16_t get_drops() const
 		{
 			return drops_;
 		}
@@ -263,7 +263,7 @@ namespace devices::rf
 		 * @param[in] len number of bytes in buffer.
 		 * @return number of bytes send or negative error code.
 		 */
-		inline int broadcast(uint8_t port, const void* buf, size_t len)
+		int broadcast(uint8_t port, const void* buf, size_t len)
 		{
 			return send(BROADCAST, port, buf, len);
 		}
@@ -272,7 +272,7 @@ namespace devices::rf
 		 * Return true if the latest received message was a broadcast
 		 * otherwise false.
 		 */
-		inline bool is_broadcast() const
+		bool is_broadcast() const
 		{
 			return (dest_ == BROADCAST);
 		}
@@ -430,7 +430,7 @@ namespace devices::rf
 
 		/// @cond notdocumented
 		// Lowest-level methods to access NRF24L01 device
-		inline uint8_t read(uint8_t cmd)
+		uint8_t read(uint8_t cmd)
 		{
 			this->start_transfer();
 			status_ = status_t{this->transfer(cmd)};
@@ -438,27 +438,27 @@ namespace devices::rf
 			this->end_transfer();
 			return result;
 		}
-		inline void read(uint8_t cmd, void* buf, size_t size)
+		void read(uint8_t cmd, void* buf, size_t size)
 		{
 			this->start_transfer();
 			status_ = status_t{this->transfer(cmd)};
 			this->transfer((uint8_t*) buf, size, uint8_t(Command::NOP));
 			this->end_transfer();
 		}
-		inline void write(uint8_t cmd)
+		void write(uint8_t cmd)
 		{
 			this->start_transfer();
 			status_ = status_t{this->transfer(cmd)};
 			this->end_transfer();
 		}
-		inline void write(uint8_t cmd, uint8_t data)
+		void write(uint8_t cmd, uint8_t data)
 		{
 			this->start_transfer();
 			status_ = status_t{this->transfer(cmd)};
 			this->transfer(data);
 			this->end_transfer();
 		}
-		inline void write(uint8_t cmd, const void* buf, size_t size)
+		void write(uint8_t cmd, const void* buf, size_t size)
 		{
 			this->start_transfer();
 			status_ = status_t{this->transfer(cmd)};
@@ -467,46 +467,46 @@ namespace devices::rf
 		}
 
 		// Command-level methods to access NRF24L01 device
-		inline uint8_t read_command(Command cmd)
+		uint8_t read_command(Command cmd)
 		{
 			return read(uint8_t(cmd));
 		}
-		inline void read_command(Command cmd, void* buf, size_t size)
+		void read_command(Command cmd, void* buf, size_t size)
 		{
 			read(uint8_t(cmd), buf, size);
 		}
-		inline void write_command(Command cmd)
+		void write_command(Command cmd)
 		{
 			write(uint8_t(cmd));
 		}
-		inline void write_command(Command cmd, uint8_t data)
+		void write_command(Command cmd, uint8_t data)
 		{
 			write(uint8_t(cmd), data);
 		}
-		inline void write_command(Command cmd, const void* buf, size_t size)
+		void write_command(Command cmd, const void* buf, size_t size)
 		{
 			write(uint8_t(cmd), buf, size);
 		}
 
 		// Mid-level methods to access NRF24L01 device registers
-		inline uint8_t read_register(Register reg)
+		uint8_t read_register(Register reg)
 		{
 			return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
 		}
-		inline void read_register(Register reg, void* buf, size_t size)
+		void read_register(Register reg, void* buf, size_t size)
 		{
 			read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 		}
-		inline void write_register(Register reg, uint8_t data)
+		void write_register(Register reg, uint8_t data)
 		{
 			write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
 		}
-		inline void write_register(Register reg, const void* buf, size_t size)
+		void write_register(Register reg, const void* buf, size_t size)
 		{
 			write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 		}
 
-		inline status_t read_status()
+		status_t read_status()
 		{
 			this->start_transfer();
 			status_ = status_t{this->transfer(uint8_t(Command::NOP))};
@@ -519,11 +519,11 @@ namespace devices::rf
 
 		bool available();
 		int read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t count);
-		inline fifo_status_t read_fifo_status()
+		fifo_status_t read_fifo_status()
 		{
 			return fifo_status_t{read_register(Register::FIFO_STATUS)};
 		}
-		inline observe_tx_t read_observe_tx()
+		observe_tx_t read_observe_tx()
 		{
 			return observe_tx_t{read_register(Register::OBSERVE_TX)};
 		}
@@ -598,7 +598,7 @@ namespace devices::rf
 		 * Start up the device driver. This must be called before any transmission
 		 * or reception can take place.
 		 */
-		inline void begin()
+		void begin()
 		{
 			NRF24L01<CSN, CE>::begin();
 			irq_signal_.enable();
@@ -607,7 +607,7 @@ namespace devices::rf
 		/**
 		 * Shut down the device driver.
 		 */
-		inline void end()
+		void end()
 		{
 			irq_signal_.disable();
 			NRF24L01<CSN, CE>::end();
