@@ -109,8 +109,14 @@ namespace streams
 		}
 
 	private:
-		explicit constexpr setbase_(int b)
-		: base_{b == 2 ? ios::bin : b == 8 ? ios::oct : b == 16 ? ios::hex : ios::dec} {}
+		static constexpr ios::fmtflags convert_base(int base)
+		{
+			if (base == 2) return ios::bin; 
+			if (base == 8) return ios::oct; 
+			if (base == 16) return ios::hex;
+			return ios::dec; 
+		}
+		explicit constexpr setbase_(int base) : base_{convert_base(base)} {}
 		const ios::fmtflags base_;
 		friend constexpr const setbase_ setbase(int base);
 	};

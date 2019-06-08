@@ -111,27 +111,27 @@ namespace devices
 		 */
 		struct Status
 		{
-			inline bool busy() const
+			bool busy() const
 			{
 				return value & 0x0001;
 			}
-			inline bool write_enable_latch() const
+			bool write_enable_latch() const
 			{
 				return value & 0x0002;
 			}
-			inline BlockProtect block_protect() const
+			BlockProtect block_protect() const
 			{
 				return static_cast<BlockProtect>(value & 0x007C);
 			}
-			inline bool complement_protect() const
+			bool complement_protect() const
 			{
 				return value & 0x4000;
 			}
-			inline bool suspend_status() const
+			bool suspend_status() const
 			{
 				return value & 0x8000U;
 			}
-			inline StatusRegisterProtect status_register_protect() const
+			StatusRegisterProtect status_register_protect() const
 			{
 				return static_cast<StatusRegisterProtect>(value & 0x0180);
 			}
@@ -139,7 +139,7 @@ namespace devices
 			const uint16_t value;
 
 		private:
-			inline Status(uint8_t sr1, uint8_t sr2) : value(sr2 << 8 | sr1) {}
+			Status(uint8_t sr1, uint8_t sr2) : value(sr2 << 8 | sr1) {}
 
 			friend class WinBond<CS>;
 		};
@@ -147,7 +147,7 @@ namespace devices
 		/**
 		 * Get the value of the chip's Status register (§6.1, §6.2.8).
 		 */
-		inline Status status()
+		Status status()
 		{
 			return Status(read(0x05), read(0x35));
 		}
@@ -176,7 +176,7 @@ namespace devices
 		/**
 		 * Set the chip to low power mode (§6.2.29).
 		 */
-		inline void power_down()
+		void power_down()
 		{
 			send(0xB9);
 		}
@@ -184,7 +184,7 @@ namespace devices
 		/**
 		 * Release power-down mode (§6.2.30).
 		 */
-		inline void power_up()
+		void power_up()
 		{
 			send(0xAB);
 			time::delay_us(3);
@@ -214,7 +214,7 @@ namespace devices
 		 * Enable write mode for the chip (§6.2.5). This must becalled before
 		 * every erase or write instruction.
 		 */
-		inline void enable_write()
+		void enable_write()
 		{
 			send(0x06);
 		}
@@ -223,7 +223,7 @@ namespace devices
 		 * Disable chip write mode (§6.2.7). This method is seldom used, as any
 		 * erase or write instruction will automatically disable write mode.
 		 */
-		inline void disable_write()
+		void disable_write()
 		{
 			send(0x04);
 		}
@@ -233,7 +233,7 @@ namespace devices
 		 * @param address address (24 bits) of the sector to erase
 		 * @sa enable_write()
 		 */
-		inline void erase_sector(uint32_t address)
+		void erase_sector(uint32_t address)
 		{
 			send(0x20, address);
 		}
@@ -243,7 +243,7 @@ namespace devices
 		 * @param address address (24 bits) of the sector to erase
 		 * @sa enable_write()
 		 */
-		inline void erase_block_32K(uint32_t address)
+		void erase_block_32K(uint32_t address)
 		{
 			send(0x52, address);
 		}
@@ -253,7 +253,7 @@ namespace devices
 		 * @param address address (24 bits) of the sector to erase
 		 * @sa enable_write()
 		 */
-		inline void erase_block_64K(uint32_t address)
+		void erase_block_64K(uint32_t address)
 		{
 			send(0xD8, address);
 		}
@@ -263,7 +263,7 @@ namespace devices
 		 * @param address address (24 bits) of the sector to erase
 		 * @sa enable_write()
 		 */
-		inline void erase_chip()
+		void erase_chip()
 		{
 			send(0xC7);
 		}
@@ -276,7 +276,7 @@ namespace devices
 		 * @param size the number of bytes to write; if `0`, then 256 bytes
 		 * (one full page) will be written.
 		 */
-		inline void write_page(uint32_t address, uint8_t* data, uint8_t size)
+		void write_page(uint32_t address, uint8_t* data, uint8_t size)
 		{
 			send(0x02, address, data, (size == 0 ? 256 : size));
 		}
@@ -300,7 +300,7 @@ namespace devices
 	private:
 		uint8_t read(uint8_t code);
 		void send(uint8_t code);
-		inline void send(uint8_t code, uint32_t address)
+		void send(uint8_t code, uint32_t address)
 		{
 			send(code, address, 0, 0);
 		}

@@ -170,7 +170,7 @@ namespace watchdog
 
 	protected:
 		/// @cond notdocumented
-		inline void begin_with_config(uint8_t config) INLINE
+		void begin_with_config(uint8_t config) INLINE
 		{
 			__asm__ __volatile__("wdr");
 			MCUSR_ |= 1 << WDRF;
@@ -232,12 +232,13 @@ namespace watchdog
 		 * `begin()`.
 		 * @return number of milliseconds elpased since watchdog was started
 		 */
-		inline uint32_t millis() const
+		uint32_t millis() const
 		{
 			synchronized return millis_;
 		}
 
-		inline void reset()
+		//TODO DOCS!
+		void reset()
 		{
 			synchronized millis_ = 0;
 		}

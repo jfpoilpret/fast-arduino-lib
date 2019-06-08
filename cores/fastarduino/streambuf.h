@@ -165,7 +165,7 @@ namespace streams
 		 * @sa pubsync()
 		 * @sa reset_overflow()
 		 */
-		inline bool overflow() const
+		bool overflow() const
 		{
 			return overflow_;
 		}
@@ -174,7 +174,7 @@ namespace streams
 		 * Reset the overflow flag.
 		 * @sa overflow()
 		 */
-		inline void reset_overflow()
+		void reset_overflow()
 		{
 			overflow_ = false;
 		}

@@ -40,7 +40,7 @@ namespace i2c
 
 	public:
 		static constexpr const I2CMode MODE = MODE_;
-		inline uint8_t status() const INLINE
+		uint8_t status() const INLINE
 		{
 			return status_;
 		}

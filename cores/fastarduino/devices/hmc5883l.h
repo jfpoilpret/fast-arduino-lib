@@ -240,7 +240,7 @@ namespace devices::magneto
 		 * 
 		 * @sa begin()
 		 */
-		inline bool end() INLINE
+		bool end() INLINE
 		{
 			return write_register(MODE_REG, uint8_t(OperatingMode::IDLE));
 		}
@@ -248,7 +248,7 @@ namespace devices::magneto
 		/**
 		 * Get the curent chip status.
 		 */
-		inline Status status() INLINE
+		Status status() INLINE
 		{
 			Status status;
 			read_register(STATUS_REG, (uint8_t&) status);

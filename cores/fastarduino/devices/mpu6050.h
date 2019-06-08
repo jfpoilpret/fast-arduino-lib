@@ -50,10 +50,10 @@ namespace devices::magneto
 	 */
 	static constexpr uint16_t GYRO_RANGE_DPS(GyroRange range)
 	{
-		return (range == GyroRange::RANGE_2000 ? 2000 :
-				range == GyroRange::RANGE_1000 ? 1000 :
-				range == GyroRange::RANGE_500 ? 500 :
-				250);
+		if (range == GyroRange::RANGE_2000) return 2000;
+		if (range == GyroRange::RANGE_1000) return 1000;
+		if (range == GyroRange::RANGE_500) return 500;
+		return 250;
 	}
 	
 	/**
@@ -73,10 +73,10 @@ namespace devices::magneto
 	 */
 	static constexpr uint16_t ACCEL_RANGE_G(AccelRange range)
 	{
-		return (range == AccelRange::RANGE_16G ? 16 :
-				range == AccelRange::RANGE_8G ? 8 :
-				range == AccelRange::RANGE_4G ? 4 :
-				2);
+		if (range == AccelRange::RANGE_16G) return 16;
+		if (range == AccelRange::RANGE_8G) return 8;
+		if (range == AccelRange::RANGE_4G) return 4;
+		return 2;
 	}
 	
 	/**
@@ -323,7 +323,7 @@ namespace devices::magneto
 		 * 
 		 * @sa begin()
 		 */
-		inline bool end() INLINE
+		bool end() INLINE
 		{
 			// Put to sleep mode
 			PowerManagement power;
@@ -337,7 +337,7 @@ namespace devices::magneto
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
 		 */
-		inline bool reset() INLINE
+		bool reset() INLINE
 		{
 			PowerManagement power;
 			power.device_reset = 1;
@@ -519,7 +519,7 @@ namespace devices::magneto
 		 * 
 		 * @sa fifo_count()
 		 */
-		template<typename T> inline bool fifo_pop(T& output, bool wait = false, bool yield = false)
+		template<typename T> bool fifo_pop(T& output, bool wait = false, bool yield = false)
 		{
 			return fifo_pop((uint8_t*) &output, sizeof(T), wait, yield);
 		}
@@ -562,7 +562,7 @@ namespace devices::magneto
 
 		static constexpr const uint8_t WHO_AM_I = 0x75;
 
-		inline bool write_power(PowerManagement power)
+		bool write_power(PowerManagement power)
 		{
 			using namespace i2c::Status;
 			return this->write(DEVICE_ADDRESS, PWR_MGMT_1, BusCond::START_NO_STOP) == OK

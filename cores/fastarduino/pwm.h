@@ -90,7 +90,7 @@ namespace analog
 		 * is not used in pulsed mode, i.e. when @p PULSED template argument is
 		 * `true`.
 		 */
-		inline void set_output_mode(TimerOutputMode output_mode)
+		void set_output_mode(TimerOutputMode output_mode)
 		{
 			if (TIMER_TRAIT::IS_16BITS || !PULSED) timer_.template set_output_mode<COM>(output_mode);
 		}
@@ -117,7 +117,7 @@ namespace analog
 		 * @sa TYPE
 		 * @sa MAX
 		 */
-		inline void set_duty(TYPE duty)
+		void set_duty(TYPE duty)
 		{
 			timer_.template set_max<COM>(duty);
 		}

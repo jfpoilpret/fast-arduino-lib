@@ -162,7 +162,7 @@ namespace interrupt
 		 * @param trigger the new kind of level event 
 		 * @sa set_trigger_()
 		 */
-		inline void set_trigger(InterruptTrigger trigger)
+		void set_trigger(InterruptTrigger trigger)
 		{
 			synchronized INT_TRAIT::EICR_ =
 				(INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
@@ -175,7 +175,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `enable_()` instead.
 		 */
-		inline void enable()
+		void enable()
 		{
 			synchronized INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
 		}
@@ -187,7 +187,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `disable_()` instead.
 		 */
-		inline void disable()
+		void disable()
 		{
 			synchronized INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
 		}
@@ -201,7 +201,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `clear_()` instead.
 		 */
-		inline void clear()
+		void clear()
 		{
 			synchronized INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
 		}
@@ -213,7 +213,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `set_trigger()` instead.
 		 */
-		inline void set_trigger_(InterruptTrigger trigger)
+		void set_trigger_(InterruptTrigger trigger)
 		{
 			INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 		}
@@ -225,7 +225,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `enable()` instead.
 		 */
-		inline void enable_()
+		void enable_()
 		{
 			INT_TRAIT::EIMSK_ |= INT_TRAIT::EIMSK_MASK;
 		}
@@ -237,7 +237,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `disable()` instead.
 		 */
-		inline void disable_()
+		void disable_()
 		{
 			INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
 		}
@@ -251,7 +251,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `clear()` instead.
 		 */
-		inline void clear_()
+		void clear_()
 		{
 			INT_TRAIT::EIFR_ |= INT_TRAIT::EIFR_MASK;
 		}

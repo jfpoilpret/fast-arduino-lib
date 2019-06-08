@@ -78,7 +78,7 @@ namespace streams
 		/**
 		 * Return the current stream error state.
 		 */
-		inline iostate rdstate() const
+		iostate rdstate() const
 		{
 			return state_;
 		}
@@ -87,7 +87,7 @@ namespace streams
 		 * Set the stream error flags state in addition to currently set flags.
 		 * Essentially calls `clear(rdstate() | state)`.
 		 */
-		inline void setstate(iostate state)
+		void setstate(iostate state)
 		{
 			clear(rdstate() | state);
 		}
@@ -97,7 +97,7 @@ namespace streams
 		 * By default, assigns ios::goodbit which has the effect of clearing all
 		 * error state flags.
 		 */
-		inline void clear(iostate state = goodbit)
+		void clear(iostate state = goodbit)
 		{
 			state_ = state;
 		}
@@ -111,7 +111,7 @@ namespace streams
 		 * @sa goodbit
 		 * @sa clear()
 		 */
-		inline bool good() const
+		bool good() const
 		{
 			return rdstate() == goodbit;
 		}
@@ -122,7 +122,7 @@ namespace streams
 		 * @sa rdstate()
 		 * @sa eofbit
 		 */
-		inline bool eof() const
+		bool eof() const
 		{
 			return rdstate() & eofbit;
 		}
@@ -137,7 +137,7 @@ namespace streams
 		 * @sa badbit
 		 * @sa clear()
 		 */
-		inline bool fail() const
+		bool fail() const
 		{
 			return rdstate() & (failbit | badbit);
 		}
@@ -149,7 +149,7 @@ namespace streams
 		 * @sa rdstate()
 		 * @sa badbit
 		 */
-		inline bool bad() const
+		bool bad() const
 		{
 			return rdstate() & badbit;
 		}
@@ -160,7 +160,7 @@ namespace streams
 		 * Actually, this is equivalent to calling `fail()`.
 		 * @sa fail()
 		 */
-		inline bool operator!() const
+		bool operator!() const
 		{
 			return fail();
 		}
@@ -170,7 +170,7 @@ namespace streams
 		 * Returns `true` if the stream has no errors and is ready for I/O operations.
 		 * @sa fail()
 		 */
-		inline explicit operator bool() const
+		explicit operator bool() const
 		{
 			return !fail();
 		}
@@ -284,7 +284,7 @@ namespace streams
 		 * Set new format flags for this stream.
 		 * @sa fmtflags
 		 */
-		inline void flags(fmtflags flags)
+		void flags(fmtflags flags)
 		{
 			flags_ = flags;
 		}
@@ -293,7 +293,7 @@ namespace streams
 		 * Return the format flags currently selected in this stream.
 		 * @sa fmtflags
 		 */
-		inline fmtflags flags() const
+		fmtflags flags() const
 		{
 			return flags_;
 		}
@@ -309,7 +309,7 @@ namespace streams
 		 * @sa setf(fmtflags, fmtflags)
 		 * @sa flags(fmtflags)
 		 */
-		inline void setf(fmtflags flags)
+		void setf(fmtflags flags)
 		{
 			flags_ |= flags;
 		}
@@ -332,7 +332,7 @@ namespace streams
 		 * @sa setf(fmtflags)
 		 * @sa flags(fmtflags)
 		 */
-		inline void setf(fmtflags flags, fmtflags mask)
+		void setf(fmtflags flags, fmtflags mask)
 		{
 			flags_ = (flags_ & ~mask) | (flags & mask);
 		}
@@ -343,7 +343,7 @@ namespace streams
 		 * @sa setf(fmtflags)
 		 * @sa flags(fmtflags)
 		 */
-		inline void unsetf(fmtflags flags)
+		void unsetf(fmtflags flags)
 		{
 			flags_ &= ~flags;
 		}
@@ -355,7 +355,7 @@ namespace streams
 		 * Default fill character is a space.
 		 * @sa width()
 		 */
-		inline char fill() const
+		char fill() const
 		{
 			return fill_;
 		}
@@ -366,7 +366,7 @@ namespace streams
 		 * fill spaces when padding results to the field width.
 		 * @sa width()
 		 */
-		inline void fill(char fill)
+		void fill(char fill)
 		{
 			fill_ = fill;
 		}
@@ -387,7 +387,7 @@ namespace streams
 		 * @sa left
 		 * @sa right
 		 */
-		inline void width(uint8_t width)
+		void width(uint8_t width)
 		{
 			width_ = width;
 		}
@@ -397,7 +397,7 @@ namespace streams
 		 * output.
 		 * @return current minimum width
 		 */
-		inline uint8_t width() const
+		uint8_t width() const
 		{
 			return width_;
 		}
@@ -408,7 +408,7 @@ namespace streams
 		 * 
 		 * @param precision the new precision for next formatted output
 		 */
-		inline void precision(uint8_t precision)
+		void precision(uint8_t precision)
 		{
 			precision_ = (precision < MAX_PRECISION ? precision : MAX_PRECISION);
 		}
@@ -418,7 +418,7 @@ namespace streams
 		 * floating values output.
 		 * @return current precision
 		 */
-		inline uint8_t precision() const
+		uint8_t precision() const
 		{
 			return precision_;
 		}

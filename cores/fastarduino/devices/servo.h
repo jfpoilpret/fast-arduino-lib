@@ -90,7 +90,7 @@ namespace devices::servo
 		 * no pulse will be generated at all, i.e. the servo will not be able to
 		 * hold its position anymore.
 		 */
-		inline void detach() INLINE
+		void detach() INLINE
 		{
 			out_.set_duty(0);
 		}
@@ -108,7 +108,7 @@ namespace devices::servo
 		 * @sa set_pulse()
 		 * @sa rotate()
 		 */
-		inline void set_counter(TYPE value) INLINE
+		void set_counter(TYPE value) INLINE
 		{
 			out_.set_duty(utils::constrain(value, COUNTER_MINIMUM_, COUNTER_MAXIMUM_));
 		}
@@ -123,7 +123,7 @@ namespace devices::servo
 		 * @sa set_counter()
 		 * @sa rotate()
 		 */
-		inline void set_pulse(uint16_t pulse_us)
+		void set_pulse(uint16_t pulse_us)
 		{
 			// Constrain pulse to min/max and convert pulse to timer counter value
 			out_.set_duty(calculate_counter(pulse_us));
@@ -138,7 +138,7 @@ namespace devices::servo
 		 * @param angle the new angle, in degrees, to rotate the servo to; it must
 		 * be between `-90` and `+90`.
 		 */
-		inline void rotate(int8_t angle)
+		void rotate(int8_t angle)
 		{
 			angle = utils::constrain(angle, MIN, MAX);
 			TYPE count =

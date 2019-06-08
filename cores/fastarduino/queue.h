@@ -182,7 +182,7 @@ namespace containers
 		 * This is the maximum number of items that can be present at the same time
 		 * in this queue.
 		 */
-		inline uint8_t size() const
+		uint8_t size() const
 		{
 			return size_ - 1;
 		}
@@ -196,7 +196,7 @@ namespace containers
 		 * @sa free_()
 		 * @sa full_()
 		 */
-		inline bool empty_() const
+		bool empty_() const
 		{
 			return tail_ == head_;
 		}
@@ -209,7 +209,7 @@ namespace containers
 		 * @sa full()
 		 * @sa free_()
 		 */
-		inline bool full_() const
+		bool full_() const
 		{
 			return (tail_ + 1) == (head_ ? head_ : size_);
 		}
@@ -222,7 +222,7 @@ namespace containers
 		 * @sa items()
 		 * @sa size()
 		 */
-		inline uint8_t items_() const
+		uint8_t items_() const
 		{
 			// - must be 0 when head_ = tail_
 			// - must be size_ - 1 max, when tail_ = head_ - 1
@@ -238,7 +238,7 @@ namespace containers
 		 * @sa free()
 		 * @sa empty_()
 		 */
-		inline uint8_t free_() const
+		uint8_t free_() const
 		{
 			// - must be 0 when tail_ = head_ - 1
 			// - must be size_ - 1, when head_ == tail_
@@ -254,7 +254,7 @@ namespace containers
 		 * @sa clear()
 		 * @sa empty_()
 		 */
-		inline void clear_()
+		void clear_()
 		{
 			head_ = tail_ = 0;
 		}
@@ -274,7 +274,7 @@ namespace containers
 		 * @sa pull()
 		 * @sa free()
 		 */
-		inline bool push(TREF item)
+		bool push(TREF item)
 		{
 			synchronized return push_(item);
 		}
@@ -296,7 +296,7 @@ namespace containers
 		 * @sa push()
 		 * @sa empty()
 		 */
-		inline bool pull(T& item)
+		bool pull(T& item)
 		{
 			synchronized return pull_(item);
 		}
@@ -319,7 +319,7 @@ namespace containers
 		 * @sa push()
 		 * @sa empty()
 		 */
-		inline bool peek(T& item) const
+		bool peek(T& item) const
 		{
 			synchronized return peek_(item);
 		}
@@ -345,7 +345,7 @@ namespace containers
 		 * @sa push()
 		 * @sa items()
 		 */
-		inline uint8_t peek(T* buffer, uint8_t size) const
+		uint8_t peek(T* buffer, uint8_t size) const
 		{
 			synchronized return peek_(buffer, size);
 		}
@@ -372,7 +372,7 @@ namespace containers
 		 * @sa push()
 		 * @sa items()
 		 */
-		template<uint8_t SIZE> inline uint8_t peek(T (&buffer)[SIZE]) const
+		template<uint8_t SIZE> uint8_t peek(T (&buffer)[SIZE]) const
 		{
 			synchronized return peek_(buffer);
 		}
@@ -383,7 +383,7 @@ namespace containers
 		 * an interrupt-unsafe context; if you are sure you are in an interrupt-safe,
 		 * you should use the not synchronized flavor `empty_()` instead.
 		 */
-		inline bool empty() const
+		bool empty() const
 		{
 			synchronized return empty_();
 		}
@@ -395,7 +395,7 @@ namespace containers
 		 * you should use the not synchronized flavor `items_()` instead.
 		 * @sa items_()
 		 */
-		inline uint8_t items() const
+		uint8_t items() const
 		{
 			synchronized return items_();
 		}
@@ -409,7 +409,7 @@ namespace containers
 		 * @sa free_()
 		 * @sa empty()
 		 */
-		inline uint8_t free() const
+		uint8_t free() const
 		{
 			synchronized return free_();
 		}
@@ -422,7 +422,7 @@ namespace containers
 		 * @sa full_()
 		 * @sa free()
 		 */
-		inline bool full() const
+		bool full() const
 		{
 			synchronized return full_();
 		}
@@ -435,7 +435,7 @@ namespace containers
 		 * @sa clear_()
 		 * @sa empty()
 		 */
-		inline void clear()
+		void clear()
 		{
 			synchronized clear_();
 		}

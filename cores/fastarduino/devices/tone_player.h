@@ -160,39 +160,39 @@ namespace devices::audio
 			{}
 
 		private:
-			inline PRESCALER prescaler() const
+			PRESCALER prescaler() const
 			{
 				return prescaler_;
 			}
-			inline COUNTER counter() const
+			COUNTER counter() const
 			{
 				return counter_;
 			}
-			inline uint16_t duration() const
+			uint16_t duration() const
 			{
 				return ms_;
 			}
-			inline bool is_tone() const
+			bool is_tone() const
 			{
 				return flags_ == TONE;
 			}
-			inline bool is_pause() const
+			bool is_pause() const
 			{
 				return flags_ == NONE;
 			}
-			inline bool is_end() const
+			bool is_end() const
 			{
 				return flags_ == END;
 			}
-			inline bool is_repeat_start() const
+			bool is_repeat_start() const
 			{
 				return flags_ == REPEAT_START;
 			}
-			inline bool is_repeat_end() const
+			bool is_repeat_end() const
 			{
 				return flags_ == REPEAT_END;
 			}
-			inline uint16_t repeat_count() const
+			uint16_t repeat_count() const
 			{
 				return ms_;
 			}
@@ -247,7 +247,7 @@ namespace devices::audio
 		 * @param melody a pointer, in SRAM, to the sequence of `TonePlay` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		inline void play(const TonePlay* melody)
+		void play(const TonePlay* melody)
 		{
 			play_(melody, load_sram);
 		}
@@ -259,7 +259,7 @@ namespace devices::audio
 		 * @param melody a pointer, in EEPROM, to the sequence of `TonePlay` to 
 		 * be played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		inline void play_eeprom(const TonePlay* melody)
+		void play_eeprom(const TonePlay* melody)
 		{
 			play_(melody, load_eeprom);
 		}
@@ -271,7 +271,7 @@ namespace devices::audio
 		 * @param melody a pointer, in Flash, to the sequence of `TonePlay` to 
 		 * be played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		inline void play_flash(const TonePlay* melody)
+		void play_flash(const TonePlay* melody)
 		{
 			play_(melody, load_flash);
 		}
@@ -283,7 +283,7 @@ namespace devices::audio
 		 * @param melody a pointer, in SRAM, to the sequence of `QTonePlay` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		inline void play(const QTonePlay* melody)
+		void play(const QTonePlay* melody)
 		{
 			play_(melody, load_sram);
 		}
@@ -295,7 +295,7 @@ namespace devices::audio
 		 * @param melody a pointer, in EEPROM, to the sequence of `QTonePlay` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		inline void play_eeprom(const QTonePlay* melody)
+		void play_eeprom(const QTonePlay* melody)
 		{
 			play_(melody, load_eeprom);
 		}
@@ -307,7 +307,7 @@ namespace devices::audio
 		 * @param melody a pointer, in Flash, to the sequence of `QTonePlay` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		inline void play_flash(const QTonePlay* melody)
+		void play_flash(const QTonePlay* melody)
 		{
 			play_(melody, load_flash);
 		}
@@ -316,7 +316,7 @@ namespace devices::audio
 		 * Stop playing current melody (if any).
 		 * Playing is not immediate but will stop at the end of the current tone.
 		 */
-		inline void stop()
+		void stop()
 		{
 			stop_ = true;
 		}

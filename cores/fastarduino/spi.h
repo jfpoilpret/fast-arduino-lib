@@ -163,14 +163,14 @@ namespace spi
 		 * @sa transfer(uint8_t*, uint16_t)
 		 * @sa transfer(uint8_t*, uint16_t, uint8_t)
 		 */
-		inline uint8_t transfer(uint8_t data)
+		uint8_t transfer(uint8_t data)
 		{
 			SPDR_ = data;
 			SPSR_.loop_until_bit_set(SPIF);
 			return SPDR_;
 		}
 #else
-		inline uint8_t transfer(uint8_t data)
+		uint8_t transfer(uint8_t data)
 		{
 			USIDR_ = data;
 			// Clear counter overflow before transmission
@@ -194,7 +194,7 @@ namespace spi
 		 * @sa transfer(uint8_t)
 		 * @sa transfer(uint8_t*, uint16_t, uint8_t)
 		 */
-		inline void transfer(uint8_t* data, uint16_t size)
+		void transfer(uint8_t* data, uint16_t size)
 		{
 			while (size--)
 			{
@@ -220,7 +220,7 @@ namespace spi
 		 * @sa transfer(uint8_t)
 		 * @sa transfer(uint8_t*, uint16_t)
 		 */
-		inline void transfer(uint8_t* data, uint16_t size, uint8_t sent)
+		void transfer(uint8_t* data, uint16_t size, uint8_t sent)
 		{
 			while (size--) *data++ = transfer(sent);
 		}
@@ -252,7 +252,7 @@ namespace spi
 	 * class WinBond : public spi::SPIDevice<CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2>
 	 * {
 	 * public:
-	 *     inline void write_page(uint32_t address, uint8_t* data, uint8_t size)
+	 *     void write_page(uint32_t address, uint8_t* data, uint8_t size)
 	 *     {
 	 *         send(0x02, address, data, (size == 0 ? 256 : size));
 	 *     }
@@ -296,14 +296,14 @@ namespace spi
 		 * Start an SPI transfer to this device.
 		 * Concretely this sets the active level on @p CS pin.
 		 */
-		inline void start_transfer()
+		void start_transfer()
 		{
 			cs_.toggle();
 			SPCR_ = SPCR__;
 			SPSR_ = SPSR__;
 		}
 #else
-		inline void start_transfer()
+		void start_transfer()
 		{
 			cs_.toggle();
 			// Set 3-wire mode (SPI) and requested SPI mode (0 or 1) and use software clock strobe (through USITC)
@@ -314,7 +314,7 @@ namespace spi
 		 * End the current SPI ransfer tot hsi device.
 		 * Concretely this clears the active level on @p CS pin.
 		 */
-		inline void end_transfer() INLINE
+		void end_transfer() INLINE
 		{
 			cs_.toggle();
 		}

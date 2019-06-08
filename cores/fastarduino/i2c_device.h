@@ -101,7 +101,7 @@ namespace i2c
 			if (uint8_t(conditions) & 0x01)
 				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
 					 && manager_.send_slar(address);
-			while (ok && --size) ok = manager_.receive_data(*data++);
+			while (ok && (--size != 0)) ok = manager_.receive_data(*data++);
 			if (uint8_t(conditions) & 0x04)
 			{
 				ok = ok && manager_.receive_data(*data++, true);
@@ -180,7 +180,7 @@ namespace i2c
 			if (uint8_t(conditions) & 0x01)
 				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
 					 && manager_.send_slaw(address);
-			while (ok && size--) ok = manager_.send_data(*data++);
+			while (ok && (size-- != 0) ok = manager_.send_data(*data++);
 			if (uint8_t(conditions) & 0x04) manager_.stop();
 			return manager_.status();
 		}

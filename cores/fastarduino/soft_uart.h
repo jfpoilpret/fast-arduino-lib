@@ -171,7 +171,7 @@ namespace serial::soft
 		/// @endcond
 
 	private:
-		inline void write(uint8_t value)
+		void write(uint8_t value)
 		{
 			synchronized write_(value);
 		}

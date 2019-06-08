@@ -152,7 +152,7 @@ namespace serial::hard
 		 * @param parity the kind of parity check used by transmission
 		 * @param stop_bits the number of stop bits used by transmission
 		 */
-		inline void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
 			synchronized
@@ -169,7 +169,7 @@ namespace serial::hard
 		 * Once called, it is possible to re-enable transmission again by
 		 * calling `begin()`.
 		 */
-		inline void end()
+		void end()
 		{
 			synchronized TRAIT::UCSRB = 0;
 		}
@@ -178,13 +178,13 @@ namespace serial::hard
 		 * Get the formatted output stream used to send content through this serial
 		 * transmitter.
 		 */
-		inline streams::ostream out()
+		streams::ostream out()
 		{
 			return streams::ostream(*this);
 		}
 
 	private:
-		inline void data_register_empty()
+		void data_register_empty()
 		{
 			errors_.has_errors = 0;
 			char value;
@@ -275,7 +275,7 @@ namespace serial::hard
 		 * @param parity the kind of parity check used by transmission
 		 * @param stop_bits the number of stop bits used by transmission
 		 */
-		inline void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
 			synchronized
@@ -292,7 +292,7 @@ namespace serial::hard
 		 * Once called, it is possible to re-enable reception again by
 		 * calling `begin()`.
 		 */
-		inline void end()
+		void end()
 		{
 			synchronized TRAIT::UCSRB = 0;
 		}
@@ -301,7 +301,7 @@ namespace serial::hard
 		 * Get the formatted input stream used to read content received through
 		 * this serial transmitter.
 		 */
-		inline streams::istream in()
+		streams::istream in()
 		{
 			return streams::istream(*this);
 		}
@@ -313,7 +313,7 @@ namespace serial::hard
 		/// @endcond
 
 	private:
-		inline void data_receive_complete()
+		void data_receive_complete()
 		{
 			char status = TRAIT::UCSRA;
 			errors_.data_overrun = status & TRAIT::DOR_MASK;
@@ -375,7 +375,7 @@ namespace serial::hard
 		 * @param parity the kind of parity check used by transmission
 		 * @param stop_bits the number of stop bits used by transmission
 		 */
-		inline void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
 			synchronized
@@ -392,7 +392,7 @@ namespace serial::hard
 		 * Once called, it is possible to re-enable transmission and reception 
 		 * again by calling `begin()`.
 		 */
-		inline void end()
+		void end()
 		{
 			synchronized TRAIT::UCSRB = 0;
 		}

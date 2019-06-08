@@ -163,7 +163,7 @@ namespace interrupt
 		 * @sa enable_pin()
 		 * @sa enable_pins()
 		 */
-		inline void enable()
+		void enable()
 		{
 			synchronized TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
 		}
@@ -180,7 +180,7 @@ namespace interrupt
 		 * @sa disable_()
 		 * @sa disable_pin()
 		 */
-		inline void disable()
+		void disable()
 		{
 			synchronized TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
 		}
@@ -195,7 +195,7 @@ namespace interrupt
 		 * `clear_()` instead.
 		 * @sa clear_()
 		 */
-		inline void clear()
+		void clear()
 		{
 			synchronized TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
 		}
@@ -214,7 +214,7 @@ namespace interrupt
 		 * @sa enable_pins()
 		 * @sa disable_pins()
 		 */
-		inline void set_enable_pins(uint8_t mask)
+		void set_enable_pins(uint8_t mask)
 		{
 			synchronized TRAIT::PCMSK_ = mask;
 		}
@@ -238,7 +238,7 @@ namespace interrupt
 		 * @sa enable_pin()
 		 * @sa disable_pin()
 		 */
-		inline void enable_pins(uint8_t mask)
+		void enable_pins(uint8_t mask)
 		{
 			synchronized TRAIT::PCMSK_ |= mask;
 		}
@@ -262,7 +262,7 @@ namespace interrupt
 		 * @sa enable_pin()
 		 * @sa disable_pin()
 		 */
-		inline void disable_pins(uint8_t mask)
+		void disable_pins(uint8_t mask)
 		{
 			synchronized TRAIT::PCMSK_ &= uint8_t(~mask);
 		}
@@ -280,7 +280,7 @@ namespace interrupt
 		 * @sa disable_pin()
 		 * @sa enable_pins()
 		 */
-		template<board::InterruptPin PIN> inline void enable_pin()
+		template<board::InterruptPin PIN> void enable_pin()
 		{
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
@@ -302,7 +302,7 @@ namespace interrupt
 		 * @sa disable_pin_()
 		 * @sa enable_pin()
 		 */
-		template<board::InterruptPin PIN> inline void disable_pin()
+		template<board::InterruptPin PIN> void disable_pin()
 		{
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
@@ -326,7 +326,7 @@ namespace interrupt
 		 * @sa enable_pin_()
 		 * @sa enable_pins_()
 		 */
-		inline void enable_()
+		void enable_()
 		{
 			TRAIT::PCICR_ |= TRAIT::PCICR_MASK;
 		}
@@ -343,7 +343,7 @@ namespace interrupt
 		 * @sa disable()
 		 * @sa disable_pin_()
 		 */
-		inline void disable_()
+		void disable_()
 		{
 			TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
 		}
@@ -358,7 +358,7 @@ namespace interrupt
 		 * `clear()` instead.
 		 * @sa clear()
 		 */
-		inline void clear_()
+		void clear_()
 		{
 			TRAIT::PCIFR_ |= TRAIT::PCIFR_MASK;
 		}
@@ -377,7 +377,7 @@ namespace interrupt
 		 * @sa enable_pins_()
 		 * @sa disable_pins_()
 		 */
-		inline void set_enable_pins_(uint8_t mask)
+		void set_enable_pins_(uint8_t mask)
 		{
 			TRAIT::PCMSK_ = mask;
 		}
@@ -401,7 +401,7 @@ namespace interrupt
 		 * @sa enable_pin_()
 		 * @sa disable_pin_()
 		 */
-		inline void enable_pins_(uint8_t mask)
+		void enable_pins_(uint8_t mask)
 		{
 			TRAIT::PCMSK_ |= mask;
 		}
@@ -425,7 +425,7 @@ namespace interrupt
 		 * @sa enable_pin_()
 		 * @sa disable_pin_()
 		 */
-		inline void disable_pins_(uint8_t mask)
+		void disable_pins_(uint8_t mask)
 		{
 			TRAIT::PCMSK_ &= uint8_t(~mask);
 		}
@@ -443,7 +443,7 @@ namespace interrupt
 		 * @sa disable_pin_()
 		 * @sa enable_pins_()
 		 */
-		template<board::InterruptPin PIN> inline void enable_pin_()
+		template<board::InterruptPin PIN> void enable_pin_()
 		{
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
@@ -465,7 +465,7 @@ namespace interrupt
 		 * @sa disable_pin()
 		 * @sa enable_pin_()
 		 */
-		template<board::InterruptPin PIN> inline void disable_pin_()
+		template<board::InterruptPin PIN> void disable_pin_()
 		{
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();

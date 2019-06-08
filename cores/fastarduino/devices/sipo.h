@@ -75,7 +75,7 @@ namespace devices
 		 * more optimized initialization with other pins, at port level, in the
 		 * final program.
 		 */
-		inline void init()
+		void init()
 		{
 			clock_.set_mode(gpio::PinMode::OUTPUT, false);
 			latch_.set_mode(gpio::PinMode::OUTPUT, true);
@@ -99,14 +99,14 @@ namespace devices
 
 		/// @cond notdocumented
 		// Specialized output for most common types
-		inline void output(uint8_t data) INLINE
+		void output(uint8_t data) INLINE
 		{
 			latch_.clear();
 			bit_bang_data(data);
 			latch_.set();
 		}
 
-		inline void output(uint16_t data) INLINE
+		void output(uint16_t data) INLINE
 		{
 			latch_.clear();
 			bit_bang_data(data >> 8);

@@ -175,8 +175,9 @@ namespace timer
 	private:
 		bool overflow()
 		{
-			if (++count_ == MAX) count_ = 0;
-			return !count_;
+			++count_;
+			if (count_ == MAX) count_ = 0;
+			return (count_ == 0);
 		}
 
 		static constexpr uint8_t TCCRA_MASK()

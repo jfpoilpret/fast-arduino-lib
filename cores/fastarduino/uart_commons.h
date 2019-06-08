@@ -66,7 +66,7 @@ namespace serial
 		/**
 		 * Reset UART errors to no error.
 		 */
-		inline void clear_errors()
+		void clear_errors()
 		{
 			errors_.has_errors = 0;
 		}
@@ -77,7 +77,7 @@ namespace serial
 		 * the exact error(s).
 		 * @retval false if no error is pending
 		 */
-		inline uint8_t has_errors() const
+		uint8_t has_errors() const
 		{
 			return errors_.has_errors;
 		}
@@ -87,7 +87,7 @@ namespace serial
 		 * @retval true if a frame error has occurred
 		 * @retval false if no frame error has occurred
 		 */
-		inline bool frame_error() const
+		bool frame_error() const
 		{
 			return errors_.frame_error;
 		}
@@ -97,7 +97,7 @@ namespace serial
 		 * @retval true if a data overrun has occurred
 		 * @retval false if no data overrun has occurred
 		 */
-		inline bool data_overrun() const
+		bool data_overrun() const
 		{
 			return errors_.data_overrun;
 		}
@@ -107,7 +107,7 @@ namespace serial
 		 * @retval true if a queue overflow has occurred
 		 * @retval false if no queue overflow has occurred
 		 */
-		inline bool queue_overflow() const
+		bool queue_overflow() const
 		{
 			return errors_.queue_overflow;
 		}
@@ -117,7 +117,7 @@ namespace serial
 		 * @retval true if a parity error has occurred
 		 * @retval false if no parity error has occurred
 		 */
-		inline bool parity_error() const
+		bool parity_error() const
 		{
 			return errors_.parity_error;
 		}

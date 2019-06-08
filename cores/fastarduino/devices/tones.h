@@ -192,7 +192,7 @@ namespace devices::audio
 		 * @sa tone(PRESCALER, COUNTER, uint16_t)
 		 * @sa start_tone(Tone)
 		 */
-		inline void start_tone(PRESCALER prescaler, COUNTER counter)
+		void start_tone(PRESCALER prescaler, COUNTER counter)
 		{
 			generator_.start_frequency(prescaler, counter);
 		}
@@ -208,7 +208,7 @@ namespace devices::audio
 		 * 
 		 * @sa start_tone()
 		 */
-		inline void pause(uint16_t ms)
+		void pause(uint16_t ms)
 		{
 			time::delay_ms(ms);
 			generator_.stop();
@@ -220,7 +220,7 @@ namespace devices::audio
 		 * Stop the tone being currently generated to the connected buzzer.
 		 * @sa start_toner()
 		 */
-		inline void stop_tone()
+		void stop_tone()
 		{
 			generator_.stop();
 		}
@@ -250,7 +250,7 @@ namespace devices::audio
 		 * 
 		 * @sa start_tone(PRESCALER, COUNTER)
 		 */
-		inline void tone(PRESCALER prescaler, COUNTER counter, uint16_t ms)
+		void tone(PRESCALER prescaler, COUNTER counter, uint16_t ms)
 		{
 			generator_.start_frequency(prescaler, counter);
 			pause(ms);

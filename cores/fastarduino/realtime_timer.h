@@ -245,7 +245,7 @@ namespace timer
 		 * @sa micros()
 		 * @sa millis_()
 		 */
-		inline uint32_t millis() const
+		uint32_t millis() const
 		{
 			synchronized return milliseconds_;
 		}
@@ -266,7 +266,7 @@ namespace timer
 		 * @sa micros()
 		 * @sa millis()
 		 */
-		inline uint32_t millis_() const
+		uint32_t millis_() const
 		{
 			return milliseconds_;
 		}
@@ -305,7 +305,7 @@ namespace timer
 		 * @sa time()
 		 * @sa micros_()
 		 */
-		inline uint16_t micros() const
+		uint16_t micros() const
 		{
 			synchronized return compute_micros();
 		}
@@ -328,7 +328,7 @@ namespace timer
 		 * @sa time()
 		 * @sa micros()
 		 */
-		inline uint16_t micros_() const
+		uint16_t micros_() const
 		{
 			return compute_micros();
 		}
@@ -418,7 +418,7 @@ namespace timer
 		 * Evey elapsed millisecond will then be added to this new value.
 		 * @param ms the new millisecond start
 		 */
-		inline void millis(uint32_t ms)
+		void millis(uint32_t ms)
 		{
 			synchronized
 			{
@@ -438,7 +438,7 @@ namespace timer
 		 * @sa end()
 		 * @sa begin_()
 		 */
-		inline void begin()
+		void begin()
 		{
 			synchronized begin_();
 		}
@@ -453,7 +453,7 @@ namespace timer
 		 * @sa end_()
 		 * @sa begin()
 		 */
-		inline void begin_()
+		void begin_()
 		{
 			milliseconds_ = 0;
 			Timer<NTIMER>::begin_(MILLI_COUNTER);
@@ -468,7 +468,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa end_()
 		 */
-		inline void end()
+		void end()
 		{
 			Timer<NTIMER>::end();
 		}
@@ -484,7 +484,7 @@ namespace timer
 		 * @sa begin_()
 		 * @sa end()
 		 */
-		inline void end_()
+		void end_()
 		{
 			Timer<NTIMER>::end_();
 		}
@@ -492,7 +492,7 @@ namespace timer
 		/**
 		 * Get a reference to the underlying `Timer` of this `RTT`.
 		 */
-		inline Timer<NTIMER>& timer()
+		Timer<NTIMER>& timer()
 		{
 			return *this;
 		}
@@ -510,7 +510,7 @@ namespace timer
 		static constexpr const PRESCALER MILLI_PRESCALER = CALC::CTC_prescaler(ONE_MILLI);
 		static constexpr const TYPE MILLI_COUNTER = CALC::CTC_counter(MILLI_PRESCALER, ONE_MILLI);
 
-		inline uint16_t compute_micros() const
+		uint16_t compute_micros() const
 		{
 			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1UL + (volatile TYPE&) TRAIT::OCRA));
 		}
