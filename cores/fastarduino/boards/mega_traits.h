@@ -277,7 +277,7 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS02) :
 					_BV(CS02) | _BV(CS00));
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE0) : 0)
@@ -312,7 +312,7 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS22) | _BV(CS21) :
 					_BV(CS22) | _BV(CS21) | _BV(CS20));
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE2) : 0)
@@ -352,7 +352,7 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS12) :
 					_BV(CS12) | _BV(CS10));
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE1) : 0)
@@ -393,7 +393,7 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS32) :
 					_BV(CS32) | _BV(CS30));
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE3) : 0)
@@ -435,7 +435,7 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS42) :
 					_BV(CS42) | _BV(CS40));
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE4) : 0)
@@ -477,7 +477,7 @@ namespace board_traits
 					p == TIMER_PRESCALER::DIV_256 ? _BV(CS52) :
 					_BV(CS52) | _BV(CS50));
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t i)
+		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
 			return	(i & OVERFLOW ? _BV(TOIE5) : 0)

@@ -762,7 +762,7 @@ namespace timer
 		Timer(TimerMode timer_mode, PRESCALER prescaler, TimerInterrupt interrupts = TimerInterrupt(0))
 			: tccra_{timer_mode_TCCRA(timer_mode)},
 			  tccrb_{uint8_t(timer_mode_TCCRB(timer_mode) | TRAIT::TCCRB_prescaler(prescaler))},
-			  timsk_{TRAIT::TIMSK_INT_MASK(uint8_t(interrupts))}
+			  timsk_{TRAIT::TIMSK_int_mask(uint8_t(interrupts))}
 		{}
 
 		/**
@@ -780,7 +780,7 @@ namespace timer
 		 */
 		inline void set_interrupts(TimerInterrupt interrupts = TimerInterrupt(0))
 		{
-			timsk_ = TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			timsk_ = TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB) utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}
@@ -799,7 +799,7 @@ namespace timer
 		 */
 		inline void enable_interrupts(TimerInterrupt interrupts)
 		{
-			timsk_ |= TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			timsk_ |= TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB) utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}
@@ -817,7 +817,7 @@ namespace timer
 		 */
 		inline void disable_interrupts(TimerInterrupt interrupts)
 		{
-			timsk_ &= ~TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			timsk_ &= ~TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB) utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}
@@ -833,7 +833,7 @@ namespace timer
 		 */
 		inline bool are_interrupts_enabled(TimerInterrupt interrupts) const
 		{
-			uint8_t mask = TRAIT::TIMSK_INT_MASK(uint8_t(interrupts));
+			uint8_t mask = TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			return (TRAIT::TIMSK_ & mask) == mask;
 		}
 
@@ -1158,10 +1158,10 @@ namespace timer
 					output_mode == TimerOutputMode::NON_INVERTING ? COM_TRAIT::COM_CLEAR : COM_TRAIT::COM_NORMAL);
 		}
 
-		static constexpr bool TIMSK_INT_MASK_IS_SUPPORTED(TimerInterrupt interrupt)
+		static constexpr bool TIMSK_int_mask_IS_SUPPORTED(TimerInterrupt interrupt)
 		{
-			return (TRAIT::TIMSK_INT_MASK(0xFF) & TRAIT::TIMSK_INT_MASK(uint8_t(interrupt)))
-				   == TRAIT::TIMSK_INT_MASK(uint8_t(interrupt));
+			return (TRAIT::TIMSK_int_mask(0xFF) & TRAIT::TIMSK_int_mask(uint8_t(interrupt)))
+				   == TRAIT::TIMSK_int_mask(uint8_t(interrupt));
 		}
 
 		static constexpr uint8_t timer_mode_TCCRA(TimerMode timer_mode)

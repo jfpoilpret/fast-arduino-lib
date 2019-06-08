@@ -38,74 +38,74 @@ namespace board_traits
 	template<typename T> class REGISTER
 	{
 	public:
-		constexpr REGISTER() : ADDR(NO_REG) {}
-		constexpr REGISTER(uint16_t ADDR) INLINE : ADDR(ADDR) {}
+		constexpr REGISTER() : addr_(NO_REG) {}
+		constexpr REGISTER(uint16_t addr) INLINE : addr_(addr) {}
 
 		constexpr bool is_no_reg() const INLINE
 		{
-			return ADDR == NO_REG;
+			return addr_ == NO_REG;
 		}
 		void operator=(int value) const INLINE
 		{
-			*((volatile T*) ADDR) = (T) value;
+			*((volatile T*) addr_) = (T) value;
 		}
 		void operator|=(int value) const INLINE
 		{
-			*((volatile T*) ADDR) |= (T) value;
+			*((volatile T*) addr_) |= (T) value;
 		}
 		void operator&=(int value) const INLINE
 		{
-			*((volatile T*) ADDR) &= (T) value;
+			*((volatile T*) addr_) &= (T) value;
 		}
 		void operator^=(int value) const INLINE
 		{
-			*((volatile T*) ADDR) ^= (T) value;
+			*((volatile T*) addr_) ^= (T) value;
 		}
 		T operator~() const INLINE
 		{
-			return ~(*((volatile T*) ADDR));
+			return ~(*((volatile T*) addr_));
 		}
 		void loop_until_bit_set(uint8_t bit) const INLINE
 		{
-			while (!(*((volatile T*) ADDR) & _BV(bit)))
+			while (!(*((volatile T*) addr_) & _BV(bit)))
 				;
 		}
 		void loop_until_bit_clear(uint8_t bit) const INLINE
 		{
-			while (*((volatile T*) ADDR) & _BV(bit))
+			while (*((volatile T*) addr_) & _BV(bit))
 				;
 		}
 		bool operator==(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) == (T) value;
+			return *((volatile T*) addr_) == (T) value;
 		}
 		bool operator!=(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) != (T) value;
+			return *((volatile T*) addr_) != (T) value;
 		}
 		bool operator>(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) > (T) value;
+			return *((volatile T*) addr_) > (T) value;
 		}
 		bool operator>=(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) >= (T) value;
+			return *((volatile T*) addr_) >= (T) value;
 		}
 		bool operator<(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) < (T) value;
+			return *((volatile T*) addr_) < (T) value;
 		}
 		bool operator<=(int value) const INLINE
 		{
-			return *((volatile T*) ADDR) <= (T) value;
+			return *((volatile T*) addr_) <= (T) value;
 		}
 		operator volatile T&() const INLINE
 		{
-			return *((volatile T*) ADDR);
+			return *((volatile T*) addr_);
 		}
 
 	private:
-		const uint16_t ADDR;
+		const uint16_t addr_;
 	};
 
 	using REG8 = REGISTER<uint8_t>;
@@ -174,21 +174,23 @@ namespace board_traits
 	{
 		static constexpr uint8_t round_prescaler(uint16_t rate)
 		{
-			return (rate > 64 ? 128 :
-					rate > 32 ? 64 :
-					rate > 16 ? 32 :
-					rate > 8 ? 16 :
-					rate > 4 ? 8 :
-					rate > 2 ? 4 : 2);
+			if (rate > 64) return 128;
+			if (rate > 32) return 64;
+			if (rate > 16) return 32;
+			if (rate > 8) return 16;
+			if (rate > 4) return 8;
+			if (rate > 2) return 4;
+			return 2;
 		}
 		static constexpr uint8_t prescaler_mask(uint8_t prescaler)
 		{
-			return (prescaler == 128 ? _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0) :
-					prescaler == 64 ? _BV(ADPS2) | _BV(ADPS1) :
-					prescaler == 32 ? _BV(ADPS2) | _BV(ADPS0) :
-					prescaler == 16 ? _BV(ADPS2) :
-					prescaler == 8 ? _BV(ADPS1) | _BV(ADPS0) :
-					prescaler == 4 ? _BV(ADPS1) : _BV(ADPS0));
+			if (prescaler == 128) return _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);
+			if (prescaler == 64) return _BV(ADPS2) | _BV(ADPS1);
+			if (prescaler == 32) return _BV(ADPS2) | _BV(ADPS0);
+			if (prescaler == 16) return _BV(ADPS2);
+			if (prescaler == 8) return _BV(ADPS1) | _BV(ADPS0);
+			if (prescaler == 4) return _BV(ADPS1);
+			return _BV(ADPS0);
 		}
 
 		static constexpr const uint8_t PRESCALER = round_prescaler(uint16_t(F_CPU / MAXFREQ));
@@ -484,7 +486,7 @@ namespace board_traits
 
 		static constexpr const TimerPrescalers PRESCALERS = TimerPrescalers::PRESCALERS_NONE;
 		using PRESCALERS_TRAIT = TimerPrescalers_trait<PRESCALERS>;
-		using TIMER_PRESCALER = PRESCALERS_TRAIT::TYPE;
+		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 
 		static constexpr const uint8_t COM_COUNT = 0;
 		static constexpr const uint8_t COM_MASK = 0;
@@ -517,11 +519,11 @@ namespace board_traits
 		static constexpr const REG8 TIMSK_{};
 		static constexpr const uint8_t TIMSK_MASK = 0xFF;
 		static constexpr const REG8 TIFR_{};
-		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p UNUSED)
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER prescaler UNUSED)
 		{
 			return 0;
 		}
-		static constexpr uint8_t TIMSK_INT_MASK(uint8_t interrupt UNUSED)
+		static constexpr uint8_t TIMSK_int_mask(uint8_t interrupt UNUSED)
 		{
 			return 0;
 		}

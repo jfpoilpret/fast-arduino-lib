@@ -151,12 +151,12 @@ namespace streams
 		 * int* p = &i;
 		 * out << p;
 		 * @endcode
-		 * @param p the pointer which address to output
+		 * @param ptr the pointer which address to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(const void* p)
+		ostream& operator<<(const void* ptr)
 		{
-			convert(stream_, uint16_t(p));
+			convert(stream_, uint16_t(ptr));
 			after_insertion();
 			return *this;
 		}
@@ -166,12 +166,12 @@ namespace streams
 		 * @code
 		 * out << true;
 		 * @endcode
-		 * @param b the bool to output
+		 * @param value the bool to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(bool b)
+		ostream& operator<<(bool value)
 		{
-			convert(stream_, b);
+			convert(stream_, value);
 			after_insertion();
 			return *this;
 		}
@@ -181,12 +181,12 @@ namespace streams
 		 * @code
 		 * out << '\n';
 		 * @endcode
-		 * @param c the character to output
+		 * @param ch the character to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(char c)
+		ostream& operator<<(char ch)
 		{
-			convert(stream_, c);
+			convert(stream_, ch);
 			after_insertion();
 			return *this;
 		}
@@ -196,12 +196,12 @@ namespace streams
 		 * @code
 		 * out << "Hello, Worlds!\n";
 		 * @endcode
-		 * @param s the string to output
+		 * @param str the string to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(const char* s)
+		ostream& operator<<(const char* str)
 		{
-			justify(stream_, s, false, nullptr);
+			justify(stream_, str, false, nullptr);
 			after_insertion();
 			return *this;
 		}
@@ -211,12 +211,12 @@ namespace streams
 		 * @code
 		 * out << F("Hello, Worlds!\n");
 		 * @endcode
-		 * @param s the string to output
+		 * @param str the string to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(const flash::FlashStorage* s)
+		ostream& operator<<(const flash::FlashStorage* str)
 		{
-			justify(stream_, s);
+			justify(stream_, str);
 			after_insertion();
 			return *this;
 		}
@@ -228,12 +228,12 @@ namespace streams
 		 * int x = -123;
 		 * out << x;
 		 * @endcode
-		 * @param v the number to output
+		 * @param value the number to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(int v)
+		ostream& operator<<(int value)
 		{
-			convert(stream_, v);
+			convert(stream_, value);
 			after_insertion();
 			return *this;
 		}
@@ -245,12 +245,12 @@ namespace streams
 		 * unsigned int x = 64000;
 		 * out << x;
 		 * @endcode
-		 * @param v the number to output
+		 * @param value the number to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(unsigned int v)
+		ostream& operator<<(unsigned int value)
 		{
-			convert(stream_, v);
+			convert(stream_, value);
 			after_insertion();
 			return *this;
 		}
@@ -262,12 +262,12 @@ namespace streams
 		 * long x = -999999L;
 		 * out << x;
 		 * @endcode
-		 * @param v the number to output
+		 * @param value the number to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(long v)
+		ostream& operator<<(long value)
 		{
-			convert(stream_, v);
+			convert(stream_, value);
 			after_insertion();
 			return *this;
 		}
@@ -279,12 +279,12 @@ namespace streams
 		 * unsigned long x = 999999UL;
 		 * out << x;
 		 * @endcode
-		 * @param v the number to output
+		 * @param value the number to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(unsigned long v)
+		ostream& operator<<(unsigned long value)
 		{
-			convert(stream_, v);
+			convert(stream_, value);
 			after_insertion();
 			return *this;
 		}
@@ -296,12 +296,12 @@ namespace streams
 		 * double x = 123.456;
 		 * out << x;
 		 * @endcode
-		 * @param v the number to output
+		 * @param value the number to output
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(double v)
+		ostream& operator<<(double value)
 		{
-			convert(stream_, v);
+			convert(stream_, value);
 			after_insertion();
 			return *this;
 		}
@@ -324,12 +324,12 @@ namespace streams
 		 * 
 		 * out << hex << 16384 << endl << flush;
 		 * @endcode
-		 * @param f the manipulator to apply to this output stream
+		 * @param func the manipulator to apply to this output stream
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(Manipulator f)
+		ostream& operator<<(Manipulator func)
 		{
-			f(*this);
+			func(*this);
 			return *this;
 		}
 
@@ -405,9 +405,9 @@ namespace streams
 		 * @sa get()
 		 * @sa istreambuf::sbumpc()
 		 */
-		istream& get(char& c)
+		istream& get(char& ch)
 		{
-			c = get();
+			ch = get();
 			return *this;
 		}
 
@@ -415,19 +415,19 @@ namespace streams
 		 * Extract characters from this input stream and stores them as a C-string,
 		 * until either `(n - 1)` characters have been extracted or the @p delim
 		 * character is encountered. The delimiting character is not extracted 
-		 * from the stream and also not added to @p s.
-		 * A null character `\0` is automatically appended to @p s.
+		 * from the stream and also not added to @p str.
+		 * A null character `\0` is automatically appended to @p str.
 		 * @sa getline()
 		 */
-		istream& get(char* s, size_t n, char delim = '\n')
+		istream& get(char* str, size_t n, char delim = '\n')
 		{
 			while (--n)
 			{
-				int c = peek();
-				if (c == delim) break;
-				*s++ = get();
+				int ch = peek();
+				if (ch == delim) break;
+				*str++ = get();
 			}
-			*s = 0;
+			*str = 0;
 			return *this;
 		}
 
@@ -435,19 +435,19 @@ namespace streams
 		 * Extract characters from this input stream and stores them as a C-string,
 		 * until either `(n - 1)` characters have been extracted or the @p delim
 		 * character is encountered. The delimiting character is extracted 
-		 * from the stream but is not added to @p s.
-		 * A null character `\0` is automatically appended to @p s.
+		 * from the stream but is not added to @p str.
+		 * A null character `\0` is automatically appended to @p str.
 		 * @sa get(char*, size_t, char)
 		 */
-		istream& getline(char* s, size_t n, char delim = '\n')
+		istream& getline(char* str, size_t n, char delim = '\n')
 		{
 			while (--n)
 			{
-				int c = get();
-				if (c == delim) break;
-				*s++ = c;
+				int ch = get();
+				if (ch == delim) break;
+				*str++ = ch;
 			}
-			*s = 0;
+			*str = 0;
 			return *this;
 		}
 
@@ -471,12 +471,12 @@ namespace streams
 
 		/**
 		 * Read a block of data from this input stream.
-		 * Extracts exactly @p n characters and copies them to @p s.
+		 * Extracts exactly @p n characters and copies them to @p str.
 		 * The method blocks until @p n characters have been read.
 		 */
-		istream& read(char* s, size_t n)
+		istream& read(char* str, size_t n)
 		{
-			while (n--) *s++ = get();
+			while (n--) *str++ = get();
 			return *this;
 		}
 
@@ -509,19 +509,19 @@ namespace streams
 		 * any other value will be interpreted as `true`.
 		 * If `skipws()` is in action, then any white spaces read from the input
 		 * will be skipped and the first non white space character will be used 
-		 * to determine the value to set to @p v.
+		 * to determine the value to set to @p value.
 		 * @code
 		 * bool b;
 		 * in >> b;
 		 * @endcode
-		 * @param v the boolean value read from the input stream
+		 * @param value the boolean value read from the input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(bool& v)
+		istream& operator>>(bool& value)
 		{
 			skipws_if_needed();
 			char buffer[10 + 1];
-			convert(scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), value);
 			return *this;
 		}
 
@@ -529,18 +529,18 @@ namespace streams
 		 * Input next character from buffer.
 		 * If `skipws()` is in action, then any white spaces read from the input
 		 * will be skipped and the first non white space character will be used 
-		 * to determine the value to set to @p v.
+		 * to determine the value to set to @p value.
 		 * @code
 		 * char c;
 		 * in >> c;
 		 * @endcode
-		 * @param v the next character read from the input stream
+		 * @param value the next character read from the input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(char& v)
+		istream& operator>>(char& value)
 		{
 			skipws_if_needed();
-			v = containers::pull(stream_.queue());
+			value = containers::pull(stream_.queue());
 			return *this;
 		}
 
@@ -548,19 +548,19 @@ namespace streams
 		 * Input and interpret next word from buffer as a signed integer value.
 		 * If `skipws()` is in action, then any white spaces read from the input
 		 * will be skipped and the first non white space character will be used 
-		 * to determine the value to set to @p v.
+		 * to determine the value to set to @p value.
 		 * @code
 		 * int i;
 		 * in >> i;
 		 * @endcode
-		 * @param v the integer value read from the input stream
+		 * @param value the integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(int& v)
+		istream& operator>>(int& value)
 		{
 			skipws_if_needed();
 			char buffer[sizeof(int) * 8 + 1];
-			convert(scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), value);
 			return *this;
 		}
 
@@ -568,19 +568,19 @@ namespace streams
 		 * Input and interpret next word from buffer as an unsigned integer value.
 		 * If `skipws()` is in action, then any white spaces read from the input
 		 * will be skipped and the first non white space character will be used 
-		 * to determine the value to set to @p v.
+		 * to determine the value to set to @p value.
 		 * @code
 		 * unsigned int i;
 		 * in >> i;
 		 * @endcode
-		 * @param v the unsigned integer value read from the input stream
+		 * @param value the unsigned integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(unsigned int& v)
+		istream& operator>>(unsigned int& value)
 		{
 			skipws_if_needed();
 			char buffer[sizeof(int) * 8 + 1];
-			convert(scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), value);
 			return *this;
 		}
 
@@ -588,19 +588,19 @@ namespace streams
 		 * Input and interpret next word from buffer as a signed long integer value.
 		 * If `skipws()` is in action, then any white spaces read from the input
 		 * will be skipped and the first non white space character will be used 
-		 * to determine the value to set to @p v.
+		 * to determine the value to set to @p value.
 		 * @code
 		 * long i;
 		 * in >> i;
 		 * @endcode
-		 * @param v the long integer value read from the input stream
+		 * @param value the long integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(long& v)
+		istream& operator>>(long& value)
 		{
 			skipws_if_needed();
 			char buffer[sizeof(long) * 8 + 1];
-			convert(scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), value);
 			return *this;
 		}
 
@@ -608,19 +608,19 @@ namespace streams
 		 * Input and interpret next word from buffer as an unsigned long integer value.
 		 * If `skipws()` is in action, then any white spaces read from the input
 		 * will be skipped and the first non white space character will be used 
-		 * to determine the value to set to @p v.
+		 * to determine the value to set to @p value.
 		 * @code
 		 * unsigned long i;
 		 * in >> i;
 		 * @endcode
-		 * @param v the unsigned long integer value read from the input stream
+		 * @param value the unsigned long integer value read from the input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(unsigned long& v)
+		istream& operator>>(unsigned long& value)
 		{
 			skipws_if_needed();
 			char buffer[sizeof(long) * 8 + 1];
-			convert(scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), value);
 			return *this;
 		}
 
@@ -628,21 +628,21 @@ namespace streams
 		 * Input and interpret next word from buffer as a floating point value.
 		 * If `skipws()` is in action, then any white spaces read from the input
 		 * will be skipped and the first non white space character will be used 
-		 * to determine the value to set to @p v.
+		 * to determine the value to set to @p value.
 		 * @code
 		 * double d;
 		 * in >> d;
 		 * @endcode
-		 * @param v the floating point value read from the input stream
+		 * @param value the floating point value read from the input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(double& v)
+		istream& operator>>(double& value)
 		{
 			skipws_if_needed();
 			// Allocate sufficient size for fixed/scientific representation with precision max = 16
 			// Need 1 more for sign, 1 for DP, 1 for first digit, 4 for e+00
 			char buffer[DOUBLE_BUFFER_SIZE];
-			convert(scan(buffer, sizeof buffer), v);
+			convert(scan(buffer, sizeof buffer), value);
 			return *this;
 		}
 
@@ -665,12 +665,12 @@ namespace streams
 		 * represented in hexadecimal in the input, e.g. 0xABCD.
 		 * in >> hex >> value;
 		 * @endcode
-		 * @param f the manipulator to apply to this input stream
+		 * @param func the manipulator to apply to this input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(Manipulator f)
+		istream& operator>>(Manipulator func)
 		{
-			f(*this);
+			func(*this);
 			return *this;
 		}
 
