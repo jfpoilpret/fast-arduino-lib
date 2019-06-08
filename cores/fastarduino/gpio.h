@@ -417,7 +417,7 @@ namespace gpio
 		 */
 		void set_PORT(uint8_t port) INLINE
 		{
-			TRAIT::PORT = (TRAIT::PORT & uint8_t(~MASK)) | (port & MASK);
+			TRAIT::PORT = uint8_t(TRAIT::PORT & uint8_t(~MASK)) | uint8_t(port & MASK);
 		}
 
 		/**
@@ -448,7 +448,7 @@ namespace gpio
 		 */
 		void set_DDR(uint8_t ddr) INLINE
 		{
-			TRAIT::DDR = (TRAIT::DDR & uint8_t(~MASK)) | (ddr & MASK);
+			TRAIT::DDR = uint8_t(TRAIT::DDR & uint8_t(~MASK)) | uint8_t(ddr & MASK);
 		}
 
 		/**

@@ -357,7 +357,7 @@ namespace timer
 		 */
 		static constexpr uint32_t ticks_to_us(PRESCALER prescaler, TYPE ticks)
 		{
-			return uint32_t(ticks) * _BV(uint8_t(prescaler)) / (F_CPU / 1000000UL);
+			return uint32_t(ticks) * _BV(uint8_t(prescaler)) / (F_CPU / 1'000'000UL);
 		}
 
 		/**
@@ -373,7 +373,7 @@ namespace timer
 		 */
 		static constexpr TYPE us_to_ticks(PRESCALER prescaler, uint32_t us)
 		{
-			return TYPE(us * (F_CPU / 1000000UL) / _BV(uint8_t(prescaler)));
+			return TYPE(us * (F_CPU / 1'000'000UL) / _BV(uint8_t(prescaler)));
 		}
 
 		/**
@@ -617,14 +617,14 @@ namespace timer
 		}
 
 	private:
-		static constexpr uint32_t prescaler_quotient(PRESCALER p, uint32_t us)
+		static constexpr uint32_t prescaler_quotient(PRESCALER prescaler, uint32_t us)
 		{
-			return (F_CPU / 1000000UL * us) / _BV(uint8_t(p));
+			return (F_CPU / 1'000'000UL * us) / _BV(uint8_t(prescaler));
 		}
 
-		static constexpr uint32_t prescaler_remainder(PRESCALER p, uint32_t us)
+		static constexpr uint32_t prescaler_remainder(PRESCALER prescaler, uint32_t us)
 		{
-			return (F_CPU / 1000000UL * us) % _BV(uint8_t(p));
+			return (F_CPU / 1'000'000UL * us) % _BV(uint8_t(prescaler));
 		}
 
 		static constexpr bool prescaler_is_adequate(uint32_t quotient)
@@ -638,7 +638,7 @@ namespace timer
 			// - quotient is in ]1; MAX_COUNTER[
 			// - smallest remainder
 			// - largest quotient
-			uint32_t smallest_remainder = 0xFFFFFFFFUL;
+			uint32_t smallest_remainder = 0xFFFF'FFFFUL;
 			uint32_t largest_quotient = 0;
 			PRESCALER current = prescalers[N - 1];
 			for (size_t i = 0; i < N; ++i)
@@ -649,7 +649,7 @@ namespace timer
 				{
 					uint32_t remainder = prescaler_remainder(prescaler, us);
 					if (remainder > smallest_remainder) continue;
-					if (remainder == smallest_remainder && quotient <= largest_quotient) continue;
+					if ((remainder == smallest_remainder) && (quotient <= largest_quotient)) continue;
 					current = prescaler;
 					smallest_remainder = remainder;
 					largest_quotient = quotient;
@@ -658,9 +658,9 @@ namespace timer
 			return current;
 		}
 
-		static constexpr bool prescaler_is_adequate_for_frequency(PRESCALER p, uint32_t freq)
+		static constexpr bool prescaler_is_adequate_for_frequency(PRESCALER prescaler, uint32_t freq)
 		{
-			return (F_CPU / (uint32_t) _BV(uint8_t(p)) > freq);
+			return (F_CPU / (uint32_t) _BV(uint8_t(prescaler))) > freq;
 		}
 
 		template<size_t N>
@@ -676,9 +676,9 @@ namespace timer
 			return prescalers[N - 1];
 		}
 
-		static constexpr bool prescaler_is_adequate_for_tick(PRESCALER p, uint32_t us)
+		static constexpr bool prescaler_is_adequate_for_tick(PRESCALER prescaler, uint32_t us)
 		{
-			return (prescaler_quotient(p, us) >= 1);
+			return (prescaler_quotient(prescaler, us) >= 1);
 		}
 
 		template<size_t N> static constexpr PRESCALER best_tick_prescaler(const PRESCALER (&prescalers)[N], uint32_t us)
@@ -778,7 +778,7 @@ namespace timer
 		 * started; note that some interrupts are not supported by all timers, if
 		 * used here, they will silently be ignored.
 		 */
-		inline void set_interrupts(TimerInterrupt interrupts = TimerInterrupt(0))
+		void set_interrupts(TimerInterrupt interrupts = TimerInterrupt(0))
 		{
 			timsk_ = TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			// Check if timer is currently running
@@ -797,7 +797,7 @@ namespace timer
 		 * started; note that some interrupts are not supported by all timers, if
 		 * used here, they will silently be ignored.
 		 */
-		inline void enable_interrupts(TimerInterrupt interrupts)
+		void enable_interrupts(TimerInterrupt interrupts)
 		{
 			timsk_ |= TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			// Check if timer is currently running
@@ -815,7 +815,7 @@ namespace timer
 		 * @param interrupts interrupts that will not be used when timer is 
 		 * started
 		 */
-		inline void disable_interrupts(TimerInterrupt interrupts)
+		void disable_interrupts(TimerInterrupt interrupts)
 		{
 			timsk_ &= ~TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			// Check if timer is currently running
@@ -831,7 +831,7 @@ namespace timer
 		 * 
 		 * @param interrupts interrupts to be checked
 		 */
-		inline bool are_interrupts_enabled(TimerInterrupt interrupts) const
+		bool are_interrupts_enabled(TimerInterrupt interrupts) const
 		{
 			uint8_t mask = TRAIT::TIMSK_int_mask(uint8_t(interrupts));
 			return (TRAIT::TIMSK_ & mask) == mask;
@@ -845,7 +845,7 @@ namespace timer
 		 * using this method will generate a compiler error.
 		 * @param input_capture new input capture mode to use
 		 */
-		inline void set_input_capture(TimerInputCapture input_capture)
+		void set_input_capture(TimerInputCapture input_capture)
 		{
 			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
 			utils::set_mask(tccrb_, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture));
@@ -856,7 +856,7 @@ namespace timer
 		/** 
 		 * Return the current `TimerInputCapture` used by this timer.
 		 */
-		inline TimerInputCapture input_capture() const
+		TimerInputCapture input_capture() const
 		{
 			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
 			return TRAIT::TCCRB & TRAIT::ICES_TCCRB ? TimerInputCapture::RISING_EDGE : TimerInputCapture::FALLING_EDGE;
@@ -866,7 +866,7 @@ namespace timer
 		 * Change timer mode.
 		 * @param timer_mode the mode to reset this timer to
 		 */
-		inline void set_timer_mode(TimerMode timer_mode)
+		void set_timer_mode(TimerMode timer_mode)
 		{
 			utils::set_mask(tccra_, TRAIT::MODE_MASK_TCCRA, timer_mode_TCCRA(timer_mode));
 			utils::set_mask(tccrb_, TRAIT::MODE_MASK_TCCRB, timer_mode_TCCRB(timer_mode));
@@ -884,7 +884,7 @@ namespace timer
 		 * needed, do not use it, as it will generate extra code with no real
 		 * added value.
 		 */
-		inline TimerMode get_timer_mode() const
+		TimerMode get_timer_mode() const
 		{
 			return timer_mode(tccra_, tccrb_);
 		}
@@ -893,7 +893,7 @@ namespace timer
 		 * Change prescaler for this timer.
 		 * @param prescaler the prescale enum value to use for this timer
 		 */
-		inline void set_prescaler(PRESCALER prescaler)
+		void set_prescaler(PRESCALER prescaler)
 		{
 			utils::set_mask(tccrb_, TRAIT::CS_MASK_TCCRB, TRAIT::TCCRB_prescaler(prescaler));
 			// Check if timer is currently running
@@ -913,7 +913,7 @@ namespace timer
 		 * @sa end()
 		 * @sa begin_(TYPE)
 		 */
-		inline void begin(TYPE max = 0)
+		void begin(TYPE max = 0)
 		{
 			synchronized begin_(max);
 		}
@@ -931,7 +931,7 @@ namespace timer
 		 * @sa end_()
 		 * @sa begin(TYPE)
 		 */
-		inline void begin_(TYPE max = 0)
+		void begin_(TYPE max = 0)
 		{
 			if (!TRAIT::TCCRA.is_no_reg()) TRAIT::TCCRA = tccra_;
 			TRAIT::TCCRB = tccrb_;
@@ -950,7 +950,7 @@ namespace timer
 		 * `reset_()` instead.
 		 * @sa reset_()
 		 */
-		inline void reset()
+		void reset()
 		{
 			if (sizeof(TYPE) > 1)
 				synchronized reset_();
@@ -966,7 +966,7 @@ namespace timer
 		 * `reset()` instead.
 		 * @sa reset()
 		 */
-		inline void reset_()
+		void reset_()
 		{
 			TRAIT::TCNT = 0;
 		}
@@ -978,7 +978,7 @@ namespace timer
 		 * `ticks_()` instead.
 		 * @sa ticks_()
 		 */
-		inline TYPE ticks()
+		TYPE ticks()
 		{
 			if (sizeof(TYPE) > 1)
 				synchronized return ticks_();
@@ -994,7 +994,7 @@ namespace timer
 		 * `ticks()` instead.
 		 * @sa ticks()
 		 */
-		inline TYPE ticks_()
+		TYPE ticks_()
 		{
 			return TRAIT::TCNT;
 		}
@@ -1009,7 +1009,7 @@ namespace timer
 		 * @sa resume()
 		 * @sa suspend_()
 		 */
-		inline void suspend()
+		void suspend()
 		{
 			synchronized suspend_();
 		}
@@ -1024,7 +1024,7 @@ namespace timer
 		 * @sa resume_()
 		 * @sa suspend()
 		 */
-		inline void suspend_()
+		void suspend_()
 		{
 			// Clear timer interrupt mode
 			utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, uint8_t(0));
@@ -1040,7 +1040,7 @@ namespace timer
 		 * @sa suspend()
 		 * @sa resume_()
 		 */
-		inline void resume()
+		void resume()
 		{
 			synchronized resume_();
 		}
@@ -1055,7 +1055,7 @@ namespace timer
 		 * @sa suspend_()
 		 * @sa resume()
 		 */
-		inline void resume_()
+		void resume_()
 		{
 			// Reset timer counter
 			TRAIT::TCNT = 0;
@@ -1069,7 +1069,7 @@ namespace timer
 		 * @retval true the timer is currently suspended
 		 * @retval false the timer is currently active
 		 */
-		inline bool is_suspended()
+		bool is_suspended()
 		{
 			return (TRAIT::TIMSK_ & TRAIT::TIMSK_MASK) == 0;
 		}
@@ -1084,7 +1084,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa end_()
 		 */
-		inline void end()
+		void end()
 		{
 			synchronized end_();
 		}
@@ -1099,7 +1099,7 @@ namespace timer
 		 * @sa begin_()
 		 * @sa end()
 		 */
-		inline void end_()
+		void end_()
 		{
 			// Stop timer
 			TRAIT::TCCRB = 0;
@@ -1114,7 +1114,7 @@ namespace timer
 		 * will not compile if you use an incorrect value.
 		 * @param mode the new output mode for this timer and this pin
 		 */
-		template<uint8_t COM> inline void set_output_mode(TimerOutputMode mode)
+		template<uint8_t COM> void set_output_mode(TimerOutputMode mode)
 		{
 			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
 			using COM_TRAIT = board_traits::Timer_COM_trait<NTIMER, COM>;
@@ -1131,7 +1131,7 @@ namespace timer
 		 * will not compile if you use an incorrect value.
 		 * @param max the new maximum value for this timer and this pin
 		 */
-		template<uint8_t COM> inline void set_max(TYPE max)
+		template<uint8_t COM> void set_max(TYPE max)
 		{
 			static_assert(COM < TRAIT::COM_COUNT, "COM must exist for TIMER");
 			using COM_TRAIT = board_traits::Timer_COM_trait<NTIMER, COM>;
@@ -1153,9 +1153,10 @@ namespace timer
 		template<uint8_t COM> static constexpr uint8_t convert_COM(TimerOutputMode output_mode)
 		{
 			using COM_TRAIT = board_traits::Timer_COM_trait<NTIMER, COM>;
-			return (output_mode == TimerOutputMode::TOGGLE ? COM_TRAIT::COM_TOGGLE :
-					output_mode == TimerOutputMode::INVERTING ? COM_TRAIT::COM_SET :
-					output_mode == TimerOutputMode::NON_INVERTING ? COM_TRAIT::COM_CLEAR : COM_TRAIT::COM_NORMAL);
+			if (output_mode == TimerOutputMode::TOGGLE) return COM_TRAIT::COM_TOGGLE;
+			if (output_mode == TimerOutputMode::INVERTING) return COM_TRAIT::COM_SET;
+			if (output_mode == TimerOutputMode::NON_INVERTING) return COM_TRAIT::COM_CLEAR;
+			return COM_TRAIT::COM_NORMAL;
 		}
 
 		static constexpr bool TIMSK_int_mask_IS_SUPPORTED(TimerInterrupt interrupt)
@@ -1166,15 +1167,17 @@ namespace timer
 
 		static constexpr uint8_t timer_mode_TCCRA(TimerMode timer_mode)
 		{
-			return (timer_mode == TimerMode::CTC ? TRAIT::CTC_TCCRA :
-					timer_mode == TimerMode::FAST_PWM ? TRAIT::F_PWM_TCCRA :
-					timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRA : 0);
+			if (timer_mode == TimerMode::CTC) return TRAIT::CTC_TCCRA;
+			if (timer_mode == TimerMode::FAST_PWM) return TRAIT::F_PWM_TCCRA;
+			if (timer_mode == TimerMode::PHASE_CORRECT_PWM) return TRAIT::PC_PWM_TCCRA;
+			return 0;
 		}
 		static constexpr uint8_t timer_mode_TCCRB(TimerMode timer_mode)
 		{
-			return (timer_mode == TimerMode::CTC ? TRAIT::CTC_TCCRB :
-					timer_mode == TimerMode::FAST_PWM ? TRAIT::F_PWM_TCCRB :
-					timer_mode == TimerMode::PHASE_CORRECT_PWM ? TRAIT::PC_PWM_TCCRB : 0);
+			if (timer_mode == TimerMode::CTC) return TRAIT::CTC_TCCRB;
+			if (timer_mode == TimerMode::FAST_PWM) return TRAIT::F_PWM_TCCRB;
+			if (timer_mode == TimerMode::PHASE_CORRECT_PWM) return TRAIT::PC_PWM_TCCRB;
+			return 0;
 		}
 
 		static constexpr bool is_timer_mode(TimerMode mode, uint8_t TCCRA, uint8_t TCCRB)
@@ -1184,10 +1187,10 @@ namespace timer
 		}
 		static constexpr TimerMode timer_mode(uint8_t TCCRA, uint8_t TCCRB)
 		{
-			return (is_timer_mode(TimerMode::CTC, TCCRA, TCCRB) ? TimerMode::CTC :
-					is_timer_mode(TimerMode::FAST_PWM, TCCRA, TCCRB) ? TimerMode::FAST_PWM :
-					is_timer_mode(TimerMode::PHASE_CORRECT_PWM, TCCRA, TCCRB) ? TimerMode::PHASE_CORRECT_PWM :
-					TimerMode::NORMAL);
+			if (is_timer_mode(TimerMode::CTC, TCCRA, TCCRB)) return TimerMode::CTC;
+			if (is_timer_mode(TimerMode::FAST_PWM, TCCRA, TCCRB)) return TimerMode::FAST_PWM;
+			if (is_timer_mode(TimerMode::PHASE_CORRECT_PWM, TCCRA, TCCRB)) return TimerMode::PHASE_CORRECT_PWM;
+			return TimerMode::NORMAL;
 		}
 
 		static constexpr uint8_t input_capture_TCCRB(TimerInputCapture input_capture)

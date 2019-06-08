@@ -47,4 +47,14 @@
 #define SREG (*((volatile uint8_t*) (0x3F + __SFR_OFFSET)))
 #endif
 
+//TODO maybe put in other header, eg bits.h?
+static constexpr uint8_t BV8(uint8_t shift)
+{
+	return uint8_t(1 << shift);
+}
+static constexpr uint16_t BV16(uint8_t shift)
+{
+	return uint16_t(1 << shift);
+}
+
 #endif /* BOARDS_IO_HH */

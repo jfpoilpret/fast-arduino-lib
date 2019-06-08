@@ -142,7 +142,7 @@ namespace eeprom
 		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa read(uint16_t, T&)
 		 */
-		template<typename T> inline static bool read(const T* address, T& value)
+		template<typename T> static bool read(const T* address, T& value)
 		{
 			return read((uint16_t) address, value);
 		}
@@ -165,8 +165,8 @@ namespace eeprom
 		template<typename T> static bool read(uint16_t address, T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
-			uint8_t* v = (uint8_t*) &value;
-			for (uint16_t i = 0; i < sizeof(T); ++i) blocked_read(address++, *v++);
+			uint8_t* pvalue = (uint8_t*) &value;
+			for (uint16_t i = 0; i < sizeof(T); ++i) blocked_read(address++, *pvalue++);
 			return true;
 		}
 
@@ -187,7 +187,7 @@ namespace eeprom
 		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa read(uint16_t, T*, uint16_t)
 		 */
-		template<typename T> inline static bool read(const T* address, T* value, uint16_t count)
+		template<typename T> static bool read(const T* address, T* value, uint16_t count)
 		{
 			return read((uint16_t) address, value, count);
 		}
@@ -211,8 +211,8 @@ namespace eeprom
 		template<typename T> static bool read(uint16_t address, T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
-			uint8_t* v = (uint8_t*) value;
-			for (uint16_t i = 0; i < count * sizeof(T); ++i) blocked_read(address++, *v++);
+			uint8_t* pvalue = (uint8_t*) value;
+			for (uint16_t i = 0; i < (count * sizeof(T)); ++i) blocked_read(address++, *pvalue++);
 			return true;
 		}
 
@@ -228,7 +228,7 @@ namespace eeprom
 		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa read(uint16_t, uint8_t&)
 		 */
-		inline static bool read(const uint8_t* address, uint8_t& value)
+		static bool read(const uint8_t* address, uint8_t& value)
 		{
 			return read((uint16_t) address, value);
 		}
@@ -244,7 +244,7 @@ namespace eeprom
 		 * @retval false if read failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa read(const uint8_t*, uint8_t&)
 		 */
-		inline static bool read(uint16_t address, uint8_t& value)
+		static bool read(uint16_t address, uint8_t& value)
 		{
 			if (!check(address, 1))
 			{
@@ -271,7 +271,7 @@ namespace eeprom
 		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa write(uint16_t, const T&)
 		 */
-		template<typename T> inline static bool write(const T* address, const T& value)
+		template<typename T> static bool write(const T* address, const T& value)
 		{
 			return write((uint16_t) address, value);
 		}
@@ -294,8 +294,8 @@ namespace eeprom
 		template<typename T> static bool write(uint16_t address, const T& value)
 		{
 			if (!check(address, sizeof(T))) return false;
-			uint8_t* v = (uint8_t*) &value;
-			for (uint8_t i = 0; i < sizeof(T); ++i) blocked_write(address++, *v++);
+			uint8_t* pvalue = (uint8_t*) &value;
+			for (uint8_t i = 0; i < sizeof(T); ++i) blocked_write(address++, *pvalue++);
 			return true;
 		}
 
@@ -316,7 +316,7 @@ namespace eeprom
 		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa write(uint16_t, const T*, uint16_t)
 		 */
-		template<typename T> inline static bool write(const T* address, const T* value, uint16_t count)
+		template<typename T> static bool write(const T* address, const T* value, uint16_t count)
 		{
 			return write((uint16_t) address, value, count);
 		}
@@ -340,8 +340,8 @@ namespace eeprom
 		template<typename T> static bool write(uint16_t address, const T* value, uint16_t count)
 		{
 			if (!check(address, count * sizeof(T))) return false;
-			uint8_t* v = (uint8_t*) value;
-			for (uint8_t i = 0; i < count * sizeof(T); ++i) blocked_write(address++, *v++);
+			uint8_t* pvalue = (uint8_t*) value;
+			for (uint8_t i = 0; i < (count * sizeof(T)); ++i) blocked_write(address++, *pvalue++);
 			return true;
 		}
 
@@ -356,7 +356,7 @@ namespace eeprom
 		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa write(uint16_t, uint8_t)
 		 */
-		inline static bool write(const uint8_t* address, uint8_t value)
+		static bool write(const uint8_t* address, uint8_t value)
 		{
 			return write((uint16_t) address, value);
 		}
@@ -371,7 +371,7 @@ namespace eeprom
 		 * @retval false if write failed, i.e. if @p address is outside EEPROM bounds
 		 * @sa write(const uint8_t*, uint8_t)
 		 */
-		inline static bool write(uint16_t address, uint8_t value)
+		static bool write(uint16_t address, uint8_t value)
 		{
 			if (!check(address, 1)) return false;
 			blocked_write(address, value);
@@ -406,32 +406,32 @@ namespace eeprom
 		 * Normally, you would not need this method as any `EEPROM` method calls it 
 		 * before starting its operation.
 		 */
-		inline static void wait_until_ready()
+		static void wait_until_ready()
 		{
 			EECR_.loop_until_bit_clear(EEPE);
 		}
 
 	protected:
 		/// @cond notdocumented
-		inline static bool check(uint16_t address, uint16_t size)
+		static bool check(uint16_t address, uint16_t size)
 		{
 			return size && (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
 		}
 
-		inline static void blocked_read(uint16_t address, uint8_t& value)
+		static void blocked_read(uint16_t address, uint8_t& value)
 		{
 			wait_until_ready();
 			read_byte(address, value);
 		}
 
-		inline static void read_byte(uint16_t address, uint8_t& value)
+		static void read_byte(uint16_t address, uint8_t& value)
 		{
 			EEAR_ = address;
 			EECR_ = _BV(EERE);
 			value = EEDR_;
 		}
 
-		inline static void blocked_write(uint16_t address, uint8_t value)
+		static void blocked_write(uint16_t address, uint8_t value)
 		{
 			wait_until_ready();
 			write_byte(address, value);
@@ -441,7 +441,7 @@ namespace eeprom
 		// Then we choose between erase, write and erase+write based on comparison
 		// This approach is detailed in ATmel note AVR103: Using the EEPROM Programming Modes
 		// http://www.atmel.com/images/doc2578.pdf
-		inline static void write_byte(uint16_t address, uint8_t value)
+		static void write_byte(uint16_t address, uint8_t value)
 		{
 			EEAR_ = address;
 			EECR_ = _BV(EERE);
@@ -475,7 +475,7 @@ namespace eeprom
 			}
 		}
 
-		inline static bool erase_address(uint16_t address)
+		static bool erase_address(uint16_t address)
 		{
 			EEAR_ = address;
 			EECR_ = _BV(EERE);
@@ -556,7 +556,7 @@ namespace eeprom
 		 * or if the ring buffer would overflow
 		 * @sa write(uint16_t, const T&) 
 		 */
-		template<typename T> inline bool write(const T* address, const T& value)
+		template<typename T> bool write(const T* address, const T& value)
 		{
 			return write((uint16_t) address, value);
 		}
@@ -601,7 +601,7 @@ namespace eeprom
 		 * or if the ring buffer would overflow
 		 * @sa write(uint16_t, const T*, uint16_t) or if the ring buffer would overflow
 		 */
-		template<typename T> inline bool write(const T* address, const T* value, uint16_t count)
+		template<typename T> bool write(const T* address, const T* value, uint16_t count)
 		{
 			return write((uint16_t) address, value, count);
 		}
@@ -641,7 +641,7 @@ namespace eeprom
 		 * or if the ring buffer would overflow
 		 * @sa write(uint16_t, uint8_t)
 		 */
-		inline bool write(const uint8_t* address, uint8_t value)
+		bool write(const uint8_t* address, uint8_t value)
 		{
 			return write((uint16_t) address, value);
 		}
@@ -772,7 +772,7 @@ namespace eeprom
 		bool write_data(uint16_t address, uint8_t* value, uint16_t size)
 		{
 			// First check if there is enough space in buffer_ for this queued write
-			if ((buffer_.free_() < size + ITEM_SIZE) || !size) return false;
+			if ((buffer_.free_() < (size + ITEM_SIZE)) || (size == 0)) return false;
 			done_ = false;
 			// Add new queued write to buffer
 			buffer_.push_(WriteItem::value1(address, size));
@@ -789,18 +789,18 @@ namespace eeprom
 		{
 			WriteItem() : address{0}, size{0} {}
 			WriteItem(uint8_t value1, uint8_t value2, uint8_t value3)
-				: address{uint16_t(value1 << 4 | value2 >> 4)}, size{uint16_t(utils::is_zero(
-																	(value2 & 0x0F) << 8 | value3, E2END + 1))}
-			{}
-			inline static uint8_t value1(uint16_t address, uint16_t size UNUSED)
+			:	address{uint16_t(uint8_t(value1 << 4) | uint8_t(value2 >> 4))}, 
+				size{uint16_t(utils::is_zero(((value2 & 0x0F) << 8) | value3, E2END + 1))} {}
+
+			static uint8_t value1(uint16_t address, uint16_t size UNUSED)
 			{
 				return address >> 4;
 			}
-			inline static uint8_t value2(uint16_t address, uint16_t size)
+			static uint8_t value2(uint16_t address, uint16_t size)
 			{
-				return address << 4 | size >> 8;
+				return (address << 4) | (size >> 8);
 			}
-			inline static uint8_t value3(uint16_t address UNUSED, uint16_t size)
+			static uint8_t value3(uint16_t address UNUSED, uint16_t size)
 			{
 				return size;
 			}
@@ -811,9 +811,11 @@ namespace eeprom
 
 		WriteItem next_item()
 		{
-			uint8_t value1, value2, value3;
+			uint8_t value1;
 			buffer_.pull_(value1);
+			uint8_t value2;
 			buffer_.pull_(value2);
+			uint8_t value3;
 			buffer_.pull_(value3);
 			return WriteItem{value1, value2, value3};
 		}

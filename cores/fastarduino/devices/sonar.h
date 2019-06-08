@@ -601,7 +601,7 @@ namespace devices::sonar
 		 * @retval false an echo pulse duration is not yet available
 		 * @sa latest_echo_us()
 		 */
-		inline bool ready() const
+		bool ready() const
 		{
 			return status_ == READY;
 		}
@@ -616,7 +616,7 @@ namespace devices::sonar
 		 * @sa HCSR04::echo_us()
 		 * @sa HCSR04::await_echo_us()
 		 */
-		inline uint16_t latest_echo_us() const
+		uint16_t latest_echo_us() const
 		{
 			synchronized
 			{
@@ -678,7 +678,7 @@ namespace devices::sonar
 			}
 		}
 
-		inline void trigger_sent(uint16_t timeout_ms)
+		void trigger_sent(uint16_t timeout_ms)
 		{
 			synchronized
 			{
@@ -687,15 +687,15 @@ namespace devices::sonar
 			}
 		}
 
-		inline bool pulse_edge(bool rising)
+		bool pulse_edge(bool rising)
 		{
-			if (rising && status_ == TRIGGERED)
+			if (rising && (status_ == TRIGGERED))
 			{
 				status_ = ECHO_STARTED;
 				echo_start_ = rtt_.raw_time_();
 				return false;
 			}
-			if ((!rising) && status_ == ECHO_STARTED)
+			if ((!rising) && (status_ == ECHO_STARTED))
 			{
 				status_ = READY;
 				echo_end_ = rtt_.raw_time_();
@@ -704,9 +704,9 @@ namespace devices::sonar
 			return false;
 		}
 
-		inline bool rtt_time_changed()
+		bool rtt_time_changed()
 		{
-			if (status_ != READY && rtt_.millis_() >= timeout_time_ms_)
+			if ((status_ != READY) && (rtt_.millis_() >= timeout_time_ms_))
 			{
 				status_ = READY;
 				echo_start_ = echo_end_ = RAW_TIME::EMPTY_TIME;
@@ -759,9 +759,9 @@ namespace devices::sonar
 		using PARENT = AbstractSonar<NTIMER_>;
 		using ECHO_PIN_TRAIT = board_traits::DigitalPin_trait<ECHO>;
 		using ECHO_PORT_TRAIT = board_traits::Port_trait<ECHO_PIN_TRAIT::PORT>;
-		static_assert(SONAR_TYPE != SonarType::ASYNC_INT || ECHO_PIN_TRAIT::IS_INT,
+		static_assert((SONAR_TYPE != SonarType::ASYNC_INT) || ECHO_PIN_TRAIT::IS_INT,
 					  "SONAR_TYPE == ASYNC_INT but ECHO is not an INT pin");
-		static_assert(SONAR_TYPE != SonarType::ASYNC_PCINT || ECHO_PORT_TRAIT::PCINT != 0xFF,
+		static_assert((SONAR_TYPE != SonarType::ASYNC_PCINT) || (ECHO_PORT_TRAIT::PCINT != 0xFF),
 					  "SONAR_TYPE == ASYNC_PCINT but ECHO is not an PCI pin");
 
 	public:
@@ -877,7 +877,7 @@ namespace devices::sonar
 			return this->rtt_time_changed();
 		}
 
-		inline void trigger()
+		void trigger()
 		{
 			// Pulse TRIGGER for 10us
 			trigger_.set();
@@ -1230,9 +1230,9 @@ namespace devices::sonar
 			if (!active_) return EVENT{};
 			// Compute the newly started echoes
 			uint8_t pins = echo_.get_PIN();
-			uint8_t started = pins & ~started_;
+			uint8_t started = pins & uint8_t(~started_);
 			// Compute the newly finished echoes
-			uint8_t ready = ~pins & started_ & ~ready_;
+			uint8_t ready = uint8_t(~pins) & started_ & uint8_t(~ready_);
 			// Update status of all echo pins
 			started_ |= started;
 			ready_ |= ready;
@@ -1242,7 +1242,7 @@ namespace devices::sonar
 
 		EVENT on_rtt_change()
 		{
-			if (active_ && rtt_.millis_() >= timeout_time_ms_)
+			if (active_ && (rtt_.millis_() >= timeout_time_ms_))
 			{
 				active_ = false;
 				return EVENT{true};
