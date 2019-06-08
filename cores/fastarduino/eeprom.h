@@ -427,7 +427,7 @@ namespace eeprom
 		static void read_byte(uint16_t address, uint8_t& value)
 		{
 			EEAR_ = address;
-			EECR_ = _BV(EERE);
+			EECR_ = BV8(EERE);
 			value = EEDR_;
 		}
 
@@ -444,7 +444,7 @@ namespace eeprom
 		static void write_byte(uint16_t address, uint8_t value)
 		{
 			EEAR_ = address;
-			EECR_ = _BV(EERE);
+			EECR_ = BV8(EERE);
 			uint8_t old_value = EEDR_;
 			uint8_t diff = old_value ^ value;
 			if (diff & value)
@@ -470,15 +470,15 @@ namespace eeprom
 			EEDR_ = value;
 			synchronized
 			{
-				EECR_ |= _BV(EEMPE);
-				EECR_ |= _BV(EEPE);
+				EECR_ |= BV8(EEMPE);
+				EECR_ |= BV8(EEPE);
 			}
 		}
 
 		static bool erase_address(uint16_t address)
 		{
 			EEAR_ = address;
-			EECR_ = _BV(EERE);
+			EECR_ = BV8(EERE);
 			uint8_t value = EEDR;
 			// Some bits need to be erased (ie set to 1)
 			if (value == 0xFF) return false;
@@ -486,8 +486,8 @@ namespace eeprom
 			EEDR_ = 0xFF;
 			synchronized
 			{
-				EECR_ |= _BV(EEMPE);
-				EECR_ |= _BV(EEPE);
+				EECR_ |= BV8(EEMPE);
+				EECR_ |= BV8(EEPE);
 			}
 			return true;
 		}
@@ -688,7 +688,7 @@ namespace eeprom
 				current_.address = 0;
 				current_.size = size();
 				// Start transmission if not done yet
-				EECR_ = _BV(EERIE);
+				EECR_ = BV8(EERIE);
 			}
 		}
 
@@ -759,14 +759,14 @@ namespace eeprom
 			buffer_.pull_(value);
 			EEPROM::write_byte(current_.address++, value);
 			--current_.size;
-			EECR_ |= _BV(EERIE);
+			EECR_ |= BV8(EERIE);
 		}
 
 		void erase_next()
 		{
 			EEPROM::erase_address(current_.address++);
 			--current_.size;
-			EECR_ |= _BV(EERIE);
+			EECR_ |= BV8(EERIE);
 		}
 
 		bool write_data(uint16_t address, uint8_t* value, uint16_t size)
@@ -781,7 +781,7 @@ namespace eeprom
 			for (uint16_t i = 0; i < size; ++i) buffer_.push_(*value++);
 
 			// Start transmission if not done yet
-			EECR_ = _BV(EERIE);
+			EECR_ = BV8(EERIE);
 			return true;
 		}
 

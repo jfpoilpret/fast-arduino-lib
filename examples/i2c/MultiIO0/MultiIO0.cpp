@@ -67,13 +67,13 @@ constexpr const uint8_t GPIO_B = 0x13;
 constexpr const uint8_t OLAT_A = 0x14;
 constexpr const uint8_t OLAT_B = 0x15;
 // IOCON bits (not all are used in this implementation)
-constexpr const uint8_t IOCON_BANK = _BV(7);
-constexpr const uint8_t IOCON_MIRROR = _BV(6);
-constexpr const uint8_t IOCON_SEQOP = _BV(5);
-constexpr const uint8_t IOCON_DISSLW = _BV(4);
-constexpr const uint8_t IOCON_HAEN = _BV(3);
-constexpr const uint8_t IOCON_ODR = _BV(2);
-constexpr const uint8_t IOCON_INTPOL = _BV(1);
+constexpr const uint8_t IOCON_BANK = BV8(7);
+constexpr const uint8_t IOCON_MIRROR = BV8(6);
+constexpr const uint8_t IOCON_SEQOP = BV8(5);
+constexpr const uint8_t IOCON_DISSLW = BV8(4);
+constexpr const uint8_t IOCON_HAEN = BV8(3);
+constexpr const uint8_t IOCON_ODR = BV8(2);
+constexpr const uint8_t IOCON_INTPOL = BV8(1);
 
 // constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Standard;
 constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Fast;

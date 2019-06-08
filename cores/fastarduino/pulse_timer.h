@@ -196,7 +196,7 @@ namespace timer
 		}
 		static constexpr uint8_t OVERFLOW_COUNTER(uint16_t pulse_frequency)
 		{
-			return F_CPU / 256UL / _BV(uint8_t(PRESCALER)) / pulse_frequency;
+			return F_CPU / 256UL / BV16(uint8_t(PRESCALER)) / pulse_frequency;
 		}
 
 	private:

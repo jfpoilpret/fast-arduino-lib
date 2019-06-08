@@ -42,7 +42,7 @@ namespace board
 	 */
 	template<DigitalPin PIN> constexpr uint8_t MASK()
 	{
-		return _BV(board_traits::DigitalPin_trait<PIN>::BIT);
+		return BV8(board_traits::DigitalPin_trait<PIN>::BIT);
 	}
 };
 
@@ -100,7 +100,7 @@ namespace gpio
 		 */
 		FastPin() INLINE
 		{
-			static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
+			static_assert(TRAIT::DPIN_MASK & BV8(BIT), "BIT must be compatible with PORT available pins");
 		}
 
 		/**
@@ -114,7 +114,7 @@ namespace gpio
 		 */
 		FastPin(PinMode mode, bool value = false) INLINE
 		{
-			static_assert(TRAIT::DPIN_MASK & _BV(BIT), "BIT must be compatible with PORT available pins");
+			static_assert(TRAIT::DPIN_MASK & BV8(BIT), "BIT must be compatible with PORT available pins");
 			set_mode(mode, value);
 		}
 
@@ -128,13 +128,13 @@ namespace gpio
 		void set_mode(PinMode mode, bool value = false) INLINE
 		{
 			if (mode == PinMode::OUTPUT)
-				TRAIT::DDR |= _BV(BIT);
+				TRAIT::DDR |= BV8(BIT);
 			else
-				TRAIT::DDR &= ~_BV(BIT);
+				TRAIT::DDR &= ~BV8(BIT);
 			if (value || (mode == PinMode::INPUT_PULLUP))
-				TRAIT::PORT |= _BV(BIT);
+				TRAIT::PORT |= BV8(BIT);
 			else
-				TRAIT::PORT &= ~_BV(BIT);
+				TRAIT::PORT &= ~BV8(BIT);
 		}
 
 		/**
@@ -143,7 +143,7 @@ namespace gpio
 		 */
 		void set() INLINE
 		{
-			TRAIT::PORT |= _BV(BIT);
+			TRAIT::PORT |= BV8(BIT);
 		}
 
 		/**
@@ -152,7 +152,7 @@ namespace gpio
 		 */
 		void clear() INLINE
 		{
-			TRAIT::PORT &= ~_BV(BIT);
+			TRAIT::PORT &= ~BV8(BIT);
 		}
 
 		/**
@@ -162,7 +162,7 @@ namespace gpio
 		 */
 		void toggle() INLINE
 		{
-			TRAIT::PIN |= _BV(BIT);
+			TRAIT::PIN |= BV8(BIT);
 		}
 
 		/**
@@ -172,7 +172,7 @@ namespace gpio
 		 */
 		bool value() INLINE
 		{
-			return TRAIT::PIN & _BV(BIT);
+			return TRAIT::PIN & BV8(BIT);
 		}
 	};
 
@@ -539,7 +539,7 @@ namespace gpio
 		/** The bit position of `DPIN` within its port. */
 		static constexpr const uint8_t BIT = TRAIT::BIT;
 		/** The bit-mask to use when accessing `DPIN` through `PORT`. */
-		static constexpr const uint8_t MASK = _BV(BIT);
+		static constexpr const uint8_t MASK = BV8(BIT);
 
 		/** The exact `FastPin` parameterized type for `DPIN` IO pin. */
 		using TYPE = FastPin<PORT, BIT>;
@@ -556,13 +556,13 @@ namespace gpio
 		static void set_mode(PinMode mode, bool value = false)
 		{
 			if (mode == PinMode::OUTPUT)
-				PTRAIT::DDR |= _BV(BIT);
+				PTRAIT::DDR |= BV8(BIT);
 			else
-				PTRAIT::DDR &= ~_BV(BIT);
+				PTRAIT::DDR &= ~BV8(BIT);
 			if (value || (mode == PinMode::INPUT_PULLUP))
-				PTRAIT::PORT |= _BV(BIT);
+				PTRAIT::PORT |= BV8(BIT);
 			else
-				PTRAIT::PORT &= ~_BV(BIT);
+				PTRAIT::PORT &= ~BV8(BIT);
 		}
 
 		/**
@@ -571,7 +571,7 @@ namespace gpio
 		 */
 		static void set()
 		{
-			PTRAIT::PORT |= _BV(BIT);
+			PTRAIT::PORT |= BV8(BIT);
 		}
 
 		/**
@@ -580,7 +580,7 @@ namespace gpio
 		 */
 		static void clear()
 		{
-			PTRAIT::PORT &= ~_BV(BIT);
+			PTRAIT::PORT &= ~BV8(BIT);
 		}
 
 		/**
@@ -590,7 +590,7 @@ namespace gpio
 		 */
 		static void toggle()
 		{
-			PTRAIT::PIN |= _BV(BIT);
+			PTRAIT::PIN |= BV8(BIT);
 		}
 
 		/**
@@ -600,7 +600,7 @@ namespace gpio
 		 */
 		static bool value()
 		{
-			return PTRAIT::PIN & _BV(BIT);
+			return PTRAIT::PIN & BV8(BIT);
 		}
 	};
 

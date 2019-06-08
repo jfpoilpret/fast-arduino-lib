@@ -285,9 +285,9 @@ namespace interrupt
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
+			static_assert(TRAIT::PCI_MASK & BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			enable_pins(_BV(board_traits::DigitalPin_trait<DPIN>::BIT));
+			enable_pins(BV8(board_traits::DigitalPin_trait<DPIN>::BIT));
 		}
 
 		/**
@@ -307,9 +307,9 @@ namespace interrupt
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
+			static_assert(TRAIT::PCI_MASK & BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			synchronized TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<DPIN>::BIT);
+			synchronized TRAIT::PCMSK_ &= ~BV8(board_traits::DigitalPin_trait<DPIN>::BIT);
 		}
 
 		/**
@@ -448,9 +448,9 @@ namespace interrupt
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
+			static_assert(TRAIT::PCI_MASK & BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			enable_pins_(_BV(board_traits::DigitalPin_trait<DPIN>::BIT));
+			enable_pins_(BV8(board_traits::DigitalPin_trait<DPIN>::BIT));
 		}
 
 		/**
@@ -470,9 +470,9 @@ namespace interrupt
 			check_mega_bug<PIN>();
 			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & _BV(board_traits::DigitalPin_trait<DPIN>::BIT),
+			static_assert(TRAIT::PCI_MASK & BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			TRAIT::PCMSK_ &= ~_BV(board_traits::DigitalPin_trait<DPIN>::BIT);
+			TRAIT::PCMSK_ &= ~BV8(board_traits::DigitalPin_trait<DPIN>::BIT);
 		}
 	};
 
@@ -531,7 +531,7 @@ namespace interrupt
 			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
 						  "PIN port must match PCI_NUM port");
 			static_assert(
-				_BV(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK,
+				BV8(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK,
 				"PIN must be a PCINT pin");
 			// Check other pins
 			check_pci_pins<PCI_NUM_, PCIPINS_...>();

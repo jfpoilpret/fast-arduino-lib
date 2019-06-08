@@ -24,12 +24,12 @@ void spi::init()
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
 		// Also set SS as Output (mandatory for Master SPI as per Atmel datasheet)
-		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~_BV(board_traits::SPI_trait::MISO))
-									   | _BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK)
-									   | _BV(board_traits::SPI_trait::SS);
+		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~BV8(board_traits::SPI_trait::MISO))
+									   | BV8(board_traits::SPI_trait::MOSI) | BV8(board_traits::SPI_trait::SCK)
+									   | BV8(board_traits::SPI_trait::SS);
 		// Set MISO as pullup and force MOSI and SCK low
-		board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | _BV(board_traits::SPI_trait::MISO))
-										& ~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
+		board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | BV8(board_traits::SPI_trait::MISO))
+										& ~(BV8(board_traits::SPI_trait::MOSI) | BV8(board_traits::SPI_trait::SCK));
 	}
 }
 #else
@@ -40,12 +40,12 @@ void spi::init()
 	{
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
-		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~_BV(board_traits::SPI_trait::MISO))
-									   | _BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK);
+		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~BV8(board_traits::SPI_trait::MISO))
+									   | BV8(board_traits::SPI_trait::MOSI) | BV8(board_traits::SPI_trait::SCK);
 		// Set MISO as pullup and force MOSI and SCK low
 		//TODO not sure this is really needed
-		// board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | _BV(board_traits::SPI_trait::MISO)) &
-		// 								~(_BV(board_traits::SPI_trait::MOSI) | _BV(board_traits::SPI_trait::SCK));
+		// board_traits::SPI_trait::PORT = (board_traits::SPI_trait::PORT | BV8(board_traits::SPI_trait::MISO)) &
+		// 								~(BV8(board_traits::SPI_trait::MOSI) | BV8(board_traits::SPI_trait::SCK));
 	}
 }
 #endif

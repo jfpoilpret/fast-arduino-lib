@@ -49,14 +49,14 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	// Prepare ports to write to LEDs
-	gpio::FastMaskedPort<LED_PORT, _BV(0)> pins0{0xFF};
-	gpio::FastMaskedPort<LED_PORT, _BV(1)> pins1{0xFF};
-	gpio::FastMaskedPort<LED_PORT, _BV(2)> pins2{0xFF};
-	gpio::FastMaskedPort<LED_PORT, _BV(3)> pins3{0xFF};
-	gpio::FastMaskedPort<LED_PORT, _BV(4)> pins4{0xFF};
-	gpio::FastMaskedPort<LED_PORT, _BV(5)> pins5{0xFF};
-	gpio::FastMaskedPort<LED_PORT, _BV(6)> pins6{0xFF};
-	gpio::FastMaskedPort<LED_PORT, _BV(7)> pins7{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(0)> pins0{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(1)> pins1{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(2)> pins2{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(3)> pins3{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(4)> pins4{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(5)> pins5{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(6)> pins6{0xFF};
+	gpio::FastMaskedPort<LED_PORT, BV8(7)> pins7{0xFF};
 	
 	// Loop of the LED chaser
 	while (true)

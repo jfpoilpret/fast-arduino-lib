@@ -210,19 +210,19 @@ int main()
 		analog::AnalogInput<COLUMN, uint8_t, board::AnalogReference::AVCC> column_input;
 		uint8_t row = 0;
 		uint8_t col = 0;
-		mux.blinks()[0] = _BV(0);
+		mux.blinks()[0] = BV8(0);
 		while (true)
 		{
 			// Update selected cell
 			mux.blinks()[row] = 0;
 			row = ROWS - 1 - (row_input.sample() >> (8 - LOG2(ROWS)));
 			col = COLUMNS - 1 - (column_input.sample() >> (8 - LOG2(COLUMNS)));
-			mux.blinks()[row] = _BV(col);
+			mux.blinks()[row] = BV8(col);
 			// Check button states
 			if (stop.unique_press())
 				break;
 			if (select.unique_press())
-				mux.data()[row] ^= _BV(col);
+				mux.data()[row] ^= BV8(col);
 			mux.refresh(BlinkMode::BLINK_ALL_BLINKS);
 			time::delay_us(REFRESH_PERIOD_US);
 		}

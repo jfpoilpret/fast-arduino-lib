@@ -357,7 +357,7 @@ namespace timer
 		 */
 		static constexpr uint32_t ticks_to_us(PRESCALER prescaler, TYPE ticks)
 		{
-			return uint32_t(ticks) * _BV(uint8_t(prescaler)) / (F_CPU / 1'000'000UL);
+			return uint32_t(ticks) * BV16(uint8_t(prescaler)) / (F_CPU / 1'000'000UL);
 		}
 
 		/**
@@ -373,7 +373,7 @@ namespace timer
 		 */
 		static constexpr TYPE us_to_ticks(PRESCALER prescaler, uint32_t us)
 		{
-			return TYPE(us * (F_CPU / 1'000'000UL) / _BV(uint8_t(prescaler)));
+			return TYPE(us * (F_CPU / 1'000'000UL) / BV16(uint8_t(prescaler)));
 		}
 
 		/**
@@ -406,7 +406,7 @@ namespace timer
 		 */
 		static constexpr uint32_t CTC_frequency(PRESCALER prescaler)
 		{
-			return F_CPU / _BV(uint8_t(prescaler));
+			return F_CPU / BV16(uint8_t(prescaler));
 		}
 
 		/**
@@ -477,7 +477,7 @@ namespace timer
 		 */
 		static constexpr uint16_t FastPWM_frequency(PRESCALER prescaler)
 		{
-			return F_CPU / _BV(uint8_t(prescaler)) / (PWM_MAX + 1UL);
+			return F_CPU / BV16(uint8_t(prescaler)) / (PWM_MAX + 1UL);
 		}
 
 		/**
@@ -509,7 +509,7 @@ namespace timer
 		 */
 		static constexpr uint16_t PhaseCorrectPWM_frequency(PRESCALER prescaler)
 		{
-			return F_CPU / _BV(uint8_t(prescaler)) / (2UL * PWM_MAX);
+			return F_CPU / BV16(uint8_t(prescaler)) / (2UL * PWM_MAX);
 		}
 
 		/**
@@ -591,7 +591,7 @@ namespace timer
 		 */
 		static constexpr uint16_t PWM_ICR_frequency(PRESCALER prescaler, uint16_t counter)
 		{
-			return F_CPU / _BV(uint8_t(prescaler)) / counter;
+			return F_CPU / BV16(uint8_t(prescaler)) / counter;
 		}
 
 		/**
@@ -613,18 +613,18 @@ namespace timer
 		 */
 		static constexpr uint16_t PWM_ICR_counter(PRESCALER prescaler, uint16_t pwm_frequency)
 		{
-			return F_CPU / _BV(uint8_t(prescaler)) / pwm_frequency;
+			return F_CPU / BV16(uint8_t(prescaler)) / pwm_frequency;
 		}
 
 	private:
 		static constexpr uint32_t prescaler_quotient(PRESCALER prescaler, uint32_t us)
 		{
-			return (F_CPU / 1'000'000UL * us) / _BV(uint8_t(prescaler));
+			return (F_CPU / 1'000'000UL * us) / BV16(uint8_t(prescaler));
 		}
 
 		static constexpr uint32_t prescaler_remainder(PRESCALER prescaler, uint32_t us)
 		{
-			return (F_CPU / 1'000'000UL * us) % _BV(uint8_t(prescaler));
+			return (F_CPU / 1'000'000UL * us) % BV16(uint8_t(prescaler));
 		}
 
 		static constexpr bool prescaler_is_adequate(uint32_t quotient)
@@ -660,7 +660,7 @@ namespace timer
 
 		static constexpr bool prescaler_is_adequate_for_frequency(PRESCALER prescaler, uint32_t freq)
 		{
-			return (F_CPU / (uint32_t) _BV(uint8_t(prescaler))) > freq;
+			return (F_CPU / (uint32_t) BV16(uint8_t(prescaler))) > freq;
 		}
 
 		template<size_t N>

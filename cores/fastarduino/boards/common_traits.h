@@ -67,12 +67,12 @@ namespace board_traits
 		}
 		void loop_until_bit_set(uint8_t bit) const INLINE
 		{
-			while (!(*((volatile T*) addr_) & _BV(bit)))
+			while (!(*((volatile T*) addr_) & BV8(bit)))
 				;
 		}
 		void loop_until_bit_clear(uint8_t bit) const INLINE
 		{
-			while (*((volatile T*) addr_) & _BV(bit))
+			while (*((volatile T*) addr_) & BV8(bit))
 				;
 		}
 		bool operator==(int value) const INLINE
@@ -184,13 +184,13 @@ namespace board_traits
 		}
 		static constexpr uint8_t prescaler_mask(uint8_t prescaler)
 		{
-			if (prescaler == 128) return _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);
-			if (prescaler == 64) return _BV(ADPS2) | _BV(ADPS1);
-			if (prescaler == 32) return _BV(ADPS2) | _BV(ADPS0);
-			if (prescaler == 16) return _BV(ADPS2);
-			if (prescaler == 8) return _BV(ADPS1) | _BV(ADPS0);
-			if (prescaler == 4) return _BV(ADPS1);
-			return _BV(ADPS0);
+			if (prescaler == 128) return BV8(ADPS2) | BV8(ADPS1) | BV8(ADPS0);
+			if (prescaler == 64) return BV8(ADPS2) | BV8(ADPS1);
+			if (prescaler == 32) return BV8(ADPS2) | BV8(ADPS0);
+			if (prescaler == 16) return BV8(ADPS2);
+			if (prescaler == 8) return BV8(ADPS1) | BV8(ADPS0);
+			if (prescaler == 4) return BV8(ADPS1);
+			return BV8(ADPS0);
 		}
 
 		static constexpr const uint8_t PRESCALER = round_prescaler(uint16_t(F_CPU / MAXFREQ));
@@ -297,14 +297,14 @@ namespace board_traits
 		static constexpr const REG8 UCSRC = UCSRC_;
 		static constexpr const REG8 UDR = UDR_;
 		static constexpr const REG16 UBRR = UBRR_;
-		static constexpr const uint8_t U2X_MASK = _BV(U2X_BIT);
-		static constexpr const uint8_t TX_ENABLE_MASK = _BV(TX_ENABLE_BIT);
-		static constexpr const uint8_t RX_ENABLE_MASK = _BV(RX_ENABLE_BIT);
-		static constexpr const uint8_t UDRIE_MASK = _BV(UDRIE_BIT);
-		static constexpr const uint8_t RXCIE_MASK = _BV(RXCIE_BIT);
-		static constexpr const uint8_t DOR_MASK = _BV(DOR_BIT);
-		static constexpr const uint8_t FE_MASK = _BV(FE_BIT);
-		static constexpr const uint8_t UPE_MASK = _BV(UPE_BIT);
+		static constexpr const uint8_t U2X_MASK = BV8(U2X_BIT);
+		static constexpr const uint8_t TX_ENABLE_MASK = BV8(TX_ENABLE_BIT);
+		static constexpr const uint8_t RX_ENABLE_MASK = BV8(RX_ENABLE_BIT);
+		static constexpr const uint8_t UDRIE_MASK = BV8(UDRIE_BIT);
+		static constexpr const uint8_t RXCIE_MASK = BV8(RXCIE_BIT);
+		static constexpr const uint8_t DOR_MASK = BV8(DOR_BIT);
+		static constexpr const uint8_t FE_MASK = BV8(FE_BIT);
+		static constexpr const uint8_t UPE_MASK = BV8(UPE_BIT);
 	};
 
 	template<Port PORT_, uint8_t SS_, uint8_t MOSI_, uint8_t MISO_, uint8_t SCK_> struct SPI_trait_impl
@@ -325,7 +325,7 @@ namespace board_traits
 		static constexpr const REG8 PORT = PORT_TRAIT::PORT;
 		static constexpr const REG8 PIN = PORT_TRAIT::PIN;
 		static constexpr const REG8 DDR = PORT_TRAIT::DDR;
-		static constexpr const uint8_t SCL_SDA_MASK = _BV(SCL_) | _BV(SDA_);
+		static constexpr const uint8_t SCL_SDA_MASK = BV8(SCL_) | BV8(SDA_);
 		static constexpr const uint8_t BIT_SCL = SCL_;
 		static constexpr const uint8_t BIT_SDA = SDA_;
 	};
