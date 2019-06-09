@@ -242,7 +242,7 @@ namespace devices::rtc
 		bool set_ram(uint8_t address, const uint8_t* data, uint8_t size)
 		{
 			address += RAM_START;
-			if (address + size <= RAM_END)
+			if ((address + size) <= RAM_END)
 				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
 					   && write(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 			else
@@ -263,7 +263,7 @@ namespace devices::rtc
 		bool get_ram(uint8_t address, uint8_t* data, uint8_t size)
 		{
 			address += RAM_START;
-			if (address + size <= RAM_END)
+			if ((address + size) <= RAM_END)
 				return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
 					   && read(DEVICE_ADDRESS, data, size, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK;
 			else

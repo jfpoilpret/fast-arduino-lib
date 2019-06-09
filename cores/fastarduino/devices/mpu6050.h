@@ -537,7 +537,7 @@ namespace devices::magneto
 			uint8_t device_reset : 1;
 		};
 
-		static constexpr const uint8_t DEVICE_ADDRESS = uint8_t(0x68 | uint8_t(AD0)) << 1;
+		static constexpr const uint8_t DEVICE_ADDRESS = uint8_t(uint8_t(0x68 | uint8_t(AD0)) << 1);
 
 		static constexpr const uint8_t SMPRT_DIV = 0x19;
 		static constexpr const uint8_t CONFIG = 0x1A;

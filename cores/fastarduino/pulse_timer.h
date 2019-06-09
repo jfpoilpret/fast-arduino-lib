@@ -200,7 +200,6 @@ namespace timer
 			return F_CPU / 256UL / BV16(uint8_t(PRESCALER)) / pulse_frequency;
 		}
 
-	private:
 		const uint8_t MAX;
 		uint8_t count_;
 

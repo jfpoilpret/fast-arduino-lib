@@ -205,7 +205,7 @@ namespace serial::hard
 		: streams::ostreambuf{output}, transmitting_{false} {}
 
 		// Listeners of events on the buffer
-		virtual void on_put() override
+		void on_put() override
 		{
 			errors_.queue_overflow = ostreambuf::overflow();
 			synchronized

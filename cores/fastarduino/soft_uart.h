@@ -161,7 +161,7 @@ namespace serial::soft
 
 	protected:
 		/// @cond notdocumented
-		virtual void on_put() override
+		void on_put() override
 		{
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			check_overflow();

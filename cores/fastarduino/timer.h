@@ -427,7 +427,7 @@ namespace timer
 		}
 
 		/**
-		 * Verifies that the given prescaler @p p is suitable for this timer in
+		 * Verifies that the given prescaler @p prescaler is suitable for this timer in
 		 * TimerMode::CTC in ordeer to be able to reach @p us microseconds.
 		 * This is normally not needed but can be helpful in a `static_assert` in
 		 * your code.
@@ -436,16 +436,16 @@ namespace timer
 		 * You could use this method in `static_assert()` in order to check that
 		 * the requested period @p us is OK for this timer.
 		 *
-		 * @param p the prescaler used for this timer
+		 * @param prescaler the prescaler used for this timer
 		 * @param us the number of microseconds to reach with this timer in CTC mode
-		 * @retval `true` if @p p and @p us are adequate for @p TIMER
-		 * @retval `false` if @p p and @p us are **NOT** adequate for @p TIMER
+		 * @retval `true` if @p prescaler and @p us are adequate for @p TIMER
+		 * @retval `false` if @p prescaler and @p us are **NOT** adequate for @p TIMER
 		 * @sa CTC_prescaler()
 		 * @sa CTC_counter()
 		 */
-		static constexpr bool is_adequate_for_CTC(PRESCALER p, uint32_t us)
+		static constexpr bool is_adequate_for_CTC(PRESCALER prescaler, uint32_t us)
 		{
-			return prescaler_is_adequate(prescaler_quotient(p, us));
+			return prescaler_is_adequate(prescaler_quotient(prescaler, us));
 		}
 
 		/**
