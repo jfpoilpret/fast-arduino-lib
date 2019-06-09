@@ -103,7 +103,7 @@ namespace timer
 		 */
 		void start_frequency(uint32_t frequency)
 		{
-			const uint32_t period = 1000000UL / 2 / frequency;
+			const uint32_t period = 1'000'000UL / 2 / frequency;
 			typename TIMER::PRESCALER prescaler = CALC::CTC_prescaler(period);
 			start_frequency(prescaler, CALC::CTC_counter(prescaler, period));
 		}

@@ -491,19 +491,19 @@ namespace devices::rf
 		// Mid-level methods to access NRF24L01 device registers
 		uint8_t read_register(Register reg)
 		{
-			return read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)));
+			return read(uint8_t(Command::R_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)));
 		}
 		void read_register(Register reg, void* buf, size_t size)
 		{
-			read(uint8_t(Command::R_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
+			read(uint8_t(Command::R_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 		}
 		void write_register(Register reg, uint8_t data)
 		{
-			write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
+			write(uint8_t(Command::W_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
 		}
 		void write_register(Register reg, const void* buf, size_t size)
 		{
-			write(uint8_t(Command::W_REGISTER) | (uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
+			write(uint8_t(Command::W_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 		}
 
 		status_t read_status()
@@ -632,7 +632,7 @@ namespace devices::rf
 		write_register(Register::FEATURE, (BV8(EN_DPL) | BV8(EN_ACK_PAY) | BV8(EN_DYN_ACK)));
 		write_register(Register::RF_CH, channel_);
 		write_register(Register::RF_SETUP, RF_DR_2MBPS | RF_PWR_0DBM);
-		write_register(Register::SETUP_RETR, (DEFAULT_ARD << ARD) | (DEFAULT_ARC << ARC));
+		write_register(Register::SETUP_RETR, uint8_t(DEFAULT_ARD << ARD) | uint8_t(DEFAULT_ARC << ARC));
 		write_register(Register::DYNPD, DPL_PA);
 
 		// Setup hardware receive pipes address; network (16-bit), device (8-bit)
@@ -684,7 +684,8 @@ namespace devices::rf
 	template<board::DigitalPin CSN, board::DigitalPin CE>
 	int NRF24L01<CSN, CE>::send(uint8_t dest, uint8_t port, const void* buf, size_t len)
 	{
-		if (buf == nullptr && len > 0) return errors::EINVAL;
+		//FIXME is this condition correct? what if len == 0?
+		if ((buf == nullptr) && (len > 0)) return errors::EINVAL;
 		if (len > PAYLOAD_MAX) return errors::EMSGSIZE;
 
 		// Setting transmit destination first (needs to ensure standby mode)

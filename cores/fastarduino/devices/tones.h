@@ -166,16 +166,16 @@ namespace devices::audio
 		 * If you would like to generate a tone for a given duration, you should
 		 * use `tone()` instead.
 		 * 
-		 * @param t the tone to generate
+		 * @param tone the tone to generate
 		 * 
 		 * @sa stop_tone()
 		 * @sa pause()
 		 * @sa tone(Tone, uint16_t)
 		 * @sa start_tone(PRESCALER, COUNTER)
 		 */
-		void start_tone(Tone t)
+		void start_tone(Tone tone)
 		{
-			if (t > Tone::SILENCE) generator_.start_frequency(uint32_t(t));
+			if (tone > Tone::SILENCE) generator_.start_frequency(uint32_t(tone));
 		}
 
 		/**
@@ -229,15 +229,15 @@ namespace devices::audio
 		 * Play the required tone for the given duration.
 		 * Note that at the end of the tone, a short silence of 20ms is forced.
 		 * 
-		 * @param t the tone to play
+		 * @param tone the tone to play
 		 * @param ms the duration, in milliseconds, of the tone to generate
 		 * 
 		 * @sa start_tone(Tone)
 		 */
-		void tone(Tone t, uint16_t ms)
+		void tone(Tone tone, uint16_t ms)
 		{
-			if (t > Tone::SILENCE) generator_.start_frequency(uint32_t(t));
-			if (t >= Tone::SILENCE) pause(ms);
+			if (tone > Tone::SILENCE) generator_.start_frequency(uint32_t(tone));
+			if (tone >= Tone::SILENCE) pause(ms);
 		}
 		
 		/**

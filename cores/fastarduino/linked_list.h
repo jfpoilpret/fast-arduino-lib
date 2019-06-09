@@ -123,15 +123,15 @@ namespace containers
 		 * or a class overloading `operator()`; in any case, it is passed a reference
 		 * to a @p T item and must return a `bool`; if it returns `true` for a given
 		 * item, then that item will be removed from this list.
-		 * @param f the functor to execute on each item
+		 * @param func the functor to execute on each item
 		 */
-		template<typename F> void traverse(F f)
+		template<typename F> void traverse(F func)
 		{
 			T* current = head();
 			while (current != nullptr)
 			{
 				T* next = current->next();
-				if (f(*current)) remove(*current);
+				if (func(*current)) remove(*current);
 				current = next;
 			}
 		}

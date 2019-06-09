@@ -134,7 +134,7 @@ namespace devices::mcp23017
 		 * @param address the address part (0-7) set by A0-3 pins of the chip
 		 */
 		MCP23017(MANAGER& manager, uint8_t address)
-			: i2c::I2CDevice<MODE>(manager), device_{uint8_t((BASE_ADDRESS | (address & 0x07)) << 1)}
+			: i2c::I2CDevice<MODE>(manager), device_{uint8_t(uint8_t(BASE_ADDRESS | uint8_t(address & 0x07)) << 1)}
 		{}
 
 		/**
@@ -330,7 +330,7 @@ namespace devices::mcp23017
 
 		static constexpr uint8_t build_IOCON(bool mirror, bool int_polarity)
 		{
-			return (mirror ? IOCON_MIRROR : 0) | (int_polarity ? IOCON_INTPOL : 0);
+			return uint8_t(mirror ? IOCON_MIRROR : 0) | uint8_t(int_polarity ? IOCON_INTPOL : 0);
 		}
 
 		template<typename T> bool write_register(uint8_t address, T value)

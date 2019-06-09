@@ -139,7 +139,7 @@ namespace devices
 			const uint16_t value;
 
 		private:
-			Status(uint8_t sr1, uint8_t sr2) : value(sr2 << 8 | sr1) {}
+			Status(uint8_t sr1, uint8_t sr2) : value(uint8_t(sr2 << 8) | sr1) {}
 
 			friend class WinBond<CS>;
 		};
@@ -324,7 +324,7 @@ namespace devices
 		while (true)
 		{
 			uint8_t status = this->transfer(0x00);
-			if (!(status & 0x01))
+			if ((status & 0x01) == 0)
 			{
 				ready = true;
 				break;

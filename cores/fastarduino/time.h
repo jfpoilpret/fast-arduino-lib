@@ -109,7 +109,7 @@ namespace time
 		 */
 		RTTTime& operator-=(uint32_t microseconds)
 		{
-			return *this = *this - RTTTime{microseconds};
+			return *this = (*this - RTTTime{microseconds});
 		}
 
 		/**
@@ -321,7 +321,7 @@ namespace time
 	inline void delay_us(uint16_t us) INLINE;
 	inline void delay_us(uint16_t us)
 	{
-		_delay_loop_2(us * (F_CPU / 1000000UL) / 4UL);
+		_delay_loop_2(us * (F_CPU / 1'000'000UL) / 4UL);
 	}
 
 	/**

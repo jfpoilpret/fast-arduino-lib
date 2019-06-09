@@ -215,7 +215,7 @@ namespace watchdog
 		 */
 		void begin(TimeOut timeout = TimeOut::TO_16ms)
 		{
-			uint16_t ms_per_tick = 1 << (uint8_t(timeout) + 4);
+			uint16_t ms_per_tick = BV16(uint8_t(timeout) + 4);
 			uint8_t config = BV8(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? BV8(WDP3) : 0);
 
 			synchronized

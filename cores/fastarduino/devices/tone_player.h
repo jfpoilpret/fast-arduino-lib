@@ -149,14 +149,14 @@ namespace devices::audio
 			/**
 			 * Construct an optimized tone play for the provided tone and duration.
 			 * 
-			 * @param t the `Tone` for this `QTonePlay`; it will be automatically
+			 * @param tone the `Tone` for this `QTonePlay`; it will be automatically
 			 * converted (at compile-time if @p t is a constant) to the proper
 			 * timer prescaler and counter.
 			 * @param ms the duration of this tone in milliseconds; this may have
 			 * different meanings if @p t is a `SpecialTone`.
 			 */
-			constexpr QTonePlay(Tone t, uint16_t ms = 0)
-				: flags_{flags(t)}, prescaler_{prescaler(t)}, counter_{counter(t)}, ms_{ms}
+			constexpr QTonePlay(Tone tone, uint16_t ms = 0)
+				: flags_{flags(tone)}, prescaler_{prescaler(t)}, counter_{counter(t)}, ms_{ms}
 			{}
 
 		private:
@@ -197,7 +197,6 @@ namespace devices::audio
 				return ms_;
 			}
 
-		private:
 			static constexpr uint8_t TONE = 0x00;
 			static constexpr uint8_t NONE = 0x01;
 			static constexpr uint8_t END = 0x02;
@@ -211,7 +210,7 @@ namespace devices::audio
 
 			static constexpr uint32_t period(Tone tone)
 			{
-				return 1000000UL / 2 / uint16_t(tone);
+				return 1'000'000UL / 2 / uint16_t(tone);
 			}
 			static constexpr PRESCALER prescaler(Tone tone)
 			{

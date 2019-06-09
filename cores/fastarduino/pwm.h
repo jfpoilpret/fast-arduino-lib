@@ -79,7 +79,7 @@ namespace analog
 		{
 			// Initialize pin as output
 			gpio::FastPinType<PIN>::set_mode(gpio::PinMode::OUTPUT);
-			if (TIMER_TRAIT::IS_16BITS || !PULSED)
+			if (TIMER_TRAIT::IS_16BITS || (!PULSED))
 				// Set com mode for pin
 				timer_.template set_output_mode<COM>(output_mode);
 		}
@@ -92,7 +92,7 @@ namespace analog
 		 */
 		void set_output_mode(TimerOutputMode output_mode)
 		{
-			if (TIMER_TRAIT::IS_16BITS || !PULSED) timer_.template set_output_mode<COM>(output_mode);
+			if (TIMER_TRAIT::IS_16BITS || (!PULSED)) timer_.template set_output_mode<COM>(output_mode);
 		}
 
 		/**
