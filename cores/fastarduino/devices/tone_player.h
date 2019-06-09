@@ -156,7 +156,7 @@ namespace devices::audio
 			 * different meanings if @p t is a `SpecialTone`.
 			 */
 			constexpr QTonePlay(Tone tone, uint16_t ms = 0)
-				: flags_{flags(tone)}, prescaler_{prescaler(t)}, counter_{counter(t)}, ms_{ms}
+				: flags_{flags(tone)}, prescaler_{prescaler(tone)}, counter_{counter(tone)}, ms_{ms}
 			{}
 
 		private:
