@@ -242,7 +242,7 @@ namespace devices::magneto
 					DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
 					ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			PowerManagement power;
 			power.clock_select = uint8_t(clock_select);
 			return this->write(DEVICE_ADDRESS, CONFIG, BusCond::START_NO_STOP) == OK
@@ -287,7 +287,7 @@ namespace devices::magneto
 					DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
 					ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			fifo_enable.reserved = 0;
 			if (utils::as_uint8_t(fifo_enable) == 0)
 				return begin(gyro_range, accel_range, low_pass_filter, clock_select);
@@ -354,7 +354,7 @@ namespace devices::magneto
 		 */
 		bool gyro_measures(Sensor3D& gyro)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			if (this->write(DEVICE_ADDRESS, GYRO_XOUT, BusCond::START_NO_STOP) == OK
 				&& this->read(DEVICE_ADDRESS, gyro, BusCond::REPEAT_START_STOP) == OK)
 			{
@@ -378,7 +378,7 @@ namespace devices::magneto
 		 */
 		int16_t temperature()
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			int16_t temperature = -32768;
 			if (this->write(DEVICE_ADDRESS, TEMP_OUT, BusCond::START_NO_STOP) == OK)
 				this->read(DEVICE_ADDRESS, temperature, BusCond::REPEAT_START_STOP);
@@ -405,7 +405,7 @@ namespace devices::magneto
 		 */
 		bool accel_measures(Sensor3D& accel)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			if (this->write(DEVICE_ADDRESS, ACCEL_XOUT, BusCond::START_NO_STOP) == OK
 				&& this->read(DEVICE_ADDRESS, accel, BusCond::REPEAT_START_STOP) == OK)
 			{
@@ -427,7 +427,7 @@ namespace devices::magneto
 		 */
 		bool all_measures(AllSensors& sensors)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			if (this->write(DEVICE_ADDRESS, ACCEL_XOUT, BusCond::START_NO_STOP) == OK
 				&& this->read(DEVICE_ADDRESS, sensors, BusCond::REPEAT_START_STOP) == OK)
 			{
@@ -451,7 +451,7 @@ namespace devices::magneto
 		 */
 		INTStatus interrupt_status()
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			INTStatus status;
 			if (this->write(DEVICE_ADDRESS, INT_STATUS, BusCond::START_NO_STOP) == OK)
 				this->read(DEVICE_ADDRESS, status, BusCond::REPEAT_START_STOP);
@@ -466,7 +466,7 @@ namespace devices::magneto
 		 */
 		bool reset_fifo()
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			return this->write(DEVICE_ADDRESS, USER_CTRL, BusCond::START_NO_STOP) == OK
 				   && this->write(DEVICE_ADDRESS, uint8_t(0x44), BusCond::NO_START_STOP) == OK;
 		}
@@ -486,7 +486,7 @@ namespace devices::magneto
 		 */
 		uint16_t fifo_count()
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			uint16_t count = 0;
 			if (this->write(DEVICE_ADDRESS, FIFO_COUNT, BusCond::START_NO_STOP) == OK)
 				this->read(DEVICE_ADDRESS, count, BusCond::REPEAT_START_STOP);
@@ -564,7 +564,7 @@ namespace devices::magneto
 
 		bool write_power(PowerManagement power)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			return this->write(DEVICE_ADDRESS, PWR_MGMT_1, BusCond::START_NO_STOP) == OK
 				   && this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
 		}
@@ -578,7 +578,7 @@ namespace devices::magneto
 
 		bool fifo_pop(uint8_t* buffer, uint8_t size, bool wait, bool yield)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			while (fifo_count() < size)
 			{
 				if (!wait) return false;

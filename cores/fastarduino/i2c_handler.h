@@ -131,7 +131,7 @@ namespace i2c
 		// 1. Disable TWI
 		TWCR_ = 0;
 		// 2. remove SDA/SCL pullups
-		TRAIT::PORT &= ~TRAIT::SCL_SDA_MASK;
+		TRAIT::PORT &= COMPL(TRAIT::SCL_SDA_MASK);
 	}
 
 	template<I2CMode MODE> bool I2CHandler<MODE>::start()
@@ -206,7 +206,7 @@ namespace i2c
 	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : status_{}, hook_{hook}
 	{
 		// set SDA/SCL default directions
-		TRAIT::DDR &= ~BV8(TRAIT::BIT_SDA);
+		TRAIT::DDR &= CBV8(TRAIT::BIT_SDA);
 		// TRAIT::PORT |= BV8(TRAIT::BIT_SDA);
 		TRAIT::DDR |= BV8(TRAIT::BIT_SCL);
 		TRAIT::PORT |= BV8(TRAIT::BIT_SCL);
@@ -219,7 +219,7 @@ namespace i2c
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::SCL_LOW()
 	{
-		TRAIT::PORT &= ~BV8(TRAIT::BIT_SCL);
+		TRAIT::PORT &= CBV8(TRAIT::BIT_SCL);
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::SDA_HIGH()
 	{
@@ -227,11 +227,11 @@ namespace i2c
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::SDA_LOW()
 	{
-		TRAIT::PORT &= ~BV8(TRAIT::BIT_SDA);
+		TRAIT::PORT &= CBV8(TRAIT::BIT_SDA);
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::SDA_INPUT()
 	{
-		TRAIT::DDR &= ~BV8(TRAIT::BIT_SDA);
+		TRAIT::DDR &= CBV8(TRAIT::BIT_SDA);
 		// TRAIT::PORT |= BV8(TRAIT::BIT_SDA);
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::SDA_OUTPUT()

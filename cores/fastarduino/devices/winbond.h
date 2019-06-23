@@ -40,6 +40,7 @@
 
 #include "../spi.h"
 #include "../time.h"
+#include "../utilities.h"
 
 namespace devices
 {
@@ -139,7 +140,7 @@ namespace devices
 			const uint16_t value;
 
 		private:
-			Status(uint8_t sr1, uint8_t sr2) : value(uint8_t(sr2 << 8) | sr1) {}
+			Status(uint8_t sr1, uint8_t sr2) : value(utils::as_uint16_t(sr2, sr1)) {}
 
 			friend class WinBond<CS>;
 		};
@@ -310,8 +311,8 @@ namespace devices
 	template<board::DigitalPin CS> void WinBond<CS>::set_status(uint16_t status)
 	{
 		this->start_transfer();
-		this->transfer(status);
-		this->transfer(status >> 8);
+		this->transfer(LOW_BYTE(status));
+		this->transfer(HIGH_BYTE(status));
 		this->end_transfer();
 	}
 
@@ -394,8 +395,8 @@ namespace devices
 		this->start_transfer();
 		this->transfer(code);
 		this->transfer(address >> 16);
-		this->transfer(address >> 8);
-		this->transfer(address);
+		this->transfer(HIGH_BYTE(address));
+		this->transfer(LOW_BYTE(address));
 		this->transfer(data, size);
 		this->end_transfer();
 	}

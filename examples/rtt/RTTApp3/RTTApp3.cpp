@@ -97,6 +97,6 @@ int main()
 		rtt.millis(0);
 		time::delay_us(666);
 		time::RTTTime time = rtt.time();
-		out << time.millis << "ms " << time.micros << "us" << streams::endl;
+		out << time.millis() << "ms " << time.micros() << "us" << streams::endl;
 	}
 }

@@ -43,7 +43,7 @@ while (echo.value()) ;
 // Read current time
 time::RTTTime end = rtt.time();
 // Calculate the echo duration in microseconds
-uint16_t echo_us = uint16_t(end.millis * 1000UL + end.micros);
+uint16_t echo_us = uint16_t(end.millis() * 1000UL + end.micros());
 //! [rtt_hcsr04]
 }
 

@@ -182,7 +182,7 @@ namespace interrupt
 		 */
 		void disable()
 		{
-			synchronized TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
+			synchronized TRAIT::PCICR_ &= COMPL(TRAIT::PCICR_MASK);
 		}
 
 		/**
@@ -264,7 +264,7 @@ namespace interrupt
 		 */
 		void disable_pins(uint8_t mask)
 		{
-			synchronized TRAIT::PCMSK_ &= uint8_t(~mask);
+			synchronized TRAIT::PCMSK_ &= COMPL(mask);
 		}
 
 		/**
@@ -309,7 +309,7 @@ namespace interrupt
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			synchronized TRAIT::PCMSK_ &= ~BV8(board_traits::DigitalPin_trait<DPIN>::BIT);
+			synchronized TRAIT::PCMSK_ &= CBV8(board_traits::DigitalPin_trait<DPIN>::BIT);
 		}
 
 		/**
@@ -345,7 +345,7 @@ namespace interrupt
 		 */
 		void disable_()
 		{
-			TRAIT::PCICR_ &= ~TRAIT::PCICR_MASK;
+			TRAIT::PCICR_ &= COMPL(TRAIT::PCICR_MASK);
 		}
 
 		/**
@@ -427,7 +427,7 @@ namespace interrupt
 		 */
 		void disable_pins_(uint8_t mask)
 		{
-			TRAIT::PCMSK_ &= uint8_t(~mask);
+			TRAIT::PCMSK_ &= COMPL(mask);
 		}
 
 		/**
@@ -472,7 +472,7 @@ namespace interrupt
 			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
 			static_assert(TRAIT::PCI_MASK & BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
 						  "PIN must be a PCI within PORT");
-			TRAIT::PCMSK_ &= ~BV8(board_traits::DigitalPin_trait<DPIN>::BIT);
+			TRAIT::PCMSK_ &= CBV8(board_traits::DigitalPin_trait<DPIN>::BIT);
 		}
 	};
 

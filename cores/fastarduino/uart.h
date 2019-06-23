@@ -194,7 +194,7 @@ namespace serial::hard
 			{
 				transmitting_ = false;
 				// Clear UDRIE to prevent UDR interrupt to go on forever
-				TRAIT::UCSRB &= ~TRAIT::UDRIE_MASK;
+				TRAIT::UCSRB &= COMPL(TRAIT::UDRIE_MASK);
 			}
 		}
 

@@ -46,26 +46,27 @@ namespace time
 	 * value is not supported and will have an undefined behavior of the API
 	 * consuming such an `RTTTime` instance.
 	 */
-	struct RTTTime
+	class RTTTime
 	{
+	public:
 		/**
 		 * Construct a new `RTTTime` value.
 		 * @param micros number of microseconds (can be > 1000us)
 		 */
-		explicit RTTTime(uint32_t micros = 0UL) : millis(micros / 1000UL), micros(micros % 1000UL) {}
+		explicit RTTTime(uint32_t micros = 0UL) : millis_(micros / 1000UL), micros_(micros % 1000UL) {}
 
 		/**
 		 * Construct a new `RTTTime` value.
 		 * @param millis number of milliseconds
 		 * @param micros number of microseconds (0..999)
 		 */
-		RTTTime(uint32_t millis, uint16_t micros) : millis(millis), micros(micros) {}
+		RTTTime(uint32_t millis, uint16_t micros) : millis_(millis), micros_(micros) {}
 
 		/**
 		 * Construct a copy of @p that.
 		 * @param that
 		 */
-		RTTTime(const RTTTime& that) : millis{that.millis}, micros{that.micros} {}
+		RTTTime(const RTTTime& that) : millis_{that.millis_}, micros_{that.micros_} {}
 
 		/**
 		 * Assign this `RTTTime` instance from @p that.
@@ -76,8 +77,8 @@ namespace time
 		{
 			if (this != &that)
 			{
-				millis = that.millis;
-				micros = that.micros;
+				millis_ = that.millis_;
+				micros_ = that.micros_;
 			}
 			return *this;
 		}
@@ -91,12 +92,12 @@ namespace time
 		{
 			uint32_t extra_millis = microseconds / 1000UL;
 			uint16_t extra_micros = microseconds % 1000UL;
-			millis += extra_millis;
-			micros += extra_micros;
-			if (micros >= 1000UL)
+			millis_ += extra_millis;
+			micros_ += extra_micros;
+			if (micros_ >= 1000UL)
 			{
-				++millis;
-				micros -= 1000UL;
+				++millis_;
+				micros_ -= 1000UL;
 			}
 			return *this;
 		}
@@ -117,13 +118,24 @@ namespace time
 		 */
 		uint32_t total_micros() const
 		{
-			return millis * 1000UL + micros;
+			return millis_ * 1000UL + micros_;
 		}
 
 		/** Number of elapsed milliseconds. */
-		uint32_t millis;
+		uint32_t millis() const
+		{
+			return millis_;
+		}
+
 		/** Number of elapsed microseconds (0..999). */
-		uint16_t micros;
+		uint16_t micros() const
+		{
+			return micros_;
+		}
+
+	private:
+		uint32_t millis_;
+		uint16_t micros_;
 	};
 
 	/**
@@ -135,9 +147,9 @@ namespace time
 	 */
 	inline bool operator>(const RTTTime& a, const RTTTime& b)
 	{
-		if (a.millis > b.millis) return true;
-		if (a.millis < b.millis) return false;
-		return a.micros > b.micros;
+		if (a.millis() > b.millis()) return true;
+		if (a.millis() < b.millis()) return false;
+		return a.micros() > b.micros();
 	}
 
 	/**
@@ -149,9 +161,9 @@ namespace time
 	 */
 	inline bool operator>=(const RTTTime& a, const RTTTime& b)
 	{
-		if (a.millis > b.millis) return true;
-		if (a.millis < b.millis) return false;
-		return a.micros >= b.micros;
+		if (a.millis() > b.millis()) return true;
+		if (a.millis() < b.millis()) return false;
+		return a.micros() >= b.micros();
 	}
 
 	/**
@@ -163,9 +175,9 @@ namespace time
 	 */
 	inline bool operator<(const RTTTime& a, const RTTTime& b)
 	{
-		if (a.millis < b.millis) return true;
-		if (a.millis > b.millis) return false;
-		return a.micros < b.micros;
+		if (a.millis() < b.millis()) return true;
+		if (a.millis() > b.millis()) return false;
+		return a.micros() < b.micros();
 	}
 
 	/**
@@ -177,9 +189,9 @@ namespace time
 	 */
 	inline bool operator<=(const RTTTime& a, const RTTTime& b)
 	{
-		if (a.millis < b.millis) return true;
-		if (a.millis > b.millis) return false;
-		return a.micros <= b.micros;
+		if (a.millis() < b.millis()) return true;
+		if (a.millis() > b.millis()) return false;
+		return a.micros() <= b.micros();
 	}
 
 	/**
@@ -191,7 +203,7 @@ namespace time
 	 */
 	inline bool operator==(const RTTTime& a, const RTTTime& b)
 	{
-		return (a.millis == b.millis) && (a.micros == b.micros);
+		return (a.millis() == b.millis()) && (a.micros() == b.micros());
 	}
 
 	/**
@@ -203,7 +215,7 @@ namespace time
 	 */
 	inline bool operator!=(const RTTTime& a, const RTTTime& b)
 	{
-		return (a.millis != b.millis) || (a.micros != b.micros);
+		return (a.millis() != b.millis()) || (a.micros() != b.micros());
 	}
 
 	/**
@@ -214,8 +226,8 @@ namespace time
 	 */
 	inline RTTTime operator+(const RTTTime& a, const RTTTime& b)
 	{
-		uint32_t millis = a.millis + b.millis;
-		uint16_t micros = a.micros + b.micros;
+		uint32_t millis = a.millis() + b.millis();
+		uint16_t micros = a.micros() + b.micros();
 		if (micros >= 1000UL)
 		{
 			++millis;
@@ -233,9 +245,9 @@ namespace time
 	inline RTTTime operator-(const RTTTime& a, const RTTTime& b)
 	{
 		if (a <= b) return RTTTime{0, 0};
-		uint32_t millis = a.millis - b.millis;
-		if (a.micros >= b.micros) return RTTTime{millis, a.micros - b.micros};
-		return RTTTime{millis - 1, 1000 + a.micros - b.micros};
+		uint32_t millis = a.millis() - b.millis();
+		if (a.micros() >= b.micros()) return RTTTime{millis, a.micros() - b.micros()};
+		return RTTTime{millis - 1, 1000 + a.micros() - b.micros()};
 	}
 
 	/**

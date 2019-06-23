@@ -130,11 +130,11 @@ namespace gpio
 			if (mode == PinMode::OUTPUT)
 				TRAIT::DDR |= BV8(BIT);
 			else
-				TRAIT::DDR &= ~BV8(BIT);
+				TRAIT::DDR &= CBV8(BIT);
 			if (value || (mode == PinMode::INPUT_PULLUP))
 				TRAIT::PORT |= BV8(BIT);
 			else
-				TRAIT::PORT &= ~BV8(BIT);
+				TRAIT::PORT &= CBV8(BIT);
 		}
 
 		/**
@@ -152,7 +152,7 @@ namespace gpio
 		 */
 		void clear() INLINE
 		{
-			TRAIT::PORT &= ~BV8(BIT);
+			TRAIT::PORT &= CBV8(BIT);
 		}
 
 		/**
@@ -417,7 +417,7 @@ namespace gpio
 		 */
 		void set_PORT(uint8_t port) INLINE
 		{
-			TRAIT::PORT = uint8_t(TRAIT::PORT & uint8_t(~MASK)) | uint8_t(port & MASK);
+			TRAIT::PORT = uint8_t(TRAIT::PORT & COMPL(MASK)) | uint8_t(port & MASK);
 		}
 
 		/**
@@ -448,7 +448,7 @@ namespace gpio
 		 */
 		void set_DDR(uint8_t ddr) INLINE
 		{
-			TRAIT::DDR = uint8_t(TRAIT::DDR & uint8_t(~MASK)) | uint8_t(ddr & MASK);
+			TRAIT::DDR = uint8_t(TRAIT::DDR & COMPL(MASK)) | uint8_t(ddr & MASK);
 		}
 
 		/**
@@ -558,11 +558,11 @@ namespace gpio
 			if (mode == PinMode::OUTPUT)
 				PTRAIT::DDR |= BV8(BIT);
 			else
-				PTRAIT::DDR &= ~BV8(BIT);
+				PTRAIT::DDR &= CBV8(BIT);
 			if (value || (mode == PinMode::INPUT_PULLUP))
 				PTRAIT::PORT |= BV8(BIT);
 			else
-				PTRAIT::PORT &= ~BV8(BIT);
+				PTRAIT::PORT &= CBV8(BIT);
 		}
 
 		/**
@@ -580,7 +580,7 @@ namespace gpio
 		 */
 		static void clear()
 		{
-			PTRAIT::PORT &= ~BV8(BIT);
+			PTRAIT::PORT &= CBV8(BIT);
 		}
 
 		/**

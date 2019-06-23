@@ -26,14 +26,14 @@ void time::yield()
 
 time::RTTTime time::delta(const RTTTime& time1, const RTTTime& time2)
 {
-	uint32_t millis = ((time1.millis <= time2.millis) ? (time2.millis - time1.millis) : 0);
+	uint32_t millis = ((time1.millis() <= time2.millis()) ? (time2.millis() - time1.millis()) : 0);
 	uint16_t micros = 0;
-	if (time1.micros <= time2.micros)
-		micros = time2.micros - time1.micros;
+	if (time1.micros() <= time2.micros())
+		micros = time2.micros() - time1.micros();
 	else if (millis)
 	{
 		--millis;
-		micros = 1000 + time2.micros - time1.micros;
+		micros = 1000 + time2.micros() - time1.micros();
 	}
 	return RTTTime{millis, micros};
 }

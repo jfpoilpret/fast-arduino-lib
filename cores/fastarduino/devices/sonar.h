@@ -867,7 +867,7 @@ namespace devices::sonar
 	private:
 		bool on_pin_change()
 		{
-			static_assert(SONAR_TYPE == SonarType::ASYNC_INT || SONAR_TYPE == SonarType::ASYNC_PCINT,
+			static_assert((SONAR_TYPE == SonarType::ASYNC_INT) || (SONAR_TYPE == SonarType::ASYNC_PCINT),
 						  "on_pin_change() must be called only with SonarType::ASYNC_INT or ASYNC_PCINT");
 			return this->pulse_edge(echo_.value());
 		}
@@ -1230,9 +1230,9 @@ namespace devices::sonar
 			if (!active_) return EVENT{};
 			// Compute the newly started echoes
 			uint8_t pins = echo_.get_PIN();
-			uint8_t started = pins & uint8_t(~started_);
+			uint8_t started = pins & COMPL(started_);
 			// Compute the newly finished echoes
-			uint8_t ready = uint8_t(~pins) & started_ & uint8_t(~ready_);
+			uint8_t ready = COMPL(pins) & started_ & COMPL(ready_);
 			// Update status of all echo pins
 			started_ |= started;
 			ready_ |= ready;

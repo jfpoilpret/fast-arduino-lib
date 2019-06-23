@@ -72,11 +72,6 @@ namespace serial::soft
 	protected:
 		template<uint8_t SIZE_TX> explicit AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
 
-		streams::ostream out()
-		{
-			return streams::ostream(*this);
-		}
-
 		void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 		static Parity calculate_parity(Parity parity, uint8_t value);
 
@@ -143,7 +138,7 @@ namespace serial::soft
 		 */
 		streams::ostream out()
 		{
-			return AbstractUATX::out();
+			return streams::ostream(out_());
 		}
 
 		/**
@@ -166,7 +161,7 @@ namespace serial::soft
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			check_overflow();
 			char value;
-			while (out_().queue().pull(value)) write(value);
+			while (out_().queue().pull(value)) write(uint8_t(value));
 		}
 		/// @endcond
 
@@ -227,11 +222,6 @@ namespace serial::soft
 			return (streams::istreambuf&) *this;
 		}
 
-		streams::istream in()
-		{
-			return streams::istream(*this);
-		}
-
 		void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 
 		template<board::DigitalPin RX> void pin_change();
@@ -288,7 +278,7 @@ namespace serial::soft
 		// Push value if no error
 		if (errors.has_errors == 0)
 		{
-			errors.queue_overflow = !in_().queue().push_(value);
+			errors.queue_overflow = !in_().queue().push_(char(value));
 			// Wait for 1st stop bit
 			_delay_loop_2(stop_bit_rx_time_push_);
 		}
@@ -344,7 +334,7 @@ namespace serial::soft
 		 */
 		streams::istream in()
 		{
-			return AbstractUARX::in();
+			return streams::istream(in_());
 		}
 
 		/**
@@ -428,7 +418,7 @@ namespace serial::soft
 		 */
 		streams::istream in()
 		{
-			return AbstractUARX::in();
+			return streams::istream(in_());
 		}
 
 		/**

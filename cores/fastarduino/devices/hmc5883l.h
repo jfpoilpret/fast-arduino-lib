@@ -270,7 +270,7 @@ namespace devices::magneto
 		 */
 		bool magnetic_fields(Sensor3D& fields)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, BusCond::START_NO_STOP) == OK
 				&& this->read(DEVICE_ADDRESS, fields, BusCond::REPEAT_START_STOP) == OK)
 			{
@@ -314,14 +314,14 @@ namespace devices::magneto
 
 		bool write_register(uint8_t address, uint8_t value)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			return (this->write(DEVICE_ADDRESS, address, BusCond::START_NO_STOP) == OK
 					&& this->write(DEVICE_ADDRESS, value, BusCond::NO_START_STOP) == OK);
 		}
 
 		bool read_register(uint8_t address, uint8_t& value)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			return (this->write(DEVICE_ADDRESS, address, BusCond::START_NO_STOP) == OK
 					&& this->read(DEVICE_ADDRESS, value, BusCond::REPEAT_START_STOP) == OK);
 		}

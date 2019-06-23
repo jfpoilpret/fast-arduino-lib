@@ -24,7 +24,7 @@ void spi::init()
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
 		// Also set SS as Output (mandatory for Master SPI as per Atmel datasheet)
-		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~BV8(board_traits::SPI_trait::MISO))
+		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & CBV8(board_traits::SPI_trait::MISO))
 									   | BV8(board_traits::SPI_trait::MOSI) | BV8(board_traits::SPI_trait::SCK)
 									   | BV8(board_traits::SPI_trait::SS);
 		// Set MISO as pullup and force MOSI and SCK low
@@ -40,7 +40,7 @@ void spi::init()
 	{
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
-		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & ~BV8(board_traits::SPI_trait::MISO))
+		board_traits::SPI_trait::DDR = (board_traits::SPI_trait::DDR & CBV8(board_traits::SPI_trait::MISO))
 									   | BV8(board_traits::SPI_trait::MOSI) | BV8(board_traits::SPI_trait::SCK);
 		// Set MISO as pullup and force MOSI and SCK low
 		//TODO not sure this is really needed

@@ -335,14 +335,14 @@ namespace devices::mcp23017
 
 		template<typename T> bool write_register(uint8_t address, T value)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			return this->write(device_, address, BusCond::START_NO_STOP) == OK
 				   && this->write(device_, value, BusCond::NO_START_STOP) == OK;
 		}
 
 		template<typename T> bool read_register(uint8_t address, T& value)
 		{
-			using namespace i2c::Status;
+			using i2c::Status::OK;
 			return this->write(device_, address, BusCond::START_NO_STOP) == OK
 				   && this->read(device_, value, BusCond::REPEAT_START_STOP) == OK;
 		}

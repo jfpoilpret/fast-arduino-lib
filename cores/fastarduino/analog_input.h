@@ -159,21 +159,19 @@ namespace analog
 	//TODO LATER: need ISR also
 	// Find better class name
 	//TODO Implement mechanism to ensure only DeferredAnalogInput can be registered (need sth like one AnalogInputManager?))
-	/*
-	template<board::AnalogPin APIN, board::AnalogReference AREF = board::AnalogReference::AVCC, typename SAMPLE_TYPE = uint16_t>
-	class DeferredAnalogInput
-	{
-	public:
-		DeferredAnalogInput();
-		void start();
-		void stop();
-		SAMPLE_TYPE sample();
-		//Other API? eg sample_ready? sample_changed?
+	// template<board::AnalogPin APIN, board::AnalogReference AREF = board::AnalogReference::AVCC, typename SAMPLE_TYPE = uint16_t>
+	// class DeferredAnalogInput
+	// {
+	// public:
+	// 	DeferredAnalogInput();
+	// 	void start();
+	// 	void stop();
+	// 	SAMPLE_TYPE sample();
+	// 	//Other API? eg sample_ready? sample_changed?
 
-	private:
-		SAMPLE_TYPE sample_;
-	};
-	*/
+	// private:
+	// 	SAMPLE_TYPE sample_;
+	// };
 }
 
 #endif /* ANALOGINPUT_HH */

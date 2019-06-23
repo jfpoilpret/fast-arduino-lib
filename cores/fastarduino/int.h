@@ -165,7 +165,7 @@ namespace interrupt
 		void set_trigger(InterruptTrigger trigger)
 		{
 			synchronized INT_TRAIT::EICR_ =
-				(INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
+				(INT_TRAIT::EICR_ & COMPL(INT_TRAIT::EICR_MASK)) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 		}
 
 		/**
@@ -189,7 +189,7 @@ namespace interrupt
 		 */
 		void disable()
 		{
-			synchronized INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
+			synchronized INT_TRAIT::EIMSK_ &= COMPL(INT_TRAIT::EIMSK_MASK);
 		}
 
 		/**
@@ -215,7 +215,7 @@ namespace interrupt
 		 */
 		void set_trigger_(InterruptTrigger trigger)
 		{
-			INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & ~INT_TRAIT::EICR_MASK) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
+			INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & COMPL(INT_TRAIT::EICR_MASK)) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 		}
 
 		/**
@@ -239,7 +239,7 @@ namespace interrupt
 		 */
 		void disable_()
 		{
-			INT_TRAIT::EIMSK_ &= ~INT_TRAIT::EIMSK_MASK;
+			INT_TRAIT::EIMSK_ &= COMPL(INT_TRAIT::EIMSK_MASK);
 		}
 
 		/**

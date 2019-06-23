@@ -99,7 +99,7 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
+				ok = ((uint8_t(conditions) & 0x02) ? manager_.repeat_start() : manager_.start())
 					 && manager_.send_slar(address);
 			while (ok && (--size != 0)) ok = manager_.receive_data(*data++);
 			if (uint8_t(conditions) & 0x04)
@@ -178,7 +178,7 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
+				ok = ((uint8_t(conditions) & 0x02) ? manager_.repeat_start() : manager_.start())
 					 && manager_.send_slaw(address);
 			while (ok && (size-- != 0)) ok = manager_.send_data(*data++);
 			if (uint8_t(conditions) & 0x04) manager_.stop();
@@ -249,7 +249,7 @@ namespace i2c
 		{
 			bool ok = true;
 			if (uint8_t(conditions) & 0x01)
-				ok = (uint8_t(conditions) & 0x02 ? manager_.repeat_start() : manager_.start())
+				ok = ((uint8_t(conditions) & 0x02) ? manager_.repeat_start() : manager_.start())
 					 && manager_.send_slaw(address);
 			ok = ok && manager_.send_data(data);
 			if (uint8_t(conditions) & 0x04) manager_.stop();

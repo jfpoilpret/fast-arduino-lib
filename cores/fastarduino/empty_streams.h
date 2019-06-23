@@ -85,50 +85,50 @@ namespace streams
 		void precision(uint8_t precision UNUSED) {}
 
 		void flush() {}
-		void put(char c UNUSED) {}
+		void put(char val UNUSED) {}
 		void write(const char* content UNUSED, size_t size UNUSED) {}
 		void write(const char* str UNUSED) {}
 		void write(const flash::FlashStorage* str UNUSED) {}
 
-		null_ostream& operator<<(const void* p UNUSED)
+		null_ostream& operator<<(const void* ptr UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(bool b UNUSED)
+		null_ostream& operator<<(bool val UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(char c UNUSED)
+		null_ostream& operator<<(char val UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(const char* s UNUSED)
+		null_ostream& operator<<(const char* str UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(int v UNUSED)
+		null_ostream& operator<<(int val UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(unsigned int v UNUSED)
+		null_ostream& operator<<(unsigned int val UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(long v UNUSED)
+		null_ostream& operator<<(long val UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(unsigned long v UNUSED)
+		null_ostream& operator<<(unsigned long val UNUSED)
 		{
 			return *this;
 		}
-		null_ostream& operator<<(double v UNUSED)
+		null_ostream& operator<<(double val UNUSED)
 		{
 			return *this;
 		}
 
 		typedef void (*Manipulator)(null_ostream&);
-		null_ostream& operator<<(Manipulator f UNUSED)
+		null_ostream& operator<<(Manipulator func UNUSED)
 		{
 			return *this;
 		}

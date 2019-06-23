@@ -48,13 +48,35 @@
 #endif
 
 //TODO maybe put in other header, eg bits.h?
-static constexpr uint8_t BV8(uint8_t shift)
+//TODO improve by having multiple args (ORed together)
+//TODO improve by adding complement functions
+static constexpr uint8_t BV8(uint8_t bit)
 {
-	return uint8_t(1 << shift);
+	return uint8_t(1 << bit);
 }
-static constexpr uint16_t BV16(uint8_t shift)
+static constexpr uint8_t CBV8(uint8_t bit)
 {
-	return uint16_t(1 << shift);
+	return uint8_t(~BV8(bit));
+}
+static constexpr uint16_t BV16(uint8_t bit)
+{
+	return uint16_t(1 << bit);
+}
+static constexpr uint16_t CBV16(uint8_t bit)
+{
+	return uint16_t(~BV16(bit));
+}
+static constexpr uint8_t COMPL(uint8_t value)
+{
+	return uint8_t(~value);
+}
+static constexpr uint8_t LOW_BYTE(uint16_t value)
+{
+	return uint8_t(value & 0x00FFU);
+}
+static constexpr uint8_t HIGH_BYTE(uint16_t value)
+{
+	return uint8_t(value >> 8);
 }
 
 #endif /* BOARDS_IO_HH */

@@ -272,7 +272,7 @@ namespace utils
 	 */
 	constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)
 	{
-		return uint16_t(high << 8) | low;
+		return uint16_t(uint16_t(high) << 8) | uint16_t(low);
 	}
 
 	/**

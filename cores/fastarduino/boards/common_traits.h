@@ -555,7 +555,7 @@ namespace board_traits
 		using TIMER_PRESCALER = typename PRESCALERS_TRAIT::TYPE;
 
 		static constexpr const uint8_t COM_COUNT = COM_COUNT_;
-		static constexpr const uint8_t COM_MASK = ~(0xFF >> (2 * COM_COUNT));
+		static constexpr const uint8_t COM_MASK = ~(0x00FFU >> uint8_t(2 * COM_COUNT));
 
 		static constexpr const uint8_t CS_MASK_TCCRB = CS_MASK_TCCRB_;
 		static constexpr const uint8_t MODE_MASK_TCCRA = MODE_MASK_TCCRA_;
