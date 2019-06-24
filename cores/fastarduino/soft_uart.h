@@ -77,6 +77,7 @@ namespace serial::soft
 	protected:
 		template<uint8_t SIZE_TX> explicit AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
 
+		//TODO rename to compute_times() and do not include Parity
 		void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 		static Parity calculate_parity(Parity parity, uint8_t value);
 
@@ -90,12 +91,55 @@ namespace serial::soft
 			errors_.queue_overflow = overflow();
 		}
 
+		template<board::DigitalPin DPIN> void write(uint8_t value)
+		{
+			synchronized write_<DPIN>(value);
+		}
+		template<board::DigitalPin DPIN> void write_(uint8_t value);
+	
 		Parity parity_;
 		// Various timing constants based on rate
 		uint16_t interbit_tx_time_;
 		uint16_t start_bit_tx_time_;
 		uint16_t stop_bit_tx_time_;
 	};
+
+	template<board::DigitalPin DPIN> void AbstractUATX::write_(uint8_t value)
+	{
+		using TX = gpio::FastPinType<DPIN>;
+		// Pre-calculate all what we need: parity bit
+		Parity parity_bit = calculate_parity(parity_, value);
+
+		// Write start bit
+		TX::clear();
+		// Wait before starting actual value transmission
+		_delay_loop_2(start_bit_tx_time_);
+		for (uint8_t bit = 0; bit < 8; ++bit)
+		{
+			if (value & 0x01)
+				TX::set();
+			else
+			{
+				// Additional NOP to ensure set/clear are executed exactly at the same time (cycle)
+				asm volatile("NOP");
+				TX::clear();
+			}
+			value >>= 1;
+			_delay_loop_2(interbit_tx_time_);
+		}
+		// Add parity if needed
+		if (parity_bit != Parity::NONE)
+		{
+			if (parity_bit == parity_)
+				TX::clear();
+			else
+				TX::set();
+			_delay_loop_2(interbit_tx_time_);
+		}
+		// Add stop bit
+		TX::set();
+		_delay_loop_2(stop_bit_tx_time_);
+	}
 	/// @endcond
 
 	/**
@@ -166,55 +210,14 @@ namespace serial::soft
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			check_overflow();
 			char value;
-			while (out_().queue().pull(value)) write(uint8_t(value));
+			while (out_().queue().pull(value)) write<TX>(uint8_t(value));
 		}
 		/// @endcond
 
 	private:
-		void write(uint8_t value)
-		{
-			synchronized write_(value);
-		}
-		void write_(uint8_t value);
-
 		typename gpio::FastPinType<TX>::TYPE tx_;
 	};
 
-	template<board::DigitalPin DPIN> void UATX<DPIN>::write_(uint8_t value)
-	{
-		// Pre-calculate all what we need: parity bit
-		Parity parity_bit = calculate_parity(parity_, value);
-
-		// Write start bit
-		tx_.clear();
-		// Wait before starting actual value transmission
-		_delay_loop_2(start_bit_tx_time_);
-		for (uint8_t bit = 0; bit < 8; ++bit)
-		{
-			if (value & 0x01)
-				tx_.set();
-			else
-			{
-				// Additional NOP to ensure set/clear are executed exactly at the same time (cycle)
-				asm volatile("NOP");
-				tx_.clear();
-			}
-			value >>= 1;
-			_delay_loop_2(interbit_tx_time_);
-		}
-		// Add parity if needed
-		if (parity_bit != Parity::NONE)
-		{
-			if (parity_bit == parity_)
-				tx_.clear();
-			else
-				tx_.set();
-			_delay_loop_2(interbit_tx_time_);
-		}
-		// Add stop bit
-		tx_.set();
-		_delay_loop_2(stop_bit_tx_time_);
-	}
 
 	/// @cond notdocumented
 	class AbstractUARX : virtual public UARTErrors, private streams::istreambuf
@@ -227,9 +230,10 @@ namespace serial::soft
 			return (streams::istreambuf&) *this;
 		}
 
+		//TODO rename to compute_times() and do not include Parity
 		void begin_serial(uint32_t rate, Parity parity, StopBits stop_bits);
 
-		template<board::DigitalPin RX> void pin_change();
+		template<board::DigitalPin DPIN> void pin_change();
 
 		// Check if we can further refactor here, as we don't want parity stored twice for RX and TX...
 		Parity parity_;
@@ -240,11 +244,10 @@ namespace serial::soft
 		uint16_t stop_bit_rx_time_push_;
 		uint16_t stop_bit_rx_time_no_push_;
 	};
-	/// @endcond
 
-	template<board::DigitalPin RX_> void AbstractUARX::pin_change()
+	template<board::DigitalPin DPIN> void AbstractUARX::pin_change()
 	{
-		using RX = gpio::FastPinType<RX_>;
+		using RX = gpio::FastPinType<DPIN>;
 		// Check RX is low (start bit)
 		if (RX::value()) return;
 		uint8_t value = 0;
@@ -294,6 +297,7 @@ namespace serial::soft
 			_delay_loop_2(stop_bit_rx_time_no_push_);
 		}
 	}
+	/// @endcond
 
 	/// @cond notdocumented
 	template<typename T, T IRQ> class UARX {};
@@ -333,6 +337,7 @@ namespace serial::soft
 			interrupt::register_handler(*this);
 		}
 
+		//TODO try to put that method to Abstract base class and document it there
 		/**
 		 * Get the formatted input stream used to read content received through
 		 * this serial transmitter.
@@ -475,6 +480,7 @@ namespace serial::soft
 	/// @endcond
 
 	/** @sa UART_EXT */
+	//TODO do not subclass UATX/UARX, only subclass Abstract classes
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::ExternalInterruptPin, RX_, TX_> : public UARX<board::ExternalInterruptPin, RX_>, public UATX<TX_>
 	{
@@ -537,6 +543,7 @@ namespace serial::soft
 	};
 
 	/** @sa UART_PCI */
+	//TODO do not subclass UATX/UARX, only subclass Abstract classes
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::InterruptPin, RX_, TX_> : public UARX<board::InterruptPin, RX_>, public UATX<TX_>
 	{
