@@ -13,11 +13,9 @@
 //   limitations under the License.
 
 #include "soft_uart.h"
-// #include <util/delay_basic.h>
 
-void serial::soft::AbstractUATX::begin_serial(uint32_t rate, Parity parity, StopBits stop_bits)
+void serial::soft::AbstractUATX::compute_times(uint32_t rate, StopBits stop_bits)
 {
-	parity_ = parity;
 	// Calculate timing for TX in number of cycles
 	uint16_t bit_time = uint16_t(F_CPU / rate);
 	// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2()
@@ -36,9 +34,8 @@ static constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cyc
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
 }
 
-void serial::soft::AbstractUARX::begin_serial(uint32_t rate, Parity parity, UNUSED StopBits stop_bits)
+void serial::soft::AbstractUARX::compute_times(uint32_t rate, bool has_parity, UNUSED StopBits stop_bits)
 {
-	parity_ = parity;
 	// Calculate timing for RX in number of cycles
 	uint16_t bit_time = uint16_t(F_CPU / rate);
 
@@ -57,7 +54,7 @@ void serial::soft::AbstractUARX::begin_serial(uint32_t rate, Parity parity, UNUS
 	// 16+4N cycles elapse between processing of each bit
 	interbit_rx_time_ = compute_delay(bit_time, 16);
 
-	if (parity != Parity::NONE)
+	if (has_parity)
 	{
 		// When parity must be checked, the number of cycles between last data bit sampled and parity bit sample is:
 		// - 20 cycles + 4n delay
