@@ -62,7 +62,7 @@ constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D1
 #endif
 
 // Define vectors we need in the example
-REGISTER_UART_INT_ISR(RX, INT_NUM)
+REGISTER_UART_INT_ISR(RX, TX, INT_NUM)
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;

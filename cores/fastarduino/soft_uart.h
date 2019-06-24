@@ -30,31 +30,54 @@
 #include "pci.h"
 #include "int.h"
 
-//TODO need 2 extra macros to differetiate UARX and UART
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX
- * to work correctly. This applies to an `UARX` (or `UART`) which @p RX pin is
- * a PCINT pin.
- * @param RX the `board::InterruptPin` used as RX for the UARX (or UART)
+ * to work correctly. This applies to an `UARX` which @p RX pin is a PCINT pin.
+ * @param RX the `board::InterruptPin` used as RX for the UARX
  * @param PCI_NUM the number of the `PCINT` vector for the given @p RX pin
  */
-#define REGISTER_UART_PCI_ISR(RX, PCI_NUM)                        \
+#define REGISTER_UARX_PCI_ISR(RX, PCI_NUM)                        \
 	ISR(CAT3(PCINT, PCI_NUM, _vect))                              \
 	{                                                             \
-		serial::soft::isr_handler::check_uart_pci<PCI_NUM, RX>(); \
+		serial::soft::isr_handler::check_uarx_pci<PCI_NUM, RX>(); \
 	}
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX
- * to work correctly. This applies to an `UARX` (or `UART`) which @p RX pin is
- * a External INT pin.
- * @param RX the `board::ExternalInterruptPin` used as RX for the UARX (or UART)
+ * to work correctly. This applies to an `UARX` which @p RX pin is an External INT pin.
+ * @param RX the `board::ExternalInterruptPin` used as RX for the UARX
  * @param INT_NUM the number of the `INT` vector for the given @p RX pin
  */
-#define REGISTER_UART_INT_ISR(RX, INT_NUM)                        \
+#define REGISTER_UARX_INT_ISR(RX, INT_NUM)                        \
 	ISR(CAT3(INT, INT_NUM, _vect))                                \
 	{                                                             \
-		serial::soft::isr_handler::check_uart_int<INT_NUM, RX>(); \
+		serial::soft::isr_handler::check_uarx_int<INT_NUM, RX>(); \
+	}
+
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART
+ * to work correctly. This applies to an `UART` which @p RX pin is a PCINT pin.
+ * @param RX the `board::InterruptPin` used as RX for the UART
+ * @param TX the `board::DigitalPin` used as TX for the UART
+ * @param PCI_NUM the number of the `PCINT` vector for the given @p RX pin
+ */
+#define REGISTER_UART_PCI_ISR(RX, TX, PCI_NUM)                        \
+	ISR(CAT3(PCINT, PCI_NUM, _vect))                                  \
+	{                                                                 \
+		serial::soft::isr_handler::check_uart_pci<PCI_NUM, RX, TX>(); \
+	}
+
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART
+ * to work correctly. This applies to an `UART` which @p RX pin is an External INT pin.
+ * @param RX the `board::ExternalInterruptPin` used as RX for the UART
+ * @param TX the `board::DigitalPin` used as TX for the UART
+ * @param INT_NUM the number of the `INT` vector for the given @p RX pin
+ */
+#define REGISTER_UART_INT_ISR(RX, TX, INT_NUM)                        \
+	ISR(CAT3(INT, INT_NUM, _vect))                                    \
+	{                                                                 \
+		serial::soft::isr_handler::check_uart_int<INT_NUM, RX, TX>(); \
 	}
 
 //FIXME Handle begin/end properly in relation to current queue content
@@ -703,18 +726,32 @@ namespace serial::soft
 	/// @cond notdocumented
 	struct isr_handler
 	{
-		//TODO need the same 2 API for UART!!!
-
-		template<uint8_t PCI_NUM_, board::InterruptPin RX_> static void check_uart_pci()
+		template<uint8_t PCI_NUM_, board::InterruptPin RX_> static void check_uarx_pci()
 		{
 			interrupt::isr_handler_pci::check_pci_pins<PCI_NUM_, RX_>();
-			interrupt::HandlerHolder<serial::soft::UARX<board::InterruptPin, RX_>>::handler()->on_pin_change();
+			using UARX = serial::soft::UARX_PCI<RX_>;
+			interrupt::HandlerHolder<UARX>::handler()->on_pin_change();
 		}
 
-		template<uint8_t INT_NUM_, board::ExternalInterruptPin RX_> static void check_uart_int()
+		template<uint8_t INT_NUM_, board::ExternalInterruptPin RX_> static void check_uarx_int()
 		{
 			interrupt::isr_handler_int::check_int_pin<INT_NUM_, RX_>();
-			interrupt::HandlerHolder<serial::soft::UARX<board::ExternalInterruptPin, RX_>>::handler()->on_pin_change();
+			using UARX = serial::soft::UARX_EXT<RX_>;
+			interrupt::HandlerHolder<UARX>::handler()->on_pin_change();
+		}
+
+		template<uint8_t PCI_NUM_, board::InterruptPin RX_, board::DigitalPin TX_> static void check_uart_pci()
+		{
+			interrupt::isr_handler_pci::check_pci_pins<PCI_NUM_, RX_>();
+			using UART = serial::soft::UART_PCI<RX_, TX_>;
+			interrupt::HandlerHolder<UART>::handler()->on_pin_change();
+		}
+
+		template<uint8_t INT_NUM_, board::ExternalInterruptPin RX_, board::DigitalPin TX_> static void check_uart_int()
+		{
+			interrupt::isr_handler_int::check_int_pin<INT_NUM_, RX_>();
+			using UART = serial::soft::UART_EXT<RX_, TX_>;
+			interrupt::HandlerHolder<UART>::handler()->on_pin_change();
 		}
 	};
 	/// @endcond
