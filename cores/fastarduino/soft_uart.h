@@ -66,6 +66,11 @@
  */
 namespace serial::soft
 {
+	//TODO redesign
+	// Put more methods in AbstractUATX/AbstractUARX and template methods if needed
+	// Make UATX and UARX minimal
+	// Make UART derive from AbstractUATX, AbstractURX (instead of UATX/UARX)
+
 	/// @cond notdocumented
 	class AbstractUATX : virtual public UARTErrors, private streams::ostreambuf
 	{
