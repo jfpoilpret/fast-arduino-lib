@@ -445,8 +445,8 @@ namespace serial::soft
 		 * buffer output during transmission.
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		: AbstractUARX{input}, AbstractUATX{output}, rx_{gpio::PinMode::INPUT}
+		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+		: AbstractUARX{input}, AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -484,6 +484,17 @@ namespace serial::soft
 			int_->disable();
 		}
 
+	protected:
+		/// @cond notdocumented
+		void on_put() override
+		{
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			check_overflow();
+			char value;
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+		}
+		/// @endcond
+
 	private:
 		void on_pin_change()
 		{
@@ -493,6 +504,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
+		typename gpio::FastPinType<TX>::TYPE tx_;
 		typename gpio::FastPinType<RX>::TYPE rx_;
 		INT_TYPE* int_;
 		friend struct isr_handler;
@@ -607,8 +619,8 @@ namespace serial::soft
 		 * buffer output during transmission.
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		: AbstractUARX{input}, AbstractUATX{output}, rx_{gpio::PinMode::INPUT}
+		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+		: AbstractUARX{input}, AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -646,6 +658,17 @@ namespace serial::soft
 			pci_->template disable_pin<RX_>();
 		}
 
+	protected:
+		/// @cond notdocumented
+		void on_put() override
+		{
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			check_overflow();
+			char value;
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+		}
+		/// @endcond
+
 	private:
 		void on_pin_change()
 		{
@@ -655,6 +678,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
+		typename gpio::FastPinType<TX>::TYPE tx_;
 		typename gpio::FastPinType<RX>::TYPE rx_;
 		PCI_TYPE* pci_;
 		friend struct isr_handler;
