@@ -73,7 +73,7 @@ struct EchoLed
 	template<DigitalPin ECHO, DigitalPin LED>
 	static constexpr const EchoLed create()
 	{
-		return EchoLed{BV8(FastPinType<ECHO>::BIT), BV8(FastPinType<LED>::BIT)};
+		return EchoLed{bits::BV8(FastPinType<ECHO>::BIT), bits::BV8(FastPinType<LED>::BIT)};
 	}
 
 	constexpr EchoLed(uint8_t echo, uint8_t led):echo{echo}, led{led} {}

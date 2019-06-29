@@ -114,7 +114,7 @@ public:
 			else if (blink_mode == BlinkMode::BLINK_ALL_BLINKS)
 				data |= _blinks[_row];
 		}
-		_sipo.output(TRAIT::as_type(CBV8(_row), data));
+		_sipo.output(TRAIT::as_type(bits::CBV8(_row), data));
 		if (++_row == ROWS)
 		{
 			_row = 0;
@@ -127,7 +127,7 @@ public:
 	// This is equivalent to refresh(BlinkMode::NO_BLINK) but smaller and faster
 	void refresh()
 	{
-		_sipo.output(TRAIT::as_type(CBV8(_row), _data[_row]));
+		_sipo.output(TRAIT::as_type(bits::CBV8(_row), _data[_row]));
 		if (++_row == ROWS)
 			_row = 0;
 	}

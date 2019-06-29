@@ -44,15 +44,15 @@ namespace board_traits
 	//==============
 	// Analog Input
 	//==============
-	template<> struct AnalogReference_trait<AnalogReference::AREF>:AnalogReference_trait_impl<BV8(REFS0)> {};
+	template<> struct AnalogReference_trait<AnalogReference::AREF>:AnalogReference_trait_impl<bits::BV8(REFS0)> {};
 	template<> struct AnalogReference_trait<AnalogReference::AVCC>:AnalogReference_trait_impl<0> {};
-	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>:AnalogReference_trait_impl<BV8(REFS1)> {};
-	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_2_56V>:AnalogReference_trait_impl<BV8(REFS2) | BV8(REFS1)> {};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>:AnalogReference_trait_impl<bits::BV8(REFS1)> {};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_2_56V>:AnalogReference_trait_impl<bits::BV8(REFS2) | bits::BV8(REFS1)> {};
 	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_2_56V_BYPASS_CAP>
-		:AnalogReference_trait_impl<BV8(REFS2) | BV8(REFS1) | BV8(REFS0)> {};
+		:AnalogReference_trait_impl<bits::BV8(REFS2) | bits::BV8(REFS1) | bits::BV8(REFS0)> {};
 	
 	template<> struct AnalogSampleType_trait<uint16_t>: AnalogSampleType_trait_impl<uint16_t, 0, 0, R_(ADC)> {};
-	template<> struct AnalogSampleType_trait<uint8_t>: AnalogSampleType_trait_impl<uint8_t, BV8(ADLAR), 0, R_(ADCH)> {};
+	template<> struct AnalogSampleType_trait<uint8_t>: AnalogSampleType_trait_impl<uint8_t, bits::BV8(ADLAR), 0, R_(ADCH)> {};
 
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_50KHz>: AnalogClock_trait_impl<50000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_100KHz>: AnalogClock_trait_impl<100000UL> {};
@@ -62,24 +62,24 @@ namespace board_traits
 
 	struct GlobalAnalogPin_trait:GlobalAnalogPin_trait_impl<R_(ADMUX), R_(ADCSRA), R_(ADCSRB)> {};
 	
-	template<> struct AnalogPin_trait<AnalogPin::A1>: AnalogPin_trait_impl<BV8(MUX0)> {};
-	template<> struct AnalogPin_trait<AnalogPin::A2>: AnalogPin_trait_impl<BV8(MUX1)> {};
-	template<> struct AnalogPin_trait<AnalogPin::A3>: AnalogPin_trait_impl<BV8(MUX1) | BV8(MUX0)> {};
-	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<BV8(MUX3) | BV8(MUX2) | BV8(MUX1) | BV8(MUX0)> {};
-	template<> struct AnalogPin_trait<AnalogPin::GND>: AnalogPin_trait_impl<BV8(MUX3) | BV8(MUX2) | BV8(MUX0)> {};
-	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<BV8(MUX3) | BV8(MUX2), 0, 1100> {};
+	template<> struct AnalogPin_trait<AnalogPin::A1>: AnalogPin_trait_impl<bits::BV8(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A2>: AnalogPin_trait_impl<bits::BV8(MUX1)> {};
+	template<> struct AnalogPin_trait<AnalogPin::A3>: AnalogPin_trait_impl<bits::BV8(MUX1) | bits::BV8(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX3) | bits::BV8(MUX2) | bits::BV8(MUX1) | bits::BV8(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::GND>: AnalogPin_trait_impl<bits::BV8(MUX3) | bits::BV8(MUX2) | bits::BV8(MUX0)> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX3) | bits::BV8(MUX2), 0, 1100> {};
 
 	//===============
 	// IO interrupts
 	//===============
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D2_PB2_EXT0>: 
-		ExternalInterruptPin_trait_impl<DigitalPin::D2_PB2, 0, R_(MCUCR), BV8(ISC00) | BV8(ISC01), R_(GIMSK), BV8(INT0), R_(GIFR), BV8(INTF0)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D2_PB2, 0, R_(MCUCR), bits::BV8(ISC00) | bits::BV8(ISC01), R_(GIMSK), bits::BV8(INT0), R_(GIFR), bits::BV8(INTF0)> {};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
 	 */
 	template<> struct PCI_trait<0>: 
-		PCI_trait_impl<Port::PORT_B, 0x1F, BV8(PCIE), BV8(PCIF), R_(GIMSK), R_(GIFR), R_(PCMSK)> {};
+		PCI_trait_impl<Port::PORT_B, 0x1F, bits::BV8(PCIE), bits::BV8(PCIF), R_(GIMSK), R_(GIFR), R_(PCMSK)> {};
 	
 	//=======
 	// USART
@@ -101,46 +101,46 @@ namespace board_traits
 	//========
 	template<> struct Timer_COM_trait<Timer::TIMER0, 0>: Timer_COM_trait_impl<
 		uint8_t, PWMPin::D0_PB0_OC0A, R_(OCR0A), 
-		BV8(COM0A0) | BV8(COM0A1), 0, BV8(COM0A0), BV8(COM0A1), BV8(COM0A0) | BV8(COM0A1)> {};
+		bits::BV8(COM0A0) | bits::BV8(COM0A1), 0, bits::BV8(COM0A0), bits::BV8(COM0A1), bits::BV8(COM0A0) | bits::BV8(COM0A1)> {};
 	template<> struct Timer_COM_trait<Timer::TIMER0, 1>: Timer_COM_trait_impl<
 		uint8_t, PWMPin::D1_PB1_OC0B, R_(OCR0B), 
-		BV8(COM0B0) | BV8(COM0B1), 0, BV8(COM0B0), BV8(COM0B1), BV8(COM0B0) | BV8(COM0B1)> {};
+		bits::BV8(COM0B0) | bits::BV8(COM0B1), 0, bits::BV8(COM0B0), bits::BV8(COM0B1), bits::BV8(COM0B0) | bits::BV8(COM0B1)> {};
 	template<> struct Timer_trait<Timer::TIMER0>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
 							2,
-							BV8(WGM00) | BV8(WGM01), BV8(WGM02), BV8(CS00) | BV8(CS01) | BV8(CS02),
-							BV8(WGM00) | BV8(WGM01), 0,
-							BV8(WGM00), 0,
-							BV8(WGM01), 0,
+							bits::BV8(WGM00) | bits::BV8(WGM01), bits::BV8(WGM02), bits::BV8(CS00) | bits::BV8(CS01) | bits::BV8(CS02),
+							bits::BV8(WGM00) | bits::BV8(WGM01), 0,
+							bits::BV8(WGM00), 0,
+							bits::BV8(WGM01), 0,
 							R_(TCCR0A), R_(TCCR0B), R_(TCNT0), R_(OCR0A), 
-							R_(TIMSK), R_(TIFR), BV8(TOIE0) | BV8(OCIE0A) | BV8(OCIE0B)>
+							R_(TIMSK), R_(TIFR), bits::BV8(TOIE0) | bits::BV8(OCIE0A) | bits::BV8(OCIE0B)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
-			return (p == TIMER_PRESCALER::NO_PRESCALING ? BV8(CS00) :
-					p == TIMER_PRESCALER::DIV_8 ? BV8(CS01) :
-					p == TIMER_PRESCALER::DIV_64 ? BV8(CS00) | BV8(CS01) :
-					p == TIMER_PRESCALER::DIV_256 ? BV8(CS02) :
-					BV8(CS02) | BV8(CS00));
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? bits::BV8(CS00) :
+					p == TIMER_PRESCALER::DIV_8 ? bits::BV8(CS01) :
+					p == TIMER_PRESCALER::DIV_64 ? bits::BV8(CS00) | bits::BV8(CS01) :
+					p == TIMER_PRESCALER::DIV_256 ? bits::BV8(CS02) :
+					bits::BV8(CS02) | bits::BV8(CS00));
 		}
 		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
-			return	(i & OVERFLOW ? BV8(TOIE0) : 0)
-				|	(i & OUTPUT_COMPARE_A ? BV8(OCIE0A) : 0)
-				|	(i & OUTPUT_COMPARE_B ? BV8(OCIE0B) : 0);
+			return	(i & OVERFLOW ? bits::BV8(TOIE0) : 0)
+				|	(i & OUTPUT_COMPARE_A ? bits::BV8(OCIE0A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? bits::BV8(OCIE0B) : 0);
 		}
 	};
 	
 	template<> struct Timer_trait<Timer::TIMER1>: 
 		Timer_trait_impl<	uint8_t, TimerPrescalers::PRESCALERS_1_TO_16384, 
 							0,
-							0, BV8(CTC1), BV8(CS10) | BV8(CS11) | BV8(CS12) | BV8(CS13),
+							0, bits::BV8(CTC1), bits::BV8(CS10) | bits::BV8(CS11) | bits::BV8(CS12) | bits::BV8(CS13),
 							0, 0,
 							0, 0,
-							0, BV8(CTC1),
+							0, bits::BV8(CTC1),
 							NO_REG, R_(TCCR1), R_(TCNT1), R_(OCR1A), 
-							R_(TIMSK), R_(TIFR), BV8(TOIE1) | BV8(OCIE1A) | BV8(OCIE1B),
+							R_(TIMSK), R_(TIFR), bits::BV8(TOIE1) | bits::BV8(OCIE1A) | bits::BV8(OCIE1B),
 							NO_REG,
 							0, 0,
 							0, 0,
@@ -156,9 +156,9 @@ namespace board_traits
 		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
 		{
 			using namespace board_traits::TimerInterrupt;
-			return	(i & OVERFLOW ? BV8(TOIE1) : 0)
-				|	(i & OUTPUT_COMPARE_A ? BV8(OCIE1A) : 0)
-				|	(i & OUTPUT_COMPARE_B ? BV8(OCIE1B) : 0);
+			return	(i & OVERFLOW ? bits::BV8(TOIE1) : 0)
+				|	(i & OUTPUT_COMPARE_A ? bits::BV8(OCIE1A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? bits::BV8(OCIE1B) : 0);
 		}
 	};
 	

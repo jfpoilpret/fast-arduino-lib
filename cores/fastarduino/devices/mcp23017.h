@@ -320,13 +320,13 @@ namespace devices::mcp23017
 		static constexpr const uint8_t OLAT_B = 0x15;
 
 		// IOCON bits (not all are used in this implementation)
-		static constexpr const uint8_t IOCON_BANK = BV8(7);
-		static constexpr const uint8_t IOCON_MIRROR = BV8(6);
-		static constexpr const uint8_t IOCON_SEQOP = BV8(5);
-		static constexpr const uint8_t IOCON_DISSLW = BV8(4);
-		static constexpr const uint8_t IOCON_HAEN = BV8(3);
-		static constexpr const uint8_t IOCON_ODR = BV8(2);
-		static constexpr const uint8_t IOCON_INTPOL = BV8(1);
+		static constexpr const uint8_t IOCON_BANK = bits::BV8(7);
+		static constexpr const uint8_t IOCON_MIRROR = bits::BV8(6);
+		static constexpr const uint8_t IOCON_SEQOP = bits::BV8(5);
+		static constexpr const uint8_t IOCON_DISSLW = bits::BV8(4);
+		static constexpr const uint8_t IOCON_HAEN = bits::BV8(3);
+		static constexpr const uint8_t IOCON_ODR = bits::BV8(2);
+		static constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
 
 		static constexpr uint8_t build_IOCON(bool mirror, bool int_polarity)
 		{

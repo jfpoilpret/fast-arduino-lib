@@ -110,7 +110,7 @@ namespace analog
 			// In this situation, a delay of minimum 400us seems necessary to ensure bandgap reference voltage is stabilized
 			if (TRAIT::IS_BANDGAP) time::delay_us(BG_STABILIZATION_DELAY_US);
 
-			GLOBAL_TRAIT::ADCSRA_ = BV8(ADEN) | BV8(ADSC) | TRAIT::MUX_MASK2 | FREQ_TRAIT::PRESCALER_MASK;
+			GLOBAL_TRAIT::ADCSRA_ = bits::BV8(ADEN) | bits::BV8(ADSC) | TRAIT::MUX_MASK2 | FREQ_TRAIT::PRESCALER_MASK;
 			// Wait until sampling is done
 			GLOBAL_TRAIT::ADCSRA_.loop_until_bit_clear(ADSC);
 			// Should we synchronize ADC reading?

@@ -629,7 +629,7 @@ namespace devices::rf
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::begin()
 	{
 		// Setup hardware features, channel, bitrate, retransmission, dynamic payload
-		write_register(Register::FEATURE, (BV8(EN_DPL) | BV8(EN_ACK_PAY) | BV8(EN_DYN_ACK)));
+		write_register(Register::FEATURE, (bits::BV8(EN_DPL) | bits::BV8(EN_ACK_PAY) | bits::BV8(EN_DYN_ACK)));
 		write_register(Register::RF_CH, channel_);
 		write_register(Register::RF_SETUP, RF_DR_2MBPS | RF_PWR_0DBM);
 		write_register(Register::SETUP_RETR, uint8_t(DEFAULT_ARD << ARD) | uint8_t(DEFAULT_ARC << ARC));
@@ -643,8 +643,8 @@ namespace devices::rf
 		write_register(Register::SETUP_AW, AW_3BYTES);
 		write_register(Register::RX_ADDR_P1, &rx_addr, sizeof(rx_addr));
 		write_register(Register::RX_ADDR_P2, BROADCAST);
-		write_register(Register::EN_RXADDR, BV8(ERX_P2) | BV8(ERX_P1));
-		write_register(Register::EN_AA, BV8(ENAA_P1) | BV8(ENAA_P0));
+		write_register(Register::EN_RXADDR, bits::BV8(ERX_P2) | bits::BV8(ERX_P1));
+		write_register(Register::EN_AA, bits::BV8(ENAA_P1) | bits::BV8(ENAA_P0));
 
 		// Ready to go
 		powerup();
@@ -656,12 +656,12 @@ namespace devices::rf
 		ce_.clear();
 
 		// Setup configuration for powerup and clear interrupts
-		write_register(Register::CONFIG, BV8(EN_CRC) | BV8(CRCO) | BV8(PWR_UP));
+		write_register(Register::CONFIG, bits::BV8(EN_CRC) | bits::BV8(CRCO) | bits::BV8(PWR_UP));
 		time::delay_ms(Tpd2stby_ms);
 		state_ = State::STANDBY_STATE;
 
 		// Flush status
-		write_register(Register::STATUS, BV8(RX_DR) | BV8(TX_DS) | BV8(MAX_RT));
+		write_register(Register::STATUS, bits::BV8(RX_DR) | bits::BV8(TX_DS) | bits::BV8(MAX_RT));
 		write_command(Command::FLUSH_TX);
 		write_command(Command::FLUSH_RX);
 	}
@@ -677,7 +677,7 @@ namespace devices::rf
 	{
 		if (state_ == State::POWER_DOWN_STATE) return;
 		ce_.clear();
-		write_register(Register::CONFIG, BV8(EN_CRC) | BV8(CRCO));
+		write_register(Register::CONFIG, bits::BV8(EN_CRC) | bits::BV8(CRCO));
 		state_ = State::POWER_DOWN_STATE;
 	}
 
@@ -707,7 +707,7 @@ namespace devices::rf
 		{
 			addr_t tx_addr(addr_.network, dest);
 			write_register(Register::RX_ADDR_P0, &tx_addr, sizeof(tx_addr));
-			write_register(Register::EN_RXADDR, BV8(ERX_P2) | BV8(ERX_P1) | BV8(ERX_P0));
+			write_register(Register::EN_RXADDR, bits::BV8(ERX_P2) | bits::BV8(ERX_P1) | bits::BV8(ERX_P0));
 		}
 
 		// Wait for transmission
@@ -722,10 +722,10 @@ namespace devices::rf
 		bool data_sent = status.tx_ds;
 
 		// Check for auto-acknowledge pipe(0) disable
-		if (dest != BROADCAST) write_register(Register::EN_RXADDR, BV8(ERX_P2) | BV8(ERX_P1));
+		if (dest != BROADCAST) write_register(Register::EN_RXADDR, bits::BV8(ERX_P2) | bits::BV8(ERX_P1));
 
 		// Reset status bits
-		write_register(Register::STATUS, BV8(TX_DS) | BV8(MAX_RT));
+		write_register(Register::STATUS, bits::BV8(TX_DS) | bits::BV8(MAX_RT));
 
 		// Read retransmission counter and update
 		observe_tx_t observe = read_observe_tx();
@@ -783,7 +783,7 @@ namespace devices::rf
 		if (state_ != State::TX_STATE)
 		{
 			ce_.clear();
-			write_register(Register::CONFIG, BV8(EN_CRC) | BV8(CRCO) | BV8(PWR_UP));
+			write_register(Register::CONFIG, bits::BV8(EN_CRC) | bits::BV8(CRCO) | bits::BV8(PWR_UP));
 			ce_.set();
 		}
 
@@ -798,7 +798,7 @@ namespace devices::rf
 		if (state_ == State::RX_STATE) return;
 
 		// Configure primary receiver mode
-		write_register(Register::CONFIG, BV8(EN_CRC) | BV8(CRCO) | BV8(PWR_UP) | BV8(PRIM_RX));
+		write_register(Register::CONFIG, bits::BV8(EN_CRC) | bits::BV8(CRCO) | bits::BV8(PWR_UP) | bits::BV8(PRIM_RX));
 		ce_.set();
 		if (state_ == State::STANDBY_STATE) time::delay_us(Tstby2a_us);
 		state_ = State::RX_STATE;

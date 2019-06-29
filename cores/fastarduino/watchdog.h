@@ -152,7 +152,7 @@ namespace watchdog
 		 */
 		void begin(TimeOut timeout = TimeOut::TO_16ms)
 		{
-			uint8_t config = BV8(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? BV8(WDP3) : 0);
+			uint8_t config = bits::BV8(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? bits::BV8(WDP3) : 0);
 			synchronized begin_with_config(config);
 		}
 
@@ -163,7 +163,7 @@ namespace watchdog
 		{
 			synchronized
 			{
-				WDTCSR_ = BV8(WDCE) | BV8(WDE);
+				WDTCSR_ = bits::BV8(WDCE) | bits::BV8(WDE);
 				WDTCSR_ = 0;
 			}
 		}
@@ -174,7 +174,7 @@ namespace watchdog
 		{
 			__asm__ __volatile__("wdr");
 			MCUSR_ |= 1 << WDRF;
-			WDTCSR_ = BV8(WDCE) | BV8(WDE);
+			WDTCSR_ = bits::BV8(WDCE) | bits::BV8(WDE);
 			WDTCSR_ = config;
 		}
 		/// @endcond
@@ -216,7 +216,7 @@ namespace watchdog
 		void begin(TimeOut timeout = TimeOut::TO_16ms)
 		{
 			uint16_t ms_per_tick = BV16(uint8_t(timeout) + 4);
-			uint8_t config = BV8(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? BV8(WDP3) : 0);
+			uint8_t config = bits::BV8(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? bits::BV8(WDP3) : 0);
 
 			synchronized
 			{

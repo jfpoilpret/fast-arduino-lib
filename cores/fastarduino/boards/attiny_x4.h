@@ -235,7 +235,7 @@ namespace board
 	};
 
 	/// @cond notdocumented
-    #define SLEEP_MODE_PWR_SAVE     (BV8(SM0) | BV8(SM1))
+    #define SLEEP_MODE_PWR_SAVE     (bits::BV8(SM0) | bits::BV8(SM1))
 	/// @endcond
 	
 	/**

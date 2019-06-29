@@ -93,8 +93,8 @@ namespace devices::rf::nrf24l01p_internals
 	 * Transmission rates RF_DR_LOW/RF_DR_HIGH values, radio bit-rate.
 	 */
 	const uint8_t RF_DR_1MBPS = 0;				  //!< 1 Mbps.
-	const uint8_t RF_DR_2MBPS = BV8(RF_DR_HIGH);  //!< 2 Mbps.
-	const uint8_t RF_DR_250KBPS = BV8(RF_DR_LOW); //!< 250 Kbps.
+	const uint8_t RF_DR_2MBPS = bits::BV8(RF_DR_HIGH);  //!< 2 Mbps.
+	const uint8_t RF_DR_250KBPS = bits::BV8(RF_DR_LOW); //!< 250 Kbps.
 
 	/**
 	 * Output power RF_PWR values, radio power setting.
