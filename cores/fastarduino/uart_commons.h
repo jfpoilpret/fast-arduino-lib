@@ -55,7 +55,8 @@ namespace serial
 	/// @cond notdocumented
 	union Errors
 	{
-		Errors(uint8_t errors = 0) : has_errors{errors} {}
+		Errors() : has_errors{} {}
+		// Errors(uint8_t errors = 0) : has_errors{errors} {}
 
 		uint8_t has_errors;
 		struct
