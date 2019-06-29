@@ -18,6 +18,7 @@
 #include "io.h"
 #include "board.h"
 #include "../uart_commons.h"
+#include "../bits.h"
 
 // This internal macro is used by individual boards headers
 #define R_(REG) (uint16_t(REG))

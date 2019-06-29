@@ -15,36 +15,40 @@
 // This file wraps "avr/io.h" header, in order to override all _SFR_XXX() macros
 // to allow usage of all defines (such as PINB) to work in constexpr evalutations.
 
-#ifndef BOARDS_IO_HH
-#define BOARDS_IO_HH
+#ifndef BITS_HH
+#define BITS_HH
 
-#include <avr/io.h>
+#include <stdint.h>
 
-// Override all _SFR_XXX() macros to simply return a const integer value
-#ifdef _SFR_IO8
-#undef _SFR_IO8
-#endif
-#define _SFR_IO8(x) ((x) + __SFR_OFFSET)
+//TODO improve by having multiple args (ORed together)
+//TODO improve by adding complement functions
+static constexpr uint8_t BV8(uint8_t bit)
+{
+	return uint8_t(1 << bit);
+}
+static constexpr uint8_t CBV8(uint8_t bit)
+{
+	return uint8_t(~BV8(bit));
+}
+static constexpr uint16_t BV16(uint8_t bit)
+{
+	return uint16_t(1 << bit);
+}
+static constexpr uint16_t CBV16(uint8_t bit)
+{
+	return uint16_t(~BV16(bit));
+}
+static constexpr uint8_t COMPL(uint8_t value)
+{
+	return uint8_t(~value);
+}
+static constexpr uint8_t LOW_BYTE(uint16_t value)
+{
+	return uint8_t(value & 0x00FFU);
+}
+static constexpr uint8_t HIGH_BYTE(uint16_t value)
+{
+	return uint8_t(value >> 8);
+}
 
-#ifdef _SFR_IO16
-#undef _SFR_IO16
-#endif
-#define _SFR_IO16(x) ((x) + __SFR_OFFSET)
-
-#ifdef _SFR_MEM8
-#undef _SFR_MEM8
-#endif
-#define _SFR_MEM8(x) (x)
-
-#ifdef _SFR_MEM16
-#undef _SFR_MEM16
-#endif
-#define _SFR_MEM16(x) (x)
-
-// Force SREG which is used by <util/atomic.h>
-#ifdef SREG
-#undef SREG
-#define SREG (*((volatile uint8_t*) (0x3F + __SFR_OFFSET)))
-#endif
-
-#endif /* BOARDS_IO_HH */
+#endif /* BITS_HH */
