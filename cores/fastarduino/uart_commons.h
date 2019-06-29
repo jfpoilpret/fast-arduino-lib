@@ -52,16 +52,32 @@ namespace serial
 		TWO = 2
 	};
 
+	/// @cond notdocumented
+	union Errors
+	{
+		Errors(uint8_t errors = 0) : has_errors{errors} {}
+
+		uint8_t has_errors;
+		struct
+		{
+			bool frame_error : 1;
+			bool data_overrun : 1;
+			bool queue_overflow : 1;
+			bool parity_error : 1;
+		};
+	};
+	/// @endcond
+
 	/**
-	 * Holder of latest UART errors.
+	 * Holder of latest UART errors. Used as public interface to check what errors 
+	 * occurred lately on UATX/UARX/UART devices.
 	 */
 	class UARTErrors
 	{
 	public:
-		UARTErrors()
-		{
-			clear_errors();
-		}
+		UARTErrors() : errors_{} {}
+		UARTErrors(const UARTErrors& that) = default;
+		UARTErrors& operator=(const UARTErrors& that) = default;
 
 		/**
 		 * Reset UART errors to no error.
@@ -121,22 +137,15 @@ namespace serial
 		{
 			return errors_.parity_error;
 		}
-
+	
 	protected:
-		/// @cond notdocumented
-		union Errors
+		Errors& errors()
 		{
-			uint8_t has_errors;
-			struct
-			{
-				bool frame_error : 1;
-				bool data_overrun : 1;
-				bool queue_overflow : 1;
-				bool parity_error : 1;
-			};
-		};
+			return errors_;
+		}
+
+	private:
 		Errors errors_;
-		/// @endcond
 	};
 };
 

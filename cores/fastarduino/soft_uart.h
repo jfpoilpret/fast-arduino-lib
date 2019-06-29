@@ -90,11 +90,8 @@
  */
 namespace serial::soft
 {
-	//TODO redesign
-	// factor UARTErrors out (to avoid virtual inheritance)
-
 	/// @cond notdocumented
-	class AbstractUATX : virtual public UARTErrors, private streams::ostreambuf
+	class AbstractUATX : private streams::ostreambuf
 	{
 	public:
 		/**
@@ -117,9 +114,9 @@ namespace serial::soft
 			return (streams::ostreambuf&) *this;
 		}
 
-		void check_overflow()
+		void check_overflow(Errors& errors)
 		{
-			errors_.queue_overflow = overflow();
+			errors.queue_overflow = overflow();
 		}
 
 		template<board::DigitalPin DPIN> void write(Parity parity, uint8_t value)
@@ -180,7 +177,7 @@ namespace serial::soft
 	 * @sa UARX
 	 * @sa UART
 	 */
-	template<board::DigitalPin TX_> class UATX : public AbstractUATX
+	template<board::DigitalPin TX_> class UATX : public AbstractUATX, public UARTErrors
 	{
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
@@ -230,7 +227,7 @@ namespace serial::soft
 		void on_put() override
 		{
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow();
+			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
@@ -241,9 +238,8 @@ namespace serial::soft
 		typename gpio::FastPinType<TX>::TYPE tx_;
 	};
 
-
 	/// @cond notdocumented
-	class AbstractUARX : virtual public UARTErrors, private streams::istreambuf
+	class AbstractUARX : private streams::istreambuf
 	{
 	public:
 		/**
@@ -265,7 +261,7 @@ namespace serial::soft
 
 		void compute_times(uint32_t rate, bool has_parity, StopBits stop_bits);
 
-		template<board::DigitalPin DPIN> void pin_change(Parity parity);
+		template<board::DigitalPin DPIN> void pin_change(Parity parity, Errors& errors);
 
 		// Various timing constants based on rate
 		uint16_t interbit_rx_time_;
@@ -275,14 +271,13 @@ namespace serial::soft
 		uint16_t stop_bit_rx_time_no_push_;
 	};
 
-	template<board::DigitalPin DPIN> void AbstractUARX::pin_change(Parity parity)
+	template<board::DigitalPin DPIN> void AbstractUARX::pin_change(Parity parity, Errors& errors)
 	{
 		using RX = gpio::FastPinType<DPIN>;
 		// Check RX is low (start bit)
 		if (RX::value()) return;
 		uint8_t value = 0;
 		bool odd = false;
-		Errors errors;
 		errors.has_errors = 0;
 		// Wait for start bit to finish
 		_delay_loop_2(start_bit_rx_time_);
@@ -322,7 +317,6 @@ namespace serial::soft
 		}
 		else
 		{
-			errors_ = errors;
 			// Wait for 1st stop bit
 			_delay_loop_2(stop_bit_rx_time_no_push_);
 		}
@@ -335,7 +329,7 @@ namespace serial::soft
 
 	/** @sa UARX_EXT */
 	template<board::ExternalInterruptPin RX_>
-	class UARX<board::ExternalInterruptPin, RX_> : public AbstractUARX
+	class UARX<board::ExternalInterruptPin, RX_> : public AbstractUARX, public UARTErrors
 	{
 	public:
 		/**
@@ -400,7 +394,7 @@ namespace serial::soft
 	private:
 		void on_pin_change()
 		{
-			this->pin_change<RX>(parity_);
+			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 			int_->clear_();
 		}
@@ -417,7 +411,7 @@ namespace serial::soft
 
 	/** @sa UART_EXT */
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
-	class UART<board::ExternalInterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX
+	class UART<board::ExternalInterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
@@ -489,7 +483,7 @@ namespace serial::soft
 		void on_put() override
 		{
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow();
+			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
@@ -498,7 +492,7 @@ namespace serial::soft
 	private:
 		void on_pin_change()
 		{
-			this->pin_change<RX>(parity_);
+			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 			int_->clear_();
 		}
@@ -511,7 +505,7 @@ namespace serial::soft
 	};
 
 	/** @sa UARX_PCI */
-	template<board::InterruptPin RX_> class UARX<board::InterruptPin, RX_> : public AbstractUARX
+	template<board::InterruptPin RX_> class UARX<board::InterruptPin, RX_> : public AbstractUARX, public UARTErrors
 	{
 	public:
 		/**
@@ -578,7 +572,7 @@ namespace serial::soft
 	private:
 		void on_pin_change()
 		{
-			this->pin_change<RX>(parity_);
+			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 			pci_->clear_();
 		}
@@ -591,7 +585,7 @@ namespace serial::soft
 
 	/** @sa UART_PCI */
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
-	class UART<board::InterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX
+	class UART<board::InterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
@@ -663,7 +657,7 @@ namespace serial::soft
 		void on_put() override
 		{
 			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow();
+			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
@@ -672,7 +666,7 @@ namespace serial::soft
 	private:
 		void on_pin_change()
 		{
-			this->pin_change<RX>(parity_);
+			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
 			pci_->clear_();
 		}
