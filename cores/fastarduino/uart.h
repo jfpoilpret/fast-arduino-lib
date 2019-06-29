@@ -76,7 +76,7 @@ namespace serial::hard
 {
 	//TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow
 	/// @cond notdocumented
-	class AbstractUART : public UARTErrors
+	class AbstractUART
 	{
 	protected:
 		struct SpeedSetup
@@ -85,6 +85,7 @@ namespace serial::hard
 			const uint16_t ubrr_value;
 			const bool u2x;
 		};
+
 		static constexpr SpeedSetup compute_speed(uint32_t rate)
 		{
 			const uint16_t double_rate = UBRR_double(rate);
@@ -92,6 +93,22 @@ namespace serial::hard
 				return SpeedSetup(double_rate, true);
 			else
 				return SpeedSetup(UBRR_single(rate), false);
+		}
+
+		template<board::USART USART>
+		static void begin_(uint32_t rate, Parity parity, StopBits stop_bits, bool rx, bool tx)
+		{
+			using TRAIT = board_traits::USART_trait<USART>;
+			constexpr uint8_t UCSRB_TX = TRAIT::TX_ENABLE_MASK | TRAIT::UDRIE_MASK;
+			constexpr uint8_t UCSRB_RX = TRAIT::RX_ENABLE_MASK | TRAIT::RXCIE_MASK;
+			SpeedSetup setup = compute_speed(rate);
+			synchronized
+			{
+				TRAIT::UBRR = setup.ubrr_value;
+				TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
+				TRAIT::UCSRB = (tx ? UCSRB_TX : 0) | (rx ? UCSRB_RX : 0);
+				TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
+			}
 		}
 
 	private:
@@ -106,74 +123,10 @@ namespace serial::hard
 			return (F_CPU / 8 / rate - 1) / 2;
 		}
 	};
-	/// @endcond
 
-	// Forward declarations for use as friend
-	template<board::USART USART_> class UART;
-
-	/**
-	 * Hardware serial transmitter API.
-	 * For this API to be fully functional, you must register the right ISR in your
-	 * program, through `REGISTER_UATX_ISR()`.
-	 * 
-	 * @tparam USART_ the hardware `board::USART` to use
-	 * @sa REGISTER_UATX_ISR()
-	 */
-	template<board::USART USART_> class UATX : virtual public AbstractUART, private streams::ostreambuf
+	class AbstractUATX : public AbstractUART, private streams::ostreambuf
 	{
 	public:
-		/** The hardware `board::USART` used by this UATX. */
-		static constexpr const board::USART USART = USART_;
-
-	private:
-		using TRAIT = board_traits::USART_trait<USART>;
-
-	public:
-		/**
-		 * Construct a new hardware serial transmitter and provide it with a
-		 * buffer for interrupt-based transmission.
-		 * @param output an array of characters used by this transmitter to
-		 * buffer output during transmission so that write methods are not
-		 * blocking.
-		 * @sa REGISTER_UATX_ISR()
-		 */
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false}
-		{
-			interrupt::register_handler(*this);
-		}
-
-		/**
-		 * Enable the transmitter. 
-		 * This is needed before any transmission can take place.
-		 * Once called, it is possible to push content to `out()`,
-		 * which will be then transmitted through the serial connection.
-		 * 
-		 * @param rate the transmission rate in bits per second (bps)
-		 * @param parity the kind of parity check used by transmission
-		 * @param stop_bits the number of stop bits used by transmission
-		 */
-		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
-		{
-			AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
-			synchronized
-			{
-				TRAIT::UBRR = setup.ubrr_value;
-				TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
-				TRAIT::UCSRB = TRAIT::TX_ENABLE_MASK | TRAIT::UDRIE_MASK;
-				TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
-			}
-		}
-
-		/**
-		 * Stop all transmissions.
-		 * Once called, it is possible to re-enable transmission again by
-		 * calling `begin()`.
-		 */
-		void end()
-		{
-			synchronized TRAIT::UCSRB = 0;
-		}
-
 		/**
 		 * Get the formatted output stream used to send content through this serial
 		 * transmitter.
@@ -183,10 +136,15 @@ namespace serial::hard
 			return streams::ostream(*this);
 		}
 
-	private:
-		void data_register_empty()
+	protected:
+		template<uint8_t SIZE_TX> 
+		AbstractUATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false} {}
+
+		template<board::USART USART>
+		void data_register_empty(Errors& errors)
 		{
-			errors_.has_errors = 0;
+			using TRAIT = board_traits::USART_trait<USART>;
+			errors.has_errors = 0;
 			char value;
 			if (queue().pull_(value))
 				TRAIT::UDR = value;
@@ -198,16 +156,11 @@ namespace serial::hard
 			}
 		}
 
-	protected:
-		/// @cond notdocumented
-		// This constructor is used by subclass to avoid calling register_handler()
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX], bool dummy UNUSED)
-		: streams::ostreambuf{output}, transmitting_{false} {}
-
-		// Listeners of events on the buffer
-		void on_put() override
+		template<board::USART USART>
+		void on_put(Errors& errors)
 		{
-			errors_.queue_overflow = ostreambuf::overflow();
+			using TRAIT = board_traits::USART_trait<USART>;
+			errors.queue_overflow = ostreambuf::overflow();
 			synchronized
 			{
 				// Check if TX is not currently active, if so, activate it
@@ -225,13 +178,115 @@ namespace serial::hard
 				}
 			}
 		}
-		/// @endcond
 
 	private:
 		bool transmitting_;
-		friend class UART<USART>;
+	};
+	/// @endcond
+
+	/**
+	 * Hardware serial transmitter API.
+	 * For this API to be fully functional, you must register the right ISR in your
+	 * program, through `REGISTER_UATX_ISR()`.
+	 * 
+	 * @tparam USART_ the hardware `board::USART` to use
+	 * @sa REGISTER_UATX_ISR()
+	 */
+	template<board::USART USART_> class UATX : public AbstractUATX, public UARTErrors
+	{
+	public:
+		/** The hardware `board::USART` used by this UATX. */
+		static constexpr const board::USART USART = USART_;
+
+	private:
+		using TRAIT = board_traits::USART_trait<USART>;
+
+	public:
+		/**
+		 * Construct a new hardware serial transmitter and provide it with a
+		 * buffer for interrupt-based transmission.
+		 * @param output an array of characters used by this transmitter to
+		 * buffer output during transmission so that write methods are not
+		 * blocking.
+		 * @sa REGISTER_UATX_ISR()
+		 */
+		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}
+		{
+			interrupt::register_handler(*this);
+		}
+
+		/**
+		 * Enable the transmitter. 
+		 * This is needed before any transmission can take place.
+		 * Once called, it is possible to push content to `out()`,
+		 * which will be then transmitted through the serial connection.
+		 * 
+		 * @param rate the transmission rate in bits per second (bps)
+		 * @param parity the kind of parity check used by transmission
+		 * @param stop_bits the number of stop bits used by transmission
+		 */
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		{
+			AbstractUART::begin_<USART>(rate, parity, stop_bits, false, true);
+		}
+
+		/**
+		 * Stop all transmissions.
+		 * Once called, it is possible to re-enable transmission again by
+		 * calling `begin()`.
+		 */
+		void end()
+		{
+			synchronized TRAIT::UCSRB = 0;
+		}
+
+	protected:
+		/// @cond notdocumented
+		// Listeners of events on the buffer
+		void on_put() override
+		{
+			AbstractUATX::on_put<USART>(errors());
+		}
+		/// @endcond
+
+	private:
+		void data_register_empty()
+		{
+			AbstractUATX::data_register_empty<USART>(errors());
+		}
+
 		friend struct isr_handler;
 	};
+
+	/// @cond notdocumented
+	class AbstractUARX : public AbstractUART, private streams::istreambuf
+	{
+	public:
+		/**
+		 * Get the formatted input stream used to read content received through
+		 * this serial transmitter.
+		 */
+		streams::istream in()
+		{
+			return streams::istream(*this);
+		}
+
+	protected:
+		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : streams::istreambuf{input} {}
+
+		template<board::USART USART>
+		void data_receive_complete(Errors& errors)
+		{
+			using TRAIT = board_traits::USART_trait<USART>;
+			char status = TRAIT::UCSRA;
+			errors.data_overrun = status & TRAIT::DOR_MASK;
+			errors.frame_error = status & TRAIT::FE_MASK;
+			errors.parity_error = status & TRAIT::UPE_MASK;
+			char value = TRAIT::UDR;
+			errors.queue_overflow = !queue().push_(value);
+		}
+	};
+	/// @endcond
 
 	/**
 	 * Hardware serial receiver API.
@@ -241,7 +296,7 @@ namespace serial::hard
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UARX_ISR()
 	 */
-	template<board::USART USART_> class UARX : virtual public AbstractUART, private streams::istreambuf
+	template<board::USART USART_> class UARX : public AbstractUARX, public UARTErrors
 	{
 	public:
 		/** The hardware `board::USART` used by this UARX. */
@@ -260,7 +315,7 @@ namespace serial::hard
 		 * `in()`.
 		 * @sa REGISTER_UARX_ISR()
 		 */
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : istreambuf{input}
+		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -277,14 +332,7 @@ namespace serial::hard
 		 */
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
-			AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
-			synchronized
-			{
-				TRAIT::UBRR = setup.ubrr_value;
-				TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
-				TRAIT::UCSRB = TRAIT::TX_ENABLE_MASK | TRAIT::RXCIE_MASK;
-				TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
-			}
+			AbstractUART::begin_<USART>(rate, parity, stop_bits, true, false);
 		}
 
 		/**
@@ -297,33 +345,12 @@ namespace serial::hard
 			synchronized TRAIT::UCSRB = 0;
 		}
 
-		/**
-		 * Get the formatted input stream used to read content received through
-		 * this serial transmitter.
-		 */
-		streams::istream in()
-		{
-			return streams::istream(*this);
-		}
-
-	protected:
-		/// @cond notdocumented
-		// This constructor is used by subclass to avoid calling register_handler()
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX], bool dummy UNUSED) : istreambuf{input} {}
-		/// @endcond
-
 	private:
 		void data_receive_complete()
 		{
-			char status = TRAIT::UCSRA;
-			errors_.data_overrun = status & TRAIT::DOR_MASK;
-			errors_.frame_error = status & TRAIT::FE_MASK;
-			errors_.parity_error = status & TRAIT::UPE_MASK;
-			char value = TRAIT::UDR;
-			errors_.queue_overflow = !queue().push_(value);
+			AbstractUARX::data_receive_complete<USART>(errors());
 		}
 
-		friend class UART<USART>;
 		friend struct isr_handler;
 	};
 
@@ -335,7 +362,7 @@ namespace serial::hard
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UART_ISR()
 	 */
-	template<board::USART USART_> class UART : public UARX<USART_>, public UATX<USART_>
+	template<board::USART USART_> class UART : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
 	public:
 		/** The hardware `board::USART` used by this UART. */
@@ -360,7 +387,7 @@ namespace serial::hard
 		 * @sa REGISTER_UART_ISR()
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : UARX<USART>{input, true}, UATX<USART>{output, true}
+		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : AbstractUARX{input}, AbstractUATX{output}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -377,14 +404,7 @@ namespace serial::hard
 		 */
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
-			AbstractUART::SpeedSetup setup = AbstractUART::compute_speed(rate);
-			synchronized
-			{
-				TRAIT::UBRR = setup.ubrr_value;
-				TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
-				TRAIT::UCSRB = TRAIT::TX_ENABLE_MASK | TRAIT::RX_ENABLE_MASK | TRAIT::UDRIE_MASK | TRAIT::RXCIE_MASK;
-				TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
-			}
+			AbstractUART::begin_<USART>(rate, parity, stop_bits, true, true);
 		}
 
 		/**
@@ -395,6 +415,26 @@ namespace serial::hard
 		void end()
 		{
 			synchronized TRAIT::UCSRB = 0;
+		}
+
+	protected:
+		/// @cond notdocumented
+		// Listeners of events on the buffer
+		void on_put() override
+		{
+			AbstractUATX::on_put<USART>(errors());
+		}
+		/// @endcond
+
+	private:
+		void data_register_empty()
+		{
+			AbstractUATX::data_register_empty<USART>(errors());
+		}
+
+		void data_receive_complete()
+		{
+			AbstractUARX::data_receive_complete<USART>(errors());
 		}
 
 		friend struct isr_handler;
