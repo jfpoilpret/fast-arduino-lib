@@ -311,8 +311,8 @@ namespace devices
 	template<board::DigitalPin CS> void WinBond<CS>::set_status(uint16_t status)
 	{
 		this->start_transfer();
-		this->transfer(LOW_BYTE(status));
-		this->transfer(HIGH_BYTE(status));
+		this->transfer(bits::LOW_BYTE(status));
+		this->transfer(bits::HIGH_BYTE(status));
 		this->end_transfer();
 	}
 
@@ -395,8 +395,8 @@ namespace devices
 		this->start_transfer();
 		this->transfer(code);
 		this->transfer(address >> 16);
-		this->transfer(HIGH_BYTE(address));
-		this->transfer(LOW_BYTE(address));
+		this->transfer(bits::HIGH_BYTE(address));
+		this->transfer(bits::LOW_BYTE(address));
 		this->transfer(data, size);
 		this->end_transfer();
 	}

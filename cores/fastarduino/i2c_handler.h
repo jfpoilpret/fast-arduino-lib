@@ -131,7 +131,7 @@ namespace i2c
 		// 1. Disable TWI
 		TWCR_ = 0;
 		// 2. remove SDA/SCL pullups
-		TRAIT::PORT &= COMPL(TRAIT::SCL_SDA_MASK);
+		TRAIT::PORT &= bits::COMPL(TRAIT::SCL_SDA_MASK);
 	}
 
 	template<I2CMode MODE> bool I2CHandler<MODE>::start()

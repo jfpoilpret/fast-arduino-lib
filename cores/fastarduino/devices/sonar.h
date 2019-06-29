@@ -1230,9 +1230,9 @@ namespace devices::sonar
 			if (!active_) return EVENT{};
 			// Compute the newly started echoes
 			uint8_t pins = echo_.get_PIN();
-			uint8_t started = pins & COMPL(started_);
+			uint8_t started = pins & bits::COMPL(started_);
 			// Compute the newly finished echoes
-			uint8_t ready = COMPL(pins) & started_ & COMPL(ready_);
+			uint8_t ready = bits::COMPL(pins) & started_ & bits::COMPL(ready_);
 			// Update status of all echo pins
 			started_ |= started;
 			ready_ |= ready;

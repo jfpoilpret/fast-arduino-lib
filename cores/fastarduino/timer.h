@@ -817,7 +817,7 @@ namespace timer
 		 */
 		void disable_interrupts(TimerInterrupt interrupts)
 		{
-			timsk_ &= COMPL(TRAIT::TIMSK_int_mask(uint8_t(interrupts)));
+			timsk_ &= bits::COMPL(TRAIT::TIMSK_int_mask(uint8_t(interrupts)));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB) utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, timsk_);
 		}

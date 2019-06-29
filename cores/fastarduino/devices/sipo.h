@@ -109,8 +109,8 @@ namespace devices
 		void output(uint16_t data) INLINE
 		{
 			latch_.clear();
-			bit_bang_data(HIGH_BYTE(data));
-			bit_bang_data(LOW_BYTE(data));
+			bit_bang_data(bits::HIGH_BYTE(data));
+			bit_bang_data(bits::LOW_BYTE(data));
 			latch_.set();
 		}
 		/// @endcond

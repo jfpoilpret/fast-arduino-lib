@@ -182,7 +182,7 @@ namespace interrupt
 		 */
 		void disable()
 		{
-			synchronized TRAIT::PCICR_ &= COMPL(TRAIT::PCICR_MASK);
+			synchronized TRAIT::PCICR_ &= bits::COMPL(TRAIT::PCICR_MASK);
 		}
 
 		/**
@@ -264,7 +264,7 @@ namespace interrupt
 		 */
 		void disable_pins(uint8_t mask)
 		{
-			synchronized TRAIT::PCMSK_ &= COMPL(mask);
+			synchronized TRAIT::PCMSK_ &= bits::COMPL(mask);
 		}
 
 		/**
@@ -345,7 +345,7 @@ namespace interrupt
 		 */
 		void disable_()
 		{
-			TRAIT::PCICR_ &= COMPL(TRAIT::PCICR_MASK);
+			TRAIT::PCICR_ &= bits::COMPL(TRAIT::PCICR_MASK);
 		}
 
 		/**
@@ -427,7 +427,7 @@ namespace interrupt
 		 */
 		void disable_pins_(uint8_t mask)
 		{
-			TRAIT::PCMSK_ &= COMPL(mask);
+			TRAIT::PCMSK_ &= bits::COMPL(mask);
 		}
 
 		/**
