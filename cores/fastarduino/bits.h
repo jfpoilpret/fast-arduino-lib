@@ -24,13 +24,13 @@
 //TODO improve by having multiple args (ORed together)
 namespace bits
 {
-	static constexpr uint8_t bits::BV8(uint8_t bit)
+	static constexpr uint8_t BV8(uint8_t bit)
 	{
 		return uint8_t(1 << bit);
 	}
-	static constexpr uint8_t bits::CBV8(uint8_t bit)
+	static constexpr uint8_t CBV8(uint8_t bit)
 	{
-		return uint8_t(~bits::BV8(bit));
+		return uint8_t(~BV8(bit));
 	}
 	static constexpr uint16_t BV16(uint8_t bit)
 	{
