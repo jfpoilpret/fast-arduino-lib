@@ -21,7 +21,6 @@
 #include <stdint.h>
 
 //TODO Add docs
-//TODO improve by having multiple args (ORed together):2,3,4 args
 namespace bits
 {
 	static constexpr uint8_t BV8(uint8_t bit)
@@ -34,17 +33,18 @@ namespace bits
 	}
 	static constexpr uint8_t BV8(uint8_t bit1, uint8_t bit2, uint8_t bit3)
 	{
-		return uint8_t(BV8(bit1) | BV8(bit2) | BV8(bit3));
+		return uint8_t(BV8(bit1, bit2) | BV8(bit3));
 	}
 	static constexpr uint8_t BV8(uint8_t bit1, uint8_t bit2, uint8_t bit3, uint8_t bit4)
 	{
-		return uint8_t(BV8(bit1) | BV8(bit2) | BV8(bit3) | BV8(bit4));
+		return uint8_t(BV8(bit1, bit2) | BV8(bit3, bit4));
 	}
 
 	static constexpr uint8_t CBV8(uint8_t bit)
 	{
 		return uint8_t(~BV8(bit));
 	}
+
 	static constexpr uint16_t BV16(uint8_t bit)
 	{
 		return uint16_t(1 << bit);
@@ -53,10 +53,12 @@ namespace bits
 	{
 		return uint16_t(~BV16(bit));
 	}
+
 	static constexpr uint8_t COMPL(uint8_t value)
 	{
 		return uint8_t(~value);
 	}
+
 	static constexpr uint8_t LOW_BYTE(uint16_t value)
 	{
 		return uint8_t(value & 0x00FFU);

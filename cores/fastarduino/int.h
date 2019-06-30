@@ -215,7 +215,8 @@ namespace interrupt
 		 */
 		void set_trigger_(InterruptTrigger trigger)
 		{
-			INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & bits::COMPL(INT_TRAIT::EICR_MASK)) | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
+			INT_TRAIT::EICR_ = (INT_TRAIT::EICR_ & bits::COMPL(INT_TRAIT::EICR_MASK)) 
+							   | (uint8_t(trigger) & INT_TRAIT::EICR_MASK);
 		}
 
 		/**

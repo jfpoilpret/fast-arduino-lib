@@ -59,12 +59,14 @@ namespace board_traits
 	//==============
 	// Analog Input
 	//==============
-	template<> struct AnalogReference_trait<AnalogReference::AREF>:AnalogReference_trait_impl<0> {};
-	template<> struct AnalogReference_trait<AnalogReference::AVCC>:AnalogReference_trait_impl<bits::BV8(REFS0)> {};
-	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>:AnalogReference_trait_impl<bits::BV8(REFS1, REFS0)> {};
+	template<> struct AnalogReference_trait<AnalogReference::AREF> : AnalogReference_trait_impl<0> {};
+	template<> struct AnalogReference_trait<AnalogReference::AVCC> : AnalogReference_trait_impl<bits::BV8(REFS0)> {};
+	template<> struct AnalogReference_trait<AnalogReference::INTERNAL_1_1V>
+		: AnalogReference_trait_impl<bits::BV8(REFS1, REFS0)> {};
 
 	template<> struct AnalogSampleType_trait<uint16_t>: AnalogSampleType_trait_impl<uint16_t, 0, 0, R_(ADC)> {};
-	template<> struct AnalogSampleType_trait<uint8_t>: AnalogSampleType_trait_impl<uint8_t, bits::BV8(ADLAR), 0, R_(ADCH)> {};
+	template<> struct AnalogSampleType_trait<uint8_t>
+		: AnalogSampleType_trait_impl<uint8_t, bits::BV8(ADLAR), 0, R_(ADCH)> {};
 
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_50KHz>: AnalogClock_trait_impl<50000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_100KHz>: AnalogClock_trait_impl<100000UL> {};
@@ -85,15 +87,22 @@ namespace board_traits
 	template<> struct AnalogPin_trait<AnalogPin::A7>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1, MUX0)> {};
 #endif	
 	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX3)> {};
-	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX3, MUX2, MUX1), 0, 1100> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>
+		: AnalogPin_trait_impl<bits::BV8(MUX3, MUX2, MUX1), 0, 1100> {};
 	
 	//===============
 	// IO interrupts
 	//===============
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D2_PD2_EXT0>: 
-		ExternalInterruptPin_trait_impl<DigitalPin::D2_PD2, 0, R_(EICRA), bits::BV8(ISC00, ISC01), R_(EIMSK), bits::BV8(INT0), R_(EIFR), bits::BV8(INTF0)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D2_PD2, 0, 
+										R_(EICRA), bits::BV8(ISC00, ISC01), 
+										R_(EIMSK), bits::BV8(INT0), 
+										R_(EIFR), bits::BV8(INTF0)> {};
 	template<> struct ExternalInterruptPin_trait<ExternalInterruptPin::D3_PD3_EXT1>: 
-		ExternalInterruptPin_trait_impl<DigitalPin::D3_PD3, 1, R_(EICRA), bits::BV8(ISC10, ISC11), R_(EIMSK), bits::BV8(INT1), R_(EIFR), bits::BV8(INTF1)> {};
+		ExternalInterruptPin_trait_impl<DigitalPin::D3_PD3, 1, 
+										R_(EICRA), bits::BV8(ISC10, ISC11), 
+										R_(EIMSK), bits::BV8(INT1), 
+										R_(EIFR), bits::BV8(INTF1)> {};
 
 	/**
 	 * Pin change interrupt (PCI) pins.
