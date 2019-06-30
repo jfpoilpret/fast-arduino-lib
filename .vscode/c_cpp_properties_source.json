@@ -31,9 +31,9 @@
         {
             "name": "Linux",
             "includePath": [
+                "/usr/lib/gcc/avr/7.4.0/include",
                 "/usr/avr/include",
                 "/usr/avr/include/avr",
-                "/usr/lib/gcc/avr/7.4.0/include",
                 "${workspaceRoot}/cores"
             ],
             "defines": [
@@ -44,8 +44,8 @@
             "intelliSenseMode": "clang-x64",
             "browse": {
                 "path": [
-	                "/usr/avr/include",
 	                "/usr/lib/gcc/avr/7.4.0/include",
+	                "/usr/avr/include",
                     "${workspaceRoot}/cores"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
