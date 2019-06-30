@@ -379,7 +379,7 @@ namespace devices::magneto
 		int16_t temperature()
 		{
 			using i2c::Status::OK;
-			int16_t temperature = -32768;
+			int16_t temperature = INT16_MIN;
 			if (this->write(DEVICE_ADDRESS, TEMP_OUT, BusCond::START_NO_STOP) == OK)
 				this->read(DEVICE_ADDRESS, temperature, BusCond::REPEAT_START_STOP);
 			return temperature;
