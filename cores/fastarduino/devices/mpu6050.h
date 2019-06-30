@@ -310,7 +310,7 @@ namespace devices::magneto
 				   && this->write(DEVICE_ADDRESS, utils::as_uint8_t(int_enable), BusCond::NO_START_NO_STOP) == OK
 
 				   && this->write(DEVICE_ADDRESS, USER_CTRL, BusCond::REPEAT_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(0x40), BusCond::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, FIFO_ENABLE, BusCond::NO_START_NO_STOP) == OK
 				   && this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
 		}
 
@@ -468,7 +468,7 @@ namespace devices::magneto
 		{
 			using i2c::Status::OK;
 			return this->write(DEVICE_ADDRESS, USER_CTRL, BusCond::START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(0x44), BusCond::NO_START_STOP) == OK;
+				   && this->write(DEVICE_ADDRESS, FIFO_ENABLE | FIFO_RESET, BusCond::NO_START_STOP) == OK;
 		}
 
 		/**
@@ -554,6 +554,9 @@ namespace devices::magneto
 		static constexpr const uint8_t GYRO_XOUT = 0x43;
 
 		static constexpr const uint8_t USER_CTRL = 0x6A;
+		static constexpr const uint8_t FIFO_RESET = 0x04;
+		static constexpr const uint8_t FIFO_ENABLE = 0x40;
+
 		static constexpr const uint8_t PWR_MGMT_1 = 0x6B;
 		static constexpr const uint8_t PWR_MGMT_2 = 0x6C;
 

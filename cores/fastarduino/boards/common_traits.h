@@ -34,7 +34,7 @@
 namespace board_traits
 {
 	using REG = uint16_t;
-	static constexpr REG NO_REG = 0xFFFFU;
+	static constexpr REG NO_REG = UINT16_MAX;
 
 	template<typename T> class REGISTER
 	{
@@ -114,15 +114,17 @@ namespace board_traits
 
 	using namespace ::board;
 
+	static constexpr uint8_t PCI_NONE = UINT8_MAX;
+
 	template<Port P> struct Port_trait
 	{
 		static constexpr const REG8 PIN{};
 		static constexpr const REG8 DDR{};
 		static constexpr const REG8 PORT{};
 		static constexpr const uint8_t DPIN_MASK = 0x00;
-		static constexpr const uint8_t PCINT = 0xFF;
+		static constexpr const uint8_t PCINT = PCI_NONE;
 	};
-	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_ = 0xFF> struct Port_trait_impl
+	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_ = PCI_NONE> struct Port_trait_impl
 	{
 		static constexpr const REG8 PIN{PIN_};
 		static constexpr const REG8 DDR{DDR_};
@@ -205,18 +207,20 @@ namespace board_traits
 		static constexpr const REG8 ADCSRB_ = ADCSRB__;
 	};
 
+	static constexpr uint16_t NO_BANDGAP_VOLTAGE = 0xFFFFU;
+
 	template<AnalogPin APIN> struct AnalogPin_trait
 	{
 		static constexpr const uint8_t MUX_MASK1 = 0;
 		static constexpr const uint8_t MUX_MASK2 = 0;
 		static constexpr const bool IS_BANDGAP = false;
-		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = 0xFFFFU;
+		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = NO_BANDGAP_VOLTAGE;
 	};
-	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = 0xFFFFU> struct AnalogPin_trait_impl
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = NO_BANDGAP_VOLTAGE> struct AnalogPin_trait_impl
 	{
 		static constexpr const uint8_t MUX_MASK1 = MUXM1;
 		static constexpr const uint8_t MUX_MASK2 = MUXM2;
-		static constexpr const bool IS_BANDGAP = (VOLTAGE != 0xFFFFU);
+		static constexpr const bool IS_BANDGAP = (VOLTAGE != NO_BANDGAP_VOLTAGE);
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
 	};
 

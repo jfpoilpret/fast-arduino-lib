@@ -638,7 +638,7 @@ namespace timer
 			// - quotient is in ]1; MAX_COUNTER[
 			// - smallest remainder
 			// - largest quotient
-			uint32_t smallest_remainder = 0xFFFF'FFFFUL;
+			uint32_t smallest_remainder = UINT32_MAX;
 			uint32_t largest_quotient = 0;
 			PRESCALER current = prescalers[N - 1];
 			for (size_t i = 0; i < N; ++i)
@@ -1161,7 +1161,7 @@ namespace timer
 
 		static constexpr bool TIMSK_int_mask_IS_SUPPORTED(TimerInterrupt interrupt)
 		{
-			return (TRAIT::TIMSK_int_mask(0xFF) & TRAIT::TIMSK_int_mask(uint8_t(interrupt)))
+			return (TRAIT::TIMSK_int_mask(UINT8_MAX) & TRAIT::TIMSK_int_mask(uint8_t(interrupt)))
 				   == TRAIT::TIMSK_int_mask(uint8_t(interrupt));
 		}
 

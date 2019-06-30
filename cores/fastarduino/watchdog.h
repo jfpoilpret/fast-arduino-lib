@@ -152,7 +152,8 @@ namespace watchdog
 		 */
 		void begin(TimeOut timeout = TimeOut::TO_16ms)
 		{
-			uint8_t config = bits::BV8(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? bits::BV8(WDP3) : 0);
+			uint8_t config = bits::BV8(WDIE) | (uint8_t(timeout) & MASK_WDP012) |
+							 ((uint8_t(timeout) & MASK_WDP3) ? bits::BV8(WDP3) : 0);
 			synchronized begin_with_config(config);
 		}
 
@@ -177,6 +178,9 @@ namespace watchdog
 			WDTCSR_ = bits::BV8(WDCE, WDE);
 			WDTCSR_ = config;
 		}
+
+		static constexpr const uint8_t MASK_WDP012 = bits::BV8(WDP0, WDP1, WDP2);
+		static constexpr const uint8_t MASK_WDP3 = 0x08U;
 		/// @endcond
 
 	private:
@@ -216,7 +220,8 @@ namespace watchdog
 		void begin(TimeOut timeout = TimeOut::TO_16ms)
 		{
 			uint16_t ms_per_tick = bits::BV16(uint8_t(timeout) + 4);
-			uint8_t config = bits::BV8(WDIE) | (uint8_t(timeout) & 0x07) | (uint8_t(timeout) & 0x08 ? bits::BV8(WDP3) : 0);
+			uint8_t config = bits::BV8(WDIE) | (uint8_t(timeout) & MASK_WDP012) |
+							 ((uint8_t(timeout) & MASK_WDP3) ? bits::BV8(WDP3) : 0);
 
 			synchronized
 			{

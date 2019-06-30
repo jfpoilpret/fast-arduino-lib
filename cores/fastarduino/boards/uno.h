@@ -62,7 +62,7 @@ namespace board
 		/** Port D (8 IO) */
 		PORT_D,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**
@@ -171,7 +171,7 @@ namespace board
 		/** Shortcut for LED pin on Arduino */
 		LED_PB5 = D13_PB5,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 
 	/**
@@ -231,7 +231,7 @@ namespace board
 		/** Bandgap reference */
 		BANDGAP,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**
@@ -257,7 +257,7 @@ namespace board
 		D11 = D11_PB3_OC2A,
 		D3 = D3_PD3_OC2B,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**

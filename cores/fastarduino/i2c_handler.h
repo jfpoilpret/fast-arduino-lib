@@ -146,7 +146,7 @@ namespace i2c
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slar(uint8_t address)
 	{
-		TWDR_ = address | 0x01;
+		TWDR_ = address | 0x01U;
 		TWCR_ = bits::BV8(TWEN, TWINT);
 		return wait_twint(Status::SLA_R_TRANSMITTED_ACK);
 	}
@@ -188,7 +188,8 @@ namespace i2c
 	template<I2CMode MODE> bool I2CHandler<MODE>::wait_twint(uint8_t expected_status)
 	{
 		TWCR_.loop_until_bit_set(TWINT);
-		status_ = TWSR_ & 0xF8;
+		status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+		// status_ = TWSR_ & 0xF8;
 		if (hook_) hook_(expected_status, status_);
 		if (status_ == expected_status)
 		{
@@ -242,7 +243,7 @@ namespace i2c
 	template<I2CMode MODE> void I2CHandler<MODE>::begin()
 	{
 		// 1. Force 1 to data
-		USIDR_ = 0xFF;
+		USIDR_ = UINT8_MAX;
 		// 2. Enable TWI
 		// Set USI I2C mode, enable software clock strobe (USITC)
 		USICR_ = bits::BV8(USIWM1, USICS1, USICLK);
@@ -268,7 +269,7 @@ namespace i2c
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slar(uint8_t address)
 	{
-		return send_byte(address | 0x01, Status::SLA_R_TRANSMITTED_ACK, Status::SLA_R_TRANSMITTED_NACK);
+		return send_byte(address | 0x01U, Status::SLA_R_TRANSMITTED_ACK, Status::SLA_R_TRANSMITTED_NACK);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slaw(uint8_t address)
 	{
@@ -283,7 +284,7 @@ namespace i2c
 		SDA_INPUT();
 		data = transfer(USISR_DATA);
 		// Send ACK (or NACK if last byte)
-		USIDR_ = (last_byte ? 0xFF : 0x00);
+		USIDR_ = (last_byte ? UINT8_MAX : 0x00);
 		uint8_t good_status = (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
 		transfer(USISR_ACK);
 		return callback_hook(true, good_status, good_status);
@@ -328,7 +329,7 @@ namespace i2c
 		transfer(USISR_DATA);
 		// For acknowledge, first set SDA as input
 		SDA_INPUT();
-		return callback_hook((transfer(USISR_ACK) & 0x01) == 0, ACK, NACK);
+		return callback_hook((transfer(USISR_ACK) & 0x01U) == 0, ACK, NACK);
 	}
 	template<I2CMode MODE> uint8_t I2CHandler<MODE>::transfer(uint8_t USISR_count)
 	{
@@ -348,7 +349,7 @@ namespace i2c
 		_delay_loop_1(T_LOW);
 		// Read data
 		uint8_t data = USIDR_;
-		USIDR_ = 0xFF;
+		USIDR_ = UINT8_MAX;
 		// Release SDA
 		SDA_OUTPUT();
 		return data;

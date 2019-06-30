@@ -761,7 +761,7 @@ namespace devices::sonar
 		using ECHO_PORT_TRAIT = board_traits::Port_trait<ECHO_PIN_TRAIT::PORT>;
 		static_assert((SONAR_TYPE != SonarType::ASYNC_INT) || ECHO_PIN_TRAIT::IS_INT,
 					  "SONAR_TYPE == ASYNC_INT but ECHO is not an INT pin");
-		static_assert((SONAR_TYPE != SonarType::ASYNC_PCINT) || (ECHO_PORT_TRAIT::PCINT != 0xFF),
+		static_assert((SONAR_TYPE != SonarType::ASYNC_PCINT) || (ECHO_PORT_TRAIT::PCINT != board_traits::PCI_NONE),
 					  "SONAR_TYPE == ASYNC_PCINT but ECHO is not an PCI pin");
 
 	public:
@@ -1101,7 +1101,7 @@ namespace devices::sonar
 
 	private:
 		using PTRAIT = board_traits::Port_trait<ECHO_PORT>;
-		static_assert(PTRAIT::PCINT != 0xFF, "ECHO_PORT_ must support PCINT");
+		static_assert(PTRAIT::PCINT != board_traits::PCI_NONE, "ECHO_PORT_ must support PCINT");
 		static_assert((PTRAIT::DPIN_MASK & ECHO_MASK) == ECHO_MASK, "ECHO_MASK_ must contain available PORT pins");
 
 	public:

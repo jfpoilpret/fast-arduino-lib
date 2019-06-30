@@ -59,7 +59,7 @@ namespace board
 		/** Port B (5 IO) */
 		PORT_B = 0,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 
 	/**
@@ -84,7 +84,7 @@ namespace board
 		/** Shortcut for LED pin, arbitrarily chosen to be D0 */
 		LED = D0_PB0,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 
 	/**
@@ -146,7 +146,7 @@ namespace board
 		/** Temperature sensor */
 		TEMP,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**
@@ -165,7 +165,7 @@ namespace board
 		// different compared to other MCU, even ATtinyX4)
 		// constexpr const DigitalPin D4_PB4_OC1B = DigitalPin::D4_PB4;
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**

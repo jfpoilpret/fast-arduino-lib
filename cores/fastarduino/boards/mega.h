@@ -80,7 +80,7 @@ namespace board
 		/** Port L (8 IO) */
 		PORT_L,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**
@@ -450,7 +450,7 @@ namespace board
 		/** Bandgap reference */
 		BANDGAP,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**
@@ -503,7 +503,7 @@ namespace board
 		D45 = D45_PL4_OC5B,
 		D46 = D46_PL3_OC5A,
 		// FastArduino internal: DO NOT USE
-		NONE = 0xFF
+		NONE = UINT8_MAX
 	};
 	
 	/**

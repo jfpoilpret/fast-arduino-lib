@@ -100,6 +100,8 @@ namespace interrupt
 {
 	/**
 	 * Kind of change that will trigger an External Interrupt for a given pin.
+	 * Actual `uint8_t` value matches the related mask for EICR, for up to 4
+	 * EXT pins (2 bits per pin), hence the 2-bits value is repeated 4 times.
 	 */
 	enum class InterruptTrigger : uint8_t
 	{

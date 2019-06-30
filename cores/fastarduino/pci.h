@@ -142,7 +142,7 @@ namespace interrupt
 		// PCISignal is constructed not when its template type gets instantiated.
 		PCISignal()
 		{
-			static_assert(PORT_TRAIT::PCINT != 0xFF, "PORT_ must support PCINT");
+			static_assert(PORT_TRAIT::PCINT != board_traits::PCI_NONE, "PORT_ must support PCINT");
 		}
 		/// @endcond
 

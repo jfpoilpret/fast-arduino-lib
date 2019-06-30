@@ -114,33 +114,45 @@ namespace devices
 		{
 			bool busy() const
 			{
-				return value & 0x0001;
+				return value & bits::BV16(BUSY);
 			}
 			bool write_enable_latch() const
 			{
-				return value & 0x0002;
+				return value & bits::BV16(WEL);
 			}
 			BlockProtect block_protect() const
 			{
-				return static_cast<BlockProtect>(value & 0x007C);
+				return static_cast<BlockProtect>(value & bits::BV16(BP0, BP1, BP2, TB, SEC));
 			}
 			bool complement_protect() const
 			{
-				return value & 0x4000;
+				return value & bits::BV16(CMP);
 			}
 			bool suspend_status() const
 			{
-				return value & 0x8000U;
+				return value & bits::BV16(SUS);
 			}
 			StatusRegisterProtect status_register_protect() const
 			{
-				return static_cast<StatusRegisterProtect>(value & 0x0180);
+				return static_cast<StatusRegisterProtect>(value & bits::BV16(SRP0, SRP1));
 			}
 
 			const uint16_t value;
 
 		private:
 			Status(uint8_t sr1, uint8_t sr2) : value(utils::as_uint16_t(sr2, sr1)) {}
+
+			static constexpr const uint8_t BUSY = 0;
+			static constexpr const uint8_t WEL = 1;
+			static constexpr const uint8_t BP0 = 2;
+			static constexpr const uint8_t BP1 = 3;
+			static constexpr const uint8_t BP2 = 4;
+			static constexpr const uint8_t TB = 5;
+			static constexpr const uint8_t SEC = 6;
+			static constexpr const uint8_t SRP0 = 7;
+			static constexpr const uint8_t SRP1 = 8;
+			static constexpr const uint8_t CMP = 14;
+			static constexpr const uint8_t SUS = 15;
 
 			friend class WinBond<CS>;
 		};
@@ -150,7 +162,7 @@ namespace devices
 		 */
 		Status status()
 		{
-			return Status(read(0x05), read(0x35));
+			return Status(read(READ_STATUS_1), read(READ_STATUS_2));
 		}
 
 		/**
@@ -179,7 +191,7 @@ namespace devices
 		 */
 		void power_down()
 		{
-			send(0xB9);
+			send(POWER_DOWN);
 		}
 
 		/**
@@ -187,7 +199,7 @@ namespace devices
 		 */
 		void power_up()
 		{
-			send(0xAB);
+			send(POWER_UP);
 			time::delay_us(3);
 		}
 
@@ -217,7 +229,7 @@ namespace devices
 		 */
 		void enable_write()
 		{
-			send(0x06);
+			send(WRITE_ENABLE);
 		}
 
 		/**
@@ -226,7 +238,7 @@ namespace devices
 		 */
 		void disable_write()
 		{
-			send(0x04);
+			send(WRITE_DISABLE);
 		}
 
 		/**
@@ -236,7 +248,7 @@ namespace devices
 		 */
 		void erase_sector(uint32_t address)
 		{
-			send(0x20, address);
+			send(SECTOR_ERASE, address);
 		}
 
 		/**
@@ -246,7 +258,7 @@ namespace devices
 		 */
 		void erase_block_32K(uint32_t address)
 		{
-			send(0x52, address);
+			send(BLOCK_32K_ERASE, address);
 		}
 
 		/**
@@ -256,7 +268,7 @@ namespace devices
 		 */
 		void erase_block_64K(uint32_t address)
 		{
-			send(0xD8, address);
+			send(BLOCK_64K_ERASE, address);
 		}
 
 		/**
@@ -266,7 +278,7 @@ namespace devices
 		 */
 		void erase_chip()
 		{
-			send(0xC7);
+			send(CHIP_ERASE);
 		}
 
 		/**
@@ -279,7 +291,7 @@ namespace devices
 		 */
 		void write_page(uint32_t address, uint8_t* data, uint8_t size)
 		{
-			send(0x02, address, data, (size == 0 ? 256 : size));
+			send(PAGE_PROGRAM, address, data, (size == 0 ? 256 : size));
 		}
 
 		/**
@@ -306,6 +318,25 @@ namespace devices
 			send(code, address, 0, 0);
 		}
 		void send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size);
+
+		// Instructions
+		static constexpr const uint8_t WRITE_STATUS = 0x01;
+		static constexpr const uint8_t PAGE_PROGRAM = 0x02;
+		static constexpr const uint8_t READ_DATA = 0x03;
+		static constexpr const uint8_t WRITE_DISABLE = 0x04;
+		static constexpr const uint8_t READ_STATUS_1 = 0x05;
+		static constexpr const uint8_t WRITE_ENABLE = 0x06;
+		static constexpr const uint8_t FAST_READ = 0x0B;
+		static constexpr const uint8_t SECTOR_ERASE = 0x20;
+		static constexpr const uint8_t READ_STATUS_2 = 0x35;
+		static constexpr const uint8_t READ_UNIQUE_ID = 0x4B;
+		static constexpr const uint8_t BLOCK_32K_ERASE = 0x52;
+		static constexpr const uint8_t DEVICE_ID = 0x90;
+		static constexpr const uint8_t POWER_UP = 0xAB;
+		static constexpr const uint8_t POWER_DOWN = 0xB9;
+		static constexpr const uint8_t CHIP_ERASE = 0xC7;
+		static constexpr const uint8_t BLOCK_64K_ERASE = 0xD8;
+		
 	};
 
 	template<board::DigitalPin CS> void WinBond<CS>::set_status(uint16_t status)
@@ -320,12 +351,12 @@ namespace devices
 	{
 		bool ready = false;
 		this->start_transfer();
-		this->transfer(0x05);
+		this->transfer(READ_STATUS_1);
 		uint32_t start = time::millis();
 		while (true)
 		{
 			uint8_t status = this->transfer(0x00);
-			if ((status & 0x01) == 0)
+			if ((status & bits::BV8(Status::BUSY)) == 0)
 			{
 				ready = true;
 				break;
@@ -340,7 +371,7 @@ namespace devices
 	template<board::DigitalPin CS> typename WinBond<CS>::Device WinBond<CS>::read_device()
 	{
 		Device device;
-		send(0x90, 0, (uint8_t*) &device, sizeof(device));
+		send(DEVICE_ID, 0, (uint8_t*) &device, sizeof(device));
 		return device;
 	}
 
@@ -356,7 +387,7 @@ namespace devices
 			uint64_t id;
 		};
 		PAYLOAD buffer;
-		send(0x4B, 0, (uint8_t*) &buffer, sizeof buffer);
+		send(READ_UNIQUE_ID, 0, (uint8_t*) &buffer, sizeof buffer);
 		// WinBond ID is big-endian (high byte first) but AVR is little-endian
 		// hence we need to convert result (using GCC builtin utility)
 		return __builtin_bswap64(buffer.id);
@@ -371,7 +402,7 @@ namespace devices
 
 	template<board::DigitalPin CS> void WinBond<CS>::read_data(uint32_t address, uint8_t* data, uint16_t size)
 	{
-		send(0x03, address, data, size);
+		send(READ_DATA, address, data, size);
 	}
 
 	template<board::DigitalPin CS> uint8_t WinBond<CS>::read(uint8_t code)

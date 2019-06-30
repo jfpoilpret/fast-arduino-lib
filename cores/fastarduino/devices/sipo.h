@@ -118,6 +118,7 @@ namespace devices
 	private:
 		void bit_bang_data(uint8_t data)
 		{
+			// Start with MSB
 			uint8_t mask = 0x80;
 			do
 			{

@@ -148,7 +148,7 @@ namespace devices::rtc
 		{
 			// just write 0x80 at address 0
 			return write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-				   && write(DEVICE_ADDRESS, uint8_t(0x80), i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
+				   && write(DEVICE_ADDRESS, CLOCK_HALT, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
 		}
 
 		/**
@@ -306,6 +306,7 @@ namespace devices::rtc
 	private:
 		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 		static constexpr const uint8_t TIME_ADDRESS = 0x00;
+		static constexpr const uint8_t CLOCK_HALT = 0x80;
 		static constexpr const uint8_t CONTROL_ADDRESS = 0x07;
 		static constexpr const uint8_t RAM_START = 0x08;
 		static constexpr const uint8_t RAM_END = 0x40;

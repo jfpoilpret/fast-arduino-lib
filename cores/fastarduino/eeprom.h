@@ -248,7 +248,7 @@ namespace eeprom
 		{
 			if (!check(address, 1))
 			{
-				value = 0xFF;
+				value = UINT8_MAX;
 				return false;
 			}
 			blocked_read(address, value);
@@ -450,7 +450,7 @@ namespace eeprom
 			if (diff & value)
 			{
 				// Some bits need to be erased (ie set to 1)
-				if (value == 0xFF)
+				if (value == UINT8_MAX)
 					// Erase only
 					EECR_ = EEPM0;
 				else
@@ -481,9 +481,9 @@ namespace eeprom
 			EECR_ = bits::BV8(EERE);
 			uint8_t value = EEDR;
 			// Some bits need to be erased (ie set to 1)
-			if (value == 0xFF) return false;
+			if (value == UINT8_MAX) return false;
 			EECR_ = EEPM0;
-			EEDR_ = 0xFF;
+			EEDR_ = UINT8_MAX;
 			synchronized
 			{
 				EECR_ |= bits::BV8(EEMPE);
