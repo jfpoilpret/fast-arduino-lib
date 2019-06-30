@@ -122,13 +122,13 @@ namespace spi
 		 * SPI mode 3: CPOL = 1 and CPHA = 1.
 		 * @note not available on ATtiny MCU.
 		 */
-		MODE_3 = bits::BV8(CPHA) | bits::BV8(CPOL)
+		MODE_3 = bits::BV8(CPHA, CPOL)
 	};
 #else
 	enum class Mode : uint8_t
 	{
-		MODE_0 = bits::BV8(USIWM0) | bits::BV8(USICLK) | bits::BV8(USICS1),
-		MODE_1 = bits::BV8(USIWM0) | bits::BV8(USICLK) | bits::BV8(USICS1) | bits::BV8(USICS0)
+		MODE_0 = bits::BV8(USIWM0, USICLK, USICS1),
+		MODE_1 = bits::BV8(USIWM0, USICLK, USICS1, USICS0)
 	};
 #endif
 
@@ -327,7 +327,7 @@ namespace spi
 		static constexpr const REG8 SPSR_{SPSR};
 		// Configuration values to reset at beginning of each transfer
 		static const constexpr uint8_t SPCR__ =
-			bits::BV8(SPE) | bits::BV8(MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
+			bits::BV8(SPE, MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
 		static const constexpr uint8_t SPSR__ = (uint8_t(RATE) & 0x10) ? bits::BV8(SPI2X) : 0;
 #else
 		static constexpr const REG8 USIDR_{USIDR};

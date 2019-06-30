@@ -185,11 +185,11 @@ namespace board_traits
 		}
 		static constexpr uint8_t prescaler_mask(uint8_t prescaler)
 		{
-			if (prescaler == 128) return bits::BV8(ADPS2) | bits::BV8(ADPS1) | bits::BV8(ADPS0);
-			if (prescaler == 64) return bits::BV8(ADPS2) | bits::BV8(ADPS1);
-			if (prescaler == 32) return bits::BV8(ADPS2) | bits::BV8(ADPS0);
+			if (prescaler == 128) return bits::BV8(ADPS2, ADPS1, ADPS0);
+			if (prescaler == 64) return bits::BV8(ADPS2, ADPS1);
+			if (prescaler == 32) return bits::BV8(ADPS2, ADPS0);
 			if (prescaler == 16) return bits::BV8(ADPS2);
-			if (prescaler == 8) return bits::BV8(ADPS1) | bits::BV8(ADPS0);
+			if (prescaler == 8) return bits::BV8(ADPS1, ADPS0);
 			if (prescaler == 4) return bits::BV8(ADPS1);
 			return bits::BV8(ADPS0);
 		}
@@ -326,7 +326,7 @@ namespace board_traits
 		static constexpr const REG8 PORT = PORT_TRAIT::PORT;
 		static constexpr const REG8 PIN = PORT_TRAIT::PIN;
 		static constexpr const REG8 DDR = PORT_TRAIT::DDR;
-		static constexpr const uint8_t SCL_SDA_MASK = bits::BV8(SCL_) | bits::BV8(SDA_);
+		static constexpr const uint8_t SCL_SDA_MASK = bits::BV8(SCL_, SDA_);
 		static constexpr const uint8_t BIT_SCL = SCL_;
 		static constexpr const uint8_t BIT_SDA = SDA_;
 	};

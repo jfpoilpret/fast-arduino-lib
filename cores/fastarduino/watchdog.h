@@ -163,7 +163,7 @@ namespace watchdog
 		{
 			synchronized
 			{
-				WDTCSR_ = bits::BV8(WDCE) | bits::BV8(WDE);
+				WDTCSR_ = bits::BV8(WDCE, WDE);
 				WDTCSR_ = 0;
 			}
 		}
@@ -174,7 +174,7 @@ namespace watchdog
 		{
 			__asm__ __volatile__("wdr");
 			MCUSR_ |= 1 << WDRF;
-			WDTCSR_ = bits::BV8(WDCE) | bits::BV8(WDE);
+			WDTCSR_ = bits::BV8(WDCE, WDE);
 			WDTCSR_ = config;
 		}
 		/// @endcond

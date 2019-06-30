@@ -88,7 +88,7 @@ namespace i2c
 
 		// Constant values for USISR
 		// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
-		static constexpr const uint8_t USISR_DATA = bits::BV8(USISIF) | bits::BV8(USIOIF) | bits::BV8(USIPF) | bits::BV8(USIDC);
+		static constexpr const uint8_t USISR_DATA = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
 		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
 		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
 
@@ -136,30 +136,30 @@ namespace i2c
 
 	template<I2CMode MODE> bool I2CHandler<MODE>::start()
 	{
-		TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT) | bits::BV8(TWSTA);
+		TWCR_ = bits::BV8(TWEN, TWINT, TWSTA);
 		return wait_twint(Status::START_TRANSMITTED);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::repeat_start()
 	{
-		TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT) | bits::BV8(TWSTA);
+		TWCR_ = bits::BV8(TWEN, TWINT, TWSTA);
 		return wait_twint(Status::REPEAT_START_TRANSMITTED);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slar(uint8_t address)
 	{
 		TWDR_ = address | 0x01;
-		TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT);
+		TWCR_ = bits::BV8(TWEN, TWINT);
 		return wait_twint(Status::SLA_R_TRANSMITTED_ACK);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_slaw(uint8_t address)
 	{
 		TWDR_ = address;
-		TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT);
+		TWCR_ = bits::BV8(TWEN, TWINT);
 		return wait_twint(Status::SLA_W_TRANSMITTED_ACK);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::send_data(uint8_t data)
 	{
 		TWDR_ = data;
-		TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT);
+		TWCR_ = bits::BV8(TWEN, TWINT);
 		return wait_twint(Status::DATA_TRANSMITTED_ACK);
 	}
 	template<I2CMode MODE> bool I2CHandler<MODE>::receive_data(uint8_t& data, bool last_byte)
@@ -169,12 +169,12 @@ namespace i2c
 		bool ok;
 		if (last_byte)
 		{
-			TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT);
+			TWCR_ = bits::BV8(TWEN, TWINT);
 			ok = wait_twint(Status::DATA_RECEIVED_NACK);
 		}
 		else
 		{
-			TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT) | bits::BV8(TWEA);
+			TWCR_ = bits::BV8(TWEN, TWINT, TWEA);
 			ok = wait_twint(Status::DATA_RECEIVED_ACK);
 		}
 		if (ok) data = TWDR_;
@@ -182,7 +182,7 @@ namespace i2c
 	}
 	template<I2CMode MODE> void I2CHandler<MODE>::stop()
 	{
-		TWCR_ = bits::BV8(TWEN) | bits::BV8(TWINT) | bits::BV8(TWSTO);
+		TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 	}
 
 	template<I2CMode MODE> bool I2CHandler<MODE>::wait_twint(uint8_t expected_status)
@@ -245,9 +245,9 @@ namespace i2c
 		USIDR_ = 0xFF;
 		// 2. Enable TWI
 		// Set USI I2C mode, enable software clock strobe (USITC)
-		USICR_ = bits::BV8(USIWM1) | bits::BV8(USICS1) | bits::BV8(USICLK);
+		USICR_ = bits::BV8(USIWM1, USICS1, USICLK);
 		// Clear all interrupt flags
-		USISR_ = bits::BV8(USISIF) | bits::BV8(USIOIF) | bits::BV8(USIPF) | bits::BV8(USIDC);
+		USISR_ = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
 		// 3. Set SDA as output
 		SDA_OUTPUT();
 	}

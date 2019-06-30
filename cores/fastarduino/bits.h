@@ -21,13 +21,26 @@
 #include <stdint.h>
 
 //TODO Add docs
-//TODO improve by having multiple args (ORed together)
+//TODO improve by having multiple args (ORed together):2,3,4 args
 namespace bits
 {
 	static constexpr uint8_t BV8(uint8_t bit)
 	{
 		return uint8_t(1 << bit);
 	}
+	static constexpr uint8_t BV8(uint8_t bit1, uint8_t bit2)
+	{
+		return uint8_t(BV8(bit1) | BV8(bit2));
+	}
+	static constexpr uint8_t BV8(uint8_t bit1, uint8_t bit2, uint8_t bit3)
+	{
+		return uint8_t(BV8(bit1) | BV8(bit2) | BV8(bit3));
+	}
+	static constexpr uint8_t BV8(uint8_t bit1, uint8_t bit2, uint8_t bit3, uint8_t bit4)
+	{
+		return uint8_t(BV8(bit1) | BV8(bit2) | BV8(bit3) | BV8(bit4));
+	}
+
 	static constexpr uint8_t CBV8(uint8_t bit)
 	{
 		return uint8_t(~BV8(bit));
