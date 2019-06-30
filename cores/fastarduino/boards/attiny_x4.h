@@ -23,6 +23,7 @@
 #define BOARDS_ATTINYX4_HH
 
 #include "io.h"
+#include "../bits.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented
