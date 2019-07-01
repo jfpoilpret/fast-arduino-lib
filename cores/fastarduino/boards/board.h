@@ -17,13 +17,6 @@
 
 #include <stdint.h>
 
-// General constants used everywhere
-static constexpr const uint32_t ONE_MHZ = 1'000'000UL;
-static constexpr const uint32_t ONE_SECOND = 1'000'000UL;
-static constexpr const uint32_t INST_PER_US = F_CPU / ONE_MHZ;
-static constexpr const uint16_t ONE_MILLI_16 = 1000U;
-static constexpr const uint32_t ONE_MILLI_32 = 1000UL;
-
 // Arduino Boards
 #if defined(ARDUINO_MEGA)
 #include "mega.h"
@@ -44,5 +37,12 @@ static constexpr const uint32_t ONE_MILLI_32 = 1000UL;
 #else
 #error "board.h: board not supported"
 #endif
+
+// General constants used everywhere
+static constexpr const uint32_t ONE_MHZ = 1'000'000UL;
+static constexpr const uint32_t ONE_SECOND = 1'000'000UL;
+static constexpr const uint32_t INST_PER_US = F_CPU / ONE_MHZ;
+static constexpr const uint16_t ONE_MILLI_16 = 1000U;
+static constexpr const uint32_t ONE_MILLI_32 = 1000UL;
 
 #endif /* BOARDS_BOARD_HH */
