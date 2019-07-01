@@ -176,7 +176,7 @@ int main()
 		{
 			// Try to send to slave
 			trace << "S " << sent_port << streams::flush;
-			int result = rf.send(other_device, sent_port, 0, 0);
+			int result = rf.send(other_device, sent_port);
 			if (result < 0)
 				trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 						<< " #Retrans=" << rf.get_retrans() 
@@ -185,7 +185,7 @@ int main()
 			// Then wait for slave reply
 			trace << " R " << streams::flush;
 			uint8_t src, port;
-			result = rf.recv(src, port, 0, 0, REPLY_MAX_WAIT_MS);
+			result = rf.recv(src, port, REPLY_MAX_WAIT_MS);
 			if (result < 0)
 				trace << "\nError " << result << '!' << streams::endl;
 			else
@@ -200,14 +200,14 @@ int main()
 			// Wait for master payload
 			trace << "R " << streams::flush;
 			uint8_t src, port;
-			int result = rf.recv(src, port, 0, 0);
+			int result = rf.recv(src, port);
 			if (result < 0)
 				trace << "\nError " << result << '!' << streams::endl;
 			else
 			{
 				trace << uint16_t(port) << " (" << uint16_t(src) << ") RR " << streams::flush;
 				// Reply to master with same content
-				result = rf.send(src, port, 0, 0);
+				result = rf.send(src, port);
 				if (result < 0)
 					trace	<< "\nError " << result << "! #Trans=" << rf.get_trans() 
 							<< " #Retrans=" << rf.get_retrans() 

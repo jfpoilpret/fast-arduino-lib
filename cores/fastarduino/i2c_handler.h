@@ -66,7 +66,7 @@ namespace i2c
 
 		bool wait_twint(uint8_t expected_status);
 
-		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100000UL - 16UL) / 2;
+		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / ONE_MHZ - 16UL) / 2;
 		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400000UL - 16UL) / 2;
 		static constexpr const uint8_t TWBR_VALUE = (MODE == I2CMode::Standard ? STANDARD_FREQUENCY : FAST_FREQUENCY);
 #else

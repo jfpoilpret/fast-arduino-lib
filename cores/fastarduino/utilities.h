@@ -21,7 +21,7 @@
 #ifndef UTILITIES_HH
 #define UTILITIES_HH
 
-#include "boards/io.h"
+#include "boards/board.h"
 #include <util/atomic.h>
 
 /// @cond notdocumented
@@ -395,7 +395,7 @@ namespace utils
 	 */
 	constexpr uint8_t calculate_delay1_count(float time_us)
 	{
-		return uint8_t(F_CPU / 1'000'000UL / 3.0 * time_us);
+		return uint8_t(INST_PER_US / 3.0 * time_us);
 	}
 
 	/**

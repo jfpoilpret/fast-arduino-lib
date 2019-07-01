@@ -357,7 +357,7 @@ namespace timer
 		 */
 		static constexpr uint32_t ticks_to_us(PRESCALER prescaler, TYPE ticks)
 		{
-			return uint32_t(ticks) * bits::BV16(uint8_t(prescaler)) / (F_CPU / 1'000'000UL);
+			return uint32_t(ticks) * bits::BV16(uint8_t(prescaler)) / INST_PER_US;
 		}
 
 		/**
@@ -373,7 +373,7 @@ namespace timer
 		 */
 		static constexpr TYPE us_to_ticks(PRESCALER prescaler, uint32_t us)
 		{
-			return TYPE(us * (F_CPU / 1'000'000UL) / bits::BV16(uint8_t(prescaler)));
+			return TYPE(us * INST_PER_US / bits::BV16(uint8_t(prescaler)));
 		}
 
 		/**
@@ -619,12 +619,12 @@ namespace timer
 	private:
 		static constexpr uint32_t prescaler_quotient(PRESCALER prescaler, uint32_t us)
 		{
-			return (F_CPU / 1'000'000UL * us) / bits::BV16(uint8_t(prescaler));
+			return (INST_PER_US * us) / bits::BV16(uint8_t(prescaler));
 		}
 
 		static constexpr uint32_t prescaler_remainder(PRESCALER prescaler, uint32_t us)
 		{
-			return (F_CPU / 1'000'000UL * us) % bits::BV16(uint8_t(prescaler));
+			return (INST_PER_US * us) % bits::BV16(uint8_t(prescaler));
 		}
 
 		static constexpr bool prescaler_is_adequate(uint32_t quotient)

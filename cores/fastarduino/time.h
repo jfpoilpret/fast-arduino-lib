@@ -53,7 +53,7 @@ namespace time
 		 * Construct a new `RTTTime` value.
 		 * @param micros number of microseconds (can be > 1000us)
 		 */
-		explicit RTTTime(uint32_t micros = 0UL) : millis_(micros / 1000UL), micros_(micros % 1000UL) {}
+		explicit RTTTime(uint32_t micros = 0UL) : millis_(micros / ONE_MILLI_32), micros_(micros % ONE_MILLI_32) {}
 
 		/**
 		 * Construct a new `RTTTime` value.
@@ -90,14 +90,14 @@ namespace time
 		 */
 		RTTTime& operator+=(uint32_t microseconds)
 		{
-			uint32_t extra_millis = microseconds / 1000UL;
-			uint16_t extra_micros = microseconds % 1000UL;
+			uint32_t extra_millis = microseconds / ONE_MILLI_32;
+			uint16_t extra_micros = microseconds % ONE_MILLI_32;
 			millis_ += extra_millis;
 			micros_ += extra_micros;
-			if (micros_ >= 1000UL)
+			if (micros_ >= ONE_MILLI_16)
 			{
 				++millis_;
-				micros_ -= 1000UL;
+				micros_ -= ONE_MILLI_16;
 			}
 			return *this;
 		}
@@ -118,7 +118,7 @@ namespace time
 		 */
 		uint32_t total_micros() const
 		{
-			return millis_ * 1000UL + micros_;
+			return millis_ * ONE_MILLI_32 + micros_;
 		}
 
 		/** Number of elapsed milliseconds. */
@@ -228,10 +228,10 @@ namespace time
 	{
 		uint32_t millis = a.millis() + b.millis();
 		uint16_t micros = a.micros() + b.micros();
-		if (micros >= 1000UL)
+		if (micros >= ONE_MILLI_16)
 		{
 			++millis;
-			micros -= 1000UL;
+			micros -= ONE_MILLI_16;
 		}
 		return RTTTime{millis, micros};
 	}
@@ -247,7 +247,7 @@ namespace time
 		if (a <= b) return RTTTime{0, 0};
 		uint32_t millis = a.millis() - b.millis();
 		if (a.micros() >= b.micros()) return RTTTime{millis, a.micros() - b.micros()};
-		return RTTTime{millis - 1, 1000 + a.micros() - b.micros()};
+		return RTTTime{millis - 1, ONE_MILLI_16 + a.micros() - b.micros()};
 	}
 
 	/**
@@ -333,7 +333,7 @@ namespace time
 	inline void delay_us(uint16_t us) INLINE;
 	inline void delay_us(uint16_t us)
 	{
-		_delay_loop_2(us * (F_CPU / 1'000'000UL) / 4UL);
+		_delay_loop_2(us * INST_PER_US / 4UL);
 	}
 
 	/**
@@ -345,7 +345,7 @@ namespace time
 	inline void delay_ms(uint16_t ms) INLINE;
 	inline void delay_ms(uint16_t ms)
 	{
-		while (ms--) delay_us(1000);
+		while (ms--) delay_us(ONE_MILLI_16);
 	}
 
 	/**

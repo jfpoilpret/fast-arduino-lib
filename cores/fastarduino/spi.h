@@ -203,6 +203,12 @@ namespace spi
 			}
 		}
 
+		//TODO DOCS
+		void transfer(const uint8_t* data, uint16_t size)
+		{
+			while (size--) transfer(*data++);
+		}
+
 		/**
 		 * Transfer the provided byte @p sent several times to the currently selected
 		 * SPI slave device through MOSI pin, and get all data bytes simultaneously received 
@@ -223,6 +229,12 @@ namespace spi
 		void transfer(uint8_t* data, uint16_t size, uint8_t sent)
 		{
 			while (size--) *data++ = transfer(sent);
+		}
+
+		//TODO DOCS
+		void transfer(uint16_t size, uint8_t sent)
+		{
+			while (size--) transfer(sent);
 		}
 
 	private:

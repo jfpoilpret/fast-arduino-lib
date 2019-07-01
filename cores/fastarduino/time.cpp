@@ -33,7 +33,7 @@ time::RTTTime time::delta(const RTTTime& time1, const RTTTime& time2)
 	else if (millis)
 	{
 		--millis;
-		micros = 1000 + time2.micros() - time1.micros();
+		micros = ONE_MILLI_16 + time2.micros() - time1.micros();
 	}
 	return RTTTime{millis, micros};
 }
@@ -46,5 +46,5 @@ uint32_t time::since(uint32_t start_ms)
 
 void time::default_delay(uint32_t ms)
 {
-	while (ms--) time::delay_us(1000);
+	while (ms--) time::delay_us(ONE_MILLI_16);
 }

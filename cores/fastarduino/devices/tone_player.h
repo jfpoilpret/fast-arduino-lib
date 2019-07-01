@@ -210,7 +210,7 @@ namespace devices::audio
 
 			static constexpr uint32_t period(Tone tone)
 			{
-				return 1'000'000UL / 2 / uint16_t(tone);
+				return ONE_SECOND / 2 / uint16_t(tone);
 			}
 			static constexpr PRESCALER prescaler(Tone tone)
 			{

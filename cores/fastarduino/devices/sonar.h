@@ -781,7 +781,7 @@ namespace devices::sonar
 		 * @sa await_echo_us()
 		 * @sa async_echo()
 		 */
-		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
+		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * ONE_MILLI_32 / SPEED_OF_SOUND + 1;
 
 		/**
 		 * Construct a new a sonar sensor handler.
@@ -1124,7 +1124,7 @@ namespace devices::sonar
 		 * @sa MAX_RANGE_M
 		 * @sa trigger()
 		 */
-		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * 1000UL / SPEED_OF_SOUND + 1;
+		static constexpr const uint16_t DEFAULT_TIMEOUT_MS = MAX_RANGE_M * 2 * ONE_MILLI_32 / SPEED_OF_SOUND + 1;
 
 		/**
 		 * Construct a new a multi-sonar sensors handler.

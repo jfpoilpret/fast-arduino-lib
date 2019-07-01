@@ -182,6 +182,7 @@ namespace devices::rf
 		 */
 		void powerdown();
 
+		//TODO update docs
 		/**
 		 * Send message in given buffer, with given number of bytes.
 		 * 
@@ -198,8 +199,19 @@ namespace devices::rf
 		 * @sa errors::EMSGSIZE
 		 * @sa errors::EIO
 		 */
-		int send(uint8_t dest, uint8_t port, const void* buf, size_t len);
+		template<typename T, typename TREF = const T&>
+		int send(uint8_t dest, uint8_t port, TREF buf)
+		{
+			return send_(dest, port, (const uint8_t*) &buf, sizeof(T));
+		}
 
+		//TODO Docs
+		int send(uint8_t dest, uint8_t port)
+		{
+			return send_(dest, port, nullptr, 0);
+		}
+
+		//TODO update docs
 		/**
 		 * Receive message and store into given buffer with given maximum
 		 * size. The source network address is returned in the parameter src.
@@ -219,7 +231,17 @@ namespace devices::rf
 		 * @sa errors::ETIME
 		 * @sa errors::EMSGSIZE
 		 */
-		int recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t ms = 0L);
+		template<typename T, typename TREF = T&>
+		int recv(uint8_t& src, uint8_t& port, TREF buf, uint32_t ms = 0L)
+		{
+			return recv_(src, port, (uint8_t*) &buf, sizeof(T), ms);
+		}
+
+		//TODO DOCS
+		int recv(uint8_t& src, uint8_t& port, uint32_t ms = 0L)
+		{
+			return recv_(src, port, nullptr, 0, ms);
+		}
 
 		/**
 		 * Set output power level (-30..10 dBm)
@@ -254,6 +276,7 @@ namespace devices::rf
 			return drops_;
 		}
 
+		//TODO update docs
 		/**
 		 * Broadcast message in given buffer, with given number of bytes.
 		 * Returns number of bytes sent if successful otherwise a negative
@@ -263,9 +286,10 @@ namespace devices::rf
 		 * @param[in] len number of bytes in buffer.
 		 * @return number of bytes send or negative error code.
 		 */
-		int broadcast(uint8_t port, const void* buf, size_t len)
+		template<typename T, typename TREF = const T&>
+		int broadcast(uint8_t port, TREF buf)
 		{
-			return send(BROADCAST, port, buf, len);
+			return send(BROADCAST, port, buf);
 		}
 
 		/**
@@ -278,6 +302,11 @@ namespace devices::rf
 		}
 
 	protected:
+		/// @cond notdocumented
+		int send_(uint8_t dest, uint8_t port, const uint8_t* buf, size_t len);
+		int recv_(uint8_t& src, uint8_t& port, uint8_t* buf, size_t size, uint32_t ms);
+		/// @endcond
+
 		/**
 		 * SPI Commands (See chap. 8.3.1, tab. 20, pp. 51).
 		 */
@@ -438,13 +467,6 @@ namespace devices::rf
 			this->end_transfer();
 			return result;
 		}
-		void read(uint8_t cmd, void* buf, size_t size)
-		{
-			this->start_transfer();
-			status_ = status_t{this->transfer(cmd)};
-			this->transfer((uint8_t*) buf, size, uint8_t(Command::NOP));
-			this->end_transfer();
-		}
 		void write(uint8_t cmd)
 		{
 			this->start_transfer();
@@ -458,7 +480,7 @@ namespace devices::rf
 			this->transfer(data);
 			this->end_transfer();
 		}
-		void write(uint8_t cmd, const void* buf, size_t size)
+		void write(uint8_t cmd, const uint8_t* buf, size_t size)
 		{
 			this->start_transfer();
 			status_ = status_t{this->transfer(cmd)};
@@ -471,21 +493,9 @@ namespace devices::rf
 		{
 			return read(uint8_t(cmd));
 		}
-		void read_command(Command cmd, void* buf, size_t size)
-		{
-			read(uint8_t(cmd), buf, size);
-		}
 		void write_command(Command cmd)
 		{
 			write(uint8_t(cmd));
-		}
-		void write_command(Command cmd, uint8_t data)
-		{
-			write(uint8_t(cmd), data);
-		}
-		void write_command(Command cmd, const void* buf, size_t size)
-		{
-			write(uint8_t(cmd), buf, size);
 		}
 
 		// Mid-level methods to access NRF24L01 device registers
@@ -493,15 +503,11 @@ namespace devices::rf
 		{
 			return read(uint8_t(Command::R_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)));
 		}
-		void read_register(Register reg, void* buf, size_t size)
-		{
-			read(uint8_t(Command::R_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
-		}
 		void write_register(Register reg, uint8_t data)
 		{
 			write(uint8_t(Command::W_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)), data);
 		}
-		void write_register(Register reg, const void* buf, size_t size)
+		void write_register(Register reg, const uint8_t* buf, size_t size)
 		{
 			write(uint8_t(Command::W_REGISTER) | uint8_t(uint8_t(Command::REG_MASK) & uint8_t(reg)), buf, size);
 		}
@@ -518,7 +524,7 @@ namespace devices::rf
 		void receive_mode();
 
 		bool available();
-		int read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t count);
+		int read_fifo_payload(uint8_t& src, uint8_t& port, uint8_t* buf, size_t count);
 		fifo_status_t read_fifo_status()
 		{
 			return fifo_status_t{read_register(Register::FIFO_STATUS)};
@@ -641,7 +647,7 @@ namespace devices::rf
 		// P2: broadcast<network:0>
 		addr_t rx_addr = addr_;
 		write_register(Register::SETUP_AW, AW_3BYTES);
-		write_register(Register::RX_ADDR_P1, &rx_addr, sizeof(rx_addr));
+		write_register(Register::RX_ADDR_P1, (const uint8_t*) &rx_addr, sizeof(rx_addr));
 		write_register(Register::RX_ADDR_P2, BROADCAST);
 		write_register(Register::EN_RXADDR, bits::BV8(ERX_P2, ERX_P1));
 		write_register(Register::EN_AA, bits::BV8(ENAA_P1, ENAA_P0));
@@ -682,9 +688,9 @@ namespace devices::rf
 	}
 
 	template<board::DigitalPin CSN, board::DigitalPin CE>
-	int NRF24L01<CSN, CE>::send(uint8_t dest, uint8_t port, const void* buf, size_t len)
+	int NRF24L01<CSN, CE>::send_(uint8_t dest, uint8_t port, const uint8_t* buf, size_t len)
 	{
-		//FIXME is this condition correct? what if len == 0?
+		// Note buf == 0 and len == 0 is perfectly acceptable
 		if ((buf == nullptr) && (len > 0)) return errors::EINVAL;
 		if (len > PAYLOAD_MAX) return errors::EMSGSIZE;
 
@@ -697,7 +703,7 @@ namespace devices::rf
 		status_ = status_t{this->transfer(uint8_t(command))};
 		this->transfer(addr_.device);
 		this->transfer(port);
-		this->transfer((uint8_t*) buf, len);
+		this->transfer(buf, len);
 		this->end_transfer();
 
 		trans_ += 1;
@@ -706,7 +712,7 @@ namespace devices::rf
 		if (dest != BROADCAST)
 		{
 			addr_t tx_addr(addr_.network, dest);
-			write_register(Register::RX_ADDR_P0, &tx_addr, sizeof(tx_addr));
+			write_register(Register::RX_ADDR_P0, (const uint8_t*) &tx_addr, sizeof(tx_addr));
 			write_register(Register::EN_RXADDR, bits::BV8(ERX_P2, ERX_P1, ERX_P0));
 		}
 
@@ -742,7 +748,7 @@ namespace devices::rf
 	}
 
 	template<board::DigitalPin CSN, board::DigitalPin CE>
-	int NRF24L01<CSN, CE>::recv(uint8_t& src, uint8_t& port, void* buf, size_t size, uint32_t ms)
+	int NRF24L01<CSN, CE>::recv_(uint8_t& src, uint8_t& port, uint8_t* buf, size_t size, uint32_t ms)
 	{
 		// Run in receive mode
 		receive_mode();
@@ -777,7 +783,7 @@ namespace devices::rf
 	{
 		// Setup primary transmit address
 		addr_t tx_addr(addr_.network, dest);
-		write_register(Register::TX_ADDR, &tx_addr, sizeof(tx_addr));
+		write_register(Register::TX_ADDR, (const uint8_t*) &tx_addr, sizeof(tx_addr));
 
 		// Trigger the transmitter mode
 		if (state_ != State::TX_STATE)
@@ -816,7 +822,7 @@ namespace devices::rf
 	}
 
 	template<board::DigitalPin CSN, board::DigitalPin CE>
-	int NRF24L01<CSN, CE>::read_fifo_payload(uint8_t& src, uint8_t& port, void* buf, size_t size)
+	int NRF24L01<CSN, CE>::read_fifo_payload(uint8_t& src, uint8_t& port, uint8_t* buf, size_t size)
 	{
 		// Check for payload error from device (Tab. 20, pp. 51, R_RX_PL_WID)
 		uint8_t count = read_command(Command::R_RX_PL_WID) - 2;
@@ -834,7 +840,7 @@ namespace devices::rf
 		status_ = status_t{this->transfer(uint8_t(Command::R_RX_PAYLOAD))};
 		src = this->transfer(0);
 		port = this->transfer(0);
-		this->transfer((uint8_t*) buf, count, uint8_t(Command::NOP));
+		this->transfer(buf, count, uint8_t(Command::NOP));
 		this->end_transfer();
 		return count;
 	}

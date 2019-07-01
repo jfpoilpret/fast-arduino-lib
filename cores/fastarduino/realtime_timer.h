@@ -161,13 +161,11 @@ namespace timer
 		 */
 		time::RTTTime as_real_time() const
 		{
-			return time::RTTTime{millis_, uint16_t(ONE_MILLI * counter_ / (1UL + max_counter_))};
+			return time::RTTTime{millis_, uint16_t(ONE_MILLI_32 * counter_ / (1UL + max_counter_))};
 		}
 
 	private:
 		constexpr RTTRawTime() : buffer_{} {}
-
-		static constexpr const uint32_t ONE_MILLI = 1000UL;
 
 		// This union is an ugly hack to trick the compiler so that it understands
 		// the default constructor just needs 0 initialization for EMPTY_TIME constant,
@@ -506,13 +504,12 @@ namespace timer
 		}
 
 		using CALC = Calculator<NTIMER>;
-		static constexpr const uint32_t ONE_MILLI = 1000UL;
-		static constexpr const PRESCALER MILLI_PRESCALER = CALC::CTC_prescaler(ONE_MILLI);
-		static constexpr const TYPE MILLI_COUNTER = CALC::CTC_counter(MILLI_PRESCALER, ONE_MILLI);
+		static constexpr const PRESCALER MILLI_PRESCALER = CALC::CTC_prescaler(ONE_MILLI_32);
+		static constexpr const TYPE MILLI_COUNTER = CALC::CTC_counter(MILLI_PRESCALER, ONE_MILLI_32);
 
 		uint16_t compute_micros() const
 		{
-			return uint16_t(ONE_MILLI * ((volatile TYPE&) TRAIT::TCNT) / (1UL + (volatile TYPE&) TRAIT::OCRA));
+			return uint16_t(ONE_MILLI_32 * ((volatile TYPE&) TRAIT::TCNT) / (1UL + (volatile TYPE&) TRAIT::OCRA));
 		}
 
 		friend struct isr_handler_rtt;
