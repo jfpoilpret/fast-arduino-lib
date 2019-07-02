@@ -242,7 +242,10 @@ namespace watchdog
 			synchronized return millis_;
 		}
 
-		//TODO DOCS!
+		/**
+		 * Reset current counter to 0.
+		 * This method is synchronized.
+		 */
 		void reset()
 		{
 			synchronized millis_ = 0;

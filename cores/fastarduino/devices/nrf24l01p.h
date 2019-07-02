@@ -182,20 +182,20 @@ namespace devices::rf
 		 */
 		void powerdown();
 
-		//TODO update docs
 		/**
-		 * Send message in given buffer, with given number of bytes.
+		 * Send message with given object reference.
+		 * 
+		 * @tparam T the type of @p buf (the object to transfer)
+		 * @tparam TREF the type passed for @p buf, typically a const reference 
+		 * to type @p T
 		 * 
 		 * @param[in] dest destination network address.
 		 * @param[in] port device port (or message type).
-		 * @param[in] buf buffer to transmit.
-		 * @param[in] len number of bytes in buffer.
+		 * @param[in] buf reference of object to transmit.
 		 * @return number of bytes send or negative error code.
-		 * @retval errors::EINVAL if @p buf is null or @p len is 0
 		 * @retval errors::EMSGSIZE if @p len > `PAYLOAD_MAX`
 		 * @retval errors::EIO if a transmission failure happened
 		 * 
-		 * @sa errors::EINVAL
 		 * @sa errors::EMSGSIZE
 		 * @sa errors::EIO
 		 */
@@ -205,21 +205,37 @@ namespace devices::rf
 			return send_(dest, port, (const uint8_t*) &buf, sizeof(T));
 		}
 
-		//TODO Docs
+		/**
+		 * Send an empty message.
+		 * 
+		 * @param[in] dest destination network address.
+		 * @param[in] port device port (or message type).
+		 * @return number of bytes send or negative error code.
+		 * @retval errors::EMSGSIZE if @p len > `PAYLOAD_MAX`
+		 * @retval errors::EIO if a transmission failure happened
+		 * 
+		 * @sa errors::EMSGSIZE
+		 * @sa errors::EIO
+		 */
 		int send(uint8_t dest, uint8_t port)
 		{
 			return send_(dest, port, nullptr, 0);
 		}
 
-		//TODO update docs
 		/**
-		 * Receive message and store into given buffer with given maximum
-		 * size. The source network address is returned in the parameter src.
+		 * Receive message and store into given object reference.
+		 * The source network address is returned in the parameter src.
+		 * 
+		 * @tparam T the type of @p buf (the object to be received)
+		 * @tparam TREF the type passed for @p buf, typically a reference 
+		 * to type @p T
 		 * 
 		 * @param[out] src source network address.
 		 * @param[out] port device port (or message type).
+		 * @param[out] buf reference to object to fill with received payload;
+		 * note that no constructor will get called during this operation, it is
+		 * best to use simple `struct` for type @p T.
 		 * @param[in] buf buffer to store incoming message.
-		 * @param[in] size maximum number of bytes to receive.
 		 * @param[in] ms maximum time out period.
 		 * @return number of bytes received or negative error code.
 		 * @retval errors::ETIME if nothing was received and a timeout occurred
@@ -237,7 +253,23 @@ namespace devices::rf
 			return recv_(src, port, (uint8_t*) &buf, sizeof(T), ms);
 		}
 
-		//TODO DOCS
+		/**
+		 * Receive an empty message.
+		 * The source network address is returned in the parameter src.
+		 * 
+		 * @param[out] src source network address.
+		 * @param[out] port device port (or message type).
+		 * @param[in] ms maximum time out period.
+		 * @return number of bytes received or negative error code.
+		 * @retval errors::ETIME if nothing was received and a timeout occurred
+		 * after @p ms elapsed
+		 * @retval errors::EMSGSIZE if a payload error occurred from the chip
+		 * (Tab. 20, pp. 51, R_RX_PL_WID) or the received payload size is bigger
+		 * than the requested @p size 
+		 * 
+		 * @sa errors::ETIME
+		 * @sa errors::EMSGSIZE
+		 */
 		int recv(uint8_t& src, uint8_t& port, uint32_t ms = 0L)
 		{
 			return recv_(src, port, nullptr, 0, ms);
@@ -276,14 +308,17 @@ namespace devices::rf
 			return drops_;
 		}
 
-		//TODO update docs
 		/**
-		 * Broadcast message in given buffer, with given number of bytes.
+		 * Broadcast message with given object reference.
 		 * Returns number of bytes sent if successful otherwise a negative
 		 * error code.
+		 * 
+		 * @tparam T the type of @p buf (the object to transfer)
+		 * @tparam TREF the type passed for @p buf, typically a const reference 
+		 * to type @p T
+		 * 
 		 * @param[in] port device port (or message type).
-		 * @param[in] buf buffer to transmit.
-		 * @param[in] len number of bytes in buffer.
+		 * @param[in] buf reference of object to transmit.
 		 * @return number of bytes send or negative error code.
 		 */
 		template<typename T, typename TREF = const T&>

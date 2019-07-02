@@ -193,6 +193,7 @@ namespace spi
 		 * 
 		 * @sa transfer(uint8_t)
 		 * @sa transfer(uint8_t*, uint16_t, uint8_t)
+		 * @sa transfer(const uint8_t*, uint16_t)
 		 */
 		void transfer(uint8_t* data, uint16_t size)
 		{
@@ -203,7 +204,17 @@ namespace spi
 			}
 		}
 
-		//TODO DOCS
+		/**
+		 * Transfer an array of payload data to the currently selected SPI slave device
+		 * through MOSI pin; any data bytes simultaneously received from that
+		 * device through MISO pin are lost.
+		 * @param data pointer to the payload to transmit
+		 * @param size the payload size
+		 * 
+		 * @sa transfer(uint8_t)
+		 * @sa transfer(uint16_t, uint8_t)
+		 * @sa transfer(uint8_t*, uint16_t)
+		 */
 		void transfer(const uint8_t* data, uint16_t size)
 		{
 			while (size--) transfer(*data++);
@@ -225,13 +236,25 @@ namespace spi
 		 * 
 		 * @sa transfer(uint8_t)
 		 * @sa transfer(uint8_t*, uint16_t)
+		 * @sa transfer(uint16_t, uint8_t)
 		 */
 		void transfer(uint8_t* data, uint16_t size, uint8_t sent)
 		{
 			while (size--) *data++ = transfer(sent);
 		}
 
-		//TODO DOCS
+		/**
+		 * Transfer the provided byte @p sent several times to the currently selected
+		 * SPI slave device through MOSI pin; any data bytes simultaneously received 
+		 * from that device through MISO pin are lost.
+		 * 
+		 * @param size the number of times to transmit @p sent byte to the SPI slave
+		 * @param sent the data byte to transmit several times
+		 * 
+		 * @sa transfer(uint8_t)
+		 * @sa transfer(const uint8_t*, uint16_t)
+		 * @sa transfer(uint8_t*, uint16_t, uint8_t)
+		 */
 		void transfer(uint16_t size, uint8_t sent)
 		{
 			while (size--) transfer(sent);
