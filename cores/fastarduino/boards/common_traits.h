@@ -112,7 +112,17 @@ namespace board_traits
 	using REG8 = REGISTER<uint8_t>;
 	using REG16 = REGISTER<uint16_t>;
 
-	using namespace ::board;
+	// Avoid super long lines of code for all board traits!
+	using board::AnalogPin;
+	using board::AnalogClock;
+	using board::AnalogReference;
+	using board::DigitalPin;
+	using board::Port;
+	using board::InterruptPin;
+	using board::ExternalInterruptPin;
+	using board::PWMPin;
+	using board::Timer;
+	using board::USART;
 
 	static constexpr uint8_t PCI_NONE = UINT8_MAX;
 
