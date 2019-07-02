@@ -658,7 +658,7 @@ namespace devices::rf
 		interrupt::INTSignal<IRQ> irq_signal_;
 	};
 
-	using namespace nrf24l01p_internals;
+	// using namespace nrf24l01p_internals;
 
 	template<board::DigitalPin CSN, board::DigitalPin CE>
 	NRF24L01<CSN, CE>::NRF24L01(uint16_t net, uint8_t dev)
@@ -669,6 +669,7 @@ namespace devices::rf
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::begin()
 	{
+		using namespace nrf24l01p_internals;
 		// Setup hardware features, channel, bitrate, retransmission, dynamic payload
 		write_register(Register::FEATURE, (bits::BV8(EN_DPL, EN_ACK_PAY, EN_DYN_ACK)));
 		write_register(Register::RF_CH, channel_);
@@ -693,6 +694,7 @@ namespace devices::rf
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::powerup()
 	{
+		using namespace nrf24l01p_internals;
 		if (state_ != State::POWER_DOWN_STATE) return;
 		ce_.clear();
 
@@ -716,6 +718,7 @@ namespace devices::rf
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::powerdown()
 	{
+		using namespace nrf24l01p_internals;
 		if (state_ == State::POWER_DOWN_STATE) return;
 		ce_.clear();
 		write_register(Register::CONFIG, bits::BV8(EN_CRC, CRCO));
@@ -725,6 +728,7 @@ namespace devices::rf
 	template<board::DigitalPin CSN, board::DigitalPin CE>
 	int NRF24L01<CSN, CE>::send_(uint8_t dest, uint8_t port, const uint8_t* buf, size_t len)
 	{
+		using namespace nrf24l01p_internals;
 		// Note buf == 0 and len == 0 is perfectly acceptable
 		if ((buf == nullptr) && (len > 0)) return errors::EINVAL;
 		if (len > PAYLOAD_MAX) return errors::EMSGSIZE;
@@ -802,6 +806,7 @@ namespace devices::rf
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::set_output_power_level(int8_t dBm)
 	{
+		using namespace nrf24l01p_internals;
 		uint8_t pwr;
 		if (dBm < -12)
 			pwr = RF_PWR_18DBM;
@@ -816,6 +821,7 @@ namespace devices::rf
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::transmit_mode(uint8_t dest)
 	{
+		using namespace nrf24l01p_internals;
 		// Setup primary transmit address
 		addr_t tx_addr(addr_.network, dest);
 		write_register(Register::TX_ADDR, (const uint8_t*) &tx_addr, sizeof(tx_addr));
@@ -835,6 +841,7 @@ namespace devices::rf
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::receive_mode()
 	{
+		using namespace nrf24l01p_internals;
 		// Check already in receive mode
 		if (state_ == State::RX_STATE) return;
 
