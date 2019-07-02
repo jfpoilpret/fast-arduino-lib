@@ -291,7 +291,7 @@ namespace devices
 		 */
 		void write_page(uint32_t address, uint8_t* data, uint8_t size)
 		{
-			send(PAGE_PROGRAM, address, data, (size == 0 ? 256 : size));
+			send(PAGE_PROGRAM, address, data, ((size == 0) ? (1U + UINT8_MAX) : size));
 		}
 
 		/**
