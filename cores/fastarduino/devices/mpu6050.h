@@ -209,7 +209,7 @@ namespace devices::magneto
 	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW> class MPU6050 : public i2c::I2CDevice<MODE>
 	{
 	private:
-		using BusCond = i2c::BusConditions;
+		using BUSCOND = i2c::BusConditions;
 
 	public:
 		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
@@ -245,12 +245,12 @@ namespace devices::magneto
 			using i2c::Status::OK;
 			PowerManagement power;
 			power.clock_select = uint8_t(clock_select);
-			return this->write(DEVICE_ADDRESS, CONFIG, BusCond::START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(low_pass_filter), BusCond::NO_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(gyro_range), BusCond::NO_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(accel_range), BusCond::NO_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, PWR_MGMT_1, BusCond::REPEAT_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
+			return this->write(DEVICE_ADDRESS, CONFIG, BUSCOND::START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, uint8_t(low_pass_filter), BUSCOND::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, uint8_t(gyro_range), BUSCOND::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, uint8_t(accel_range), BUSCOND::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, PWR_MGMT_1, BUSCOND::REPEAT_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, power, BUSCOND::NO_START_STOP) == OK;
 		}
 
 		/**
@@ -294,24 +294,24 @@ namespace devices::magneto
 			int_enable.reserved1 = int_enable.reserved2 = 0;
 			PowerManagement power;
 			power.clock_select = uint8_t(clock_select);
-			return this->write(DEVICE_ADDRESS, CONFIG, BusCond::START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(low_pass_filter), BusCond::NO_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(gyro_range), BusCond::NO_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(accel_range), BusCond::NO_START_NO_STOP) == OK
+			return this->write(DEVICE_ADDRESS, CONFIG, BUSCOND::START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, uint8_t(low_pass_filter), BUSCOND::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, uint8_t(gyro_range), BUSCOND::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, uint8_t(accel_range), BUSCOND::NO_START_NO_STOP) == OK
 
-				   && this->write(DEVICE_ADDRESS, SMPRT_DIV, BusCond::REPEAT_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, sample_rate_divider, BusCond::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, SMPRT_DIV, BUSCOND::REPEAT_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, sample_rate_divider, BUSCOND::NO_START_NO_STOP) == OK
 
-				   && this->write(DEVICE_ADDRESS, FIFO_EN, BusCond::REPEAT_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, utils::as_uint8_t(fifo_enable), BusCond::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, FIFO_EN, BUSCOND::REPEAT_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, utils::as_uint8_t(fifo_enable), BUSCOND::NO_START_NO_STOP) == OK
 
-				   && this->write(DEVICE_ADDRESS, INT_PIN_CFG, BusCond::REPEAT_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, uint8_t(0), BusCond::NO_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, utils::as_uint8_t(int_enable), BusCond::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, INT_PIN_CFG, BUSCOND::REPEAT_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, uint8_t(0), BUSCOND::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, utils::as_uint8_t(int_enable), BUSCOND::NO_START_NO_STOP) == OK
 
-				   && this->write(DEVICE_ADDRESS, USER_CTRL, BusCond::REPEAT_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, FIFO_ENABLE, BusCond::NO_START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
+				   && this->write(DEVICE_ADDRESS, USER_CTRL, BUSCOND::REPEAT_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, FIFO_ENABLE, BUSCOND::NO_START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, power, BUSCOND::NO_START_STOP) == OK;
 		}
 
 		/**
@@ -355,8 +355,8 @@ namespace devices::magneto
 		bool gyro_measures(Sensor3D& gyro)
 		{
 			using i2c::Status::OK;
-			if (this->write(DEVICE_ADDRESS, GYRO_XOUT, BusCond::START_NO_STOP) == OK
-				&& this->read(DEVICE_ADDRESS, gyro, BusCond::REPEAT_START_STOP) == OK)
+			if (this->write(DEVICE_ADDRESS, GYRO_XOUT, BUSCOND::START_NO_STOP) == OK
+				&& this->read(DEVICE_ADDRESS, gyro, BUSCOND::REPEAT_START_STOP) == OK)
 			{
 				format_sensors(gyro);
 				return true;
@@ -380,8 +380,8 @@ namespace devices::magneto
 		{
 			using i2c::Status::OK;
 			int16_t temperature = INT16_MIN;
-			if (this->write(DEVICE_ADDRESS, TEMP_OUT, BusCond::START_NO_STOP) == OK)
-				this->read(DEVICE_ADDRESS, temperature, BusCond::REPEAT_START_STOP);
+			if (this->write(DEVICE_ADDRESS, TEMP_OUT, BUSCOND::START_NO_STOP) == OK)
+				this->read(DEVICE_ADDRESS, temperature, BUSCOND::REPEAT_START_STOP);
 			return temperature;
 		}
 
@@ -406,8 +406,8 @@ namespace devices::magneto
 		bool accel_measures(Sensor3D& accel)
 		{
 			using i2c::Status::OK;
-			if (this->write(DEVICE_ADDRESS, ACCEL_XOUT, BusCond::START_NO_STOP) == OK
-				&& this->read(DEVICE_ADDRESS, accel, BusCond::REPEAT_START_STOP) == OK)
+			if (this->write(DEVICE_ADDRESS, ACCEL_XOUT, BUSCOND::START_NO_STOP) == OK
+				&& this->read(DEVICE_ADDRESS, accel, BUSCOND::REPEAT_START_STOP) == OK)
 			{
 				format_sensors(accel);
 				return true;
@@ -428,8 +428,8 @@ namespace devices::magneto
 		bool all_measures(AllSensors& sensors)
 		{
 			using i2c::Status::OK;
-			if (this->write(DEVICE_ADDRESS, ACCEL_XOUT, BusCond::START_NO_STOP) == OK
-				&& this->read(DEVICE_ADDRESS, sensors, BusCond::REPEAT_START_STOP) == OK)
+			if (this->write(DEVICE_ADDRESS, ACCEL_XOUT, BUSCOND::START_NO_STOP) == OK
+				&& this->read(DEVICE_ADDRESS, sensors, BUSCOND::REPEAT_START_STOP) == OK)
 			{
 				format_sensors(sensors.accel);
 				format_sensors(sensors.gyro);
@@ -453,8 +453,8 @@ namespace devices::magneto
 		{
 			using i2c::Status::OK;
 			INTStatus status;
-			if (this->write(DEVICE_ADDRESS, INT_STATUS, BusCond::START_NO_STOP) == OK)
-				this->read(DEVICE_ADDRESS, status, BusCond::REPEAT_START_STOP);
+			if (this->write(DEVICE_ADDRESS, INT_STATUS, BUSCOND::START_NO_STOP) == OK)
+				this->read(DEVICE_ADDRESS, status, BUSCOND::REPEAT_START_STOP);
 			return status;
 		}
 
@@ -467,8 +467,8 @@ namespace devices::magneto
 		bool reset_fifo()
 		{
 			using i2c::Status::OK;
-			return this->write(DEVICE_ADDRESS, USER_CTRL, BusCond::START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, FIFO_ENABLE | FIFO_RESET, BusCond::NO_START_STOP) == OK;
+			return this->write(DEVICE_ADDRESS, USER_CTRL, BUSCOND::START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, FIFO_ENABLE | FIFO_RESET, BUSCOND::NO_START_STOP) == OK;
 		}
 
 		/**
@@ -488,8 +488,8 @@ namespace devices::magneto
 		{
 			using i2c::Status::OK;
 			uint16_t count = 0;
-			if (this->write(DEVICE_ADDRESS, FIFO_COUNT, BusCond::START_NO_STOP) == OK)
-				this->read(DEVICE_ADDRESS, count, BusCond::REPEAT_START_STOP);
+			if (this->write(DEVICE_ADDRESS, FIFO_COUNT, BUSCOND::START_NO_STOP) == OK)
+				this->read(DEVICE_ADDRESS, count, BUSCOND::REPEAT_START_STOP);
 			utils::swap_bytes(count);
 			return count;
 		}
@@ -568,8 +568,8 @@ namespace devices::magneto
 		bool write_power(PowerManagement power)
 		{
 			using i2c::Status::OK;
-			return this->write(DEVICE_ADDRESS, PWR_MGMT_1, BusCond::START_NO_STOP) == OK
-				   && this->write(DEVICE_ADDRESS, power, BusCond::NO_START_STOP) == OK;
+			return this->write(DEVICE_ADDRESS, PWR_MGMT_1, BUSCOND::START_NO_STOP) == OK
+				   && this->write(DEVICE_ADDRESS, power, BUSCOND::NO_START_STOP) == OK;
 		}
 
 		void format_sensors(Sensor3D& sensors)
@@ -588,8 +588,8 @@ namespace devices::magneto
 				if (yield) time::yield();
 			}
 
-			if (this->write(DEVICE_ADDRESS, FIFO_R_W, BusCond::START_NO_STOP) == OK
-				&& this->read(DEVICE_ADDRESS, buffer, size, BusCond::REPEAT_START_STOP) == OK)
+			if (this->write(DEVICE_ADDRESS, FIFO_R_W, BUSCOND::START_NO_STOP) == OK
+				&& this->read(DEVICE_ADDRESS, buffer, size, BUSCOND::REPEAT_START_STOP) == OK)
 			{
 				// Swap all 2-bytes words
 				uint16_t* temp = (uint16_t*) buffer;

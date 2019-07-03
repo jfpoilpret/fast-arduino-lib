@@ -309,10 +309,10 @@ namespace streams
 		/**
 		 * General type of a manipulator function applicable to this output stream.
 		 */
-		using Manipulator = void (*)(ostream&);
+		using MANIPULATOR = void (*)(ostream&);
 
 		/**
-		 * Apply a `Manipulator` to this output stream.
+		 * Apply a `MANIPULATOR` to this output stream.
 		 * A manipulator may:
 		 * - change formatting option (base, width, precision)
 		 * - call some method of this output stream 
@@ -327,7 +327,7 @@ namespace streams
 		 * @param func the manipulator to apply to this output stream
 		 * @return @p this formatted output
 		 */
-		ostream& operator<<(Manipulator func)
+		ostream& operator<<(MANIPULATOR func)
 		{
 			func(*this);
 			return *this;
@@ -649,10 +649,10 @@ namespace streams
 		/**
 		 * General type of a manipulator function applicable to this input stream.
 		 */
-		using Manipulator = void (*)(istream&);
+		using MANIPULATOR = void (*)(istream&);
 
 		/**
-		 * Apply a `Manipulator` to this input stream.
+		 * Apply a `MANIPULATOR` to this input stream.
 		 * A manipulator may:
 		 * - change formatting option (base)
 		 * - call some method of this input stream 
@@ -668,7 +668,7 @@ namespace streams
 		 * @param func the manipulator to apply to this input stream
 		 * @return @p this formatted input
 		 */
-		istream& operator>>(Manipulator func)
+		istream& operator>>(MANIPULATOR func)
 		{
 			func(*this);
 			return *this;

@@ -192,7 +192,7 @@ namespace devices::magneto
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class HMC5883L : public i2c::I2CDevice<MODE_>
 	{
 	private:
-		using BusCond = i2c::BusConditions;
+		using BUSCOND = i2c::BusConditions;
 
 	public:
 		/** The I2C transmission mode (speed) used for this device. */
@@ -271,8 +271,8 @@ namespace devices::magneto
 		bool magnetic_fields(Sensor3D& fields)
 		{
 			using i2c::Status::OK;
-			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, BusCond::START_NO_STOP) == OK
-				&& this->read(DEVICE_ADDRESS, fields, BusCond::REPEAT_START_STOP) == OK)
+			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, BUSCOND::START_NO_STOP) == OK
+				&& this->read(DEVICE_ADDRESS, fields, BUSCOND::REPEAT_START_STOP) == OK)
 			{
 				utils::swap_bytes(fields.x);
 				utils::swap_bytes(fields.y);
@@ -315,15 +315,15 @@ namespace devices::magneto
 		bool write_register(uint8_t address, uint8_t value)
 		{
 			using i2c::Status::OK;
-			return (this->write(DEVICE_ADDRESS, address, BusCond::START_NO_STOP) == OK
-					&& this->write(DEVICE_ADDRESS, value, BusCond::NO_START_STOP) == OK);
+			return (this->write(DEVICE_ADDRESS, address, BUSCOND::START_NO_STOP) == OK
+					&& this->write(DEVICE_ADDRESS, value, BUSCOND::NO_START_STOP) == OK);
 		}
 
 		bool read_register(uint8_t address, uint8_t& value)
 		{
 			using i2c::Status::OK;
-			return (this->write(DEVICE_ADDRESS, address, BusCond::START_NO_STOP) == OK
-					&& this->read(DEVICE_ADDRESS, value, BusCond::REPEAT_START_STOP) == OK);
+			return (this->write(DEVICE_ADDRESS, address, BUSCOND::START_NO_STOP) == OK
+					&& this->read(DEVICE_ADDRESS, value, BUSCOND::REPEAT_START_STOP) == OK);
 		}
 
 		void convert_field_to_mGa(int16_t& value)

@@ -115,7 +115,7 @@ namespace devices::mcp23017
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class MCP23017 : public i2c::I2CDevice<MODE_>
 	{
 	private:
-		using BusCond = i2c::BusConditions;
+		using BUSCOND = i2c::BusConditions;
 		template<MCP23017Port P> using TRAIT = mcp23017_traits::Port_trait<P>;
 		template<MCP23017Port P> using T = typename TRAIT<P>::TYPE;
 
@@ -336,15 +336,15 @@ namespace devices::mcp23017
 		template<typename T> bool write_register(uint8_t address, T value)
 		{
 			using i2c::Status::OK;
-			return this->write(device_, address, BusCond::START_NO_STOP) == OK
-				   && this->write(device_, value, BusCond::NO_START_STOP) == OK;
+			return this->write(device_, address, BUSCOND::START_NO_STOP) == OK
+				   && this->write(device_, value, BUSCOND::NO_START_STOP) == OK;
 		}
 
 		template<typename T> bool read_register(uint8_t address, T& value)
 		{
 			using i2c::Status::OK;
-			return this->write(device_, address, BusCond::START_NO_STOP) == OK
-				   && this->read(device_, value, BusCond::REPEAT_START_STOP) == OK;
+			return this->write(device_, address, BUSCOND::START_NO_STOP) == OK
+				   && this->read(device_, value, BUSCOND::REPEAT_START_STOP) == OK;
 		}
 
 		const uint8_t device_;
