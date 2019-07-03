@@ -115,8 +115,8 @@ namespace events
 		 * The first ordinal event type that you may use for your own custom events.
 		 * You would generally define all your custom event types as constant:
 		 * @code
-		 * static const MY_EVENT_TYPE = events::Type::USER_EVENT;
-		 * static const MY_OTHER_EVENT_TYPE = events::Type::USER_EVENT + 1;
+		 * static const uint8_t MY_EVENT_TYPE = events::Type::USER_EVENT;
+		 * static const uint8_t MY_OTHER_EVENT_TYPE = events::Type::USER_EVENT + 1;
 		 * @endcode
 		 * You can define up to 127 event types on your own, from 128 to 255.
 		 */
