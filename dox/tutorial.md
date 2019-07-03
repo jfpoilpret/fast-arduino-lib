@@ -1181,8 +1181,8 @@ The first part is the I2C and the RTC device initialization:
 @skip I2CManager
 @until DS1307
 `i2c::I2CManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
-- `i2c::I2CMode::Standard`: slow I2C mode (100 kHz), this the default
-- `i2c::I2CMode::Fast`: fast I2C mode (400 kHz)
+- `i2c::I2CMode::STANDARD`: slow I2C mode (100 kHz), this the default
+- `i2c::I2CMode::FAST`: fast I2C mode (400 kHz)
 
 The mode selection depends on all devices you wire on the I2C bus, if one is using standard mode, 
 then all the bus must be set to standard mode. Since DS1307 chip does not support fast mode,

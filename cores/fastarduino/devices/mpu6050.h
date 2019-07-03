@@ -206,7 +206,7 @@ namespace devices::magneto
 	 * 
 	 * @sa AD0
 	 */
-	template<i2c::I2CMode MODE = i2c::I2CMode::Fast, AD0 AD0 = AD0::LOW> class MPU6050 : public i2c::I2CDevice<MODE>
+	template<i2c::I2CMode MODE = i2c::I2CMode::FAST, AD0 AD0 = AD0::LOW> class MPU6050 : public i2c::I2CDevice<MODE>
 	{
 	private:
 		using BUSCOND = i2c::BusConditions;

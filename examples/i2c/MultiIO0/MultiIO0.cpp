@@ -75,8 +75,8 @@ constexpr const uint8_t IOCON_HAEN = bits::BV8(3);
 constexpr const uint8_t IOCON_ODR = bits::BV8(2);
 constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
 
-// constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Standard;
-constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Fast;
+// constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::STANDARD;
+constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::FAST;
 
 // Subclass I2CDevice to make protected methods available
 class PublicDevice : public i2c::I2CDevice<I2C_MODE>

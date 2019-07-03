@@ -38,7 +38,7 @@
  * @code
  * int main()
  * {
- *     i2c::I2CManager<i2c::I2CMode::Standard> manager;
+ *     i2c::I2CManager<i2c::I2CMode::STANDARD> manager;
  *     manager.begin();
  *     devices::rtc::DS1307 rtc{manager};
  *     devices::rtc::tm now;
@@ -87,9 +87,9 @@ namespace i2c
 	enum class I2CMode : uint8_t
 	{
 		/** I2C Standard mode, less than 100KHz. */
-		Standard,
+		STANDARD,
 		/** I2C Fast mode, less than 400KHz. */
-		Fast
+		FAST
 	};
 };
 

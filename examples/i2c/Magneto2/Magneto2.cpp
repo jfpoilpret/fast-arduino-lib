@@ -140,7 +140,7 @@ private:
 
 REGISTER_INT_ISR_METHOD(INT_NUM, DRDY, DataReadyHandler, &DataReadyHandler::data_ready)
 
-using MAGNETOMETER = devices::magneto::HMC5883L<i2c::I2CMode::Fast>;
+using MAGNETOMETER = devices::magneto::HMC5883L<i2c::I2CMode::FAST>;
 
 int main() __attribute__((OS_main));
 int main()

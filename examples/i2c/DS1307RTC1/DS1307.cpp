@@ -77,10 +77,10 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 // Subclass I2CDevice to make protected methods available
-class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::Standard>
+class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::STANDARD>
 {
 public:
-	PublicDevice(MANAGER& manager): i2c::I2CDevice<i2c::I2CMode::Standard>{manager} {}
+	PublicDevice(MANAGER& manager): i2c::I2CDevice<i2c::I2CMode::STANDARD>{manager} {}
 	friend int main();
 };
 
@@ -130,7 +130,7 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	i2c::I2CManager<i2c::I2CMode::Standard> manager;
+	i2c::I2CManager<i2c::I2CMode::STANDARD> manager;
 	manager.begin();
 	out << "I2C interface started" << endl;
 	out << "status #1 " << manager.status() << endl;

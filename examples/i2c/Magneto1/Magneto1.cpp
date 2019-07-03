@@ -98,7 +98,7 @@ void trace_fields(const Sensor3D& fields)
 	out << dec << F("Fields x = ") << fields.x << F(", y = ") << fields.y << F(", z = ") << fields.z << '\n' << flush;
 }
 
-using MAGNETOMETER = HMC5883L<i2c::I2CMode::Fast>;
+using MAGNETOMETER = HMC5883L<i2c::I2CMode::FAST>;
 
 int main() __attribute__((OS_main));
 int main()

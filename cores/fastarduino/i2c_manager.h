@@ -35,7 +35,7 @@ namespace i2c
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @sa i2c::I2CMode
 	 */
-	template<I2CMode MODE_ = I2CMode::Standard> class I2CManager
+	template<I2CMode MODE_ = I2CMode::STANDARD> class I2CManager
 	{
 	public:
 		/** The I2C mode for this manager. */

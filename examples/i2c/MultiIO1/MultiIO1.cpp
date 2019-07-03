@@ -46,7 +46,7 @@
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/devices/mcp23017.h>
 
-constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::Fast;
+constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::FAST;
 
 using MCP = devices::mcp23017::MCP23017<I2C_MODE>;
 using MCP_PORT = devices::mcp23017::MCP23017Port;

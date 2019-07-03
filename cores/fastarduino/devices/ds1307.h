@@ -29,6 +29,7 @@
  */
 namespace devices::rtc
 {
+	//TODO apply guidelines to enum values: all UPPER_CASE
 	/** Days of the week. */
 	enum class WeekDay : uint8_t
 	{
@@ -75,7 +76,7 @@ namespace devices::rtc
 	 * I2C device driver for the DS1307 RTC chip.
 	 * Note that this chip only supports standard I2C mode (100 KHz).
 	 */
-	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::Standard>
+	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::STANDARD>
 	{
 	public:
 		/**

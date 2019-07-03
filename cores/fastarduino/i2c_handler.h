@@ -68,7 +68,7 @@ namespace i2c
 
 		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / ONE_MHZ - 16UL) / 2;
 		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400000UL - 16UL) / 2;
-		static constexpr const uint8_t TWBR_VALUE = (MODE == I2CMode::Standard ? STANDARD_FREQUENCY : FAST_FREQUENCY);
+		static constexpr const uint8_t TWBR_VALUE = (MODE == I2CMode::STANDARD ? STANDARD_FREQUENCY : FAST_FREQUENCY);
 #else
 		static constexpr const REG8 USIDR_{USIDR};
 		static constexpr const REG8 USISR_{USISR};
@@ -93,12 +93,12 @@ namespace i2c
 		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
 
 		// Timing constants for current mode (as per I2C specifications)
-		static constexpr const uint8_t T_HD_STA = utils::calculate_delay1_count(MODE == I2CMode::Standard ? 4.0 : 0.6);
-		static constexpr const uint8_t T_LOW = utils::calculate_delay1_count(MODE == I2CMode::Standard ? 4.7 : 1.3);
-		static constexpr const uint8_t T_HIGH = utils::calculate_delay1_count(MODE == I2CMode::Standard ? 4.0 : 0.6);
-		static constexpr const uint8_t T_SU_STA = utils::calculate_delay1_count(MODE == I2CMode::Standard ? 4.7 : 0.6);
-		static constexpr const uint8_t T_SU_STO = utils::calculate_delay1_count(MODE == I2CMode::Standard ? 4.0 : 0.6);
-		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(MODE == I2CMode::Standard ? 4.7 : 1.3);
+		static constexpr const uint8_t T_HD_STA = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
+		static constexpr const uint8_t T_LOW = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 1.3);
+		static constexpr const uint8_t T_HIGH = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
+		static constexpr const uint8_t T_SU_STA = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 0.6);
+		static constexpr const uint8_t T_SU_STO = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
+		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 1.3);
 #endif
 
 		uint8_t status_;

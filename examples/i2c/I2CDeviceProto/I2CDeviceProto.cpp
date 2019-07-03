@@ -54,7 +54,7 @@ static streams::ostream out = uart.out();
 
 // I2C Device specific stuff goes here
 //=====================================
-static constexpr const i2c::I2CMode MODE = i2c::I2CMode::Fast;
+static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
 static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 
 // Subclass I2CDevice to make protected methods available

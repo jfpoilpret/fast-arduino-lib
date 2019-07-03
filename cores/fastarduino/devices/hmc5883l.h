@@ -186,10 +186,10 @@ namespace devices::magneto
 	 * }
 	 * @endcode
 	 * 
-	 * @tparam MODE_ the I2C mode to use; HMC5883L supports both `i2c::I2CMode::Standard`
-	 * and `i2c:I2CMode::Fast`
+	 * @tparam MODE_ the I2C mode to use; HMC5883L supports both `i2c::I2CMode::STANDARD`
+	 * and `i2c:I2CMode::FAST`
 	 */
-	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class HMC5883L : public i2c::I2CDevice<MODE_>
+	template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class HMC5883L : public i2c::I2CDevice<MODE_>
 	{
 	private:
 		using BUSCOND = i2c::BusConditions;

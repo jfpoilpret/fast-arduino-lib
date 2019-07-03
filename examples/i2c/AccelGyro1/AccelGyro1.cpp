@@ -102,7 +102,7 @@ void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
 		out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
 }
 
-using ACCELEROMETER = MPU6050<i2c::I2CMode::Fast>;
+using ACCELEROMETER = MPU6050<i2c::I2CMode::FAST>;
 
 int main() __attribute__((OS_main));
 int main()

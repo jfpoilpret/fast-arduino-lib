@@ -64,7 +64,7 @@ namespace i2c
 	 * @sa i2c::I2CMode
 	 * @sa i2c::I2CManager
 	 */
-	template<I2CMode MODE_ = I2CMode::Standard> class I2CDevice
+	template<I2CMode MODE_ = I2CMode::STANDARD> class I2CDevice
 	{
 	public:
 		/** the I2C mode for this device. */

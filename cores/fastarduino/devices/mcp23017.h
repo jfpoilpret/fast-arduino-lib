@@ -109,10 +109,10 @@ namespace devices::mcp23017
 	 * I2C device driver for Microchip MCP23017 support.
 	 * The MCP23017 chip is a 16-Bit I/O Expander with I2C interface.
 	 * 
-	 * @tparam MODE_ the I2C mode to use; MCP23017 supports both `i2c::I2CMode::Standard`
-	 * and `i2c:I2CMode::Fast`
+	 * @tparam MODE_ the I2C mode to use; MCP23017 supports both `i2c::I2CMode::STANDARD`
+	 * and `i2c:I2CMode::FAST`
 	 */
-	template<i2c::I2CMode MODE_ = i2c::I2CMode::Fast> class MCP23017 : public i2c::I2CDevice<MODE_>
+	template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class MCP23017 : public i2c::I2CDevice<MODE_>
 	{
 	private:
 		using BUSCOND = i2c::BusConditions;
