@@ -658,8 +658,6 @@ namespace devices::rf
 		interrupt::INTSignal<IRQ> irq_signal_;
 	};
 
-	// using namespace nrf24l01p_internals;
-
 	template<board::DigitalPin CSN, board::DigitalPin CE>
 	NRF24L01<CSN, CE>::NRF24L01(uint16_t net, uint8_t dev)
 		: ce_{gpio::PinMode::OUTPUT, false}, addr_{net, dev}, channel_{DEFAULT_CHANNEL}, dest_{}, status_{0},
