@@ -162,7 +162,7 @@ int main()
 	time1.tm_hour = 8;
 	time1.tm_min = 45;
 	time1.tm_sec = 30;
-	time1.tm_wday = WeekDay::Tuesday;
+	time1.tm_wday = WeekDay::TUESDAY;
 	time1.tm_mday = 13;
 	time1.tm_mon = 6;
 	time1.tm_year = 17;

@@ -29,17 +29,16 @@
  */
 namespace devices::rtc
 {
-	//TODO apply guidelines to enum values: all UPPER_CASE
 	/** Days of the week. */
 	enum class WeekDay : uint8_t
 	{
-		Sunday = 1,
-		Monday,
-		Tuesday,
-		Wednesday,
-		Thursday,
-		Friday,
-		Saturday
+		SUNDAY = 1,
+		MONDAY,
+		TUESDAY,
+		WEDNESDAY,
+		THURSDAY,
+		FRIDAY,
+		SATURDAY
 	};
 
 	/**
