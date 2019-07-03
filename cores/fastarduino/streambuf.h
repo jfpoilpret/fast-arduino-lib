@@ -26,6 +26,7 @@
 
 namespace streams
 {
+	//TODO update doc (new ctor args)
 	/**
 	 * Output API based on a ring buffer.
 	 * Provides general methods to push characters or strings to the buffer;
@@ -44,7 +45,11 @@ namespace streams
 		using QUEUE = Queue<char, char>;
 
 	public:
-		template<uint8_t SIZE> explicit ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false} {}
+		using CALLBACK = void (*)(void*);
+
+		template<uint8_t SIZE>
+		explicit ostreambuf(char (&buffer)[SIZE], CALLBACK callback = nullptr, void* arg = nullptr)
+		: QUEUE{buffer}, overflow_{false}, on_put_callback{callback}, arg_callback{arg} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -136,14 +141,6 @@ namespace streams
 
 	protected:
 		/**
-		 * Callback method called when new content has been added to the buffer.
-		 * This can be overridden by a subclass to trigger interrupt-driven
-		 * transmission of buffer data.
-		 * Default implementation does nothing.
-		 */
-		virtual void on_put() {}
-
-		/**
 		 * Append a character to the buffer.
 		 * If the buffer is full, then `overflow()` flag will be set.
 		 * @param c the character to append
@@ -180,7 +177,15 @@ namespace streams
 		}
 
 	private:
+		void on_put()
+		{
+			if (on_put_callback != nullptr)
+				on_put_callback(arg_callback);
+		}
+
 		bool overflow_;
+		const CALLBACK on_put_callback;
+		void* const arg_callback;
 
 		friend class ios_base;
 		friend class ostream;

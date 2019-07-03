@@ -104,7 +104,11 @@ namespace serial::soft
 		}
 
 	protected:
-		template<uint8_t SIZE_TX> explicit AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
+		using CALLBACK = streams::ostreambuf::CALLBACK;
+
+		template<uint8_t SIZE_TX> 
+		explicit AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
+		: ostreambuf{output, callback, arg} {}
 
 		void compute_times(uint32_t rate, StopBits stop_bits);
 		static Parity calculate_parity(Parity parity, uint8_t value);
@@ -179,6 +183,9 @@ namespace serial::soft
 	 */
 	template<board::DigitalPin TX_> class UATX : public AbstractUATX, public UARTErrors
 	{
+	private:
+		using THIS = UATX<TX_>;
+
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -189,8 +196,8 @@ namespace serial::soft
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission
 		 */
-		template<uint8_t SIZE_TX> 
-		explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true} {}
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
+		: AbstractUATX{output, THIS::on_put, this}, tx_{gpio::PinMode::OUTPUT, true} {}
 
 		/**
 		 * Enable the transmitter. 
@@ -222,18 +229,16 @@ namespace serial::soft
 			// - enable pushing again?
 		}
 
-	protected:
-		/// @cond notdocumented
-		void on_put() override
-		{
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow(errors());
-			char value;
-			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
-		}
-		/// @endcond
-
 	private:
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS*) arg);
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			target.check_overflow(target.errors());
+			char value;
+			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+		}
+
 		Parity parity_;
 		typename gpio::FastPinType<TX>::TYPE tx_;
 	};
@@ -413,6 +418,9 @@ namespace serial::soft
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::ExternalInterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
+	private:
+		using THIS = UART<board::ExternalInterruptPin, RX_, TX_>;
+
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -440,7 +448,8 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		: AbstractUARX{input}, AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
+		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
+			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -478,18 +487,16 @@ namespace serial::soft
 			int_->disable();
 		}
 
-	protected:
-		/// @cond notdocumented
-		void on_put() override
-		{
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow(errors());
-			char value;
-			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
-		}
-		/// @endcond
-
 	private:
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS*) arg);
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			target.check_overflow(target.errors());
+			char value;
+			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+		}
+
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());
@@ -587,6 +594,9 @@ namespace serial::soft
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::InterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
+	private:
+		using THIS = UART<board::InterruptPin, RX_, TX_>;
+
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -614,7 +624,8 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		: AbstractUARX{input}, AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
+		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
+			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -652,18 +663,16 @@ namespace serial::soft
 			pci_->template disable_pin<RX_>();
 		}
 
-	protected:
-		/// @cond notdocumented
-		void on_put() override
-		{
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow(errors());
-			char value;
-			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
-		}
-		/// @endcond
-
 	private:
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS*) arg);
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			target.check_overflow(target.errors());
+			char value;
+			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+		}
+
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());
