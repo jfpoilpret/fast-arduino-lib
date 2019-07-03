@@ -21,19 +21,23 @@ Naming
 ------
 Throughout FastArduino library code, the following naming conventions apply:
 
-1. Namespaces: always written in `lower_case` (possibly including underscores to separate different words); one exception to this rule is when a namespace is defined to be used like an "extensible" `enum class` and thus contains only `static const` fields, all of the same type, e.g. `board::PWMPin`.
+1. Namespaces: always written in `lower_case` (possibly including underscores to separate different words); one exception to this rule is when a namespace is defined to be used like an "extensible" `enum class` and thus contains only `static const` fields, all of the same type, e.g. `events::Type`.
 2. Template arguments: always written in `UPPER_CASE`, often ending with an underscore (`UPPER_CASE_`).
-3. Macros: always written in `UPPER_CASE` for "public" macros (part of FastArduino official API) or `UPPER_CASE_` for internal macros (not part of the API)
-4. struct, enum, union, class types: always written as `CamelCase`, possibly with a trailing underscore for internal (not public) types.
-5. enum values: always `UPPER_CASE`
+3. Macros: always written in `UPPER_CASE` for "public" macros (part of FastArduino official API) or `UPPER_CASE_` for internal macros (not part of the API). The only exception to this rule is `synchronized` which is defined in lowercase because it is used like a language keyword.
+4. struct, enum, union, class types: always written as `CamelCase`, possibly with a trailing underscore for internal (not public) types. If the name refers to some acronym, it can be left all uppercase, e.g. `PWMPin` or `USART`.
+5. enum values: always `UPPER_CASE`. 
 6. Constant values (e.g. `static const...`): written in `UPPER_CASE` or `UPPER_CASE_`.
 7. functions, methods: always written in `lower_case`; uppercase letters may be used for official measurement units though (e.g. `voltage_mV()`); when one function exists in 2 flavours, one `synchronized` and one not `synchronized`, then the not synchronized flavour bears the same name as the synchronized function, with a trailing undercore added, e.g. `Queue::push()` and `Queue::push_()`.
 8. `private` fields of a class: always written as `lower_case_` with a trailing underscore; uppercase letters may be used for official measurement units though.
 9. Local variables are always written as `lower_case`; uppercase letters may be used for official measurement units though.
-10. `static constexpr` functions: not yet defined; hesitating between `UPPER_CASE` and `lower_case`, currently FastArduino has methods with both conventions.
-11. Types alias with `using` should always be `UPPER_CASE`.
+10. `static constexpr` functions: there is no constraining rule here. These functions may be considered (and named) like "normal" functions,
+or `UPPER_CASE` like macros. FastArduino has methods with both conventions.
+11. Types alias with `using` should always be `UPPER_CASE`. 
 
-Currently, FastArduino has no automatic check of these guidelines, hence control must be performed manually before merging Pull Requests.
+Exceptions to the rules above are allowed for definitions implementing API equivalent to C++ standards (like `ostream`).
+
+Currently, FastArduino has no automatic check of all these guidelines, hence control must be performed manually before merging Pull Requests.
+Do note however that FastArduino uses [SonarQube](https://sonarcloud.io/dashboard?id=FastArduino-UNO) for checking some of these rules.
 
 Coding Style
 ------------
