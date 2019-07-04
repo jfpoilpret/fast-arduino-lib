@@ -49,7 +49,7 @@ namespace streams
 
 		template<uint8_t SIZE>
 		explicit ostreambuf(char (&buffer)[SIZE], CALLBACK callback = nullptr, void* arg = nullptr)
-		: QUEUE{buffer}, overflow_{false}, on_put_callback{callback}, arg_callback{arg} {}
+		: QUEUE{buffer}, overflow_{false}, on_put_callback_{callback}, arg_callback_{arg} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -179,13 +179,13 @@ namespace streams
 	private:
 		void on_put()
 		{
-			if (on_put_callback != nullptr)
-				on_put_callback(arg_callback);
+			if (on_put_callback_ != nullptr)
+				on_put_callback_(arg_callback_);
 		}
 
 		bool overflow_;
-		const CALLBACK on_put_callback;
-		void* const arg_callback;
+		const CALLBACK on_put_callback_;
+		void* const arg_callback_;
 
 		friend class ios_base;
 		friend class ostream;
