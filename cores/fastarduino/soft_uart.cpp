@@ -34,11 +34,13 @@ static constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cyc
 	return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
 }
 
+//TODO possible code size optimizations by using a static inline constexpr to calculate all values?
 void serial::soft::AbstractUARX::compute_times(uint32_t rate, bool has_parity, UNUSED StopBits stop_bits)
 {
 	// Calculate timing for RX in number of cycles
 	uint16_t bit_time = uint16_t(F_CPU / rate);
 
+	//TODO rework timing count here (heavy refactoring)
 	// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2()
 	// 87 cycles (+4N delay) elapse until start bit is detected from PCI interrupt and 1st bit is sampled:
 	// - 3 cycles to generate the PCI interrupt
