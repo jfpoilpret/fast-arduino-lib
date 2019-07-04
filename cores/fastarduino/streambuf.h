@@ -131,6 +131,17 @@ namespace streams
 		}
 
 		/**
+		 * Indicate if a buffer overflow has occurred since last time `pubsync()` or
+		 * `reset_overflow()` was called. 
+		 * @sa pubsync()
+		 * @sa reset_overflow()
+		 */
+		bool overflow() const
+		{
+			return overflow_;
+		}
+
+		/**
 		 * Return the underlying queue.
 		 * Normally you will not need this method.
 		 */
@@ -154,17 +165,6 @@ namespace streams
 		{
 			if (!push(c)) overflow_ = true;
 			if (call_on_put) on_put();
-		}
-
-		/**
-		 * Indicate if a buffer overflow has occurred since last time `pubsync()` or
-		 * `reset_overflow()` was called. 
-		 * @sa pubsync()
-		 * @sa reset_overflow()
-		 */
-		bool overflow() const
-		{
-			return overflow_;
 		}
 
 		/**

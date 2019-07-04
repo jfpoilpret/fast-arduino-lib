@@ -124,7 +124,7 @@ namespace serial::hard
 		}
 	};
 
-	class AbstractUATX : public AbstractUART, private streams::ostreambuf
+	class AbstractUATX : public AbstractUART
 	{
 	public:
 		/**
@@ -133,7 +133,7 @@ namespace serial::hard
 		 */
 		streams::ostream out()
 		{
-			return streams::ostream(*this);
+			return streams::ostream(obuf_);
 		}
 
 	protected:
@@ -141,7 +141,7 @@ namespace serial::hard
 
 		template<uint8_t SIZE_TX> 
 		AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
-		: streams::ostreambuf{output, callback, arg}, transmitting_{false} {}
+		: obuf_{output, callback, arg}, transmitting_{false} {}
 
 		template<board::USART USART>
 		void data_register_empty(Errors& errors)
@@ -149,7 +149,7 @@ namespace serial::hard
 			using TRAIT = board_traits::USART_trait<USART>;
 			errors.has_errors = 0;
 			char value;
-			if (queue().pull_(value))
+			if (obuf_.queue().pull_(value))
 				TRAIT::UDR = value;
 			else
 			{
@@ -163,7 +163,7 @@ namespace serial::hard
 		void on_put(Errors& errors)
 		{
 			using TRAIT = board_traits::USART_trait<USART>;
-			errors.queue_overflow = ostreambuf::overflow();
+			errors.queue_overflow = obuf_.overflow();
 			synchronized
 			{
 				// Check if TX is not currently active, if so, activate it
@@ -171,7 +171,7 @@ namespace serial::hard
 				{
 					// Yes, trigger TX
 					char value;
-					if (queue().pull_(value))
+					if (obuf_.queue().pull_(value))
 					{
 						// Set UDR interrupt to be notified when we can send the next character
 						TRAIT::UCSRB |= TRAIT::UDRIE_MASK;
@@ -183,6 +183,7 @@ namespace serial::hard
 		}
 
 	private:
+		streams::ostreambuf obuf_;
 		bool transmitting_;
 	};
 	/// @endcond
@@ -262,7 +263,7 @@ namespace serial::hard
 	};
 
 	/// @cond notdocumented
-	class AbstractUARX : public AbstractUART, private streams::istreambuf
+	class AbstractUARX : public AbstractUART
 	{
 	public:
 		/**
@@ -271,11 +272,11 @@ namespace serial::hard
 		 */
 		streams::istream in()
 		{
-			return streams::istream(*this);
+			return streams::istream(ibuf_);
 		}
 
 	protected:
-		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : streams::istreambuf{input} {}
+		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
 
 		template<board::USART USART>
 		void data_receive_complete(Errors& errors)
@@ -286,8 +287,11 @@ namespace serial::hard
 			errors.frame_error = status & TRAIT::FE_MASK;
 			errors.parity_error = status & TRAIT::UPE_MASK;
 			char value = TRAIT::UDR;
-			errors.queue_overflow = !queue().push_(value);
+			errors.queue_overflow = !ibuf_.queue().push_(value);
 		}
+
+	private:
+		streams::istreambuf ibuf_;
 	};
 	/// @endcond
 

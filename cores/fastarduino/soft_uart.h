@@ -91,7 +91,7 @@
 namespace serial::soft
 {
 	/// @cond notdocumented
-	class AbstractUATX : private streams::ostreambuf
+	class AbstractUATX
 	{
 	public:
 		/**
@@ -108,19 +108,19 @@ namespace serial::soft
 
 		template<uint8_t SIZE_TX> 
 		explicit AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
-		: ostreambuf{output, callback, arg} {}
+		: obuf_{output, callback, arg} {}
 
 		void compute_times(uint32_t rate, StopBits stop_bits);
 		static Parity calculate_parity(Parity parity, uint8_t value);
 
 		streams::ostreambuf& out_()
 		{
-			return (streams::ostreambuf&) *this;
+			return obuf_;
 		}
 
 		void check_overflow(Errors& errors)
 		{
-			errors.queue_overflow = overflow();
+			errors.queue_overflow = obuf_.overflow();
 		}
 
 		template<board::DigitalPin DPIN> void write(Parity parity, uint8_t value)
@@ -128,7 +128,12 @@ namespace serial::soft
 			synchronized write_<DPIN>(parity, value);
 		}
 		template<board::DigitalPin DPIN> void write_(Parity parity, uint8_t value);
-	
+
+	private:
+		// NOTE declaring obuf_ first instead of last optimizes code size (4 bytes)
+		streams::ostreambuf obuf_;
+
+	protected:
 		// Various timing constants based on rate
 		uint16_t interbit_tx_time_;
 		uint16_t start_bit_tx_time_;
@@ -244,7 +249,7 @@ namespace serial::soft
 	};
 
 	/// @cond notdocumented
-	class AbstractUARX : private streams::istreambuf
+	class AbstractUARX
 	{
 	public:
 		/**
@@ -257,17 +262,22 @@ namespace serial::soft
 		}
 
 	protected:
-		template<uint8_t SIZE_RX> explicit AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input} {}
+		template<uint8_t SIZE_RX> explicit AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
 
 		streams::istreambuf& in_()
 		{
-			return (streams::istreambuf&) *this;
+			return ibuf_;
 		}
 
 		void compute_times(uint32_t rate, bool has_parity, StopBits stop_bits);
 
 		template<board::DigitalPin DPIN> void pin_change(Parity parity, Errors& errors);
 
+	private:
+		// NOTE declaring ibuf_ first instead of last optimizes code size (2 bytes)
+		streams::istreambuf ibuf_;
+
+	protected:
 		// Various timing constants based on rate
 		uint16_t interbit_rx_time_;
 		uint16_t start_bit_rx_time_;
