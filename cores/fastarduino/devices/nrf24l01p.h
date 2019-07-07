@@ -75,7 +75,7 @@ namespace devices::rf
 	 * 
 	 * @sa IRQ_NRF24L01
 	 */
-	template<board::DigitalPin CSN, board::DigitalPin CE> class NRF24L01 : private spi::SPIDevice<CSN>
+	template<board::DigitalPin CSN, board::DigitalPin CE> class NRF24L01 : public spi::SPIDevice<CSN>
 	{
 	public:
 		/** Broadcast device address. */

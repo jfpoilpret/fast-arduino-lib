@@ -37,6 +37,9 @@ namespace streams
 	 * @param buffer the original ring buffer containing all pushed content; once
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
+	 * @param callback a pointer to function that is called back when data is pushed
+	 * to this `ostreambuf`.
+	 * @param arg any pointer value that will be passed to @p callback
 	 */
 	class ostreambuf : private containers::Queue<char, char>
 	{
@@ -44,7 +47,11 @@ namespace streams
 		using QUEUE = Queue<char, char>;
 
 	public:
-		template<uint8_t SIZE> explicit ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer}, overflow_{false} {}
+		using CALLBACK = void (*)(void*);
+
+		template<uint8_t SIZE>
+		explicit ostreambuf(char (&buffer)[SIZE], CALLBACK callback = nullptr, void* arg = nullptr)
+		: QUEUE{buffer}, overflow_{false}, on_put_callback_{callback}, arg_callback_{arg} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -126,6 +133,17 @@ namespace streams
 		}
 
 		/**
+		 * Indicate if a buffer overflow has occurred since last time `pubsync()` or
+		 * `reset_overflow()` was called. 
+		 * @sa pubsync()
+		 * @sa reset_overflow()
+		 */
+		bool overflow() const
+		{
+			return overflow_;
+		}
+
+		/**
 		 * Return the underlying queue.
 		 * Normally you will not need this method.
 		 */
@@ -135,14 +153,6 @@ namespace streams
 		}
 
 	protected:
-		/**
-		 * Callback method called when new content has been added to the buffer.
-		 * This can be overridden by a subclass to trigger interrupt-driven
-		 * transmission of buffer data.
-		 * Default implementation does nothing.
-		 */
-		virtual void on_put() {}
-
 		/**
 		 * Append a character to the buffer.
 		 * If the buffer is full, then `overflow()` flag will be set.
@@ -160,17 +170,6 @@ namespace streams
 		}
 
 		/**
-		 * Indicate if a buffer overflow has occurred since last time `pubsync()` or
-		 * `reset_overflow()` was called. 
-		 * @sa pubsync()
-		 * @sa reset_overflow()
-		 */
-		bool overflow() const
-		{
-			return overflow_;
-		}
-
-		/**
 		 * Reset the overflow flag.
 		 * @sa overflow()
 		 */
@@ -180,7 +179,15 @@ namespace streams
 		}
 
 	private:
+		void on_put()
+		{
+			if (on_put_callback_ != nullptr)
+				on_put_callback_(arg_callback_);
+		}
+
 		bool overflow_;
+		const CALLBACK on_put_callback_;
+		void* const arg_callback_;
 
 		friend class ios_base;
 		friend class ostream;

@@ -85,13 +85,17 @@
  * Defines API types used by software UART features.
  * This API is available to all MCU, even those that do not have hardware UART,
  * hence even ATtiny MCU are supported.
+ * IMPORTANT! Note that software-emulated UART cannot be as fast as hardware UART,
+ * for that reason a maximum rate of 115'200bps is supported, preferrably with 2 
+ * stop bits (depending on the sending device, UART reception may lose bits if only
+ * one stop bit is used).
  * 
  * @sa serial::hard
  */
 namespace serial::soft
 {
 	/// @cond notdocumented
-	class AbstractUATX : private streams::ostreambuf
+	class AbstractUATX
 	{
 	public:
 		/**
@@ -104,19 +108,23 @@ namespace serial::soft
 		}
 
 	protected:
-		template<uint8_t SIZE_TX> explicit AbstractUATX(char (&output)[SIZE_TX]) : ostreambuf{output} {}
+		using CALLBACK = streams::ostreambuf::CALLBACK;
+
+		template<uint8_t SIZE_TX> 
+		explicit AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
+		: obuf_{output, callback, arg} {}
 
 		void compute_times(uint32_t rate, StopBits stop_bits);
 		static Parity calculate_parity(Parity parity, uint8_t value);
 
 		streams::ostreambuf& out_()
 		{
-			return (streams::ostreambuf&) *this;
+			return obuf_;
 		}
 
 		void check_overflow(Errors& errors)
 		{
-			errors.queue_overflow = overflow();
+			errors.queue_overflow = obuf_.overflow();
 		}
 
 		template<board::DigitalPin DPIN> void write(Parity parity, uint8_t value)
@@ -124,7 +132,12 @@ namespace serial::soft
 			synchronized write_<DPIN>(parity, value);
 		}
 		template<board::DigitalPin DPIN> void write_(Parity parity, uint8_t value);
-	
+
+	private:
+		// NOTE declaring obuf_ first instead of last optimizes code size (4 bytes)
+		streams::ostreambuf obuf_;
+
+	protected:
 		// Various timing constants based on rate
 		uint16_t interbit_tx_time_;
 		uint16_t start_bit_tx_time_;
@@ -146,11 +159,7 @@ namespace serial::soft
 			if (value & 0x01)
 				TX::set();
 			else
-			{
-				// Additional NOP to ensure set/clear are executed exactly at the same time (cycle)
-				asm volatile("NOP");
 				TX::clear();
-			}
 			value >>= 1;
 			_delay_loop_2(interbit_tx_time_);
 		}
@@ -179,6 +188,9 @@ namespace serial::soft
 	 */
 	template<board::DigitalPin TX_> class UATX : public AbstractUATX, public UARTErrors
 	{
+	private:
+		using THIS = UATX<TX_>;
+
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -189,8 +201,8 @@ namespace serial::soft
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission
 		 */
-		template<uint8_t SIZE_TX> 
-		explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true} {}
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
+		: AbstractUATX{output, THIS::on_put, this}, tx_{gpio::PinMode::OUTPUT, true} {}
 
 		/**
 		 * Enable the transmitter. 
@@ -222,24 +234,22 @@ namespace serial::soft
 			// - enable pushing again?
 		}
 
-	protected:
-		/// @cond notdocumented
-		void on_put() override
-		{
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow(errors());
-			char value;
-			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
-		}
-		/// @endcond
-
 	private:
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS*) arg);
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			target.check_overflow(target.errors());
+			char value;
+			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+		}
+
 		Parity parity_;
 		typename gpio::FastPinType<TX>::TYPE tx_;
 	};
 
 	/// @cond notdocumented
-	class AbstractUARX : private streams::istreambuf
+	class AbstractUARX
 	{
 	public:
 		/**
@@ -252,23 +262,25 @@ namespace serial::soft
 		}
 
 	protected:
-		template<uint8_t SIZE_RX> explicit AbstractUARX(char (&input)[SIZE_RX]) : istreambuf{input} {}
+		template<uint8_t SIZE_RX> explicit AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
 
 		streams::istreambuf& in_()
 		{
-			return (streams::istreambuf&) *this;
+			return ibuf_;
 		}
 
 		void compute_times(uint32_t rate, bool has_parity, StopBits stop_bits);
 
 		template<board::DigitalPin DPIN> void pin_change(Parity parity, Errors& errors);
 
+	private:
+		// NOTE declaring ibuf_ first instead of last optimizes code size (2 bytes)
+		streams::istreambuf ibuf_;
+
+	protected:
 		// Various timing constants based on rate
 		uint16_t interbit_rx_time_;
 		uint16_t start_bit_rx_time_;
-		uint16_t parity_bit_rx_time_;
-		uint16_t stop_bit_rx_time_push_;
-		uint16_t stop_bit_rx_time_no_push_;
 	};
 
 	template<board::DigitalPin DPIN> void AbstractUARX::pin_change(Parity parity, Errors& errors)
@@ -282,44 +294,33 @@ namespace serial::soft
 		// Wait for start bit to finish
 		_delay_loop_2(start_bit_rx_time_);
 		// Read first 7 bits
-		for (uint8_t i = 0; i < 7; ++i)
+		for (uint8_t i = 0; i < 8; ++i)
 		{
 			if (RX::value())
 			{
 				value |= 0x80;
 				odd = !odd;
 			}
-			value >>= 1;
+			if (i < 7)
+				value >>= 1;
 			_delay_loop_2(interbit_rx_time_);
-		}
-		// Read last bit
-		if (RX::value())
-		{
-			value |= 0x80;
-			odd = !odd;
 		}
 
 		if (parity != Parity::NONE)
 		{
-			// Wait for parity bit
-			_delay_loop_2(parity_bit_rx_time_);
+			// Check parity bit
 			bool parity_bit = (parity == Parity::ODD ? !odd : odd);
 			// Check parity bit
 			errors.parity_error = (RX::value() != parity_bit);
+			_delay_loop_2(interbit_rx_time_);
 		}
 
+		// Check we receive a stop bit
+		if (!RX::value())
+			errors.frame_error = true;
 		// Push value if no error
 		if (errors.has_errors == 0)
-		{
 			errors.queue_overflow = !in_().queue().push_(char(value));
-			// Wait for 1st stop bit
-			_delay_loop_2(stop_bit_rx_time_push_);
-		}
-		else
-		{
-			// Wait for 1st stop bit
-			_delay_loop_2(stop_bit_rx_time_no_push_);
-		}
 	}
 	/// @endcond
 
@@ -413,6 +414,9 @@ namespace serial::soft
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::ExternalInterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
+	private:
+		using THIS = UART<board::ExternalInterruptPin, RX_, TX_>;
+
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -440,7 +444,8 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		: AbstractUARX{input}, AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
+		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
+			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -478,18 +483,16 @@ namespace serial::soft
 			int_->disable();
 		}
 
-	protected:
-		/// @cond notdocumented
-		void on_put() override
-		{
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow(errors());
-			char value;
-			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
-		}
-		/// @endcond
-
 	private:
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS*) arg);
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			target.check_overflow(target.errors());
+			char value;
+			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+		}
+
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());
@@ -587,6 +590,9 @@ namespace serial::soft
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::InterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
+	private:
+		using THIS = UART<board::InterruptPin, RX_, TX_>;
+
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -614,7 +620,8 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
-		: AbstractUARX{input}, AbstractUATX{output}, tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
+		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
+			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -652,18 +659,16 @@ namespace serial::soft
 			pci_->template disable_pin<RX_>();
 		}
 
-	protected:
-		/// @cond notdocumented
-		void on_put() override
-		{
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
-			check_overflow(errors());
-			char value;
-			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
-		}
-		/// @endcond
-
 	private:
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS*) arg);
+			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
+			target.check_overflow(target.errors());
+			char value;
+			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+		}
+
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());

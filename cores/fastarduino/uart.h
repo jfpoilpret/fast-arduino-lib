@@ -124,7 +124,7 @@ namespace serial::hard
 		}
 	};
 
-	class AbstractUATX : public AbstractUART, private streams::ostreambuf
+	class AbstractUATX : public AbstractUART
 	{
 	public:
 		/**
@@ -133,12 +133,15 @@ namespace serial::hard
 		 */
 		streams::ostream out()
 		{
-			return streams::ostream(*this);
+			return streams::ostream(obuf_);
 		}
 
 	protected:
+		using CALLBACK = streams::ostreambuf::CALLBACK;
+
 		template<uint8_t SIZE_TX> 
-		AbstractUATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output}, transmitting_{false} {}
+		AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
+		: obuf_{output, callback, arg}, transmitting_{false} {}
 
 		template<board::USART USART>
 		void data_register_empty(Errors& errors)
@@ -146,7 +149,7 @@ namespace serial::hard
 			using TRAIT = board_traits::USART_trait<USART>;
 			errors.has_errors = 0;
 			char value;
-			if (queue().pull_(value))
+			if (obuf_.queue().pull_(value))
 				TRAIT::UDR = value;
 			else
 			{
@@ -160,7 +163,7 @@ namespace serial::hard
 		void on_put(Errors& errors)
 		{
 			using TRAIT = board_traits::USART_trait<USART>;
-			errors.queue_overflow = ostreambuf::overflow();
+			errors.queue_overflow = obuf_.overflow();
 			synchronized
 			{
 				// Check if TX is not currently active, if so, activate it
@@ -168,7 +171,7 @@ namespace serial::hard
 				{
 					// Yes, trigger TX
 					char value;
-					if (queue().pull_(value))
+					if (obuf_.queue().pull_(value))
 					{
 						// Set UDR interrupt to be notified when we can send the next character
 						TRAIT::UCSRB |= TRAIT::UDRIE_MASK;
@@ -180,6 +183,7 @@ namespace serial::hard
 		}
 
 	private:
+		streams::ostreambuf obuf_;
 		bool transmitting_;
 	};
 	/// @endcond
@@ -199,6 +203,7 @@ namespace serial::hard
 		static constexpr const board::USART USART = USART_;
 
 	private:
+		using THIS = UATX<USART_>;
 		using TRAIT = board_traits::USART_trait<USART>;
 
 	public:
@@ -210,7 +215,8 @@ namespace serial::hard
 		 * blocking.
 		 * @sa REGISTER_UATX_ISR()
 		 */
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}
+		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX])
+		: AbstractUATX{output, THIS::on_put, this}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -240,16 +246,14 @@ namespace serial::hard
 			synchronized TRAIT::UCSRB = 0;
 		}
 
-	protected:
-		/// @cond notdocumented
-		// Listeners of events on the buffer
-		void on_put() override
-		{
-			AbstractUATX::on_put<USART>(errors());
-		}
-		/// @endcond
-
 	private:
+		// Listeners of events on the buffer
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS *) arg);
+			target.AbstractUATX::on_put<USART>(target.errors());
+		}
+
 		void data_register_empty()
 		{
 			AbstractUATX::data_register_empty<USART>(errors());
@@ -259,7 +263,7 @@ namespace serial::hard
 	};
 
 	/// @cond notdocumented
-	class AbstractUARX : public AbstractUART, private streams::istreambuf
+	class AbstractUARX : public AbstractUART
 	{
 	public:
 		/**
@@ -268,11 +272,11 @@ namespace serial::hard
 		 */
 		streams::istream in()
 		{
-			return streams::istream(*this);
+			return streams::istream(ibuf_);
 		}
 
 	protected:
-		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : streams::istreambuf{input} {}
+		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
 
 		template<board::USART USART>
 		void data_receive_complete(Errors& errors)
@@ -283,8 +287,11 @@ namespace serial::hard
 			errors.frame_error = status & TRAIT::FE_MASK;
 			errors.parity_error = status & TRAIT::UPE_MASK;
 			char value = TRAIT::UDR;
-			errors.queue_overflow = !queue().push_(value);
+			errors.queue_overflow = !ibuf_.queue().push_(value);
 		}
+
+	private:
+		streams::istreambuf ibuf_;
 	};
 	/// @endcond
 
@@ -369,6 +376,7 @@ namespace serial::hard
 		static constexpr const board::USART USART = USART_;
 
 	private:
+		using THIS = UART<USART_>;
 		using TRAIT = board_traits::USART_trait<USART>;
 
 	public:
@@ -387,7 +395,8 @@ namespace serial::hard
 		 * @sa REGISTER_UART_ISR()
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : AbstractUARX{input}, AbstractUATX{output}
+		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) 
+		: AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -417,16 +426,14 @@ namespace serial::hard
 			synchronized TRAIT::UCSRB = 0;
 		}
 
-	protected:
-		/// @cond notdocumented
-		// Listeners of events on the buffer
-		void on_put() override
-		{
-			AbstractUATX::on_put<USART>(errors());
-		}
-		/// @endcond
-
 	private:
+		// Listeners of events on the buffer
+		static void on_put(void* arg)
+		{
+			THIS& target = *((THIS*) arg);
+			target.AbstractUATX::on_put<USART>(target.errors());
+		}
+
 		void data_register_empty()
 		{
 			AbstractUATX::data_register_empty<USART>(errors());
