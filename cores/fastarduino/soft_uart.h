@@ -85,6 +85,10 @@
  * Defines API types used by software UART features.
  * This API is available to all MCU, even those that do not have hardware UART,
  * hence even ATtiny MCU are supported.
+ * IMPORTANT! Note that software-emulated UART cannot be as fast as hardware UART,
+ * for that reason a maximum rate of 115'200bps is supported, preferrably with 2 
+ * stop bits (depending on the sending device, UART reception may lose bits if only
+ * one stop bit is used).
  * 
  * @sa serial::hard
  */
@@ -155,11 +159,7 @@ namespace serial::soft
 			if (value & 0x01)
 				TX::set();
 			else
-			{
-				// Additional NOP to ensure set/clear are executed exactly at the same time (cycle)
-				asm volatile("NOP");
 				TX::clear();
-			}
 			value >>= 1;
 			_delay_loop_2(interbit_tx_time_);
 		}
@@ -281,9 +281,6 @@ namespace serial::soft
 		// Various timing constants based on rate
 		uint16_t interbit_rx_time_;
 		uint16_t start_bit_rx_time_;
-		uint16_t parity_bit_rx_time_;
-		uint16_t stop_bit_rx_time_push_;
-		uint16_t stop_bit_rx_time_no_push_;
 	};
 
 	template<board::DigitalPin DPIN> void AbstractUARX::pin_change(Parity parity, Errors& errors)
@@ -297,44 +294,33 @@ namespace serial::soft
 		// Wait for start bit to finish
 		_delay_loop_2(start_bit_rx_time_);
 		// Read first 7 bits
-		for (uint8_t i = 0; i < 7; ++i)
+		for (uint8_t i = 0; i < 8; ++i)
 		{
 			if (RX::value())
 			{
 				value |= 0x80;
 				odd = !odd;
 			}
-			value >>= 1;
+			if (i < 7)
+				value >>= 1;
 			_delay_loop_2(interbit_rx_time_);
-		}
-		// Read last bit
-		if (RX::value())
-		{
-			value |= 0x80;
-			odd = !odd;
 		}
 
 		if (parity != Parity::NONE)
 		{
-			// Wait for parity bit
-			_delay_loop_2(parity_bit_rx_time_);
+			// Check parity bit
 			bool parity_bit = (parity == Parity::ODD ? !odd : odd);
 			// Check parity bit
 			errors.parity_error = (RX::value() != parity_bit);
+			_delay_loop_2(interbit_rx_time_);
 		}
 
+		// Check we receive a stop bit
+		if (!RX::value())
+			errors.frame_error = true;
 		// Push value if no error
 		if (errors.has_errors == 0)
-		{
 			errors.queue_overflow = !in_().queue().push_(char(value));
-			// Wait for 1st stop bit
-			_delay_loop_2(stop_bit_rx_time_push_);
-		}
-		else
-		{
-			// Wait for 1st stop bit
-			_delay_loop_2(stop_bit_rx_time_no_push_);
-		}
 	}
 	/// @endcond
 
