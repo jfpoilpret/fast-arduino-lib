@@ -26,7 +26,6 @@
 
 namespace streams
 {
-	//TODO update doc (new ctor args)
 	/**
 	 * Output API based on a ring buffer.
 	 * Provides general methods to push characters or strings to the buffer;
@@ -38,6 +37,9 @@ namespace streams
 	 * @param buffer the original ring buffer containing all pushed content; once
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
+	 * @param callback a pointer to function that is called back when data is pushed
+	 * to this `ostreambuf`.
+	 * @param arg any pointer value that will be passed to @p callback
 	 */
 	class ostreambuf : private containers::Queue<char, char>
 	{
