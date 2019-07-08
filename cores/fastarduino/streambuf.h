@@ -23,6 +23,7 @@
 
 #include "queue.h"
 #include "flash.h"
+#include "virtual.h"
 
 namespace streams
 {
@@ -47,11 +48,11 @@ namespace streams
 		using QUEUE = Queue<char, char>;
 
 	public:
-		using CALLBACK = void (*)(void*);
+		using CALLBACK = virtual_support::VirtualMethod::METHOD;
 
 		template<uint8_t SIZE>
 		explicit ostreambuf(char (&buffer)[SIZE], CALLBACK callback = nullptr, void* arg = nullptr)
-		: QUEUE{buffer}, overflow_{false}, on_put_callback_{callback}, arg_callback_{arg} {}
+		: QUEUE{buffer}, overflow_{false}, on_put_callback_{callback, arg} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -181,13 +182,11 @@ namespace streams
 	private:
 		void on_put()
 		{
-			if (on_put_callback_ != nullptr)
-				on_put_callback_(arg_callback_);
+			on_put_callback_();
 		}
 
 		bool overflow_;
-		const CALLBACK on_put_callback_;
-		void* const arg_callback_;
+		const virtual_support::VirtualMethod on_put_callback_;
 
 		friend class ios_base;
 		friend class ostream;
