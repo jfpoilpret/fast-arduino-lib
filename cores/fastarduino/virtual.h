@@ -35,14 +35,58 @@ namespace virtual_support
 {
 	//TODO add support for extra args (variadic template possible?)
 
-	//TODO DOC!
+	/**
+	 * Holder of a "virtual method".
+	 * Typical use:
+	 * @code
+	 * class A {
+	 * public:
+	 *     A(VirtualMethod::METHOD callback, void* arg) : callback_{callback, arg} {}
+	 * 
+	 *     void call_back() {
+	 *         callback_();
+	 *     }
+	 * private:
+	 *     VirtualMethod callback_;
+	 * }
+	 * 
+	 * class B {
+	 * public:
+	 *     B() : a{B::callback, this} {}
+	 * private:
+	 *     // this is the actual "virtual" method
+	 *     void do_something() {
+	 *         ...
+	 *     }
+	 * 
+	 *     // this method is in hcarge of dispatching to the actual "virtual" method
+	 *     static void callback(void* arg) {
+	 *         ((B*) arg)->do_something();
+	 *     }
+	 * 
+	 *     A a;
+	 * }
+	 * @endcode
+	 */
 	class VirtualMethod
 	{
 	public:
+		/**
+		 * The type of function that will get the call.
+		 */
 		using METHOD = void (*)(void*);
 
+		/**
+		 * Create a `VirtualMethod` with the given arguments.
+		 * @param method the method that will receive the call and shall dispatch
+		 * to the proper method of the proper object, which pointer is given by @p arg
+		 * @param arg a pointer to the object that should receive the actual dispatch
+		 */
 		explicit VirtualMethod(METHOD method = nullptr, void* arg = nullptr): method_{method}, arg_{arg} {}
 
+		/**
+		 * Call dispatching method.
+		 */
 		void operator()() const
 		{
 			if (method_ != nullptr)
