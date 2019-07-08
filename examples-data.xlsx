@@ -13,21 +13,21 @@ ExternalInterrupt1	LED switch based on button (INT ISR, power down)	264	2	348	2	
 ExternalInterrupt2	LED switch based on button (empty ISR, power down)	194	0	278	0	322	0	122	0	118	0
 ExternalInterrupt3	LED switch based on 2 buttons (2 INT ISR, power down)	324	2	408	2	466	2				
 UartApp1	HW UART check with formatted output	1892	156	1976	156	2040	156				
-UartApp2	SW UARX/UATX with PCI	1154	130	1240	130	1290	130	1076	130	1072	130
-UartApp3	SW UART with PCI	1146	130	1216	130	1282	130	1068	130	1064	130
-UartApp4	SW UART with INT	1138	130	1218	130	1270	130	1072	130		
+UartApp2	SW UARX/UATX with PCI	1134	130	1220	130	1270	130	1056	130	1052	130
+UartApp3	SW UART with PCI	1128	130	1198	130	1264	130	1050	130	1046	130
+UartApp4	SW UART with INT	1120	130	1200	130	1252	130	1054	130		
 UartApp5	HW UATX with flash string output	804	94			944	94				
 UartApp6	HW UART with iostream conversion checks	12674	162			12976	162				
-Flash1	Display (UATX) strings and structures from Flash	2100	74	2184	74	2240	74	2020	72		
-InputCapture1	Measure button switch duration through timer ICP (UATX)	2414	76	2498	76	2592	76	2326	42		
+Flash1	Display (UATX) strings and structures from Flash	2100	74	2184	74	2240	74	2018	72		
+InputCapture1	Measure button switch duration through timer ICP (UATX)	2414	76	2498	76	2592	76	2324	42		
 RTTApp1b	Check all timers with RTT to blink a LED based on delay	806	6	900	6	1564	12	522	4	528	4
 RTTApp2	LED blinker based on RTT delay	374	2	458	2	510	2	300	2	304	2
-RTTApp3	Display (UART) RTT microseconds	1990	92	2074	92	2142	92	1954	90	1958	90
+RTTApp3	Display (UART) RTT microseconds	1990	92	2074	92	2142	92	1952	90	1956	90
 RTTApp4	LED blinker based on RTTEventCallback (ISR)	1120	53	1204	53	1274	53	1046	53	1048	53
 TimerApp3	LED blinker based on CTC Timer (ISR)	252	2	336	2	388	2	166	2	158	2
 TimerApp4	LED blinker with dimmer based on 2 CTC Timers (2 ISR)	400	4	484	4	542	4	300	4	308	4
 TimerTinyX5	LEDs blinker with ATtinyX5 timer mode specificities									406	0
-AnalogPin1	Display (UATX) analog value/voltage	1984	92	2068	92	2128	92	1864	90	1864	90
+AnalogPin1	Display (UATX) analog value/voltage	1984	92	2068	92	2128	92	1862	90	1862	90
 AnalogPin2	Display analog input on 8 LEDs	198	0	282	0	326	0	122	0		
 ALLPWM	Dim LEDs connected to all available PWM pins of target MCU	970	0	1162	0	3030	0	532	0	358	0
 PWM1	Dim 1 LED with a pot through 8bits PWM	236	0	320	0	364	0	146	0	144	0
@@ -40,21 +40,21 @@ EventApp3	8 LEDs chaser: jobs scheduler, watchdog, IOPort	1088	51	1172	51	1242	5
 EventApp4	8 LEDs chaser: jobs scheduler, watchdog (power down), IOPort	1100	52	1184	52	1254	52	1026	52		
 EventApp5	LED blinker triggered and configured by buttons-generated events	538	2								
 EventApp6	LED blinker handled by watchdog-generated events	1072	51	1156	51	1226	51	998	51	994	51
-Eeprom1	Blocking EEPROM read/writes (UATX)	2374	104	2458	104	2514	104	2294	102	2290	102
-Eeprom2	Asynchronous EEPROM writes (UATX)	3248	344	3316	344	3398	344	2978	314		
-Eeprom3	Asynchronous EEPROM writes with callback (UATX)	3466	380	3534	380	3616	380	3186	350		
-Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)	3190	162	3274	162	3336	162	3110	160		
-IOStreams1	Check ostream (SW UATX)							3062	64		
+Eeprom1	Blocking EEPROM read/writes (UATX)	2374	104	2458	104	2514	104	2292	102	2288	102
+Eeprom2	Asynchronous EEPROM writes (UATX)	3248	344	3316	344	3398	344	2976	314		
+Eeprom3	Asynchronous EEPROM writes with callback (UATX)	3466	380	3534	380	3616	380	3184	350		
+Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)	3190	162	3274	162	3336	162	3108	160		
+IOStreams1	Check ostream (SW UATX)							3060	64		
 IOStreams2	Check real Vs. null ostream	5708	94	5792	94	5912	94	5646	94	5642	94
 IOStreams3	Check ostream error handling (UART)	3574	184								
 QueueCheck	Unit Tests of queue container	3254	330								
 LinkedListCheck	Unit Tests of linked list container	5980	463								
-AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3262	94	3346	94	3416	94	3360	99		
-AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	3378	94	3462	94	3536	94	3486	99		
-DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	2372	168	2456	168	2516	168	2430	166	2426	166
-DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	3088	76	3172	76	3232	76	3190	74	3186	74
-Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	6760	94	6844	94	6986	94	6914	99		
-Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	2748	96	2832	96	2910	96	2880	101		
+AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3262	94	3346	94	3416	94	3358	99		
+AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	3378	94	3462	94	3536	94	3484	99		
+DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	2372	168	2456	168	2516	168	2428	166	2424	166
+DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	3088	76	3172	76	3232	76	3188	74	3184	74
+Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	6760	94	6844	94	6986	94	6912	99		
+Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	2748	96	2832	96	2910	96	2878	101		
 MultiIO0	Direct MCP23017 command and trace (UATX) for testing chip (i2c)	2312	180			2456	180				
 MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	972	8	1056	8	1104	8	1048	8	1044	8
 MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1032	8	1116	8	1164	8	1132	8	1128	8
@@ -64,14 +64,14 @@ Servo1	Servo controlled by a pot through 8bits pulse timer	646	2	730	2	782	2	562
 Servo2	Servo controlled by a pot through 16bits pulse timer	540	0	624	0	668	0	428	0		
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4028	224	4162	224	4362	224	1702	8	1272	6
 RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)	4056	224	4190	224	4390	224	1726	8		
-WinBond	Trace (UATX) WinBond flash chip read/writes (spi)	3294	330	3378	330	3506	330	3204	200	3200	200
-Sonar1	Display (UATX) sonar range meaures in blocking mode	2380	76	2464	76	2528	76	2302	74		
-Sonar2	Display (UATX) sonar range meaures in INT mode	2514	78	2660	78	2732	78	2510	76		
-Sonar3	Display (UATX) sonar range meaures in PCINT mode	2526	78	2672	78	2744	78	2514	76		
-Sonar4	Display (UATX) range meaures in PCINT mode from 2 distinct sonars	2886	80	2970	80	3038	80	2834	78		
-Sonar5	Display (UATX) range meaures in PCINT mode from 2 sonars sharing trigger	2878	80	2962	80	3030	80	2826	78		
-Sonar6	Display (UATX) sonar range meaures in PCINT mode with PCI callback	2706	80	2790	80	2862	80	2618	78		
-Sonar7	Display (UATX) sonar range meaures in PCINT mode with PCI/TIMEOUT callback	2846	80	2930	80	3002	80	2766	78		
+WinBond	Trace (UATX) WinBond flash chip read/writes (spi)	3294	330	3378	330	3506	330	3202	200	3198	200
+Sonar1	Display (UATX) sonar range meaures in blocking mode	2380	76	2464	76	2528	76	2300	74		
+Sonar2	Display (UATX) sonar range meaures in INT mode	2514	78	2660	78	2732	78	2508	76		
+Sonar3	Display (UATX) sonar range meaures in PCINT mode	2526	78	2672	78	2744	78	2512	76		
+Sonar4	Display (UATX) range meaures in PCINT mode from 2 distinct sonars	2886	80	2970	80	3038	80	2832	78		
+Sonar5	Display (UATX) range meaures in PCINT mode from 2 sonars sharing trigger	2878	80	2962	80	3030	80	2824	78		
+Sonar6	Display (UATX) sonar range meaures in PCINT mode with PCI callback	2706	80	2790	80	2862	80	2616	78		
+Sonar7	Display (UATX) sonar range meaures in PCINT mode with PCI/TIMEOUT callback	2846	80	2930	80	3002	80	2764	78		
 Sonar10	Light LEDS based on multiple sonars alarms with callbacks	1954	10								
 Sonar11	Light LEDS based on auto-trigger multiple sonars alarms with callbacks	1950	10								
 tones1	Tone player from SRAM	802	250								
