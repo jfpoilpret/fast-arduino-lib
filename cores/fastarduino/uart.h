@@ -143,6 +143,11 @@ namespace serial::hard
 		AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
 		: obuf_{output, callback, arg}, transmitting_{false} {}
 
+		streams::ostreambuf& out_()
+		{
+			return obuf_;
+		}
+
 		template<board::USART USART>
 		void data_register_empty(Errors& errors)
 		{
@@ -234,6 +239,7 @@ namespace serial::hard
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			AbstractUART::begin_<USART>(rate, parity, stop_bits, false, true);
+			out_().queue().unlock();
 		}
 
 		/**
@@ -241,8 +247,22 @@ namespace serial::hard
 		 * Once called, it is possible to re-enable transmission again by
 		 * calling `begin()`.
 		 */
-		void end()
+		void end(BufferHandling buffer_handling = BufferHandling::CLEAR_BUFFER)
 		{
+			out_().queue().lock();
+			switch (buffer_handling)
+			{
+				case BufferHandling::CLEAR_BUFFER:
+				out_().queue().clear();
+				break;
+
+				case BufferHandling::FLUSH_BUFFER:
+				out_().pubsync();
+				break;
+
+				case BufferHandling::KEEP_BUFFER:
+				break;
+			}
 			synchronized TRAIT::UCSRB = 0;
 		}
 

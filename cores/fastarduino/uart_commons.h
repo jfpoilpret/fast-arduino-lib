@@ -52,6 +52,14 @@ namespace serial
 		TWO = 2
 	};
 
+	//TODO DOCS
+	enum class BufferHandling : uint8_t
+	{
+		CLEAR_BUFFER = 0,
+		FLUSH_BUFFER,
+		KEEP_BUFFER
+	};
+
 	/// @cond notdocumented
 	union Errors
 	{
