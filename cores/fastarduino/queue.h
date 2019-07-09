@@ -71,8 +71,40 @@ namespace containers
 		 * @tparam SIZE the number of @p T items that `buffer` can hold; note that,
 		 * for optimization reasons, only `SIZE - 1` items can be held in the buffer.
 		 * @param buffer the buffer used by this queue to store its items
+		 * @param locked when `true`, prevents pushing any data to this queue
 		 */
-		template<uint8_t SIZE> explicit Queue(T (&buffer)[SIZE]) : buffer_{buffer}, size_{SIZE}, head_{0}, tail_{0} {}
+		template<uint8_t SIZE> explicit Queue(T (&buffer)[SIZE], bool locked = false)
+		: buffer_{buffer}, size_{SIZE}, locked_{locked}, head_{0}, tail_{0} {}
+
+		/**
+		 * Lock this queue, ie prevent pushing any data to it.
+		 * @sa unlock()
+		 * @sa is_locked()
+		 */
+		void lock()
+		{
+			locked_ = true;
+		}
+
+		/**
+		 * Unlock this queue, ie allow pushing data to it.
+		 * @sa lock()
+		 * @sa is_locked()
+		 */
+		void unlock()
+		{
+			locked_ = false;
+		}
+
+		/**
+		 * Check if this queue is locked, ie if pushing data to it is disabled.
+		 * @sa lock()
+		 * @sa unlock()
+		 */
+		bool is_locked() const
+		{
+			return locked_;
+		}
 
 		/**
 		 * Push @p item to the end of this queue, provided there is still available
@@ -443,6 +475,7 @@ namespace containers
 	private:
 		T* const buffer_;
 		const uint8_t size_;
+		bool locked_;
 		volatile uint8_t head_;
 		volatile uint8_t tail_;
 	};
@@ -486,7 +519,7 @@ namespace containers
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::push_(TREF item)
 	{
-		if (full_()) return false;
+		if (locked_ || full_()) return false;
 		buffer_[tail_] = item;
 		++tail_;
 		if (tail_ == size_) tail_ = 0;
