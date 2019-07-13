@@ -52,7 +52,7 @@ namespace streams
 
 		template<uint8_t SIZE>
 		explicit ostreambuf(char (&buffer)[SIZE], CALLBACK callback = nullptr, void* arg = nullptr)
-		: QUEUE{buffer}, overflow_{false}, on_put_callback_{callback, arg} {}
+		: QUEUE{buffer, true}, overflow_{false}, on_put_callback_{callback, arg} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -213,7 +213,7 @@ namespace streams
 		 */
 		static const int EOF = -1;
 
-		template<uint8_t SIZE> explicit istreambuf(char (&buffer)[SIZE]) : QUEUE{buffer} {}
+		template<uint8_t SIZE> explicit istreambuf(char (&buffer)[SIZE]) : QUEUE{buffer, false} {}
 
 		/**
 		 * @return number of available characters in buffer

@@ -61,10 +61,10 @@ namespace streams
 	{
 	public:
 		/**
-		 * Construct a formatted output wrapper of @p stream
-		 * @param stream the output stream to be wrapped
+		 * Construct a formatted output wrapper of @p streambuf
+		 * @param streambuf the output streambuf to be wrapped
 		 */
-		explicit ostream(ostreambuf& stream) : stream_{stream} {}
+		explicit ostream(ostreambuf& streambuf) : streambuf_{streambuf} {}
 
 		ostream& operator=(const ostream&) = delete;
 
@@ -73,7 +73,7 @@ namespace streams
 		 */
 		ostreambuf& rdbuf() const
 		{
-			return stream_;
+			return streambuf_;
 		}
 
 		/**
@@ -85,7 +85,7 @@ namespace streams
 		 */
 		void flush()
 		{
-			stream_.pubsync();
+			streambuf_.pubsync();
 		}
 
 		/**
@@ -97,7 +97,7 @@ namespace streams
 		 */
 		void put(char c)
 		{
-			stream_.sputc(c);
+			streambuf_.sputc(c);
 			check_overflow();
 		}
 
@@ -112,7 +112,7 @@ namespace streams
 		 */
 		void write(const char* content, size_t size)
 		{
-			stream_.sputn(content, size);
+			streambuf_.sputn(content, size);
 			check_overflow();
 		}
 
@@ -126,7 +126,7 @@ namespace streams
 		 */
 		void write(const char* str)
 		{
-			stream_.sputn(str);
+			streambuf_.sputn(str);
 			check_overflow();
 		}
 
@@ -140,7 +140,7 @@ namespace streams
 		 */
 		void write(const flash::FlashStorage* str)
 		{
-			stream_.sputn(str);
+			streambuf_.sputn(str);
 			check_overflow();
 		}
 
@@ -156,7 +156,7 @@ namespace streams
 		 */
 		ostream& operator<<(const void* ptr)
 		{
-			convert(stream_, uint16_t(ptr));
+			convert(streambuf_, uint16_t(ptr));
 			after_insertion();
 			return *this;
 		}
@@ -171,7 +171,7 @@ namespace streams
 		 */
 		ostream& operator<<(bool value)
 		{
-			convert(stream_, value);
+			convert(streambuf_, value);
 			after_insertion();
 			return *this;
 		}
@@ -186,7 +186,7 @@ namespace streams
 		 */
 		ostream& operator<<(char ch)
 		{
-			convert(stream_, ch);
+			convert(streambuf_, ch);
 			after_insertion();
 			return *this;
 		}
@@ -201,7 +201,7 @@ namespace streams
 		 */
 		ostream& operator<<(const char* str)
 		{
-			justify(stream_, str, false, nullptr);
+			justify(streambuf_, str, false, nullptr);
 			after_insertion();
 			return *this;
 		}
@@ -216,7 +216,7 @@ namespace streams
 		 */
 		ostream& operator<<(const flash::FlashStorage* str)
 		{
-			justify(stream_, str);
+			justify(streambuf_, str);
 			after_insertion();
 			return *this;
 		}
@@ -233,7 +233,7 @@ namespace streams
 		 */
 		ostream& operator<<(int value)
 		{
-			convert(stream_, value);
+			convert(streambuf_, value);
 			after_insertion();
 			return *this;
 		}
@@ -250,7 +250,7 @@ namespace streams
 		 */
 		ostream& operator<<(unsigned int value)
 		{
-			convert(stream_, value);
+			convert(streambuf_, value);
 			after_insertion();
 			return *this;
 		}
@@ -267,7 +267,7 @@ namespace streams
 		 */
 		ostream& operator<<(long value)
 		{
-			convert(stream_, value);
+			convert(streambuf_, value);
 			after_insertion();
 			return *this;
 		}
@@ -284,7 +284,7 @@ namespace streams
 		 */
 		ostream& operator<<(unsigned long value)
 		{
-			convert(stream_, value);
+			convert(streambuf_, value);
 			after_insertion();
 			return *this;
 		}
@@ -301,7 +301,7 @@ namespace streams
 		 */
 		ostream& operator<<(double value)
 		{
-			convert(stream_, value);
+			convert(streambuf_, value);
 			after_insertion();
 			return *this;
 		}
@@ -337,16 +337,16 @@ namespace streams
 		void after_insertion()
 		{
 			check_overflow();
-			if (flags() & unitbuf) stream_.pubsync();
+			if (flags() & unitbuf) streambuf_.pubsync();
 			width(0);
 		}
 
 		void check_overflow()
 		{
-			if (stream_.overflow()) setstate(badbit);
+			if (streambuf_.overflow()) setstate(badbit);
 		}
 
-		ostreambuf& stream_;
+		ostreambuf& streambuf_;
 	};
 
 	// NOTE: istream API is blocking, while istreambuf is not
@@ -357,10 +357,10 @@ namespace streams
 	{
 	public:
 		/**
-		 * Construct a formatted input wrapper of @p stream
-		 * @param stream the input stream to be wrapped
+		 * Construct a formatted input wrapper of @p streambuf
+		 * @param streambuf the input streambuf to be wrapped
 		 */
-		explicit istream(istreambuf& stream) : stream_{stream} {}
+		explicit istream(istreambuf& streambuf) : streambuf_{streambuf} {}
 
 		istream& operator=(const istream&) = delete;
 
@@ -369,7 +369,7 @@ namespace streams
 		 */
 		istreambuf& rdbuf() const
 		{
-			return stream_;
+			return streambuf_;
 		}
 
 		/**
@@ -381,7 +381,7 @@ namespace streams
 		int peek()
 		{
 			int value;
-			while ((value = stream_.sgetc()) == istreambuf::EOF) time::yield();
+			while ((value = streambuf_.sgetc()) == istreambuf::EOF) time::yield();
 			return value;
 		}
 
@@ -394,7 +394,7 @@ namespace streams
 		int get()
 		{
 			int value;
-			while ((value = stream_.sbumpc()) == istreambuf::EOF) time::yield();
+			while ((value = streambuf_.sbumpc()) == istreambuf::EOF) time::yield();
 			return value;
 		}
 
@@ -540,7 +540,7 @@ namespace streams
 		istream& operator>>(char& value)
 		{
 			skipws_if_needed();
-			value = containers::pull(stream_.queue());
+			value = containers::pull(streambuf_.queue());
 			return *this;
 		}
 
@@ -682,12 +682,12 @@ namespace streams
 
 		void skip_whitespace()
 		{
-			while (isspace(containers::peek(stream_.queue()))) containers::pull(stream_.queue());
+			while (isspace(containers::peek(streambuf_.queue()))) containers::pull(streambuf_.queue());
 		}
 
 		char* scan(char* str, size_t max);
 
-		istreambuf& stream_;
+		istreambuf& streambuf_;
 
 		template<typename FSTREAM> friend void ws(FSTREAM&);
 	};

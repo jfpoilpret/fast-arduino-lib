@@ -55,9 +55,9 @@ namespace serial
 	//TODO DOCS
 	enum class BufferHandling : uint8_t
 	{
-		CLEAR_BUFFER = 0,
-		FLUSH_BUFFER,
-		KEEP_BUFFER
+		KEEP = 0x00,
+		CLEAR = 0x01,
+		FLUSH = 0x02
 	};
 
 	/// @cond notdocumented

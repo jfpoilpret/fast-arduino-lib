@@ -24,8 +24,7 @@
 #include <fastarduino/uart.h>
 
 // Define vectors we need in the example
-REGISTER_UATX_ISR(0)
-REGISTER_UARX_ISR(0)
+REGISTER_UART_ISR(0)
 
 static const board::USART USART = board::USART::USART0;
 
@@ -43,56 +42,54 @@ int main()
 	sei();
 	
 	// Start UART
-	serial::hard::UATX<USART> uatx{output_buffer};
-	streams::ostream out = uatx.out();
+	serial::hard::UART<USART> uart{input_buffer, output_buffer};
+	streams::ostream out = uart.out();
+	streams::istream in = uart.in();
 
 	// Check buffer handling at end()
 	// The following should not appear has output buffer is locked until begin() is called
 	out << F("BEFORE: ABCDEFGHIKLMNOPQRSTUVWXYZ\n");
 
-	uatx.begin(9600);
+	uart.begin(9600);
 	// The following should partly appear until UATX is ended and buffer cleared
 	out << F("CLEAR: ABCDEFGHIKLMNOPQRSTUVWXYZ\n");
-	uatx.end(serial::BufferHandling::CLEAR);
+	uart.end(serial::BufferHandling::CLEAR);
 	time::delay_ms(2000);
 
-	uatx.begin(9600);
+	uart.begin(9600);
 	// The following shall fully appear until output buffer is locked in end()
 	out << F("FLUSH: ABCDEFGHIKLMNOPQRSTUVWXYZ\n");
-	uatx.end(serial::BufferHandling::FLUSH);
+	uart.end(serial::BufferHandling::FLUSH);
 	time::delay_ms(2000);
 
-	uatx.begin(9600);
+	uart.begin(9600);
 	// The following shall partly appear  then be complete in full after 2 seconds
 	out << F("KEEP: ABCDEFGHIKLMNOPQRSTUVWXYZ\n");
-	uatx.end(serial::BufferHandling::KEEP);
+	uart.end(serial::BufferHandling::KEEP);
 	time::delay_ms(2000);
-	uatx.begin(9600);
+	uart.begin(9600);
 	time::delay_ms(2000);
 
 	// Start UART
-	serial::hard::UARX<USART> uarx{input_buffer};
-	streams::istream in = uarx.in();
 	int value;
 
-	uarx.begin(9600);
 	// NOTE: if you type 123 456 (+NL) in console, then 456 will be forgotten
 	in >> value;
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
-	uarx.end(serial::BufferHandling::CLEAR);
+	uart.end(serial::BufferHandling::CLEAR);
 
-	uarx.begin(9600);
+	uart.begin(9600);
 	// NOTE: if you type 456 789 (+NL) in console, then 789 will be available for next step
 	in >> value;
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
-	uarx.end(serial::BufferHandling::KEEP);
+	uart.end(serial::BufferHandling::KEEP);
 
-	uarx.begin(9600);
+	uart.begin(9600);
 	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
 	in >> value;
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
-	uarx.end(serial::BufferHandling::CLEAR);
+	uart.end(serial::BufferHandling::CLEAR);
 }

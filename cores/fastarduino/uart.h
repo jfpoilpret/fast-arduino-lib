@@ -96,19 +96,43 @@ namespace serial::hard
 		}
 
 		template<board::USART USART>
-		static void begin_(uint32_t rate, Parity parity, StopBits stop_bits, bool rx, bool tx)
+		static void begin_(uint32_t rate, Parity parity, StopBits stop_bits,
+						   streams::istreambuf* in, streams::ostreambuf* out)
 		{
 			using TRAIT = board_traits::USART_trait<USART>;
 			constexpr uint8_t UCSRB_TX = TRAIT::TX_ENABLE_MASK | TRAIT::UDRIE_MASK;
 			constexpr uint8_t UCSRB_RX = TRAIT::RX_ENABLE_MASK | TRAIT::RXCIE_MASK;
+			const uint8_t UCSRB_MASK = ((out != nullptr) ? UCSRB_TX : 0) | ((in != nullptr) ? UCSRB_RX : 0);
 			SpeedSetup setup = compute_speed(rate);
+			const uint8_t UCSRA_MASK = (setup.u2x ? TRAIT::U2X_MASK : 0);
 			synchronized
 			{
 				TRAIT::UBRR = setup.ubrr_value;
-				TRAIT::UCSRA = (setup.u2x ? TRAIT::U2X_MASK : 0);
-				TRAIT::UCSRB = (tx ? UCSRB_TX : 0) | (rx ? UCSRB_RX : 0);
+				TRAIT::UCSRA = UCSRA_MASK;
+				TRAIT::UCSRB |= UCSRB_MASK;
 				TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
 			}
+			if (out != nullptr) out->queue().unlock();
+		}
+
+		template<board::USART USART>
+		static void end_(BufferHandling buffer_handling, streams::istreambuf* in , streams::ostreambuf* out)
+		{
+			using TRAIT = board_traits::USART_trait<USART>;
+			if (out != nullptr)
+			{
+				out->queue().lock();
+				if (buffer_handling == BufferHandling::CLEAR)
+					out->queue().clear();
+				else if (buffer_handling == BufferHandling::FLUSH)
+					out->pubsync();
+			}
+			constexpr uint8_t UCSRB_TX = TRAIT::TX_ENABLE_MASK | TRAIT::UDRIE_MASK;
+			constexpr uint8_t UCSRB_RX = TRAIT::RX_ENABLE_MASK | TRAIT::RXCIE_MASK;
+			const uint8_t UCSRB_MASK = ((out != nullptr) ? UCSRB_TX : 0) | ((in != nullptr) ? UCSRB_RX : 0);
+			synchronized TRAIT::UCSRB &= ~UCSRB_MASK;
+			if ((in != nullptr) && (buffer_handling == BufferHandling::CLEAR))
+				in->queue().clear();
 		}
 
 	private:
@@ -238,32 +262,20 @@ namespace serial::hard
 		 */
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
-			AbstractUART::begin_<USART>(rate, parity, stop_bits, false, true);
-			out_().queue().unlock();
+			AbstractUART::begin_<USART>(rate, parity, stop_bits, nullptr, &out_());
 		}
 
 		/**
 		 * Stop all transmissions.
 		 * Once called, it is possible to re-enable transmission again by
 		 * calling `begin()`.
+		 * @param buffer_handling how to handle output buffer before ending
+		 * transmissions
+		 * @sa BufferHandling
 		 */
-		void end(BufferHandling buffer_handling = BufferHandling::CLEAR_BUFFER)
+		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			out_().queue().lock();
-			switch (buffer_handling)
-			{
-				case BufferHandling::CLEAR_BUFFER:
-				out_().queue().clear();
-				break;
-
-				case BufferHandling::FLUSH_BUFFER:
-				out_().pubsync();
-				break;
-
-				case BufferHandling::KEEP_BUFFER:
-				break;
-			}
-			synchronized TRAIT::UCSRB = 0;
+			AbstractUART::end_<USART>(buffer_handling, nullptr, &out_());
 		}
 
 	private:
@@ -297,6 +309,11 @@ namespace serial::hard
 
 	protected:
 		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
+
+		streams::istreambuf& in_()
+		{
+			return ibuf_;
+		}
 
 		template<board::USART USART>
 		void data_receive_complete(Errors& errors)
@@ -359,17 +376,20 @@ namespace serial::hard
 		 */
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
-			AbstractUART::begin_<USART>(rate, parity, stop_bits, true, false);
+			AbstractUART::begin_<USART>(rate, parity, stop_bits, &in_(), nullptr);
 		}
 
 		/**
 		 * Stop reception.
 		 * Once called, it is possible to re-enable reception again by
 		 * calling `begin()`.
+		 * @param buffer_handling how to handle input buffer before ending
+		 * transmissions
+		 * @sa BufferHandling
 		 */
-		void end()
+		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			synchronized TRAIT::UCSRB = 0;
+			AbstractUART::end_<USART>(buffer_handling, &in_(), nullptr);
 		}
 
 	private:
@@ -433,17 +453,20 @@ namespace serial::hard
 		 */
 		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
-			AbstractUART::begin_<USART>(rate, parity, stop_bits, true, true);
+			AbstractUART::begin_<USART>(rate, parity, stop_bits, &in_(), &out_());
 		}
 
 		/**
 		 * Stop all transmissions and receptions.
 		 * Once called, it is possible to re-enable transmission and reception 
 		 * again by calling `begin()`.
+		 * @param buffer_handling how to handle output and input buffers before ending
+		 * transmissions
+		 * @sa BufferHandling
 		 */
-		void end()
+		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			synchronized TRAIT::UCSRB = 0;
+			AbstractUART::end_<USART>(buffer_handling, &in_(), &out_());
 		}
 
 	private:
