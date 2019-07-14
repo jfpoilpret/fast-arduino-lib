@@ -80,6 +80,8 @@
 		serial::soft::isr_handler::check_uart_int<INT_NUM, RX, TX>(); \
 	}
 
+//FIXME why is PCISignal/INTSignal passed to begin() instead of constructor?
+
 //FIXME Handle begin/end properly in relation to current queue content
 /**
  * Defines API types used by software UART features.
@@ -218,27 +220,26 @@ namespace serial::soft
 		{
 			parity_ = parity;
 			compute_times(rate, stop_bits);
-			//FIXME if queue is not empty, we should process it until everything is written (or clear it?)
+			out_().queue().unlock();
 		}
 
 		/**
 		 * Stop all transmissions.
 		 * Once called, it is possible to re-enable transmission again by
 		 * calling `begin()`.
+		 * @param buffer_handling unused argument, present for symetry with 
+		 * `serial::hard::UATX::end()`; this is unused because useless, as 
+		 * software UATX is totally synchronous.
 		 */
-		void end()
+		void end(UNUSED BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			//FIXME if queue not empty we should:
-			// - prevent pushing to it (how?)
-			// - flush it completely
-			// - enable pushing again?
+			out_().queue().lock();
 		}
 
 	private:
 		static void on_put(void* arg)
 		{
 			THIS& target = *((THIS*) arg);
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			target.check_overflow(target.errors());
 			char value;
 			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
@@ -387,9 +388,11 @@ namespace serial::soft
 		 * Once called, it is possible to re-enable reception again by
 		 * calling `begin()`.
 		 */
-		void end()
+		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
 			int_->disable();
+			if (buffer_handling == BufferHandling::CLEAR)
+				in_().queue().clear();
 		}
 
 	private:
@@ -466,6 +469,7 @@ namespace serial::soft
 		 */
 		void begin(INT_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
+			out_().queue().unlock();
 			parity_ = parity;
 			int_ = &enabler;
 			AbstractUARX::compute_times(rate, parity != Parity::NONE, stop_bits);
@@ -478,16 +482,18 @@ namespace serial::soft
 		 * Once called, it is possible to re-enable transmission and reception 
 		 * again by calling `begin()`.
 		 */
-		void end()
+		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
 			int_->disable();
+			if (buffer_handling == BufferHandling::CLEAR)
+				in_().queue().clear();
+			out_().queue().lock();
 		}
 
 	private:
 		static void on_put(void* arg)
 		{
 			THIS& target = *((THIS*) arg);
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			target.check_overflow(target.errors());
 			char value;
 			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
@@ -567,9 +573,11 @@ namespace serial::soft
 		 * Once called, it is possible to re-enable reception again by
 		 * calling `begin()`.
 		 */
-		void end()
+		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
 			pci_->template disable_pin<RX_>();
+			if (buffer_handling == BufferHandling::CLEAR)
+				in_().queue().clear();
 		}
 
 	private:
@@ -642,6 +650,7 @@ namespace serial::soft
 		 */
 		void begin(PCI_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
+			out_().queue().unlock();
 			parity_ = parity;
 			pci_ = &enabler;
 			AbstractUARX::compute_times(rate, parity != Parity::NONE, stop_bits);
@@ -653,17 +662,22 @@ namespace serial::soft
 		 * Stop all transmissions and receptions.
 		 * Once called, it is possible to re-enable transmission and reception 
 		 * again by calling `begin()`.
+		 * @param buffer_handling how to handle input buffer before ending
+		 * transmissions
+		 * @sa BufferHandling
 		 */
-		void end()
+		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
 			pci_->template disable_pin<RX_>();
+			if (buffer_handling == BufferHandling::CLEAR)
+				in_().queue().clear();
+			out_().queue().lock();
 		}
 
 	private:
 		static void on_put(void* arg)
 		{
 			THIS& target = *((THIS*) arg);
-			//FIXME we should write ONLY if UAT is active (begin() has been called and not end())
 			target.check_overflow(target.errors());
 			char value;
 			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
