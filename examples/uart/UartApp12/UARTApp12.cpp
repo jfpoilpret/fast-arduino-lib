@@ -78,10 +78,13 @@ int main()
 	time::delay_ms(2000);
 	uart.end(serial::BufferHandling::KEEP);
 
+	uint8_t size = in.rdbuf().queue().items();
+
 	uart.begin(pci, 9600);
 	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
 	in >> value;
 	out << F("value=") << value << streams::endl;
+	out << F("input queue size=") << size << streams::endl;
 	time::delay_ms(2000);
 	uart.end(serial::BufferHandling::CLEAR);
 }

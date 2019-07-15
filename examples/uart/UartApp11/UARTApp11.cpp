@@ -36,6 +36,9 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char input_buffer[INPUT_BUFFER_SIZE];
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
+static constexpr uint8_t NUM_SIZES = 10;
+static uint8_t sizes[NUM_SIZES];
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -67,24 +70,37 @@ int main()
 	streams::istream in = uarx.in();
 	int value;
 
+	uint8_t index = 0;
+	sizes[index++] = in.rdbuf().queue().items();
 	uarx.begin(pci, 9600);
 	// NOTE: if you type 123 456 (+NL) in console, then 456 will be forgotten
 	in >> value;
+	sizes[index++] = in.rdbuf().queue().items();
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
 	uarx.end(serial::BufferHandling::CLEAR);
 
+	sizes[index++] = in.rdbuf().queue().items();
 	uarx.begin(pci, 9600);
 	// NOTE: if you type 456 789 (+NL) in console, then 789 will be available for next step
 	in >> value;
+	sizes[index++] = in.rdbuf().queue().items();
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
 	uarx.end(serial::BufferHandling::KEEP);
 
+	sizes[index++] = in.rdbuf().queue().items();
 	uarx.begin(pci, 9600);
 	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
 	in >> value;
+	sizes[index++] = in.rdbuf().queue().items();
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
 	uarx.end(serial::BufferHandling::CLEAR);
+
+	sizes[index++] = in.rdbuf().queue().items();
+
+	out << F("sizes") << streams::endl;
+	for (uint8_t i = 0; i < index; ++i)
+		out << F("sizes[") << i << F("]=") << sizes[i] << streams::endl;
 }
