@@ -90,7 +90,7 @@ int main()
 	uarx.end(serial::BufferHandling::KEEP);
 
 	uarx.begin(9600);
-	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
+	// NOTE: if you typed 456 789 (+NL) in console before then 789 should immediately appear
 	in >> value;
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
