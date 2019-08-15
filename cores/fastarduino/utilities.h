@@ -198,9 +198,9 @@ namespace utils
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
 		const int8_t prefix_value = int8_t(prefix);
 		if (prefix_value > 0)
-			return value * range / power_of_10(int8_t(prefix)) / (1UL << precision_bits);
+			return int32_t(value) * int32_t(range) / int32_t(power_of_10(int8_t(prefix))) / int32_t(1UL << precision_bits);
 		else
-			return value * range * power_of_10(int8_t(prefix)) / (1UL << precision_bits);
+			return int32_t(value) * int32_t(range) * int32_t(power_of_10(int8_t(prefix))) / int32_t(1UL << precision_bits);
 	}
 
 	/**
@@ -259,9 +259,9 @@ namespace utils
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
 		const int8_t prefix_value = int8_t(prefix);
 		if (prefix_value > 0)
-			return value * (1UL << precision_bits) * power_of_10(prefix_value) / range;
+			return int32_t(value) * int32_t(1UL << precision_bits) * int32_t(power_of_10(prefix_value)) / int32_t(range);
 		else
-			return value * (1UL << precision_bits) / power_of_10(prefix_value) / range;
+			return int32_t(value) * int32_t(1UL << precision_bits) / int32_t(power_of_10(prefix_value)) / int32_t(range);
 	}
 
 	/**
