@@ -176,9 +176,9 @@ namespace devices::magneto
 	 */
 	struct AllSensors
 	{
-		Sensor3D gyro;
-		int16_t temperature;
 		Sensor3D accel;
+		int16_t temperature;
+		Sensor3D gyro;
 	};
 
 	/**
