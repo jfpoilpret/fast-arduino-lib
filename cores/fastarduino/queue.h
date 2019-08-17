@@ -501,11 +501,16 @@ namespace containers
 			else
 			{
 				uint8_t part_size = size_ - head_;
+				if (part_size > size) part_size = size;
 				const T* source = &buffer_[head_];
 				for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
-				part_size = size - part_size;
-				source = buffer_;
-				for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
+
+				if (size > part_size)
+				{
+					part_size = size - part_size;
+					source = buffer_;
+					for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
+				}
 			}
 		}
 		return size;
