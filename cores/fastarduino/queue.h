@@ -489,7 +489,7 @@ namespace containers
 
 	template<typename T, typename TREF> uint8_t Queue<T, TREF>::peek_(T* buffer, uint8_t size) const
 	{
-		size = (size < items()) ? size : items();
+		size = (size <= items_()) ? size : items_();
 		if (size)
 		{
 			// Split peek in 2 parts if needed
