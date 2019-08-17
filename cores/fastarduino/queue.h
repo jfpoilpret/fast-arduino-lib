@@ -21,7 +21,6 @@
 #ifndef QUEUE_HH
 #define QUEUE_HH
 
-#include <math.h>
 #include "utilities.h"
 #include "time.h"
 
@@ -490,7 +489,7 @@ namespace containers
 
 	template<typename T, typename TREF> uint8_t Queue<T, TREF>::peek_(T* buffer, uint8_t size) const
 	{
-		size = min(size, items());
+		size = (size <= items_()) ? size : items_();
 		if (size)
 		{
 			// Split peek in 2 parts if needed
@@ -502,11 +501,16 @@ namespace containers
 			else
 			{
 				uint8_t part_size = size_ - head_;
+				if (part_size > size) part_size = size;
 				const T* source = &buffer_[head_];
 				for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
-				part_size = size - part_size;
-				source = buffer_;
-				for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
+
+				if (size > part_size)
+				{
+					part_size = size - part_size;
+					source = buffer_;
+					for (uint8_t i = 0; i < part_size; ++i) *buffer++ = *source++;
+				}
 			}
 		}
 		return size;
@@ -514,7 +518,7 @@ namespace containers
 
 	template<typename T, typename TREF> template<uint8_t SIZE> uint8_t Queue<T, TREF>::peek_(T (&buffer)[SIZE]) const
 	{
-		return peek_(&buffer, SIZE);
+		return peek_(&buffer[0], SIZE);
 	}
 
 	template<typename T, typename TREF> bool Queue<T, TREF>::push_(TREF item)

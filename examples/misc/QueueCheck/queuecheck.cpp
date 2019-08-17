@@ -19,6 +19,8 @@
  *   - Standard USB to console
  */
 
+#include <string.h>
+
 #include <fastarduino/queue.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/streams.h>
@@ -33,7 +35,7 @@ REGISTER_UATX_ISR(0)
 #endif
 
 // Buffers for UART
-static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 static const uint8_t BUFFER_SIZE = 10;
@@ -58,6 +60,11 @@ void assert(ostream& out, const Queue<char>& queue, bool empty, bool full, uint8
 	assert(out, "free()", free, queue.free());
 }
 
+// 0-initialized buffers for peek(0 checks)
+static char peek_buffer5[5];
+static char peek_buffer15[15];
+static char peek_buffer20[20];
+
 int main()
 {
 	board::init();
@@ -73,8 +80,12 @@ int main()
 	// Create a queue and operate on it
 	char buffer[BUFFER_SIZE];
 	Queue<char> queue{buffer};
+	char val;
+
 	out << "New empty queue" << endl;
 	assert(out, "size()", BUFFER_SIZE - 1, queue.size());
+	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
+	assert(out, "peek(c)", false, queue.peek(val));
 	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
 
 	out << "Push 1 char" << endl;
@@ -82,7 +93,6 @@ int main()
 	assert(out, queue, false, false, 1, BUFFER_SIZE - 2);
 
 	out << "Pull 1 char" << endl;
-	char val;
 	assert(out, "pull()", true, queue.pull(val));
 	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
 
@@ -96,6 +106,26 @@ int main()
 	queue.push('7');
 	queue.push('8');
 	queue.push('9');
+	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+
+	out << "Peek functions" << endl;
+	assert(out, "peek(c)", true, queue.peek(val));
+	assert(out, "peeked c", '1', val);
+	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, "peek(c)", true, queue.peek(val));
+	assert(out, "peeked c", '1', val);
+	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+
+	assert(out, "peek(buf[5])", 5, queue.peek(peek_buffer5));
+	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+
+	assert(out, "peek(buf[15])", 9, queue.peek(peek_buffer15));
+	assert(out, "peeked buf[15] Vs \"123456789\"", 0, strcmp(peek_buffer15, "123456789"));
+	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+
+	assert(out, "peek(buf, 5)", 5, queue.peek(peek_buffer20, 5));
+	assert(out, "peeked buf Vs \"12345\"", 0, strcmp(peek_buffer20, "12345"));
+	out << "peek_buffer20 = '" << peek_buffer20 << "'" << endl;
 	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
 
 	out << "Pull 8 chars" << endl;
