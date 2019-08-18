@@ -140,7 +140,25 @@ int main()
 	assert_map_physical_to_raw(out, -32767, -32767, UnitPrefix::NONE, 32767, 15);
 	assert_map_physical_to_raw(out, -32768, -32768, UnitPrefix::NONE, 32767, 15);
 
-	//TODO check also map_physical_to_raw()
+	// Examples with possible values from MPU6050 gyro
+	// - ranges: 250, 500, 1000 or 2000 (dps)
+	// - 15 bits precision
+	// - conversion to deci-dps
+	assert_map_physical_to_raw(out, 0, 0, UnitPrefix::DECI, 2000, 15);
+	assert_map_physical_to_raw(out, 16384, 10000, UnitPrefix::DECI, 2000, 15);
+	assert_map_physical_to_raw(out, -16384, -10000, UnitPrefix::DECI, 2000, 15);
+	assert_map_physical_to_raw(out, 32767, 20000, UnitPrefix::DECI, 2000, 15);
+	assert_map_physical_to_raw(out, -32767, -20000, UnitPrefix::DECI, 2000, 15);
+
+	// Examples with possible values from MPU6050 accelerometer
+	// - ranges: 250, 500, 1000 or 2000 (dps)
+	// - 15 bits precision
+	// - conversion to deca-dps
+	assert_map_physical_to_raw(out, 0, 0, UnitPrefix::DECA, 2000, 15);
+	assert_map_physical_to_raw(out, 16384, 100, UnitPrefix::DECA, 2000, 15);
+	assert_map_physical_to_raw(out, -16384, -100, UnitPrefix::DECA, 2000, 15);
+	assert_map_physical_to_raw(out, 32767, 200, UnitPrefix::DECA, 2000, 15);
+	assert_map_physical_to_raw(out, -32767, -200, UnitPrefix::DECA, 2000, 15);
 
 	out << "END" << endl;
 	return 0;
