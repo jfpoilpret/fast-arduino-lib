@@ -1,7 +1,7 @@
 Latest News
 ===========
 
-FastArduino v1.2 has just been released on 6th June 2019.
+FastArduino v1.2 has been released on 6th June 2019.
 The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1).
 Please note that this version breaks compatibility on some API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.2).
 
@@ -41,7 +41,7 @@ All this comes at a cost:
 1. Template usage is often more complex in applications. The provided examples are here to help.
 2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included); for this point however, please note that compile time difference is hardly noticeable.
 
-Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use the complete [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) and the numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++14 standard.
+Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use the complete [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) and the numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++17 standard.
 
 Since the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino itself) are now built with [Visual Studio Code](https://code.visualstudio.com/) along with a [small extension](https://github.com/jfpoilpret/vscode-fastarduino) I developed specifically for FastArduino. Once properly setup, I find VS Code environment much easier and friendlier to use than Arduino IDE or even [netbeans](https://netbeans.org/) which I originally used for FastArduino but finally ditched out.
 
@@ -120,15 +120,15 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/1?closed=1) (released on 22.02.2018)
 - [Milestone v1.1](https://github.com/jfpoilpret/fast-arduino-lib/milestone/2?closed=1) (released on 26.04.2019)
 - [Milestone v1.2](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1) (released on 06.06.2019)
-- [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5) (31.08.2019)
-- [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6) (31.10.2019)
+- [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5) (30.09.2019)
+- [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6) (30.11.2019)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (31.12.2019)
 - [2020 and later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 Documentation - no milestones
 -----------------------------
 1. Add SPI and I2C new device creation to Tutorial (31.12.2019)
-2. Document how to add support for another board target in Tutorial (31.12.2019)
+2. Document how to add support for other boards in Tutorial (31.12.2019)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
