@@ -141,7 +141,7 @@ namespace utils
 	}
 
 	/**
-	 * Convert the raw @p value, obtained from a electronics device, using
+	 * Convert the raw @p value, obtained from an electronics device, using
 	 * @p precision_bit number of bits (that defines the input range) into a
 	 * physical measure for which @p range defines the complete output range for
 	 * such value, adjusted according to the unit @p prefix that we want in the
@@ -198,9 +198,9 @@ namespace utils
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
 		const int8_t prefix_value = int8_t(prefix);
 		if (prefix_value > 0)
-			return int32_t(value) * int32_t(range) / int32_t(power_of_10(int8_t(prefix))) / int32_t(1UL << precision_bits);
+			return (int32_t(value) * int32_t(range) / int32_t(power_of_10(prefix_value))) >> precision_bits;
 		else
-			return int32_t(value) * int32_t(range) * int32_t(power_of_10(int8_t(prefix))) / int32_t(1UL << precision_bits);
+			return (int32_t(value) * int32_t(range) * int32_t(power_of_10(prefix_value))) >> precision_bits;
 	}
 
 	/**
@@ -256,9 +256,10 @@ namespace utils
 	 */
 	constexpr int16_t map_physical_to_raw(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
 	{
+		//FIXME int32 calculation may lead to 32768 which will be converted to -32768 (instead of 32767)
 		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
 		const int8_t prefix_value = int8_t(prefix);
-		if (prefix_value > 0)
+		if (prefix_value >= 0)
 			return int32_t(value) * int32_t(1UL << precision_bits) * int32_t(power_of_10(prefix_value)) / int32_t(range);
 		else
 			return int32_t(value) * int32_t(1UL << precision_bits) / int32_t(power_of_10(prefix_value)) / int32_t(range);
