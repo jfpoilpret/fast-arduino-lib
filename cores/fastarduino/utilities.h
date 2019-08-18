@@ -203,6 +203,18 @@ namespace utils
 			return (int32_t(value) * int32_t(range) * int32_t(power_of_10(prefix_value))) >> precision_bits;
 	}
 
+	/// @cond notdocumented
+	// This is intermediate function used by map_physical_to_raw() but without overflow issue (int32 only)
+	constexpr int32_t map_physical_to_raw_(int32_t value, int8_t prefix, int32_t range, uint8_t precision_bits)
+	{
+		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
+		if (prefix >= 0)
+			return (value << precision_bits) * int32_t(power_of_10(prefix)) / range;
+		else
+			return (value << precision_bits) / int32_t(power_of_10(prefix)) / range;
+	}
+	/// @endcond
+
 	/**
 	 * Convert an absolute physical @p value, expressed in some given measurement 
 	 * unit, scaled with @p prefix, into a raw measurement as if obtained
@@ -256,13 +268,15 @@ namespace utils
 	 */
 	constexpr int16_t map_physical_to_raw(int16_t value, UnitPrefix prefix, int16_t range, uint8_t precision_bits)
 	{
-		//FIXME int32 calculation may lead to 32768 which will be converted to -32768 (instead of 32767)
-		// Here we approximate the calculation by using 2^n instead of (2^n - 1) as input range
-		const int8_t prefix_value = int8_t(prefix);
-		if (prefix_value >= 0)
-			return int32_t(value) * int32_t(1UL << precision_bits) * int32_t(power_of_10(prefix_value)) / int32_t(range);
+		// We first perform calculation as int32
+		const int32_t output = map_physical_to_raw_(value, int8_t(prefix), range, precision_bits);
+		//Then we deal with boundary cases before conversion to int16
+		if (output > INT16_MAX)
+			return INT16_MAX;
+		else if (output <= INT16_MIN)
+			return INT16_MIN;
 		else
-			return int32_t(value) * int32_t(1UL << precision_bits) / int32_t(power_of_10(prefix_value)) / int32_t(range);
+			return output;
 	}
 
 	/**
