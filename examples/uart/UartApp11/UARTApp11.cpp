@@ -26,7 +26,6 @@
 static const board::DigitalPin TX = board::DigitalPin::D1_PD1;
 static const board::InterruptPin RX = board::InterruptPin::D0_PD0_PCI2;
 
-//TODO rewrite for SW UART
 // Define vectors we need in the example
 REGISTER_UARX_PCI_ISR(RX, 2)
 

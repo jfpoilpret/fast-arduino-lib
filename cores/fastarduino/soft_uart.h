@@ -81,8 +81,6 @@
 	}
 
 //FIXME why is PCISignal/INTSignal passed to begin() instead of constructor?
-
-//FIXME Handle begin/end properly in relation to current queue content
 /**
  * Defines API types used by software UART features.
  * This API is available to all MCU, even those that do not have hardware UART,

@@ -66,14 +66,13 @@ int main()
 	// Start UART
 	// Following configurations have been tested successfully
 	// OK
-	// uarx.begin(pci, 115200);
+	uarx.begin(pci, 115200);
 	// uarx.begin(pci, 115200, serial::Parity::EVEN);
 
 	streams::istream in = uarx.in();
 
 	while (true)
 	{
-		//TODO
 		char buffer[BUF_SIZE + 1];
 		in.getline(buffer, BUF_SIZE + 1, '\n');
 		if (strcmp(buffer, EXPECTED) == 0)
