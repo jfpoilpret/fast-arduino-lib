@@ -39,6 +39,14 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static constexpr uint8_t NUM_SIZES = 10;
 static uint8_t sizes[NUM_SIZES];
 
+static void display_input_buffer(streams::ostream& out, const char* label)
+{
+	out << label << streams::endl;
+	for (uint8_t i = 0; i < INPUT_BUFFER_SIZE; ++i)
+		out << streams::hex << uint8_t(input_buffer[i]) << ' ';
+	out << streams::endl;
+}
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -72,33 +80,43 @@ int main()
 
 	uint8_t index = 0;
 	sizes[index++] = in.rdbuf().queue().items();
+	display_input_buffer(out, "#1");
 	uarx.begin(pci, 9600);
 	// NOTE: if you type 123 456 (+NL) in console, then 456 will be forgotten
 	in >> value;
+	time::delay_ms(2000);
 	sizes[index++] = in.rdbuf().queue().items();
-	out << F("value=") << value << streams::endl;
+	display_input_buffer(out, "#2");
+	out << F("value=") << streams::dec << value << streams::endl;
 	time::delay_ms(2000);
 	uarx.end(serial::BufferHandling::CLEAR);
 
 	sizes[index++] = in.rdbuf().queue().items();
+	display_input_buffer(out, "#3");
 	uarx.begin(pci, 9600);
 	// NOTE: if you type 456 789 (+NL) in console, then 789 will be available for next step
 	in >> value;
+	time::delay_ms(2000);
 	sizes[index++] = in.rdbuf().queue().items();
-	out << F("value=") << value << streams::endl;
+	display_input_buffer(out, "#4");
+	out << F("value=") << streams::dec << value << streams::endl;
 	time::delay_ms(2000);
 	uarx.end(serial::BufferHandling::KEEP);
 
 	sizes[index++] = in.rdbuf().queue().items();
+	display_input_buffer(out, "#5");
 	uarx.begin(pci, 9600);
 	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
 	in >> value;
+	time::delay_ms(2000);
 	sizes[index++] = in.rdbuf().queue().items();
-	out << F("value=") << value << streams::endl;
+	display_input_buffer(out, "#6");
+	out << F("value=") << streams::dec << value << streams::endl;
 	time::delay_ms(2000);
 	uarx.end(serial::BufferHandling::CLEAR);
 
 	sizes[index++] = in.rdbuf().queue().items();
+	display_input_buffer(out, "#7");
 
 	out << F("sizes") << streams::endl;
 	for (uint8_t i = 0; i < index; ++i)
