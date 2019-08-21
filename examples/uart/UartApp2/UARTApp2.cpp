@@ -87,35 +87,35 @@ int main()
 	
 	// Setup UART
 	serial::soft::UATX<TX> uatx{output_buffer};
-	serial::soft::UARX_PCI<RX> uarx{input_buffer};
 	typename interrupt::PCIType<RX>::TYPE pci;
+	serial::soft::UARX_PCI<RX> uarx{input_buffer, pci};
 	pci.enable();
 
 	// Start UART
 	// Following configurations have been tested successfully
 //	uatx.begin(9600);
-//	uarx.begin(pci, 9600);
+//	uarx.begin(9600);
 
 	uatx.begin(115200);
-	uarx.begin(pci, 115200);
+	uarx.begin(115200);
 	
 //	uatx.begin(230400);
-//	uarx.begin(pci, 230400);
+//	uarx.begin(230400);
 	
 //	uatx.begin(230400, Serial::Parity::NONE, Serial::StopBits::TWO);
-//	uarx.begin(pci, 230400, Serial::Parity::NONE, Serial::StopBits::TWO);
+//	uarx.begin(230400, Serial::Parity::NONE, Serial::StopBits::TWO);
 	
 //	uatx.begin(230400, Serial::Parity::EVEN, Serial::StopBits::TWO);
-//	uarx.begin(pci, 230400, Serial::Parity::EVEN, Serial::StopBits::TWO);
+//	uarx.begin(230400, Serial::Parity::EVEN, Serial::StopBits::TWO);
 	
 //	uatx.begin(230400, Serial::Parity::EVEN);
-//	uarx.begin(pci, 230400, Serial::Parity::EVEN);
+//	uarx.begin(230400, Serial::Parity::EVEN);
 	
 //	uatx.begin(115200, Serial::Parity::ODD);
-//	uarx.begin(pci, 115200, Serial::Parity::ODD);
+//	uarx.begin(115200, Serial::Parity::ODD);
 	
 //	uatx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
-//	uarx.begin(pci, 115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
+//	uarx.begin(115200, Serial::Parity::EVEN, Serial::StopBits::TWO);
 
 	streams::istream in = uarx.in();
 	streams::ostream out = uatx.out();

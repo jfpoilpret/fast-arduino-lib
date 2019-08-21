@@ -80,7 +80,6 @@
 		serial::soft::isr_handler::check_uart_int<INT_NUM, RX, TX>(); \
 	}
 
-//FIXME why is PCISignal/INTSignal passed to begin() instead of constructor?
 /**
  * Defines API types used by software UART features.
  * This API is available to all MCU, even those that do not have hardware UART,
@@ -353,10 +352,13 @@ namespace serial::soft
 		 * @param input an array of characters used by this receiver to
 		 * store content received through serial line, buffered until read through
 		 * `in()`.
+		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
+		 * enable interrupts on that pin.
 		 * @sa REGISTER_UART_INT_ISR()
 		 */
 		template<uint8_t SIZE_RX> 
-		explicit UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
+		explicit UARX(char (&input)[SIZE_RX], INT_TYPE& enabler)
+		: AbstractUARX{input}, rx_{gpio::PinMode::INPUT}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -367,28 +369,27 @@ namespace serial::soft
 		 * Once called, it is possible to read content, received through serial
 		 * connection, by using `in()`.
 		 * 
-		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
-		 * enable interrupts on that pin.
 		 * @param rate the transmission rate in bits per second (bps)
 		 * @param parity the kind of parity check used by transmission
 		 * @param stop_bits the number of stop bits used by transmission
 		 */
-		void begin(INT_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			parity_ = parity;
-			int_ = &enabler;
 			AbstractUARX::compute_times(rate, parity != Parity::NONE, stop_bits);
-			int_->enable();
+			int_.enable();
 		}
 		
 		/**
 		 * Stop reception.
 		 * Once called, it is possible to re-enable reception again by
 		 * calling `begin()`.
+		 * @param buffer_handling how to handle output buffer before ending
+		 * transmissions
 		 */
 		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			int_->disable();
+			int_.disable();
 			if (buffer_handling == BufferHandling::CLEAR)
 				in_().queue().clear();
 		}
@@ -398,12 +399,12 @@ namespace serial::soft
 		{
 			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
-			int_->clear_();
+			int_.clear_();
 		}
 
 		Parity parity_;
 		typename gpio::FastPinType<RX>::TYPE rx_;
-		INT_TYPE* int_;
+		INT_TYPE& int_;
 		friend struct isr_handler;
 	};
 
@@ -442,11 +443,13 @@ namespace serial::soft
 		 * `in()`.
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission.
+		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
+		 * enable interrupts on that pin.
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], INT_TYPE& enabler)
 		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
-			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
+			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -457,32 +460,29 @@ namespace serial::soft
 		 * Once called, it is possible to send and receive content through serial
 		 * connection, by using `in()` for reading and `out()` for writing.
 		 * 
-		 * @param enabler the `interrupt::INTSignal` for the RX pin; it is used to
-		 * enable interrupts on that pin.
 		 * @param rate the transmission rate in bits per second (bps)
 		 * @param parity the kind of parity check used by transmission
 		 * @param stop_bits the number of stop bits used by transmission
-		 * 
-		 * @sa begin(INT_TYPE&, uint32_t, Parity, StopBits)
 		 */
-		void begin(INT_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			out_().queue().unlock();
 			parity_ = parity;
-			int_ = &enabler;
 			AbstractUARX::compute_times(rate, parity != Parity::NONE, stop_bits);
 			AbstractUATX::compute_times(rate, stop_bits);
-			int_->enable();
+			int_.enable();
 		}
 
 		/**
 		 * Stop all transmissions and receptions.
 		 * Once called, it is possible to re-enable transmission and reception 
 		 * again by calling `begin()`.
+		 * @param buffer_handling how to handle output buffer before ending
+		 * transmissions
 		 */
 		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			int_->disable();
+			int_.disable();
 			if (buffer_handling == BufferHandling::CLEAR)
 				in_().queue().clear();
 			out_().queue().lock();
@@ -501,13 +501,13 @@ namespace serial::soft
 		{
 			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
-			int_->clear_();
+			int_.clear_();
 		}
 
 		Parity parity_;
 		typename gpio::FastPinType<TX>::TYPE tx_;
 		typename gpio::FastPinType<RX>::TYPE rx_;
-		INT_TYPE* int_;
+		INT_TYPE& int_;
 		friend struct isr_handler;
 	};
 
@@ -536,10 +536,13 @@ namespace serial::soft
 		 * @param input an array of characters used by this receiver to
 		 * store content received through serial line, buffered until read through
 		 * `in()`.
+		 * @param enabler the `interrupt::PCISignal` for the RX pin; it is used to
+		 * enable interrupts on that pin.
 		 * @sa REGISTER_UART_PCI_ISR()
 		 */
 		template<uint8_t SIZE_RX>
-		explicit UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}, rx_{gpio::PinMode::INPUT}
+		explicit UARX(char (&input)[SIZE_RX], PCI_TYPE& enabler)
+		: AbstractUARX{input}, rx_{gpio::PinMode::INPUT}, pci_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -550,30 +553,27 @@ namespace serial::soft
 		 * Once called, it is possible to read content, received through serial
 		 * connection, by using `in()`.
 		 * 
-		 * @param enabler the `interrupt::PCISignal` for the RX pin; it is used to
-		 * enable interrupts on that pin.
 		 * @param rate the transmission rate in bits per second (bps)
 		 * @param parity the kind of parity check used by transmission
 		 * @param stop_bits the number of stop bits used by transmission
-		 * 
-		 * @sa begin(INT_TYPE&, uint32_t, Parity, StopBits)
 		 */
-		void begin(PCI_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			parity_ = parity;
-			pci_ = &enabler;
 			AbstractUARX::compute_times(rate, parity != Parity::NONE, stop_bits);
-			pci_->template enable_pin<RX_>();
+			pci_.template enable_pin<RX_>();
 		}
 
 		/**
 		 * Stop reception.
 		 * Once called, it is possible to re-enable reception again by
 		 * calling `begin()`.
+		 * @param buffer_handling how to handle output buffer before ending
+		 * transmissions
 		 */
 		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			pci_->template disable_pin<RX_>();
+			pci_.template disable_pin<RX_>();
 			if (buffer_handling == BufferHandling::CLEAR)
 				in_().queue().clear();
 		}
@@ -583,12 +583,12 @@ namespace serial::soft
 		{
 			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
-			pci_->clear_();
+			pci_.clear_();
 		}
 
 		Parity parity_;
 		typename gpio::FastPinType<RX>::TYPE rx_;
-		PCI_TYPE* pci_;
+		PCI_TYPE& pci_;
 		friend struct isr_handler;
 	};
 
@@ -623,11 +623,13 @@ namespace serial::soft
 		 * `in()`.
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission.
+		 * @param enabler the `interrupt::PCISignal` for the RX pin; it is used to
+		 * enable interrupts on that pin.
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX])
+		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], PCI_TYPE& enabler)
 		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
-			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}
+			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}, pci_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -638,22 +640,17 @@ namespace serial::soft
 		 * Once called, it is possible to send and receive content through serial
 		 * connection, by using `in()` for reading and `out()` for writing.
 		 * 
-		 * @param enabler the `interrupt::PCISignal` for the RX pin; it is used to
-		 * enable interrupts on that pin.
 		 * @param rate the transmission rate in bits per second (bps)
 		 * @param parity the kind of parity check used by transmission
 		 * @param stop_bits the number of stop bits used by transmission
-		 * 
-		 * @sa begin(INT_TYPE&, uint32_t, Parity, StopBits)
 		 */
-		void begin(PCI_TYPE& enabler, uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
+		void begin(uint32_t rate, Parity parity = Parity::NONE, StopBits stop_bits = StopBits::ONE)
 		{
 			out_().queue().unlock();
 			parity_ = parity;
-			pci_ = &enabler;
 			AbstractUARX::compute_times(rate, parity != Parity::NONE, stop_bits);
 			AbstractUATX::compute_times(rate, stop_bits);
-			pci_->template enable_pin<RX_>();
+			pci_.template enable_pin<RX_>();
 		}
 
 		/**
@@ -666,7 +663,7 @@ namespace serial::soft
 		 */
 		void end(BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			pci_->template disable_pin<RX_>();
+			pci_.template disable_pin<RX_>();
 			if (buffer_handling == BufferHandling::CLEAR)
 				in_().queue().clear();
 			out_().queue().lock();
@@ -685,13 +682,13 @@ namespace serial::soft
 		{
 			this->pin_change<RX>(parity_, errors());
 			// Clear PCI interrupt to remove pending PCI occurred during this method and to detect next start bit
-			pci_->clear_();
+			pci_.clear_();
 		}
 
 		Parity parity_;
 		typename gpio::FastPinType<TX>::TYPE tx_;
 		typename gpio::FastPinType<RX>::TYPE rx_;
-		PCI_TYPE* pci_;
+		PCI_TYPE& pci_;
 		friend struct isr_handler;
 	};
 

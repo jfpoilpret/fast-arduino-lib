@@ -59,15 +59,15 @@ int main()
 	time::delay_ms(2000);
 
 	// Setup UART
-	serial::soft::UARX_PCI<RX> uarx{input_buffer};
 	typename interrupt::PCIType<RX>::TYPE pci;
+	serial::soft::UARX_PCI<RX> uarx{input_buffer, pci};
 	pci.enable();
 
 	// Start UART
 	// Following configurations have been tested successfully
 	// OK
-	uarx.begin(pci, 115200);
-	// uarx.begin(pci, 115200, serial::Parity::EVEN);
+	uarx.begin(115200);
+	// uarx.begin(115200, serial::Parity::EVEN);
 
 	streams::istream in = uarx.in();
 

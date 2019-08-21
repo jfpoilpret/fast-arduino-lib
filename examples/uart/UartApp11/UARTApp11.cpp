@@ -71,8 +71,8 @@ int main()
 	time::delay_ms(2000);
 
 	// Start UARX
-	serial::soft::UARX_PCI<RX> uarx{input_buffer};
 	typename interrupt::PCIType<RX>::TYPE pci;
+	serial::soft::UARX_PCI<RX> uarx{input_buffer, pci};
 	pci.enable();
 	streams::istream in = uarx.in();
 	int value;
@@ -80,7 +80,7 @@ int main()
 	uint8_t index = 0;
 	sizes[index++] = in.rdbuf().queue().items();
 	display_input_buffer(out, "#1");
-	uarx.begin(pci, 9600);
+	uarx.begin(9600);
 	// NOTE: if you type 123 456 (+NL) in console, then 456 will be forgotten
 	in >> value;
 	time::delay_ms(2000);
@@ -92,7 +92,7 @@ int main()
 
 	sizes[index++] = in.rdbuf().queue().items();
 	display_input_buffer(out, "#3");
-	uarx.begin(pci, 9600);
+	uarx.begin(9600);
 	// NOTE: if you type 456 789 (+NL) in console, then 789 will be available for next step
 	in >> value;
 	time::delay_ms(2000);
@@ -104,7 +104,7 @@ int main()
 
 	sizes[index++] = in.rdbuf().queue().items();
 	display_input_buffer(out, "#5");
-	uarx.begin(pci, 9600);
+	uarx.begin(9600);
 	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
 	in >> value;
 	time::delay_ms(2000);

@@ -43,23 +43,23 @@ int main()
 	sei();
 	
 	// Start UATX
-	serial::soft::UART_PCI<RX, TX> uart{input_buffer, output_buffer};
+	typename interrupt::PCIType<RX>::TYPE pci;
+	serial::soft::UART_PCI<RX, TX> uart{input_buffer, output_buffer, pci};
 	streams::ostream out = uart.out();
 	streams::istream in = uart.in();
-	typename interrupt::PCIType<RX>::TYPE pci;
 	pci.enable();
 
 	// Check buffer handling at end()
 	// The following should not appear has output buffer is locked until begin() is called
 	out << F("BEFORE: ABCDEFGHIKLMNOPQRSTUVWXYZ\n");
 
-	uart.begin(pci, 9600);
+	uart.begin(9600);
 	// The following should partly appear until UATX is ended and buffer cleared
 	out << F("FLUSH: ABCDEFGHIKLMNOPQRSTUVWXYZ\n");
 	uart.end();
 	time::delay_ms(2000);
 
-	uart.begin(pci, 9600);
+	uart.begin(9600);
 	time::delay_ms(2000);
 
 	// Start UARX
@@ -71,7 +71,7 @@ int main()
 	time::delay_ms(2000);
 	uart.end(serial::BufferHandling::CLEAR);
 
-	uart.begin(pci, 9600);
+	uart.begin(9600);
 	// NOTE: if you type 456 789 (+NL) in console, then 789 will be available for next step
 	in >> value;
 	out << F("value=") << value << streams::endl;
@@ -80,7 +80,7 @@ int main()
 
 	uint8_t size = in.rdbuf().queue().items();
 
-	uart.begin(pci, 9600);
+	uart.begin(9600);
 	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
 	in >> value;
 	out << F("value=") << value << streams::endl;

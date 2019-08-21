@@ -78,19 +78,19 @@ int main()
 	sei();
 	
 	// Setup UART
-	serial::soft::UART_EXT<RX, TX> uart{input_buffer, output_buffer};
 	serial::soft::UART_EXT<RX, TX>::INT_TYPE int_signal;
+	serial::soft::UART_EXT<RX, TX> uart{input_buffer, output_buffer, int_signal};
 	
 	// Start UART
 	// Uncomment the line with the configuration you want to test
-//	uart.begin(pci, 9600);
-	uart.begin(int_signal, 115200);
-//	uart.begin(pci, 230400);
-//	uart.begin(pci, 230400, Serial::Parity::NONE, Serial::StopBits::TWO);
-//	uart.begin(pci, 230400, Serial::Parity::EVEN, Serial::StopBits::TWO);
-//	uart.begin(pci, 230400, Serial::Parity::EVEN);
-//	uart.begin(pci, 115200, Serial::Parity::ODD);
-//	uart.begin(pci, 115200, Serial::Parity::EVEN);
+//	uart.begin(9600);
+	uart.begin(115200);
+//	uart.begin(230400);
+//	uart.begin(230400, Serial::Parity::NONE, Serial::StopBits::TWO);
+//	uart.begin(230400, Serial::Parity::EVEN, Serial::StopBits::TWO);
+//	uart.begin(230400, Serial::Parity::EVEN);
+//	uart.begin(115200, Serial::Parity::ODD);
+//	uart.begin(115200, Serial::Parity::EVEN);
 
 	streams::istream in = uart.in();
 	streams::ostream out = uart.out();

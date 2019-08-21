@@ -15,10 +15,10 @@ int main()
     sei();
 	
     // Start UART
-	serial::soft::UARX_PCI<RX> uarx{input_buffer};
 	typename interrupt::PCIType<RX>::TYPE pci;
+	serial::soft::UARX_PCI<RX> uarx{input_buffer, pci};
 	pci.enable();
-	uarx.begin(pci, 115200);
+	uarx.begin(115200);
 
     streams::istream in = uarx.in();
 
