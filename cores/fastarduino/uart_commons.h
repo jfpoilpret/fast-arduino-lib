@@ -52,11 +52,20 @@ namespace serial
 		TWO = 2
 	};
 
-	//TODO DOCS
+	/**
+	 * How the TX/RX buffer should be handled when ending transmission
+	 * (see `end()` methods) on UATX/UARX.
+	 */
 	enum class BufferHandling : uint8_t
 	{
+		/** Stop transmission immediately, keep buffer as-is. */
 		KEEP = 0x00,
+		/** Stop transmission immediately, clear buffer. */
 		CLEAR = 0x01,
+		/**
+		 * Flush buffer before stopping transmission (buffer will be empty after
+		 * calling `end()`).
+		 */
 		FLUSH = 0x02
 	};
 
