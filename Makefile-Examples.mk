@@ -36,7 +36,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
 					uart/UartApp2 uart/UartApp3 uart/UartApp4								\
 					sonar/Sonar1 sonar/Sonar2 sonar/Sonar3 sonar/Sonar4						\
-					sonar/Sonar5 sonar/Sonar6 sonar/Sonar7
+					sonar/Sonar5 sonar/Sonar6 sonar/Sonar7									
 
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						events/EventApp5						\
@@ -44,6 +44,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/IOStreams3							\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
+						misc/UtilsCheck							\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10 sonar/Sonar11				\
 						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
@@ -51,7 +52,13 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						tones/tones4							\
 						uart/UartApp1							\
 						uart/UartApp5							\
-						uart/UartApp6							
+						uart/UartApp6							\
+						uart/UartApp7							\
+						uart/UartApp8							\
+						uart/UartApp9							\
+						uart/UartApp10							\
+						uart/UartApp11							\
+						uart/UartApp12							
 
 EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 							int/ExternalInterrupt3				\
@@ -62,7 +69,9 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						i2c/MultiIO0							\
 						uart/UartApp1							\
 						uart/UartApp5							\
-						uart/UartApp6							
+						uart/UartApp6							\
+						uart/UartApp9							\
+						uart/UartApp10							
 
 EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						events/EventApp5						\
@@ -71,7 +80,12 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						sonar/Sonar10 sonar/Sonar11				\
 						uart/UartApp1							\
 						uart/UartApp5							\
-						uart/UartApp6							
+						uart/UartApp6							\
+						uart/UartApp8							\
+						uart/UartApp9							\
+						uart/UartApp10							\
+						uart/UartApp11							\
+						uart/UartApp12							
 
 EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								events/EventApp5						\
@@ -80,7 +94,12 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								sonar/Sonar10 sonar/Sonar11				\
 								uart/UartApp1							\
 								uart/UartApp5							\
-								uart/UartApp6					
+								uart/UartApp6							\
+								uart/UartApp7							\
+								uart/UartApp9							\
+								uart/UartApp10							\
+								uart/UartApp11							\
+								uart/UartApp12							
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\

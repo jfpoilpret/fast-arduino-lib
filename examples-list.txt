@@ -16,6 +16,12 @@ UartApp3	SW UART with PCI
 UartApp4	SW UART with INT
 UartApp5	HW UATX with flash string output
 UartApp6	HW UART with iostream conversion checks
+UartApp7	SW UATX timing debug example
+UartApp8	SW UARX timing debug example
+UartApp9	HW UART test of begin/end
+UartApp10	HW UART test of begin/end
+UartApp11	SW UART test of begin/end
+UartApp12	SW UART test of begin/end
 Flash1	Display (UATX) strings and structures from Flash
 InputCapture1	Measure button switch duration through timer ICP (UATX)
 RTTApp1b	Check all timers with RTT to blink a LED based on delay
@@ -47,6 +53,7 @@ IOStreams2	Check real Vs. null ostream
 IOStreams3	Check ostream error handling (UART)
 QueueCheck	Unit Tests of queue container
 LinkedListCheck	Unit Tests of linked list container
+UtilsCheck	Unit Tests of conversion utilities
 AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)
 AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)
 DS1307RTC1	Change RTC and display (UATX) date/time (i2c)

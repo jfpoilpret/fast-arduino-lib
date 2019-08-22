@@ -16,7 +16,7 @@
  * Software UART sample to test begin/end methods.
  * 
  * Wiring:
- * - on Arduino UNO, LEONARDO and MEGA:
+ * - on Arduino UNO:
  *   - Use standard TX/RX
  */
 
