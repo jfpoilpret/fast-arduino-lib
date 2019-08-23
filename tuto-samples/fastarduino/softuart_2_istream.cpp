@@ -3,7 +3,7 @@
 constexpr const board::InterruptPin RX = board::InterruptPin::D0_PD0_PCI2;
 #define PCI_NUM 2
 
-REGISTER_UART_PCI_ISR(RX, PCI_NUM)
+REGISTER_UARX_PCI_ISR(RX, PCI_NUM)
 
 // Buffers for UARX
 static const uint8_t INPUT_BUFFER_SIZE = 64;
