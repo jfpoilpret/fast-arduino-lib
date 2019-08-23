@@ -1233,12 +1233,11 @@ Note the following differences with a previous example using `serial::hard::UARX
 
 1. `RX` must be an interrupt pin (either `board::InterruptPin` 
 or `board::ExternalInterruptPin`)
-2. `REGISTER_UART_PCI_ISR(RX, PCI_NUM)` (or `REGISTER_UART_INT_ISR(RX, INT_NUM)`) is needed to register an ISR on 
+2. `REGISTER_UARX_PCI_ISR(RX, PCI_NUM)` (or `REGISTER_UARX_INT_ISR(RX, INT_NUM)`) is needed to register an ISR on 
 pin `RX` changes
 3. the `uarx` variable must be defined as a `serial::soft::UARX_PCI` if it is connected to an `board::InterruptPin` or a `serial::soft::UARX_EXT` if it is connected to an `board::ExternalInterruptPin`
-3. an interrupt handler must be setup (either `interrupt::PCISignal` or 
-`interrupt::INTSignal`) and enabled
-4. `begin()` is passed the interrupt handler as an extra argument
+4. an interrupt handler must be setup (either `interrupt::PCISignal` or 
+`interrupt::INTSignal`), passed to the constructor then enabled
 
 Finally, there are also two classes, `serial::soft::UART_PCI` and `serial::soft::UART_EXT`, that combine `serial::soft::UATX`
 and `serial::soft::UARX_PCI` or `serial::soft::UARX_EXT`, and work similarly as `serial::hard::UART`.

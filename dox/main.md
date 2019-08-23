@@ -13,7 +13,7 @@ FastArduino is a C++ object-oriented library for Arduino boards based on AVR MCU
 - supports both ATmega and ATtiny chips
 
 FastArduino implementation:
-- is based on C++14 standard
+- is based on C++17 standard
 - favours C++ templates rather than virtual methods whenever possible
 - virtual methods are used only when needed (mostly for event handlers)
 - never automatically registers any ISR but requires explicit registration through provided macros
