@@ -50,7 +50,7 @@ int main()
 	pci.enable();
 
 	// Check buffer handling at end()
-	// The following should not appear has output buffer is locked until begin() is called
+	// The following should not appear as output buffer is locked until begin() is called
 	out << F("BEFORE: ABCDEFGHIKLMNOPQRSTUVWXYZ\n");
 
 	uart.begin(9600);
@@ -67,6 +67,7 @@ int main()
 
 	// NOTE: if you type 123 456 (+NL) in console, then 456 will be forgotten
 	in >> value;
+	time::delay_ms(2000);
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
 	uart.end(serial::BufferHandling::CLEAR);
@@ -74,6 +75,7 @@ int main()
 	uart.begin(9600);
 	// NOTE: if you type 456 789 (+NL) in console, then 789 will be available for next step
 	in >> value;
+	time::delay_ms(2000);
 	out << F("value=") << value << streams::endl;
 	time::delay_ms(2000);
 	uart.end(serial::BufferHandling::KEEP);
@@ -83,6 +85,7 @@ int main()
 	uart.begin(9600);
 	// NOTE: if you typed 456 789 (+NL) in console beofre then 789 should immediately appear
 	in >> value;
+	time::delay_ms(2000);
 	out << F("value=") << value << streams::endl;
 	out << F("input queue size=") << size << streams::endl;
 	time::delay_ms(2000);
