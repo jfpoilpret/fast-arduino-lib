@@ -134,6 +134,6 @@ int main()
 			out.put('\n');
 			uarx.clear_errors();
 		}
-		time::delay_ms(10);
+		// time::delay_ms(1);
 	}
 }

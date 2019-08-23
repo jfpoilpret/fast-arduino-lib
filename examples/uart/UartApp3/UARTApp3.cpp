@@ -116,6 +116,6 @@ int main()
 			out.put('\n');
 			uart.clear_errors();
 		}
-		time::delay_ms(10);
+		// time::delay_ms(10);
 	}
 }
