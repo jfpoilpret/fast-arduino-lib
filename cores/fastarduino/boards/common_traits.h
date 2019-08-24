@@ -133,14 +133,17 @@ namespace board_traits
 		static constexpr const REG8 PORT{};
 		static constexpr const uint8_t DPIN_MASK = 0x00;
 		static constexpr const uint8_t PCINT = PCI_NONE;
+		static constexpr const uint8_t PCI_SHIFT = 0;
 	};
-	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_ = PCI_NONE> struct Port_trait_impl
+	template<REG PIN_, REG DDR_, REG PORT_, uint8_t DPIN_MASK_, uint8_t PCINT_ = PCI_NONE, uint8_t PCI_SHIFT_ = 0>
+	struct Port_trait_impl
 	{
 		static constexpr const REG8 PIN{PIN_};
 		static constexpr const REG8 DDR{DDR_};
 		static constexpr const REG8 PORT{PORT_};
 		static constexpr const uint8_t DPIN_MASK = DPIN_MASK_;
 		static constexpr const uint8_t PCINT = PCINT_;
+		static constexpr const uint8_t PCI_SHIFT = PCI_SHIFT_;
 	};
 
 	template<DigitalPin DPIN> struct DigitalPin_trait
@@ -261,7 +264,8 @@ namespace board_traits
 
 	template<uint8_t PCINT> struct PCI_trait
 	{
-		static constexpr const Port PORT = Port::NONE;
+		static constexpr const bool SUPPORTED = false;
+		// static constexpr const Port PORT = Port::NONE;
 		static constexpr const uint8_t PCI_MASK = 0x00;
 		static constexpr const uint8_t PCICR_MASK = 0x00;
 		static constexpr const uint8_t PCIFR_MASK = 0x00;
@@ -273,7 +277,8 @@ namespace board_traits
 			 REG PCMSK__>
 	struct PCI_trait_impl
 	{
-		static constexpr const Port PORT = PORT_;
+		static constexpr const bool SUPPORTED = (PORT_ != Port::NONE);
+		// static constexpr const Port PORT = PORT_;
 		static constexpr const uint8_t PCI_MASK = PCI_MASK_;
 		static constexpr const uint8_t PCICR_MASK = PCICR_MASK_;
 		static constexpr const uint8_t PCIFR_MASK = PCIFR_MASK_;

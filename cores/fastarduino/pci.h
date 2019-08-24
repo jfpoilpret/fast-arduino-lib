@@ -101,13 +101,62 @@ namespace board
 	}
 };
 
+
 namespace interrupt
 {
+	// All PCI-related methods called by pre-defined ISR are defined here
+	//====================================================================
+
 	/// @cond notdocumented
-	// Forward declaration
-	template<board::InterruptPin PIN> void check_mega_bug();
+	struct isr_handler_pci
+	{
+		template<uint8_t PCI_NUM_, board::InterruptPin PCIPIN_>
+		static constexpr uint8_t get_pci_pin_bit()
+		{
+			constexpr board::DigitalPin PIN = board::PCI_PIN<PCIPIN_>();
+			using PINTRAIT = board_traits::DigitalPin_trait<PIN>;
+			using PORTTRAIT = board_traits::Port_trait<PINTRAIT::PORT>;
+			return bits::BV8(PINTRAIT::BIT) << PORTTRAIT::PCI_SHIFT;
+		}
+
+		template<uint8_t PCI_NUM_> static void check_pci_pins() {}
+
+		template<uint8_t PCI_NUM_, board::InterruptPin PCIPIN1_, board::InterruptPin... PCIPINS_>
+		static void check_pci_pins()
+		{
+			static_assert(board_traits::PCI_trait<PCI_NUM_>::SUPPORTED, "PORT must support PCI");
+			constexpr board::DigitalPin PIN = board::PCI_PIN<PCIPIN1_>();
+			using PINTRAIT = board_traits::DigitalPin_trait<PIN>;
+			using PORTTRAIT = board_traits::Port_trait<PINTRAIT::PORT>;
+			using PCITRAIT = board_traits::PCI_trait<PCI_NUM_>;
+			static_assert(PORTTRAIT::PCINT == PCI_NUM_, "PIN must be within this PCINT");
+			static_assert(PCITRAIT::PCI_MASK & get_pci_pin_bit<PCI_NUM_, PCIPIN1_>(),
+						  "PIN must be a PCI within PORT");
+			// Check other pins
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+		}
+
+		template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::InterruptPin... PCIPINS_>
+		static void pci_method()
+		{
+			// Check pin is compliant
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+			// Call handler back
+			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
+		}
+
+		template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::InterruptPin... PCIPINS_> static void pci_function()
+		{
+			// Check pin is compliant
+			check_pci_pins<PCI_NUM_, PCIPINS_...>();
+			// Call handler back
+			CALLBACK_();
+		}
+	};
 	/// @endcond
 
+	//TODO PORT_ should not be the only way to refer to PCISignal as 2 ports may
+	// refer to the same PCISignal...
 	/**
 	 * Handler of a Pin Change Interrupt vector, i.e. a @p PORT_. For each PCINT
 	 * vector you need, you must create one instance of this handler. 
@@ -135,7 +184,7 @@ namespace interrupt
 
 	public:
 		/** The IO port which PCINT vector is managed by this PCISignal. */
-		static constexpr const board::Port PORT = PORT_;
+		// static constexpr const board::Port PORT = PORT_;
 
 		/// @cond notdocumented
 		//NOTE this constructor exists only to add a static_assert checked when
@@ -282,12 +331,8 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> void enable_pin()
 		{
-			check_mega_bug<PIN>();
-			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
-			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & bits::BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
-						  "PIN must be a PCI within PORT");
-			enable_pins(bits::BV8(board_traits::DigitalPin_trait<DPIN>::BIT));
+			check_pin_pci<PIN>();
+			enable_pins(isr_handler_pci::get_pci_pin_bit<PCINT, PIN>());
 		}
 
 		/**
@@ -304,12 +349,8 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> void disable_pin()
 		{
-			check_mega_bug<PIN>();
-			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
-			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & bits::BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
-						  "PIN must be a PCI within PORT");
-			synchronized TRAIT::PCMSK_ &= bits::CBV8(board_traits::DigitalPin_trait<DPIN>::BIT);
+			check_pin_pci<PIN>();
+			disable_pins(isr_handler_pci::get_pci_pin_bit<PCINT, PIN>());
 		}
 
 		/**
@@ -445,12 +486,8 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> void enable_pin_()
 		{
-			check_mega_bug<PIN>();
-			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
-			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & bits::BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
-						  "PIN must be a PCI within PORT");
-			enable_pins_(bits::BV8(board_traits::DigitalPin_trait<DPIN>::BIT));
+			check_pin_pci<PIN>();
+			enable_pins_(isr_handler_pci::get_pci_pin_bit<PCINT, PIN>());
 		}
 
 		/**
@@ -467,12 +504,14 @@ namespace interrupt
 		 */
 		template<board::InterruptPin PIN> void disable_pin_()
 		{
-			check_mega_bug<PIN>();
-			constexpr board::DigitalPin DPIN = board::PCI_PIN<PIN>();
-			static_assert(board_traits::DigitalPin_trait<DPIN>::PORT == PORT, "PIN must be within PORT");
-			static_assert(TRAIT::PCI_MASK & bits::BV8(board_traits::DigitalPin_trait<DPIN>::BIT),
-						  "PIN must be a PCI within PORT");
-			TRAIT::PCMSK_ &= bits::CBV8(board_traits::DigitalPin_trait<DPIN>::BIT);
+			check_pin_pci<PIN>();
+			disable_pins_(isr_handler_pci::get_pci_pin_bit<PCINT, PIN>());
+		}
+
+	private:
+		template<board::InterruptPin PIN> void check_pin_pci()
+		{
+			isr_handler_pci::check_pci_pins<PCINT, PIN>();
 		}
 	};
 
@@ -502,59 +541,6 @@ namespace interrupt
 		static constexpr const uint8_t PCINT =
 			board_traits::Port_trait<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>::PCINT;
 	};
-
-	/// @cond notdocumented
-	// Work-around for https://github.com/jfpoilpret/fast-arduino-lib/issues/40
-	// MEGA-only: prevent template arguments D15_PJ0_PCI1 and D14_PJ1_PCI1
-	template<board::InterruptPin PIN> void check_mega_bug()
-	{
-#ifdef ARDUINO_MEGA
-		static_assert(PIN != board::InterruptPin::D14_PJ1_PCI1,
-					  "Do not use this API with D14_PJ1_PCI1 (see issue #40)");
-		static_assert(PIN != board::InterruptPin::D15_PJ0_PCI1,
-					  "Do not use this API with D15_PJ0_PCI1 (see issue #40)");
-#endif
-	}
-
-	// All PCI-related methods called by pre-defined ISR are defined here
-	//====================================================================
-
-	struct isr_handler_pci
-	{
-		template<uint8_t PCI_NUM_> static void check_pci_pins() {}
-
-		template<uint8_t PCI_NUM_, board::InterruptPin PCIPIN1_, board::InterruptPin... PCIPINS_>
-		static void check_pci_pins()
-		{
-			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
-			constexpr board::DigitalPin PIN = board::PCI_PIN<PCIPIN1_>();
-			static_assert(board_traits::DigitalPin_trait<PIN>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
-						  "PIN port must match PCI_NUM port");
-			static_assert(
-				bits::BV8(board_traits::DigitalPin_trait<PIN>::BIT) & board_traits::PCI_trait<PCI_NUM_>::PCI_MASK,
-				"PIN must be a PCINT pin");
-			// Check other pins
-			check_pci_pins<PCI_NUM_, PCIPINS_...>();
-		}
-
-		template<uint8_t PCI_NUM_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(), board::InterruptPin... PCIPINS_>
-		static void pci_method()
-		{
-			// Check pin is compliant
-			check_pci_pins<PCI_NUM_, PCIPINS_...>();
-			// Call handler back
-			interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();
-		}
-
-		template<uint8_t PCI_NUM_, void (*CALLBACK_)(), board::InterruptPin... PCIPINS_> static void pci_function()
-		{
-			// Check pin is compliant
-			check_pci_pins<PCI_NUM_, PCIPINS_...>();
-			// Call handler back
-			CALLBACK_();
-		}
-	};
-	/// @endcond
 }
 
 #endif /* PCI_HH */
