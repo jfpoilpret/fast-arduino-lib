@@ -7,6 +7,7 @@ PinChangeInterrupt1	Use PCI on push button to light LED
 PinChangeInterrupt2	Use PCI on 3 push buttons to light 4 LEDs (IOPin)
 PinChangeInterrupt3	Use PCI on 3 push buttons to light 4 LEDs (IOPort)
 PinChangeInterrupt4	LED command by 2 buttons (2 PCI ISR).
+PinChangeInterrupt5MEGA	LED command by 3 buttons on MEGA specificities.
 ExternalInterrupt1	LED switch based on button (INT ISR, power down)
 ExternalInterrupt2	LED switch based on button (empty ISR, power down)
 ExternalInterrupt3	LED switch based on 2 buttons (2 INT ISR, power down)
