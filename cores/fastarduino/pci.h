@@ -129,8 +129,7 @@ namespace interrupt
 			using PORTTRAIT = board_traits::Port_trait<PINTRAIT::PORT>;
 			using PCITRAIT = board_traits::PCI_trait<PCI_NUM_>;
 			static_assert(PORTTRAIT::PCINT == PCI_NUM_, "PIN must be within this PCINT");
-			static_assert(PCITRAIT::PCI_MASK & get_pci_pin_bit<PCI_NUM_, PCIPIN1_>(),
-						  "PIN must be a PCI within PORT");
+			static_assert(PCITRAIT::PCI_MASK & get_pci_pin_bit<PCI_NUM_, PCIPIN1_>(), "PIN must be a PCI within PORT");
 			// Check other pins
 			check_pci_pins<PCI_NUM_, PCIPINS_...>();
 		}
@@ -168,18 +167,16 @@ namespace interrupt
 	 * If you don't know the port you need to handle but only a pin, then you can
 	 * use `PCIType<PIN>::TYPE`.
 	 * 
-	 * @tparam PORT_ the IO port which PCINT vector you want to manage; if @p PORT_
-	 * has no associated PCINT vector then the program will not compile.
+	 * @tparam PCINT_ the PCINT vector you want to manage
 	 * @sa REGISTER_PCI_ISR_FUNCTION
 	 * @sa REGISTER_PCI_ISR_METHOD
 	 * @sa REGISTER_PCI_ISR_EMPTY
 	 * @sa PCIType
 	 */
-	template<board::Port PORT_> class PCISignal
+	template<uint8_t PCINT_> class PCISignal
 	{
 	private:
-		using PORT_TRAIT = board_traits::Port_trait<PORT_>;
-		using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
+		using TRAIT = board_traits::PCI_trait<PCINT_>;
 
 	public:
 		/// @cond notdocumented
@@ -187,12 +184,12 @@ namespace interrupt
 		// PCISignal is constructed not when its template type gets instantiated.
 		PCISignal()
 		{
-			static_assert(PORT_TRAIT::PCINT != board_traits::PCI_NONE, "PORT_ must support PCINT");
+			static_assert(TRAIT::SUPPORTED, "PCINT_ must be a valid PCINT number");
 		}
 		/// @endcond
 
 		/** The PCINT vector number for this PCISignal. */
-		static constexpr const uint8_t PCINT = PORT_TRAIT::PCINT;
+		static constexpr const uint8_t PCINT = PCINT_;
 
 		/**
 		 * Enable pin change interrupts for the port of the `PCISignal`.
@@ -531,11 +528,15 @@ namespace interrupt
 	 */
 	template<board::InterruptPin PIN> struct PCIType
 	{
-		/** PCISignal type for @p PIN */
-		using TYPE = PCISignal<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>;
+	private:
+		using PIN_TRAIT = board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>;
+		using PORT_TRAIT = board_traits::Port_trait<PIN_TRAIT::PORT>;
+
+	public:
 		/** `PCINT` vector number for this @p PIN */
-		static constexpr const uint8_t PCINT =
-			board_traits::Port_trait<board_traits::DigitalPin_trait<board::PCI_PIN<PIN>()>::PORT>::PCINT;
+		static constexpr const uint8_t PCINT = PORT_TRAIT::PCINT;
+		/** PCISignal type for @p PIN */
+		using TYPE = PCISignal<PCINT>;
 	};
 }
 

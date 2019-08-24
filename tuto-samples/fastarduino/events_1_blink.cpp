@@ -70,7 +70,7 @@ int main()
 	interrupt::register_handler(generator);
 
 	// Setup PCI interrupts
-	interrupt::PCISignal<BUTTONS_PORT> signal;
+	interrupt::PCISignal<PCI_NUM> signal;
 	signal.enable_pins_(0xFF);
 	signal.enable_();
 

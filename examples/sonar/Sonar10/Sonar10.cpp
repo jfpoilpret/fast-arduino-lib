@@ -167,7 +167,7 @@ int main()
 	rtt.begin_();
 
 	// Setup PCI for all sonar echo pins
-	interrupt::PCISignal<ECHO_PORT> signal;
+	interrupt::PCISignal<PCI_NUM> signal;
 	signal.set_enable_pins_(ECHO_MASK);
 	signal.enable_();
 
