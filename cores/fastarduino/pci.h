@@ -101,7 +101,6 @@ namespace board
 	}
 };
 
-
 namespace interrupt
 {
 	// All PCI-related methods called by pre-defined ISR are defined here
@@ -183,9 +182,6 @@ namespace interrupt
 		using TRAIT = board_traits::PCI_trait<PORT_TRAIT::PCINT>;
 
 	public:
-		/** The IO port which PCINT vector is managed by this PCISignal. */
-		// static constexpr const board::Port PORT = PORT_;
-
 		/// @cond notdocumented
 		//NOTE this constructor exists only to add a static_assert checked when
 		// PCISignal is constructed not when its template type gets instantiated.
