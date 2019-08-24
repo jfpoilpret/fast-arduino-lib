@@ -66,6 +66,7 @@ EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 
 EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						pci/PinChangeInterrupt4					\
+						pci/PinChangeInterrupt5MEGA				\
 						i2c/MultiIO0							\
 						uart/UartApp1							\
 						uart/UartApp5							\
