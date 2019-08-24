@@ -272,9 +272,7 @@ namespace board_traits
 		static constexpr const REG8 PCIFR_{};
 		static constexpr const REG8 PCMSK_{};
 	};
-	//TODO remove PORT_ argument
-	template<Port PORT_, uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__,
-			 REG PCMSK__>
+	template<uint8_t PCI_MASK_, uint8_t PCICR_MASK_, uint8_t PCIFR_MASK_, REG PCICR__, REG PCIFR__, REG PCMSK__>
 	struct PCI_trait_impl
 	{
 		static constexpr const bool SUPPORTED = true;

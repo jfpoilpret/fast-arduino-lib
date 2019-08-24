@@ -85,10 +85,10 @@ namespace board_traits
 	 */
 	//	PCI0 = 0,			// D0-D7, PA0-7
 	template<> struct PCI_trait<0>: 
-		PCI_trait_impl<Port::PORT_A, 0xFF, bits::BV8(PCIE0), bits::BV8(PCIF0), R_(GIMSK), R_(GIFR), R_(PCMSK0)> {};
+		PCI_trait_impl<0xFF, bits::BV8(PCIE0), bits::BV8(PCIF0), R_(GIMSK), R_(GIFR), R_(PCMSK0)> {};
 	//	PCI1 = 1			// D8-D10, PB0-2 (PB3 used for RESET)
 	template<> struct PCI_trait<1>: 
-		PCI_trait_impl<Port::PORT_B, 0x07, bits::BV8(PCIE1), bits::BV8(PCIF1), R_(GIMSK), R_(GIFR), R_(PCMSK1)> {};
+		PCI_trait_impl<0x07, bits::BV8(PCIE1), bits::BV8(PCIF1), R_(GIMSK), R_(GIFR), R_(PCMSK1)> {};
 	
 	//=======
 	// USART
