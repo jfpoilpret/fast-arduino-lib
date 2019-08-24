@@ -1304,10 +1304,7 @@ namespace devices::sonar
 		{
 			timer::isr_handler::check_timer<TIMER_>();
 			// handle first echo pin
-			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
-			static_assert(	board_traits::DigitalPin_trait<board::PCI_PIN<ECHO1_>()>::PORT ==
-							board_traits::PCI_trait<PCI_NUM_>::PORT,
-							"ECHO port must match PCI_NUM port");
+			interrupt::isr_handler_pci::check_pci_pins<PCI_NUM_, ECHO1_>();
 			using SONAR = ASYNC_PCINT_HCSR04<TIMER_, TRIGGER_, ECHO1_>;
 			bool result = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
 			// handle other echo pins
@@ -1365,10 +1362,7 @@ namespace devices::sonar
 		{
 			timer::isr_handler::check_timer<TIMER_>();
 			// handle first echo pin
-			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT != board::Port::NONE, "PORT must support PCI");
-			constexpr const board::DigitalPin ECHO_PIN = board::PCI_PIN<ECHO_>();
-			static_assert(board_traits::DigitalPin_trait<ECHO_PIN>::PORT == board_traits::PCI_trait<PCI_NUM_>::PORT,
-						  "ECHO port must match PCI_NUM port");
+			interrupt::isr_handler_pci::check_pci_pins<PCI_NUM_, ECHO_>();
 			using SONAR = ASYNC_PCINT_HCSR04<TIMER_, TRIGGER_, ECHO_>;
 			return interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
 		}
@@ -1386,8 +1380,8 @@ namespace devices::sonar
 		static void multi_sonar_pci_method()
 		{
 			timer::isr_handler::check_timer<TIMER_>();
-			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT == ECHO_PORT_, "ECHO_PORT must match PCI_NUM");
 			using PTRAIT = board_traits::Port_trait<ECHO_PORT_>;
+			static_assert(PTRAIT::PCINT == PCI_NUM_, "ECHO_PORT must match PCI_NUM");
 			static_assert((PTRAIT::DPIN_MASK & ECHO_MASK_) == ECHO_MASK_, "ECHO_MASK must contain available PORT pins");
 			using SONAR = MultiHCSR04<TIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>;
 			SonarEvent<TIMER_> event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
@@ -1400,8 +1394,8 @@ namespace devices::sonar
 		static void multi_sonar_pci_function()
 		{
 			timer::isr_handler::check_timer<TIMER_>();
-			static_assert(board_traits::PCI_trait<PCI_NUM_>::PORT == ECHO_PORT_, "ECHO_PORT must match PCI_NUM");
 			using PTRAIT = board_traits::Port_trait<ECHO_PORT_>;
+			static_assert(PTRAIT::PCINT == PCI_NUM_, "ECHO_PORT must match PCI_NUM");
 			static_assert((PTRAIT::DPIN_MASK & ECHO_MASK_) == ECHO_MASK_, "ECHO_MASK must contain available PORT pins");
 			using SONAR = MultiHCSR04<TIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>;
 			SonarEvent<TIMER_> event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
