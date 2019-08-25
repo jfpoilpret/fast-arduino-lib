@@ -771,7 +771,7 @@ to the events queue.
 As [usual](@ref interrupts), we have to register this handler to the right PCI ISR:
 @skipline REGISTER
 
-Next we define the size of the events queue, which must be a power of 2 (this allows code size and speed optimizations):
+Next we define the size of the events queue:
 @skipline EVENT_QUEUE_SIZE
 This must be known at compile-time as we do not want dynamic memory allocation in an embedded program.
 

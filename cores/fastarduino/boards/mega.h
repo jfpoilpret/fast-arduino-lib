@@ -551,10 +551,9 @@ namespace board
 		D12_PB6_PCI0 = uint8_t(DigitalPin::D12_PB6),
 		D13_PB7_PCI0 = uint8_t(DigitalPin::D13_PB7),
 
-		//TODO missing PE0 (PCINT8); note vector PCINT1 is shared with PJ port,
-		// which is not supported by FastArduino currently
+		// PE0
+		D0_PE0_PCI1 = uint8_t(DigitalPin::D0_PE0),
 
-		//FIXME I doubt PCINT will work for those 2 pins
 		// PJ0-1
 		D15_PJ0_PCI1 = uint8_t(DigitalPin::D15_PJ0),
 		D14_PJ1_PCI1 = uint8_t(DigitalPin::D14_PJ1),

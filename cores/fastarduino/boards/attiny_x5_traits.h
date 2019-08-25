@@ -79,7 +79,7 @@ namespace board_traits
 	 * Pin change interrupt (PCI) pins.
 	 */
 	template<> struct PCI_trait<0>: 
-		PCI_trait_impl<Port::PORT_B, 0x1F, bits::BV8(PCIE), bits::BV8(PCIF), R_(GIMSK), R_(GIFR), R_(PCMSK)> {};
+		PCI_trait_impl<0x1F, bits::BV8(PCIE), bits::BV8(PCIF), R_(GIMSK), R_(GIFR), R_(PCMSK)> {};
 	
 	//=======
 	// USART

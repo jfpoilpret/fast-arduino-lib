@@ -204,7 +204,7 @@ private:
 			trigger();
 	}
 	
-	interrupt::PCISignal<ECHO_PORT> signal_;
+	interrupt::PCISignal<PCI_NUM> signal_;
 	RTT rtt_;
 	SONAR sonar_;
 	QUEUE& queue_;

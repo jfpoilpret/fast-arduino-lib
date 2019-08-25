@@ -325,7 +325,7 @@ namespace serial::soft
 		static constexpr uint16_t compute_delay(uint16_t total_cycles, uint16_t less_cycles)
 		{
 			// We add 3 cycles to allow rounding
-			return (total_cycles > less_cycles ? (total_cycles - less_cycles + 3) / 4 : 1);
+			return (total_cycles > less_cycles) ? ((total_cycles - less_cycles + 3) / 4) : 1;
 		}
 
 		// NOTE declaring ibuf_ first instead of last optimizes code size (2 bytes)

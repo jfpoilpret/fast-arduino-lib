@@ -29,13 +29,14 @@ namespace board_traits
 	template<> struct Port_trait<Port::PORT_B>: Port_trait_impl<R_(PINB), R_(DDRB), R_(PORTB), 0xFF, 0> {};
 	template<> struct Port_trait<Port::PORT_C>: Port_trait_impl<R_(PINC), R_(DDRC), R_(PORTC), 0xFF> {};
 	template<> struct Port_trait<Port::PORT_D>: Port_trait_impl<R_(PIND), R_(DDRD), R_(PORTD), 0x8F> {};
-	template<> struct Port_trait<Port::PORT_E>: Port_trait_impl<R_(PINE), R_(DDRE), R_(PORTE), 0x3B> {};
+	//	PCI1 = 1,			// PE0
+	template<> struct Port_trait<Port::PORT_E>: Port_trait_impl<R_(PINE), R_(DDRE), R_(PORTE), 0x3B, 1> {};
 	template<> struct Port_trait<Port::PORT_F>: Port_trait_impl<R_(PINF), R_(DDRF), R_(PORTF), 0xFF> {};
 	template<> struct Port_trait<Port::PORT_G>: Port_trait_impl<R_(PING), R_(DDRG), R_(PORTG), 0x27> {};
 	template<> struct Port_trait<Port::PORT_H>: Port_trait_impl<R_(PINH), R_(DDRH), R_(PORTH), 0x7B> {};
-//	PCI1 = 1,			// PJ0-1
-	template<> struct Port_trait<Port::PORT_J>: Port_trait_impl<R_(PINJ), R_(DDRJ), R_(PORTJ), 0x03, 1> {};
-//	PCI2 = 2			// PK0-7
+	//	PCI1 = 1,			// PJ0-1
+	template<> struct Port_trait<Port::PORT_J>: Port_trait_impl<R_(PINJ), R_(DDRJ), R_(PORTJ), 0x03, 1, 1> {};
+	//	PCI2 = 2			// PK0-7
 	template<> struct Port_trait<Port::PORT_K>: Port_trait_impl<R_(PINK), R_(DDRK), R_(PORTK), 0xFF, 2> {};
 	template<> struct Port_trait<Port::PORT_L>: Port_trait_impl<R_(PINL), R_(DDRL), R_(PORTL), 0xFF> {};
 	
@@ -182,11 +183,11 @@ namespace board_traits
 	 * Pin change interrupt (PCI) pins.
 	 */
 	template<> struct PCI_trait<0>: 
-		PCI_trait_impl<Port::PORT_B, 0xFF, bits::BV8(PCIE0), bits::BV8(PCIF0), R_(PCICR), R_(PCIFR), R_(PCMSK0)> {};
+		PCI_trait_impl<0xFF, bits::BV8(PCIE0), bits::BV8(PCIF0), R_(PCICR), R_(PCIFR), R_(PCMSK0)> {};
 	template<> struct PCI_trait<1>: 
-		PCI_trait_impl<Port::PORT_J, 0x03, bits::BV8(PCIE1), bits::BV8(PCIF1), R_(PCICR), R_(PCIFR), R_(PCMSK1)> {};
+		PCI_trait_impl<0x07, bits::BV8(PCIE1), bits::BV8(PCIF1), R_(PCICR), R_(PCIFR), R_(PCMSK1)> {};
 	template<> struct PCI_trait<2>: 
-		PCI_trait_impl<Port::PORT_K, 0xFF, bits::BV8(PCIE2), bits::BV8(PCIF2), R_(PCICR), R_(PCIFR), R_(PCMSK2)> {};
+		PCI_trait_impl<0xFF, bits::BV8(PCIE2), bits::BV8(PCIF2), R_(PCICR), R_(PCIFR), R_(PCMSK2)> {};
 
 	//=======
 	// USART
