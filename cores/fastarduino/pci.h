@@ -123,13 +123,14 @@ namespace interrupt
 		template<uint8_t PCI_NUM_, board::InterruptPin PCIPIN1_, board::InterruptPin... PCIPINS_>
 		static void check_pci_pins()
 		{
-			static_assert(board_traits::PCI_trait<PCI_NUM_>::SUPPORTED, "PORT must support PCI");
+			static_assert(board_traits::PCI_trait<PCI_NUM_>::SUPPORTED, "PCI_NUM must support PCI");
 			constexpr board::DigitalPin PIN = board::PCI_PIN<PCIPIN1_>();
 			using PINTRAIT = board_traits::DigitalPin_trait<PIN>;
 			using PORTTRAIT = board_traits::Port_trait<PINTRAIT::PORT>;
 			using PCITRAIT = board_traits::PCI_trait<PCI_NUM_>;
-			static_assert(PORTTRAIT::PCINT == PCI_NUM_, "PIN must be within this PCINT");
-			static_assert(PCITRAIT::PCI_MASK & get_pci_pin_bit<PCI_NUM_, PCIPIN1_>(), "PIN must be a PCI within PORT");
+			static_assert(PORTTRAIT::PCINT == PCI_NUM_, "PIN PORT must use this PCINT");
+			static_assert(PCITRAIT::PCI_MASK & get_pci_pin_bit<PCI_NUM_, PCIPIN1_>(), 
+						  "PIN must be a PCI within this PCINT");
 			// Check other pins
 			check_pci_pins<PCI_NUM_, PCIPINS_...>();
 		}
@@ -153,18 +154,16 @@ namespace interrupt
 	};
 	/// @endcond
 
-	//TODO PORT_ should not be the only way to refer to PCISignal as 2 ports may
-	// refer to the same PCISignal...
 	/**
-	 * Handler of a Pin Change Interrupt vector, i.e. a @p PORT_. For each PCINT
+	 * Handler of a Pin Change Interrupt vector. For each PCINT
 	 * vector you need, you must create one instance of this handler. 
 	 * With one instance, you are then able to handle individually each pin 
 	 * which interrupt you want to enable or disable. 
 	 * If you need a function or method to be called back when a Pin Change Interrupt
 	 * occurs for a PCINT vector, then you have to use `REGISTER_PCI_ISR_FUNCTION` or 
 	 * `REGISTER_PCI_ISR_METHOD()` macros.
-	 * If you don't then use `REGISTER_PCI_ISR_EMPTY` macro.
-	 * If you don't know the port you need to handle but only a pin, then you can
+	 * If you don't then use `REGISTER_PCI_ISR_EMPTY()` macro.
+	 * If you don't know the PCINT you need to handle but only a pin, then you can
 	 * use `PCIType<PIN>::TYPE`.
 	 * 
 	 * @tparam PCINT_ the PCINT vector you want to manage
@@ -192,8 +191,8 @@ namespace interrupt
 		static constexpr const uint8_t PCINT = PCINT_;
 
 		/**
-		 * Enable pin change interrupts for the port of the `PCISignal`.
-		 * Enabling interrupts on the port is not sufficient, you should enable 
+		 * Enable pin change interrupts handled by this `PCISignal`.
+		 * Enabling interrupts on a PCINT is not sufficient, you should enable 
 		 * pin change interrupts for each individual pin you are interested in,
 		 * with `enable_pin()` or `enable_pins()`.
 		 * Note that this method is synchronized, i.e. it disables all interrupts
@@ -211,9 +210,9 @@ namespace interrupt
 		}
 
 		/**
-		 * Disable all pin change interrupts for the port of the `PCISignal`.
+		 * Disable all pin change interrupts handled by this `PCISignal`.
 		 * If you need to only diable pin change interrupts for some pins of that
-		 * port, then use `disable_pin()` instead.
+		 * PCINT, then use `disable_pin()` instead.
 		 * Note that this method is synchronized, i.e. it disables all interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
@@ -228,7 +227,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Clear the interrupt flag for this pin change interrupt port.
+		 * Clear the interrupt flag for this pin change interrupt vector.
 		 * Generally, you would not need this method as that interrupt flag
 		 * automatically gets cleared when the matching ISR is executed. 
 		 * Note that this method is synchronized, i.e. it disables all interrupts
@@ -243,7 +242,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Set the exact list of pins, in this port, for which Pin Change Interrupts
+		 * Set the exact list of pins, in this PCINT, for which Pin Change Interrupts
 		 * must be enabled. For other pins, interrupts will be disabled.
 		 * This method provides no compile-time safety net if you pass a wrong mask.
 		 * Note that this method is synchronized, i.e. it disables all interrupts
@@ -251,7 +250,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `set_enable_pins_()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
-		 * to enable for this port; other pins will have interrupts disbaled.
+		 * to enable for this PCINT; other pins will have interrupts disabled.
 		 * @sa set_enable_pins_()
 		 * @sa enable_pins()
 		 * @sa disable_pins()
@@ -262,7 +261,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Enable pin change interrupts for several pins of this port.
+		 * Enable pin change interrupts for several pins of this PCINT.
 		 * This does not enable completely interrupts, for this you need to also
 		 * call `enable()`.
 		 * This method is useful when you have several pins to enable at once; if
@@ -273,7 +272,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `enable_pins_()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
-		 * to enable for this port; only pins included in @p mask will be affected;
+		 * to enable for this PCINT; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
 		 * @sa enable()
 		 * @sa enable_pins_()
@@ -286,7 +285,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Disable pin change interrupts for several pins of this port.
+		 * Disable pin change interrupts for several pins of this PCINT.
 		 * This does not disable completely interrupts, for this you need to also
 		 * call `disable()`.
 		 * This method is useful when you have several pins to disable at once; if
@@ -297,7 +296,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `disable_pins_()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
-		 * to disable for this port; only pins included in @p mask will be affected;
+		 * to disable for this PCINT; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
 		 * @sa disable()
 		 * @sa disable_pins_()
@@ -316,7 +315,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `enable_pin_()` instead.
 		 * @tparam PIN the pin for which to enable Pin Change Interrupts; this must
-		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * belong to the handler's @p PCINT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
 		 * @sa enable_pin_()
 		 * @sa disable_pin()
@@ -335,7 +334,7 @@ namespace interrupt
 		 * If you do not need synchronization, then you should better use
 		 * `disable_pin_()` instead.
 		 * @tparam PIN the pin for which to disable Pin Change Interrupts; this must
-		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * belong to the handler's @p PCINT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
 		 * @sa disable_pin_()
 		 * @sa enable_pin()
@@ -347,8 +346,8 @@ namespace interrupt
 		}
 
 		/**
-		 * Enable pin change interrupts for the port of the `PCISignal`.
-		 * Enabling interrupts on the port is not sufficient, you should enable 
+		 * Enable pin change interrupts for this `PCISignal`.
+		 * Enabling interrupts is not sufficient, you should enable 
 		 * pin change interrupts for each individual pin you are interested in,
 		 * with `enable_pin()` or `enable_pins()`.
 		 * Note that this method is not synchronized, hence you should ensure it
@@ -366,9 +365,9 @@ namespace interrupt
 		}
 
 		/**
-		 * Disable all pin change interrupts for the port of the `PCISignal`.
+		 * Disable all pin change interrupts for this `PCISignal`.
 		 * If you need to only diable pin change interrupts for some pins of that
-		 * port, then use `disable_pin()` instead.
+		 * PCINT, then use `disable_pin()` instead.
 		 * Note that this method is not synchronized, hence you should ensure it
 		 * is called only while global interrupts are not enabled.
 		 * If you need synchronization, then you should better use
@@ -383,7 +382,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Clear the interrupt flag for this pin change interrupt port.
+		 * Clear the interrupt flag for this pin change interrupt vector.
 		 * Generally, you would not need this method as that interrupt flag
 		 * automatically gets cleared when the matching ISR is executed. 
 		 * Note that this method is not synchronized, hence you should ensure it
@@ -398,7 +397,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Set the exact list of pins, in this port, for which Pin Change Interrupts
+		 * Set the exact list of pins, in this PCINT, for which Pin Change Interrupts
 		 * must be enabled. For other pins, interrupts will be disabled.
 		 * This method provides no compile-time safety net if you pass a wrong mask.
 		 * Note that this method is not synchronized, hence you should ensure it
@@ -406,7 +405,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `set_enable_pins()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
-		 * to enable for this port; other pins will have interrupts disbaled.
+		 * to enable for this PCINT; other pins will have interrupts disabled.
 		 * @sa set_enable_pins()
 		 * @sa enable_pins_()
 		 * @sa disable_pins_()
@@ -417,7 +416,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Enable pin change interrupts for several pins of this port.
+		 * Enable pin change interrupts for several pins of this PCINT.
 		 * This does not enable completely interrupts, for this you need to also
 		 * call `enable_()`.
 		 * This method is useful when you have several pins to enable at once; if
@@ -428,7 +427,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `enable_pin()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
-		 * to enable for this port; only pins included in @p mask will be affected;
+		 * to enable for this PCINT; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
 		 * @sa enable_()
 		 * @sa enable_pins()
@@ -441,7 +440,7 @@ namespace interrupt
 		}
 
 		/**
-		 * Disable pin change interrupts for several pins of this port.
+		 * Disable pin change interrupts for several pins of this PCINT.
 		 * This does not disable completely interrupts, for this you need to also
 		 * call `disable_()`.
 		 * This method is useful when you have several pins to disable at once; if
@@ -452,7 +451,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `disable_pin()` instead.
 		 * @param mask the mask of pin bits which pin change interrupts you want
-		 * to disable for this port; only pins included in @p mask will be affected;
+		 * to disable for this PCINT; only pins included in @p mask will be affected;
 		 * if other pins are already enabled, they won't be changed.
 		 * @sa disable_()
 		 * @sa disable_pins()
@@ -471,7 +470,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `enable_pin()` instead.
 		 * @tparam PIN the pin for which to enable Pin Change Interrupts; this must
-		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * belong to the handler's @p PCINT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
 		 * @sa enable_pin()
 		 * @sa disable_pin_()
@@ -490,7 +489,7 @@ namespace interrupt
 		 * If you need synchronization, then you should better use
 		 * `disable_pin()` instead.
 		 * @tparam PIN the pin for which to disable Pin Change Interrupts; this must
-		 * belong to the handler's @p PORT and must support Pin Change Interrupts,
+		 * belong to the handler's @p PCINT and must support Pin Change Interrupts,
 		 * otherwise compilation will fail.
 		 * @sa disable_pin()
 		 * @sa enable_pin_()
