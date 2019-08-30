@@ -25,36 +25,13 @@
 #include "../flash.h"
 #include "tones.h"
 
+//TODO write BaseTonePlayer (protected)
+// write SyncTonePlayer (as before)
+// write AsynTonePlayer (several flavours: events, ISR...?)
 namespace devices::audio
 {
-	/**
-	 * This struct is the unit data manipulated by `TonePlayer`: it describes one
-	 * `Tone` along with its duration in milliseconds.
-	 * It can also hold special tones as defined in `SpecialTone` namespace.
-	 * 
-	 * Note that, although it is quite easy to define melodies with `TonePlay`,
-	 * it is less efficient in terms of code size and performance (this is due to
-	 * the need to convert tone frequencies to Timer prescaler and counter). It
-	 * is advised, to use `TonePlayer::QTonePlay` optimized structure instead.
-	 * 
-	 * @sa Tone
-	 * @sa TonePlayer
-	 * @sa SpecialTone
-	 * @sa TonePlayer::QTonePlay
-	 */
-	struct TonePlay
-	{
-		/**
-		 * The tone for this `TonePlay`.
-		 * This may be one of the special tones defined in `SpecialTone`. 
-		 */
-		Tone tone;
-		/**
-		 * The duration of this `TonePlay` in milliseconds.
-		 * This may have another meaning when`tone` is a special tone.
-		 */
-		uint16_t ms;
-	};
+	// Forward declaration
+	template<board::Timer NTIMER, board::PWMPin OUTPUT> class AbstractTonePlayer;
 
 	/**
 	 * This namespace defines special "tones" which have an impact on how to play
@@ -86,37 +63,93 @@ namespace devices::audio
 		static constexpr const Tone REPEAT_END = Tone::USER2;
 	}
 
-	//TODO allow asynchronous play (will need ISR registration)
 	/**
-	 * This API defines a player of melodies, defined as a sequence of tones and
-	 * durations.
+	 * This struct is the unit data manipulated by `TonePlayer`: it describes one
+	 * `Tone` along with its duration in milliseconds.
+	 * It can also hold special tones as defined in `SpecialTone` namespace.
 	 * 
-	 * Melodies are defined as sequence of unit information, which can be either:
-	 * - `TonePlay`s: easy to write in source code but not efficient in size of
-	 * generated code
-	 * - `TonePlayer::QTonePlay`s: requires more effort in source code, but 
-	 * reduces generated code size
-	 * Most methods exist in two flavours, one for each type.
+	 * Note that, although it is quite easy to define melodies with `TonePlay`,
+	 * it is less efficient in terms of code size and performance (this is due to
+	 * the need to convert tone frequencies to Timer prescaler and counter). It
+	 * is advised, to use `TonePlayer::QTonePlay` optimized structure instead.
 	 * 
-	 * With this API, played melodies can be stored on 3 possible locations:
-	 * - in SRAM: this is useful when you get the melody from another support
-	 * e.g. an external flash device
-	 * - in Flash: this is the mostly used way as flash s the more abundant storage
-	 * in AVR MCU
-	 * - in EEPROM: this can be useful for short melodies, when you do not want
-	 * to waste precious SRAM and Flash
-	 * Each play API has 3 distinct methods, one for each storage strategy.
-	 * 
-	 * @tparam NTIMER the AVR timer to use for the underlying Timer
-	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
-	 * this must be the pin OCnA, where n is the AVR Timer number
-	 * 
-	 * @sa TonePlay
+	 * @sa Tone
+	 * @sa TonePlayer
+	 * @sa SpecialTone
 	 * @sa TonePlayer::QTonePlay
 	 */
-	template<board::Timer NTIMER, board::PWMPin OUTPUT> class TonePlayer
+	class TonePlay
+	{
+	public:
+		/**
+		 * Default constructor, used only to declare an uninitialized
+		 * `TonePlay` variable.
+		 * You should always ensure you replace such a variable with one
+		 * constructed with the next constructor.
+		 * @sa TonePlay(Tone, uint16_t)
+		 */
+		TonePlay() = default;
+
+		/**
+		 * Construct a tone play with the provided tone and duration.
+		 * 
+		 * @param tone the `Tone` for this `TonePlay`; it will be automatically
+		 * converted (at compile-time if @p t is a constant) to the proper
+		 * timer prescaler and counter.
+		 * @param ms the duration of this tone in milliseconds; this may have
+		 * different meanings if @p t is a `SpecialTone`.
+		 */
+		constexpr TonePlay(Tone tone, uint16_t ms = 0) : tone_{tone}, ms_{ms} {}
+
+	private:
+		uint16_t duration() const
+		{
+			return ms_;
+		}
+		bool is_tone() const
+		{
+			return tone_ > Tone::SILENCE;
+		}
+		bool is_pause() const
+		{
+			return tone_ == Tone::SILENCE;
+		}
+		bool is_end() const
+		{
+			return tone_ == SpecialTone::END;
+		}
+		bool is_repeat_start() const
+		{
+			return tone_ == SpecialTone::REPEAT_START;
+		}
+		bool is_repeat_end() const
+		{
+			return tone_ == SpecialTone::REPEAT_END;
+		}
+		uint16_t repeat_count() const
+		{
+			return ms_;
+		}
+
+		template<board::Timer NTIMER, board::PWMPin OUTPUT>
+		void generate_tone(ToneGenerator<NTIMER, OUTPUT>& generator) const
+		{
+			generator.start_tone(tone_);
+		}
+
+		Tone tone_;
+		uint16_t ms_;
+
+		template<board::Timer, board::PWMPin> friend class AbstractTonePlayer;
+	};
+
+	//TODO DOC?
+	template<board::Timer NTIMER, board::PWMPin OUTPUT> class AbstractTonePlayer
 	{
 	private:
+		static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
+
+	protected:
 		using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
 
 	public:
@@ -160,14 +193,6 @@ namespace devices::audio
 			{}
 
 		private:
-			PRESCALER prescaler() const
-			{
-				return prescaler_;
-			}
-			COUNTER counter() const
-			{
-				return counter_;
-			}
 			uint16_t duration() const
 			{
 				return ms_;
@@ -195,6 +220,11 @@ namespace devices::audio
 			uint16_t repeat_count() const
 			{
 				return ms_;
+			}
+
+			void generate_tone(GENERATOR& generator) const
+			{
+				generator.start_tone(prescaler_, counter_);
 			}
 
 			static constexpr uint8_t TONE = 0x00;
@@ -229,15 +259,216 @@ namespace devices::audio
 				return TONE;
 			}
 
-			friend class TonePlayer<NTIMER, OUTPUT>;
+			friend class AbstractTonePlayer<NTIMER, OUTPUT>;
 		};
+
+	protected:
+		AbstractTonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
+
+		void prepare(const TonePlay* melody)
+		{
+			prepare_(melody, load_sram<TonePlay>);
+		}
+
+		void prepare_eeprom(const TonePlay* melody)
+		{
+			prepare_(melody, load_eeprom<TonePlay>);
+		}
+
+		void prepare_flash(const TonePlay* melody)
+		{
+			prepare_(melody, load_flash<TonePlay>);
+		}
+
+		void prepare(const QTonePlay* melody)
+		{
+			prepare_(melody, load_sram<QTonePlay>);
+		}
+
+		void prepare_eeprom(const QTonePlay* melody)
+		{
+			prepare_(melody, load_eeprom<QTonePlay>);
+		}
+
+		void prepare_flash(const QTonePlay* melody)
+		{
+			prepare_(melody, load_flash<QTonePlay>);
+		}
+
+		uint16_t start_next_note()
+		{
+			if (is_qtone_)
+				return start_next_(qtone_play_context_);
+			else
+				return start_next_(tone_play_context_);
+		}
+
+		uint16_t stop_current_note()
+		{
+			if (is_qtone_)
+				return stop_current_(qtone_play_context_);
+			else
+				return stop_current_(tone_play_context_);
+		}
+
+		bool is_finished() const
+		{
+			return (!is_qtone_) && (tone_play_context_.loader == nullptr);
+		}
+
+	private:
+		// Internal utility types
+		template<typename TONEPLAY_>
+		struct TonePlayContext
+		{
+			using TONEPLAY = TONEPLAY_;
+			using LOAD_TONE = const TONEPLAY* (*) (const TONEPLAY* address, TONEPLAY& holder);
+
+			TonePlayContext() = default;
+			TonePlayContext(LOAD_TONE loader, const TONEPLAY* play)
+			: loader{loader}, current_play{play}, repeat_play{}, repeat_times{}, no_delay{true} {}
+
+			LOAD_TONE loader;
+			const TONEPLAY* current_play;
+			const TONEPLAY* repeat_play;
+			int8_t repeat_times;
+			bool no_delay;
+		};
+
+		using TONEPLAYCONTEXT = TonePlayContext<TonePlay>;
+		using QTONEPLAYCONTEXT = TonePlayContext<QTonePlay>;
+
+		void prepare_(const TonePlay* melody, typename TONEPLAYCONTEXT::LOAD_TONE load_tone)
+		{
+			is_qtone_ = false;
+			tone_play_context_ = TONEPLAYCONTEXT{load_tone, melody};
+		}
+
+		void prepare_(const QTonePlay* melody, typename QTONEPLAYCONTEXT::LOAD_TONE load_tone)
+		{
+			is_qtone_ = true;
+			qtone_play_context_ = QTONEPLAYCONTEXT{load_tone, melody};
+		}
+
+		template<typename CONTEXT>
+		uint16_t start_next_(CONTEXT& context)
+		{
+			if (context.loader == nullptr) return 0;
+
+			uint16_t delay = 0;
+			typename CONTEXT::TONEPLAY holder;
+			const typename CONTEXT::TONEPLAY* current = context.loader(context.current_play, holder);
+			if (current->is_end())
+			{
+				context = CONTEXT{};
+				is_qtone_ = false;
+				return 0;
+			}
+			if (current->is_repeat_start())
+			{
+				context.repeat_play = context.current_play;
+				context.repeat_times = -1;
+				context.no_delay = true;
+			}
+			else if (current->is_repeat_end())
+			{
+				if (context.repeat_play)
+				{
+					if (context.repeat_times == -1) context.repeat_times = current->repeat_count();
+					if (context.repeat_times--)
+						context.current_play = context.repeat_play;
+					else
+						context.repeat_play = nullptr;
+				}
+				context.no_delay = true;
+			}
+			else
+			{
+				if (current->is_tone()) current->generate_tone(generator_);
+				delay = current->duration();
+				context.no_delay = false;
+			}
+			++context.current_play;
+			return delay;
+		}
+
+		template<typename CONTEXT>
+		uint16_t stop_current_(CONTEXT& context)
+		{
+			if (context.no_delay)
+				return 0;
+			generator_.stop_tone();
+			return INTERTONE_DELAY_MS;
+		}
+
+		template<typename TONEPLAY>
+		static const TONEPLAY* load_sram(const TONEPLAY* address, TONEPLAY& holder UNUSED)
+		{
+			return address;
+		}
+		template<typename TONEPLAY>
+		static const TONEPLAY* load_eeprom(const TONEPLAY* address, TONEPLAY& holder)
+		{
+			eeprom::EEPROM::read(address, holder);
+			return &holder;
+		}
+		template<typename TONEPLAY>
+		static const TONEPLAY* load_flash(const TONEPLAY* address, TONEPLAY& holder)
+		{
+			flash::read_flash(address, holder);
+			return &holder;
+		}
+
+		GENERATOR& generator_;
+		bool is_qtone_;
+		union
+		{
+			TONEPLAYCONTEXT tone_play_context_;
+			QTONEPLAYCONTEXT qtone_play_context_;
+		};
+	};
+
+	/**
+	 * This API defines a player of melodies, defined as a sequence of tones and
+	 * durations.
+	 * 
+	 * Melodies are defined as sequence of unit information, which can be either:
+	 * - `TonePlay`s: easy to write in source code but not efficient in size of
+	 * generated code
+	 * - `TonePlayer::QTonePlay`s: requires more effort in source code, but 
+	 * reduces generated code size
+	 * Most methods exist in two flavours, one for each type.
+	 * 
+	 * With this API, played melodies can be stored on 3 possible locations:
+	 * - in SRAM: this is useful when you get the melody from another support
+	 * e.g. an external flash device
+	 * - in Flash: this is the mostly used way as flash s the more abundant storage
+	 * in AVR MCU
+	 * - in EEPROM: this can be useful for short melodies, when you do not want
+	 * to waste precious SRAM and Flash
+	 * Each play API has 3 distinct methods, one for each storage strategy.
+	 * 
+	 * @tparam NTIMER the AVR timer to use for the underlying Timer
+	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
+	 * this must be the pin OCnA, where n is the AVR Timer number
+	 * 
+	 * @sa TonePlay
+	 * @sa AbstractTonePlayer::QTonePlay
+	 */
+	template<board::Timer NTIMER, board::PWMPin OUTPUT> class TonePlayer : public AbstractTonePlayer<NTIMER, OUTPUT>
+	{
+		using BASE = AbstractTonePlayer<NTIMER, OUTPUT>;
+
+	public:
+		using QTonePlay = typename BASE::QTonePlay;
+		using GENERATOR = typename BASE::GENERATOR;
 
 		/**
 		 * Create a new tone player, based on an existing `ToneGenerator`.
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
-		explicit TonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
+		explicit TonePlayer(GENERATOR& tone_generator) : BASE{tone_generator} {}
 
 		/**
 		 * Play a melody, defined by a sequence of `TonePlay`s, stored in SRAM.
@@ -248,7 +479,8 @@ namespace devices::audio
 		 */
 		void play(const TonePlay* melody)
 		{
-			play_(melody, load_sram);
+			this->prepare(melody);
+			play_();
 		}
 
 		/**
@@ -260,7 +492,8 @@ namespace devices::audio
 		 */
 		void play_eeprom(const TonePlay* melody)
 		{
-			play_(melody, load_eeprom);
+			this->prepare_eeprom(melody);
+			play_();
 		}
 
 		/**
@@ -272,7 +505,8 @@ namespace devices::audio
 		 */
 		void play_flash(const TonePlay* melody)
 		{
-			play_(melody, load_flash);
+			this->prepare_flash(melody);
+			play_();
 		}
 
 		/**
@@ -284,7 +518,8 @@ namespace devices::audio
 		 */
 		void play(const QTonePlay* melody)
 		{
-			play_(melody, load_sram);
+			this->prepare(melody);
+			play_();
 		}
 
 		/**
@@ -296,7 +531,8 @@ namespace devices::audio
 		 */
 		void play_eeprom(const QTonePlay* melody)
 		{
-			play_(melody, load_eeprom);
+			this->prepare_eeprom(melody);
+			play_();
 		}
 
 		/**
@@ -308,7 +544,8 @@ namespace devices::audio
 		 */
 		void play_flash(const QTonePlay* melody)
 		{
-			play_(melody, load_flash);
+			this->prepare_flash(melody);
+			play_();
 		}
 
 		/**
@@ -321,109 +558,19 @@ namespace devices::audio
 		}
 
 	private:
-		using LOAD_TONE = const TonePlay* (*) (const TonePlay* address, TonePlay& holder);
-
-		static const TonePlay* load_sram(const TonePlay* address, TonePlay& holder UNUSED)
-		{
-			return address;
-		}
-		static const TonePlay* load_eeprom(const TonePlay* address, TonePlay& holder)
-		{
-			eeprom::EEPROM::read(address, holder);
-			return &holder;
-		}
-		static const TonePlay* load_flash(const TonePlay* address, TonePlay& holder)
-		{
-			flash::read_flash(address, holder);
-			return &holder;
-		}
-
-		void play_(const TonePlay* melody, LOAD_TONE load_tone)
+		void play_()
 		{
 			stop_ = false;
-			const TonePlay* repeat_play = nullptr;
-			int8_t repeat_times;
-			const TonePlay* play = melody;
 			while (!stop_)
 			{
-				TonePlay holder;
-				const TonePlay* current = load_tone(play, holder);
-				if (current->tone == SpecialTone::END) break;
-				if (current->tone == SpecialTone::REPEAT_START)
-				{
-					repeat_play = play;
-					repeat_times = -1;
-				}
-				else if (current->tone == SpecialTone::REPEAT_END)
-				{
-					if (repeat_play != nullptr)
-					{
-						if (repeat_times == -1) repeat_times = current->ms;
-						if (repeat_times--)
-							play = repeat_play;
-						else
-							repeat_play = nullptr;
-					}
-				}
-				else
-					generator_.tone(current->tone, current->ms);
-				++play;
+				uint16_t delay = this->start_next_note();
+				if (delay) time::delay_ms(delay);
+				delay = this->stop_current_note();
+				if (delay) time::delay_ms(delay);
+				if (this->is_finished()) break;
 			}
 		}
 
-		using LOAD_QTONE = const QTonePlay* (*) (const QTonePlay* address, QTonePlay& holder);
-
-		static const QTonePlay* load_sram(const QTonePlay* address, QTonePlay& holder UNUSED)
-		{
-			return address;
-		}
-		static const QTonePlay* load_eeprom(const QTonePlay* address, QTonePlay& holder)
-		{
-			eeprom::EEPROM::read(address, holder);
-			return &holder;
-		}
-		static const QTonePlay* load_flash(const QTonePlay* address, QTonePlay& holder)
-		{
-			flash::read_flash(address, holder);
-			return &holder;
-		}
-
-		void play_(const QTonePlay* melody, LOAD_QTONE load_tone)
-		{
-			stop_ = false;
-			const QTonePlay* repeat_play = nullptr;
-			int8_t repeat_times;
-			const QTonePlay* play = melody;
-			while (!stop_)
-			{
-				QTonePlay holder;
-				const QTonePlay* current = load_tone(play, holder);
-				if (current->is_end()) break;
-				if (current->is_repeat_start())
-				{
-					repeat_play = play;
-					repeat_times = -1;
-				}
-				else if (current->is_repeat_end())
-				{
-					if (repeat_play != nullptr)
-					{
-						if (repeat_times == -1) repeat_times = current->repeat_count();
-						if (repeat_times--)
-							play = repeat_play;
-						else
-							repeat_play = nullptr;
-					}
-				}
-				else if (current->is_pause())
-					generator_.pause(current->duration());
-				else
-					generator_.tone(current->prescaler(), current->counter(), current->duration());
-				++play;
-			}
-		}
-
-		GENERATOR& generator_;
 		volatile bool stop_;
 	};
 }
