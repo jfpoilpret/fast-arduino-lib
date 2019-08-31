@@ -80,8 +80,9 @@ Sonar6	Display (UATX) sonar range meaures in PCINT mode with PCI callback
 Sonar7	Display (UATX) sonar range meaures in PCINT mode with PCI/TIMEOUT callback
 Sonar10	Light LEDS based on multiple sonars alarms with callbacks
 Sonar11	Light LEDS based on auto-trigger multiple sonars alarms with callbacks
-tones1	Tone player from SRAM
-tones2	Tone player from EEPROM
-tones3	Tone player from Flash
-tones4	Tone player from SRAM, stoppable from external interrupt
+tones0	Tone player from SRAM (TonePlay)
+tones1	Tone player from SRAM (QTonePlay)
+tones2	Tone player from EEPROM (QTonePlay)
+tones3	Tone player from Flash (QTonePlay)
+tones4	Tone player from SRAM, stoppable from external interrupt (QTonePlay)
 Conway	Game of Life (8x8 LED) 1KB Hackaday

@@ -49,7 +49,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						sonar/Sonar10 sonar/Sonar11				\
 						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 						tones/tones1 tones/tones2 tones/tones3	\
-						tones/tones4							\
+						tones/tones4 tones/tones0				\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							\
