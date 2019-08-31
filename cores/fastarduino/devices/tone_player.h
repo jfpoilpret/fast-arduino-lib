@@ -25,9 +25,8 @@
 #include "../flash.h"
 #include "tones.h"
 
-//TODO write BaseTonePlayer (protected)
-// write SyncTonePlayer (as before)
-// write AsynTonePlayer (several flavours: events, ISR...?)
+//TODO test TonePlayer (as before) with tones examples
+// write AsyncTonePlayer (several flavours: events, ISR...?)
 namespace devices::audio
 {
 	// Forward declaration
@@ -143,6 +142,8 @@ namespace devices::audio
 		template<board::Timer, board::PWMPin> friend class AbstractTonePlayer;
 	};
 
+	//TODO Templatize to TonePlay vs QTonePlay? That makes sense because we would
+	// normally not use both flavours in the same program...
 	//TODO DOC?
 	template<board::Timer NTIMER, board::PWMPin OUTPUT> class AbstractTonePlayer
 	{
@@ -162,6 +163,7 @@ namespace devices::audio
 		 * compile-time, hence the generated code is smaller and more efficient;
 		 * this can be useful when your MCU is limited in data size.
 		 */
+		//TODO define outside class directly in namespace (templatized)
 		class QTonePlay
 		{
 			using CALC = timer::Calculator<NTIMER>;
@@ -227,6 +229,7 @@ namespace devices::audio
 				generator.start_tone(prescaler_, counter_);
 			}
 
+			// Flags meaning
 			static constexpr uint8_t TONE = 0x00;
 			static constexpr uint8_t NONE = 0x01;
 			static constexpr uint8_t END = 0x02;
@@ -265,6 +268,7 @@ namespace devices::audio
 	protected:
 		AbstractTonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
 
+		//TODO rename to prepare_sram() for consistency
 		void prepare(const TonePlay* melody)
 		{
 			prepare_(melody, load_sram<TonePlay>);
