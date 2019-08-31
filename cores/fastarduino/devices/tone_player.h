@@ -252,7 +252,7 @@ namespace devices::audio
 	};
 
 	//TODO DOC? protected API doc?
-	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY>
+	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay<NTIMER, OUTPUT>>
 	class AbstractTonePlayer
 	{
 	protected:
