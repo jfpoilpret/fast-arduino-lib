@@ -25,8 +25,7 @@
 #include "../flash.h"
 #include "tones.h"
 
-//TODO test TonePlayer (as before) with tones examples
-// write AsyncTonePlayer (several flavours: events, ISR...?)
+//TODO write AsyncTonePlayer (several flavours: events, ISR...?)
 namespace devices::audio
 {
 	// Forward declaration
@@ -154,11 +153,6 @@ namespace devices::audio
 	 */
 	template<board::Timer NTIMER, board::PWMPin OUTPUT> class QTonePlay
 	{
-		using CALC = timer::Calculator<NTIMER>;
-		using TIMER = timer::Timer<NTIMER>;
-		using PRESCALER = typename TIMER::PRESCALER;
-		using COUNTER = typename TIMER::TYPE;
-
 	public:
 		/**
 		 * Default constructor, used only to declare an uninitialized
@@ -182,6 +176,11 @@ namespace devices::audio
 			: flags_{flags(tone)}, prescaler_{prescaler(tone)}, counter_{counter(tone)}, ms_{ms} {}
 
 	private:
+		using CALC = timer::Calculator<NTIMER>;
+		using TIMER = timer::Timer<NTIMER>;
+		using PRESCALER = typename TIMER::PRESCALER;
+		using COUNTER = typename TIMER::TYPE;
+
 		uint16_t duration() const
 		{
 			return ms_;
@@ -252,16 +251,16 @@ namespace devices::audio
 		friend class AbstractTonePlayer<NTIMER, OUTPUT, QTonePlay<NTIMER, OUTPUT>>;
 	};
 
-	//TODO DOC?
+	//TODO DOC? protected API doc?
 	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY>
 	class AbstractTonePlayer
 	{
-	public:
+	protected:
 		using TONE_PLAY = TONEPLAY;
 		using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
 
-	protected:
-		AbstractTonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
+		AbstractTonePlayer(GENERATOR& tone_generator)
+		: generator_{tone_generator}, loader_{}, current_play_{}, repeat_play_{}, repeat_times_{}, no_delay_{} {}
 
 		void prepare_sram(const TONE_PLAY* melody)
 		{
@@ -280,86 +279,83 @@ namespace devices::audio
 
 		uint16_t start_next_note()
 		{
-			return start_next_(tone_play_context_);
+			return start_next_();
 		}
 
 		uint16_t stop_current_note()
 		{
-			return stop_current_(tone_play_context_);
+			return stop_current_();
 		}
 
 		bool is_finished() const
 		{
-			return (tone_play_context_.loader == nullptr);
+			return (loader_ == nullptr);
 		}
 
 	private:
 		static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
 
-		// Internal utility types
 		using LOAD_TONE = const TONE_PLAY* (*) (const TONE_PLAY* address, TONE_PLAY& holder);
-
-		struct TonePlayContext
-		{
-			TonePlayContext() = default;
-			TonePlayContext(LOAD_TONE loader, const TONE_PLAY* play)
-			: loader{loader}, current_play{play}, repeat_play{}, repeat_times{}, no_delay{true} {}
-
-			LOAD_TONE loader;
-			const TONE_PLAY* current_play;
-			const TONE_PLAY* repeat_play;
-			int8_t repeat_times;
-			bool no_delay;
-		};
 
 		void prepare_(const TONE_PLAY* melody, LOAD_TONE load_tone)
 		{
-			tone_play_context_ = TonePlayContext{load_tone, melody};
+			loader_ = load_tone;
+			current_play_ = melody;
+			repeat_play_ = nullptr;
+			repeat_times_ = 0;
 		}
 
-		uint16_t start_next_(TonePlayContext& context)
+		void reset_()
 		{
-			if (context.loader == nullptr) return 0;
+			loader_ = nullptr;
+			current_play_ = nullptr;
+			repeat_play_ = nullptr;
+			repeat_times_ = 0;
+		}
+
+		uint16_t start_next_()
+		{
+			if (loader_ == nullptr) return 0;
 
 			uint16_t delay = 0;
 			TONE_PLAY holder;
-			const TONE_PLAY* current = context.loader(context.current_play, holder);
+			const TONE_PLAY* current = loader_(current_play_, holder);
 			if (current->is_end())
 			{
-				context = TonePlayContext{};
+				reset_();
 				return 0;
 			}
 			if (current->is_repeat_start())
 			{
-				context.repeat_play = context.current_play;
-				context.repeat_times = -1;
-				context.no_delay = true;
+				repeat_play_ = current_play_;
+				repeat_times_ = -1;
+				no_delay_ = true;
 			}
 			else if (current->is_repeat_end())
 			{
-				if (context.repeat_play)
+				if (repeat_play_)
 				{
-					if (context.repeat_times == -1) context.repeat_times = current->repeat_count();
-					if (context.repeat_times--)
-						context.current_play = context.repeat_play;
+					if (repeat_times_ == -1) repeat_times_ = current->repeat_count();
+					if (repeat_times_--)
+						current_play_ = repeat_play_;
 					else
-						context.repeat_play = nullptr;
+						repeat_play_ = nullptr;
 				}
-				context.no_delay = true;
+				no_delay_ = true;
 			}
 			else
 			{
 				if (current->is_tone()) current->generate_tone(generator_);
 				delay = current->duration();
-				context.no_delay = false;
+				no_delay_ = false;
 			}
-			++context.current_play;
+			++current_play_;
 			return delay;
 		}
 
-		uint16_t stop_current_(TonePlayContext& context)
+		uint16_t stop_current_()
 		{
-			if (context.no_delay)
+			if (no_delay_)
 				return 0;
 			generator_.stop_tone();
 			return INTERTONE_DELAY_MS;
@@ -381,7 +377,11 @@ namespace devices::audio
 		}
 
 		GENERATOR& generator_;
-		TonePlayContext tone_play_context_;
+		LOAD_TONE loader_;
+		const TONE_PLAY* current_play_;
+		const TONE_PLAY* repeat_play_;
+		int8_t repeat_times_;
+		bool no_delay_;
 	};
 
 	/**
@@ -409,7 +409,7 @@ namespace devices::audio
 	 * this must be the pin OCnA, where n is the AVR Timer number
 	 * 
 	 * @sa TonePlay
-	 * @sa AbstractTonePlayer::QTonePlay
+	 * @sa QTonePlay
 	 */
 	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay<NTIMER, OUTPUT>>
 	class TonePlayer : public AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>
