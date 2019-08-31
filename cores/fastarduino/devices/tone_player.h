@@ -30,7 +30,7 @@
 namespace devices::audio
 {
 	// Forward declaration
-	template<board::Timer NTIMER, board::PWMPin OUTPUT> class AbstractTonePlayer;
+	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY> class AbstractTonePlayer;
 
 	/**
 	 * This namespace defines special "tones" which have an impact on how to play
@@ -75,7 +75,7 @@ namespace devices::audio
 	 * @sa Tone
 	 * @sa TonePlayer
 	 * @sa SpecialTone
-	 * @sa TonePlayer::QTonePlay
+	 * @sa QTonePlay
 	 */
 	class TonePlay
 	{
@@ -139,233 +139,194 @@ namespace devices::audio
 		Tone tone_;
 		uint16_t ms_;
 
-		template<board::Timer, board::PWMPin> friend class AbstractTonePlayer;
+		template<board::Timer, board::PWMPin, typename> friend class AbstractTonePlayer;
 	};
 
-	//TODO Templatize to TonePlay vs QTonePlay? That makes sense because we would
-	// normally not use both flavours in the same program...
-	//TODO DOC?
-	template<board::Timer NTIMER, board::PWMPin OUTPUT> class AbstractTonePlayer
+	/**
+	 * An optimized surrogate to `TonePlay` structure.
+	 * Contrarily to `TonePlay`, it does not store `Tone` (i.e. frequency) but
+	 * Timer prescaler and counter for the desired frequency.
+	 * The advantage is that when you construct a `QTonePlay` from constant
+	 * tones, each tone wll be converted to timer prescaler and counter at 
+	 * compile-time, hence the generated code is smaller and more efficient;
+	 * this can be useful when your MCU is limited in data size.
+	 * @sa TonePlay
+	 */
+	template<board::Timer NTIMER, board::PWMPin OUTPUT> class QTonePlay
 	{
-	private:
-		static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
-
-	protected:
-		using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
+		using CALC = timer::Calculator<NTIMER>;
+		using TIMER = timer::Timer<NTIMER>;
+		using PRESCALER = typename TIMER::PRESCALER;
+		using COUNTER = typename TIMER::TYPE;
 
 	public:
 		/**
-		 * An optimized surrogate to `TonePlay` structure.
-		 * Contrarily to `TonePlay`, it does not store `Tone` (i.e. frequency) but
-		 * Timer prescaler and counter for the desired frequency.
-		 * The advantage is that when you construct a `QTonePlay` from constant
-		 * tones, each tone wll be converted to timer prescaler and counter at 
-		 * compile-time, hence the generated code is smaller and more efficient;
-		 * this can be useful when your MCU is limited in data size.
+		 * Default constructor, used only to declare an uninitialized
+		 * `QTonePlay` variable.
+		 * You should always ensure you replace such a variable with one
+		 * constructed with the next constructor.
+		 * @sa QTonePlay(Tone, uint16_t)
 		 */
-		//TODO define outside class directly in namespace (templatized)
-		class QTonePlay
+		QTonePlay() = default;
+
+		/**
+		 * Construct an optimized tone play for the provided tone and duration.
+		 * 
+		 * @param tone the `Tone` for this `QTonePlay`; it will be automatically
+		 * converted (at compile-time if @p t is a constant) to the proper
+		 * timer prescaler and counter.
+		 * @param ms the duration of this tone in milliseconds; this may have
+		 * different meanings if @p t is a `SpecialTone`.
+		 */
+		constexpr QTonePlay(Tone tone, uint16_t ms = 0)
+			: flags_{flags(tone)}, prescaler_{prescaler(tone)}, counter_{counter(tone)}, ms_{ms} {}
+
+	private:
+		uint16_t duration() const
 		{
-			using CALC = timer::Calculator<NTIMER>;
-			using TIMER = timer::Timer<NTIMER>;
-			using PRESCALER = typename TIMER::PRESCALER;
-			using COUNTER = typename TIMER::TYPE;
+			return ms_;
+		}
+		bool is_tone() const
+		{
+			return flags_ == TONE;
+		}
+		bool is_pause() const
+		{
+			return flags_ == NONE;
+		}
+		bool is_end() const
+		{
+			return flags_ == END;
+		}
+		bool is_repeat_start() const
+		{
+			return flags_ == REPEAT_START;
+		}
+		bool is_repeat_end() const
+		{
+			return flags_ == REPEAT_END;
+		}
+		uint16_t repeat_count() const
+		{
+			return ms_;
+		}
 
-		public:
-			/**
-			 * Default constructor, used only to declare an uninitialized
-			 * `QTonePlay` variable.
-			 * You should always ensure you replace such a variable with one
-			 * constructed with the next constructor.
-			 * @sa QTonePlay(Tone, uint16_t)
-			 */
-			QTonePlay() = default;
+		void generate_tone(ToneGenerator<NTIMER, OUTPUT>& generator) const
+		{
+			generator.start_tone(prescaler_, counter_);
+		}
 
-			/**
-			 * Construct an optimized tone play for the provided tone and duration.
-			 * 
-			 * @param tone the `Tone` for this `QTonePlay`; it will be automatically
-			 * converted (at compile-time if @p t is a constant) to the proper
-			 * timer prescaler and counter.
-			 * @param ms the duration of this tone in milliseconds; this may have
-			 * different meanings if @p t is a `SpecialTone`.
-			 */
-			constexpr QTonePlay(Tone tone, uint16_t ms = 0)
-				: flags_{flags(tone)}, prescaler_{prescaler(tone)}, counter_{counter(tone)}, ms_{ms}
-			{}
+		// Flags meaning
+		static constexpr uint8_t TONE = 0x00;
+		static constexpr uint8_t NONE = 0x01;
+		static constexpr uint8_t END = 0x02;
+		static constexpr uint8_t REPEAT_START = 0x04;
+		static constexpr uint8_t REPEAT_END = 0x08;
 
-		private:
-			uint16_t duration() const
-			{
-				return ms_;
-			}
-			bool is_tone() const
-			{
-				return flags_ == TONE;
-			}
-			bool is_pause() const
-			{
-				return flags_ == NONE;
-			}
-			bool is_end() const
-			{
-				return flags_ == END;
-			}
-			bool is_repeat_start() const
-			{
-				return flags_ == REPEAT_START;
-			}
-			bool is_repeat_end() const
-			{
-				return flags_ == REPEAT_END;
-			}
-			uint16_t repeat_count() const
-			{
-				return ms_;
-			}
+		uint8_t flags_;
+		PRESCALER prescaler_;
+		COUNTER counter_;
+		uint16_t ms_;
 
-			void generate_tone(GENERATOR& generator) const
-			{
-				generator.start_tone(prescaler_, counter_);
-			}
+		static constexpr uint32_t period(Tone tone)
+		{
+			return ONE_SECOND / 2 / uint16_t(tone);
+		}
+		static constexpr PRESCALER prescaler(Tone tone)
+		{
+			return (tone > Tone::SILENCE ? CALC::CTC_prescaler(period(tone)) : PRESCALER::NO_PRESCALING);
+		}
+		static constexpr COUNTER counter(Tone tone)
+		{
+			return (tone > Tone::SILENCE ? CALC::CTC_counter(prescaler(tone), period(tone)) : 0);
+		}
+		static constexpr uint8_t flags(Tone tone)
+		{
+			if (tone == Tone::SILENCE) return NONE;
+			if (tone == SpecialTone::END) return END;
+			if (tone == SpecialTone::REPEAT_START) return REPEAT_START;
+			if (tone == SpecialTone::REPEAT_END) return REPEAT_END;
+			return TONE;
+		}
 
-			// Flags meaning
-			static constexpr uint8_t TONE = 0x00;
-			static constexpr uint8_t NONE = 0x01;
-			static constexpr uint8_t END = 0x02;
-			static constexpr uint8_t REPEAT_START = 0x04;
-			static constexpr uint8_t REPEAT_END = 0x08;
+		friend class AbstractTonePlayer<NTIMER, OUTPUT, QTonePlay<NTIMER, OUTPUT>>;
+	};
 
-			uint8_t flags_;
-			PRESCALER prescaler_;
-			COUNTER counter_;
-			uint16_t ms_;
-
-			static constexpr uint32_t period(Tone tone)
-			{
-				return ONE_SECOND / 2 / uint16_t(tone);
-			}
-			static constexpr PRESCALER prescaler(Tone tone)
-			{
-				return (tone > Tone::SILENCE ? CALC::CTC_prescaler(period(tone)) : PRESCALER::NO_PRESCALING);
-			}
-			static constexpr COUNTER counter(Tone tone)
-			{
-				return (tone > Tone::SILENCE ? CALC::CTC_counter(prescaler(tone), period(tone)) : 0);
-			}
-			static constexpr uint8_t flags(Tone tone)
-			{
-				if (tone == Tone::SILENCE) return NONE;
-				if (tone == SpecialTone::END) return END;
-				if (tone == SpecialTone::REPEAT_START) return REPEAT_START;
-				if (tone == SpecialTone::REPEAT_END) return REPEAT_END;
-				return TONE;
-			}
-
-			friend class AbstractTonePlayer<NTIMER, OUTPUT>;
-		};
+	//TODO DOC?
+	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY>
+	class AbstractTonePlayer
+	{
+	public:
+		using TONE_PLAY = TONEPLAY;
+		using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
 
 	protected:
 		AbstractTonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
 
-		//TODO rename to prepare_sram() for consistency
-		void prepare(const TonePlay* melody)
+		void prepare_sram(const TONE_PLAY* melody)
 		{
-			prepare_(melody, load_sram<TonePlay>);
+			prepare_(melody, load_sram);
 		}
 
-		void prepare_eeprom(const TonePlay* melody)
+		void prepare_eeprom(const TONE_PLAY* melody)
 		{
-			prepare_(melody, load_eeprom<TonePlay>);
+			prepare_(melody, load_eeprom);
 		}
 
-		void prepare_flash(const TonePlay* melody)
+		void prepare_flash(const TONE_PLAY* melody)
 		{
-			prepare_(melody, load_flash<TonePlay>);
-		}
-
-		void prepare(const QTonePlay* melody)
-		{
-			prepare_(melody, load_sram<QTonePlay>);
-		}
-
-		void prepare_eeprom(const QTonePlay* melody)
-		{
-			prepare_(melody, load_eeprom<QTonePlay>);
-		}
-
-		void prepare_flash(const QTonePlay* melody)
-		{
-			prepare_(melody, load_flash<QTonePlay>);
+			prepare_(melody, load_flash);
 		}
 
 		uint16_t start_next_note()
 		{
-			if (is_qtone_)
-				return start_next_(qtone_play_context_);
-			else
-				return start_next_(tone_play_context_);
+			return start_next_(tone_play_context_);
 		}
 
 		uint16_t stop_current_note()
 		{
-			if (is_qtone_)
-				return stop_current_(qtone_play_context_);
-			else
-				return stop_current_(tone_play_context_);
+			return stop_current_(tone_play_context_);
 		}
 
 		bool is_finished() const
 		{
-			return (!is_qtone_) && (tone_play_context_.loader == nullptr);
+			return (tone_play_context_.loader == nullptr);
 		}
 
 	private:
+		static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
+
 		// Internal utility types
-		template<typename TONEPLAY_>
+		using LOAD_TONE = const TONE_PLAY* (*) (const TONE_PLAY* address, TONE_PLAY& holder);
+
 		struct TonePlayContext
 		{
-			using TONEPLAY = TONEPLAY_;
-			using LOAD_TONE = const TONEPLAY* (*) (const TONEPLAY* address, TONEPLAY& holder);
-
 			TonePlayContext() = default;
-			TonePlayContext(LOAD_TONE loader, const TONEPLAY* play)
+			TonePlayContext(LOAD_TONE loader, const TONE_PLAY* play)
 			: loader{loader}, current_play{play}, repeat_play{}, repeat_times{}, no_delay{true} {}
 
 			LOAD_TONE loader;
-			const TONEPLAY* current_play;
-			const TONEPLAY* repeat_play;
+			const TONE_PLAY* current_play;
+			const TONE_PLAY* repeat_play;
 			int8_t repeat_times;
 			bool no_delay;
 		};
 
-		using TONEPLAYCONTEXT = TonePlayContext<TonePlay>;
-		using QTONEPLAYCONTEXT = TonePlayContext<QTonePlay>;
-
-		void prepare_(const TonePlay* melody, typename TONEPLAYCONTEXT::LOAD_TONE load_tone)
+		void prepare_(const TONE_PLAY* melody, LOAD_TONE load_tone)
 		{
-			is_qtone_ = false;
-			tone_play_context_ = TONEPLAYCONTEXT{load_tone, melody};
+			tone_play_context_ = TonePlayContext{load_tone, melody};
 		}
 
-		void prepare_(const QTonePlay* melody, typename QTONEPLAYCONTEXT::LOAD_TONE load_tone)
-		{
-			is_qtone_ = true;
-			qtone_play_context_ = QTONEPLAYCONTEXT{load_tone, melody};
-		}
-
-		template<typename CONTEXT>
-		uint16_t start_next_(CONTEXT& context)
+		uint16_t start_next_(TonePlayContext& context)
 		{
 			if (context.loader == nullptr) return 0;
 
 			uint16_t delay = 0;
-			typename CONTEXT::TONEPLAY holder;
-			const typename CONTEXT::TONEPLAY* current = context.loader(context.current_play, holder);
+			TONE_PLAY holder;
+			const TONE_PLAY* current = context.loader(context.current_play, holder);
 			if (current->is_end())
 			{
-				context = CONTEXT{};
-				is_qtone_ = false;
+				context = TonePlayContext{};
 				return 0;
 			}
 			if (current->is_repeat_start())
@@ -396,8 +357,7 @@ namespace devices::audio
 			return delay;
 		}
 
-		template<typename CONTEXT>
-		uint16_t stop_current_(CONTEXT& context)
+		uint16_t stop_current_(TonePlayContext& context)
 		{
 			if (context.no_delay)
 				return 0;
@@ -405,31 +365,23 @@ namespace devices::audio
 			return INTERTONE_DELAY_MS;
 		}
 
-		template<typename TONEPLAY>
-		static const TONEPLAY* load_sram(const TONEPLAY* address, TONEPLAY& holder UNUSED)
+		static const TONE_PLAY* load_sram(const TONE_PLAY* address, TONE_PLAY& holder UNUSED)
 		{
 			return address;
 		}
-		template<typename TONEPLAY>
-		static const TONEPLAY* load_eeprom(const TONEPLAY* address, TONEPLAY& holder)
+		static const TONE_PLAY* load_eeprom(const TONE_PLAY* address, TONE_PLAY& holder)
 		{
 			eeprom::EEPROM::read(address, holder);
 			return &holder;
 		}
-		template<typename TONEPLAY>
-		static const TONEPLAY* load_flash(const TONEPLAY* address, TONEPLAY& holder)
+		static const TONE_PLAY* load_flash(const TONE_PLAY* address, TONE_PLAY& holder)
 		{
 			flash::read_flash(address, holder);
 			return &holder;
 		}
 
 		GENERATOR& generator_;
-		bool is_qtone_;
-		union
-		{
-			TONEPLAYCONTEXT tone_play_context_;
-			QTONEPLAYCONTEXT qtone_play_context_;
-		};
+		TonePlayContext tone_play_context_;
 	};
 
 	/**
@@ -459,13 +411,14 @@ namespace devices::audio
 	 * @sa TonePlay
 	 * @sa AbstractTonePlayer::QTonePlay
 	 */
-	template<board::Timer NTIMER, board::PWMPin OUTPUT> class TonePlayer : public AbstractTonePlayer<NTIMER, OUTPUT>
+	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay<NTIMER, OUTPUT>>
+	class TonePlayer : public AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>
 	{
-		using BASE = AbstractTonePlayer<NTIMER, OUTPUT>;
+		using BASE = AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>;
 
 	public:
-		using QTonePlay = typename BASE::QTonePlay;
 		using GENERATOR = typename BASE::GENERATOR;
+		using TONE_PLAY = typename BASE::TONE_PLAY;
 
 		/**
 		 * Create a new tone player, based on an existing `ToneGenerator`.
@@ -481,9 +434,9 @@ namespace devices::audio
 		 * @param melody a pointer, in SRAM, to the sequence of `TonePlay` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		void play(const TonePlay* melody)
+		void play_sram(const TONE_PLAY* melody)
 		{
-			this->prepare(melody);
+			this->prepare_sram(melody);
 			play_();
 		}
 
@@ -494,7 +447,7 @@ namespace devices::audio
 		 * @param melody a pointer, in EEPROM, to the sequence of `TonePlay` to 
 		 * be played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		void play_eeprom(const TonePlay* melody)
+		void play_eeprom(const TONE_PLAY* melody)
 		{
 			this->prepare_eeprom(melody);
 			play_();
@@ -507,46 +460,7 @@ namespace devices::audio
 		 * @param melody a pointer, in Flash, to the sequence of `TonePlay` to 
 		 * be played; the sequence MUST finish with a `SpecialTone::END`.
 		 */
-		void play_flash(const TonePlay* melody)
-		{
-			this->prepare_flash(melody);
-			play_();
-		}
-
-		/**
-		 * Play a melody, defined by a sequence of `QTonePlay`s, stored in SRAM.
-		 * This method is blocking: it will return only when the melody is
-		 * finished playing.
-		 * @param melody a pointer, in SRAM, to the sequence of `QTonePlay` to be
-		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 */
-		void play(const QTonePlay* melody)
-		{
-			this->prepare(melody);
-			play_();
-		}
-
-		/**
-		 * Play a melody, defined by a sequence of `QTonePlay`s, stored in EEPROM.
-		 * This method is blocking: it will return only when the melody is
-		 * finished playing.
-		 * @param melody a pointer, in EEPROM, to the sequence of `QTonePlay` to be
-		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 */
-		void play_eeprom(const QTonePlay* melody)
-		{
-			this->prepare_eeprom(melody);
-			play_();
-		}
-
-		/**
-		 * Play a melody, defined by a sequence of `QTonePlay`s, stored in Flash.
-		 * This method is blocking: it will return only when the melody is
-		 * finished playing.
-		 * @param melody a pointer, in Flash, to the sequence of `QTonePlay` to be
-		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 */
-		void play_flash(const QTonePlay* melody)
+		void play_flash(const TONE_PLAY* melody)
 		{
 			this->prepare_flash(melody);
 			play_();

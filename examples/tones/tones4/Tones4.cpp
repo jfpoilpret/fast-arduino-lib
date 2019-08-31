@@ -43,7 +43,7 @@ using devices::audio::Tone;
 using namespace devices::audio::SpecialTone;
 using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
 using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
-using QTONEPLAY = PLAYER::QTonePlay;
+using QTONEPLAY = PLAYER::TONE_PLAY;
 
 static QTONEPLAY music[] =
 {
@@ -140,5 +140,5 @@ int main()
 	time::delay_ms(5000);
 
 	signal.enable();
-	player.play(music);
+	player.play_sram(music);
 }

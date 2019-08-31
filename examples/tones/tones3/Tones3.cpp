@@ -36,7 +36,7 @@ using devices::audio::Tone;
 using namespace devices::audio::SpecialTone;
 using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
 using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
-using QTONEPLAY = PLAYER::QTonePlay;
+using QTONEPLAY = PLAYER::TONE_PLAY;
 
 static const QTONEPLAY music[] PROGMEM =
 {
