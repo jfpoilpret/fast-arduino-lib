@@ -24,8 +24,7 @@ Do note the following API changes that break compatibility with programs develop
 
 - `devices::audio::ToneGenerator`: API removed or updated (no more duration handled here)
 - `devices::audio::QTonePlay`: structure moved out of `devices::audio::TonePlayer`
-- `devices::audio::TonePlayer`: additional template parameter `TONE_PLAY` (either `TonePlay` or `QTonePlay`; now a `TonePlayer`
-instance can only play one type of `TONE_PLAY`.
+- `devices::audio::TonePlayer`: additional template parameter `TONE_PLAY` (either `TonePlay` or `QTonePlay`; now a `TonePlayer` instance can only play one type of `TONE_PLAY`.
 
 All features have been tested on all supported targets.
 
@@ -34,7 +33,7 @@ Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-ard
 The platform is well documented:
 
 - a tutorial allows developers to discover and learn the platform step by step
-- FastArduino core API is documented through doxygen and documentation is publihed here
+- FastArduino core API is documented through doxygen and documentation is published here
 - FastArduino comes with many examples covering all supported features and devices
 
 I hope you'll enjoy playing with FastArduino platform and submit enhancements you would like 
@@ -65,8 +64,8 @@ Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-ard
 
 The platform is well documented:
 
-- a tutorial allows developers to discover and learn the platform step by step
-- FastArduino core API is documented through doxygen and documentation is publihed here
+- a [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is publihed [here](http://jfpoilpret.github.io/fast-arduino-lib/)
 - FastArduino comes with many examples covering all supported features and devices
 
 I hope you'll enjoy playing with FastArduino platform and submit enhancements you would like 
