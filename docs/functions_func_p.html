@@ -92,15 +92,12 @@ $(document).ready(function(){initNavTree('functions_func_p.html','');});
 <li>parity_error()
 : <a class="el" href="classserial_1_1_u_a_r_t_errors.html#ae4776a3526396c1b7d9c097a7a0a20d3">serial::UARTErrors</a>
 </li>
-<li>pause()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd">devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</a>
-</li>
 <li>peek()
-: <a class="el" href="classcontainers_1_1_queue.html#a09ef8dc6eadb8a11f057ba5804871790">containers::Queue&lt; T_, TREF_ &gt;</a>
+: <a class="el" href="classcontainers_1_1_queue.html#a811a466ef9dcecbe8c9324e9a818efde">containers::Queue&lt; T_, TREF_ &gt;</a>
 , <a class="el" href="classstreams_1_1istream.html#afc5cae27c93b4e8ac37497b41d916b15">streams::istream</a>
 </li>
 <li>peek_()
-: <a class="el" href="classcontainers_1_1_queue.html#aae15154a0000abe7e0d95009de441cff">containers::Queue&lt; T_, TREF_ &gt;</a>
+: <a class="el" href="classcontainers_1_1_queue.html#ad21e0a4c9c816f8bf2586882a3c1e7d7">containers::Queue&lt; T_, TREF_ &gt;</a>
 </li>
 <li>period()
 : <a class="el" href="classevents_1_1_job.html#a47a5f4e4a13a5cc729fc15dbe33b726f">events::Job</a>
@@ -111,14 +108,17 @@ $(document).ready(function(){initNavTree('functions_func_p.html','');});
 <li>PhaseCorrectPWM_prescaler()
 : <a class="el" href="structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1">timer::Calculator&lt; NTIMER_ &gt;</a>
 </li>
-<li>play()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a9b66076721319f6d3e6c9037e01fe965">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</a>
-</li>
 <li>play_eeprom()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#ac6c611fc69de8fd2e5236d22bfb4707d">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</a>
+: <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a9bb99d5823fd4e9fe32684a66164fafb">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+, <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a43ff76ae9a2c70fd1d4909b452452b62">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 </li>
 <li>play_flash()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a769aaafb0a81435806d7317edc9f9e63">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</a>
+: <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a17bc119d487c998a1cbf3dd69428f0ac">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+, <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a6f32cd2b7dd022ae3d05ea72fff6712b">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+</li>
+<li>play_sram()
+: <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a864966951c141e5a7d527ea911c755cf">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+, <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a2b27758850cf51ff2291edb37c7ca996">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 </li>
 <li>power_down()
 : <a class="el" href="classdevices_1_1_win_bond.html#a2b5cc4c9f6f51c4879e55f29dde36f57">devices::WinBond&lt; CS &gt;</a>
@@ -133,7 +133,16 @@ $(document).ready(function(){initNavTree('functions_func_p.html','');});
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ab177f9f3d3a35c41079ec8843436f967">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
 </li>
 <li>precision()
-: <a class="el" href="classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59">streams::ios_base</a>
+: <a class="el" href="classstreams_1_1ios__base.html#a19275827f0fadef367261d4ac8cf0d09">streams::ios_base</a>
+</li>
+<li>prepare_eeprom()
+: <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a4235dfefc15e13b9f59df3b9e0fd6035">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+</li>
+<li>prepare_flash()
+: <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#affe7596080114d81b8ccf19611b05d3b">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+</li>
+<li>prepare_sram()
+: <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#ab7d4b91ec792c18e090a89dc858870ee">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 </li>
 <li>pubsync()
 : <a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e">streams::ostreambuf</a>

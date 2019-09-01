@@ -1,5 +1,4 @@
 <map id="fastarduino/pci.h" name="fastarduino/pci.h">
 <area shape="rect" id="node2" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="5,80,156,121"/>
 <area shape="rect" id="node3" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="181,87,351,114"/>
-<area shape="rect" id="node4" href="$soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="173,169,359,196"/>
 </map>

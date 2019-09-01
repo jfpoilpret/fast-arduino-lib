@@ -8,7 +8,7 @@ var structtimer_1_1_calculator =
     [ "CTC_prescaler", "structtimer_1_1_calculator.html#aaf6b1350daffe0bee6a1ffcdd3941c29", null ],
     [ "CTC_frequency", "structtimer_1_1_calculator.html#aceb36f26794f7d23319db3c964d21fc4", null ],
     [ "CTC_counter", "structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455", null ],
-    [ "is_adequate_for_CTC", "structtimer_1_1_calculator.html#a3f53878ea0179bdc8fba364f8fb629e2", null ],
+    [ "is_adequate_for_CTC", "structtimer_1_1_calculator.html#aeb70a97267562fe0edec61517734d960", null ],
     [ "FastPWM_prescaler", "structtimer_1_1_calculator.html#a4c53597343b9f3f8094d90a6618e7507", null ],
     [ "FastPWM_frequency", "structtimer_1_1_calculator.html#ab25ea1fa8d73227cdac44b75ae130161", null ],
     [ "PhaseCorrectPWM_prescaler", "structtimer_1_1_calculator.html#a466c0e2c7768c6f95672ab9c5a371aa1", null ],

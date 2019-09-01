@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.14"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: interrupt::PCISignal&lt; PORT_ &gt; Class Template Reference</title>
+<title>FastArduino: interrupt::PCISignal&lt; PCINT_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -91,88 +91,85 @@ $(document).ready(function(){initNavTree('classinterrupt_1_1_p_c_i_signal.html',
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classinterrupt_1_1_p_c_i_signal-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">interrupt::PCISignal&lt; PORT_ &gt; Class Template Reference</div>  </div>
+<div class="title">interrupt::PCISignal&lt; PCINT_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Handler of a Pin Change Interrupt vector, i.e.  
+<p>Handler of a Pin Change Interrupt vector.  
  <a href="classinterrupt_1_1_p_c_i_signal.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="pci_8h_source.html">fastarduino/pci.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a08880731428d7d1e638be999923c116e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e">enable</a> ()</td></tr>
-<tr class="memdesc:a08880731428d7d1e638be999923c116e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>.  <a href="#a08880731428d7d1e638be999923c116e">More...</a><br /></td></tr>
-<tr class="separator:a08880731428d7d1e638be999923c116e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adcf8e04a098db476874025634b4a02eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb">disable</a> ()</td></tr>
-<tr class="memdesc:adcf8e04a098db476874025634b4a02eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>.  <a href="#adcf8e04a098db476874025634b4a02eb">More...</a><br /></td></tr>
-<tr class="separator:adcf8e04a098db476874025634b4a02eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a537a570866951cd8e6913c0abff4f1b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a537a570866951cd8e6913c0abff4f1b1">clear</a> ()</td></tr>
-<tr class="memdesc:a537a570866951cd8e6913c0abff4f1b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this pin change interrupt port.  <a href="#a537a570866951cd8e6913c0abff4f1b1">More...</a><br /></td></tr>
-<tr class="separator:a537a570866951cd8e6913c0abff4f1b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b58e40147fbe046805eb49e1c9ec6af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2b58e40147fbe046805eb49e1c9ec6af">set_enable_pins</a> (uint8_t mask)</td></tr>
-<tr class="memdesc:a2b58e40147fbe046805eb49e1c9ec6af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled.  <a href="#a2b58e40147fbe046805eb49e1c9ec6af">More...</a><br /></td></tr>
-<tr class="separator:a2b58e40147fbe046805eb49e1c9ec6af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a633232ed5b09f7b0b2a5bcf4a1a3cbd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6">enable_pins</a> (uint8_t mask)</td></tr>
-<tr class="memdesc:a633232ed5b09f7b0b2a5bcf4a1a3cbd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts for several pins of this port.  <a href="#a633232ed5b09f7b0b2a5bcf4a1a3cbd6">More...</a><br /></td></tr>
-<tr class="separator:a633232ed5b09f7b0b2a5bcf4a1a3cbd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8bde46b21b64a778abf23a4a553db44"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab8bde46b21b64a778abf23a4a553db44">disable_pins</a> (uint8_t mask)</td></tr>
-<tr class="memdesc:ab8bde46b21b64a778abf23a4a553db44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable pin change interrupts for several pins of this port.  <a href="#ab8bde46b21b64a778abf23a4a553db44">More...</a><br /></td></tr>
-<tr class="separator:ab8bde46b21b64a778abf23a4a553db44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad544b5ff2375bf71582693188d53a699"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
-<tr class="memitem:ad544b5ff2375bf71582693188d53a699"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699">enable_pin</a> ()</td></tr>
-<tr class="memdesc:ad544b5ff2375bf71582693188d53a699"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable Pin Change Interrupts for <code>PIN</code>.  <a href="#ad544b5ff2375bf71582693188d53a699">More...</a><br /></td></tr>
-<tr class="separator:ad544b5ff2375bf71582693188d53a699"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb860352976ca904a6233ad3f7527e6b"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
-<tr class="memitem:aeb860352976ca904a6233ad3f7527e6b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b">disable_pin</a> ()</td></tr>
-<tr class="memdesc:aeb860352976ca904a6233ad3f7527e6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable Pin Change Interrupts for <code>PIN</code>.  <a href="#aeb860352976ca904a6233ad3f7527e6b">More...</a><br /></td></tr>
-<tr class="separator:aeb860352976ca904a6233ad3f7527e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae98ac09553f3a113afc438a2f2e74d07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae98ac09553f3a113afc438a2f2e74d07">enable_</a> ()</td></tr>
-<tr class="memdesc:ae98ac09553f3a113afc438a2f2e74d07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>.  <a href="#ae98ac09553f3a113afc438a2f2e74d07">More...</a><br /></td></tr>
-<tr class="separator:ae98ac09553f3a113afc438a2f2e74d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a409fac4a5555c679558d52ec33bdcbb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1">disable_</a> ()</td></tr>
-<tr class="memdesc:a409fac4a5555c679558d52ec33bdcbb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>.  <a href="#a409fac4a5555c679558d52ec33bdcbb1">More...</a><br /></td></tr>
-<tr class="separator:a409fac4a5555c679558d52ec33bdcbb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bb0bfed157c128aa239f0448d2efa73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2bb0bfed157c128aa239f0448d2efa73">clear_</a> ()</td></tr>
-<tr class="memdesc:a2bb0bfed157c128aa239f0448d2efa73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this pin change interrupt port.  <a href="#a2bb0bfed157c128aa239f0448d2efa73">More...</a><br /></td></tr>
-<tr class="separator:a2bb0bfed157c128aa239f0448d2efa73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77c43f661bd3eaa56fe3102b76336b93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a77c43f661bd3eaa56fe3102b76336b93">set_enable_pins_</a> (uint8_t mask)</td></tr>
-<tr class="memdesc:a77c43f661bd3eaa56fe3102b76336b93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled.  <a href="#a77c43f661bd3eaa56fe3102b76336b93">More...</a><br /></td></tr>
-<tr class="separator:a77c43f661bd3eaa56fe3102b76336b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1dab5eae5175b5ccf2f6b2f01f9ba04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae1dab5eae5175b5ccf2f6b2f01f9ba04">enable_pins_</a> (uint8_t mask)</td></tr>
-<tr class="memdesc:ae1dab5eae5175b5ccf2f6b2f01f9ba04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts for several pins of this port.  <a href="#ae1dab5eae5175b5ccf2f6b2f01f9ba04">More...</a><br /></td></tr>
-<tr class="separator:ae1dab5eae5175b5ccf2f6b2f01f9ba04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b6ca8e3436f39eea424a4fa0dd57a36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5b6ca8e3436f39eea424a4fa0dd57a36">disable_pins_</a> (uint8_t mask)</td></tr>
-<tr class="memdesc:a5b6ca8e3436f39eea424a4fa0dd57a36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable pin change interrupts for several pins of this port.  <a href="#a5b6ca8e3436f39eea424a4fa0dd57a36">More...</a><br /></td></tr>
-<tr class="separator:a5b6ca8e3436f39eea424a4fa0dd57a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1f416ccd1fe9d7e6eb820238a072d5a"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
-<tr class="memitem:af1f416ccd1fe9d7e6eb820238a072d5a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a">enable_pin_</a> ()</td></tr>
-<tr class="memdesc:af1f416ccd1fe9d7e6eb820238a072d5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable Pin Change Interrupts for <code>PIN</code>.  <a href="#af1f416ccd1fe9d7e6eb820238a072d5a">More...</a><br /></td></tr>
-<tr class="separator:af1f416ccd1fe9d7e6eb820238a072d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ebc71b0dd0af18b06124a00b4f336df"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
-<tr class="memitem:a2ebc71b0dd0af18b06124a00b4f336df"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df">disable_pin_</a> ()</td></tr>
-<tr class="memdesc:a2ebc71b0dd0af18b06124a00b4f336df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable Pin Change Interrupts for <code>PIN</code>.  <a href="#a2ebc71b0dd0af18b06124a00b4f336df">More...</a><br /></td></tr>
-<tr class="separator:a2ebc71b0dd0af18b06124a00b4f336df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cbc89ca21a31546d8d52648bf5e6472"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472">enable</a> ()</td></tr>
+<tr class="memdesc:a1cbc89ca21a31546d8d52648bf5e6472"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts handled by this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>.  <a href="#a1cbc89ca21a31546d8d52648bf5e6472">More...</a><br /></td></tr>
+<tr class="separator:a1cbc89ca21a31546d8d52648bf5e6472"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94562c557597c2a06b780baa24bea57c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a94562c557597c2a06b780baa24bea57c">disable</a> ()</td></tr>
+<tr class="memdesc:a94562c557597c2a06b780baa24bea57c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all pin change interrupts handled by this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>.  <a href="#a94562c557597c2a06b780baa24bea57c">More...</a><br /></td></tr>
+<tr class="separator:a94562c557597c2a06b780baa24bea57c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abea9f1b0e90228fe877ac0e491b477de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#abea9f1b0e90228fe877ac0e491b477de">clear</a> ()</td></tr>
+<tr class="memdesc:abea9f1b0e90228fe877ac0e491b477de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this pin change interrupt vector.  <a href="#abea9f1b0e90228fe877ac0e491b477de">More...</a><br /></td></tr>
+<tr class="separator:abea9f1b0e90228fe877ac0e491b477de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70861ae816ed1a2fbb977eddadc89da1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a70861ae816ed1a2fbb977eddadc89da1">set_enable_pins</a> (uint8_t mask)</td></tr>
+<tr class="memdesc:a70861ae816ed1a2fbb977eddadc89da1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled.  <a href="#a70861ae816ed1a2fbb977eddadc89da1">More...</a><br /></td></tr>
+<tr class="separator:a70861ae816ed1a2fbb977eddadc89da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f9a0d32e7e65d74cf923586acce1425"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425">enable_pins</a> (uint8_t mask)</td></tr>
+<tr class="memdesc:a5f9a0d32e7e65d74cf923586acce1425"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts for several pins of this PCINT.  <a href="#a5f9a0d32e7e65d74cf923586acce1425">More...</a><br /></td></tr>
+<tr class="separator:a5f9a0d32e7e65d74cf923586acce1425"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3506eb7f8c8791186a634116621a438f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a3506eb7f8c8791186a634116621a438f">disable_pins</a> (uint8_t mask)</td></tr>
+<tr class="memdesc:a3506eb7f8c8791186a634116621a438f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable pin change interrupts for several pins of this PCINT.  <a href="#a3506eb7f8c8791186a634116621a438f">More...</a><br /></td></tr>
+<tr class="separator:a3506eb7f8c8791186a634116621a438f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7026ca25a138371c6e16c2f17ffa867"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
+<tr class="memitem:ac7026ca25a138371c6e16c2f17ffa867"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867">enable_pin</a> ()</td></tr>
+<tr class="memdesc:ac7026ca25a138371c6e16c2f17ffa867"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable Pin Change Interrupts for <code>PIN</code>.  <a href="#ac7026ca25a138371c6e16c2f17ffa867">More...</a><br /></td></tr>
+<tr class="separator:ac7026ca25a138371c6e16c2f17ffa867"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6b9cc82dfb2a0732539247ce83657ac"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
+<tr class="memitem:ab6b9cc82dfb2a0732539247ce83657ac"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac">disable_pin</a> ()</td></tr>
+<tr class="memdesc:ab6b9cc82dfb2a0732539247ce83657ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable Pin Change Interrupts for <code>PIN</code>.  <a href="#ab6b9cc82dfb2a0732539247ce83657ac">More...</a><br /></td></tr>
+<tr class="separator:ab6b9cc82dfb2a0732539247ce83657ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91c747b1d70bcf54889698401b90f21b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a91c747b1d70bcf54889698401b90f21b">enable_</a> ()</td></tr>
+<tr class="memdesc:a91c747b1d70bcf54889698401b90f21b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts for this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>.  <a href="#a91c747b1d70bcf54889698401b90f21b">More...</a><br /></td></tr>
+<tr class="separator:a91c747b1d70bcf54889698401b90f21b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fee5dd598a08ca12254cd14da08a0cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8fee5dd598a08ca12254cd14da08a0cf">disable_</a> ()</td></tr>
+<tr class="memdesc:a8fee5dd598a08ca12254cd14da08a0cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable all pin change interrupts for this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>.  <a href="#a8fee5dd598a08ca12254cd14da08a0cf">More...</a><br /></td></tr>
+<tr class="separator:a8fee5dd598a08ca12254cd14da08a0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d0c4b84584df87d7405443cf93b61fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5d0c4b84584df87d7405443cf93b61fc">clear_</a> ()</td></tr>
+<tr class="memdesc:a5d0c4b84584df87d7405443cf93b61fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the interrupt flag for this pin change interrupt vector.  <a href="#a5d0c4b84584df87d7405443cf93b61fc">More...</a><br /></td></tr>
+<tr class="separator:a5d0c4b84584df87d7405443cf93b61fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed98707d148a27051fee8e3d909f143c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aed98707d148a27051fee8e3d909f143c">set_enable_pins_</a> (uint8_t mask)</td></tr>
+<tr class="memdesc:aed98707d148a27051fee8e3d909f143c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled.  <a href="#aed98707d148a27051fee8e3d909f143c">More...</a><br /></td></tr>
+<tr class="separator:aed98707d148a27051fee8e3d909f143c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a116409c3029a4d5b869bf68e1fde14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14">enable_pins_</a> (uint8_t mask)</td></tr>
+<tr class="memdesc:a7a116409c3029a4d5b869bf68e1fde14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable pin change interrupts for several pins of this PCINT.  <a href="#a7a116409c3029a4d5b869bf68e1fde14">More...</a><br /></td></tr>
+<tr class="separator:a7a116409c3029a4d5b869bf68e1fde14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af68e7e306ffd4488363745231585c3f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af68e7e306ffd4488363745231585c3f5">disable_pins_</a> (uint8_t mask)</td></tr>
+<tr class="memdesc:af68e7e306ffd4488363745231585c3f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable pin change interrupts for several pins of this PCINT.  <a href="#af68e7e306ffd4488363745231585c3f5">More...</a><br /></td></tr>
+<tr class="separator:af68e7e306ffd4488363745231585c3f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad29f240c090974ee06b02fe7838fb538"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
+<tr class="memitem:ad29f240c090974ee06b02fe7838fb538"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538">enable_pin_</a> ()</td></tr>
+<tr class="memdesc:ad29f240c090974ee06b02fe7838fb538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable Pin Change Interrupts for <code>PIN</code>.  <a href="#ad29f240c090974ee06b02fe7838fb538">More...</a><br /></td></tr>
+<tr class="separator:ad29f240c090974ee06b02fe7838fb538"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89fee5f5aac524d70b68968d57f1d98e"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
+<tr class="memitem:a89fee5f5aac524d70b68968d57f1d98e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e">disable_pin_</a> ()</td></tr>
+<tr class="memdesc:a89fee5f5aac524d70b68968d57f1d98e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable Pin Change Interrupts for <code>PIN</code>.  <a href="#a89fee5f5aac524d70b68968d57f1d98e">More...</a><br /></td></tr>
+<tr class="separator:a89fee5f5aac524d70b68968d57f1d98e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a13a3e5d369e6beb06c05b01715308f0a"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a13a3e5d369e6beb06c05b01715308f0a">PORT</a> = PORT_</td></tr>
-<tr class="memdesc:a13a3e5d369e6beb06c05b01715308f0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The IO port which PCINT vector is managed by this <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a>.  <a href="#a13a3e5d369e6beb06c05b01715308f0a">More...</a><br /></td></tr>
-<tr class="separator:a13a3e5d369e6beb06c05b01715308f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bf0e1fa0d38470572293e43d4e13305"><td class="memItemLeft" align="right" valign="top">static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8bf0e1fa0d38470572293e43d4e13305">PCINT</a> = PORT_TRAIT::PCINT</td></tr>
-<tr class="memdesc:a8bf0e1fa0d38470572293e43d4e13305"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PCINT vector number for this <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a>.  <a href="#a8bf0e1fa0d38470572293e43d4e13305">More...</a><br /></td></tr>
-<tr class="separator:a8bf0e1fa0d38470572293e43d4e13305"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed9572c82b46f578837fd8389ef3af24"><td class="memItemLeft" align="right" valign="top">static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aed9572c82b46f578837fd8389ef3af24">PCINT</a> = PCINT_</td></tr>
+<tr class="memdesc:aed9572c82b46f578837fd8389ef3af24"><td class="mdescLeft">&#160;</td><td class="mdescRight">The PCINT vector number for this <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a>.  <a href="#aed9572c82b46f578837fd8389ef3af24">More...</a><br /></td></tr>
+<tr class="separator:aed9572c82b46f578837fd8389ef3af24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;board::Port PORT_&gt;<br />
-class interrupt::PCISignal&lt; PORT_ &gt;</h3>
+<div class="textblock"><h3>template&lt;uint8_t PCINT_&gt;<br />
+class interrupt::PCISignal&lt; PCINT_ &gt;</h3>
 
-<p>Handler of a Pin Change Interrupt vector, i.e. </p>
-<p>a <code>PORT_</code>. For each PCINT vector you need, you must create one instance of this handler. With one instance, you are then able to handle individually each pin which interrupt you want to enable or disable. If you need a function or method to be called back when a Pin Change Interrupt occurs for a PCINT vector, then you have to use <code>REGISTER_PCI_ISR_FUNCTION</code> or <code><a class="el" href="pci_8h.html#a64be10f04dd31643ee243b564a0d910c" title="Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector...">REGISTER_PCI_ISR_METHOD()</a></code> macros. If you don't then use <code>REGISTER_PCI_ISR_EMPTY</code> macro. If you don't know the port you need to handle but only a pin, then you can use <code><a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal. ">PCIType</a>&lt;PIN&gt;::TYPE</code>.</p>
+<p>Handler of a Pin Change Interrupt vector. </p>
+<p>For each PCINT vector you need, you must create one instance of this handler. With one instance, you are then able to handle individually each pin which interrupt you want to enable or disable. If you need a function or method to be called back when a Pin Change Interrupt occurs for a PCINT vector, then you have to use <code>REGISTER_PCI_ISR_FUNCTION</code> or <code><a class="el" href="pci_8h.html#a64be10f04dd31643ee243b564a0d910c" title="Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector...">REGISTER_PCI_ISR_METHOD()</a></code> macros. If you don't then use <code><a class="el" href="pci_8h.html#ae3388141a0b77e8bb9c5ab66943e3998" title="Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt vector. ">REGISTER_PCI_ISR_EMPTY()</a></code> macro. If you don't know the PCINT you need to handle but only a pin, then you can use <code><a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal. ">PCIType</a>&lt;PIN&gt;::TYPE</code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PORT_</td><td>the IO port which PCINT vector you want to manage; if <code>PORT_</code> has no associated PCINT vector then the program will not compile. </td></tr>
+    <tr><td class="paramname">PCINT_</td><td>the PCINT vector you want to manage </td></tr>
   </table>
   </dd>
 </dl>
@@ -184,21 +181,21 @@ class interrupt::PCISignal&lt; PORT_ &gt;</h3>
 <dd>
 <a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal. ">PCIType</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00130">130</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00175">175</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a08880731428d7d1e638be999923c116e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08880731428d7d1e638be999923c116e">&#9670;&nbsp;</a></span>enable()</h2>
+<a id="a1cbc89ca21a31546d8d52648bf5e6472"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cbc89ca21a31546d8d52648bf5e6472">&#9670;&nbsp;</a></span>enable()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::enable </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::enable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -211,32 +208,32 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Enable pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>. </p>
-<p>Enabling interrupts on the port is not sufficient, you should enable pin change interrupts for each individual pin you are interested in, with <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> or <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6" title="Enable pin change interrupts for several pins of this port. ">enable_pins()</a></code>. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae98ac09553f3a113afc438a2f2e74d07" title="Enable pin change interrupts for the port of the PCISignal. ">enable_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae98ac09553f3a113afc438a2f2e74d07" title="Enable pin change interrupts for the port of the PCISignal. ">enable_()</a> </dd>
+<p>Enable pin change interrupts handled by this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>. </p>
+<p>Enabling interrupts on a PCINT is not sufficient, you should enable pin change interrupts for each individual pin you are interested in, with <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> or <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins()</a></code>. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a91c747b1d70bcf54889698401b90f21b" title="Enable pin change interrupts for this PCISignal. ">enable_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a91c747b1d70bcf54889698401b90f21b" title="Enable pin change interrupts for this PCISignal. ">enable_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb" title="Disable all pin change interrupts for the port of the PCISignal. ">disable()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a94562c557597c2a06b780baa24bea57c" title="Disable all pin change interrupts handled by this PCISignal. ">disable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6" title="Enable pin change interrupts for several pins of this port. ">enable_pins()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00166">166</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00207">207</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="adcf8e04a098db476874025634b4a02eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcf8e04a098db476874025634b4a02eb">&#9670;&nbsp;</a></span>disable()</h2>
+<a id="a94562c557597c2a06b780baa24bea57c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94562c557597c2a06b780baa24bea57c">&#9670;&nbsp;</a></span>disable()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::disable </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::disable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -249,30 +246,30 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Disable all pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>. </p>
-<p>If you need to only diable pin change interrupts for some pins of that port, then use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1" title="Disable all pin change interrupts for the port of the PCISignal. ">disable_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e" title="Enable pin change interrupts for the port of the PCISignal. ">enable()</a> </dd>
+<p>Disable all pin change interrupts handled by this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>. </p>
+<p>If you need to only diable pin change interrupts for some pins of that PCINT, then use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8fee5dd598a08ca12254cd14da08a0cf" title="Disable all pin change interrupts for this PCISignal. ">disable_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472" title="Enable pin change interrupts handled by this PCISignal. ">enable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1" title="Disable all pin change interrupts for the port of the PCISignal. ">disable_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8fee5dd598a08ca12254cd14da08a0cf" title="Disable all pin change interrupts for this PCISignal. ">disable_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00183">183</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00224">224</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a537a570866951cd8e6913c0abff4f1b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a537a570866951cd8e6913c0abff4f1b1">&#9670;&nbsp;</a></span>clear()</h2>
+<a id="abea9f1b0e90228fe877ac0e491b477de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abea9f1b0e90228fe877ac0e491b477de">&#9670;&nbsp;</a></span>clear()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::clear </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::clear </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -285,26 +282,26 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Clear the interrupt flag for this pin change interrupt port. </p>
-<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2bb0bfed157c128aa239f0448d2efa73" title="Clear the interrupt flag for this pin change interrupt port. ">clear_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2bb0bfed157c128aa239f0448d2efa73" title="Clear the interrupt flag for this pin change interrupt port. ">clear_()</a> </dd></dl>
+<p>Clear the interrupt flag for this pin change interrupt vector. </p>
+<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5d0c4b84584df87d7405443cf93b61fc" title="Clear the interrupt flag for this pin change interrupt vector. ">clear_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5d0c4b84584df87d7405443cf93b61fc" title="Clear the interrupt flag for this pin change interrupt vector. ">clear_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00198">198</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00239">239</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a2b58e40147fbe046805eb49e1c9ec6af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b58e40147fbe046805eb49e1c9ec6af">&#9670;&nbsp;</a></span>set_enable_pins()</h2>
+<a id="a70861ae816ed1a2fbb977eddadc89da1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70861ae816ed1a2fbb977eddadc89da1">&#9670;&nbsp;</a></span>set_enable_pins()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::set_enable_pins </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::set_enable_pins </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>mask</em></td><td>)</td>
@@ -318,36 +315,36 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled. </p>
-<p>For other pins, interrupts will be disabled. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a77c43f661bd3eaa56fe3102b76336b93" title="Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled...">set_enable_pins_()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled. </p>
+<p>For other pins, interrupts will be disabled. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aed98707d148a27051fee8e3d909f143c" title="Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled...">set_enable_pins_()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this port; other pins will have interrupts disbaled. </td></tr>
+    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this PCINT; other pins will have interrupts disabled. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a77c43f661bd3eaa56fe3102b76336b93" title="Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled...">set_enable_pins_()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aed98707d148a27051fee8e3d909f143c" title="Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled...">set_enable_pins_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6" title="Enable pin change interrupts for several pins of this port. ">enable_pins()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab8bde46b21b64a778abf23a4a553db44" title="Disable pin change interrupts for several pins of this port. ">disable_pins()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a3506eb7f8c8791186a634116621a438f" title="Disable pin change interrupts for several pins of this PCINT. ">disable_pins()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00217">217</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00258">258</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a633232ed5b09f7b0b2a5bcf4a1a3cbd6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a633232ed5b09f7b0b2a5bcf4a1a3cbd6">&#9670;&nbsp;</a></span>enable_pins()</h2>
+<a id="a5f9a0d32e7e65d74cf923586acce1425"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f9a0d32e7e65d74cf923586acce1425">&#9670;&nbsp;</a></span>enable_pins()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::enable_pins </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::enable_pins </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>mask</em></td><td>)</td>
@@ -361,38 +358,38 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Enable pin change interrupts for several pins of this port. </p>
-<p>This does not enable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e" title="Enable pin change interrupts for the port of the PCISignal. ">enable()</a></code>. This method is useful when you have several pins to enable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae1dab5eae5175b5ccf2f6b2f01f9ba04" title="Enable pin change interrupts for several pins of this port. ">enable_pins_()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Enable pin change interrupts for several pins of this PCINT. </p>
+<p>This does not enable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472" title="Enable pin change interrupts handled by this PCISignal. ">enable()</a></code>. This method is useful when you have several pins to enable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins_()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this port; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
+    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this PCINT; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e" title="Enable pin change interrupts for the port of the PCISignal. ">enable()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472" title="Enable pin change interrupts handled by this PCISignal. ">enable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae1dab5eae5175b5ccf2f6b2f01f9ba04" title="Enable pin change interrupts for several pins of this port. ">enable_pins_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00241">241</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00282">282</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="ab8bde46b21b64a778abf23a4a553db44"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8bde46b21b64a778abf23a4a553db44">&#9670;&nbsp;</a></span>disable_pins()</h2>
+<a id="a3506eb7f8c8791186a634116621a438f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3506eb7f8c8791186a634116621a438f">&#9670;&nbsp;</a></span>disable_pins()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::disable_pins </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::disable_pins </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>mask</em></td><td>)</td>
@@ -406,32 +403,32 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Disable pin change interrupts for several pins of this port. </p>
-<p>This does not disable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb" title="Disable all pin change interrupts for the port of the PCISignal. ">disable()</a></code>. This method is useful when you have several pins to disable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5b6ca8e3436f39eea424a4fa0dd57a36" title="Disable pin change interrupts for several pins of this port. ">disable_pins_()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Disable pin change interrupts for several pins of this PCINT. </p>
+<p>This does not disable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a94562c557597c2a06b780baa24bea57c" title="Disable all pin change interrupts handled by this PCISignal. ">disable()</a></code>. This method is useful when you have several pins to disable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af68e7e306ffd4488363745231585c3f5" title="Disable pin change interrupts for several pins of this PCINT. ">disable_pins_()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to disable for this port; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
+    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to disable for this PCINT; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb" title="Disable all pin change interrupts for the port of the PCISignal. ">disable()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a94562c557597c2a06b780baa24bea57c" title="Disable all pin change interrupts handled by this PCISignal. ">disable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5b6ca8e3436f39eea424a4fa0dd57a36" title="Disable pin change interrupts for several pins of this port. ">disable_pins_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af68e7e306ffd4488363745231585c3f5" title="Disable pin change interrupts for several pins of this PCINT. ">disable_pins_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00265">265</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00306">306</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="ad544b5ff2375bf71582693188d53a699"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad544b5ff2375bf71582693188d53a699">&#9670;&nbsp;</a></span>enable_pin()</h2>
+<a id="ac7026ca25a138371c6e16c2f17ffa867"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7026ca25a138371c6e16c2f17ffa867">&#9670;&nbsp;</a></span>enable_pin()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <div class="memtemplate">
 template&lt;board::InterruptPin PIN&gt; </div>
 <table class="mlabels">
@@ -439,7 +436,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::enable_pin </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::enable_pin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -453,29 +450,29 @@ template&lt;board::InterruptPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Enable Pin Change Interrupts for <code>PIN</code>. </p>
-<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PIN</td><td>the pin for which to enable Pin Change Interrupts; this must belong to the handler's <code>PORT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the pin for which to enable Pin Change Interrupts; this must belong to the handler's <code>PCINT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6" title="Enable pin change interrupts for several pins of this port. ">enable_pins()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00283">283</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00324">324</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="aeb860352976ca904a6233ad3f7527e6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb860352976ca904a6233ad3f7527e6b">&#9670;&nbsp;</a></span>disable_pin()</h2>
+<a id="ab6b9cc82dfb2a0732539247ce83657ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6b9cc82dfb2a0732539247ce83657ac">&#9670;&nbsp;</a></span>disable_pin()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <div class="memtemplate">
 template&lt;board::InterruptPin PIN&gt; </div>
 <table class="mlabels">
@@ -483,7 +480,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::disable_pin </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::disable_pin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -497,33 +494,33 @@ template&lt;board::InterruptPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Disable Pin Change Interrupts for <code>PIN</code>. </p>
-<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PIN</td><td>the pin for which to disable Pin Change Interrupts; this must belong to the handler's <code>PORT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the pin for which to disable Pin Change Interrupts; this must belong to the handler's <code>PCINT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00305">305</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00342">342</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="ae98ac09553f3a113afc438a2f2e74d07"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae98ac09553f3a113afc438a2f2e74d07">&#9670;&nbsp;</a></span>enable_()</h2>
+<a id="a91c747b1d70bcf54889698401b90f21b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91c747b1d70bcf54889698401b90f21b">&#9670;&nbsp;</a></span>enable_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::enable_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::enable_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -536,32 +533,32 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Enable pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>. </p>
-<p>Enabling interrupts on the port is not sufficient, you should enable pin change interrupts for each individual pin you are interested in, with <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> or <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6" title="Enable pin change interrupts for several pins of this port. ">enable_pins()</a></code>. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e" title="Enable pin change interrupts for the port of the PCISignal. ">enable()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e" title="Enable pin change interrupts for the port of the PCISignal. ">enable()</a> </dd>
+<p>Enable pin change interrupts for this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>. </p>
+<p>Enabling interrupts is not sufficient, you should enable pin change interrupts for each individual pin you are interested in, with <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> or <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins()</a></code>. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472" title="Enable pin change interrupts handled by this PCISignal. ">enable()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472" title="Enable pin change interrupts handled by this PCISignal. ">enable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1" title="Disable all pin change interrupts for the port of the PCISignal. ">disable_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8fee5dd598a08ca12254cd14da08a0cf" title="Disable all pin change interrupts for this PCISignal. ">disable_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae1dab5eae5175b5ccf2f6b2f01f9ba04" title="Enable pin change interrupts for several pins of this port. ">enable_pins_()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00329">329</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00362">362</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a409fac4a5555c679558d52ec33bdcbb1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a409fac4a5555c679558d52ec33bdcbb1">&#9670;&nbsp;</a></span>disable_()</h2>
+<a id="a8fee5dd598a08ca12254cd14da08a0cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fee5dd598a08ca12254cd14da08a0cf">&#9670;&nbsp;</a></span>disable_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::disable_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::disable_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -574,30 +571,30 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Disable all pin change interrupts for the port of the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>. </p>
-<p>If you need to only diable pin change interrupts for some pins of that port, then use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb" title="Disable all pin change interrupts for the port of the PCISignal. ">disable()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e" title="Enable pin change interrupts for the port of the PCISignal. ">enable()</a> </dd>
+<p>Disable all pin change interrupts for this <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>. </p>
+<p>If you need to only diable pin change interrupts for some pins of that PCINT, then use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a94562c557597c2a06b780baa24bea57c" title="Disable all pin change interrupts handled by this PCISignal. ">disable()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472" title="Enable pin change interrupts handled by this PCISignal. ">enable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#adcf8e04a098db476874025634b4a02eb" title="Disable all pin change interrupts for the port of the PCISignal. ">disable()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a94562c557597c2a06b780baa24bea57c" title="Disable all pin change interrupts handled by this PCISignal. ">disable()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00346">346</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00379">379</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a2bb0bfed157c128aa239f0448d2efa73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2bb0bfed157c128aa239f0448d2efa73">&#9670;&nbsp;</a></span>clear_()</h2>
+<a id="a5d0c4b84584df87d7405443cf93b61fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d0c4b84584df87d7405443cf93b61fc">&#9670;&nbsp;</a></span>clear_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::clear_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::clear_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -610,26 +607,26 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Clear the interrupt flag for this pin change interrupt port. </p>
-<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a537a570866951cd8e6913c0abff4f1b1" title="Clear the interrupt flag for this pin change interrupt port. ">clear()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a537a570866951cd8e6913c0abff4f1b1" title="Clear the interrupt flag for this pin change interrupt port. ">clear()</a> </dd></dl>
+<p>Clear the interrupt flag for this pin change interrupt vector. </p>
+<p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#abea9f1b0e90228fe877ac0e491b477de" title="Clear the interrupt flag for this pin change interrupt vector. ">clear()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#abea9f1b0e90228fe877ac0e491b477de" title="Clear the interrupt flag for this pin change interrupt vector. ">clear()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00361">361</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00394">394</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a77c43f661bd3eaa56fe3102b76336b93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a77c43f661bd3eaa56fe3102b76336b93">&#9670;&nbsp;</a></span>set_enable_pins_()</h2>
+<a id="aed98707d148a27051fee8e3d909f143c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed98707d148a27051fee8e3d909f143c">&#9670;&nbsp;</a></span>set_enable_pins_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::set_enable_pins_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::set_enable_pins_ </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>mask</em></td><td>)</td>
@@ -643,36 +640,36 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled. </p>
-<p>For other pins, interrupts will be disabled. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2b58e40147fbe046805eb49e1c9ec6af" title="Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled...">set_enable_pins()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled. </p>
+<p>For other pins, interrupts will be disabled. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a70861ae816ed1a2fbb977eddadc89da1" title="Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled...">set_enable_pins()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this port; other pins will have interrupts disbaled. </td></tr>
+    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this PCINT; other pins will have interrupts disabled. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2b58e40147fbe046805eb49e1c9ec6af" title="Set the exact list of pins, in this port, for which Pin Change Interrupts must be enabled...">set_enable_pins()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a70861ae816ed1a2fbb977eddadc89da1" title="Set the exact list of pins, in this PCINT, for which Pin Change Interrupts must be enabled...">set_enable_pins()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae1dab5eae5175b5ccf2f6b2f01f9ba04" title="Enable pin change interrupts for several pins of this port. ">enable_pins_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5b6ca8e3436f39eea424a4fa0dd57a36" title="Disable pin change interrupts for several pins of this port. ">disable_pins_()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af68e7e306ffd4488363745231585c3f5" title="Disable pin change interrupts for several pins of this PCINT. ">disable_pins_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00380">380</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00413">413</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="ae1dab5eae5175b5ccf2f6b2f01f9ba04"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1dab5eae5175b5ccf2f6b2f01f9ba04">&#9670;&nbsp;</a></span>enable_pins_()</h2>
+<a id="a7a116409c3029a4d5b869bf68e1fde14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a116409c3029a4d5b869bf68e1fde14">&#9670;&nbsp;</a></span>enable_pins_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::enable_pins_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::enable_pins_ </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>mask</em></td><td>)</td>
@@ -686,38 +683,38 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Enable pin change interrupts for several pins of this port. </p>
-<p>This does not enable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae98ac09553f3a113afc438a2f2e74d07" title="Enable pin change interrupts for the port of the PCISignal. ">enable_()</a></code>. This method is useful when you have several pins to enable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Enable pin change interrupts for several pins of this PCINT. </p>
+<p>This does not enable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a91c747b1d70bcf54889698401b90f21b" title="Enable pin change interrupts for this PCISignal. ">enable_()</a></code>. This method is useful when you have several pins to enable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this port; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
+    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to enable for this PCINT; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae98ac09553f3a113afc438a2f2e74d07" title="Enable pin change interrupts for the port of the PCISignal. ">enable_()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a91c747b1d70bcf54889698401b90f21b" title="Enable pin change interrupts for this PCISignal. ">enable_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a633232ed5b09f7b0b2a5bcf4a1a3cbd6" title="Enable pin change interrupts for several pins of this port. ">enable_pins()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00404">404</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00437">437</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a5b6ca8e3436f39eea424a4fa0dd57a36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b6ca8e3436f39eea424a4fa0dd57a36">&#9670;&nbsp;</a></span>disable_pins_()</h2>
+<a id="af68e7e306ffd4488363745231585c3f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af68e7e306ffd4488363745231585c3f5">&#9670;&nbsp;</a></span>disable_pins_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::disable_pins_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::disable_pins_ </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
           <td class="paramname"><em>mask</em></td><td>)</td>
@@ -731,32 +728,32 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Disable pin change interrupts for several pins of this port. </p>
-<p>This does not disable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1" title="Disable all pin change interrupts for the port of the PCISignal. ">disable_()</a></code>. This method is useful when you have several pins to disable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Disable pin change interrupts for several pins of this PCINT. </p>
+<p>This does not disable completely interrupts, for this you need to also call <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8fee5dd598a08ca12254cd14da08a0cf" title="Disable all pin change interrupts for this PCISignal. ">disable_()</a></code>. This method is useful when you have several pins to disable at once; if you have only one pin, then <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a></code> is preferred. This method provides no compile-time safety net if you pass a wrong mask. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to disable for this port; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
+    <tr><td class="paramname">mask</td><td>the mask of pin bits which pin change interrupts you want to disable for this PCINT; only pins included in <code>mask</code> will be affected; if other pins are already enabled, they won't be changed. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a409fac4a5555c679558d52ec33bdcbb1" title="Disable all pin change interrupts for the port of the PCISignal. ">disable_()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8fee5dd598a08ca12254cd14da08a0cf" title="Disable all pin change interrupts for this PCISignal. ">disable_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab8bde46b21b64a778abf23a4a553db44" title="Disable pin change interrupts for several pins of this port. ">disable_pins()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a3506eb7f8c8791186a634116621a438f" title="Disable pin change interrupts for several pins of this PCINT. ">disable_pins()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00428">428</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00461">461</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="af1f416ccd1fe9d7e6eb820238a072d5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1f416ccd1fe9d7e6eb820238a072d5a">&#9670;&nbsp;</a></span>enable_pin_()</h2>
+<a id="ad29f240c090974ee06b02fe7838fb538"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad29f240c090974ee06b02fe7838fb538">&#9670;&nbsp;</a></span>enable_pin_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <div class="memtemplate">
 template&lt;board::InterruptPin PIN&gt; </div>
 <table class="mlabels">
@@ -764,7 +761,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::enable_pin_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::enable_pin_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -778,29 +775,29 @@ template&lt;board::InterruptPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Enable Pin Change Interrupts for <code>PIN</code>. </p>
-<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PIN</td><td>the pin for which to enable Pin Change Interrupts; this must belong to the handler's <code>PORT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the pin for which to enable Pin Change Interrupts; this must belong to the handler's <code>PCINT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad544b5ff2375bf71582693188d53a699" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN. ">enable_pin()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a2ebc71b0dd0af18b06124a00b4f336df" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN. ">disable_pin_()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ae1dab5eae5175b5ccf2f6b2f01f9ba04" title="Enable pin change interrupts for several pins of this port. ">enable_pins_()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14" title="Enable pin change interrupts for several pins of this PCINT. ">enable_pins_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00446">446</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00479">479</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
-<a id="a2ebc71b0dd0af18b06124a00b4f336df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ebc71b0dd0af18b06124a00b4f336df">&#9670;&nbsp;</a></span>disable_pin_()</h2>
+<a id="a89fee5f5aac524d70b68968d57f1d98e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89fee5f5aac524d70b68968d57f1d98e">&#9670;&nbsp;</a></span>disable_pin_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <div class="memtemplate">
 template&lt;board::InterruptPin PIN&gt; </div>
 <table class="mlabels">
@@ -808,7 +805,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::disable_pin_ </td>
+          <td class="memname">void <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::disable_pin_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -822,34 +819,34 @@ template&lt;board::InterruptPin PIN&gt; </div>
 </div><div class="memdoc">
 
 <p>Disable Pin Change Interrupts for <code>PIN</code>. </p>
-<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a></code> instead. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PIN</td><td>the pin for which to disable Pin Change Interrupts; this must belong to the handler's <code>PORT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
+    <tr><td class="paramname">PIN</td><td>the pin for which to disable Pin Change Interrupts; this must belong to the handler's <code>PCINT</code> and must support Pin Change Interrupts, otherwise compilation will fail. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aeb860352976ca904a6233ad3f7527e6b" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN. ">disable_pin()</a> </dd>
 <dd>
-<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af1f416ccd1fe9d7e6eb820238a072d5a" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd></dl>
+<a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN. ">enable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00468">468</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00497">497</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a13a3e5d369e6beb06c05b01715308f0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13a3e5d369e6beb06c05b01715308f0a">&#9670;&nbsp;</a></span>PORT</h2>
+<a id="aed9572c82b46f578837fd8389ef3af24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed9572c82b46f578837fd8389ef3af24">&#9670;&nbsp;</a></span>PCINT</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
+template&lt;uint8_t PCINT_&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr const <a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a> <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::PORT = PORT_</td>
+          <td class="memname">constexpr const uint8_t <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PCINT_ &gt;::PCINT = PCINT_</td>
         </tr>
       </table>
   </td>
@@ -859,37 +856,9 @@ template&lt;board::Port PORT_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>The IO port which PCINT vector is managed by this <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a>. </p>
+<p>The PCINT vector number for this <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00138">138</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
-
-</div>
-</div>
-<a id="a8bf0e1fa0d38470572293e43d4e13305"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bf0e1fa0d38470572293e43d4e13305">&#9670;&nbsp;</a></span>PCINT</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;board::Port PORT_&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr const uint8_t <a class="el" href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a>&lt; PORT_ &gt;::PCINT = PORT_TRAIT::PCINT</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The PCINT vector number for this <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a>. </p>
-
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00150">150</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00191">191</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>

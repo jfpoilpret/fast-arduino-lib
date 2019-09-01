@@ -1,4 +1,3 @@
 <map id="serial::soft::UART&lt; board::ExternalInterruptPin, RX_, TX_ &gt;" name="serial::soft::UART&lt; board::ExternalInterruptPin, RX_, TX_ &gt;">
-<area shape="rect" id="node2" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html" title="serial::soft::UARX\l\&lt; board::ExternalInterrupt\lPin, RX_ \&gt;" alt="" coords="5,80,197,136"/>
-<area shape="rect" id="node4" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="Software&#45;emulated serial transmitter API. " alt="" coords="222,87,357,129"/>
+<area shape="rect" id="node4" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="278,5,417,32"/>
 </map>

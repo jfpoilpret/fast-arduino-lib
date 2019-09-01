@@ -102,9 +102,9 @@ $(document).ready(function(){initNavTree('classgpio_1_1_fast_port.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a84be18957e6be3f7cee54b23e8cd24c6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_port.html#a84be18957e6be3f7cee54b23e8cd24c6">FastPort</a> ()</td></tr>
-<tr class="memdesc:a84be18957e6be3f7cee54b23e8cd24c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <code><a class="el" href="classgpio_1_1_fast_port.html" title="API that manipulates a whole digital IO port. ">FastPort</a></code> without any physical setup on target MCU.  <a href="#a84be18957e6be3f7cee54b23e8cd24c6">More...</a><br /></td></tr>
-<tr class="separator:a84be18957e6be3f7cee54b23e8cd24c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d98e19d71a9e1df8e7d635b8c767c7f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_port.html#a0d98e19d71a9e1df8e7d635b8c767c7f">FastPort</a> ()=default</td></tr>
+<tr class="memdesc:a0d98e19d71a9e1df8e7d635b8c767c7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <code><a class="el" href="classgpio_1_1_fast_port.html" title="API that manipulates a whole digital IO port. ">FastPort</a></code> without any physical setup on target MCU.  <a href="#a0d98e19d71a9e1df8e7d635b8c767c7f">More...</a><br /></td></tr>
+<tr class="separator:a0d98e19d71a9e1df8e7d635b8c767c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8b0daa4b4e74425e6c11d0a1af1c2f2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgpio_1_1_fast_port.html#ac8b0daa4b4e74425e6c11d0a1af1c2f2">FastPort</a> (uint8_t ddr, uint8_t port=0) INLINE</td></tr>
 <tr class="memdesc:ac8b0daa4b4e74425e6c11d0a1af1c2f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <code><a class="el" href="classgpio_1_1_fast_port.html" title="API that manipulates a whole digital IO port. ">FastPort</a></code> with the given direction byte and initial values byte.  <a href="#ac8b0daa4b4e74425e6c11d0a1af1c2f2">More...</a><br /></td></tr>
 <tr class="separator:ac8b0daa4b4e74425e6c11d0a1af1c2f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,8 +160,8 @@ class gpio::FastPort&lt; PORT_ &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00192">192</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a84be18957e6be3f7cee54b23e8cd24c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84be18957e6be3f7cee54b23e8cd24c6">&#9670;&nbsp;</a></span>FastPort() <span class="overload">[1/2]</span></h2>
+<a id="a0d98e19d71a9e1df8e7d635b8c767c7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d98e19d71a9e1df8e7d635b8c767c7f">&#9670;&nbsp;</a></span>FastPort() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -180,15 +180,13 @@ template&lt;board::Port PORT_&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Construct a <code><a class="el" href="classgpio_1_1_fast_port.html" title="API that manipulates a whole digital IO port. ">FastPort</a></code> without any physical setup on target MCU. </p>
 <p>This is useful if default pins directions and values are OK for you and you want to avoid calling mode setup on target MCU. </p>
-
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00206">206</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>

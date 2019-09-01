@@ -111,10 +111,19 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aca99c22736f50f3e357702fb02bb2834"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE&gt; </td></tr>
-<tr class="memitem:aca99c22736f50f3e357702fb02bb2834"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#aca99c22736f50f3e357702fb02bb2834">Queue</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;buffer)[SIZE])</td></tr>
-<tr class="memdesc:aca99c22736f50f3e357702fb02bb2834"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new queue, based on the provided <code>buffer</code> array.  <a href="#aca99c22736f50f3e357702fb02bb2834">More...</a><br /></td></tr>
-<tr class="separator:aca99c22736f50f3e357702fb02bb2834"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88c9b93c195d0e0d010e8c7ede8b707c"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE&gt; </td></tr>
+<tr class="memitem:a88c9b93c195d0e0d010e8c7ede8b707c"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a88c9b93c195d0e0d010e8c7ede8b707c">Queue</a> (<a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;buffer)[SIZE], bool locked=false)</td></tr>
+<tr class="memdesc:a88c9b93c195d0e0d010e8c7ede8b707c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new queue, based on the provided <code>buffer</code> array.  <a href="#a88c9b93c195d0e0d010e8c7ede8b707c">More...</a><br /></td></tr>
+<tr class="separator:a88c9b93c195d0e0d010e8c7ede8b707c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9502986798fafa55a8201cf4aad11946"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#a9502986798fafa55a8201cf4aad11946">lock</a> ()</td></tr>
+<tr class="memdesc:a9502986798fafa55a8201cf4aad11946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock this queue, ie prevent pushing any data to it.  <a href="#a9502986798fafa55a8201cf4aad11946">More...</a><br /></td></tr>
+<tr class="separator:a9502986798fafa55a8201cf4aad11946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d85639dea318b57ff77760d109384e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#ac9d85639dea318b57ff77760d109384e">unlock</a> ()</td></tr>
+<tr class="memdesc:ac9d85639dea318b57ff77760d109384e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlock this queue, ie allow pushing data to it.  <a href="#ac9d85639dea318b57ff77760d109384e">More...</a><br /></td></tr>
+<tr class="separator:ac9d85639dea318b57ff77760d109384e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af880d9ab03a337b3edcebae6043f894c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#af880d9ab03a337b3edcebae6043f894c">is_locked</a> () const</td></tr>
+<tr class="memdesc:af880d9ab03a337b3edcebae6043f894c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if this queue is locked, ie if pushing data to it is disabled.  <a href="#af880d9ab03a337b3edcebae6043f894c">More...</a><br /></td></tr>
+<tr class="separator:af880d9ab03a337b3edcebae6043f894c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae506aa92e594cbac6f338c2b65d1e3b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6">push_</a> (<a class="el" href="classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278">TREF</a> item)</td></tr>
 <tr class="memdesc:ae506aa92e594cbac6f338c2b65d1e3b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Push <code>item</code> to the end of this queue, provided there is still available space in its ring buffer.  <a href="#ae506aa92e594cbac6f338c2b65d1e3b6">More...</a><br /></td></tr>
 <tr class="separator:ae506aa92e594cbac6f338c2b65d1e3b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,7 +214,7 @@ class containers::Queue&lt; T_, TREF_ &gt;</h3>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00059">59</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00058">58</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a6611f442aefd7dac3184b146ce42631a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6611f442aefd7dac3184b146ce42631a">&#9670;&nbsp;</a></span>T</h2>
@@ -223,7 +232,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 
 <p>The type of items in this queue. </p>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00063">63</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00062">62</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -243,13 +252,13 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 
 <p>The constant reference type of items in this queue. </p>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00066">66</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00065">65</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aca99c22736f50f3e357702fb02bb2834"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca99c22736f50f3e357702fb02bb2834">&#9670;&nbsp;</a></span>Queue()</h2>
+<a id="a88c9b93c195d0e0d010e8c7ede8b707c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88c9b93c195d0e0d010e8c7ede8b707c">&#9670;&nbsp;</a></span>Queue()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -265,13 +274,23 @@ template&lt;uint8_t SIZE&gt; </div>
           <td class="memname"><a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::<a class="el" href="classcontainers_1_1_queue.html">Queue</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a">T</a>(&amp;)&#160;</td>
-          <td class="paramname"><em>buffer</em>[SIZE]</td><td>)</td>
+          <td class="paramname"><em>buffer</em>[SIZE], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>locked</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -286,6 +305,7 @@ template&lt;uint8_t SIZE&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td>the buffer used by this queue to store its items </td></tr>
+    <tr><td class="paramname">locked</td><td>when <code>true</code>, prevents pushing any data to this queue </td></tr>
   </table>
   </dd>
 </dl>
@@ -295,6 +315,108 @@ template&lt;uint8_t SIZE&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9502986798fafa55a8201cf4aad11946"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9502986798fafa55a8201cf4aad11946">&#9670;&nbsp;</a></span>lock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::lock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lock this queue, ie prevent pushing any data to it. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#ac9d85639dea318b57ff77760d109384e" title="Unlock this queue, ie allow pushing data to it. ">unlock()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#af880d9ab03a337b3edcebae6043f894c" title="Check if this queue is locked, ie if pushing data to it is disabled. ">is_locked()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00083">83</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="ac9d85639dea318b57ff77760d109384e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9d85639dea318b57ff77760d109384e">&#9670;&nbsp;</a></span>unlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::unlock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unlock this queue, ie allow pushing data to it. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a9502986798fafa55a8201cf4aad11946" title="Lock this queue, ie prevent pushing any data to it. ">lock()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#af880d9ab03a337b3edcebae6043f894c" title="Check if this queue is locked, ie if pushing data to it is disabled. ">is_locked()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00093">93</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
+<a id="af880d9ab03a337b3edcebae6043f894c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af880d9ab03a337b3edcebae6043f894c">&#9670;&nbsp;</a></span>is_locked()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classcontainers_1_1_queue.html">containers::Queue</a>&lt; T_, TREF_ &gt;::is_locked </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if this queue is locked, ie if pushing data to it is disabled. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a9502986798fafa55a8201cf4aad11946" title="Lock this queue, ie prevent pushing any data to it. ">lock()</a> </dd>
+<dd>
+<a class="el" href="classcontainers_1_1_queue.html#ac9d85639dea318b57ff77760d109384e" title="Unlock this queue, ie allow pushing data to it. ">unlock()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00103">103</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+
+</div>
+</div>
 <a id="ae506aa92e594cbac6f338c2b65d1e3b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae506aa92e594cbac6f338c2b65d1e3b6">&#9670;&nbsp;</a></span>push_()</h2>
 
@@ -541,7 +663,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <p>Get the maximum size of this queue. </p>
 <p>This is the maximum number of items that can be present at the same time in this queue. </p>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00185">185</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00216">216</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -577,7 +699,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#ae11324e5034406bd864a2b9bb1d3470b" title="Tell if this queue is currently full. ">full_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00199">199</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00230">230</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -611,7 +733,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f" title="Tell the current number of available locations for items to be pushed to this queue. ">free_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00212">212</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00243">243</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -645,7 +767,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#a7dde204e519e98fbacbabdc7d456e11e" title="Get the maximum size of this queue. ">size()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00225">225</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00256">256</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -679,7 +801,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00241">241</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00272">272</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -713,7 +835,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00257">257</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00288">288</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -764,7 +886,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308" title="Tell the current number of available locations for items to be pushed to this queue. ">free()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00277">277</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00308">308</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -815,7 +937,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00299">299</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00330">330</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -868,7 +990,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00322">322</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00353">353</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -926,7 +1048,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069" title="Tell the current number of items currently present in this queue. ">items()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00348">348</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00379">379</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -981,7 +1103,7 @@ template&lt;uint8_t SIZE&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#ac27c87f9de54ecb11a96d40074a2b069" title="Tell the current number of items currently present in this queue. ">items()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00375">375</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00406">406</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -1013,7 +1135,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <p>Tell if this queue is currently empty. </p>
 <p>This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678" title="Tell if this queue is currently empty. ">empty_()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00386">386</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00417">417</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -1045,7 +1167,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <p>Tell the current number of items currently present in this queue. </p>
 <p>This method is synchronized, hence you can call it from an an interrupt-unsafe context; if you are sure you are in an interrupt-safe, you should use the not synchronized flavor <code><a class="el" href="classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd" title="Tell the current number of items currently present in this queue. ">items_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classcontainers_1_1_queue.html#a56649c6345bdb582a15bc66dc853bfdd" title="Tell the current number of items currently present in this queue. ">items_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00398">398</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00429">429</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -1079,7 +1201,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00412">412</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00443">443</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -1113,7 +1235,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308" title="Tell the current number of available locations for items to be pushed to this queue. ">free()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00425">425</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00456">456</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>
@@ -1147,7 +1269,7 @@ template&lt;typename T_, typename TREF_ = const T_&amp;&gt; </div>
 <dd>
 <a class="el" href="classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f" title="Tell if this queue is currently empty. ">empty()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00438">438</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="queue_8h_source.html#l00469">469</a> of file <a class="el" href="queue_8h_source.html">queue.h</a>.</p>
 
 </div>
 </div>

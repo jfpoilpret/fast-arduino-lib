@@ -108,9 +108,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="uart__commons_8h__dep__incl.png" border="0" usemap="#fastarduino_2uart__commons_8hdep" alt=""/></div>
 <map name="fastarduino_2uart__commons_8hdep" id="fastarduino_2uart__commons_8hdep">
-<area shape="rect" id="node2" href="soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="13,80,183,107"/>
-<area shape="rect" id="node4" href="uart_8h.html" title="Hardware serial API. " alt="" coords="207,80,346,107"/>
-<area shape="rect" id="node3" href="soft__uart_8cpp_source.html" title="fastarduino/soft_uart.cpp" alt="" coords="5,155,191,181"/>
+<area shape="rect" id="node2" href="soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="5,80,176,107"/>
+<area shape="rect" id="node3" href="uart_8h.html" title="Hardware serial API. " alt="" coords="200,80,339,107"/>
 </map>
 </div>
 </div>
@@ -148,6 +147,16 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a1cc0a59518594157f23ddf16842243b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of stop bits used for serial transmission.  <a href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">More...</a><br /></td></tr>
 <tr class="separator:a1cc0a59518594157f23ddf16842243b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1abc2ad4df0b9d422f51f63c81d0a2d7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7">serial::BufferHandling</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a60cba2874369bd3790e14ea5f8a7bc58">serial::BufferHandling::KEEP</a> = 0x00, 
+<br />
+&#160;&#160;<a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a813461e0c58e7ad59a2fd83ca2237fec">serial::BufferHandling::CLEAR</a> = 0x01, 
+<br />
+&#160;&#160;<a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a26eed7f078fc015c5252f817059a6f9f">serial::BufferHandling::FLUSH</a> = 0x02
+<br />
+ }</td></tr>
+<tr class="memdesc:a1abc2ad4df0b9d422f51f63c81d0a2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the TX/RX buffer should be handled when ending transmission (see <code>end()</code> methods) on UATX/UARX.  <a href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7">More...</a><br /></td></tr>
+<tr class="separator:a1abc2ad4df0b9d422f51f63c81d0a2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Common definitions for serial API. </p>

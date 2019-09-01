@@ -131,9 +131,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a673be501023fdf70bd06dff90839d455"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a77c46427baeaa86aff4787b6c75f807c">TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a673be501023fdf70bd06dff90839d455">CTC_counter</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint32_t us)</td></tr>
 <tr class="memdesc:a673be501023fdf70bd06dff90839d455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the value of counter to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> mode, with <code>prescaler</code>, in order to reach <code>us</code> microseconds.  <a href="#a673be501023fdf70bd06dff90839d455">More...</a><br /></td></tr>
 <tr class="separator:a673be501023fdf70bd06dff90839d455"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f53878ea0179bdc8fba364f8fb629e2"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a3f53878ea0179bdc8fba364f8fb629e2">is_adequate_for_CTC</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> p, uint32_t us)</td></tr>
-<tr class="memdesc:a3f53878ea0179bdc8fba364f8fb629e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that the given prescaler <code>p</code> is suitable for this timer in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> in ordeer to be able to reach <code>us</code> microseconds.  <a href="#a3f53878ea0179bdc8fba364f8fb629e2">More...</a><br /></td></tr>
-<tr class="separator:a3f53878ea0179bdc8fba364f8fb629e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb70a97267562fe0edec61517734d960"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#aeb70a97267562fe0edec61517734d960">is_adequate_for_CTC</a> (<a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a> prescaler, uint32_t us)</td></tr>
+<tr class="memdesc:aeb70a97267562fe0edec61517734d960"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies that the given prescaler <code>prescaler</code> is suitable for this timer in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> in ordeer to be able to reach <code>us</code> microseconds.  <a href="#aeb70a97267562fe0edec61517734d960">More...</a><br /></td></tr>
+<tr class="separator:aeb70a97267562fe0edec61517734d960"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c53597343b9f3f8094d90a6618e7507"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtimer_1_1_calculator.html#a4c53597343b9f3f8094d90a6618e7507">FastPWM_prescaler</a> (uint16_t pwm_frequency)</td></tr>
 <tr class="memdesc:a4c53597343b9f3f8094d90a6618e7507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the ideal prescaler value to use for this timer, in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a3c777f2debe013caa4c85ae201e9bda0" title="Timer &quot;Fast Phase Width Modulation&quot; mode: counter is incremented until it reaches MAX value (0xFF for...">TimerMode::FAST_PWM</a> mode, in order to be able to reach at least <code>pwm_frequency</code>.  <a href="#a4c53597343b9f3f8094d90a6618e7507">More...</a><br /></td></tr>
 <tr class="separator:a4c53597343b9f3f8094d90a6618e7507"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -490,8 +490,8 @@ Timer::begin(PRESCALER, TYPE) </dd></dl>
 
 </div>
 </div>
-<a id="a3f53878ea0179bdc8fba364f8fb629e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f53878ea0179bdc8fba364f8fb629e2">&#9670;&nbsp;</a></span>is_adequate_for_CTC()</h2>
+<a id="aeb70a97267562fe0edec61517734d960"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb70a97267562fe0edec61517734d960">&#9670;&nbsp;</a></span>is_adequate_for_CTC()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -505,7 +505,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
           <td class="memname">static constexpr bool <a class="el" href="structtimer_1_1_calculator.html">timer::Calculator</a>&lt; NTIMER_ &gt;::is_adequate_for_CTC </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structtimer_1_1_calculator.html#a892cea8920e7d5b2621fcd7ccfd0c8d0">PRESCALER</a>&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
+          <td class="paramname"><em>prescaler</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -526,19 +526,19 @@ template&lt;board::Timer NTIMER_&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Verifies that the given prescaler <code>p</code> is suitable for this timer in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> in ordeer to be able to reach <code>us</code> microseconds. </p>
+<p>Verifies that the given prescaler <code>prescaler</code> is suitable for this timer in <a class="el" href="namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77" title="Timer &quot;Clear Timer on Compare match&quot; mode: counter is incremented until it reaches &quot;TOP&quot; (OCRxA regis...">TimerMode::CTC</a> in ordeer to be able to reach <code>us</code> microseconds. </p>
 <p>This is normally not needed but can be helpful in a <code>static_assert</code> in your code. Note this is a <code>constexpr</code> method, i.e. it allows compile-time computation when provided constant arguments. You could use this method in <code>static_assert()</code> in order to check that the requested period <code>us</code> is OK for this timer.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p</td><td>the prescaler used for this timer </td></tr>
+    <tr><td class="paramname">prescaler</td><td>the prescaler used for this timer </td></tr>
     <tr><td class="paramname">us</td><td>the number of microseconds to reach with this timer in CTC mode </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">&lt;tt&gt;true&lt;/tt&gt;</td><td>if <code>p</code> and <code>us</code> are adequate for <code>TIMER</code> </td></tr>
-    <tr><td class="paramname">&lt;tt&gt;false&lt;/tt&gt;</td><td>if <code>p</code> and <code>us</code> are <b>NOT</b> adequate for <code>TIMER</code> </td></tr>
+    <tr><td class="paramname">&lt;tt&gt;true&lt;/tt&gt;</td><td>if <code>prescaler</code> and <code>us</code> are adequate for <code>TIMER</code> </td></tr>
+    <tr><td class="paramname">&lt;tt&gt;false&lt;/tt&gt;</td><td>if <code>prescaler</code> and <code>us</code> are <b>NOT</b> adequate for <code>TIMER</code> </td></tr>
   </table>
   </dd>
 </dl>

@@ -1,8 +1,9 @@
 <map id="fastarduino/pulse_timer.h" name="fastarduino/pulse_timer.h">
-<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="209,155,307,181"/>
-<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="382,155,465,181"/>
-<area shape="rect" id="node10" href="$timer_8h.html" title="Timer API. " alt="" coords="313,80,381,107"/>
-<area shape="rect" id="node11" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="227,80,289,107"/>
-<area shape="rect" id="node12" href="$types__traits_8h.html" title="Useful traits for common types. " alt="" coords="508,80,619,107"/>
-<area shape="rect" id="node6" href="$io_8h_source.html" title="boards/io.h" alt="" coords="296,229,391,256"/>
+<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="297,155,394,181"/>
+<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="189,155,272,181"/>
+<area shape="rect" id="node12" href="$timer_8h.html" title="Timer API. " alt="" coords="383,80,451,107"/>
+<area shape="rect" id="node13" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="194,80,257,107"/>
+<area shape="rect" id="node14" href="$types__traits_8h.html" title="Useful traits for common types. " alt="" coords="602,80,713,107"/>
+<area shape="rect" id="node6" href="$io_8h_source.html" title="boards/io.h" alt="" coords="307,229,402,256"/>
+<area shape="rect" id="node9" href="$board_8h_source.html" title="boards/board.h" alt="" coords="35,229,154,256"/>
 </map>

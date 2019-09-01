@@ -9,5 +9,10 @@ var uart__commons_8h =
     [ "StopBits", "uart__commons_8h.html#a1cc0a59518594157f23ddf16842243b3", [
       [ "ONE", "uart__commons_8h.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396", null ],
       [ "TWO", "uart__commons_8h.html#a1cc0a59518594157f23ddf16842243b3a0f82d86afa0f5dc965c5c15aca58dcfb", null ]
+    ] ],
+    [ "BufferHandling", "uart__commons_8h.html#a1abc2ad4df0b9d422f51f63c81d0a2d7", [
+      [ "KEEP", "uart__commons_8h.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a60cba2874369bd3790e14ea5f8a7bc58", null ],
+      [ "CLEAR", "uart__commons_8h.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a813461e0c58e7ad59a2fd83ca2237fec", null ],
+      [ "FLUSH", "uart__commons_8h.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a26eed7f078fc015c5252f817059a6f9f", null ]
     ] ]
 ];

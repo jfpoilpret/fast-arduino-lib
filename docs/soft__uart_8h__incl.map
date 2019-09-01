@@ -1,16 +1,17 @@
 <map id="fastarduino/soft_uart.h" name="fastarduino/soft_uart.h">
-<area shape="rect" id="node2" href="$board_8h_source.html" title="boards/board.h" alt="" coords="685,155,803,181"/>
-<area shape="rect" id="node3" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="930,155,1027,181"/>
-<area shape="rect" id="node7" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="828,453,911,480"/>
-<area shape="rect" id="node9" href="$uart__commons_8h.html" title="Common definitions for serial API. " alt="" coords="5,304,136,331"/>
-<area shape="rect" id="node11" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="426,80,513,107"/>
-<area shape="rect" id="node24" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="1202,80,1265,107"/>
-<area shape="rect" id="node26" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="876,80,929,107"/>
-<area shape="rect" id="node27" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="1040,80,1091,107"/>
-<area shape="rect" id="node4" href="$io_8h_source.html" title="boards/io.h" alt="" coords="598,528,693,555"/>
-<area shape="rect" id="node13" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="275,304,349,331"/>
-<area shape="rect" id="node15" href="$time_8h.html" title="Simple time utilities. " alt="" coords="227,379,291,405"/>
-<area shape="rect" id="node17" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="513,304,578,331"/>
-<area shape="rect" id="node19" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="443,155,496,181"/>
-<area shape="rect" id="node23" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="262,229,362,256"/>
+<area shape="rect" id="node2" href="$board_8h_source.html" title="boards/board.h" alt="" coords="705,528,823,555"/>
+<area shape="rect" id="node4" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="878,379,975,405"/>
+<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="1059,453,1141,480"/>
+<area shape="rect" id="node10" href="$uart__commons_8h.html" title="Common definitions for serial API. " alt="" coords="135,80,265,107"/>
+<area shape="rect" id="node11" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="502,80,589,107"/>
+<area shape="rect" id="node25" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="1278,304,1341,331"/>
+<area shape="rect" id="node27" href="$pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="980,304,1033,331"/>
+<area shape="rect" id="node28" href="$int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="1203,304,1253,331"/>
+<area shape="rect" id="node5" href="$io_8h_source.html" title="boards/io.h" alt="" coords="446,453,541,480"/>
+<area shape="rect" id="node13" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="647,304,721,331"/>
+<area shape="rect" id="node14" href="$time_8h.html" title="Simple time utilities. " alt="" coords="587,379,651,405"/>
+<area shape="rect" id="node16" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="54,304,119,331"/>
+<area shape="rect" id="node18" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="296,155,349,181"/>
+<area shape="rect" id="node23" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="477,229,577,256"/>
+<area shape="rect" id="node24" href="$virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl. " alt="" coords="319,304,395,331"/>
 </map>

@@ -2,8 +2,8 @@ var i2c_8h =
 [
     [ "I2C_STATUS_HOOK", "i2c_8h.html#a30a5217313a148f7da0b484c60f3fd00", null ],
     [ "I2CMode", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36", [
-      [ "Standard", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36aeb6d8ae6f20283755b339c0dc273988b", null ],
-      [ "Fast", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36ae16b5b7f26f54214445cbe38d72c2828", null ]
+      [ "STANDARD", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0", null ],
+      [ "FAST", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36adca6e617f6fb54033deb311e7e7c93cc", null ]
     ] ],
     [ "OK", "i2c_8h.html#a64da02c9095e825b16389e29f86d4192", null ],
     [ "START_TRANSMITTED", "i2c_8h.html#a3332435f3cfafe3c696fdc5ec63d38f9", null ],

@@ -87,6 +87,7 @@ $(document).ready(function(){initNavTree('classstreams_1_1ostreambuf.html','');}
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
@@ -105,9 +106,7 @@ Inheritance diagram for streams::ostreambuf:</div>
 <div class="dyncontent">
 <div class="center"><img src="classstreams_1_1ostreambuf__inherit__graph.png" border="0" usemap="#streams_1_1ostreambuf_inherit__map" alt="Inheritance graph"/></div>
 <map name="streams_1_1ostreambuf_inherit__map" id="streams_1_1ostreambuf_inherit__map">
-<area shape="rect" id="node3" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. " alt="" coords="15,169,154,211"/>
 <area shape="rect" id="node2" href="classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="9,5,160,47"/>
-<area shape="rect" id="node4" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. " alt="" coords="15,259,154,300"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
@@ -119,12 +118,18 @@ Collaboration diagram for streams::ostreambuf:</div>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a550c89444ecfc08e1d053964ec48b218"><td class="memItemLeft" align="right" valign="top"><a id="a550c89444ecfc08e1d053964ec48b218"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>CALLBACK</b> = <a class="el" href="classvirtual__support_1_1_virtual_method.html#a5092df1acd6b3bdbc0d7f77a4ea59cd6">virtual_support::VirtualMethod::METHOD</a></td></tr>
+<tr class="separator:a550c89444ecfc08e1d053964ec48b218"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6095fc818def8bb011cd1b18a342f6a9"><td class="memTemplParams" colspan="2"><a id="a6095fc818def8bb011cd1b18a342f6a9"></a>
+<tr class="memitem:a9afb4ee7746a391e2769e4f9b46176ec"><td class="memTemplParams" colspan="2"><a id="a9afb4ee7746a391e2769e4f9b46176ec"></a>
 template&lt;uint8_t SIZE&gt; </td></tr>
-<tr class="memitem:a6095fc818def8bb011cd1b18a342f6a9"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ostreambuf</b> (char(&amp;buffer)[SIZE])</td></tr>
-<tr class="separator:a6095fc818def8bb011cd1b18a342f6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9afb4ee7746a391e2769e4f9b46176ec"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ostreambuf</b> (char(&amp;buffer)[SIZE], CALLBACK callback=nullptr, void *arg=nullptr)</td></tr>
+<tr class="separator:a9afb4ee7746a391e2769e4f9b46176ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e65481b6a64791d5584818b687ddf7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e">pubsync</a> ()</td></tr>
 <tr class="memdesc:a2e65481b6a64791d5584818b687ddf7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait until all buffer content has been pulled by a consumer.  <a href="#a2e65481b6a64791d5584818b687ddf7e">More...</a><br /></td></tr>
 <tr class="separator:a2e65481b6a64791d5584818b687ddf7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,21 +145,18 @@ template&lt;uint8_t SIZE&gt; </td></tr>
 <tr class="memitem:a5ae9b4a7aeef87bcec0ca2bf5c3c3204"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a5ae9b4a7aeef87bcec0ca2bf5c3c3204">sputn</a> (const flash::FlashStorage *str)</td></tr>
 <tr class="memdesc:a5ae9b4a7aeef87bcec0ca2bf5c3c3204"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a string, stored on flash memory, to the buffer.  <a href="#a5ae9b4a7aeef87bcec0ca2bf5c3c3204">More...</a><br /></td></tr>
 <tr class="separator:a5ae9b4a7aeef87bcec0ca2bf5c3c3204"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fea28ab629281840fd8f5cd422b6251"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251">overflow</a> () const</td></tr>
+<tr class="memdesc:a3fea28ab629281840fd8f5cd422b6251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate if a buffer overflow has occurred since last time <code><a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e" title="Wait until all buffer content has been pulled by a consumer. ">pubsync()</a></code> or <code><a class="el" href="classstreams_1_1ostreambuf.html#a57078ffdfda5810ad9b29dc8807e5eae" title="Reset the overflow flag. ">reset_overflow()</a></code> was called.  <a href="#a3fea28ab629281840fd8f5cd422b6251">More...</a><br /></td></tr>
+<tr class="separator:a3fea28ab629281840fd8f5cd422b6251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4dfb627256754b1bc7e15d2e0bc97c54"><td class="memItemLeft" align="right" valign="top">QUEUE &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a4dfb627256754b1bc7e15d2e0bc97c54">queue</a> ()</td></tr>
 <tr class="memdesc:a4dfb627256754b1bc7e15d2e0bc97c54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the underlying queue.  <a href="#a4dfb627256754b1bc7e15d2e0bc97c54">More...</a><br /></td></tr>
 <tr class="separator:a4dfb627256754b1bc7e15d2e0bc97c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a9341c110cdc9acfbea274eed5e63a079"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079">on_put</a> ()</td></tr>
-<tr class="memdesc:a9341c110cdc9acfbea274eed5e63a079"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback method called when new content has been added to the buffer.  <a href="#a9341c110cdc9acfbea274eed5e63a079">More...</a><br /></td></tr>
-<tr class="separator:a9341c110cdc9acfbea274eed5e63a079"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d673605713824093f7e91c6789ccdfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a8d673605713824093f7e91c6789ccdfc">put_</a> (char c, bool call_on_put=true)</td></tr>
 <tr class="memdesc:a8d673605713824093f7e91c6789ccdfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a character to the buffer.  <a href="#a8d673605713824093f7e91c6789ccdfc">More...</a><br /></td></tr>
 <tr class="separator:a8d673605713824093f7e91c6789ccdfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fea28ab629281840fd8f5cd422b6251"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251">overflow</a> () const</td></tr>
-<tr class="memdesc:a3fea28ab629281840fd8f5cd422b6251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate if a buffer overflow has occurred since last time <code><a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e" title="Wait until all buffer content has been pulled by a consumer. ">pubsync()</a></code> or <code><a class="el" href="classstreams_1_1ostreambuf.html#a57078ffdfda5810ad9b29dc8807e5eae" title="Reset the overflow flag. ">reset_overflow()</a></code> was called.  <a href="#a3fea28ab629281840fd8f5cd422b6251">More...</a><br /></td></tr>
-<tr class="separator:a3fea28ab629281840fd8f5cd422b6251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57078ffdfda5810ad9b29dc8807e5eae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostreambuf.html#a57078ffdfda5810ad9b29dc8807e5eae">reset_overflow</a> ()</td></tr>
 <tr class="memdesc:a57078ffdfda5810ad9b29dc8807e5eae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the overflow flag.  <a href="#a57078ffdfda5810ad9b29dc8807e5eae">More...</a><br /></td></tr>
 <tr class="separator:a57078ffdfda5810ad9b29dc8807e5eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,11 +176,13 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td>the original ring buffer containing all pushed content; once passed to the constructor, it should never be used directly as it will be consumed by a <code><a class="el" href="classcontainers_1_1_queue.html" title="Queue of type T_ items. ">containers::Queue</a></code>. </td></tr>
+    <tr><td class="paramname">callback</td><td>a pointer to function that is called back when data is pushed to this <code>ostreambuf</code>. </td></tr>
+    <tr><td class="paramname">arg</td><td>any pointer value that will be passed to <code>callback</code> </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00041">41</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00045">45</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2e65481b6a64791d5584818b687ddf7e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2e65481b6a64791d5584818b687ddf7e">&#9670;&nbsp;</a></span>pubsync()</h2>
@@ -206,7 +210,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 <p>Wait until all buffer content has been pulled by a consumer. </p>
 <p>This method clear the count of overflows that have occurred until now. </p>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00053">53</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00061">61</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 
 </div>
 </div>
@@ -243,7 +247,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00065">65</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00073">73</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 
 </div>
 </div>
@@ -282,7 +286,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 </div><div class="memdoc">
 
 <p>Append several characters to the buffer. </p>
-<p>If the buffer is full, then <code><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a></code> flag will be set. Once all characters have been appended, <code><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a></code> will be called, even if an overflow has occurred.</p>
+<p>If the buffer is full, then <code><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a></code> flag will be set. Once all characters have been appended, <code>on_put()</code> will be called, even if an overflow has occurred.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">content</td><td>the array of characters to be appended </td></tr>
@@ -290,11 +294,11 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd>on_put() </dd>
 <dd>
 <a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00081">81</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00089">89</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 
 </div>
 </div>
@@ -323,18 +327,18 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 </div><div class="memdoc">
 
 <p>Append a string to the buffer. </p>
-<p>The &lsquo;&rsquo;\0'<code>end character of @p str is not transmitted. If the buffer is full, then</code><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a><code>flag will be set. Once all string content has been appended,</code><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a>` will be called, even if an overflow has occurred.</p>
+<p>The &lsquo;&rsquo;\0'<code>end character of @p str is not transmitted. If the buffer is full, then</code><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a><code>flag will be set. Once all string content has been appended,</code>on_put()` will be called, even if an overflow has occurred.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">str</td><td>the '\0' ended string (standard C-string) to append </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd>on_put() </dd>
 <dd>
 <a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00098">98</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00106">106</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 
 </div>
 </div>
@@ -363,7 +367,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 </div><div class="memdoc">
 
 <p>Append a string, stored on flash memory, to the buffer. </p>
-<p>The &lsquo;&rsquo;\0'<code>end character of @p str is not transmitted. If the buffer is full, then</code><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a><code>flag will be set. Once all string content has been appended,</code><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a>` will be called, even if an overflow has occurred. Example: </p><div class="fragment"><div class="line">output.sputn(<a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Hello, World!\n&quot;</span>));</div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+<p>The &lsquo;&rsquo;\0'<code>end character of @p str is not transmitted. If the buffer is full, then</code><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a><code>flag will be set. Once all string content has been appended,</code>on_put()` will be called, even if an overflow has occurred. Example: </p><div class="fragment"><div class="line">output.sputn(<a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Hello, World!\n&quot;</span>));</div></div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">str</td><td>the '\0' ended string (standard C-string), stored on flash, to append </td></tr>
   </table>
@@ -371,11 +375,43 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15" title="Force string constant to be stored as flash storage. ">F()</a> </dd>
 <dd>
-<a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a> </dd>
+on_put() </dd>
 <dd>
 <a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00121">121</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00129">129</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+
+</div>
+</div>
+<a id="a3fea28ab629281840fd8f5cd422b6251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fea28ab629281840fd8f5cd422b6251">&#9670;&nbsp;</a></span>overflow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool streams::ostreambuf::overflow </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Indicate if a buffer overflow has occurred since last time <code><a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e" title="Wait until all buffer content has been pulled by a consumer. ">pubsync()</a></code> or <code><a class="el" href="classstreams_1_1ostreambuf.html#a57078ffdfda5810ad9b29dc8807e5eae" title="Reset the overflow flag. ">reset_overflow()</a></code> was called. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e" title="Wait until all buffer content has been pulled by a consumer. ">pubsync()</a> </dd>
+<dd>
+<a class="el" href="classstreams_1_1ostreambuf.html#a57078ffdfda5810ad9b29dc8807e5eae" title="Reset the overflow flag. ">reset_overflow()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00142">142</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 
 </div>
 </div>
@@ -405,37 +441,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 <p>Return the underlying queue. </p>
 <p>Normally you will not need this method. </p>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00132">132</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
-
-</div>
-</div>
-<a id="a9341c110cdc9acfbea274eed5e63a079"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9341c110cdc9acfbea274eed5e63a079">&#9670;&nbsp;</a></span>on_put()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void streams::ostreambuf::on_put </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Callback method called when new content has been added to the buffer. </p>
-<p>This can be overridden by a subclass to trigger interrupt-driven transmission of buffer data. Default implementation does nothing. </p>
-
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00144">144</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00151">151</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 
 </div>
 </div>
@@ -477,47 +483,15 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>ostream</b></td></tr
 <p>If the buffer is full, then <code><a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a></code> flag will be set. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">c</td><td>the character to append </td></tr>
-    <tr><td class="paramname">call_on_put</td><td><code>true</code> if <code><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a></code> should be called after <code>c</code> has been appended, <code>false</code> otherwise; when directly calling this method, you should keep the default value. </td></tr>
+    <tr><td class="paramname">call_on_put</td><td><code>true</code> if <code>on_put()</code> should be called after <code>c</code> has been appended, <code>false</code> otherwise; when directly calling this method, you should keep the default value. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a9341c110cdc9acfbea274eed5e63a079" title="Callback method called when new content has been added to the buffer. ">on_put()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd>on_put() </dd>
 <dd>
 <a class="el" href="classstreams_1_1ostreambuf.html#a3fea28ab629281840fd8f5cd422b6251" title="Indicate if a buffer overflow has occurred since last time pubsync() or reset_overflow() was called...">overflow()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00156">156</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
-
-</div>
-</div>
-<a id="a3fea28ab629281840fd8f5cd422b6251"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3fea28ab629281840fd8f5cd422b6251">&#9670;&nbsp;</a></span>overflow()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool streams::ostreambuf::overflow </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Indicate if a buffer overflow has occurred since last time <code><a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e" title="Wait until all buffer content has been pulled by a consumer. ">pubsync()</a></code> or <code><a class="el" href="classstreams_1_1ostreambuf.html#a57078ffdfda5810ad9b29dc8807e5eae" title="Reset the overflow flag. ">reset_overflow()</a></code> was called. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e" title="Wait until all buffer content has been pulled by a consumer. ">pubsync()</a> </dd>
-<dd>
-<a class="el" href="classstreams_1_1ostreambuf.html#a57078ffdfda5810ad9b29dc8807e5eae" title="Reset the overflow flag. ">reset_overflow()</a> </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00168">168</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00167">167</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
 
 </div>
 </div>

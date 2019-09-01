@@ -128,8 +128,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a14d6153a6676bcecddfc7519c824ef77"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">millis</a> () const</td></tr>
 <tr class="memdesc:a14d6153a6676bcecddfc7519c824ef77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of milliseconds that elapsed since <code><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> was called.  <a href="#a14d6153a6676bcecddfc7519c824ef77">More...</a><br /></td></tr>
 <tr class="separator:a14d6153a6676bcecddfc7519c824ef77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b000bf47369faf9b4a2ca47f85c6d5b"><td class="memItemLeft" align="right" valign="top"><a id="a8b000bf47369faf9b4a2ca47f85c6d5b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
+<tr class="memitem:a8b000bf47369faf9b4a2ca47f85c6d5b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b">reset</a> ()</td></tr>
+<tr class="memdesc:a8b000bf47369faf9b4a2ca47f85c6d5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset current counter to 0.  <a href="#a8b000bf47369faf9b4a2ca47f85c6d5b">More...</a><br /></td></tr>
 <tr class="separator:a8b000bf47369faf9b4a2ca47f85c6d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea02a3b9597f346d30b0781fae69506d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">delay</a> (uint32_t ms)</td></tr>
 <tr class="memdesc:aea02a3b9597f346d30b0781fae69506d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay program execution for the given amount of milliseconds.  <a href="#aea02a3b9597f346d30b0781fae69506d">More...</a><br /></td></tr>
@@ -152,7 +152,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <div class="textblock"><p>Simple API to use watchdog timer as a real-time clock. </p>
 <p>For this to work correctly, you need to register the proper ISR through <code><a class="el" href="watchdog_8h.html#acf8c96f84107c380f8208e0e8f22a879" title="Register the necessary ISR (Interrupt Service Routine) for a watchdog::WatchdogRTT to work properly...">REGISTER_WATCHDOG_RTT_ISR()</a></code> macro first. </p>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00193">193</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00197">197</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad8bebd66247d2a9bbfb57fa173930477"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8bebd66247d2a9bbfb57fa173930477">&#9670;&nbsp;</a></span>WatchdogRTT()</h2>
@@ -180,7 +180,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <p>Construct a new watchdog-based clock that will count elapsed milliseconds since it was started with <code><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2" title="Start the watchdog clock with the given timeout period. ">begin()</a></code>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="watchdog_8h.html#acf8c96f84107c380f8208e0e8f22a879" title="Register the necessary ISR (Interrupt Service Routine) for a watchdog::WatchdogRTT to work properly...">REGISTER_WATCHDOG_RTT_ISR()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00201">201</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00205">205</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -217,7 +217,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00216">216</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00220">220</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -247,7 +247,37 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <p>Get the number of milliseconds that elapsed since <code><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2" title="Start the watchdog clock with the given timeout period. ">begin()</a></code> was called. </p>
 <p>Note: the precision is limited by the <code>timeout</code> value used with <code><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2" title="Start the watchdog clock with the given timeout period. ">begin()</a></code>. </p><dl class="section return"><dt>Returns</dt><dd>number of milliseconds elpased since watchdog was started </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00235">235</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00240">240</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+
+</div>
+</div>
+<a id="a8b000bf47369faf9b4a2ca47f85c6d5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b000bf47369faf9b4a2ca47f85c6d5b">&#9670;&nbsp;</a></span>reset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void watchdog::WatchdogRTT::reset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reset current counter to 0. </p>
+<p>This method is synchronized. </p>
+
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00249">249</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -285,7 +315,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00257">257</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00266">266</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>

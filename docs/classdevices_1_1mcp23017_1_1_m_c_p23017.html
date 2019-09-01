@@ -132,7 +132,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6be9b53ec7fa8895a1a497db05f78028"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#a6be9b53ec7fa8895a1a497db05f78028">MCP23017</a> (<a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4d87168983b0d46ffd73668f77350141">MANAGER</a> &amp;manager, uint8_t address)</td></tr>
 <tr class="memdesc:a6be9b53ec7fa8895a1a497db05f78028"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new device driver for an <a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html" title="I2C device driver for Microchip MCP23017 support. ">MCP23017</a> chip.  <a href="#a6be9b53ec7fa8895a1a497db05f78028">More...</a><br /></td></tr>
 <tr class="separator:a6be9b53ec7fa8895a1a497db05f78028"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae367fd3bf59b68fe28d93eb14bf98036"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#ae367fd3bf59b68fe28d93eb14bf98036">begin</a> (bool mirror_interrupts=false, <a class="el" href="namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523">InterruptPolarity</a> interrupt_polarity=InterruptPolarity::ACTIVE_HIGH)</td></tr>
+<tr class="memitem:ae367fd3bf59b68fe28d93eb14bf98036"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#ae367fd3bf59b68fe28d93eb14bf98036">begin</a> (bool mirror_interrupts=false, <a class="el" href="namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523">InterruptPolarity</a> interrupt_polarity=<a class="el" href="namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523ab868e37f0edfdbea9838600657b6f4b3">InterruptPolarity::ACTIVE_HIGH</a>)</td></tr>
 <tr class="memdesc:ae367fd3bf59b68fe28d93eb14bf98036"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the chip before operation.  <a href="#ae367fd3bf59b68fe28d93eb14bf98036">More...</a><br /></td></tr>
 <tr class="separator:ae367fd3bf59b68fe28d93eb14bf98036"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcf580d86cce5ebd761e4a6fc8c1e9ff"><td class="memTemplParams" colspan="2">template&lt;MCP23017Port P_&gt; </td></tr>
@@ -195,14 +195,14 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ab3267675aecc9f77c729afa6988cf6ee inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt;<br />
+<div class="textblock"><h3>template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt;<br />
 class devices::mcp23017::MCP23017&lt; MODE_ &gt;</h3>
 
 <p>I2C device driver for Microchip <a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html" title="I2C device driver for Microchip MCP23017 support. ">MCP23017</a> support. </p>
 <p>The <a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html" title="I2C device driver for Microchip MCP23017 support. ">MCP23017</a> chip is a 16-Bit I/O Expander with I2C interface.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">MODE_</td><td>the I2C mode to use; <a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html" title="I2C device driver for Microchip MCP23017 support. ">MCP23017</a> supports both <code><a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36aeb6d8ae6f20283755b339c0dc273988b" title="I2C Standard mode, less than 100KHz. ">i2c::I2CMode::Standard</a></code> and <code>i2c:I2CMode::Fast</code> </td></tr>
+    <tr><td class="paramname">MODE_</td><td>the I2C mode to use; <a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html" title="I2C device driver for Microchip MCP23017 support. ">MCP23017</a> supports both <code><a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0" title="I2C Standard mode, less than 100KHz. ">i2c::I2CMode::STANDARD</a></code> and <code>i2c:I2CMode::FAST</code> </td></tr>
   </table>
   </dd>
 </dl>
@@ -215,7 +215,7 @@ class devices::mcp23017::MCP23017&lt; MODE_ &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html">devices::mcp23017::MCP23017</a>&lt; MODE_ &gt;::<a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4d87168983b0d46ffd73668f77350141">MANAGER</a> =  typename <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt;<a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#abfc14a2b520c4e0d0b0c662fbf1cc713">MODE</a>&gt;::<a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#a4d87168983b0d46ffd73668f77350141">MANAGER</a></td>
@@ -236,7 +236,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -287,7 +287,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -302,7 +302,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523">InterruptPolarity</a>&#160;</td>
-          <td class="paramname"><em>interrupt_polarity</em> = <code>InterruptPolarity::ACTIVE_HIGH</code>&#160;</td>
+          <td class="paramname"><em>interrupt_polarity</em> = <code><a class="el" href="namespacedevices_1_1mcp23017.html#a027b5cd825760f8fa2f4723e92d3a523ab868e37f0edfdbea9838600657b6f4b3">InterruptPolarity::ACTIVE_HIGH</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -343,7 +343,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <div class="memtemplate">
 template&lt;MCP23017Port P_&gt; </div>
 <table class="mlabels">
@@ -414,7 +414,7 @@ template&lt;MCP23017Port P_&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <div class="memtemplate">
 template&lt;MCP23017Port P_&gt; </div>
 <table class="mlabels">
@@ -485,7 +485,7 @@ template&lt;MCP23017Port P_&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <div class="memtemplate">
 template&lt;MCP23017Port P_&gt; </div>
 <table class="mlabels">
@@ -538,7 +538,7 @@ template&lt;MCP23017Port P_&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <div class="memtemplate">
 template&lt;MCP23017Port P_&gt; </div>
 <table class="mlabels">
@@ -578,7 +578,7 @@ template&lt;MCP23017Port P_&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <div class="memtemplate">
 template&lt;MCP23017Port P_&gt; </div>
 <table class="mlabels">
@@ -618,7 +618,7 @@ template&lt;MCP23017Port P_&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <div class="memtemplate">
 template&lt;MCP23017Port P_&gt; </div>
 <table class="mlabels">
@@ -660,7 +660,7 @@ template&lt;MCP23017Port P_&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

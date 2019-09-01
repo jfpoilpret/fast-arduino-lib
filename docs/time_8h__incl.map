@@ -1,4 +1,5 @@
 <map id="fastarduino/time.h" name="fastarduino/time.h">
-<area shape="rect" id="node3" href="$io_8h_source.html" title="boards/io.h" alt="" coords="124,155,219,181"/>
-<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="311,80,394,107"/>
+<area shape="rect" id="node3" href="$io_8h_source.html" title="boards/io.h" alt="" coords="24,80,119,107"/>
+<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="304,80,386,107"/>
+<area shape="rect" id="node7" href="$board_8h_source.html" title="boards/board.h" alt="" coords="140,155,259,181"/>
 </map>

@@ -183,10 +183,10 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a35b591123d1c9fef7c70f1be1ebb2098"><td class="memItemLeft" align="right" valign="top"><a id="a35b591123d1c9fef7c70f1be1ebb2098"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a35b591123d1c9fef7c70f1be1ebb2098">WinBond</a> ()</td></tr>
-<tr class="memdesc:a35b591123d1c9fef7c70f1be1ebb2098"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new device driver for a <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> chip. <br /></td></tr>
-<tr class="separator:a35b591123d1c9fef7c70f1be1ebb2098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae93b2dd8e8283a771aecda76b9ee55f2"><td class="memItemLeft" align="right" valign="top"><a id="ae93b2dd8e8283a771aecda76b9ee55f2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#ae93b2dd8e8283a771aecda76b9ee55f2">WinBond</a> ()=default</td></tr>
+<tr class="memdesc:ae93b2dd8e8283a771aecda76b9ee55f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new device driver for a <a class="el" href="classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash). ">WinBond</a> chip. <br /></td></tr>
+<tr class="separator:ae93b2dd8e8283a771aecda76b9ee55f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c6302795b108cf7a54e0a927b748e63"><td class="memItemLeft" align="right" valign="top"><a id="a2c6302795b108cf7a54e0a927b748e63"></a>
 <a class="el" href="structdevices_1_1_win_bond_1_1_status.html">Status</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63">status</a> ()</td></tr>
 <tr class="memdesc:a2c6302795b108cf7a54e0a927b748e63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of the chip's <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces. ">Status</a> register (§6.1, §6.2.8). <br /></td></tr>
@@ -261,9 +261,15 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">transfer</a> (uint8_t *data, uint16_t size)</td></tr>
 <tr class="memdesc:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">More...</a><br /></td></tr>
 <tr class="separator:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19de463c2ae3e8e627012f42f9e54401 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401">transfer</a> (const uint8_t *data, uint16_t size)</td></tr>
+<tr class="memdesc:a19de463c2ae3e8e627012f42f9e54401 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost.  <a href="classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401">More...</a><br /></td></tr>
+<tr class="separator:a19de463c2ae3e8e627012f42f9e54401 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">transfer</a> (uint8_t *data, uint16_t size, uint8_t sent)</td></tr>
 <tr class="memdesc:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">More...</a><br /></td></tr>
 <tr class="separator:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90a120b920e48402fd7fb84b8452c026 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026">transfer</a> (uint16_t size, uint8_t sent)</td></tr>
+<tr class="memdesc:a90a120b920e48402fd7fb84b8452c026 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost.  <a href="classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026">More...</a><br /></td></tr>
+<tr class="separator:a90a120b920e48402fd7fb84b8452c026 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::DigitalPin CS&gt;<br />
@@ -277,7 +283,7 @@ class devices::WinBond&lt; CS &gt;</h3>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00053">53</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00054">54</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ad46d5ac3e447b751e0c17e07e143b342"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad46d5ac3e447b751e0c17e07e143b342">&#9670;&nbsp;</a></span>BlockProtect</h2>
@@ -306,7 +312,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 <dd>
 <a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63" title="Get the value of the chip&#39;s Status register (§6.1, §6.2.8). ">status()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00068">68</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00069">69</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -337,7 +343,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 <dd>
 <a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63" title="Get the value of the chip&#39;s Status register (§6.1, §6.2.8). ">status()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00099">99</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00100">100</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -368,7 +374,7 @@ template&lt;board::DigitalPin CS&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00310">310</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00342">342</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -408,7 +414,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 <dd>
 <a class="el" href="classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d" title="Set the default sleep mode, that will be used by next calls to Power::sleep() and time::yield()...">power::Power::set_default_mode()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00318">318</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00350">350</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -440,7 +446,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 <p>Enable write mode for the chip (§6.2.5). </p>
 <p>This must becalled before every erase or write instruction. </p>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00217">217</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00230">230</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -472,7 +478,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 <p>Disable chip write mode (§6.2.7). </p>
 <p>This method is seldom used, as any erase or write instruction will automatically disable write mode. </p>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00226">226</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00239">239</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -511,7 +517,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00236">236</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00249">249</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -550,7 +556,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00246">246</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00259">259</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -589,7 +595,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00256">256</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00269">269</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -627,7 +633,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_win_bond.html#aa9dbcb9f582388501554018e638d1401" title="Enable write mode for the chip (§6.2.5). ">enable_write()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00266">266</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00279">279</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -683,7 +689,7 @@ template&lt;board::DigitalPin CS&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00279">279</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00292">292</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -714,7 +720,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the value read from flash memory </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00364">364</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00396">396</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>
@@ -762,7 +768,7 @@ template&lt;board::DigitalPin CS&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00371">371</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="winbond_8h_source.html#l00403">403</a> of file <a class="el" href="winbond_8h_source.html">winbond.h</a>.</p>
 
 </div>
 </div>

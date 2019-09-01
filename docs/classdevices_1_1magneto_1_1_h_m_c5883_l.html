@@ -184,7 +184,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ab3267675aecc9f77c729afa6988cf6ee inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt;<br />
+<div class="textblock"><h3>template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt;<br />
 class devices::magneto::HMC5883L&lt; MODE_ &gt;</h3>
 
 <p>I2C device driver for the <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> compass chip. </p>
@@ -194,9 +194,9 @@ class devices::magneto::HMC5883L&lt; MODE_ &gt;</h3>
   </table>
   </dd>
 </dl>
-<p>The <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> also has a DRDY pin that you can use to an EXT or PCI pin, in order to be notified when sensor data is ready for reading; this is particularly useful in continuous mode, where you would try to avoid busy waits against <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> status register. The following snippet (excerpt from <code>Magneto2</code> example) show this: </p><div class="fragment"><div class="line"><span class="comment">// This handler gets notified when HMC5883L data is ready to read</span></div><div class="line"><span class="keyword">class </span>DataReadyHandler</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    DataReadyHandler() : ready_{<span class="keyword">false</span>}</div><div class="line">    {</div><div class="line">        <a class="code" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a>(*<span class="keyword">this</span>);</div><div class="line">    }</div><div class="line">    <span class="keywordtype">void</span> reset()</div><div class="line">    {</div><div class="line">        ready_ = <span class="keyword">false</span>;</div><div class="line">    }</div><div class="line">    <span class="keywordtype">bool</span> ready()<span class="keyword"> const</span></div><div class="line"><span class="keyword">    </span>{</div><div class="line">        <span class="keywordflow">return</span> ready_;</div><div class="line">    }</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="keywordtype">void</span> data_ready()</div><div class="line">    {</div><div class="line">        ready_ = <span class="keyword">true</span>;</div><div class="line">    }</div><div class="line">    <span class="keyword">volatile</span> <span class="keywordtype">bool</span> ready_;</div><div class="line">    <a class="code" href="int_8h.html#ac8d31ae95551a7ba072fd11cd7339f68">DECL_INT_ISR_HANDLERS_FRIEND</a></div><div class="line">};</div><div class="line"></div><div class="line"><span class="comment">// EXT pin connected to HMC5883L DRDY pin</span></div><div class="line"><span class="keyword">static</span> constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7">board::ExternalInterruptPin</a> DRDY = board::ExternalInterruptPin::D2_PD2_EXT0;</div><div class="line"><span class="comment">// Register our handler with DRDY EXT pin interrupts</span></div><div class="line"><a class="code" href="int_8h.html#a3e2a8c98468d29717612f7c694a17d59">REGISTER_INT_ISR_METHOD</a>(0, DRDY, DataReadyHandler, &amp;DataReadyHandler::data_ready)</div><div class="line"></div><div class="line"><span class="keywordtype">int</span> main()</div><div class="line">{</div><div class="line">    <span class="comment">// Perform other necessary initializations here,</span></div><div class="line">    <span class="comment">// including I2CManager and HMC5883L device (named compass in hte following code)</span></div><div class="line">    ...</div><div class="line">    <span class="comment">// Initialize DRDY notifications handler</span></div><div class="line">    DataReadyHandler handler;</div><div class="line">    <a class="code" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt;DRDY&gt;</a> signal{<a class="code" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1bad85243a747ac5537ef0b7adde99c3e98">interrupt::InterruptTrigger::RISING_EDGE</a>};</div><div class="line">    signal.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#a08880731428d7d1e638be999923c116e">enable</a>();</div><div class="line"></div><div class="line">    <span class="comment">// Start compass in continuous mode</span></div><div class="line">    compass.begin(OperatingMode::CONTINUOUS,</div><div class="line">                  Gain::GAIN_1_9GA,</div><div class="line">                  DataOutput::RATE_0_75HZ,</div><div class="line">                  SamplesAveraged::EIGHT_SAMPLES);</div><div class="line">    <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div><div class="line">    {</div><div class="line">        <span class="comment">// Wait until data is ready (time::yield() will put MCU to sleep)</span></div><div class="line">        <span class="keywordflow">while</span> (!handler.ready()) <a class="code" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a">time::yield</a>();</div><div class="line">        handler.reset();</div><div class="line">        <span class="comment">// Read compass fields</span></div><div class="line">        Sensor3D fields;</div><div class="line">        compass.magnetic_fields(fields);</div><div class="line">        <span class="comment">// Use compass fields in your program</span></div><div class="line">        ...</div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>The <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> also has a DRDY pin that you can use to an EXT or PCI pin, in order to be notified when sensor data is ready for reading; this is particularly useful in continuous mode, where you would try to avoid busy waits against <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> status register. The following snippet (excerpt from <code>Magneto2</code> example) show this: </p><div class="fragment"><div class="line"><span class="comment">// This handler gets notified when HMC5883L data is ready to read</span></div><div class="line"><span class="keyword">class </span>DataReadyHandler</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    DataReadyHandler() : ready_{<span class="keyword">false</span>}</div><div class="line">    {</div><div class="line">        <a class="code" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a>(*<span class="keyword">this</span>);</div><div class="line">    }</div><div class="line">    <span class="keywordtype">void</span> reset()</div><div class="line">    {</div><div class="line">        ready_ = <span class="keyword">false</span>;</div><div class="line">    }</div><div class="line">    <span class="keywordtype">bool</span> ready()<span class="keyword"> const</span></div><div class="line"><span class="keyword">    </span>{</div><div class="line">        <span class="keywordflow">return</span> ready_;</div><div class="line">    }</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="keywordtype">void</span> data_ready()</div><div class="line">    {</div><div class="line">        ready_ = <span class="keyword">true</span>;</div><div class="line">    }</div><div class="line">    <span class="keyword">volatile</span> <span class="keywordtype">bool</span> ready_;</div><div class="line">    <a class="code" href="int_8h.html#ac8d31ae95551a7ba072fd11cd7339f68">DECL_INT_ISR_HANDLERS_FRIEND</a></div><div class="line">};</div><div class="line"></div><div class="line"><span class="comment">// EXT pin connected to HMC5883L DRDY pin</span></div><div class="line"><span class="keyword">static</span> constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7">board::ExternalInterruptPin</a> DRDY = board::ExternalInterruptPin::D2_PD2_EXT0;</div><div class="line"><span class="comment">// Register our handler with DRDY EXT pin interrupts</span></div><div class="line"><a class="code" href="int_8h.html#a3e2a8c98468d29717612f7c694a17d59">REGISTER_INT_ISR_METHOD</a>(0, DRDY, DataReadyHandler, &amp;DataReadyHandler::data_ready)</div><div class="line"></div><div class="line"><span class="keywordtype">int</span> main()</div><div class="line">{</div><div class="line">    <span class="comment">// Perform other necessary initializations here,</span></div><div class="line">    <span class="comment">// including I2CManager and HMC5883L device (named compass in hte following code)</span></div><div class="line">    ...</div><div class="line">    <span class="comment">// Initialize DRDY notifications handler</span></div><div class="line">    DataReadyHandler handler;</div><div class="line">    <a class="code" href="classinterrupt_1_1_i_n_t_signal.html">interrupt::INTSignal&lt;DRDY&gt;</a> signal{<a class="code" href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1bad85243a747ac5537ef0b7adde99c3e98">interrupt::InterruptTrigger::RISING_EDGE</a>};</div><div class="line">    signal.<a class="code" href="classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472">enable</a>();</div><div class="line"></div><div class="line">    <span class="comment">// Start compass in continuous mode</span></div><div class="line">    compass.begin(OperatingMode::CONTINUOUS,</div><div class="line">                  Gain::GAIN_1_9GA,</div><div class="line">                  DataOutput::RATE_0_75HZ,</div><div class="line">                  SamplesAveraged::EIGHT_SAMPLES);</div><div class="line">    <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div><div class="line">    {</div><div class="line">        <span class="comment">// Wait until data is ready (time::yield() will put MCU to sleep)</span></div><div class="line">        <span class="keywordflow">while</span> (!handler.ready()) <a class="code" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a">time::yield</a>();</div><div class="line">        handler.reset();</div><div class="line">        <span class="comment">// Read compass fields</span></div><div class="line">        Sensor3D fields;</div><div class="line">        compass.magnetic_fields(fields);</div><div class="line">        <span class="comment">// Use compass fields in your program</span></div><div class="line">        ...</div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">MODE_</td><td>the I2C mode to use; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> supports both <code><a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36aeb6d8ae6f20283755b339c0dc273988b" title="I2C Standard mode, less than 100KHz. ">i2c::I2CMode::Standard</a></code> and <code>i2c:I2CMode::Fast</code> </td></tr>
+    <tr><td class="paramname">MODE_</td><td>the I2C mode to use; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip. ">HMC5883L</a> supports both <code><a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0" title="I2C Standard mode, less than 100KHz. ">i2c::I2CMode::STANDARD</a></code> and <code>i2c:I2CMode::FAST</code> </td></tr>
   </table>
   </dd>
 </dl>
@@ -209,7 +209,7 @@ class devices::magneto::HMC5883L&lt; MODE_ &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; MODE_ &gt;::<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a> =  typename <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt;<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ac624623c870359549b72bd1ecc260874">MODE</a>&gt;::<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a">MANAGER</a></td>
@@ -230,7 +230,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -245,7 +245,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -269,7 +269,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -348,7 +348,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -387,7 +387,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -434,7 +434,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -476,7 +476,7 @@ template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::Fast&gt; </div>
+template&lt;i2c::I2CMode MODE_ = i2c::I2CMode::FAST&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

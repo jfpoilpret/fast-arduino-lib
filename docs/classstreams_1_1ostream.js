@@ -1,7 +1,7 @@
 var classstreams_1_1ostream =
 [
-    [ "Manipulator", "classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050", null ],
-    [ "ostream", "classstreams_1_1ostream.html#a2b72abee7fbf597915ceeb5d8ba9d9c4", null ],
+    [ "MANIPULATOR", "classstreams_1_1ostream.html#ae7d6a7f02cc8a544b1dfc36beede06e0", null ],
+    [ "ostream", "classstreams_1_1ostream.html#ac52818e51d0fd5e4156c9b5dd4ab59bc", null ],
     [ "operator=", "classstreams_1_1ostream.html#a65ff162585aea4d98bf63c66619e92d6", null ],
     [ "rdbuf", "classstreams_1_1ostream.html#af874202c30293f8c8cd4ce05e17d477f", null ],
     [ "flush", "classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2", null ],
@@ -9,15 +9,15 @@ var classstreams_1_1ostream =
     [ "write", "classstreams_1_1ostream.html#a001a2dd6c215d77e06492376bf791870", null ],
     [ "write", "classstreams_1_1ostream.html#abe77c73075ca122451d66cf7a5ef935e", null ],
     [ "write", "classstreams_1_1ostream.html#a488b5aca48b25bbf9791d4fabf82d218", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a76987c35ed3270084ccacfb7fec16d17", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a84bce43ea0376c40bbd29bf450ef0b99", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a4689b5c98931dcf2b149f975a6f2673f", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#abdc1aee6a0bc46df741029e0056490eb", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a941acfc7c2505196951824e19261eb55", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#afa74697840ad087240aef0b7ee7928ab", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a9dfbef562a3a7ddef3e0ebe009fe5dfd", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a31ec2d6729a023de89880daf9c7f4ce4", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#a5550cf6711de611533b56b83a87465a1", null ],
-    [ "operator<<", "classstreams_1_1ostream.html#af7655e589d035924b6c496c8b887fd8a", null ]
+    [ "operator<<", "classstreams_1_1ostream.html#ad3e6f366593e5ad00919bb5fd67e7cce", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#af9dfdfcfe94660722208d0a222600820", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#a2d79b8e668754e45e3208bd19d5e469c", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#a1808ab2b797eaaa127938510541c2aa3", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#aa6a53fd35979290e65ddabba24ce13b3", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#af9a18a6f516bb3f2775d3501fb1c275a", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#ae529ebf2b9829d1aebb584c49d713e5e", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#a3abd316a76dcc344c835885e6b1a0b30", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#a0fcdb5979afd673fba74993adbfd009b", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#a70111e4368a61c159742d9a6e9644564", null ],
+    [ "operator<<", "classstreams_1_1ostream.html#a035c4b4055255b3bdfb79d860105634c", null ]
 ];

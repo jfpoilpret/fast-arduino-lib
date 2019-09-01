@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['no_5fstart_5fno_5fstop',['NO_START_NO_STOP',['../namespacei2c.html#ae97c327132c21ce93c129f34d3b5101ea75446b54248ebcf0a0b0a954c7e9b98c',1,'i2c']]],
-  ['no_5fstart_5fstop',['NO_START_STOP',['../namespacei2c.html#ae97c327132c21ce93c129f34d3b5101ea9d40cc65ca9efb752e93b1c7aa3e0018',1,'i2c']]],
-  ['non_5finverting',['NON_INVERTING',['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a5b9d80a04f3ec2025977abad33e94e61',1,'timer']]],
-  ['none',['NONE',['../namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693',1,'serial']]],
-  ['nop',['NOP',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30a1a004f5abe2b334db21328be1ea6b593',1,'devices::rf::NRF24L01']]],
-  ['normal',['NORMAL',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a1e23852820b9154316c7c06e2b7ba051',1,'timer']]]
+  ['mode_5f0',['MODE_0',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bba3a769a916836dccf98801212615595d3',1,'spi']]],
+  ['mode_5f1',['MODE_1',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbaf7ede748a6b41c7c91c18ed2d155b33e',1,'spi']]],
+  ['mode_5f2',['MODE_2',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbacac4185dc8a44d8ae07bfb94c2830017',1,'spi']]],
+  ['mode_5f3',['MODE_3',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbac5b781763a4c930367500c96e64a0166',1,'spi']]],
+  ['msb_5ffirst',['MSB_FIRST',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7a89488e0251a0b2be79602890ef16ddb3',1,'spi']]]
 ];

@@ -34,8 +34,7 @@ var NAVTREE =
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ],
-        [ "Enumerator", "namespacemembers_eval.html", null ]
+        [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -64,12 +63,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "abi_8cpp_source.html",
-"classdevices_1_1rtc_1_1_d_s1307.html",
-"classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html#a028eda424aae2c386a5fd6ed74c0cfff",
-"ds1307_8h.html#a765e5fb8599fbfc007de3b47a81593b3a78ae6f0cd191d25147e252dc54768238",
-"mpu6050_8h.html#a293a7ee50fc4bbf24e89858a328e1775a54e49aece18753b8a945a440215c3d20",
-"structdevices_1_1rtc_1_1tm.html#a5cf662ebd192a0a84afceaf4a1105b49",
-"utilities_8h.html#a6ba012c3dd675cf1eabcf14e55cea0e0ac236475a2d098d9e27c22aefc4a371ee"
+"classdevices_1_1rf_1_1_n_r_f24_l01.html#ac6ab7ec353225fec36d49130cb9d6786",
+"classpower_1_1_power.html#a8380885011701d1936ea37b64a1e6b61",
+"classtimer_1_1_timer.html#a1efbbfd198ed05ba360e9e537e16f255",
+"iomanip_8h.html#a47b832c75cfff7d1d585f5c808f07d20",
+"spi_8h.html#afad82e7a839263bc0851445fdcced0bbacac4185dc8a44d8ae07bfb94c2830017",
+"uart__commons_8h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

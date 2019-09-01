@@ -106,11 +106,20 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">AbstractTonePlayer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This low-level API defines an abstract player of melodies (defined as a sequence of tones and durations).  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html">AsyncTonePlayer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This API defines a player of melodies, defined as a sequence of tones and durations.  <a href="classdevices_1_1audio_1_1_async_tone_player.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_q_tone_play.html">QTonePlay</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An optimized surrogate to <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> structure.  <a href="classdevices_1_1audio_1_1_q_tone_play.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">ToneGenerator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">API class for tone generation to a buzzer (or better an amplifier) connected to pin <code>OUTPUT</code>.  <a href="classdevices_1_1audio_1_1_tone_generator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1audio_1_1_tone_play.html">TonePlay</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This struct is the unit data manipulated by <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">TonePlayer</a></code>: it describes one <code>Tone</code> along with its duration in milliseconds.  <a href="structdevices_1_1audio_1_1_tone_play.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html">TonePlay</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This struct is the unit data manipulated by <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">TonePlayer</a></code>: it describes one <code>Tone</code> along with its duration in milliseconds.  <a href="classdevices_1_1audio_1_1_tone_play.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html">TonePlayer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This API defines a player of melodies, defined as a sequence of tones and durations.  <a href="classdevices_1_1audio_1_1_tone_player.html#details">More...</a><br /></td></tr>
@@ -290,7 +299,7 @@ Enumerations</h2></td></tr>
 <li><code>SILENCE</code>: used to play no tone at all All other tones are named according to their musical note (in English scale), and their octave,. This is similar to the usual <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> except for the octave index which is different: in this enum, the standard tuning pitch (440Hz) is <code>A1</code> instead of <code>A4</code> in <em>SPN</em>. Please note that each tone can be converted to a <code>uint16_t</code> which is its playing frequency. </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00046">46</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00045">45</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 
 </div>
 </div>

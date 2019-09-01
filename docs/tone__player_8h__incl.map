@@ -1,15 +1,15 @@
 <map id="fastarduino/devices/tone_player.h" name="fastarduino/devices/tone_player.h">
-<area shape="rect" id="node2" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="702,169,798,196"/>
-<area shape="rect" id="node16" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="73,95,150,121"/>
-<area shape="rect" id="node18" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer. " alt="" coords="295,95,366,121"/>
-<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="795,393,892,420"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="350,393,433,420"/>
-<area shape="rect" id="node11" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="336,244,410,271"/>
-<area shape="rect" id="node7" href="$io_8h_source.html" title="boards/io.h" alt="" coords="266,468,360,495"/>
-<area shape="rect" id="node13" href="$time_8h.html" title="Simple time utilities. " alt="" coords="173,319,237,345"/>
-<area shape="rect" id="node19" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="522,169,654,196"/>
-<area shape="rect" id="node20" href="$timer_8h.html" title="Timer API. " alt="" coords="736,319,804,345"/>
-<area shape="rect" id="node22" href="$pwm_8h.html" title="PWM API. " alt="" coords="554,244,621,271"/>
-<area shape="rect" id="node23" href="$board_8h_source.html" title="boards/board.h" alt="" coords="542,319,660,345"/>
-<area shape="rect" id="node24" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="455,319,518,345"/>
+<area shape="rect" id="node2" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="563,169,659,196"/>
+<area shape="rect" id="node16" href="$flash_8h.html" title="Flash memory utilities. " alt="" coords="878,95,955,121"/>
+<area shape="rect" id="node18" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer. " alt="" coords="444,95,514,121"/>
+<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="730,393,828,420"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="311,393,394,420"/>
+<area shape="rect" id="node13" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="534,244,608,271"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title="boards/io.h" alt="" coords="818,468,913,495"/>
+<area shape="rect" id="node10" href="$board_8h_source.html" title="boards/board.h" alt="" coords="177,468,296,495"/>
+<area shape="rect" id="node14" href="$time_8h.html" title="Simple time utilities. " alt="" coords="539,319,603,345"/>
+<area shape="rect" id="node19" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="284,169,416,196"/>
+<area shape="rect" id="node20" href="$timer_8h.html" title="Timer API. " alt="" coords="316,319,384,345"/>
+<area shape="rect" id="node22" href="$pwm_8h.html" title="PWM API. " alt="" coords="83,244,150,271"/>
+<area shape="rect" id="node23" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="225,319,288,345"/>
 </map>

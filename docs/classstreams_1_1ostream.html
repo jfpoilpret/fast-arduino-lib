@@ -118,10 +118,10 @@ Collaboration diagram for streams::ostream:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a1aa4b5435851863d7cabc35bebd1b050"><td class="memItemLeft" align="right" valign="top"><a id="a1aa4b5435851863d7cabc35bebd1b050"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050">Manipulator</a> = void(*)(<a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;)</td></tr>
-<tr class="memdesc:a1aa4b5435851863d7cabc35bebd1b050"><td class="mdescLeft">&#160;</td><td class="mdescRight">General type of a manipulator function applicable to this output stream. <br /></td></tr>
-<tr class="separator:a1aa4b5435851863d7cabc35bebd1b050"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7d6a7f02cc8a544b1dfc36beede06e0"><td class="memItemLeft" align="right" valign="top"><a id="ae7d6a7f02cc8a544b1dfc36beede06e0"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#ae7d6a7f02cc8a544b1dfc36beede06e0">MANIPULATOR</a> = void(*)(<a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;)</td></tr>
+<tr class="memdesc:ae7d6a7f02cc8a544b1dfc36beede06e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">General type of a manipulator function applicable to this output stream. <br /></td></tr>
+<tr class="separator:ae7d6a7f02cc8a544b1dfc36beede06e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classstreams_1_1ios__base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classstreams_1_1ios__base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classstreams_1_1ios__base.html">streams::ios_base</a></td></tr>
 <tr class="memitem:a3da19e6ccdcc8269e870c8c53041e378 inherit pub_types_classstreams_1_1ios__base"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378">iostate</a> = uint8_t</td></tr>
 <tr class="memdesc:a3da19e6ccdcc8269e870c8c53041e378 inherit pub_types_classstreams_1_1ios__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bitmask type to represent stream state flags.  <a href="classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378">More...</a><br /></td></tr>
@@ -132,9 +132,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2b72abee7fbf597915ceeb5d8ba9d9c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a2b72abee7fbf597915ceeb5d8ba9d9c4">ostream</a> (<a class="el" href="classstreams_1_1ostreambuf.html">ostreambuf</a> &amp;stream)</td></tr>
-<tr class="memdesc:a2b72abee7fbf597915ceeb5d8ba9d9c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a formatted output wrapper of <code>stream</code>.  <a href="#a2b72abee7fbf597915ceeb5d8ba9d9c4">More...</a><br /></td></tr>
-<tr class="separator:a2b72abee7fbf597915ceeb5d8ba9d9c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac52818e51d0fd5e4156c9b5dd4ab59bc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#ac52818e51d0fd5e4156c9b5dd4ab59bc">ostream</a> (<a class="el" href="classstreams_1_1ostreambuf.html">ostreambuf</a> &amp;streambuf)</td></tr>
+<tr class="memdesc:ac52818e51d0fd5e4156c9b5dd4ab59bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a formatted output wrapper of <code>streambuf</code>.  <a href="#ac52818e51d0fd5e4156c9b5dd4ab59bc">More...</a><br /></td></tr>
+<tr class="separator:ac52818e51d0fd5e4156c9b5dd4ab59bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65ff162585aea4d98bf63c66619e92d6"><td class="memItemLeft" align="right" valign="top"><a id="a65ff162585aea4d98bf63c66619e92d6"></a>
 <a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;)=delete</td></tr>
 <tr class="separator:a65ff162585aea4d98bf63c66619e92d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,39 +157,39 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a488b5aca48b25bbf9791d4fabf82d218"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a488b5aca48b25bbf9791d4fabf82d218">write</a> (const flash::FlashStorage *str)</td></tr>
 <tr class="memdesc:a488b5aca48b25bbf9791d4fabf82d218"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write a flash-stored string (null-terminated) to this stream.  <a href="#a488b5aca48b25bbf9791d4fabf82d218">More...</a><br /></td></tr>
 <tr class="separator:a488b5aca48b25bbf9791d4fabf82d218"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76987c35ed3270084ccacfb7fec16d17"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a76987c35ed3270084ccacfb7fec16d17">operator&lt;&lt;</a> (const void *p)</td></tr>
-<tr class="memdesc:a76987c35ed3270084ccacfb7fec16d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output the address of a pointer.  <a href="#a76987c35ed3270084ccacfb7fec16d17">More...</a><br /></td></tr>
-<tr class="separator:a76987c35ed3270084ccacfb7fec16d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84bce43ea0376c40bbd29bf450ef0b99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a84bce43ea0376c40bbd29bf450ef0b99">operator&lt;&lt;</a> (bool b)</td></tr>
-<tr class="memdesc:a84bce43ea0376c40bbd29bf450ef0b99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a boolean value.  <a href="#a84bce43ea0376c40bbd29bf450ef0b99">More...</a><br /></td></tr>
-<tr class="separator:a84bce43ea0376c40bbd29bf450ef0b99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4689b5c98931dcf2b149f975a6f2673f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a4689b5c98931dcf2b149f975a6f2673f">operator&lt;&lt;</a> (char c)</td></tr>
-<tr class="memdesc:a4689b5c98931dcf2b149f975a6f2673f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a single character.  <a href="#a4689b5c98931dcf2b149f975a6f2673f">More...</a><br /></td></tr>
-<tr class="separator:a4689b5c98931dcf2b149f975a6f2673f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdc1aee6a0bc46df741029e0056490eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#abdc1aee6a0bc46df741029e0056490eb">operator&lt;&lt;</a> (const char *s)</td></tr>
-<tr class="memdesc:abdc1aee6a0bc46df741029e0056490eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a C-string (<code>\0</code> terminated).  <a href="#abdc1aee6a0bc46df741029e0056490eb">More...</a><br /></td></tr>
-<tr class="separator:abdc1aee6a0bc46df741029e0056490eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a941acfc7c2505196951824e19261eb55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a941acfc7c2505196951824e19261eb55">operator&lt;&lt;</a> (const flash::FlashStorage *s)</td></tr>
-<tr class="memdesc:a941acfc7c2505196951824e19261eb55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a C-string (<code>\0</code> terminated) that is stored in flash memory.  <a href="#a941acfc7c2505196951824e19261eb55">More...</a><br /></td></tr>
-<tr class="separator:a941acfc7c2505196951824e19261eb55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae">operator&lt;&lt;</a> (int v)</td></tr>
-<tr class="memdesc:a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a signed integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae">More...</a><br /></td></tr>
-<tr class="separator:a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa74697840ad087240aef0b7ee7928ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#afa74697840ad087240aef0b7ee7928ab">operator&lt;&lt;</a> (unsigned int v)</td></tr>
-<tr class="memdesc:afa74697840ad087240aef0b7ee7928ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output an unsigned integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#afa74697840ad087240aef0b7ee7928ab">More...</a><br /></td></tr>
-<tr class="separator:afa74697840ad087240aef0b7ee7928ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dfbef562a3a7ddef3e0ebe009fe5dfd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a9dfbef562a3a7ddef3e0ebe009fe5dfd">operator&lt;&lt;</a> (long v)</td></tr>
-<tr class="memdesc:a9dfbef562a3a7ddef3e0ebe009fe5dfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a signed long integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#a9dfbef562a3a7ddef3e0ebe009fe5dfd">More...</a><br /></td></tr>
-<tr class="separator:a9dfbef562a3a7ddef3e0ebe009fe5dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31ec2d6729a023de89880daf9c7f4ce4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a31ec2d6729a023de89880daf9c7f4ce4">operator&lt;&lt;</a> (unsigned long v)</td></tr>
-<tr class="memdesc:a31ec2d6729a023de89880daf9c7f4ce4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output an unsigned long integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#a31ec2d6729a023de89880daf9c7f4ce4">More...</a><br /></td></tr>
-<tr class="separator:a31ec2d6729a023de89880daf9c7f4ce4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5550cf6711de611533b56b83a87465a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a5550cf6711de611533b56b83a87465a1">operator&lt;&lt;</a> (double v)</td></tr>
-<tr class="memdesc:a5550cf6711de611533b56b83a87465a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a floating point number, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code> and <code><a class="el" href="classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59" title="Set precision (number of digits after decimal point) used for displaying floating values...">precision()</a></code>.  <a href="#a5550cf6711de611533b56b83a87465a1">More...</a><br /></td></tr>
-<tr class="separator:a5550cf6711de611533b56b83a87465a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7655e589d035924b6c496c8b887fd8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#af7655e589d035924b6c496c8b887fd8a">operator&lt;&lt;</a> (<a class="el" href="classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050">Manipulator</a> f)</td></tr>
-<tr class="memdesc:af7655e589d035924b6c496c8b887fd8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a <code>Manipulator</code> to this output stream.  <a href="#af7655e589d035924b6c496c8b887fd8a">More...</a><br /></td></tr>
-<tr class="separator:af7655e589d035924b6c496c8b887fd8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3e6f366593e5ad00919bb5fd67e7cce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#ad3e6f366593e5ad00919bb5fd67e7cce">operator&lt;&lt;</a> (const void *ptr)</td></tr>
+<tr class="memdesc:ad3e6f366593e5ad00919bb5fd67e7cce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output the address of a pointer.  <a href="#ad3e6f366593e5ad00919bb5fd67e7cce">More...</a><br /></td></tr>
+<tr class="separator:ad3e6f366593e5ad00919bb5fd67e7cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9dfdfcfe94660722208d0a222600820"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#af9dfdfcfe94660722208d0a222600820">operator&lt;&lt;</a> (bool value)</td></tr>
+<tr class="memdesc:af9dfdfcfe94660722208d0a222600820"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a boolean value.  <a href="#af9dfdfcfe94660722208d0a222600820">More...</a><br /></td></tr>
+<tr class="separator:af9dfdfcfe94660722208d0a222600820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d79b8e668754e45e3208bd19d5e469c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a2d79b8e668754e45e3208bd19d5e469c">operator&lt;&lt;</a> (char ch)</td></tr>
+<tr class="memdesc:a2d79b8e668754e45e3208bd19d5e469c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a single character.  <a href="#a2d79b8e668754e45e3208bd19d5e469c">More...</a><br /></td></tr>
+<tr class="separator:a2d79b8e668754e45e3208bd19d5e469c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1808ab2b797eaaa127938510541c2aa3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a1808ab2b797eaaa127938510541c2aa3">operator&lt;&lt;</a> (const char *str)</td></tr>
+<tr class="memdesc:a1808ab2b797eaaa127938510541c2aa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a C-string (<code>\0</code> terminated).  <a href="#a1808ab2b797eaaa127938510541c2aa3">More...</a><br /></td></tr>
+<tr class="separator:a1808ab2b797eaaa127938510541c2aa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6a53fd35979290e65ddabba24ce13b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#aa6a53fd35979290e65ddabba24ce13b3">operator&lt;&lt;</a> (const flash::FlashStorage *str)</td></tr>
+<tr class="memdesc:aa6a53fd35979290e65ddabba24ce13b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a C-string (<code>\0</code> terminated) that is stored in flash memory.  <a href="#aa6a53fd35979290e65ddabba24ce13b3">More...</a><br /></td></tr>
+<tr class="separator:aa6a53fd35979290e65ddabba24ce13b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a18a6f516bb3f2775d3501fb1c275a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#af9a18a6f516bb3f2775d3501fb1c275a">operator&lt;&lt;</a> (int value)</td></tr>
+<tr class="memdesc:af9a18a6f516bb3f2775d3501fb1c275a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a signed integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#af9a18a6f516bb3f2775d3501fb1c275a">More...</a><br /></td></tr>
+<tr class="separator:af9a18a6f516bb3f2775d3501fb1c275a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae529ebf2b9829d1aebb584c49d713e5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#ae529ebf2b9829d1aebb584c49d713e5e">operator&lt;&lt;</a> (unsigned int value)</td></tr>
+<tr class="memdesc:ae529ebf2b9829d1aebb584c49d713e5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output an unsigned integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#ae529ebf2b9829d1aebb584c49d713e5e">More...</a><br /></td></tr>
+<tr class="separator:ae529ebf2b9829d1aebb584c49d713e5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3abd316a76dcc344c835885e6b1a0b30"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a3abd316a76dcc344c835885e6b1a0b30">operator&lt;&lt;</a> (long value)</td></tr>
+<tr class="memdesc:a3abd316a76dcc344c835885e6b1a0b30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a signed long integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#a3abd316a76dcc344c835885e6b1a0b30">More...</a><br /></td></tr>
+<tr class="separator:a3abd316a76dcc344c835885e6b1a0b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fcdb5979afd673fba74993adbfd009b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a0fcdb5979afd673fba74993adbfd009b">operator&lt;&lt;</a> (unsigned long value)</td></tr>
+<tr class="memdesc:a0fcdb5979afd673fba74993adbfd009b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output an unsigned long integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>.  <a href="#a0fcdb5979afd673fba74993adbfd009b">More...</a><br /></td></tr>
+<tr class="separator:a0fcdb5979afd673fba74993adbfd009b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70111e4368a61c159742d9a6e9644564"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a70111e4368a61c159742d9a6e9644564">operator&lt;&lt;</a> (double value)</td></tr>
+<tr class="memdesc:a70111e4368a61c159742d9a6e9644564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output a floating point number, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code> and <code><a class="el" href="classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59" title="Set precision (number of digits after decimal point) used for displaying floating values...">precision()</a></code>.  <a href="#a70111e4368a61c159742d9a6e9644564">More...</a><br /></td></tr>
+<tr class="separator:a70111e4368a61c159742d9a6e9644564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a035c4b4055255b3bdfb79d860105634c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#a035c4b4055255b3bdfb79d860105634c">operator&lt;&lt;</a> (<a class="el" href="classstreams_1_1ostream.html#ae7d6a7f02cc8a544b1dfc36beede06e0">MANIPULATOR</a> func)</td></tr>
+<tr class="memdesc:a035c4b4055255b3bdfb79d860105634c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a <code>MANIPULATOR</code> to this output stream.  <a href="#a035c4b4055255b3bdfb79d860105634c">More...</a><br /></td></tr>
+<tr class="separator:a035c4b4055255b3bdfb79d860105634c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classstreams_1_1ios__base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classstreams_1_1ios__base')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classstreams_1_1ios__base.html">streams::ios_base</a></td></tr>
 <tr class="memitem:a3234d1e22f867e22439efa53c9bf9271 inherit pub_methods_classstreams_1_1ios__base"><td class="memItemLeft" align="right" valign="top"><a id="a3234d1e22f867e22439efa53c9bf9271"></a>
 <a class="el" href="classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378">iostate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#a3234d1e22f867e22439efa53c9bf9271">rdstate</a> () const</td></tr>
@@ -321,7 +321,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <tr class="memitem:adf13f8be7e7aadff99dc440276d23e69 inherit pub_static_attribs_classstreams_1_1ios__base"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c657b09a8e9a14cd11950bb">fmtflags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#adf13f8be7e7aadff99dc440276d23e69">unitbuf</a> = 0x4000</td></tr>
 <tr class="memdesc:adf13f8be7e7aadff99dc440276d23e69 inherit pub_static_attribs_classstreams_1_1ios__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flush output after each insertion oepration.  <a href="classstreams_1_1ios__base.html#adf13f8be7e7aadff99dc440276d23e69">More...</a><br /></td></tr>
 <tr class="separator:adf13f8be7e7aadff99dc440276d23e69 inherit pub_static_attribs_classstreams_1_1ios__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2335f6b0e714f851dc7aec88522538fc inherit pub_static_attribs_classstreams_1_1ios__base"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c657b09a8e9a14cd11950bb">fmtflags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#a2335f6b0e714f851dc7aec88522538fc">uppercase</a> = 0x8000</td></tr>
+<tr class="memitem:a2335f6b0e714f851dc7aec88522538fc inherit pub_static_attribs_classstreams_1_1ios__base"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c657b09a8e9a14cd11950bb">fmtflags</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#a2335f6b0e714f851dc7aec88522538fc">uppercase</a> = 0x8000U</td></tr>
 <tr class="memdesc:a2335f6b0e714f851dc7aec88522538fc inherit pub_static_attribs_classstreams_1_1ios__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write uppercase letters instead of lowercase in certain insertion operations.  <a href="classstreams_1_1ios__base.html#a2335f6b0e714f851dc7aec88522538fc">More...</a><br /></td></tr>
 <tr class="separator:a2335f6b0e714f851dc7aec88522538fc inherit pub_static_attribs_classstreams_1_1ios__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb443852e1cbb99456e06f78532f2974 inherit pub_static_attribs_classstreams_1_1ios__base"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ios__base.html#afb443852e1cbb99456e06f78532f2974">MAX_PRECISION</a> = 16</td></tr>
@@ -333,8 +333,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 <p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00060">60</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2b72abee7fbf597915ceeb5d8ba9d9c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b72abee7fbf597915ceeb5d8ba9d9c4">&#9670;&nbsp;</a></span>ostream()</h2>
+<a id="ac52818e51d0fd5e4156c9b5dd4ab59bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac52818e51d0fd5e4156c9b5dd4ab59bc">&#9670;&nbsp;</a></span>ostream()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -346,21 +346,21 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname">streams::ostream::ostream </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classstreams_1_1ostreambuf.html">ostreambuf</a> &amp;&#160;</td>
-          <td class="paramname"><em>stream</em></td><td>)</td>
+          <td class="paramname"><em>streambuf</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Construct a formatted output wrapper of <code>stream</code>. </p>
+<p>Construct a formatted output wrapper of <code>streambuf</code>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">stream</td><td>the output stream to be wrapped </td></tr>
+    <tr><td class="paramname">streambuf</td><td>the output streambuf to be wrapped </td></tr>
   </table>
   </dd>
 </dl>
@@ -555,8 +555,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a76987c35ed3270084ccacfb7fec16d17"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76987c35ed3270084ccacfb7fec16d17">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/11]</span></h2>
+<a id="ad3e6f366593e5ad00919bb5fd67e7cce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3e6f366593e5ad00919bb5fd67e7cce">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[1/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -568,7 +568,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>p</em></td><td>)</td>
+          <td class="paramname"><em>ptr</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -582,7 +582,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output the address of a pointer. </p>
 <div class="fragment"><div class="line"><span class="keywordtype">int</span> i = 0;</div><div class="line"><span class="keywordtype">int</span>* p = &amp;i;</div><div class="line">out &lt;&lt; p;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p</td><td>the pointer which address to output </td></tr>
+    <tr><td class="paramname">ptr</td><td>the pointer which address to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -592,8 +592,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a84bce43ea0376c40bbd29bf450ef0b99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84bce43ea0376c40bbd29bf450ef0b99">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/11]</span></h2>
+<a id="af9dfdfcfe94660722208d0a222600820"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9dfdfcfe94660722208d0a222600820">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[2/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -605,7 +605,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>b</em></td><td>)</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -619,7 +619,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output a boolean value. </p>
 <div class="fragment"><div class="line">out &lt;&lt; <span class="keyword">true</span>;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">b</td><td>the bool to output </td></tr>
+    <tr><td class="paramname">value</td><td>the bool to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -629,8 +629,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a4689b5c98931dcf2b149f975a6f2673f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4689b5c98931dcf2b149f975a6f2673f">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/11]</span></h2>
+<a id="a2d79b8e668754e45e3208bd19d5e469c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d79b8e668754e45e3208bd19d5e469c">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[3/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -642,7 +642,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>c</em></td><td>)</td>
+          <td class="paramname"><em>ch</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -656,7 +656,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output a single character. </p>
 <div class="fragment"><div class="line">out &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">c</td><td>the character to output </td></tr>
+    <tr><td class="paramname">ch</td><td>the character to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -666,8 +666,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="abdc1aee6a0bc46df741029e0056490eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abdc1aee6a0bc46df741029e0056490eb">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[4/11]</span></h2>
+<a id="a1808ab2b797eaaa127938510541c2aa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1808ab2b797eaaa127938510541c2aa3">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[4/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -679,7 +679,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>s</em></td><td>)</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -693,7 +693,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output a C-string (<code>\0</code> terminated). </p>
 <div class="fragment"><div class="line">out &lt;&lt; <span class="stringliteral">&quot;Hello, Worlds!\n&quot;</span>;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>the string to output </td></tr>
+    <tr><td class="paramname">str</td><td>the string to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -703,8 +703,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a941acfc7c2505196951824e19261eb55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a941acfc7c2505196951824e19261eb55">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[5/11]</span></h2>
+<a id="aa6a53fd35979290e65ddabba24ce13b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6a53fd35979290e65ddabba24ce13b3">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[5/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -716,7 +716,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">const flash::FlashStorage *&#160;</td>
-          <td class="paramname"><em>s</em></td><td>)</td>
+          <td class="paramname"><em>str</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -730,7 +730,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output a C-string (<code>\0</code> terminated) that is stored in flash memory. </p>
 <div class="fragment"><div class="line">out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Hello, Worlds!\n&quot;</span>);</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>the string to output </td></tr>
+    <tr><td class="paramname">str</td><td>the string to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -740,8 +740,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b8486c18ff9cfd1ccd0a6bc7b9ad8ae">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[6/11]</span></h2>
+<a id="af9a18a6f516bb3f2775d3501fb1c275a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9a18a6f516bb3f2775d3501fb1c275a">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[6/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -753,7 +753,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -767,7 +767,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output a signed integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>. </p>
 <div class="fragment"><div class="line"><span class="keywordtype">int</span> x = -123;</div><div class="line">out &lt;&lt; x;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v</td><td>the number to output </td></tr>
+    <tr><td class="paramname">value</td><td>the number to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -777,8 +777,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="afa74697840ad087240aef0b7ee7928ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa74697840ad087240aef0b7ee7928ab">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[7/11]</span></h2>
+<a id="ae529ebf2b9829d1aebb584c49d713e5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae529ebf2b9829d1aebb584c49d713e5e">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[7/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -790,7 +790,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -804,7 +804,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output an unsigned integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>. </p>
 <div class="fragment"><div class="line"><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> x = 64000;</div><div class="line">out &lt;&lt; x;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v</td><td>the number to output </td></tr>
+    <tr><td class="paramname">value</td><td>the number to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -814,8 +814,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a9dfbef562a3a7ddef3e0ebe009fe5dfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9dfbef562a3a7ddef3e0ebe009fe5dfd">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[8/11]</span></h2>
+<a id="a3abd316a76dcc344c835885e6b1a0b30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3abd316a76dcc344c835885e6b1a0b30">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[8/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -827,7 +827,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">long&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -841,7 +841,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output a signed long integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>. </p>
 <div class="fragment"><div class="line"><span class="keywordtype">long</span> x = -999999L;</div><div class="line">out &lt;&lt; x;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v</td><td>the number to output </td></tr>
+    <tr><td class="paramname">value</td><td>the number to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -851,8 +851,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a31ec2d6729a023de89880daf9c7f4ce4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31ec2d6729a023de89880daf9c7f4ce4">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[9/11]</span></h2>
+<a id="a0fcdb5979afd673fba74993adbfd009b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fcdb5979afd673fba74993adbfd009b">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[9/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -864,7 +864,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">unsigned long&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -878,7 +878,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output an unsigned long integral number, represented within the current <code>base()</code>, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code>. </p>
 <div class="fragment"><div class="line"><span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> x = 999999UL;</div><div class="line">out &lt;&lt; x;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v</td><td>the number to output </td></tr>
+    <tr><td class="paramname">value</td><td>the number to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -888,8 +888,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="a5550cf6711de611533b56b83a87465a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5550cf6711de611533b56b83a87465a1">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[10/11]</span></h2>
+<a id="a70111e4368a61c159742d9a6e9644564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70111e4368a61c159742d9a6e9644564">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[10/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -901,7 +901,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>v</em></td><td>)</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -915,7 +915,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Output a floating point number, using the current minimum <code><a class="el" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f" title="Set minimum width used for displaying values. ">width()</a></code> and <code><a class="el" href="classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59" title="Set precision (number of digits after decimal point) used for displaying floating values...">precision()</a></code>. </p>
 <div class="fragment"><div class="line"><span class="keywordtype">double</span> x = 123.456;</div><div class="line">out &lt;&lt; x;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">v</td><td>the number to output </td></tr>
+    <tr><td class="paramname">value</td><td>the number to output </td></tr>
   </table>
   </dd>
 </dl>
@@ -925,8 +925,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 
 </div>
 </div>
-<a id="af7655e589d035924b6c496c8b887fd8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7655e589d035924b6c496c8b887fd8a">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[11/11]</span></h2>
+<a id="a035c4b4055255b3bdfb79d860105634c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a035c4b4055255b3bdfb79d860105634c">&#9670;&nbsp;</a></span>operator&lt;&lt;() <span class="overload">[11/11]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -937,8 +937,8 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
         <tr>
           <td class="memname"><a class="el" href="classstreams_1_1ostream.html">ostream</a>&amp; streams::ostream::operator&lt;&lt; </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classstreams_1_1ostream.html#a1aa4b5435851863d7cabc35bebd1b050">Manipulator</a>&#160;</td>
-          <td class="paramname"><em>f</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classstreams_1_1ostream.html#ae7d6a7f02cc8a544b1dfc36beede06e0">MANIPULATOR</a>&#160;</td>
+          <td class="paramname"><em>func</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -949,14 +949,14 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </table>
 </div><div class="memdoc">
 
-<p>Apply a <code>Manipulator</code> to this output stream. </p>
+<p>Apply a <code>MANIPULATOR</code> to this output stream. </p>
 <p>A manipulator may:</p><ul>
 <li>change formatting option (base, width, precision)</li>
 <li>call some method of this output stream</li>
 </ul>
 <div class="fragment"><div class="line"><span class="keyword">using</span> <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">streams::hex</a>;</div><div class="line"><span class="keyword">using</span> <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div><div class="line"><span class="keyword">using</span> <a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">streams::flush</a>;</div><div class="line"></div><div class="line">out &lt;&lt; <a class="code" href="classstreams_1_1ios__base.html#aafd29f140be78e8402102dba405d9b61">hex</a> &lt;&lt; 16384 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a> &lt;&lt; <a class="code" href="classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2">flush</a>;</div></div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">f</td><td>the manipulator to apply to this output stream </td></tr>
+    <tr><td class="paramname">func</td><td>the manipulator to apply to this output stream </td></tr>
   </table>
   </dd>
 </dl>

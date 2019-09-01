@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['i2c_5fstatus_5fhook',['I2C_STATUS_HOOK',['../namespacei2c.html#a30a5217313a148f7da0b484c60f3fd00',1,'i2c']]],
-  ['int_5ftype',['INT_TYPE',['../classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html#afc25f7f62f531f0d10af83e2194074bc',1,'serial::soft::UARX&lt; board::ExternalInterruptPin, RX_ &gt;']]],
-  ['intenable',['INTEnable',['../namespacedevices_1_1magneto.html#af1a3dfb463a3ed6edaa3d7dcbdd2352d',1,'devices::magneto']]],
-  ['ios',['ios',['../namespacestreams.html#a9666e4bfa7b60ffba7c8ee7d9fe95492',1,'streams']]],
-  ['iostate',['iostate',['../classstreams_1_1ios__base.html#a3da19e6ccdcc8269e870c8c53041e378',1,'streams::ios_base']]]
+  ['generator',['GENERATOR',['../classdevices_1_1audio_1_1_abstract_tone_player.html#a491b9f1635b99b1c84805739c4d5d7c8',1,'devices::audio::AbstractTonePlayer::GENERATOR()'],['../classdevices_1_1audio_1_1_tone_player.html#a9a1e3b410674297fe58e9abb0c2bf415',1,'devices::audio::TonePlayer::GENERATOR()'],['../classdevices_1_1audio_1_1_async_tone_player.html#a0b2babc2bb035243505f0aa6158d1b03',1,'devices::audio::AsyncTonePlayer::GENERATOR()']]]
 ];

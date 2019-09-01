@@ -1,6 +1,7 @@
 var namespaces_dup =
 [
     [ "analog", "namespaceanalog.html", null ],
+    [ "bits", "namespacebits.html", null ],
     [ "board", "namespaceboard.html", null ],
     [ "containers", "namespacecontainers.html", null ],
     [ "devices", "namespacedevices.html", "namespacedevices" ],
@@ -19,5 +20,6 @@ var namespaces_dup =
     [ "timer", "namespacetimer.html", null ],
     [ "types_traits", "namespacetypes__traits.html", null ],
     [ "utils", "namespaceutils.html", null ],
+    [ "virtual_support", "namespacevirtual__support.html", null ],
     [ "watchdog", "namespacewatchdog.html", null ]
 ];

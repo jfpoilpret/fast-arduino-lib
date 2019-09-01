@@ -1,5 +1,6 @@
 <map id="fastarduino/analog_input.h" name="fastarduino/analog_input.h">
 <area shape="rect" id="node3" href="$time_8h.html" title="Simple time utilities. " alt="" coords="189,95,253,121"/>
-<area shape="rect" id="node5" href="$io_8h_source.html" title="boards/io.h" alt="" coords="178,244,273,271"/>
-<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="365,169,448,196"/>
+<area shape="rect" id="node5" href="$io_8h_source.html" title="boards/io.h" alt="" coords="105,169,199,196"/>
+<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="384,169,467,196"/>
+<area shape="rect" id="node9" href="$board_8h_source.html" title="boards/board.h" alt="" coords="221,244,339,271"/>
 </map>

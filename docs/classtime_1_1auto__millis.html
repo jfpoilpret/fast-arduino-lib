@@ -101,14 +101,14 @@ $(document).ready(function(){initNavTree('classtime_1_1auto__millis.html','');})
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a98fad2c2c88e941ea0bd505d657e1cfb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtime_1_1auto__millis.html#a98fad2c2c88e941ea0bd505d657e1cfb">auto_millis</a> (<a class="el" href="namespacetime.html#abe5f682f4654fd7af7c744d41fd2efdd">MILLIS_PTR</a> new_millis) INLINE</td></tr>
+<tr class="memitem:a98fad2c2c88e941ea0bd505d657e1cfb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtime_1_1auto__millis.html#a98fad2c2c88e941ea0bd505d657e1cfb">auto_millis</a> (<a class="el" href="namespacetime.html#a6beadc7ea06995818634b29b52433b80">MILLIS_PTR</a> new_millis) INLINE</td></tr>
 <tr class="memdesc:a98fad2c2c88e941ea0bd505d657e1cfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set new <code><a class="el" href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70" title="Count number of milliseconds elapsed since some time base reference (generally since MCU startup)...">time::millis</a></code> to <code>new_millis</code> after storing current function for later restore.  <a href="#a98fad2c2c88e941ea0bd505d657e1cfb">More...</a><br /></td></tr>
 <tr class="separator:a98fad2c2c88e941ea0bd505d657e1cfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Set a new <code><a class="el" href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70" title="Count number of milliseconds elapsed since some time base reference (generally since MCU startup)...">time::millis</a></code> function for the duration of the current scope; when the scope is left, the previous <code><a class="el" href="namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70" title="Count number of milliseconds elapsed since some time base reference (generally since MCU startup)...">time::millis</a></code> function is restored. </p>
 <p>Usage example: </p><div class="fragment"><div class="line">uint32_t my_millis()</div><div class="line">{</div><div class="line">    ...</div><div class="line">}</div><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <span class="comment">// Set new time::millis function</span></div><div class="line">    <a class="code" href="classtime_1_1auto__millis.html#a98fad2c2c88e941ea0bd505d657e1cfb">auto_millis</a> d{my_millis};</div><div class="line">    <span class="comment">// call API that rely on time::millis</span></div><div class="line">    ...</div><div class="line">    <span class="comment">// Restore previous time::millis function</span></div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00456">456</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00471">471</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a98fad2c2c88e941ea0bd505d657e1cfb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a98fad2c2c88e941ea0bd505d657e1cfb">&#9670;&nbsp;</a></span>auto_millis()</h2>
@@ -122,14 +122,14 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">time::auto_millis::auto_millis </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacetime.html#abe5f682f4654fd7af7c744d41fd2efdd">MILLIS_PTR</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacetime.html#a6beadc7ea06995818634b29b52433b80">MILLIS_PTR</a>&#160;</td>
           <td class="paramname"><em>new_millis</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -142,7 +142,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00464">464</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00479">479</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>

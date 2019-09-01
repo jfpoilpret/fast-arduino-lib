@@ -130,7 +130,7 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a671a4e4a182c39c4e72e9ff821d8bec7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7">DataOrder</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7a89488e0251a0b2be79602890ef16ddb3">DataOrder::MSB_FIRST</a> = 0, 
 <br />
-&#160;&#160;<a class="el" href="namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7aa34fb35b522d4b8f2757b9adf8aefd96">DataOrder::LSB_FIRST</a> = _BV(DORD)
+&#160;&#160;<a class="el" href="namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7aa34fb35b522d4b8f2757b9adf8aefd96">DataOrder::LSB_FIRST</a> = bits::BV8(DORD)
 <br />
  }</td></tr>
 <tr class="memdesc:a671a4e4a182c39c4e72e9ff821d8bec7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bit ordering per byte.  <a href="namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7">More...</a><br /></td></tr>
@@ -138,11 +138,11 @@ Enumerations</h2></td></tr>
 <tr class="memitem:afad82e7a839263bc0851445fdcced0bb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bb">Mode</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bba3a769a916836dccf98801212615595d3">Mode::MODE_0</a> = 0, 
 <br />
-&#160;&#160;<a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bbaf7ede748a6b41c7c91c18ed2d155b33e">Mode::MODE_1</a> = _BV(CPHA), 
+&#160;&#160;<a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bbaf7ede748a6b41c7c91c18ed2d155b33e">Mode::MODE_1</a> = bits::BV8(CPHA), 
 <br />
-&#160;&#160;<a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bbacac4185dc8a44d8ae07bfb94c2830017">Mode::MODE_2</a> = _BV(CPOL), 
+&#160;&#160;<a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bbacac4185dc8a44d8ae07bfb94c2830017">Mode::MODE_2</a> = bits::BV8(CPOL), 
 <br />
-&#160;&#160;<a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bbac5b781763a4c930367500c96e64a0166">Mode::MODE_3</a> = _BV(CPHA) | _BV(CPOL)
+&#160;&#160;<a class="el" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bbac5b781763a4c930367500c96e64a0166">Mode::MODE_3</a> = bits::BV8(CPHA, CPOL)
 <br />
  }</td></tr>
 <tr class="memdesc:afad82e7a839263bc0851445fdcced0bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">SPI transmission mode.  <a href="namespacespi.html#afad82e7a839263bc0851445fdcced0bb">More...</a><br /></td></tr>

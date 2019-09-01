@@ -105,19 +105,19 @@ Include dependency graph for tone_player.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="tone__player_8h__incl.png" border="0" usemap="#fastarduino_2devices_2tone__player_8h" alt=""/></div>
 <map name="fastarduino_2devices_2tone__player_8h" id="fastarduino_2devices_2tone__player_8h">
-<area shape="rect" id="node2" href="eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="702,169,798,196"/>
-<area shape="rect" id="node16" href="flash_8h.html" title="Flash memory utilities. " alt="" coords="73,95,150,121"/>
-<area shape="rect" id="node18" href="tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer. " alt="" coords="295,95,366,121"/>
-<area shape="rect" id="node6" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="795,393,892,420"/>
-<area shape="rect" id="node9" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="350,393,433,420"/>
-<area shape="rect" id="node11" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="336,244,410,271"/>
-<area shape="rect" id="node7" href="io_8h_source.html" title="boards/io.h" alt="" coords="266,468,360,495"/>
-<area shape="rect" id="node13" href="time_8h.html" title="Simple time utilities. " alt="" coords="173,319,237,345"/>
-<area shape="rect" id="node19" href="square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="522,169,654,196"/>
-<area shape="rect" id="node20" href="timer_8h.html" title="Timer API. " alt="" coords="736,319,804,345"/>
-<area shape="rect" id="node22" href="pwm_8h.html" title="PWM API. " alt="" coords="554,244,621,271"/>
-<area shape="rect" id="node23" href="board_8h_source.html" title="boards/board.h" alt="" coords="542,319,660,345"/>
-<area shape="rect" id="node24" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="455,319,518,345"/>
+<area shape="rect" id="node2" href="eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="563,169,659,196"/>
+<area shape="rect" id="node16" href="flash_8h.html" title="Flash memory utilities. " alt="" coords="878,95,955,121"/>
+<area shape="rect" id="node18" href="tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer. " alt="" coords="444,95,514,121"/>
+<area shape="rect" id="node6" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="730,393,828,420"/>
+<area shape="rect" id="node9" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="311,393,394,420"/>
+<area shape="rect" id="node13" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="534,244,608,271"/>
+<area shape="rect" id="node7" href="io_8h_source.html" title="boards/io.h" alt="" coords="818,468,913,495"/>
+<area shape="rect" id="node10" href="board_8h_source.html" title="boards/board.h" alt="" coords="177,468,296,495"/>
+<area shape="rect" id="node14" href="time_8h.html" title="Simple time utilities. " alt="" coords="539,319,603,345"/>
+<area shape="rect" id="node19" href="square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency. " alt="" coords="284,169,416,196"/>
+<area shape="rect" id="node20" href="timer_8h.html" title="Timer API. " alt="" coords="316,319,384,345"/>
+<area shape="rect" id="node22" href="pwm_8h.html" title="PWM API. " alt="" coords="83,244,150,271"/>
+<area shape="rect" id="node23" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="225,319,288,345"/>
 </map>
 </div>
 </div>
@@ -125,14 +125,23 @@ Include dependency graph for tone_player.h:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structdevices_1_1audio_1_1_tone_play.html">devices::audio::TonePlay</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This struct is the unit data manipulated by <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">TonePlayer</a></code>: it describes one <code>Tone</code> along with its duration in milliseconds.  <a href="structdevices_1_1audio_1_1_tone_play.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This low-level API defines an abstract player of melodies (defined as a sequence of tones and durations).  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html">devices::audio::TonePlay</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This struct is the unit data manipulated by <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">TonePlayer</a></code>: it describes one <code>Tone</code> along with its duration in milliseconds.  <a href="classdevices_1_1audio_1_1_tone_play.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_q_tone_play.html">devices::audio::QTonePlay&lt; NTIMER, OUTPUT &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An optimized surrogate to <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> structure.  <a href="classdevices_1_1audio_1_1_q_tone_play.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This low-level API defines an abstract player of melodies (defined as a sequence of tones and durations).  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This API defines a player of melodies, defined as a sequence of tones and durations.  <a href="classdevices_1_1audio_1_1_tone_player.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;::QTonePlay</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An optimized surrogate to <code><a class="el" href="structdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> structure.  <a href="classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This API defines a player of melodies, defined as a sequence of tones and durations.  <a href="classdevices_1_1audio_1_1_async_tone_player.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>

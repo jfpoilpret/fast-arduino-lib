@@ -7,6 +7,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
       [ "AnalogInput", "classanalog_1_1_analog_input.html", "classanalog_1_1_analog_input" ],
       [ "PowerVoltage", "classanalog_1_1_power_voltage.html", "classanalog_1_1_power_voltage" ]
     ] ],
+    [ "bits.h", "bits_8h.html", "bits_8h" ],
     [ "eeprom.h", "eeprom_8h.html", "eeprom_8h" ],
     [ "empty_streams.h", "empty__streams_8h.html", [
       [ "null_ostream", "classstreams_1_1null__ostream.html", null ]
@@ -48,7 +49,6 @@ var dir_855eda775a9841b65daa0015d5560bfd =
       [ "Scheduler", "classevents_1_1_scheduler.html", "classevents_1_1_scheduler" ],
       [ "Job", "classevents_1_1_job.html", "classevents_1_1_job" ]
     ] ],
-    [ "soft_uart.cpp", "soft__uart_8cpp_source.html", null ],
     [ "soft_uart.h", "soft__uart_8h.html", "soft__uart_8h" ],
     [ "spi.cpp", "spi_8cpp_source.html", null ],
     [ "spi.h", "spi_8h.html", "spi_8h" ],
@@ -68,5 +68,8 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "uart.h", "uart_8h.html", "uart_8h" ],
     [ "uart_commons.h", "uart__commons_8h.html", "uart__commons_8h" ],
     [ "utilities.h", "utilities_8h.html", "utilities_8h" ],
+    [ "virtual.h", "virtual_8h.html", [
+      [ "VirtualMethod", "classvirtual__support_1_1_virtual_method.html", "classvirtual__support_1_1_virtual_method" ]
+    ] ],
     [ "watchdog.h", "watchdog_8h.html", "watchdog_8h" ]
 ];

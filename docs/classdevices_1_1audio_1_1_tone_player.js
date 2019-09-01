@@ -1,12 +1,11 @@
 var classdevices_1_1audio_1_1_tone_player =
 [
-    [ "QTonePlay", "classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html", "classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play" ],
-    [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html#a142aa8ecaa187cea0063a6dbfeea8da6", null ],
-    [ "play", "classdevices_1_1audio_1_1_tone_player.html#a9b66076721319f6d3e6c9037e01fe965", null ],
-    [ "play_eeprom", "classdevices_1_1audio_1_1_tone_player.html#a1f4229a9228eb9cdda2d99d58baef84a", null ],
-    [ "play_flash", "classdevices_1_1audio_1_1_tone_player.html#a769aaafb0a81435806d7317edc9f9e63", null ],
-    [ "play", "classdevices_1_1audio_1_1_tone_player.html#afb7992dc1517178e677d01b984e00e0f", null ],
-    [ "play_eeprom", "classdevices_1_1audio_1_1_tone_player.html#ac6c611fc69de8fd2e5236d22bfb4707d", null ],
-    [ "play_flash", "classdevices_1_1audio_1_1_tone_player.html#a07807774066b59ae95c33e7426c88e19", null ],
-    [ "stop", "classdevices_1_1audio_1_1_tone_player.html#a7435df818813e53569faeba66bf839c9", null ]
+    [ "GENERATOR", "classdevices_1_1audio_1_1_tone_player.html#a9a1e3b410674297fe58e9abb0c2bf415", null ],
+    [ "TONE_PLAY", "classdevices_1_1audio_1_1_tone_player.html#a092116054795ed996f2f7a3db9f34c40", null ],
+    [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html#a32bb2fd479a64ba15a10bcf38b0588ce", null ],
+    [ "play_sram", "classdevices_1_1audio_1_1_tone_player.html#a2b27758850cf51ff2291edb37c7ca996", null ],
+    [ "play_eeprom", "classdevices_1_1audio_1_1_tone_player.html#a43ff76ae9a2c70fd1d4909b452452b62", null ],
+    [ "play_flash", "classdevices_1_1audio_1_1_tone_player.html#a6f32cd2b7dd022ae3d05ea72fff6712b", null ],
+    [ "stop", "classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c", null ],
+    [ "is_playing", "classdevices_1_1audio_1_1_tone_player.html#a5ecdcb031e7d6b884bdd2f3759954bce", null ]
 ];

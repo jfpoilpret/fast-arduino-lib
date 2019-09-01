@@ -1,7 +1,7 @@
 var searchData=
 [
   ['i2cdevice',['I2CDevice',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
-  ['i2cdevice_3c_20i2c_3a_3ai2cmode_3a_3astandard_20_3e',['I2CDevice&lt; i2c::I2CMode::Standard &gt;',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
+  ['i2cdevice_3c_20i2c_3a_3ai2cmode_3a_3astandard_20_3e',['I2CDevice&lt; i2c::I2CMode::STANDARD &gt;',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
   ['i2cdevice_3c_20mode_20_3e',['I2CDevice&lt; MODE &gt;',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
   ['i2cmanager',['I2CManager',['../classi2c_1_1_i2_c_manager.html',1,'i2c']]],
   ['intsignal',['INTSignal',['../classinterrupt_1_1_i_n_t_signal.html',1,'interrupt']]],

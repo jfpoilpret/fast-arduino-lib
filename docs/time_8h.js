@@ -1,10 +1,10 @@
 var time_8h =
 [
-    [ "RTTTime", "structtime_1_1_r_t_t_time.html", "structtime_1_1_r_t_t_time" ],
+    [ "RTTTime", "classtime_1_1_r_t_t_time.html", "classtime_1_1_r_t_t_time" ],
     [ "auto_delay", "classtime_1_1auto__delay.html", "classtime_1_1auto__delay" ],
     [ "auto_millis", "classtime_1_1auto__millis.html", "classtime_1_1auto__millis" ],
     [ "DELAY_PTR", "time_8h.html#a0980f7cbb448c562b0081484031f325e", null ],
-    [ "MILLIS_PTR", "time_8h.html#abe5f682f4654fd7af7c744d41fd2efdd", null ],
+    [ "MILLIS_PTR", "time_8h.html#a6beadc7ea06995818634b29b52433b80", null ],
     [ "operator-", "time_8h.html#a897dc67d09f077584bc6339cc1e1ce59", null ],
     [ "operator>", "time_8h.html#a528710a605a0265b0d428c926beb6463", null ],
     [ "operator>=", "time_8h.html#ae8df0d63b0b81344df283ec6d6ece1f8", null ],

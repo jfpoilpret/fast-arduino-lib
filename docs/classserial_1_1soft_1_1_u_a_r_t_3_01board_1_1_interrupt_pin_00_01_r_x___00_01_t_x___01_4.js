@@ -1,8 +1,10 @@
 var classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4 =
 [
-    [ "UART", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a5e00a476e884ca76b097d14d97fd2def", null ],
-    [ "begin", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a4ecaf1c0aba2af6653888d37a87b9bbd", null ],
-    [ "end", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#ad18b0d95c84c8856bb29abd2e75bbb6d", null ],
+    [ "PCI_TYPE", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a6bd0cdfa450d30b0f86bbf24d6a21ee6", null ],
+    [ "UART", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a9626ef38af1b5c2603acff8864082274", null ],
+    [ "begin", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a38e90ff0d3073efdd4bbc52a32f371ae", null ],
+    [ "end", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a644b6288402c7a0db86b3ce2c8cc7bc3", null ],
+    [ "isr_handler", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a028eda424aae2c386a5fd6ed74c0cfff", null ],
     [ "TX", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a49f0f78e753229c9f6da1212437e9d6e", null ],
     [ "RX", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a29dec29ce8c227c2f1d9d56fe9aad6f9", null ]
 ];

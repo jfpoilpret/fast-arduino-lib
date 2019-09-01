@@ -1,6 +1,6 @@
 <map id="fastarduino/pci.h" name="fastarduino/pci.h">
-<area shape="rect" id="node2" href="$board_8h_source.html" title="boards/board.h" alt="" coords="5,80,124,107"/>
-<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="384,80,481,107"/>
-<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="506,80,589,107"/>
-<area shape="rect" id="node6" href="$io_8h_source.html" title="boards/io.h" alt="" coords="428,155,523,181"/>
+<area shape="rect" id="node2" href="$board_8h_source.html" title="boards/board.h" alt="" coords="5,155,124,181"/>
+<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="381,80,479,107"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="223,80,306,107"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title="boards/io.h" alt="" coords="452,155,547,181"/>
 </map>

@@ -116,8 +116,8 @@ Collaboration diagram for devices::rf::NRF24L01&lt; CSN, CE &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classdevices_1_1rf_1_1_n_r_f24_l01__coll__graph.png" border="0" usemap="#devices_1_1rf_1_1_n_r_f24_l01_3_01_c_s_n_00_01_c_e_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="devices_1_1rf_1_1_n_r_f24_l01_3_01_c_s_n_00_01_c_e_01_4_coll__map" id="devices_1_1rf_1_1_n_r_f24_l01_3_01_c_s_n_00_01_c_e_01_4_coll__map">
-<area shape="rect" id="node2" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="5,80,168,107"/>
-<area shape="rect" id="node3" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="7,5,166,32"/>
+<area shape="rect" id="node2" href="classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="5,80,176,107"/>
+<area shape="rect" id="node3" href="classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="7,5,175,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -173,12 +173,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a1d1a753fa86ed08feeb3e3dd8a95c8cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a1d1a753fa86ed08feeb3e3dd8a95c8cd">powerdown</a> ()</td></tr>
 <tr class="memdesc:a1d1a753fa86ed08feeb3e3dd8a95c8cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set power down.  <a href="#a1d1a753fa86ed08feeb3e3dd8a95c8cd">More...</a><br /></td></tr>
 <tr class="separator:a1d1a753fa86ed08feeb3e3dd8a95c8cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfd5e54d4d5ecdc575774c137be3d01f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#adfd5e54d4d5ecdc575774c137be3d01f">send</a> (uint8_t dest, uint8_t port, const void *buf, size_t len)</td></tr>
-<tr class="memdesc:adfd5e54d4d5ecdc575774c137be3d01f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send message in given buffer, with given number of bytes.  <a href="#adfd5e54d4d5ecdc575774c137be3d01f">More...</a><br /></td></tr>
-<tr class="separator:adfd5e54d4d5ecdc575774c137be3d01f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac47b25e3543775985c309a3c43b360ec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ac47b25e3543775985c309a3c43b360ec">recv</a> (uint8_t &amp;src, uint8_t &amp;port, void *buf, size_t size, uint32_t ms=0L)</td></tr>
-<tr class="memdesc:ac47b25e3543775985c309a3c43b360ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive message and store into given buffer with given maximum size.  <a href="#ac47b25e3543775985c309a3c43b360ec">More...</a><br /></td></tr>
-<tr class="separator:ac47b25e3543775985c309a3c43b360ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a136c14487abb13a2e3ffcf0a1b9b0476"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TREF  = const T&amp;&gt; </td></tr>
+<tr class="memitem:a136c14487abb13a2e3ffcf0a1b9b0476"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a136c14487abb13a2e3ffcf0a1b9b0476">send</a> (uint8_t dest, uint8_t port, TREF buf)</td></tr>
+<tr class="memdesc:a136c14487abb13a2e3ffcf0a1b9b0476"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send message with given object reference.  <a href="#a136c14487abb13a2e3ffcf0a1b9b0476">More...</a><br /></td></tr>
+<tr class="separator:a136c14487abb13a2e3ffcf0a1b9b0476"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16ed8e5840a0a2e1ac8098ecf5cfae67"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a16ed8e5840a0a2e1ac8098ecf5cfae67">send</a> (uint8_t dest, uint8_t port)</td></tr>
+<tr class="memdesc:a16ed8e5840a0a2e1ac8098ecf5cfae67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an empty message.  <a href="#a16ed8e5840a0a2e1ac8098ecf5cfae67">More...</a><br /></td></tr>
+<tr class="separator:a16ed8e5840a0a2e1ac8098ecf5cfae67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa17a151dec42da7d89e7f7428239b386"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TREF  = T&amp;&gt; </td></tr>
+<tr class="memitem:aa17a151dec42da7d89e7f7428239b386"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aa17a151dec42da7d89e7f7428239b386">recv</a> (uint8_t &amp;src, uint8_t &amp;port, TREF buf, uint32_t ms=0L)</td></tr>
+<tr class="memdesc:aa17a151dec42da7d89e7f7428239b386"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive message and store into given object reference.  <a href="#aa17a151dec42da7d89e7f7428239b386">More...</a><br /></td></tr>
+<tr class="separator:aa17a151dec42da7d89e7f7428239b386"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b8307f10c69834574782a4daaf37869"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a9b8307f10c69834574782a4daaf37869">recv</a> (uint8_t &amp;src, uint8_t &amp;port, uint32_t ms=0L)</td></tr>
+<tr class="memdesc:a9b8307f10c69834574782a4daaf37869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive an empty message.  <a href="#a9b8307f10c69834574782a4daaf37869">More...</a><br /></td></tr>
+<tr class="separator:a9b8307f10c69834574782a4daaf37869"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02068822f1d2c882e34afff2ce4270a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a02068822f1d2c882e34afff2ce4270a1">set_output_power_level</a> (int8_t dBm)</td></tr>
 <tr class="memdesc:a02068822f1d2c882e34afff2ce4270a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set output power level (-30..10 dBm)  <a href="#a02068822f1d2c882e34afff2ce4270a1">More...</a><br /></td></tr>
 <tr class="separator:a02068822f1d2c882e34afff2ce4270a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,9 +199,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a2649cd9a33694a1a459d54a312799f1f"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a2649cd9a33694a1a459d54a312799f1f">get_drops</a> () const</td></tr>
 <tr class="memdesc:a2649cd9a33694a1a459d54a312799f1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return number of dropped messages.  <a href="#a2649cd9a33694a1a459d54a312799f1f">More...</a><br /></td></tr>
 <tr class="separator:a2649cd9a33694a1a459d54a312799f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd216ea94b6db1a4e4bde74170961dd4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#afd216ea94b6db1a4e4bde74170961dd4">broadcast</a> (uint8_t port, const void *buf, size_t len)</td></tr>
-<tr class="memdesc:afd216ea94b6db1a4e4bde74170961dd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Broadcast message in given buffer, with given number of bytes.  <a href="#afd216ea94b6db1a4e4bde74170961dd4">More...</a><br /></td></tr>
-<tr class="separator:afd216ea94b6db1a4e4bde74170961dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa50eddb9b7a68a0dc628d93837aa7dcb"><td class="memTemplParams" colspan="2">template&lt;typename T , typename TREF  = const T&amp;&gt; </td></tr>
+<tr class="memitem:aa50eddb9b7a68a0dc628d93837aa7dcb"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aa50eddb9b7a68a0dc628d93837aa7dcb">broadcast</a> (uint8_t port, TREF buf)</td></tr>
+<tr class="memdesc:aa50eddb9b7a68a0dc628d93837aa7dcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Broadcast message with given object reference.  <a href="#aa50eddb9b7a68a0dc628d93837aa7dcb">More...</a><br /></td></tr>
+<tr class="separator:aa50eddb9b7a68a0dc628d93837aa7dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa20eb7c9fc9e17dcd1159fed98d2422a"><td class="memItemLeft" align="right" valign="top"><a id="aa20eb7c9fc9e17dcd1159fed98d2422a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#aa20eb7c9fc9e17dcd1159fed98d2422a">is_broadcast</a> () const</td></tr>
 <tr class="memdesc:aa20eb7c9fc9e17dcd1159fed98d2422a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if the latest received message was a broadcast otherwise false. <br /></td></tr>
@@ -312,6 +321,36 @@ Protected Types</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ac665b346c57c2fb75ecbc8265ff2f74f"><td class="mdescLeft">&#160;</td><td class="mdescRight">NRF transceiver states (See chap.  <a href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ac665b346c57c2fb75ecbc8265ff2f74f">More...</a><br /></td></tr>
 <tr class="separator:ac665b346c57c2fb75ecbc8265ff2f74f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_classspi_1_1_s_p_i_device"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classspi_1_1_s_p_i_device')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classspi_1_1_s_p_i_device.html">spi::SPIDevice&lt; CSN &gt;</a></td></tr>
+<tr class="memitem:af475ac99b2405d338d7a511709bb98a0 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top"><a id="af475ac99b2405d338d7a511709bb98a0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#af475ac99b2405d338d7a511709bb98a0">SPIDevice</a> () INLINE</td></tr>
+<tr class="memdesc:af475ac99b2405d338d7a511709bb98a0 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <code>SPIDevice</code>; this sets up the <code>CS</code> pin for later use during transfers. <br /></td></tr>
+<tr class="separator:af475ac99b2405d338d7a511709bb98a0 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a6860cb1a7a09cc75a3b98abcb3dd0e inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e">start_transfer</a> ()</td></tr>
+<tr class="memdesc:a4a6860cb1a7a09cc75a3b98abcb3dd0e inherit pro_methods_classspi_1_1_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start an SPI transfer to this device.  <a href="classspi_1_1_s_p_i_device.html#a4a6860cb1a7a09cc75a3b98abcb3dd0e">More...</a><br /></td></tr>
+<tr class="separator:a4a6860cb1a7a09cc75a3b98abcb3dd0e inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7966a43f4b18fa308a637e28a5633722 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722">end_transfer</a> () INLINE</td></tr>
+<tr class="memdesc:a7966a43f4b18fa308a637e28a5633722 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">End the current SPI ransfer tot hsi device.  <a href="classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722">More...</a><br /></td></tr>
+<tr class="separator:a7966a43f4b18fa308a637e28a5633722 inherit pro_methods_classspi_1_1_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classspi_1_1_abstract_s_p_i_device"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classspi_1_1_abstract_s_p_i_device')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classspi_1_1_abstract_s_p_i_device.html">spi::AbstractSPIDevice</a></td></tr>
+<tr class="memitem:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">transfer</a> (uint8_t data)</td></tr>
+<tr class="memdesc:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte returned by the device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc">More...</a><br /></td></tr>
+<tr class="separator:a5439aabb817119e079f29a8eddfd3edc inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">transfer</a> (uint8_t *data, uint16_t size)</td></tr>
+<tr class="memdesc:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">More...</a><br /></td></tr>
+<tr class="separator:a63111d80e27d147a46e9654346a0b0b7 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19de463c2ae3e8e627012f42f9e54401 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401">transfer</a> (const uint8_t *data, uint16_t size)</td></tr>
+<tr class="memdesc:a19de463c2ae3e8e627012f42f9e54401 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost.  <a href="classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401">More...</a><br /></td></tr>
+<tr class="separator:a19de463c2ae3e8e627012f42f9e54401 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">transfer</a> (uint8_t *data, uint16_t size, uint8_t sent)</td></tr>
+<tr class="memdesc:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">More...</a><br /></td></tr>
+<tr class="separator:a3a92225a72e5136406cadaabbef0cb62 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90a120b920e48402fd7fb84b8452c026 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026">transfer</a> (uint16_t size, uint8_t sent)</td></tr>
+<tr class="memdesc:a90a120b920e48402fd7fb84b8452c026 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost.  <a href="classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026">More...</a><br /></td></tr>
+<tr class="separator:a90a120b920e48402fd7fb84b8452c026 inherit pro_methods_classspi_1_1_abstract_s_p_i_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt;<br />
@@ -388,7 +427,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00284">284</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00348">348</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -491,7 +530,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00310">310</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00374">374</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -520,7 +559,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <p>NRF transceiver states (See chap. </p>
 <p>6.1.1, fig. 4, pp. 22). </p>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00410">410</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00464">464</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -564,7 +603,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00636">636</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00662">662</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -772,7 +811,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <p>Start up the device driver. </p>
 <p>This must be called before any transmission or reception can take place. </p>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00642">642</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00668">668</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -796,7 +835,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <p>Set power up mode. </p>
 <p>Will initiate radio with necessary settings after power on reset. </p>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00666">666</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00693">693</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -820,17 +859,22 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <p>Set power down. </p>
 <p>Turn off radio and go into low power mode. </p>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00689">689</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00717">717</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
-<a id="adfd5e54d4d5ecdc575774c137be3d01f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfd5e54d4d5ecdc575774c137be3d01f">&#9670;&nbsp;</a></span>send()</h2>
+<a id="a136c14487abb13a2e3ffcf0a1b9b0476"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a136c14487abb13a2e3ffcf0a1b9b0476">&#9670;&nbsp;</a></span>send() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
+<div class="memtemplate">
+template&lt;typename T , typename TREF  = const T&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html">devices::rf::NRF24L01</a>&lt; CSN, CE &gt;::send </td>
@@ -847,14 +891,8 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>buf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
+          <td class="paramtype">TREF&#160;</td>
+          <td class="paramname"><em>buf</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -862,44 +900,117 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Send message in given buffer, with given number of bytes. </p>
+<p>Send message with given object reference. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of <code>buf</code> (the object to transfer) </td></tr>
+    <tr><td class="paramname">TREF</td><td>the type passed for <code>buf</code>, typically a const reference to type <code>T</code> </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">dest</td><td>destination network address. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">port</td><td>device port (or message type). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">buf</td><td>buffer to transmit. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>number of bytes in buffer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">buf</td><td>reference of object to transmit. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>number of bytes send or negative error code. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname"><a class="el" href="namespaceerrors.html#a24d0c302dd23c25975e5a98ed5850142" title="Invalid argument. ">errors::EINVAL</a></td><td>if <code>buf</code> is null or <code>len</code> is 0 </td></tr>
     <tr><td class="paramname"><a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a></td><td>if <code>len</code> &gt; <code>PAYLOAD_MAX</code> </td></tr>
     <tr><td class="paramname"><a class="el" href="namespaceerrors.html#a4b234f4e31c1a1c0afbbbc08f98658dd" title="Input/output error. ">errors::EIO</a></td><td>if a transmission failure happened</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceerrors.html#a24d0c302dd23c25975e5a98ed5850142" title="Invalid argument. ">errors::EINVAL</a> </dd>
-<dd>
-<a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a> </dd>
 <dd>
 <a class="el" href="namespaceerrors.html#a4b234f4e31c1a1c0afbbbc08f98658dd" title="Input/output error. ">errors::EIO</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00698">698</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00203">203</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
-<a id="ac47b25e3543775985c309a3c43b360ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac47b25e3543775985c309a3c43b360ec">&#9670;&nbsp;</a></span>recv()</h2>
+<a id="a16ed8e5840a0a2e1ac8098ecf5cfae67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16ed8e5840a0a2e1ac8098ecf5cfae67">&#9670;&nbsp;</a></span>send() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html">devices::rf::NRF24L01</a>&lt; CSN, CE &gt;::send </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>port</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Send an empty message. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dest</td><td>destination network address. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">port</td><td>device port (or message type). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of bytes send or negative error code. </dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname"><a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a></td><td>if <code>len</code> &gt; <code>PAYLOAD_MAX</code> </td></tr>
+    <tr><td class="paramname"><a class="el" href="namespaceerrors.html#a4b234f4e31c1a1c0afbbbc08f98658dd" title="Input/output error. ">errors::EIO</a></td><td>if a transmission failure happened</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a> </dd>
+<dd>
+<a class="el" href="namespaceerrors.html#a4b234f4e31c1a1c0afbbbc08f98658dd" title="Input/output error. ">errors::EIO</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00220">220</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+
+</div>
+</div>
+<a id="aa17a151dec42da7d89e7f7428239b386"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa17a151dec42da7d89e7f7428239b386">&#9670;&nbsp;</a></span>recv() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
+<div class="memtemplate">
+template&lt;typename T , typename TREF  = T&amp;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html">devices::rf::NRF24L01</a>&lt; CSN, CE &gt;::recv </td>
@@ -916,14 +1027,8 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">void *&#160;</td>
+          <td class="paramtype">TREF&#160;</td>
           <td class="paramname"><em>buf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -937,16 +1042,28 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Receive message and store into given buffer with given maximum size. </p>
+<p>Receive message and store into given object reference. </p>
 <p>The source network address is returned in the parameter src.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of <code>buf</code> (the object to be received) </td></tr>
+    <tr><td class="paramname">TREF</td><td>the type passed for <code>buf</code>, typically a reference to type <code>T</code> </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">src</td><td>source network address. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">port</td><td>device port (or message type). </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">buf</td><td>reference to object to fill with received payload; note that no constructor will get called during this operation, it is best to use simple <code>struct</code> for type <code>T</code>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">buf</td><td>buffer to store incoming message. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>maximum number of bytes to receive. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ms</td><td>maximum time out period. </td></tr>
   </table>
   </dd>
@@ -963,7 +1080,75 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <dd>
 <a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00757">757</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00251">251</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+
+</div>
+</div>
+<a id="a9b8307f10c69834574782a4daaf37869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b8307f10c69834574782a4daaf37869">&#9670;&nbsp;</a></span>recv() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html">devices::rf::NRF24L01</a>&lt; CSN, CE &gt;::recv </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t &amp;&#160;</td>
+          <td class="paramname"><em>src</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t &amp;&#160;</td>
+          <td class="paramname"><em>port</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ms</em> = <code>0L</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Receive an empty message. </p>
+<p>The source network address is returned in the parameter src.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">src</td><td>source network address. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">port</td><td>device port (or message type). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ms</td><td>maximum time out period. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of bytes received or negative error code. </dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname"><a class="el" href="namespaceerrors.html#ad4ec1e37e74c959b9f0c60673b7f793d" title="Timer expired. ">errors::ETIME</a></td><td>if nothing was received and a timeout occurred after <code>ms</code> elapsed </td></tr>
+    <tr><td class="paramname"><a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a></td><td>if a payload error occurred from the chip (Tab. 20, pp. 51, R_RX_PL_WID) or the received payload size is bigger than the requested <code>size</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceerrors.html#ad4ec1e37e74c959b9f0c60673b7f793d" title="Timer expired. ">errors::ETIME</a> </dd>
+<dd>
+<a class="el" href="namespaceerrors.html#a50aa2617c63d80c22e337f78926aa7a2" title="Message too long. ">errors::EMSGSIZE</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00273">273</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -993,7 +1178,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00774">774</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00805">805</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -1025,7 +1210,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <p>Return number of transmitted messages. </p>
 <dl class="section return"><dt>Returns</dt><dd>transmit count. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00234">234</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00288">288</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -1057,7 +1242,7 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <p>Return number of retransmissions. </p>
 <dl class="section return"><dt>Returns</dt><dd>retransmit count. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00243">243</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00297">297</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
@@ -1089,17 +1274,19 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 <p>Return number of dropped messages. </p>
 <dl class="section return"><dt>Returns</dt><dd>drop count. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00252">252</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00306">306</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>
-<a id="afd216ea94b6db1a4e4bde74170961dd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd216ea94b6db1a4e4bde74170961dd4">&#9670;&nbsp;</a></span>broadcast()</h2>
+<a id="aa50eddb9b7a68a0dc628d93837aa7dcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa50eddb9b7a68a0dc628d93837aa7dcb">&#9670;&nbsp;</a></span>broadcast()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
+<div class="memtemplate">
+template&lt;typename T , typename TREF  = const T&amp;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1113,14 +1300,8 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const void *&#160;</td>
-          <td class="paramname"><em>buf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>len</em>&#160;</td>
+          <td class="paramtype">TREF&#160;</td>
+          <td class="paramname"><em>buf</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1135,18 +1316,25 @@ template&lt;board::DigitalPin CSN, board::DigitalPin CE&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Broadcast message in given buffer, with given number of bytes. </p>
-<p>Returns number of bytes sent if successful otherwise a negative error code. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Broadcast message with given object reference. </p>
+<p>Returns number of bytes sent if successful otherwise a negative error code.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>the type of <code>buf</code> (the object to transfer) </td></tr>
+    <tr><td class="paramname">TREF</td><td>the type passed for <code>buf</code>, typically a const reference to type <code>T</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">port</td><td>device port (or message type). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">buf</td><td>buffer to transmit. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">len</td><td>number of bytes in buffer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">buf</td><td>reference of object to transmit. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>number of bytes send or negative error code. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00266">266</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nrf24l01p_8h_source.html#l00325">325</a> of file <a class="el" href="nrf24l01p_8h_source.html">nrf24l01p.h</a>.</p>
 
 </div>
 </div>

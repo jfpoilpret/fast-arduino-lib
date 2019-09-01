@@ -14,27 +14,24 @@ var hierarchy =
         ] ]
       ] ]
     ] ],
-    [ "AbstractUART", null, [
-      [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", [
-        [ "serial::hard::UART< USART_ >", "classserial_1_1hard_1_1_u_a_r_t.html", null ]
-      ] ],
-      [ "serial::hard::UATX< USART_ >", "classserial_1_1hard_1_1_u_a_t_x.html", [
-        [ "serial::hard::UART< USART_ >", "classserial_1_1hard_1_1_u_a_r_t.html", null ]
-      ] ]
+    [ "devices::audio::AbstractTonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_abstract_tone_player.html", [
+      [ "devices::audio::AsyncTonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_async_tone_player.html", null ],
+      [ "devices::audio::TonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_tone_player.html", null ]
     ] ],
     [ "AbstractUARX", null, [
-      [ "serial::soft::UARX< board::ExternalInterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html", [
-        [ "serial::soft::UART< board::ExternalInterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ]
-      ] ],
-      [ "serial::soft::UARX< board::InterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html", [
-        [ "serial::soft::UART< board::InterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ]
-      ] ]
+      [ "serial::hard::UART< USART_ >", "classserial_1_1hard_1_1_u_a_r_t.html", null ],
+      [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", null ],
+      [ "serial::soft::UART< board::ExternalInterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ],
+      [ "serial::soft::UART< board::InterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ],
+      [ "serial::soft::UARX< board::ExternalInterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html", null ],
+      [ "serial::soft::UARX< board::InterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html", null ]
     ] ],
     [ "AbstractUATX", null, [
-      [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", [
-        [ "serial::soft::UART< board::ExternalInterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ],
-        [ "serial::soft::UART< board::InterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ]
-      ] ]
+      [ "serial::hard::UART< USART_ >", "classserial_1_1hard_1_1_u_a_r_t.html", null ],
+      [ "serial::hard::UATX< USART_ >", "classserial_1_1hard_1_1_u_a_t_x.html", null ],
+      [ "serial::soft::UART< board::ExternalInterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ],
+      [ "serial::soft::UART< board::InterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ],
+      [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", null ]
     ] ],
     [ "devices::rf::NRF24L01< CSN, CE >::addr_t", "structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html", null ],
     [ "devices::magneto::AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", null ],
@@ -71,7 +68,7 @@ var hierarchy =
       [ "devices::magneto::HMC5883L< MODE_ >", "classdevices_1_1magneto_1_1_h_m_c5883_l.html", null ],
       [ "devices::mcp23017::MCP23017< MODE_ >", "classdevices_1_1mcp23017_1_1_m_c_p23017.html", null ]
     ] ],
-    [ "i2c::I2CDevice< i2c::I2CMode::Standard >", "classi2c_1_1_i2_c_device.html", [
+    [ "i2c::I2CDevice< i2c::I2CMode::STANDARD >", "classi2c_1_1_i2_c_device.html", [
       [ "devices::rtc::DS1307", "classdevices_1_1rtc_1_1_d_s1307.html", null ]
     ] ],
     [ "i2c::I2CDevice< MODE >", "classi2c_1_1_i2_c_device.html", [
@@ -113,27 +110,23 @@ var hierarchy =
     [ "devices::sonar::MultiHCSR04< NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ >", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html", null ],
     [ "streams::null_ostream", "classstreams_1_1null__ostream.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::observe_tx_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html", null ],
-    [ "interrupt::PCISignal< PORT_ >", "classinterrupt_1_1_p_c_i_signal.html", null ],
+    [ "interrupt::PCISignal< PCINT_ >", "classinterrupt_1_1_p_c_i_signal.html", null ],
     [ "interrupt::PCIType< PIN >", "structinterrupt_1_1_p_c_i_type.html", null ],
     [ "power::Power", "classpower_1_1_power.html", null ],
     [ "analog::PWMOutput< PWMPIN_, PULSED_ >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "analog::PWMOutput< OUTPUT >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "analog::PWMOutput< PWMPIN, true >", "classanalog_1_1_p_w_m_output.html", null ],
-    [ "devices::audio::TonePlayer< NTIMER, OUTPUT >::QTonePlay", "classdevices_1_1audio_1_1_tone_player_1_1_q_tone_play.html", null ],
+    [ "devices::audio::QTonePlay< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_q_tone_play.html", null ],
     [ "containers::Queue< T_, TREF_ >", "classcontainers_1_1_queue.html", null ],
     [ "containers::Queue< char, char >", "classcontainers_1_1_queue.html", [
-      [ "streams::istreambuf", "classstreams_1_1istreambuf.html", [
-        [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", null ]
-      ] ],
-      [ "streams::ostreambuf", "classstreams_1_1ostreambuf.html", [
-        [ "serial::hard::UATX< USART_ >", "classserial_1_1hard_1_1_u_a_t_x.html", null ]
-      ] ]
+      [ "streams::istreambuf", "classstreams_1_1istreambuf.html", null ],
+      [ "streams::ostreambuf", "classstreams_1_1ostreambuf.html", null ]
     ] ],
     [ "containers::Queue< EVENT >", "classcontainers_1_1_queue.html", null ],
     [ "containers::Queue< uint8_t, uint8_t >", "classcontainers_1_1_queue.html", null ],
     [ "timer::RTTEventCallback< EVENT, PERIOD_MS >", "classtimer_1_1_r_t_t_event_callback.html", null ],
     [ "timer::RTTRawTime< T >", "classtimer_1_1_r_t_t_raw_time.html", null ],
-    [ "time::RTTTime", "structtime_1_1_r_t_t_time.html", null ],
+    [ "time::RTTTime", "classtime_1_1_r_t_t_time.html", null ],
     [ "devices::magneto::Sensor3D", "structdevices_1_1magneto_1_1_sensor3_d.html", null ],
     [ "devices::servo::Servo< TIMER_, PWMPIN_ >", "classdevices_1_1servo_1_1_servo.html", null ],
     [ "devices::SIPO< CLOCK_, LATCH_, DATA_ >", "classdevices_1_1_s_i_p_o.html", null ],
@@ -150,10 +143,19 @@ var hierarchy =
     [ "timer::Timer< NTIMER >", "classtimer_1_1_timer.html", null ],
     [ "devices::rtc::tm", "structdevices_1_1rtc_1_1tm.html", null ],
     [ "devices::audio::ToneGenerator< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_generator.html", null ],
-    [ "devices::audio::TonePlay", "structdevices_1_1audio_1_1_tone_play.html", null ],
-    [ "devices::audio::TonePlayer< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_player.html", null ],
+    [ "devices::audio::TonePlay", "classdevices_1_1audio_1_1_tone_play.html", null ],
     [ "types_traits::Type_trait< T >", "structtypes__traits_1_1_type__trait.html", null ],
-    [ "serial::UARTErrors", "classserial_1_1_u_a_r_t_errors.html", null ],
+    [ "serial::UARTErrors", "classserial_1_1_u_a_r_t_errors.html", [
+      [ "serial::hard::UART< USART_ >", "classserial_1_1hard_1_1_u_a_r_t.html", null ],
+      [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", null ],
+      [ "serial::hard::UATX< USART_ >", "classserial_1_1hard_1_1_u_a_t_x.html", null ],
+      [ "serial::soft::UART< board::ExternalInterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ],
+      [ "serial::soft::UART< board::InterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", null ],
+      [ "serial::soft::UARX< board::ExternalInterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html", null ],
+      [ "serial::soft::UARX< board::InterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html", null ],
+      [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", null ]
+    ] ],
+    [ "virtual_support::VirtualMethod", "classvirtual__support_1_1_virtual_method.html", null ],
     [ "watchdog::WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", [
       [ "watchdog::WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", [
         [ "watchdog::Watchdog< EVENT >", "classwatchdog_1_1_watchdog.html", null ]

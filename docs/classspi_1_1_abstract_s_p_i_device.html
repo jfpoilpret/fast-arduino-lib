@@ -120,9 +120,15 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a63111d80e27d147a46e9654346a0b0b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7">transfer</a> (uint8_t *data, uint16_t size)</td></tr>
 <tr class="memdesc:a63111d80e27d147a46e9654346a0b0b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="#a63111d80e27d147a46e9654346a0b0b7">More...</a><br /></td></tr>
 <tr class="separator:a63111d80e27d147a46e9654346a0b0b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19de463c2ae3e8e627012f42f9e54401"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401">transfer</a> (const uint8_t *data, uint16_t size)</td></tr>
+<tr class="memdesc:a19de463c2ae3e8e627012f42f9e54401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer an array of payload data to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost.  <a href="#a19de463c2ae3e8e627012f42f9e54401">More...</a><br /></td></tr>
+<tr class="separator:a19de463c2ae3e8e627012f42f9e54401"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a92225a72e5136406cadaabbef0cb62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62">transfer</a> (uint8_t *data, uint16_t size, uint8_t sent)</td></tr>
 <tr class="memdesc:a3a92225a72e5136406cadaabbef0cb62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin, and get all data bytes simultaneously received from that device through MISO pin.  <a href="#a3a92225a72e5136406cadaabbef0cb62">More...</a><br /></td></tr>
 <tr class="separator:a3a92225a72e5136406cadaabbef0cb62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90a120b920e48402fd7fb84b8452c026"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026">transfer</a> (uint16_t size, uint8_t sent)</td></tr>
+<tr class="memdesc:a90a120b920e48402fd7fb84b8452c026"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost.  <a href="#a90a120b920e48402fd7fb84b8452c026">More...</a><br /></td></tr>
+<tr class="separator:a90a120b920e48402fd7fb84b8452c026"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contain general payload transfer API for an SPI device. </p>
@@ -131,7 +137,7 @@ Protected Member Functions</h2></td></tr>
 <p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00153">153</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a5439aabb817119e079f29a8eddfd3edc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5439aabb817119e079f29a8eddfd3edc">&#9670;&nbsp;</a></span>transfer() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5439aabb817119e079f29a8eddfd3edc">&#9670;&nbsp;</a></span>transfer() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -171,7 +177,7 @@ Protected Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a63111d80e27d147a46e9654346a0b0b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63111d80e27d147a46e9654346a0b0b7">&#9670;&nbsp;</a></span>transfer() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a63111d80e27d147a46e9654346a0b0b7">&#9670;&nbsp;</a></span>transfer() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,14 +220,68 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc" title="Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte retur...">transfer(uint8_t)</a> </dd>
 <dd>
-<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62" title="Transfer the provided byte sent several times to the currently selected SPI slave device through MOSI...">transfer(uint8_t*, uint16_t, uint8_t)</a> </dd></dl>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62" title="Transfer the provided byte sent several times to the currently selected SPI slave device through MOSI...">transfer(uint8_t*, uint16_t, uint8_t)</a> </dd>
+<dd>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401" title="Transfer an array of payload data to the currently selected SPI slave device through MOSI pin; any da...">transfer(const uint8_t*, uint16_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00197">197</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00198">198</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
+
+</div>
+</div>
+<a id="a19de463c2ae3e8e627012f42f9e54401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19de463c2ae3e8e627012f42f9e54401">&#9670;&nbsp;</a></span>transfer() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void spi::AbstractSPIDevice::transfer </td>
+          <td>(</td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transfer an array of payload data to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>pointer to the payload to transmit </td></tr>
+    <tr><td class="paramname">size</td><td>the payload size</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc" title="Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte retur...">transfer(uint8_t)</a> </dd>
+<dd>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026" title="Transfer the provided byte sent several times to the currently selected SPI slave device through MOSI...">transfer(uint16_t, uint8_t)</a> </dd>
+<dd>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7" title="Transfer an array of payload data to the currently selected SPI slave device through MOSI pin...">transfer(uint8_t*, uint16_t)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00218">218</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
 
 </div>
 </div>
 <a id="a3a92225a72e5136406cadaabbef0cb62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a92225a72e5136406cadaabbef0cb62">&#9670;&nbsp;</a></span>transfer() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a92225a72e5136406cadaabbef0cb62">&#9670;&nbsp;</a></span>transfer() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -272,9 +332,63 @@ Protected Member Functions</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc" title="Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte retur...">transfer(uint8_t)</a> </dd>
 <dd>
-<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7" title="Transfer an array of payload data to the currently selected SPI slave device through MOSI pin...">transfer(uint8_t*, uint16_t)</a> </dd></dl>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7" title="Transfer an array of payload data to the currently selected SPI slave device through MOSI pin...">transfer(uint8_t*, uint16_t)</a> </dd>
+<dd>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026" title="Transfer the provided byte sent several times to the currently selected SPI slave device through MOSI...">transfer(uint16_t, uint8_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00223">223</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00241">241</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
+
+</div>
+</div>
+<a id="a90a120b920e48402fd7fb84b8452c026"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90a120b920e48402fd7fb84b8452c026">&#9670;&nbsp;</a></span>transfer() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void spi::AbstractSPIDevice::transfer </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>sent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transfer the provided byte <code>sent</code> several times to the currently selected SPI slave device through MOSI pin; any data bytes simultaneously received from that device through MISO pin are lost. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>the number of times to transmit <code>sent</code> byte to the SPI slave </td></tr>
+    <tr><td class="paramname">sent</td><td>the data byte to transmit several times</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc" title="Transfer one byte to the currently selected SPI slave device through MOSI pin, and get the byte retur...">transfer(uint8_t)</a> </dd>
+<dd>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401" title="Transfer an array of payload data to the currently selected SPI slave device through MOSI pin; any da...">transfer(const uint8_t*, uint16_t)</a> </dd>
+<dd>
+<a class="el" href="classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62" title="Transfer the provided byte sent several times to the currently selected SPI slave device through MOSI...">transfer(uint8_t*, uint16_t, uint8_t)</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="spi_8h_source.html#l00258">258</a> of file <a class="el" href="spi_8h_source.html">spi.h</a>.</p>
 
 </div>
 </div>

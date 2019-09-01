@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('classtimer_1_1_r_t_t_raw_time.html',''
 </div><!--header-->
 <div class="contents">
 
-<p>Utility class to avoid costly instantiation of <code><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code> from an interrupt routine.  
+<p>Utility class to avoid costly instantiation of <code><a class="el" href="classtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code> from an interrupt routine.  
  <a href="classtimer_1_1_r_t_t_raw_time.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="realtime__timer_8h_source.html">fastarduino/realtime_timer.h</a>&gt;</code></p>
@@ -105,8 +105,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a272a897e13e597aec2eb7da6f919943d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t_raw_time.html#a272a897e13e597aec2eb7da6f919943d">RTTRawTime</a> (uint32_t millis, T counter, T max_counter)</td></tr>
 <tr class="memdesc:a272a897e13e597aec2eb7da6f919943d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">RTTRawTime</a></code> from <code>millis</code> milliseconds, and values from <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> <code>counter</code> value that will allow microseconds calculation later on.  <a href="#a272a897e13e597aec2eb7da6f919943d">More...</a><br /></td></tr>
 <tr class="separator:a272a897e13e597aec2eb7da6f919943d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18ed46ad3c990ff5f960720a1dca27e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtime_1_1_r_t_t_time.html">time::RTTTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t_raw_time.html#a18ed46ad3c990ff5f960720a1dca27e3">as_real_time</a> () const</td></tr>
-<tr class="memdesc:a18ed46ad3c990ff5f960720a1dca27e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert this <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">RTTRawTime</a></code> instance to a fully usable <code><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code>.  <a href="#a18ed46ad3c990ff5f960720a1dca27e3">More...</a><br /></td></tr>
+<tr class="memitem:a18ed46ad3c990ff5f960720a1dca27e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtime_1_1_r_t_t_time.html">time::RTTTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_r_t_t_raw_time.html#a18ed46ad3c990ff5f960720a1dca27e3">as_real_time</a> () const</td></tr>
+<tr class="memdesc:a18ed46ad3c990ff5f960720a1dca27e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert this <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">RTTRawTime</a></code> instance to a fully usable <code><a class="el" href="classtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code>.  <a href="#a18ed46ad3c990ff5f960720a1dca27e3">More...</a><br /></td></tr>
 <tr class="separator:a18ed46ad3c990ff5f960720a1dca27e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
@@ -119,8 +119,8 @@ Static Public Attributes</h2></td></tr>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
 class timer::RTTRawTime&lt; T &gt;</h3>
 
-<p>Utility class to avoid costly instantiation of <code><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code> from an interrupt routine. </p>
-<p>It can be later (outside an ISR) converted into a real <code><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code>.</p>
+<p>Utility class to avoid costly instantiation of <code><a class="el" href="classtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code> from an interrupt routine. </p>
+<p>It can be later (outside an ISR) converted into a real <code><a class="el" href="classtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code>.</p>
 <p>It is usually created from raw <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer. ">Timer</a> registers values. This type shall usually not be directly used as RTTRawTime&lt;T&gt; but actually obtained from an RTT&lt;NTIMER&gt; instance, as <code><a class="el" href="classtimer_1_1_r_t_t.html#aecb24e63db68d362d56e435224444d9b" title="The adequate RTTRawTime type for this RTT. ">RTT::RAW_TIME</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -128,7 +128,7 @@ class timer::RTTRawTime&lt; T &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a> </dd>
 <dd>
 <a class="el" href="classtimer_1_1_r_t_t.html#aecb24e63db68d362d56e435224444d9b" title="The adequate RTTRawTime type for this RTT. ">RTT::RAW_TIME</a> </dd></dl>
 
@@ -203,7 +203,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structtime_1_1_r_t_t_time.html">time::RTTTime</a> <a class="el" href="classtimer_1_1_r_t_t_raw_time.html">timer::RTTRawTime</a>&lt; T &gt;::as_real_time </td>
+          <td class="memname"><a class="el" href="classtime_1_1_r_t_t_time.html">time::RTTTime</a> <a class="el" href="classtimer_1_1_r_t_t_raw_time.html">timer::RTTRawTime</a>&lt; T &gt;::as_real_time </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -216,7 +216,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Convert this <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">RTTRawTime</a></code> instance to a fully usable <code><a class="el" href="structtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code>. </p>
+<p>Convert this <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine. ">RTTRawTime</a></code> instance to a fully usable <code><a class="el" href="classtime_1_1_r_t_t_time.html" title="Structure used to hold a time value with microsecond precision. ">time::RTTTime</a></code>. </p>
 <p>This method performs potentially costly computation and hence should not be used inside an ISR. </p>
 
 <p class="definition">Definition at line <a class="el" href="realtime__timer_8h_source.html#l00162">162</a> of file <a class="el" href="realtime__timer_8h_source.html">realtime_timer.h</a>.</p>

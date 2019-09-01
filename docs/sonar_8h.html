@@ -113,20 +113,20 @@ Include dependency graph for sonar.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="sonar_8h__incl.png" border="0" usemap="#fastarduino_2devices_2sonar_8h" alt=""/></div>
 <map name="fastarduino_2devices_2sonar_8h" id="fastarduino_2devices_2sonar_8h">
-<area shape="rect" id="node2" href="board_8h_source.html" title="fastarduino/boards\l/board.h" alt="" coords="43,259,187,300"/>
-<area shape="rect" id="node3" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="170,184,310,211"/>
-<area shape="rect" id="node5" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="519,423,601,449"/>
-<area shape="rect" id="node9" href="time_8h.html" title="Simple time utilities. " alt="" coords="1061,348,1203,375"/>
-<area shape="rect" id="node12" href="realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="808,95,963,136"/>
-<area shape="rect" id="node22" href="int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="495,184,625,211"/>
-<area shape="rect" id="node23" href="pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="335,184,465,211"/>
-<area shape="rect" id="node6" href="io_8h_source.html" title="boards/io.h" alt="" coords="861,497,955,524"/>
-<area shape="rect" id="node14" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="598,266,695,293"/>
-<area shape="rect" id="node15" href="timer_8h.html" title="Timer API. " alt="" coords="765,184,833,211"/>
-<area shape="rect" id="node17" href="events_8h.html" title="Support for events management. " alt="" coords="978,184,1057,211"/>
-<area shape="rect" id="node18" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="923,266,997,293"/>
-<area shape="rect" id="node20" href="linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="1021,266,1123,293"/>
-<area shape="rect" id="node21" href="types__traits_8h.html" title="Useful traits for common types. " alt="" coords="1227,348,1338,375"/>
+<area shape="rect" id="node2" href="board_8h_source.html" title="fastarduino/boards\l/board.h" alt="" coords="1033,483,1177,524"/>
+<area shape="rect" id="node4" href="gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="1023,259,1163,285"/>
+<area shape="rect" id="node6" href="utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="660,408,743,435"/>
+<area shape="rect" id="node8" href="time_8h.html" title="Simple time utilities. " alt="" coords="131,333,274,360"/>
+<area shape="rect" id="node12" href="realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="609,95,764,136"/>
+<area shape="rect" id="node21" href="int_8h.html" title="General API for handling External Interrupt pins. " alt="" coords="865,259,994,285"/>
+<area shape="rect" id="node22" href="pci_8h.html" title="General API for handling Pin Change Interrupts. " alt="" coords="1192,259,1323,285"/>
+<area shape="rect" id="node9" href="io_8h_source.html" title="boards/io.h" alt="" coords="166,408,261,435"/>
+<area shape="rect" id="node14" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="790,333,887,360"/>
+<area shape="rect" id="node15" href="timer_8h.html" title="Timer API. " alt="" coords="653,259,721,285"/>
+<area shape="rect" id="node17" href="events_8h.html" title="Support for events management. " alt="" coords="357,184,435,211"/>
+<area shape="rect" id="node18" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="240,259,315,285"/>
+<area shape="rect" id="node19" href="linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="389,259,491,285"/>
+<area shape="rect" id="node20" href="types__traits_8h.html" title="Useful traits for common types. " alt="" coords="350,333,461,360"/>
 </map>
 </div>
 </div>
@@ -992,7 +992,7 @@ HCSR04::async_echo() </dd>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                           \</div><div class="line">    {                                                                                                          \</div><div class="line">        using isr = devices::sonar::isr_handler;                                                               \</div><div class="line">        isr::multi_sonar_pci_method&lt;PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK&gt;();       \</div><div class="line">    }</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                           \</div><div class="line">    {                                                                                                          \</div><div class="line">        using ISRHANDLER = devices::sonar::isr_handler;                                                        \</div><div class="line">        ISRHANDLER::multi_sonar_pci_method&lt;PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, HANDLER, CALLBACK&gt;();\</div><div class="line">    }</div></div><!-- fragment -->
 <p>Register the necessary ISR (Interrupt Service Routine) for a <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> to listen to echo pulses on all sonars connected to it, and call back a handler's method. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1066,7 +1066,7 @@ HCSR04::async_echo() </dd>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                    \</div><div class="line">    {                                                                                                   \</div><div class="line">        using isr = devices::sonar::isr_handler;                                                        \</div><div class="line">        isr::multi_sonar_pci_function&lt;PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK&gt;();       \</div><div class="line">    }</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line">ISR(CAT3(PCINT, PCI_NUM, _vect))                                                                    \</div><div class="line">    {                                                                                                   \</div><div class="line">        using ISRHANDLER = devices::sonar::isr_handler;                                                 \</div><div class="line">        ISRHANDLER::multi_sonar_pci_function&lt;PCI_NUM, TIMER, TRIGGER, ECHO_PORT, ECHO_MASK, CALLBACK&gt;();\</div><div class="line">    }</div></div><!-- fragment -->
 <p>Register the necessary ISR (Interrupt Service Routine) for a <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">devices::sonar::MultiHCSR04</a></code> to listen to echo pulses on all sonars connected to it, and call back a function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

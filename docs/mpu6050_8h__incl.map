@@ -1,10 +1,11 @@
 <map id="fastarduino/devices/mpu6050.h" name="fastarduino/devices/mpu6050.h">
 <area shape="rect" id="node4" href="$common__magneto_8h.html" title="Common types used by 3D sensors (e.g. " alt="" coords="149,95,305,121"/>
-<area shape="rect" id="node5" href="$i2c__device_8h.html" title="I2C Device API. " alt="" coords="513,95,627,121"/>
-<area shape="rect" id="node9" href="$time_8h.html" title="Simple time utilities. " alt="" coords="329,95,405,121"/>
-<area shape="rect" id="node13" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="439,169,522,196"/>
-<area shape="rect" id="node6" href="$i2c_8h.html" title="I2C API common definitions. " alt="" coords="545,244,598,271"/>
-<area shape="rect" id="node7" href="$i2c__manager_8h.html" title="I2C Manager API. " alt="" coords="607,169,725,196"/>
-<area shape="rect" id="node8" href="$i2c__handler_8h_source.html" title="i2c_handler.h" alt="" coords="623,244,731,271"/>
-<area shape="rect" id="node10" href="$io_8h_source.html" title="boards/io.h" alt="" coords="244,244,339,271"/>
+<area shape="rect" id="node5" href="$i2c__device_8h.html" title="I2C Device API. " alt="" coords="330,95,445,121"/>
+<area shape="rect" id="node9" href="$time_8h.html" title="Simple time utilities. " alt="" coords="500,95,576,121"/>
+<area shape="rect" id="node13" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="770,169,853,196"/>
+<area shape="rect" id="node6" href="$i2c_8h.html" title="I2C API common definitions. " alt="" coords="229,244,282,271"/>
+<area shape="rect" id="node7" href="$i2c__manager_8h.html" title="I2C Manager API. " alt="" coords="298,169,415,196"/>
+<area shape="rect" id="node8" href="$i2c__handler_8h_source.html" title="i2c_handler.h" alt="" coords="307,244,415,271"/>
+<area shape="rect" id="node10" href="$io_8h_source.html" title="boards/io.h" alt="" coords="491,169,585,196"/>
+<area shape="rect" id="node14" href="$board_8h_source.html" title="boards/board.h" alt="" coords="607,244,725,271"/>
 </map>

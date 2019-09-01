@@ -1,7 +1,8 @@
 var searchData=
 [
   ['gain',['Gain',['../namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d',1,'devices::magneto']]],
-  ['get',['get',['../classstreams_1_1istream.html#a32740ec0eb870f855232b32d56fa0ef5',1,'streams::istream::get()'],['../classstreams_1_1istream.html#ae409e103e253f334292458af664135ff',1,'streams::istream::get(char &amp;c)'],['../classstreams_1_1istream.html#ad12377696d7affe9f80dee1dd0e4c9bd',1,'streams::istream::get(char *s, size_t n, char delim=&apos;\n&apos;)']]],
+  ['generator',['GENERATOR',['../classdevices_1_1audio_1_1_abstract_tone_player.html#a491b9f1635b99b1c84805739c4d5d7c8',1,'devices::audio::AbstractTonePlayer::GENERATOR()'],['../classdevices_1_1audio_1_1_tone_player.html#a9a1e3b410674297fe58e9abb0c2bf415',1,'devices::audio::TonePlayer::GENERATOR()'],['../classdevices_1_1audio_1_1_async_tone_player.html#a0b2babc2bb035243505f0aa6158d1b03',1,'devices::audio::AsyncTonePlayer::GENERATOR()']]],
+  ['get',['get',['../classstreams_1_1istream.html#a32740ec0eb870f855232b32d56fa0ef5',1,'streams::istream::get()'],['../classstreams_1_1istream.html#a68e9e68b91bc1d90bb2411af6d209c12',1,'streams::istream::get(char &amp;ch)'],['../classstreams_1_1istream.html#ae4e2b657fa91f8c286ffa3c3dc2e0d94',1,'streams::istream::get(char *str, size_t n, char delim=&apos;\n&apos;)']]],
   ['get_5fchannel',['get_channel',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ab94595c2c57ae43f2de904605751bec2',1,'devices::rf::NRF24L01']]],
   ['get_5fdatetime',['get_datetime',['../classdevices_1_1rtc_1_1_d_s1307.html#adaad5864aee51fa23be267184f411978',1,'devices::rtc::DS1307']]],
   ['get_5fddr',['get_DDR',['../classgpio_1_1_fast_port.html#aaa2806c2eddb28c4056ba6f95ebbe32f',1,'gpio::FastPort::get_DDR()'],['../classgpio_1_1_fast_masked_port.html#a24ece4d003f5535e863d4da2df4f4631',1,'gpio::FastMaskedPort::get_DDR()']]],
@@ -14,7 +15,7 @@ var searchData=
   ['get_5fretrans',['get_retrans',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a0e95d3ea4f07cd023238bfa1969be98d',1,'devices::rf::NRF24L01']]],
   ['get_5ftimer_5fmode',['get_timer_mode',['../classtimer_1_1_timer.html#aab067b194a8fb9c434e38685d26d7bca',1,'timer::Timer']]],
   ['get_5ftrans',['get_trans',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#a060d6151100e55bdb2adc607d8884c8b',1,'devices::rf::NRF24L01']]],
-  ['getline',['getline',['../classstreams_1_1istream.html#a3aec885e6da8c3274c579bc80384ffd6',1,'streams::istream']]],
+  ['getline',['getline',['../classstreams_1_1istream.html#ab2b480d5069588a6e9c97e89dfd7c4d8',1,'streams::istream']]],
   ['good',['good',['../classstreams_1_1ios__base.html#a0d6c236b3c0807bf269cc49bcb0fa7c7',1,'streams::ios_base']]],
   ['goodbit',['goodbit',['../classstreams_1_1ios__base.html#af0fa321bcbcac24b58dd9e01fa2063ed',1,'streams::ios_base']]],
   ['gpio',['gpio',['../namespacegpio.html',1,'']]],

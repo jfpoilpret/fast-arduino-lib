@@ -5,6 +5,7 @@ var searchData=
   ['hcsr04',['HCSR04',['../classdevices_1_1sonar_1_1_h_c_s_r04.html',1,'devices::sonar::HCSR04&lt; NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ &gt;'],['../classdevices_1_1sonar_1_1_h_c_s_r04.html#a941b39cf6e4fc8e3f20789211e76da85',1,'devices::sonar::HCSR04::HCSR04()']]],
   ['hex',['hex',['../classstreams_1_1ios__base.html#aafd29f140be78e8402102dba405d9b61',1,'streams::ios_base::hex()'],['../namespacestreams.html#a91675bd61b31e7382e8655930606f62f',1,'streams::hex()']]],
   ['high',['HIGH',['../namespacedevices_1_1magneto.html#acce78d7a9c22e2b1d83bb320326075b1ab89de3b4b81c4facfac906edf29aec8c',1,'devices::magneto']]],
+  ['high_5fbyte',['HIGH_BYTE',['../namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31',1,'bits']]],
   ['hmc5883l',['HMC5883L',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html',1,'devices::magneto::HMC5883L&lt; MODE_ &gt;'],['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#a1e7d1dcbb4cf9d5d5066c54f0ea76962',1,'devices::magneto::HMC5883L::HMC5883L()']]],
   ['hmc5883l_2eh',['hmc5883l.h',['../hmc5883l_8h.html',1,'']]]
 ];

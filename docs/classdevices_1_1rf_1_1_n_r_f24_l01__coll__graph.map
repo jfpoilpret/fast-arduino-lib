@@ -1,4 +1,4 @@
 <map id="devices::rf::NRF24L01&lt; CSN, CE &gt;" name="devices::rf::NRF24L01&lt; CSN, CE &gt;">
-<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="5,80,168,107"/>
-<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="7,5,166,32"/>
+<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title="spi::SPIDevice\&lt; CSN \&gt;" alt="" coords="5,80,176,107"/>
+<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device. " alt="" coords="7,5,175,32"/>
 </map>

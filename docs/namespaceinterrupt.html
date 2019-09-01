@@ -104,10 +104,10 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler of an External Interrupt.  <a href="classinterrupt_1_1_i_n_t_signal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classinterrupt_1_1_p_c_i_signal.html">PCISignal</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler of a Pin Change Interrupt vector, i.e.  <a href="classinterrupt_1_1_p_c_i_signal.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler of a Pin Change Interrupt vector.  <a href="classinterrupt_1_1_p_c_i_signal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structinterrupt_1_1_p_c_i_type.html">PCIType</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class that easily converts a <code>PIN</code> into the right <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector, i.e. ">PCISignal</a></code>.  <a href="structinterrupt_1_1_p_c_i_type.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class that easily converts a <code>PIN</code> into the right <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector. ">PCISignal</a></code>.  <a href="structinterrupt_1_1_p_c_i_type.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -161,6 +161,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Kind of change that will trigger an External Interrupt for a given pin. </p>
+<p>Actual <code>uint8_t</code> value matches the related mask for EICR, for up to 4 EXT pins (2 bits per pin), hence the 2-bits value is repeated 4 times. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a27eee51cf0393a75a91aac0425e65d1bad5ef89cca31152290b30f50cd1d8c536"></a>LOW_LEVEL&#160;</td><td class="fielddoc"><p>Interrupt is triggered whenever pin level is low. </p>
 </td></tr>
@@ -172,7 +173,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00104">104</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="int_8h_source.html#l00106">106</a> of file <a class="el" href="int_8h_source.html">int.h</a>.</p>
 
 </div>
 </div>

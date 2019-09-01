@@ -92,17 +92,15 @@ $(document).ready(function(){initNavTree('functions_p.html','');});
 <li>parity_error()
 : <a class="el" href="classserial_1_1_u_a_r_t_errors.html#ae4776a3526396c1b7d9c097a7a0a20d3">serial::UARTErrors</a>
 </li>
-<li>pause()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa61fbde651584a45e6bd1f43613844cd">devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</a>
-</li>
 <li>PAYLOAD_MAX
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ade723eac06149ca77f8063d06756e891">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
 </li>
 <li>PCI_TYPE
-: <a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#adca60aa1d5ca7f8a1f2ab00582f4ba32">serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;</a>
+: <a class="el" href="classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html#a6bd0cdfa450d30b0f86bbf24d6a21ee6">serial::soft::UART&lt; board::InterruptPin, RX_, TX_ &gt;</a>
+, <a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#adca60aa1d5ca7f8a1f2ab00582f4ba32">serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;</a>
 </li>
 <li>PCINT
-: <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a8bf0e1fa0d38470572293e43d4e13305">interrupt::PCISignal&lt; PORT_ &gt;</a>
+: <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#aed9572c82b46f578837fd8389ef3af24">interrupt::PCISignal&lt; PCINT_ &gt;</a>
 , <a class="el" href="structinterrupt_1_1_p_c_i_type.html#ade102a62db31cff23ad88bb268037e5b">interrupt::PCIType&lt; PIN &gt;</a>
 </li>
 <li>peek()
@@ -127,14 +125,17 @@ $(document).ready(function(){initNavTree('functions_p.html','');});
 , <a class="el" href="classinterrupt_1_1_i_n_t_signal.html#a764005686dc40d1cb6ba6dacb75a39ef">interrupt::INTSignal&lt; EXTPIN_ &gt;</a>
 , <a class="el" href="classtimer_1_1_square_wave.html#a5ffcf5a70f1b2e49f4c4b4422a8a5800">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
 </li>
-<li>play()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a9b66076721319f6d3e6c9037e01fe965">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</a>
-</li>
 <li>play_eeprom()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a1f4229a9228eb9cdda2d99d58baef84a">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</a>
+: <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a9bb99d5823fd4e9fe32684a66164fafb">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+, <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a43ff76ae9a2c70fd1d4909b452452b62">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 </li>
 <li>play_flash()
-: <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a769aaafb0a81435806d7317edc9f9e63">devices::audio::TonePlayer&lt; NTIMER, OUTPUT &gt;</a>
+: <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a17bc119d487c998a1cbf3dd69428f0ac">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+, <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a6f32cd2b7dd022ae3d05ea72fff6712b">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+</li>
+<li>play_sram()
+: <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a864966951c141e5a7d527ea911c755cf">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+, <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a2b27758850cf51ff2291edb37c7ca996">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 </li>
 <li>plos_cnt
 : <a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#a9c8601854f0b92601fd197a8358a7075">devices::rf::NRF24L01&lt; CSN, CE &gt;::observe_tx_t</a>
@@ -144,7 +145,6 @@ $(document).ready(function(){initNavTree('functions_p.html','');});
 , <a class="el" href="classgpio_1_1_fast_pin.html#a3a54cab72f69b0194d51a2b3b5afdf88">gpio::FastPin&lt; PORT_, BIT_ &gt;</a>
 , <a class="el" href="classgpio_1_1_fast_pin_type.html#a9b79040d09c151361c55fd543070c845">gpio::FastPinType&lt; DPIN_ &gt;</a>
 , <a class="el" href="classgpio_1_1_fast_port.html#a968f6fce6710b6a655391f1a6e589872">gpio::FastPort&lt; PORT_ &gt;</a>
-, <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a13a3e5d369e6beb06c05b01715308f0a">interrupt::PCISignal&lt; PORT_ &gt;</a>
 </li>
 <li>PORT_TYPE
 : <a class="el" href="classgpio_1_1_fast_pin_type.html#a7b7dc71e82eba871bdb45b1fe063f8de">gpio::FastPinType&lt; DPIN_ &gt;</a>
@@ -163,6 +163,15 @@ $(document).ready(function(){initNavTree('functions_p.html','');});
 </li>
 <li>precision()
 : <a class="el" href="classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59">streams::ios_base</a>
+</li>
+<li>prepare_eeprom()
+: <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a4235dfefc15e13b9f59df3b9e0fd6035">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+</li>
+<li>prepare_flash()
+: <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#affe7596080114d81b8ccf19611b05d3b">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
+</li>
+<li>prepare_sram()
+: <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#ab7d4b91ec792c18e090a89dc858870ee">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 </li>
 <li>PRESCALER
 : <a class="el" href="classanalog_1_1_analog_input.html#a55510fc4cb79562a68a71aa61117935a">analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;</a>

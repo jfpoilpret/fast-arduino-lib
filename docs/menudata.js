@@ -84,8 +84,7 @@ var menudata={children:[
 {text:"s",url:"namespacemembers_enum.html#index_s"},
 {text:"t",url:"namespacemembers_enum.html#index_t"},
 {text:"u",url:"namespacemembers_enum.html#index_u"},
-{text:"w",url:"namespacemembers_enum.html#index_w"}]},
-{text:"Enumerator",url:"namespacemembers_eval.html"}]}]},
+{text:"w",url:"namespacemembers_enum.html#index_w"}]}]}]},
 {text:"Classes",url:"annotated.html",children:[
 {text:"Class List",url:"annotated.html"},
 {text:"Class Index",url:"classes.html"},
@@ -160,6 +159,7 @@ var menudata={children:[
 {text:"c",url:"functions_type.html#index_c"},
 {text:"e",url:"functions_type.html#index_e"},
 {text:"f",url:"functions_type.html#index_f"},
+{text:"g",url:"functions_type.html#index_g"},
 {text:"i",url:"functions_type.html#index_i"},
 {text:"m",url:"functions_type.html#index_m"},
 {text:"p",url:"functions_type.html#index_p"},

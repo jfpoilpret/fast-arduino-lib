@@ -103,9 +103,9 @@ $(document).ready(function(){initNavTree('classi2c_1_1_i2_c_manager.html','');})
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2d9e4e95760af5ab03cd2eaf165b1aaf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_manager.html#a2d9e4e95760af5ab03cd2eaf165b1aaf">I2CManager</a> (<a class="el" href="namespacei2c.html#a30a5217313a148f7da0b484c60f3fd00">I2C_STATUS_HOOK</a> hook=0)</td></tr>
-<tr class="memdesc:a2d9e4e95760af5ab03cd2eaf165b1aaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an I2C Manager with an optional hook function for debugging.  <a href="#a2d9e4e95760af5ab03cd2eaf165b1aaf">More...</a><br /></td></tr>
-<tr class="separator:a2d9e4e95760af5ab03cd2eaf165b1aaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af32448d0e43b264d238beea50bbe0a7d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_manager.html#af32448d0e43b264d238beea50bbe0a7d">I2CManager</a> (<a class="el" href="namespacei2c.html#a30a5217313a148f7da0b484c60f3fd00">I2C_STATUS_HOOK</a> hook=nullptr)</td></tr>
+<tr class="memdesc:af32448d0e43b264d238beea50bbe0a7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an I2C Manager with an optional hook function for debugging.  <a href="#af32448d0e43b264d238beea50bbe0a7d">More...</a><br /></td></tr>
+<tr class="separator:af32448d0e43b264d238beea50bbe0a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a890a9498da6705782b629bd2c50ae285"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_manager.html#a890a9498da6705782b629bd2c50ae285">begin</a> () INLINE</td></tr>
 <tr class="memdesc:a890a9498da6705782b629bd2c50ae285"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare and enable the MCU for I2C transmission.  <a href="#a890a9498da6705782b629bd2c50ae285">More...</a><br /></td></tr>
 <tr class="separator:a890a9498da6705782b629bd2c50ae285"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,7 +131,7 @@ template&lt;I2CMode M&gt; </td></tr>
 <tr class="separator:a787499b46e8ad88439f896ceefe1da54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;I2CMode MODE_ = I2CMode::Standard&gt;<br />
+<div class="textblock"><h3>template&lt;I2CMode MODE_ = I2CMode::STANDARD&gt;<br />
 class i2c::I2CManager&lt; MODE_ &gt;</h3>
 
 <p>General I2C Manager. </p>
@@ -146,13 +146,13 @@ class i2c::I2CManager&lt; MODE_ &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="i2c__manager_8h_source.html#l00038">38</a> of file <a class="el" href="i2c__manager_8h_source.html">i2c_manager.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2d9e4e95760af5ab03cd2eaf165b1aaf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d9e4e95760af5ab03cd2eaf165b1aaf">&#9670;&nbsp;</a></span>I2CManager()</h2>
+<a id="af32448d0e43b264d238beea50bbe0a7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af32448d0e43b264d238beea50bbe0a7d">&#9670;&nbsp;</a></span>I2CManager()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+template&lt;I2CMode MODE_ = I2CMode::STANDARD&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -161,13 +161,13 @@ template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
           <td class="memname"><a class="el" href="classi2c_1_1_i2_c_manager.html">i2c::I2CManager</a>&lt; MODE_ &gt;::<a class="el" href="classi2c_1_1_i2_c_manager.html">I2CManager</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespacei2c.html#a30a5217313a148f7da0b484c60f3fd00">I2C_STATUS_HOOK</a>&#160;</td>
-          <td class="paramname"><em>hook</em> = <code>0</code></td><td>)</td>
+          <td class="paramname"><em>hook</em> = <code>nullptr</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -191,7 +191,7 @@ template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+template&lt;I2CMode MODE_ = I2CMode::STANDARD&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -223,7 +223,7 @@ template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+template&lt;I2CMode MODE_ = I2CMode::STANDARD&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -256,7 +256,7 @@ template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;I2CMode MODE_ = I2CMode::Standard&gt; </div>
+template&lt;I2CMode MODE_ = I2CMode::STANDARD&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

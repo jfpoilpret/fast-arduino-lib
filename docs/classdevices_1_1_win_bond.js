@@ -27,7 +27,7 @@ var classdevices_1_1_win_bond =
       [ "HARDWARE_PROTECTION", "classdevices_1_1_win_bond.html#a92195e06aea5dce195d5e9f5c21201d8a81b026d17e4a493defc20eccfb6c4126", null ],
       [ "POWER_SUPPLY_LOCKDOWN", "classdevices_1_1_win_bond.html#a92195e06aea5dce195d5e9f5c21201d8a6c2a84b22166a84919330f6c282e2285", null ]
     ] ],
-    [ "WinBond", "classdevices_1_1_win_bond.html#a35b591123d1c9fef7c70f1be1ebb2098", null ],
+    [ "WinBond", "classdevices_1_1_win_bond.html#ae93b2dd8e8283a771aecda76b9ee55f2", null ],
     [ "status", "classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63", null ],
     [ "set_status", "classdevices_1_1_win_bond.html#a0b36056bc755fa0b2d189b386d553521", null ],
     [ "wait_until_ready", "classdevices_1_1_win_bond.html#ad6f442d91ad487e97c68db6f1e97cc33", null ],

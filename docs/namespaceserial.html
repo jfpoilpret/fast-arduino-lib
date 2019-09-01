@@ -133,6 +133,16 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a1cc0a59518594157f23ddf16842243b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of stop bits used for serial transmission.  <a href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">More...</a><br /></td></tr>
 <tr class="separator:a1cc0a59518594157f23ddf16842243b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1abc2ad4df0b9d422f51f63c81d0a2d7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7">BufferHandling</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a60cba2874369bd3790e14ea5f8a7bc58">BufferHandling::KEEP</a> = 0x00, 
+<br />
+&#160;&#160;<a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a813461e0c58e7ad59a2fd83ca2237fec">BufferHandling::CLEAR</a> = 0x01, 
+<br />
+&#160;&#160;<a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a26eed7f078fc015c5252f817059a6f9f">BufferHandling::FLUSH</a> = 0x02
+<br />
+ }</td></tr>
+<tr class="memdesc:a1abc2ad4df0b9d422f51f63c81d0a2d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the TX/RX buffer should be handled when ending transmission (see <code>end()</code> methods) on UATX/UARX.  <a href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7">More...</a><br /></td></tr>
+<tr class="separator:a1abc2ad4df0b9d422f51f63c81d0a2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines API types used by hardware and software UART features. </p>
@@ -200,6 +210,40 @@ Enumerations</h2></td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00047">47</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
+
+</div>
+</div>
+<a id="a1abc2ad4df0b9d422f51f63c81d0a2d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1abc2ad4df0b9d422f51f63c81d0a2d7">&#9670;&nbsp;</a></span>BufferHandling</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7">serial::BufferHandling</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How the TX/RX buffer should be handled when ending transmission (see <code>end()</code> methods) on UATX/UARX. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1abc2ad4df0b9d422f51f63c81d0a2d7a60cba2874369bd3790e14ea5f8a7bc58"></a>KEEP&#160;</td><td class="fielddoc"><p>Stop transmission immediately, keep buffer as-is. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1abc2ad4df0b9d422f51f63c81d0a2d7a813461e0c58e7ad59a2fd83ca2237fec"></a>CLEAR&#160;</td><td class="fielddoc"><p>Stop transmission immediately, clear buffer. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1abc2ad4df0b9d422f51f63c81d0a2d7a26eed7f078fc015c5252f817059a6f9f"></a>FLUSH&#160;</td><td class="fielddoc"><p>Flush buffer before stopping transmission (buffer will be empty after calling <code>end()</code>). </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00059">59</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
 
 </div>
 </div>
