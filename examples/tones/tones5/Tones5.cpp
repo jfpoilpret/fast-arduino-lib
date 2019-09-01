@@ -38,8 +38,6 @@ static constexpr const board::PWMPin OUTPUT = board::PWMPin::D6_PD6_OC0A;
 #define RTTTIMER 1
 static constexpr const board::Timer NRTTTIMER = board::Timer::TIMER1;
 
-using RTT = timer::RTT<NRTTTIMER>;
-
 class AsyncTonePlayer : public devices::audio::AbstractTonePlayer<NTIMER, OUTPUT>
 {
 	using BASE = AbstractTonePlayer<NTIMER, OUTPUT>;
@@ -48,8 +46,8 @@ public:
 	using GENERATOR = typename BASE::GENERATOR;
 	using TONE_PLAY = typename BASE::TONE_PLAY;
 
-	AsyncTonePlayer(RTT& timer, GENERATOR& tone_generator)
-	: BASE{tone_generator}, timer_{timer}, status_{Status::NOT_STARTED}
+	AsyncTonePlayer(GENERATOR& tone_generator)
+	: BASE{tone_generator}, status_{Status::NOT_STARTED}
 	{
 		interrupt::register_handler(*this);
 	}
@@ -58,7 +56,7 @@ public:
 	{
 		status_ = Status::NOT_STARTED;
 		prepare_sram(melody);
-		next_time_ = timer_.millis();
+		next_time_ = 0;
 		status_ = Status::STARTED;
 	}
 
@@ -108,7 +106,6 @@ private:
 		}
 	}
 
-	RTT& timer_;
 	Status status_;
 	uint32_t next_time_;
 
@@ -185,6 +182,7 @@ static QTONEPLAY music[] =
 REGISTER_RTT_ISR_METHOD(RTTTIMER, AsyncTonePlayer, &AsyncTonePlayer::rtt_update)
 
 using GENERATOR = AsyncTonePlayer::GENERATOR;
+using RTT = timer::RTT<NRTTTIMER>;
 
 int main() __attribute__((OS_main));
 int main()
@@ -193,9 +191,9 @@ int main()
 
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
 	
-	RTT timer;
 	GENERATOR generator;
-	AsyncTonePlayer player{timer, generator};
+	AsyncTonePlayer player{generator};
+	RTT timer;
 	timer.begin();
 
 	while (true)
