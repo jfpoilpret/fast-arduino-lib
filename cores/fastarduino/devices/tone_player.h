@@ -254,42 +254,121 @@ namespace devices::audio
 		friend class AbstractTonePlayer<NTIMER, OUTPUT, QTonePlay<NTIMER, OUTPUT>>;
 	};
 
-	//TODO DOC? protected API doc?
+	/**
+	 * This low-level API defines an abstract player of melodies (defined as a
+	 * sequence of tones and durations).
+	 * You should normally not need to use it directly in programs, but rather
+	 * use specific implementations instead:
+	 * - `TonePlay`: a simple player, playing melodies in a synchronous way
+	 * (blocking until the whole melody is played until end)
+	 * - `AsyncTonePlay`: a player that can play melodies asynchronously, when
+	 * used with a Timer ISR.
+	 * 
+	 * Melodies are defined as sequence of unit information, which can be either:
+	 * - `TonePlay`s: easy to write in source code but not efficient in size of
+	 * generated code
+	 * - `QTonePlay`s: requires more effort in source code, but reduces generated
+	 * code size
+	 * Which types is used is defined as the @p TONEPLAY template parameter.
+	 * 
+	 * With this API, played melodies can be stored on 3 possible locations:
+	 * - in SRAM: this is useful when you get the melody from another support
+	 * e.g. an external flash device
+	 * - in Flash: this is the mostly used way as flash s the more abundant storage
+	 * in AVR MCU
+	 * - in EEPROM: this can be useful for short melodies, when you do not want
+	 * to waste precious SRAM and Flash
+	 * Each play API has 3 distinct methods, one for each storage strategy.
+	 * 
+	 * @tparam NTIMER the AVR timer to use for the underlying Timer
+	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
+	 * this must be the pin OCnA, where n is the AVR Timer number
+	 * @tparam TONEPLAY the type used to store melody data, `QTonePlay` by default
+	 * 
+	 * @sa TonePlay
+	 * @sa QTonePlay
+	 * @sa TonePlayer
+	 * @sa AsyncTonePlayer
+	 */
 	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay<NTIMER, OUTPUT>>
 	class AbstractTonePlayer
 	{
 	protected:
+		/** The type that holds unit of information of a melody. */
 		using TONE_PLAY = TONEPLAY;
+		/** The type of `ToneGenerator` to use as constructor's argument. */
 		using GENERATOR = ToneGenerator<NTIMER, OUTPUT>;
 
+		/**
+		 * Create a new tone player, based on an existing `ToneGenerator`.
+		 * @param tone_generator the `ToneGenerator` used to actually produce
+		 * tones.
+		 */
 		AbstractTonePlayer(GENERATOR& tone_generator)
 		: generator_{tone_generator}, loader_{}, current_play_{}, repeat_play_{}, repeat_times_{}, no_delay_{} {}
 
+		/**
+		 * Prepare playing of @p melody, which should be stored in SRAM.
+		 * Once preparation is done, actual melody playing is performed by sequenced
+		 * calls to `start_next_note()` and `stop_current_note()`.
+		 */
 		void prepare_sram(const TONE_PLAY* melody)
 		{
 			prepare_(melody, load_sram);
 		}
 
+		/**
+		 * Prepare playing of @p melody, which should be stored in EEPROM.
+		 * Once preparation is done, actual melody playing is performed by sequenced
+		 * calls to `start_next_note()` and `stop_current_note()`.
+		 */
 		void prepare_eeprom(const TONE_PLAY* melody)
 		{
 			prepare_(melody, load_eeprom);
 		}
 
+		/**
+		 * Prepare playing of @p melody, which should be stored in Flash.
+		 * Once preparation is done, actual melody playing is performed by sequenced
+		 * calls to `start_next_note()` and `stop_current_note()`.
+		 */
 		void prepare_flash(const TONE_PLAY* melody)
 		{
 			prepare_(melody, load_flash);
 		}
 
+		/**
+		 * Ask this player to start playing the next note of the melody.
+		 * @return the duration of the next note that just started playing; it is
+		 * the responsibility of the caller to wait for that duration until calling
+		 * `stop_current_note()`.
+		 * @retval 0 if no wait is needed until next call to `stop_current_note()`;
+		 * this may happen when the next melody note is not a true note but an
+		 * instruction (e.g. repeat start/end), or when the melody is finished
+		 * playing.
+		 */
 		uint16_t start_next_note()
 		{
 			return start_next_();
 		}
 
+		/**
+		 * Ask this player to stop playing the current note of the melody.
+		 * @return the duration of inter note play (short silence between 
+		 * consecutive notes)
+		 * @retval 0 if there is no delay needed between the current note and 
+		 * the next one; this may also happen when the current note is not a true
+		 * note but an instruction (e.g. repeat start/end), or when the melody
+		 * is finished playing.
+		 */
 		uint16_t stop_current_note()
 		{
 			return stop_current_();
 		}
 
+		/**
+		 * Indicate if the currently played melody is finished.
+		 */
 		bool is_finished() const
 		{
 			return (loader_ == nullptr);
@@ -390,13 +469,16 @@ namespace devices::audio
 	/**
 	 * This API defines a player of melodies, defined as a sequence of tones and
 	 * durations.
+	 * This player is synchronous, i.e. when asking it to play a melody, the called
+	 * method will not return until the melody is finished playing (or if `stop()` 
+	 * has been called, e.g. by an ISR).
 	 * 
 	 * Melodies are defined as sequence of unit information, which can be either:
 	 * - `TonePlay`s: easy to write in source code but not efficient in size of
 	 * generated code
-	 * - `TonePlayer::QTonePlay`s: requires more effort in source code, but 
-	 * reduces generated code size
-	 * Most methods exist in two flavours, one for each type.
+	 * - `QTonePlay`s: requires more effort in source code, but reduces generated
+	 * code size
+	 * Which types is used is defined as the @p TONEPLAY template parameter.
 	 * 
 	 * With this API, played melodies can be stored on 3 possible locations:
 	 * - in SRAM: this is useful when you get the melody from another support
@@ -405,14 +487,17 @@ namespace devices::audio
 	 * in AVR MCU
 	 * - in EEPROM: this can be useful for short melodies, when you do not want
 	 * to waste precious SRAM and Flash
-	 * Each play API has 3 distinct methods, one for each storage strategy.
+	 * 
+	 * Each API has 3 distinct methods, one for each storage strategy.
 	 * 
 	 * @tparam NTIMER the AVR timer to use for the underlying Timer
 	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
 	 * this must be the pin OCnA, where n is the AVR Timer number
+	 * @tparam TONEPLAY the type used to store melody data, `QTonePlay` by default
 	 * 
 	 * @sa TonePlay
 	 * @sa QTonePlay
+	 * @sa AsyncTonePlayer
 	 */
 	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay<NTIMER, OUTPUT>>
 	class TonePlayer : public AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>
@@ -420,23 +505,27 @@ namespace devices::audio
 		using BASE = AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>;
 
 	public:
-		//TODO DOCS
+		/** The type of `ToneGenerator` to use as constructor's argument. */
 		using GENERATOR = typename BASE::GENERATOR;
+		/** The type that holds unit of information of a melody. */
 		using TONE_PLAY = typename BASE::TONE_PLAY;
 
 		/**
-		 * Create a new tone player, based on an existing `ToneGenerator`.
+		 * Create a new synchronous tone player, based on an existing `ToneGenerator`.
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
 		explicit TonePlayer(GENERATOR& tone_generator) : BASE{tone_generator}, stop_{true} {}
 
 		/**
-		 * Play a melody, defined by a sequence of `TonePlay`s, stored in SRAM.
+		 * Play a melody, defined by a sequence of `TONE_PLAY`s, stored in SRAM.
 		 * This method is blocking: it will return only when the melody is
 		 * finished playing.
-		 * @param melody a pointer, in SRAM, to the sequence of `TonePlay` to be
+		 * @param melody a pointer, in SRAM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @sa play_eeprom()
+		 * @sa play_flash()
+		 * @sa stop()
 		 */
 		void play_sram(const TONE_PLAY* melody)
 		{
@@ -445,11 +534,14 @@ namespace devices::audio
 		}
 
 		/**
-		 * Play a melody, defined by a sequence of `TonePlay`s, stored in EEPROM.
+		 * Play a melody, defined by a sequence of `TONE_PLAY`s, stored in EEPROM.
 		 * This method is blocking: it will return only when the melody is
 		 * finished playing.
-		 * @param melody a pointer, in EEPROM, to the sequence of `TonePlay` to 
-		 * be played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param melody a pointer, in EEPROM, to the sequence of `TONE_PLAY` to be
+		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @sa play_sram()
+		 * @sa play_flash()
+		 * @sa stop()
 		 */
 		void play_eeprom(const TONE_PLAY* melody)
 		{
@@ -458,11 +550,14 @@ namespace devices::audio
 		}
 
 		/**
-		 * Play a melody, defined by a sequence of `TonePlay`s, stored in Flash.
+		 * Play a melody, defined by a sequence of `TONE_PLAY`s, stored in Flash.
 		 * This method is blocking: it will return only when the melody is
 		 * finished playing.
-		 * @param melody a pointer, in Flash, to the sequence of `TonePlay` to 
-		 * be played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param melody a pointer, in Flash, to the sequence of `TONE_PLAY` to be
+		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @sa play_eeprom()
+		 * @sa play_sram()
+		 * @sa stop()
 		 */
 		void play_flash(const TONE_PLAY* melody)
 		{
@@ -472,13 +567,16 @@ namespace devices::audio
 
 		/**
 		 * Stop playing current melody (if any).
-		 * Playing is not immediate but will stop at the end of the current tone.
+		 * Effect is not immediate but will stop at the end of the current tone.
 		 */
 		void stop()
 		{
 			stop_ = true;
 		}
 
+		/**
+		 * Tell if a melody is currently playing.
+		 */
 		bool is_playing() const
 		{
 			return !stop_;
@@ -502,7 +600,40 @@ namespace devices::audio
 		volatile bool stop_;
 	};
 
-	//TODO DOCS!
+	/**
+	 * This API defines a player of melodies, defined as a sequence of tones and
+	 * durations.
+	 * This player is asynchronous, i.e. when asking it to play a melody, the called
+	 * method will return immediately even before the melody starts playing; then
+	 * its `update()` method must be called frequently (from an ISR, or from a main
+	 * event loop).
+	 * 
+	 * Melodies are defined as sequence of unit information, which can be either:
+	 * - `TonePlay`s: easy to write in source code but not efficient in size of
+	 * generated code
+	 * - `QTonePlay`s: requires more effort in source code, but reduces generated
+	 * code size
+	 * Which types is used is defined as the @p TONEPLAY template parameter.
+	 * 
+	 * With this API, played melodies can be stored on 3 possible locations:
+	 * - in SRAM: this is useful when you get the melody from another support
+	 * e.g. an external flash device
+	 * - in Flash: this is the mostly used way as flash s the more abundant storage
+	 * in AVR MCU
+	 * - in EEPROM: this can be useful for short melodies, when you do not want
+	 * to waste precious SRAM and Flash
+	 * 
+	 * Each API has 3 distinct methods, one for each storage strategy.
+	 * 
+	 * @tparam NTIMER the AVR timer to use for the underlying Timer
+	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
+	 * this must be the pin OCnA, where n is the AVR Timer number
+	 * @tparam TONEPLAY the type used to store melody data, `QTonePlay` by default
+	 * 
+	 * @sa TonePlay
+	 * @sa QTonePlay
+	 * @sa TonePlayer
+	 */
 	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay<NTIMER, OUTPUT>>
 	class AsyncTonePlayer : public AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>
 	{
@@ -510,12 +641,31 @@ namespace devices::audio
 		using THIS = AsyncTonePlayer<NTIMER, OUTPUT, TONEPLAY>;
 
 	public:
+		/** The type of `ToneGenerator` to use as constructor's argument. */
 		using GENERATOR = typename BASE::GENERATOR;
+		/** The type that holds unit of information of a melody. */
 		using TONE_PLAY = typename BASE::TONE_PLAY;
 
+		/**
+		 * Create a new asynchronous tone player, based on an existing `ToneGenerator`.
+		 * @param tone_generator the `ToneGenerator` used to actually produce
+		 * tones.
+		 */
 		explicit AsyncTonePlayer(GENERATOR& tone_generator)
 		: BASE{tone_generator}, status_{Status::NOT_STARTED}, next_time_{} {}
 
+		/**
+		 * Start playing a melody, defined by a sequence of `TONE_PLAY`s, stored in SRAM.
+		 * This method is asynchronous: it returns immediately even ebfore starting
+		 * playing the first melody's note.
+		 * Actual play is performed by frequent calls of `update()`.
+		 * @param melody a pointer, in SRAM, to the sequence of `TONE_PLAY` to be
+		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @sa play_eeprom()
+		 * @sa play_flash()
+		 * @sa stop()
+		 * @sa update()
+		 */
 		void play_sram(const TONE_PLAY* melody)
 		{
 			status_ = Status::NOT_STARTED;
@@ -524,6 +674,18 @@ namespace devices::audio
 			status_ = Status::STARTED;
 		}
 
+		/**
+		 * Start playing a melody, defined by a sequence of `TONE_PLAY`s, stored in EEPROM.
+		 * This method is asynchronous: it returns immediately even ebfore starting
+		 * playing the first melody's note.
+		 * Actual play is performed by frequent calls of `update()`.
+		 * @param melody a pointer, in EEPROM, to the sequence of `TONE_PLAY` to be
+		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @sa play_sram()
+		 * @sa play_flash()
+		 * @sa stop()
+		 * @sa update()
+		 */
 		void play_eeprom(const TONE_PLAY* melody)
 		{
 			status_ = Status::NOT_STARTED;
@@ -532,6 +694,18 @@ namespace devices::audio
 			status_ = Status::STARTED;
 		}
 
+		/**
+		 * Start playing a melody, defined by a sequence of `TONE_PLAY`s, stored in Flash.
+		 * This method is asynchronous: it returns immediately even ebfore starting
+		 * playing the first melody's note.
+		 * Actual play is performed by frequent calls of `update()`.
+		 * @param melody a pointer, in Flash, to the sequence of `TONE_PLAY` to be
+		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @sa play_eeprom()
+		 * @sa play_sram()
+		 * @sa stop()
+		 * @sa update()
+		 */
 		void play_flash(const TONE_PLAY* melody)
 		{
 			status_ = Status::NOT_STARTED;
@@ -540,16 +714,34 @@ namespace devices::audio
 			status_ = Status::STARTED;
 		}
 
+		/**
+		 * Stop playing current melody (if any).
+		 * Effect is not immediate but will stop at the end of the current tone.
+		 */
 		void stop()
 		{
 			status_ = Status::NOT_STARTED;
+			this->stop_current_note();
 		}
 
+		/**
+		 * Tell if a melody is currently playing.
+		 */
 		bool is_playing() const
 		{
 			return status_ != Status::NOT_STARTED;
 		}
 
+		/**
+		 * Ask this player to update current play if needed, based on current
+		 * time (as returned by an `timer::RTT` for example).
+		 * This may be called from an ISR or from an event loop in `main()`.
+		 * This is the end program responsibility to call this method at proper
+		 * intervals, in order to ensure fidelity of melody tempo.
+		 * 
+		 * @param rtt_millis the current real time (in milliseconds), as obtained 
+		 * from an `timer::RTT` instance.
+		 */
 		void update(uint32_t rtt_millis)
 		{
 			if ((status_ != Status::NOT_STARTED) && (rtt_millis >= next_time_))
