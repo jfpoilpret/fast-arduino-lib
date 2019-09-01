@@ -172,11 +172,8 @@ Now let's take a look at the 90 bytes of data used in the FastArduino version of
 |-------------------|-------------|
 | `output_buffer`   | 64 bytes    |
 | `UATX` ISR        | 2 bytes     |
-| `UATX` vtable     | 8 bytes     |
 | "Hello, World!\n" | 16 bytes    |
-| **TOTAL**         | 90 bytes    |
-
-*vtable* is specific data created by C++ compiler for classes with `virtual` methods: every time you use virtual methods in classes, this will add more data size, this is why FastArduino avoids `virtual` as much as possible.
+| **TOTAL**         | 82 bytes    |
 
 As you can see in the table above, the constant string `"Hello, World!\n"` occupies 16 bytes of data (i.e. AVR SRAM) in addition to 16 bytes of Flash (as it is part of the program and must be stored permanently). If your program deals with a lot of constant strings like this, you may quickly meet a memory problem with SRAM usage. This is why it is more effective to keep these strings exclusively in Flash (you have no choice) but load them to SRAM only when they are needed, i.e. when they get printed to `UATX` as in the sample code.
 
@@ -190,7 +187,7 @@ We can compare the impact on sizes:
 
 @snippetdoc tables.txt uartflash_2_helloworld
 
-Although a bit more code has been added (the code to read the string from Flash into SRAM on the fly), we see 16 bytes have been removed from data, this is the size of the string constant.
+We can see here that 16 bytes have been removed from data, this is the size of the string constant.
 
 You may wonder why `"Hello, World!\n"` occupies 16 bytes, although it should use only 15 bytes (if we account for the terminating `'\0'` character); this is because the string is stored in Flash and Flash is word-addressable, not byte-addressable on AVR.
 
