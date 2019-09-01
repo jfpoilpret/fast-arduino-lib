@@ -52,7 +52,7 @@ namespace events
 	 *     containers::Queue<EVENT> event_queue{buffer};
 	 * 
 	 *     // Prepare event dispatcher, clock and scheduler
-	 * 	   Dispatcher<EVENT> dispatcher;
+	 *     Dispatcher<EVENT> dispatcher;
 	 *     watchdog::Watchdog<EVENT> watchdog{event_queue};
 	 *     Scheduler<watchdog::Watchdog<EVENT>, EVENT> scheduler{watchdog, Type::WDT_TIMER};
 	 *     dispatcher.insert(scheduler);
