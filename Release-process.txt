@@ -12,6 +12,36 @@ Release procedure
 9. Official release in github
 10. Close milestone in github
 
+FastArduino 1.3 release
+
+I am happy to announce the 4th major release of FastArduino platform.
+
+Since release 1.2 (June 2019), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.3).
+
+This is mainly a release with bug fixes, but it also brings afew enhancements.
+
+Do note the following API changes that break compatibility with programs developed with FastArduino 1.2:
+
+- `devices::audio::ToneGenerator`: API removed or updated (no more duration handled here)
+- `devices::audio::QTonePlay`: structure moved out of `devices::audio::TonePlayer`
+- `devices::audio::TonePlayer`: additional template parameter `TONE_PLAY` (either `TonePlay` or `QTonePlay`; now a `TonePlayer`
+instance can only play one type of `TONE_PLAY`.
+
+All features have been tested on all supported targets.
+
+Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a tutorial allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is publihed here
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform and submit enhancements you would like 
+to see in future versions or report issues you may discover.
+
+
+
 FastArduino 1.2 release
 
 I am happy to announce the 3rd major release of FastArduino platform.

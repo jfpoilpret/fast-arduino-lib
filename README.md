@@ -1,9 +1,9 @@
 Latest News
 ===========
 
-FastArduino v1.2 has been released on 6th June 2019.
-The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1).
-Please note that this version breaks compatibility on some API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.2).
+FastArduino v1.3 has been released on 1st September 2019.
+The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5?closed=1).
+Please note that this version breaks compatibility on some API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.3).
 
 FastArduino
 ===========
@@ -56,7 +56,7 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-Latest FastArduino release [**v1.2**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.2) has been published on 6.06.2019.
+Latest FastArduino release [**v1.3**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.3) has been published on 1.09.2019.
 
 In the current version, the project covers a lot of features; a few missing, less important, features will be released in future versions (see roadmap below); the API of current features is deemed stable and should not change in the future.
 
@@ -120,7 +120,7 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/1?closed=1) (released on 22.02.2018)
 - [Milestone v1.1](https://github.com/jfpoilpret/fast-arduino-lib/milestone/2?closed=1) (released on 26.04.2019)
 - [Milestone v1.2](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1) (released on 06.06.2019)
-- [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5) (30.09.2019)
+- [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5?closed=1) (released on 1.09.2019)
 - [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6) (30.11.2019)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (31.12.2019)
 - [2020 and later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
