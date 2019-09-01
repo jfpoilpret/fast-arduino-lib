@@ -25,7 +25,10 @@
 #include "../flash.h"
 #include "tones.h"
 
-//TODO write AsyncTonePlayer (several flavours: events, ISR...?)
+//TODO improve duration config by using musical notes durations (whole, half, quarter...)
+// along with a tempo provided at runtime (API).
+//TODO support slurs and ties (=> no internote delay)
+
 namespace devices::audio
 {
 	// Forward declaration
@@ -417,6 +420,7 @@ namespace devices::audio
 		using BASE = AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>;
 
 	public:
+		//TODO DOCS
 		using GENERATOR = typename BASE::GENERATOR;
 		using TONE_PLAY = typename BASE::TONE_PLAY;
 
@@ -425,7 +429,7 @@ namespace devices::audio
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
-		explicit TonePlayer(GENERATOR& tone_generator) : BASE{tone_generator} {}
+		explicit TonePlayer(GENERATOR& tone_generator) : BASE{tone_generator}, stop_{true} {}
 
 		/**
 		 * Play a melody, defined by a sequence of `TonePlay`s, stored in SRAM.
@@ -475,6 +479,11 @@ namespace devices::audio
 			stop_ = true;
 		}
 
+		bool is_playing() const
+		{
+			return !stop_;
+		}
+
 	private:
 		void play_()
 		{
@@ -485,11 +494,100 @@ namespace devices::audio
 				if (delay) time::delay_ms(delay);
 				delay = this->stop_current_note();
 				if (delay) time::delay_ms(delay);
-				if (this->is_finished()) break;
+				if (this->is_finished())
+					stop_ = true;
 			}
 		}
 
 		volatile bool stop_;
+	};
+
+	//TODO DOCS!
+	template<board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay<NTIMER, OUTPUT>>
+	class AsyncTonePlayer : public AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>
+	{
+		using BASE = AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>;
+		using THIS = AsyncTonePlayer<NTIMER, OUTPUT, TONEPLAY>;
+
+	public:
+		using GENERATOR = typename BASE::GENERATOR;
+		using TONE_PLAY = typename BASE::TONE_PLAY;
+
+		explicit AsyncTonePlayer(GENERATOR& tone_generator)
+		: BASE{tone_generator}, status_{Status::NOT_STARTED}, next_time_{} {}
+
+		void play_sram(const TONE_PLAY* melody)
+		{
+			status_ = Status::NOT_STARTED;
+			this->prepare_sram(melody);
+			next_time_ = 0;
+			status_ = Status::STARTED;
+		}
+
+		void play_eeprom(const TONE_PLAY* melody)
+		{
+			status_ = Status::NOT_STARTED;
+			this->prepare_eeprom(melody);
+			next_time_ = 0;
+			status_ = Status::STARTED;
+		}
+
+		void play_flash(const TONE_PLAY* melody)
+		{
+			status_ = Status::NOT_STARTED;
+			this->prepare_flash(melody);
+			next_time_ = 0;
+			status_ = Status::STARTED;
+		}
+
+		void stop()
+		{
+			status_ = Status::NOT_STARTED;
+		}
+
+		bool is_playing() const
+		{
+			return status_ != Status::NOT_STARTED;
+		}
+
+		void update(uint32_t rtt_millis)
+		{
+			if ((status_ != Status::NOT_STARTED) && (rtt_millis >= next_time_))
+			{
+				uint16_t delay;
+				Status next;
+				if (status_ == Status::PLAYING_NOTE)
+				{
+					delay = this->stop_current_note();
+					next = Status::PLAYING_INTERNOTE;
+				}
+				else
+				{
+					delay = this->start_next_note();
+					next = Status::PLAYING_NOTE;
+				}
+				
+				if (this->is_finished())
+					status_ = Status::NOT_STARTED;
+				else
+				{
+					next_time_ = rtt_millis + delay;
+					status_ = next;
+				}
+			}
+		}
+
+	private:
+		enum class Status : uint8_t
+		{
+			NOT_STARTED = 0,
+			STARTED,
+			PLAYING_NOTE,
+			PLAYING_INTERNOTE
+		};
+
+		Status status_;
+		uint32_t next_time_;
 	};
 }
 
