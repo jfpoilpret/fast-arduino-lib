@@ -532,6 +532,7 @@ namespace timer
 		static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
 
 	public:
+		//FIXME we should allow Queue<EVENT, ?>
 		/**
 		 * Create a `RTTEventCallback` that will push periodic events to @p event_queue.
 		 * 
