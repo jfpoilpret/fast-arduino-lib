@@ -45,7 +45,9 @@ int main()
 		EEPROM::read(play, tone);
 		if (tone.tone == Tone::USER0)
 			break;
-		generator.tone(tone.tone, tone.ms);
+		generator.start_tone(tone.tone);
+		time::delay_ms(tone.ms);
+		generator.stop_tone();
 		++play;
 	}
 }
