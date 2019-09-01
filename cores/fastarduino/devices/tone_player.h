@@ -304,7 +304,7 @@ namespace devices::audio
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
-		AbstractTonePlayer(GENERATOR& tone_generator)
+		explicit AbstractTonePlayer(GENERATOR& tone_generator)
 		: generator_{tone_generator}, loader_{}, current_play_{}, repeat_play_{}, repeat_times_{}, no_delay_{} {}
 
 		/**
