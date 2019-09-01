@@ -22,7 +22,6 @@
 #define TONES_HH
 
 #include "../square_wave.h"
-#include "../time.h"
 
 /**
  * Defines API for audio tones (square waves) generation and simple melodies playing.
@@ -147,7 +146,6 @@ namespace devices::audio
 	{
 	private:
 		using SQWGEN = timer::SquareWave<NTIMER, OUTPUT>;
-		static constexpr const uint32_t INTERTONE_DELAY_MS = 20;
 
 	public:
 		/** The `TimerPrescaler` type matching the selected NTIMER. */
@@ -162,15 +160,14 @@ namespace devices::audio
 
 		/**
 		 * Start generating a tone on the connected buzzer until `stop_tone()`
-		 * or `pause()` is called.
+		 * is called.
 		 * If you would like to generate a tone for a given duration, you should
 		 * use `tone()` instead.
 		 * 
 		 * @param tone the tone to generate
 		 * 
 		 * @sa stop_tone()
-		 * @sa pause()
-		 * @sa tone(Tone, uint16_t)
+		 * @sa tone(Tone)
 		 * @sa start_tone(PRESCALER, COUNTER)
 		 */
 		void start_tone(Tone tone)
@@ -180,7 +177,7 @@ namespace devices::audio
 
 		/**
 		 * Start generating a tone on the connected buzzer until `stop_tone()`
-		 * or `pause()` is called.
+		 * is called.
 		 * If you would like to generate a tone for a given duration, you should
 		 * use `tone()` instead.
 		 * 
@@ -188,32 +185,12 @@ namespace devices::audio
 		 * @param counter the timer counter value to use to produce the required tone
 		 * 
 		 * @sa stop_tone()
-		 * @sa pause()
-		 * @sa tone(PRESCALER, COUNTER, uint16_t)
+		 * @sa tone(PRESCALER, COUNTER)
 		 * @sa start_tone(Tone)
 		 */
 		void start_tone(PRESCALER prescaler, COUNTER counter)
 		{
 			generator_.start_frequency(prescaler, counter);
-		}
-
-		/**
-		 * Force a delay of the required duration and stop the tone being currently
-		 * generated to the connected buzzer.
-		 * Note that, after the note generation has been stopped, a short silence
-		 * of 20ms is forced.
-		 * 
-		 * @param ms the time to wait, in milliseconds, until note generation is
-		 * stopped
-		 * 
-		 * @sa start_tone()
-		 */
-		void pause(uint16_t ms)
-		{
-			time::delay_ms(ms);
-			generator_.stop();
-			// Short delay between tones
-			time::delay_ms(INTERTONE_DELAY_MS);
 		}
 
 		/**
@@ -225,37 +202,6 @@ namespace devices::audio
 			generator_.stop();
 		}
 
-		/**
-		 * Play the required tone for the given duration.
-		 * Note that at the end of the tone, a short silence of 20ms is forced.
-		 * 
-		 * @param tone the tone to play
-		 * @param ms the duration, in milliseconds, of the tone to generate
-		 * 
-		 * @sa start_tone(Tone)
-		 */
-		void tone(Tone tone, uint16_t ms)
-		{
-			if (tone > Tone::SILENCE) generator_.start_frequency(uint32_t(tone));
-			if (tone >= Tone::SILENCE) pause(ms);
-		}
-		
-		/**
-		 * Play the required tone for the given duration.
-		 * Note that at the end of the tone, a short silence of 20ms is forced.
-		 * 
-		 * @param prescaler the timer prescaler value to use to produce the required tone
-		 * @param counter the timer counter value to use to produce the required tone
-		 * @param ms the duration, in milliseconds, of the tone to generate
-		 * 
-		 * @sa start_tone(PRESCALER, COUNTER)
-		 */
-		void tone(PRESCALER prescaler, COUNTER counter, uint16_t ms)
-		{
-			generator_.start_frequency(prescaler, counter);
-			pause(ms);
-		}
-		
 	private:
 		SQWGEN generator_;
 	};

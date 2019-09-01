@@ -14,7 +14,7 @@
 
 /*
  * Frequency generator example, used to play the Imperial March.
- * In this example, the melody is stored in SRAM.
+ * In this example, the melody is stored in SRAM as an array of TonePlay.
  * 
  * Wiring:
  * - on Arduino UNO:
@@ -35,71 +35,72 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 static constexpr const board::PWMPin OUTPUT = board::PWMPin::D6_PD6_OC0A;
 
 using devices::audio::Tone;
+using devices::audio::TonePlay;
 using namespace devices::audio::SpecialTone;
 using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
-using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
-using QTONEPLAY = PLAYER::TONE_PLAY;
+using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT, TonePlay>;
+using TONEPLAY = PLAYER::TONE_PLAY;
 
-static QTONEPLAY music[] =
+static TONEPLAY music[] =
 {
 	// First part
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::F1, 350},
-	QTONEPLAY{Tone::C2, 150},
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::F1, 350},
-	QTONEPLAY{Tone::C2, 150},
-	QTONEPLAY{Tone::A1, 650},
-	QTONEPLAY{Tone::SILENCE, 150},
+	TONEPLAY{Tone::A1, 500},
+	TONEPLAY{Tone::A1, 500},
+	TONEPLAY{Tone::A1, 500},
+	TONEPLAY{Tone::F1, 350},
+	TONEPLAY{Tone::C2, 150},
+	TONEPLAY{Tone::A1, 500},
+	TONEPLAY{Tone::F1, 350},
+	TONEPLAY{Tone::C2, 150},
+	TONEPLAY{Tone::A1, 650},
+	TONEPLAY{Tone::SILENCE, 150},
 
 	// Second part
-	QTONEPLAY{Tone::E2, 500},
-	QTONEPLAY{Tone::E2, 500},
-	QTONEPLAY{Tone::E2, 500},
-	QTONEPLAY{Tone::F2, 350},
-	QTONEPLAY{Tone::C2, 150},
-	QTONEPLAY{Tone::Gs1, 500},
-	QTONEPLAY{Tone::F1, 350},
-	QTONEPLAY{Tone::C2, 150},
-	QTONEPLAY{Tone::A1, 650},
-	QTONEPLAY{Tone::SILENCE, 150},
+	TONEPLAY{Tone::E2, 500},
+	TONEPLAY{Tone::E2, 500},
+	TONEPLAY{Tone::E2, 500},
+	TONEPLAY{Tone::F2, 350},
+	TONEPLAY{Tone::C2, 150},
+	TONEPLAY{Tone::Gs1, 500},
+	TONEPLAY{Tone::F1, 350},
+	TONEPLAY{Tone::C2, 150},
+	TONEPLAY{Tone::A1, 650},
+	TONEPLAY{Tone::SILENCE, 150},
 
 	// Third part (repeated once)
-	QTONEPLAY{REPEAT_START},
-	QTONEPLAY{Tone::A2, 500},
-	QTONEPLAY{Tone::A1, 300},
-	QTONEPLAY{Tone::A1, 150},
-	QTONEPLAY{Tone::A2, 400},
-	QTONEPLAY{Tone::Gs2, 200},
-	QTONEPLAY{Tone::G2, 200},
-	QTONEPLAY{Tone::Fs2, 125},
-	QTONEPLAY{Tone::F2, 125},
-	QTONEPLAY{Tone::Fs2, 250},
-	QTONEPLAY{Tone::SILENCE, 250},
+	TONEPLAY{REPEAT_START},
+	TONEPLAY{Tone::A2, 500},
+	TONEPLAY{Tone::A1, 300},
+	TONEPLAY{Tone::A1, 150},
+	TONEPLAY{Tone::A2, 400},
+	TONEPLAY{Tone::Gs2, 200},
+	TONEPLAY{Tone::G2, 200},
+	TONEPLAY{Tone::Fs2, 125},
+	TONEPLAY{Tone::F2, 125},
+	TONEPLAY{Tone::Fs2, 250},
+	TONEPLAY{Tone::SILENCE, 250},
 
-	QTONEPLAY{Tone::As1, 250},
-	QTONEPLAY{Tone::Ds2, 400},
-	QTONEPLAY{Tone::D2, 200},
-	QTONEPLAY{Tone::Cs2, 200},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::B1, 125},
-	QTONEPLAY{Tone::C2, 250},
-	QTONEPLAY{Tone::SILENCE, 250},
+	TONEPLAY{Tone::As1, 250},
+	TONEPLAY{Tone::Ds2, 400},
+	TONEPLAY{Tone::D2, 200},
+	TONEPLAY{Tone::Cs2, 200},
+	TONEPLAY{Tone::C2, 125},
+	TONEPLAY{Tone::B1, 125},
+	TONEPLAY{Tone::C2, 250},
+	TONEPLAY{Tone::SILENCE, 250},
 
-	QTONEPLAY{Tone::F1, 125},
-	QTONEPLAY{Tone::Gs1, 500},
-	QTONEPLAY{Tone::F1, 375},
-	QTONEPLAY{Tone::A1, 125},
-	QTONEPLAY{Tone::C2, 500},
-	QTONEPLAY{Tone::A1, 375},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::E2, 650},
-	QTONEPLAY{Tone::SILENCE, 250},
-	QTONEPLAY{REPEAT_END, 1},
+	TONEPLAY{Tone::F1, 125},
+	TONEPLAY{Tone::Gs1, 500},
+	TONEPLAY{Tone::F1, 375},
+	TONEPLAY{Tone::A1, 125},
+	TONEPLAY{Tone::C2, 500},
+	TONEPLAY{Tone::A1, 375},
+	TONEPLAY{Tone::C2, 125},
+	TONEPLAY{Tone::E2, 650},
+	TONEPLAY{Tone::SILENCE, 250},
+	TONEPLAY{REPEAT_END, 1},
 
-	QTONEPLAY{END, 0}
+	TONEPLAY{END, 0}
 };
 
 int main() __attribute__((OS_main));
