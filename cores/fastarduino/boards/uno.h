@@ -195,8 +195,10 @@ namespace board
 		AREF = 0,
 		/** Voltage reference is given by the `AVcc` pin. */
 		AVCC,
-		/** Voltage reference is internal 1.1V reference, generated from the
-		 * internal bandgap reference. */
+		/** 
+		 * Voltage reference is internal 1.1V reference, generated from the
+		 * internal bandgap reference.
+		 */
 		INTERNAL_1_1V
 	};
 	
