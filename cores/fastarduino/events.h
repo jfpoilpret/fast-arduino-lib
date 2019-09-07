@@ -201,7 +201,10 @@ namespace events
 	{
 		static constexpr const bool IS_EVENT = false;
 	};
-	template<> template<typename T> struct Event_trait<Event<T>>
+	// Note: the following line compiled with GCC 7.4 but does not with 9.2
+	// template<> template<typename T> struct Event_trait<Event<T>>
+	// Replaced with this line to make GCC 9.2 happy
+	template<typename T> struct Event_trait<Event<T>>
 	{
 		static constexpr const bool IS_EVENT = true;
 	};
