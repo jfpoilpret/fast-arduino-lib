@@ -413,7 +413,7 @@ namespace eeprom
 
 	protected:
 		/// @cond notdocumented
-		static bool check(uint16_t address, uint16_t size)
+		static bool constexpr check(uint16_t address, uint16_t size)
 		{
 			return size && (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
 		}
