@@ -82,7 +82,6 @@ var hierarchy =
       [ "streams::istream", "classstreams_1_1istream.html", null ],
       [ "streams::ostream", "classstreams_1_1ostream.html", null ]
     ] ],
-    [ "watchdog::isr_handler", "structwatchdog_1_1isr__handler.html", null ],
     [ "LinkedListImpl", null, [
       [ "containers::LinkedList< T_ >", "classcontainers_1_1_linked_list.html", null ],
       [ "containers::LinkedList< EventHandler< EVENT > >", "classcontainers_1_1_linked_list.html", [

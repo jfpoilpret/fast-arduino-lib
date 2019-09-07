@@ -459,7 +459,7 @@ Variables</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">TIMER</td><td>the <code><a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb" title="Defines all timers available for target MCU. ">board::Timer</a></code> type used to instantiate the <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">devices::sonar::HCSR04</a></code> template class. </td></tr>
     <tr><td class="paramname">PCI_NUM</td><td>the number of the <code>PCINT</code> vector for the <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> connected to the echo pin </td></tr>
-    <tr><td class="paramname">SONAR_PINS</td><td>the pair of pins connected to the 1st sonar; this is a specific type, created by <code><a class="el" href="sonar_8h.html#a17710e8c7b1d799fbe0561fca1bfd551" title="Macro used to build proper arguments for REGISTER_DISTINCT_HCSR04_PCI_ISR(). ">SONAR_PINS()</a></code> macro. </td></tr>
+    <tr><td class="paramname">SONAR_PINS1</td><td>the pair of pins connected to the 1st sonar; this is a specific type, created by <code><a class="el" href="sonar_8h.html#a17710e8c7b1d799fbe0561fca1bfd551" title="Macro used to build proper arguments for REGISTER_DISTINCT_HCSR04_PCI_ISR(). ">SONAR_PINS()</a></code> macro. </td></tr>
     <tr><td class="paramname">...</td><td>other pairs of (trigger pin, echo pin) for other <code>HCSR04</code></td></tr>
   </table>
   </dd>
@@ -736,7 +736,6 @@ Variables</h2></td></tr>
     <tr><td class="paramname">PCI_NUM</td><td>the number of the <code>PCINT</code> vector for the <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> connected to the echo pin </td></tr>
     <tr><td class="paramname">TRIGGER</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sonar trigger pin </td></tr>
     <tr><td class="paramname">ECHO</td><td>the <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> connected to the sonar echo pin </td></tr>
-    <tr><td class="paramname">HANDLER</td><td>the class holding the callback method </td></tr>
     <tr><td class="paramname">CALLBACK</td><td>the function that will be called when the sonar has received the echo pulse</td></tr>
   </table>
   </dd>
@@ -747,7 +746,7 @@ Variables</h2></td></tr>
 <dd>
 <a class="el" href="sonar_8h.html#a3e79a9ca11e9e91fc368fa489a3aa4d8" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::HCSR04 to listen to echo...">REGISTER_HCSR04_PCI_ISR_METHOD()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00211">211</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00210">210</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -802,7 +801,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="realtime__timer_8h.html#afc2dfeccc5d417ae872d836d4cfb5d8c" title="Register the necessary ISR (Interrupt Service Routine) for a timer::RTT to work properly. ">REGISTER_RTT_ISR()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00233">233</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00232">232</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -871,7 +870,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#ac36a8561dfc7a239085ed273e72ba3f7" title="Register the necessary ISR (Interrupt Service Routine) for a set of devices::sonar::HCSR04 to be noti...">REGISTER_HCSR04_RTT_TIMEOUT()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00258">258</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00257">257</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -933,7 +932,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#ac36a8561dfc7a239085ed273e72ba3f7" title="Register the necessary ISR (Interrupt Service Routine) for a set of devices::sonar::HCSR04 to be noti...">REGISTER_HCSR04_RTT_TIMEOUT()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00283">283</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00282">282</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -1000,6 +999,7 @@ HCSR04::async_echo() </dd>
     <tr><td class="paramname">PCI_NUM</td><td>the number of the <code>PCINT</code> vector for the <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> connected to the echo pin </td></tr>
     <tr><td class="paramname">TRIGGER</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sonars trigger pins </td></tr>
     <tr><td class="paramname">ECHO_PORT</td><td>the <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU. ">board::Port</a></code> connected to all sonar echo pins </td></tr>
+    <tr><td class="paramname">ECHO_MASK</td><td>the mask to apply to <code>ECHO_PORT</code> to define which pins of this port are connected to a sonar </td></tr>
     <tr><td class="paramname">HANDLER</td><td>the class holding the callback method </td></tr>
     <tr><td class="paramname">CALLBACK</td><td>the method of <code>HANDLER</code> that will be called when one sonar echo pin changes level, i.e. when a leading or trailing edge of the echo pulse is received; this must be a proper PTMF (pointer to member function) which takes one argument of type <code>const SonarEvent&lt;TIMER&gt;&amp;</code>.</td></tr>
   </table>
@@ -1013,7 +1013,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#a2e5344136bf09598861c164a152c9694" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00312">312</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00313">313</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -1074,6 +1074,7 @@ HCSR04::async_echo() </dd>
     <tr><td class="paramname">PCI_NUM</td><td>the number of the <code>PCINT</code> vector for the <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins...">board::InterruptPin</a></code> connected to the echo pin </td></tr>
     <tr><td class="paramname">TRIGGER</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU. ">board::DigitalPin</a></code> connected to the sonars trigger pins </td></tr>
     <tr><td class="paramname">ECHO_PORT</td><td>the <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU. ">board::Port</a></code> connected to all sonar echo pins </td></tr>
+    <tr><td class="paramname">ECHO_MASK</td><td>the mask to apply to <code>ECHO_PORT</code> to define which pins of this port are connected to a sonar </td></tr>
     <tr><td class="paramname">CALLBACK</td><td>the function that will be called when one sonar echo pin changes level, i.e. when a leading or trailing edge of the echo pulse is received; this must take one argument of type <code>const SonarEvent&lt;TIMER&gt;&amp;</code>.</td></tr>
   </table>
   </dd>
@@ -1086,7 +1087,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00339">339</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00342">342</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -1144,7 +1145,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00364">364</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00367">367</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -1195,7 +1196,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#a2e5344136bf09598861c164a152c9694" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_METHOD()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00388">388</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00391">391</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -1264,7 +1265,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#a19777a99a5fd97d4fed4561306f0f869" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_FUNCTION()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00420">420</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00423">423</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -1326,7 +1327,7 @@ HCSR04::async_echo() </dd>
 <dd>
 <a class="el" href="sonar_8h.html#a16fb5a94c4ec0a8909528ec8592564e8" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_TRIGGER_METHOD()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00451">451</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00454">454</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -1352,7 +1353,7 @@ HCSR04::async_echo() </dd>
 </ul>
 <p>It declares the class where it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00473">473</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00476">476</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>

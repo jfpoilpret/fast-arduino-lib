@@ -13,7 +13,7 @@ var searchData=
   ['uarx_3c_20board_3a_3ainterruptpin_2c_20rx_5f_20_3e',['UARX&lt; board::InterruptPin, RX_ &gt;',['../classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html',1,'serial::soft']]],
   ['uarx_5fext',['UARX_EXT',['../namespaceserial_1_1soft.html#a8df57c2eef46710582fd0e1bbb71aa25',1,'serial::soft']]],
   ['uarx_5fpci',['UARX_PCI',['../namespaceserial_1_1soft.html#a635413d48cfb8a9c87a89cfe5260f4fe',1,'serial::soft']]],
-  ['uatx',['UATX',['../classserial_1_1soft_1_1_u_a_t_x.html',1,'serial::soft::UATX&lt; TX_ &gt;'],['../classserial_1_1hard_1_1_u_a_t_x.html',1,'serial::hard::UATX&lt; USART_ &gt;'],['../classserial_1_1soft_1_1_u_a_t_x.html#ab823008e711802840b92fe2c1339f6b3',1,'serial::soft::UATX::UATX()'],['../classserial_1_1hard_1_1_u_a_t_x.html#aac216368224107002b59b0400626306e',1,'serial::hard::UATX::UATX()']]],
+  ['uatx',['UATX',['../classserial_1_1hard_1_1_u_a_t_x.html',1,'serial::hard::UATX&lt; USART_ &gt;'],['../classserial_1_1soft_1_1_u_a_t_x.html',1,'serial::soft::UATX&lt; TX_ &gt;'],['../classserial_1_1soft_1_1_u_a_t_x.html#ab823008e711802840b92fe2c1339f6b3',1,'serial::soft::UATX::UATX()'],['../classserial_1_1hard_1_1_u_a_t_x.html#aac216368224107002b59b0400626306e',1,'serial::hard::UATX::UATX()']]],
   ['unitbuf',['unitbuf',['../classstreams_1_1ios__base.html#adf13f8be7e7aadff99dc440276d23e69',1,'streams::ios_base::unitbuf()'],['../namespacestreams.html#ae5c27f1451f13e2158abbf5abe491830',1,'streams::unitbuf()']]],
   ['unitprefix',['UnitPrefix',['../namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0',1,'utils']]],
   ['unlock',['unlock',['../classcontainers_1_1_queue.html#ac9d85639dea318b57ff77760d109384e',1,'containers::Queue']]],

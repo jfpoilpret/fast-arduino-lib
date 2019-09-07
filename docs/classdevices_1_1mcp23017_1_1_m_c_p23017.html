@@ -463,7 +463,7 @@ template&lt;MCP23017Port P_&gt; </div>
   <table class="params">
     <tr><td class="paramname">int_pins</td><td>each bit sets if the matching pin shall generate interrupts </td></tr>
     <tr><td class="paramname">ref</td><td>contains the reference value for comparison with the actual input pin; if input differs, then an interrupt will be triggered for that pin, provided that <code>compare_ref</code> for that bit is also <code>1</code>. </td></tr>
-    <tr><td class="paramname">compare_ref</td><td>each bit indicates the condition for which the matching input pin can generate interrupts; if <code>0</code>, an interrupt is generated every time the input pin changes level, if <code>1</code>, an interrupt is generated every time the input pin level changes to be diferent than matching bit. </td></tr>
+    <tr><td class="paramname">compare_ref</td><td>each bit indicates the condition for which the matching input pin can generate interrupts; if <code>0</code>, an interrupt is generated every time the input pin changes level, if <code>1</code>, an interrupt is generated every time the input pin level changes to be diferent than the matching bit. </td></tr>
   </table>
   </dd>
 </dl>

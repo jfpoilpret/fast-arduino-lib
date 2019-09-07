@@ -4,6 +4,7 @@ var searchData=
   ['observe_5ftx_5ft',['observe_tx_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html',1,'devices::rf::NRF24L01&lt; CSN, CE &gt;::observe_tx_t'],['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#a018c22c31c2ef9ad46eb57ab6f31ea7b',1,'devices::rf::NRF24L01::observe_tx_t::observe_tx_t()']]],
   ['oct',['oct',['../classstreams_1_1ios__base.html#a345081e2763697e99665dbd025d16a58',1,'streams::ios_base::oct()'],['../namespacestreams.html#a9c09ef93f2d071416214cbe8ed0e1710',1,'streams::oct()']]],
   ['odd',['ODD',['../namespaceserial.html#a770c86bfde96ad529293b7b322422032a57a1355d5527355458c7cc08ba70bf94',1,'serial']]],
+  ['ok',['OK',['../namespacei2c_1_1_status.html#a64da02c9095e825b16389e29f86d4192',1,'i2c::Status']]],
   ['on_5fevent',['on_event',['../classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09',1,'events::EventHandler']]],
   ['on_5fschedule',['on_schedule',['../classevents_1_1_job.html#a09270ba4033ca2fffc8134d6f1b428a1',1,'events::Job']]],
   ['one',['ONE',['../namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396',1,'serial']]],

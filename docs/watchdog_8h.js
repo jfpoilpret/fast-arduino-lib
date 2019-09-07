@@ -3,7 +3,6 @@ var watchdog_8h =
     [ "WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", "classwatchdog_1_1_watchdog_signal" ],
     [ "WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", "classwatchdog_1_1_watchdog_r_t_t" ],
     [ "Watchdog", "classwatchdog_1_1_watchdog.html", "classwatchdog_1_1_watchdog" ],
-    [ "isr_handler", "structwatchdog_1_1isr__handler.html", "structwatchdog_1_1isr__handler" ],
     [ "REGISTER_WATCHDOG_CLOCK_ISR", "watchdog_8h.html#a6998639a03718afa44f5626c17ce8994", null ],
     [ "REGISTER_WATCHDOG_RTT_ISR", "watchdog_8h.html#acf8c96f84107c380f8208e0e8f22a879", null ],
     [ "REGISTER_WATCHDOG_ISR_METHOD", "watchdog_8h.html#a04cf0d3a526304c80ae5bf73ee63edb0", null ],

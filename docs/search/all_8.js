@@ -51,7 +51,6 @@ var searchData=
   ['is_5fsuspended',['is_suspended',['../classtimer_1_1_timer.html#ae6b17fe07b82e343aa0360430bfb8671',1,'timer::Timer']]],
   ['is_5fuint8_5for_5fuint16',['is_uint8_or_uint16',['../namespacetypes__traits.html#a739ba92939efc7c21dbe34a19234373e',1,'types_traits']]],
   ['is_5fzero',['is_zero',['../namespaceutils.html#a3525bf2bf63c9f906bc9b952f0d54355',1,'utils']]],
-  ['isr_5fhandler',['isr_handler',['../structwatchdog_1_1isr__handler.html',1,'watchdog']]],
   ['istream',['istream',['../classstreams_1_1istream.html',1,'streams::istream'],['../classstreams_1_1istream.html#a3ff127afaaf8c1049cba8c27bc920c80',1,'streams::istream::istream()']]],
   ['istreambuf',['istreambuf',['../classstreams_1_1istreambuf.html',1,'streams']]],
   ['item',['item',['../classcontainers_1_1_link_wrapper.html#af252032a9e9ae6b922eb18dc40907461',1,'containers::LinkWrapper::item()'],['../classcontainers_1_1_link_wrapper.html#a7e789a64063266c6d5dcfa66753936f1',1,'containers::LinkWrapper::item() const']]],

@@ -133,8 +133,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog&lt; EVENT &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple API to use watchdog timer as a clock for events generation.  <a href="classwatchdog_1_1_watchdog.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwatchdog_1_1isr__handler.html">watchdog::isr_handler</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -346,8 +344,7 @@ Enumerations</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span><a class="code" href="structwatchdog_1_1isr__handler.html">watchdog::isr_handler</a>;  \</div><div class="line">    friend void ::WDT_vect();</div><div class="ttc" id="structwatchdog_1_1isr__handler_html"><div class="ttname"><a href="structwatchdog_1_1isr__handler.html">watchdog::isr_handler</a></div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00335">watchdog.h:335</a></div></div>
-</div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">friend</span> <span class="keyword">struct </span>watchdog::isr_handler;  \</div><div class="line">    friend void ::WDT_vect();</div></div><!-- fragment -->
 <p>This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_WATCHDOG_ISR_METHOD</code>. </p>
 <p>It declares the class where it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
 
