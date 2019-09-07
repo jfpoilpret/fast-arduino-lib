@@ -30,8 +30,11 @@ namespace devices::magneto
 	 */
 	struct Sensor3D
 	{
+		/** Sensor value on X axis. */
 		int16_t x;
+		/** Sensor value on Y axis. */
 		int16_t y;
+		/** Sensor value on Z axis. */
 		int16_t z;
 	};
 }

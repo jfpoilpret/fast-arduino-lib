@@ -97,7 +97,7 @@ namespace timer
 		 * If possible, you should prefer the other start_frequency() that directly
 		 * takes a prescaler and a counter value (those can be pre-calculated at
 		 * compile-time).
-		 * @param the frequency, in Hz, of the square wave t generate
+		 * @param frequency the frequency, in Hz, of the square wave t generate
 		 * 
 		 * @sa start_frequency(typename TIMER::PRESCALER, typename TIMER::TYPE)
 		 */

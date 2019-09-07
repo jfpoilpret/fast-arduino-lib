@@ -193,7 +193,7 @@ namespace i2c
 		if (hook_) hook_(expected_status, status_);
 		if (status_ == expected_status)
 		{
-			status_ = 0;
+			status_ = Status::OK;
 			return true;
 		}
 		else

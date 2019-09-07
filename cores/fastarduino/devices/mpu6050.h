@@ -132,7 +132,9 @@ namespace devices::magneto
 	{
 		FIFOEnable() : reserved{}, accel{}, gyro_z{}, gyro_y{}, gyro_x{}, temperature{} {}
 
+		/// @cond notdocumented
 		uint8_t reserved : 3;
+		/// @endcond
 		/** If `1`, accelerometer measures on 3 axes will be loaded to FIFO buffer. */
 		uint8_t accel : 1;
 		/** If `1`, gyroscope measures on Z axis will be loaded to FIFO buffer. */
@@ -156,10 +158,14 @@ namespace devices::magneto
 
 		/** If `1`, the Data Ready interrupt is enabled. */
 		uint8_t data_ready : 1;
+		/// @cond notdocumented
 		uint8_t reserved1 : 3;
+		/// @endcond
 		/** If `1`, a FIFO buffer overflow will generate an interrupt. */
 		uint8_t overflow : 1;
+		/// @cond notdocumented
 		uint8_t reserved2 : 3;
+		/// @endcond
 	};
 
 	/**

@@ -17,6 +17,7 @@
 
 namespace power
 {
+	/// @cond notdocumented
 	void sleep(uint8_t mode)
 	{
 		set_sleep_mode(mode);
@@ -26,4 +27,5 @@ namespace power
 		sleep_cpu();
 		sleep_disable();
 	}
+	/// @endcond
 }

@@ -96,16 +96,14 @@ namespace devices::rf
 		 * Construct NRF transceiver with given channel and pin numbers
 		 * for SPI slave select, activity enable and interrupt. Default
 		 * in parenthesis (Standard/Mega Arduino/TinyX4).
-		 * @param[in] net network address.
-		 * @param[in] dev device address.
-		 * @param[in] csn spi slave select pin number (default CS0).
-		 * @param[in] ce chip enable activates pin number (default GPIO P1-22).
+		 * @param[in] net network address
+		 * @param[in] dev device address
 		 */
 		NRF24L01(uint16_t net, uint8_t dev);
 
 		/**
 		 * Get driver channel.
-		 * @return channel.
+		 * @return channel
 		 */
 		uint8_t get_channel() const
 		{
@@ -114,7 +112,7 @@ namespace devices::rf
 
 		/**
 		 * Get driver network address.
-		 * @return network address.
+		 * @return network address
 		 */
 		uint16_t get_network_address() const
 		{
@@ -123,7 +121,7 @@ namespace devices::rf
 
 		/**
 		 * Get driver device address.
-		 * @return device address.
+		 * @return device address
 		 */
 		uint8_t get_device_address() const
 		{
@@ -133,8 +131,8 @@ namespace devices::rf
 		/**
 		 * Set network and device address. Do not use the broadcast
 		 * address(0). Should be used before calling begin().
-		 * @param[in] net network address.
-		 * @param[in] dev device address.
+		 * @param[in] net network address
+		 * @param[in] dev device address
 		 */
 		void set_address(int16_t net, uint8_t dev)
 		{
@@ -145,7 +143,7 @@ namespace devices::rf
 		/**
 		 * Set device transmission channel. Should be used before calling
 		 * begin().
-		 * @param[in] channel.
+		 * @param[in] channel
 		 */
 		void set_channel(uint8_t channel)
 		{
@@ -189,10 +187,10 @@ namespace devices::rf
 		 * @tparam TREF the type passed for @p buf, typically a const reference 
 		 * to type @p T
 		 * 
-		 * @param[in] dest destination network address.
-		 * @param[in] port device port (or message type).
-		 * @param[in] buf reference of object to transmit.
-		 * @return number of bytes send or negative error code.
+		 * @param[in] dest destination network address
+		 * @param[in] port device port (or message type)
+		 * @param[in] buf reference of object to transmit
+		 * @return number of bytes send or negative error code
 		 * @retval errors::EMSGSIZE if @p len > `PAYLOAD_MAX`
 		 * @retval errors::EIO if a transmission failure happened
 		 * 
@@ -208,9 +206,9 @@ namespace devices::rf
 		/**
 		 * Send an empty message.
 		 * 
-		 * @param[in] dest destination network address.
-		 * @param[in] port device port (or message type).
-		 * @return number of bytes send or negative error code.
+		 * @param[in] dest destination network address
+		 * @param[in] port device port (or message type)
+		 * @return number of bytes send or negative error code
 		 * @retval errors::EMSGSIZE if @p len > `PAYLOAD_MAX`
 		 * @retval errors::EIO if a transmission failure happened
 		 * 
@@ -230,14 +228,14 @@ namespace devices::rf
 		 * @tparam TREF the type passed for @p buf, typically a reference 
 		 * to type @p T
 		 * 
-		 * @param[out] src source network address.
-		 * @param[out] port device port (or message type).
+		 * @param[out] src source network address
+		 * @param[out] port device port (or message type)
 		 * @param[out] buf reference to object to fill with received payload;
 		 * note that no constructor will get called during this operation, it is
 		 * best to use simple `struct` for type @p T.
-		 * @param[in] buf buffer to store incoming message.
-		 * @param[in] ms maximum time out period.
-		 * @return number of bytes received or negative error code.
+		 * @param[in] buf buffer to store incoming message
+		 * @param[in] ms maximum time out period
+		 * @return number of bytes received or negative error code
 		 * @retval errors::ETIME if nothing was received and a timeout occurred
 		 * after @p ms elapsed
 		 * @retval errors::EMSGSIZE if a payload error occurred from the chip
@@ -257,10 +255,10 @@ namespace devices::rf
 		 * Receive an empty message.
 		 * The source network address is returned in the parameter src.
 		 * 
-		 * @param[out] src source network address.
-		 * @param[out] port device port (or message type).
-		 * @param[in] ms maximum time out period.
-		 * @return number of bytes received or negative error code.
+		 * @param[out] src source network address
+		 * @param[out] port device port (or message type)
+		 * @param[in] ms maximum time out period
+		 * @return number of bytes received or negative error code
 		 * @retval errors::ETIME if nothing was received and a timeout occurred
 		 * after @p ms elapsed
 		 * @retval errors::EMSGSIZE if a payload error occurred from the chip
@@ -277,13 +275,13 @@ namespace devices::rf
 
 		/**
 		 * Set output power level (-30..10 dBm)
-		 * @param[in] dBm.
+		 * @param[in] dBm
 		 */
 		void set_output_power_level(int8_t dBm);
 
 		/**
 		 * Return number of transmitted messages.
-		 * @return transmit count.
+		 * @return transmit count
 		 */
 		uint16_t get_trans() const
 		{
@@ -292,7 +290,7 @@ namespace devices::rf
 
 		/**
 		 * Return number of retransmissions.
-		 * @return retransmit count.
+		 * @return retransmit count
 		 */
 		uint16_t get_retrans() const
 		{
@@ -301,7 +299,7 @@ namespace devices::rf
 
 		/**
 		 * Return number of dropped messages.
-		 * @return drop count.
+		 * @return drop count
 		 */
 		uint16_t get_drops() const
 		{
@@ -317,9 +315,9 @@ namespace devices::rf
 		 * @tparam TREF the type passed for @p buf, typically a const reference 
 		 * to type @p T
 		 * 
-		 * @param[in] port device port (or message type).
-		 * @param[in] buf reference of object to transmit.
-		 * @return number of bytes send or negative error code.
+		 * @param[in] port device port (or message type)
+		 * @param[in] buf reference of object to transmit
+		 * @return number of bytes send or negative error code
 		 */
 		template<typename T, typename TREF = const T&>
 		int broadcast(uint8_t port, TREF buf)
@@ -417,7 +415,7 @@ namespace devices::rf
 			/**
 			 * Construct transmitter performance statistics from register
 			 * reading.
-			 * @param[in] value register reading.
+			 * @param[in] value register reading
 			 */
 			explicit observe_tx_t(uint8_t value) INLINE : as_byte{value} {}
 		};
@@ -442,7 +440,7 @@ namespace devices::rf
 
 			/**
 			 * Construct transmitter queue status from register reading.
-			 * @param[in] value register reading.
+			 * @param[in] value register reading
 			 */
 			explicit fifo_status_t(uint8_t value) INLINE : as_byte{value} {}
 		};
@@ -723,6 +721,7 @@ namespace devices::rf
 		state_ = State::POWER_DOWN_STATE;
 	}
 
+	/// @cond notdocumented
 	template<board::DigitalPin CSN, board::DigitalPin CE>
 	int NRF24L01<CSN, CE>::send_(uint8_t dest, uint8_t port, const uint8_t* buf, size_t len)
 	{
@@ -801,6 +800,7 @@ namespace devices::rf
 		// Try and read payload from FIFO
 		return read_fifo_payload(src, port, buf, size);
 	}
+	/// @endcond
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::set_output_power_level(int8_t dBm)
 	{
@@ -817,6 +817,7 @@ namespace devices::rf
 		write_register(Register::RF_SETUP, RF_DR_2MBPS | pwr);
 	}
 
+	/// @cond notdocumented
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::transmit_mode(uint8_t dest)
 	{
 		using namespace nrf24l01p_internals;
@@ -884,6 +885,7 @@ namespace devices::rf
 		this->end_transfer();
 		return count;
 	}
+	/// @endcond
 }
 
 #endif /* NRF24L01_HH */

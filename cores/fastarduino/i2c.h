@@ -60,22 +60,43 @@ namespace i2c
 	 * Transmission status codes.
 	 * Transmission status is returned by all `i2c::I2CDevice` read and write methods.
 	 * This status is also transmitted to an optional hook function for debug purposes.
+	 * 
+	 * All codes are defined and directly mapped from ATmega328 datasheet 
+	 * (section 22. "2-wire Serial interface", tables 22-2 and 22-3).
+	 * 
+	 * You will probably never need to use these codes in your program or own devices
+	 * driver implementations, except `Status::OK`.
+	 * 
 	 * @sa i2c::I2CManager::status()
 	 */
 	namespace Status
 	{
+		/** Code indicating the last called method executed as expected without any issue. */
 		constexpr const uint8_t OK = 0x00;
+		/** [Transmitter/Receiver modes] A START condition has been transmitted. */
 		constexpr const uint8_t START_TRANSMITTED = 0x08;
+		/** [Transmitter/Receiver modes] A repeated START condition has been transmitted. */
 		constexpr const uint8_t REPEAT_START_TRANSMITTED = 0x10;
+		/** [Transmitter mode] SLA+W has been transmitted; ACK has been received. */
 		constexpr const uint8_t SLA_W_TRANSMITTED_ACK = 0x18;
+		/** [Transmitter mode] SLA+W has been transmitted; NOT ACK has been received. */
 		constexpr const uint8_t SLA_W_TRANSMITTED_NACK = 0x20;
+		/** [Transmitter mode] Data byte has been transmitted; ACK has been received. */
 		constexpr const uint8_t DATA_TRANSMITTED_ACK = 0x28;
+		/** [Transmitter mode] Data byte has been transmitted; NOT ACK has been received. */
 		constexpr const uint8_t DATA_TRANSMITTED_NACK = 0x30;
+		/**
+		 * [Transmitter mode] Abitration lost in SLA+W or data bytes. 
+		 * [Receiver mode] Abitration lost in SLA+R or NOT ACK bit. 
+		 */
 		constexpr const uint8_t ARBITRATION_LOST = 0x38;
-
+		/** [Receiver mode] SLA+R has been transmitted; ACK has been received. */
 		constexpr const uint8_t SLA_R_TRANSMITTED_ACK = 0x40;
+		/** [Receiver mode] SLA+R has been transmitted; NOT ACK has been received. */
 		constexpr const uint8_t SLA_R_TRANSMITTED_NACK = 0x48;
+		/** [Receiver mode] Data byte has been transmitted; ACK has been returned. */
 		constexpr const uint8_t DATA_RECEIVED_ACK = 0x50;
+		/** [Receiver mode] Data byte has been transmitted; NOT ACK has been returned. */
 		constexpr const uint8_t DATA_RECEIVED_NACK = 0x58;
 	}
 

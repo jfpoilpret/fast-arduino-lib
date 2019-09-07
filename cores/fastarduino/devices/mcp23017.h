@@ -195,7 +195,7 @@ namespace devices::mcp23017
 		 * @param compare_ref each bit indicates the condition for which the matching 
 		 * input pin can generate interrupts; if `0`, an interrupt is generated every
 		 * time the input pin changes level, if `1`, an interrupt is generated every
-		 * time the input pin level changes to be diferent than @ref matching bit.
+		 * time the input pin level changes to be diferent than the matching bit.
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.

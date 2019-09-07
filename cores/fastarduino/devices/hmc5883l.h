@@ -113,7 +113,9 @@ namespace devices::magneto
 
 		uint8_t ready : 1;
 		uint8_t lock : 1;
+		/// @cond notdocumented
 		uint8_t reserved : 6;
+		/// @endcond
 	};
 
 	/**

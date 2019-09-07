@@ -90,6 +90,7 @@ namespace types_traits
 	 */
 	template<class T, class B> struct derives_from
 	{
+		/// @cond notdocumented
 		static void constraints(T* p)
 		{
 			UNUSED B* pb = p;
@@ -98,6 +99,7 @@ namespace types_traits
 		{
 			UNUSED void (*p)(T*) = constraints;
 		}
+		/// @endcond
 	};
 }
 

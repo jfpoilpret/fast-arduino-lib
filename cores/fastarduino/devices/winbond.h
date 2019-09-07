@@ -273,7 +273,6 @@ namespace devices
 
 		/**
 		 * Erase the whole chip memory (§6.2.26).
-		 * @param address address (24 bits) of the sector to erase
 		 * @sa enable_write()
 		 */
 		void erase_chip()

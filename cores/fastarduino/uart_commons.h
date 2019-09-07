@@ -92,9 +92,11 @@ namespace serial
 	class UARTErrors
 	{
 	public:
+		/// @cond notdocumented
 		UARTErrors() : errors_{} {}
 		UARTErrors(const UARTErrors& that) = default;
 		UARTErrors& operator=(const UARTErrors& that) = default;
+		/// @endcond
 
 		/**
 		 * Reset UART errors to no error.
@@ -156,10 +158,12 @@ namespace serial
 		}
 	
 	protected:
+		/// @cond notdocumented
 		Errors& errors()
 		{
 			return errors_;
 		}
+		/// @endcond
 
 	private:
 		Errors errors_;

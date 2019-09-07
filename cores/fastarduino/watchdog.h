@@ -332,6 +332,7 @@ namespace watchdog
 		friend struct isr_handler;
 	};
 
+	/// @cond notdocumented
 	struct isr_handler
 	{
 		template<typename EVENT> static void watchdog_clock()
@@ -354,6 +355,7 @@ namespace watchdog
 			interrupt::CallbackHandler<void (*)(), CALLBACK>::call();
 		}
 	};
+	/// @endcond
 }
 
 #endif /* WATCHDOG_HH */

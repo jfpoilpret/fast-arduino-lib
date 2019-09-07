@@ -96,7 +96,7 @@
  * template class.
  * @param PCI_NUM the number of the `PCINT` vector for the `board::InterruptPin`
  * connected to the echo pin
- * @param SONAR_PINS the pair of pins connected to the 1st sonar; this is a 
+ * @param SONAR_PINS1 the pair of pins connected to the 1st sonar; this is a 
  * specific type, created by `SONAR_PINS()` macro.
  * @param ... other pairs of (trigger pin, echo pin) for other `HCSR04`
  * 
@@ -200,7 +200,6 @@
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonar trigger pin
  * @param ECHO the `board::InterruptPin` connected to the sonar echo pin
- * @param HANDLER the class holding the callback method
  * @param CALLBACK the function that will be called when the sonar has received
  * the echo pulse
  * 
@@ -298,6 +297,8 @@
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonars trigger pins
  * @param ECHO_PORT the `board::Port` connected to all sonar echo pins
+ * @param ECHO_MASK the mask to apply to @p ECHO_PORT to define which pins of this
+ * port are connected to a sonar
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when one sonar
  * echo pin changes level, i.e. when a leading or trailing edge of the echo pulse
@@ -327,6 +328,8 @@
  * connected to the echo pin
  * @param TRIGGER the `board::DigitalPin` connected to the sonars trigger pins
  * @param ECHO_PORT the `board::Port` connected to all sonar echo pins
+ * @param ECHO_MASK the mask to apply to @p ECHO_PORT to define which pins of this
+ * port are connected to a sonar
  * @param CALLBACK the function that will be called when one sonar echo pin 
  * changes level, i.e. when a leading or trailing edge of the echo pulse
  * is received; this must take one argument of type `const SonarEvent<TIMER>&`.
