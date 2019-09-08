@@ -17,6 +17,9 @@
 # Examples common to all targets (except ATtinyX5)
 COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					analog/AnalogPin1 analog/AnalogPin2										\
+					analog/AnalogComparator1 analog/AnalogComparator2						\
+					analog/AnalogComparator3 analog/AnalogComparator4						\
+					analog/AnalogComparator5												\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\
 					eeprom/Eeprom1 eeprom/Eeprom2 eeprom/Eeprom3 eeprom/Eeprom4				\
 					events/EventApp1 events/EventApp2 events/EventApp3 events/EventApp4		\
@@ -114,6 +117,11 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								analog/ALLPWM					\
 								analog/PWM1 analog/PWM2			\
 								analog/PWM4						\
+								analog/AnalogComparator1		\
+								analog/AnalogComparator2		\
+								analog/AnalogComparator3		\
+								analog/AnalogComparator4		\
+								analog/AnalogComparator5		\
 								eeprom/Eeprom1					\
 								events/EventApp6				\
 								int/ExternalInterrupt1			\

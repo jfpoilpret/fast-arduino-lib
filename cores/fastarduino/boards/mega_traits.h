@@ -153,7 +153,7 @@ namespace board_traits
 	template<> struct AnalogPin_trait<AnalogPin::A5>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX0)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A6>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A7>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1, MUX0)> {};
-	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX4, MUX3, MUX2, MUX1), 0, 1100> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX4, MUX3, MUX2, MUX1), 0, false, 1100> {};
 	template<> struct AnalogPin_trait<AnalogPin::A8>: AnalogPin_trait_impl<0, bits::BV8(MUX5)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A9>: AnalogPin_trait_impl<bits::BV8(MUX0), bits::BV8(MUX5)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A10>: AnalogPin_trait_impl<bits::BV8(MUX1), bits::BV8(MUX5)> {};

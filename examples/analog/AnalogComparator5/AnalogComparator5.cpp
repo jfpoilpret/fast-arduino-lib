@@ -42,6 +42,14 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+#elif defined(ARDUINO_MEGA)
+static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+#elif defined(ARDUINO_LEONARDO)
+static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+#elif defined(BREADBOARD_ATTINYX4)
+static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+#elif defined(BREADBOARD_ATTINYX5)
+static constexpr const board::AnalogPin INPUT = board::AnalogPin::A1;
 #else
 #error "Current target is not yet supported!"
 #endif

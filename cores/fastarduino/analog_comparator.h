@@ -87,9 +87,15 @@ namespace analog
 			return ACSR_ & bits::BV8(ACO);
 		}
 
+#if !defined(BREADBOARD_ATTINYX5)
 		template<board::AnalogPin INPUT = board::AnalogPin::NONE>
 		void begin_(bool use_bandgap = false, ComparatorInterrupt mode = ComparatorInterrupt::NONE, 
 					bool trigger_icp = false)
+#else
+		template<board::AnalogPin INPUT = board::AnalogPin::NONE>
+		void begin_(bool use_bandgap = false, ComparatorInterrupt mode = ComparatorInterrupt::NONE, 
+					UNUSED bool trigger_icp = false)
+#endif
 		{
 			using ATRAIT = board_traits::AnalogPin_trait<INPUT>;
 			static_assert(ATRAIT::IS_ANALOG_PIN || INPUT == board::AnalogPin::NONE, "INPUT must not be TEMP!");
@@ -97,7 +103,11 @@ namespace analog
 			GLOBAL_TRAIT::ADCSRB_ = ((INPUT == board::AnalogPin::NONE) ? 0 : bits::BV8(ACME));
 			GLOBAL_TRAIT::ADCSRA_ = ATRAIT::MUX_MASK2;
 			GLOBAL_TRAIT::ADMUX_ = ATRAIT::MUX_MASK1;
+#if !defined(BREADBOARD_ATTINYX5)
 			ACSR_ = (use_bandgap ? bits::BV8(ACBG) : 0) | uint8_t(mode) | (trigger_icp ? bits::BV8(ACIC) : 0);
+#else
+			ACSR_ = (use_bandgap ? bits::BV8(ACBG) : 0) | uint8_t(mode);
+#endif
 		}
 
 		void end_()

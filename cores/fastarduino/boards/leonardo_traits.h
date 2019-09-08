@@ -95,8 +95,8 @@ namespace board_traits
 	template<> struct AnalogPin_trait<AnalogPin::A8_D8_ADC11>: AnalogPin_trait_impl<bits::BV8(MUX1, MUX0), bits::BV8(MUX5)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A9_D9_ADC12>: AnalogPin_trait_impl<bits::BV8(MUX2), bits::BV8(MUX5)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A10_D10_ADC13>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX0), bits::BV8(MUX5)> {};
-	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1, MUX0), bits::BV8(MUX5)> {};
-	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX4, MUX3, MUX2, MUX1), 0, 1100> {};
+	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1, MUX0), bits::BV8(MUX5), false> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX4, MUX3, MUX2, MUX1), 0, false, 1100> {};
 	
 	//===============
 	// IO interrupts
