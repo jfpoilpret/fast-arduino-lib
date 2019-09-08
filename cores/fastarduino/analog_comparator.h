@@ -41,6 +41,7 @@
 #define REGISTER_ANALOG_COMPARE_ISR_EMPTY() EMPTY_INTERRUPT(ANALOG_COMP_vect)
 
 //TODO DECL fiends
+#define DECL_ANALOG_COMPARE_ISR_HANDLERS_FRIEND friend void ::ANALOG_COMP_vect(void);
 
 //TODO DOCS
 // - supported inputs: all AnalogPins or AIN1, bandgap ref or AIN0

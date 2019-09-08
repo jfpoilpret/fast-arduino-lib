@@ -54,14 +54,16 @@ public:
 		interrupt::register_handler(*this);
 	}
 
+private:
 	void callback()
 	{
 		if (comparator_.output()) led_.set(); else led_.clear();
 	}
 
-private:
 	analog::AnalogComparator& comparator_;
 	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
+
+	DECL_ANALOG_COMPARE_ISR_HANDLERS_FRIEND
 };
 
 REGISTER_ANALOG_COMPARE_ISR_METHOD(Compare, &Compare::callback)
