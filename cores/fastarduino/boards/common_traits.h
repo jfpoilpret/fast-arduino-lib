@@ -228,13 +228,16 @@ namespace board_traits
 		static constexpr const uint8_t MUX_MASK2 = 0;
 		static constexpr const bool IS_BANDGAP = false;
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = NO_BANDGAP_VOLTAGE;
+		static constexpr const bool IS_ANALOG_PIN = false;
 	};
-	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = NO_BANDGAP_VOLTAGE> struct AnalogPin_trait_impl
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0, bool IS_ANALOG_PIN_ = true, uint16_t VOLTAGE = NO_BANDGAP_VOLTAGE>
+	struct AnalogPin_trait_impl
 	{
 		static constexpr const uint8_t MUX_MASK1 = MUXM1;
 		static constexpr const uint8_t MUX_MASK2 = MUXM2;
 		static constexpr const bool IS_BANDGAP = (VOLTAGE != NO_BANDGAP_VOLTAGE);
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
+		static constexpr const bool IS_ANALOG_PIN = IS_ANALOG_PIN_;
 	};
 
 	template<ExternalInterruptPin DPIN> struct ExternalInterruptPin_trait
