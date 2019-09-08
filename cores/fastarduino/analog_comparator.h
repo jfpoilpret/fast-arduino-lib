@@ -67,7 +67,7 @@ namespace analog
 		// - use Bandgap or AIN0 as positive input
 		// - use ISR (with interrupt mode) or not
 		// - use Timer1 ICP
-		template<board::AnalogPin INPUT>
+		template<board::AnalogPin INPUT = board::AnalogPin::NONE>
 		void begin(bool use_bandgap = false, ComparatorInterrupt mode = ComparatorInterrupt::NONE, 
 					bool trigger_icp = false)
 		{
@@ -84,7 +84,7 @@ namespace analog
 			return ACSR_ & bits::BV8(ACO);
 		}
 
-		template<board::AnalogPin INPUT>
+		template<board::AnalogPin INPUT = board::AnalogPin::NONE>
 		void begin_(bool use_bandgap = false, ComparatorInterrupt mode = ComparatorInterrupt::NONE, 
 					bool trigger_icp = false)
 		{
