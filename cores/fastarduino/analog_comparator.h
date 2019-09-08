@@ -26,19 +26,21 @@
 #include "utilities.h"
 
 //TODO DOCS
-#define REGISTER_ANALOG_COMPARE_ISR_FUNCTION(CALLBACK)		\
-	ISR(ANALOG_COMP_vect)									\
-	{														\
-		CALLBACK();											\
+#define REGISTER_ANALOG_COMPARE_ISR_FUNCTION(CALLBACK)	\
+	ISR(ANALOG_COMP_vect)								\
+	{													\
+		CALLBACK();										\
 	}
 
-#define REGISTER_ANALOG_COMPARE_ISR_METHOD(HANDLER, CALLBACK)					\
-	ISR(ANALOG_COMP_vect)														\
-	{																			\
-		interrupt::CallbackHandler<void (HANDLER_::*)(), CALLBACK_>::call();	\
+#define REGISTER_ANALOG_COMPARE_ISR_METHOD(HANDLER, CALLBACK)				\
+	ISR(ANALOG_COMP_vect)													\
+	{																		\
+		interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call();	\
 	}
 
 #define REGISTER_ANALOG_COMPARE_ISR_EMPTY() EMPTY_INTERRUPT(ANALOG_COMP_vect)
+
+//TODO DECL fiends
 
 //TODO DOCS
 // - supported inputs: all AnalogPins or AIN1, bandgap ref or AIN0
