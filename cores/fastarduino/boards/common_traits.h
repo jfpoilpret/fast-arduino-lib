@@ -551,6 +551,7 @@ namespace board_traits
 		// Input-capture stuff
 		static constexpr const DigitalPin ICP_PIN = DigitalPin::NONE;
 		static constexpr const uint8_t ICES_TCCRB = 0;
+		static constexpr const uint8_t ICNC_TCCRB = 0;
 
 		// ATtinyX5 Timer1 specific stuff
 		static constexpr const REGISTER<TYPE> CTC_MAX{};
@@ -562,7 +563,8 @@ namespace board_traits
 			 REG TCCRB_, REG TCNT_, REG OCRA_, REG TIMSK__, REG TIFR__, uint8_t TIMSK_MASK_ = 0xFF, REG ICR_ = 0,
 			 uint8_t CTC_ICR_TCCRA_ = 0, uint8_t CTC_ICR_TCCRB_ = 0, uint8_t F_PWM_ICR_TCCRA_ = 0,
 			 uint8_t F_PWM_ICR_TCCRB_ = 0, uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0,
-			 DigitalPin ICP_PIN_ = DigitalPin::NONE, uint8_t ICES_TCCRB_ = 0, REG CTC_MAX_ = NO_REG>
+			 DigitalPin ICP_PIN_ = DigitalPin::NONE, uint8_t ICES_TCCRB_ = 0, uint8_t ICNC_TCCRB_ = 0,
+			 REG CTC_MAX_ = NO_REG>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -607,6 +609,7 @@ namespace board_traits
 
 		static constexpr const DigitalPin ICP_PIN = ICP_PIN_;
 		static constexpr const uint8_t ICES_TCCRB = ICES_TCCRB_;
+		static constexpr const uint8_t ICNC_TCCRB = ICNC_TCCRB_;
 
 		static constexpr const REGISTER<TYPE> CTC_MAX = CTC_MAX_;
 	};

@@ -19,7 +19,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					analog/AnalogPin1 analog/AnalogPin2										\
 					analog/AnalogComparator1 analog/AnalogComparator2						\
 					analog/AnalogComparator3 analog/AnalogComparator4						\
-					analog/AnalogComparator5												\
+					analog/AnalogComparator5 analog/AnalogComparator6						\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\
 					eeprom/Eeprom1 eeprom/Eeprom2 eeprom/Eeprom3 eeprom/Eeprom4				\
 					events/EventApp1 events/EventApp2 events/EventApp3 events/EventApp4		\

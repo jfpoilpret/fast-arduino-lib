@@ -343,7 +343,8 @@ namespace board_traits
 							R_(ICR1),
 							0, bits::BV8(WGM12, WGM13),
 							bits::BV8(WGM11), bits::BV8(WGM12, WGM13),
-							bits::BV8(WGM11), bits::BV8(WGM13)>
+							bits::BV8(WGM11), bits::BV8(WGM13),
+							DigitalPin::NONE, bits::BV8(ICES1), bits::BV8(ICNC1)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -384,7 +385,8 @@ namespace board_traits
 							R_(ICR3),
 							0, bits::BV8(WGM32, WGM33),
 							bits::BV8(WGM31), bits::BV8(WGM32, WGM33),
-							bits::BV8(WGM31), bits::BV8(WGM33)>
+							bits::BV8(WGM31), bits::BV8(WGM33),
+							DigitalPin::NONE, bits::BV8(ICES3), bits::BV8(ICNC3)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -426,7 +428,7 @@ namespace board_traits
 							0, bits::BV8(WGM42, WGM43),
 							bits::BV8(WGM41), bits::BV8(WGM42, WGM43),
 							bits::BV8(WGM41), bits::BV8(WGM43),
-							board::DigitalPin::D49_PL0, bits::BV8(ICES4)>
+							DigitalPin::D49_PL0, bits::BV8(ICES4), bits::BV8(ICNC4)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -468,7 +470,7 @@ namespace board_traits
 							0, bits::BV8(WGM52, WGM53),
 							bits::BV8(WGM51), bits::BV8(WGM52, WGM53),
 							bits::BV8(WGM51), bits::BV8(WGM53),
-							board::DigitalPin::D48_PL1, bits::BV8(ICES5)>
+							DigitalPin::D48_PL1, bits::BV8(ICES5), bits::BV8(ICNC5)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{

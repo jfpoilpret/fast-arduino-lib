@@ -39,6 +39,12 @@ PWM1	Dim 1 LED with a pot through 8bits PWM
 PWM2	Dim 2 LEDs with 2 pots through 8bits PWM
 PWM3	Dim 1 LEDs with 1 pot through 16bits PulseTimer
 PWM4	Dim 2 LEDs with 2 pots through 8bits PulseTimer
+AnalogComparator1	Compares 2 analog inputs by polling
+AnalogComparator2	Compares 2 analog inputs by ISR
+AnalogComparator3	Compares 2 analog inputs by ISR
+AnalogComparator4	Compares 1 analog input to bandgap by ISR
+AnalogComparator5	Compares 2 analog inputs then 1 analog input to bandgap by ISR
+AnalogComparator6	Compares 1 analog input to bandgap by Input Capture
 EventApp1	8 LEDs chaser: events dispatcher, delay, IOPin
 EventApp2	8 LEDs chaser: events dispatcher, watchdog, IOPort
 EventApp3	8 LEDs chaser: jobs scheduler, watchdog, IOPort
