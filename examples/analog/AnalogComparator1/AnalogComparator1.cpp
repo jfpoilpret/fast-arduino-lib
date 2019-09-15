@@ -22,18 +22,25 @@
  *   - D6 (AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D7 (AIN1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D13 (LED): internal Arduino LED
- * TODO other targets
- * - on Arduino MEGA:
- *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  * - on ATtinyX4 based boards:
- *   - A7: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D1 (PA1, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D2 (PA2, AIN1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D7 (PA7, LED): LED in series with 330 Ohm resistor, connected to ground
+ * - on ATtinyX5 based boards:
+ *   - D0 (PB0, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D1 (PB1, AIN1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D4 (PB4): LED in series with 330 Ohm resistor, connected to ground
  */
 
 #include <fastarduino/time.h>
 #include <fastarduino/analog_comparator.h>
 #include <fastarduino/gpio.h>
+
+#if defined(BREADBOARD_ATTINYX5)
+static constexpr const board::DigitalPin LED = board::DigitalPin::D4_PB4;
+#else
+static constexpr const board::DigitalPin LED = board::DigitalPin::LED;
+#endif
 
 int main()
 {
@@ -41,7 +48,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FastPinType<LED>::TYPE led{gpio::PinMode::OUTPUT};
 
 	// Declare Analog comparator
 	analog::AnalogComparator comparator;

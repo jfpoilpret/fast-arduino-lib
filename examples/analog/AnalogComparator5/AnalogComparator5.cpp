@@ -24,16 +24,18 @@
  *   - D6 (AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D13 (LED): internal Arduino LED
- * TODO other targets
  * - on Arduino LEONARDO:
+ *   - D7 (AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *	 - D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in series with 330 Ohm resistors
- * - on Arduino MEGA:
- *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D13 (LED): internal Arduino LED
  * - on ATtinyX4 based boards:
- *   - A7: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D1 (PA1, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D7 (PA7, LED): LED in series with 330 Ohm resistor, connected to ground
+ * - on ATtinyX5 based boards:
+ *   - D0 (PB0, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1 (PB2): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D4 (PB4): LED in series with 330 Ohm resistor, connected to ground
  */
 
 #include <fastarduino/time.h>
@@ -42,12 +44,16 @@
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+static constexpr const board::DigitalPin LED = board::DigitalPin::LED;
 #elif defined(ARDUINO_LEONARDO)
 static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+static constexpr const board::DigitalPin LED = board::DigitalPin::LED;
 #elif defined(BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+static constexpr const board::DigitalPin LED = board::DigitalPin::LED;
 #elif defined(BREADBOARD_ATTINYX5)
 static constexpr const board::AnalogPin INPUT = board::AnalogPin::A1;
+static constexpr const board::DigitalPin LED = board::DigitalPin::D4_PB4;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -67,7 +73,7 @@ private:
 	}
 
 	analog::AnalogComparator& comparator_;
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
+	gpio::FastPinType<LED>::TYPE led_;
 
 	DECL_ANALOG_COMPARE_ISR_HANDLERS_FRIEND
 };
