@@ -86,11 +86,11 @@ int main()
 	analog::AnalogComparator comparator;
 	Compare compare{comparator};
 
-	comparator.begin<INPUT>(false, analog::ComparatorInterrupt::TOGGLE);
+	comparator.begin<INPUT, false>(analog::ComparatorInterrupt::TOGGLE);
 	time::delay_ms(30000);
 	comparator.end();
 
-	comparator.begin<INPUT>(true, analog::ComparatorInterrupt::TOGGLE);
+	comparator.begin<INPUT, true>(analog::ComparatorInterrupt::TOGGLE);
 	time::delay_ms(30000);
 	comparator.end();
 

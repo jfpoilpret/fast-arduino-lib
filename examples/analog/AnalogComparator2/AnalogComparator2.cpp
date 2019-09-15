@@ -55,7 +55,7 @@ int main()
 
 	// Declare Analog comparator
 	analog::AnalogComparator comparator;
-	comparator.begin<>(false, analog::ComparatorInterrupt::TOGGLE);
+	comparator.begin<>(analog::ComparatorInterrupt::TOGGLE);
 
 	// Infinite loop sleeping idle
 	while (true)

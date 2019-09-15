@@ -23,9 +23,6 @@
  *   - D7 (AIN1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D13 (LED): internal Arduino LED
  * TODO other targets
- * - on Arduino LEONARDO:
- *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *	 - D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in series with 330 Ohm resistors
  * - on Arduino MEGA:
  *   - A0: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D22-D29 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground

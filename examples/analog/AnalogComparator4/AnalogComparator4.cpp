@@ -57,7 +57,7 @@ public:
 	Compare() : comparator_{}, led_{gpio::PinMode::OUTPUT}
 	{
 		interrupt::register_handler(*this);
-		comparator_.begin<INPUT>(true, analog::ComparatorInterrupt::TOGGLE);
+		comparator_.begin<INPUT, true>(analog::ComparatorInterrupt::TOGGLE);
 	}
 
 	void callback()

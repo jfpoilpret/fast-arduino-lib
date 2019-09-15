@@ -213,11 +213,16 @@ namespace board_traits
 		static constexpr const uint8_t PRESCALER_MASK = prescaler_mask(PRESCALER);
 	};
 
-	template<REG ADMUX__, REG ADCSRA__, REG ADCSRB__> struct GlobalAnalogPin_trait_impl
+	template<REG ADMUX__, REG ADCSRA__, REG ADCSRB__, uint8_t ICP_TRIGGER_,
+			 bool HAS_AIN0_ = true, bool HAS_AIN1_ = true>
+	struct GlobalAnalogPin_trait_impl
 	{
 		static constexpr const REG8 ADMUX_ = ADMUX__;
 		static constexpr const REG8 ADCSRA_ = ADCSRA__;
 		static constexpr const REG8 ADCSRB_ = ADCSRB__;
+		static constexpr const uint8_t ICP_TRIGGER = ICP_TRIGGER_;
+		static constexpr const bool HAS_AIN0 = HAS_AIN0_;
+		static constexpr const bool HAS_AIN1 = HAS_AIN1_;
 	};
 
 	static constexpr uint16_t NO_BANDGAP_VOLTAGE = 0xFFFFU;

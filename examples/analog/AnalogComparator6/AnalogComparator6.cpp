@@ -17,7 +17,7 @@
  * This program shows usage of FastArduino AnalogComparator API.
  * It compares AIN1 with Bandgap and counts time elapsed between two transitions,
  * by using Input Capture connection to Timer1.
- * 
+ * TODO replace AIN1 with Ax pin so that we can also support LEONARDO target
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D7 (AIN1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
@@ -178,7 +178,7 @@ int main()
 	Capture capture{timer, comparator};
 
 	timer.begin();
-	comparator.begin<>(true, analog::ComparatorInterrupt::NONE, true);
+	comparator.begin<board::AnalogPin::NONE, true>(analog::ComparatorInterrupt::NONE, true);
 
 	// Event Loop
 	while (true)

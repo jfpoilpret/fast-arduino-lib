@@ -70,11 +70,10 @@ namespace analog
 		// - use Bandgap or AIN0 as positive input
 		// - use ISR (with interrupt mode) or not
 		// - use Timer1 ICP
-		template<board::AnalogPin INPUT = board::AnalogPin::NONE>
-		void begin(bool use_bandgap = false, ComparatorInterrupt mode = ComparatorInterrupt::NONE, 
-					bool trigger_icp = false)
+		template<board::AnalogPin INPUT1 = board::AnalogPin::NONE, bool INPUT0_BANDGAP = false>
+		void begin(ComparatorInterrupt mode = ComparatorInterrupt::NONE, bool trigger_icp = false)
 		{
-			synchronized begin_<INPUT>(use_bandgap, mode, trigger_icp);
+			synchronized begin_<INPUT1, INPUT0_BANDGAP>(mode, trigger_icp);
 		}
 
 		void end()
@@ -87,27 +86,20 @@ namespace analog
 			return ACSR_ & bits::BV8(ACO);
 		}
 
-#if !defined(BREADBOARD_ATTINYX5)
-		template<board::AnalogPin INPUT = board::AnalogPin::NONE>
-		void begin_(bool use_bandgap = false, ComparatorInterrupt mode = ComparatorInterrupt::NONE, 
-					bool trigger_icp = false)
-#else
-		template<board::AnalogPin INPUT = board::AnalogPin::NONE>
-		void begin_(bool use_bandgap = false, ComparatorInterrupt mode = ComparatorInterrupt::NONE, 
-					UNUSED bool trigger_icp = false)
-#endif
+		template<board::AnalogPin INPUT1 = board::AnalogPin::NONE, bool INPUT0_BANDGAP = false>
+		void begin_(ComparatorInterrupt mode = ComparatorInterrupt::NONE, bool trigger_icp = false)
 		{
-			using ATRAIT = board_traits::AnalogPin_trait<INPUT>;
-			static_assert(ATRAIT::IS_ANALOG_PIN || INPUT == board::AnalogPin::NONE, "INPUT must not be TEMP!");
+			using ATRAIT = board_traits::AnalogPin_trait<INPUT1>;
+			static_assert(ATRAIT::IS_ANALOG_PIN || INPUT1 == board::AnalogPin::NONE, "INPUT must not be TEMP!");
+			static_assert(INPUT1 != board::AnalogPin::NONE || GLOBAL_TRAIT::HAS_AIN1, "Target has no AIN1 pin!");
+			static_assert(GLOBAL_TRAIT::HAS_AIN0 || INPUT0_BANDGAP, "Target has no AIN0 hence INPUT0_BANDGAP must be true");
 
-			GLOBAL_TRAIT::ADCSRB_ = ((INPUT == board::AnalogPin::NONE) ? 0 : bits::BV8(ACME));
+			GLOBAL_TRAIT::ADCSRB_ = ((INPUT1 == board::AnalogPin::NONE) ? 0 : bits::BV8(ACME));
 			GLOBAL_TRAIT::ADCSRA_ = ATRAIT::MUX_MASK2;
 			GLOBAL_TRAIT::ADMUX_ = ATRAIT::MUX_MASK1;
-#if !defined(BREADBOARD_ATTINYX5)
-			ACSR_ = (use_bandgap ? bits::BV8(ACBG) : 0) | uint8_t(mode) | (trigger_icp ? bits::BV8(ACIC) : 0);
-#else
-			ACSR_ = (use_bandgap ? bits::BV8(ACBG) : 0) | uint8_t(mode);
-#endif
+			ACSR_ = (INPUT0_BANDGAP ? bits::BV8(ACBG) : 0) |
+					uint8_t(mode) |
+					(trigger_icp ? GLOBAL_TRAIT::ICP_TRIGGER : 0);
 		}
 
 		void end_()
