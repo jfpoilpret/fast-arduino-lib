@@ -53,13 +53,6 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER4;
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 REGISTER_UATX_ISR(0)
-#elif defined(ARDUINO_LEONARDO)
-#define NUM_TIMER 1
-static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-#define HARDWARE_UART 1
-#include <fastarduino/uart.h>
-static constexpr const board::USART UART = board::USART::USART1;
-REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
 #define NUM_TIMER 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
