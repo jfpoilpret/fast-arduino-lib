@@ -861,7 +861,13 @@ namespace timer
 			return TRAIT::TCCRB & TRAIT::ICES_TCCRB ? TimerInputCapture::RISING_EDGE : TimerInputCapture::FALLING_EDGE;
 		}
 
-		//TODO DOC
+		/**
+		 * Set or clear the noise canceller for input capture on this timer.
+		 * Note that some timers do not support input capture; in this situation,
+		 * using this method will generate a compiler error.
+		 * @param cancel_noise if `true`, set noise canceller for this timer's 
+		 * input capture; if `false`, clear noise canceller.
+		 */
 		void set_capture_noise_canceller(bool cancel_noise)
 		{
 			static_assert(TRAIT::ICNC_TCCRB != 0, "TIMER must support Input Capture");
@@ -873,7 +879,10 @@ namespace timer
 			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
 		}
 
-		//TODO DOC
+		/**
+		 * Tell whether noise canceller for this timer's input capture is active
+		 * or not.
+		 */
 		bool has_capture_noise_canceller() const
 		{
 			static_assert(TRAIT::ICNC_TCCRB != 0, "TIMER must support Input Capture");
