@@ -81,7 +81,7 @@ namespace board_traits
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_500KHz>: AnalogClock_trait_impl<500000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_1MHz>: AnalogClock_trait_impl<1000000UL> {};
 
-	struct GlobalAnalogPin_trait:GlobalAnalogPin_trait_impl<R_(ADMUX), R_(ADCSRA), R_(ADCSRB)> {};
+	struct GlobalAnalogPin_trait:GlobalAnalogPin_trait_impl<R_(ADMUX), R_(ADCSRA), R_(ADCSRB), bits::BV8(ACIC), true, false> {};
 	
 	template<> struct AnalogPin_trait<AnalogPin::A5_ADC0>: AnalogPin_trait_impl<0> {};
 	template<> struct AnalogPin_trait<AnalogPin::A4_ADC1>: AnalogPin_trait_impl<bits::BV8(MUX0)> {};
@@ -95,8 +95,8 @@ namespace board_traits
 	template<> struct AnalogPin_trait<AnalogPin::A8_D8_ADC11>: AnalogPin_trait_impl<bits::BV8(MUX1, MUX0), bits::BV8(MUX5)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A9_D9_ADC12>: AnalogPin_trait_impl<bits::BV8(MUX2), bits::BV8(MUX5)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A10_D10_ADC13>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX0), bits::BV8(MUX5)> {};
-	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1, MUX0), bits::BV8(MUX5)> {};
-	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX4, MUX3, MUX2, MUX1), 0, 1100> {};
+	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1, MUX0), bits::BV8(MUX5), false> {};
+	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>: AnalogPin_trait_impl<bits::BV8(MUX4, MUX3, MUX2, MUX1), 0, false, 1100> {};
 	
 	//===============
 	// IO interrupts
@@ -202,7 +202,7 @@ namespace board_traits
 							0, bits::BV8(WGM12, WGM13),
 							bits::BV8(WGM11), bits::BV8(WGM12, WGM13),
 							bits::BV8(WGM11), bits::BV8(WGM13),
-							board::DigitalPin::D4_PD4, bits::BV8(ICES1)>
+							DigitalPin::D4_PD4, bits::BV8(ICES1), bits::BV8(ICNC1)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
@@ -238,7 +238,7 @@ namespace board_traits
 							0, bits::BV8(WGM32, WGM33),
 							bits::BV8(WGM31), bits::BV8(WGM32, WGM33),
 							bits::BV8(WGM31), bits::BV8(WGM33),
-							board::DigitalPin::D13_PC7, bits::BV8(ICES3)>
+							DigitalPin::D13_PC7, bits::BV8(ICES3), bits::BV8(ICNC3)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{

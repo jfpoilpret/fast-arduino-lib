@@ -279,7 +279,6 @@ namespace timer
 		INVERTING
 	};
 
-	//TODO Later add Analog Compare in addition to ICP edges
 	/**
 	 * Defines the type of input capture we want for a timer.
 	 */
@@ -838,7 +837,7 @@ namespace timer
 		}
 
 		/**
-		 * Set the input capture mode fr this timer.
+		 * Set the input capture mode for this timer.
 		 * Input Capture will work only if `set_interrupts()` is called with
 		 * `TimerInterrupt::INPUT_CAPTURE`.
 		 * Note that some timers do not support input capture; in this situation,
@@ -847,7 +846,7 @@ namespace timer
 		 */
 		void set_input_capture(TimerInputCapture input_capture)
 		{
-			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
+			static_assert(TRAIT::ICES_TCCRB != 0, "TIMER must support Input Capture");
 			utils::set_mask(tccrb_, TRAIT::ICES_TCCRB, input_capture_TCCRB(input_capture));
 			// Check if timer is currently running
 			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
@@ -858,8 +857,36 @@ namespace timer
 		 */
 		TimerInputCapture input_capture() const
 		{
-			static_assert(TRAIT::ICP_PIN != board::DigitalPin::NONE, "TIMER must support Input Capture");
+			static_assert(TRAIT::ICES_TCCRB != 0, "TIMER must support Input Capture");
 			return TRAIT::TCCRB & TRAIT::ICES_TCCRB ? TimerInputCapture::RISING_EDGE : TimerInputCapture::FALLING_EDGE;
+		}
+
+		/**
+		 * Set or clear the noise canceller for input capture on this timer.
+		 * Note that some timers do not support input capture; in this situation,
+		 * using this method will generate a compiler error.
+		 * @param cancel_noise if `true`, set noise canceller for this timer's 
+		 * input capture; if `false`, clear noise canceller.
+		 */
+		void set_capture_noise_canceller(bool cancel_noise)
+		{
+			static_assert(TRAIT::ICNC_TCCRB != 0, "TIMER must support Input Capture");
+			if (cancel_noise)
+				tccrb_ |= TRAIT::ICNC_TCCRB;
+			else
+				tccrb_ &= ~TRAIT::ICNC_TCCRB;
+			// Check if timer is currently running
+			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
+		}
+
+		/**
+		 * Tell whether noise canceller for this timer's input capture is active
+		 * or not.
+		 */
+		bool has_capture_noise_canceller() const
+		{
+			static_assert(TRAIT::ICNC_TCCRB != 0, "TIMER must support Input Capture");
+			return TRAIT::TCCRB & TRAIT::ICNC_TCCRB;
 		}
 
 		/**
@@ -1228,7 +1255,7 @@ namespace timer
 		template<uint8_t TIMER_NUM_> static constexpr board::Timer check_timer_capture()
 		{
 			constexpr board::Timer NTIMER = check_timer<TIMER_NUM_>();
-			static_assert(board_traits::Timer_trait<NTIMER>::ICP_PIN != board::DigitalPin::NONE,
+			static_assert(board_traits::Timer_trait<NTIMER>::ICES_TCCRB != 0,
 						  "TIMER_NUM must be Timer supporting capture");
 			return NTIMER;
 		}

@@ -213,11 +213,16 @@ namespace board_traits
 		static constexpr const uint8_t PRESCALER_MASK = prescaler_mask(PRESCALER);
 	};
 
-	template<REG ADMUX__, REG ADCSRA__, REG ADCSRB__> struct GlobalAnalogPin_trait_impl
+	template<REG ADMUX__, REG ADCSRA__, REG ADCSRB__, uint8_t ICP_TRIGGER_,
+			 bool HAS_AIN0_ = true, bool HAS_AIN1_ = true>
+	struct GlobalAnalogPin_trait_impl
 	{
 		static constexpr const REG8 ADMUX_ = ADMUX__;
 		static constexpr const REG8 ADCSRA_ = ADCSRA__;
 		static constexpr const REG8 ADCSRB_ = ADCSRB__;
+		static constexpr const uint8_t ICP_TRIGGER = ICP_TRIGGER_;
+		static constexpr const bool HAS_AIN0 = HAS_AIN0_;
+		static constexpr const bool HAS_AIN1 = HAS_AIN1_;
 	};
 
 	static constexpr uint16_t NO_BANDGAP_VOLTAGE = 0xFFFFU;
@@ -228,13 +233,16 @@ namespace board_traits
 		static constexpr const uint8_t MUX_MASK2 = 0;
 		static constexpr const bool IS_BANDGAP = false;
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = NO_BANDGAP_VOLTAGE;
+		static constexpr const bool IS_ANALOG_PIN = false;
 	};
-	template<uint8_t MUXM1, uint8_t MUXM2 = 0, uint16_t VOLTAGE = NO_BANDGAP_VOLTAGE> struct AnalogPin_trait_impl
+	template<uint8_t MUXM1, uint8_t MUXM2 = 0, bool IS_ANALOG_PIN_ = true, uint16_t VOLTAGE = NO_BANDGAP_VOLTAGE>
+	struct AnalogPin_trait_impl
 	{
 		static constexpr const uint8_t MUX_MASK1 = MUXM1;
 		static constexpr const uint8_t MUX_MASK2 = MUXM2;
 		static constexpr const bool IS_BANDGAP = (VOLTAGE != NO_BANDGAP_VOLTAGE);
 		static constexpr const uint16_t BANDGAP_VOLTAGE_MV = VOLTAGE;
+		static constexpr const bool IS_ANALOG_PIN = IS_ANALOG_PIN_;
 	};
 
 	template<ExternalInterruptPin DPIN> struct ExternalInterruptPin_trait
@@ -548,6 +556,7 @@ namespace board_traits
 		// Input-capture stuff
 		static constexpr const DigitalPin ICP_PIN = DigitalPin::NONE;
 		static constexpr const uint8_t ICES_TCCRB = 0;
+		static constexpr const uint8_t ICNC_TCCRB = 0;
 
 		// ATtinyX5 Timer1 specific stuff
 		static constexpr const REGISTER<TYPE> CTC_MAX{};
@@ -559,7 +568,8 @@ namespace board_traits
 			 REG TCCRB_, REG TCNT_, REG OCRA_, REG TIMSK__, REG TIFR__, uint8_t TIMSK_MASK_ = 0xFF, REG ICR_ = 0,
 			 uint8_t CTC_ICR_TCCRA_ = 0, uint8_t CTC_ICR_TCCRB_ = 0, uint8_t F_PWM_ICR_TCCRA_ = 0,
 			 uint8_t F_PWM_ICR_TCCRB_ = 0, uint8_t PC_PWM_ICR_TCCRA_ = 0, uint8_t PC_PWM_ICR_TCCRB_ = 0,
-			 DigitalPin ICP_PIN_ = DigitalPin::NONE, uint8_t ICES_TCCRB_ = 0, REG CTC_MAX_ = NO_REG>
+			 DigitalPin ICP_PIN_ = DigitalPin::NONE, uint8_t ICES_TCCRB_ = 0, uint8_t ICNC_TCCRB_ = 0,
+			 REG CTC_MAX_ = NO_REG>
 	struct Timer_trait_impl
 	{
 		using TYPE = TYPE_;
@@ -604,6 +614,7 @@ namespace board_traits
 
 		static constexpr const DigitalPin ICP_PIN = ICP_PIN_;
 		static constexpr const uint8_t ICES_TCCRB = ICES_TCCRB_;
+		static constexpr const uint8_t ICNC_TCCRB = ICNC_TCCRB_;
 
 		static constexpr const REGISTER<TYPE> CTC_MAX = CTC_MAX_;
 	};

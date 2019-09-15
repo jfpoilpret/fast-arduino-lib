@@ -17,6 +17,7 @@
 # Examples common to all targets (except ATtinyX5)
 COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					analog/AnalogPin1 analog/AnalogPin2										\
+					analog/AnalogComparator4												\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\
 					eeprom/Eeprom1 eeprom/Eeprom2 eeprom/Eeprom3 eeprom/Eeprom4				\
 					events/EventApp1 events/EventApp2 events/EventApp3 events/EventApp4		\
@@ -41,6 +42,11 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						events/EventApp5						\
 						int/ExternalInterrupt3					\
+						analog/AnalogComparator1				\
+						analog/AnalogComparator2				\
+						analog/AnalogComparator3				\
+						analog/AnalogComparator5				\
+						analog/AnalogComparator6				\
 						misc/IOStreams3							\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
@@ -63,9 +69,12 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 
 EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 							int/ExternalInterrupt3				\
+							analog/AnalogComparator3			\
+							analog/AnalogComparator5			\
 							uart/UartApp1						
 
 EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
+						analog/AnalogComparator6				\
 						pci/PinChangeInterrupt4					\
 						pci/PinChangeInterrupt5MEGA				\
 						i2c/MultiIO0							\
@@ -78,6 +87,11 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						events/EventApp5						\
 						pci/PinChangeInterrupt4					\
+						analog/AnalogComparator1				\
+						analog/AnalogComparator2				\
+						analog/AnalogComparator3				\
+						analog/AnalogComparator5				\
+						analog/AnalogComparator6				\
 						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 						sonar/Sonar10 sonar/Sonar11				\
 						uart/UartApp1							\
@@ -92,6 +106,11 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								events/EventApp5						\
 								pci/PinChangeInterrupt4					\
+								analog/AnalogComparator1				\
+								analog/AnalogComparator2				\
+								analog/AnalogComparator3				\
+								analog/AnalogComparator5				\
+								analog/AnalogComparator6				\
 								i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
 								sonar/Sonar10 sonar/Sonar11				\
 								uart/UartApp1							\
@@ -105,6 +124,11 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
+								analog/AnalogComparator1		\
+								analog/AnalogComparator2		\
+								analog/AnalogComparator3		\
+								analog/AnalogComparator5		\
+								analog/AnalogComparator6		\
 								pci/PinChangeInterrupt4
 
 # ATtinyX5 needs its own (reduced) set of examples (because of many limitations)
@@ -114,6 +138,11 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								analog/ALLPWM					\
 								analog/PWM1 analog/PWM2			\
 								analog/PWM4						\
+								analog/AnalogComparator1		\
+								analog/AnalogComparator2		\
+								analog/AnalogComparator3		\
+								analog/AnalogComparator4		\
+								analog/AnalogComparator5		\
 								eeprom/Eeprom1					\
 								events/EventApp6				\
 								int/ExternalInterrupt1			\

@@ -74,7 +74,7 @@ namespace board_traits
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_500KHz>: AnalogClock_trait_impl<500000UL> {};
 	template<> struct AnalogClock_trait<AnalogClock::MAX_FREQ_1MHz>: AnalogClock_trait_impl<1000000UL> {};
 
-	struct GlobalAnalogPin_trait:GlobalAnalogPin_trait_impl<R_(ADMUX), R_(ADCSRA), R_(ADCSRB)> {};
+	struct GlobalAnalogPin_trait:GlobalAnalogPin_trait_impl<R_(ADMUX), R_(ADCSRA), R_(ADCSRB), bits::BV8(ACIC)> {};
 	
 	template<> struct AnalogPin_trait<AnalogPin::A0>: AnalogPin_trait_impl<0> {};
 	template<> struct AnalogPin_trait<AnalogPin::A1>: AnalogPin_trait_impl<bits::BV8(MUX0)> {};
@@ -86,9 +86,9 @@ namespace board_traits
 	template<> struct AnalogPin_trait<AnalogPin::A6>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1)> {};
 	template<> struct AnalogPin_trait<AnalogPin::A7>: AnalogPin_trait_impl<bits::BV8(MUX2, MUX1, MUX0)> {};
 #endif	
-	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX3)> {};
+	template<> struct AnalogPin_trait<AnalogPin::TEMP>: AnalogPin_trait_impl<bits::BV8(MUX3), 0, false> {};
 	template<> struct AnalogPin_trait<AnalogPin::BANDGAP>
-		: AnalogPin_trait_impl<bits::BV8(MUX3, MUX2, MUX1), 0, 1100> {};
+		: AnalogPin_trait_impl<bits::BV8(MUX3, MUX2, MUX1), 0, false, 1100> {};
 	
 	//===============
 	// IO interrupts
@@ -230,7 +230,7 @@ namespace board_traits
 							0, bits::BV8(WGM12, WGM13),
 							bits::BV8(WGM11), bits::BV8(WGM12, WGM13),
 							bits::BV8(WGM11), bits::BV8(WGM13),
-							board::DigitalPin::D8_PB0, bits::BV8(ICES1)>
+							DigitalPin::D8_PB0, bits::BV8(ICES1), bits::BV8(ICNC1)>
 	{
 		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
 		{
