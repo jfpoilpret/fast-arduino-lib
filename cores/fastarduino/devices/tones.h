@@ -33,12 +33,16 @@ namespace devices::audio
 	 * This also defnes "special" values that are not actual tones but are 
 	 * reserved for user purposes or for silences:
 	 * - `USER0` ... `USER7`: can be used for any purpose defined by the end-developer
-	 * - `SILENCE`: used to play no tone at all
+	 * - `SILENCE` or `REST`: used to play no tone at all
 	 * All other tones are named according to their musical note (in English scale),
 	 * and their octave,. This is similar to the usual
 	 * [Scientific Pitch Notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation)
 	 * except for the octave index which is different: in this enum, the standard
 	 * tuning pitch (440Hz) is `A1` instead of `A4` in *SPN*.
+	 * 
+	 * Sharps are noted as `s` between the note and its octave, as in `Cs0`.
+	 * Flats are noted as `f` between the note and its octave, as in `Df0`.
+	 * 
 	 * Please note that each tone can be converted to a `uint16_t` which is its
 	 * playing frequency.
 	 */
@@ -53,72 +57,98 @@ namespace devices::audio
 		USER6,
 		USER7,
 
-		// Use this tone for pause (no tone)
+		// Use this tone for rest (no tone)
 		SILENCE = USER7 + 1,
+		REST = SILENCE,
 
 		C0 = 131,
 		Cs0 = 139,
+		Df0 = Cs0,
 		D0 = 147,
 		Ds0 = 156,
+		Ef0 = Ds0,
 		E0 = 165,
 		F0 = 175,
 		Fs0 = 185,
+		Gf0 = Fs0,
 		G0 = 196,
 		Gs0 = 208,
+		Af0 = Gs0,
 		A0 = 220,
 		As0 = 233,
+		Bf0 = As0,
 		B0 = 247,
 
 		C1 = 262,
 		Cs1 = 277,
+		Df1 = Cs1,
 		D1 = 294,
 		Ds1 = 311,
+		Ef1 = Ds1,
 		E1 = 330,
 		F1 = 349,
 		Fs1 = 370,
+		Gf1 = Fs1,
 		G1 = 392,
 		Gs1 = 415,
+		Af1 = Gs1,
 		A1 = 440,
 		As1 = 466,
+		Bf1 = As1,
 		B1 = 494,
 
 		C2 = 523,
 		Cs2 = 554,
+		Df2 = Cs2,
 		D2 = 587,
 		Ds2 = 622,
+		Ef2 = Ds2,
 		E2 = 659,
 		F2 = 698,
 		Fs2 = 740,
+		Gf2 = Fs2,
 		G2 = 784,
 		Gs2 = 831,
+		Af2 = Gs2,
 		A2 = 880,
 		As2 = 932,
+		Bf2 = As2,
 		B2 = 988,
 
 		C3 = 1046,
 		Cs3 = 1109,
+		Df3 = Cs3,
 		D3 = 1175,
 		Ds3 = 1245,
+		Ef3 = Ds3,
 		E3 = 1319,
 		F3 = 1397,
 		Fs3 = 1480,
+		Gf3 = Fs3,
 		G3 = 1568,
 		Gs3 = 1662,
+		Af3 = Gs3,
 		A3 = 1760,
 		As3 = 1865,
+		Bf3 = As3,
 		B3 = 1976,
 
 		C4 = 2093,
 		Cs4 = 2217,
+		Df4 = Cs4,
 		D4 = 2349,
 		Ds4 = 2489,
+		Ef4 = Ds4,
 		E4 = 2637,
 		F4 = 2794,
 		Fs4 = 2960,
+		Gf4 = Fs4,
 		G4 = 3136,
 		Gs4 = 3322,
+		Af4 = Gs4,
 		A4 = 3520,
 		As4 = 3729,
+		Bf4 = As4,
 		B4 = 3951,
 	};
 
