@@ -25,8 +25,8 @@
 
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
-// Better score found at
-// https://www.musicnotes.com/sheetmusic/mtd.asp?ppn=MN0017607
+// Better score (simplified) found at
+// http://www.filmmusicnotes.com/john-williams-themes-part-3-of-6-the-imperial-march-darth-vaders-theme/
 
 // Example of square wave generation, using CTC mode and COM toggle
 #include <fastarduino/events.h>
@@ -56,62 +56,93 @@ static constexpr const Duration QV = Duration::QUAVER;
 static constexpr const Duration SQ = Duration::SEMI_QUAVER;
 static constexpr auto DOT = devices::audio::dotted;
 
-// The Imperial March
 static const QTONEPLAY music[] PROGMEM =
 {
 	// First part
-	QTONEPLAY{Tone::A1, QN},
-	QTONEPLAY{Tone::A1, QN},
-	QTONEPLAY{Tone::A1, QN},
-	QTONEPLAY{Tone::F1, DOT(QV)},
-	QTONEPLAY{Tone::C2, SQ},
-	QTONEPLAY{Tone::A1, QN},
-	QTONEPLAY{Tone::F1, DOT(QV)},
-	QTONEPLAY{Tone::C2, SQ},
-	QTONEPLAY{Tone::A1, HN},
+	QTONEPLAY{Tone::G2, QN},
+	QTONEPLAY{Tone::G2, QN},
+	QTONEPLAY{Tone::G2, QN},
+	QTONEPLAY{Tone::Ef2, DOT(QV)},
+	QTONEPLAY{Tone::Bf2, SQ},
+
+	QTONEPLAY{Tone::G2, QN},
+	QTONEPLAY{Tone::Ef2, DOT(QV)},
+	QTONEPLAY{Tone::Bf2, SQ},
+	QTONEPLAY{Tone::G2, HN},
 
 	// Second part
-	QTONEPLAY{Tone::E2, QN},
-	QTONEPLAY{Tone::E2, QN},
-	QTONEPLAY{Tone::E2, QN},
-	QTONEPLAY{Tone::F2, DOT(QV)},
-	QTONEPLAY{Tone::C2, SQ},
-	QTONEPLAY{Tone::Gs1, QN},
-	QTONEPLAY{Tone::F1, DOT(QV)},
-	QTONEPLAY{Tone::C2, SQ},
-	QTONEPLAY{Tone::A1, HN},
+	QTONEPLAY{Tone::D3, QN},
+	QTONEPLAY{Tone::D3, QN},
+	QTONEPLAY{Tone::D3, QN},
+	QTONEPLAY{Tone::Ef3, DOT(QV)},
+	QTONEPLAY{Tone::Bf2, SQ},
 
-	// Third part (repeated once)
-	QTONEPLAY{REPEAT_START},
-	QTONEPLAY{Tone::A2, QN},
-	QTONEPLAY{Tone::A1, DOT(QV)},
-	QTONEPLAY{Tone::A1, SQ},
-	QTONEPLAY{Tone::A2, QN},
-	QTONEPLAY{Tone::Gs2, DOT(QV)},
+	QTONEPLAY{Tone::Gf2, QN},
+	QTONEPLAY{Tone::Ef2, DOT(QV)},
+	QTONEPLAY{Tone::Bf2, SQ},
+	QTONEPLAY{Tone::G2, HN},
+
+	// Third part
+	QTONEPLAY{Tone::G3, QN},
+	QTONEPLAY{Tone::G2, DOT(QV)},
 	QTONEPLAY{Tone::G2, SQ},
-	QTONEPLAY{Tone::Fs2, SQ},
-	QTONEPLAY{Tone::F2, SQ},
-	QTONEPLAY{Tone::Fs2, QV},
-	QTONEPLAY{Tone::SILENCE, QV},
+	QTONEPLAY{Tone::G3, QN},
+	QTONEPLAY{Tone::Fs3, DOT(QV)},
+	QTONEPLAY{Tone::F3, SQ},
 
-	QTONEPLAY{Tone::As1, QV},
-	QTONEPLAY{Tone::Ds2, QN},
-	QTONEPLAY{Tone::D2, DOT(QV)},
-	QTONEPLAY{Tone::Cs2, SQ},
-	QTONEPLAY{Tone::C2, SQ},
-	QTONEPLAY{Tone::B1, SQ},
-	QTONEPLAY{Tone::C2, QV},
+	QTONEPLAY{Tone::E3, SQ},
+	QTONEPLAY{Tone::Ds3, SQ},
+	QTONEPLAY{Tone::E3, QV},
 	QTONEPLAY{Tone::SILENCE, QV},
+	QTONEPLAY{Tone::Gs2, QV},
+	QTONEPLAY{Tone::Cs3, QN},
+	QTONEPLAY{Tone::C3, DOT(QV)},
+	QTONEPLAY{Tone::B2, SQ},
 
-	QTONEPLAY{Tone::F1, SQ},
-	QTONEPLAY{Tone::Gs1, QN},
-	QTONEPLAY{Tone::F1, DOT(QV)},
-	QTONEPLAY{Tone::A1, SQ},
-	QTONEPLAY{Tone::C2, QN},
-	QTONEPLAY{Tone::A1, DOT(QV)},
-	QTONEPLAY{Tone::C2, SQ},
-	QTONEPLAY{Tone::E2, HN},
-	QTONEPLAY{REPEAT_END, 1},
+	QTONEPLAY{Tone::Bf2, SQ},
+	QTONEPLAY{Tone::A2, SQ},
+	QTONEPLAY{Tone::Bf2, QV},
+	QTONEPLAY{Tone::SILENCE, QV},
+	QTONEPLAY{Tone::Ef2, SQ},
+	QTONEPLAY{Tone::Gf2, QN},
+	QTONEPLAY{Tone::Ef2, DOT(QV)},
+	QTONEPLAY{Tone::Gf2, SQ},
+
+	QTONEPLAY{Tone::Bf2, QN},
+	QTONEPLAY{Tone::G2, DOT(QV)},
+	QTONEPLAY{Tone::Bf2, SQ},
+	QTONEPLAY{Tone::D3, HN},
+
+	// Fourth part (like 3rd part except last bar)
+	QTONEPLAY{Tone::G3, QN},
+	QTONEPLAY{Tone::G2, DOT(QV)},
+	QTONEPLAY{Tone::G2, SQ},
+	QTONEPLAY{Tone::G3, QN},
+	QTONEPLAY{Tone::Fs3, DOT(QV)},
+	QTONEPLAY{Tone::F3, SQ},
+
+	QTONEPLAY{Tone::E3, SQ},
+	QTONEPLAY{Tone::Ds3, SQ},
+	QTONEPLAY{Tone::E3, QV},
+	QTONEPLAY{Tone::SILENCE, QV},
+	QTONEPLAY{Tone::Gs2, QV},
+	QTONEPLAY{Tone::Cs3, QN},
+	QTONEPLAY{Tone::C3, DOT(QV)},
+	QTONEPLAY{Tone::B2, SQ},
+
+	QTONEPLAY{Tone::Bf2, SQ},
+	QTONEPLAY{Tone::A2, SQ},
+	QTONEPLAY{Tone::Bf2, QV},
+	QTONEPLAY{Tone::SILENCE, QV},
+	QTONEPLAY{Tone::Ef2, SQ},
+	QTONEPLAY{Tone::Gf2, QN},
+	QTONEPLAY{Tone::Ef2, DOT(QV)},
+	QTONEPLAY{Tone::Gf2, SQ},
+
+	QTONEPLAY{Tone::G2, QN},
+	QTONEPLAY{Tone::Ef2, DOT(QV)},
+	QTONEPLAY{Tone::Bf2, SQ},
+	QTONEPLAY{Tone::G2, HN},
 
 	QTONEPLAY{END, 0}
 };
@@ -146,7 +177,7 @@ int main()
 	GENERATOR generator;
 	TONEPLAYER player{generator};
 
-	time::delay_ms(5000);
+	time::delay_ms(1000);
 	player.play_flash(music, BPM);
 
 	timer.begin();
