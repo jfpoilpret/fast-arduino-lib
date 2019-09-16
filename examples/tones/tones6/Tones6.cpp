@@ -47,18 +47,16 @@ using devices::audio::Tone;
 using namespace devices::audio::SpecialTone;
 using QTONEPLAY = TONEPLAYER::TONE_PLAY;
 
-//TODO put in special header?
+// Define constants with short names to ease score transcription
 using devices::audio::Duration;
-static constexpr const Duration WN = Duration::WN;
-static constexpr const Duration HN = Duration::HN;
-static constexpr const Duration QN = Duration::QN;
-static constexpr const Duration QV = Duration::QV;
-static constexpr const Duration SQ = Duration::SQ;
+static constexpr const Duration WN = Duration::WHOLE;
+static constexpr const Duration HN = Duration::HALF;
+static constexpr const Duration QN = Duration::QUARTER;
+static constexpr const Duration QV = Duration::QUAVER;
+static constexpr const Duration SQ = Duration::SEMI_QUAVER;
 static constexpr auto DOT = devices::audio::dotted;
 
-//TODO QN = 500, replace all other
 // The Imperial March
-// Durations have been reviewed based on official score (at 120 BPM)
 static const QTONEPLAY music[] PROGMEM =
 {
 	// First part

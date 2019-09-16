@@ -65,7 +65,6 @@ namespace devices::audio
 	}
 
 	//TODO DOCS
-	//TODO find easy way to use durations in scores (short names)
 
 	// The uint8_t is the multiplier to apply to the duration of a 32th note
 	// to get the actual duration (in 4 quarters mode)
@@ -85,20 +84,6 @@ namespace devices::audio
 		CROTCHET = QUARTER,
 		QUAVER = EIGHTH,
 		SEMI_QUAVER = SIXTEENTH,
-
-		// Abbreviations for notes durations (typically used in scores)
-		WN = WHOLE,
-		HN = HALF,
-		QN = QUARTER,
-		QV = EIGHTH,
-		SQ = SIXTEENTH,
-
-		// Time-based abbreviations
-		T1 = WHOLE,
-		T2 = HALF,
-		T4 = QUARTER,
-		T8 = EIGHTH,
-		T16 = SIXTEENTH,
 	};
 
 	static constexpr Duration dotted(Duration d)
