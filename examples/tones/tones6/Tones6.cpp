@@ -25,6 +25,8 @@
 
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
+// Better score found at
+// https://www.musicnotes.com/sheetmusic/mtd.asp?ppn=MN0017607
 
 // Example of square wave generation, using CTC mode and COM toggle
 #include <fastarduino/events.h>
@@ -45,66 +47,78 @@ using devices::audio::Tone;
 using namespace devices::audio::SpecialTone;
 using QTONEPLAY = TONEPLAYER::TONE_PLAY;
 
+//TODO put in special header?
+using devices::audio::Duration;
+static constexpr const Duration WN = Duration::WN;
+static constexpr const Duration HN = Duration::HN;
+static constexpr const Duration QN = Duration::QN;
+static constexpr const Duration QV = Duration::QV;
+static constexpr const Duration SQ = Duration::SQ;
+static constexpr auto DOT = devices::audio::dotted;
+
+//TODO QN = 500, replace all other
 // The Imperial March
 // Durations have been reviewed based on official score (at 120 BPM)
 static const QTONEPLAY music[] PROGMEM =
 {
 	// First part
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::F1, 375},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::A1, 500},
-	QTONEPLAY{Tone::F1, 375},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::A1, 1000},
+	QTONEPLAY{Tone::A1, QN},
+	QTONEPLAY{Tone::A1, QN},
+	QTONEPLAY{Tone::A1, QN},
+	QTONEPLAY{Tone::F1, DOT(QV)},
+	QTONEPLAY{Tone::C2, SQ},
+	QTONEPLAY{Tone::A1, QN},
+	QTONEPLAY{Tone::F1, DOT(QV)},
+	QTONEPLAY{Tone::C2, SQ},
+	QTONEPLAY{Tone::A1, HN},
 
 	// Second part
-	QTONEPLAY{Tone::E2, 500},
-	QTONEPLAY{Tone::E2, 500},
-	QTONEPLAY{Tone::E2, 500},
-	QTONEPLAY{Tone::F2, 375},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::Gs1, 500},
-	QTONEPLAY{Tone::F1, 375},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::A1, 1000},
+	QTONEPLAY{Tone::E2, QN},
+	QTONEPLAY{Tone::E2, QN},
+	QTONEPLAY{Tone::E2, QN},
+	QTONEPLAY{Tone::F2, DOT(QV)},
+	QTONEPLAY{Tone::C2, SQ},
+	QTONEPLAY{Tone::Gs1, QN},
+	QTONEPLAY{Tone::F1, DOT(QV)},
+	QTONEPLAY{Tone::C2, SQ},
+	QTONEPLAY{Tone::A1, HN},
 
 	// Third part (repeated once)
 	QTONEPLAY{REPEAT_START},
-	QTONEPLAY{Tone::A2, 500},
-	QTONEPLAY{Tone::A1, 375},
-	QTONEPLAY{Tone::A1, 125},
-	QTONEPLAY{Tone::A2, 500},
-	QTONEPLAY{Tone::Gs2, 375},
-	QTONEPLAY{Tone::G2, 125},
-	QTONEPLAY{Tone::Fs2, 125},
-	QTONEPLAY{Tone::F2, 125},
-	QTONEPLAY{Tone::Fs2, 250},
-	QTONEPLAY{Tone::SILENCE, 250},
+	QTONEPLAY{Tone::A2, QN},
+	QTONEPLAY{Tone::A1, DOT(QV)},
+	QTONEPLAY{Tone::A1, SQ},
+	QTONEPLAY{Tone::A2, QN},
+	QTONEPLAY{Tone::Gs2, DOT(QV)},
+	QTONEPLAY{Tone::G2, SQ},
+	QTONEPLAY{Tone::Fs2, SQ},
+	QTONEPLAY{Tone::F2, SQ},
+	QTONEPLAY{Tone::Fs2, QV},
+	QTONEPLAY{Tone::SILENCE, QV},
 
-	QTONEPLAY{Tone::As1, 250},
-	QTONEPLAY{Tone::Ds2, 500},
-	QTONEPLAY{Tone::D2, 375},
-	QTONEPLAY{Tone::Cs2, 125},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::B1, 125},
-	QTONEPLAY{Tone::C2, 250},
-	QTONEPLAY{Tone::SILENCE, 250},
+	QTONEPLAY{Tone::As1, QV},
+	QTONEPLAY{Tone::Ds2, QN},
+	QTONEPLAY{Tone::D2, DOT(QV)},
+	QTONEPLAY{Tone::Cs2, SQ},
+	QTONEPLAY{Tone::C2, SQ},
+	QTONEPLAY{Tone::B1, SQ},
+	QTONEPLAY{Tone::C2, QV},
+	QTONEPLAY{Tone::SILENCE, QV},
 
-	QTONEPLAY{Tone::F1, 125},
-	QTONEPLAY{Tone::Gs1, 500},
-	QTONEPLAY{Tone::F1, 375},
-	QTONEPLAY{Tone::A1, 125},
-	QTONEPLAY{Tone::C2, 500},
-	QTONEPLAY{Tone::A1, 375},
-	QTONEPLAY{Tone::C2, 125},
-	QTONEPLAY{Tone::E2, 1000},
+	QTONEPLAY{Tone::F1, SQ},
+	QTONEPLAY{Tone::Gs1, QN},
+	QTONEPLAY{Tone::F1, DOT(QV)},
+	QTONEPLAY{Tone::A1, SQ},
+	QTONEPLAY{Tone::C2, QN},
+	QTONEPLAY{Tone::A1, DOT(QV)},
+	QTONEPLAY{Tone::C2, SQ},
+	QTONEPLAY{Tone::E2, HN},
 	QTONEPLAY{REPEAT_END, 1},
 
 	QTONEPLAY{END, 0}
 };
+
+static constexpr const uint8_t BPM = 120;
 
 using GENERATOR = TONEPLAYER::GENERATOR;
 
@@ -135,7 +149,7 @@ int main()
 	TONEPLAYER player{generator};
 
 	time::delay_ms(5000);
-	player.play_flash(music);
+	player.play_flash(music, BPM);
 
 	timer.begin();
 	while (true)
