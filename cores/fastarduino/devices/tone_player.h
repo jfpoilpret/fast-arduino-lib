@@ -88,7 +88,12 @@ namespace devices::audio
 
 	static constexpr Duration dotted(Duration d)
 	{
-		return Duration(uint8_t(d) | 0x80);
+		return Duration(uint8_t(d) + uint8_t(d) / 2);
+	}
+
+	static constexpr Duration triplet(Duration d)
+	{
+		return Duration(uint8_t(d) * 2 / 3);
 	}
 
 	/**
@@ -511,8 +516,7 @@ namespace devices::audio
 
 		uint16_t duration(Duration d) const
 		{
-			const uint16_t delay = (uint8_t(d) & 0x7FU) * t32_duration_ms_;
-			return (uint8_t(d) & 0x80U) ? (delay + delay / 2U) : delay;
+			return uint8_t(d) * t32_duration_ms_;
 		}
 
 		static const TONE_PLAY* load_sram(const TONE_PLAY* address, TONE_PLAY& holder UNUSED)
