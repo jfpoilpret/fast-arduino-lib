@@ -164,7 +164,7 @@ static const QTONEPLAY1 music1[] PROGMEM =
 // March melody (each part is one bar), melody starts after 4 bars
 static const QTONEPLAY2 music2[] PROGMEM =
 {
-	// First part
+	// First part (7 times)
 	QTONEPLAY2(REPEAT_START, 0),
 	QTONEPLAY2{Tone::G0, QN},
 	QTONEPLAY2{Tone::G0, QV},
@@ -179,26 +179,9 @@ static const QTONEPLAY2 music2[] PROGMEM =
 	QTONEPLAY2{Tone::Ef0, TRIPLET(SQ)},
 	QTONEPLAY2{Tone::Ef0, TRIPLET(SQ)},
 	QTONEPLAY2{Tone::Ef0, QV},
-	QTONEPLAY2(REPEAT_END, 1),
+	QTONEPLAY2(REPEAT_END, 6),
 
-	// 2nd part
-	QTONEPLAY2(REPEAT_START, 0),
-	QTONEPLAY2{Tone::G0, QN},
-	QTONEPLAY2{Tone::G0, QV},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, QV},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
-	QTONEPLAY2{Tone::G0, QV},
-	QTONEPLAY2(REPEAT_END, 4),
-
-	// 3rd part
+	// 3rd part (once)
 	QTONEPLAY2{Tone::Ef0, QN},
 	QTONEPLAY2{Tone::C1, QN},
 	QTONEPLAY2{Tone::G0, QV},
@@ -210,7 +193,7 @@ static const QTONEPLAY2 music2[] PROGMEM =
 	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
 	QTONEPLAY2{Tone::G0, QV},
 
-	// 4th part (like 2nd part)
+	// 4th part (like 2nd part, only once)
 	QTONEPLAY2{Tone::G0, QN},
 	QTONEPLAY2{Tone::G0, QV},
 	QTONEPLAY2{Tone::G0, TRIPLET(SQ)},
