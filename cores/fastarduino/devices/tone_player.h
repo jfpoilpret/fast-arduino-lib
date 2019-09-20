@@ -25,10 +25,6 @@
 #include "../flash.h"
 #include "tones.h"
 
-//TODO improve duration config by using musical notes durations (whole, half, quarter...)
-// along with a tempo provided at runtime (API).
-//TODO support slurs and ties (=> no internote delay)
-
 namespace devices::audio
 {
 	// Forward declaration
@@ -56,41 +52,92 @@ namespace devices::audio
 
 		/**
 		 * This special tone marks the end of a repeating sequence (started with
-		 * `REPEAT_START`). The associated duration in `TonePlay` has a special
+		 * `REPEAT_START`). The associated `repeats` in `TonePlay` has a special
 		 * meaning: it indicates the number of times to repeat the sequence.
 		 * @sa REPEAT_START
-		 * @sa TonePlay::ms
 		 */
 		static constexpr const Tone REPEAT_END = Tone::USER2;
+
+		/**
+		 * This special tone marks the following notes to be tied together, ie
+		 * their durations are added with no intertone delay. The associated `repeats`
+		 * in `TonePlay` indicates how many following notes shall be tied to the next;
+		 * hence, in order to tie two notes, you should set `repeats` to `1`.
+		 * 
+		 * According to music theory, ties are between two notes of the same pitch 
+		 * only; however, there is no control of this constraint.
+		 * @sa SLUR
+		 */
+		static constexpr const Tone TIE = Tone::USER3;
+
+		/**
+		 * This special tone marks the following notes to be slurred together, ie
+		 * no intertone delay shall occur between these notes. The associated `repeats`
+		 * in `TonePlay` indicates how many following notes shall be slurred to the
+		 * next; hence, in order to slur two notes, you should set `repeats` to `1`.
+		 * 
+		 * According to music theory, slurs are between two notes of different pitches 
+		 * only; however, there is no control of this constraint.
+		 * Implementation-wise, technically speaking, there is no difference between
+		 * ties and slurs.
+		 * @sa TIE
+		 */
+		static constexpr const Tone SLUR = TIE;
 	}
 
-	//TODO DOCS
-
-	// The uint8_t is the multiplier to apply to the duration of a 32th note
-	// to get the actual duration (in 4 quarters mode)
-	// The MSB is special and means "dotted" i.e. "add one half to that duration"
+	/**
+	 * Possible duration of a note, following music theory.
+	 * The shortest duration supported is the semi-quaver (or sixteenth).
+	 * Synonyms are also defined when they exist.
+	 * 
+	 * The `uint8_t` value is the multiplier to apply to the duration of a 32th
+	 * note to get the actual duration (in 4 quarters time signature).
+	 * 
+	 * A note duration can be altered by:
+	 * - dotting it (i.e. multiplying the duration by 1.5)
+	 * - making it a note in a triplet (i.e. multiplying the duration by 0.67)
+	 * 
+	 * @sa dotted()
+	 * @sa triplet()
+	 */
 	enum class Duration : uint8_t
 	{
 		// Common names for notes durations
+		/** Duration of a whole note; 4 times the duration of a quarter. */
 		WHOLE = 32,
+		/** Duration of a half note; 2 times the duration of a quarter. */
 		HALF = 16,
+		/** Duration of a quarter note; this is actually the duration of one beat. */
 		QUARTER = 8,
+		/** Duration of an eighth note; half the duration of a quarter. */
 		EIGHTH = 4,
+		/** Duration of a sixteenth note; a quarter the duration of a quarter! */
 		SIXTEENTH = 2,
 
 		// Synonyms for some notes durations
+		/** Other common name for a whole note. */
 		SEMI_BREVE = WHOLE,
+		/** Other common name for a half note. */
 		MINIM = HALF,
+		/** Other common name for a quarter note. */
 		CROTCHET = QUARTER,
+		/** Other common name for an eighth note. */
 		QUAVER = EIGHTH,
+		/** Other common name for a sixteenth note. */
 		SEMI_QUAVER = SIXTEENTH,
 	};
 
+	/**
+	 * Transforms a note duration to its dotted value (1.5 times the given duration).
+	 */
 	static constexpr Duration dotted(Duration d)
 	{
 		return Duration(uint8_t(d) + uint8_t(d) / 2);
 	}
 
+	/**
+	 * Transforms a note duration to allow it to use in a triplet.
+	 */
 	static constexpr Duration triplet(Duration d)
 	{
 		return Duration(uint8_t(d) * 2 / 3);
@@ -119,24 +166,29 @@ namespace devices::audio
 		 * `TonePlay` variable.
 		 * You should always ensure you replace such a variable with one
 		 * constructed with the next constructor.
-		 * @sa TonePlay(Tone, uint16_t)
+		 * @sa TonePlay(Tone, uint8_t)
 		 */
 		TonePlay() = default;
 
-		//TODO DOC update
 		/**
 		 * Construct a tone play with the provided tone and duration.
 		 * 
 		 * @param tone the `Tone` for this `TonePlay`; it will be automatically
 		 * converted (at compile-time if @p t is a constant) to the proper
 		 * timer prescaler and counter.
-		 * @param ms the duration of this tone in milliseconds; this may have
-		 * different meanings if @p t is a `SpecialTone`.
+		 * @param duration the duration of this note.
 		 */
 		constexpr TonePlay(Tone tone, Duration duration) : tone_{tone}, duration_{duration} {}
 
-		//TODO DOC
-		constexpr TonePlay(Tone tone, uint8_t repeats = 0) : tone_{tone}, repeats_{repeats} {}
+		/**
+		 * Construct a "special" tone play with the provided value.
+		 * 
+		 * @param tone the special tone (as defined in `SpecialTone` namespace)
+		 * @param value additional value which meaning depends on actual @p tone:
+		 * number of repeats for `SpecialTone::REPEAT_END`, number of ties or
+		 * slurs between successive notes for `SpecialTone::TIE`.
+		 */
+		constexpr TonePlay(Tone tone, uint8_t value = 0) : tone_{tone}, repeats_{value} {}
 
 	private:
 		Duration duration() const
@@ -167,6 +219,14 @@ namespace devices::audio
 		{
 			return repeats_;
 		}
+		bool is_tie() const
+		{
+			return tone_ == SpecialTone::TIE;
+		}
+		uint8_t num_ties() const
+		{
+			return ties_;
+		}
 
 		template<board::Timer NTIMER, board::PWMPin OUTPUT>
 		void generate_tone(ToneGenerator<NTIMER, OUTPUT>& generator) const
@@ -179,6 +239,7 @@ namespace devices::audio
 		{
 			Duration duration_;
 			uint8_t repeats_;
+			uint8_t ties_;
 		};
 
 		template<board::Timer, board::PWMPin, typename> friend class AbstractTonePlayer;
@@ -189,9 +250,14 @@ namespace devices::audio
 	 * Contrarily to `TonePlay`, it does not store `Tone` (i.e. frequency) but
 	 * Timer prescaler and counter for the desired frequency.
 	 * The advantage is that when you construct a `QTonePlay` from constant
-	 * tones, each tone wll be converted to timer prescaler and counter at 
+	 * tones, each tone will be converted to timer prescaler and counter at 
 	 * compile-time, hence the generated code is smaller and more efficient;
 	 * this can be useful when your MCU is limited in data size.
+	 * 
+	 * @tparam NTIMER the AVR timer to use for the underlying Timer
+	 * @tparam OUTPUT the `board::PWMPin` connected to the buzzer;
+	 * this must be the pin OCnA, where n is the AVR Timer number
+	 * 
 	 * @sa TonePlay
 	 */
 	template<board::Timer NTIMER, board::PWMPin OUTPUT> class QTonePlay
@@ -206,22 +272,27 @@ namespace devices::audio
 		 */
 		QTonePlay() = default;
 
-		//TODO DOC update
 		/**
 		 * Construct an optimized tone play for the provided tone and duration.
 		 * 
 		 * @param tone the `Tone` for this `QTonePlay`; it will be automatically
 		 * converted (at compile-time if @p t is a constant) to the proper
 		 * timer prescaler and counter.
-		 * @param ms the duration of this tone in milliseconds; this may have
-		 * different meanings if @p t is a `SpecialTone`.
+		 * @param duration the duration of this note.
 		 */
 		constexpr QTonePlay(Tone tone, Duration duration)
 			: flags_{flags(tone)}, prescaler_{prescaler(tone)}, counter_{counter(tone)}, duration_{duration} {}
 
-		//TODO DOC
-		constexpr QTonePlay(Tone tone, uint8_t repeats = 0)
-			: flags_{flags(tone)}, prescaler_{prescaler(tone)}, counter_{counter(tone)}, repeats_{repeats} {}
+		/**
+		 * Construct a "special" optimized tone play with the provided value.
+		 * 
+		 * @param tone the special tone (as defined in `SpecialTone` namespace)
+		 * @param value additional value which meaning depends on actual @p tone:
+		 * number of repeats for `SpecialTone::REPEAT_END`, number of ties or
+		 * slurs between successive notes for `SpecialTone::TIE`.
+		 */
+		constexpr QTonePlay(Tone tone, uint8_t value = 0)
+			: flags_{flags(tone)}, prescaler_{prescaler(tone)}, counter_{counter(tone)}, repeats_{value} {}
 
 	private:
 		using CALC = timer::Calculator<NTIMER>;
@@ -257,6 +328,14 @@ namespace devices::audio
 		{
 			return repeats_;
 		}
+		bool is_tie() const
+		{
+			return flags_ == TIE;
+		}
+		uint8_t num_ties() const
+		{
+			return ties_;
+		}
 
 		void generate_tone(ToneGenerator<NTIMER, OUTPUT>& generator) const
 		{
@@ -269,6 +348,7 @@ namespace devices::audio
 		static constexpr uint8_t END = 0x02;
 		static constexpr uint8_t REPEAT_START = 0x04;
 		static constexpr uint8_t REPEAT_END = 0x08;
+		static constexpr uint8_t TIE = 0x10;
 
 		uint8_t flags_;
 		PRESCALER prescaler_;
@@ -277,6 +357,7 @@ namespace devices::audio
 		{
 			Duration duration_;
 			uint8_t repeats_;
+			uint8_t ties_;
 		};
 
 		static constexpr uint32_t period(Tone tone)
@@ -297,6 +378,7 @@ namespace devices::audio
 			if (tone == SpecialTone::END) return END;
 			if (tone == SpecialTone::REPEAT_START) return REPEAT_START;
 			if (tone == SpecialTone::REPEAT_END) return REPEAT_END;
+			if (tone == SpecialTone::TIE) return TIE;
 			return TONE;
 		}
 
@@ -355,10 +437,15 @@ namespace devices::audio
 		 */
 		explicit AbstractTonePlayer(GENERATOR& tone_generator)
 		: generator_{tone_generator}, loader_{}, t32_duration_ms_{}, 
-		  current_play_{}, repeat_play_{}, repeat_times_{}, no_delay_{} {}
+		  current_play_{}, repeat_play_{}, repeat_times_{}, tie_notes_{}, no_delay_{} {}
 
-		//TODO DOC
-		//TODO improve by providing a time signature?
+		/**
+		 * Calculate the minimum duration (duration of a 32nd note), in milliseconds,
+		 * for the given tempo (beats per minute).
+		 * If provided with a constant value for @p bpm, then the result will be 
+		 * evaluated at compile-time.
+		 * @sa set_min_duration()
+		 */
 		static constexpr uint16_t calculate_min_duration(uint8_t bpm)
 		{
 			// bpm defines the duration of a quarter note (in 4/4 mode)
@@ -366,13 +453,21 @@ namespace devices::audio
 			return (60U * 1000U / 8U) / bpm;
 		}
 
-		//TODO DOC
+		/**
+		 * Set the duration, in milliseconds, of a 32nd note.
+		 * This method must be called before any melody play.
+		 * @sa calculate_min_duration()
+		 * @sa get_min_duration()
+		 */
 		void set_min_duration(uint16_t min_duration)
 		{
 			t32_duration_ms_ = min_duration;
 		}
 
-		//TODO DOC
+		/**
+		 * Get the duration, in milliseconds, of a 32nd note.
+		 * @sa set_min_duration()
+		 */
 		uint16_t get_min_duration() const
 		{
 			return t32_duration_ms_;
@@ -446,7 +541,9 @@ namespace devices::audio
 		}
 
 	private:
-		static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
+		//FIXME temporary longer internote delay
+		// static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
+		static constexpr const uint16_t INTERTONE_DELAY_MS = 200;
 
 		using LOAD_TONE = const TONE_PLAY* (*) (const TONE_PLAY* address, TONE_PLAY& holder);
 
@@ -456,6 +553,7 @@ namespace devices::audio
 			current_play_ = melody;
 			repeat_play_ = nullptr;
 			repeat_times_ = 0;
+			tie_notes_ = 0;
 		}
 
 		void reset_()
@@ -464,13 +562,13 @@ namespace devices::audio
 			current_play_ = nullptr;
 			repeat_play_ = nullptr;
 			repeat_times_ = 0;
+			tie_notes_ = 0;
 		}
 
 		uint16_t start_next_()
 		{
 			if (loader_ == nullptr) return 0;
 
-			uint16_t delay = 0;
 			TONE_PLAY holder;
 			const TONE_PLAY* current = loader_(current_play_, holder);
 			if (current->is_end())
@@ -478,11 +576,12 @@ namespace devices::audio
 				reset_();
 				return 0;
 			}
+			uint16_t delay = 0;
+			no_delay_ = true;
 			if (current->is_repeat_start())
 			{
 				repeat_play_ = current_play_;
 				repeat_times_ = -1;
-				no_delay_ = true;
 			}
 			else if (current->is_repeat_end())
 			{
@@ -494,13 +593,19 @@ namespace devices::audio
 					else
 						repeat_play_ = nullptr;
 				}
-				no_delay_ = true;
+			}
+			else if (current->is_tie())
+			{
+				tie_notes_ = current->num_ties();
 			}
 			else
 			{
 				if (current->is_tone()) current->generate_tone(generator_);
+				if (tie_notes_)
+					--tie_notes_;
+				else
+					no_delay_ = false;
 				delay = duration(current->duration());
-				no_delay_ = false;
 			}
 			++current_play_;
 			return delay;
@@ -540,6 +645,7 @@ namespace devices::audio
 		const TONE_PLAY* current_play_;
 		const TONE_PLAY* repeat_play_;
 		int8_t repeat_times_;
+		uint8_t tie_notes_;
 		bool no_delay_;
 	};
 
@@ -594,13 +700,14 @@ namespace devices::audio
 		 */
 		explicit TonePlayer(GENERATOR& tone_generator) : BASE{tone_generator}, stop_{true} {}
 
-		//TODO DOC update
 		/**
 		 * Play a melody, defined by a sequence of `TONE_PLAY`s, stored in SRAM.
 		 * This method is blocking: it will return only when the melody is
 		 * finished playing.
 		 * @param melody a pointer, in SRAM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_flash()
 		 * @sa stop()
@@ -612,13 +719,14 @@ namespace devices::audio
 			play_();
 		}
 
-		//TODO DOC update
 		/**
 		 * Play a melody, defined by a sequence of `TONE_PLAY`s, stored in EEPROM.
 		 * This method is blocking: it will return only when the melody is
 		 * finished playing.
 		 * @param melody a pointer, in EEPROM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * played; one beat is the duration of a quarter note.
 		 * @sa play_sram()
 		 * @sa play_flash()
 		 * @sa stop()
@@ -630,13 +738,14 @@ namespace devices::audio
 			play_();
 		}
 
-		//TODO DOC update
 		/**
 		 * Play a melody, defined by a sequence of `TONE_PLAY`s, stored in Flash.
 		 * This method is blocking: it will return only when the melody is
 		 * finished playing.
 		 * @param melody a pointer, in Flash, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_sram()
 		 * @sa stop()
@@ -737,14 +846,21 @@ namespace devices::audio
 		explicit AsyncTonePlayer(GENERATOR& tone_generator)
 		: BASE{tone_generator}, status_{Status::NOT_STARTED}, next_time_{} {}
 
-		//TODO DOC
-		//TODO check better API (statis?) to find out best timer settings in relation to bpm
+		/**
+		 * Get the duration, in milliseconds, of a 32nd note.
+		 * This value can be used to set the ideal timer/counter value that shall
+		 * be used to asynchronously play a melody.
+		 * This method shall be called only AFTER one of `play_xxxx()` methods has
+		 * been called.
+		 * @sa play_sram()
+		 * @sa play_eeprom()
+		 * @sa play_flash()
+		 */
 		uint16_t get_min_duration() const
 		{
 			return BASE::get_min_duration();
 		}
 
-		//TODO DOC update
 		/**
 		 * Start playing a melody, defined by a sequence of `TONE_PLAY`s, stored in SRAM.
 		 * This method is asynchronous: it returns immediately even ebfore starting
@@ -752,6 +868,8 @@ namespace devices::audio
 		 * Actual play is performed by frequent calls of `update()`.
 		 * @param melody a pointer, in SRAM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_flash()
 		 * @sa stop()
@@ -766,7 +884,6 @@ namespace devices::audio
 			status_ = Status::STARTED;
 		}
 
-		//TODO DOC update
 		/**
 		 * Start playing a melody, defined by a sequence of `TONE_PLAY`s, stored in EEPROM.
 		 * This method is asynchronous: it returns immediately even ebfore starting
@@ -774,6 +891,8 @@ namespace devices::audio
 		 * Actual play is performed by frequent calls of `update()`.
 		 * @param melody a pointer, in EEPROM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * played; one beat is the duration of a quarter note.
 		 * @sa play_sram()
 		 * @sa play_flash()
 		 * @sa stop()
@@ -788,7 +907,6 @@ namespace devices::audio
 			status_ = Status::STARTED;
 		}
 
-		//TODO DOC update
 		/**
 		 * Start playing a melody, defined by a sequence of `TONE_PLAY`s, stored in Flash.
 		 * This method is asynchronous: it returns immediately even ebfore starting
@@ -796,6 +914,8 @@ namespace devices::audio
 		 * Actual play is performed by frequent calls of `update()`.
 		 * @param melody a pointer, in Flash, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
+		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_sram()
 		 * @sa stop()
