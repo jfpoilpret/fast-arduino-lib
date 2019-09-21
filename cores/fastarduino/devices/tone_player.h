@@ -541,9 +541,7 @@ namespace devices::audio
 		}
 
 	private:
-		//FIXME temporary longer internote delay
-		// static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
-		static constexpr const uint16_t INTERTONE_DELAY_MS = 200;
+		static constexpr const uint16_t INTERTONE_DELAY_MS = 20;
 
 		using LOAD_TONE = const TONE_PLAY* (*) (const TONE_PLAY* address, TONE_PLAY& holder);
 

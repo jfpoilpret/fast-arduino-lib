@@ -16,9 +16,16 @@
  * Frequency generator examples, used to test all features.
  * 
  * Wiring:
- * - on Arduino UNO:
- *   - D6: connect to a 5V piezo buzzer with the other lead connected to ground
- * - TODO other
+ * - on Arduino UNO (or NANO or ATmega328 chip):
+ *   - D6: connect to a 5V passive piezo buzzer with the other lead connected to ground
+ * - on Arduino MEGA:
+ *   - D13: connect to a 5V passive piezo buzzer with the other lead connected to ground
+ * - on Arduino LEONARDO:
+ *   - D9: connect to a 5V passive piezo buzzer with the other lead connected to ground
+ * - on ATtinyX4:
+ *   - D10 (PB2): connect to a 5V passive piezo buzzer with the other lead connected to ground
+ * - on ATtinyX5:
+ *   - D0 (PB0): connect to a 5V passive piezo buzzer with the other lead connected to ground
  */
 
 // Example of square wave generation, using CTC mode and COM toggle
@@ -587,33 +594,61 @@ static const TONEPLAY bad_repeats[] PROGMEM =
 	TONEPLAY{END, 0}
 };
 
-static const TONEPLAY ties_and_slurs[] PROGMEM =
+static const TONEPLAY ties[] PROGMEM =
 {
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
 	TONEPLAY{Tone::REST, WN},
 
 	TONEPLAY{TIE, 1},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
 	TONEPLAY{Tone::REST, WN},
 
 	TONEPLAY{TIE, 2},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
 	TONEPLAY{Tone::REST, WN},
 
 	TONEPLAY{TIE, 3},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
-	TONEPLAY{Tone::C0, QV},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::REST, WN},
+
+	TONEPLAY{END, 0}
+};
+
+static const TONEPLAY slurs[] PROGMEM =
+{
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::D0, QN},
+	TONEPLAY{Tone::E0, QN},
+	TONEPLAY{Tone::F0, QN},
+	TONEPLAY{Tone::G0, QN},
+	TONEPLAY{Tone::A0, QN},
+	TONEPLAY{Tone::B0, QN},
+	TONEPLAY{Tone::C1, QN},
+	TONEPLAY{Tone::REST, WN},
+	TONEPLAY{Tone::REST, WN},
+
+	TONEPLAY{SLUR, 7},
+	TONEPLAY{Tone::C0, QN},
+	TONEPLAY{Tone::D0, QN},
+	TONEPLAY{Tone::E0, QN},
+	TONEPLAY{Tone::F0, QN},
+	TONEPLAY{Tone::G0, QN},
+	TONEPLAY{Tone::A0, QN},
+	TONEPLAY{Tone::B0, QN},
+	TONEPLAY{Tone::C1, QN},
+	TONEPLAY{Tone::REST, WN},
 	TONEPLAY{Tone::REST, WN},
 
 	TONEPLAY{END, 0}
@@ -630,43 +665,45 @@ int main()
 	GENERATOR generator;
 	PLAYER player{generator};
 
-	// // Check scales
-	// player.play_flash(C_major_scale, BPM);
-	// time::delay_ms(1000);
-	// player.play_flash(D_major_scale, BPM);
-	// time::delay_ms(1000);
-	// player.play_flash(E_major_scale, BPM);
-	// time::delay_ms(1000);
-	// player.play_flash(F_major_scale, BPM);
-	// time::delay_ms(1000);
-	// player.play_flash(G_major_scale, BPM);
-	// time::delay_ms(1000);
-	// player.play_flash(A_major_scale, BPM);
-	// time::delay_ms(1000);
-	// player.play_flash(B_major_scale, BPM);
-	// time::delay_ms(1000);
+	// Check scales
+	player.play_flash(C_major_scale, BPM);
+	time::delay_ms(1000);
+	player.play_flash(D_major_scale, BPM);
+	time::delay_ms(1000);
+	player.play_flash(E_major_scale, BPM);
+	time::delay_ms(1000);
+	player.play_flash(F_major_scale, BPM);
+	time::delay_ms(1000);
+	player.play_flash(G_major_scale, BPM);
+	time::delay_ms(1000);
+	player.play_flash(A_major_scale, BPM);
+	time::delay_ms(1000);
+	player.play_flash(B_major_scale, BPM);
+	time::delay_ms(1000);
 
-	// // Check durations, dots, triplets, including rests
-	// player.play_flash(durations, BPM * 2);
-	// time::delay_ms(1000);
-	// player.play_flash(durations_dots, BPM * 2);
-	// time::delay_ms(1000);
-	// player.play_flash(durations_triplets, BPM * 2);
-	// time::delay_ms(1000);
+	// Check durations, dots, triplets, including rests
+	player.play_flash(durations, BPM * 2);
+	time::delay_ms(1000);
+	player.play_flash(durations_dots, BPM * 2);
+	time::delay_ms(1000);
+	player.play_flash(durations_triplets, BPM * 2);
+	time::delay_ms(1000);
 
-	// // Check single and multiple repeats
-	// player.play_flash(repeat_zero, BPM * 2);
-	// time::delay_ms(1000);
-	// player.play_flash(repeat_once, BPM * 2);
-	// time::delay_ms(1000);
-	// player.play_flash(repeat_twice, BPM * 2);
-	// time::delay_ms(1000);
-	// player.play_flash(two_repeats, BPM * 2);
-	// time::delay_ms(1000);
-	// player.play_flash(bad_repeats, BPM * 2);
-	// time::delay_ms(1000);
+	// Check single and multiple repeats
+	player.play_flash(repeat_zero, BPM * 2);
+	time::delay_ms(1000);
+	player.play_flash(repeat_once, BPM * 2);
+	time::delay_ms(1000);
+	player.play_flash(repeat_twice, BPM * 2);
+	time::delay_ms(1000);
+	player.play_flash(two_repeats, BPM * 2);
+	time::delay_ms(1000);
+	player.play_flash(bad_repeats, BPM * 2);
+	time::delay_ms(1000);
 
-	//TODO Check slurs and ties when implemented
-	player.play_flash(ties_and_slurs, BPM * 2);
+	// Check slurs and ties when implemented
+	player.play_flash(ties, BPM * 2);
+	time::delay_ms(1000);
+	player.play_flash(slurs, BPM * 2);
 	time::delay_ms(1000);
 }
