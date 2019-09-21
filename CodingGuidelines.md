@@ -39,6 +39,20 @@ Exceptions to the rules above are allowed for definitions implementing API equiv
 Currently, FastArduino has no automatic check of all these guidelines, hence control must be performed manually before merging Pull Requests.
 Do note however that FastArduino uses [SonarQube](https://sonarcloud.io/dashboard?id=FastArduino-UNO) for checking some of these rules.
 
+Classes special methods
+-----------------------
+The following special methods of a class must be explicitly declared:
+- default constructor if the class has no other constructor
+- copy constructor
+- assignment operator
+
+For each of these methods, 3 options are possible:
+- explicitly use its `default` implementation
+- `delete` it (e.g. to prevent copy or assignment)
+- give it a body if needed
+
+In most situations, constructors that take only one argument shall be declared `explicit` to force explicit calls.
+
 Coding Style
 ------------
 All other conventions for coding styles are directly defined within project's `.clang-format` file rules.
