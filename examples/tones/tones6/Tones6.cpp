@@ -209,7 +209,6 @@ static const QTONEPLAY2 music2[] PROGMEM =
 	QTONEPLAY2{Tone::G0, QV},
 
 	// Followed by 12 bars melody...
-	//TODO add additional march bars here
 
 	QTONEPLAY2{END, 0}
 };

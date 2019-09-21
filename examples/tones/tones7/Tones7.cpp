@@ -179,7 +179,8 @@ static const TONEPLAY music[] PROGMEM =
 	TONEPLAY{Tone::Ef0, QV},
 	TONEPLAY(REPEAT_END, 1),
 
-	//TODO More to come here in the melody
+	// More to come here in the melody, add it someday when I have time...
+	
 	TONEPLAY{END, 0}
 };
 
