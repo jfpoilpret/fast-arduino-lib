@@ -88,6 +88,9 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
+		FastPin(const FastPin<PORT_, BIT_>&) = default;
+		FastPin<PORT_, BIT_>& operator=(const FastPin<PORT_, BIT_>&) = default;
+
 		/** The port to which this pin belongs. */
 		static constexpr const board::Port PORT = PORT_;
 		/** The bit position (from `0` to `7`), in port, of this pin. */
@@ -195,6 +198,9 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
+		FastPort(const FastPort<PORT_>&) = default;
+		FastPort<PORT_>& operator=(const FastPort<PORT_>&) = default;
+
 		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;
 
@@ -366,6 +372,9 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
+		FastMaskedPort(const FastMaskedPort<PORT_, MASK_>&) = default;
+		FastMaskedPort<PORT_, MASK_>& operator=(const FastMaskedPort<PORT_, MASK_>&) = default;
+
 		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;
 
@@ -532,6 +541,8 @@ namespace gpio
 		using PTRAIT = board_traits::Port_trait<TRAIT::PORT>;
 
 	public:
+		FastPinType() = delete;
+
 		/** The digital pin for this FastPinType. */
 		static constexpr const board::DigitalPin DPIN = DPIN_;
 		/** The port to which `DPIN` belongs. */
@@ -608,6 +619,8 @@ namespace gpio
 	template<> class FastPinType<board::DigitalPin::NONE>
 	{
 	public:
+		FastPinType() = delete;
+
 		static constexpr const board::Port PORT = board::Port::NONE;
 		static constexpr const uint8_t BIT = 0;
 		static constexpr const uint8_t MASK = 0;
@@ -629,6 +642,8 @@ namespace gpio
 	template<> class FastPin<board::Port::NONE, 0>
 	{
 	public:
+		FastPin(const FastPin<board::Port::NONE, 0>&) = default;
+		FastPin<board::Port::NONE, 0>& operator=(const FastPin<board::Port::NONE, 0>&) = default;
 		FastPin() INLINE = default;
 		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
 		void set() INLINE {}

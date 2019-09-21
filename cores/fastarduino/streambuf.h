@@ -48,6 +48,9 @@ namespace streams
 		using QUEUE = Queue<char, char>;
 
 	public:
+		ostreambuf(const ostreambuf&) = delete;
+		ostreambuf& operator=(const ostreambuf&) = delete;
+		
 		using CALLBACK = virtual_support::VirtualMethod::METHOD;
 
 		template<uint8_t SIZE>
@@ -208,6 +211,9 @@ namespace streams
 		using QUEUE = Queue<char, char>;
 
 	public:
+		istreambuf(const istreambuf&) = delete;
+		istreambuf& operator=(const istreambuf&) = delete;
+		
 		/**
 		 * Special value returned by `sbumpc()` when buffer is empty.
 		 */

@@ -161,6 +161,9 @@ namespace devices::audio
 	class TonePlay
 	{
 	public:
+		TonePlay(const TonePlay&) = default;
+		TonePlay& operator=(const TonePlay&) = default;
+
 		/**
 		 * Default constructor, used only to declare an uninitialized
 		 * `TonePlay` variable.
@@ -263,6 +266,9 @@ namespace devices::audio
 	template<board::Timer NTIMER, board::PWMPin OUTPUT> class QTonePlay
 	{
 	public:
+		QTonePlay(const QTonePlay<NTIMER, OUTPUT>&) = default;
+		QTonePlay<NTIMER, OUTPUT>& operator=(const QTonePlay<NTIMER, OUTPUT>&) = default;
+
 		/**
 		 * Default constructor, used only to declare an uninitialized
 		 * `QTonePlay` variable.
@@ -425,6 +431,10 @@ namespace devices::audio
 	class AbstractTonePlayer
 	{
 	protected:
+		AbstractTonePlayer(const AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>&) = delete;
+		AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>& operator=(
+			const AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>&) = delete;
+
 		/** The type that holds unit of information of a melody. */
 		using TONE_PLAY = TONEPLAY;
 		/** The type of `ToneGenerator` to use as constructor's argument. */

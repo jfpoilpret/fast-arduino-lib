@@ -126,6 +126,10 @@ namespace eeprom
 	class EEPROM
 	{
 	public:
+		EEPROM() = default;
+		EEPROM(const EEPROM&) = delete;
+		EEPROM& operator=(const EEPROM&) = delete;
+
 		/**
 		 * Read value of type @p T stored in EEPROM at @p address.
 		 * @note Whatever @p T type, this method never calls its assignment 
@@ -526,6 +530,9 @@ namespace eeprom
 	class QueuedWriter : private EEPROM
 	{
 	public:
+		QueuedWriter(const QueuedWriter&) = delete;
+		QueuedWriter& operator=(const QueuedWriter&) = delete;
+		
 		/**
 		 * Construct a QueuedWriter from a given @p buffer array.
 		 * 

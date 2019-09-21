@@ -32,7 +32,7 @@
 namespace time
 {
 	// Forward declaration to avoid compilation error
-	struct RTTTime;
+	class RTTTime;
 	inline RTTTime operator-(const RTTTime& a, const RTTTime& b);
 
 	/**
@@ -364,6 +364,8 @@ namespace time
 		using TYPE = ClockDelegate<CLOCK>;
 
 	public:
+		ClockDelegate() = delete;
+
 		static void set_clock(const CLOCK& clock)
 		{
 			clock_ = &clock;
@@ -430,6 +432,9 @@ namespace time
 	class auto_delay
 	{
 	public:
+		auto_delay(const auto_delay&) = delete;
+		auto_delay& operator=(const auto_delay&) = delete;
+
 		/**
 		 * Set new `time::delay` to @p new_delay after storing current function 
 		 * for later restore.
@@ -471,6 +476,9 @@ namespace time
 	class auto_millis
 	{
 	public:
+		auto_millis(const auto_millis&) = delete;
+		auto_millis& operator=(const auto_millis&) = delete;
+		
 		/**
 		 * Set new `time::millis` to @p new_millis after storing current function 
 		 * for later restore.

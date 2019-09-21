@@ -58,6 +58,9 @@ namespace containers
 	template<typename T_, typename TREF_ = const T_&> class Queue
 	{
 	public:
+		Queue(const Queue<T_, TREF_>&) = delete;
+		Queue<T_, TREF_>& operator=(const Queue<T_, TREF_>&) = delete;
+		
 		/** The type of items in this queue. */
 		using T = T_;
 

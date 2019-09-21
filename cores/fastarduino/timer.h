@@ -714,6 +714,9 @@ namespace timer
 		/// @endcond
 
 	public:
+		Timer(const Timer<NTIMER_>&) = delete;
+		Timer<NTIMER_>& operator=(const Timer<NTIMER_>&) = delete;
+		
 		/**
 		 * The type of this timer's counter (either `uint8_t` or `uint16_t`).
 		 */

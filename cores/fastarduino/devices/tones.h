@@ -178,6 +178,9 @@ namespace devices::audio
 		using SQWGEN = timer::SquareWave<NTIMER, OUTPUT>;
 
 	public:
+		ToneGenerator(const ToneGenerator<NTIMER, OUTPUT>&) = delete;
+		ToneGenerator<NTIMER, OUTPUT>& operator=(const ToneGenerator<NTIMER, OUTPUT>&) = delete;
+		
 		/** The `TimerPrescaler` type matching the selected NTIMER. */
 		using PRESCALER = typename SQWGEN::TIMER::PRESCALER;
 		/** The counter type (`uint8_t` or `uint16_t`) for the selected NTIMER. */

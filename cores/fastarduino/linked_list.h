@@ -38,6 +38,8 @@ namespace containers
 	{
 	public:
 		LinkImpl() INLINE : next_{nullptr} {}
+		LinkImpl(const LinkImpl&) = default;
+		LinkImpl& operator=(const LinkImpl&) = delete;
 
 	protected:
 		LinkImpl* next_;
@@ -49,6 +51,8 @@ namespace containers
 	{
 	public:
 		LinkedListImpl() INLINE : head_{nullptr} {}
+		LinkedListImpl(const LinkedListImpl&) = default;
+		LinkedListImpl& operator=(const LinkedListImpl&) = delete;
 		void insert(LinkImpl* item);
 		bool remove(LinkImpl* item);
 		template<typename F> void traverse(F f);
@@ -82,6 +86,9 @@ namespace containers
 			using DERIVES_FROM_LINK = types_traits::derives_from<T_, LinkImpl>;
 			UNUSED DERIVES_FROM_LINK dummy = DERIVES_FROM_LINK();
 		}
+
+		LinkedList(const LinkedList<T_>&) = default;
+		LinkedList<T_>& operator=(const LinkedList<T_>&) = delete;
 
 		/**
 		 * The type of items in this list.
@@ -167,6 +174,11 @@ namespace containers
 		 * The type of item wrapped by this class.
 		 */
 		using T = T_;
+	
+	protected:
+		Link() = default;
+		Link(const Link<T_>&) = default;
+		Link<T_>& operator=(const Link<T_>&) = delete;
 
 	private:
 		T* next() INLINE
@@ -211,6 +223,9 @@ namespace containers
 	class LinkWrapper : private LinkImpl
 	{
 	public:
+		LinkWrapper(const LinkWrapper<T_, TREF_, CTREF_>&) = default;
+		LinkWrapper<T_, TREF_, CTREF_>& operator=(const LinkWrapper<T_, TREF_, CTREF_>&) = delete;
+
 		/** The type of item wrapped by this class. */
 		using T = T_;
 

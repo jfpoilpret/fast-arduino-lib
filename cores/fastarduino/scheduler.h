@@ -88,6 +88,10 @@ namespace events
 	class Scheduler : public EventHandler<EVENT_>, public containers::LinkedList<Job>
 	{
 	public:
+		//FIXME uncomment the following line (will need important changes in events.h)
+		// Scheduler(const Scheduler<CLOCK_, EVENT_>&) = delete;
+		Scheduler<CLOCK_, EVENT_>& operator=(const Scheduler<CLOCK_, EVENT_>&) = delete;
+
 		/** The type of @p clock source used by this Scheduler. */
 		using CLOCK = CLOCK_;
 		/** The `events::Event<T>` dispatched by the system and expected by this Scheduler. */
@@ -189,6 +193,9 @@ namespace events
 		}
 
 	protected:
+		Job(const Job&) =  default;
+		Job& operator=(const Job&) = default;
+		
 		/**
 		 * This method is called by `Scheduler` whenever  current clock time is
 		 * greater or equal to `next_time()`.

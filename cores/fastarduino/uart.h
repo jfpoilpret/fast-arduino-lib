@@ -79,6 +79,10 @@ namespace serial::hard
 	class AbstractUART
 	{
 	protected:
+		AbstractUART() = default;
+		AbstractUART(const AbstractUART&) = delete;
+		AbstractUART& operator=(const AbstractUART&) = delete;
+		
 		struct SpeedSetup
 		{
 			constexpr SpeedSetup(uint16_t ubrr_value, bool u2x) : ubrr_value{ubrr_value}, u2x{u2x} {}
