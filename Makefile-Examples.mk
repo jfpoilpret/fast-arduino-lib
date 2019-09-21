@@ -37,7 +37,8 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
 					uart/UartApp2 uart/UartApp3 uart/UartApp4								\
 					sonar/Sonar1 sonar/Sonar2 sonar/Sonar3 sonar/Sonar4						\
-					sonar/Sonar5 sonar/Sonar6 sonar/Sonar7									
+					sonar/Sonar5 sonar/Sonar6 sonar/Sonar7									\
+					tones/tones00															
 
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						events/EventApp5						\
@@ -57,6 +58,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						tones/tones0							\
 						tones/tones1 tones/tones2 tones/tones3	\
 						tones/tones4 tones/tones5 tones/tones6	\
+						tones/tones7							\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							\
@@ -155,7 +157,8 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								rtt/TimerTinyX5					\
 								i2c/DS1307RTC1 i2c/DS1307RTC2	\
 								i2c/MultiIO1 i2c/MultiIO2		\
-								spi/RF24App1 spi/WinBond
+								spi/RF24App1 spi/WinBond		\
+								tones/tones00					
 
 # Finally define all examples supported for the current variant (defined by current configuration)
 # Note that ATtinyX5 needs its own (reduced) set of examples (because of many limitations)

@@ -41,67 +41,108 @@ using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
 using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT, TonePlay>;
 using TONEPLAY = PLAYER::TONE_PLAY;
 
+// Define constants with short names to ease score transcription
+using devices::audio::Duration;
+static constexpr const Duration WN = Duration::WHOLE;
+static constexpr const Duration HN = Duration::HALF;
+static constexpr const Duration QN = Duration::QUARTER;
+static constexpr const Duration QV = Duration::QUAVER;
+static constexpr const Duration SQ = Duration::SEMI_QUAVER;
+static constexpr auto DOT = devices::audio::dotted;
+static constexpr auto TRIPLET = devices::audio::triplet;
+
 static TONEPLAY music[] =
 {
-	// First part
-	TONEPLAY{Tone::A1, 500},
-	TONEPLAY{Tone::A1, 500},
-	TONEPLAY{Tone::A1, 500},
-	TONEPLAY{Tone::F1, 350},
-	TONEPLAY{Tone::C2, 150},
-	TONEPLAY{Tone::A1, 500},
-	TONEPLAY{Tone::F1, 350},
-	TONEPLAY{Tone::C2, 150},
-	TONEPLAY{Tone::A1, 650},
-	TONEPLAY{Tone::SILENCE, 150},
+	// Melody first part
+	TONEPLAY{Tone::G2, QN},
+	TONEPLAY{Tone::G2, QN},
+	TONEPLAY{Tone::G2, QN},
+	TONEPLAY{Tone::Ef2, DOT(QV)},
+	TONEPLAY{Tone::Bf2, SQ},
 
-	// Second part
-	TONEPLAY{Tone::E2, 500},
-	TONEPLAY{Tone::E2, 500},
-	TONEPLAY{Tone::E2, 500},
-	TONEPLAY{Tone::F2, 350},
-	TONEPLAY{Tone::C2, 150},
-	TONEPLAY{Tone::Gs1, 500},
-	TONEPLAY{Tone::F1, 350},
-	TONEPLAY{Tone::C2, 150},
-	TONEPLAY{Tone::A1, 650},
-	TONEPLAY{Tone::SILENCE, 150},
+	TONEPLAY{Tone::G2, QN},
+	TONEPLAY{Tone::Ef2, DOT(QV)},
+	TONEPLAY{Tone::Bf2, SQ},
+	TONEPLAY{Tone::G2, HN},
 
-	// Third part (repeated once)
-	TONEPLAY{REPEAT_START},
-	TONEPLAY{Tone::A2, 500},
-	TONEPLAY{Tone::A1, 300},
-	TONEPLAY{Tone::A1, 150},
-	TONEPLAY{Tone::A2, 400},
-	TONEPLAY{Tone::Gs2, 200},
-	TONEPLAY{Tone::G2, 200},
-	TONEPLAY{Tone::Fs2, 125},
-	TONEPLAY{Tone::F2, 125},
-	TONEPLAY{Tone::Fs2, 250},
-	TONEPLAY{Tone::SILENCE, 250},
+	// Melody second part
+	TONEPLAY{Tone::D3, QN},
+	TONEPLAY{Tone::D3, QN},
+	TONEPLAY{Tone::D3, QN},
+	TONEPLAY{Tone::Ef3, DOT(QV)},
+	TONEPLAY{Tone::Bf2, SQ},
 
-	TONEPLAY{Tone::As1, 250},
-	TONEPLAY{Tone::Ds2, 400},
-	TONEPLAY{Tone::D2, 200},
-	TONEPLAY{Tone::Cs2, 200},
-	TONEPLAY{Tone::C2, 125},
-	TONEPLAY{Tone::B1, 125},
-	TONEPLAY{Tone::C2, 250},
-	TONEPLAY{Tone::SILENCE, 250},
+	TONEPLAY{Tone::Gf2, QN},
+	TONEPLAY{Tone::Ef2, DOT(QV)},
+	TONEPLAY{Tone::Bf2, SQ},
+	TONEPLAY{Tone::G2, HN},
 
-	TONEPLAY{Tone::F1, 125},
-	TONEPLAY{Tone::Gs1, 500},
-	TONEPLAY{Tone::F1, 375},
-	TONEPLAY{Tone::A1, 125},
-	TONEPLAY{Tone::C2, 500},
-	TONEPLAY{Tone::A1, 375},
-	TONEPLAY{Tone::C2, 125},
-	TONEPLAY{Tone::E2, 650},
-	TONEPLAY{Tone::SILENCE, 250},
-	TONEPLAY{REPEAT_END, 1},
+	// Melody third part
+	TONEPLAY{Tone::G3, QN},
+	TONEPLAY{Tone::G2, DOT(QV)},
+	TONEPLAY{Tone::G2, SQ},
+	TONEPLAY{Tone::G3, QN},
+	TONEPLAY{Tone::Fs3, DOT(QV)},
+	TONEPLAY{Tone::F3, SQ},
+
+	TONEPLAY{Tone::E3, SQ},
+	TONEPLAY{Tone::Ds3, SQ},
+	TONEPLAY{Tone::E3, QV},
+	TONEPLAY{Tone::SILENCE, QV},
+	TONEPLAY{Tone::Gs2, QV},
+	TONEPLAY{Tone::Cs3, QN},
+	TONEPLAY{Tone::C3, DOT(QV)},
+	TONEPLAY{Tone::B2, SQ},
+
+	TONEPLAY{Tone::Bf2, SQ},
+	TONEPLAY{Tone::A2, SQ},
+	TONEPLAY{Tone::Bf2, QV},
+	TONEPLAY{Tone::SILENCE, QV},
+	TONEPLAY{Tone::Ef2, SQ},
+	TONEPLAY{Tone::Gf2, QN},
+	TONEPLAY{Tone::Ef2, DOT(QV)},
+	TONEPLAY{Tone::Gf2, SQ},
+
+	TONEPLAY{Tone::Bf2, QN},
+	TONEPLAY{Tone::G2, DOT(QV)},
+	TONEPLAY{Tone::Bf2, SQ},
+	TONEPLAY{Tone::D3, HN},
+
+	// Melody fourth part (like 3rd part except last bar)
+	TONEPLAY{Tone::G3, QN},
+	TONEPLAY{Tone::G2, DOT(QV)},
+	TONEPLAY{Tone::G2, SQ},
+	TONEPLAY{Tone::G3, QN},
+	TONEPLAY{Tone::Fs3, DOT(QV)},
+	TONEPLAY{Tone::F3, SQ},
+
+	TONEPLAY{Tone::E3, SQ},
+	TONEPLAY{Tone::Ds3, SQ},
+	TONEPLAY{Tone::E3, QV},
+	TONEPLAY{Tone::SILENCE, QV},
+	TONEPLAY{Tone::Gs2, QV},
+	TONEPLAY{Tone::Cs3, QN},
+	TONEPLAY{Tone::C3, DOT(QV)},
+	TONEPLAY{Tone::B2, SQ},
+
+	TONEPLAY{Tone::Bf2, SQ},
+	TONEPLAY{Tone::A2, SQ},
+	TONEPLAY{Tone::Bf2, QV},
+	TONEPLAY{Tone::SILENCE, QV},
+	TONEPLAY{Tone::Ef2, SQ},
+	TONEPLAY{Tone::Gf2, QN},
+	TONEPLAY{Tone::Ef2, DOT(QV)},
+	TONEPLAY{Tone::Bf2, SQ},
+
+	TONEPLAY{Tone::G2, QN},
+	TONEPLAY{Tone::Ef2, DOT(QV)},
+	TONEPLAY{Tone::Bf2, SQ},
+	TONEPLAY{Tone::G2, HN},
 
 	TONEPLAY{END, 0}
 };
+
+static constexpr const uint8_t BPM = 120;
 
 int main() __attribute__((OS_main));
 int main()
@@ -111,5 +152,5 @@ int main()
 
 	GENERATOR generator;
 	PLAYER player{generator};
-	player.play_sram(music);
+	player.play_sram(music, BPM);
 }

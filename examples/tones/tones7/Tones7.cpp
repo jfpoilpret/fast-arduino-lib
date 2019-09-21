@@ -14,36 +14,38 @@
 
 /*
  * Frequency generator example, used to play the Imperial March.
- * The melody play is stoppable by pushing a button.
- * In this example, the melody is stored in SRAM.
+ * This example is playing the melody asynchronously, based on RTT events.
+ * In this example, the melody is stored in Flash.
  * 
  * Wiring:
  * - on Arduino UNO:
  *   - D6: connect to a 5V piezo buzzer with the othe lead connected to ground
- *   - D2: connect to a push button connected to GND
+ *   - D13: embedded LED that blinks synchronously from main()
  */
 
 // Imperial march tones thanks:
 // http://processors.wiki.ti.com/index.php/Playing_The_Imperial_March
+// Better score (simplified) found at
+// http://www.filmmusicnotes.com/john-williams-themes-part-3-of-6-the-imperial-march-darth-vaders-theme/
 
 // Example of square wave generation, using CTC mode and COM toggle
+#include <fastarduino/events.h>
+#include <fastarduino/gpio.h>
+#include <fastarduino/queue.h>
+#include <fastarduino/realtime_timer.h>
 #include <fastarduino/time.h>
 #include <fastarduino/devices/tone_player.h>
-#include <fastarduino/gpio.h>
-#include <fastarduino/int.h>
 
 // Board-dependent settings
-// static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
-// static constexpr const board::DigitalPin OUTPUT = board::PWMPin::D9_PB1_OC1A;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 static constexpr const board::PWMPin OUTPUT = board::PWMPin::D6_PD6_OC0A;
-static constexpr const board::ExternalInterruptPin STOP = board::ExternalInterruptPin::D2_PD2_EXT0;
+#define RTTTIMER 1
+static constexpr const board::Timer NRTTTIMER = board::Timer::TIMER1;
 
+using TONEPLAYER = devices::audio::AsyncTonePlayer<NTIMER, OUTPUT>;
 using devices::audio::Tone;
 using namespace devices::audio::SpecialTone;
-using GENERATOR = devices::audio::ToneGenerator<NTIMER, OUTPUT>;
-using PLAYER = devices::audio::TonePlayer<NTIMER, OUTPUT>;
-using TONEPLAY = PLAYER::TONE_PLAY;
+using TONEPLAY = TONEPLAYER::TONE_PLAY;
 
 // Define constants with short names to ease score transcription
 using devices::audio::Duration;
@@ -55,8 +57,25 @@ static constexpr const Duration SQ = Duration::SEMI_QUAVER;
 static constexpr auto DOT = devices::audio::dotted;
 static constexpr auto TRIPLET = devices::audio::triplet;
 
-static TONEPLAY music[] =
+static const TONEPLAY music[] PROGMEM =
 {
+	// March 1st part (4 times)
+	TONEPLAY(REPEAT_START, 0),
+	TONEPLAY{Tone::G0, QN},
+	TONEPLAY{Tone::G0, QV},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, QV},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, QV},
+	TONEPLAY(REPEAT_END, 3),
+
 	// Melody first part
 	TONEPLAY{Tone::G2, QN},
 	TONEPLAY{Tone::G2, QN},
@@ -143,43 +162,68 @@ static TONEPLAY music[] =
 	TONEPLAY{Tone::Bf2, SQ},
 	TONEPLAY{Tone::G2, HN},
 
+	// March 2nd part (2 times)
+	TONEPLAY(REPEAT_START, 0),
+	TONEPLAY{Tone::G0, QN},
+	TONEPLAY{Tone::G0, QV},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, QV},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::G0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, TRIPLET(SQ)},
+	TONEPLAY{Tone::Ef0, QV},
+	TONEPLAY(REPEAT_END, 1),
+
+	//TODO More to come here in the melody
 	TONEPLAY{END, 0}
 };
 
-class PlayerStop
-{
-public:
-	PlayerStop(PLAYER& player):player_{player}, stop_{gpio::PinMode::INPUT_PULLUP}
-	{
-		interrupt::register_handler(*this);
-	}
-
-private:
-	void pin_change()
-	{
-		if (!stop_.value()) player_.stop();
-	}
-
-	PLAYER& player_;
-	gpio::FastPinType<board::EXT_PIN<STOP>()>::TYPE stop_;
-
-	DECL_INT_ISR_HANDLERS_FRIEND
-};
-
-REGISTER_INT_ISR_METHOD(0, STOP, PlayerStop, &PlayerStop::pin_change)
-
 static constexpr const uint8_t BPM = 120;
+
+using GENERATOR = TONEPLAYER::GENERATOR;
+
+using RTT = timer::RTT<NRTTTIMER>;
+
+using EVENT = events::Event<void>;
+static constexpr const uint8_t EVENT_QUEUE_SIZE = 32;
+static EVENT buffer[EVENT_QUEUE_SIZE];
+static containers::Queue<EVENT> events_queue{buffer};
+
+static constexpr const uint16_t PERIOD = 32; 
+using RTTCALLBACK = timer::RTTEventCallback<EVENT, PERIOD>;
+
+REGISTER_RTT_EVENT_ISR(RTTTIMER, EVENT, PERIOD)
 
 int main() __attribute__((OS_main));
 int main()
 {
 	sei();
-	GENERATOR generator;
-	PLAYER player{generator};
-	PlayerStop stop_handler{player};
-	interrupt::INTSignal<STOP> signal{interrupt::InterruptTrigger::FALLING_EDGE};
-	time::delay_ms(5000);
 
-	signal.enable();
-	player.play_sram(music, BPM);
+	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	
+	RTT timer;
+	RTTCALLBACK handler{events_queue};
+	interrupt::register_handler(handler);
+
+	GENERATOR generator;
+	TONEPLAYER player{generator};
+
+	time::delay_ms(1000);
+	player.play_flash(music, BPM);
+
+	timer.begin();
+	while (true)
+	{
+		EVENT event;
+		if (events_queue.pull(event) && player.is_playing())
+		{
+			led.toggle();
+			player.update(timer.millis());
+		}
+	}
 }
