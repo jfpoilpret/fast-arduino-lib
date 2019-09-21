@@ -93,6 +93,6 @@ tones2	Tone player from EEPROM (QTonePlay)
 tones3	Tone player from Flash (QTonePlay)
 tones4	Tone player from SRAM, stoppable from external interrupt (QTonePlay)
 tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)
-tones6	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)
-tones7	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)
+tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)
+tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)
 Conway	Game of Life (8x8 LED) 1KB Hackaday
