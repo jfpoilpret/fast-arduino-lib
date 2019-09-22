@@ -137,7 +137,7 @@ namespace events
 		class JobCaller
 		{
 		public:
-			JobCaller(const CLOCK& clock) : clock_{clock} {}
+			explicit JobCaller(const CLOCK& clock) : clock_{clock} {}
 			bool operator()(Job& job);
 
 		private:

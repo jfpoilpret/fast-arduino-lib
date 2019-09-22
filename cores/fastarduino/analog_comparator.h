@@ -232,7 +232,7 @@ namespace analog
 		void begin_(ComparatorInterrupt mode = ComparatorInterrupt::NONE, bool trigger_icp = false)
 		{
 			using ATRAIT = board_traits::AnalogPin_trait<INPUT1>;
-			static_assert(ATRAIT::IS_ANALOG_PIN || INPUT1 == board::AnalogPin::NONE, "INPUT must not be TEMP!");
+			static_assert(ATRAIT::IS_ANALOG_PIN || (INPUT1 == board::AnalogPin::NONE), "INPUT must not be TEMP!");
 			static_assert(INPUT1 != board::AnalogPin::NONE || GLOBAL_TRAIT::HAS_AIN1, "Target has no AIN1 pin!");
 			static_assert(GLOBAL_TRAIT::HAS_AIN0 || INPUT0_BANDGAP, "Target has no AIN0 hence INPUT0_BANDGAP must be true");
 
