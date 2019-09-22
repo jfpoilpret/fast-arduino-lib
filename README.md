@@ -123,13 +123,14 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.2](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1) (released on 06.06.2019)
 - [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5?closed=1) (released on 1.09.2019)
 - [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6?closed=1) (released on 22.09.2019)
-- [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (31.12.2019)
+- [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7) (30.11.2019)
+- [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (31.03.2020)
 - [2020 and later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 Documentation - no milestones
 -----------------------------
 1. Add SPI and I2C new device creation to Tutorial (31.12.2019)
-2. Document how to add support for other boards in Tutorial (31.12.2019)
+2. Document how to add support for other boards in Tutorial (31.03.2020)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
