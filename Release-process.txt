@@ -12,6 +12,41 @@ Release procedure
 9. Official release in github
 10. Close milestone in github
 
+FastArduino 1.4 release
+
+I am happy to announce the 5th major release of FastArduino platform.
+
+Since release 1.3 (September 2019), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.4).
+
+This release brings the following new features and enhancements:
+- Add support for Timer Input Capture Noise Canceler
+- Add support for Analog Comparator feature
+- Improve tone player API to support simpler transcription of music scores: durations are now based on music theory (whole notes, 
+half notes, dotted notes...); ties, slurs and triplets are also supported; now you can provide a tempo (`bpm`) to the play API.
+
+Also, in this release, an effort was made to clean up C++ code by explicitly adding declarations for copy constructors and assignment operators.
+
+Do note the following API changes that break compatibility with programs developed with FastArduino 1.3:
+
+- `devices::audio::TonePlay` and `devices::audio::QTonePlay`: these structs do not embed durations in milliseconds any more; 
+they now use the new `devices::audio::Duration` enum to use music theory notes durations (whole notes, quarters, quavers...)
+- `devices::audio::TonePlayer` and `devices::audio::TonePlayer`: additional argument `bpm` (beats per minute) to all `play_XXXX()` methods.
+
+All features have been tested on all supported targets.
+
+Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is published [here](http://jfpoilpret.github.io/fast-arduino-lib/)
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform; please submit enhancements you would like 
+to see in future versions or report issues you may discover.
+
+
+
 FastArduino 1.3 release
 
 I am happy to announce the 4th major release of FastArduino platform.
