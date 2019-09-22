@@ -89,6 +89,8 @@ $(document).ready(function(){initNavTree('tone__player_8h.html','');});
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">tone_player.h File Reference</div>  </div>
@@ -153,6 +155,44 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespacedevices_1_1audio_1_1_special_tone"><td class="mdescLeft">&#160;</td><td class="mdescRight">This namespace defines special "tones" which have an impact on how to play a melody. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a9ec897420c4939aebbe29ccdbe3d1ead"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">devices::audio::Duration</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadaad772c40e87c4f01eec1e39727e96a69">devices::audio::Duration::WHOLE</a> = 32, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada87e955627b59c274ec4cbdd3a130f9bb">devices::audio::Duration::HALF</a> = 16, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada2127749533f087678c2ff775d060024e">devices::audio::Duration::QUARTER</a> = 8, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadab22bd4fad3d4313c5a652c7b2cca52e2">devices::audio::Duration::EIGHTH</a> = 4, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada4490ba0de617cba6aa30437dfd283f69">devices::audio::Duration::SIXTEENTH</a> = 2, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada9bb923acef0f04fbc0e7ded5358f5aae">devices::audio::Duration::SEMI_BREVE</a> = WHOLE, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadae23564ab1419fa36e0af23ed32b9f7f9">devices::audio::Duration::MINIM</a> = HALF, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada46a31ccb6974d5b2c709021f1f7bae28">devices::audio::Duration::CROTCHET</a> = QUARTER, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadad17399392e4d861e340d0b04482687f7">devices::audio::Duration::QUAVER</a> = EIGHTH, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada392d2ac45240b7c50b33074478a082cc">devices::audio::Duration::SEMI_QUAVER</a> = SIXTEENTH
+<br />
+ }</td></tr>
+<tr class="memdesc:a9ec897420c4939aebbe29ccdbe3d1ead"><td class="mdescLeft">&#160;</td><td class="mdescRight">Possible duration of a note, following music theory.  <a href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">More...</a><br /></td></tr>
+<tr class="separator:a9ec897420c4939aebbe29ccdbe3d1ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a222d4124b81f50a0025e06a509e6c110"><td class="memItemLeft" align="right" valign="top"><a id="a222d4124b81f50a0025e06a509e6c110"></a>
+static constexpr Duration&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#a222d4124b81f50a0025e06a509e6c110">devices::audio::dotted</a> (Duration d)</td></tr>
+<tr class="memdesc:a222d4124b81f50a0025e06a509e6c110"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms a note duration to its dotted value (1.5 times the given duration). <br /></td></tr>
+<tr class="separator:a222d4124b81f50a0025e06a509e6c110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2faad8e6873df42c8fe7a3885d6dfb5b"><td class="memItemLeft" align="right" valign="top"><a id="a2faad8e6873df42c8fe7a3885d6dfb5b"></a>
+static constexpr Duration&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#a2faad8e6873df42c8fe7a3885d6dfb5b">devices::audio::triplet</a> (Duration d)</td></tr>
+<tr class="memdesc:a2faad8e6873df42c8fe7a3885d6dfb5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms a note duration to allow it to use in a triplet. <br /></td></tr>
+<tr class="separator:a2faad8e6873df42c8fe7a3885d6dfb5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a4221d7dbfd3adda995e653697bdf28a1"><td class="memItemLeft" align="right" valign="top"><a id="a4221d7dbfd3adda995e653697bdf28a1"></a>
@@ -165,6 +205,12 @@ static constexpr const Tone&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a2a8d80fcee09ad51b4592cd15edcbea1"><td class="memItemLeft" align="right" valign="top">static constexpr const Tone&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a2a8d80fcee09ad51b4592cd15edcbea1">devices::audio::SpecialTone::REPEAT_END</a> = Tone::USER2</td></tr>
 <tr class="memdesc:a2a8d80fcee09ad51b4592cd15edcbea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This special tone marks the end of a repeating sequence (started with <code>REPEAT_START</code>).  <a href="namespacedevices_1_1audio_1_1_special_tone.html#a2a8d80fcee09ad51b4592cd15edcbea1">More...</a><br /></td></tr>
 <tr class="separator:a2a8d80fcee09ad51b4592cd15edcbea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e1d8ea55f01c6392ac105852d21c9e6"><td class="memItemLeft" align="right" valign="top">static constexpr const Tone&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a7e1d8ea55f01c6392ac105852d21c9e6">devices::audio::SpecialTone::TIE</a> = Tone::USER3</td></tr>
+<tr class="memdesc:a7e1d8ea55f01c6392ac105852d21c9e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This special tone marks the following notes to be tied together, ie their durations are added with no intertone delay.  <a href="namespacedevices_1_1audio_1_1_special_tone.html#a7e1d8ea55f01c6392ac105852d21c9e6">More...</a><br /></td></tr>
+<tr class="separator:a7e1d8ea55f01c6392ac105852d21c9e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06daaae22209035c123e92935e2cdf5e"><td class="memItemLeft" align="right" valign="top">static constexpr const Tone&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a06daaae22209035c123e92935e2cdf5e">devices::audio::SpecialTone::SLUR</a> = TIE</td></tr>
+<tr class="memdesc:a06daaae22209035c123e92935e2cdf5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This special tone marks the following notes to be slurred together, ie no intertone delay shall occur between these notes.  <a href="namespacedevices_1_1audio_1_1_special_tone.html#a06daaae22209035c123e92935e2cdf5e">More...</a><br /></td></tr>
+<tr class="separator:a06daaae22209035c123e92935e2cdf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>API to handle melody playing (tones as simple square waves) to a buzzer. </p>

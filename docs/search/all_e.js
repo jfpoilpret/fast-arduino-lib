@@ -28,7 +28,7 @@ var searchData=
   ['operator_7c',['operator|',['../namespacetimer.html#a10762dd286296623f6262a801cd925a9',1,'timer']]],
   ['ostream',['ostream',['../classstreams_1_1ostream.html',1,'streams::ostream'],['../classstreams_1_1ostream.html#ac52818e51d0fd5e4156c9b5dd4ab59bc',1,'streams::ostream::ostream()']]],
   ['ostreambuf',['ostreambuf',['../classstreams_1_1ostreambuf.html',1,'streams']]],
-  ['output',['OUTPUT',['../classtimer_1_1_square_wave.html#a7c00e91969d0c1773bfa444ed4207188',1,'timer::SquareWave::OUTPUT()'],['../classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0',1,'devices::SIPO::output()'],['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34',1,'gpio::OUTPUT()']]],
+  ['output',['OUTPUT',['../classtimer_1_1_square_wave.html#a7c00e91969d0c1773bfa444ed4207188',1,'timer::SquareWave::OUTPUT()'],['../classanalog_1_1_analog_comparator.html#a5ec66d3bab14f8d7a3ac0d9eb56739f8',1,'analog::AnalogComparator::output()'],['../classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0',1,'devices::SIPO::output()'],['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34',1,'gpio::OUTPUT()']]],
   ['output_5fcompare_5fa',['OUTPUT_COMPARE_A',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a1aac1f38fe13831901945888f2a3998d',1,'timer']]],
   ['output_5fcompare_5fb',['OUTPUT_COMPARE_B',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a2ec54b766f810d959b45fe0149db994c',1,'timer']]],
   ['output_5fcompare_5fc',['OUTPUT_COMPARE_C',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a152b06238f6e18dc172a755417314a5a',1,'timer']]],

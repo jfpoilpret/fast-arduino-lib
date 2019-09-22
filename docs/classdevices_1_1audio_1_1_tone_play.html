@@ -102,12 +102,21 @@ $(document).ready(function(){initNavTree('classdevices_1_1audio_1_1_tone_play.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aacb23ff0049ae39715504ecc6d65d0ec"><td class="memItemLeft" align="right" valign="top"><a id="aacb23ff0049ae39715504ecc6d65d0ec"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TonePlay</b> (const <a class="el" href="classdevices_1_1audio_1_1_tone_play.html">TonePlay</a> &amp;)=default</td></tr>
+<tr class="separator:aacb23ff0049ae39715504ecc6d65d0ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3468a8016e6d114f5813b5d4edd8569d"><td class="memItemLeft" align="right" valign="top"><a id="a3468a8016e6d114f5813b5d4edd8569d"></a>
+<a class="el" href="classdevices_1_1audio_1_1_tone_play.html">TonePlay</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classdevices_1_1audio_1_1_tone_play.html">TonePlay</a> &amp;)=default</td></tr>
+<tr class="separator:a3468a8016e6d114f5813b5d4edd8569d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4eeff78dc4cd700df1e8e38f13877526"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#a4eeff78dc4cd700df1e8e38f13877526">TonePlay</a> ()=default</td></tr>
 <tr class="memdesc:a4eeff78dc4cd700df1e8e38f13877526"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor, used only to declare an uninitialized <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> variable.  <a href="#a4eeff78dc4cd700df1e8e38f13877526">More...</a><br /></td></tr>
 <tr class="separator:a4eeff78dc4cd700df1e8e38f13877526"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a834a40d31f9898bd8102c182f7dbd8"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#a1a834a40d31f9898bd8102c182f7dbd8">TonePlay</a> (<a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone, uint16_t ms=0)</td></tr>
-<tr class="memdesc:a1a834a40d31f9898bd8102c182f7dbd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a tone play with the provided tone and duration.  <a href="#a1a834a40d31f9898bd8102c182f7dbd8">More...</a><br /></td></tr>
-<tr class="separator:a1a834a40d31f9898bd8102c182f7dbd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8e6cf858d44632a6330b63187e776be"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#aa8e6cf858d44632a6330b63187e776be">TonePlay</a> (<a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone, <a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a> duration)</td></tr>
+<tr class="memdesc:aa8e6cf858d44632a6330b63187e776be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a tone play with the provided tone and duration.  <a href="#aa8e6cf858d44632a6330b63187e776be">More...</a><br /></td></tr>
+<tr class="separator:aa8e6cf858d44632a6330b63187e776be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae08d0aef431104d42e04bfaefe11a082"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#ae08d0aef431104d42e04bfaefe11a082">TonePlay</a> (<a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone, uint8_t value=0)</td></tr>
+<tr class="memdesc:ae08d0aef431104d42e04bfaefe11a082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a "special" tone play with the provided value.  <a href="#ae08d0aef431104d42e04bfaefe11a082">More...</a><br /></td></tr>
+<tr class="separator:ae08d0aef431104d42e04bfaefe11a082"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -128,10 +137,10 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. ">QTonePlay</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00082">82</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00161">161</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4eeff78dc4cd700df1e8e38f13877526"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4eeff78dc4cd700df1e8e38f13877526">&#9670;&nbsp;</a></span>TonePlay() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4eeff78dc4cd700df1e8e38f13877526">&#9670;&nbsp;</a></span>TonePlay() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -154,12 +163,12 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
 </div><div class="memdoc">
 
 <p>Default constructor, used only to declare an uninitialized <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> variable. </p>
-<p>You should always ensure you replace such a variable with one constructed with the next constructor. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#a1a834a40d31f9898bd8102c182f7dbd8" title="Construct a tone play with the provided tone and duration. ">TonePlay(Tone, uint16_t)</a> </dd></dl>
+<p>You should always ensure you replace such a variable with one constructed with the next constructor. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#ae08d0aef431104d42e04bfaefe11a082" title="Construct a &quot;special&quot; tone play with the provided value. ">TonePlay(Tone, uint8_t)</a> </dd></dl>
 
 </div>
 </div>
-<a id="a1a834a40d31f9898bd8102c182f7dbd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a834a40d31f9898bd8102c182f7dbd8">&#9670;&nbsp;</a></span>TonePlay() <span class="overload">[2/2]</span></h2>
+<a id="aa8e6cf858d44632a6330b63187e776be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8e6cf858d44632a6330b63187e776be">&#9670;&nbsp;</a></span>TonePlay() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,8 +185,8 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint16_t&#160;</td>
-          <td class="paramname"><em>ms</em> = <code>0</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a>&#160;</td>
+          <td class="paramname"><em>duration</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -196,12 +205,59 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tone</td><td>the <code>Tone</code> for this <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>; it will be automatically converted (at compile-time if <code>t</code> is a constant) to the proper timer prescaler and counter. </td></tr>
-    <tr><td class="paramname">ms</td><td>the duration of this tone in milliseconds; this may have different meanings if <code>t</code> is a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html" title="This namespace defines special &quot;tones&quot; which have an impact on how to play a melody. ">SpecialTone</a></code>. </td></tr>
+    <tr><td class="paramname">duration</td><td>the duration of this note. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00103">103</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00184">184</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="ae08d0aef431104d42e04bfaefe11a082"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae08d0aef431104d42e04bfaefe11a082">&#9670;&nbsp;</a></span>TonePlay() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr devices::audio::TonePlay::TonePlay </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td>
+          <td class="paramname"><em>tone</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>value</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a "special" tone play with the provided value. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tone</td><td>the special tone (as defined in <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html" title="This namespace defines special &quot;tones&quot; which have an impact on how to play a melody. ">SpecialTone</a></code> namespace) </td></tr>
+    <tr><td class="paramname">value</td><td>additional value which meaning depends on actual <code>tone:</code> number of repeats for <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a2a8d80fcee09ad51b4592cd15edcbea1" title="This special tone marks the end of a repeating sequence (started with REPEAT_START). ">SpecialTone::REPEAT_END</a></code>, number of ties or slurs between successive notes for <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a7e1d8ea55f01c6392ac105852d21c9e6" title="This special tone marks the following notes to be tied together, ie their durations are added with no...">SpecialTone::TIE</a></code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00194">194</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>

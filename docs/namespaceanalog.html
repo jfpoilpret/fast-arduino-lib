@@ -87,7 +87,8 @@ $(document).ready(function(){initNavTree('namespaceanalog.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">analog Namespace Reference</div>  </div>
 </div><!--header-->
@@ -98,6 +99,9 @@ $(document).ready(function(){initNavTree('namespaceanalog.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_analog_comparator.html">AnalogComparator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler of the Analog Comparator feature.  <a href="classanalog_1_1_analog_comparator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_analog_input.html">AnalogInput</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">API that handles a given analog input pin of the target MCU.  <a href="classanalog_1_1_analog_input.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -107,10 +111,63 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classanalog_1_1_p_w_m_output.html">PWMOutput</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new handler for a PWM output pin.  <a href="classanalog_1_1_p_w_m_output.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:aa6b91d833875b3e4f6b2c7293f21a81e"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81e">ComparatorInterrupt</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81eab50339a10e1de285ac99d4c3990b8693">ComparatorInterrupt::NONE</a> = bits::BV8(ACI), 
+<br />
+&#160;&#160;<a class="el" href="namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81ea1252c45651289c0b553a30d27bb5ae9b">ComparatorInterrupt::TOGGLE</a> = bits::BV8(ACI, ACIE), 
+<br />
+&#160;&#160;<a class="el" href="namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81ea297f5ea19073f4b51715b029f48d5d52">ComparatorInterrupt::FALLING_EDGE</a> = bits::BV8(ACI, ACIE, ACIS1), 
+<br />
+&#160;&#160;<a class="el" href="namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81ead85243a747ac5537ef0b7adde99c3e98">ComparatorInterrupt::RISING_EDGE</a> = bits::BV8(ACI, ACIE, ACIS1, ACIS0)
+<br />
+ }</td></tr>
+<tr class="memdesc:aa6b91d833875b3e4f6b2c7293f21a81e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kind of change that will trigger an Analog Comparator Interrupt.  <a href="namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81e">More...</a><br /></td></tr>
+<tr class="separator:aa6b91d833875b3e4f6b2c7293f21a81e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines all API to manipulate analog input/output. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="aa6b91d833875b3e4f6b2c7293f21a81e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6b91d833875b3e4f6b2c7293f21a81e">&#9670;&nbsp;</a></span>ComparatorInterrupt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81e">analog::ComparatorInterrupt</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Kind of change that will trigger an Analog Comparator Interrupt. </p>
+<p>Actual <code>uint8_t</code> value matches the related mask for ACSR. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa6b91d833875b3e4f6b2c7293f21a81eab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"><p>No interrupt will be generated by the Anolog Comparator. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aa6b91d833875b3e4f6b2c7293f21a81ea1252c45651289c0b553a30d27bb5ae9b"></a>TOGGLE&#160;</td><td class="fielddoc"><p>An interrupt is generated everytime the Analog Comparator output changes. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aa6b91d833875b3e4f6b2c7293f21a81ea297f5ea19073f4b51715b029f48d5d52"></a>FALLING_EDGE&#160;</td><td class="fielddoc"><p>An interrupt is generated everytime the Analog Comparator output changes from 1 to 0. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aa6b91d833875b3e4f6b2c7293f21a81ead85243a747ac5537ef0b7adde99c3e98"></a>RISING_EDGE&#160;</td><td class="fielddoc"><p>An interrupt is generated everytime the Analog Comparator output changes from 0 to 1. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="analog__comparator_8h_source.html#l00083">83</a> of file <a class="el" href="analog__comparator_8h_source.html">analog_comparator.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

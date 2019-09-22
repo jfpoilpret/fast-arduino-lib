@@ -108,6 +108,12 @@ static constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef
 <tr class="memitem:a2a8d80fcee09ad51b4592cd15edcbea1"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a2a8d80fcee09ad51b4592cd15edcbea1">REPEAT_END</a> = Tone::USER2</td></tr>
 <tr class="memdesc:a2a8d80fcee09ad51b4592cd15edcbea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This special tone marks the end of a repeating sequence (started with <code>REPEAT_START</code>).  <a href="#a2a8d80fcee09ad51b4592cd15edcbea1">More...</a><br /></td></tr>
 <tr class="separator:a2a8d80fcee09ad51b4592cd15edcbea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e1d8ea55f01c6392ac105852d21c9e6"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a7e1d8ea55f01c6392ac105852d21c9e6">TIE</a> = Tone::USER3</td></tr>
+<tr class="memdesc:a7e1d8ea55f01c6392ac105852d21c9e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This special tone marks the following notes to be tied together, ie their durations are added with no intertone delay.  <a href="#a7e1d8ea55f01c6392ac105852d21c9e6">More...</a><br /></td></tr>
+<tr class="separator:a7e1d8ea55f01c6392ac105852d21c9e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06daaae22209035c123e92935e2cdf5e"><td class="memItemLeft" align="right" valign="top">static constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a06daaae22209035c123e92935e2cdf5e">SLUR</a> = <a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a7e1d8ea55f01c6392ac105852d21c9e6">TIE</a></td></tr>
+<tr class="memdesc:a06daaae22209035c123e92935e2cdf5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This special tone marks the following notes to be slurred together, ie no intertone delay shall occur between these notes.  <a href="#a06daaae22209035c123e92935e2cdf5e">More...</a><br /></td></tr>
+<tr class="separator:a06daaae22209035c123e92935e2cdf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This namespace defines special "tones" which have an impact on how to play a melody. </p>
@@ -138,7 +144,7 @@ static constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef
 <p>This special tone marks the beginning of sequence that shall be repeated later. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a2a8d80fcee09ad51b4592cd15edcbea1" title="This special tone marks the end of a repeating sequence (started with REPEAT_START). ">REPEAT_END</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00055">55</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00051">51</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -163,11 +169,65 @@ static constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef
 </div><div class="memdoc">
 
 <p>This special tone marks the end of a repeating sequence (started with <code>REPEAT_START</code>). </p>
-<p>The associated duration in <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> has a special meaning: it indicates the number of times to repeat the sequence. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a491005c61adc2452fbe67c0727e868bd" title="This special tone marks the beginning of sequence that shall be repeated later. ">REPEAT_START</a> </dd>
-<dd>
-TonePlay::ms </dd></dl>
+<p>The associated <code>repeats</code> in <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> has a special meaning: it indicates the number of times to repeat the sequence. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a491005c61adc2452fbe67c0727e868bd" title="This special tone marks the beginning of sequence that shall be repeated later. ">REPEAT_START</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00064">64</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00059">59</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="a7e1d8ea55f01c6392ac105852d21c9e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e1d8ea55f01c6392ac105852d21c9e6">&#9670;&nbsp;</a></span>TIE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> devices::audio::SpecialTone::TIE = Tone::USER3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This special tone marks the following notes to be tied together, ie their durations are added with no intertone delay. </p>
+<p>The associated <code>repeats</code> in <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> indicates how many following notes shall be tied to the next; hence, in order to tie two notes, you should set <code>repeats</code> to <code>1</code>.</p>
+<p>According to music theory, ties are between two notes of the same pitch only; however, there is no control of this constraint. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a06daaae22209035c123e92935e2cdf5e" title="This special tone marks the following notes to be slurred together, ie no intertone delay shall occur...">SLUR</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00071">71</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="a06daaae22209035c123e92935e2cdf5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06daaae22209035c123e92935e2cdf5e">&#9670;&nbsp;</a></span>SLUR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const <a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> devices::audio::SpecialTone::SLUR = <a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a7e1d8ea55f01c6392ac105852d21c9e6">TIE</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This special tone marks the following notes to be slurred together, ie no intertone delay shall occur between these notes. </p>
+<p>The associated <code>repeats</code> in <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> indicates how many following notes shall be slurred to the next; hence, in order to slur two notes, you should set <code>repeats</code> to <code>1</code>.</p>
+<p>According to music theory, slurs are between two notes of different pitches only; however, there is no control of this constraint. Implementation-wise, technically speaking, there is no difference between ties and slurs. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a7e1d8ea55f01c6392ac105852d21c9e6" title="This special tone marks the following notes to be tied together, ie their durations are added with no...">TIE</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00085">85</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>

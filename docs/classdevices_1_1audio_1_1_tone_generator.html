@@ -111,6 +111,12 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ac834c6d0d291cdce1f7d257ab45721c3"><td class="memItemLeft" align="right" valign="top"><a id="ac834c6d0d291cdce1f7d257ab45721c3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ToneGenerator</b> (const <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">ToneGenerator</a>&lt; NTIMER, OUTPUT &gt; &amp;)=delete</td></tr>
+<tr class="separator:ac834c6d0d291cdce1f7d257ab45721c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ef5aa8b8dbbb2846c44d13a7eda5f7a"><td class="memItemLeft" align="right" valign="top"><a id="a1ef5aa8b8dbbb2846c44d13a7eda5f7a"></a>
+<a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">ToneGenerator</a>&lt; NTIMER, OUTPUT &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html">ToneGenerator</a>&lt; NTIMER, OUTPUT &gt; &amp;)=delete</td></tr>
+<tr class="separator:a1ef5aa8b8dbbb2846c44d13a7eda5f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8edbc25118181a60719fe731ba75f62c"><td class="memItemLeft" align="right" valign="top"><a id="a8edbc25118181a60719fe731ba75f62c"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#a8edbc25118181a60719fe731ba75f62c">ToneGenerator</a> ()</td></tr>
 <tr class="memdesc:a8edbc25118181a60719fe731ba75f62c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new generator of tones. <br /></td></tr>
@@ -145,7 +151,7 @@ class devices::audio::ToneGenerator&lt; NTIMER, OUTPUT &gt;</h3>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">TonePlayer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00145">145</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00175">175</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aee0c351832dfafbd7b29a90f7dbc70b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee0c351832dfafbd7b29a90f7dbc70b1">&#9670;&nbsp;</a></span>PRESCALER</h2>
@@ -163,7 +169,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 
 <p>The <code>TimerPrescaler</code> type matching the selected NTIMER. </p>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00152">152</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00185">185</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 
 </div>
 </div>
@@ -183,7 +189,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 
 <p>The counter type (<code>uint8_t</code> or <code>uint16_t</code>) for the selected NTIMER. </p>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00154">154</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00187">187</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 
 </div>
 </div>
@@ -228,7 +234,7 @@ tone(Tone) </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67" title="Start generating a tone on the connected buzzer until stop_tone() is called. ">start_tone(PRESCALER, COUNTER)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00173">173</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00206">206</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 
 </div>
 </div>
@@ -283,7 +289,7 @@ tone(PRESCALER, COUNTER) </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_generator.html#aa0b1916ae575480da9985085d74dc18f" title="Start generating a tone on the connected buzzer until stop_tone() is called. ">start_tone(Tone)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00191">191</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00224">224</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 
 </div>
 </div>
@@ -315,7 +321,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT&gt; </div>
 <p>Stop the tone being currently generated to the connected buzzer. </p>
 <dl class="section see"><dt>See also</dt><dd>start_toner() </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00200">200</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00233">233</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 
 </div>
 </div>

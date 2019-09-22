@@ -2,6 +2,7 @@ var searchData=
 [
   ['calculate_5fcounter',['calculate_counter',['../classdevices_1_1servo_1_1_servo.html#a206b12e8bdc3bc717f954460cb697d1c',1,'devices::servo::Servo']]],
   ['calculate_5fdelay1_5fcount',['calculate_delay1_count',['../namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271',1,'utils']]],
+  ['calculate_5fmin_5fduration',['calculate_min_duration',['../classdevices_1_1audio_1_1_abstract_tone_player.html#a6d82a75e01d37cd3868c44a49691f8c4',1,'devices::audio::AbstractTonePlayer']]],
   ['captured_5fvalues',['captured_values',['../classdevices_1_1mcp23017_1_1_m_c_p23017.html#a2e14774540fd75dfda8a527ea792d996',1,'devices::mcp23017::MCP23017']]],
   ['cbv16',['CBV16',['../namespacebits.html#af3e29db72a5d50fc0b1b684524e1c9a3',1,'bits']]],
   ['cbv8',['CBV8',['../namespacebits.html#a299b783445b74ee74546da2f1b2e7990',1,'bits']]],

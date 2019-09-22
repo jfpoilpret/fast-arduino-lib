@@ -1,7 +1,9 @@
 var classstreams_1_1ostreambuf =
 [
     [ "CALLBACK", "classstreams_1_1ostreambuf.html#a550c89444ecfc08e1d053964ec48b218", null ],
+    [ "ostreambuf", "classstreams_1_1ostreambuf.html#a96a8f9932f4c4900bb3b2d2579d912be", null ],
     [ "ostreambuf", "classstreams_1_1ostreambuf.html#a9afb4ee7746a391e2769e4f9b46176ec", null ],
+    [ "operator=", "classstreams_1_1ostreambuf.html#a68fc716d31c9ad87640a01c3aa720ba1", null ],
     [ "pubsync", "classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e", null ],
     [ "sputc", "classstreams_1_1ostreambuf.html#ad1fe405fcecf6e1d1bd97d7f14792438", null ],
     [ "sputn", "classstreams_1_1ostreambuf.html#aec033507c6f9c2fe741ea03a7fb6cda3", null ],

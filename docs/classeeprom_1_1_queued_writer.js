@@ -1,6 +1,8 @@
 var classeeprom_1_1_queued_writer =
 [
+    [ "QueuedWriter", "classeeprom_1_1_queued_writer.html#aa68e060485956dd804c4b9c17f277b8c", null ],
     [ "QueuedWriter", "classeeprom_1_1_queued_writer.html#a07fab062394e8e75fcb4ea57ae061fa1", null ],
+    [ "operator=", "classeeprom_1_1_queued_writer.html#a42ac9ba516b7fa172e3f056df0acdee7", null ],
     [ "write", "classeeprom_1_1_queued_writer.html#a4ef427e050a320c7f38a57a61afb69e6", null ],
     [ "write", "classeeprom_1_1_queued_writer.html#a8c0b5c3c61beb977e3c116c329b7e7eb", null ],
     [ "write", "classeeprom_1_1_queued_writer.html#a5e0da0ee5d855f140fdc6a46028bc7f8", null ],

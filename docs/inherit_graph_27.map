@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC&#45;SR04 sonars (or equivalent sensors), with their trigger pins ..." alt="" coords="5,5,217,61"/>
+<area shape="rect" id="node1" href="$classdevices_1_1sonar_1_1_abstract_sonar.html" title="An abstract base class for some sonar classes defined as part of this API. " alt="" coords="5,13,184,54"/>
+<area shape="rect" id="node2" href="$classdevices_1_1sonar_1_1_h_c_s_r04.html" title="devices::sonar::HCSR04\l\&lt; NTIMER_, TRIGGER_, ECHO\l_, SONAR_TYPE_ \&gt;" alt="" coords="232,5,444,61"/>
 </map>

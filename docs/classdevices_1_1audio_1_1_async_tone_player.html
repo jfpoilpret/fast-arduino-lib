@@ -130,15 +130,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aadcca6f8bf13f9a7c4cae454157330a7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#aadcca6f8bf13f9a7c4cae454157330a7">AsyncTonePlayer</a> (<a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a491b9f1635b99b1c84805739c4d5d7c8">GENERATOR</a> &amp;tone_generator)</td></tr>
 <tr class="memdesc:aadcca6f8bf13f9a7c4cae454157330a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new asynchronous tone player, based on an existing <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html" title="API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT...">ToneGenerator</a></code>.  <a href="#aadcca6f8bf13f9a7c4cae454157330a7">More...</a><br /></td></tr>
 <tr class="separator:aadcca6f8bf13f9a7c4cae454157330a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a864966951c141e5a7d527ea911c755cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a864966951c141e5a7d527ea911c755cf">play_sram</a> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *melody)</td></tr>
-<tr class="memdesc:a864966951c141e5a7d527ea911c755cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start playing a melody, defined by a sequence of <code>TONE_PLAY</code>s, stored in SRAM.  <a href="#a864966951c141e5a7d527ea911c755cf">More...</a><br /></td></tr>
-<tr class="separator:a864966951c141e5a7d527ea911c755cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bb99d5823fd4e9fe32684a66164fafb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a9bb99d5823fd4e9fe32684a66164fafb">play_eeprom</a> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *melody)</td></tr>
-<tr class="memdesc:a9bb99d5823fd4e9fe32684a66164fafb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start playing a melody, defined by a sequence of <code>TONE_PLAY</code>s, stored in EEPROM.  <a href="#a9bb99d5823fd4e9fe32684a66164fafb">More...</a><br /></td></tr>
-<tr class="separator:a9bb99d5823fd4e9fe32684a66164fafb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17bc119d487c998a1cbf3dd69428f0ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a17bc119d487c998a1cbf3dd69428f0ac">play_flash</a> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *melody)</td></tr>
-<tr class="memdesc:a17bc119d487c998a1cbf3dd69428f0ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start playing a melody, defined by a sequence of <code>TONE_PLAY</code>s, stored in Flash.  <a href="#a17bc119d487c998a1cbf3dd69428f0ac">More...</a><br /></td></tr>
-<tr class="separator:a17bc119d487c998a1cbf3dd69428f0ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a149bbf761641799654d3468e58971c69"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a149bbf761641799654d3468e58971c69">get_min_duration</a> () const</td></tr>
+<tr class="memdesc:a149bbf761641799654d3468e58971c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the duration, in milliseconds, of a 32nd note.  <a href="#a149bbf761641799654d3468e58971c69">More...</a><br /></td></tr>
+<tr class="separator:a149bbf761641799654d3468e58971c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca7f294180c98391db6dcc3bbdbf921c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#aca7f294180c98391db6dcc3bbdbf921c">play_sram</a> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *melody, uint8_t bpm)</td></tr>
+<tr class="memdesc:aca7f294180c98391db6dcc3bbdbf921c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start playing a melody, defined by a sequence of <code>TONE_PLAY</code>s, stored in SRAM.  <a href="#aca7f294180c98391db6dcc3bbdbf921c">More...</a><br /></td></tr>
+<tr class="separator:aca7f294180c98391db6dcc3bbdbf921c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8d57962b79fe1bcf889133c378fa55d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae8d57962b79fe1bcf889133c378fa55d">play_eeprom</a> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *melody, uint8_t bpm)</td></tr>
+<tr class="memdesc:ae8d57962b79fe1bcf889133c378fa55d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start playing a melody, defined by a sequence of <code>TONE_PLAY</code>s, stored in EEPROM.  <a href="#ae8d57962b79fe1bcf889133c378fa55d">More...</a><br /></td></tr>
+<tr class="separator:ae8d57962b79fe1bcf889133c378fa55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae46f6c4a2a252f536368fbf05f8e17ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae46f6c4a2a252f536368fbf05f8e17ff">play_flash</a> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *melody, uint8_t bpm)</td></tr>
+<tr class="memdesc:ae46f6c4a2a252f536368fbf05f8e17ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start playing a melody, defined by a sequence of <code>TONE_PLAY</code>s, stored in Flash.  <a href="#ae46f6c4a2a252f536368fbf05f8e17ff">More...</a><br /></td></tr>
+<tr class="separator:ae46f6c4a2a252f536368fbf05f8e17ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a874ec951bd1695aefbe127ee1744c52d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a874ec951bd1695aefbe127ee1744c52d">stop</a> ()</td></tr>
 <tr class="memdesc:a874ec951bd1695aefbe127ee1744c52d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop playing current melody (if any).  <a href="#a874ec951bd1695aefbe127ee1744c52d">More...</a><br /></td></tr>
 <tr class="separator:a874ec951bd1695aefbe127ee1744c52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,9 +163,21 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memdesc:a491b9f1635b99b1c84805739c4d5d7c8 inherit pro_types_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html" title="API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT...">ToneGenerator</a></code> to use as constructor's argument.  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#a491b9f1635b99b1c84805739c4d5d7c8">More...</a><br /></td></tr>
 <tr class="separator:a491b9f1635b99b1c84805739c4d5d7c8 inherit pro_types_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classdevices_1_1audio_1_1_abstract_tone_player')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a></td></tr>
+<tr class="memitem:aaf90909ee14abd8ff81e8b4b8251efe3 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top"><a id="aaf90909ee14abd8ff81e8b4b8251efe3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>AbstractTonePlayer</b> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">AbstractTonePlayer</a>&lt; NTIMER, OUTPUT, TONEPLAY &gt; &amp;)=delete</td></tr>
+<tr class="separator:aaf90909ee14abd8ff81e8b4b8251efe3 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af741020b475f49af7f97acb3152593b9 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top"><a id="af741020b475f49af7f97acb3152593b9"></a>
+<a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">AbstractTonePlayer</a>&lt; NTIMER, OUTPUT, TONEPLAY &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">AbstractTonePlayer</a>&lt; NTIMER, OUTPUT, TONEPLAY &gt; &amp;)=delete</td></tr>
+<tr class="separator:af741020b475f49af7f97acb3152593b9 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc86fc481f1049eb4c6ba658ef62488a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#acc86fc481f1049eb4c6ba658ef62488a">AbstractTonePlayer</a> (<a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a491b9f1635b99b1c84805739c4d5d7c8">GENERATOR</a> &amp;tone_generator)</td></tr>
 <tr class="memdesc:acc86fc481f1049eb4c6ba658ef62488a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new tone player, based on an existing <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html" title="API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT...">ToneGenerator</a></code>.  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#acc86fc481f1049eb4c6ba658ef62488a">More...</a><br /></td></tr>
 <tr class="separator:acc86fc481f1049eb4c6ba658ef62488a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a03c6699c7a65f7d51dfe73d73bafd7 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a2a03c6699c7a65f7d51dfe73d73bafd7">set_min_duration</a> (uint16_t min_duration)</td></tr>
+<tr class="memdesc:a2a03c6699c7a65f7d51dfe73d73bafd7 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the duration, in milliseconds, of a 32nd note.  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#a2a03c6699c7a65f7d51dfe73d73bafd7">More...</a><br /></td></tr>
+<tr class="separator:a2a03c6699c7a65f7d51dfe73d73bafd7 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a272068f53c5b9115df118cafd45a3b4c inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a272068f53c5b9115df118cafd45a3b4c">get_min_duration</a> () const</td></tr>
+<tr class="memdesc:a272068f53c5b9115df118cafd45a3b4c inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the duration, in milliseconds, of a 32nd note.  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#a272068f53c5b9115df118cafd45a3b4c">More...</a><br /></td></tr>
+<tr class="separator:a272068f53c5b9115df118cafd45a3b4c inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7d4b91ec792c18e090a89dc858870ee inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#ab7d4b91ec792c18e090a89dc858870ee">prepare_sram</a> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *melody)</td></tr>
 <tr class="memdesc:ab7d4b91ec792c18e090a89dc858870ee inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare playing of <code>melody</code>, which should be stored in SRAM.  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#ab7d4b91ec792c18e090a89dc858870ee">More...</a><br /></td></tr>
 <tr class="separator:ab7d4b91ec792c18e090a89dc858870ee inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,6 +197,10 @@ Additional Inherited Members</h2></td></tr>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#ae68dcd70889c601fca619596ddcf5f1a">is_finished</a> () const</td></tr>
 <tr class="memdesc:ae68dcd70889c601fca619596ddcf5f1a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicate if the currently played melody is finished. <br /></td></tr>
 <tr class="separator:ae68dcd70889c601fca619596ddcf5f1a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_static_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classdevices_1_1audio_1_1_abstract_tone_player')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a></td></tr>
+<tr class="memitem:a6d82a75e01d37cd3868c44a49691f8c4 inherit pro_static_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top">static constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a6d82a75e01d37cd3868c44a49691f8c4">calculate_min_duration</a> (uint8_t bpm)</td></tr>
+<tr class="memdesc:a6d82a75e01d37cd3868c44a49691f8c4 inherit pro_static_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the minimum duration (duration of a 32nd note), in milliseconds, for the given tempo (beats per minute).  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#a6d82a75e01d37cd3868c44a49691f8c4">More...</a><br /></td></tr>
+<tr class="separator:a6d82a75e01d37cd3868c44a49691f8c4 inherit pro_static_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY = QTonePlay&lt;NTIMER, OUTPUT&gt;&gt;<br />
@@ -213,7 +232,7 @@ class devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</h3>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. ">TonePlayer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00638">638</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00838">838</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a0b2babc2bb035243505f0aa6158d1b03"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b2babc2bb035243505f0aa6158d1b03">&#9670;&nbsp;</a></span>GENERATOR</h2>
@@ -231,7 +250,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 
 <p>The type of <code><a class="el" href="classdevices_1_1audio_1_1_tone_generator.html" title="API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT...">ToneGenerator</a></code> to use as constructor's argument. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00645">645</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00845">845</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -251,7 +270,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 
 <p>The type that holds unit of information of a melody. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00647">647</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00847">847</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -290,13 +309,49 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00654">654</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00854">854</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a864966951c141e5a7d527ea911c755cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a864966951c141e5a7d527ea911c755cf">&#9670;&nbsp;</a></span>play_sram()</h2>
+<a id="a149bbf761641799654d3468e58971c69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a149bbf761641799654d3468e58971c69">&#9670;&nbsp;</a></span>get_min_duration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTonePlay&lt;NTIMER, OUTPUT&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html">devices::audio::AsyncTonePlayer</a>&lt; NTIMER, OUTPUT, TONEPLAY &gt;::get_min_duration </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the duration, in milliseconds, of a 32nd note. </p>
+<p>This value can be used to set the ideal timer/counter value that shall be used to asynchronously play a melody. This method shall be called only AFTER one of <code>play_xxxx()</code> methods has been called. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#aca7f294180c98391db6dcc3bbdbf921c" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in SRAM. ">play_sram()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae8d57962b79fe1bcf889133c378fa55d" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in EEPROM. ">play_eeprom()</a> </dd>
+<dd>
+<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae46f6c4a2a252f536368fbf05f8e17ff" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in Flash. ">play_flash()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00867">867</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
+<a id="aca7f294180c98391db6dcc3bbdbf921c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca7f294180c98391db6dcc3bbdbf921c">&#9670;&nbsp;</a></span>play_sram()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -310,8 +365,18 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
           <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html">devices::audio::AsyncTonePlayer</a>&lt; NTIMER, OUTPUT, TONEPLAY &gt;::play_sram </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *&#160;</td>
-          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td class="paramname"><em>melody</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>bpm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -325,23 +390,24 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>This method is asynchronous: it returns immediately even ebfore starting playing the first melody's note. Actual play is performed by frequent calls of <code><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a0d588e929815d14f4d18b1f453866251" title="Ask this player to update current play if needed, based on current time (as returned by an timer::RTT...">update()</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">melody</td><td>a pointer, in SRAM, to the sequence of <code>TONE_PLAY</code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+    <tr><td class="paramname">bpm</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a9bb99d5823fd4e9fe32684a66164fafb" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in EEPROM. ">play_eeprom()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae8d57962b79fe1bcf889133c378fa55d" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in EEPROM. ">play_eeprom()</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a17bc119d487c998a1cbf3dd69428f0ac" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in Flash. ">play_flash()</a> </dd>
+<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae46f6c4a2a252f536368fbf05f8e17ff" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in Flash. ">play_flash()</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a874ec951bd1695aefbe127ee1744c52d" title="Stop playing current melody (if any). ">stop()</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a0d588e929815d14f4d18b1f453866251" title="Ask this player to update current play if needed, based on current time (as returned by an timer::RTT...">update()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00669">669</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00886">886</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
-<a id="a9bb99d5823fd4e9fe32684a66164fafb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bb99d5823fd4e9fe32684a66164fafb">&#9670;&nbsp;</a></span>play_eeprom()</h2>
+<a id="ae8d57962b79fe1bcf889133c378fa55d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8d57962b79fe1bcf889133c378fa55d">&#9670;&nbsp;</a></span>play_eeprom()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -355,8 +421,18 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
           <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html">devices::audio::AsyncTonePlayer</a>&lt; NTIMER, OUTPUT, TONEPLAY &gt;::play_eeprom </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *&#160;</td>
-          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td class="paramname"><em>melody</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>bpm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -370,23 +446,24 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>This method is asynchronous: it returns immediately even ebfore starting playing the first melody's note. Actual play is performed by frequent calls of <code><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a0d588e929815d14f4d18b1f453866251" title="Ask this player to update current play if needed, based on current time (as returned by an timer::RTT...">update()</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">melody</td><td>a pointer, in EEPROM, to the sequence of <code>TONE_PLAY</code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+    <tr><td class="paramname">bpm</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a864966951c141e5a7d527ea911c755cf" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in SRAM. ">play_sram()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#aca7f294180c98391db6dcc3bbdbf921c" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in SRAM. ">play_sram()</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a17bc119d487c998a1cbf3dd69428f0ac" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in Flash. ">play_flash()</a> </dd>
+<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae46f6c4a2a252f536368fbf05f8e17ff" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in Flash. ">play_flash()</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a874ec951bd1695aefbe127ee1744c52d" title="Stop playing current melody (if any). ">stop()</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a0d588e929815d14f4d18b1f453866251" title="Ask this player to update current play if needed, based on current time (as returned by an timer::RTT...">update()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00689">689</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00909">909</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
-<a id="a17bc119d487c998a1cbf3dd69428f0ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17bc119d487c998a1cbf3dd69428f0ac">&#9670;&nbsp;</a></span>play_flash()</h2>
+<a id="ae46f6c4a2a252f536368fbf05f8e17ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae46f6c4a2a252f536368fbf05f8e17ff">&#9670;&nbsp;</a></span>play_flash()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -400,8 +477,18 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
           <td class="memname">void <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html">devices::audio::AsyncTonePlayer</a>&lt; NTIMER, OUTPUT, TONEPLAY &gt;::play_flash </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#aa9c5a1b49d8b6bab06c7a86fd334da4b">TONE_PLAY</a> *&#160;</td>
-          <td class="paramname"><em>melody</em></td><td>)</td>
+          <td class="paramname"><em>melody</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>bpm</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -415,18 +502,19 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>This method is asynchronous: it returns immediately even ebfore starting playing the first melody's note. Actual play is performed by frequent calls of <code><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a0d588e929815d14f4d18b1f453866251" title="Ask this player to update current play if needed, based on current time (as returned by an timer::RTT...">update()</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">melody</td><td>a pointer, in Flash, to the sequence of <code>TONE_PLAY</code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones). ">SpecialTone::END</a></code>. </td></tr>
+    <tr><td class="paramname">bpm</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a9bb99d5823fd4e9fe32684a66164fafb" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in EEPROM. ">play_eeprom()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#ae8d57962b79fe1bcf889133c378fa55d" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in EEPROM. ">play_eeprom()</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a864966951c141e5a7d527ea911c755cf" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in SRAM. ">play_sram()</a> </dd>
+<a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#aca7f294180c98391db6dcc3bbdbf921c" title="Start playing a melody, defined by a sequence of TONE_PLAYs, stored in SRAM. ">play_sram()</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a874ec951bd1695aefbe127ee1744c52d" title="Stop playing current melody (if any). ">stop()</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a0d588e929815d14f4d18b1f453866251" title="Ask this player to update current play if needed, based on current time (as returned by an timer::RTT...">update()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00709">709</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00932">932</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -458,7 +546,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>Stop playing current melody (if any). </p>
 <p>Effect is not immediate but will stop at the end of the current tone. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00721">721</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00945">945</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -497,7 +585,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00745">745</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00969">969</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>

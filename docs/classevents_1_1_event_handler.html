@@ -126,12 +126,25 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a46dbc956154585486e67771316235029"><td class="memItemLeft" align="right" valign="top"><a id="a46dbc956154585486e67771316235029"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>EventHandler</b> (const <a class="el" href="classevents_1_1_event_handler.html">EventHandler</a>&lt; EVENT &gt; &amp;)=default</td></tr>
+<tr class="separator:a46dbc956154585486e67771316235029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a878a55d4bdb79ec6b17174f836a08f8c"><td class="memItemLeft" align="right" valign="top"><a id="a878a55d4bdb79ec6b17174f836a08f8c"></a>
+<a class="el" href="classevents_1_1_event_handler.html">EventHandler</a>&lt; EVENT &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classevents_1_1_event_handler.html">EventHandler</a>&lt; EVENT &gt; &amp;)=default</td></tr>
+<tr class="separator:a878a55d4bdb79ec6b17174f836a08f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf1504447f58fbe5060bf2218dee9c09"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09">on_event</a> (const EVENT &amp;event)=0</td></tr>
 <tr class="memdesc:adf1504447f58fbe5060bf2218dee9c09"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pure virtual method is called by <code><a class="el" href="classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7" title="Dispatch the given event to the right EventHandler, based on the event type. ">Dispatcher::dispatch()</a></code> when <code>event.type()</code> matches the type supported by this <code><a class="el" href="classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d...">EventHandler</a></code>.  <a href="#adf1504447f58fbe5060bf2218dee9c09">More...</a><br /></td></tr>
 <tr class="separator:adf1504447f58fbe5060bf2218dee9c09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a1b6e45fb04ed611dc09c71a30d2341"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevents_1_1_event_handler.html#a3a1b6e45fb04ed611dc09c71a30d2341">EventHandler</a> (uint8_t <a class="el" href="classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0">type</a>=<a class="el" href="namespaceevents_1_1_type.html#a2c33d039e5fdd277900219bd3cd74eb0">Type::NO_EVENT</a>) INLINE</td></tr>
 <tr class="memdesc:a3a1b6e45fb04ed611dc09c71a30d2341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an <a class="el" href="classevents_1_1_event.html" title="A standard Event as managed by FastArduino event API. ">Event</a> Handler for given <code>type</code> of event.  <a href="#a3a1b6e45fb04ed611dc09c71a30d2341">More...</a><br /></td></tr>
 <tr class="separator:a3a1b6e45fb04ed611dc09c71a30d2341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classcontainers_1_1_link"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcontainers_1_1_link')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcontainers_1_1_link.html">containers::Link&lt; EventHandler&lt; EVENT &gt; &gt;</a></td></tr>
+<tr class="memitem:a3bfefb58721e17eab032e99fe42cf19f inherit pro_methods_classcontainers_1_1_link"><td class="memItemLeft" align="right" valign="top"><a id="a3bfefb58721e17eab032e99fe42cf19f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Link</b> (const <a class="el" href="classcontainers_1_1_link.html">Link</a>&lt; EventHandler&lt; EVENT &gt; &gt; &amp;)=default</td></tr>
+<tr class="separator:a3bfefb58721e17eab032e99fe42cf19f inherit pro_methods_classcontainers_1_1_link"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11e2757f45bfd68f5524986e4648915e inherit pro_methods_classcontainers_1_1_link"><td class="memItemLeft" align="right" valign="top"><a id="a11e2757f45bfd68f5524986e4648915e"></a>
+<a class="el" href="classcontainers_1_1_link.html">Link</a>&lt; EventHandler&lt; EVENT &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classcontainers_1_1_link.html">Link</a>&lt; EventHandler&lt; EVENT &gt; &gt; &amp;)=delete</td></tr>
+<tr class="separator:a11e2757f45bfd68f5524986e4648915e inherit pro_methods_classcontainers_1_1_link"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -160,7 +173,7 @@ class events::EventHandler&lt; EVENT &gt;</h3>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7" title="Dispatch the given event to the right EventHandler, based on the event type. ">Dispatcher::dispatch()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00275">275</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00285">285</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3a1b6e45fb04ed611dc09c71a30d2341"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3a1b6e45fb04ed611dc09c71a30d2341">&#9670;&nbsp;</a></span>EventHandler()</h2>
@@ -196,7 +209,7 @@ template&lt;typename EVENT&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00300">300</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="events_8h_source.html#l00313">313</a> of file <a class="el" href="events_8h_source.html">events.h</a>.</p>
 
 </div>
 </div>

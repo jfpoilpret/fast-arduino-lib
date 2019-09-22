@@ -2,6 +2,7 @@ var classgpio_1_1_fast_pin_type =
 [
     [ "TYPE", "classgpio_1_1_fast_pin_type.html#a042fde27c2748f1401523090025b03ea", null ],
     [ "PORT_TYPE", "classgpio_1_1_fast_pin_type.html#a7b7dc71e82eba871bdb45b1fe063f8de", null ],
+    [ "FastPinType", "classgpio_1_1_fast_pin_type.html#adb8523f5561b736462b9ee190936cba5", null ],
     [ "set_mode", "classgpio_1_1_fast_pin_type.html#aec745f596e959cb883f9ba66a526b1b6", null ],
     [ "set", "classgpio_1_1_fast_pin_type.html#a3c262326bc03f5e9b03c460fb8916e24", null ],
     [ "clear", "classgpio_1_1_fast_pin_type.html#a5a031efb5fa3df88fdc861ec80ae580b", null ],

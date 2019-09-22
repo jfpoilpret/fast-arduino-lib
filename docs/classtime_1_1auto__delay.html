@@ -101,14 +101,20 @@ $(document).ready(function(){initNavTree('classtime_1_1auto__delay.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ac364c1e6735965f38a251fc3ed8cff7b"><td class="memItemLeft" align="right" valign="top"><a id="ac364c1e6735965f38a251fc3ed8cff7b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>auto_delay</b> (const <a class="el" href="classtime_1_1auto__delay.html">auto_delay</a> &amp;)=delete</td></tr>
+<tr class="separator:ac364c1e6735965f38a251fc3ed8cff7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f2b9906fc39790b2881bb46fc531f8a"><td class="memItemLeft" align="right" valign="top"><a id="a2f2b9906fc39790b2881bb46fc531f8a"></a>
+<a class="el" href="classtime_1_1auto__delay.html">auto_delay</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classtime_1_1auto__delay.html">auto_delay</a> &amp;)=delete</td></tr>
+<tr class="separator:a2f2b9906fc39790b2881bb46fc531f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9ffd33d155ba2ff39cb3f6fea96fdb4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtime_1_1auto__delay.html#af9ffd33d155ba2ff39cb3f6fea96fdb4">auto_delay</a> (<a class="el" href="namespacetime.html#a0980f7cbb448c562b0081484031f325e">DELAY_PTR</a> new_delay) INLINE</td></tr>
 <tr class="memdesc:af9ffd33d155ba2ff39cb3f6fea96fdb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set new <code><a class="el" href="namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf" title="Delay program execution for the given amount of milliseconds. ">time::delay</a></code> to <code>new_delay</code> after storing current function for later restore.  <a href="#af9ffd33d155ba2ff39cb3f6fea96fdb4">More...</a><br /></td></tr>
 <tr class="separator:af9ffd33d155ba2ff39cb3f6fea96fdb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Set a new <code><a class="el" href="namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf" title="Delay program execution for the given amount of milliseconds. ">time::delay</a></code> function for the duration of the current scope; when the scope is left, the previous <code><a class="el" href="namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf" title="Delay program execution for the given amount of milliseconds. ">time::delay</a></code> function is restored. </p>
-<p>Usage example: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> my_delay(uint32_t ms)</div><div class="line">{</div><div class="line">    ...</div><div class="line">}</div><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <span class="comment">// Set new time::delay function</span></div><div class="line">    <a class="code" href="classtime_1_1auto__delay.html#af9ffd33d155ba2ff39cb3f6fea96fdb4">auto_delay</a> d{my_delay};</div><div class="line">    <span class="comment">// call API that rely on time::delay</span></div><div class="line">    ...</div><div class="line">    <span class="comment">// Restore previous time::delay function</span></div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00430">430</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p>Usage example: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> my_delay(uint32_t ms)</div><div class="line">{</div><div class="line">    ...</div><div class="line">}</div><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <span class="comment">// Set new time::delay function</span></div><div class="line">    auto_delay d{my_delay};</div><div class="line">    <span class="comment">// call API that rely on time::delay</span></div><div class="line">    ...</div><div class="line">    <span class="comment">// Restore previous time::delay function</span></div><div class="line">}</div></div><!-- fragment --> 
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00432">432</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af9ffd33d155ba2ff39cb3f6fea96fdb4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9ffd33d155ba2ff39cb3f6fea96fdb4">&#9670;&nbsp;</a></span>auto_delay()</h2>
@@ -142,7 +148,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00438">438</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="time_8h_source.html#l00443">443</a> of file <a class="el" href="time_8h_source.html">time.h</a>.</p>
 
 </div>
 </div>

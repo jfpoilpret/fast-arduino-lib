@@ -1,5 +1,8 @@
 var searchData=
 [
+  ['register_5fanalog_5fcompare_5fisr_5fempty',['REGISTER_ANALOG_COMPARE_ISR_EMPTY',['../analog__comparator_8h.html#a8f31fd98c300467deb35cd55ed5ad23d',1,'analog_comparator.h']]],
+  ['register_5fanalog_5fcompare_5fisr_5ffunction',['REGISTER_ANALOG_COMPARE_ISR_FUNCTION',['../analog__comparator_8h.html#ac6cd04df8124af40ca7c97ef64172017',1,'analog_comparator.h']]],
+  ['register_5fanalog_5fcompare_5fisr_5fmethod',['REGISTER_ANALOG_COMPARE_ISR_METHOD',['../analog__comparator_8h.html#a1051f30a755279b95ab656d0bca1f0bb',1,'analog_comparator.h']]],
   ['register_5fdistinct_5fhcsr04_5fpci_5fisr',['REGISTER_DISTINCT_HCSR04_PCI_ISR',['../sonar_8h.html#a68439863637a31628311b26d628c082f',1,'sonar.h']]],
   ['register_5feeprom_5fisr',['REGISTER_EEPROM_ISR',['../eeprom_8h.html#a24aa9951e4fd46ce3fb158d64748e2ac',1,'eeprom.h']]],
   ['register_5feeprom_5fisr_5ffunction',['REGISTER_EEPROM_ISR_FUNCTION',['../eeprom_8h.html#a3e98083ea0d85e7fad253e419373cb8d',1,'eeprom.h']]],

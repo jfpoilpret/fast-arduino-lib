@@ -3,6 +3,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
     [ "boards", "dir_1c08fda4bc66c3abc75082f93842b107.html", "dir_1c08fda4bc66c3abc75082f93842b107" ],
     [ "devices", "dir_c8147ad417a9a009ff67e0ffb1a47300.html", "dir_c8147ad417a9a009ff67e0ffb1a47300" ],
     [ "abi.cpp", "abi_8cpp_source.html", null ],
+    [ "analog_comparator.h", "analog__comparator_8h.html", "analog__comparator_8h" ],
     [ "analog_input.h", "analog__input_8h.html", [
       [ "AnalogInput", "classanalog_1_1_analog_input.html", "classanalog_1_1_analog_input" ],
       [ "PowerVoltage", "classanalog_1_1_power_voltage.html", "classanalog_1_1_power_voltage" ]

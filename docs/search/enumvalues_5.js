@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['falling_5fedge',['FALLING_EDGE',['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba297f5ea19073f4b51715b029f48d5d52',1,'interrupt::FALLING_EDGE()'],['../namespacetimer.html#a908aa72c1bb077bec67565b637350bf4a297f5ea19073f4b51715b029f48d5d52',1,'timer::FALLING_EDGE()']]],
+  ['falling_5fedge',['FALLING_EDGE',['../namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81ea297f5ea19073f4b51715b029f48d5d52',1,'analog::FALLING_EDGE()'],['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba297f5ea19073f4b51715b029f48d5d52',1,'interrupt::FALLING_EDGE()'],['../namespacetimer.html#a908aa72c1bb077bec67565b637350bf4a297f5ea19073f4b51715b029f48d5d52',1,'timer::FALLING_EDGE()']]],
   ['fast',['FAST',['../namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36adca6e617f6fb54033deb311e7e7c93cc',1,'i2c']]],
   ['fast_5fpwm',['FAST_PWM',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a3c777f2debe013caa4c85ae201e9bda0',1,'timer']]],
   ['feature',['FEATURE',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aacc5eac6d4ce84ae96a802a5ecdd51977',1,'devices::rf::NRF24L01']]],

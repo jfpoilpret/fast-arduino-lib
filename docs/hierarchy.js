@@ -35,6 +35,7 @@ var hierarchy =
     ] ],
     [ "devices::rf::NRF24L01< CSN, CE >::addr_t", "structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html", null ],
     [ "devices::magneto::AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", null ],
+    [ "analog::AnalogComparator", "classanalog_1_1_analog_comparator.html", null ],
     [ "analog::AnalogInput< APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ >", "classanalog_1_1_analog_input.html", null ],
     [ "analog::AnalogInput< BANDGAP_, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz >", "classanalog_1_1_analog_input.html", [
       [ "analog::PowerVoltage< BANDGAP_ >", "classanalog_1_1_power_voltage.html", null ]
@@ -132,8 +133,8 @@ var hierarchy =
     [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],
     [ "timer::SquareWave< NTIMER, OUTPUT >", "classtimer_1_1_square_wave.html", null ],
-    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
+    [ "devices::magneto::Status", "structdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
     [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", [
       [ "timer::PulseTimer< NTIMER_, PRESCALER_, T >", "classtimer_1_1_pulse_timer.html", null ],

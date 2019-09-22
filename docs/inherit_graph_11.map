@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1audio_1_1_q_tone_play.html" title="An optimized surrogate to TonePlay structure. " alt="" coords="5,5,197,47"/>
+<area shape="rect" id="node1" href="$classdevices_1_1audio_1_1_abstract_tone_player.html" title="This low&#45;level API defines an abstract player of melodies (defined as a sequence of tones and duratio..." alt="" coords="5,43,229,99"/>
+<area shape="rect" id="node2" href="$classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. " alt="" coords="299,5,494,61"/>
+<area shape="rect" id="node3" href="$classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. " alt="" coords="277,86,516,127"/>
 </map>

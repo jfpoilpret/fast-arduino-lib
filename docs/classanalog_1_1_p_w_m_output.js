@@ -2,7 +2,9 @@ var classanalog_1_1_p_w_m_output =
 [
     [ "TIMER", "classanalog_1_1_p_w_m_output.html#a1969f69344b32964ffcbcdc24b50f635", null ],
     [ "TYPE", "classanalog_1_1_p_w_m_output.html#afc6fc544b991bb50cddfc8c7b102ae88", null ],
+    [ "PWMOutput", "classanalog_1_1_p_w_m_output.html#ae4d5a31f8ce3773d5e15ea9644d842c0", null ],
     [ "PWMOutput", "classanalog_1_1_p_w_m_output.html#a16c149cfcfd7969d2f5985b1209b0c72", null ],
+    [ "operator=", "classanalog_1_1_p_w_m_output.html#aae131f4dcb1d78d2838c856d95d34da9", null ],
     [ "set_output_mode", "classanalog_1_1_p_w_m_output.html#aea6a8cf721d0fcd61266f0f4e783ad82", null ],
     [ "set_duty", "classanalog_1_1_p_w_m_output.html#a299100ad96772ee84f2cd400da07ba06", null ],
     [ "PWMPIN", "classanalog_1_1_p_w_m_output.html#a93782b9fe0429b20792f65419b6888a9", null ],

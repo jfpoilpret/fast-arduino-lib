@@ -89,7 +89,8 @@ $(document).ready(function(){initNavTree('namespacedevices_1_1audio.html','');})
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">devices::audio Namespace Reference</div>  </div>
 </div><!--header-->
@@ -127,6 +128,30 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a9ec897420c4939aebbe29ccdbe3d1ead"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadaad772c40e87c4f01eec1e39727e96a69">Duration::WHOLE</a> = 32, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada87e955627b59c274ec4cbdd3a130f9bb">Duration::HALF</a> = 16, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada2127749533f087678c2ff775d060024e">Duration::QUARTER</a> = 8, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadab22bd4fad3d4313c5a652c7b2cca52e2">Duration::EIGHTH</a> = 4, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada4490ba0de617cba6aa30437dfd283f69">Duration::SIXTEENTH</a> = 2, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada9bb923acef0f04fbc0e7ded5358f5aae">Duration::SEMI_BREVE</a> = WHOLE, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadae23564ab1419fa36e0af23ed32b9f7f9">Duration::MINIM</a> = HALF, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada46a31ccb6974d5b2c709021f1f7bae28">Duration::CROTCHET</a> = QUARTER, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadad17399392e4d861e340d0b04482687f7">Duration::QUAVER</a> = EIGHTH, 
+<br />
+&#160;&#160;<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada392d2ac45240b7c50b33074478a082cc">Duration::SEMI_QUAVER</a> = SIXTEENTH
+<br />
+ }</td></tr>
+<tr class="memdesc:a9ec897420c4939aebbe29ccdbe3d1ead"><td class="mdescLeft">&#160;</td><td class="mdescRight">Possible duration of a note, following music theory.  <a href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">More...</a><br /></td></tr>
+<tr class="separator:a9ec897420c4939aebbe29ccdbe3d1ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> : uint16_t { <br />
 &#160;&#160;<b>USER0</b> = 0, 
 <br />
@@ -146,13 +171,19 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>SILENCE</b> = USER7 + 1, 
 <br />
+&#160;&#160;<b>REST</b> = SILENCE, 
+<br />
 &#160;&#160;<b>C0</b> = 131, 
 <br />
 &#160;&#160;<b>Cs0</b> = 139, 
 <br />
+&#160;&#160;<b>Df0</b> = Cs0, 
+<br />
 &#160;&#160;<b>D0</b> = 147, 
 <br />
 &#160;&#160;<b>Ds0</b> = 156, 
+<br />
+&#160;&#160;<b>Ef0</b> = Ds0, 
 <br />
 &#160;&#160;<b>E0</b> = 165, 
 <br />
@@ -160,13 +191,19 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Fs0</b> = 185, 
 <br />
+&#160;&#160;<b>Gf0</b> = Fs0, 
+<br />
 &#160;&#160;<b>G0</b> = 196, 
 <br />
 &#160;&#160;<b>Gs0</b> = 208, 
 <br />
+&#160;&#160;<b>Af0</b> = Gs0, 
+<br />
 &#160;&#160;<b>A0</b> = 220, 
 <br />
 &#160;&#160;<b>As0</b> = 233, 
+<br />
+&#160;&#160;<b>Bf0</b> = As0, 
 <br />
 &#160;&#160;<b>B0</b> = 247, 
 <br />
@@ -174,9 +211,13 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Cs1</b> = 277, 
 <br />
+&#160;&#160;<b>Df1</b> = Cs1, 
+<br />
 &#160;&#160;<b>D1</b> = 294, 
 <br />
 &#160;&#160;<b>Ds1</b> = 311, 
+<br />
+&#160;&#160;<b>Ef1</b> = Ds1, 
 <br />
 &#160;&#160;<b>E1</b> = 330, 
 <br />
@@ -184,13 +225,19 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Fs1</b> = 370, 
 <br />
+&#160;&#160;<b>Gf1</b> = Fs1, 
+<br />
 &#160;&#160;<b>G1</b> = 392, 
 <br />
 &#160;&#160;<b>Gs1</b> = 415, 
 <br />
+&#160;&#160;<b>Af1</b> = Gs1, 
+<br />
 &#160;&#160;<b>A1</b> = 440, 
 <br />
 &#160;&#160;<b>As1</b> = 466, 
+<br />
+&#160;&#160;<b>Bf1</b> = As1, 
 <br />
 &#160;&#160;<b>B1</b> = 494, 
 <br />
@@ -198,9 +245,13 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Cs2</b> = 554, 
 <br />
+&#160;&#160;<b>Df2</b> = Cs2, 
+<br />
 &#160;&#160;<b>D2</b> = 587, 
 <br />
 &#160;&#160;<b>Ds2</b> = 622, 
+<br />
+&#160;&#160;<b>Ef2</b> = Ds2, 
 <br />
 &#160;&#160;<b>E2</b> = 659, 
 <br />
@@ -208,13 +259,19 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Fs2</b> = 740, 
 <br />
+&#160;&#160;<b>Gf2</b> = Fs2, 
+<br />
 &#160;&#160;<b>G2</b> = 784, 
 <br />
 &#160;&#160;<b>Gs2</b> = 831, 
 <br />
+&#160;&#160;<b>Af2</b> = Gs2, 
+<br />
 &#160;&#160;<b>A2</b> = 880, 
 <br />
 &#160;&#160;<b>As2</b> = 932, 
+<br />
+&#160;&#160;<b>Bf2</b> = As2, 
 <br />
 &#160;&#160;<b>B2</b> = 988, 
 <br />
@@ -222,9 +279,13 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Cs3</b> = 1109, 
 <br />
+&#160;&#160;<b>Df3</b> = Cs3, 
+<br />
 &#160;&#160;<b>D3</b> = 1175, 
 <br />
 &#160;&#160;<b>Ds3</b> = 1245, 
+<br />
+&#160;&#160;<b>Ef3</b> = Ds3, 
 <br />
 &#160;&#160;<b>E3</b> = 1319, 
 <br />
@@ -232,13 +293,19 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Fs3</b> = 1480, 
 <br />
+&#160;&#160;<b>Gf3</b> = Fs3, 
+<br />
 &#160;&#160;<b>G3</b> = 1568, 
 <br />
 &#160;&#160;<b>Gs3</b> = 1662, 
 <br />
+&#160;&#160;<b>Af3</b> = Gs3, 
+<br />
 &#160;&#160;<b>A3</b> = 1760, 
 <br />
 &#160;&#160;<b>As3</b> = 1865, 
+<br />
+&#160;&#160;<b>Bf3</b> = As3, 
 <br />
 &#160;&#160;<b>B3</b> = 1976, 
 <br />
@@ -246,9 +313,13 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Cs4</b> = 2217, 
 <br />
+&#160;&#160;<b>Df4</b> = Cs4, 
+<br />
 &#160;&#160;<b>D4</b> = 2349, 
 <br />
 &#160;&#160;<b>Ds4</b> = 2489, 
+<br />
+&#160;&#160;<b>Ef4</b> = Ds4, 
 <br />
 &#160;&#160;<b>E4</b> = 2637, 
 <br />
@@ -256,23 +327,97 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<b>Fs4</b> = 2960, 
 <br />
+&#160;&#160;<b>Gf4</b> = Fs4, 
+<br />
 &#160;&#160;<b>G4</b> = 3136, 
 <br />
 &#160;&#160;<b>Gs4</b> = 3322, 
 <br />
+&#160;&#160;<b>Af4</b> = Gs4, 
+<br />
 &#160;&#160;<b>A4</b> = 3520, 
 <br />
 &#160;&#160;<b>As4</b> = 3729, 
+<br />
+&#160;&#160;<b>Bf4</b> = As4, 
 <br />
 &#160;&#160;<b>B4</b> = 3951
 <br />
  }</td></tr>
 <tr class="memdesc:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines all possible audio tones that can be generated.  <a href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">More...</a><br /></td></tr>
 <tr class="separator:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a222d4124b81f50a0025e06a509e6c110"><td class="memItemLeft" align="right" valign="top"><a id="a222d4124b81f50a0025e06a509e6c110"></a>
+static constexpr <a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#a222d4124b81f50a0025e06a509e6c110">dotted</a> (<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a> d)</td></tr>
+<tr class="memdesc:a222d4124b81f50a0025e06a509e6c110"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms a note duration to its dotted value (1.5 times the given duration). <br /></td></tr>
+<tr class="separator:a222d4124b81f50a0025e06a509e6c110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2faad8e6873df42c8fe7a3885d6dfb5b"><td class="memItemLeft" align="right" valign="top"><a id="a2faad8e6873df42c8fe7a3885d6dfb5b"></a>
+static constexpr <a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#a2faad8e6873df42c8fe7a3885d6dfb5b">triplet</a> (<a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a> d)</td></tr>
+<tr class="memdesc:a2faad8e6873df42c8fe7a3885d6dfb5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms a note duration to allow it to use in a triplet. <br /></td></tr>
+<tr class="separator:a2faad8e6873df42c8fe7a3885d6dfb5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines API for audio tones (square waves) generation and simple melodies playing. </p>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a9ec897420c4939aebbe29ccdbe3d1ead"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ec897420c4939aebbe29ccdbe3d1ead">&#9670;&nbsp;</a></span>Duration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">devices::audio::Duration</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Possible duration of a note, following music theory. </p>
+<p>The shortest duration supported is the semi-quaver (or sixteenth). Synonyms are also defined when they exist.</p>
+<p>The <code>uint8_t</code> value is the multiplier to apply to the duration of a 32th note to get the actual duration (in 4 quarters time signature).</p>
+<p>A note duration can be altered by:</p><ul>
+<li>dotting it (i.e. multiplying the duration by 1.5)</li>
+<li>making it a note in a triplet (i.e. multiplying the duration by 0.67)</li>
+</ul>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio.html#a222d4124b81f50a0025e06a509e6c110" title="Transforms a note duration to its dotted value (1.5 times the given duration). ">dotted()</a> </dd>
+<dd>
+<a class="el" href="namespacedevices_1_1audio.html#a2faad8e6873df42c8fe7a3885d6dfb5b" title="Transforms a note duration to allow it to use in a triplet. ">triplet()</a> </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eadaad772c40e87c4f01eec1e39727e96a69"></a>WHOLE&#160;</td><td class="fielddoc"><p>Duration of a whole note; 4 times the duration of a quarter. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eada87e955627b59c274ec4cbdd3a130f9bb"></a>HALF&#160;</td><td class="fielddoc"><p>Duration of a half note; 2 times the duration of a quarter. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eada2127749533f087678c2ff775d060024e"></a>QUARTER&#160;</td><td class="fielddoc"><p>Duration of a quarter note; this is actually the duration of one beat. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eadab22bd4fad3d4313c5a652c7b2cca52e2"></a>EIGHTH&#160;</td><td class="fielddoc"><p>Duration of an eighth note; half the duration of a quarter. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eada4490ba0de617cba6aa30437dfd283f69"></a>SIXTEENTH&#160;</td><td class="fielddoc"><p>Duration of a sixteenth note; a quarter the duration of a quarter! </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eada9bb923acef0f04fbc0e7ded5358f5aae"></a>SEMI_BREVE&#160;</td><td class="fielddoc"><p>Other common name for a whole note. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eadae23564ab1419fa36e0af23ed32b9f7f9"></a>MINIM&#160;</td><td class="fielddoc"><p>Other common name for a half note. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eada46a31ccb6974d5b2c709021f1f7bae28"></a>CROTCHET&#160;</td><td class="fielddoc"><p>Other common name for a quarter note. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eadad17399392e4d861e340d0b04482687f7"></a>QUAVER&#160;</td><td class="fielddoc"><p>Other common name for an eighth note. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a9ec897420c4939aebbe29ccdbe3d1eada392d2ac45240b7c50b33074478a082cc"></a>SEMI_QUAVER&#160;</td><td class="fielddoc"><p>Other common name for a sixteenth note. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00103">103</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+
+</div>
+</div>
 <a id="ad5cef39b1f81f50bd23e0a4f4cf555aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad5cef39b1f81f50bd23e0a4f4cf555aa">&#9670;&nbsp;</a></span>Tone</h2>
 
@@ -296,10 +441,12 @@ Enumerations</h2></td></tr>
 <p>This enum defines all possible audio tones that can be generated. </p>
 <p>This also defnes "special" values that are not actual tones but are reserved for user purposes or for silences:</p><ul>
 <li><code>USER0</code> ... <code>USER7</code>: can be used for any purpose defined by the end-developer</li>
-<li><code>SILENCE</code>: used to play no tone at all All other tones are named according to their musical note (in English scale), and their octave,. This is similar to the usual <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> except for the octave index which is different: in this enum, the standard tuning pitch (440Hz) is <code>A1</code> instead of <code>A4</code> in <em>SPN</em>. Please note that each tone can be converted to a <code>uint16_t</code> which is its playing frequency. </li>
+<li><code>SILENCE</code> or <code>REST</code>: used to play no tone at all All other tones are named according to their musical note (in English scale), and their octave,. This is similar to the usual <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> except for the octave index which is different: in this enum, the standard tuning pitch (440Hz) is <code>A1</code> instead of <code>A4</code> in <em>SPN</em>.</li>
 </ul>
+<p>Sharps are noted as <code>s</code> between the note and its octave, as in <code>Cs0</code>. Flats are noted as <code>f</code> between the note and its octave, as in <code>Df0</code>.</p>
+<p>Please note that each tone can be converted to a <code>uint16_t</code> which is its playing frequency. </p>
 
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00045">45</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00049">49</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
 
 </div>
 </div>
