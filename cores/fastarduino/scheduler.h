@@ -88,6 +88,9 @@ namespace events
 	class Scheduler : public EventHandler<EVENT_>, public containers::LinkedList<Job>
 	{
 	public:
+		Scheduler(const Scheduler<CLOCK_, EVENT_>&) = delete;
+		Scheduler<CLOCK_, EVENT_>& operator=(const Scheduler<CLOCK_, EVENT_>&) = delete;
+
 		/** The type of @p clock source used by this Scheduler. */
 		using CLOCK = CLOCK_;
 		/** The `events::Event<T>` dispatched by the system and expected by this Scheduler. */
@@ -103,10 +106,8 @@ namespace events
 		/// @cond notdocumented
 		void on_event(UNUSED const EVENT& event) override INLINE
 		{
-			traverse(*this);
+			traverse(JobCaller{clock_});
 		}
-
-		bool operator()(Job& job);
 		/// @endcond
 
 		/**
@@ -133,6 +134,16 @@ namespace events
 		}
 
 	private:
+		class JobCaller
+		{
+		public:
+			JobCaller(const CLOCK& clock) : clock_{clock} {}
+			bool operator()(Job& job);
+
+		private:
+			const CLOCK& clock_;
+		};
+
 		const CLOCK& clock_;
 	};
 
@@ -189,6 +200,9 @@ namespace events
 		}
 
 	protected:
+		Job(const Job&) =  default;
+		Job& operator=(const Job&) = default;
+		
 		/**
 		 * This method is called by `Scheduler` whenever  current clock time is
 		 * greater or equal to `next_time()`.
@@ -215,7 +229,7 @@ namespace events
 	};
 
 	/// @cond notdocumented
-	template<typename CLOCK, typename T> bool Scheduler<CLOCK, T>::operator()(Job& job)
+	template<typename CLOCK, typename T> bool Scheduler<CLOCK, T>::JobCaller::operator()(Job& job)
 	{
 		uint32_t now = clock_.millis();
 		if (job.next_time() <= now)

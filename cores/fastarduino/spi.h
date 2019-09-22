@@ -153,6 +153,10 @@ namespace spi
 	class AbstractSPIDevice
 	{
 	protected:
+		AbstractSPIDevice() = default;
+		AbstractSPIDevice(const AbstractSPIDevice&) = delete;
+		AbstractSPIDevice& operator=(const AbstractSPIDevice&) = delete;
+
 #ifdef SPDR
 		/**
 		 * Transfer one byte to the currently selected SPI slave device through MOSI

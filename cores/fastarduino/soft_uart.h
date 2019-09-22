@@ -107,6 +107,9 @@ namespace serial::soft
 		}
 
 	protected:
+		AbstractUATX(const AbstractUATX&) = delete;
+		AbstractUATX& operator=(const AbstractUATX&) = delete;
+
 		using CALLBACK = streams::ostreambuf::CALLBACK;
 
 		template<uint8_t SIZE_TX> 
@@ -281,6 +284,9 @@ namespace serial::soft
 		}
 
 	protected:
+		AbstractUARX(const AbstractUARX&) = delete;
+		AbstractUARX& operator=(const AbstractUARX&) = delete;
+		
 		template<uint8_t SIZE_RX> explicit AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
 
 		streams::istreambuf& in_()

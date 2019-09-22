@@ -71,6 +71,8 @@ namespace streams
 	public:
 		/// @cond notdocumented
 		null_ostream() = default;
+		null_ostream(const null_ostream&) = delete;
+		null_ostream& operator=(const null_ostream&) = delete;
 
 		void setf(ios::fmtflags flags UNUSED) {}
 

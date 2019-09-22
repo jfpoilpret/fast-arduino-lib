@@ -31,6 +31,9 @@ namespace i2c
 	template<I2CMode MODE_> class I2CHandler
 	{
 	private:
+		I2CHandler(const I2CHandler<MODE_>&) = delete;
+		I2CHandler<MODE_>& operator=(const I2CHandler<MODE_>&) = delete;
+
 		using TRAIT = board_traits::TWI_trait;
 
 		explicit inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;

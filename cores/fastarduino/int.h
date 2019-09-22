@@ -140,6 +140,9 @@ namespace interrupt
 		using INT_TRAIT = board_traits::ExternalInterruptPin_trait<EXTPIN>;
 
 	public:
+		INTSignal(const INTSignal<EXTPIN_>&) = delete;
+		INTSignal<EXTPIN_>& operator=(const INTSignal<EXTPIN_>&) = delete;
+		
 		/**
 		 * Create a handler for @p EXTPIN external interrupt pin.
 		 * This does not automatically enable the interrupt.

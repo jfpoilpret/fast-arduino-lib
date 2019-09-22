@@ -143,6 +143,9 @@ namespace events
 	template<typename T> class Event
 	{
 	public:
+		Event(const Event<T>&) = default;
+		Event<T>& operator=(const Event<T>&) = default;
+
 		/**
 		 * The type of additional event value, as defined in template paraneter @p T.
 		 */
@@ -183,6 +186,9 @@ namespace events
 	template<> class Event<void>
 	{
 	public:
+		Event(const Event<void>&) = default;
+		Event<void>& operator=(const Event<void>&) = default;
+
 		using TYPE = void;
 
 		explicit Event(uint8_t type = Type::NO_EVENT) INLINE : type_{type} {}
@@ -235,6 +241,10 @@ namespace events
 		static_assert(Event_trait<EVENT>::IS_EVENT, "EVENT type must be an events::Event<T>");
 
 	public:
+		Dispatcher() = default;
+		Dispatcher(const Dispatcher<EVENT>&) = delete;
+		Dispatcher<EVENT>& operator=(const Dispatcher<EVENT>&) = delete;
+
 		/**
 		 * Dispatch the given @p event to the right `EventHandler`, based on the event type.
 		 * Note that if several registered `EventHandler`s match this @p event type,
@@ -286,6 +296,9 @@ namespace events
 		}
 
 	protected:
+		EventHandler(const EventHandler<EVENT>&) = default;
+		EventHandler<EVENT>& operator=(const EventHandler<EVENT>&) = default;
+		
 		/**
 		 * This pure virtual method is called by `Dispatcher::dispatch()` when
 		 * @p event.type() matches the type supported by this `EventHandler`.

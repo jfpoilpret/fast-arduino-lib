@@ -144,6 +144,10 @@ namespace watchdog
 	class WatchdogSignal
 	{
 	public:
+		WatchdogSignal() = default;
+		WatchdogSignal(const WatchdogSignal&) = delete;
+		WatchdogSignal& operator=(const WatchdogSignal&) = delete;
+
 		/**
 		 * Start the watchdog timer with the given @p timeout period.
 		 * From now on, watchdog interrupts get generated at @p timeout period,
@@ -209,6 +213,7 @@ namespace watchdog
 
 		/// @cond notdocumented
 		WatchdogRTT(const WatchdogRTT&) = delete;
+		WatchdogRTT& operator=(const WatchdogRTT&) = delete;
 		/// @endcond
 
 		/**
@@ -318,6 +323,7 @@ namespace watchdog
 
 		/// @cond notdocumented
 		Watchdog(const Watchdog&) = delete;
+		Watchdog& operator=(const Watchdog&) = delete;
 		/// @endcond
 
 	private:

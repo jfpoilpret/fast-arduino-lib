@@ -449,7 +449,7 @@ namespace streams
 	protected:
 		/// @cond notdocumented
 		ios_base() : state_{0}, flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '} {}
-
+		ios_base(const ios_base&) = delete;
 		ios_base& operator=(const ios_base&) = delete;
 
 		static constexpr uint8_t DOUBLE_BUFFER_SIZE = MAX_PRECISION + 7 + 1;

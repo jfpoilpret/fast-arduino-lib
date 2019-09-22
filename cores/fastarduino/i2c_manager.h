@@ -38,6 +38,9 @@ namespace i2c
 	template<I2CMode MODE_ = I2CMode::STANDARD> class I2CManager
 	{
 	public:
+		I2CManager(const I2CManager<MODE_>&) = delete;
+		I2CManager<MODE_>& operator=(const I2CManager<MODE_>&) = delete;
+		
 		/** The I2C mode for this manager. */
 		static constexpr const I2CMode MODE = MODE_;
 

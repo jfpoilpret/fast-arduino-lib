@@ -635,6 +635,9 @@ namespace devices::sonar
 
 	protected:
 		/// @cond notdocumented
+		AbstractSonar(const AbstractSonar<NTIMER_>&) = delete;
+		AbstractSonar<NTIMER_>& operator=(const AbstractSonar<NTIMER_>&) = delete;
+
 		explicit AbstractSonar(const RTT& rtt)
 			: rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{},
 			  echo_start_{RAW_TIME::EMPTY_TIME}, echo_end_{RAW_TIME::EMPTY_TIME}
@@ -966,6 +969,9 @@ namespace devices::sonar
 	template<board::Timer NTIMER_> struct SonarEvent
 	{
 	public:
+		SonarEvent(const SonarEvent<NTIMER_>&) = default;
+		SonarEvent<NTIMER_>& operator=(const SonarEvent<NTIMER_>&) = default;
+
 		/** 
 		 * The type of `timer::RTT` used by the `MultiHCSR04` producing this `SonarEvent`. 
 		 * @sa MultiHCSR04::RTT
@@ -1108,6 +1114,10 @@ namespace devices::sonar
 		static_assert((PTRAIT::DPIN_MASK & ECHO_MASK) == ECHO_MASK, "ECHO_MASK_ must contain available PORT pins");
 
 	public:
+		MultiHCSR04(const MultiHCSR04<NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>&) = delete;
+		MultiHCSR04<NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>& operator=(
+			const MultiHCSR04<NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>&) = delete;
+		
 		/** The type of `timer::RTT` used by this `MultiHCSR04` instance. */
 		using RTT = timer::RTT<NTIMER_>;
 		/** The exact `SonarEvent` type produced by this `MultiHCSR04` instance. */

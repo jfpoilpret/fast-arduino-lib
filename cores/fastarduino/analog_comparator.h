@@ -120,6 +120,10 @@ namespace analog
 		using GLOBAL_TRAIT = board_traits::GlobalAnalogPin_trait;
 
 	public:
+		AnalogComparator() = default;
+		AnalogComparator(const AnalogComparator&) = delete;
+		AnalogComparator& operator=(const AnalogComparator&) = delete;
+		
 		/**
 		 * Start operations of the Analog Comparator.
 		 * Once the Analog Comparator is started, you can possibly poll its output

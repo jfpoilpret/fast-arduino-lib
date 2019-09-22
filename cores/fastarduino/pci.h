@@ -178,6 +178,9 @@ namespace interrupt
 		using TRAIT = board_traits::PCI_trait<PCINT_>;
 
 	public:
+		PCISignal(const PCISignal<PCINT_>&) = delete;
+		PCISignal<PCINT_>& operator=(const PCISignal<PCINT_>&) = delete;
+		
 		/// @cond notdocumented
 		//NOTE this constructor exists only to add a static_assert checked when
 		// PCISignal is constructed not when its template type gets instantiated.

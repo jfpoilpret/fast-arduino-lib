@@ -73,6 +73,9 @@ namespace i2c
 		using MANAGER = I2CManager<MODE>;
 
 	protected:
+		I2CDevice(const I2CDevice<MODE_>&) = delete;
+		I2CDevice<MODE_>& operator=(const I2CDevice<MODE_>&) = delete;
+		
 		/**
 		 * Create a new I2C device. This constructor must be called by a subclass
 		 * implementing an actua I2C device.

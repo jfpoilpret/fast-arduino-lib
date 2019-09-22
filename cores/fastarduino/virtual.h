@@ -71,6 +71,9 @@ namespace virtual_support
 	class VirtualMethod
 	{
 	public:
+		VirtualMethod(const VirtualMethod&) = default;
+		VirtualMethod& operator=(const VirtualMethod&) = default;
+		
 		/**
 		 * The type of function that will get the call.
 		 */
