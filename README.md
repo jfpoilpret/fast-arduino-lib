@@ -95,7 +95,8 @@ In addition, FastArduino brings support for the following devices:
 - DS1307 RTC device support (I2C-based)
 - HMC5883L magnetometer device support (I2C-based)
 - MPU-6050 accelerometer/gyroscope device support (I2C-based)
-- HC-SR04 sonar device support in synchronous and asynchromous modes
+- MCP23017 16-Bit I/O Expander (I2C-based)
+- HC-SR04 sonar device support in synchronous and asynchronous modes
 
 As of now, the following platforms are supported (and tested):
 
@@ -130,7 +131,7 @@ The project is organized according to the following structure:
   - `refs`: contains datasheets for AVR MCU and external devices supported by FastArduino
 
   - `build`: created at build time, contains object files
-  - `deps`: created at build time, conatins all source code dependencies
+  - `deps`: created at build time, contains all source code dependencies
   - `dist`: created at build time, contains FastArduino library for various targets
 
   - `apidocs`: created by doxygen, contains docs generated in LATEX format
