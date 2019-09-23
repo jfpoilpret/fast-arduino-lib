@@ -137,3 +137,8 @@ Milestones dates are "best effort" and may change based on contributors' availab
 The following features are not in FastArduino roadmap currently (but may be in the future):
 
 - OWI support
+
+Project structure
+=================
+
+TODO list dirs and content

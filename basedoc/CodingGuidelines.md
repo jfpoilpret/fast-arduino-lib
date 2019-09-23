@@ -30,8 +30,7 @@ Throughout FastArduino library code, the following naming conventions apply:
 7. functions, methods: always written in `lower_case`; uppercase letters may be used for official measurement units though (e.g. `voltage_mV()`); when one function exists in 2 flavours, one `synchronized` and one not `synchronized`, then the not synchronized flavour bears the same name as the synchronized function, with a trailing undercore added, e.g. `Queue::push()` and `Queue::push_()`.
 8. `private` fields of a class: always written as `lower_case_` with a trailing underscore; uppercase letters may be used for official measurement units though.
 9. Local variables are always written as `lower_case`; uppercase letters may be used for official measurement units though.
-10. `static constexpr` functions: there is no constraining rule here. These functions may be considered (and named) like "normal" functions,
-or `UPPER_CASE` like macros. FastArduino has methods with both conventions.
+10. `static constexpr` functions: there is no constraining rule here. These functions may be considered (and named) like "normal" functions, or `UPPER_CASE` like macros. FastArduino has methods with both conventions.
 11. Types alias with `using` should always be `UPPER_CASE`. 
 
 Exceptions to the rules above are allowed for definitions implementing API equivalent to C++ standards (like `ostream`).
