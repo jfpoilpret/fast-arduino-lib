@@ -14,7 +14,7 @@ FastArduino API is fully documented [here](http://jfpoilpret.github.io/fast-ardu
 
 FastArduino C++ code is also analyzed by SonarQube and results of this analysis are published from time to time [here](https://sonarcloud.io/dashboard?id=FastArduino-UNO).
 
-FastArduino objectives are:
+FastArduino benefits are:
 
 - provide smaller and faster code than other libraries for the same functionality
 - ensure you pay (size and speed) only for what you use
