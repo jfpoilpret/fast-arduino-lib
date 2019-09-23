@@ -113,6 +113,28 @@ I intend to probably add support some day for:
 
 A [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) is available for those who want to learn FastArduino API; it covers the whole FastArduino core API. In addition to that, the [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) is fully documented through [doxygen](http://www.stack.nl/~dimitri/doxygen/).
 
+Project structure
+=================
+
+The project is organized according to the following structure:
+- `/`: root project directory
+  - `cores/fastarduino`: FastArduino library C++ source code
+  - `make`: utility makefiles and scripts to build FastArduino library, generate docs, and prepare releases
+  - `examples`: source code of basic examples of all FastArduino features, gathered by categories
+  - `.vscode`: project settings for Visual Studio Code
+  - `docs`: created by doxygen, contains all docs generated in HTML format, published [here](http://jfpoilpret.github.io/fast-arduino-lib/)
+  - `basedoc`: other various project documentation
+  - `dox`: doxygen documentation source files and settings
+  - `tuto-samples`: source code of samples used in tutorial; samples are often present in 2 flavours, Arduino API and FastArduino, in order to compare their respective sizes
+  - `example-boards`: contains schemas (produced with LochMaster software) of stripboards that I use for FastArduino runtime tests 
+  - `refs`: contains datasheets for AVR MCU and external devices supported by FastArduino
+
+  - `build`: created at build time, contains object files
+  - `deps`: created at build time, conatins all source code dependencies
+  - `dist`: created at build time, contains FastArduino library for various targets
+
+  - `apidocs`: created by doxygen, contains docs generated in LATEX format
+
 Roadmap
 =======
 
@@ -138,7 +160,3 @@ The following features are not in FastArduino roadmap currently (but may be in t
 
 - OWI support
 
-Project structure
-=================
-
-TODO list dirs and content
