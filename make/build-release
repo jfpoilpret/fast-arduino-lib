@@ -11,7 +11,8 @@
 # 6. Regenerate docs
 
 CURDIR=`pwd`
-MAKEDIR=$(dirname "$0")
+SCRIPT=$(readlink -f "$0")
+MAKEDIR=$(dirname "$SCRIPT")
 BASEDIR=$MAKEDIR/..
 DOCDIR=$BASEDIR/basedoc
 
