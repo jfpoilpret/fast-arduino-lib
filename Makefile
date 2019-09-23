@@ -24,7 +24,7 @@ ADDITIONAL_INCLUDES:=
 ADDITIONAL_LIBS:=
 
 # include generic makefile for libs
-include Makefile-lib.mk
+include make/Makefile-lib.mk
 
 # FastArduino doc generation targets
 # - docs is target for html doc (published on github pages)
@@ -46,5 +46,5 @@ doco:
 	doxygen ./dox/doxyfile-attinyx5
 
 # include list of all examples
-include Makefile-Examples.mk
+include make/Makefile-Examples.mk
 

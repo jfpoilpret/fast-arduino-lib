@@ -6,18 +6,22 @@
 # 3. Generate size tables for inclusion into tutorial doc
 # 4. Regenerate docs
 
+CURDIR=`pwd`
+SCRIPT=$(readlink -f "$0")
+MAKEDIR=$(dirname "$SCRIPT")
+BASEDIR=$MAKEDIR/..
+
 echo "Build all samples for Arduino API"
-cd tuto-samples/arduino
+cd $BASEDIR/tuto-samples/arduino
 ./build-samples | ./stats.py >sizes.txt
-cd ../..
 
 echo "Build all samples for FastArduino"
-cd tuto-samples/fastarduino
+cd $BASEDIR/tuto-samples/fastarduino
 ./build-samples 2>errors| ./stats.py >sizes.txt
-cd ../..
 
 # check if error found, then abort
-grep "Error" tuto-samples/fastarduino/errors
+cd $CURDIR
+grep "Error" $BASEDIR/tuto-samples/fastarduino/errors
 if [ $? -ne 1 ]; then
 	echo "Error occurred, aborting."
 	exit 1
@@ -25,7 +29,9 @@ fi
 
 # Generate size tables 
 echo "Generate size data sheets"
-./gen-sample-size-tables.py tuto-samples/arduino/sizes.txt tuto-samples/fastarduino/sizes.txt samples-list.txt >tuto-samples/tables.txt
+$MAKEDIR/gen-sample-size-tables.py $BASEDIR/tuto-samples/arduino/sizes.txt $BASEDIR/tuto-samples/fastarduino/sizes.txt $MAKEDIR/samples-list.txt >$BASEDIR/tuto-samples/tables.txt
 
 echo "Generate docs"
+cd $BASEDIR
 make doco
+cd $CURDIR

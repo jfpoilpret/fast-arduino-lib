@@ -10,7 +10,14 @@
 # 5. Collect size information and prepare integration to doxygen tutorial size tables
 # 6. Regenerate docs
 
+CURDIR=`pwd`
+SCRIPT=$(readlink -f "$0")
+MAKEDIR=$(dirname "$SCRIPT")
+BASEDIR=$MAKEDIR/..
+DOCDIR=$BASEDIR/basedoc
+
 echo "Clean up all generated code"
+cd $BASEDIR
 make clean-all >/dev/null 2>&1
 make clean-examples-all >/dev/null 2>&1
 
@@ -19,7 +26,7 @@ export TARGETS="UNO LEONARDO MEGA ATtiny84 ATtiny85"
 for TARGET in $TARGETS
 do
 	echo "Target: $TARGET"
-	make CONF=$TARGET examples 2>errors | ./stats.py >newsizes-$TARGET
+	make CONF=$TARGET examples 2>errors | $MAKEDIR/stats.py >newsizes-$TARGET
 	grep "Error" errors
 	# check if error found, then abort
 	if [ $? -ne 1 ]; then
@@ -30,7 +37,7 @@ do
 done
 
 echo "Generate size data sheets"
-./gen-size-sheet.py new-examples-data.xlsx $TARGETS
+$MAKEDIR/gen-size-sheet.py $DOCDIR/new-examples-data.xlsx $TARGETS
 
 echo "Remove intermediate result files"
 for TARGET in $TARGETS
@@ -39,4 +46,5 @@ do
 done
 
 echo "Compare new sizes with previous release sizes"
-./compare-size-sheets.py examples-data.xlsx new-examples-data.xlsx >sizes-diff.xlsx
+$MAKEDIR/compare-size-sheets.py $DOCDIR/examples-data.xlsx $DOCDIR/new-examples-data.xlsx >$DOCDIR/sizes-diff.xlsx
+cd $CURDIR

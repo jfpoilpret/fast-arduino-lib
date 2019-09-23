@@ -16,7 +16,7 @@ ALL_SIZES = {}
 def read_template():
     global ALL_EXAMPLES
     global ALL_SIZES
-    with open("examples-list.txt", "r") as handle:
+    with open("make/examples-list.txt", "r") as handle:
         for line in handle:
             data = line.split('\t')
             ALL_EXAMPLES.append(data[0])
