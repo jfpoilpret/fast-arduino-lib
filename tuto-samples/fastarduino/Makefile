@@ -37,4 +37,4 @@ ADDITIONAL_INCLUDES:=
 ADDITIONAL_LIBS:=
 
 # include generic makefile for apps
-include $(FASTARDUINO_ROOT)/Makefile-app.mk
+include $(FASTARDUINO_ROOT)/make/Makefile-app.mk
