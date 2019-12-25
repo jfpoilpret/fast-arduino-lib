@@ -114,9 +114,54 @@ calls, from `main()`, to `protected` API of `spi::SPIDevice`, for easy testing
 
 FastArduino includes such a debugging sample in `examples/spi/SPIDeviceProto` example, copied hereafter:
 
-TODO include example here and explain how to use.
+@includelineno spi/SPIDeviceProto/SPIDeviceProto.cpp
 
-This example demonstrates how to simply test the MCP3008 ADC chip.
+This example demonstrates how to simply test the MCP3008 ADC chip. It is made of several parts:
+
+@dontinclude SPIDeviceProto.cpp
+@skipline include
+@line include
+@line include
+@line include
+Those lines include a few headers necessary (or just useful) to debug an SPI device.
+
+@skip REGISTER
+@until output_buffer
+Then a buffer is defined for tracing through UART and the necessary UART ISR is registered.
+
+@skip Spec
+@until spi::Mode
+Any specificity of the tested SPI device is defined as a constant in the next code section. These constants will be used
+for template parameters later on.
+
+@skip DigitalPin
+@until CLOCK_RATE
+Here we set the UNO pin to be connected to the CS pin of the tested SPI device, then we define the proper SPI clock rate
+for this device, based on CPU frequency and device maximum SPI frequency.
+
+@skip PublicDevice
+@until };
+This is where we define a utility class to debug our SPI interface to the tested device. `PublicDevice` class does 
+**nothing** but making all protected methods callable from `main()`, so that we can directly perform our code tests in
+`main()`, without thinking much about proper API design now.
+
+@skip main()
+@until out.width
+This is the `main()` function where it all happens. First we initialize the MCU and the UART for tracing.
+
+@skipline spi::init
+Here we simply initialize SPI function on the UNO.
+
+@skipline PublicDevice
+We then declare the `device` variable that we will use for testing our SPI device.
+
+Then we start an infinite loop that will read data from the SPI device and trace it:
+@skip MCP3008
+@until Intermediate results:
+In this code snippet, `result1` and `result2` each contain a part of the expected result (analog channel read on 
+MCP3008), these must be used to calculate the actual value (based on the datasheet):
+@skip value
+@until Calculated value
 
 
 Defining the driver API based on device features
