@@ -116,3 +116,6 @@ Discovering FastArduino API step by step
 ----------------------------------------
 The best way to discover FastArduino is to follow [this tutorial](tutorial.html).
 
+There are also specific pieces of documentation for the following topics:
+- [Adding support to an SPI device](spi-devices.html)
+- [Adding support to an I2C device](TODO)
