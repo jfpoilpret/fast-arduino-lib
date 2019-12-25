@@ -31,3 +31,5 @@ do
 	mv $INO.tmp $INO
 done
 
+# Remove all generated files (useless)
+rm *.elf *.hex
