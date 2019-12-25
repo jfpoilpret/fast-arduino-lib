@@ -1,5 +1,5 @@
-Adding support to an SPI device {#spidevices}
-===============================
+Adding support for an SPI device {#spidevices}
+================================
 
 There are plenty of devices of all kinds, based on SPI interface, that you may want to connect to your Arduino
 or a board you created with an AVR ATmega or ATtiny MCU.
@@ -22,8 +22,6 @@ FastArduino SPI driver API
 The generic support for SPI device driver in FastArduino is quite simple, it is entirely embedded in 2 classes:
 @image html classspi_1_1_s_p_i_device__inherit__graph.png
 @image latex classspi_1_1_s_p_i_device__inherit__graph.pdf
-
-TODOREF: http://jfpoilpret.github.io/fast-arduino-lib/classspi_1_1_s_p_i_device__inherit__graph.png
 
 The important class here is `spi::SPIDevice`, this is a template class (with many parameters discussed later) 
 which all actual SPI device drivers shall derive from.
@@ -54,7 +52,7 @@ Hence, creating a new driver for an SPI device is as simple as:
 The `spi::SPIDevice` template class is instantiated through the following template parameters:
 - CS: this `board::DigitalPin` is the most important parameter of the template; it defines on which digital pin 
 of the MCU the targeted device "chip select" pin shall be connected; in `MySPIDevice`, this shall remain a template 
-parameter because you never know in advance how the device will be connected to the MCU acrodd different projects.
+parameter because you never know in advance how the device will be connected to the MCU across different projects.
 - CS_MODE: this parameter defines if the CS pin is active HIGH or LOW (the default); this is specific to every SPI
 device and shall be forced to the proper value in `MySPIDevice` class definition.
 - RATE: this parameter fixes the SPI clock frequency to the maximum value supported by the actual device. This is 
@@ -65,7 +63,7 @@ your project.
 [here](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface#Clock_polarity_and_phase) and
 [there](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface#Mode_numbers)); typically a given device supports
 exactly one mode, you should thus enforce the proper mode for your target device.
-- ORDER: this parameter defines the the order in which bits of a byte are transferred: 
+- ORDER: this parameter defines the order in which bits of a byte are transferred: 
 MSB (most significant bit) first, or LSB (least significant bit) first; typically a given device supports
 exactly one bit transfer order, you should thus enforce the proper order for your target device.
 
@@ -79,7 +77,7 @@ during transmission (SPI is a full-duplex protocol where master and slave can se
 simultaneously transmitted by that device.
 - `spi::SPIDevice.transfer(const uint8_t*, uint16_t)`: send a packet of bytes to the slave SPI device, but trash any
 bytes simultaneously transmitted by that device.
-- `spi::SPIDevice.end_transfer()`: finished the current transfer to the slave SPI device, that was initiated with
+- `spi::SPIDevice.end_transfer()`: finish the current transfer to the slave SPI device, that was initiated with
 `spi::SPIDevice.start_transfer()`.
 
 Any feature implementation in `MySPIDevice` will always consist in a sequence of calls to the methods above, like:
@@ -125,7 +123,7 @@ Defining the driver API based on device features
 ------------------------------------------------
 
 At this level, you have already been able to debug how the device works and you have a good overview of what
-features you want to provide to developers (and you as the first of all) who will want to use this device.
+features you want to provide to developers (and to yourself as the first of all) who will want to use this device.
 
 An easy way is to provide an API that maps every feature found in the datasheet to its dedicated method. This is what
 we would call a low-level API; that is the minimum your driver should provide.
@@ -152,7 +150,7 @@ for every method!
 
 Here is a simple implementation attempt for MCP3008 driver:
 
-@code
+@code{.cpp}
 enum class MCP3008Channel : uint8_t
 {
     // singled-ended input
@@ -198,26 +196,26 @@ public:
 Note the implementation of `read_channel()` which is mainly the same as in the debugging example described earlier.
 
 Of course, the MCP3008 is a very simple device which is easy to interact with through SPI, but there are many SPI
-devices (cameras, B&W and color display controllers, RF transmitters...) 
+devices with more complex capabilities (cameras, B&W and color display controllers, RF transmitters...) 
 For those devices, the number of features can be large and this would result in dozens or even hundreds of API methods! 
 
 
 Support for ATtiny MCU
 ----------------------
 
-ATtiny MCU provide some support (through its USI feature) for SPI but it is quite limited in comparison to ATmega devices; 
-hence FastArduino SPI support for ATtiny chips has derived limitations:
+ATtiny MCU provides some support (through its USI feature) for SPI but it is quite limited in comparison to ATmega devices; 
+hence FastArduino SPI support for ATtiny chips has similar limitations:
 
 1. The only `spi::DataOrder` supported is `spi::DataOrder::MSB_FIRST`
-2. The only `spi::Mode` supported are `spi::Mode::MODE_0` and `spi::Mode::MODE_1`
+2. The only `spi::Mode`s supported are `spi::Mode::MODE_0` and `spi::Mode::MODE_1`
 3. `spi::ClockRate` parameter is not used in `spi::SPIDevice` implementation, hence the maximum clock rate
-is always used, and is roughly equal to `CPU frequency / 7`, hence typically a bit more than 1MHz for common
-clock frequency used in ATtiny boards (internal RC clock); this might be a problem for devices supporting only 1MHz SPI.
+is always used, and is roughly equal to `CPU frequency / 7`, hence typically a bit more than 1MHz with common
+clock frequency used in ATtiny boards (internal 8MHz RC clock); this might be a problem for devices supporting only 1MHz SPI.
 
 These limitations might prevent proper support, on ATtiny MCU, of some SPI devices.
 
 If your device is in this situation, then you should add compile error checks (through `static_assert()`, or `#if` 
-and `#error`)) in your SPI device driver header file, so that it cannot compile for these unsupported ATtiny targets.
+and `#error`) in your SPI device driver header file, so that it cannot compile for these unsupported ATtiny targets.
 
 
 The last mile: add driver to FastArduino project!
@@ -226,13 +224,13 @@ The last mile: add driver to FastArduino project!
 Bravo! You successfully added FastArduino support, in your own project, for a specific SPI device!
 
 The last mile would now consist in adding your valuable work to FastArduino library! 
-You do not have to, of course, but this a good way to:
+You do not *have to*, of course, but this would be a good way to:
 - thank other people who provided FastArduino open source library to you
 - feel part of the community
 - get feedback on your work, potentially allowing it to be further improved
 - share your work with the rest of the world
 
-However, like for marathon, the last mile is often very difficult! In order to run this last mile, you will have to:
+However, like for a marathon, the last mile can be difficult! In order to run this last mile, you will have to:
 - first accept FastArduino Apache License 2.0 for your contribution, or discuss with FastArduino owner for another one, 
 if compatible
 - follow FastArduino coding guidelines: this might impose some code rewrite or reformatting
@@ -244,5 +242,5 @@ used as "tests" before new releases of FastArduino.
 - prepare and propose a PR to FastArduino project
 
 **Important condition**: in order to accept merging a PR to FastArduino, I must be able to check it by myself, hence
-I need to first have the new supported device available on my workbench; I will buy one (or a few) if it is affordable
+I need to first have the new supported device available on my workbench; I will gladly buy one (or a few) if it is affordable
 and easy to find.
