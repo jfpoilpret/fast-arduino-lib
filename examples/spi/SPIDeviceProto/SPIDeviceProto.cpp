@@ -40,15 +40,12 @@
 #include <fastarduino/uart.h>
 #include <fastarduino/utilities.h>
 
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 
 // UART for traces
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
-static streams::ostream out = uart.out();
 
 // SPI Device specific stuff goes here
 //=====================================
@@ -82,6 +79,7 @@ int main()
 	sei();
 
 	// Init UART output for traces
+	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 	uart.begin(115200);
 	streams::ostream out = uart.out();
 	out.width(2);
@@ -113,7 +111,7 @@ int main()
 		device.end_transfer();
 
 		// Trace intermediate results (for debugging)
-		out << F("intermediate results:") << hex << result1 << ' ' << result2 << endl;
+		out << F("Intermediate results:") << hex << result1 << ' ' << result2 << endl;
 		// Combine result
 		uint16_t value =  utils::as_uint16_t(result1 & 0x03, result2);
 		out << F("Calculated value: ") << dec << value << endl;
