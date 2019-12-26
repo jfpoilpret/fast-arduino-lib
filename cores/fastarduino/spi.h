@@ -181,6 +181,10 @@ namespace spi
 			USISR_ = bits::BV8(USIOIF);
 			synchronized
 			{
+				// Note: the following loop means 7 clock cycles per bit transmitted
+				// Hence at 8MHz, that gives a SPI rate > 1MHz, which might be incompatible 
+				// with some devices
+				// FIXME add a NOP to ensure 8 clock cycles per bit, hence 1MHz SPI clock
 				while ((USISR_ & bits::BV8(USIOIF)) == 0) USICR_ |= bits::BV8(USITC);
 			}
 			return USIDR_;

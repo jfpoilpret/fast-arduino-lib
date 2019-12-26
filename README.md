@@ -23,31 +23,19 @@ FastArduino benefits are:
 - support event-driven programs
 - support both ATmega and ATtiny chips
 
-It was originally inspired by [Cosa library](https://github.com/mikaelpatel/Cosa) from Mikael Patel.
+From my viewpoint, the main issues with other third-party Arduino libraries are essentially heavy usage of `virtual` methods, which quickly increases code size when you start to define deep classes hierarchies; this also can have a slight impact on speed due to additional indirection when calling methods. Calling `virtual` methods **from an ISR** also has a big impact on code size as the generated code for ISR will push all registers to the stack, then call your ISR code, and finally pop all registers back from the stack; of course, this also has a dramatic impact on ISR execution speed. Avoiding `virtual` methods calls from an ISR ensures the compiler generates only the strict minimum of push and pop necessary.
 
-After usage of Cosa libraries for several projects on ATmega328, and particularly on ATtiny84, I found out that the current way Cosa was built had a few drawbacks related to:
-
-- code size (for small AVR MCU)
-- speed (for specific situations such as software UART)
-
-From my viewpoint, the main source of those drawbacks was essentially heavy usage of `virtual` methods, which quickly increases code size when you start to define deep classes hierarchies; this also can have a slight impact on speed due to additional indirection when calling methods. Calling `virtual` methods from an ISR also has a big impact on code size as the generated code for ISR will push all registers to the stack, then call your ISR code, and finally pop all registers back from the stack; of course, this also has a dramatic impact on ISR execution speed. Avoiding `virtual` methods calls from an ISR ensures the compiler generates only the strict minimum of push and pop necessary.
-
-FastArduino tries to favour C++ templates rather than virtual methods whenever possible; when virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one abstract parent and direct children). 
+FastArduino tries to favour C++ templates rather than virtual methods whenever possible; in the very rare locations where virtual methods are used, their number is reduced to the minimum needed (abstract virtual methods only, typically used for event handlers, generally limited to hierarchy of 2 levels only, one abstract parent and direct children). 
 
 Also, no ISR gets automatically declared by FastArduino: every program declares the ISR it needs by using pre-defined FastArduino ISR-registration macros (note that ISR registration is the only feature for which FastArduino uses macros). FastArduino does not use `virtual` methods for ISR callbacks, thus permitting optimization of ISR code size, which would not have been possible with `virtual` methods as callbacks.
 
-All this comes at a cost: 
+Note that, if you consider using FastArduino for your projects, you should be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use the complete [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) and the numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. FastArduino currently uses C++17 standard.
 
-1. Template usage is often more complex in applications. The provided examples are here to help.
-2. Build times may be increased a bit as most code is inside C++ headers (recompiled every time included); for this point however, please note that compile time difference is hardly noticeable.
-
-Also, if you consider using FastArduino for your projects, be aware that FastArduino does not support Arduino API and does not intend to do so some day. That means you will have to first learn FastArduino API (you can use the complete [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) and the numerous examples provided for that) in order to reap its benefits. FastArduino is definitely not for newcomers to C++ programming as it makes heavy use of C++ specificities. Note that FastArduino currently uses C++17 standard.
-
-Since the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino itself) are now built with [Visual Studio Code](https://code.visualstudio.com/) along with a [small extension](https://github.com/jfpoilpret/vscode-fastarduino) I developed specifically for FastArduino. Once properly setup, I find VS Code environment much easier and friendlier to use than Arduino IDE or even [netbeans](https://netbeans.org/) which I originally used for FastArduino but finally ditched out.
+Since the initial drafts, I decided not to be compliant with Arduino IDE as I find it is a real pain. All my projects (including FastArduino itself) are now built with [Visual Studio Code](https://code.visualstudio.com/) along with a [small extension](https://github.com/jfpoilpret/vscode-fastarduino) I developed specifically for FastArduino. Once properly setup, I find VS Code environment very easy and friendly to use.
 
 FastArduino is also buildable from the command line (on a linux system) through the standard `make`. Its make system can also be used for projects using the FastArduino library.
 
-Making FastArduino buildable on Arduino IDE is not on my roadmap currently (and probably won't until long, as I'm more than happy with my current setup until now).
+Making FastArduino buildable on Arduino IDE is not on the roadmap.
 
 My complete setup is described in [ArduinoDevSetup.docx](ArduinoDevSetup.docx). This document also describes how I setup Visual Studio Code for my projects.
 
@@ -146,9 +134,9 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.2](https://github.com/jfpoilpret/fast-arduino-lib/milestone/4?closed=1) (released on 06.06.2019)
 - [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5?closed=1) (released on 1.09.2019)
 - [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6?closed=1) (released on 22.09.2019)
-- [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7) (30.11.2019)
-- [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (31.03.2020)
-- [2020 and later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
+- [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7) (28.02.2020)
+- [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (30.06.2020)
+- [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 Documentation - no milestones
 -----------------------------

@@ -2,17 +2,12 @@
 
 @INCLUDE		= dox/doxyfile-common
 
-#PROJECT_NAME           = FastArduino
-
-#PROJECT_BRIEF          = "C++ library to build fast but small Arduino/AVR projects"
-
 INPUT                  = cores dox
 ENABLED_SECTIONS       = api
 
 EXCLUDE_PATTERNS       = */boards/attiny* */boards/leonardo* */boards/mega* */boards/uno* */boards/*traits*
 
 HTML_OUTPUT            = docs
-
 LATEX_OUTPUT           = apidoc/latex/api
 
 PREDEFINED             = F_CPU=16000000L UCSR0A SPDR TWCR
