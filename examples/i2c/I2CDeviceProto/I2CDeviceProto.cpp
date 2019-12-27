@@ -22,17 +22,9 @@
  * 
  * Wiring:
  * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
- * - on ATmega328P based boards (including Arduino UNO):
+ * - on Arduino UNO:
  *   - A4 (PC4, SDA): connected to DS1307 SDA pin
  *   - A5 (PC5, SCL): connected to DS1307 SCL pin
- *   - direct USB access (traces output)
- * - on Arduino LEONARDO:
- *   - D2 (PD1, SDA): connected to DS1307 SDA pin
- *   - D3 (PD0, SCL): connected to DS1307 SDA pin
- *   - direct USB access (traces output)
- * - on Arduino MEGA:
- *   - D20 (PD1, SDA): connected to DS1307 SDA pin
- *   - D21 (PD0, SCL): connected to DS1307 SDA pin
  *   - direct USB access (traces output)
  */
 
@@ -41,13 +33,11 @@
 #include <fastarduino/utilities.h>
 #include <fastarduino/uart.h>
 
-#include <math.h>
-
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 
 // UART for traces
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 static streams::ostream out = uart.out();
@@ -75,7 +65,6 @@ void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
 		out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
 }
 
-int main() __attribute__((OS_main));
 int main()
 {
 	board::init();
