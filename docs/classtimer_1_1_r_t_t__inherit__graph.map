@@ -1,3 +1,4 @@
 <map id="timer::RTT&lt; NTIMER_ &gt;" name="timer::RTT&lt; NTIMER_ &gt;">
-<area shape="rect" id="node2" href="$classtimer_1_1_timer.html" title="General API to handle an AVR timer. " alt="" coords="5,5,180,32"/>
+<area shape="rect" id="node1" title="API to handle a real&#45;time timer." alt="" coords="12,80,189,107"/>
+<area shape="rect" id="node2" href="$classtimer_1_1_timer.html" title="General API to handle an AVR timer." alt="" coords="5,5,196,32"/>
 </map>

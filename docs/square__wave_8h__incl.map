@@ -1,9 +1,16 @@
 <map id="fastarduino/square_wave.h" name="fastarduino/square_wave.h">
-<area shape="rect" id="node2" href="$timer_8h.html" title="Timer API. " alt="" coords="244,169,312,196"/>
-<area shape="rect" id="node13" href="$pwm_8h.html" title="PWM API. " alt="" coords="155,95,222,121"/>
-<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="381,244,479,271"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="223,244,306,271"/>
-<area shape="rect" id="node7" href="$io_8h_source.html" title="boards/io.h" alt="" coords="452,319,547,345"/>
-<area shape="rect" id="node10" href="$board_8h_source.html" title="boards/board.h" alt="" coords="5,319,124,345"/>
-<area shape="rect" id="node14" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="157,169,220,196"/>
+<area shape="rect" id="node1" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="151,5,295,47"/>
+<area shape="rect" id="node2" href="$timer_8h.html" title="Timer API." alt="" coords="244,169,312,196"/>
+<area shape="rect" id="node13" href="$pwm_8h.html" title="PWM API." alt="" coords="155,95,222,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="39,244,199,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="313,319,427,345"/>
+<area shape="rect" id="node5" title=" " alt="" coords="503,244,578,271"/>
+<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="381,244,479,271"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="223,244,306,271"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="452,319,547,345"/>
+<area shape="rect" id="node8" title=" " alt="" coords="464,393,535,420"/>
+<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="5,319,124,345"/>
+<area shape="rect" id="node12" title=" " alt="" coords="185,319,289,345"/>
+<area shape="rect" id="node11" title=" " alt="" coords="29,393,100,420"/>
+<area shape="rect" id="node14" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="157,169,220,196"/>
 </map>

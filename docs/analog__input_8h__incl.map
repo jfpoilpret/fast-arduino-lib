@@ -1,6 +1,12 @@
 <map id="fastarduino/analog_input.h" name="fastarduino/analog_input.h">
-<area shape="rect" id="node3" href="$time_8h.html" title="Simple time utilities. " alt="" coords="189,95,253,121"/>
-<area shape="rect" id="node5" href="$io_8h_source.html" title="boards/io.h" alt="" coords="105,169,199,196"/>
-<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="384,169,467,196"/>
-<area shape="rect" id="node9" href="$board_8h_source.html" title="boards/board.h" alt="" coords="221,244,339,271"/>
+<area shape="rect" id="node1" title="Analog Input API." alt="" coords="81,5,225,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,165,121"/>
+<area shape="rect" id="node3" href="$time_8h.html" title="Simple time utilities." alt="" coords="189,95,253,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="142,319,213,345"/>
+<area shape="rect" id="node5" href="$io_8h_source.html" title=" " alt="" coords="105,169,199,196"/>
+<area shape="rect" id="node7" title=" " alt="" coords="224,169,360,196"/>
+<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="384,169,467,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="117,244,187,271"/>
+<area shape="rect" id="node9" href="$board_8h_source.html" title=" " alt="" coords="221,244,339,271"/>
+<area shape="rect" id="node10" title=" " alt="" coords="373,244,477,271"/>
 </map>

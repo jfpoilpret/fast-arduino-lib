@@ -1,3 +1,6 @@
 <map id="fastarduino/interrupts.h" name="fastarduino/interrupts.h">
-<area shape="rect" id="node2" href="$io_8h_source.html" title="boards/io.h" alt="" coords="5,80,100,107"/>
+<area shape="rect" id="node1" title="General API for handling AVR interrupt vectors." alt="" coords="29,5,204,32"/>
+<area shape="rect" id="node2" href="$io_8h_source.html" title=" " alt="" coords="5,80,100,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="125,80,239,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="17,155,88,181"/>
 </map>

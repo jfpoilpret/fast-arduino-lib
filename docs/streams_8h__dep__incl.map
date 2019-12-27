@@ -1,5 +1,6 @@
 <map id="fastarduino/streams.h" name="fastarduino/streams.h">
-<area shape="rect" id="node2" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="5,80,176,107"/>
-<area shape="rect" id="node3" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="201,80,381,107"/>
-<area shape="rect" id="node4" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="405,80,544,107"/>
+<area shape="rect" id="node1" title="C++&#45;like std::iostream facilities." alt="" coords="206,5,371,32"/>
+<area shape="rect" id="node2" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="5,80,175,107"/>
+<area shape="rect" id="node3" href="$streams_8cpp_source.html" title=" " alt="" coords="199,80,379,107"/>
+<area shape="rect" id="node4" href="$uart_8h.html" title="Hardware serial API." alt="" coords="403,80,542,107"/>
 </map>

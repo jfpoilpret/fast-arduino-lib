@@ -1,3 +1,6 @@
 <map id="fastarduino/boards/empty.h" name="fastarduino/boards/empty.h">
-<area shape="rect" id="node2" href="$io_8h_source.html" title="io.h" alt="" coords="17,95,64,121"/>
+<area shape="rect" id="node1" title="Target&#45;specific features and pins; this serves as an example, showing all types but without any conte..." alt="" coords="15,5,159,47"/>
+<area shape="rect" id="node2" href="$io_8h_source.html" title=" " alt="" coords="17,95,64,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="88,95,183,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,76,196"/>
 </map>

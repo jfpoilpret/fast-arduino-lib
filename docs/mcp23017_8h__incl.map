@@ -1,6 +1,8 @@
 <map id="fastarduino/devices/mcp23017.h" name="fastarduino/devices/mcp23017.h">
-<area shape="rect" id="node3" href="$i2c__device_8h.html" title="I2C Device API. " alt="" coords="98,95,213,121"/>
-<area shape="rect" id="node4" href="$i2c_8h.html" title="I2C API common definitions. " alt="" coords="81,244,134,271"/>
-<area shape="rect" id="node5" href="$i2c__manager_8h.html" title="I2C Manager API. " alt="" coords="145,169,262,196"/>
-<area shape="rect" id="node6" href="$i2c__handler_8h_source.html" title="i2c_handler.h" alt="" coords="159,244,267,271"/>
+<area shape="rect" id="node1" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="21,5,172,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,73,121"/>
+<area shape="rect" id="node3" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="98,95,213,121"/>
+<area shape="rect" id="node4" href="$i2c_8h.html" title="I2C API common definitions." alt="" coords="81,244,134,271"/>
+<area shape="rect" id="node5" href="$i2c__manager_8h.html" title="I2C Manager API." alt="" coords="145,169,262,196"/>
+<area shape="rect" id="node6" href="$i2c__handler_8h_source.html" title=" " alt="" coords="159,244,267,271"/>
 </map>

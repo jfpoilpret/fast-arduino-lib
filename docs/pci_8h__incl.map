@@ -1,6 +1,12 @@
 <map id="fastarduino/pci.h" name="fastarduino/pci.h">
-<area shape="rect" id="node2" href="$board_8h_source.html" title="boards/board.h" alt="" coords="5,155,124,181"/>
-<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="381,80,479,107"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="223,80,306,107"/>
-<area shape="rect" id="node7" href="$io_8h_source.html" title="boards/io.h" alt="" coords="452,155,547,181"/>
+<area shape="rect" id="node1" title="General API for handling Pin Change Interrupts." alt="" coords="199,5,330,32"/>
+<area shape="rect" id="node2" href="$board_8h_source.html" title=" " alt="" coords="5,155,124,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="39,80,199,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="313,155,427,181"/>
+<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="381,80,479,107"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="223,80,306,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="29,229,100,256"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="452,155,547,181"/>
+<area shape="rect" id="node8" title=" " alt="" coords="464,229,535,256"/>
+<area shape="rect" id="node10" title=" " alt="" coords="185,155,289,181"/>
 </map>

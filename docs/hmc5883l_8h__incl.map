@@ -1,9 +1,13 @@
 <map id="fastarduino/devices/hmc5883l.h" name="fastarduino/devices/hmc5883l.h">
-<area shape="rect" id="node3" href="$common__magneto_8h.html" title="Common types used by 3D sensors (e.g. " alt="" coords="504,169,660,196"/>
-<area shape="rect" id="node5" href="$i2c__device_8h.html" title="I2C Device API. " alt="" coords="98,95,213,121"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="244,95,339,121"/>
-<area shape="rect" id="node6" href="$i2c_8h.html" title="I2C API common definitions. " alt="" coords="26,244,79,271"/>
-<area shape="rect" id="node7" href="$i2c__manager_8h.html" title="I2C Manager API. " alt="" coords="90,169,207,196"/>
-<area shape="rect" id="node8" href="$i2c__handler_8h_source.html" title="i2c_handler.h" alt="" coords="104,244,212,271"/>
-<area shape="rect" id="node10" href="$board_8h_source.html" title="boards/board.h" alt="" coords="232,169,351,196"/>
+<area shape="rect" id="node1" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="148,5,299,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,73,121"/>
+<area shape="rect" id="node3" href="$common__magneto_8h.html" title="Common types used by 3D sensors (e.g." alt="" coords="504,169,660,196"/>
+<area shape="rect" id="node5" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="98,95,213,121"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="244,95,339,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="401,244,472,271"/>
+<area shape="rect" id="node6" href="$i2c_8h.html" title="I2C API common definitions." alt="" coords="26,244,79,271"/>
+<area shape="rect" id="node7" href="$i2c__manager_8h.html" title="I2C Manager API." alt="" coords="90,169,207,196"/>
+<area shape="rect" id="node8" href="$i2c__handler_8h_source.html" title=" " alt="" coords="104,244,212,271"/>
+<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="232,169,351,196"/>
+<area shape="rect" id="node11" title=" " alt="" coords="375,169,479,196"/>
 </map>

@@ -1,17 +1,18 @@
 <map id="fastarduino/queue.h" name="fastarduino/queue.h">
-<area shape="rect" id="node2" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes. " alt="" coords="141,80,303,107"/>
-<area shape="rect" id="node4" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="327,80,506,107"/>
-<area shape="rect" id="node8" href="$streams_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="434,251,599,278"/>
-<area shape="rect" id="node12" href="$events_8h.html" title="Support for events management. " alt="" coords="708,80,864,107"/>
-<area shape="rect" id="node3" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer. " alt="" coords="147,155,297,196"/>
-<area shape="rect" id="node5" href="$ios_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="323,162,454,189"/>
+<area shape="rect" id="node1" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="403,5,555,32"/>
+<area shape="rect" id="node2" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes." alt="" coords="141,80,303,107"/>
+<area shape="rect" id="node4" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="327,80,506,107"/>
+<area shape="rect" id="node8" href="$streams_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="434,251,599,278"/>
+<area shape="rect" id="node12" href="$events_8h.html" title="Support for events management." alt="" coords="708,80,864,107"/>
+<area shape="rect" id="node3" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="147,155,297,196"/>
+<area shape="rect" id="node5" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="323,162,454,189"/>
 <area shape="rect" id="node6" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,251,220,278"/>
-<area shape="rect" id="node7" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities. " alt="" coords="245,251,410,278"/>
-<area shape="rect" id="node9" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="231,333,402,360"/>
-<area shape="rect" id="node10" href="$streams_8cpp_source.html" title="fastarduino/streams.cpp" alt="" coords="427,333,607,360"/>
-<area shape="rect" id="node11" href="$uart_8h.html" title="Hardware serial API. " alt="" coords="631,333,770,360"/>
-<area shape="rect" id="node13" href="$realtime__timer_8h.html" title="Real&#45;time Timer API. " alt="" coords="614,155,769,196"/>
-<area shape="rect" id="node15" href="$scheduler_8h.html" title="Support for jobs scheduling. " alt="" coords="793,162,968,189"/>
-<area shape="rect" id="node16" href="$watchdog_8h.html" title="Watchdog API. " alt="" coords="992,162,1167,189"/>
-<area shape="rect" id="node14" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="624,244,775,285"/>
+<area shape="rect" id="node7" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="245,251,410,278"/>
+<area shape="rect" id="node9" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="233,333,403,360"/>
+<area shape="rect" id="node10" href="$streams_8cpp_source.html" title=" " alt="" coords="427,333,607,360"/>
+<area shape="rect" id="node11" href="$uart_8h.html" title="Hardware serial API." alt="" coords="631,333,770,360"/>
+<area shape="rect" id="node13" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="614,155,769,196"/>
+<area shape="rect" id="node15" href="$scheduler_8h.html" title="Support for jobs scheduling." alt="" coords="793,162,968,189"/>
+<area shape="rect" id="node16" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="992,162,1167,189"/>
+<area shape="rect" id="node14" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="624,244,775,285"/>
 </map>

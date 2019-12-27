@@ -1,5 +1,9 @@
 <map id="fastarduino/spi.h" name="fastarduino/spi.h">
-<area shape="rect" id="node2" href="$board_8h_source.html" title="boards/board.h" alt="" coords="17,229,135,256"/>
-<area shape="rect" id="node4" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="98,80,161,107"/>
-<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="233,155,316,181"/>
+<area shape="rect" id="node1" title="SPI support for AVR MCU." alt="" coords="5,5,136,32"/>
+<area shape="rect" id="node2" href="$board_8h_source.html" title=" " alt="" coords="17,229,135,256"/>
+<area shape="rect" id="node4" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="98,80,161,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="41,304,111,331"/>
+<area shape="rect" id="node5" title=" " alt="" coords="49,155,209,181"/>
+<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="233,155,316,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="223,229,327,256"/>
 </map>

@@ -1,3 +1,4 @@
 <map id="fastarduino/eeprom.h" name="fastarduino/eeprom.h">
-<area shape="rect" id="node2" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer. " alt="" coords="11,80,162,121"/>
+<area shape="rect" id="node1" title="API to handle EEPROM access in read and write modes." alt="" coords="5,5,168,32"/>
+<area shape="rect" id="node2" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="11,80,162,121"/>
 </map>

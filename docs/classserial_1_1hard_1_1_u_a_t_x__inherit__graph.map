@@ -1,3 +1,5 @@
 <map id="serial::hard::UATX&lt; USART_ &gt;" name="serial::hard::UATX&lt; USART_ &gt;">
-<area shape="rect" id="node3" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors. " alt="" coords="141,5,279,32"/>
+<area shape="rect" id="node1" title="Hardware serial transmitter API." alt="" coords="66,80,205,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,116,32"/>
+<area shape="rect" id="node3" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="141,5,279,32"/>
 </map>

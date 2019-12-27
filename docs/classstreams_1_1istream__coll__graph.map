@@ -1,3 +1,4 @@
 <map id="streams::istream" name="streams::istream">
-<area shape="rect" id="node2" href="$classstreams_1_1ios__base.html" title="Base class for formatted streams. " alt="" coords="5,5,135,32"/>
+<area shape="rect" id="node1" title="Input stream wrapper to provide formatted input API, a la C++." alt="" coords="9,80,142,107"/>
+<area shape="rect" id="node2" href="$classstreams_1_1ios__base.html" title="Base class for formatted streams." alt="" coords="5,5,145,32"/>
 </map>

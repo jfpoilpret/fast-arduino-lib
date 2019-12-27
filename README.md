@@ -140,8 +140,7 @@ The roadmap of next activities and new supported features is the following:
 
 Documentation - no milestones
 -----------------------------
-1. Add SPI and I2C new device creation to Tutorial (31.12.2019)
-2. Document how to add support for other boards in Tutorial (31.03.2020)
+- Document how to add support for other boards in Tutorial (31.03.2020)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 

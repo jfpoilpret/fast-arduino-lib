@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['supported_20mcu_20and_20arduino_20boards',['Supported MCU and Arduino boards',['../supportedboards.html',1,'']]]
+  ['fastarduino_20documentation',['FastArduino Documentation',['../index.html',1,'']]],
+  ['fastarduino_20api_20tutorial',['FastArduino API Tutorial',['../tutorial.html',1,'']]]
 ];

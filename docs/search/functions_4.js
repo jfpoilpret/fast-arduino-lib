@@ -1,7 +1,7 @@
 var searchData=
 [
   ['echo_5fus',['echo_us',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#a20893e3685ab8e1774496ba4fe4de911',1,'devices::sonar::HCSR04']]],
-  ['echo_5fus_5fto_5fdistance_5fmm',['echo_us_to_distance_mm',['../namespacedevices_1_1sonar.html#ad1f46b1fd69d9c8c486867572a3cfd89',1,'devices::sonar']]],
+  ['echo_5fus_5fto_5fdistance_5fmm',['echo_us_to_distance_mm',['../sonar_8h.html#ad1f46b1fd69d9c8c486867572a3cfd89',1,'devices::sonar']]],
   ['empty',['empty',['../classcontainers_1_1_queue.html#a594a05c1cd32c640317d91c5928ff43f',1,'containers::Queue']]],
   ['empty_5f',['empty_',['../classcontainers_1_1_queue.html#a4bfd0803a08aa7363b9608ed64474678',1,'containers::Queue']]],
   ['enable',['enable',['../classinterrupt_1_1_i_n_t_signal.html#aba283975bf5d335fccc927f217305e85',1,'interrupt::INTSignal::enable()'],['../classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472',1,'interrupt::PCISignal::enable()']]],

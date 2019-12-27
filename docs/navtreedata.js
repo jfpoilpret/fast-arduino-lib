@@ -26,6 +26,8 @@ var NAVTREE =
   [ "FastArduino", "index.html", [
     [ "FastArduino Documentation", "index.html", null ],
     [ "Supported MCU and Arduino boards", "supportedboards.html", null ],
+    [ "Adding support for an I2C device", "i2cdevices.html", null ],
+    [ "Adding support for an SPI device", "spidevices.html", null ],
     [ "FastArduino API Tutorial", "tutorial.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -62,13 +64,13 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"abi_8cpp_source.html",
-"classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a",
-"classgpio_1_1_fast_pin.html#a3845165b5c3e1a9e1502780015998157",
-"classstreams_1_1ostream.html#a0fcdb5979afd673fba74993adbfd009b",
-"functions_func_s.html",
-"namespaceserial.html",
-"timer_8h.html#a17d2af2848409a47612cd961ea27b5a0a6bc15f455c55707fa8b803b159cfc88b"
+".html",
+"classdevices_1_1audio_1_1_tone_player.html#a5ecdcb031e7d6b884bdd2f3759954bce",
+"classgpio_1_1_fast_masked_port.html#a24ece4d003f5535e863d4da2df4f4631",
+"classstreams_1_1istreambuf.html#a85f68445fc2c3baaaf3df0caa90e38cd",
+"functions_func_h.html",
+"namespacespi.html",
+"timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

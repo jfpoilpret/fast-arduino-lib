@@ -1,12 +1,20 @@
 <map id="fastarduino/realtime_timer.h" name="fastarduino/realtime_timer.h">
-<area shape="rect" id="node2" href="$io_8h_source.html" title="boards/io.h" alt="" coords="23,319,117,345"/>
-<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="25,169,123,196"/>
-<area shape="rect" id="node6" href="$timer_8h.html" title="Timer API. " alt="" coords="297,95,365,121"/>
-<area shape="rect" id="node13" href="$time_8h.html" title="Simple time utilities. " alt="" coords="291,244,355,271"/>
-<area shape="rect" id="node15" href="$events_8h.html" title="Support for events management. " alt="" coords="588,95,667,121"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="481,319,563,345"/>
-<area shape="rect" id="node10" href="$board_8h_source.html" title="boards/board.h" alt="" coords="535,393,653,420"/>
-<area shape="rect" id="node16" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers. " alt="" coords="534,169,609,196"/>
-<area shape="rect" id="node17" href="$linked__list_8h.html" title="Utility API to handle linked list containers. " alt="" coords="633,169,734,196"/>
-<area shape="rect" id="node18" href="$types__traits_8h.html" title="Useful traits for common types. " alt="" coords="636,244,747,271"/>
+<area shape="rect" id="node1" title="Real&#45;time Timer API." alt="" coords="109,5,263,47"/>
+<area shape="rect" id="node2" href="$io_8h_source.html" title=" " alt="" coords="23,319,117,345"/>
+<area shape="rect" id="node4" title=" " alt="" coords="107,244,222,271"/>
+<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="25,169,123,196"/>
+<area shape="rect" id="node6" href="$timer_8h.html" title="Timer API." alt="" coords="297,95,365,121"/>
+<area shape="rect" id="node13" href="$time_8h.html" title="Simple time utilities." alt="" coords="291,244,355,271"/>
+<area shape="rect" id="node15" href="$events_8h.html" title="Support for events management." alt="" coords="588,95,667,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="35,393,105,420"/>
+<area shape="rect" id="node7" title=" " alt="" coords="299,169,459,196"/>
+<area shape="rect" id="node8" title=" " alt="" coords="747,319,822,345"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="481,319,563,345"/>
+<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="535,393,653,420"/>
+<area shape="rect" id="node12" title=" " alt="" coords="406,393,510,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="559,468,629,495"/>
+<area shape="rect" id="node14" title=" " alt="" coords="195,319,331,345"/>
+<area shape="rect" id="node16" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="534,169,609,196"/>
+<area shape="rect" id="node17" href="$linked__list_8h.html" title="Utility API to handle linked list containers." alt="" coords="633,169,733,196"/>
+<area shape="rect" id="node18" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="636,244,747,271"/>
 </map>

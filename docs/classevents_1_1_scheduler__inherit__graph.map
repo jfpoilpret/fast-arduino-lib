@@ -1,5 +1,8 @@
 <map id="events::Scheduler&lt; CLOCK_, EVENT_ &gt;" name="events::Scheduler&lt; CLOCK_, EVENT_ &gt;">
-<area shape="rect" id="node2" href="$classevents_1_1_event_handler.html" title="events::EventHandler\l\&lt; EVENT_ \&gt;" alt="" coords="37,169,185,211"/>
-<area shape="rect" id="node3" href="$classcontainers_1_1_link.html" title="containers::Link\&lt; EventHandler\l\&lt; EVENT_ \&gt; \&gt;" alt="" coords="5,80,211,121"/>
-<area shape="rect" id="node5" href="$classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; Job \&gt;" alt="" coords="211,169,360,211"/>
+<area shape="rect" id="node1" title="Schedule jobs at predefined periods of time." alt="" coords="141,259,292,300"/>
+<area shape="rect" id="node2" href="$classevents_1_1_event_handler.html" title=" " alt="" coords="41,169,203,211"/>
+<area shape="rect" id="node3" href="$classcontainers_1_1_link.html" title=" " alt="" coords="5,80,233,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="80,5,159,32"/>
+<area shape="rect" id="node5" href="$classcontainers_1_1_linked_list.html" title=" " alt="" coords="231,169,394,211"/>
+<area shape="rect" id="node6" title=" " alt="" coords="257,87,373,114"/>
 </map>

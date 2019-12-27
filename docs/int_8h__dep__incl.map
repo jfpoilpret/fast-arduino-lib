@@ -1,5 +1,6 @@
 <map id="fastarduino/int.h" name="fastarduino/int.h">
-<area shape="rect" id="node2" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2..." alt="" coords="5,80,156,121"/>
-<area shape="rect" id="node3" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04. " alt="" coords="180,80,331,121"/>
-<area shape="rect" id="node4" href="$soft__uart_8h.html" title="Software&#45;emulated serial API. " alt="" coords="355,87,526,114"/>
+<area shape="rect" id="node1" title="General API for handling External Interrupt pins." alt="" coords="191,5,320,32"/>
+<area shape="rect" id="node2" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2...." alt="" coords="5,80,156,121"/>
+<area shape="rect" id="node3" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="180,80,331,121"/>
+<area shape="rect" id="node4" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="355,87,524,114"/>
 </map>

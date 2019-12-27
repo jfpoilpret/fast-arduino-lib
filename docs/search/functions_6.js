@@ -17,5 +17,5 @@ var searchData=
   ['getline',['getline',['../classstreams_1_1istream.html#ab2b480d5069588a6e9c97e89dfd7c4d8',1,'streams::istream']]],
   ['good',['good',['../classstreams_1_1ios__base.html#a0d6c236b3c0807bf269cc49bcb0fa7c7',1,'streams::ios_base']]],
   ['gyro_5fmeasures',['gyro_measures',['../classdevices_1_1magneto_1_1_m_p_u6050.html#aae3fc49d5b6c7f733d98c83ed74fa32e',1,'devices::magneto::MPU6050']]],
-  ['gyro_5frange_5fdps',['GYRO_RANGE_DPS',['../namespacedevices_1_1magneto.html#a85e20b9728762df0bfd884bbd040199d',1,'devices::magneto']]]
+  ['gyro_5frange_5fdps',['GYRO_RANGE_DPS',['../mpu6050_8h.html#a85e20b9728762df0bfd884bbd040199d',1,'devices::magneto']]]
 ];

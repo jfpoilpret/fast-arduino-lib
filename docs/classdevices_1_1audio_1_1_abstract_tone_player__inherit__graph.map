@@ -1,4 +1,5 @@
 <map id="devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;" name="devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;">
-<area shape="rect" id="node2" href="$classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. " alt="" coords="299,5,494,61"/>
-<area shape="rect" id="node3" href="$classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations. " alt="" coords="277,86,516,127"/>
+<area shape="rect" id="node1" title="This low&#45;level API defines an abstract player of melodies (defined as a sequence of tones and duratio..." alt="" coords="5,43,231,99"/>
+<area shape="rect" id="node2" href="$classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="302,5,497,61"/>
+<area shape="rect" id="node3" href="$classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="279,86,520,127"/>
 </map>

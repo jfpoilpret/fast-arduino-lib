@@ -1,3 +1,4 @@
 <map id="devices::rtc::DS1307" name="devices::rtc::DS1307">
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_device.html" title="i2c::I2CDevice\&lt; i2c\l::I2CMode::STANDARD \&gt;" alt="" coords="5,5,187,47"/>
+<area shape="rect" id="node1" title="I2C device driver for the DS1307 RTC chip." alt="" coords="19,95,174,121"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_device.html" title=" " alt="" coords="5,5,188,47"/>
 </map>

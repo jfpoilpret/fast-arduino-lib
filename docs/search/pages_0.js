@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['fastarduino_20documentation',['FastArduino Documentation',['../index.html',1,'']]],
-  ['fastarduino_20api_20tutorial',['FastArduino API Tutorial',['../tutorial.html',1,'']]]
+  ['adding_20support_20for_20an_20i2c_20device',['Adding support for an I2C device',['../i2cdevices.html',1,'']]],
+  ['adding_20support_20for_20an_20spi_20device',['Adding support for an SPI device',['../spidevices.html',1,'']]]
 ];

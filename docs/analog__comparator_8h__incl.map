@@ -1,6 +1,12 @@
 <map id="fastarduino/analog_comparator.h" name="fastarduino/analog_comparator.h">
-<area shape="rect" id="node3" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors. " alt="" coords="190,95,287,121"/>
-<area shape="rect" id="node7" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="339,95,421,121"/>
-<area shape="rect" id="node4" href="$io_8h_source.html" title="boards/io.h" alt="" coords="62,169,157,196"/>
-<area shape="rect" id="node8" href="$board_8h_source.html" title="boards/board.h" alt="" coords="321,169,439,196"/>
+<area shape="rect" id="node1" title="Analog Comparator API." alt="" coords="167,5,311,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,165,121"/>
+<area shape="rect" id="node3" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="190,95,287,121"/>
+<area shape="rect" id="node7" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="339,95,421,121"/>
+<area shape="rect" id="node4" href="$io_8h_source.html" title=" " alt="" coords="62,169,157,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="181,169,296,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="74,244,145,271"/>
+<area shape="rect" id="node8" href="$board_8h_source.html" title=" " alt="" coords="321,169,439,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="464,169,568,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="345,244,415,271"/>
 </map>

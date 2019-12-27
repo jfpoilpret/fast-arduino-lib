@@ -1,3 +1,4 @@
 <map id="devices::magneto::HMC5883L&lt; MODE_ &gt;" name="devices::magneto::HMC5883L&lt; MODE_ &gt;">
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_device.html" title="Base class for all I2C devices. " alt="" coords="11,5,191,32"/>
+<area shape="rect" id="node1" title="I2C device driver for the HMC5883L compass chip." alt="" coords="5,80,215,121"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_device.html" title="Base class for all I2C devices." alt="" coords="14,5,206,32"/>
 </map>

@@ -1,3 +1,4 @@
 <map id="fastarduino/devices/tones.h" name="fastarduino/devices/tones.h">
-<area shape="rect" id="node2" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer. " alt="" coords="5,95,156,136"/>
+<area shape="rect" id="node1" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="5,5,156,47"/>
+<area shape="rect" id="node2" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="5,95,156,136"/>
 </map>

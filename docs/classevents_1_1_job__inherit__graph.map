@@ -1,3 +1,5 @@
 <map id="events::Job" name="events::Job">
-<area shape="rect" id="node2" href="$classcontainers_1_1_link.html" title="containers::Link\&lt; Job \&gt;" alt="" coords="5,80,164,107"/>
+<area shape="rect" id="node1" title="Abstract class holding some action to be executed at given periods of time." alt="" coords="45,155,140,181"/>
+<area shape="rect" id="node2" href="$classcontainers_1_1_link.html" title=" " alt="" coords="5,80,180,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="53,5,132,32"/>
 </map>

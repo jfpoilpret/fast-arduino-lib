@@ -13,7 +13,6 @@ var searchData=
   ['linkedlist_3c_20job_20_3e',['LinkedList&lt; Job &gt;',['../classcontainers_1_1_linked_list.html',1,'containers']]],
   ['linkwrapper',['LinkWrapper',['../classcontainers_1_1_link_wrapper.html',1,'containers::LinkWrapper&lt; T_, TREF_, CTREF_ &gt;'],['../classcontainers_1_1_link_wrapper.html#ab73ec02a8144d6cc3991bcf138171e7b',1,'containers::LinkWrapper::LinkWrapper()']]],
   ['lock',['lock',['../classcontainers_1_1_queue.html#a9502986798fafa55a8201cf4aad11946',1,'containers::Queue']]],
-  ['low',['LOW',['../namespacedevices_1_1magneto.html#acce78d7a9c22e2b1d83bb320326075b1a41bc94cbd8eebea13ce0491b2ac11b88',1,'devices::magneto']]],
   ['low_5fbyte',['LOW_BYTE',['../namespacebits.html#aa2e0d50727d964c50b3e444018cce593',1,'bits']]],
   ['low_5flevel',['LOW_LEVEL',['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1bad5ef89cca31152290b30f50cd1d8c536',1,'interrupt']]],
   ['lsb_5ffirst',['LSB_FIRST',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7aa34fb35b522d4b8f2757b9adf8aefd96',1,'spi']]]

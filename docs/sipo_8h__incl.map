@@ -1,5 +1,9 @@
 <map id="fastarduino/devices/sipo.h" name="fastarduino/devices/sipo.h">
-<area shape="rect" id="node2" href="$gpio_8h.html" title="General Purpose (digital) Input Output API. " alt="" coords="120,95,195,121"/>
-<area shape="rect" id="node4" href="$utilities_8h.html" title="General utilities API that have broad application in programs. " alt="" coords="189,169,272,196"/>
-<area shape="rect" id="node5" href="$board_8h_source.html" title="boards/board.h" alt="" coords="103,244,222,271"/>
+<area shape="rect" id="node1" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;,..." alt="" coords="82,5,233,47"/>
+<area shape="rect" id="node2" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="120,95,195,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,169,165,196"/>
+<area shape="rect" id="node4" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="189,169,272,196"/>
+<area shape="rect" id="node5" href="$board_8h_source.html" title=" " alt="" coords="103,244,222,271"/>
+<area shape="rect" id="node7" title=" " alt="" coords="247,244,351,271"/>
+<area shape="rect" id="node6" title=" " alt="" coords="127,319,198,345"/>
 </map>

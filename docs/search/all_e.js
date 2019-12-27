@@ -8,7 +8,7 @@ var searchData=
   ['on_5fevent',['on_event',['../classevents_1_1_event_handler.html#adf1504447f58fbe5060bf2218dee9c09',1,'events::EventHandler']]],
   ['on_5fschedule',['on_schedule',['../classevents_1_1_job.html#a09270ba4033ca2fffc8134d6f1b428a1',1,'events::Job']]],
   ['one',['ONE',['../namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396',1,'serial']]],
-  ['operatingmode',['OperatingMode',['../namespacedevices_1_1magneto.html#ab5a939dc4c5640584198a3ae0a7914f0',1,'devices::magneto']]],
+  ['operatingmode',['OperatingMode',['../hmc5883l_8h.html#ab5a939dc4c5640584198a3ae0a7914f0',1,'devices::magneto']]],
   ['operator_20bool',['operator bool',['../classstreams_1_1ios__base.html#affa809dbba9357b2c671b08ab5dca0f2',1,'streams::ios_base']]],
   ['operator_21',['operator!',['../classstreams_1_1ios__base.html#a2cc8fbf83729f31cb9750c1805e31f5f',1,'streams::ios_base']]],
   ['operator_21_3d',['operator!=',['../namespacetime.html#ad531c6bbf3175c03d57325bbc4553979',1,'time']]],
