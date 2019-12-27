@@ -81,7 +81,7 @@ bytes simultaneously transmitted by that device.
 `spi::SPIDevice.start_transfer()`.
 
 Any feature implementation in `MySPIDevice` will always consist in a sequence of calls to the methods above, like:
-@code
+@code{.cpp}
     this->start_transfer();
     this->transfer(0x01);
     uint8_t result1 = this->transfer(0x80);
@@ -114,7 +114,7 @@ calls, from `main()`, to `protected` API of `spi::SPIDevice`, for easy testing
 
 FastArduino includes such a debugging sample in `examples/spi/SPIDeviceProto` example, copied hereafter:
 
-@includelineno spi/SPIDeviceProto/SPIDeviceProto.cpp
+@includelineno SPIDeviceProto.cpp
 
 This example demonstrates how to simply test the MCP3008 ADC chip. It is made of several parts:
 
