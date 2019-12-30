@@ -53,6 +53,10 @@
             "board": "Arduino UNO",
             "programmer": "ArduinoISP.cc"
         },
+        "UNO-TinyISP": {
+            "board": "Arduino UNO",
+            "programmer": "USBtinyISP"
+        },
         "NANO": {
             "board": "Arduino NANO",
             "programmer": "NANO USB",
