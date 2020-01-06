@@ -37,7 +37,7 @@ FastArduino is also buildable from the command line (on a linux system) through 
 
 Making FastArduino buildable on Arduino IDE is not on the roadmap.
 
-My complete setup is described in [ArduinoDevSetup.docx](ArduinoDevSetup.docx). This document also describes how I setup Visual Studio Code for my projects.
+My complete setup is described in [ArduinoDevSetup.docx](basedoc/ArduinoDevSetup.docx). This document also describes how I setup Visual Studio Code for my projects.
 
 One easy way to start a new project using FastArduino is to checkout [this project template](https://github.com/jfpoilpret/fastarduino-project-template).
 
