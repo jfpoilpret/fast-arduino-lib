@@ -233,7 +233,6 @@ namespace devices::rf
 		 * @param[out] buf reference to object to fill with received payload;
 		 * note that no constructor will get called during this operation, it is
 		 * best to use simple `struct` for type @p T.
-		 * @param[in] buf buffer to store incoming message
 		 * @param[in] ms maximum time out period
 		 * @return number of bytes received or negative error code
 		 * @retval errors::ETIME if nothing was received and a timeout occurred

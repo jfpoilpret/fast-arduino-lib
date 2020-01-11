@@ -164,7 +164,7 @@ namespace interrupt
 	 * `REGISTER_PCI_ISR_METHOD()` macros.
 	 * If you don't then use `REGISTER_PCI_ISR_EMPTY()` macro.
 	 * If you don't know the PCINT you need to handle but only a pin, then you can
-	 * use `PCIType<PIN>::TYPE`.
+	 * use `PCIType<PIN>::TYPE`, or better `PCI_SIGNAL<PIN>`.
 	 * 
 	 * @tparam PCINT_ the PCINT vector you want to manage
 	 * @sa REGISTER_PCI_ISR_FUNCTION
