@@ -662,7 +662,7 @@ namespace devices::sonar
 		}
 
 		template<board::DigitalPin ECHO>
-		uint16_t blocking_echo_us(typename gpio::FastPinType<ECHO>::TYPE& echo, uint16_t timeout_ms)
+		uint16_t blocking_echo_us(gpio::FAST_PIN<ECHO>& echo, uint16_t timeout_ms)
 		{
 			uint32_t now = rtt_.millis();
 			now += timeout_ms;
@@ -893,8 +893,8 @@ namespace devices::sonar
 
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
-		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
-		typename gpio::FastPinType<ECHO>::TYPE echo_;
+		gpio::FAST_PIN<TRIGGER> trigger_;
+		gpio::FAST_PIN<ECHO> echo_;
 
 		// Make friends with all ISR handlers
 		friend struct isr_handler;
@@ -1270,7 +1270,7 @@ namespace devices::sonar
 		volatile uint8_t ready_;
 		volatile bool active_;
 		uint32_t timeout_time_ms_;
-		typename gpio::FastPinType<TRIGGER>::TYPE trigger_;
+		gpio::FAST_PIN<TRIGGER> trigger_;
 		gpio::FastMaskedPort<ECHO_PORT, ECHO_MASK> echo_;
 
 		// Make friends with all ISR handlers

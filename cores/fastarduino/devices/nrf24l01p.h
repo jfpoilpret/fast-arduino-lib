@@ -571,7 +571,7 @@ namespace devices::rf
 	private:
 		static const uint8_t DEFAULT_CHANNEL = 64;
 
-		typename gpio::FastPinType<CE>::TYPE ce_;
+		gpio::FAST_PIN<CE> ce_;
 
 		addr_t addr_;	 //!< Current network and device address.
 		uint8_t channel_; //!< Current channel (device dependent.

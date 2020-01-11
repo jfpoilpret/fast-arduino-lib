@@ -68,7 +68,7 @@ void blink(uint8_t buttons)
 	// If no button is pressed, do nothing
 	if (!buttons) return;
 
-	gpio::FastPinType<LED>::TYPE led;
+	gpio::FAST_PIN<LED> led;
 	// Buttons are plit in 2 groups of four:
 	// - 1st group sets 5 iterations
 	// - 2nd group sets 10 iterations
@@ -108,7 +108,7 @@ int main()
 	signal.enable_();
 
 	// Setup LED pin as output
-	gpio::FastPinType<LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FAST_PIN<LED> led{gpio::PinMode::OUTPUT};
 
 	// Enable interrupts at startup time
 	sei();

@@ -71,7 +71,7 @@ int main()
 	time::delay_ms(2000);
 
 	// Start UARX
-	typename interrupt::PCIType<RX>::TYPE pci;
+	interrupt::PCI_SIGNAL<RX> pci;
 	serial::soft::UARX_PCI<RX> uarx{input_buffer, pci};
 	pci.enable();
 	streams::istream in = uarx.in();

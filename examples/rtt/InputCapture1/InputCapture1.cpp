@@ -147,7 +147,7 @@ public:
 
 private:
 	TIMER& _timer;
-	gpio::FastPinType<ICP>::TYPE _input;
+	gpio::FAST_PIN<ICP> _input;
 	volatile bool _ready;
 	volatile TYPE _capture;
 	volatile uint16_t _overflows;

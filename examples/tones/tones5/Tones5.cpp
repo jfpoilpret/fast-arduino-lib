@@ -231,7 +231,7 @@ int main()
 {
 	sei();
 
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FAST_PIN<board::DigitalPin::LED> led{gpio::PinMode::OUTPUT};
 	
 	GENERATOR generator;
 	AsyncTonePlayer player{generator};

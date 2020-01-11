@@ -53,7 +53,7 @@ int main()
 	// The additional 0.5x are due to the wake-up time at every interrupt (every ms)
 //	Power::set_default_mode(board::SleepMode::POWER_SAVE);
 	
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FAST_PIN<board::DigitalPin::LED> led{gpio::PinMode::OUTPUT};
 	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.begin();
 	// Event Loop

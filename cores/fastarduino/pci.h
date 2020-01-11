@@ -540,6 +540,11 @@ namespace interrupt
 		/** PCISignal type for @p PIN */
 		using TYPE = PCISignal<PCINT>;
 	};
+
+	//TODO APIDOC
+	template<board::InterruptPin PIN>
+	using PCI_SIGNAL = typename PCIType<PIN>::TYPE;
+
 }
 
 #endif /* PCI_HH */

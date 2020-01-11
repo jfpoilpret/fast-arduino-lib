@@ -161,7 +161,7 @@ private:
 	}
 
 	PLAYER& player_;
-	gpio::FastPinType<board::EXT_PIN<STOP>()>::TYPE stop_;
+	gpio::FAST_EXT_PIN<STOP> stop_;
 
 	DECL_INT_ISR_HANDLERS_FRIEND
 };

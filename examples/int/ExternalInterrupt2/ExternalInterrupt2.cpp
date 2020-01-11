@@ -71,8 +71,8 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	gpio::FastPinType<board::EXT_PIN<SWITCH>()>::TYPE button{gpio::PinMode::INPUT_PULLUP};
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};	
+	gpio::FAST_EXT_PIN<SWITCH> button{gpio::PinMode::INPUT_PULLUP};
+	gpio::FAST_PIN<board::DigitalPin::LED> led{gpio::PinMode::OUTPUT};	
 	interrupt::INTSignal<SWITCH> int0{interrupt::InterruptTrigger::ANY_CHANGE};
 	int0.enable();
 

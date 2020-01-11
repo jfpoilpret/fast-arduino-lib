@@ -68,7 +68,7 @@ const constexpr uint32_t BLINK_DELAY = 10000;
 template<board::Timer TIMER>
 void check_timer()
 {
-	typename gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT, true};
+	gpio::FAST_PIN<board::DigitalPin::LED> led{gpio::PinMode::OUTPUT, true};
 	timer::RTT<TIMER> rtt;
 	rtt.begin();
 	// Event Loop

@@ -267,7 +267,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		typename gpio::FastPinType<TX>::TYPE tx_;
+		gpio::FAST_PIN<TX> tx_;
 	};
 
 	/// @cond notdocumented
@@ -464,7 +464,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		typename gpio::FastPinType<RX>::TYPE rx_;
+		gpio::FAST_PIN<RX> rx_;
 		INT_TYPE& int_;
 		friend struct isr_handler;
 	};
@@ -566,8 +566,8 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		typename gpio::FastPinType<TX>::TYPE tx_;
-		typename gpio::FastPinType<RX>::TYPE rx_;
+		gpio::FAST_PIN<TX> tx_;
+		gpio::FAST_PIN<RX> rx_;
 		INT_TYPE& int_;
 		friend struct isr_handler;
 	};
@@ -588,7 +588,7 @@ namespace serial::soft
 		 * PinChangeInterrupt pin. This type is used in `begin()` call.
 		 * @sa begin()
 		 */
-		using PCI_TYPE = typename interrupt::PCIType<RX_>::TYPE;
+		using PCI_TYPE = interrupt::PCI_SIGNAL<RX_>;
 
 		/**
 		 * Construct a new software serial receiver and provide it with a
@@ -648,7 +648,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		typename gpio::FastPinType<RX>::TYPE rx_;
+		gpio::FAST_PIN<RX> rx_;
 		PCI_TYPE& pci_;
 		friend struct isr_handler;
 	};
@@ -673,7 +673,7 @@ namespace serial::soft
 		 * PinChangeInterrupt pin. This type is used in `begin()` call.
 		 * @sa begin()
 		 */
-		using PCI_TYPE = typename interrupt::PCIType<RX_>::TYPE;
+		using PCI_TYPE = interrupt::PCI_SIGNAL<RX_>;
 
 		/**
 		 * Construct a new software serial receiver/transceiver and provide it 
@@ -747,8 +747,8 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		typename gpio::FastPinType<TX>::TYPE tx_;
-		typename gpio::FastPinType<RX>::TYPE rx_;
+		gpio::FAST_PIN<TX> tx_;
+		gpio::FAST_PIN<RX> rx_;
 		PCI_TYPE& pci_;
 		friend struct isr_handler;
 	};

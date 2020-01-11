@@ -135,9 +135,9 @@ namespace devices
 			} while (mask);
 		}
 
-		typename gpio::FastPinType<CLOCK>::TYPE clock_;
-		typename gpio::FastPinType<LATCH>::TYPE latch_;
-		typename gpio::FastPinType<DATA>::TYPE data_;
+		gpio::FAST_PIN<CLOCK> clock_;
+		gpio::FAST_PIN<LATCH> latch_;
+		gpio::FAST_PIN<DATA> data_;
 	};
 }
 

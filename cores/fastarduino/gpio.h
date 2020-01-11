@@ -22,6 +22,8 @@
 #define FASTIO_HH
 
 #include "boards/board_traits.h"
+#include "int.h"
+#include "pci.h"
 #include "utilities.h"
 
 namespace board
@@ -655,6 +657,16 @@ namespace gpio
 		}
 	};
 	/// @endcond
+
+	//TODO APIDOC
+	template<board::DigitalPin DPIN_>
+	using FAST_PIN = typename FastPinType<DPIN_>::TYPE;
+
+	template<board::InterruptPin IPIN_>
+	using FAST_INT_PIN = typename FastPinType<board::PCI_PIN<IPIN_>()>::TYPE;
+
+	template<board::ExternalInterruptPin EPIN_>
+	using FAST_EXT_PIN = typename FastPinType<board::EXT_PIN<EPIN_>()>::TYPE;
 }
 
 #endif /* FASTIO_HH */

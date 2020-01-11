@@ -133,7 +133,7 @@ static bool is_master()
 #else
 static bool is_master()
 {
-	gpio::FastPinType<PIN_CONFIG>::TYPE config{gpio::PinMode::INPUT_PULLUP};
+	gpio::FAST_PIN<PIN_CONFIG> config{gpio::PinMode::INPUT_PULLUP};
 	return config.value();
 }
 #endif

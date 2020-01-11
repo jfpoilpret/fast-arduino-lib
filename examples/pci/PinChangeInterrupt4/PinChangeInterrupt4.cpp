@@ -79,9 +79,9 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<board::PCI_PIN<SWITCH_ON>()>::TYPE _switch_on;
-	gpio::FastPinType<board::PCI_PIN<SWITCH_OFF>()>::TYPE _switch_off;
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
+	gpio::FAST_INT_PIN<SWITCH_ON> _switch_on;
+	gpio::FAST_INT_PIN<SWITCH_OFF> _switch_off;
+	gpio::FAST_PIN<board::DigitalPin::LED> _led;	
 };
 
 // Define vectors we need in the example
@@ -96,8 +96,8 @@ int main()
 	
 	SwitchHandler switch_handler;
 	interrupt::register_handler(switch_handler);
-	interrupt::PCIType<SWITCH_ON>::TYPE pci_on;
-	interrupt::PCIType<SWITCH_OFF>::TYPE pci_off;
+	interrupt::PCI_SIGNAL<SWITCH_ON> pci_on;
+	interrupt::PCI_SIGNAL<SWITCH_OFF> pci_off;
 	
 	pci_on.enable_pin<SWITCH_ON>();
 	pci_off.enable_pin<SWITCH_OFF>();

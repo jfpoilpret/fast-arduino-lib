@@ -57,7 +57,7 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;
+	gpio::FAST_PIN<board::DigitalPin::LED> _led;
 };
 
 // Define vectors we need in the example

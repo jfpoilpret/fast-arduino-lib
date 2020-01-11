@@ -133,7 +133,7 @@ public:
 private:
 	const uint16_t MIN_US;
 	const SONAR& sonar_;
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
+	gpio::FAST_PIN<board::DigitalPin::LED> led_;
 };
 
 REGISTER_HCSR04_PCI_ISR_METHOD(NTIMER, PCI_NUM, TRIGGER, ECHO, SonarListener, &SonarListener::on_sonar)
@@ -159,7 +159,7 @@ int main()
 
 	SonarListener listener{sonar, DISTANCE_THRESHOLD_MM};
 
-	typename interrupt::PCIType<ECHO>::TYPE signal;
+	interrupt::PCI_SIGNAL<ECHO> signal;
 	signal.enable_pin<ECHO>();
 	signal.enable();
 	

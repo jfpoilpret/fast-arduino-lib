@@ -73,9 +73,9 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<board::EXT_PIN<SWITCH_ON>()>::TYPE _switch_on;
-	gpio::FastPinType<board::EXT_PIN<SWITCH_OFF>()>::TYPE _switch_off;
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
+	gpio::FAST_EXT_PIN<SWITCH_ON> _switch_on;
+	gpio::FAST_EXT_PIN<SWITCH_OFF> _switch_off;
+	gpio::FAST_PIN<board::DigitalPin::LED> _led;	
 };
 
 // Define vectors we need in the example
