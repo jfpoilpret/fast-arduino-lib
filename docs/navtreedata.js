@@ -69,8 +69,8 @@ var NAVTREEINDEX =
 "classgpio_1_1_fast_masked_port.html#a24ece4d003f5535e863d4da2df4f4631",
 "classstreams_1_1istreambuf.html#a85f68445fc2c3baaaf3df0caa90e38cd",
 "functions_func_h.html",
-"namespacespi.html",
-"timer_8h.html#a6f85b9572e33671db45e5ac8ee3ea097a2c0cb5e902703e9e30523c1a6ba51d77"
+"namespaceserial.html",
+"timer_8h.html#a1dec37d0ac500f2d0dfc9b50fcf6e71f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

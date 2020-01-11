@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('namespaceinterrupt.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -109,6 +110,13 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structinterrupt_1_1_p_c_i_type.html">PCIType</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class that easily converts a <code>PIN</code> into the right <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code>.  <a href="structinterrupt_1_1_p_c_i_type.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a440f2d705bc60755a4f81a105caef15c"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
+<tr class="memitem:a440f2d705bc60755a4f81a105caef15c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">PCI_SIGNAL</a> = typename <a class="el" href="structinterrupt_1_1_p_c_i_type.html">PCIType</a>&lt; PIN &gt;::TYPE</td></tr>
+<tr class="memdesc:a440f2d705bc60755a4f81a105caef15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Useful alias type to the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>.  <a href="#a440f2d705bc60755a4f81a105caef15c">More...</a><br /></td></tr>
+<tr class="separator:a440f2d705bc60755a4f81a105caef15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -139,7 +147,32 @@ Functions</h2></td></tr>
 <li>handle external interrupt pins</li>
 <li>handle pin change interrupts </li>
 </ul>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="a440f2d705bc60755a4f81a105caef15c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a440f2d705bc60755a4f81a105caef15c">&#9670;&nbsp;</a></span>PCI_SIGNAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::InterruptPin PIN&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">interrupt::PCI_SIGNAL</a> = typedef typename <a class="el" href="structinterrupt_1_1_p_c_i_type.html">PCIType</a>&lt;PIN&gt;::TYPE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Useful alias type to the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>. </p>
+<p>The following snippet demonstrates usage of <code>PCI_SIGNAL</code> to declare a <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> instance for later use in a function:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a> PIN = board::InterruptPin::D7;</div><div class="line">    <a class="code" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">interrupt::PCI_SIGNAL&lt;PIN&gt;</a> pci;</div><div class="line">    pci.enable_pin&lt;PIN&gt;();</div><div class="line">    pci.enable();</div><div class="line">    ...</div><div class="line">    pci.disable();</div><div class="line">}</div></div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a> </dd>
+<dd>
+<a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal.">PCIType</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00567">567</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a27eee51cf0393a75a91aac0425e65d1b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a27eee51cf0393a75a91aac0425e65d1b">&#9670;&nbsp;</a></span>InterruptTrigger</h2>
 

@@ -121,14 +121,14 @@ Collaboration diagram for serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;:<
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:adca60aa1d5ca7f8a1f2ab00582f4ba32"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#adca60aa1d5ca7f8a1f2ab00582f4ba32">PCI_TYPE</a> = typename <a class="el" href="structinterrupt_1_1_p_c_i_type.html">interrupt::PCIType</a>&lt; RX_ &gt;::TYPE</td></tr>
-<tr class="memdesc:adca60aa1d5ca7f8a1f2ab00582f4ba32"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">interrupt::PCISignal</a> type for <code>RX_</code> pin, if it is a PinChangeInterrupt pin.  <a href="#adca60aa1d5ca7f8a1f2ab00582f4ba32">More...</a><br /></td></tr>
-<tr class="separator:adca60aa1d5ca7f8a1f2ab00582f4ba32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78221b3be502f4fba3fb2052b128bd18"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#a78221b3be502f4fba3fb2052b128bd18">PCI_TYPE</a> = <a class="el" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">interrupt::PCI_SIGNAL</a>&lt; RX_ &gt;</td></tr>
+<tr class="memdesc:a78221b3be502f4fba3fb2052b128bd18"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">interrupt::PCISignal</a> type for <code>RX_</code> pin, if it is a PinChangeInterrupt pin.  <a href="#a78221b3be502f4fba3fb2052b128bd18">More...</a><br /></td></tr>
+<tr class="separator:a78221b3be502f4fba3fb2052b128bd18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afe291c4ecabfd2932d9f199c383f1d46"><td class="memTemplParams" colspan="2">template&lt;uint8_t SIZE_RX&gt; </td></tr>
-<tr class="memitem:afe291c4ecabfd2932d9f199c383f1d46"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#afe291c4ecabfd2932d9f199c383f1d46">UARX</a> (char(&amp;input)[SIZE_RX], <a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#adca60aa1d5ca7f8a1f2ab00582f4ba32">PCI_TYPE</a> &amp;enabler)</td></tr>
+<tr class="memitem:afe291c4ecabfd2932d9f199c383f1d46"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#afe291c4ecabfd2932d9f199c383f1d46">UARX</a> (char(&amp;input)[SIZE_RX], <a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#a78221b3be502f4fba3fb2052b128bd18">PCI_TYPE</a> &amp;enabler)</td></tr>
 <tr class="memdesc:afe291c4ecabfd2932d9f199c383f1d46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new software serial receiver and provide it with a buffer for interrupt-based reception.  <a href="#afe291c4ecabfd2932d9f199c383f1d46">More...</a><br /></td></tr>
 <tr class="separator:afe291c4ecabfd2932d9f199c383f1d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c67306fbe04d184f0c267d3041fcbfc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#a7c67306fbe04d184f0c267d3041fcbfc">begin</a> (uint32_t rate, <a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032">Parity</a> parity=<a class="el" href="namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693">Parity::NONE</a>, <a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3">StopBits</a> stop_bits=<a class="el" href="namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396">StopBits::ONE</a>)</td></tr>
@@ -179,8 +179,8 @@ class serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00576">576</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="adca60aa1d5ca7f8a1f2ab00582f4ba32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adca60aa1d5ca7f8a1f2ab00582f4ba32">&#9670;&nbsp;</a></span>PCI_TYPE</h2>
+<a id="a78221b3be502f4fba3fb2052b128bd18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78221b3be502f4fba3fb2052b128bd18">&#9670;&nbsp;</a></span>PCI_TYPE</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +188,7 @@ class serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;</h3>
 template&lt;board::InterruptPin RX_&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using serial::soft::UARX&lt; <a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a>, RX_ &gt;::<a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#adca60aa1d5ca7f8a1f2ab00582f4ba32">PCI_TYPE</a> =  typename <a class="el" href="structinterrupt_1_1_p_c_i_type.html">interrupt::PCIType</a>&lt;RX_&gt;::TYPE</td>
+          <td class="memname">using serial::soft::UARX&lt; <a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a>, RX_ &gt;::<a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#a78221b3be502f4fba3fb2052b128bd18">PCI_TYPE</a> =  <a class="el" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">interrupt::PCI_SIGNAL</a>&lt;RX_&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -223,7 +223,7 @@ template&lt;uint8_t SIZE_RX&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#adca60aa1d5ca7f8a1f2ab00582f4ba32">PCI_TYPE</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#a78221b3be502f4fba3fb2052b128bd18">PCI_TYPE</a> &amp;&#160;</td>
           <td class="paramname"><em>enabler</em>&#160;</td>
         </tr>
         <tr>

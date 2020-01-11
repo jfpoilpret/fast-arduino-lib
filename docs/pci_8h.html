@@ -90,6 +90,7 @@ $(document).ready(function(){initNavTree('pci_8h.html','');});
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">pci.h File Reference</div>  </div>
@@ -125,9 +126,21 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="pci_8h__dep__incl.png" border="0" usemap="#fastarduino_2pci_8hdep" alt=""/></div>
 <map name="fastarduino_2pci_8hdep" id="fastarduino_2pci_8hdep">
-<area shape="rect"  title="General API for handling Pin Change Interrupts." alt="" coords="107,5,238,32"/>
-<area shape="rect"  href="sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="5,80,156,121"/>
-<area shape="rect"  href="soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="180,87,349,114"/>
+<area shape="rect"  title="General API for handling Pin Change Interrupts." alt="" coords="453,5,583,32"/>
+<area shape="rect"  href="gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="448,80,588,107"/>
+<area shape="rect"  href="sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="15,155,165,196"/>
+<area shape="rect"  href="soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="902,162,1073,189"/>
+<area shape="rect"  href="spi_8h.html" title="SPI support for AVR MCU." alt="" coords="190,162,321,189"/>
+<area shape="rect"  href="sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;,..." alt="" coords="345,155,496,196"/>
+<area shape="rect"  href="pwm_8h.html" title="PWM API." alt="" coords="734,162,878,189"/>
+<area shape="rect"  href="pulse__timer_8h.html" title="PulseTimer API." alt="" coords="521,162,710,189"/>
+<area shape="rect"  href="nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2...." alt="" coords="5,244,156,285"/>
+<area shape="rect"  href="winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface." alt="" coords="180,244,331,285"/>
+<area shape="rect"  href="spi_8cpp_source.html" title=" " alt="" coords="355,251,502,278"/>
+<area shape="rect"  href="servo_8h.html" title="API to handle servomotors." alt="" coords="549,244,700,285"/>
+<area shape="rect"  href="square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="734,244,878,285"/>
+<area shape="rect"  href="tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="731,333,881,375"/>
+<area shape="rect"  href="tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="731,423,881,464"/>
 </map>
 </div>
 </div>
@@ -165,6 +178,13 @@ Macros</h2></td></tr>
 <tr class="memitem:a9555afa641897359e7083321db93d9a2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pci_8h.html#a9555afa641897359e7083321db93d9a2">DECL_PCI_ISR_HANDLERS_FRIEND</a></td></tr>
 <tr class="memdesc:a9555afa641897359e7083321db93d9a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">This macro shall be used in a class containing a private callback method, registered by <code>REGISTER_PCI_ISR_METHOD</code>.  <a href="#a9555afa641897359e7083321db93d9a2">More...</a><br /></td></tr>
 <tr class="separator:a9555afa641897359e7083321db93d9a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a440f2d705bc60755a4f81a105caef15c"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
+<tr class="memitem:a440f2d705bc60755a4f81a105caef15c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">interrupt::PCI_SIGNAL</a> = typename PCIType&lt; PIN &gt;::TYPE</td></tr>
+<tr class="memdesc:a440f2d705bc60755a4f81a105caef15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Useful alias type to the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>.  <a href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">More...</a><br /></td></tr>
+<tr class="separator:a440f2d705bc60755a4f81a105caef15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>

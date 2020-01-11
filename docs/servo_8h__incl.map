@@ -1,18 +1,20 @@
 <map id="fastarduino/devices/servo.h" name="fastarduino/devices/servo.h">
-<area shape="rect" id="node1" title="API to handle servomotors." alt="" coords="151,5,301,47"/>
-<area shape="rect" id="node2" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="264,95,452,121"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="217,244,299,271"/>
-<area shape="rect" id="node16" href="$pwm_8h.html" title="PWM API." alt="" coords="34,95,178,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="26,244,186,271"/>
-<area shape="rect" id="node4" title=" " alt="" coords="339,319,454,345"/>
-<area shape="rect" id="node5" title=" " alt="" coords="558,244,633,271"/>
-<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="436,244,533,271"/>
-<area shape="rect" id="node13" href="$timer_8h.html" title="Timer API." alt="" coords="315,169,383,196"/>
-<area shape="rect" id="node14" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="75,169,137,196"/>
-<area shape="rect" id="node15" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="560,169,671,196"/>
-<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="479,319,573,345"/>
-<area shape="rect" id="node8" title=" " alt="" coords="491,393,561,420"/>
-<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="64,319,183,345"/>
-<area shape="rect" id="node12" title=" " alt="" coords="207,319,311,345"/>
-<area shape="rect" id="node11" title=" " alt="" coords="609,393,680,420"/>
+<area shape="rect" id="node1" title="API to handle servomotors." alt="" coords="261,5,412,47"/>
+<area shape="rect" id="node2" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="242,95,431,121"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="339,319,422,345"/>
+<area shape="rect" id="node18" href="$pwm_8h.html" title="PWM API." alt="" coords="621,95,765,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="619,319,779,345"/>
+<area shape="rect" id="node4" title=" " alt="" coords="525,393,639,420"/>
+<area shape="rect" id="node5" title=" " alt="" coords="117,319,191,345"/>
+<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="447,319,544,345"/>
+<area shape="rect" id="node13" href="$timer_8h.html" title="Timer API." alt="" coords="343,244,413,271"/>
+<area shape="rect" id="node14" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="661,169,724,196"/>
+<area shape="rect" id="node17" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="5,244,116,271"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="405,393,500,420"/>
+<area shape="rect" id="node8" title=" " alt="" coords="417,468,488,495"/>
+<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="736,393,855,420"/>
+<area shape="rect" id="node12" title=" " alt="" coords="277,393,381,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="185,468,256,495"/>
+<area shape="rect" id="node15" href="$int_8h.html" title="General API for handling External Interrupt pins." alt="" coords="538,244,589,271"/>
+<area shape="rect" id="node16" href="$pci_8h.html" title="General API for handling Pin Change Interrupts." alt="" coords="663,244,717,271"/>
 </map>

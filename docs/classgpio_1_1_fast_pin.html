@@ -145,7 +145,7 @@ class gpio::FastPin&lt; PORT_, BIT_ &gt;</h3>
 
 <p>API that manipulates one digital IO pin of a given port. </p>
 <p>Implementation is highly optimized for size and speed: instances use no SRAM at all, most common methods use only 1 AVR instruction.</p>
-<p>Note that, although it has public constructors, you generally do not construct <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instances directly. You better use <code><a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">FastPinType</a></code>, which is directly provided a <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code> constant. You may also obtain a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instance through <code><a class="el" href="classgpio_1_1_fast_port.html#ad239b42e4388126afe8242a01cd8eb2d" title="Create a FastPin instance for a given pin of this port.">FastPort::get_pin()</a></code>.</p>
+<p>Note that, although it has public constructors, you generally do not construct <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instances directly. You better use <code><a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">FastPinType</a></code>, which is directly provided a <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code> constant, or even better, use <code>FAST_PIN</code> alias type. You may also obtain a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instance through <code><a class="el" href="classgpio_1_1_fast_port.html#ad239b42e4388126afe8242a01cd8eb2d" title="Create a FastPin instance for a given pin of this port.">FastPort::get_pin()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">PORT_</td><td>the target port to which this pin belongs </td></tr>
@@ -157,9 +157,11 @@ class gpio::FastPin&lt; PORT_, BIT_ &gt;</h3>
 <dd>
 <a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">gpio::FastPinType</a> </dd>
 <dd>
+<a class="el" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57" title="Useful alias type to the FastPin type matching a given board::DigitalPin.">gpio::FAST_PIN</a> </dd>
+<dd>
 <a class="el" href="classgpio_1_1_fast_port.html#ad239b42e4388126afe8242a01cd8eb2d" title="Create a FastPin instance for a given pin of this port.">gpio::FastPort::get_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00085">85</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00089">89</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a51a984d640ee2e0dd5ebfec39fa5a8f2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a51a984d640ee2e0dd5ebfec39fa5a8f2">&#9670;&nbsp;</a></span>FastPin() <span class="overload">[1/2]</span></h2>
@@ -189,7 +191,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
 <p>Construct a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> without any physical setup on target MCU. </p>
 <p>This is useful if default pin direction and value are OK for you and you want to avoid calling mode setup on target MCU. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00104">104</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00108">108</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -240,7 +242,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgpio_1_1_fast_pin.html#a3845165b5c3e1a9e1502780015998157" title="Set mode (direction) and value (if output) of this pin.">set_mode()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00118">118</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00122">122</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -290,7 +292,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00131">131</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00135">135</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -322,7 +324,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
 <p>Set pin level to <code>HIGH</code> (i.e. </p>
 <p>Vcc). This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00147">147</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00151">151</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -354,7 +356,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
 <p>Set pin level to <code>LOW</code> (i.e. </p>
 <p>GND). This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00156">156</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00160">160</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -386,7 +388,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
 <p>Toggle pin level, i.e. </p>
 <p>set it to <code>LOW</code> if it was <code>HIGH</code>, and <code>HIGH</code> if it was <code>LOW</code>. This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00166">166</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00170">170</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -424,7 +426,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00176">176</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00180">180</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -453,7 +455,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
 
 <p>The port to which this pin belongs. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00095">95</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00099">99</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -481,7 +483,7 @@ template&lt;board::Port PORT_, uint8_t BIT_&gt; </div>
 
 <p>The bit position (from <code>0</code> to <code>7</code>), in port, of this pin. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00097">97</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00101">101</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
