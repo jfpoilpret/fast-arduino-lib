@@ -23,8 +23,8 @@ void analoginput_8bits() {
 void rtt_hcsr04() {
 //! [rtt_hcsr04]
 // Declare 2 pins connected to HC-SR04
-gpio::FastPinType<board::DigitalPin::D0>::TYPE trigger{gpio::PinMode::OUTPUT};
-gpio::FastPinType<board::DigitalPin::D1>::TYPE echo{gpio::PinMode::INPUT};
+gpio::FAST_PIN<board::DigitalPin::D0> trigger{gpio::PinMode::OUTPUT};
+gpio::FAST_PIN<board::DigitalPin::D1> echo{gpio::PinMode::INPUT};
 
 // Declare RTT (note: don't forget to call REGISTER_RTT_ISR(1) macro in your program)
 timer::RTT<board::Timer::TIMER1>& rtt;

@@ -13,7 +13,7 @@ int main()
 	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.begin();
 
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FAST_PIN<board::DigitalPin::LED> led{gpio::PinMode::OUTPUT};
 	while (true)
 	{
 		led.toggle();

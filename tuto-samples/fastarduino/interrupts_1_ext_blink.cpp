@@ -18,8 +18,8 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<board::EXT_PIN<SWITCH>()>::TYPE _switch;
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
+	gpio::FAST_EXT_PIN<SWITCH> _switch;
+	gpio::FAST_PIN<board::DigitalPin::LED> _led;	
 };
 
 // Define vectors we need in the example

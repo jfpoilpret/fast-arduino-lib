@@ -527,6 +527,7 @@ namespace interrupt
 	 * }
 	 * @endcode
 	 * @sa board::InterruptPin
+	 * @sa PCI_SIGNAL
 	 */
 	template<board::InterruptPin PIN> struct PCIType
 	{
@@ -541,10 +542,29 @@ namespace interrupt
 		using TYPE = PCISignal<PCINT>;
 	};
 
-	//TODO APIDOC
+	/**
+	 * Useful alias type to the `PCISignal` type matching a given `board::InterruptPin`.
+	 * 
+	 * The following snippet demonstrates usage of `PCI_SIGNAL` to declare a 
+	 * `PCISignal` instance for later use in a function:
+	 * 
+	 * @code
+	 * void f()
+	 * {
+	 *     constexpr const board::InterruptPin PIN = board::InterruptPin::D7;
+	 *     interrupt::PCI_SIGNAL<PIN> pci;
+	 *     pci.enable_pin<PIN>();
+	 *     pci.enable();
+	 *     ...
+	 *     pci.disable();
+	 * }
+	 * @endcode
+	 * 
+	 * @sa PCISignal
+	 * @sa PCIType
+	 */
 	template<board::InterruptPin PIN>
 	using PCI_SIGNAL = typename PCIType<PIN>::TYPE;
-
 }
 
 #endif /* PCI_HH */

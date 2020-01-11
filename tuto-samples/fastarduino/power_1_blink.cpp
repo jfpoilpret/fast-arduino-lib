@@ -11,7 +11,7 @@ int main()
 	board::init();
 	sei();
 
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FAST_PIN<board::DigitalPin::LED> led{gpio::PinMode::OUTPUT};
 
 	watchdog::WatchdogSignal watchdog;
 	watchdog.begin(watchdog::TimeOut::TO_500ms);

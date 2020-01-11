@@ -51,12 +51,12 @@ This includes the necessary API from FastArduino; in this example, we just use `
 @until sei
 The next part defines the standard `main()` function as the entry point of the program; first actions in the `main()` should always be to call `board::init()` (important initialization for some specific boards), then sooner or later call `sei()` to enable interrupts again, as interrupts are disabled when `main()` is initially called.
 
-@skipline FastPinType
+@skipline FAST_PIN
 This line declares and initializes a digital pin variable named `led` as output for the board's LED (i.e. `D13` on Arduino boards).
 
 `board::DigitalPin` is a strong enum class that defines all digital pins **for the current target**, that target must be defined in the compiler command-line.
 
-The actual type of `led` is `gpio::FastPin<board::Port:PORT_B, 5>` which means "the pin number 5 within port B"; since this type is not easy to declare when you only know the number of the pin you need, `gpio::FastPinType<board::DigitalPin::LED>::TYPE` is used instead, as it maps directly to the right type.
+The actual type of `led` is `gpio::FastPin<board::Port:PORT_B, 5>` which means "the pin number 5 within port B"; since this type is not easy to declare when you only know the number of the pin you need, `gpio::FAST_PIN<board::DigitalPin::LED>` is used instead, as this useful template alias maps directly to the right type.
 
 `led` is initialized as an output pin, its initial level is `false` (i.e. GND) by default.
 
@@ -655,8 +655,6 @@ Then we define the class that will handle interrupts occurring when the button p
 The interesting code here is the `on_pin_change()` method which be called back when the button is pushed or relaxed, i.e. on any level change.
 Since this method is called whatever the new pin level, it must explicitly check the button status (i.e. the pin level) to set the right output for the LED pin. Note that, since we use `gpio::PinMode::INPUT_PULLUP`, the pin value will be `false` when the button is pushed, and `true` when it is not.
 
-You should also note the use of `board::EXT_PIN<SWITCH>()` in the definition of the `_switch` FastPin member; that template method converts an `board::ExternalInterruptPin` value to a `board::DigitalPin` value.
-
 The next line of code registers `PinChangeHandler` class and `on_pin_change()` method as callback for `INT0` interrupt.
 @skipline REGISTER
 In addition to the class and method, the macro takes the number of the `INT` interrupt (`0`) and the pin connected to this interrupt.
@@ -701,14 +699,14 @@ The first difference is in the way we define the pin to use as interrupt source:
 @until PCI_NUM
 Here we use `board::InterruptPin` enum to find out the possible pins that can be used as Pin Change Interrupt pins. We select pin D14 and see from its name that is belonging to `PCINT1` interrupt vector. We also define the `PCINT` number as a constant, `PCI_NUM`, for later use.
 
-You should also note the use of `board::PCI_PIN<SWITCH>()` in the definition of the `_switch` FastPin member; that template method converts an `board::InterruptPin` value to a `board::DigitalPin` value.
-
 Then we register `PinChangeHandler` class and `on_pin_change()` method as callback for `PCINT1` interrupt.
 @skipline REGISTER
 
 Once we have, as before,registered our handler class, we then create a `PCISignal` instance that we will use to activate the proper interrupt:
-@skip PCIType
+@skip PCI_SIGNAL
 @until enable()
+Note that we use the useful template alias `PCI_SIGNAL` to find the proper `PCISignal` directly from the `board::InterruptPin`. 
+
 Before enabling the `PCINT1` interrupt, we need to first indicate that we are only interested in changes of the button pin.
 
 For this example, we cannot compare sizes with the Arduino API equivalent because Pin Change Interrupts are not supported by the API.
