@@ -58,7 +58,7 @@ public:
 	{
 		while (true)
 		{
-			for (uint8_t i = 0; i < 8; ++i)
+			for (uint8_t i = 0; i < 4; ++i)
 			{
 				mcp_.values(shift_pattern(pattern_, i, direction_) << 4);
 				time::delay_ms(250);
@@ -71,7 +71,7 @@ private:
 	{
 		if (direction) shift = 4 - shift;
 		uint16_t result = (pattern << shift);
-		return result | (result >> 8);
+		return result | (result >> 4);
 	}
 
 	static inline uint8_t calculate_pattern(uint8_t switches)
@@ -94,10 +94,9 @@ private:
 			return 0x05;
 
 			case 0x05:
-			return 0x09;
-
 			case 0x06:
-			return 0x00;
+			case 0x07:
+			return 0x09;
 		}
 	}
 
