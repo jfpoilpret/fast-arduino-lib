@@ -440,7 +440,7 @@ namespace time
 		 * for later restore.
 		 * @param new_delay new function pointer to replace `time::delay`
 		 */
-		explicit auto_delay(DELAY_PTR new_delay) INLINE : old_delay_{delay}
+		explicit auto_delay(DELAY_PTR new_delay) INLINE
 		{
 			delay = new_delay;
 		}
@@ -451,7 +451,7 @@ namespace time
 		}
 		/// @endcond
 	private:
-		const DELAY_PTR old_delay_;
+		const DELAY_PTR old_delay_ = delay;
 	};
 
 	/**
@@ -484,7 +484,7 @@ namespace time
 		 * for later restore.
 		 * @param new_millis new function pointer to replace `time::millis`
 		 */
-		explicit auto_millis(MILLIS_PTR new_millis) INLINE : old_millis_{millis}
+		explicit auto_millis(MILLIS_PTR new_millis) INLINE
 		{
 			millis = new_millis;
 		}
@@ -495,7 +495,7 @@ namespace time
 		}
 		/// @endcond
 	private:
-		const MILLIS_PTR old_millis_;
+		const MILLIS_PTR old_millis_ = millis;
 	};
 };
 

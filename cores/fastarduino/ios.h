@@ -448,7 +448,7 @@ namespace streams
 
 	protected:
 		/// @cond notdocumented
-		ios_base() : state_{0}, flags_{skipws | dec}, width_{0}, precision_{6}, fill_{' '} {}
+		ios_base() = default;
 		ios_base(const ios_base&) = delete;
 		ios_base& operator=(const ios_base&) = delete;
 
@@ -712,11 +712,11 @@ namespace streams
 		/// @endcond
 
 	private:
-		iostate state_;
-		fmtflags flags_;
-		uint8_t width_;
-		uint8_t precision_;
-		char fill_;
+		iostate state_ = 0;
+		fmtflags flags_ = skipws | dec;
+		uint8_t width_ = 0;
+		uint8_t precision_ = 6;
+		char fill_ = ' ';
 	};
 
 	/** Alias for `ios_base`, allowing to write shorter code, eg `ios::eofbit`. */

@@ -69,7 +69,7 @@ namespace devices
 		 * `init()`.
 		 * @sa init()
 		 */
-		SIPO() : clock_{}, latch_{}, data_{} {}
+		SIPO() = default;
 
 		/**
 		 * Initialize (direction, value) all used pins. This must be executed

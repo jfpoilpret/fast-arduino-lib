@@ -39,8 +39,7 @@ namespace board_traits
 	template<typename T> class REGISTER
 	{
 	public:
-		constexpr REGISTER() : addr_(NO_REG) {}
-		constexpr REGISTER(uint16_t addr) INLINE : addr_(addr) {}
+		constexpr REGISTER(uint16_t addr = NO_REG) INLINE : addr_(addr) {}
 
 		constexpr bool is_no_reg() const INLINE
 		{

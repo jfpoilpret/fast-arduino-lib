@@ -541,7 +541,7 @@ namespace eeprom
 		 * @param buffer the buffer that will be used by this QueuedWriter
 		 */
 		template<uint16_t SIZE>
-		explicit QueuedWriter(uint8_t (&buffer)[SIZE]) : buffer_{buffer}, current_{}, erase_{false}, done_{true}
+		explicit QueuedWriter(uint8_t (&buffer)[SIZE]) : buffer_{buffer}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -794,7 +794,7 @@ namespace eeprom
 
 		struct WriteItem
 		{
-			WriteItem() : address{0}, size{0} {}
+			WriteItem() = default;
 			WriteItem(uint8_t value1, uint8_t value2, uint8_t value3)
 			:	address{uint16_t(uint8_t(value1 << 4) | uint8_t(value2 >> 4))}, 
 				size{uint16_t(utils::is_zero(((value2 & 0x0F) << 8) | value3, E2END + 1))} {}
@@ -812,8 +812,8 @@ namespace eeprom
 				return size;
 			}
 
-			uint16_t address;
-			uint16_t size;
+			uint16_t address = 0;
+			uint16_t size = 0;
 		};
 
 		WriteItem next_item()
@@ -835,8 +835,8 @@ namespace eeprom
 
 		containers::Queue<uint8_t, uint8_t> buffer_;
 		WriteItem current_;
-		volatile bool erase_;
-		volatile bool done_;
+		volatile bool erase_ = false;
+		volatile bool done_ = true;
 
 		friend struct isr_handler;
 	};

@@ -225,7 +225,7 @@ namespace serial::soft
 		 * buffer output during transmission
 		 */
 		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
-		: AbstractUATX{output, THIS::on_put, this}, tx_{gpio::PinMode::OUTPUT, true} {}
+		: AbstractUATX{output, THIS::on_put, this} {}
 
 		/**
 		 * Enable the transmitter. 
@@ -267,7 +267,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		gpio::FAST_PIN<TX> tx_;
+		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
 	};
 
 	/// @cond notdocumented
@@ -419,7 +419,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX> 
 		explicit UARX(char (&input)[SIZE_RX], INT_TYPE& enabler)
-		: AbstractUARX{input}, rx_{gpio::PinMode::INPUT}, int_{enabler}
+		: AbstractUARX{input}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -464,7 +464,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		gpio::FAST_PIN<RX> rx_;
+		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		INT_TYPE& int_;
 		friend struct isr_handler;
 	};
@@ -509,8 +509,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], INT_TYPE& enabler)
-		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
-			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}, int_{enabler}
+		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -566,8 +565,8 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		gpio::FAST_PIN<TX> tx_;
-		gpio::FAST_PIN<RX> rx_;
+		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
+		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		INT_TYPE& int_;
 		friend struct isr_handler;
 	};
@@ -603,7 +602,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX>
 		explicit UARX(char (&input)[SIZE_RX], PCI_TYPE& enabler)
-		: AbstractUARX{input}, rx_{gpio::PinMode::INPUT}, pci_{enabler}
+		: AbstractUARX{input}, pci_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -648,7 +647,7 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		gpio::FAST_PIN<RX> rx_;
+		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		PCI_TYPE& pci_;
 		friend struct isr_handler;
 	};
@@ -689,8 +688,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], PCI_TYPE& enabler)
-		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, 
-			tx_{gpio::PinMode::OUTPUT, true}, rx_{gpio::PinMode::INPUT}, pci_{enabler}
+		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, pci_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -747,8 +745,8 @@ namespace serial::soft
 		}
 
 		Parity parity_;
-		gpio::FAST_PIN<TX> tx_;
-		gpio::FAST_PIN<RX> rx_;
+		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
+		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		PCI_TYPE& pci_;
 		friend struct isr_handler;
 	};

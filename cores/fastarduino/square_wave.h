@@ -67,9 +67,7 @@ namespace timer
 		 * Instantiate a SquareWave generator.
 		 * This will create the underlying Timer with the proper arguments.
 		 */
-		SquareWave()
-			: timer_{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING},
-			  output_{timer_, timer::TimerOutputMode::TOGGLE}
+		SquareWave() : output_{timer_, timer::TimerOutputMode::TOGGLE}
 		{
 			using TRAIT = board_traits::PWMPin_trait<OUTPUT>;
 			static_assert(TRAIT::COM == 0, "Only OCnA pin is supported for wave generation");
@@ -146,7 +144,7 @@ namespace timer
 		}
 
 	private:
-		TIMER timer_;
+		TIMER timer_ = TIMER{timer::TimerMode::CTC, TIMER::PRESCALER::NO_PRESCALING};
 		PWMPIN output_;
 	};
 }

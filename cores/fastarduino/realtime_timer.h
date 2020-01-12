@@ -228,7 +228,7 @@ namespace timer
 		 * @sa begin()
 		 * @sa millis()
 		 */
-		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER, TimerInterrupt::OUTPUT_COMPARE_A}, milliseconds_{}
+		RTT() : Timer<NTIMER>{TimerMode::CTC, MILLI_PRESCALER, TimerInterrupt::OUTPUT_COMPARE_A}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -502,7 +502,7 @@ namespace timer
 		}
 
 	private:
-		volatile uint32_t milliseconds_;
+		volatile uint32_t milliseconds_ = 0UL;
 
 		void on_timer()
 		{

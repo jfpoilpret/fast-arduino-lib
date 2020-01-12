@@ -72,9 +72,9 @@ namespace serial
 	/// @cond notdocumented
 	union Errors
 	{
-		Errors() : has_errors{} {}
+		Errors() = default;
 
-		uint8_t has_errors;
+		uint8_t has_errors = 0;
 		struct
 		{
 			bool frame_error : 1;

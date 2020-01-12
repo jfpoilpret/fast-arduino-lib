@@ -37,12 +37,12 @@ namespace containers
 	class LinkImpl
 	{
 	public:
-		LinkImpl() INLINE : next_{nullptr} {}
+		LinkImpl() INLINE = default;
 		LinkImpl(const LinkImpl&) = default;
 		LinkImpl& operator=(const LinkImpl&) = delete;
 
 	protected:
-		LinkImpl* next_;
+		LinkImpl* next_ = nullptr;
 		friend class LinkedListImpl;
 		template<class T, class B> friend struct types_traits::derives_from;
 	};
@@ -50,7 +50,7 @@ namespace containers
 	class LinkedListImpl
 	{
 	public:
-		LinkedListImpl() INLINE : head_{nullptr} {}
+		LinkedListImpl() INLINE = default;
 		LinkedListImpl(const LinkedListImpl&) = default;
 		LinkedListImpl& operator=(const LinkedListImpl&) = delete;
 		void insert(LinkImpl* item);
@@ -58,7 +58,7 @@ namespace containers
 		template<typename F> void traverse(F f);
 
 	protected:
-		LinkImpl* head_;
+		LinkImpl* head_ = nullptr;
 	};
 	/// @endcond
 

@@ -570,18 +570,18 @@ namespace devices::rf
 	private:
 		static const uint8_t DEFAULT_CHANNEL = 64;
 
-		gpio::FAST_PIN<CE> ce_;
+		gpio::FAST_PIN<CE> ce_ = gpio::FAST_PIN<CE>{gpio::PinMode::OUTPUT, false};
 
 		addr_t addr_;	 //!< Current network and device address.
-		uint8_t channel_; //!< Current channel (device dependent.
-		uint8_t dest_;	//!< Latest message destination device address.
+		uint8_t channel_ = DEFAULT_CHANNEL; //!< Current channel (device dependent.
+		uint8_t dest_ = 0;	//!< Latest message destination device address.
 
-		status_t status_; //!< Latest status.
-		State state_;	 //!< Transceiver state.
+		status_t status_ = status_t{0}; //!< Latest status.
+		State state_ = State::POWER_DOWN_STATE;	 //!< Transceiver state.
 
-		uint16_t trans_;   //!< Send count.
-		uint16_t retrans_; //!< Retransmittion count.
-		uint16_t drops_;   //!< Dropped messages.
+		uint16_t trans_ = 0;   //!< Send count.
+		uint16_t retrans_ = 0; //!< Retransmittion count.
+		uint16_t drops_ = 0;   //!< Dropped messages.
 	};
 
 	/**
@@ -626,8 +626,7 @@ namespace devices::rf
 		 * @param[in] net network address.
 		 * @param[in] dev device address.
 		 */
-		IRQ_NRF24L01(uint16_t net, uint8_t dev)
-			: NRF24L01<CSN, CE>{net, dev}, irq_signal_{interrupt::InterruptTrigger::FALLING_EDGE}
+		IRQ_NRF24L01(uint16_t net, uint8_t dev) : NRF24L01<CSN, CE>{net, dev}
 		{
 			gpio::FastPinType<board::EXT_PIN<IRQ>()>::set_mode(gpio::PinMode::INPUT_PULLUP);
 		}
@@ -652,15 +651,11 @@ namespace devices::rf
 		}
 
 	private:
-		interrupt::INTSignal<IRQ> irq_signal_;
+		interrupt::INTSignal<IRQ> irq_signal_ = interrupt::INTSignal<IRQ>{interrupt::InterruptTrigger::FALLING_EDGE};
 	};
 
 	template<board::DigitalPin CSN, board::DigitalPin CE>
-	NRF24L01<CSN, CE>::NRF24L01(uint16_t net, uint8_t dev)
-		: ce_{gpio::PinMode::OUTPUT, false}, addr_{net, dev}, channel_{DEFAULT_CHANNEL}, dest_{}, status_{0},
-			state_{State::POWER_DOWN_STATE}, trans_{}, retrans_{}, drops_{}
-	{
-	}
+	NRF24L01<CSN, CE>::NRF24L01(uint16_t net, uint8_t dev) : addr_{net, dev} {}
 
 	template<board::DigitalPin CSN, board::DigitalPin CE> void NRF24L01<CSN, CE>::begin()
 	{

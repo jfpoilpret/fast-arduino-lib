@@ -206,7 +206,7 @@ namespace watchdog
 		 * milliseconds since it was started with `begin()`.
 		 * @sa REGISTER_WATCHDOG_RTT_ISR()
 		 */
-		WatchdogRTT() : millis_{0}, millis_per_tick_{0}
+		WatchdogRTT()
 		{
 			interrupt::register_handler(*this);
 		}
@@ -280,7 +280,7 @@ namespace watchdog
 	protected:
 		/// @cond notdocumented
 		// This constructor is used by subclass to avoid calling register_handler()
-		explicit WatchdogRTT(bool dummy UNUSED) : millis_{0}, millis_per_tick_{0} {}
+		explicit WatchdogRTT(bool dummy UNUSED) {}
 
 		void on_tick()
 		{
@@ -289,8 +289,8 @@ namespace watchdog
 		/// @endcond
 
 	private:
-		volatile uint32_t millis_;
-		uint16_t millis_per_tick_;
+		volatile uint32_t millis_ = 0UL;
+		uint16_t millis_per_tick_ = 0U;
 
 		friend struct isr_handler;
 	};

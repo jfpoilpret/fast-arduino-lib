@@ -332,7 +332,7 @@ namespace spi
 		 * Create a new `SPIDevice`; this sets up the @p CS pin for later use 
 		 * during transfers.
 		 */
-		SPIDevice() INLINE : cs_{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW} {}
+		SPIDevice() INLINE = default;
 
 #ifdef SPDR
 		/**
@@ -378,7 +378,7 @@ namespace spi
 		static constexpr const REG8 USICR_{USICR};
 		static const constexpr uint8_t USICR__ = uint8_t(MODE);
 #endif
-		gpio::FAST_PIN<CS> cs_;
+		gpio::FAST_PIN<CS> cs_ = gpio::FAST_PIN<CS>{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW};
 	};
 };
 

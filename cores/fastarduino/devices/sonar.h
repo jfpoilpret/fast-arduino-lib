@@ -638,10 +638,7 @@ namespace devices::sonar
 		AbstractSonar(const AbstractSonar<NTIMER_>&) = delete;
 		AbstractSonar<NTIMER_>& operator=(const AbstractSonar<NTIMER_>&) = delete;
 
-		explicit AbstractSonar(const RTT& rtt)
-			: rtt_{rtt}, status_{UNKNOWN}, timeout_time_ms_{},
-			  echo_start_{RAW_TIME::EMPTY_TIME}, echo_end_{RAW_TIME::EMPTY_TIME}
-		{}
+		explicit AbstractSonar(const RTT& rtt) : rtt_{rtt} {}
 
 		uint16_t async_echo_us(uint16_t timeout_ms)
 		{
@@ -735,11 +732,11 @@ namespace devices::sonar
 		static constexpr const uint8_t ECHO_STARTED = 0x11;
 		static constexpr const uint8_t READY = 0x20;
 
-		volatile uint8_t status_;
-		uint32_t timeout_time_ms_;
+		volatile uint8_t status_ = UNKNOWN;
+		uint32_t timeout_time_ms_ = 0UL;
 
-		RAW_TIME echo_start_;
-		RAW_TIME echo_end_;
+		RAW_TIME echo_start_ = RAW_TIME::EMPTY_TIME;
+		RAW_TIME echo_end_ = RAW_TIME::EMPTY_TIME;
 	};
 
 	/**
@@ -795,7 +792,7 @@ namespace devices::sonar
 		 * duration counting; this RTT shall be started before using any other
 		 * methods of this sonar.
 		 */
-		explicit HCSR04(const RTT& rtt) : PARENT{rtt}, trigger_{gpio::PinMode::OUTPUT}, echo_{gpio::PinMode::INPUT}
+		explicit HCSR04(const RTT& rtt) : PARENT{rtt}
 		{
 			if (SONAR_TYPE != SonarType::BLOCKING)
 				interrupt::register_handler(*this);
@@ -893,8 +890,8 @@ namespace devices::sonar
 
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
-		gpio::FAST_PIN<TRIGGER> trigger_;
-		gpio::FAST_PIN<ECHO> echo_;
+		gpio::FAST_PIN<TRIGGER> trigger_ = gpio::PinMode::OUTPUT;
+		gpio::FAST_PIN<ECHO> echo_ = gpio::PinMode::INPUT;
 
 		// Make friends with all ISR handlers
 		friend struct isr_handler;
@@ -993,7 +990,7 @@ namespace devices::sonar
 		 * ...
 		 * @endcode
 		 */
-		SonarEvent() : timeout_{false}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME} {}
+		SonarEvent() {}
 
 		/**
 		 * Indicate if this event was produced by a timeout while waiting for 
@@ -1052,15 +1049,15 @@ namespace devices::sonar
 		}
 
 	private:
-		explicit SonarEvent(bool timeout) : timeout_{timeout}, started_{}, ready_{}, time_{RAW_TIME::EMPTY_TIME} {}
+		explicit SonarEvent(bool timeout) : timeout_{timeout} {}
 		SonarEvent(uint8_t started, uint8_t ready, const RAW_TIME& time)
-			: timeout_{}, started_{started}, ready_{ready}, time_{time}
+			: started_{started}, ready_{ready}, time_{time}
 		{}
 
-		bool timeout_;
-		uint8_t started_;
-		uint8_t ready_;
-		RAW_TIME time_;
+		bool timeout_ = false;
+		uint8_t started_ = 0;
+		uint8_t ready_ = 0;
+		RAW_TIME time_ = RAW_TIME::EMPTY_TIME;
 
 		template<board::Timer, board::DigitalPin, board::Port, uint8_t> friend class MultiHCSR04;
 	};
@@ -1145,9 +1142,7 @@ namespace devices::sonar
 		 * duration counting; this RTT shall be started before using any other
 		 * methods of this sonar.
 		 */
-		explicit MultiHCSR04(RTT& rtt)
-			: rtt_{rtt}, started_{}, ready_{}, active_{false},
-			  timeout_time_ms_{}, trigger_{gpio::PinMode::OUTPUT}, echo_{0}
+		explicit MultiHCSR04(RTT& rtt) : rtt_{rtt}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -1266,12 +1261,12 @@ namespace devices::sonar
 		static constexpr const uint16_t TRIGGER_PULSE_US = 10;
 
 		RTT& rtt_;
-		volatile uint8_t started_;
-		volatile uint8_t ready_;
-		volatile bool active_;
-		uint32_t timeout_time_ms_;
-		gpio::FAST_PIN<TRIGGER> trigger_;
-		gpio::FastMaskedPort<ECHO_PORT, ECHO_MASK> echo_;
+		volatile uint8_t started_ = 0;
+		volatile uint8_t ready_ = 0;
+		volatile bool active_ = false;
+		uint32_t timeout_time_ms_ = 0UL;
+		gpio::FAST_PIN<TRIGGER> trigger_ = gpio::PinMode::OUTPUT;
+		gpio::FastMaskedPort<ECHO_PORT, ECHO_MASK> echo_ = 0;
 
 		// Make friends with all ISR handlers
 		friend struct isr_handler;

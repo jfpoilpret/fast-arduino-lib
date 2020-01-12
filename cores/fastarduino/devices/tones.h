@@ -189,7 +189,7 @@ namespace devices::audio
 		/**
 		 * Create a new generator of tones.
 		 */
-		ToneGenerator() : generator_{} {}
+		ToneGenerator() = default;
 
 		/**
 		 * Start generating a tone on the connected buzzer until `stop_tone()`

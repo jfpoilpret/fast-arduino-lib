@@ -445,9 +445,7 @@ namespace devices::audio
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
-		explicit AbstractTonePlayer(GENERATOR& tone_generator)
-		: generator_{tone_generator}, loader_{}, t32_duration_ms_{}, 
-		  current_play_{}, repeat_play_{}, repeat_times_{}, tie_notes_{}, no_delay_{} {}
+		explicit AbstractTonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
 
 		/**
 		 * Calculate the minimum duration (duration of a 32nd note), in milliseconds,
@@ -648,13 +646,13 @@ namespace devices::audio
 		}
 
 		GENERATOR& generator_;
-		LOAD_TONE loader_;
-		uint16_t t32_duration_ms_;
-		const TONE_PLAY* current_play_;
-		const TONE_PLAY* repeat_play_;
-		int8_t repeat_times_;
-		uint8_t tie_notes_;
-		bool no_delay_;
+		LOAD_TONE loader_ = nullptr;
+		uint16_t t32_duration_ms_ = 0U;
+		const TONE_PLAY* current_play_ = nullptr;
+		const TONE_PLAY* repeat_play_ = nullptr;
+		int8_t repeat_times_ = 0;
+		uint8_t tie_notes_ = 0;
+		bool no_delay_ = false;
 	};
 
 	/**
@@ -706,7 +704,7 @@ namespace devices::audio
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
-		explicit TonePlayer(GENERATOR& tone_generator) : BASE{tone_generator}, stop_{true} {}
+		explicit TonePlayer(GENERATOR& tone_generator) : BASE{tone_generator} {}
 
 		/**
 		 * Play a melody, defined by a sequence of `TONE_PLAY`s, stored in SRAM.
@@ -797,7 +795,7 @@ namespace devices::audio
 			}
 		}
 
-		volatile bool stop_;
+		volatile bool stop_ = true;
 	};
 
 	/**
@@ -851,8 +849,7 @@ namespace devices::audio
 		 * @param tone_generator the `ToneGenerator` used to actually produce
 		 * tones.
 		 */
-		explicit AsyncTonePlayer(GENERATOR& tone_generator)
-		: BASE{tone_generator}, status_{Status::NOT_STARTED}, next_time_{} {}
+		explicit AsyncTonePlayer(GENERATOR& tone_generator) : BASE{tone_generator} {}
 
 		/**
 		 * Get the duration, in milliseconds, of a 32nd note.
@@ -1002,8 +999,8 @@ namespace devices::audio
 			PLAYING_INTERNOTE
 		};
 
-		Status status_;
-		uint32_t next_time_;
+		Status status_ = Status::NOT_STARTED;
+		uint32_t next_time_ = 0UL;
 	};
 }
 

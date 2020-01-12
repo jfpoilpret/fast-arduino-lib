@@ -104,7 +104,7 @@ namespace i2c
 		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 1.3);
 #endif
 
-		uint8_t status_;
+		uint8_t status_ = 0;
 		const I2C_STATUS_HOOK hook_;
 
 		friend class I2CManager<MODE>;
@@ -117,7 +117,7 @@ namespace i2c
 
 	// ATmega implementation
 	//----------------------
-	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : status_{}, hook_{hook} {}
+	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : hook_{hook} {}
 
 	template<I2CMode MODE> void I2CHandler<MODE>::begin()
 	{
@@ -207,7 +207,7 @@ namespace i2c
 
 	// ATtiny implementation
 	//----------------------
-	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : status_{}, hook_{hook}
+	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : hook_{hook}
 	{
 		// set SDA/SCL default directions
 		TRAIT::DDR &= bits::CBV8(TRAIT::BIT_SDA);
