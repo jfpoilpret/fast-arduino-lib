@@ -1,7 +1,7 @@
 var classdevices_1_1_s_i_p_o =
 [
     [ "SIPO", "classdevices_1_1_s_i_p_o.html#af60ae683fcb317acfaafe4b29ac960bc", null ],
-    [ "SIPO", "classdevices_1_1_s_i_p_o.html#abe61784dd2474010f326d529a832fa60", null ],
+    [ "SIPO", "classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898", null ],
     [ "operator=", "classdevices_1_1_s_i_p_o.html#ad2f8a86b6c024b28830485b474bde1d1", null ],
     [ "init", "classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2", null ],
     [ "output", "classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0", null ],

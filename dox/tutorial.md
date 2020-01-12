@@ -167,7 +167,7 @@ Now let's compare the size of both:
 
 The data size is big because the buffer used by `Serial` has a hard-coded size (you cannot change it without modifying and recompiling Arduino API). Moreover, when using `Serial`, 2 buffers are created, one for input and one for output, even though you may only need the latter one!
 
-Now let's take a look at the 90 bytes of data used in the FastArduino version of this example, how are they broken down?
+Now let's take a look at the 82 bytes of data used in the FastArduino version of this example, how are they broken down?
 | Source            | data size   |
 |-------------------|-------------|
 | `output_buffer`   | 64 bytes    |

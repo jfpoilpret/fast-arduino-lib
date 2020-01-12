@@ -108,9 +108,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad2f8a86b6c024b28830485b474bde1d1"><td class="memItemLeft" align="right" valign="top"><a id="ad2f8a86b6c024b28830485b474bde1d1"></a>
 <a class="el" href="classdevices_1_1_s_i_p_o.html">SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classdevices_1_1_s_i_p_o.html">SIPO</a>&lt; CLOCK_, LATCH_, DATA_ &gt; &amp;)=delete</td></tr>
 <tr class="separator:ad2f8a86b6c024b28830485b474bde1d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe61784dd2474010f326d529a832fa60"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#abe61784dd2474010f326d529a832fa60">SIPO</a> ()</td></tr>
-<tr class="memdesc:abe61784dd2474010f326d529a832fa60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins.">SIPO</a> handler, according to pins defined by class template parameters.  <a href="#abe61784dd2474010f326d529a832fa60">More...</a><br /></td></tr>
-<tr class="separator:abe61784dd2474010f326d529a832fa60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac435abc96f30d6c67714aec531b88898"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">SIPO</a> ()=default</td></tr>
+<tr class="memdesc:ac435abc96f30d6c67714aec531b88898"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins.">SIPO</a> handler, according to pins defined by class template parameters.  <a href="#ac435abc96f30d6c67714aec531b88898">More...</a><br /></td></tr>
+<tr class="separator:ac435abc96f30d6c67714aec531b88898"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacceaec314ea0e24b6f6803892c494a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">init</a> ()</td></tr>
 <tr class="memdesc:aacceaec314ea0e24b6f6803892c494a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize (direction, value) all used pins.  <a href="#aacceaec314ea0e24b6f6803892c494a2">More...</a><br /></td></tr>
 <tr class="separator:aacceaec314ea0e24b6f6803892c494a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,8 +153,8 @@ class devices::SIPO&lt; CLOCK_, LATCH_, DATA_ &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00052">52</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="abe61784dd2474010f326d529a832fa60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe61784dd2474010f326d529a832fa60">&#9670;&nbsp;</a></span>SIPO()</h2>
+<a id="ac435abc96f30d6c67714aec531b88898"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac435abc96f30d6c67714aec531b88898">&#9670;&nbsp;</a></span>SIPO()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -173,15 +173,13 @@ template&lt;board::DigitalPin CLOCK_, board::DigitalPin LATCH_, board::DigitalPi
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Create a new <a class="el" href="classdevices_1_1_s_i_p_o.html" title="This template class supports one SIPO chip, connected to the MCU through 3 pins.">SIPO</a> handler, according to pins defined by class template parameters. </p>
 <p>This does not initialize the 3 output pins, for this you shall use <code><a class="el" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2" title="Initialize (direction, value) all used pins.">init()</a></code>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2" title="Initialize (direction, value) all used pins.">init()</a> </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="sipo_8h_source.html#l00072">72</a> of file <a class="el" href="sipo_8h_source.html">sipo.h</a>.</p>
 
 </div>
 </div>
