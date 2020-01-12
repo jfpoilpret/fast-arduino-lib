@@ -72,6 +72,7 @@ MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)
 MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)
 MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)
 MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)
+MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)
 Servo1	Servo controlled by a pot through 8bits pulse timer
 Servo2	Servo controlled by a pot through 16bits pulse timer
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)
