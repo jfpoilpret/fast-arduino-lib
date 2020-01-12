@@ -33,8 +33,6 @@
  */
 namespace virtual_support
 {
-	//TODO add support for extra args (variadic template possible?)
-
 	/**
 	 * Holder of a "virtual method".
 	 * Typical use:
