@@ -43,7 +43,7 @@ int main()
 	sei();
 	
 	// Start UATX
-	typename interrupt::PCIType<RX>::TYPE pci;
+	interrupt::PCI_SIGNAL<RX> pci;
 	serial::soft::UART_PCI<RX, TX> uart{input_buffer, output_buffer, pci};
 	streams::ostream out = uart.out();
 	streams::istream in = uart.in();

@@ -74,7 +74,7 @@ public:
 
 private:
 	analog::AnalogComparator comparator_;
-	gpio::FastPinType<LED>::TYPE led_;
+	gpio::FAST_PIN<LED> led_;
 };
 
 REGISTER_ANALOG_COMPARE_ISR_METHOD(Compare, &Compare::callback)

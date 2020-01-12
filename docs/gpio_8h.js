@@ -4,6 +4,9 @@ var gpio_8h =
     [ "FastPort", "classgpio_1_1_fast_port.html", "classgpio_1_1_fast_port" ],
     [ "FastMaskedPort", "classgpio_1_1_fast_masked_port.html", "classgpio_1_1_fast_masked_port" ],
     [ "FastPinType", "classgpio_1_1_fast_pin_type.html", "classgpio_1_1_fast_pin_type" ],
+    [ "FAST_PIN", "gpio_8h.html#a3cbdad86ced6494ca615a425b433fd57", null ],
+    [ "FAST_INT_PIN", "gpio_8h.html#aaa6f9e5f023592cc0692da0bb37deccd", null ],
+    [ "FAST_EXT_PIN", "gpio_8h.html#a78705a6beb0840892d7f8f52d0f32bec", null ],
     [ "PinMode", "gpio_8h.html#ae18fafd08668ee17aa5dd415ee3b6041", [
       [ "INPUT", "gpio_8h.html#ae18fafd08668ee17aa5dd415ee3b6041aa84cc046d48610b05c21fd3670d0c829", null ],
       [ "INPUT_PULLUP", "gpio_8h.html#ae18fafd08668ee17aa5dd415ee3b6041ace9c2fb3e41547f8dfb11145f7485786", null ],

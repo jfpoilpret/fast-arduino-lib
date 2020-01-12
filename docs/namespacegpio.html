@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('namespacegpio.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">gpio Namespace Reference</div>  </div>
@@ -112,6 +113,21 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">API that manipulates a whole digital IO port.  <a href="classgpio_1_1_fast_port.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a3cbdad86ced6494ca615a425b433fd57"><td class="memTemplParams" colspan="2">template&lt;board::DigitalPin DPIN_&gt; </td></tr>
+<tr class="memitem:a3cbdad86ced6494ca615a425b433fd57"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">FAST_PIN</a> = typename <a class="el" href="classgpio_1_1_fast_pin_type.html">FastPinType</a>&lt; DPIN_ &gt;::TYPE</td></tr>
+<tr class="memdesc:a3cbdad86ced6494ca615a425b433fd57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Useful alias type to the <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code>.  <a href="#a3cbdad86ced6494ca615a425b433fd57">More...</a><br /></td></tr>
+<tr class="separator:a3cbdad86ced6494ca615a425b433fd57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa6f9e5f023592cc0692da0bb37deccd"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin IPIN_&gt; </td></tr>
+<tr class="memitem:aaa6f9e5f023592cc0692da0bb37deccd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacegpio.html#aaa6f9e5f023592cc0692da0bb37deccd">FAST_INT_PIN</a> = typename <a class="el" href="classgpio_1_1_fast_pin_type.html">FastPinType</a>&lt; <a class="el" href="namespaceboard.html#a817ea24e897a7672b250053baec872a4">board::PCI_PIN</a>&lt; IPIN_ &gt;()&gt;::TYPE</td></tr>
+<tr class="memdesc:aaa6f9e5f023592cc0692da0bb37deccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Useful alias type to the <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>.  <a href="#aaa6f9e5f023592cc0692da0bb37deccd">More...</a><br /></td></tr>
+<tr class="separator:aaa6f9e5f023592cc0692da0bb37deccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78705a6beb0840892d7f8f52d0f32bec"><td class="memTemplParams" colspan="2">template&lt;board::ExternalInterruptPin EPIN_&gt; </td></tr>
+<tr class="memitem:a78705a6beb0840892d7f8f52d0f32bec"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacegpio.html#a78705a6beb0840892d7f8f52d0f32bec">FAST_EXT_PIN</a> = typename <a class="el" href="classgpio_1_1_fast_pin_type.html">FastPinType</a>&lt; <a class="el" href="namespaceboard.html#a8a587b48884f6b62938abfbcf1484130">board::EXT_PIN</a>&lt; EPIN_ &gt;()&gt;::TYPE</td></tr>
+<tr class="memdesc:a78705a6beb0840892d7f8f52d0f32bec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Useful alias type to the <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> type matching a given <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins.">board::ExternalInterruptPin</a></code>.  <a href="#a78705a6beb0840892d7f8f52d0f32bec">More...</a><br /></td></tr>
+<tr class="separator:a78705a6beb0840892d7f8f52d0f32bec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ae18fafd08668ee17aa5dd415ee3b6041"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041">PinMode</a> : uint8_t { <br />
@@ -127,7 +143,92 @@ Enumerations</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines all API to manipulate general-purpose digital input/output pins. </p>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="a3cbdad86ced6494ca615a425b433fd57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cbdad86ced6494ca615a425b433fd57">&#9670;&nbsp;</a></span>FAST_PIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::DigitalPin DPIN_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN</a> = typedef typename <a class="el" href="classgpio_1_1_fast_pin_type.html">FastPinType</a>&lt;DPIN_&gt;::TYPE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Useful alias type to the <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code>. </p>
+<p>The following snippet demonstrates usage of <code>FAST_PIN</code> to declare a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instance for later use in a function:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <a class="code" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN&lt;board::DigitalPin::LED&gt;</a> led{<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34">gpio::PinMode::OUTPUT</a>};</div><div class="line">    led.clear();</div><div class="line">    ...</div><div class="line">    led.set();</div><div class="line">}</div></div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a> </dd>
+<dd>
+<a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">FastPinType</a> </dd>
+<dd>
+<a class="el" href="namespacegpio.html#aaa6f9e5f023592cc0692da0bb37deccd" title="Useful alias type to the FastPin type matching a given board::InterruptPin.">FAST_INT_PIN</a> </dd>
+<dd>
+<a class="el" href="namespacegpio.html#a78705a6beb0840892d7f8f52d0f32bec" title="Useful alias type to the FastPin type matching a given board::ExternalInterruptPin.">FAST_EXT_PIN</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00686">686</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+
+</div>
+</div>
+<a id="aaa6f9e5f023592cc0692da0bb37deccd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa6f9e5f023592cc0692da0bb37deccd">&#9670;&nbsp;</a></span>FAST_INT_PIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::InterruptPin IPIN_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacegpio.html#aaa6f9e5f023592cc0692da0bb37deccd">gpio::FAST_INT_PIN</a> = typedef typename <a class="el" href="classgpio_1_1_fast_pin_type.html">FastPinType</a>&lt;<a class="el" href="namespaceboard.html#a817ea24e897a7672b250053baec872a4">board::PCI_PIN</a>&lt;IPIN_&gt;()&gt;::TYPE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Useful alias type to the <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>. </p>
+<p>The following snippet demonstrates usage of <code>FAST_INT_PIN</code> to declare a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instance for later use in a function:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <a class="code" href="namespacegpio.html#aaa6f9e5f023592cc0692da0bb37deccd">gpio::FAST_INT_PIN&lt;board::InterruptPin::D0&gt;</a> input{<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041aa84cc046d48610b05c21fd3670d0c829">gpio::PinMode::INPUT</a>};</div><div class="line">    <span class="keywordtype">bool</span> val = input.value();</div><div class="line">    ...</div><div class="line">}</div></div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a> </dd>
+<dd>
+<a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">FastPinType</a> </dd>
+<dd>
+<a class="el" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57" title="Useful alias type to the FastPin type matching a given board::DigitalPin.">FAST_PIN</a> </dd>
+<dd>
+<a class="el" href="namespacegpio.html#a78705a6beb0840892d7f8f52d0f32bec" title="Useful alias type to the FastPin type matching a given board::ExternalInterruptPin.">FAST_EXT_PIN</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00709">709</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+
+</div>
+</div>
+<a id="a78705a6beb0840892d7f8f52d0f32bec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78705a6beb0840892d7f8f52d0f32bec">&#9670;&nbsp;</a></span>FAST_EXT_PIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;board::ExternalInterruptPin EPIN_&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacegpio.html#a78705a6beb0840892d7f8f52d0f32bec">gpio::FAST_EXT_PIN</a> = typedef typename <a class="el" href="classgpio_1_1_fast_pin_type.html">FastPinType</a>&lt;<a class="el" href="namespaceboard.html#a8a587b48884f6b62938abfbcf1484130">board::EXT_PIN</a>&lt;EPIN_&gt;()&gt;::TYPE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Useful alias type to the <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> type matching a given <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of target MCU, usable as direct external interrupt pins.">board::ExternalInterruptPin</a></code>. </p>
+<p>The following snippet demonstrates usage of <code>FAST_EXT_PIN</code> to declare a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instance for later use in a function:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <a class="code" href="namespacegpio.html#a78705a6beb0840892d7f8f52d0f32bec">gpio::FAST_EXT_PIN&lt;board::ExternalInterruptPin::D2&gt;</a> input{<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041aa84cc046d48610b05c21fd3670d0c829">gpio::PinMode::INPUT</a>};</div><div class="line">    <span class="keywordtype">bool</span> val = input.value();</div><div class="line">    ...</div><div class="line">}</div></div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a> </dd>
+<dd>
+<a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">FastPinType</a> </dd>
+<dd>
+<a class="el" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57" title="Useful alias type to the FastPin type matching a given board::DigitalPin.">FAST_PIN</a> </dd>
+<dd>
+<a class="el" href="namespacegpio.html#aaa6f9e5f023592cc0692da0bb37deccd" title="Useful alias type to the FastPin type matching a given board::InterruptPin.">FAST_INT_PIN</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00732">732</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="ae18fafd08668ee17aa5dd415ee3b6041"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae18fafd08668ee17aa5dd415ee3b6041">&#9670;&nbsp;</a></span>PinMode</h2>
 
@@ -158,7 +259,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00057">57</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00059">59</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>

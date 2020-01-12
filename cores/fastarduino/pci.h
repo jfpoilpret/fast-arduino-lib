@@ -164,7 +164,7 @@ namespace interrupt
 	 * `REGISTER_PCI_ISR_METHOD()` macros.
 	 * If you don't then use `REGISTER_PCI_ISR_EMPTY()` macro.
 	 * If you don't know the PCINT you need to handle but only a pin, then you can
-	 * use `PCIType<PIN>::TYPE`.
+	 * use `PCIType<PIN>::TYPE`, or better `PCI_SIGNAL<PIN>`.
 	 * 
 	 * @tparam PCINT_ the PCINT vector you want to manage
 	 * @sa REGISTER_PCI_ISR_FUNCTION
@@ -527,6 +527,7 @@ namespace interrupt
 	 * }
 	 * @endcode
 	 * @sa board::InterruptPin
+	 * @sa PCI_SIGNAL
 	 */
 	template<board::InterruptPin PIN> struct PCIType
 	{
@@ -540,6 +541,30 @@ namespace interrupt
 		/** PCISignal type for @p PIN */
 		using TYPE = PCISignal<PCINT>;
 	};
+
+	/**
+	 * Useful alias type to the `PCISignal` type matching a given `board::InterruptPin`.
+	 * 
+	 * The following snippet demonstrates usage of `PCI_SIGNAL` to declare a 
+	 * `PCISignal` instance for later use in a function:
+	 * 
+	 * @code
+	 * void f()
+	 * {
+	 *     constexpr const board::InterruptPin PIN = board::InterruptPin::D7;
+	 *     interrupt::PCI_SIGNAL<PIN> pci;
+	 *     pci.enable_pin<PIN>();
+	 *     pci.enable();
+	 *     ...
+	 *     pci.disable();
+	 * }
+	 * @endcode
+	 * 
+	 * @sa PCISignal
+	 * @sa PCIType
+	 */
+	template<board::InterruptPin PIN>
+	using PCI_SIGNAL = typename PCIType<PIN>::TYPE;
 }
 
 #endif /* PCI_HH */

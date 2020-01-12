@@ -1,14 +1,18 @@
 <map id="fastarduino/devices/winbond.h" name="fastarduino/devices/winbond.h">
-<area shape="rect" id="node1" title="API to handle WinBond flash memory chips through SPI interface." alt="" coords="171,5,322,47"/>
-<area shape="rect" id="node2" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="106,95,171,121"/>
-<area shape="rect" id="node7" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="205,244,288,271"/>
-<area shape="rect" id="node9" href="$time_8h.html" title="Simple time utilities." alt="" coords="287,169,363,196"/>
-<area shape="rect" id="node3" href="$board_8h_source.html" title=" " alt="" coords="41,319,159,345"/>
-<area shape="rect" id="node5" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="107,169,170,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="177,393,247,420"/>
-<area shape="rect" id="node6" title=" " alt="" coords="21,244,181,271"/>
-<area shape="rect" id="node8" title=" " alt="" coords="184,319,288,345"/>
-<area shape="rect" id="node10" href="$io_8h_source.html" title=" " alt="" coords="363,244,458,271"/>
-<area shape="rect" id="node12" title=" " alt="" coords="483,244,619,271"/>
-<area shape="rect" id="node11" title=" " alt="" coords="375,319,446,345"/>
+<area shape="rect" id="node1" title="API to handle WinBond flash memory chips through SPI interface." alt="" coords="559,5,710,47"/>
+<area shape="rect" id="node2" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="531,95,597,121"/>
+<area shape="rect" id="node12" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="464,319,547,345"/>
+<area shape="rect" id="node15" href="$time_8h.html" title="Simple time utilities." alt="" coords="673,244,749,271"/>
+<area shape="rect" id="node3" href="$board_8h_source.html" title=" " alt="" coords="467,393,586,420"/>
+<area shape="rect" id="node5" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="345,169,407,196"/>
+<area shape="rect" id="node4" title=" " alt="" coords="661,468,731,495"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,319,165,345"/>
+<area shape="rect" id="node7" href="$int_8h.html" title="General API for handling External Interrupt pins." alt="" coords="264,244,315,271"/>
+<area shape="rect" id="node14" href="$pci_8h.html" title="General API for handling Pin Change Interrupts." alt="" coords="349,244,403,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="209,393,324,420"/>
+<area shape="rect" id="node9" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="241,319,338,345"/>
+<area shape="rect" id="node10" href="$io_8h_source.html" title=" " alt="" coords="349,393,443,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="361,468,431,495"/>
+<area shape="rect" id="node13" title=" " alt="" coords="611,393,715,420"/>
+<area shape="rect" id="node16" title=" " alt="" coords="672,319,808,345"/>
 </map>

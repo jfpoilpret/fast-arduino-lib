@@ -22,6 +22,8 @@
 #define FASTIO_HH
 
 #include "boards/board_traits.h"
+#include "int.h"
+#include "pci.h"
 #include "utilities.h"
 
 namespace board
@@ -71,8 +73,9 @@ namespace gpio
 	 * 
 	 * Note that, although it has public constructors, you generally do not 
 	 * construct `FastPin` instances directly. You better use `FastPinType`,
-	 * which is directly provided a `board::DigitalPin` constant. You may also
-	 * obtain a `FastPin` instance through `FastPort::get_pin()`.
+	 * which is directly provided a `board::DigitalPin` constant, or even better,
+	 * use `FAST_PIN` alias type.
+	 * You may also obtain a `FastPin` instance through `FastPort::get_pin()`.
 	 * 
 	 * @tparam PORT_ the target port to which this pin belongs
 	 * @tparam BIT_ the bit position (from `0` to `7`), in port, of this pin;
@@ -80,6 +83,7 @@ namespace gpio
 	 * then a compilation error will occur.
 	 * @sa board::Port
 	 * @sa gpio::FastPinType
+	 * @sa gpio::FAST_PIN
 	 * @sa gpio::FastPort::get_pin()
 	 */
 	template<board::Port PORT_, uint8_t BIT_> class FastPin
@@ -533,6 +537,7 @@ namespace gpio
 	 * @tparam DPIN_ a unique digital pin for the MCU target
 	 * @sa gpio::DigitalPin
 	 * @sa gpio::FastPin
+	 * @sa FAST_PIN
 	 */
 	template<board::DigitalPin DPIN_> class FastPinType
 	{
@@ -655,6 +660,76 @@ namespace gpio
 		}
 	};
 	/// @endcond
+
+	/**
+	 * Useful alias type to the `FastPin` type matching a given `board::DigitalPin`.
+	 * 
+	 * The following snippet demonstrates usage of `FAST_PIN` to declare a 
+	 * `FastPin` instance for later use in a function:
+	 * 
+	 * @code
+	 * void f()
+	 * {
+	 *     gpio::FAST_PIN<board::DigitalPin::LED> led{gpio::PinMode::OUTPUT};
+	 *     led.clear();
+	 *     ...
+	 *     led.set();
+	 * }
+	 * @endcode
+	 * 
+	 * @sa FastPin
+	 * @sa FastPinType
+	 * @sa FAST_INT_PIN
+	 * @sa FAST_EXT_PIN
+	 */
+	template<board::DigitalPin DPIN_>
+	using FAST_PIN = typename FastPinType<DPIN_>::TYPE;
+
+	/**
+	 * Useful alias type to the `FastPin` type matching a given `board::InterruptPin`.
+	 * 
+	 * The following snippet demonstrates usage of `FAST_INT_PIN` to declare a 
+	 * `FastPin` instance for later use in a function:
+	 * 
+	 * @code
+	 * void f()
+	 * {
+	 *     gpio::FAST_INT_PIN<board::InterruptPin::D0> input{gpio::PinMode::INPUT};
+	 *     bool val = input.value();
+	 *     ...
+	 * }
+	 * @endcode
+	 * 
+	 * @sa FastPin
+	 * @sa FastPinType
+	 * @sa FAST_PIN
+	 * @sa FAST_EXT_PIN
+	 */
+	template<board::InterruptPin IPIN_>
+	using FAST_INT_PIN = typename FastPinType<board::PCI_PIN<IPIN_>()>::TYPE;
+
+	/**
+	 * Useful alias type to the `FastPin` type matching a given `board::ExternalInterruptPin`.
+	 * 
+	 * The following snippet demonstrates usage of `FAST_EXT_PIN` to declare a 
+	 * `FastPin` instance for later use in a function:
+	 * 
+	 * @code
+	 * void f()
+	 * {
+	 *     gpio::FAST_EXT_PIN<board::ExternalInterruptPin::D2> input{gpio::PinMode::INPUT};
+	 *     bool val = input.value();
+	 *     ...
+	 * }
+	 * @endcode
+	 * 
+	 * @sa FastPin
+	 * @sa FastPinType
+	 * @sa FAST_PIN
+	 * @sa FAST_INT_PIN
+	 */
+	template<board::ExternalInterruptPin EPIN_>
+	using FAST_EXT_PIN = typename FastPinType<board::EXT_PIN<EPIN_>()>::TYPE;
 }
 
 #endif /* FASTIO_HH */

@@ -55,11 +55,11 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 	
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE PinLED{gpio::PinMode::OUTPUT, false};
+	gpio::FAST_PIN<board::DigitalPin::LED> PinLED{gpio::PinMode::OUTPUT, false};
 	time::delay_ms(2000);
 
 	// Setup UART
-	typename interrupt::PCIType<RX>::TYPE pci;
+	interrupt::PCI_SIGNAL<RX> pci;
 	serial::soft::UARX_PCI<RX> uarx{input_buffer, pci};
 	pci.enable();
 

@@ -94,7 +94,7 @@ public:
 	}
 
 private:
-	typename gpio::FastPinType<DPIN>::TYPE _pin;
+	gpio::FAST_PIN<DPIN> _pin;
 };
 
 #endif /* BUTTON_HH */

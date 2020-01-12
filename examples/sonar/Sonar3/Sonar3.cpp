@@ -123,7 +123,7 @@ int main()
 	SONAR sonar{rtt};
 	rtt.begin();
 	
-	typename interrupt::PCIType<ECHO>::TYPE signal;
+	interrupt::PCI_SIGNAL<ECHO> signal;
 	signal.enable_pin<ECHO>();
 	signal.enable();
 

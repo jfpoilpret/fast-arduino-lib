@@ -378,7 +378,7 @@ namespace spi
 		static constexpr const REG8 USICR_{USICR};
 		static const constexpr uint8_t USICR__ = uint8_t(MODE);
 #endif
-		typename gpio::FastPinType<CS>::TYPE cs_;
+		gpio::FAST_PIN<CS> cs_;
 	};
 };
 

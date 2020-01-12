@@ -76,8 +76,8 @@ public:
 	}
 	
 private:
-	gpio::FastPinType<board::PCI_PIN<SWITCH>()>::TYPE _switch;
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE _led;	
+	gpio::FAST_INT_PIN<SWITCH> _switch;
+	gpio::FAST_PIN<board::DigitalPin::LED> _led;	
 };
 
 // Define vectors we need in the example
@@ -92,7 +92,7 @@ int main()
 	
 	PinChangeHandler handler;
 	interrupt::register_handler(handler);
-	interrupt::PCIType<SWITCH>::TYPE pci;
+	interrupt::PCI_SIGNAL<SWITCH> pci;
 	
 	pci.enable_pin<SWITCH>();
 	pci.enable();

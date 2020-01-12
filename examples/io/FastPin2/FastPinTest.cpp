@@ -37,7 +37,7 @@ int main()
 {
 	board::init();
 	sei();
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE PinLED{gpio::PinMode::OUTPUT};
+	gpio::FAST_PIN<board::DigitalPin::LED> PinLED{gpio::PinMode::OUTPUT};
 	while (true)
 	{
 		PinLED.toggle();

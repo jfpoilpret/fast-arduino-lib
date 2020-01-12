@@ -131,7 +131,7 @@ public:
 private:
 	const uint16_t MIN_US;
 	const SONAR& sonar_;
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
+	gpio::FAST_PIN<board::DigitalPin::LED> led_;
 };
 
 REGISTER_HCSR04_RTT_TIMEOUT_METHOD(TIMER_NUM, SonarListener, &SonarListener::on_sonar, SONAR)

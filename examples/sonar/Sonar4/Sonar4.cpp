@@ -149,7 +149,7 @@ int main()
 	SONAR2 sonar2{rtt};
 	rtt.begin();
 	
-	typename interrupt::PCIType<ECHO1>::TYPE signal;
+	interrupt::PCI_SIGNAL<ECHO1> signal;
 	signal.set_enable_pins(ECHO_MASK);
 	signal.enable();
 	

@@ -233,7 +233,6 @@ namespace devices::rf
 		 * @param[out] buf reference to object to fill with received payload;
 		 * note that no constructor will get called during this operation, it is
 		 * best to use simple `struct` for type @p T.
-		 * @param[in] buf buffer to store incoming message
 		 * @param[in] ms maximum time out period
 		 * @return number of bytes received or negative error code
 		 * @retval errors::ETIME if nothing was received and a timeout occurred
@@ -571,7 +570,7 @@ namespace devices::rf
 	private:
 		static const uint8_t DEFAULT_CHANNEL = 64;
 
-		typename gpio::FastPinType<CE>::TYPE ce_;
+		gpio::FAST_PIN<CE> ce_;
 
 		addr_t addr_;	 //!< Current network and device address.
 		uint8_t channel_; //!< Current channel (device dependent.

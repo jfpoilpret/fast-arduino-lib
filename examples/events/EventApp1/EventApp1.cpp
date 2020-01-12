@@ -97,7 +97,7 @@ public:
 	}
 	
 private:
-	typename gpio::FastPinType<PIN>::TYPE _led;
+	gpio::FAST_PIN<PIN> _led;
 };
 
 int main() __attribute__((OS_main));

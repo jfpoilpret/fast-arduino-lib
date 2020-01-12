@@ -127,7 +127,7 @@ REGISTER_INT_ISR_EMPTY(0, PIN_IRQ)
 
 static bool is_master()
 {
-	typename gpio::FastPinType<PIN_CONFIG>::TYPE config{gpio::PinMode::INPUT_PULLUP};
+	gpio::FAST_PIN<PIN_CONFIG> config{gpio::PinMode::INPUT_PULLUP};
 	return config.value();
 }
 

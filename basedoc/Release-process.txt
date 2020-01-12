@@ -12,6 +12,34 @@ Release procedure
 9. Official release in github
 10. Close milestone in github
 
+FastArduino 1.5 release
+
+I am happy to announce the 6th major release of FastArduino platform.
+
+Since release 1.4 (September 2019), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.5).
+
+This release brings the following improvements:
+- Rework project directory structure to reduce the number of files in project's root directory
+- Update make system to add support for USBtinyISP programmer
+- Add documentation for adding support for new I2C and SPI devices
+- Improve GPIO and PCI API to ease declaration of FastPin and PCISignal instances 
+([issue #74](https://github.com/jfpoilpret/fast-arduino-lib/issues/74) thanks [hreintke](https://github.com/hreintke) for this excellent suggestion). 
+
+All API changes are compatible with existing programs.
+
+Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is published [here](http://jfpoilpret.github.io/fast-arduino-lib/)
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform; please submit enhancements you would like 
+to see in future versions or report issues you may discover.
+
+
+
 FastArduino 1.4 release
 
 I am happy to announce the 5th major release of FastArduino platform.

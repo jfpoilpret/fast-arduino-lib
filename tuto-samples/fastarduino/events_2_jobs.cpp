@@ -23,7 +23,7 @@ protected:
 	}
 	
 private:
-	gpio::FastPinType<board::DigitalPin::LED>::TYPE led_;
+	gpio::FAST_PIN<board::DigitalPin::LED> led_;
 };
 
 // Define event queue

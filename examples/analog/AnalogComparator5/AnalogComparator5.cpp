@@ -73,7 +73,7 @@ private:
 	}
 
 	analog::AnalogComparator& comparator_;
-	gpio::FastPinType<LED>::TYPE led_;
+	gpio::FAST_PIN<LED> led_;
 
 	DECL_ANALOG_COMPARE_ISR_HANDLERS_FRIEND
 };

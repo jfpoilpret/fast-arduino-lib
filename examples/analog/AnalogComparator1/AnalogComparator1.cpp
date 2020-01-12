@@ -48,7 +48,7 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	gpio::FastPinType<LED>::TYPE led{gpio::PinMode::OUTPUT};
+	gpio::FAST_PIN<LED> led{gpio::PinMode::OUTPUT};
 
 	// Declare Analog comparator
 	analog::AnalogComparator comparator;
