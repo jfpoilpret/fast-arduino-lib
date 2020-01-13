@@ -119,5 +119,6 @@ int main()
 		out << F("CH5 = ") << adc.read_channel(MCP3008Channel::CH5) << endl;
 		out << F("CH6 = ") << adc.read_channel(MCP3008Channel::CH6) << endl;
 		out << F("CH7 = ") << adc.read_channel(MCP3008Channel::CH7) << endl;
+		time::delay_ms(1000);
 	}
 }
