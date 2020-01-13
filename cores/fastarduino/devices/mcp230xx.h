@@ -37,7 +37,7 @@ namespace devices
 namespace devices::mcp230xx
 {
 	/**
-	 * The polarity of the MCP23017 INTA and INTB pins.
+	 * The polarity of the MCP23008/MCP23017 INT pins.
 	 */
 	enum class InterruptPolarity : uint8_t
 	{
