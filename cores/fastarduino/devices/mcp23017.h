@@ -21,7 +21,6 @@
 #ifndef MCP23017_H
 #define MCP23017_H
 
-// #include <math.h>
 #include "mcp230xx.h"
 #include "../i2c_device.h"
 
