@@ -43,7 +43,7 @@ namespace devices::mcp230xx
 	 * The MCP23008 chip is a 8-Bit I/O Expander with I2C interface.
 	 * 
 	 * @tparam MODE_ the I2C mode to use; MCP23008 supports both `i2c::I2CMode::STANDARD`
-	 * and `i2c:I2CMode::FAST`
+	 * and `i2c::I2CMode::FAST`
 	 * 
 	 * @sa devices::mcp23017::MCP23017
 	 */
