@@ -97,19 +97,20 @@ $(document).ready(function(){initNavTree('mcp23017_8h.html','');});
 
 <p>API to handle the MCP23017 chip (16-Bit I/O Expander with I2C interface).  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;math.h&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="mcp230xx_8h_source.html">mcp230xx.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="i2c__device_8h_source.html">../i2c_device.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for mcp23017.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="mcp23017_8h__incl.png" border="0" usemap="#fastarduino_2devices_2mcp23017_8h" alt=""/></div>
 <map name="fastarduino_2devices_2mcp23017_8h" id="fastarduino_2devices_2mcp23017_8h">
-<area shape="rect"  title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="21,5,172,47"/>
-<area shape="rect"  title=" " alt="" coords="5,95,73,121"/>
-<area shape="rect"  href="i2c__device_8h.html" title="I2C Device API." alt="" coords="98,95,213,121"/>
-<area shape="rect"  href="i2c_8h.html" title="I2C API common definitions." alt="" coords="81,244,134,271"/>
-<area shape="rect"  href="i2c__manager_8h.html" title="I2C Manager API." alt="" coords="145,169,262,196"/>
-<area shape="rect"  href="i2c__handler_8h_source.html" title=" " alt="" coords="159,244,267,271"/>
+<area shape="rect"  title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="48,5,199,47"/>
+<area shape="rect"  href="mcp230xx_8h.html" title="API to handle the MCP23008/23017 chips (8 &amp; 16&#45;Bit I/O Expanders with I2C interface)." alt="" coords="5,95,108,121"/>
+<area shape="rect"  href="i2c__device_8h.html" title="I2C Device API." alt="" coords="133,95,247,121"/>
+<area shape="rect"  title=" " alt="" coords="21,169,92,196"/>
+<area shape="rect"  href="i2c_8h.html" title="I2C API common definitions." alt="" coords="133,244,186,271"/>
+<area shape="rect"  href="i2c__manager_8h.html" title="I2C Manager API." alt="" coords="197,169,316,196"/>
+<area shape="rect"  href="i2c__handler_8h_source.html" title=" " alt="" coords="210,244,319,271"/>
 </map>
 </div>
 </div>
@@ -117,8 +118,8 @@ Include dependency graph for mcp23017.h:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html">devices::mcp23017::MCP23017&lt; MODE_ &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C device driver for Microchip <a class="el" href="classdevices_1_1mcp23017_1_1_m_c_p23017.html" title="I2C device driver for Microchip MCP23017 support.">MCP23017</a> support.  <a href="classdevices_1_1mcp23017_1_1_m_c_p23017.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1mcp230xx_1_1_m_c_p23017.html">devices::mcp230xx::MCP23017&lt; MODE_ &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C device driver for Microchip <a class="el" href="classdevices_1_1mcp230xx_1_1_m_c_p23017.html" title="I2C device driver for Microchip MCP23017 support.">MCP23017</a> support.  <a href="classdevices_1_1mcp230xx_1_1_m_c_p23017.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -129,32 +130,24 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a1deedbcfa66c2d000cc9e9293ec00d5d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcp23017_8h.html#a1deedbcfa66c2d000cc9e9293ec00d5d">devices::mcp23017::MCP23017Port</a> : uint8_t { <br />
-&#160;&#160;<b>devices::mcp23017::MCP23017Port::PORT_A</b>, 
+<tr class="memitem:ab180a3010d19bcd655569e6a2e022969"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcp23017_8h.html#ab180a3010d19bcd655569e6a2e022969">devices::mcp230xx::MCP23017Port</a> : uint8_t { <br />
+&#160;&#160;<b>devices::mcp230xx::MCP23017Port::PORT_A</b>, 
 <br />
-&#160;&#160;<b>devices::mcp23017::MCP23017Port::PORT_B</b>, 
+&#160;&#160;<b>devices::mcp230xx::MCP23017Port::PORT_B</b>, 
 <br />
-&#160;&#160;<b>devices::mcp23017::MCP23017Port::PORT_AB</b>
-<br />
- }</td></tr>
-<tr class="memdesc:a1deedbcfa66c2d000cc9e9293ec00d5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The port(s) to use in MCP23017 API.  <a href="mcp23017_8h.html#a1deedbcfa66c2d000cc9e9293ec00d5d">More...</a><br /></td></tr>
-<tr class="separator:a1deedbcfa66c2d000cc9e9293ec00d5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a027b5cd825760f8fa2f4723e92d3a523"><td class="memItemLeft" align="right" valign="top"><a id="a027b5cd825760f8fa2f4723e92d3a523"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcp23017_8h.html#a027b5cd825760f8fa2f4723e92d3a523">devices::mcp23017::InterruptPolarity</a> : uint8_t { <br />
-&#160;&#160;<b>devices::mcp23017::InterruptPolarity::ACTIVE_LOW</b> = 0, 
-<br />
-&#160;&#160;<b>devices::mcp23017::InterruptPolarity::ACTIVE_HIGH</b> = 1
+&#160;&#160;<b>devices::mcp230xx::MCP23017Port::PORT_AB</b>
 <br />
  }</td></tr>
-<tr class="memdesc:a027b5cd825760f8fa2f4723e92d3a523"><td class="mdescLeft">&#160;</td><td class="mdescRight">The polarity of the MCP23017 INTA and INTB pins. <br /></td></tr>
-<tr class="separator:a027b5cd825760f8fa2f4723e92d3a523"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:ab180a3010d19bcd655569e6a2e022969"><td class="mdescLeft">&#160;</td><td class="mdescRight">The port(s) to use in MCP23017 API.  <a href="mcp23017_8h.html#ab180a3010d19bcd655569e6a2e022969">More...</a><br /></td></tr>
+<tr class="separator:ab180a3010d19bcd655569e6a2e022969"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>API to handle the MCP23017 chip (16-Bit I/O Expander with I2C interface). </p>
 
 <p class="definition">Definition in file <a class="el" href="mcp23017_8h_source.html">mcp23017.h</a>.</p>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="file_a1deedbcfa66c2d000cc9e9293ec00d5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#file_a1deedbcfa66c2d000cc9e9293ec00d5d">&#9670;&nbsp;</a></span>MCP23017Port</h2>
+<a id="file_ab180a3010d19bcd655569e6a2e022969"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_ab180a3010d19bcd655569e6a2e022969">&#9670;&nbsp;</a></span>MCP23017Port</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -163,7 +156,7 @@ Enumerations</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="mcp23017_8h.html#a1deedbcfa66c2d000cc9e9293ec00d5d">devices::mcp23017::MCP23017Port</a> : uint8_t</td>
+          <td class="memname">enum <a class="el" href="mcp23017_8h.html#ab180a3010d19bcd655569e6a2e022969">devices::mcp230xx::MCP23017Port</a> : uint8_t</td>
         </tr>
       </table>
   </td>
