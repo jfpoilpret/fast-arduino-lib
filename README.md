@@ -83,6 +83,7 @@ In addition, FastArduino brings support for the following devices:
 - DS1307 RTC device support (I2C-based)
 - HMC5883L magnetometer device support (I2C-based)
 - MPU-6050 accelerometer/gyroscope device support (I2C-based)
+- MCP23008 8-Bit I/O Expander (I2C-based)
 - MCP23017 16-Bit I/O Expander (I2C-based)
 - HC-SR04 sonar device support in synchronous and asynchronous modes
 
