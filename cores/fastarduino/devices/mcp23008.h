@@ -21,7 +21,8 @@
 #ifndef MCP23008_H
 #define MCP23008_H
 
-#include <math.h>
+// #include <math.h>
+#include "mcp230xx.h"
 #include "../i2c_device.h"
 
 /**
@@ -33,28 +34,10 @@ namespace devices
 }
 
 /**
- * Defines the API for MCP23008 chip support.
- * @sa devices::mcp23017
+ * Defines the API for MCP23008/MCP23017 chips support.
  */
-namespace devices::mcp23008
+namespace devices::mcp230xx
 {
-	/**
-	 * The polarity of the MCP23008 INT pins.
-	 */
-	enum class InterruptPolarity : uint8_t
-	{
-		/**
-		 * The INT pins shall be active low, ie they are high by default, and 
-		 * changed to low when an interrupt is triggered.
-		 */
-		ACTIVE_LOW = 0,
-		/**
-		 * The INT pins shall be active high, ie they are low by default, and 
-		 * changed to high when an interrupt is triggered.
-		 */
-		ACTIVE_HIGH = 1
-	};
-
 	/**
 	 * I2C device driver for Microchip MCP23008 support.
 	 * The MCP23008 chip is a 8-Bit I/O Expander with I2C interface.

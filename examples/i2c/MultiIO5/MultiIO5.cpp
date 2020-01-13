@@ -108,7 +108,7 @@ private:
 	}
 
 	static constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::FAST;
-	using MCP = devices::mcp23008::MCP23008<I2C_MODE>;
+	using MCP = devices::mcp230xx::MCP23008<I2C_MODE>;
 
 	i2c::I2CManager<I2C_MODE> manager_;
 	MCP mcp_;
