@@ -54,7 +54,8 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/UtilsCheck							\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10 sonar/Sonar11				\
-						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
+						i2c/MultiIO0 i2c/MultiIO3				\
+						i2c/MultiIO4 i2c/MultiIO5				\
 						tones/tones0							\
 						tones/tones1 tones/tones2 tones/tones3	\
 						tones/tones4 tones/tones5 tones/tones6	\
@@ -94,7 +95,8 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						analog/AnalogComparator3				\
 						analog/AnalogComparator5				\
 						analog/AnalogComparator6				\
-						i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
+						i2c/MultiIO0 i2c/MultiIO3				\
+						i2c/MultiIO4 i2c/MultiIO5				\
 						sonar/Sonar10 sonar/Sonar11				\
 						uart/UartApp1							\
 						uart/UartApp5							\
@@ -113,7 +115,8 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator3				\
 								analog/AnalogComparator5				\
 								analog/AnalogComparator6				\
-								i2c/MultiIO0 i2c/MultiIO3 i2c/MultiIO4	\
+								i2c/MultiIO0 i2c/MultiIO3				\
+								i2c/MultiIO4 i2c/MultiIO5				\
 								sonar/Sonar10 sonar/Sonar11				\
 								uart/UartApp1							\
 								uart/UartApp5							\

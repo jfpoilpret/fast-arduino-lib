@@ -126,7 +126,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Holder of a "virtual method". </p>
 <p>Typical use: </p><div class="fragment"><div class="line"><span class="keyword">class </span>A {</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    A(<a class="code" href="classvirtual__support_1_1_virtual_method.html#a5092df1acd6b3bdbc0d7f77a4ea59cd6">VirtualMethod::METHOD</a> callback, <span class="keywordtype">void</span>* arg) : callback_{callback, arg} {}</div><div class="line"></div><div class="line">    <span class="keywordtype">void</span> call_back() {</div><div class="line">        callback_();</div><div class="line">    }</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    VirtualMethod callback_;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">class </span>B {</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    B() : a{B::callback, <span class="keyword">this</span>} {}</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="comment">// this is the actual &quot;virtual&quot; method</span></div><div class="line">    <span class="keywordtype">void</span> do_something() {</div><div class="line">        ...</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="comment">// this method is in hcarge of dispatching to the actual &quot;virtual&quot; method</span></div><div class="line">    <span class="keyword">static</span> <span class="keywordtype">void</span> callback(<span class="keywordtype">void</span>* arg) {</div><div class="line">        ((B*) arg)-&gt;do_something();</div><div class="line">    }</div><div class="line"></div><div class="line">    A a;</div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="virtual_8h_source.html#l00071">71</a> of file <a class="el" href="virtual_8h_source.html">virtual.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="virtual_8h_source.html#l00069">69</a> of file <a class="el" href="virtual_8h_source.html">virtual.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a2acc81a53c6e399d7d2f13d62f1a24d5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2acc81a53c6e399d7d2f13d62f1a24d5">&#9670;&nbsp;</a></span>VirtualMethod()</h2>
@@ -171,7 +171,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="virtual_8h_source.html#l00088">88</a> of file <a class="el" href="virtual_8h_source.html">virtual.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="virtual_8h_source.html#l00086">86</a> of file <a class="el" href="virtual_8h_source.html">virtual.h</a>.</p>
 
 </div>
 </div>

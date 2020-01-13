@@ -21,7 +21,7 @@
 #ifndef MCP23017_H
 #define MCP23017_H
 
-#include <math.h>
+#include "mcp230xx.h"
 #include "../i2c_device.h"
 
 /**
@@ -33,9 +33,9 @@ namespace devices
 }
 
 /**
- * Defines the API for MCP23017 chip support.
+ * Defines the API for MCP23008/MCP23017 chips support.
  */
-namespace devices::mcp23017
+namespace devices::mcp230xx
 {
 	/**
 	 * The port(s) to use in MCP23017 API. Most API are templates which argument
@@ -57,23 +57,6 @@ namespace devices::mcp23017
 		 * - high byte maps to B port
 		 */
 		PORT_AB
-	};
-
-	/**
-	 * The polarity of the MCP23017 INTA and INTB pins.
-	 */
-	enum class InterruptPolarity : uint8_t
-	{
-		/**
-		 * The INT pins shall be active low, ie they are high by default, and 
-		 * changed to low when an interrupt is triggered.
-		 */
-		ACTIVE_LOW = 0,
-		/**
-		 * The INT pins shall be active high, ie they are low by default, and 
-		 * changed to high when an interrupt is triggered.
-		 */
-		ACTIVE_HIGH = 1
 	};
 
 	/// @cond notdocumented
@@ -110,7 +93,7 @@ namespace devices::mcp23017
 	 * The MCP23017 chip is a 16-Bit I/O Expander with I2C interface.
 	 * 
 	 * @tparam MODE_ the I2C mode to use; MCP23017 supports both `i2c::I2CMode::STANDARD`
-	 * and `i2c:I2CMode::FAST`
+	 * and `i2c::I2CMode::FAST`
 	 */
 	template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class MCP23017 : public i2c::I2CDevice<MODE_>
 	{

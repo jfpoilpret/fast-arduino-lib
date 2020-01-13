@@ -48,8 +48,8 @@
 
 constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::FAST;
 
-using MCP = devices::mcp23017::MCP23017<I2C_MODE>;
-using MCP_PORT = devices::mcp23017::MCP23017Port;
+using MCP = devices::mcp230xx::MCP23017<I2C_MODE>;
+using MCP_PORT = devices::mcp230xx::MCP23017Port;
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift, bool direction)
 {

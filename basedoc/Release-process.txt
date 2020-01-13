@@ -24,8 +24,10 @@ This release brings the following improvements:
 - Add documentation for adding support for new I2C and SPI devices
 - Improve GPIO and PCI API to ease declaration of FastPin and PCISignal instances 
 ([issue #74](https://github.com/jfpoilpret/fast-arduino-lib/issues/74) thanks [hreintke](https://github.com/hreintke) for this excellent suggestion). 
+- Add support for MCP23008 GPIO expander (similar to MCP23017)
 
-All API changes are compatible with existing programs.
+Almost all API changes are compatible with existing programs. Note that if you use MCP23017 device, its namespace has been renamed from 
+`mcp23017` to `mcp230xx` (this new namespace is shared between `MCP23017` and `23008` devices).
 
 Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
 

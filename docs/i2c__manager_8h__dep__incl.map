@@ -1,8 +1,9 @@
 <map id="fastarduino/i2c_manager.h" name="fastarduino/i2c_manager.h">
-<area shape="rect" id="node1" title="I2C Manager API." alt="" coords="245,5,439,32"/>
-<area shape="rect" id="node2" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="251,80,433,107"/>
+<area shape="rect" id="node1" title="I2C Manager API." alt="" coords="332,5,528,32"/>
+<area shape="rect" id="node2" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="339,80,521,107"/>
 <area shape="rect" id="node3" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,155,156,196"/>
 <area shape="rect" id="node4" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,155,331,196"/>
-<area shape="rect" id="node5" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,155,505,196"/>
-<area shape="rect" id="node6" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="529,155,680,196"/>
+<area shape="rect" id="node5" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,155,505,196"/>
+<area shape="rect" id="node6" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,155,680,196"/>
+<area shape="rect" id="node7" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,155,855,196"/>
 </map>
