@@ -279,6 +279,18 @@ namespace utils
 			return output;
 	}
 
+	//TODO APIDOC
+	constexpr uint8_t low_byte(uint16_t word)
+	{
+		return uint8_t(word & 0xFF);
+	}
+
+	//TODO APIDOC
+	constexpr uint8_t high_byte(uint16_t word)
+	{
+		return uint8_t(word >> 8);
+	}
+
 	/**
 	 * Convert 2 bytes into an unsigned int.
 	 * @param high the high byte

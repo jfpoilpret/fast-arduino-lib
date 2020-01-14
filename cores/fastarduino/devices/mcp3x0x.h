@@ -16,10 +16,10 @@
 
 /**
  * @file
- * API to handle MCP3008 ADC chip.
+ * API to handle MicroChip ADC chips family (MCP3001-2-4-8, MCP3201-2-4-8, MCP3301-2-4).
  */
-#ifndef MCP3008_HH
-#define MCP3008_HH
+#ifndef MCP3X0X_HH
+#define MCP3X0X_HH
 
 #include "../spi.h"
 #include "../time.h"
@@ -27,9 +27,8 @@
 
 namespace devices::mcp3x0x
 {
-	//TODO add generic support for whole family: number of bits, number of channels...
 	//TODO Add APIDOC
-	template<board::DigitalPin CS, typename CHANNELS, uint8_t HIGH_BITS>
+	template<board::DigitalPin CS, typename CHANNEL, uint16_t MASK, uint8_t RSHIFT>
 	class MCP3x0x : public spi::SPIDevice<
 		CS, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(3'600'000UL), 
 		spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST>
@@ -37,44 +36,25 @@ namespace devices::mcp3x0x
 	public:
 		MCP3x0x() = default;
 
-		uint16_t read_channel(CHANNELS channel)
+		uint16_t read_channel(CHANNEL channel)
 		{
+			uint8_t result1;
+			uint8_t result2;
 			this->start_transfer();
-			this->transfer(0x01);
-			uint8_t result1 = this->transfer(uint8_t(channel));
-			uint8_t result2 = this->transfer(0x00);
+			if (sizeof(CHANNEL) == 2)
+			{
+				this->transfer(utils::high_byte(uint16_t(channel)));
+				result1 = this->transfer(utils::low_byte(uint16_t(channel)));
+			}
+			else
+				result1 = this->transfer(uint8_t(channel));
+			result2 = this->transfer(0x00);
 			this->end_transfer();
 			// Convert bytes pair to N-bits result
-			return utils::as_uint16_t(result1 & HIGH_BITS, result2);
+			return (utils::as_uint16_t(result1, result2) & MASK) >> RSHIFT;
 		}
 	};
-
-	enum class MCP3008Channel : uint8_t
-	{
-		// singled-ended input
-		CH0 = 0x80,
-		CH1 = 0x90,
-		CH2 = 0xA0,
-		CH3 = 0xB0,
-		CH4 = 0xC0,
-		CH5 = 0xD0,
-		CH6 = 0xE0,
-		CH7 = 0xF0,
-		// differential input
-		CH0_CH1 = 0x00,
-		CH1_CH0 = 0x10,
-		CH2_CH3 = 0x20,
-		CH3_CH2 = 0x30,
-		CH4_CH5 = 0x40,
-		CH5_CH4 = 0x50,
-		CH6_CH7 = 0x60,
-		CH7_CH6 = 0x70
-	};
-
-	template<board::DigitalPin CS>
-	using MCP3008 = MCP3x0x<CS, MCP3008Channel, 0x03>;
-	
 }
 
-#endif /* MCP3008_HH */
+#endif /* MCP3X0X_HH */
 /// @endcond

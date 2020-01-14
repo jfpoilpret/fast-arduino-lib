@@ -39,7 +39,7 @@
  *   - D0 (MISO), D1 (MOSI), D2 (SCK), D3 (CS): SPI interface to MCP3008
  */
 
-#include <fastarduino/devices/mcp3x0x.h>
+#include <fastarduino/devices/mcp3008.h>
 #include <fastarduino/time.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
