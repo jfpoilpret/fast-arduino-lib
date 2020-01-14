@@ -29,6 +29,25 @@ namespace devices::mcp3x0x
 {
 	//TODO add generic support for whole family: number of bits, number of channels...
 	//TODO Add APIDOC
+	template<board::DigitalPin CS, typename CHANNELS, uint8_t HIGH_BITS>
+	class MCP3x0x : public spi::SPIDevice<
+		CS, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(3'600'000UL), 
+		spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST>
+	{
+	public:
+		MCP3x0x() = default;
+
+		uint16_t read_channel(CHANNELS channel)
+		{
+			this->start_transfer();
+			this->transfer(0x01);
+			uint8_t result1 = this->transfer(uint8_t(channel));
+			uint8_t result2 = this->transfer(0x00);
+			this->end_transfer();
+			// Convert bytes pair to N-bits result
+			return utils::as_uint16_t(result1 & HIGH_BITS, result2);
+		}
+	};
 
 	enum class MCP3008Channel : uint8_t
 	{
@@ -53,24 +72,8 @@ namespace devices::mcp3x0x
 	};
 
 	template<board::DigitalPin CS>
-	class MCP3008 : public spi::SPIDevice<
-		CS, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(3'600'000UL), 
-		spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST>
-	{
-	public:
-		MCP3008() = default;
-
-		uint16_t read_channel(MCP3008Channel channel)
-		{
-			this->start_transfer();
-			this->transfer(0x01);
-			uint8_t result1 = this->transfer(uint8_t(channel));
-			uint8_t result2 = this->transfer(0x00);
-			this->end_transfer();
-			// Convert bytes pair to 10 bits result
-			return utils::as_uint16_t(result1 & 0x03, result2);
-		}
-	};
+	using MCP3008 = MCP3x0x<CS, MCP3008Channel, 0x03>;
+	
 }
 
 #endif /* MCP3008_HH */
