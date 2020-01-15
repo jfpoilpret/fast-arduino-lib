@@ -25,13 +25,18 @@
 
 namespace devices::mcp3x0x
 {
-	//TODO Add APIDOC
+	/**
+	 * List of channels supported by MCP3001.
+	 */
 	enum class MCP3001Channel : uint8_t
 	{
 		// single-ended input
 		CH0 = 0x00
 	};
 
+	/**
+	 * Device class supporting MCP3001 ADC chip.
+	 */
 	template<board::DigitalPin CS>
 	using MCP3001 = MCP3x0x<CS, MCP3001Channel, 0x1FF8, 3>;
 }

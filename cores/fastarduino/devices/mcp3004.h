@@ -25,7 +25,9 @@
 
 namespace devices::mcp3x0x
 {
-	//TODO Add APIDOC
+	/**
+	 * List of channels supported by MCP3004.
+	 */
 	enum class MCP3004Channel : uint16_t
 	{
 		// single-ended input
@@ -40,6 +42,9 @@ namespace devices::mcp3x0x
 		CH3_CH2 = 0x0130
 	};
 
+	/**
+	 * Device class supporting MCP3004 ADC chip.
+	 */
 	template<board::DigitalPin CS>
 	using MCP3004 = MCP3x0x<CS, MCP3004Channel, 0x03FF, 0>;
 }
