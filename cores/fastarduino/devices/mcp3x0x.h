@@ -24,6 +24,7 @@
 
 #include "../spi.h"
 #include "../time.h"
+#include "../types_traits.h"
 #include "../utilities.h"
 
 /**
@@ -39,7 +40,7 @@ namespace devices::mcp3x0x
 	 * 
 	 * @tparam CS the output pin used for Chip Selection of the MCP chip on
 	 * the SPI bus.
-	 * @tparam CHANNEL an `enum class` type defining all possible analog input 
+	 * @tparam CHANNEL_ an `enum class` type defining all possible analog input 
 	 * channels handled by the device; this is used as an argument in `read_channel()`;
 	 * it must be castable to a `uint8_t` or `uint16_t` that will be used as the first
 	 * or two first bytes in the transmission to the chip.
@@ -48,18 +49,29 @@ namespace devices::mcp3x0x
 	 * @tparam RSHIFT the number of bits to shift right on the analog value read by the 
 	 * chip; some MCP devices actually return values that are not right-aligned; for
 	 * these devices you need a non-0 @p RSHIFT.
+	 * @tparam TYPE_ the analog output type, typically `uint16_t`, or `int16_t` for 
+	 * some devices.
 	 * 
-	 * @sa MCP3001
-	 * @sa MCP3002
-	 * @sa MCP3004
 	 * @sa MCP3008
+	 * @sa MCP3208
+	 * @sa MCP3304
 	 */
-	template<board::DigitalPin CS, typename CHANNEL, uint16_t MASK, uint8_t RSHIFT>
+	template<board::DigitalPin CS, typename CHANNEL_, uint16_t MASK, uint8_t RSHIFT, typename TYPE_ = uint16_t>
 	class MCP3x0x : public spi::SPIDevice<
 		CS, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(3'600'000UL), 
 		spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST>
 	{
+		using TRAIT = types_traits::Type_trait<TYPE_>;
+		static_assert(TRAIT::IS_INT && (TRAIT::SIZE == 2), "TYPE must be uint16_t or int16_t");
+		static constexpr const bool IS_SIGNED = TRAIT::IS_SIGNED;
+		static constexpr const uint16_t SIGN_MASK = ((MASK >> RSHIFT) + 1) >> 1;
+		static constexpr const uint16_t NEGATIVE = 0xFFFF & ~(MASK >> RSHIFT);
+
 	public:
+		//TODO APIDOC
+		using CHANNEL = CHANNEL_;
+		using TYPE = TYPE_;
+
 		/**
 		 * Create a new device driver for an MCP chip.
 		 */
@@ -71,7 +83,7 @@ namespace devices::mcp3x0x
 		 * @return the analog value; the bits precision depends on each device
 		 * (typically 10, 12 or 13 bits).
 		 */
-		uint16_t read_channel(CHANNEL channel)
+		TYPE read_channel(CHANNEL channel)
 		{
 			uint8_t result1;
 			uint8_t result2;
@@ -86,7 +98,19 @@ namespace devices::mcp3x0x
 			result2 = this->transfer(0x00);
 			this->end_transfer();
 			// Convert bytes pair to N-bits result
-			return (utils::as_uint16_t(result1, result2) & MASK) >> RSHIFT;
+			uint16_t value = (utils::as_uint16_t(result1, result2) & MASK) >> RSHIFT;
+			if (IS_SIGNED)
+			{
+				if (value & SIGN_MASK)
+					// value is negative, change it to negative int16_t
+					//TODO need some unit tests for all this fuzzy code...
+					return TYPE(NEGATIVE | value);
+				else
+					// value is positive, directly cast it to int16_t
+					return TYPE(value);
+			}
+			else
+				return value;
 		}
 	};
 }
