@@ -53,6 +53,8 @@ namespace devices::mcp3x0x
 	/**
 	 * Device class supporting MCP3304 ADC chip.
 	 * @warning Support for this device has not been tested by author.
+	 * @sa MCP3301
+	 * @sa MCP3302
 	 */
 	template<board::DigitalPin CS>
 	using MCP3304 = MCP3x0x<CS, MCP3304Channel, 0x0FFF, 0>;

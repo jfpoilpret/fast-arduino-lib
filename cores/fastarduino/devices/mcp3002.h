@@ -41,6 +41,9 @@ namespace devices::mcp3x0x
 	/**
 	 * Device class supporting MCP3002 ADC chip.
 	 * @warning Support for this device has not been tested by author.
+	 * @sa MCP3001
+	 * @sa MCP3004
+	 * @sa MCP3008
 	 */
 	template<board::DigitalPin CS>
 	using MCP3002 = MCP3x0x<CS, MCP3002Channel, 0x03FF, 0>;

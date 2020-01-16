@@ -37,6 +37,9 @@ namespace devices::mcp3x0x
 	/**
 	 * Device class supporting MCP3201 ADC chip.
 	 * @warning Support for this device has not been tested by author.
+	 * @sa MCP3202
+	 * @sa MCP3204
+	 * @sa MCP3208
 	 */
 	template<board::DigitalPin CS>
 	using MCP3201 = MCP3x0x<CS, MCP3201Channel, 0x1FFE, 1>;
