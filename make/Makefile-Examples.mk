@@ -34,7 +34,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4						\
 					motors/Servo1 motors/Servo2												\
 					rtt/TimerApp3 rtt/TimerApp4												\
-					spi/MultiADC01 spi/MultiADC02											\
+					spi/MultiADC00 spi/MultiADC01 spi/MultiADC02							\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
 					uart/UartApp2 uart/UartApp3 uart/UartApp4								\
 					sonar/Sonar1 sonar/Sonar2 sonar/Sonar3 sonar/Sonar4						\
@@ -161,6 +161,7 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								rtt/TimerTinyX5					\
 								i2c/DS1307RTC1 i2c/DS1307RTC2	\
 								i2c/MultiIO1 i2c/MultiIO2		\
+								spi/MultiADC00					\
 								spi/MultiADC01 spi/MultiADC02	\
 								spi/RF24App1 spi/WinBond		\
 								tones/tones00					
