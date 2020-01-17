@@ -62,7 +62,7 @@ namespace devices::mcp3x0x
 		spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST>
 	{
 		using TRAIT = types_traits::Type_trait<TYPE_>;
-		static_assert(TRAIT::IS_INT && (TRAIT::SIZE == 2), "TYPE must be uint16_t or int16_t");
+		static_assert(TRAIT::IS_INT && (TRAIT::SIZE == sizeof(uint16_t)), "TYPE must be uint16_t or int16_t");
 		static constexpr const bool IS_SIGNED = TRAIT::IS_SIGNED;
 		static constexpr const uint16_t SIGN_MASK = ((MASK >> RSHIFT) + 1) >> 1;
 		static constexpr const uint16_t NEGATIVE = 0xFFFF & ~(MASK >> RSHIFT);
@@ -97,7 +97,7 @@ namespace devices::mcp3x0x
 			uint8_t result1;
 			uint8_t result2;
 			this->start_transfer();
-			if (sizeof(CHANNEL) == 2)
+			if (sizeof(CHANNEL) == sizeof(uint16_t))
 			{
 				this->transfer(utils::high_byte(uint16_t(channel)));
 				result1 = this->transfer(utils::low_byte(uint16_t(channel)));
