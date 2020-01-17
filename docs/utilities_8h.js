@@ -19,6 +19,8 @@ var utilities_8h =
     [ "power_of_10", "utilities_8h.html#a1f09c3ac0739c934fa0b975fa827f993", null ],
     [ "map_raw_to_physical", "utilities_8h.html#a610e02474f969fc747fa1725b79e252c", null ],
     [ "map_physical_to_raw", "utilities_8h.html#a78e8ff3db7671b59028ba873086cfa32", null ],
+    [ "low_byte", "utilities_8h.html#ad5f19301125b8e9dc9e89ea50da962fa", null ],
+    [ "high_byte", "utilities_8h.html#a84e5a79013cf3cf3c46a09b2c4861d37", null ],
     [ "as_uint16_t", "utilities_8h.html#a9d48a47fd601d3b960ce55b26a4d5194", null ],
     [ "is_zero", "utilities_8h.html#a3525bf2bf63c9f906bc9b952f0d54355", null ],
     [ "set_mask", "utilities_8h.html#a983d6f3839652d22e2353e7cfeff63af", null ],

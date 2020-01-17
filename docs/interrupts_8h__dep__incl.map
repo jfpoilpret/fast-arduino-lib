@@ -1,25 +1,37 @@
 <map id="fastarduino/interrupts.h" name="fastarduino/interrupts.h">
-<area shape="rect" id="node1" title="General API for handling AVR interrupt vectors." alt="" coords="867,5,1042,32"/>
-<area shape="rect" id="node2" href="$analog__comparator_8h.html" title="Analog Comparator API." alt="" coords="5,80,149,121"/>
-<area shape="rect" id="node3" href="$int_8h.html" title="General API for handling External Interrupt pins." alt="" coords="474,87,603,114"/>
-<area shape="rect" id="node16" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="889,266,1079,293"/>
-<area shape="rect" id="node17" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="188,266,359,293"/>
-<area shape="rect" id="node18" href="$pci_8h.html" title="General API for handling Pin Change Interrupts." alt="" coords="659,87,789,114"/>
-<area shape="rect" id="node19" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes." alt="" coords="1264,445,1427,471"/>
-<area shape="rect" id="node20" href="$timer_8h.html" title="Timer API." alt="" coords="1021,87,1168,114"/>
-<area shape="rect" id="node21" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="792,169,947,211"/>
-<area shape="rect" id="node22" href="$uart_8h.html" title="Hardware serial API." alt="" coords="1372,87,1511,114"/>
-<area shape="rect" id="node23" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="1535,87,1710,114"/>
-<area shape="rect" id="node4" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="577,177,717,203"/>
-<area shape="rect" id="node6" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2...." alt="" coords="225,348,375,389"/>
-<area shape="rect" id="node10" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="714,259,865,300"/>
-<area shape="rect" id="node5" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="559,266,689,293"/>
-<area shape="rect" id="node9" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;,..." alt="" coords="383,259,534,300"/>
-<area shape="rect" id="node11" href="$pwm_8h.html" title="PWM API." alt="" coords="1103,266,1247,293"/>
-<area shape="rect" id="node7" href="$winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface." alt="" coords="462,348,613,389"/>
-<area shape="rect" id="node8" href="$spi_8cpp_source.html" title=" " alt="" coords="637,355,784,382"/>
-<area shape="rect" id="node12" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="918,348,1069,389"/>
-<area shape="rect" id="node13" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="1103,348,1247,389"/>
-<area shape="rect" id="node14" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="1089,437,1239,479"/>
-<area shape="rect" id="node15" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="1179,527,1330,568"/>
+<area shape="rect" id="node1" title="General API for handling AVR interrupt vectors." alt="" coords="1273,5,1448,32"/>
+<area shape="rect" id="node2" href="$analog__comparator_8h.html" title="Analog Comparator API." alt="" coords="462,80,606,121"/>
+<area shape="rect" id="node3" href="$int_8h.html" title="General API for handling External Interrupt pins." alt="" coords="908,87,1037,114"/>
+<area shape="rect" id="node28" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="1346,266,1535,293"/>
+<area shape="rect" id="node29" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="645,266,815,293"/>
+<area shape="rect" id="node30" href="$pci_8h.html" title="General API for handling Pin Change Interrupts." alt="" coords="1093,87,1223,114"/>
+<area shape="rect" id="node31" href="$eeprom_8h.html" title="API to handle EEPROM access in read and write modes." alt="" coords="1906,177,2069,203"/>
+<area shape="rect" id="node32" href="$timer_8h.html" title="Timer API." alt="" coords="1439,87,1586,114"/>
+<area shape="rect" id="node33" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="1226,169,1381,211"/>
+<area shape="rect" id="node34" href="$uart_8h.html" title="Hardware serial API." alt="" coords="1661,87,1799,114"/>
+<area shape="rect" id="node35" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="1824,87,1999,114"/>
+<area shape="rect" id="node4" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="1011,177,1151,203"/>
+<area shape="rect" id="node18" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2...." alt="" coords="532,348,683,389"/>
+<area shape="rect" id="node22" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="1171,259,1321,300"/>
+<area shape="rect" id="node5" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="1015,266,1146,293"/>
+<area shape="rect" id="node21" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;,..." alt="" coords="840,259,991,300"/>
+<area shape="rect" id="node23" href="$pwm_8h.html" title="PWM API." alt="" coords="1559,266,1703,293"/>
+<area shape="rect" id="node6" href="$mcp3x0x_8h.html" title="API to handle SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8, MCP3201&#45;2&#45;4&#45;8, MCP3301&#45;2&#45;4)." alt="" coords="1053,348,1204,389"/>
+<area shape="rect" id="node19" href="$winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface." alt="" coords="707,348,857,389"/>
+<area shape="rect" id="node20" href="$spi_8cpp_source.html" title=" " alt="" coords="882,355,1029,382"/>
+<area shape="rect" id="node7" href="$mcp3001_8h.html" title="API to handle MicroChip ADC chip MCP3001." alt="" coords="1577,437,1728,479"/>
+<area shape="rect" id="node8" href="$mcp3002_8h.html" title="API to handle MicroChip ADC chip MCP3002." alt="" coords="1752,437,1903,479"/>
+<area shape="rect" id="node9" href="$mcp3004_8h.html" title="API to handle MicroChip ADC chip MCP3004." alt="" coords="5,437,156,479"/>
+<area shape="rect" id="node10" href="$mcp3008_8h.html" title="API to handle MicroChip ADC chip MCP3008." alt="" coords="180,437,331,479"/>
+<area shape="rect" id="node11" href="$mcp3201_8h.html" title="API to handle MicroChip ADC chip MCP3201." alt="" coords="355,437,505,479"/>
+<area shape="rect" id="node12" href="$mcp3202_8h.html" title="API to handle MicroChip ADC chip MCP3202." alt="" coords="529,437,680,479"/>
+<area shape="rect" id="node13" href="$mcp3204_8h.html" title="API to handle MicroChip ADC chip MCP3204." alt="" coords="704,437,855,479"/>
+<area shape="rect" id="node14" href="$mcp3208_8h.html" title="API to handle MicroChip ADC chip MCP3208." alt="" coords="879,437,1029,479"/>
+<area shape="rect" id="node15" href="$mcp3301_8h.html" title="API to handle MicroChip ADC chip MCP3301." alt="" coords="1053,437,1204,479"/>
+<area shape="rect" id="node16" href="$mcp3302_8h.html" title="API to handle MicroChip ADC chip MCP3302." alt="" coords="1228,437,1379,479"/>
+<area shape="rect" id="node17" href="$mcp3304_8h.html" title="API to handle MicroChip ADC chip MCP3304." alt="" coords="1403,437,1553,479"/>
+<area shape="rect" id="node24" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="1429,348,1580,389"/>
+<area shape="rect" id="node25" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="1669,348,1813,389"/>
+<area shape="rect" id="node26" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="1927,437,2077,479"/>
+<area shape="rect" id="node27" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="1983,527,2133,568"/>
 </map>
