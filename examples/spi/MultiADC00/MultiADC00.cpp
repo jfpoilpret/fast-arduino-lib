@@ -42,7 +42,6 @@ template<uint16_t MASK, uint8_t RSHIFT, typename TYPE> struct MCP3x0x
 		{
 			if (value & SIGN_MASK)
 				// value is negative, change it to negative int16_t
-				//TODO need some unit tests for all this fuzzy code...
 				return TYPE(NEGATIVE | value);
 			else
 				// value is positive, directly cast it to int16_t
