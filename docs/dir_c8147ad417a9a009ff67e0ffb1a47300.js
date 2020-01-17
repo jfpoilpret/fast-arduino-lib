@@ -10,6 +10,20 @@ var dir_c8147ad417a9a009ff67e0ffb1a47300 =
     ] ],
     [ "mcp23017.h", "mcp23017_8h.html", "mcp23017_8h" ],
     [ "mcp230xx.h", "mcp230xx_8h.html", "mcp230xx_8h" ],
+    [ "mcp3001.h", "mcp3001_8h.html", "mcp3001_8h" ],
+    [ "mcp3002.h", "mcp3002_8h.html", "mcp3002_8h" ],
+    [ "mcp3004.h", "mcp3004_8h.html", "mcp3004_8h" ],
+    [ "mcp3008.h", "mcp3008_8h.html", "mcp3008_8h" ],
+    [ "mcp3201.h", "mcp3201_8h.html", "mcp3201_8h" ],
+    [ "mcp3202.h", "mcp3202_8h.html", "mcp3202_8h" ],
+    [ "mcp3204.h", "mcp3204_8h.html", "mcp3204_8h" ],
+    [ "mcp3208.h", "mcp3208_8h.html", "mcp3208_8h" ],
+    [ "mcp3301.h", "mcp3301_8h.html", "mcp3301_8h" ],
+    [ "mcp3302.h", "mcp3302_8h.html", "mcp3302_8h" ],
+    [ "mcp3304.h", "mcp3304_8h.html", "mcp3304_8h" ],
+    [ "mcp3x0x.h", "mcp3x0x_8h.html", [
+      [ "MCP3x0x", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x" ]
+    ] ],
     [ "mpu6050.h", "mpu6050_8h.html", "mpu6050_8h" ],
     [ "nrf24l01p.h", "nrf24l01p_8h.html", [
       [ "NRF24L01", "classdevices_1_1rf_1_1_n_r_f24_l01.html", "classdevices_1_1rf_1_1_n_r_f24_l01" ],

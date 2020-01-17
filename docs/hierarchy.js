@@ -8,6 +8,9 @@ var hierarchy =
       [ "spi::SPIDevice< CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2 >", "classspi_1_1_s_p_i_device.html", [
         [ "devices::WinBond< CS >", "classdevices_1_1_win_bond.html", null ]
       ] ],
+      [ "spi::SPIDevice< CS, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(3 '600 '000UL), spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST >", "classspi_1_1_s_p_i_device.html", [
+        [ "devices::mcp3x0x::MCP3x0x< CS, CHANNEL_, MASK, RSHIFT, TYPE_ >", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html", null ]
+      ] ],
       [ "spi::SPIDevice< CSN >", "classspi_1_1_s_p_i_device.html", [
         [ "devices::rf::NRF24L01< CSN, CE >", "classdevices_1_1rf_1_1_n_r_f24_l01.html", [
           [ "devices::rf::IRQ_NRF24L01< CSN, CE, IRQ >", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html", null ]

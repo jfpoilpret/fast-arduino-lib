@@ -21,6 +21,9 @@ var namespacedevices =
       [ "MCP23008", "classdevices_1_1mcp230xx_1_1_m_c_p23008.html", "classdevices_1_1mcp230xx_1_1_m_c_p23008" ],
       [ "MCP23017", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html", "classdevices_1_1mcp230xx_1_1_m_c_p23017" ]
     ] ],
+    [ "mcp3x0x", null, [
+      [ "MCP3x0x", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x" ]
+    ] ],
     [ "rf", null, [
       [ "IRQ_NRF24L01", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01" ],
       [ "NRF24L01", "classdevices_1_1rf_1_1_n_r_f24_l01.html", "classdevices_1_1rf_1_1_n_r_f24_l01" ]

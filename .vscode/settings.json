@@ -112,6 +112,8 @@
     "C_Cpp.default.intelliSenseMode": "gcc-x64",
     "files.associations": {
         "**/*.yml": "ansible",
-        "cstdint": "cpp"
+        "cstdint": "cpp",
+        "*.tcc": "cpp",
+        "fstream": "cpp"
     }
 }

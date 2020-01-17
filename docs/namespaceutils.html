@@ -145,6 +145,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a78e8ff3db7671b59028ba873086cfa32"><td class="memItemLeft" align="right" valign="top">constexpr int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32">map_physical_to_raw</a> (int16_t value, <a class="el" href="namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0">UnitPrefix</a> prefix, int16_t range, uint8_t precision_bits)</td></tr>
 <tr class="memdesc:a78e8ff3db7671b59028ba873086cfa32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an absolute physical <code>value</code>, expressed in some given measurement unit, scaled with <code>prefix</code>, into a raw measurement as if obtained from a electronics device, using <code>precision_bit</code> number of bits (that defines the device raw measure range); for this device, physical measures are within <code>range</code>.  <a href="#a78e8ff3db7671b59028ba873086cfa32">More...</a><br /></td></tr>
 <tr class="separator:a78e8ff3db7671b59028ba873086cfa32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5f19301125b8e9dc9e89ea50da962fa"><td class="memItemLeft" align="right" valign="top"><a id="ad5f19301125b8e9dc9e89ea50da962fa"></a>
+constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#ad5f19301125b8e9dc9e89ea50da962fa">low_byte</a> (uint16_t word)</td></tr>
+<tr class="memdesc:ad5f19301125b8e9dc9e89ea50da962fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the low order byte of a 16-bits word. <br /></td></tr>
+<tr class="separator:ad5f19301125b8e9dc9e89ea50da962fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84e5a79013cf3cf3c46a09b2c4861d37"><td class="memItemLeft" align="right" valign="top"><a id="a84e5a79013cf3cf3c46a09b2c4861d37"></a>
+constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a84e5a79013cf3cf3c46a09b2c4861d37">high_byte</a> (uint16_t word)</td></tr>
+<tr class="memdesc:a84e5a79013cf3cf3c46a09b2c4861d37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the high order byte of a 16-bits word. <br /></td></tr>
+<tr class="separator:a84e5a79013cf3cf3c46a09b2c4861d37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d48a47fd601d3b960ce55b26a4d5194"><td class="memItemLeft" align="right" valign="top">constexpr uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a9d48a47fd601d3b960ce55b26a4d5194">as_uint16_t</a> (uint8_t high, uint8_t low)</td></tr>
 <tr class="memdesc:a9d48a47fd601d3b960ce55b26a4d5194"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert 2 bytes into an unsigned int.  <a href="#a9d48a47fd601d3b960ce55b26a4d5194">More...</a><br /></td></tr>
 <tr class="separator:a9d48a47fd601d3b960ce55b26a4d5194"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -518,7 +526,7 @@ template&lt;typename TI , typename TO &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the unsigned integer computed from <code>high</code> and <code>low</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00288">288</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00304">304</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -561,7 +569,7 @@ operator"). </p>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>value</code> if <code>value</code> is not false (or 0) otherwise <code>default_value</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00300">300</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00316">316</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -615,7 +623,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00313">313</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00329">329</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -669,7 +677,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00325">325</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00341">341</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -706,7 +714,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>bcd</code> converted to natural integer </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00336">336</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00352">352</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -743,7 +751,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>binary</code> converted to BCD </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00350">350</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00366">366</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -779,7 +787,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00366">366</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00382">382</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -815,7 +823,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00376">376</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00392">392</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -846,7 +854,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>input</code> casted as a byte </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00398">398</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00414">414</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -875,7 +883,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the count to pass to <code>delay</code>()` AVR function </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00411">411</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00427">427</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
@@ -913,7 +921,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00421">421</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00437">437</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>
