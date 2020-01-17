@@ -158,7 +158,7 @@ struct devices::sonar::SonarEvent&lt; NTIMER_ &gt;</h3>
 <dd>
 <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a343b9784151711d186327284c347d236" title="The exact SonarEvent type produced by this MultiHCSR04 instance.">MultiHCSR04::EVENT</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00966">966</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00973">973</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ac070d4377cd1219c62db54d21257ee54"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac070d4377cd1219c62db54d21257ee54">&#9670;&nbsp;</a></span>RTT</h2>
@@ -177,7 +177,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>The type of <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer.">timer::RTT</a></code> used by the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> producing this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler.">SonarEvent</a></code>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#aaef6b674165a7bd5dcf4976bed3fc1a5" title="The type of timer::RTT used by this MultiHCSR04 instance.">MultiHCSR04::RTT</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00976">976</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00983">983</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -198,7 +198,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>The <code><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine.">timer::RTTRawTime</a></code> type used by the <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> producing this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler.">SonarEvent</a></code>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine.">timer::RTTRawTime</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00983">983</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00990">990</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -230,7 +230,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 
 <p>Default constructor. </p>
 <p>This is here to allow direct declaration in your code: </p><div class="fragment"><div class="line">SonarEvent&lt;NTIMER&gt; event;</div><div class="line">...</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l00993">993</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01000">1000</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -263,7 +263,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>Indicate if this event was produced by a timeout while waiting for echo pulses. </p>
 <p>If so, no other field in this <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler.">SonarEvent</a></code> is relevant. Hence this is the first method you should call on a <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler.">SonarEvent</a></code> you need to handle. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01001">1001</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01008">1008</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -296,7 +296,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <p>Each bit maps to one sonar handled by the producing <code>MultHCSR04</code>; when <code>1</code>, the echo pulse just started on the matching sonar. <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred.">time()</a></code> will then provide the exact time at which the pulse egde occurred.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred.">time()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01016">1016</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01023">1023</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -331,7 +331,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65" title="The timer::RTTRawTime at which this event occurred.">time()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01034">1034</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01041">1041</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -366,7 +366,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <dd>
 <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#aaa9fe430fd043ca3992f37ac66a24ec1" title="Indicate if this event was produced tdue to an echo pulse trailing edge just received by the related ...">ready()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01046">1046</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01053">1053</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -378,7 +378,7 @@ template&lt;board::Timer NTIMER_&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>sonar</b></li><li class="navelem"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1sonar.html">sonar</a></li><li class="navelem"><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html">SonarEvent</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>

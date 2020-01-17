@@ -152,7 +152,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a8ff91a2361b03432c5e72f5a4defa750"><td class="memItemLeft" align="right" valign="top">static constexpr const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> = 4</td></tr>
 <tr class="memdesc:a8ff91a2361b03432c5e72f5a4defa750"><td class="mdescLeft">&#160;</td><td class="mdescRight">The approximate maximum range, in meters, that this sonar sensor supports.  <a href="#a8ff91a2361b03432c5e72f5a4defa750">More...</a><br /></td></tr>
 <tr class="separator:a8ff91a2361b03432c5e72f5a4defa750"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a568791a5cba1f49509f380aff1101f38"><td class="memItemLeft" align="right" valign="top">static constexpr const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a568791a5cba1f49509f380aff1101f38">DEFAULT_TIMEOUT_MS</a> = <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> * 2 * ONE_MILLI_32 / SPEED_OF_SOUND + 1</td></tr>
+<tr class="memitem:a568791a5cba1f49509f380aff1101f38"><td class="memItemLeft" align="right" valign="top">static constexpr const uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a568791a5cba1f49509f380aff1101f38">DEFAULT_TIMEOUT_MS</a> = <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> * 2 * ONE_MILLI_32 / <a class="el" href="namespacedevices_1_1sonar.html#a45348626a8f4f1dad995f9376cc92770">SPEED_OF_SOUND</a> + 1</td></tr>
 <tr class="memdesc:a568791a5cba1f49509f380aff1101f38"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default timeout duration, in milliseconds, to use if you want to cover the maximum range of the sensor.  <a href="#a568791a5cba1f49509f380aff1101f38">More...</a><br /></td></tr>
 <tr class="separator:a568791a5cba1f49509f380aff1101f38"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -192,7 +192,7 @@ class devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ 
 <dd>
 <a class="el" href="sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01098">1098</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01105">1105</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aaef6b674165a7bd5dcf4976bed3fc1a5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaef6b674165a7bd5dcf4976bed3fc1a5">&#9670;&nbsp;</a></span>RTT</h2>
@@ -210,7 +210,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 
 <p>The type of <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer.">timer::RTT</a></code> used by this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> instance. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01119">1119</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01126">1126</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -230,7 +230,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 
 <p>The exact <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler.">SonarEvent</a></code> type produced by this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> instance. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01121">1121</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01128">1128</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -269,7 +269,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01145">1145</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01152">1152</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -320,7 +320,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <dd>
 <a class="el" href="sonar_8h.html#a3a9689da1c2cb01a59ea8a6bde709ade" title="Register the necessary ISR (Interrupt Service Routine) for a devices::sonar::MultiHCSR04 to be notifi...">REGISTER_MULTI_HCSR04_RTT_TIMEOUT_FUNCTION()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01167">1167</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01174">1174</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -355,7 +355,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <li>timeout has occurred while waiting for one (or more) echo pulses </li>
 </ul>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01187">1187</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01194">1194</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -393,7 +393,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <dd>
 <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#adaa8097e1fb62f58f28c4d0cc105ae22" title="Force readiness of all connected sensors, ie the end of current ranging.">set_ready()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01205">1205</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01212">1212</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -425,7 +425,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <p>Tell if the latest ranging, started by <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04.">trigger()</a></code>, is finished for all connected sonars, ie the echo pulse has been received. </p>
 <p>If you want to know for which connected sonars ranging is finished, then use <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a2df1e7d175287c7775e72d84a031a427" title="Tell, for which of the connected sonars, the latest ranging, started by trigger(),...">ready()</a></code> instead. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01216">1216</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01223">1223</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -457,7 +457,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <p>Force readiness of all connected sensors, ie the end of current ranging. </p>
 <p>This can be used by callbacks e.g. to stop current ranging when a timeout has occurred. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01226">1226</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01233">1233</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -486,7 +486,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 
 <p>The <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code> connected to the sensors trigger pins. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01102">1102</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01109">1109</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -514,7 +514,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 
 <p>The MCU port to which all echo pins of sonars handled by this class are connected. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01104">1104</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01111">1111</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -542,7 +542,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 
 <p>The mask determining which pins of <code>ECHO_PORT</code> are actually connected to a real sonar echo pin. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01106">1106</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01113">1113</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -571,7 +571,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <p>The approximate maximum range, in meters, that this sonar sensor supports. </p>
 <p>Any obstacle beyond this distance will generate no echo pulse from the sensor. </p>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01128">1128</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01135">1135</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -587,7 +587,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr const uint16_t <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::DEFAULT_TIMEOUT_MS = <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> * 2 * ONE_MILLI_32 / SPEED_OF_SOUND + 1</td>
+          <td class="memname">constexpr const uint16_t <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">devices::sonar::MultiHCSR04</a>&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;::DEFAULT_TIMEOUT_MS = <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a8ff91a2361b03432c5e72f5a4defa750">MAX_RANGE_M</a> * 2 * ONE_MILLI_32 / <a class="el" href="namespacedevices_1_1sonar.html#a45348626a8f4f1dad995f9376cc92770">SPEED_OF_SOUND</a> + 1</td>
         </tr>
       </table>
   </td>
@@ -602,7 +602,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <dd>
 <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027" title="Start ranging on all sonars connected to this MultiHCSR04.">trigger()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01137">1137</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sonar_8h_source.html#l01144">1144</a> of file <a class="el" href="sonar_8h_source.html">sonar.h</a>.</p>
 
 </div>
 </div>
@@ -614,7 +614,7 @@ template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_P
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>sonar</b></li><li class="navelem"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">MultiHCSR04</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1sonar.html">sonar</a></li><li class="navelem"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html">MultiHCSR04</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>

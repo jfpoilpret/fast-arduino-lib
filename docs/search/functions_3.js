@@ -19,7 +19,7 @@ var searchData=
   ['disable_5fpins_5f',['disable_pins_',['../classinterrupt_1_1_p_c_i_signal.html#af68e7e306ffd4488363745231585c3f5',1,'interrupt::PCISignal']]],
   ['disable_5fwrite',['disable_write',['../classdevices_1_1_win_bond.html#a11a1577660d2089d1e938d0c78557e86',1,'devices::WinBond']]],
   ['dispatch',['dispatch',['../classevents_1_1_dispatcher.html#a97998440c7f6f351f57fb501df3c0dd7',1,'events::Dispatcher']]],
-  ['distance_5fmm_5fto_5fecho_5fus',['distance_mm_to_echo_us',['../sonar_8h.html#af3bc97f71928347fa7b883f166235916',1,'devices::sonar']]],
-  ['dotted',['dotted',['../tone__player_8h.html#a222d4124b81f50a0025e06a509e6c110',1,'devices::audio']]],
+  ['distance_5fmm_5fto_5fecho_5fus',['distance_mm_to_echo_us',['../namespacedevices_1_1sonar.html#af3bc97f71928347fa7b883f166235916',1,'devices::sonar']]],
+  ['dotted',['dotted',['../namespacedevices_1_1audio.html#a222d4124b81f50a0025e06a509e6c110',1,'devices::audio']]],
   ['ds1307',['DS1307',['../classdevices_1_1rtc_1_1_d_s1307.html#a4f5ff1c8b22610e679eba4b017b03606',1,'devices::rtc::DS1307']]]
 ];

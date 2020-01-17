@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['setup_5faw',['SETUP_AW',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa51ce6e22a02accadc359e125441193e9',1,'devices::rf::NRF24L01']]],
-  ['setup_5fretr',['SETUP_RETR',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa14367f0ebd70d515bc5566b6cc976d46',1,'devices::rf::NRF24L01']]],
-  ['standard',['STANDARD',['../namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0',1,'i2c']]],
-  ['start_5fno_5fstop',['START_NO_STOP',['../namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eab49c63ca611c1b57592299c62ce0f3ae',1,'i2c']]],
-  ['start_5fstop',['START_STOP',['../namespacei2c.html#ae97c327132c21ce93c129f34d3b5101eaf749dae7024a2aceb2b15cb807300aef',1,'i2c']]],
-  ['status',['STATUS',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aa5f241c8c8f985b3c51e05d39cf030f4c',1,'devices::rf::NRF24L01']]]
+  ['phase_5fcorrect_5fpwm',['PHASE_CORRECT_PWM',['../namespacetimer.html#a6f85b9572e33671db45e5ac8ee3ea097a7f01b8981f6296047e0083579b050770',1,'timer']]],
+  ['pipe_5fmask',['PIPE_MASK',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#acffff70f3fa128ad21602236aa20ef30ab9f475993c1dd99db529c27f80f1642d',1,'devices::rf::NRF24L01']]],
+  ['port_5fa',['PORT_A',['../namespacedevices_1_1mcp230xx.html#ab180a3010d19bcd655569e6a2e022969a74be45e4297a389149136838447505eb',1,'devices::mcp230xx']]],
+  ['port_5fab',['PORT_AB',['../namespacedevices_1_1mcp230xx.html#ab180a3010d19bcd655569e6a2e022969a0a2feb35c8d6fe4651682010fed3f6f6',1,'devices::mcp230xx']]],
+  ['port_5fb',['PORT_B',['../namespacedevices_1_1mcp230xx.html#ab180a3010d19bcd655569e6a2e022969a9cae7bfd8bd697a2b71b832915916500',1,'devices::mcp230xx']]]
 ];

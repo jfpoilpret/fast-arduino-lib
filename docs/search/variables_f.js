@@ -11,6 +11,6 @@ var searchData=
   ['sla_5fw_5ftransmitted_5fnack',['SLA_W_TRANSMITTED_NACK',['../namespacei2c_1_1_status.html#a41e8f178c653f0fcf4060a26dab6f7bf',1,'i2c::Status']]],
   ['slur',['SLUR',['../namespacedevices_1_1audio_1_1_special_tone.html#a06daaae22209035c123e92935e2cdf5e',1,'devices::audio::SpecialTone']]],
   ['sonar_5ftype',['SONAR_TYPE',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#a71e6d0d6892d993152356637fc02f289',1,'devices::sonar::HCSR04']]],
-  ['speed_5fof_5fsound',['SPEED_OF_SOUND',['../sonar_8h.html#a45348626a8f4f1dad995f9376cc92770',1,'devices::sonar']]],
+  ['speed_5fof_5fsound',['SPEED_OF_SOUND',['../namespacedevices_1_1sonar.html#a45348626a8f4f1dad995f9376cc92770',1,'devices::sonar']]],
   ['start_5ftransmitted',['START_TRANSMITTED',['../namespacei2c_1_1_status.html#a3332435f3cfafe3c696fdc5ec63d38f9',1,'i2c::Status']]]
 ];

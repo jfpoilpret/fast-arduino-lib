@@ -17,6 +17,6 @@ var searchData=
   ['transfer',['transfer',['../classspi_1_1_abstract_s_p_i_device.html#a5439aabb817119e079f29a8eddfd3edc',1,'spi::AbstractSPIDevice::transfer(uint8_t data)'],['../classspi_1_1_abstract_s_p_i_device.html#a63111d80e27d147a46e9654346a0b0b7',1,'spi::AbstractSPIDevice::transfer(uint8_t *data, uint16_t size)'],['../classspi_1_1_abstract_s_p_i_device.html#a19de463c2ae3e8e627012f42f9e54401',1,'spi::AbstractSPIDevice::transfer(const uint8_t *data, uint16_t size)'],['../classspi_1_1_abstract_s_p_i_device.html#a3a92225a72e5136406cadaabbef0cb62',1,'spi::AbstractSPIDevice::transfer(uint8_t *data, uint16_t size, uint8_t sent)'],['../classspi_1_1_abstract_s_p_i_device.html#a90a120b920e48402fd7fb84b8452c026',1,'spi::AbstractSPIDevice::transfer(uint16_t size, uint8_t sent)']]],
   ['traverse',['traverse',['../classcontainers_1_1_linked_list.html#a4ae2eead4262bfe59bfc714774cd9d43',1,'containers::LinkedList']]],
   ['trigger',['trigger',['../classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a002878e5c75fb4fb513e855629b68027',1,'devices::sonar::MultiHCSR04']]],
-  ['triplet',['triplet',['../tone__player_8h.html#a2faad8e6873df42c8fe7a3885d6dfb5b',1,'devices::audio']]],
+  ['triplet',['triplet',['../namespacedevices_1_1audio.html#a2faad8e6873df42c8fe7a3885d6dfb5b',1,'devices::audio']]],
   ['type',['type',['../classevents_1_1_event.html#a4cc68c5a6710d276baa534b61a25f611',1,'events::Event::type()'],['../classevents_1_1_event_handler.html#ab3ce6db961c671fec9475507d17a65d0',1,'events::EventHandler::type()']]]
 ];

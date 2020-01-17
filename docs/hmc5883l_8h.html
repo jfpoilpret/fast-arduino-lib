@@ -135,12 +135,15 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacedevices"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices.html">devices</a></td></tr>
-<tr class="memdesc:namespacedevices"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API for Real-Time Clock chips usage. <br /></td></tr>
+<tr class="memdesc:namespacedevices"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all API for all external devices supported by FastArduino. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacedevices_1_1magneto"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1magneto.html">devices::magneto</a></td></tr>
+<tr class="memdesc:namespacedevices_1_1magneto"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API for magnetic sensors for direction, speed and acceleration properties. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a9e686e1825471f8625d03061992dc76e"><td class="memItemLeft" align="right" valign="top"><a id="a9e686e1825471f8625d03061992dc76e"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="hmc5883l_8h.html#a9e686e1825471f8625d03061992dc76e">devices::magneto::SamplesAveraged</a> : uint8_t { <br />
+<tr class="memitem:a9e686e1825471f8625d03061992dc76e"><td class="memItemLeft" align="right" valign="top"><a id="a9e686e1825471f8625d03061992dc76e"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1magneto.html#a9e686e1825471f8625d03061992dc76e">devices::magneto::SamplesAveraged</a> : uint8_t { <br />
 &#160;&#160;<b>ONE_SAMPLE</b> = 0 &lt;&lt; 5, 
 <br />
 &#160;&#160;<b>TWO_SAMPLES</b> = 1 &lt;&lt; 5, 
@@ -152,7 +155,7 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a9e686e1825471f8625d03061992dc76e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of samples to average every time a measurement is required from the HMC5883L chip (datasheet p12). <br /></td></tr>
 <tr class="separator:a9e686e1825471f8625d03061992dc76e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2ffe07596a9831289b3eb76e83ec2aa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="hmc5883l_8h.html#af2ffe07596a9831289b3eb76e83ec2aa">devices::magneto::DataOutput</a> : uint8_t { <br />
+<tr class="memitem:af2ffe07596a9831289b3eb76e83ec2aa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1magneto.html#af2ffe07596a9831289b3eb76e83ec2aa">devices::magneto::DataOutput</a> : uint8_t { <br />
 &#160;&#160;<b>RATE_0_75HZ</b> = 0 &lt;&lt; 2, 
 <br />
 &#160;&#160;<b>RATE_1_5HZ</b> = 1 &lt;&lt; 2, 
@@ -168,9 +171,9 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>RATE_75HZ</b> = 6 &lt;&lt; 2
 <br />
  }</td></tr>
-<tr class="memdesc:af2ffe07596a9831289b3eb76e83ec2aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">The output rate when used in continuous mode (datasheet p12).  <a href="hmc5883l_8h.html#af2ffe07596a9831289b3eb76e83ec2aa">More...</a><br /></td></tr>
+<tr class="memdesc:af2ffe07596a9831289b3eb76e83ec2aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">The output rate when used in continuous mode (datasheet p12).  <a href="namespacedevices_1_1magneto.html#af2ffe07596a9831289b3eb76e83ec2aa">More...</a><br /></td></tr>
 <tr class="separator:af2ffe07596a9831289b3eb76e83ec2aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73e5a83c3a0209228c48c115f21c01bc"><td class="memItemLeft" align="right" valign="top"><a id="a73e5a83c3a0209228c48c115f21c01bc"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="hmc5883l_8h.html#a73e5a83c3a0209228c48c115f21c01bc">devices::magneto::MeasurementMode</a> : uint8_t { <br />
+<tr class="memitem:a73e5a83c3a0209228c48c115f21c01bc"><td class="memItemLeft" align="right" valign="top"><a id="a73e5a83c3a0209228c48c115f21c01bc"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc">devices::magneto::MeasurementMode</a> : uint8_t { <br />
 &#160;&#160;<b>NORMAL</b> = 0, 
 <br />
 &#160;&#160;<b>POSITIVE_BIAS</b> = 1, 
@@ -180,7 +183,7 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a73e5a83c3a0209228c48c115f21c01bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The measurement mode as defined in datasheet p12, table6. <br /></td></tr>
 <tr class="separator:a73e5a83c3a0209228c48c115f21c01bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5a939dc4c5640584198a3ae0a7914f0"><td class="memItemLeft" align="right" valign="top"><a id="ab5a939dc4c5640584198a3ae0a7914f0"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="hmc5883l_8h.html#ab5a939dc4c5640584198a3ae0a7914f0">devices::magneto::OperatingMode</a> : uint8_t { <br />
+<tr class="memitem:ab5a939dc4c5640584198a3ae0a7914f0"><td class="memItemLeft" align="right" valign="top"><a id="ab5a939dc4c5640584198a3ae0a7914f0"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1magneto.html#ab5a939dc4c5640584198a3ae0a7914f0">devices::magneto::OperatingMode</a> : uint8_t { <br />
 &#160;&#160;<b>CONTINUOUS</b> = 0, 
 <br />
 &#160;&#160;<b>SINGLE</b> = 1, 
@@ -190,7 +193,7 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ab5a939dc4c5640584198a3ae0a7914f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The operating mode of the chip as defined in datasheet p10, p14 table 12. <br /></td></tr>
 <tr class="separator:ab5a939dc4c5640584198a3ae0a7914f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e3190fff3a9a97602b890647846068d"><td class="memItemLeft" align="right" valign="top"><a id="a9e3190fff3a9a97602b890647846068d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="hmc5883l_8h.html#a9e3190fff3a9a97602b890647846068d">devices::magneto::Gain</a> : uint8_t { <br />
+<tr class="memitem:a9e3190fff3a9a97602b890647846068d"><td class="memItemLeft" align="right" valign="top"><a id="a9e3190fff3a9a97602b890647846068d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d">devices::magneto::Gain</a> : uint8_t { <br />
 &#160;&#160;<b>GAIN_0_88GA</b> = 0 &lt;&lt; 5, 
 <br />
 &#160;&#160;<b>GAIN_1_3GA</b> = 1 &lt;&lt; 5, 
@@ -214,7 +217,7 @@ Enumerations</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a3b4ef6b88b5accbf034aa8728c711715"><td class="memItemLeft" align="right" valign="top"><a id="a3b4ef6b88b5accbf034aa8728c711715"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="hmc5883l_8h.html#a3b4ef6b88b5accbf034aa8728c711715">devices::magneto::magnetic_heading</a> (int16_t x, int16_t y)</td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1magneto.html#a3b4ef6b88b5accbf034aa8728c711715">devices::magneto::magnetic_heading</a> (int16_t x, int16_t y)</td></tr>
 <tr class="memdesc:a3b4ef6b88b5accbf034aa8728c711715"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the magnetic heading (heading measured clockwise from magnetic north) from X and Y magnetic fields. <br /></td></tr>
 <tr class="separator:a3b4ef6b88b5accbf034aa8728c711715"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -223,35 +226,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="hmc
 <dl class="section see"><dt>See also</dt><dd><a href="https://github.com/jfpoilpret/fast-arduino-lib/blob/master/refs/devices/HMC5883L.pdf">https://github.com/jfpoilpret/fast-arduino-lib/blob/master/refs/devices/HMC5883L.pdf</a> </dd></dl>
 
 <p class="definition">Definition in file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="file_af2ffe07596a9831289b3eb76e83ec2aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#file_af2ffe07596a9831289b3eb76e83ec2aa">&#9670;&nbsp;</a></span>DataOutput</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="hmc5883l_8h.html#af2ffe07596a9831289b3eb76e83ec2aa">devices::magneto::DataOutput</a> : uint8_t</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The output rate when used in continuous mode (datasheet p12). </p>
-<dl class="section see"><dt>See also</dt><dd>OperatingMode </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00061">61</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

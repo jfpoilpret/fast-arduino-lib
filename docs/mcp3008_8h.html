@@ -130,19 +130,22 @@ Include dependency graph for mcp3008.h:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacedevices"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices.html">devices</a></td></tr>
-<tr class="memdesc:namespacedevices"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API for Real-Time Clock chips usage. <br /></td></tr>
+<tr class="memdesc:namespacedevices"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all API for all external devices supported by FastArduino. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacedevices_1_1mcp3x0x"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1mcp3x0x.html">devices::mcp3x0x</a></td></tr>
+<tr class="memdesc:namespacedevices_1_1mcp3x0x"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the API for MicroChip ADC chips family support. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:add1644f0562c65093e0f6ff755902e86"><td class="memTemplParams" colspan="2">template&lt;board::DigitalPin CS&gt; </td></tr>
-<tr class="memitem:add1644f0562c65093e0f6ff755902e86"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="mcp3008_8h.html#add1644f0562c65093e0f6ff755902e86">devices::mcp3x0x::MCP3008</a> = MCP3x0x&lt; CS, MCP3008Channel, 0x03FF, 0 &gt;</td></tr>
-<tr class="memdesc:add1644f0562c65093e0f6ff755902e86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device class supporting MCP3008 ADC chip.  <a href="mcp3008_8h.html#add1644f0562c65093e0f6ff755902e86">More...</a><br /></td></tr>
+<tr class="memitem:add1644f0562c65093e0f6ff755902e86"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1mcp3x0x.html#add1644f0562c65093e0f6ff755902e86">devices::mcp3x0x::MCP3008</a> = MCP3x0x&lt; CS, MCP3008Channel, 0x03FF, 0 &gt;</td></tr>
+<tr class="memdesc:add1644f0562c65093e0f6ff755902e86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Device class supporting MCP3008 ADC chip.  <a href="namespacedevices_1_1mcp3x0x.html#add1644f0562c65093e0f6ff755902e86">More...</a><br /></td></tr>
 <tr class="separator:add1644f0562c65093e0f6ff755902e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a9ac959352f715c81ecc2a4d2c991b99c"><td class="memItemLeft" align="right" valign="top"><a id="a9ac959352f715c81ecc2a4d2c991b99c"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mcp3008_8h.html#a9ac959352f715c81ecc2a4d2c991b99c">devices::mcp3x0x::MCP3008Channel</a> : uint16_t { <br />
+<tr class="memitem:a9ac959352f715c81ecc2a4d2c991b99c"><td class="memItemLeft" align="right" valign="top"><a id="a9ac959352f715c81ecc2a4d2c991b99c"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99c">devices::mcp3x0x::MCP3008Channel</a> : uint16_t { <br />
 &#160;&#160;<b>CH0</b> = 0x0180, 
 <br />
 &#160;&#160;<b>CH1</b> = 0x0190, 
@@ -183,33 +186,7 @@ Enumerations</h2></td></tr>
 <div class="textblock"><p>API to handle MicroChip ADC chip MCP3008. </p>
 
 <p class="definition">Definition in file <a class="el" href="mcp3008_8h_source.html">mcp3008.h</a>.</p>
-</div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="file_add1644f0562c65093e0f6ff755902e86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#file_add1644f0562c65093e0f6ff755902e86">&#9670;&nbsp;</a></span>MCP3008</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;board::DigitalPin CS&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="mcp3008_8h.html#add1644f0562c65093e0f6ff755902e86">devices::mcp3x0x::MCP3008</a> = typedef MCP3x0x&lt;CS, MCP3008Channel, 0x03FF, 0&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Device class supporting MCP3008 ADC chip. </p>
-<dl class="section see"><dt>See also</dt><dd>MCP3001 </dd>
-<dd>
-MCP3002 </dd>
-<dd>
-MCP3004 </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="mcp3008_8h_source.html#l00060">60</a> of file <a class="el" href="mcp3008_8h_source.html">mcp3008.h</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

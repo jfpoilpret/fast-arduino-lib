@@ -32,7 +32,7 @@ var NAVTREE =
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
+        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
@@ -64,14 +64,14 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-".html",
-"classdevices_1_1audio_1_1_tone_player.html#a4300cb753680532170459718a402b9e9",
-"classevents_1_1_job.html#a575132ca904526a8918989225082833e",
-"classstreams_1_1istream.html#a5f200be947f576213b92277f64f9276f",
-"flash_8h_source.html",
-"mcp3202_8h.html#adf3528439ed62f13f9971982f009e174",
-"spi_8h.html#a030761907666e27c3a2236d68792a30ba1a08b06becddf8272619d67bbe196321",
-"tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaa9f693771ca12c43759045cdf4295e9f5"
+"abi_8cpp_source.html",
+"classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad385a7db4270f602df52a2eb06bc903a",
+"classevents_1_1_scheduler.html#afec660953213969f4e4f7e81b2256110",
+"classstreams_1_1istream.html#ae4e2b657fa91f8c286ffa3c3dc2e0d94",
+"functions_func_b.html",
+"mcp3204_8h.html#acd2a206fd02d03409c2872c33d94127aa5d2088374cf542187a09641fac593ca4",
+"sonar_8h.html#a19777a99a5fd97d4fed4561306f0f869",
+"tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaa3abe124ecc82bf2c2e22e6058f38c50c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

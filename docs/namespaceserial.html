@@ -87,6 +87,7 @@ $(document).ready(function(){initNavTree('namespaceserial.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
@@ -94,9 +95,18 @@ $(document).ready(function(){initNavTree('namespaceserial.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Defines API types used by software UART features.  
+<p>Defines all API for UART features.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceserial_1_1hard"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceserial_1_1hard.html">hard</a></td></tr>
+<tr class="memdesc:namespaceserial_1_1hard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API types used by hardware <a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API.">UART</a> features. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceserial_1_1soft"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceserial_1_1soft.html">soft</a></td></tr>
+<tr class="memdesc:namespaceserial_1_1soft"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API types used by software UART features. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classserial_1_1_u_a_r_t_errors.html">UARTErrors</a></td></tr>
@@ -135,12 +145,11 @@ Enumerations</h2></td></tr>
 <tr class="separator:a1abc2ad4df0b9d422f51f63c81d0a2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Defines API types used by software UART features. </p>
-<p>Defines API types used by hardware and software UART features.</p>
-<p>Defines API types used by hardware UART features.</p>
-<p>This API is available to all MCU, even those that do not have hardware UART, hence even ATtiny MCU are supported. IMPORTANT! Note that software-emulated UART cannot be as fast as hardware UART, for that reason a maximum rate of 115'200bps is supported, preferrably with 2 stop bits (depending on the sending device, UART reception may lose bits if only one stop bit is used).</p>
-<dl class="section see"><dt>See also</dt><dd>serial::hard</dd></dl>
-<p>Note this API is only available to MCU that have hardware UART, such as all ATmega, but not other MCU, like ATtiny. </p>
+<div class="textblock"><p>Defines all API for UART features. </p>
+<p>This namespace embeds two namespaces:</p><ul>
+<li><code>hard</code> contains API for hardware UART (only for MCU that support it)</li>
+<li><code>soft</code> contains API for software-emulated UART (for all MCU) </li>
+</ul>
 </div><h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a770c86bfde96ad529293b7b322422032"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a770c86bfde96ad529293b7b322422032">&#9670;&nbsp;</a></span>Parity</h2>
@@ -172,7 +181,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00034">34</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00037">37</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
 
 </div>
 </div>
@@ -204,7 +213,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00047">47</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00050">50</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
 
 </div>
 </div>
@@ -238,7 +247,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00059">59</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart__commons_8h_source.html#l00062">62</a> of file <a class="el" href="uart__commons_8h_source.html">uart_commons.h</a>.</p>
 
 </div>
 </div>

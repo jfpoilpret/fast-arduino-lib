@@ -143,12 +143,15 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespacedevices"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices.html">devices</a></td></tr>
-<tr class="memdesc:namespacedevices"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API for Real-Time Clock chips usage. <br /></td></tr>
+<tr class="memdesc:namespacedevices"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all API for all external devices supported by FastArduino. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacedevices_1_1audio"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html">devices::audio</a></td></tr>
+<tr class="memdesc:namespacedevices_1_1audio"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API for audio tones (square waves) generation and simple melodies playing. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">devices::audio::Tone</a> : uint16_t { <br />
+<tr class="memitem:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">devices::audio::Tone</a> : uint16_t { <br />
 &#160;&#160;<b>USER0</b> = 0, 
 <br />
 &#160;&#160;<b>USER1</b>, 
@@ -340,47 +343,14 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>B4</b> = 3951
 <br />
  }</td></tr>
-<tr class="memdesc:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines all possible audio tones that can be generated.  <a href="tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">More...</a><br /></td></tr>
+<tr class="memdesc:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">This enum defines all possible audio tones that can be generated.  <a href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">More...</a><br /></td></tr>
 <tr class="separator:ad5cef39b1f81f50bd23e0a4f4cf555aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>API to handle tones (simple square waves) generation to a buzzer. </p>
 
 <p class="definition">Definition in file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="file_ad5cef39b1f81f50bd23e0a4f4cf555aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#file_ad5cef39b1f81f50bd23e0a4f4cf555aa">&#9670;&nbsp;</a></span>Tone</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">devices::audio::Tone</a> : uint16_t</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>This enum defines all possible audio tones that can be generated. </p>
-<p>This also defnes "special" values that are not actual tones but are reserved for user purposes or for silences:</p><ul>
-<li><code>USER0</code> ... <code>USER7</code>: can be used for any purpose defined by the end-developer</li>
-<li><code>SILENCE</code> or <code>REST</code>: used to play no tone at all All other tones are named according to their musical note (in English scale), and their octave,. This is similar to the usual <a href="https://en.wikipedia.org/wiki/Scientific_pitch_notation">Scientific Pitch Notation</a> except for the octave index which is different: in this enum, the standard tuning pitch (440Hz) is <code>A1</code> instead of <code>A4</code> in <em>SPN</em>.</li>
-</ul>
-<p>Sharps are noted as <code>s</code> between the note and its octave, as in <code>Cs0</code>. Flats are noted as <code>f</code> between the note and its octave, as in <code>Df0</code>.</p>
-<p>Please note that each tone can be converted to a <code>uint16_t</code> which is its playing frequency. </p>
-
-<p class="definition">Definition at line <a class="el" href="tones_8h_source.html#l00049">49</a> of file <a class="el" href="tones_8h_source.html">tones.h</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -111,10 +111,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4eeff78dc4cd700df1e8e38f13877526"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#a4eeff78dc4cd700df1e8e38f13877526">TonePlay</a> ()=default</td></tr>
 <tr class="memdesc:a4eeff78dc4cd700df1e8e38f13877526"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor, used only to declare an uninitialized <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code> variable.  <a href="#a4eeff78dc4cd700df1e8e38f13877526">More...</a><br /></td></tr>
 <tr class="separator:a4eeff78dc4cd700df1e8e38f13877526"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8e6cf858d44632a6330b63187e776be"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#aa8e6cf858d44632a6330b63187e776be">TonePlay</a> (<a class="el" href="tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone, <a class="el" href="tone__player_8h.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a> duration)</td></tr>
+<tr class="memitem:aa8e6cf858d44632a6330b63187e776be"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#aa8e6cf858d44632a6330b63187e776be">TonePlay</a> (<a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone, <a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a> duration)</td></tr>
 <tr class="memdesc:aa8e6cf858d44632a6330b63187e776be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a tone play with the provided tone and duration.  <a href="#aa8e6cf858d44632a6330b63187e776be">More...</a><br /></td></tr>
 <tr class="separator:aa8e6cf858d44632a6330b63187e776be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae08d0aef431104d42e04bfaefe11a082"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#ae08d0aef431104d42e04bfaefe11a082">TonePlay</a> (<a class="el" href="tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone, uint8_t value=0)</td></tr>
+<tr class="memitem:ae08d0aef431104d42e04bfaefe11a082"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html#ae08d0aef431104d42e04bfaefe11a082">TonePlay</a> (<a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone, uint8_t value=0)</td></tr>
 <tr class="memdesc:ae08d0aef431104d42e04bfaefe11a082"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a "special" tone play with the provided value.  <a href="#ae08d0aef431104d42e04bfaefe11a082">More...</a><br /></td></tr>
 <tr class="separator:ae08d0aef431104d42e04bfaefe11a082"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -129,7 +129,7 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
 <div class="textblock"><p>This struct is the unit data manipulated by <code><a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations.">TonePlayer</a></code>: it describes one <code>Tone</code> along with its duration in milliseconds. </p>
 <p>It can also hold special tones as defined in <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html" title="This namespace defines special &quot;tones&quot; which have an impact on how to play a melody.">SpecialTone</a></code> namespace.</p>
 <p>Note that, although it is quite easy to define melodies with <code><a class="el" href="classdevices_1_1audio_1_1_tone_play.html" title="This struct is the unit data manipulated by TonePlayer: it describes one Tone along with its duration...">TonePlay</a></code>, it is less efficient in terms of code size and performance (this is due to the need to convert tone frequencies to Timer prescaler and counter). It is advised, to use <code>TonePlayer::QTonePlay</code> optimized structure instead.</p>
-<dl class="section see"><dt>See also</dt><dd>Tone </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa" title="This enum defines all possible audio tones that can be generated.">Tone</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations.">TonePlayer</a> </dd>
 <dd>
@@ -179,13 +179,13 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
         <tr>
           <td class="memname">constexpr devices::audio::TonePlay::TonePlay </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td>
           <td class="paramname"><em>tone</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="tone__player_8h.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead">Duration</a>&#160;</td>
           <td class="paramname"><em>duration</em>&#160;</td>
         </tr>
         <tr>
@@ -226,7 +226,7 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
         <tr>
           <td class="memname">constexpr devices::audio::TonePlay::TonePlay </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a>&#160;</td>
           <td class="paramname"><em>tone</em>, </td>
         </tr>
         <tr>
@@ -269,7 +269,7 @@ template&lt;board::Timer , board::PWMPin , typename &gt; </td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><b>audio</b></li><li class="navelem"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html">TonePlay</a></li>
+    <li class="navelem"><a class="el" href="namespacedevices.html">devices</a></li><li class="navelem"><a class="el" href="namespacedevices_1_1audio.html">audio</a></li><li class="navelem"><a class="el" href="classdevices_1_1audio_1_1_tone_play.html">TonePlay</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>

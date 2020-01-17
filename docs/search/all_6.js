@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['gain',['Gain',['../hmc5883l_8h.html#a9e3190fff3a9a97602b890647846068d',1,'devices::magneto']]],
+  ['gain',['Gain',['../namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d',1,'devices::magneto']]],
   ['generator',['GENERATOR',['../classdevices_1_1audio_1_1_abstract_tone_player.html#a491b9f1635b99b1c84805739c4d5d7c8',1,'devices::audio::AbstractTonePlayer::GENERATOR()'],['../classdevices_1_1audio_1_1_tone_player.html#a9a1e3b410674297fe58e9abb0c2bf415',1,'devices::audio::TonePlayer::GENERATOR()'],['../classdevices_1_1audio_1_1_async_tone_player.html#a0b2babc2bb035243505f0aa6158d1b03',1,'devices::audio::AsyncTonePlayer::GENERATOR()']]],
   ['get',['get',['../classstreams_1_1istream.html#a32740ec0eb870f855232b32d56fa0ef5',1,'streams::istream::get()'],['../classstreams_1_1istream.html#a68e9e68b91bc1d90bb2411af6d209c12',1,'streams::istream::get(char &amp;ch)'],['../classstreams_1_1istream.html#ae4e2b657fa91f8c286ffa3c3dc2e0d94',1,'streams::istream::get(char *str, size_t n, char delim=&apos;\n&apos;)']]],
   ['get_5fchannel',['get_channel',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#ab94595c2c57ae43f2de904605751bec2',1,'devices::rf::NRF24L01']]],
@@ -22,9 +22,9 @@ var searchData=
   ['gpio',['gpio',['../namespacegpio.html',1,'']]],
   ['gpio_2eh',['gpio.h',['../gpio_8h.html',1,'']]],
   ['gyro_5fmeasures',['gyro_measures',['../classdevices_1_1magneto_1_1_m_p_u6050.html#aae3fc49d5b6c7f733d98c83ed74fa32e',1,'devices::magneto::MPU6050']]],
-  ['gyro_5frange_5fdps',['GYRO_RANGE_DPS',['../mpu6050_8h.html#a85e20b9728762df0bfd884bbd040199d',1,'devices::magneto']]],
+  ['gyro_5frange_5fdps',['GYRO_RANGE_DPS',['../namespacedevices_1_1magneto.html#a85e20b9728762df0bfd884bbd040199d',1,'devices::magneto']]],
   ['gyro_5fx',['gyro_x',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#ae951ab13db65b201b986ec0a6538d31e',1,'devices::magneto::FIFOEnable']]],
   ['gyro_5fy',['gyro_y',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#a1e99edcee3a6939461fcee742afbdba0',1,'devices::magneto::FIFOEnable']]],
   ['gyro_5fz',['gyro_z',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html#aa2b70828e0e7fe729623a47b11bc5e12',1,'devices::magneto::FIFOEnable']]],
-  ['gyrorange',['GyroRange',['../mpu6050_8h.html#af1ab54980b0620a7f3c95ff2318604f4',1,'devices::magneto']]]
+  ['gyrorange',['GyroRange',['../namespacedevices_1_1magneto.html#af1ab54980b0620a7f3c95ff2318604f4',1,'devices::magneto']]]
 ];

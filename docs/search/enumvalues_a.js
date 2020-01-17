@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['observe_5ftx',['OBSERVE_TX',['../classdevices_1_1rf_1_1_n_r_f24_l01.html#aeccb935b0e5c24a52d44dae7fe8f0d0aad61d4adbac784aecaf31f11abe6b0de8',1,'devices::rf::NRF24L01']]],
-  ['odd',['ODD',['../namespaceserial.html#a770c86bfde96ad529293b7b322422032a57a1355d5527355458c7cc08ba70bf94',1,'serial']]],
-  ['one',['ONE',['../namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396',1,'serial']]],
-  ['output',['OUTPUT',['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34',1,'gpio']]],
-  ['output_5fcompare_5fa',['OUTPUT_COMPARE_A',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a1aac1f38fe13831901945888f2a3998d',1,'timer']]],
-  ['output_5fcompare_5fb',['OUTPUT_COMPARE_B',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a2ec54b766f810d959b45fe0149db994c',1,'timer']]],
-  ['output_5fcompare_5fc',['OUTPUT_COMPARE_C',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a152b06238f6e18dc172a755417314a5a',1,'timer']]],
-  ['overflow',['OVERFLOW',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a0134b04a942cbc5336958c8cd09b82f3',1,'timer']]]
+  ['minim',['MINIM',['../namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadae23564ab1419fa36e0af23ed32b9f7f9',1,'devices::audio']]],
+  ['mode_5f0',['MODE_0',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bba3a769a916836dccf98801212615595d3',1,'spi']]],
+  ['mode_5f1',['MODE_1',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbaf7ede748a6b41c7c91c18ed2d155b33e',1,'spi']]],
+  ['mode_5f2',['MODE_2',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbacac4185dc8a44d8ae07bfb94c2830017',1,'spi']]],
+  ['mode_5f3',['MODE_3',['../namespacespi.html#afad82e7a839263bc0851445fdcced0bbac5b781763a4c930367500c96e64a0166',1,'spi']]],
+  ['msb_5ffirst',['MSB_FIRST',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7a89488e0251a0b2be79602890ef16ddb3',1,'spi']]]
 ];
