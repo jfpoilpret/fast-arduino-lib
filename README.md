@@ -85,6 +85,7 @@ In addition, FastArduino brings support for the following devices:
 - MPU-6050 accelerometer/gyroscope device support (I2C-based)
 - MCP23008 8-Bit I/O Expander (I2C-based)
 - MCP23017 16-Bit I/O Expander (I2C-based)
+- MCP3008 8-channel Analog-Digital Converter (SPI-based) and other chips from the same family
 - HC-SR04 sonar device support in synchronous and asynchronous modes
 
 As of now, the following platforms are supported (and tested):
