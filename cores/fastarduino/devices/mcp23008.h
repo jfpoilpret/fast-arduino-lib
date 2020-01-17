@@ -24,17 +24,6 @@
 #include "mcp230xx.h"
 #include "../i2c_device.h"
 
-/**
- * Defines all API for all external devices supported by FastArduino.
- * Most devices support API define their own namespace within `devices` namespace.
- */
-namespace devices
-{
-}
-
-/**
- * Defines the API for MCP23008/MCP23017 chips support.
- */
 namespace devices::mcp230xx
 {
 	/**

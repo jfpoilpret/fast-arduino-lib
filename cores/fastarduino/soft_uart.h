@@ -80,17 +80,23 @@
 		serial::soft::isr_handler::check_uart_int<INT_NUM, RX, TX>(); \
 	}
 
-/**
- * Defines API types used by software UART features.
- * This API is available to all MCU, even those that do not have hardware UART,
- * hence even ATtiny MCU are supported.
- * IMPORTANT! Note that software-emulated UART cannot be as fast as hardware UART,
- * for that reason a maximum rate of 115'200bps is supported, preferrably with 2 
- * stop bits (depending on the sending device, UART reception may lose bits if only
- * one stop bit is used).
- * 
- * @sa serial::hard
- */
+namespace serial
+{
+	/**
+	 * Defines API types used by software UART features.
+	 * This API is available to all MCU, even those that do not have hardware UART,
+	 * hence even ATtiny MCU are supported.
+	 * IMPORTANT! Note that software-emulated UART cannot be as fast as hardware UART,
+	 * for that reason a maximum rate of 115'200bps is supported, preferrably with 2 
+	 * stop bits (depending on the sending device, UART reception may lose bits if only
+	 * one stop bit is used).
+	 * @sa serial::hard
+	 */
+	namespace soft
+	{
+	}
+}
+
 namespace serial::soft
 {
 	/// @cond notdocumented

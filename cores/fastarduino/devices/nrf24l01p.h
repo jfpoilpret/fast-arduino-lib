@@ -40,13 +40,20 @@
 #include "../int.h"
 #include "nrf24l01p_internals.h"
 
-/**
- * Defines the API for radio-frequency (wireless) communication support.
- * Current support is for Nordic Semiconductor nRF24L01+ chip (SPI-based).
- * API is provided in 2 flavours, IRQ-based or not, through two template classes.
- * IRQ-based flavour is encouraged but is sometimes impossible as it requires an
- * available `board::ExternalInterruptPin` on the MCU.
- */
+namespace devices
+{
+	/**
+	 * Defines the API for radio-frequency (wireless) communication support.
+	 * Current support is for Nordic Semiconductor nRF24L01+ chip (SPI-based).
+	 * API is provided in 2 flavours, IRQ-based or not, through two template classes.
+	 * IRQ-based flavour is encouraged but is sometimes impossible as it requires an
+	 * available `board::ExternalInterruptPin` on the MCU.
+	 */
+	namespace rf
+	{
+	}
+}
+
 namespace devices::rf
 {
 	/**

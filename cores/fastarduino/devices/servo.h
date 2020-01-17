@@ -25,9 +25,16 @@
 #include <fastarduino/pwm.h>
 #include <fastarduino/utilities.h>
 
-/**
- * Defines the API for servomotor support.
- */
+namespace devices
+{
+	/**
+	 * Defines the API for servomotor support.
+	 */
+	namespace servo
+	{
+	}
+}
+
 namespace devices::servo
 {
 	/**

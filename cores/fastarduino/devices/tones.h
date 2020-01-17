@@ -23,9 +23,16 @@
 
 #include "../square_wave.h"
 
-/**
- * Defines API for audio tones (square waves) generation and simple melodies playing.
- */
+namespace devices
+{
+	/**
+	 * Defines API for audio tones (square waves) generation and simple melodies playing.
+	 */
+	namespace audio
+	{
+	}
+}
+
 namespace devices::audio
 {
 	/**

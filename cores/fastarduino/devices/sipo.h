@@ -26,6 +26,11 @@
 
 #include "../gpio.h"
 
+/**
+ * Defines all API for all external devices supported by FastArduino.
+ * Most devices support API, but not all, define their own namespace within 
+ * `devices` namespace.
+ */
 namespace devices
 {
 	/**

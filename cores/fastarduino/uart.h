@@ -67,11 +67,19 @@
 		serial::hard::isr_handler::uart_rx<UART_NUM>(); \
 	}
 
-/**
- * Defines API types used by hardware UART features.
- * Note this API is only available to MCU that have hardware UART, such as all
- * ATmega, but not other MCU, like ATtiny.
- */
+namespace serial
+{
+	/**
+	 * Defines API types used by hardware UART features.
+	 * Note this API is only available to MCU that have hardware UART, such as all
+	 * ATmega, but not other MCU, like ATtiny.
+	 * @sa serial::soft
+	 */
+	namespace hard
+	{
+	}
+}
+
 namespace serial::hard
 {
 	//TODO Handle generic errors coming from UART TX (which errors?) in addition to internal overflow

@@ -27,9 +27,6 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-/**
- * Defines API for magnetic sensors for direction, speed and acceleration properties.
- */
 namespace devices::magneto
 {
 	/**

@@ -24,7 +24,10 @@
 #include <stdint.h>
 
 /**
- * Defines API types used by hardware and software UART features.
+ * Defines all API for UART features.
+ * This namespace embeds two namespaces:
+ * - `hard` contains API for hardware UART (only for MCU that support it)
+ * - `soft` contains API for software-emulated UART (for all MCU)
  */
 namespace serial
 {

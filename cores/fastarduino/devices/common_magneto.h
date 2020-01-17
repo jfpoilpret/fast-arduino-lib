@@ -23,6 +23,16 @@
 
 #include <stdint.h>
 
+namespace devices
+{
+	/**
+	 * Defines API for magnetic sensors for direction, speed and acceleration properties.
+	 */
+	namespace magneto
+	{
+	}
+}
+
 namespace devices::magneto
 {
 	/**

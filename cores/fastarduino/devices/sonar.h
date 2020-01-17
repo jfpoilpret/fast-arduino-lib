@@ -479,18 +479,25 @@
 	DECL_PCINT_ISR_FRIENDS                     \
 	DECL_TIMER_COMP_FRIENDS
 
-/**
- * Defines the API for sonar support.
- * Supported ultrasonic sensors have 2 pins:
- * - one "trigger" pin that, upon a short pulse, will generate ultrasonic waves
- * to be emitted by the sensor
- * - one "echo" pin that, upon reception of the echoed ultrasonic wave, will
- * generate a pulse which duration is the time during which the ultrasonic wave
- * has travelled from the sensor back to the sensor, after reflecting on some
- * obstacle.
- * This API has been tested on HC-SR04 sensors (cheap ultrasonic sensors with
- * a range of 4 meters).
- */
+namespace devices
+{
+	/**
+	 * Defines the API for sonar support.
+	 * Supported ultrasonic sensors have 2 pins:
+	 * - one "trigger" pin that, upon a short pulse, will generate ultrasonic waves
+	 * to be emitted by the sensor
+	 * - one "echo" pin that, upon reception of the echoed ultrasonic wave, will
+	 * generate a pulse which duration is the time during which the ultrasonic wave
+	 * has travelled from the sensor back to the sensor, after reflecting on some
+	 * obstacle.
+	 * This API has been tested on HC-SR04 sensors (cheap ultrasonic sensors with
+	 * a range of 4 meters).
+	 */
+	namespace sonar
+	{
+	}
+}
+
 namespace devices::sonar
 {
 	/**

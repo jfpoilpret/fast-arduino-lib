@@ -27,9 +27,16 @@
 #include "../types_traits.h"
 #include "../utilities.h"
 
-/**
- * Defines the API for MicroChip ADC chips family support.
- */
+namespace devices
+{
+	/**
+	 * Defines the API for MicroChip ADC chips family support.
+	 */
+	namespace mcp3x0x
+	{
+	}
+}
+
 namespace devices::mcp3x0x
 {
 	/**

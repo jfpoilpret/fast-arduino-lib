@@ -24,9 +24,16 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
-/**
- * Defines API for Real-Time Clock chips usage.
- */
+namespace devices
+{
+	/**
+	 * Defines API for Real-Time Clock chips usage.
+	 */
+	namespace rtc
+	{
+	}
+}
+
 namespace devices::rtc
 {
 	/** Days of the week. */
