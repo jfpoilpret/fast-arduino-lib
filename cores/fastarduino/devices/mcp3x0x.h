@@ -68,8 +68,17 @@ namespace devices::mcp3x0x
 		static constexpr const uint16_t NEGATIVE = 0xFFFF & ~(MASK >> RSHIFT);
 
 	public:
-		//TODO APIDOC
+		/**
+		 * The `enum class` type defining all possible analog input 
+		 * channels handled by the device.
+		 * @sa read_channel()
+		 */
 		using CHANNEL = CHANNEL_;
+
+		/**
+		 * The analog output type for this device, either `uint16_t` or `int16_t`.
+		 * @sa read_channel()
+		 */
 		using TYPE = TYPE_;
 
 		/**
@@ -103,7 +112,6 @@ namespace devices::mcp3x0x
 			{
 				if (value & SIGN_MASK)
 					// value is negative, change it to negative int16_t
-					//TODO need some unit tests for all this fuzzy code...
 					return TYPE(NEGATIVE | value);
 				else
 					// value is positive, directly cast it to int16_t

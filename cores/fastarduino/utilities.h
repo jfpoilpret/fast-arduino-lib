@@ -279,13 +279,17 @@ namespace utils
 			return output;
 	}
 
-	//TODO APIDOC
+	/**
+	 * Extract the low order byte of a 16-bits word.
+	 */
 	constexpr uint8_t low_byte(uint16_t word)
 	{
 		return uint8_t(word & 0xFF);
 	}
 
-	//TODO APIDOC
+	/**
+	 * Extract the high order byte of a 16-bits word.
+	 */
 	constexpr uint8_t high_byte(uint16_t word)
 	{
 		return uint8_t(word >> 8);
