@@ -1,22 +1,23 @@
 <map id="fastarduino/streams.h" name="fastarduino/streams.h">
-<area shape="rect" id="node1" title="C++&#45;like std::iostream facilities." alt="" coords="107,5,273,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,76,107"/>
-<area shape="rect" id="node3" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="151,229,226,256"/>
-<area shape="rect" id="node8" href="$time_8h.html" title="Simple time utilities." alt="" coords="85,304,149,331"/>
-<area shape="rect" id="node12" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="271,229,336,256"/>
-<area shape="rect" id="node14" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="457,80,510,107"/>
-<area shape="rect" id="node19" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="253,155,353,181"/>
-<area shape="rect" id="node4" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="206,379,289,405"/>
-<area shape="rect" id="node5" href="$board_8h_source.html" title=" " alt="" coords="52,453,171,480"/>
-<area shape="rect" id="node7" title=" " alt="" coords="195,453,299,480"/>
-<area shape="rect" id="node6" title=" " alt="" coords="76,528,147,555"/>
-<area shape="rect" id="node9" href="$io_8h_source.html" title=" " alt="" coords="313,379,408,405"/>
-<area shape="rect" id="node11" title=" " alt="" coords="46,379,182,405"/>
-<area shape="rect" id="node10" title=" " alt="" coords="325,453,396,480"/>
-<area shape="rect" id="node13" title=" " alt="" coords="227,304,353,331"/>
-<area shape="rect" id="node15" title=" " alt="" coords="377,155,445,181"/>
-<area shape="rect" id="node16" title=" " alt="" coords="490,304,565,331"/>
-<area shape="rect" id="node17" title=" " alt="" coords="572,155,643,181"/>
-<area shape="rect" id="node18" title=" " alt="" coords="667,155,737,181"/>
-<area shape="rect" id="node20" href="$virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl." alt="" coords="408,229,484,256"/>
+<area shape="rect" id="node1" title="C++&#45;like std::iostream facilities." alt="" coords="239,5,404,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="137,80,207,107"/>
+<area shape="rect" id="node3" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="283,229,357,256"/>
+<area shape="rect" id="node9" href="$time_8h.html" title="Simple time utilities." alt="" coords="216,304,280,331"/>
+<area shape="rect" id="node13" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="401,229,468,256"/>
+<area shape="rect" id="node15" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="612,80,665,107"/>
+<area shape="rect" id="node20" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="385,155,485,181"/>
+<area shape="rect" id="node4" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="279,379,361,405"/>
+<area shape="rect" id="node5" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="216,453,299,480"/>
+<area shape="rect" id="node6" href="$board_8h_source.html" title=" " alt="" coords="323,453,442,480"/>
+<area shape="rect" id="node8" title=" " alt="" coords="467,453,571,480"/>
+<area shape="rect" id="node7" title=" " alt="" coords="347,528,418,555"/>
+<area shape="rect" id="node10" href="$io_8h_source.html" title=" " alt="" coords="482,379,577,405"/>
+<area shape="rect" id="node12" title=" " alt="" coords="5,379,141,405"/>
+<area shape="rect" id="node11" title=" " alt="" coords="595,453,666,480"/>
+<area shape="rect" id="node14" title=" " alt="" coords="365,304,491,331"/>
+<area shape="rect" id="node16" title=" " alt="" coords="750,155,818,181"/>
+<area shape="rect" id="node17" title=" " alt="" coords="812,304,887,331"/>
+<area shape="rect" id="node18" title=" " alt="" coords="509,155,579,181"/>
+<area shape="rect" id="node19" title=" " alt="" coords="603,155,674,181"/>
+<area shape="rect" id="node21" href="$virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl." alt="" coords="666,229,742,256"/>
 </map>

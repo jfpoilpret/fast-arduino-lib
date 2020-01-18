@@ -1,11 +1,12 @@
 <map id="fastarduino/devices/ds1307.h" name="fastarduino/devices/ds1307.h">
-<area shape="rect" id="node1" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="123,5,274,47"/>
-<area shape="rect" id="node2" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="71,95,185,121"/>
-<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="223,95,318,121"/>
+<area shape="rect" id="node1" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="118,5,269,47"/>
+<area shape="rect" id="node2" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="72,95,187,121"/>
+<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="271,95,366,121"/>
 <area shape="rect" id="node3" href="$i2c_8h.html" title="I2C API common definitions." alt="" coords="5,244,59,271"/>
-<area shape="rect" id="node4" href="$i2c__manager_8h.html" title="I2C Manager API." alt="" coords="69,169,187,196"/>
-<area shape="rect" id="node5" href="$i2c__handler_8h_source.html" title=" " alt="" coords="83,244,191,271"/>
-<area shape="rect" id="node7" href="$board_8h_source.html" title=" " alt="" coords="211,169,330,196"/>
-<area shape="rect" id="node9" title=" " alt="" coords="355,169,459,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="235,244,306,271"/>
+<area shape="rect" id="node4" href="$i2c__manager_8h.html" title="I2C Manager API." alt="" coords="70,169,189,196"/>
+<area shape="rect" id="node5" href="$i2c__handler_8h_source.html" title=" " alt="" coords="83,244,192,271"/>
+<area shape="rect" id="node7" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="213,169,296,196"/>
+<area shape="rect" id="node8" href="$board_8h_source.html" title=" " alt="" coords="321,169,439,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="464,169,568,196"/>
+<area shape="rect" id="node9" title=" " alt="" coords="345,244,415,271"/>
 </map>

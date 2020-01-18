@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['naked_5fsignal',['NAKED_SIGNAL',['../defines_8h.html#a330c425a6677b0f5b1d88f864161ff90',1,'defines.h']]],
   ['network',['network',['../structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html#ab96267277742b5d81046be3bd6476858',1,'devices::rf::NRF24L01::addr_t']]],
   ['next_5ftime',['next_time',['../classevents_1_1_job.html#ac74008e6d9a1c14604f1130b627fbdee',1,'events::Job']]],
   ['no_5fevent',['NO_EVENT',['../namespaceevents_1_1_type.html#a2c33d039e5fdd277900219bd3cd74eb0',1,'events::Type']]],

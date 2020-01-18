@@ -1,6 +1,7 @@
 <map id="fastarduino/utilities.h" name="fastarduino/utilities.h">
-<area shape="rect" id="node1" title="General utilities API that have broad application in programs." alt="" coords="52,5,213,32"/>
-<area shape="rect" id="node2" href="$board_8h_source.html" title=" " alt="" coords="5,80,124,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="149,80,253,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="29,155,100,181"/>
+<area shape="rect" id="node1" title="General utilities API that have broad application in programs." alt="" coords="91,5,253,32"/>
+<area shape="rect" id="node2" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,80,88,107"/>
+<area shape="rect" id="node3" href="$board_8h_source.html" title=" " alt="" coords="113,80,231,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="256,80,360,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="137,155,207,181"/>
 </map>

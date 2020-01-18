@@ -19,6 +19,7 @@ var searchData=
   ['unlock',['unlock',['../classcontainers_1_1_queue.html#ac9d85639dea318b57ff77760d109384e',1,'containers::Queue']]],
   ['unschedule',['unschedule',['../classevents_1_1_scheduler.html#a6886f399f31429c4aa4ec1dbbdd5d801',1,'events::Scheduler']]],
   ['unsetf',['unsetf',['../classstreams_1_1ios__base.html#a7ce5897064ad025f995125b2a59194ff',1,'streams::ios_base']]],
+  ['unused',['UNUSED',['../defines_8h.html#addf5ec070e9499d36b7f2009ce736076',1,'defines.h']]],
   ['update',['update',['../classdevices_1_1audio_1_1_async_tone_player.html#a0d588e929815d14f4d18b1f453866251',1,'devices::audio::AsyncTonePlayer']]],
   ['uppercase',['uppercase',['../classstreams_1_1ios__base.html#a2335f6b0e714f851dc7aec88522538fc',1,'streams::ios_base::uppercase()'],['../namespacestreams.html#aadedfb04617e81c64e981930efa2fccd',1,'streams::uppercase()']]],
   ['us_5fto_5fticks',['us_to_ticks',['../structtimer_1_1_calculator.html#afa7329a7d3fa0263f7f3311617228067',1,'timer::Calculator']]],

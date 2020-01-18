@@ -109,16 +109,17 @@ Include dependency graph for pci.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="pci_8h__incl.png" border="0" usemap="#fastarduino_2pci_8h" alt=""/></div>
 <map name="fastarduino_2pci_8h" id="fastarduino_2pci_8h">
-<area shape="rect"  title="General API for handling Pin Change Interrupts." alt="" coords="199,5,330,32"/>
-<area shape="rect"  href="board_8h_source.html" title=" " alt="" coords="5,155,124,181"/>
-<area shape="rect"  title=" " alt="" coords="39,80,199,107"/>
-<area shape="rect"  title=" " alt="" coords="313,155,427,181"/>
-<area shape="rect"  href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="381,80,479,107"/>
-<area shape="rect"  href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="223,80,306,107"/>
-<area shape="rect"  title=" " alt="" coords="29,229,100,256"/>
-<area shape="rect"  href="io_8h_source.html" title=" " alt="" coords="452,155,547,181"/>
-<area shape="rect"  title=" " alt="" coords="464,229,535,256"/>
-<area shape="rect"  title=" " alt="" coords="185,155,289,181"/>
+<area shape="rect"  title="General API for handling Pin Change Interrupts." alt="" coords="219,5,349,32"/>
+<area shape="rect"  href="board_8h_source.html" title=" " alt="" coords="311,155,430,181"/>
+<area shape="rect"  title=" " alt="" coords="51,80,211,107"/>
+<area shape="rect"  title=" " alt="" coords="5,155,120,181"/>
+<area shape="rect"  href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="235,80,333,107"/>
+<area shape="rect"  href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="437,80,520,107"/>
+<area shape="rect"  title=" " alt="" coords="335,229,406,256"/>
+<area shape="rect"  href="io_8h_source.html" title=" " alt="" coords="193,155,287,181"/>
+<area shape="rect"  title=" " alt="" coords="205,229,275,256"/>
+<area shape="rect"  href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="583,155,665,181"/>
+<area shape="rect"  title=" " alt="" coords="455,155,559,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -354,7 +355,8 @@ template&lt;InterruptPin PCI&gt; </td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(PCINT, PCI_NUM, _vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \</div><div class="line">    void CAT3(PCINT, PCI_NUM, _vect)(void)                                                          \</div><div class="line">    {                                                                                               \</div><div class="line">        interrupt::isr_handler_pci::check_pci_pins&lt;PCI_NUM, PIN, ##__VA_ARGS__&gt;();                  \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                                            \</div><div class="line">    }</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(PCINT, PCI_NUM, _vect)(void) <a class="code" href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a>;                 \</div><div class="line">    void CAT3(PCINT, PCI_NUM, _vect)(void)                                          \</div><div class="line">    {                                                                               \</div><div class="line">        interrupt::isr_handler_pci::check_pci_pins&lt;PCI_NUM, PIN, ##__VA_ARGS__&gt;();  \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                            \</div><div class="line">    }</div><div class="ttc" id="defines_8h_html_a330c425a6677b0f5b1d88f864161ff90"><div class="ttname"><a href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a></div><div class="ttdeci">#define NAKED_SIGNAL</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a signal handler (aka ISR, or Interrupt Service Rout...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00087">defines.h:87</a></div></div>
+</div><!-- fragment -->
 <p>Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt vector. </p>
 <p>This can be useful if you just need to wake up the MCU from an external signal, but do not need to perform any sepcific stuff with a callback. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

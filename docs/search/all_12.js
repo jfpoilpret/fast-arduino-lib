@@ -58,6 +58,7 @@ var searchData=
   ['sgetc',['sgetc',['../classstreams_1_1istreambuf.html#a16d0cd0b244ffc50cc019c387b975e8e',1,'streams::istreambuf']]],
   ['showbase',['showbase',['../classstreams_1_1ios__base.html#af6f180a4700b98f687aecef89e6503eb',1,'streams::ios_base::showbase()'],['../namespacestreams.html#a45afa8e386fab7a290452f31eef9ef83',1,'streams::showbase()']]],
   ['showpos',['showpos',['../classstreams_1_1ios__base.html#a33dcd3234d8aece7d5685baa3f1a5e04',1,'streams::ios_base::showpos()'],['../namespacestreams.html#a8d4403f70b177048857b79d4e012922b',1,'streams::showpos()']]],
+  ['signal',['SIGNAL',['../defines_8h.html#a4688695205ef66fbf096f1b95a0d7fe9',1,'defines.h']]],
   ['since',['since',['../namespacetime.html#ad482508d5954e833f1d2e605b881b263',1,'time']]],
   ['sipo',['SIPO',['../classdevices_1_1_s_i_p_o.html',1,'devices::SIPO&lt; CLOCK_, LATCH_, DATA_ &gt;'],['../classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898',1,'devices::SIPO::SIPO()']]],
   ['sipo_2eh',['sipo.h',['../sipo_8h.html',1,'']]],

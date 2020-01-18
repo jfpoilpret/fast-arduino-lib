@@ -9,6 +9,7 @@ var dir_855eda775a9841b65daa0015d5560bfd =
       [ "PowerVoltage", "classanalog_1_1_power_voltage.html", "classanalog_1_1_power_voltage" ]
     ] ],
     [ "bits.h", "bits_8h.html", "bits_8h" ],
+    [ "defines.h", "defines_8h.html", "defines_8h" ],
     [ "eeprom.h", "eeprom_8h.html", "eeprom_8h" ],
     [ "empty_streams.h", "empty__streams_8h.html", [
       [ "null_ostream", "classstreams_1_1null__ostream.html", null ]

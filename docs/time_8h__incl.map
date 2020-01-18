@@ -1,10 +1,11 @@
 <map id="fastarduino/time.h" name="fastarduino/time.h">
-<area shape="rect" id="node1" title="Simple time utilities." alt="" coords="70,5,212,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="62,229,132,256"/>
-<area shape="rect" id="node3" href="$io_8h_source.html" title=" " alt="" coords="24,80,119,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="144,80,280,107"/>
-<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="304,80,386,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="36,155,107,181"/>
-<area shape="rect" id="node7" href="$board_8h_source.html" title=" " alt="" coords="140,155,259,181"/>
-<area shape="rect" id="node8" title=" " alt="" coords="293,155,397,181"/>
+<area shape="rect" id="node1" title="Simple time utilities." alt="" coords="71,5,213,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="108,229,179,256"/>
+<area shape="rect" id="node3" href="$io_8h_source.html" title=" " alt="" coords="25,80,120,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="145,80,281,107"/>
+<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="305,80,387,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="37,155,108,181"/>
+<area shape="rect" id="node7" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="155,155,238,181"/>
+<area shape="rect" id="node8" href="$board_8h_source.html" title=" " alt="" coords="263,155,381,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="406,155,510,181"/>
 </map>

@@ -114,12 +114,13 @@ Include dependency graph for timer.h:</div>
 <area shape="rect"  title=" " alt="" coords="173,155,288,181"/>
 <area shape="rect"  title=" " alt="" coords="240,80,315,107"/>
 <area shape="rect"  href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="339,80,437,107"/>
-<area shape="rect"  href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="469,80,552,107"/>
-<area shape="rect"  href="io_8h_source.html" title=" " alt="" coords="333,155,427,181"/>
-<area shape="rect"  title=" " alt="" coords="345,229,415,256"/>
-<area shape="rect"  href="board_8h_source.html" title=" " alt="" coords="451,155,570,181"/>
-<area shape="rect"  title=" " alt="" coords="595,155,699,181"/>
-<area shape="rect"  title=" " alt="" coords="475,229,546,256"/>
+<area shape="rect"  href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="516,80,599,107"/>
+<area shape="rect"  href="io_8h_source.html" title=" " alt="" coords="326,155,421,181"/>
+<area shape="rect"  title=" " alt="" coords="338,229,409,256"/>
+<area shape="rect"  href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="445,155,528,181"/>
+<area shape="rect"  href="board_8h_source.html" title=" " alt="" coords="553,155,671,181"/>
+<area shape="rect"  title=" " alt="" coords="696,155,800,181"/>
+<area shape="rect"  title=" " alt="" coords="577,229,647,256"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -130,7 +131,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <area shape="rect"  title="Timer API." alt="" coords="157,5,303,32"/>
 <area shape="rect"  href="square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="9,169,153,211"/>
 <area shape="rect"  href="pwm_8h.html" title="PWM API." alt="" coords="63,87,207,114"/>
-<area shape="rect"  href="pulse__timer_8h.html" title="PulseTimer API." alt="" coords="232,87,420,114"/>
+<area shape="rect"  href="pulse__timer_8h.html" title="PulseTimer API." alt="" coords="231,87,421,114"/>
 <area shape="rect"  href="realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="445,80,599,121"/>
 <area shape="rect"  href="tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="5,259,156,300"/>
 <area shape="rect"  href="tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="5,348,156,389"/>
@@ -349,7 +350,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \</div><div class="line">    void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                                                          \</div><div class="line">    {                                                                                                       \</div><div class="line">        timer::isr_handler::check_timer&lt;TIMER_NUM&gt;();                                                       \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                                                    \</div><div class="line">    }</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void) <a class="code" href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a>;     \</div><div class="line">    void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                              \</div><div class="line">    {                                                                           \</div><div class="line">        timer::isr_handler::check_timer&lt;TIMER_NUM&gt;();                           \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                        \</div><div class="line">    }</div><div class="ttc" id="defines_8h_html_a330c425a6677b0f5b1d88f864161ff90"><div class="ttname"><a href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a></div><div class="ttdeci">#define NAKED_SIGNAL</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a signal handler (aka ISR, or Interrupt Service Rout...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00087">defines.h:87</a></div></div>
+</div><!-- fragment -->
 <p>Register an empty ISR (Interrupt Service Routine) for a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer.">timer::Timer</a>. </p>
 <p>This may be needed when using timer CTC mode but when you don't need any callback. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -462,7 +464,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(TIMER, TIMER_NUM, _OVF_vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \</div><div class="line">    void CAT3(TIMER, TIMER_NUM, _OVF_vect)(void)                                                          \</div><div class="line">    {                                                                                                     \</div><div class="line">        timer::isr_handler::check_timer&lt;TIMER_NUM&gt;();                                                     \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                                                  \</div><div class="line">    }</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(TIMER, TIMER_NUM, _OVF_vect)(void) <a class="code" href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a>;   \</div><div class="line">    void CAT3(TIMER, TIMER_NUM, _OVF_vect)(void)                            \</div><div class="line">    {                                                                       \</div><div class="line">        timer::isr_handler::check_timer&lt;TIMER_NUM&gt;();                       \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                    \</div><div class="line">    }</div><div class="ttc" id="defines_8h_html_a330c425a6677b0f5b1d88f864161ff90"><div class="ttname"><a href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a></div><div class="ttdeci">#define NAKED_SIGNAL</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a signal handler (aka ISR, or Interrupt Service Rout...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00087">defines.h:87</a></div></div>
+</div><!-- fragment -->
 <p>Register an empty ISR (Interrupt Service Routine) for the Counter Overflow of a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer.">timer::Timer</a>. </p>
 <p>This would normally not be needed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -575,7 +578,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \</div><div class="line">    void CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void)                                                          \</div><div class="line">    {                                                                                                      \</div><div class="line">        timer::isr_handler::check_timer_capture&lt;TIMER_NUM&gt;();                                              \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                                                   \</div><div class="line">    }</div></div><!-- fragment -->
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> <span class="keywordtype">void</span> CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void) <a class="code" href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a>;  \</div><div class="line">    void CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void)                           \</div><div class="line">    {                                                                       \</div><div class="line">        timer::isr_handler::check_timer_capture&lt;TIMER_NUM&gt;();               \</div><div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                                    \</div><div class="line">    }</div><div class="ttc" id="defines_8h_html_a330c425a6677b0f5b1d88f864161ff90"><div class="ttname"><a href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a></div><div class="ttdeci">#define NAKED_SIGNAL</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a signal handler (aka ISR, or Interrupt Service Rout...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00087">defines.h:87</a></div></div>
+</div><!-- fragment -->
 <p>Register an empty ISR (Interrupt Service Routine) for the Input Capture of a <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer.">timer::Timer</a>. </p>
 <p>This would normally not be needed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

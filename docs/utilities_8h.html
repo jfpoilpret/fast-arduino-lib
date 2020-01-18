@@ -98,17 +98,19 @@ $(document).ready(function(){initNavTree('utilities_8h.html','');});
 
 <p>General utilities API that have broad application in programs.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;boards/board.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="defines_8h_source.html">defines.h</a>&quot;</code><br />
+<code>#include &quot;boards/board.h&quot;</code><br />
 <code>#include &lt;util/atomic.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for utilities.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="utilities_8h__incl.png" border="0" usemap="#fastarduino_2utilities_8h" alt=""/></div>
 <map name="fastarduino_2utilities_8h" id="fastarduino_2utilities_8h">
-<area shape="rect"  title="General utilities API that have broad application in programs." alt="" coords="52,5,213,32"/>
-<area shape="rect"  href="board_8h_source.html" title=" " alt="" coords="5,80,124,107"/>
-<area shape="rect"  title=" " alt="" coords="149,80,253,107"/>
-<area shape="rect"  title=" " alt="" coords="29,155,100,181"/>
+<area shape="rect"  title="General utilities API that have broad application in programs." alt="" coords="91,5,253,32"/>
+<area shape="rect"  href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,80,88,107"/>
+<area shape="rect"  href="board_8h_source.html" title=" " alt="" coords="113,80,231,107"/>
+<area shape="rect"  title=" " alt="" coords="256,80,360,107"/>
+<area shape="rect"  title=" " alt="" coords="137,155,207,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -297,7 +299,7 @@ operator").  <a href="namespaceutils.html#a3525bf2bf63c9f906bc9b952f0d54355">Mor
 
 <p>Make a block of code a critical section (not interruptible). </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="comment">// value may be initialized through an ISR</span></div><div class="line"><span class="keyword">volatile</span> <span class="keywordtype">int</span> value;</div><div class="line"></div><div class="line"><span class="keywordtype">void</span> f()</div><div class="line">{</div><div class="line">    <span class="keyword">synchronized</span></div><div class="line">    {</div><div class="line">        <span class="comment">// This code must not be interrupted (reading an int is not atomic on AVR)</span></div><div class="line">        <span class="keywordflow">if</span> (value &gt; 1000)</div><div class="line">            value = 0;</div><div class="line">    }</div><div class="line">}</div></div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00055">55</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="utilities_8h_source.html#l00046">46</a> of file <a class="el" href="utilities_8h_source.html">utilities.h</a>.</p>
 
 </div>
 </div>

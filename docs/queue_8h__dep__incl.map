@@ -8,7 +8,7 @@
 <area shape="rect" id="node5" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="323,162,454,189"/>
 <area shape="rect" id="node6" href="$empty__streams_8h.html" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="5,251,220,278"/>
 <area shape="rect" id="node7" href="$iomanip_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="245,251,410,278"/>
-<area shape="rect" id="node9" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="233,333,403,360"/>
+<area shape="rect" id="node9" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="231,333,402,360"/>
 <area shape="rect" id="node10" href="$streams_8cpp_source.html" title=" " alt="" coords="427,333,607,360"/>
 <area shape="rect" id="node11" href="$uart_8h.html" title="Hardware serial API." alt="" coords="631,333,770,360"/>
 <area shape="rect" id="node13" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="614,155,769,196"/>
