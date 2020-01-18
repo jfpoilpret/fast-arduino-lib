@@ -11,7 +11,7 @@ PinChangeInterrupt3	Use PCI on 3 push buttons to light 4 LEDs (IOPort)	288	2	356
 PinChangeInterrupt4	LED command by 2 buttons (2 PCI ISR).	312	2			482	2	222	2		
 PinChangeInterrupt5MEGA	LED command by 3 buttons on MEGA specificities.					492	2				
 ExternalInterrupt1	LED switch based on button (INT ISR, power down)	246	2	330	2	388	2	174	2	170	2
-ExternalInterrupt2	LED switch based on button (empty ISR, power down)	194	0	278	0	322	0	122	0	118	0
+ExternalInterrupt2	LED switch based on button (empty ISR, power down)	196	0	280	0	324	0	124	0	120	0
 ExternalInterrupt3	LED switch based on 2 buttons (2 INT ISR, power down)	288	2	372	2	438	2				
 UartApp1	HW UART check with formatted output	2008	156	2092	156	2156	156				
 UartApp2	SW UARX/UATX with PCI	1130	130	1216	130	1266	130	1052	130	1048	130
@@ -69,15 +69,19 @@ DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	2366	168	2450	168	2506	
 DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	3118	76	3202	76	3262	76	3218	74	3214	74
 Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	6910	95	6994	95	7136	95	7110	100		
 Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	2776	97	2860	97	2942	97	2936	102		
+MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0
+MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	1974	74	2058	74	2152	74	1896	72	1892	72
+MultiADC02	MCP3X0X chips support compilation check (spi)	4294	74	4378	74	4518	74	4212	72	4208	72
 MultiIO0	Direct MCP23017 command and trace (UATX) for testing chip (i2c)	2296	180			2436	180				
 MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	974	8	1058	8	1106	8	1036	8	1032	8
 MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1106	8	1190	8	1238	8	1186	8	1182	8
 MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	990	12								
 MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	986	10								
+MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	964	10								
 Servo1	Servo controlled by a pot through 8bits pulse timer	642	2	726	2	778	2	594	2		
 Servo2	Servo controlled by a pot through 16bits pulse timer	562	0	646	0	690	0	488	0		
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4140	224	4236	224	4432	224	1746	8	1292	6
-RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)	4164	224	4260	224	4456	224	1770	8		
+RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)	4166	224	4262	224	4458	224	1772	8		
 WinBond	Trace (UATX) WinBond flash chip read/writes (spi)	3406	330	3490	330	3618	330	3320	200	3316	200
 Sonar1	Display (UATX) sonar range meaures in blocking mode	2472	76	2556	76	2624	76	2436	74		
 Sonar2	Display (UATX) sonar range meaures in INT mode	2560	78	2726	78	2802	78	2636	76		
