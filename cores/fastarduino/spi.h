@@ -342,15 +342,15 @@ namespace spi
 		void start_transfer()
 		{
 			cs_.toggle();
-			SPCR_ = SPCR__;
-			SPSR_ = SPSR__;
+			SPCR_ = SPCR_START_;
+			SPSR_ = SPSR_START_;
 		}
 #else
 		void start_transfer()
 		{
 			cs_.toggle();
 			// Set 3-wire mode (SPI) and requested SPI mode (0 or 1) and use software clock strobe (through USITC)
-			USICR_ = USICR__;
+			USICR_ = USICR_START_;
 		}
 #endif
 		/**
@@ -369,14 +369,14 @@ namespace spi
 		static constexpr const REG8 SPDR_{SPDR};
 		static constexpr const REG8 SPSR_{SPSR};
 		// Configuration values to reset at beginning of each transfer
-		static const constexpr uint8_t SPCR__ =
+		static const constexpr uint8_t SPCR_START_ =
 			bits::BV8(SPE, MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
-		static const constexpr uint8_t SPSR__ = (uint8_t(RATE) & 0x10) ? bits::BV8(SPI2X) : 0;
+		static const constexpr uint8_t SPSR_START_ = (uint8_t(RATE) & 0x10) ? bits::BV8(SPI2X) : 0;
 #else
 		static constexpr const REG8 USIDR_{USIDR};
 		static constexpr const REG8 USISR_{USISR};
 		static constexpr const REG8 USICR_{USICR};
-		static const constexpr uint8_t USICR__ = uint8_t(MODE);
+		static const constexpr uint8_t USICR_START_ = uint8_t(MODE);
 #endif
 		gpio::FAST_PIN<CS> cs_ = gpio::FAST_PIN<CS>{gpio::PinMode::OUTPUT, CS_MODE == ChipSelect::ACTIVE_LOW};
 	};
