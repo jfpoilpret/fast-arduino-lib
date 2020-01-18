@@ -68,7 +68,7 @@
  */
 #define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                        \
 	extern "C" void CAT3(INT, INT_NUM, _vect)(void) NAKED_SIGNAL;   \
-	void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                  \
+	void CAT3(INT, INT_NUM, _vect)(void)                            \
 	{                                                               \
 		interrupt::isr_handler_int::check_int_pin<INT_NUM, PIN>();  \
 		__asm__ __volatile__("reti" ::);                            \
