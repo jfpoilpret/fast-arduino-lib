@@ -26,6 +26,7 @@ This release brings the following improvements:
 ([issue #74](https://github.com/jfpoilpret/fast-arduino-lib/issues/74) thanks [hreintke](https://github.com/hreintke) for this excellent suggestion). 
 - Add support for MCP23008 GPIO expander (similar to MCP23017)
 - Add support for MCP3x0x ADC chips family (note that only the MCP3008 chip has been tested; support for other chips has been implemented but could not be tested as I do not have these chips)
+- Fix API documentation issues with some badly generated namespaces
 
 Almost all API changes are compatible with existing programs. Note that if you use MCP23017 device, its namespace has been renamed from 
 `mcp23017` to `mcp230xx` (this new namespace is shared between `MCP23017` and `MCP23008` devices).
