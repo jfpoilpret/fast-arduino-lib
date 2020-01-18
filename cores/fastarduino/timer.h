@@ -64,12 +64,12 @@
  * callback.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)                                                         \
-	extern "C" void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \
-	void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                                                          \
-	{                                                                                                       \
-		timer::isr_handler::check_timer<TIMER_NUM>();                                                       \
-		__asm__ __volatile__("reti" ::);                                                                    \
+#define REGISTER_TIMER_COMPARE_ISR_EMPTY(TIMER_NUM)                             \
+	extern "C" void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void) NAKED_SIGNAL;     \
+	void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                              \
+	{                                                                           \
+		timer::isr_handler::check_timer<TIMER_NUM>();                           \
+		__asm__ __volatile__("reti" ::);                                        \
 	}
 
 /**
@@ -107,12 +107,12 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM)                                                      \
-	extern "C" void CAT3(TIMER, TIMER_NUM, _OVF_vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \
-	void CAT3(TIMER, TIMER_NUM, _OVF_vect)(void)                                                          \
-	{                                                                                                     \
-		timer::isr_handler::check_timer<TIMER_NUM>();                                                     \
-		__asm__ __volatile__("reti" ::);                                                                  \
+#define REGISTER_TIMER_OVERFLOW_ISR_EMPTY(TIMER_NUM)                        \
+	extern "C" void CAT3(TIMER, TIMER_NUM, _OVF_vect)(void) NAKED_SIGNAL;   \
+	void CAT3(TIMER, TIMER_NUM, _OVF_vect)(void)                            \
+	{                                                                       \
+		timer::isr_handler::check_timer<TIMER_NUM>();                       \
+		__asm__ __volatile__("reti" ::);                                    \
 	}
 
 /**
@@ -148,12 +148,12 @@
  * This would normally not be needed.
  * @param TIMER_NUM the number of the TIMER feature for the target MCU
  */
-#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)                                                        \
-	extern "C" void CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \
-	void CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void)                                                          \
-	{                                                                                                      \
-		timer::isr_handler::check_timer_capture<TIMER_NUM>();                                              \
-		__asm__ __volatile__("reti" ::);                                                                   \
+#define REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)                         \
+	extern "C" void CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void) NAKED_SIGNAL;  \
+	void CAT3(TIMER, TIMER_NUM, _CAPT_vect)(void)                           \
+	{                                                                       \
+		timer::isr_handler::check_timer_capture<TIMER_NUM>();               \
+		__asm__ __volatile__("reti" ::);                                    \
 	}
 
 /**

@@ -66,12 +66,12 @@
  * @param PIN the `board::ExternalInterruptPin` for @p INT_NUM; if @p PIN and 
  * @p INT_NUM do not match, compilation will fail.
  */
-#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                                                      \
-	extern "C" void CAT3(INT, INT_NUM, _vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \
-	void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                                                \
-	{                                                                                             \
-		interrupt::isr_handler_int::check_int_pin<INT_NUM, PIN>();                                \
-		__asm__ __volatile__("reti" ::);                                                          \
+#define REGISTER_INT_ISR_EMPTY(INT_NUM, PIN)                        \
+	extern "C" void CAT3(INT, INT_NUM, _vect)(void) NAKED_SIGNAL;   \
+	void CAT3(TIMER, TIMER_NUM, _COMPA_vect)(void)                  \
+	{                                                               \
+		interrupt::isr_handler_int::check_int_pin<INT_NUM, PIN>();  \
+		__asm__ __volatile__("reti" ::);                            \
 	}
 
 /**

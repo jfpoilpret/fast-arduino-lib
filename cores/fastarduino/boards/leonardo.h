@@ -23,15 +23,12 @@
 #define BOARDS_LEONARDO_HH
 
 #include "io.h"
+#include "../defines.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented
 /* This board is based on ATmega32u4 */
 #define BOARD_ATMEGA32U4
-
-#ifndef INLINE
-#define INLINE __attribute__((always_inline))
-#endif
 /// @endcond
 
 /**
@@ -433,38 +430,38 @@ namespace board
 /// @cond notdocumented
 // Forward declare interrupt service routines to allow them as friends.
 extern "C" {
-	void ADC_vect(void) __attribute__ ((signal));
-	void ANALOG_COMP_vect(void) __attribute__ ((signal));
-	void INT0_vect(void) __attribute__ ((signal));
-	void INT1_vect(void) __attribute__ ((signal));
-	void INT2_vect(void) __attribute__ ((signal));
-	void INT3_vect(void) __attribute__ ((signal));
-	void INT6_vect(void) __attribute__ ((signal));
-	void PCINT0_vect(void) __attribute__ ((signal));
-	void SPI_STC_vect(void) __attribute__ ((signal));
-	void TIMER0_COMPA_vect(void) __attribute__ ((signal));
-	void TIMER0_COMPB_vect(void) __attribute__ ((signal));
-	void TIMER0_OVF_vect(void) __attribute__ ((signal));
-	void TIMER1_CAPT_vect(void)  __attribute__ ((signal));
-	void TIMER1_COMPA_vect(void) __attribute__ ((signal));
-	void TIMER1_COMPB_vect(void) __attribute__ ((signal));
-	void TIMER1_COMPC_vect(void) __attribute__ ((signal));
-	void TIMER1_OVF_vect(void) __attribute__ ((signal));
-	void TIMER3_CAPT_vect(void)  __attribute__ ((signal));
-	void TIMER3_COMPA_vect(void) __attribute__ ((signal));
-	void TIMER3_COMPB_vect(void) __attribute__ ((signal));
-	void TIMER3_COMPC_vect(void) __attribute__ ((signal));
-	void TIMER3_OVF_vect(void) __attribute__ ((signal));
-	void TIMER4_COMPA_vect(void) __attribute__ ((signal));
-	void TIMER4_COMPB_vect(void) __attribute__ ((signal));
-	void TIMER4_COMPD_vect(void) __attribute__ ((signal));
-	void TIMER4_OVF_vect(void) __attribute__ ((signal));
-	void TWI_vect(void) __attribute__ ((signal));
-	void WDT_vect(void) __attribute__ ((signal));
-	void USART1_RX_vect(void) __attribute__ ((signal));
-	void USART1_TX_vect(void) __attribute__ ((signal));
-	void USART1_UDRE_vect(void) __attribute__ ((signal));
-	void EE_READY_vect(void) __attribute__ ((signal));
+	void ADC_vect(void) SIGNAL;
+	void ANALOG_COMP_vect(void) SIGNAL;
+	void INT0_vect(void) SIGNAL;
+	void INT1_vect(void) SIGNAL;
+	void INT2_vect(void) SIGNAL;
+	void INT3_vect(void) SIGNAL;
+	void INT6_vect(void) SIGNAL;
+	void PCINT0_vect(void) SIGNAL;
+	void SPI_STC_vect(void) SIGNAL;
+	void TIMER0_COMPA_vect(void) SIGNAL;
+	void TIMER0_COMPB_vect(void) SIGNAL;
+	void TIMER0_OVF_vect(void) SIGNAL;
+	void TIMER1_CAPT_vect(void)  SIGNAL;
+	void TIMER1_COMPA_vect(void) SIGNAL;
+	void TIMER1_COMPB_vect(void) SIGNAL;
+	void TIMER1_COMPC_vect(void) SIGNAL;
+	void TIMER1_OVF_vect(void) SIGNAL;
+	void TIMER3_CAPT_vect(void)  SIGNAL;
+	void TIMER3_COMPA_vect(void) SIGNAL;
+	void TIMER3_COMPB_vect(void) SIGNAL;
+	void TIMER3_COMPC_vect(void) SIGNAL;
+	void TIMER3_OVF_vect(void) SIGNAL;
+	void TIMER4_COMPA_vect(void) SIGNAL;
+	void TIMER4_COMPB_vect(void) SIGNAL;
+	void TIMER4_COMPD_vect(void) SIGNAL;
+	void TIMER4_OVF_vect(void) SIGNAL;
+	void TWI_vect(void) SIGNAL;
+	void WDT_vect(void) SIGNAL;
+	void USART1_RX_vect(void) SIGNAL;
+	void USART1_TX_vect(void) SIGNAL;
+	void USART1_UDRE_vect(void) SIGNAL;
+	void EE_READY_vect(void) SIGNAL;
 }
 /// @endcond
 

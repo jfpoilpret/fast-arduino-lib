@@ -24,16 +24,13 @@
 
 #include "io.h"
 #include "../bits.h"
+#include "../defines.h"
 #include <avr/sleep.h>
 
 /// @cond notdocumented
 /* This board is based on ATtinyX4/ATtiny */
 #define BOARDS_ATTINYX4
 #define BOARD_ATTINY
-
-#ifndef INLINE
-#define INLINE __attribute__((always_inline))
-#endif
 /// @endcond
 
 /**
@@ -296,22 +293,22 @@ namespace board
 
 // Forward declare interrupt service routines to allow them as friends.
 extern "C" {
-	void ADC_vect(void) __attribute__ ((signal));
-	void ANALOG_COMP_vect(void) __attribute__ ((signal));
-	void INT0_vect(void) __attribute__ ((signal));
-	void PCINT0_vect(void) __attribute__ ((signal));
-	void PCINT1_vect(void) __attribute__ ((signal));
-	void TIMER0_COMPA_vect(void) __attribute__ ((signal));
-	void TIMER0_COMPB_vect(void) __attribute__ ((signal));
-	void TIMER0_OVF_vect(void) __attribute__ ((signal));
-	void TIMER1_COMPA_vect(void) __attribute__ ((signal));
-	void TIMER1_COMPB_vect(void) __attribute__ ((signal));
-	void TIMER1_OVF_vect(void) __attribute__ ((signal));
-	void TIMER1_CAPT_vect(void)  __attribute__ ((signal));
-	void WDT_vect(void) __attribute__ ((signal));
-	void USI_START_vect(void) __attribute__ ((signal));
-	void USI_OVF_vect(void) __attribute__ ((signal));
-	void EE_READY_vect(void) __attribute__ ((signal));
+	void ADC_vect(void) SIGNAL;
+	void ANALOG_COMP_vect(void) SIGNAL;
+	void INT0_vect(void) SIGNAL;
+	void PCINT0_vect(void) SIGNAL;
+	void PCINT1_vect(void) SIGNAL;
+	void TIMER0_COMPA_vect(void) SIGNAL;
+	void TIMER0_COMPB_vect(void) SIGNAL;
+	void TIMER0_OVF_vect(void) SIGNAL;
+	void TIMER1_COMPA_vect(void) SIGNAL;
+	void TIMER1_COMPB_vect(void) SIGNAL;
+	void TIMER1_OVF_vect(void) SIGNAL;
+	void TIMER1_CAPT_vect(void)  SIGNAL;
+	void WDT_vect(void) SIGNAL;
+	void USI_START_vect(void) SIGNAL;
+	void USI_OVF_vect(void) SIGNAL;
+	void EE_READY_vect(void) SIGNAL;
 }
 /// @endcond
 

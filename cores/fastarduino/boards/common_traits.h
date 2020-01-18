@@ -17,19 +17,12 @@
 
 #include "io.h"
 #include "board.h"
-#include "../uart_commons.h"
 #include "../bits.h"
+#include "../defines.h"
+#include "../uart_commons.h"
 
 // This internal macro is used by individual boards headers
 #define R_(REG) (uint16_t(REG))
-
-#ifndef UNUSED
-#define UNUSED __attribute__((unused))
-#endif
-
-#ifndef INLINE
-#define INLINE __attribute__((always_inline))
-#endif
 
 namespace board_traits
 {

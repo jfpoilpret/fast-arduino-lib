@@ -21,18 +21,9 @@
 #ifndef UTILITIES_HH
 #define UTILITIES_HH
 
+#include "defines.h"
 #include "boards/board.h"
 #include <util/atomic.h>
-
-/// @cond notdocumented
-#ifndef UNUSED
-#define UNUSED __attribute__((unused))
-#endif
-
-#ifndef INLINE
-#define INLINE __attribute__((always_inline))
-#endif
-/// @endcond
 
 /**
  * Make a block of code a critical section (not interruptible).

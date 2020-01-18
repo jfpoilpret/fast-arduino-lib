@@ -71,12 +71,12 @@
  * @param PIN the `board::InterruptPin` pins for @p PCI_NUM; if any of the given 
  * @p PIN does not match with @p PCI_NUM, compilation will fail.
  */
-#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)                                                   \
-	extern "C" void CAT3(PCINT, PCI_NUM, _vect)(void) __attribute__((signal, naked, __INTR_ATTRS)); \
-	void CAT3(PCINT, PCI_NUM, _vect)(void)                                                          \
-	{                                                                                               \
-		interrupt::isr_handler_pci::check_pci_pins<PCI_NUM, PIN, ##__VA_ARGS__>();                  \
-		__asm__ __volatile__("reti" ::);                                                            \
+#define REGISTER_PCI_ISR_EMPTY(PCI_NUM, PIN, ...)                                   \
+	extern "C" void CAT3(PCINT, PCI_NUM, _vect)(void) NAKED_SIGNAL;                 \
+	void CAT3(PCINT, PCI_NUM, _vect)(void)                                          \
+	{                                                                               \
+		interrupt::isr_handler_pci::check_pci_pins<PCI_NUM, PIN, ##__VA_ARGS__>();  \
+		__asm__ __volatile__("reti" ::);                                            \
 	}
 
 /**

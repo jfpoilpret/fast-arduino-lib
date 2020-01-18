@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#define UNUSED __attribute__((unused))
+#include "defines.h"
 
 // https://gcc.gnu.org/onlinedocs/gcc-4.9.2/libstdc++/api/a00833.html
 namespace __cxxabiv1

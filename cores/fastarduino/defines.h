@@ -12,13 +12,25 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "defines.h"
+/// @cond api
 
-int main() WEAK;
-int main()
-{
-	return 0;
-}
+/**
+ * @file
+ * Useful defines GCC specific attributes
+ */
+#ifndef DEFINES_HH
+#define DEFINES_HH
 
-void exit(int status) WEAK;
-void exit(int status UNUSED) {}
+//TODO APIDOC
+#define UNUSED __attribute__((unused))
+
+#define INLINE __attribute__((always_inline))
+
+#define SIGNAL __attribute__ ((signal))
+
+#define NAKED_SIGNAL __attribute__((signal, naked, __INTR_ATTRS))
+
+#define WEAK __attribute__((weak))
+
+#endif /* DEFINES_HH */
+/// @endcond

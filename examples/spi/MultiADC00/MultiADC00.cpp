@@ -17,10 +17,7 @@
  * This program does nothing and is not aimed at deploying to anything.
  */
 
-#ifndef UNUSED
-#define UNUSED __attribute__((unused))
-#endif
-
+#include <fastarduino/defines.h>
 #include <fastarduino/boards/board.h>
 #include <fastarduino/types_traits.h>
 #include <fastarduino/utilities.h>
