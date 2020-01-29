@@ -280,5 +280,5 @@ namespace board_traits
 #define DECL_TIMER_CAPT_FRIENDS friend void ::TIMER1_CAPT_vect(void);
 #define DECL_UDRE_ISR_FRIENDS friend void ::USART0_UDRE_vect(void);
 #define DECL_RX_ISR_FRIENDS friend void ::USART0_RX_vect(void);
-
+#define DECL_TWI_FRIENDS friend void ::TWI_vect(void);
 #endif /* BOARDS_UNO_TRAITS_HH */
