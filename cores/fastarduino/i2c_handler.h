@@ -121,7 +121,7 @@ namespace i2c
 
 	template<I2CMode MODE> void I2CHandler<MODE>::begin()
 	{
-		// 1. set SDA/SCL pullups
+		// 1. set SDA/SCL pullups TODO is that mandatory? should be optional!
 		TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
 		// 2. set I2C frequency
 		TWBR_ = TWBR_VALUE;
@@ -133,7 +133,7 @@ namespace i2c
 	{
 		// 1. Disable TWI
 		TWCR_ = 0;
-		// 2. remove SDA/SCL pullups
+		// 2. remove SDA/SCL pullups TODO is that mandatory? should be optional!
 		TRAIT::PORT &= bits::COMPL(TRAIT::SCL_SDA_MASK);
 	}
 
