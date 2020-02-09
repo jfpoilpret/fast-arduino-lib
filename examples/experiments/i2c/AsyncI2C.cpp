@@ -4,8 +4,8 @@
  * It is just try-and-throw-away code.
  */
 
+#include <util/delay_basic.h>
 
-// Define vectors we need in the example
 #include <fastarduino/boards/board.h>
 #include <fastarduino/i2c.h>
 #include <fastarduino/queue.h>
@@ -266,10 +266,13 @@ private:
 		// Check if there is one command in queue
 		if (commands_.empty_()) return false;
 
-		//TODO how to handle next command?
 		// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 		// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
-		return true;
+		//TODO this can be reduced by the time it takes to pull the next command!
+		_delay_loop_1(DELAY_AFTER_STOP);
+
+		// Handle next command
+		return dequeue_command_();
 	}
 
 	//TODO infer result to include info for REGISTERED ISR & callbacks:
@@ -295,6 +298,12 @@ private:
 	static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / ONE_MHZ - 16UL) / 2;
 	static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400000UL - 16UL) / 2;
 	static constexpr const uint8_t TWBR_VALUE = (MODE == i2c::I2CMode::STANDARD ? STANDARD_FREQUENCY : FAST_FREQUENCY);
+
+	static constexpr const float STANDARD_DELAY_AFTER_STOP_US = 4.0 + 4.7;
+	static constexpr const float FAST_DELAY_AFTER_STOP_US = 0.6 + 1.3;
+	static constexpr const float DELAY_AFTER_STOP_US =
+		(MODE == i2c::I2CMode::STANDARD ? STANDARD_DELAY_AFTER_STOP_US : FAST_DELAY_AFTER_STOP_US);
+	static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(DELAY_AFTER_STOP_US);
 
 	containers::Queue<uint8_t, uint8_t> commands_;
 	// Status of current command processing
