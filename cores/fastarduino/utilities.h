@@ -413,7 +413,7 @@ namespace utils
 	 * that @p time_us is a constant when the method is called.
 	 * This is to avoid dragging huge mathematics libraries if it can be avoided.
 	 * @param time_us the time to reach through `delay1()` AVR function
-	 * @return the count to pass to `delay`()` AVR function
+	 * @return the count to pass to `delay1()` AVR function
 	 */
 	constexpr uint8_t calculate_delay1_count(float time_us)
 	{
