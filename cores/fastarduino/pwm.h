@@ -26,6 +26,18 @@
 #include "gpio.h"
 #include "timer.h"
 
+namespace board
+{
+	template<PWMPin PWM> constexpr DigitalPin PWM_PIN() INLINE;
+	/**
+	 * Convert an `PWMPin` to the matching `DigitalPin`.
+	 */
+	template<PWMPin PWM> constexpr DigitalPin PWM_PIN()
+	{
+		return board_traits::PWMPin_trait<PWM>::ACTUAL_PIN;
+	}
+};
+
 namespace analog
 {
 	using timer::TimerOutputMode;
