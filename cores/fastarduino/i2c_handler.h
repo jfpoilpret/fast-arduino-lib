@@ -20,7 +20,7 @@
 #include "boards/board_traits.h"
 #include "utilities.h"
 #include "i2c.h"
-// #include <util/delay_basic.h>
+#include <util/delay_basic.h>
 
 // NOTE: ATtiny implementation provides no pullup, hence you must ensure your
 // I2C bus has pullups where needed
