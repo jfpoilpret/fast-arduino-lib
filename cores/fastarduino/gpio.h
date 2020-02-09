@@ -99,6 +99,8 @@ namespace gpio
 		static constexpr const board::Port PORT = PORT_;
 		/** The bit position (from `0` to `7`), in port, of this pin. */
 		static constexpr const uint8_t BIT = BIT_;
+		/** The bit-mask to use when accessing `DPIN` through `PORT`. */
+		static constexpr const uint8_t MASK = bits::BV8(BIT);
 
 		/**
 		 * Construct a `FastPin` without any physical setup on target MCU.

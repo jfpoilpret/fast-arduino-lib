@@ -565,6 +565,10 @@ namespace interrupt
 	 */
 	template<board::InterruptPin PIN>
 	using PCI_SIGNAL = typename PCIType<PIN>::TYPE;
+
+	//TODO DOC
+	template<board::Port PORT>
+	using PCI_PORT_SIGNAL = PCISignal<board_traits::Port_trait<PORT>::PCINT>;
 }
 
 #endif /* PCI_HH */
