@@ -16,7 +16,7 @@ FastArduino 1.5 release
 
 I am happy to announce the 6th major release of FastArduino platform.
 
-Since release 1.4 (September 2019), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.5).
+Since release 1.4 (September 2019), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7?closed=1).
 
 This release brings the following improvements:
 - Rework project directory structure to reduce the number of files in project's root directory
