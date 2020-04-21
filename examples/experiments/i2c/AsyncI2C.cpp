@@ -27,7 +27,6 @@ REGISTER_UATX_ISR(0)
 // - prepare a Promise/Future concept library to hold results asynchronously (to be further thought of)
 
 // TODO OPEN POINTS:
-// - DS1307 seems not work currently (even with synchronous I2C on FastArduino!)
 // - implement callback registration (only one callback, can be an event supplier)
 // - optimize queue size by allowing multiple read/writes in one command
 // - optimize queue size by reducing number of commands: start+slaw/r+send/receive
@@ -375,8 +374,8 @@ private:
 		return I2CCallback::NONE;
 	}
 
-	static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / ONE_MHZ - 16UL) / 2;
-	static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400000UL - 16UL) / 2;
+	static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100'000UL - 16UL) / 2;
+	static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400'000UL - 16UL) / 2;
 	static constexpr const uint8_t TWBR_VALUE = (MODE == i2c::I2CMode::STANDARD ? STANDARD_FREQUENCY : FAST_FREQUENCY);
 
 	static constexpr const float STANDARD_DELAY_AFTER_STOP_US = 4.0 + 4.7;
@@ -539,7 +538,7 @@ int main()
 			time::delay_ms(10);
 			out << F("get_ram() after 10ms data = ") << dec << data << endl;
 
-			display_status(out);
+			// display_status(out);
 
 		}
 		time::delay_ms(1000);
