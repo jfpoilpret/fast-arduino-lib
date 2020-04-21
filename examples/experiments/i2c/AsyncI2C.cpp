@@ -22,29 +22,22 @@ REGISTER_UATX_ISR(0)
 
 // MAIN IDEA:
 // - have a queue of "I2C commands" (variable-length)
-// - special command: callback?
-// - dequeue and execute each command from TWI ISR, call back when last command is finished 
+// - dequeue and execute each command from TWI ISR, call back when last command is finished or error occurred
+// - transmission starts aonce a STOP command has been enqueued
+// - prepare a Promise/Future concept library to hold results asynchronously (to be further thought of)
 
 // TODO OPEN POINTS:
-// - when to start transmission? at STOP command request? or at first request? or specific API?
-// - how to automatically go ahead after STOP, if queue not empty (START)?
-
-// - what kind of callbacks?
-// - targets of callbacks (device? => several instances possible for same device class!)?
-// - how to handle callbacks without virtual methods? => events? must be optional!
-// - develop promise/future library to handle future values of devices?
-// - even promises will need some kind of callback (events? but events are virtual-based!)
-// - improve API to allow writing/reading a whole buffer as only one command
-// - allow to predetermine that buffer is big enough to hold a complete chain of commands!
-
-// - should sync and async handler code cohabitate? or use only asyn but allow devices to await (sync) or not (async) 
+// - DS1307 seems not work currently (even with synchronous I2C on FastArduino!)
+// - implement callback registration (only one callback, can be an event supplier)
+// - optimize queue size by allowing multiple read/writes in one command
+// - optimize queue size by reducing number of commands: start+slaw/r+send/receive
+//		(repeat start or stop should be automatically added)
+//		(will need some kind of FSM for handling several stages of a single command)
+//		(maybe we could use a "command builder" for that?)
+// - should sync and async handler code cohabitate? or use only async but allow devices to await (sync) or not (async) 
+//
 // - ATtiny support
 // - short addresses (1 byte) for some ATtiny devices?
-
-// - Optimization of command size: combine starts with slar/slaw? (2 bytes instead of 3)
-// - Optimization of command size: support multibyte send/receive from/to an address (4 bytes per command)
-// - Optimization of command size: more commands for send/receive 2, 3, 4... bytes (3 bytes per command)
-
 
 // I2C async specific definitions
 //================================
@@ -82,6 +75,12 @@ enum class I2CCallback : uint8_t
 	ERROR
 };
 
+//TODO DEBUG ONLY, remove after
+static constexpr uint8_t STATUS_BUFFER_SIZE = 64;
+static uint8_t expected_status[STATUS_BUFFER_SIZE];
+static uint8_t actual_status[STATUS_BUFFER_SIZE];
+static uint8_t status_index = 0;
+
 // This is an asynchronous I2C handler
 template<i2c::I2CMode MODE_> class I2CHandler
 {
@@ -114,7 +113,7 @@ public:
 		TWBR_ = TWBR_VALUE;
 		TWSR_ = 0;
 		// 3. Enable TWI
-		TWCR_ = bits::BV8(TWEN);
+		// TWCR_ = bits::BV8(TWEN);
 	}
 	void end_()
 	{
@@ -129,48 +128,16 @@ public:
 		return status_;
 	}
 
+	//TODO DEBUG ONLY!
+	uint8_t control() const
+	{
+		return TWCR_;
+	}
+
+	//TODO is that really useful?
 	bool is_ready() const
 	{
 		return commands_.empty();
-		// return !(TWCR_ & bits::BV8(TWIE));
-	}
-
-	//TODO do we really need synchronized version of all these methods?
-	// Anyway, the whole chain of commands should be encapsulated in a sync block!
-	bool check_queue(uint8_t num_starts, uint8_t num_sends, uint8_t num_receives)
-	{
-		synchronized return check_queue_(num_starts, num_sends, num_receives);
-	}
-
-	bool start()
-	{
-		synchronized return start_();
-	}
-	bool repeat_start()
-	{
-		synchronized return repeat_start_();
-	}
-	bool send_slar(uint8_t address)
-	{
-		synchronized return send_slar_(address);
-	}
-	bool send_slaw(uint8_t address)
-	{
-		synchronized return send_slaw_(address);
-	}
-	//TODO shall we handle sending N bytes (from one address)?
-	bool send_data(uint8_t data)
-	{
-		synchronized return send_data_(data);
-	}
-	//TODO shall we handle receiving N bytes (to one address)?
-	bool receive_data(uint8_t& data, bool last_byte)
-	{
-		synchronized return	receive_data_(data, last_byte);
-	}
-	bool stop()
-	{
-		synchronized return stop_();
 	}
 
 	bool check_queue_(uint8_t num_starts, uint8_t num_sends, uint8_t num_receives)
@@ -178,37 +145,37 @@ public:
 		// - each start (including repeat start) is 1 byte, plus 2 bytes for the following slaw/slar
 		// - each send is 2 bytes
 		// - each receive is 3 bytes
-		// - one stop is mandatory to end the I2C chain of commands
+		// - one stop is mandatory to end the I2C transaction
 		return commands_.free_() >= (num_starts * 3 + num_sends * 2 + num_receives * 3 + 1);
 	}
 
 	bool start_()
 	{
-		return push_byte_(uint8_t(I2CCommand::START), true);
+		return push_byte_(uint8_t(I2CCommand::START));
 	}
 	bool repeat_start_()
 	{
-		return push_byte_(uint8_t(I2CCommand::REPEAT_START), true);
+		return push_byte_(uint8_t(I2CCommand::REPEAT_START));
 	}
 	bool send_slar_(uint8_t address)
 	{
-		return push_byte_(uint8_t(I2CCommand::SLAR), false) && push_byte_(address, true);
+		return push_byte_(uint8_t(I2CCommand::SLAR)) && push_byte_(address);
 	}
 	bool send_slaw_(uint8_t address)
 	{
-		return push_byte_(uint8_t(I2CCommand::SLAW), false) && push_byte_(address, true);
+		return push_byte_(uint8_t(I2CCommand::SLAW)) && push_byte_(address);
 	}
 	//TODO shall we handle sending N bytes (from one address)?
 	bool send_data_(uint8_t data)
 	{
-		return push_byte_(uint8_t(I2CCommand::WDATA), false) && push_byte_(data, true);
+		return push_byte_(uint8_t(I2CCommand::WDATA)) && push_byte_(data);
 	}
 	//TODO shall we handle receiving N bytes (to one address)?
 	bool receive_data_(uint8_t& data, bool last_byte)
 	{
-		return	push_byte_(uint8_t(last_byte ? I2CCommand::RDATA_LAST : I2CCommand::RDATA), false)
-			&&	push_byte_(utils::high_byte(reinterpret_cast<uint16_t>(&data)), false)
-			&&	push_byte_(utils::low_byte(reinterpret_cast<uint16_t>(&data)), true);
+		return	push_byte_(uint8_t(last_byte ? I2CCommand::RDATA_LAST : I2CCommand::RDATA))
+			&&	push_byte_(utils::high_byte(reinterpret_cast<uint16_t>(&data)))
+			&&	push_byte_(utils::low_byte(reinterpret_cast<uint16_t>(&data)));
 	}
 	bool stop_()
 	{
@@ -225,108 +192,114 @@ private:
 	static constexpr const REG8 TWDR_{TWDR};
 
 	// Push one byte of a command to the queue, and possibly initiate a new transmission right away
-	bool push_byte_(uint8_t data, bool finished)
+	bool push_byte_(uint8_t data, bool finished = false)
 	{
-		bool ok = commands_.push(data);
+		bool ok = commands_.push_(data);
 		// Check if need to initiate transmission
-		if (ok && finished && !(TWCR_ & bits::BV8(TWIE)))
-			// Dequeue first command and start TWI operation
-			//FIXME if this is a STOP command, we have to perform an additional dequeue!
+		// if (ok && finished && !(TWCR_ & bits::BV8(TWIE)))
+		if (ok && finished && current_ == I2CCommand::NONE)
+			// Dequeue first pending command and start TWI operation
 			dequeue_command_();
 		return ok;
 	}
 
 	// Dequeue the next command in the queue and process it immediately
-	// returns false if queue is empty
-	bool dequeue_command_()
+	void dequeue_command_()
 	{
 		uint8_t command = 0;
-		commands_.pull_(command);
+		if (!commands_.pull_(command))
+		{
+			// No more I2C command to execute
+			current_ = I2CCommand::NONE;
+			TWCR_ = bits::BV8(TWINT);
+			return;
+		}
 		current_ = I2CCommand(command);
 		// Check command type and read more
 		switch (current_)
 		{
 			case I2CCommand::START:
-			return exec_start_();
+			exec_start_();
+			break;
 			
 			case I2CCommand::REPEAT_START:
-			return exec_repeat_start_();
+			exec_repeat_start_();
+			break;
 			
 			case I2CCommand::STOP:
-			return exec_stop_();
+			exec_stop_();
+			break;
 			
 			case I2CCommand::SLAR:
-			return exec_send_slar_();
+			exec_send_slar_();
+			break;
 
 			case I2CCommand::SLAW:
-			return exec_send_slaw_();
+			exec_send_slaw_();
+			break;
 
 			case I2CCommand::WDATA:
-			return exec_send_data_();
+			exec_send_data_();
+			break;
 			
 			case I2CCommand::RDATA:
-			return exec_receive_data_(false);
+			exec_receive_data_(false);
+			break;
 			
 			case I2CCommand::RDATA_LAST:
-			return exec_receive_data_(true);
+			exec_receive_data_(true);
+			break;
 
 			default:
-			// No more I2C command to execute
-			TWCR_ = bits::BV8(TWEN, TWINT);
-			return false;
+			break;
 		}
 	}
 
 	// Low-level methods to handle the bus in an asynchronous way
-	bool exec_start_()
+	void exec_start_()
 	{
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 		expected_status_ = i2c::Status::START_TRANSMITTED;
-		return true;
 	}
-	bool exec_repeat_start_()
+	void exec_repeat_start_()
 	{
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 		expected_status_ = i2c::Status::REPEAT_START_TRANSMITTED;
-		return true;
 	}
-	bool exec_send_slar_()
+	void exec_send_slar_()
 	{
 		// Read device address from queue
 		uint8_t address;
-		if (commands_.pull_(address)) return false;
+		commands_.pull_(address);
 		TWDR_ = address | 0x01U;
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 		expected_status_ = i2c::Status::SLA_R_TRANSMITTED_ACK;
-		return true;
 	}
-	bool exec_send_slaw_()
+	void exec_send_slaw_()
 	{
 		// Read device address from queue
 		uint8_t address;
-		if (commands_.pull_(address)) return false;
+		commands_.pull_(address);
 		TWDR_ = address;
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 		expected_status_ = i2c::Status::SLA_W_TRANSMITTED_ACK;
-		return true;
 	}
-	bool exec_send_data_()
+	void exec_send_data_()
 	{
 		// Read data from queue
 		uint8_t data;
-		if (commands_.pull_(data)) return false;
+		commands_.pull_(data);
 		TWDR_ = data;
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 		expected_status_ = i2c::Status::DATA_TRANSMITTED_ACK;
-		return true;
 	}
-	bool exec_receive_data_(bool last_byte)
+	void exec_receive_data_(bool last_byte)
 	{
 		// Read buffer address from queue
 		uint8_t high_address = 0;
-		if (commands_.pull_(high_address)) return false;
+		commands_.pull_(high_address);
 		uint8_t low_address = 0;
-		if (commands_.pull_(low_address)) return false;
+		commands_.pull_(low_address);
 		const uint16_t address = utils::as_uint16_t(high_address, low_address);
 		payload_ = reinterpret_cast<uint8_t*>(address);
 
@@ -342,37 +315,38 @@ private:
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
 			expected_status_ = i2c::Status::DATA_RECEIVED_ACK;
 		}
-		return true;
 	}
-	bool exec_stop_()
+	void exec_stop_(bool error = false)
 	{
-		//TODO check if this code works fine (i.e. clear TWIE with TWSTO)
-		// TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTO);
+		// TWCR_ = bits::BV8(TWINT, TWSTO);
 		TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
-		expected_status_ = 0;
-		// Check if there is one command in queue
-		if (commands_.empty_())
-			// No more I2C command to execute
-			return false;
-
+		if (!error)
+		{
+			expected_status_ = 0;
+			stopped_ = true;
+		}
 		// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 		// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
-		//TODO this can be reduced by the time it takes to pull the next command!
+		//TODO we can reduce delay by accounting for dequeue time!
 		_delay_loop_1(DELAY_AFTER_STOP);
-		return true;
+
+		// Check if there is one more command in queue (i.e. new I2C transaction)
+		dequeue_command_();
 	}
 
 	I2CCallback i2c_change()
 	{
 		// Check status Vs. expected status
 		status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+		actual_status[status_index] = status_;
+		expected_status[status_index++] = expected_status_;
 		if (status_ != expected_status_)
 		{
-			// Acknowledge TWI interrupt
-			TWCR_ |= bits::BV8(TWINT);
-			//TODO how to handle errors? normally send STOP (master mode)
-			//TODO What to do with pending commands in queue?
-			// Note: that behavior could be customizable (clear all, do nothing, or clear current chain until stop)
+			// Clear all pending transactions from queue
+			//TODO that behavior could be customizable (clear all, or clear only current I2C transaction)
+			commands_.clear_();
+			// In case of an error, immediately send a STOP condition
+			exec_stop_(true);
 			return I2CCallback::ERROR;
 		}
 		
@@ -389,16 +363,13 @@ private:
 			break;
 		}
 
-		// Acknowledge TWI interrupt
-		TWCR_ |= bits::BV8(TWINT);
-
 		// Handle next command if any
+		dequeue_command_();
 		// If it was a stop then special behavior is required
-		if (dequeue_command_() && current_ == I2CCommand::STOP)
+		if (stopped_)
 		{
-			// We need to dequeue another command if any
-			dequeue_command_();
 			// We need to let ISR execute any callbacks!
+			stopped_ = false;
 			return I2CCallback::NORMAL_STOP;
 		}
 		return I2CCallback::NONE;
@@ -419,6 +390,7 @@ private:
 	// Status of current command processing
 	I2CCommand current_ = I2CCommand::NONE;
 	uint8_t expected_status_ = 0;
+	bool stopped_ = false;
 	// For read command only
 	uint8_t* payload_ = nullptr;
 
@@ -440,38 +412,6 @@ ISR(TWI_vect)                                                               \
 
 // RTC-specific definitions (for testing purpose)
 //================================================
-// enum class WeekDay : uint8_t
-// {
-// 	SUNDAY = 1,
-// 	MONDAY,
-// 	TUESDAY,
-// 	WEDNESDAY,
-// 	THURSDAY,
-// 	FRIDAY,
-// 	SATURDAY
-// };
-
-// struct tm
-// {
-// 	uint8_t tm_sec;  /**< seconds after the minute - [ 0 to 59 ] */
-// 	uint8_t tm_min;  /**< minutes after the hour - [ 0 to 59 ] */
-// 	uint8_t tm_hour; /**< hours since midnight - [ 0 to 23 ] */
-// 	WeekDay tm_wday; /**< days since Sunday - [ 1 to 7 ] */
-// 	uint8_t tm_mday; /**< day of the month - [ 1 to 31 ] */
-// 	uint8_t tm_mon;  /**< months since January - [ 1 to 12 ] */
-// 	uint8_t tm_year; /**< years since 2000 */
-// };
-
-// enum class SquareWaveFrequency : uint8_t
-// {
-// 	FREQ_1HZ = 0x00,
-// 	FREQ_4096HZ = 0x01,
-// 	FREQ_8192HZ = 0x02,
-// 	FREQ_32768HZ = 0x03
-// };
-
-// Actual test example
-//=====================
 class RTC
 {
 	public:
@@ -510,53 +450,17 @@ class RTC
 							&&	handler_.stop_();
 	}
 
-	// bool set_ram(uint8_t address, const uint8_t* data, uint8_t size)
-	// {
-	// 	address += RAM_START;
-	// 	if ((address + size) <= RAM_END)
-	// 		return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-	// 				&& write(DEVICE_ADDRESS, data, size, i2c::BusConditions::NO_START_STOP) == i2c::Status::OK;
-	// 	else
-	// 		return false;
-	// }
-
-	// bool get_ram(uint8_t address, uint8_t* data, uint8_t size)
-	// {
-	// 	address += RAM_START;
-	// 	if ((address + size) <= RAM_END)
-	// 		return write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-	// 				&& read(DEVICE_ADDRESS, data, size, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK;
-	// 	else
-	// 		return false;
-	// }
-
 	private:
 	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
-	// static constexpr const uint8_t TIME_ADDRESS = 0x00;
-	// static constexpr const uint8_t CLOCK_HALT = 0x80;
-	// static constexpr const uint8_t CONTROL_ADDRESS = 0x07;
 	static constexpr const uint8_t RAM_START = 0x08;
 	static constexpr const uint8_t RAM_END = 0x40;
 	static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
 
-	// union ControlRegister
-	// {
-	// 	explicit ControlRegister(uint8_t data = 0) : data{data} {}
-
-	// 	uint8_t data;
-	// 	struct
-	// 	{
-	// 		uint8_t rs : 2;
-	// 		uint8_t res1 : 2;
-	// 		uint8_t sqwe : 1;
-	// 		uint8_t res2 : 2;
-	// 		uint8_t out : 1;
-	// 	};
-	// };
-
 	I2CHandler<i2c::I2CMode::STANDARD>& handler_;
 };
 
+// Actual test example
+//=====================
 using I2CHANDLER = I2CHandler<i2c::I2CMode::STANDARD>;
 
 REGISTER_ASYNC_I2C(i2c::I2CMode::STANDARD)
@@ -564,10 +468,21 @@ REGISTER_ASYNC_I2C(i2c::I2CMode::STANDARD)
 static constexpr uint8_t I2C_BUFFER_SIZE = 128;
 static uint8_t i2c_buffer[I2C_BUFFER_SIZE];
 
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace streams;
+
+void display_status(ostream& out)
+{
+	out << F("Status history") << endl;
+	out << F("expected  actual") << endl;
+	for (uint8_t i = 0; i != status_index; ++i)
+		out << showbase << hex << right << setw(8) << expected_status[i]
+			<< F("  ") << right << setw(6) << actual_status[i] << endl;
+	out << endl;
+	status_index = 0;
+}
 
 int main() __attribute__((OS_main));
 int main()
@@ -589,31 +504,43 @@ int main()
 	out << boolalpha;
 
 	handler.begin();
+	time::delay_ms(500);
 
 	//TODO Test 1: write one byte, read one byte, delay
 	//TODO Test 2: add ready() method in I2CHandler
 	//TODO Test 3: add simple callback (function or method, in charge of dispatching)
-	while (true)
+	// while (true)
 	{
 		constexpr uint8_t RAM_SIZE = rtc.ram_size();
+	
+		out << F("TEST #1 write and read RAM bytes, one by one") << endl;
 		// Write all RAM bytes
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		uint8_t i = 1;
+		// for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
-			bool ok = rtc.set_ram(i, i + 1);
-			uint8_t status = handler.status();
-			out << F("set_ram(") << dec << i << F(") => ") << ok << F(", status = 0x") << hex << status
-				<< F(", items = ") << dec << handler.commands_.items() << endl;
-			// if not OK (queue full), wait until ready
-			if (!ok)
-			{
-				out << F("waiting...") << flush;
-				while (!handler.is_ready())
-				{
-					out << '.' << flush;
-					time::delay_ms(100);
-				}
-				out << endl;
-			}
+			uint8_t data = 0;
+			bool ok1 = rtc.set_ram(i, i + 1);
+			uint8_t status1 = handler.status();
+			uint8_t control1 = handler.control();
+			uint8_t expected1 = handler.expected_status_;
+			uint8_t items1 = handler.commands_.items();
+			bool ok2 = rtc.get_ram(i, data);
+			uint8_t status2 = handler.status();
+			uint8_t control2 = handler.control();
+			uint8_t expected2 = handler.expected_status_;
+			uint8_t items2 = handler.commands_.items();
+			out << F("set_ram(") << dec << i << F(") => ") << ok1 << F(", status = 0x") << hex << status1
+				<< F(", expected = 0x") << expected1 << F(", control = 0x") << control1
+				<< F(", items = ") << dec << items1 << endl;
+			out << F("get_ram(") << dec << i << F(") => ") << ok2 << F(", status = 0x") << hex << status2
+				<< F(", expected = 0x") << expected2 << F(", control = 0x") << control2
+				<< F(", items = ") << dec << items2 << endl;
+			out << F("get_ram() data = ") << dec << data << endl;
+			time::delay_ms(10);
+			out << F("get_ram() after 10ms data = ") << dec << data << endl;
+
+			display_status(out);
+
 		}
 		time::delay_ms(1000);
 		//TODO Read all RAM bytes
