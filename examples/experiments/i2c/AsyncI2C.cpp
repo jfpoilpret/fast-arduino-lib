@@ -77,7 +77,7 @@ enum class I2CCommandType : uint8_t
 // Command in the queue
 struct I2CCommand
 {
-	static I2CCommand read(uint8_t target, uint8_t* payload, uint8_t size = 1)
+	static I2CCommand read(uint8_t target, uint8_t* payload, uint8_t size)
 	{
 		return I2CCommand{I2CCommandType::READ, target, payload, size};
 	}
@@ -99,12 +99,12 @@ struct I2CCommand
 	}
 
 	constexpr I2CCommand() : type{I2CCommandType::NONE}, target{0}, payload{0}, size{0} {}
-	I2CCommand(const I2CCommand&) = default;
-
 	I2CCommand(I2CCommandType type, uint8_t target, uint8_t data1, uint8_t data2, uint8_t data3)
 		: type{type}, target{target}, data1{data1}, data2{data2}, data3{data3} {}
 	I2CCommand(I2CCommandType type, uint8_t target, uint8_t* payload, uint8_t size)
 		: type{type}, target{target}, payload{payload}, size{size} {}
+
+	I2CCommand(const I2CCommand&) = default;
 
 	// Type of this command
 	I2CCommandType type = I2CCommandType::NONE;
@@ -189,7 +189,7 @@ public:
 	{
 		return push_command(I2CCommand::writeN(target, data, size));
 	}
-	bool read(uint8_t target, uint8_t* data, uint8_t size)
+	bool read(uint8_t target, uint8_t* data, uint8_t size = 1)
 	{
 		return push_command(I2CCommand::read(target, data, size));
 	}
@@ -243,7 +243,6 @@ private:
 	{
 		if (!commands_.pull_(command_))
 		{
-			//TODO improve to avoid constructing an empty command everytime
 			command_ = NONE;
 			current_ = State::NONE;
 			// No more I2C command to execute
@@ -356,14 +355,15 @@ private:
 		bool last = (command_.size == 1);
 
 		// Then a problem occurs for the last byte we want to get, which should have NACK instead!
-		// Send ACK for previous data (including SLA-R)
 		if (last)
 		{
+			// Send NACK for the last data byte we want
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 			expected_status_ = i2c::Status::DATA_RECEIVED_NACK;
 		}
 		else
 		{
+			// Send ACK for data byte if not the last one we want
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
 			expected_status_ = i2c::Status::DATA_RECEIVED_ACK;
 		}
@@ -377,7 +377,6 @@ private:
 		current_ = State::NONE;
 		// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 		// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
-		//TODO we can reduce delay by accounting for dequeue time!
 		_delay_loop_1(DELAY_AFTER_STOP);
 	}
 
