@@ -173,18 +173,6 @@ public:
 		return status_;
 	}
 
-	//TODO DEBUG ONLY!
-	uint8_t control() const
-	{
-		return TWCR_;
-	}
-
-	//TODO is that really useful?
-	// bool is_ready() const
-	// {
-	// 	return commands_.empty();
-	// }
-
 	bool write(uint8_t target, uint8_t data)
 	{
 		return push_command(I2CCommand::write1(target, data));
@@ -385,7 +373,8 @@ private:
 		TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 		if (!error)
 			expected_status_ = 0;
-
+		command_ = NONE;
+		current_ = State::NONE;
 		// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 		// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
 		//TODO we can reduce delay by accounting for dequeue time!
@@ -581,7 +570,7 @@ int main()
 	out << boolalpha << showbase;
 
 	handler.begin();
-	time::delay_ms(500);
+	// time::delay_ms(500);
 
 	//TODO Test 1: write one byte, read one byte, delay
 	//TODO Test 2: add ready() method in I2CHandler
@@ -599,25 +588,23 @@ int main()
 			uint8_t data = 0;
 			bool ok1 = rtc.set_ram(i, i + 1);
 			uint8_t status1 = handler.status();
-			uint8_t control1 = handler.control();
 			uint8_t expected1 = handler.expected_status_;
 			uint8_t items1 = handler.commands_.items();
 			bool ok2 = rtc.get_ram(i, data);
 			uint8_t status2 = handler.status();
-			uint8_t control2 = handler.control();
 			uint8_t expected2 = handler.expected_status_;
 			uint8_t items2 = handler.commands_.items();
 			out << F("set_ram(") << dec << i << F(") => ") << ok1 << F(", status = ") << hex << status1
-				<< F(", expected = ") << expected1 << F(", control = ") << control1
+				<< F(", expected = ") << expected1 
 				<< F(", items = ") << dec << items1 << endl;
 			out << F("get_ram(") << dec << i << F(") => ") << ok2 << F(", status = ") << hex << status2
-				<< F(", expected = ") << expected2 << F(", control = ") << control2
+				<< F(", expected = ") << expected2 
 				<< F(", items = ") << dec << items2 << endl;
 			out << F("get_ram() data = ") << dec << data << endl;
 			time::delay_ms(100);
 			out << F("get_ram() after 100ms data = ") << dec << data << endl;
 
-			display_status(out);
+			// display_status(out);
 			status_index = 0;
 		}
 		time::delay_ms(1000);
