@@ -20,6 +20,12 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
+//TODO rework I2CCommandType to include flag "force stop"
+//TODO add callback stuff
+//TODO add promises and futures
+//TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
+//TODO add policies for behavior on error (retry, clear queue...)
+
 // MAIN IDEA:
 // - have a queue of "I2C commands" records
 // - each command is either a read or a write and contains all necessary data
@@ -49,12 +55,6 @@ enum class I2CCallback : uint8_t
 	NORMAL_STOP,
 	ERROR
 };
-
-//TODO DEBUG ONLY, remove after
-static constexpr uint8_t STATUS_BUFFER_SIZE = 64;
-static uint8_t expected_status[STATUS_BUFFER_SIZE];
-static uint8_t actual_status[STATUS_BUFFER_SIZE];
-static uint8_t status_index = 0;
 
 // Type of commands in queue
 enum class I2CCommandType : uint8_t
@@ -545,16 +545,6 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using namespace streams;
 
-void display_status(ostream& out)
-{
-	out << F("Status history") << endl;
-	out << F("expected  actual") << endl;
-	for (uint8_t i = 0; i != status_index; ++i)
-		out << hex << right << setw(8) << expected_status[i]
-			<< F("  ") << right << setw(6) << actual_status[i] << endl;
-	out << endl;
-}
-
 int main() __attribute__((OS_main));
 int main()
 {
@@ -595,8 +585,6 @@ int main()
 			out << F("set_ram(") << dec << i << F(") => ") << ok1 << endl;
 			out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
 			out << F("get_ram() data = ") << dec << data1[i] << endl;
-			// display_status(out);
-			status_index = 0;
 		}
 		time::delay_ms(1000);
 		out << F("all data after 1s = [") << data1[0] << flush;
@@ -610,8 +598,6 @@ int main()
 		// {
 		// 	bool ok = rtc.set_ram(i, i * 2 + 1);
 		// 	out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
-		// 	// display_status(out);
-		// 	status_index = 0;
 		// }
 		// for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		// {
@@ -619,8 +605,6 @@ int main()
 		// 	bool ok = rtc.get_ram(i, data);
 		// 	out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
 		// 	out << F("get_ram() data = ") << dec << data << endl;
-		// 	// display_status(out);
-		// 	status_index = 0;
 		// }
 		// time::delay_ms(1000);
 	}
