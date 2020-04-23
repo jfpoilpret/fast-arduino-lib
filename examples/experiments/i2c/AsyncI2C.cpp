@@ -446,8 +446,14 @@ private:
 			if (commands_.empty_())
 				exec_stop_();
 			else
+			{
+				//TODO try to fix issue between set_ram and get_ram
+				// if it works, then introduce a force stop flag in I2CCommand
+				exec_stop_();
+				dequeue_command_(true);
 				// Handle next command
-				dequeue_command_(false);
+				// dequeue_command_(false);
+			}
 			return I2CCallback::NORMAL_STOP;
 		}
 
@@ -579,34 +585,43 @@ int main()
 		constexpr uint8_t RAM_SIZE = rtc.ram_size();
 	
 		out << F("TEST #1 write and read RAM bytes, one by one") << endl;
-		// Write all RAM bytes
-		// uint8_t i = 1;
-		// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		for (uint8_t i = 0; i < 8; ++i)
+		uint8_t data1[RAM_SIZE];
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+			data1[i] = 0;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
-			uint8_t data = 0;
 			bool ok1 = rtc.set_ram(i, i + 1);
-			uint8_t status1 = handler.status();
-			uint8_t expected1 = handler.expected_status_;
-			uint8_t items1 = handler.commands_.items();
-			bool ok2 = rtc.get_ram(i, data);
-			uint8_t status2 = handler.status();
-			uint8_t expected2 = handler.expected_status_;
-			uint8_t items2 = handler.commands_.items();
-			out << F("set_ram(") << dec << i << F(") => ") << ok1 << F(", status = ") << hex << status1
-				<< F(", expected = ") << expected1 
-				<< F(", items = ") << dec << items1 << endl;
-			out << F("get_ram(") << dec << i << F(") => ") << ok2 << F(", status = ") << hex << status2
-				<< F(", expected = ") << expected2 
-				<< F(", items = ") << dec << items2 << endl;
-			out << F("get_ram() data = ") << dec << data << endl;
-			time::delay_ms(100);
-			out << F("get_ram() after 100ms data = ") << dec << data << endl;
-
+			bool ok2 = rtc.get_ram(i, data1[i]);
+			out << F("set_ram(") << dec << i << F(") => ") << ok1 << endl;
+			out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
+			out << F("get_ram() data = ") << dec << data1[i] << endl;
 			// display_status(out);
 			status_index = 0;
 		}
 		time::delay_ms(1000);
-		//TODO Read all RAM bytes
+		out << F("all data after 1s = [") << data1[0] << flush;
+		for (uint8_t i = 1; i < RAM_SIZE; ++i)
+			out << F(", ") << data1[i] << flush;
+		out << ']' << endl;
+
+		// The following test works properly
+		// out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
+		// for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		// {
+		// 	bool ok = rtc.set_ram(i, i * 2 + 1);
+		// 	out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
+		// 	// display_status(out);
+		// 	status_index = 0;
+		// }
+		// for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		// {
+		// 	uint8_t data = 0;
+		// 	bool ok = rtc.get_ram(i, data);
+		// 	out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
+		// 	out << F("get_ram() data = ") << dec << data << endl;
+		// 	// display_status(out);
+		// 	status_index = 0;
+		// }
+		// time::delay_ms(1000);
 	}
 }
