@@ -24,9 +24,6 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-//FIXME automatic reset as soon as one command is pushed!
-
-//TODO rework I2CCommandType to include flag "force stop"
 //TODO add callback stuff
 //TODO add promises and futures
 //TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
@@ -198,6 +195,11 @@ public:
 		return status_;
 	}
 
+	//TODO maybe make all methods not synchronized and enforce device drivers to synchronize all calls?
+	bool ensure_num_commands(uint8_t num_commands)
+	{
+		return commands_.free() >= num_commands;
+	}
 	bool write(uint8_t target, uint8_t data, bool force_stop = false)
 	{
 		return push_command(I2CCommand::write1(target, force_stop, data));
@@ -498,16 +500,28 @@ private:
 	uint8_t status_ = 0;
 
 	DECL_TWI_FRIENDS
-	//FOR DEBUG ONLY!
-	friend int main();
 };
 
-//TODO Add callbacks registration
-#define REGISTER_ASYNC_I2C(MODE)                                            \
+//TODO Add callbacks registration (FUNCTION + METHOD, or VOID as usual)
+//TODO improve by using usual isr_handler struct for callback handlers!
+#define REGISTER_I2C_ISR(MODE)                                              \
+ISR(TWI_vect)                                                               \
+{                                                                           \
+	interrupt::HandlerHolder<I2CHandler<MODE>>::handler()->i2c_change();    \
+}
+#define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)                           \
 ISR(TWI_vect)                                                               \
 {                                                                           \
 	I2CCallback callback =                                                  \
 		interrupt::HandlerHolder<I2CHandler<MODE>>::handler()->i2c_change();\
+	CALLBACK(callback);                                                     \
+}
+#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)                        \
+ISR(TWI_vect)                                                                   \
+{                                                                               \
+	I2CCallback callback =                                                      \
+		interrupt::HandlerHolder<I2CHandler<MODE>>::handler()->i2c_change();    \
+	interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call(callback);  \
 }
 
 // RTC-specific definitions (for testing purpose)
@@ -535,8 +549,10 @@ class RTC
 		address += RAM_START;
 		if (address >= RAM_END)
 			return false;
-		//FIXME need pre-check to ensure queue is big enough for 2 I2C commands!
-		return handler_.write(DEVICE_ADDRESS, address) && handler_.read(DEVICE_ADDRESS, &data, 1, true);
+		// Note: we first ensure available queue space for 2 commands in full transaction
+		return handler_.ensure_num_commands(2)
+			&& handler_.write(DEVICE_ADDRESS, address)
+			&& handler_.read(DEVICE_ADDRESS, &data, 1, true);
 	}
 
 	private:
@@ -552,7 +568,7 @@ class RTC
 //=====================
 using I2CHANDLER = I2CHandler<i2c::I2CMode::STANDARD>;
 
-REGISTER_ASYNC_I2C(i2c::I2CMode::STANDARD)
+REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 static I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
@@ -582,91 +598,79 @@ int main()
 	out << boolalpha << showbase;
 
 	handler.begin();
-	// time::delay_ms(500);
 
-	//TODO Test 2: add simple callback (function or method, in charge of dispatching)
-	// while (true)
+	constexpr uint8_t RAM_SIZE = rtc.ram_size();
+
+	uint8_t data1[RAM_SIZE];
+	out << F("TEST #0 read all RAM bytes, one by one") << endl;
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		data1[i] = 0;
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
 	{
-		constexpr uint8_t RAM_SIZE = rtc.ram_size();
-
-		// out << F("TEST just one set_ram()") << endl;
-		// bool ok = rtc.set_ram(0, 0x80);
-		// out << F("END ") << ok << endl;
-
-		// out << F("TEST just one get_ram()") << endl;
-		// uint8_t data;
-		// bool ok = rtc.get_ram(0, data);
-		// out << F("END ") << ok << endl;
-		// time::delay_ms(100);
-		// out << F("data = ") << hex << data << endl;
-
-		uint8_t data1[RAM_SIZE];
-		out << F("TEST #0 read all RAM bytes, one by one") << endl;
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-			data1[i] = 0;
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		{
-			bool ok2 = rtc.get_ram(i, data1[i]);
-			out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
-			out << F("get_ram() data = ") << dec << data1[i] << endl;
-		}
-		time::delay_ms(1000);
-		out << F("all data after 1s = [") << data1[0] << flush;
-		for (uint8_t i = 1; i < RAM_SIZE; ++i)
-			out << F(", ") << data1[i] << flush;
-		out << ']' << endl;
-
-		time::delay_ms(1000);
-		out << F("TEST #1 write and read RAM bytes, one by one") << endl;
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-			data1[i] = 0;
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		{
-			bool ok1 = rtc.set_ram(i, i + 1);
-			out << F("#2") << endl;
-			bool ok2 = rtc.get_ram(i, data1[i]);
-			out << F("set_ram(") << dec << i << F(") => ") << ok1 << endl;
-			out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
-			out << F("get_ram() data = ") << dec << data1[i] << endl;
-		}
-		time::delay_ms(1000);
-		out << F("all data after 1s = [") << data1[0] << flush;
-		for (uint8_t i = 1; i < RAM_SIZE; ++i)
-			out << F(", ") << data1[i] << flush;
-		out << ']' << endl;
-
-		// The following test works properly
-		out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		{
-			bool ok = rtc.set_ram(i, i * 2 + 1);
-			out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
-		}
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		{
-			uint8_t data = 0;
-			bool ok = rtc.get_ram(i, data);
-			out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
-			out << F("get_ram() data = ") << dec << data << endl;
-		}
-		time::delay_ms(1000);
-
-		out << F("TEST #3 write and read RAM bytes, one by one, without delay") << endl;
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-			data1[i] = 0;
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		{
-			bool ok1 = rtc.set_ram(i, i + 1);
-			bool ok2 = rtc.get_ram(i, data1[i]);
-			if (!ok1)
-				out << F("KO1 on ") << i << endl;
-			if (!ok2)
-				out << F("KO2 on ") << i << endl;
-		}
-		time::delay_ms(1000);
-		out << F("all data after 1s = [") << data1[0] << flush;
-		for (uint8_t i = 1; i < RAM_SIZE; ++i)
-			out << F(", ") << data1[i] << flush;
-		out << ']' << endl;
+		bool ok2 = rtc.get_ram(i, data1[i]);
+		out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
+		out << F("get_ram() data = ") << dec << data1[i] << endl;
 	}
+	time::delay_ms(1000);
+	out << F("all data after 1s = [") << data1[0] << flush;
+	for (uint8_t i = 1; i < RAM_SIZE; ++i)
+		out << F(", ") << data1[i] << flush;
+	out << ']' << endl;
+
+	time::delay_ms(1000);
+	out << F("TEST #1 write and read RAM bytes, one by one") << endl;
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		data1[i] = 0;
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+	{
+		bool ok1 = rtc.set_ram(i, i + 1);
+		out << F("#2") << endl;
+		bool ok2 = rtc.get_ram(i, data1[i]);
+		out << F("set_ram(") << dec << i << F(") => ") << ok1 << endl;
+		out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
+		out << F("get_ram() data = ") << dec << data1[i] << endl;
+	}
+	time::delay_ms(1000);
+	out << F("all data after 1s = [") << data1[0] << flush;
+	for (uint8_t i = 1; i < RAM_SIZE; ++i)
+		out << F(", ") << data1[i] << flush;
+	out << ']' << endl;
+
+	// The following test works properly
+	out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+	{
+		bool ok = rtc.set_ram(i, i * 2 + 1);
+		out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
+	}
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+	{
+		uint8_t data = 0;
+		bool ok = rtc.get_ram(i, data);
+		out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
+		out << F("get_ram() data = ") << dec << data << endl;
+	}
+	time::delay_ms(1000);
+
+	out << F("TEST #3 write and read RAM bytes, one by one, without delay") << endl;
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		data1[i] = 0;
+	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+	{
+		bool ok1 = rtc.set_ram(i, i + 1);
+		bool ok2 = rtc.get_ram(i, data1[i]);
+		if (!ok1)
+			out << F("KO1 on ") << i << endl;
+		if (!ok2)
+			out << F("KO2 on ") << i << endl;
+	}
+	time::delay_ms(1000);
+	out << F("all data after 1s = [") << data1[0] << flush;
+	for (uint8_t i = 1; i < RAM_SIZE; ++i)
+		out << F(", ") << data1[i] << flush;
+	out << ']' << endl;
+
+	//TODO Test 4: add simple callback (function or method, in charge of dispatching)
+
+	handler.end();
 }
