@@ -17,8 +17,14 @@
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 
+//DEBUG
+// #include <fastarduino/gpio.h>
+// static gpio::FastPort<board::Port::PORT_B> Leds{0xFF};
+
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
+
+//FIXME automatic reset as soon as one command is pushed!
 
 //TODO rework I2CCommandType to include flag "force stop"
 //TODO add callback stuff
@@ -57,59 +63,76 @@ enum class I2CCallback : uint8_t
 };
 
 // Type of commands in queue
-enum class I2CCommandType : uint8_t
+class I2CCommandType
 {
-	// No command at all
-	NONE = 0,
-	// Read command (includes start/repeat start, slar, receive data)
-	READ,
-	// Write command (includes start/repeat start, slaw, write 1 constant byte)
-	WRITE_1,
-	// Write command (includes start/repeat start, slaw, write 2 constant bytes)
-	WRITE_2,
-	// Write command (includes start/repeat start, slaw, write 3 constant bytes)
-	WRITE_3,
-	// Write command (includes start/repeat start, slaw, write bytes from buffer)
-	WRITE_N,
+public:
+	constexpr I2CCommandType()
+		: none{true}, write{false}, force_stop{false}, write_size{0} {}
+	constexpr I2CCommandType(const I2CCommandType&) = default;
+	constexpr I2CCommandType& operator=(const I2CCommandType&) = default;
+
+private:
+	constexpr I2CCommandType(bool force_stop)
+		: none{false}, write{false}, force_stop{force_stop}, write_size{0} {}
+	constexpr I2CCommandType(bool force_stop, uint8_t write_size)
+		: none{false}, write{true}, force_stop{force_stop}, write_size{write_size} {}
+
+	// true if this is an empty command
+	bool none : 1;
+	// true if this is a write command, false for a read command
+	bool write : 1;
+	// true if a STOP condition must absolutely be forced at the end of this command
+	bool force_stop : 1;
+	// number of bytes, embedded in command, to write; 0 for external payload
+	uint8_t write_size : 2;
+
+	friend class I2CCommand;
+	template<i2c::I2CMode> friend class I2CHandler;
 };
 
-//TODO maybe change to class and protect members appropriately
 // Command in the queue
-struct I2CCommand
+class I2CCommand
 {
-	static I2CCommand read(uint8_t target, uint8_t* payload, uint8_t size)
+public:
+	constexpr I2CCommand() : payload{0}, size{0} {}
+	constexpr I2CCommand(const I2CCommand&) = default;
+	constexpr I2CCommand& operator=(const I2CCommand&) = default;
+
+private:
+	static constexpr I2CCommand none()
 	{
-		return I2CCommand{I2CCommandType::READ, target, payload, size};
+		return I2CCommand{};
 	}
-	static I2CCommand write1(uint8_t target, uint8_t data1)
+	static constexpr I2CCommand read(uint8_t target, bool force_stop, uint8_t* payload, uint8_t size)
 	{
-		return I2CCommand{I2CCommandType::WRITE_1, target, data1, 0, 0};
+		return I2CCommand{I2CCommandType{force_stop}, target, payload, size};
 	}
-	static I2CCommand write2(uint8_t target, uint8_t data1, uint8_t data2)
+	static constexpr I2CCommand write1(uint8_t target, bool force_stop, uint8_t data1)
 	{
-		return I2CCommand{I2CCommandType::WRITE_2, target, data1, data2, 0};
+		return I2CCommand{I2CCommandType{force_stop, 1}, target, data1, 0, 0};
 	}
-	static I2CCommand write3(uint8_t target, uint8_t data1, uint8_t data2, uint8_t data3)
+	static constexpr I2CCommand write2(uint8_t target, bool force_stop, uint8_t data1, uint8_t data2)
 	{
-		return I2CCommand{I2CCommandType::WRITE_3, target, data1, data2, data3};
+		return I2CCommand{I2CCommandType{force_stop, 2}, target, data1, data2, 0};
 	}
-	static I2CCommand writeN(uint8_t target, const uint8_t* payload, uint8_t size)
+	static constexpr I2CCommand write3(uint8_t target, bool force_stop, uint8_t data1, uint8_t data2, uint8_t data3)
 	{
-		return I2CCommand{I2CCommandType::WRITE_N, target, const_cast<uint8_t*>(payload), size};
+		return I2CCommand{I2CCommandType{force_stop, 3}, target, data1, data2, data3};
+	}
+	static constexpr I2CCommand writeN(uint8_t target, bool force_stop, const uint8_t* payload, uint8_t size)
+	{
+		return I2CCommand{I2CCommandType{force_stop, 0}, target, const_cast<uint8_t*>(payload), size};
 	}
 
-	constexpr I2CCommand() : type{I2CCommandType::NONE}, target{0}, payload{0}, size{0} {}
-	I2CCommand(I2CCommandType type, uint8_t target, uint8_t data1, uint8_t data2, uint8_t data3)
+	constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t data1, uint8_t data2, uint8_t data3)
 		: type{type}, target{target}, data1{data1}, data2{data2}, data3{data3} {}
-	I2CCommand(I2CCommandType type, uint8_t target, uint8_t* payload, uint8_t size)
+	constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t* payload, uint8_t size)
 		: type{type}, target{target}, payload{payload}, size{size} {}
 
-	I2CCommand(const I2CCommand&) = default;
-
 	// Type of this command
-	I2CCommandType type = I2CCommandType::NONE;
+	I2CCommandType type = I2CCommandType{};
 	// Address of the target device (on 8 bits, already left-shifted)
-	uint8_t target;
+	uint8_t target = 0;
 	union
 	{
 		struct
@@ -124,6 +147,8 @@ struct I2CCommand
 			uint8_t size;
 		};
 	};
+
+	template<i2c::I2CMode> friend class I2CHandler;
 };
 
 // This is an asynchronous I2C handler
@@ -173,30 +198,28 @@ public:
 		return status_;
 	}
 
-	bool write(uint8_t target, uint8_t data)
+	bool write(uint8_t target, uint8_t data, bool force_stop = false)
 	{
-		return push_command(I2CCommand::write1(target, data));
+		return push_command(I2CCommand::write1(target, force_stop, data));
 	}
-	bool write(uint8_t target, uint8_t data1, uint8_t data2)
+	bool write(uint8_t target, uint8_t data1, uint8_t data2, bool force_stop = false)
 	{
-		return push_command(I2CCommand::write2(target, data1, data2));
+		return push_command(I2CCommand::write2(target, force_stop, data1, data2));
 	}
-	bool write(uint8_t target, uint8_t data1, uint8_t data2, uint8_t data3)
+	bool write(uint8_t target, uint8_t data1, uint8_t data2, uint8_t data3, bool force_stop = false)
 	{
-		return push_command(I2CCommand::write3(target, data1, data2, data3));
+		return push_command(I2CCommand::write3(target, force_stop, data1, data2, data3));
 	}
-	bool write(uint8_t target, const uint8_t* data, uint8_t size)
+	bool write(uint8_t target, const uint8_t* data, uint8_t size, bool force_stop = false)
 	{
-		return push_command(I2CCommand::writeN(target, data, size));
+		return push_command(I2CCommand::writeN(target, force_stop, data, size));
 	}
-	bool read(uint8_t target, uint8_t* data, uint8_t size = 1)
+	bool read(uint8_t target, uint8_t* data, uint8_t size, bool force_stop = false)
 	{
-		return push_command(I2CCommand::read(target, data, size));
+		return push_command(I2CCommand::read(target, force_stop, data, size));
 	}
 
 private:
-	static constexpr I2CCommand NONE = I2CCommand{};
-
 	enum class State : uint8_t
 	{
 		NONE = 0,
@@ -228,7 +251,7 @@ private:
 			if (commands_.push_(command))
 			{
 				// Check if need to initiate transmission (i.e no current command is executed)
-				if (command_.type == I2CCommandType::NONE)
+				if (command_.type.none)
 					// Dequeue first pending command and start TWI operation
 					dequeue_command_(true);
 				return true;
@@ -243,7 +266,7 @@ private:
 	{
 		if (!commands_.pull_(command_))
 		{
-			command_ = NONE;
+			command_ = I2CCommand::none();
 			current_ = State::NONE;
 			// No more I2C command to execute
 			TWCR_ = bits::BV8(TWINT);
@@ -264,7 +287,7 @@ private:
 		switch (current_)
 		{
 			case State::START:
-			return ((command_.type == I2CCommandType::READ) ? State::SLAR : State::SLAW);
+			return (command_.type.write ? State::SLAW : State::SLAR);
 
 			case State::SLAR:
 			case State::RECV:
@@ -274,13 +297,13 @@ private:
 			return State::STOP;
 
 			case State::SLAW:
-			return ((command_.type == I2CCommandType::WRITE_N) ? State::SENDN : State::SEND1);
+			return ((command_.type.write_size == 0) ? State::SENDN : State::SEND1);
 			
 			case State::SEND1:
-			return ((command_.type == I2CCommandType::WRITE_1) ? State::STOP : State::SEND2);
+			return ((command_.type.write_size == 1) ? State::STOP : State::SEND2);
 
 			case State::SEND2:
-			return ((command_.type == I2CCommandType::WRITE_2) ? State::STOP : State::SEND3);
+			return ((command_.type.write_size == 2) ? State::STOP : State::SEND3);
 
 			case State::SEND3:
 			return State::STOP;
@@ -297,6 +320,7 @@ private:
 	// Low-level methods to handle the bus in an asynchronous way
 	void exec_start_()
 	{
+		// Leds.set_PORT(0x01);
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 		expected_status_ = i2c::Status::START_TRANSMITTED;
 	}
@@ -314,6 +338,7 @@ private:
 	}
 	void exec_send_slaw_()
 	{
+		// Leds.set_PORT(0x03);
 		// Read device address from queue
 		TWDR_ = command_.target;
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
@@ -321,6 +346,7 @@ private:
 	}
 	void exec_send_data_()
 	{
+		// Leds.set_PORT(0x07);
 		// Determine next data byte
 		switch (current_)
 		{
@@ -370,10 +396,11 @@ private:
 	}
 	void exec_stop_(bool error = false)
 	{
+		// Leds.set_PORT(0x0F);
 		TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 		if (!error)
 			expected_status_ = 0;
-		command_ = NONE;
+		command_ = I2CCommand::none();
 		current_ = State::NONE;
 		// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 		// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
@@ -384,8 +411,6 @@ private:
 	{
 		// Check status Vs. expected status
 		status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
-		actual_status[status_index] = status_;
-		expected_status[status_index++] = expected_status_;
 		if (status_ != expected_status_)
 		{
 			// Clear all pending transactions from queue
@@ -405,7 +430,6 @@ private:
 		}
 
 		// Handle next step in current command
-		bool end_transaction = false;
 		current_ = next_state_();
 		switch (current_)
 		{
@@ -435,28 +459,21 @@ private:
 			break;
 
 			case State::STOP:
-			end_transaction = true;
-			break;
-		}
-
-		// Check if current transaction is finished
-		if (end_transaction)
-		{
-			// Check if we need to STOP or REPEAT START
+			// Check if we need to STOP (no more pending commands in queue)
 			if (commands_.empty_())
 				exec_stop_();
-			else
+			// Check if we need to STOP or REPEAT START (current command requires STOP)
+			else if (command_.type.force_stop)
 			{
-				//TODO try to fix issue between set_ram and get_ram
-				// if it works, then introduce a force stop flag in I2CCommand
 				exec_stop_();
-				dequeue_command_(true);
 				// Handle next command
-				// dequeue_command_(false);
+				dequeue_command_(true);
 			}
+			else
+				// Handle next command
+				dequeue_command_(false);
 			return I2CCallback::NORMAL_STOP;
 		}
-
 		return I2CCallback::NONE;
 	}
 
@@ -510,7 +527,7 @@ class RTC
 		address += RAM_START;
 		if (address >= RAM_END)
 			return false;
-		return handler_.write(DEVICE_ADDRESS, address, data);
+		return handler_.write(DEVICE_ADDRESS, address, data, true);
 	}
 
 	bool get_ram(uint8_t address, uint8_t& data)
@@ -519,7 +536,7 @@ class RTC
 		if (address >= RAM_END)
 			return false;
 		//FIXME need pre-check to ensure queue is big enough for 2 I2C commands!
-		return handler_.write(DEVICE_ADDRESS, address) && handler_.read(DEVICE_ADDRESS, &data, 1);
+		return handler_.write(DEVICE_ADDRESS, address) && handler_.read(DEVICE_ADDRESS, &data, 1, true);
 	}
 
 	private:
@@ -567,20 +584,46 @@ int main()
 	handler.begin();
 	// time::delay_ms(500);
 
-	//TODO Test 1: write one byte, read one byte, delay
-	//TODO Test 2: add ready() method in I2CHandler
-	//TODO Test 3: add simple callback (function or method, in charge of dispatching)
+	//TODO Test 2: add simple callback (function or method, in charge of dispatching)
 	// while (true)
 	{
 		constexpr uint8_t RAM_SIZE = rtc.ram_size();
-	
-		out << F("TEST #1 write and read RAM bytes, one by one") << endl;
+
+		// out << F("TEST just one set_ram()") << endl;
+		// bool ok = rtc.set_ram(0, 0x80);
+		// out << F("END ") << ok << endl;
+
+		// out << F("TEST just one get_ram()") << endl;
+		// uint8_t data;
+		// bool ok = rtc.get_ram(0, data);
+		// out << F("END ") << ok << endl;
+		// time::delay_ms(100);
+		// out << F("data = ") << hex << data << endl;
+
 		uint8_t data1[RAM_SIZE];
+		out << F("TEST #0 read all RAM bytes, one by one") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+			data1[i] = 0;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			bool ok2 = rtc.get_ram(i, data1[i]);
+			out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
+			out << F("get_ram() data = ") << dec << data1[i] << endl;
+		}
+		time::delay_ms(1000);
+		out << F("all data after 1s = [") << data1[0] << flush;
+		for (uint8_t i = 1; i < RAM_SIZE; ++i)
+			out << F(", ") << data1[i] << flush;
+		out << ']' << endl;
+
+		time::delay_ms(1000);
+		out << F("TEST #1 write and read RAM bytes, one by one") << endl;
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 			data1[i] = 0;
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
 			bool ok1 = rtc.set_ram(i, i + 1);
+			out << F("#2") << endl;
 			bool ok2 = rtc.get_ram(i, data1[i]);
 			out << F("set_ram(") << dec << i << F(") => ") << ok1 << endl;
 			out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
@@ -593,19 +636,37 @@ int main()
 		out << ']' << endl;
 
 		// The following test works properly
-		// out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
-		// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		// {
-		// 	bool ok = rtc.set_ram(i, i * 2 + 1);
-		// 	out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
-		// }
-		// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-		// {
-		// 	uint8_t data = 0;
-		// 	bool ok = rtc.get_ram(i, data);
-		// 	out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
-		// 	out << F("get_ram() data = ") << dec << data << endl;
-		// }
-		// time::delay_ms(1000);
+		out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			bool ok = rtc.set_ram(i, i * 2 + 1);
+			out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
+		}
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			uint8_t data = 0;
+			bool ok = rtc.get_ram(i, data);
+			out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
+			out << F("get_ram() data = ") << dec << data << endl;
+		}
+		time::delay_ms(1000);
+
+		out << F("TEST #3 write and read RAM bytes, one by one, without delay") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+			data1[i] = 0;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			bool ok1 = rtc.set_ram(i, i + 1);
+			bool ok2 = rtc.get_ram(i, data1[i]);
+			if (!ok1)
+				out << F("KO1 on ") << i << endl;
+			if (!ok2)
+				out << F("KO2 on ") << i << endl;
+		}
+		time::delay_ms(1000);
+		out << F("all data after 1s = [") << data1[0] << flush;
+		for (uint8_t i = 1; i < RAM_SIZE; ++i)
+			out << F(", ") << data1[i] << flush;
+		out << ']' << endl;
 	}
 }
