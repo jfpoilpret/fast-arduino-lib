@@ -35,7 +35,7 @@ namespace errors
 {
 	/** Input/output error. */
 	constexpr const int EIO = -5;
-	/** Invalid argument. */
+	/** Invalid argument or Future. */
 	constexpr const int EINVAL = -22;
 	/** Timer expired. */
 	constexpr const int ETIME = -62;
