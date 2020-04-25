@@ -1,7 +1,8 @@
 /*
  * This program is just for personal experiments here on AVR features and C++ stuff
- * It does not do anything interesting as far as hardware is concerned.
- * It is just try-and-throw-away code.
+ * This one is a proof of concept on I2C asynchronous handling, to be later integrated
+ * to FastArduino library.
+ * For tests, I just use a DS1307 connected through I2C (SDA/SCL) to an Arduino UNO.
  */
 
 #include <util/delay_basic.h>
@@ -16,10 +17,6 @@
 
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
-
-//DEBUG
-// #include <fastarduino/gpio.h>
-// static gpio::FastPort<board::Port::PORT_B> Leds{0xFF};
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
