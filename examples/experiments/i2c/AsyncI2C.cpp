@@ -6,7 +6,7 @@
 
 #include <util/delay_basic.h>
 
-#include <fastarduino/boards/board.h>
+// #include <fastarduino/boards/board.h>
 #include <fastarduino/i2c.h>
 #include <fastarduino/queue.h>
 #include <fastarduino/time.h>
@@ -24,7 +24,6 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-//TODO add callback stuff
 //TODO add promises and futures
 //TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
 //TODO add policies for behavior on error (retry, clear queue...)
@@ -502,7 +501,6 @@ private:
 	DECL_TWI_FRIENDS
 };
 
-//TODO Add callbacks registration (FUNCTION + METHOD, or VOID as usual)
 //TODO improve by using usual isr_handler struct for callback handlers!
 #define REGISTER_I2C_ISR(MODE)                                              \
 ISR(TWI_vect)                                                               \
@@ -514,14 +512,15 @@ ISR(TWI_vect)                                                               \
 {                                                                           \
 	I2CCallback callback =                                                  \
 		interrupt::HandlerHolder<I2CHandler<MODE>>::handler()->i2c_change();\
-	CALLBACK(callback);                                                     \
+	if (callback != I2CCallback::NONE) CALLBACK(callback);                  \
 }
-#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)                        \
-ISR(TWI_vect)                                                                   \
-{                                                                               \
-	I2CCallback callback =                                                      \
-		interrupt::HandlerHolder<I2CHandler<MODE>>::handler()->i2c_change();    \
-	interrupt::CallbackHandler<void (HANDLER::*)(), CALLBACK>::call(callback);  \
+#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)                                        \
+ISR(TWI_vect)                                                                                   \
+{                                                                                               \
+	I2CCallback callback =                                                                      \
+		interrupt::HandlerHolder<I2CHandler<MODE>>::handler()->i2c_change();                    \
+	if (callback != I2CCallback::NONE)                                                          \
+		interrupt::CallbackHandler<void (HANDLER::*)(I2CCallback), CALLBACK>::call(callback);	\
 }
 
 // RTC-specific definitions (for testing purpose)
@@ -568,7 +567,50 @@ class RTC
 //=====================
 using I2CHANDLER = I2CHandler<i2c::I2CMode::STANDARD>;
 
-REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
+// Callback handler
+class RTCCallback
+{
+public:
+	RTCCallback()
+	{
+		interrupt::register_handler(*this);
+	}
+
+	void reset()
+	{
+		synchronized
+		{
+			count_ok_ = count_errors_ = 0;
+		}
+	}
+
+	uint16_t count_errors() const
+	{
+		synchronized return count_errors_;
+	}
+
+	uint16_t count_ok() const
+	{
+		synchronized return count_ok_;
+	}
+
+private:
+	void callback(I2CCallback result)
+	{
+		if (result == I2CCallback::NORMAL_STOP)
+			++count_ok_;
+		else
+			++count_errors_;
+	}
+
+	uint16_t count_errors_ = 0;
+	uint16_t count_ok_ = 0;
+
+	DECL_TWI_FRIENDS
+};
+
+REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
+// REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 static I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
@@ -591,7 +633,10 @@ int main()
 	uart.begin(115200);
 	ostream out = uart.out();
 
-	// Initialize I2C asyn handler
+	// Initialize callback handler
+	RTCCallback callback{};
+
+	// Initialize I2C async handler
 	I2CHANDLER handler{i2c_buffer};
 	RTC rtc{handler};
 	out << F("Before handler.begin()") << endl;
@@ -616,6 +661,9 @@ int main()
 	for (uint8_t i = 1; i < RAM_SIZE; ++i)
 		out << F(", ") << data1[i] << flush;
 	out << ']' << endl;
+	out << F("callback ok = ") << dec << callback.count_ok() 
+		<< F(", errors = ") << dec << callback.count_errors() << endl;
+	callback.reset();
 
 	time::delay_ms(1000);
 	out << F("TEST #1 write and read RAM bytes, one by one") << endl;
@@ -635,6 +683,9 @@ int main()
 	for (uint8_t i = 1; i < RAM_SIZE; ++i)
 		out << F(", ") << data1[i] << flush;
 	out << ']' << endl;
+	out << F("callback ok = ") << dec << callback.count_ok() 
+		<< F(", errors = ") << dec << callback.count_errors() << endl;
+	callback.reset();
 
 	// The following test works properly
 	out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
@@ -643,6 +694,9 @@ int main()
 		bool ok = rtc.set_ram(i, i * 2 + 1);
 		out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
 	}
+	out << F("callback ok = ") << dec << callback.count_ok() 
+		<< F(", errors = ") << dec << callback.count_errors() << endl;
+	callback.reset();
 	for (uint8_t i = 0; i < RAM_SIZE; ++i)
 	{
 		uint8_t data = 0;
@@ -650,6 +704,9 @@ int main()
 		out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
 		out << F("get_ram() data = ") << dec << data << endl;
 	}
+	out << F("callback ok = ") << dec << callback.count_ok() 
+		<< F(", errors = ") << dec << callback.count_errors() << endl;
+	callback.reset();
 	time::delay_ms(1000);
 
 	out << F("TEST #3 write and read RAM bytes, one by one, without delay") << endl;
@@ -669,8 +726,9 @@ int main()
 	for (uint8_t i = 1; i < RAM_SIZE; ++i)
 		out << F(", ") << data1[i] << flush;
 	out << ']' << endl;
-
-	//TODO Test 4: add simple callback (function or method, in charge of dispatching)
+	out << F("callback ok = ") << dec << callback.count_ok() 
+		<< F(", errors = ") << dec << callback.count_errors() << endl;
+	callback.reset();
 
 	handler.end();
 }
