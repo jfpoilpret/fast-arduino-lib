@@ -73,6 +73,7 @@ public:
 	{
 		synchronized return set_future_value_(id, chunk, size);
 	}
+	//TODO does this function work also with a T (useful when T is small and is a constant eg -1 as int)
 	template<typename T> bool set_future_value(uint8_t id, const T& value) const
 	{
 		synchronized return set_future_value_(id, value);
@@ -291,6 +292,7 @@ private:
 	uint8_t size_ = 0;
 
 	friend class AbstractFutureManager;
+	template<typename T> friend class Future;
 };
 
 bool AbstractFutureManager::set_future_value_(uint8_t id, uint8_t chunk) const
@@ -341,9 +343,9 @@ public:
 	Future() : AbstractFuture{buffer_, sizeof(T)} {}
 	~Future() = default;
 
-	Future(Future<T>&& that)
+	Future(Future<T>&& that) : AbstractFuture{std::move(that)}
 	{
-		move(that);
+		move(std::move(that));
 	}
 	Future<T>& operator=(Future<T>&& that)
 	{
@@ -366,6 +368,7 @@ public:
 	}
 
 private:
+	//TODO better put this method in AbstractFuture?
 	void move(Future<T>&& that)
 	{
 		synchronized
@@ -620,40 +623,68 @@ int main()
 	}
 	out << endl;
 
+	// Check reuse of a future in various states
+	out << F("TEST #7 check Future status after move constructor") << endl;
+	out << F("#7.1 instantiate future") << endl;
+	Future<uint16_t> future7;
+	trace_future(out, future7);
+	out << F("#7.2 register future") << endl;
+	ok = manager.register_future(future7);
+	out << F("result => ") << ok << endl;
+	trace_future(out, future7);
+	if (ok)
+	{
+		out << F("#7.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
+		Future<uint16_t> future8 = std::move(future7);
+		trace_future(out, future7);
+		trace_future(out, future8);
+
+		out << F("#7.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
+		manager.set_future_value(future8.id(), 0xFFFFu);
+		Future<uint16_t> future9 = std::move(future8);
+		trace_future(out, future8);
+		trace_future(out, future9);
+		uint16_t value = 0;
+		future9.get(value);
+		out << F("value (expected 0xFFFF) = ") << hex << value << endl;
+
+		out << F("#7.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
+		Future<uint16_t> future10;
+		manager.register_future(future10);
+		manager.set_future_error(future10.id(), -10000);
+		Future<uint16_t> future11 = std::move(future10);
+		trace_future(out, future10);
+		trace_future(out, future11);
+		out << F("error (expected -10000) = ") << dec << future11.error() << endl;
+
+		out << F("#7.6 check status (INVALID, INVALID) -> (INVALID, INVALID)") << endl;
+		Future<uint16_t> future12;
+		Future<uint16_t> future13 = std::move(future12);
+		trace_future(out, future12);
+		trace_future(out, future13);
+
+		out << F("#7.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
+		Future<uint16_t> future14;
+		manager.register_future(future14);
+		manager.set_future_value(future14.id(), uint8_t(0xBB));
+		Future<uint16_t> future15 = std::move(future14);
+		trace_future(out, future14);
+		trace_future(out, future15);
+		manager.set_future_value(future15.id(), uint8_t(0xCC));
+		out << F("After complete set value, status shall be READY") << endl;
+		trace_future(out, future15);
+		out << F("error = ") << dec << future15.error() << endl;
+		value = 0;
+		future15.get(value);
+		out << F("value (expected 0xCCBB) = ") << hex << value << endl;
+	}
+	out << endl;
+
 	//TODO Check reuse of a future in various states
-
-
-	//FIXME this does not work if we reuse future1! still NOT_READY after 2 chunks set!
-	// But it works with a new future...
-	// time::delay_ms(1000);
-	// out << F("TEST #2 Future construction/destruction/move...") << endl;
-	// //TODO
-	// out << F("TEST #2 simple Future lifecycle: future reuse and full value set") << endl;
-	// out << F("#2.1 reuse future") << endl;
-	// ok = manager.register_future(future1);
-	// out << F("result => ") << ok << endl;
-	// trace_future(out, future1);
-	// if (ok)
-	// {
-	// 	out << F("#2.2 set_future_value()") << endl;
-	// 	ok = manager.set_future_value(future1.id(), 0x8000);
-	// 	out << F("result => ") << ok << endl;
-	// 	trace_future(out, future1);
-	// 	int error = future1.error();
-	// 	out << F("error() = ") << dec << error << endl;
-	// 	trace_future(out, future1);
-	// 	uint16_t value = 0;
-	// 	ok = future1.get(value);
-	// 	out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
-	// 	trace_future(out, future1);
-	// 	error = future1.error();
-	// 	out << F("error() = ") << dec << error << endl;
-	// 	trace_future(out, future1);
-	// }
-
+	out << F("TEST #8 check Future status after move assignment") << endl;
 
 	// time::delay_ms(1000);
-	// out << F("TEST #3 Future updated by ISR...") << endl;
+	// out << F("TEST #9 Future updated by ISR...") << endl;
 	//TODO
 
 }
