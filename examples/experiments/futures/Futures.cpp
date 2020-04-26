@@ -186,16 +186,16 @@ public:
 
 protected:
 	// Constructor used by FutureManager
-	AbstractFuture(uint8_t* data, uint8_t size) : data_{data}, size_{size} {}
+	AbstractFuture(uint8_t* data, uint8_t size) : data_{data}, current_{data}, size_{size} {}
 	~AbstractFuture()
 	{
 		// Notify FutureManager about destruction
 		AbstractFutureManager::instance().update_future(id_, this, nullptr);
 	}
 
-	//FIXME data_ is incorrect because it shall point to the next byte to write!
 	AbstractFuture(AbstractFuture&& that)
-		: id_{that.id_}, status_{that.status_}, error_{that.error_}, data_{that.data_}, size_{that.size_}
+		:	id_{that.id_}, status_{that.status_}, error_{that.error_}, 
+			data_{that.data_}, current_{that.current_}, size_{that.size_}
 	{
 		// Notify FutureManager about Future move
 		if (!AbstractFutureManager::instance().update_future(id_, &that, this))
@@ -213,8 +213,8 @@ protected:
 			id_ = that.id_;
 			status_ = that.status_;
 			error_ = that.error_;
-			//FIXME data_ is incorrect because it shall point to the next byte to write!
 			data_ = that.data_;
+			current_ = that.current_;
 			size_ = that.size_;
 			// Notify FutureManager about Future move
 			if (!AbstractFutureManager::instance().update_future_(id_, &that, this))
@@ -247,7 +247,7 @@ private:
 		if (status_ != FutureStatus::NOT_READY)
 			return false;
 		// Update Future value chunk
-		*data_++ = chunk;
+		*current_++ = chunk;
 		// Is that the last chunk?
 		if (--size_ == 0)
 			status_ = FutureStatus::READY;
@@ -265,7 +265,8 @@ private:
 			set_error_(errors::EMSGSIZE);
 			return false;
 		}
-		memcpy(data_, chunk, size);
+		memcpy(current_, chunk, size);
+		current_ += size;
 		// Is that the last chunk?
 		size_ -= size;
 		if (size_ == 0)
@@ -286,6 +287,7 @@ private:
 	volatile FutureStatus status_ = FutureStatus::INVALID;
 	int error_ = 0;
 	uint8_t* data_ = nullptr;
+	uint8_t* current_ = nullptr;
 	uint8_t size_ = 0;
 
 	friend class AbstractFutureManager;
@@ -293,6 +295,7 @@ private:
 
 bool AbstractFutureManager::set_future_value_(uint8_t id, uint8_t chunk) const
 {
+	//TODO refactor common code velow to dedicated private method
 	if ((id == 0) || (id > size_))
 		return false;
 	AbstractFuture* future = futures_[id - 1];
@@ -340,12 +343,12 @@ public:
 
 	Future(Future<T>&& that)
 	{
-		synchronized memcpy(buffer_, that.buffer_, sizeof(T));
+		move(that);
 	}
 	Future<T>& operator=(Future<T>&& that)
 	{
 		if (this == &that) return *this;
-		synchronized memcpy(buffer_, that.buffer_, sizeof(T));
+		move(that);
 		return *this;
 	}
 
@@ -363,6 +366,19 @@ public:
 	}
 
 private:
+	void move(Future<T>&& that)
+	{
+		synchronized
+		{
+			// Reset size_ if data is not being constructed currently
+			if (status_ != FutureStatus::NOT_READY)
+				size_ = sizeof(T);
+			memcpy(buffer_, that.buffer_, sizeof(T));
+			data_ = buffer_;
+			current_ = buffer_ + (that.current_ - that.data_);
+		}
+	}
+
 	union
 	{
 		T result_;
@@ -432,9 +448,6 @@ void trace_future(ostream& out, const Future<T>& future)
 	out << F("Future id = ") << dec << future.id() << F(", status = ") << future.status() << endl;
 }
 
-//TODO Prepare tests from simplest to most complex:
-// - without interrupt, check simple Future can be set with value, chunks, or error
-// - check Future status on move and after resolved
 int main() __attribute__((OS_main));
 int main()
 {
@@ -452,7 +465,8 @@ int main()
 	out << F("Before FutureManager instantiation") << endl;
 	FutureManager<MAX_FUTURES> manager{};
 
-	out << F("TEST #1 simple Future lifecycle") << endl;
+	out << F("TEST #1 simple Future lifecycle: normal error case") << endl;
+	// Check normal error context
 	out << F("#1.1 instantiate future") << endl;
 	Future<uint16_t> future1;
 	trace_future(out, future1);
@@ -470,38 +484,173 @@ int main()
 		out << F("error() = ") << hex << error << endl;
 		trace_future(out, future1);
 	}
+	out << endl;
 
-	out << F("#1.4 reuse future") << endl;
-	ok = manager.register_future(future1);
+	// Check full data set
+	out << F("TEST #2 simple Future lifecycle: future reuse and full value set") << endl;
+	out << F("#2.1 instantiate future") << endl;
+	Future<uint16_t> future2;
+	trace_future(out, future2);
+	out << F("#2.2 register_future()") << endl;
+	ok = manager.register_future(future2);
 	out << F("result => ") << ok << endl;
-	trace_future(out, future1);
+	trace_future(out, future2);
 	if (ok)
 	{
-		out << F("#1.5 set_future_value()") << endl;
-		ok = manager.set_future_value(future1.id(), 0x8000);
+		out << F("#2.3 set_future_value()") << endl;
+		ok = manager.set_future_value(future2.id(), 0x8000);
 		out << F("result => ") << ok << endl;
-		trace_future(out, future1);
-		int error = future1.error();
+		trace_future(out, future2);
+		int error = future2.error();
 		out << F("error() = ") << dec << error << endl;
-		trace_future(out, future1);
+		trace_future(out, future2);
 		uint16_t value = 0;
-		ok = future1.get(value);
+		ok = future2.get(value);
 		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
-		trace_future(out, future1);
-		error = future1.error();
+		trace_future(out, future2);
+		error = future2.error();
 		out << F("error() = ") << dec << error << endl;
-		trace_future(out, future1);
+		trace_future(out, future2);
 	}
+	out << endl;
 
-	//TODO check set value by chunks
+	// Check set value by chunks
+	out << F("TEST #3 simple Future lifecycle: new Future and partial value set") << endl;
+	out << F("#3.1 instantiate future") << endl;
+	Future<uint16_t> future3;
+	trace_future(out, future3);
+	out << F("#3.2 register future") << endl;
+	ok = manager.register_future(future3);
+	out << F("result => ") << ok << endl;
+	trace_future(out, future3);
+	if (ok)
+	{
+		out << F("#3.3 set_future_value() chunk1") << endl;
+		ok = manager.set_future_value(future3.id(), uint8_t(0x11));
+		out << F("result => ") << ok << endl;
+		trace_future(out, future3);
+		out << F("#3.4 set_future_value() chunk2") << endl;
+		ok = manager.set_future_value(future3.id(), uint8_t(0x22));
+		out << F("result => ") << ok << endl;
+		trace_future(out, future3);
+		uint16_t value = 0;
+		ok = future3.get(value);
+		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
+		trace_future(out, future3);
+	}
+	out << endl;
+
+	// Check set value by data pointer once
+	out << F("TEST #4 simple Future lifecycle: new Future and full value pointer set") << endl;
+	out << F("#4.1 instantiate future") << endl;
+	Future<uint16_t> future4;
+	trace_future(out, future4);
+	out << F("#4.2 register future") << endl;
+	ok = manager.register_future(future4);
+	out << F("result => ") << ok << endl;
+	trace_future(out, future4);
+	if (ok)
+	{
+		out << F("#4.3 set_future_value() from ptr") << endl;
+		const uint16_t constant = 0x4433;
+		ok = manager.set_future_value(future4.id(), (const uint8_t*) &constant, sizeof(constant));
+		out << F("result => ") << ok << endl;
+		trace_future(out, future4);
+		uint16_t value = 0;
+		ok = future4.get(value);
+		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
+		trace_future(out, future4);
+	}
+	out << endl;
+
+	// Check set value by data pointer twice
+	out << F("TEST #5 simple Future lifecycle: new Future and part value pointer set") << endl;
+	out << F("#5.1 instantiate future") << endl;
+	Future<uint16_t> future5;
+	trace_future(out, future5);
+	out << F("#5.2 register future") << endl;
+	ok = manager.register_future(future5);
+	out << F("result => ") << ok << endl;
+	trace_future(out, future5);
+	if (ok)
+	{
+		out << F("#5.3 set_future_value() from ptr (1 byte)") << endl;
+		const uint16_t constant = 0x5566;
+		ok = manager.set_future_value(future5.id(), (const uint8_t*) &constant, 1);
+		out << F("result => ") << ok << endl;
+		trace_future(out, future5);
+		out << F("#5.4 set_future_value() from ptr (2nd byte)") << endl;
+		ok = manager.set_future_value(future5.id(), ((const uint8_t*) &constant) + 1, 1);
+		out << F("result => ") << ok << endl;
+		trace_future(out, future5);
+		uint16_t value = 0;
+		ok = future5.get(value);
+		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
+		trace_future(out, future5);
+	}
+	out << endl;
+
+	// Check further updates do not do anything (and do not crash either!)
+	out << F("TEST #6 simple Future lifecycle: check no more updates possible after first set complete") << endl;
+	out << F("#6.1 instantiate future") << endl;
+	Future<uint16_t> future6;
+	trace_future(out, future6);
+	out << F("#6.2 register future") << endl;
+	ok = manager.register_future(future6);
+	out << F("result => ") << ok << endl;
+	trace_future(out, future6);
+	if (ok)
+	{
+		out << F("#5.3 set_future_value() from full value") << endl;
+		ok = manager.set_future_value(future6.id(), 0x8899);
+		out << F("result => ") << ok << endl;
+		trace_future(out, future6);
+		out << F("#5.4 set_future_value() additional byte") << endl;
+		ok = manager.set_future_value(future6.id(), uint8_t(0xAA));
+		out << F("result => ") << ok << endl;
+		trace_future(out, future6);
+		uint16_t value = 0;
+		ok = future6.get(value);
+		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
+		trace_future(out, future6);
+		out << F("#5.5 set_future_value() after get() additional byte") << endl;
+		ok = manager.set_future_value(future6.id(), uint8_t(0xBB));
+		out << F("result => ") << ok << endl;
+		trace_future(out, future6);
+	}
+	out << endl;
+
+	//TODO Check reuse of a future in various states
 
 
-	//TODO check further updates do not do anything (and do not crash either!)
-	//TODO check status across lifecyle
-
+	//FIXME this does not work if we reuse future1! still NOT_READY after 2 chunks set!
+	// But it works with a new future...
 	// time::delay_ms(1000);
 	// out << F("TEST #2 Future construction/destruction/move...") << endl;
 	// //TODO
+	// out << F("TEST #2 simple Future lifecycle: future reuse and full value set") << endl;
+	// out << F("#2.1 reuse future") << endl;
+	// ok = manager.register_future(future1);
+	// out << F("result => ") << ok << endl;
+	// trace_future(out, future1);
+	// if (ok)
+	// {
+	// 	out << F("#2.2 set_future_value()") << endl;
+	// 	ok = manager.set_future_value(future1.id(), 0x8000);
+	// 	out << F("result => ") << ok << endl;
+	// 	trace_future(out, future1);
+	// 	int error = future1.error();
+	// 	out << F("error() = ") << dec << error << endl;
+	// 	trace_future(out, future1);
+	// 	uint16_t value = 0;
+	// 	ok = future1.get(value);
+	// 	out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
+	// 	trace_future(out, future1);
+	// 	error = future1.error();
+	// 	out << F("error() = ") << dec << error << endl;
+	// 	trace_future(out, future1);
+	// }
+
 
 	// time::delay_ms(1000);
 	// out << F("TEST #3 Future updated by ISR...") << endl;
