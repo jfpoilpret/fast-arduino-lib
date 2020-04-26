@@ -41,7 +41,8 @@ REGISTER_UATX_ISR(0)
 // OPEN POINTS
 // - how to handle errors inside FM
 // - how to avoid reuse of inactive ids? (high risk of updating another Future!)
-// - Future template specialization for void
+// - Future template specialization for void, for refs?
+// - Generalize concept to support ValueHolders (opposite of futures)
 
 // Forward declarations
 class AbstractFuture;
@@ -107,6 +108,12 @@ protected:
 private:
 	static AbstractFutureManager* instance_;
 
+	AbstractFuture* find_future(uint8_t id) const
+	{
+		if ((id == 0) || (id > size_))
+			return nullptr;
+		return futures_[id - 1];
+	}
 	bool update_future(uint8_t id, AbstractFuture* old_address, AbstractFuture* new_address)
 	{
 		synchronized return update_future_(id, old_address, new_address);
@@ -115,7 +122,7 @@ private:
 	bool update_future_(uint8_t id, AbstractFuture* old_address, AbstractFuture* new_address)
 	{
 		// Check id is plausible and address matches
-		if ((id == 0) || (id > size_) || (futures_[id - 1] != old_address))
+		if (find_future(id) != old_address)
 			return false;
 		futures_[id - 1] = new_address;
 		return true;
@@ -297,37 +304,28 @@ private:
 
 bool AbstractFutureManager::set_future_value_(uint8_t id, uint8_t chunk) const
 {
-	//TODO refactor common code velow to dedicated private method
-	if ((id == 0) || (id > size_))
-		return false;
-	AbstractFuture* future = futures_[id - 1];
+	AbstractFuture* future = find_future(id);
 	if (future == nullptr)
 		return false;
 	return future->set_chunk_(chunk);
 }
 bool AbstractFutureManager::set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const
 {
-	if ((id == 0) || (id > size_))
-		return false;
-	AbstractFuture* future = futures_[id - 1];
+	AbstractFuture* future = find_future(id);
 	if (future == nullptr)
 		return false;
 	return future->set_chunk_(chunk, size);
 }
 template<typename T> bool AbstractFutureManager::set_future_value_(uint8_t id, const T& value) const
 {
-	if ((id == 0) || (id > size_))
-		return false;
-	AbstractFuture* future = futures_[id - 1];
+	AbstractFuture* future = find_future(id);
 	if (future == nullptr)
 		return false;
 	return future->set_chunk_(reinterpret_cast<const uint8_t*>(&value), sizeof(T));
 }
 bool AbstractFutureManager::set_future_error_(uint8_t id, int error) const
 {
-	if ((id == 0) || (id > size_))
-		return false;
-	AbstractFuture* future = futures_[id - 1];
+	AbstractFuture* future = find_future(id);
 	if (future == nullptr)
 		return false;
 	return future->set_error_(error);
@@ -347,10 +345,12 @@ public:
 	{
 		move(std::move(that));
 	}
+	//TODO mybe AbstractFuture::operator=() is not amndatory and can be fully removed?
 	Future<T>& operator=(Future<T>&& that)
 	{
 		if (this == &that) return *this;
-		move(that);
+		(AbstractFuture&) *this = std::move(that);
+		move(std::move(that));
 		return *this;
 	}
 
@@ -682,6 +682,57 @@ int main()
 
 	//TODO Check reuse of a future in various states
 	out << F("TEST #8 check Future status after move assignment") << endl;
+	out << F("#8.1 instantiate futures") << endl;
+	Future<uint16_t> future17, future18, future19, future20, future21, future22, future23, future24, future25;
+	out << F("#8.2 register future") << endl;
+	ok = manager.register_future(future17);
+	out << F("result => ") << ok << endl;
+	trace_future(out, future17);
+	if (ok)
+	{
+		out << F("#8.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
+		future18 = std::move(future17);
+		trace_future(out, future17);
+		trace_future(out, future18);
+
+		out << F("#8.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
+		manager.set_future_value(future18.id(), 0xFFFFu);
+		future19 = std::move(future18);
+		trace_future(out, future18);
+		trace_future(out, future19);
+		uint16_t value = 0;
+		future19.get(value);
+		out << F("value (expected 0xFFFF) = ") << hex << value << endl;
+
+		out << F("#8.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
+		manager.register_future(future20);
+		manager.set_future_error(future20.id(), -10000);
+		future21 = std::move(future20);
+		trace_future(out, future20);
+		trace_future(out, future21);
+		out << F("error (expected -10000) = ") << dec << future21.error() << endl;
+
+		out << F("#8.6 check status (INVALID, INVALID) -> (INVALID, INVALID)") << endl;
+		future23 = std::move(future22);
+		trace_future(out, future22);
+		trace_future(out, future23);
+
+		out << F("#8.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
+		manager.register_future(future24);
+		manager.set_future_value(future24.id(), uint8_t(0xBB));
+		future25 = std::move(future24);
+		trace_future(out, future24);
+		trace_future(out, future25);
+		manager.set_future_value(future25.id(), uint8_t(0xCC));
+		out << F("After complete set value, status shall be READY") << endl;
+		trace_future(out, future25);
+		out << F("error = ") << dec << future25.error() << endl;
+		value = 0;
+		future25.get(value);
+		out << F("value (expected 0xCCBB) = ") << hex << value << endl;
+	}
+	out << endl;
+
 
 	// time::delay_ms(1000);
 	// out << F("TEST #9 Future updated by ISR...") << endl;
