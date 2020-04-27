@@ -3,7 +3,8 @@
  * This is a Proof of Concept about Futures and Promises, to be used later by
  * async I2C API (and possibly other API too).
  * It just uses an Arduino UNO with the following connections:
- * - TODO
+ * - D2 (EXT0) connected to a push button, itself connected to GND
+ * - D3 (EXT1) connected to a push button, itself connected to GND
  */
 
 
@@ -15,6 +16,8 @@
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/flash.h>
+#include <fastarduino/int.h>
+#include <fastarduino/gpio.h>
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
@@ -345,7 +348,7 @@ public:
 	{
 		move(std::move(that));
 	}
-	//TODO mybe AbstractFuture::operator=() is not amndatory and can be fully removed?
+	//TODO maybe AbstractFuture::operator=() is not mandatory and can be fully removed?
 	Future<T>& operator=(Future<T>&& that)
 	{
 		if (this == &that) return *this;
@@ -391,6 +394,7 @@ private:
 
 template<typename T> bool AbstractFutureManager::register_future_(Future<T>& future)
 {
+	//FIXME we should refuse to re-register an already registered future, (except if INVALID?)!!!
 	//TODO possible optimization if we maintain a count of free ids
 	for (uint8_t i = 0; i < size_; ++i)
 	{
@@ -444,6 +448,33 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static constexpr uint8_t MAX_FUTURES = 64;
 
 using namespace streams;
+
+using EXT0 = gpio::FastPinType<board::EXT_PIN<board::ExternalInterruptPin::D2_PD2_EXT0>()>;
+using EXT1 = gpio::FastPinType<board::EXT_PIN<board::ExternalInterruptPin::D3_PD3_EXT1>()>;
+
+struct ButtonValue
+{
+	ButtonValue(uint8_t button = 0, uint16_t count = 0) : button{button}, count{count} {}
+	uint8_t button;
+	uint16_t count;
+};
+static uint8_t future_id = 0;
+
+void button_pushed()
+{
+	static uint16_t count0 = 0;
+	static uint16_t count1 = 0;
+
+	// if EXTx pushed, countx++, set value of future to (x, countx)
+	if (!EXT0::value())
+		AbstractFutureManager::instance().set_future_value_(future_id, ButtonValue{0, ++count0});
+	else if (!EXT1::value())
+		AbstractFutureManager::instance().set_future_value_(future_id, ButtonValue{1, ++count1});
+}
+
+// Register ISR for EXT0/1
+REGISTER_INT_ISR_FUNCTION(0, board::ExternalInterruptPin::D2_PD2_EXT0, button_pushed)
+REGISTER_INT_ISR_FUNCTION(1, board::ExternalInterruptPin::D3_PD3_EXT1, button_pushed)
 
 template<typename T>
 void trace_future(ostream& out, const Future<T>& future)
@@ -680,7 +711,7 @@ int main()
 	}
 	out << endl;
 
-	//TODO Check reuse of a future in various states
+	// Check reuse of a future in various states
 	out << F("TEST #8 check Future status after move assignment") << endl;
 	out << F("#8.1 instantiate futures") << endl;
 	Future<uint16_t> future17, future18, future19, future20, future21, future22, future23, future24, future25;
@@ -733,9 +764,36 @@ int main()
 	}
 	out << endl;
 
+	time::delay_ms(1000);
+	out << F("TEST #9 Future updated by ISR...") << endl;
+	EXT0::set_mode(gpio::PinMode::INPUT_PULLUP);
+	EXT1::set_mode(gpio::PinMode::INPUT_PULLUP);
+	interrupt::INTSignal<board::ExternalInterruptPin::D2_PD2_EXT0> signal0{interrupt::InterruptTrigger::FALLING_EDGE};
+	interrupt::INTSignal<board::ExternalInterruptPin::D3_PD3_EXT1> signal1{interrupt::InterruptTrigger::FALLING_EDGE};
+	signal0.enable();
+	signal1.enable();
+	while (true)
+	{
+		Future<ButtonValue> future;
+		manager.register_future(future);
+		future_id = future.id();
+		ButtonValue value;
+		out << F("Press button 0 or 1 to see the future result") << endl;
+		switch (future.await())
+		{
+			case FutureStatus::READY:
+			future.get(value);
+			out << F("Button EXT") << dec << value.button << F(", count = ") << value.count << endl;
+			break;
 
-	// time::delay_ms(1000);
-	// out << F("TEST #9 Future updated by ISR...") << endl;
-	//TODO
+			case FutureStatus::ERROR:
+			out << F("Error ") << dec << future.error() << F(" received!") << endl;
+			break;
+
+			default:
+			out << F("Unexpected status ") << future.status() << endl;
+			break;
+		}
+	}
 
 }
