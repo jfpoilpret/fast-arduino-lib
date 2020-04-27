@@ -44,13 +44,9 @@ REGISTER_UATX_ISR(0)
 // - it is possible to subclass Futures to add last minute transformation on get()
 
 // OPEN POINTS
-//TODO - optimization/concurrence-safety of AbstractFuture/Future moves!
-//TODO - invalid Futures should always get id_ set to 0!
+//TODO - Extend concept to support ValueHolders (e.g. DataFuture<T,U>, PreDataFuture<T,U>, DataHolderFuture<T,U>))
 //TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
-
-//TODO - limit friends as much as possible
 //TODO - Future template specialization for void, for refs?
-//TODO - Generalize concept to support ValueHolders (opposite of futures)
 
 // Forward declarations
 class AbstractFuture;
@@ -209,7 +205,6 @@ public:
 
 			case FutureStatus::INVALID:
 			default:
-			status_ = FutureStatus::INVALID;
 			return errors::EINVAL;
 		}
 	}
@@ -223,40 +218,38 @@ protected:
 		AbstractFutureManager::instance().update_future(id_, this, nullptr);
 	}
 
-	AbstractFuture(AbstractFuture&& that)
-		:	id_{that.id_}, status_{that.status_}, error_{that.error_}, 
-			data_{that.data_}, current_{that.current_}, size_{that.size_}
-	{
-		// Notify FutureManager about Future move
-		if (!AbstractFutureManager::instance().update_future(id_, &that, this))
-			status_ = FutureStatus::INVALID;
-		// Make rhs Future invalid
-		that.status_ = FutureStatus::INVALID;
-	}
-	AbstractFuture& operator=(AbstractFuture&& that)
-	{
-		if (this == &that) return *this;
-		synchronized
-		{
-			// In case this Future is valid, it must be invalidated with FutureManager
-			AbstractFutureManager::instance().update_future_(id_, this, nullptr);
-			id_ = that.id_;
-			status_ = that.status_;
-			error_ = that.error_;
-			data_ = that.data_;
-			current_ = that.current_;
-			size_ = that.size_;
-			// Notify FutureManager about Future move
-			if (!AbstractFutureManager::instance().update_future_(id_, &that, this))
-				status_ = FutureStatus::INVALID;
-			// Make rhs Future invalid
-			that.status_ = FutureStatus::INVALID;
-		}
-		return *this;
-	}
-
 	AbstractFuture(const AbstractFuture&) = delete;
 	AbstractFuture& operator=(const AbstractFuture&) = delete;
+	AbstractFuture(AbstractFuture&&) = delete;
+	AbstractFuture& operator=(AbstractFuture&&) = delete;
+
+	void invalidate()
+	{
+		status_ = FutureStatus::INVALID;
+	}
+
+	// This method is called by subclass in their move constructor and assignment operator
+	void move_(AbstractFuture&& that, uint8_t full_size)
+	{
+		// In case this Future is valid, it must be first invalidated with FutureManager
+		AbstractFutureManager::instance().update_future_(id_, this, nullptr);
+
+		// Now copy all attributes from rhs (data_ was already initialized when this was constructed)
+		id_ = that.id_;
+		status_ = that.status_;
+		error_ = that.error_;
+		size_ = that.size_;
+		// Calculate data pointer attribute for next set value calls
+		current_ = data_ + full_size - size_;
+
+		// Notify FutureManager about Future move
+		if (!AbstractFutureManager::instance().update_future_(id_, &that, this))
+			status_ = FutureStatus::INVALID;
+
+		// Make rhs Future invalid
+		that.id_ = 0;
+		that.status_ = FutureStatus::INVALID;
+	}
 
 private:
 	// The following methods are called by FutureManager to fill the Future value (or error)
@@ -310,7 +303,6 @@ private:
 	uint8_t size_ = 0;
 
 	friend class AbstractFutureManager;
-	template<typename T> friend class Future;
 };
 
 bool AbstractFutureManager::set_future_value_(uint8_t id, uint8_t chunk) const
@@ -352,15 +344,13 @@ public:
 	Future() : AbstractFuture{buffer_, sizeof(T)} {}
 	~Future() = default;
 
-	Future(Future<T>&& that) : AbstractFuture{std::move(that)}
+	Future(Future<T>&& that) : AbstractFuture{buffer_, sizeof(T)}
 	{
 		move(std::move(that));
 	}
-	//TODO maybe AbstractFuture::operator=() is not mandatory and can be fully removed?
 	Future<T>& operator=(Future<T>&& that)
 	{
 		if (this == &that) return *this;
-		(AbstractFuture&) *this = std::move(that);
 		move(std::move(that));
 		return *this;
 	}
@@ -374,22 +364,17 @@ public:
 		if (await() != FutureStatus::READY)
 			return false;
 		result = result_;
-		status_ = FutureStatus::INVALID;
+		invalidate();
 		return true;
 	}
 
 private:
-	//TODO better put this method in AbstractFuture?
 	void move(Future<T>&& that)
 	{
 		synchronized
 		{
-			// Reset size_ if data is not being constructed currently
-			if (status_ != FutureStatus::NOT_READY)
-				size_ = sizeof(T);
 			memcpy(buffer_, that.buffer_, sizeof(T));
-			data_ = buffer_;
-			current_ = buffer_ + (that.current_ - that.data_);
+			move_(std::move(that), sizeof(T));
 		}
 	}
 
