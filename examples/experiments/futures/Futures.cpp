@@ -92,7 +92,6 @@ public:
 	{
 		synchronized return set_future_value_(id, chunk, size);
 	}
-	//TODO does this function work also with a T (useful when T is small and is a constant eg -1 as int)
 	template<typename T> bool set_future_value(uint8_t id, const T& value) const
 	{
 		synchronized return set_future_value_(id, value);
