@@ -199,7 +199,7 @@ public:
 		switch (await())
 		{
 			case FutureStatus::ERROR:
-			set_invalid();
+			status_ = FutureStatus::INVALID;
 			return error_;
 
 			case FutureStatus::READY:
@@ -207,7 +207,7 @@ public:
 
 			case FutureStatus::INVALID:
 			default:
-			set_invalid();
+			status_ = FutureStatus::INVALID;
 			return errors::EINVAL;
 		}
 	}
@@ -255,18 +255,6 @@ protected:
 
 	AbstractFuture(const AbstractFuture&) = delete;
 	AbstractFuture& operator=(const AbstractFuture&) = delete;
-
-	// Called by Future<T>::get() and Future<T>::error()
-	void set_invalid()
-	{
-		synchronized
-		{
-			//FIXME not sure this a good idea to get rid of this Future immediately (risk of reuse same id...)
-			// Notify FutureManager to release this Future
-			AbstractFutureManager::instance().update_future_(id_, this, nullptr);
-			status_ = FutureStatus::INVALID;
-		}
-	}
 
 private:
 	// The following methods are called by FutureManager to fill the Future value (or error)
@@ -384,7 +372,7 @@ public:
 		if (await() != FutureStatus::READY)
 			return false;
 		result = result_;
-		set_invalid();
+		status_ = FutureStatus::INVALID;
 		return true;
 	}
 
@@ -574,7 +562,7 @@ int main()
 	out << endl;
 
 	// Check full data set
-	out << F("TEST #2 simple Future lifecycle: future reuse and full value set") << endl;
+	out << F("TEST #2 simple Future lifecycle: new Future and full value set") << endl;
 	out << F("#2.1 instantiate future") << endl;
 	Future<uint16_t> future2;
 	trace_future(out, future2);
@@ -678,6 +666,7 @@ int main()
 	out << endl;
 
 	// Check further updates do not do anything (and do not crash either!)
+	//TODO also perform this check before get() is called READY -> READY or READY -> ERROR?
 	out << F("TEST #6 simple Future lifecycle: check no more updates possible after first set complete") << endl;
 	out << F("#6.1 instantiate future") << endl;
 	Future<uint16_t> future6;
