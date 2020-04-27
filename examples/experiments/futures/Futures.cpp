@@ -44,6 +44,7 @@ REGISTER_UATX_ISR(0)
 
 // OPEN POINTS
 //TODO - optimization/concurrence-safety of AbstractFuture/Future moves!
+//TODO - invalid Futures should always get id_ set to 0!
 //TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
 
 //TODO - limit friends as much as possible
