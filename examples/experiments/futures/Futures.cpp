@@ -40,12 +40,15 @@ REGISTER_UATX_ISR(0)
 // - Futures ID are used as an index into an internal FM table
 // - Value providers must know the ID in order to fill up values (or errors) of
 //	a Future, through FM (only FM knows exactly where each Future stands)
+// - it is possible to subclass Futures to add last minute transformation on get()
 
 // OPEN POINTS
-// - how to handle errors inside FM
-// - how to avoid reuse of inactive ids? (high risk of updating another Future!)
-// - Future template specialization for void, for refs?
-// - Generalize concept to support ValueHolders (opposite of futures)
+//TODO - optimization/concurrence-safety of AbstractFuture/Future moves!
+//TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
+
+//TODO - limit friends as much as possible
+//TODO - Future template specialization for void, for refs?
+//TODO - Generalize concept to support ValueHolders (opposite of futures)
 
 // Forward declarations
 class AbstractFuture;
@@ -66,6 +69,20 @@ public:
 		synchronized return register_future_(future);
 	}
 	template<typename T> bool register_future_(Future<T>& future);
+
+	uint8_t available_futures() const
+	{
+		synchronized return available_futures_();
+	}
+
+	uint8_t available_futures_() const
+	{
+		uint8_t free = 0;
+		for (uint8_t i = 0; i < size_; ++i)
+			if (futures_[i] != nullptr)
+				++free;
+		return free;
+	}
 
 	// Called by future value providers
 	// 2 first methods can set value by chunks
@@ -244,6 +261,7 @@ protected:
 	{
 		synchronized
 		{
+			//FIXME not sure this a good idea to get rid of this Future immediately (risk of reuse same id...)
 			// Notify FutureManager to release this Future
 			AbstractFutureManager::instance().update_future_(id_, this, nullptr);
 			status_ = FutureStatus::INVALID;
@@ -476,6 +494,39 @@ void button_pushed()
 REGISTER_INT_ISR_FUNCTION(0, board::ExternalInterruptPin::D2_PD2_EXT0, button_pushed)
 REGISTER_INT_ISR_FUNCTION(1, board::ExternalInterruptPin::D3_PD3_EXT1, button_pushed)
 
+// Future subclass for checking that it works too!
+class MyFuture : public Future<uint16_t>
+{
+public:
+	MyFuture() : Future<uint16_t>{} {}
+	~MyFuture() = default;
+
+	MyFuture(MyFuture&& that) : Future<uint16_t>{std::move(that)}
+	{
+	}
+	MyFuture& operator=(MyFuture&& that)
+	{
+		if (this == &that) return *this;
+		(Future<uint16_t>&) *this = std::move(that);
+		return *this;
+	}
+
+	MyFuture(const MyFuture&) = delete;
+	MyFuture& operator=(const MyFuture&) = delete;
+
+	// The following method is blocking until this Future is ready
+	bool get(uint16_t& result)
+	{
+		uint16_t temp = 0;
+		if (this->Future<uint16_t>::get(temp))
+		{
+			result = temp * 10;
+			return true;
+		}
+		return false;
+	}
+};
+
 template<typename T>
 void trace_future(ostream& out, const Future<T>& future)
 {
@@ -498,6 +549,7 @@ int main()
 
 	out << F("Before FutureManager instantiation") << endl;
 	FutureManager<MAX_FUTURES> manager{};
+	out << F("Available futures = ") << dec << manager.available_futures() << endl;
 
 	out << F("TEST #1 simple Future lifecycle: normal error case") << endl;
 	// Check normal error context
@@ -508,6 +560,7 @@ int main()
 	bool ok = manager.register_future(future1);
 	out << F("result => ") << ok << endl;
 	trace_future(out, future1);
+	out << F("Available futures = ") << dec << manager.available_futures() << endl;
 	if (ok)
 	{
 		out << F("#1.3 set_future_error()") << endl;
@@ -635,11 +688,11 @@ int main()
 	trace_future(out, future6);
 	if (ok)
 	{
-		out << F("#5.3 set_future_value() from full value") << endl;
+		out << F("#6.3 set_future_value() from full value") << endl;
 		ok = manager.set_future_value(future6.id(), 0x8899);
 		out << F("result => ") << ok << endl;
 		trace_future(out, future6);
-		out << F("#5.4 set_future_value() additional byte") << endl;
+		out << F("#6.4 set_future_value() additional byte") << endl;
 		ok = manager.set_future_value(future6.id(), uint8_t(0xAA));
 		out << F("result => ") << ok << endl;
 		trace_future(out, future6);
@@ -647,7 +700,7 @@ int main()
 		ok = future6.get(value);
 		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
 		trace_future(out, future6);
-		out << F("#5.5 set_future_value() after get() additional byte") << endl;
+		out << F("#6.5 set_future_value() after get() additional byte") << endl;
 		ok = manager.set_future_value(future6.id(), uint8_t(0xBB));
 		out << F("result => ") << ok << endl;
 		trace_future(out, future6);
@@ -764,8 +817,29 @@ int main()
 	}
 	out << endl;
 
+	// Check Future subclassing
+	out << F("TEST #9 Future subclassing...") << endl;
+	out << F("#9.1 instantiate future") << endl;
+	MyFuture my_future;
+	trace_future(out, my_future);
+	out << F("#9.2 register_future()") << endl;
+	ok = manager.register_future(my_future);
+	out << F("result => ") << ok << endl;
+	trace_future(out, my_future);
+	out << F("#9.3 set_future_value()") << endl;
+	ok = manager.set_future_value(my_future.id(), 123);
+	out << F("result => ") << ok << endl;
+	trace_future(out, my_future);
+	out << F("#9.4 get()") << endl;
+	uint16_t value = 0;
+	ok = my_future.get(value);
+	out << F("result => ") << ok << endl;
+	trace_future(out, my_future);
+	out << F("value (expected 1230) = ") << dec << value << endl;
+	out << endl;
+
 	time::delay_ms(1000);
-	out << F("TEST #9 Future updated by ISR...") << endl;
+	out << F("TEST #10 Future updated by ISR...") << endl;
 	EXT0::set_mode(gpio::PinMode::INPUT_PULLUP);
 	EXT1::set_mode(gpio::PinMode::INPUT_PULLUP);
 	interrupt::INTSignal<board::ExternalInterruptPin::D2_PD2_EXT0> signal0{interrupt::InterruptTrigger::FALLING_EDGE};
