@@ -13,6 +13,7 @@
 #include <fastarduino/move.h>
 #include <fastarduino/time.h>
 
+#include <fastarduino/tests/assertions.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/flash.h>
@@ -80,7 +81,7 @@ public:
 	{
 		uint8_t free = 0;
 		for (uint8_t i = 0; i < size_; ++i)
-			if (futures_[i] != nullptr)
+			if (futures_[i] == nullptr)
 				++free;
 		return free;
 	}
@@ -516,6 +517,18 @@ public:
 	}
 };
 
+#define ASSERT_STATUS(OUT, STATUS, FUTURE) assert(OUT, F("" #FUTURE ".status()"), FutureStatus:: STATUS, FUTURE.status())
+#define ASSERT_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
+template<typename T1, typename T2> 
+void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::FlashStorage* name2, 
+	Future<T1>& future, const T2& expected)
+{
+	T1 actual{};
+	assert(out, name1, future.get(actual));
+	assert(out, name2, expected, actual);
+}
+#define ASSERT_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE ".get()"), F("" #FUTURE ".get() value"), FUTURE, VALUE)
+
 template<typename T>
 void trace_future(ostream& out, const Future<T>& future)
 {
@@ -538,27 +551,24 @@ int main()
 
 	out << F("Before FutureManager instantiation") << endl;
 	FutureManager<MAX_FUTURES> manager{};
+	assert(out, F("available futures"), MAX_FUTURES, manager.available_futures());
 	out << F("Available futures = ") << dec << manager.available_futures() << endl;
 
 	out << F("TEST #1 simple Future lifecycle: normal error case") << endl;
 	// Check normal error context
 	out << F("#1.1 instantiate future") << endl;
 	Future<uint16_t> future1;
-	trace_future(out, future1);
+	ASSERT_STATUS(out, INVALID, future1);
 	out << F("#1.2 register_future()") << endl;
-	bool ok = manager.register_future(future1);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future1);
-	out << F("Available futures = ") << dec << manager.available_futures() << endl;
-	if (ok)
+	ASSERT(out, manager.register_future(future1));
+	ASSERT_STATUS(out, NOT_READY, future1);
+	assert(out, F("available futures"), MAX_FUTURES - 1, manager.available_futures());
 	{
 		out << F("#1.3 set_future_error()") << endl;
-		ok = manager.set_future_error(future1.id(), 0x1111);
-		out << F("result => ") << ok << endl;
-		trace_future(out, future1);
-		int error = future1.error();
-		out << F("error() = ") << hex << error << endl;
-		trace_future(out, future1);
+		ASSERT(out, manager.set_future_error(future1.id(), 0x1111));
+		ASSERT_STATUS(out, ERROR, future1);
+		ASSERT_ERROR(out, 0x1111, future1);
+		ASSERT_STATUS(out, INVALID, future1);
 	}
 	out << endl;
 
@@ -566,27 +576,20 @@ int main()
 	out << F("TEST #2 simple Future lifecycle: new Future and full value set") << endl;
 	out << F("#2.1 instantiate future") << endl;
 	Future<uint16_t> future2;
-	trace_future(out, future2);
+	ASSERT_STATUS(out, INVALID, future2);
 	out << F("#2.2 register_future()") << endl;
-	ok = manager.register_future(future2);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future2);
-	if (ok)
+	ASSERT(out, manager.register_future(future2));
+	ASSERT_STATUS(out, NOT_READY, future2);
 	{
 		out << F("#2.3 set_future_value()") << endl;
-		ok = manager.set_future_value(future2.id(), 0x8000);
-		out << F("result => ") << ok << endl;
-		trace_future(out, future2);
-		int error = future2.error();
-		out << F("error() = ") << dec << error << endl;
-		trace_future(out, future2);
-		uint16_t value = 0;
-		ok = future2.get(value);
-		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
-		trace_future(out, future2);
-		error = future2.error();
-		out << F("error() = ") << dec << error << endl;
-		trace_future(out, future2);
+		ASSERT(out, manager.set_future_value(future2.id(), 0x8000));
+		ASSERT_STATUS(out, READY, future2);
+		ASSERT_ERROR(out, 0, future2);
+		ASSERT_STATUS(out, READY, future2);
+		ASSERT_VALUE(out, 0x8000u, future2);
+		ASSERT_STATUS(out, INVALID, future2);
+		ASSERT_ERROR(out, errors::EINVAL, future2);
+		ASSERT_STATUS(out, INVALID, future2);
 	}
 	out << endl;
 
@@ -594,25 +597,19 @@ int main()
 	out << F("TEST #3 simple Future lifecycle: new Future and partial value set") << endl;
 	out << F("#3.1 instantiate future") << endl;
 	Future<uint16_t> future3;
-	trace_future(out, future3);
+	ASSERT_STATUS(out, INVALID, future3);
 	out << F("#3.2 register future") << endl;
-	ok = manager.register_future(future3);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future3);
-	if (ok)
+	ASSERT(out, manager.register_future(future3));
+	ASSERT_STATUS(out, NOT_READY, future3);
 	{
 		out << F("#3.3 set_future_value() chunk1") << endl;
-		ok = manager.set_future_value(future3.id(), uint8_t(0x11));
-		out << F("result => ") << ok << endl;
-		trace_future(out, future3);
+		ASSERT(out, manager.set_future_value(future3.id(), uint8_t(0x11)));
+		ASSERT_STATUS(out, NOT_READY, future3);
 		out << F("#3.4 set_future_value() chunk2") << endl;
-		ok = manager.set_future_value(future3.id(), uint8_t(0x22));
-		out << F("result => ") << ok << endl;
-		trace_future(out, future3);
-		uint16_t value = 0;
-		ok = future3.get(value);
-		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
-		trace_future(out, future3);
+		ASSERT(out, manager.set_future_value(future3.id(), uint8_t(0x22)));
+		ASSERT_STATUS(out, READY, future3);
+		ASSERT_VALUE(out, 0x2211u, future3);
+		ASSERT_STATUS(out, INVALID, future3);
 	}
 	out << endl;
 
@@ -620,22 +617,17 @@ int main()
 	out << F("TEST #4 simple Future lifecycle: new Future and full value pointer set") << endl;
 	out << F("#4.1 instantiate future") << endl;
 	Future<uint16_t> future4;
-	trace_future(out, future4);
+	ASSERT_STATUS(out, INVALID, future4);
 	out << F("#4.2 register future") << endl;
-	ok = manager.register_future(future4);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future4);
-	if (ok)
+	ASSERT(out, manager.register_future(future4));
+	ASSERT_STATUS(out, NOT_READY, future4);
 	{
 		out << F("#4.3 set_future_value() from ptr") << endl;
 		const uint16_t constant = 0x4433;
-		ok = manager.set_future_value(future4.id(), (const uint8_t*) &constant, sizeof(constant));
-		out << F("result => ") << ok << endl;
-		trace_future(out, future4);
-		uint16_t value = 0;
-		ok = future4.get(value);
-		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
-		trace_future(out, future4);
+		ASSERT(out, manager.set_future_value(future4.id(), (const uint8_t*) &constant, sizeof(constant)));
+		ASSERT_STATUS(out, READY, future4);
+		ASSERT_VALUE(out, 0x4433u, future4);
+		ASSERT_STATUS(out, INVALID, future4);
 	}
 	out << endl;
 
@@ -643,26 +635,20 @@ int main()
 	out << F("TEST #5 simple Future lifecycle: new Future and part value pointer set") << endl;
 	out << F("#5.1 instantiate future") << endl;
 	Future<uint16_t> future5;
-	trace_future(out, future5);
+	ASSERT_STATUS(out, INVALID, future5);
 	out << F("#5.2 register future") << endl;
-	ok = manager.register_future(future5);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future5);
-	if (ok)
+	ASSERT(out, manager.register_future(future5));
+	ASSERT_STATUS(out, NOT_READY, future5);
 	{
 		out << F("#5.3 set_future_value() from ptr (1 byte)") << endl;
 		const uint16_t constant = 0x5566;
-		ok = manager.set_future_value(future5.id(), (const uint8_t*) &constant, 1);
-		out << F("result => ") << ok << endl;
-		trace_future(out, future5);
+		ASSERT(out, manager.set_future_value(future5.id(), (const uint8_t*) &constant, 1));
+		ASSERT_STATUS(out, NOT_READY, future5);
 		out << F("#5.4 set_future_value() from ptr (2nd byte)") << endl;
-		ok = manager.set_future_value(future5.id(), ((const uint8_t*) &constant) + 1, 1);
-		out << F("result => ") << ok << endl;
-		trace_future(out, future5);
-		uint16_t value = 0;
-		ok = future5.get(value);
-		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
-		trace_future(out, future5);
+		ASSERT(out, manager.set_future_value(future5.id(), ((const uint8_t*) &constant) + 1, 1));
+		ASSERT_STATUS(out, READY, future5);
+		ASSERT_VALUE(out, 0x5566u, future5);
+		ASSERT_STATUS(out, INVALID, future5);
 	}
 	out << endl;
 
@@ -671,29 +657,22 @@ int main()
 	out << F("TEST #6 simple Future lifecycle: check no more updates possible after first set complete") << endl;
 	out << F("#6.1 instantiate future") << endl;
 	Future<uint16_t> future6;
-	trace_future(out, future6);
+	ASSERT_STATUS(out, INVALID, future6);
 	out << F("#6.2 register future") << endl;
-	ok = manager.register_future(future6);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future6);
-	if (ok)
+	ASSERT(out, manager.register_future(future6));
+	ASSERT_STATUS(out, NOT_READY, future6);
 	{
 		out << F("#6.3 set_future_value() from full value") << endl;
-		ok = manager.set_future_value(future6.id(), 0x8899);
-		out << F("result => ") << ok << endl;
-		trace_future(out, future6);
+		ASSERT(out, manager.set_future_value(future6.id(), 0x8899));
+		ASSERT_STATUS(out, READY, future6);
 		out << F("#6.4 set_future_value() additional byte") << endl;
-		ok = manager.set_future_value(future6.id(), uint8_t(0xAA));
-		out << F("result => ") << ok << endl;
-		trace_future(out, future6);
-		uint16_t value = 0;
-		ok = future6.get(value);
-		out << F("get() = ") << ok << F(", value = ") << hex << value << endl;
-		trace_future(out, future6);
+		ASSERT(out, !manager.set_future_value(future6.id(), uint8_t(0xAA)));
+		ASSERT_STATUS(out, READY, future6);
+		ASSERT_VALUE(out, 0x8899u, future6);
+		ASSERT_STATUS(out, INVALID, future6);
 		out << F("#6.5 set_future_value() after get() additional byte") << endl;
-		ok = manager.set_future_value(future6.id(), uint8_t(0xBB));
-		out << F("result => ") << ok << endl;
-		trace_future(out, future6);
+		ASSERT(out, !manager.set_future_value(future6.id(), uint8_t(0xBB)));
+		ASSERT_STATUS(out, INVALID, future6);
 	}
 	out << endl;
 
@@ -701,56 +680,50 @@ int main()
 	out << F("TEST #7 check Future status after move constructor") << endl;
 	out << F("#7.1 instantiate future") << endl;
 	Future<uint16_t> future7;
-	trace_future(out, future7);
+	ASSERT_STATUS(out, INVALID, future7);
 	out << F("#7.2 register future") << endl;
-	ok = manager.register_future(future7);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future7);
-	if (ok)
+	ASSERT(out, manager.register_future(future7));
+	ASSERT_STATUS(out, NOT_READY, future7);
 	{
 		out << F("#7.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
 		Future<uint16_t> future8 = std::move(future7);
-		trace_future(out, future7);
-		trace_future(out, future8);
+		ASSERT_STATUS(out, INVALID, future7);
+		ASSERT_STATUS(out, NOT_READY, future8);
 
 		out << F("#7.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
-		manager.set_future_value(future8.id(), 0xFFFFu);
+		ASSERT(out, manager.set_future_value(future8.id(), 0xFFFFu));
 		Future<uint16_t> future9 = std::move(future8);
-		trace_future(out, future8);
-		trace_future(out, future9);
-		uint16_t value = 0;
-		future9.get(value);
-		out << F("value (expected 0xFFFF) = ") << hex << value << endl;
+		ASSERT_STATUS(out, INVALID, future8);
+		ASSERT_STATUS(out, READY, future9);
+		ASSERT_VALUE(out, 0xFFFFu, future9);
 
 		out << F("#7.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
 		Future<uint16_t> future10;
-		manager.register_future(future10);
-		manager.set_future_error(future10.id(), -10000);
+		ASSERT(out, manager.register_future(future10));
+		ASSERT(out, manager.set_future_error(future10.id(), -10000));
 		Future<uint16_t> future11 = std::move(future10);
-		trace_future(out, future10);
-		trace_future(out, future11);
-		out << F("error (expected -10000) = ") << dec << future11.error() << endl;
+		ASSERT_STATUS(out, INVALID, future10);
+		ASSERT_STATUS(out, ERROR, future11);
+		ASSERT_ERROR(out, -10000, future11);
 
 		out << F("#7.6 check status (INVALID, INVALID) -> (INVALID, INVALID)") << endl;
 		Future<uint16_t> future12;
 		Future<uint16_t> future13 = std::move(future12);
-		trace_future(out, future12);
-		trace_future(out, future13);
+		ASSERT_STATUS(out, INVALID, future12);
+		ASSERT_STATUS(out, INVALID, future13);
 
 		out << F("#7.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
 		Future<uint16_t> future14;
-		manager.register_future(future14);
-		manager.set_future_value(future14.id(), uint8_t(0xBB));
+		ASSERT(out, manager.register_future(future14));
+		ASSERT(out, manager.set_future_value(future14.id(), uint8_t(0xBB)));
 		Future<uint16_t> future15 = std::move(future14);
-		trace_future(out, future14);
-		trace_future(out, future15);
-		manager.set_future_value(future15.id(), uint8_t(0xCC));
-		out << F("After complete set value, status shall be READY") << endl;
-		trace_future(out, future15);
-		out << F("error = ") << dec << future15.error() << endl;
-		value = 0;
-		future15.get(value);
-		out << F("value (expected 0xCCBB) = ") << hex << value << endl;
+		ASSERT_STATUS(out, INVALID, future14);
+		ASSERT_STATUS(out, NOT_READY, future15);
+		ASSERT(out, manager.set_future_value(future15.id(), uint8_t(0xCC)));
+		out << F("#7.8 Complete set value") << endl;
+		ASSERT_STATUS(out, READY, future15);
+		ASSERT_ERROR(out, 0, future15);
+		ASSERT_VALUE(out, 0xCCBBu, future15);
 	}
 	out << endl;
 
@@ -759,51 +732,45 @@ int main()
 	out << F("#8.1 instantiate futures") << endl;
 	Future<uint16_t> future17, future18, future19, future20, future21, future22, future23, future24, future25;
 	out << F("#8.2 register future") << endl;
-	ok = manager.register_future(future17);
-	out << F("result => ") << ok << endl;
-	trace_future(out, future17);
-	if (ok)
+	ASSERT(out, manager.register_future(future17));
+	ASSERT_STATUS(out, NOT_READY, future17);
 	{
 		out << F("#8.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
 		future18 = std::move(future17);
-		trace_future(out, future17);
-		trace_future(out, future18);
+		ASSERT_STATUS(out, INVALID, future17);
+		ASSERT_STATUS(out, NOT_READY, future18);
 
 		out << F("#8.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
-		manager.set_future_value(future18.id(), 0xFFFFu);
+		ASSERT(out, manager.set_future_value(future18.id(), 0xFFFFu));
 		future19 = std::move(future18);
-		trace_future(out, future18);
-		trace_future(out, future19);
-		uint16_t value = 0;
-		future19.get(value);
-		out << F("value (expected 0xFFFF) = ") << hex << value << endl;
+		ASSERT_STATUS(out, INVALID, future18);
+		ASSERT_STATUS(out, READY, future19);
+		ASSERT_VALUE(out, 0xFFFFu, future19);
 
 		out << F("#8.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
-		manager.register_future(future20);
-		manager.set_future_error(future20.id(), -10000);
+		ASSERT(out, manager.register_future(future20));
+		ASSERT(out, manager.set_future_error(future20.id(), -10000));
 		future21 = std::move(future20);
-		trace_future(out, future20);
-		trace_future(out, future21);
-		out << F("error (expected -10000) = ") << dec << future21.error() << endl;
+		ASSERT_STATUS(out, INVALID, future20);
+		ASSERT_STATUS(out, ERROR, future21);
+		ASSERT_ERROR(out, -10000, future21);
 
 		out << F("#8.6 check status (INVALID, INVALID) -> (INVALID, INVALID)") << endl;
 		future23 = std::move(future22);
-		trace_future(out, future22);
-		trace_future(out, future23);
+		ASSERT_STATUS(out, INVALID, future22);
+		ASSERT_STATUS(out, INVALID, future23);
 
 		out << F("#8.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
-		manager.register_future(future24);
-		manager.set_future_value(future24.id(), uint8_t(0xBB));
+		ASSERT(out, manager.register_future(future24));
+		ASSERT(out, manager.set_future_value(future24.id(), uint8_t(0xBB)));
 		future25 = std::move(future24);
-		trace_future(out, future24);
-		trace_future(out, future25);
-		manager.set_future_value(future25.id(), uint8_t(0xCC));
-		out << F("After complete set value, status shall be READY") << endl;
-		trace_future(out, future25);
-		out << F("error = ") << dec << future25.error() << endl;
-		value = 0;
-		future25.get(value);
-		out << F("value (expected 0xCCBB) = ") << hex << value << endl;
+		ASSERT_STATUS(out, INVALID, future24);
+		ASSERT_STATUS(out, NOT_READY, future25);
+		out << F("#8.8 after complete set value, status shall be READY") << endl;
+		ASSERT(out, manager.set_future_value(future25.id(), uint8_t(0xCC)));
+		ASSERT_STATUS(out, READY, future25);
+		ASSERT_ERROR(out, 0, future25);
+		ASSERT_VALUE(out, 0xCCBBu, future25);
 	}
 	out << endl;
 
@@ -811,21 +778,18 @@ int main()
 	out << F("TEST #9 Future subclassing...") << endl;
 	out << F("#9.1 instantiate future") << endl;
 	MyFuture my_future;
-	trace_future(out, my_future);
+	ASSERT_STATUS(out, INVALID, my_future);
 	out << F("#9.2 register_future()") << endl;
-	ok = manager.register_future(my_future);
-	out << F("result => ") << ok << endl;
-	trace_future(out, my_future);
+	ASSERT(out, manager.register_future(my_future));
+	ASSERT_STATUS(out, NOT_READY, my_future);
 	out << F("#9.3 set_future_value()") << endl;
-	ok = manager.set_future_value(my_future.id(), 123);
-	out << F("result => ") << ok << endl;
-	trace_future(out, my_future);
+	ASSERT(out, manager.set_future_value(my_future.id(), 123));
+	ASSERT_STATUS(out, READY, my_future);
 	out << F("#9.4 get()") << endl;
-	uint16_t value = 0;
-	ok = my_future.get(value);
-	out << F("result => ") << ok << endl;
-	trace_future(out, my_future);
-	out << F("value (expected 1230) = ") << dec << value << endl;
+	uint16_t actual = 0;
+	ASSERT(out, my_future.get(actual));
+	assert(out, F("myfuture.get() value"), 1230u, actual);
+	ASSERT_STATUS(out, INVALID, my_future);
 	out << endl;
 
 	time::delay_ms(1000);
