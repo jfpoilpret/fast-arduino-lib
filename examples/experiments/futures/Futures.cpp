@@ -24,7 +24,8 @@
 REGISTER_UATX_ISR(0)
 
 // MAIN IDEA:
-// - A Future holds a buffer for future value (any type)
+// - A Future holds a buffer for future value (any type, even void, i.e. no value)
+// - A Future may also hold a storage value (constant, any type) with same lifetime as the Future
 // - Each Future is identified by a unique ID
 // - A Future is either:
 //		- Invalid: it is not linked to anything and is unusable; this happens
@@ -36,15 +37,20 @@ REGISTER_UATX_ISR(0)
 //		held by this Future, the actual error has not yet been read by anyone
 // - A FutureManager centralizes lifetime of all Futures
 // - The FutureManager holds pointers to each valid Future
-// - Number of Futures is statically defined at build time
+// - Maximum number of Futures is statically defined at build time
 // - Futures notify their lifetime to FM (moved, deleted, inactive)
-// - Futures ID are used as an index into an internal FM table
+// - Futures ID are used as an index into an internal FM table, 0 means "not registered"
 // - Value providers must know the ID in order to fill up values (or errors) of
 //	a Future, through FM (only FM knows exactly where each Future stands)
-// - it is possible to subclass Futures to add last minute transformation on get()
-
-// OPEN POINTS
-//TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
+// - Storage value consumers must know the ID in order to get storage value of
+//	a Future, through FM (only FM knows exactly where each Future stands)
+// - it is possible to subclass a Future to add last minute transformation on get()
+// - FutureManager tries to limit potential conflicts when assigning an ID during
+// Future registration, by searching for an available ID AFTER the last ID removed;
+// This may not be sufficient: it is possible (although a well-written program should 
+// never do that) that a NOT_READY Future gets destructed and its value provider tries to 
+// fill its value, since the provider only gets the ID, if the same ID has been assigned 
+// to a new Future, a conflict may occur and possibly lead to a crash.
 
 // Forward declarations
 class AbstractFuture;
@@ -71,6 +77,7 @@ public:
 		synchronized return available_futures_();
 	}
 
+	//TODO possible optimization?
 	uint8_t available_futures_() const
 	{
 		uint8_t free = 0;
@@ -144,6 +151,8 @@ protected:
 private:
 	static AbstractFutureManager* instance_;
 
+	bool register_at_index_(AbstractFuture& future, uint8_t index);
+
 	AbstractFuture* find_future(uint8_t id) const
 	{
 		if ((id == 0) || (id > size_))
@@ -161,11 +170,14 @@ private:
 		if (find_future(id) != old_address)
 			return false;
 		futures_[id - 1] = new_address;
+		if (new_address == nullptr)
+			last_removed_id_ = id;
 		return true;
 	}
 
 	const uint8_t size_;
 	AbstractFuture** futures_;
+	uint8_t last_removed_id_ = 0;
 
 	friend class AbstractFuture;
 };
@@ -610,20 +622,27 @@ bool AbstractFutureManager::register_future_(Future<OUT, IN>& future)
 	// You cannot register an already registered future
 	if (future.id() != 0)
 		return false;
-	//TODO possible optimization if we maintain a count of free ids
-	for (uint8_t i = 0; i < size_; ++i)
-	{
-		if (futures_[i] == nullptr)
-		{
-			update_future_(future.id_, &future, nullptr);
-			future.id_ = static_cast<uint8_t>(i + 1);
-			future.status_ = FutureStatus::NOT_READY;
-			futures_[i] = &future;
+	// Optimization: we start search AFTER the last removed id
+	for (uint8_t i = last_removed_id_; i < size_; ++i)
+		if (register_at_index_(future, i))
 			return true;
-		}
-	}
+	for (uint8_t i = 0; i <= last_removed_id_; ++i)
+		if (register_at_index_(future, i))
+			return true;
 	return false;
 }
+
+bool AbstractFutureManager::register_at_index_(AbstractFuture& future, uint8_t index)
+{
+	if (futures_[index] != nullptr)
+		return false;
+	update_future_(future.id_, &future, nullptr);
+	future.id_ = static_cast<uint8_t>(index + 1);
+	future.status_ = FutureStatus::NOT_READY;
+	futures_[index] = &future;
+	return true;
+}
+
 
 // Static definitions (must be in cpp file)
 //==========================================
@@ -724,6 +743,8 @@ public:
 	}
 };
 
+#define ECHO_ID(OUT, FUTURE) OUT << F("" #FUTURE ".id() = ") << FUTURE.id() << endl
+
 #define ASSERT_STATUS(OUT, STATUS, FUTURE) assert(OUT, F("" #FUTURE ".status()"), FutureStatus:: STATUS, FUTURE.status())
 #define ASSERT_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
 template<typename T1, typename T2> 
@@ -767,6 +788,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future1);
 	out << F("#1.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future1));
+	ECHO_ID(out, future1);
 	ASSERT_STATUS(out, NOT_READY, future1);
 	assert(out, F("available futures"), MAX_FUTURES - 1, manager.available_futures());
 	out << F("#1.3 set_future_error()") << endl;
@@ -783,6 +805,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future2);
 	out << F("#2.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future2));
+	ECHO_ID(out, future2);
 	ASSERT_STATUS(out, NOT_READY, future2);
 	out << F("#2.3 set_future_value()") << endl;
 	ASSERT(out, manager.set_future_value(future2.id(), 0x8000));
@@ -802,6 +825,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future3);
 	out << F("#3.2 register future") << endl;
 	ASSERT(out, manager.register_future(future3));
+	ECHO_ID(out, future3);
 	ASSERT_STATUS(out, NOT_READY, future3);
 	out << F("#3.3 set_future_value() chunk1") << endl;
 	ASSERT(out, manager.set_future_value(future3.id(), uint8_t(0x11)));
@@ -820,6 +844,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future4);
 	out << F("#4.2 register future") << endl;
 	ASSERT(out, manager.register_future(future4));
+	ECHO_ID(out, future4);
 	ASSERT_STATUS(out, NOT_READY, future4);
 	out << F("#4.3 set_future_value() from ptr") << endl;
 	const uint16_t constant1 = 0x4433;
@@ -836,6 +861,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future5);
 	out << F("#5.2 register future") << endl;
 	ASSERT(out, manager.register_future(future5));
+	ECHO_ID(out, future5);
 	ASSERT_STATUS(out, NOT_READY, future5);
 	out << F("#5.3 set_future_value() from ptr (1 byte)") << endl;
 	const uint16_t constant2 = 0x5566;
@@ -855,6 +881,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future6);
 	out << F("#6.2 register future") << endl;
 	ASSERT(out, manager.register_future(future6));
+	ECHO_ID(out, future6);
 	ASSERT_STATUS(out, NOT_READY, future6);
 	out << F("#6.3 set_future_value() from full value") << endl;
 	ASSERT(out, manager.set_future_value(future6.id(), 0x8899));
@@ -876,6 +903,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future7);
 	out << F("#7.2 register future") << endl;
 	ASSERT(out, manager.register_future(future7));
+	ECHO_ID(out, future7);
 	ASSERT_STATUS(out, NOT_READY, future7);
 	out << F("#7.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
 	Future<uint16_t> future8 = std::move(future7);
@@ -890,6 +918,7 @@ int main()
 	out << F("#7.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
 	Future<uint16_t> future10;
 	ASSERT(out, manager.register_future(future10));
+	ECHO_ID(out, future10);
 	ASSERT(out, manager.set_future_error(future10.id(), -10000));
 	Future<uint16_t> future11 = std::move(future10);
 	ASSERT_STATUS(out, INVALID, future10);
@@ -903,6 +932,7 @@ int main()
 	out << F("#7.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
 	Future<uint16_t> future14;
 	ASSERT(out, manager.register_future(future14));
+	ECHO_ID(out, future14);
 	ASSERT(out, manager.set_future_value(future14.id(), uint8_t(0xBB)));
 	Future<uint16_t> future15 = std::move(future14);
 	ASSERT_STATUS(out, INVALID, future14);
@@ -920,6 +950,7 @@ int main()
 	Future<uint16_t> future17, future18, future19, future20, future21, future22, future23, future24, future25;
 	out << F("#8.2 register future") << endl;
 	ASSERT(out, manager.register_future(future17));
+	ECHO_ID(out, future17);
 	ASSERT_STATUS(out, NOT_READY, future17);
 	out << F("#8.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
 	future18 = std::move(future17);
@@ -933,6 +964,7 @@ int main()
 	ASSERT_VALUE(out, 0xFFFFu, future19);
 	out << F("#8.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
 	ASSERT(out, manager.register_future(future20));
+	ECHO_ID(out, future20);
 	ASSERT(out, manager.set_future_error(future20.id(), -10000));
 	future21 = std::move(future20);
 	ASSERT_STATUS(out, INVALID, future20);
@@ -944,6 +976,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future23);
 	out << F("#8.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
 	ASSERT(out, manager.register_future(future24));
+	ECHO_ID(out, future24);
 	ASSERT(out, manager.set_future_value(future24.id(), uint8_t(0xBB)));
 	future25 = std::move(future24);
 	ASSERT_STATUS(out, INVALID, future24);
@@ -962,6 +995,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, my_future);
 	out << F("#9.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(my_future));
+	ECHO_ID(out, my_future);
 	ASSERT_STATUS(out, NOT_READY, my_future);
 	out << F("#9.3 set_future_value()") << endl;
 	ASSERT(out, manager.set_future_value(my_future.id(), 123));
@@ -980,6 +1014,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future26);
 	out << F("#10.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future26));
+	ECHO_ID(out, future26);
 	ASSERT_STATUS(out, NOT_READY, future26);
 	out << F("#10.3 get storage value") << endl;
 	uint16_t input = 0;
@@ -1003,6 +1038,7 @@ int main()
 	ASSERT_STATUS(out, INVALID, future27);
 	out << F("#11.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future27));
+	ECHO_ID(out, future27);
 	ASSERT_STATUS(out, NOT_READY, future27);
 	out << F("#11.3 set finish()") << endl;
 	ASSERT(out, manager.set_future_finish(future27.id()));
@@ -1022,6 +1058,7 @@ int main()
 	{
 		Future<ButtonValue> future;
 		manager.register_future(future);
+		ECHO_ID(out, future);
 		future_id = future.id();
 		ButtonValue value;
 		out << F("Press button 0 or 1 to see the future result") << endl;
