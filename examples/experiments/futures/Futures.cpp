@@ -603,7 +603,9 @@ public:
 template<typename OUT, typename IN>
 bool AbstractFutureManager::register_future_(Future<OUT, IN>& future)
 {
-	//FIXME we should refuse to re-register an already registered future, (except if only INVALID futures remain?)!!!
+	// You cannot register an already registered future
+	if (future.id() != 0)
+		return false;
 	//TODO possible optimization if we maintain a count of free ids
 	for (uint8_t i = 0; i < size_; ++i)
 	{
