@@ -80,12 +80,13 @@ public:
 		return free;
 	}
 
-	// Called by future value providers
-	// 2 first methods can set value by chunks
+	// Called by Future output providers and input consumers
+	// This method is useful to make READY a Future with void output
 	bool set_future_finish(uint8_t id) const
 	{
 		synchronized return set_future_finish_(id);
 	}
+	// Following methods can set value by chunks or as whole
 	bool set_future_value(uint8_t id, uint8_t chunk) const
 	{
 		synchronized return set_future_value_(id, chunk);
@@ -98,11 +99,13 @@ public:
 	{
 		synchronized return set_future_value_(id, value);
 	}
+	// Mark Future in ERROR
 	bool set_future_error(uint8_t id, int error) const
 	{
 		synchronized return set_future_error_(id, error);
 	}
 
+	// Following methods read a Future storage value by chunks
 	bool get_storage_value(uint8_t id, uint8_t& chunk) const
 	{
 		synchronized return get_storage_value_(id, chunk);
@@ -112,6 +115,7 @@ public:
 		synchronized return get_storage_value_(id, chunk, size);
 	}
 
+	// Same methods as above but not synchronized (called from an ISR exclusively)
 	bool set_future_finish_(uint8_t id) const;
 	bool set_future_value_(uint8_t id, uint8_t chunk) const;
 	bool set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const;
@@ -122,7 +126,7 @@ public:
 	bool get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const;
 
 protected:
-	explicit AbstractFutureManager(AbstractFuture** futures, uint8_t size)
+	AbstractFutureManager(AbstractFuture** futures, uint8_t size)
 		: size_{size}, futures_{futures}
 	{
 		for (uint8_t i = 0; i < size_; ++i)
