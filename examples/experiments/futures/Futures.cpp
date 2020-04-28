@@ -44,15 +44,8 @@ REGISTER_UATX_ISR(0)
 // - it is possible to subclass Futures to add last minute transformation on get()
 
 // OPEN POINTS
-// - Extend concept to support ValueHolders (e.g. Future<T,U>)
-//	DESIGN:
-//		- support both input (new) and output (existing) in AbstractFuture
-//		- redefine Future<T> to be Future<T, U>
-//		- adapt AbstractFutureManager to register Future<T, U>
-//TODO	- adapt tests
-
-//TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
 //TODO - Future template specialization for void, for refs?
+//TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
 
 // Forward declarations
 class AbstractFuture;
@@ -405,8 +398,8 @@ class Future : public AbstractFuture
 	static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 public:
-	//TODO better have constructor taking value of type IN!
-	Future() : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)} {}
+	Future(const IN& input = IN{})
+		: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
 	~Future() = default;
 
 	Future(Future<OUT, IN>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
@@ -449,13 +442,17 @@ private:
 		OUT output_;
 		uint8_t output_buffer_[sizeof(OUT)];
 	};
-	uint8_t input_buffer_[sizeof(IN)];
+	union
+	{
+		const IN input_;
+		uint8_t input_buffer_[sizeof(IN)];
+	};
 };
 
 template<typename OUT, typename IN>
 bool AbstractFutureManager::register_future_(Future<OUT, IN>& future)
 {
-	//FIXME we should refuse to re-register an already registered future, (except if INVALID?)!!!
+	//FIXME we should refuse to re-register an already registered future, (except if only INVALID futures remain?)!!!
 	//TODO possible optimization if we maintain a count of free ids
 	for (uint8_t i = 0; i < size_; ++i)
 	{
@@ -819,8 +816,31 @@ int main()
 	ASSERT_STATUS(out, INVALID, my_future);
 	out << endl;
 
+	// Check value storage in Future
+	out << F("TEST #10 Future value storage...") << endl;
+	out << F("#10.1 instantiate future") << endl;
+	Future<uint16_t, uint16_t> future26{12345};
+	ASSERT_STATUS(out, INVALID, future26);
+	out << F("#10.2 register_future()") << endl;
+	ASSERT(out, manager.register_future(future26));
+	ASSERT_STATUS(out, NOT_READY, future26);
+	out << F("#10.3 get storage value") << endl;
+	uint16_t input = 0;
+	ASSERT(out, manager.get_storage_value(future26.id(), (uint8_t*) &input, sizeof(input)));
+	assert(out, F("get_storage_value((future26.id())"), 12345u, input);
+	ASSERT_STATUS(out, NOT_READY, future26);
+	out << F("#10.4 set_future_value()") << endl;
+	ASSERT(out, manager.set_future_value(future26.id(), 123));
+	ASSERT_STATUS(out, READY, future26);
+	out << F("#10.5 get()") << endl;
+	actual = 0;
+	ASSERT(out, future26.get(actual));
+	assert(out, F("future26.get() value"), 123u, actual);
+	ASSERT_STATUS(out, INVALID, future26);
+	out << endl;
+
 	time::delay_ms(1000);
-	out << F("TEST #10 Future updated by ISR...") << endl;
+	out << F("TEST #11 Future updated by ISR...") << endl;
 	EXT0::set_mode(gpio::PinMode::INPUT_PULLUP);
 	EXT1::set_mode(gpio::PinMode::INPUT_PULLUP);
 	interrupt::INTSignal<board::ExternalInterruptPin::D2_PD2_EXT0> signal0{interrupt::InterruptTrigger::FALLING_EDGE};
