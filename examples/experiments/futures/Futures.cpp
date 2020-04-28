@@ -7,12 +7,12 @@
  * - D3 (EXT1) connected to a push button, itself connected to GND
  */
 
-
 #include <string.h>
 #include <fastarduino/errors.h>
 #include <fastarduino/move.h>
 #include <fastarduino/time.h>
 
+// includes for the example program itself
 #include <fastarduino/tests/assertions.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
@@ -44,7 +44,6 @@ REGISTER_UATX_ISR(0)
 // - it is possible to subclass Futures to add last minute transformation on get()
 
 // OPEN POINTS
-//TODO - Future template specialization for void, for refs?
 //TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
 
 // Forward declarations
@@ -83,6 +82,10 @@ public:
 
 	// Called by future value providers
 	// 2 first methods can set value by chunks
+	bool set_future_finish(uint8_t id) const
+	{
+		synchronized return set_future_finish_(id);
+	}
 	bool set_future_value(uint8_t id, uint8_t chunk) const
 	{
 		synchronized return set_future_value_(id, chunk);
@@ -109,6 +112,7 @@ public:
 		synchronized return get_storage_value_(id, chunk, size);
 	}
 
+	bool set_future_finish_(uint8_t id) const;
 	bool set_future_value_(uint8_t id, uint8_t chunk) const;
 	bool set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const;
 	template<typename T> bool set_future_value_(uint8_t id, const T& value) const;
@@ -267,6 +271,15 @@ protected:
 
 private:
 	// The following methods are called by FutureManager to fill the Future value (or error)
+	bool set_finish_()
+	{
+		// Check this future is waiting for data
+		if (status_ != FutureStatus::NOT_READY)
+			return false;
+		if (output_size_ == 0)
+			status_ = FutureStatus::READY;
+		return true;
+	}
 	bool set_chunk_(uint8_t chunk)
 	{
 		// Check this future is waiting for data
@@ -345,6 +358,13 @@ private:
 	friend class AbstractFutureManager;
 };
 
+bool AbstractFutureManager::set_future_finish_(uint8_t id) const
+{
+	AbstractFuture* future = find_future(id);
+	if (future == nullptr)
+		return false;
+	return future->set_finish_();
+}
 bool AbstractFutureManager::set_future_value_(uint8_t id, uint8_t chunk) const
 {
 	AbstractFuture* future = find_future(id);
@@ -390,8 +410,7 @@ bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t* chunk, uint8
 }
 
 // Future supports only types strictly smaller than 256 bytes
-//FIXME temporarily force IN = uint8_t (cannot be void), will need template specialization
-template<typename OUT, typename IN = uint8_t>
+template<typename OUT = void, typename IN = void>
 class Future : public AbstractFuture
 {
 	static_assert(sizeof(OUT) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
@@ -447,6 +466,138 @@ private:
 		const IN input_;
 		uint8_t input_buffer_[sizeof(IN)];
 	};
+};
+
+// Template specialization for void types
+template<typename OUT>
+class Future<OUT, void> : public AbstractFuture
+{
+	static_assert(sizeof(OUT) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+
+public:
+	Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
+	~Future() = default;
+
+	Future(Future<OUT, void>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0}
+	{
+		move(std::move(that));
+	}
+	Future<OUT, void>& operator=(Future<OUT, void>&& that)
+	{
+		if (this == &that) return *this;
+		move(std::move(that));
+		return *this;
+	}
+
+	Future(const Future<OUT, void>&) = delete;
+	Future<OUT, void>& operator=(const Future<OUT, void>&) = delete;
+
+	// The following method is blocking until this Future is ready
+	bool get(OUT& result)
+	{
+		if (await() != FutureStatus::READY)
+			return false;
+		result = output_;
+		invalidate();
+		return true;
+	}
+
+private:
+	void move(Future<OUT, void>&& that)
+	{
+		synchronized
+		{
+			memcpy(output_buffer_, that.output_buffer_, sizeof(OUT));
+			move_(std::move(that), sizeof(OUT), 0);
+		}
+	}
+
+	union
+	{
+		OUT output_;
+		uint8_t output_buffer_[sizeof(OUT)];
+	};
+};
+
+template<typename IN>
+class Future<void, IN> : public AbstractFuture
+{
+	static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+
+public:
+	Future(const IN& input = IN{})
+		: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
+	~Future() = default;
+
+	Future(Future<void, IN>&& that) : AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}
+	{
+		move(std::move(that));
+	}
+	Future<void, IN>& operator=(Future<void, IN>&& that)
+	{
+		if (this == &that) return *this;
+		move(std::move(that));
+		return *this;
+	}
+
+	Future(const Future<void, IN>&) = delete;
+	Future<void, IN>& operator=(const Future<void, IN>&) = delete;
+
+	// The following method is blocking until this Future is ready
+	bool get()
+	{
+		if (await() != FutureStatus::READY)
+			return false;
+		invalidate();
+		return true;
+	}
+
+private:
+	void move(Future<void, IN>&& that)
+	{
+		synchronized
+		{
+			memcpy(input_buffer_, that.input_buffer_, sizeof(IN));
+			move_(std::move(that), 0, sizeof(IN));
+		}
+	}
+
+	union
+	{
+		const IN input_;
+		uint8_t input_buffer_[sizeof(IN)];
+	};
+};
+
+template<>
+class Future<void, void> : public AbstractFuture
+{
+public:
+	Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
+	~Future() = default;
+
+	Future(Future<void, void>&& that) : AbstractFuture{nullptr, 0, nullptr, 0}
+	{
+		synchronized move_(std::move(that), 0, 0);
+	}
+	Future<void, void>& operator=(Future<void, void>&& that)
+	{
+		if (this == &that) return *this;
+		synchronized move_(std::move(that), 0, 0);
+		return *this;
+	}
+
+	Future(const Future<void, void>&) = delete;
+	Future<void, void>& operator=(const Future<void, void>&) = delete;
+
+	// The following method is blocking until this Future is ready
+	bool get()
+	{
+		if (await() != FutureStatus::READY)
+			return false;
+		invalidate();
+		return true;
+	}
 };
 
 template<typename OUT, typename IN>
@@ -839,8 +990,22 @@ int main()
 	ASSERT_STATUS(out, INVALID, future26);
 	out << endl;
 
+	// Check Future without value (just done or error or not)
+	out << F("TEST #11 Future without value...") << endl;
+	out << F("#11.1 instantiate future") << endl;
+	Future<> future27;
+	ASSERT_STATUS(out, INVALID, future27);
+	out << F("#11.2 register_future()") << endl;
+	ASSERT(out, manager.register_future(future27));
+	ASSERT_STATUS(out, NOT_READY, future27);
+	out << F("#11.3 set finish()") << endl;
+	ASSERT(out, manager.set_future_finish(future27.id()));
+	ASSERT_STATUS(out, READY, future27);
+	ASSERT(out, future27.get());
+	out << endl;
+
 	time::delay_ms(1000);
-	out << F("TEST #11 Future updated by ISR...") << endl;
+	out << F("TEST #12 Future updated by ISR...") << endl;
 	EXT0::set_mode(gpio::PinMode::INPUT_PULLUP);
 	EXT1::set_mode(gpio::PinMode::INPUT_PULLUP);
 	interrupt::INTSignal<board::ExternalInterruptPin::D2_PD2_EXT0> signal0{interrupt::InterruptTrigger::FALLING_EDGE};
