@@ -44,13 +44,19 @@ REGISTER_UATX_ISR(0)
 // - it is possible to subclass Futures to add last minute transformation on get()
 
 // OPEN POINTS
-//TODO - Extend concept to support ValueHolders (e.g. DataFuture<T,U>, PreDataFuture<T,U>, DataHolderFuture<T,U>))
+// - Extend concept to support ValueHolders (e.g. Future<T,U>)
+//	DESIGN:
+//		- support both input (new) and output (existing) in AbstractFuture
+//		- redefine Future<T> to be Future<T, U>
+//		- adapt AbstractFutureManager to register Future<T, U>
+//TODO	- adapt tests
+
 //TODO - how to avoid reuse of inactive ids? (high risk of updating another Future!)
 //TODO - Future template specialization for void, for refs?
 
 // Forward declarations
 class AbstractFuture;
-template<typename T> class Future;
+template<typename OUT, typename IN> class Future;
 
 // Do we need to make it a singleton?
 class AbstractFutureManager
@@ -62,11 +68,11 @@ public:
 	}
 
 	// Called by a future value producer
-	template<typename T> bool register_future(Future<T>& future)
+	template<typename OUT, typename IN> bool register_future(Future<OUT, IN>& future)
 	{
 		synchronized return register_future_(future);
 	}
-	template<typename T> bool register_future_(Future<T>& future);
+	template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future);
 
 	uint8_t available_futures() const
 	{
@@ -101,10 +107,22 @@ public:
 		synchronized return set_future_error_(id, error);
 	}
 
+	bool get_storage_value(uint8_t id, uint8_t& chunk) const
+	{
+		synchronized return get_storage_value_(id, chunk);
+	}
+	bool get_storage_value(uint8_t id, uint8_t* chunk, uint8_t size) const
+	{
+		synchronized return get_storage_value_(id, chunk, size);
+	}
+
 	bool set_future_value_(uint8_t id, uint8_t chunk) const;
 	bool set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const;
 	template<typename T> bool set_future_value_(uint8_t id, const T& value) const;
 	bool set_future_error_(uint8_t id, int error) const;
+
+	bool get_storage_value_(uint8_t id, uint8_t& chunk) const;
+	bool get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const;
 
 protected:
 	explicit AbstractFutureManager(AbstractFuture** futures, uint8_t size)
@@ -210,7 +228,9 @@ public:
 
 protected:
 	// Constructor used by FutureManager
-	AbstractFuture(uint8_t* data, uint8_t size) : data_{data}, current_{data}, size_{size} {}
+	AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		:	output_data_{output_data}, output_current_{output_data}, output_size_{output_size},
+			input_data_{input_data}, input_current_{input_data}, input_size_{input_size} {}
 	~AbstractFuture()
 	{
 		// Notify FutureManager about destruction
@@ -228,18 +248,20 @@ protected:
 	}
 
 	// This method is called by subclass in their move constructor and assignment operator
-	void move_(AbstractFuture&& that, uint8_t full_size)
+	void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
 	{
 		// In case this Future is valid, it must be first invalidated with FutureManager
 		AbstractFutureManager::instance().update_future_(id_, this, nullptr);
 
-		// Now copy all attributes from rhs (data_ was already initialized when this was constructed)
+		// Now copy all attributes from rhs (output_data_ was already initialized when this was constructed)
 		id_ = that.id_;
 		status_ = that.status_;
 		error_ = that.error_;
-		size_ = that.size_;
+		output_size_ = that.output_size_;
+		input_size_ -= that.input_size_;
 		// Calculate data pointer attribute for next set value calls
-		current_ = data_ + full_size - size_;
+		output_current_ = output_data_ + full_output_size - output_size_;
+		input_current_ = input_data_ + full_input_size - input_size_;
 
 		// Notify FutureManager about Future move
 		if (!AbstractFutureManager::instance().update_future_(id_, &that, this))
@@ -258,9 +280,9 @@ private:
 		if (status_ != FutureStatus::NOT_READY)
 			return false;
 		// Update Future value chunk
-		*current_++ = chunk;
+		*output_current_++ = chunk;
 		// Is that the last chunk?
-		if (--size_ == 0)
+		if (--output_size_ == 0)
 			status_ = FutureStatus::READY;
 		return true;
 	}
@@ -270,17 +292,17 @@ private:
 		if (status_ != FutureStatus::NOT_READY)
 			return false;
 		// Check size does not go beyond expected size
-		if (size > size_)
+		if (size > output_size_)
 		{
 			// Store error
 			set_error_(errors::EMSGSIZE);
 			return false;
 		}
-		memcpy(current_, chunk, size);
-		current_ += size;
+		memcpy(output_current_, chunk, size);
+		output_current_ += size;
 		// Is that the last chunk?
-		size_ -= size;
-		if (size_ == 0)
+		output_size_ -= size;
+		if (output_size_ == 0)
 			status_ = FutureStatus::READY;
 		return true;
 	}
@@ -294,12 +316,38 @@ private:
 		return true;
 	}
 
+	// The following methods are called by FutureManager to get the read-only value held by this Future
+	bool get_chunk_(uint8_t& chunk)
+	{
+		// Check all bytes have not been transferred yet
+		if (!input_size_)
+			return false;
+		chunk = *input_current_++;
+		--input_size_;
+		return true;
+	}
+	bool get_chunk_(uint8_t* chunk, uint8_t size)
+	{
+		// Check size does not go beyond transferrable size
+		if (size > input_size_)
+			return false;
+		memcpy(chunk, input_current_, size);
+		input_current_ += size;
+		input_size_ -= size;
+		return true;
+	}
+
 	uint8_t id_ = 0;
 	volatile FutureStatus status_ = FutureStatus::INVALID;
 	int error_ = 0;
-	uint8_t* data_ = nullptr;
-	uint8_t* current_ = nullptr;
-	uint8_t size_ = 0;
+
+	uint8_t* output_data_ = nullptr;
+	uint8_t* output_current_ = nullptr;
+	uint8_t output_size_ = 0;
+	
+	uint8_t* input_data_ = nullptr;
+	uint8_t* input_current_ = nullptr;
+	uint8_t input_size_ = 0;
 
 	friend class AbstractFutureManager;
 };
@@ -333,58 +381,79 @@ bool AbstractFutureManager::set_future_error_(uint8_t id, int error) const
 	return future->set_error_(error);
 }
 
+bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t& chunk) const
+{
+	AbstractFuture* future = find_future(id);
+	if (future == nullptr)
+		return false;
+	return future->get_chunk_(chunk);
+}
+bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const
+{
+	AbstractFuture* future = find_future(id);
+	if (future == nullptr)
+		return false;
+	return future->get_chunk_(chunk, size);
+}
+
 // Future supports only types strictly smaller than 256 bytes
-template<typename T>
+//FIXME temporarily force IN = uint8_t (cannot be void), will need template specialization
+template<typename OUT, typename IN = uint8_t>
 class Future : public AbstractFuture
 {
-	static_assert(sizeof(T) <= UINT8_MAX, "T must be strictly smaller than 256 bytes");
+	static_assert(sizeof(OUT) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+	static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 public:
-	Future() : AbstractFuture{buffer_, sizeof(T)} {}
+	//TODO better have constructor taking value of type IN!
+	Future() : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)} {}
 	~Future() = default;
 
-	Future(Future<T>&& that) : AbstractFuture{buffer_, sizeof(T)}
+	Future(Future<OUT, IN>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
 	{
 		move(std::move(that));
 	}
-	Future<T>& operator=(Future<T>&& that)
+	Future<OUT, IN>& operator=(Future<OUT, IN>&& that)
 	{
 		if (this == &that) return *this;
 		move(std::move(that));
 		return *this;
 	}
 
-	Future(const Future<T>&) = delete;
-	Future& operator=(const Future<T>&) = delete;
+	Future(const Future<OUT, IN>&) = delete;
+	Future<OUT, IN>& operator=(const Future<OUT, IN>&) = delete;
 
 	// The following method is blocking until this Future is ready
-	bool get(T& result)
+	bool get(OUT& result)
 	{
 		if (await() != FutureStatus::READY)
 			return false;
-		result = result_;
+		result = output_;
 		invalidate();
 		return true;
 	}
 
 private:
-	void move(Future<T>&& that)
+	void move(Future<OUT, IN>&& that)
 	{
 		synchronized
 		{
-			memcpy(buffer_, that.buffer_, sizeof(T));
-			move_(std::move(that), sizeof(T));
+			memcpy(output_buffer_, that.output_buffer_, sizeof(OUT));
+			memcpy(input_buffer_, that.input_buffer_, sizeof(IN));
+			move_(std::move(that), sizeof(OUT), sizeof(IN));
 		}
 	}
 
 	union
 	{
-		T result_;
-		uint8_t buffer_[sizeof(T)];
+		OUT output_;
+		uint8_t output_buffer_[sizeof(OUT)];
 	};
+	uint8_t input_buffer_[sizeof(IN)];
 };
 
-template<typename T> bool AbstractFutureManager::register_future_(Future<T>& future)
+template<typename OUT, typename IN>
+bool AbstractFutureManager::register_future_(Future<OUT, IN>& future)
 {
 	//FIXME we should refuse to re-register an already registered future, (except if INVALID?)!!!
 	//TODO possible optimization if we maintain a count of free ids
