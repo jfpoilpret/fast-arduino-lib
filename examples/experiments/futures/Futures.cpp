@@ -52,6 +52,8 @@ REGISTER_UATX_ISR(0)
 // fill its value, since the provider only gets the ID, if the same ID has been assigned 
 // to a new Future, a conflict may occur and possibly lead to a crash.
 
+//TODO - shall we allow re-registering an invalid future (id = 0) or not? Why not?
+
 // Forward declarations
 class AbstractFuture;
 template<typename OUT, typename IN> class Future;
@@ -77,7 +79,6 @@ public:
 		synchronized return available_futures_();
 	}
 
-	//TODO possible optimization?
 	uint8_t available_futures_() const
 	{
 		uint8_t free = 0;
