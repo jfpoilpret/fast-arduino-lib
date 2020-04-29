@@ -23,7 +23,7 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-// MAIN IDEA:
+// MAIN CONCEPT:
 // - A Future holds a buffer for future value (any type, even void, i.e. no value)
 // - A Future may also hold a storage value (constant, any type) with same lifetime as the Future
 // - Each Future is identified by a unique ID
@@ -35,6 +35,8 @@ REGISTER_UATX_ISR(0)
 //		- Ready: its value has been fully set and not yet read by anyone
 //		- Error: an error occurred in the provider, hence no value will ever be 
 //		held by this Future, the actual error has not yet been read by anyone
+// - Once invalid, a Future becomes useless, unless re-assigned with newly 
+//	constructed Future
 // - A FutureManager centralizes lifetime of all Futures
 // - The FutureManager holds pointers to each valid Future
 // - Maximum number of Futures is statically defined at build time
@@ -51,8 +53,6 @@ REGISTER_UATX_ISR(0)
 // never do that) that a NOT_READY Future gets destructed and its value provider tries to 
 // fill its value, since the provider only gets the ID, if the same ID has been assigned 
 // to a new Future, a conflict may occur and possibly lead to a crash.
-
-//TODO - shall we allow re-registering an invalid future (id = 0) or not? Why not?
 
 // Forward declarations
 class AbstractFuture;
