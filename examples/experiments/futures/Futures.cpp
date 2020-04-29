@@ -58,7 +58,6 @@ REGISTER_UATX_ISR(0)
 class AbstractFuture;
 template<typename OUT, typename IN> class Future;
 
-// Do we need to make it a singleton?
 class AbstractFutureManager
 {
 public:
