@@ -50,6 +50,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						analog/AnalogComparator5				\
 						analog/AnalogComparator6				\
 						misc/IOStreams3							\
+						misc/FutureCheck						\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
 						misc/UtilsCheck							\

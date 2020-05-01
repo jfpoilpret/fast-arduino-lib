@@ -58,6 +58,7 @@ Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)
 IOStreams1	Check ostream (SW UATX)
 IOStreams2	Check real Vs. null ostream
 IOStreams3	Check ostream error handling (UART)
+FutureCheck	Unit Tests of future API
 QueueCheck	Unit Tests of queue container
 LinkedListCheck	Unit Tests of linked list container
 UtilsCheck	Unit Tests of conversion utilities
