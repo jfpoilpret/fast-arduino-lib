@@ -29,12 +29,12 @@
 #include "time.h"
 
 /**
- * Contains the API around `Future` implementation.
- * A `Future` allows you to pass and get values across different units of executions
- * (threads, or more likely on AVR MCU, the main program and ISR).
+ * Contains the API around Future implementation.
+ * A Future allows you to pass and get values across different units of executions
+ * (threads, or more likely on AVR MCU, the main program and an ISR).
  * 
  * Concepts applied in this API:
- * - A `Future` holds a buffer for a future "output" value (any type, even void, 
+ * - A Future holds a buffer for a future "output" value (any type, even `void`, 
  * i.e. no value)
  * - A Future may also hold a storage "input" value (constant, any type) with 
  * same lifetime as the Future
@@ -82,14 +82,15 @@
  * // PCINT0 ISR
  * void take_snapshot() {
  *     gpio::FastPort<board::Port::PORT_B> port;
- *     AbstractFutureManager::instance().set_future_value(portB_snapshot_id, port.get_PIN());
+ *     future::AbstractFutureManager::instance().set_future_value(portB_snapshot_id, port.get_PIN());
  * }
  * REGISTER_PCI_ISR_FUNCTION(0, take_snapshot, board::InterruptPin::D8_PB0_PCI0)
  * ...
+ * 
  * // Within main()
  * // First create a FutureManager singleton with max 16 futures
  * static constexpr uint8_t MAX_FUTURES = 16;
- * FutureManager<MAX_FUTURES> manager;
+ * future::FutureManager<MAX_FUTURES> manager;
  * // Initialize PORTB and PCI
  * gpio::FastPort<board::Port::PORT_B> port{0xFF, 0xFF};
  * interrupt::PCI_PORT_SIGNAL<board::Port::PORT_B> signal;
@@ -98,7 +99,7 @@
  * ...
  * while (true) {
  *     // Create a Future and register it
- *     Future<uint8_t> portB_snapshot;
+ *     future::Future<uint8_t> portB_snapshot;
  *     manager.register_future(portB_snapshot);
  *     portB_snapshot_id = portB_snapshot.id();
  *     ...
@@ -143,8 +144,8 @@ namespace future
 		}
 
 		/**
-		 * Register a newly instantiated `Future` with this `AbstractFutureManager`.
-		 * A `Future` is useless until it has been registered.
+		 * Register a newly instantiated Future with this `AbstractFutureManager`.
+		 * A Future is useless until it has been registered.
 		 * 
 		 * This method is synchronized, it shall be called from outside an ISR.
 		 * If you need the same feature called from an ISR, then you shall use 
@@ -152,7 +153,7 @@ namespace future
 		 * 
 		 * @tparam OUT the output (result value) type that @p future holds
 		 * @tparam IN the input (storage value) type that @p future holds
-		 * @param future a reference to a newly constructed `Future` that we want to register
+		 * @param future a reference to a newly constructed Future that we want to register
 		 * in order to use it as expected
 		 * @retval true if @p future has been successfully registered by this `AbstractFutureManager`
 		 * @retval false if @p future could not be registered by this `AbstractFutureManager`,
@@ -168,8 +169,8 @@ namespace future
 		}
 
 		/**
-		 * Register a newly instantiated `Future` with this `AbstractFutureManager`.
-		 * A `Future` is useless until it has been registered.
+		 * Register a newly instantiated Future with this `AbstractFutureManager`.
+		 * A Future is useless until it has been registered.
 		 * 
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
@@ -178,7 +179,7 @@ namespace future
 		 * 
 		 * @tparam OUT the output (result value) type that @p future holds
 		 * @tparam IN the input (storage value) type that @p future holds
-		 * @param future a reference to a newly constructed `Future` that we want to register
+		 * @param future a reference to a newly constructed Future that we want to register
 		 * in order to use it as expected
 		 * @retval true if @p future has been successfully registered by this `AbstractFutureManager`
 		 * @retval false if @p future could not be registered by this `AbstractFutureManager`,
@@ -191,9 +192,9 @@ namespace future
 		template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future);
 
 		/**
-		 * Return the number of available `Future`s in this `AbstractFactoryManager`.
+		 * Return the number of available `Future`s in this `AbstractFutureManager`.
 		 * This means the maximum number of `Future`s that can be registered if no
-		 * `Future` already registered get destroyed.
+		 * Future already registered get destroyed.
 		 * 
 		 * This method is synchronized, it shall be called from outside an ISR.
 		 * If you need the same feature called from an ISR, then you shall use 
@@ -209,9 +210,9 @@ namespace future
 		}
 
 		/**
-		 * Return the number of available `Future`s in this `AbstractFactoryManager`.
+		 * Return the number of available `Future`s in this `AbstractFutureManager`.
 		 * This means the maximum number of `Future`s that can be registered if no
-		 * `Future` already registered get destroyed.
+		 * Future already registered get destroyed.
 		 * 
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
@@ -232,9 +233,9 @@ namespace future
 		}
 
 		/**
-		 * Mark the `Future` identified by @p id as `FutureStatus::READY`.
-		 * This method is called by a `Future` ouput value provider to indicate
-		 * that a `Future` is ready for use.
+		 * Mark the Future identified by @p id as `FutureStatus::READY`.
+		 * This method is called by a Future ouput value provider to indicate
+		 * that a Future is ready for use.
 		 * This method is useful only for `Future<void>` i.e. `Future`s that have 
 		 * no output, but exist as way to indicate the end of an asynchronous 
 		 * process. For other `Future<T>`s, with a non `void` type `T`, you should
@@ -244,11 +245,11 @@ namespace future
 		 * If you need the same feature called from an ISR, then you shall use 
 		 * `AbstractFutureManager.set_future_finish_()` instead.
 		 * 
-		 * @param id the unique id of the `Future` that shall be marked ready
-		 * @retval false if there is no `Future` with id @p id, or if the related 
-		 * `Future` cannot be updated properly (because it is not in
+		 * @param id the unique id of the Future that shall be marked ready
+		 * @retval false if there is no Future with id @p id, or if the related 
+		 * Future cannot be updated properly (because it is not in
 		 * `FutureStatus::NOT_READY` or if it is still expecting data)
-		 * @retval true if the matching `Future` has been properly updated
+		 * @retval true if the matching Future has been properly updated
 		 * 
 		 * @sa Future.status()
 		 * @sa set_future_value()
@@ -261,12 +262,12 @@ namespace future
 		}
 
 		/**
-		 * Add one byte to the output value content of the `Future` identified 
+		 * Add one byte to the output value content of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` ouput value provider to fill up,
-		 * byte after byte, the output value of a `Future`.
-		 * Calling this method may change the status of the `Future` to `FutureStatus::READY`
-		 * if this is the last output value byte to be filled for this `Future`.
+		 * This method is called by a Future ouput value provider to fill up,
+		 * byte after byte, the output value of a Future.
+		 * Calling this method may change the status of the Future to `FutureStatus::READY`
+		 * if this is the last output value byte to be filled for this Future.
 		 * This method is useful only for `Future<T>` where `T` type is not `void`.
 		 * You should not use it for a `Future<void>` instance.
 		 * 
@@ -275,18 +276,18 @@ namespace future
 		 * 
 		 * This method is synchronized, it shall be called from outside an ISR.
 		 * If you need the same feature called from an ISR, then you shall use 
-		 * `AbstractFutureManager.set_future_value_(uint8_t, uint8_t)` instead.
+		 * `AbstractFutureManager.set_future_value_(uint8_t, uint8_t) const` instead.
 		 * 
-		 * @param id the unique id of the `Future` which output value shall be filled up
-		 * @param chunk the byte to append to this `Future` output value
+		 * @param id the unique id of the Future which output value shall be filled up
+		 * @param chunk the byte to append to this Future output value
 		 * @retval true if @p chunk could be added to the future
 		 * @retval false if this method failed; typically, when the current status
-		 * of the target `Future` is not `FutureStatus::NOT_READY`
+		 * of the target Future is not `FutureStatus::NOT_READY`
 		 * 
 		 * @sa Future.status()
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, const uint8_t*, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, const T&)
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, uint8_t)
+		 * @sa set_future_value(uint8_t, const uint8_t*, uint8_t) const
+		 * @sa set_future_value(uint8_t, const T&) const
+		 * @sa set_future_value_(uint8_t, uint8_t) const
 		 */
 		bool set_future_value(uint8_t id, uint8_t chunk) const
 		{
@@ -294,12 +295,12 @@ namespace future
 		}
 
 		/**
-		 * Add several bytes to the output value content of the `Future` identified 
+		 * Add several bytes to the output value content of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` ouput value provider to fill up,
-		 * with a chunk of bytes, the output value of a `Future`.
-		 * Calling this method may change the status of the `Future` to `FutureStatus::READY`
-		 * if this is the last output value chunk to be filled for this `Future`.
+		 * This method is called by a Future ouput value provider to fill up,
+		 * with a chunk of bytes, the output value of a Future.
+		 * Calling this method may change the status of the Future to `FutureStatus::READY`
+		 * if this is the last output value chunk to be filled for this Future.
 		 * This method is useful only for `Future<T>` where `T` type is not `void`.
 		 * You should not use it for a `Future<void>` instance.
 		 * 
@@ -308,22 +309,22 @@ namespace future
 		 * 
 		 * This method is synchronized, it shall be called from outside an ISR.
 		 * If you need the same feature called from an ISR, then you shall use 
-		 * `AbstractFutureManager.set_future_value_(uint8_t, const uint8_t* uint8_t)`
+		 * `AbstractFutureManager.set_future_value_(uint8_t, const uint8_t*, uint8_t) const`
 		 * instead.
 		 * 
-		 * @param id the unique id of the `Future` which output value shall be filled up
-		 * @param chunk pointer to the first byte to be added to this `Future` output
+		 * @param id the unique id of the Future which output value shall be filled up
+		 * @param chunk pointer to the first byte to be added to this Future output
 		 * value
 		 * @param size the number of bytes to be appended to this Future output value
 		 * @retval true if @p chunk could be completely added to the future
 		 * @retval false if this method failed; typically, when the current status
-		 * of the target `Future` is not `FutureStatus::NOT_READY`, or when @p size
+		 * of the target Future is not `FutureStatus::NOT_READY`, or when @p size
 		 * additional bytes would make the output value bigger than expected
 		 * 
 		 * @sa Future.status()
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, const T&)
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, const uint8_t*, uint8_t)
+		 * @sa set_future_value(uint8_t, uint8_t) const
+		 * @sa set_future_value(uint8_t, const T&) const
+		 * @sa set_future_value_(uint8_t, const uint8_t*, uint8_t) const
 		 */
 		bool set_future_value(uint8_t id, const uint8_t* chunk, uint8_t size) const
 		{
@@ -331,10 +332,10 @@ namespace future
 		}
 
 		/**
-		 * Set the output value content of the `Future` identified by @p id.
-		 * This method is called by a `Future` ouput value provider to fully fill
-		 * up, with the proper value, the output value of a `Future`.
-		 * Calling this method will change the status of the `Future` to 
+		 * Set the output value content of the Future identified by @p id.
+		 * This method is called by a Future ouput value provider to fully fill
+		 * up, with the proper value, the output value of a Future.
+		 * Calling this method will change the status of the Future to 
 		 * `FutureStatus::READY`
 		 * This method is useful only for `Future<T>` where `T` type is not `void`.
 		 * 
@@ -343,20 +344,20 @@ namespace future
 		 * 
 		 * This method is synchronized, it shall be called from outside an ISR.
 		 * If you need the same feature called from an ISR, then you shall use 
-		 * `AbstractFutureManager.set_future_value_(uint8_t, const T&)`instead.
+		 * `AbstractFutureManager.set_future_value_(uint8_t, const T&) const` instead.
 		 * 
-		 * @tparam T the type of output value of the `Future` indetified by @p id
+		 * @tparam T the type of output value of the Future indetified by @p id
 		 * 
-		 * @param id the unique id of the `Future` which output value shall be set
+		 * @param id the unique id of the Future which output value shall be set
 		 * @param value a constant reference to the value to set in the target Future
 		 * @retval true if @p value could be properly set into the future
 		 * @retval false if this method failed; typically, when the current status
-		 * of the target `Future` is not `FutureStatus::NOT_READY`
+		 * of the target Future is not `FutureStatus::NOT_READY`
 		 * 
 		 * @sa Future.status()
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, const uint8_t*, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, const T&)
+		 * @sa set_future_value(uint8_t, uint8_t) const
+		 * @sa set_future_value(uint8_t, const uint8_t*, uint8_t) const
+		 * @sa set_future_value_(uint8_t, const T&) const
 		 */
 		template<typename T> bool set_future_value(uint8_t id, const T& value) const
 		{
@@ -364,19 +365,19 @@ namespace future
 		}
 
 		/**
-		 * Mark the `Future` identified by @p id as `FutureStatus::ERROR`.
-		 * This method is called by a `Future` ouput value provider to indicate
-		 * that it cannot compute an output value for a given `Future`.
+		 * Mark the Future identified by @p id as `FutureStatus::ERROR`.
+		 * This method is called by a Future ouput value provider to indicate
+		 * that it cannot compute an output value for a given Future.
 		 * 
 		 * This method is synchronized, it shall be called from outside an ISR.
 		 * If you need the same feature called from an ISR, then you shall use 
 		 * `AbstractFutureManager.set_future_error_()` instead.
 		 * 
-		 * @param id the unique id of the `Future` that shall be marked in error
-		 * @param error the error code to set for the `Future`
-		 * @retval true if the matching `Future` has been properly updated
-		 * @retval false if there is no `Future` with id @p id, or if the related 
-		 * `Future` cannot be updated properly (because it is not in
+		 * @param id the unique id of the Future that shall be marked in error
+		 * @param error the error code to set for the Future
+		 * @retval true if the matching Future has been properly updated
+		 * @retval false if there is no Future with id @p id, or if the related 
+		 * Future cannot be updated properly (because it is not in
 		 * `FutureStatus::NOT_READY`)
 		 * 
 		 * @sa Future.status()
@@ -390,13 +391,13 @@ namespace future
 		}
 
 		/**
-		 * Get one byte from the input storage value of the `Future` identified 
+		 * Get one byte from the input storage value of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` input value consumer to consume
-		 * the input value held by a `Future`.
-		 * Every call to this method will advance the `Future` internal pointer 
+		 * This method is called by a Future input value consumer to consume
+		 * the input value held by a Future.
+		 * Every call to this method will advance the Future internal pointer 
 		 * to input data, so that next call will return the next byte of data.
-		 * Calling this method never changes the status of the `Future`, hence
+		 * Calling this method never changes the status of the Future, hence
 		 * it is not possible to read the input value more than once.
 		 * This method is useful only for `Future<?, T>` where `T` type is not 
 		 * `void`.
@@ -405,18 +406,17 @@ namespace future
 		 * If you need the same feature called from an ISR, then you shall use 
 		 * `AbstractFutureManager.get_storage_value_()` instead.
 		 * 
-		 * @param id the unique id of the `Future` which input storage value to get
+		 * @param id the unique id of the Future which input storage value to get
 		 * @param chunk the byte reference that will receive the next byte of this
 		 * Future input value
 		 * @retval true if the next byte of this Future could be read successfully
-		 * @retval false if there is no `Future` with id @p id, or if all bytes of 
+		 * @retval false if there is no Future with id @p id, or if all bytes of 
 		 * its input storage value have been read already
 		 * 
-		 * TODO check refs are properly generated!
-		 * @sa Future::Future(T)
+		 * @sa Future::Future(const IN&)
 		 * @sa Future.status()
-		 * @sa get_storage_value(uint8_t, uint8_t*, uint8_t)
-		 * @sa get_storage_value_(uint8_t, uint8_t&)
+		 * @sa get_storage_value(uint8_t, uint8_t*, uint8_t) const
+		 * @sa get_storage_value_(uint8_t, uint8_t&) const
 		 */
 		bool get_storage_value(uint8_t id, uint8_t& chunk) const
 		{
@@ -424,13 +424,13 @@ namespace future
 		}
 
 		/**
-		 * Get @p size bytes from the input storage value of the `Future` identified 
+		 * Get @p size bytes from the input storage value of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` input value consumer to consume
-		 * the input value held by a `Future`.
-		 * Every call to this method will advance the `Future` internal pointer 
+		 * This method is called by a Future input value consumer to consume
+		 * the input value held by a Future.
+		 * Every call to this method will advance the Future internal pointer 
 		 * to input data, so that next call will return the next chunk of data.
-		 * Calling this method never changes the status of the `Future`, hence
+		 * Calling this method never changes the status of the Future, hence
 		 * it is not possible to read the input value more than once.
 		 * This method is useful only for `Future<?, T>` where `T` type is not 
 		 * `void`.
@@ -439,20 +439,20 @@ namespace future
 		 * If you need the same feature called from an ISR, then you shall use 
 		 * `AbstractFutureManager.get_storage_value_()` instead.
 		 * 
-		 * @param id the unique id of the `Future` which input storage value to get
+		 * @param id the unique id of the Future which input storage value to get
 		 * @param chunk a pointer to an array of at least @p size bytes, which will
 		 * be filled with the next chunk of bytes of this Future input value
 		 * @param size the number of bytes to get from the input storage value
 		 * @retval true if the right amount bytes of this Future could be read 
 		 * successfully
-		 * @retval false if there is no `Future` with id @p id, or if @p size is
+		 * @retval false if there is no Future with id @p id, or if @p size is
 		 * larger than the remaining number of bytes to be read from the input 
 		 * storage value
 		 * 
-		 * @sa Future::Future(T)
+		 * @sa Future::Future(const IN&)
 		 * @sa Future.status()
-		 * @sa get_storage_value(uint8_t, uint8_t&)
-		 * @sa get_storage_value_(uint8_t, uint8_t*, uint8_t)
+		 * @sa get_storage_value(uint8_t, uint8_t&) const
+		 * @sa get_storage_value_(uint8_t, uint8_t*, uint8_t) const
 		 */
 		bool get_storage_value(uint8_t id, uint8_t* chunk, uint8_t size) const
 		{
@@ -460,9 +460,9 @@ namespace future
 		}
 
 		/**
-		 * Mark the `Future` identified by @p id as `FutureStatus::READY`.
-		 * This method is called by a `Future` ouput value provider to indicate
-		 * that a `Future` is ready for use.
+		 * Mark the Future identified by @p id as `FutureStatus::READY`.
+		 * This method is called by a Future ouput value provider to indicate
+		 * that a Future is ready for use.
 		 * This method is useful only for `Future<void>` i.e. `Future`s that have 
 		 * no output, but exist as way to indicate the end of an asynchronous 
 		 * process. For other `Future<T>`s, with a non `void` type `T`, you should
@@ -473,11 +473,11 @@ namespace future
 		 * If you need the same feature with synchronization, then you shall use 
 		 * `AbstractFutureManager.set_future_finish()` instead.
 		 * 
-		 * @param id the unique id of the `Future` that shall be marked ready
-		 * @retval false if there is no `Future` with id @p id, or if the related 
-		 * `Future` cannot be updated properly (because it is not in
+		 * @param id the unique id of the Future that shall be marked ready
+		 * @retval false if there is no Future with id @p id, or if the related 
+		 * Future cannot be updated properly (because it is not in
 		 * `FutureStatus::NOT_READY` or if it is still expecting data)
-		 * @retval true if the matching `Future` has been properly updated
+		 * @retval true if the matching Future has been properly updated
 		 * 
 		 * @sa Future.status()
 		 * @sa set_future_value_()
@@ -487,12 +487,12 @@ namespace future
 		bool set_future_finish_(uint8_t id) const;
 
 		/**
-		 * Add one byte to the output value content of the `Future` identified 
+		 * Add one byte to the output value content of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` ouput value provider to fill up,
-		 * byte after byte, the output value of a `Future`.
-		 * Calling this method may change the status of the `Future` to `FutureStatus::READY`
-		 * if this is the last output value byte to be filled for this `Future`.
+		 * This method is called by a Future ouput value provider to fill up,
+		 * byte after byte, the output value of a Future.
+		 * Calling this method may change the status of the Future to `FutureStatus::READY`
+		 * if this is the last output value byte to be filled for this Future.
 		 * This method is useful only for `Future<T>` where `T` type is not `void`.
 		 * You should not use it for a `Future<void>` instance.
 		 * 
@@ -502,28 +502,28 @@ namespace future
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
 		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.set_future_value(uint8_t, uint8_t)` instead.
+		 * `AbstractFutureManager.set_future_value(uint8_t, uint8_t) const` instead.
 		 * 
-		 * @param id the unique id of the `Future` which output value shall be filled up
-		 * @param chunk the byte to append to this `Future` output value
+		 * @param id the unique id of the Future which output value shall be filled up
+		 * @param chunk the byte to append to this Future output value
 		 * @retval true if @p chunk could be added to the future
 		 * @retval false if this method failed; typically, when the current status
-		 * of the target `Future` is not `FutureStatus::NOT_READY`
+		 * of the target Future is not `FutureStatus::NOT_READY`
 		 * 
 		 * @sa Future.status()
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, const uint8_t*, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, const T&)
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, uint8_t)
+		 * @sa set_future_value_(uint8_t, const uint8_t*, uint8_t) const
+		 * @sa set_future_value_(uint8_t, const T&) const
+		 * @sa set_future_value(uint8_t, uint8_t) const
 		 */
 		bool set_future_value_(uint8_t id, uint8_t chunk) const;
 
 		/**
-		 * Add several bytes to the output value content of the `Future` identified 
+		 * Add several bytes to the output value content of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` ouput value provider to fill up,
-		 * with a chunk of bytes, the output value of a `Future`.
-		 * Calling this method may change the status of the `Future` to `FutureStatus::READY`
-		 * if this is the last output value chunk to be filled for this `Future`.
+		 * This method is called by a Future ouput value provider to fill up,
+		 * with a chunk of bytes, the output value of a Future.
+		 * Calling this method may change the status of the Future to `FutureStatus::READY`
+		 * if this is the last output value chunk to be filled for this Future.
 		 * This method is useful only for `Future<T>` where `T` type is not `void`.
 		 * You should not use it for a `Future<void>` instance.
 		 * 
@@ -533,30 +533,30 @@ namespace future
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
 		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.set_future_value(uint8_t, const uint8_t* uint8_t)` 
+		 * `AbstractFutureManager.set_future_value(uint8_t, const uint8_t*, uint8_t) const` 
 		 * instead.
 		 * 
-		 * @param id the unique id of the `Future` which output value shall be filled up
-		 * @param chunk pointer to the first byte to be added to this `Future` output
+		 * @param id the unique id of the Future which output value shall be filled up
+		 * @param chunk pointer to the first byte to be added to this Future output
 		 * value
 		 * @param size the number of bytes to be appended to this Future output value
 		 * @retval true if @p chunk could be completely added to the future
 		 * @retval false if this method failed; typically, when the current status
-		 * of the target `Future` is not `FutureStatus::NOT_READY`, or when @p size
+		 * of the target Future is not `FutureStatus::NOT_READY`, or when @p size
 		 * additional bytes would make the output value bigger than expected
 		 * 
 		 * @sa Future.status()
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, const T&)
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, const uint8_t*, uint8_t)
+		 * @sa set_future_value_(uint8_t, uint8_t) const
+		 * @sa set_future_value_(uint8_t, const T&) const
+		 * @sa set_future_value(uint8_t, const uint8_t*, uint8_t) const
 		 */
 		bool set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const;
 
 		/**
-		 * Set the output value content of the `Future` identified by @p id.
-		 * This method is called by a `Future` ouput value provider to fully fill
-		 * up, with the proper value, the output value of a `Future`.
-		 * Calling this method will change the status of the `Future` to 
+		 * Set the output value content of the Future identified by @p id.
+		 * This method is called by a Future ouput value provider to fully fill
+		 * up, with the proper value, the output value of a Future.
+		 * Calling this method will change the status of the Future to 
 		 * `FutureStatus::READY`
 		 * This method is useful only for `Future<T>` where `T` type is not `void`.
 		 * 
@@ -566,38 +566,38 @@ namespace future
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
 		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.set_future_value(uint8_t, const T&)` instead.
+		 * `AbstractFutureManager.set_future_value(uint8_t, const T&) const` instead.
 		 * 
-		 * @tparam T the type of output value of the `Future` indetified by @p id
+		 * @tparam T the type of output value of the Future indetified by @p id
 		 * 
-		 * @param id the unique id of the `Future` which output value shall be set
+		 * @param id the unique id of the Future which output value shall be set
 		 * @param value a constant reference to the value to set in the target Future
 		 * @retval true if @p value could be properly set into the future
 		 * @retval false if this method failed; typically, when the current status
-		 * of the target `Future` is not `FutureStatus::NOT_READY`
+		 * of the target Future is not `FutureStatus::NOT_READY`
 		 * 
 		 * @sa Future.status()
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value_(uint8_t, const uint8_t*, uint8_t)
-		 * @sa AbstractFutureManager.set_future_value(uint8_t, const T&)
+		 * @sa set_future_value_(uint8_t, uint8_t) const
+		 * @sa set_future_value_(uint8_t, const uint8_t*, uint8_t) const
+		 * @sa set_future_value(uint8_t, const T&) const
 		 */
 		template<typename T> bool set_future_value_(uint8_t id, const T& value) const;
 
 		/**
-		 * Mark the `Future` identified by @p id as `FutureStatus::ERROR`.
-		 * This method is called by a `Future` ouput value provider to indicate
-		 * that it cannot compute an output value for a given `Future`.
+		 * Mark the Future identified by @p id as `FutureStatus::ERROR`.
+		 * This method is called by a Future ouput value provider to indicate
+		 * that it cannot compute an output value for a given Future.
 		 * 
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
 		 * If you need the same feature with synchronization, then you shall use 
 		 * `AbstractFutureManager.set_future_error()` instead.
 		 * 
-		 * @param id the unique id of the `Future` that shall be marked in error
-		 * @param error the error code to set for the `Future`
-		 * @retval true if the matching `Future` has been properly updated
-		 * @retval false if there is no `Future` with id @p id, or if the related 
-		 * `Future` cannot be updated properly (because it is not in
+		 * @param id the unique id of the Future that shall be marked in error
+		 * @param error the error code to set for the Future
+		 * @retval true if the matching Future has been properly updated
+		 * @retval false if there is no Future with id @p id, or if the related 
+		 * Future cannot be updated properly (because it is not in
 		 * `FutureStatus::NOT_READY`)
 		 * 
 		 * @sa Future.status()
@@ -608,13 +608,13 @@ namespace future
 		bool set_future_error_(uint8_t id, int error) const;
 
 		/**
-		 * Get one byte from the input storage value of the `Future` identified 
+		 * Get one byte from the input storage value of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` input value consumer to consume
-		 * the input value held by a `Future`.
-		 * Every call to this method will advance the `Future` internal pointer 
+		 * This method is called by a Future input value consumer to consume
+		 * the input value held by a Future.
+		 * Every call to this method will advance the Future internal pointer 
 		 * to input data, so that next call will return the next byte of data.
-		 * Calling this method never changes the status of the `Future`, hence
+		 * Calling this method never changes the status of the Future, hence
 		 * it is not possible to read the input value more than once.
 		 * This method is useful only for `Future<?, T>` where `T` type is not 
 		 * `void`.
@@ -622,30 +622,30 @@ namespace future
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
 		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.get_storage_value(uint8_t, uint8_t&)` instead.
+		 * `AbstractFutureManager.get_storage_value(uint8_t, uint8_t&) const` instead.
 		 * 
-		 * @param id the unique id of the `Future` which input storage value to get
+		 * @param id the unique id of the Future which input storage value to get
 		 * @param chunk the byte reference that will receive the next byte of this
 		 * Future input value
 		 * @retval true if the next byte of this Future could be read successfully
-		 * @retval false if there is no `Future` with id @p id, or if all bytes of 
+		 * @retval false if there is no Future with id @p id, or if all bytes of 
 		 * its input storage value have been read already
 		 * 
-		 * @sa Future::Future(T)
+		 * @sa Future::Future(const IN&)
 		 * @sa Future.status()
-		 * @sa get_storage_value_(uint8_t, uint8_t*, uint8_t)
-		 * @sa get_storage_value(uint8_t, uint8_t&)
+		 * @sa get_storage_value_(uint8_t, uint8_t*, uint8_t) const
+		 * @sa get_storage_value(uint8_t, uint8_t&) const
 		 */
 		bool get_storage_value_(uint8_t id, uint8_t& chunk) const;
 
 		/**
-		 * Get @p size bytes from the input storage value of the `Future` identified 
+		 * Get @p size bytes from the input storage value of the Future identified 
 		 * by @p id.
-		 * This method is called by a `Future` input value consumer to consume
-		 * the input value held by a `Future`.
-		 * Every call to this method will advance the `Future` internal pointer 
+		 * This method is called by a Future input value consumer to consume
+		 * the input value held by a Future.
+		 * Every call to this method will advance the Future internal pointer 
 		 * to input data, so that next call will return the next chunk of data.
-		 * Calling this method never changes the status of the `Future`, hence
+		 * Calling this method never changes the status of the Future, hence
 		 * it is not possible to read the input value more than once.
 		 * This method is useful only for `Future<?, T>` where `T` type is not 
 		 * `void`.
@@ -653,23 +653,23 @@ namespace future
 		 * This method is not synchronized, it shall be called exclusively from an ISR,
 		 * or possibly from inside a `synchronized` block.
 		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.get_storage_value(uint8_t, uint8_t*, uint8_t)` 
+		 * `AbstractFutureManager.get_storage_value(uint8_t, uint8_t*, uint8_t) const` 
 		 * instead.
 		 * 
-		 * @param id the unique id of the `Future` which input storage value to get
+		 * @param id the unique id of the Future which input storage value to get
 		 * @param chunk a pointer to an array of at least @p size bytes, which will
 		 * be filled with the next chunk of bytes of this Future input value
 		 * @param size the number of bytes to get from the input storage value
 		 * @retval true if the right amount bytes of this Future could be read 
 		 * successfully
-		 * @retval false if there is no `Future` with id @p id, or if @p size is
+		 * @retval false if there is no Future with id @p id, or if @p size is
 		 * larger than the remaining number of bytes to be read from the input 
 		 * storage value
 		 * 
-		 * @sa Future::Future(T)
+		 * @sa Future::Future(const IN&)
 		 * @sa Future.status()
-		 * @sa get_storage_value_(uint8_t, uint8_t&)
-		 * @sa get_storage_value(uint8_t, uint8_t*, uint8_t)
+		 * @sa get_storage_value_(uint8_t, uint8_t&) const
+		 * @sa get_storage_value(uint8_t, uint8_t*, uint8_t) const
 		 */
 		bool get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const;
 
@@ -731,7 +731,9 @@ namespace future
 	 * You must define a `FutureManager` instance if you want to use FastArduino
 	 * futures comcept.
 	 * 
-	 * @tparam SIZE the maximum number of `Future`s this FutureManager can register
+	 * @tparam SIZE the maximum number of `Future`s this FutureManager can register,
+	 * i.e. the maximum number of `Future`s that can exist simultaneously in the
+	 * system
 	 */
 	template<uint8_t SIZE>
 	class FutureManager : public AbstractFutureManager
@@ -749,20 +751,20 @@ namespace future
 	};
 
 	/**
-	 * Status of a `Future`.
-	 * A `Future` follows a strict lifecycle by passing through the status defined
-	 * here.
+	 * Status of a Future.
+	 * A Future follows a strict lifecycle by passing through the various statuses
+	 * defined here.
 	 * 
 	 * @sa Future
 	 */
 	enum class FutureStatus : uint8_t
 	{
 		/** 
-		 * The initial status of a `Future`, once constructed.
-		 * This is also the final status of a `Future`, once it has been "read"
+		 * The initial status of a Future, once constructed.
+		 * This is also the final status of a Future, once it has been "read"
 		 * by a consumer.
-		 * This can finally be the status of a `Future` that has been "moved" to 
-		 * another `Future` (though C++ move constructor or move assignment operator).
+		 * This can finally be the status of a Future that has been "moved" to 
+		 * another Future (though C++ move constructor or move assignment operator).
 		 * 
 		 * @sa Future.get()
 		 * @sa Future.error()
@@ -770,14 +772,14 @@ namespace future
 		INVALID = 0,
 
 		/**
-		 * The status of a `Future` immediately after it has been registered with
+		 * The status of a Future immediately after it has been registered with
 		 * the `FutureManager`.
-		 * The `Future` will keep this status until:
+		 * The Future will keep this status until:
 		 * - either its output value provider has fully filled its value (then its
 		 * status will become `READY`)
 		 * - or its output value provider has reported an error to it (then its 
 		 * status will become `ERROR`)
-		 * - or it is moved to another `Future` (then its status will become `INVALID`)
+		 * - or it is moved to another Future (then its status will become `INVALID`)
 		 * 
 		 * @sa AbstractFutureManager.register_future()
 		 * @sa AbstractFutureManager.set_future_value()
@@ -787,12 +789,12 @@ namespace future
 		NOT_READY,
 
 		/**
-		 * The status of a `Future` once its output value has been fully set by a 
+		 * The status of a Future once its output value has been fully set by a 
 		 * provider.
-		 * The `Future` will keep this value until:
+		 * The Future will keep this value until:
 		 * - either its value is read from some consumer code (then its 
 		 * status will become `INVALID`)
-		 * - or it is moved to another `Future` (then its status will become 
+		 * - or it is moved to another Future (then its status will become 
 		 * `INVALID`)
 		 * 
 		 * @sa AbstractFutureManager.set_future_value()
@@ -802,12 +804,12 @@ namespace future
 		READY,
 
 		/**
-		 * The status of a `Future` once a value provider has reported an error 
+		 * The status of a Future once a value provider has reported an error 
 		 * to it.
-		 * The `Future` will keep this value until:
+		 * The Future will keep this value until:
 		 * - either its error is read from some consumer code (then its 
 		 * status will become `INVALID`)
-		 * - or it is moved to another `Future` (then its status will become 
+		 * - or it is moved to another Future (then its status will become 
 		 * `INVALID`)
 		 * 
 		 * @sa AbstractFutureManager.set_future_error()
@@ -818,7 +820,7 @@ namespace future
 
 	/**
 	 * Base class for all `Future`s.
-	 * This defines most API and implementation of a `Future`.
+	 * This defines most API and implementation of a Future.
 	 * 
 	 * @sa Future
 	 */
@@ -826,11 +828,11 @@ namespace future
 	{
 	public:
 		/**
-		 * The unique ID of this `Future`, as provded by the `FutureManager` 
+		 * The unique ID of this Future, as provded by the `FutureManager` 
 		 * upon registration.
 		 * This is `0` when:
-		 * - the `Future` has just been constructed (not registered yet)
-		 * - the `Future` has just been moved to another `Future`.
+		 * - the Future has just been constructed (not registered yet)
+		 * - the Future has just been moved to another Future.
 		 * 
 		 * @sa AbstractFutureManager.register_future()
 		 */
@@ -840,7 +842,7 @@ namespace future
 		}
 
 		/**
-		 * The current status of this `Future`.
+		 * The current status of this Future.
 		 * 
 		 * @sa FutureStatus
 		 */
@@ -850,11 +852,11 @@ namespace future
 		}
 
 		/**
-		 * Wait until this `Future` becomes "ready", i.e. it holds either an
+		 * Wait until this Future becomes "ready", that is when it holds either an
 		 * output value or an error.
-		 * The method returns immediately if this `Future` is "INVALID".
+		 * The method returns immediately if this Future is "INVALID".
 		 * 
-		 * @return the latest status of the `Future`
+		 * @return the latest status of the Future
 		 * 
 		 * @sa Future.get()
 		 * @sa error()
@@ -867,14 +869,14 @@ namespace future
 		}
 
 		/**
-		 * Wait until this `Future` becomes "ready", i.e. it holds either an
+		 * Wait until this Future becomes "ready", that is when it holds either an
 		 * output value or an error, then return the error reported.
-		 * Calling this method when the `Future` holds an error will change its
+		 * Calling this method when the Future holds an error will change its
 		 * status to `FutureStatus::INVALID`.
 		 * 
-		 * @retval 0 if the `Future` is READY, i.e. holds a valid output value
-		 * @retval EINVAL if the `Future` is currently `INVALID`
-		 * @return the actual error reported by a provider on this `Future`
+		 * @retval 0 if the Future is READY, i.e. holds a valid output value
+		 * @retval EINVAL if the Future is currently `INVALID`
+		 * @return the actual error reported by a provider on this Future
 		 * 
 		 * @sa await()
 		 * @sa AbstractFutureManager.set_future_error()
@@ -1087,24 +1089,24 @@ namespace future
 
 	/**
 	 * Represent a value to be obtained, in some asynchronous way, in the future.
-	 * A `Future` can be though of as a container (or buffer) that is here to receive
+	 * A Future can be thought of as a container (or buffer) that is here to receive
 	 * some value that will be read later on. The value can be fed by some external 
 	 * function, either as a whole, or possibly byte per byte or even as chunks of 
 	 * bytes. This value is called an output value as it represents the output of
 	 * some asynchronous function.
-	 * A `Future` is also a holder for a constant value that is persistent as long 
+	 * A Future is also a holder for a constant value that is persistent as long 
 	 * as the Future persists; this value is called "input storage value" as it can 
 	 * serve as input to an asynchronous function.
-	 * A `Future` can also an error code instead of a valid output value; that code
+	 * A Future can also an error code instead of a valid output value; that code
 	 * is provided, when needed, by the asynchronous function computing the output
 	 * value, if it encounters an unrecoverable error.
-	 * To be usable, any `Future` must have been registered first with a `FutureManager`.
+	 * To be usable, any Future must have been registered first with a `FutureManager`.
 	 * 
 	 * This is a template class where one can define the types of the input storage 
 	 * value and of the output value.
 	 * Template specializations exist for @p OUT or @p IN `void`.
 	 * 
-	 * The lifecycle of a `Future` is described in further details in `FutureStatus`.
+	 * The lifecycle of a Future is described in further details in `FutureStatus`.
 	 * 
 	 * @tparam OUT the type of the output value; `void` by default. 
 	 * This type is limited to 255 bytes in length.
@@ -1123,14 +1125,14 @@ namespace future
 	public:
 		/** 
 		 * Construct a new Future.
-		 * The created `Future` is in `FutureStatus::INVALID` and has no `id()` yet.
+		 * The created Future is in `FutureStatus::INVALID` and has no `id()` yet.
 		 * It must be registered with `FutureManager` to become usable.
 		 * The Future holds buffers to store both the input storage value and the 
 		 * output value.
 		 * These buffers are moved between Futures during move construction or move 
 		 * assignment.
 		 * 
-		 * @param input a value to be copied to this `Future` input storage value;
+		 * @param input a value to be copied to this Future input storage value;
 		 * this argument does not exist when @p IN is `void`.
 		 * 
 		 * @sa AbstractFuture
@@ -1146,8 +1148,6 @@ namespace future
 		/**
 		 * Destroy an existing Future.
 		 * This Future will be automatically deregistered from `FutureManager`.
-		 * 
-		 * @sa AbstractFuture::~AbstractFuture()
 		 */
 		~Future() = default;
 
@@ -1156,7 +1156,7 @@ namespace future
 		 * After this Future has been constructed:
 		 * - @p that Future becomes unsable (`FutureStatus::INVALID`, `id() = 0`)
 		 * - @p that is deregistered from `FutureManager` if it was registered already
-		 * - this Future has the same `id(), `state()` and values as @that Future
+		 * - this Future has the same `id()`, `state()` and values as @p that Future
 		 * before the move
 		 * - this Future is registered with `FutureManager` if @p that Future was
 		 * 
@@ -1182,7 +1182,7 @@ namespace future
 		 * After this operation is finished:
 		 * - @p that Future becomes unsable (`FutureStatus::INVALID`, `id() = 0`)
 		 * - @p that is deregistered from `FutureManager` if it was registered already
-		 * - this Future has the same `id(), `state()` and values as @that Future
+		 * - this Future has the same `id()`, `state()` and values as @p that Future
 		 * before the move
 		 * - this Future is registered with `FutureManager` if @p that Future was
 		 * 
@@ -1213,7 +1213,7 @@ namespace future
 		/// @endcond
 
 		/**
-		 * Wait until an output value has been completely filled in this `Future`
+		 * Wait until an output value has been completely filled in this Future
 		 * and return that value to the caller.
 		 * 
 		 * Once its output value has been read once through this method, this
@@ -1228,7 +1228,7 @@ namespace future
 		 * @retval true if an output value has been set to this Future and it was
 		 * assigned to @p result
 		 * @retval false if this Future is not yet registered, if it is invalid,
-		 * or if an error was reported to it; the error ca be obtained through 
+		 * or if an error was reported to it; the error can be obtained through 
 		 * `error()`.
 		 * 
 		 * @sa await()
