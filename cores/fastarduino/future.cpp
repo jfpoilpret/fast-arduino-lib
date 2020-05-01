@@ -20,5 +20,64 @@ namespace future
 	/// @cond notdocumented
 	// Static definition for AbstractFutureManager singleton
 	AbstractFutureManager* AbstractFutureManager::instance_ = nullptr;
+
+	bool AbstractFutureManager::set_future_finish_(uint8_t id) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return false;
+		return future->set_finish_();
+	}
+	
+	bool AbstractFutureManager::set_future_value_(uint8_t id, uint8_t chunk) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return false;
+		return future->set_chunk_(chunk);
+	}
+
+	bool AbstractFutureManager::set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return false;
+		return future->set_chunk_(chunk, size);
+	}
+
+	bool AbstractFutureManager::set_future_error_(uint8_t id, int error) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return false;
+		return future->set_error_(error);
+	}
+
+	bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t& chunk) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return false;
+		return future->get_chunk_(chunk);
+	}
+
+	bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return false;
+		return future->get_chunk_(chunk, size);
+	}
+
+	bool AbstractFutureManager::register_at_index_(AbstractFuture& future, uint8_t index)
+	{
+		if (futures_[index] != nullptr)
+			return false;
+		update_future_(future.id_, &future, nullptr);
+		future.id_ = static_cast<uint8_t>(index + 1);
+		future.status_ = FutureStatus::NOT_READY;
+		futures_[index] = &future;
+		return true;
+	}
 	/// @endcond
 }
