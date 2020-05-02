@@ -75,7 +75,6 @@
  * Here is a simple usage example of this API, using PCINT0 interrupt to take a 
  * "snapshot" of 6 input buttons connected to all PORTB pins, after one of them has
  * changed level:
- * TODO set this as a real example and check it works!
  * @code
  * // global variable holding the id of the future to fill in
  * static uint8_t portB_snapshot_id = 0;
