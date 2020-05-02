@@ -51,6 +51,7 @@ In the current version, the project covers almost all features; a few missing, l
 What the library already has:
 
 - General utilities (queues, linked lists, busy loop delays)
+- "Future" support for asynchronous computation (preview on Git master, to be released in **v1.6**)
 - Fast IO support: template-based, optimized for speed and size
 - Analog Digital Conversion support (in Single Conversion mode)
 - Analog Comparator support

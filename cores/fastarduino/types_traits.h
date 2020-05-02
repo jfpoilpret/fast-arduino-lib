@@ -25,6 +25,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "defines.h"
 
 /**
  * Defines traits and utility methods for standard types, like `uint16_t`.
@@ -100,6 +101,20 @@ namespace types_traits
 			UNUSED void (*p)(T*) = constraints;
 		}
 		/// @endcond
+	};
+
+	//TODO doc!
+	template<typename T> struct remove_reference
+	{
+		using type = T;
+	};
+	template<typename T> struct remove_reference<T&>
+	{
+		using type = T;
+	};
+	template<typename T> struct remove_reference<T&&>
+	{
+		using type = T;
 	};
 }
 

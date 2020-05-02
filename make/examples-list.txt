@@ -58,6 +58,7 @@ Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)
 IOStreams1	Check ostream (SW UATX)
 IOStreams2	Check real Vs. null ostream
 IOStreams3	Check ostream error handling (UART)
+FutureCheck	Unit Tests of future API
 QueueCheck	Unit Tests of queue container
 LinkedListCheck	Unit Tests of linked list container
 UtilsCheck	Unit Tests of conversion utilities
@@ -99,4 +100,5 @@ tones4	Tone player from SRAM, stoppable from external interrupt (QTonePlay)
 tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)
 tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)
 tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)
+PCIFuture	Example of Future concept usage with PCI ISR
 Conway	Game of Life (8x8 LED) 1KB Hackaday
