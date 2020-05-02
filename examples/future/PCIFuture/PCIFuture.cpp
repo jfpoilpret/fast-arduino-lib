@@ -19,9 +19,20 @@
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
- *   - D8-D13 (port B): branch 8 push buttons connected to GND
+ *   - D8-D13 (port B): branch 6 push buttons connected to GND
  *   - Standard USB to console
- * TODO OTHERS
+ * - on Arduino LEONARDO
+ *   - D8-D11 (port B): branch 4 push buttons connected to GND
+ *   - Standard USB to console
+ * - on Arduino MEGA
+ *   - A8-A15 (port K): branch 8 push buttons connected to GND
+ *   - Standard USB to console
+ * - on ATtinyX4 breadboard
+ *   - D0-D7 (PA0-7, port A): branch 8 push buttons connected to GND
+ *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATtinyX5 breadboard
+ *   - D0,2-4 (PB0,2-4, port B): branch 4 push buttons connected to GND
+ *   - D1 (PB1) as TX to a Serial-USB converter
  * 
  * Notes: if you do not connect as many buttons as expected, the example will still 
  * work but it will always show high bits for unconnected inputs.
@@ -30,19 +41,53 @@
 #include <fastarduino/future.h>
 #include <fastarduino/move.h>
 #include <fastarduino/time.h>
-#include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/pci.h>
 #include <fastarduino/gpio.h>
 
-#ifdef ARDUINO_UNO
+#if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
 static constexpr board::USART USART = board::USART::USART0;
 static constexpr board::Port PORT = board::Port::PORT_B;
-static constexpr uint8_t PORT_MASK = 0xFF;
+static constexpr uint8_t PORT_MASK = 0x3F;
 static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D8_PB0_PCI0;
 #define PCINT 0
-// Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+#elif defined(ARDUINO_LEONARDO)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr board::USART USART = board::USART::USART1;
+static constexpr board::Port PORT = board::Port::PORT_B;
+static constexpr uint8_t PORT_MASK = 0xF0;
+static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D8_PB4_PCI0;
+#define PCINT 0
+REGISTER_UATX_ISR(1)
+#elif defined(ARDUINO_MEGA)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr board::USART USART = board::USART::USART0;
+static constexpr board::Port PORT = board::Port::PORT_K;
+static constexpr uint8_t PORT_MASK = 0xFF;
+static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D62_PK0_PCI2;
+#define PCINT 2
+REGISTER_UATX_ISR(0)
+#elif defined (BREADBOARD_ATTINYX4)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
+static constexpr board::Port PORT = board::Port::PORT_A;
+static constexpr uint8_t PORT_MASK = 0xFF;
+static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D0_PA0_PCI0;
+#define PCINT 0
+#elif defined (BREADBOARD_ATTINYX5)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
+static constexpr board::Port PORT = board::Port::PORT_B;
+static constexpr uint8_t PORT_MASK = 0x1C;
+static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D0_PB0_PCI0;
+#define PCINT 0
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -64,7 +109,7 @@ void take_snapshot() {
     future::AbstractFutureManager::instance().set_future_value(port_snapshot_id, port.get_PIN());
 }
 
-REGISTER_PCI_ISR_FUNCTION(0, take_snapshot, IPIN0)
+REGISTER_PCI_ISR_FUNCTION(PCINT, take_snapshot, IPIN0)
 
 int main() __attribute__((OS_main));
 int main()
@@ -75,7 +120,11 @@ int main()
 	sei();
 
 	// Initialize debugging output
+#if HARDWARE_UART
 	serial::hard::UATX<USART> uart{output_buffer};
+#else
+	serial::soft::UATX<TX> uart{output_buffer};
+#endif
 	uart.begin(115200);
 	ostream out = uart.out();
 	out << showbase << uppercase;
