@@ -39,6 +39,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
 					uart/UartApp2 uart/UartApp3 uart/UartApp4								\
 					sonar/Sonar1 sonar/Sonar2 sonar/Sonar3 sonar/Sonar4						\
 					sonar/Sonar5 sonar/Sonar6 sonar/Sonar7									\
+					future/PCIFuture														\
 					tones/tones00															
 
 EXAMPLES_ARDUINO_UNO=	complete/Conway							\
@@ -165,6 +166,7 @@ EXAMPLES_BREADBOARD_ATTINYX5=	io/FastPin1 io/FastPin2			\
 								spi/MultiADC00					\
 								spi/MultiADC01 spi/MultiADC02	\
 								spi/RF24App1 spi/WinBond		\
+								future/PCIFuture				\
 								tones/tones00					
 
 # Finally define all examples supported for the current variant (defined by current configuration)
