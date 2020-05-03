@@ -21,13 +21,17 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
+//FIXME ensure Future can work with IN = T[N] by adding some array template class
 //TODO what async devices methods signature is best:
 //		- return Future<X, Y> possibly with error status() (when failure inside the method)?
 //		- take Future<X, Y>& and return bool?
-//TODO codify errors returned by async device methods
-//		- bad arguments
-//		- no more future available in system
-//		- no more I2C commands available in queue
+
+//TODO ensure errors exist for async I2C device methods returns
+//		- bad arguments EINVAL
+//		- no more future available in system: EAGAIN? ENOBUFS?
+//		- no more I2C commands available in queue: EAGAIN? ENOBUFS
+//		- for futures: EOVERFLOW when provider tries to write too many bytes?
+
 //TODO what type for future is best:
 //		- direct Future<X,Y> type?				=> not beautiful API
 //		- using XXXX = Future<X,Y>?				=> much better API
@@ -58,6 +62,122 @@ REGISTER_UATX_ISR(0)
 // - should sync and async handler code cohabitate? or use only async but allow devices to await (sync) or not (async) 
 //
 // - ATtiny support: what's feasible with USI?
+
+// ARRAY STUFF
+//=============
+
+// initializer_list adapted from GCC header
+// #pragma GCC visibility push(default)
+//TODO remove what's useless...
+namespace std
+{
+	/// initializer_list
+	template<class T> class initializer_list
+	{
+	public:
+		typedef T value_type;
+		typedef const T& 	reference;
+		typedef const T& 	const_reference;
+		typedef size_t 		size_type;
+		typedef const T* 	iterator;
+		typedef const T* 	const_iterator;
+
+	private:
+		iterator			array_;
+		size_type			len_;
+
+		// The compiler can call a private constructor.
+		constexpr initializer_list(const_iterator a, size_type l) : array_(a), len_(l) {}
+
+	public:
+		constexpr initializer_list() : array_(0), len_(0) {}
+
+		// Number of elements.
+		constexpr size_type size() const
+		{
+			return len_;
+		}
+
+		// First element.
+		constexpr const_iterator begin() const
+		{
+			return array_;
+		}
+
+		// One past the last element.
+		constexpr const_iterator end() const
+		{
+			return begin() + size();
+		}
+	};
+}
+
+// #pragma GCC visibility pop
+
+//TODO put in its own header!!!
+template<typename T_, uint8_t N_>
+class array
+{
+public:
+	using T = T_;
+	using TREF = T_&;
+	using CTREF = const T_&;
+	using TPTR = T_*;
+	using CTPTR = const T_*;
+	static constexpr uint8_t N = N_;
+
+	//TODO array constructor with many T...
+	array(T buffer[N])
+	{
+		memcpy(buffer_, buffer, N * sizeof(T));
+	}
+	array(std::initializer_list<T> list)
+	{
+		T* ptr = buffer_;
+		for (auto i = list.begin(); i != list.end(); ++i)
+			*ptr++ = *i;
+	}
+	
+	array<T, N>& operator=(const T buffer[N])
+	{
+		memcpy(buffer_, buffer, N * sizeof(T));
+		return *this;
+	}
+
+	array(const array<T, N>& that)
+	{
+		memcpy(buffer_, that.buffer_, N * sizeof(T));
+	}
+	array<T, N>& operator=(const array<T, N>& that)
+	{
+		memcpy(buffer_, that.buffer_, N * sizeof(T));
+		return *this;
+	}
+
+	uint8_t size() const
+	{
+		return N;
+	}
+	CTREF operator[](uint8_t index) const
+	{
+		return buffer_[index];
+	}
+	TREF operator[](uint8_t index)
+	{
+		return buffer_[index];
+	}
+	operator CTPTR() const
+	{
+		return buffer_;
+	}
+	operator TPTR()
+	{
+		return buffer_;
+	}
+
+private:
+	T buffer_[N];
+};
 
 // Debugging stuff
 //=================
@@ -606,44 +726,55 @@ class RTC
 		return RAM_SIZE;
 	}
 
-	// using SET_RAM = future::Future<void, uint8_t[2]>;
-	// bool set_ram(uint8_t address, uint8_t data, SET_RAM& future)
-	// {
-	// 	address += RAM_START;
-	// 	if (address >= RAM_END)
-	// 		return false;
-	// 	SET_RAM temp{{address, data}};
-	// 	future::AbstractFutureManager::instance().register_future(temp);
-	// 	if (!handler_.write(DEVICE_ADDRESS, temp.id(), true))
-	// 		return false;
-	// 	future = std::move(temp);
-	// 	return true;
-	// }
-
-	//TODO implement two ways through overload
-	using GET_RAM = future::Future<uint8_t, uint8_t>;
-	bool get_ram(uint8_t address, GET_RAM& data)
+	using SET_RAM = future::Future<void, array<uint8_t, 2>>;
+	int set_ram(uint8_t address, uint8_t data, SET_RAM& future)
 	{
 		address += RAM_START;
 		if (address >= RAM_END)
-			return false;
+			return errors::EINVAL;
+		auto& manager = future::AbstractFutureManager::instance();
+		synchronized
+		{
+			// pre-conditions (must be synchronized)
+			if (manager.available_futures_() == 0) return errors::EGAIN;
+			if (!handler_.ensure_num_commands_(1)) return errors::EGAIN;
+			// prepare future and I2C transaction
+			// array<uint8_t, 2> input{{address, data}};
+			// uint8_t input[2] = {address, data};
+			// SET_RAM temp{array<uint8_t, 2>{input}};
+			// SET_RAM temp{array<uint8_t, 2>{address, data}};
+			SET_RAM temp{{address, data, 0}};
+			// NOTE: normally 3 following calls should never return false!
+			if (!manager.register_future_(temp)) return errors::EGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id())) return errors::EGAIN;
+			future = std::move(temp);
+			return 0;
+		}
+	}
+
+	//TODO implement two ways through overload
+	using GET_RAM = future::Future<uint8_t, uint8_t>;
+	int get_ram(uint8_t address, GET_RAM& future)
+	{
+		address += RAM_START;
+		if (address >= RAM_END)
+			return errors::EINVAL;
 		auto& manager = future::AbstractFutureManager::instance();
 		//TODO maybe an abstract device class could encapsulate all that?
 		synchronized
 		{
 			// pre-conditions (must be synchronized)
-			if (manager.available_futures_() == 0) return false;
-			if (!handler_.ensure_num_commands_(2)) return false;
+			if (manager.available_futures_() == 0) return errors::EGAIN;
+			if (!handler_.ensure_num_commands_(2)) return errors::EGAIN;
 			// prepare future and I2C transaction
 			GET_RAM temp{address};
-			// NOTE: normally 3 follwoign calls shoudl never return false!
-			if (!manager.register_future_(temp)) return false;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id())) return false;
-			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true)) return false;
-			data = std::move(temp);
-			return true;
+			// NOTE: normally 3 following calls should never return false!
+			if (!manager.register_future_(temp)) return errors::EGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id())) return errors::EGAIN;
+			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true)) return errors::EGAIN;
+			future = std::move(temp);
+			return 0;
 		}
-// 		bool ok = future::AbstractFutureManager::instance().register_future(temp);
 // #ifdef DEBUG_REGISTER_OK
 // 		if (ok)
 // 			debug_status[debug_index++] = DebugStatus::REGISTER_OK;
@@ -652,15 +783,6 @@ class RTC
 // 		if (!ok)
 // 			debug_status[debug_index++] = DebugStatus::REGISTER_ERROR;
 // #endif
-		// // Note: we first ensure available queue space for 2 commands in full transaction
-		// if (	handler_.ensure_num_commands(2)
-		// 	&&	handler_.write(DEVICE_ADDRESS, temp.id())
-		// 	&&	handler_.read(DEVICE_ADDRESS, temp.id(), true))
-		// {
-		// 	data = std::move(temp);
-		// 	return true;
-		// }
-		// return false;
 	}
 
 	private:
@@ -763,8 +885,8 @@ int main()
 		out << F("TEST #0 read all RAM bytes, one by one") << endl;
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
-			bool ok = rtc.get_ram(i, data[i]);
-			if (!ok)
+			int error = rtc.get_ram(i, data[i]);
+			if (error)
 				out << F("F") << dec << i << F(" ") << flush;
 			// This delay is needed to give time to I2C transactions to finish 
 			// and free I2C commands in buffer (only 32) 
