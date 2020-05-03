@@ -21,7 +21,6 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-//FIXME ensure Future can work with IN = T[N] by adding some array template class
 //TODO what async devices methods signature is best:
 //		- return Future<X, Y> possibly with error status() (when failure inside the method)?
 //		- take Future<X, Y>& and return bool?
@@ -38,8 +37,6 @@ REGISTER_UATX_ISR(0)
 //		- dedicated subclass for each method?	=> best API, but requires heavy work to define a new device...
 // NOTE: this may show some intrinsics of the methods (through the IN type)
 // What is the best for end developer?
-
-//FIXME handle futures without output expected (eg write only) by calling set_finish!
 
 //TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
 //TODO add policies for behavior on error (retry, clear queue...)
@@ -176,7 +173,7 @@ public:
 	}
 
 private:
-	T buffer_[N];
+	T buffer_[N] = {};
 };
 
 // Debugging stuff
@@ -291,13 +288,13 @@ class I2CCommandType
 {
 public:
 	constexpr I2CCommandType()
-		: none{true}, write{false}, force_stop{false} {}
+		: none{true}, write{false}, force_stop{false}, finish_future{false} {}
 	constexpr I2CCommandType(const I2CCommandType&) = default;
 	constexpr I2CCommandType& operator=(const I2CCommandType&) = default;
 
 private:
-	constexpr I2CCommandType(bool write, bool force_stop)
-		: none{false}, write{write}, force_stop{force_stop} {}
+	constexpr I2CCommandType(bool write, bool force_stop, bool finish_future)
+		: none{false}, write{write}, force_stop{force_stop}, finish_future{finish_future} {}
 
 	// true if this is an empty command
 	bool none : 1;
@@ -305,6 +302,8 @@ private:
 	bool write : 1;
 	// true if a STOP condition must absolutely be forced at the end of this command
 	bool force_stop : 1;
+	// true if aasociated future is void and must eb forced finished after this command
+	bool finish_future : 1;
 
 	friend class I2CCommand;
 	template<i2c::I2CMode> friend class I2CHandler;
@@ -319,17 +318,18 @@ public:
 	constexpr I2CCommand& operator=(const I2CCommand&) = default;
 
 private:
+	//TODO if these shall be made public, then reorder arguments and set defaults!!
 	static constexpr I2CCommand none()
 	{
 		return I2CCommand{};
 	}
-	static constexpr I2CCommand read(uint8_t target, bool force_stop, uint8_t future_id)
+	static constexpr I2CCommand read(uint8_t target, bool force_stop, uint8_t future_id, bool finish_future)
 	{
-		return I2CCommand{I2CCommandType{false, force_stop}, target, future_id};
+		return I2CCommand{I2CCommandType{false, force_stop, finish_future}, target, future_id};
 	}
-	static constexpr I2CCommand write(uint8_t target, bool force_stop, uint8_t future_id)
+	static constexpr I2CCommand write(uint8_t target, bool force_stop, uint8_t future_id, bool finish_future)
 	{
-		return I2CCommand{I2CCommandType{true, force_stop}, target, future_id};
+		return I2CCommand{I2CCommandType{true, force_stop, finish_future}, target, future_id};
 	}
 
 	constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t future_id)
@@ -395,13 +395,13 @@ public:
 	{
 		return commands_.free_() >= num_commands;
 	}
-	bool write_(uint8_t target, uint8_t future_id, bool force_stop = false)
+	bool write_(uint8_t target, uint8_t future_id, bool force_stop, bool finish_future)
 	{
-		return push_command_(I2CCommand::write(target, force_stop, future_id));
+		return push_command_(I2CCommand::write(target, force_stop, future_id, finish_future));
 	}
-	bool read_(uint8_t target, uint8_t future_id, bool force_stop = false)
+	bool read_(uint8_t target, uint8_t future_id, bool force_stop, bool finish_future)
 	{
-		return push_command_(I2CCommand::read(target, force_stop, future_id));
+		return push_command_(I2CCommand::read(target, force_stop, future_id, finish_future));
 	}
 
 private:
@@ -651,6 +651,9 @@ private:
 			break;
 
 			case State::STOP:
+			// Check if we need to finish the current future
+			if (command_.type.finish_future)
+				future::AbstractFutureManager::instance().set_future_finish_(command_.future_id);
 			// Check if we need to STOP (no more pending commands in queue)
 			if (commands_.empty_())
 				exec_stop_();
@@ -743,10 +746,10 @@ class RTC
 			// uint8_t input[2] = {address, data};
 			// SET_RAM temp{array<uint8_t, 2>{input}};
 			// SET_RAM temp{array<uint8_t, 2>{address, data}};
-			SET_RAM temp{{address, data, 0}};
+			SET_RAM temp{{address, data}};
 			// NOTE: normally 3 following calls should never return false!
 			if (!manager.register_future_(temp)) return errors::EGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id())) return errors::EGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), true, true)) return errors::EGAIN;
 			future = std::move(temp);
 			return 0;
 		}
@@ -770,8 +773,8 @@ class RTC
 			GET_RAM temp{address};
 			// NOTE: normally 3 following calls should never return false!
 			if (!manager.register_future_(temp)) return errors::EGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id())) return errors::EGAIN;
-			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true)) return errors::EGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EGAIN;
+			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true, false)) return errors::EGAIN;
 			future = std::move(temp);
 			return 0;
 		}
@@ -904,24 +907,93 @@ int main()
 		trace_states(out);
 	}
 
-	// time::delay_ms(1000);
-	// out << F("TEST #1 write and read RAM bytes, one by one") << endl;
-	// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-	// 	data1[i] = 0;
-	// for (uint8_t i = 0; i < RAM_SIZE; ++i)
+	time::delay_ms(1000);
+
+	{
+		RTC::SET_RAM set[RAM_SIZE];
+
+		out << F("TEST #1.1 write RAM bytes, one by one") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			int error1 = rtc.set_ram(i, i + 2, set[i]);
+			if (error1)
+				out << F("S") << dec << i << F(" ") << flush;
+			// This delay is needed to give time to I2C transactions to finish 
+			// and free I2C commands in buffer (only 32) 
+			time::delay_us(100);
+		}
+		out << endl;
+		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
+		{
+			out << F("set[") << dec << i << F("] await()=") << set[i].await() << endl;
+			out << F("error()=") << dec << set[i].error() << endl;
+		}
+		trace_states(out);
+	}
+
+	time::delay_ms(1000);
+
+	{
+		RTC::GET_RAM get[RAM_SIZE];
+
+		out << F("TEST #1.2 read RAM bytes, one by one") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			int error2 = rtc.get_ram(i, get[i]);
+			if (error2)
+				out << F("G") << dec << i << F(" ") << flush;
+			// This delay is needed to give time to I2C transactions to finish 
+			// and free I2C commands in buffer (only 32) 
+			time::delay_us(1000);
+		}
+		out << endl;
+		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
+		{
+			out << F("get[") << dec << i << F("] await()=") << get[i].await() << endl;
+			out << F("error()=") << dec << get[i].error() << endl;
+			uint8_t result = 0;
+			get[i].get(result);
+			out << F("get()=") << hex << result << endl;
+		}
+		trace_states(out);
+	}
+
+	time::delay_ms(1000);
+
+	out << F("sizeof(RTC::GET_RAM)=") << dec << sizeof(RTC::GET_RAM) << endl;
+	out << F("sizeof(RTC::SET_RAM)=") << dec << sizeof(RTC::SET_RAM) << endl;
+
+	//FIXME the following crashe the MCU immediately, probably because of stack trace
 	// {
-	// 	bool ok1 = rtc.set_ram(i, i + 1);
-	// 	out << F("#2") << endl;
-	// 	bool ok2 = rtc.get_ram(i, data1[i]);
-	// 	out << F("set_ram(") << dec << i << F(") => ") << ok1 << endl;
-	// 	out << F("get_ram(") << dec << i << F(") => ") << ok2 << endl;
-	// 	out << F("get_ram() data = ") << dec << data1[i] << endl;
+	// 	RTC::SET_RAM set[RAM_SIZE];
+	// 	RTC::GET_RAM get[RAM_SIZE];
+
+	// 	out << F("TEST #1.3 write and read RAM bytes, one by one") << endl;
+	// 	for (uint8_t i = 0; i < RAM_SIZE; ++i)
+	// 	{
+	// 		int error1 = rtc.set_ram(i, i + 1, set[i]);
+	// 		if (error1)
+	// 			out << F("S") << dec << i << F(" ") << flush;
+	// 		int error2 = rtc.get_ram(i, get[i]);
+	// 		if (error2)
+	// 			out << F("G") << dec << i << F(" ") << flush;
+	// 		// This delay is needed to give time to I2C transactions to finish 
+	// 		// and free I2C commands in buffer (only 32) 
+	// 		time::delay_us(1000);
+	// 	}
+	// 	out << endl;
+	// 	for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
+	// 	{
+	// 		out << F("set[") << dec << i << F("] await()=") << set[i].await() << endl;
+	// 		out << F("error()=") << dec << set[i].error() << endl;
+	// 		out << F("get[") << dec << i << F("] await()=") << get[i].await() << endl;
+	// 		out << F("error()=") << dec << get[i].error() << endl;
+	// 		uint8_t result = 0;
+	// 		get[i].get(result);
+	// 		out << F("get()=") << hex << result << endl;
+	// 	}
+	// 	trace_states(out);
 	// }
-	// time::delay_ms(1000);
-	// out << F("all data after 1s = [") << data1[0] << flush;
-	// for (uint8_t i = 1; i < RAM_SIZE; ++i)
-	// 	out << F(", ") << data1[i] << flush;
-	// out << ']' << endl;
 
 	// The following test works properly
 	// out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
