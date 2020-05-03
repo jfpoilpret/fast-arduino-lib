@@ -231,6 +231,12 @@ namespace future
 			return free;
 		}
 
+		//TODO DOC
+		uint8_t get_future_value_size(uint8_t id) const
+		{
+			synchronized return get_future_value_size_(id);
+		}
+
 		/**
 		 * Mark the Future identified by @p id as `FutureStatus::READY`.
 		 * This method is called by a Future ouput value provider to indicate
@@ -389,6 +395,12 @@ namespace future
 			synchronized return set_future_error_(id, error);
 		}
 
+		//TODO DOCS
+		uint8_t get_storage_value_size(uint8_t id) const
+		{
+			synchronized return get_storage_value_size_(id);
+		}
+
 		/**
 		 * Get one byte from the input storage value of the Future identified 
 		 * by @p id.
@@ -457,6 +469,9 @@ namespace future
 		{
 			synchronized return get_storage_value_(id, chunk, size);
 		}
+
+		//TODO DOC
+		uint8_t get_future_value_size_(uint8_t id) const;
 
 		/**
 		 * Mark the Future identified by @p id as `FutureStatus::READY`.
@@ -605,6 +620,9 @@ namespace future
 		 * @sa set_future_error()
 		 */
 		bool set_future_error_(uint8_t id, int error) const;
+
+		//TODO DOCS
+		uint8_t get_storage_value_size_(uint8_t id) const;
 
 		/**
 		 * Get one byte from the input storage value of the Future identified 
@@ -931,7 +949,7 @@ namespace future
 			status_ = that.status_;
 			error_ = that.error_;
 			output_size_ = that.output_size_;
-			input_size_ -= that.input_size_;
+			input_size_ = that.input_size_;
 			// Calculate data pointer attribute for next set value calls
 			output_current_ = output_data_ + full_output_size - output_size_;
 			input_current_ = input_data_ + full_input_size - input_size_;
@@ -948,6 +966,11 @@ namespace future
 
 	private:
 		// The following methods are called by FutureManager to fill the Future value (or error)
+		uint8_t get_output_size_() const
+		{
+			return output_size_;
+		}
+
 		bool set_finish_()
 		{
 			// Check this future is waiting for data
@@ -1000,6 +1023,11 @@ namespace future
 		}
 
 		// The following methods are called by FutureManager to get the read-only value held by this Future
+		uint8_t get_input_size_() const
+		{
+			return input_size_;
+		}
+
 		bool get_chunk_(uint8_t& chunk)
 		{
 			// Check all bytes have not been transferred yet
