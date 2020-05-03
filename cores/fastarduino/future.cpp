@@ -16,10 +16,17 @@
 
 namespace future
 {
-	//TODO ensure link is weak!
 	/// @cond notdocumented
 	// Static definition for AbstractFutureManager singleton
 	AbstractFutureManager* AbstractFutureManager::instance_ = nullptr;
+
+	uint8_t AbstractFutureManager::get_future_value_size_(uint8_t id) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return 0;
+		return future->get_output_size_();
+	}
 
 	bool AbstractFutureManager::set_future_finish_(uint8_t id) const
 	{
@@ -51,6 +58,14 @@ namespace future
 		if (future == nullptr)
 			return false;
 		return future->set_error_(error);
+	}
+
+	uint8_t AbstractFutureManager::get_storage_value_size_(uint8_t id) const
+	{
+		AbstractFuture* future = find_future(id);
+		if (future == nullptr)
+			return 0;
+		return future->get_input_size_();
 	}
 
 	bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t& chunk) const
