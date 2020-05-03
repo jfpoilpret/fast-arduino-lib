@@ -21,22 +21,11 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-//TODO what async devices methods signature is best:
-//		- return Future<X, Y> possibly with error status() (when failure inside the method)?
-//		- take Future<X, Y>& and return bool?
-
 //TODO ensure errors exist for async I2C device methods returns
 //		- bad arguments EINVAL
 //		- no more future available in system: EAGAIN? ENOBUFS?
 //		- no more I2C commands available in queue: EAGAIN? ENOBUFS
 //		- for futures: EOVERFLOW when provider tries to write too many bytes?
-
-//TODO what type for future is best:
-//		- direct Future<X,Y> type?				=> not beautiful API
-//		- using XXXX = Future<X,Y>?				=> much better API
-//		- dedicated subclass for each method?	=> best API, but requires heavy work to define a new device...
-// NOTE: this may show some intrinsics of the methods (through the IN type)
-// What is the best for end developer?
 
 //TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
 //TODO add policies for behavior on error (retry, clear queue...)
@@ -123,7 +112,6 @@ public:
 	using CTPTR = const T_*;
 	static constexpr uint8_t N = N_;
 
-	//TODO array constructor with many T...
 	array(T buffer[N])
 	{
 		memcpy(buffer_, buffer, N * sizeof(T));
@@ -755,7 +743,6 @@ class RTC
 		}
 	}
 
-	//TODO implement two ways through overload
 	using GET_RAM = future::Future<uint8_t, uint8_t>;
 	int get_ram(uint8_t address, GET_RAM& future)
 	{
@@ -778,14 +765,6 @@ class RTC
 			future = std::move(temp);
 			return 0;
 		}
-// #ifdef DEBUG_REGISTER_OK
-// 		if (ok)
-// 			debug_status[debug_index++] = DebugStatus::REGISTER_OK;
-// #endif
-// #ifdef DEBUG_REGISTER_ERR
-// 		if (!ok)
-// 			debug_status[debug_index++] = DebugStatus::REGISTER_ERROR;
-// #endif
 	}
 
 	private:
