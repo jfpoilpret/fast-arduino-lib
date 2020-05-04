@@ -93,7 +93,7 @@ class RTC
 	}
 
 	template<uint8_t SIZE, typename T = uint8_t>
-	using GET_RAM = future::Future<uint8_t, array<T, SIZE>>;
+	using GET_RAM = future::Future<array<T, SIZE>, uint8_t>;
 	template<uint8_t SIZE>
 	int get_ram(uint8_t address, GET_RAM<SIZE>& future)
 	{
@@ -108,7 +108,7 @@ class RTC
 			if (manager.available_futures_() == 0) return errors::EAGAIN;
 			if (!handler_.ensure_num_commands_(2)) return errors::EAGAIN;
 			// prepare future and I2C transaction
-			GET_RAM<SIZE> temp{address};
+			GET_RAM<SIZE> temp{{address}};
 			// NOTE: normally 3 following calls should never return false!
 			if (!manager.register_future_(temp)) return errors::EAGAIN;
 			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EAGAIN;
@@ -292,6 +292,24 @@ int main()
 
 	out << F("sizeof(RTC::GET_RAM1)=") << dec << sizeof(RTC::GET_RAM1) << endl;
 	out << F("sizeof(RTC::SET_RAM)=") << dec << sizeof(RTC::SET_RAM) << endl;
+
+	{
+		RTC::GET_RAM<RAM_SIZE> get;
+
+		out << F("TEST #1.3 read all RAM bytes in one transaction") << endl;
+		int error = rtc.get_ram(0, get);
+		if (error)
+			out << F("G") << endl;
+		out << F("get await()=") << get.await() << endl;
+		out << F("error()=") << dec << get.error() << endl;
+		array<uint8_t, RAM_SIZE> result{};
+		get.get(result);
+		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
+			out << F("get(") << dec << i << F(")=") << hex << result[i] << endl;
+		trace_states(out);
+	}
+
+	time::delay_ms(1000);
 
 	//FIXME the following crashes the MCU immediately, probably because of stack trace
 	// {
