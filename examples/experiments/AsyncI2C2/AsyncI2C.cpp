@@ -21,12 +21,6 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-//TODO ensure errors exist for async I2C device methods returns
-//		- bad arguments EINVAL
-//		- no more future available in system: EAGAIN? ENOBUFS?
-//		- no more I2C commands available in queue: EAGAIN? ENOBUFS
-//		- for futures: EOVERFLOW when provider tries to write too many bytes?
-
 //TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
 //TODO add policies for behavior on error (retry, clear queue...)
 
@@ -727,8 +721,8 @@ class RTC
 		synchronized
 		{
 			// pre-conditions (must be synchronized)
-			if (manager.available_futures_() == 0) return errors::EGAIN;
-			if (!handler_.ensure_num_commands_(1)) return errors::EGAIN;
+			if (manager.available_futures_() == 0) return errors::EAGAIN;
+			if (!handler_.ensure_num_commands_(1)) return errors::EAGAIN;
 			// prepare future and I2C transaction
 			// array<uint8_t, 2> input{{address, data}};
 			// uint8_t input[2] = {address, data};
@@ -736,8 +730,8 @@ class RTC
 			// SET_RAM temp{array<uint8_t, 2>{address, data}};
 			SET_RAM temp{{address, data}};
 			// NOTE: normally 3 following calls should never return false!
-			if (!manager.register_future_(temp)) return errors::EGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), true, true)) return errors::EGAIN;
+			if (!manager.register_future_(temp)) return errors::EAGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), true, true)) return errors::EAGAIN;
 			future = std::move(temp);
 			return 0;
 		}
@@ -754,14 +748,14 @@ class RTC
 		synchronized
 		{
 			// pre-conditions (must be synchronized)
-			if (manager.available_futures_() == 0) return errors::EGAIN;
-			if (!handler_.ensure_num_commands_(2)) return errors::EGAIN;
+			if (manager.available_futures_() == 0) return errors::EAGAIN;
+			if (!handler_.ensure_num_commands_(2)) return errors::EAGAIN;
 			// prepare future and I2C transaction
 			GET_RAM temp{address};
 			// NOTE: normally 3 following calls should never return false!
-			if (!manager.register_future_(temp)) return errors::EGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EGAIN;
-			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true, false)) return errors::EGAIN;
+			if (!manager.register_future_(temp)) return errors::EAGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EAGAIN;
+			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true, false)) return errors::EAGAIN;
 			future = std::move(temp);
 			return 0;
 		}
@@ -942,7 +936,7 @@ int main()
 	out << F("sizeof(RTC::GET_RAM)=") << dec << sizeof(RTC::GET_RAM) << endl;
 	out << F("sizeof(RTC::SET_RAM)=") << dec << sizeof(RTC::SET_RAM) << endl;
 
-	//FIXME the following crashe the MCU immediately, probably because of stack trace
+	//FIXME the following crashes the MCU immediately, probably because of stack trace
 	// {
 	// 	RTC::SET_RAM set[RAM_SIZE];
 	// 	RTC::GET_RAM get[RAM_SIZE];
