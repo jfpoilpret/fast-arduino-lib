@@ -1107,6 +1107,8 @@ namespace future
 		static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 	public:
+		//TODO add OUT and IN types as public members! Also in specializations!
+		
 		/** 
 		 * Construct a new Future.
 		 * The created Future is in `FutureStatus::INVALID` and has no `id()` yet.
