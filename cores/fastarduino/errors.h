@@ -42,7 +42,7 @@ namespace errors
 	 * Try again. 
 	 * This may happen when limited resources are exhausted but could be released.
 	 */
-	constexpr const int EGAIN = -11;
+	constexpr const int EAGAIN = -11;
 	// /** Out of memory. */
 	// constexpr const int ENOMEM = -12;
 	/** Invalid argument or Future. */
