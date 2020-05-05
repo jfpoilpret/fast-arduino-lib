@@ -80,7 +80,7 @@ class RTC
 		{
 			// pre-conditions (must be synchronized)
 			if (manager.available_futures_() == 0) return errors::EAGAIN;
-			if (!handler_.ensure_num_commands_(2)) return errors::EAGAIN;
+			if (!handler_.ensure_num_commands_(1)) return errors::EAGAIN;
 			// prepare future and I2C transaction
 			typename SET_RAM<SIZE>::IN input;
 			// containers::array<uint8_t, SIZE + 1> input;
@@ -89,8 +89,7 @@ class RTC
 			SET_RAM<SIZE> temp{input};
 			// NOTE: normally 3 following calls should never return false!
 			if (!manager.register_future_(temp)) return errors::EAGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EAGAIN;
-			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true, false)) return errors::EAGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), true, true)) return errors::EAGAIN;
 			future = std::move(temp);
 			return 0;
 		}
@@ -341,9 +340,11 @@ int main()
 		uint8_t values[RAM_SIZE];
 		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
 			values[i] = i * 3 + 10;
-		int error = rtc.set_ram<RAM_SIZE>(uint8_t(0), values, set);
+		int error = rtc.set_ram<RAM_SIZE>(0, values, set);
 		if (error)
 			out << F("S") << endl;
+		time::delay_ms(1000);
+		trace_states(out);
 		out << F("set await()=") << set.await() << endl;
 		out << F("error()=") << dec << set.error() << endl;
 		trace_states(out);
