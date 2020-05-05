@@ -1100,15 +1100,17 @@ namespace future
 	 * @sa AbstractFuture
 	 * @sa FutureStatus
 	 */
-	template<typename OUT = void, typename IN = void>
+	template<typename OUT_ = void, typename IN_ = void>
 	class Future : public AbstractFuture
 	{
-		static_assert(sizeof(OUT) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
-		static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 	public:
-		//TODO add OUT and IN types as public members! Also in specializations!
-		
+		//TODO DOCS
+		using OUT = OUT_;
+		using IN = IN_;
+
 		/** 
 		 * Construct a new Future.
 		 * The created Future is in `FutureStatus::INVALID` and has no `id()` yet.
@@ -1257,12 +1259,15 @@ namespace future
 	// Future template specializations for void types
 	//================================================
 	/// @cond notdocumented	
-	template<typename OUT>
-	class Future<OUT, void> : public AbstractFuture
+	template<typename OUT_>
+	class Future<OUT_, void> : public AbstractFuture
 	{
-		static_assert(sizeof(OUT) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 
 	public:
+		using OUT = OUT_;
+		using IN = void;
+
 		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
 		~Future() = default;
 
@@ -1309,12 +1314,15 @@ namespace future
 	/// @endcond
 
 	/// @cond notdocumented	
-	template<typename IN>
-	class Future<void, IN> : public AbstractFuture
+	template<typename IN_>
+	class Future<void, IN_> : public AbstractFuture
 	{
-		static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 	public:
+		using OUT = void;
+		using IN = IN_;
+
 		Future(const IN& input = IN{})
 			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
 		~Future() = default;
@@ -1365,6 +1373,9 @@ namespace future
 	class Future<void, void> : public AbstractFuture
 	{
 	public:
+		using OUT = void;
+		using IN = void;
+
 		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
 		~Future() = default;
 
