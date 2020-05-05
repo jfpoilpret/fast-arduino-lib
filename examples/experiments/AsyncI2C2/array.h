@@ -17,72 +17,104 @@
 #define ARRAY_HH
 
 #include <stdint.h>
+#include <string.h>
 #include "initializer_list.h"
 
 //TODO DOCS
-//TODO namespace
-template<typename T_, uint8_t N_>
-class array
+namespace containers
 {
-public:
-	using T = T_;
-	using TREF = T_&;
-	using CTREF = const T_&;
-	using TPTR = T_*;
-	using CTPTR = const T_*;
-	static constexpr uint8_t N = N_;
+	template<typename T_, uint8_t N_>
+	class array
+	{
+	public:
+		using T = T_;
+		static constexpr uint8_t N = N_;
+		using TREF = T_&;
+		using CTREF = const T_&;
+		using TPTR = T_*;
+		using CTPTR = const T_*;
 
-	array(T buffer[N])
-	{
-		memcpy(buffer_, buffer, N * sizeof(T));
-	}
-	array(std::initializer_list<T> list)
-	{
-		T* ptr = buffer_;
-		for (auto i = list.begin(); i != list.end(); ++i)
-			*ptr++ = *i;
-	}
-	
-	array<T, N>& operator=(const T buffer[N])
-	{
-		memcpy(buffer_, buffer, N * sizeof(T));
-		return *this;
-	}
+		array()
+		{
+			memset(buffer_, 0, N * sizeof(T));
+		}
+		array(T buffer[N])
+		{
+			memcpy(buffer_, buffer, N * sizeof(T));
+		}
+		array(std::initializer_list<T> list)
+		{
+			T* dst = buffer_;
+			auto src = list.begin();
+			for (uint8_t i = 0; i < N; ++i)
+			{
+				if (src != list.end())
+					*dst++ = *src++;
+				else
+					*dst++ = T{};
+			}
+		}
+		array(const array<T, N>& that)
+		{
+			memcpy(buffer_, that.buffer_, N * sizeof(T));
+		}
+		
+		array<T, N>& operator=(const T buffer[N])
+		{
+			memcpy(buffer_, buffer, N * sizeof(T));
+			return *this;
+		}
+		array<T, N>& operator=(std::initializer_list<T> list)
+		{
+			T* dst = buffer_;
+			auto src = list.begin();
+			for (uint8_t i = 0; i < N; ++i)
+			{
+				if (src != list.end())
+					*dst++ = *src++;
+				else
+					*dst++ = T{};
+			}
+		}
+		array<T, N>& operator=(const array<T, N>& that)
+		{
+			memcpy(buffer_, that.buffer_, N * sizeof(T));
+			return *this;
+		}
 
-	array(const array<T, N>& that)
-	{
-		memcpy(buffer_, that.buffer_, N * sizeof(T));
-	}
-	array<T, N>& operator=(const array<T, N>& that)
-	{
-		memcpy(buffer_, that.buffer_, N * sizeof(T));
-		return *this;
-	}
+		CTPTR data() const
+		{
+			return buffer_;
+		}
+		TPTR data()
+		{
+			return buffer_;
+		}
+		uint8_t size() const
+		{
+			return N;
+		}
 
-	uint8_t size() const
-	{
-		return N;
-	}
-	CTREF operator[](uint8_t index) const
-	{
-		return buffer_[index];
-	}
-	TREF operator[](uint8_t index)
-	{
-		return buffer_[index];
-	}
-	operator CTPTR() const
-	{
-		return buffer_;
-	}
-	operator TPTR()
-	{
-		return buffer_;
-	}
+		CTREF operator[](uint8_t index) const
+		{
+			return buffer_[index];
+		}
+		TREF operator[](uint8_t index)
+		{
+			return buffer_[index];
+		}
 
-private:
-	T buffer_[N] = {};
-};
+		template<uint8_t NN>
+		void set(uint8_t index, const T (&buffer)[NN])
+		{
+			if (index >= N) return;
+			const uint8_t nn = ((N - index) < NN) ? (N - index) : NN;
+			memcpy(&buffer_[index], buffer, nn * sizeof(T));
+		}
 
+	private:
+		T buffer_[N] = {};
+	};
+}
 #endif /* ARRAY_HH */
 /// @endcond
