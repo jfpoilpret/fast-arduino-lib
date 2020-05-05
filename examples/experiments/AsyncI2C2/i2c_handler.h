@@ -32,8 +32,6 @@
 
 #include "array.h"
 
-//TODO add more API to RTC (same as official DS1307) and check further
-
 //TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
 //TODO add policies for behavior on error (retry, clear queue...)
 //TODO add namespaces where needed
