@@ -46,8 +46,9 @@ class RTC
 		return RAM_SIZE;
 	}
 
-	using SET_RAM = future::Future<void, array<uint8_t, 2>>;
-	int set_ram(uint8_t address, uint8_t data, SET_RAM& future)
+	template<uint8_t SIZE, typename T = uint8_t>
+	using SET_RAM = future::Future<void, containers::array<T, SIZE + 1>>;
+	int set_ram(uint8_t address, uint8_t data, SET_RAM<1>& future)
 	{
 		address += RAM_START;
 		if (address >= RAM_END)
@@ -59,10 +60,37 @@ class RTC
 			if (manager.available_futures_() == 0) return errors::EAGAIN;
 			if (!handler_.ensure_num_commands_(1)) return errors::EAGAIN;
 			// prepare future and I2C transaction
-			SET_RAM temp{{address, data}};
+			SET_RAM<1> temp{{address, data}};
 			// NOTE: normally 3 following calls should never return false!
 			if (!manager.register_future_(temp)) return errors::EAGAIN;
 			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), true, true)) return errors::EAGAIN;
+			future = std::move(temp);
+			return 0;
+		}
+	}
+
+	template<uint8_t SIZE>
+	int set_ram(uint8_t address, const uint8_t (&data)[SIZE], SET_RAM<SIZE>& future)
+	{
+		address += RAM_START;
+		if ((address + SIZE) > RAM_END)
+			return errors::EINVAL;
+		auto& manager = future::AbstractFutureManager::instance();
+		synchronized
+		{
+			// pre-conditions (must be synchronized)
+			if (manager.available_futures_() == 0) return errors::EAGAIN;
+			if (!handler_.ensure_num_commands_(2)) return errors::EAGAIN;
+			// prepare future and I2C transaction
+			typename SET_RAM<SIZE>::IN input;
+			// containers::array<uint8_t, SIZE + 1> input;
+			input[0] = address;
+			input.set(uint8_t(1), data);
+			SET_RAM<SIZE> temp{input};
+			// NOTE: normally 3 following calls should never return false!
+			if (!manager.register_future_(temp)) return errors::EAGAIN;
+			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EAGAIN;
+			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true, false)) return errors::EAGAIN;
 			future = std::move(temp);
 			return 0;
 		}
@@ -93,7 +121,7 @@ class RTC
 	}
 
 	template<uint8_t SIZE, typename T = uint8_t>
-	using GET_RAM = future::Future<array<T, SIZE>, uint8_t>;
+	using GET_RAM = future::Future<containers::array<T, SIZE>, uint8_t>;
 	template<uint8_t SIZE>
 	int get_ram(uint8_t address, GET_RAM<SIZE>& future)
 	{
@@ -101,7 +129,6 @@ class RTC
 		if (address >= RAM_END)
 			return errors::EINVAL;
 		auto& manager = future::AbstractFutureManager::instance();
-		//TODO maybe an abstract device class could encapsulate all that?
 		synchronized
 		{
 			// pre-conditions (must be synchronized)
@@ -196,8 +223,8 @@ int main()
 
 	// INITIAL debug test with only one call, normally not part of complete unit tests
 	// {
-	// 	RTC::GET_RAM data;
 	// 	out << F("TEST #0 read one RAM byte") << endl;
+	// 	RTC::GET_RAM data;
 	// 	bool ok = rtc.get_ram(0, data);
 	// 	uint8_t id = data.id();
 	// 	future::FutureStatus status = data.status();
@@ -214,8 +241,8 @@ int main()
 	// }
 
 	{
-		RTC::GET_RAM1 data[RAM_SIZE];
 		out << F("TEST #0 read all RAM bytes, one by one") << endl;
+		RTC::GET_RAM1 data[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
 			int error = rtc.get_ram(i, data[i]);
@@ -240,9 +267,8 @@ int main()
 	time::delay_ms(1000);
 
 	{
-		RTC::SET_RAM set[RAM_SIZE];
-
 		out << F("TEST #1.1 write RAM bytes, one by one") << endl;
+		RTC::SET_RAM<1> set[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
 			int error1 = rtc.set_ram(i, i + 2, set[i]);
@@ -264,9 +290,8 @@ int main()
 	time::delay_ms(1000);
 
 	{
-		RTC::GET_RAM1 get[RAM_SIZE];
-
 		out << F("TEST #1.2 read RAM bytes, one by one") << endl;
+		RTC::GET_RAM1 get[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
 			int error2 = rtc.get_ram(i, get[i]);
@@ -291,21 +316,36 @@ int main()
 	time::delay_ms(1000);
 
 	out << F("sizeof(RTC::GET_RAM1)=") << dec << sizeof(RTC::GET_RAM1) << endl;
-	out << F("sizeof(RTC::SET_RAM)=") << dec << sizeof(RTC::SET_RAM) << endl;
+	out << F("sizeof(RTC::SET_RAM<1>)=") << dec << sizeof(RTC::SET_RAM<1>) << endl;
 
 	{
-		RTC::GET_RAM<RAM_SIZE> get;
-
 		out << F("TEST #1.3 read all RAM bytes in one transaction") << endl;
+		RTC::GET_RAM<RAM_SIZE> get;
 		int error = rtc.get_ram(0, get);
 		if (error)
 			out << F("G") << endl;
 		out << F("get await()=") << get.await() << endl;
 		out << F("error()=") << dec << get.error() << endl;
-		array<uint8_t, RAM_SIZE> result{};
+		RTC::GET_RAM<RAM_SIZE>::OUT result{};
 		get.get(result);
 		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
 			out << F("get(") << dec << i << F(")=") << hex << result[i] << endl;
+		trace_states(out);
+	}
+
+	time::delay_ms(1000);
+
+	{
+		out << F("TEST #1.4 write all RAM bytes in one transaction") << endl;
+		RTC::SET_RAM<RAM_SIZE> set;
+		uint8_t values[RAM_SIZE];
+		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
+			values[i] = i * 3 + 10;
+		int error = rtc.set_ram<RAM_SIZE>(uint8_t(0), values, set);
+		if (error)
+			out << F("S") << endl;
+		out << F("set await()=") << set.await() << endl;
+		out << F("error()=") << dec << set.error() << endl;
 		trace_states(out);
 	}
 
