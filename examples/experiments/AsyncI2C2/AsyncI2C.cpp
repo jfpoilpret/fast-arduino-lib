@@ -28,130 +28,10 @@
 
 #include "array.h"
 #include "i2c_handler.h"
+#include "ds1307.h"
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
-
-//TODO add more API to RTC (same as official DS1307) and check further
-
-// RTC-specific definitions (for testing purpose)
-//================================================
-class RTC
-{
-	public:
-	RTC(I2CHandler<i2c::I2CMode::STANDARD>& handler) : handler_{handler} {}
-
-	static constexpr uint8_t ram_size()
-	{
-		return RAM_SIZE;
-	}
-
-	template<uint8_t SIZE, typename T = uint8_t>
-	using SET_RAM = future::Future<void, containers::array<T, SIZE + 1>>;
-	int set_ram(uint8_t address, uint8_t data, SET_RAM<1>& future)
-	{
-		address += RAM_START;
-		if (address >= RAM_END)
-			return errors::EINVAL;
-		auto& manager = future::AbstractFutureManager::instance();
-		synchronized
-		{
-			// pre-conditions (must be synchronized)
-			if (manager.available_futures_() == 0) return errors::EAGAIN;
-			if (!handler_.ensure_num_commands_(1)) return errors::EAGAIN;
-			// prepare future and I2C transaction
-			SET_RAM<1> temp{{address, data}};
-			// NOTE: normally 3 following calls should never return false!
-			if (!manager.register_future_(temp)) return errors::EAGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), true, true)) return errors::EAGAIN;
-			future = std::move(temp);
-			return 0;
-		}
-	}
-
-	template<uint8_t SIZE>
-	int set_ram(uint8_t address, const uint8_t (&data)[SIZE], SET_RAM<SIZE>& future)
-	{
-		address += RAM_START;
-		if ((address + SIZE) > RAM_END)
-			return errors::EINVAL;
-		auto& manager = future::AbstractFutureManager::instance();
-		synchronized
-		{
-			// pre-conditions (must be synchronized)
-			if (manager.available_futures_() == 0) return errors::EAGAIN;
-			if (!handler_.ensure_num_commands_(1)) return errors::EAGAIN;
-			// prepare future and I2C transaction
-			typename SET_RAM<SIZE>::IN input;
-			// containers::array<uint8_t, SIZE + 1> input;
-			input[0] = address;
-			input.set(uint8_t(1), data);
-			SET_RAM<SIZE> temp{input};
-			// NOTE: normally 3 following calls should never return false!
-			if (!manager.register_future_(temp)) return errors::EAGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), true, true)) return errors::EAGAIN;
-			future = std::move(temp);
-			return 0;
-		}
-	}
-
-	using GET_RAM1 = future::Future<uint8_t, uint8_t>;
-	int get_ram(uint8_t address, GET_RAM1& future)
-	{
-		address += RAM_START;
-		if (address >= RAM_END)
-			return errors::EINVAL;
-		auto& manager = future::AbstractFutureManager::instance();
-		//TODO maybe an abstract device class could encapsulate all that block with a list of commands in args?
-		synchronized
-		{
-			// pre-conditions (must be synchronized)
-			if (manager.available_futures_() == 0) return errors::EAGAIN;
-			if (!handler_.ensure_num_commands_(2)) return errors::EAGAIN;
-			// prepare future and I2C transaction
-			GET_RAM1 temp{address};
-			// NOTE: normally 3 following calls should never return false!
-			if (!manager.register_future_(temp)) return errors::EAGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EAGAIN;
-			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true, false)) return errors::EAGAIN;
-			future = std::move(temp);
-			return 0;
-		}
-	}
-
-	template<uint8_t SIZE, typename T = uint8_t>
-	using GET_RAM = future::Future<containers::array<T, SIZE>, uint8_t>;
-	template<uint8_t SIZE>
-	int get_ram(uint8_t address, GET_RAM<SIZE>& future)
-	{
-		address += RAM_START;
-		if (address >= RAM_END)
-			return errors::EINVAL;
-		auto& manager = future::AbstractFutureManager::instance();
-		synchronized
-		{
-			// pre-conditions (must be synchronized)
-			if (manager.available_futures_() == 0) return errors::EAGAIN;
-			if (!handler_.ensure_num_commands_(2)) return errors::EAGAIN;
-			// prepare future and I2C transaction
-			GET_RAM<SIZE> temp{{address}};
-			// NOTE: normally 3 following calls should never return false!
-			if (!manager.register_future_(temp)) return errors::EAGAIN;
-			if (!handler_.write_(DEVICE_ADDRESS, temp.id(), false, false)) return errors::EAGAIN;
-			if (!handler_.read_(DEVICE_ADDRESS, temp.id(), true, false)) return errors::EAGAIN;
-			future = std::move(temp);
-			return 0;
-		}
-	}
-
-	private:
-	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
-	static constexpr const uint8_t RAM_START = 0x08;
-	static constexpr const uint8_t RAM_END = 0x40;
-	static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
-
-	I2CHandler<i2c::I2CMode::STANDARD>& handler_;
-};
 
 // Actual test example
 //=====================
@@ -179,6 +59,19 @@ static const flash::FlashStorage* convert(future::FutureStatus s)
 streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s)
 {
 	return out << convert(s);
+}
+
+void display_time(streams::ostream& out, const tm& time)
+{
+	out	<< streams::dec << F("RTC: [") 
+		<< uint8_t(time.tm_wday) << ']'
+		<< time.tm_mday << '.'
+		<< time.tm_mon << '.'
+		<< time.tm_year << ' '
+		<< time.tm_hour << ':'
+		<< time.tm_min << ':'
+		<< time.tm_sec
+		<< streams::endl;
 }
 
 // REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
@@ -352,71 +245,40 @@ int main()
 
 	time::delay_ms(1000);
 
-	//FIXME the following crashes the MCU immediately, probably because of stack trace
-	// {
-	// 	RTC::SET_RAM set[RAM_SIZE];
-	// 	RTC::GET_RAM get[RAM_SIZE];
+	{
+		out << F("TEST #2 set datetime") << endl;
+		RTC::SET_DATETIME set;
+		tm datetime;
+		datetime.tm_year = 20;
+		datetime.tm_mon = 5;
+		datetime.tm_mday = 6;
+		datetime.tm_wday = WeekDay::WEDNESDAY;
+		datetime.tm_hour = 20;
+		datetime.tm_min = 0;
+		datetime.tm_sec = 0;
+		int error = rtc.set_datetime(datetime, set);
+		if (error)
+			out << F("S") << endl;
+		out << F("set await()=") << set.await() << endl;
+		out << F("error()=") << dec << set.error() << endl;
+		trace_states(out);
+	}
 
-	// 	out << F("TEST #1.3 write and read RAM bytes, one by one") << endl;
-	// 	for (uint8_t i = 0; i < RAM_SIZE; ++i)
-	// 	{
-	// 		int error1 = rtc.set_ram(i, i + 1, set[i]);
-	// 		if (error1)
-	// 			out << F("S") << dec << i << F(" ") << flush;
-	// 		int error2 = rtc.get_ram(i, get[i]);
-	// 		if (error2)
-	// 			out << F("G") << dec << i << F(" ") << flush;
-	// 		// This delay is needed to give time to I2C transactions to finish 
-	// 		// and free I2C commands in buffer (only 32) 
-	// 		time::delay_us(1000);
-	// 	}
-	// 	out << endl;
-	// 	for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
-	// 	{
-	// 		out << F("set[") << dec << i << F("] await()=") << set[i].await() << endl;
-	// 		out << F("error()=") << dec << set[i].error() << endl;
-	// 		out << F("get[") << dec << i << F("] await()=") << get[i].await() << endl;
-	// 		out << F("error()=") << dec << get[i].error() << endl;
-	// 		uint8_t result = 0;
-	// 		get[i].get(result);
-	// 		out << F("get()=") << hex << result << endl;
-	// 	}
-	// 	trace_states(out);
-	// }
+	time::delay_ms(13000);
 
-	// The following test works properly
-	// out << F("TEST #2 write all RAM bytes, one by one, then read all, one by one") << endl;
-	// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-	// {
-	// 	bool ok = rtc.set_ram(i, i * 2 + 1);
-	// 	out << F("set_ram(") << dec << i << F(") => ") << ok << endl;
-	// }
-	// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-	// {
-	// 	uint8_t data = 0;
-	// 	bool ok = rtc.get_ram(i, data);
-	// 	out << F("get_ram(") << dec << i << F(") => ") << ok << endl;
-	// 	out << F("get_ram() data = ") << dec << data << endl;
-	// }
-	// time::delay_ms(1000);
-
-	// out << F("TEST #3 write and read RAM bytes, one by one, without delay") << endl;
-	// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-	// 	data1[i] = 0;
-	// for (uint8_t i = 0; i < RAM_SIZE; ++i)
-	// {
-	// 	bool ok1 = rtc.set_ram(i, i + 1);
-	// 	bool ok2 = rtc.get_ram(i, data1[i]);
-	// 	if (!ok1)
-	// 		out << F("KO1 on ") << i << endl;
-	// 	if (!ok2)
-	// 		out << F("KO2 on ") << i << endl;
-	// }
-	// time::delay_ms(1000);
-	// out << F("all data after 1s = [") << data1[0] << flush;
-	// for (uint8_t i = 1; i < RAM_SIZE; ++i)
-	// 	out << F(", ") << data1[i] << flush;
-	// out << ']' << endl;
+	{
+		out << F("TEST #3 get datetime") << endl;
+		RTC::GetDatetimeFuture get;
+		int error = rtc.get_datetime(get);
+		if (error)
+			out << F("G") << endl;
+		out << F("set await()=") << get.await() << endl;
+		out << F("error()=") << dec << get.error() << endl;
+		tm datetime;
+		out << F("get()=") << dec << get.get(datetime) << endl;
+		trace_states(out);
+		display_time(out, datetime);
+	}
 
 	handler.end();
 }
