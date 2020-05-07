@@ -142,6 +142,13 @@ namespace future
 			return *instance_;
 		}
 
+		//TODO DOC with mention NEVER USE (internal API)!
+		bool register_future(AbstractFuture& future)
+		{
+			synchronized return register_future_(future);
+		}
+		bool register_future_(AbstractFuture& future);
+
 		/**
 		 * Register a newly instantiated Future with this `AbstractFutureManager`.
 		 * A Future is useless until it has been registered.
@@ -164,7 +171,7 @@ namespace future
 		 */
 		template<typename OUT, typename IN> bool register_future(Future<OUT, IN>& future)
 		{
-			synchronized return register_future_(future);
+			return register_future((AbstractFuture&) future);
 		}
 
 		/**
@@ -188,7 +195,10 @@ namespace future
 		 * @sa Future
 		 * @sa AbstractFutureManager.register_future()
 		 */
-		template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future);
+		template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future)
+		{
+			return register_future_((AbstractFuture&) future);
+		}
 
 		/**
 		 * Return the number of available `Future`s in this `AbstractFutureManager`.
@@ -1404,8 +1414,7 @@ namespace future
 	};
 	/// @endcond
 
-	template<typename OUT, typename IN>
-	bool AbstractFutureManager::register_future_(Future<OUT, IN>& future)
+	bool AbstractFutureManager::register_future_(AbstractFuture& future)
 	{
 		// You cannot register an already registered future
 		if (future.id() != 0)
@@ -1419,6 +1428,7 @@ namespace future
 				return true;
 		return false;
 	}
+
 }
 
 #endif /* FUTURE_HH */
