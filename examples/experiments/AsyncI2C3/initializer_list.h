@@ -52,6 +52,8 @@ namespace std
 		{
 			return begin() + size();
 		}
+
+		//TODO reverse iterator?
 	};
 }
 

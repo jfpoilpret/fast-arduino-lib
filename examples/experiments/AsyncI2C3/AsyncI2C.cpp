@@ -6,7 +6,6 @@
  */
 
 //TODO improvements
-// - i2c_handler inside proper namespace
 // - add abstract device class
 // - update RTC to derive from abstract device
 // - Add sync RTC based on Async RTC
@@ -41,7 +40,7 @@ REGISTER_UATX_ISR(0)
 
 // Actual test example
 //=====================
-using I2CHANDLER = I2CHandler<i2c::I2CMode::STANDARD>;
+using I2CHANDLER = i2c::I2CHandler<i2c::I2CMode::STANDARD>;
 
 // Add utility ostream manipulator for FutureStatus
 static const flash::FlashStorage* convert(future::FutureStatus s)
@@ -84,7 +83,7 @@ void display_time(streams::ostream& out, const tm& time)
 REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
-static I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
