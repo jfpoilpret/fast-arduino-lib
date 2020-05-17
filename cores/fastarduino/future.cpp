@@ -20,6 +20,21 @@ namespace future
 	// Static definition for AbstractFutureManager singleton
 	AbstractFutureManager* AbstractFutureManager::instance_ = nullptr;
 
+	bool AbstractFutureManager::register_future_(AbstractFuture& future)
+	{
+		// You cannot register an already registered future
+		if (future.id() != 0)
+			return false;
+		// Optimization: we start search AFTER the last removed id
+		for (uint8_t i = last_removed_id_; i < size_; ++i)
+			if (register_at_index_(future, i))
+				return true;
+		for (uint8_t i = 0; i <= last_removed_id_; ++i)
+			if (register_at_index_(future, i))
+				return true;
+		return false;
+	}
+
 	uint8_t AbstractFutureManager::get_future_value_size_(uint8_t id) const
 	{
 		AbstractFuture* future = find_future(id);
