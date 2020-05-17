@@ -13,6 +13,14 @@
 #include "i2c_handler.h"
 #include "i2c_device.h"
 
+// Device driver guidelines:
+// - Template on MODE only if both modes accepted, otherwise force MODE
+// - Define Future subclass (inside device class) for every future requiring input (constant, or user-provided)
+//   naming convention: MethodNameFuture
+// - Future subclass shall have explicit constructor with mandatory input arguments (no default)
+// - define using types (inside device class) for each future subclass (UPPER_CASE same as METHOD_NAME)
+// - each API method returns int (error code) and takes reference to specific future as unique argument
+
 enum class WeekDay : uint8_t
 {
 	SUNDAY = 1,
@@ -60,19 +68,28 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		return RAM_SIZE;
 	}
 
-	using SET_DATETIME = future::Future<void, set_tm>;
-	int set_datetime(tm& datetime, SET_DATETIME& future)
+	class SetDatetimeFuture : public future::Future<void, set_tm>
 	{
-		set_tm set;
-		// 1st convert datetime for DS1307 (BCD)
-		set.address_ = TIME_ADDRESS;
-		set.tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
-		set.tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
-		set.tm_.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
-		set.tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
-		set.tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
-		set.tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
-		future.reset_input(set);
+	public:
+		explicit SetDatetimeFuture(const tm& datetime)
+		{
+			set_tm set;
+			// 1st convert datetime for DS1307 (BCD)
+			set.address_ = TIME_ADDRESS;
+			set.tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
+			set.tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
+			set.tm_.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
+			set.tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
+			set.tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
+			set.tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
+			this->reset_input(set);
+		}
+		SetDatetimeFuture(SetDatetimeFuture&&) = default;
+		SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
+	};
+	using SET_DATETIME = SetDatetimeFuture;
+	int set_datetime(SET_DATETIME& future)
+	{
 		// send register address to write to (0)
 		// send datetime at address 0
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
@@ -98,90 +115,166 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 			return true;
 		}
 	};
-
-	int get_datetime(GetDatetimeFuture& future)
+	using GET_DATETIME = GetDatetimeFuture;
+	int get_datetime(GET_DATETIME& future)
 	{
 		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
 
-	template<uint8_t SIZE, typename T = uint8_t>
-	using SET_RAM = future::Future<void, containers::array<T, SIZE + 1>>;
-	int set_ram(uint8_t address, uint8_t data, SET_RAM<1>& future)
+	template<uint8_t SIZE_>
+	class SetRamFuture : public future::Future<void, containers::array<uint8_t, SIZE_ + 1>>
 	{
-		address += RAM_START;
-		if (address >= RAM_END)
+		using PARENT = future::Future<void, containers::array<uint8_t, SIZE_ + 1>>;
+	public:
+		//TODO does this work when SIZE ==1 : SetRamFuture x{0, 12};
+		SetRamFuture() = default;
+		explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
+			:	address_{static_cast<uint8_t>(address + RAM_START)}
+		{
+			typename PARENT::IN input;
+			input[0] = address_;
+			input.set(uint8_t(1), data);
+			this->reset_input(input);
+		}
+		SetRamFuture(SetRamFuture<SIZE_>&&) = default;
+		SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
+	private:
+		uint8_t address_;
+		friend class RTC;
+	};
+	template<uint8_t SIZE> using SET_RAM = SetRamFuture<SIZE>;
+	template<uint8_t SIZE> int set_ram(SET_RAM<SIZE>& future)
+	{
+		if (future.address_ + SIZE > RAM_END)
 			return errors::EINVAL;
-		future.reset_input({address, data});
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
-	template<uint8_t SIZE>
-	int set_ram(uint8_t address, const uint8_t (&data)[SIZE], SET_RAM<SIZE>& future)
+	class SetRam1Future : public future::Future<void, containers::array<uint8_t, 2>>
 	{
-		address += RAM_START;
-		if ((address + SIZE) > RAM_END)
+		using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+	public:
+		//TODO does this work when SIZE ==1 : SetRamFuture x{0, 12};
+		SetRam1Future() = default;
+		explicit SetRam1Future(uint8_t address, uint8_t data)
+			:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}}, 
+				address_{static_cast<uint8_t>(address + RAM_START)} {}
+		SetRam1Future(SetRam1Future&&) = default;
+		SetRam1Future& operator=(SetRam1Future&&) = default;
+	private:
+		uint8_t address_;
+		friend class RTC;
+	};
+	using SET_RAM1 = SetRam1Future;
+	int set_ram(SET_RAM1& future)
+	{
+		if (future.address_ + 1 > RAM_END)
 			return errors::EINVAL;
-		// prepare future and I2C transaction
-		typename SET_RAM<SIZE>::IN input;
-		input[0] = address;
-		input.set(uint8_t(1), data);
-		future.reset_input(input);
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
-	using GET_RAM1 = future::Future<uint8_t, uint8_t>;
-	int get_ram(uint8_t address, GET_RAM1& future)
+	template<uint8_t SIZE_>
+	class GetRamFuture : public future::Future<containers::array<uint8_t, SIZE_>, uint8_t>
 	{
-		address += RAM_START;
-		if (address >= RAM_END)
+		using PARENT = future::Future<containers::array<uint8_t, SIZE_>, uint8_t>;
+	public:
+		explicit GetRamFuture(uint8_t address)
+			:	PARENT{static_cast<uint8_t>(address + RAM_START)},
+				address_{static_cast<uint8_t>(address + RAM_START)} {}
+		GetRamFuture(GetRamFuture<SIZE_>&&) = default;
+		GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = default;
+
+	private:
+		uint8_t address_;
+		friend class RTC;
+	};
+
+	template<uint8_t SIZE> using GET_RAM = GetRamFuture<SIZE>;
+	template<uint8_t SIZE> int get_ram(GET_RAM<SIZE>& future)
+	{
+		if (future.address_ >= RAM_END)
 			return errors::EINVAL;
-		future.reset_input(address);
 		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
 
-	template<uint8_t SIZE, typename T = uint8_t>
-	using GET_RAM = future::Future<containers::array<T, SIZE>, uint8_t>;
-	template<uint8_t SIZE>
-	int get_ram(uint8_t address, GET_RAM<SIZE>& future)
+	class GetRam1Future : public future::Future<uint8_t, uint8_t>
 	{
-		address += RAM_START;
-		if (address >= RAM_END)
+		using PARENT = future::Future<uint8_t, uint8_t>;
+	public:
+		explicit GetRam1Future(uint8_t address = 0)
+			:	PARENT{static_cast<uint8_t>(address + RAM_START)},
+				address_{static_cast<uint8_t>(address + RAM_START)} {}
+		GetRam1Future(GetRam1Future&&) = default;
+		GetRam1Future& operator=(GetRam1Future&&) = default;
+
+	private:
+		uint8_t address_;
+		friend class RTC;
+	};
+	using GET_RAM1 = GetRam1Future;
+	int get_ram(GET_RAM1& future)
+	{
+		if (future.address_ >= RAM_END)
 			return errors::EINVAL;
-		// prepare future and I2C transaction
-		future.reset_input(address);
 		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
 
-	using HALT_CLOCK = future::Future<void, containers::array<uint8_t, 2>>;
+	class HaltClockFuture : public future::Future<void, containers::array<uint8_t, 2>>
+	{
+	public:
+		// just write 0x80 at address 0
+		HaltClockFuture() : future::Future<void, containers::array<uint8_t, 2>>{{TIME_ADDRESS, CLOCK_HALT}} {}
+		HaltClockFuture(HaltClockFuture&&) = default;
+		HaltClockFuture& operator=(HaltClockFuture&&) = default;
+	};
+	using HALT_CLOCK = HaltClockFuture;
 	int halt_clock(HALT_CLOCK& future)
 	{
-		// just write 0x80 at address 0
-		future.reset_input({TIME_ADDRESS, CLOCK_HALT});
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
-	using ENABLE_OUTPUT = future::Future<void, containers::array<uint8_t, 2>>;
-	bool enable_output(ENABLE_OUTPUT& future, SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
+	class EnableOutputFuture : public future::Future<void, containers::array<uint8_t, 2>>
 	{
-		ControlRegister control;
-		control.sqwe = 1;
-		control.rs = uint8_t(frequency);
-		typename ENABLE_OUTPUT::IN input;
-		input[0] = CONTROL_ADDRESS;
-		input[1] = control.data;
-		future.reset_input(input);
+		using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+	public:
+		explicit EnableOutputFuture(SquareWaveFrequency frequency)
+		{
+			ControlRegister control;
+			control.sqwe = 1;
+			control.rs = uint8_t(frequency);
+			typename PARENT::IN input;
+			input[0] = CONTROL_ADDRESS;
+			input[1] = control.data;
+			this->reset_input(input);
+		}
+		EnableOutputFuture(EnableOutputFuture&&) = default;
+		EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
+	};
+	using ENABLE_OUTPUT = EnableOutputFuture;
+	int enable_output(ENABLE_OUTPUT& future)
+	{
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
-	using DISABLE_OUTPUT = future::Future<void, containers::array<uint8_t, 2>>;
-	bool disable_output(DISABLE_OUTPUT& future, bool output_value = false)
+	class DisableOutputFuture : public future::Future<void, containers::array<uint8_t, 2>>
 	{
-		ControlRegister control;
-		control.out = output_value;
-		typename ENABLE_OUTPUT::IN input;
-		input[0] = CONTROL_ADDRESS;
-		input[1] = control.data;
-		future.reset_input(input);
+		using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+	public:
+		explicit DisableOutputFuture(bool output_value)
+		{
+			ControlRegister control;
+			control.out = output_value;
+			typename PARENT::IN input;
+			input[0] = CONTROL_ADDRESS;
+			input[1] = control.data;
+			this->reset_input(input);
+		}
+		DisableOutputFuture(DisableOutputFuture&&) = default;
+		DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
+	};
+	using DISABLE_OUTPUT = DisableOutputFuture;
+	int disable_output(DISABLE_OUTPUT& future)
+	{
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 

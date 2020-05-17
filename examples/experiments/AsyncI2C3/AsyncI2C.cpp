@@ -141,8 +141,8 @@ int main()
 	// INITIAL debug test with only one call, normally not part of complete unit tests
 	{
 		out << F("\nTEST #0 read one RAM byte") << endl;
-		RTC::GET_RAM1 data;
-		int ok = rtc.get_ram(0, data);
+		RTC::GET_RAM1 data{0};
+		int ok = rtc.get_ram(data);
 		uint8_t id = data.id();
 		future::FutureStatus status = data.status();
 		out << F("get_ram()=") << ok << endl;
@@ -162,7 +162,8 @@ int main()
 		RTC::GET_RAM1 data[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
-			int error = rtc.get_ram(i, data[i]);
+			data[i] = RTC::GET_RAM1{i};
+			int error = rtc.get_ram(data[i]);
 			if (error)
 				out << F("F") << dec << i << F(" ") << flush;
 			// This delay is needed to give time to I2C transactions to finish 
@@ -185,10 +186,11 @@ int main()
 
 	{
 		out << F("\nTEST #1.1 write RAM bytes (val: i+2), one by one") << endl;
-		RTC::SET_RAM<1> set[RAM_SIZE];
+		RTC::SET_RAM1 set[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
-			int error1 = rtc.set_ram(i, i + 2, set[i]);
+			set[i] = RTC::SET_RAM1{i, i + 2};
+			int error1 = rtc.set_ram(set[i]);
 			if (error1)
 				out << F("S") << dec << i << F(" ") << flush;
 			// This delay is needed to give time to I2C transactions to finish 
@@ -211,7 +213,8 @@ int main()
 		RTC::GET_RAM1 get[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
-			int error2 = rtc.get_ram(i, get[i]);
+			get[i] = RTC::GET_RAM1{i};
+			int error2 = rtc.get_ram(get[i]);
 			if (error2)
 				out << F("G") << dec << i << F(" ") << flush;
 			// This delay is needed to give time to I2C transactions to finish 
@@ -237,8 +240,8 @@ int main()
 
 	{
 		out << F("\nTEST #1.3 read all RAM bytes in one transaction (val should i+2)") << endl;
-		RTC::GET_RAM<RAM_SIZE> get;
-		int error = rtc.get_ram(0, get);
+		RTC::GET_RAM<RAM_SIZE> get{0};
+		int error = rtc.get_ram(get);
 		if (error)
 			out << F("G") << endl;
 		out << F("get await()=") << get.await() << endl;
@@ -254,11 +257,11 @@ int main()
 
 	{
 		out << F("\nTEST #1.4 write all RAM bytes (val: 3i+10) in one transaction") << endl;
-		RTC::SET_RAM<RAM_SIZE> set;
 		uint8_t values[RAM_SIZE];
 		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
 			values[i] = i * 3 + 10;
-		int error = rtc.set_ram<RAM_SIZE>(0, values, set);
+		RTC::SET_RAM<RAM_SIZE> set{0, values};
+		int error = rtc.set_ram(set);
 		if (error)
 			out << F("S") << endl;
 		time::delay_ms(1000);
@@ -272,7 +275,6 @@ int main()
 
 	{
 		out << F("\nTEST #2 set datetime (Wed 06.05.2020 20:00:00)") << endl;
-		RTC::SET_DATETIME set;
 		tm datetime;
 		datetime.tm_year = 20;
 		datetime.tm_mon = 5;
@@ -281,7 +283,8 @@ int main()
 		datetime.tm_hour = 20;
 		datetime.tm_min = 0;
 		datetime.tm_sec = 0;
-		int error = rtc.set_datetime(datetime, set);
+		RTC::SET_DATETIME set{datetime};
+		int error = rtc.set_datetime(set);
 		if (error)
 			out << F("S") << endl;
 		out << F("set await()=") << set.await() << endl;
@@ -293,7 +296,7 @@ int main()
 
 	{
 		out << F("\nTEST #3 get datetime (should be: Wed 06.05.2020 20:00:13") << endl;
-		RTC::GetDatetimeFuture get;
+		RTC::GET_DATETIME get;
 		int error = rtc.get_datetime(get);
 		if (error)
 			out << F("G") << endl;
@@ -319,7 +322,7 @@ int main()
 		time::delay_ms(10000);
 
 		out << F("\nTEST #4.2 get datetime (should be: Wed 06.05.2020 20:00:14)") << endl;
-		RTC::GetDatetimeFuture get;
+		RTC::GET_DATETIME get;
 		error = rtc.get_datetime(get);
 		if (error)
 			out << F("G") << endl;
