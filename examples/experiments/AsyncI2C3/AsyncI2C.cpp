@@ -38,6 +38,9 @@
 #include "i2c_handler.h"
 #include "ds1307.h"
 
+// This is used when nothing works at all and this reduces the tests to only once get_ram() call
+// #define BASIC_DEBUG
+
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
@@ -134,27 +137,28 @@ int main()
 
 	constexpr uint8_t RAM_SIZE = rtc.ram_size();
 
+#ifdef BASIC_DEBUG
 	// INITIAL debug test with only one call, normally not part of complete unit tests
-	// {
-	// 	out << F("TEST #0 read one RAM byte") << endl;
-	// 	RTC::GET_RAM1 data;
-	// 	int ok = rtc.get_ram(0, data);
-	// 	uint8_t id = data.id();
-	// 	future::FutureStatus status = data.status();
-	// 	out << F("get_ram()=") << ok << endl;
-	// 	out << F("id=") << dec << id << F(" status=") << status << endl;
-	// 	// out << F("id=") << dec << data.id() << F(" status=") << data.status() << endl;
-	// 	// time::delay_ms(1000);
-	// 	out << F("data await()=") << data.await() << endl;
-	// 	out << F("error()=") << dec << data.error() << endl;
-	// 	uint8_t result = 0;
-	// 	data.get(result);
-	// 	out << F("get()=") << hex << result << endl;
-	//	trace(out);
-	// }
-
 	{
-		out << F("TEST #0 read all RAM bytes, one by one") << endl;
+		out << F("\nTEST #0 read one RAM byte") << endl;
+		RTC::GET_RAM1 data;
+		int ok = rtc.get_ram(0, data);
+		uint8_t id = data.id();
+		future::FutureStatus status = data.status();
+		out << F("get_ram()=") << ok << endl;
+		out << F("id=") << dec << id << F(" status=") << status << endl;
+		// out << F("id=") << dec << data.id() << F(" status=") << data.status() << endl;
+		// time::delay_ms(1000);
+		out << F("data await()=") << data.await() << endl;
+		out << F("error()=") << dec << data.error() << endl;
+		uint8_t result = 0;
+		data.get(result);
+		out << F("get()=") << hex << result << endl;
+		trace(out);
+	}
+#else
+	{
+		out << F("\nTEST #0 read all RAM bytes, one by one") << endl;
 		RTC::GET_RAM1 data[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
@@ -180,7 +184,7 @@ int main()
 	time::delay_ms(1000);
 
 	{
-		out << F("TEST #1.1 write RAM bytes, one by one") << endl;
+		out << F("\nTEST #1.1 write RAM bytes (val: i+2), one by one") << endl;
 		RTC::SET_RAM<1> set[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
@@ -203,7 +207,7 @@ int main()
 	time::delay_ms(1000);
 
 	{
-		out << F("TEST #1.2 read RAM bytes, one by one") << endl;
+		out << F("\nTEST #1.2 read RAM bytes, one by one (val should be i+2)") << endl;
 		RTC::GET_RAM1 get[RAM_SIZE];
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
@@ -232,7 +236,7 @@ int main()
 	out << F("sizeof(RTC::SET_RAM<1>)=") << dec << sizeof(RTC::SET_RAM<1>) << endl;
 
 	{
-		out << F("TEST #1.3 read all RAM bytes in one transaction") << endl;
+		out << F("\nTEST #1.3 read all RAM bytes in one transaction (val should i+2)") << endl;
 		RTC::GET_RAM<RAM_SIZE> get;
 		int error = rtc.get_ram(0, get);
 		if (error)
@@ -249,7 +253,7 @@ int main()
 	time::delay_ms(1000);
 
 	{
-		out << F("TEST #1.4 write all RAM bytes in one transaction") << endl;
+		out << F("\nTEST #1.4 write all RAM bytes (val: 3i+10) in one transaction") << endl;
 		RTC::SET_RAM<RAM_SIZE> set;
 		uint8_t values[RAM_SIZE];
 		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
@@ -267,7 +271,7 @@ int main()
 	time::delay_ms(1000);
 
 	{
-		out << F("TEST #2 set datetime") << endl;
+		out << F("\nTEST #2 set datetime (Wed 06.05.2020 20:00:00)") << endl;
 		RTC::SET_DATETIME set;
 		tm datetime;
 		datetime.tm_year = 20;
@@ -288,7 +292,7 @@ int main()
 	time::delay_ms(13000);
 
 	{
-		out << F("TEST #3 get datetime") << endl;
+		out << F("\nTEST #3 get datetime (should be: Wed 06.05.2020 20:00:13") << endl;
 		RTC::GetDatetimeFuture get;
 		int error = rtc.get_datetime(get);
 		if (error)
@@ -300,6 +304,7 @@ int main()
 		trace(out);
 		display_time(out, datetime);
 	}
+#endif
 
 	handler.end();
 }
