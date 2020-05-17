@@ -126,7 +126,6 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	{
 		using PARENT = future::Future<void, containers::array<uint8_t, SIZE_ + 1>>;
 	public:
-		//TODO does this work when SIZE ==1 : SetRamFuture x{0, 12};
 		SetRamFuture() = default;
 		explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
 			:	address_{static_cast<uint8_t>(address + RAM_START)}
@@ -154,7 +153,6 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	{
 		using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
 	public:
-		//TODO does this work when SIZE ==1 : SetRamFuture x{0, 12};
 		SetRam1Future() = default;
 		explicit SetRam1Future(uint8_t address, uint8_t data)
 			:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}}, 
@@ -277,6 +275,80 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	{
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
+
+	// synchronous API
+	bool set_datetime(const tm& datetime)
+	{
+		SET_DATETIME future{datetime};
+		if (set_datetime(future) != 0) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
+	bool get_datetime(tm& datetime)
+	{
+		GET_DATETIME future;
+		if (get_datetime(future) != 0) return false;
+		return future.get(datetime);
+	}
+	bool halt_clock()
+	{
+		HALT_CLOCK future;
+		if (halt_clock(future) != 0) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
+	bool enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
+	{
+		ENABLE_OUTPUT future{frequency};
+		if (enable_output(future) != 0) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
+	bool disable_output(bool output_value = false)
+	{
+		DISABLE_OUTPUT future{output_value};
+		if (disable_output(future) != 0) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
+	bool set_ram(uint8_t address, uint8_t data)
+	{
+		SET_RAM1 future{address, data};
+		if (set_ram(future) != 0) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
+	uint8_t get_ram(uint8_t address)
+	{
+		GET_RAM1 future{address};
+		if (get_ram(future) != 0) return false;
+		uint8_t data = 0;
+		future.get(data);
+		return data;
+	}
+	template<uint8_t SIZE> bool set_ram(uint8_t address, const uint8_t (&data)[SIZE])
+	{
+		SET_RAM<SIZE> future{address, data};
+		if (set_ram(future) != 0) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
+	template<uint8_t SIZE> bool get_ram(uint8_t address, uint8_t (&data)[SIZE])
+	{
+		GET_RAM<SIZE> future{address};
+		if (get_ram(future) != 0) return false;
+		typename GET_RAM<SIZE>::OUT temp;
+		if (!future.get(temp)) return false;
+		memcpy(data, temp.data(), SIZE);
+		return true;
+	}
+	//TODO try to uncomment following methdos, and check compile and run
+	// template<typename T> bool set_ram(uint8_t address, const T& data)
+	// {
+	// 	SET_RAM<sizeof(T)> future{address, reinterpret_cast<const uint8_t*>(&data)};
+	// 	if (set_ram(future) != 0) return false;
+	// 	return (future.await() == future::FutureStatus::READY);
+	// }
+	// template<typename T> bool get_ram(uint8_t address, T& data)
+	// {
+	// 	GET_RAM<sizeof(T)> future{address};
+	// 	if (get_ram(future) != 0) return false;
+	// 	return future.get(reinterpret_cast<uint8_t&>(data));
+	// }
 
 	private:
 	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;

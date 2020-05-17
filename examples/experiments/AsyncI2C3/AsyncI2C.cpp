@@ -333,6 +333,48 @@ int main()
 		trace(out);
 		display_time(out, datetime);
 	}
+
+	time::delay_ms(1000);
+
+	// Test sync API
+	{
+		out << F("\nTEST #5 sync API") << endl;
+		out << F("TEST #5.1 set 1 RAM byte") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			if (!rtc.set_ram(i, i * 2))
+				out << F("G") << endl;
+		}
+		out << F("\nTEST #5.2 get 1 RAM byte (expected 2i)") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			uint8_t data = rtc.get_ram(i);
+			out << F("get(") << dec << i << F(")=") << hex << data << endl;
+		}
+
+		time::delay_ms(1000);
+
+		out << F("\nTEST #5.3 set all RAM bytes") << endl;
+		{
+			uint8_t data[RAM_SIZE];
+			for (uint8_t i = 0; i < RAM_SIZE; ++i)
+				data[i] = i * 2 + 1;
+			if (!rtc.set_ram(0, data))
+				out << F("S") << endl;
+		}
+		out << F("\nTEST #5.4 get all RAM bytes (expected 2i+1") << endl;
+		{
+			uint8_t data[RAM_SIZE];
+			if (!rtc.get_ram(0, data))
+				out << F("G") << endl;
+			for (uint8_t i; i < RAM_SIZE; ++i)
+				out << F("get(") << dec << i << F(")=") << hex << data[i] << endl;
+		}
+
+		//TODO set/get datetime
+
+		//TODO halt clock
+	}
 #endif
 
 	handler.end();
