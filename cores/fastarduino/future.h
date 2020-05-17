@@ -845,6 +845,7 @@ namespace future
 		ERROR
 	};
 
+	//TODO add API to set/replace IN value (under some conditions on status?)
 	/**
 	 * Base class for all `Future`s.
 	 * This defines most API and implementation of a Future.
@@ -946,6 +947,17 @@ namespace future
 		void invalidate()
 		{
 			status_ = FutureStatus::INVALID;
+		}
+
+		// This method is called by subclass to check if input is replaceable,
+		// i.e. it has not been read yet
+		bool can_replace_input() const
+		{
+			synchronized return can_replace_input_();
+		}
+		bool can_replace_input_() const
+		{
+			return (input_current_ == input_data_);
 		}
 
 		// This method is called by subclass in their move constructor and assignment operator
@@ -1140,7 +1152,7 @@ namespace future
 		 * @sa Future(Future&&)
 		 * @sa operator=(Future&&)
 		 */
-		Future(const IN& input = IN{})
+		explicit Future(const IN& input = IN{})
 			: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
 
 		/**
@@ -1210,6 +1222,18 @@ namespace future
 		Future<OUT, IN>& operator=(const Future<OUT, IN>&) = delete;
 		/// @endcond
 
+		//TODO DOCS
+		bool reset_input(const IN& input)
+		{
+			synchronized return reset_input_(input);
+		}
+		bool reset_input_(const IN& input)
+		{
+			if (!can_replace_input_()) return false;
+			input_ = input;
+			return true;
+		}
+
 		/**
 		 * Wait until an output value has been completely filled in this Future
 		 * and return that value to the caller.
@@ -1261,7 +1285,7 @@ namespace future
 		};
 		union
 		{
-			const IN input_;
+			IN input_;
 			uint8_t input_buffer_[sizeof(IN)];
 		};
 	};
@@ -1333,7 +1357,7 @@ namespace future
 		using OUT = void;
 		using IN = IN_;
 
-		Future(const IN& input = IN{})
+		explicit Future(const IN& input = IN{})
 			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
 		~Future() = default;
 
@@ -1350,6 +1374,17 @@ namespace future
 
 		Future(const Future<void, IN>&) = delete;
 		Future<void, IN>& operator=(const Future<void, IN>&) = delete;
+
+		bool reset_input(const IN& input)
+		{
+			synchronized return reset_input_(input);
+		}
+		bool reset_input_(const IN& input)
+		{
+			if (!can_replace_input_()) return false;
+			input_ = input;
+			return true;
+		}
 
 		// The following method is blocking until this Future is ready
 		bool get()
@@ -1372,7 +1407,7 @@ namespace future
 
 		union
 		{
-			const IN input_;
+			IN input_;
 			uint8_t input_buffer_[sizeof(IN)];
 		};
 	};
@@ -1413,22 +1448,6 @@ namespace future
 		}
 	};
 	/// @endcond
-
-	bool AbstractFutureManager::register_future_(AbstractFuture& future)
-	{
-		// You cannot register an already registered future
-		if (future.id() != 0)
-			return false;
-		// Optimization: we start search AFTER the last removed id
-		for (uint8_t i = last_removed_id_; i < size_; ++i)
-			if (register_at_index_(future, i))
-				return true;
-		for (uint8_t i = 0; i <= last_removed_id_; ++i)
-			if (register_at_index_(future, i))
-				return true;
-		return false;
-	}
-
 }
 
 #endif /* FUTURE_HH */
