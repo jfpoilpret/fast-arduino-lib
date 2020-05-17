@@ -57,6 +57,9 @@
 
 // Debugging stuff
 //=================
+static constexpr uint8_t MAX_DEBUG = 128;
+
+#if defined(DEBUG_STEPS) || defined(DEBUG_REGISTER_OK) || defined(DEBUG_REGISTER_ERR) || defined(DEBUG_SEND_OK) || defined(DEBUG_SEND_ERR) || defined(DEBUG_RECV_OK) || defined(DEBUG_RECV_ERR)
 enum class DebugStatus : uint8_t
 {
 	START = 0,
@@ -131,17 +134,41 @@ streams::ostream& operator<<(streams::ostream& out, DebugStatus s)
 	return out << convert(s);
 }
 
-static constexpr uint8_t MAX_DEBUG = 128;
 static DebugStatus debug_status[MAX_DEBUG];
-static uint8_t debug_index = 0;
+static uint8_t debug_status_index = 0;
 
 static void trace_states(streams::ostream& out, bool reset = true)
 {
-	for (uint8_t i = 0; i < debug_index; ++i)
+	for (uint8_t i = 0; i < debug_status_index; ++i)
 		out << debug_status[i] << streams::endl;
 	if (reset)
-		debug_index = 0;
+		debug_status_index = 0;
 }
+#endif
+
+#ifdef DEBUG_DATA_RECV
+static uint8_t debug_recv_data[MAX_DEBUG];
+static uint8_t debug_recv_index = 0;
+static void trace_recv_data(streams::ostream& out, bool reset = true)
+{
+	for (uint8_t i = 0; i < debug_recv_index; ++i)
+		out << streams::hex << debug_recv_data[i] << streams::endl;
+	if (reset)
+		debug_recv_index = 0;
+}
+#endif
+
+#ifdef DEBUG_DATA_SEND
+static uint8_t debug_send_data[MAX_DEBUG];
+static uint8_t debug_send_index = 0;
+static void trace_send_data(streams::ostream& out, bool reset = true)
+{
+	for (uint8_t i = 0; i < debug_send_index; ++i)
+		out << streams::hex << debug_send_data[i] << streams::endl;
+	if (reset)
+		debug_send_index = 0;
+}
+#endif
 
 // I2C async specific definitions
 //================================
@@ -400,7 +427,7 @@ namespace i2c
 		void exec_start_()
 		{
 	#ifdef DEBUG_STEPS
-			debug_status[debug_index++] = DebugStatus::START;
+			debug_status[debug_status_index++] = DebugStatus::START;
 	#endif
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 			expected_status_ = i2c::Status::START_TRANSMITTED;
@@ -408,7 +435,7 @@ namespace i2c
 		void exec_repeat_start_()
 		{
 	#ifdef DEBUG_STEPS
-			debug_status[debug_index++] = DebugStatus::REPEAT_START;
+			debug_status[debug_status_index++] = DebugStatus::REPEAT_START;
 	#endif
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 			expected_status_ = i2c::Status::REPEAT_START_TRANSMITTED;
@@ -416,7 +443,7 @@ namespace i2c
 		void exec_send_slar_()
 		{
 	#ifdef DEBUG_STEPS
-			debug_status[debug_index++] = DebugStatus::SLAR;
+			debug_status[debug_status_index++] = DebugStatus::SLAR;
 	#endif
 			// Read device address from queue
 			TWDR_ = command_.target | 0x01U;
@@ -426,7 +453,7 @@ namespace i2c
 		void exec_send_slaw_()
 		{
 	#ifdef DEBUG_STEPS
-			debug_status[debug_index++] = DebugStatus::SLAW;
+			debug_status[debug_status_index++] = DebugStatus::SLAW;
 	#endif
 			// Read device address from queue
 			TWDR_ = command_.target;
@@ -436,7 +463,7 @@ namespace i2c
 		void exec_send_data_()
 		{
 	#ifdef DEBUG_STEPS
-			debug_status[debug_index++] = DebugStatus::SEND;
+			debug_status[debug_status_index++] = DebugStatus::SEND;
 	#endif
 			// Determine next data byte
 			uint8_t data = 0;
@@ -444,13 +471,16 @@ namespace i2c
 			bool ok = future::AbstractFutureManager::instance().get_storage_value_(command_.future_id, data);
 	#ifdef DEBUG_SEND_OK
 			if (ok)
-				debug_status[debug_index++] = DebugStatus::SEND_OK;
+				debug_status[debug_status_index++] = DebugStatus::SEND_OK;
 	#endif
 	#ifdef DEBUG_SEND_ERR
 			if (!ok)
-				debug_status[debug_index++] = DebugStatus::SEND_ERROR;
+				debug_status[debug_status_index++] = DebugStatus::SEND_ERROR;
 	#endif
 			TWDR_ = data;
+	#ifdef DEBUG_DATA_SEND
+			debug_send_data[debug_send_index++] = data;
+	#endif
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 			//TODO it is possible to get NACK on the last sent byte! That should not be an error!
 			expected_status_ = i2c::Status::DATA_TRANSMITTED_ACK;
@@ -461,7 +491,7 @@ namespace i2c
 			if (future::AbstractFutureManager::instance().get_future_value_size_(command_.future_id) == 1)
 			{
 	#ifdef DEBUG_STEPS
-				debug_status[debug_index++] = DebugStatus::RECV_LAST;
+				debug_status[debug_status_index++] = DebugStatus::RECV_LAST;
 	#endif
 				// Send NACK for the last data byte we want
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
@@ -470,7 +500,7 @@ namespace i2c
 			else
 			{
 	#ifdef DEBUG_STEPS
-				debug_status[debug_index++] = DebugStatus::RECV;
+				debug_status[debug_status_index++] = DebugStatus::RECV;
 	#endif
 				// Send ACK for data byte if not the last one we want
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
@@ -480,7 +510,7 @@ namespace i2c
 		void exec_stop_(bool error = false)
 		{
 	#ifdef DEBUG_STEPS
-			debug_status[debug_index++] = DebugStatus::STOP;
+			debug_status[debug_status_index++] = DebugStatus::STOP;
 	#endif
 			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 			if (!error)
@@ -511,14 +541,17 @@ namespace i2c
 			if (current_ == State::RECV || current_ == State::RECV_LAST)
 			{
 				const uint8_t data = TWDR_;
+	#ifdef DEBUG_DATA_RECV
+				debug_recv_data[debug_recv_index++] = data;
+	#endif
 				bool ok = future::AbstractFutureManager::instance().set_future_value_(command_.future_id, data);
 	#ifdef DEBUG_RECV_OK
 				if (ok)
-					debug_status[debug_index++] = DebugStatus::RECV_OK;
+					debug_status[debug_status_index++] = DebugStatus::RECV_OK;
 	#endif
 	#ifdef DEBUG_RECV_ERR
 				if (!ok)
-					debug_status[debug_index++] = DebugStatus::RECV_ERROR;
+					debug_status[debug_status_index++] = DebugStatus::RECV_ERROR;
 	#endif
 			}
 
