@@ -26,13 +26,13 @@ enum class WeekDay : uint8_t
 
 struct tm
 {
-	uint8_t tm_sec;  /**< seconds after the minute - [ 0 to 59 ] */
-	uint8_t tm_min;  /**< minutes after the hour - [ 0 to 59 ] */
-	uint8_t tm_hour; /**< hours since midnight - [ 0 to 23 ] */
-	WeekDay tm_wday; /**< days since Sunday - [ 1 to 7 ] */
-	uint8_t tm_mday; /**< day of the month - [ 1 to 31 ] */
-	uint8_t tm_mon;  /**< months since January - [ 1 to 12 ] */
-	uint8_t tm_year; /**< years since 2000 */
+	uint8_t tm_sec = 0;           /**< seconds after the minute - [ 0 to 59 ] */
+	uint8_t tm_min = 0;           /**< minutes after the hour - [ 0 to 59 ] */
+	uint8_t tm_hour = 0;          /**< hours since midnight - [ 0 to 23 ] */
+	WeekDay tm_wday = WeekDay(0); /**< days since Sunday - [ 1 to 7 ] */
+	uint8_t tm_mday = 0;          /**< day of the month - [ 1 to 31 ] */
+	uint8_t tm_mon = 0;           /**< months since January - [ 1 to 12 ] */
+	uint8_t tm_year = 0;          /**< years since 2000 */
 };
 
 class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
