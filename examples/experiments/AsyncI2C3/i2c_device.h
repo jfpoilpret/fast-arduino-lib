@@ -53,7 +53,9 @@ namespace i2c
 		public:
 		AbstractDevice(i2c::I2CHandler<MODE>& handler, uint8_t device)
 		: device_{device}, handler_{handler} {}
-		//TODO copy ctor and assignment op?
+
+		AbstractDevice(const AbstractDevice<MODE>&) = delete;
+		AbstractDevice<MODE>& operator=(const AbstractDevice<MODE>&) = delete;
 
 		protected:
 		void set_device(uint8_t device)
