@@ -64,12 +64,10 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		set.tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
 		set.tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
 		set.tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
-		//FIXME why temp future??
-		SET_DATETIME temp{set};
-		future = set;
+		future.reset_input(set);
 		// send register address to write to (0)
 		// send datetime at address 0
-		return launch_commands(temp, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
 	class GetDatetimeFuture : public future::Future<tm, uint8_t>
@@ -105,10 +103,8 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		address += RAM_START;
 		if (address >= RAM_END)
 			return errors::EINVAL;
-		//FIXME why temp future??
-		SET_RAM<1> temp{{address, data}};
-		return launch_commands(temp, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
-		// future = std::move(temp);
+		future.reset_input({address, data});
+		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
 	template<uint8_t SIZE>
@@ -122,10 +118,8 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		// containers::array<uint8_t, SIZE + 1> input;
 		input[0] = address;
 		input.set(uint8_t(1), data);
-		//FIXME why temp future??
-		SET_RAM<SIZE> temp{input};
-		return launch_commands(temp, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
-		// future = std::move(temp);
+		future.reset_input(input);
+		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
 	using GET_RAM1 = future::Future<uint8_t, uint8_t>;
@@ -134,10 +128,8 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		address += RAM_START;
 		if (address >= RAM_END)
 			return errors::EINVAL;
-		GET_RAM1 temp{address};
-		//FIXME why temp future??
-		return launch_commands(temp, {write(), read(i2c::I2CFinish::FORCE_STOP)});
-		// future = std::move(temp);
+		future.reset_input(address);
+		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
 
 	template<uint8_t SIZE, typename T = uint8_t>
@@ -149,10 +141,8 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		if (address >= RAM_END)
 			return errors::EINVAL;
 		// prepare future and I2C transaction
-		//FIXME why temp future??
-		GET_RAM<SIZE> temp{{address}};
-		return launch_commands(temp, {write(), read(i2c::I2CFinish::FORCE_STOP)});
-		// future = std::move(temp);
+		future.reset_input(address);
+		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
 
 	private:

@@ -6,8 +6,6 @@
  */
 
 //TODO improvements
-// - add abstract device class
-// - update RTC to derive from abstract device
 // - Add sync RTC based on Async RTC
 
 #include <util/delay_basic.h>
@@ -25,11 +23,16 @@
 
 // #define DEBUG_STEPS
 // #define DEBUG_REGISTER_OK
-#define DEBUG_REGISTER_ERR
+// #define DEBUG_REGISTER_ERR
 // #define DEBUG_SEND_OK
-#define DEBUG_SEND_ERR
+// #define DEBUG_SEND_ERR
 // #define DEBUG_RECV_OK
-#define DEBUG_RECV_ERR
+// #define DEBUG_RECV_ERR
+// #define DEBUG_DATA_RECV
+// #define DEBUG_DATA_SEND
+#if defined(DEBUG_STEPS) || defined(DEBUG_REGISTER_OK) || defined(DEBUG_REGISTER_ERR) || defined(DEBUG_SEND_OK) || defined(DEBUG_SEND_ERR) || defined(DEBUG_RECV_OK) || defined(DEBUG_RECV_ERR)
+#define DEBUG_STATUS
+#endif
 
 #include "array.h"
 #include "i2c_handler.h"
@@ -79,6 +82,19 @@ void display_time(streams::ostream& out, const tm& time)
 		<< streams::endl;
 }
 
+void trace(streams::ostream& out, bool reset = true)
+{
+#ifdef DEBUG_STATUS
+	trace_states(out, reset);
+#endif
+#ifdef DEBUG_DATA_SEND
+	trace_send_data(out, reset);
+#endif
+#ifdef DEBUG_DATA_RECV
+	trace_recv_data(out, reset);
+#endif
+}
+
 // REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
 REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 
@@ -121,8 +137,8 @@ int main()
 	// INITIAL debug test with only one call, normally not part of complete unit tests
 	// {
 	// 	out << F("TEST #0 read one RAM byte") << endl;
-	// 	RTC::GET_RAM data;
-	// 	bool ok = rtc.get_ram(0, data);
+	// 	RTC::GET_RAM1 data;
+	// 	int ok = rtc.get_ram(0, data);
 	// 	uint8_t id = data.id();
 	// 	future::FutureStatus status = data.status();
 	// 	out << F("get_ram()=") << ok << endl;
@@ -134,7 +150,7 @@ int main()
 	// 	uint8_t result = 0;
 	// 	data.get(result);
 	// 	out << F("get()=") << hex << result << endl;
-	// 	trace_states(out);
+	//	trace(out);
 	// }
 
 	{
@@ -158,7 +174,7 @@ int main()
 			data[i].get(result);
 			out << F("get()=") << hex << result << endl;
 		}
-		trace_states(out);
+		trace(out);
 	}
 
 	time::delay_ms(1000);
@@ -181,7 +197,7 @@ int main()
 			out << F("set[") << dec << i << F("] await()=") << set[i].await() << endl;
 			out << F("error()=") << dec << set[i].error() << endl;
 		}
-		trace_states(out);
+		trace(out);
 	}
 
 	time::delay_ms(1000);
@@ -207,7 +223,7 @@ int main()
 			get[i].get(result);
 			out << F("get()=") << hex << result << endl;
 		}
-		trace_states(out);
+		trace(out);
 	}
 
 	time::delay_ms(1000);
@@ -227,7 +243,7 @@ int main()
 		get.get(result);
 		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
 			out << F("get(") << dec << i << F(")=") << hex << result[i] << endl;
-		trace_states(out);
+		trace(out);
 	}
 
 	time::delay_ms(1000);
@@ -242,10 +258,10 @@ int main()
 		if (error)
 			out << F("S") << endl;
 		time::delay_ms(1000);
-		trace_states(out);
+		trace(out);
 		out << F("set await()=") << set.await() << endl;
 		out << F("error()=") << dec << set.error() << endl;
-		trace_states(out);
+		trace(out);
 	}
 
 	time::delay_ms(1000);
@@ -266,7 +282,7 @@ int main()
 			out << F("S") << endl;
 		out << F("set await()=") << set.await() << endl;
 		out << F("error()=") << dec << set.error() << endl;
-		trace_states(out);
+		trace(out);
 	}
 
 	time::delay_ms(13000);
@@ -281,7 +297,7 @@ int main()
 		out << F("error()=") << dec << get.error() << endl;
 		tm datetime;
 		out << F("get()=") << dec << get.get(datetime) << endl;
-		trace_states(out);
+		trace(out);
 		display_time(out, datetime);
 	}
 
