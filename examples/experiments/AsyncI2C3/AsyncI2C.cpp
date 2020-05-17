@@ -297,7 +297,33 @@ int main()
 		int error = rtc.get_datetime(get);
 		if (error)
 			out << F("G") << endl;
-		out << F("set await()=") << get.await() << endl;
+		out << F("get await()=") << get.await() << endl;
+		out << F("error()=") << dec << get.error() << endl;
+		tm datetime;
+		out << F("get()=") << dec << get.get(datetime) << endl;
+		trace(out);
+		display_time(out, datetime);
+	}
+
+	time::delay_ms(1000);
+
+	{
+		out << F("\nTEST #4.1 halt clock") << endl;
+		RTC::HALT_CLOCK halt;
+		int error = rtc.halt_clock(halt);
+		if (error)
+			out << F("H") << endl;
+		out << F("halt await()=") << halt.await() << endl;
+		out << F("error()=") << dec << halt.error() << endl;
+		trace(out);
+		time::delay_ms(10000);
+
+		out << F("\nTEST #4.2 get datetime (should be: Wed 06.05.2020 20:00:14)") << endl;
+		RTC::GetDatetimeFuture get;
+		error = rtc.get_datetime(get);
+		if (error)
+			out << F("G") << endl;
+		out << F("get await()=") << get.await() << endl;
 		out << F("error()=") << dec << get.error() << endl;
 		tm datetime;
 		out << F("get()=") << dec << get.get(datetime) << endl;

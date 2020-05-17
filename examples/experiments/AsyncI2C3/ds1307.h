@@ -35,6 +35,14 @@ struct tm
 	uint8_t tm_year = 0;          /**< years since 2000 */
 };
 
+enum class SquareWaveFrequency : uint8_t
+{
+	FREQ_1HZ = 0x00,
+	FREQ_4096HZ = 0x01,
+	FREQ_8192HZ = 0x02,
+	FREQ_32768HZ = 0x03
+};
+
 class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 {
 	struct set_tm
@@ -115,7 +123,6 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 			return errors::EINVAL;
 		// prepare future and I2C transaction
 		typename SET_RAM<SIZE>::IN input;
-		// containers::array<uint8_t, SIZE + 1> input;
 		input[0] = address;
 		input.set(uint8_t(1), data);
 		future.reset_input(input);
@@ -145,10 +152,60 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
 
+	using HALT_CLOCK = future::Future<void, containers::array<uint8_t, 2>>;
+	int halt_clock(HALT_CLOCK& future)
+	{
+		// just write 0x80 at address 0
+		future.reset_input({TIME_ADDRESS, CLOCK_HALT});
+		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+	}
+
+	using ENABLE_OUTPUT = future::Future<void, containers::array<uint8_t, 2>>;
+	bool enable_output(ENABLE_OUTPUT& future, SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
+	{
+		ControlRegister control;
+		control.sqwe = 1;
+		control.rs = uint8_t(frequency);
+		typename ENABLE_OUTPUT::IN input;
+		input[0] = CONTROL_ADDRESS;
+		input[1] = control.data;
+		future.reset_input(input);
+		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+	}
+
+	using DISABLE_OUTPUT = future::Future<void, containers::array<uint8_t, 2>>;
+	bool disable_output(DISABLE_OUTPUT& future, bool output_value = false)
+	{
+		ControlRegister control;
+		control.out = output_value;
+		typename ENABLE_OUTPUT::IN input;
+		input[0] = CONTROL_ADDRESS;
+		input[1] = control.data;
+		future.reset_input(input);
+		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+	}
+
 	private:
 	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 	static constexpr const uint8_t RAM_START = 0x08;
 	static constexpr const uint8_t RAM_END = 0x40;
 	static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
 	static constexpr const uint8_t TIME_ADDRESS = 0x00;
+	static constexpr const uint8_t CLOCK_HALT = 0x80;
+	static constexpr const uint8_t CONTROL_ADDRESS = 0x07;
+
+	union ControlRegister
+	{
+		explicit ControlRegister(uint8_t data = 0) : data{data} {}
+
+		uint8_t data;
+		struct
+		{
+			uint8_t rs : 2;
+			uint8_t res1 : 2;
+			uint8_t sqwe : 1;
+			uint8_t res2 : 2;
+			uint8_t out : 1;
+		};
+	};
 };
