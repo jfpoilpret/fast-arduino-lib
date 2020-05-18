@@ -34,7 +34,6 @@
 
 //TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
 //TODO add policies for behavior on error (retry, clear queue...)
-//TODO add namespaces where needed
 
 // MAIN IDEA:
 // - have a queue of "I2C commands" records
@@ -172,26 +171,20 @@ static void trace_send_data(streams::ostream& out, bool reset = true)
 
 // I2C async specific definitions
 //================================
-//TODO improve by using usual isr_handler struct for callback handlers!
-#define REGISTER_I2C_ISR(MODE)                                                  \
-ISR(TWI_vect)                                                                   \
-{                                                                               \
-	interrupt::HandlerHolder<i2c::I2CHandler<MODE>>::handler()->i2c_change();   \
+#define REGISTER_I2C_ISR(MODE)                                  \
+ISR(TWI_vect)                                                   \
+{                                                               \
+	i2c::isr_handler::i2c_change<MODE>();                       \
 }
-#define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)                                   \
-ISR(TWI_vect)                                                                       \
-{                                                                                   \
-	I2CCallback callback =                                                          \
-		interrupt::HandlerHolder<i2c::I2CHandler<MODE>>::handler()->i2c_change();   \
-	if (callback != i2c::I2CCallback::NONE) CALLBACK(callback);                     \
+#define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)               \
+ISR(TWI_vect)                                                   \
+{                                                               \
+	i2c::isr_handler::i2c_change<MODE, CALLBACK>();             \
 }
-#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)                                            \
-ISR(TWI_vect)                                                                                       \
-{                                                                                                   \
-	i2c::I2CCallback callback =                                                                     \
-		interrupt::HandlerHolder<i2c::I2CHandler<MODE>>::handler()->i2c_change();                   \
-	if (callback != i2c::I2CCallback::NONE)                                                         \
-		interrupt::CallbackHandler<void (HANDLER::*)(i2c::I2CCallback), CALLBACK>::call(callback);  \
+#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)        \
+ISR(TWI_vect)                                                   \
+{                                                               \
+	i2c::isr_handler::i2c_change<MODE, HANDLER, CALLBACK>();    \
 }
 
 namespace i2c
@@ -240,8 +233,6 @@ namespace i2c
 		constexpr I2CCommand& operator=(const I2CCommand&) = default;
 
 	private:
-		//TODO if these shall be made public, then reorder arguments and set defaults!!
-		//TODO if public, use enum args instead of bool maybe (more readable)
 		static constexpr I2CCommand none()
 		{
 			return I2CCommand{};
@@ -624,7 +615,34 @@ namespace i2c
 		uint8_t status_ = 0;
 
 		template<i2c::I2CMode> friend class AbstractDevice;
-		DECL_TWI_FRIENDS
+		friend struct isr_handler;
+	};
+
+	struct isr_handler
+	{
+		template<I2CMode MODE_>
+		void i2c_change()
+		{
+			using HANDLER = I2CHandler<MODE_>;
+			interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
+		}
+
+		template<I2CMode MODE_, void (*CALLBACK_)(I2CCallback)>
+		void i2c_change()
+		{
+			using HANDLER = I2CHandler<MODE_>;
+			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
+			if (callback != I2CCallback::NONE) CALLBACK(callback);
+		}
+
+		template<I2CMode MODE_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(I2CCallback)>
+		void i2c_change()
+		{
+			using HANDLER = I2CHandler<MODE_>;
+			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
+			if (callback != I2CCallback::NONE)
+				interrupt::CallbackHandler<void (HANDLER_::*)(I2CCallback), CALLBACK_>::call(callback);
+		}
 	};
 }
 
