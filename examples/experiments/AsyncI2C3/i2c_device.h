@@ -42,10 +42,6 @@ namespace i2c
 	{
 		return I2CFinish(uint8_t(f1) & uint8_t(f2));
 	}
-	// bool operator bool(I2CFinish f)
-	// {
-	// 	return uint8_t(f) != 0;
-	// }
 
 	template<i2c::I2CMode MODE>
 	class AbstractDevice
