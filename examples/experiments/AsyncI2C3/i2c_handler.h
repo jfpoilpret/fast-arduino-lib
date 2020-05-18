@@ -171,24 +171,31 @@ static void trace_send_data(streams::ostream& out, bool reset = true)
 
 // I2C async specific definitions
 //================================
-#define REGISTER_I2C_ISR(MODE)                                  \
-ISR(TWI_vect)                                                   \
-{                                                               \
-	i2c::isr_handler::i2c_change<MODE>();                       \
+#define REGISTER_I2C_ISR(MODE)                                      \
+ISR(TWI_vect)                                                       \
+{                                                                   \
+	i2c::isr_handler::i2c_change<MODE>();                           \
 }
-#define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)               \
-ISR(TWI_vect)                                                   \
-{                                                               \
-	i2c::isr_handler::i2c_change<MODE, CALLBACK>();             \
+#define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)                   \
+ISR(TWI_vect)                                                       \
+{                                                                   \
+	i2c::isr_handler::i2c_change_function<MODE, CALLBACK>();        \
 }
-#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)        \
-ISR(TWI_vect)                                                   \
-{                                                               \
-	i2c::isr_handler::i2c_change<MODE, HANDLER, CALLBACK>();    \
+#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)            \
+ISR(TWI_vect)                                                       \
+{                                                                   \
+	i2c::isr_handler::i2c_change_method<MODE, HANDLER, CALLBACK>(); \
 }
 
 namespace i2c
 {
+	enum class I2CErrorPolicy : uint8_t
+	{
+		CONTINUE = 0,
+		CLEAR_ALL_COMMANDS,
+		CLEAR_TRANSACTION_COMMANDS
+		//TODO RETRY_COMMAND if this was possible (need complete reset of Future!)
+	};
 
 	// Used by TWI ISR to potentially call a registered callback
 	enum class I2CCallback : uint8_t
@@ -269,8 +276,9 @@ namespace i2c
 		I2CHandler(const I2CHandler<MODE_>&) = delete;
 		I2CHandler<MODE_>& operator=(const I2CHandler<MODE_>&) = delete;
 
-		template<uint8_t SIZE>
-		explicit I2CHandler(I2CCommand (&buffer)[SIZE]) : commands_{buffer}
+		template<uint8_t SIZE> explicit 
+		I2CHandler(I2CCommand (&buffer)[SIZE], I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
+			:	commands_{buffer}, error_policy_{error_policy}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -605,6 +613,7 @@ namespace i2c
 		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(DELAY_AFTER_STOP_US);
 
 		containers::Queue<I2CCommand> commands_;
+		I2CErrorPolicy error_policy_;
 
 		// Status of current command processing
 		I2CCommand command_;
@@ -621,22 +630,22 @@ namespace i2c
 	struct isr_handler
 	{
 		template<I2CMode MODE_>
-		void i2c_change()
+		static void i2c_change()
 		{
 			using HANDLER = I2CHandler<MODE_>;
 			interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
 		}
 
 		template<I2CMode MODE_, void (*CALLBACK_)(I2CCallback)>
-		void i2c_change()
+		static void i2c_change_function()
 		{
 			using HANDLER = I2CHandler<MODE_>;
 			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
-			if (callback != I2CCallback::NONE) CALLBACK(callback);
+			if (callback != I2CCallback::NONE) CALLBACK_(callback);
 		}
 
 		template<I2CMode MODE_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(I2CCallback)>
-		void i2c_change()
+		static void i2c_change_method()
 		{
 			using HANDLER = I2CHandler<MODE_>;
 			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
