@@ -32,25 +32,21 @@
 
 #include "array.h"
 
-//TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
-//TODO add policies for behavior on error (retry, clear queue...)
-
 // MAIN IDEA:
 // - have a queue of "I2C commands" records
-// - each command is either a read or a write and contains all necessary data
+// - each command is either a read or a write and contains important flags for handling the command
 // - handling of each command is broken down into sequential steps (State)
 // - dequeue and execute each command from TWI ISR, call back when the last step of 
 //   a command is finished or an error occurred
 // - consecutive commands in the queue are chained with repeat start conditions
 // - the last command in the queue is finished with a stop condition
-// - for sent or received data, a system of Promise & Future (independent API) is
+// - for sent or received data, a system of Future (independent API) is
 //   used to hold data until it is not needed anymore and can be released
-// - the device API shall return a Promise/Future that can be used asynchronously later on
+// - the device API shall return a Future that can be used asynchronously later on
 // NOTE: no dynamic allocation shall be used!
 
 // OPEN POINTS:
 // - implement proper callback registration (only one callback, can be an event supplier)
-// - should sync and async handler code cohabitate? or use only async but allow devices to await (sync) or not (async) 
 //
 // - ATtiny support: what's feasible with USI?
 
@@ -191,10 +187,8 @@ namespace i2c
 {
 	enum class I2CErrorPolicy : uint8_t
 	{
-		CONTINUE = 0,
 		CLEAR_ALL_COMMANDS,
 		CLEAR_TRANSACTION_COMMANDS
-		//TODO RETRY_COMMAND if this was possible (need complete reset of Future!)
 	};
 
 	// Used by TWI ISR to potentially call a registered callback
@@ -228,7 +222,7 @@ namespace i2c
 		bool finish_future : 1;
 
 		friend class I2CCommand;
-		template<i2c::I2CMode> friend class I2CHandler;
+		template<I2CMode> friend class I2CHandler;
 	};
 
 	// Command in the queue
@@ -263,15 +257,15 @@ namespace i2c
 		uint8_t target = 0;
 		uint8_t future_id = 0;
 
-		template<i2c::I2CMode> friend class I2CHandler;
-		template<i2c::I2CMode> friend class AbstractDevice;
+		template<I2CMode> friend class I2CHandler;
+		template<I2CMode> friend class AbstractDevice;
 	};
 
 	// This is an asynchronous I2C handler
-	template<i2c::I2CMode MODE_> class I2CHandler
+	template<I2CMode MODE_> class I2CHandler
 	{
 	public:
-		static constexpr const i2c::I2CMode MODE = MODE_;
+		static constexpr const I2CMode MODE = MODE_;
 
 		I2CHandler(const I2CHandler<MODE_>&) = delete;
 		I2CHandler<MODE_>& operator=(const I2CHandler<MODE_>&) = delete;
@@ -429,7 +423,7 @@ namespace i2c
 			debug_status[debug_status_index++] = DebugStatus::START;
 	#endif
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
-			expected_status_ = i2c::Status::START_TRANSMITTED;
+			expected_status_ = Status::START_TRANSMITTED;
 		}
 		void exec_repeat_start_()
 		{
@@ -437,7 +431,7 @@ namespace i2c
 			debug_status[debug_status_index++] = DebugStatus::REPEAT_START;
 	#endif
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
-			expected_status_ = i2c::Status::REPEAT_START_TRANSMITTED;
+			expected_status_ = Status::REPEAT_START_TRANSMITTED;
 		}
 		void exec_send_slar_()
 		{
@@ -447,7 +441,7 @@ namespace i2c
 			// Read device address from queue
 			TWDR_ = command_.target | 0x01U;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
-			expected_status_ = i2c::Status::SLA_R_TRANSMITTED_ACK;
+			expected_status_ = Status::SLA_R_TRANSMITTED_ACK;
 		}
 		void exec_send_slaw_()
 		{
@@ -457,7 +451,7 @@ namespace i2c
 			// Read device address from queue
 			TWDR_ = command_.target;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
-			expected_status_ = i2c::Status::SLA_W_TRANSMITTED_ACK;
+			expected_status_ = Status::SLA_W_TRANSMITTED_ACK;
 		}
 		void exec_send_data_()
 		{
@@ -466,8 +460,10 @@ namespace i2c
 	#endif
 			// Determine next data byte
 			uint8_t data = 0;
-			//TODO handle error here?
 			bool ok = future::AbstractFutureManager::instance().get_storage_value_(command_.future_id, data);
+			// This should only happen if there are 2 concurrent consumers for that Future
+			if (!ok)
+				future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EILSEQ);
 	#ifdef DEBUG_SEND_OK
 			if (ok)
 				debug_status[debug_status_index++] = DebugStatus::SEND_OK;
@@ -481,8 +477,7 @@ namespace i2c
 			debug_send_data[debug_send_index++] = data;
 	#endif
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
-			//TODO it is possible to get NACK on the last sent byte! That should not be an error!
-			expected_status_ = i2c::Status::DATA_TRANSMITTED_ACK;
+			expected_status_ = Status::DATA_TRANSMITTED_ACK;
 		}
 		void exec_receive_data_()
 		{
@@ -494,7 +489,7 @@ namespace i2c
 	#endif
 				// Send NACK for the last data byte we want
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
-				expected_status_ = i2c::Status::DATA_RECEIVED_NACK;
+				expected_status_ = Status::DATA_RECEIVED_NACK;
 			}
 			else
 			{
@@ -503,7 +498,7 @@ namespace i2c
 	#endif
 				// Send ACK for data byte if not the last one we want
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
-				expected_status_ = i2c::Status::DATA_RECEIVED_ACK;
+				expected_status_ = Status::DATA_RECEIVED_ACK;
 			}
 		}
 		void exec_stop_(bool error = false)
@@ -521,20 +516,50 @@ namespace i2c
 			_delay_loop_1(DELAY_AFTER_STOP);
 		}
 
+		bool check_no_error()
+		{
+			if (status_ == expected_status_) return true;
+			// handle special case of last transmitted byte
+			//TODO this should be OK ONLY IF there is no more byte to send!
+			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
+				&&	(status_ == Status::DATA_TRANSMITTED_NACK))
+				return true;
+
+			// The future must be marked as error
+			future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EPROTO);
+			switch (error_policy_)
+			{
+				case I2CErrorPolicy::CLEAR_ALL_COMMANDS:
+				// Clear all pending transactions from queue
+				commands_.clear_();
+				break;
+
+				case I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS:
+				// Clear command belonging to the same transaction (i.e. same future)
+				{
+					const uint8_t id = command_.future_id;
+					I2CCommand command;
+					while (commands_.peek_(command))
+					{
+						if (command.future_id != id)
+							break;
+						commands_.pull_(command);
+					}
+				}
+				break;
+			}
+			// In case of an error, immediately send a STOP condition
+			exec_stop_(true);
+			dequeue_command_(true);
+			return false;
+		}
+
 		I2CCallback i2c_change()
 		{
 			// Check status Vs. expected status
 			status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
-			if (status_ != expected_status_)
-			{
-				// Clear all pending transactions from queue
-				//TODO that behavior could be customizable (clear all, or clear only current I2C transaction)
-				commands_.clear_();
-				// In case of an error, immediately send a STOP condition
-				exec_stop_(true);
-				//TODO possibly retry command instead
+			if (!check_no_error())
 				return I2CCallback::ERROR;
-			}
 			
 			// Handle TWI interrupt when data received
 			if (current_ == State::RECV || current_ == State::RECV_LAST)
@@ -544,6 +569,9 @@ namespace i2c
 				debug_recv_data[debug_recv_index++] = data;
 	#endif
 				bool ok = future::AbstractFutureManager::instance().set_future_value_(command_.future_id, data);
+				// This should only happen in case there are 2 concurrent providers for this future
+				if (!ok)
+					future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EILSEQ);
 	#ifdef DEBUG_RECV_OK
 				if (ok)
 					debug_status[debug_status_index++] = DebugStatus::RECV_OK;
@@ -604,12 +632,12 @@ namespace i2c
 
 		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100'000UL - 16UL) / 2;
 		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400'000UL - 16UL) / 2;
-		static constexpr const uint8_t TWBR_VALUE = (MODE == i2c::I2CMode::STANDARD ? STANDARD_FREQUENCY : FAST_FREQUENCY);
+		static constexpr const uint8_t TWBR_VALUE = (MODE == I2CMode::STANDARD ? STANDARD_FREQUENCY : FAST_FREQUENCY);
 
 		static constexpr const float STANDARD_DELAY_AFTER_STOP_US = 4.0 + 4.7;
 		static constexpr const float FAST_DELAY_AFTER_STOP_US = 0.6 + 1.3;
 		static constexpr const float DELAY_AFTER_STOP_US =
-			(MODE == i2c::I2CMode::STANDARD ? STANDARD_DELAY_AFTER_STOP_US : FAST_DELAY_AFTER_STOP_US);
+			(MODE == I2CMode::STANDARD ? STANDARD_DELAY_AFTER_STOP_US : FAST_DELAY_AFTER_STOP_US);
 		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(DELAY_AFTER_STOP_US);
 
 		containers::Queue<I2CCommand> commands_;
@@ -623,7 +651,7 @@ namespace i2c
 		// Latest I2C status
 		uint8_t status_ = 0;
 
-		template<i2c::I2CMode> friend class AbstractDevice;
+		template<I2CMode> friend class AbstractDevice;
 		friend struct isr_handler;
 	};
 
