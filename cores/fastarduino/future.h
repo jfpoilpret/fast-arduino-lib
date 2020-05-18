@@ -142,11 +142,29 @@ namespace future
 			return *instance_;
 		}
 
-		//TODO DOC with mention NEVER USE (internal API)!
+		/**
+		 * Register a newly instantiated `AbstractFuture` with this `AbstractFutureManager`.
+		 * @warning DO NOT USE THIS METHOD! This method was made `public` because
+		 * no better way could be found to make it visible to other parts FastArduino API.
+		 * But you should never use it in your own programs.
+		 * You should use `AbstractFutureManager.register_future(Future<OUT, IN>&)` instead.
+		 * 
+		 * @sa AbstractFutureManager.register_future(Future<OUT, IN>&)
+		 */
 		bool register_future(AbstractFuture& future)
 		{
 			synchronized return register_future_(future);
 		}
+
+		/**
+		 * Register a newly instantiated `AbstractFuture` with this `AbstractFutureManager`.
+		 * @warning DO NOT USE THIS METHOD! This method was made `public` because
+		 * no better way could be found to make it visible to other parts FastArduino API.
+		 * But you should never use it in your own programs.
+		 * You should use `AbstractFutureManager.register_future_(Future<OUT, IN>&)` instead.
+		 * 
+		 * @sa AbstractFutureManager.register_future_(Future<OUT, IN>&)
+		 */
 		bool register_future_(AbstractFuture& future);
 
 		/**
@@ -241,7 +259,22 @@ namespace future
 			return free;
 		}
 
-		//TODO DOC
+		/**
+		 * Check the number of bytes remaining to write to the output value of
+		 * a Future identified by @p id.
+		 * This method is called by a Future output value producer to know how many
+		 * bytes remain to write until the end of the output value.
+		 * 
+		 * This method is synchronized, it shall be called from outside an ISR.
+		 * If you need the same feature called from an ISR, then you shall use 
+		 * `AbstractFutureManager.get_future_value_size_()` instead.
+		 * 
+		 * @param id the unique id of the Future to query
+		 * @return the number of bytes to be written to the output value stored
+		 * in Future identified by id @p id
+		 * 
+		 * @sa get_future_value_size_()
+		 */
 		uint8_t get_future_value_size(uint8_t id) const
 		{
 			synchronized return get_future_value_size_(id);
@@ -405,7 +438,22 @@ namespace future
 			synchronized return set_future_error_(id, error);
 		}
 
-		//TODO DOCS
+		/**
+		 * Check the number of bytes remaining to read from a Future identified
+		 * by @p id.
+		 * This method is called by a Future input value consumer to know how many
+		 * bytes remain to get read until the end of the input value.
+		 * 
+		 * This method is synchronized, it shall be called from outside an ISR.
+		 * If you need the same feature called from an ISR, then you shall use 
+		 * `AbstractFutureManager.get_storage_value_size_()` instead.
+		 * 
+		 * @param id the unique id of the Future that shall be marked ready
+		 * @return the number of bytes to be read from the input value stored
+		 * by Future identified by id @p id
+		 * 
+		 * @sa get_storage_value_size_()
+		 */
 		uint8_t get_storage_value_size(uint8_t id) const
 		{
 			synchronized return get_storage_value_size_(id);
@@ -480,7 +528,23 @@ namespace future
 			synchronized return get_storage_value_(id, chunk, size);
 		}
 
-		//TODO DOC
+		/**
+		 * Check the number of bytes remaining to write to the output value of
+		 * a Future identified by @p id.
+		 * This method is called by a Future output value producer to know how many
+		 * bytes remain to write until the end of the output value.
+		 * 
+		 * This method is not synchronized, it shall be called exclusively from an ISR,
+		 * or possibly from inside a `synchronized` block.
+		 * If you need the same feature with synchronization, then you shall use 
+		 * `AbstractFutureManager.get_future_value_size()` instead.
+		 * 
+		 * @param id the unique id of the Future to query
+		 * @return the number of bytes to be written to the output value stored
+		 * in Future identified by id @p id
+		 * 
+		 * @sa get_future_value_size()
+		 */
 		uint8_t get_future_value_size_(uint8_t id) const;
 
 		/**
@@ -631,7 +695,23 @@ namespace future
 		 */
 		bool set_future_error_(uint8_t id, int error) const;
 
-		//TODO DOCS
+		/**
+		 * Check the number of bytes remaining to read from a Future identified
+		 * by @p id.
+		 * This method is called by a Future input value consumer to know how many
+		 * bytes remain to get read until the end of the input value.
+		 * 
+		 * This method is not synchronized, it shall be called exclusively from an ISR,
+		 * or possibly from inside a `synchronized` block.
+		 * If you need the same feature with synchronization, then you shall use 
+		 * `AbstractFutureManager.get_storage_value_size()` instead.
+		 * 
+		 * @param id the unique id of the Future that shall be marked ready
+		 * @return the number of bytes to be read from the input value stored
+		 * by Future identified by id @p id
+		 * 
+		 * @sa get_storage_value_size()
+		 */
 		uint8_t get_storage_value_size_(uint8_t id) const;
 
 		/**
@@ -1128,8 +1208,9 @@ namespace future
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 	public:
-		//TODO DOCS
+		/** Type of the output value of this Future. */
 		using OUT = OUT_;
+		/** Type of the input value of this Future. */
 		using IN = IN_;
 
 		/** 
@@ -1221,11 +1302,46 @@ namespace future
 		Future<OUT, IN>& operator=(const Future<OUT, IN>&) = delete;
 		/// @endcond
 
-		//TODO DOCS
+		/**
+		 * Reset the input storage value held by this Future with a new value.
+		 * This is possible only if no consumer has started reading the current 
+		 * input storage value yet.
+		 * 
+		 * This method is synchronized, it shall be called from outside an ISR.
+		 * If you need the same feature called from an ISR, then you shall use 
+		 * `reset_input_()` instead.
+		 * 
+		 * @param input a value to be copied to this Future input storage value;
+		 * this argument does not exist when @p IN is `void`.
+		 * @retval true if the input strage value has been successfully replaced
+		 * @retval false if the input strage value could not be replaced because 
+		 * a consumer already started reading the previous input storage value
+		 * 
+		 * @sa reset_input_()
+		 */
 		bool reset_input(const IN& input)
 		{
 			synchronized return reset_input_(input);
 		}
+
+		/**
+		 * Reset the input storage value held by this Future with a new value.
+		 * This is possible only if no consumer has started reading the current 
+		 * input storage value yet.
+		 * 
+		 * This method is not synchronized, it shall be called exclusively from an ISR,
+		 * or possibly from inside a `synchronized` block.
+		 * If you need the same feature with synchronization, then you shall use 
+		 * `reset_input()` instead.
+		 * 
+		 * @param input a value to be copied to this Future input storage value;
+		 * this argument does not exist when @p IN is `void`.
+		 * @retval true if the input strage value has been successfully replaced
+		 * @retval false if the input strage value could not be replaced because 
+		 * a consumer already started reading the previous input storage value
+		 * 
+		 * @sa reset_input()
+		 */
 		bool reset_input_(const IN& input)
 		{
 			if (!can_replace_input_()) return false;
