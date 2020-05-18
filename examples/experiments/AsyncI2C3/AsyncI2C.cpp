@@ -5,9 +5,6 @@
  * For tests, I just use a DS1307 connected through I2C (SDA/SCL) to an Arduino UNO.
  */
 
-//TODO improvements
-// - Add sync RTC based on Async RTC
-
 #include <util/delay_basic.h>
 
 #include <fastarduino/i2c.h>
@@ -345,12 +342,14 @@ int main()
 			if (!rtc.set_ram(i, i * 2))
 				out << F("G") << endl;
 		}
+		trace(out);
 		out << F("\nTEST #5.2 get 1 RAM byte (expected 2i)") << endl;
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
 			uint8_t data = rtc.get_ram(i);
 			out << F("get(") << dec << i << F(")=") << hex << data << endl;
 		}
+		trace(out);
 
 		time::delay_ms(1000);
 
@@ -362,18 +361,57 @@ int main()
 			if (!rtc.set_ram(0, data))
 				out << F("S") << endl;
 		}
+		trace(out);
 		out << F("\nTEST #5.4 get all RAM bytes (expected 2i+1") << endl;
 		{
 			uint8_t data[RAM_SIZE];
 			if (!rtc.get_ram(0, data))
 				out << F("G") << endl;
-			for (uint8_t i; i < RAM_SIZE; ++i)
+			for (uint8_t i = 0; i < RAM_SIZE; ++i)
 				out << F("get(") << dec << i << F(")=") << hex << data[i] << endl;
 		}
+		trace(out);
 
-		//TODO set/get datetime
+		time::delay_ms(1000);
 
-		//TODO halt clock
+		out << F("\nTEST #5.5 get datetime (should be: Wed 06.05.2020 20:00:XX") << endl;
+		{
+			tm datetime;
+			if (!rtc.get_datetime(datetime))
+				out << F("G") << endl;
+			display_time(out, datetime);
+		}
+		trace(out);
+
+		out << F("\nTEST #5.6 set datetime (Mon 18.05.2020 12:54:00)") << endl;
+		{
+			tm datetime;
+			datetime.tm_year = 20;
+			datetime.tm_mon = 5;
+			datetime.tm_mday = 18;
+			datetime.tm_wday = WeekDay::MONDAY;
+			datetime.tm_hour = 12;
+			datetime.tm_min = 54;
+			datetime.tm_sec = 0;
+			if (!rtc.set_datetime(datetime))
+				out << F("S") << endl;
+		}
+		trace(out);
+
+		{
+			out << F("\nTEST #5.7 halt clock") << endl;
+			if (!rtc.halt_clock())
+				out << F("H") << endl;
+			trace(out);
+			time::delay_ms(5000);
+
+			out << F("\nTEST #5.8 get datetime (should be: Mon 18.05.2020 12:54:80)") << endl;
+			tm datetime;
+			if (!rtc.get_datetime(datetime))
+				out << F("G") << endl;
+			trace(out);
+			display_time(out, datetime);
+		}
 	}
 #endif
 
