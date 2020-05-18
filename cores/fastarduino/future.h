@@ -845,7 +845,6 @@ namespace future
 		ERROR
 	};
 
-	//TODO add API to set/replace IN value (under some conditions on status?)
 	/**
 	 * Base class for all `Future`s.
 	 * This defines most API and implementation of a Future.
