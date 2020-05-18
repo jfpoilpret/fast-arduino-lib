@@ -519,10 +519,10 @@ namespace i2c
 		bool check_no_error()
 		{
 			if (status_ == expected_status_) return true;
-			// handle special case of last transmitted byte
-			//TODO this should be OK ONLY IF there is no more byte to send!
+			// Handle special case of last transmitted byte possibly not acknowledged by device
 			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
-				&&	(status_ == Status::DATA_TRANSMITTED_NACK))
+				&&	(status_ == Status::DATA_TRANSMITTED_NACK)
+				&&	(future::AbstractFutureManager::instance().get_storage_value_size_(command_.future_id) == 0))
 				return true;
 
 			// The future must be marked as error
