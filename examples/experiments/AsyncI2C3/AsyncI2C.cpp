@@ -339,7 +339,7 @@ int main()
 		out << F("TEST #5.1 set 1 RAM byte") << endl;
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
-			if (!rtc.set_ram(i, i * 2))
+			if (!rtc.set_ram(i, uint8_t(i * 2)))
 				out << F("G") << endl;
 		}
 		trace(out);

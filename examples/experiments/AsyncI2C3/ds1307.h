@@ -336,19 +336,21 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		memcpy(data, temp.data(), SIZE);
 		return true;
 	}
-	//TODO try to uncomment following methdos, and check compile and run
-	// template<typename T> bool set_ram(uint8_t address, const T& data)
-	// {
-	// 	SET_RAM<sizeof(T)> future{address, reinterpret_cast<const uint8_t*>(&data)};
-	// 	if (set_ram(future) != 0) return false;
-	// 	return (future.await() == future::FutureStatus::READY);
-	// }
-	// template<typename T> bool get_ram(uint8_t address, T& data)
-	// {
-	// 	GET_RAM<sizeof(T)> future{address};
-	// 	if (get_ram(future) != 0) return false;
-	// 	return future.get(reinterpret_cast<uint8_t&>(data));
-	// }
+
+	template<typename T> bool set_ram(uint8_t address, const T& data)
+	{
+		uint8_t temp[sizeof(T)];
+		utils::as_array<T>(data, temp);
+		SET_RAM<sizeof(T)> future{address, temp};
+		if (set_ram(future) != 0) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
+	template<typename T> bool get_ram(uint8_t address, T& data)
+	{
+		GET_RAM<sizeof(T)> future{address};
+		if (get_ram(future) != 0) return false;
+		return future.get(reinterpret_cast<uint8_t&>(data));
+	}
 
 	private:
 	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
