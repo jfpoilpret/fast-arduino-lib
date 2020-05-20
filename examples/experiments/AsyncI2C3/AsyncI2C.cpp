@@ -95,9 +95,6 @@ void trace(streams::ostream& out, bool reset = true)
 #endif
 }
 
-// REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
-REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
-
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 
@@ -107,6 +104,70 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static constexpr uint8_t MAX_FUTURES = 128;
 
 using namespace streams;
+
+// Callback handler
+class RTCCallback
+{
+public:
+	RTCCallback()
+	{
+		interrupt::register_handler(*this);
+	}
+
+	void reset()
+	{
+		synchronized
+		{
+			count_commands_ = count_transactions_ = count_errors_ = 0;
+		}
+	}
+
+	uint16_t count_errors() const
+	{
+		synchronized return count_errors_;
+	}
+
+	uint16_t count_commands() const
+	{
+		synchronized return count_commands_;
+	}
+
+	uint16_t count_transactions() const
+	{
+		synchronized return count_transactions_;
+	}
+
+private:
+	void callback(i2c::I2CCallback result)
+	{
+		switch (result)
+		{
+			case i2c::I2CCallback::ERROR:
+			++count_errors_;
+			break;
+
+			case i2c::I2CCallback::END_TRANSACTION:
+			++count_transactions_;
+			// fallback (to increment comamnds also)
+
+			case i2c::I2CCallback::END_COMMAND:
+			++count_commands_;
+			break;
+
+			default:
+			break;
+		}
+	}
+
+	uint16_t count_errors_ = 0;
+	uint16_t count_commands_ = 0;
+	uint16_t count_transactions_ = 0;
+
+	DECL_TWI_FRIENDS
+};
+
+// REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
+REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
 
 int main() __attribute__((OS_main));
 int main()
@@ -120,6 +181,9 @@ int main()
 	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 	uart.begin(115200);
 	ostream out = uart.out();
+
+	// Initialize callback handler
+	RTCCallback callback{};
 
 	// Initialize FutureManager
 	future::FutureManager<MAX_FUTURES> future_manager;
@@ -152,6 +216,9 @@ int main()
 		data.get(result);
 		out << F("get()=") << hex << result << endl;
 		trace(out);
+		out << F("callback ok = ") << dec << callback.count_ok() 
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 #else
 	{
@@ -177,6 +244,10 @@ int main()
 			out << F("get()=") << hex << result << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(1000);
@@ -201,6 +272,10 @@ int main()
 			out << F("error()=") << dec << set[i].error() << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(1000);
@@ -228,6 +303,10 @@ int main()
 			out << F("get()=") << hex << result << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(1000);
@@ -248,6 +327,10 @@ int main()
 		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
 			out << F("get(") << dec << i << F(")=") << hex << result[i] << endl;
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(1000);
@@ -266,6 +349,10 @@ int main()
 		out << F("set await()=") << set.await() << endl;
 		out << F("error()=") << dec << set.error() << endl;
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(1000);
@@ -287,6 +374,10 @@ int main()
 		out << F("set await()=") << set.await() << endl;
 		out << F("error()=") << dec << set.error() << endl;
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(13000);
@@ -303,6 +394,10 @@ int main()
 		out << F("get()=") << dec << get.get(datetime) << endl;
 		trace(out);
 		display_time(out, datetime);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(1000);
@@ -316,6 +411,10 @@ int main()
 		out << F("halt await()=") << halt.await() << endl;
 		out << F("error()=") << dec << halt.error() << endl;
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 		time::delay_ms(10000);
 
 		out << F("\nTEST #4.2 get datetime (should be: Wed 06.05.2020 20:00:14)") << endl;
@@ -329,6 +428,10 @@ int main()
 		out << F("get()=") << dec << get.get(datetime) << endl;
 		trace(out);
 		display_time(out, datetime);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 	}
 
 	time::delay_ms(1000);
@@ -343,6 +446,10 @@ int main()
 				out << F("G") << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 		out << F("\nTEST #5.2 get 1 RAM byte (expected 2i)") << endl;
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
 		{
@@ -350,6 +457,10 @@ int main()
 			out << F("get(") << dec << i << F(")=") << hex << data << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 
 		time::delay_ms(1000);
 
@@ -362,6 +473,11 @@ int main()
 				out << F("S") << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
+
 		out << F("\nTEST #5.4 get all RAM bytes (expected 2i+1") << endl;
 		{
 			uint8_t data[RAM_SIZE];
@@ -371,6 +487,10 @@ int main()
 				out << F("get(") << dec << i << F(")=") << hex << data[i] << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 
 		time::delay_ms(1000);
 
@@ -382,6 +502,10 @@ int main()
 			display_time(out, datetime);
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 
 		out << F("\nTEST #5.6 set datetime (Mon 18.05.2020 12:54:00)") << endl;
 		{
@@ -397,12 +521,20 @@ int main()
 				out << F("S") << endl;
 		}
 		trace(out);
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
+			<< F(", errors = ") << dec << callback.count_errors() << endl;
+		callback.reset();
 
 		{
 			out << F("\nTEST #5.7 halt clock") << endl;
 			if (!rtc.halt_clock())
 				out << F("H") << endl;
 			trace(out);
+			out << F("callback trans = ") << dec << callback.count_transactions() 
+				<< F(", commands = ") << dec << callback.count_commands()
+				<< F(", errors = ") << dec << callback.count_errors() << endl;
+			callback.reset();
 			time::delay_ms(5000);
 
 			out << F("\nTEST #5.8 get datetime (should be: Mon 18.05.2020 12:54:80)") << endl;
@@ -411,6 +543,10 @@ int main()
 				out << F("G") << endl;
 			trace(out);
 			display_time(out, datetime);
+			out << F("callback trans = ") << dec << callback.count_transactions() 
+				<< F(", commands = ") << dec << callback.count_commands()
+				<< F(", errors = ") << dec << callback.count_errors() << endl;
+			callback.reset();
 		}
 	}
 #endif

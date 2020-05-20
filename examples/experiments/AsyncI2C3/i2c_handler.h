@@ -195,7 +195,8 @@ namespace i2c
 	enum class I2CCallback : uint8_t
 	{
 		NONE = 0,
-		NORMAL_STOP,
+		END_COMMAND,
+		END_TRANSACTION,
 		ERROR
 	};
 
@@ -516,6 +517,12 @@ namespace i2c
 			_delay_loop_1(DELAY_AFTER_STOP);
 		}
 
+		bool is_end_transaction() const
+		{
+			I2CCommand command;
+			return !(commands_.peek_(command) && command.future_id == command_.future_id);
+		}
+
 		bool check_no_error()
 		{
 			if (status_ == expected_status_) return true;
@@ -583,6 +590,7 @@ namespace i2c
 			}
 
 			// Handle next step in current command
+			I2CCallback result = I2CCallback::NONE;
 			current_ = next_state_();
 			switch (current_)
 			{
@@ -612,6 +620,7 @@ namespace i2c
 				// Check if we need to finish the current future
 				if (command_.type.finish_future)
 					future::AbstractFutureManager::instance().set_future_finish_(command_.future_id);
+				result = (is_end_transaction() ? I2CCallback::END_TRANSACTION : I2CCallback::END_COMMAND);
 				// Check if we need to STOP (no more pending commands in queue)
 				if (commands_.empty_())
 					exec_stop_();
@@ -625,9 +634,8 @@ namespace i2c
 				else
 					// Handle next command
 					dequeue_command_(false);
-				return I2CCallback::NORMAL_STOP;
 			}
-			return I2CCallback::NONE;
+			return result;
 		}
 
 		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100'000UL - 16UL) / 2;
