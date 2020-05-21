@@ -17,12 +17,10 @@
 #define ARRAY_HH
 
 #include <stdint.h>
-#include <string.h>
 #include "initializer_list.h"
 
 namespace containers
 {
-	//FIXME probably need to replace memset/memcpy with loops using T ctors/assign-op
 	/**
 	 * Container that encapsulates a fixed size array.
 	 * This can be used as would be a C-style array (same operators) without any
@@ -51,23 +49,18 @@ namespace containers
 
 		/**
 		 * Create a default array of @p N elements of type @p T.
-		 * @warning
-		 * Whatever @p T type, the array content will be filled with `0` bytes.
 		 */
-		array()
-		{
-			memset(buffer_, 0, N * sizeof(T));
-		}
+		array() = default;
 
 		/**
 		 * Convert a C-style array to an array.
-		 * @warning
-		 * Whatever @p T type, the array content will be copied, byte per byte,
-		 * from @p buffer.
 		 */
 		array(T buffer[N])
 		{
-			memcpy(buffer_, buffer, N * sizeof(T));
+			T* dst = buffer_;
+			const T* src = buffer;
+			for (uint8_t i = 0; i < N; ++i)
+				*dst++ = *src++;
 		}
 
 		/**
@@ -90,24 +83,24 @@ namespace containers
 
 		/**
 		 * Copy @p that array.
-		 * @warning
-		 * Whatever @p T type, the array content will be copied, byte per byte,
-		 * from @p that. No T constructor will be called.
 		 */
 		array(const array<T, N>& that)
 		{
-			memcpy(buffer_, that.buffer_, N * sizeof(T));
+			T* dst = buffer_;
+			const T* src = that.buffer_;
+			for (uint8_t i = 0; i < N; ++i)
+				*dst++ = *src++;
 		}
 
 		/**
 		 * Overwrite every element of this array with every element of @p buffer.
-		 * @warning
-		 * Whatever @p T type, the array content will be copied, byte per byte,
-		 * from @p that. No T assignment operator will be called.
 		 */
 		array<T, N>& operator=(const T buffer[N])
 		{
-			memcpy(buffer_, buffer, N * sizeof(T));
+			T* dst = buffer_;
+			const T* src = buffer;
+			for (uint8_t i = 0; i < N; ++i)
+				*dst++ = *src++;
 			return *this;
 		}
 
@@ -131,13 +124,13 @@ namespace containers
 
 		/**
 		 * Overwrite every element of this array with every element of @p that.
-		 * @warning
-		 * Whatever @p T type, the array content will be copied, byte per byte,
-		 * from @p that. No T assignment operator will be called.
 		 */
 		array<T, N>& operator=(const array<T, N>& that)
 		{
-			memcpy(buffer_, that.buffer_, N * sizeof(T));
+			T* dst = buffer_;
+			const T* src = that.buffer_;
+			for (uint8_t i = 0; i < N; ++i)
+				*dst++ = *src++;
 			return *this;
 		}
 
@@ -193,16 +186,16 @@ namespace containers
 		/**
 		 * Replace @p NN elements of this array, starting at @p index element, with
 		 * elements from @p buffer.
-		 * @warning
-		 * Whatever @p T type, the array content will be copied, byte per byte,
-		 * from @p that. No T assignment operator will be called.
 		 */
 		template<uint8_t NN>
 		void set(uint8_t index, const T (&buffer)[NN])
 		{
 			if (index >= N) return;
 			const uint8_t nn = ((N - index) < NN) ? (N - index) : NN;
-			memcpy(&buffer_[index], buffer, nn * sizeof(T));
+			T* dst = &buffer_[index];
+			const T* src = buffer;
+			for (uint8_t i = 0; i < nn; ++i)
+				*dst++ = *src++;
 		}
 
 	private:
