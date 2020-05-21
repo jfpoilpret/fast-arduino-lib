@@ -174,7 +174,7 @@ class RTC
 		if (address >= RAM_END)
 			return errors::EINVAL;
 		auto& manager = future::AbstractFutureManager::instance();
-		//TODO maybe an abstract device class could encapsulate all that block with a list of commands in args?
+		//NOTE maybe an abstract device class could encapsulate all that block with a list of commands in args?
 		synchronized
 		{
 			// pre-conditions (must be synchronized)

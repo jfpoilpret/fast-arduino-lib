@@ -21,10 +21,6 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-//TODO add promises and futures
-//TODO support both ACK/NACK on sending? (also, error in case not all bytes sent but NACK is received)
-//TODO add policies for behavior on error (retry, clear queue...)
-
 // MAIN IDEA:
 // - have a queue of "I2C commands" records
 // - each command is either a read or a write and contains all necessary data
@@ -191,7 +187,6 @@ public:
 		return status_;
 	}
 
-	//TODO maybe make all methods not synchronized and enforce device drivers to synchronize all calls?
 	bool ensure_num_commands(uint8_t num_commands)
 	{
 		return commands_.free() >= num_commands;
@@ -370,7 +365,7 @@ private:
 			break;
 		}
 		TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
-		//TODO it is possible to get NACK on the last sent byte! That should not be an error!
+		//NOTE: it is possible to get NACK on the last sent byte! That should not be an error!
 		expected_status_ = i2c::Status::DATA_TRANSMITTED_ACK;
 	}
 	void exec_receive_data_()
@@ -412,11 +407,11 @@ private:
 		if (status_ != expected_status_)
 		{
 			// Clear all pending transactions from queue
-			//TODO that behavior could be customizable (clear all, or clear only current I2C transaction)
+			//NOTE that behavior could be customizable (clear all, or clear only current I2C transaction)
 			commands_.clear_();
 			// In case of an error, immediately send a STOP condition
 			exec_stop_(true);
-			//TODO possibly retry command instead
+			//NOTE possibly retry command instead
 			return I2CCallback::ERROR;
 		}
 		
@@ -498,7 +493,6 @@ private:
 	DECL_TWI_FRIENDS
 };
 
-//TODO improve by using usual isr_handler struct for callback handlers!
 #define REGISTER_I2C_ISR(MODE)                                              \
 ISR(TWI_vect)                                                               \
 {                                                                           \

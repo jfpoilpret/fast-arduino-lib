@@ -20,7 +20,6 @@
 #include <string.h>
 #include "initializer_list.h"
 
-//TODO DOCS
 namespace containers
 {
 	template<typename T_, uint8_t N_>

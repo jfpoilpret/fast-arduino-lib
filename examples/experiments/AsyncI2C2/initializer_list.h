@@ -16,12 +16,8 @@
 #ifndef INITIALIZER_LIST_HH
 #define INITIALIZER_LIST_HH
 
-//TODO DOCS
-
-// initializer_list adapted from GCC header TODO put copyright/license
 #pragma GCC visibility push(default)
 
-//TODO remove what's useless...
 namespace std
 {
 	template<class T> class initializer_list
