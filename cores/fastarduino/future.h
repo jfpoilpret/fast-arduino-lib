@@ -143,6 +143,31 @@ namespace future
 		}
 
 		/**
+		 * Register a newly instantiated `AbstractFuture` with this `AbstractFutureManager`.
+		 * @warning DO NOT USE THIS METHOD! This method was made `public` because
+		 * no better way could be found to make it visible to other parts FastArduino API.
+		 * But you should never use it in your own programs.
+		 * You should use `AbstractFutureManager.register_future(Future<OUT, IN>&)` instead.
+		 * 
+		 * @sa AbstractFutureManager.register_future(Future<OUT, IN>&)
+		 */
+		bool register_future(AbstractFuture& future)
+		{
+			synchronized return register_future_(future);
+		}
+
+		/**
+		 * Register a newly instantiated `AbstractFuture` with this `AbstractFutureManager`.
+		 * @warning DO NOT USE THIS METHOD! This method was made `public` because
+		 * no better way could be found to make it visible to other parts FastArduino API.
+		 * But you should never use it in your own programs.
+		 * You should use `AbstractFutureManager.register_future_(Future<OUT, IN>&)` instead.
+		 * 
+		 * @sa AbstractFutureManager.register_future_(Future<OUT, IN>&)
+		 */
+		bool register_future_(AbstractFuture& future);
+
+		/**
 		 * Register a newly instantiated Future with this `AbstractFutureManager`.
 		 * A Future is useless until it has been registered.
 		 * 
@@ -164,7 +189,7 @@ namespace future
 		 */
 		template<typename OUT, typename IN> bool register_future(Future<OUT, IN>& future)
 		{
-			synchronized return register_future_(future);
+			return register_future((AbstractFuture&) future);
 		}
 
 		/**
@@ -188,7 +213,10 @@ namespace future
 		 * @sa Future
 		 * @sa AbstractFutureManager.register_future()
 		 */
-		template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future);
+		template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future)
+		{
+			return register_future_((AbstractFuture&) future);
+		}
 
 		/**
 		 * Return the number of available `Future`s in this `AbstractFutureManager`.
@@ -229,6 +257,27 @@ namespace future
 				if (futures_[i] == nullptr)
 					++free;
 			return free;
+		}
+
+		/**
+		 * Check the number of bytes remaining to write to the output value of
+		 * a Future identified by @p id.
+		 * This method is called by a Future output value producer to know how many
+		 * bytes remain to write until the end of the output value.
+		 * 
+		 * This method is synchronized, it shall be called from outside an ISR.
+		 * If you need the same feature called from an ISR, then you shall use 
+		 * `AbstractFutureManager.get_future_value_size_()` instead.
+		 * 
+		 * @param id the unique id of the Future to query
+		 * @return the number of bytes to be written to the output value stored
+		 * in Future identified by id @p id
+		 * 
+		 * @sa get_future_value_size_()
+		 */
+		uint8_t get_future_value_size(uint8_t id) const
+		{
+			synchronized return get_future_value_size_(id);
 		}
 
 		/**
@@ -390,6 +439,27 @@ namespace future
 		}
 
 		/**
+		 * Check the number of bytes remaining to read from a Future identified
+		 * by @p id.
+		 * This method is called by a Future input value consumer to know how many
+		 * bytes remain to get read until the end of the input value.
+		 * 
+		 * This method is synchronized, it shall be called from outside an ISR.
+		 * If you need the same feature called from an ISR, then you shall use 
+		 * `AbstractFutureManager.get_storage_value_size_()` instead.
+		 * 
+		 * @param id the unique id of the Future that shall be marked ready
+		 * @return the number of bytes to be read from the input value stored
+		 * by Future identified by id @p id
+		 * 
+		 * @sa get_storage_value_size_()
+		 */
+		uint8_t get_storage_value_size(uint8_t id) const
+		{
+			synchronized return get_storage_value_size_(id);
+		}
+
+		/**
 		 * Get one byte from the input storage value of the Future identified 
 		 * by @p id.
 		 * This method is called by a Future input value consumer to consume
@@ -457,6 +527,25 @@ namespace future
 		{
 			synchronized return get_storage_value_(id, chunk, size);
 		}
+
+		/**
+		 * Check the number of bytes remaining to write to the output value of
+		 * a Future identified by @p id.
+		 * This method is called by a Future output value producer to know how many
+		 * bytes remain to write until the end of the output value.
+		 * 
+		 * This method is not synchronized, it shall be called exclusively from an ISR,
+		 * or possibly from inside a `synchronized` block.
+		 * If you need the same feature with synchronization, then you shall use 
+		 * `AbstractFutureManager.get_future_value_size()` instead.
+		 * 
+		 * @param id the unique id of the Future to query
+		 * @return the number of bytes to be written to the output value stored
+		 * in Future identified by id @p id
+		 * 
+		 * @sa get_future_value_size()
+		 */
+		uint8_t get_future_value_size_(uint8_t id) const;
 
 		/**
 		 * Mark the Future identified by @p id as `FutureStatus::READY`.
@@ -605,6 +694,25 @@ namespace future
 		 * @sa set_future_error()
 		 */
 		bool set_future_error_(uint8_t id, int error) const;
+
+		/**
+		 * Check the number of bytes remaining to read from a Future identified
+		 * by @p id.
+		 * This method is called by a Future input value consumer to know how many
+		 * bytes remain to get read until the end of the input value.
+		 * 
+		 * This method is not synchronized, it shall be called exclusively from an ISR,
+		 * or possibly from inside a `synchronized` block.
+		 * If you need the same feature with synchronization, then you shall use 
+		 * `AbstractFutureManager.get_storage_value_size()` instead.
+		 * 
+		 * @param id the unique id of the Future that shall be marked ready
+		 * @return the number of bytes to be read from the input value stored
+		 * by Future identified by id @p id
+		 * 
+		 * @sa get_storage_value_size()
+		 */
+		uint8_t get_storage_value_size_(uint8_t id) const;
 
 		/**
 		 * Get one byte from the input storage value of the Future identified 
@@ -920,6 +1028,17 @@ namespace future
 			status_ = FutureStatus::INVALID;
 		}
 
+		// This method is called by subclass to check if input is replaceable,
+		// i.e. it has not been read yet
+		bool can_replace_input() const
+		{
+			synchronized return can_replace_input_();
+		}
+		bool can_replace_input_() const
+		{
+			return (input_current_ == input_data_);
+		}
+
 		// This method is called by subclass in their move constructor and assignment operator
 		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
 		{
@@ -931,7 +1050,7 @@ namespace future
 			status_ = that.status_;
 			error_ = that.error_;
 			output_size_ = that.output_size_;
-			input_size_ -= that.input_size_;
+			input_size_ = that.input_size_;
 			// Calculate data pointer attribute for next set value calls
 			output_current_ = output_data_ + full_output_size - output_size_;
 			input_current_ = input_data_ + full_input_size - input_size_;
@@ -948,6 +1067,11 @@ namespace future
 
 	private:
 		// The following methods are called by FutureManager to fill the Future value (or error)
+		uint8_t get_output_size_() const
+		{
+			return output_size_;
+		}
+
 		bool set_finish_()
 		{
 			// Check this future is waiting for data
@@ -1000,6 +1124,11 @@ namespace future
 		}
 
 		// The following methods are called by FutureManager to get the read-only value held by this Future
+		uint8_t get_input_size_() const
+		{
+			return input_size_;
+		}
+
 		bool get_chunk_(uint8_t& chunk)
 		{
 			// Check all bytes have not been transferred yet
@@ -1072,13 +1201,18 @@ namespace future
 	 * @sa AbstractFuture
 	 * @sa FutureStatus
 	 */
-	template<typename OUT = void, typename IN = void>
+	template<typename OUT_ = void, typename IN_ = void>
 	class Future : public AbstractFuture
 	{
-		static_assert(sizeof(OUT) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
-		static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 	public:
+		/** Type of the output value of this Future. */
+		using OUT = OUT_;
+		/** Type of the input value of this Future. */
+		using IN = IN_;
+
 		/** 
 		 * Construct a new Future.
 		 * The created Future is in `FutureStatus::INVALID` and has no `id()` yet.
@@ -1098,7 +1232,7 @@ namespace future
 		 * @sa Future(Future&&)
 		 * @sa operator=(Future&&)
 		 */
-		Future(const IN& input = IN{})
+		explicit Future(const IN& input = IN{})
 			: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
 
 		/**
@@ -1169,6 +1303,53 @@ namespace future
 		/// @endcond
 
 		/**
+		 * Reset the input storage value held by this Future with a new value.
+		 * This is possible only if no consumer has started reading the current 
+		 * input storage value yet.
+		 * 
+		 * This method is synchronized, it shall be called from outside an ISR.
+		 * If you need the same feature called from an ISR, then you shall use 
+		 * `reset_input_()` instead.
+		 * 
+		 * @param input a value to be copied to this Future input storage value;
+		 * this argument does not exist when @p IN is `void`.
+		 * @retval true if the input strage value has been successfully replaced
+		 * @retval false if the input strage value could not be replaced because 
+		 * a consumer already started reading the previous input storage value
+		 * 
+		 * @sa reset_input_()
+		 */
+		bool reset_input(const IN& input)
+		{
+			synchronized return reset_input_(input);
+		}
+
+		/**
+		 * Reset the input storage value held by this Future with a new value.
+		 * This is possible only if no consumer has started reading the current 
+		 * input storage value yet.
+		 * 
+		 * This method is not synchronized, it shall be called exclusively from an ISR,
+		 * or possibly from inside a `synchronized` block.
+		 * If you need the same feature with synchronization, then you shall use 
+		 * `reset_input()` instead.
+		 * 
+		 * @param input a value to be copied to this Future input storage value;
+		 * this argument does not exist when @p IN is `void`.
+		 * @retval true if the input strage value has been successfully replaced
+		 * @retval false if the input strage value could not be replaced because 
+		 * a consumer already started reading the previous input storage value
+		 * 
+		 * @sa reset_input()
+		 */
+		bool reset_input_(const IN& input)
+		{
+			if (!can_replace_input_()) return false;
+			input_ = input;
+			return true;
+		}
+
+		/**
 		 * Wait until an output value has been completely filled in this Future
 		 * and return that value to the caller.
 		 * 
@@ -1219,7 +1400,7 @@ namespace future
 		};
 		union
 		{
-			const IN input_;
+			IN input_;
 			uint8_t input_buffer_[sizeof(IN)];
 		};
 	};
@@ -1227,12 +1408,15 @@ namespace future
 	// Future template specializations for void types
 	//================================================
 	/// @cond notdocumented	
-	template<typename OUT>
-	class Future<OUT, void> : public AbstractFuture
+	template<typename OUT_>
+	class Future<OUT_, void> : public AbstractFuture
 	{
-		static_assert(sizeof(OUT) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 
 	public:
+		using OUT = OUT_;
+		using IN = void;
+
 		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
 		~Future() = default;
 
@@ -1279,13 +1463,16 @@ namespace future
 	/// @endcond
 
 	/// @cond notdocumented	
-	template<typename IN>
-	class Future<void, IN> : public AbstractFuture
+	template<typename IN_>
+	class Future<void, IN_> : public AbstractFuture
 	{
-		static_assert(sizeof(IN) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 	public:
-		Future(const IN& input = IN{})
+		using OUT = void;
+		using IN = IN_;
+
+		explicit Future(const IN& input = IN{})
 			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
 		~Future() = default;
 
@@ -1302,6 +1489,17 @@ namespace future
 
 		Future(const Future<void, IN>&) = delete;
 		Future<void, IN>& operator=(const Future<void, IN>&) = delete;
+
+		bool reset_input(const IN& input)
+		{
+			synchronized return reset_input_(input);
+		}
+		bool reset_input_(const IN& input)
+		{
+			if (!can_replace_input_()) return false;
+			input_ = input;
+			return true;
+		}
 
 		// The following method is blocking until this Future is ready
 		bool get()
@@ -1324,7 +1522,7 @@ namespace future
 
 		union
 		{
-			const IN input_;
+			IN input_;
 			uint8_t input_buffer_[sizeof(IN)];
 		};
 	};
@@ -1335,6 +1533,9 @@ namespace future
 	class Future<void, void> : public AbstractFuture
 	{
 	public:
+		using OUT = void;
+		using IN = void;
+
 		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
 		~Future() = default;
 
@@ -1362,22 +1563,6 @@ namespace future
 		}
 	};
 	/// @endcond
-
-	template<typename OUT, typename IN>
-	bool AbstractFutureManager::register_future_(Future<OUT, IN>& future)
-	{
-		// You cannot register an already registered future
-		if (future.id() != 0)
-			return false;
-		// Optimization: we start search AFTER the last removed id
-		for (uint8_t i = last_removed_id_; i < size_; ++i)
-			if (register_at_index_(future, i))
-				return true;
-		for (uint8_t i = 0; i <= last_removed_id_; ++i)
-			if (register_at_index_(future, i))
-				return true;
-		return false;
-	}
 }
 
 #endif /* FUTURE_HH */

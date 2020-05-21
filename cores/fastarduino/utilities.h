@@ -393,6 +393,13 @@ namespace utils
 		T value;
 		uint8_t as_uint8;
 	};
+
+	template<typename T> union ToArray
+	{
+		explicit ToArray(const T& value): value{value} {}
+		T value;
+		uint8_t as_array[sizeof(T)];
+	};
 	/// @endcond
 
 	/**
@@ -406,6 +413,18 @@ namespace utils
 	{
 		return ToUint8<T>(input).as_uint8;
 	}
+
+	/**
+	 * Cast an instance of type @p T to an array of `uint8_t` of the size of @p T.
+	 * @tparam T the type of @p input
+	 * @param input a constant reference to the instance to cast to an array
+	 * @param output a pointer to an array of the size of @p T
+	 */
+	template<typename T, typename U = uint8_t[sizeof(T)]>
+	constexpr void as_array(const T& input, U output)
+	{
+		memcpy(output, ToArray<T>(input).as_array, sizeof(T));
+	} 
 
 	/**
 	 * Calculate the count to pass to `delay1()` in order to reach @p time_us 
