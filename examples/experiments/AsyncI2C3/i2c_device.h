@@ -17,13 +17,13 @@
 #ifndef I2C_DEVICE_HH
 #define I2C_DEVICE_HH
 
+#include <fastarduino/array.h>
+#include <fastarduino/initializer_list.h>
 #include <fastarduino/errors.h>
 #include <fastarduino/i2c.h>
 #include <fastarduino/future.h>
 #include <fastarduino/utilities.h>
 
-#include "initializer_list.h"
-#include "array.h"
 #include "i2c_handler.h"
 
 namespace i2c

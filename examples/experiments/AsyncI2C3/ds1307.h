@@ -5,11 +5,11 @@
  * For tests, I just use a DS1307 connected through I2C (SDA/SCL) to an Arduino UNO.
  */
 
+#include <fastarduino/array.h>
 #include <fastarduino/i2c.h>
 #include <fastarduino/future.h>
 #include <fastarduino/utilities.h>
 
-#include "array.h"
 #include "i2c_handler.h"
 #include "i2c_device.h"
 

@@ -19,6 +19,7 @@
 
 #include <util/delay_basic.h>
 
+#include <fastarduino/array.h>
 #include <fastarduino/i2c.h>
 #include <fastarduino/future.h>
 #include <fastarduino/queue.h>
@@ -29,8 +30,6 @@
 
 #include <fastarduino/streams.h>
 #include <fastarduino/iomanip.h>
-
-#include "array.h"
 
 // MAIN IDEA:
 // - have a queue of "I2C commands" records

@@ -7,6 +7,7 @@
 
 #include <util/delay_basic.h>
 
+#include <fastarduino/array.h>
 #include <fastarduino/i2c.h>
 #include <fastarduino/future.h>
 #include <fastarduino/queue.h>
@@ -31,7 +32,6 @@
 #define DEBUG_STATUS
 #endif
 
-#include "array.h"
 #include "i2c_handler.h"
 #include "ds1307.h"
 

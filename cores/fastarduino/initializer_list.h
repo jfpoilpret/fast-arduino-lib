@@ -16,6 +16,8 @@
 #ifndef INITIALIZER_LIST_HH
 #define INITIALIZER_LIST_HH
 
+#include <stddef.h>
+
 /**
  * Similar to standard C++ `std` namespace, this namespace is used by FastArduino
  * library to implement various types of the standard C++ library when this is useful.
