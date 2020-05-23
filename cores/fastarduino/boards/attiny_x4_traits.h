@@ -202,5 +202,8 @@ namespace board_traits
 #define DECL_TIMER_CAPT_FRIENDS friend void ::TIMER1_CAPT_vect(void);
 #define DECL_UDRE_ISR_FRIENDS 
 #define DECL_RX_ISR_FRIENDS 
+#define DECL_TWI_FRIENDS				\
+	friend void ::USI_START_vect(void);	\
+	friend void ::USI_OVF_vect(void);
 
 #endif /* BOARDS_ATTINYX4_TRAITS_HH */
