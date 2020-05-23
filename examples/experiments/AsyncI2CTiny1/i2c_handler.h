@@ -31,121 +31,25 @@
 #include <fastarduino/streams.h>
 #include <fastarduino/iomanip.h>
 
+// MAIN IDEA:
+// - have a queue of "I2C commands" records
+// - each command is either a read or a write and contains important flags for handling the command
+// - handling of each command is broken down into sequential steps (State)
+// - dequeue and execute each command from TWI ISR, call back when the last step of 
+//   a command is finished or an error occurred
+// - consecutive commands in the queue are chained with repeat start conditions
+// - the last command in the queue is finished with a stop condition
+// - for sent or received data, a system of Future (independent API) is
+//   used to hold data until it is not needed anymore and can be released
+// - the device API shall return a Future that can be used asynchronously later on
+// NOTE: no dynamic allocation shall be used!
+
+// OPEN POINTS:
+// - implement proper callback registration (only one callback, can be an event supplier)
+// - ATtiny support: what's feasible with USI?
+
 // Debugging stuff
 //=================
-static constexpr uint8_t MAX_DEBUG = 128;
-
-#if defined(DEBUG_STEPS) || defined(DEBUG_REGISTER_OK) || defined(DEBUG_REGISTER_ERR) || defined(DEBUG_SEND_OK) || defined(DEBUG_SEND_ERR) || defined(DEBUG_RECV_OK) || defined(DEBUG_RECV_ERR)
-enum class DebugStatus : uint8_t
-{
-	START = 0,
-	REPEAT_START,
-	SLAW,
-	SLAR,
-	SEND,
-	RECV,
-	RECV_LAST,
-	STOP,
-
-	SEND_OK,
-	SEND_ERROR,
-	RECV_OK,
-	RECV_ERROR,
-
-	REGISTER_OK,
-	REGISTER_ERROR
-};
-
-// Add utility ostream manipulator for FutureStatus
-static const flash::FlashStorage* convert(DebugStatus s)
-{
-	switch (s)
-	{
-		case DebugStatus::START:
-		return F("START");
-
-		case DebugStatus::REPEAT_START:
-		return F("REPEAT_START");
-
-		case DebugStatus::SLAW:
-		return F("SLAW");
-
-		case DebugStatus::SLAR:
-		return F("SLAR");
-
-		case DebugStatus::SEND:
-		return F("SEND");
-
-		case DebugStatus::RECV:
-		return F("RECV");
-
-		case DebugStatus::RECV_LAST:
-		return F("RECV_LAST");
-
-		case DebugStatus::STOP:
-		return F("STOP");
-
-		case DebugStatus::SEND_OK:
-		return F("SEND_OK");
-
-		case DebugStatus::SEND_ERROR:
-		return F("SEND_ERROR");
-
-		case DebugStatus::RECV_OK:
-		return F("RECV_OK");
-
-		case DebugStatus::RECV_ERROR:
-		return F("RECV_ERROR");
-
-		case DebugStatus::REGISTER_OK:
-		return F("REGISTER_OK");
-
-		case DebugStatus::REGISTER_ERROR:
-		return F("REGISTER_ERROR");
-	}
-}
-
-streams::ostream& operator<<(streams::ostream& out, DebugStatus s)
-{
-	return out << convert(s);
-}
-
-static DebugStatus debug_status[MAX_DEBUG];
-static uint8_t debug_status_index = 0;
-
-static void trace_states(streams::ostream& out, bool reset = true)
-{
-	for (uint8_t i = 0; i < debug_status_index; ++i)
-		out << debug_status[i] << streams::endl;
-	if (reset)
-		debug_status_index = 0;
-}
-#endif
-
-#ifdef DEBUG_DATA_RECV
-static uint8_t debug_recv_data[MAX_DEBUG];
-static uint8_t debug_recv_index = 0;
-static void trace_recv_data(streams::ostream& out, bool reset = true)
-{
-	for (uint8_t i = 0; i < debug_recv_index; ++i)
-		out << streams::hex << debug_recv_data[i] << streams::endl;
-	if (reset)
-		debug_recv_index = 0;
-}
-#endif
-
-#ifdef DEBUG_DATA_SEND
-static uint8_t debug_send_data[MAX_DEBUG];
-static uint8_t debug_send_index = 0;
-static void trace_send_data(streams::ostream& out, bool reset = true)
-{
-	for (uint8_t i = 0; i < debug_send_index; ++i)
-		out << streams::hex << debug_send_data[i] << streams::endl;
-	if (reset)
-		debug_send_index = 0;
-}
-#endif
-
 // I2C async specific definitions
 //================================
 #define REGISTER_I2C_ISR(MODE)                                      \
@@ -180,6 +84,25 @@ namespace i2c
 		END_TRANSACTION,
 		ERROR
 	};
+
+	// Usef to transmit operating information to hook if registered
+	enum class DebugStatus : uint8_t
+	{
+		START = 0,
+		REPEAT_START,
+		SLAW,
+		SLAR,
+		SEND,
+		RECV,
+		RECV_LAST,
+		STOP,
+
+		SEND_OK,
+		SEND_ERROR,
+		RECV_OK,
+		RECV_ERROR
+	};
+	using I2C_DEBUG_HOOK = void (*)(DebugStatus status, uint8_t data);
 
 	// Type of commands in queue
 	class I2CCommandType
@@ -243,6 +166,8 @@ namespace i2c
 		template<I2CMode> friend class AbstractDevice;
 	};
 
+	//TODO isolate platform-specific code to dedicated methods, factor the rest out!
+	//TODO try to split code in platform-dependent regions
 	// This is an asynchronous I2C handler
 	template<I2CMode MODE_> class I2CHandler
 	{
@@ -253,14 +178,11 @@ namespace i2c
 		I2CHandler<MODE_>& operator=(const I2CHandler<MODE_>&) = delete;
 
 		template<uint8_t SIZE> explicit 
-		I2CHandler(I2CCommand (&buffer)[SIZE], I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			: commands_{buffer}, error_policy_{error_policy}
+		I2CHandler(	I2CCommand (&buffer)[SIZE],
+					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
+					I2C_DEBUG_HOOK hook = nullptr)
+			:	commands_{buffer}, error_policy_{error_policy}, hook_{hook}
 		{
-			// set SDA/SCL default directions
-			TRAIT::DDR &= bits::CBV8(TRAIT::BIT_SDA);
-			// TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
-			TRAIT::DDR |= bits::BV8(TRAIT::BIT_SCL);
-			TRAIT::PORT |= bits::BV8(TRAIT::BIT_SCL);
 			interrupt::register_handler(*this);
 		}
 
@@ -275,21 +197,20 @@ namespace i2c
 
 		void begin_()
 		{
-			// 1. Force 1 to data
-			USIDR_ = UINT8_MAX;
-			// 2. Enable TWI
-			// Set USI I2C mode, enable software clock strobe (USITC)
-			USICR_ = bits::BV8(USIWM1, USICS1, USICLK);
-			// Clear all interrupt flags
-			USISR_ = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
-			// 3. Set SDA as output
-			SDA_OUTPUT();
+			// 1. set SDA/SCL pullups
+			TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
+			// 2. set I2C frequency
+			TWBR_ = TWBR_VALUE;
+			TWSR_ = 0;
+			// 3. Enable TWI
+			TWCR_ = bits::BV8(TWEN);
 		}
 		void end_()
 		{
-			// Disable TWI
-			USICR_ = 0;
-			//TODO should we set SDA back to INPUT?
+			// 1. Disable TWI
+			TWCR_ = 0;
+			// 2. remove SDA/SCL pullups
+			TRAIT::PORT &= bits::COMPL(TRAIT::SCL_SDA_MASK);
 		}
 
 		uint8_t status() const
@@ -326,36 +247,10 @@ namespace i2c
 		using TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
 
-		static constexpr const REG8 USIDR_{USIDR};
-		static constexpr const REG8 USISR_{USISR};
-		static constexpr const REG8 USICR_{USICR};
-
-		void SCL_HIGH()
-		{
-			TRAIT::PORT |= bits::BV8(TRAIT::BIT_SCL);
-			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
-		}
-		void SCL_LOW()
-		{
-			TRAIT::PORT &= bits::CBV8(TRAIT::BIT_SCL);
-		}
-		void SDA_HIGH()
-		{
-			TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
-		}
-		void SDA_LOW()
-		{
-			TRAIT::PORT &= bits::CBV8(TRAIT::BIT_SDA);
-		}
-		void SDA_INPUT()
-		{
-			TRAIT::DDR &= bits::CBV8(TRAIT::BIT_SDA);
-			// TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
-		}
-		void SDA_OUTPUT()
-		{
-			TRAIT::DDR |= bits::BV8(TRAIT::BIT_SDA);
-		}
+		static constexpr const REG8 TWBR_{TWBR};
+		static constexpr const REG8 TWSR_{TWSR};
+		static constexpr const REG8 TWCR_{TWCR};
+		static constexpr const REG8 TWDR_{TWDR};
 
 		// Push one byte of a command to the queue, and possibly initiate a new transmission right away
 		bool push_command(const I2CCommand& command)
@@ -385,6 +280,7 @@ namespace i2c
 				command_ = I2CCommand::none();
 				current_ = State::NONE;
 				// No more I2C command to execute
+				TWCR_ = bits::BV8(TWINT);
 				return;
 			}
 
@@ -394,7 +290,6 @@ namespace i2c
 				exec_start_();
 			else
 				exec_repeat_start_();
-			//TODO for ATtiny we have to ensure the whole command is fully executed...
 		}
 
 		// Method to compute next state
@@ -433,28 +328,19 @@ namespace i2c
 		// Low-level methods to handle the bus in an asynchronous way
 		void exec_start_()
 		{
-	#ifdef DEBUG_STEPS
-			debug_status[debug_status_index++] = DebugStatus::START;
-	#endif
-			//TODO
-			send_start();
+			call_hook(DebugStatus::START);
+			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 			expected_status_ = Status::START_TRANSMITTED;
 		}
 		void exec_repeat_start_()
 		{
-	#ifdef DEBUG_STEPS
-			debug_status[debug_status_index++] = DebugStatus::REPEAT_START;
-	#endif
-			//TODO
-			send_start();
+			call_hook(DebugStatus::REPEAT_START);
+			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 			expected_status_ = Status::REPEAT_START_TRANSMITTED;
 		}
 		void exec_send_slar_()
 		{
-	#ifdef DEBUG_STEPS
-			debug_status[debug_status_index++] = DebugStatus::SLAR;
-	#endif
-			//TODO
+			call_hook(DebugStatus::SLAR, command_.target);
 			// Read device address from queue
 			TWDR_ = command_.target | 0x01U;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
@@ -462,10 +348,7 @@ namespace i2c
 		}
 		void exec_send_slaw_()
 		{
-	#ifdef DEBUG_STEPS
-			debug_status[debug_status_index++] = DebugStatus::SLAW;
-	#endif
-			//TODO
+			call_hook(DebugStatus::SLAW, command_.target);
 			// Read device address from queue
 			TWDR_ = command_.target;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
@@ -473,27 +356,14 @@ namespace i2c
 		}
 		void exec_send_data_()
 		{
-	#ifdef DEBUG_STEPS
-			debug_status[debug_status_index++] = DebugStatus::SEND;
-	#endif
 			// Determine next data byte
 			uint8_t data = 0;
 			bool ok = future::AbstractFutureManager::instance().get_storage_value_(command_.future_id, data);
+			call_hook(DebugStatus::SEND, data);
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (!ok)
 				future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EILSEQ);
-	#ifdef DEBUG_SEND_OK
-			if (ok)
-				debug_status[debug_status_index++] = DebugStatus::SEND_OK;
-	#endif
-	#ifdef DEBUG_SEND_ERR
-			if (!ok)
-				debug_status[debug_status_index++] = DebugStatus::SEND_ERROR;
-	#endif
-	#ifdef DEBUG_DATA_SEND
-			debug_send_data[debug_send_index++] = data;
-	#endif
-			//TODO
+			call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
 			TWDR_ = data;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 			expected_status_ = Status::DATA_TRANSMITTED_ACK;
@@ -503,20 +373,14 @@ namespace i2c
 			// Is this the last byte to receive?
 			if (future::AbstractFutureManager::instance().get_future_value_size_(command_.future_id) == 1)
 			{
-	#ifdef DEBUG_STEPS
-				debug_status[debug_status_index++] = DebugStatus::RECV_LAST;
-	#endif
-				//TODO
+				call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 				expected_status_ = Status::DATA_RECEIVED_NACK;
 			}
 			else
 			{
-	#ifdef DEBUG_STEPS
-				debug_status[debug_status_index++] = DebugStatus::RECV;
-	#endif
-				//TODO
+				call_hook(DebugStatus::RECV);
 				// Send ACK for data byte if not the last one we want
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
 				expected_status_ = Status::DATA_RECEIVED_ACK;
@@ -524,10 +388,7 @@ namespace i2c
 		}
 		void exec_stop_(bool error = false)
 		{
-	#ifdef DEBUG_STEPS
-			debug_status[debug_status_index++] = DebugStatus::STOP;
-	#endif
-			//TODO
+			call_hook(DebugStatus::STOP);
 			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 			if (!error)
 				expected_status_ = 0;
@@ -582,7 +443,6 @@ namespace i2c
 			return false;
 		}
 
-		//TODO how shall this be called?
 		I2CCallback i2c_change()
 		{
 			// Check status Vs. expected status
@@ -594,21 +454,11 @@ namespace i2c
 			if (current_ == State::RECV || current_ == State::RECV_LAST)
 			{
 				const uint8_t data = TWDR_;
-	#ifdef DEBUG_DATA_RECV
-				debug_recv_data[debug_recv_index++] = data;
-	#endif
 				bool ok = future::AbstractFutureManager::instance().set_future_value_(command_.future_id, data);
 				// This should only happen in case there are 2 concurrent providers for this future
 				if (!ok)
 					future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EILSEQ);
-	#ifdef DEBUG_RECV_OK
-				if (ok)
-					debug_status[debug_status_index++] = DebugStatus::RECV_OK;
-	#endif
-	#ifdef DEBUG_RECV_ERR
-				if (!ok)
-					debug_status[debug_status_index++] = DebugStatus::RECV_ERROR;
-	#endif
+				call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
 			}
 
 			// Handle next step in current command
@@ -660,38 +510,15 @@ namespace i2c
 			return result;
 		}
 
-		void send_start()
+		void call_hook(DebugStatus status, uint8_t data = 0)
 		{
-			// Ensure SCL is HIGH
-			SCL_HIGH();
-			// Wait for Tsu-sta
-			_delay_loop_1(T_SU_STA);
-			// Now we can generate start condition
-			// Force SDA low for Thd-sta
-			SDA_LOW();
-			_delay_loop_1(T_HD_STA);
-			// Pull SCL low
-			SCL_LOW();
-			//			_delay_loop_1(T_LOW());
-			// Release SDA (force high)
-			SDA_HIGH();
-			//TODO check START transmission with USISIF flag?
-			//			return callback_hook(USISR & bits::BV8(USISIF), good_status, Status::ARBITRATION_LOST);
+			if (hook_ != nullptr)
+				hook_(status, data);
 		}
 
-		// Constant values for USISR
-		// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
-		static constexpr const uint8_t USISR_DATA = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
-		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
-		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
-
-		// Timing constants for current mode (as per I2C specifications)
-		static constexpr const uint8_t T_HD_STA = utils::calculate_delay1_count(MODE == i2c::I2CMode::STANDARD ? 4.0 : 0.6);
-		static constexpr const uint8_t T_LOW = utils::calculate_delay1_count(MODE == i2c::I2CMode::STANDARD ? 4.7 : 1.3);
-		static constexpr const uint8_t T_HIGH = utils::calculate_delay1_count(MODE == i2c::I2CMode::STANDARD ? 4.0 : 0.6);
-		static constexpr const uint8_t T_SU_STA = utils::calculate_delay1_count(MODE == i2c::I2CMode::STANDARD ? 4.7 : 0.6);
-		static constexpr const uint8_t T_SU_STO = utils::calculate_delay1_count(MODE == i2c::I2CMode::STANDARD ? 4.0 : 0.6);
-		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(MODE == i2c::I2CMode::STANDARD ? 4.7 : 1.3);
+		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100'000UL - 16UL) / 2;
+		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400'000UL - 16UL) / 2;
+		static constexpr const uint8_t TWBR_VALUE = (MODE == I2CMode::STANDARD ? STANDARD_FREQUENCY : FAST_FREQUENCY);
 
 		static constexpr const float STANDARD_DELAY_AFTER_STOP_US = 4.0 + 4.7;
 		static constexpr const float FAST_DELAY_AFTER_STOP_US = 0.6 + 1.3;
@@ -701,6 +528,7 @@ namespace i2c
 
 		containers::Queue<I2CCommand> commands_;
 		I2CErrorPolicy error_policy_;
+		const I2C_DEBUG_HOOK hook_;
 
 		// Status of current command processing
 		I2CCommand command_;
