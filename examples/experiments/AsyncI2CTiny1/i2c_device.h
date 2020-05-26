@@ -43,11 +43,11 @@ namespace i2c
 		return I2CFinish(uint8_t(f1) & uint8_t(f2));
 	}
 
-	template<i2c::I2CMode MODE>
+	template<I2CMode MODE>
 	class AbstractDevice
 	{
 		public:
-		AbstractDevice(i2c::I2CHandler<MODE>& handler, uint8_t device)
+		AbstractDevice(I2CHandler<MODE>& handler, uint8_t device)
 		: device_{device}, handler_{handler} {}
 
 		AbstractDevice(const AbstractDevice<MODE>&) = delete;
@@ -59,17 +59,17 @@ namespace i2c
 			device_ = device;
 		}
 
-		i2c::I2CCommand read(I2CFinish finish = I2CFinish::NONE)
+		I2CCommand read(I2CFinish finish = I2CFinish::NONE)
 		{
-			return i2c::I2CCommand::read(
+			return I2CCommand::read(
 				device_, uint8_t(finish & I2CFinish::FORCE_STOP), 0, uint8_t(finish & I2CFinish::FUTURE_FINISH));
 		}
-		i2c::I2CCommand write(I2CFinish finish = I2CFinish::NONE)
+		I2CCommand write(I2CFinish finish = I2CFinish::NONE)
 		{
-			return i2c::I2CCommand::write(
+			return I2CCommand::write(
 				device_, uint8_t(finish & I2CFinish::FORCE_STOP), 0, uint8_t(finish & I2CFinish::FUTURE_FINISH));
 		}
-		int launch_commands(future::AbstractFuture& future, std::initializer_list<i2c::I2CCommand> commands)
+		int launch_commands(future::AbstractFuture& future, std::initializer_list<I2CCommand> commands)
 		{
 			const uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
@@ -86,13 +86,17 @@ namespace i2c
 					command.future_id = future.id();
 					handler_.push_command_(command);
 				}
+				// Notify handler that transaction is complete
+				//FIXME on ATtiny, this method will block until I2C transaction is finished!
+				//TODO we probably need to redefine synchronized here (really sync for ATmega, but notting for ATtiny)
+				handler_.last_command_pushed_();
 				return 0;
 			}
 		}
 
 	private:
 		uint8_t device_ = 0;
-		i2c::I2CHandler<MODE>& handler_;
+		I2CHandler<MODE>& handler_;
 	};
 }
 

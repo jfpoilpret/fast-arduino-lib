@@ -45,13 +45,13 @@
 // NOTE: no dynamic allocation shall be used!
 
 // OPEN POINTS:
-// - implement proper callback registration (only one callback, can be an event supplier)
-// - ATtiny support: what's feasible with USI?
+// - add event supplier as callback handler?
 
-// Debugging stuff
-//=================
+// - ATtiny support
+
 // I2C async specific definitions
 //================================
+#if defined(TWCR)
 #define REGISTER_I2C_ISR(MODE)                                      \
 ISR(TWI_vect)                                                       \
 {                                                                   \
@@ -67,6 +67,13 @@ ISR(TWI_vect)                                                       \
 {                                                                   \
 	i2c::isr_handler::i2c_change_method<MODE, HANDLER, CALLBACK>(); \
 }
+#else
+#define REGISTER_I2C_ISR(MODE)
+//TODO How to force ompile error if one fo the following macros is used?
+//TODO Or how to simulate callbacks in a sync way from i2c_handler?
+#define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)
+#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)
+#endif
 
 namespace i2c
 {
@@ -166,8 +173,6 @@ namespace i2c
 		template<I2CMode> friend class AbstractDevice;
 	};
 
-	//TODO isolate platform-specific code to dedicated methods, factor the rest out!
-	//TODO try to split code in platform-dependent regions
 	// This is an asynchronous I2C handler
 	template<I2CMode MODE_> class I2CHandler
 	{
@@ -184,6 +189,7 @@ namespace i2c
 			:	commands_{buffer}, error_policy_{error_policy}, hook_{hook}
 		{
 			interrupt::register_handler(*this);
+			init_impl();
 		}
 
 		void begin()
@@ -195,6 +201,7 @@ namespace i2c
 			synchronized end_();
 		}
 
+#if defined(TWCR)
 		void begin_()
 		{
 			// 1. set SDA/SCL pullups
@@ -212,6 +219,26 @@ namespace i2c
 			// 2. remove SDA/SCL pullups
 			TRAIT::PORT &= bits::COMPL(TRAIT::SCL_SDA_MASK);
 		}
+#else
+		void begin_()
+		{
+			// 1. Force 1 to data
+			USIDR_ = UINT8_MAX;
+			// 2. Enable TWI
+			// Set USI I2C mode, enable software clock strobe (USITC)
+			USICR_ = bits::BV8(USIWM1, USICS1, USICLK);
+			// Clear all interrupt flags
+			USISR_ = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
+			// 3. Set SDA as output
+			SDA_OUTPUT();
+		}
+		void end_()
+		{
+			// Disable TWI
+			USICR_ = 0;
+			//TODO should we set SDA back to INPUT?
+		}
+#endif
 
 		uint8_t status() const
 		{
@@ -247,10 +274,213 @@ namespace i2c
 		using TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
 
+#if defined(TWCR)
 		static constexpr const REG8 TWBR_{TWBR};
 		static constexpr const REG8 TWSR_{TWSR};
 		static constexpr const REG8 TWCR_{TWCR};
 		static constexpr const REG8 TWDR_{TWDR};
+
+		void init_impl() {}
+
+		uint8_t get_status_impl()
+		{
+			return TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+		}
+
+		void start_impl()
+		{
+			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
+		}
+
+		void send_byte_impl(uint8_t data)
+		{
+			TWDR_ = data;
+			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
+		}
+
+		void receive_impl(bool last_byte)
+		{
+			if (last_byte)
+				TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
+			else
+				TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
+		}
+
+		uint8_t get_byte_impl()
+		{
+			return TWDR_;
+		}
+
+		void stop_impl()
+		{
+			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
+		}
+
+		void finish_impl()
+		{
+			TWCR_ = bits::BV8(TWINT);
+		}
+
+#else
+		static constexpr const REG8 USIDR_{USIDR};
+		static constexpr const REG8 USISR_{USISR};
+		static constexpr const REG8 USICR_{USICR};
+
+		// Constant values for USISR
+		// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
+		static constexpr const uint8_t USISR_DATA = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
+		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
+		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
+
+		// Timing constants for current mode (as per I2C specifications)
+		static constexpr const uint8_t T_HD_STA = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
+		static constexpr const uint8_t T_LOW = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 1.3);
+		static constexpr const uint8_t T_HIGH = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
+		static constexpr const uint8_t T_SU_STA = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 0.6);
+		static constexpr const uint8_t T_SU_STO = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
+		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 1.3);
+
+		// This is needed to pass information from receive_impl() to get_byte_impl()
+		uint8_t data_received_ = 0;
+
+		void SCL_HIGH()
+		{
+			TRAIT::PORT |= bits::BV8(TRAIT::BIT_SCL);
+			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
+		}
+
+		void SCL_LOW()
+		{
+			TRAIT::PORT &= bits::CBV8(TRAIT::BIT_SCL);
+		}
+
+		void SDA_HIGH()
+		{
+			TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
+		}
+
+		void SDA_LOW()
+		{
+			TRAIT::PORT &= bits::CBV8(TRAIT::BIT_SDA);
+		}
+
+		void SDA_INPUT()
+		{
+			TRAIT::DDR &= bits::CBV8(TRAIT::BIT_SDA);
+			// TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
+		}
+
+		void SDA_OUTPUT()
+		{
+			TRAIT::DDR |= bits::BV8(TRAIT::BIT_SDA);
+		}
+
+		void init_impl()
+		{
+			// set SDA/SCL default directions
+			TRAIT::DDR &= bits::CBV8(TRAIT::BIT_SDA);
+			// TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
+			TRAIT::DDR |= bits::BV8(TRAIT::BIT_SCL);
+			TRAIT::PORT |= bits::BV8(TRAIT::BIT_SCL);
+		}
+
+		uint8_t get_status_impl()
+		{
+			// status_ has already been updated by all xxx_impl() methods
+			return status_;
+		}
+
+		void start_impl()
+		{
+			// Ensure SCL is HIGH
+			SCL_HIGH();
+			// Wait for Tsu-sta
+			_delay_loop_1(T_SU_STA);
+			// Now we can generate start condition
+			// Force SDA low for Thd-sta
+			SDA_LOW();
+			_delay_loop_1(T_HD_STA);
+			// Pull SCL low
+			SCL_LOW();
+			//			_delay_loop_1(T_LOW());
+			// Release SDA (force high)
+			SDA_HIGH();
+			//TODO check START transmission with USISIF flag?
+			bool ok = USISR & bits::BV8(USISIF);
+			status_ = (ok ? expected_status_ : Status::ARBITRATION_LOST);
+		}
+
+		void send_byte_impl(uint8_t data)
+		{
+			// Set SCL low TODO is this line really needed for every byte transferred?
+			SCL_LOW();
+			// Transfer address byte
+			USIDR_ = data;
+			transfer(USISR_DATA);
+			// For acknowledge, first set SDA as input
+			SDA_INPUT();
+			bool ok = ((transfer(USISR_ACK) & 0x01U) == 0);
+			// The expected status is one Status _ACK values
+			// When not OK, it shall be changed to the _NACK matching value
+			// This can be done by simply adding 0x08 to the ACK value.
+			status_ = expected_status_ + (ok ? 0 : 0x08);
+		}
+
+		void receive_impl(bool last_byte)
+		{
+			SDA_INPUT();
+			data_received_ = transfer(USISR_DATA);
+			// Send ACK (or NACK if last byte)
+			USIDR_ = (last_byte ? UINT8_MAX : 0x00);
+			transfer(USISR_ACK);
+		}
+
+		uint8_t get_byte_impl()
+		{
+			return data_received_;
+		}
+
+		void stop_impl()
+		{
+			// Pull SDA low
+			SDA_LOW();
+			// Release SCL
+			SCL_HIGH();
+			_delay_loop_1(T_SU_STO);
+			// Release SDA
+			SDA_HIGH();
+			_delay_loop_1(T_BUF);
+		}
+
+		void finish_impl()
+		{
+			// Nothing to do for ATtiny when there is no more I2C command to send
+		}
+
+		uint8_t transfer(uint8_t USISR_count)
+		{
+			// Init counter (8 bits or 1 bit for acknowledge)
+			USISR_ = USISR_count;
+			do
+			{
+				_delay_loop_1(T_LOW);
+				// clock strobe (SCL raising edge)
+				USICR_ |= bits::BV8(USITC);
+				TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
+				_delay_loop_1(T_HIGH);
+				// clock strobe (SCL falling edge)
+				USICR_ |= bits::BV8(USITC);
+			}
+			while ((USISR_ & bits::BV8(USIOIF)) == 0);
+			_delay_loop_1(T_LOW);
+			// Read data
+			uint8_t data = USIDR_;
+			USIDR_ = UINT8_MAX;
+			// Release SDA
+			SDA_OUTPUT();
+			return data;
+		}
+#endif
 
 		// Push one byte of a command to the queue, and possibly initiate a new transmission right away
 		bool push_command(const I2CCommand& command)
@@ -260,16 +490,31 @@ namespace i2c
 
 		bool push_command_(const I2CCommand& command)
 		{
-			if (commands_.push_(command))
+			return commands_.push_(command);
+		}
+
+		void last_command_pushed_()
+		{
+			// Check if need to initiate transmission (i.e no current command is executed)
+			if (command_.type.none)
 			{
-				// Check if need to initiate transmission (i.e no current command is executed)
-				if (command_.type.none)
-					// Dequeue first pending command and start TWI operation
-					dequeue_command_(true);
-				return true;
+				// Dequeue first pending command and start TWI operation
+				dequeue_command_(true);
+				// Loop here until command is executed
+				while (true)
+				{
+					switch (i2c_change())
+					{
+						case I2CCallback::NONE:
+						case I2CCallback::END_COMMAND:
+						break;;
+
+						case I2CCallback::ERROR:
+						case I2CCallback::END_TRANSACTION:
+						return;
+					}
+				}
 			}
-			else
-				return false;
 		}
 
 		// Dequeue the next command in the queue and process it immediately
@@ -280,7 +525,7 @@ namespace i2c
 				command_ = I2CCommand::none();
 				current_ = State::NONE;
 				// No more I2C command to execute
-				TWCR_ = bits::BV8(TWINT);
+				finish_impl();
 				return;
 			}
 
@@ -329,30 +574,28 @@ namespace i2c
 		void exec_start_()
 		{
 			call_hook(DebugStatus::START);
-			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 			expected_status_ = Status::START_TRANSMITTED;
+			start_impl();
 		}
 		void exec_repeat_start_()
 		{
 			call_hook(DebugStatus::REPEAT_START);
-			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 			expected_status_ = Status::REPEAT_START_TRANSMITTED;
+			start_impl();
 		}
 		void exec_send_slar_()
 		{
 			call_hook(DebugStatus::SLAR, command_.target);
 			// Read device address from queue
-			TWDR_ = command_.target | 0x01U;
-			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 			expected_status_ = Status::SLA_R_TRANSMITTED_ACK;
+			send_byte_impl(command_.target | 0x01U);
 		}
 		void exec_send_slaw_()
 		{
 			call_hook(DebugStatus::SLAW, command_.target);
 			// Read device address from queue
-			TWDR_ = command_.target;
-			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 			expected_status_ = Status::SLA_W_TRANSMITTED_ACK;
+			send_byte_impl(command_.target);
 		}
 		void exec_send_data_()
 		{
@@ -364,9 +607,8 @@ namespace i2c
 			if (!ok)
 				future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EILSEQ);
 			call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
-			TWDR_ = data;
-			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 			expected_status_ = Status::DATA_TRANSMITTED_ACK;
+			send_byte_impl(data);
 		}
 		void exec_receive_data_()
 		{
@@ -375,21 +617,21 @@ namespace i2c
 			{
 				call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
-				TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 				expected_status_ = Status::DATA_RECEIVED_NACK;
+				receive_impl(true);
 			}
 			else
 			{
 				call_hook(DebugStatus::RECV);
 				// Send ACK for data byte if not the last one we want
-				TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
 				expected_status_ = Status::DATA_RECEIVED_ACK;
+				receive_impl(false);
 			}
 		}
 		void exec_stop_(bool error = false)
 		{
 			call_hook(DebugStatus::STOP);
-			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
+			stop_impl();
 			if (!error)
 				expected_status_ = 0;
 			command_ = I2CCommand::none();
@@ -446,14 +688,14 @@ namespace i2c
 		I2CCallback i2c_change()
 		{
 			// Check status Vs. expected status
-			status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+			status_ = get_status_impl();
 			if (!check_no_error())
 				return I2CCallback::ERROR;
 			
 			// Handle TWI interrupt when data received
 			if (current_ == State::RECV || current_ == State::RECV_LAST)
 			{
-				const uint8_t data = TWDR_;
+				const uint8_t data = get_byte_impl();
 				bool ok = future::AbstractFutureManager::instance().set_future_value_(command_.future_id, data);
 				// This should only happen in case there are 2 concurrent providers for this future
 				if (!ok)
