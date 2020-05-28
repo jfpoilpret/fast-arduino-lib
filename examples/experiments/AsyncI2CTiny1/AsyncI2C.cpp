@@ -33,7 +33,7 @@ REGISTER_UATX_ISR(0)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 16;
-static constexpr uint8_t MAX_FUTURES = 32;
+static constexpr uint8_t MAX_FUTURES = 16;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -42,7 +42,7 @@ static constexpr uint8_t MAX_FUTURES = 32;
 #include "ds1307.h"
 
 // Setup debugging stuff
-// #define DEBUG_STEPS
+#define DEBUG_STEPS
 #define DEBUG_SEND_OK
 #define DEBUG_SEND_ERR
 #define DEBUG_RECV_OK
@@ -54,7 +54,7 @@ static constexpr uint8_t MAX_FUTURES = 32;
 #endif
 
 // This is used when nothing works at all and this reduces the tests to only once get_ram() call
-// #define BASIC_DEBUG
+#define BASIC_DEBUG
 
 // Actual test example
 //=====================
@@ -178,6 +178,7 @@ int main()
 	// Start UART
 	uatx.begin(115200);
 	ostream out = uatx.out();
+	out << F("Starting...") << endl;
 
 	// Initialize callback handler
 	RTCCallback callback{};
@@ -213,15 +214,16 @@ int main()
 		data.get(result);
 		out << F("get()=") << hex << result << endl;
 		trace(out);
-		out << F("callback ok = ") << dec << callback.count_ok() 
+		out << F("callback trans = ") << dec << callback.count_transactions() 
+			<< F(", commands = ") << dec << callback.count_commands()
 			<< F(", errors = ") << dec << callback.count_errors() << endl;
 		callback.reset();
 	}
 #else
 	{
 		out << F("\nTEST #0 read all RAM bytes, one by one") << endl;
-		RTC::GET_RAM1 data[RAM_SIZE];
-		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		RTC::GET_RAM1 data[10];
+		for (uint8_t i = 0; i < 10; ++i)
 		{
 			data[i] = RTC::GET_RAM1{i};
 			int error = rtc.get_ram(data[i]);
@@ -232,7 +234,7 @@ int main()
 			time::delay_us(200);
 		}
 		out << endl;
-		for (uint8_t i = 0 ; i < RAM_SIZE; ++i)
+		for (uint8_t i = 0 ; i < 10; ++i)
 		{
 			out << F("data[") << dec << i << F("] await()=") << data[i].await() << endl;
 			out << F("error()=") << dec << data[i].error() << endl;

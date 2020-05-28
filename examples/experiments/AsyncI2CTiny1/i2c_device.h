@@ -26,6 +26,19 @@
 
 #include "i2c_handler.h"
 
+#if defined(TWCR)
+// Truly asynchronous mode (ATmega only)
+// The whole code block in launch_commands() must be synchronized
+#define SYNC_OUTER synchronized
+#define SYNC_INNER
+#else
+// Fake asynchronous mode (ATtiny)
+// Only the first code block in launch_commands() must be synchronized
+#define SYNC_INNER synchronized
+// But last_command_pushed_() method shall not be synchronized (because it is actually blocking)
+#define SYNC_OUTER
+#endif
+
 namespace i2c
 {
 	enum class I2CFinish : uint8_t
@@ -74,24 +87,26 @@ namespace i2c
 			const uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
 			auto& manager = future::AbstractFutureManager::instance();
-			synchronized
+			SYNC_OUTER
 			{
-				// pre-conditions (must be synchronized)
-				if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
-				if (manager.available_futures_() == 0) return errors::EAGAIN;
-				// NOTE: normally 3 following calls should never return false!
-				manager.register_future_(future);
-				for (I2CCommand command : commands)
+				SYNC_INNER
 				{
-					command.future_id = future.id();
-					handler_.push_command_(command);
+					// pre-conditions (must be synchronized)
+					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
+					if (manager.available_futures_() == 0) return errors::EAGAIN;
+					// NOTE: normally 3 following calls should never return false!
+					manager.register_future_(future);
+					for (I2CCommand command : commands)
+					{
+						command.future_id = future.id();
+						handler_.push_command_(command);
+					}
 				}
 				// Notify handler that transaction is complete
-				//FIXME on ATtiny, this method will block until I2C transaction is finished!
-				//TODO we probably need to redefine synchronized here (really sync for ATmega, but notting for ATtiny)
+				// Note: on ATtiny, this method will block until I2C transaction is finished!
 				handler_.last_command_pushed_();
-				return 0;
 			}
+			return 0;
 		}
 
 	private:
@@ -99,6 +114,9 @@ namespace i2c
 		I2CHandler<MODE>& handler_;
 	};
 }
+
+#undef SYNC_OUTER
+#undef SYNC_INNER
 
 #endif /* I2C_DEVICE_HH */
 /// @endcond

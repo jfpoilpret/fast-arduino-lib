@@ -287,6 +287,8 @@ namespace i2c
 			return TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
 		}
 
+		void last_command_pushed_impl_() {}
+
 		void start_impl()
 		{
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
@@ -388,6 +390,25 @@ namespace i2c
 		{
 			// status_ has already been updated by all xxx_impl() methods
 			return status_;
+		}
+
+		void last_command_pushed_impl_()
+		{
+			//TODO How to report errors? keep future way or direct return?
+			// Loop here until command is executed
+			while (true)
+			{
+				switch (i2c_change())
+				{
+					case I2CCallback::NONE:
+					case I2CCallback::END_COMMAND:
+					break;;
+
+					case I2CCallback::ERROR:
+					case I2CCallback::END_TRANSACTION:
+					return;
+				}
+			}
 		}
 
 		void start_impl()
@@ -500,20 +521,8 @@ namespace i2c
 			{
 				// Dequeue first pending command and start TWI operation
 				dequeue_command_(true);
-				// Loop here until command is executed
-				while (true)
-				{
-					switch (i2c_change())
-					{
-						case I2CCallback::NONE:
-						case I2CCallback::END_COMMAND:
-						break;;
-
-						case I2CCallback::ERROR:
-						case I2CCallback::END_TRANSACTION:
-						return;
-					}
-				}
+				// For ATtiny, loop here until command is executed
+				last_command_pushed_impl_();
 			}
 		}
 

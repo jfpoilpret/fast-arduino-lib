@@ -63,7 +63,7 @@ streams::ostream& operator<<(streams::ostream& out, i2c::DebugStatus s)
 #ifdef ARDUINO_UNO
 static constexpr uint8_t MAX_DEBUG = 128;
 #else
-static constexpr uint8_t MAX_DEBUG = 64;
+static constexpr uint8_t MAX_DEBUG = 32;
 #endif
 
 static i2c::DebugStatus debug_status[MAX_DEBUG];
