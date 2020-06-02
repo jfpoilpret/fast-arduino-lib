@@ -32,7 +32,6 @@
 
 #define REGISTER_I2C_ISR(MODE)
 
-//TODO Update status wherever needed, so that we can properly handle errors
 namespace i2c
 {
 	template<I2CMode MODE_> class I2CHandler : public AbstractI2CHandler<MODE_>
@@ -79,7 +78,7 @@ namespace i2c
 			//TODO should we set SDA back to INPUT?
 		}
 
-		bool ensure_num_commands_(uint8_t num_commands)
+		bool ensure_num_commands_(UNUSED uint8_t num_commands)
 		{
 			return true;
 		}
@@ -137,7 +136,11 @@ namespace i2c
 
 		void last_command_pushed_()
 		{
-			//TODO
+			// Check if previously executed command already did a STOP
+			if (!this->command_.type.force_stop)
+				exec_stop_();
+			this->command_ = I2CCommand::none();
+			clear_commands_ = false;
 		}
 
 		void start_impl_()
@@ -232,9 +235,10 @@ namespace i2c
 		{
 			// Check command is not empty
 			if (command.type.none) return true;
+			if (clear_commands_) return false;
 			// Execute command immediately from start to optional stop
-			// Check if start or repeat start
-			if (!this->command_.type.none)
+			// Check if start or repeat start (edpends on previously executed command)
+			if (this->command_.type.none || this->command_.type.force_stop)
 				exec_start_();
 			else
 				exec_repeat_start_();
@@ -266,8 +270,12 @@ namespace i2c
 				}
 			}
 
-			//TODO stop or no stop?
-
+			// Check if we must force finish the future
+			if (command.type.finish_future)
+				future::AbstractFutureManager::instance().set_future_finish_(command.future_id);
+			// Check if we must force a STOP
+			if (command.type.force_stop)
+				exec_stop_();
 		}
 
 		// Low-level methods to handle the bus in an asynchronous way
@@ -328,6 +336,8 @@ namespace i2c
 				this->expected_status_ = Status::DATA_RECEIVED_ACK;
 				data = receive_impl(false);
 			}
+			// Ensure status is set properly
+			this->status_ = this->expected_status_;
 			// Fill future
 			bool ok = future::AbstractFutureManager::instance().set_future_value_(this->command_.future_id, data);
 			// This should only happen in case there are 2 concurrent providers for this future
@@ -348,12 +358,6 @@ namespace i2c
 			_delay_loop_1(DELAY_AFTER_STOP);
 		}
 
-		bool is_end_transaction() const
-		{
-			I2CCommand command;
-			return !(commands_.peek_(command) && command.future_id == this->command_.future_id);
-		}
-
 		bool handle_no_error()
 		{
 			if (this->check_no_error()) return true;
@@ -364,7 +368,8 @@ namespace i2c
 				// Clear all pending transactions from queue
 				case I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS:
 				// Clear command belonging to the same transaction (i.e. same future)
-				//TODO forbid any new command until last command (add new flag for that)
+				// ie forbid any new command until last command (add new flag for that)
+				clear_commands_ = true;
 				break;
 			}
 			// In case of an error, immediately send a STOP condition
@@ -372,38 +377,13 @@ namespace i2c
 			return false;
 		}
 
-		I2CCallback i2c_change()
-		{
-			// Handle next step in current command
-			I2CCallback result = I2CCallback::NONE;
-			{
-				// case State::STOP:
-				// Check if we need to finish the current future
-				if (this->command_.type.finish_future)
-					future::AbstractFutureManager::instance().set_future_finish_(this->command_.future_id);
-				result = (is_end_transaction() ? I2CCallback::END_TRANSACTION : I2CCallback::END_COMMAND);
-				// Check if we need to STOP (no more pending commands in queue)
-				if (commands_.empty_())
-					exec_stop_();
-				// Check if we need to STOP or REPEAT START (current command requires STOP)
-				else if (this->command_.type.force_stop)
-				{
-					exec_stop_();
-					// Handle next command
-					dequeue_command_(true);
-				}
-				else
-					// Handle next command
-					dequeue_command_(false);
-			}
-			return result;
-		}
-
 		static constexpr const float STANDARD_DELAY_AFTER_STOP_US = 4.0 + 4.7;
 		static constexpr const float FAST_DELAY_AFTER_STOP_US = 0.6 + 1.3;
 		static constexpr const float DELAY_AFTER_STOP_US =
 			(MODE_ == I2CMode::STANDARD ? STANDARD_DELAY_AFTER_STOP_US : FAST_DELAY_AFTER_STOP_US);
 		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(DELAY_AFTER_STOP_US);
+
+		bool clear_commands_ = false;
 
 		template<I2CMode> friend class AbstractDevice;
 	};

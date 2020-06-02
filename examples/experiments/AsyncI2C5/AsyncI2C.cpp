@@ -120,8 +120,10 @@ private:
 	DECL_TWI_FRIENDS
 };
 
+#ifdef TWCR
 // REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
-// REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
+REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
+#endif
 
 // Add utility ostream manipulator for FutureStatus
 static const flash::FlashStorage* convert(future::FutureStatus s)
