@@ -30,10 +30,10 @@ static constexpr uint8_t MAX_FUTURES = 128;
 REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
-constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+constexpr const board::DigitalPin TX = board::DigitalPin::D0_PA0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-static constexpr uint8_t I2C_BUFFER_SIZE = 16;
-static constexpr uint8_t MAX_FUTURES = 16;
+static constexpr uint8_t I2C_BUFFER_SIZE = 8;
+static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -42,11 +42,11 @@ static constexpr uint8_t MAX_FUTURES = 16;
 #include "ds1307.h"
 
 // Setup debugging stuff
-#define DEBUG_STEPS
-#define DEBUG_SEND_OK
-#define DEBUG_SEND_ERR
-#define DEBUG_RECV_OK
-#define DEBUG_RECV_ERR
+// #define DEBUG_STEPS
+// #define DEBUG_SEND_OK
+// #define DEBUG_SEND_ERR
+// #define DEBUG_RECV_OK
+// #define DEBUG_RECV_ERR
 #include "debug.h"
 
 #if defined(DEBUG_STEPS) || defined(DEBUG_SEND_OK) || defined(DEBUG_SEND_ERR) || defined(DEBUG_RECV_OK) || defined(DEBUG_RECV_ERR)
@@ -160,6 +160,18 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 using I2CHANDLER = i2c::I2CHandler<i2c::I2CMode::STANDARD>;
 using namespace streams;
 
+// void i2c_hook(i2c::DebugStatus status, uint8_t data)
+// {
+// 	uint8_t val = 0;
+// 	switch (status)
+// 	{
+// 		case i2c::DebugStatus::START:
+// 		val = 1;
+// 		break;
+// 	}
+// }
+
+//TODO add call hook
 int main() __attribute__((OS_main));
 int main()
 {
@@ -167,6 +179,22 @@ int main()
 
 	// Enable interrupts at startup time
 	sei();
+
+	// Initialize temporary debug through LEDs
+	gpio::FastPinType<board::DigitalPin::D1_PA1>::set_mode(gpio::PinMode::OUTPUT);
+	gpio::FastPinType<board::DigitalPin::D2_PA2>::set_mode(gpio::PinMode::OUTPUT);
+	gpio::FastPinType<board::DigitalPin::D3_PA3>::set_mode(gpio::PinMode::OUTPUT);
+	gpio::FastPinType<board::DigitalPin::D5_PA5>::set_mode(gpio::PinMode::OUTPUT);
+
+	// gpio::FastPinType<board::DigitalPin::D1_PA1>::set();
+	// gpio::FastPinType<board::DigitalPin::D2_PA2>::set();
+	// gpio::FastPinType<board::DigitalPin::D3_PA3>::set();
+	// gpio::FastPinType<board::DigitalPin::D5_PA5>::set();
+	// time::delay_ms(2000);
+	// gpio::FastPinType<board::DigitalPin::D1_PA1>::clear();
+	// gpio::FastPinType<board::DigitalPin::D2_PA2>::clear();
+	// gpio::FastPinType<board::DigitalPin::D3_PA3>::clear();
+	// gpio::FastPinType<board::DigitalPin::D5_PA5>::clear();
 
 	// Initialize debugging output
 #ifdef HARD_UART
@@ -202,9 +230,9 @@ int main()
 		out << F("\nTEST #0 read one RAM byte") << endl;
 		RTC::GET_RAM1 data{0};
 		int ok = rtc.get_ram(data);
+		out << F("get_ram()=") << ok << endl;
 		uint8_t id = data.id();
 		future::FutureStatus status = data.status();
-		out << F("get_ram()=") << ok << endl;
 		out << F("id=") << dec << id << F(" status=") << status << endl;
 		// out << F("id=") << dec << data.id() << F(" status=") << data.status() << endl;
 		// time::delay_ms(1000);

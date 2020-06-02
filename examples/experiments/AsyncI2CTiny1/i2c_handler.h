@@ -249,14 +249,14 @@ namespace i2c
 		{
 			return commands_.free_() >= num_commands;
 		}
-		bool write_(uint8_t target, uint8_t future_id, bool force_stop, bool finish_future)
-		{
-			return push_command_(I2CCommand::write(target, force_stop, future_id, finish_future));
-		}
-		bool read_(uint8_t target, uint8_t future_id, bool force_stop, bool finish_future)
-		{
-			return push_command_(I2CCommand::read(target, force_stop, future_id, finish_future));
-		}
+		// bool write_(uint8_t target, uint8_t future_id, bool force_stop, bool finish_future)
+		// {
+		// 	return push_command_(I2CCommand::write(target, force_stop, future_id, finish_future));
+		// }
+		// bool read_(uint8_t target, uint8_t future_id, bool force_stop, bool finish_future)
+		// {
+		// 	return push_command_(I2CCommand::read(target, force_stop, future_id, finish_future));
+		// }
 
 	private:
 		enum class State : uint8_t
@@ -392,6 +392,9 @@ namespace i2c
 			return status_;
 		}
 
+		//FIXME add debug of i2c_change() return through LEDs
+		// Use 1 LED per status to start with, in order to check which status never get used
+		// Then, use counters per status to check how many times they are passed through
 		void last_command_pushed_impl_()
 		{
 			//TODO How to report errors? keep future way or direct return?
@@ -401,11 +404,17 @@ namespace i2c
 				switch (i2c_change())
 				{
 					case I2CCallback::NONE:
+					gpio::FastPinType<board::DigitalPin::D1_PA1>::set();
+					break;
 					case I2CCallback::END_COMMAND:
-					break;;
+					gpio::FastPinType<board::DigitalPin::D2_PA2>::set();
+					break;
 
 					case I2CCallback::ERROR:
+					gpio::FastPinType<board::DigitalPin::D3_PA3>::set();
+					return;
 					case I2CCallback::END_TRANSACTION:
+					gpio::FastPinType<board::DigitalPin::D5_PA5>::set();
 					return;
 				}
 			}
