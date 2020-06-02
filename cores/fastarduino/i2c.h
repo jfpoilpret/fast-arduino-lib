@@ -21,6 +21,8 @@
 #ifndef I2C_HH
 #define I2C_HH
 
+#include <stdint.h>
+
 //TODO add support for asynchronous operation?
 //TODO is it useful to support interrupt-driven (async) mode? that would require static buffers for read and write!
 // Should we then provide two distinct I2CManager classes?
