@@ -137,7 +137,7 @@ namespace i2c
 		void last_command_pushed_()
 		{
 			// Check if previously executed command already did a STOP
-			if (!this->command_.type.force_stop)
+			if ((!this->command_.type.force_stop) && !clear_commands_)
 				exec_stop_();
 			this->command_ = I2CCommand::none();
 			clear_commands_ = false;
@@ -160,7 +160,8 @@ namespace i2c
 			SDA_HIGH();
 			//TODO check START transmission with USISIF flag?
 			bool ok = USISR & bits::BV8(USISIF);
-			this->status_ = (ok ? this->expected_status_ : Status::ARBITRATION_LOST);
+			// this->status_ = (ok ? this->expected_status_ : Status::ARBITRATION_LOST);
+			this->status_ = this->expected_status_;
 		}
 
 		void send_byte_impl(uint8_t data)
@@ -276,6 +277,7 @@ namespace i2c
 			// Check if we must force a STOP
 			if (command.type.force_stop)
 				exec_stop_();
+			return true;
 		}
 
 		// Low-level methods to handle the bus in an asynchronous way

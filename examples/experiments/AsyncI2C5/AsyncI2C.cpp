@@ -31,7 +31,7 @@ static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
-constexpr const board::DigitalPin TX = board::DigitalPin::D0_PA0;
+static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t MAX_FUTURES = 8;
 #else
@@ -59,70 +59,8 @@ static constexpr uint8_t MAX_FUTURES = 8;
 // Actual test example
 //=====================
 
-// Callback handler
-class RTCCallback
-{
-public:
-	RTCCallback()
-	{
-		interrupt::register_handler(*this);
-	}
-
-	void reset()
-	{
-		synchronized
-		{
-			count_commands_ = count_transactions_ = count_errors_ = 0;
-		}
-	}
-
-	uint16_t count_errors() const
-	{
-		synchronized return count_errors_;
-	}
-
-	uint16_t count_commands() const
-	{
-		synchronized return count_commands_;
-	}
-
-	uint16_t count_transactions() const
-	{
-		synchronized return count_transactions_;
-	}
-
-private:
-	void callback(i2c::I2CCallback result)
-	{
-		switch (result)
-		{
-			case i2c::I2CCallback::ERROR:
-			++count_errors_;
-			break;
-
-			case i2c::I2CCallback::END_TRANSACTION:
-			++count_transactions_;
-			// fallback (to increment comamnds also)
-
-			case i2c::I2CCallback::END_COMMAND:
-			++count_commands_;
-			break;
-
-			default:
-			break;
-		}
-	}
-
-	uint16_t count_errors_ = 0;
-	uint16_t count_commands_ = 0;
-	uint16_t count_transactions_ = 0;
-
-	DECL_TWI_FRIENDS
-};
-
 #ifdef TWCR
-// REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
-REGISTER_I2C_ISR_METHOD(i2c::I2CMode::STANDARD, RTCCallback, &RTCCallback::callback)
+REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 #endif
 
 // Add utility ostream manipulator for FutureStatus
@@ -161,16 +99,65 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 using I2CHANDLER = i2c::I2CHandler<i2c::I2CMode::STANDARD>;
 using namespace streams;
 
-// void i2c_hook(i2c::DebugStatus status, uint8_t data)
-// {
-// 	uint8_t val = 0;
-// 	switch (status)
-// 	{
-// 		case i2c::DebugStatus::START:
-// 		val = 1;
-// 		break;
-// 	}
-// }
+static ostream* pout = nullptr;
+#define OUT (*pout)
+
+static void i2c_hook(i2c::DebugStatus status, uint8_t data)
+{
+	switch (status)
+	{
+		case i2c::DebugStatus::START:
+		OUT << "St " << flush;
+		break;
+
+		case i2c::DebugStatus::REPEAT_START:
+		OUT << "RS " << flush;
+		break;
+
+		case i2c::DebugStatus::STOP:
+		OUT << "Sp " << flush;
+		break;
+
+		case i2c::DebugStatus::SLAW:
+		// OUT << "AW " << flush;
+		OUT << "AW " << hex << data << ' ' << flush;
+		break;
+
+		case i2c::DebugStatus::SLAR:
+		// OUT << "AR " << flush;
+		OUT << "AR " << hex << data << ' ' << flush;
+		break;
+
+		case i2c::DebugStatus::SEND:
+		// OUT << "S " << flush;
+		OUT << "S " << hex << data << ' ' << flush;
+		break;
+
+		case i2c::DebugStatus::SEND_OK:
+		OUT << "So " << flush;
+		break;
+
+		case i2c::DebugStatus::SEND_ERROR:
+		OUT << "Se " << flush;
+		break;
+
+		case i2c::DebugStatus::RECV:
+		OUT << "R " << flush;
+		break;
+
+		case i2c::DebugStatus::RECV_LAST:
+		OUT << "RL " << flush;
+		break;
+
+		case i2c::DebugStatus::RECV_OK:
+		OUT << "Ro " << flush;
+		break;
+
+		case i2c::DebugStatus::RECV_ERROR:
+		OUT << "Re " << flush;
+		break;
+	}
+}
 
 //TODO add call hook
 int main() __attribute__((OS_main));
@@ -207,10 +194,8 @@ int main()
 	// Start UART
 	uatx.begin(115200);
 	ostream out = uatx.out();
+	pout = &out;
 	out << F("Starting...") << endl;
-
-	// Initialize callback handler
-	RTCCallback callback{};
 
 	// Initialize FutureManager
 	future::FutureManager<MAX_FUTURES> future_manager;
@@ -219,7 +204,7 @@ int main()
 #ifdef TWCR
 	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, debug_hook};
 #else
-	I2CHANDLER handler{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, debug_hook};
+	I2CHANDLER handler{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
 #endif
 	RTC rtc{handler};
 	out << F("Before handler.begin()") << endl;
@@ -235,7 +220,8 @@ int main()
 		out << F("\nTEST #0 read one RAM byte") << endl;
 		RTC::GET_RAM1 data{0};
 		int ok = rtc.get_ram(data);
-		out << F("get_ram()=") << ok << endl;
+		out << F("get_ram()=") << dec << ok << endl;
+		out << F("handler.status()=") << dec << handler.status() << endl;
 		uint8_t id = data.id();
 		future::FutureStatus status = data.status();
 		out << F("id=") << dec << id << F(" status=") << status << endl;
@@ -247,10 +233,6 @@ int main()
 		data.get(result);
 		out << F("get()=") << hex << result << endl;
 		trace(out);
-		out << F("callback trans = ") << dec << callback.count_transactions() 
-			<< F(", commands = ") << dec << callback.count_commands()
-			<< F(", errors = ") << dec << callback.count_errors() << endl;
-		callback.reset();
 	}
 #else
 	{
@@ -276,10 +258,6 @@ int main()
 			out << F("get()=") << hex << result << endl;
 		}
 		trace(out);
-		out << F("callback trans = ") << dec << callback.count_transactions() 
-			<< F(", commands = ") << dec << callback.count_commands()
-			<< F(", errors = ") << dec << callback.count_errors() << endl;
-		callback.reset();
 	}
 #endif
 

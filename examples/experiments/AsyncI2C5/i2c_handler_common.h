@@ -120,6 +120,7 @@ namespace i2c
 		template<I2CMode> friend class AbstractDevice;
 	};
 
+	//TODO improve use functor for hook, as a template argument
 	template<I2CMode MODE_> class AbstractI2CHandler
 	{
 	public:

@@ -88,19 +88,25 @@ namespace i2c
 			{
 				// pre-conditions (must be synchronized)
 				if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
+				//FIXME actually the following lines shall be synchronized all the time!
 				if (manager.available_futures_() == 0) return errors::EAGAIN;
 				// NOTE: normally 3 following calls should never return false!
 				manager.register_future_(future);
+				int error = 0;
 				for (I2CCommand command : commands)
 				{
 					command.future_id = future.id();
-					handler_.push_command_(command);
+					if (!handler_.push_command_(command))
+					{
+						error = errors::EPROTO;
+						break;
+					}
 				}
 				// Notify handler that transaction is complete
 				// Note: on ATtiny, this method will block until I2C transaction is finished!
 				handler_.last_command_pushed_();
+				return error;
 			}
-			return 0;
 		}
 
 	private:
