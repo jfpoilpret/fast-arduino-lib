@@ -43,11 +43,17 @@ namespace i2c
 					I2C_DEBUG_HOOK hook = nullptr)
 			:	SUPER{error_policy, hook}
 		{
+			// // set SDA/SCL default directions
+			// SUPER::TRAIT::DDR &= bits::CBV8(SUPER::TRAIT::BIT_SDA);
+			// // SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
+			// SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+			// SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+
 			// set SDA/SCL default directions
-			SUPER::TRAIT::DDR &= bits::CBV8(SUPER::TRAIT::BIT_SDA);
-			// SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
-			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
 			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SDA);
+			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
 		}
 
 		void begin()
@@ -159,7 +165,7 @@ namespace i2c
 			// Release SDA (force high)
 			SDA_HIGH();
 			//TODO check START transmission with USISIF flag?
-			bool ok = USISR & bits::BV8(USISIF);
+			bool ok = USISR_ & bits::BV8(USISIF);
 			// this->status_ = (ok ? this->expected_status_ : Status::ARBITRATION_LOST);
 			this->status_ = this->expected_status_;
 		}
@@ -204,17 +210,20 @@ namespace i2c
 
 		uint8_t transfer(uint8_t USISR_count)
 		{
+			//Rework according to AVR310
 			// Init counter (8 bits or 1 bit for acknowledge)
 			USISR_ = USISR_count;
 			do
 			{
 				_delay_loop_1(T_LOW);
 				// clock strobe (SCL raising edge)
-				USICR_ |= bits::BV8(USITC);
+				// USICR_ |= bits::BV8(USITC);
+				USICR_ = bits::BV8(USIWM1, USICS1, USICLK, USITC);
 				SUPER::TRAIT::PIN.loop_until_bit_set(SUPER::TRAIT::BIT_SCL);
 				_delay_loop_1(T_HIGH);
 				// clock strobe (SCL falling edge)
-				USICR_ |= bits::BV8(USITC);
+				// USICR_ |= bits::BV8(USITC);
+				USICR_ = bits::BV8(USIWM1, USICS1, USICLK, USITC);
 			}
 			while ((USISR_ & bits::BV8(USIOIF)) == 0);
 			_delay_loop_1(T_LOW);
