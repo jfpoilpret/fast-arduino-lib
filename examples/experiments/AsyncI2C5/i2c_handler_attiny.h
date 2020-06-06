@@ -256,13 +256,13 @@ namespace i2c
 			this->command_ = command;
 			if (!handle_no_error()) return false;
 
-			if (command.write)
+			if (command.type.write)
 			{
 				// Send device address
 				exec_send_slaw_();
 				if (!handle_no_error()) return false;
 				// Send content
-				while (future::AbstractFutureManager::instance().get_storage_value_size_(command.future_id) >= 1)
+				while (future::AbstractFutureManager::instance().get_storage_value_size_(command.future_id) > 0)
 				{
 					exec_send_data_();
 					if (!handle_no_error()) return false;
@@ -274,7 +274,7 @@ namespace i2c
 				exec_send_slar_();
 				if (!handle_no_error()) return false;
 				// Receive content
-				while (future::AbstractFutureManager::instance().get_future_value_size_(command.future_id) > 1)
+				while (future::AbstractFutureManager::instance().get_future_value_size_(command.future_id) > 0)
 				{
 					exec_receive_data_();
 					if (!handle_no_error()) return false;
