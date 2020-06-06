@@ -75,7 +75,7 @@ namespace i2c
 		bool write : 1;
 		// true if a STOP condition must absolutely be forced at the end of this command
 		bool force_stop : 1;
-		// true if aasociated future is void and must eb forced finished after this command
+		// true if associated future is void and must be forced finished after this command
 		bool finish_future : 1;
 
 		friend class I2CCommand;
