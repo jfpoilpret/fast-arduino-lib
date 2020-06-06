@@ -107,54 +107,51 @@ static void i2c_hook(i2c::DebugStatus status, uint8_t data)
 	switch (status)
 	{
 		case i2c::DebugStatus::START:
-		OUT << "St " << flush;
+		OUT << F("St ") << flush;
 		break;
 
 		case i2c::DebugStatus::REPEAT_START:
-		OUT << "RS " << flush;
+		OUT << F("RS ") << flush;
 		break;
 
 		case i2c::DebugStatus::STOP:
-		OUT << "Sp " << flush;
+		OUT << F("Sp ") << flush;
 		break;
 
 		case i2c::DebugStatus::SLAW:
-		// OUT << "AW " << flush;
-		OUT << "AW " << hex << data << ' ' << flush;
+		OUT << F("AW ") << hex << data << ' ' << flush;
 		break;
 
 		case i2c::DebugStatus::SLAR:
-		// OUT << "AR " << flush;
-		OUT << "AR " << hex << data << ' ' << flush;
+		OUT << F("AR ") << hex << data << ' ' << flush;
 		break;
 
 		case i2c::DebugStatus::SEND:
-		// OUT << "S " << flush;
-		OUT << "S " << hex << data << ' ' << flush;
+		OUT << F("S ") << hex << data << ' ' << flush;
 		break;
 
 		case i2c::DebugStatus::SEND_OK:
-		OUT << "So " << flush;
+		OUT << F("So ") << flush;
 		break;
 
 		case i2c::DebugStatus::SEND_ERROR:
-		OUT << "Se " << flush;
+		OUT << F("Se ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV:
-		OUT << "R " << flush;
+		OUT << F("R ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV_LAST:
-		OUT << "RL " << flush;
+		OUT << F("RL ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV_OK:
-		OUT << "Ro " << flush;
+		OUT << F("Ro ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV_ERROR:
-		OUT << "Re " << flush;
+		OUT << F("Re ") << flush;
 		break;
 	}
 }
