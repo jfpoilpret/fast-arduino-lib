@@ -124,27 +124,29 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	template<uint8_t SIZE_>
 	class SetRamFuture : public future::Future<void, containers::array<uint8_t, SIZE_ + 1>>
 	{
+		//TODO add static assert on SIZE_
 		using PARENT = future::Future<void, containers::array<uint8_t, SIZE_ + 1>>;
 	public:
 		SetRamFuture() = default;
 		explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
-			:	address_{static_cast<uint8_t>(address + RAM_START)}
 		{
 			typename PARENT::IN input;
-			input[0] = address_;
+			input[0] = static_cast<uint8_t>(address + RAM_START);
 			input.set(uint8_t(1), data);
 			this->reset_input(input);
 		}
 		SetRamFuture(SetRamFuture<SIZE_>&&) = default;
 		SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
-	private:
-		uint8_t address_;
-		friend class RTC;
+
+		bool is_input_valid() const
+		{
+			return (this->get_input()[0] + SIZE_ <= RAM_END);
+		}
 	};
 	template<uint8_t SIZE> using SET_RAM = SetRamFuture<SIZE>;
 	template<uint8_t SIZE> int set_ram(SET_RAM<SIZE>& future)
 	{
-		if (future.address_ + SIZE > RAM_END)
+		if (!future.is_input_valid())
 			return errors::EINVAL;
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
@@ -155,18 +157,19 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	public:
 		SetRam1Future() = default;
 		explicit SetRam1Future(uint8_t address, uint8_t data)
-			:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}}, 
-				address_{static_cast<uint8_t>(address + RAM_START)} {}
+			:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}} {}
 		SetRam1Future(SetRam1Future&&) = default;
 		SetRam1Future& operator=(SetRam1Future&&) = default;
-	private:
-		uint8_t address_;
-		friend class RTC;
+
+		bool is_input_valid() const
+		{
+			return (this->get_input()[0] < RAM_END);
+		}
 	};
 	using SET_RAM1 = SetRam1Future;
 	int set_ram(SET_RAM1& future)
 	{
-		if (future.address_ + 1 > RAM_END)
+		if (!future.is_input_valid())
 			return errors::EINVAL;
 		return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 	}
@@ -174,23 +177,23 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	template<uint8_t SIZE_>
 	class GetRamFuture : public future::Future<containers::array<uint8_t, SIZE_>, uint8_t>
 	{
+		//TODO add static assert on SIZE_
 		using PARENT = future::Future<containers::array<uint8_t, SIZE_>, uint8_t>;
 	public:
-		explicit GetRamFuture(uint8_t address)
-			:	PARENT{static_cast<uint8_t>(address + RAM_START)},
-				address_{static_cast<uint8_t>(address + RAM_START)} {}
+		explicit GetRamFuture(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
 		GetRamFuture(GetRamFuture<SIZE_>&&) = default;
 		GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = default;
 
-	private:
-		uint8_t address_;
-		friend class RTC;
+		bool is_input_valid() const
+		{
+			return (this->get_input() + SIZE_ <= RAM_END);
+		}
 	};
 
 	template<uint8_t SIZE> using GET_RAM = GetRamFuture<SIZE>;
 	template<uint8_t SIZE> int get_ram(GET_RAM<SIZE>& future)
 	{
-		if (future.address_ >= RAM_END)
+		if (!future.is_input_valid())
 			return errors::EINVAL;
 		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
@@ -199,22 +202,19 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	{
 		using PARENT = future::Future<uint8_t, uint8_t>;
 	public:
-		explicit GetRam1Future(uint8_t address = 0)
-			:	PARENT{static_cast<uint8_t>(address + RAM_START)},
-				address_{static_cast<uint8_t>(address + RAM_START)} {}
+		explicit GetRam1Future(uint8_t address = 0) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
 		GetRam1Future(GetRam1Future&&) = default;
 		GetRam1Future& operator=(GetRam1Future&&) = default;
 
-	private:
-		//TODO avoid this extra duplicate field; add protected method in Future<> to get input
-		uint8_t address_;
-		//TODO remvoe friend by adding public method is_address_valid() ?
-		friend class RTC;
+		bool is_input_valid() const
+		{
+			return this->get_input() < RAM_END;
+		}
 	};
 	using GET_RAM1 = GetRam1Future;
 	int get_ram(GET_RAM1& future)
 	{
-		if (future.address_ >= RAM_END)
+		if (!future.is_input_valid())
 			return errors::EINVAL;
 		return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
 	}
