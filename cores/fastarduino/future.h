@@ -1382,6 +1382,12 @@ namespace future
 			return true;
 		}
 
+	protected:
+		const IN& get_input() const
+		{
+			return input_;
+		}
+
 	private:
 		void move(Future<OUT, IN>&& that)
 		{
@@ -1508,6 +1514,12 @@ namespace future
 				return false;
 			invalidate();
 			return true;
+		}
+
+	protected:
+		const IN& get_input() const
+		{
+			return input_;
 		}
 
 	private:
