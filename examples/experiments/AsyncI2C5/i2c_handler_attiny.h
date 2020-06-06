@@ -143,10 +143,11 @@ namespace i2c
 		void last_command_pushed_()
 		{
 			// Check if previously executed command already did a STOP
-			if ((!this->command_.type.force_stop) && !clear_commands_)
+			if ((!this->command_.type.force_stop) && (!stopped_already_) && (!clear_commands_))
 				exec_stop_();
 			this->command_ = I2CCommand::none();
 			clear_commands_ = false;
+			stopped_already_ = false;
 		}
 
 		void start_impl_()
@@ -247,7 +248,7 @@ namespace i2c
 			if (command.type.none) return true;
 			if (clear_commands_) return false;
 			// Execute command immediately from start to optional stop
-			// Check if start or repeat start (edpends on previously executed command)
+			// Check if start or repeat start (depends on previously executed command)
 			if (this->command_.type.none || this->command_.type.force_stop)
 				exec_start_();
 			else
@@ -367,6 +368,7 @@ namespace i2c
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
 			_delay_loop_1(DELAY_AFTER_STOP);
+			stopped_already_ = true;
 		}
 
 		bool handle_no_error()
@@ -395,6 +397,8 @@ namespace i2c
 		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(DELAY_AFTER_STOP_US);
 
 		bool clear_commands_ = false;
+		//TODO flag to know when stop has been executed last and thus should not be executed twice in a row
+		bool stopped_already_ = false;
 
 		template<I2CMode> friend class AbstractDevice;
 	};
