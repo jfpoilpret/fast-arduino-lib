@@ -19,6 +19,7 @@
 
 #include <stdint.h>
 #include <fastarduino/i2c.h>
+#include <fastarduino/streams.h>
 
 namespace i2c
 {
@@ -81,7 +82,35 @@ namespace i2c
 		friend class I2CCommand;
 		template<I2CMode> friend class AbstractI2CHandler;
 		template<I2CMode> friend class I2CHandler;
+		friend streams::ostream& operator<<(streams::ostream&, const I2CCommandType&);
+		friend bool operator==(const I2CCommandType&, const I2CCommandType&);
+		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
 	};
+
+	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t)
+	{
+		if (t.none) return out << F("NONE") << streams::flush;
+		out << (t.write ? F("WRITE") : F("READ"));
+		if (t.force_stop)
+			out << F("[STOP]");
+		if (t.finish_future)
+			out << F("[FINISH]");
+		return out << streams::flush;
+	}
+	bool operator==(const I2CCommandType& a, const I2CCommandType& b)
+	{
+		return	(a.none == b.none)
+			&&	(a.write == b.write)
+			&&	(a.force_stop == b.force_stop)
+			&&	(a.finish_future == b.finish_future);
+	}
+	bool operator!=(const I2CCommandType& a, const I2CCommandType& b)
+	{
+		return	(a.none != b.none)
+			||	(a.write != b.write)
+			||	(a.force_stop != b.force_stop)
+			||	(a.finish_future != b.finish_future);
+	}
 
 	// Command in the queue
 	class I2CCommand
@@ -118,7 +147,26 @@ namespace i2c
 		template<I2CMode> friend class AbstractI2CHandler;
 		template<I2CMode> friend class I2CHandler;
 		template<I2CMode> friend class AbstractDevice;
+		friend streams::ostream& operator<<(streams::ostream&, const I2CCommand&);
+		friend bool operator==(const I2CCommand&, const I2CCommand&);
+		friend bool operator!=(const I2CCommand&, const I2CCommand&);
 	};
+
+	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c)
+	{
+		out	<< '{' << c.type << ',' 
+			<< streams::hex << c.target << ',' 
+			<< streams::dec << c.future_id << '}' << streams::flush;
+		return out;
+	}
+	bool operator==(const I2CCommand& a, const I2CCommand& b)
+	{
+		return (a.type == b.type) && (a.target == b.target) && (a.future_id == b.future_id);
+	}
+	bool operator!=(const I2CCommand& a, const I2CCommand& b)
+	{
+		return (a.type != b.type) || (a.target != b.target) || (a.future_id != b.future_id);
+	}
 
 	//TODO improve use functor for hook, as a template argument
 	template<I2CMode MODE_> class AbstractI2CHandler
