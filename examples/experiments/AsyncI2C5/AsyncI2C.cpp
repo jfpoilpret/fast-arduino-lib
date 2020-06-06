@@ -156,7 +156,6 @@ static void i2c_hook(i2c::DebugStatus status, uint8_t data)
 	}
 }
 
-//TODO add call hook
 int main() __attribute__((OS_main));
 int main()
 {
