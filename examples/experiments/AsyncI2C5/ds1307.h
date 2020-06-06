@@ -206,7 +206,9 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 		GetRam1Future& operator=(GetRam1Future&&) = default;
 
 	private:
+		//TODO avoid this extra duplicate field; add protected method in Future<> to get input
 		uint8_t address_;
+		//TODO remvoe friend by adding public method is_address_valid() ?
 		friend class RTC;
 	};
 	using GET_RAM1 = GetRam1Future;
