@@ -99,7 +99,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 using I2CHANDLER = i2c::I2CHandler<i2c::I2CMode::STANDARD>;
 using namespace streams;
 
-static ostream* pout = nullptr;
+ostream* pout = nullptr;
 #define OUT (*pout)
 
 static void i2c_hook(i2c::DebugStatus status, uint8_t data)
@@ -165,22 +165,6 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	// Initialize temporary debug through LEDs
-	// gpio::FastPinType<board::DigitalPin::D1_PA1>::set_mode(gpio::PinMode::OUTPUT);
-	// gpio::FastPinType<board::DigitalPin::D2_PA2>::set_mode(gpio::PinMode::OUTPUT);
-	// gpio::FastPinType<board::DigitalPin::D3_PA3>::set_mode(gpio::PinMode::OUTPUT);
-	// gpio::FastPinType<board::DigitalPin::D5_PA5>::set_mode(gpio::PinMode::OUTPUT);
-
-	// gpio::FastPinType<board::DigitalPin::D1_PA1>::set();
-	// gpio::FastPinType<board::DigitalPin::D2_PA2>::set();
-	// gpio::FastPinType<board::DigitalPin::D3_PA3>::set();
-	// gpio::FastPinType<board::DigitalPin::D5_PA5>::set();
-	// time::delay_ms(2000);
-	// gpio::FastPinType<board::DigitalPin::D1_PA1>::clear();
-	// gpio::FastPinType<board::DigitalPin::D2_PA2>::clear();
-	// gpio::FastPinType<board::DigitalPin::D3_PA3>::clear();
-	// gpio::FastPinType<board::DigitalPin::D5_PA5>::clear();
-
 	// Initialize debugging output
 #ifdef HARD_UART
 	serial::hard::UATX<UART> uatx{output_buffer};
@@ -218,7 +202,7 @@ int main()
 		RTC::GET_RAM1 data{0};
 		int ok = rtc.get_ram(data);
 		out << F("get_ram()=") << dec << ok << endl;
-		out << F("handler.status()=") << dec << handler.status() << endl;
+		out << F("handler.status()=") << hex << handler.status() << endl;
 		uint8_t id = data.id();
 		future::FutureStatus status = data.status();
 		out << F("id=") << dec << id << F(" status=") << status << endl;
