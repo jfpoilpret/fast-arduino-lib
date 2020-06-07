@@ -73,6 +73,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using I2CHANDLER = i2c::I2CManager<i2c::I2CMode::STANDARD>;
 using namespace streams;
+using namespace devices::rtc;
 
 void display_time(streams::ostream& out, const tm& time)
 {
@@ -178,7 +179,7 @@ int main()
 #else
 	I2CHANDLER handler{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
 #endif
-	RTC rtc{handler};
+	DS1307 rtc{handler};
 	out << F("Before handler.begin()") << endl;
 	out << boolalpha << showbase;
 
@@ -209,10 +210,10 @@ int main()
 #else
 	{
 		out << F("\nTEST #0 read all RAM bytes, one by one") << endl;
-		RTC::GET_RAM1 data[MAX_READ];
+		DS1307::GET_RAM1 data[MAX_READ];
 		for (uint8_t i = 0; i < MAX_READ; ++i)
 		{
-			data[i] = RTC::GET_RAM1{i};
+			data[i] = DS1307::GET_RAM1{i};
 			int error = rtc.get_ram(data[i]);
 			if (error)
 				out << F("F") << dec << i << F(" ") << flush;
@@ -233,14 +234,14 @@ int main()
 
 	{
 		out << F("\nTEST #1 read all RAM bytes, all at once") << endl;
-		RTC::GET_RAM<RAM_SIZE> data{0};
+		DS1307::GET_RAM<RAM_SIZE> data{0};
 		int error = rtc.get_ram(data);
 		if (error)
 			out << F("F") << flush;
 		out << endl;
 		out << F("data await()=") << data.await() << endl;
 		out << F("error()=") << dec << data.error() << endl;
-		RTC::GET_RAM<RAM_SIZE>::OUT result;
+		DS1307::GET_RAM<RAM_SIZE>::OUT result;
 		data.get(result);
 		out << F("result") << endl;
 		for (uint8_t i = 0; i < RAM_SIZE; ++i)
@@ -259,7 +260,7 @@ int main()
 		datetime.tm_hour = 20;
 		datetime.tm_min = 0;
 		datetime.tm_sec = 0;
-		RTC::SET_DATETIME set{datetime};
+		DS1307::SET_DATETIME set{datetime};
 		int error = rtc.set_datetime(set);
 		if (error)
 			out << F("S") << endl;
@@ -271,7 +272,7 @@ int main()
 
 	{
 		out << F("\nTEST #3 get datetime (should be: Wed 06.05.2020 20:00:13") << endl;
-		RTC::GET_DATETIME get;
+		DS1307::GET_DATETIME get;
 		int error = rtc.get_datetime(get);
 		if (error)
 			out << F("G") << endl;
