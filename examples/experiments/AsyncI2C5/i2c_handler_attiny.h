@@ -43,12 +43,6 @@ namespace i2c
 					I2C_DEBUG_HOOK hook = nullptr)
 			:	SUPER{error_policy, hook}
 		{
-			// // set SDA/SCL default directions
-			// SUPER::TRAIT::DDR &= bits::CBV8(SUPER::TRAIT::BIT_SDA);
-			// // SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
-			// SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
-			// SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
-
 			// set SDA/SCL default directions
 			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
 			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
@@ -163,10 +157,9 @@ namespace i2c
 			_delay_loop_1(T_HD_STA);
 			// Pull SCL low
 			SCL_LOW();
-			//			_delay_loop_1(T_LOW());
 			// Release SDA (force high)
 			SDA_HIGH();
-			//TODO check START transmission with USISIF flag?
+			//TODO check START transmission with USISIF flag? This seems to fail always?
 			bool ok = USISR_ & bits::BV8(USISIF);
 			// this->status_ = (ok ? this->expected_status_ : Status::ARBITRATION_LOST);
 			this->status_ = this->expected_status_;
@@ -219,12 +212,10 @@ namespace i2c
 			{
 				_delay_loop_1(T_LOW);
 				// clock strobe (SCL raising edge)
-				// USICR_ |= bits::BV8(USITC);
 				USICR_ = bits::BV8(USIWM1, USICS1, USICLK, USITC);
 				SUPER::TRAIT::PIN.loop_until_bit_set(SUPER::TRAIT::BIT_SCL);
 				_delay_loop_1(T_HIGH);
 				// clock strobe (SCL falling edge)
-				// USICR_ |= bits::BV8(USITC);
 				USICR_ = bits::BV8(USIWM1, USICS1, USICLK, USITC);
 			}
 			while ((USISR_ & bits::BV8(USIOIF)) == 0);
@@ -354,7 +345,7 @@ namespace i2c
 			// Fill future
 			bool ok = future::AbstractFutureManager::instance().set_future_value_(this->command_.future_id, data);
 			// This should only happen in case there are 2 concurrent providers for this future
-			//FIXME handle error!
+			//FIXME handle error! (stop current command)
 			if (!ok)
 				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
 			this->call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
