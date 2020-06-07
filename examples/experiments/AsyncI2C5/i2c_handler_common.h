@@ -18,6 +18,7 @@
 #define I2C_HANDLER_COMMON_HH
 
 #include <stdint.h>
+#include <fastarduino/boards/board_traits.h>
 #include <fastarduino/i2c.h>
 #include <fastarduino/streams.h>
 

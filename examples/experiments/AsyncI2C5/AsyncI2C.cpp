@@ -33,6 +33,9 @@
 #include <fastarduino/utilities.h>
 #include <fastarduino/iomanip.h>
 
+#include "i2c_handler.h"
+#include "ds1307.h"
+
 #ifdef ARDUINO_UNO
 #define HARD_UART
 #include <fastarduino/uart.h>
@@ -51,9 +54,6 @@ static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
 #endif
-
-#include "i2c_handler.h"
-#include "ds1307.h"
 
 // Uncomment when device does nto work properly and we want to trace in "real time"
 // every I2C step
