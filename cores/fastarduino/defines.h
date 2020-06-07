@@ -45,8 +45,6 @@
  * @code
  * void set_PORT(uint8_t port) INLINE {...}
  * 
- * explicit inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;
- * 
  * LinkedListImpl() INLINE = default;
  * @endcode
  */
