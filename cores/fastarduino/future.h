@@ -1383,6 +1383,11 @@ namespace future
 		}
 
 	protected:
+		/**
+		 * Return the input storage value as it was initially set (or reset 
+		 * through `reset_input()`), whatever the current state of this Future.
+		 * @sa reset_input()
+		 */
 		const IN& get_input() const
 		{
 			return input_;
