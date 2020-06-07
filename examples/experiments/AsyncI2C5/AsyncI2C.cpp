@@ -5,6 +5,21 @@
  * original API.
  * As a matter of fact, ATtiny USI feature is not very well suited for asynchronous 
  * I2C handling as I2C master (this is easier for slaves).
+ * 
+ * This example works on Arduino UNO and ATtiny84.
+ * Wiring:
+ * - Arduino UNO:
+ *   - A5 (SCL): connected to DS1307 RTC SCL pin
+ *   - A4 (SDA): connected to DS1307 RTC SDA pin
+ *   - D1 (USB TX): directly connected to a console
+ * 
+ * - ATtiny84 based-board:
+ *   - PA4 (SCL): connected to DS1307 RTC SCL pin
+ *   - PA6 (SDA): connected to DS1307 RTC SDA pin
+ *   - PB0 (TX): connected to an SerialUSB converter, connected to a console
+ * 
+ * NOTE: I2C wiring can be very sensitive, it is of utter importance to ensure
+ * all wires are securely connected (using a beadboard can have a bad impact).
  */
 
 #include <util/delay_basic.h>
