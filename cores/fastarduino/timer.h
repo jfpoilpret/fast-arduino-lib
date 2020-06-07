@@ -427,7 +427,7 @@ namespace timer
 
 		/**
 		 * Verifies that the given prescaler @p prescaler is suitable for this timer in
-		 * TimerMode::CTC in ordeer to be able to reach @p us microseconds.
+		 * TimerMode::CTC in order to be able to reach @p us microseconds.
 		 * This is normally not needed but can be helpful in a `static_assert` in
 		 * your code.
 		 * Note this is a `constexpr` method, i.e. it allows compile-time 

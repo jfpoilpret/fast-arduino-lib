@@ -1382,6 +1382,17 @@ namespace future
 			return true;
 		}
 
+	protected:
+		/**
+		 * Return the input storage value as it was initially set (or reset 
+		 * through `reset_input()`), whatever the current state of this Future.
+		 * @sa reset_input()
+		 */
+		const IN& get_input() const
+		{
+			return input_;
+		}
+
 	private:
 		void move(Future<OUT, IN>&& that)
 		{
@@ -1508,6 +1519,12 @@ namespace future
 				return false;
 			invalidate();
 			return true;
+		}
+
+	protected:
+		const IN& get_input() const
+		{
+			return input_;
 		}
 
 	private:
