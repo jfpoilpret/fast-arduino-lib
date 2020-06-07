@@ -198,8 +198,10 @@ namespace i2c
 				&&	(future::AbstractFutureManager::instance().get_storage_value_size_(command_.future_id) == 0))
 				return true;
 
-			// The future must be marked as error
-			future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EPROTO);
+			// When status is FUTURE_ERROR then future has already been marked accordingly
+			if (status_ != Status::FUTURE_ERROR)
+				// The future must be marked as error
+				future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EPROTO);
 			return false;
 		}
 

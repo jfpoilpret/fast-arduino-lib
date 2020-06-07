@@ -100,6 +100,9 @@ namespace i2c
 		constexpr const uint8_t DATA_RECEIVED_ACK = 0x50;
 		/** [Receiver mode] Data byte has been transmitted; NOT ACK has been returned. */
 		constexpr const uint8_t DATA_RECEIVED_NACK = 0x58;
+
+		/** [Any mode] Problem occurring with Future handling during I2C transmission. */
+		constexpr const uint8_t FUTURE_ERROR = 0x80;
 	}
 
 	/**

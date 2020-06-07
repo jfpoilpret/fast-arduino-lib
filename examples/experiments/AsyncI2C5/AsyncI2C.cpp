@@ -57,7 +57,7 @@ static constexpr uint8_t MAX_FUTURES = 8;
 
 // Uncomment when device does nto work properly and we want to trace in "real time"
 // every I2C step
-// #define TRACE_PROTOCOL
+#define TRACE_PROTOCOL
 
 // This is used when nothing works at all and this reduces the tests to only one get_ram() call
 // #define BASIC_DEBUG

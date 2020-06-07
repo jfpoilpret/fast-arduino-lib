@@ -314,12 +314,18 @@ namespace i2c
 			uint8_t data = 0;
 			bool ok = future::AbstractFutureManager::instance().get_storage_value_(this->command_.future_id, data);
 			this->call_hook(DebugStatus::SEND, data);
-			// This should only happen if there are 2 concurrent consumers for that Future
-			if (!ok)
-				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
 			this->call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
 			this->expected_status_ = Status::DATA_TRANSMITTED_ACK;
-			send_byte_impl(data);
+			// This should only happen if there are 2 concurrent consumers for that Future
+			if (ok)
+			{
+				send_byte_impl(data);
+			}
+			else
+			{
+				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
+				this->status_ = Status::FUTURE_ERROR;
+			}
 		}
 		void exec_receive_data_()
 		{
@@ -344,9 +350,11 @@ namespace i2c
 			// Fill future
 			bool ok = future::AbstractFutureManager::instance().set_future_value_(this->command_.future_id, data);
 			// This should only happen in case there are 2 concurrent providers for this future
-			//FIXME handle error! (stop current command)
 			if (!ok)
+			{
 				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
+				this->status_ = Status::FUTURE_ERROR;
+			}
 			this->call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
 		}
 		void exec_stop_(bool error = false)
