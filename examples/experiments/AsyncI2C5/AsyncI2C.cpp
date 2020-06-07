@@ -80,8 +80,21 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 using I2CHANDLER = i2c::I2CHandler<i2c::I2CMode::STANDARD>;
 using namespace streams;
 
+void display_time(streams::ostream& out, const tm& time)
+{
+	out	<< streams::dec << F("RTC: [") 
+		<< uint8_t(time.tm_wday) << ']'
+		<< time.tm_mday << '.'
+		<< time.tm_mon << '.'
+		<< time.tm_year << ' '
+		<< time.tm_hour << ':'
+		<< time.tm_min << ':'
+		<< time.tm_sec
+		<< streams::endl;
+}
+
 ostream* pout = nullptr;
-#define OUT (*pout)
+#define COUT (*pout)
 
 #ifdef TRACE_PROTOCOL
 static void i2c_hook(i2c::DebugStatus status, uint8_t data)
@@ -89,51 +102,51 @@ static void i2c_hook(i2c::DebugStatus status, uint8_t data)
 	switch (status)
 	{
 		case i2c::DebugStatus::START:
-		OUT << F("St ") << flush;
+		COUT << F("St ") << flush;
 		break;
 
 		case i2c::DebugStatus::REPEAT_START:
-		OUT << F("RS ") << flush;
+		COUT << F("RS ") << flush;
 		break;
 
 		case i2c::DebugStatus::STOP:
-		OUT << F("Sp ") << flush;
+		COUT << F("Sp ") << flush;
 		break;
 
 		case i2c::DebugStatus::SLAW:
-		OUT << F("AW ") << hex << data << ' ' << flush;
+		COUT << F("AW ") << hex << data << ' ' << flush;
 		break;
 
 		case i2c::DebugStatus::SLAR:
-		OUT << F("AR ") << hex << data << ' ' << flush;
+		COUT << F("AR ") << hex << data << ' ' << flush;
 		break;
 
 		case i2c::DebugStatus::SEND:
-		OUT << F("S ") << hex << data << ' ' << flush;
+		COUT << F("S ") << hex << data << ' ' << flush;
 		break;
 
 		case i2c::DebugStatus::SEND_OK:
-		OUT << F("So ") << flush;
+		COUT << F("So ") << flush;
 		break;
 
 		case i2c::DebugStatus::SEND_ERROR:
-		OUT << F("Se ") << flush;
+		COUT << F("Se ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV:
-		OUT << F("R ") << flush;
+		COUT << F("R ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV_LAST:
-		OUT << F("RL ") << flush;
+		COUT << F("RL ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV_OK:
-		OUT << F("Ro ") << flush;
+		COUT << F("Ro ") << flush;
 		break;
 
 		case i2c::DebugStatus::RECV_ERROR:
-		OUT << F("Re ") << flush;
+		COUT << F("Re ") << flush;
 		break;
 	}
 }
@@ -222,6 +235,57 @@ int main()
 			data[i].get(result);
 			out << F("get()=") << hex << result << endl;
 		}
+	}
+
+	{
+		out << F("\nTEST #1 read all RAM bytes, all at once") << endl;
+		RTC::GET_RAM<RAM_SIZE> data{0};
+		int error = rtc.get_ram(data);
+		if (error)
+			out << F("F") << flush;
+		out << endl;
+		out << F("data await()=") << data.await() << endl;
+		out << F("error()=") << dec << data.error() << endl;
+		RTC::GET_RAM<RAM_SIZE>::OUT result;
+		data.get(result);
+		out << F("result") << endl;
+		for (uint8_t i = 0; i < RAM_SIZE; ++i)
+		{
+			out << dec << i << '=' << hex << result[i] << endl;
+		}
+	}
+
+	{
+		out << F("\nTEST #2 set datetime (Wed 06.05.2020 20:00:00)") << endl;
+		tm datetime;
+		datetime.tm_year = 20;
+		datetime.tm_mon = 5;
+		datetime.tm_mday = 6;
+		datetime.tm_wday = WeekDay::WEDNESDAY;
+		datetime.tm_hour = 20;
+		datetime.tm_min = 0;
+		datetime.tm_sec = 0;
+		RTC::SET_DATETIME set{datetime};
+		int error = rtc.set_datetime(set);
+		if (error)
+			out << F("S") << endl;
+		out << F("set await()=") << set.await() << endl;
+		out << F("error()=") << dec << set.error() << endl;
+	}
+
+	time::delay_ms(13000);
+
+	{
+		out << F("\nTEST #3 get datetime (should be: Wed 06.05.2020 20:00:13") << endl;
+		RTC::GET_DATETIME get;
+		int error = rtc.get_datetime(get);
+		if (error)
+			out << F("G") << endl;
+		out << F("get await()=") << get.await() << endl;
+		out << F("error()=") << dec << get.error() << endl;
+		tm datetime;
+		out << F("get()=") << dec << get.get(datetime) << endl;
+		display_time(out, datetime);
 	}
 #endif
 
