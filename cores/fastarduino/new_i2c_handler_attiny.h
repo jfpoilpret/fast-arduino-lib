@@ -14,6 +14,11 @@
 
 /// @cond api
 
+/**
+ * @file 
+ * ATtiny I2C Manager API. This defines the synchronous I2CManager for ATtiny 
+ * architecture.
+ */
 #ifndef I2C_HANDLER_ATTINY_HH
 #define I2C_HANDLER_ATTINY_HH
 
@@ -26,19 +31,35 @@
 #include "utilities.h"
 #include "new_i2c_handler_common.h"
 
-//TODO DOC
-#define REGISTER_I2C_ISR(MODE)
-
 namespace i2c
 {
-	//TODO DOC
-	template<I2CMode MODE_> class I2CHandler : public AbstractI2CHandler<MODE_>
+	/**
+	 * General I2C Manager for ATtiny architecture, on which it handles all I2C
+	 * commands in a synchronous way (contrarily to ATmega implementation which
+	 * is asynchronous).
+	 * It is used by all I2C devices for transmission.
+	 * 
+	 * TODO mention it works the same (API) as ATmega implementation
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @sa i2c::I2CMode
+	 */
+	template<I2CMode MODE_ = I2CMode::STANDARD>
+	class I2CManager : public AbstractI2CManager<MODE_>
 	{
-		using SUPER = AbstractI2CHandler<MODE_>;
+		using SUPER = AbstractI2CManager<MODE_>;
 
 	public:
-		//TODO DOC
-		I2CHandler(	I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
+		/**
+		 * Create an I2C Manager for ATmega MCUs, with an optional hook function
+		 * for debugging.
+		 * 
+		 * @param error_policy the policy used to handle queued command when an 
+		 * error occurs
+		 * @param hook an optional hook function that will be called back after
+		 * each transmission operation.
+		 */
+		I2CManager(	I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
 					I2C_DEBUG_HOOK hook = nullptr)
 			:	SUPER{error_policy, hook}
 		{
@@ -49,18 +70,36 @@ namespace i2c
 			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
 		}
 
-		//TODO DOC
+		/**
+		 * Prepare and enable the MCU for I2C transmission.
+		 * Preparation includes setup of I2C pins (SDA and SCL).
+		 * This method is synchronized.
+		 * @sa end()
+		 * @sa begin_()
+		 */
 		void begin()
 		{
 			synchronized begin_();
 		}
-		//TODO DOC
+
+		/**
+		 * Disable MCU I2C transmission.
+		 * This method is synchronized.
+		 * @sa begin()
+		 * @sa end_()
+		 */
 		void end()
 		{
 			synchronized end_();
 		}
 
-		//TODO DOC
+		/**
+		 * Prepare and enable the MCU for I2C transmission.
+		 * Preparation includes setup of I2C pins (SDA and SCL).
+		 * This method is NOT synchronized.
+		 * @sa end_()
+		 * @sa begin()
+		 */
 		void begin_()
 		{
 			// 1. Force 1 to data
@@ -73,7 +112,13 @@ namespace i2c
 			// 3. Set SDA as output
 			SDA_OUTPUT();
 		}
-		//TODO DOC
+
+		/**
+		 * Disable MCU I2C transmission.
+		 * This method is NOT synchronized.
+		 * @sa begin_()
+		 * @sa end()
+		 */
 		void end_()
 		{
 			// Disable TWI
@@ -401,7 +446,7 @@ namespace i2c
 		bool clear_commands_ = false;
 		bool stopped_already_ = false;
 
-		template<I2CMode> friend class AbstractDevice;
+		template<I2CMode> friend class I2CDevice;
 	};
 }
 

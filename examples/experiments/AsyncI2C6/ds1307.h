@@ -13,7 +13,7 @@
 #include <fastarduino/new_i2c_device.h>
 
 // Device driver guidelines:
-// - Template on MODE only if both modes accepted, otherwise force MODE
+// - Template on MODE only if both modes accepted, otherwise force proper MODE
 // - Define Future subclass (inside device class) for every future requiring input (constant, or user-provided)
 //   naming convention: MethodNameFuture
 // - Future subclass shall have explicit constructor with mandatory input arguments (no default)
@@ -50,7 +50,7 @@ enum class SquareWaveFrequency : uint8_t
 	FREQ_32768HZ = 0x03
 };
 
-class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
+class RTC : public i2c::I2CDevice<i2c::I2CMode::STANDARD>
 {
 	struct set_tm
 	{
@@ -59,8 +59,8 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	};
 
 	public:
-	RTC(i2c::I2CHandler<i2c::I2CMode::STANDARD>& handler)
-		: i2c::AbstractDevice<i2c::I2CMode::STANDARD>{handler, DEVICE_ADDRESS} {}
+	RTC(i2c::I2CManager<i2c::I2CMode::STANDARD>& handler)
+		: i2c::I2CDevice<i2c::I2CMode::STANDARD>{handler, DEVICE_ADDRESS} {}
 
 	static constexpr uint8_t ram_size()
 	{

@@ -14,6 +14,11 @@
 
 /// @cond api
 
+/**
+ * @file 
+ * ATmega I2C Manager API. This defines the asynchronous I2CManager for ATmega 
+ * architecture.
+ */
 #ifndef I2C_HANDLER_ATMEGA_HH
 #define I2C_HANDLER_ATMEGA_HH
 
@@ -64,17 +69,38 @@ ISR(TWI_vect)                                                       \
 
 namespace i2c
 {
-	//TODO DOC
-	//TODO rename to I2CManager
-	// This is an asynchronous I2C handler
-	template<I2CMode MODE_> class I2CHandler : public AbstractI2CHandler<MODE_>
+	/**
+	 * General I2C Manager for ATmega architecture, on which it handles all I2C
+	 * commands asynchronously.
+	 * It is used by all I2C devices for transmission.
+	 * 
+	 * TODO provide approach details (already in above comment)
+	 * TODO mention need to register ISR
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @sa i2c::I2CMode
+	 */
+	template<I2CMode MODE_ = I2CMode::STANDARD>
+	class I2CManager : public AbstractI2CManager<MODE_>
 	{
-		using SUPER = AbstractI2CHandler<MODE_>;
+		using SUPER = AbstractI2CManager<MODE_>;
 
 	public:
-		//TODO DOC
+		/**
+		 * Create an I2C Manager for ATmega MCUs, with an optional hook function
+		 * for debugging.
+		 * 
+		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
+		 * asynchronous handling
+		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
+		 * queue I2C command for asynchronous handling
+		 * @param error_policy the policy used to handle queued command when an 
+		 * error occurs
+		 * @param hook an optional hook function that will be called back after
+		 * each transmission operation.
+		 */
 		template<uint8_t SIZE> explicit 
-		I2CHandler(	I2CCommand (&buffer)[SIZE],
+		I2CManager(	I2CCommand (&buffer)[SIZE],
 					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
 					I2C_DEBUG_HOOK hook = nullptr)
 			:	SUPER{error_policy, hook}, commands_{buffer}
@@ -82,18 +108,36 @@ namespace i2c
 			interrupt::register_handler(*this);
 		}
 
-		//TODO DOC
+		/**
+		 * Prepare and enable the MCU for I2C transmission.
+		 * Preparation includes setup of I2C pins (SDA and SCL).
+		 * This method is synchronized.
+		 * @sa end()
+		 * @sa begin_()
+		 */
 		void begin()
 		{
 			synchronized begin_();
 		}
-		//TODO DOC
+
+		/**
+		 * Disable MCU I2C transmission.
+		 * This method is synchronized.
+		 * @sa begin()
+		 * @sa end_()
+		 */
 		void end()
 		{
 			synchronized end_();
 		}
 
-		//TODO DOC
+		/**
+		 * Prepare and enable the MCU for I2C transmission.
+		 * Preparation includes setup of I2C pins (SDA and SCL).
+		 * This method is NOT synchronized.
+		 * @sa end_()
+		 * @sa begin()
+		 */
 		void begin_()
 		{
 			// 1. set SDA/SCL pullups
@@ -104,7 +148,13 @@ namespace i2c
 			// 3. Enable TWI
 			TWCR_ = bits::BV8(TWEN);
 		}
-		//TODO DOC
+
+		/**
+		 * Disable MCU I2C transmission.
+		 * This method is NOT synchronized.
+		 * @sa begin_()
+		 * @sa end()
+		 */
 		void end_()
 		{
 			// 1. Disable TWI
@@ -406,23 +456,24 @@ namespace i2c
 		// Status of current command processing
 		State current_;
 
-		template<I2CMode> friend class AbstractDevice;
+		template<I2CMode> friend class I2CDevice;
 		friend struct isr_handler;
 	};
 
+	/// @cond notdocumented
 	struct isr_handler
 	{
 		template<I2CMode MODE_>
 		static void i2c_change()
 		{
-			using HANDLER = I2CHandler<MODE_>;
+			using HANDLER = I2CManager<MODE_>;
 			interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
 		}
 
 		template<I2CMode MODE_, void (*CALLBACK_)(I2CCallback)>
 		static void i2c_change_function()
 		{
-			using HANDLER = I2CHandler<MODE_>;
+			using HANDLER = I2CManager<MODE_>;
 			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE) CALLBACK_(callback);
 		}
@@ -430,12 +481,13 @@ namespace i2c
 		template<I2CMode MODE_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(I2CCallback)>
 		static void i2c_change_method()
 		{
-			using HANDLER = I2CHandler<MODE_>;
+			using HANDLER = I2CManager<MODE_>;
 			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 				interrupt::CallbackHandler<void (HANDLER_::*)(I2CCallback), CALLBACK_>::call(callback);
 		}
 	};
+	/// @endcond
 }
 
 #endif /* I2C_HANDLER_ATMEGA_HH */

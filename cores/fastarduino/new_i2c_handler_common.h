@@ -14,6 +14,11 @@
 
 /// @cond api
 
+/**
+ * @file 
+ * Common I2C Manager API. This is automatically included by other header files,
+ * you should never include it directly in your programs.
+ */
 #ifndef I2C_HANDLER_COMMON_HH
 #define I2C_HANDLER_COMMON_HH
 
@@ -86,8 +91,8 @@ namespace i2c
 		bool finish_future : 1;
 
 		friend class I2CCommand;
-		template<I2CMode> friend class AbstractI2CHandler;
-		template<I2CMode> friend class I2CHandler;
+		template<I2CMode> friend class AbstractI2CManager;
+		template<I2CMode> friend class I2CManager;
 		friend streams::ostream& operator<<(streams::ostream&, const I2CCommandType&);
 		friend bool operator==(const I2CCommandType&, const I2CCommandType&);
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
@@ -151,9 +156,9 @@ namespace i2c
 		uint8_t target = 0;
 		uint8_t future_id = 0;
 
-		template<I2CMode> friend class AbstractI2CHandler;
-		template<I2CMode> friend class I2CHandler;
-		template<I2CMode> friend class AbstractDevice;
+		template<I2CMode> friend class AbstractI2CManager;
+		template<I2CMode> friend class I2CManager;
+		template<I2CMode> friend class I2CDevice;
 		friend streams::ostream& operator<<(streams::ostream&, const I2CCommand&);
 		friend bool operator==(const I2CCommand&, const I2CCommand&);
 		friend bool operator!=(const I2CCommand&, const I2CCommand&);
@@ -175,24 +180,41 @@ namespace i2c
 		return (a.type != b.type) || (a.target != b.target) || (a.future_id != b.future_id);
 	}
 
-	//TODO DOC
-	template<I2CMode MODE_> class AbstractI2CHandler
+	/**
+	 * Abstract I2C Manager.
+	 * It is specifically subclassed for ATmega Vs. ATtiny architectures.
+	 * You should never need to subclass AbstractI2CManager yourself.
+	 * 
+	 * For the time being, the MCU must always act as the only master on the bus.
+	 * Using MCU as a slave will be supported in a later version of FastArduino.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CManager
+	 */
+	template<I2CMode MODE_> class AbstractI2CManager
 	{
 	public:
-		//TODO DOC
+		/** The I2C mode for this manager. */
 		static constexpr const I2CMode MODE = MODE_;
 
-		//TODO DOC
+		/**
+		 * Return latest transmission status.
+		 * Possible statuses are defined in namespace `i2c::Status`.
+		 * If latest operation was OK, then `i2c::Status::OK` (`0`) is returned.
+		 * Any non zero value indicates an error.
+		 * @sa i2c::Status
+		 */
 		uint8_t status() const
 		{
 			return status_;
 		}
 
 	protected:
-		AbstractI2CHandler(const AbstractI2CHandler<MODE_>&) = delete;
-		AbstractI2CHandler<MODE_>& operator=(const AbstractI2CHandler<MODE_>&) = delete;
+		AbstractI2CManager(const AbstractI2CManager<MODE_>&) = delete;
+		AbstractI2CManager<MODE_>& operator=(const AbstractI2CManager<MODE_>&) = delete;
 
-		explicit AbstractI2CHandler(I2CErrorPolicy error_policy, I2C_DEBUG_HOOK hook)
+		explicit AbstractI2CManager(I2CErrorPolicy error_policy, I2C_DEBUG_HOOK hook)
 			:	error_policy_{error_policy}, hook_{hook} {}
 
 		using TRAIT = board_traits::TWI_trait;

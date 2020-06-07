@@ -12,6 +12,13 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
+/// @cond api
+
+/**
+ * @file 
+ * Common I2C Manager API. This will automatically include the proper header,
+ * based on target architecture, ATmega or ATtiny.
+ */
 #ifndef I2C_HANDLER_HH
 #define I2C_HANDLER_HH
 
@@ -22,3 +29,5 @@
 #endif
 
 #endif /* I2C_HANDLER_HH */
+
+/// @endcond

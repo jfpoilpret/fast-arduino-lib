@@ -14,6 +14,10 @@
 
 /// @cond api
 
+/**
+ * @file 
+ * I2C Device API.
+ */
 #ifndef I2C_DEVICE_HH
 #define I2C_DEVICE_HH
 
@@ -23,6 +27,7 @@
 #include "future.h"
 #include "new_i2c_handler.h"
 
+/// @cond notdocumented
 #if defined(TWCR)
 // Truly asynchronous mode (ATmega only)
 // The whole code block in launch_commands() must be synchronized
@@ -34,6 +39,7 @@
 #define INNER_SYNCHRONIZED synchronized
 #define OUTER_SYNCHRONIZED
 #endif
+/// @endcond
 
 namespace i2c
 {
@@ -44,6 +50,7 @@ namespace i2c
 		FORCE_STOP = 0x01,
 		FUTURE_FINISH = 0x02
 	};
+	
 	I2CFinish operator|(I2CFinish f1, I2CFinish f2)
 	{
 		return I2CFinish(uint8_t(f1) | uint8_t(f2));
@@ -53,39 +60,122 @@ namespace i2c
 		return I2CFinish(uint8_t(f1) & uint8_t(f2));
 	}
 
-	//TODO DOC
-	//TODO rename to I2CDevice
+	/**
+	 * Base class for all I2C devices.
+	 * 
+	 * @tparam MODE_ the I2C mode for this device; this determines the `I2CManager` type
+	 * that can manage this device.
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CManager
+	 */
 	template<I2CMode MODE>
-	class AbstractDevice
+	class I2CDevice
 	{
-		public:
-		//TODO DOC
-		AbstractDevice(I2CHandler<MODE>& handler, uint8_t device)
-		: device_{device}, handler_{handler} {}
+	public:
+		/** the I2C mode for this device. */
+		static constexpr const I2CMode MODE = MODE_;
+		/** the type of `I2CManager` that can handle this device. */
+		using MANAGER = I2CManager<MODE>;
 
-		AbstractDevice(const AbstractDevice<MODE>&) = delete;
-		AbstractDevice<MODE>& operator=(const AbstractDevice<MODE>&) = delete;
+	protected:
+		/**
+		 * Create a new I2C device. This constructor must be called by a subclass
+		 * implementing an actua I2C device.
+		 * @param manager the I2C Manager that is in charge of I2C bus
+		 * @param device the 8-bits device address on the I2C bus; it is constructed 
+		 * from the actual 7-bits address, after left-shifting 1 bit. This can be 
+		 * changed dynamically later for devices that support address changes.
+		 * 
+		 * @sa set_device()
+		 */
+		I2CDevice(I2CManager<MODE>& manager, uint8_t device)
+		: device_{device}, handler_{manager} {}
 
-		protected:
-		//TODO DOC
+		I2CDevice(const I2CDevice<MODE>&) = delete;
+		I2CDevice<MODE>& operator=(const I2CDevice<MODE>&) = delete;
+
+		/**
+		 * Change the I2C address of this device.
+		 * 
+		 * @param device the 8-bits device address on the I2C bus; it is constructed 
+		 * from the actual 7-bits address, after left-shifting 1 bit. This can be 
+		 * changed dynamically later for devices that support address changes.
+		 */
 		void set_device(uint8_t device)
 		{
 			device_ = device;
 		}
 
-		//TODO DOC
+		/**
+		 * Build a read I2CCommand that can be later pushed to the I2CManager for
+		 * proper handling.
+		 * Calling this method has no effect on the bus until the returned command 
+		 * is actually pushed to the I2CManager through a `launch_commands()` call.
+		 * 
+		 * @param finish specify the behavior to adopt after this command has been
+		 * fully handled through the I2C bus; it allows to ensure a STOP condition
+		 * will be sent on the bus (independently of the existence of further commands),
+		 * or force the end of the Future associated to the chain of I2C commands.
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 */
 		I2CCommand read(I2CFinish finish = I2CFinish::NONE)
 		{
 			return I2CCommand::read(
 				device_, uint8_t(finish & I2CFinish::FORCE_STOP), 0, uint8_t(finish & I2CFinish::FUTURE_FINISH));
 		}
-		//TODO DOC
+
+		/**
+		 * Build a write I2CCommand that can be later pushed to the I2CManager for
+		 * proper handling.
+		 * Calling this method has no effect on the bus until the returned command 
+		 * is actually pushed to the I2CManager through a `launch_commands()` call.
+		 * 
+		 * @param finish specify the behavior to adopt after this command has been
+		 * fully handled through the I2C bus; it allows to ensure a STOP condition
+		 * will be sent on the bus (independently of the existence of further commands),
+		 * or force the end of the Future associated to the chain of I2C commands.
+		 * 
+		 * @sa launch_commands()
+		 * @sa read()
+		 */
 		I2CCommand write(I2CFinish finish = I2CFinish::NONE)
 		{
 			return I2CCommand::write(
 				device_, uint8_t(finish & I2CFinish::FORCE_STOP), 0, uint8_t(finish & I2CFinish::FUTURE_FINISH));
 		}
-		//TODO DOC
+
+		/**
+		 * Launch execution (asynchronously for ATmega, synchronously for ATtiny)
+		 * of a chain of I2CCommand items (constructed with `read()` and `write()`
+		 * methods).
+		 * 
+		 * On ATmega, the method returns immediately and one has to use @p future
+		 * status to know when all @p commands have been executed.
+		 * 
+		 * On ATtiny, this command is blocking and returns only ocne all @p commands
+		 * have been executed on the I2C bus.
+		 * 
+		 * I2C commands execution is based on a Future that is used to:
+		 * - provide data to write commands
+		 * - store data returned by read commands
+		 * 
+		 * @param future the Future conatining all write data and ready to store 
+		 * all read data; it is shared by all @p commands
+		 * @param commands the list of I2CCommand to be executed, one after another
+		 * 
+		 * @retval 0 when the method did not encounter any error
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here.
+		 * 
+		 * @sa read()
+		 * @sa write()
+		 * @sa errors
+		 */
 		int launch_commands(future::AbstractFuture& future, std::initializer_list<I2CCommand> commands)
 		{
 			const uint8_t num_commands = commands.size();
@@ -119,7 +209,7 @@ namespace i2c
 
 	private:
 		uint8_t device_ = 0;
-		I2CHandler<MODE>& handler_;
+		I2CManager<MODE>& handler_;
 	};
 }
 

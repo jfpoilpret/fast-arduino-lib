@@ -71,7 +71,7 @@ streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s)
 
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-using I2CHANDLER = i2c::I2CHandler<i2c::I2CMode::STANDARD>;
+using I2CHANDLER = i2c::I2CManager<i2c::I2CMode::STANDARD>;
 using namespace streams;
 
 void display_time(streams::ostream& out, const tm& time)
