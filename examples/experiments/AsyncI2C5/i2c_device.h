@@ -29,11 +29,13 @@
 #if defined(TWCR)
 // Truly asynchronous mode (ATmega only)
 // The whole code block in launch_commands() must be synchronized
-#define SYNCHRONIZED synchronized
+#define OUTER_SYNCHRONIZED synchronized
+#define INNER_SYNCHRONIZED
 #else
 // Fake asynchronous mode (ATtiny)
-// nothing in launch_commands() must be synchronized
-#define SYNCHRONIZED
+// Only a few method calls in launch_commands() shall be synchronized
+#define INNER_SYNCHRONIZED synchronized
+#define OUTER_SYNCHRONIZED
 #endif
 
 namespace i2c
@@ -84,18 +86,20 @@ namespace i2c
 			const uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
 			auto& manager = future::AbstractFutureManager::instance();
-			SYNCHRONIZED
+			OUTER_SYNCHRONIZED
 			{
-				// pre-conditions (must be synchronized)
-				if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
-				//FIXME actually the following lines shall be synchronized all the time!
-				if (manager.available_futures_() == 0) return errors::EAGAIN;
-				// NOTE: normally 3 following calls should never return false!
-				manager.register_future_(future);
+				INNER_SYNCHRONIZED
+				{
+					// pre-conditions (must be synchronized)
+					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
+					if (manager.available_futures_() == 0) return errors::EAGAIN;
+					manager.register_future_(future);
+				}
 				int error = 0;
 				for (I2CCommand command : commands)
 				{
 					command.future_id = future.id();
+					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command))
 					{
 						error = errors::EPROTO;
@@ -103,7 +107,6 @@ namespace i2c
 					}
 				}
 				// Notify handler that transaction is complete
-				// Note: on ATtiny, this method will block until I2C transaction is finished!
 				handler_.last_command_pushed_();
 				return error;
 			}

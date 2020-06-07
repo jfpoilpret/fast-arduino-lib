@@ -159,10 +159,9 @@ namespace i2c
 			SCL_LOW();
 			// Release SDA (force high)
 			SDA_HIGH();
-			//TODO check START transmission with USISIF flag? This seems to fail always?
+			// Check START transmission with USISIF flag
 			bool ok = USISR_ & bits::BV8(USISIF);
-			// this->status_ = (ok ? this->expected_status_ : Status::ARBITRATION_LOST);
-			this->status_ = this->expected_status_;
+			this->status_ = (ok ? this->expected_status_ : Status::ARBITRATION_LOST);
 		}
 
 		void send_byte_impl(uint8_t data)
