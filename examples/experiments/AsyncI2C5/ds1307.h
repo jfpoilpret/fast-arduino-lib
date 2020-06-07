@@ -124,12 +124,12 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	template<uint8_t SIZE_>
 	class SetRamFuture : public future::Future<void, containers::array<uint8_t, SIZE_ + 1>>
 	{
-		//TODO add static assert on SIZE_
 		using PARENT = future::Future<void, containers::array<uint8_t, SIZE_ + 1>>;
 	public:
 		SetRamFuture() = default;
 		explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
 		{
+			static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
 			typename PARENT::IN input;
 			input[0] = static_cast<uint8_t>(address + RAM_START);
 			input.set(uint8_t(1), data);
@@ -177,10 +177,12 @@ class RTC : public i2c::AbstractDevice<i2c::I2CMode::STANDARD>
 	template<uint8_t SIZE_>
 	class GetRamFuture : public future::Future<containers::array<uint8_t, SIZE_>, uint8_t>
 	{
-		//TODO add static assert on SIZE_
 		using PARENT = future::Future<containers::array<uint8_t, SIZE_>, uint8_t>;
 	public:
-		explicit GetRamFuture(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
+		explicit GetRamFuture(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)}
+		{
+			static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
+		}
 		GetRamFuture(GetRamFuture<SIZE_>&&) = default;
 		GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = default;
 

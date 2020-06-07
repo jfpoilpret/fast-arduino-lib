@@ -168,7 +168,6 @@ namespace i2c
 		return (a.type != b.type) || (a.target != b.target) || (a.future_id != b.future_id);
 	}
 
-	//TODO improve use functor for hook, as a template argument
 	template<I2CMode MODE_> class AbstractI2CHandler
 	{
 	public:
