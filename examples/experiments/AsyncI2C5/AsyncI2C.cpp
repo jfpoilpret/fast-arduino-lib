@@ -1,11 +1,10 @@
 /*
  * This program is just for personal experiments here on AVR features and C++ stuff
- * This one is a proof of concept on I2C asynchronous handling specificaloly for
- * ATtiny architecture.
+ * This one is a proof of concept on adapting new I2C asynchronous handling (ATmega)
+ * to also fit ATtiny architecture in a degraded (synchronous) way while keeping 
+ * original API.
  * As a matter of fact, ATtiny USI feature is not very well suited for asynchronous 
  * I2C handling as I2C master (this is easier for slaves).
- * This PoC will try to demonstrate working with DS1307 RTC chip from an ATtiny84 MCU, 
- * using Timer0 as clock source for USI SCL clock.
  */
 
 #include <util/delay_basic.h>
@@ -41,23 +40,12 @@ static constexpr uint8_t MAX_FUTURES = 8;
 #include "i2c_handler.h"
 #include "ds1307.h"
 
-// Setup debugging stuff
-// #define DEBUG_STEPS
-// #define DEBUG_SEND_OK
-// #define DEBUG_SEND_ERR
-// #define DEBUG_RECV_OK
-// #define DEBUG_RECV_ERR
-#include "debug.h"
+// Uncomment when device does nto work properly and we want to trace in "real time"
+// every I2C step
+// #define TRACE_PROTOCOL
 
-#if defined(DEBUG_STEPS) || defined(DEBUG_SEND_OK) || defined(DEBUG_SEND_ERR) || defined(DEBUG_RECV_OK) || defined(DEBUG_RECV_ERR)
-#define DEBUG_STATUS
-#endif
-
-// This is used when nothing works at all and this reduces the tests to only once get_ram() call
-#define BASIC_DEBUG
-
-// Actual test example
-//=====================
+// This is used when nothing works at all and this reduces the tests to only one get_ram() call
+// #define BASIC_DEBUG
 
 #ifdef TWCR
 REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
@@ -87,13 +75,6 @@ streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s)
 	return out << convert(s);
 }
 
-void trace(streams::ostream& out)
-{
-#ifdef DEBUG_STATUS
-	trace_states(out);
-#endif
-}
-
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using I2CHANDLER = i2c::I2CHandler<i2c::I2CMode::STANDARD>;
@@ -102,6 +83,7 @@ using namespace streams;
 ostream* pout = nullptr;
 #define OUT (*pout)
 
+#ifdef TRACE_PROTOCOL
 static void i2c_hook(i2c::DebugStatus status, uint8_t data)
 {
 	switch (status)
@@ -155,6 +137,9 @@ static void i2c_hook(i2c::DebugStatus status, uint8_t data)
 		break;
 	}
 }
+#else
+i2c::I2C_DEBUG_HOOK i2c_hook = nullptr; 
+#endif
 
 int main() __attribute__((OS_main));
 int main()
@@ -182,7 +167,7 @@ int main()
 
 	// Initialize I2C async handler
 #ifdef TWCR
-	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, debug_hook};
+	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
 #else
 	I2CHANDLER handler{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
 #endif
@@ -193,6 +178,7 @@ int main()
 	handler.begin();
 
 	constexpr uint8_t RAM_SIZE = rtc.ram_size();
+	constexpr uint8_t MAX_READ = (RAM_SIZE < MAX_FUTURES ? RAM_SIZE : MAX_FUTURES);
 
 #ifdef BASIC_DEBUG
 	// INITIAL debug test with only one call, normally not part of complete unit tests
@@ -212,13 +198,12 @@ int main()
 		uint8_t result = 0;
 		data.get(result);
 		out << F("get()=") << hex << result << endl;
-		trace(out);
 	}
 #else
 	{
 		out << F("\nTEST #0 read all RAM bytes, one by one") << endl;
-		RTC::GET_RAM1 data[10];
-		for (uint8_t i = 0; i < 10; ++i)
+		RTC::GET_RAM1 data[MAX_READ];
+		for (uint8_t i = 0; i < MAX_READ; ++i)
 		{
 			data[i] = RTC::GET_RAM1{i};
 			int error = rtc.get_ram(data[i]);
@@ -229,7 +214,7 @@ int main()
 			time::delay_us(200);
 		}
 		out << endl;
-		for (uint8_t i = 0 ; i < 10; ++i)
+		for (uint8_t i = 0 ; i < MAX_READ; ++i)
 		{
 			out << F("data[") << dec << i << F("] await()=") << data[i].await() << endl;
 			out << F("error()=") << dec << data[i].error() << endl;
@@ -237,7 +222,6 @@ int main()
 			data[i].get(result);
 			out << F("get()=") << hex << result << endl;
 		}
-		trace(out);
 	}
 #endif
 

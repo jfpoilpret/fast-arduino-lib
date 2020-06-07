@@ -81,7 +81,8 @@ namespace i2c
 		{
 			// Disable TWI
 			USICR_ = 0;
-			//TODO should we set SDA back to INPUT?
+			// Set SDA back to INPUT
+			SDA_INPUT();
 		}
 
 		bool ensure_num_commands_(UNUSED uint8_t num_commands)
@@ -173,7 +174,7 @@ namespace i2c
 
 		void send_byte_impl(uint8_t data)
 		{
-			// Set SCL low TODO is this line really needed for every byte transferred?
+			// Set SCL low
 			SCL_LOW();
 			// Transfer address byte
 			USIDR_ = data;
@@ -397,7 +398,6 @@ namespace i2c
 		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(DELAY_AFTER_STOP_US);
 
 		bool clear_commands_ = false;
-		//TODO flag to know when stop has been executed last and thus should not be executed twice in a row
 		bool stopped_already_ = false;
 
 		template<I2CMode> friend class AbstractDevice;
