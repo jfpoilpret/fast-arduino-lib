@@ -13,7 +13,7 @@
 #include <fastarduino/utilities.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/new_i2c_handler.h>
-#include "new_ds1307.h"
+#include <fastarduino/devices/new_ds1307.h>
 
 #ifdef ARDUINO_UNO
 #define HARD_UART

@@ -22,12 +22,12 @@
 #ifndef DS1307_H
 #define DS1307_H
 
-#include <fastarduino/array.h>
-#include <fastarduino/i2c.h>
-#include <fastarduino/future.h>
-#include <fastarduino/utilities.h>
-#include <fastarduino/new_i2c_handler.h>
-#include <fastarduino/new_i2c_device.h>
+#include "../array.h"
+#include "../i2c.h"
+#include "../future.h"
+#include "../utilities.h"
+#include "../new_i2c_handler.h"
+#include "../new_i2c_device.h"
 
 // Device driver guidelines:
 // - Template on MODE only if both modes accepted, otherwise force proper MODE
