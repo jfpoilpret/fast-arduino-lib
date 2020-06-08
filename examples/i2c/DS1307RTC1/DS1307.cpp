@@ -43,13 +43,15 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/i2c_device.h>
+#include <fastarduino/new_i2c_device.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -57,6 +59,8 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -76,16 +80,17 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
+// DS1307 specific
+static constexpr uint8_t DEVICE_ADDRESS = 0x68 << 1;
+
 // Subclass I2CDevice to make protected methods available
 class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::STANDARD>
 {
 public:
-	PublicDevice(MANAGER& manager): i2c::I2CDevice<i2c::I2CMode::STANDARD>{manager} {}
+	PublicDevice(MANAGER& manager): i2c::I2CDevice<i2c::I2CMode::STANDARD>{manager, DEVICE_ADDRESS} {}
 	friend int main();
 };
 
-// DS1307 specific
-const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 union BCD
 {
 	struct
@@ -111,6 +116,8 @@ const uint32_t I2C_FREQUENCY = 100000;
 
 using namespace streams;
 
+static constexpr uint8_t MAX_FUTURES = 8;
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -128,9 +135,17 @@ int main()
 	out.setf(ios::hex, ios::basefield);
 	out << "Start" << endl;
 	
+	// Initialize FutureManager
+	future::FutureManager<MAX_FUTURES> future_manager;
+
 	// Start TWI interface
 	//====================
+	// Initialize I2C async handler
+#ifdef TWCR
+	i2c::I2CManager<i2c::I2CMode::STANDARD> manager{i2c_buffer};
+#else
 	i2c::I2CManager<i2c::I2CMode::STANDARD> manager;
+#endif
 	manager.begin();
 	out << "I2C interface started" << endl;
 	out << "status #1 " << manager.status() << endl;
@@ -149,20 +164,33 @@ int main()
 	
 	// Initialize clock date
 	//=======================
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
-	rtc.write(DEVICE_ADDRESS, init_time, i2c::BusConditions::NO_START_STOP);
+	future::Future<void, uint8_t> f1{0};
+	int error1 = rtc.launch_commands(f1, {rtc.write(i2c::I2CFinish::FUTURE_FINISH)});
+	future::Future<void, RealTime> f2{init_time};
+	int error2 = rtc.launch_commands(f2, {rtc.write(i2c::I2CFinish::FUTURE_FINISH)});
 	out << "status #2 " << manager.status() << endl;
+	out << "error1 " << error1 << endl;
+	out << "error2 " << error2 << endl;
+	out << f1.await() << endl;
+	out << f2.await() << endl;
 
 	time::delay_ms(2000);
 	
 	// Read clock
 	//============
 	RealTime time;
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
+	f1 = future::Future<void, uint8_t>{0};
+	error1 = rtc.launch_commands(f1, {rtc.write()});
 	out << "status #3 " << manager.status() << endl;
-	rtc.read(DEVICE_ADDRESS, time, i2c::BusConditions::REPEAT_START_STOP);
+	future::Future<RealTime, void> f3{};
+	error2 = rtc.launch_commands(f3, {rtc.read()});
 	out << "status #4 " << manager.status() << endl;
-	
+	out << "error1 " << error1 << endl;
+	out << "error2 " << error2 << endl;
+	out << f1.await() << endl;
+	out << f3.await() << endl;
+
+	f3.get(time);
 	out	<< "RTC: " 
 		<< time.day.tens << time.day.units << '.'
 		<< time.month.tens << time.month.units << '.'

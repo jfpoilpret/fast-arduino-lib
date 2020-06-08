@@ -41,8 +41,8 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/i2c_manager.h>
-#include <fastarduino/devices/ds1307.h>
+#include <fastarduino/new_i2c_handler.h>
+#include <fastarduino/devices/new_ds1307.h>
 #include <fastarduino/iomanip.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
@@ -50,6 +50,8 @@
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_MEGA)
@@ -57,6 +59,8 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -64,6 +68,8 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -80,6 +86,10 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
+#ifdef TWCR
+REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
+#endif
+
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
@@ -89,12 +99,64 @@ using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
 using namespace streams;
 
+static constexpr uint8_t MAX_FUTURES = 8;
+
 // Have to somehow declare this ugly global pointer so that trace_status()
-// knwos where to display its content.
+// knows where to display its content.
 static ostream* pout = 0;
-void trace_status(uint8_t expected_status UNUSED, uint8_t actual_status UNUSED)
+
+static void trace_status(i2c::DebugStatus status, uint8_t data)
 {
-	(*pout) << hex << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
+	switch (status)
+	{
+		case i2c::DebugStatus::START:
+		(*pout) << F("St ") << flush;
+		break;
+
+		case i2c::DebugStatus::REPEAT_START:
+		(*pout) << F("RS ") << flush;
+		break;
+
+		case i2c::DebugStatus::STOP:
+		(*pout) << F("Sp ") << flush;
+		break;
+
+		case i2c::DebugStatus::SLAW:
+		(*pout) << F("AW ") << hex << data << ' ' << flush;
+		break;
+
+		case i2c::DebugStatus::SLAR:
+		(*pout) << F("AR ") << hex << data << ' ' << flush;
+		break;
+
+		case i2c::DebugStatus::SEND:
+		(*pout) << F("S ") << hex << data << ' ' << flush;
+		break;
+
+		case i2c::DebugStatus::SEND_OK:
+		(*pout) << F("So ") << flush;
+		break;
+
+		case i2c::DebugStatus::SEND_ERROR:
+		(*pout) << F("Se ") << flush;
+		break;
+
+		case i2c::DebugStatus::RECV:
+		(*pout) << F("R ") << flush;
+		break;
+
+		case i2c::DebugStatus::RECV_LAST:
+		(*pout) << F("RL ") << flush;
+		break;
+
+		case i2c::DebugStatus::RECV_OK:
+		(*pout) << F("Ro ") << flush;
+		break;
+
+		case i2c::DebugStatus::RECV_ERROR:
+		(*pout) << F("Re ") << flush;
+		break;
+	}
 }
 
 void display_status(ostream& out, char index, uint8_t status)
@@ -141,9 +203,16 @@ int main()
 	pout = &out;
 	out << F("Start") << endl;
 	
+	// Initialize FutureManager
+	future::FutureManager<MAX_FUTURES> future_manager;
+
 	// Start TWI interface
 	//====================
-	i2c::I2CManager<> manager{trace_status};
+#ifdef TWCR
+	i2c::I2CManager<> manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, trace_status};
+#else
+	i2c::I2CManager<> manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, trace_status};
+#endif
 	manager.begin();
 	out << F("I2C interface started") << endl;
 	display_status(out, '1', manager.status());
@@ -153,8 +222,8 @@ int main()
 	
 	// read RAM content and print out
 	uint8_t data[DS1307::ram_size()];
-	memset(data, 0,sizeof data);
-	rtc.get_ram(0, data, sizeof data);
+	memset(data, 0, sizeof data);
+	rtc.get_ram(0, data);
 	display_status(out, '2', manager.status());
 	display_ram(out, data, sizeof data);
 	
@@ -177,7 +246,6 @@ int main()
 	// Read clock
 	//============
 	tm time2;
-	memset(&time2, 0,sizeof time2);
 	rtc.get_datetime(time2);
 	display_status(out, '4', manager.status());
 	display_time(out, time2);
@@ -196,7 +264,7 @@ int main()
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
-	rtc.set_ram(0, data, sizeof data);
+	rtc.set_ram(0, data);
 	display_status(out, '7', manager.status());
 	
 	// Stop TWI interface
