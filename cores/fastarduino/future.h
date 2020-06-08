@@ -27,6 +27,7 @@
 #include "errors.h"
 #include "move.h"
 #include "time.h"
+#include "streams.h"
 
 /**
  * Contains the API around Future implementation.
@@ -924,6 +925,32 @@ namespace future
 		 */
 		ERROR
 	};
+
+	/// @cond notdocumented
+	// Add utility ostream manipulator for FutureStatus
+	static const flash::FlashStorage* convert(future::FutureStatus s)
+	{
+		switch (s)
+		{
+			case future::FutureStatus::INVALID:
+			return F("INVALID");
+
+			case future::FutureStatus::NOT_READY:
+			return F("NOT_READY");
+
+			case future::FutureStatus::READY:
+			return F("READY");
+
+			case future::FutureStatus::ERROR:
+			return F("ERROR");
+		}
+	}
+
+	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s)
+	{
+		return out << convert(s);
+	}
+	/// @endcond
 
 	/**
 	 * Base class for all `Future`s.
