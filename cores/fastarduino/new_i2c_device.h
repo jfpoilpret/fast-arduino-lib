@@ -112,6 +112,7 @@ namespace i2c
 		 * Calling this method has no effect on the bus until the returned command 
 		 * is actually pushed to the I2CManager through a `launch_commands()` call.
 		 * 
+		 * @param read_count TODO
 		 * @param finish specify the behavior to adopt after this command has been
 		 * fully handled through the I2C bus; it allows to ensure a STOP condition
 		 * will be sent on the bus (independently of the existence of further commands),
@@ -120,10 +121,10 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa write()
 		 */
-		I2CCommand read(I2CFinish finish = I2CFinish::NONE)
+		I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
-			return I2CCommand::read(
-				device_, uint8_t(finish & I2CFinish::FORCE_STOP), 0, uint8_t(finish & I2CFinish::FUTURE_FINISH));
+			return I2CCommand::read(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
+				0, uint8_t(finish & I2CFinish::FUTURE_FINISH), read_count);
 		}
 
 		/**
@@ -132,6 +133,7 @@ namespace i2c
 		 * Calling this method has no effect on the bus until the returned command 
 		 * is actually pushed to the I2CManager through a `launch_commands()` call.
 		 * 
+		 * @param write_count TODO
 		 * @param finish specify the behavior to adopt after this command has been
 		 * fully handled through the I2C bus; it allows to ensure a STOP condition
 		 * will be sent on the bus (independently of the existence of further commands),
@@ -140,10 +142,10 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa read()
 		 */
-		I2CCommand write(I2CFinish finish = I2CFinish::NONE)
+		I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
-			return I2CCommand::write(
-				device_, uint8_t(finish & I2CFinish::FORCE_STOP), 0, uint8_t(finish & I2CFinish::FUTURE_FINISH));
+			return I2CCommand::write(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
+				0, uint8_t(finish & I2CFinish::FUTURE_FINISH), write_count);
 		}
 
 		/**
@@ -183,17 +185,41 @@ namespace i2c
 			auto& manager = future::AbstractFutureManager::instance();
 			OUTER_SYNCHRONIZED
 			{
+				uint8_t id = 0;
+				uint8_t max_read = 0;
+				uint8_t max_write = 0;
 				INNER_SYNCHRONIZED
 				{
 					// pre-conditions (must be synchronized)
 					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
 					if (manager.available_futures_() == 0) return errors::EAGAIN;
 					manager.register_future_(future);
+					id = future.id();
+					max_read = manager.get_future_value_size_(id);
+					max_write = manager.get_storage_value_size_(id);
 				}
+				uint16_t total_read = 0;
+				uint16_t total_write = 0;
+				for (I2CCommand command : commands)
+				{
+					// Count number of bytes read and written
+					if (command.type.write)
+						total_write += (command.byte_count ? command.byte_count : max_write);
+					else
+						total_read += (command.byte_count ? command.byte_count : max_read);
+				}
+				// check sum of read commands byte_count matches future output size
+				// check sum of write commands byte_count matches future input size
+				if ((total_write != max_write) || (total_read != max_read)) return errors::EINVAL;
+
+				// Now push each command to the I2CManager
 				int error = 0;
 				for (I2CCommand command : commands)
 				{
-					command.future_id = future.id();
+					// update command.byte_count if 0
+					command.future_id = id;
+					if (!command.byte_count)
+						command.byte_count = (command.type.write ? max_write : max_read);
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command))
 					{

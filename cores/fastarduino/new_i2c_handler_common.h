@@ -138,23 +138,27 @@ namespace i2c
 			return I2CCommand{};
 		}
 
-		static constexpr I2CCommand read(uint8_t target, bool force_stop, uint8_t future_id, bool finish_future)
+		static constexpr I2CCommand read(
+			uint8_t target, bool force_stop, uint8_t future_id, bool finish_future, uint8_t read_count)
 		{
-			return I2CCommand{I2CCommandType{false, force_stop, finish_future}, target, future_id};
+			return I2CCommand{I2CCommandType{false, force_stop, finish_future}, target, future_id, read_count};
 		}
-		static constexpr I2CCommand write(uint8_t target, bool force_stop, uint8_t future_id, bool finish_future)
+		static constexpr I2CCommand write(
+			uint8_t target, bool force_stop, uint8_t future_id, bool finish_future, uint8_t write_count)
 		{
-			return I2CCommand{I2CCommandType{true, force_stop, finish_future}, target, future_id};
+			return I2CCommand{I2CCommandType{true, force_stop, finish_future}, target, future_id, write_count};
 		}
 
-		constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t future_id)
-			: type{type}, target{target}, future_id{future_id} {}
+		constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t future_id, uint8_t byte_count)
+			: type{type}, target{target}, future_id{future_id}, byte_count{byte_count} {}
 
 		// Type of this command
 		I2CCommandType type = I2CCommandType{};
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target = 0;
 		uint8_t future_id = 0;
+		//TODO Use this byte where needed (0 means to use all bytes from/to the Future)
+		uint8_t byte_count = 0;
 
 		template<I2CMode> friend class AbstractI2CManager;
 		template<I2CMode> friend class I2CManager;
@@ -224,6 +228,7 @@ namespace i2c
 		{
 			if (status_ == expected_status_) return true;
 			// Handle special case of last transmitted byte possibly not acknowledged by device
+			//FIXME NACK may be expected also when command_.byte_count is reached
 			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
 				&&	(status_ == Status::DATA_TRANSMITTED_NACK)
 				&&	(future::AbstractFutureManager::instance().get_storage_value_size_(command_.future_id) == 0))

@@ -301,6 +301,7 @@ namespace i2c
 				exec_send_slaw_();
 				if (!handle_no_error()) return false;
 				// Send content
+				//FIXME test shall also use command_.byte_count
 				while (future::AbstractFutureManager::instance().get_storage_value_size_(command.future_id) > 0)
 				{
 					exec_send_data_();
@@ -313,6 +314,7 @@ namespace i2c
 				exec_send_slar_();
 				if (!handle_no_error()) return false;
 				// Receive content
+				//FIXME test shall also use command_.byte_count
 				while (future::AbstractFutureManager::instance().get_future_value_size_(command.future_id) > 0)
 				{
 					exec_receive_data_();
@@ -379,6 +381,7 @@ namespace i2c
 		{
 			// Is this the last byte to receive?
 			uint8_t data;
+			//FIXME this test shall also depend on command_.byte_count!
 			if (future::AbstractFutureManager::instance().get_future_value_size_(this->command_.future_id) == 1)
 			{
 				this->call_hook(DebugStatus::RECV_LAST);
