@@ -45,30 +45,6 @@ static constexpr uint8_t MAX_FUTURES = 8;
 REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 #endif
 
-// Add utility ostream manipulator for FutureStatus
-static const flash::FlashStorage* convert(future::FutureStatus s)
-{
-	switch (s)
-	{
-		case future::FutureStatus::INVALID:
-		return F("INVALID");
-
-		case future::FutureStatus::NOT_READY:
-		return F("NOT_READY");
-
-		case future::FutureStatus::READY:
-		return F("READY");
-
-		case future::FutureStatus::ERROR:
-		return F("ERROR");
-	}
-}
-
-streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s)
-{
-	return out << convert(s);
-}
-
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 using I2CHANDLER = i2c::I2CManager<i2c::I2CMode::STANDARD>;
