@@ -22,6 +22,7 @@
 #ifndef I2C_HANDLER_HH
 #define I2C_HANDLER_HH
 
+//FIXME add specific define for true async I2C or not
 #ifdef TWCR
 #include "new_i2c_handler_atmega.h"
 #else

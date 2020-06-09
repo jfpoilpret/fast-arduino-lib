@@ -101,11 +101,11 @@ static void i2c_hook(i2c::DebugStatus status, uint8_t data)
 		break;
 
 		case i2c::DebugStatus::RECV_OK:
-		COUT << F("Ro ") << flush;
+		COUT << F("Ro ") << hex << data << ' ' << flush;
 		break;
 
 		case i2c::DebugStatus::RECV_ERROR:
-		COUT << F("Re ") << flush;
+		COUT << F("Re ") << hex << data << ' ' << flush;
 		break;
 	}
 }
@@ -116,6 +116,11 @@ i2c::I2C_DEBUG_HOOK i2c_hook = nullptr;
 class RTC : public i2c::I2CDevice<i2c::I2CMode::STANDARD>
 {
 	using PARENT = i2c::I2CDevice<i2c::I2CMode::STANDARD>;
+
+	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
+	static constexpr const uint8_t RAM_START = 0x08;
+	static constexpr const uint8_t RAM_END = 0x40;
+	static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
 
 public:
 	RTC(PARENT::MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS} {}
@@ -130,17 +135,38 @@ public:
 	};
 	int set_ram(SetRamFuture& future)
 	{
-		//TODO add argument to write()
-		return launch_commands(future, {write(), write(i2c::I2CFinish::FUTURE_FINISH)});
+		return launch_commands(
+			// future, {write(3), write(4, i2c::I2CFinish::FUTURE_FINISH)});
+			future, {write(3, i2c::I2CFinish::FORCE_STOP), write(4, i2c::I2CFinish::FUTURE_FINISH)});
 	}
 
-	//TODO Future + method to read all RAM
+	class GetRamFuture : public future::Future<containers::array<uint8_t, 2+3>, containers::array<uint8_t, 1+1>>
+	{
+		using PARENT = future::Future<containers::array<uint8_t, 2+3>, containers::array<uint8_t, 1+1>>;
+	public:
+		GetRamFuture() : PARENT{{RAM_START + 10, RAM_START + 20}} {}
+		GetRamFuture(GetRamFuture&&) = default;
+		GetRamFuture& operator=(GetRamFuture&&) = default;
+	};
+	int get_ram(GetRamFuture& future)
+	{
+		return launch_commands(
+			// future, {write(1), read(2), write(1), read(3)});
+			future, {write(1), read(2, i2c::I2CFinish::FORCE_STOP), write(1), read(3)});
+	}
 
-private:
-	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
-	static constexpr const uint8_t RAM_START = 0x08;
-	static constexpr const uint8_t RAM_END = 0x40;
-	static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
+	class GetAllRamFuture : public future::Future<containers::array<uint8_t, RAM_SIZE>, uint8_t>
+	{
+		using PARENT = future::Future<containers::array<uint8_t, RAM_SIZE>, uint8_t>;
+	public:
+		GetAllRamFuture() : PARENT{RAM_START} {}
+		GetAllRamFuture(GetAllRamFuture&&) = default;
+		GetAllRamFuture& operator=(GetAllRamFuture&&) = default;
+	};
+	int get_all_ram(GetAllRamFuture& future)
+	{
+		return launch_commands(future, {write(1), read(0)});
+	}
 };
 
 int main() __attribute__((OS_main));
@@ -175,28 +201,68 @@ int main()
 #endif
 	out << F("Before handler.begin()") << endl;
 	out << boolalpha << showbase;
-
 	handler.begin();
 
-	constexpr uint8_t RAM_SIZE = rtc.ram_size();
-	constexpr uint8_t MAX_READ = (RAM_SIZE < MAX_FUTURES ? RAM_SIZE : MAX_FUTURES);
+	RTC rtc{handler};
+	{
+		out << F("\nTEST #1 set 2 then 3 RAM bytes") << endl;
+		RTC::SetRamFuture output;
+		int ok = rtc.set_ram(output);
+		out << F("\nset_ram()=") << dec << ok << endl;
+		out << F("handler.status()=") << hex << handler.status() << endl;
+		uint8_t id = output.id();
+		future::FutureStatus status = output.status();
+		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("data await()=") << output.await() << endl;
+		out << F("error()=") << dec << output.error() << endl;
+	}
 
 	{
-		out << F("\nTEST #0 read one RAM byte") << endl;
-		RTC::GET_RAM1 data{0};
-		int ok = rtc.get_ram(data);
-		out << F("get_ram()=") << dec << ok << endl;
+		out << F("\nTEST #2 get all RAM bytes") << endl;
+		RTC::GetAllRamFuture input;
+		int ok = rtc.get_all_ram(input);
+		out << F("\nget_all_ram()=") << dec << ok << endl;
 		out << F("handler.status()=") << hex << handler.status() << endl;
-		uint8_t id = data.id();
-		future::FutureStatus status = data.status();
+		uint8_t id = input.id();
+		future::FutureStatus status = input.status();
 		out << F("id=") << dec << id << F(" status=") << status << endl;
-		// out << F("id=") << dec << data.id() << F(" status=") << data.status() << endl;
-		// time::delay_ms(1000);
-		out << F("data await()=") << data.await() << endl;
-		out << F("error()=") << dec << data.error() << endl;
-		uint8_t result = 0;
-		data.get(result);
-		out << F("get()=") << hex << result << endl;
+		out << F("data await()=") << input.await() << endl;
+		out << F("error()=") << dec << input.error() << endl;
+		RTC::GetAllRamFuture::OUT result;
+		if (input.get(result))
+		{
+			out << F("get() OK") << endl;
+			for (uint16_t i = 0; i < result.size(); ++i)
+				out << F("result[") << dec << i << F("] = ") << result[i] << endl;
+		}
+		else
+		{
+			out << F("get() KO") << endl;
+		}
+	}
+
+	{
+		out << F("\nTEST #3 get 2 then 3 RAM bytes") << endl;
+		RTC::GetRamFuture input;
+		int ok = rtc.get_ram(input);
+		out << F("\nget_ram()=") << dec << ok << endl;
+		out << F("handler.status()=") << hex << handler.status() << endl;
+		uint8_t id = input.id();
+		future::FutureStatus status = input.status();
+		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("data await()=") << input.await() << endl;
+		out << F("error()=") << dec << input.error() << endl;
+		RTC::GetRamFuture::OUT result;
+		if (input.get(result))
+		{
+			out << F("get() OK") << endl;
+			for (uint16_t i = 0; i < result.size(); ++i)
+				out << F("result[") << dec << i << F("] = ") << result[i] << endl;
+		}
+		else
+		{
+			out << F("get() KO") << endl;
+		}
 	}
 
 	handler.end();

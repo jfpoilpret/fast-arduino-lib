@@ -210,6 +210,7 @@ namespace i2c
 			// Check START transmission with USISIF flag
 			bool ok = USISR_ & bits::BV8(USISIF);
 			this->status_ = (ok ? this->expected_status_ : Status::ARBITRATION_LOST);
+			stopped_already_ = false;
 		}
 
 		void send_byte_impl(uint8_t data)
@@ -301,8 +302,7 @@ namespace i2c
 				exec_send_slaw_();
 				if (!handle_no_error()) return false;
 				// Send content
-				//FIXME test shall also use command_.byte_count
-				while (future::AbstractFutureManager::instance().get_storage_value_size_(command.future_id) > 0)
+				while (this->command_.byte_count > 0)
 				{
 					exec_send_data_();
 					if (!handle_no_error()) return false;
@@ -314,8 +314,7 @@ namespace i2c
 				exec_send_slar_();
 				if (!handle_no_error()) return false;
 				// Receive content
-				//FIXME test shall also use command_.byte_count
-				while (future::AbstractFutureManager::instance().get_future_value_size_(command.future_id) > 0)
+				while (this->command_.byte_count > 0)
 				{
 					exec_receive_data_();
 					if (!handle_no_error()) return false;
@@ -369,6 +368,7 @@ namespace i2c
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (ok)
 			{
+				--this->command_.byte_count;
 				send_byte_impl(data);
 			}
 			else
@@ -381,8 +381,7 @@ namespace i2c
 		{
 			// Is this the last byte to receive?
 			uint8_t data;
-			//FIXME this test shall also depend on command_.byte_count!
-			if (future::AbstractFutureManager::instance().get_future_value_size_(this->command_.future_id) == 1)
+			if (this->command_.byte_count == 1)
 			{
 				this->call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
@@ -401,7 +400,11 @@ namespace i2c
 			// Fill future
 			bool ok = future::AbstractFutureManager::instance().set_future_value_(this->command_.future_id, data);
 			// This should only happen in case there are 2 concurrent providers for this future
-			if (!ok)
+			if (ok)
+			{
+				--this->command_.byte_count;
+			}
+			else
 			{
 				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
 				this->status_ = Status::FUTURE_ERROR;

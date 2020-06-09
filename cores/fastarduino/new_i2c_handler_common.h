@@ -37,6 +37,7 @@ namespace i2c
 	};
 
 	// Used by TWI ISR to potentially call a registered callback
+	//TODO move to ATmega?
 	//TODO DOC
 	enum class I2CCallback : uint8_t
 	{
@@ -93,6 +94,7 @@ namespace i2c
 		friend class I2CCommand;
 		template<I2CMode> friend class AbstractI2CManager;
 		template<I2CMode> friend class I2CManager;
+		template<I2CMode> friend class I2CDevice;
 		friend streams::ostream& operator<<(streams::ostream&, const I2CCommandType&);
 		friend bool operator==(const I2CCommandType&, const I2CCommandType&);
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
@@ -157,7 +159,8 @@ namespace i2c
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target = 0;
 		uint8_t future_id = 0;
-		//TODO Use this byte where needed (0 means to use all bytes from/to the Future)
+		// The number of remaining bytes to be read or write
+		// When initally set to 0, it will be first replaced by Future full read or write size
 		uint8_t byte_count = 0;
 
 		template<I2CMode> friend class AbstractI2CManager;
@@ -228,10 +231,9 @@ namespace i2c
 		{
 			if (status_ == expected_status_) return true;
 			// Handle special case of last transmitted byte possibly not acknowledged by device
-			//FIXME NACK may be expected also when command_.byte_count is reached
 			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
 				&&	(status_ == Status::DATA_TRANSMITTED_NACK)
-				&&	(future::AbstractFutureManager::instance().get_storage_value_size_(command_.future_id) == 0))
+				&&	(command_.byte_count == 0))
 				return true;
 
 			// When status is FUTURE_ERROR then future has already been marked accordingly
