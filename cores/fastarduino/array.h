@@ -19,6 +19,7 @@
 #include <stdint.h>
 #include "initializer_list.h"
 
+//TODO add begin()/end() to allow iterator-based oeprations
 namespace containers
 {
 	/**
