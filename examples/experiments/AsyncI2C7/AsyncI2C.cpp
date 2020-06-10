@@ -167,6 +167,26 @@ public:
 	{
 		return launch_commands(future, {write(1), read(0)});
 	}
+
+	class SetAllRamFuture : public future::Future<void, containers::array<uint8_t, 1 + RAM_SIZE>>
+	{
+		using PARENT = future::Future<void, containers::array<uint8_t, 1 + RAM_SIZE>>;
+	public:
+		SetAllRamFuture(uint8_t value)
+		{
+			SetAllRamFuture::IN input;
+			input[0] = RAM_START;
+			for (uint8_t i = 1; i < input.size(); ++i)
+				input[i] = value;
+			reset_input(input);
+		}
+		SetAllRamFuture(SetAllRamFuture&&) = default;
+		SetAllRamFuture& operator=(SetAllRamFuture&&) = default;
+	};
+	int set_all_ram(SetAllRamFuture& future)
+	{
+		return launch_commands(future, {write(0, i2c::I2CFinish::FUTURE_FINISH)});
+	}
 };
 
 int main() __attribute__((OS_main));
@@ -204,6 +224,43 @@ int main()
 	handler.begin();
 
 	RTC rtc{handler};
+	{
+		out << F("\nTEST #0.1 clear all RAM bytes") << endl;
+		RTC::SetAllRamFuture output{0};
+		int ok = rtc.set_all_ram(output);
+		out << F("\nset_all_ram()=") << dec << ok << endl;
+		out << F("handler.status()=") << hex << handler.status() << endl;
+		uint8_t id = output.id();
+		future::FutureStatus status = output.status();
+		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("data await()=") << output.await() << endl;
+		out << F("error()=") << dec << output.error() << endl;
+	}
+
+	{
+		out << F("\nTEST #0.2 get all RAM bytes") << endl;
+		RTC::GetAllRamFuture input;
+		int ok = rtc.get_all_ram(input);
+		out << F("\nget_all_ram()=") << dec << ok << endl;
+		out << F("handler.status()=") << hex << handler.status() << endl;
+		uint8_t id = input.id();
+		future::FutureStatus status = input.status();
+		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("data await()=") << input.await() << endl;
+		out << F("error()=") << dec << input.error() << endl;
+		RTC::GetAllRamFuture::OUT result;
+		if (input.get(result))
+		{
+			out << F("get() OK") << endl;
+			for (uint16_t i = 0; i < result.size(); ++i)
+				out << F("result[") << dec << i << F("] = ") << result[i] << endl;
+		}
+		else
+		{
+			out << F("get() KO") << endl;
+		}
+	}
+
 	{
 		out << F("\nTEST #1 set 2 then 3 RAM bytes") << endl;
 		RTC::SetRamFuture output;
