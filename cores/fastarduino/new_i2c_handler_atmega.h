@@ -243,7 +243,7 @@ namespace i2c
 
 				case State::SLAR:
 				case State::RECV:
-				if (future::AbstractFutureManager::instance().get_future_value_size_(this->command_.future_id) > 1)
+				if (this->command_.byte_count > 1)
 					return State::RECV;
 				else
 					return State::RECV_LAST;
@@ -255,7 +255,7 @@ namespace i2c
 				return State::SEND;
 				
 				case State::SEND:
-				if (future::AbstractFutureManager::instance().get_storage_value_size_(this->command_.future_id) >= 1)
+				if (this->command_.byte_count >= 1)
 					return State::SEND;
 				else
 					return State::STOP;
@@ -300,7 +300,9 @@ namespace i2c
 			bool ok = future::AbstractFutureManager::instance().get_storage_value_(this->command_.future_id, data);
 			this->call_hook(DebugStatus::SEND, data);
 			// This should only happen if there are 2 concurrent consumers for that Future
-			if (!ok)
+			if (ok)
+				--this->command_.byte_count;
+			else
 				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
 			this->call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
 			this->expected_status_ = Status::DATA_TRANSMITTED_ACK;
@@ -309,7 +311,7 @@ namespace i2c
 		void exec_receive_data_()
 		{
 			// Is this the last byte to receive?
-			if (future::AbstractFutureManager::instance().get_future_value_size_(this->command_.future_id) == 1)
+			if (this->command_.byte_count == 1)
 			{
 				this->call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
@@ -387,7 +389,9 @@ namespace i2c
 				const uint8_t data = TWDR_;
 				bool ok = future::AbstractFutureManager::instance().set_future_value_(this->command_.future_id, data);
 				// This should only happen in case there are 2 concurrent providers for this future
-				if (!ok)
+				if (ok)
+					--this->command_.byte_count;
+				else
 					future::AbstractFutureManager::instance().set_future_error_(
 						this->command_.future_id, errors::EILSEQ);
 				this->call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
