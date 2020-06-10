@@ -215,7 +215,9 @@ int main()
 
 	// Initialize I2C async handler
 #ifdef TWCR
-	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
+	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+	//TODO cannot use i2c_hook because it shall not be executed from inside interrupts!
+	// I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
 #else
 	I2CHANDLER handler{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
 #endif
