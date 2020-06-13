@@ -39,7 +39,6 @@
 #include <fastarduino/time.h>
 #include <fastarduino/devices/new_mpu6050.h>
 
-//TODO add necessary buffer for I2CHandler queue and MAX future numbers
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
@@ -68,6 +67,10 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
+#endif
+
+#ifdef TWCR
+REGISTER_I2C_ISR(i2c::I2CMode::FAST)
 #endif
 
 // UART for traces
@@ -111,6 +114,7 @@ void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
 }
 
 using ACCELEROMETER = MPU6050<i2c::I2CMode::FAST>;
+// using ACCELEROMETER = MPU6050<i2c::I2CMode::STANDARD>;
 
 int main() __attribute__((OS_main));
 int main()
