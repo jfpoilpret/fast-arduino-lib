@@ -38,13 +38,16 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/devices/mpu6050.h>
+#include <fastarduino/devices/new_mpu6050.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -52,6 +55,9 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -59,8 +65,14 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
+#endif
+
+#ifdef TWCR
+REGISTER_I2C_ISR(i2c::I2CMode::FAST)
 #endif
 
 // UART for traces
@@ -120,16 +132,22 @@ int main()
 	out.width(2);
 	out << F("Start") << endl;
 
-	ACCELEROMETER::MANAGER manager;
+	// Initialize FutureManager
+	future::FutureManager<MAX_FUTURES> future_manager;
+
+	// Initialize I2C async handler
+#ifdef TWCR
+	ACCELEROMETER::MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#else
+	ACCELEROMETER::MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#endif
 	manager.begin();
 	out << F("I2C interface started") << endl;
 
 	ACCELEROMETER mpu{manager};
 	
-	FIFOEnable fifo_enable;
-	fifo_enable.accel = fifo_enable.gyro_x = fifo_enable.gyro_y = fifo_enable.gyro_z = fifo_enable.temperature = 1;
-	INTStatus int_enable;
-	int_enable.data_ready = 1;
+	FIFOEnable fifo_enable{true, true, true, true, true};
+	INTStatus int_enable{true};
 	bool ok = mpu.begin(fifo_enable, int_enable, SAMPLE_RATE_DIVIDER, 
 						GyroRange::RANGE_250, AccelRange::RANGE_2G, DLPF::ACCEL_BW_5HZ);
 	out << dec << F("begin() ") << ok << endl;
@@ -138,7 +156,9 @@ int main()
 	while (true)
 	{
 		AllSensors sensors;
-		if (mpu.fifo_pop(sensors, true))
+		while (mpu.fifo_count() < sizeof(sensors))
+			;
+		if (mpu.fifo_pop(sensors))
 		{
 			out	<< dec 
 				<< F("cdps Gyro x = ") << gyro(sensors.gyro.x)
