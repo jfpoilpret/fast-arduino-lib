@@ -45,6 +45,9 @@
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -52,6 +55,9 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -59,6 +65,7 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -114,7 +121,15 @@ int main()
 	out.width(2);
 	out << F("Start") << endl;
 
-	ACCELEROMETER::MANAGER manager;
+	// Initialize FutureManager
+	future::FutureManager<MAX_FUTURES> future_manager;
+
+	// Initialize I2C async handler
+#ifdef TWCR
+	ACCELEROMETER::MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#else
+	ACCELEROMETER::MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#endif
 	manager.begin();
 	out << F("I2C interface started") << endl;
 

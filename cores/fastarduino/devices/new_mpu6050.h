@@ -129,23 +129,53 @@ namespace devices::magneto
 	 * FIFO buffer (see also datasheet §7.17).
 	 * @sa MPU6050::begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)
 	 */
-	struct FIFOEnable
+	class FIFOEnable
 	{
-		FIFOEnable() : reserved{}, accel{}, gyro_z{}, gyro_y{}, gyro_x{}, temperature{} {}
+	public:
+		//TODO DOC
+		constexpr FIFOEnable(
+			bool accel = false, bool gyro_x = false, bool gyro_y = false, bool gyro_z = false, bool temperature = false)
+			:	reserved_{}, 
+				accel_{accel}, gyro_z_{gyro_z}, gyro_y_{gyro_y}, gyro_x_{gyro_x}, 
+				temperature_{temperature} {}
 
-		/// @cond notdocumented
-		uint8_t reserved : 3;
-		/// @endcond
-		/** If `1`, accelerometer measures on 3 axes will be loaded to FIFO buffer. */
-		uint8_t accel : 1;
-		/** If `1`, gyroscope measures on Z axis will be loaded to FIFO buffer. */
-		uint8_t gyro_z : 1;
-		/** If `1`, gyroscope measures on Y axis will be loaded to FIFO buffer. */
-		uint8_t gyro_y : 1;
-		/** If `1`, gyroscope measures on X axis will be loaded to FIFO buffer. */
-		uint8_t gyro_x : 1;
-		/** If `1`, chip temperature will be loaded to FIFO buffer. */
-		uint8_t temperature : 1;
+		/** If `true`, accelerometer measures on 3 axes will be loaded to FIFO buffer. */
+		bool accel() const
+		{
+			return accel_;
+		}
+
+		/** If `true`, gyroscope measures on X axis will be loaded to FIFO buffer. */
+		bool gyro_x() const
+		{
+			return gyro_x_;
+		}
+
+		/** If `true`, gyroscope measures on Y axis will be loaded to FIFO buffer. */
+		bool gyro_y() const
+		{
+			return gyro_y_;
+		}
+
+		/** If `true`, gyroscope measures on Z axis will be loaded to FIFO buffer. */
+		bool gyro_z() const
+		{
+			return gyro_z_;
+		}
+
+		/** If `true`, chip temperature will be loaded to FIFO buffer. */
+		bool temperature() const
+		{
+			return temperature_;			
+		}
+
+	private:
+		uint8_t reserved_ : 3;
+		bool accel_ : 1;
+		bool gyro_z_ : 1;
+		bool gyro_y_ : 1;
+		bool gyro_x_ : 1;
+		bool temperature_ : 1;
 	};
 
 	/** 
@@ -153,20 +183,30 @@ namespace devices::magneto
 	 * @sa MPU6050::interrupt_status()
 	 * @sa INTEnable
 	 */
-	struct INTStatus
+	class INTStatus
 	{
-		INTStatus() : data_ready{}, reserved1{}, overflow{}, reserved2{} {}
+	public:
+		//TODO DOC
+		constexpr INTStatus(bool data_ready = false, bool overflow = false)
+			: data_ready_{data_ready}, reserved1_{}, overflow_{overflow}, reserved2_{} {}
 
-		/** If `1`, the Data Ready interrupt is enabled. */
-		uint8_t data_ready : 1;
-		/// @cond notdocumented
-		uint8_t reserved1 : 3;
-		/// @endcond
-		/** If `1`, a FIFO buffer overflow will generate an interrupt. */
-		uint8_t overflow : 1;
-		/// @cond notdocumented
-		uint8_t reserved2 : 3;
-		/// @endcond
+		/** If `true`, the Data Ready interrupt is enabled. */
+		bool data_ready() const
+		{
+			return data_ready_;
+		}
+
+		/** If `true`, a FIFO buffer overflow will generate an interrupt. */
+		bool overflow() const
+		{
+			return overflow_;
+		}
+
+	private:
+		bool data_ready_ : 1;
+		uint8_t reserved1_ : 3;
+		bool overflow_ : 1;
+		uint8_t reserved2_ : 3;
 	};
 
 	/**
@@ -216,6 +256,8 @@ namespace devices::magneto
 	template<i2c::I2CMode MODE = i2c::I2CMode::FAST, AD0 AD0 = AD0::LOW> class MPU6050 : public i2c::I2CDevice<MODE>
 	{
 	private:
+		using DEVICE = MPU6050<MODE, AD0>;
+
 		class Sensor3DFuture : public future::Future<Sensor3D, uint8_t>
 		{
 			using PARENT = future::Future<Sensor3D, uint8_t>;
@@ -224,33 +266,60 @@ namespace devices::magneto
 			Sensor3DFuture(Sensor3DFuture&&) = default;
 			Sensor3DFuture& operator=(Sensor3DFuture&&) = default;
 		public:
-			int get(Sensor3D& result)
+			bool get(Sensor3D& result)
 			{
-				int error = PARENT::get(result);
-				if (error == 0)
-					format_sensors(result);
-				return error;
+				if (!PARENT::get(result)) return false;
+				format_sensors(result);
+				return true;
 			}
 		};
 
-		struct PowerManagement
+		class PowerManagement
 		{
-			PowerManagement() : clock_select{}, temp_disable{}, reserved{}, cycle{}, sleep{}, device_reset{} {}
-			explicit PowerManagement(ClockSelect clock_select, bool temp_disable = false,
+		public:
+			constexpr PowerManagement()
+				:	clock_select_{}, temp_disable_{}, reserved_{}, cycle_{}, sleep_{}, device_reset_{} {}
+			explicit constexpr PowerManagement(ClockSelect clock_select, bool temp_disable = false,
 							bool cycle = false, bool sleep = false, bool device_reset = false) 
-				:	clock_select{uint8_t(clock_select)},
-					temp_disable{temp_disable}, reserved{}, 
-					cycle{cycle}, sleep{sleep}, device_reset{device_reset} {}
-			PowerManagement(bool temp_disable, bool cycle, bool sleep, bool device_reset) 
-				:	clock_select{}, temp_disable{temp_disable}, reserved{}, 
-					cycle{cycle}, sleep{sleep}, device_reset{device_reset} {}
+				:	clock_select_{uint8_t(clock_select)},
+					temp_disable_{temp_disable}, reserved_{}, 
+					cycle_{cycle}, sleep_{sleep}, device_reset_{device_reset} {}
+			constexpr PowerManagement(bool temp_disable, bool cycle, bool sleep, bool device_reset) 
+				:	clock_select_{}, temp_disable_{temp_disable}, reserved_{}, 
+					cycle_{cycle}, sleep_{sleep}, device_reset_{device_reset} {}
 
-			uint8_t clock_select : 3;
-			bool temp_disable : 1;
-			uint8_t reserved : 1;
-			bool cycle : 1;
-			bool sleep : 1;
-			bool device_reset : 1;
+			ClockSelect clock_select() const
+			{
+				return static_cast<ClockSelect>(clock_select_);
+			}
+
+			bool temp_disable() const
+			{
+				return temp_disable_;
+			}
+
+			bool cycle() const
+			{
+				return cycle_;
+			}
+
+			bool sleep() const
+			{
+				return sleep_;
+			}
+
+			bool device_reset() const
+			{
+				return device_reset_;
+			}
+
+		private:
+			uint8_t clock_select_ : 3;
+			bool temp_disable_ : 1;
+			uint8_t reserved_ : 1;
+			bool cycle_ : 1;
+			bool sleep_ : 1;
+			bool device_reset_ : 1;
 		};
 
 		class PowerManagementFuture : public future::Future<void, containers::array<uint8_t, 2>>
@@ -281,19 +350,19 @@ namespace devices::magneto
 									AccelRange accel_range = AccelRange::RANGE_2G,
 									DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
 									ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
-				: PARENT{{	CONFIG, uint8_t(low_pass_filter), uint8_t(gyro_measures), uint8_t(accel_range),
-							PWR_MGMT_1, PowerManagement{clock_select}}} {}
+				: PARENT{{	CONFIG, uint8_t(low_pass_filter), uint8_t(gyro_range), uint8_t(accel_range),
+							PWR_MGMT_1, utils::as_uint8_t(PowerManagement{clock_select})}} {}
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
 		};
 		int begin(BeginFuture& future)
 		{
 			// We split the transaction in 2 write commands (3 bytes starting at CONFIG, 1 byte at PWR_MGT_1)
-			return launch_commands(future, {this->write(4), this->write(2, i2c::I2CFinish::FUTURE_FINISH)});
+			return this->launch_commands(future, {this->write(4), this->write(2, i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		//TODO DOC
-		//TODO Find better name for this future
+		//TODO Find better name for this future FifoBeginFuture? Complete, Full, Detail?
 		class LongBeginFuture : public future::Future<void, containers::array<uint8_t, 14>>
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 14>>;
@@ -305,23 +374,26 @@ namespace devices::magneto
 										AccelRange accel_range = AccelRange::RANGE_2G,
 										DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
 										ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
-				: PARENT{{	CONFIG, uint8_t(low_pass_filter), uint8_t(gyro_measures), uint8_t(accel_range),
+				: PARENT{{	CONFIG, uint8_t(low_pass_filter), uint8_t(gyro_range), uint8_t(accel_range),
+							PWR_MGMT_1, utils::as_uint8_t(PowerManagement{clock_select}),
 							SMPRT_DIV, sample_rate_divider,
 							FIFO_EN, utils::as_uint8_t(fifo_enable),
 							INT_PIN_CFG, 0, utils::as_uint8_t(int_enable),
-							USER_CTRL, FIFO_ENABLE, PowerManagement{clock_select}}} {}
+							USER_CTRL, FIFO_ENABLE}} {}
 			LongBeginFuture(LongBeginFuture&&) = default;
 			LongBeginFuture& operator=(LongBeginFuture&&) = default;
+
+			bool is_fifo_enabled() const
+			{
+				return (this->get_input()[9] != 0);
+			}
 		};
 		int begin(LongBeginFuture& future)
 		{
-			//FIXME add checks in Future class and return EINVAL;
-			fifo_enable.reserved = 0;
-			if (utils::as_uint8_t(fifo_enable) == 0)
-				return begin(gyro_range, accel_range, low_pass_filter, clock_select);
-			int_enable.reserved1 = int_enable.reserved2 = 0;
-			return launch_commands(
-				future, {this->write(4), this->write(2), this->write(2), this->write(3), this->write(3, i2c::I2CFinish::FUTURE_FINISH)});
+			if (!future.is_fifo_enabled()) return errors::EINVAL;
+			return this->launch_commands(future, {
+				this->write(4), this->write(2), this->write(2), this->write(3), 
+				this->write(3, i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		/**
@@ -458,7 +530,7 @@ namespace devices::magneto
 		};
 		int gyro_measures(GyroFuture& future)
 		{
-			return launch_commands(this->write(), this->read());
+			return this->launch_commands(this->write(), this->read());
 		}
 
 		/**
@@ -473,7 +545,7 @@ namespace devices::magneto
 		{
 			GyroFuture future;
 			if (gyro_measures(future) != 0) return false;
-			return (future.get(gyro) == future::FutureStatus::READY);
+			return future.get(gyro);
 		}
 
 		//TODO DOC
@@ -485,17 +557,16 @@ namespace devices::magneto
 			TemperatureFuture(TemperatureFuture&&) = default;
 			TemperatureFuture& operator=(TemperatureFuture&&) = default;
 
-			int get(int16_t& result)
+			bool get(int16_t& result)
 			{
-				int error = PARENT::get(result);
-				if (error == 0)
-					utils::swap_bytes(result);
-				return error;
+				if (!PARENT::get(result)) return false;
+				utils::swap_bytes(result);
+				return true;
 			}
 		};
 		int temperature(TemperatureFuture& future)
 		{
-			return launch_commands(future, {this->write(), this->read()});
+			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
 		/**
@@ -514,7 +585,7 @@ namespace devices::magneto
 			TemperatureFuture future;
 			if (temperature(future) != 0) return false;
 			int16_t temp;
-			if (future.get(temp) == future::FutureStatus::READY)
+			if (future.get(temp))
 				return temp;
 			else
 				return INT16_MIN;
@@ -540,7 +611,7 @@ namespace devices::magneto
 		};
 		int accel_measures(AccelFuture& future)
 		{
-			return launch_commands(this->write(), this->read());
+			return this->launch_commands(this->write(), this->read());
 		}
 
 		/**
@@ -555,7 +626,7 @@ namespace devices::magneto
 		{
 			AccelFuture future;
 			if (accel_measures(future) != 0) return false;
-			return (future.get(accel) == future::FutureStatus::READY);
+			return future.get(accel);
 		}
 
 		//TODO DOC
@@ -567,21 +638,18 @@ namespace devices::magneto
 			AllMeasuresFuture(AllMeasuresFuture&&) = default;
 			AllMeasuresFuture& operator=(AllMeasuresFuture&&) = default;
 
-			int get(AllSensors& result)
+			bool get(AllSensors& result)
 			{
-				int error = PARENT::get(result);
-				if (error == 0)
-				{
-					format_sensors(result.accel);
-					format_sensors(result.gyro);
-					utils::swap_bytes(result.temperature);
-				}
-				return error;
+				if (!PARENT::get(result)) return false;
+				format_sensors(result.accel);
+				format_sensors(result.gyro);
+				utils::swap_bytes(result.temperature);
+				return true;
 			}
 		};
 		int all_measures(AllMeasuresFuture& future)
 		{
-			return launch_commands(future, {this->write(), this->read()});
+			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
 		/**
@@ -597,7 +665,7 @@ namespace devices::magneto
 		{
 			AllMeasuresFuture future;
 			if (all_measures(future) != 0) return false;
-			return (future.get(sensors) == future::FutureStatus::READY);
+			return future.get(sensors);
 		}
 
 		//TODO DOC
@@ -611,7 +679,7 @@ namespace devices::magneto
 		};
 		int interrupt_status(InterruptStatusFuture& future)
 		{
-			return launch_commands(future, {this->write(), this->read()});
+			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
 		/**
@@ -637,13 +705,13 @@ namespace devices::magneto
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
 		public:
-			ResetFifoFuture() : PARENT{{USER_CTRL. FIFO_ENABLE | FIFO_RESET}} {}
+			ResetFifoFuture() : PARENT{{USER_CTRL, FIFO_ENABLE | FIFO_RESET}} {}
 			ResetFifoFuture(ResetFifoFuture&&) = default;
 			ResetFifoFuture& operator=(ResetFifoFuture&&) = default;
 		};
 		int reset_fifo(ResetFifoFuture& future)
 		{
-			return launch_commands(future, {this->write(0, i2c::I2CFinish::FUTURE_FINISH)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		/**
@@ -668,17 +736,16 @@ namespace devices::magneto
 			FifoCountFuture(FifoCountFuture&&) = default;
 			FifoCountFuture& operator=(FifoCountFuture&&) = default;
 
-			int get(uint16_t& result)
+			bool get(uint16_t& result)
 			{
-				int error = PARENT::get(result);
-				if (error == 0)
-					utils::swap_bytes(result);
-				return error;
+				if (!PARENT::get(result)) return false;
+				utils::swap_bytes(result);
+				return true;
 			}
 		};
 		int fifo_count(FifoCountFuture& future)
 		{
-			return launch_commands(future, {this->write(), this->read()});
+			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
 		/**
@@ -716,7 +783,7 @@ namespace devices::magneto
 		//TODO DOC careful fifo_count() is not checked by this method!
 		template<typename T> int fifo_pop(FifoPopFuture<T>& future)
 		{
-			return launch_commands(future, {this->write(), this->read()});
+			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
 		/**
@@ -749,7 +816,7 @@ namespace devices::magneto
 		{
 			FifoPopFuture<T> future;
 			if (fifo_pop(future) != 0) return false;
-			return (future.get(output) == future::FutureStatus::READY);
+			return future.get(output);
 		}
 
 		//TODO DOC
@@ -789,10 +856,10 @@ namespace devices::magneto
 
 		int write_power(PowerManagementFuture& future)
 		{
-			return launch_commands(future, {this->write(0, i2c::I2CFinish::FUTURE_FINISH)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
-		void format_sensors(Sensor3D& sensors)
+		static void format_sensors(Sensor3D& sensors)
 		{
 			utils::swap_bytes(sensors.x);
 			utils::swap_bytes(sensors.y);
