@@ -678,7 +678,14 @@ namespace devices::magneto
 			return (future.await() == future::FutureStatus::READY);
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method gyro_measures(GyroFuture&).
+		 * This is used by `gyro_measures()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa gyro_measures(GyroFuture& future)
+		 */
 		class GyroFuture : public Sensor3DFuture
 		{
 		public:
@@ -686,7 +693,30 @@ namespace devices::magneto
 			GyroFuture(GyroFuture&&) = default;
 			GyroFuture& operator=(GyroFuture&&) = default;
 		};
-		
+
+		/**
+		 * Get latest gyroscope measurements from the device (register map §4.19).
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `GyroFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here.
+		 * @return an error value if the method failed; the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @param gyro a reference to a `Sensor3D` variable that will be filled
+		 * with latest gyroscope measurements on 3 axis.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * shall be called for further information on the error.
+		 * 
+		 * @sa gyro_measures()
+		 */
 		int gyro_measures(GyroFuture& future)
 		{
 			return this->launch_commands(this->write(), this->read());
@@ -708,7 +738,17 @@ namespace devices::magneto
 			return future.get(gyro);
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method temperature(TemperatureFuture&).
+		 * This is used by `temperature()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * The value returned by `get()` is internal raw value from the chip, it can be 
+		 * converted to human-readable temperature with `convert_temp_to_centi_degrees()`.
+		 * 
+		 * @sa temperature(TemperatureFuture& future)
+		 */
 		class TemperatureFuture : public future::Future<int16_t, uint8_t>
 		{
 			using PARENT = future::Future<int16_t, uint8_t>;
@@ -724,6 +764,24 @@ namespace devices::magneto
 				return true;
 			}
 		};
+
+		/**
+		 * Get latest chip temperature measurement (register map §4.18).
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `TemperatureFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here.
+		 * @return an error value if the method failed; the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa temperature()
+		 */
 		int temperature(TemperatureFuture& future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -762,7 +820,14 @@ namespace devices::magneto
 			return int16_t(temp * 10L / 34L + 3653);
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method accel_measures(AccelFuture&).
+		 * This is used by `accel_measures()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa accel_measures(AccelFuture&)
+		 */
 		class AccelFuture : public Sensor3DFuture
 		{
 		public:
@@ -770,6 +835,24 @@ namespace devices::magneto
 			AccelFuture(AccelFuture&&) = default;
 			AccelFuture& operator=(AccelFuture&&) = default;
 		};
+
+		/**
+		 * Get latest accelerometer measurements from the device (register map §4.17).
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `AccelFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here.
+		 * @return an error value if the method failed; the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa accel_measures()
+		 */
 		int accel_measures(AccelFuture& future)
 		{
 			return this->launch_commands(this->write(), this->read());
