@@ -69,8 +69,6 @@ ISR(TWI_vect)                                                       \
 }
 #else
 #define REGISTER_I2C_ISR(MODE)
-//TODO How to force ompile error if one fo the following macros is used?
-//TODO Or how to simulate callbacks in a sync way from i2c_handler?
 #define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)
 #define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)
 #endif
@@ -236,7 +234,7 @@ namespace i2c
 		{
 			// Disable TWI
 			USICR_ = 0;
-			//TODO should we set SDA back to INPUT?
+			// should we set SDA back to INPUT?
 		}
 #endif
 
@@ -392,12 +390,9 @@ namespace i2c
 			return status_;
 		}
 
-		//FIXME add debug of i2c_change() return through LEDs
-		// Use 1 LED per status to start with, in order to check which status never get used
-		// Then, use counters per status to check how many times they are passed through
 		void last_command_pushed_impl_()
 		{
-			//TODO How to report errors? keep future way or direct return?
+			// How to report errors? keep future way or direct return?
 			// Loop here until command is executed
 			while (true)
 			{
@@ -435,14 +430,14 @@ namespace i2c
 			//			_delay_loop_1(T_LOW());
 			// Release SDA (force high)
 			SDA_HIGH();
-			//TODO check START transmission with USISIF flag?
+			// check START transmission with USISIF flag?
 			bool ok = USISR & bits::BV8(USISIF);
 			status_ = (ok ? expected_status_ : Status::ARBITRATION_LOST);
 		}
 
 		void send_byte_impl(uint8_t data)
 		{
-			// Set SCL low TODO is this line really needed for every byte transferred?
+			// Set SCL low: is this line really needed for every byte transferred?
 			SCL_LOW();
 			// Transfer address byte
 			USIDR_ = data;
