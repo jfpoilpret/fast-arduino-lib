@@ -157,7 +157,6 @@ int main()
 	out << dec << F("reset_fifo() ") << ok << endl;
 	while (true)
 	{
-		//TODO what happens if fifo_count() == 0 but we call fifo_pop()?
 		AllSensors sensors;
 		uint16_t count;
 		while ((count = mpu.fifo_count()) < sizeof(sensors))
