@@ -120,7 +120,19 @@ namespace devices::rtc
 
 		// Asynchronous API
 		//==================
-		//TODO DOC
+
+		/**
+		 * Create a future to be used by asynchronous method set_datetime(SET_DATETIME&).
+		 * This is used by `set_datetime()` to pass input settings, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * 
+		 * @param datetime the new date/time to set on the RTC chip; all values 
+		 * must be properly set and be correct, in particular, note that
+		 * `tm::tm_wday` must be set correctly by yourself (the RTC chip does not
+		 * calculate it itself).
+		 * 
+		 * @sa set_datetime(SET_DATETIME&)
+		 */
 		class SetDatetimeFuture : public future::Future<void, set_tm>
 		{
 		public:
@@ -140,9 +152,28 @@ namespace devices::rtc
 			SetDatetimeFuture(SetDatetimeFuture&&) = default;
 			SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
 		};
-		//TODO DOC
+		/** Alias type for SetDatetimeFuture. */
 		using SET_DATETIME = SetDatetimeFuture;
-		//TODO DOC
+
+		/**
+		 * Change date and time of the RTC chip connected to this driver.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `SetDatetimeFuture` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa SetDatetimeFuture
+		 * @sa SET_DATETIME
+		 * @sa set_datetime(const tm&)
+		 * @sa errors
+		 */
 		int set_datetime(SET_DATETIME& future)
 		{
 			// send register address to write to (0)
@@ -150,7 +181,13 @@ namespace devices::rtc
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method get_datetime(GET_DATETIME&).
+		 * This is used by `get_datetime()` to get device data, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * 
+		 * @sa get_datetime(GET_DATETIME&)
+		 */
 		class GetDatetimeFuture : public future::Future<tm, uint8_t>
 		{
 		public:
@@ -158,7 +195,6 @@ namespace devices::rtc
 			GetDatetimeFuture(GetDatetimeFuture&&) = default;
 			GetDatetimeFuture& operator=(GetDatetimeFuture&&) = default;
 
-			//TODO DOC
 			bool get(tm& datetime)
 			{
 				if (!future::Future<tm, uint8_t>::get(datetime)) return false;
@@ -172,9 +208,29 @@ namespace devices::rtc
 				return true;
 			}
 		};
-		//TODO DOC
+
+		/** Alias type for SetDatetimeFuture. */
 		using GET_DATETIME = GetDatetimeFuture;
-		//TODO DOC
+
+		/**
+		 * Get the current date and time from the RTC chip.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `SetDatetimeFuture` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa GetDatetimeFuture
+		 * @sa GET_DATETIME
+		 * @sa get_datetime(tm&)
+		 * @sa errors
+		 */
 		int get_datetime(GET_DATETIME& future)
 		{
 			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
@@ -187,7 +243,6 @@ namespace devices::rtc
 			using PARENT = future::Future<void, containers::array<uint8_t, SIZE_ + 1>>;
 		public:
 			SetRamFuture() = default;
-			//TODO DOC
 			explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
@@ -199,10 +254,12 @@ namespace devices::rtc
 			SetRamFuture(SetRamFuture<SIZE_>&&) = default;
 			SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
 
+			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return (this->get_input()[0] + SIZE_ <= RAM_END);
 			}
+			/// @endcond
 		};
 		//TODO DOC
 		template<uint8_t SIZE> using SET_RAM = SetRamFuture<SIZE>;
@@ -220,16 +277,17 @@ namespace devices::rtc
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
 		public:
 			SetRam1Future() = default;
-			//TODO DOC
 			explicit SetRam1Future(uint8_t address, uint8_t data)
 				:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}} {}
 			SetRam1Future(SetRam1Future&&) = default;
 			SetRam1Future& operator=(SetRam1Future&&) = default;
 
+			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return (this->get_input()[0] < RAM_END);
 			}
+			/// @endcond
 		};
 		//TODO DOC
 		using SET_RAM1 = SetRam1Future;
@@ -247,7 +305,6 @@ namespace devices::rtc
 		{
 			using PARENT = future::Future<containers::array<uint8_t, SIZE_>, uint8_t>;
 		public:
-			//TODO DOC
 			explicit GetRamFuture(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)}
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
@@ -255,10 +312,12 @@ namespace devices::rtc
 			GetRamFuture(GetRamFuture<SIZE_>&&) = default;
 			GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = default;
 
+			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return (this->get_input() + SIZE_ <= RAM_END);
 			}
+			/// @endcond
 		};
 		//TODO DOC
 		template<uint8_t SIZE> using GET_RAM = GetRamFuture<SIZE>;
@@ -275,15 +334,16 @@ namespace devices::rtc
 		{
 			using PARENT = future::Future<uint8_t, uint8_t>;
 		public:
-			//TODO DOC
 			explicit GetRam1Future(uint8_t address = 0) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
 			GetRam1Future(GetRam1Future&&) = default;
 			GetRam1Future& operator=(GetRam1Future&&) = default;
 
+			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return this->get_input() < RAM_END;
 			}
+			/// @endcond
 		};
 		//TODO DOC
 		using GET_RAM1 = GetRam1Future;
@@ -317,7 +377,6 @@ namespace devices::rtc
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
 		public:
-			//TODO DOC
 			explicit EnableOutputFuture(SquareWaveFrequency frequency)
 			{
 				ControlRegister control;
@@ -344,7 +403,6 @@ namespace devices::rtc
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
 		public:
-			//TODO DOC
 			explicit DisableOutputFuture(bool output_value)
 			{
 				ControlRegister control;
@@ -378,6 +436,8 @@ namespace devices::rtc
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
+		 * 
+		 * @sa set_datetime(SET_DATETIME&)
 		 */
 		bool set_datetime(const tm& datetime)
 		{
