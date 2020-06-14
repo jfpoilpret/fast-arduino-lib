@@ -1015,7 +1015,7 @@ namespace devices::magneto
 			FifoCountFuture future;
 			if (fifo_count(future) != 0) return 0;
 			uint16_t count = 0;
-			if (future.get(count) != 0) return 0;
+			if (!future.get(count)) return 0;
 			return count;
 		}
 
@@ -1028,6 +1028,16 @@ namespace devices::magneto
 			FifoPopFuture() : PARENT{FIFO_R_W} {}
 			FifoPopFuture(FifoPopFuture&&) = default;
 			FifoPopFuture& operator=(FifoPopFuture&&) = default;
+
+			bool get(T& result)
+			{
+				if (!PARENT::get(result)) return false;
+				// We need to swap bytes of all words (big-endian to little-endian)
+				uint16_t* temp = reinterpret_cast<uint16_t*>(&result);
+				uint8_t size = sizeof(T) / 2;
+				while (size--) utils::swap_bytes(*temp++);
+				return true;
+			}
 		};
 		//TODO DOC careful fifo_count() is not checked by this method!
 		template<typename T> int fifo_pop(FifoPopFuture<T>& future)
@@ -1069,12 +1079,6 @@ namespace devices::magneto
 			return future.get(output);
 		}
 
-		//TODO DOC
-		// template<typename T> bool fifo_pop(T& output, bool wait = false, bool yield = false)
-		// {
-		// 	return fifo_pop((uint8_t*) &output, sizeof(T), wait, yield);
-		// }
-
 	private:
 		static constexpr const uint8_t DEVICE_ADDRESS = uint8_t(uint8_t(0x68 | uint8_t(AD0)) << 1);
 
@@ -1115,29 +1119,6 @@ namespace devices::magneto
 			utils::swap_bytes(sensors.y);
 			utils::swap_bytes(sensors.z);
 		}
-
-		//TODO Hard to futurize really
-		// bool fifo_pop(uint8_t* buffer, uint8_t size, bool wait, bool yield)
-		// {
-		// 	using i2c::Status::OK;
-		// 	while (fifo_count() < size)
-		// 	{
-		// 		if (!wait) return false;
-		// 		if (yield) time::yield();
-		// 	}
-
-		// 	if (this->write(DEVICE_ADDRESS, FIFO_R_W, BUSCOND::START_NO_STOP) == OK
-		// 		&& this->read(DEVICE_ADDRESS, buffer, size, BUSCOND::REPEAT_START_STOP) == OK)
-		// 	{
-		// 		// Swap all 2-bytes words
-		// 		uint16_t* temp = (uint16_t*) buffer;
-		// 		size /= 2;
-		//		// FIXME check if (and how) Future-based fifo_pop() should also swap bytes?
-		// 		while (size--) utils::swap_bytes(*temp++);
-		// 		return true;
-		// 	}
-		// 	return false;
-		// }
 	};
 }
 
