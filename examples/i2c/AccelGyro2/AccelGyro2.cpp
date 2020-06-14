@@ -99,6 +99,7 @@ using devices::magneto::DLPF;
 using streams::dec;
 using streams::hex;
 using streams::endl;
+using streams::flush;
 
 static constexpr const GyroRange GYRO_RANGE = GyroRange::RANGE_250;
 static constexpr const AccelRange ACCEL_RANGE = AccelRange::RANGE_2G;
@@ -130,6 +131,7 @@ int main()
 	time::delay_ms(5000);
 	uart.begin(115200);
 	out.width(2);
+	out << streams::boolalpha;
 	out << F("Start") << endl;
 
 	// Initialize FutureManager
@@ -156,14 +158,30 @@ int main()
 	while (true)
 	{
 		AllSensors sensors;
-		while (mpu.fifo_count() < sizeof(sensors))
-			;
+		uint16_t count;
+		while ((count = mpu.fifo_count()) < sizeof(sensors))
+		{
+			if (count == 0)
+				out << '.' << flush;
+			else
+				out << ' ' << dec << count << ' ' << flush;
+			time::delay_ms(10);
+		}
+		out << endl;
 		if (mpu.fifo_pop(sensors))
 		{
+			out	<< dec 
+				<< F("raw Gyro x = ") << sensors.gyro.x 
+				<< F(", y = ") << sensors.gyro.y 
+				<< F(", z = ") << sensors.gyro.z << endl;
 			out	<< dec 
 				<< F("cdps Gyro x = ") << gyro(sensors.gyro.x)
 				<< F(", y = ") << gyro(sensors.gyro.y) 
 				<< F(", z = ") << gyro(sensors.gyro.z) << endl;
+			out	<< dec 
+				<< F("raw Accel x = ") << sensors.accel.x 
+				<< F(", y = ") << sensors.accel.y 
+				<< F(", z = ") << sensors.accel.z << endl;
 			out	<< dec 
 				<< F("mG Accel x = ") << accel(sensors.accel.x) 
 				<< F(", y = ") << accel(sensors.accel.y) 
@@ -173,7 +191,6 @@ int main()
 		}
 		else
 			out << F("fifo_pop() KO") << endl;
-		time::delay_ms(10);
 	}
 	
 	// Stop TWI interface
