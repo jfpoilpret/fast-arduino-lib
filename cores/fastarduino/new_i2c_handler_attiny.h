@@ -324,7 +324,6 @@ namespace i2c
 			}
 
 			// Check if we must force finish the future
-			//TODO Maybe we shall call this every time because anyway it will not change the status if not completely filled...
 			if (command.type.finish_future)
 				future::AbstractFutureManager::instance().set_future_finish_(command.future_id);
 			// Check if we must force a STOP
