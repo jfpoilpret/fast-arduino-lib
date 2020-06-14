@@ -37,6 +37,8 @@ namespace devices::magneto
 	/**
 	 * The full-scale range of the gyroscope in dps (datasheet §6.1).
 	 * @sa MPU6050::begin()
+	 * @sa MPU6050::BeginFuture
+	 * @sa MPU6050::FifoBeginFuture
 	 */
 	enum class GyroRange : uint8_t
 	{
@@ -60,6 +62,8 @@ namespace devices::magneto
 	/**
 	 * The full-scale range of the accelerometer in g (datasheet §6.2).
 	 * @sa MPU6050::begin()
+	 * @sa MPU6050::BeginFuture
+	 * @sa MPU6050::FifoBeginFuture
 	 */
 	enum class AccelRange : uint8_t
 	{
@@ -83,6 +87,8 @@ namespace devices::magneto
 	/**
 	 * The clock to select for the chip (datasheet §6.6).
 	 * @sa MPU6050::begin()
+	 * @sa MPU6050::BeginFuture
+	 * @sa MPU6050::FifoBeginFuture
 	 */
 	enum class ClockSelect : uint8_t
 	{
@@ -103,6 +109,8 @@ namespace devices::magneto
 	 * selecting a DLPF setting for the accelerometer will force the matching
 	 * setting for the gyroscope.
 	 * @sa MPU6050::begin()
+	 * @sa MPU6050::BeginFuture
+	 * @sa MPU6050::FifoBeginFuture
 	 */
 	enum class DLPF : uint8_t
 	{
@@ -128,7 +136,7 @@ namespace devices::magneto
 	 * This allows setting which sensor measurements should be loaded in the chip
 	 * FIFO buffer (see also datasheet §7.17).
 	 * @sa MPU6050::begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)
-	 * @sa FifoBeginFuture
+	 * @sa MPU6050::FifoBeginFuture
 	 */
 	class FIFOEnable
 	{
@@ -227,7 +235,7 @@ namespace devices::magneto
 	/**
 	 * The structure of the Interrupt Enable register (register map §4.15).
 	 * @sa MPU6050::begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)
-	 * @sa FifoBeginFuture
+	 * @sa MPU6050::FifoBeginFuture
 	 * @sa INTStatus
 	 */
 	using INTEnable = INTStatus;
@@ -236,6 +244,7 @@ namespace devices::magneto
 	 * Structure to store all MPU6050 sensors data (3 axis gyroscope and 
 	 * accelerometer, chip temperature).
 	 * @sa MPU6050::all_measures()
+	 * @sa MPU6050::AllMeasuresFuture
 	 */
 	struct AllSensors
 	{
@@ -258,6 +267,7 @@ namespace devices::magneto
 		HIGH = 1
 	};
 
+	//FIXME we do not need AD0 as a template parameter (would generate same code twice for 2 wired MPU6050!)
 	/**
 	 * I2C device driver for the MPU6050 gyroscope/accelerometer chip.
 	 * Note that the I2C auxiliary mode of the chip is not supported by the driver.
@@ -272,8 +282,6 @@ namespace devices::magneto
 	template<i2c::I2CMode MODE = i2c::I2CMode::FAST, AD0 AD0 = AD0::LOW> class MPU6050 : public i2c::I2CDevice<MODE>
 	{
 	private:
-		using DEVICE = MPU6050<MODE, AD0>;
-
 		//TODO check if absolutely need to be defined first and not last...
 		class Sensor3DFuture : public future::Future<Sensor3D, uint8_t>
 		{
@@ -401,8 +409,7 @@ namespace devices::magneto
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
-		 * @return an error value if the method failed; the list of possible errors
+		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
 		 * @sa BeginFuture
@@ -480,8 +487,7 @@ namespace devices::magneto
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
-		 * @return an error value if the method failed; the list of possible errors
+		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
 		 * @sa FifoBeginFuture
@@ -514,6 +520,7 @@ namespace devices::magneto
 		 * 
 		 * @sa end()
 		 * @sa begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)
+		 * @sa begin(BeginFuture&)
 		 */
 		bool begin( GyroRange gyro_range = GyroRange::RANGE_250,
 					AccelRange accel_range = AccelRange::RANGE_2G,
@@ -549,6 +556,7 @@ namespace devices::magneto
 		 * 
 		 * @sa end()
 		 * @sa begin(GyroRange, AccelRange, DLPF, ClockSelect)
+		 * @sa begin(FifoBeginFuture&)
 		 * @sa interrupts::INTSignal
 		 * @sa interrupts::PCISignal
 		 */
@@ -589,19 +597,20 @@ namespace devices::magneto
 		 * if any.
 		 * @warning Asynchronous API!
 		 * 
-		 * @param future a `EndFuture` passed by the caller, that will be 
+		 * @param future an `EndFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happended; for ATmega, this 
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
-		 * @return an error value if the method failed; the list of possible errors
+		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
-		 * @sa begin()
+		 * @sa begin(BeginFutre&)
+		 * @sa begin(FifoBeginFuture&)
 		 * @sa end()
+		 * @sa errors
 		 */
 		int end(EndFuture& future) INLINE
 		{
@@ -613,11 +622,13 @@ namespace devices::magneto
 		 * Put the chip to sleep mode (low-power mode); stops sampling operations 
 		 * if any.
 		 * @warning Blocking API!
+		 * 
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
 		 * 
 		 * @sa begin()
+		 * @sa end(EndFuture&)
 		 */
 		bool end() INLINE
 		{
@@ -653,11 +664,11 @@ namespace devices::magneto
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
-		 * @return an error value if the method failed; the list of possible errors
+		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
 		 * @sa reset()
+		 * @sa errors
 		 */
 		int reset(ResetFuture& future) INLINE
 		{
@@ -667,9 +678,12 @@ namespace devices::magneto
 		/**
 		 * Reset the chip (register map §4.28).
 		 * @warning Blocking API!
+		 * 
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
+		 * 
+		 * @sa reset(ResetFuture&)
 		 */
 		bool reset() INLINE
 		{
@@ -705,17 +719,11 @@ namespace devices::magneto
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
-		 * @return an error value if the method failed; the list of possible errors
+		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
-		 * @param gyro a reference to a `Sensor3D` variable that will be filled
-		 * with latest gyroscope measurements on 3 axis.
-		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
-		 * 
-		 * @sa gyro_measures()
+		 * @sa gyro_measures(Sensor3D&)
+		 * @sa errors
 		 */
 		int gyro_measures(GyroFuture& future)
 		{
@@ -725,11 +733,14 @@ namespace devices::magneto
 		/**
 		 * Get latest gyroscope measurements from the device (register map §4.19).
 		 * @warning Blocking API!
+		 * 
 		 * @param gyro a reference to a `Sensor3D` variable that will be filled
 		 * with latest gyroscope measurements on 3 axis.
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
+		 * 
+		 * @sa gyro_measures(GyroFuture&)
 		 */
 		bool gyro_measures(Sensor3D& gyro)
 		{
@@ -776,11 +787,12 @@ namespace devices::magneto
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
-		 * @return an error value if the method failed; the list of possible errors
+		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
 		 * @sa temperature()
+		 * @sa convert_temp_to_centi_degrees()
+		 * @sa errors
 		 */
 		int temperature(TemperatureFuture& future)
 		{
@@ -797,6 +809,7 @@ namespace devices::magneto
 		 * @retval -32768 if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
 		 * 
+		 * @sa temperature(TemperatureFuture&)
 		 * @sa convert_temp_to_centi_degrees()
 		 */
 		int16_t temperature()
@@ -847,11 +860,11 @@ namespace devices::magneto
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
-		 * @return an error value if the method failed; the list of possible errors
+		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
-		 * @sa accel_measures()
+		 * @sa accel_measures(Sensor3D&)
+		 * @sa errors
 		 */
 		int accel_measures(AccelFuture& future)
 		{
@@ -861,11 +874,14 @@ namespace devices::magneto
 		/**
 		 * Get latest accelerometer measurements from the device (register map §4.17).
 		 * @warning Blocking API!
+		 * 
 		 * @param accel a reference to a `Sensor3D` variable that will be filled
 		 * with latest accelerometer measurements on 3 axis.
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
+		 * 
+		 * @sa accel_measures(AccelFuture&)
 		 */
 		bool accel_measures(Sensor3D& accel)
 		{
@@ -874,7 +890,14 @@ namespace devices::magneto
 			return future.get(accel);
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method all_measures(AllMeasuresFuture&).
+		 * This is used by `all_measures()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa all_measures(AllMeasuresFuture&)
+		 */
 		class AllMeasuresFuture : public future::Future<AllSensors, uint8_t>
 		{
 			using PARENT = future::Future<AllSensors, uint8_t>;
@@ -892,6 +915,25 @@ namespace devices::magneto
 				return true;
 			}
 		};
+
+		/**
+		 * Get latest measurements of all device sensors (gyroscope, accelerometer,
+		 * temperature).
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `AllMeasuresFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa all_measures(AllSensors&)
+		 * @sa errors
+		 */
 		int all_measures(AllMeasuresFuture& future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -901,11 +943,14 @@ namespace devices::magneto
 		 * Get latest measurements of all device sensors (gyroscope, accelerometer,
 		 * temperature).
 		 * @warning Blocking API!
+		 * 
 		 * @param sensors a reference to an `AllSensors` variable that will be filled
 		 * with all latest measurements.
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
+		 * 
+		 * @sa all_measures(AllMeasuresFuture&)
 		 */
 		bool all_measures(AllSensors& sensors)
 		{
@@ -914,7 +959,14 @@ namespace devices::magneto
 			return future.get(sensors);
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method interrupt_status(InterruptStatusFuture&).
+		 * This is used by `interrupt_status()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa interrupt_status(InterruptStatusFuture&)
+		 */
 		class InterruptStatusFuture : public future::Future<INTStatus, uint8_t>
 		{
 			using PARENT = future::Future<INTStatus, uint8_t>;
@@ -923,6 +975,26 @@ namespace devices::magneto
 			InterruptStatusFuture(InterruptStatusFuture&&) = default;
 			InterruptStatusFuture& operator=(InterruptStatusFuture&&) = default;
 		};
+
+		/**
+		 * Get the interrupt status (register map §4.16) after an interrupt has 
+		 * occurred. After this method is called, the Interrupt Status register
+		 * is cleared.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `InterruptStatusFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa interrupt_status()
+		 * @sa errors
+		 */
 		int interrupt_status(InterruptStatusFuture& future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -933,10 +1005,13 @@ namespace devices::magneto
 		 * occurred. After this method is called, the Interrupt Status register
 		 * is cleared.
 		 * @warning Blocking API!
+		 * 
 		 * @return the latest interrupt status as an `INTStatus` structure where
 		 * each field maps to the interrupt that occurred; in case of an error,
 		 * the returned status is fully cleared. In order to ensure the returned
 		 * status can be inspected, you should first call `i2c::I2CManager.status()`.
+		 * 
+		 * @sa interrupt_status(InterruptStatusFuture&)
 		 */
 		INTStatus interrupt_status()
 		{
@@ -947,7 +1022,14 @@ namespace devices::magneto
 			return status;
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method reset_fifo(ResetFifoFuture&).
+		 * This is used by `reset_fifo()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa reset_fifo(ResetFifoFuture&)
+		 */
 		class ResetFifoFuture : public future::Future<void, containers::array<uint8_t, 2>>
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
@@ -956,6 +1038,24 @@ namespace devices::magneto
 			ResetFifoFuture(ResetFifoFuture&&) = default;
 			ResetFifoFuture& operator=(ResetFifoFuture&&) = default;
 		};
+
+		/**
+		 * Reset the FIFO buffer (parameter map §4.27).
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `ResetFifoFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa reset_fifo()
+		 * @sa errors
+		 */
 		int reset_fifo(ResetFifoFuture& future)
 		{
 			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FUTURE_FINISH)});
@@ -964,9 +1064,12 @@ namespace devices::magneto
 		/**
 		 * Reset the FIFO buffer (parameter map §4.27).
 		 * @warning Blocking API!
+		 * 
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
+		 * 
+		 * @sa reset_fifo(ResetFifoFuture&)
 		 */
 		bool reset_fifo()
 		{
@@ -975,7 +1078,14 @@ namespace devices::magneto
 			return (future.await() == future::FutureStatus::READY);
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method fifo_count(FifoCountFuture&).
+		 * This is used by `fifo_count()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa fifo_count(FifoCountFuture&)
+		 */
 		class FifoCountFuture : public future::Future<uint16_t, uint8_t>
 		{
 			using PARENT = future::Future<uint16_t, uint8_t>;
@@ -991,6 +1101,28 @@ namespace devices::magneto
 				return true;
 			}
 		};
+
+		/**
+		 * Get the number of bytes currently stored in the FIFO buffer (register 
+		 * map §4.30). This number is a multiple of the size of sensor samples as
+		 * selected by `FIFOEnable` in
+		 * `begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)`.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `FifoCountFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa fifo_pop()
+		 * @sa fifo_count()
+		 * @sa errors
+		 */
 		int fifo_count(FifoCountFuture& future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -1002,6 +1134,7 @@ namespace devices::magneto
 		 * selected by `FIFOEnable` in
 		 * `begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)`.
 		 * @warning Blocking API!
+		 * 
 		 * @return the number of bytes currently present in the FIFO buffer; when not `0`,
 		 * you should read the samples with `fifo_pop()`.
 		 * @retval 0 if the FIFO buffer is empty or if the operation failed; 
@@ -1009,6 +1142,7 @@ namespace devices::magneto
 		 * call `i2c::I2CManager.status()`.
 		 * 
 		 * @sa fifo_pop()
+		 * @sa fifo_count(FifoCountFuture&)
 		 */
 		uint16_t fifo_count()
 		{
@@ -1019,7 +1153,20 @@ namespace devices::magneto
 			return count;
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method fifo_pop(FifoPopFuture<T>&).
+		 * This is used by `fifo_pop(FifoPopFuture<T>&)` to asynchronously launch the 
+		 * I2C transaction, and it shall be used by the caller to determine when the
+		 * I2C transaction is finished.
+		 * 
+		 * @tparam T the type of measurement to read from FIFO; shall be one of
+		 * `Sensor3D` (gyroscope or accelerometer measure), `int16_t` (temperature),
+		 * `AllSensors` (eveything), or a combination of these.
+		 * 
+		 * @sa fifo_pop(FifoPopFuture<T>&)
+		 * @sa Sensor3D
+		 * @sa AllSensors
+		 */
 		template<typename T>
 		class FifoPopFuture : public future::Future<T, uint8_t>
 		{
@@ -1039,7 +1186,32 @@ namespace devices::magneto
 				return true;
 			}
 		};
-		//TODO DOC careful fifo_count() is not checked by this method!
+
+		/**
+		 * Get one sample out of the FIFO buffer (register map §4.31).
+		 * @warning You should first call `fifo_count()` to ensure the MPU6050
+		 * FIFO queue contains a sample of the right size! Otherwise this method
+		 * will... TODO
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam T the type of sample to get from the FIFO buffer; must be one
+		 * of `Sensor3D`, `int16_t` or `AllSensors`, based on the sensor samples
+		 * selected by `FIFOEnable` in
+		 * `begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)`.
+		 * @param future an `FifoCountFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa fifo_count()
+		 * @sa fifo_pop(T&)
+		 * @sa errors
+		 */
 		template<typename T> int fifo_pop(FifoPopFuture<T>& future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -1047,9 +1219,9 @@ namespace devices::magneto
 
 		/**
 		 * Get one sample out of the FIFO buffer (register map §4.31).
-		 * This method may block until a full sample is available in the FIFO
-		 * buffer; if you do not want to wait, first call `fifo_count()` to ensure
-		 * a sample is available.
+		 * @warning You should first call `fifo_count()` to ensure the MPU6050
+		 * FIFO queue contains a sample of the right size! Otherwise this method
+		 * will... TODO
 		 * @warning Blocking API!
 		 * 
 		 * @tparam T the type of sample to get from the FIFO buffer; must be one
@@ -1058,20 +1230,14 @@ namespace devices::magneto
 		 * `begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)`.
 		 * @param output a reference to a `T`-type variable that will be filled
 		 * with the required sample.
-		 * @param wait set to `true` if the method shall block until a sample of 
-		 * the required size is available in the FIFO buffer
-		 * @param yield set to `true` if you want the method to yield time (i.e. 
-		 * enter default pwoer sleep mode) while waiting; this is effective only 
-		 * when @p wait is `true`. When @p wait is `true` and @p yield is `false`,
-		 * then waiting is performed by a busy loop.
 		 * @retval true if a sample has been read into @p output
 		 * @retval false if no sample was ready or if the operation failed; when
 		 * so, `i2c::I2CManager.status()` shall be called for further information
 		 * on the error.
 		 * 
 		 * @sa fifo_count()
+		 * @sa fifo_pop(FifoPopFuture<T>&)
 		 */
-		//TODO DOC that fifo_count is not checked by this method
 		template<typename T> bool fifo_pop(T& output)
 		{
 			FifoPopFuture<T> future;
