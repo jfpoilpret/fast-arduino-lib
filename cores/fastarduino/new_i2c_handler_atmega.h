@@ -426,6 +426,7 @@ namespace i2c
 
 				case State::STOP:
 				// Check if we need to finish the current future
+				//TODO Maybe we shall call this every time because anyway it will not change the status if not completely filled...
 				if (this->command_.type.finish_future)
 					future::AbstractFutureManager::instance().set_future_finish_(this->command_.future_id);
 				result = (is_end_transaction() ? I2CCallback::END_TRANSACTION : I2CCallback::END_COMMAND);
