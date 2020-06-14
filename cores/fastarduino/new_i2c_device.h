@@ -43,11 +43,39 @@
 
 namespace i2c
 {
-	//TODO DOC
+	/**
+	 * Action(s) to perform at the end of an I2C read or write command.
+	 * Values can be or'ed together to combine several actions.
+	 * 
+	 * @sa I2CDevice::read()
+	 * @sa I2CDevice::write()
+	 * @sa I2CCommand
+	 * @sa I2CCommandType
+	 */
 	enum class I2CFinish : uint8_t
 	{
+		/** Perform no specific action ate the end of a read or write I2C command. */
 		NONE = 0,
+		/**
+		 * Force an I2C STOP condition at the end of a read or write command, 
+		 * instead of the default REPEAT START condition.
+		 * This may be useful for some devices that do not support REEAT START well.
+		 */
 		FORCE_STOP = 0x01,
+		/**
+		 * Force finishing the Future associated with the current read or write 
+		 * I2C command. This is useful for I2C transaction with only write commands,
+		 * hence associated to a Future with no output.
+		 * @warning
+		 * In general, you would never use this value in your own implementation 
+		 * for a device, because FastArduino I2C support already ensures this is
+		 * done at the end of a complete I2C transaction (with mutiple read and 
+		 * write commands).
+		 * This could be useful in the exceptional case where your I2C transaction
+		 * is made of many commands, but you would like to finish the associated 
+		 * Future **before** the last command is executed, which should be an
+		 * extraordinarily rare situation.
+		 */
 		FUTURE_FINISH = 0x02
 	};
 	
@@ -112,7 +140,9 @@ namespace i2c
 		 * Calling this method has no effect on the bus until the returned command 
 		 * is actually pushed to the I2CManager through a `launch_commands()` call.
 		 * 
-		 * @param read_count TODO
+		 * @param read_count the number of bytes to read from the device to fill
+		 * the output value in the Future associated with the I2C transaction; 
+		 * if `0`, the whole output value should be filled by this command.
 		 * @param finish specify the behavior to adopt after this command has been
 		 * fully handled through the I2C bus; it allows to ensure a STOP condition
 		 * will be sent on the bus (independently of the existence of further commands),
@@ -133,7 +163,10 @@ namespace i2c
 		 * Calling this method has no effect on the bus until the returned command 
 		 * is actually pushed to the I2CManager through a `launch_commands()` call.
 		 * 
-		 * @param write_count TODO
+		 * @param write_count the number of bytes to get from the storage value
+		 * in the Future associated with the I2C transaction, in order to write 
+		 * them to the device; if `0`, the whole storage value should be used by 
+		 * this command.
 		 * @param finish specify the behavior to adopt after this command has been
 		 * fully handled through the I2C bus; it allows to ensure a STOP condition
 		 * will be sent on the bus (independently of the existence of further commands),
@@ -214,12 +247,16 @@ namespace i2c
 
 				// Now push each command to the I2CManager
 				int error = 0;
+				uint8_t index = 0;
 				for (I2CCommand command : commands)
 				{
 					// update command.byte_count if 0
 					command.future_id = id;
 					if (!command.byte_count)
 						command.byte_count = (command.type.write ? max_write : max_read);
+					// force future finish for last command in transaction
+					if (++index == num_commands)
+						command.type.finish_future = true;
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command))
 					{
