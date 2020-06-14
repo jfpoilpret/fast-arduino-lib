@@ -141,7 +141,7 @@ int main()
 	// Start TWI interface
 	//====================
 	// Initialize I2C async handler
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 	i2c::I2CManager<i2c::I2CMode::STANDARD> manager{i2c_buffer};
 #else
 	i2c::I2CManager<i2c::I2CMode::STANDARD> manager;
@@ -165,9 +165,9 @@ int main()
 	// Initialize clock date
 	//=======================
 	future::Future<void, uint8_t> f1{0};
-	int error1 = rtc.launch_commands(f1, {rtc.write(i2c::I2CFinish::FUTURE_FINISH)});
+	int error1 = rtc.launch_commands(f1, {rtc.write(0, i2c::I2CFinish::FUTURE_FINISH)});
 	future::Future<void, RealTime> f2{init_time};
-	int error2 = rtc.launch_commands(f2, {rtc.write(i2c::I2CFinish::FUTURE_FINISH)});
+	int error2 = rtc.launch_commands(f2, {rtc.write(0, i2c::I2CFinish::FUTURE_FINISH)});
 	out << "status #2 " << manager.status() << endl;
 	out << "error1 " << error1 << endl;
 	out << "error2 " << error2 << endl;

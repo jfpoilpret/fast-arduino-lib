@@ -71,7 +71,7 @@ static constexpr uint8_t MAX_FUTURES = 8;
 #error "Current target is not yet supported!"
 #endif
 
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 REGISTER_I2C_ISR(i2c::I2CMode::FAST)
 #endif
 
@@ -138,7 +138,7 @@ int main()
 	future::FutureManager<MAX_FUTURES> future_manager;
 
 	// Initialize I2C async handler
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 	ACCELEROMETER::MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #else
 	ACCELEROMETER::MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};

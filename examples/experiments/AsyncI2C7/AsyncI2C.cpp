@@ -43,7 +43,7 @@ static constexpr uint8_t MAX_FUTURES = 8;
 // every I2C step
 #define TRACE_PROTOCOL
 
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 #endif
 
@@ -214,7 +214,7 @@ int main()
 	future::FutureManager<MAX_FUTURES> future_manager;
 
 	// Initialize I2C async handler
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 	//TODO cannot use i2c_hook because it shall not be executed from inside interrupts!
 	// I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};

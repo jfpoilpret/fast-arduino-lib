@@ -86,7 +86,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 #endif
 
@@ -208,7 +208,7 @@ int main()
 
 	// Start TWI interface
 	//====================
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 	i2c::I2CManager<> manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, trace_status};
 #else
 	i2c::I2CManager<> manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, trace_status};

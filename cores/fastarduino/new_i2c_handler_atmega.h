@@ -32,6 +32,8 @@
 #include "utilities.h"
 #include "new_i2c_handler_common.h"
 
+#define I2C_TRUE_ASYNC 1
+
 // MAIN IDEA:
 // - have a queue of "I2C commands" records
 // - each command is either a read or a write and contains important flags for handling the command

@@ -41,7 +41,7 @@ static constexpr uint8_t MAX_FUTURES = 8;
 // This is used when nothing works at all and this reduces the tests to only one get_ram() call
 // #define BASIC_DEBUG
 
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 REGISTER_I2C_ISR(i2c::I2CMode::STANDARD)
 #endif
 
@@ -150,7 +150,7 @@ int main()
 	future::FutureManager<MAX_FUTURES> future_manager;
 
 	// Initialize I2C async handler
-#ifdef TWCR
+#if I2C_TRUE_ASYNC
 	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};
 #else
 	I2CHANDLER handler{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, i2c_hook};

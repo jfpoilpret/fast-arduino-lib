@@ -31,6 +31,8 @@
 #include "utilities.h"
 #include "new_i2c_handler_common.h"
 
+#define I2C_TRUE_ASYNC 0
+
 namespace i2c
 {
 	/**
