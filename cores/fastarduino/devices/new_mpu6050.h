@@ -352,7 +352,7 @@ namespace devices::magneto
 		int begin(BeginFuture& future)
 		{
 			// We split the transaction in 2 write commands (3 bytes starting at CONFIG, 1 byte at PWR_MGT_1)
-			return this->launch_commands(future, {this->write(4), this->write(2, i2c::I2CFinish::FUTURE_FINISH)});
+			return this->launch_commands(future, {this->write(4), this->write(2)});
 		}
 
 		/**
@@ -431,8 +431,7 @@ namespace devices::magneto
 		{
 			if (!future.is_fifo_enabled()) return errors::EINVAL;
 			return this->launch_commands(future, {
-				this->write(4), this->write(2), this->write(2), this->write(3), 
-				this->write(3, i2c::I2CFinish::FUTURE_FINISH)});
+				this->write(4), this->write(2), this->write(2), this->write(3), this->write(3)});
 		}
 
 		/**
@@ -550,7 +549,7 @@ namespace devices::magneto
 		 */
 		int gyro_measures(GyroFuture& future)
 		{
-			return this->launch_commands(this->write(), this->read());
+			return this->launch_commands(future, this->write(), this->read());
 		}
 
 		/**
@@ -648,7 +647,7 @@ namespace devices::magneto
 		 */
 		int accel_measures(AccelFuture& future)
 		{
-			return this->launch_commands(this->write(), this->read());
+			return this->launch_commands(future, this->write(), this->read());
 		}
 
 		/**
@@ -777,7 +776,7 @@ namespace devices::magneto
 		 */
 		int reset_fifo(ResetFifoFuture& future)
 		{
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FUTURE_FINISH)});
+			return this->launch_commands(future, {this->write()});
 		}
 
 		/**
@@ -1286,7 +1285,7 @@ namespace devices::magneto
 
 		int write_power(PowerManagementFuture& future)
 		{
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FUTURE_FINISH)});
+			return this->launch_commands(future, {this->write()});
 		}
 
 		static void format_sensors(Sensor3D& sensors)
