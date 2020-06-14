@@ -34,7 +34,7 @@
 // - Define Future subclass (inside device class) for every future requiring input (constant, or user-provided)
 //   naming convention: MethodNameFuture
 // - Future subclass shall have explicit constructor with mandatory input arguments (no default)
-// - define using types (inside device class) for each future subclass (UPPER_CASE same as METHOD_NAME)
+// - define using types (inside device class) for each future subclass (UPPER_CASE same as METHOD_NAME) TODO too heavy!!
 // - each API method returns int (error code) and takes reference to specific future as unique argument
 
 namespace devices
@@ -261,8 +261,10 @@ namespace devices::rtc
 			}
 			/// @endcond
 		};
-		//TODO DOC
+
+		/** Alias type for SetRamFuture. */
 		template<uint8_t SIZE> using SET_RAM = SetRamFuture<SIZE>;
+
 		//TODO DOC
 		template<uint8_t SIZE> int set_ram(SET_RAM<SIZE>& future)
 		{
@@ -289,8 +291,10 @@ namespace devices::rtc
 			}
 			/// @endcond
 		};
-		//TODO DOC
+
+		/** Alias type for SetRam1Future. */
 		using SET_RAM1 = SetRam1Future;
+
 		//TODO DOC
 		int set_ram(SET_RAM1& future)
 		{
@@ -319,8 +323,10 @@ namespace devices::rtc
 			}
 			/// @endcond
 		};
-		//TODO DOC
+
+		/** Alias type for GetRamFuture. */
 		template<uint8_t SIZE> using GET_RAM = GetRamFuture<SIZE>;
+
 		//TODO DOC
 		template<uint8_t SIZE> int get_ram(GET_RAM<SIZE>& future)
 		{
@@ -345,8 +351,10 @@ namespace devices::rtc
 			}
 			/// @endcond
 		};
-		//TODO DOC
+
+		/** Alias type for GetRam1Future. */
 		using GET_RAM1 = GetRam1Future;
+
 		//TODO DOC
 		int get_ram(GET_RAM1& future)
 		{
@@ -364,15 +372,25 @@ namespace devices::rtc
 			HaltClockFuture(HaltClockFuture&&) = default;
 			HaltClockFuture& operator=(HaltClockFuture&&) = default;
 		};
-		//TODO DOC
+
+		/** Alias type for HaltClockFuture. */
 		using HALT_CLOCK = HaltClockFuture;
+
 		//TODO DOC
 		int halt_clock(HALT_CLOCK& future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method enable_output(EnableOutputFuture&).
+		 * This is used by `enable_output()` to set device data, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * @param frequency one of the supported RTC frequencies, defined in
+		 * `SquareWaveFrequency` enum
+		 * 
+		 * @sa enable_output(EnableOutputFuture&)
+		 */
 		class EnableOutputFuture : public future::Future<void, containers::array<uint8_t, 2>>
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
@@ -390,15 +408,43 @@ namespace devices::rtc
 			EnableOutputFuture(EnableOutputFuture&&) = default;
 			EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
 		};
-		//TODO DOC
+
+		/** Alias type for EnableOutputFuture. */
 		using ENABLE_OUTPUT = EnableOutputFuture;
-		//TODO DOC
+
+		/**
+		 * Enable square wave output to the SQW/OUT pin of the RTC chip.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `EnableOutputFuture` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa EnableOutputFuture
+		 * @sa enable_output(SquareWaveFrequency)
+		 * @sa disable_output(DisableOutputFuture&)
+		 * @sa errors
+		 */
 		int enable_output(ENABLE_OUTPUT& future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method disable_output(DISABLE_OUTPUT&).
+		 * This is used by `disable_output()` to perform the I2C transaction, 
+		 * and it shall be used by the caller to determine when the I2C transaction 
+		 * is finished.
+		 * 
+		 * @sa DISABLE_OUTPUT
+		 * @sa disable_output(DISABLE_OUTPUT&)
+		 */
 		class DisableOutputFuture : public future::Future<void, containers::array<uint8_t, 2>>
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
@@ -415,9 +461,29 @@ namespace devices::rtc
 			DisableOutputFuture(DisableOutputFuture&&) = default;
 			DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
 		};
-		//TODO DOC
+
+		/** Alias type for DisableOutputFuture. */
 		using DISABLE_OUTPUT = DisableOutputFuture;
-		//TODO DOC
+
+		/**
+		 * Enable square wave output to the SQW/OUT pin of the RTC chip.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `DisableOutputFuture` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa DisableOutputFuture
+		 * @sa DISABLE_OUTPUT
+		 * @sa disable_output(bool)
+		 * @sa errors
+		 */
 		int disable_output(DISABLE_OUTPUT& future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
@@ -501,7 +567,7 @@ namespace devices::rtc
 		 * Disable square wave output to the SQW/OUT pin of the RTC chip.
 		 * @warning Blocking API!
 		 * 
-		 * @param output_value TODO
+		 * @param output_value value to force on SQW/OUT pin
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * @sa enable_output()
