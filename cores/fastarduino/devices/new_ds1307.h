@@ -147,7 +147,7 @@ namespace devices::rtc
 		{
 			// send register address to write to (0)
 			// send datetime at address 0
-			return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		//TODO DOC
@@ -177,7 +177,7 @@ namespace devices::rtc
 		//TODO DOC
 		int get_datetime(GET_DATETIME& future)
 		{
-			return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
+			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		//TODO DOC
@@ -211,7 +211,7 @@ namespace devices::rtc
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		//TODO DOC
@@ -238,7 +238,7 @@ namespace devices::rtc
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		//TODO DOC
@@ -267,7 +267,7 @@ namespace devices::rtc
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
+			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		//TODO DOC
@@ -292,7 +292,7 @@ namespace devices::rtc
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(), read(i2c::I2CFinish::FORCE_STOP)});
+			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		//TODO DOC
@@ -309,7 +309,7 @@ namespace devices::rtc
 		//TODO DOC
 		int halt_clock(HALT_CLOCK& future)
 		{
-			return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		//TODO DOC
@@ -336,7 +336,7 @@ namespace devices::rtc
 		//TODO DOC
 		int enable_output(ENABLE_OUTPUT& future)
 		{
-			return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		//TODO DOC
@@ -362,7 +362,7 @@ namespace devices::rtc
 		//TODO DOC
 		int disable_output(DISABLE_OUTPUT& future)
 		{
-			return launch_commands(future, {write(i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
+			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH)});
 		}
 
 		// Synchronous API
