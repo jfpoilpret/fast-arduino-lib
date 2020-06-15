@@ -65,7 +65,6 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
