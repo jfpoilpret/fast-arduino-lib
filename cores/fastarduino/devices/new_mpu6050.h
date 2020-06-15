@@ -28,7 +28,6 @@
 #include "common_magneto.h"
 #include "../array.h"
 #include "../new_i2c_device.h"
-#include "../time.h"
 #include "../utilities.h"
 
 //TODO rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
@@ -520,7 +519,7 @@ namespace devices::magneto
 		 * and it shall be used by the caller to determine when the I2C transaction
 		 * is finished.
 		 * 
-		 * @sa gyro_measures(GyroFuture& future)
+		 * @sa gyro_measures(GyroFuture&)
 		 */
 		class GyroFuture : public Sensor3DFuture
 		{
@@ -561,7 +560,7 @@ namespace devices::magneto
 		 * The value returned by `get()` is internal raw value from the chip, it can be 
 		 * converted to human-readable temperature with `convert_temp_to_centi_degrees()`.
 		 * 
-		 * @sa temperature(TemperatureFuture& future)
+		 * @sa temperature(TemperatureFuture&)
 		 */
 		class TemperatureFuture : public future::Future<int16_t, uint8_t>
 		{
@@ -593,6 +592,7 @@ namespace devices::magneto
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
+		 * @sa TemperatureFuture
 		 * @sa temperature()
 		 * @sa convert_temp_to_centi_degrees()
 		 * @sa errors
@@ -1039,7 +1039,7 @@ namespace devices::magneto
 		int16_t temperature()
 		{
 			TemperatureFuture future;
-			if (temperature(future) != 0) return false;
+			if (temperature(future) != 0) return INT16_MIN;
 			int16_t temp;
 			if (future.get(temp))
 				return temp;
