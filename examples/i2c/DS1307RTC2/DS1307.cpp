@@ -209,7 +209,7 @@ int main()
 	// Start TWI interface
 	//====================
 #if I2C_TRUE_ASYNC
-	i2c::I2CManager<> manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, trace_status};
+	i2c::I2CManager<> manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #else
 	i2c::I2CManager<> manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, trace_status};
 #endif
@@ -255,7 +255,7 @@ int main()
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
 	display_status(out, '5', manager.status());
 	
-	// Provide 10 seconds delay to allow checking square ave output with an oscilloscope
+	// Provide 10 seconds delay to allow checking square wave output with an oscilloscope
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
