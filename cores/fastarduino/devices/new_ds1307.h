@@ -34,7 +34,6 @@
 // - Define Future subclass (inside device class) for every future requiring input (constant, or user-provided)
 //   naming convention: MethodNameFuture
 // - Future subclass shall have explicit constructor with mandatory input arguments (no default)
-// - define using types (inside device class) for each future subclass (UPPER_CASE same as METHOD_NAME) TODO too heavy!!
 // - each API method returns int (error code) and takes reference to specific future as unique argument
 
 namespace devices
@@ -122,7 +121,7 @@ namespace devices::rtc
 		//==================
 
 		/**
-		 * Create a future to be used by asynchronous method set_datetime(SET_DATETIME&).
+		 * Create a future to be used by asynchronous method set_datetime(SetDatetimeFuture&).
 		 * This is used by `set_datetime()` to pass input settings, and it shall be used 
 		 * by the caller to determine when the I2C transaction is finished.
 		 * 
@@ -131,7 +130,7 @@ namespace devices::rtc
 		 * `tm::tm_wday` must be set correctly by yourself (the RTC chip does not
 		 * calculate it itself).
 		 * 
-		 * @sa set_datetime(SET_DATETIME&)
+		 * @sa set_datetime(SetDatetimeFuture&)
 		 */
 		class SetDatetimeFuture : public future::Future<void, set_tm>
 		{
@@ -152,8 +151,6 @@ namespace devices::rtc
 			SetDatetimeFuture(SetDatetimeFuture&&) = default;
 			SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
 		};
-		/** Alias type for SetDatetimeFuture. */
-		using SET_DATETIME = SetDatetimeFuture;
 
 		/**
 		 * Change date and time of the RTC chip connected to this driver.
@@ -170,11 +167,10 @@ namespace devices::rtc
 		 * is in namespace `errors`.
 		 * 
 		 * @sa SetDatetimeFuture
-		 * @sa SET_DATETIME
 		 * @sa set_datetime(const tm&)
 		 * @sa errors
 		 */
-		int set_datetime(SET_DATETIME& future)
+		int set_datetime(SetDatetimeFuture& future)
 		{
 			// send register address to write to (0)
 			// send datetime at address 0
@@ -182,11 +178,11 @@ namespace devices::rtc
 		}
 
 		/**
-		 * Create a future to be used by asynchronous method get_datetime(GET_DATETIME&).
+		 * Create a future to be used by asynchronous method get_datetime(GetDatetimeFuture&).
 		 * This is used by `get_datetime()` to get device data, and it shall be used 
 		 * by the caller to determine when the I2C transaction is finished.
 		 * 
-		 * @sa get_datetime(GET_DATETIME&)
+		 * @sa get_datetime(GetDatetimeFuture&)
 		 */
 		class GetDatetimeFuture : public future::Future<tm, uint8_t>
 		{
@@ -209,14 +205,11 @@ namespace devices::rtc
 			}
 		};
 
-		/** Alias type for SetDatetimeFuture. */
-		using GET_DATETIME = GetDatetimeFuture;
-
 		/**
 		 * Get the current date and time from the RTC chip.
 		 * @warning Asynchronous API!
 		 * 
-		 * @param future a `SetDatetimeFuture` passed by the caller, that will be
+		 * @param future a `GetDatetimeFuture` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happended; for ATmega, this 
@@ -227,16 +220,26 @@ namespace devices::rtc
 		 * is in namespace `errors`.
 		 * 
 		 * @sa GetDatetimeFuture
-		 * @sa GET_DATETIME
 		 * @sa get_datetime(tm&)
 		 * @sa errors
 		 */
-		int get_datetime(GET_DATETIME& future)
+		int get_datetime(GetDatetimeFuture& future)
 		{
 			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method set_ram(SetRamFuture<SIZE>&).
+		 * This is used by `set_ram()` to set device data, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * @tparam SIZE_ the number of bytes to set to the chip RAM
+		 * @param address the address of the first cell to set, must be between
+		 * `0` and `ram_size()`.
+		 * @param data a point to a buffer of size @p SIZE_ which content will be 
+		 * written to the chip RAM starting at @p address
+		 * 
+		 * @sa set_ram(SetRamFuture<SIZE>&)
+		 */
 		template<uint8_t SIZE_>
 		class SetRamFuture : public future::Future<void, containers::array<uint8_t, SIZE_ + 1>>
 		{
@@ -262,18 +265,44 @@ namespace devices::rtc
 			/// @endcond
 		};
 
-		/** Alias type for SetRamFuture. */
-		template<uint8_t SIZE> using SET_RAM = SetRamFuture<SIZE>;
-
-		//TODO DOC
-		template<uint8_t SIZE> int set_ram(SET_RAM<SIZE>& future)
+		/**
+		 * Set several cells of the chip internal RAM to specified values.
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam SIZE the number of bytes to be written; `address + SIZE` must be
+		 * less than `ram_size()`.
+		 * @param future a `SetRamFuture<SIZE>` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa SetRamFuture<SIZE>
+		 * @sa set_ram(uint8_t, const uint8_t(&)[])
+		 * @sa get_ram(GetRamFuture<SIZE>&)
+		 * @sa errors
+		 */
+		template<uint8_t SIZE> int set_ram(SetRamFuture<SIZE>& future)
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method set_ram(SetRam1Future&).
+		 * This is used by `set_ram()` to set device data, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * @param address the address of the cell to set, must be between
+		 * `0` and `ram_size()`.
+		 * @param data the value to put at @p address
+		 * 
+		 * @sa set_ram(SetRam1Future&)
+		 */
 		class SetRam1Future : public future::Future<void, containers::array<uint8_t, 2>>
 		{
 			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
@@ -292,18 +321,42 @@ namespace devices::rtc
 			/// @endcond
 		};
 
-		/** Alias type for SetRam1Future. */
-		using SET_RAM1 = SetRam1Future;
-
-		//TODO DOC
-		int set_ram(SET_RAM1& future)
+		/**
+		 * Set one cell of the chip internal RAM to the specified value.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `SetRam1Future` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa SetRam1Future
+		 * @sa get_ram(GetRam1Future&)
+		 * @sa set_ram(uint8_t, uint8_t)
+		 * @sa errors
+		 */
+		int set_ram(SetRam1Future& future)
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method get_ram(GetRamFuture<SIZE>&).
+		 * This is used by `get_ram()` to set device data, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * @tparam SIZE the number of bytes to read from DS1307 RAM
+		 * @param address the address of the cell to read, must be between
+		 * `0` and `ram_size()`.
+		 * 
+		 * @sa get_ram(GetRamFuture<SIZE>&)
+		 */
 		template<uint8_t SIZE_>
 		class GetRamFuture : public future::Future<containers::array<uint8_t, SIZE_>, uint8_t>
 		{
@@ -324,23 +377,48 @@ namespace devices::rtc
 			/// @endcond
 		};
 
-		/** Alias type for GetRamFuture. */
-		template<uint8_t SIZE> using GET_RAM = GetRamFuture<SIZE>;
-
-		//TODO DOC
-		template<uint8_t SIZE> int get_ram(GET_RAM<SIZE>& future)
+		/**
+		 * Get values of several cells from the chip internal RAM.
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam SIZE the number of bytes to read; `address + SIZE` must be
+		 * less than `ram_size()`.
+		 * @param future an `GetRamFuture` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa GetRamFuture<SIZE>
+		 * @sa set_ram(SetRamFuture<SIZE>&)
+		 * @sa get_ram(uint8_t, uint8_t*, uint8_t)
+		 * @sa errors
+		 */
+		template<uint8_t SIZE> int get_ram(GetRamFuture<SIZE>& future)
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method get_ram(GetRam1Future&).
+		 * This is used by `get_ram()` to set device data, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * @param address the address of the cell to read, must be between
+		 * `0` and `ram_size()`.
+		 * 
+		 * @sa get_ram(GetRam1Future&)
+		 */
 		class GetRam1Future : public future::Future<uint8_t, uint8_t>
 		{
 			using PARENT = future::Future<uint8_t, uint8_t>;
 		public:
-			explicit GetRam1Future(uint8_t address = 0) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
+			explicit GetRam1Future(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
 			GetRam1Future(GetRam1Future&&) = default;
 			GetRam1Future& operator=(GetRam1Future&&) = default;
 
@@ -352,18 +430,39 @@ namespace devices::rtc
 			/// @endcond
 		};
 
-		/** Alias type for GetRam1Future. */
-		using GET_RAM1 = GetRam1Future;
-
-		//TODO DOC
-		int get_ram(GET_RAM1& future)
+		/**
+		 * Get the value of one cell of the chip internal RAM.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `GetRam1Future` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa GetRam1Future
+		 * @sa get_ram(uint8_t, uint8_t&)
+		 * @sa set_ram(SetRam1Future&)
+		 * @sa errors
+		 */
+		int get_ram(GetRam1Future& future)
 		{
 			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
-		//TODO DOC
+		/**
+		 * Create a future to be used by asynchronous method halt_clock(HaltClockFuture&).
+		 * This is used by `halt_clock()` to set device data, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished.
+		 * 
+		 * @sa halt_clock(HaltClockFuture&)
+		 */
 		class HaltClockFuture : public future::Future<void, containers::array<uint8_t, 2>>
 		{
 		public:
@@ -373,11 +472,28 @@ namespace devices::rtc
 			HaltClockFuture& operator=(HaltClockFuture&&) = default;
 		};
 
-		/** Alias type for HaltClockFuture. */
-		using HALT_CLOCK = HaltClockFuture;
-
-		//TODO DOC
-		int halt_clock(HALT_CLOCK& future)
+		/**
+		 * Disable the RTC oscillator, hence the time will not be updated anymore.
+		 * If you want to re-enable the clock, you need to set a new date/time
+		 * with `set_datetime()`.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `HaltClockFuture` passed by the caller, that will be
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happended; for ATmega, this 
+		 * typically happens when the queue of I2CCommand is full, or when 
+		 * @p future could not be registered with the FutureManager; for ATtiny,
+		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa HaltClockFuture
+		 * @sa set_datetime()
+		 * @sa halt_clock()
+		 * @sa errors
+		 */
+		int halt_clock(HaltClockFuture& future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -409,9 +525,6 @@ namespace devices::rtc
 			EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
 		};
 
-		/** Alias type for EnableOutputFuture. */
-		using ENABLE_OUTPUT = EnableOutputFuture;
-
 		/**
 		 * Enable square wave output to the SQW/OUT pin of the RTC chip.
 		 * @warning Asynchronous API!
@@ -431,19 +544,19 @@ namespace devices::rtc
 		 * @sa disable_output(DisableOutputFuture&)
 		 * @sa errors
 		 */
-		int enable_output(ENABLE_OUTPUT& future)
+		int enable_output(EnableOutputFuture& future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
-		 * Create a future to be used by asynchronous method disable_output(DISABLE_OUTPUT&).
+		 * Create a future to be used by asynchronous method disable_output(DisableOutputFuture&).
 		 * This is used by `disable_output()` to perform the I2C transaction, 
 		 * and it shall be used by the caller to determine when the I2C transaction 
 		 * is finished.
+		 * @param output_value value to force on SQW/OUT pin
 		 * 
-		 * @sa DISABLE_OUTPUT
-		 * @sa disable_output(DISABLE_OUTPUT&)
+		 * @sa disable_output(DisableOutputFuture&)
 		 */
 		class DisableOutputFuture : public future::Future<void, containers::array<uint8_t, 2>>
 		{
@@ -462,9 +575,6 @@ namespace devices::rtc
 			DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
 		};
 
-		/** Alias type for DisableOutputFuture. */
-		using DISABLE_OUTPUT = DisableOutputFuture;
-
 		/**
 		 * Enable square wave output to the SQW/OUT pin of the RTC chip.
 		 * @warning Asynchronous API!
@@ -480,11 +590,11 @@ namespace devices::rtc
 		 * is in namespace `errors`.
 		 * 
 		 * @sa DisableOutputFuture
-		 * @sa DISABLE_OUTPUT
 		 * @sa disable_output(bool)
+		 * @sa enable_output()
 		 * @sa errors
 		 */
-		int disable_output(DISABLE_OUTPUT& future)
+		int disable_output(DisableOutputFuture& future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -503,11 +613,11 @@ namespace devices::rtc
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
 		 * 
-		 * @sa set_datetime(SET_DATETIME&)
+		 * @sa set_datetime(SetDatetimeFuture&)
 		 */
 		bool set_datetime(const tm& datetime)
 		{
-			SET_DATETIME future{datetime};
+			SetDatetimeFuture future{datetime};
 			if (set_datetime(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -521,10 +631,12 @@ namespace devices::rtc
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
+		 * 
+		 * @sa get_datetime(GetDatetimeFuture&)
 		 */
 		bool get_datetime(tm& datetime)
 		{
-			GET_DATETIME future;
+			GetDatetimeFuture future;
 			if (get_datetime(future) != 0) return false;
 			return future.get(datetime);
 		}
@@ -537,11 +649,13 @@ namespace devices::rtc
 		 * 
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa set_datetime()
+		 * @sa halt_clock(HaltClockFuture&)
 		 */
 		bool halt_clock()
 		{
-			HALT_CLOCK future;
+			HaltClockFuture future;
 			if (halt_clock(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -554,11 +668,13 @@ namespace devices::rtc
 		 * `SquareWaveFrequency` enum
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa disable_output()
+		 * @sa enable_output(EnableOutputFuture&)
 		 */
 		bool enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
 		{
-			ENABLE_OUTPUT future{frequency};
+			EnableOutputFuture future{frequency};
 			if (enable_output(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -570,11 +686,13 @@ namespace devices::rtc
 		 * @param output_value value to force on SQW/OUT pin
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa enable_output()
+		 * @sa disable_output(DisableOutputFuture&)
 		 */
 		bool disable_output(bool output_value = false)
 		{
-			DISABLE_OUTPUT future{output_value};
+			DisableOutputFuture future{output_value};
 			if (disable_output(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -588,11 +706,13 @@ namespace devices::rtc
 		 * @param data the value to put at @p address
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa get_ram(uint8_t)
+		 * @sa set_ram(SetRam1Future&)
 		 */
 		bool set_ram(uint8_t address, uint8_t data)
 		{
-			SET_RAM1 future{address, data};
+			SetRam1Future future{address, data};
 			if (set_ram(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -604,11 +724,13 @@ namespace devices::rtc
 		 * @param address the address of the cell to read, must be between
 		 * `0` and `ram_size()`.
 		 * @return the value read at @p address
+		 * 
 		 * @sa set_ram(uint8_t, uint8_t)
+		 * @sa get_ram(GetRam1Future&)
 		 */
 		uint8_t get_ram(uint8_t address)
 		{
-			GET_RAM1 future{address};
+			GetRam1Future future{address};
 			if (get_ram(future) != 0) return false;
 			uint8_t data = 0;
 			future.get(data);
@@ -626,11 +748,13 @@ namespace devices::rtc
 		 * @param data pointer to a buffer containing the values to write
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa get_ram(uint8_t, uint8_t(&)[])
+		 * @sa set_ram(SetRamFuture<SIZE>&)
 		 */
 		template<uint8_t SIZE> bool set_ram(uint8_t address, const uint8_t (&data)[SIZE])
 		{
-			SET_RAM<SIZE> future{address, data};
+			SetRamFuture<SIZE> future{address, data};
 			if (set_ram(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -646,13 +770,15 @@ namespace devices::rtc
 		 * @param data pointer to a buffer where read values will be copied
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa set_ram(uint8_t, const uint8_t(&)[])
+		 * @sa get_ram(GetRamFuture<SIZE>&)
 		 */
 		template<uint8_t SIZE> bool get_ram(uint8_t address, uint8_t (&data)[SIZE])
 		{
-			GET_RAM<SIZE> future{address};
+			GetRamFuture<SIZE> future{address};
 			if (get_ram(future) != 0) return false;
-			typename GET_RAM<SIZE>::OUT temp;
+			typename GetRamFuture<SIZE>::OUT temp;
 			if (!future.get(temp)) return false;
 			memcpy(data, temp.data(), SIZE);
 			return true;
@@ -668,13 +794,15 @@ namespace devices::rtc
 		 * @param data the actual data of type @p T, to be written
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa get_ram(uint8_t, T&)
+		 * @sa set_ram(SetRamFuture<SIZE>&)
 		 */
 		template<typename T> bool set_ram(uint8_t address, const T& data)
 		{
 			uint8_t temp[sizeof(T)];
 			utils::as_array<T>(data, temp);
-			SET_RAM<sizeof(T)> future{address, temp};
+			SetRamFuture<sizeof(T)> future{address, temp};
 			if (set_ram(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -692,11 +820,13 @@ namespace devices::rtc
 		 * @param data a reference to a variable that will be copied the read content
 		 * @retval true if the operation succeeded
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * 
 		 * @sa set_ram(uint8_t, const T&)
+		 * @sa get_ram(GetRamFuture<SIZE>&)
 		 */
 		template<typename T> bool get_ram(uint8_t address, T& data)
 		{
-			GET_RAM<sizeof(T)> future{address};
+			GetRamFuture<sizeof(T)> future{address};
 			if (get_ram(future) != 0) return false;
 			return future.get(reinterpret_cast<uint8_t&>(data));
 		}

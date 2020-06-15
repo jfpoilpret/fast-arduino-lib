@@ -236,7 +236,7 @@ int main()
 		datetime.tm_hour = 20;
 		datetime.tm_min = 0;
 		datetime.tm_sec = 0;
-		DS1307::SET_DATETIME set{datetime};
+		DS1307::SetDatetimeFuture set{datetime};
 		int error = rtc.set_datetime(set);
 		if (error)
 			out << F("S") << endl;
