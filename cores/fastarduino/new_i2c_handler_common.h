@@ -70,6 +70,7 @@ namespace i2c
 
 	// Type of commands in queue
 	//TODO DOC
+	//TODO Possibly rework as a simple uint8_t with bit values
 	class I2CCommandType
 	{
 	public:
@@ -100,6 +101,9 @@ namespace i2c
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
 	};
 
+	//TODO check if need to be externalized to cpp file as it generates strange
+	// _GLOBAL__sub_I__ZN3i2clsERN7streams7ostreamERKNS_14I2CCommandTypeE)
+	// even though it is not actually used!
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t)
 	{
 		if (t.none) return out << F("NONE") << streams::flush;

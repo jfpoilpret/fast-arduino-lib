@@ -116,7 +116,7 @@ namespace i2c
 		 * 
 		 * @sa set_device()
 		 */
-		I2CDevice(I2CManager<MODE>& manager, uint8_t device)
+		I2CDevice(MANAGER& manager, uint8_t device)
 		: device_{device}, handler_{manager} {}
 
 		I2CDevice(const I2CDevice<MODE>&) = delete;
@@ -231,9 +231,10 @@ namespace i2c
 					max_read = manager.get_future_value_size_(id);
 					max_write = manager.get_storage_value_size_(id);
 				}
-				uint16_t total_read = 0;
-				uint16_t total_write = 0;
-				for (I2CCommand command : commands)
+				// Limit total number of bytes read or written in a transaction to 255
+				uint8_t total_read = 0;
+				uint8_t total_write = 0;
+				for (const I2CCommand& command : commands)
 				{
 					// Count number of bytes read and written
 					if (command.type.write)
@@ -272,7 +273,7 @@ namespace i2c
 
 	private:
 		uint8_t device_ = 0;
-		I2CManager<MODE>& handler_;
+		MANAGER& handler_;
 	};
 }
 
