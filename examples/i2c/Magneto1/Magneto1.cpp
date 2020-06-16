@@ -74,15 +74,7 @@ static constexpr uint8_t MAX_FUTURES = 8;
 REGISTER_I2C_ISR(i2c::I2CMode::FAST)
 #endif
 
-// UART for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
-#if HARDWARE_UART
-static serial::hard::UATX<UART> uart{output_buffer};
-#else
-static serial::soft::UATX<TX> uart{output_buffer};
-#endif
-static streams::ostream out = uart.out();
-
 using devices::magneto::DataOutput;
 using devices::magneto::Gain;
 using devices::magneto::HMC5883L;
@@ -98,13 +90,13 @@ using streams::hex;
 using streams::flush;
 using streams::endl;
 
-void trace_status(Status status)
+void trace_status(streams::ostream& out, Status status)
 {
 	out	<< dec << F(", lock = ") << status.lock()
 		<< F(", ready = ") << status.ready() << endl;
 }
 
-void trace_fields(const Sensor3D& fields)
+void trace_fields(streams::ostream& out, const Sensor3D& fields)
 {
 	out << dec << F("Fields x = ") << fields.x << F(", y = ") << fields.y << F(", z = ") << fields.z << endl;
 }
@@ -116,6 +108,15 @@ int main()
 {
 	board::init();
 	sei();
+
+	// UART for traces
+#if HARDWARE_UART
+	serial::hard::UATX<UART> uart{output_buffer};
+#else
+	serial::soft::UATX<TX> uart{output_buffer};
+#endif
+	streams::ostream out = uart.out();
+
 	uart.begin(115200);
 	out.width(2);
 	out << F("Start\n") << flush;
@@ -139,18 +140,18 @@ int main()
 		OperatingMode::CONTINUOUS, Gain::GAIN_1_9GA, DataOutput::RATE_75HZ, SamplesAveraged::EIGHT_SAMPLES);
 	out << dec << F("begin() ") << ok << '\n' << flush;
 	out << hex << F("status #2 ") << manager.status() << endl;
-	trace_status(compass.status());
+	trace_status(out, compass.status());
 	while (true)
 	{
 		while (!compass.status().ready()) ;
-		trace_status(compass.status());
+		trace_status(out, compass.status());
 		Sensor3D fields{};
 		ok = compass.magnetic_fields(fields);
 
 		float heading = magnetic_heading(fields.x, fields.y);
 		out << F("Magnetic heading ") << heading << F(" rad\n") << flush;
 		compass.convert_fields_to_mGA(fields);
-		trace_fields(fields);
+		trace_fields(out, fields);
 		time::delay_ms(500);
 	}
 	
