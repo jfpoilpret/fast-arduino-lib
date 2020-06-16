@@ -42,8 +42,8 @@
 
 #include <fastarduino/int.h>
 #include <fastarduino/time.h>
-#include <fastarduino/i2c_manager.h>
-#include <fastarduino/devices/hmc5883l.h>
+#include <fastarduino/new_i2c_handler.h>
+#include <fastarduino/devices/new_hmc5883l.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
@@ -51,6 +51,9 @@
 static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D2_PD2_EXT0;
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 #define INT_NUM 0
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
@@ -60,6 +63,9 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D7_PE6_EXT6;
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 #define INT_NUM 6
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
@@ -69,6 +75,9 @@ REGISTER_UATX_ISR(1)
 static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D18_PD3_EXT3;
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 #define INT_NUM 3
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
@@ -78,9 +87,14 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D10_PB2_EXT0;
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t MAX_FUTURES = 8;
 #define INT_NUM 0
 #else
 #error "Current target is not yet supported!"
+#endif
+
+#if I2C_TRUE_ASYNC
+REGISTER_I2C_ISR(i2c::I2CMode::FAST)
 #endif
 
 // UART for traces
@@ -151,7 +165,15 @@ int main()
 	uart.begin(115200);
 	out << F("Start") << endl;
 	
-	MAGNETOMETER::MANAGER manager;
+	// Initialize FutureManager
+	future::FutureManager<MAX_FUTURES> future_manager;
+
+	// Initialize I2C async handler
+#if I2C_TRUE_ASYNC
+	MAGNETOMETER::MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#else
+	MAGNETOMETER::MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#endif
 	manager.begin();
 	out << F("I2C interface started") << endl;
 	out << hex << F("status #1 ") << manager.status() << endl;
