@@ -151,7 +151,7 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa write()
 		 */
-		I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
+		I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE) const
 		{
 			return I2CCommand::read(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
 				0, uint8_t(finish & I2CFinish::FUTURE_FINISH), read_count);
@@ -175,7 +175,7 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa read()
 		 */
-		I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
+		I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE) const
 		{
 			return I2CCommand::write(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
 				0, uint8_t(finish & I2CFinish::FUTURE_FINISH), write_count);
