@@ -420,6 +420,7 @@ namespace devices::magneto
 
 		// Synchronous API
 		//=================
+
 		/**
 		 * Start operation of this compass chip. Once this method has been called,
 		 * you may use `magnetic_fields()` to find out the directions of the device.
