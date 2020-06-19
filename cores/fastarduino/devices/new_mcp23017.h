@@ -164,7 +164,7 @@ namespace devices::mcp230xx
 		 */
 		int begin(BeginFuture& future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->launch_commands(future, {write_stop()});
 		}
 
 		/**
@@ -223,7 +223,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_> int configure_gpio(ConfigureGPIOFuture<P_>& future)
 		{
 			constexpr uint8_t SIZE = sizeof(T<P_>) + 1;
-			return this->launch_commands(future, {this->write(SIZE), this->write(SIZE), this->write(SIZE)});
+			return this->launch_commands(future, {write_stop(SIZE), write_stop(SIZE), write_stop(SIZE)});
 		}
 
 		/**
@@ -284,7 +284,7 @@ namespace devices::mcp230xx
 		int configure_interrupts(ConfigureInterruptsFuture<P_>& future)
 		{
 			constexpr uint8_t SIZE = sizeof(T<P_>) + 1;
-			return this->launch_commands(future, {this->write(SIZE), this->write(SIZE), this->write(SIZE)});
+			return this->launch_commands(future, {write_stop(SIZE), write_stop(SIZE), write_stop(SIZE)});
 		}
 
 		/**
@@ -334,7 +334,7 @@ namespace devices::mcp230xx
 		 */
 		template<MCP23017Port P_> int values(SetValuesFuture<P_>& future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->launch_commands(future, {write_stop()});
 		}
 
 		/**
@@ -583,13 +583,13 @@ namespace devices::mcp230xx
 		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
 		 * shall be called for further information on the error.
 		 * 
-		 * @sa values(GetValuesFuture<P_>&)
+		 * @sa values(SetValuesFuture<P_>&)
 		 */
 		template<MCP23017Port P_> bool values(T<P_> value)
 		{
-			GetValuesFuture<P_> future;
+			SetValuesFuture<P_> future{value};
 			if (values(future) != 0) return false;
-			return future.get(value);
+			return (future.await() == future::FutureStatus::READY);
 		}
 
 		/**
@@ -707,6 +707,11 @@ namespace devices::mcp230xx
 		static constexpr const uint8_t IOCON_HAEN = bits::BV8(3);
 		static constexpr const uint8_t IOCON_ODR = bits::BV8(2);
 		static constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
+
+		i2c::I2CCommand write_stop(uint8_t byte_count = 0) const
+		{
+			return this->write(byte_count, i2c::I2CFinish::FORCE_STOP);
+		}
 
 		template<MCP23017Port P> struct Write3Registers
 		{
