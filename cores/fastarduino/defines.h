@@ -50,6 +50,11 @@
  */
 #define INLINE __attribute__((always_inline))
 
+//NOTE: SIGNAL is defined (but deprecated) in AVR interrupt.h
+#ifdef SIGNAL
+#undef SIGNAL
+#endif
+
 /**
  * Specific GCC attribute for AVR target, declaring a function as a signal handler
  * (aka ISR, or Interrupt Service Routine).
