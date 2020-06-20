@@ -148,8 +148,11 @@ int main()
 		Sensor3D fields{};
 		ok = compass.magnetic_fields(fields);
 
+		// The following code draws maths libraries (too big fro ATtiny84 8KB code)
+#ifndef BREADBOARD_ATTINYX4
 		float heading = magnetic_heading(fields.x, fields.y);
 		out << F("Magnetic heading ") << heading << F(" rad\n") << flush;
+#endif
 		compass.convert_fields_to_mGA(fields);
 		trace_fields(out, fields);
 		time::delay_ms(500);
