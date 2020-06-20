@@ -37,30 +37,6 @@ REGISTER_UATX_ISR(0)
 using namespace future;
 using namespace streams;
 
-// Add utility ostream manipulator for FutureStatus
-//==================================================
-static const flash::FlashStorage* convert(FutureStatus s)
-{
-	switch (s)
-	{
-		case FutureStatus::INVALID:
-		return F("INVALID");
-
-		case FutureStatus::NOT_READY:
-		return F("NOT_READY");
-
-		case FutureStatus::READY:
-		return F("READY");
-
-		case FutureStatus::ERROR:
-		return F("ERROR");
-	}
-}
-ostream& operator<<(ostream& out, FutureStatus s)
-{
-	return out << convert(s);
-}
-
 // Buffers for UART
 //==================
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
