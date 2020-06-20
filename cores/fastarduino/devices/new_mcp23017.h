@@ -22,7 +22,6 @@
 #define MCP23017_H
 
 #include "mcp230xx.h"
-#include "../array.h"
 #include "../new_i2c_device.h"
 
 namespace devices::mcp230xx
@@ -111,7 +110,7 @@ namespace devices::mcp230xx
 		 * @param address the address part (0-7) set by A0-3 pins of the chip
 		 */
 		MCP23017(MANAGER& manager, uint8_t address)
-			: i2c::I2CDevice<MODE>{manager, uint8_t(uint8_t(BASE_ADDRESS | uint8_t(address & 0x07)) << 1)} {}
+			: i2c::I2CDevice<MODE>{manager, uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07)) << 1)} {}
 
 		// Asynchronous API
 		//==================
@@ -365,7 +364,7 @@ namespace devices::mcp230xx
 		 * @tparam P_ which port to read from, may be A, B or both; if both, then
 		 * the return type will be `uint16_t`, with low byte for port A,
 		 * and high byte for port B.
-		 * @param future a `SetValuesFuture` passed by the caller, that will be 
+		 * @param future a `GetValuesFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for ATmega, this 
@@ -415,7 +414,7 @@ namespace devices::mcp230xx
 		 * the return type will be `uint16_t`, with low byte for port A,
 		 * and high byte for port B.
 		 * 
-		 * @param future a `SetValuesFuture` passed by the caller, that will be 
+		 * @param future a `InterruptFlagsFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for ATmega, this 
@@ -467,7 +466,7 @@ namespace devices::mcp230xx
 		 * the return type will be `uint16_t`, with low byte for port A,
 		 * and high byte for port B.
 		 * 
-		 * @param future a `SetValuesFuture` passed by the caller, that will be 
+		 * @param future a `CapturedValuesFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for ATmega, this 
@@ -658,8 +657,6 @@ namespace devices::mcp230xx
 		{
 			CapturedValuesFuture<P_> future;
 			if (captured_values(future) != 0) return T<P_>{};
-
-			constexpr uint8_t SHIFT = TRAIT<P_>::REG_SHIFT;
 			T<P_> value;
 			if (future.get(value))
 				return value;
