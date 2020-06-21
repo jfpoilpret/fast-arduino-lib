@@ -20,6 +20,14 @@ namespace future
 	// Static definition for AbstractFutureManager singleton
 	AbstractFutureManager* AbstractFutureManager::instance_ = nullptr;
 
+	AbstractBaseFuture* AbstractFutureManager::find_future(uint8_t id) const
+	{
+		if (id == ID_STATIC) return static_future_;
+		if ((id == 0) || (id > size_))
+			return nullptr;
+		return futures_[id - 1];
+	}
+
 	bool AbstractFutureManager::register_future_(AbstractFuture<false>& future)
 	{
 		// You cannot register an already registered future
@@ -33,6 +41,14 @@ namespace future
 			if (register_at_index_(future, i))
 				return true;
 		return false;
+	}
+
+	bool AbstractFutureManager::register_future_(AbstractFuture<true>& future)
+	{
+		future.id_ = ID_STATIC;
+		future.status_ = FutureStatus::NOT_READY;
+		static_future_ = &future;
+		return true;
 	}
 
 	uint8_t AbstractFutureManager::get_future_value_size_(uint8_t id) const

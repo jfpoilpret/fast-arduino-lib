@@ -36,7 +36,15 @@ REGISTER_UATX_ISR(0)
 #error "Current target is not yet supported!"
 #endif
 
+#define STATIC_FUTURES
+
+#ifdef STATIC_FUTURES
+static constexpr bool STATIC = true;
+static constexpr uint8_t MAX_FUTURES = 0;
+#else
 static constexpr bool STATIC = false;
+static constexpr uint8_t MAX_FUTURES = 64;
+#endif
 
 using namespace future;
 using namespace streams;
@@ -64,8 +72,6 @@ template<typename T1, typename T2> void trace_future(ostream& out, const Future<
 {
 	out << F("Future id = ") << dec << future.id() << F(", status = ") << future.status() << endl;
 }
-
-static constexpr uint8_t MAX_FUTURES = 64;
 
 int main()
 {

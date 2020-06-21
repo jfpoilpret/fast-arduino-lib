@@ -53,6 +53,13 @@ namespace future
 
 		bool register_future_(AbstractFuture<false>& future);
 
+		bool register_future(AbstractFuture<true>& future)
+		{
+			synchronized return register_future_(future);
+		}
+
+		bool register_future_(AbstractFuture<true>& future);
+
 		//TODO do we need these template functions actually?
 		// template<typename OUT, typename IN> bool register_future(Future<OUT, IN, false>& future)
 		// {
@@ -165,12 +172,8 @@ namespace future
 
 		bool register_at_index_(AbstractFuture<false>& future, uint8_t index);
 
-		AbstractBaseFuture* find_future(uint8_t id) const
-		{
-			if ((id == 0) || (id > size_))
-				return nullptr;
-			return futures_[id - 1];
-		}
+		AbstractBaseFuture* find_future(uint8_t id) const;
+
 		bool update_future(uint8_t id, AbstractBaseFuture* old_address, AbstractBaseFuture* new_address)
 		{
 			synchronized return update_future_(id, old_address, new_address);
@@ -187,8 +190,11 @@ namespace future
 			return true;
 		}
 
+		static constexpr uint8_t ID_STATIC = 0xFF;
+
 		const uint8_t size_;
 		AbstractBaseFuture** futures_;
+		AbstractFuture<true>* static_future_ = nullptr;
 		uint8_t last_removed_id_ = 0;
 
 		template<bool STATIC> friend class AbstractFuture;
@@ -428,6 +434,22 @@ namespace future
 		/// @endcond
 	};
 
+	template<> class AbstractFuture<true> : public AbstractBaseFuture
+	{
+	protected:
+		/// @cond notdocumented
+		// Constructor used by FutureManager
+		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+			:	AbstractBaseFuture{output_data, output_size, input_data, input_size} {}
+		~AbstractFuture() = default;
+
+		AbstractFuture(const AbstractFuture<true>&) = delete;
+		AbstractFuture<true>& operator=(const AbstractFuture<true>&) = delete;
+		AbstractFuture(AbstractFuture<true>&&) = delete;
+		AbstractFuture<true>& operator=(AbstractFuture<true>&&) = delete;
+		/// @endcond
+	};
+
 	template<typename T> bool AbstractFutureManager::set_future_value_(uint8_t id, const T& value) const
 	{
 		AbstractBaseFuture* future = find_future(id);
@@ -521,6 +543,72 @@ namespace future
 		};
 	};
 
+	template<typename OUT_, typename IN_>
+	class Future<OUT_, IN_, true> : public AbstractFuture<true>
+	{
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+
+	public:
+		using OUT = OUT_;
+		using IN = IN_;
+
+		explicit Future(const IN& input = IN{})
+			: AbstractFuture<true>{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
+
+		~Future() = default;
+
+		/// @cond notdocumented
+		Future(Future<OUT, IN, true>&& that) = delete;
+		Future<OUT, IN, true>& operator=(Future<OUT, IN, true>&& that) = delete;
+		Future(const Future<OUT, IN, true>&) = delete;
+		Future<OUT, IN, true>& operator=(const Future<OUT, IN, true>&) = delete;
+		/// @endcond
+
+		bool reset_input(const IN& input)
+		{
+			synchronized return reset_input_(input);
+		}
+
+		//TODO Factor out? How?
+		bool reset_input_(const IN& input)
+		{
+			if (!can_replace_input_()) return false;
+			input_ = input;
+			return true;
+		}
+
+		//TODO Factor out? How?
+		bool get(OUT& result)
+		{
+			if (await() != FutureStatus::READY)
+				return false;
+			result = output_;
+			invalidate();
+			return true;
+		}
+
+	protected:
+		//TODO Factor out? How?
+		const IN& get_input() const
+		{
+			return input_;
+		}
+
+	private:
+		//TODO Factor out? How?
+		union
+		{
+			OUT output_;
+			uint8_t output_buffer_[sizeof(OUT)];
+		};
+		union
+		{
+			IN input_;
+			uint8_t input_buffer_[sizeof(IN)];
+		};
+	};
+
 	// Future template specializations for void types
 	//================================================
 	/// @cond notdocumented	
@@ -570,6 +658,41 @@ namespace future
 			}
 		}
 
+		union
+		{
+			OUT output_;
+			uint8_t output_buffer_[sizeof(OUT)];
+		};
+	};
+
+	template<typename OUT_>
+	class Future<OUT_, void, true> : public AbstractFuture<true>
+	{
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+
+	public:
+		using OUT = OUT_;
+		using IN = void;
+
+		Future() : AbstractFuture<true>{output_buffer_, sizeof(OUT), nullptr, 0} {}
+		~Future() = default;
+
+		Future(Future<OUT, void, true>&& that) = delete;
+		Future<OUT, void, true>& operator=(Future<OUT, void, true>&& that) = delete;
+		Future(const Future<OUT, void, true>&) = delete;
+		Future<OUT, void, true>& operator=(const Future<OUT, void, true>&) = delete;
+
+		// The following method is blocking until this Future is ready
+		bool get(OUT& result)
+		{
+			if (await() != FutureStatus::READY)
+				return false;
+			result = output_;
+			invalidate();
+			return true;
+		}
+
+	private:
 		union
 		{
 			OUT output_;
@@ -648,6 +771,58 @@ namespace future
 			uint8_t input_buffer_[sizeof(IN)];
 		};
 	};
+
+	template<typename IN_>
+	class Future<void, IN_, true> : public AbstractFuture<true>
+	{
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+
+	public:
+		using OUT = void;
+		using IN = IN_;
+
+		explicit Future(const IN& input = IN{})
+			: AbstractFuture<true>{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
+		~Future() = default;
+
+		Future(Future<void, IN, true>&& that) = delete;
+		Future<void, IN, true>& operator=(Future<void, IN, true>&& that) = delete;
+		Future(const Future<void, IN, true>&) = delete;
+		Future<void, IN, true>& operator=(const Future<void, IN, true>&) = delete;
+
+		bool reset_input(const IN& input)
+		{
+			synchronized return reset_input_(input);
+		}
+		bool reset_input_(const IN& input)
+		{
+			if (!can_replace_input_()) return false;
+			input_ = input;
+			return true;
+		}
+
+		// The following method is blocking until this Future is ready
+		bool get()
+		{
+			if (await() != FutureStatus::READY)
+				return false;
+			invalidate();
+			return true;
+		}
+
+	protected:
+		const IN& get_input() const
+		{
+			return input_;
+		}
+
+	private:
+		union
+		{
+			IN input_;
+			uint8_t input_buffer_[sizeof(IN)];
+		};
+	};
 	/// @endcond
 
 	/// @cond notdocumented	
@@ -674,6 +849,30 @@ namespace future
 
 		Future(const Future<void, void, false>&) = delete;
 		Future<void, void, false>& operator=(const Future<void, void, false>&) = delete;
+
+		// The following method is blocking until this Future is ready
+		bool get()
+		{
+			if (await() != FutureStatus::READY)
+				return false;
+			invalidate();
+			return true;
+		}
+	};
+
+	template<>
+	class Future<void, void, true> : public AbstractFuture<true>
+	{
+	public:
+		using OUT = void;
+		using IN = void;
+
+		Future() : AbstractFuture<true>{nullptr, 0,nullptr, 0} {}
+		~Future() = default;
+		Future(Future<void, void, true>&& that) = delete;
+		Future<void, void, true>& operator=(Future<void, void, true>&& that) = delete;
+		Future(const Future<void, void, true>&) = delete;
+		Future<void, void, true>& operator=(const Future<void, void, true>&) = delete;
 
 		// The following method is blocking until this Future is ready
 		bool get()

@@ -1,0 +1,10 @@
+00800112 00000008 d CSWTCH.32
+00000556 00000010 T __do_clear_bss
+00000540 00000016 T __do_copy_data
+000005da 00000034 t future::AbstractBaseFuture::error()
+0000123e 00000036 T __epilogue_restores__
+00000636 00000036 t future::AbstractFutureManager::find_future(unsigned char) const
+000006ae 00000036 t future::AbstractFutureManager::get_storage_value_(unsigned char, unsigned char&) const
+00001206 00000038 T __prologue_saves__
+0000066c 00000042 t future::AbstractFutureManager::set_future_value(unsigned char, unsigned char) const
+00000b7e 0000061a T main
