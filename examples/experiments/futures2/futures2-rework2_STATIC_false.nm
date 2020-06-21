@@ -3,12 +3,12 @@
 0000054c 00000010 T __do_clear_bss
 00000536 00000016 T __do_copy_data
 0000062c 0000002c t future::AbstractFutureManager::find_future(unsigned char) const
-000005d0 00000034 t future::AbstractFuture::error()
-000012de 00000036 T __epilogue_restores__
+000005d0 00000034 t future::AbstractBaseFuture::error()
+000012ba 00000036 T __epilogue_restores__
 000007b0 00000036 t future::AbstractFutureManager::get_storage_value_(unsigned char, unsigned char&) const
-000012a6 00000038 T __prologue_saves__
+00001282 00000038 T __prologue_saves__
 0000076e 00000042 t future::AbstractFutureManager::set_future_value(unsigned char, unsigned char) const
-0000071c 00000052 t future::AbstractFuture::~AbstractFuture()
-000006c6 00000056 t future::AbstractFutureManager::register_future(future::AbstractFuture&)
-00000658 0000006e t future::AbstractFutureManager::register_at_index_(future::AbstractFuture&, unsigned char)
-00000c80 000005b8 T main
+0000071c 00000052 t future::AbstractFuture<false>::~AbstractFuture()
+000006c6 00000056 t future::AbstractFutureManager::register_future(future::AbstractFuture<false>&)
+00000658 0000006e t future::AbstractFutureManager::register_at_index_(future::AbstractFuture<false>&, unsigned char)
+00000c80 00000594 T main

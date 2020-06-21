@@ -33,8 +33,9 @@ namespace future
 {
 	/// @cond notdocumented
 	// Forward declarations
-	class AbstractFuture;
-	template<typename OUT, typename IN> class Future;
+	class AbstractBaseFuture;
+	template<bool STATIC> class AbstractFuture;
+	template<typename OUT, typename IN, bool STATIC> class Future;
 	/// @endcond
 
 	class AbstractFutureManager
@@ -45,22 +46,23 @@ namespace future
 			return *instance_;
 		}
 
-		bool register_future(AbstractFuture& future)
+		bool register_future(AbstractFuture<false>& future)
 		{
 			synchronized return register_future_(future);
 		}
 
-		bool register_future_(AbstractFuture& future);
+		bool register_future_(AbstractFuture<false>& future);
 
-		template<typename OUT, typename IN> bool register_future(Future<OUT, IN>& future)
-		{
-			return register_future((AbstractFuture&) future);
-		}
+		//TODO do we need these template functions actually?
+		// template<typename OUT, typename IN> bool register_future(Future<OUT, IN, false>& future)
+		// {
+		// 	return register_future((AbstractFuture<false>&) future);
+		// }
 
-		template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future)
-		{
-			return register_future_((AbstractFuture&) future);
-		}
+		// template<typename OUT, typename IN> bool register_future_(Future<OUT, IN, false>& future)
+		// {
+		// 	return register_future_((AbstractFuture<false>&) future);
+		// }
 
 		uint8_t available_futures() const
 		{
@@ -76,6 +78,7 @@ namespace future
 			return free;
 		}
 
+		//TODO everywhere id is an argument, it should be checked (static or not)
 		uint8_t get_future_value_size(uint8_t id) const
 		{
 			synchronized return get_future_value_size_(id);
@@ -141,7 +144,7 @@ namespace future
 
 	protected:
 		/// @cond notdocumented
-		AbstractFutureManager(AbstractFuture** futures, uint8_t size)
+		AbstractFutureManager(AbstractBaseFuture** futures, uint8_t size)
 			: size_{size}, futures_{futures}
 		{
 			for (uint8_t i = 0; i < size_; ++i)
@@ -160,20 +163,20 @@ namespace future
 	private:
 		static AbstractFutureManager* instance_;
 
-		bool register_at_index_(AbstractFuture& future, uint8_t index);
+		bool register_at_index_(AbstractFuture<false>& future, uint8_t index);
 
-		AbstractFuture* find_future(uint8_t id) const
+		AbstractBaseFuture* find_future(uint8_t id) const
 		{
 			if ((id == 0) || (id > size_))
 				return nullptr;
 			return futures_[id - 1];
 		}
-		bool update_future(uint8_t id, AbstractFuture* old_address, AbstractFuture* new_address)
+		bool update_future(uint8_t id, AbstractBaseFuture* old_address, AbstractBaseFuture* new_address)
 		{
 			synchronized return update_future_(id, old_address, new_address);
 		}
 		// Called by Future themselves (on construction, destruction, assignment)
-		bool update_future_(uint8_t id, AbstractFuture* old_address, AbstractFuture* new_address)
+		bool update_future_(uint8_t id, AbstractBaseFuture* old_address, AbstractBaseFuture* new_address)
 		{
 			// Check id is plausible and address matches
 			if (find_future(id) != old_address)
@@ -185,10 +188,10 @@ namespace future
 		}
 
 		const uint8_t size_;
-		AbstractFuture** futures_;
+		AbstractBaseFuture** futures_;
 		uint8_t last_removed_id_ = 0;
 
-		friend class AbstractFuture;
+		template<bool STATIC> friend class AbstractFuture;
 	};
 
 	template<uint8_t SIZE>
@@ -198,7 +201,7 @@ namespace future
 		FutureManager() : AbstractFutureManager{buffer_, SIZE}, buffer_{} {}
 
 	private:
-		AbstractFuture* buffer_[SIZE];
+		AbstractBaseFuture* buffer_[SIZE];
 	};
 
 	enum class FutureStatus : uint8_t
@@ -213,7 +216,7 @@ namespace future
 	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s);
 	/// @endcond
 
-	class AbstractFuture
+	class AbstractBaseFuture
 	{
 	public:
 		uint8_t id() const
@@ -253,19 +256,15 @@ namespace future
 	protected:
 		/// @cond notdocumented
 		// Constructor used by FutureManager
-		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		AbstractBaseFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
 			:	output_data_{output_data}, output_current_{output_data}, output_size_{output_size},
 				input_data_{input_data}, input_current_{input_data}, input_size_{input_size} {}
-		~AbstractFuture()
-		{
-			// Notify FutureManager about destruction
-			AbstractFutureManager::instance().update_future(id_, this, nullptr);
-		}
+		~AbstractBaseFuture() = default;
 
-		AbstractFuture(const AbstractFuture&) = delete;
-		AbstractFuture& operator=(const AbstractFuture&) = delete;
-		AbstractFuture(AbstractFuture&&) = delete;
-		AbstractFuture& operator=(AbstractFuture&&) = delete;
+		AbstractBaseFuture(const AbstractBaseFuture&) = delete;
+		AbstractBaseFuture& operator=(const AbstractBaseFuture&) = delete;
+		AbstractBaseFuture(AbstractBaseFuture&&) = delete;
+		AbstractBaseFuture& operator=(AbstractBaseFuture&&) = delete;
 
 		void invalidate()
 		{
@@ -282,32 +281,6 @@ namespace future
 		{
 			return (input_current_ == input_data_);
 		}
-
-		// This method is called by subclass in their move constructor and assignment operator
-		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
-		{
-			// In case this Future is valid, it must be first invalidated with FutureManager
-			AbstractFutureManager::instance().update_future_(id_, this, nullptr);
-
-			// Now copy all attributes from rhs (output_data_ was already initialized when this was constructed)
-			id_ = that.id_;
-			status_ = that.status_;
-			error_ = that.error_;
-			output_size_ = that.output_size_;
-			input_size_ = that.input_size_;
-			// Calculate data pointer attribute for next set value calls
-			output_current_ = output_data_ + full_output_size - output_size_;
-			input_current_ = input_data_ + full_input_size - input_size_;
-
-			// Notify FutureManager about Future move
-			if (!AbstractFutureManager::instance().update_future_(id_, &that, this))
-				status_ = FutureStatus::INVALID;
-
-			// Make rhs Future invalid
-			that.id_ = 0;
-			that.status_ = FutureStatus::INVALID;
-		}
-		/// @endcond
 
 	private:
 		// The following methods are called by FutureManager to fill the Future value (or error)
@@ -406,18 +379,67 @@ namespace future
 		uint8_t input_size_ = 0;
 
 		friend class AbstractFutureManager;
+		template<bool> friend class AbstractFuture;
+	};
+
+	template<bool STATIC = false> class AbstractFuture;
+	template<> class AbstractFuture<false> : public AbstractBaseFuture
+	{
+	protected:
+		/// @cond notdocumented
+		// Constructor used by FutureManager
+		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+			:	AbstractBaseFuture{output_data, output_size, input_data, input_size} {}
+		~AbstractFuture()
+		{
+			// Notify FutureManager about destruction
+			AbstractFutureManager::instance().update_future(id_, this, nullptr);
+		}
+
+		AbstractFuture(const AbstractFuture<false>&) = delete;
+		AbstractFuture<false>& operator=(const AbstractFuture<false>&) = delete;
+		AbstractFuture(AbstractFuture<false>&&) = delete;
+		AbstractFuture<false>& operator=(AbstractFuture<false>&&) = delete;
+
+		// This method is called by subclass in their move constructor and assignment operator
+		void move_(AbstractFuture<false>&& that, uint8_t full_output_size, uint8_t full_input_size)
+		{
+			// In case this Future is valid, it must be first invalidated with FutureManager
+			AbstractFutureManager::instance().update_future_(id_, this, nullptr);
+
+			// Now copy all attributes from rhs (output_data_ was already initialized when this was constructed)
+			id_ = that.id_;
+			status_ = that.status_;
+			error_ = that.error_;
+			output_size_ = that.output_size_;
+			input_size_ = that.input_size_;
+			// Calculate data pointer attribute for next set value calls
+			output_current_ = output_data_ + full_output_size - output_size_;
+			input_current_ = input_data_ + full_input_size - input_size_;
+
+			// Notify FutureManager about Future move
+			if (!AbstractFutureManager::instance().update_future_(id_, &that, this))
+				status_ = FutureStatus::INVALID;
+
+			// Make rhs Future invalid
+			that.id_ = 0;
+			that.status_ = FutureStatus::INVALID;
+		}
+		/// @endcond
 	};
 
 	template<typename T> bool AbstractFutureManager::set_future_value_(uint8_t id, const T& value) const
 	{
-		AbstractFuture* future = find_future(id);
+		AbstractBaseFuture* future = find_future(id);
 		if (future == nullptr)
 			return false;
 		return future->set_chunk_(reinterpret_cast<const uint8_t*>(&value), sizeof(T));
 	}
 
-	template<typename OUT_ = void, typename IN_ = void>
-	class Future : public AbstractFuture
+	template<typename OUT_ = void, typename IN_ = void, bool STATIC = false> class Future {};
+
+	template<typename OUT_, typename IN_>
+	class Future<OUT_, IN_, false> : public AbstractFuture<false>
 	{
 		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
@@ -427,16 +449,17 @@ namespace future
 		using IN = IN_;
 
 		explicit Future(const IN& input = IN{})
-			: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
+			: AbstractFuture<false>{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
 
 		~Future() = default;
 
-		Future(Future<OUT, IN>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
+		Future(Future<OUT, IN, false>&& that)
+			:	AbstractFuture<false>{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
 		{
 			move(std::move(that));
 		}
 
-		Future<OUT, IN>& operator=(Future<OUT, IN>&& that)
+		Future<OUT, IN, false>& operator=(Future<OUT, IN, false>&& that)
 		{
 			if (this == &that) return *this;
 			move(std::move(that));
@@ -444,8 +467,8 @@ namespace future
 		}
 
 		/// @cond notdocumented
-		Future(const Future<OUT, IN>&) = delete;
-		Future<OUT, IN>& operator=(const Future<OUT, IN>&) = delete;
+		Future(const Future<OUT, IN, false>&) = delete;
+		Future<OUT, IN>& operator=(const Future<OUT, IN, false>&) = delete;
 		/// @endcond
 
 		bool reset_input(const IN& input)
@@ -476,7 +499,7 @@ namespace future
 		}
 
 	private:
-		void move(Future<OUT, IN>&& that)
+		void move(Future<OUT, IN, false>&& that)
 		{
 			synchronized
 			{
@@ -502,7 +525,7 @@ namespace future
 	//================================================
 	/// @cond notdocumented	
 	template<typename OUT_>
-	class Future<OUT_, void> : public AbstractFuture
+	class Future<OUT_, void, false> : public AbstractFuture<false>
 	{
 		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 
@@ -510,22 +533,22 @@ namespace future
 		using OUT = OUT_;
 		using IN = void;
 
-		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
+		Future() : AbstractFuture<false>{output_buffer_, sizeof(OUT), nullptr, 0} {}
 		~Future() = default;
 
-		Future(Future<OUT, void>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0}
+		Future(Future<OUT, void, false>&& that) : AbstractFuture<false>{output_buffer_, sizeof(OUT), nullptr, 0}
 		{
 			move(std::move(that));
 		}
-		Future<OUT, void>& operator=(Future<OUT, void>&& that)
+		Future<OUT, void, false>& operator=(Future<OUT, void, false>&& that)
 		{
 			if (this == &that) return *this;
 			move(std::move(that));
 			return *this;
 		}
 
-		Future(const Future<OUT, void>&) = delete;
-		Future<OUT, void>& operator=(const Future<OUT, void>&) = delete;
+		Future(const Future<OUT, void, false>&) = delete;
+		Future<OUT, void, false>& operator=(const Future<OUT, void, false>&) = delete;
 
 		// The following method is blocking until this Future is ready
 		bool get(OUT& result)
@@ -538,7 +561,7 @@ namespace future
 		}
 
 	private:
-		void move(Future<OUT, void>&& that)
+		void move(Future<OUT, void, false>&& that)
 		{
 			synchronized
 			{
@@ -557,7 +580,7 @@ namespace future
 
 	/// @cond notdocumented	
 	template<typename IN_>
-	class Future<void, IN_> : public AbstractFuture
+	class Future<void, IN_, false> : public AbstractFuture<false>
 	{
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
@@ -566,22 +589,22 @@ namespace future
 		using IN = IN_;
 
 		explicit Future(const IN& input = IN{})
-			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
+			: AbstractFuture<false>{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
 		~Future() = default;
 
-		Future(Future<void, IN>&& that) : AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}
+		Future(Future<void, IN, false>&& that) : AbstractFuture<false>{nullptr, 0, input_buffer_, sizeof(IN)}
 		{
 			move(std::move(that));
 		}
-		Future<void, IN>& operator=(Future<void, IN>&& that)
+		Future<void, IN, false>& operator=(Future<void, IN, false>&& that)
 		{
 			if (this == &that) return *this;
 			move(std::move(that));
 			return *this;
 		}
 
-		Future(const Future<void, IN>&) = delete;
-		Future<void, IN>& operator=(const Future<void, IN>&) = delete;
+		Future(const Future<void, IN, false>&) = delete;
+		Future<void, IN>& operator=(const Future<void, IN, false>&) = delete;
 
 		bool reset_input(const IN& input)
 		{
@@ -610,7 +633,7 @@ namespace future
 		}
 
 	private:
-		void move(Future<void, IN>&& that)
+		void move(Future<void, IN, false>&& that)
 		{
 			synchronized
 			{
@@ -629,28 +652,28 @@ namespace future
 
 	/// @cond notdocumented	
 	template<>
-	class Future<void, void> : public AbstractFuture
+	class Future<void, void, false> : public AbstractFuture<false>
 	{
 	public:
 		using OUT = void;
 		using IN = void;
 
-		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
+		Future() : AbstractFuture<false>{nullptr, 0,nullptr, 0} {}
 		~Future() = default;
 
-		Future(Future<void, void>&& that) : AbstractFuture{nullptr, 0, nullptr, 0}
+		Future(Future<void, void, false>&& that) : AbstractFuture<false>{nullptr, 0, nullptr, 0}
 		{
 			synchronized move_(std::move(that), 0, 0);
 		}
-		Future<void, void>& operator=(Future<void, void>&& that)
+		Future<void, void, false>& operator=(Future<void, void, false>&& that)
 		{
 			if (this == &that) return *this;
 			synchronized move_(std::move(that), 0, 0);
 			return *this;
 		}
 
-		Future(const Future<void, void>&) = delete;
-		Future<void, void>& operator=(const Future<void, void>&) = delete;
+		Future(const Future<void, void, false>&) = delete;
+		Future<void, void, false>& operator=(const Future<void, void, false>&) = delete;
 
 		// The following method is blocking until this Future is ready
 		bool get()

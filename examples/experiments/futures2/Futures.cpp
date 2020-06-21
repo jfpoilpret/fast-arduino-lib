@@ -36,7 +36,7 @@ REGISTER_UATX_ISR(0)
 #error "Current target is not yet supported!"
 #endif
 
-#define STATIC
+static constexpr bool STATIC = false;
 
 using namespace future;
 using namespace streams;
@@ -53,14 +53,14 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 #define ASSERT_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
 template<typename T1, typename T2, typename T3> 
 void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::FlashStorage* name2, 
-	Future<T1, T3>& future, const T2& expected)
+	Future<T1, T3, STATIC>& future, const T2& expected)
 {
 	T1 actual{};
 	assert(out, name1, future.get(actual));
 	assert(out, name2, expected, actual);
 }
 #define ASSERT_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE ".get()"), F("" #FUTURE ".get() value"), FUTURE, VALUE)
-template<typename T> void trace_future(ostream& out, const Future<T>& future)
+template<typename T1, typename T2> void trace_future(ostream& out, const Future<T1, T2, STATIC>& future)
 {
 	out << F("Future id = ") << dec << future.id() << F(", status = ") << future.status() << endl;
 }
@@ -84,7 +84,7 @@ int main()
 
 	{
 		out << F("TEST #1 Future<uint16_t, void, STATIC>") << endl;
-		Future<uint16_t, void> future;
+		Future<uint16_t, void, STATIC> future;
 		ASSERT_STATUS(out, INVALID, future);
 		ASSERT(out, manager.register_future(future));
 		ECHO_ID(out, future);
@@ -104,7 +104,7 @@ int main()
 
 	{
 		out << F("TEST #2 Future<void, uint16_t, STATIC>") << endl;
-		Future<void, uint16_t> future;
+		Future<void, uint16_t, STATIC> future;
 		ASSERT_STATUS(out, INVALID, future);
 		ASSERT(out, manager.register_future(future));
 		ECHO_ID(out, future);
@@ -121,7 +121,7 @@ int main()
 
 	{
 		out << F("TEST #3 Future<uint16_t, uint16_t, STATIC>") << endl;
-		Future<uint16_t, uint16_t> future;
+		Future<uint16_t, uint16_t, STATIC> future;
 		ASSERT_STATUS(out, INVALID, future);
 		ASSERT(out, manager.register_future(future));
 		ECHO_ID(out, future);
@@ -142,4 +142,5 @@ int main()
 		out << endl;
 	}
 
+	out << F("Finished!") << endl;
 }
