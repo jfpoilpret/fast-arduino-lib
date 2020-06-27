@@ -37,50 +37,30 @@ REGISTER_UATX_ISR(0)
 using namespace future;
 using namespace streams;
 
-// Add utility ostream manipulator for FutureStatus
-//==================================================
-static const flash::FlashStorage* convert(FutureStatus s)
-{
-	switch (s)
-	{
-		case FutureStatus::INVALID:
-		return F("INVALID");
-
-		case FutureStatus::NOT_READY:
-		return F("NOT_READY");
-
-		case FutureStatus::READY:
-		return F("READY");
-
-		case FutureStatus::ERROR:
-		return F("ERROR");
-	}
-}
-ostream& operator<<(ostream& out, FutureStatus s)
-{
-	return out << convert(s);
-}
-
 // Buffers for UART
 //==================
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
+static constexpr uint8_t MAX_FUTURES = 64;
+using FUTURE_MANAGER = future::FutureManager<MAX_FUTURES>;
+template<typename OUT = void, typename IN = void> using FUTURE = FUTURE_MANAGER::FUTURE<OUT, IN>;
+
 // Future subclass for specific check
 //====================================
-class MyFuture : public Future<uint16_t>
+class MyFuture : public FUTURE<uint16_t>
 {
 public:
-	MyFuture() : Future<uint16_t>{} {}
+	MyFuture() : FUTURE<uint16_t>{} {}
 	~MyFuture() = default;
 
-	MyFuture(MyFuture&& that) : Future<uint16_t>{std::move(that)}
+	MyFuture(MyFuture&& that) : FUTURE<uint16_t>{std::move(that)}
 	{
 	}
 	MyFuture& operator=(MyFuture&& that)
 	{
 		if (this == &that) return *this;
-		(Future<uint16_t>&) *this = std::move(that);
+		(FUTURE<uint16_t>&) *this = std::move(that);
 		return *this;
 	}
 
@@ -91,7 +71,7 @@ public:
 	bool get(uint16_t& result)
 	{
 		uint16_t temp = 0;
-		if (this->Future<uint16_t>::get(temp))
+		if (this->FUTURE<uint16_t>::get(temp))
 		{
 			result = temp * 10;
 			return true;
@@ -107,19 +87,17 @@ public:
 #define ASSERT_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
 template<typename T1, typename T2> 
 void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::FlashStorage* name2, 
-	Future<T1>& future, const T2& expected)
+	FUTURE<T1>& future, const T2& expected)
 {
 	T1 actual{};
 	assert(out, name1, future.get(actual));
 	assert(out, name2, expected, actual);
 }
 #define ASSERT_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE ".get()"), F("" #FUTURE ".get() value"), FUTURE, VALUE)
-template<typename T> void trace_future(ostream& out, const Future<T>& future)
+template<typename T> void trace_future(ostream& out, const FUTURE<T>& future)
 {
 	out << F("Future id = ") << dec << future.id() << F(", status = ") << future.status() << endl;
 }
-
-static constexpr uint8_t MAX_FUTURES = 64;
 
 int main()
 {
@@ -141,7 +119,7 @@ int main()
 	// Check normal error context
 	out << F("TEST #1 simple Future lifecycle: normal error case") << endl;
 	out << F("#1.1 instantiate future") << endl;
-	Future<uint16_t> future1;
+	FUTURE<uint16_t> future1;
 	ASSERT_STATUS(out, INVALID, future1);
 	out << F("#1.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future1));
@@ -158,18 +136,19 @@ int main()
 	// Check full data set
 	out << F("TEST #2 simple Future lifecycle: new Future and full value set") << endl;
 	out << F("#2.1 instantiate future") << endl;
-	Future<uint16_t> future2;
+	FUTURE<uint16_t> future2;
 	ASSERT_STATUS(out, INVALID, future2);
 	out << F("#2.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future2));
 	ECHO_ID(out, future2);
 	ASSERT_STATUS(out, NOT_READY, future2);
 	out << F("#2.3 set_future_value()") << endl;
-	ASSERT(out, manager.set_future_value(future2.id(), 0x8000));
+	const uint16_t VAL1 = 0x8000u;
+	ASSERT(out, manager.set_future_value(future2.id(), reinterpret_cast<const uint8_t*>(&VAL1), sizeof(VAL1)));
 	ASSERT_STATUS(out, READY, future2);
 	ASSERT_ERROR(out, 0, future2);
 	ASSERT_STATUS(out, READY, future2);
-	ASSERT_VALUE(out, 0x8000u, future2);
+	ASSERT_VALUE(out, VAL1, future2);
 	ASSERT_STATUS(out, INVALID, future2);
 	ASSERT_ERROR(out, errors::EINVAL, future2);
 	ASSERT_STATUS(out, INVALID, future2);
@@ -178,7 +157,7 @@ int main()
 	// Check set value by chunks
 	out << F("TEST #3 simple Future lifecycle: new Future and partial value set") << endl;
 	out << F("#3.1 instantiate future") << endl;
-	Future<uint16_t> future3;
+	FUTURE<uint16_t> future3;
 	ASSERT_STATUS(out, INVALID, future3);
 	out << F("#3.2 register future") << endl;
 	ASSERT(out, manager.register_future(future3));
@@ -197,7 +176,7 @@ int main()
 	// Check set value by data pointer once
 	out << F("TEST #4 simple Future lifecycle: new Future and full value pointer set") << endl;
 	out << F("#4.1 instantiate future") << endl;
-	Future<uint16_t> future4;
+	FUTURE<uint16_t> future4;
 	ASSERT_STATUS(out, INVALID, future4);
 	out << F("#4.2 register future") << endl;
 	ASSERT(out, manager.register_future(future4));
@@ -214,7 +193,7 @@ int main()
 	// Check set value by data pointer twice
 	out << F("TEST #5 simple Future lifecycle: new Future and part value pointer set") << endl;
 	out << F("#5.1 instantiate future") << endl;
-	Future<uint16_t> future5;
+	FUTURE<uint16_t> future5;
 	ASSERT_STATUS(out, INVALID, future5);
 	out << F("#5.2 register future") << endl;
 	ASSERT(out, manager.register_future(future5));
@@ -234,19 +213,20 @@ int main()
 	// Check further updates do not do anything (and do not crash either!)
 	out << F("TEST #6 simple Future lifecycle: check no more updates possible after first set complete") << endl;
 	out << F("#6.1 instantiate future") << endl;
-	Future<uint16_t> future6;
+	FUTURE<uint16_t> future6;
 	ASSERT_STATUS(out, INVALID, future6);
 	out << F("#6.2 register future") << endl;
 	ASSERT(out, manager.register_future(future6));
 	ECHO_ID(out, future6);
 	ASSERT_STATUS(out, NOT_READY, future6);
 	out << F("#6.3 set_future_value() from full value") << endl;
-	ASSERT(out, manager.set_future_value(future6.id(), 0x8899));
+	const uint16_t VAL2 = 0x8899u;
+	ASSERT(out, manager.set_future_value(future6.id(), reinterpret_cast<const uint8_t*>(&VAL2), sizeof(VAL2)));
 	ASSERT_STATUS(out, READY, future6);
 	out << F("#6.4 set_future_value() additional byte") << endl;
 	ASSERT(out, !manager.set_future_value(future6.id(), uint8_t(0xAA)));
 	ASSERT_STATUS(out, READY, future6);
-	ASSERT_VALUE(out, 0x8899u, future6);
+	ASSERT_VALUE(out, VAL2, future6);
 	ASSERT_STATUS(out, INVALID, future6);
 	out << F("#6.5 set_future_value() after get() additional byte") << endl;
 	ASSERT(out, !manager.set_future_value(future6.id(), uint8_t(0xBB)));
@@ -256,42 +236,43 @@ int main()
 	// Check reuse of a future in various states
 	out << F("TEST #7 check Future status after move constructor") << endl;
 	out << F("#7.1 instantiate future") << endl;
-	Future<uint16_t> future7;
+	FUTURE<uint16_t> future7;
 	ASSERT_STATUS(out, INVALID, future7);
 	out << F("#7.2 register future") << endl;
 	ASSERT(out, manager.register_future(future7));
 	ECHO_ID(out, future7);
 	ASSERT_STATUS(out, NOT_READY, future7);
 	out << F("#7.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
-	Future<uint16_t> future8 = std::move(future7);
+	FUTURE<uint16_t> future8 = std::move(future7);
 	ASSERT_STATUS(out, INVALID, future7);
 	ASSERT_STATUS(out, NOT_READY, future8);
 	out << F("#7.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
-	ASSERT(out, manager.set_future_value(future8.id(), 0xFFFFu));
-	Future<uint16_t> future9 = std::move(future8);
+	const uint16_t VAL3 = 0xFFFFu;
+	ASSERT(out, manager.set_future_value(future8.id(), reinterpret_cast<const uint8_t*>(&VAL3), sizeof(VAL3)));
+	FUTURE<uint16_t> future9 = std::move(future8);
 	ASSERT_STATUS(out, INVALID, future8);
 	ASSERT_STATUS(out, READY, future9);
-	ASSERT_VALUE(out, 0xFFFFu, future9);
+	ASSERT_VALUE(out, VAL3, future9);
 	out << F("#7.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
-	Future<uint16_t> future10;
+	FUTURE<uint16_t> future10;
 	ASSERT(out, manager.register_future(future10));
 	ECHO_ID(out, future10);
 	ASSERT(out, manager.set_future_error(future10.id(), -10000));
-	Future<uint16_t> future11 = std::move(future10);
+	FUTURE<uint16_t> future11 = std::move(future10);
 	ASSERT_STATUS(out, INVALID, future10);
 	ASSERT_STATUS(out, ERROR, future11);
 	ASSERT_ERROR(out, -10000, future11);
 	out << F("#7.6 check status (INVALID, INVALID) -> (INVALID, INVALID)") << endl;
-	Future<uint16_t> future12;
-	Future<uint16_t> future13 = std::move(future12);
+	FUTURE<uint16_t> future12;
+	FUTURE<uint16_t> future13 = std::move(future12);
 	ASSERT_STATUS(out, INVALID, future12);
 	ASSERT_STATUS(out, INVALID, future13);
 	out << F("#7.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
-	Future<uint16_t> future14;
+	FUTURE<uint16_t> future14;
 	ASSERT(out, manager.register_future(future14));
 	ECHO_ID(out, future14);
 	ASSERT(out, manager.set_future_value(future14.id(), uint8_t(0xBB)));
-	Future<uint16_t> future15 = std::move(future14);
+	FUTURE<uint16_t> future15 = std::move(future14);
 	ASSERT_STATUS(out, INVALID, future14);
 	ASSERT_STATUS(out, NOT_READY, future15);
 	ASSERT(out, manager.set_future_value(future15.id(), uint8_t(0xCC)));
@@ -304,7 +285,7 @@ int main()
 	// Check reuse of a future in various states
 	out << F("TEST #8 check Future status after move assignment") << endl;
 	out << F("#8.1 instantiate futures") << endl;
-	Future<uint16_t> future17, future18, future19, future20, future21, future22, future23, future24, future25;
+	FUTURE<uint16_t> future17, future18, future19, future20, future21, future22, future23, future24, future25;
 	out << F("#8.2 register future") << endl;
 	ASSERT(out, manager.register_future(future17));
 	ECHO_ID(out, future17);
@@ -314,11 +295,11 @@ int main()
 	ASSERT_STATUS(out, INVALID, future17);
 	ASSERT_STATUS(out, NOT_READY, future18);
 	out << F("#8.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
-	ASSERT(out, manager.set_future_value(future18.id(), 0xFFFFu));
+	ASSERT(out, manager.set_future_value(future18.id(), reinterpret_cast<const uint8_t*>(&VAL3), sizeof(VAL3)));
 	future19 = std::move(future18);
 	ASSERT_STATUS(out, INVALID, future18);
 	ASSERT_STATUS(out, READY, future19);
-	ASSERT_VALUE(out, 0xFFFFu, future19);
+	ASSERT_VALUE(out, VAL3, future19);
 	out << F("#8.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
 	ASSERT(out, manager.register_future(future20));
 	ECHO_ID(out, future20);
@@ -356,6 +337,7 @@ int main()
 	ASSERT_STATUS(out, NOT_READY, my_future);
 	out << F("#9.3 set_future_value()") << endl;
 	ASSERT(out, manager.set_future_value(my_future.id(), 123));
+	ASSERT(out, manager.set_future_value(my_future.id(), 0));
 	ASSERT_STATUS(out, READY, my_future);
 	out << F("#9.4 get()") << endl;
 	uint16_t actual = 0;
@@ -367,7 +349,7 @@ int main()
 	// Check value storage in Future
 	out << F("TEST #10 Future value storage...") << endl;
 	out << F("#10.1 instantiate future") << endl;
-	Future<uint16_t, uint16_t> future26{12345};
+	FUTURE<uint16_t, uint16_t> future26{12345};
 	ASSERT_STATUS(out, INVALID, future26);
 	out << F("#10.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future26));
@@ -379,7 +361,8 @@ int main()
 	assert(out, F("get_storage_value((future26.id())"), 12345u, input);
 	ASSERT_STATUS(out, NOT_READY, future26);
 	out << F("#10.4 set_future_value()") << endl;
-	ASSERT(out, manager.set_future_value(future26.id(), 123));
+	const uint16_t VAL4 = 123u;
+	ASSERT(out, manager.set_future_value(future26.id(), reinterpret_cast<const uint8_t*>(&VAL4), sizeof(VAL4)));
 	ASSERT_STATUS(out, READY, future26);
 	out << F("#10.5 get()") << endl;
 	actual = 0;
@@ -391,7 +374,7 @@ int main()
 	// Check Future without value (just done or error or not)
 	out << F("TEST #11 Future without value...") << endl;
 	out << F("#11.1 instantiate future") << endl;
-	Future<> future27;
+	FUTURE<> future27;
 	ASSERT_STATUS(out, INVALID, future27);
 	out << F("#11.2 register_future()") << endl;
 	ASSERT(out, manager.register_future(future27));

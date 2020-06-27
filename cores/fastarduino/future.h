@@ -23,10 +23,8 @@
 #ifndef FUTURE_HH
 #define FUTURE_HH
 
-#include <string.h>
-#include "errors.h"
 #include "move.h"
-#include "time.h"
+#include "future_commons.h"
 
 /**
  * Contains the API around Future implementation.
@@ -50,7 +48,6 @@
  * - Once invalid, a Future becomes useless, unless re-assigned with a newly 
  * constructed Future
  * - A `FutureManager` centralizes lifetime of all Futures
- * - There can be only one FutureManager in the system (singleton)
  * - The FutureManager holds up-to-date pointers to each valid Future
  * - Maximum number of Futures is statically defined at build time
  * - Futures notify their lifetime to FutureManager (moved, deleted, inactive)
@@ -79,15 +76,15 @@
  * // global variable holding the id of the future to fill in
  * static uint8_t portB_snapshot_id = 0;
  * // PCINT0 ISR
- * void take_snapshot() {
+ * void take_snapshot(future::AbstractFutureManager& manager) {
  *     gpio::FastPort<board::Port::PORT_B> port;
- *     future::AbstractFutureManager::instance().set_future_value(portB_snapshot_id, port.get_PIN());
+ *     manager.set_future_value(portB_snapshot_id, port.get_PIN());
  * }
  * REGISTER_PCI_ISR_FUNCTION(0, take_snapshot, board::InterruptPin::D8_PB0_PCI0)
  * ...
  * 
  * // Within main()
- * // First create a FutureManager singleton with max 16 futures
+ * // First create a FutureManager with max 16 futures
  * static constexpr uint8_t MAX_FUTURES = 16;
  * future::FutureManager<MAX_FUTURES> manager;
  * // Initialize PORTB and PCI
@@ -110,154 +107,43 @@
  * }
  * ...
  * @endcode
+ * 
+ * @note There exist different implementation of Futures and FutureManagers with
+ * distinct characteristics:
+ * - FutureManager (default) handles futures with potential long lifetime, that can
+ * be "moved around" without losing their reference: wherever they are moved, they
+ * are guaranteed to be reached and updated when needed
+ * - StaticFutureManager handles futures that are not moveable (code is smaller than
+ * standard Futuremanager where futures are moveable)
+ * - SingleFutureManager handles only one -non moveable- future with very short
+ * lifetime (i.e. a kind of "immediate" future); its code is much smaller than other
+ * implementations and can be used in situations where a future is expected but you
+ * want to await its result immediately.
+ * 
+ * @sa StaticFutureManager
+ * @sa SingleFutureManager
  */
 namespace future
 {
 	/// @cond notdocumented
-	// Forward declarations
-	class AbstractFuture;
+	// Forward declaration needed by FUTURE
 	template<typename OUT, typename IN> class Future;
 	/// @endcond
 
 	/**
 	 * This is the parent of `FutureManager` and it provides all `FutureManager` API.
 	 * You should normally never need to subclass it.
-	 * This is a singleton, in the sense there can be only one `AbstractFutureManager`
-	 * active at a time.
 	 * An `AbstractFutureManager` holds a limited number of registered `Future`s;
 	 * the limit is fixed at construction time of `FutureManager`.
 	 * 
 	 * @sa FutureManager
 	 * @sa Future
 	 */
-	class AbstractFutureManager
+	class AbstractFutureManager : public AbstractMultiFutureManager
 	{
 	public:
-		/**
-		 * Return the single instance of `AbstractFutureManager`, or `null` if no 
-		 * `FutureManager` has been instantiated yet.
-		 */
-		static AbstractFutureManager& instance()
-		{
-			return *instance_;
-		}
-
-		/**
-		 * Register a newly instantiated `AbstractFuture` with this `AbstractFutureManager`.
-		 * @warning DO NOT USE THIS METHOD! This method was made `public` because
-		 * no better way could be found to make it visible to other parts FastArduino API.
-		 * But you should never use it in your own programs.
-		 * You should use `AbstractFutureManager.register_future(Future<OUT, IN>&)` instead.
-		 * 
-		 * @sa AbstractFutureManager.register_future(Future<OUT, IN>&)
-		 */
-		bool register_future(AbstractFuture& future)
-		{
-			synchronized return register_future_(future);
-		}
-
-		/**
-		 * Register a newly instantiated `AbstractFuture` with this `AbstractFutureManager`.
-		 * @warning DO NOT USE THIS METHOD! This method was made `public` because
-		 * no better way could be found to make it visible to other parts FastArduino API.
-		 * But you should never use it in your own programs.
-		 * You should use `AbstractFutureManager.register_future_(Future<OUT, IN>&)` instead.
-		 * 
-		 * @sa AbstractFutureManager.register_future_(Future<OUT, IN>&)
-		 */
-		bool register_future_(AbstractFuture& future);
-
-		/**
-		 * Register a newly instantiated Future with this `AbstractFutureManager`.
-		 * A Future is useless until it has been registered.
-		 * 
-		 * This method is synchronized, it shall be called from outside an ISR.
-		 * If you need the same feature called from an ISR, then you shall use 
-		 * `AbstractFutureManager.register_future_()` instead.
-		 * 
-		 * @tparam OUT the output (result value) type that @p future holds
-		 * @tparam IN the input (storage value) type that @p future holds
-		 * @param future a reference to a newly constructed Future that we want to register
-		 * in order to use it as expected
-		 * @retval true if @p future has been successfully registered by this `AbstractFutureManager`
-		 * @retval false if @p future could not be registered by this `AbstractFutureManager`,
-		 * either because the limit of registrable `Future`s has been reached already, or
-		 * because @p future is already registered.
-		 * 
-		 * @sa Future
-		 * @sa AbstractFutureManager.register_future_()
-		 */
-		template<typename OUT, typename IN> bool register_future(Future<OUT, IN>& future)
-		{
-			return register_future((AbstractFuture&) future);
-		}
-
-		/**
-		 * Register a newly instantiated Future with this `AbstractFutureManager`.
-		 * A Future is useless until it has been registered.
-		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
-		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.register_future()` instead.
-		 * 
-		 * @tparam OUT the output (result value) type that @p future holds
-		 * @tparam IN the input (storage value) type that @p future holds
-		 * @param future a reference to a newly constructed Future that we want to register
-		 * in order to use it as expected
-		 * @retval true if @p future has been successfully registered by this `AbstractFutureManager`
-		 * @retval false if @p future could not be registered by this `AbstractFutureManager`,
-		 * either because the limit of registrable `Future`s has been reached already, or
-		 * because @p future is already registered.
-		 * 
-		 * @sa Future
-		 * @sa AbstractFutureManager.register_future()
-		 */
-		template<typename OUT, typename IN> bool register_future_(Future<OUT, IN>& future)
-		{
-			return register_future_((AbstractFuture&) future);
-		}
-
-		/**
-		 * Return the number of available `Future`s in this `AbstractFutureManager`.
-		 * This means the maximum number of `Future`s that can be registered if no
-		 * Future already registered get destroyed.
-		 * 
-		 * This method is synchronized, it shall be called from outside an ISR.
-		 * If you need the same feature called from an ISR, then you shall use 
-		 * `AbstractFutureManager.available_futures_()` instead.
-		 * 
-		 * @sa register_future()
-		 * @sa Future
-		 * @sa available_futures_()
-		 */
-		uint8_t available_futures() const
-		{
-			synchronized return available_futures_();
-		}
-
-		/**
-		 * Return the number of available `Future`s in this `AbstractFutureManager`.
-		 * This means the maximum number of `Future`s that can be registered if no
-		 * Future already registered get destroyed.
-		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
-		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.available_futures()` instead.
-		 * 
-		 * @sa register_future_()
-		 * @sa Future
-		 * @sa available_futures()
-		 */
-		uint8_t available_futures_() const
-		{
-			uint8_t free = 0;
-			for (uint8_t i = 0; i < size_; ++i)
-				if (futures_[i] == nullptr)
-					++free;
-			return free;
-		}
+		//TODO DOC
+		template<typename OUT, typename IN> using FUTURE = Future<OUT, IN>;
 
 		/**
 		 * Check the number of bytes remaining to write to the output value of
@@ -371,45 +257,11 @@ namespace future
 		 * 
 		 * @sa Future.status()
 		 * @sa set_future_value(uint8_t, uint8_t) const
-		 * @sa set_future_value(uint8_t, const T&) const
 		 * @sa set_future_value_(uint8_t, const uint8_t*, uint8_t) const
 		 */
 		bool set_future_value(uint8_t id, const uint8_t* chunk, uint8_t size) const
 		{
 			synchronized return set_future_value_(id, chunk, size);
-		}
-
-		/**
-		 * Set the output value content of the Future identified by @p id.
-		 * This method is called by a Future ouput value provider to fully fill
-		 * up, with the proper value, the output value of a Future.
-		 * Calling this method will change the status of the Future to 
-		 * `FutureStatus::READY`
-		 * This method is useful only for `Future<T>` where `T` type is not `void`.
-		 * 
-		 * It is also possible to fill the output value byte per byte, with
-		 * other overloaded versions of this method.
-		 * 
-		 * This method is synchronized, it shall be called from outside an ISR.
-		 * If you need the same feature called from an ISR, then you shall use 
-		 * `AbstractFutureManager.set_future_value_(uint8_t, const T&) const` instead.
-		 * 
-		 * @tparam T the type of output value of the Future indetified by @p id
-		 * 
-		 * @param id the unique id of the Future which output value shall be set
-		 * @param value a constant reference to the value to set in the target Future
-		 * @retval true if @p value could be properly set into the future
-		 * @retval false if this method failed; typically, when the current status
-		 * of the target Future is not `FutureStatus::NOT_READY`
-		 * 
-		 * @sa Future.status()
-		 * @sa set_future_value(uint8_t, uint8_t) const
-		 * @sa set_future_value(uint8_t, const uint8_t*, uint8_t) const
-		 * @sa set_future_value_(uint8_t, const T&) const
-		 */
-		template<typename T> bool set_future_value(uint8_t id, const T& value) const
-		{
-			synchronized return set_future_value_(id, value);
 		}
 
 		/**
@@ -545,7 +397,10 @@ namespace future
 		 * 
 		 * @sa get_future_value_size()
 		 */
-		uint8_t get_future_value_size_(uint8_t id) const;
+		uint8_t get_future_value_size_(uint8_t id) const
+		{
+			return AbstractMultiFutureManager::get_future_value_size_(find_future(id));
+		}
 
 		/**
 		 * Mark the Future identified by @p id as `FutureStatus::READY`.
@@ -572,7 +427,10 @@ namespace future
 		 * @sa set_future_error_()
 		 * @sa set_future_finish()
 		 */
-		bool set_future_finish_(uint8_t id) const;
+		bool set_future_finish_(uint8_t id) const
+		{
+			return AbstractMultiFutureManager::set_future_finish_(find_future(id));
+		}
 
 		/**
 		 * Add one byte to the output value content of the Future identified 
@@ -600,10 +458,12 @@ namespace future
 		 * 
 		 * @sa Future.status()
 		 * @sa set_future_value_(uint8_t, const uint8_t*, uint8_t) const
-		 * @sa set_future_value_(uint8_t, const T&) const
 		 * @sa set_future_value(uint8_t, uint8_t) const
 		 */
-		bool set_future_value_(uint8_t id, uint8_t chunk) const;
+		bool set_future_value_(uint8_t id, uint8_t chunk) const
+		{
+			return AbstractMultiFutureManager::set_future_value_(find_future(id), chunk);
+		}
 
 		/**
 		 * Add several bytes to the output value content of the Future identified 
@@ -635,41 +495,12 @@ namespace future
 		 * 
 		 * @sa Future.status()
 		 * @sa set_future_value_(uint8_t, uint8_t) const
-		 * @sa set_future_value_(uint8_t, const T&) const
 		 * @sa set_future_value(uint8_t, const uint8_t*, uint8_t) const
 		 */
-		bool set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const;
-
-		/**
-		 * Set the output value content of the Future identified by @p id.
-		 * This method is called by a Future ouput value provider to fully fill
-		 * up, with the proper value, the output value of a Future.
-		 * Calling this method will change the status of the Future to 
-		 * `FutureStatus::READY`
-		 * This method is useful only for `Future<T>` where `T` type is not `void`.
-		 * 
-		 * It is also possible to fill the output value byte per byte, with
-		 * other overloaded versions of this method.
-		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
-		 * If you need the same feature with synchronization, then you shall use 
-		 * `AbstractFutureManager.set_future_value(uint8_t, const T&) const` instead.
-		 * 
-		 * @tparam T the type of output value of the Future indetified by @p id
-		 * 
-		 * @param id the unique id of the Future which output value shall be set
-		 * @param value a constant reference to the value to set in the target Future
-		 * @retval true if @p value could be properly set into the future
-		 * @retval false if this method failed; typically, when the current status
-		 * of the target Future is not `FutureStatus::NOT_READY`
-		 * 
-		 * @sa Future.status()
-		 * @sa set_future_value_(uint8_t, uint8_t) const
-		 * @sa set_future_value_(uint8_t, const uint8_t*, uint8_t) const
-		 * @sa set_future_value(uint8_t, const T&) const
-		 */
-		template<typename T> bool set_future_value_(uint8_t id, const T& value) const;
+		bool set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const
+		{
+			return AbstractMultiFutureManager::set_future_value_(find_future(id), chunk, size);
+		}
 
 		/**
 		 * Mark the Future identified by @p id as `FutureStatus::ERROR`.
@@ -693,7 +524,10 @@ namespace future
 		 * @sa set_future_finish_()
 		 * @sa set_future_error()
 		 */
-		bool set_future_error_(uint8_t id, int error) const;
+		bool set_future_error_(uint8_t id, int error) const
+		{
+			return AbstractMultiFutureManager::set_future_error_(find_future(id), error);
+		}
 
 		/**
 		 * Check the number of bytes remaining to read from a Future identified
@@ -712,7 +546,10 @@ namespace future
 		 * 
 		 * @sa get_storage_value_size()
 		 */
-		uint8_t get_storage_value_size_(uint8_t id) const;
+		uint8_t get_storage_value_size_(uint8_t id) const
+		{
+			return AbstractMultiFutureManager::get_storage_value_size_(find_future(id));
+		}
 
 		/**
 		 * Get one byte from the input storage value of the Future identified 
@@ -743,7 +580,10 @@ namespace future
 		 * @sa get_storage_value_(uint8_t, uint8_t*, uint8_t) const
 		 * @sa get_storage_value(uint8_t, uint8_t&) const
 		 */
-		bool get_storage_value_(uint8_t id, uint8_t& chunk) const;
+		bool get_storage_value_(uint8_t id, uint8_t& chunk) const
+		{
+			return AbstractMultiFutureManager::get_storage_value_(find_future(id), chunk);
+		}
 
 		/**
 		 * Get @p size bytes from the input storage value of the Future identified 
@@ -778,58 +618,22 @@ namespace future
 		 * @sa get_storage_value_(uint8_t, uint8_t&) const
 		 * @sa get_storage_value(uint8_t, uint8_t*, uint8_t) const
 		 */
-		bool get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const;
+		bool get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const
+		{
+			return AbstractMultiFutureManager::get_storage_value_(find_future(id), chunk, size);
+		}
 
 	protected:
 		/// @cond notdocumented
-		AbstractFutureManager(AbstractFuture** futures, uint8_t size)
-			: size_{size}, futures_{futures}
-		{
-			for (uint8_t i = 0; i < size_; ++i)
-				futures_[i] = nullptr;
-			synchronized AbstractFutureManager::instance_ = this;
-		}
+		AbstractFutureManager(AbstractManagedFuture** futures, uint8_t size)
+			: AbstractMultiFutureManager{futures, size} {}
 
 		AbstractFutureManager(const AbstractFutureManager&) = delete;
 		AbstractFutureManager& operator=(const AbstractFutureManager&) = delete;
-		~AbstractFutureManager()
-		{
-			synchronized AbstractFutureManager::instance_ = nullptr;
-		}
+		AbstractFutureManager(AbstractFutureManager&&) = delete;
+		AbstractFutureManager& operator=(AbstractFutureManager&&) = delete;
+		~AbstractFutureManager() = default;
 		/// @endcond
-
-	private:
-		static AbstractFutureManager* instance_;
-
-		bool register_at_index_(AbstractFuture& future, uint8_t index);
-
-		AbstractFuture* find_future(uint8_t id) const
-		{
-			if ((id == 0) || (id > size_))
-				return nullptr;
-			return futures_[id - 1];
-		}
-		bool update_future(uint8_t id, AbstractFuture* old_address, AbstractFuture* new_address)
-		{
-			synchronized return update_future_(id, old_address, new_address);
-		}
-		// Called by Future themselves (on construction, destruction, assignment)
-		bool update_future_(uint8_t id, AbstractFuture* old_address, AbstractFuture* new_address)
-		{
-			// Check id is plausible and address matches
-			if (find_future(id) != old_address)
-				return false;
-			futures_[id - 1] = new_address;
-			if (new_address == nullptr)
-				last_removed_id_ = id;
-			return true;
-		}
-
-		const uint8_t size_;
-		AbstractFuture** futures_;
-		uint8_t last_removed_id_ = 0;
-
-		friend class AbstractFuture;
 	};
 
 	/**
@@ -847,330 +651,14 @@ namespace future
 	{
 	public:
 		/** 
-		 * Construct a FutureManager, that will become THE FutureManager singleton.
+		 * Construct a FutureManager.
 		 * @sa AbstractFutureManager
-		 * @sa AbstractFutureManager.instance()
 		 */
 		FutureManager() : AbstractFutureManager{buffer_, SIZE}, buffer_{} {}
 
 	private:
-		AbstractFuture* buffer_[SIZE];
+		AbstractManagedFuture* buffer_[SIZE];
 	};
-
-	/**
-	 * Status of a Future.
-	 * A Future follows a strict lifecycle by passing through the various statuses
-	 * defined here.
-	 * 
-	 * @sa Future
-	 */
-	enum class FutureStatus : uint8_t
-	{
-		/** 
-		 * The initial status of a Future, once constructed.
-		 * This is also the final status of a Future, once it has been "read"
-		 * by a consumer.
-		 * This can finally be the status of a Future that has been "moved" to 
-		 * another Future (though C++ move constructor or move assignment operator).
-		 * 
-		 * @sa Future.get()
-		 * @sa Future.error()
-		 */
-		INVALID = 0,
-
-		/**
-		 * The status of a Future immediately after it has been registered with
-		 * the `FutureManager`.
-		 * The Future will keep this status until:
-		 * - either its output value provider has fully filled its value (then its
-		 * status will become `READY`)
-		 * - or its output value provider has reported an error to it (then its 
-		 * status will become `ERROR`)
-		 * - or it is moved to another Future (then its status will become `INVALID`)
-		 * 
-		 * @sa AbstractFutureManager.register_future()
-		 * @sa AbstractFutureManager.set_future_value()
-		 * @sa AbstractFutureManager.set_future_finish()
-		 * @sa AbstractFutureManager.set_future_error()
-		 */
-		NOT_READY,
-
-		/**
-		 * The status of a Future once its output value has been fully set by a 
-		 * provider.
-		 * The Future will keep this value until:
-		 * - either its value is read from some consumer code (then its 
-		 * status will become `INVALID`)
-		 * - or it is moved to another Future (then its status will become 
-		 * `INVALID`)
-		 * 
-		 * @sa AbstractFutureManager.set_future_value()
-		 * @sa AbstractFutureManager.set_future_finish()
-		 * @sa Future.get()
-		 */
-		READY,
-
-		/**
-		 * The status of a Future once a value provider has reported an error 
-		 * to it.
-		 * The Future will keep this value until:
-		 * - either its error is read from some consumer code (then its 
-		 * status will become `INVALID`)
-		 * - or it is moved to another Future (then its status will become 
-		 * `INVALID`)
-		 * 
-		 * @sa AbstractFutureManager.set_future_error()
-		 * @sa Future.error()
-		 */
-		ERROR
-	};
-
-	/**
-	 * Base class for all `Future`s.
-	 * This defines most API and implementation of a Future.
-	 * 
-	 * @sa Future
-	 */
-	class AbstractFuture
-	{
-	public:
-		/**
-		 * The unique ID of this Future, as provded by the `FutureManager` 
-		 * upon registration.
-		 * This is `0` when:
-		 * - the Future has just been constructed (not registered yet)
-		 * - the Future has just been moved to another Future.
-		 * 
-		 * @sa AbstractFutureManager.register_future()
-		 */
-		uint8_t id() const
-		{
-			return id_;
-		}
-
-		/**
-		 * The current status of this Future.
-		 * 
-		 * @sa FutureStatus
-		 */
-		FutureStatus status() const
-		{
-			return status_;
-		}
-
-		/**
-		 * Wait until this Future becomes "ready", that is when it holds either an
-		 * output value or an error.
-		 * The method returns immediately if this Future is "INVALID".
-		 * 
-		 * @return the latest status of the Future
-		 * 
-		 * @sa Future.get()
-		 * @sa error()
-		 */
-		FutureStatus await() const
-		{
-			while (status_ == FutureStatus::NOT_READY)
-				time::yield();
-			return status_;
-		}
-
-		/**
-		 * Wait until this Future becomes "ready", that is when it holds either an
-		 * output value or an error, then return the error reported.
-		 * Calling this method when the Future holds an error will change its
-		 * status to `FutureStatus::INVALID`.
-		 * 
-		 * @retval 0 if the Future is READY, i.e. holds a valid output value
-		 * @retval EINVAL if the Future is currently `INVALID`
-		 * @return the actual error reported by a provider on this Future
-		 * 
-		 * @sa await()
-		 * @sa AbstractFutureManager.set_future_error()
-		 * @sa errors::EINVAL
-		 */
-		int error()
-		{
-			switch (await())
-			{
-				case FutureStatus::ERROR:
-				status_ = FutureStatus::INVALID;
-				return error_;
-
-				case FutureStatus::READY:
-				return 0;
-
-				case FutureStatus::INVALID:
-				default:
-				return errors::EINVAL;
-			}
-		}
-
-	protected:
-		/// @cond notdocumented
-		// Constructor used by FutureManager
-		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
-			:	output_data_{output_data}, output_current_{output_data}, output_size_{output_size},
-				input_data_{input_data}, input_current_{input_data}, input_size_{input_size} {}
-		~AbstractFuture()
-		{
-			// Notify FutureManager about destruction
-			AbstractFutureManager::instance().update_future(id_, this, nullptr);
-		}
-
-		AbstractFuture(const AbstractFuture&) = delete;
-		AbstractFuture& operator=(const AbstractFuture&) = delete;
-		AbstractFuture(AbstractFuture&&) = delete;
-		AbstractFuture& operator=(AbstractFuture&&) = delete;
-
-		void invalidate()
-		{
-			status_ = FutureStatus::INVALID;
-		}
-
-		// This method is called by subclass to check if input is replaceable,
-		// i.e. it has not been read yet
-		bool can_replace_input() const
-		{
-			synchronized return can_replace_input_();
-		}
-		bool can_replace_input_() const
-		{
-			return (input_current_ == input_data_);
-		}
-
-		// This method is called by subclass in their move constructor and assignment operator
-		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
-		{
-			// In case this Future is valid, it must be first invalidated with FutureManager
-			AbstractFutureManager::instance().update_future_(id_, this, nullptr);
-
-			// Now copy all attributes from rhs (output_data_ was already initialized when this was constructed)
-			id_ = that.id_;
-			status_ = that.status_;
-			error_ = that.error_;
-			output_size_ = that.output_size_;
-			input_size_ = that.input_size_;
-			// Calculate data pointer attribute for next set value calls
-			output_current_ = output_data_ + full_output_size - output_size_;
-			input_current_ = input_data_ + full_input_size - input_size_;
-
-			// Notify FutureManager about Future move
-			if (!AbstractFutureManager::instance().update_future_(id_, &that, this))
-				status_ = FutureStatus::INVALID;
-
-			// Make rhs Future invalid
-			that.id_ = 0;
-			that.status_ = FutureStatus::INVALID;
-		}
-		/// @endcond
-
-	private:
-		// The following methods are called by FutureManager to fill the Future value (or error)
-		uint8_t get_output_size_() const
-		{
-			return output_size_;
-		}
-
-		bool set_finish_()
-		{
-			// Check this future is waiting for data
-			if (status_ != FutureStatus::NOT_READY)
-				return false;
-			if (output_size_ == 0)
-				status_ = FutureStatus::READY;
-			return true;
-		}
-		bool set_chunk_(uint8_t chunk)
-		{
-			// Check this future is waiting for data
-			if (status_ != FutureStatus::NOT_READY)
-				return false;
-			// Update Future value chunk
-			*output_current_++ = chunk;
-			// Is that the last chunk?
-			if (--output_size_ == 0)
-				status_ = FutureStatus::READY;
-			return true;
-		}
-		bool set_chunk_(const uint8_t* chunk, uint8_t size)
-		{
-			// Check this future is waiting for data
-			if (status_ != FutureStatus::NOT_READY)
-				return false;
-			// Check size does not go beyond expected size
-			if (size > output_size_)
-			{
-				// Store error
-				set_error_(errors::EMSGSIZE);
-				return false;
-			}
-			memcpy(output_current_, chunk, size);
-			output_current_ += size;
-			// Is that the last chunk?
-			output_size_ -= size;
-			if (output_size_ == 0)
-				status_ = FutureStatus::READY;
-			return true;
-		}
-		bool set_error_(int error)
-		{
-			// Check this future is waiting for data
-			if (error == 0 || status_ != FutureStatus::NOT_READY)
-				return false;
-			error_ = error;
-			status_ = FutureStatus::ERROR;
-			return true;
-		}
-
-		// The following methods are called by FutureManager to get the read-only value held by this Future
-		uint8_t get_input_size_() const
-		{
-			return input_size_;
-		}
-
-		bool get_chunk_(uint8_t& chunk)
-		{
-			// Check all bytes have not been transferred yet
-			if (!input_size_)
-				return false;
-			chunk = *input_current_++;
-			--input_size_;
-			return true;
-		}
-		bool get_chunk_(uint8_t* chunk, uint8_t size)
-		{
-			// Check size does not go beyond transferrable size
-			if (size > input_size_)
-				return false;
-			memcpy(chunk, input_current_, size);
-			input_current_ += size;
-			input_size_ -= size;
-			return true;
-		}
-
-		uint8_t id_ = 0;
-		volatile FutureStatus status_ = FutureStatus::INVALID;
-		int error_ = 0;
-
-		uint8_t* output_data_ = nullptr;
-		uint8_t* output_current_ = nullptr;
-		uint8_t output_size_ = 0;
-		
-		uint8_t* input_data_ = nullptr;
-		uint8_t* input_current_ = nullptr;
-		uint8_t input_size_ = 0;
-
-		friend class AbstractFutureManager;
-	};
-
-	template<typename T> bool AbstractFutureManager::set_future_value_(uint8_t id, const T& value) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return false;
-		return future->set_chunk_(reinterpret_cast<const uint8_t*>(&value), sizeof(T));
-	}
 
 	/**
 	 * Represent a value to be obtained, in some asynchronous way, in the future.
@@ -1198,11 +686,11 @@ namespace future
 	 * @tparam IN the type of the input storage value; `void` by default.
 	 * This type is limited to 255 bytes in length.
 	 * 
-	 * @sa AbstractFuture
+	 * @sa AbstractManagedFuture
 	 * @sa FutureStatus
 	 */
 	template<typename OUT_ = void, typename IN_ = void>
-	class Future : public AbstractFuture
+	class Future : public AbstractManagedFuture
 	{
 		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
@@ -1225,7 +713,7 @@ namespace future
 		 * @param input a value to be copied to this Future input storage value;
 		 * this argument does not exist when @p IN is `void`.
 		 * 
-		 * @sa AbstractFuture
+		 * @sa AbstractManagedFuture
 		 * @sa status()
 		 * @sa FutureStatus
 		 * @sa FutureManager
@@ -1233,7 +721,7 @@ namespace future
 		 * @sa operator=(Future&&)
 		 */
 		explicit Future(const IN& input = IN{})
-			: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
+			: AbstractManagedFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
 
 		/**
 		 * Destroy an existing Future.
@@ -1262,7 +750,7 @@ namespace future
 		 * ...
 		 * @endcode
 		 */
-		Future(Future<OUT, IN>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
+		Future(Future<OUT, IN>&& that) : AbstractManagedFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
 		{
 			move(std::move(that));
 		}
@@ -1420,7 +908,7 @@ namespace future
 	//================================================
 	/// @cond notdocumented	
 	template<typename OUT_>
-	class Future<OUT_, void> : public AbstractFuture
+	class Future<OUT_, void> : public AbstractManagedFuture
 	{
 		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 
@@ -1428,10 +916,10 @@ namespace future
 		using OUT = OUT_;
 		using IN = void;
 
-		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
+		Future() : AbstractManagedFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
 		~Future() = default;
 
-		Future(Future<OUT, void>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0}
+		Future(Future<OUT, void>&& that) : AbstractManagedFuture{output_buffer_, sizeof(OUT), nullptr, 0}
 		{
 			move(std::move(that));
 		}
@@ -1475,7 +963,7 @@ namespace future
 
 	/// @cond notdocumented	
 	template<typename IN_>
-	class Future<void, IN_> : public AbstractFuture
+	class Future<void, IN_> : public AbstractManagedFuture
 	{
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
@@ -1484,10 +972,10 @@ namespace future
 		using IN = IN_;
 
 		explicit Future(const IN& input = IN{})
-			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
+			: AbstractManagedFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
 		~Future() = default;
 
-		Future(Future<void, IN>&& that) : AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}
+		Future(Future<void, IN>&& that) : AbstractManagedFuture{nullptr, 0, input_buffer_, sizeof(IN)}
 		{
 			move(std::move(that));
 		}
@@ -1547,16 +1035,16 @@ namespace future
 
 	/// @cond notdocumented	
 	template<>
-	class Future<void, void> : public AbstractFuture
+	class Future<void, void> : public AbstractManagedFuture
 	{
 	public:
 		using OUT = void;
 		using IN = void;
 
-		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
+		Future() : AbstractManagedFuture{nullptr, 0,nullptr, 0} {}
 		~Future() = default;
 
-		Future(Future<void, void>&& that) : AbstractFuture{nullptr, 0, nullptr, 0}
+		Future(Future<void, void>&& that) : AbstractManagedFuture{nullptr, 0, nullptr, 0}
 		{
 			synchronized move_(std::move(that), 0, 0);
 		}
@@ -1578,6 +1066,13 @@ namespace future
 			invalidate();
 			return true;
 		}
+	};
+	/// @endcond
+
+	/// @cond notdocumented
+	template<uint8_t SIZE> struct FutureManager_trait<FutureManager<SIZE>>
+	{
+		static constexpr const bool IS_FUTURE_MANAGER = true;
 	};
 	/// @endcond
 }
