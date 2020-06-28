@@ -103,10 +103,14 @@ using namespace streams;
 // global variable holding the id of the future to fill in
 static uint8_t port_snapshot_id = 0;
 
+using FUTURE_MANAGER = FutureManager<MAX_FUTURES>;
+template<typename OUT = void, typename IN = void> using FUTURE = FUTURE_MANAGER::FUTURE<OUT, IN>;
+
 // PCINT0 ISR
+//NOTE: a beter design would define a class encasulating FUTURE_MANAGER instance, and port_snashot_id.
 void take_snapshot() {
     gpio::FastPort<PORT> port;
-    future::AbstractFutureManager::instance().set_future_value(port_snapshot_id, port.get_PIN());
+	interrupt::HandlerHolder<FUTURE_MANAGER>::handler()->set_future_value_(port_snapshot_id, port.get_PIN());
 }
 
 REGISTER_PCI_ISR_FUNCTION(PCINT, take_snapshot, IPIN0)
@@ -130,7 +134,9 @@ int main()
 	out << showbase << uppercase;
 
 	// First create a FutureManager singleton
-	FutureManager<MAX_FUTURES> manager;
+	FUTURE_MANAGER manager;
+	// Register Futuremanager to make it accessible by ISR
+	interrupt::register_handler(manager);
 
 	// Initialize PORT and PCI
 	gpio::FastPort<PORT> port{PORT_MASK, PORT_MASK};
@@ -143,7 +149,7 @@ int main()
 	while (true)
 	{
 		// Create a Future and register it
-		Future<uint8_t> port_snapshot;
+		FUTURE<uint8_t> port_snapshot;
 		manager.register_future(port_snapshot);
 		port_snapshot_id = port_snapshot.id();
 		out << F("ID = ") << dec << port_snapshot_id << endl;
