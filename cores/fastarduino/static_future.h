@@ -14,141 +14,32 @@
 
 /// @cond api
 
-/**
- * @file
- * Utility API to handle the concept of futures.
- * In this header, we define the "standard" way of handling futures, that is
- * futures that can be moved around and always keep their proper context.
- * Although standard, this default implementation has a main downside: code size.
- * Other implementations exist, with limitations but also more optimized code size. 
- * 
- * For general discussion about this concept, please check 
- * https://en.wikipedia.org/wiki/Futures_and_promises
- */
-#ifndef FUTURE_HH
-#define FUTURE_HH
+#ifndef STATIC_FUTURE_HH
+#define STATIC_FUTURE_HH
 
-#include "move.h"
 #include "future_commons.h"
 
-/**
- * Contains the API around Future implementation.
- * A Future allows you to pass and get values across different units of executions
- * (threads, or more likely on AVR MCU, the main program and an ISR).
- * 
- * Concepts applied in this API:
- * - A Future holds a buffer for a future "output" value (any type, even `void`, 
- * i.e. no value)
- * - A Future may also hold a storage "input" value (constant, any type) with 
- * same lifetime as the Future
- * - Each Future is identified by a unique ID
- * - A Future is either:
- *      - Invalid: it is not linked to anything and is unusable; this happens
- *        in several circumstances: default construction, instance move, value (or 
- *        error) set and already read once
- *      - Not ready: its value has not been obtained yet
- *      - Ready: its value has been fully set and not yet read by anyone
- *      - Error: an error occurred in the provider, hence no value will ever be 
- *        held by this Future, the actual error has not yet been read by anyone
- * - Once invalid, a Future becomes useless, unless re-assigned with a newly 
- * constructed Future
- * - A `FutureManager` centralizes lifetime of all Futures
- * - The FutureManager holds up-to-date pointers to each valid Future
- * - Maximum number of Futures is statically defined at build time
- * - Futures notify their lifetime to FutureManager (moved, deleted, inactive)
- * - Futures ID are used as an index into an internal FutureManager table, 0 means 
- * "not registered yet" or "invalid" after moving to another Future instance
- * - Output value providers must know the ID in order to fill up values 
- * (or errors) of a Future, through the FutureManager (only the FutureManager 
- * knows exactly where each Future stands)
- * - Storage input value consumers must know the ID in order to get storage value
- * of a Future, through the FutureManager (only the FutureManager knows exactly
- * where each Future stands)
- * - It is possible to subclass a Future to add last minute transformation on 
- * `Future.get()` method
- * - The FutureManager tries to limit potential conflicts when assigning an ID
- * during Future registration, by searching for an available ID AFTER the last ID
- * removed; this may not be sufficient: it is possible (although a well-written 
- * program should never do that) that a NOT_READY Future gets destructed and its 
- * output value provider tries to fill its value, since the provider only gets the 
- * ID, if the same ID has been assigned to a new Future, a conflict may occur and 
- * possibly lead to a crash.
- * 
- * Here is a simple usage example of this API, using PCINT0 interrupt to take a 
- * "snapshot" of 6 input buttons connected to all PORTB pins, after one of them has
- * changed level:
- * @code
- * // global variable holding the id of the future to fill in
- * static uint8_t portB_snapshot_id = 0;
- * // PCINT0 ISR
- * void take_snapshot(future::AbstractFutureManager& manager) {
- *     gpio::FastPort<board::Port::PORT_B> port;
- *     manager.set_future_value(portB_snapshot_id, port.get_PIN());
- * }
- * REGISTER_PCI_ISR_FUNCTION(0, take_snapshot, board::InterruptPin::D8_PB0_PCI0)
- * ...
- * 
- * // Within main()
- * // First create a FutureManager with max 16 futures
- * static constexpr uint8_t MAX_FUTURES = 16;
- * future::FutureManager<MAX_FUTURES> manager;
- * // Initialize PORTB and PCI
- * gpio::FastPort<board::Port::PORT_B> port{0xFF, 0xFF};
- * interrupt::PCI_PORT_SIGNAL<board::Port::PORT_B> signal;
- * signal.set_enable_pins(0xFF);
- * signal.enable();
- * ...
- * while (true) {
- *     // Create a Future and register it
- *     future::Future<uint8_t> portB_snapshot;
- *     manager.register_future(portB_snapshot);
- *     portB_snapshot_id = portB_snapshot.id();
- *     ...
- *     // Wait for the future to be filled in by the PCINT0 ISR
- *     uint8_t snapshot = 0;
- *     if (portB_snapshot.get(snapshot)) {
- *         // Do something with the obtained snapshot
- *     }
- * }
- * ...
- * @endcode
- * 
- * @note There exist different implementation of Futures and FutureManagers with
- * distinct characteristics:
- * - FutureManager (default) handles futures with potential long lifetime, that can
- * be "moved around" without losing their reference: wherever they are moved, they
- * are guaranteed to be reached and updated when needed
- * - StaticFutureManager handles futures that are not moveable (code is smaller than
- * standard Futuremanager where futures are moveable)
- * - SingleFutureManager handles only one -non moveable- future with very short
- * lifetime (i.e. a kind of "immediate" future); its code is much smaller than other
- * implementations and can be used in situations where a future is expected but you
- * want to await its result immediately.
- * 
- * @sa StaticFutureManager
- * @sa SingleFutureManager
- */
 namespace future
 {
 	/// @cond notdocumented
 	// Forward declaration needed by FUTURE
-	template<typename OUT, typename IN> class Future;
+	template<typename OUT, typename IN> class StaticFuture;
 	/// @endcond
 
 	/**
-	 * This is the parent of `FutureManager` and it provides all `FutureManager` API.
+	 * This is the parent of `StaticFutureManager` and it provides all `FutureManager` API.
 	 * You should normally never need to subclass it.
-	 * An `AbstractFutureManager` holds a limited number of registered `Future`s;
+	 * An `AbstractStaticFutureManager` holds a limited number of registered `Future`s;
 	 * the limit is fixed at construction time of `FutureManager`.
 	 * 
-	 * @sa FutureManager
-	 * @sa Future
+	 * @sa StaticFutureManager
+	 * @sa StaticFuture
 	 */
-	class AbstractFutureManager : public AbstractMultiFutureManager
+	class AbstractStaticFutureManager : public AbstractMultiFutureManager
 	{
 	public:
 		//TODO DOC
-		template<typename OUT, typename IN> using FUTURE = Future<OUT, IN>;
+		template<typename OUT, typename IN> using FUTURE = StaticFuture<OUT, IN>;
 
 		/**
 		 * Check the number of bytes remaining to write to the output value of
@@ -630,36 +521,36 @@ namespace future
 
 	protected:
 		/// @cond notdocumented
-		AbstractFutureManager(AbstractManagedFuture** futures, uint8_t size)
+		AbstractStaticFutureManager(AbstractManagedFuture** futures, uint8_t size)
 			: AbstractMultiFutureManager{futures, size} {}
 
-		AbstractFutureManager(const AbstractFutureManager&) = delete;
-		AbstractFutureManager& operator=(const AbstractFutureManager&) = delete;
-		AbstractFutureManager(AbstractFutureManager&&) = delete;
-		AbstractFutureManager& operator=(AbstractFutureManager&&) = delete;
-		~AbstractFutureManager() = default;
+		AbstractStaticFutureManager(const AbstractStaticFutureManager&) = delete;
+		AbstractStaticFutureManager& operator=(const AbstractStaticFutureManager&) = delete;
+		AbstractStaticFutureManager(AbstractStaticFutureManager&&) = delete;
+		AbstractStaticFutureManager& operator=(AbstractStaticFutureManager&&) = delete;
+		~AbstractStaticFutureManager() = default;
 		/// @endcond
 	};
 
 	/**
-	 * The actual FutureManager implementation, based on `AbstractFutureManager`,
+	 * The actual StaticFutureManager implementation, based on `AbstractStaticFutureManager`,
 	 * adding static storage for it.
-	 * You must define a `FutureManager` instance if you want to use FastArduino
+	 * You must define a `StaticFutureManager` instance if you want to use FastArduino
 	 * futures comcept.
 	 * 
-	 * @tparam SIZE the maximum number of `Future`s this FutureManager can register,
+	 * @tparam SIZE the maximum number of `StaticFuture`s this StaticFutureManager can register,
 	 * i.e. the maximum number of `Future`s that can exist simultaneously in the
 	 * system
 	 */
 	template<uint8_t SIZE>
-	class FutureManager : public AbstractFutureManager
+	class StaticFutureManager : public AbstractStaticFutureManager
 	{
 	public:
 		/** 
-		 * Construct a FutureManager.
-		 * @sa AbstractFutureManager
+		 * Construct a StaticFutureManager.
+		 * @sa AbstractStaticFutureManager
 		 */
-		FutureManager() : AbstractFutureManager{buffer_, SIZE}, buffer_{} {}
+		StaticFutureManager() : AbstractStaticFutureManager{buffer_, SIZE}, buffer_{} {}
 
 	private:
 		AbstractManagedFuture* buffer_[SIZE];
@@ -695,7 +586,7 @@ namespace future
 	 * @sa FutureStatus
 	 */
 	template<typename OUT_ = void, typename IN_ = void>
-	class Future : public AbstractManagedFuture
+	class StaticFuture : public AbstractManagedFuture
 	{
 		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
@@ -725,74 +616,20 @@ namespace future
 		 * @sa Future(Future&&)
 		 * @sa operator=(Future&&)
 		 */
-		explicit Future(const IN& input = IN{})
+		explicit StaticFuture(const IN& input = IN{})
 			: AbstractManagedFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
 
 		/**
 		 * Destroy an existing Future.
 		 * This Future will be automatically deregistered from `FutureManager`.
 		 */
-		~Future() = default;
-
-		/**
-		 * Construct a new Future from @p that Future, through moving operation.
-		 * After this Future has been constructed:
-		 * - @p that Future becomes unsable (`FutureStatus::INVALID`, `id() = 0`)
-		 * - @p that is deregistered from `FutureManager` if it was registered already
-		 * - this Future has the same `id()`, `state()` and values as @p that Future
-		 * before the move
-		 * - this Future is registered with `FutureManager` if @p that Future was
-		 * 
-		 * @param that the Future to be moved to this Future
-		 * 
-		 * @code
-		 * Future<uint16_t> future1;
-		 * // Do something with future1
-		 * ...
-		 * // Move future1 to future2, a new Future
-		 * Future<uint16_t> future2 = std::move(future1);
-		 * // Now use future2 only, as future1 has become useless
-		 * ...
-		 * @endcode
-		 */
-		Future(Future<OUT, IN>&& that) : AbstractManagedFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
-		{
-			move(std::move(that));
-		}
-
-		/**
-		 * Move @p that Future to this Future.
-		 * After this operation is finished:
-		 * - @p that Future becomes unsable (`FutureStatus::INVALID`, `id() = 0`)
-		 * - @p that is deregistered from `FutureManager` if it was registered already
-		 * - this Future has the same `id()`, `state()` and values as @p that Future
-		 * before the move
-		 * - this Future is registered with `FutureManager` if @p that Future was
-		 * 
-		 * @param that the Future to be moved to this Future
-		 * 
-		 * @code
-		 * Future<uint16_t> future1, future2;
-		 * // Do something with future1
-		 * ...
-		 * // Move future1 to future2, an existing Future
-		 * future2 = std::move(future1);
-		 * // Now use future2 only, as future1 has become useless
-		 * // If future2 was already registered before, it has been first 
-		 * // deregistered before the move.
-		 * ...
-		 * @endcode
-		 */
-		Future<OUT, IN>& operator=(Future<OUT, IN>&& that)
-		{
-			if (this == &that) return *this;
-			move(std::move(that));
-			return *this;
-		}
+		~StaticFuture() = default;
 
 		/// @cond notdocumented
-		Future(const Future<OUT, IN>&) = delete;
-		Future<OUT, IN>& operator=(const Future<OUT, IN>&) = delete;
+		StaticFuture(StaticFuture<OUT, IN>&& that) = delete;
+		StaticFuture<OUT, IN>& operator=(StaticFuture<OUT, IN>&& that) = delete;
+		StaticFuture(const StaticFuture<OUT, IN>&) = delete;
+		StaticFuture<OUT, IN>& operator=(const StaticFuture<OUT, IN>&) = delete;
 		/// @endcond
 
 		/**
@@ -887,16 +724,6 @@ namespace future
 		}
 
 	private:
-		void move(Future<OUT, IN>&& that)
-		{
-			synchronized
-			{
-				memcpy(output_buffer_, that.output_buffer_, sizeof(OUT));
-				memcpy(input_buffer_, that.input_buffer_, sizeof(IN));
-				move_(std::move(that), sizeof(OUT), sizeof(IN));
-			}
-		}
-
 		union
 		{
 			OUT output_;
@@ -913,7 +740,7 @@ namespace future
 	//================================================
 	/// @cond notdocumented	
 	template<typename OUT_>
-	class Future<OUT_, void> : public AbstractManagedFuture
+	class StaticFuture<OUT_, void> : public AbstractManagedFuture
 	{
 		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
 
@@ -921,22 +748,13 @@ namespace future
 		using OUT = OUT_;
 		using IN = void;
 
-		Future() : AbstractManagedFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
-		~Future() = default;
+		StaticFuture() : AbstractManagedFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
+		~StaticFuture() = default;
 
-		Future(Future<OUT, void>&& that) : AbstractManagedFuture{output_buffer_, sizeof(OUT), nullptr, 0}
-		{
-			move(std::move(that));
-		}
-		Future<OUT, void>& operator=(Future<OUT, void>&& that)
-		{
-			if (this == &that) return *this;
-			move(std::move(that));
-			return *this;
-		}
-
-		Future(const Future<OUT, void>&) = delete;
-		Future<OUT, void>& operator=(const Future<OUT, void>&) = delete;
+		StaticFuture(StaticFuture<OUT, void>&& that) = delete;
+		StaticFuture<OUT, void>& operator=(StaticFuture<OUT, void>&& that) = delete;
+		StaticFuture(const StaticFuture<OUT, void>&) = delete;
+		StaticFuture<OUT, void>& operator=(const StaticFuture<OUT, void>&) = delete;
 
 		// The following method is blocking until this Future is ready
 		bool get(OUT& result)
@@ -949,15 +767,6 @@ namespace future
 		}
 
 	private:
-		void move(Future<OUT, void>&& that)
-		{
-			synchronized
-			{
-				memcpy(output_buffer_, that.output_buffer_, sizeof(OUT));
-				move_(std::move(that), sizeof(OUT), 0);
-			}
-		}
-
 		union
 		{
 			OUT output_;
@@ -968,7 +777,7 @@ namespace future
 
 	/// @cond notdocumented	
 	template<typename IN_>
-	class Future<void, IN_> : public AbstractManagedFuture
+	class StaticFuture<void, IN_> : public AbstractManagedFuture
 	{
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
@@ -976,23 +785,14 @@ namespace future
 		using OUT = void;
 		using IN = IN_;
 
-		explicit Future(const IN& input = IN{})
+		explicit StaticFuture(const IN& input = IN{})
 			: AbstractManagedFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
-		~Future() = default;
+		~StaticFuture() = default;
 
-		Future(Future<void, IN>&& that) : AbstractManagedFuture{nullptr, 0, input_buffer_, sizeof(IN)}
-		{
-			move(std::move(that));
-		}
-		Future<void, IN>& operator=(Future<void, IN>&& that)
-		{
-			if (this == &that) return *this;
-			move(std::move(that));
-			return *this;
-		}
-
-		Future(const Future<void, IN>&) = delete;
-		Future<void, IN>& operator=(const Future<void, IN>&) = delete;
+		StaticFuture(StaticFuture<void, IN>&& that) = delete;
+		StaticFuture<void, IN>& operator=(StaticFuture<void, IN>&& that) = delete;
+		StaticFuture(const StaticFuture<void, IN>&) = delete;
+		StaticFuture<void, IN>& operator=(const StaticFuture<void, IN>&) = delete;
 
 		bool reset_input(const IN& input)
 		{
@@ -1021,15 +821,6 @@ namespace future
 		}
 
 	private:
-		void move(Future<void, IN>&& that)
-		{
-			synchronized
-			{
-				memcpy(input_buffer_, that.input_buffer_, sizeof(IN));
-				move_(std::move(that), 0, sizeof(IN));
-			}
-		}
-
 		union
 		{
 			IN input_;
@@ -1040,28 +831,19 @@ namespace future
 
 	/// @cond notdocumented	
 	template<>
-	class Future<void, void> : public AbstractManagedFuture
+	class StaticFuture<void, void> : public AbstractManagedFuture
 	{
 	public:
 		using OUT = void;
 		using IN = void;
 
-		Future() : AbstractManagedFuture{nullptr, 0,nullptr, 0} {}
-		~Future() = default;
+		StaticFuture() : AbstractManagedFuture{nullptr, 0,nullptr, 0} {}
+		~StaticFuture() = default;
 
-		Future(Future<void, void>&& that) : AbstractManagedFuture{nullptr, 0, nullptr, 0}
-		{
-			synchronized move_(std::move(that), 0, 0);
-		}
-		Future<void, void>& operator=(Future<void, void>&& that)
-		{
-			if (this == &that) return *this;
-			synchronized move_(std::move(that), 0, 0);
-			return *this;
-		}
-
-		Future(const Future<void, void>&) = delete;
-		Future<void, void>& operator=(const Future<void, void>&) = delete;
+		StaticFuture(StaticFuture<void, void>&& that) = delete;
+		StaticFuture<void, void>& operator=(StaticFuture<void, void>&& that) = delete;
+		StaticFuture(const StaticFuture<void, void>&) = delete;
+		StaticFuture<void, void>& operator=(const StaticFuture<void, void>&) = delete;
 
 		// The following method is blocking until this Future is ready
 		bool get()
@@ -1075,12 +857,12 @@ namespace future
 	/// @endcond
 
 	/// @cond notdocumented
-	template<uint8_t SIZE> struct FutureManager_trait<FutureManager<SIZE>>
+	template<uint8_t SIZE> struct FutureManager_trait<StaticFutureManager<SIZE>>
 	{
 		static constexpr const bool IS_FUTURE_MANAGER = true;
 	};
 	/// @endcond
 }
 
-#endif /* FUTURE_HH */
+#endif /* STATIC_FUTURE_HH */
 /// @endcond
