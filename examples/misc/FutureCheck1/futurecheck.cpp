@@ -43,7 +43,7 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 static constexpr uint8_t MAX_FUTURES = 64;
-using FUTURE_MANAGER = future::FutureManager<MAX_FUTURES>;
+using FUTURE_MANAGER = FutureManager<MAX_FUTURES>;
 template<typename OUT = void, typename IN = void> using FUTURE = FUTURE_MANAGER::FUTURE<OUT, IN>;
 
 // Future subclass for specific check
@@ -113,7 +113,7 @@ int main()
 	out << boolalpha << showbase;
 
 	out << F("Before FutureManager instantiation") << endl;
-	FutureManager<MAX_FUTURES> manager{};
+	FUTURE_MANAGER manager{};
 	assert(out, F("available futures"), MAX_FUTURES, manager.available_futures());
 
 	// Check normal error context
