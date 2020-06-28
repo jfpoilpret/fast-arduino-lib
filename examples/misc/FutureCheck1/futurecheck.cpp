@@ -54,16 +54,8 @@ public:
 	MyFuture() : FUTURE<uint16_t>{} {}
 	~MyFuture() = default;
 
-	MyFuture(MyFuture&& that) : FUTURE<uint16_t>{std::move(that)}
-	{
-	}
-	MyFuture& operator=(MyFuture&& that)
-	{
-		if (this == &that) return *this;
-		(FUTURE<uint16_t>&) *this = std::move(that);
-		return *this;
-	}
-
+	MyFuture(MyFuture&& that) = default;
+	MyFuture& operator=(MyFuture&& that) = default;
 	MyFuture(const MyFuture&) = delete;
 	MyFuture& operator=(const MyFuture&) = delete;
 
