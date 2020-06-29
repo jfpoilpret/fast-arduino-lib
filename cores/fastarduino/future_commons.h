@@ -310,6 +310,7 @@ namespace future
 
 		friend class AbstractBaseFutureManager;
 		friend class AbstractMultiFutureManager;
+		friend class SingleFutureManager;
 	};
 
 	/**
