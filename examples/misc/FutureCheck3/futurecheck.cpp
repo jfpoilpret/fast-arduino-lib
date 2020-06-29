@@ -22,26 +22,38 @@
 #include <fastarduino/flash.h>
 #include <fastarduino/move.h>
 #include <fastarduino/static_future.h>
+#include <fastarduino/iomanip.h>
+
+#ifndef ARDUINO_UNO
+#error "Current target is not yet supported!"
+#endif
+
+#define NO_OUTPUT true
+
+#if NO_OUTPUT
+#include <fastarduino/empty_streams.h>
+using OSTREAM = streams::null_ostream;
+void assert(UNUSED OSTREAM& out, UNUSED const char* message, UNUSED bool condition) {}
+void assert(UNUSED OSTREAM& out, UNUSED const flash::FlashStorage* message, UNUSED bool condition) {}
+#define ASSERT(OUT, CONDITION) assert(OUT, F("" #CONDITION ""), CONDITION)
+template<typename T1, typename T2>
+void assert(UNUSED OSTREAM& out, UNUSED const char* var, UNUSED T1 expected, UNUSED T2 actual) {}
+template<typename T1, typename T2>
+void assert(UNUSED OSTREAM& out, UNUSED const flash::FlashStorage* var, UNUSED T1 expected, UNUSED T2 actual) {}
+#else
 #include <fastarduino/uart.h>
 #include <fastarduino/streams.h>
-#include <fastarduino/iomanip.h>
 #include <fastarduino/tests/assertions.h>
-
-#ifdef ARDUINO_UNO
 static const board::USART USART = board::USART::USART0;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
-#else
-#error "Current target is not yet supported!"
+using OSTREAM = streams::ostream;
+static const uint8_t OUTPUT_BUFFER_SIZE = 128;
+static char output_buffer[OUTPUT_BUFFER_SIZE];
 #endif
 
 using namespace future;
 using namespace streams;
-
-// Buffers for UART
-//==================
-static const uint8_t OUTPUT_BUFFER_SIZE = 128;
-static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 static constexpr uint8_t MAX_FUTURES = 1;
 using FUTURE_MANAGER = StaticFutureManager<MAX_FUTURES>;
@@ -53,7 +65,7 @@ template<typename OUT = void, typename IN = void> using FUTURE = FUTURE_MANAGER:
 #define ASSERT_STATUS(OUT, STATUS, FUTURE) assert(OUT, F("" #FUTURE ".status()"), FutureStatus:: STATUS, FUTURE.status())
 #define ASSERT_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
 template<typename T1, typename T2> 
-void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::FlashStorage* name2, 
+void assert_value(OSTREAM& out, const flash::FlashStorage* name1, const flash::FlashStorage* name2, 
 	FUTURE<T1>& future, const T2& expected)
 {
 	T1 actual{};
@@ -61,7 +73,7 @@ void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::F
 	assert(out, name2, expected, actual);
 }
 #define ASSERT_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE ".get()"), F("" #FUTURE ".get() value"), FUTURE, VALUE)
-template<typename T> void trace_future(ostream& out, const FUTURE<T>& future)
+template<typename T> void trace_future(OSTREAM& out, const FUTURE<T>& future)
 {
 	out << F("Future id = ") << dec << future.id() << F(", status = ") << future.status() << endl;
 }
@@ -73,10 +85,14 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
+#if NO_OUTPUT
+	OSTREAM out;
+#else
 	// Initialize debugging output
 	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 	uart.begin(115200);
-	ostream out = uart.out();
+	OSTREAM out = uart.out();
+#endif
 	out << boolalpha << showbase;
 
 	out << F("Before FutureManager instantiation") << endl;
