@@ -19,6 +19,10 @@ REGISTER_UATX_ISR(0)
 
 // API Proof of Concept
 //======================
+
+//TODO LifeCycleManager improvements: add template to allow register and find with strong types?
+//TODO see if further code size optimization is possible
+
 // Forward declaration
 class LifeCycleManager;
 
@@ -137,23 +141,29 @@ template<typename T> class LifeCycle : public AbstractLifeCycle, public T
 public:
 	LifeCycle(const T& value = T{}) : T{value} {}
 	LifeCycle(const LifeCycle<T>&) = delete;
-	LifeCycle(LifeCycle<T>&& that) : T{std::move((T&&) that)}
+	LifeCycle(LifeCycle<T>&& that) : AbstractLifeCycle{std::move(that)}, T{std::move((T&&) that)}
 	{
+		//TODO try to move it to superclass (non template)
 		if (that.id_)
 			that.manager_->move_(that.id_, *this);
 	}
 	~LifeCycle()
 	{
+		T::out() << F("~LifeCycle(), id_ = ") << streams::dec << id_ << streams::endl;
+		//TODO try to move it to superclass (non template)
 		if (id_)
 			manager_->unregister_(id_);
 	}
 	LifeCycle<T>& operator=(const LifeCycle<T>&) = delete;
 	LifeCycle<T>& operator=(LifeCycle<T>&& that)
 	{
+		T::operator=(std::move(that));
+		//TODO try to move it to superclass (non template)
 		if (id_)
 			manager_->unregister_(id_);
 		if (that.id_)
-			manager_->move_(that.id_, *this);
+			that.manager_->move_(that.id_, *this);
+		return *this;
 	}
 };
 
@@ -169,7 +179,7 @@ public:
 	{
 		out_ = &out;
 	}
-	Value(int val) : val_{val}
+	Value(int val = 0) : val_{val}
 	{
 		trace('c');
 	}
@@ -198,10 +208,16 @@ public:
 		return *this;
 	}
 
+	static ostream& out()
+	{
+		return *out_;
+	}
+
 private:
 	void trace(char method)
 	{
-		*out_ << method << dec << val_ << ' ' << hex << this << endl;
+		if (out_)
+			*out_ << method << dec << val_ << ' ' << hex << this << endl;
 	}
 
 	static ostream* out_;
@@ -238,7 +254,7 @@ template<typename T> static void check(ostream& out, LifeCycleManager& manager, 
 		//TODO Check copy never compiles
 		// LifeCycle<T> copy{instance};
 
-		out << F("3. Move") << endl;
+		out << F("3. Move constructor") << endl;
 		LifeCycle<T> move = std::move(instance);
 		assert(out, F("original id() after registration"), 0, instance.id());
 		assert(out, F("moved id() after registration"), id, move.id());
@@ -248,10 +264,21 @@ template<typename T> static void check(ostream& out, LifeCycleManager& manager, 
 		found = manager.find_(id);
 		assert(out, F("manager.find_(id)"), found != nullptr);
 		assert(out, F("manager.find_(id)"), &move, found);
+
+		//TODO Check copy never compiles
+		// LifeCycle<T> copy;
+		// copy = move;
+
+		out << F("5. Move assignment") << endl;
+		LifeCycle<T> move2;
+		move2 = std::move(move);
+		assert(out, F("original id() after registration"), 0, move.id());
+		assert(out, F("moved id() after registration"), id, move2.id());
+		assert(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
 	}
 
 	// Check destruction
-	out << F("5. Destruction") << endl;
+	out << F("6. Destruction") << endl;
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 }
 
@@ -272,6 +299,8 @@ int main()
 	out << F("Starting...") << endl;
 
 	Value::set_out(out);
+	out << F("Create constant Value first") << endl;
+	const Value VAL0 = Value{1};
 
 	// Create manager
 	out << F("Instantiate LifeCycleManager") << endl;
@@ -280,5 +309,5 @@ int main()
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 
 	// Check different types T (int, struct, with/without dtor/ctor/op=...)
-	check<Value>(out, manager, Value{0});
+	check<Value>(out, manager, VAL0);
 }
