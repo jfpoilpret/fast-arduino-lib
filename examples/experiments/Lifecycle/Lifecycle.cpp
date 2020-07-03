@@ -20,11 +20,13 @@ REGISTER_UATX_ISR(0)
 // API Proof of Concept
 //======================
 
-//TODO LifeCycleManager improvements: add template to allow register and find with strong types?
 //TODO see if further code size optimization is possible
+//TODO work out and check Proxy classes
+//TODO subclass LifeCycleManager to directly store AbstractLifeCycle*[] buffer
 
 // Forward declaration
 class LifeCycleManager;
+template<typename T> class LifeCycle;
 
 // LifeCycle handling
 class AbstractLifeCycle
@@ -41,6 +43,7 @@ protected:
 	LifeCycleManager* manager_ = nullptr;
 
 	friend class LifeCycleManager;
+	template<typename T> friend class Proxy;
 };
 
 class LifeCycleManager
@@ -52,19 +55,9 @@ public:
 	LifeCycleManager(const LifeCycleManager&) = delete;
 	LifeCycleManager& operator=(const LifeCycleManager&) = delete;
 
-	uint8_t register_(AbstractLifeCycle& instance)
+	template<typename T> uint8_t register_(LifeCycle<T>& instance)
 	{
-		// You cannot register an already registered future
-		if (instance.id_ != 0)
-			return 0;
-		// Optimization: we start search AFTER the last removed id
-		for (uint8_t i = last_removed_id_; i < size_; ++i)
-			if (register_at_index_(instance, i))
-				return i + 1;
-		for (uint8_t i = 0; i <= last_removed_id_; ++i)
-			if (register_at_index_(instance, i))
-				return i + 1;
-		return 0;
+		return register_impl_(instance);
 	}
 
 	bool unregister_(uint8_t id)
@@ -103,7 +96,28 @@ public:
 		return true;
 	}
 
-	AbstractLifeCycle* find_(uint8_t id)
+	template<typename T> LifeCycle<T>* find_(uint8_t id) const
+	{
+		return static_cast<LifeCycle<T>*>(find_impl_(id));
+	}
+
+private:
+	uint8_t register_impl_(AbstractLifeCycle& instance)
+	{
+		// You cannot register an already registered future
+		if (instance.id_ != 0)
+			return 0;
+		// Optimization: we start search AFTER the last removed id
+		for (uint8_t i = last_removed_id_; i < size_; ++i)
+			if (register_at_index_(instance, i))
+				return i + 1;
+		for (uint8_t i = 0; i <= last_removed_id_; ++i)
+			if (register_at_index_(instance, i))
+				return i + 1;
+		return 0;
+	}
+
+	AbstractLifeCycle* find_impl_(uint8_t id) const
 	{
 		AbstractLifeCycle** slot = find_slot_(id);
 		if (slot == nullptr)
@@ -112,8 +126,7 @@ public:
 			return *slot;
 	}
 
-private:
-	AbstractLifeCycle** find_slot_(uint8_t id)
+	AbstractLifeCycle** find_slot_(uint8_t id) const
 	{
 		if (id == 0 || id > size_)
 			return nullptr;
@@ -149,7 +162,6 @@ public:
 	}
 	~LifeCycle()
 	{
-		T::out() << F("~LifeCycle(), id_ = ") << streams::dec << id_ << streams::endl;
 		//TODO try to move it to superclass (non template)
 		if (id_)
 			manager_->unregister_(id_);
@@ -165,6 +177,49 @@ public:
 			that.manager_->move_(that.id_, *this);
 		return *this;
 	}
+};
+
+// We also need a "direct proxy" specialization for non LifeCycle<T>
+template<typename T> class Proxy
+{
+public:
+	Proxy(T& dest) : dest_{&dest} {}
+	Proxy(const Proxy&) = default;
+	Proxy operator=(const Proxy&) = default;
+
+	T& operator*()
+	{
+		return *dest_;
+	}
+	T* operator->()
+	{
+		return dest_;
+	}
+
+private:
+	T* dest_;
+};
+
+template<typename T> class Proxy<LifeCycle<T>>
+{
+	using LC = LifeCycle<T>;
+public:
+	Proxy(const LC& dest) : id_{dest.id_}, manager_{dest.manager_} {}
+	Proxy(const Proxy&) = default;
+	Proxy operator=(const Proxy&) = default;
+
+	LC& operator*()
+	{
+		return *(manager_->find_<T>(id_));
+	}
+	LC* operator->()
+	{
+		return manager_->find_<T>(id_);
+	}
+
+private:
+	const uint8_t id_;
+	LifeCycleManager* manager_;
 };
 
 // Usage Example
@@ -208,6 +263,11 @@ public:
 		return *this;
 	}
 
+	int val() const
+	{
+		return val_;
+	}
+
 	static ostream& out()
 	{
 		return *out_;
@@ -247,9 +307,10 @@ template<typename T> static void check(ostream& out, LifeCycleManager& manager, 
 		assert(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
 
 		out << F("2. Find") << endl;
-		AbstractLifeCycle* found = manager.find_(id);
+		LifeCycle<T>* found = manager.find_<T>(id);
 		assert(out, F("manager.find_(id)"), found != nullptr);
 		assert(out, F("manager.find_(id)"), &instance, found);
+		out << F("val=") << dec << found->val() << endl;
 
 		//TODO Check copy never compiles
 		// LifeCycle<T> copy{instance};
@@ -261,9 +322,10 @@ template<typename T> static void check(ostream& out, LifeCycleManager& manager, 
 		assert(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
 
 		out << F("4. Find after move") << endl;
-		found = manager.find_(id);
+		found = manager.find_<T>(id);
 		assert(out, F("manager.find_(id)"), found != nullptr);
 		assert(out, F("manager.find_(id)"), &move, found);
+		out << F("val=") << dec << found->val() << endl;
 
 		//TODO Check copy never compiles
 		// LifeCycle<T> copy;
@@ -300,7 +362,7 @@ int main()
 
 	Value::set_out(out);
 	out << F("Create constant Value first") << endl;
-	const Value VAL0 = Value{1};
+	const Value VAL0 = Value{123};
 
 	// Create manager
 	out << F("Instantiate LifeCycleManager") << endl;
