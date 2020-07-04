@@ -4,15 +4,14 @@
  */
 
 #include <string.h>
-#include <fastarduino/errors.h>
-#include <fastarduino/move.h>
-#include <fastarduino/time.h>
+#include <fastarduino/types_traits.h>
 
 // includes for the example program itself
 #include <fastarduino/tests/assertions.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/flash.h>
+#include <fastarduino/move.h>
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
@@ -206,7 +205,12 @@ template<typename T> class Proxy
 	using LC = LifeCycle<T>;
 public:
 	Proxy(T& dest) : id_{0}, dest_{&dest} {}
-	Proxy(const LC& dest) : id_{dest.id_}, manager_{dest.manager_} {}
+	template<typename U>
+	Proxy(const LifeCycle<U>& dest) : id_{dest.id_}, manager_{dest.manager_}
+	{
+		// Statically check (at compile-time) that U is a subclass of T
+		UNUSED types_traits::derives_from<U, T> check;
+	}
 	Proxy(const Proxy&) = default;
 	Proxy& operator=(const Proxy&) = default;
 
