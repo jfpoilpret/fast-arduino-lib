@@ -19,7 +19,6 @@ REGISTER_UATX_ISR(0)
 // API Proof of Concept
 //======================
 
-//TODO check bad use of proxy constructor does not compile!
 //TODO see if further code size optimization is possible
 //FIXME 2 AbstractLifeCycle may have different managers?
 // - in this case, how should the move (ctor and assignment) should be handled?
@@ -233,28 +232,25 @@ public:
 	}
 	T* destination() const
 	{
-		return (id_ == 0 ? dest_ : nullptr);
+		return dest_;
 	}
 	AbstractLifeCycleManager* manager() const
 	{
-		return (id_ != 0 ? manager_ : nullptr);
+		return manager_;
 	}
 
 private:
 	T* target() const
 	{
-		if (id_ == 0)
+		if (manager_ == nullptr)
 			return dest_;
 		else
 			return manager_->find_<T>(id_);
 	}
 
 	const uint8_t id_;
-	union
-	{
-		T* dest_;
-		AbstractLifeCycleManager* manager_;
-	};
+	T* dest_ = nullptr;
+	AbstractLifeCycleManager* manager_ = nullptr;
 };
 
 // Usage Example
@@ -424,6 +420,9 @@ void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 		<< F(" p4.dest=") << hex << p4.destination() << endl;
 	out << F("p3->val() ") << hex << &p3 << ' ' << dec << p3->val() << endl;
 	out << F("p4->val() ") << hex << &p4 << ' ' << dec << p4->val() << endl;
+
+	// This shall not compile
+	// Proxy<SubValue> p5{lc1};
 }
 
 int main() __attribute__((OS_main));
