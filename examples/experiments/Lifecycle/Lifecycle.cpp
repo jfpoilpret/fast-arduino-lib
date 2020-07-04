@@ -199,10 +199,8 @@ public:
 	LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 };
 
-// We also need a "direct proxy" specialization for non LifeCycle<T>
 template<typename T> class Proxy
 {
-	using LC = LifeCycle<T>;
 public:
 	Proxy(T& dest) : id_{0}, dest_{&dest} {}
 	template<typename U>
@@ -228,7 +226,6 @@ public:
 	}
 
 private:
-	//TODO code size for this method is big => factor out to abstract base class!
 	T* target() const
 	{
 		if (id_ == 0)
@@ -247,35 +244,6 @@ private:
 	//TODO remove (for debug only)
 	friend void check_proxies(streams::ostream&, AbstractLifeCycleManager&);
 };
-
-// template<typename T> class Proxy<LifeCycle<T>>
-// {
-// 	using LC = LifeCycle<T>;
-// public:
-// 	Proxy(const LC& dest) : id_{dest.id_}, manager_{dest.manager_} {}
-// 	Proxy(const Proxy&) = default;
-// 	Proxy& operator=(const Proxy&) = default;
-
-// 	LC& operator*()
-// 	{
-// 		return *(manager_->find_<T>(id_));
-// 	}
-// 	LC* operator&()
-// 	{
-// 		return manager_->find_<T>(id_);
-// 	}
-// 	LC* operator->()
-// 	{
-// 		return manager_->find_<T>(id_);
-// 	}
-
-// private:
-// 	const uint8_t id_;
-// 	AbstractLifeCycleManager* manager_;
-
-// 	//TODO remove (for debug only)
-// 	friend void check_proxies(streams::ostream&, AbstractLifeCycleManager&);
-// };
 
 // Usage Example
 //===============
