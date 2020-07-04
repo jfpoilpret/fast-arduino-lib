@@ -19,10 +19,8 @@ REGISTER_UATX_ISR(0)
 // API Proof of Concept
 //======================
 
+// Note: one LifeCycle instance can be managed by exactly one AbstractLifeCycleManager
 //TODO see if further code size optimization is possible
-//FIXME 2 AbstractLifeCycle may have different managers?
-// - in this case, how should the move (ctor and assignment) should be handled?
-// => that would bring additional code maybe for nothing?
 
 // Forward declaration
 class AbstractLifeCycleManager;
