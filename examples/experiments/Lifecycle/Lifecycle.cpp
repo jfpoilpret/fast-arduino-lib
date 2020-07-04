@@ -23,6 +23,9 @@ REGISTER_UATX_ISR(0)
 //TODO see if further code size optimization is possible
 //TODO work out and check Proxy classes
 //TODO subclass LifeCycleManager to directly store AbstractLifeCycle*[] buffer
+//FIXME 2 AbstractLifeCycle may have different managers?
+// - in this case, how should the move (ctor and assignment) should be handled?
+// => that would bring additional code maybe for nothing?
 
 // Forward declaration
 class LifeCycleManager;
@@ -33,12 +36,19 @@ class AbstractLifeCycle
 {
 public:
 	AbstractLifeCycle() = default;
+	AbstractLifeCycle(AbstractLifeCycle&& that);
+	~AbstractLifeCycle();
+	AbstractLifeCycle& operator=(AbstractLifeCycle&& that);
+
+	AbstractLifeCycle(const AbstractLifeCycle&) = delete;
+	AbstractLifeCycle& operator=(const AbstractLifeCycle&) = delete;
+
 	uint8_t id() const
 	{
 		return id_;
 	}
 
-protected:
+private:
 	uint8_t id_ = 0;
 	LifeCycleManager* manager_ = nullptr;
 
@@ -50,7 +60,7 @@ class LifeCycleManager
 {
 public:
 	template<uint8_t SIZE>
-	LifeCycleManager(AbstractLifeCycle* (&slots)[SIZE]) : size_{SIZE}, slots_{slots} {}
+	LifeCycleManager(AbstractLifeCycle* (&slots)[SIZE]) : size_{SIZE}, slots_{slots}, free_slots_{SIZE} {}
 	~LifeCycleManager() = default;
 	LifeCycleManager(const LifeCycleManager&) = delete;
 	LifeCycleManager& operator=(const LifeCycleManager&) = delete;
@@ -65,27 +75,24 @@ public:
 		AbstractLifeCycle** slot = find_slot_(id);
 		if (slot == nullptr || *slot == nullptr)
 			return false;
-		(*slot)->id_ = 0;
-		(*slot)->manager_ = nullptr;
+		AbstractLifeCycle& source = **slot;
+		source.id_ = 0;
+		source.manager_ = nullptr;
 		*slot = nullptr;
+		++free_slots_;
 		return true;
 	}
 
 	uint8_t available_() const
 	{
-		uint8_t free = 0;
-		for (uint8_t i = 0; i < size_; ++i)
-			if (slots_[i] == nullptr)
-				++free;
-		return free;
+		return free_slots_;
 	}
 	
 	bool move_(uint8_t id, AbstractLifeCycle& dest)
 	{
 		// Check this instance is managed
 		AbstractLifeCycle** slot = find_slot_(id);
-		if (slot == nullptr || *slot == nullptr)
-			return false;
+		if (slot == nullptr || *slot == nullptr) return false;
 		// Perform move
 		AbstractLifeCycle& source = **slot;
 		dest.id_ = source.id_;
@@ -104,9 +111,10 @@ public:
 private:
 	uint8_t register_impl_(AbstractLifeCycle& instance)
 	{
+		// Youcannot register any instance if there are no free slots remaining
+		if (free_slots_ == 0) return 0;
 		// You cannot register an already registered future
-		if (instance.id_ != 0)
-			return 0;
+		if (instance.id_ != 0) return 0;
 		// Optimization: we start search AFTER the last removed id
 		for (uint8_t i = last_removed_id_; i < size_; ++i)
 			if (register_at_index_(instance, i))
@@ -141,42 +149,44 @@ private:
 		instance.id_ = static_cast<uint8_t>(index + 1);
 		instance.manager_ = this;
 		slots_[index] = &instance;
+		--free_slots_;
 		return true;
 	}
 
 	const uint8_t size_;
 	AbstractLifeCycle** slots_;
+	uint8_t free_slots_;
 	uint8_t last_removed_id_ = 0;
 };
+
+AbstractLifeCycle::AbstractLifeCycle(AbstractLifeCycle&& that)
+{
+	if (that.id_)
+		that.manager_->move_(that.id_, *this);
+}
+AbstractLifeCycle::~AbstractLifeCycle()
+{
+	if (id_)
+		manager_->unregister_(id_);
+}
+AbstractLifeCycle& AbstractLifeCycle::operator=(AbstractLifeCycle&& that)
+{
+	if (id_)
+		manager_->unregister_(id_);
+	if (that.id_)
+		that.manager_->move_(that.id_, *this);
+	return *this;
+}
 
 template<typename T> class LifeCycle : public AbstractLifeCycle, public T
 {
 public:
-	LifeCycle(const T& value = T{}) : T{value} {}
-	LifeCycle(const LifeCycle<T>&) = delete;
-	LifeCycle(LifeCycle<T>&& that) : AbstractLifeCycle{std::move(that)}, T{std::move((T&&) that)}
-	{
-		//TODO try to move it to superclass (non template)
-		if (that.id_)
-			that.manager_->move_(that.id_, *this);
-	}
-	~LifeCycle()
-	{
-		//TODO try to move it to superclass (non template)
-		if (id_)
-			manager_->unregister_(id_);
-	}
-	LifeCycle<T>& operator=(const LifeCycle<T>&) = delete;
-	LifeCycle<T>& operator=(LifeCycle<T>&& that)
-	{
-		T::operator=(std::move(that));
-		//TODO try to move it to superclass (non template)
-		if (id_)
-			manager_->unregister_(id_);
-		if (that.id_)
-			that.manager_->move_(that.id_, *this);
-		return *this;
-	}
+	LifeCycle(const T& value = T{}) : AbstractLifeCycle{}, T{value} {}
+	// LifeCycle(const LifeCycle<T>&) = delete;
+	LifeCycle(LifeCycle<T>&& that) = default;
+	~LifeCycle() = default;
+	// LifeCycle<T>& operator=(const LifeCycle<T>&) = delete;
+	LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 };
 
 // We also need a "direct proxy" specialization for non LifeCycle<T>
