@@ -46,6 +46,7 @@ public:
 	{
 		return id_;
 	}
+	//TODO define manager() getter and remove some friend declarations?
 
 private:
 	uint8_t id_ = 0;
@@ -202,56 +203,75 @@ public:
 // We also need a "direct proxy" specialization for non LifeCycle<T>
 template<typename T> class Proxy
 {
+	using LC = LifeCycle<T>;
 public:
-	Proxy(T& dest) : dest_{&dest} {}
+	Proxy(T& dest) : id_{0}, dest_{&dest} {}
+	Proxy(const LC& dest) : id_{dest.id_}, manager_{dest.manager_} {}
 	Proxy(const Proxy&) = default;
 	Proxy& operator=(const Proxy&) = default;
 
 	T& operator*()
 	{
-		return *dest_;
+		return *target();
 	}
 	T* operator&()
 	{
-		return dest_;
+		return target();
 	}
 	T* operator->()
 	{
-		return dest_;
+		return target();
 	}
 
 private:
-	T* dest_;
-};
-
-template<typename T> class Proxy<LifeCycle<T>>
-{
-	using LC = LifeCycle<T>;
-public:
-	Proxy(const LC& dest) : id_{dest.id_}, manager_{dest.manager_} {}
-	Proxy(const Proxy&) = default;
-	Proxy& operator=(const Proxy&) = default;
-
-	LC& operator*()
+	//TODO code size for this method is big => factor out to abstract base class!
+	T* target() const
 	{
-		return *(manager_->find_<T>(id_));
-	}
-	LC* operator&()
-	{
-		return manager_->find_<T>(id_);
-	}
-	LC* operator->()
-	{
-		return manager_->find_<T>(id_);
+		if (id_ == 0)
+			return dest_;
+		else
+			return manager_->find_<T>(id_);
 	}
 
-private:
 	const uint8_t id_;
-	AbstractLifeCycleManager* manager_;
+	union
+	{
+		T* dest_;
+		AbstractLifeCycleManager* manager_;
+	};
 
 	//TODO remove (for debug only)
 	friend void check_proxies(streams::ostream&, AbstractLifeCycleManager&);
 };
+
+// template<typename T> class Proxy<LifeCycle<T>>
+// {
+// 	using LC = LifeCycle<T>;
+// public:
+// 	Proxy(const LC& dest) : id_{dest.id_}, manager_{dest.manager_} {}
+// 	Proxy(const Proxy&) = default;
+// 	Proxy& operator=(const Proxy&) = default;
+
+// 	LC& operator*()
+// 	{
+// 		return *(manager_->find_<T>(id_));
+// 	}
+// 	LC* operator&()
+// 	{
+// 		return manager_->find_<T>(id_);
+// 	}
+// 	LC* operator->()
+// 	{
+// 		return manager_->find_<T>(id_);
+// 	}
+
+// private:
+// 	const uint8_t id_;
+// 	AbstractLifeCycleManager* manager_;
+
+// 	//TODO remove (for debug only)
+// 	friend void check_proxies(streams::ostream&, AbstractLifeCycleManager&);
+// };
 
 // Usage Example
 //===============
@@ -410,12 +430,12 @@ void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 	assert(out, F("manager.register_(lc2)"), 2, manager.register_(lc2));
 	assert(out, F("lc2.id()"), 2, lc2.id());
 
-	Proxy<LifeCycle<Value>> p3{lc1};
+	Proxy<Value> p3{lc1};
 	out << F("p3.id_=") << dec << p3.id_ << endl;
 	//TODO The following line does not work
-	// Proxy<LifeCycle<Value>> p4{lc2};
-	// But the following line does not work
-	Proxy<LifeCycle<SubValue>> p4{lc2};
+	Proxy<Value> p4{lc2};
+	// But the following line does work
+	// Proxy<SubValue> p4{lc2};
 	//FIXME this line shows 0 for id_
 	out << F("p4.id_=") << dec << p4.id_ << F(" p4.manager_=") << hex << p4.manager_ << endl;
 	out << F("p3->val() ") << hex << &p3 << ' ' << dec << p3->val() << endl;
