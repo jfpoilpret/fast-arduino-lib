@@ -22,7 +22,6 @@ REGISTER_UATX_ISR(0)
 
 //TODO see if further code size optimization is possible
 //TODO work out and check Proxy classes
-//TODO subclass LifeCycleManager to directly store AbstractLifeCycle*[] buffer
 //FIXME 2 AbstractLifeCycle may have different managers?
 // - in this case, how should the move (ctor and assignment) should be handled?
 // => that would bring additional code maybe for nothing?
@@ -59,12 +58,6 @@ private:
 class AbstractLifeCycleManager
 {
 public:
-	template<uint8_t SIZE>
-	AbstractLifeCycleManager(AbstractLifeCycle* (&slots)[SIZE]) : size_{SIZE}, slots_{slots}, free_slots_{SIZE} {}
-	~AbstractLifeCycleManager() = default;
-	AbstractLifeCycleManager(const AbstractLifeCycleManager&) = delete;
-	AbstractLifeCycleManager& operator=(const AbstractLifeCycleManager&) = delete;
-
 	template<typename T> uint8_t register_(LifeCycle<T>& instance)
 	{
 		return register_impl_(instance);
@@ -107,6 +100,16 @@ public:
 	{
 		return static_cast<LifeCycle<T>*>(find_impl_(id));
 	}
+
+protected:
+	AbstractLifeCycleManager(AbstractLifeCycle** slots, uint8_t size)
+		:	size_{size}, slots_{slots}, free_slots_{size}
+	{
+		memset(slots, 0, size * sizeof(AbstractLifeCycle*));
+	}
+	~AbstractLifeCycleManager() = default;
+	AbstractLifeCycleManager(const AbstractLifeCycleManager&) = delete;
+	AbstractLifeCycleManager& operator=(const AbstractLifeCycleManager&) = delete;
 
 private:
 	uint8_t register_impl_(AbstractLifeCycle& instance)
@@ -157,6 +160,15 @@ private:
 	AbstractLifeCycle** slots_;
 	uint8_t free_slots_;
 	uint8_t last_removed_id_ = 0;
+};
+
+template<uint8_t SIZE> class LifeCycleManager : public AbstractLifeCycleManager
+{
+public:
+	LifeCycleManager() : AbstractLifeCycleManager{slots_buffer_, SIZE} {}
+
+private:
+	AbstractLifeCycle* slots_buffer_[SIZE];
 };
 
 AbstractLifeCycle::AbstractLifeCycle(AbstractLifeCycle&& that)
@@ -300,7 +312,6 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 static constexpr const uint8_t MAX_LC_SLOTS = 32;
-static AbstractLifeCycle* lc_slots[MAX_LC_SLOTS];
 
 template<typename T> static void check(ostream& out, AbstractLifeCycleManager& manager, const T& init)
 {
@@ -414,7 +425,7 @@ int main()
 
 	// Create manager
 	out << F("Instantiate LifeCycleManager") << endl;
-	AbstractLifeCycleManager manager{lc_slots};
+	LifeCycleManager<MAX_LC_SLOTS> manager;
 	// Check available slots
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 
