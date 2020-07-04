@@ -19,8 +19,8 @@ REGISTER_UATX_ISR(0)
 // API Proof of Concept
 //======================
 
+//TODO check bad use of proxy constructor does not compile!
 //TODO see if further code size optimization is possible
-//TODO work out and check Proxy classes
 //FIXME 2 AbstractLifeCycle may have different managers?
 // - in this case, how should the move (ctor and assignment) should be handled?
 // => that would bring additional code maybe for nothing?
@@ -45,14 +45,16 @@ public:
 	{
 		return id_;
 	}
-	//TODO define manager() getter and remove some friend declarations?
+	AbstractLifeCycleManager* manager() const
+	{
+		return manager_;
+	}
 
 private:
 	uint8_t id_ = 0;
 	AbstractLifeCycleManager* manager_ = nullptr;
 
 	friend class AbstractLifeCycleManager;
-	template<typename T> friend class Proxy;
 };
 
 class AbstractLifeCycleManager
@@ -174,19 +176,19 @@ private:
 AbstractLifeCycle::AbstractLifeCycle(AbstractLifeCycle&& that)
 {
 	if (that.id_)
-		that.manager_->move_(that.id_, *this);
+		that.manager()->move_(that.id_, *this);
 }
 AbstractLifeCycle::~AbstractLifeCycle()
 {
 	if (id_)
-		manager_->unregister_(id_);
+		manager()->unregister_(id_);
 }
 AbstractLifeCycle& AbstractLifeCycle::operator=(AbstractLifeCycle&& that)
 {
 	if (id_)
-		manager_->unregister_(id_);
+		manager()->unregister_(id_);
 	if (that.id_)
-		that.manager_->move_(that.id_, *this);
+		that.manager()->move_(that.id_, *this);
 	return *this;
 }
 
@@ -204,7 +206,7 @@ template<typename T> class Proxy
 public:
 	Proxy(T& dest) : id_{0}, dest_{&dest} {}
 	template<typename U>
-	Proxy(const LifeCycle<U>& dest) : id_{dest.id_}, manager_{dest.manager_}
+	Proxy(const LifeCycle<U>& dest) : id_{dest.id()}, manager_{dest.manager()}
 	{
 		// Statically check (at compile-time) that U is a subclass of T
 		UNUSED types_traits::derives_from<U, T> check;
@@ -225,6 +227,19 @@ public:
 		return target();
 	}
 
+	uint8_t id() const
+	{
+		return id_;
+	}
+	T* destination() const
+	{
+		return (id_ == 0 ? dest_ : nullptr);
+	}
+	AbstractLifeCycleManager* manager() const
+	{
+		return (id_ != 0 ? manager_ : nullptr);
+	}
+
 private:
 	T* target() const
 	{
@@ -240,9 +255,6 @@ private:
 		T* dest_;
 		AbstractLifeCycleManager* manager_;
 	};
-
-	//TODO remove (for debug only)
-	friend void check_proxies(streams::ostream&, AbstractLifeCycleManager&);
 };
 
 // Usage Example
@@ -403,15 +415,14 @@ void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 	assert(out, F("lc2.id()"), 2, lc2.id());
 
 	Proxy<Value> p3{lc1};
-	out << F("p3.id_=") << dec << p3.id_ << endl;
-	//TODO The following line does not work
+	out << F("p3.id=") << dec << p3.id()
+		<< F(" p3.manager=") << hex << p3.manager() 
+		<< F(" p3.dest=") << hex << p3.destination() << endl;
 	Proxy<Value> p4{lc2};
-	// But the following line does work
-	// Proxy<SubValue> p4{lc2};
-	//FIXME this line shows 0 for id_
-	out << F("p4.id_=") << dec << p4.id_ << F(" p4.manager_=") << hex << p4.manager_ << endl;
+	out << F("p4.id=") << dec << p4.id() 
+		<< F(" p4.manager=") << hex << p4.manager()
+		<< F(" p4.dest=") << hex << p4.destination() << endl;
 	out << F("p3->val() ") << hex << &p3 << ' ' << dec << p3->val() << endl;
-	//FIXME this line shows 0 for val()
 	out << F("p4->val() ") << hex << &p4 << ' ' << dec << p4->val() << endl;
 }
 
