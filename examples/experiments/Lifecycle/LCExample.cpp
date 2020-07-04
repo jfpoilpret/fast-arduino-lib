@@ -9,7 +9,7 @@
 #include <fastarduino/iomanip.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/move.h>
-#include "lifecycle.h"
+#include <fastarduino/lifecycle.h>
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
