@@ -28,7 +28,7 @@ REGISTER_UATX_ISR(0)
 // => that would bring additional code maybe for nothing?
 
 // Forward declaration
-class LifeCycleManager;
+class AbstractLifeCycleManager;
 template<typename T> class LifeCycle;
 
 // LifeCycle handling
@@ -50,20 +50,20 @@ public:
 
 private:
 	uint8_t id_ = 0;
-	LifeCycleManager* manager_ = nullptr;
+	AbstractLifeCycleManager* manager_ = nullptr;
 
-	friend class LifeCycleManager;
+	friend class AbstractLifeCycleManager;
 	template<typename T> friend class Proxy;
 };
 
-class LifeCycleManager
+class AbstractLifeCycleManager
 {
 public:
 	template<uint8_t SIZE>
-	LifeCycleManager(AbstractLifeCycle* (&slots)[SIZE]) : size_{SIZE}, slots_{slots}, free_slots_{SIZE} {}
-	~LifeCycleManager() = default;
-	LifeCycleManager(const LifeCycleManager&) = delete;
-	LifeCycleManager& operator=(const LifeCycleManager&) = delete;
+	AbstractLifeCycleManager(AbstractLifeCycle* (&slots)[SIZE]) : size_{SIZE}, slots_{slots}, free_slots_{SIZE} {}
+	~AbstractLifeCycleManager() = default;
+	AbstractLifeCycleManager(const AbstractLifeCycleManager&) = delete;
+	AbstractLifeCycleManager& operator=(const AbstractLifeCycleManager&) = delete;
 
 	template<typename T> uint8_t register_(LifeCycle<T>& instance)
 	{
@@ -229,7 +229,7 @@ public:
 
 private:
 	const uint8_t id_;
-	LifeCycleManager* manager_;
+	AbstractLifeCycleManager* manager_;
 };
 
 // Usage Example
@@ -302,7 +302,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static constexpr const uint8_t MAX_LC_SLOTS = 32;
 static AbstractLifeCycle* lc_slots[MAX_LC_SLOTS];
 
-template<typename T> static void check(ostream& out, LifeCycleManager& manager, const T& init)
+template<typename T> static void check(ostream& out, AbstractLifeCycleManager& manager, const T& init)
 {
 	{
 		out << F("0. Instance creation") << endl;
@@ -414,7 +414,7 @@ int main()
 
 	// Create manager
 	out << F("Instantiate LifeCycleManager") << endl;
-	LifeCycleManager manager{lc_slots};
+	AbstractLifeCycleManager manager{lc_slots};
 	// Check available slots
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 
