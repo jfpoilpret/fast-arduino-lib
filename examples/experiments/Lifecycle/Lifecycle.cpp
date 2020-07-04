@@ -194,10 +194,8 @@ template<typename T> class LifeCycle : public AbstractLifeCycle, public T
 {
 public:
 	LifeCycle(const T& value = T{}) : AbstractLifeCycle{}, T{value} {}
-	// LifeCycle(const LifeCycle<T>&) = delete;
 	LifeCycle(LifeCycle<T>&& that) = default;
 	~LifeCycle() = default;
-	// LifeCycle<T>& operator=(const LifeCycle<T>&) = delete;
 	LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 };
 
@@ -212,6 +210,10 @@ public:
 	T& operator*()
 	{
 		return *dest_;
+	}
+	T* operator&()
+	{
+		return dest_;
 	}
 	T* operator->()
 	{
@@ -234,6 +236,10 @@ public:
 	{
 		return *(manager_->find_<T>(id_));
 	}
+	LC* operator&()
+	{
+		return manager_->find_<T>(id_);
+	}
 	LC* operator->()
 	{
 		return manager_->find_<T>(id_);
@@ -242,6 +248,9 @@ public:
 private:
 	const uint8_t id_;
 	AbstractLifeCycleManager* manager_;
+
+	//TODO remove (for debug only)
+	friend void check_proxies(streams::ostream&, AbstractLifeCycleManager&);
 };
 
 // Usage Example
@@ -384,23 +393,34 @@ private:
 	int val2_;
 };
 
-void check_proxies(ostream& out)
+void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 {
 	Value v1{10};
 	SubValue v2{20, 30};
-	LifeCycle<Value> lc1{v1};
-	LifeCycle<SubValue> lc2{v2};
 
 	Proxy<Value> p1{v1};
 	Proxy<Value> p2{v2};
-	Proxy<LifeCycle<Value>> p3{lc1};
-	Proxy<LifeCycle<Value>> p4{lc2};
+	out << F("p1->val() ") << hex << &p1 << ' ' << dec << p1->val() << endl;
+	out << F("p2->val() ") << hex << &p2 << ' ' << dec << p2->val() << endl;
 
-	out << F("p1->val()") << dec << p1->val() << endl;
-	out << F("p2->val()") << dec << p2->val() << endl;
-	//FIXME both lines show 0 for val()
-	out << F("p3->val()") << dec << p3->val() << endl;
-	out << F("p4->val()") << dec << p4->val() << endl;
+	LifeCycle<Value> lc1{v1};
+	assert(out, F("manager.register_(lc1)"), 1, manager.register_(lc1));
+	assert(out, F("lc1.id()"), 1, lc1.id());
+	LifeCycle<SubValue> lc2{v2};
+	assert(out, F("manager.register_(lc2)"), 2, manager.register_(lc2));
+	assert(out, F("lc2.id()"), 2, lc2.id());
+
+	Proxy<LifeCycle<Value>> p3{lc1};
+	out << F("p3.id_=") << dec << p3.id_ << endl;
+	//TODO The following line does not work
+	// Proxy<LifeCycle<Value>> p4{lc2};
+	// But the following line does not work
+	Proxy<LifeCycle<SubValue>> p4{lc2};
+	//FIXME this line shows 0 for id_
+	out << F("p4.id_=") << dec << p4.id_ << F(" p4.manager_=") << hex << p4.manager_ << endl;
+	out << F("p3->val() ") << hex << &p3 << ' ' << dec << p3->val() << endl;
+	//FIXME this line shows 0 for val()
+	out << F("p4->val() ") << hex << &p4 << ' ' << dec << p4->val() << endl;
 }
 
 int main() __attribute__((OS_main));
@@ -430,7 +450,7 @@ int main()
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 
 	// Check different types T (int, struct, with/without dtor/ctor/op=...)
-	check<Value>(out, manager, VAL0);
+	// check<Value>(out, manager, VAL0);
 
-	// check_proxies(out);
+	check_proxies(out, manager);
 }
