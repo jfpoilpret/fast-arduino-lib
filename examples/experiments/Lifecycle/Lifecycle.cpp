@@ -363,7 +363,6 @@ private:
 	int val2_;
 };
 
-//TODO sample proxy usage (to be achieved)
 void check_proxies(ostream& out)
 {
 	Value v1{10};
@@ -378,6 +377,7 @@ void check_proxies(ostream& out)
 
 	out << F("p1->val()") << dec << p1->val() << endl;
 	out << F("p2->val()") << dec << p2->val() << endl;
+	//FIXME both lines show 0 for val()
 	out << F("p3->val()") << dec << p3->val() << endl;
 	out << F("p4->val()") << dec << p4->val() << endl;
 }
@@ -411,5 +411,5 @@ int main()
 	// Check different types T (int, struct, with/without dtor/ctor/op=...)
 	check<Value>(out, manager, VAL0);
 
-	check_proxies(out);
+	// check_proxies(out);
 }
