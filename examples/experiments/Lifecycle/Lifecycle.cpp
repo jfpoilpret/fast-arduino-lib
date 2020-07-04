@@ -185,7 +185,7 @@ template<typename T> class Proxy
 public:
 	Proxy(T& dest) : dest_{&dest} {}
 	Proxy(const Proxy&) = default;
-	Proxy operator=(const Proxy&) = default;
+	Proxy& operator=(const Proxy&) = default;
 
 	T& operator*()
 	{
@@ -206,7 +206,7 @@ template<typename T> class Proxy<LifeCycle<T>>
 public:
 	Proxy(const LC& dest) : id_{dest.id_}, manager_{dest.manager_} {}
 	Proxy(const Proxy&) = default;
-	Proxy operator=(const Proxy&) = default;
+	Proxy& operator=(const Proxy&) = default;
 
 	LC& operator*()
 	{
@@ -273,7 +273,7 @@ public:
 		return *out_;
 	}
 
-private:
+protected:
 	void trace(char method)
 	{
 		if (out_)
@@ -344,6 +344,44 @@ template<typename T> static void check(ostream& out, LifeCycleManager& manager, 
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 }
 
+class SubValue : public Value
+{
+public:
+	SubValue(int val = 0, int val2 = 0) : Value{val}, val2_{val2} {}
+	~SubValue() = default;
+	SubValue(const SubValue& that) = default;
+	SubValue(SubValue&& that) = default;
+	SubValue& operator=(const SubValue& that) = default;
+	SubValue& operator=(SubValue&& that) = default;
+
+	int val2() const
+	{
+		return val2_;
+	}
+
+private:
+	int val2_;
+};
+
+//TODO sample proxy usage (to be achieved)
+void check_proxies(ostream& out)
+{
+	Value v1{10};
+	SubValue v2{20, 30};
+	LifeCycle<Value> lc1{v1};
+	LifeCycle<SubValue> lc2{v2};
+
+	Proxy<Value> p1{v1};
+	Proxy<Value> p2{v2};
+	Proxy<LifeCycle<Value>> p3{lc1};
+	Proxy<LifeCycle<Value>> p4{lc2};
+
+	out << F("p1->val()") << dec << p1->val() << endl;
+	out << F("p2->val()") << dec << p2->val() << endl;
+	out << F("p3->val()") << dec << p3->val() << endl;
+	out << F("p4->val()") << dec << p4->val() << endl;
+}
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -372,4 +410,6 @@ int main()
 
 	// Check different types T (int, struct, with/without dtor/ctor/op=...)
 	check<Value>(out, manager, VAL0);
+
+	check_proxies(out);
 }
