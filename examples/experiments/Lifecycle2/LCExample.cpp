@@ -146,9 +146,33 @@ static int check_proxies_inheritance(AbstractLifeCycleManager& manager)
 	return value;
 }
 
+//TODO temporary work on proxy optimization
+union proxy
+{
+	struct
+	{
+		uint16_t is_dynamic : 1;
+		uintptr_t ptr : 15;
+	};
+	struct
+	{
+		uint8_t reserved;
+		uint8_t id;
+	};
+};
+constexpr size_t proxy_size = sizeof(proxy);
+
 int main() __attribute__((OS_main));
 int main()
 {
+	proxy p1;
+	p1.is_dynamic = true;
+	p1.ptr = uintptr_t(nullptr);
+
+	proxy p2;
+	p2.is_dynamic = false;
+	p2.id = 0x80;
+
 	board::init();
 
 	// Enable interrupts at startup time
