@@ -399,8 +399,6 @@ namespace lifecycle
 		LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 	};
 
-	//TODO second proxy flavour (with externalized manager: 2 bytes instead of 3)
-	//TODO define abstract base class to factor out common code?
 	/**
 	 * A proxy class that encapsulates access to a fixed @p T instance, or to
 	 * a dynamic LifeCycle<T> instance.
@@ -425,7 +423,7 @@ namespace lifecycle
 		/**
 		 * Create a Proxy<T> to a LifeCycle<U> instance (dynamic reference).
 		 * @tparam U the type of reference held by @p dest; must be @p T or a
-		 * subclass of @p T,otherwise code will not compile.
+		 * subclass of @p T, otherwise code will not compile.
 		 * @param dest the reference to a LifeCycle<U> instance to proxify; if
 		 * @p dest is later moved, it will eb automatically tracked by this Proxy<T>.
 		 * 
@@ -502,6 +500,81 @@ namespace lifecycle
 			bool is_dynamic_ : 1;
 			uintptr_t ptr_ : 15;
 			uint8_t id_;
+		};
+	};
+
+	//TODO define abstract base class to factor out common code?
+	//TODO DOC
+	template<typename T> class SmallProxy
+	{
+	public:
+		/**
+		 * Create a SmallProxy<T> to a static reference.
+		 * @param dest the reference to a @p T instance to proxify.
+		 */
+		SmallProxy(T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
+
+		/**
+		 * Create a SmallProxy<T> to a LifeCycle<U> instance (dynamic reference).
+		 * @tparam U the type of reference held by @p dest; must be @p T or a
+		 * subclass of @p T, otherwise code will not compile.
+		 * @param dest the reference to a LifeCycle<U> instance to proxify; if
+		 * @p dest is later moved, it will eb automatically tracked by this Proxy<T>.
+		 * 
+		 * @sa LifeCycle<T>
+		 */
+		template<typename U>
+		SmallProxy(const LifeCycle<U>& dest) : is_dynamic_{true}, id_{dest.id()}
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+		}
+
+		/// @cond notdocumented
+		SmallProxy(const SmallProxy&) = default;
+		SmallProxy& operator=(const SmallProxy&) = default;
+		/// @endcond
+
+		//TODO DOC
+		T* target(AbstractLifeCycleManager* manager) const
+		{
+			if (is_dynamic_)
+				return manager->find_<T>(id_);
+			else
+				return reinterpret_cast<T*>(ptr_);
+		}
+
+		/**
+		 * The identifier of the proxified LifeCycle<U> or `0` if a static instance
+		 * was proxified.
+		 */
+		uint8_t id() const
+		{
+			return id_;
+		}
+
+		/**
+		 * A pointer to the static instance proxified, or `nullptr` if a dynamic 
+		 * instance (a LifeCycle<U>) was proxified.
+		 */
+		T* destination() const
+		{
+			return (is_dynamic_ ? nullptr : reinterpret_cast<T*>(ptr_));
+		}
+
+	private:
+		union
+		{
+			struct
+			{
+				uint16_t is_dynamic_ : 1;
+				uintptr_t ptr_ : 15;
+			};
+			struct
+			{
+				uint8_t reserved_;
+				uint8_t id_;
+			};
 		};
 	};
 }
