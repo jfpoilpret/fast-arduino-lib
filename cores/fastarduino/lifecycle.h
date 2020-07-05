@@ -57,7 +57,7 @@ namespace lifecycle
 	 * Once registered with a LifeCycleManager, it holds a unique id and the 
 	 * reference to its LifeCycleManager.
 	 * 
-	 * You shall nomrally never use this class directly, butonly its template 
+	 * You shall normally never use this class directly, but only its template 
 	 * subclass LifeCycle<T>.
 	 * 
 	 * @sa LifeCycle<T>
@@ -66,7 +66,7 @@ namespace lifecycle
 	class AbstractLifeCycle
 	{
 	public:
-		//TODO DOC
+		/// @cond notdocumented
 		AbstractLifeCycle() = default;
 		AbstractLifeCycle(AbstractLifeCycle&& that);
 		~AbstractLifeCycle();
@@ -74,11 +74,40 @@ namespace lifecycle
 
 		AbstractLifeCycle(const AbstractLifeCycle&) = delete;
 		AbstractLifeCycle& operator=(const AbstractLifeCycle&) = delete;
+		/// @endcond
 
+		/**
+		 * The unique identifier of this lifecycle-managed instance, as provided 
+		 * by the LifeCycleManager it was registered with.
+		 * When `0`, it means this instance has not been registered yet, or it has 
+		 * been unregistered since.
+		 * 
+		 * @note any registered instance may be implicitly unregistered after 
+		 * being "moved" to another instance (through usage of its move-constructor
+		 * or move-assignment operator).
+		 * 
+		 * @sa AbstractLifeCycleManager.register_()
+		 * @sa AbstractLifeCycleManager.unregister_()
+		 * @sa std::move()
+		 */
 		uint8_t id() const
 		{
 			return id_;
 		}
+
+		/**
+		 * A pointer to the AbstractLifeCycleManager handling this instance.
+		 * When `nullptr`, it means this instance has not been registered yet, 
+		 * or it has been unregistered since.
+		 * 
+		 * @note any registered instance may be implicitly unregistered after 
+		 * being "moved" to another instance (through usage of its move-constructor
+		 * or move-assignment operator).
+		 * 
+		 * @sa AbstractLifeCycleManager.register_()
+		 * @sa AbstractLifeCycleManager.unregister_()
+		 * @sa std::move()
+		 */
 		AbstractLifeCycleManager* manager() const
 		{
 			return manager_;
@@ -101,12 +130,50 @@ namespace lifecycle
 	class AbstractLifeCycleManager
 	{
 	public:
-		//TODO DOC
+		/**
+		 * Register a LifeCycle<T> instance with this LifeCycleManager.
+		 * From now on, @p instance is tracked by this LifeCycleManager,
+		 * in particular if it is moved around, its latest address is updated.
+		 * It is assigned a unique identifier so that it can be retrieved, later 
+		 * on, by calling find_().
+		 * 
+		 * @warning This method is NOT synchronized and should be called either
+		 * from an ISR, or from a synchronized block.
+		 * 
+		 * @tparam T the type encapsulated in a LifeCycle<T> type
+		 * @param instance a reference to an LifeCycle<T> to register with this
+		 * LifeCycleManager
+		 * @return a unique identifier for the registered instance
+		 * @retval 0 if an error occurred; this can happen when too many instances 
+		 * are already registered with this LifeCycleManager, or when @p instance
+		 * is already registered (with yhis or any LifeCycleManager).
+		 * 
+		 * @sa LifeCycle<T>
+		 * @sa unregister_()
+		 * @sa find_()
+		 */
 		template<typename T> uint8_t register_(LifeCycle<T>& instance)
 		{
 			return register_impl_(instance);
 		}
 
+		/**
+		 * Unregisters a LifeCycle<T> instance, identified by @p id, already 
+		 * registered with this LifeCycleManager.
+		 * 
+		 * @note This is automatically called by LifeCycle<T> destructor.
+		 * 
+		 * @warning This method is NOT synchronized and should be called either
+		 * from an ISR, or from a synchronized block.
+		 * 
+		 * @param id the unique identifier for the LifeCycle<T> instance to 
+		 * unregister; this is the value returned by register_().
+		 * @retval true if the LifeCycle<T> instance was found and successfully
+		 * deregistered
+		 * @retval false if there is no registered instance identified by @p id
+		 * 
+		 * @sa register_()
+		 */
 		bool unregister_(uint8_t id)
 		{
 			AbstractLifeCycle** slot = find_slot_(id);
@@ -120,11 +187,39 @@ namespace lifecycle
 			return true;
 		}
 
+		/**
+		 * Return the number of available "slots" for registration of new
+		 * LifeCycle<T> instances.
+		 * 
+		 * @note This method is atomic, hnece it can freely be called from an ISR
+		 * or normal code without any synchronization required.
+		 */
 		uint8_t available_() const
 		{
 			return free_slots_;
 		}
 		
+		/**
+		 * Move an already registered LifeCycle<T> instance (identified by @p id)
+		 * to a new location, determine by @p dest.
+		 * Once this method is called, the previous LifeCycle<T> instance becomes
+		 * unusable (its identifier is reset to `0`).
+		 * 
+		 * @warning This method is automatically called when a registered LifeCycle<T>
+		 * is moved to another instance. You should normally never need to call 
+		 * this method directly. 
+		 * 
+		 * @warning This method is NOT synchronized and should be called either
+		 * from an ISR, or from a synchronized block.
+		 * 
+		 * @param id the unique identifier for the LifeCycle<T> instance to 
+		 * move; this is the value returned by register_().
+		 * @param dest a reference to a LifeCycle<T> instance to receive the instance
+		 * currently identified by @p id
+		 * @retval true if the LifeCycle<T> instance was found and successfully
+		 * moved to @p dest
+		 * @retval false if there is no registered instance identified by @p id
+		 */
 		bool move_(uint8_t id, AbstractLifeCycle& dest)
 		{
 			// Check this instance is managed
@@ -140,6 +235,24 @@ namespace lifecycle
 			return true;
 		}
 
+		/**
+		 * Find an existing LifeCycle<T> registered with this LifeCycleManager
+		 * and identified by @p id.
+		 * This is the only way to get a pointer to the right location of an
+		 * instance.
+		 * 
+		 * @warning This method is NOT synchronized and should be called either
+		 * from an ISR, or from a synchronized block.
+		 * 
+		 * @tparam T the type encapsulated in a LifeCycle<T> type
+		 * @param id the unique identifier for the LifeCycle<T> instance to 
+		 * look for; this is the value returned by register_().
+		 * @return a pointer to the found LifeCycle<T> instance
+		 * @retval nullptr if there is no registered instance identified by @p id
+		 * 
+		 * @sa LifeCycle<T>
+		 * @sa register_()
+		 */
 		template<typename T> LifeCycle<T>* find_(uint8_t id) const
 		{
 			return static_cast<LifeCycle<T>*>(find_impl_(id));
@@ -208,7 +321,18 @@ namespace lifecycle
 		uint8_t last_removed_id_ = 0;
 	};
 
-	//TODO DOC
+	/**
+	 * An actual LifeCycleManager implementation, based on `AbstractLifeCycleManager`,
+	 * adding static storage for it.
+	 * 
+	 * @tparam SIZE the maximum number of `LifeCycle<T> instances this 
+	 * LifeCycleManager can register,
+	 * 
+	 * @sa AbstractLifeCycleManager
+	 * @sa register_()
+	 * @sa unregister_()
+	 * @sa available_()
+	 */
 	template<uint8_t SIZE> class LifeCycleManager : public AbstractLifeCycleManager
 	{
 	public:
@@ -218,51 +342,146 @@ namespace lifecycle
 		AbstractLifeCycle* slots_buffer_[SIZE];
 	};
 
-	//TODO DOC
+	/**
+	 * A mixin class allowing lifecycle management of any object of any type @p T.
+	 * 
+	 * @tparam T the type of object for which we want to manage lifecycle
+	 * 
+	 * @sa LifeCycleManager
+	 */
 	template<typename T> class LifeCycle : public AbstractLifeCycle, public T
 	{
 	public:
+		/**
+		 * Create a new LifeCycle<T> mixin for object @p value of type @p T.
+		 * This can be registered with a LifeCycleManager and then tracked
+		 * wherever it gets moved.
+		 * 
+		 * @param value the original value of this @p T instance
+		 */
 		LifeCycle(const T& value = T{}) : AbstractLifeCycle{}, T{value} {}
+
+		/**
+		 * Crate a new LifeCycle<T> mixin object of type @p T, by moving an
+		 * already existing LifeCycle<T> instance @p that.
+		 * Once this is constructed, @p that was automatically unregistered from
+		 * its LifeCycleManager.
+		 * 
+		 * @param that the rvalue of an existing LifeCycle<T> instance (possibly 
+		 * registered already or not) to be moved into this.
+		 * 
+		 * @sa std::move()
+		 * @sa AbstractLifeCycleManager::move_()
+		 */
 		LifeCycle(LifeCycle<T>&& that) = default;
+
+		/**
+		 * Destroy this LifeCycle<T> instance.
+		 * That destructor unregisters this instance from its LifeCycleManager
+		 * (if already registered).
+		 */
 		~LifeCycle() = default;
+
+		/**
+		 * Assign this LifeCycle<T> with @p that, by moving that already
+		 * existing LifeCycle<T> instance.
+		 * Before assignment, this is automatically unregistered from its 
+		 * LifeCycleManager, if needed.
+		 * Once assignment is completed, @p that was automatically unregistered from
+		 * its LifeCycleManager.
+		 * 
+		 * @param that the rvalue of an existing LifeCycle<T> instance (possibly 
+		 * registered already or not) to be moved into this.
+		 * 
+		 * @sa std::move()
+		 * @sa AbstractLifeCycleManager::move_()
+		 */
 		LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 	};
 
-	//TODO DOC
+	//TODO improve data size (3 bytes instead of 5) => tricky and risky, but worth it!
+	//TODO second proxy flavour (with externalized manager: 2 bytes instead of 3)
+	//TODO define abstract base class to factor out common code?
+	/**
+	 * A proxy class that encapsulates access to a fixed @p T instance, or to
+	 * a dynamic LifeCycle<T> instance.
+	 * This allows to define a method which argument does not have to care whether
+	 * the object passed should be dynamic or static.
+	 * 
+	 * @warning Since proxying a @p T instance incurs overhead (data size, code size
+	 * and speed), you should use Proxy<T> only when it makes sense.
+	 * 
+	 * @tparam T the type of the object proxied
+	 */
 	template<typename T> class Proxy
 	{
 	public:
+		/**
+		 * Create a Proxy<T> to a static reference.
+		 * @param dest the reference to a @p T instance to proxify.
+		 */
 		Proxy(T& dest) : id_{0}, dest_{&dest} {}
+
+		/**
+		 * Create a Proxy<T> to a LifeCycle<U> instance (dynamic reference).
+		 * @tparam U the type of reference held by @p dest; must be @p T or a
+		 * subclass of @p T,otherwise code will not compile.
+		 * @param dest the reference to a LifeCycle<U> instance to proxify; if
+		 * @p dest is later moved, it will eb automatically tracked by this Proxy<T>.
+		 * 
+		 * @sa LifeCycle<T>
+		 */
 		template<typename U>
 		Proxy(const LifeCycle<U>& dest) : id_{dest.id()}, manager_{dest.manager()}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
 		}
+
+		/// @cond notdocumented
 		Proxy(const Proxy&) = default;
 		Proxy& operator=(const Proxy&) = default;
+		/// @endcond
 
+		/**
+		 * Return a reference to the proxified @p T instance.
+		 */
 		T& operator*()
 		{
 			return *target();
 		}
-		T* operator&()
-		{
-			return target();
-		}
+
+		/**
+		 * Overloaded `->` operator, allowing access to proxified type @p T instance
+		 * members.
+		 */
 		T* operator->()
 		{
 			return target();
 		}
 
+		/**
+		 * The identifier of the proxified LifeCycle<U> or `0` if a static instance
+		 * was proxified.
+		 */
 		uint8_t id() const
 		{
 			return id_;
 		}
+
+		/**
+		 * A pointer to the static instance proxified, or `nullptr` if a dynamic 
+		 * instance (a LifeCycle<U>) was proxified.
+		 */
 		T* destination() const
 		{
 			return dest_;
 		}
+
+		/**
+		 * The LifeCycleManager managing the proxified LifeCycle<U>, or `nullptr`
+		 * if a static instance was proxified.
+		 */
 		AbstractLifeCycleManager* manager() const
 		{
 			return manager_;
