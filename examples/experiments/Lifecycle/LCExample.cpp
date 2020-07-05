@@ -3,7 +3,6 @@
  * handling lifecycle of specific objects.
  */
 
-// includes for the example program itself
 #include <fastarduino/tests/assertions.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
