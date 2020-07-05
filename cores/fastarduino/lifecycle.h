@@ -399,7 +399,6 @@ namespace lifecycle
 		LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 	};
 
-	//TODO improve data size (3 bytes instead of 5) => tricky and risky, but worth it!
 	//TODO second proxy flavour (with externalized manager: 2 bytes instead of 3)
 	//TODO define abstract base class to factor out common code?
 	/**
@@ -420,7 +419,8 @@ namespace lifecycle
 		 * Create a Proxy<T> to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
-		Proxy(T& dest) : id_{0}, dest_{&dest} {}
+		Proxy(T& dest)
+			:	is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, id_{0} {}
 
 		/**
 		 * Create a Proxy<T> to a LifeCycle<U> instance (dynamic reference).
@@ -432,7 +432,8 @@ namespace lifecycle
 		 * @sa LifeCycle<T>
 		 */
 		template<typename U>
-		Proxy(const LifeCycle<U>& dest) : id_{dest.id()}, manager_{dest.manager()}
+		Proxy(const LifeCycle<U>& dest)
+			:	is_dynamic_{true}, ptr_{reinterpret_cast<uintptr_t>(dest.manager())}, id_{dest.id()}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
@@ -475,7 +476,7 @@ namespace lifecycle
 		 */
 		T* destination() const
 		{
-			return dest_;
+			return (is_dynamic_ ? nullptr : reinterpret_cast<T*>(ptr_));
 		}
 
 		/**
@@ -484,21 +485,24 @@ namespace lifecycle
 		 */
 		AbstractLifeCycleManager* manager() const
 		{
-			return manager_;
+			return (is_dynamic_ ? reinterpret_cast<AbstractLifeCycleManager*>(ptr_) : nullptr);
 		}
 
 	private:
 		T* target() const
 		{
-			if (manager_ == nullptr)
-				return dest_;
+			if (is_dynamic_)
+				return reinterpret_cast<AbstractLifeCycleManager*>(ptr_)->find_<T>(id_);
 			else
-				return manager_->find_<T>(id_);
+				return reinterpret_cast<T*>(ptr_);
 		}
 
-		const uint8_t id_;
-		T* dest_ = nullptr;
-		AbstractLifeCycleManager* manager_ = nullptr;
+		struct
+		{
+			bool is_dynamic_ : 1;
+			uintptr_t ptr_ : 15;
+			uint8_t id_;
+		};
 	};
 }
 

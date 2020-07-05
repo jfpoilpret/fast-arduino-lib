@@ -147,6 +147,7 @@ template<typename T> static void check(ostream& out, AbstractLifeCycleManager& m
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 }
 
+//TODO also check static proxies!!
 void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 {
 	Value v1{10};
@@ -154,8 +155,8 @@ void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 
 	Proxy<Value> p1{v1};
 	Proxy<Value> p2{v2};
-	out << F("p1->val() ") << hex << &p1 << ' ' << dec << p1->val() << endl;
-	out << F("p2->val() ") << hex << &p2 << ' ' << dec << p2->val() << endl;
+	out << F("p1->val() ") << hex << &(*p1) << ' ' << dec << p1->val() << endl;
+	out << F("p2->val() ") << hex << &(*p2) << ' ' << dec << p2->val() << endl;
 
 	LifeCycle<Value> lc1{v1};
 	assert(out, F("manager.register_(lc1)"), 1, manager.register_(lc1));
@@ -172,8 +173,8 @@ void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 	out << F("p4.id=") << dec << p4.id() 
 		<< F(" p4.manager=") << hex << p4.manager()
 		<< F(" p4.dest=") << hex << p4.destination() << endl;
-	out << F("p3->val() ") << hex << &p3 << ' ' << dec << p3->val() << endl;
-	out << F("p4->val() ") << hex << &p4 << ' ' << dec << p4->val() << endl;
+	out << F("p3->val() ") << hex << &(*p3) << ' ' << dec << p3->val() << endl;
+	out << F("p4->val() ") << hex << &(*p4) << ' ' << dec << p4->val() << endl;
 
 	// This shall not compile
 	// Proxy<SubValue> p5{lc1};
