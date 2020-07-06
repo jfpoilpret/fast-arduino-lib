@@ -505,17 +505,18 @@ namespace lifecycle
 
 	//TODO define abstract base class to factor out common code?
 	//TODO DOC
-	template<typename T> class SmallProxy
+	//TODO bridge from Proxy to LightProxy?
+	template<typename T> class LightProxy
 	{
 	public:
 		/**
-		 * Create a SmallProxy<T> to a static reference.
+		 * Create a LightProxy<T> to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
-		SmallProxy(T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
+		LightProxy(T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
 
 		/**
-		 * Create a SmallProxy<T> to a LifeCycle<U> instance (dynamic reference).
+		 * Create a LightProxy<T> to a LifeCycle<U> instance (dynamic reference).
 		 * @tparam U the type of reference held by @p dest; must be @p T or a
 		 * subclass of @p T, otherwise code will not compile.
 		 * @param dest the reference to a LifeCycle<U> instance to proxify; if
@@ -524,19 +525,19 @@ namespace lifecycle
 		 * @sa LifeCycle<T>
 		 */
 		template<typename U>
-		SmallProxy(const LifeCycle<U>& dest) : is_dynamic_{true}, id_{dest.id()}
+		LightProxy(const LifeCycle<U>& dest) : is_dynamic2_{true}, id_{dest.id()}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
 		}
 
 		/// @cond notdocumented
-		SmallProxy(const SmallProxy&) = default;
-		SmallProxy& operator=(const SmallProxy&) = default;
+		LightProxy(const LightProxy&) = default;
+		LightProxy& operator=(const LightProxy&) = default;
 		/// @endcond
 
 		//TODO DOC
-		T* target(AbstractLifeCycleManager* manager) const
+		T* operator()(AbstractLifeCycleManager* manager = nullptr) const
 		{
 			if (is_dynamic_)
 				return manager->find_<T>(id_);
@@ -572,7 +573,8 @@ namespace lifecycle
 			};
 			struct
 			{
-				uint8_t reserved_;
+				uint8_t is_dynamic2_ : 1;
+				uint8_t reserved_ : 7;
 				uint8_t id_;
 			};
 		};
