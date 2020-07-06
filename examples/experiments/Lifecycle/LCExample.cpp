@@ -97,6 +97,7 @@ static constexpr const uint8_t MAX_LC_SLOTS = 32;
 
 template<typename T> static void check(ostream& out, AbstractLifeCycleManager& manager, const T& init)
 {
+	out << F("Check LifeCycle management") << endl;
 	{
 		out << F("0. Instance creation") << endl;
 		LifeCycle<T> instance{init};
@@ -147,12 +148,47 @@ template<typename T> static void check(ostream& out, AbstractLifeCycleManager& m
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 }
 
-//TODO also check static proxies!!
-void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
+void check_light_proxies(ostream& out, AbstractLifeCycleManager& manager)
 {
+	out << F("Check LightProxy class") << endl;
+
 	Value v1{10};
 	SubValue v2{20, 30};
 
+	assert(out, F("sizeof LightProxy<Value>"), 2u, sizeof(LightProxy<Value>));
+	LightProxy<Value> p1{v1};
+	LightProxy<Value> p2{v2};
+	out << F("p1()->val() ") << hex << p1() << ' ' << dec << p1()->val() << endl;
+	out << F("p2()->val() ") << hex << p2() << ' ' << dec << p2()->val() << endl;
+
+	LifeCycle<Value> lc1{v1};
+	assert(out, F("manager.register_(lc1)"), 1, manager.register_(lc1));
+	assert(out, F("lc1.id()"), 1, lc1.id());
+	LifeCycle<SubValue> lc2{v2};
+	assert(out, F("manager.register_(lc2)"), 2, manager.register_(lc2));
+	assert(out, F("lc2.id()"), 2, lc2.id());
+
+	LightProxy<Value> p3{lc1};
+	out << F("p3.id=") << dec << p3.id()
+		<< F(" p3.dest=") << hex << p3.destination() << endl;
+	LightProxy<Value> p4{lc2};
+	out << F("p4.id=") << dec << p4.id() 
+		<< F(" p4.dest=") << hex << p4.destination() << endl;
+	out << F("p3()->val() ") << hex << p3(&manager) << ' ' << dec << p3(&manager)->val() << endl;
+	out << F("p4()->val() ") << hex << p4(&manager) << ' ' << dec << p4(&manager)->val() << endl;
+
+	// This shall not compile
+	// LightProxy<SubValue> p5{lc1};
+}
+
+void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
+{
+	out << F("Check Proxy class") << endl;
+
+	Value v1{10};
+	SubValue v2{20, 30};
+
+	assert(out, F("sizeof Proxy<Value>"), 3u, sizeof(Proxy<Value>));
 	Proxy<Value> p1{v1};
 	Proxy<Value> p2{v2};
 	out << F("p1->val() ") << hex << &(*p1) << ' ' << dec << p1->val() << endl;
@@ -212,7 +248,9 @@ int main()
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 
 	// Check different types T (int, struct, with/without dtor/ctor/op=...)
-	// check<Value>(out, manager, VAL0);
+	check<Value>(out, manager, VAL0);
 
 	check_proxies(out, manager);
+
+	check_light_proxies(out, manager);
 }
