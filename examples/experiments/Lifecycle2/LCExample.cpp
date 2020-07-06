@@ -122,6 +122,15 @@ template<typename T> static int check_proxies(AbstractLifeCycleManager& manager,
 	return p1->val();
 }
 
+template<typename T> static int check_light_proxies(AbstractLifeCycleManager& manager, const T& init)
+{
+	LifeCycle<T> lc1{init};
+	manager.register_(lc1);
+
+	LightProxy<T> p1{lc1};
+	return p1()->val();
+}
+
 static int check_proxies_inheritance(AbstractLifeCycleManager& manager)
 {
 	int value = 0;
@@ -145,22 +154,6 @@ static int check_proxies_inheritance(AbstractLifeCycleManager& manager)
 
 	return value;
 }
-
-//TODO temporary work on proxy optimization
-union proxy1
-{
-	struct
-	{
-		uint16_t is_dynamic : 1;
-		uintptr_t ptr : 15;
-	};
-	struct
-	{
-		uint8_t reserved;
-		uint8_t id;
-	};
-};
-constexpr size_t proxy1_size = sizeof(proxy1);
 
 int main() __attribute__((OS_main));
 int main()
@@ -188,6 +181,10 @@ int main()
 		value += check_proxies(manager, VAL0);
 		value += check_proxies(manager, VAL1);
 		value += check_proxies(manager, VAL2);
+
+		value += check_light_proxies(manager, VAL0);
+		value += check_light_proxies(manager, VAL1);
+		value += check_light_proxies(manager, VAL2);
 
 		value += check_proxies_inheritance(manager);
 	}
