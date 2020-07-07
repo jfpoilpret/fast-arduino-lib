@@ -409,6 +409,8 @@ namespace lifecycle
 	 * and speed), you should use Proxy<T> only when it makes sense.
 	 * 
 	 * @tparam T the type of the object proxied
+	 * 
+	 * @sa LightProxy
 	 */
 	template<typename T> class Proxy
 	{
@@ -460,6 +462,18 @@ namespace lifecycle
 		}
 
 		/**
+		 * Tell if this Proxy is dynamic or static.
+		 * A dynamic proxy was constructed with a LifeCycle<T> instance and thus 
+		 * ensures that the actual instance will aways be referenced even if it gets 
+		 * moved.
+		 * A static proxy was constructed directly with a @p T instance.
+		 */
+		bool is_dynamic() const
+		{
+			return is_dynamic_;
+		}
+
+		/**
 		 * The identifier of the proxified LifeCycle<U> or `0` if a static instance
 		 * was proxified.
 		 */
@@ -504,8 +518,22 @@ namespace lifecycle
 	};
 
 	//TODO define abstract base class to factor out common code?
-	//TODO DOC
 	//TODO bridge from Proxy to LightProxy?
+	/**
+	 * A light proxy class that encapsulates access to a fixed @p T instance, or to
+	 * a dynamic LifeCycle<T> instance.
+	 * Each instance uses 2 bytes, instead of 3 bytes for a Proxy instance.
+	 * The downside is that a dynamic LightProxy (i.e. constructed with a LifeCycle<T>)
+	 * has to be passed the proper LifeCycleManager every time we want to get the
+	 * pointer to the actual proxied instance.
+	 * 
+	 * @warning Since proxying a @p T instance incurs overhead (data size, code size
+	 * and speed), you should use LightProxy<T> only when it makes sense.
+	 * 
+	 * @tparam T the type of the object proxied
+	 * 
+	 * @sa Proxy
+	 */
 	template<typename T> class LightProxy
 	{
 	public:
@@ -536,13 +564,31 @@ namespace lifecycle
 		LightProxy& operator=(const LightProxy&) = default;
 		/// @endcond
 
-		//TODO DOC
+		/**
+		 * Return a pointer to the proxified @p T instance.
+		 * @param manager a pointer to the LifeCycleManager which was used to 
+		 * register the underlying LifeCycle<T> instance; can be `nullptr` if this
+		 * is a static proxy. Behaviour is undefined if `nullptr` and this LightProxy
+		 * is dynamic.
+		 */
 		T* operator()(AbstractLifeCycleManager* manager = nullptr) const
 		{
 			if (is_dynamic_)
 				return manager->find_<T>(id_);
 			else
 				return reinterpret_cast<T*>(ptr_);
+		}
+
+		/**
+		 * Tell if this LightProxy is dynamic or static.
+		 * A dynamic proxy was constructed with a LifeCycle<T> instance and thus 
+		 * ensures that the actual instance will aways be referenced even if it gets 
+		 * moved.
+		 * A static proxy was constructed directly with a @p T instance.
+		 */
+		bool is_dynamic() const
+		{
+			return is_dynamic_;
 		}
 
 		/**
