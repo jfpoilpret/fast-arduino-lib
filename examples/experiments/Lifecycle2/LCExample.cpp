@@ -122,12 +122,24 @@ template<typename T> static int check_proxies(AbstractLifeCycleManager& manager,
 	return p1->val();
 }
 
+template<typename T> static int check_proxies(const T& init)
+{
+	Proxy<T> p1{init};
+	return p1->val();
+}
+
 template<typename T> static int check_light_proxies(AbstractLifeCycleManager& manager, const T& init)
 {
 	LifeCycle<T> lc1{init};
 	manager.register_(lc1);
 
 	LightProxy<T> p1{lc1};
+	return p1(&manager)->val();
+}
+
+template<typename T> static int check_light_proxies(const T& init)
+{
+	LightProxy<T> p1{init};
 	return p1()->val();
 }
 
@@ -174,19 +186,49 @@ int main()
 	int value = 0;
 	do
 	{
+		__asm__ __volatile__("nop");
 		value += check_lc(manager, VAL0);
+		__asm__ __volatile__("nop");
 		value += check_lc(manager, VAL1);
+		__asm__ __volatile__("nop");
 		value += check_lc(manager, VAL2);
+		__asm__ __volatile__("nop");
 
+		__asm__ __volatile__("nop");
 		value += check_proxies(manager, VAL0);
+		__asm__ __volatile__("nop");
 		value += check_proxies(manager, VAL1);
+		__asm__ __volatile__("nop");
 		value += check_proxies(manager, VAL2);
+		__asm__ __volatile__("nop");
 
+		__asm__ __volatile__("nop");
+		value += check_proxies(VAL0);
+		__asm__ __volatile__("nop");
+		value += check_proxies(VAL1);
+		__asm__ __volatile__("nop");
+		value += check_proxies(VAL2);
+		__asm__ __volatile__("nop");
+
+		__asm__ __volatile__("nop");
 		value += check_light_proxies(manager, VAL0);
+		__asm__ __volatile__("nop");
 		value += check_light_proxies(manager, VAL1);
+		__asm__ __volatile__("nop");
 		value += check_light_proxies(manager, VAL2);
+		__asm__ __volatile__("nop");
 
+		__asm__ __volatile__("nop");
+		value += check_light_proxies(VAL0);
+		__asm__ __volatile__("nop");
+		value += check_light_proxies(VAL1);
+		__asm__ __volatile__("nop");
+		value += check_light_proxies(VAL2);
+		__asm__ __volatile__("nop");
+
+		__asm__ __volatile__("nop");
 		value += check_proxies_inheritance(manager);
+		__asm__ __volatile__("nop");
 	}
 	while (value);
 }
