@@ -517,7 +517,6 @@ namespace lifecycle
 		};
 	};
 
-	//TODO define abstract base class to factor out common code?
 	//TODO bridge from Proxy to LightProxy?
 	/**
 	 * A light proxy class that encapsulates access to a fixed @p T instance, or to
