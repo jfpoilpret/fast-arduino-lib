@@ -419,7 +419,7 @@ namespace lifecycle
 		 * Create a Proxy<T> to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
-		Proxy(T& dest)
+		Proxy(const T& dest)
 			:	is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, id_{0} {}
 
 		/**
@@ -541,7 +541,7 @@ namespace lifecycle
 		 * Create a LightProxy<T> to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
-		LightProxy(T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
+		LightProxy(const T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
 
 		/**
 		 * Create a LightProxy<T> to a LifeCycle<U> instance (dynamic reference).
