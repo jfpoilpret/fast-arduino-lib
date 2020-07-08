@@ -216,6 +216,61 @@ void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 	// Proxy<SubValue> p5{lc1};
 }
 
+void check_proxy_constructors(ostream& out, UNUSED AbstractLifeCycleManager& manager)
+{
+	out << F("Check Proxy constructors") << endl;
+	Value v1{50};
+
+	{
+		Proxy<Value> p1;
+		out << F("Proxy default constructor") << endl;
+		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert(out, F("p1.manager()"), (AbstractLifeCycleManager*) nullptr, p1.manager());
+		assert(out, F("p1.destination()"), (Value*) nullptr, p1.destination());
+
+		p1 = Proxy<Value>{v1};
+		out << F("Proxy assignment operator") << endl;
+		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert(out, F("p1.manager()"), (AbstractLifeCycleManager*) nullptr, p1.manager());
+		assert(out, F("p1.destination()"), &v1, p1.destination());
+		assert(out, F("p1->val()"), 50, p1->val());
+
+		Proxy<Value> p2{p1};
+		out << F("Proxy copy constructor") << endl;
+		assert(out, F("p2.is_dynamic()"), false, p2.is_dynamic());
+		assert(out, F("p2.manager()"), (AbstractLifeCycleManager*) nullptr, p2.manager());
+		assert(out, F("p2.destination()"), &v1, p2.destination());
+		assert(out, F("p2->val()"), 50, p2->val());
+	}
+
+	out << F("Check LightProxy constructors") << endl;
+	{
+		LightProxy<Value> p1;
+		out << F("LightProxy default constructor") << endl;
+		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert(out, F("p1.destination()"), (Value*) nullptr, p1.destination());
+
+		p1 = LightProxy<Value>{v1};
+		out << F("LightProxy assignment operator") << endl;
+		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert(out, F("p1.destination()"), &v1, p1.destination());
+		assert(out, F("p1()->val()"), 50, p1()->val());
+
+		LightProxy<Value> p2{p1};
+		out << F("LightProxy copy constructor") << endl;
+		assert(out, F("p2.is_dynamic()"), false, p2.is_dynamic());
+		assert(out, F("p2.destination()"), &v1, p2.destination());
+		assert(out, F("p2()->val()"), 50, p2()->val());
+
+		out << F("LightProxy conversion constructor from Proxy") << endl;
+		Proxy<Value> p4{v1};
+		LightProxy<Value> p5{p4};
+		assert(out, F("p5.is_dynamic()"), false, p5.is_dynamic());
+		assert(out, F("p5.destination()"), &v1, p5.destination());
+		assert(out, F("p5()->val()"), 50, p5()->val());
+	}
+}
+
 ostream* Value::out_ = nullptr;
 
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
@@ -247,10 +302,12 @@ int main()
 	// Check available slots
 	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 
-	// Check different types T (int, struct, with/without dtor/ctor/op=...)
+	// Check LC
 	check<Value>(out, manager, VAL0);
-
+	// Check full proxies
 	check_proxies(out, manager);
-
+	// Check light proxies
 	check_light_proxies(out, manager);
+	// Check other constructors
+	check_proxy_constructors(out, manager);
 }

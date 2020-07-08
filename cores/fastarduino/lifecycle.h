@@ -440,6 +440,7 @@ namespace lifecycle
 		}
 
 		/// @cond notdocumented
+		Proxy() = default;
 		Proxy(const Proxy&) = default;
 		Proxy& operator=(const Proxy&) = default;
 		/// @endcond
@@ -517,7 +518,6 @@ namespace lifecycle
 		};
 	};
 
-	//TODO bridge from Proxy to LightProxy?
 	/**
 	 * A light proxy class that encapsulates access to a fixed @p T instance, or to
 	 * a dynamic LifeCycle<T> instance.
@@ -558,7 +558,28 @@ namespace lifecycle
 			UNUSED types_traits::derives_from<U, T> check;
 		}
 
+		/**
+		 * Create a LightProxy<T> from a Proxy<T>.
+		 * @param proxy the original Proxy<T> to copy into this LightProxy
+		 * 
+		 * @sa Proxy<T>
+		 */
+		LightProxy(const Proxy<T>& proxy)
+		{
+			if (proxy.is_dynamic())
+			{
+				is_dynamic2_ = true;
+				id_ = proxy.id();
+			}
+			else
+			{
+				is_dynamic_ = false;
+				ptr_ = reinterpret_cast<uintptr_t>(proxy.destination());
+			}
+		}
+
 		/// @cond notdocumented
+		LightProxy() : is_dynamic_{false}, ptr_{0} {}
 		LightProxy(const LightProxy&) = default;
 		LightProxy& operator=(const LightProxy&) = default;
 		/// @endcond
