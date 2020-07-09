@@ -277,24 +277,22 @@ namespace lifecycle
 			if (free_slots_ == 0) return 0;
 			// You cannot register an already registered future
 			if (instance.id_ != 0) return 0;
-			//TODO Check if the following loops could be optimized
-			// Optimization: we start search AFTER the last removed id
-			uint8_t i = last_removed_id_;
-			AbstractLifeCycle** slot = &slots_[i];
-			while (i < size_)
+			// Find first free slot for registration
+			AbstractLifeCycle** slot = &slots_[0];
+			for (uint8_t i = 0; i < size_; ++i)
 			{
-				if (register_at_index_(instance, slot, i))
-					return i + 1;
-				++i;
+				if (*slot == nullptr)
+				{
+					const uint8_t id = i + 1;
+					instance.id_ = id;
+					instance.manager_ = this;
+					*slot = &instance;
+					--free_slots_;
+					return id;
+				}
+				++slot;
 			}
-			i = 0;
-			slot = &slots_[0];
-			while (i <= last_removed_id_)
-			{
-				if (register_at_index_(instance, slot, i))
-					return i + 1;
-				++i;
-			}
+			// No free slot found; should never come here since we checked free_slots_ first
 			return 0;
 		}
 
@@ -315,21 +313,9 @@ namespace lifecycle
 				return &slots_[id - 1];
 		}
 
-		bool register_at_index_(AbstractLifeCycle& instance, AbstractLifeCycle** slot, uint8_t index)
-		{
-			if (*slot != nullptr)
-				return false;
-			instance.id_ = static_cast<uint8_t>(index + 1);
-			instance.manager_ = this;
-			*slot = &instance;
-			--free_slots_;
-			return true;
-		}
-
 		const uint8_t size_;
 		AbstractLifeCycle** slots_;
 		uint8_t free_slots_;
-		uint8_t last_removed_id_ = 0;
 	};
 
 	/**
