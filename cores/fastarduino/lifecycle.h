@@ -273,17 +273,28 @@ namespace lifecycle
 	private:
 		uint8_t register_impl_(AbstractLifeCycle& instance)
 		{
-			// Youcannot register any instance if there are no free slots remaining
+			// You cannot register any instance if there are no free slots remaining
 			if (free_slots_ == 0) return 0;
 			// You cannot register an already registered future
 			if (instance.id_ != 0) return 0;
+			//TODO Check if the following loops could be optimized
 			// Optimization: we start search AFTER the last removed id
-			for (uint8_t i = last_removed_id_; i < size_; ++i)
-				if (register_at_index_(instance, i))
+			uint8_t i = last_removed_id_;
+			AbstractLifeCycle** slot = &slots_[i];
+			while (i < size_)
+			{
+				if (register_at_index_(instance, slot, i))
 					return i + 1;
-			for (uint8_t i = 0; i <= last_removed_id_; ++i)
-				if (register_at_index_(instance, i))
+				++i;
+			}
+			i = 0;
+			slot = &slots_[0];
+			while (i <= last_removed_id_)
+			{
+				if (register_at_index_(instance, slot, i))
 					return i + 1;
+				++i;
+			}
 			return 0;
 		}
 
@@ -304,13 +315,13 @@ namespace lifecycle
 				return &slots_[id - 1];
 		}
 
-		bool register_at_index_(AbstractLifeCycle& instance, uint8_t index)
+		bool register_at_index_(AbstractLifeCycle& instance, AbstractLifeCycle** slot, uint8_t index)
 		{
-			if (slots_[index] != nullptr)
+			if (*slot != nullptr)
 				return false;
 			instance.id_ = static_cast<uint8_t>(index + 1);
 			instance.manager_ = this;
-			slots_[index] = &instance;
+			*slot = &instance;
 			--free_slots_;
 			return true;
 		}
@@ -325,7 +336,7 @@ namespace lifecycle
 	 * An actual LifeCycleManager implementation, based on `AbstractLifeCycleManager`,
 	 * adding static storage for it.
 	 * 
-	 * @tparam SIZE the maximum number of `LifeCycle<T> instances this 
+	 * @tparam SIZE the maximum number of `LifeCycle<T>` instances this 
 	 * LifeCycleManager can register,
 	 * 
 	 * @sa AbstractLifeCycleManager
