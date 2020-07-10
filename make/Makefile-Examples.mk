@@ -133,6 +133,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
+								misc/LifeCycleCheck				\
 								analog/AnalogComparator1		\
 								analog/AnalogComparator2		\
 								analog/AnalogComparator3		\

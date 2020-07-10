@@ -20,17 +20,27 @@
  */
 
 #include <fastarduino/tests/assertions.h>
-#include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/move.h>
 #include <fastarduino/lifecycle.h>
 
-#ifndef ARDUINO_UNO
+#ifdef ARDUINO_UNO
+#define HARD_UART
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
+static constexpr const uint8_t MAX_LC_SLOTS = 32;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
+#elif defined (BREADBOARD_ATTINYX4)
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t MAX_LC_SLOTS = 16;
+#else
 #error "Current target is not yet supported!"
 #endif
-// Register vector for UART (used for debug)
-REGISTER_UATX_ISR(0)
 
 using namespace streams;
 using namespace lifecycle;
@@ -111,8 +121,6 @@ public:
 private:
 	int val2_;
 };
-
-static constexpr const uint8_t MAX_LC_SLOTS = 32;
 
 template<typename T> static void check(ostream& out, AbstractLifeCycleManager& manager, const T& init)
 {
@@ -292,7 +300,6 @@ void check_proxy_constructors(ostream& out, UNUSED AbstractLifeCycleManager& man
 
 ostream* Value::out_ = nullptr;
 
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 int main() __attribute__((OS_main));
@@ -303,8 +310,11 @@ int main()
 	// Enable interrupts at startup time
 	sei();
 
-	// Initialize debugging output
-	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
+#ifdef HARD_UART
+	serial::hard::UATX<UART> uart{output_buffer};
+#else
+	serial::soft::UATX<TX> uart{output_buffer};
+#endif
 	uart.begin(115200);
 	ostream out = uart.out();
 	out << boolalpha << showbase;
