@@ -51,6 +51,7 @@ In the current version, the project covers almost all features; a few missing, l
 What the library already has:
 
 - General utilities (queues, linked lists, busy loop delays)
+- LifeCycle management support to keep track of moving or destroyed objects (preview on Git master, to be released in **v1.6**)
 - "Future" support for asynchronous computation (preview on Git master, to be released in **v1.6**)
 - Fast IO support: template-based, optimized for speed and size
 - Analog Digital Conversion support (in Single Conversion mode)
@@ -138,7 +139,7 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5?closed=1) (released on 1.09.2019)
 - [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6?closed=1) (released on 22.09.2019)
 - [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7?closed=1) (released on 18.01.2020)
-- [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8) (30.06.2020)
+- [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8) (31.07.2020)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
 - [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
