@@ -16,6 +16,7 @@
 
 namespace lifecycle
 {
+	/// @cond notdocumented
 	AbstractLifeCycle::AbstractLifeCycle(AbstractLifeCycle&& that)
 	{
 		if (that.id_)
@@ -34,4 +35,5 @@ namespace lifecycle
 			that.manager()->move_(that.id_, *this);
 		return *this;
 	}
+	/// @endcond
 }

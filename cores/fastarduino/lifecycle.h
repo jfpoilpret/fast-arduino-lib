@@ -19,7 +19,7 @@
  * Utility API to handle lifecycle of objects so that:
  * - objects can be registered and identified with a repository
  * - objects can be removed from the repository
- * - objects can be moved around and still be properyl referenced by their repository
+ * - objects can be moved around and still be properly referenced by their repository
  */
 #ifndef LIFECYCLE_HH
 #define LIFECYCLE_HH
@@ -33,16 +33,16 @@
  * The API is based on the following:
  * - A LifeCycleManager is a repository of some kind of objects
  * - A LifeCycleManager has a limited number of managed objects
- * - Lifecycle management is performed through the template type LifeCycle<T>
+ * - Lifecycle management is performed through the template type `LifeCycle<T>`
  * that manages a T instance; lifecycle allows to move an object across memory
  * location but always have its associated LifeCycleManager keep its latest location
- * - LifeCycle management starts when a LifeCycle<T> instance is registered with a
+ * - LifeCycle management starts when a `LifeCycle<T>` instance is registered with a
  * LifeCycleManager
- * - LifeCycle management ends when a registered LifeCycle<T> instance is destroyed
+ * - LifeCycle management ends when a registered `LifeCycle<T>` instance is destroyed
  * or explicitly deregistered from its LifeCycleManager
  * 
- * In addition, a template Proxy class can be used as a proxy to either a static
- * instance or a lifecycle-managed instance in a consistent way.
+ * In addition, two template Proxy and LightProxy classes can be used as a proxy 
+ * to either a static instance or a lifecycle-managed instance in a consistent way.
  */
 namespace lifecycle
 {
@@ -53,14 +53,14 @@ namespace lifecycle
 	/// @endcond
 
 	/**
-	 * The abstract base class of all LifeCycle<T>.
+	 * The abstract base class of all `LifeCycle<T>`.
 	 * Once registered with a LifeCycleManager, it holds a unique id and the 
 	 * reference to its LifeCycleManager.
 	 * 
 	 * You shall normally never use this class directly, but only its template 
-	 * subclass LifeCycle<T>.
+	 * subclass `LifeCycle<T>`.
 	 * 
-	 * @sa LifeCycle<T>
+	 * @sa LifeCycle
 	 * @sa AbstractLifeCycleManager.register_()
 	 */
 	class AbstractLifeCycle
@@ -125,13 +125,13 @@ namespace lifecycle
 	 * needed API for lifecycle management.
 	 * 
 	 * @sa LifeCycleManager
-	 * @sa LifeCycle<T>
+	 * @sa LifeCycle
 	 */
 	class AbstractLifeCycleManager
 	{
 	public:
 		/**
-		 * Register a LifeCycle<T> instance with this LifeCycleManager.
+		 * Register a `LifeCycle<T>` instance with this LifeCycleManager.
 		 * From now on, @p instance is tracked by this LifeCycleManager,
 		 * in particular if it is moved around, its latest address is updated.
 		 * It is assigned a unique identifier so that it can be retrieved, later 
@@ -140,15 +140,15 @@ namespace lifecycle
 		 * @warning This method is NOT synchronized and should be called either
 		 * from an ISR, or from a synchronized block.
 		 * 
-		 * @tparam T the type encapsulated in a LifeCycle<T> type
-		 * @param instance a reference to an LifeCycle<T> to register with this
+		 * @tparam T the type encapsulated in a `LifeCycle<T>` type
+		 * @param instance a reference to an `LifeCycle<T>` to register with this
 		 * LifeCycleManager
 		 * @return a unique identifier for the registered instance
 		 * @retval 0 if an error occurred; this can happen when too many instances 
 		 * are already registered with this LifeCycleManager, or when @p instance
 		 * is already registered (with yhis or any LifeCycleManager).
 		 * 
-		 * @sa LifeCycle<T>
+		 * @sa LifeCycle
 		 * @sa unregister_()
 		 * @sa find_()
 		 */
@@ -158,17 +158,17 @@ namespace lifecycle
 		}
 
 		/**
-		 * Unregisters a LifeCycle<T> instance, identified by @p id, already 
+		 * Unregisters a `LifeCycle<T>` instance, identified by @p id, already 
 		 * registered with this LifeCycleManager.
 		 * 
-		 * @note This is automatically called by LifeCycle<T> destructor.
+		 * @note This is automatically called by `LifeCycle<T>` destructor.
 		 * 
 		 * @warning This method is NOT synchronized and should be called either
 		 * from an ISR, or from a synchronized block.
 		 * 
-		 * @param id the unique identifier for the LifeCycle<T> instance to 
+		 * @param id the unique identifier for the `LifeCycle<T>` instance to 
 		 * unregister; this is the value returned by register_().
-		 * @retval true if the LifeCycle<T> instance was found and successfully
+		 * @retval true if the `LifeCycle<T>` instance was found and successfully
 		 * deregistered
 		 * @retval false if there is no registered instance identified by @p id
 		 * 
@@ -189,7 +189,7 @@ namespace lifecycle
 
 		/**
 		 * Return the number of available "slots" for registration of new
-		 * LifeCycle<T> instances.
+		 * `LifeCycle<T>` instances.
 		 * 
 		 * @note This method is atomic, hnece it can freely be called from an ISR
 		 * or normal code without any synchronization required.
@@ -200,23 +200,23 @@ namespace lifecycle
 		}
 		
 		/**
-		 * Move an already registered LifeCycle<T> instance (identified by @p id)
+		 * Move an already registered `LifeCycle<T>` instance (identified by @p id)
 		 * to a new location, determine by @p dest.
-		 * Once this method is called, the previous LifeCycle<T> instance becomes
+		 * Once this method is called, the previous `LifeCycle<T>` instance becomes
 		 * unusable (its identifier is reset to `0`).
 		 * 
-		 * @warning This method is automatically called when a registered LifeCycle<T>
+		 * @warning This method is automatically called when a registered `LifeCycle<T>`
 		 * is moved to another instance. You should normally never need to call 
 		 * this method directly. 
 		 * 
 		 * @warning This method is NOT synchronized and should be called either
 		 * from an ISR, or from a synchronized block.
 		 * 
-		 * @param id the unique identifier for the LifeCycle<T> instance to 
+		 * @param id the unique identifier for the `LifeCycle<T>` instance to 
 		 * move; this is the value returned by register_().
-		 * @param dest a reference to a LifeCycle<T> instance to receive the instance
+		 * @param dest a reference to a `LifeCycle<T>` instance to receive the instance
 		 * currently identified by @p id
-		 * @retval true if the LifeCycle<T> instance was found and successfully
+		 * @retval true if the `LifeCycle<T>` instance was found and successfully
 		 * moved to @p dest
 		 * @retval false if there is no registered instance identified by @p id
 		 */
@@ -236,21 +236,27 @@ namespace lifecycle
 		}
 
 		/**
-		 * Find an existing LifeCycle<T> registered with this LifeCycleManager
+		 * Find an existing `LifeCycle<T>` registered with this LifeCycleManager
 		 * and identified by @p id.
 		 * This is the only way to get a pointer to the right location of an
 		 * instance.
 		 * 
+		 * @warning A LifeCycleManager can hold `LifeCycle<T>` instances of any
+		 * @p T type, it does not keep information about actual type of a LifeCycle;
+		 * hence it cannot ensure safe casting in `find_()` method. It is the 
+		 * responsibility of the application developer to ensure consistency of
+		 * the type used in `register_()` and in `find_()` for the same @p id !
+		 * 
 		 * @warning This method is NOT synchronized and should be called either
 		 * from an ISR, or from a synchronized block.
 		 * 
-		 * @tparam T the type encapsulated in a LifeCycle<T> type
-		 * @param id the unique identifier for the LifeCycle<T> instance to 
+		 * @tparam T the type encapsulated in a `LifeCycle<T>` type
+		 * @param id the unique identifier for the `LifeCycle<T>` instance to 
 		 * look for; this is the value returned by register_().
-		 * @return a pointer to the found LifeCycle<T> instance
+		 * @return a pointer to the found `LifeCycle<T>` instance
 		 * @retval nullptr if there is no registered instance identified by @p id
 		 * 
-		 * @sa LifeCycle<T>
+		 * @sa LifeCycle
 		 * @sa register_()
 		 */
 		template<typename T> LifeCycle<T>* find_(uint8_t id) const
@@ -350,7 +356,7 @@ namespace lifecycle
 	{
 	public:
 		/**
-		 * Create a new LifeCycle<T> mixin for object @p value of type @p T.
+		 * Create a new `LifeCycle<T>` mixin for object @p value of type @p T.
 		 * This can be registered with a LifeCycleManager and then tracked
 		 * wherever it gets moved.
 		 * 
@@ -359,12 +365,12 @@ namespace lifecycle
 		LifeCycle(const T& value = T{}) : AbstractLifeCycle{}, T{value} {}
 
 		/**
-		 * Crate a new LifeCycle<T> mixin object of type @p T, by moving an
-		 * already existing LifeCycle<T> instance @p that.
+		 * Crate a new `LifeCycle<T>` mixin object of type @p T, by moving an
+		 * already existing `LifeCycle<T>` instance @p that.
 		 * Once this is constructed, @p that was automatically unregistered from
 		 * its LifeCycleManager.
 		 * 
-		 * @param that the rvalue of an existing LifeCycle<T> instance (possibly 
+		 * @param that the rvalue of an existing `LifeCycle<T>` instance (possibly 
 		 * registered already or not) to be moved into this.
 		 * 
 		 * @sa std::move()
@@ -373,21 +379,21 @@ namespace lifecycle
 		LifeCycle(LifeCycle<T>&& that) = default;
 
 		/**
-		 * Destroy this LifeCycle<T> instance.
+		 * Destroy this `LifeCycle<T>` instance.
 		 * That destructor unregisters this instance from its LifeCycleManager
 		 * (if already registered).
 		 */
 		~LifeCycle() = default;
 
 		/**
-		 * Assign this LifeCycle<T> with @p that, by moving that already
-		 * existing LifeCycle<T> instance.
+		 * Assign this `LifeCycle<T>` with @p that, by moving that already
+		 * existing `LifeCycle<T>` instance.
 		 * Before assignment, this is automatically unregistered from its 
 		 * LifeCycleManager, if needed.
 		 * Once assignment is completed, @p that was automatically unregistered from
 		 * its LifeCycleManager.
 		 * 
-		 * @param that the rvalue of an existing LifeCycle<T> instance (possibly 
+		 * @param that the rvalue of an existing `LifeCycle<T>` instance (possibly 
 		 * registered already or not) to be moved into this.
 		 * 
 		 * @sa std::move()
@@ -398,12 +404,12 @@ namespace lifecycle
 
 	/**
 	 * A proxy class that encapsulates access to a fixed @p T instance, or to
-	 * a dynamic LifeCycle<T> instance.
+	 * a dynamic `LifeCycle<T>` instance.
 	 * This allows to define a method which argument does not have to care whether
 	 * the object passed should be dynamic or static.
 	 * 
 	 * @warning Since proxying a @p T instance incurs overhead (data size, code size
-	 * and speed), you should use Proxy<T> only when it makes sense.
+	 * and speed), you should use `Proxy<T>` only when it makes sense.
 	 * 
 	 * @tparam T the type of the object proxied
 	 * 
@@ -413,20 +419,21 @@ namespace lifecycle
 	{
 	public:
 		/**
-		 * Create a Proxy<T> to a static reference.
+		 * Create a `Proxy<T>` to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
 		Proxy(const T& dest)
 			:	is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, id_{0} {}
 
 		/**
-		 * Create a Proxy<T> to a LifeCycle<U> instance (dynamic reference).
+		 * Create a `Proxy<T>` to a `LifeCycle<U>` instance (dynamic reference).
+		 * 
 		 * @tparam U the type of reference held by @p dest; must be @p T or a
 		 * subclass of @p T, otherwise code will not compile.
-		 * @param dest the reference to a LifeCycle<U> instance to proxify; if
-		 * @p dest is later moved, it will eb automatically tracked by this Proxy<T>.
+		 * @param dest the reference to a `LifeCycle<U>` instance to proxify; if
+		 * @p dest is later moved, it will be automatically tracked by this Proxy<T>.
 		 * 
-		 * @sa LifeCycle<T>
+		 * @sa LifeCycle
 		 */
 		template<typename U>
 		Proxy(const LifeCycle<U>& dest)
@@ -461,7 +468,7 @@ namespace lifecycle
 
 		/**
 		 * Tell if this Proxy is dynamic or static.
-		 * A dynamic proxy was constructed with a LifeCycle<T> instance and thus 
+		 * A dynamic proxy was constructed with a `LifeCycle<T>` instance and thus 
 		 * ensures that the actual instance will aways be referenced even if it gets 
 		 * moved.
 		 * A static proxy was constructed directly with a @p T instance.
@@ -472,7 +479,7 @@ namespace lifecycle
 		}
 
 		/**
-		 * The identifier of the proxified LifeCycle<U> or `0` if a static instance
+		 * The identifier of the proxified `LifeCycle<U>` or `0` if a static instance
 		 * was proxified.
 		 */
 		uint8_t id() const
@@ -482,7 +489,7 @@ namespace lifecycle
 
 		/**
 		 * A pointer to the static instance proxified, or `nullptr` if a dynamic 
-		 * instance (a LifeCycle<U>) was proxified.
+		 * instance (a `LifeCycle<U>`) was proxified.
 		 */
 		T* destination() const
 		{
@@ -490,7 +497,7 @@ namespace lifecycle
 		}
 
 		/**
-		 * The LifeCycleManager managing the proxified LifeCycle<U>, or `nullptr`
+		 * The LifeCycleManager managing the proxified `LifeCycle<U>`, or `nullptr`
 		 * if a static instance was proxified.
 		 */
 		AbstractLifeCycleManager* manager() const
@@ -517,14 +524,14 @@ namespace lifecycle
 
 	/**
 	 * A light proxy class that encapsulates access to a fixed @p T instance, or to
-	 * a dynamic LifeCycle<T> instance.
+	 * a dynamic `LifeCycle<T>` instance.
 	 * Each instance uses 2 bytes, instead of 3 bytes for a Proxy instance.
-	 * The downside is that a dynamic LightProxy (i.e. constructed with a LifeCycle<T>)
+	 * The downside is that a dynamic LightProxy (i.e. constructed with a `LifeCycle<T>`)
 	 * has to be passed the proper LifeCycleManager every time we want to get the
 	 * pointer to the actual proxied instance.
 	 * 
 	 * @warning Since proxying a @p T instance incurs overhead (data size, code size
-	 * and speed), you should use LightProxy<T> only when it makes sense.
+	 * and speed), you should use `LightProxy<T>` only when it makes sense.
 	 * 
 	 * @tparam T the type of the object proxied
 	 * 
@@ -534,19 +541,20 @@ namespace lifecycle
 	{
 	public:
 		/**
-		 * Create a LightProxy<T> to a static reference.
+		 * Create a `LightProxy<T>` to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
 		LightProxy(const T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
 
 		/**
-		 * Create a LightProxy<T> to a LifeCycle<U> instance (dynamic reference).
+		 * Create a `LightProxy<T>` to a `LifeCycle<U>` instance (dynamic reference).
+		 * 
 		 * @tparam U the type of reference held by @p dest; must be @p T or a
 		 * subclass of @p T, otherwise code will not compile.
-		 * @param dest the reference to a LifeCycle<U> instance to proxify; if
-		 * @p dest is later moved, it will eb automatically tracked by this Proxy<T>.
+		 * @param dest the reference to a `LifeCycle<U>` instance to proxify; if
+		 * @p dest is later moved, it will eb automatically tracked by this `Proxy<T>`.
 		 * 
-		 * @sa LifeCycle<T>
+		 * @sa LifeCycle
 		 */
 		template<typename U>
 		LightProxy(const LifeCycle<U>& dest) : is_dynamic2_{true}, id_{dest.id()}
@@ -556,10 +564,10 @@ namespace lifecycle
 		}
 
 		/**
-		 * Create a LightProxy<T> from a Proxy<T>.
-		 * @param proxy the original Proxy<T> to copy into this LightProxy
+		 * Create a `LightProxy<T>` from a `Proxy<T>`.
+		 * @param proxy the original `Proxy<T>` to copy into this LightProxy
 		 * 
-		 * @sa Proxy<T>
+		 * @sa Proxy
 		 */
 		LightProxy(const Proxy<T>& proxy)
 		{
@@ -584,7 +592,7 @@ namespace lifecycle
 		/**
 		 * Return a pointer to the proxified @p T instance.
 		 * @param manager a pointer to the LifeCycleManager which was used to 
-		 * register the underlying LifeCycle<T> instance; can be `nullptr` if this
+		 * register the underlying `LifeCycle<T>` instance; can be `nullptr` if this
 		 * is a static proxy. Behaviour is undefined if `nullptr` and this LightProxy
 		 * is dynamic.
 		 */
@@ -598,7 +606,7 @@ namespace lifecycle
 
 		/**
 		 * Tell if this LightProxy is dynamic or static.
-		 * A dynamic proxy was constructed with a LifeCycle<T> instance and thus 
+		 * A dynamic proxy was constructed with a `LifeCycle<T>` instance and thus 
 		 * ensures that the actual instance will aways be referenced even if it gets 
 		 * moved.
 		 * A static proxy was constructed directly with a @p T instance.
@@ -609,7 +617,7 @@ namespace lifecycle
 		}
 
 		/**
-		 * The identifier of the proxified LifeCycle<U> or `0` if a static instance
+		 * The identifier of the proxified `LifeCycle<U>` or `0` if a static instance
 		 * was proxified.
 		 */
 		uint8_t id() const
@@ -619,7 +627,7 @@ namespace lifecycle
 
 		/**
 		 * A pointer to the static instance proxified, or `nullptr` if a dynamic 
-		 * instance (a LifeCycle<U>) was proxified.
+		 * instance (a `LifeCycle<U>`) was proxified.
 		 */
 		T* destination() const
 		{
