@@ -112,6 +112,7 @@ namespace types_traits
 	{
 		using type = T;
 	};
+	/// @cond notdocumented
 	template<typename T> struct remove_reference<T&>
 	{
 		using type = T;
@@ -120,6 +121,7 @@ namespace types_traits
 	{
 		using type = T;
 	};
+	/// @endcond
 }
 
 #endif /* TYPES_TRAITS_HH */

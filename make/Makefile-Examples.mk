@@ -52,6 +52,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						analog/AnalogComparator6				\
 						misc/IOStreams3							\
 						misc/FutureCheck						\
+						misc/LifeCycleCheck						\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
 						misc/UtilsCheck							\
@@ -132,6 +133,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
+								misc/LifeCycleCheck				\
 								analog/AnalogComparator1		\
 								analog/AnalogComparator2		\
 								analog/AnalogComparator3		\

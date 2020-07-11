@@ -39,7 +39,7 @@ void assert(streams::ostream& out, const char* var, T1 expected, T2 actual)
 {
 	if (expected != actual)
 		out << F("ASSERTION FAILED on ") << var 
-			<< F(": expected = ") << expected << ", actual=" << actual << streams::endl;
+			<< F(": expected = ") << expected << F(", actual=") << actual << streams::endl;
 }
 
 template<typename T1, typename T2>
@@ -47,7 +47,7 @@ void assert(streams::ostream& out, const flash::FlashStorage* var, T1 expected, 
 {
 	if (expected != actual)
 		out << F("ASSERTION FAILED on ") << var 
-			<< F(": expected = ") << expected << ", actual=" << actual << streams::endl;
+			<< F(": expected = ") << expected << F(", actual=") << actual << streams::endl;
 }
 
 #endif /* TESTS_ASSERTIONS_H */
