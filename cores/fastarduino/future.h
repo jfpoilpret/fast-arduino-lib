@@ -26,6 +26,7 @@
 #include <string.h>
 #include "errors.h"
 #include "move.h"
+#include "streams.h"
 #include "time.h"
 
 //TODO update DOC to show how to use LC if needed
@@ -142,6 +143,10 @@ namespace future
 		 */
 		INVALID
 	};
+
+	/// @cond notdocumented
+	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s);
+	/// @endcond
 
 	/**
 	 * Base class for all `Future`s.
