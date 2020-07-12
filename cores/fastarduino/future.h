@@ -29,7 +29,6 @@
 #include "time.h"
 
 //TODO update DOC to show how to use LC if needed
-//TODO shall we reintroduce INVALID for moved futures?
 /**
  * Contains the API around Future implementation.
  * A Future allows you to pass and get values across different units of executions
@@ -134,7 +133,13 @@ namespace future
 		 * @sa Future.set_future_error()
 		 * @sa Future.error()
 		 */
-		ERROR
+		ERROR,
+
+		/**
+		 * The status of a Future that has been moved, if it was`NOT_READY` before
+		 * moving.
+		 */
+		INVALID
 	};
 
 	/**
@@ -508,6 +513,7 @@ namespace future
 			return (input_current_ == input_data_);
 		}
 
+		//FIXME for move assignment input_data_/output_data_ have not been initialized!
 		// This method is called by subclass in their move constructor and assignment operator
 		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
 		{
@@ -521,7 +527,8 @@ namespace future
 			input_current_ = input_data_ + full_input_size - input_size_;
 
 			// Make rhs Future invalid
-			// that.status_ = FutureStatus::INVALID;
+			if (status_ == FutureStatus::NOT_READY)
+				that.status_ = FutureStatus::INVALID;
 		}
 		/// @endcond
 
@@ -626,8 +633,6 @@ namespace future
 		 * @retval true if the input strage value has been successfully replaced
 		 * @retval false if the input strage value could not be replaced because 
 		 * a consumer already started reading the previous input storage value
-		 * 
-		 * @sa reset_input()
 		 */
 		bool reset_input_(const IN& input)
 		{
@@ -667,8 +672,8 @@ namespace future
 	protected:
 		/**
 		 * Return the input storage value as it was initially set (or reset 
-		 * through `reset_input()`), whatever the current state of this Future.
-		 * @sa reset_input()
+		 * through `reset_input_()`), whatever the current state of this Future.
+		 * @sa reset_input_()
 		 */
 		const IN& get_input() const
 		{
@@ -783,10 +788,6 @@ namespace future
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
 
-		bool reset_input(const IN& input)
-		{
-			synchronized return reset_input_(input);
-		}
 		bool reset_input_(const IN& input)
 		{
 			if (!can_replace_input_()) return false;

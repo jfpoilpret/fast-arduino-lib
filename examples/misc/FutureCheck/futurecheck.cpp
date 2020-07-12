@@ -51,6 +51,9 @@ static const flash::FlashStorage* convert(FutureStatus s)
 
 		case FutureStatus::ERROR:
 		return F("ERROR");
+
+		case FutureStatus::INVALID:
+		return F("INVALID");
 	}
 }
 ostream& operator<<(ostream& out, FutureStatus s)
@@ -223,31 +226,32 @@ int main()
 	ASSERT_STATUS(out, NOT_READY, future7);
 	out << F("#7.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
 	Future<uint16_t> future8 = std::move(future7);
-	// ASSERT_STATUS(out, INVALID, future7);
+	ASSERT_STATUS(out, INVALID, future7);
 	ASSERT_STATUS(out, NOT_READY, future8);
-	out << F("#7.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
+	out << F("#7.4 check status (READY, INVALID) -> (READY, READY)") << endl;
 	ASSERT(out, future8.set_future_value_(0xFFFFu));
 	Future<uint16_t> future9 = std::move(future8);
-	// ASSERT_STATUS(out, INVALID, future8);
+	ASSERT_STATUS(out, READY, future8);
 	ASSERT_STATUS(out, READY, future9);
 	ASSERT_VALUE(out, 0xFFFFu, future9);
-	out << F("#7.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
+	out << F("#7.5 check status (ERROR, INVALID) -> (ERROR, ERROR)") << endl;
 	Future<uint16_t> future10;
 	ASSERT(out, future10.set_future_error_(-10000));
 	Future<uint16_t> future11 = std::move(future10);
-	// ASSERT_STATUS(out, INVALID, future10);
+	ASSERT_STATUS(out, ERROR, future10);
+	ASSERT_ERROR(out, -10000, future10);
 	ASSERT_STATUS(out, ERROR, future11);
 	ASSERT_ERROR(out, -10000, future11);
-	out << F("#7.6 check status (INVALID, INVALID) -> (INVALID, INVALID)") << endl;
+	out << F("#7.6 check status (NOT_READY, NOT_READY) -> (INVALID, NOT_READY)") << endl;
 	Future<uint16_t> future12;
 	Future<uint16_t> future13 = std::move(future12);
-	// ASSERT_STATUS(out, INVALID, future12);
-	// ASSERT_STATUS(out, INVALID, future13);
+	ASSERT_STATUS(out, INVALID, future12);
+	ASSERT_STATUS(out, NOT_READY, future13);
 	out << F("#7.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
 	Future<uint16_t> future14;
 	ASSERT(out, future14.set_future_value_(uint8_t(0xBB)));
 	Future<uint16_t> future15 = std::move(future14);
-	// ASSERT_STATUS(out, INVALID, future14);
+	ASSERT_STATUS(out, INVALID, future14);
 	ASSERT_STATUS(out, NOT_READY, future15);
 	ASSERT(out, future15.set_future_value_(uint8_t(0xCC)));
 	out << F("#7.8 Complete set value") << endl;
@@ -264,28 +268,25 @@ int main()
 	ASSERT_STATUS(out, NOT_READY, future17);
 	out << F("#8.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
 	future18 = std::move(future17);
-	// ASSERT_STATUS(out, INVALID, future17);
+	ASSERT_STATUS(out, INVALID, future17);
 	ASSERT_STATUS(out, NOT_READY, future18);
-	out << F("#8.4 check status (READY, INVALID) -> (INVALID, READY)") << endl;
+	out << F("#8.4 check status (READY, INVALID) -> (READY, READY)") << endl;
 	ASSERT(out, future18.set_future_value_(0xFFFFu));
 	future19 = std::move(future18);
-	// ASSERT_STATUS(out, INVALID, future18);
+	ASSERT_STATUS(out, READY, future18);
 	ASSERT_STATUS(out, READY, future19);
 	ASSERT_VALUE(out, 0xFFFFu, future19);
-	out << F("#8.5 check status (ERROR, INVALID) -> (INVALID, ERROR)") << endl;
+	out << F("#8.5 check status (ERROR, INVALID) -> (ERROR, ERROR)") << endl;
 	ASSERT(out, future20.set_future_error_(-10000));
 	future21 = std::move(future20);
-	// ASSERT_STATUS(out, INVALID, future20);
+	ASSERT_STATUS(out, ERROR, future20);
+	ASSERT_ERROR(out, -10000, future20);
 	ASSERT_STATUS(out, ERROR, future21);
 	ASSERT_ERROR(out, -10000, future21);
-	out << F("#8.6 check status (INVALID, INVALID) -> (INVALID, INVALID)") << endl;
-	future23 = std::move(future22);
-	// ASSERT_STATUS(out, INVALID, future22);
-	// ASSERT_STATUS(out, INVALID, future23);
 	out << F("#8.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
 	ASSERT(out, future24.set_future_value_(uint8_t(0xBB)));
 	future25 = std::move(future24);
-	// ASSERT_STATUS(out, INVALID, future24);
+	ASSERT_STATUS(out, INVALID, future24);
 	ASSERT_STATUS(out, NOT_READY, future25);
 	out << F("#8.8 after complete set value, status shall be READY") << endl;
 	ASSERT(out, future25.set_future_value_(uint8_t(0xCC)));
