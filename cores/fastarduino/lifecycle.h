@@ -25,6 +25,7 @@
 #define LIFECYCLE_HH
 
 #include <string.h>
+#include "move.h"
 #include "types_traits.h"
 
 /**
@@ -356,13 +357,38 @@ namespace lifecycle
 	{
 	public:
 		/**
+		 * Create a new `LifeCycle<T>` mixin for an object of type @p T.
+		 * This can be registered with a LifeCycleManager and then tracked
+		 * wherever it gets moved.
+		 * 
+		 * @warning Type T must be default-constructable if you use this 
+		 * LifeCycle constructor.
+		 */
+		LifeCycle() : AbstractLifeCycle{}, T{} {}
+
+		/**
 		 * Create a new `LifeCycle<T>` mixin for object @p value of type @p T.
 		 * This can be registered with a LifeCycleManager and then tracked
 		 * wherever it gets moved.
 		 * 
+		 * @warning Type T must be copy-constructable if you use this 
+		 * LifeCycle constructor.
+		 * 
 		 * @param value the original value of this @p T instance
 		 */
-		LifeCycle(const T& value = T{}) : AbstractLifeCycle{}, T{value} {}
+		LifeCycle(const T& value) : AbstractLifeCycle{}, T{value} {}
+
+		/**
+		 * Create a new `LifeCycle<T>` mixin for object @p value of type @p T.
+		 * This can be registered with a LifeCycleManager and then tracked
+		 * wherever it gets moved.
+		 * 
+		 * @warning Type T must be move-constructable if you use this 
+		 * LifeCycle constructor.
+		 * 
+		 * @param value the original value of this @p T instance
+		 */
+		LifeCycle(T&& value) : AbstractLifeCycle{}, T{std::move(value)} {}
 
 		/**
 		 * Crate a new `LifeCycle<T>` mixin object of type @p T, by moving an
