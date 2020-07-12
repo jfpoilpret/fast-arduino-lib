@@ -28,8 +28,9 @@
 #include "move.h"
 #include "time.h"
 
-//TODO add @warning for unsync methods everywhere
+//TODO review usage of syncrhonized blocks everywhere
 //TODO update DOC to show how to use LC if needed
+//TODO shall we reintroduce INVALID fro moved futures?
 /**
  * Contains the API around Future implementation.
  * A Future allows you to pass and get values across different units of executions
@@ -207,8 +208,8 @@ namespace future
 		 * This method is called by a Future input value consumer to know how many
 		 * bytes remain to get read until the end of the input value.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @return the number of bytes to be read from the input value stored
 		 * by this Future
@@ -231,8 +232,8 @@ namespace future
 		 * This method is useful only for `Future<?, T>` where `T` type is not 
 		 * `void`.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @param chunk the byte reference that will receive the next byte of this
 		 * Future input value
@@ -265,8 +266,8 @@ namespace future
 		 * This method is useful only for `Future<?, T>` where `T` type is not 
 		 * `void`.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @param chunk a pointer to an array of at least @p size bytes, which will
 		 * be filled with the next chunk of bytes of this Future input value
@@ -300,8 +301,8 @@ namespace future
 		 * This method is called by a Future output value producer to know how many
 		 * bytes remain to write until the end of the output value.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @return the number of bytes to be written to the output value stored
 		 * in this Future
@@ -323,8 +324,8 @@ namespace future
 		 * process. For other `Future<T>`s, with a non `void` type `T`, you should
 		 * use one of `set_future_value_` methods instead.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @retval false if this Future cannot be updated properly (because it is
 		 * not in `FutureStatus::NOT_READY` or if it is still expecting data)
@@ -356,8 +357,8 @@ namespace future
 		 * It is also possible to fill the output value by larger chunks, with
 		 * other overloaded versions of this method.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @param chunk the byte to append to this Future output value
 		 * @retval true if @p chunk could be added to the future
@@ -393,8 +394,8 @@ namespace future
 		 * It is also possible to fill the output value byte per byte, with
 		 * other overloaded versions of this method.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @param chunk pointer to the first byte to be added to this Future output
 		 * value
@@ -440,8 +441,8 @@ namespace future
 		 * It is also possible to fill the output value byte per byte, with
 		 * other overloaded versions of this method.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @tparam T the type of output value of this Future
 		 * 
@@ -464,8 +465,8 @@ namespace future
 		 * This method is called by a Future ouput value provider to indicate
 		 * that it cannot compute an output value for a given Future.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @param error the error code to set for the Future
 		 * @retval true if this Future has been properly updated
@@ -618,8 +619,8 @@ namespace future
 		 * This is possible only if no consumer has started reading the current 
 		 * input storage value yet.
 		 * 
-		 * This method is not synchronized, it shall be called exclusively from an ISR,
-		 * or possibly from inside a `synchronized` block.
+		 * @warning This method is not synchronized, it shall be called exclusively
+		 * from an ISR, or possibly from inside a `synchronized` block.
 		 * 
 		 * @param input a value to be copied to this Future input storage value;
 		 * this argument does not exist when @p IN is `void`.
