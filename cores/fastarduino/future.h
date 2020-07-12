@@ -28,9 +28,9 @@
 #include "move.h"
 #include "time.h"
 
-//TODO review usage of syncrhonized blocks everywhere
+//TODO simplify code by remoing extra <...>
 //TODO update DOC to show how to use LC if needed
-//TODO shall we reintroduce INVALID fro moved futures?
+//TODO shall we reintroduce INVALID for moved futures?
 /**
  * Contains the API around Future implementation.
  * A Future allows you to pass and get values across different units of executions
@@ -599,19 +599,19 @@ namespace future
 
 		/// @cond notdocumented
 		~Future() = default;
-		Future(Future<OUT, IN>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
+		Future(Future&& that) : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
 		{
 			move(std::move(that));
 		}
-		Future<OUT, IN>& operator=(Future<OUT, IN>&& that)
+		Future& operator=(Future&& that)
 		{
 			if (this == &that) return *this;
 			move(std::move(that));
 			return *this;
 		}
 
-		Future(const Future<OUT, IN>&) = delete;
-		Future<OUT, IN>& operator=(const Future<OUT, IN>&) = delete;
+		Future(const Future&) = delete;
+		Future& operator=(const Future&) = delete;
 		/// @endcond
 
 		/**
@@ -677,7 +677,7 @@ namespace future
 		}
 
 	private:
-		void move(Future<OUT, IN>&& that)
+		void move(Future&& that)
 		{
 			synchronized
 			{
@@ -715,19 +715,19 @@ namespace future
 		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
 		~Future() = default;
 
-		Future(Future<OUT, void>&& that) : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0}
+		Future(Future&& that) : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0}
 		{
 			move(std::move(that));
 		}
-		Future<OUT, void>& operator=(Future<OUT, void>&& that)
+		Future& operator=(Future&& that)
 		{
 			if (this == &that) return *this;
 			move(std::move(that));
 			return *this;
 		}
 
-		Future(const Future<OUT, void>&) = delete;
-		Future<OUT, void>& operator=(const Future<OUT, void>&) = delete;
+		Future(const Future&) = delete;
+		Future& operator=(const Future&) = delete;
 
 		// The following method is blocking until this Future is ready
 		bool get(OUT& result)
@@ -739,7 +739,7 @@ namespace future
 		}
 
 	private:
-		void move(Future<OUT, void>&& that)
+		void move(Future&& that)
 		{
 			synchronized
 			{
@@ -770,19 +770,19 @@ namespace future
 			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
 		~Future() = default;
 
-		Future(Future<void, IN>&& that) : AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}
+		Future(Future&& that) : AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}
 		{
 			move(std::move(that));
 		}
-		Future<void, IN>& operator=(Future<void, IN>&& that)
+		Future& operator=(Future&& that)
 		{
 			if (this == &that) return *this;
 			move(std::move(that));
 			return *this;
 		}
 
-		Future(const Future<void, IN>&) = delete;
-		Future<void, IN>& operator=(const Future<void, IN>&) = delete;
+		Future(const Future&) = delete;
+		Future& operator=(const Future&) = delete;
 
 		bool reset_input(const IN& input)
 		{
@@ -808,7 +808,7 @@ namespace future
 		}
 
 	private:
-		void move(Future<void, IN>&& that)
+		void move(Future&& that)
 		{
 			synchronized
 			{
@@ -836,19 +836,19 @@ namespace future
 		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
 		~Future() = default;
 
-		Future(Future<void, void>&& that) : AbstractFuture{nullptr, 0, nullptr, 0}
+		Future(Future&& that) : AbstractFuture{nullptr, 0, nullptr, 0}
 		{
 			synchronized move_(std::move(that), 0, 0);
 		}
-		Future<void, void>& operator=(Future<void, void>&& that)
+		Future& operator=(Future&& that)
 		{
 			if (this == &that) return *this;
 			synchronized move_(std::move(that), 0, 0);
 			return *this;
 		}
 
-		Future(const Future<void, void>&) = delete;
-		Future<void, void>& operator=(const Future<void, void>&) = delete;
+		Future(const Future&) = delete;
+		Future& operator=(const Future&) = delete;
 
 		// The following method is blocking until this Future is ready
 		bool get()
