@@ -28,7 +28,6 @@
 #include "move.h"
 #include "time.h"
 
-//TODO simplify code by remoing extra <...>
 //TODO update DOC to show how to use LC if needed
 //TODO shall we reintroduce INVALID for moved futures?
 /**
