@@ -29,6 +29,7 @@
 #include "time.h"
 
 //TODO update DOC to show how to use LC if needed
+//TODO API to reset and existing future (as if just constructed)? Only if not NOT_READY
 /**
  * Contains the API around Future implementation.
  * A Future allows you to pass and get values across different units of executions
