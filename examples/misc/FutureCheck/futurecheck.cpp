@@ -90,8 +90,6 @@ void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::F
 }
 #define ASSERT_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE ".get()"), F("" #FUTURE ".get() value"), FUTURE, VALUE)
 
-static constexpr uint8_t MAX_FUTURES = 64;
-
 int main()
 {
 	board::init();
