@@ -519,7 +519,6 @@ namespace future
 			return (input_current_ == input_data_);
 		}
 
-		//FIXME for move assignment input_data_/output_data_ have not been initialized!
 		// This method is called by subclass in their move constructor and assignment operator
 		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
 		{
@@ -697,7 +696,6 @@ namespace future
 			}
 		}
 
-		//TODO do we really need these unions, why not just use &output when needed?
 		union
 		{
 			OUT output_;
