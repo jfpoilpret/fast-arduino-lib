@@ -29,8 +29,6 @@
 #include "streams.h"
 #include "time.h"
 
-//TODO update DOC to show how to use LC if needed
-//TODO API to reset an existing future (as if just constructed)? Only if not NOT_READY
 /**
  * Contains the API around Future implementation.
  * A Future allows you to pass and get values across different units of executions
@@ -57,40 +55,54 @@
  * "snapshot" of 6 input buttons connected to all PORTB pins, after one of them has
  * changed level:
  * @code
- * //TODO update DOC to remove FutureManager
- * // global variable holding the id of the future to fill in
- * static uint8_t portB_snapshot_id = 0;
  * // PCINT0 ISR
- * void take_snapshot() {
- *     gpio::FastPort<board::Port::PORT_B> port;
- *     future::AbstractFutureManager::instance().set_future_value(portB_snapshot_id, port.get_PIN());
- * }
- * REGISTER_PCI_ISR_FUNCTION(0, take_snapshot, board::InterruptPin::D8_PB0_PCI0)
- * ...
+ * class ButtonsSnapshot {
+ * public:
+ *     ButtonsSnapshot() : port_{0x3F, 0x3F} {
+ *         interrupt::register_handler(*this);
+ *         signal_.set_enable_pins(0x3F);
+ *         signal_.enable();
+ *     }
  * 
- * // Within main()
- * // First create a FutureManager singleton with max 16 futures
- * static constexpr uint8_t MAX_FUTURES = 16;
- * future::FutureManager<MAX_FUTURES> manager;
- * // Initialize PORTB and PCI
- * gpio::FastPort<board::Port::PORT_B> port{0xFF, 0xFF};
- * interrupt::PCI_PORT_SIGNAL<board::Port::PORT_B> signal;
- * signal.set_enable_pins(0xFF);
- * signal.enable();
- * ...
- * while (true) {
- *     // Create a Future and register it
- *     future::Future<uint8_t> portB_snapshot;
- *     manager.register_future(portB_snapshot);
- *     portB_snapshot_id = portB_snapshot.id();
- *     ...
- *     // Wait for the future to be filled in by the PCINT0 ISR
- *     uint8_t snapshot = 0;
- *     if (portB_snapshot.get(snapshot)) {
- *         // Do something with the obtained snapshot
+ *     bool get_snapshot(uint8_t& snapshot) {
+ *         // Wait for future result
+ *         bool result = future_.get(snapshot);
+ *         // Reset future
+ *         future_ = std::move(Future<uint8_t>{});
+ *         return result;
+ *     }
+ * 
+ * private:
+ *     void take_snapshot() {
+ *         future_.set_future_value_(port_.get_PIN());
+ *     }
+ * 
+ *     Future<uint8_t> future_;
+ *     gpio::FastPort<board::Port::PORT_B> port_;
+ *     interrupt::PCI_PORT_SIGNAL<board::Port::PORT_B> signal_;
+ * 
+ *     DECL_PCINT_ISR_FRIENDS
+ * };
+ * 
+ * REGISTER_PCI_ISR_METHOD(PCINT, ButtonsSnapshot, &ButtonsSnapshot::take_snapshot, board::InterruptPin::D8_PB0_PCI0)
+ * 
+ * int main() {
+ *     board::init();
+ * 
+ *     // Enable interrupts at startup time
+ *     sei();
+ * 
+ *     // Initialize PORT and PCI through ButtonsSnapshot
+ *     ButtonsSnapshot snapshot_taker;
+ * 
+ *     while (true) {
+ *         // Wait for the future to be filled in by the PCINT0 ISR
+ *         uint8_t snapshot = 0;
+ *         if (snapshot_taker.get_snapshot(snapshot)) {
+ *             // Do something with the obtained snapshot
+ *         }
  *     }
  * }
- * ...
  * @endcode
  */
 namespace future
