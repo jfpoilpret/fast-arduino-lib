@@ -30,7 +30,7 @@
 #include "time.h"
 
 //TODO update DOC to show how to use LC if needed
-//TODO API to reset and existing future (as if just constructed)? Only if not NOT_READY
+//TODO API to reset an existing future (as if just constructed)? Only if not NOT_READY
 /**
  * Contains the API around Future implementation.
  * A Future allows you to pass and get values across different units of executions
@@ -421,10 +421,6 @@ namespace future
 		 */
 		bool set_future_value_(const uint8_t* chunk, uint8_t size)
 		{
-			//TODO optimize by calling set_future_value_(uint8_t chunk)
-			// Check this future is waiting for data
-			if (status_ != FutureStatus::NOT_READY)
-				return false;
 			// Check size does not go beyond expected size
 			if (size > output_size_)
 			{
@@ -432,12 +428,10 @@ namespace future
 				set_future_error_(errors::EMSGSIZE);
 				return false;
 			}
-			memcpy(output_current_, chunk, size);
-			output_current_ += size;
-			// Is that the last chunk?
-			output_size_ -= size;
-			if (output_size_ == 0)
-				status_ = FutureStatus::READY;
+			while (size--)
+			{
+				if (!set_future_value_(*chunk++)) return false;
+			}
 			return true;
 		}
 
