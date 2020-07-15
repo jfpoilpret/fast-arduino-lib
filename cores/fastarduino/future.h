@@ -421,6 +421,7 @@ namespace future
 		 */
 		bool set_future_value_(const uint8_t* chunk, uint8_t size)
 		{
+			//TODO optimize by calling set_future_value_(uint8_t chunk)
 			// Check this future is waiting for data
 			if (status_ != FutureStatus::NOT_READY)
 				return false;
@@ -523,17 +524,22 @@ namespace future
 		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
 		{
 			// Now copy all attributes from rhs (output_data_ was already initialized when this was constructed)
-			status_ = that.status_;
-			error_ = that.error_;
-			output_size_ = that.output_size_;
-			input_size_ = that.input_size_;
-			// Calculate data pointer attribute for next set value calls
-			output_current_ = output_data_ + full_output_size - output_size_;
-			input_current_ = input_data_ + full_input_size - input_size_;
-
+			const FutureStatus status = that.status_;
+			status_ = status;
 			// Make rhs Future invalid
-			if (status_ == FutureStatus::NOT_READY)
+			if (status == FutureStatus::NOT_READY)
 				that.status_ = FutureStatus::INVALID;
+
+			error_ = that.error_;
+			const uint8_t output_size = that.output_size_;
+			// Calculate data pointer attribute for next set value calls
+			output_current_ = output_data_ + full_output_size - output_size;
+			output_size_ = output_size;
+
+			const uint8_t input_size = that.input_size_;
+			// Calculate data pointer attribute for next set value calls
+			input_current_ = input_data_ + full_input_size - input_size;
+			input_size_ = input_size;
 		}
 		/// @endcond
 
