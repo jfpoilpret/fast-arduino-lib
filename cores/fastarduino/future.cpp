@@ -17,97 +17,28 @@
 namespace future
 {
 	/// @cond notdocumented
-	// Static definition for AbstractFutureManager singleton
-	AbstractFutureManager* AbstractFutureManager::instance_ = nullptr;
-
-	bool AbstractFutureManager::register_future_(AbstractFuture& future)
+	// Add utility ostream manipulator for FutureStatus
+	static const flash::FlashStorage* convert(future::FutureStatus s)
 	{
-		// You cannot register an already registered future
-		if (future.id() != 0)
-			return false;
-		// Optimization: we start search AFTER the last removed id
-		for (uint8_t i = last_removed_id_; i < size_; ++i)
-			if (register_at_index_(future, i))
-				return true;
-		for (uint8_t i = 0; i <= last_removed_id_; ++i)
-			if (register_at_index_(future, i))
-				return true;
-		return false;
+		switch (s)
+		{
+			case future::FutureStatus::NOT_READY:
+			return F("NOT_READY");
+
+			case future::FutureStatus::READY:
+			return F("READY");
+
+			case future::FutureStatus::ERROR:
+			return F("ERROR");
+
+			case future::FutureStatus::INVALID:
+			return F("INVALID");
+		}
 	}
 
-	uint8_t AbstractFutureManager::get_future_value_size_(uint8_t id) const
+	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s)
 	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return 0;
-		return future->get_output_size_();
-	}
-
-	bool AbstractFutureManager::set_future_finish_(uint8_t id) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return false;
-		return future->set_finish_();
-	}
-	
-	bool AbstractFutureManager::set_future_value_(uint8_t id, uint8_t chunk) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return false;
-		return future->set_chunk_(chunk);
-	}
-
-	bool AbstractFutureManager::set_future_value_(uint8_t id, const uint8_t* chunk, uint8_t size) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return false;
-		return future->set_chunk_(chunk, size);
-	}
-
-	bool AbstractFutureManager::set_future_error_(uint8_t id, int error) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return false;
-		return future->set_error_(error);
-	}
-
-	uint8_t AbstractFutureManager::get_storage_value_size_(uint8_t id) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return 0;
-		return future->get_input_size_();
-	}
-
-	bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t& chunk) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return false;
-		return future->get_chunk_(chunk);
-	}
-
-	bool AbstractFutureManager::get_storage_value_(uint8_t id, uint8_t* chunk, uint8_t size) const
-	{
-		AbstractFuture* future = find_future(id);
-		if (future == nullptr)
-			return false;
-		return future->get_chunk_(chunk, size);
-	}
-
-	bool AbstractFutureManager::register_at_index_(AbstractFuture& future, uint8_t index)
-	{
-		if (futures_[index] != nullptr)
-			return false;
-		update_future_(future.id_, &future, nullptr);
-		future.id_ = static_cast<uint8_t>(index + 1);
-		future.status_ = FutureStatus::NOT_READY;
-		futures_[index] = &future;
-		return true;
+		return out << convert(s);
 	}
 	/// @endcond
 }

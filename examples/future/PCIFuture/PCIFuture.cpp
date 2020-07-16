@@ -95,21 +95,43 @@ static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D0_PB0_PCI0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-static constexpr uint8_t MAX_FUTURES = 5;
-
 using namespace future;
 using namespace streams;
 
-// global variable holding the id of the future to fill in
-static uint8_t port_snapshot_id = 0;
-
 // PCINT0 ISR
-void take_snapshot() {
-    gpio::FastPort<PORT> port;
-    future::AbstractFutureManager::instance().set_future_value(port_snapshot_id, port.get_PIN());
-}
+class ButtonsSnapshot
+{
+public:
+	ButtonsSnapshot() : port_{PORT_MASK, PORT_MASK}
+	{
+		interrupt::register_handler(*this);
+		signal_.set_enable_pins(PORT_MASK);
+		signal_.enable();
+	}
 
-REGISTER_PCI_ISR_FUNCTION(PCINT, take_snapshot, IPIN0)
+	bool get_snapshot(uint8_t& snapshot)
+	{
+		// Wait for future result
+		bool result = future_.get(snapshot);
+		// Reset future
+		future_ = std::move(Future<uint8_t>{});
+		return result;
+	}
+
+private:
+	void take_snapshot()
+	{
+		future_.set_future_value_(port_.get_PIN());
+	}
+
+	Future<uint8_t> future_;
+	gpio::FastPort<PORT> port_;
+	interrupt::PCI_PORT_SIGNAL<PORT> signal_;
+
+	DECL_PCINT_ISR_FRIENDS
+};
+
+REGISTER_PCI_ISR_METHOD(PCINT, ButtonsSnapshot, &ButtonsSnapshot::take_snapshot, IPIN0)
 
 int main() __attribute__((OS_main));
 int main()
@@ -129,28 +151,17 @@ int main()
 	ostream out = uart.out();
 	out << showbase << uppercase;
 
-	// First create a FutureManager singleton
-	FutureManager<MAX_FUTURES> manager;
-
-	// Initialize PORT and PCI
-	gpio::FastPort<PORT> port{PORT_MASK, PORT_MASK};
-	interrupt::PCI_PORT_SIGNAL<PORT> signal;
-	signal.set_enable_pins(PORT_MASK);
-	signal.enable();
+	// Initialize PORT and PCI through ButtonsSnapshot
+	ButtonsSnapshot snapshot_taker;
 
 	out << F("STARTED") << endl;
 
 	while (true)
 	{
-		// Create a Future and register it
-		Future<uint8_t> port_snapshot;
-		manager.register_future(port_snapshot);
-		port_snapshot_id = port_snapshot.id();
-		out << F("ID = ") << dec << port_snapshot_id << endl;
-
 		// Wait for the future to be filled in by the PCINT0 ISR
 		uint8_t snapshot = 0;
-		if (port_snapshot.get(snapshot)) {
+		if (snapshot_taker.get_snapshot(snapshot))
+		{
 			out << F("SNAPSHOT = ") << hex << (snapshot & PORT_MASK) << endl;
 		}
 	}
