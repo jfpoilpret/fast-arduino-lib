@@ -150,7 +150,7 @@ namespace future
 		ERROR,
 
 		/**
-		 * The status of a Future that has been moved, if it was`NOT_READY` before
+		 * The status of a Future that has been moved, if it was `NOT_READY` before
 		 * moving.
 		 */
 		INVALID
