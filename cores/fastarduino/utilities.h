@@ -405,7 +405,7 @@ namespace utils
 	/**
 	 * Cast a one byte long bit-fields struct into a byte.
 	 * Useful when dealing with devices registers (bytes) where each bit has a
-	 * specific maening which you want to clarify through a bitfield struct.
+	 * specific meaning which you want to clarify through a bitfield struct.
 	 * @param input the bit field struct value to convert
 	 * @return @p input casted as a byte
 	 */

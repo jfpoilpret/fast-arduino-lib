@@ -27,6 +27,7 @@
 #include "../i2c_device.h"
 #include "../utilities.h"
 
+//TODO use bool instead of uint8_t when possible (in structs with bitfields)
 namespace devices::magneto
 {
 	/**

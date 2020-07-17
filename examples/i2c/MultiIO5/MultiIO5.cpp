@@ -33,8 +33,13 @@
 
 #include <fastarduino/int.h>
 #include <fastarduino/time.h>
-#include <fastarduino/i2c_device.h>
-#include <fastarduino/devices/mcp23008.h>
+#include <fastarduino/new_i2c_device.h>
+#include <fastarduino/devices/new_mcp23008.h>
+
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
+REGISTER_I2C_ISR(i2c::I2CMode::FAST)
 
 #define INT_NUM 0
 static constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
@@ -42,7 +47,9 @@ static constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInte
 class LedChaser
 {
 public:
-	LedChaser() : manager_{}, mcp_{manager_, 0x00}, signal_{interrupt::InterruptTrigger::RISING_EDGE}
+	LedChaser()
+		:	manager_{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS}, 
+			mcp_{manager_, 0x00}, signal_{interrupt::InterruptTrigger::RISING_EDGE}
 	{
 		interrupt::register_handler(*this);
 		manager_.begin();
@@ -127,6 +134,9 @@ int main()
 {
 	board::init();
 	sei();
+	// Initialize FutureManager
+	future::FutureManager<MAX_FUTURES> future_manager;
+
 	LedChaser chaser;
 	chaser.loop();
 }

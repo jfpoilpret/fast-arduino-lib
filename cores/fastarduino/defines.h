@@ -45,12 +45,15 @@
  * @code
  * void set_PORT(uint8_t port) INLINE {...}
  * 
- * explicit inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;
- * 
  * LinkedListImpl() INLINE = default;
  * @endcode
  */
 #define INLINE __attribute__((always_inline))
+
+//NOTE: SIGNAL is defined (but deprecated) in AVR interrupt.h
+#ifdef SIGNAL
+#undef SIGNAL
+#endif
 
 /**
  * Specific GCC attribute for AVR target, declaring a function as a signal handler

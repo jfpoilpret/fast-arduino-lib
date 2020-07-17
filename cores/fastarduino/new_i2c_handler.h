@@ -15,40 +15,19 @@
 /// @cond api
 
 /**
- * @file
- * Common types used by 3D sensors (e.g. compass, gyroscope, accelerometer).
+ * @file 
+ * Common I2C Manager API. This will automatically include the proper header,
+ * based on target architecture, ATmega or ATtiny.
  */
-#ifndef COMMON_MAGNETO_H
-#define COMMON_MAGNETO_H
+#ifndef I2C_HANDLER_HH
+#define I2C_HANDLER_HH
 
-#include <stdint.h>
+#ifdef TWCR
+#include "new_i2c_handler_atmega.h"
+#else
+#include "new_i2c_handler_attiny.h"
+#endif
 
-namespace devices
-{
-	/**
-	 * Defines API for magnetic sensors for direction, speed and acceleration properties.
-	 */
-	namespace magneto
-	{
-	}
-}
+#endif /* I2C_HANDLER_HH */
 
-namespace devices::magneto
-{
-	/**
-	 * Structure to store 3 axis data for one sensor (gyroscope or accelerometer).
-	 */
-	struct Sensor3D
-	{
-		Sensor3D() = default;
-		/** Sensor value on X axis. */
-		int16_t x;
-		/** Sensor value on Y axis. */
-		int16_t y;
-		/** Sensor value on Z axis. */
-		int16_t z;
-	};
-}
-
-#endif /* COMMON_MAGNETO_H */
 /// @endcond

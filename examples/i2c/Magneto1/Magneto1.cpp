@@ -37,14 +37,17 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/i2c_manager.h>
-#include <fastarduino/devices/hmc5883l.h>
+#include <fastarduino/new_i2c_handler.h>
+#include <fastarduino/devices/new_hmc5883l.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -52,6 +55,9 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static constexpr uint8_t MAX_FUTURES = 128;
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -59,19 +65,16 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-// UART for traces
-static char output_buffer[OUTPUT_BUFFER_SIZE];
-#if HARDWARE_UART
-static serial::hard::UATX<UART> uart{output_buffer};
-#else
-static serial::soft::UATX<TX> uart{output_buffer};
+#if I2C_TRUE_ASYNC
+REGISTER_I2C_ISR(i2c::I2CMode::FAST)
 #endif
-static streams::ostream out = uart.out();
 
+static char output_buffer[OUTPUT_BUFFER_SIZE];
 using devices::magneto::DataOutput;
 using devices::magneto::Gain;
 using devices::magneto::HMC5883L;
@@ -85,17 +88,17 @@ using devices::magneto::magnetic_heading;
 using streams::dec;
 using streams::hex;
 using streams::flush;
+using streams::endl;
 
-void trace_status(Status status)
+void trace_status(streams::ostream& out, Status status)
 {
-	out	<< dec << F("status reserved = ") << status.reserved 
-		<< F(", lock = ") << status.lock 
-		<< F(", ready = ") << status.ready << '\n' << flush;
+	out	<< dec << F(", lock = ") << status.lock()
+		<< F(", ready = ") << status.ready() << endl;
 }
 
-void trace_fields(const Sensor3D& fields)
+void trace_fields(streams::ostream& out, const Sensor3D& fields)
 {
-	out << dec << F("Fields x = ") << fields.x << F(", y = ") << fields.y << F(", z = ") << fields.z << '\n' << flush;
+	out << dec << F("Fields x = ") << fields.x << F(", y = ") << fields.y << F(", z = ") << fields.z << endl;
 }
 
 using MAGNETOMETER = HMC5883L<i2c::I2CMode::FAST>;
@@ -105,39 +108,59 @@ int main()
 {
 	board::init();
 	sei();
+
+	// UART for traces
+#if HARDWARE_UART
+	serial::hard::UATX<UART> uart{output_buffer};
+#else
+	serial::soft::UATX<TX> uart{output_buffer};
+#endif
+	streams::ostream out = uart.out();
+
 	uart.begin(115200);
 	out.width(2);
 	out << F("Start\n") << flush;
 	
-	MAGNETOMETER::MANAGER manager;
+	// Initialize FutureManager
+	future::FutureManager<MAX_FUTURES> future_manager;
+
+	// Initialize I2C async handler
+#if I2C_TRUE_ASYNC
+	MAGNETOMETER::MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#else
+	MAGNETOMETER::MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#endif
 	manager.begin();
 	out << F("I2C interface started\n") << flush;
-	out << hex << F("status #1 ") << manager.status() << '\n' << flush;
+	out << hex << F("status #1 ") << manager.status() << endl;
 	
 	MAGNETOMETER compass{manager};
 	
 	bool ok = compass.begin(
 		OperatingMode::CONTINUOUS, Gain::GAIN_1_9GA, DataOutput::RATE_75HZ, SamplesAveraged::EIGHT_SAMPLES);
 	out << dec << F("begin() ") << ok << '\n' << flush;
-	out << hex << F("status #2 ") << manager.status() << '\n' << flush;
-	trace_status(compass.status());
+	out << hex << F("status #2 ") << manager.status() << endl;
+	trace_status(out, compass.status());
 	while (true)
 	{
-		while (!compass.status().ready) ;
-		trace_status(compass.status());
-		Sensor3D fields;
+		while (!compass.status().ready()) ;
+		trace_status(out, compass.status());
+		Sensor3D fields{};
 		ok = compass.magnetic_fields(fields);
 
+		// The following code draws maths libraries (too big fro ATtiny84 8KB code)
+#ifndef BREADBOARD_ATTINYX4
 		float heading = magnetic_heading(fields.x, fields.y);
 		out << F("Magnetic heading ") << heading << F(" rad\n") << flush;
+#endif
 		compass.convert_fields_to_mGA(fields);
-		trace_fields(fields);
+		trace_fields(out, fields);
 		time::delay_ms(500);
 	}
 	
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << hex << F("status #4 ") << manager.status() << '\n' << flush;
+	out << hex << F("status #4 ") << manager.status() << endl;
 	out << F("End\n") << flush;
 }
