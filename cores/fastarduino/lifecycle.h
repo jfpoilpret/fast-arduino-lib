@@ -428,6 +428,16 @@ namespace lifecycle
 		LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 	};
 
+	// Forward declarations for Proxy and LightProxy classes
+	/// @cond notdocumented
+	template<typename T> class Proxy;
+	template<typename T> bool operator==(const Proxy<T>& a, const Proxy<T>& b);
+	template<typename T> bool operator!=(const Proxy<T>& a, const Proxy<T>& b);
+	template<typename T> class LightProxy;
+	template<typename T> bool operator==(const LightProxy<T>& a, const LightProxy<T>& b);
+	template<typename T> bool operator!=(const LightProxy<T>& a, const LightProxy<T>& b);
+	/// @endcond
+
 	/**
 	 * A proxy class that encapsulates access to a fixed @p T instance, or to
 	 * a dynamic `LifeCycle<T>` instance.
@@ -546,7 +556,25 @@ namespace lifecycle
 			uintptr_t ptr_ : 15;
 			uint8_t id_;
 		};
+
+		friend bool operator==<T>(const Proxy<T>&, const Proxy<T>&);
+		friend bool operator!=<T>(const Proxy<T>&, const Proxy<T>&);
 	};
+
+	/// @cond notdocumented
+	template<typename T>
+	bool operator==(const Proxy<T>& a, const Proxy<T>& b)
+	{
+		if (&a == &b) return true;
+		return (a.is_dynamic_ == b.is_dynamic_) && (a.ptr_ == b.ptr_) && (a.id_ == b.id_);
+	}
+
+	template<typename T>
+	bool operator!=(const Proxy<T>& a, const Proxy<T>& b)
+	{
+		return (a.is_dynamic_ != b.is_dynamic_) || (a.ptr_ != b.ptr_) || (a.id_ != b.id_);
+	}
+	/// @endcond
 
 	/**
 	 * A light proxy class that encapsulates access to a fixed @p T instance, or to
@@ -610,7 +638,7 @@ namespace lifecycle
 		}
 
 		/// @cond notdocumented
-		LightProxy() : is_dynamic_{false}, ptr_{0} {}
+		constexpr LightProxy() : is_dynamic_{false}, ptr_{0} {}
 		LightProxy(const LightProxy&) = default;
 		LightProxy& operator=(const LightProxy&) = default;
 		/// @endcond
@@ -622,7 +650,7 @@ namespace lifecycle
 		 * is a static proxy. Behaviour is undefined if `nullptr` and this LightProxy
 		 * is dynamic.
 		 */
-		T* operator()(AbstractLifeCycleManager* manager = nullptr) const
+		T* operator()(const AbstractLifeCycleManager* manager = nullptr) const
 		{
 			if (is_dynamic_)
 				return manager->find_<T>(id_);
@@ -675,7 +703,25 @@ namespace lifecycle
 				uint8_t id_;
 			};
 		};
+
+		friend bool operator==<T>(const LightProxy<T>&, const LightProxy<T>&);
+		friend bool operator!=<T>(const LightProxy<T>&, const LightProxy<T>&);
 	};
+
+	/// @cond notdocumented
+	template<typename T>
+	bool operator==(const LightProxy<T>& a, const LightProxy<T>& b)
+	{
+		if (&a == &b) return true;
+		return (a.is_dynamic_ == b.is_dynamic_) && (a.ptr_ == b.ptr_);
+	}
+
+	template<typename T>
+	bool operator!=(const LightProxy<T>& a, const LightProxy<T>& b)
+	{
+		return (a.is_dynamic != b.is_dynamic_) || (a.ptr_ != b.ptr_);
+	}
+	/// @endcond
 }
 
 #endif /* LIFECYCLE_HH */
