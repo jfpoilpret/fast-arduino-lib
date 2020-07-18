@@ -26,6 +26,8 @@
 #include "boards/board_traits.h"
 #include "i2c.h"
 #include "streams.h"
+#include "future.h"
+#include "lifecycle.h"
 
 namespace i2c
 {
@@ -145,24 +147,25 @@ namespace i2c
 		}
 
 		static constexpr I2CCommand read(
-			uint8_t target, bool force_stop, uint8_t future_id, bool finish_future, uint8_t read_count)
+			uint8_t target, bool force_stop, bool finish_future, uint8_t read_count)
 		{
-			return I2CCommand{I2CCommandType{false, force_stop, finish_future}, target, future_id, read_count};
+			return I2CCommand{I2CCommandType{false, force_stop, finish_future}, target, read_count};
 		}
 		static constexpr I2CCommand write(
-			uint8_t target, bool force_stop, uint8_t future_id, bool finish_future, uint8_t write_count)
+			uint8_t target, bool force_stop, bool finish_future, uint8_t write_count)
 		{
-			return I2CCommand{I2CCommandType{true, force_stop, finish_future}, target, future_id, write_count};
+			return I2CCommand{I2CCommandType{true, force_stop, finish_future}, target, write_count};
 		}
 
-		constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t future_id, uint8_t byte_count)
-			: type{type}, target{target}, future_id{future_id}, byte_count{byte_count} {}
+		constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t byte_count)
+			: type{type}, target{target}, byte_count{byte_count} {}
 
 		// Type of this command
 		I2CCommandType type = I2CCommandType{};
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target = 0;
-		uint8_t future_id = 0;
+		// A proxy to the future to be used for this command
+		lifecycle::LightProxy<future::AbstractFuture> future_;
 		// The number of remaining bytes to be read or write
 		// When initally set to 0, it will be first replaced by Future full read or write size
 		uint8_t byte_count = 0;
@@ -178,17 +181,16 @@ namespace i2c
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c)
 	{
 		out	<< '{' << c.type << ',' 
-			<< streams::hex << c.target << ',' 
-			<< streams::dec << c.future_id << '}' << streams::flush;
+			<< streams::hex << c.target << '}' << streams::flush;
 		return out;
 	}
 	bool operator==(const I2CCommand& a, const I2CCommand& b)
 	{
-		return (a.type == b.type) && (a.target == b.target) && (a.future_id == b.future_id);
+		return (a.type == b.type) && (a.target == b.target) && (a.future_ == b.future_);
 	}
 	bool operator!=(const I2CCommand& a, const I2CCommand& b)
 	{
-		return (a.type != b.type) || (a.target != b.target) || (a.future_id != b.future_id);
+		return (a.type != b.type) || (a.target != b.target) || (a.future_ != b.future_);
 	}
 
 	/**
@@ -225,8 +227,10 @@ namespace i2c
 		AbstractI2CManager(const AbstractI2CManager<MODE_>&) = delete;
 		AbstractI2CManager<MODE_>& operator=(const AbstractI2CManager<MODE_>&) = delete;
 
-		explicit AbstractI2CManager(I2CErrorPolicy error_policy, I2C_DEBUG_HOOK hook)
-			:	error_policy_{error_policy}, hook_{hook} {}
+		AbstractI2CManager(
+			lifecycle::AbstractLifeCycleManager* lifecycle_manager, 
+			I2CErrorPolicy error_policy, I2C_DEBUG_HOOK hook)
+			:	lifecycle_manager_{lifecycle_manager}, error_policy_{error_policy}, hook_{hook} {}
 
 		using TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
@@ -243,8 +247,18 @@ namespace i2c
 			// When status is FUTURE_ERROR then future has already been marked accordingly
 			if (status_ != Status::FUTURE_ERROR)
 				// The future must be marked as error
-				future::AbstractFutureManager::instance().set_future_error_(command_.future_id, errors::EPROTO);
+				future().set_future_error_(errors::EPROTO);
 			return false;
+		}
+
+		future::AbstractFuture& future(const lifecycle::LightProxy<future::AbstractFuture>& proxy) const
+		{
+			return *proxy(lifecycle_manager_);
+		}
+
+		future::AbstractFuture& future() const
+		{
+			return future(command_.future_);
 		}
 
 		void call_hook(DebugStatus status, uint8_t data = 0)
@@ -256,6 +270,7 @@ namespace i2c
 		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100'000UL - 16UL) / 2;
 		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400'000UL - 16UL) / 2;
 
+		lifecycle::AbstractLifeCycleManager* lifecycle_manager_;
 		const I2CErrorPolicy error_policy_;
 		const I2C_DEBUG_HOOK hook_;
 

@@ -25,6 +25,7 @@
 #include "errors.h"
 #include "i2c.h"
 #include "future.h"
+#include "lifecycle.h"
 #include "new_i2c_handler.h"
 
 /// @cond notdocumented
@@ -154,7 +155,7 @@ namespace i2c
 		I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE) const
 		{
 			return I2CCommand::read(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
-				0, uint8_t(finish & I2CFinish::FUTURE_FINISH), read_count);
+				uint8_t(finish & I2CFinish::FUTURE_FINISH), read_count);
 		}
 
 		/**
@@ -178,7 +179,7 @@ namespace i2c
 		I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE) const
 		{
 			return I2CCommand::write(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
-				0, uint8_t(finish & I2CFinish::FUTURE_FINISH), write_count);
+				uint8_t(finish & I2CFinish::FUTURE_FINISH), write_count);
 		}
 
 		/**
@@ -211,25 +212,23 @@ namespace i2c
 		 * @sa write()
 		 * @sa errors
 		 */
-		int launch_commands(future::AbstractFuture& future, std::initializer_list<I2CCommand> commands)
+		int launch_commands(
+			lifecycle::LightProxy<future::AbstractFuture> proxy, std::initializer_list<I2CCommand> commands)
 		{
+			//FIXME add checks for resolvability of proxy by handler_ (ie if dynamic, manager must not be null)
 			const uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
-			auto& manager = future::AbstractFutureManager::instance();
 			OUTER_SYNCHRONIZED
 			{
-				uint8_t id = 0;
 				uint8_t max_read = 0;
 				uint8_t max_write = 0;
 				INNER_SYNCHRONIZED
 				{
 					// pre-conditions (must be synchronized)
 					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
-					if (manager.available_futures_() == 0) return errors::EAGAIN;
-					manager.register_future_(future);
-					id = future.id();
-					max_read = manager.get_future_value_size_(id);
-					max_write = manager.get_storage_value_size_(id);
+					future::AbstractFuture& future = handler_.future(proxy);
+					max_read = future.get_future_value_size_();
+					max_write = future.get_storage_value_size_();
 				}
 				// Limit total number of bytes read or written in a transaction to 255
 				uint8_t total_read = 0;
@@ -252,7 +251,7 @@ namespace i2c
 				for (I2CCommand command : commands)
 				{
 					// update command.byte_count if 0
-					command.future_id = id;
+					command.future_ = proxy;
 					if (!command.byte_count)
 						command.byte_count = (command.type.write ? max_write : max_read);
 					// force future finish for last command in transaction
@@ -270,6 +269,7 @@ namespace i2c
 				return error;
 			}
 		}
+		//TODO maybe add 2 launch_commands with resp. AbstractFuture& and LifeCycle<AbstractFuture>?
 
 	private:
 		uint8_t device_ = 0;

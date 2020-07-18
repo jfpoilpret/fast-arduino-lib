@@ -105,7 +105,19 @@ namespace i2c
 		I2CManager(	I2CCommand (&buffer)[SIZE],
 					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
 					I2C_DEBUG_HOOK hook = nullptr)
-			:	SUPER{error_policy, hook}, commands_{buffer}
+			:	SUPER{nullptr, error_policy, hook}, commands_{buffer}
+		{
+			interrupt::register_handler(*this);
+		}
+
+		//TODO do we really need 2 constructors or one should be enough?
+		//TODO DOC
+		template<uint8_t SIZE> explicit 
+		I2CManager(	lifecycle::AbstractLifeCycleManager& lifecycle_manager,
+					I2CCommand (&buffer)[SIZE],
+					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
+					I2C_DEBUG_HOOK hook = nullptr)
+			:	SUPER{&lifecycle_manager, error_policy, hook}, commands_{buffer}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -299,13 +311,14 @@ namespace i2c
 		{
 			// Determine next data byte
 			uint8_t data = 0;
-			bool ok = future::AbstractFutureManager::instance().get_storage_value_(this->command_.future_id, data);
+			future::AbstractFuture& future = this->future();
+			bool ok = future.get_storage_value_(data);
 			this->call_hook(DebugStatus::SEND, data);
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (ok)
 				--this->command_.byte_count;
 			else
-				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
+				future.set_future_error_(errors::EILSEQ);
 			this->call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
 			this->expected_status_ = Status::DATA_TRANSMITTED_ACK;
 			send_byte(data);
@@ -344,7 +357,7 @@ namespace i2c
 		bool is_end_transaction() const
 		{
 			I2CCommand command;
-			return !(commands_.peek_(command) && command.future_id == this->command_.future_id);
+			return !(commands_.peek_(command) && command.future_ == this->command_.future_);
 		}
 
 		bool handle_no_error()
@@ -361,11 +374,11 @@ namespace i2c
 				case I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS:
 				// Clear command belonging to the same transaction (i.e. same future)
 				{
-					const uint8_t id = this->command_.future_id;
+					const auto future = this->command_.future_;
 					I2CCommand command;
 					while (commands_.peek_(command))
 					{
-						if (command.future_id != id)
+						if (command.future_ != future)
 							break;
 						commands_.pull_(command);
 					}
@@ -386,16 +399,16 @@ namespace i2c
 				return I2CCallback::ERROR;
 			
 			// Handle TWI interrupt when data received
+			future::AbstractFuture& future = this->future();
 			if (current_ == State::RECV || current_ == State::RECV_LAST)
 			{
 				const uint8_t data = TWDR_;
-				bool ok = future::AbstractFutureManager::instance().set_future_value_(this->command_.future_id, data);
+				bool ok = future.set_future_value_(data);
 				// This should only happen in case there are 2 concurrent providers for this future
 				if (ok)
 					--this->command_.byte_count;
 				else
-					future::AbstractFutureManager::instance().set_future_error_(
-						this->command_.future_id, errors::EILSEQ);
+					future.set_future_error_(errors::EILSEQ);
 				this->call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
 			}
 
@@ -429,7 +442,7 @@ namespace i2c
 				case State::STOP:
 				// Check if we need to finish the current future
 				if (this->command_.type.finish_future)
-					future::AbstractFutureManager::instance().set_future_finish_(this->command_.future_id);
+					future.set_future_finish_();
 				result = (is_end_transaction() ? I2CCallback::END_TRANSACTION : I2CCallback::END_COMMAND);
 				// Check if we need to STOP (no more pending commands in queue)
 				if (commands_.empty_())

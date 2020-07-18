@@ -116,6 +116,7 @@ i2c::I2C_DEBUG_HOOK i2c_hook = nullptr;
 class RTC : public i2c::I2CDevice<i2c::I2CMode::STANDARD>
 {
 	using PARENT = i2c::I2CDevice<i2c::I2CMode::STANDARD>;
+	template<typename T> using PROXY = lifecycle::LightProxy<T>;
 
 	static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 	static constexpr const uint8_t RAM_START = 0x08;
@@ -133,7 +134,7 @@ public:
 		SetRamFuture(SetRamFuture&&) = default;
 		SetRamFuture& operator=(SetRamFuture&&) = default;
 	};
-	int set_ram(SetRamFuture& future)
+	int set_ram(PROXY<SetRamFuture> future)
 	{
 		return launch_commands(
 			// future, {write(3), write(4, i2c::I2CFinish::FUTURE_FINISH)});
@@ -148,7 +149,7 @@ public:
 		GetRamFuture(GetRamFuture&&) = default;
 		GetRamFuture& operator=(GetRamFuture&&) = default;
 	};
-	int get_ram(GetRamFuture& future)
+	int get_ram(PROXY<GetRamFuture> future)
 	{
 		return launch_commands(
 			// future, {write(1), read(2), write(1), read(3)});
@@ -163,7 +164,7 @@ public:
 		GetAllRamFuture(GetAllRamFuture&&) = default;
 		GetAllRamFuture& operator=(GetAllRamFuture&&) = default;
 	};
-	int get_all_ram(GetAllRamFuture& future)
+	int get_all_ram(PROXY<GetAllRamFuture> future)
 	{
 		return launch_commands(future, {write(1), read(0)});
 	}
@@ -178,16 +179,18 @@ public:
 			input[0] = RAM_START;
 			for (uint8_t i = 1; i < input.size(); ++i)
 				input[i] = value;
-			reset_input(input);
+			reset_input_(input);
 		}
 		SetAllRamFuture(SetAllRamFuture&&) = default;
 		SetAllRamFuture& operator=(SetAllRamFuture&&) = default;
 	};
-	int set_all_ram(SetAllRamFuture& future)
+	int set_all_ram(PROXY<SetAllRamFuture> future)
 	{
 		return launch_commands(future, {write(0, i2c::I2CFinish::FUTURE_FINISH)});
 	}
 };
+
+using namespace lifecycle;
 
 int main() __attribute__((OS_main));
 int main()
@@ -210,9 +213,6 @@ int main()
 	pout = &out;
 	out << F("Starting...") << endl;
 
-	// Initialize FutureManager
-	future::FutureManager<MAX_FUTURES> future_manager;
-
 	// Initialize I2C async handler
 #if I2C_TRUE_ASYNC
 	I2CHANDLER handler{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
@@ -229,12 +229,11 @@ int main()
 	{
 		out << F("\nTEST #0.1 clear all RAM bytes") << endl;
 		RTC::SetAllRamFuture output{0};
-		int ok = rtc.set_all_ram(output);
+		int ok = rtc.set_all_ram(LightProxy<RTC::SetAllRamFuture>{output});
 		out << F("\nset_all_ram()=") << dec << ok << endl;
 		out << F("handler.status()=") << hex << handler.status() << endl;
-		uint8_t id = output.id();
 		future::FutureStatus status = output.status();
-		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("status=") << status << endl;
 		out << F("data await()=") << output.await() << endl;
 		out << F("error()=") << dec << output.error() << endl;
 	}
@@ -242,12 +241,11 @@ int main()
 	{
 		out << F("\nTEST #0.2 get all RAM bytes") << endl;
 		RTC::GetAllRamFuture input;
-		int ok = rtc.get_all_ram(input);
+		int ok = rtc.get_all_ram(LightProxy<RTC::GetAllRamFuture>{input});
 		out << F("\nget_all_ram()=") << dec << ok << endl;
 		out << F("handler.status()=") << hex << handler.status() << endl;
-		uint8_t id = input.id();
 		future::FutureStatus status = input.status();
-		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("status=") << status << endl;
 		out << F("data await()=") << input.await() << endl;
 		out << F("error()=") << dec << input.error() << endl;
 		RTC::GetAllRamFuture::OUT result;
@@ -266,12 +264,11 @@ int main()
 	{
 		out << F("\nTEST #1 set 2 then 3 RAM bytes") << endl;
 		RTC::SetRamFuture output;
-		int ok = rtc.set_ram(output);
+		int ok = rtc.set_ram(LightProxy<RTC::SetRamFuture>{output});
 		out << F("\nset_ram()=") << dec << ok << endl;
 		out << F("handler.status()=") << hex << handler.status() << endl;
-		uint8_t id = output.id();
 		future::FutureStatus status = output.status();
-		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("status=") << status << endl;
 		out << F("data await()=") << output.await() << endl;
 		out << F("error()=") << dec << output.error() << endl;
 	}
@@ -279,12 +276,11 @@ int main()
 	{
 		out << F("\nTEST #2 get all RAM bytes") << endl;
 		RTC::GetAllRamFuture input;
-		int ok = rtc.get_all_ram(input);
+		int ok = rtc.get_all_ram(LightProxy<RTC::GetAllRamFuture>{input});
 		out << F("\nget_all_ram()=") << dec << ok << endl;
 		out << F("handler.status()=") << hex << handler.status() << endl;
-		uint8_t id = input.id();
 		future::FutureStatus status = input.status();
-		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("status=") << status << endl;
 		out << F("data await()=") << input.await() << endl;
 		out << F("error()=") << dec << input.error() << endl;
 		RTC::GetAllRamFuture::OUT result;
@@ -303,12 +299,11 @@ int main()
 	{
 		out << F("\nTEST #3 get 2 then 3 RAM bytes") << endl;
 		RTC::GetRamFuture input;
-		int ok = rtc.get_ram(input);
+		int ok = rtc.get_ram(LightProxy<RTC::GetRamFuture>{input});
 		out << F("\nget_ram()=") << dec << ok << endl;
 		out << F("handler.status()=") << hex << handler.status() << endl;
-		uint8_t id = input.id();
 		future::FutureStatus status = input.status();
-		out << F("id=") << dec << id << F(" status=") << status << endl;
+		out << F("status=") << status << endl;
 		out << F("data await()=") << input.await() << endl;
 		out << F("error()=") << dec << input.error() << endl;
 		RTC::GetRamFuture::OUT result;
