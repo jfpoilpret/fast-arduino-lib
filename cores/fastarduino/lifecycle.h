@@ -747,7 +747,7 @@ namespace lifecycle
 	template<typename T>
 	bool operator!=(const LightProxy<T>& a, const LightProxy<T>& b)
 	{
-		return (a.is_dynamic != b.is_dynamic_) || (a.ptr_ != b.ptr_);
+		return (a.is_dynamic_ != b.is_dynamic_) || (a.ptr_ != b.ptr_);
 	}
 	/// @endcond
 }
