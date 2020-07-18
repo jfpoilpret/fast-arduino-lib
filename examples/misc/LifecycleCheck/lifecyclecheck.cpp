@@ -204,6 +204,20 @@ void check_light_proxies(ostream& out, AbstractLifeCycleManager& manager)
 	out << F("p3()->val() ") << hex << p3(&manager) << ' ' << dec << p3(&manager)->val() << endl;
 	out << F("p4()->val() ") << hex << p4(&manager) << ' ' << dec << p4(&manager)->val() << endl;
 
+	// Check LP<T> is copy-construtable from LP<T'> if T' is a T subclass
+	LightProxy<SubValue> p5{lc2};
+
+	LightProxy<Value> p6{p5};
+	out << F("p6.id=") << dec << p6.id()
+		<< F(" p6.dest=") << hex << p6.destination() << endl;
+	out << F("p6()->val() ") << hex << p6(&manager) << ' ' << dec << p6(&manager)->val() << endl;
+
+	// Check LP<T> is copy-assignable from LP<T'> if T' is a T subclass
+	p6 = p5;
+	out << F("p6.id=") << dec << p6.id()
+		<< F(" p6.dest=") << hex << p6.destination() << endl;
+	out << F("p6()->val() ") << hex << p6(&manager) << ' ' << dec << p6(&manager)->val() << endl;
+
 	// This shall not compile
 	// LightProxy<SubValue> p5{lc1};
 }

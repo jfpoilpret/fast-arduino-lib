@@ -438,6 +438,7 @@ namespace lifecycle
 	template<typename T> bool operator!=(const LightProxy<T>& a, const LightProxy<T>& b);
 	/// @endcond
 
+	//TODO define AbstractProxy to factor out common code?
 	/**
 	 * A proxy class that encapsulates access to a fixed @p T instance, or to
 	 * a dynamic `LifeCycle<T>` instance.
@@ -480,9 +481,23 @@ namespace lifecycle
 		}
 
 		/// @cond notdocumented
-		Proxy() = default;
-		Proxy(const Proxy&) = default;
-		Proxy& operator=(const Proxy&) = default;
+		constexpr Proxy() = default;
+		template<typename U> Proxy(const Proxy<U>& that)
+			:	is_dynamic_{that.is_dynamic_}, ptr_{that.ptr_}, id_{that.id_}
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+
+		}
+		template<typename U> Proxy& operator=(const Proxy<U>& that)
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+			is_dynamic_ = that.is_dynamic_;
+			ptr_ = that.ptr_;
+			id_ = that.id_;
+			return *this;
+		}
 		/// @endcond
 
 		/**
@@ -557,6 +572,7 @@ namespace lifecycle
 			uint8_t id_;
 		};
 
+		template<typename U> friend class Proxy;
 		friend bool operator==<T>(const Proxy<T>&, const Proxy<T>&);
 		friend bool operator!=<T>(const Proxy<T>&, const Proxy<T>&);
 	};
@@ -638,9 +654,19 @@ namespace lifecycle
 		}
 
 		/// @cond notdocumented
-		constexpr LightProxy() : is_dynamic_{false}, ptr_{0} {}
-		LightProxy(const LightProxy&) = default;
-		LightProxy& operator=(const LightProxy&) = default;
+		constexpr LightProxy() : content_{} {}
+		template<typename U> LightProxy(const LightProxy<U>& that) : content_{that.content_}
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+		}
+		template<typename U> LightProxy& operator=(const LightProxy<U>& that)
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+			content_ = that.content_;
+			return *this;
+		}
 		/// @endcond
 
 		/**
@@ -691,6 +717,7 @@ namespace lifecycle
 	private:
 		union
 		{
+			uint16_t content_;
 			struct
 			{
 				uint16_t is_dynamic_ : 1;
@@ -704,6 +731,7 @@ namespace lifecycle
 			};
 		};
 
+		template<typename U> friend class LightProxy;
 		friend bool operator==<T>(const LightProxy<T>&, const LightProxy<T>&);
 		friend bool operator!=<T>(const LightProxy<T>&, const LightProxy<T>&);
 	};
