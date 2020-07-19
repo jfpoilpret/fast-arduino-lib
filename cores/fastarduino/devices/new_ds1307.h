@@ -96,6 +96,8 @@ namespace devices::rtc
 	 */
 	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::STANDARD>
 	{
+		template<typename T> using PROXY = lifecycle::LightProxy<T>;
+
 		struct set_tm
 		{
 			uint8_t address_;
@@ -146,7 +148,7 @@ namespace devices::rtc
 				set.tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
 				set.tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
 				set.tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
-				this->reset_input(set);
+				this->reset_input_(set);
 			}
 			SetDatetimeFuture(SetDatetimeFuture&&) = default;
 			SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
@@ -170,7 +172,7 @@ namespace devices::rtc
 		 * @sa set_datetime(const tm&)
 		 * @sa errors
 		 */
-		int set_datetime(SetDatetimeFuture& future)
+		int set_datetime(PROXY<SetDatetimeFuture> future)
 		{
 			// send register address to write to (0)
 			// send datetime at address 0
@@ -223,7 +225,7 @@ namespace devices::rtc
 		 * @sa get_datetime(tm&)
 		 * @sa errors
 		 */
-		int get_datetime(GetDatetimeFuture& future)
+		int get_datetime(PROXY<GetDatetimeFuture> future)
 		{
 			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -252,7 +254,7 @@ namespace devices::rtc
 				typename PARENT::IN input;
 				input[0] = static_cast<uint8_t>(address + RAM_START);
 				input.set(uint8_t(1), data);
-				this->reset_input(input);
+				this->reset_input_(input);
 			}
 			SetRamFuture(SetRamFuture<SIZE_>&&) = default;
 			SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
@@ -286,9 +288,9 @@ namespace devices::rtc
 		 * @sa get_ram(GetRamFuture<SIZE>&)
 		 * @sa errors
 		 */
-		template<uint8_t SIZE> int set_ram(SetRamFuture<SIZE>& future)
+		template<uint8_t SIZE> int set_ram(PROXY<SetRamFuture<SIZE>> future)
 		{
-			if (!future.is_input_valid())
+			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -340,9 +342,9 @@ namespace devices::rtc
 		 * @sa set_ram(uint8_t, uint8_t)
 		 * @sa errors
 		 */
-		int set_ram(SetRam1Future& future)
+		int set_ram(PROXY<SetRam1Future> future)
 		{
-			if (!future.is_input_valid())
+			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -398,9 +400,9 @@ namespace devices::rtc
 		 * @sa get_ram(uint8_t, uint8_t*, uint8_t)
 		 * @sa errors
 		 */
-		template<uint8_t SIZE> int get_ram(GetRamFuture<SIZE>& future)
+		template<uint8_t SIZE> int get_ram(PROXY<GetRamFuture<SIZE>> future)
 		{
-			if (!future.is_input_valid())
+			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -449,9 +451,9 @@ namespace devices::rtc
 		 * @sa set_ram(SetRam1Future&)
 		 * @sa errors
 		 */
-		int get_ram(GetRam1Future& future)
+		int get_ram(PROXY<GetRam1Future> future)
 		{
-			if (!future.is_input_valid())
+			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
 			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -493,7 +495,7 @@ namespace devices::rtc
 		 * @sa halt_clock()
 		 * @sa errors
 		 */
-		int halt_clock(HaltClockFuture& future)
+		int halt_clock(PROXY<HaltClockFuture> future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -519,7 +521,7 @@ namespace devices::rtc
 				typename PARENT::IN input;
 				input[0] = CONTROL_ADDRESS;
 				input[1] = control.data;
-				this->reset_input(input);
+				this->reset_input_(input);
 			}
 			EnableOutputFuture(EnableOutputFuture&&) = default;
 			EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
@@ -544,7 +546,7 @@ namespace devices::rtc
 		 * @sa disable_output(DisableOutputFuture&)
 		 * @sa errors
 		 */
-		int enable_output(EnableOutputFuture& future)
+		int enable_output(PROXY<EnableOutputFuture> future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -569,7 +571,7 @@ namespace devices::rtc
 				typename PARENT::IN input;
 				input[0] = CONTROL_ADDRESS;
 				input[1] = control.data;
-				this->reset_input(input);
+				this->reset_input_(input);
 			}
 			DisableOutputFuture(DisableOutputFuture&&) = default;
 			DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
@@ -594,7 +596,7 @@ namespace devices::rtc
 		 * @sa enable_output()
 		 * @sa errors
 		 */
-		int disable_output(DisableOutputFuture& future)
+		int disable_output(PROXY<DisableOutputFuture> future)
 		{
 			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
@@ -618,7 +620,7 @@ namespace devices::rtc
 		bool set_datetime(const tm& datetime)
 		{
 			SetDatetimeFuture future{datetime};
-			if (set_datetime(future) != 0) return false;
+			if (set_datetime(lifecycle::make_light_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -637,7 +639,7 @@ namespace devices::rtc
 		bool get_datetime(tm& datetime)
 		{
 			GetDatetimeFuture future;
-			if (get_datetime(future) != 0) return false;
+			if (get_datetime(lifecycle::make_light_proxy(future)) != 0) return false;
 			return future.get(datetime);
 		}
 
@@ -656,7 +658,7 @@ namespace devices::rtc
 		bool halt_clock()
 		{
 			HaltClockFuture future;
-			if (halt_clock(future) != 0) return false;
+			if (halt_clock(lifecycle::make_light_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -675,7 +677,7 @@ namespace devices::rtc
 		bool enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
 		{
 			EnableOutputFuture future{frequency};
-			if (enable_output(future) != 0) return false;
+			if (enable_output(lifecycle::make_light_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -693,7 +695,7 @@ namespace devices::rtc
 		bool disable_output(bool output_value = false)
 		{
 			DisableOutputFuture future{output_value};
-			if (disable_output(future) != 0) return false;
+			if (disable_output(lifecycle::make_light_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -713,7 +715,7 @@ namespace devices::rtc
 		bool set_ram(uint8_t address, uint8_t data)
 		{
 			SetRam1Future future{address, data};
-			if (set_ram(future) != 0) return false;
+			if (set_ram(lifecycle::make_light_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -731,7 +733,7 @@ namespace devices::rtc
 		uint8_t get_ram(uint8_t address)
 		{
 			GetRam1Future future{address};
-			if (get_ram(future) != 0) return false;
+			if (get_ram(lifecycle::make_light_proxy(future)) != 0) return false;
 			uint8_t data = 0;
 			future.get(data);
 			return data;
@@ -755,7 +757,7 @@ namespace devices::rtc
 		template<uint8_t SIZE> bool set_ram(uint8_t address, const uint8_t (&data)[SIZE])
 		{
 			SetRamFuture<SIZE> future{address, data};
-			if (set_ram(future) != 0) return false;
+			if (set_ram(lifecycle::make_light_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -777,7 +779,7 @@ namespace devices::rtc
 		template<uint8_t SIZE> bool get_ram(uint8_t address, uint8_t (&data)[SIZE])
 		{
 			GetRamFuture<SIZE> future{address};
-			if (get_ram(future) != 0) return false;
+			if (get_ram(lifecycle::make_light_proxy(future)) != 0) return false;
 			typename GetRamFuture<SIZE>::OUT temp;
 			if (!future.get(temp)) return false;
 			memcpy(data, temp.data(), SIZE);
@@ -803,7 +805,7 @@ namespace devices::rtc
 			uint8_t temp[sizeof(T)];
 			utils::as_array<T>(data, temp);
 			SetRamFuture<sizeof(T)> future{address, temp};
-			if (set_ram(future) != 0) return false;
+			if (set_ram(lifecycle::make_light_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -827,7 +829,7 @@ namespace devices::rtc
 		template<typename T> bool get_ram(uint8_t address, T& data)
 		{
 			GetRamFuture<sizeof(T)> future{address};
-			if (get_ram(future) != 0) return false;
+			if (get_ram(lifecycle::make_light_proxy(future)) != 0) return false;
 			return future.get(reinterpret_cast<uint8_t&>(data));
 		}
 
