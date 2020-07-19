@@ -18,6 +18,8 @@
  * 
  * Wiring:
  * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
+ * WARNING: wiring is very sensitive for I2C connections! When using breadboard, ensure
+ * wires connections are tight and stable.
  * - on ATmega328P based boards (including Arduino UNO):
  *   - A4 (PC4, SDA): connected to DS1307 SDA pin
  *   - A5 (PC5, SCL): connected to DS1307 SCL pin
@@ -98,8 +100,6 @@ using devices::rtc::WeekDay;
 using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
 using namespace streams;
-
-static constexpr uint8_t MAX_FUTURES = 8;
 
 // Have to somehow declare this ugly global pointer so that trace_status()
 // knows where to display its content.
@@ -203,9 +203,6 @@ int main()
 	pout = &out;
 	out << F("Start") << endl;
 	
-	// Initialize FutureManager
-	future::FutureManager<MAX_FUTURES> future_manager;
-
 	// Start TWI interface
 	//====================
 #if I2C_TRUE_ASYNC
