@@ -61,9 +61,22 @@ namespace i2c
 		 * @param hook an optional hook function that will be called back after
 		 * each transmission operation.
 		 */
-		I2CManager(	I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
-					I2C_DEBUG_HOOK hook = nullptr)
-			:	SUPER{error_policy, hook}
+		explicit I2CManager(
+			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS, I2C_DEBUG_HOOK hook = nullptr)
+			:	SUPER{nullptr, error_policy, hook}
+		{
+			// set SDA/SCL default directions
+			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
+			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SDA);
+			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+		}
+
+		explicit I2CManager(
+			lifecycle::AbstractLifeCycleManager& lifecycle_manager,
+			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
+			I2C_DEBUG_HOOK hook = nullptr)
+			:	SUPER{lifecycle_manager, error_policy, hook}
 		{
 			// set SDA/SCL default directions
 			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
@@ -325,7 +338,7 @@ namespace i2c
 
 			// Check if we must force finish the future
 			if (command.type.finish_future)
-				future::AbstractFutureManager::instance().set_future_finish_(command.future_id);
+				this->future(command.future_).set_future_finish_();
 			// Check if we must force a STOP
 			if (command.type.force_stop)
 				exec_stop_();
@@ -363,7 +376,8 @@ namespace i2c
 		{
 			// Determine next data byte
 			uint8_t data = 0;
-			bool ok = future::AbstractFutureManager::instance().get_storage_value_(this->command_.future_id, data);
+			future::AbstractFuture& future = this->future();
+			bool ok = future.get_storage_value_(data);
 			this->call_hook(DebugStatus::SEND, data);
 			this->call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
 			this->expected_status_ = Status::DATA_TRANSMITTED_ACK;
@@ -375,7 +389,7 @@ namespace i2c
 			}
 			else
 			{
-				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
+				future.set_future_error_(errors::EILSEQ);
 				this->status_ = Status::FUTURE_ERROR;
 			}
 		}
@@ -400,7 +414,8 @@ namespace i2c
 			// Ensure status is set properly
 			this->status_ = this->expected_status_;
 			// Fill future
-			bool ok = future::AbstractFutureManager::instance().set_future_value_(this->command_.future_id, data);
+			future::AbstractFuture& future = this->future();
+			bool ok = future.set_future_value_(data);
 			// This should only happen in case there are 2 concurrent providers for this future
 			if (ok)
 			{
@@ -408,7 +423,7 @@ namespace i2c
 			}
 			else
 			{
-				future::AbstractFutureManager::instance().set_future_error_(this->command_.future_id, errors::EILSEQ);
+				future.set_future_error_(errors::EILSEQ);
 				this->status_ = Status::FUTURE_ERROR;
 			}
 			this->call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
