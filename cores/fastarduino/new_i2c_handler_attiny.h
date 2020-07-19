@@ -338,7 +338,7 @@ namespace i2c
 
 			// Check if we must force finish the future
 			if (command.type.finish_future)
-				this->future(command.future_).set_future_finish_();
+				this->resolve(command.future_).set_future_finish_();
 			// Check if we must force a STOP
 			if (command.type.force_stop)
 				exec_stop_();
@@ -376,7 +376,7 @@ namespace i2c
 		{
 			// Determine next data byte
 			uint8_t data = 0;
-			future::AbstractFuture& future = this->future();
+			future::AbstractFuture& future = this->current_future();
 			bool ok = future.get_storage_value_(data);
 			this->call_hook(DebugStatus::SEND, data);
 			this->call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
@@ -414,7 +414,7 @@ namespace i2c
 			// Ensure status is set properly
 			this->status_ = this->expected_status_;
 			// Fill future
-			future::AbstractFuture& future = this->future();
+			future::AbstractFuture& future = this->current_future();
 			bool ok = future.set_future_value_(data);
 			// This should only happen in case there are 2 concurrent providers for this future
 			if (ok)

@@ -247,18 +247,18 @@ namespace i2c
 			// When status is FUTURE_ERROR then future has already been marked accordingly
 			if (status_ != Status::FUTURE_ERROR)
 				// The future must be marked as error
-				future().set_future_error_(errors::EPROTO);
+				current_future().set_future_error_(errors::EPROTO);
 			return false;
 		}
 
-		future::AbstractFuture& future(const lifecycle::LightProxy<future::AbstractFuture>& proxy) const
+		template<typename T> T& resolve(lifecycle::LightProxy<T> proxy) const
 		{
 			return *proxy(lifecycle_manager_);
 		}
 
-		future::AbstractFuture& future() const
+		future::AbstractFuture& current_future() const
 		{
-			return future(command_.future_);
+			return resolve(command_.future_);
 		}
 
 		void call_hook(DebugStatus status, uint8_t data = 0)

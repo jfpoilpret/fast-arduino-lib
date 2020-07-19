@@ -226,7 +226,7 @@ namespace i2c
 				{
 					// pre-conditions (must be synchronized)
 					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
-					future::AbstractFuture& future = handler_.future(proxy);
+					future::AbstractFuture& future = resolve(proxy);
 					max_read = future.get_future_value_size_();
 					max_write = future.get_storage_value_size_();
 				}
@@ -269,6 +269,13 @@ namespace i2c
 				return error;
 			}
 		}
+
+		//TODO API DOC
+		template<typename T> T& resolve(const lifecycle::LightProxy<T> proxy) const
+		{
+			return handler_.resolve(proxy);
+		}
+
 		//TODO maybe add 2 launch_commands with resp. AbstractFuture& and LifeCycle<AbstractFuture>?
 
 	private:

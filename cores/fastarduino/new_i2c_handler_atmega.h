@@ -311,7 +311,7 @@ namespace i2c
 		{
 			// Determine next data byte
 			uint8_t data = 0;
-			future::AbstractFuture& future = this->future();
+			future::AbstractFuture& future = this->current_future();
 			bool ok = future.get_storage_value_(data);
 			this->call_hook(DebugStatus::SEND, data);
 			// This should only happen if there are 2 concurrent consumers for that Future
@@ -399,7 +399,7 @@ namespace i2c
 				return I2CCallback::ERROR;
 			
 			// Handle TWI interrupt when data received
-			future::AbstractFuture& future = this->future();
+			future::AbstractFuture& future = this->current_future();
 			if (current_ == State::RECV || current_ == State::RECV_LAST)
 			{
 				const uint8_t data = TWDR_;
