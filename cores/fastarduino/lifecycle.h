@@ -577,6 +577,16 @@ namespace lifecycle
 		friend bool operator!=<T>(const Proxy<T>&, const Proxy<T>&);
 	};
 
+	//TODO API DOC
+	template<typename T> Proxy<T> make_proxy(const T& dest)
+	{
+		return Proxy<T>{dest};
+	}
+	template<typename T> Proxy<T> make_proxy(const LifeCycle<T>& dest)
+	{
+		return Proxy<T>{dest};
+	}
+
 	/// @cond notdocumented
 	template<typename T>
 	bool operator==(const Proxy<T>& a, const Proxy<T>& b)
@@ -735,6 +745,16 @@ namespace lifecycle
 		friend bool operator==<T>(const LightProxy<T>&, const LightProxy<T>&);
 		friend bool operator!=<T>(const LightProxy<T>&, const LightProxy<T>&);
 	};
+
+	//TODO API DOC
+	template<typename T> LightProxy<T> make_light_proxy(const T& dest)
+	{
+		return LightProxy<T>{dest};
+	}
+	template<typename T> LightProxy<T> make_light_proxy(const LifeCycle<T>& dest)
+	{
+		return LightProxy<T>{dest};
+	}
 
 	/// @cond notdocumented
 	template<typename T>
