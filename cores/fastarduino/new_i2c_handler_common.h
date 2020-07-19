@@ -49,7 +49,7 @@ namespace i2c
 		ERROR
 	};
 
-	// Usef to transmit operating information to hook if registered
+	// Used to transmit operating information to hook if registered
 	//TODO DOC
 	enum class DebugStatus : uint8_t
 	{
