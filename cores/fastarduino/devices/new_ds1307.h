@@ -94,8 +94,10 @@ namespace devices::rtc
 	 * I2C device driver for the DS1307 RTC chip.
 	 * Note that this chip only supports standard I2C mode (100 KHz).
 	 */
-	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::STANDARD>
+	template<typename MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD>>
+	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>
 	{
+		using PARENT = i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>;
 		template<typename T> using PROXY = lifecycle::LightProxy<T>;
 
 		struct set_tm
@@ -109,7 +111,7 @@ namespace devices::rtc
 		 * Create a new device driver for a DS1307 chip.
 		 * @param manager reference to a suitable i2c::I2CManager for this device
 		 */
-		explicit DS1307(MANAGER& manager) : I2CDevice{manager, DEVICE_ADDRESS} {}
+		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS} {}
 
 		/**
 		 * Get the size of the additional RAM size of the chip.
@@ -176,7 +178,7 @@ namespace devices::rtc
 		{
 			// send register address to write to (0)
 			// send datetime at address 0
-			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -227,7 +229,7 @@ namespace devices::rtc
 		 */
 		int get_datetime(PROXY<GetDatetimeFuture> future)
 		{
-			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -292,7 +294,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -346,7 +348,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -404,7 +406,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -455,7 +457,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return launch_commands(future, {write(), read(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -497,7 +499,7 @@ namespace devices::rtc
 		 */
 		int halt_clock(PROXY<HaltClockFuture> future)
 		{
-			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -548,7 +550,7 @@ namespace devices::rtc
 		 */
 		int enable_output(PROXY<EnableOutputFuture> future)
 		{
-			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		/**
@@ -598,7 +600,7 @@ namespace devices::rtc
 		 */
 		int disable_output(PROXY<DisableOutputFuture> future)
 		{
-			return launch_commands(future, {write(0, i2c::I2CFinish::FORCE_STOP)});
+			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
 		}
 
 		// Synchronous API

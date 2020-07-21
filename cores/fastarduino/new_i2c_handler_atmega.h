@@ -51,22 +51,22 @@
 //TODO - add event supplier as callback handler?
 
 //TODO DOC
-#define REGISTER_I2C_ISR(MODE)                                      \
+#define REGISTER_I2C_ISR(MANAGER)                                   \
 ISR(TWI_vect)                                                       \
 {                                                                   \
-	i2c::isr_handler::i2c_change<MODE>();                           \
+	i2c::isr_handler::i2c_change<MANAGER>();                        \
 }
 //TODO DOC
-#define REGISTER_I2C_ISR_FUNCTION(MODE, CALLBACK)                   \
+#define REGISTER_I2C_ISR_FUNCTION(MANAGER, CALLBACK)                \
 ISR(TWI_vect)                                                       \
 {                                                                   \
-	i2c::isr_handler::i2c_change_function<MODE, CALLBACK>();        \
+	i2c::isr_handler::i2c_change_function<MANAGER, CALLBACK>();     \
 }
 //TODO DOC
-#define REGISTER_I2C_ISR_METHOD(MODE, HANDLER, CALLBACK)            \
-ISR(TWI_vect)                                                       \
-{                                                                   \
-	i2c::isr_handler::i2c_change_method<MODE, HANDLER, CALLBACK>(); \
+#define REGISTER_I2C_ISR_METHOD(MANAGER, HANDLER, CALLBACK)             \
+ISR(TWI_vect)                                                           \
+{                                                                       \
+	i2c::isr_handler::i2c_change_method<MANAGER, HANDLER, CALLBACK>();  \
 }
 
 namespace i2c
@@ -82,12 +82,35 @@ namespace i2c
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @sa i2c::I2CMode
 	 */
-	template<I2CMode MODE_ = I2CMode::STANDARD>
-	class I2CManager : public AbstractI2CManager<MODE_>
+	template<
+		I2CMode MODE_ = I2CMode::STANDARD, 
+		bool HAS_LIFECYCLE_ = false, 
+		bool IS_DEBUG_ = false, 
+		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CManager : public AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>
 	{
-		using SUPER = AbstractI2CManager<MODE_>;
+		using SUPER = AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>;
 
 	public:
+		/**
+		 * Create an I2C Manager for ATmega MCUs, with an optional hook function
+		 * for debugging.
+		 * 
+		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
+		 * asynchronous handling
+		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
+		 * queue I2C command for asynchronous handling
+		 * @param error_policy the policy used to handle queued command when an 
+		 * error occurs
+		 */
+		template<uint8_t SIZE> explicit 
+		I2CManager(
+			I2CCommand (&buffer)[SIZE], I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
+			:	SUPER{error_policy}, commands_{buffer}
+		{
+			interrupt::register_handler(*this);
+		}
+
 		/**
 		 * Create an I2C Manager for ATmega MCUs, with an optional hook function
 		 * for debugging.
@@ -103,20 +126,29 @@ namespace i2c
 		 */
 		template<uint8_t SIZE> explicit 
 		I2CManager(	I2CCommand (&buffer)[SIZE],
-					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
-					I2C_DEBUG_HOOK hook = nullptr)
-			:	SUPER{nullptr, error_policy, hook}, commands_{buffer}
+					DEBUG_HOOK_ hook,
+					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
+			:	SUPER{error_policy, hook}, commands_{buffer}
 		{
 			interrupt::register_handler(*this);
 		}
 
-		//TODO do we really need 2 constructors or one should be enough?
 		//TODO DOC
 		template<uint8_t SIZE> explicit 
 		I2CManager(	lifecycle::AbstractLifeCycleManager& lifecycle_manager,
 					I2CCommand (&buffer)[SIZE],
-					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS,
-					I2C_DEBUG_HOOK hook = nullptr)
+					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
+			:	SUPER{&lifecycle_manager, error_policy}, commands_{buffer}
+		{
+			interrupt::register_handler(*this);
+		}
+
+		//TODO DOC
+		template<uint8_t SIZE> explicit 
+		I2CManager(	lifecycle::AbstractLifeCycleManager& lifecycle_manager,
+					I2CCommand (&buffer)[SIZE],
+					DEBUG_HOOK_ hook,
+					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
 			:	SUPER{&lifecycle_manager, error_policy, hook}, commands_{buffer}
 		{
 			interrupt::register_handler(*this);
@@ -204,12 +236,6 @@ namespace i2c
 		{
 			TWDR_ = data;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
-		}
-
-		// Push one byte of a command to the queue, and possibly initiate a new transmission right away
-		bool push_command(const I2CCommand& command)
-		{
-			synchronized return push_command_(command);
 		}
 
 		bool push_command_(const I2CCommand& command)
@@ -356,6 +382,7 @@ namespace i2c
 
 		bool is_end_transaction() const
 		{
+			//FIXME using peek_() adds 46 bytes!
 			I2CCommand command;
 			return !(commands_.peek_(command) && command.future_ == this->command_.future_);
 		}
@@ -475,33 +502,64 @@ namespace i2c
 		// Status of current command processing
 		State current_;
 
-		template<I2CMode> friend class I2CDevice;
+		template<I2CMode, typename> friend class I2CDevice;
 		friend struct isr_handler;
 	};
 
 	/// @cond notdocumented
+	// Specific traits for I2CManager
+	template<I2CMode MODE_, bool HAS_LIFECYCLE_, bool IS_DEBUG_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<HAS_LIFECYCLE_, IS_DEBUG_> {};
+	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, false, false, HOOK_>>
+	// {
+	// 	static constexpr bool IS_I2CMANAGER = true;
+	// 	static constexpr bool IS_DEBUG = false;
+	// 	static constexpr bool HAS_LIFECYCLE = false;
+	// };
+	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, false, true, HOOK_>>
+	// {
+	// 	static constexpr bool IS_I2CMANAGER = true;
+	// 	static constexpr bool IS_DEBUG = true;
+	// 	static constexpr bool HAS_LIFECYCLE = false;
+	// };
+	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, true, false, HOOK_>>
+	// {
+	// 	static constexpr bool IS_I2CMANAGER = true;
+	// 	static constexpr bool IS_DEBUG = false;
+	// 	static constexpr bool HAS_LIFECYCLE = true;
+	// };
+	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, true, true, HOOK_>>
+	// {
+	// 	static constexpr bool IS_I2CMANAGER = true;
+	// 	static constexpr bool IS_DEBUG = true;
+	// 	static constexpr bool HAS_LIFECYCLE = true;
+	// };
+	/// @endcond
+
+	/// @cond notdocumented
 	struct isr_handler
 	{
-		template<I2CMode MODE_>
+		template<typename MANAGER>
 		static void i2c_change()
 		{
-			using HANDLER = I2CManager<MODE_>;
-			interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
+			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
+			interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 		}
 
-		template<I2CMode MODE_, void (*CALLBACK_)(I2CCallback)>
+		template<typename MANAGER, void (*CALLBACK_)(I2CCallback)>
 		static void i2c_change_function()
 		{
-			using HANDLER = I2CManager<MODE_>;
-			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
+			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
+			I2CCallback callback =  interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE) CALLBACK_(callback);
 		}
 
-		template<I2CMode MODE_, typename HANDLER_, void (HANDLER_::*CALLBACK_)(I2CCallback)>
+		template<typename MANAGER, typename HANDLER_, void (HANDLER_::*CALLBACK_)(I2CCallback)>
 		static void i2c_change_method()
 		{
-			using HANDLER = I2CManager<MODE_>;
-			I2CCallback callback =  interrupt::HandlerHolder<HANDLER>::handler()->i2c_change();
+			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
+			I2CCallback callback =  interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 				interrupt::CallbackHandler<void (HANDLER_::*)(I2CCallback), CALLBACK_>::call(callback);
 		}

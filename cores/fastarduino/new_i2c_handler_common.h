@@ -72,7 +72,7 @@ namespace i2c
 
 	// Type of commands in queue
 	//TODO DOC
-	//TODO Possibly rework as a simple uint8_t with bit values
+	//TODO Possibly rework as a simple uint8_t with bit values defined in a namespace or enum
 	class I2CCommandType
 	{
 	public:
@@ -95,9 +95,9 @@ namespace i2c
 		bool finish_future : 1;
 
 		friend class I2CCommand;
-		template<I2CMode> friend class AbstractI2CManager;
-		template<I2CMode> friend class I2CManager;
-		template<I2CMode> friend class I2CDevice;
+		template<I2CMode, bool, bool, typename> friend class AbstractI2CManager;
+		template<I2CMode, bool, bool, typename> friend class I2CManager;
+		template<I2CMode, typename> friend class I2CDevice;
 		friend streams::ostream& operator<<(streams::ostream&, const I2CCommandType&);
 		friend bool operator==(const I2CCommandType&, const I2CCommandType&);
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
@@ -170,9 +170,9 @@ namespace i2c
 		// When initally set to 0, it will be first replaced by Future full read or write size
 		uint8_t byte_count = 0;
 
-		template<I2CMode> friend class AbstractI2CManager;
-		template<I2CMode> friend class I2CManager;
-		template<I2CMode> friend class I2CDevice;
+		template<I2CMode, bool, bool, typename> friend class AbstractI2CManager;
+		template<I2CMode, bool, bool, typename> friend class I2CManager;
+		template<I2CMode, typename> friend class I2CDevice;
 		friend streams::ostream& operator<<(streams::ostream&, const I2CCommand&);
 		friend bool operator==(const I2CCommand&, const I2CCommand&);
 		friend bool operator!=(const I2CCommand&, const I2CCommand&);
@@ -193,6 +193,9 @@ namespace i2c
 		return (a.type != b.type) || (a.target != b.target) || (a.future_ != b.future_);
 	}
 
+	//TODO refactor to have a common class with everything common (non template)
+	//TODO then define a generic template (subclass) with 4 specializations for HAS_LIFECYCLE and IS_DEBUG
+	//TODO here MODE_ template arg seems unused?
 	/**
 	 * Abstract I2C Manager.
 	 * It is specifically subclassed for ATmega Vs. ATtiny architectures.
@@ -202,14 +205,21 @@ namespace i2c
 	 * Using MCU as a slave will be supported in a later version of FastArduino.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
+	 * 
 	 * @sa i2c::I2CMode
 	 * @sa i2c::I2CManager
 	 */
-	template<I2CMode MODE_> class AbstractI2CManager
+	template<I2CMode MODE_, bool HAS_LIFECYCLE_ = false, bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class AbstractI2CManager
 	{
 	public:
 		/** The I2C mode for this manager. */
 		static constexpr const I2CMode MODE = MODE_;
+
+		//TODO DOC
+		static constexpr const bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
+		static constexpr const bool IS_DEBUG = IS_DEBUG_;
+		using DEBUG_HOOK = DEBUG_HOOK_;
 
 		/**
 		 * Return latest transmission status.
@@ -227,10 +237,35 @@ namespace i2c
 		AbstractI2CManager(const AbstractI2CManager<MODE_>&) = delete;
 		AbstractI2CManager<MODE_>& operator=(const AbstractI2CManager<MODE_>&) = delete;
 
+		AbstractI2CManager(I2CErrorPolicy error_policy)
+			:	lifecycle_manager_{nullptr}, error_policy_{error_policy}, hook_{nullptr}
+		{
+			static_assert(!HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be false with this constructor");
+			static_assert(!IS_DEBUG, "IS_DEBUG_ must be false with this constructor");
+		}
+
 		AbstractI2CManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager, 
-			I2CErrorPolicy error_policy, I2C_DEBUG_HOOK hook)
-			:	lifecycle_manager_{lifecycle_manager}, error_policy_{error_policy}, hook_{hook} {}
+			lifecycle::AbstractLifeCycleManager* lifecycle_manager, I2CErrorPolicy error_policy)
+			:	lifecycle_manager_{lifecycle_manager}, error_policy_{error_policy}, hook_{nullptr}
+		{
+			static_assert(HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be true with this constructor");
+			static_assert(!IS_DEBUG, "IS_DEBUG_ must be false with this constructor");
+		}
+
+		AbstractI2CManager(I2CErrorPolicy error_policy, DEBUG_HOOK hook)
+			:	lifecycle_manager_{nullptr}, error_policy_{error_policy}, hook_{hook}
+		{
+			static_assert(!HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be false with this constructor");
+			static_assert(IS_DEBUG, "IS_DEBUG_ must be true with this constructor");
+		}
+
+		AbstractI2CManager(
+			lifecycle::AbstractLifeCycleManager* lifecycle_manager, I2CErrorPolicy error_policy, DEBUG_HOOK hook)
+			:	lifecycle_manager_{lifecycle_manager}, error_policy_{error_policy}, hook_{hook}
+		{
+			static_assert(HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be true with this constructor");
+			static_assert(IS_DEBUG, "IS_DEBUG_ must be true with this constructor");
+		}
 
 		using TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
@@ -253,7 +288,10 @@ namespace i2c
 
 		template<typename T> T& resolve(lifecycle::LightProxy<T> proxy) const
 		{
-			return *proxy(lifecycle_manager_);
+			if (HAS_LIFECYCLE)
+				return *proxy(lifecycle_manager_);
+			else
+				return *proxy.destination();
 		}
 
 		future::AbstractFuture& current_future() const
@@ -263,7 +301,7 @@ namespace i2c
 
 		void call_hook(DebugStatus status, uint8_t data = 0)
 		{
-			if (hook_ != nullptr)
+			if (IS_DEBUG)
 				hook_(status, data);
 		}
 
@@ -272,7 +310,7 @@ namespace i2c
 
 		lifecycle::AbstractLifeCycleManager* lifecycle_manager_;
 		const I2CErrorPolicy error_policy_;
-		const I2C_DEBUG_HOOK hook_;
+		DEBUG_HOOK hook_;
 
 		// Status of current command processing
 		I2CCommand command_;
@@ -281,6 +319,23 @@ namespace i2c
 		// Latest I2C status
 		uint8_t status_ = 0;
 	};
+
+	/// @cond notdocumented
+	// Specific traits for I2CManager
+	template<typename T> struct I2CManager_trait
+	{
+		static constexpr bool IS_I2CMANAGER = false;
+		static constexpr bool IS_DEBUG = false;
+		static constexpr bool HAS_LIFECYCLE = false;
+	};
+
+	template<bool IS_DEBUG_, bool HAS_LIFECYCLE_> struct I2CManager_trait_impl
+	{
+		static constexpr bool IS_I2CMANAGER = true;
+		static constexpr bool IS_DEBUG = IS_DEBUG_;
+		static constexpr bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
+	};
+	/// @endcond
 }
 
 #endif /* I2C_HANDLER_COMMON_HH */

@@ -94,19 +94,24 @@ namespace i2c
 	 * 
 	 * @tparam MODE_ the I2C mode for this device; this determines the `I2CManager` type
 	 * that can manage this device.
+	 * @tparam MANAGER_ the type of I2CManager used to handle I2C communication
+	 * 
 	 * @sa i2c::I2CMode
 	 * @sa i2c::I2CManager
 	 */
-	template<I2CMode MODE_>
+	template<I2CMode MODE_, typename MANAGER_ = I2CManager<MODE_>>
 	class I2CDevice
 	{
 	public:
 		/** the I2C mode for this device. */
 		static constexpr const I2CMode MODE = MODE_;
 		/** the type of `I2CManager` that can handle this device. */
-		using MANAGER = I2CManager<MODE>;
+		using MANAGER = MANAGER_;
 
 	protected:
+		//TODO DOC API
+		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
+
 		/**
 		 * Create a new I2C device. This constructor must be called by a subclass
 		 * implementing an actua I2C device.
@@ -117,11 +122,14 @@ namespace i2c
 		 * 
 		 * @sa set_device()
 		 */
-		I2CDevice(MANAGER& manager, uint8_t device)
-		: device_{device}, handler_{manager} {}
+		I2CDevice(MANAGER& manager, uint8_t device) : device_{device}, handler_{manager}
+		{
+			static_assert(
+				MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
+		}
 
-		I2CDevice(const I2CDevice<MODE>&) = delete;
-		I2CDevice<MODE>& operator=(const I2CDevice<MODE>&) = delete;
+		I2CDevice(const I2CDevice&) = delete;
+		I2CDevice& operator=(const I2CDevice&) = delete;
 
 		/**
 		 * Change the I2C address of this device.
@@ -220,8 +228,8 @@ namespace i2c
 			if (num_commands == 0) return errors::EINVAL;
 			OUTER_SYNCHRONIZED
 			{
-				uint8_t max_read = 0;
-				uint8_t max_write = 0;
+				uint8_t max_read;
+				uint8_t max_write;
 				INNER_SYNCHRONIZED
 				{
 					// pre-conditions (must be synchronized)
@@ -230,20 +238,25 @@ namespace i2c
 					max_read = future.get_future_value_size_();
 					max_write = future.get_storage_value_size_();
 				}
-				// Limit total number of bytes read or written in a transaction to 255
-				uint8_t total_read = 0;
-				uint8_t total_write = 0;
-				for (const I2CCommand& command : commands)
+
+				// That check is normally usefull only in debug mode
+				if (MANAGER_TRAIT::IS_DEBUG)
 				{
-					// Count number of bytes read and written
-					if (command.type.write)
-						total_write += (command.byte_count ? command.byte_count : max_write);
-					else
-						total_read += (command.byte_count ? command.byte_count : max_read);
+					// Limit total number of bytes read or written in a transaction to 255
+					uint8_t total_read = 0;
+					uint8_t total_write = 0;
+					for (const I2CCommand& command : commands)
+					{
+						// Count number of bytes read and written
+						if (command.type.write)
+							total_write += (command.byte_count ? command.byte_count : max_write);
+						else
+							total_read += (command.byte_count ? command.byte_count : max_read);
+					}
+					// check sum of read commands byte_count matches future output size
+					// check sum of write commands byte_count matches future input size
+					if ((total_write != max_write) || (total_read != max_read)) return errors::EINVAL;
 				}
-				// check sum of read commands byte_count matches future output size
-				// check sum of write commands byte_count matches future input size
-				if ((total_write != max_write) || (total_read != max_read)) return errors::EINVAL;
 
 				// Now push each command to the I2CManager
 				int error = 0;

@@ -469,7 +469,7 @@ namespace i2c
 		bool clear_commands_ = false;
 		bool stopped_already_ = false;
 
-		template<I2CMode> friend class I2CDevice;
+		template<I2CMode, typename> friend class I2CDevice;
 	};
 }
 
