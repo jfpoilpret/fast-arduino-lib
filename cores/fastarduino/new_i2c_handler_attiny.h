@@ -49,7 +49,7 @@ namespace i2c
 	template<I2CMode MODE_ = I2CMode::STANDARD>
 	class I2CManager : public AbstractI2CManager<MODE_>
 	{
-		using SUPER = AbstractI2CManager<MODE_>;
+		using PARENT = AbstractI2CManager<MODE_>;
 
 	public:
 		/**
@@ -63,26 +63,26 @@ namespace i2c
 		 */
 		explicit I2CManager(
 			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS, I2C_DEBUG_HOOK hook = nullptr)
-			:	SUPER{nullptr, error_policy, hook}
+			:	PARENT{nullptr, error_policy, hook}
 		{
 			// set SDA/SCL default directions
-			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
-			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
-			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SDA);
-			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
 		}
 
 		explicit I2CManager(
 			lifecycle::AbstractLifeCycleManager& lifecycle_manager,
 			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
 			I2C_DEBUG_HOOK hook = nullptr)
-			:	SUPER{lifecycle_manager, error_policy, hook}
+			:	PARENT{lifecycle_manager, error_policy, hook}
 		{
 			// set SDA/SCL default directions
-			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
-			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
-			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SDA);
-			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
 		}
 
 		/**
@@ -148,9 +148,9 @@ namespace i2c
 			return true;
 		}
 
-		static constexpr const typename SUPER::REG8 USIDR_{USIDR};
-		static constexpr const typename SUPER::REG8 USISR_{USISR};
-		static constexpr const typename SUPER::REG8 USICR_{USICR};
+		static constexpr const typename PARENT::REG8 USIDR_{USIDR};
+		static constexpr const typename PARENT::REG8 USISR_{USISR};
+		static constexpr const typename PARENT::REG8 USICR_{USICR};
 
 		// Constant values for USISR
 		// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
@@ -168,34 +168,34 @@ namespace i2c
 
 		void SCL_HIGH()
 		{
-			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SCL);
-			SUPER::TRAIT::PIN.loop_until_bit_set(SUPER::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PIN.loop_until_bit_set(PARENT::TRAIT::BIT_SCL);
 		}
 
 		void SCL_LOW()
 		{
-			SUPER::TRAIT::PORT &= bits::CBV8(SUPER::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT &= bits::CBV8(PARENT::TRAIT::BIT_SCL);
 		}
 
 		void SDA_HIGH()
 		{
-			SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
 		}
 
 		void SDA_LOW()
 		{
-			SUPER::TRAIT::PORT &= bits::CBV8(SUPER::TRAIT::BIT_SDA);
+			PARENT::TRAIT::PORT &= bits::CBV8(PARENT::TRAIT::BIT_SDA);
 		}
 
 		void SDA_INPUT()
 		{
-			SUPER::TRAIT::DDR &= bits::CBV8(SUPER::TRAIT::BIT_SDA);
-			// SUPER::TRAIT::PORT |= bits::BV8(SUPER::TRAIT::BIT_SDA);
+			PARENT::TRAIT::DDR &= bits::CBV8(PARENT::TRAIT::BIT_SDA);
+			// PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
 		}
 
 		void SDA_OUTPUT()
 		{
-			SUPER::TRAIT::DDR |= bits::BV8(SUPER::TRAIT::BIT_SDA);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
 		}
 
 		void last_command_pushed_()
@@ -276,7 +276,7 @@ namespace i2c
 				_delay_loop_1(T_LOW);
 				// clock strobe (SCL raising edge)
 				USICR_ = bits::BV8(USIWM1, USICS1, USICLK, USITC);
-				SUPER::TRAIT::PIN.loop_until_bit_set(SUPER::TRAIT::BIT_SCL);
+				PARENT::TRAIT::PIN.loop_until_bit_set(PARENT::TRAIT::BIT_SCL);
 				_delay_loop_1(T_HIGH);
 				// clock strobe (SCL falling edge)
 				USICR_ = bits::BV8(USIWM1, USICS1, USICLK, USITC);

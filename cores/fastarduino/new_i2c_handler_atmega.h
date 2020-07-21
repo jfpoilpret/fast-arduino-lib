@@ -89,7 +89,7 @@ namespace i2c
 		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CManager : public AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>
 	{
-		using SUPER = AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>;
 
 	public:
 		/**
@@ -106,7 +106,7 @@ namespace i2c
 		template<uint8_t SIZE> explicit 
 		I2CManager(
 			I2CCommand (&buffer)[SIZE], I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	SUPER{error_policy}, commands_{buffer}
+			:	PARENT{error_policy}, commands_{buffer}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -128,7 +128,7 @@ namespace i2c
 		I2CManager(	I2CCommand (&buffer)[SIZE],
 					DEBUG_HOOK_ hook,
 					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	SUPER{error_policy, hook}, commands_{buffer}
+			:	PARENT{error_policy, hook}, commands_{buffer}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -138,7 +138,7 @@ namespace i2c
 		I2CManager(	lifecycle::AbstractLifeCycleManager& lifecycle_manager,
 					I2CCommand (&buffer)[SIZE],
 					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	SUPER{&lifecycle_manager, error_policy}, commands_{buffer}
+			:	PARENT{&lifecycle_manager, error_policy}, commands_{buffer}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -149,7 +149,7 @@ namespace i2c
 					I2CCommand (&buffer)[SIZE],
 					DEBUG_HOOK_ hook,
 					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	SUPER{&lifecycle_manager, error_policy, hook}, commands_{buffer}
+			:	PARENT{&lifecycle_manager, error_policy, hook}, commands_{buffer}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -187,7 +187,7 @@ namespace i2c
 		void begin_()
 		{
 			// 1. set SDA/SCL pullups
-			SUPER::TRAIT::PORT |= SUPER::TRAIT::SCL_SDA_MASK;
+			PARENT::TRAIT::PORT |= PARENT::TRAIT::SCL_SDA_MASK;
 			// 2. set I2C frequency
 			TWBR_ = TWBR_VALUE;
 			TWSR_ = 0;
@@ -206,7 +206,7 @@ namespace i2c
 			// 1. Disable TWI
 			TWCR_ = 0;
 			// 2. remove SDA/SCL pullups
-			SUPER::TRAIT::PORT &= bits::COMPL(SUPER::TRAIT::SCL_SDA_MASK);
+			PARENT::TRAIT::PORT &= bits::COMPL(PARENT::TRAIT::SCL_SDA_MASK);
 		}
 
 	private:
@@ -227,10 +227,10 @@ namespace i2c
 			STOP
 		};
 
-		static constexpr const typename SUPER::REG8 TWBR_{TWBR};
-		static constexpr const typename SUPER::REG8 TWSR_{TWSR};
-		static constexpr const typename SUPER::REG8 TWCR_{TWCR};
-		static constexpr const typename SUPER::REG8 TWDR_{TWDR};
+		static constexpr const typename PARENT::REG8 TWBR_{TWBR};
+		static constexpr const typename PARENT::REG8 TWSR_{TWSR};
+		static constexpr const typename PARENT::REG8 TWCR_{TWCR};
+		static constexpr const typename PARENT::REG8 TWDR_{TWDR};
 
 		void send_byte(uint8_t data)
 		{
@@ -489,7 +489,7 @@ namespace i2c
 		}
 
 		static constexpr const uint8_t TWBR_VALUE =
-			(MODE_ == I2CMode::STANDARD ? SUPER::STANDARD_FREQUENCY : SUPER::FAST_FREQUENCY);
+			(MODE_ == I2CMode::STANDARD ? PARENT::STANDARD_FREQUENCY : PARENT::FAST_FREQUENCY);
 
 		static constexpr const float STANDARD_DELAY_AFTER_STOP_US = 4.0 + 4.7;
 		static constexpr const float FAST_DELAY_AFTER_STOP_US = 0.6 + 1.3;
