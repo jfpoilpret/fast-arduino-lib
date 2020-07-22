@@ -509,30 +509,6 @@ namespace i2c
 	template<I2CMode MODE_, bool HAS_LIFECYCLE_, bool IS_DEBUG_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>>
 		:	I2CManager_trait_impl<HAS_LIFECYCLE_, IS_DEBUG_> {};
-	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, false, false, HOOK_>>
-	// {
-	// 	static constexpr bool IS_I2CMANAGER = true;
-	// 	static constexpr bool IS_DEBUG = false;
-	// 	static constexpr bool HAS_LIFECYCLE = false;
-	// };
-	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, false, true, HOOK_>>
-	// {
-	// 	static constexpr bool IS_I2CMANAGER = true;
-	// 	static constexpr bool IS_DEBUG = true;
-	// 	static constexpr bool HAS_LIFECYCLE = false;
-	// };
-	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, true, false, HOOK_>>
-	// {
-	// 	static constexpr bool IS_I2CMANAGER = true;
-	// 	static constexpr bool IS_DEBUG = false;
-	// 	static constexpr bool HAS_LIFECYCLE = true;
-	// };
-	// template<I2CMode MODE_, typename HOOK_> struct I2CManager_trait<I2CManager<MODE_, true, true, HOOK_>>
-	// {
-	// 	static constexpr bool IS_I2CMANAGER = true;
-	// 	static constexpr bool IS_DEBUG = true;
-	// 	static constexpr bool HAS_LIFECYCLE = true;
-	// };
 	/// @endcond
 
 	/// @cond notdocumented
