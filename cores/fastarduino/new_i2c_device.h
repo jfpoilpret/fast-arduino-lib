@@ -296,8 +296,6 @@ namespace i2c
 			return handler_.resolve(proxy);
 		}
 
-		//TODO maybe add 2 launch_commands with resp. AbstractFuture& and LifeCycle<AbstractFuture>?
-
 	private:
 		uint8_t device_ = 0;
 		MANAGER& handler_;
