@@ -276,7 +276,7 @@ namespace i2c
 						command.set_byte_count(command.type().is_write() ? max_write : max_read);
 					// force future finish for last command in transaction
 					if (--num_commands == 0)
-						command.type().add_flags(I2CCommandType::flags(false, true, false));
+						command.type().add_flags(I2CCommandType::flags(false, true, true));
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command))
 					{

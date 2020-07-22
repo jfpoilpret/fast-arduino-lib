@@ -382,9 +382,7 @@ namespace i2c
 
 		bool is_end_transaction() const
 		{
-			//FIXME using peek_() adds 46 bytes!
-			I2CCommand command;
-			return !(commands_.peek_(command) && command.future() == this->command_.future());
+			return this->command_.type().is_end();
 		}
 
 		bool handle_no_error()
