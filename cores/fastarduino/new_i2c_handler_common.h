@@ -32,10 +32,25 @@
 
 namespace i2c
 {
-	//TODO DOC
+	/**
+	 * I2CManager policy to use in case of an error during I2C transaction.
+	 * @warning available only on ATmega MCU.
+	 * @sa I2CManager
+	 */
 	enum class I2CErrorPolicy : uint8_t
 	{
+		/**
+		 * In case of an error during I2C transaction, then all I2CCommand currently
+		 * in queue will be removed.
+		 * @warning this means that an error with device A can trigger a removal
+		 * of pending commands for device B.
+		 */
 		CLEAR_ALL_COMMANDS,
+
+		/**
+		 * In case of an error during I2C transaction, then all pending I2CCommand
+		 * of the current transaction will be removed.
+		 */
 		CLEAR_TRANSACTION_COMMANDS
 	};
 
@@ -50,28 +65,50 @@ namespace i2c
 		ERROR
 	};
 
-	// Used to transmit operating information to hook if registered
-	//TODO DOC
+	/**
+	 * List of debug states that are reported by the I2CManager in debug mode.
+	 * @sa I2CManager
+	 */
 	enum class DebugStatus : uint8_t
 	{
+		/** A start condition has just been sent. */
 		START = 0,
+		/** A repeat start condition has just been sent. */
 		REPEAT_START,
+		/** A slave address has just been sent for writing. */
 		SLAW,
+		/** A slave address has just been sent for reading. */
 		SLAR,
+		/** A byte has just be sent to the slave. */
 		SEND,
+		/** A byte is being received from the slave. */
 		RECV,
+		/** The last byte is being received from the slave. */
 		RECV_LAST,
+		/** A stop condition has just been sent. */
 		STOP,
 
+		/** The latest sent byte has been acknowledged by the slave. */
 		SEND_OK,
+		/** The latest sent byte has not been acknowledged by the slave. */
 		SEND_ERROR,
+		/** I2CManager has acknowledged the latest received byte from the slave. */
 		RECV_OK,
+		/** I2CManager has not acknowledged the latest received byte from the slave. */
 		RECV_ERROR
 	};
-	//TODO DOC
+
+	/**
+	 * The default debugging hook type.
+	 * @warning Do not use this (function pointer) for your hooks! This will 
+	 * increase code size and ISR delay. Rather use functors as defined in
+	 * `i2c_debug.h`.
+	 * @sa i2c::debug::I2CAsyncDebugger
+	 * @sa i2c::debug::I2CSyncDebugger
+	 */
 	using I2C_DEBUG_HOOK = void (*)(DebugStatus status, uint8_t data);
 
-	//TODO DOC
+	/// @cond notdocumented
 	// Type of commands in queue
 	class I2CCommandType
 	{
@@ -132,9 +169,7 @@ namespace i2c
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
 	};
 
-	//TODO check if need to be externalized to cpp file as it generates strange
-	// _GLOBAL__sub_I__ZN3i2clsERN7streams7ostreamERKNS_14I2CCommandTypeE)
-	// even though it is not actually used!
+	//TODO check if need to be externalized to cpp file
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t)
 	{
 		if (t.is_none()) return out << F("NONE") << streams::flush;
@@ -155,12 +190,26 @@ namespace i2c
 	{
 		return	(a.value_ != b.value_);
 	}
+	/// @endcond
 
-	// Command in the queue
-	//TODO DOC
+	/**
+	 * Atomic I2C command as prepared by an I2C device.
+	 * Each command embeds:
+	 * - the command type (read, write...), 
+	 * - the count of bytes to be read or  written,
+	 * - the address of target slave device
+	 * - a proxy to the future holding inputs and results of the I2C transaction 
+	 * 
+	 * @warning You should never need to use this API by yourself. This is 
+	 * internally used by FastArduino I2CManager to handle I2C transactions.
+	 * 
+	 * @sa lifecycle::LightProxy
+	 * @sa future::AbstractFuture
+	 */
 	class I2CCommand
 	{
 	public:
+		/// @cond notdocumented
 		constexpr I2CCommand() = default;
 		constexpr I2CCommand(const I2CCommand&) = default;
 		constexpr I2CCommand(I2CCommandType type, uint8_t byte_count) : type_{type}, byte_count_{byte_count} {}
@@ -201,6 +250,7 @@ namespace i2c
 		{
 			byte_count_ = byte_count;
 		}
+		/// @endcond
 
 	private:
 		// Type of this command
@@ -216,6 +266,7 @@ namespace i2c
 		friend bool operator!=(const I2CCommand&, const I2CCommand&);
 	};
 
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c)
 	{
 		out	<< '{' << c.type() << ',' 
@@ -232,6 +283,7 @@ namespace i2c
 	{
 		return (a.type() != b.type()) || (a.target() != b.target()) || (a.future() != b.future());
 	}
+	/// @endcond
 
 	//TODO refactor to have a common class with everything common (non template)
 	//TODO then define a generic template (subclass) with 4 specializations for HAS_LIFECYCLE and IS_DEBUG
@@ -245,9 +297,20 @@ namespace i2c
 	 * Using MCU as a slave will be supported in a later version of FastArduino.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam HAS_LIFECYCLE_ tells if this I2CManager must be able to handle 
+	 * proxies to Future that can mvoe around and must eb cotnrolled by a 
+	 * LifeCycleManager; using `false` will generate smaller code.
+	 * @tparam IS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * step of an I2C transaction; this is useful for debugging support for a new 
+	 * I2C device; using `false` will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `IS_DEBUG` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_DEBUG_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
 	 * 
-	 * @sa i2c::I2CMode
-	 * @sa i2c::I2CManager
+	 * @sa I2CMode
+	 * @sa I2CManager
+	 * @sa I2C_DEBUG_HOOK
 	 */
 	template<I2CMode MODE_, bool HAS_LIFECYCLE_ = false, bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class AbstractI2CManager
