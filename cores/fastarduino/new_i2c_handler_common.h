@@ -422,7 +422,7 @@ namespace i2c
 		static constexpr bool HAS_LIFECYCLE = false;
 	};
 
-	template<bool IS_DEBUG_, bool HAS_LIFECYCLE_> struct I2CManager_trait_impl
+	template<bool HAS_LIFECYCLE_, bool IS_DEBUG_> struct I2CManager_trait_impl
 	{
 		static constexpr bool IS_I2CMANAGER = true;
 		static constexpr bool IS_DEBUG = IS_DEBUG_;
