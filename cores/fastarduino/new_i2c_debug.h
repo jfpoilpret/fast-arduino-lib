@@ -102,6 +102,21 @@ namespace i2c::debug
 	public:
 		I2CAsyncDebugger(DEBUG debug = DEBUG::DEBUG_ALL) : debug_{debug} {}
 
+		void reset()
+		{
+			index_ = 0;
+		}
+
+		void trace(streams::ostream& out)
+		{
+			for (uint8_t i = 0; i < index_; ++i)
+				out << status_[i] << streams::hex << data_[i] << ' ' << streams::flush;
+			if (index_ >= SIZE)
+				out << F("# OVF #");
+			out << streams::endl;
+			index_ = 0;
+		}
+
 		void operator()(i2c::DebugStatus status, uint8_t data)
 		{
 			if (index_ >= SIZE) return;
@@ -154,21 +169,6 @@ namespace i2c::debug
 				}
 				break;
 			}
-		}
-
-		void reset()
-		{
-			index_ = 0;
-		}
-
-		void trace(streams::ostream& out)
-		{
-			for (uint8_t i = 0; i < index_; ++i)
-				out << status_[i] << streams::hex << data_[i] << ' ' << streams::flush;
-			if (index_ >= SIZE)
-				out << F("# OVF #");
-			out << streams::endl;
-			index_ = 0;
 		}
 
 	private:
