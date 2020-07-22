@@ -89,6 +89,8 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
+// #define DEBUG_I2C
+
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
@@ -99,15 +101,28 @@ using devices::rtc::SquareWaveFrequency;
 using namespace streams;
 
 #if I2C_TRUE_ASYNC
+
+#ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 32;
 using DEBUGGER = i2c::debug::I2CAsyncDebugger<DEBUG_SIZE>;
-// using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, false>;
 using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, true, DEBUGGER&>;
-REGISTER_I2C_ISR(MANAGER)
+#define TRACE() debugger.trace(out)
 #else
+using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, false>;
+#define TRACE()
+#endif
+REGISTER_I2C_ISR(MANAGER)
+
+#else
+
+#define TRACE()
+#ifdef DEBUG_I2C
 using DEBUGGER = i2c::debug::I2CSyncDebugger;
-// using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, false>;
 using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, true, DEBUGGER&>;
+#else
+using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, false>;
+#endif
+
 #endif
 
 void display_status(ostream& out, char index, uint8_t status)
@@ -156,12 +171,25 @@ int main()
 	// Start TWI interface
 	//====================
 #if I2C_TRUE_ASYNC
+
+#ifdef DEBUG_I2C
 	DEBUGGER debugger;
 	MANAGER manager{i2c_buffer, debugger, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #else
+	MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#endif
+
+#else
+
+#ifdef DEBUG_I2C
 	DEBUGGER debugger{out};
 	MANAGER manager{debugger, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#else
+	MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #endif
+
+#endif
+
 	manager.begin();
 	out << F("I2C interface started") << endl;
 	display_status(out, '1', manager.status());
@@ -175,7 +203,7 @@ int main()
 	rtc.get_ram(0, data);
 	display_status(out, '2', manager.status());
 	display_ram(out, data, sizeof data);
-	debugger.trace(out);
+	TRACE();
 	
 	tm time1;
 	time1.tm_hour = 8;
@@ -190,7 +218,7 @@ int main()
 	//=======================
 	rtc.set_datetime(time1);
 	display_status(out, '3', manager.status());
-	debugger.trace(out);
+	TRACE();
 
 	time::delay_ms(2000);
 	
@@ -200,27 +228,27 @@ int main()
 	rtc.get_datetime(time2);
 	display_status(out, '4', manager.status());
 	display_time(out, time2);
-	debugger.trace(out);
+	TRACE();
 	
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
 	display_status(out, '5', manager.status());
-	debugger.trace(out);
+	TRACE();
 	
 	// Provide 10 seconds delay to allow checking square wave output with an oscilloscope
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
 	display_status(out, '6', manager.status());
-	debugger.trace(out);
+	TRACE();
 
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
 	rtc.set_ram(0, data);
 	display_status(out, '7', manager.status());
-	debugger.trace(out);
+	TRACE();
 	
 	// Stop TWI interface
 	//===================
