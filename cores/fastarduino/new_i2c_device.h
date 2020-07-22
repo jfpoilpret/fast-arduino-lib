@@ -227,7 +227,6 @@ namespace i2c
 		int launch_commands(
 			lifecycle::LightProxy<future::AbstractFuture> proxy, std::initializer_list<I2CCommand> commands)
 		{
-			//FIXME add checks for resolvability of proxy by handler_ (ie if dynamic, manager must not be null)
 			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
 			OUTER_SYNCHRONIZED
@@ -238,6 +237,11 @@ namespace i2c
 				{
 					// pre-conditions (must be synchronized)
 					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
+					// Add checks for resolvability of proxy by handler_ (ie if dynamic, LCmanager must not be null)
+					if (!MANAGER_TRAIT::HAS_LIFECYCLE)
+					{
+						if (proxy.is_dynamic()) return errors::EINVAL;
+					}
 					future::AbstractFuture& future = resolve(proxy);
 					max_read = future.get_future_value_size_();
 					max_write = future.get_storage_value_size_();
