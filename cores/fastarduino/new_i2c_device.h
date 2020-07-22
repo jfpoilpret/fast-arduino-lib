@@ -226,7 +226,7 @@ namespace i2c
 			lifecycle::LightProxy<future::AbstractFuture> proxy, std::initializer_list<I2CCommand> commands)
 		{
 			//FIXME add checks for resolvability of proxy by handler_ (ie if dynamic, manager must not be null)
-			const uint8_t num_commands = commands.size();
+			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
 			OUTER_SYNCHRONIZED
 			{
@@ -262,7 +262,6 @@ namespace i2c
 
 				// Now push each command to the I2CManager
 				int error = 0;
-				uint8_t index = 0;
 				for (I2CCommand command : commands)
 				{
 					// update command.byte_count if 0
@@ -270,7 +269,7 @@ namespace i2c
 					if (!command.byte_count())
 						command.set_byte_count(command.type().is_write() ? max_write : max_read);
 					// force future finish for last command in transaction
-					if (++index == num_commands)
+					if (--num_commands == 0)
 						command.type().add_flags(I2CCommandType::flags(false, true, false));
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command))
