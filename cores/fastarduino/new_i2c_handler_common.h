@@ -273,16 +273,6 @@ namespace i2c
 			<< streams::hex << c.target() << '}' << streams::flush;
 		return out;
 	}
-	//TODO do we need these operators?
-	//TODO why not check byte_count?
-	bool operator==(const I2CCommand& a, const I2CCommand& b)
-	{
-		return (a.type() == b.type()) && (a.target() == b.target()) && (a.future() == b.future());
-	}
-	bool operator!=(const I2CCommand& a, const I2CCommand& b)
-	{
-		return (a.type() != b.type()) || (a.target() != b.target()) || (a.future() != b.future());
-	}
 	/// @endcond
 
 	//TODO refactor to have a common class with everything common (non template)
