@@ -46,14 +46,35 @@ namespace i2c
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @sa i2c::I2CMode
 	 */
-	template<I2CMode MODE_ = I2CMode::STANDARD>
-	class I2CManager : public AbstractI2CManager<MODE_>
+	template<
+		I2CMode MODE_ = I2CMode::STANDARD, 
+		bool HAS_LIFECYCLE_ = false, 
+		bool IS_DEBUG_ = false, 
+		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CManager : public AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CManager<MODE_>;
+		using PARENT = AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>;
 
 	public:
 		/**
-		 * Create an I2C Manager for ATmega MCUs, with an optional hook function
+		 * Create an I2C Manager for ATtiny MCUs, with an optional hook function
+		 * for debugging.
+		 * 
+		 * @param error_policy the policy used to handle queued command when an 
+		 * error occurs
+		 */
+		explicit I2CManager(I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
+			:	PARENT{error_policy}
+		{
+			// set SDA/SCL default directions
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+		}
+
+		/**
+		 * Create an I2C Manager for ATtiny MCUs, with an optional hook function
 		 * for debugging.
 		 * 
 		 * @param error_policy the policy used to handle queued command when an 
@@ -61,9 +82,8 @@ namespace i2c
 		 * @param hook an optional hook function that will be called back after
 		 * each transmission operation.
 		 */
-		explicit I2CManager(
-			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS, I2C_DEBUG_HOOK hook = nullptr)
-			:	PARENT{nullptr, error_policy, hook}
+		explicit I2CManager(DEBUG_HOOK_ hook, I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
+			:	PARENT{error_policy, hook}
 		{
 			// set SDA/SCL default directions
 			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
@@ -74,8 +94,20 @@ namespace i2c
 
 		explicit I2CManager(
 			lifecycle::AbstractLifeCycleManager& lifecycle_manager,
-			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
-			I2C_DEBUG_HOOK hook = nullptr)
+			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
+			:	PARENT{lifecycle_manager, error_policy}
+		{
+			// set SDA/SCL default directions
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+		}
+
+		explicit I2CManager(
+			lifecycle::AbstractLifeCycleManager& lifecycle_manager,
+			DEBUG_HOOK_ hook,
+			I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
 			:	PARENT{lifecycle_manager, error_policy, hook}
 		{
 			// set SDA/SCL default directions
@@ -201,9 +233,9 @@ namespace i2c
 		void last_command_pushed_()
 		{
 			// Check if previously executed command already did a STOP
-			if ((!this->command_.type.force_stop) && (!stopped_already_) && (!clear_commands_))
+			if ((!this->command_.type().is_stop()) && (!stopped_already_) && (!clear_commands_))
 				exec_stop_();
-			this->command_ = I2CCommand::none();
+			this->command_ = I2CCommand{};
 			clear_commands_ = false;
 			stopped_already_ = false;
 		}
@@ -292,32 +324,27 @@ namespace i2c
 		}
 
 		// Push one byte of a command to the queue, and possibly initiate a new transmission right away
-		bool push_command(const I2CCommand& command)
-		{
-			synchronized return push_command_(command);
-		}
-
 		bool push_command_(const I2CCommand& command)
 		{
 			// Check command is not empty
-			if (command.type.none) return true;
+			if (command.type().is_none()) return true;
 			if (clear_commands_) return false;
 			// Execute command immediately from start to optional stop
 			// Check if start or repeat start (depends on previously executed command)
-			if (this->command_.type.none || this->command_.type.force_stop)
+			if (this->command_.type().is_none() || this->command_.type().is_stop())
 				exec_start_();
 			else
 				exec_repeat_start_();
 			this->command_ = command;
 			if (!handle_no_error()) return false;
 
-			if (command.type.write)
+			if (command.type().is_write())
 			{
 				// Send device address
 				exec_send_slaw_();
 				if (!handle_no_error()) return false;
 				// Send content
-				while (this->command_.byte_count > 0)
+				while (this->command_.byte_count() > 0)
 				{
 					exec_send_data_();
 					if (!handle_no_error()) return false;
@@ -329,7 +356,7 @@ namespace i2c
 				exec_send_slar_();
 				if (!handle_no_error()) return false;
 				// Receive content
-				while (this->command_.byte_count > 0)
+				while (this->command_.byte_count() > 0)
 				{
 					exec_receive_data_();
 					if (!handle_no_error()) return false;
@@ -337,10 +364,10 @@ namespace i2c
 			}
 
 			// Check if we must force finish the future
-			if (command.type.finish_future)
-				this->resolve(command.future_).set_future_finish_();
+			if (command.type().is_finish())
+				this->current_future().set_future_finish_();
 			// Check if we must force a STOP
-			if (command.type.force_stop)
+			if (command.type().is_stop())
 				exec_stop_();
 			return true;
 		}
@@ -360,17 +387,17 @@ namespace i2c
 		}
 		void exec_send_slar_()
 		{
-			this->call_hook(DebugStatus::SLAR, this->command_.target);
+			this->call_hook(DebugStatus::SLAR, this->command_.target());
 			// Read device address from queue
 			this->expected_status_ = Status::SLA_R_TRANSMITTED_ACK;
-			send_byte_impl(this->command_.target | 0x01U);
+			send_byte_impl(this->command_.target() | 0x01U);
 		}
 		void exec_send_slaw_()
 		{
-			this->call_hook(DebugStatus::SLAW, this->command_.target);
+			this->call_hook(DebugStatus::SLAW, this->command_.target());
 			// Read device address from queue
 			this->expected_status_ = Status::SLA_W_TRANSMITTED_ACK;
-			send_byte_impl(this->command_.target);
+			send_byte_impl(this->command_.target());
 		}
 		void exec_send_data_()
 		{
@@ -384,7 +411,7 @@ namespace i2c
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (ok)
 			{
-				--this->command_.byte_count;
+				this->command_.decrement_byte_count();
 				send_byte_impl(data);
 			}
 			else
@@ -397,7 +424,7 @@ namespace i2c
 		{
 			// Is this the last byte to receive?
 			uint8_t data;
-			if (this->command_.byte_count == 1)
+			if (this->command_.byte_count() == 1)
 			{
 				this->call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
@@ -419,7 +446,7 @@ namespace i2c
 			// This should only happen in case there are 2 concurrent providers for this future
 			if (ok)
 			{
-				--this->command_.byte_count;
+				this->command_.decrement_byte_count();
 			}
 			else
 			{
@@ -434,7 +461,7 @@ namespace i2c
 			stop_impl();
 			if (!error)
 				this->expected_status_ = 0;
-			this->command_ = I2CCommand::none();
+			this->command_ = I2CCommand{};
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
 			_delay_loop_1(DELAY_AFTER_STOP);
@@ -471,6 +498,13 @@ namespace i2c
 
 		template<I2CMode, typename> friend class I2CDevice;
 	};
+
+	/// @cond notdocumented
+	// Specific traits for I2CManager
+	template<I2CMode MODE_, bool HAS_LIFECYCLE_, bool IS_DEBUG_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<HAS_LIFECYCLE_, IS_DEBUG_> {};
+	/// @endcond
 }
 
 #endif /* I2C_HANDLER_ATTINY_HH */
