@@ -246,7 +246,7 @@ namespace i2c
 		void last_command_pushed_()
 		{
 			// Check if need to initiate transmission (i.e no current command is executed)
-			if (this->command_.type.none)
+			if (this->command_.type().is_none())
 			{
 				// Dequeue first pending command and start TWI operation
 				dequeue_command_(true);
@@ -258,7 +258,7 @@ namespace i2c
 		{
 			if (!commands_.pull_(this->command_))
 			{
-				this->command_ = I2CCommand::none();
+				this->command_ = I2CCommand{};
 				current_ = State::NONE;
 				// No more I2C command to execute
 				TWCR_ = bits::BV8(TWINT);
@@ -279,11 +279,11 @@ namespace i2c
 			switch (current_)
 			{
 				case State::START:
-				return (this->command_.type.write ? State::SLAW : State::SLAR);
+				return (this->command_.type().is_write() ? State::SLAW : State::SLAR);
 
 				case State::SLAR:
 				case State::RECV:
-				if (this->command_.byte_count > 1)
+				if (this->command_.byte_count() > 1)
 					return State::RECV;
 				else
 					return State::RECV_LAST;
@@ -295,7 +295,7 @@ namespace i2c
 				return State::SEND;
 				
 				case State::SEND:
-				if (this->command_.byte_count >= 1)
+				if (this->command_.byte_count() >= 1)
 					return State::SEND;
 				else
 					return State::STOP;
@@ -321,17 +321,17 @@ namespace i2c
 		}
 		void exec_send_slar_()
 		{
-			this->call_hook(DebugStatus::SLAR, this->command_.target);
+			this->call_hook(DebugStatus::SLAR, this->command_.target());
 			// Read device address from queue
 			this->expected_status_ = Status::SLA_R_TRANSMITTED_ACK;
-			send_byte(this->command_.target | 0x01U);
+			send_byte(this->command_.target() | 0x01U);
 		}
 		void exec_send_slaw_()
 		{
-			this->call_hook(DebugStatus::SLAW, this->command_.target);
+			this->call_hook(DebugStatus::SLAW, this->command_.target());
 			// Read device address from queue
 			this->expected_status_ = Status::SLA_W_TRANSMITTED_ACK;
-			send_byte(this->command_.target);
+			send_byte(this->command_.target());
 		}
 		void exec_send_data_()
 		{
@@ -342,7 +342,7 @@ namespace i2c
 			this->call_hook(DebugStatus::SEND, data);
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (ok)
-				--this->command_.byte_count;
+				this->command_.decrement_byte_count();
 			else
 				future.set_future_error_(errors::EILSEQ);
 			this->call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
@@ -352,7 +352,7 @@ namespace i2c
 		void exec_receive_data_()
 		{
 			// Is this the last byte to receive?
-			if (this->command_.byte_count == 1)
+			if (this->command_.byte_count() == 1)
 			{
 				this->call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
@@ -373,7 +373,7 @@ namespace i2c
 			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 			if (!error)
 				this->expected_status_ = 0;
-			this->command_ = I2CCommand::none();
+			this->command_ = I2CCommand{};
 			current_ = State::NONE;
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
@@ -384,7 +384,7 @@ namespace i2c
 		{
 			//FIXME using peek_() adds 46 bytes!
 			I2CCommand command;
-			return !(commands_.peek_(command) && command.future_ == this->command_.future_);
+			return !(commands_.peek_(command) && command.future() == this->command_.future());
 		}
 
 		bool handle_no_error()
@@ -401,11 +401,11 @@ namespace i2c
 				case I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS:
 				// Clear command belonging to the same transaction (i.e. same future)
 				{
-					const auto future = this->command_.future_;
+					const auto future = this->command_.future();
 					I2CCommand command;
 					while (commands_.peek_(command))
 					{
-						if (command.future_ != future)
+						if (command.future() != future)
 							break;
 						commands_.pull_(command);
 					}
@@ -433,7 +433,7 @@ namespace i2c
 				bool ok = future.set_future_value_(data);
 				// This should only happen in case there are 2 concurrent providers for this future
 				if (ok)
-					--this->command_.byte_count;
+					this->command_.decrement_byte_count();
 				else
 					future.set_future_error_(errors::EILSEQ);
 				this->call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
@@ -468,14 +468,14 @@ namespace i2c
 
 				case State::STOP:
 				// Check if we need to finish the current future
-				if (this->command_.type.finish_future)
+				if (this->command_.type().is_finish())
 					future.set_future_finish_();
 				result = (is_end_transaction() ? I2CCallback::END_TRANSACTION : I2CCallback::END_COMMAND);
 				// Check if we need to STOP (no more pending commands in queue)
 				if (commands_.empty_())
 					exec_stop_();
 				// Check if we need to STOP or REPEAT START (current command requires STOP)
-				else if (this->command_.type.force_stop)
+				else if (this->command_.type().is_stop())
 				{
 					exec_stop_();
 					// Handle next command

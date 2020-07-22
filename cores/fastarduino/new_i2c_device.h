@@ -80,11 +80,11 @@ namespace i2c
 		FUTURE_FINISH = 0x02
 	};
 	
-	I2CFinish operator|(I2CFinish f1, I2CFinish f2)
+	constexpr I2CFinish operator|(I2CFinish f1, I2CFinish f2)
 	{
 		return I2CFinish(uint8_t(f1) | uint8_t(f2));
 	}
-	I2CFinish operator&(I2CFinish f1, I2CFinish f2)
+	constexpr I2CFinish operator&(I2CFinish f1, I2CFinish f2)
 	{
 		return I2CFinish(uint8_t(f1) & uint8_t(f2));
 	}
@@ -160,10 +160,11 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa write()
 		 */
-		I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE) const
+		static constexpr I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
-			return I2CCommand::read(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
-				uint8_t(finish & I2CFinish::FUTURE_FINISH), read_count);
+			const I2CCommandType type{
+				false, uint8_t(finish & I2CFinish::FORCE_STOP), uint8_t(finish & I2CFinish::FUTURE_FINISH), false};
+			return I2CCommand{type, read_count};
 		}
 
 		/**
@@ -184,10 +185,11 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa read()
 		 */
-		I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE) const
+		static constexpr I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
-			return I2CCommand::write(device_, uint8_t(finish & I2CFinish::FORCE_STOP), 
-				uint8_t(finish & I2CFinish::FUTURE_FINISH), write_count);
+			const I2CCommandType type{
+				true, uint8_t(finish & I2CFinish::FORCE_STOP), uint8_t(finish & I2CFinish::FUTURE_FINISH), false};
+			return I2CCommand{type, write_count};
 		}
 
 		/**
@@ -248,10 +250,10 @@ namespace i2c
 					for (const I2CCommand& command : commands)
 					{
 						// Count number of bytes read and written
-						if (command.type.write)
-							total_write += (command.byte_count ? command.byte_count : max_write);
+						if (command.type().is_write())
+							total_write += (command.byte_count() ? command.byte_count() : max_write);
 						else
-							total_read += (command.byte_count ? command.byte_count : max_read);
+							total_read += (command.byte_count() ? command.byte_count() : max_read);
 					}
 					// check sum of read commands byte_count matches future output size
 					// check sum of write commands byte_count matches future input size
@@ -264,12 +266,12 @@ namespace i2c
 				for (I2CCommand command : commands)
 				{
 					// update command.byte_count if 0
-					command.future_ = proxy;
-					if (!command.byte_count)
-						command.byte_count = (command.type.write ? max_write : max_read);
+					command.set_target(device_, proxy);
+					if (!command.byte_count())
+						command.set_byte_count(command.type().is_write() ? max_write : max_read);
 					// force future finish for last command in transaction
 					if (++index == num_commands)
-						command.type.finish_future = true;
+						command.type().add_flags(I2CCommandType::flags(false, true, false));
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command))
 					{

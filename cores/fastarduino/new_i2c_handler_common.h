@@ -24,6 +24,7 @@
 
 #include <stdint.h>
 #include "boards/board_traits.h"
+#include "bits.h"
 #include "i2c.h"
 #include "streams.h"
 #include "future.h"
@@ -70,35 +71,63 @@ namespace i2c
 	//TODO DOC
 	using I2C_DEBUG_HOOK = void (*)(DebugStatus status, uint8_t data);
 
-	// Type of commands in queue
 	//TODO DOC
-	//TODO Possibly rework as a simple uint8_t with bit values defined in a namespace or enum
+	// Type of commands in queue
 	class I2CCommandType
 	{
 	public:
-		constexpr I2CCommandType()
-			: none{true}, write{false}, force_stop{false}, finish_future{false} {}
+		constexpr I2CCommandType() = default;
 		constexpr I2CCommandType(const I2CCommandType&) = default;
-		constexpr I2CCommandType& operator=(const I2CCommandType&) = default;
+		constexpr I2CCommandType(uint8_t value) : value_{value} {}
+		constexpr I2CCommandType(bool write, bool stop, bool finish, bool end)
+			:	value_{value(write, stop, finish, end)} {}
+		I2CCommandType& operator=(const I2CCommandType&) = default;
+
+		bool is_none() const
+		{
+			return value_ == NONE;
+		}
+		bool is_write() const
+		{
+			return value_ & WRITE;
+		}
+		bool is_stop() const
+		{
+			return value_ & STOP;
+		}
+		bool is_finish() const
+		{
+			return value_ & FINISH;
+		}
+		bool is_end() const
+		{
+			return value_ & END;
+		}
+		void add_flags(uint8_t value)
+		{
+			value_ |= value;
+		}
+
+		static constexpr uint8_t flags(bool stop, bool finish, bool end)
+		{
+			return (stop ? STOP : 0) | (finish ? FINISH : 0) | (end ? END : 0);
+		}
 
 	private:
-		constexpr I2CCommandType(bool write, bool force_stop, bool finish_future)
-			: none{false}, write{write}, force_stop{force_stop}, finish_future{finish_future} {}
+		static constexpr const uint8_t NONE = 0;
+		static constexpr const uint8_t NOT_NONE = bits::BV8(0);
+		static constexpr const uint8_t WRITE = bits::BV8(1);
+		static constexpr const uint8_t STOP = bits::BV8(2);
+		static constexpr const uint8_t FINISH = bits::BV8(3);
+		static constexpr const uint8_t END = bits::BV8(4);
 
-		// true if this is an empty command
-		bool none : 1;
-		// true if this is a write command, false for a read command
-		bool write : 1;
-		// true if a STOP condition must absolutely be forced at the end of this command
-		bool force_stop : 1;
-		// true if associated future is void and must be forced finished after this command
-		bool finish_future : 1;
+		static constexpr uint8_t value(bool write, bool stop, bool finish, bool end)
+		{
+			return NOT_NONE | (write ? WRITE : 0) | (stop ? STOP : 0) | (finish ? FINISH : 0) | (end ? END : 0);
+		}
 
-		friend class I2CCommand;
-		template<I2CMode, bool, bool, typename> friend class AbstractI2CManager;
-		template<I2CMode, bool, bool, typename> friend class I2CManager;
-		template<I2CMode, typename> friend class I2CDevice;
-		friend streams::ostream& operator<<(streams::ostream&, const I2CCommandType&);
+		uint8_t value_ = NONE;
+
 		friend bool operator==(const I2CCommandType&, const I2CCommandType&);
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
 	};
@@ -108,27 +137,23 @@ namespace i2c
 	// even though it is not actually used!
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t)
 	{
-		if (t.none) return out << F("NONE") << streams::flush;
-		out << (t.write ? F("WRITE") : F("READ"));
-		if (t.force_stop)
+		if (t.is_none()) return out << F("NONE") << streams::flush;
+		out << (t.is_write() ? F("WRITE") : F("READ"));
+		if (t.is_stop())
 			out << F("[STOP]");
-		if (t.finish_future)
+		if (t.is_finish())
 			out << F("[FINISH]");
+		if (t.is_end())
+			out << F("[END]");
 		return out << streams::flush;
 	}
 	bool operator==(const I2CCommandType& a, const I2CCommandType& b)
 	{
-		return	(a.none == b.none)
-			&&	(a.write == b.write)
-			&&	(a.force_stop == b.force_stop)
-			&&	(a.finish_future == b.finish_future);
+		return	(a.value_ == b.value_);
 	}
 	bool operator!=(const I2CCommandType& a, const I2CCommandType& b)
 	{
-		return	(a.none != b.none)
-			||	(a.write != b.write)
-			||	(a.force_stop != b.force_stop)
-			||	(a.finish_future != b.finish_future);
+		return	(a.value_ != b.value_);
 	}
 
 	// Command in the queue
@@ -138,59 +163,74 @@ namespace i2c
 	public:
 		constexpr I2CCommand() = default;
 		constexpr I2CCommand(const I2CCommand&) = default;
+		constexpr I2CCommand(I2CCommandType type, uint8_t byte_count) : type_{type}, byte_count_{byte_count} {}
 		constexpr I2CCommand& operator=(const I2CCommand&) = default;
 
+		I2CCommandType type() const
+		{
+			return type_;
+		}
+		I2CCommandType& type()
+		{
+			return type_;
+		}
+		uint8_t target() const
+		{
+			return target_;
+		}
+		uint8_t byte_count() const
+		{
+			return byte_count_;
+		}
+		lifecycle::LightProxy<future::AbstractFuture> future() const
+		{
+			return future_;
+		}
+
+		void set_target(uint8_t target, lifecycle::LightProxy<future::AbstractFuture> future)
+		{
+			target_ = target;
+			future_ = future;
+		}
+		void decrement_byte_count()
+		{
+			--byte_count_;
+		}
+		//TODO remove later
+		void set_byte_count(uint8_t byte_count)
+		{
+			byte_count_ = byte_count;
+		}
+
 	private:
-		static constexpr I2CCommand none()
-		{
-			return I2CCommand{};
-		}
-
-		static constexpr I2CCommand read(
-			uint8_t target, bool force_stop, bool finish_future, uint8_t read_count)
-		{
-			return I2CCommand{I2CCommandType{false, force_stop, finish_future}, target, read_count};
-		}
-		static constexpr I2CCommand write(
-			uint8_t target, bool force_stop, bool finish_future, uint8_t write_count)
-		{
-			return I2CCommand{I2CCommandType{true, force_stop, finish_future}, target, write_count};
-		}
-
-		constexpr I2CCommand(I2CCommandType type, uint8_t target, uint8_t byte_count)
-			: type{type}, target{target}, byte_count{byte_count} {}
-
 		// Type of this command
-		I2CCommandType type = I2CCommandType{};
+		I2CCommandType type_ = I2CCommandType{};
+		// The number of remaining bytes to be read or write
+		uint8_t byte_count_ = 0;
 		// Address of the target device (on 8 bits, already left-shifted)
-		uint8_t target = 0;
+		uint8_t target_ = 0;
 		// A proxy to the future to be used for this command
 		lifecycle::LightProxy<future::AbstractFuture> future_;
-		// The number of remaining bytes to be read or write
-		// When initally set to 0, it will be first replaced by Future full read or write size
-		uint8_t byte_count = 0;
 
-		template<I2CMode, bool, bool, typename> friend class AbstractI2CManager;
-		template<I2CMode, bool, bool, typename> friend class I2CManager;
-		template<I2CMode, typename> friend class I2CDevice;
-		friend streams::ostream& operator<<(streams::ostream&, const I2CCommand&);
 		friend bool operator==(const I2CCommand&, const I2CCommand&);
 		friend bool operator!=(const I2CCommand&, const I2CCommand&);
 	};
 
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c)
 	{
-		out	<< '{' << c.type << ',' 
-			<< streams::hex << c.target << '}' << streams::flush;
+		out	<< '{' << c.type() << ',' 
+			<< streams::hex << c.target() << '}' << streams::flush;
 		return out;
 	}
+	//TODO do we need these operators?
+	//TODO why not check byte_count?
 	bool operator==(const I2CCommand& a, const I2CCommand& b)
 	{
-		return (a.type == b.type) && (a.target == b.target) && (a.future_ == b.future_);
+		return (a.type() == b.type()) && (a.target() == b.target()) && (a.future() == b.future());
 	}
 	bool operator!=(const I2CCommand& a, const I2CCommand& b)
 	{
-		return (a.type != b.type) || (a.target != b.target) || (a.future_ != b.future_);
+		return (a.type() != b.type()) || (a.target() != b.target()) || (a.future() != b.future());
 	}
 
 	//TODO refactor to have a common class with everything common (non template)
@@ -276,7 +316,7 @@ namespace i2c
 			// Handle special case of last transmitted byte possibly not acknowledged by device
 			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
 				&&	(status_ == Status::DATA_TRANSMITTED_NACK)
-				&&	(command_.byte_count == 0))
+				&&	(command_.byte_count() == 0))
 				return true;
 
 			// When status is FUTURE_ERROR then future has already been marked accordingly
@@ -296,7 +336,7 @@ namespace i2c
 
 		future::AbstractFuture& current_future() const
 		{
-			return resolve(command_.future_);
+			return resolve(command_.future());
 		}
 
 		void call_hook(DebugStatus status, uint8_t data = 0)
