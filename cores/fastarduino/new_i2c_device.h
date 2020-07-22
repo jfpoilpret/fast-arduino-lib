@@ -80,14 +80,16 @@ namespace i2c
 		FUTURE_FINISH = 0x02
 	};
 	
+	/// @cond notdocumented
 	constexpr I2CFinish operator|(I2CFinish f1, I2CFinish f2)
 	{
 		return I2CFinish(uint8_t(f1) | uint8_t(f2));
 	}
-	constexpr I2CFinish operator&(I2CFinish f1, I2CFinish f2)
+	constexpr bool operator&(I2CFinish f1, I2CFinish f2)
 	{
-		return I2CFinish(uint8_t(f1) & uint8_t(f2));
+		return uint8_t(f1) & uint8_t(f2);
 	}
+	/// @endcond
 
 	/**
 	 * Base class for all I2C devices.
@@ -163,7 +165,7 @@ namespace i2c
 		static constexpr I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
 			const I2CCommandType type{
-				false, uint8_t(finish & I2CFinish::FORCE_STOP), uint8_t(finish & I2CFinish::FUTURE_FINISH), false};
+				false, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
 			return I2CCommand{type, read_count};
 		}
 
@@ -188,7 +190,7 @@ namespace i2c
 		static constexpr I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
 			const I2CCommandType type{
-				true, uint8_t(finish & I2CFinish::FORCE_STOP), uint8_t(finish & I2CFinish::FUTURE_FINISH), false};
+				true, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
 			return I2CCommand{type, write_count};
 		}
 
