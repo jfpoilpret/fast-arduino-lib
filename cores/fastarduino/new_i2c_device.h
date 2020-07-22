@@ -209,8 +209,10 @@ namespace i2c
 		 * - provide data to write commands
 		 * - store data returned by read commands
 		 * 
-		 * @param future the Future conatining all write data and ready to store 
-		 * all read data; it is shared by all @p commands
+		 * @param proxy a LightPoxy to the Future containing all write data and
+		 * ready to store all read data; it is shared by all @p commands ; passing
+		 * a Future will be accepted as the compiler will automatically construct 
+		 * a LightProxy for it.
 		 * @param commands the list of I2CCommand to be executed, one after another
 		 * 
 		 * @retval 0 when the method did not encounter any error
@@ -218,7 +220,7 @@ namespace i2c
 		 * typically happens when the queue of I2CCommand is full, or when 
 		 * @p future could not be registered with the FutureManager; for ATtiny,
 		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here.
+		 * target device will trigger an error here. TODO rework with list of all errors
 		 * 
 		 * @sa read()
 		 * @sa write()
