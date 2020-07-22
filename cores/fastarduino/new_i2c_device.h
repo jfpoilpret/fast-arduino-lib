@@ -274,8 +274,7 @@ namespace i2c
 				{
 					// update command.byte_count if 0
 					command.set_target(device_, proxy);
-					if (!command.byte_count())
-						command.set_byte_count(command.type().is_write() ? max_write : max_read);
+					command.update_byte_count(max_read, max_write);
 					// force future finish for last command in transaction
 					if (--num_commands == 0)
 						command.type().add_flags(I2CCommandType::flags(false, true, true));

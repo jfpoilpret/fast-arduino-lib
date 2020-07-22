@@ -245,10 +245,10 @@ namespace i2c
 		{
 			--byte_count_;
 		}
-		//TODO remove later
-		void set_byte_count(uint8_t byte_count)
+		void update_byte_count(uint8_t read_count, uint8_t write_count)
 		{
-			byte_count_ = byte_count;
+			if (!byte_count_)
+				byte_count_ = (type_.is_write() ? write_count : read_count);
 		}
 		/// @endcond
 
