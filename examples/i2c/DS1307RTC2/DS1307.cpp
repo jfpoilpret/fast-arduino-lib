@@ -100,29 +100,18 @@ using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
 using namespace streams;
 
-#if I2C_TRUE_ASYNC
-
 #ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 32;
 using DEBUGGER = i2c::debug::I2CAsyncDebugger<DEBUG_SIZE>;
 using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, true, DEBUGGER&>;
-#define TRACE() debugger.trace(out)
+#define TRACE(OUT) debugger.trace(OUT)
 #else
 using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, false>;
-#define TRACE()
+#define TRACE(OUT)
 #endif
+
+#if I2C_TRUE_ASYNC
 REGISTER_I2C_ISR(MANAGER)
-
-#else
-
-#define TRACE()
-#ifdef DEBUG_I2C
-using DEBUGGER = i2c::debug::I2CSyncDebugger;
-using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, true, DEBUGGER&>;
-#else
-using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, false>;
-#endif
-
 #endif
 
 void display_status(ostream& out, char index, uint8_t status)
@@ -170,24 +159,22 @@ int main()
 
 	// Start TWI interface
 	//====================
-#if I2C_TRUE_ASYNC
-
 #ifdef DEBUG_I2C
 	DEBUGGER debugger;
+#endif
+
+#if I2C_TRUE_ASYNC
+#ifdef DEBUG_I2C
 	MANAGER manager{i2c_buffer, debugger, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #else
 	MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #endif
-
 #else
-
 #ifdef DEBUG_I2C
-	DEBUGGER debugger{out};
 	MANAGER manager{debugger, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #else
 	MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
 #endif
-
 #endif
 
 	manager.begin();
@@ -203,7 +190,7 @@ int main()
 	rtc.get_ram(0, data);
 	display_status(out, '2', manager.status());
 	display_ram(out, data, sizeof data);
-	TRACE();
+	TRACE(out);
 	
 	tm time1;
 	time1.tm_hour = 8;
@@ -218,7 +205,7 @@ int main()
 	//=======================
 	rtc.set_datetime(time1);
 	display_status(out, '3', manager.status());
-	TRACE();
+	TRACE(out);
 
 	time::delay_ms(2000);
 	
@@ -228,27 +215,27 @@ int main()
 	rtc.get_datetime(time2);
 	display_status(out, '4', manager.status());
 	display_time(out, time2);
-	TRACE();
+	TRACE(out);
 	
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
 	display_status(out, '5', manager.status());
-	TRACE();
+	TRACE(out);
 	
 	// Provide 10 seconds delay to allow checking square wave output with an oscilloscope
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
 	display_status(out, '6', manager.status());
-	TRACE();
+	TRACE(out);
 
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
 	rtc.set_ram(0, data);
 	display_status(out, '7', manager.status());
-	TRACE();
+	TRACE(out);
 	
 	// Stop TWI interface
 	//===================
