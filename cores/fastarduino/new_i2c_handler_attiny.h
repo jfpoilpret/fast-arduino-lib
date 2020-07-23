@@ -67,10 +67,8 @@ namespace i2c
 			:	PARENT{error_policy}
 		{
 			// set SDA/SCL default directions
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
 		}
 
 		/**
@@ -86,10 +84,8 @@ namespace i2c
 			:	PARENT{error_policy, hook}
 		{
 			// set SDA/SCL default directions
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
 		}
 
 		explicit I2CManager(
@@ -98,10 +94,8 @@ namespace i2c
 			:	PARENT{lifecycle_manager, error_policy}
 		{
 			// set SDA/SCL default directions
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
 		}
 
 		explicit I2CManager(
@@ -111,10 +105,8 @@ namespace i2c
 			:	PARENT{lifecycle_manager, error_policy, hook}
 		{
 			// set SDA/SCL default directions
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SCL);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA);
-			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::PORT |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
+			PARENT::TRAIT::DDR |= bits::BV8(PARENT::TRAIT::BIT_SDA, PARENT::TRAIT::BIT_SCL);
 		}
 
 		/**
