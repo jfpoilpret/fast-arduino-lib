@@ -288,7 +288,7 @@ namespace i2c
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @tparam HAS_LIFECYCLE_ tells if this I2CManager must be able to handle 
-	 * proxies to Future that can mvoe around and must eb cotnrolled by a 
+	 * proxies to Future that can move around and must be controlled by a 
 	 * LifeCycleManager; using `false` will generate smaller code.
 	 * @tparam IS_DEBUG_ tells this I2CManager to call a debugging hook at each 
 	 * step of an I2C transaction; this is useful for debugging support for a new 
@@ -309,9 +309,23 @@ namespace i2c
 		/** The I2C mode for this manager. */
 		static constexpr const I2CMode MODE = MODE_;
 
-		//TODO DOC
+		/**
+		 * Tell if this I2CManager is able to handle proxies to Future that
+		 * can move around and must be controlled by a LifeCycleManager.
+		 */
 		static constexpr const bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
+
+		/**
+		 * Tell if this I2CManager calls a debugging hook at each step of an I2C
+		 * transaction.
+		 * @sa DEBUG_HOOK
+		 */
 		static constexpr const bool IS_DEBUG = IS_DEBUG_;
+
+		/**
+		 * The type of hook called when `IS_DEBUG` is `true`. 
+		 * @sa IS_DEBUG
+		 */
 		using DEBUG_HOOK = DEBUG_HOOK_;
 
 		/**
@@ -327,6 +341,7 @@ namespace i2c
 		}
 
 	protected:
+		/// @cond notdocumented
 		AbstractI2CManager(const AbstractI2CManager<MODE_>&) = delete;
 		AbstractI2CManager<MODE_>& operator=(const AbstractI2CManager<MODE_>&) = delete;
 
@@ -411,6 +426,7 @@ namespace i2c
 
 		// Latest I2C status
 		uint8_t status_ = 0;
+		/// @endcond
 	};
 
 	/// @cond notdocumented

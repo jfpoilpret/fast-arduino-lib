@@ -110,10 +110,10 @@ namespace i2c
 		/** the type of `I2CManager` that can handle this device. */
 		using MANAGER = MANAGER_;
 
-	protected:
-		//TODO DOC API
+	private:
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
 
+	protected:
 		/**
 		 * Create a new I2C device. This constructor must be called by a subclass
 		 * implementing an actua I2C device.
@@ -216,11 +216,16 @@ namespace i2c
 		 * @param commands the list of I2CCommand to be executed, one after another
 		 * 
 		 * @retval 0 when the method did not encounter any error
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
-		 * target device will trigger an error here. TODO rework with list of all errors
+		 * @retval errors::EINVAL if passed arguments are invalid e.g. if @p commands
+		 * is empty, if @p proxy is dynamic but associated @p MANAGER does not
+		 * have a lifecycle::LifeCycleManager, or if the total number of bytes read
+		 * or written by all @p commands does not match @p proxy future input and
+		 * output sizes.
+		 * @retval errors::EAGAIN if the associated @p MANAGER has not enough space
+		 * in its queue of commands; in such situation, you may retry the same call
+		 * at a later time.
+		 * @retval errors::EPROTO (on ATtiny MCU only) if an error occured during
+		 * command execution
 		 * 
 		 * @sa read()
 		 * @sa write()
