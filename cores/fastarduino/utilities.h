@@ -344,7 +344,7 @@ namespace utils
 	{
 		uint8_t tens = bcd >> 4;
 		// We avoid tens * 10 to avoid adding library for multiplication
-		return (tens * 8) + (tens * 2) + (bcd & 0x0F);
+		return (tens << 3) + (tens << 1) + (bcd & 0x0F);
 	}
 
 	/**
