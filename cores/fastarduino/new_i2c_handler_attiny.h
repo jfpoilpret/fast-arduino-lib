@@ -463,17 +463,9 @@ namespace i2c
 		bool handle_no_error()
 		{
 			if (this->check_no_error()) return true;
-
-			switch (this->error_policy_)
-			{
-				case I2CErrorPolicy::CLEAR_ALL_COMMANDS:
-				// Clear all pending transactions from queue
-				case I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS:
-				// Clear command belonging to the same transaction (i.e. same future)
-				// ie forbid any new command until last command (add new flag for that)
-				clear_commands_ = true;
-				break;
-			}
+			// Clear command belonging to the same transaction (i.e. same future)
+			// ie forbid any new command until last command (add new flag for that)
+			clear_commands_ = true;
 			// In case of an error, immediately send a STOP condition
 			exec_stop_(true);
 			return false;
