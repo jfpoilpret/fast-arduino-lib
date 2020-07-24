@@ -342,7 +342,7 @@ namespace utils
 	 */
 	inline uint8_t bcd_to_binary(uint8_t bcd)
 	{
-		uint8_t tens = bcd >> 4;
+		const uint8_t tens = bcd / 16;
 		// We avoid tens * 10 to avoid adding library for multiplication
 		return (tens << 3) + (tens << 1) + (bcd & 0x0F);
 	}
