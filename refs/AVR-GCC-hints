@@ -1,0 +1,91 @@
+This file is listing a set of information about AVR GCC compiler and code generation, that may be used as hints in FastArduino development.
+
+What registers are used by the C compiler?
+==========================================
+Data types:
+-----------
+- char is 8 bits, 
+- int is 16 bits, 
+- long is 32 bits, 
+- long long is 64 bits, 
+- float and double are 32 bits (this is the only supported floating point format), 
+- pointers are 16 bits (function pointers are word addresses, to allow addressing the whole 128K program memory space on the ATmega devices with > 64 KB of flash ROM). 
+
+There is a -mint8 option (see Options for the C compiler avr-gcc) to make int 8 bits, but that is not supported by avr-libc and violates C standards (int must be at least 16 bits). It may be removed in a future release.
+
+Call-used registers (r18-r27, r30-r31):
+---------------------------------------
+May be allocated by gcc for local data. You may use them freely in assembler subroutines. Calling C subroutines can clobber any of them - the caller is responsible for saving and restoring.
+
+Call-saved registers (r2-r17, r28-r29):
+---------------------------------------
+May be allocated by gcc for local data. Calling C subroutines leaves them unchanged. 
+Assembler subroutines are responsible for saving and restoring these registers, if changed. 
+r29:r28 (Y pointer) is used as a frame pointer (points to local data on stack) if necessary.
+
+Fixed registers (r0, r1):
+-------------------------
+Never allocated by gcc for local data, but often used for fixed purposes:
+- r0 - temporary register, can be clobbered by any C code (except interrupt handlers which save it), may be used to remember something for a while within one piece of assembler code
+- r1 - assumed to be always zero in any C code, may be used to remember something for a while within one piece of assembler code, but must then be cleared after use (clr r1). This includes any use of the [f]mul[s[u]] instructions, which return their result in r1:r0. Interrupt handlers save and clear r1 on entry, and restore r1 on exit (in case it was non-zero).
+
+Function call conventions:
+--------------------------
+- Arguments - allocated left to right, r25 to r8. All arguments are aligned to start in even-numbered registers (odd-sized arguments, including char, have one free register above them). This allows making better use of the movw instruction on the enhanced core. If too many, those that don't fit are passed on the stack.
+- Return values: 8-bit in r24 (not r25!), 16-bit in r25:r24, up to 32 bits in r22-r25, up to 64 bits in r18-r25. 8-bit return values are zero/sign-extended to 16 bits by the caller (unsigned char is more efficient than signed char - just clr r25). Arguments to functions with variable argument lists (printf etc.) are all passed on stack, and char is extended to int. 
+
+Byte arithemtics
+================
+Note: byte here is understood as `uint8_t`.
+Strangely, some instructions are always handled as uint16_t in genreated code:
+
+	uint8_t bcd_to_binary(uint8_t bcd)
+	{
+		const uint8_t tens = bcd >> 4;
+		...
+	}
+
+Code generated for that snippet considers a logical right shift on a word (2 registers) where the high register never gets used! This seems to be a known issue with GCC C++ front-end.
+A workaround consistes in replacing the right shift with a division!
+	const uint8_t tens = bcd / 16;
+leads to code operating just on one byte, as expected.
+
+Due to this any right-shift on uint8_t should be avoided and replaced with a division.
+
+Bit-fields
+==========
+Note: yes I know, bitfields are known to be evil and 100% implementation dependent (compiler, target...) Anyway they help produce code that is easier to read, while keeping data size under control.
+
+A common issue with bit-fields is the order of bits in the struct (LSB first, MSB first), which can have 2 impacts:
+- mistake interpreting one bit-field after an exchange with another platform
+- generated code size suboptimal due to unexpected field order
+
+Hence, a good rule of thumb when using bit-fields is to know *exactly* how your compiler (GCC C++) will order them for your target (AVR).
+
+Since this information is often hard to find (except in the compiler code itself), it is useful to note it here, based on past experiments:
+
+Example 1
+---------
+	struct
+	{
+		uint8_t lsb : 1;
+		uint8_t middle : 6;
+		uint8_t msb : 1;
+	};
+
+Example 2
+---------
+	struct
+	{
+		uint16_t is_dynamic_ : 1;
+		uintptr_t ptr_ : 15;
+	};
+	
+The flag is the LSB where it might have been thought that it would be MSB instead.
+In this concrete example, generated code is suboptimal whenever we want to use ptr_ and only test is_dynamic_ (most of the time). It is preferrable to reorder both fields as follows:
+	struct
+	{
+		uintptr_t ptr_ : 15;
+		uint16_t is_dynamic_ : 1;
+	};
+
