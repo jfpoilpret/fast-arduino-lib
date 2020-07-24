@@ -460,7 +460,7 @@ namespace lifecycle
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
 		Proxy(const T& dest)
-			:	is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, id_{0} {}
+			:	id_{0}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, is_dynamic_{false} {}
 
 		/**
 		 * Create a `Proxy<T>` to a `LifeCycle<U>` instance (dynamic reference).
@@ -474,7 +474,7 @@ namespace lifecycle
 		 */
 		template<typename U>
 		Proxy(const LifeCycle<U>& dest)
-			:	is_dynamic_{true}, ptr_{reinterpret_cast<uintptr_t>(dest.manager())}, id_{dest.id()}
+			:	id_{dest.id()}, ptr_{reinterpret_cast<uintptr_t>(dest.manager())}, is_dynamic_{true}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
@@ -483,7 +483,7 @@ namespace lifecycle
 		/// @cond notdocumented
 		constexpr Proxy() = default;
 		template<typename U> Proxy(const Proxy<U>& that)
-			:	is_dynamic_{that.is_dynamic_}, ptr_{that.ptr_}, id_{that.id_}
+			:	id_{that.id_}, ptr_{that.ptr_}, is_dynamic_{that.is_dynamic_}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
@@ -493,9 +493,9 @@ namespace lifecycle
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
-			is_dynamic_ = that.is_dynamic_;
-			ptr_ = that.ptr_;
 			id_ = that.id_;
+			ptr_ = that.ptr_;
+			is_dynamic_ = that.is_dynamic_;
 			return *this;
 		}
 		/// @endcond
@@ -567,9 +567,9 @@ namespace lifecycle
 
 		struct
 		{
-			bool is_dynamic_ : 1;
-			uintptr_t ptr_ : 15;
 			uint8_t id_;
+			uintptr_t ptr_ : 15;
+			bool is_dynamic_ : 1;
 		};
 
 		template<typename U> friend class Proxy;
@@ -624,7 +624,7 @@ namespace lifecycle
 		 * Create a `LightProxy<T>` to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
-		LightProxy(const T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
+		LightProxy(const T& dest) : ptr_{reinterpret_cast<uintptr_t>(&dest)}, is_dynamic_{false}  {}
 
 		/**
 		 * Create a `LightProxy<T>` to a `LifeCycle<U>` instance (dynamic reference).
@@ -637,7 +637,7 @@ namespace lifecycle
 		 * @sa LifeCycle
 		 */
 		template<typename U>
-		LightProxy(const LifeCycle<U>& dest) : is_dynamic2_{true}, id_{dest.id()}
+		LightProxy(const LifeCycle<U>& dest) : id_{dest.id()}, is_dynamic2_{true}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
@@ -653,13 +653,13 @@ namespace lifecycle
 		{
 			if (proxy.is_dynamic())
 			{
-				is_dynamic2_ = true;
 				id_ = proxy.id();
+				is_dynamic2_ = true;
 			}
 			else
 			{
-				is_dynamic_ = false;
 				ptr_ = reinterpret_cast<uintptr_t>(proxy.destination());
+				is_dynamic_ = false;
 			}
 		}
 
@@ -730,14 +730,14 @@ namespace lifecycle
 			uint16_t content_;
 			struct
 			{
-				uint16_t is_dynamic_ : 1;
 				uintptr_t ptr_ : 15;
+				uint16_t is_dynamic_ : 1;
 			};
 			struct
 			{
-				uint8_t is_dynamic2_ : 1;
-				uint8_t reserved_ : 7;
 				uint8_t id_;
+				uint8_t reserved_ : 7;
+				uint8_t is_dynamic2_ : 1;
 			};
 		};
 
