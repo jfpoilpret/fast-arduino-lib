@@ -534,7 +534,7 @@ namespace i2c
 	// Specific traits for I2CManager
 	template<I2CMode MODE_, bool HAS_LIFECYCLE_, bool IS_DEBUG_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<HAS_LIFECYCLE_, IS_DEBUG_> {};
+		:	I2CManager_trait_impl<true, HAS_LIFECYCLE_, IS_DEBUG_, MODE_> {};
 	/// @endcond
 
 	/// @cond notdocumented

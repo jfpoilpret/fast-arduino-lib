@@ -423,15 +423,20 @@ namespace i2c
 	template<typename T> struct I2CManager_trait
 	{
 		static constexpr bool IS_I2CMANAGER = false;
-		static constexpr bool IS_DEBUG = false;
+		static constexpr bool IS_ASYNC = false;
 		static constexpr bool HAS_LIFECYCLE = false;
+		static constexpr bool IS_DEBUG = false;
+		static constexpr I2CMode MODE = I2CMode::STANDARD;
 	};
 
-	template<bool HAS_LIFECYCLE_, bool IS_DEBUG_> struct I2CManager_trait_impl
+	template<bool IS_ASYNC_, bool HAS_LIFECYCLE_, bool IS_DEBUG_, I2CMode MODE_>
+	struct I2CManager_trait_impl
 	{
 		static constexpr bool IS_I2CMANAGER = true;
-		static constexpr bool IS_DEBUG = IS_DEBUG_;
+		static constexpr bool IS_ASYNC = IS_ASYNC_;
 		static constexpr bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
+		static constexpr bool IS_DEBUG = IS_DEBUG_;
+		static constexpr I2CMode MODE = MODE_;
 	};
 	/// @endcond
 }
