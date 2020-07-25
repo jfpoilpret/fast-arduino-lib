@@ -169,19 +169,7 @@ namespace i2c
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
 	};
 
-	//TODO check if need to be externalized to cpp file
-	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t)
-	{
-		if (t.is_none()) return out << F("NONE") << streams::flush;
-		out << (t.is_write() ? F("WRITE") : F("READ"));
-		if (t.is_stop())
-			out << F("[STOP]");
-		if (t.is_finish())
-			out << F("[FINISH]");
-		if (t.is_end())
-			out << F("[END]");
-		return out << streams::flush;
-	}
+	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t);
 	bool operator==(const I2CCommandType& a, const I2CCommandType& b)
 	{
 		return	(a.value_ == b.value_);
@@ -267,12 +255,7 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c)
-	{
-		out	<< '{' << c.type() << ',' 
-			<< streams::hex << c.target() << '}' << streams::flush;
-		return out;
-	}
+	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c);
 	/// @endcond
 
 	//TODO refactor to have a common class with everything common (non template)
