@@ -23,11 +23,6 @@
 
 #include <stdint.h>
 
-//TODO add support for asynchronous operation?
-//TODO is it useful to support interrupt-driven (async) mode? that would require static buffers for read and write!
-// Should we then provide two distinct I2CManager classes?
-//TODO register ISR macro?
-
 //NOTE only Master operation is supported for the moment
 /**
  * Define API to define and manage I2C devices.
