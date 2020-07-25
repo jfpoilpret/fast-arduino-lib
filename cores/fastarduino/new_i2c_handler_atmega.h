@@ -50,19 +50,45 @@
 // OPEN POINTS:
 //TODO - add event supplier as callback handler?
 
-//TODO DOC
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
+ * I2CManager to work properly.
+ */
 #define REGISTER_I2C_ISR(MANAGER)                                   \
 ISR(TWI_vect)                                                       \
 {                                                                   \
 	i2c::isr_handler::i2c_change<MANAGER>();                        \
 }
-//TODO DOC
+
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
+ * I2CManager to work properly, along with a callback method that will be called
+ * everytime an I2C transaction progresses (one command executed, whole transaction
+ * executed, error).
+ * 
+ * @param CALLBACK the function that will be called when the interrupt is
+ * triggered
+ * 
+ * @sa i2c::I2CCallback
+ */
 #define REGISTER_I2C_ISR_FUNCTION(MANAGER, CALLBACK)                \
 ISR(TWI_vect)                                                       \
 {                                                                   \
 	i2c::isr_handler::i2c_change_function<MANAGER, CALLBACK>();     \
 }
-//TODO DOC
+
+/**
+ * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
+ * I2CManager to work properly, along with a callback method that will be called
+ * everytime an I2C transaction progresses (one command executed, whole transaction
+ * executed, error).
+ * 
+ * @param HANDLER the class holding the callback method
+ * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
+ * is triggered; this must be a proper PTMF (pointer to member function).
+ * 
+ * @sa i2c::I2CCallback
+ */
 #define REGISTER_I2C_ISR_METHOD(MANAGER, HANDLER, CALLBACK)             \
 ISR(TWI_vect)                                                           \
 {                                                                       \
@@ -514,6 +540,7 @@ namespace i2c
 	/// @cond notdocumented
 	struct isr_handler
 	{
+		//TODO Check MANAGER is ASYNCHRONOUS (need trait)
 		template<typename MANAGER>
 		static void i2c_change()
 		{
