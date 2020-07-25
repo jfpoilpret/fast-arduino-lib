@@ -296,7 +296,12 @@ namespace i2c
 			}
 		}
 
-		//TODO API DOC
+		/**
+		 * Resolve @p proxy to an actual @p T (typically a `Future`).
+		 * @tparam T the type pointed to by @p proxy
+		 * @param proxy the LightProxy to a Future to resolve
+		 * @return a reference to the proxied Future
+		 */
 		template<typename T> T& resolve(const lifecycle::LightProxy<T> proxy) const
 		{
 			return handler_.resolve(proxy);
