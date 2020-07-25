@@ -102,7 +102,7 @@ using namespace streams;
 
 #ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 32;
-using DEBUGGER = i2c::debug::I2CAsyncDebugger<DEBUG_SIZE>;
+using DEBUGGER = i2c::debug::I2CDebugRecorder<DEBUG_SIZE>;
 using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, true, DEBUGGER&>;
 #define TRACE(OUT) debugger.trace(OUT)
 #else

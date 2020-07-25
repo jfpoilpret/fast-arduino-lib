@@ -103,8 +103,8 @@ namespace i2c
 	 * @warning Do not use this (function pointer) for your hooks! This will 
 	 * increase code size and ISR delay. Rather use functors as defined in
 	 * `i2c_debug.h`.
-	 * @sa i2c::debug::I2CAsyncDebugger
-	 * @sa i2c::debug::I2CSyncDebugger
+	 * @sa i2c::debug::I2CDebugRecorder
+	 * @sa i2c::debug::I2CLiveDebugger
 	 */
 	using I2C_DEBUG_HOOK = void (*)(DebugStatus status, uint8_t data);
 

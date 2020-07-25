@@ -27,7 +27,11 @@
 
 namespace i2c
 {
-	//TODO DOC
+	/**
+	 * Defines API to ease I2C devices debugging.
+	 * You would normally not use API in this namespace unless you develop specific
+	 * support for I2C devices.
+	 */
 	namespace debug
 	{
 	}
@@ -85,28 +89,86 @@ namespace i2c::debug
 	}
 	/// @endcond
 
-	//TODO DOC
+	/**
+	 * Indicate what in I2C protocol shall be debugged.
+	 * Values can or'ed together, e.g. `DEBUG::DEBUG_SEND_OK | DEBUG::DEBUG_SEND_ERR`.
+	 * @sa I2CDebugRecorder
+	 * @sa I2CLiveDebugger
+	 */
 	enum class DEBUG : uint8_t
 	{
+		/**
+		 * Debug all individual steps of I2C protocol:
+		 * - START condition
+		 * - REPEAT START condition
+		 * - SLAW slave address for writing
+		 * - SLAR slave address for reading
+		 * - SEND send byte to slave
+		 * - RECV receive byte from slave
+		 * - RECV_LAST receive last byte from slave
+		 * - STOP condition
+		 */
 		DEBUG_STEPS = 0x01,
+		/** Debug successfully written bytes. */
 		DEBUG_SEND_OK = 0x02,
+		/** Debug written bytes not acknowledged by slave. */
 		DEBUG_SEND_ERR = 0x04,
+		/** Debug successfully received bytes. */
 		DEBUG_RECV_OK = 0x08,
+		/** Debug error during receiving bytes. */
 		DEBUG_RECV_ERR = 0x10,
+		/** Debug everything. */
 		DEBUG_ALL = 0xFF
 	};
 
-	//TODO DOC
-	template<uint8_t SIZE> class I2CAsyncDebugger
+	/// @cond notdocumented
+	DEBUG operator|(DEBUG a, DEBUG b)
+	{
+		return DEBUG(uint8_t(a) | uint8_t(b));
+	}
+	/// @endcond
+
+	/**
+	 * Class recording I2C debug notifications for later output.
+	 * 
+	 * @tparam SIZE the maximum number of notifications to record (each notification
+	 * is 2 bytes)
+	 * 
+	 * @sa i2c::DebugStatus
+	 */
+	template<uint8_t SIZE> class I2CDebugRecorder
 	{
 	public:
-		I2CAsyncDebugger(DEBUG debug = DEBUG::DEBUG_ALL) : debug_{debug} {}
+		/**
+		 * Create an I2CDebugRecorder that can record I2C notifications determined
+		 * by @p debug list.
+		 * The number of recorded notifications is limited by @p SIZE. Once @p SIZE
+		 * notifications have been recorded by this I2CDebugRecorder, any additional
+		 * notification will be trashed.
+		 * To be effective, this must be attached to an I2CManager (at construction time).
+		 * Recorded notifications can be output to a `streams::ostream` with `trace()`.
+		 * 
+		 * @param debug the list fo notifications to be recorded
+		 * 
+		 * @sa trace()
+		 * @sa reset()
+		 */
+		I2CDebugRecorder(DEBUG debug = DEBUG::DEBUG_ALL) : debug_{debug} {}
 
+		/**
+		 * Clear all recorded notifications.
+		 * @sa trace()
+		 */
 		void reset()
 		{
 			index_ = 0;
 		}
 
+		/**
+		 * Output all recorded I2C notifications to @p out then clear all records.
+		 * @param out the `streams::ostream` to output traces to
+		 * @sa reset()
+		 */
 		void trace(streams::ostream& out)
 		{
 			for (uint8_t i = 0; i < index_; ++i)
@@ -117,6 +179,7 @@ namespace i2c::debug
 			index_ = 0;
 		}
 
+		/// @cond notdocumented
 		void operator()(i2c::DebugStatus status, uint8_t data)
 		{
 			if (index_ >= SIZE) return;
@@ -170,6 +233,7 @@ namespace i2c::debug
 				break;
 			}
 		}
+		/// @endcond
 
 	private:
 		i2c::DebugStatus status_[SIZE];
@@ -178,12 +242,27 @@ namespace i2c::debug
 		DEBUG debug_;
 	};
 
-	//TODO DOC
-	class I2CSyncDebugger
+	/**
+	 * Class tracing I2C debug notifications live to @p out.
+	 * @warning Do not use this with asynchronous (ISR-based) I2CManagers! if you
+	 * use an asynchronous I2CManager, then use I2CDebugRecorder instead.
+	 * 
+	 * @sa i2c::DebugStatus
+	 * @sa I2CDebugRecorder
+	 */
+	class I2CLiveDebugger
 	{
 	public:
-		I2CSyncDebugger(streams::ostream& out, DEBUG debug = DEBUG::DEBUG_ALL) : out_{out}, debug_{debug} {}
+		/**
+		 * Create an I2CLiveDebugger that can trace live I2C notifications determined
+		 * by @p debug list. I2C notifications are output to @p out.
+		 * 
+		 * @param out the `streams::ostream` to output traces to
+		 * @param debug the list fo notifications to trace
+		 */
+		I2CLiveDebugger(streams::ostream& out, DEBUG debug = DEBUG::DEBUG_ALL) : out_{out}, debug_{debug} {}
 
+		/// @cond notdocumented
 		void operator()(i2c::DebugStatus status, uint8_t data)
 		{
 			bool display = false;
@@ -219,6 +298,7 @@ namespace i2c::debug
 			if (display)
 				out_ << status << streams::hex << data << ' ' << streams::flush;
 		}
+		/// @endcond
 
 	private:
 		streams::ostream& out_;
