@@ -21,8 +21,11 @@
 #ifndef DEFINES_HH
 #define DEFINES_HH
 
-//TODO DOC
-#define NOP __asm__ __volatile__("nop")
+/**
+ * Utility to produce a `nop` instruction in generated code, as a way to debug
+ * (and optimize) generated assembly code from C++ source.
+ */
+#define NOP() __asm__ __volatile__("nop")
 
 /**
  * Specific GCC attribute to declare an argument or variable unused, so that the 

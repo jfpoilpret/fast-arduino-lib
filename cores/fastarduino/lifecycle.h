@@ -577,11 +577,27 @@ namespace lifecycle
 		friend bool operator!=<T>(const Proxy<T>&, const Proxy<T>&);
 	};
 
-	//TODO API DOC
+	/**
+	 * Utility template function to create a Proxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify
+	 * @return a Proxy to @p dest
+	 * @sa Proxy
+	 */
 	template<typename T> Proxy<T> make_proxy(const T& dest)
 	{
 		return Proxy<T>{dest};
 	}
+
+	/**
+	 * Utility template function to create a Proxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify, wrapped in LifeCycle
+	 * @return a Proxy to @p dest
+	 * @sa Proxy
+	 */
 	template<typename T> Proxy<T> make_proxy(const LifeCycle<T>& dest)
 	{
 		return Proxy<T>{dest};
@@ -746,11 +762,27 @@ namespace lifecycle
 		friend bool operator!=<T>(const LightProxy<T>&, const LightProxy<T>&);
 	};
 
-	//TODO API DOC
+	/**
+	 * Utility template function to create a LightProxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify
+	 * @return a LightProxy to @p dest
+	 * @sa LightProxy
+	 */
 	template<typename T> LightProxy<T> make_light_proxy(const T& dest)
 	{
 		return LightProxy<T>{dest};
 	}
+
+	/**
+	 * Utility template function to create a LightProxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify, wrapped in a LifeCycle
+	 * @return a LightProxy to @p dest
+	 * @sa LightProxy
+	 */
 	template<typename T> LightProxy<T> make_light_proxy(const LifeCycle<T>& dest)
 	{
 		return LightProxy<T>{dest};
