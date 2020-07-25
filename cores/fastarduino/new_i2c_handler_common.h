@@ -29,6 +29,8 @@
 #include "streams.h"
 #include "future.h"
 #include "lifecycle.h"
+#include "queue.h"
+#include "utilities.h"
 
 namespace i2c
 {
@@ -39,6 +41,12 @@ namespace i2c
 	 */
 	enum class I2CErrorPolicy : uint8_t
 	{
+		/**
+		 * Do nothing at all in case of an error; useful only with a synchronous
+		 * I2CManager.
+		 */
+		DO_NOTHING,
+
 		/**
 		 * In case of an error during I2C transaction, then all I2CCommand currently
 		 * in queue will be removed.
@@ -264,9 +272,89 @@ namespace i2c
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c);
 	/// @endcond
 
-	//TODO refactor to have a common class with everything common (non template)
-	//TODO then define a generic template (subclass) with 4 specializations for HAS_LIFECYCLE and IS_DEBUG
-	//TODO here MODE_ template arg seems unused?
+	/// @cond notdocumented
+	// Generic support for I2C debugging
+	template<bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>  class I2CDebugSupport
+	{
+	protected:
+		I2CDebugSupport(UNUSED DEBUG_HOOK_ hook = nullptr) {}
+		void call_hook(UNUSED DebugStatus status, UNUSED uint8_t data = 0) {}
+	};
+	// template<> template<typename DEBUG_HOOK_> class I2CDebugSupport<true, DEBUG_HOOK_>
+	template<typename DEBUG_HOOK_> class I2CDebugSupport<true, DEBUG_HOOK_>
+	{
+	protected:
+		I2CDebugSupport(DEBUG_HOOK_ hook) : hook_{hook} {}
+		void call_hook(DebugStatus status, uint8_t data = 0)
+		{
+			hook_(status, data);
+		}
+	private:
+		DEBUG_HOOK_ hook_;
+	};
+	/// @endcond
+
+	/// @cond notdocumented
+	// Generic support for LifeCycle resolution
+	template<bool HAS_LIFECYCLE_ = false> class I2CLifeCycleSupport
+	{
+	protected:
+		I2CLifeCycleSupport(UNUSED lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr) {}
+		template<typename T> T& resolve(lifecycle::LightProxy<T> proxy) const
+		{
+			return *proxy.destination();
+		}
+	};
+	template<> class I2CLifeCycleSupport<true>
+	{
+	protected:
+		I2CLifeCycleSupport(lifecycle::AbstractLifeCycleManager* lifecycle_manager)
+			:	lifecycle_manager_{*lifecycle_manager} {}
+		template<typename T> T& resolve(lifecycle::LightProxy<T> proxy) const
+		{
+			return *proxy(lifecycle_manager_);
+		}
+	private:
+		lifecycle::AbstractLifeCycleManager& lifecycle_manager_;
+	};
+	/// @endcond
+
+	/// @cond notdocumented
+	// Generic support for LifeCycle resolution
+	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> class I2CErrorPolicySupport
+	{
+	protected:
+		I2CErrorPolicySupport() {}
+		void handle_error(UNUSED const I2CCommand& current, UNUSED containers::Queue<I2CCommand>& commands) {}
+	};
+	template<> class I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_ALL_COMMANDS>
+	{
+	protected:
+		I2CErrorPolicySupport() {}
+		void handle_error(UNUSED const I2CCommand& current, containers::Queue<I2CCommand>& commands)
+		{
+			commands.clear_();
+		}
+	};
+	template<> class I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS>
+	{
+	protected:
+		I2CErrorPolicySupport() {}
+		void handle_error(const I2CCommand& current, containers::Queue<I2CCommand>& commands)
+		{
+			// Clear command belonging to the same transaction (i.e. same future)
+			const auto future = current.future();
+			I2CCommand command;
+			while (commands.peek_(command))
+			{
+				if (command.future() != future)
+					break;
+				commands.pull_(command);
+			}
+		}
+	};
+	/// @endcond
+
 	/**
 	 * Abstract I2C Manager.
 	 * It is specifically subclassed for ATmega Vs. ATtiny architectures.
@@ -274,49 +362,10 @@ namespace i2c
 	 * 
 	 * For the time being, the MCU must always act as the only master on the bus.
 	 * Using MCU as a slave will be supported in a later version of FastArduino.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam HAS_LIFECYCLE_ tells if this I2CManager must be able to handle 
-	 * proxies to Future that can move around and must be controlled by a 
-	 * LifeCycleManager; using `false` will generate smaller code.
-	 * @tparam IS_DEBUG_ tells this I2CManager to call a debugging hook at each 
-	 * step of an I2C transaction; this is useful for debugging support for a new 
-	 * I2C device; using `false` will generate smaller code.
-	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `IS_DEBUG` is 
-	 * `true`. This can be a simple function pointer (of type `I2C_DEBUG_HOOK`)
-	 * or a Functor class (or Functor class reference). Using a Functor class will
-	 * generate smaller code.
-	 * 
-	 * @sa I2CMode
-	 * @sa I2CManager
-	 * @sa I2C_DEBUG_HOOK
 	 */
-	template<I2CMode MODE_, bool HAS_LIFECYCLE_ = false, bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class AbstractI2CManager
 	{
 	public:
-		/** The I2C mode for this manager. */
-		static constexpr const I2CMode MODE = MODE_;
-
-		/**
-		 * Tell if this I2CManager is able to handle proxies to Future that
-		 * can move around and must be controlled by a LifeCycleManager.
-		 */
-		static constexpr const bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
-
-		/**
-		 * Tell if this I2CManager calls a debugging hook at each step of an I2C
-		 * transaction.
-		 * @sa DEBUG_HOOK
-		 */
-		static constexpr const bool IS_DEBUG = IS_DEBUG_;
-
-		/**
-		 * The type of hook called when `IS_DEBUG` is `true`. 
-		 * @sa IS_DEBUG
-		 */
-		using DEBUG_HOOK = DEBUG_HOOK_;
-
 		/**
 		 * Return latest transmission status.
 		 * Possible statuses are defined in namespace `i2c::Status`.
@@ -331,43 +380,7 @@ namespace i2c
 
 	protected:
 		/// @cond notdocumented
-		AbstractI2CManager(const AbstractI2CManager<MODE_>&) = delete;
-		AbstractI2CManager<MODE_>& operator=(const AbstractI2CManager<MODE_>&) = delete;
-
-		AbstractI2CManager(I2CErrorPolicy error_policy)
-			:	lifecycle_manager_{nullptr}, error_policy_{error_policy}, hook_{nullptr}
-		{
-			static_assert(!HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be false with this constructor");
-			static_assert(!IS_DEBUG, "IS_DEBUG_ must be false with this constructor");
-		}
-
-		AbstractI2CManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager, I2CErrorPolicy error_policy)
-			:	lifecycle_manager_{lifecycle_manager}, error_policy_{error_policy}, hook_{nullptr}
-		{
-			static_assert(HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be true with this constructor");
-			static_assert(!IS_DEBUG, "IS_DEBUG_ must be false with this constructor");
-		}
-
-		AbstractI2CManager(I2CErrorPolicy error_policy, DEBUG_HOOK hook)
-			:	lifecycle_manager_{nullptr}, error_policy_{error_policy}, hook_{hook}
-		{
-			static_assert(!HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be false with this constructor");
-			static_assert(IS_DEBUG, "IS_DEBUG_ must be true with this constructor");
-		}
-
-		AbstractI2CManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager, I2CErrorPolicy error_policy, DEBUG_HOOK hook)
-			:	lifecycle_manager_{lifecycle_manager}, error_policy_{error_policy}, hook_{hook}
-		{
-			static_assert(HAS_LIFECYCLE, "HAS_LIFECYCLE_ must be true with this constructor");
-			static_assert(IS_DEBUG, "IS_DEBUG_ must be true with this constructor");
-		}
-
-		using TRAIT = board_traits::TWI_trait;
-		using REG8 = board_traits::REG8;
-
-		bool check_no_error()
+		bool check_no_error(future::AbstractFuture& future)
 		{
 			if (status_ == expected_status_) return true;
 			// Handle special case of last transmitted byte possibly not acknowledged by device
@@ -377,37 +390,12 @@ namespace i2c
 				return true;
 
 			// When status is FUTURE_ERROR then future has already been marked accordingly
+			//FIXME this status is not used for ATmega?
 			if (status_ != Status::FUTURE_ERROR)
 				// The future must be marked as error
-				current_future().set_future_error_(errors::EPROTO);
+				future.set_future_error_(errors::EPROTO);
 			return false;
 		}
-
-		template<typename T> T& resolve(lifecycle::LightProxy<T> proxy) const
-		{
-			if (HAS_LIFECYCLE)
-				return *proxy(lifecycle_manager_);
-			else
-				return *proxy.destination();
-		}
-
-		future::AbstractFuture& current_future() const
-		{
-			return resolve(command_.future());
-		}
-
-		void call_hook(DebugStatus status, uint8_t data = 0)
-		{
-			if (IS_DEBUG)
-				hook_(status, data);
-		}
-
-		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / 100'000UL - 16UL) / 2;
-		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / 400'000UL - 16UL) / 2;
-
-		lifecycle::AbstractLifeCycleManager* lifecycle_manager_;
-		const I2CErrorPolicy error_policy_;
-		DEBUG_HOOK hook_;
 
 		// Status of current command processing
 		I2CCommand command_;
@@ -437,6 +425,34 @@ namespace i2c
 		static constexpr bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
 		static constexpr bool IS_DEBUG = IS_DEBUG_;
 		static constexpr I2CMode MODE = MODE_;
+	};
+
+	// Specific traits for I2CMode
+	template<I2CMode MODE_ = I2CMode::STANDARD> struct I2CMode_trait
+	{
+		static constexpr I2CMode MODE = MODE_;
+		static constexpr uint32_t RATE = 100'000UL;
+		static constexpr uint32_t FREQUENCY = (F_CPU / RATE - 16UL) / 2;
+		static constexpr const uint8_t T_HD_STA = utils::calculate_delay1_count(4.0);
+		static constexpr const uint8_t T_LOW = utils::calculate_delay1_count(4.7);
+		static constexpr const uint8_t T_HIGH = utils::calculate_delay1_count(4.0);
+		static constexpr const uint8_t T_SU_STA = utils::calculate_delay1_count(4.7);
+		static constexpr const uint8_t T_SU_STO = utils::calculate_delay1_count(4.0);
+		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(4.7);
+		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(4.0 + 4.7);
+	};
+	template<> struct I2CMode_trait<I2CMode::FAST>
+	{
+		static constexpr I2CMode MODE = I2CMode::FAST;
+		static constexpr uint32_t RATE = 400'000UL;
+		static constexpr uint32_t FREQUENCY = (F_CPU / RATE - 16UL) / 2;
+		static constexpr const uint8_t T_HD_STA = utils::calculate_delay1_count(0.6);
+		static constexpr const uint8_t T_LOW = utils::calculate_delay1_count(1.3);
+		static constexpr const uint8_t T_HIGH = utils::calculate_delay1_count(0.6);
+		static constexpr const uint8_t T_SU_STA = utils::calculate_delay1_count(0.6);
+		static constexpr const uint8_t T_SU_STO = utils::calculate_delay1_count(0.6);
+		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(1.3);
+		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(0.6 + 1.3);
 	};
 	/// @endcond
 }

@@ -101,7 +101,7 @@ namespace i2c
 	 * @sa i2c::I2CMode
 	 * @sa i2c::I2CManager
 	 */
-	template<I2CMode MODE_, typename MANAGER_ = I2CManager<MODE_>>
+	template<I2CMode MODE_, typename MANAGER_>
 	class I2CDevice
 	{
 	public:

@@ -94,7 +94,7 @@ namespace devices::rtc
 	 * I2C device driver for the DS1307 RTC chip.
 	 * Note that this chip only supports standard I2C mode (100 KHz).
 	 */
-	template<typename MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD>>
+	template<typename MANAGER>
 	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>
 	{
 		using PARENT = i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>;

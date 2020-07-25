@@ -97,89 +97,45 @@ ISR(TWI_vect)                                                           \
 
 namespace i2c
 {
+	//TODO Maybe add an extra layer AbstractATmegaI2CManager with all common methods for sync and ascyn?
 	/**
-	 * General I2C Manager for ATmega architecture, on which it handles all I2C
-	 * commands asynchronously.
-	 * It is used by all I2C devices for transmission.
-	 * 
-	 * TODO provide approach details (already in above comment)
-	 * TODO mention need to register ISR
+	 * Abstract asynchronous I2C Manager.
+	 * It is specifically subclassed for ATmega architecture.
+	 * You should never need to subclass AbstractI2CAsyncManager yourself.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
-	 * @sa i2c::I2CMode
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * proxies to Future that can move around and must be controlled by a 
+	 * LifeCycleManager; using `false` will generate smaller code.
+	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * step of an I2C transaction; this is useful for debugging support for a new 
+	 * I2C device; using `false` will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `IS_DEBUG` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_DEBUG_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
+	 * 
+	 * @sa I2CMode
+	 * @sa I2C_DEBUG_HOOK
 	 */
-	template<
-		I2CMode MODE_ = I2CMode::STANDARD, 
-		bool HAS_LIFECYCLE_ = false, 
-		bool IS_DEBUG_ = false, 
-		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CManager : public AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
+	class AbstractI2CAsyncManager :
+		public AbstractI2CManager,
+		public I2CErrorPolicySupport<POLICY_>, 
+		public I2CLifeCycleSupport<HAS_LC_>, 
+		public I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>;
+	private:
+		using MODE_TRAIT = I2CMode_trait<MODE_>;
+		using I2C_TRAIT = board_traits::TWI_trait;
+		using REG8 = board_traits::REG8;
+		using PARENT = AbstractI2CManager;
+		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
+		using POLICY = I2CErrorPolicySupport<POLICY_>;
+		using LC = I2CLifeCycleSupport<HAS_LC_>;
 
 	public:
-		/**
-		 * Create an I2C Manager for ATmega MCUs, with an optional hook function
-		 * for debugging.
-		 * 
-		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
-		 * asynchronous handling
-		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
-		 * queue I2C command for asynchronous handling
-		 * @param error_policy the policy used to handle queued command when an 
-		 * error occurs
-		 */
-		template<uint8_t SIZE> explicit 
-		I2CManager(
-			I2CCommand (&buffer)[SIZE], I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	PARENT{error_policy}, commands_{buffer}
-		{
-			interrupt::register_handler(*this);
-		}
-
-		/**
-		 * Create an I2C Manager for ATmega MCUs, with an optional hook function
-		 * for debugging.
-		 * 
-		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
-		 * asynchronous handling
-		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
-		 * queue I2C command for asynchronous handling
-		 * @param error_policy the policy used to handle queued command when an 
-		 * error occurs
-		 * @param hook an optional hook function that will be called back after
-		 * each transmission operation.
-		 */
-		template<uint8_t SIZE> explicit 
-		I2CManager(	I2CCommand (&buffer)[SIZE],
-					DEBUG_HOOK_ hook,
-					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	PARENT{error_policy, hook}, commands_{buffer}
-		{
-			interrupt::register_handler(*this);
-		}
-
-		//TODO DOC
-		template<uint8_t SIZE> explicit 
-		I2CManager(	lifecycle::AbstractLifeCycleManager& lifecycle_manager,
-					I2CCommand (&buffer)[SIZE],
-					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	PARENT{&lifecycle_manager, error_policy}, commands_{buffer}
-		{
-			interrupt::register_handler(*this);
-		}
-
-		//TODO DOC
-		template<uint8_t SIZE> explicit 
-		I2CManager(	lifecycle::AbstractLifeCycleManager& lifecycle_manager,
-					I2CCommand (&buffer)[SIZE],
-					DEBUG_HOOK_ hook,
-					I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	PARENT{&lifecycle_manager, error_policy, hook}, commands_{buffer}
-		{
-			interrupt::register_handler(*this);
-		}
-
 		/**
 		 * Prepare and enable the MCU for I2C transmission.
 		 * Preparation includes setup of I2C pins (SDA and SCL).
@@ -213,9 +169,9 @@ namespace i2c
 		void begin_()
 		{
 			// 1. set SDA/SCL pullups
-			PARENT::TRAIT::PORT |= PARENT::TRAIT::SCL_SDA_MASK;
+			I2C_TRAIT::PORT |= I2C_TRAIT::SCL_SDA_MASK;
 			// 2. set I2C frequency
-			TWBR_ = TWBR_VALUE;
+			TWBR_ = MODE_TRAIT::FREQUENCY;
 			TWSR_ = 0;
 			// 3. Enable TWI
 			TWCR_ = bits::BV8(TWEN);
@@ -232,15 +188,30 @@ namespace i2c
 			// 1. Disable TWI
 			TWCR_ = 0;
 			// 2. remove SDA/SCL pullups
-			PARENT::TRAIT::PORT &= bits::COMPL(PARENT::TRAIT::SCL_SDA_MASK);
+			I2C_TRAIT::PORT &= bits::COMPL(I2C_TRAIT::SCL_SDA_MASK);
 		}
+
+	protected:
+		/// @cond notdocumented
+		template<uint8_t SIZE>
+		explicit AbstractI2CAsyncManager(
+			I2CCommand (&buffer)[SIZE], 
+			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr,
+			DEBUG_HOOK_ hook = nullptr)
+			:	AbstractI2CManager{},
+				I2CErrorPolicySupport<POLICY_>{},
+				I2CLifeCycleSupport<HAS_LC_>{lifecycle_manager},
+				I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>{hook},
+				commands_(buffer) {}
+		/// @endcond
 
 	private:
-		bool ensure_num_commands_(uint8_t num_commands)
-		{
-			return commands_.free_() >= num_commands;
-		}
+		static constexpr const REG8 TWBR_{TWBR};
+		static constexpr const REG8 TWSR_{TWSR};
+		static constexpr const REG8 TWCR_{TWCR};
+		static constexpr const REG8 TWDR_{TWDR};
 
+		// States of execution of an I2C command through ISR calls
 		enum class State : uint8_t
 		{
 			NONE = 0,
@@ -253,10 +224,15 @@ namespace i2c
 			STOP
 		};
 
-		static constexpr const typename PARENT::REG8 TWBR_{TWBR};
-		static constexpr const typename PARENT::REG8 TWSR_{TWSR};
-		static constexpr const typename PARENT::REG8 TWCR_{TWCR};
-		static constexpr const typename PARENT::REG8 TWDR_{TWDR};
+		future::AbstractFuture& current_future() const
+		{
+			return LC::resolve(command_.future());
+		}
+
+		bool ensure_num_commands_(uint8_t num_commands)
+		{
+			return commands_.free_() >= num_commands;
+		}
 
 		void send_byte(uint8_t data)
 		{
@@ -272,7 +248,7 @@ namespace i2c
 		void last_command_pushed_()
 		{
 			// Check if need to initiate transmission (i.e no current command is executed)
-			if (this->command_.type().is_none())
+			if (command_.type().is_none())
 			{
 				// Dequeue first pending command and start TWI operation
 				dequeue_command_(true);
@@ -282,9 +258,9 @@ namespace i2c
 		// Dequeue the next command in the queue and process it immediately
 		void dequeue_command_(bool first)
 		{
-			if (!commands_.pull_(this->command_))
+			if (!commands_.pull_(command_))
 			{
-				this->command_ = I2CCommand{};
+				command_ = I2CCommand{};
 				current_ = State::NONE;
 				// No more I2C command to execute
 				TWCR_ = bits::BV8(TWINT);
@@ -305,11 +281,11 @@ namespace i2c
 			switch (current_)
 			{
 				case State::START:
-				return (this->command_.type().is_write() ? State::SLAW : State::SLAR);
+				return (command_.type().is_write() ? State::SLAW : State::SLAR);
 
 				case State::SLAR:
 				case State::RECV:
-				if (this->command_.byte_count() > 1)
+				if (command_.byte_count() > 1)
 					return State::RECV;
 				else
 					return State::RECV_LAST;
@@ -321,7 +297,7 @@ namespace i2c
 				return State::SEND;
 				
 				case State::SEND:
-				if (this->command_.byte_count() >= 1)
+				if (command_.byte_count() >= 1)
 					return State::SEND;
 				else
 					return State::STOP;
@@ -335,107 +311,86 @@ namespace i2c
 		// Low-level methods to handle the bus in an asynchronous way
 		void exec_start_()
 		{
-			this->call_hook(DebugStatus::START);
-			this->expected_status_ = Status::START_TRANSMITTED;
+			DEBUG::call_hook(DebugStatus::START);
+			expected_status_ = Status::START_TRANSMITTED;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 		}
 		void exec_repeat_start_()
 		{
-			this->call_hook(DebugStatus::REPEAT_START);
-			this->expected_status_ = Status::REPEAT_START_TRANSMITTED;
+			DEBUG::call_hook(DebugStatus::REPEAT_START);
+			expected_status_ = Status::REPEAT_START_TRANSMITTED;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWSTA);
 		}
 		void exec_send_slar_()
 		{
-			this->call_hook(DebugStatus::SLAR, this->command_.target());
+			DEBUG::call_hook(DebugStatus::SLAR, command_.target());
 			// Read device address from queue
-			this->expected_status_ = Status::SLA_R_TRANSMITTED_ACK;
-			send_byte(this->command_.target() | 0x01U);
+			expected_status_ = Status::SLA_R_TRANSMITTED_ACK;
+			send_byte(command_.target() | 0x01U);
 		}
 		void exec_send_slaw_()
 		{
-			this->call_hook(DebugStatus::SLAW, this->command_.target());
+			DEBUG::call_hook(DebugStatus::SLAW, command_.target());
 			// Read device address from queue
-			this->expected_status_ = Status::SLA_W_TRANSMITTED_ACK;
-			send_byte(this->command_.target());
+			expected_status_ = Status::SLA_W_TRANSMITTED_ACK;
+			send_byte(command_.target());
 		}
 		void exec_send_data_()
 		{
 			// Determine next data byte
 			uint8_t data = 0;
-			future::AbstractFuture& future = this->current_future();
+			future::AbstractFuture& future = current_future();
 			bool ok = future.get_storage_value_(data);
-			this->call_hook(DebugStatus::SEND, data);
+			DEBUG::call_hook(DebugStatus::SEND, data);
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (ok)
-				this->command_.decrement_byte_count();
+				command_.decrement_byte_count();
 			else
 				future.set_future_error_(errors::EILSEQ);
-			this->call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
-			this->expected_status_ = Status::DATA_TRANSMITTED_ACK;
+			DEBUG::call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
+			expected_status_ = Status::DATA_TRANSMITTED_ACK;
 			send_byte(data);
 		}
 		void exec_receive_data_()
 		{
 			// Is this the last byte to receive?
-			if (this->command_.byte_count() == 1)
+			if (command_.byte_count() == 1)
 			{
-				this->call_hook(DebugStatus::RECV_LAST);
+				DEBUG::call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
-				this->expected_status_ = Status::DATA_RECEIVED_NACK;
+				expected_status_ = Status::DATA_RECEIVED_NACK;
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
 			}
 			else
 			{
-				this->call_hook(DebugStatus::RECV);
+				DEBUG::call_hook(DebugStatus::RECV);
 				// Send ACK for data byte if not the last one we want
-				this->expected_status_ = Status::DATA_RECEIVED_ACK;
+				expected_status_ = Status::DATA_RECEIVED_ACK;
 				TWCR_ = bits::BV8(TWEN, TWIE, TWINT, TWEA);
 			}
 		}
 		void exec_stop_(bool error = false)
 		{
-			this->call_hook(DebugStatus::STOP);
+			DEBUG::call_hook(DebugStatus::STOP);
 			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 			if (!error)
-				this->expected_status_ = 0;
-			this->command_ = I2CCommand{};
+				expected_status_ = 0;
+			command_ = I2CCommand{};
 			current_ = State::NONE;
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
-			_delay_loop_1(DELAY_AFTER_STOP);
+			_delay_loop_1(MODE_TRAIT::DELAY_AFTER_STOP);
 		}
 
 		bool is_end_transaction() const
 		{
-			return this->command_.type().is_end();
+			return command_.type().is_end();
 		}
 
-		bool handle_no_error()
+		bool handle_no_error(future::AbstractFuture& future)
 		{
-			if (this->check_no_error()) return true;
-
-			switch (this->error_policy_)
-			{
-				case I2CErrorPolicy::CLEAR_ALL_COMMANDS:
-				// Clear all pending transactions from queue
-				commands_.clear_();
-				break;
-
-				case I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS:
-				// Clear command belonging to the same transaction (i.e. same future)
-				{
-					const auto future = this->command_.future();
-					I2CCommand command;
-					while (commands_.peek_(command))
-					{
-						if (command.future() != future)
-							break;
-						commands_.pull_(command);
-					}
-				}
-				break;
-			}
+			if (PARENT::check_no_error(future)) return true;
+			POLICY::handle_error(command_, commands_);
 			// In case of an error, immediately send a STOP condition
 			exec_stop_(true);
 			dequeue_command_(true);
@@ -445,22 +400,22 @@ namespace i2c
 		I2CCallback i2c_change()
 		{
 			// Check status Vs. expected status
-			this->status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
-			if (!handle_no_error())
+			status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+			future::AbstractFuture& future = current_future();
+			if (!handle_no_error(future))
 				return I2CCallback::ERROR;
 			
 			// Handle TWI interrupt when data received
-			future::AbstractFuture& future = this->current_future();
 			if (current_ == State::RECV || current_ == State::RECV_LAST)
 			{
 				const uint8_t data = TWDR_;
 				bool ok = future.set_future_value_(data);
 				// This should only happen in case there are 2 concurrent providers for this future
 				if (ok)
-					this->command_.decrement_byte_count();
+					command_.decrement_byte_count();
 				else
 					future.set_future_error_(errors::EILSEQ);
-				this->call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
+				DEBUG::call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
 			}
 
 			// Handle next step in current command
@@ -492,14 +447,14 @@ namespace i2c
 
 				case State::STOP:
 				// Check if we need to finish the current future
-				if (this->command_.type().is_finish())
+				if (command_.type().is_finish())
 					future.set_future_finish_();
 				result = (is_end_transaction() ? I2CCallback::END_TRANSACTION : I2CCallback::END_COMMAND);
 				// Check if we need to STOP (no more pending commands in queue)
 				if (commands_.empty_())
 					exec_stop_();
 				// Check if we need to STOP or REPEAT START (current command requires STOP)
-				else if (this->command_.type().is_stop())
+				else if (command_.type().is_stop())
 				{
 					exec_stop_();
 					// Handle next command
@@ -512,39 +467,210 @@ namespace i2c
 			return result;
 		}
 
-		static constexpr const uint8_t TWBR_VALUE =
-			(MODE_ == I2CMode::STANDARD ? PARENT::STANDARD_FREQUENCY : PARENT::FAST_FREQUENCY);
-
-		static constexpr const float STANDARD_DELAY_AFTER_STOP_US = 4.0 + 4.7;
-		static constexpr const float FAST_DELAY_AFTER_STOP_US = 0.6 + 1.3;
-		static constexpr const float DELAY_AFTER_STOP_US =
-			(MODE_ == I2CMode::STANDARD ? STANDARD_DELAY_AFTER_STOP_US : FAST_DELAY_AFTER_STOP_US);
-		static constexpr const uint8_t DELAY_AFTER_STOP = utils::calculate_delay1_count(DELAY_AFTER_STOP_US);
-
+		// Queue of commands to execute
 		containers::Queue<I2CCommand> commands_;
 
 		// Status of current command processing
-		State current_;
+		State current_ = State::NONE;
 
 		template<I2CMode, typename> friend class I2CDevice;
 		friend struct isr_handler;
 	};
 
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture.
+	 * This class offers no support for dynamic proxies, nor any debug facility.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 * @sa I2CAsyncDebugManager
+	 * @sa I2CAsyncLCManager
+	 */
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS>
+	class I2CAsyncManager : public AbstractI2CAsyncManager<MODE_, POLICY_, false, false, I2C_DEBUG_HOOK>
+	{
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, false, I2C_DEBUG_HOOK>;
+	public:
+		/**
+		 * Create an asynchronous I2C Manager for ATmega MCUs.
+		 * 
+		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
+		 * asynchronous handling
+		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
+		 * queue I2C command for asynchronous handling
+		 */
+		template<uint8_t SIZE>
+		explicit I2CAsyncManager(I2CCommand (&buffer)[SIZE]) : PARENT{buffer}
+		{
+			interrupt::register_handler(*this);
+		}
+	};
+
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture with debug facility.
+	 * This class offers no support for dynamic proxies.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 * @sa I2CAsyncDebugManager
+	 * @sa I2CAsyncLCManager
+	 */
+	template<
+		I2CMode MODE_, 
+		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
+		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CAsyncDebugManager : public AbstractI2CAsyncManager<MODE_, POLICY_, false, true, DEBUG_HOOK_>
+	{
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, true, DEBUG_HOOK_>;
+	public:
+		/**
+		 * Create an asynchronous I2C Manager for ATmega MCUs.
+		 * 
+		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
+		 * asynchronous handling
+		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
+		 * queue I2C command for asynchronous handling
+		 * @param hook the debug hook function or functor that is called during
+		 * I2C transaction execution.
+		 */
+		template<uint8_t SIZE>
+		explicit I2CAsyncDebugManager(I2CCommand (&buffer)[SIZE], DEBUG_HOOK_ hook) : PARENT{buffer, nullptr, hook}
+		{
+			interrupt::register_handler(*this);
+		}
+	};
+
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture with support for dynalic proxies.
+	 * This class offers no debug facility.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 * @sa I2CAsyncDebugManager
+	 * @sa I2CAsyncLCManager
+	 */
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS>
+	class I2CAsyncLCManager : public AbstractI2CAsyncManager<MODE_, POLICY_, true, false, I2C_DEBUG_HOOK>
+	{
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, false, I2C_DEBUG_HOOK>;
+	public:
+		/**
+		 * Create an asynchronous I2C Manager for ATmega MCUs.
+		 * 
+		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
+		 * asynchronous handling
+		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
+		 * queue I2C command for asynchronous handling
+		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
+		 * the lifecycle of Future used by this I2CManager
+		 */
+		template<uint8_t SIZE>
+		explicit I2CAsyncLCManager(I2CCommand (&buffer)[SIZE], lifecycle::AbstractLifeCycleManager& lifecycle_manager)
+			:	PARENT{buffer, &lifecycle_manager}
+		{
+			interrupt::register_handler(*this);
+		}
+	};
+
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture with debug facility
+	 * and support for dynamic proxies.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 * @sa I2CAsyncDebugManager
+	 * @sa I2CAsyncLCManager
+	 */
+	template<
+		I2CMode MODE_, 
+		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
+		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CAsyncLCDebugManager : public AbstractI2CAsyncManager<MODE_, POLICY_, true, true, DEBUG_HOOK_>
+	{
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, true, DEBUG_HOOK_>;
+	public:
+		/**
+		 * Create an asynchronous I2C Manager for ATmega MCUs.
+		 * 
+		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
+		 * asynchronous handling
+		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
+		 * queue I2C command for asynchronous handling
+		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
+		 * the lifecycle of Future used by this I2CManager
+		 * @param hook the debug hook function or functor that is called during
+		 * I2C transaction execution
+		 */
+		template<uint8_t SIZE>
+		explicit I2CAsyncLCDebugManager(
+			I2CCommand (&buffer)[SIZE], lifecycle::AbstractLifeCycleManager& lifecycle_manager, DEBUG_HOOK_ hook)
+			:	PARENT{buffer, &lifecycle_manager, hook}
+		{
+			interrupt::register_handler(*this);
+		}
+	};
+
 	/// @cond notdocumented
 	// Specific traits for I2CManager
-	template<I2CMode MODE_, bool HAS_LIFECYCLE_, bool IS_DEBUG_, typename DEBUG_HOOK_>
-	struct I2CManager_trait<I2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, HAS_LIFECYCLE_, IS_DEBUG_, MODE_> {};
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
+	struct I2CManager_trait<I2CAsyncManager<MODE_, POLICY_>>
+		:	I2CManager_trait_impl<true, false, false, MODE_> {};
+
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
+	struct I2CManager_trait<I2CAsyncLCManager<MODE_, POLICY_>>
+		:	I2CManager_trait_impl<true, true, false, MODE_> {};
+
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CAsyncDebugManager<MODE_, POLICY_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<true, false, true, MODE_> {};
+
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CAsyncLCDebugManager<MODE_, POLICY_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<true, true, true, MODE_> {};
 	/// @endcond
 
 	/// @cond notdocumented
 	struct isr_handler
 	{
-		//TODO Check MANAGER is ASYNCHRONOUS (need trait)
 		template<typename MANAGER>
 		static void i2c_change()
 		{
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
+			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
 			interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 		}
 
@@ -552,6 +678,7 @@ namespace i2c
 		static void i2c_change_function()
 		{
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
+			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
 			I2CCallback callback =  interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE) CALLBACK_(callback);
 		}
@@ -560,6 +687,7 @@ namespace i2c
 		static void i2c_change_method()
 		{
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
+			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
 			I2CCallback callback =  interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 				interrupt::CallbackHandler<void (HANDLER_::*)(I2CCallback), CALLBACK_>::call(callback);

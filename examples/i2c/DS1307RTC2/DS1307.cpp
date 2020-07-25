@@ -103,10 +103,10 @@ using namespace streams;
 #ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 32;
 using DEBUGGER = i2c::debug::I2CDebugRecorder<DEBUG_SIZE>;
-using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, true, DEBUGGER&>;
+using MANAGER = i2c::I2CAsyncDebugManager<i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&>;
 #define TRACE(OUT) debugger.trace(OUT)
 #else
-using MANAGER = i2c::I2CManager<i2c::I2CMode::STANDARD, false, false>;
+using MANAGER = i2c::I2CAsyncManager<i2c::I2CMode::STANDARD>;
 #define TRACE(OUT)
 #endif
 
@@ -165,15 +165,15 @@ int main()
 
 #if I2C_TRUE_ASYNC
 #ifdef DEBUG_I2C
-	MANAGER manager{i2c_buffer, debugger, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+	MANAGER manager{i2c_buffer, debugger};
 #else
-	MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+	MANAGER manager{i2c_buffer};
 #endif
 #else
 #ifdef DEBUG_I2C
-	MANAGER manager{debugger, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+	MANAGER manager{debugger};
 #else
-	MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+	MANAGER manager{};
 #endif
 #endif
 
