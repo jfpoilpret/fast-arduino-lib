@@ -97,6 +97,22 @@ ISR(TWI_vect)                                                           \
 
 namespace i2c
 {
+	/**
+	 * Type passed to I2C ISR registered callbacks (ATmega MCU only) when an 
+	 * asynchronous I2C transaction is executed. 
+	 */
+	enum class I2CCallback : uint8_t
+	{
+		/** An I2C command is being processed (intermediate step). */
+		NONE = 0,
+		/** An I2C command has just been finished executed. */
+		END_COMMAND,
+		/** The last I2C command in a transaction ahs just been finished executing. */
+		END_TRANSACTION,
+		/** An error has occurred during I2C transaction execution. */
+		ERROR
+	};
+
 	//TODO Maybe add an extra layer AbstractATmegaI2CManager with all common methods for sync and ascyn?
 	/**
 	 * Abstract asynchronous I2C Manager.
@@ -229,7 +245,7 @@ namespace i2c
 			return LC::resolve(command_.future());
 		}
 
-		bool ensure_num_commands_(uint8_t num_commands)
+		bool ensure_num_commands_(uint8_t num_commands) const
 		{
 			return commands_.free_() >= num_commands;
 		}

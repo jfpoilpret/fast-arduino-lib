@@ -62,23 +62,6 @@ namespace i2c
 		CLEAR_TRANSACTION_COMMANDS
 	};
 
-	//TODO move to ATmega?
-	/**
-	 * Type passed to I2C ISR registered callbacks (ATmega MCU only) when an 
-	 * asynchronous I2C transaction is executed. 
-	 */
-	enum class I2CCallback : uint8_t
-	{
-		/** An I2C command is being processed (intermediate step). */
-		NONE = 0,
-		/** An I2C command has just been finished executed. */
-		END_COMMAND,
-		/** The last I2C command in a transaction ahs just been finished executing. */
-		END_TRANSACTION,
-		/** An error has occurred during I2C transaction execution. */
-		ERROR
-	};
-
 	/**
 	 * List of debug states that are reported by the I2CManager in debug mode.
 	 * @sa I2CManager
