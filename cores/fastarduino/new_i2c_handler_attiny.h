@@ -125,11 +125,9 @@ namespace i2c
 			return true;
 		}
 
-		//FIXME that method code is still 246 bytes long: is further optimization possible?
 		bool push_command_(
 			I2CLightCommand command, uint8_t target, lifecycle::LightProxy<future::AbstractFuture> proxy)
 		{
-			NOP();
 			// Check command is not empty
 			const I2CCommandType type = command.type();
 			if (type.is_none()) return true;
@@ -171,7 +169,6 @@ namespace i2c
 				exec_stop_();
 			// Ensure STOP is generated or not depending on latest command executed
 			no_stop_ = !type.is_stop();
-			NOP();
 			return true;
 		}
 
@@ -404,7 +401,7 @@ namespace i2c
 			return false;
 		}
 
-		// Use bitfields instead
+		// Flags for storing I2C transaction operation state
 		bool no_stop_ = false;
 		bool clear_commands_ = false;
 		bool stopped_already_ = false;
