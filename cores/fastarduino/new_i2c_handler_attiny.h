@@ -37,7 +37,7 @@ namespace i2c
 	//TODO DOC
 	template<I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncManager :
-		public AbstractI2CManager,
+		public AbstractBaseI2CManager,
 		public I2CLifeCycleSupport<HAS_LC_>,
 		public I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>
 	{
@@ -45,7 +45,7 @@ namespace i2c
 		using MODE_TRAIT = I2CMode_trait<MODE_>;
 		using I2C_TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
-		using PARENT = AbstractI2CManager;
+		using PARENT = AbstractBaseI2CManager;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
 		using LC = I2CLifeCycleSupport<HAS_LC_>;
 
@@ -426,7 +426,7 @@ namespace i2c
 		bool HAS_LIFECYCLE_ = false, 
 		bool IS_DEBUG_ = false, 
 		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CManager : public AbstractI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>
+	class I2CManager : public AbstractBaseI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>
 	{
 	public:
 		/**

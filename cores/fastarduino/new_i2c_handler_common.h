@@ -367,12 +367,12 @@ namespace i2c
 	/**
 	 * Abstract I2C Manager.
 	 * It is specifically subclassed for ATmega Vs. ATtiny architectures.
-	 * You should never need to subclass AbstractI2CManager yourself.
+	 * You should never need to subclass AbstractBaseI2CManager yourself.
 	 * 
 	 * For the time being, the MCU must always act as the only master on the bus.
 	 * Using MCU as a slave will be supported in a later version of FastArduino.
 	 */
-	class AbstractI2CManager
+	class AbstractBaseI2CManager
 	{
 	public:
 		/**
@@ -389,27 +389,7 @@ namespace i2c
 
 	protected:
 		/// @cond notdocumented
-		bool check_no_error(future::AbstractFuture& future)
-		{
-			if (status_ == expected_status_) return true;
-			// Handle special case of last transmitted byte possibly not acknowledged by device
-			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
-				&&	(status_ == Status::DATA_TRANSMITTED_NACK)
-				&&	(command_.byte_count() == 0))
-				return true;
-
-			// When status is FUTURE_ERROR then future has already been marked accordingly
-			//FIXME this status is not used for ATmega?
-			if (status_ != Status::FUTURE_ERROR)
-				// The future must be marked as error
-				future.set_future_error_(errors::EPROTO);
-			return false;
-		}
-
-		// Status of current command processing
-		I2CCommand command_;
-		uint8_t expected_status_ = 0;
-
+		AbstractBaseI2CManager() = default;
 		// Latest I2C status
 		uint8_t status_ = 0;
 		/// @endcond

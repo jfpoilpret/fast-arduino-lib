@@ -113,6 +113,33 @@ namespace i2c
 		ERROR
 	};
 
+	//TODO DOC
+	class AbstractI2CManager : public AbstractBaseI2CManager
+	{
+	protected:
+		/// @cond notdocumented
+		AbstractI2CManager() = default;
+
+		bool check_no_error(future::AbstractFuture& future)
+		{
+			if (status_ == expected_status_) return true;
+			// Handle special case of last transmitted byte possibly not acknowledged by device
+			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
+				&&	(status_ == Status::DATA_TRANSMITTED_NACK)
+				&&	(command_.byte_count() == 0))
+				return true;
+
+			// The future must be marked as error
+			future.set_future_error_(errors::EPROTO);
+			return false;
+		}
+
+		// Status of current command processing
+		I2CCommand command_;
+		uint8_t expected_status_ = 0;
+		/// @endcond
+	};
+
 	//TODO Maybe add an extra layer AbstractATmegaI2CManager with all common methods for sync and ascyn?
 	/**
 	 * Abstract asynchronous I2C Manager.
@@ -406,7 +433,7 @@ namespace i2c
 
 		bool handle_no_error(future::AbstractFuture& future)
 		{
-			if (PARENT::check_no_error(future)) return true;
+			if (check_no_error(future)) return true;
 			POLICY::handle_error(command_, commands_);
 			// In case of an error, immediately send a STOP condition
 			exec_stop_(true);
