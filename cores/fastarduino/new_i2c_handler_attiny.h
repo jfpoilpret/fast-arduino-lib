@@ -159,7 +159,6 @@ namespace i2c
 		void SDA_INPUT()
 		{
 			I2C_TRAIT::DDR &= bits::CBV8(I2C_TRAIT::BIT_SDA);
-			// I2C_TRAIT::PORT |= bits::BV8(I2C_TRAIT::BIT_SDA);
 		}
 
 		void SDA_OUTPUT()
@@ -167,22 +166,17 @@ namespace i2c
 			I2C_TRAIT::DDR |= bits::BV8(I2C_TRAIT::BIT_SDA);
 		}
 
-		future::AbstractFuture& current_future() const
-		{
-			return LC::resolve(command_.future());
-		}
-
 		void last_command_pushed_()
 		{
-			// Check if previously executed command already did a STOP
-			if ((!command_.type().is_stop()) && (!stopped_already_) && (!clear_commands_))
+			// Check if previously executed command already did a STOP (and needed one)
+			if ((!no_stop_) && (!stopped_already_) && (!clear_commands_))
 				exec_stop_();
-			command_ = I2CCommand{};
+			no_stop_ = false;
 			clear_commands_ = false;
 			stopped_already_ = false;
 		}
 
-		void start_impl_()
+		bool start_impl_()
 		{
 			// Ensure SCL is HIGH
 			SCL_HIGH();
@@ -197,12 +191,11 @@ namespace i2c
 			// Release SDA (force high)
 			SDA_HIGH();
 			// Check START transmission with USISIF flag
-			bool ok = USISR_ & bits::BV8(USISIF);
-			status_ = (ok ? expected_status_ : Status::ARBITRATION_LOST);
 			stopped_already_ = false;
+			return USISR_ & bits::BV8(USISIF);
 		}
 
-		void send_byte_impl(uint8_t data)
+		bool send_byte_impl(uint8_t data)
 		{
 			// Set SCL low
 			SCL_LOW();
@@ -211,11 +204,7 @@ namespace i2c
 			transfer(USISR_DATA);
 			// For acknowledge, first set SDA as input
 			SDA_INPUT();
-			bool ok = ((transfer(USISR_ACK) & 0x01U) == 0);
-			// The expected status is one Status _ACK values
-			// When not OK, it shall be changed to the _NACK matching value
-			// This can be done by simply adding 0x08 to the ACK value.
-			status_ = expected_status_ + (ok ? 0 : 0x08);
+			return ((transfer(USISR_ACK) & 0x01U) == 0);
 		}
 
 		uint8_t receive_impl(bool last_byte)
@@ -265,163 +254,157 @@ namespace i2c
 			return data;
 		}
 
-		// Push one byte of a command to the queue, and possibly initiate a new transmission right away
-		bool push_command_(const I2CCommand& command)
+		//FIXME that method code is still 304 bytes long: further optimization recommended!
+		bool push_command_(I2CCommand& command)
 		{
+			NOP();
 			// Check command is not empty
-			if (command.type().is_none()) return true;
+			const I2CCommandType type = command.type();
+			if (type.is_none()) return true;
 			if (clear_commands_) return false;
-			// Execute command immediately from start to optional stop
-			// Check if start or repeat start (depends on previously executed command)
-			if (command_.type().is_none() || command_.type().is_stop())
-				exec_start_();
-			else
-				exec_repeat_start_();
-			command_ = command;
-			future::AbstractFuture& future = current_future();
-			if (!handle_no_error(future)) return false;
+			future::AbstractFuture& future = LC::resolve(command.future());
+			// Execute command immediately, from start to optional stop
+			if (!exec_start_())
+				return handle_error(future, Status::ARBITRATION_LOST);
 
-			if (command.type().is_write())
+			if (type.is_write())
 			{
 				// Send device address
-				exec_send_slaw_();
-				if (!handle_no_error(future)) return false;
+				if (!exec_send_slaw_(command.target()))
+					return handle_error(future, Status::SLA_W_TRANSMITTED_NACK);
 				// Send content
-				while (command_.byte_count() > 0)
-				{
-					exec_send_data_();
-					if (!handle_no_error(future)) return false;
-				}
+				while (command.byte_count() > 0)
+					// In case of a NACK on data writing, we check if it is not last byte
+					if ((!exec_send_data_(command, future)) && (command.byte_count() > 0))
+						return handle_error(future, Status::DATA_TRANSMITTED_NACK);
+				status_ = Status::DATA_TRANSMITTED_ACK;
 			}
 			else
 			{
 				// Send device address
-				exec_send_slar_();
-				if (!handle_no_error(future)) return false;
+				if (!exec_send_slar_(command.target()))
+					return handle_error(future, Status::SLA_R_TRANSMITTED_NACK);
 				// Receive content
-				while (command_.byte_count() > 0)
-				{
-					exec_receive_data_();
-					if (!handle_no_error(future)) return false;
-				}
+				while (command.byte_count() > 0)
+					if (!exec_receive_data_(command, future))
+						return handle_error(future, Status::DATA_RECEIVED_NACK);
+				status_ = Status::DATA_RECEIVED_ACK;
 			}
 
 			// Check if we must force finish the future
-			if (command.type().is_finish())
+			if (type.is_finish())
 				future.set_future_finish_();
 			// Check if we must force a STOP
-			if (command.type().is_stop())
+			if (type.is_stop())
 				exec_stop_();
+			// Ensure STOP is generated or not depending on latest command executed
+			no_stop_ = !type.is_stop();
+			NOP();
 			return true;
 		}
 
 		// Low-level methods to handle the bus in an asynchronous way
-		void exec_start_()
+		bool exec_start_()
 		{
 			DEBUG::call_hook(DebugStatus::START);
-			expected_status_ = Status::START_TRANSMITTED;
-			start_impl_();
+			return start_impl_();
 		}
-		void exec_repeat_start_()
+
+		bool exec_send_slar_(uint8_t target)
 		{
-			DEBUG::call_hook(DebugStatus::REPEAT_START);
-			expected_status_ = Status::REPEAT_START_TRANSMITTED;
-			start_impl_();
+			DEBUG::call_hook(DebugStatus::SLAR, target);
+			return send_byte_impl(target | 0x01U);
 		}
-		void exec_send_slar_()
+
+		bool exec_send_slaw_(uint8_t target)
 		{
-			DEBUG::call_hook(DebugStatus::SLAR, command_.target());
-			// Read device address from queue
-			expected_status_ = Status::SLA_R_TRANSMITTED_ACK;
-			send_byte_impl(command_.target() | 0x01U);
+			DEBUG::call_hook(DebugStatus::SLAW, target);
+			return send_byte_impl(target);
 		}
-		void exec_send_slaw_()
-		{
-			DEBUG::call_hook(DebugStatus::SLAW, command_.target());
-			// Read device address from queue
-			expected_status_ = Status::SLA_W_TRANSMITTED_ACK;
-			send_byte_impl(command_.target());
-		}
-		void exec_send_data_()
+
+		bool exec_send_data_(I2CCommand& command, future::AbstractFuture& future)
 		{
 			// Determine next data byte
 			uint8_t data = 0;
-			future::AbstractFuture& future = current_future();
 			bool ok = future.get_storage_value_(data);
 			DEBUG::call_hook(DebugStatus::SEND, data);
 			DEBUG::call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
-			expected_status_ = Status::DATA_TRANSMITTED_ACK;
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (ok)
 			{
-				command_.decrement_byte_count();
-				send_byte_impl(data);
+				command.decrement_byte_count();
+				return send_byte_impl(data);
 			}
 			else
 			{
 				future.set_future_error_(errors::EILSEQ);
 				status_ = Status::FUTURE_ERROR;
+				return false;
 			}
 		}
-		void exec_receive_data_()
+
+		bool exec_receive_data_(I2CCommand& command, future::AbstractFuture& future)
 		{
 			// Is this the last byte to receive?
 			uint8_t data;
-			if (command_.byte_count() == 1)
+			if (command.byte_count() == 1)
 			{
 				DEBUG::call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
-				expected_status_ = Status::DATA_RECEIVED_NACK;
 				data = receive_impl(true);
 			}
 			else
 			{
 				DEBUG::call_hook(DebugStatus::RECV);
 				// Send ACK for data byte if not the last one we want
-				expected_status_ = Status::DATA_RECEIVED_ACK;
 				data = receive_impl(false);
 			}
-			// Ensure status is set properly
-			status_ = expected_status_;
 			// Fill future
-			future::AbstractFuture& future = current_future();
 			bool ok = future.set_future_value_(data);
+			DEBUG::call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
 			// This should only happen in case there are 2 concurrent providers for this future
 			if (ok)
 			{
-				command_.decrement_byte_count();
+				command.decrement_byte_count();
 			}
 			else
 			{
 				future.set_future_error_(errors::EILSEQ);
 				status_ = Status::FUTURE_ERROR;
 			}
-			DEBUG::call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
+			return ok;
 		}
-		void exec_stop_(bool error = false)
+
+		void exec_stop_()
 		{
 			DEBUG::call_hook(DebugStatus::STOP);
 			stop_impl();
-			if (!error)
-				expected_status_ = 0;
-			command_ = I2CCommand{};
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
 			_delay_loop_1(MODE_TRAIT::DELAY_AFTER_STOP);
 			stopped_already_ = true;
 		}
 
-		bool handle_no_error(future::AbstractFuture& future)
+		// This method is called when an error has occurred
+		bool handle_error(future::AbstractFuture& future, uint8_t status)
 		{
-			if (check_no_error(future)) return true;
+			// When status is FUTURE_ERROR then future has already been marked accordingly
+			if (status != Status::FUTURE_ERROR)
+				// The future must be marked as error
+				future.set_future_error_(errors::EPROTO);
+			// Update status
+			status_ = status;
+
 			// Clear command belonging to the same transaction (i.e. same future)
 			// ie forbid any new command until last command (add new flag for that)
 			clear_commands_ = true;
 			// In case of an error, immediately send a STOP condition
-			exec_stop_(true);
+			exec_stop_();
 			return false;
 		}
 
+		// Use bitfields instead
+		bool no_stop_ = false;
 		bool clear_commands_ = false;
 		bool stopped_already_ = false;
 
