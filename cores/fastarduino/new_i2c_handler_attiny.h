@@ -482,7 +482,7 @@ namespace i2c
 	};
 #endif
 
-	//TODO Specific implementations
+	//TODO DOC
 	template<I2CMode MODE_>
 	class I2CSyncManager : public AbstractI2CSyncManager<MODE_, false, false, I2C_DEBUG_HOOK>
 	{
@@ -491,6 +491,7 @@ namespace i2c
 		I2CSyncManager() : PARENT{} {}
 	};
 
+	//TODO DOC
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncDebugManager : public AbstractI2CSyncManager<MODE_, false, true, DEBUG_HOOK_>
 	{
@@ -499,6 +500,7 @@ namespace i2c
 		explicit I2CSyncDebugManager(DEBUG_HOOK_ hook) : PARENT{nullptr, hook} {}
 	};
 
+	//TODO DOC
 	template<I2CMode MODE_>
 	class I2CSyncLCManager : public AbstractI2CSyncManager<MODE_, true, false, I2C_DEBUG_HOOK>
 	{
@@ -508,6 +510,7 @@ namespace i2c
 			:	PARENT{&lifecycle_manager} {}
 	};
 
+	//TODO DOC
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncLCDebugManager : public AbstractI2CSyncManager<MODE_, true, true, DEBUG_HOOK_>
 	{
