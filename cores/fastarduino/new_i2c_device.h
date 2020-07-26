@@ -162,11 +162,11 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa write()
 		 */
-		static constexpr I2CCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
+		static constexpr I2CLightCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
 			const I2CCommandType type{
 				false, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
-			return I2CCommand{type, read_count};
+			return I2CLightCommand{type, read_count};
 		}
 
 		/**
@@ -187,11 +187,11 @@ namespace i2c
 		 * @sa launch_commands()
 		 * @sa read()
 		 */
-		static constexpr I2CCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
+		static constexpr I2CLightCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
 		{
 			const I2CCommandType type{
 				true, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
-			return I2CCommand{type, write_count};
+			return I2CLightCommand{type, write_count};
 		}
 
 		/**
@@ -232,7 +232,7 @@ namespace i2c
 		 * @sa errors
 		 */
 		int launch_commands(
-			lifecycle::LightProxy<future::AbstractFuture> proxy, std::initializer_list<I2CCommand> commands)
+			lifecycle::LightProxy<future::AbstractFuture> proxy, std::initializer_list<I2CLightCommand> commands)
 		{
 			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
@@ -260,7 +260,7 @@ namespace i2c
 					// Limit total number of bytes read or written in a transaction to 255
 					uint8_t total_read = 0;
 					uint8_t total_write = 0;
-					for (const I2CCommand& command : commands)
+					for (const I2CLightCommand& command : commands)
 					{
 						// Count number of bytes read and written
 						if (command.type().is_write())
@@ -275,16 +275,15 @@ namespace i2c
 
 				// Now push each command to the I2CManager
 				int error = 0;
-				for (I2CCommand command : commands)
+				for (I2CLightCommand command : commands)
 				{
 					// update command.byte_count if 0
-					command.set_target(device_, proxy);
 					command.update_byte_count(max_read, max_write);
 					// force future finish for last command in transaction
 					if (--num_commands == 0)
 						command.type().add_flags(I2CCommandType::flags(false, true, true));
 					// Note: on ATtiny, this method blocks until I2C command is finished!
-					if (!handler_.push_command_(command))
+					if (!handler_.push_command_(command, device_, proxy))
 					{
 						error = errors::EPROTO;
 						break;

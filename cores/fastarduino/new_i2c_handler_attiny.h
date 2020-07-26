@@ -125,6 +125,66 @@ namespace i2c
 			return true;
 		}
 
+		//FIXME that method code is still 246 bytes long: is further optimization possible?
+		bool push_command_(
+			I2CLightCommand command, uint8_t target, lifecycle::LightProxy<future::AbstractFuture> proxy)
+		{
+			NOP();
+			// Check command is not empty
+			const I2CCommandType type = command.type();
+			if (type.is_none()) return true;
+			if (clear_commands_) return false;
+			future::AbstractFuture& future = LC::resolve(proxy);
+			// Execute command immediately, from start to optional stop
+			if (!exec_start_())
+				return handle_error(future, Status::ARBITRATION_LOST);
+
+			if (type.is_write())
+			{
+				// Send device address
+				if (!exec_send_slaw_(target))
+					return handle_error(future, Status::SLA_W_TRANSMITTED_NACK);
+				// Send content
+				while (command.byte_count() > 0)
+					// In case of a NACK on data writing, we check if it is not last byte
+					if ((!exec_send_data_(command, future)) && (command.byte_count() > 0))
+						return handle_error(future, Status::DATA_TRANSMITTED_NACK);
+				status_ = Status::DATA_TRANSMITTED_ACK;
+			}
+			else
+			{
+				// Send device address
+				if (!exec_send_slar_(target))
+					return handle_error(future, Status::SLA_R_TRANSMITTED_NACK);
+				// Receive content
+				while (command.byte_count() > 0)
+					if (!exec_receive_data_(command, future))
+						return handle_error(future, Status::DATA_RECEIVED_NACK);
+				status_ = Status::DATA_RECEIVED_ACK;
+			}
+
+			// Check if we must force finish the future
+			if (type.is_finish())
+				future.set_future_finish_();
+			// Check if we must force a STOP
+			if (type.is_stop())
+				exec_stop_();
+			// Ensure STOP is generated or not depending on latest command executed
+			no_stop_ = !type.is_stop();
+			NOP();
+			return true;
+		}
+
+		void last_command_pushed_()
+		{
+			// Check if previously executed command already did a STOP (and needed one)
+			if ((!no_stop_) && (!stopped_already_) && (!clear_commands_))
+				exec_stop_();
+			no_stop_ = false;
+			clear_commands_ = false;
+			stopped_already_ = false;
+		}
+
 		static constexpr const REG8 USIDR_{USIDR};
 		static constexpr const REG8 USISR_{USISR};
 		static constexpr const REG8 USICR_{USICR};
@@ -164,16 +224,6 @@ namespace i2c
 		void SDA_OUTPUT()
 		{
 			I2C_TRAIT::DDR |= bits::BV8(I2C_TRAIT::BIT_SDA);
-		}
-
-		void last_command_pushed_()
-		{
-			// Check if previously executed command already did a STOP (and needed one)
-			if ((!no_stop_) && (!stopped_already_) && (!clear_commands_))
-				exec_stop_();
-			no_stop_ = false;
-			clear_commands_ = false;
-			stopped_already_ = false;
 		}
 
 		bool start_impl_()
@@ -254,55 +304,6 @@ namespace i2c
 			return data;
 		}
 
-		//FIXME that method code is still 304 bytes long: further optimization recommended!
-		bool push_command_(I2CCommand& command)
-		{
-			NOP();
-			// Check command is not empty
-			const I2CCommandType type = command.type();
-			if (type.is_none()) return true;
-			if (clear_commands_) return false;
-			future::AbstractFuture& future = LC::resolve(command.future());
-			// Execute command immediately, from start to optional stop
-			if (!exec_start_())
-				return handle_error(future, Status::ARBITRATION_LOST);
-
-			if (type.is_write())
-			{
-				// Send device address
-				if (!exec_send_slaw_(command.target()))
-					return handle_error(future, Status::SLA_W_TRANSMITTED_NACK);
-				// Send content
-				while (command.byte_count() > 0)
-					// In case of a NACK on data writing, we check if it is not last byte
-					if ((!exec_send_data_(command, future)) && (command.byte_count() > 0))
-						return handle_error(future, Status::DATA_TRANSMITTED_NACK);
-				status_ = Status::DATA_TRANSMITTED_ACK;
-			}
-			else
-			{
-				// Send device address
-				if (!exec_send_slar_(command.target()))
-					return handle_error(future, Status::SLA_R_TRANSMITTED_NACK);
-				// Receive content
-				while (command.byte_count() > 0)
-					if (!exec_receive_data_(command, future))
-						return handle_error(future, Status::DATA_RECEIVED_NACK);
-				status_ = Status::DATA_RECEIVED_ACK;
-			}
-
-			// Check if we must force finish the future
-			if (type.is_finish())
-				future.set_future_finish_();
-			// Check if we must force a STOP
-			if (type.is_stop())
-				exec_stop_();
-			// Ensure STOP is generated or not depending on latest command executed
-			no_stop_ = !type.is_stop();
-			NOP();
-			return true;
-		}
-
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
@@ -322,7 +323,7 @@ namespace i2c
 			return send_byte_impl(target);
 		}
 
-		bool exec_send_data_(I2CCommand& command, future::AbstractFuture& future)
+		bool exec_send_data_(I2CLightCommand& command, future::AbstractFuture& future)
 		{
 			// Determine next data byte
 			uint8_t data = 0;
@@ -343,7 +344,7 @@ namespace i2c
 			}
 		}
 
-		bool exec_receive_data_(I2CCommand& command, future::AbstractFuture& future)
+		bool exec_receive_data_(I2CLightCommand& command, future::AbstractFuture& future)
 		{
 			// Is this the last byte to receive?
 			uint8_t data;

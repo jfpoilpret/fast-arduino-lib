@@ -177,28 +177,14 @@ namespace i2c
 	}
 	/// @endcond
 
-	/**
-	 * Atomic I2C command as prepared by an I2C device.
-	 * Each command embeds:
-	 * - the command type (read, write...), 
-	 * - the count of bytes to be read or  written,
-	 * - the address of target slave device
-	 * - a proxy to the future holding inputs and results of the I2C transaction 
-	 * 
-	 * @warning You should never need to use this API by yourself. This is 
-	 * internally used by FastArduino I2CManager to handle I2C transactions.
-	 * 
-	 * @sa lifecycle::LightProxy
-	 * @sa future::AbstractFuture
-	 */
-	class I2CCommand
+	//TODO DOC
+	class I2CLightCommand
 	{
 	public:
 		/// @cond notdocumented
-		constexpr I2CCommand() = default;
-		constexpr I2CCommand(const I2CCommand&) = default;
-		constexpr I2CCommand(I2CCommandType type, uint8_t byte_count) : type_{type}, byte_count_{byte_count} {}
-		constexpr I2CCommand& operator=(const I2CCommand&) = default;
+		constexpr I2CLightCommand() = default;
+		constexpr I2CLightCommand(const I2CLightCommand&) = default;
+		constexpr I2CLightCommand(I2CCommandType type, uint8_t byte_count) : type_{type}, byte_count_{byte_count} {}
 
 		I2CCommandType type() const
 		{
@@ -208,23 +194,9 @@ namespace i2c
 		{
 			return type_;
 		}
-		uint8_t target() const
-		{
-			return target_;
-		}
 		uint8_t byte_count() const
 		{
 			return byte_count_;
-		}
-		lifecycle::LightProxy<future::AbstractFuture> future() const
-		{
-			return future_;
-		}
-
-		void set_target(uint8_t target, lifecycle::LightProxy<future::AbstractFuture> future)
-		{
-			target_ = target;
-			future_ = future;
 		}
 		void decrement_byte_count()
 		{
@@ -242,13 +214,53 @@ namespace i2c
 		I2CCommandType type_ = I2CCommandType{};
 		// The number of remaining bytes to be read or write
 		uint8_t byte_count_ = 0;
+	};
+
+	/**
+	 * Atomic I2C command as prepared by an I2C device.
+	 * Each command embeds:
+	 * - the command type (read, write...), 
+	 * - the count of bytes to be read or  written,
+	 * - the address of target slave device
+	 * - a proxy to the future holding inputs and results of the I2C transaction 
+	 * 
+	 * @warning You should never need to use this API by yourself. This is 
+	 * internally used by FastArduino I2CManager to handle I2C transactions.
+	 * 
+	 * @sa lifecycle::LightProxy
+	 * @sa future::AbstractFuture
+	 */
+	class I2CCommand : public I2CLightCommand
+	{
+	public:
+		/// @cond notdocumented
+		constexpr I2CCommand() = default;
+		constexpr I2CCommand(const I2CCommand&) = default;
+		constexpr I2CCommand(const I2CLightCommand& that) : I2CLightCommand{that} {}
+		// constexpr I2CCommand(I2CCommandType type, uint8_t byte_count) : I2CLightCommand{type, byte_count} {}
+		constexpr I2CCommand& operator=(const I2CCommand&) = default;
+
+		uint8_t target() const
+		{
+			return target_;
+		}
+		lifecycle::LightProxy<future::AbstractFuture> future() const
+		{
+			return future_;
+		}
+
+		void set_target(uint8_t target, lifecycle::LightProxy<future::AbstractFuture> future)
+		{
+			target_ = target;
+			future_ = future;
+		}
+		/// @endcond
+
+	private:
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target_ = 0;
 		// A proxy to the future to be used for this command
 		lifecycle::LightProxy<future::AbstractFuture> future_;
-
-		friend bool operator==(const I2CCommand&, const I2CCommand&);
-		friend bool operator!=(const I2CCommand&, const I2CCommand&);
 	};
 
 	/// @cond notdocumented
