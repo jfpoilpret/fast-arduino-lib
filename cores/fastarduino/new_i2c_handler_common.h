@@ -177,7 +177,17 @@ namespace i2c
 	}
 	/// @endcond
 
-	//TODO DOC
+	/**
+	 * Light atomic I2C command as prepared by an I2C device.
+	 * Each command embeds:
+	 * - the command type (read, write...), 
+	 * - the count of bytes to be read or  written,
+	 * 
+	 * @warning You should never need to use this API by yourself. This is 
+	 * internally used by FastArduino I2CManager to handle I2C transactions.
+	 * 
+	 * @sa I2CCommand
+	 */
 	class I2CLightCommand
 	{
 	public:
@@ -217,7 +227,10 @@ namespace i2c
 	};
 
 	/**
-	 * Atomic I2C command as prepared by an I2C device.
+	 * Atomic I2C command as used internally by an asynchronous I2C Manager.
+	 * You shall use it when you define a buffer of commands for an asynchronous
+	 * I2C Manager constructor.
+	 * 
 	 * Each command embeds:
 	 * - the command type (read, write...), 
 	 * - the count of bytes to be read or  written,
