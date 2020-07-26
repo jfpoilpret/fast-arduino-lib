@@ -518,10 +518,6 @@ namespace i2c
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncLCDebugManager<MODE_, DEBUG_HOOK_>>
 		:	I2CManager_trait_impl<false, true, true, MODE_> {};
-
-	// template<I2CMode MODE_, bool HAS_LIFECYCLE_, bool IS_DEBUG_, typename DEBUG_HOOK_>
-	// struct I2CManager_trait<I2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>>
-	// 	:	I2CManager_trait_impl<fasle, HAS_LIFECYCLE_, IS_DEBUG_, MODE_> {};
 	/// @endcond
 }
 
