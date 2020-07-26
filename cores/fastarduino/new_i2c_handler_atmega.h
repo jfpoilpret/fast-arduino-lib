@@ -222,6 +222,27 @@ namespace i2c
 		/// @endcond
 
 	private:
+		bool ensure_num_commands_(uint8_t num_commands) const
+		{
+			return commands_.free_() >= num_commands;
+		}
+
+		bool push_command_(
+			I2CLightCommand command, uint8_t target, lifecycle::LightProxy<future::AbstractFuture> proxy)
+		{
+			return commands_.push_(I2CCommand{command, target, proxy});
+		}
+
+		void last_command_pushed_()
+		{
+			// Check if need to initiate transmission (i.e no current command is executed)
+			if (command_.type().is_none())
+			{
+				// Dequeue first pending command and start TWI operation
+				dequeue_command_(true);
+			}
+		}
+
 		static constexpr const REG8 TWBR_{TWBR};
 		static constexpr const REG8 TWSR_{TWSR};
 		static constexpr const REG8 TWCR_{TWCR};
@@ -245,30 +266,10 @@ namespace i2c
 			return LC::resolve(command_.future());
 		}
 
-		bool ensure_num_commands_(uint8_t num_commands) const
-		{
-			return commands_.free_() >= num_commands;
-		}
-
 		void send_byte(uint8_t data)
 		{
 			TWDR_ = data;
 			TWCR_ = bits::BV8(TWEN, TWIE, TWINT);
-		}
-
-		bool push_command_(const I2CCommand& command)
-		{
-			return commands_.push_(command);
-		}
-
-		void last_command_pushed_()
-		{
-			// Check if need to initiate transmission (i.e no current command is executed)
-			if (command_.type().is_none())
-			{
-				// Dequeue first pending command and start TWI operation
-				dequeue_command_(true);
-			}
 		}
 
 		// Dequeue the next command in the queue and process it immediately

@@ -249,8 +249,9 @@ namespace i2c
 		/// @cond notdocumented
 		constexpr I2CCommand() = default;
 		constexpr I2CCommand(const I2CCommand&) = default;
-		constexpr I2CCommand(const I2CLightCommand& that) : I2CLightCommand{that} {}
-		// constexpr I2CCommand(I2CCommandType type, uint8_t byte_count) : I2CLightCommand{type, byte_count} {}
+		constexpr I2CCommand(
+			const I2CLightCommand& that, uint8_t target, lifecycle::LightProxy<future::AbstractFuture> future)
+			:	I2CLightCommand{that}, target_{target}, future_{future} {}
 		constexpr I2CCommand& operator=(const I2CCommand&) = default;
 
 		uint8_t target() const
