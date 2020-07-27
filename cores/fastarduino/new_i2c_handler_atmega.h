@@ -113,7 +113,11 @@ namespace i2c
 		ERROR
 	};
 
-	//TODO DOC
+	/**
+	 * Abstract I2C Manager for ATmega architectures. It is subclassed by more
+	 * specific implementations.
+	 * You should never need to subclass AbstractI2CManager yourself.
+	 */
 	class AbstractI2CManager : public AbstractBaseI2CManager
 	{
 	protected:

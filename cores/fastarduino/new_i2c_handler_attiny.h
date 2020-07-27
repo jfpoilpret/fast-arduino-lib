@@ -34,7 +34,25 @@
 
 namespace i2c
 {
-	//TODO DOC
+	/**
+	 * Abstract synchronous I2C Manager for ATtiny architecture.
+	 * You should never need to subclass AbstractI2CSyncManager yourself.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * proxies to Future that can move around and must be controlled by a 
+	 * LifeCycleManager; using `false` will generate smaller code.
+	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * step of an I2C transaction; this is useful for debugging support for a new 
+	 * I2C device; using `false` will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `IS_DEBUG` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_DEBUG_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
+	 * 
+	 * @sa I2CMode
+	 * @sa I2C_DEBUG_HOOK
+	 */
 	template<I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncManager :
 		public AbstractBaseI2CManager,
