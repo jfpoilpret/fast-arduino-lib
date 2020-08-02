@@ -602,6 +602,11 @@ namespace future
 		/** Type of the input value of this Future. */
 		using IN = IN_;
 
+		/** Size of the output value of this Future. */
+		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
+		/** Size of the input value of this Future. */
+		static constexpr uint8_t IN_SIZE = sizeof(IN);
+
 		/** 
 		 * Construct a new Future.
 		 * The created Future is in `FutureStatus::NOT_READY` status.
@@ -732,6 +737,9 @@ namespace future
 		using OUT = OUT_;
 		using IN = void;
 
+		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
+		static constexpr uint8_t IN_SIZE = 0;
+
 		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
 		~Future() = default;
 
@@ -785,6 +793,9 @@ namespace future
 	public:
 		using OUT = void;
 		using IN = IN_;
+
+		static constexpr uint8_t OUT_SIZE = 0;
+		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
 		explicit Future(const IN& input = IN{})
 			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
@@ -848,6 +859,9 @@ namespace future
 	public:
 		using OUT = void;
 		using IN = void;
+
+		static constexpr uint8_t OUT_SIZE = 0;
+		static constexpr uint8_t IN_SIZE = 0;
 
 		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
 		~Future() = default;
