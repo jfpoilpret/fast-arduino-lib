@@ -54,7 +54,6 @@
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
-static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_MEGA)
@@ -63,7 +62,6 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
-static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -72,7 +70,6 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
-static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -90,6 +87,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #endif
 
 // #define DEBUG_I2C
+#define FORCE_SYNC
 
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -103,22 +101,26 @@ using namespace streams;
 #ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 32;
 using DEBUGGER = i2c::debug::I2CDebugRecorder<DEBUG_SIZE>;
-#if I2C_TRUE_ASYNC
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 using MANAGER = i2c::I2CAsyncDebugManager<i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&>;
-#else
+#	else
 using MANAGER = i2c::I2CSyncDebugManager<i2c::I2CMode::STANDARD, DEBUGGER&>;
-#endif
+#	endif
 #define TRACE(OUT) debugger.trace(OUT)
+
 #else
-#if I2C_TRUE_ASYNC
+
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 using MANAGER = i2c::I2CAsyncManager<i2c::I2CMode::STANDARD>;
-#else
+#	else
 using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
-#endif
+#	endif
 #define TRACE(OUT)
 #endif
 
-#if I2C_TRUE_ASYNC
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 REGISTER_I2C_ISR(MANAGER)
 #endif
 
@@ -171,18 +173,18 @@ int main()
 	DEBUGGER debugger;
 #endif
 
-#if I2C_TRUE_ASYNC
-#ifdef DEBUG_I2C
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+#	ifdef DEBUG_I2C
 	MANAGER manager{i2c_buffer, debugger};
-#else
+#	else
 	MANAGER manager{i2c_buffer};
-#endif
+#	endif
 #else
-#ifdef DEBUG_I2C
+#	ifdef DEBUG_I2C
 	MANAGER manager{debugger};
-#else
+#	else
 	MANAGER manager{};
-#endif
+#	endif
 #endif
 
 	manager.begin();

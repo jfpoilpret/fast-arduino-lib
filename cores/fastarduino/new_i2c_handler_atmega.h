@@ -144,6 +144,295 @@ namespace i2c
 		/// @endcond
 	};
 
+	//TODO Sync Manager class here
+	template<I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
+	class AbstractI2CSyncManager :
+		public AbstractBaseI2CManager,
+		public I2CLifeCycleSupport<HAS_LC_>, 
+		public I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>
+	{
+	private:
+		using MODE_TRAIT = I2CMode_trait<MODE_>;
+		using I2C_TRAIT = board_traits::TWI_trait;
+		using REG8 = board_traits::REG8;
+		using PARENT = AbstractBaseI2CManager;
+		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
+		using LC = I2CLifeCycleSupport<HAS_LC_>;
+
+	public:
+		/**
+		 * Prepare and enable the MCU for I2C transmission.
+		 * Preparation includes setup of I2C pins (SDA and SCL).
+		 * This method is synchronized.
+		 * @sa end()
+		 * @sa begin_()
+		 */
+		void begin()
+		{
+			synchronized begin_();
+		}
+
+		/**
+		 * Disable MCU I2C transmission.
+		 * This method is synchronized.
+		 * @sa begin()
+		 * @sa end_()
+		 */
+		void end()
+		{
+			synchronized end_();
+		}
+
+		/**
+		 * Prepare and enable the MCU for I2C transmission.
+		 * Preparation includes setup of I2C pins (SDA and SCL).
+		 * This method is NOT synchronized.
+		 * @sa end_()
+		 * @sa begin()
+		 */
+		void begin_()
+		{
+			// 1. set SDA/SCL pullups
+			I2C_TRAIT::PORT |= I2C_TRAIT::SCL_SDA_MASK;
+			// 2. set I2C frequency
+			TWBR_ = MODE_TRAIT::FREQUENCY;
+			TWSR_ = 0;
+			// 3. Enable TWI
+			TWCR_ = bits::BV8(TWEN);
+		}
+
+		/**
+		 * Disable MCU I2C transmission.
+		 * This method is NOT synchronized.
+		 * @sa begin_()
+		 * @sa end()
+		 */
+		void end_()
+		{
+			// 1. Disable TWI
+			TWCR_ = 0;
+			// 2. remove SDA/SCL pullups
+			I2C_TRAIT::PORT &= bits::COMPL(I2C_TRAIT::SCL_SDA_MASK);
+		}
+
+	protected:
+		/// @cond notdocumented
+		explicit AbstractI2CSyncManager(
+			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr,
+			DEBUG_HOOK_ hook = nullptr)
+			:	AbstractBaseI2CManager{},
+				I2CLifeCycleSupport<HAS_LC_>{lifecycle_manager},
+				I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>{hook} {}
+		/// @endcond
+
+	private:
+		bool ensure_num_commands_(UNUSED uint8_t num_commands) const
+		{
+			return true;
+		}
+
+		bool push_command_(
+			I2CLightCommand command, uint8_t target, lifecycle::LightProxy<future::AbstractFuture> proxy)
+		{
+			// Check command is not empty
+			const I2CCommandType type = command.type();
+			if (type.is_none()) return true;
+			if (clear_commands_) return false;
+			future::AbstractFuture& future = LC::resolve(proxy);
+			// Execute command immediately, from start to optional stop
+			//FIXME start or repeat start?
+			bool ok = (no_stop_ ? exec_repeat_start_() : exec_start_());
+			if (!ok)
+				return handle_error(future, Status::ARBITRATION_LOST);
+
+			if (type.is_write())
+			{
+				// Send device address
+				if (!exec_send_slaw_(target))
+					return handle_error(future, Status::SLA_W_TRANSMITTED_NACK);
+				// Send content
+				while (command.byte_count() > 0)
+					// In case of a NACK on data writing, we check if it is not last byte
+					if ((!exec_send_data_(command, future)) && (command.byte_count() > 0))
+						return handle_error(future, Status::DATA_TRANSMITTED_NACK);
+				status_ = Status::DATA_TRANSMITTED_ACK;
+			}
+			else
+			{
+				// Send device address
+				if (!exec_send_slar_(target))
+					return handle_error(future, Status::SLA_R_TRANSMITTED_NACK);
+				// Receive content
+				while (command.byte_count() > 0)
+					if (!exec_receive_data_(command, future))
+						return handle_error(future, Status::DATA_RECEIVED_NACK);
+				status_ = Status::DATA_RECEIVED_ACK;
+			}
+
+			// Check if we must force finish the future
+			if (type.is_finish())
+				future.set_future_finish_();
+			// Check if we must force a STOP
+			if (type.is_stop())
+				exec_stop_();
+			// Ensure STOP is generated or not depending on latest command executed
+			no_stop_ = !type.is_stop();
+			return true;
+		}
+
+		void last_command_pushed_()
+		{
+			// Check if previously executed command already did a STOP (and needed one)
+			if ((!no_stop_) && (!stopped_already_) && (!clear_commands_))
+				exec_stop_();
+			no_stop_ = false;
+			clear_commands_ = false;
+			stopped_already_ = false;
+		}
+
+		static constexpr const REG8 TWBR_{TWBR};
+		static constexpr const REG8 TWSR_{TWSR};
+		static constexpr const REG8 TWCR_{TWCR};
+		static constexpr const REG8 TWDR_{TWDR};
+
+		void send_byte(uint8_t data)
+		{
+			TWDR_ = data;
+			TWCR_ = bits::BV8(TWEN, TWINT);
+		}
+
+		// Low-level methods to handle the bus in an asynchronous way
+		bool exec_start_()
+		{
+			DEBUG::call_hook(DebugStatus::START);
+			TWCR_ = bits::BV8(TWEN, TWINT, TWSTA);
+			return wait_twint(Status::START_TRANSMITTED);
+		}
+
+		bool exec_repeat_start_()
+		{
+			DEBUG::call_hook(DebugStatus::REPEAT_START);
+			TWCR_ = bits::BV8(TWEN, TWINT, TWSTA);
+			return wait_twint(Status::REPEAT_START_TRANSMITTED);
+		}
+
+		bool exec_send_slar_(uint8_t target)
+		{
+			DEBUG::call_hook(DebugStatus::SLAR, target);
+			send_byte(target | 0x01U);
+			return wait_twint(Status::SLA_R_TRANSMITTED_ACK);
+		}
+		
+		bool exec_send_slaw_(uint8_t target)
+		{
+			DEBUG::call_hook(DebugStatus::SLAW, target);
+			send_byte(target);
+			return wait_twint(Status::SLA_W_TRANSMITTED_ACK);
+		}
+
+		bool exec_send_data_(I2CLightCommand& command, future::AbstractFuture& future)
+		{
+			// Determine next data byte
+			uint8_t data = 0;
+			bool ok = future.get_storage_value_(data);
+			DEBUG::call_hook(DebugStatus::SEND, data);
+			// This should only happen if there are 2 concurrent consumers for that Future
+			if (ok)
+				command.decrement_byte_count();
+			else
+				future.set_future_error_(errors::EILSEQ);
+			DEBUG::call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
+			send_byte(data);
+			return wait_twint(Status::DATA_TRANSMITTED_ACK);
+		}
+
+		bool exec_receive_data_(I2CLightCommand& command, future::AbstractFuture& future)
+		{
+			bool ok;
+			// Is this the last byte to receive?
+			if (command.byte_count() == 1)
+			{
+				DEBUG::call_hook(DebugStatus::RECV_LAST);
+				// Send NACK for the last data byte we want
+				TWCR_ = bits::BV8(TWEN, TWINT);
+				ok = wait_twint(Status::DATA_RECEIVED_NACK);
+			}
+			else
+			{
+				DEBUG::call_hook(DebugStatus::RECV);
+				// Send ACK for data byte if not the last one we want
+				TWCR_ = bits::BV8(TWEN, TWINT, TWEA);
+				ok = wait_twint(Status::DATA_RECEIVED_ACK);
+			}
+			if (ok)
+			{
+				uint8_t data = TWDR_;
+				ok = future.set_future_value_(data);
+				DEBUG::call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
+				// This should only happen in case there are 2 concurrent providers for this future
+				if (ok)
+				{
+					command.decrement_byte_count();
+				}
+				else
+				{
+					future.set_future_error_(errors::EILSEQ);
+					status_ = Status::FUTURE_ERROR;
+				}
+			}
+			return ok;
+		}
+
+		void exec_stop_()
+		{
+			DEBUG::call_hook(DebugStatus::STOP);
+			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
+			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
+			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
+			_delay_loop_1(MODE_TRAIT::DELAY_AFTER_STOP);
+		}
+
+		bool wait_twint(uint8_t expected_status)
+		{
+			TWCR_.loop_until_bit_set(TWINT);
+			status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+			if (status_ == expected_status)
+			{
+				//TODO do we need that?
+				status_ = Status::OK;
+				return true;
+			}
+			else
+				return false;
+		}
+
+		// This method is called when an error has occurred
+		bool handle_error(future::AbstractFuture& future, uint8_t status)
+		{
+			//TODO check if FUTURE_ERROR is used actually
+			// When status is FUTURE_ERROR then future has already been marked accordingly
+			if (status != Status::FUTURE_ERROR)
+				// The future must be marked as error
+				future.set_future_error_(errors::EPROTO);
+			// Update status
+			status_ = status;
+
+			// Clear command belonging to the same transaction (i.e. same future)
+			// ie forbid any new command until last command (add new flag for that)
+			clear_commands_ = true;
+			// In case of an error, immediately send a STOP condition
+			exec_stop_();
+			return false;
+		}
+
+		// Flags for storing I2C transaction operation state
+		bool no_stop_ = false;
+		bool clear_commands_ = false;
+		bool stopped_already_ = false;
+
+		template<I2CMode, typename> friend class I2CDevice;
+	};
+
 	//TODO Maybe add an extra layer AbstractATmegaI2CManager with all common methods for sync and ascyn?
 	/**
 	 * Abstract asynchronous I2C Manager.
@@ -692,8 +981,48 @@ namespace i2c
 		}
 	};
 
+	//TODO DOC
+	template<I2CMode MODE_>
+	class I2CSyncManager : public AbstractI2CSyncManager<MODE_, false, false, I2C_DEBUG_HOOK>
+	{
+		using PARENT = AbstractI2CSyncManager<MODE_, false, false, I2C_DEBUG_HOOK>;
+	public:
+		I2CSyncManager() : PARENT{} {}
+	};
+
+	//TODO DOC
+	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CSyncDebugManager : public AbstractI2CSyncManager<MODE_, false, true, DEBUG_HOOK_>
+	{
+		using PARENT = AbstractI2CSyncManager<MODE_, false, true, DEBUG_HOOK_>;
+	public:
+		explicit I2CSyncDebugManager(DEBUG_HOOK_ hook) : PARENT{nullptr, hook} {}
+	};
+
+	//TODO DOC
+	template<I2CMode MODE_>
+	class I2CSyncLCManager : public AbstractI2CSyncManager<MODE_, true, false, I2C_DEBUG_HOOK>
+	{
+		using PARENT = AbstractI2CSyncManager<MODE_, true, false, I2C_DEBUG_HOOK>;
+	public:
+		explicit I2CSyncLCManager(lifecycle::AbstractLifeCycleManager& lifecycle_manager)
+			:	PARENT{&lifecycle_manager} {}
+	};
+
+	//TODO DOC
+	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CSyncLCDebugManager : public AbstractI2CSyncManager<MODE_, true, true, DEBUG_HOOK_>
+	{
+		using PARENT = AbstractI2CSyncManager<MODE_, true, true, DEBUG_HOOK_>;
+	public:
+		explicit I2CSyncLCDebugManager(lifecycle::AbstractLifeCycleManager& lifecycle_manager)
+			:	PARENT{&lifecycle_manager} {}
+	};
+
+
 	/// @cond notdocumented
 	// Specific traits for I2CManager
+	// Async managers first
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
 	struct I2CManager_trait<I2CAsyncManager<MODE_, POLICY_>>
 		:	I2CManager_trait_impl<true, false, false, MODE_> {};
@@ -709,6 +1038,23 @@ namespace i2c
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncLCDebugManager<MODE_, POLICY_, DEBUG_HOOK_>>
 		:	I2CManager_trait_impl<true, true, true, MODE_> {};
+	
+	// Then sync managers
+	template<I2CMode MODE_>
+	struct I2CManager_trait<I2CSyncManager<MODE_>>
+		:	I2CManager_trait_impl<false, false, false, MODE_> {};
+
+	template<I2CMode MODE_>
+	struct I2CManager_trait<I2CSyncLCManager<MODE_>>
+		:	I2CManager_trait_impl<false, true, false, MODE_> {};
+
+	template<I2CMode MODE_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CSyncDebugManager<MODE_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+
+	template<I2CMode MODE_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CSyncLCDebugManager<MODE_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<false, true, true, MODE_> {};
 	/// @endcond
 
 	/// @cond notdocumented
