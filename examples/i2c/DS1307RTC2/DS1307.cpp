@@ -102,8 +102,8 @@ using namespace streams;
 static constexpr const uint8_t DEBUG_SIZE = 32;
 using DEBUGGER = i2c::debug::I2CDebugRecorder<DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
-static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 using MANAGER = i2c::I2CAsyncDebugManager<i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
 using MANAGER = i2c::I2CSyncDebugManager<i2c::I2CMode::STANDARD, DEBUGGER&>;
 #	endif
@@ -112,8 +112,8 @@ using MANAGER = i2c::I2CSyncDebugManager<i2c::I2CMode::STANDARD, DEBUGGER&>;
 #else
 
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
-static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 using MANAGER = i2c::I2CAsyncManager<i2c::I2CMode::STANDARD>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
 using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
 #	endif

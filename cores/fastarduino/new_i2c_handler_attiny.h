@@ -66,6 +66,9 @@ namespace i2c
 		using PARENT = AbstractBaseI2CManager;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
 		using LC = I2CLifeCycleSupport<HAS_LC_>;
+		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
+		template<typename T> using PROXY = typename LC::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = future::FakeFuture<OUT, IN>;
 
 	public:
 		/**
@@ -144,14 +147,15 @@ namespace i2c
 		}
 
 		bool push_command_(
-			I2CLightCommand command, uint8_t target, lifecycle::LightProxy<future::AbstractFuture> proxy)
+			I2CLightCommand command, uint8_t target, PROXY<ABSTRACT_FUTURE> proxy)
 		{
 			// Check command is not empty
 			const I2CCommandType type = command.type();
 			if (type.is_none()) return true;
 			if (clear_commands_) return false;
-			future::AbstractFuture& future = LC::resolve(proxy);
+			ABSTRACT_FUTURE& future = LC::resolve(proxy);
 			// Execute command immediately, from start to optional stop
+			status_ = Status::OK;
 			if (!exec_start_())
 				return handle_error(future, Status::ARBITRATION_LOST);
 
@@ -165,7 +169,6 @@ namespace i2c
 					// In case of a NACK on data writing, we check if it is not last byte
 					if ((!exec_send_data_(command, future)) && (command.byte_count() > 0))
 						return handle_error(future, Status::DATA_TRANSMITTED_NACK);
-				status_ = Status::DATA_TRANSMITTED_ACK;
 			}
 			else
 			{
@@ -176,7 +179,6 @@ namespace i2c
 				while (command.byte_count() > 0)
 					if (!exec_receive_data_(command, future))
 						return handle_error(future, Status::DATA_RECEIVED_NACK);
-				status_ = Status::DATA_RECEIVED_ACK;
 			}
 
 			// Check if we must force finish the future
@@ -338,7 +340,7 @@ namespace i2c
 			return send_byte_impl(target);
 		}
 
-		bool exec_send_data_(I2CLightCommand& command, future::AbstractFuture& future)
+		bool exec_send_data_(I2CLightCommand& command, ABSTRACT_FUTURE& future)
 		{
 			// Determine next data byte
 			uint8_t data = 0;
@@ -359,7 +361,7 @@ namespace i2c
 			}
 		}
 
-		bool exec_receive_data_(I2CLightCommand& command, future::AbstractFuture& future)
+		bool exec_receive_data_(I2CLightCommand& command, ABSTRACT_FUTURE& future)
 		{
 			// Is this the last byte to receive?
 			uint8_t data;
@@ -402,10 +404,10 @@ namespace i2c
 		}
 
 		// This method is called when an error has occurred
-		bool handle_error(future::AbstractFuture& future, uint8_t status)
+		bool handle_error(ABSTRACT_FUTURE& future, uint8_t status)
 		{
 			// When status is FUTURE_ERROR then future has already been marked accordingly
-			if (status != Status::FUTURE_ERROR)
+			if (status_ != Status::FUTURE_ERROR)
 				// The future must be marked as error
 				future.set_future_error_(errors::EPROTO);
 			// Update status
@@ -427,61 +429,17 @@ namespace i2c
 		template<I2CMode, typename> friend class I2CDevice;
 	};
 
-#if 0
 	/**
-	 * General I2C Manager for ATtiny architecture, on which it handles all I2C
-	 * commands in a synchronous way (contrarily to ATmega implementation which
-	 * is asynchronous).
-	 * It is used by all I2C devices for transmission.
-	 * 
-	 * TODO mention it works the same (API) as ATmega implementation
+	 * Synchronous I2C Manager for ATtiny architecture.
+	 * This class offers no support for dynamic proxies, nor any debug facility.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
+	 * 
 	 * @sa i2c::I2CMode
+	 * @sa I2CSyncDebugManager
+	 * @sa I2CSyncLCManager
+	 * @sa I2CSyncLCDebugManager
 	 */
-	template<
-		I2CMode MODE_ = I2CMode::STANDARD, 
-		bool HAS_LIFECYCLE_ = false, 
-		bool IS_DEBUG_ = false, 
-		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CManager : public AbstractBaseI2CManager<MODE_, HAS_LIFECYCLE_, IS_DEBUG_, DEBUG_HOOK_>
-	{
-	public:
-		/**
-		 * Create an I2C Manager for ATtiny MCUs, with an optional hook function
-		 * for debugging.
-		 * 
-		 * @param error_policy the policy used to handle queued command when an 
-		 * error occurs
-		 */
-		explicit I2CManager(I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	PARENT{error_policy}
-		{
-			// set SDA/SCL default directions
-			I2C_TRAIT::PORT |= bits::BV8(I2C_TRAIT::BIT_SDA, I2C_TRAIT::BIT_SCL);
-			I2C_TRAIT::DDR |= bits::BV8(I2C_TRAIT::BIT_SDA, I2C_TRAIT::BIT_SCL);
-		}
-
-		/**
-		 * Create an I2C Manager for ATtiny MCUs, with an optional hook function
-		 * for debugging.
-		 * 
-		 * @param error_policy the policy used to handle queued command when an 
-		 * error occurs
-		 * @param hook an optional hook function that will be called back after
-		 * each transmission operation.
-		 */
-		explicit I2CManager(DEBUG_HOOK_ hook, I2CErrorPolicy error_policy = I2CErrorPolicy::CLEAR_ALL_COMMANDS)
-			:	PARENT{error_policy, hook}
-		{
-			// set SDA/SCL default directions
-			I2C_TRAIT::PORT |= bits::BV8(I2C_TRAIT::BIT_SDA, I2C_TRAIT::BIT_SCL);
-			I2C_TRAIT::DDR |= bits::BV8(I2C_TRAIT::BIT_SDA, I2C_TRAIT::BIT_SCL);
-		}
-	};
-#endif
-
-	//TODO DOC
 	template<I2CMode MODE_>
 	class I2CSyncManager : public AbstractI2CSyncManager<MODE_, false, false, I2C_DEBUG_HOOK>
 	{
@@ -490,7 +448,20 @@ namespace i2c
 		I2CSyncManager() : PARENT{} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATtiny architecture with debug facility.
+	 * This class offers no support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa I2CSyncManager
+	 * @sa I2CSyncLCManager
+	 * @sa I2CSyncLCDebugManager
+	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncDebugManager : public AbstractI2CSyncManager<MODE_, false, true, DEBUG_HOOK_>
 	{
@@ -499,7 +470,17 @@ namespace i2c
 		explicit I2CSyncDebugManager(DEBUG_HOOK_ hook) : PARENT{nullptr, hook} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATtiny architecture with support for dynamic proxies.
+	 * This class offers no debug facility.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa I2CSyncManager
+	 * @sa I2CSyncDebugManager
+	 * @sa I2CSsyncLCDebugManager
+	 */
 	template<I2CMode MODE_>
 	class I2CSyncLCManager : public AbstractI2CSyncManager<MODE_, true, false, I2C_DEBUG_HOOK>
 	{
@@ -509,7 +490,20 @@ namespace i2c
 			:	PARENT{&lifecycle_manager} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATtiny architecture with debug facility
+	 * and support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa I2CSyncManager
+	 * @sa I2CSyncDebugManager
+	 * @sa I2CSyncLCManager
+	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncLCDebugManager : public AbstractI2CSyncManager<MODE_, true, true, DEBUG_HOOK_>
 	{

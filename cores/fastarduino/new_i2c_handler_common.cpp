@@ -29,13 +29,5 @@ namespace i2c
 			out << F("[END]");
 		return out << streams::flush;
 	}
-
-	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c)
-	{
-		out	<< '{' << c.type() << ',' 
-			<< streams::hex << c.target() << '}' << streams::flush;
-		return out;
-	}
 	/// @endcond
-
 }

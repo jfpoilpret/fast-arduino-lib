@@ -91,6 +91,8 @@ namespace i2c
 	}
 	/// @endcond
 
+	//FIXME static assert to check manager mode matches device mode
+	//TODO simplify API and remove MODE template argument?
 	/**
 	 * Base class for all I2C devices.
 	 * 
@@ -114,6 +116,15 @@ namespace i2c
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
 
 	protected:
+		/**
+		 * The actual type used for all proxies; may be `lifecycle::LightProxy` 
+		 * or nothing in particular. This is defined by MANAGER type, whether it
+		 * uses a lifecycle:AbstractLifeCycleManager or not.
+		 */
+		template<typename T> using PROXY = typename MANAGER::template PROXY<T>;
+		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
+		template<typename OUT, typename IN> using FUTURE = typename MANAGER::template FUTURE<OUT, IN>;
+
 		/**
 		 * Create a new I2C device. This constructor must be called by a subclass
 		 * implementing an actua I2C device.
@@ -232,7 +243,7 @@ namespace i2c
 		 * @sa errors
 		 */
 		int launch_commands(
-			lifecycle::LightProxy<future::AbstractFuture> proxy, std::initializer_list<I2CLightCommand> commands)
+			PROXY<ABSTRACT_FUTURE> proxy, std::initializer_list<I2CLightCommand> commands)
 		{
 			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
@@ -244,12 +255,7 @@ namespace i2c
 				{
 					// pre-conditions (must be synchronized)
 					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
-					// Add checks for resolvability of proxy by handler_ (ie if dynamic, LCmanager must not be null)
-					if (!MANAGER_TRAIT::HAS_LIFECYCLE)
-					{
-						if (proxy.is_dynamic()) return errors::EINVAL;
-					}
-					future::AbstractFuture& future = resolve(proxy);
+					ABSTRACT_FUTURE& future = resolve(proxy);
 					max_read = future.get_future_value_size_();
 					max_write = future.get_storage_value_size_();
 				}
@@ -301,9 +307,20 @@ namespace i2c
 		 * @param proxy the LightProxy to a Future to resolve
 		 * @return a reference to the proxied Future
 		 */
-		template<typename T> T& resolve(const lifecycle::LightProxy<T> proxy) const
+		template<typename T> T& resolve(PROXY<T> proxy) const
 		{
 			return handler_.resolve(proxy);
+		}
+
+		/**
+		 * Create a PROXY from @p target.
+		 * Depending ona ctual PROXY type, that may lead to @p target reference
+		 * itself or a lifecycle::LightProxy.
+		 * This can be used by device methods working in blocking mode.
+		 */
+		template<typename T> static PROXY<T> make_proxy(const T& target)
+		{
+			return MANAGER::LC::make_proxy(target);
 		}
 
 	private:

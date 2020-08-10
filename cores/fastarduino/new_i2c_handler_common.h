@@ -243,14 +243,14 @@ namespace i2c
 	 * @sa lifecycle::LightProxy
 	 * @sa future::AbstractFuture
 	 */
-	class I2CCommand : public I2CLightCommand
+	template<typename T> class I2CCommand : public I2CLightCommand
 	{
 	public:
 		/// @cond notdocumented
 		constexpr I2CCommand() = default;
 		constexpr I2CCommand(const I2CCommand&) = default;
 		constexpr I2CCommand(
-			const I2CLightCommand& that, uint8_t target, lifecycle::LightProxy<future::AbstractFuture> future)
+			const I2CLightCommand& that, uint8_t target, T future)
 			:	I2CLightCommand{that}, target_{target}, future_{future} {}
 		constexpr I2CCommand& operator=(const I2CCommand&) = default;
 
@@ -258,12 +258,12 @@ namespace i2c
 		{
 			return target_;
 		}
-		lifecycle::LightProxy<future::AbstractFuture> future() const
+		T future() const
 		{
 			return future_;
 		}
 
-		void set_target(uint8_t target, lifecycle::LightProxy<future::AbstractFuture> future)
+		void set_target(uint8_t target, T future)
 		{
 			target_ = target;
 			future_ = future;
@@ -274,11 +274,17 @@ namespace i2c
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target_ = 0;
 		// A proxy to the future to be used for this command
-		lifecycle::LightProxy<future::AbstractFuture> future_;
+		T future_{};
 	};
 
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, const I2CCommand& c);
+	template<typename T>
+	streams::ostream& operator<<(streams::ostream& out, const I2CCommand<T>& c)
+	{
+		out	<< '{' << c.type() << ',' 
+			<< streams::hex << c.target() << '}' << streams::flush;
+		return out;
+	}
 	/// @endcond
 
 	/// @cond notdocumented
@@ -308,18 +314,28 @@ namespace i2c
 	template<bool HAS_LIFECYCLE_ = false> class I2CLifeCycleSupport
 	{
 	protected:
-		I2CLifeCycleSupport(UNUSED lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr) {}
-		template<typename T> T& resolve(lifecycle::LightProxy<T> proxy) const
+		template<typename T> using PROXY = lifecycle::DirectProxy<T>;
+		template<typename T> static PROXY<T> make_proxy(const T& dest)
 		{
-			return *proxy.destination();
+			return lifecycle::make_direct_proxy(dest);
+		}
+		I2CLifeCycleSupport(UNUSED lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr) {}
+		template<typename T> T& resolve(PROXY<T> proxy) const
+		{
+			return *proxy();
 		}
 	};
 	template<> class I2CLifeCycleSupport<true>
 	{
 	protected:
+		template<typename T> using PROXY = lifecycle::LightProxy<T>;
+		template<typename T> static PROXY<T> make_proxy(const T& dest)
+		{
+			return lifecycle::make_light_proxy(dest);
+		}
 		I2CLifeCycleSupport(lifecycle::AbstractLifeCycleManager* lifecycle_manager)
 			:	lifecycle_manager_{*lifecycle_manager} {}
-		template<typename T> T& resolve(lifecycle::LightProxy<T> proxy) const
+		template<typename T> T& resolve(PROXY<T> proxy) const
 		{
 			return *proxy(lifecycle_manager_);
 		}
@@ -334,13 +350,15 @@ namespace i2c
 	{
 	protected:
 		I2CErrorPolicySupport() {}
-		void handle_error(UNUSED const I2CCommand& current, UNUSED containers::Queue<I2CCommand>& commands) {}
+		template<typename T>
+		void handle_error(UNUSED const I2CCommand<T>& current, UNUSED containers::Queue<I2CCommand<T>>& commands) {}
 	};
 	template<> class I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_ALL_COMMANDS>
 	{
 	protected:
 		I2CErrorPolicySupport() {}
-		void handle_error(UNUSED const I2CCommand& current, containers::Queue<I2CCommand>& commands)
+		template<typename T>
+		void handle_error(UNUSED const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
 		{
 			commands.clear_();
 		}
@@ -349,11 +367,12 @@ namespace i2c
 	{
 	protected:
 		I2CErrorPolicySupport() {}
-		void handle_error(const I2CCommand& current, containers::Queue<I2CCommand>& commands)
+		template<typename T>
+		void handle_error(const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
 		{
 			// Clear command belonging to the same transaction (i.e. same future)
 			const auto future = current.future();
-			I2CCommand command;
+			I2CCommand<T> command;
 			while (commands.peek_(command))
 			{
 				if (command.future() != future)
@@ -363,6 +382,9 @@ namespace i2c
 		}
 	};
 	/// @endcond
+
+	//TODO Sync/Async class support?
+
 
 	/**
 	 * Abstract I2C Manager.

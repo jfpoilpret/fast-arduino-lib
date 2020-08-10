@@ -98,7 +98,8 @@ namespace devices::rtc
 	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>
 	{
 		using PARENT = i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>;
-		template<typename T> using PROXY = lifecycle::LightProxy<T>;
+		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		struct set_tm
 		{
@@ -136,7 +137,7 @@ namespace devices::rtc
 		 * 
 		 * @sa set_datetime(SetDatetimeFuture&)
 		 */
-		class SetDatetimeFuture : public future::Future<void, set_tm>
+		class SetDatetimeFuture : public FUTURE<void, set_tm>
 		{
 		public:
 			explicit SetDatetimeFuture(const tm& datetime)
@@ -188,16 +189,16 @@ namespace devices::rtc
 		 * 
 		 * @sa get_datetime(GetDatetimeFuture&)
 		 */
-		class GetDatetimeFuture : public future::Future<tm, uint8_t>
+		class GetDatetimeFuture : public FUTURE<tm, uint8_t>
 		{
 		public:
-			GetDatetimeFuture() : future::Future<tm, uint8_t>{TIME_ADDRESS} {}
+			GetDatetimeFuture() : FUTURE<tm, uint8_t>{TIME_ADDRESS} {}
 			GetDatetimeFuture(GetDatetimeFuture&&) = default;
 			GetDatetimeFuture& operator=(GetDatetimeFuture&&) = default;
 
 			bool get(tm& datetime)
 			{
-				if (!future::Future<tm, uint8_t>::get(datetime)) return false;
+				if (!FUTURE<tm, uint8_t>::get(datetime)) return false;
 				// convert DS1307 output (BCD) to integer type
 				datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
 				datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
@@ -245,9 +246,9 @@ namespace devices::rtc
 		 * @sa set_ram(SetRamFuture<SIZE>&)
 		 */
 		template<uint8_t SIZE_>
-		class SetRamFuture : public future::Future<void, containers::array<uint8_t, SIZE_ + 1>>
+		class SetRamFuture : public FUTURE<void, containers::array<uint8_t, SIZE_ + 1>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, SIZE_ + 1>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, SIZE_ + 1>>;
 		public:
 			SetRamFuture() = default;
 			explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
@@ -307,9 +308,9 @@ namespace devices::rtc
 		 * 
 		 * @sa set_ram(SetRam1Future&)
 		 */
-		class SetRam1Future : public future::Future<void, containers::array<uint8_t, 2>>
+		class SetRam1Future : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
 			SetRam1Future() = default;
 			explicit SetRam1Future(uint8_t address, uint8_t data)
@@ -362,9 +363,9 @@ namespace devices::rtc
 		 * @sa get_ram(GetRamFuture<SIZE>&)
 		 */
 		template<uint8_t SIZE_>
-		class GetRamFuture : public future::Future<containers::array<uint8_t, SIZE_>, uint8_t>
+		class GetRamFuture : public FUTURE<containers::array<uint8_t, SIZE_>, uint8_t>
 		{
-			using PARENT = future::Future<containers::array<uint8_t, SIZE_>, uint8_t>;
+			using PARENT = FUTURE<containers::array<uint8_t, SIZE_>, uint8_t>;
 		public:
 			explicit GetRamFuture(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)}
 			{
@@ -418,9 +419,9 @@ namespace devices::rtc
 		 * 
 		 * @sa get_ram(GetRam1Future&)
 		 */
-		class GetRam1Future : public future::Future<uint8_t, uint8_t>
+		class GetRam1Future : public FUTURE<uint8_t, uint8_t>
 		{
-			using PARENT = future::Future<uint8_t, uint8_t>;
+			using PARENT = FUTURE<uint8_t, uint8_t>;
 		public:
 			explicit GetRam1Future(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
 			GetRam1Future(GetRam1Future&&) = default;
@@ -467,11 +468,11 @@ namespace devices::rtc
 		 * 
 		 * @sa halt_clock(HaltClockFuture&)
 		 */
-		class HaltClockFuture : public future::Future<void, containers::array<uint8_t, 2>>
+		class HaltClockFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
 		public:
 			// just write 0x80 at address 0
-			HaltClockFuture() : future::Future<void, containers::array<uint8_t, 2>>{{TIME_ADDRESS, CLOCK_HALT}} {}
+			HaltClockFuture() : FUTURE<void, containers::array<uint8_t, 2>>{{TIME_ADDRESS, CLOCK_HALT}} {}
 			HaltClockFuture(HaltClockFuture&&) = default;
 			HaltClockFuture& operator=(HaltClockFuture&&) = default;
 		};
@@ -511,9 +512,9 @@ namespace devices::rtc
 		 * 
 		 * @sa enable_output(EnableOutputFuture&)
 		 */
-		class EnableOutputFuture : public future::Future<void, containers::array<uint8_t, 2>>
+		class EnableOutputFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
 			explicit EnableOutputFuture(SquareWaveFrequency frequency)
 			{
@@ -562,9 +563,9 @@ namespace devices::rtc
 		 * 
 		 * @sa disable_output(DisableOutputFuture&)
 		 */
-		class DisableOutputFuture : public future::Future<void, containers::array<uint8_t, 2>>
+		class DisableOutputFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
 			explicit DisableOutputFuture(bool output_value)
 			{
@@ -622,7 +623,7 @@ namespace devices::rtc
 		bool set_datetime(const tm& datetime)
 		{
 			SetDatetimeFuture future{datetime};
-			if (set_datetime(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (set_datetime(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -641,7 +642,7 @@ namespace devices::rtc
 		bool get_datetime(tm& datetime)
 		{
 			GetDatetimeFuture future;
-			if (get_datetime(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (get_datetime(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(datetime);
 		}
 
@@ -660,7 +661,7 @@ namespace devices::rtc
 		bool halt_clock()
 		{
 			HaltClockFuture future;
-			if (halt_clock(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (halt_clock(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -679,7 +680,7 @@ namespace devices::rtc
 		bool enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
 		{
 			EnableOutputFuture future{frequency};
-			if (enable_output(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (enable_output(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -697,7 +698,7 @@ namespace devices::rtc
 		bool disable_output(bool output_value = false)
 		{
 			DisableOutputFuture future{output_value};
-			if (disable_output(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (disable_output(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -717,7 +718,7 @@ namespace devices::rtc
 		bool set_ram(uint8_t address, uint8_t data)
 		{
 			SetRam1Future future{address, data};
-			if (set_ram(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (set_ram(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -735,7 +736,7 @@ namespace devices::rtc
 		uint8_t get_ram(uint8_t address)
 		{
 			GetRam1Future future{address};
-			if (get_ram(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (get_ram(PARENT::make_proxy(future)) != 0) return false;
 			uint8_t data = 0;
 			future.get(data);
 			return data;
@@ -759,7 +760,7 @@ namespace devices::rtc
 		template<uint8_t SIZE> bool set_ram(uint8_t address, const uint8_t (&data)[SIZE])
 		{
 			SetRamFuture<SIZE> future{address, data};
-			if (set_ram(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (set_ram(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -781,7 +782,7 @@ namespace devices::rtc
 		template<uint8_t SIZE> bool get_ram(uint8_t address, uint8_t (&data)[SIZE])
 		{
 			GetRamFuture<SIZE> future{address};
-			if (get_ram(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (get_ram(PARENT::make_proxy(future)) != 0) return false;
 			typename GetRamFuture<SIZE>::OUT temp;
 			if (!future.get(temp)) return false;
 			memcpy(data, temp.data(), SIZE);
@@ -807,7 +808,7 @@ namespace devices::rtc
 			uint8_t temp[sizeof(T)];
 			utils::as_array<T>(data, temp);
 			SetRamFuture<sizeof(T)> future{address, temp};
-			if (set_ram(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (set_ram(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -831,7 +832,7 @@ namespace devices::rtc
 		template<typename T> bool get_ram(uint8_t address, T& data)
 		{
 			GetRamFuture<sizeof(T)> future{address};
-			if (get_ram(lifecycle::make_light_proxy(future)) != 0) return false;
+			if (get_ram(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(reinterpret_cast<uint8_t&>(data));
 		}
 
