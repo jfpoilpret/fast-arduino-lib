@@ -379,38 +379,6 @@ namespace i2c
 	//TODO Sync/Async class support?
 
 
-	//TODO just remove this useless base class (only one single method!)
-	/**
-	 * Abstract I2C Manager.
-	 * It is specifically subclassed for ATmega Vs. ATtiny architectures.
-	 * You should never need to subclass AbstractBaseI2CManager yourself.
-	 * 
-	 * For the time being, the MCU must always act as the only master on the bus.
-	 * Using MCU as a slave will be supported in a later version of FastArduino.
-	 */
-	class AbstractBaseI2CManager
-	{
-	public:
-		/**
-		 * Return latest transmission status.
-		 * Possible statuses are defined in namespace `i2c::Status`.
-		 * If latest operation was OK, then `i2c::Status::OK` (`0`) is returned.
-		 * Any non zero value indicates an error.
-		 * @sa i2c::Status
-		 */
-		uint8_t status() const
-		{
-			return status_;
-		}
-
-	protected:
-		/// @cond notdocumented
-		AbstractBaseI2CManager() = default;
-		// Latest I2C status
-		uint8_t status_ = 0;
-		/// @endcond
-	};
-
 	/// @cond notdocumented
 	// Specific traits for I2CManager
 	template<typename T> struct I2CManager_trait

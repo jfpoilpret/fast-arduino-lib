@@ -113,37 +113,6 @@ namespace i2c
 		ERROR
 	};
 
-	/**
-	 * Abstract I2C Manager for ATmega architectures. It is subclassed by more
-	 * specific implementations.
-	 * You should never need to subclass AbstractI2CManager yourself.
-	 */
-	// class AbstractI2CManager : public AbstractBaseI2CManager
-	// {
-	// protected:
-	// 	/// @cond notdocumented
-	// 	AbstractI2CManager() = default;
-
-	// 	bool check_no_error(future::AbstractFuture& future)
-	// 	{
-	// 		if (status_ == expected_status_) return true;
-	// 		// Handle special case of last transmitted byte possibly not acknowledged by device
-	// 		if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
-	// 			&&	(status_ == Status::DATA_TRANSMITTED_NACK)
-	// 			&&	(command_.byte_count() == 0))
-	// 			return true;
-
-	// 		// The future must be marked as error
-	// 		future.set_future_error_(errors::EPROTO);
-	// 		return false;
-	// 	}
-
-	// 	// Status of current command processing
-	// 	I2CCOMMAND command_;
-	// 	uint8_t expected_status_ = 0;
-	// 	/// @endcond
-	// };
-
 	//TODO Sync Manager class here
 	template<I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncManager
@@ -560,7 +529,7 @@ namespace i2c
 			I2CCOMMAND (&buffer)[SIZE], 
 			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr,
 			DEBUG_HOOK_ hook = nullptr)
-			:	policy_{}, lc_{lifecycle_manager}, debug_{hook}, commands_(buffer) {}
+			:	commands_{buffer}, policy_{}, lc_{lifecycle_manager}, debug_{hook} {}
 		/// @endcond
 
 	private:
@@ -851,11 +820,12 @@ namespace i2c
 		// Latest I2C status
 		uint8_t status_ = 0;
 		uint8_t expected_status_ = 0;
-		// Queue of commands to execute
-		containers::Queue<I2CCOMMAND> commands_;
 
 		// Status of current command processing
 		State current_ = State::NONE;
+
+		// Queue of commands to execute
+		containers::Queue<I2CCOMMAND> commands_;
 
 		POLICY policy_;
 		LC lc_;
