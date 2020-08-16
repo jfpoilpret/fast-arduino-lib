@@ -289,16 +289,14 @@ namespace i2c
 
 	/// @cond notdocumented
 	// Generic support for I2C debugging
-	template<bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>  class I2CDebugSupport
+	template<bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>  struct I2CDebugSupport
 	{
-	protected:
 		I2CDebugSupport(UNUSED DEBUG_HOOK_ hook = nullptr) {}
 		void call_hook(UNUSED DebugStatus status, UNUSED uint8_t data = 0) {}
 	};
 	// template<> template<typename DEBUG_HOOK_> class I2CDebugSupport<true, DEBUG_HOOK_>
-	template<typename DEBUG_HOOK_> class I2CDebugSupport<true, DEBUG_HOOK_>
+	template<typename DEBUG_HOOK_> struct I2CDebugSupport<true, DEBUG_HOOK_>
 	{
-	protected:
 		I2CDebugSupport(DEBUG_HOOK_ hook) : hook_{hook} {}
 		void call_hook(DebugStatus status, uint8_t data = 0)
 		{
@@ -311,9 +309,8 @@ namespace i2c
 
 	/// @cond notdocumented
 	// Generic support for LifeCycle resolution
-	template<bool HAS_LIFECYCLE_ = false> class I2CLifeCycleSupport
+	template<bool HAS_LIFECYCLE_ = false> struct I2CLifeCycleSupport
 	{
-	protected:
 		template<typename T> using PROXY = lifecycle::DirectProxy<T>;
 		template<typename T> static PROXY<T> make_proxy(const T& dest)
 		{
@@ -325,9 +322,8 @@ namespace i2c
 			return *proxy();
 		}
 	};
-	template<> class I2CLifeCycleSupport<true>
+	template<> struct I2CLifeCycleSupport<true>
 	{
-	protected:
 		template<typename T> using PROXY = lifecycle::LightProxy<T>;
 		template<typename T> static PROXY<T> make_proxy(const T& dest)
 		{
@@ -346,16 +342,14 @@ namespace i2c
 
 	/// @cond notdocumented
 	// Generic support for LifeCycle resolution
-	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> class I2CErrorPolicySupport
+	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> struct I2CErrorPolicySupport
 	{
-	protected:
 		I2CErrorPolicySupport() {}
 		template<typename T>
 		void handle_error(UNUSED const I2CCommand<T>& current, UNUSED containers::Queue<I2CCommand<T>>& commands) {}
 	};
-	template<> class I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_ALL_COMMANDS>
+	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_ALL_COMMANDS>
 	{
-	protected:
 		I2CErrorPolicySupport() {}
 		template<typename T>
 		void handle_error(UNUSED const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
@@ -363,9 +357,8 @@ namespace i2c
 			commands.clear_();
 		}
 	};
-	template<> class I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS>
+	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS>
 	{
-	protected:
 		I2CErrorPolicySupport() {}
 		template<typename T>
 		void handle_error(const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
@@ -386,6 +379,7 @@ namespace i2c
 	//TODO Sync/Async class support?
 
 
+	//TODO just remove this useless base class (only one single method!)
 	/**
 	 * Abstract I2C Manager.
 	 * It is specifically subclassed for ATmega Vs. ATtiny architectures.
