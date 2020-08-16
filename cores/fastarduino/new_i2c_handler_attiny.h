@@ -54,16 +54,12 @@ namespace i2c
 	 * @sa I2C_DEBUG_HOOK
 	 */
 	template<I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
-	class AbstractI2CSyncManager :
-		public AbstractBaseI2CManager,
-		public I2CLifeCycleSupport<HAS_LC_>,
-		public I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>
+	class AbstractI2CSyncManager
 	{
 	private:
 		using MODE_TRAIT = I2CMode_trait<MODE_>;
 		using I2C_TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
-		using PARENT = AbstractBaseI2CManager;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
 		using LC = I2CLifeCycleSupport<HAS_LC_>;
 		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
@@ -128,11 +124,23 @@ namespace i2c
 			SDA_INPUT();
 		}
 
+		/**
+		 * Return latest transmission status.
+		 * Possible statuses are defined in namespace `i2c::Status`.
+		 * If latest operation was OK, then `i2c::Status::OK` (`0`) is returned.
+		 * Any non zero value indicates an error.
+		 * @sa i2c::Status
+		 */
+		uint8_t status() const
+		{
+			return status_;
+		}
+
 	protected:
 		/// @cond notdocumented
 		explicit AbstractI2CSyncManager(
 			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, DEBUG_HOOK_ hook = nullptr)
-			:	PARENT{}, LC{lifecycle_manager}, DEBUG{hook}
+			:	lc_{lifecycle_manager}, debug_{hook}
 		{
 			// set SDA/SCL default directions
 			I2C_TRAIT::PORT |= I2C_TRAIT::SCL_SDA_MASK;
@@ -153,7 +161,7 @@ namespace i2c
 			const I2CCommandType type = command.type();
 			if (type.is_none()) return true;
 			if (clear_commands_) return false;
-			ABSTRACT_FUTURE& future = LC::resolve(proxy);
+			ABSTRACT_FUTURE& future = resolve(proxy);
 			// Execute command immediately, from start to optional stop
 			status_ = Status::OK;
 			if (!exec_start_())
@@ -200,6 +208,11 @@ namespace i2c
 			no_stop_ = false;
 			clear_commands_ = false;
 			stopped_already_ = false;
+		}
+
+		template<typename T> T& resolve(PROXY<T> proxy) const
+		{
+			return lc_.resolve(proxy);
 		}
 
 		static constexpr const REG8 USIDR_{USIDR};
@@ -324,19 +337,19 @@ namespace i2c
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
-			DEBUG::call_hook(DebugStatus::START);
+			debug_.call_hook(DebugStatus::START);
 			return start_impl_();
 		}
 
 		bool exec_send_slar_(uint8_t target)
 		{
-			DEBUG::call_hook(DebugStatus::SLAR, target);
+			debug_.call_hook(DebugStatus::SLAR, target);
 			return send_byte_impl(target | 0x01U);
 		}
 
 		bool exec_send_slaw_(uint8_t target)
 		{
-			DEBUG::call_hook(DebugStatus::SLAW, target);
+			debug_.call_hook(DebugStatus::SLAW, target);
 			return send_byte_impl(target);
 		}
 
@@ -345,8 +358,8 @@ namespace i2c
 			// Determine next data byte
 			uint8_t data = 0;
 			bool ok = future.get_storage_value_(data);
-			DEBUG::call_hook(DebugStatus::SEND, data);
-			DEBUG::call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
+			debug_.call_hook(DebugStatus::SEND, data);
+			debug_.call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (ok)
 			{
@@ -367,19 +380,19 @@ namespace i2c
 			uint8_t data;
 			if (command.byte_count() == 1)
 			{
-				DEBUG::call_hook(DebugStatus::RECV_LAST);
+				debug_.call_hook(DebugStatus::RECV_LAST);
 				// Send NACK for the last data byte we want
 				data = receive_impl(true);
 			}
 			else
 			{
-				DEBUG::call_hook(DebugStatus::RECV);
+				debug_.call_hook(DebugStatus::RECV);
 				// Send ACK for data byte if not the last one we want
 				data = receive_impl(false);
 			}
 			// Fill future
 			bool ok = future.set_future_value_(data);
-			DEBUG::call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
+			debug_.call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
 			// This should only happen in case there are 2 concurrent providers for this future
 			if (ok)
 			{
@@ -395,7 +408,7 @@ namespace i2c
 
 		void exec_stop_()
 		{
-			DEBUG::call_hook(DebugStatus::STOP);
+			debug_.call_hook(DebugStatus::STOP);
 			stop_impl();
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
@@ -421,10 +434,15 @@ namespace i2c
 			return false;
 		}
 
+		// Latest I2C status
+		uint8_t status_ = 0;
 		// Flags for storing I2C transaction operation state
 		bool no_stop_ = false;
 		bool clear_commands_ = false;
 		bool stopped_already_ = false;
+
+		LC lc_;
+		DEBUG debug_;
 
 		template<I2CMode, typename> friend class I2CDevice;
 	};
