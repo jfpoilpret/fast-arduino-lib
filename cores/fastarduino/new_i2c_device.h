@@ -91,13 +91,11 @@ namespace i2c
 	}
 	/// @endcond
 
-	//FIXME static assert to check manager mode matches device mode
-	//TODO simplify API and remove MODE template argument?
 	/**
 	 * Base class for all I2C devices.
 	 * 
-	 * @tparam MODE_ the I2C mode for this device; this determines the `I2CManager` type
-	 * that can manage this device.
+	 * @tparam MODE_ the best I2C mode for this device; this determines the 
+	 * `I2CManager` types that can manage this device.
 	 * @tparam MANAGER_ the type of I2CManager used to handle I2C communication
 	 * 
 	 * @sa i2c::I2CMode
@@ -107,13 +105,17 @@ namespace i2c
 	class I2CDevice
 	{
 	public:
-		/** the I2C mode for this device. */
-		static constexpr const I2CMode MODE = MODE_;
 		/** the type of `I2CManager` that can handle this device. */
 		using MANAGER = MANAGER_;
 
 	private:
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
+		// Ensure MANAGER is an accepted I2C Manager type
+		static_assert(
+			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
+		// Ensure that MANAGER I2C mode is compliant with the best mode for this device
+		static_assert(MODE_ == I2CMode::FAST || MODE_ == MANAGER_TRAIT::MODE,
+			"MANAGER_ I2CMode must be compliant with this device best mode");
 
 	protected:
 		/**
@@ -135,11 +137,7 @@ namespace i2c
 		 * 
 		 * @sa set_device()
 		 */
-		I2CDevice(MANAGER& manager, uint8_t device) : device_{device}, handler_{manager}
-		{
-			static_assert(
-				MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
-		}
+		I2CDevice(MANAGER& manager, uint8_t device) : device_{device}, handler_{manager} {}
 
 		I2CDevice(const I2CDevice&) = delete;
 		I2CDevice& operator=(const I2CDevice&) = delete;
