@@ -271,7 +271,10 @@ namespace i2c
 		template<typename OUT, typename IN> using FUTURE = future::Future<OUT, IN>;
 
 	public:
-		//TODO DOC
+		/**
+		 * The type of I2CCommand to use in the buffer passed to the constructor 
+		 * of this AbstractI2CAsyncManager.
+		 */
 		using I2CCOMMAND = I2CCommand<PROXY<ABSTRACT_FUTURE>>;
 
 		/**
