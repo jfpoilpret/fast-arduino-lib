@@ -888,6 +888,7 @@ namespace future
 	};
 	/// @endcond
 
+	//TODO remove from future.h as this is totally specific to I2C managers?
 	/**
 	 * Base class for all `FakeFuture`s.
 	 * A FakeFuture is an implementation for a specific Future that shall be used
@@ -916,64 +917,6 @@ namespace future
 			return error_;
 		}
 
-		// Methods called by a Future consumer
-		//=====================================
-
-		uint8_t get_storage_value_size_() const
-		{
-			return input_size_;
-		}
-
-		bool get_storage_value_(uint8_t& chunk)
-		{
-			// Check all bytes have not been transferred yet
-			chunk = *input_current_++;
-			--input_size_;
-			return true;
-		}
-
-		bool get_storage_value_(uint8_t* chunk, uint8_t size)
-		{
-			memcpy(chunk, input_current_, size);
-			input_current_ += size;
-			input_size_ -= size;
-			return true;
-		}
-
-		// Methods called by a Future supplier
-		//=====================================
-
-		uint8_t get_future_value_size_() const
-		{
-			return output_size_;
-		}
-
-		bool set_future_finish_()
-		{
-			return true;
-		}
-
-		bool set_future_value_(uint8_t chunk)
-		{
-			// Update Future value chunk
-			*output_current_++ = chunk;
-			return true;
-		}
-
-		bool set_future_value_(const uint8_t* chunk, uint8_t size)
-		{
-			while (size--)
-			{
-				set_future_value_(*chunk++);
-			}
-			return true;
-		}
-
-		template<typename T> bool set_future_value_(const T& value)
-		{
-			return set_future_value_(reinterpret_cast<const uint8_t*>(&value), sizeof(T));
-		}
-
 		bool set_future_error_(int error)
 		{
 			error_ = error;
@@ -983,9 +926,7 @@ namespace future
 	protected:
 		/// @cond notdocumented
 		// "default" constructor
-		AbstractFakeFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
-			:	output_current_{output_data}, output_size_{output_size},
-				input_current_{input_data}, input_size_{input_size} {}
+		AbstractFakeFuture() = default;
 
 		// these constructors are forbidden (subclass ctors shall call above move/copy ctor instead)
 		AbstractFakeFuture(const AbstractFakeFuture&) = delete;
@@ -1005,12 +946,6 @@ namespace future
 
 	private:
 		int error_ = 0;
-
-		uint8_t* output_current_ = nullptr;
-		uint8_t output_size_ = 0;
-		
-		uint8_t* input_current_ = nullptr;
-		uint8_t input_size_ = 0;
 	};
 
 	/**
@@ -1033,9 +968,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		explicit FakeFuture(const IN& input = IN{})
-			: AbstractFakeFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
-
+		explicit FakeFuture(const IN& input = IN{}) : input_{input} {}
 		~FakeFuture() = default;
 
 		bool reset_input_(const IN& input)
@@ -1048,6 +981,16 @@ namespace future
 		{
 			result = output_;
 			return true;
+		}
+
+		const uint8_t* input() const
+		{
+			return input_buffer_;
+		}
+
+		uint8_t* output()
+		{
+			return output_buffer_;
 		}
 
 	protected:
@@ -1081,15 +1024,23 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture()
-			: AbstractFakeFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
-
+		FakeFuture() = default;
 		~FakeFuture() = default;
 
 		bool get(OUT& result)
 		{
 			result = output_;
 			return true;
+		}
+
+		const uint8_t* input() const
+		{
+			return nullptr;
+		}
+
+		uint8_t* output()
+		{
+			return output_buffer_;
 		}
 
 	private:
@@ -1112,9 +1063,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		explicit FakeFuture(const IN& input = IN{})
-			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
-
+		explicit FakeFuture(const IN& input = IN{}) : input_{input} {}
 		~FakeFuture() = default;
 
 		bool reset_input_(const IN& input)
@@ -1126,6 +1075,16 @@ namespace future
 		bool get()
 		{
 			return true;
+		}
+
+		const uint8_t* input() const
+		{
+			return input_buffer_;
+		}
+
+		uint8_t* output() const
+		{
+			return nullptr;
 		}
 
 	protected:
@@ -1152,14 +1111,22 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture()
-			: AbstractFakeFuture{nullptr, 0, nullptr, 0} {}
-
+		FakeFuture() = default;
 		~FakeFuture() = default;
 
 		bool get()
 		{
 			return true;
+		}
+
+		const uint8_t* input() const
+		{
+			return nullptr;
+		}
+
+		uint8_t* output() const
+		{
+			return nullptr;
 		}
 	};
 }

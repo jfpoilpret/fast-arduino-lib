@@ -218,18 +218,13 @@ namespace i2c
 	{
 	private:
 		using PARENT = AbstractI2CSyncManager<ATmegaI2CSyncHandler<MODE_>, MODE_, HAS_LC_, HAS_DEBUG_, DEBUG_HOOK_>;
-		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
-		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 	protected:
 		/// @cond notdocumented
-		explicit AbstractI2CSyncATmegaManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, DEBUG_HOOK_ hook = nullptr)
-			:	PARENT{lifecycle_manager, hook} {}
+		explicit AbstractI2CSyncATmegaManager(DEBUG_HOOK_ hook = nullptr) : PARENT{hook} {}
 		/// @endcond
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<I2CMode, typename, bool> friend class I2CDevice;
 	};
 
 	//===============
@@ -655,7 +650,7 @@ namespace i2c
 		LC lc_;
 		DEBUG debug_;
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<I2CMode, typename, bool> friend class I2CDevice;
 		friend struct isr_handler;
 	};
 

@@ -91,28 +91,39 @@ namespace i2c
 	}
 	/// @endcond
 
+	//TODO LATER refactor to remove MODE parameter (as devices of both modes may co-exist)
+	// - can be done with parent class (no MODE param)
+	// - or easier with MODE param in constructor
+	//TODO LATER refactor common code (set_device,read,write...)
+
+	//TODO refactor to provide one I2CDevice for ASYNC manager and one for SYNC manager
+	//TODO API shall be similar but different
 	/**
 	 * Base class for all I2C devices.
 	 * 
 	 * @tparam MODE_ the best I2C mode for this device; this determines the 
 	 * `I2CManager` types that can manage this device.
 	 * @tparam MANAGER_ the type of I2CManager used to handle I2C communication
+	 * @tparam IS_ASYNC_ always use default value
 	 * 
 	 * @sa i2c::I2CMode
 	 * @sa i2c::I2CManager
 	 */
-	template<I2CMode MODE_, typename MANAGER_>
+	template<I2CMode MODE_, typename MANAGER_, bool IS_ASYNC_ = I2CManager_trait<MANAGER_>::IS_ASYNC>
 	class I2CDevice
 	{
 	public:
 		/** the type of `I2CManager` that can handle this device. */
 		using MANAGER = MANAGER_;
+		//TODO DOC
+		static constexpr bool IS_ASYNC = IS_ASYNC_;
 
 	private:
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
 		// Ensure MANAGER is an accepted I2C Manager type
-		static_assert(
-			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
+		static_assert(MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
+		// Ensure IS_ASYNC is compliant to provided MANAGER type
+		static_assert(IS_ASYNC_ == MANAGER_TRAIT::IS_ASYNC, "MANAGER_ must have same synchronicity as IS_ASYNC_");
 		// Ensure that MANAGER I2C mode is compliant with the best mode for this device
 		static_assert(MODE_ == I2CMode::FAST || MODE_ == MANAGER_TRAIT::MODE,
 			"MANAGER_ I2CMode must be compliant with this device best mode");
@@ -124,7 +135,9 @@ namespace i2c
 		 * uses a lifecycle:AbstractLifeCycleManager or not.
 		 */
 		template<typename T> using PROXY = typename MANAGER::template PROXY<T>;
+		//TODO DOC
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
+		//TODO DOC
 		template<typename OUT, typename IN> using FUTURE = typename MANAGER::template FUTURE<OUT, IN>;
 
 		/**
@@ -325,6 +338,128 @@ namespace i2c
 		uint8_t device_ = 0;
 		MANAGER& handler_;
 	};
+
+	/// @cond notdocumented
+	// I2CDevice specialization for asynchronous mode
+	template<I2CMode MODE_, typename MANAGER_>
+	class I2CDevice<MODE_, MANAGER_, false>
+	{
+	public:
+		using MANAGER = MANAGER_;
+		static constexpr bool IS_ASYNC = false;
+
+	private:
+		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
+		// Ensure MANAGER is an accepted I2C Manager type
+		static_assert(MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
+		// Ensure IS_ASYNC is compliant to provided MANAGER type
+		static_assert(false == MANAGER_TRAIT::IS_ASYNC, "MANAGER_ must be synchronous");
+		// Ensure that MANAGER I2C mode is compliant with the best mode for this device
+		static_assert(MODE_ == I2CMode::FAST || MODE_ == MANAGER_TRAIT::MODE,
+			"MANAGER_ I2CMode must be compliant with this device best mode");
+
+	protected:
+		template<typename T> using PROXY = lifecycle::DirectProxy<T>;
+		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
+		template<typename OUT, typename IN> using FUTURE = future::FakeFuture<OUT, IN>;
+
+		I2CDevice(MANAGER& manager, uint8_t device) : device_{device}, handler_{manager} {}
+
+		I2CDevice(const I2CDevice&) = delete;
+		I2CDevice& operator=(const I2CDevice&) = delete;
+
+		void set_device(uint8_t device)
+		{
+			device_ = device;
+		}
+
+		static constexpr I2CLightCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
+		{
+			const I2CCommandType type{
+				false, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
+			return I2CLightCommand{type, read_count};
+		}
+
+		static constexpr I2CLightCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
+		{
+			const I2CCommandType type{
+				true, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
+			return I2CLightCommand{type, write_count};
+		}
+
+		template<typename F>
+		int launch_commands(PROXY<F> proxy, std::initializer_list<I2CLightCommand> commands)
+		{
+			constexpr uint8_t max_read = F::OUT_SIZE;
+			constexpr uint8_t max_write = F::IN_SIZE;
+			F& future = resolve(proxy);
+			return launch_commands_(future, future.output(), max_read, future.input(), max_write, commands);
+		}
+
+		//TODO make private
+		int launch_commands_(ABSTRACT_FUTURE& future, 
+			uint8_t* output, uint8_t max_read, 
+			const uint8_t* input, uint8_t max_write,
+			std::initializer_list<I2CLightCommand>& commands)
+		{
+			if (commands.size() == 0) return errors::EINVAL;
+			// That check is normally usefull only in debug mode
+			if (MANAGER_TRAIT::IS_DEBUG)
+			{
+				// Limit total number of bytes read or written in a transaction to 255
+				uint8_t total_read = 0;
+				uint8_t total_write = 0;
+				for (const I2CLightCommand& command : commands)
+				{
+					// Count number of bytes read and written
+					const uint8_t byte_count = command.byte_count();
+					if (command.type().is_write())
+						total_write += (byte_count ? byte_count : max_write);
+					else
+						total_read += (byte_count ? byte_count : max_read);
+				}
+				// check sum of read commands byte_count matches future output size
+				// check sum of write commands byte_count matches future input size
+				if ((total_write != max_write) || (total_read != max_read)) return errors::EINVAL;
+			}
+
+			// Now push each command to the I2CManager and directly set future value
+			bool ok = true;
+			for (I2CLightCommand command : commands)
+			{
+				const uint8_t byte_count = command.byte_count();
+				const bool is_stop = command.type().is_stop();
+				if (command.type().is_write())
+					ok = handler_.write(device_, input, (byte_count ? byte_count : max_write), is_stop);
+				else
+					ok = handler_.read(device_, output, (byte_count ? byte_count : max_read), is_stop);
+				if (!ok)
+					break;
+			}
+
+			// Notify handler that transaction is complete
+			handler_.end_transaction();
+
+			if (ok) return 0;
+			future.set_future_error_(errors::EPROTO);
+			return errors::EPROTO;
+		}
+
+		template<typename T> T& resolve(PROXY<T> proxy) const
+		{
+			return *proxy();
+		}
+		
+		template<typename T> static PROXY<T> make_proxy(const T& target)
+		{
+			return lifecycle::make_direct_proxy(target);
+		}
+
+	private:
+		uint8_t device_ = 0;
+		MANAGER& handler_;
+	};
+	/// @endcond
 }
 
 #undef INNER_SYNCHRONIZED

@@ -239,9 +239,6 @@ namespace i2c
 	{
 	private:
 		using PARENT = AbstractI2CSyncManager<ATtinyI2CSyncHandler<MODE_>, MODE_, HAS_LC_, HAS_DEBUG_, DEBUG_HOOK_>;
-		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
-		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 	protected:
 		/// @cond notdocumented
@@ -250,7 +247,7 @@ namespace i2c
 			:	PARENT{lifecycle_manager, hook} {}
 		/// @endcond
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<I2CMode, typename, bool> friend class I2CDevice;
 	};
 
 	/**

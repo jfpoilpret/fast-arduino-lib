@@ -406,6 +406,7 @@ namespace i2c
 	/// @endcond
 
 	// Abstract generic class for synchronous I2C management
+	//TODO DO WE REALLY NEED LC for SYNC MANAGER?
 	template<typename ARCH_HANDLER_, I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncManager
 	{
@@ -415,10 +416,6 @@ namespace i2c
 		using I2C_TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
-		using LC = I2CLifeCycleSupport<HAS_LC_>;
-		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
-		template<typename T> using PROXY = typename LC::template PROXY<T>;
-		template<typename OUT, typename IN> using FUTURE = future::FakeFuture<OUT, IN>;
 
 	public:
 		/**
@@ -481,68 +478,35 @@ namespace i2c
 
 	protected:
 		/// @cond notdocumented
-		explicit AbstractI2CSyncManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, 
-			DEBUG_HOOK_ hook = nullptr)
-			:	handler_{}, lc_{lifecycle_manager}, debug_{hook} {}
+		explicit AbstractI2CSyncManager(DEBUG_HOOK_ hook = nullptr) : handler_{}, debug_{hook} {}
 		/// @endcond
 
 	private:
-		bool ensure_num_commands_(UNUSED uint8_t num_commands) const
+		bool write(uint8_t target, const uint8_t* data, uint8_t size, bool is_stop)
 		{
-			return true;
-		}
+			if (!before_()) return false;
 
-		bool push_command_(
-			I2CLightCommand command, uint8_t target, PROXY<ABSTRACT_FUTURE> proxy)
-		{
-			// Check command is not empty
-			const I2CCommandType type = command.type();
-			if (type.is_none()) return true;
-			if (clear_commands_) return false;
-			ABSTRACT_FUTURE& future = lc_.resolve(proxy);
-			// Execute command immediately, from start to optional stop
-			//FIXME start or repeat start?
-			status_ = Status::OK;
-			bool ok = (no_stop_ ? exec_repeat_start_() : exec_start_());
-			stopped_already_ = false;
-			if (!ok)
-				return handle_error(future);
+			bool ok = exec_send_slaw_(target);
+			while (ok && (size-- != 0)) ok = exec_send_data_(*data++);
 
-			if (type.is_write())
-			{
-				// Send device address
-				if (!exec_send_slaw_(target))
-					return handle_error(future);
-				// Send content
-				while (command.byte_count() > 0)
-					// In case of a NACK on data writing, we check if it is not last byte
-					if ((!exec_send_data_(command, future)) && (command.byte_count() > 0))
-						return handle_error(future);
-			}
-			else
-			{
-				// Send device address
-				if (!exec_send_slar_(target))
-					return handle_error(future);
-				// Receive content
-				while (command.byte_count() > 0)
-					if (!exec_receive_data_(command, future))
-						return handle_error(future);
-			}
-
-			// Check if we must force finish the future
-			if (type.is_finish())
-				future.set_future_finish_();
 			// Check if we must force a STOP
-			if (type.is_stop())
-				exec_stop_();
-			// Ensure STOP is generated or not depending on latest command executed
-			no_stop_ = !type.is_stop();
-			return true;
+			after_(is_stop, !ok);
+			return ok;
 		}
 
-		void last_command_pushed_()
+		bool read(uint8_t target, uint8_t* data, uint8_t size, bool is_stop)
+		{
+			if (!before_()) return false;
+
+			bool ok = exec_send_slar_(target);
+			while (ok && (size-- != 0)) ok = exec_receive_data_(*data++, (size == 0));
+
+			// Check if we must force a STOP
+			after_(is_stop, !ok);
+			return ok;
+		}
+
+		void end_transaction()
 		{
 			// Check if previously executed command already did a STOP (and needed one)
 			if ((!no_stop_) && (!stopped_already_) && (!clear_commands_))
@@ -552,11 +516,31 @@ namespace i2c
 			stopped_already_ = false;
 		}
 
-		template<typename T> T& resolve(PROXY<T> proxy) const
+		bool before_()
 		{
-			return lc_.resolve(proxy);
+			if (clear_commands_) return false;
+			bool ok = (no_stop_ ? exec_repeat_start_() : exec_start_());
+			stopped_already_ = false;
+			return ok;
 		}
-		
+
+		void after_(bool is_stop, bool error)
+		{
+			if (is_stop || error)
+			{
+				exec_stop_();
+				// Clear command belonging to the same transaction
+				// ie forbid any new command until last command (add new flag for that)
+				if (error)
+				{
+					clear_commands_ = true;
+					// status_ = ~Status::OK;
+				}
+				// Ensure STOP is generated or not depending on latest command executed
+				no_stop_ = !is_stop;
+			}
+		}
+
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
@@ -582,47 +566,21 @@ namespace i2c
 			return handler_.exec_send_slaw_(target);
 		}
 
-		bool exec_send_data_(I2CLightCommand& command, ABSTRACT_FUTURE& future)
+		bool exec_send_data_(uint8_t data)
 		{
-			// Determine next data byte
-			uint8_t data = 0;
-			bool ok = future.get_storage_value_(data);
 			debug_.call_hook(DebugStatus::SEND, data);
+			bool ok = handler_.exec_send_data_(data);
 			debug_.call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
-			// This should only happen if there are 2 concurrent consumers for that Future
-			if (!ok)
-			{
-				future.set_future_error_(errors::EILSEQ);
-				return false;
-			}
-			command.decrement_byte_count();
-			return handler_.exec_send_data_(data);
+			return ok;
 		}
 
-		bool exec_receive_data_(I2CLightCommand& command, ABSTRACT_FUTURE& future)
+		bool exec_receive_data_(uint8_t& data, bool last_byte = false)
 		{
-			// Is this the last byte to receive?
-			const bool last_byte = (command.byte_count() == 1);
 			const DebugStatus debug = (last_byte ? DebugStatus::RECV_LAST : DebugStatus::RECV);
 			debug_.call_hook(debug);
-
-			uint8_t data;
-			if (handler_.exec_receive_data_(last_byte, data))
-			{
-				const bool ok = future.set_future_value_(data);
-				debug_.call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
-				// This should only happen in case there are 2 concurrent providers for this future
-				if (ok)
-				{
-					command.decrement_byte_count();
-				}
-				else
-				{
-					future.set_future_error_(errors::EILSEQ);
-				}
-				return ok;
-			}
-			return false;
+			bool ok = handler_.exec_receive_data_(last_byte, data);
+			debug_.call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
+			return ok;
 		}
 
 		void exec_stop_()
@@ -635,22 +593,6 @@ namespace i2c
 			stopped_already_ = true;
 		}
 
-		// This method is called when an error has occurred
-		bool handle_error(ABSTRACT_FUTURE& future)
-		{
-			if (future.status() != future::FutureStatus::ERROR)
-				// The future must be marked as error
-				future.set_future_error_(errors::EPROTO);
-
-			// Clear command belonging to the same transaction (i.e. same future)
-			// ie forbid any new command until last command (add new flag for that)
-			clear_commands_ = true;
-			// In case of an error, immediately send a STOP condition
-			exec_stop_();
-			status_ = ~Status::OK;
-			return false;
-		}
-
 		// Flags for storing I2C transaction operation state
 		bool no_stop_ = false;
 		bool clear_commands_ = false;
@@ -658,10 +600,9 @@ namespace i2c
 		uint8_t status_;
 
 		ARCH_HANDLER_ handler_;
-		LC lc_;
 		DEBUG debug_;
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<I2CMode, typename, bool> friend class I2CDevice;
 	};
 
 

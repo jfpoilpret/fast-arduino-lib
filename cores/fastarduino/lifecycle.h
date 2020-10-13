@@ -812,6 +812,7 @@ namespace lifecycle
 	}
 	/// @endcond
 
+	//TODO do we really need this totally fake proxy?
 	/**
 	 * A kind of proxy class that encapsulates access to a fixed @p T instance.
 	 * Each instance uses 2 bytes (pointer to the instance proxied).
