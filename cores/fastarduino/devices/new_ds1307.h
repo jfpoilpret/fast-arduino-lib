@@ -179,7 +179,9 @@ namespace devices::rtc
 		{
 			// send register address to write to (0)
 			// send datetime at address 0
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(1, future);
+			this->write(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -230,7 +232,10 @@ namespace devices::rtc
 		 */
 		int get_datetime(PROXY<GetDatetimeFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(2, future);
+			this->write();
+			this->read(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -295,7 +300,9 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(1, future);
+			this->write(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -349,7 +356,9 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(1, future);
+			this->write(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -407,7 +416,10 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(2, future);
+			this->write();
+			this->read(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -458,7 +470,10 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(2, future);
+			this->write();
+			this->read(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -500,7 +515,9 @@ namespace devices::rtc
 		 */
 		int halt_clock(PROXY<HaltClockFuture> future)
 		{
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(1, future);
+			this->write(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -551,7 +568,9 @@ namespace devices::rtc
 		 */
 		int enable_output(PROXY<EnableOutputFuture> future)
 		{
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(1, future);
+			this->write(0, true);
+			return this->end_transaction(future);
 		}
 
 		/**
@@ -601,7 +620,9 @@ namespace devices::rtc
 		 */
 		int disable_output(PROXY<DisableOutputFuture> future)
 		{
-			return this->launch_commands(future, {this->write(0, i2c::I2CFinish::FORCE_STOP)});
+			this->begin_transaction(1, future);
+			this->write(0, true);
+			return this->end_transaction(future);
 		}
 
 		// Synchronous API

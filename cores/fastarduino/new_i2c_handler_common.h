@@ -482,38 +482,51 @@ namespace i2c
 		/// @endcond
 
 	private:
-		bool write(uint8_t target, const uint8_t* data, uint8_t size, bool is_stop)
+		// bool begin_transaction(
+		// 	uint8_t target, uint8_t* output, uint8_t max_read, const uint8_t* input, uint8_t max_write)
+		// {
+		// 	//TODO
+		// 	target_ = target;
+		// 	output_ = output;
+		// 	max_read_ = max_read;
+		// 	input_ = input;
+		// 	max_write_ = max_write;
+		// }
+
+		bool write(uint8_t target, const uint8_t* input, uint8_t size, bool is_stop)
 		{
 			if (!before_()) return false;
 
 			bool ok = exec_send_slaw_(target);
-			while (ok && (size-- != 0)) ok = exec_send_data_(*data++);
+			while (ok && (size-- != 0)) ok = exec_send_data_(*input++);
 
 			// Check if we must force a STOP
 			after_(is_stop, !ok);
 			return ok;
 		}
 
-		bool read(uint8_t target, uint8_t* data, uint8_t size, bool is_stop)
+		bool read(uint8_t target, uint8_t* output, uint8_t size, bool is_stop)
 		{
 			if (!before_()) return false;
 
 			bool ok = exec_send_slar_(target);
-			while (ok && (size-- != 0)) ok = exec_receive_data_(*data++, (size == 0));
+			while (ok && (size-- != 0)) ok = exec_receive_data_(*output++, (size == 0));
 
 			// Check if we must force a STOP
 			after_(is_stop, !ok);
 			return ok;
 		}
 
-		void end_transaction()
+		bool end_transaction()
 		{
 			// Check if previously executed command already did a STOP (and needed one)
 			if ((!no_stop_) && (!stopped_already_) && (!clear_commands_))
 				exec_stop_();
+			bool ok = !clear_commands_;
 			no_stop_ = false;
 			clear_commands_ = false;
 			stopped_already_ = false;
+			return ok;
 		}
 
 		bool before_()
@@ -598,6 +611,13 @@ namespace i2c
 		bool clear_commands_ = false;
 		bool stopped_already_ = false;
 		uint8_t status_;
+
+		// Data used during an I2C transaction
+		// uint8_t target_;
+		// uint8_t* output_;
+		// uint8_t max_read_;
+		// const uint8_t* input_;
+		// uint8_t max_write_;
 
 		ARCH_HANDLER_ handler_;
 		DEBUG debug_;
