@@ -359,7 +359,7 @@ namespace i2c
 			"MANAGER_ I2CMode must be compliant with this device best mode");
 
 	protected:
-		template<typename T> using PROXY = lifecycle::DirectProxy<T>;
+		template<typename T> using PROXY = T&;
 		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
 		template<typename OUT, typename IN> using FUTURE = future::FakeFuture<OUT, IN>;
 
@@ -447,12 +447,12 @@ namespace i2c
 
 		template<typename T> T& resolve(PROXY<T> proxy) const
 		{
-			return *proxy();
+			return proxy;
 		}
 		
 		template<typename T> static PROXY<T> make_proxy(const T& target)
 		{
-			return lifecycle::make_direct_proxy(target);
+			return const_cast<T&>(target);
 		}
 
 	private:
