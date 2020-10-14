@@ -91,6 +91,7 @@ namespace i2c
 	}
 	/// @endcond
 
+	//TODO remove MODE form tempate args and set it to constructor instead
 	/**
 	 * Base class for all I2C devices.
 	 * 

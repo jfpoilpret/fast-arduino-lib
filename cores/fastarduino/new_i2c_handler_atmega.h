@@ -431,7 +431,6 @@ namespace i2c
 		}
 
 		// Method to compute next state
-		//TODO try to improve code spped/size on this method (use a state table?)
 		State next_state_()
 		{
 			switch (current_)
