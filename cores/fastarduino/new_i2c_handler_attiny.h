@@ -297,9 +297,6 @@ namespace i2c
 	 * @tparam MODE_ the I2C mode for this manager
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncDebugManager
-	 * @sa I2CSyncLCManager
-	 * @sa I2CSyncLCDebugManager
 	 */
 	template<I2CMode MODE_>
 	class I2CSyncManager : 
@@ -310,7 +307,17 @@ namespace i2c
 		I2CSyncManager() : PARENT{} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATtiny architecture with status notification facility.
+	 * This class offers no support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK>
 	class I2CSyncStatusManager : 
 		public AbstractI2CSyncATtinyManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
@@ -330,9 +337,6 @@ namespace i2c
 	 * class reference). Using a Functor class will generate smaller code.
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncManager
-	 * @sa I2CSyncLCManager
-	 * @sa I2CSyncLCDebugManager
 	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncDebugManager : 
@@ -343,7 +347,21 @@ namespace i2c
 		explicit I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{nullptr, nullptr, debug_hook} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATtiny architecture with status notification
+	 * and debug facilities.
+	 * This class offers no support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncStatusDebugManager : 
 		public AbstractI2CSyncATtinyManager<MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>
@@ -361,9 +379,6 @@ namespace i2c
 	 * @tparam MODE_ the I2C mode for this manager
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncManager
-	 * @sa I2CSyncDebugManager
-	 * @sa I2CSsyncLCDebugManager
 	 */
 	template<I2CMode MODE_>
 	class I2CSyncLCManager : 
@@ -375,7 +390,17 @@ namespace i2c
 			:	PARENT{&lifecycle_manager} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATtiny architecture with status notification
+	 * facility and support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_>
 	class I2CSyncLCStatusManager : 
 		public AbstractI2CSyncATtinyManager<MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
@@ -397,9 +422,6 @@ namespace i2c
 	 * class reference). Using a Functor class will generate smaller code.
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncManager
-	 * @sa I2CSyncDebugManager
-	 * @sa I2CSyncLCManager
 	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncLCDebugManager : 
@@ -412,7 +434,20 @@ namespace i2c
 			:	PARENT{&lifecycle_manager, nullptr, debug_hook} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATtiny architecture with status notification
+	 * and debug facilities and support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncLCStatusDebugManager : 
 		public AbstractI2CSyncATtinyManager<MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>
