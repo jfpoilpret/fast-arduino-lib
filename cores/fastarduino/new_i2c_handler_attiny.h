@@ -80,44 +80,35 @@ namespace i2c
 			SDA_INPUT();
 		}
 
-		//TODO call hook with status
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
-			// Ensure SCL is HIGH
-			SCL_HIGH();
-			// Wait for Tsu-sta
-			_delay_loop_1(MODE_TRAIT::T_SU_STA);
-			// Now we can generate start condition
-			// Force SDA low for Thd-sta
-			SDA_LOW();
-			_delay_loop_1(MODE_TRAIT::T_HD_STA);
-			// Pull SCL low
-			SCL_LOW();
-			// Release SDA (force high)
-			SDA_HIGH();
-			// Check START transmission with USISIF flag
-			return USISR_ & bits::BV8(USISIF);
+			return notify_status(send_start_(),
+				Status::START_TRANSMITTED, Status::ARBITRATION_LOST);
 		}
 
 		bool exec_repeat_start_()
 		{
-			return exec_start_();
+			return notify_status(send_start_(),
+				Status::REPEAT_START_TRANSMITTED, Status::ARBITRATION_LOST);
 		}
 
 		bool exec_send_slar_(uint8_t target)
 		{
-			return send_byte_impl(target | 0x01U);
+			return notify_status(send_byte_impl(target | 0x01U), 
+				Status::SLA_R_TRANSMITTED_ACK, Status::SLA_R_TRANSMITTED_NACK);
 		}
 
 		bool exec_send_slaw_(uint8_t target)
 		{
-			return send_byte_impl(target);
+			return notify_status(send_byte_impl(target), 
+				Status::SLA_W_TRANSMITTED_ACK, Status::SLA_W_TRANSMITTED_NACK);
 		}
 
 		bool exec_send_data_(uint8_t data)
 		{
-			return send_byte_impl(data);
+			return notify_status(send_byte_impl(data),
+				Status::DATA_TRANSMITTED_ACK, Status::DATA_TRANSMITTED_NACK);
 		}
 
 		bool exec_receive_data_(bool last_byte, uint8_t& data)
@@ -127,7 +118,8 @@ namespace i2c
 			// Send ACK (or NACK if last byte)
 			USIDR_ = (last_byte ? UINT8_MAX : 0x00);
 			transfer(USISR_ACK);
-			return true;
+			//TODO return ((transfer(USISR_ACK) & 0x01U) == 0);
+			return notify_status(true, Status::DATA_RECEIVED_ACK, Status::DATA_RECEIVED_NACK);
 		}
 
 		void exec_stop_()
@@ -152,6 +144,12 @@ namespace i2c
 		static constexpr const uint8_t USISR_DATA = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
 		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
 		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
+
+		bool notify_status(bool as_expected, uint8_t good, uint8_t bad)
+		{
+			status_hook_.call_hook(good, (as_expected ? good : bad));
+			return as_expected;
+		}  
 
 		void SCL_HIGH()
 		{
@@ -182,6 +180,24 @@ namespace i2c
 		void SDA_OUTPUT()
 		{
 			I2C_TRAIT::DDR |= bits::BV8(I2C_TRAIT::BIT_SDA);
+		}
+
+		bool send_start_()
+		{
+			// Ensure SCL is HIGH
+			SCL_HIGH();
+			// Wait for Tsu-sta
+			_delay_loop_1(MODE_TRAIT::T_SU_STA);
+			// Now we can generate start condition
+			// Force SDA low for Thd-sta
+			SDA_LOW();
+			_delay_loop_1(MODE_TRAIT::T_HD_STA);
+			// Pull SCL low
+			SCL_LOW();
+			// Release SDA (force high)
+			SDA_HIGH();
+			// Check START transmission with USISIF flag
+			return USISR_ & bits::BV8(USISIF);
 		}
 
 		bool send_byte_impl(uint8_t data)
