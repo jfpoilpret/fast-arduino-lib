@@ -22,6 +22,7 @@
 #ifndef I2C_HANDLER_ATMEGA_HH
 #define I2C_HANDLER_ATMEGA_HH
 
+//TODO prevent inclusion for ATtiny architecture
 #include <util/delay_basic.h>
 
 #include "i2c.h"
@@ -225,7 +226,32 @@ namespace i2c
 	};
 	/// @endcond
 
-	/// @cond notdocumented
+	/**
+	 * Abstract synchronous I2C Manager for ATmega architecture.
+	 * You should never need to subclass AbstractI2CSyncManager yourself.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * proxies to Future that can move around and must be controlled by a 
+	 * LifeCycleManager; using `false` will generate smaller code.
+	 * @tparam HAS_STATUS_ tells this I2CManager to call a status hook at each 
+	 * step of an I2C transaction; using `false` will generate smaller code.
+	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_STATUS_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
+	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * step of an I2C transaction; this is useful for debugging support for a new 
+	 * I2C device; using `false` will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `HAS_DEBUG_` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_DEBUG_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
+	 * 
+	 * @sa I2CMode
+	 * @sa I2C_STATUS_HOOK
+	 * @sa I2C_DEBUG_HOOK
+	 */
 	template<I2CMode MODE_, bool HAS_LC_, 
 		bool HAS_STATUS_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncATmegaManager
@@ -249,7 +275,6 @@ namespace i2c
 
 		template<typename> friend class I2CDevice;
 	};
-	/// @endcond
 
 	//===============
 	// Async Manager 
@@ -911,7 +936,6 @@ namespace i2c
 		explicit I2CSyncStatusDebugManager(STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook) 
 		: PARENT{nullptr, status_hook, debug_hook} {}
 	};
-
 
 	/**
 	 * Synchronous I2C Manager for ATmega architecture with support for dynamic proxies.
