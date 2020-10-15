@@ -22,7 +22,11 @@
 #ifndef I2C_HANDLER_ATTINY_HH
 #define I2C_HANDLER_ATTINY_HH
 
-//TODO prevent inclusion for ATmega architecture
+// Prevent inclusion for ATmega architecture
+#ifdef TWCR
+#error "i2c_handler_attiny.h cannot be included in an ATmega program!"
+#endif
+
 #include <util/delay_basic.h>
 
 #include "i2c.h"

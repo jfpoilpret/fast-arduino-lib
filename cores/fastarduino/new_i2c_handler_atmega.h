@@ -22,7 +22,11 @@
 #ifndef I2C_HANDLER_ATMEGA_HH
 #define I2C_HANDLER_ATMEGA_HH
 
-//TODO prevent inclusion for ATtiny architecture
+// Prevent inclusion for ATtiny architecture
+#ifndef TWCR
+#error "i2c_handler_atmega.h cannot be included in an ATtiny program!"
+#endif
+
 #include <util/delay_basic.h>
 
 #include "i2c.h"
@@ -53,7 +57,6 @@
 //TODO - add callback registration including proxy/future reference (when future is done)
 //		-> this will allow pushing events to be handled by main event loop
 //			- maybe also need some device reference?
-//TODO - how to prevent usage of 2 managers (whatever specific type)
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
