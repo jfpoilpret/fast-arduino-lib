@@ -88,7 +88,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #endif
 
 #define DEBUG_I2C
-#define FORCE_SYNC
+// #define FORCE_SYNC
 
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -103,8 +103,8 @@ using namespace streams;
 static constexpr const uint8_t DEBUG_SIZE = 32;
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
-using MANAGER = i2c::I2CAsyncDebugStatusManager<
-	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGGER&, DEBUGGER&>;
+using MANAGER = i2c::I2CAsyncStatusDebugManager<
+	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
 using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::STANDARD, DEBUGGER&, DEBUGGER&>;
@@ -119,7 +119,6 @@ static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
 using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
 #	endif
-#define TRACE(OUT)
 #define DEBUG(OUT)
 #endif
 
