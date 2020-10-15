@@ -381,18 +381,6 @@ namespace i2c
 			I2C_TRAIT::PORT &= bits::COMPL(I2C_TRAIT::SCL_SDA_MASK);
 		}
 
-		/**
-		 * Return latest transmission status.
-		 * Possible statuses are defined in namespace `i2c::Status`.
-		 * If latest operation was OK, then `i2c::Status::OK` (`0`) is returned.
-		 * Any non zero value indicates an error.
-		 * @sa i2c::Status
-		 */
-		uint8_t status() const
-		{
-			return status_;
-		}
-
 	protected:
 		/// @cond notdocumented
 		template<uint8_t SIZE>

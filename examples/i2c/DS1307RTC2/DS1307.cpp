@@ -197,7 +197,6 @@ int main()
 
 	manager.begin();
 	out << F("I2C interface started") << endl;
-	display_status(out, '1', manager.status());
 	SHOW_STATUS(out);
 	time::delay_ms(1000);
 	
@@ -207,7 +206,6 @@ int main()
 	uint8_t data[DS1307<MANAGER>::ram_size()];
 	memset(data, 0, sizeof data);
 	rtc.get_ram(0, data);
-	display_status(out, '2', manager.status());
 	SHOW_STATUS(out);
 	display_ram(out, data, sizeof data);
 	DEBUG(out);
@@ -224,7 +222,6 @@ int main()
 	// Initialize clock date
 	//=======================
 	rtc.set_datetime(time1);
-	display_status(out, '3', manager.status());
 	SHOW_STATUS(out);
 	DEBUG(out);
 
@@ -234,7 +231,6 @@ int main()
 	//============
 	tm time2;
 	rtc.get_datetime(time2);
-	display_status(out, '4', manager.status());
 	display_time(out, time2);
 	SHOW_STATUS(out);
 	DEBUG(out);
@@ -242,7 +238,6 @@ int main()
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
-	display_status(out, '5', manager.status());
 	SHOW_STATUS(out);
 	DEBUG(out);
 	
@@ -250,7 +245,6 @@ int main()
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
-	display_status(out, '6', manager.status());
 	SHOW_STATUS(out);
 	DEBUG(out);
 
@@ -258,7 +252,6 @@ int main()
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
 	rtc.set_ram(0, data);
-	display_status(out, '7', manager.status());
 	SHOW_STATUS(out);
 	DEBUG(out);
 	

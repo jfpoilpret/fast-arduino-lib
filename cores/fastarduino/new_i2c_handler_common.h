@@ -492,18 +492,6 @@ namespace i2c
 			handler_.end_();
 		}
 
-		/**
-		 * Return latest transmission status.
-		 * Possible statuses are defined in namespace `i2c::Status`.
-		 * If latest operation was OK, then `i2c::Status::OK` (`0`) is returned.
-		 * Any non zero value indicates an error.
-		 * @sa i2c::Status
-		 */
-		uint8_t status() const
-		{
-			return status_;
-		}
-
 	protected:
 		/// @cond notdocumented
 		explicit AbstractI2CSyncManager(
