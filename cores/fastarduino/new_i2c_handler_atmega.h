@@ -53,7 +53,6 @@
 // NOTE: no dynamic allocation shall be used!
 
 // OPEN POINTS:
-//TODO - add status observer hook
 //TODO - add callback registration including proxy/future reference (when future is done)
 //		-> this will allow pushing events to be handled by main event loop
 //			- maybe also need some device reference?
