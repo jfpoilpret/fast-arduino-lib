@@ -88,7 +88,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #endif
 
 // #define DEBUG_I2C
-// #define FORCE_SYNC
+#define FORCE_SYNC
 
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -120,7 +120,7 @@ using MANAGER = i2c::I2CAsyncStatusManager<
 	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, STATUS&>;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
-using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD, STATUS&>;
+using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::STANDARD, STATUS&>;
 #	endif
 #define DEBUG(OUT)
 #define SHOW_STATUS(OUT) OUT << streams::hex << status_holder.latest_status() << streams::endl
