@@ -64,5 +64,10 @@ namespace i2c::debug
 	{
 		return out << convert(s);
 	}
+
+	DEBUG operator|(DEBUG a, DEBUG b)
+	{
+		return DEBUG(uint8_t(a) | uint8_t(b));
+	}
 	/// @endcond
 }

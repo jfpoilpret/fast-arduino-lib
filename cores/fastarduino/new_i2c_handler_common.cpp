@@ -29,5 +29,15 @@ namespace i2c
 			out << F("[END]");
 		return out << streams::flush;
 	}
+
+	bool operator==(const I2CCommandType& a, const I2CCommandType& b)
+	{
+		return	(a.value_ == b.value_);
+	}
+
+	bool operator!=(const I2CCommandType& a, const I2CCommandType& b)
+	{
+		return	(a.value_ != b.value_);
+	}
 	/// @endcond
 }

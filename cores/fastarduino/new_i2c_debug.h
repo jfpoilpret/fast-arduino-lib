@@ -24,6 +24,7 @@
 #include "flash.h"
 #include "streams.h"
 #include "new_i2c_handler_common.h"
+#include "new_i2c_status.h"
 
 namespace i2c
 {
@@ -48,7 +49,7 @@ namespace i2c::debug
 	 * Indicate what in I2C protocol shall be debugged.
 	 * Values can or'ed together, e.g. `DEBUG::DEBUG_SEND_OK | DEBUG::DEBUG_SEND_ERR`.
 	 * @sa I2CDebugRecorder
-	 * @sa I2CLiveDebugger
+	 * @sa I2CDebugLiveLogger
 	 */
 	enum class DEBUG : uint8_t
 	{
@@ -77,10 +78,7 @@ namespace i2c::debug
 	};
 
 	/// @cond notdocumented
-	DEBUG operator|(DEBUG a, DEBUG b)
-	{
-		return DEBUG(uint8_t(a) | uint8_t(b));
-	}
+	DEBUG operator|(DEBUG a, DEBUG b);
 	/// @endcond
 
 	/**
@@ -103,7 +101,7 @@ namespace i2c::debug
 		 * To be effective, this must be attached to an I2CManager (at construction time).
 		 * Recorded notifications can be output to a `streams::ostream` with `trace()`.
 		 * 
-		 * @param debug the list fo notifications to be recorded
+		 * @param debug the list of notifications to be recorded
 		 * 
 		 * @sa trace()
 		 * @sa reset()
@@ -205,17 +203,17 @@ namespace i2c::debug
 	 * @sa i2c::DebugStatus
 	 * @sa I2CDebugRecorder
 	 */
-	class I2CLiveDebugger
+	class I2CDebugLiveLogger
 	{
 	public:
 		/**
-		 * Create an I2CLiveDebugger that can trace live I2C notifications determined
+		 * Create an I2CDebugLiveLogger that can trace live I2C notifications determined
 		 * by @p debug list. I2C notifications are output to @p out.
 		 * 
 		 * @param out the `streams::ostream` to output traces to
-		 * @param debug the list fo notifications to trace
+		 * @param debug the list of notifications to trace
 		 */
-		I2CLiveDebugger(streams::ostream& out, DEBUG debug = DEBUG::DEBUG_ALL) : out_{out}, debug_{debug} {}
+		I2CDebugLiveLogger(streams::ostream& out, DEBUG debug = DEBUG::DEBUG_ALL) : out_{out}, debug_{debug} {}
 
 		/// @cond notdocumented
 		void operator()(i2c::DebugStatus status, uint8_t data)
@@ -258,6 +256,92 @@ namespace i2c::debug
 	private:
 		streams::ostream& out_;
 		DEBUG debug_;
+	};
+
+	/**
+	 * Class recording I2C debug and status notifications for later output.
+	 * 
+	 * @tparam SIZE_STATUS the maximum number of status notifications to record 
+	 * (each notification is 2 bytes)
+	 * @tparam SIZE_DEBUG the maximum number of debug notifications to record 
+	 * (each notification is 2 bytes)
+	 * 
+	 * @sa i2c::debug::I2CDebugRecorder
+	 * @sa i2c::status::I2CStatusRecorder
+	 */
+	template<uint8_t SIZE_STATUS, uint8_t SIZE_DEBUG>
+	class I2CDebugStatusRecorder : 
+		public i2c::status::I2CStatusRecorder<SIZE_STATUS>, public I2CDebugRecorder<SIZE_DEBUG>
+	{
+	public:
+		using I2CDebugRecorder<SIZE_DEBUG>::operator();
+		using i2c::status::I2CStatusRecorder<SIZE_STATUS>::operator();
+		
+		/**
+		 * Create an I2CDebugStatusRecorder that can record I2C notifications determined
+		 * by @p debug list.
+		 * The number of recorded notifications is limited by @p SIZE. Once @p SIZE
+		 * notifications have been recorded by this I2CDebugRecorder, any additional
+		 * notification will be trashed.
+		 * To be effective, this must be attached to an I2CManager (at construction time).
+		 * Recorded notifications can be output to a `streams::ostream` with `trace()`.
+		 * 
+		 * @param trace the list of debug notifications to be recorded
+		 * @param debug the list of status notifications to be recorded
+		 * 
+		 * @sa trace()
+		 * @sa reset()
+		 */
+		I2CDebugStatusRecorder(
+			i2c::status::STATUS trace = i2c::status::STATUS::TRACE_ALL, DEBUG debug = DEBUG::DEBUG_ALL)
+		: i2c::status::I2CStatusRecorder<SIZE_STATUS>{trace}, I2CDebugRecorder<SIZE_DEBUG>{debug} {}
+
+		/**
+		 * Clear all recorded notifications.
+		 * @sa trace()
+		 */
+		void reset()
+		{
+			i2c::status::I2CStatusRecorder<SIZE_STATUS>::reset();
+			I2CDebugRecorder<SIZE_DEBUG>::reset();
+		}
+
+		/**
+		 * Output all recorded I2C notifications to @p out then clear all records.
+		 * @param out the `streams::ostream` to output traces to
+		 * @sa reset()
+		 */
+		void trace(streams::ostream& out)
+		{
+			I2CDebugRecorder<SIZE_DEBUG>::trace(out);
+			i2c::status::I2CStatusRecorder<SIZE_STATUS>::trace(out);
+		}
+	};
+
+	/**
+	 * Class tracing I2C status and debug notifications live to @p out.
+	 * @warning Do not use this with asynchronous (ISR-based) I2CManagers! if you
+	 * use an asynchronous I2CManager, then use I2CDebugStatusRecorder instead.
+	 * 
+	 * @sa I2CDebugStatusRecorder
+	 */
+	class I2CDebugStatusLiveLogger : public i2c::status::I2CStatusLiveLogger, public I2CDebugLiveLogger
+	{
+	public:
+		/**
+		 * Create an I2CDebugLiveLogger that can trace live I2C notifications determined
+		 * by @p debug and @p trace list. I2C notifications are output to @p out.
+		 * 
+		 * @param out the `streams::ostream` to output traces to
+		 * @param trace the list of debug notifications to be recorded
+		 * @param debug the list of status notifications to be recorded
+		 * 
+		 * @sa trace()
+		 * @sa reset()
+		 */
+		I2CDebugStatusLiveLogger(streams::ostream& out,
+			i2c::status::STATUS trace = i2c::status::STATUS::TRACE_ALL, DEBUG debug = DEBUG::DEBUG_ALL)
+		: i2c::status::I2CStatusLiveLogger{out, trace}, I2CDebugLiveLogger{out, debug} {}
 	};
 }
 

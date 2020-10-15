@@ -101,9 +101,20 @@ namespace i2c
 	 * increase code size and ISR delay. Rather use functors as defined in
 	 * `i2c_debug.h`.
 	 * @sa i2c::debug::I2CDebugRecorder
-	 * @sa i2c::debug::I2CLiveDebugger
+	 * @sa i2c::debug::I2CDebugLiveLogger
 	 */
 	using I2C_DEBUG_HOOK = void (*)(DebugStatus status, uint8_t data);
+
+	//TODO already defined in i2c.h: remove from there and keep it here instead!
+	// /**
+	//  * The default status observer hook type.
+	//  * @warning Do not use this (function pointer) for your hooks! This will 
+	//  * increase code size and ISR delay. Rather use functors as defined in
+	//  * `i2c_status.h`.
+	//  * @sa i2c::debug::I2CDebugRecorder
+	//  * @sa i2c::debug::I2CDebugLiveLogger
+	//  */
+	// using I2C_STATUS_HOOK = void (*)(uint8_t expected, uint8_t actual);
 
 	/// @cond notdocumented
 	// Type of commands in queue
@@ -167,14 +178,8 @@ namespace i2c
 	};
 
 	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t);
-	bool operator==(const I2CCommandType& a, const I2CCommandType& b)
-	{
-		return	(a.value_ == b.value_);
-	}
-	bool operator!=(const I2CCommandType& a, const I2CCommandType& b)
-	{
-		return	(a.value_ != b.value_);
-	}
+	bool operator==(const I2CCommandType& a, const I2CCommandType& b);
+	bool operator!=(const I2CCommandType& a, const I2CCommandType& b);
 	/// @endcond
 
 	/**
@@ -307,6 +312,25 @@ namespace i2c
 	/// @endcond
 
 	/// @cond notdocumented
+	// Generic support for I2C status hook
+	template<bool IS_STATUS_ = false, typename STATUS_HOOK_ = I2C_STATUS_HOOK>  struct I2CStatusSupport
+	{
+		I2CStatusSupport(UNUSED STATUS_HOOK_ hook = nullptr) {}
+		void call_hook(UNUSED uint8_t expected, UNUSED uint8_t actual) {}
+	};
+	template<typename STATUS_HOOK_> struct I2CStatusSupport<true, STATUS_HOOK_>
+	{
+		I2CStatusSupport(STATUS_HOOK_ hook) : hook_{hook} {}
+		void call_hook(uint8_t expected, uint8_t actual)
+		{
+			hook_(expected, actual);
+		}
+	private:
+		STATUS_HOOK_ hook_;
+	};
+	/// @endcond
+
+	/// @cond notdocumented
 	// Generic support for LifeCycle resolution
 	template<bool HAS_LIFECYCLE_ = false> struct I2CLifeCycleSupport
 	{
@@ -406,7 +430,8 @@ namespace i2c
 	/// @endcond
 
 	// Abstract generic class for synchronous I2C management
-	template<typename ARCH_HANDLER_, I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
+	template<typename ARCH_HANDLER_, I2CMode MODE_, bool HAS_LC_, 
+		typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncManager
 	{
 	protected:
@@ -483,8 +508,9 @@ namespace i2c
 		/// @cond notdocumented
 		explicit AbstractI2CSyncManager(
 			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, 
-			DEBUG_HOOK_ hook = nullptr)
-			:	handler_{}, lc_{lifecycle_manager}, debug_{hook} {}
+			STATUS_HOOK_ status_hook = nullptr,
+			DEBUG_HOOK_ debug_hook = nullptr)
+			:	handler_{status_hook}, lc_{lifecycle_manager}, debug_hook_{debug_hook} {}
 		/// @endcond
 
 	private:
@@ -560,25 +586,25 @@ namespace i2c
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
-			debug_.call_hook(DebugStatus::START);
+			debug_hook_.call_hook(DebugStatus::START);
 			return handler_.exec_start_();
 		}
 
 		bool exec_repeat_start_()
 		{
-			debug_.call_hook(DebugStatus::REPEAT_START);
+			debug_hook_.call_hook(DebugStatus::REPEAT_START);
 			return handler_.exec_repeat_start_();
 		}
 
 		bool exec_send_slar_(uint8_t target)
 		{
-			debug_.call_hook(DebugStatus::SLAR, target);
+			debug_hook_.call_hook(DebugStatus::SLAR, target);
 			return handler_.exec_send_slar_(target);
 		}
 		
 		bool exec_send_slaw_(uint8_t target)
 		{
-			debug_.call_hook(DebugStatus::SLAW, target);
+			debug_hook_.call_hook(DebugStatus::SLAW, target);
 			return handler_.exec_send_slaw_(target);
 		}
 
@@ -587,8 +613,8 @@ namespace i2c
 			// Determine next data byte
 			uint8_t data = 0;
 			bool ok = future.get_storage_value_(data);
-			debug_.call_hook(DebugStatus::SEND, data);
-			debug_.call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
+			debug_hook_.call_hook(DebugStatus::SEND, data);
+			debug_hook_.call_hook(ok ? DebugStatus::SEND_OK : DebugStatus::SEND_ERROR);
 			// This should only happen if there are 2 concurrent consumers for that Future
 			if (!ok)
 			{
@@ -604,13 +630,13 @@ namespace i2c
 			// Is this the last byte to receive?
 			const bool last_byte = (command.byte_count() == 1);
 			const DebugStatus debug = (last_byte ? DebugStatus::RECV_LAST : DebugStatus::RECV);
-			debug_.call_hook(debug);
+			debug_hook_.call_hook(debug);
 
 			uint8_t data;
 			if (handler_.exec_receive_data_(last_byte, data))
 			{
 				const bool ok = future.set_future_value_(data);
-				debug_.call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
+				debug_hook_.call_hook(ok ? DebugStatus::RECV_OK : DebugStatus::RECV_ERROR, data);
 				// This should only happen in case there are 2 concurrent providers for this future
 				if (ok)
 				{
@@ -627,7 +653,7 @@ namespace i2c
 
 		void exec_stop_()
 		{
-			debug_.call_hook(DebugStatus::STOP);
+			debug_hook_.call_hook(DebugStatus::STOP);
 			handler_.exec_stop_();
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
 			// (ATMEGA328P datasheet 29.7 Tsu;sto + Tbuf)
@@ -657,9 +683,9 @@ namespace i2c
 		bool stopped_already_ = false;
 		uint8_t status_;
 
-		ARCH_HANDLER_ handler_;
+		ARCH_HANDLER handler_;
 		LC lc_;
-		DEBUG debug_;
+		DEBUG debug_hook_;
 
 		template<typename> friend class I2CDevice;
 	};
