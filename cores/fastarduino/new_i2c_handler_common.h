@@ -517,7 +517,6 @@ namespace i2c
 			ABSTRACT_FUTURE& future = lc_.resolve(proxy);
 			// Execute command immediately, from start to optional stop
 			//FIXME start or repeat start?
-			status_ = Status::OK;
 			bool ok = (no_stop_ ? exec_repeat_start_() : exec_start_());
 			stopped_already_ = false;
 			if (!ok)
@@ -661,7 +660,6 @@ namespace i2c
 			clear_commands_ = true;
 			// In case of an error, immediately send a STOP condition
 			exec_stop_();
-			status_ = ~Status::OK;
 			return false;
 		}
 
@@ -669,7 +667,6 @@ namespace i2c
 		bool no_stop_ = false;
 		bool clear_commands_ = false;
 		bool stopped_already_ = false;
-		uint8_t status_;
 
 		ARCH_HANDLER handler_;
 		LC lc_;

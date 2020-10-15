@@ -581,9 +581,9 @@ namespace i2c
 			return command_.type().is_end();
 		}
 
-		bool handle_no_error(ABSTRACT_FUTURE& future)
+		bool handle_no_error(ABSTRACT_FUTURE& future, uint8_t status)
 		{
-			if (check_no_error(future)) return true;
+			if (check_no_error(future, status)) return true;
 			policy_.handle_error(command_, commands_);
 			// In case of an error, immediately send a STOP condition
 			exec_stop_(true);
@@ -594,9 +594,9 @@ namespace i2c
 		I2CCallback i2c_change()
 		{
 			// Check status Vs. expected status
-			status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+			const uint8_t status = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
 			ABSTRACT_FUTURE& future = current_future();
-			if (!handle_no_error(future))
+			if (!handle_no_error(future, status))
 				return I2CCallback::ERROR;
 			
 			// Handle TWI interrupt when data received
@@ -661,13 +661,13 @@ namespace i2c
 			return result;
 		}
 
-		bool check_no_error(ABSTRACT_FUTURE& future)
+		bool check_no_error(ABSTRACT_FUTURE& future, uint8_t status)
 		{
-			status_hook_.call_hook(expected_status_, status_);
-			if (status_ == expected_status_) return true;
+			status_hook_.call_hook(expected_status_, status);
+			if (status == expected_status_) return true;
 			// Handle special case of last transmitted byte possibly not acknowledged by device
 			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
-				&&	(status_ == Status::DATA_TRANSMITTED_NACK)
+				&&	(status == Status::DATA_TRANSMITTED_NACK)
 				&&	(command_.byte_count() == 0))
 				return true;
 
@@ -681,7 +681,6 @@ namespace i2c
 		I2CCOMMAND command_;
 
 		// Latest I2C status
-		uint8_t status_ = Status::OK;
 		uint8_t expected_status_ = Status::OK;
 
 		// Status of current command processing
