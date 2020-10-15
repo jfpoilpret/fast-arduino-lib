@@ -22,6 +22,7 @@
 #ifndef I2C_HANDLER_ATTINY_HH
 #define I2C_HANDLER_ATTINY_HH
 
+//TODO prevent inclusion for ATmega architecture
 #include <util/delay_basic.h>
 
 #include "i2c.h"
@@ -37,15 +38,17 @@ namespace i2c
 	//==============
 	// Sync Handler 
 	//==============
-	template<I2CMode MODE_> class ATtinyI2CSyncHandler
+	template<I2CMode MODE_, bool HAS_STATUS_ = false, typename STATUS_HOOK_ = I2C_STATUS_HOOK>
+	class ATtinyI2CSyncHandler
 	{
 	private:
 		using MODE_TRAIT = I2CMode_trait<MODE_>;
 		using I2C_TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
+		using STATUS = I2CStatusSupport<HAS_STATUS_, STATUS_HOOK_>;
 
 	public:
-		ATtinyI2CSyncHandler()
+		ATtinyI2CSyncHandler(STATUS_HOOK_ status_hook = nullptr) : status_hook_{status_hook}
 		{
 			// set SDA/SCL default directions
 			I2C_TRAIT::PORT |= I2C_TRAIT::SCL_SDA_MASK;
@@ -73,6 +76,7 @@ namespace i2c
 			SDA_INPUT();
 		}
 
+		//TODO call hook with status
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
@@ -212,6 +216,8 @@ namespace i2c
 			SDA_OUTPUT();
 			return data;
 		}
+
+		STATUS status_hook_;
 	};
 
 	/**
@@ -222,23 +228,33 @@ namespace i2c
 	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
 	 * proxies to Future that can move around and must be controlled by a 
 	 * LifeCycleManager; using `false` will generate smaller code.
+	 * @tparam HAS_STATUS_ tells this I2CManager to call a status hook at each 
+	 * step of an I2C transaction; using `false` will generate smaller code.
+	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_STATUS_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
 	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
 	 * step of an I2C transaction; this is useful for debugging support for a new 
 	 * I2C device; using `false` will generate smaller code.
-	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `IS_DEBUG` is 
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `HAS_DEBUG_` is 
 	 * `true`. This can be a simple function pointer (of type `I2C_DEBUG_HOOK`)
 	 * or a Functor class (or Functor class reference). Using a Functor class will
 	 * generate smaller code.
 	 * 
 	 * @sa I2CMode
+	 * @sa I2C_STATUS_HOOK
 	 * @sa I2C_DEBUG_HOOK
 	 */
-	template<I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
+	template<I2CMode MODE_, bool HAS_LC_, 
+		bool HAS_STATUS_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncATtinyManager
-		: public AbstractI2CSyncManager<ATtinyI2CSyncHandler<MODE_>, MODE_, HAS_LC_, HAS_DEBUG_, DEBUG_HOOK_>
+		: public AbstractI2CSyncManager<ATtinyI2CSyncHandler<MODE_, HAS_STATUS_, STATUS_HOOK_>, 
+			MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>
 	{
 	private:
-		using PARENT = AbstractI2CSyncManager<ATtinyI2CSyncHandler<MODE_>, MODE_, HAS_LC_, HAS_DEBUG_, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CSyncManager<ATtinyI2CSyncHandler<MODE_, HAS_STATUS_, STATUS_HOOK_>, 
+			MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>;
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
@@ -246,8 +262,9 @@ namespace i2c
 	protected:
 		/// @cond notdocumented
 		explicit AbstractI2CSyncATtinyManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, DEBUG_HOOK_ hook = nullptr)
-			:	PARENT{lifecycle_manager, hook} {}
+			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, 
+				STATUS_HOOK_ status_hook = nullptr, DEBUG_HOOK_ debug_hook = nullptr)
+			:	PARENT{lifecycle_manager, status_hook, debug_hook} {}
 		/// @endcond
 
 		template<typename> friend class I2CDevice;
@@ -265,11 +282,22 @@ namespace i2c
 	 * @sa I2CSyncLCDebugManager
 	 */
 	template<I2CMode MODE_>
-	class I2CSyncManager : public AbstractI2CSyncATtinyManager<MODE_, false, false, I2C_DEBUG_HOOK>
+	class I2CSyncManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
 	{
-		using PARENT = AbstractI2CSyncATtinyManager<MODE_, false, false, I2C_DEBUG_HOOK>;
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
 	public:
 		I2CSyncManager() : PARENT{} {}
+	};
+
+	//TODO DOC
+	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK>
+	class I2CSyncStatusManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
+	{
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
+	public:
+		I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{nullptr, status_hook} {}
 	};
 
 	/**
@@ -287,11 +315,23 @@ namespace i2c
 	 * @sa I2CSyncLCDebugManager
 	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CSyncDebugManager : public AbstractI2CSyncATtinyManager<MODE_, false, true, DEBUG_HOOK_>
+	class I2CSyncDebugManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CSyncATtinyManager<MODE_, false, true, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
 	public:
-		explicit I2CSyncDebugManager(DEBUG_HOOK_ hook) : PARENT{nullptr, hook} {}
+		explicit I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{nullptr, nullptr, debug_hook} {}
+	};
+
+	//TODO DOC
+	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CSyncStatusDebugManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>
+	{
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
+	public:
+		explicit I2CSyncStatusDebugManager(STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook) 
+		: PARENT{nullptr, status_hook, debug_hook} {}
 	};
 
 	/**
@@ -306,12 +346,25 @@ namespace i2c
 	 * @sa I2CSsyncLCDebugManager
 	 */
 	template<I2CMode MODE_>
-	class I2CSyncLCManager : public AbstractI2CSyncATtinyManager<MODE_, true, false, I2C_DEBUG_HOOK>
+	class I2CSyncLCManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
 	{
-		using PARENT = AbstractI2CSyncATtinyManager<MODE_, true, false, I2C_DEBUG_HOOK>;
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
 	public:
 		explicit I2CSyncLCManager(lifecycle::AbstractLifeCycleManager& lifecycle_manager)
 			:	PARENT{&lifecycle_manager} {}
+	};
+
+	//TODO DOC
+	template<I2CMode MODE_, typename STATUS_HOOK_>
+	class I2CSyncLCStatusManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
+	{
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
+	public:
+		explicit I2CSyncLCStatusManager(
+			lifecycle::AbstractLifeCycleManager& lifecycle_manager, STATUS_HOOK_ status_hook)
+			:	PARENT{&lifecycle_manager, status_hook} {}
 	};
 
 	/**
@@ -329,12 +382,26 @@ namespace i2c
 	 * @sa I2CSyncLCManager
 	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CSyncLCDebugManager : public AbstractI2CSyncATtinyManager<MODE_, true, true, DEBUG_HOOK_>
+	class I2CSyncLCDebugManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CSyncATtinyManager<MODE_, true, true, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
 	public:
-		explicit I2CSyncLCDebugManager(lifecycle::AbstractLifeCycleManager& lifecycle_manager)
-			:	PARENT{&lifecycle_manager} {}
+		explicit I2CSyncLCDebugManager(
+			lifecycle::AbstractLifeCycleManager& lifecycle_manager, DEBUG_HOOK_ debug_hook)
+			:	PARENT{&lifecycle_manager, nullptr, debug_hook} {}
+	};
+
+	//TODO DOC
+	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
+	class I2CSyncLCStatusDebugManager : 
+		public AbstractI2CSyncATtinyManager<MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>
+	{
+		using PARENT = AbstractI2CSyncATtinyManager<MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
+	public:
+		explicit I2CSyncLCStatusDebugManager(
+			lifecycle::AbstractLifeCycleManager& lifecycle_manager, STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook)
+			:	PARENT{&lifecycle_manager, status_hook, debug_hook} {}
 	};
 
 	/// @cond notdocumented
@@ -347,12 +414,28 @@ namespace i2c
 	struct I2CManager_trait<I2CSyncLCManager<MODE_>>
 		:	I2CManager_trait_impl<false, true, false, MODE_> {};
 
+	template<I2CMode MODE_, typename STATUS_HOOK_>
+	struct I2CManager_trait<I2CSyncStatusManager<MODE_, STATUS_HOOK_>>
+		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncDebugManager<MODE_, DEBUG_HOOK_>>
 		:	I2CManager_trait_impl<false, false, true, MODE_> {};
 
+	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CSyncStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+
+	template<I2CMode MODE_, typename STATUS_HOOK_>
+	struct I2CManager_trait<I2CSyncLCStatusManager<MODE_, STATUS_HOOK_>>
+		:	I2CManager_trait_impl<false, true, false, MODE_> {};
+
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncLCDebugManager<MODE_, DEBUG_HOOK_>>
+		:	I2CManager_trait_impl<false, true, true, MODE_> {};
+
+	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
+	struct I2CManager_trait<I2CSyncLCStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
 		:	I2CManager_trait_impl<false, true, true, MODE_> {};
 	/// @endcond
 }
