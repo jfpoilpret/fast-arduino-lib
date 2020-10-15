@@ -428,35 +428,35 @@ namespace i2c
 	// Specific traits for I2CManager
 	template<I2CMode MODE_>
 	struct I2CManager_trait<I2CSyncManager<MODE_>>
-		:	I2CManager_trait_impl<false, false, false, MODE_> {};
+		:	I2CManager_trait_impl<false, false, false, false, MODE_> {};
 
 	template<I2CMode MODE_>
 	struct I2CManager_trait<I2CSyncLCManager<MODE_>>
-		:	I2CManager_trait_impl<false, true, false, MODE_> {};
+		:	I2CManager_trait_impl<false, true, false, false, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CSyncStatusManager<MODE_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<false, false, true, false, MODE_> {};
 
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncDebugManager<MODE_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<false, false, false, true, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<false, false, true, true, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CSyncLCStatusManager<MODE_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<false, true, false, MODE_> {};
+		:	I2CManager_trait_impl<false, true, true, false, MODE_> {};
 
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncLCDebugManager<MODE_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, true, true, MODE_> {};
+		:	I2CManager_trait_impl<false, true, false, true, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncLCStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, true, true, MODE_> {};
+		:	I2CManager_trait_impl<false, true, true, true, MODE_> {};
 	/// @endcond
 }
 

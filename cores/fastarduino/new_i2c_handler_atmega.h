@@ -840,7 +840,6 @@ namespace i2c
 		}
 	};
 
-
 	/**
 	 * Asynchronous I2C Manager for ATmega architecture with support for dynamic proxies.
 	 * This class offers no debug facility.
@@ -1139,68 +1138,68 @@ namespace i2c
 	// Async managers first
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
 	struct I2CManager_trait<I2CAsyncManager<MODE_, POLICY_>>
-		:	I2CManager_trait_impl<true, false, false, MODE_> {};
+		:	I2CManager_trait_impl<true, false, false, false, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
 	struct I2CManager_trait<I2CAsyncLCManager<MODE_, POLICY_>>
-		:	I2CManager_trait_impl<true, true, false, MODE_> {};
+		:	I2CManager_trait_impl<true, true, false, false, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncDebugManager<MODE_, POLICY_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, false, true, MODE_> {};
+		:	I2CManager_trait_impl<true, false, false, true, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CAsyncStatusManager<MODE_, POLICY_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<true, false, false, MODE_> {};
+		:	I2CManager_trait_impl<true, false, true, false, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncStatusDebugManager<MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, false, true, MODE_> {};
+		:	I2CManager_trait_impl<true, false, true, true, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncLCDebugManager<MODE_, POLICY_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, true, true, MODE_> {};
+		:	I2CManager_trait_impl<true, true, false, true, MODE_> {};
 	
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CAsyncLCStatusManager<MODE_, POLICY_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<true, true, false, MODE_> {};
+		:	I2CManager_trait_impl<true, true, true, false, MODE_> {};
 	
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncLCStatusDebugManager<MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, true, true, MODE_> {};
+		:	I2CManager_trait_impl<true, true, true, true, MODE_> {};
 	
 	// Then sync managers
 	template<I2CMode MODE_>
 	struct I2CManager_trait<I2CSyncManager<MODE_>>
-		:	I2CManager_trait_impl<false, false, false, MODE_> {};
+		:	I2CManager_trait_impl<false, false, false, false, MODE_> {};
 
 	template<I2CMode MODE_>
 	struct I2CManager_trait<I2CSyncLCManager<MODE_>>
-		:	I2CManager_trait_impl<false, true, false, MODE_> {};
+		:	I2CManager_trait_impl<false, true, false, false, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CSyncStatusManager<MODE_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<false, false, true, false, MODE_> {};
 
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncDebugManager<MODE_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<false, false, false, true, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<false, false, true, true, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CSyncLCStatusManager<MODE_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<false, true, false, MODE_> {};
+		:	I2CManager_trait_impl<false, true, true, false, MODE_> {};
 
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncLCDebugManager<MODE_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, true, true, MODE_> {};
+		:	I2CManager_trait_impl<false, true, false, true, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncLCStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, true, true, MODE_> {};
+		:	I2CManager_trait_impl<false, true, true, true, MODE_> {};
 	/// @endcond
 
 	//TODO improve callback to include a reference to the updated future? 
