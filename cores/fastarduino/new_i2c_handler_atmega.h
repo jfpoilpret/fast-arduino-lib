@@ -675,6 +675,7 @@ namespace i2c
 
 		bool check_no_error(ABSTRACT_FUTURE& future)
 		{
+			status_hook_.call_hook(expected_status_, status_);
 			if (status_ == expected_status_) return true;
 			// Handle special case of last transmitted byte possibly not acknowledged by device
 			if (	(expected_status_ == Status::DATA_TRANSMITTED_ACK)
