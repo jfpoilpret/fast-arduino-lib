@@ -130,11 +130,6 @@ using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::STANDARD, STATUS&>;
 REGISTER_I2C_ISR(MANAGER)
 #endif
 
-void display_status(ostream& out, char index, uint8_t status)
-{
-	out << hex << F("status #") << index << ' ' << status << endl;
-}
-
 void display_ram(ostream& out, const uint8_t* data, uint8_t size)
 {
 	out << hex << F("RAM content\n");
