@@ -710,8 +710,6 @@ namespace i2c
 	 * @sa REGISTER_I2C_ISR()
 	 * @sa REGISTER_I2C_ISR_FUNCTION()
 	 * @sa REGISTER_I2C_ISR_METHOD()
-	 * @sa I2CAsyncDebugManager
-	 * @sa I2CAsyncLCManager
 	 */
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS>
 	class I2CAsyncManager : 
@@ -750,8 +748,6 @@ namespace i2c
 	 * @sa REGISTER_I2C_ISR()
 	 * @sa REGISTER_I2C_ISR_FUNCTION()
 	 * @sa REGISTER_I2C_ISR_METHOD()
-	 * @sa I2CAsyncDebugManager
-	 * @sa I2CAsyncLCManager
 	 */
 	template<
 		I2CMode MODE_, 
@@ -769,7 +765,7 @@ namespace i2c
 		 * asynchronous handling
 		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
 		 * queue I2C command for asynchronous handling
-		 * @param hook the debug hook function or functor that is called during
+		 * @param debug_hook the debug hook function or functor that is called during
 		 * I2C transaction execution.
 		 */
 		template<uint8_t SIZE>
@@ -781,7 +777,23 @@ namespace i2c
 		}
 	};
 
-	//TODO DOC
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture with status notification facility.
+	 * This class offers no support for dynamic proxies.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 */
 	template<
 		I2CMode MODE_, 
 		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
@@ -798,7 +810,7 @@ namespace i2c
 		 * asynchronous handling
 		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
 		 * queue I2C command for asynchronous handling
-		 * @param hook the debug hook function or functor that is called during
+		 * @param status_hook the status hook function or functor that is called during
 		 * I2C transaction execution.
 		 */
 		template<uint8_t SIZE>
@@ -810,7 +822,27 @@ namespace i2c
 		}
 	};
 
-	//TODO DOC
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture with debug and status
+	 * notification facilities.
+	 * This class offers no support for dynamic proxies.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 */
 	template<
 		I2CMode MODE_, 
 		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
@@ -828,7 +860,9 @@ namespace i2c
 		 * asynchronous handling
 		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
 		 * queue I2C command for asynchronous handling
-		 * @param hook the debug hook function or functor that is called during
+		 * @param status_hook the status hook function or functor that is called during
+		 * I2C transaction execution.
+		 * @param debug_hook the debug hook function or functor that is called during
 		 * I2C transaction execution.
 		 */
 		template<uint8_t SIZE>
@@ -853,8 +887,6 @@ namespace i2c
 	 * @sa REGISTER_I2C_ISR()
 	 * @sa REGISTER_I2C_ISR_FUNCTION()
 	 * @sa REGISTER_I2C_ISR_METHOD()
-	 * @sa I2CAsyncDebugManager
-	 * @sa I2CAsyncLCManager
 	 */
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS>
 	class I2CAsyncLCManager : 
@@ -897,8 +929,6 @@ namespace i2c
 	 * @sa REGISTER_I2C_ISR()
 	 * @sa REGISTER_I2C_ISR_FUNCTION()
 	 * @sa REGISTER_I2C_ISR_METHOD()
-	 * @sa I2CAsyncDebugManager
-	 * @sa I2CAsyncLCManager
 	 */
 	template<
 		I2CMode MODE_, 
@@ -918,7 +948,7 @@ namespace i2c
 		 * queue I2C command for asynchronous handling
 		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
 		 * the lifecycle of Future used by this I2CManager
-		 * @param hook the debug hook function or functor that is called during
+		 * @param debug_hook the debug hook function or functor that is called during
 		 * I2C transaction execution
 		 */
 		template<uint8_t SIZE>
@@ -932,7 +962,23 @@ namespace i2c
 		}
 	};
 
-	//TODO DOC
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture with status notification
+	 * facility and support for dynamic proxies.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 */
 	template<
 		I2CMode MODE_, 
 		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
@@ -951,8 +997,8 @@ namespace i2c
 		 * queue I2C command for asynchronous handling
 		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
 		 * the lifecycle of Future used by this I2CManager
-		 * @param hook the debug hook function or functor that is called during
-		 * I2C transaction execution
+		 * @param status_hook the status hook function or functor that is called during
+		 * I2C transaction execution.
 		 */
 		template<uint8_t SIZE>
 		explicit I2CAsyncLCStatusManager(
@@ -965,7 +1011,26 @@ namespace i2c
 		}
 	};
 
-	//TODO DOC
+	/**
+	 * Asynchronous I2C Manager for ATmega architecture with debug and status 
+	 * notification facilities and support for dynamic proxies.
+	 * @warning You need to register the proper ISR for this class to work properly.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 * @sa i2c::I2CErrorPolicy
+	 * @sa REGISTER_I2C_ISR()
+	 * @sa REGISTER_I2C_ISR_FUNCTION()
+	 * @sa REGISTER_I2C_ISR_METHOD()
+	 */
 	template<
 		I2CMode MODE_, 
 		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
@@ -985,8 +1050,10 @@ namespace i2c
 		 * queue I2C command for asynchronous handling
 		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
 		 * the lifecycle of Future used by this I2CManager
-		 * @param hook the debug hook function or functor that is called during
-		 * I2C transaction execution
+		 * @param status_hook the status hook function or functor that is called during
+		 * I2C transaction execution.
+		 * @param debug_hook the debug hook function or functor that is called during
+		 * I2C transaction execution.
 		 */
 		template<uint8_t SIZE>
 		explicit I2CAsyncLCStatusDebugManager(
@@ -1006,9 +1073,6 @@ namespace i2c
 	 * @tparam MODE_ the I2C mode for this manager
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncDebugManager
-	 * @sa I2CSyncLCManager
-	 * @sa I2CSyncLCDebugManager
 	 */
 	template<I2CMode MODE_>
 	class I2CSyncManager : 
@@ -1019,7 +1083,18 @@ namespace i2c
 		I2CSyncManager() : PARENT{} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATmega architecture wit status notification
+	 * facility.
+	 * This class offers no support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK>
 	class I2CSyncStatusManager : 
 		public AbstractI2CSyncATmegaManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
@@ -1039,9 +1114,6 @@ namespace i2c
 	 * class reference). Using a Functor class will generate smaller code.
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncManager
-	 * @sa I2CSyncLCManager
-	 * @sa I2CSyncLCDebugManager
 	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncDebugManager : 
@@ -1052,7 +1124,21 @@ namespace i2c
 		explicit I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{nullptr, nullptr, debug_hook} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATmega architecture with status notification
+	 * and debug facility.
+	 * This class offers no support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncStatusDebugManager : 
 		public AbstractI2CSyncATmegaManager<MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>
@@ -1070,9 +1156,6 @@ namespace i2c
 	 * @tparam MODE_ the I2C mode for this manager
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncManager
-	 * @sa I2CSyncDebugManager
-	 * @sa I2CSsyncLCDebugManager
 	 */
 	template<I2CMode MODE_>
 	class I2CSyncLCManager : 
@@ -1084,7 +1167,17 @@ namespace i2c
 			:	PARENT{&lifecycle_manager} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATmega architecture with status notification
+	 * facility and support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_>
 	class I2CSyncLCStatusManager : 
 		public AbstractI2CSyncATmegaManager<MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
@@ -1106,9 +1199,6 @@ namespace i2c
 	 * class reference). Using a Functor class will generate smaller code.
 	 * 
 	 * @sa i2c::I2CMode
-	 * @sa I2CSyncManager
-	 * @sa I2CSyncDebugManager
-	 * @sa I2CSyncLCManager
 	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncLCDebugManager : 
@@ -1121,7 +1211,20 @@ namespace i2c
 			:	PARENT{&lifecycle_manager, nullptr, debug_hook} {}
 	};
 
-	//TODO DOC
+	/**
+	 * Synchronous I2C Manager for ATmega architecture with status notification
+	 * and debug facilities and support for dynamic proxies.
+	 * 
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
+	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
+	 * class reference). Using a Functor class will generate smaller code.
+	 * 
+	 * @sa i2c::I2CMode
+	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncLCStatusDebugManager : 
 		public AbstractI2CSyncATmegaManager<MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>
@@ -1202,7 +1305,6 @@ namespace i2c
 		:	I2CManager_trait_impl<false, true, true, true, MODE_> {};
 	/// @endcond
 
-	//TODO improve callback to include a reference to the updated future? 
 	/// @cond notdocumented
 	struct isr_handler
 	{
