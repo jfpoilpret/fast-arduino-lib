@@ -91,18 +91,14 @@ namespace i2c
 	}
 	/// @endcond
 
-	//TODO remove MODE form tempate args and set it to constructor instead
 	/**
 	 * Base class for all I2C devices.
 	 * 
-	 * @tparam MODE_ the best I2C mode for this device; this determines the 
-	 * `I2CManager` types that can manage this device.
 	 * @tparam MANAGER_ the type of I2CManager used to handle I2C communication
 	 * 
-	 * @sa i2c::I2CMode
 	 * @sa i2c::I2CManager
 	 */
-	template<I2CMode MODE_, typename MANAGER_>
+	template<typename MANAGER_>
 	class I2CDevice
 	{
 	public:
@@ -115,8 +111,6 @@ namespace i2c
 		static_assert(
 			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
 		// Ensure that MANAGER I2C mode is compliant with the best mode for this device
-		static_assert(MODE_ == I2CMode::FAST || MODE_ == MANAGER_TRAIT::MODE,
-			"MANAGER_ I2CMode must be compliant with this device best mode");
 
 	protected:
 		/**
@@ -131,6 +125,10 @@ namespace i2c
 		/**
 		 * Create a new I2C device. This constructor must be called by a subclass
 		 * implementing an actua I2C device.
+		 * 
+		 * @tparam MODE the best I2C mode for this device; this determines the 
+		 * `I2CManager` types that can manage this device.
+		 * 
 		 * @param manager the I2C Manager that is in charge of I2C bus
 		 * @param device the 8-bits device address on the I2C bus; it is constructed 
 		 * from the actual 7-bits address, after left-shifting 1 bit. This can be 
@@ -138,7 +136,13 @@ namespace i2c
 		 * 
 		 * @sa set_device()
 		 */
-		I2CDevice(MANAGER& manager, uint8_t device) : device_{device}, handler_{manager} {}
+		template<I2CMode MODE = I2CMode::STANDARD>
+		I2CDevice(MANAGER& manager, uint8_t device) : device_{device}, handler_{manager}
+		{
+			// Ensure that MANAGER I2C mode is compliant with the best mode for this device
+			static_assert(MODE == I2CMode::FAST || MODE == MANAGER_TRAIT::MODE,
+				"MANAGER_ I2CMode must be compliant with this device best mode");
+		}
 
 		I2CDevice(const I2CDevice&) = delete;
 		I2CDevice& operator=(const I2CDevice&) = delete;

@@ -48,7 +48,10 @@
 // NOTE: no dynamic allocation shall be used!
 
 // OPEN POINTS:
-//TODO - add event supplier as callback handler?
+//TODO - add callback registration including proxy/future reference (when future is done)
+//		-> this will allow pushing events to be handled by main event loop
+//			- maybe also need some device reference?
+//TODO - how to prevent usage of 2 managers (whatever specific type)
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
@@ -116,6 +119,7 @@ namespace i2c
 	//==============
 	// Sync Handler 
 	//==============
+	/// @cond notdocumented
 	template<I2CMode MODE_> class ATmegaI2CSyncHandler
 	{
 	private:
@@ -211,7 +215,9 @@ namespace i2c
 			return (status == expected_status);
 		}
 	};
+	/// @endcond
 
+	/// @cond notdocumented
 	template<I2CMode MODE_, bool HAS_LC_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncATmegaManager
 		: public AbstractI2CSyncManager<ATmegaI2CSyncHandler<MODE_>, MODE_, HAS_LC_, HAS_DEBUG_, DEBUG_HOOK_>
@@ -229,8 +235,9 @@ namespace i2c
 			:	PARENT{lifecycle_manager, hook} {}
 		/// @endcond
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<typename> friend class I2CDevice;
 	};
+	/// @endcond
 
 	//===============
 	// Async Manager 
@@ -654,7 +661,7 @@ namespace i2c
 		LC lc_;
 		DEBUG debug_;
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<typename> friend class I2CDevice;
 		friend struct isr_handler;
 	};
 
@@ -951,6 +958,7 @@ namespace i2c
 		:	I2CManager_trait_impl<false, true, true, MODE_> {};
 	/// @endcond
 
+	//TODO improve callback to inclued a reference to the updated future? 
 	/// @cond notdocumented
 	struct isr_handler
 	{

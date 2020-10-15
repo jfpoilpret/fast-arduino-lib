@@ -661,7 +661,7 @@ namespace i2c
 		LC lc_;
 		DEBUG debug_;
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<typename> friend class I2CDevice;
 	};
 
 

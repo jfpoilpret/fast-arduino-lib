@@ -95,9 +95,9 @@ namespace devices::rtc
 	 * Note that this chip only supports standard I2C mode (100 KHz).
 	 */
 	template<typename MANAGER>
-	class DS1307 : public i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>
+	class DS1307 : public i2c::I2CDevice<MANAGER>
 	{
-		using PARENT = i2c::I2CDevice<i2c::I2CMode::STANDARD, MANAGER>;
+		using PARENT = i2c::I2CDevice<MANAGER>;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 

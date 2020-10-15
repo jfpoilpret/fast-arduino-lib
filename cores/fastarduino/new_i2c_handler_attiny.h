@@ -250,7 +250,7 @@ namespace i2c
 			:	PARENT{lifecycle_manager, hook} {}
 		/// @endcond
 
-		template<I2CMode, typename> friend class I2CDevice;
+		template<typename> friend class I2CDevice;
 	};
 
 	/**
