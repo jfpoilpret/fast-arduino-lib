@@ -87,7 +87,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
-#define DEBUG_I2C
+// #define DEBUG_I2C
 // #define FORCE_SYNC
 
 // UART buffer for traces
@@ -110,16 +110,20 @@ static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::STANDARD, DEBUGGER&, DEBUGGER&>;
 #	endif
 #define DEBUG(OUT) debugger.trace(OUT)
+#define SHOW_STATUS(OUT)
 
 #else
 
+using STATUS = i2c::status::I2CLatestStatusHolder;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
-using MANAGER = i2c::I2CAsyncManager<i2c::I2CMode::STANDARD>;
+using MANAGER = i2c::I2CAsyncStatusManager<
+	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, STATUS&>;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
-using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
+using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD, STATUS&>;
 #	endif
 #define DEBUG(OUT)
+#define SHOW_STATUS(OUT) OUT << streams::hex << status_holder.latest_status() << streams::endl
 #endif
 
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
@@ -173,25 +177,28 @@ int main()
 	//====================
 #ifdef DEBUG_I2C
 	DEBUGGER debugger;
+#else
+	STATUS status_holder;
 #endif
 
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 #	ifdef DEBUG_I2C
 	MANAGER manager{i2c_buffer, debugger, debugger};
 #	else
-	MANAGER manager{i2c_buffer};
+	MANAGER manager{i2c_buffer, status_holder};
 #	endif
 #else
 #	ifdef DEBUG_I2C
 	MANAGER manager{debugger, debugger};
 #	else
-	MANAGER manager{};
+	MANAGER manager{status_holder};
 #	endif
 #endif
 
 	manager.begin();
 	out << F("I2C interface started") << endl;
 	display_status(out, '1', manager.status());
+	SHOW_STATUS(out);
 	time::delay_ms(1000);
 	
 	DS1307<MANAGER> rtc{manager};
@@ -201,6 +208,7 @@ int main()
 	memset(data, 0, sizeof data);
 	rtc.get_ram(0, data);
 	display_status(out, '2', manager.status());
+	SHOW_STATUS(out);
 	display_ram(out, data, sizeof data);
 	DEBUG(out);
 	
@@ -217,6 +225,7 @@ int main()
 	//=======================
 	rtc.set_datetime(time1);
 	display_status(out, '3', manager.status());
+	SHOW_STATUS(out);
 	DEBUG(out);
 
 	time::delay_ms(2000);
@@ -227,12 +236,14 @@ int main()
 	rtc.get_datetime(time2);
 	display_status(out, '4', manager.status());
 	display_time(out, time2);
+	SHOW_STATUS(out);
 	DEBUG(out);
 	
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
 	display_status(out, '5', manager.status());
+	SHOW_STATUS(out);
 	DEBUG(out);
 	
 	// Provide 10 seconds delay to allow checking square wave output with an oscilloscope
@@ -240,6 +251,7 @@ int main()
 	
 	rtc.disable_output(false);
 	display_status(out, '6', manager.status());
+	SHOW_STATUS(out);
 	DEBUG(out);
 
 	// write RAM content
@@ -247,6 +259,7 @@ int main()
 		data[i] = i;
 	rtc.set_ram(0, data);
 	display_status(out, '7', manager.status());
+	SHOW_STATUS(out);
 	DEBUG(out);
 	
 	// Stop TWI interface

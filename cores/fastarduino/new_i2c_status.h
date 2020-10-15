@@ -149,6 +149,48 @@ namespace i2c::status
 		streams::ostream& out_;
 		STATUS trace_;
 	};
+
+	/**
+	 * Class holding the latest I2C status.
+	 * 
+	 * @sa Status
+	 */
+	class I2CLatestStatusHolder
+	{
+	public:
+		/**
+		 * Create an I2CLatestStatusHolder that can hold latest I2C status.
+		 */
+		I2CLatestStatusHolder() = default;
+
+		/**
+		 * Return the latest I2C actual status.
+		 */
+		uint8_t latest_status() const
+		{
+			return actual_;
+		}
+
+		/**
+		 * Return the latest I2C expected status (may be different than actual).
+		 */
+		uint8_t latest_expected_status() const
+		{
+			return expected_;
+		}
+
+		/// @cond notdocumented
+		void operator()(uint8_t expected, uint8_t actual)
+		{
+			expected_ = expected;
+			actual_ = actual;
+		}
+		/// @endcond
+
+	private:
+		uint8_t actual_ = Status::OK;
+		uint8_t expected_ = Status::OK;
+	};
 }
 
 #endif /* I2C_STATUS_HH */
