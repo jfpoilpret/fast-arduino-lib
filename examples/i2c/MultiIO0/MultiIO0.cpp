@@ -92,7 +92,7 @@ public:
 
 	uint8_t read_register(uint8_t address)
 	{
-		uint8_t data;
+		uint8_t data = 0;
 		if (write(DEVICE_ADDRESS, address, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
 			&& read(DEVICE_ADDRESS, data, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
 			return data;

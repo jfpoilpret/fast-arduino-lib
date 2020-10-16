@@ -696,7 +696,7 @@ namespace lifecycle
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
-			if (this == &that) return *this;
+			if (this == (LightProxy<T>*) &that) return *this;
 			content_ = that.content_;
 			return *this;
 		}
