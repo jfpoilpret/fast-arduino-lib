@@ -273,18 +273,20 @@ namespace devices::magneto
 	 * @tparam MODE the I2C transmission mode to use for this device; this chip
 	 * supports both available modes.
 	 */
-	template<i2c::I2CMode MODE = i2c::I2CMode::FAST> class MPU6050 : public i2c::I2CDevice<MODE>
+	template<typename MANAGER>
+	class MPU6050 : public i2c::I2CDevice<MANAGER>
 	{
 	private:
+		using PARENT = i2c::I2CDevice<MANAGER>;
+		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+
 		// Forward declarations needed by compiler
 		class Sensor3DFuture;
 		class PowerManagement;
 		class PowerManagementFuture;
 
 	public:
-		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
-		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
-
 		/**
 		 * Create a new device driver for a MPU6050 chip.
 		 * @param manager reference to a suitable i2c::I2CManager for this device
@@ -293,7 +295,8 @@ namespace devices::magneto
 		 * 
 		 * @sa AD0
 		 */
-		explicit MPU6050(MANAGER& manager, AD0 ad0 = AD0::LOW) : i2c::I2CDevice<MODE>(manager, DEVICE_ADDRESS(ad0)) {}
+		explicit MPU6050(MANAGER& manager, AD0 ad0 = AD0::LOW)
+			: PARENT(manager, DEVICE_ADDRESS(ad0), i2c::I2C_FAST) {}
 
 		// Asynchronous API
 		//==================
@@ -312,9 +315,9 @@ namespace devices::magneto
 		 * 
 		 * @sa begin(BeginFuture&)
 		 */
-		class BeginFuture : public future::Future<void, containers::array<uint8_t, 6>>
+		class BeginFuture : public FUTURE<void, containers::array<uint8_t, 6>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 6>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 6>>;
 		public:
 			explicit BeginFuture(	GyroRange gyro_range = GyroRange::RANGE_250,
 									AccelRange accel_range = AccelRange::RANGE_2G,
@@ -348,7 +351,7 @@ namespace devices::magneto
 		 * @sa begin(FifoBeginFuture&)
 		 * @sa errors
 		 */
-		int begin(BeginFuture& future)
+		int begin(PROXY<BeginFuture> future)
 		{
 			// We split the transaction in 2 write commands (3 bytes starting at CONFIG, 1 byte at PWR_MGT_1)
 			return this->launch_commands(future, {this->write(4), this->write(2)});
@@ -374,9 +377,9 @@ namespace devices::magneto
 		 * 
 		 * @sa begin(FifoBeginFuture&)
 		 */
-		class FifoBeginFuture : public future::Future<void, containers::array<uint8_t, 14>>
+		class FifoBeginFuture : public FUTURE<void, containers::array<uint8_t, 14>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 14>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 14>>;
 		public:
 			explicit FifoBeginFuture(	FIFOEnable fifo_enable,
 										INTEnable int_enable,
@@ -426,9 +429,9 @@ namespace devices::magneto
 		 * @sa begin(BeginFuture&)
 		 * @sa errors
 		 */
-		int begin(FifoBeginFuture& future)
+		int begin(PROXY<FifoBeginFuture> future)
 		{
-			if (!future.is_fifo_enabled()) return errors::EINVAL;
+			if (!PARENT::resolve(future).is_fifo_enabled()) return errors::EINVAL;
 			return this->launch_commands(future, {
 				this->write(4), this->write(2), this->write(2), this->write(3), this->write(3)});
 		}
@@ -469,7 +472,7 @@ namespace devices::magneto
 		 * @sa end()
 		 * @sa errors
 		 */
-		int end(EndFuture& future) INLINE
+		int end(PROXY<EndFuture> future) INLINE
 		{
 			// Put to sleep mode
 			return write_power(future);
@@ -508,7 +511,7 @@ namespace devices::magneto
 		 * @sa reset()
 		 * @sa errors
 		 */
-		int reset(ResetFuture& future) INLINE
+		int reset(PROXY<ResetFuture> future) INLINE
 		{
 			return write_power(future);
 		}
@@ -546,7 +549,7 @@ namespace devices::magneto
 		 * @sa gyro_measures(Sensor3D&)
 		 * @sa errors
 		 */
-		int gyro_measures(GyroFuture& future)
+		int gyro_measures(PROXY<GyroFuture> future)
 		{
 			return this->launch_commands(future, this->write(), this->read());
 		}
@@ -562,9 +565,9 @@ namespace devices::magneto
 		 * 
 		 * @sa temperature(TemperatureFuture&)
 		 */
-		class TemperatureFuture : public future::Future<int16_t, uint8_t>
+		class TemperatureFuture : public FUTURE<int16_t, uint8_t>
 		{
-			using PARENT = future::Future<int16_t, uint8_t>;
+			using PARENT = FUTURE<int16_t, uint8_t>;
 		public:
 			TemperatureFuture() : PARENT{TEMP_OUT} {}
 			TemperatureFuture(TemperatureFuture&&) = default;
@@ -597,7 +600,7 @@ namespace devices::magneto
 		 * @sa convert_temp_to_centi_degrees()
 		 * @sa errors
 		 */
-		int temperature(TemperatureFuture& future)
+		int temperature(PROXY<TemperatureFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -645,7 +648,7 @@ namespace devices::magneto
 		 * @sa accel_measures(Sensor3D&)
 		 * @sa errors
 		 */
-		int accel_measures(AccelFuture& future)
+		int accel_measures(PROXY<AccelFuture> future)
 		{
 			return this->launch_commands(future, this->write(), this->read());
 		}
@@ -658,9 +661,9 @@ namespace devices::magneto
 		 * 
 		 * @sa all_measures(AllMeasuresFuture&)
 		 */
-		class AllMeasuresFuture : public future::Future<AllSensors, uint8_t>
+		class AllMeasuresFuture : public FUTURE<AllSensors, uint8_t>
 		{
-			using PARENT = future::Future<AllSensors, uint8_t>;
+			using PARENT = FUTURE<AllSensors, uint8_t>;
 		public:
 			AllMeasuresFuture() : PARENT{ACCEL_XOUT} {}
 			AllMeasuresFuture(AllMeasuresFuture&&) = default;
@@ -694,7 +697,7 @@ namespace devices::magneto
 		 * @sa all_measures(AllSensors&)
 		 * @sa errors
 		 */
-		int all_measures(AllMeasuresFuture& future)
+		int all_measures(PROXY<AllMeasuresFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -707,9 +710,9 @@ namespace devices::magneto
 		 * 
 		 * @sa interrupt_status(InterruptStatusFuture&)
 		 */
-		class InterruptStatusFuture : public future::Future<INTStatus, uint8_t>
+		class InterruptStatusFuture : public FUTURE<INTStatus, uint8_t>
 		{
-			using PARENT = future::Future<INTStatus, uint8_t>;
+			using PARENT = FUTURE<INTStatus, uint8_t>;
 		public:
 			InterruptStatusFuture() : PARENT{INT_STATUS} {}
 			InterruptStatusFuture(InterruptStatusFuture&&) = default;
@@ -735,7 +738,7 @@ namespace devices::magneto
 		 * @sa interrupt_status()
 		 * @sa errors
 		 */
-		int interrupt_status(InterruptStatusFuture& future)
+		int interrupt_status(PROXY<InterruptStatusFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -748,9 +751,9 @@ namespace devices::magneto
 		 * 
 		 * @sa reset_fifo(ResetFifoFuture&)
 		 */
-		class ResetFifoFuture : public future::Future<void, containers::array<uint8_t, 2>>
+		class ResetFifoFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
 			ResetFifoFuture() : PARENT{{USER_CTRL, FIFO_ENABLE | FIFO_RESET}} {}
 			ResetFifoFuture(ResetFifoFuture&&) = default;
@@ -774,7 +777,7 @@ namespace devices::magneto
 		 * @sa reset_fifo()
 		 * @sa errors
 		 */
-		int reset_fifo(ResetFifoFuture& future)
+		int reset_fifo(PROXY<ResetFifoFuture> future)
 		{
 			return this->launch_commands(future, {this->write()});
 		}
@@ -787,9 +790,9 @@ namespace devices::magneto
 		 * 
 		 * @sa fifo_count(FifoCountFuture&)
 		 */
-		class FifoCountFuture : public future::Future<uint16_t, uint8_t>
+		class FifoCountFuture : public FUTURE<uint16_t, uint8_t>
 		{
-			using PARENT = future::Future<uint16_t, uint8_t>;
+			using PARENT = FUTURE<uint16_t, uint8_t>;
 		public:
 			FifoCountFuture() : PARENT{FIFO_COUNT} {}
 			FifoCountFuture(FifoCountFuture&&) = default;
@@ -824,7 +827,7 @@ namespace devices::magneto
 		 * @sa fifo_count()
 		 * @sa errors
 		 */
-		int fifo_count(FifoCountFuture& future)
+		int fifo_count(PROXY<FifoCountFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -844,9 +847,9 @@ namespace devices::magneto
 		 * @sa AllSensors
 		 */
 		template<typename T>
-		class FifoPopFuture : public future::Future<T, uint8_t>
+		class FifoPopFuture : public FUTURE<T, uint8_t>
 		{
-			using PARENT = future::Future<T, uint8_t>;
+			using PARENT = FUTURE<T, uint8_t>;
 		public:
 			FifoPopFuture() : PARENT{FIFO_R_W} {}
 			FifoPopFuture(FifoPopFuture&&) = default;
@@ -888,7 +891,7 @@ namespace devices::magneto
 		 * @sa fifo_pop(T&)
 		 * @sa errors
 		 */
-		template<typename T> int fifo_pop(FifoPopFuture<T>& future)
+		template<typename T> int fifo_pop(PROXY<FifoPopFuture<T>> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -920,7 +923,7 @@ namespace devices::magneto
 					ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 		{
 			BeginFuture future{gyro_range, accel_range, low_pass_filter, clock_select};
-			if (begin(future) != 0) return false;
+			if (begin(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -964,7 +967,7 @@ namespace devices::magneto
 				return begin(gyro_range, accel_range, low_pass_filter, clock_select);
 			FifoBeginFuture future{
 				fifo_enable, int_enable, sample_rate_divider, gyro_range, accel_range, low_pass_filter, clock_select};
-			if (begin(future) != 0) return false;
+			if (begin(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -983,7 +986,7 @@ namespace devices::magneto
 		bool end() INLINE
 		{
 			EndFuture future;
-			if (write_power(future) != 0) return false;
+			if (write_power(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -1000,7 +1003,7 @@ namespace devices::magneto
 		bool reset() INLINE
 		{
 			ResetFuture future;
-			if (write_power(future) != 0) return false;
+			if (write_power(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -1019,7 +1022,7 @@ namespace devices::magneto
 		bool gyro_measures(Sensor3D& gyro)
 		{
 			GyroFuture future;
-			if (gyro_measures(future) != 0) return false;
+			if (gyro_measures(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(gyro);
 		}
 
@@ -1039,7 +1042,7 @@ namespace devices::magneto
 		int16_t temperature()
 		{
 			TemperatureFuture future;
-			if (temperature(future) != 0) return INT16_MIN;
+			if (temperature(PARENT::make_proxy(future)) != 0) return INT16_MIN;
 			int16_t temp;
 			if (future.get(temp))
 				return temp;
@@ -1062,7 +1065,7 @@ namespace devices::magneto
 		bool accel_measures(Sensor3D& accel)
 		{
 			AccelFuture future;
-			if (accel_measures(future) != 0) return false;
+			if (accel_measures(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(accel);
 		}
 
@@ -1082,7 +1085,7 @@ namespace devices::magneto
 		bool all_measures(AllSensors& sensors)
 		{
 			AllMeasuresFuture future;
-			if (all_measures(future) != 0) return false;
+			if (all_measures(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(sensors);
 		}
 
@@ -1102,7 +1105,7 @@ namespace devices::magneto
 		INTStatus interrupt_status()
 		{
 			InterruptStatusFuture future;
-			if (interrupt_status(future) != 0) return false;
+			if (interrupt_status(PARENT::make_proxy(future)) != 0) return false;
 			INTStatus status;
 			future.get(status);
 			return status;
@@ -1121,7 +1124,7 @@ namespace devices::magneto
 		bool reset_fifo()
 		{
 			ResetFifoFuture future;
-			if (reset_fifo(future) != 0) return false;
+			if (reset_fifo(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -1144,7 +1147,7 @@ namespace devices::magneto
 		uint16_t fifo_count()
 		{
 			FifoCountFuture future;
-			if (fifo_count(future) != 0) return 0;
+			if (fifo_count(PARENT::make_proxy(future)) != 0) return 0;
 			uint16_t count = 0;
 			if (!future.get(count)) return 0;
 			return count;
@@ -1174,14 +1177,14 @@ namespace devices::magneto
 		template<typename T> bool fifo_pop(T& output)
 		{
 			FifoPopFuture<T> future;
-			if (fifo_pop(future) != 0) return false;
+			if (fifo_pop(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(output);
 		}
 
 	private:
-		class Sensor3DFuture : public future::Future<Sensor3D, uint8_t>
+		class Sensor3DFuture : public FUTURE<Sensor3D, uint8_t>
 		{
-			using PARENT = future::Future<Sensor3D, uint8_t>;
+			using PARENT = FUTURE<Sensor3D, uint8_t>;
 		protected:
 			Sensor3DFuture(uint8_t address) : PARENT{address} {}
 			Sensor3DFuture(Sensor3DFuture&&) = default;
@@ -1243,9 +1246,9 @@ namespace devices::magneto
 			bool device_reset_ : 1;
 		};
 
-		class PowerManagementFuture : public future::Future<void, containers::array<uint8_t, 2>>
+		class PowerManagementFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		protected:
 			PowerManagementFuture(PowerManagement power) : PARENT{{PWR_MGMT_1, uint8_t(power)}} {}
 			PowerManagementFuture(PowerManagementFuture&&) = default;
