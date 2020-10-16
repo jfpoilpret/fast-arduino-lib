@@ -16,16 +16,11 @@
 
 /**
  * @file 
- * ATmega I2C Manager API. This defines the asynchronous I2CManager for ATmega 
- * architecture.
+ * ATmega I2C Manager API. This defines asynchronous and synchronous I2CManagers
+ * for ATmega architecture.
  */
 #ifndef I2C_HANDLER_ATMEGA_HH
 #define I2C_HANDLER_ATMEGA_HH
-
-// Prevent inclusion for ATtiny architecture
-#ifndef TWCR
-#error "i2c_handler_atmega.h cannot be included in an ATtiny program!"
-#endif
 
 #include <util/delay_basic.h>
 
@@ -37,20 +32,12 @@
 #include "utilities.h"
 #include "new_i2c_handler_common.h"
 
-#define I2C_TRUE_ASYNC 1
+// Prevent inclusion for ATtiny architecture
+#ifndef TWCR
+#error "i2c_handler_atmega.h cannot be included in an ATtiny program!"
+#endif
 
-// MAIN IDEA:
-// - have a queue of "I2C commands" records
-// - each command is either a read or a write and contains important flags for handling the command
-// - handling of each command is broken down into sequential steps (State)
-// - dequeue and execute each command from TWI ISR, call back when the last step of 
-//   a command is finished or an error occurred
-// - consecutive commands in the queue are chained with repeat start conditions
-// - the last command in the queue is finished with a stop condition
-// - for sent or received data, a system of Future (independent API) is
-//   used to hold data until it is not needed anymore and can be released
-// - the device API shall return a Future that can be used asynchronously later on
-// NOTE: no dynamic allocation shall be used!
+#define I2C_TRUE_ASYNC 1
 
 // OPEN POINTS:
 //TODO - add callback registration including proxy/future reference (when future is done)
@@ -60,6 +47,8 @@
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
  * I2CManager to work properly.
+ * 
+ * @param MANAGER one of many asynchronous I2C managers defined in this header
  */
 #define REGISTER_I2C_ISR(MANAGER)                                   \
 ISR(TWI_vect)                                                       \
@@ -69,10 +58,11 @@ ISR(TWI_vect)                                                       \
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
- * I2CManager to work properly, along with a callback method that will be called
+ * I2CManager to work properly, along with a callback function that will be called
  * everytime an I2C transaction progresses (one command executed, whole transaction
  * executed, error).
  * 
+ * @param MANAGER one of many asynchronous I2C managers defined in this header
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered
  * 
@@ -90,6 +80,7 @@ ISR(TWI_vect)                                                       \
  * everytime an I2C transaction progresses (one command executed, whole transaction
  * executed, error).
  * 
+ * @param MANAGER one of many asynchronous I2C managers defined in this header
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function).
@@ -105,8 +96,36 @@ ISR(TWI_vect)                                                           \
 namespace i2c
 {
 	/**
-	 * Type passed to I2C ISR registered callbacks (ATmega MCU only) when an 
-	 * asynchronous I2C transaction is executed. 
+	 * I2CManager policy to use in case of an error during I2C transaction.
+	 * @warning available only on ATmega MCU.
+	 * @sa I2CManager
+	 */
+	enum class I2CErrorPolicy : uint8_t
+	{
+		/**
+		 * Do nothing at all in case of an error; useful only with a synchronous
+		 * I2CManager.
+		 */
+		DO_NOTHING,
+
+		/**
+		 * In case of an error during I2C transaction, then all I2CCommand currently
+		 * in queue will be removed.
+		 * @warning this means that an error with device A can trigger a removal
+		 * of pending commands for device B.
+		 */
+		CLEAR_ALL_COMMANDS,
+
+		/**
+		 * In case of an error during I2C transaction, then all pending I2CCommand
+		 * of the current transaction will be removed.
+		 */
+		CLEAR_TRANSACTION_COMMANDS
+	};
+
+	/**
+	 * Type passed to I2C ISR registered callbacks (asynchronous I2C Manager only)
+	 * when an asynchronous I2C transaction is executed. 
 	 */
 	enum class I2CCallback : uint8_t
 	{
@@ -114,11 +133,47 @@ namespace i2c
 		NONE = 0,
 		/** An I2C command has just been finished executed. */
 		END_COMMAND,
-		/** The last I2C command in a transaction ahs just been finished executing. */
+		/** The last I2C command in a transaction has just been finished executing. */
 		END_TRANSACTION,
 		/** An error has occurred during I2C transaction execution. */
 		ERROR
 	};
+
+	/// @cond notdocumented
+	// Generic support for LifeCycle resolution
+	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> struct I2CErrorPolicySupport
+	{
+		I2CErrorPolicySupport() {}
+		template<typename T>
+		void handle_error(UNUSED const I2CCommand<T>& current, UNUSED containers::Queue<I2CCommand<T>>& commands) {}
+	};
+	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_ALL_COMMANDS>
+	{
+		I2CErrorPolicySupport() {}
+		template<typename T>
+		void handle_error(UNUSED const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
+		{
+			commands.clear_();
+		}
+	};
+	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS>
+	{
+		I2CErrorPolicySupport() {}
+		template<typename T>
+		void handle_error(const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
+		{
+			// Clear command belonging to the same transaction (i.e. same future)
+			const auto future = current.future();
+			I2CCommand<T> command;
+			while (commands.peek_(command))
+			{
+				if (command.future() != future)
+					break;
+				commands.pull_(command);
+			}
+		}
+	};
+	/// @endcond
 
 	//==============
 	// Sync Handler 
@@ -230,7 +285,7 @@ namespace i2c
 
 	/**
 	 * Abstract synchronous I2C Manager for ATmega architecture.
-	 * You should never need to subclass AbstractI2CSyncManager yourself.
+	 * You should never need to subclass AbstractI2CSyncATmegaManager yourself.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
@@ -253,6 +308,8 @@ namespace i2c
 	 * @sa I2CMode
 	 * @sa I2C_STATUS_HOOK
 	 * @sa I2C_DEBUG_HOOK
+	 * @sa i2c::debug
+	 * @sa i2c::status
 	 */
 	template<I2CMode MODE_, bool HAS_LC_, 
 		bool HAS_STATUS_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
@@ -291,6 +348,12 @@ namespace i2c
 	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
 	 * proxies to Future that can move around and must be controlled by a 
 	 * LifeCycleManager; using `false` will generate smaller code.
+	 * @tparam HAS_STATUS_ tells this I2CManager to call a status hook at each 
+	 * step of an I2C transaction; using `false` will generate smaller code.
+	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_STATUS_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
 	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
 	 * step of an I2C transaction; this is useful for debugging support for a new 
 	 * I2C device; using `false` will generate smaller code.
@@ -300,7 +363,10 @@ namespace i2c
 	 * generate smaller code.
 	 * 
 	 * @sa I2CMode
+	 * @sa I2C_STATUS_HOOK
 	 * @sa I2C_DEBUG_HOOK
+	 * @sa i2c::debug
+	 * @sa i2c::status
 	 */
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, 
 		bool HAS_STATUS_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>

@@ -35,34 +35,6 @@
 namespace i2c
 {
 	/**
-	 * I2CManager policy to use in case of an error during I2C transaction.
-	 * @warning available only on ATmega MCU.
-	 * @sa I2CManager
-	 */
-	enum class I2CErrorPolicy : uint8_t
-	{
-		/**
-		 * Do nothing at all in case of an error; useful only with a synchronous
-		 * I2CManager.
-		 */
-		DO_NOTHING,
-
-		/**
-		 * In case of an error during I2C transaction, then all I2CCommand currently
-		 * in queue will be removed.
-		 * @warning this means that an error with device A can trigger a removal
-		 * of pending commands for device B.
-		 */
-		CLEAR_ALL_COMMANDS,
-
-		/**
-		 * In case of an error during I2C transaction, then all pending I2CCommand
-		 * of the current transaction will be removed.
-		 */
-		CLEAR_TRANSACTION_COMMANDS
-	};
-
-	/**
 	 * List of debug states that are reported by the I2CManager in debug mode.
 	 * @sa I2CManager
 	 */
@@ -244,9 +216,6 @@ namespace i2c
 	 * 
 	 * @warning You should never need to use this API by yourself. This is 
 	 * internally used by FastArduino I2CManager to handle I2C transactions.
-	 * 
-	 * @sa lifecycle::LightProxy
-	 * @sa future::AbstractFuture
 	 */
 	template<typename T> class I2CCommand : public I2CLightCommand
 	{
@@ -364,42 +333,6 @@ namespace i2c
 	/// @endcond
 
 	/// @cond notdocumented
-	// Generic support for LifeCycle resolution
-	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> struct I2CErrorPolicySupport
-	{
-		I2CErrorPolicySupport() {}
-		template<typename T>
-		void handle_error(UNUSED const I2CCommand<T>& current, UNUSED containers::Queue<I2CCommand<T>>& commands) {}
-	};
-	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_ALL_COMMANDS>
-	{
-		I2CErrorPolicySupport() {}
-		template<typename T>
-		void handle_error(UNUSED const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
-		{
-			commands.clear_();
-		}
-	};
-	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS>
-	{
-		I2CErrorPolicySupport() {}
-		template<typename T>
-		void handle_error(const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
-		{
-			// Clear command belonging to the same transaction (i.e. same future)
-			const auto future = current.future();
-			I2CCommand<T> command;
-			while (commands.peek_(command))
-			{
-				if (command.future() != future)
-					break;
-				commands.pull_(command);
-			}
-		}
-	};
-	/// @endcond
-
-	/// @cond notdocumented
 	// Specific traits for I2CMode
 	template<I2CMode MODE_ = I2CMode::STANDARD> struct I2CMode_trait
 	{
@@ -429,6 +362,37 @@ namespace i2c
 	};
 	/// @endcond
 
+	/**
+	 * Abstract synchronous I2C Manager for all MCU architectures.
+	 * A specifi abstract subclass is defined for each MCU architecture 
+	 * (ATmega, ATtiny).
+	 * You should never need to subclass AbstractI2CSyncManager yourself.
+	 * 
+	 * @tparam ARCH_HANDLER_ the type of an actual class handling I2C control
+	 * on actual target architecture
+	 * @tparam MODE_ the I2C mode for this manager
+	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * proxies to Future that can move around and must be controlled by a 
+	 * LifeCycleManager; using `false` will generate smaller code.
+	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a 
+	 * simple function pointer (of type `I2C_STATUS_HOOK`) or a Functor class 
+	 * (or Functor class reference). Using a Functor class will generate smaller
+	 * code.
+	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * step of an I2C transaction; this is useful for debugging support for a new 
+	 * I2C device; using `false` will generate smaller code.
+	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `HAS_DEBUG_` is 
+	 * `true`. This can be a simple function pointer (of type `I2C_DEBUG_HOOK`)
+	 * or a Functor class (or Functor class reference). Using a Functor class will
+	 * generate smaller code.
+	 * 
+	 * @sa I2CMode
+	 * @sa I2C_STATUS_HOOK
+	 * @sa I2C_DEBUG_HOOK
+	 * @sa i2c::debug
+	 * @sa i2c::status
+	 * 
+	 */
 	// Abstract generic class for synchronous I2C management
 	template<typename ARCH_HANDLER_, I2CMode MODE_, bool HAS_LC_, 
 		typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
@@ -674,7 +638,6 @@ namespace i2c
 
 		template<typename> friend class I2CDevice;
 	};
-
 
 	/// @cond notdocumented
 	// Specific traits for I2CManager

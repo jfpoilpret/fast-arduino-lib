@@ -22,11 +22,6 @@
 #ifndef I2C_HANDLER_ATTINY_HH
 #define I2C_HANDLER_ATTINY_HH
 
-// Prevent inclusion for ATmega architecture
-#ifdef TWCR
-#error "i2c_handler_attiny.h cannot be included in an ATmega program!"
-#endif
-
 #include <util/delay_basic.h>
 
 #include "i2c.h"
@@ -35,6 +30,11 @@
 #include "utilities.h"
 #include "new_i2c_handler_common.h"
 
+// Prevent inclusion for ATmega architecture
+#ifdef TWCR
+#error "i2c_handler_attiny.h cannot be included in an ATmega program!"
+#endif
+
 #define I2C_TRUE_ASYNC 0
 
 namespace i2c
@@ -42,6 +42,7 @@ namespace i2c
 	//==============
 	// Sync Handler 
 	//==============
+	/// @cond notdocumented
 	template<I2CMode MODE_, bool HAS_STATUS_ = false, typename STATUS_HOOK_ = I2C_STATUS_HOOK>
 	class ATtinyI2CSyncHandler
 	{
@@ -239,6 +240,7 @@ namespace i2c
 
 		STATUS status_hook_;
 	};
+	/// @endcond
 
 	/**
 	 * Abstract synchronous I2C Manager for ATtiny architecture.

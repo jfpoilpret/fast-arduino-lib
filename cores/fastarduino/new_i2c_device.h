@@ -50,8 +50,6 @@ namespace i2c
 	 * 
 	 * @sa I2CDevice::read()
 	 * @sa I2CDevice::write()
-	 * @sa I2CCommand
-	 * @sa I2CCommandType
 	 */
 	enum class I2CFinish : uint8_t
 	{
@@ -120,16 +118,27 @@ namespace i2c
 		// Ensure MANAGER is an accepted I2C Manager type
 		static_assert(
 			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
-		// Ensure that MANAGER I2C mode is compliant with the best mode for this device
 
 	protected:
 		/**
 		 * The actual type used for all proxies; may be `lifecycle::LightProxy` 
-		 * or nothing in particular. This is defined by MANAGER type, whether it
-		 * uses a lifecycle:AbstractLifeCycleManager or not.
+		 * or `lifecycle::DirectProxy`. This is defined by MANAGER type, whether
+		 * it uses a lifecycle::AbstractLifeCycleManager or not.
 		 */
 		template<typename T> using PROXY = typename MANAGER::template PROXY<T>;
+
+		/**
+		 * The abstract base class of all futures to be defined for a device.
+		 * This may be `future::AbstractFuture` or `future::AbstractFakeFuture`;
+		 * this is defined by MANAGER type, whether it is asynchronous or synchronous.
+		 */
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
+
+		/**
+		 * The template base class of all futures to be defined for a device.
+		 * This may be `future::Future` or `future::FakeFuture`; this is defined
+		 * by MANAGER type, whether it is asynchronous or synchronous.
+		 */
 		template<typename OUT, typename IN> using FUTURE = typename MANAGER::template FUTURE<OUT, IN>;
 
 		/**
@@ -170,7 +179,7 @@ namespace i2c
 		}
 
 		/**
-		 * Build a read I2CCommand that can be later pushed to the I2CManager for
+		 * Build a read I2CLightCommand that can be later pushed to the I2CManager for
 		 * proper handling.
 		 * Calling this method has no effect on the bus until the returned command 
 		 * is actually pushed to the I2CManager through a `launch_commands()` call.
@@ -194,7 +203,7 @@ namespace i2c
 		}
 
 		/**
-		 * Build a write I2CCommand that can be later pushed to the I2CManager for
+		 * Build a write I2CLightCommand that can be later pushed to the I2CManager for
 		 * proper handling.
 		 * Calling this method has no effect on the bus until the returned command 
 		 * is actually pushed to the I2CManager through a `launch_commands()` call.
@@ -219,25 +228,26 @@ namespace i2c
 		}
 
 		/**
-		 * Launch execution (asynchronously for ATmega, synchronously for ATtiny)
-		 * of a chain of I2CCommand items (constructed with `read()` and `write()`
+		 * Launch execution (asynchronously or synchronously, depending on MANAGER)
+		 * of a chain of I2CLightCommand items (constructed with `read()` and `write()`
 		 * methods).
 		 * 
-		 * On ATmega, the method returns immediately and one has to use @p future
-		 * status to know when all @p commands have been executed.
+		 * With an asynchronous MANAGER, the method returns immediately and one has
+		 * to use @p future status to know when all @p commands have been executed.
 		 * 
-		 * On ATtiny, this command is blocking and returns only ocne all @p commands
-		 * have been executed on the I2C bus.
+		 * With a synchronous MANAGER, this command is blocking and returns only
+		 * once all @p commands have been executed on the I2C bus.
 		 * 
 		 * I2C commands execution is based on a Future that is used to:
 		 * - provide data to write commands
 		 * - store data returned by read commands
 		 * 
-		 * @param proxy a LightPoxy to the Future containing all write data and
-		 * ready to store all read data; it is shared by all @p commands ; passing
-		 * a Future will be accepted as the compiler will automatically construct 
-		 * a LightProxy for it.
-		 * @param commands the list of I2CCommand to be executed, one after another
+		 * @param proxy a proxy (actual type defined by `PROXY` alias) to the Future
+		 * containing all write data and ready to store all read data; it is shared
+		 * by all @p commands ; passing a Future will be accepted as the compiler 
+		 * will automatically construct the proper proxy for it.
+		 * @param commands the list of I2CCommand to be executed, one after another;
+		 * this list must be embedded within braces {}.
 		 * 
 		 * @retval 0 when the method did not encounter any error
 		 * @retval errors::EINVAL if passed arguments are invalid e.g. if @p commands
@@ -248,8 +258,7 @@ namespace i2c
 		 * @retval errors::EAGAIN if the associated @p MANAGER has not enough space
 		 * in its queue of commands; in such situation, you may retry the same call
 		 * at a later time.
-		 * @retval errors::EPROTO (on ATtiny MCU only) if an error occured during
-		 * command execution
+		 * @retval errors::EPROTO if an error occured during command execution
 		 * 
 		 * @sa read()
 		 * @sa write()
@@ -317,7 +326,8 @@ namespace i2c
 		/**
 		 * Resolve @p proxy to an actual @p T (typically a `Future`).
 		 * @tparam T the type pointed to by @p proxy
-		 * @param proxy the LightProxy to a Future to resolve
+		 * @param proxy the proxy (actual type defined by `PROXY` alias) to a 
+		 * Future to resolve
 		 * @return a reference to the proxied Future
 		 */
 		template<typename T> T& resolve(PROXY<T> proxy) const
@@ -327,8 +337,8 @@ namespace i2c
 
 		/**
 		 * Create a PROXY from @p target.
-		 * Depending ona ctual PROXY type, that may lead to @p target reference
-		 * itself or a lifecycle::LightProxy.
+		 * Depending on actual PROXY type, that may lead to a lifecycle::LightProxy
+		 * or a lifecycle::DirectProxy.
 		 * This can be used by device methods working in blocking mode.
 		 */
 		template<typename T> static PROXY<T> make_proxy(const T& target)
