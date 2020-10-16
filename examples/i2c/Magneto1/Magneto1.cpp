@@ -39,6 +39,8 @@
 #include <fastarduino/time.h>
 #include <fastarduino/new_i2c_handler.h>
 #include <fastarduino/devices/new_hmc5883l.h>
+#include <fastarduino/new_i2c_debug.h>
+#include <fastarduino/new_i2c_status.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
@@ -46,8 +48,6 @@
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
-static constexpr uint8_t MAX_FUTURES = 128;
-static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -56,8 +56,6 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
-static constexpr uint8_t MAX_FUTURES = 128;
-static i2c::I2CCommand i2c_buffer[I2C_BUFFER_SIZE];
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -65,14 +63,12 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-static constexpr uint8_t MAX_FUTURES = 8;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-#if I2C_TRUE_ASYNC
-REGISTER_I2C_ISR(i2c::I2CMode::FAST)
-#endif
+// #define DEBUG_I2C
+#define FORCE_SYNC
 
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 using devices::magneto::DataOutput;
@@ -84,6 +80,34 @@ using devices::magneto::OperatingMode;
 using devices::magneto::SamplesAveraged;
 using devices::magneto::Status;
 using devices::magneto::magnetic_heading;
+
+#ifdef DEBUG_I2C
+static constexpr const uint8_t DEBUG_SIZE = 32;
+using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncStatusDebugManager<
+	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::FAST, DEBUGGER&, DEBUGGER&>;
+#	endif
+#define DEBUG(OUT) debugger.trace(OUT)
+
+#else
+
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncManager<
+	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
+#	endif
+#define DEBUG(OUT)
+#endif
+
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+REGISTER_I2C_ISR(MANAGER)
+#endif
 
 using streams::dec;
 using streams::hex;
@@ -101,7 +125,7 @@ void trace_fields(streams::ostream& out, const Sensor3D& fields)
 	out << dec << F("Fields x = ") << fields.x << F(", y = ") << fields.y << F(", z = ") << fields.z << endl;
 }
 
-using MAGNETOMETER = HMC5883L<i2c::I2CMode::FAST>;
+using MAGNETOMETER = HMC5883L<MANAGER>;
 
 int main() __attribute__((OS_main));
 int main()
@@ -121,32 +145,45 @@ int main()
 	out.width(2);
 	out << F("Start\n") << flush;
 	
-	// Initialize FutureManager
-	future::FutureManager<MAX_FUTURES> future_manager;
-
 	// Initialize I2C async handler
-#if I2C_TRUE_ASYNC
-	MAGNETOMETER::MANAGER manager{i2c_buffer, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
-#else
-	MAGNETOMETER::MANAGER manager{i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS};
+#ifdef DEBUG_I2C
+	DEBUGGER debugger;
 #endif
+
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+#	ifdef DEBUG_I2C
+	MANAGER manager{i2c_buffer, debugger, debugger};
+#	else
+	MANAGER manager{i2c_buffer};
+#	endif
+#else
+#	ifdef DEBUG_I2C
+	MANAGER manager{debugger, debugger};
+#	else
+	MANAGER manager;
+#	endif
+#endif
+
 	manager.begin();
 	out << F("I2C interface started\n") << flush;
-	out << hex << F("status #1 ") << manager.status() << endl;
 	
 	MAGNETOMETER compass{manager};
 	
 	bool ok = compass.begin(
 		OperatingMode::CONTINUOUS, Gain::GAIN_1_9GA, DataOutput::RATE_75HZ, SamplesAveraged::EIGHT_SAMPLES);
 	out << dec << F("begin() ") << ok << '\n' << flush;
-	out << hex << F("status #2 ") << manager.status() << endl;
+	DEBUG(out);
 	trace_status(out, compass.status());
 	while (true)
 	{
 		while (!compass.status().ready()) ;
+#ifdef DEBUG_I2C
+		debugger.reset();
+#endif
 		trace_status(out, compass.status());
 		Sensor3D fields{};
 		ok = compass.magnetic_fields(fields);
+		DEBUG(out);
 
 		// The following code draws maths libraries (too big fro ATtiny84 8KB code)
 #ifndef BREADBOARD_ATTINYX4
@@ -161,6 +198,5 @@ int main()
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << hex << F("status #4 ") << manager.status() << endl;
 	out << F("End\n") << flush;
 }
