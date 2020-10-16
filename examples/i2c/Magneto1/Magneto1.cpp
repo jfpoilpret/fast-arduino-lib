@@ -92,6 +92,7 @@ static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::FAST, DEBUGGER&, DEBUGGER&>;
 #	endif
 #define DEBUG(OUT) debugger.trace(OUT)
+#define RESET_DEBUG() debugger.reset()
 
 #else
 
@@ -103,6 +104,7 @@ static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
 #	endif
 #define DEBUG(OUT)
+#define RESET_DEBUG()
 #endif
 
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
@@ -177,9 +179,7 @@ int main()
 	while (true)
 	{
 		while (!compass.status().ready()) ;
-#ifdef DEBUG_I2C
-		debugger.reset();
-#endif
+		RESET_DEBUG();
 		trace_status(out, compass.status());
 		Sensor3D fields{};
 		ok = compass.magnetic_fields(fields);
