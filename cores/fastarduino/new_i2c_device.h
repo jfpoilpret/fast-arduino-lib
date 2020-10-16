@@ -91,6 +91,16 @@ namespace i2c
 	}
 	/// @endcond
 
+	// Trick to support MODE as I2CDevice constructor template argument (deducible)
+	/// @cond notdocumented
+	template<I2CMode MODE> struct Mode {};
+	/// @endcond
+
+	/** Constant determining that best supported I2C mode for an I2CDevice is STANDARD (100kHz). */
+	static constexpr Mode I2C_STANDARD = Mode<I2CMode::STANDARD>{};
+	/** Constant determining that best supported I2C mode for an I2CDevice is FAST (400kHz). */
+	static constexpr Mode I2C_FAST = Mode<I2CMode::FAST>{};
+	
 	/**
 	 * Base class for all I2C devices.
 	 * 
@@ -126,18 +136,18 @@ namespace i2c
 		 * Create a new I2C device. This constructor must be called by a subclass
 		 * implementing an actua I2C device.
 		 * 
-		 * @tparam MODE the best I2C mode for this device; this determines the 
-		 * `I2CManager` types that can manage this device.
-		 * 
 		 * @param manager the I2C Manager that is in charge of I2C bus
 		 * @param device the 8-bits device address on the I2C bus; it is constructed 
 		 * from the actual 7-bits address, after left-shifting 1 bit. This can be 
 		 * changed dynamically later for devices that support address changes.
+		 * @param mode  the best I2C mode for this device; this determines the 
+		 * `I2CManager` types that can manage this device.
 		 * 
 		 * @sa set_device()
 		 */
-		template<I2CMode MODE = I2CMode::STANDARD>
-		I2CDevice(MANAGER& manager, uint8_t device) : device_{device}, handler_{manager}
+		template<I2CMode MODE>
+		I2CDevice(MANAGER& manager, uint8_t device, UNUSED Mode<MODE> mode) 
+		: device_{device}, handler_{manager}
 		{
 			// Ensure that MANAGER I2C mode is compliant with the best mode for this device
 			static_assert(MODE == I2CMode::FAST || MODE == MANAGER_TRAIT::MODE,

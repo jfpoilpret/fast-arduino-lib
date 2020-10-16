@@ -197,25 +197,24 @@ namespace devices::magneto
 	 * @tparam MODE_ the I2C mode to use; HMC5883L supports both `i2c::I2CMode::STANDARD`
 	 * and `i2c:I2CMode::FAST`
 	 */
-	template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class HMC5883L : public i2c::I2CDevice<MODE_>
+	template<typename MANAGER>
+	class HMC5883L : public i2c::I2CDevice<MANAGER>
 	{
 	private:
+		using PARENT = i2c::I2CDevice<MANAGER>;
+		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+
 		// Forward declarations needed by compiler
 		class WriteRegisterFuture;
 		template<typename T> class ReadRegisterFuture;
 
 	public:
-		/** The I2C transmission mode (speed) used for this device. */
-		static constexpr const i2c::I2CMode MODE = MODE_;
-
-		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
-		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
-
 		/**
 		 * Create a new device driver for a HMC5883L chip.
 		 * @param manager reference to a suitable i2c::I2CManager for this device
 		 */
-		explicit HMC5883L(MANAGER& manager) : i2c::I2CDevice<MODE>{manager, DEVICE_ADDRESS} {}
+		explicit HMC5883L(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_FAST} {}
 
 		// Asynchronous API
 		//==================
@@ -235,9 +234,9 @@ namespace devices::magneto
 		 * 
 		 * @sa begin(BeginFuture&)
 		 */
-		class BeginFuture : public future::Future<void, containers::array<uint8_t, 6>>
+		class BeginFuture : public FUTURE<void, containers::array<uint8_t, 6>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 6>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 6>>;
 		public:
 			explicit BeginFuture(	OperatingMode mode = OperatingMode::SINGLE,
 									Gain gain = Gain::GAIN_1_3GA,
@@ -278,9 +277,9 @@ namespace devices::magneto
 		 * @sa begin(OperatingMode, Gain, DataOutput, SamplesAveraged, MeasurementMode)
 		 * @sa errors
 		 */
-		int begin(BeginFuture& future)
+		int begin(PROXY<BeginFuture> future)
 		{
-			gain_ = GAIN(future.gain());
+			gain_ = GAIN(this->resolve(future).gain());
 			// We split the transaction in 3 write commands (1 byte at CONFIG_REG_A, CONFIG_REG_B and MODE_REG)
 			return this->launch_commands(future, {this->write(2), this->write(2), this->write(2)});
 		}
@@ -321,7 +320,7 @@ namespace devices::magneto
 		 * @sa begin(BeginFuture&)
 		 * @sa errors
 		 */
-		int end(EndFuture& future) INLINE
+		int end(PROXY<EndFuture> future) INLINE
 		{
 			return this->launch_commands(future, {this->write()});
 		}
@@ -360,7 +359,7 @@ namespace devices::magneto
 		 * @sa status()
 		 * @sa errors
 		 */
-		int status(StatusFuture& future) INLINE
+		int status(PROXY<StatusFuture> future) INLINE
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -413,7 +412,7 @@ namespace devices::magneto
 		 * @sa magnetic_fields(Sensor3D&)
 		 * @sa errors
 		 */
-		int magnetic_fields(MagneticFieldsFuture& future)
+		int magnetic_fields(PROXY<MagneticFieldsFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -443,7 +442,7 @@ namespace devices::magneto
 				   MeasurementMode measurement = MeasurementMode::NORMAL)
 		{
 			BeginFuture future{mode, gain, rate, samples, measurement};
-			if (begin(future) != 0) return false;
+			if (begin(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -462,7 +461,7 @@ namespace devices::magneto
 		bool end() INLINE
 		{
 			EndFuture future;
-			if (end(future) != 0) return false;
+			if (end(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -476,7 +475,7 @@ namespace devices::magneto
 		Status status() INLINE
 		{
 			StatusFuture future;
-			if (status(future) != 0) return Status{};
+			if (status(PARENT::make_proxy(future)) != 0) return Status{};
 			Status status;
 			if (future.get(status))
 				return status;
@@ -502,7 +501,7 @@ namespace devices::magneto
 		bool magnetic_fields(Sensor3D& fields)
 		{
 			MagneticFieldsFuture future;
-			if (magnetic_fields(future) != 0) return false;
+			if (magnetic_fields(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(fields);
 		}
 
@@ -535,9 +534,9 @@ namespace devices::magneto
 		static constexpr const uint8_t IDENT_REG_B = 11;
 		static constexpr const uint8_t IDENT_REG_C = 12;
 
-		class WriteRegisterFuture : public future::Future<void, containers::array<uint8_t, 2>>
+		class WriteRegisterFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
-			using PARENT = future::Future<void, containers::array<uint8_t, 2>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		protected:
 			WriteRegisterFuture(uint8_t address, uint8_t value) : PARENT{{address, value}} {}
 			WriteRegisterFuture(WriteRegisterFuture&&) = default;
@@ -545,9 +544,9 @@ namespace devices::magneto
 		};
 
 		template<typename T>
-		class ReadRegisterFuture : public future::Future<T, uint8_t>
+		class ReadRegisterFuture : public FUTURE<T, uint8_t>
 		{
-			using PARENT = future::Future<T, uint8_t>;
+			using PARENT = FUTURE<T, uint8_t>;
 		protected:
 			ReadRegisterFuture(uint8_t address) : PARENT{{address}} {}
 			ReadRegisterFuture(ReadRegisterFuture<T>&&) = default;

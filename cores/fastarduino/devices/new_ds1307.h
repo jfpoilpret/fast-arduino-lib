@@ -112,7 +112,7 @@ namespace devices::rtc
 		 * Create a new device driver for a DS1307 chip.
 		 * @param manager reference to a suitable i2c::I2CManager for this device
 		 */
-		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS} {}
+		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD} {}
 
 		/**
 		 * Get the size of the additional RAM size of the chip.
