@@ -19,7 +19,6 @@
 #include <stdint.h>
 #include "initializer_list.h"
 
-//TODO add begin()/end() to allow iterator-based operations
 namespace containers
 {
 	/**
@@ -182,6 +181,30 @@ namespace containers
 		TREF operator[](uint8_t index)
 		{
 			return buffer_[index];
+		}
+
+		/** Return an iterator to the first element of this array. */
+		TPTR begin()
+		{
+			return buffer_;
+		}
+
+		/** Return an iterator to the last element of this array. */
+		TPTR end()
+		{
+			return buffer_ + N;
+		}
+
+		/** Return a const iterator to the first element of this array. */
+		CTPTR begin() const
+		{
+			return buffer_;
+		}
+
+		/** Return a const iterator to the last element of this array. */
+		CTPTR end() const
+		{
+			return buffer_ + N;
 		}
 
 		/**
