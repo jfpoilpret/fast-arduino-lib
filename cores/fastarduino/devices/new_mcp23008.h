@@ -36,21 +36,26 @@ namespace devices::mcp230xx
 	 * 
 	 * @sa devices::mcp23017::MCP23017
 	 */
-	template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class MCP23008 : public i2c::I2CDevice<MODE_>
+	template<typename MANAGER>
+	class MCP23008 : public i2c::I2CDevice<MANAGER>
+	// template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class MCP23008 : public i2c::I2CDevice<MODE_>
 	{
 	private:
+		using PARENT = i2c::I2CDevice<MANAGER>;
+		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+
 		// Forward declarations needed by compiler
 		class WriteRegisterFuture;
 		struct Write3Registers;
 		class ReadRegisterFuture;
 
+		static constexpr uint8_t compute_address(uint8_t address)
+		{
+			return uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07)) << 1);
+		}
+
 	public:
-		/** The I2C mode (speed) used by this instance. */
-		static constexpr const i2c::I2CMode MODE = MODE_;
-
-		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
-		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
-
 		/**
 		 * Create a new device driver for an MCP23008 chip. The @p address must match
 		 * the actual address set for that chip (through pins A0, A1, A3).
@@ -59,7 +64,7 @@ namespace devices::mcp230xx
 		 * @param address the address part (0-7) set by A0-3 pins of the chip
 		 */
 		MCP23008(MANAGER& manager, uint8_t address)
-			: i2c::I2CDevice<MODE>{manager, uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07)) << 1)} {}
+			: PARENT{manager, compute_address(address & 0x07), i2c::I2C_FAST} {}
 
 		// Asynchronous API
 		//==================
@@ -102,7 +107,7 @@ namespace devices::mcp230xx
 		 * @sa begin(InterruptPolarity)
 		 * @sa errors
 		 */
-		int begin(BeginFuture& future)
+		int begin(PROXY<BeginFuture> future)
 		{
 			return this->launch_commands(future, {write_stop()});
 		}
@@ -124,9 +129,9 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa configure_gpio(ConfigureGPIOFuture&)
 		 */
-		class ConfigureGPIOFuture : public future::Future<void, Write3Registers>
+		class ConfigureGPIOFuture : public FUTURE<void, Write3Registers>
 		{
-			using PARENT = future::Future<void, Write3Registers>;
+			using PARENT = FUTURE<void, Write3Registers>;
 		public:
 			ConfigureGPIOFuture(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
 				:	PARENT{Write3Registers{IODIR, direction, IPOL, polarity, GPPU, pullup}} {}
@@ -152,7 +157,7 @@ namespace devices::mcp230xx
 		 * @sa configure_gpio(uint8_t, uint8_t, uint8_t)
 		 * @sa errors
 		 */
-		int configure_gpio(ConfigureGPIOFuture& future)
+		int configure_gpio(PROXY<ConfigureGPIOFuture> future)
 		{
 			return this->launch_commands(future, {write_stop(2), write_stop(2), write_stop(2)});
 		}
@@ -175,9 +180,9 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa configure_interrupts(ConfigureInterruptsFuture&)
 		 */
-		class ConfigureInterruptsFuture : public future::Future<void, Write3Registers>
+		class ConfigureInterruptsFuture : public FUTURE<void, Write3Registers>
 		{
-			using PARENT = future::Future<void, Write3Registers>;
+			using PARENT = FUTURE<void, Write3Registers>;
 		public:
 			ConfigureInterruptsFuture(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
 				:	PARENT{Write3Registers{GPINTEN, int_pins, DEFVAL, ref, INTCON, compare_ref}} {}
@@ -203,7 +208,7 @@ namespace devices::mcp230xx
 		 * @sa configure_interrupts(uint8_t, uint8_t, uint8_t)
 		 * @sa errors
 		 */
-		int configure_interrupts(ConfigureInterruptsFuture& future)
+		int configure_interrupts(PROXY<ConfigureInterruptsFuture> future)
 		{
 			return this->launch_commands(future, {write_stop(2), write_stop(2), write_stop(2)});
 		}
@@ -245,7 +250,7 @@ namespace devices::mcp230xx
 		 * @sa values(uint8_t value)
 		 * @sa errors
 		 */
-		int values(SetValuesFuture& future)
+		int values(PROXY<SetValuesFuture> future)
 		{
 			return this->launch_commands(future, {write_stop()});
 		}
@@ -284,7 +289,7 @@ namespace devices::mcp230xx
 		 * @sa uint8_t values()
 		 * @sa errors
 		 */
-		int values(GetValuesFuture& future)
+		int values(PROXY<GetValuesFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -325,7 +330,7 @@ namespace devices::mcp230xx
 		 * @sa uint8_t interrupt_flags()
 		 * @sa errors
 		 */
-		int interrupt_flags(InterruptFlagsFuture& future)
+		int interrupt_flags(PROXY<InterruptFlagsFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -368,7 +373,7 @@ namespace devices::mcp230xx
 		 * @sa uint8_t captured_values()
 		 * @sa errors
 		 */
-		int captured_values(CapturedValuesFuture& future)
+		int captured_values(PROXY<CapturedValuesFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -391,7 +396,7 @@ namespace devices::mcp230xx
 		bool begin(InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
 			BeginFuture future{interrupt_polarity};
-			if (begin(future) != 0) return false;
+			if (begin(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -416,7 +421,7 @@ namespace devices::mcp230xx
 		bool configure_gpio(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
 		{
 			ConfigureGPIOFuture future{direction, pullup, polarity};
-			if (configure_gpio(future) != 0) return false;
+			if (configure_gpio(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -441,7 +446,7 @@ namespace devices::mcp230xx
 		bool configure_interrupts(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
 		{
 			ConfigureInterruptsFuture future{int_pins, ref, compare_ref};
-			if (configure_interrupts(future) != 0) return false;
+			if (configure_interrupts(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -460,7 +465,7 @@ namespace devices::mcp230xx
 		bool values(uint8_t value)
 		{
 			SetValuesFuture future{value};
-			if (values(future) != 0) return false;
+			if (values(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -476,7 +481,7 @@ namespace devices::mcp230xx
 		uint8_t values()
 		{
 			GetValuesFuture future;
-			if (values(future) != 0) return 0;
+			if (values(PARENT::make_proxy(future)) != 0) return 0;
 			uint8_t value;
 			if (future.get(value))
 				return value;
@@ -497,7 +502,7 @@ namespace devices::mcp230xx
 		uint8_t interrupt_flags()
 		{
 			InterruptFlagsFuture future;
-			if (interrupt_flags(future) != 0) return 0;
+			if (interrupt_flags(PARENT::make_proxy(future)) != 0) return 0;
 			uint8_t value;
 			if (future.get(value))
 				return value;
@@ -520,7 +525,7 @@ namespace devices::mcp230xx
 		uint8_t captured_values()
 		{
 			CapturedValuesFuture future;
-			if (captured_values(future) != 0) return 0;
+			if (captured_values(PARENT::make_proxy(future)) != 0) return 0;
 			uint8_t value;
 			if (future.get(value))
 				return value;
@@ -557,7 +562,7 @@ namespace devices::mcp230xx
 		static constexpr const uint8_t IOCON_ODR = bits::BV8(2);
 		static constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
 
-		i2c::I2CCommand write_stop(uint8_t byte_count = 0) const
+		i2c::I2CLightCommand write_stop(uint8_t byte_count = 0) const
 		{
 			return this->write(byte_count, i2c::I2CFinish::FORCE_STOP);
 		}
@@ -587,18 +592,18 @@ namespace devices::mcp230xx
 			uint8_t value;
 		};
 
-		class WriteRegisterFuture : public future::Future<void, WriteRegister>
+		class WriteRegisterFuture : public FUTURE<void, WriteRegister>
 		{
-			using PARENT = future::Future<void, WriteRegister>;
+			using PARENT = FUTURE<void, WriteRegister>;
 		protected:
 			WriteRegisterFuture(uint8_t address, uint8_t value) : PARENT{WriteRegister{address, value}} {}
 			WriteRegisterFuture(WriteRegisterFuture&&) = default;
 			WriteRegisterFuture& operator=(WriteRegisterFuture&&) = default;
 		};
 
-		class ReadRegisterFuture : public future::Future<uint8_t, uint8_t>
+		class ReadRegisterFuture : public FUTURE<uint8_t, uint8_t>
 		{
-			using PARENT = future::Future<uint8_t, uint8_t>;
+			using PARENT = FUTURE<uint8_t, uint8_t>;
 		protected:
 			ReadRegisterFuture(uint8_t address) : PARENT{address} {}
 			ReadRegisterFuture(ReadRegisterFuture&&) = default;

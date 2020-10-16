@@ -84,9 +84,14 @@ namespace devices::mcp230xx
 	 * @tparam MODE_ the I2C mode to use; MCP23017 supports both `i2c::I2CMode::STANDARD`
 	 * and `i2c::I2CMode::FAST`
 	 */
-	template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class MCP23017 : public i2c::I2CDevice<MODE_>
+	template<typename MANAGER>
+	class MCP23017 : public i2c::I2CDevice<MANAGER>
 	{
 	private:
+		using PARENT = i2c::I2CDevice<MANAGER>;
+		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+
 		template<MCP23017Port P> using TRAIT = mcp23017_traits::Port_trait<P>;
 		template<MCP23017Port P> using T = typename TRAIT<P>::TYPE;
 
@@ -95,13 +100,12 @@ namespace devices::mcp230xx
 		template<MCP23017Port P> struct Write3Registers;
 		template<MCP23017Port P> class ReadRegisterFuture;
 
+		static constexpr uint8_t compute_address(uint8_t address)
+		{
+			return uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07)) << 1);
+		}
+
 	public:
-		/** The I2C mode (speed) used by this instance. */
-		static constexpr const i2c::I2CMode MODE = MODE_;
-
-		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
-		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
-
 		/**
 		 * Create a new device driver for an MCP23017 chip. The @p address must match
 		 * the actual address set for that chip (through pins A0, A1, A3).
@@ -110,7 +114,7 @@ namespace devices::mcp230xx
 		 * @param address the address part (0-7) set by A0-3 pins of the chip
 		 */
 		MCP23017(MANAGER& manager, uint8_t address)
-			: i2c::I2CDevice<MODE>{manager, uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07)) << 1)} {}
+			: PARENT{manager, compute_address(address & 0x07), i2c::I2C_FAST} {}
 
 		// Asynchronous API
 		//==================
@@ -161,7 +165,7 @@ namespace devices::mcp230xx
 		 * @sa begin(bool, InterruptPolarity)
 		 * @sa errors
 		 */
-		int begin(BeginFuture& future)
+		int begin(PROXY<BeginFuture> future)
 		{
 			return this->launch_commands(future, {write_stop()});
 		}
@@ -187,9 +191,9 @@ namespace devices::mcp230xx
 		 * @sa configure_gpio(ConfigureGPIOFuture<P>&)
 		 */
 		template<MCP23017Port P_>
-		class ConfigureGPIOFuture : public future::Future<void, Write3Registers<P_>>
+		class ConfigureGPIOFuture : public FUTURE<void, Write3Registers<P_>>
 		{
-			using PARENT = future::Future<void, Write3Registers<P_>>;
+			using PARENT = FUTURE<void, Write3Registers<P_>>;
 		public:
 			ConfigureGPIOFuture(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 				:	PARENT{Write3Registers<P_>{IODIR_A, direction, IPOL_A, polarity, GPPU_A, pullup}} {}
@@ -219,7 +223,7 @@ namespace devices::mcp230xx
 		 * @sa configure_gpio(T<P_>, T<P_>, T<P_>)
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int configure_gpio(ConfigureGPIOFuture<P_>& future)
+		template<MCP23017Port P_> int configure_gpio(PROXY<ConfigureGPIOFuture<P_>> future)
 		{
 			constexpr uint8_t SIZE = sizeof(T<P_>) + 1;
 			return this->launch_commands(future, {write_stop(SIZE), write_stop(SIZE), write_stop(SIZE)});
@@ -247,9 +251,9 @@ namespace devices::mcp230xx
 		 * @sa configure_interrupts(ConfigureInterruptsFuture<P_>&)
 		 */
 		template<MCP23017Port P_>
-		class ConfigureInterruptsFuture : public future::Future<void, Write3Registers<P_>>
+		class ConfigureInterruptsFuture : public FUTURE<void, Write3Registers<P_>>
 		{
-			using PARENT = future::Future<void, Write3Registers<P_>>;
+			using PARENT = FUTURE<void, Write3Registers<P_>>;
 		public:
 			ConfigureInterruptsFuture(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 				:	PARENT{Write3Registers<P_>{GPINTEN_A, int_pins, DEFVAL_A, ref, INTCON_A, compare_ref}} {}
@@ -280,7 +284,7 @@ namespace devices::mcp230xx
 		 * @sa errors
 		 */
 		template<MCP23017Port P_>
-		int configure_interrupts(ConfigureInterruptsFuture<P_>& future)
+		int configure_interrupts(PROXY<ConfigureInterruptsFuture<P_>> future)
 		{
 			constexpr uint8_t SIZE = sizeof(T<P_>) + 1;
 			return this->launch_commands(future, {write_stop(SIZE), write_stop(SIZE), write_stop(SIZE)});
@@ -331,7 +335,7 @@ namespace devices::mcp230xx
 		 * @sa values(T<P_> value)
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int values(SetValuesFuture<P_>& future)
+		template<MCP23017Port P_> int values(PROXY<SetValuesFuture<P_>> future)
 		{
 			return this->launch_commands(future, {write_stop()});
 		}
@@ -378,7 +382,7 @@ namespace devices::mcp230xx
 		 * @sa T<P_> values()
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int values(GetValuesFuture<P_>& future)
+		template<MCP23017Port P_> int values(PROXY<GetValuesFuture<P_>> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -428,7 +432,7 @@ namespace devices::mcp230xx
 		 * @sa T<P_> interrupt_flags()
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int interrupt_flags(InterruptFlagsFuture<P_>& future)
+		template<MCP23017Port P_> int interrupt_flags(PROXY<InterruptFlagsFuture<P_>> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -480,7 +484,7 @@ namespace devices::mcp230xx
 		 * @sa T<P_> captured_values()
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int captured_values(CapturedValuesFuture<P_>& future)
+		template<MCP23017Port P_> int captured_values(PROXY<CapturedValuesFuture<P_>> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
@@ -508,7 +512,7 @@ namespace devices::mcp230xx
 				   InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
 			BeginFuture future{mirror_interrupts, interrupt_polarity};
-			if (begin(future) != 0) return false;
+			if (begin(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -536,7 +540,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_> bool configure_gpio(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 		{
 			ConfigureGPIOFuture<P_> future{direction, pullup, polarity};
-			if (configure_gpio(future) != 0) return false;
+			if (configure_gpio(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -565,7 +569,7 @@ namespace devices::mcp230xx
 		bool configure_interrupts(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 		{
 			ConfigureInterruptsFuture<P_> future{int_pins, ref, compare_ref};
-			if (configure_interrupts(future) != 0) return false;
+			if (configure_interrupts(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -587,7 +591,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_> bool values(T<P_> value)
 		{
 			SetValuesFuture<P_> future{value};
-			if (values(future) != 0) return false;
+			if (values(PARENT::make_proxy(future)) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -606,7 +610,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_> T<P_> values()
 		{
 			GetValuesFuture<P_> future;
-			if (values(future) != 0) return T<P_>{};
+			if (values(PARENT::make_proxy(future)) != 0) return T<P_>{};
 			T<P_> value;
 			if (future.get(value))
 				return value;
@@ -630,7 +634,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_> T<P_> interrupt_flags()
 		{
 			InterruptFlagsFuture<P_> future;
-			if (interrupt_flags(future) != 0) return T<P_>{};
+			if (interrupt_flags(PARENT::make_proxy(future)) != 0) return T<P_>{};
 			T<P_> value;
 			if (future.get(value))
 				return value;
@@ -656,7 +660,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_> T<P_> captured_values()
 		{
 			CapturedValuesFuture<P_> future;
-			if (captured_values(future) != 0) return T<P_>{};
+			if (captured_values(PARENT::make_proxy(future)) != 0) return T<P_>{};
 			T<P_> value;
 			if (future.get(value))
 				return value;
@@ -705,7 +709,7 @@ namespace devices::mcp230xx
 		static constexpr const uint8_t IOCON_ODR = bits::BV8(2);
 		static constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
 
-		i2c::I2CCommand write_stop(uint8_t byte_count = 0) const
+		i2c::I2CLightCommand write_stop(uint8_t byte_count = 0) const
 		{
 			return this->write(byte_count, i2c::I2CFinish::FORCE_STOP);
 		}
@@ -740,9 +744,9 @@ namespace devices::mcp230xx
 		};
 
 		template<MCP23017Port P>
-		class WriteRegisterFuture : public future::Future<void, WriteRegister<P>>
+		class WriteRegisterFuture : public FUTURE<void, WriteRegister<P>>
 		{
-			using PARENT = future::Future<void, WriteRegister<P>>;
+			using PARENT = FUTURE<void, WriteRegister<P>>;
 		protected:
 			WriteRegisterFuture(uint8_t address, T<P> value) : PARENT{WriteRegister<P>{address, value}} {}
 			WriteRegisterFuture(WriteRegisterFuture<P>&&) = default;
@@ -750,10 +754,10 @@ namespace devices::mcp230xx
 		};
 
 		template<MCP23017Port P>
-		class ReadRegisterFuture : public future::Future<T<P>, uint8_t>
+		class ReadRegisterFuture : public FUTURE<T<P>, uint8_t>
 		{
 			static constexpr uint8_t SHIFT = TRAIT<P>::REG_SHIFT;
-			using PARENT = future::Future<T<P>, uint8_t>;
+			using PARENT = FUTURE<T<P>, uint8_t>;
 		protected:
 			ReadRegisterFuture(uint8_t address) : PARENT{uint8_t(address + SHIFT)} {}
 			ReadRegisterFuture(ReadRegisterFuture<P>&&) = default;
