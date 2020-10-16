@@ -27,6 +27,8 @@ namespace devices
 {
 	/**
 	 * Defines the API for MCP23008/MCP23017 chips support.
+	 * @sa devices::mcp230xx::MCP23008
+	 * @sa devices::mcp230xx::MCP23017
 	 */
 	namespace mcp230xx
 	{

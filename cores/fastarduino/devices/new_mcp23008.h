@@ -24,7 +24,6 @@
 #include "mcp230xx.h"
 #include "../new_i2c_device.h"
 
-//TODO review API doc
 namespace devices::mcp230xx
 {
 	/**
