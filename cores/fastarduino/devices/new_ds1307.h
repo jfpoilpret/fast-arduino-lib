@@ -30,11 +30,18 @@
 #include "../new_i2c_device.h"
 
 // Device driver guidelines:
-// - Template on MODE only if both modes accepted, otherwise force proper MODE
-// - Define Future subclass (inside device class) for every future requiring input (constant, or user-provided)
+// - Template on MANAGER, subclass of I2CDevice
+// - define types aliases PARENT, PROXY and FUTURE
+// - constructor shall pass one of i2c::Mode i2c::I2C_STANDARD or i2c::I2C_FAST
+//   to inherited constructor, in order tos pecify the BEST mode supported by this driver
+// - Define FUTURE subclass (inside device class) for every future requiring input (constant, or user-provided)
 //   naming convention: MethodNameFuture
-// - Future subclass shall have explicit constructor with mandatory input arguments (no default)
-// - each API method returns int (error code) and takes reference to specific future as unique argument
+// - FUTURE subclass shall have explicit constructor with mandatory input arguments (no default)
+// - each async API method returns int (error code) and takes a PROXY to specific future as unique argument
+// - each async API shall have a matching sync API with same name but different prototype:
+//   direct input arguments, reference to output arguments, bool return (true if OK)
+//   each sync API calls the matching async API after creating the proper Future on the stack
+//   then it calls await() or get() on the future before returning.
 
 namespace devices
 {
@@ -93,10 +100,13 @@ namespace devices::rtc
 	/**
 	 * I2C device driver for the DS1307 RTC chip.
 	 * Note that this chip only supports standard I2C mode (100 KHz).
+	 * 
+	 * @tparam MANAGER one of FastArduino available I2CManager
 	 */
 	template<typename MANAGER>
 	class DS1307 : public i2c::I2CDevice<MANAGER>
 	{
+	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
@@ -110,7 +120,8 @@ namespace devices::rtc
 	public:
 		/**
 		 * Create a new device driver for a DS1307 chip.
-		 * @param manager reference to a suitable i2c::I2CManager for this device
+		 * 
+		 * @param manager reference to a suitable MANAGER for this device
 		 */
 		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD} {}
 
@@ -124,7 +135,6 @@ namespace devices::rtc
 
 		// Asynchronous API
 		//==================
-
 		/**
 		 * Create a future to be used by asynchronous method set_datetime(SetDatetimeFuture&).
 		 * This is used by `set_datetime()` to pass input settings, and it shall be used 
@@ -164,10 +174,9 @@ namespace devices::rtc
 		 * @param future a `SetDatetimeFuture` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -217,10 +226,9 @@ namespace devices::rtc
 		 * @param future a `GetDatetimeFuture` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -279,10 +287,9 @@ namespace devices::rtc
 		 * @param future a `SetRamFuture<SIZE>` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -333,10 +340,9 @@ namespace devices::rtc
 		 * @param future an `SetRam1Future` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -391,10 +397,9 @@ namespace devices::rtc
 		 * @param future an `GetRamFuture` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -442,10 +447,9 @@ namespace devices::rtc
 		 * @param future an `GetRam1Future` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -486,10 +490,9 @@ namespace devices::rtc
 		 * @param future a `HaltClockFuture` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -537,10 +540,9 @@ namespace devices::rtc
 		 * @param future an `EnableOutputFuture` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -587,10 +589,9 @@ namespace devices::rtc
 		 * @param future a `DisableOutputFuture` passed by the caller, that will be
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happended; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -615,8 +616,7 @@ namespace devices::rtc
 		 * `tm::tm_wday` must be set correctly by yourself (the RTC chip does not
 		 * calculate it itself).
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa set_datetime(SetDatetimeFuture&)
 		 */
@@ -634,8 +634,7 @@ namespace devices::rtc
 		 * @param datetime a reference to a `tm` variable that will be filled with
 		 * current date and time from the RTC chip
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa get_datetime(GetDatetimeFuture&)
 		 */
@@ -653,7 +652,7 @@ namespace devices::rtc
 		 * @warning Blocking API!
 		 * 
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa set_datetime()
 		 * @sa halt_clock(HaltClockFuture&)
@@ -672,7 +671,7 @@ namespace devices::rtc
 		 * @param frequency one of the supported RTC frequencies, defined in
 		 * `SquareWaveFrequency` enum
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa disable_output()
 		 * @sa enable_output(EnableOutputFuture&)
@@ -690,7 +689,7 @@ namespace devices::rtc
 		 * 
 		 * @param output_value value to force on SQW/OUT pin
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa enable_output()
 		 * @sa disable_output(DisableOutputFuture&)
@@ -710,7 +709,7 @@ namespace devices::rtc
 		 * `0` and `ram_size()`.
 		 * @param data the value to put at @p address
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa get_ram(uint8_t)
 		 * @sa set_ram(SetRam1Future&)
@@ -752,7 +751,7 @@ namespace devices::rtc
 		 * `0` and `ram_size()`.
 		 * @param data pointer to a buffer containing the values to write
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa get_ram(uint8_t, uint8_t(&)[])
 		 * @sa set_ram(SetRamFuture<SIZE>&)
@@ -774,7 +773,7 @@ namespace devices::rtc
 		 * `0` and `ram_size()`.
 		 * @param data pointer to a buffer where read values will be copied
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa set_ram(uint8_t, const uint8_t(&)[])
 		 * @sa get_ram(GetRamFuture<SIZE>&)
@@ -798,7 +797,7 @@ namespace devices::rtc
 		 * `0` and `ram_size() - sizeof(T)`.
 		 * @param data the actual data of type @p T, to be written
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa get_ram(uint8_t, T&)
 		 * @sa set_ram(SetRamFuture<SIZE>&)
@@ -824,7 +823,7 @@ namespace devices::rtc
 		 * `0` and `ram_size() - sizeof(T)`.
 		 * @param data a reference to a variable that will be copied the read content
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
+		 * @retval false if the operation failed
 		 * 
 		 * @sa set_ram(uint8_t, const T&)
 		 * @sa get_ram(GetRamFuture<SIZE>&)

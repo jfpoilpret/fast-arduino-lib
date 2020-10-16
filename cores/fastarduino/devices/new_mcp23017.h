@@ -81,8 +81,7 @@ namespace devices::mcp230xx
 	 * I2C device driver for Microchip MCP23017 support.
 	 * The MCP23017 chip is a 16-Bit I/O Expander with I2C interface.
 	 * 
-	 * @tparam MODE_ the I2C mode to use; MCP23017 supports both `i2c::I2CMode::STANDARD`
-	 * and `i2c::I2CMode::FAST`
+	 * @tparam MANAGER one of FastArduino available I2CManager
 	 */
 	template<typename MANAGER>
 	class MCP23017 : public i2c::I2CDevice<MANAGER>
@@ -110,15 +109,14 @@ namespace devices::mcp230xx
 		 * Create a new device driver for an MCP23017 chip. The @p address must match
 		 * the actual address set for that chip (through pins A0, A1, A3).
 		 * 
-		 * @param manager reference to a suitable i2c::I2CManager for this device
+		 * @param manager reference to a suitable MANAGER for this device
 		 * @param address the address part (0-7) set by A0-3 pins of the chip
 		 */
 		MCP23017(MANAGER& manager, uint8_t address)
-			: PARENT{manager, compute_address(address & 0x07), i2c::I2C_FAST} {}
+			: PARENT{manager, compute_address(address), i2c::I2C_FAST} {}
 
 		// Asynchronous API
 		//==================
-		
 		/**
 		 * Create a future to be used by asynchronous method begin(BeginFuture&).
 		 * This is used by `begin()` to pass input settings, and it shall be used 
@@ -154,10 +152,9 @@ namespace devices::mcp230xx
 		 * @param future a `BeginFuture` passed by the caller, that will be updated
 		 * once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happened; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -212,10 +209,9 @@ namespace devices::mcp230xx
 		 * @param future a `ConfigureGPIOFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happened; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -272,10 +268,9 @@ namespace devices::mcp230xx
 		 * @param future a `ConfigureInterruptsFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happened; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -324,10 +319,9 @@ namespace devices::mcp230xx
 		 * @param future a `SetValuesFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happened; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -371,10 +365,9 @@ namespace devices::mcp230xx
 		 * @param future a `GetValuesFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happened; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -421,10 +414,9 @@ namespace devices::mcp230xx
 		 * @param future a `InterruptFlagsFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happened; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -473,10 +465,9 @@ namespace devices::mcp230xx
 		 * @param future a `CapturedValuesFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
-		 * @return an error code if something bad happened; for ATmega, this 
-		 * typically happens when the queue of I2CCommand is full, or when 
-		 * @p future could not be registered with the FutureManager; for ATtiny,
-		 * since all execution is synchronous, any error on the I2C bus or the 
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -491,7 +482,6 @@ namespace devices::mcp230xx
 
 		// Synchronous API
 		//=================
-
 		/**
 		 * Initialize the chip before operation.
 		 * @warning Blocking API!
@@ -503,8 +493,7 @@ namespace devices::mcp230xx
 		 * @param interrupt_polarity the level triggerred on INTA or INTB pin when 
 		 * an interrupt occurs
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa begin(BeginFuture&)
 		 */
@@ -532,8 +521,7 @@ namespace devices::mcp230xx
 		 * the matching input pin; if `1`, polarity is inverted, ie one the level
 		 * on the input pin is `0`, then it is read as `1`, and conversely.
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa configure_gpio(ConfigureGPIOFuture<P_>&)
 		 */
@@ -560,8 +548,7 @@ namespace devices::mcp230xx
 		 * time the input pin changes level, if `1`, an interrupt is generated every
 		 * time the input pin level changes to be diferent than the matching bit.
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa configure_interrupts(ConfigureInterruptsFuture<P_>&)
 		 */
@@ -583,8 +570,7 @@ namespace devices::mcp230xx
 		 * @param value each bit indicates the new level of the matching output pin
 		 * of the selected port
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa values(SetValuesFuture<P_>&)
 		 */
