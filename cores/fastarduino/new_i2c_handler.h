@@ -109,7 +109,18 @@
  * The following snippet shows the minimal code to operate the I2C RTC device
  * DS1307 in synchronous mode:
  * @code
- * TODO I2C snippet
+ * // Define type alias for I2C Manager; here we use the simplest possible synchronous manager
+ * using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
+ * ...
+ * // Instantiate and start I2C Manager
+ * MANAGER manager;
+ * manager.begin();
+ * // Instantiate the DS1307 RTC device
+ * DS1307 rtc{manager};
+ * 
+ * // Call specific DS1307 API to get current date
+ * tm now;
+ * rtc.get_datetime(now);
  * @endcode
  * 
  * The next snippet demonstrates how to do the same but in an asynchronous way:
