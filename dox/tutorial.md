@@ -1146,7 +1146,6 @@ the same code as the reading code presented above.
 @anchor i2c Advanced: I2C devices example
 -----------------------------------------
 
-TODO rework according to new API
 FastArduino supports I2C ([Inter-Integrated Circuit](https://en.wikipedia.org/wiki/I%C2%B2C))
 as provided by all AVR MCU (ATmega MCU support I2C natively, ATtiny MCU support it through their USI, Universal 
 Serial Interface). I2C is also often called *TWI* for Two-Wires Interface.
@@ -1182,7 +1181,7 @@ to learn more about there, please take a look at the API and examples using it.
 
 In order to illustrate concretely I2C API usage in this tutorial, we will focus on a concrete
 example with the DS1307 RTC chip. If you want to develop an API for your own I2C device then
-please refer to `i2c::I2CDevice` API documentation and the dedicated tutorial (TODO LINK).
+please refer to `i2c::I2CDevice` API documentation and the [dedicated tutorial](i2cdevices.html).
 
 The following example reads the current clock time from a DS1307 chip:
 
