@@ -111,12 +111,13 @@
  * @code
  * // Define type alias for I2C Manager; here we use the simplest possible synchronous manager
  * using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
+ * using RTC = DS1307<MANAGER>;
  * ...
  * // Instantiate and start I2C Manager
  * MANAGER manager;
  * manager.begin();
  * // Instantiate the DS1307 RTC device
- * DS1307 rtc{manager};
+ * RTC rtc{manager};
  * 
  * // Call specific DS1307 API to get current date
  * tm now;
@@ -125,7 +126,32 @@
  * 
  * The next snippet demonstrates how to do the same but in an asynchronous way:
  * @code
- * TODO I2C snippet
+ * // Define type alias for I2C Manager; here we use the simplest possible asynchronous manager
+ * using MANAGER = i2c::I2CAsyncManager<i2c::I2CMode::STANDARD>;
+ * using RTC = DS1307<MANAGER>;
+ * 
+ * // Define a buffer for the I2C Manager commands queue
+ * static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+ * static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+ * 
+ * // Register I2C ISR to allow asynchronous operation with the I2C Manager
+ * REGISTER_I2C_ISR(MANAGER)
+ * ...
+ * // Instantiate and start I2C Manager
+ * MANAGER manager{i2c_buffer};
+ * manager.begin();
+ * // Instantiate the DS1307 RTC device
+ * RTC rtc{manager};
+ * 
+ * // Prepare Future to receive current date
+ * RTC::GetDatetimeFuture future;
+ * // Call specific DS1307 API to get current date
+ * int error = rtc.get_datetime(future);
+ * // Check error here (should be 0)...
+ * 
+ * // When needed, get the Future result (await if needed)
+ * tm now;
+ * bool ok = get_date_future.get(now);
  * @endcode
  * 
  * @sa REGISTER_I2C_ISR()
