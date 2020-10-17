@@ -14,7 +14,7 @@
 
 /*
  * Check DS1307 I2C device (real-time clock) and display output to the UART console.
- * This program uses FastArduino DS1307 support API in asynchronous mode.
+ * This program uses FastArduino DS1307 support API in asynchronous mode (ATmega only).
  * 
  * Wiring:
  * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
@@ -32,14 +32,6 @@
  *   - D20 (PD1, SDA): connected to DS1307 SDA pin
  *   - D21 (PD0, SCL): connected to DS1307 SDA pin
  *   - direct USB access
- * - on ATtinyX4 based boards:
- *   - D6 (PA6, SDA): connected to DS1307 SDA pin
- *   - D4 (PA4, SCL): connected to DS1307 SDA pin
- *   - D8 (PB0, TX): connected to SerialUSB converter
- * - on ATtinyX5 based boards:
- *   - D0 (PB0, SDA): connected to DS1307 SDA pin
- *   - D2 (PB2, SCL): connected to DS1307 SDA pin
- *   - D3 (PB3, TX): connected to SerialUSB converter
  */
 
 #include <fastarduino/time.h>
@@ -74,16 +66,6 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
-#elif defined(BREADBOARD_ATTINYX4)
-#define HARDWARE_UART 0
-#include <fastarduino/soft_uart.h>
-static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-#elif defined(BREADBOARD_ATTINYX5)
-#define HARDWARE_UART 0
-#include <fastarduino/soft_uart.h>
-static constexpr const board::DigitalPin TX = board::DigitalPin::D3_PB3;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #else
 #error "Current target is not yet supported!"
 #endif
