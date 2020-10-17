@@ -59,7 +59,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10 sonar/Sonar11				\
 						i2c/DS1307RTC3 i2c/DS1307RTC4			\
-						i2c/MultiIO0 i2c/MultiIO3				\
+						i2c/MultiIO3							\
 						i2c/MultiIO4 i2c/MultiIO5				\
 						tones/tones0							\
 						tones/tones1 tones/tones2 tones/tones3	\
@@ -87,7 +87,6 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						pci/PinChangeInterrupt4					\
 						pci/PinChangeInterrupt5MEGA				\
 						i2c/DS1307RTC3 i2c/DS1307RTC4			\
-						i2c/MultiIO0							\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							\
@@ -103,7 +102,7 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						analog/AnalogComparator5				\
 						analog/AnalogComparator6				\
 						i2c/DS1307RTC3 i2c/DS1307RTC4			\
-						i2c/MultiIO0 i2c/MultiIO3				\
+						i2c/MultiIO3							\
 						i2c/MultiIO4 i2c/MultiIO5				\
 						sonar/Sonar10 sonar/Sonar11				\
 						uart/UartApp1							\
@@ -124,7 +123,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator5				\
 								analog/AnalogComparator6				\
 								i2c/DS1307RTC3 i2c/DS1307RTC4			\
-								i2c/MultiIO0 i2c/MultiIO3				\
+								i2c/MultiIO3							\
 								i2c/MultiIO4 i2c/MultiIO5				\
 								sonar/Sonar10 sonar/Sonar11				\
 								uart/UartApp1							\

@@ -17,8 +17,8 @@
 #include <fastarduino/utilities.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/array.h>
-#include <fastarduino/new_i2c_handler.h>
-#include <fastarduino/new_i2c_device.h>
+#include <fastarduino/i2c_handler.h>
+#include <fastarduino/i2c_device.h>
 
 #ifdef ARDUINO_UNO
 #define HARD_UART

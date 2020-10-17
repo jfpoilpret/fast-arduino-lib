@@ -29,11 +29,11 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/new_i2c_device.h>
+#include <fastarduino/i2c_device.h>
 #include <fastarduino/utilities.h>
 #include <fastarduino/uart.h>
-#include <fastarduino/new_i2c_debug.h>
-#include <fastarduino/new_i2c_status.h>
+#include <fastarduino/i2c_debug.h>
+#include <fastarduino/i2c_status.h>
 
 // This macro determines if extensive debug traces should be sent (recommended during first attempts)
 #define DEBUG_I2C

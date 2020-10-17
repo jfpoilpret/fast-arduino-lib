@@ -72,7 +72,6 @@ Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interru
 MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0
 MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	1974	74	2058	74	2152	74	1896	72	1892	72
 MultiADC02	MCP3X0X chips support compilation check (spi)	4294	74	4378	74	4518	74	4212	72	4208	72
-MultiIO0	Direct MCP23017 command and trace (UATX) for testing chip (i2c)	2296	180			2436	180				
 MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	974	8	1058	8	1106	8	1036	8	1032	8
 MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1106	8	1190	8	1238	8	1186	8	1182	8
 MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	990	12								

@@ -28,7 +28,7 @@
 #include "future.h"
 #include "bits.h"
 #include "utilities.h"
-#include "new_i2c_handler_common.h"
+#include "i2c_handler_common.h"
 
 // Prevent inclusion for ATmega architecture
 #ifdef TWCR

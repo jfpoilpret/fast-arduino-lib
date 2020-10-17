@@ -25,9 +25,9 @@
 #include <math.h>
 #include "common_magneto.h"
 #include "../i2c_device.h"
+#include "../array.h"
 #include "../utilities.h"
 
-//TODO use bool instead of uint8_t when possible (in structs with bitfields)
 namespace devices::magneto
 {
 	/**
@@ -105,21 +105,29 @@ namespace devices::magneto
 	/**
 	 * The chip status, as defined in datasheet p16.
 	 */
-	struct Status
+	class Status
 	{
-		Status() : ready{}, lock{}, reserved{} {}
+	public:
+		Status() : ready_{}, lock_{}, reserved_{} {}
+		bool ready() const
+		{
+			return ready_;
+		}
+		bool lock() const
+		{
+			return lock_;
+		}
 
-		uint8_t ready : 1;
-		uint8_t lock : 1;
-		/// @cond notdocumented
-		uint8_t reserved : 6;
-		/// @endcond
+	private:
+		bool ready_ : 1;
+		bool lock_ : 1;
+		uint8_t reserved_ : 6;
 	};
 
 	/**
 	 * I2C device driver for the HMC5883L compass chip.
-	 * @tparam MODE_ the I2C transmission mode to use for this device; this chip
-	 * supports both available modes.
+	 * 
+	 * @tparam MANAGER one of FastArduino available I2CManager
 	 * 
 	 * The HMC5883L also has a DRDY pin that you can use to an EXT or PCI pin, 
 	 * in order to be notified when sensor data is ready for reading; this is
@@ -185,31 +193,229 @@ namespace devices::magneto
 	 *     }
 	 * }
 	 * @endcode
-	 * 
-	 * @tparam MODE_ the I2C mode to use; HMC5883L supports both `i2c::I2CMode::STANDARD`
-	 * and `i2c:I2CMode::FAST`
 	 */
-	template<i2c::I2CMode MODE_ = i2c::I2CMode::FAST> class HMC5883L : public i2c::I2CDevice<MODE_>
+	template<typename MANAGER>
+	class HMC5883L : public i2c::I2CDevice<MANAGER>
 	{
 	private:
-		using BUSCOND = i2c::BusConditions;
+		using PARENT = i2c::I2CDevice<MANAGER>;
+		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+
+		// Forward declarations needed by compiler
+		class WriteRegisterFuture;
+		template<typename T> class ReadRegisterFuture;
 
 	public:
-		/** The I2C transmission mode (speed) used for this device. */
-		static constexpr const i2c::I2CMode MODE = MODE_;
-
-		/** The type of `i2c::I2CManager` that must be used to handle this device.  */
-		using MANAGER = typename i2c::I2CDevice<MODE>::MANAGER;
-
 		/**
 		 * Create a new device driver for a HMC5883L chip.
-		 * @param manager reference to a suitable i2c::I2CManager for this device
+		 * 
+		 * @param manager reference to a suitable MANAGER for this device
 		 */
-		explicit HMC5883L(MANAGER& manager) : i2c::I2CDevice<MODE>(manager) {}
+		explicit HMC5883L(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_FAST} {}
+
+		// Asynchronous API
+		//==================
+		/**
+		 * Create a future to be used by asynchronous method begin(BeginFuture&).
+		 * This is used by `begin()` to pass input settings, and it shall be used 
+		 * by the caller to determine when the I2C transaction is finished, hence
+		 * when you may use other methods such as `magnetic_fields()` to get sensors
+		 * measurements from the device.
+		 * 
+		 * @param mode the `OperatingMode` to operate this chip
+		 * @param gain the `Gain` to use to increase measured magnetic fields
+		 * @param rate the `DataOutput` rate to use in `OperatingMode::CONTINUOUS` mode
+		 * @param samples the `SamplesAveraged` to use for each measurement
+		 * @param measurement the `MeasurementMode` to use on the chip sensors
+		 * 
+		 * @sa begin(BeginFuture&)
+		 */
+		class BeginFuture : public FUTURE<void, containers::array<uint8_t, 6>>
+		{
+			using PARENT = FUTURE<void, containers::array<uint8_t, 6>>;
+		public:
+			explicit BeginFuture(	OperatingMode mode = OperatingMode::SINGLE,
+									Gain gain = Gain::GAIN_1_3GA,
+									DataOutput rate = DataOutput::RATE_15HZ, 
+									SamplesAveraged samples = SamplesAveraged::ONE_SAMPLE,
+									MeasurementMode measurement = MeasurementMode::NORMAL)
+				:	PARENT{{	CONFIG_REG_A, uint8_t(uint8_t(measurement) | uint8_t(rate) | uint8_t(samples)),
+								CONFIG_REG_B, uint8_t(gain),
+								MODE_REG, uint8_t(mode)}} {}
+			BeginFuture(BeginFuture&&) = default;
+			BeginFuture& operator=(BeginFuture&&) = default;
+
+			/// @cond notdocumented
+			Gain gain() const
+			{
+				return static_cast<Gain>(this->get_input()[3]);
+			}
+			/// @endcond
+		};
 
 		/**
 		 * Start operation of this compass chip. Once this method has been called,
 		 * you may use `magnetic_fields()` to find out the directions of the device.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `BeginFuture` passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa BeginFuture
+		 * @sa end()
+		 * @sa begin(OperatingMode, Gain, DataOutput, SamplesAveraged, MeasurementMode)
+		 * @sa errors
+		 */
+		int begin(PROXY<BeginFuture> future)
+		{
+			gain_ = GAIN(this->resolve(future).gain());
+			// We split the transaction in 3 write commands (1 byte at CONFIG_REG_A, CONFIG_REG_B and MODE_REG)
+			return this->launch_commands(future, {this->write(2), this->write(2), this->write(2)});
+		}
+
+		/**
+		 * Create a future to be used by asynchronous method end(EndFuture&).
+		 * This is used by `end()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa end(EndFuture&)
+		 */
+		class EndFuture : public WriteRegisterFuture
+		{
+		public:
+			EndFuture() : WriteRegisterFuture{MODE_REG, uint8_t(OperatingMode::IDLE)} {}
+			EndFuture(EndFuture&&) = default;
+			EndFuture& operator=(EndFuture&&) = default;
+		};
+
+		/**
+		 * Stop operation of this compass chip. You should not call `magnetic_fields()`
+		 * after calling this method.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `EndFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa EndFuture
+		 * @sa end()
+		 * @sa begin(BeginFuture&)
+		 * @sa errors
+		 */
+		int end(PROXY<EndFuture> future) INLINE
+		{
+			return this->launch_commands(future, {this->write()});
+		}
+
+		/**
+		 * Create a future to be used by asynchronous method status(StatusFuture&).
+		 * This is used by `status()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa status(StatusFuture&)
+		 */
+		class StatusFuture : public ReadRegisterFuture<Status>
+		{
+		public:
+			StatusFuture() : ReadRegisterFuture<Status>{STATUS_REG} {}
+			StatusFuture(StatusFuture&&) = default;
+			StatusFuture& operator=(StatusFuture&&) = default;
+		};
+
+		/**
+		 * Get the curent chip status.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future a `TemperatureFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa StatusFuture
+		 * @sa status()
+		 * @sa errors
+		 */
+		int status(PROXY<StatusFuture> future) INLINE
+		{
+			return this->launch_commands(future, {this->write(), this->read()});
+		}
+
+		/**
+		 * Create a future to be used by asynchronous method magnetic_fields(MagneticFieldsFuture&).
+		 * This is used by `magnetic_fields()` to asynchronously launch the I2C transaction,
+		 * and it shall be used by the caller to determine when the I2C transaction
+		 * is finished.
+		 * 
+		 * @sa magnetic_fields(MagneticFieldsFuture&)
+		 * @sa convert_fields_to_mGA()
+		 */
+		class MagneticFieldsFuture : public ReadRegisterFuture<Sensor3D>
+		{
+			using PARENT = ReadRegisterFuture<Sensor3D>;
+		public:
+			MagneticFieldsFuture() : PARENT{OUTPUT_REG_1} {}
+			MagneticFieldsFuture(MagneticFieldsFuture&&) = default;
+			MagneticFieldsFuture& operator=(MagneticFieldsFuture&&) = default;
+
+			bool get(Sensor3D& fields)
+			{
+				if (!PARENT::get(fields)) return false;
+				utils::swap_bytes(fields.x);
+				utils::swap_bytes(fields.y);
+				utils::swap_bytes(fields.z);
+				return true;
+			}
+		};
+
+		/**
+		 * Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).
+		 * In order to convert raw measurements to physical values, you should
+		 * call `convert_fields_to_mGA()`.
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `AccelFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2CManager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa MagneticFieldsFuture
+		 * @sa convert_fields_to_mGA()
+		 * @sa magnetic_fields(Sensor3D&)
+		 * @sa errors
+		 */
+		int magnetic_fields(PROXY<MagneticFieldsFuture> future)
+		{
+			return this->launch_commands(future, {this->write(), this->read()});
+		}
+
+		// Synchronous API
+		//=================
+		/**
+		 * Start operation of this compass chip. Once this method has been called,
+		 * you may use `magnetic_fields()` to find out the directions of the device.
+		 * @warning Blocking API!
 		 * 
 		 * @param mode the `OperatingMode` to operate this chip
 		 * @param gain the `Gain` to use to increase measured magnetic fields
@@ -217,70 +423,75 @@ namespace devices::magneto
 		 * @param samples the `SamplesAveraged` to use for each measurement
 		 * @param measurement the `MeasurementMode` to use on the chip sensors
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa end()
+		 * @sa begin(BeginFuture&)
 		 */
 		bool begin(OperatingMode mode = OperatingMode::SINGLE, Gain gain = Gain::GAIN_1_3GA,
 				   DataOutput rate = DataOutput::RATE_15HZ, SamplesAveraged samples = SamplesAveraged::ONE_SAMPLE,
 				   MeasurementMode measurement = MeasurementMode::NORMAL)
 		{
-			gain_ = GAIN(gain);
-			return write_register(CONFIG_REG_A, uint8_t(measurement) | uint8_t(rate) | uint8_t(samples))
-				   && write_register(CONFIG_REG_B, uint8_t(gain)) && write_register(MODE_REG, uint8_t(mode));
+			BeginFuture future{mode, gain, rate, samples, measurement};
+			if (begin(PARENT::make_proxy(future)) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
 		}
 
 		/**
 		 * Stop operation of this compass chip. You should not call `magnetic_fields()`
 		 * after calling this method.
+		 * @warning Blocking API!
+		 * 
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa begin()
+		 * @sa end(EndFuture&)
 		 */
 		bool end() INLINE
 		{
-			return write_register(MODE_REG, uint8_t(OperatingMode::IDLE));
+			EndFuture future;
+			if (end(PARENT::make_proxy(future)) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
 		}
 
 		/**
 		 * Get the curent chip status.
+		 * @warning Blocking API!
+		 * 
+		 * @sa Status
+		 * @sa status(StatusFuture&)
 		 */
 		Status status() INLINE
 		{
+			StatusFuture future;
+			if (status(PARENT::make_proxy(future)) != 0) return Status{};
 			Status status;
-			read_register(STATUS_REG, (uint8_t&) status);
-			return status;
+			if (future.get(status))
+				return status;
+			else
+				return Status{};
 		}
 
 		/**
 		 * Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).
 		 * In order to convert raw measurements to physical values, you should
 		 * call `convert_fields_to_mGA()`.
+		 * @warning Blocking API!
 		 * 
 		 * @param fields a reference to a `Sensor3D` variable that will be
 		 * filled with values upon method return
 		 * @retval true if the operation succeeded
-		 * @retval false if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval false if the operation failed
 		 * 
 		 * @sa convert_fields_to_mGA()
+		 * @sa magnetic_fields(MagneticFieldsFuture&)
 		 */
 		bool magnetic_fields(Sensor3D& fields)
 		{
-			using i2c::Status::OK;
-			if (this->write(DEVICE_ADDRESS, OUTPUT_REG_1, BUSCOND::START_NO_STOP) == OK
-				&& this->read(DEVICE_ADDRESS, fields, BUSCOND::REPEAT_START_STOP) == OK)
-			{
-				utils::swap_bytes(fields.x);
-				utils::swap_bytes(fields.y);
-				utils::swap_bytes(fields.z);
-				return true;
-			}
-			else
-				return false;
+			MagneticFieldsFuture future;
+			if (magnetic_fields(PARENT::make_proxy(future)) != 0) return false;
+			return future.get(fields);
 		}
 
 		/**
@@ -312,19 +523,24 @@ namespace devices::magneto
 		static constexpr const uint8_t IDENT_REG_B = 11;
 		static constexpr const uint8_t IDENT_REG_C = 12;
 
-		bool write_register(uint8_t address, uint8_t value)
+		class WriteRegisterFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
-			using i2c::Status::OK;
-			return (this->write(DEVICE_ADDRESS, address, BUSCOND::START_NO_STOP) == OK
-					&& this->write(DEVICE_ADDRESS, value, BUSCOND::NO_START_STOP) == OK);
-		}
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
+		protected:
+			WriteRegisterFuture(uint8_t address, uint8_t value) : PARENT{{address, value}} {}
+			WriteRegisterFuture(WriteRegisterFuture&&) = default;
+			WriteRegisterFuture& operator=(WriteRegisterFuture&&) = default;
+		};
 
-		bool read_register(uint8_t address, uint8_t& value)
+		template<typename T>
+		class ReadRegisterFuture : public FUTURE<T, uint8_t>
 		{
-			using i2c::Status::OK;
-			return (this->write(DEVICE_ADDRESS, address, BUSCOND::START_NO_STOP) == OK
-					&& this->read(DEVICE_ADDRESS, value, BUSCOND::REPEAT_START_STOP) == OK);
-		}
+			using PARENT = FUTURE<T, uint8_t>;
+		protected:
+			ReadRegisterFuture(uint8_t address) : PARENT{{address}} {}
+			ReadRegisterFuture(ReadRegisterFuture<T>&&) = default;
+			ReadRegisterFuture<T>& operator=(ReadRegisterFuture<T>&&) = default;
+		};
 
 		void convert_field_to_mGa(int16_t& value)
 		{

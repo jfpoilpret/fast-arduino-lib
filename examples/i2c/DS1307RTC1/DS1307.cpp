@@ -43,9 +43,9 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/new_i2c_device.h>
-#include <fastarduino/new_i2c_debug.h>
-#include <fastarduino/new_i2c_status.h>
+#include <fastarduino/i2c_device.h>
+#include <fastarduino/i2c_debug.h>
+#include <fastarduino/i2c_status.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1

@@ -33,8 +33,8 @@
 
 #include <fastarduino/int.h>
 #include <fastarduino/time.h>
-#include <fastarduino/new_i2c_device.h>
-#include <fastarduino/devices/new_mcp23008.h>
+#include <fastarduino/i2c_device.h>
+#include <fastarduino/devices/mcp23008.h>
 
 #define FORCE_SYNC
 

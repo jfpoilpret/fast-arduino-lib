@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "new_i2c_handler_common.h"
+#include "i2c_handler_common.h"
 
 namespace i2c
 {

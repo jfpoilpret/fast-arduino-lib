@@ -42,10 +42,10 @@
 
 #include <fastarduino/int.h>
 #include <fastarduino/time.h>
-#include <fastarduino/new_i2c_handler.h>
-#include <fastarduino/devices/new_hmc5883l.h>
-#include <fastarduino/new_i2c_debug.h>
-#include <fastarduino/new_i2c_status.h>
+#include <fastarduino/i2c_handler.h>
+#include <fastarduino/devices/hmc5883l.h>
+#include <fastarduino/i2c_debug.h>
+#include <fastarduino/i2c_status.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1

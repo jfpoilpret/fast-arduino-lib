@@ -23,7 +23,7 @@
 
 #include "flash.h"
 #include "streams.h"
-#include "new_i2c_handler_common.h"
+#include "i2c_handler_common.h"
 
 namespace i2c
 {
