@@ -130,16 +130,18 @@ public:
 
 union BCD
 {
+	BCD() = default;
 	struct
 	{
 		uint8_t units	:4;
 		uint8_t tens	:4;
 	};
-	uint8_t two_digits;
+	uint8_t two_digits = 0;
 };
 
 struct RealTime 
 {
+	RealTime() = default;
 	BCD seconds;
 	BCD minutes;
 	BCD hours;
