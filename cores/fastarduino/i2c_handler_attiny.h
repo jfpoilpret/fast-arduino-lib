@@ -16,7 +16,7 @@
 
 /**
  * @file 
- * ATtiny I2C Manager API. This defines the synchronous I2CManager for ATtiny 
+ * ATtiny I2C Manager API. This defines the synchronous I2C Manager for ATtiny 
  * architecture.
  */
 #ifndef I2C_HANDLER_ATTINY_HH
@@ -247,16 +247,16 @@ namespace i2c
 	 * You should never need to subclass AbstractI2CSyncManager yourself.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
 	 * proxies to Future that can move around and must be controlled by a 
 	 * LifeCycleManager; using `false` will generate smaller code.
-	 * @tparam HAS_STATUS_ tells this I2CManager to call a status hook at each 
+	 * @tparam HAS_STATUS_ tells this I2C Manager to call a status hook at each 
 	 * step of an I2C transaction; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
 	 * `true`. This can be a simple function pointer (of type `I2C_STATUS_HOOK`)
 	 * or a Functor class (or Functor class reference). Using a Functor class will
 	 * generate smaller code.
-	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * @tparam HAS_DEBUG_ tells this I2C Manager to call a debugging hook at each 
 	 * step of an I2C transaction; this is useful for debugging support for a new 
 	 * I2C device; using `false` will generate smaller code.
 	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `HAS_DEBUG_` is 
@@ -462,7 +462,7 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	// Specific traits for I2CManager
+	// Specific traits for I2C Manager
 	template<I2CMode MODE_>
 	struct I2CManager_trait<I2CSyncManager<MODE_>>
 		:	I2CManager_trait_impl<false, false, false, false, MODE_> {};

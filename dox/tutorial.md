@@ -1146,6 +1146,7 @@ the same code as the reading code presented above.
 @anchor i2c Advanced: I2C devices example
 -----------------------------------------
 
+TODO rework according to new API
 FastArduino supports I2C ([Inter-Integrated Circuit](https://en.wikipedia.org/wiki/I%C2%B2C))
 as provided by all AVR MCU (ATmega MCU support I2C natively, ATtiny MCU support it through their USI, Universal 
 Serial Interface). I2C is also often called *TWI* for Two-Wires Interface.
@@ -1157,26 +1158,26 @@ FastArduino also brings specific support to several I2C devices:
 - MCP23008 (8-Bit I/O Expander)
 - MCP23017 (16-Bit I/O Expander)
 
-FastArduino core I2C API is defined in several headers (namespcae `i2c`) and made of a few types:
+FastArduino core I2C API is defined in several headers (namespace `i2c`) and made of a few types:
 - `i2c.h` contains a few constants and enumerations used everywhere else in the I2C API
-- `i2c_handler.h` defines several template classes defining different kinds of "I2CManager"
+- `i2c_handler.h` defines several template classes defining different kinds of "I2C Manager"
 which are central to the API
 - `i2c_device.h` mainly defines `i2c::I2CDevice` template class, which is the abstract base
 class of all concrete I2C devices
 
 Other more specific headers exist but shall not be directly included in programs.
 
-In FastArduino, I2C communication is centralized by an I2CManager; there are several flavors
-of I2CManager defined in FastArduino, with distinct characteristics such as:
+In FastArduino, I2C communication is centralized by an I2C Manager; there are several flavors
+of I2C Manager defined in FastArduino, with distinct characteristics such as:
 - synchronous (all MCU) or asynchronous (ATmega only)
 - I2C mode supported (fast 400kHz or standard 100kHz)
 - policy to follow in case of failure during an I2C transaction
 - ...
 
-In this tutorial, we will use the simplest I2CManager provided by FastArduino: `i2c::I2CSyncManager`,
+In this tutorial, we will use the simplest I2C Manager provided by FastArduino: `i2c::I2CSyncManager`,
 which handles only synchronous (blocking) I2C operations.
 
-There are also asynchronous I2CManagers but they will not be explained here. If you want
+There are also asynchronous I2C Managers but they will not be explained here. If you want
 to learn more about there, please take a look at the API and examples using it.
 
 In order to illustrate concretely I2C API usage in this tutorial, we will focus on a concrete

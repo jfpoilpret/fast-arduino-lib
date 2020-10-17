@@ -35,8 +35,10 @@
 namespace i2c
 {
 	/**
-	 * List of debug states that are reported by the I2CManager in debug mode.
-	 * @sa I2CManager
+	 * List of debug states that are reported by the I2C Manager in debug mode.
+	 * 
+	 * @sa I2CSyncDebugManager
+	 * @sa I2CAsyncDebugManager
 	 */
 	enum class DebugStatus : uint8_t
 	{
@@ -61,9 +63,9 @@ namespace i2c
 		SEND_OK,
 		/** The latest sent byte has not been acknowledged by the slave. */
 		SEND_ERROR,
-		/** I2CManager has acknowledged the latest received byte from the slave. */
+		/** I2C Manager has acknowledged the latest received byte from the slave. */
 		RECV_OK,
-		/** I2CManager has not acknowledged the latest received byte from the slave. */
+		/** I2C Manager has not acknowledged the latest received byte from the slave. */
 		RECV_ERROR
 	};
 
@@ -72,6 +74,9 @@ namespace i2c
 	 * @warning Do not use this (function pointer) for your hooks! This will 
 	 * increase code size and ISR delay. Rather use functors as defined in
 	 * `i2c_debug.h`.
+	 * 
+	 * @sa I2CSyncDebugManager
+	 * @sa I2CAsyncDebugManager
 	 * @sa i2c::debug::I2CDebugRecorder
 	 * @sa i2c::debug::I2CDebugLiveLogger
 	 */
@@ -82,6 +87,9 @@ namespace i2c
 	 * @warning Do not use this (function pointer) for your hooks! This will 
 	 * increase code size and ISR delay. Rather use functors as defined in
 	 * `i2c_status.h`.
+	 * 
+	 * @sa I2CSyncStatusManager
+	 * @sa I2CAsyncStatusManager
 	 * @sa i2c::debug::I2CDebugRecorder
 	 * @sa i2c::debug::I2CDebugLiveLogger
 	 */
@@ -160,7 +168,7 @@ namespace i2c
 	 * - the count of bytes to be read or  written,
 	 * 
 	 * @warning You should never need to use this API by yourself. This is 
-	 * internally used by FastArduino I2CManager to handle I2C transactions.
+	 * internally used by FastArduino I2C Manager to handle I2C transactions.
 	 * 
 	 * @sa I2CCommand
 	 */
@@ -214,7 +222,7 @@ namespace i2c
 	 * - a proxy to the future holding inputs and results of the I2C transaction 
 	 * 
 	 * @warning You should never need to use this API by yourself. This is 
-	 * internally used by FastArduino I2CManager to handle I2C transactions.
+	 * internally used by FastArduino I2C Manager to handle I2C transactions.
 	 */
 	template<typename T> class I2CCommand : public I2CLightCommand
 	{
@@ -370,14 +378,14 @@ namespace i2c
 	 * @tparam ARCH_HANDLER_ the type of an actual class handling I2C control
 	 * on actual target architecture
 	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
 	 * proxies to Future that can move around and must be controlled by a 
 	 * LifeCycleManager; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a 
 	 * simple function pointer (of type `I2C_STATUS_HOOK`) or a Functor class 
 	 * (or Functor class reference). Using a Functor class will generate smaller
 	 * code.
-	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * @tparam HAS_DEBUG_ tells this I2C Manager to call a debugging hook at each 
 	 * step of an I2C transaction; this is useful for debugging support for a new 
 	 * I2C device; using `false` will generate smaller code.
 	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `HAS_DEBUG_` is 
@@ -639,7 +647,7 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	// Specific traits for I2CManager
+	// Specific traits for I2C Manager
 	template<typename T> struct I2CManager_trait
 	{
 		static constexpr bool IS_I2CMANAGER = false;

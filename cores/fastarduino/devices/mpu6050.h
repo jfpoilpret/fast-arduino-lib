@@ -270,7 +270,7 @@ namespace devices::magneto
 	 * I2C device driver for the MPU6050 gyroscope/accelerometer chip.
 	 * Note that the I2C auxiliary mode of the chip is not supported by the driver.
 	 * 
-	 * @tparam MANAGER one of FastArduino available I2CManager
+	 * @tparam MANAGER one of FastArduino available I2C Manager
 	 */
 	template<typename MANAGER>
 	class MPU6050 : public i2c::I2CDevice<MANAGER>
@@ -338,8 +338,8 @@ namespace devices::magneto
 		 * once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -415,8 +415,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -458,8 +458,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -498,8 +498,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -535,8 +535,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -583,8 +583,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -632,8 +632,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -680,8 +680,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -720,8 +720,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -758,8 +758,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -806,8 +806,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -869,8 +869,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -1014,8 +1014,7 @@ namespace devices::magneto
 		 * @warning Blocking API!
 		 * 
 		 * @return the latest raw temperature in degrees if no error occurred
-		 * @retval -32768 if the operation failed; if so, `i2c::I2CManager.status()`
-		 * shall be called for further information on the error.
+		 * @retval -32768 if the operation failed
 		 * 
 		 * @sa temperature(TemperatureFuture&)
 		 * @sa convert_temp_to_centi_degrees()
@@ -1076,8 +1075,7 @@ namespace devices::magneto
 		 * 
 		 * @return the latest interrupt status as an `INTStatus` structure where
 		 * each field maps to the interrupt that occurred; in case of an error,
-		 * the returned status is fully cleared. In order to ensure the returned
-		 * status can be inspected, you should first call `i2c::I2CManager.status()`.
+		 * the returned status is fully cleared.
 		 * 
 		 * @sa interrupt_status(InterruptStatusFuture&)
 		 */
@@ -1115,9 +1113,7 @@ namespace devices::magneto
 		 * 
 		 * @return the number of bytes currently present in the FIFO buffer; when not `0`,
 		 * you should read the samples with `fifo_pop()`.
-		 * @retval 0 if the FIFO buffer is empty or if the operation failed; 
-		 * in order to ensure the returned count is cactually `0`, you should first
-		 * call `i2c::I2CManager.status()`.
+		 * @retval 0 if the FIFO buffer is empty or if the operation failed
 		 * 
 		 * @sa fifo_pop()
 		 * @sa fifo_count(FifoCountFuture&)

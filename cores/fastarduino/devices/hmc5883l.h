@@ -127,7 +127,7 @@ namespace devices::magneto
 	/**
 	 * I2C device driver for the HMC5883L compass chip.
 	 * 
-	 * @tparam MANAGER one of FastArduino available I2CManager
+	 * @tparam MANAGER one of FastArduino available I2C Manager
 	 * 
 	 * The HMC5883L also has a DRDY pin that you can use to an EXT or PCI pin, 
 	 * in order to be notified when sensor data is ready for reading; this is
@@ -168,7 +168,7 @@ namespace devices::magneto
 	 * int main()
 	 * {
 	 *     // Perform other necessary initializations here,
-	 *     // including I2CManager and HMC5883L device (named compass in hte following code)
+	 *     // including I2C Manager and HMC5883L device (named compass in hte following code)
 	 *     ...
 	 *     // Initialize DRDY notifications handler
 	 *     DataReadyHandler handler;
@@ -263,8 +263,8 @@ namespace devices::magneto
 		 * once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -305,8 +305,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -344,8 +344,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -395,8 +395,8 @@ namespace devices::magneto
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 

@@ -102,22 +102,23 @@ namespace i2c
 	/**
 	 * Base class for all I2C devices.
 	 * 
-	 * @tparam MANAGER_ the type of I2CManager used to handle I2C communication
+	 * @tparam MANAGER_ the type of I2C Manager used to handle I2C communication
 	 * 
-	 * @sa i2c::I2CManager
+	 * @sa i2c::I2CSyncManager
+	 * @sa i2c::I2CAsyncManager
 	 */
 	template<typename MANAGER_>
 	class I2CDevice
 	{
 	public:
-		/** the type of `I2CManager` that can handle this device. */
+		/** the type of I2C Manager that can handle this device. */
 		using MANAGER = MANAGER_;
 
 	private:
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
 		// Ensure MANAGER is an accepted I2C Manager type
 		static_assert(
-			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2CManager type");
+			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2C Manager type");
 
 	protected:
 		/**
@@ -150,7 +151,7 @@ namespace i2c
 		 * from the actual 7-bits address, after left-shifting 1 bit. This can be 
 		 * changed dynamically later for devices that support address changes.
 		 * @param mode  the best I2C mode for this device; this determines the 
-		 * `I2CManager` types that can manage this device.
+		 * I2C Manager types that can manage this device.
 		 * 
 		 * @sa set_device()
 		 */
@@ -179,10 +180,10 @@ namespace i2c
 		}
 
 		/**
-		 * Build a read I2CLightCommand that can be later pushed to the I2CManager for
+		 * Build a read I2CLightCommand that can be later pushed to the I2C Manager for
 		 * proper handling.
 		 * Calling this method has no effect on the bus until the returned command 
-		 * is actually pushed to the I2CManager through a `launch_commands()` call.
+		 * is actually pushed to the I2C Manager through a `launch_commands()` call.
 		 * 
 		 * @param read_count the number of bytes to read from the device to fill
 		 * the output value in the Future associated with the I2C transaction; 
@@ -203,10 +204,10 @@ namespace i2c
 		}
 
 		/**
-		 * Build a write I2CLightCommand that can be later pushed to the I2CManager for
+		 * Build a write I2CLightCommand that can be later pushed to the I2C Manager for
 		 * proper handling.
 		 * Calling this method has no effect on the bus until the returned command 
-		 * is actually pushed to the I2CManager through a `launch_commands()` call.
+		 * is actually pushed to the I2C Manager through a `launch_commands()` call.
 		 * 
 		 * @param write_count the number of bytes to get from the storage value
 		 * in the Future associated with the I2C transaction, in order to write 
@@ -301,7 +302,7 @@ namespace i2c
 					if ((total_write != max_write) || (total_read != max_read)) return errors::EINVAL;
 				}
 
-				// Now push each command to the I2CManager
+				// Now push each command to the I2C Manager
 				int error = 0;
 				for (I2CLightCommand command : commands)
 				{

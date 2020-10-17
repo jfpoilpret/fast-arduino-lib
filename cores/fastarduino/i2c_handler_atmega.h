@@ -16,7 +16,7 @@
 
 /**
  * @file 
- * ATmega I2C Manager API. This defines asynchronous and synchronous I2CManagers
+ * ATmega I2C Manager API. This defines asynchronous and synchronous I2C Managers
  * for ATmega architecture.
  */
 #ifndef I2C_HANDLER_ATMEGA_HH
@@ -41,7 +41,7 @@
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
- * I2CManager to work properly.
+ * I2C Manager to work properly.
  * 
  * @param MANAGER one of many asynchronous I2C managers defined in this header
  */
@@ -53,7 +53,7 @@ ISR(TWI_vect)                                                       \
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
- * I2CManager to work properly, along with a callback function that will be called
+ * I2C Manager to work properly, along with a callback function that will be called
  * everytime an I2C transaction progresses (one command executed, whole transaction
  * executed, error).
  * 
@@ -72,7 +72,7 @@ ISR(TWI_vect)                                                       \
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
- * I2CManager to work properly, along with a callback method that will be called
+ * I2C Manager to work properly, along with a callback method that will be called
  * everytime an I2C transaction progresses (one command executed, whole transaction
  * executed, error).
  * 
@@ -103,15 +103,15 @@ ISR(TWI_vect)                                                           \
 namespace i2c
 {
 	/**
-	 * I2CManager policy to use in case of an error during I2C transaction.
+	 * I2C Manager policy to use in case of an error during I2C transaction.
 	 * @warning available only on ATmega MCU.
-	 * @sa I2CManager
+	 * @sa I2CAsyncManager
 	 */
 	enum class I2CErrorPolicy : uint8_t
 	{
 		/**
 		 * Do nothing at all in case of an error; useful only with a synchronous
-		 * I2CManager.
+		 * I2C Manager.
 		 */
 		DO_NOTHING,
 
@@ -295,16 +295,16 @@ namespace i2c
 	 * You should never need to subclass AbstractI2CSyncATmegaManager yourself.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
 	 * proxies to Future that can move around and must be controlled by a 
 	 * LifeCycleManager; using `false` will generate smaller code.
-	 * @tparam HAS_STATUS_ tells this I2CManager to call a status hook at each 
+	 * @tparam HAS_STATUS_ tells this I2C Manager to call a status hook at each 
 	 * step of an I2C transaction; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
 	 * `true`. This can be a simple function pointer (of type `I2C_STATUS_HOOK`)
 	 * or a Functor class (or Functor class reference). Using a Functor class will
 	 * generate smaller code.
-	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * @tparam HAS_DEBUG_ tells this I2C Manager to call a debugging hook at each 
 	 * step of an I2C transaction; this is useful for debugging support for a new 
 	 * I2C device; using `false` will generate smaller code.
 	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `HAS_DEBUG_` is 
@@ -352,16 +352,16 @@ namespace i2c
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
-	 * @tparam HAS_LC_ tells if this I2CManager must be able to handle 
+	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
 	 * proxies to Future that can move around and must be controlled by a 
 	 * LifeCycleManager; using `false` will generate smaller code.
-	 * @tparam HAS_STATUS_ tells this I2CManager to call a status hook at each 
+	 * @tparam HAS_STATUS_ tells this I2C Manager to call a status hook at each 
 	 * step of an I2C transaction; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
 	 * `true`. This can be a simple function pointer (of type `I2C_STATUS_HOOK`)
 	 * or a Functor class (or Functor class reference). Using a Functor class will
 	 * generate smaller code.
-	 * @tparam HAS_DEBUG_ tells this I2CManager to call a debugging hook at each 
+	 * @tparam HAS_DEBUG_ tells this I2C Manager to call a debugging hook at each 
 	 * step of an I2C transaction; this is useful for debugging support for a new 
 	 * I2C device; using `false` will generate smaller code.
 	 * @tparam DEBUG_HOOK_ the type of the hook to be called when `IS_DEBUG` is 
@@ -991,7 +991,7 @@ namespace i2c
 		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
 		 * queue I2C command for asynchronous handling
 		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2CManager
+		 * the lifecycle of Future used by this I2C Manager
 		 */
 		template<uint8_t SIZE>
 		explicit I2CAsyncLCManager(
@@ -1036,7 +1036,7 @@ namespace i2c
 		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
 		 * queue I2C command for asynchronous handling
 		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2CManager
+		 * the lifecycle of Future used by this I2C Manager
 		 * @param debug_hook the debug hook function or functor that is called during
 		 * I2C transaction execution
 		 */
@@ -1085,7 +1085,7 @@ namespace i2c
 		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
 		 * queue I2C command for asynchronous handling
 		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2CManager
+		 * the lifecycle of Future used by this I2C Manager
 		 * @param status_hook the status hook function or functor that is called during
 		 * I2C transaction execution.
 		 */
@@ -1138,7 +1138,7 @@ namespace i2c
 		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
 		 * queue I2C command for asynchronous handling
 		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2CManager
+		 * the lifecycle of Future used by this I2C Manager
 		 * @param status_hook the status hook function or functor that is called during
 		 * I2C transaction execution.
 		 * @param debug_hook the debug hook function or functor that is called during
@@ -1326,7 +1326,7 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	// Specific traits for I2CManager
+	// Specific traits for I2C Manager
 	// Async managers first
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
 	struct I2CManager_trait<I2CAsyncManager<MODE_, POLICY_>>
@@ -1400,8 +1400,8 @@ namespace i2c
 		template<typename MANAGER>
 		static void i2c_change()
 		{
-			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
-			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
+			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
+			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
 			interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 		}
 
@@ -1409,8 +1409,8 @@ namespace i2c
 		static void i2c_change_function()
 		{
 			using namespace interrupt;
-			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
-			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
+			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
+			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 			{
@@ -1424,8 +1424,8 @@ namespace i2c
 		static void i2c_change_method()
 		{
 			using namespace interrupt;
-			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
-			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
+			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
+			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 			{

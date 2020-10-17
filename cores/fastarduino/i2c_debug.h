@@ -98,7 +98,7 @@ namespace i2c::debug
 		 * The number of recorded notifications is limited by @p SIZE. Once @p SIZE
 		 * notifications have been recorded by this I2CDebugRecorder, any additional
 		 * notification will be trashed.
-		 * To be effective, this must be attached to an I2CManager (at construction time).
+		 * To be effective, this must be attached to an I2C Manager (at construction time).
 		 * Recorded notifications can be output to a `streams::ostream` with `trace()`.
 		 * 
 		 * @param debug the list of notifications to be recorded
@@ -197,8 +197,8 @@ namespace i2c::debug
 
 	/**
 	 * Class tracing I2C debug notifications live to @p out.
-	 * @warning Do not use this with asynchronous (ISR-based) I2CManagers! if you
-	 * use an asynchronous I2CManager, then use I2CDebugRecorder instead.
+	 * @warning Do not use this with asynchronous (ISR-based) I2C Managers! if you
+	 * use an asynchronous I2C Manager, then use I2CDebugRecorder instead.
 	 * 
 	 * @sa i2c::DebugStatus
 	 * @sa I2CDebugRecorder
@@ -283,7 +283,7 @@ namespace i2c::debug
 		 * The number of recorded notifications is limited by @p SIZE. Once @p SIZE
 		 * notifications have been recorded by this I2CDebugRecorder, any additional
 		 * notification will be trashed.
-		 * To be effective, this must be attached to an I2CManager (at construction time).
+		 * To be effective, this must be attached to an I2C Manager (at construction time).
 		 * Recorded notifications can be output to a `streams::ostream` with `trace()`.
 		 * 
 		 * @param trace the list of debug notifications to be recorded
@@ -320,8 +320,8 @@ namespace i2c::debug
 
 	/**
 	 * Class tracing I2C status and debug notifications live to @p out.
-	 * @warning Do not use this with asynchronous (ISR-based) I2CManagers! if you
-	 * use an asynchronous I2CManager, then use I2CDebugStatusRecorder instead.
+	 * @warning Do not use this with asynchronous (ISR-based) I2C Managers! if you
+	 * use an asynchronous I2C Manager, then use I2CDebugStatusRecorder instead.
 	 * 
 	 * @sa I2CDebugStatusRecorder
 	 */

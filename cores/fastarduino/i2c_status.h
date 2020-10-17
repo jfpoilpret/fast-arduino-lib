@@ -66,7 +66,7 @@ namespace i2c::status
 		 * The number of recorded notifications is limited by @p SIZE. Once @p SIZE
 		 * notifications have been recorded by this I2CStatusRecorder, any additional
 		 * notification will be trashed.
-		 * To be effective, this must be attached to an I2CManager (at construction time).
+		 * To be effective, this must be attached to an I2C Manager (at construction time).
 		 * Recorded notifications can be output to a `streams::ostream` with `trace()`.
 		 * 
 		 * @param trace. the list of notifications to be recorded
@@ -120,8 +120,8 @@ namespace i2c::status
 
 	/**
 	 * Class tracing I2C status notifications live to @p out.
-	 * @warning Do not use this with asynchronous (ISR-based) I2CManagers! if you
-	 * use an asynchronous I2CManager, then use I2CStatusRecorder instead.
+	 * @warning Do not use this with asynchronous (ISR-based) I2C Managers! if you
+	 * use an asynchronous I2C Manager, then use I2CStatusRecorder instead.
 	 * 
 	 * @sa I2CStatusRecorder
 	 */

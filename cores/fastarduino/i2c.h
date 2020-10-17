@@ -28,14 +28,14 @@
  * Define API to define and manage I2C devices.
  * I2C is available to all MCU supported by FastArduino, even in ATtiny MCU, for which
  * I2C is implemented with *Universal Serial Interface* (USI).
- * @note Current implementation supports only synchronous operation. Future FastArduino 
- * versions may also support asynchronous (non-blocking) operation.
+ * @note Current implementation supports both synchronous and asynchronous operation.
+ * However, asynchronous operation is only supported on ATmega MCU.
  * 
  * The following snippet shows how to use an I2C device, the DS1307 Real Time Clock:
  * @code
  * int main()
  * {
- *     i2c::I2CManager<i2c::I2CMode::STANDARD> manager;
+ *     i2c::I2CSyncManager<i2c::I2CMode::STANDARD> manager;
  *     manager.begin();
  *     devices::rtc::DS1307 rtc{manager};
  *     devices::rtc::tm now;
@@ -55,10 +55,11 @@ namespace i2c
 	 * All codes are defined and directly mapped from ATmega328 datasheet 
 	 * (section 22. "2-wire Serial interface", tables 22-2 and 22-3).
 	 * 
-	 * You will probably never need to use these codes in your program or own devices
-	 * driver implementations, except `Status::OK`.
+	 * You will probably never need to use these codes in your program.
 	 * 
-	 * @sa i2c::I2CManager::status()
+	 * @sa I2CSyncStatusManager
+	 * @sa I2CAsyncStatusManager
+	 * @sa i2c::status
 	 */
 	namespace Status
 	{
@@ -97,7 +98,9 @@ namespace i2c
 	/**
 	 * I2C available transmission modes. This defines the maximum bus transmission 
 	 * frequency.
-	 * @sa i2c::I2CManager
+	 * 
+	 * @sa I2CSyncManager
+	 * @sa I2CAsyncManager
 	 */
 	enum class I2CMode : uint8_t
 	{

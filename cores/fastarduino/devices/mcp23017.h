@@ -81,7 +81,7 @@ namespace devices::mcp230xx
 	 * I2C device driver for Microchip MCP23017 support.
 	 * The MCP23017 chip is a 16-Bit I/O Expander with I2C interface.
 	 * 
-	 * @tparam MANAGER one of FastArduino available I2CManager
+	 * @tparam MANAGER one of FastArduino available I2C Manager
 	 */
 	template<typename MANAGER>
 	class MCP23017 : public i2c::I2CDevice<MANAGER>
@@ -153,8 +153,8 @@ namespace devices::mcp230xx
 		 * once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -210,8 +210,8 @@ namespace devices::mcp230xx
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -269,8 +269,8 @@ namespace devices::mcp230xx
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -320,8 +320,8 @@ namespace devices::mcp230xx
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -366,8 +366,8 @@ namespace devices::mcp230xx
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -415,8 +415,8 @@ namespace devices::mcp230xx
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
@@ -466,8 +466,8 @@ namespace devices::mcp230xx
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
-		 * I2CManager, this typically happens when its queue of I2CCommand is full;
-		 * for a synchronous I2CManager, any error on the I2C bus or on the 
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
 		 * target device will trigger an error here. the list of possible errors
 		 * is in namespace `errors`.
 		 * 
