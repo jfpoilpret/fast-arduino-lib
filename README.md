@@ -70,7 +70,7 @@ What the library already has:
 - Pin Change Interrupt (PCI) handling
 - External Pin Interrupt handling
 - SPI master support
-- I2C master support (synchronous mode)
+- I2C master support (synchronous mode and asynchronous mode (preview on Git master, to be released in **v1.6**) for ATmega MCU)
 - Hardware UART support (for MCU that support it, ie not for ATtiny)
 - Software UART support (for all MCU)
 - "C++ like" Input/Output streams (used by UART implementations)
@@ -95,14 +95,14 @@ As of now, the following platforms are supported (and tested):
 - Arduino UNO
 - Arduino NANO
 - Arduino MEGA
-- Arduino Leonardo (without USB support)
+- Arduino Leonardo (with only partial USB support)
 - Breadboard ATmega328 at 8MHz and 16MHz
 - Breadboard ATtiny84 at 8MHz
 - Breadboard ATtiny85 at 8MHz
 
 I intend to probably add support some day for:
 
-- Arduino Leonardo with USB support
+- Arduino Leonardo with full USB support
 
 A [step-by-step tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) is available for those who want to learn FastArduino API; it covers the whole FastArduino core API. In addition to that, the [FastArduino API](http://jfpoilpret.github.io/fast-arduino-lib/) is fully documented through [doxygen](http://www.stack.nl/~dimitri/doxygen/).
 
@@ -111,7 +111,7 @@ Project structure
 
 The project is organized according to the following structure:
 - `/`: root project directory
-  - `cores/fastarduino`: FastArduino library C++ source code
+  - `cores/fastarduino`: FastArduino platform C++ source code
   - `make`: utility makefiles and scripts to build FastArduino library, generate docs, and prepare releases
   - `examples`: source code of basic examples of all FastArduino features, gathered by categories
   - `.vscode`: project settings for Visual Studio Code
@@ -139,7 +139,8 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5?closed=1) (released on 1.09.2019)
 - [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6?closed=1) (released on 22.09.2019)
 - [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7?closed=1) (released on 18.01.2020)
-- [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8) (31.07.2020)
+- [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8) (30.11.2020)
+- [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9) (31.12.2020)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
 - [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
