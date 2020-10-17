@@ -39,11 +39,6 @@
 
 #define I2C_TRUE_ASYNC 1
 
-// OPEN POINTS:
-//TODO - add callback registration including proxy/future reference (when future is done)
-//		-> this will allow pushing events to be handled by main event loop
-//			- maybe also need some device reference?
-
 /**
  * Register the necessary ISR (Interrupt Service Routine) for an asynchronous
  * I2CManager to work properly.
@@ -64,7 +59,8 @@ ISR(TWI_vect)                                                       \
  * 
  * @param MANAGER one of many asynchronous I2C managers defined in this header
  * @param CALLBACK the function that will be called when the interrupt is
- * triggered
+ * triggered; it should follow this prototype: 
+ * `void f(I2CCallback, typename MANAGER::FUTURE_PROXY)`
  * 
  * @sa i2c::I2CCallback
  */
@@ -83,7 +79,8 @@ ISR(TWI_vect)                                                       \
  * @param MANAGER one of many asynchronous I2C managers defined in this header
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
- * is triggered; this must be a proper PTMF (pointer to member function).
+ * is triggered; this must be a proper PTMF (pointer to member function); it should
+ * follow this prototype: `void f(I2CCallback, typename MANAGER::FUTURE_PROXY)`
  * 
  * @sa i2c::I2CCallback
  */
@@ -92,6 +89,16 @@ ISR(TWI_vect)                                                           \
 {                                                                       \
 	i2c::isr_handler::i2c_change_method<MANAGER, HANDLER, CALLBACK>();  \
 }
+
+/**
+ * This macro shall be used in a class containing a private callback method,
+ * registered by `REGISTER_I2C_ISR_METHOD`.
+ * It declares the class where it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
+ */
+#define DECL_I2C_ISR_HANDLERS_FRIEND		\
+	friend struct i2c::isr_handler;			\
+	DECL_TWI_FRIENDS
 
 namespace i2c
 {
@@ -386,10 +393,20 @@ namespace i2c
 
 	public:
 		/**
+		 * The type passed to callback functions registered alongside ISR.
+		 * Callbacks cam use it to check the status of the Future used for the
+		 * current I2C transaction.
+		 * 
+		 * @sa REGISTER_I2C_ISR_FUNCTION
+		 * @sa REGISTER_I2C_ISR_METHOD
+		 */
+		using FUTURE_PROXY = PROXY<ABSTRACT_FUTURE>;
+
+		/**
 		 * The type of I2CCommand to use in the buffer passed to the constructor 
 		 * of this AbstractI2CAsyncManager.
 		 */
-		using I2CCOMMAND = I2CCommand<PROXY<ABSTRACT_FUTURE>>;
+		using I2CCOMMAND = I2CCommand<FUTURE_PROXY>;
 
 		/**
 		 * Prepare and enable the MCU for I2C transmission.
@@ -465,7 +482,7 @@ namespace i2c
 		}
 
 		bool push_command_(
-			I2CLightCommand command, uint8_t target, PROXY<ABSTRACT_FUTURE> proxy)
+			I2CLightCommand command, uint8_t target, FUTURE_PROXY proxy)
 		{
 			return commands_.push_(I2CCOMMAND{command, target, proxy});
 		}
@@ -506,6 +523,12 @@ namespace i2c
 		ABSTRACT_FUTURE& current_future() const
 		{
 			return lc_.resolve(command_.future());
+		}
+
+		FUTURE_PROXY current_proxy() const
+		{
+			//TODO shall we convert to a full Proxy<> or keep it as-is?
+			return command_.future();
 		}
 
 		void send_byte(uint8_t data)
@@ -1382,23 +1405,35 @@ namespace i2c
 			interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 		}
 
-		template<typename MANAGER, void (*CALLBACK_)(I2CCallback)>
+		template<typename MANAGER, void (*CALLBACK_)(I2CCallback, typename MANAGER::FUTURE_PROXY)>
 		static void i2c_change_function()
 		{
+			using namespace interrupt;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
-			I2CCallback callback =  interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
-			if (callback != I2CCallback::NONE) CALLBACK_(callback);
+			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
+			if (callback != I2CCallback::NONE)
+			{
+				auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
+				CALLBACK_(callback, proxy);
+			}
 		}
 
-		template<typename MANAGER, typename HANDLER_, void (HANDLER_::*CALLBACK_)(I2CCallback)>
+		template<typename MANAGER, typename HANDLER_, 
+			void (HANDLER_::*CALLBACK_)(I2CCallback, typename MANAGER::FUTURE_PROXY)>
 		static void i2c_change_method()
 		{
+			using namespace interrupt;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2CManager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2CManager");
-			I2CCallback callback =  interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
+			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
-				interrupt::CallbackHandler<void (HANDLER_::*)(I2CCallback), CALLBACK_>::call(callback);
+			{
+				auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
+				using HANDLER = 
+					CallbackHandler<void (HANDLER_::*)(I2CCallback, typename MANAGER::FUTURE_PROXY), CALLBACK_>;
+				HANDLER::call(callback, proxy);
+			}
 		}
 	};
 	/// @endcond
