@@ -77,16 +77,15 @@ namespace i2c
 	 */
 	using I2C_DEBUG_HOOK = void (*)(DebugStatus status, uint8_t data);
 
-	//TODO already defined in i2c.h: remove from there and keep it here instead!
-	// /**
-	//  * The default status observer hook type.
-	//  * @warning Do not use this (function pointer) for your hooks! This will 
-	//  * increase code size and ISR delay. Rather use functors as defined in
-	//  * `i2c_status.h`.
-	//  * @sa i2c::debug::I2CDebugRecorder
-	//  * @sa i2c::debug::I2CDebugLiveLogger
-	//  */
-	// using I2C_STATUS_HOOK = void (*)(uint8_t expected, uint8_t actual);
+	/**
+	 * The default status observer hook type.
+	 * @warning Do not use this (function pointer) for your hooks! This will 
+	 * increase code size and ISR delay. Rather use functors as defined in
+	 * `i2c_status.h`.
+	 * @sa i2c::debug::I2CDebugRecorder
+	 * @sa i2c::debug::I2CDebugLiveLogger
+	 */
+	using I2C_STATUS_HOOK = void (*)(uint8_t expected, uint8_t actual);
 
 	/// @cond notdocumented
 	// Type of commands in queue

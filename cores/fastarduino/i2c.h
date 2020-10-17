@@ -48,12 +48,6 @@
 namespace i2c
 {
 	/**
-	 * Hook function type, useful for debugging new I2C devices implementation.
-	 * @sa i2c::I2CManager
-	 */
-	using I2C_STATUS_HOOK = void (*)(uint8_t expected_status, uint8_t actual_status);
-
-	/**
 	 * Transmission status codes.
 	 * Transmission status is returned by all `i2c::I2CDevice` read and write methods.
 	 * This status is also transmitted to an optional hook function for debug purposes.
