@@ -561,5 +561,6 @@ namespace board_traits
 	friend void ::USART1_RX_vect(void);	\
 	friend void ::USART2_RX_vect(void);	\
 	friend void ::USART3_RX_vect(void);
+#define DECL_TWI_FRIENDS friend void ::TWI_vect(void);
 
 #endif /* BOARDS_MEGA_TRAITS_HH */

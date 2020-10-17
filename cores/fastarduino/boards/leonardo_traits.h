@@ -296,5 +296,6 @@ namespace board_traits
 	friend void ::TIMER3_CAPT_vect(void);
 #define DECL_UDRE_ISR_FRIENDS friend void ::USART1_UDRE_vect(void);
 #define DECL_RX_ISR_FRIENDS friend void ::USART1_RX_vect(void);
+#define DECL_TWI_FRIENDS friend void ::TWI_vect(void);
 
 #endif /* BOARDS_LEONARDO_TRAITS_HH */
