@@ -1,6 +1,7 @@
 Adding support for an I2C device {#i2cdevices}
 ================================
 
+TODO rework to fit new API
 There are plenty of devices of all kinds, based on I2C interface, that you may want to connect to your Arduino
 or a board you created with an AVR ATmega or ATtiny MCU.
 
