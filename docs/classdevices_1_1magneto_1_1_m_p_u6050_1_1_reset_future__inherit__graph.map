@@ -1,0 +1,5 @@
+<map id="devices::magneto::MPU6050&lt; MANAGER &gt;::ResetFuture" name="devices::magneto::MPU6050&lt; MANAGER &gt;::ResetFuture">
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="49,184,257,225"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,95,300,136"/>
+<area shape="rect" id="node3" title=" " alt="" coords="55,5,250,47"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="i2c::I2CSyncLCStatusDebugManager&lt; MODE_, STATUS_HOOK_, DEBUG_HOOK_ &gt;" name="i2c::I2CSyncLCStatusDebugManager&lt; MODE_, STATUS_HOOK_, DEBUG_HOOK_ &gt;">
+<area shape="rect" id="node1" title="Synchronous I2C Manager for ATmega architecture with status notification and debug facilities and sup..." alt="" coords="545,27,745,83"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="284,20,497,91"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title=" " alt="" coords="5,5,236,105"/>
+</map>

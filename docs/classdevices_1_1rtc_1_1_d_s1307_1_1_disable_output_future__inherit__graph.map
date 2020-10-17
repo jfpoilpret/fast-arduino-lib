@@ -1,0 +1,4 @@
+<map id="devices::rtc::DS1307&lt; MANAGER &gt;::DisableOutputFuture" name="devices::rtc::DS1307&lt; MANAGER &gt;::DisableOutputFuture">
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="5,95,267,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="39,5,233,47"/>
+</map>

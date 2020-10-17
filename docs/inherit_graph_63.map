@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structtypes__traits_1_1_type__trait.html" title="This trait allows static checks (at compile&#45;time) of properties of various types." alt="" coords="5,5,143,47"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,233,91"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="281,20,489,76"/>
 </map>

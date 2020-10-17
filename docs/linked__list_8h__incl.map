@@ -1,10 +1,10 @@
 <map id="fastarduino/linked_list.h" name="fastarduino/linked_list.h">
-<area shape="rect" id="node1" title="Utility API to handle linked list containers." alt="" coords="215,5,353,47"/>
-<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="183,95,265,121"/>
-<area shape="rect" id="node7" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="342,95,453,121"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,169,88,196"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="113,169,231,196"/>
-<area shape="rect" id="node6" title=" " alt="" coords="256,169,360,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="249,244,319,271"/>
-<area shape="rect" id="node8" title=" " alt="" coords="435,169,509,196"/>
+<area shape="rect" id="node1" title="Utility API to handle linked list containers." alt="" coords="229,5,367,47"/>
+<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="197,95,279,121"/>
+<area shape="rect" id="node7" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="323,95,433,121"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="277,169,359,196"/>
+<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="5,169,124,196"/>
+<area shape="rect" id="node6" title=" " alt="" coords="149,169,253,196"/>
+<area shape="rect" id="node5" title=" " alt="" coords="195,244,265,271"/>
+<area shape="rect" id="node8" title=" " alt="" coords="434,169,509,196"/>
 </map>

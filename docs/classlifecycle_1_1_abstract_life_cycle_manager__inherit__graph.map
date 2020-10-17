@@ -1,0 +1,4 @@
+<map id="lifecycle::AbstractLifeCycleManager" name="lifecycle::AbstractLifeCycleManager">
+<area shape="rect" id="node1" title="The abstract base class of all LifeCycleManager." alt="" coords="7,5,206,47"/>
+<area shape="rect" id="node2" href="$classlifecycle_1_1_life_cycle_manager.html" title="An actual LifeCycleManager implementation, based on AbstractLifeCycleManager, adding static storage f..." alt="" coords="5,95,208,136"/>
+</map>

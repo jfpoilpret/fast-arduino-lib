@@ -1,6 +1,5 @@
 var i2c_8h =
 [
-    [ "I2C_STATUS_HOOK", "i2c_8h.html#a30a5217313a148f7da0b484c60f3fd00", null ],
     [ "I2CMode", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36", [
       [ "STANDARD", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0", null ],
       [ "FAST", "i2c_8h.html#ac2780f0139dbc26f4d83a426dad67e36adca6e617f6fb54033deb311e7e7c93cc", null ]
@@ -16,5 +15,6 @@ var i2c_8h =
     [ "SLA_R_TRANSMITTED_ACK", "i2c_8h.html#a269787b0dd39990c7177b8768fc763e8", null ],
     [ "SLA_R_TRANSMITTED_NACK", "i2c_8h.html#ac7beb58eba45fb7b5fda82981ce5793f", null ],
     [ "DATA_RECEIVED_ACK", "i2c_8h.html#ae5c8a3507130476780bb0ed34d951463", null ],
-    [ "DATA_RECEIVED_NACK", "i2c_8h.html#a7298426da5cd640f388d392458134bc3", null ]
+    [ "DATA_RECEIVED_NACK", "i2c_8h.html#a7298426da5cd640f388d392458134bc3", null ],
+    [ "FUTURE_ERROR", "i2c_8h.html#a92b9a1ec20445ffa7b15a2a7d9297047", null ]
 ];

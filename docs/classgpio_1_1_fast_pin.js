@@ -10,5 +10,6 @@ var classgpio_1_1_fast_pin =
     [ "toggle", "classgpio_1_1_fast_pin.html#aa163ea832ed19672f76e8ae270f0d64d", null ],
     [ "value", "classgpio_1_1_fast_pin.html#a769986e2ab3bac20711948ea6ac8bbd2", null ],
     [ "PORT", "classgpio_1_1_fast_pin.html#a3a54cab72f69b0194d51a2b3b5afdf88", null ],
-    [ "BIT", "classgpio_1_1_fast_pin.html#ae969e28f3a5b17b87749abe88a8cbedd", null ]
+    [ "BIT", "classgpio_1_1_fast_pin.html#ae969e28f3a5b17b87749abe88a8cbedd", null ],
+    [ "MASK", "classgpio_1_1_fast_pin.html#a434cdb251586c6e041ed75d07d81e28a", null ]
 ];

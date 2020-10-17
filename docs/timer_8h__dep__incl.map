@@ -1,11 +1,11 @@
 <map id="fastarduino/timer.h" name="fastarduino/timer.h">
-<area shape="rect" id="node1" title="Timer API." alt="" coords="157,5,303,32"/>
-<area shape="rect" id="node2" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="9,169,153,211"/>
-<area shape="rect" id="node5" href="$pwm_8h.html" title="PWM API." alt="" coords="63,87,207,114"/>
-<area shape="rect" id="node7" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="231,87,421,114"/>
-<area shape="rect" id="node8" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="445,80,599,121"/>
-<area shape="rect" id="node3" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="5,259,156,300"/>
-<area shape="rect" id="node4" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="5,348,156,389"/>
-<area shape="rect" id="node6" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="215,169,365,211"/>
-<area shape="rect" id="node9" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="447,169,597,211"/>
+<area shape="rect" id="node1" title="Timer API." alt="" coords="272,5,419,32"/>
+<area shape="rect" id="node2" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="5,87,195,114"/>
+<area shape="rect" id="node4" href="$pwm_8h.html" title="PWM API." alt="" coords="219,87,363,114"/>
+<area shape="rect" id="node5" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="244,169,388,211"/>
+<area shape="rect" id="node8" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="437,80,592,121"/>
+<area shape="rect" id="node3" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="59,169,210,211"/>
+<area shape="rect" id="node6" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="241,259,391,300"/>
+<area shape="rect" id="node7" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="241,348,391,389"/>
+<area shape="rect" id="node9" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="439,169,590,211"/>
 </map>

@@ -1,0 +1,5 @@
+<map id="devices::magneto::MPU6050&lt; MANAGER &gt;::AccelFuture" name="devices::magneto::MPU6050&lt; MANAGER &gt;::AccelFuture">
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method accel_measures(AccelFuture&amp;)." alt="" coords="17,169,225,211"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,236,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="11,5,231,32"/>
+</map>

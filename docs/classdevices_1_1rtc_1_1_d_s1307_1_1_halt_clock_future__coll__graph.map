@@ -1,0 +1,4 @@
+<map id="devices::rtc::DS1307&lt; MANAGER &gt;::HaltClockFuture" name="devices::rtc::DS1307&lt; MANAGER &gt;::HaltClockFuture">
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="5,95,236,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="23,5,218,47"/>
+</map>

@@ -1,7 +1,6 @@
 <map id="fastarduino/boards/mega.h" name="fastarduino/boards/mega.h">
-<area shape="rect" id="node1" title="ATmega2560 (Arduino MEGA) specific features and pins." alt="" coords="93,5,237,47"/>
+<area shape="rect" id="node1" title="ATmega2560 (Arduino MEGA) specific features and pins." alt="" coords="51,5,195,47"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,95,52,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="76,95,147,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="171,95,265,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="289,95,384,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="76,95,171,121"/>
+<area shape="rect" id="node4" title=" " alt="" coords="195,95,289,121"/>
 </map>

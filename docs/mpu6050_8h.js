@@ -1,9 +1,21 @@
 var mpu6050_8h =
 [
-    [ "FIFOEnable", "structdevices_1_1magneto_1_1_f_i_f_o_enable.html", "structdevices_1_1magneto_1_1_f_i_f_o_enable" ],
-    [ "INTStatus", "structdevices_1_1magneto_1_1_i_n_t_status.html", "structdevices_1_1magneto_1_1_i_n_t_status" ],
+    [ "FIFOEnable", "classdevices_1_1magneto_1_1_f_i_f_o_enable.html", "classdevices_1_1magneto_1_1_f_i_f_o_enable" ],
+    [ "INTStatus", "classdevices_1_1magneto_1_1_i_n_t_status.html", "classdevices_1_1magneto_1_1_i_n_t_status" ],
     [ "AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", "structdevices_1_1magneto_1_1_all_sensors" ],
     [ "MPU6050", "classdevices_1_1magneto_1_1_m_p_u6050.html", "classdevices_1_1magneto_1_1_m_p_u6050" ],
+    [ "BeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future" ],
+    [ "FifoBeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future" ],
+    [ "EndFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future" ],
+    [ "ResetFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future" ],
+    [ "GyroFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_gyro_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_gyro_future" ],
+    [ "TemperatureFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_temperature_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_temperature_future" ],
+    [ "AccelFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_accel_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_accel_future" ],
+    [ "AllMeasuresFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_all_measures_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_all_measures_future" ],
+    [ "InterruptStatusFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_interrupt_status_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_interrupt_status_future" ],
+    [ "ResetFifoFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_fifo_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_fifo_future" ],
+    [ "FifoCountFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_count_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_count_future" ],
+    [ "FifoPopFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_pop_future.html", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_pop_future" ],
     [ "INTEnable", "mpu6050_8h.html#af1a3dfb463a3ed6edaa3d7dcbdd2352d", null ],
     [ "GyroRange", "mpu6050_8h.html#af1ab54980b0620a7f3c95ff2318604f4", [
       [ "RANGE_250", "mpu6050_8h.html#af1ab54980b0620a7f3c95ff2318604f4ae7e56984bb3dd29494cdd08eed1d3d16", null ],

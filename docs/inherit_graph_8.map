@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classcontainers_1_1_queue.html" title=" " alt="" coords="5,5,156,47"/>
+<area shape="rect" id="node1" href="$classcontainers_1_1_queue.html" title=" " alt="" coords="5,23,156,65"/>
+<area shape="rect" id="node2" href="$classstreams_1_1istreambuf.html" title="Input API based on a ring buffer." alt="" coords="206,5,361,32"/>
+<area shape="rect" id="node3" href="$classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer." alt="" coords="204,56,363,83"/>
 </map>

@@ -1,0 +1,4 @@
+<map id="devices::magneto::MPU6050&lt; MANAGER &gt;::InterruptStatusFuture" name="devices::magneto::MPU6050&lt; MANAGER &gt;::InterruptStatusFuture">
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method interrupt_status(InterruptStatusFuture&amp;)." alt="" coords="5,95,271,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="59,5,217,47"/>
+</map>

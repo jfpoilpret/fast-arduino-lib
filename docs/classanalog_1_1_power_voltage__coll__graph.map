@@ -1,4 +1,4 @@
 <map id="analog::PowerVoltage&lt; BANDGAP_ &gt;" name="analog::PowerVoltage&lt; BANDGAP_ &gt;">
-<area shape="rect" id="node1" title="API that uses bandgap feature to calculate current voltage fed to the MCU." alt="" coords="252,27,415,69"/>
-<area shape="rect" id="node2" href="$classanalog_1_1_analog_input.html" title=" " alt="" coords="5,5,204,91"/>
+<area shape="rect" id="node1" title="API that uses bandgap feature to calculate current voltage fed to the MCU." alt="" coords="247,35,411,76"/>
+<area shape="rect" id="node2" href="$classanalog_1_1_analog_input.html" title=" " alt="" coords="5,5,199,105"/>
 </map>

@@ -82,19 +82,19 @@
  * 
  * All these classes are template classes with various arguments (the actual list
  * of arguments depends on each specific class):
- * - MODE: I2C mode (bus frequency) supported (fast 400kHz or standard 100kHz)
- * - POLICY: I2CPolicy (behavior in case of an error during a transaction)
+ * - MODE: i2c::I2CMode (bus frequency) supported (fast 400kHz or standard 100kHz)
+ * - POLICY: i2c::I2CErrorPolicy (behavior in case of an error during a transaction)
  *   for asynchronous I2C Managers only
  * - DEBUG_HOOK: the type of callback hook for debug, can be a simple function 
- *   pointer (type I2C_DEBUG_HOOK) or a more complex functor class
+ *   pointer (type i2c::I2C_DEBUG_HOOK) or a more complex functor class
  * - STATUS_HOOK: the type of callback hook for I2C status, can be a simple function 
- *   pointer (type I2C_STATUS_HOOK) or a more complex functor class
+ *   pointer (type i2c::I2C_STATUS_HOOK) or a more complex functor class
  * 
  * All these different flavors of I2C Manager share the same API (except for their 
  * constructor that may need different arguments).
  * 
  * Lifecycle support enables programs to move futures around without losing track
- * of the right, thanks to the use of lifecycle:LightProxy. Although not often 
+ * of the right location, thanks to the use of lifecycle::LightProxy. Although not often 
  * needed, it can prove useful in some situations.
  * 
  * All I2C Manager asynchronous flavors operate based on a queue of I2C commands.

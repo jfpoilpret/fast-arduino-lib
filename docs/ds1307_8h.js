@@ -2,6 +2,15 @@ var ds1307_8h =
 [
     [ "tm", "structdevices_1_1rtc_1_1tm.html", "structdevices_1_1rtc_1_1tm" ],
     [ "DS1307", "classdevices_1_1rtc_1_1_d_s1307.html", "classdevices_1_1rtc_1_1_d_s1307" ],
+    [ "SetDatetimeFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_datetime_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_datetime_future" ],
+    [ "GetDatetimeFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_datetime_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_datetime_future" ],
+    [ "SetRamFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future" ],
+    [ "SetRam1Future", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future" ],
+    [ "GetRamFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram_future" ],
+    [ "GetRam1Future", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram1_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram1_future" ],
+    [ "HaltClockFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future" ],
+    [ "EnableOutputFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future" ],
+    [ "DisableOutputFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html", "classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future" ],
     [ "WeekDay", "ds1307_8h.html#a765e5fb8599fbfc007de3b47a81593b3", [
       [ "SUNDAY", "ds1307_8h.html#a765e5fb8599fbfc007de3b47a81593b3a95fa12cb2100ce7081b71f7c44bc12a5", null ],
       [ "MONDAY", "ds1307_8h.html#a765e5fb8599fbfc007de3b47a81593b3a98617021b249af0ace0f84ee92ccc7cd", null ],
