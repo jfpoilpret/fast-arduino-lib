@@ -1154,17 +1154,34 @@ FastArduino also brings specific support to several I2C devices:
 - DS1307 (real-time clock)
 - MPU6050 (accelerometer and gyroscope)
 - HMC5883L (compass)
+- MCP23008 (8-Bit I/O Expander)
 - MCP23017 (16-Bit I/O Expander)
 
-FastArduino core I2C API is defined in several headers and made of a few types:
+FastArduino core I2C API is defined in several headers (namespcae `i2c`) and made of a few types:
 - `i2c.h` contains a few constants and enumerations used everywhere else in the I2C API
-- `i2c_manager.h` defines the `i2c::I2CManager` template class which is central to the API
+- `i2c_handler.h` defines several template classes defining different kinds of "I2CManager"
+which are central to the API
 - `i2c_device.h` mainly defines `i2c::I2CDevice` template class, which is the abstract base
 class of all concrete I2C devices
 
+Other more specific headers exist but shall not be directly included in programs.
+
+In FastArduino, I2C communication is centralized by an I2CManager; there are several flavors
+of I2CManager defined in FastArduino, with distinct characteristics such as:
+- synchronous (all MCU) or asynchronous (ATmega only)
+- I2C mode supported (fast 400kHz or standard 100kHz)
+- policy to follow in case of failure during an I2C transaction
+- ...
+
+In this tutorial, we will use the simplest I2CManager provided by FastArduino: `i2c::I2CSyncManager`,
+which handles only synchronous (blocking) I2C operations.
+
+There are also asynchronous I2CManagers but they will not be explained here. If you want
+to learn more about there, please take a look at the API and examples using it.
+
 In order to illustrate concretely I2C API usage in this tutorial, we will focus on a concrete
 example with the DS1307 RTC chip. If you want to develop an API for your own I2C device then
-please refer to `i2c::I2CDevice` API documentation.
+please refer to `i2c::I2CDevice` API documentation and the dedicated tutorial (TODO LINK).
 
 The following example reads the current clock time from a DS1307 chip:
 
@@ -1174,17 +1191,19 @@ This example has 3 important parts.
 
 The first part is the I2C and the RTC device initialization:
 @dontinclude fastarduino/i2c_1_rtc.cpp
-@skip I2CManager
+@skip MANAGER
 @until DS1307
-`i2c::I2CManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
+`i2c::I2CSyncManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
 - `i2c::I2CMode::STANDARD`: slow I2C mode (100 kHz), this the default
 - `i2c::I2CMode::FAST`: fast I2C mode (400 kHz)
 
 The mode selection depends on all devices you wire on the I2C bus, if one is using standard mode, 
 then all the bus must be set to standard mode. Since DS1307 chip does not support fast mode,
-its device forces standard mode, and that mode must be used for the `I2CManager`.
+its device forces standard mode, and that mode must be used for the `I2CSyncManager`.
 
-It is important to ensure `begin()` has been called on `i2c::I2CManager` before any use of 
+For convenience reasons, we define the `MANAGER` type alias once and then reuse it where needed.
+
+It is important to ensure `begin()` has been called on `i2c::I2CSyncManager` before any use of 
 the I2C bus by devices.
 
 Next code piece is reading current clock date and time from the RTC chip:

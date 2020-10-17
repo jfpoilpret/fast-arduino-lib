@@ -1,5 +1,5 @@
 #include <fastarduino/time.h>
-#include <fastarduino/i2c_manager.h>
+#include <fastarduino/i2c_handler.h>
 #include <fastarduino/devices/ds1307.h>
 #include <fastarduino/uart.h>
 
@@ -22,7 +22,8 @@ int main()
 	uart.begin(115200);
 	ostream out = uart.out();
 	
-	i2c::I2CManager<> manager;
+	using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
+	MANAGER manager;
 	manager.begin();
 	DS1307 rtc{manager};
 	
