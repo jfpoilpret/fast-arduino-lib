@@ -1,7 +1,6 @@
 Adding support for an I2C device {#i2cdevices}
 ================================
 
-TODO rework to fit new API
 There are plenty of devices of all kinds, based on I2C interface, that you may want to connect to your Arduino
 or a board you created with an AVR ATmega or ATtiny MCU.
 
@@ -24,10 +23,15 @@ FastArduino I2C driver API
 The generic support for I2C device driver in FastArduino looks quite simple, it is entirely embedded in 1 class, 
 `i2c::I2CDevice`; this is a template class which all actual I2C device drivers shall derive from.
 
-This template class has only one `MODE` parameter, of type `i2c::I2CMode`, which defines the I2C bus speed, among
-two supported speeds: Normal (100KHz) or Fast (400KHz).
+This template class has only one `MANAGER` parameter, which must be kept as is in all subclasses; this represents 
+the type of I2C Manager used to handle the I2C bus and operations.
 
-The `i2c::I2CDevice` class mainly contains `protected` methods to read and write content to a device on the I2C bus.
+The `i2c::I2CDevice` class mainly contains `protected` types aliases and methods to create and launch read and write
+commands to a device on the I2C bus.
+
+Any FastArduino I2C device must be able to work in both asynchronous and synchronous modes The `i2c::I2CDevice` API is
+made for asynchronous operations; synchronous flavours of a specific device API are based on asynchronous
+implementations of that API (just awaiting for the operation to finish).
 
 As you can see in the following diagrams, the drivers for I2C devices currently supported by FastArduino directly
 derive from `i2c::I2CDevice`:
@@ -36,9 +40,13 @@ derive from `i2c::I2CDevice`:
 @image html classdevices_1_1rtc_1_1_d_s1307__inherit__graph.png
 @image latex classdevices_1_1rtc_1_1_d_s1307__inherit__graph.pdf
 
+2. MCP23008 8-Bit I/O Expander chip
+@image html classdevices_1_1mcp230xx_1_1_m_c_p23008__inherit__graph.png
+@image latex classdevices_1_1mcp230xx_1_1_m_c_p23008__inherit__graph.pdf
+
 2. MCP23017 16-Bit I/O Expander chip
-@image html classdevices_1_1mcp23017_1_1_m_c_p23017__inherit__graph.png
-@image latex classdevices_1_1mcp23017_1_1_m_c_p23017__inherit__graph.pdf
+@image html classdevices_1_1mcp230xx_1_1_m_c_p23017__inherit__graph.png
+@image latex classdevices_1_1mcp230xx_1_1_m_c_p23017__inherit__graph.pdf
 
 3. MPU6050 3D Accelerometer-Gyroscope chip
 @image html classdevices_1_1magneto_1_1_m_p_u6050__inherit__graph.png
@@ -48,25 +56,38 @@ derive from `i2c::I2CDevice`:
 @image html classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.png
 @image latex classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.pdf
 
-Do note that, for the RTC DS1307 device above, `MODE` template parameter has been forced to `i2c::I2CMode::STANDARD`
-because that device does not support Fast I2C mode. Driver classes for other devices are still template with
-`i2c::I2CMode` template parameter as they can be used in any mode.
-
-Creating a new driver for an I2C device is as simple as:
-1. Creating a `i2c::I2CDevice` subclass; let's call it `MyI2CDevice` in the rest of this page.
-2. Add a constructor with one argument: `MyI2CDevice::MyI2CDevice(MANAGER& manager)` where `MANAGER` is directly 
-defined as `i2c::I2CManager<MODE>` in superclass `i2c::I2CDevice`.
-3. Add proper `public` API on this `MyI2CDevice` class, based on actual device features we want to use.
-4. Implement this API through the basic `protected` API methods inherited from `i2c::I2CDevice`
+Creating a new driver for an I2C device must follow these steps:
+1. Create a `i2c::I2CDevice` template subclass; let's call it `MyI2CDevice` in the rest of this page.
+2. Redefine (as `private`) the following type aliases inherited from `i2c::I2CDevice`: `PARENT`, `PROXY`, `FUTURE` 
+3. Add a `public` constructor with one argument: `MyI2CDevice::MyI2CDevice(MANAGER& manager)` where `MANAGER` is a class 
+template argument of both `MyI2CDevice` and `i2c::I2CDevice`; this constructor must call the inherited constructor
+and pass it 3 arguments: `manager`, the default I2C address for your device, and finally, one of `i2c::I2C_STANDARD` 
+or `i2c::I2C_FAST` constants, to indicate the best mode (highest I2C frequency) that you device can support.
+4. List the API you need to provide to the end user of your device (based on the device datasheet)
+5. For each `public` API you need to provide, define a specific *Future* to hold
+values written to the device, as well as values later read from the device. Each defined Future shall derive from 
+`FUTURE` (type alias defined above). This future will allow asynchronous execution of the API.
+FastArduino guidelines for I2C devices suggest to name the future class according to the API name itself e.g. 
+`SetDatetimeFuture` for the `set_datetime()` API.
+6. For each `public` API, define a method that takes a `PROXY` to the future defined above and return an `int`. 
+The implementation of this method is based on mainly 3 inherited `protected` methods: `i2c::I2CDevice.read()`,
+`i2c::I2CDevice.write()` and `i2c::I2CDevice.launch_commands()`
+7. For each `public` API, also define a similar method (same name) with a synchronous flavour. That method will
+directly take "natural" arguments (no futures) as input or output (reference), and return a `bool` to indicate
+if API was performed without any error.
 
 ### I2CDevice API ###
-Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` methods:
-- `i2c::I2CDevice.read(uint8_t, uint8_t*, uint8_t, BusConditions)`: read an array of bytes from the I2C device
-- `i2c::I2CDevice.read(uint8_t, T&, BusConditions)`: read bytes as a struct `T` from the I2C device
-- `i2c::I2CDevice.write(uint8_t, uint8_t, BusConditions)`: write one byte to the I2C device
-- `i2c::I2CDevice.write(uint8_t, const uint8_t*, uint8_t, BusConditions)`: write an array of bytes to the I2C device
-- `i2c::I2CDevice.write(uint8_t, const T&, BusConditions)`: write bytes of a struct `T` to the I2C device
+Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` aliases:
+- `i2c::I2CDevice::PARENT`: this is simply defined as `i2c::I2CDevice<MANAGER>` and is useful for accessing next aliases
+- `i2c::I2CDevice::PROXY`: this is the type of lifecycle proxy used by `MANAGER`; it must be used for all asynchronous 
+API of `MyI2CDevice` to embed actual Future types
+- `i2c::I2CDevice::FUTURE`: this is the type of Future used by `MANAGER`; it must be used for defining your own
+Future types for all asynchronous API of `MyI2CDevice`
 
+Note that to be accessible from `MyI2CDevice` class, these types must be redefined as follows:
+TODO code snippet redefining aliases
+
+TODO Constructor description
 All methods above start with `uint8_t address` as their first argument. This is the unique device address 
 on the I2C bus, made of 7 bits. Typically an I2C device falls in one of the following categories:
 1. it has a fixed I2C address that cannot be changed (e.g. DS1307 RTC chip)
@@ -82,6 +103,18 @@ hardware, or pass the address (as `uint8_t`) to the driver class constructor.
 
 For devices in category 3, you would first define the fixed address as a constant, then define an API to change it
 (as a data member of `MyI2CDevice`).
+
+Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` methods:
+- `i2c::I2CDevice.read(uint8_t, i2c::I2CFinish)`: create a command to read bytes from the I2C device; read bytes
+will be added to the related Future (passed to `launch_commands()`)
+- `i2c::I2CDevice.write(uint8_t, i2c::I2CFinish)`:create a command to write bytes to the I2C device; written bytes
+are taken from the related Future (passed to `launch_commands()`)
+- `i2c::I2CDevice.launch_commands(PROXY<Future>, initializer_list<>)`: prepare passed read/write commands and send 
+them to `MANAGER` for later asynchronous execution (commands are queued)
+- TODO other set_device(), resolve(), make_proxy()
+
+TODO explain read/write() methods in particular I2CFinish enum
+TODO explain launch_commands() method
 
 All methods above always end with a `i2c::BusConditions conditions` argument. This argument is super important as it 
 defines how each method shall handle the I2C bus (this bus is shared between all devices and thus access to it must
@@ -150,7 +183,7 @@ implementation.
 
 Debugging support for a new device (low-level)
 ----------------------------------------------
-
+TODO
 In general, before developing a full-fledged driver for an I2C device, you need to learn how to use that device.
 
 Based on the device datasheet, you first learn how to manipulate the device through the I2C bus.
