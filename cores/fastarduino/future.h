@@ -1069,6 +1069,7 @@ namespace future
 		};
 	};
 
+	/// @cond notdocumented	
 	template<typename OUT_>
 	class FakeFuture<OUT_, void> : public AbstractFakeFuture
 	{
@@ -1099,7 +1100,9 @@ namespace future
 			uint8_t output_buffer_[sizeof(OUT)];
 		};
 	};
+	/// @endcond
 
+	/// @cond notdocumented	
 	template<typename IN_>
 	class FakeFuture<void, IN_> : public AbstractFakeFuture
 	{
@@ -1141,7 +1144,9 @@ namespace future
 			uint8_t input_buffer_[sizeof(IN)];
 		};
 	};
+	/// @endcond
 
+	/// @cond notdocumented	
 	template<>
 	class FakeFuture<void, void> : public AbstractFakeFuture
 	{
@@ -1162,6 +1167,7 @@ namespace future
 			return true;
 		}
 	};
+	/// @endcond
 }
 
 #endif /* FUTURE_HH */

@@ -44,15 +44,15 @@ derive from `i2c::I2CDevice`:
 @image html classdevices_1_1mcp230xx_1_1_m_c_p23008__inherit__graph.png
 @image latex classdevices_1_1mcp230xx_1_1_m_c_p23008__inherit__graph.pdf
 
-2. MCP23017 16-Bit I/O Expander chip
+3. MCP23017 16-Bit I/O Expander chip
 @image html classdevices_1_1mcp230xx_1_1_m_c_p23017__inherit__graph.png
 @image latex classdevices_1_1mcp230xx_1_1_m_c_p23017__inherit__graph.pdf
 
-3. MPU6050 3D Accelerometer-Gyroscope chip
+4. MPU6050 3D Accelerometer-Gyroscope chip
 @image html classdevices_1_1magneto_1_1_m_p_u6050__inherit__graph.png
 @image latex classdevices_1_1magneto_1_1_m_p_u6050__inherit__graph.pdf
 
-4. HMC5883L 3D Compass chip
+5. HMC5883L 3D Compass chip
 @image html classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.png
 @image latex classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.pdf
 
@@ -83,7 +83,7 @@ on FastArduino `future` API, which concepts shall be first understood before sta
 your own support for an I2C device.
 
 Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` aliases:
-- `i2c::I2CDevice::PARENT`: this is simply defined as `i2c::I2CDevice<MANAGER>` and is useful for accessing next aliases
+- `PARENT`: this is simply defined as `i2c::I2CDevice<MANAGER>` and is useful for accessing next aliases
 - `i2c::I2CDevice::PROXY`: this is the type of lifecycle proxy used by `MANAGER`; it must be used for all asynchronous 
 API of `MyI2CDevice` to embed actual Future types
 - `i2c::I2CDevice::FUTURE`: this is the type of Future used by `MANAGER`; it must be used for defining your own
@@ -101,7 +101,7 @@ Note that to be accessible from `MyI2CDevice` class, these types must be redefin
 1. `MANAGER& manager`: this should be passed as is from `MyI2CDevice` constructor
 2. `uint8_t device`: this is the default I2C address of this device (this 7-bits address must be already left-shifted
 one bit to leave the LSB available for I2C direction read or write)
-3. `Mode<MODE> mode` (`MODE` is a template argument of the constructor, `I2CMode MODE`): this should be passed one of
+3. `Mode<MODE> mode` (`MODE` is a template argument of the constructor, `i2c::I2CMode MODE`): this should be passed one of
 2 constants `i2c::I2C_FAST` or `i2c::I2C_STANDARD`) to indicate the best I2C mode (highest frequency) supported by 
 `MyI2CDevice`: this will impact what `MANAGER` type can be used when instantiating `MyI2CDevice` template.
 
@@ -229,9 +229,9 @@ Futures needed by all API reading registers, like in the following excerpt from 
 In the above code, the only added value of `GetValuesFuture` class is to embed the `GPIO` register address; this allows
 callers of the `values()` API to directly instantiate this Future without further input.
 
-The implementation of `values()` is one-liner that requires a few explanations:
+The implementation of `values()` is a one-liner that requires a few explanations:
 - `launch_commands()` has only 2 arguments: `future` that is directly passed from the API argument, and a list of 
-commands (embedded with braces)
+commands (embedded within braces)
 - in this example, there are only 2 commands; the first, returned by `write()`, writes all input content of `future`, 
 i.e. the `GPIO` register address (single) byte); the second command, created by `read()`, reads enough bytes (only 
 one here) from the decice to fill the output of `future`.
@@ -304,8 +304,9 @@ Here we simply initialize I2C function on the UNO.
 @skipline PublicDevice
 We then declare the `device` variable that we will use for testing our I2C device.
 
-Finally the rest of thecode is placeholder for any initialization API,
-followed by an infinite loop where you can call read/write methods on `device` in order to test the way to handle the target device.
+Finally the rest of the code is placeholder for any initialization API,
+followed by an infinite loop where you can call lauinch_commands/read/write methods on `device` in order to test
+the way to handle the target device.
 
 
 Defining the driver API based on device features
@@ -371,7 +372,7 @@ The first snippet below defines a specific Future for getting current datetime f
 @endcode
 In this code, `tm` is a strcuture to hold all parts of a datetime.
 
-The constructor take no argument: it just passes `TIME_ADDRESS` constant to the superclass.
+The constructor takes no argument: it just passes `TIME_ADDRESS` constant to the superclass.
 
 Note the overridden `get()` method, necessary to convert raw datetime data read from the device,
 to properly formatted data, usable by the caller program.
@@ -383,7 +384,7 @@ The second snippet shows the asynchronous API method:
         return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
     }
 @endcode
-In this code, one raed and one write commands are generated and sent to the I2C Manager for execution (immediate 
+In this code, one read and one write commands are generated and sent to the I2C Manager for execution (immediate 
 or deferred, depending on the I2C Manager associated to the device); the write command writes all bytes from 
 `GetDatetimeFuture`, i.e. one byte; the read command reads as many bytes as expected by `GetDatetimeFuture`, i.e. 
 one byte. At the end of the I2C transaction (end of read command), a "STOP" condition is generated, releasing the 
