@@ -33,26 +33,21 @@
 #include <fastarduino/utilities.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/i2c_debug.h>
-#include <fastarduino/i2c_status.h>
-
-// This macro determines if extensive debug traces should be sent (recommended during first attempts)
-#define DEBUG_I2C
 
 // I2C Device specific constants go here
 //======================================
 static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
 static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 
-#ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 32;
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 using MANAGER = i2c::I2CSyncStatusDebugManager<MODE, DEBUGGER&, DEBUGGER&>;
 #define DEBUG(OUT) debugger.trace(OUT)
-#else
-using STATUS = i2c::status::I2CLatestStatusHolder;
-using MANAGER = i2c::I2CSyncStatusManager<MODE, STATUS&>;
-#define DEBUG(OUT) OUT << streams::hex << status_holder.latest_status() << streams::endl
-#endif
+
+// The following type aliases will be useful for declaring proper Futures and calling I2CDevice API
+using PARENT = i2c::I2CDevice<MANAGER>;
+template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
@@ -62,11 +57,6 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 static streams::ostream out = uart.out();
-
-// The following type aliases will be useful for declaring proper Futures and calling I2CDevice API
-using PARENT = i2c::I2CDevice<MANAGER>;
-template<typename T> using PROXY = typename PARENT::template PROXY<T>;
-template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 // Subclass I2CDevice to make protected methods available
 class PublicDevice: public PARENT
@@ -90,13 +80,8 @@ int main()
 	
 	// Start TWI interface
 	//====================
-#ifdef DEBUG_I2C
 	DEBUGGER debugger;
 	MANAGER manager{debugger, debugger};
-#else
-	STATUS status_holder;
-	MANAGER manager{status_holder};
-#endif
 	manager.begin();
 	out << F("I2C interface started") << endl;
 	
