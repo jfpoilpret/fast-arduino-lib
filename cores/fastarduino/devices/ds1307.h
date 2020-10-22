@@ -150,6 +150,7 @@ namespace devices::rtc
 		class SetDatetimeFuture : public FUTURE<void, set_tm>
 		{
 		public:
+			/// @cond notdocumented
 			explicit SetDatetimeFuture(const tm& datetime)
 			{
 				set_tm set;
@@ -165,6 +166,7 @@ namespace devices::rtc
 			}
 			SetDatetimeFuture(SetDatetimeFuture&&) = default;
 			SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -201,6 +203,7 @@ namespace devices::rtc
 		class GetDatetimeFuture : public FUTURE<tm, uint8_t>
 		{
 		public:
+			/// @cond notdocumented
 			GetDatetimeFuture() : FUTURE<tm, uint8_t>{TIME_ADDRESS} {}
 			GetDatetimeFuture(GetDatetimeFuture&&) = default;
 			GetDatetimeFuture& operator=(GetDatetimeFuture&&) = default;
@@ -217,6 +220,7 @@ namespace devices::rtc
 				datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
 				return true;
 			}
+			/// @endcond
 		};
 
 		/**
@@ -258,6 +262,7 @@ namespace devices::rtc
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, SIZE_ + 1>>;
 		public:
+			/// @cond notdocumented
 			SetRamFuture() = default;
 			explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
 			{
@@ -270,7 +275,6 @@ namespace devices::rtc
 			SetRamFuture(SetRamFuture<SIZE_>&&) = default;
 			SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
 
-			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return (this->get_input()[0] + SIZE_ <= RAM_END);
@@ -319,13 +323,13 @@ namespace devices::rtc
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
+			/// @cond notdocumented
 			SetRam1Future() = default;
 			explicit SetRam1Future(uint8_t address, uint8_t data)
 				:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}} {}
 			SetRam1Future(SetRam1Future&&) = default;
 			SetRam1Future& operator=(SetRam1Future&&) = default;
 
-			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return (this->get_input()[0] < RAM_END);
@@ -373,6 +377,7 @@ namespace devices::rtc
 		{
 			using PARENT = FUTURE<containers::array<uint8_t, SIZE_>, uint8_t>;
 		public:
+			/// @cond notdocumented
 			explicit GetRamFuture(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)}
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
@@ -380,7 +385,6 @@ namespace devices::rtc
 			GetRamFuture(GetRamFuture<SIZE_>&&) = default;
 			GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = default;
 
-			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return (this->get_input() + SIZE_ <= RAM_END);
@@ -428,11 +432,11 @@ namespace devices::rtc
 		{
 			using PARENT = FUTURE<uint8_t, uint8_t>;
 		public:
+			/// @cond notdocumented
 			explicit GetRam1Future(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
 			GetRam1Future(GetRam1Future&&) = default;
 			GetRam1Future& operator=(GetRam1Future&&) = default;
 
-			/// @cond notdocumented
 			bool is_input_valid() const
 			{
 				return this->get_input() < RAM_END;
@@ -475,10 +479,12 @@ namespace devices::rtc
 		class HaltClockFuture : public FUTURE<void, containers::array<uint8_t, 2>>
 		{
 		public:
+			/// @cond notdocumented
 			// just write 0x80 at address 0
 			HaltClockFuture() : FUTURE<void, containers::array<uint8_t, 2>>{{TIME_ADDRESS, CLOCK_HALT}} {}
 			HaltClockFuture(HaltClockFuture&&) = default;
 			HaltClockFuture& operator=(HaltClockFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -519,6 +525,7 @@ namespace devices::rtc
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
+			/// @cond notdocumented
 			explicit EnableOutputFuture(SquareWaveFrequency frequency)
 			{
 				ControlRegister control;
@@ -531,6 +538,7 @@ namespace devices::rtc
 			}
 			EnableOutputFuture(EnableOutputFuture&&) = default;
 			EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -569,6 +577,7 @@ namespace devices::rtc
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
+			/// @cond notdocumented
 			explicit DisableOutputFuture(bool output_value)
 			{
 				ControlRegister control;
@@ -580,6 +589,7 @@ namespace devices::rtc
 			}
 			DisableOutputFuture(DisableOutputFuture&&) = default;
 			DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
+			/// @endcond
 		};
 
 		/**

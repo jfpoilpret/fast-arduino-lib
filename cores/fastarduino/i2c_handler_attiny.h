@@ -35,6 +35,11 @@
 #error "i2c_handler_attiny.h cannot be included in an ATmega program!"
 #endif
 
+/**
+ * This macro indicates if truly asynchronous I2C management is available for a platform:
+ * - for ATmega architecture, it is set to `1`
+ * - for ATtiny architecture, it is set to `0`
+ */
 #define I2C_TRUE_ASYNC 0
 
 namespace i2c

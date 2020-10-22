@@ -901,6 +901,7 @@ namespace future
 	class AbstractFakeFuture
 	{
 	public:
+		/// @cond notdocumented
 		FutureStatus status() const
 		{
 			return (error_ == 0 ? FutureStatus::READY : FutureStatus::ERROR);
@@ -979,6 +980,7 @@ namespace future
 			error_ = error;
 			return true;
 		}
+		/// @endcond
 
 	protected:
 		/// @cond notdocumented
@@ -1027,6 +1029,7 @@ namespace future
 		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
 
 	public:
+		/// @cond notdocumented
 		using OUT = OUT_;
 		using IN = IN_;
 
@@ -1055,6 +1058,7 @@ namespace future
 		{
 			return input_;
 		}
+		/// @endcond
 
 	private:
 		union

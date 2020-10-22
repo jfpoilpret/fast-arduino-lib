@@ -318,6 +318,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 6>>;
 		public:
+			/// @cond notdocumented
 			explicit BeginFuture(	GyroRange gyro_range = GyroRange::RANGE_250,
 									AccelRange accel_range = AccelRange::RANGE_2G,
 									DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
@@ -326,6 +327,7 @@ namespace devices::magneto
 							PWR_MGMT_1, utils::as_uint8_t(PowerManagement{clock_select})}} {}
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -379,6 +381,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 14>>;
 		public:
+			/// @cond notdocumented
 			explicit FifoBeginFuture(	FIFOEnable fifo_enable,
 										INTEnable int_enable,
 										uint8_t sample_rate_divider,
@@ -395,7 +398,6 @@ namespace devices::magneto
 			FifoBeginFuture(FifoBeginFuture&&) = default;
 			FifoBeginFuture& operator=(FifoBeginFuture&&) = default;
 
-			/// @cond notdocumented
 			bool is_fifo_enabled() const
 			{
 				return (this->get_input()[9] != 0);
@@ -444,9 +446,11 @@ namespace devices::magneto
 		class EndFuture : public PowerManagementFuture
 		{
 		public:
+			/// @cond notdocumented
 			EndFuture() : PowerManagementFuture{PowerManagement{false, false, true, false}} {}
 			EndFuture(EndFuture&&) = default;
 			EndFuture& operator=(EndFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -485,9 +489,11 @@ namespace devices::magneto
 		class ResetFuture : public PowerManagementFuture
 		{
 		public:
+			/// @cond notdocumented
 			ResetFuture() : PowerManagementFuture{PowerManagement{false, false, false, true}} {}
 			ResetFuture(ResetFuture&&) = default;
 			ResetFuture& operator=(ResetFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -522,9 +528,11 @@ namespace devices::magneto
 		class GyroFuture : public Sensor3DFuture
 		{
 		public:
+			/// @cond notdocumented
 			GyroFuture() : Sensor3DFuture{GYRO_XOUT} {}
 			GyroFuture(GyroFuture&&) = default;
 			GyroFuture& operator=(GyroFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -563,6 +571,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<int16_t, uint8_t>;
 		public:
+			/// @cond notdocumented
 			TemperatureFuture() : PARENT{TEMP_OUT} {}
 			TemperatureFuture(TemperatureFuture&&) = default;
 			TemperatureFuture& operator=(TemperatureFuture&&) = default;
@@ -573,6 +582,7 @@ namespace devices::magneto
 				utils::swap_bytes(result);
 				return true;
 			}
+			/// @endcond
 		};
 
 		/**
@@ -619,9 +629,11 @@ namespace devices::magneto
 		class AccelFuture : public Sensor3DFuture
 		{
 		public:
+			/// @cond notdocumented
 			AccelFuture() : Sensor3DFuture{ACCEL_XOUT} {}
 			AccelFuture(AccelFuture&&) = default;
 			AccelFuture& operator=(AccelFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -657,6 +669,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<AllSensors, uint8_t>;
 		public:
+			/// @cond notdocumented
 			AllMeasuresFuture() : PARENT{ACCEL_XOUT} {}
 			AllMeasuresFuture(AllMeasuresFuture&&) = default;
 			AllMeasuresFuture& operator=(AllMeasuresFuture&&) = default;
@@ -669,6 +682,7 @@ namespace devices::magneto
 				utils::swap_bytes(result.temperature);
 				return true;
 			}
+			/// @endcond
 		};
 
 		/**
@@ -705,9 +719,11 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<INTStatus, uint8_t>;
 		public:
+			/// @cond notdocumented
 			InterruptStatusFuture() : PARENT{INT_STATUS} {}
 			InterruptStatusFuture(InterruptStatusFuture&&) = default;
 			InterruptStatusFuture& operator=(InterruptStatusFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -745,9 +761,11 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
+			/// @cond notdocumented
 			ResetFifoFuture() : PARENT{{USER_CTRL, FIFO_ENABLE | FIFO_RESET}} {}
 			ResetFifoFuture(ResetFifoFuture&&) = default;
 			ResetFifoFuture& operator=(ResetFifoFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -783,6 +801,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<uint16_t, uint8_t>;
 		public:
+			/// @cond notdocumented
 			FifoCountFuture() : PARENT{FIFO_COUNT} {}
 			FifoCountFuture(FifoCountFuture&&) = default;
 			FifoCountFuture& operator=(FifoCountFuture&&) = default;
@@ -793,6 +812,7 @@ namespace devices::magneto
 				utils::swap_bytes(result);
 				return true;
 			}
+			/// @endcond
 		};
 
 		/**
@@ -839,6 +859,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<T, uint8_t>;
 		public:
+			/// @cond notdocumented
 			FifoPopFuture() : PARENT{FIFO_R_W} {}
 			FifoPopFuture(FifoPopFuture&&) = default;
 			FifoPopFuture& operator=(FifoPopFuture&&) = default;
@@ -852,6 +873,7 @@ namespace devices::magneto
 				while (size--) utils::swap_bytes(*temp++);
 				return true;
 			}
+			/// @endcond
 		};
 
 		/**

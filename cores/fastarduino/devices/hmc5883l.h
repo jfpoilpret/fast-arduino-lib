@@ -235,6 +235,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 6>>;
 		public:
+			/// @cond notdocumented
 			explicit BeginFuture(	OperatingMode mode = OperatingMode::SINGLE,
 									Gain gain = Gain::GAIN_1_3GA,
 									DataOutput rate = DataOutput::RATE_15HZ, 
@@ -246,7 +247,6 @@ namespace devices::magneto
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
 
-			/// @cond notdocumented
 			Gain gain() const
 			{
 				return static_cast<Gain>(this->get_input()[3]);
@@ -291,9 +291,11 @@ namespace devices::magneto
 		class EndFuture : public WriteRegisterFuture
 		{
 		public:
+			/// @cond notdocumented
 			EndFuture() : WriteRegisterFuture{MODE_REG, uint8_t(OperatingMode::IDLE)} {}
 			EndFuture(EndFuture&&) = default;
 			EndFuture& operator=(EndFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -331,9 +333,11 @@ namespace devices::magneto
 		class StatusFuture : public ReadRegisterFuture<Status>
 		{
 		public:
+			/// @cond notdocumented
 			StatusFuture() : ReadRegisterFuture<Status>{STATUS_REG} {}
 			StatusFuture(StatusFuture&&) = default;
 			StatusFuture& operator=(StatusFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -371,6 +375,7 @@ namespace devices::magneto
 		{
 			using PARENT = ReadRegisterFuture<Sensor3D>;
 		public:
+			/// @cond notdocumented
 			MagneticFieldsFuture() : PARENT{OUTPUT_REG_1} {}
 			MagneticFieldsFuture(MagneticFieldsFuture&&) = default;
 			MagneticFieldsFuture& operator=(MagneticFieldsFuture&&) = default;
@@ -383,6 +388,7 @@ namespace devices::magneto
 				utils::swap_bytes(fields.z);
 				return true;
 			}
+			/// @endcond
 		};
 
 		/**

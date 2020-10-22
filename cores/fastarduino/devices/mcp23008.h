@@ -79,10 +79,12 @@ namespace devices::mcp230xx
 		class BeginFuture : public WriteRegisterFuture
 		{
 		public:
+			/// @cond notdocumented
 			explicit BeginFuture(InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 				: WriteRegisterFuture{IOCON, build_IOCON(interrupt_polarity == InterruptPolarity::ACTIVE_HIGH)} {}
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -128,10 +130,12 @@ namespace devices::mcp230xx
 		{
 			using PARENT = FUTURE<void, Write3Registers>;
 		public:
+			/// @cond notdocumented
 			ConfigureGPIOFuture(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
 				:	PARENT{Write3Registers{IODIR, direction, IPOL, polarity, GPPU, pullup}} {}
 			ConfigureGPIOFuture(ConfigureGPIOFuture&&) = default;
 			ConfigureGPIOFuture& operator=(ConfigureGPIOFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -178,10 +182,12 @@ namespace devices::mcp230xx
 		{
 			using PARENT = FUTURE<void, Write3Registers>;
 		public:
+			/// @cond notdocumented
 			ConfigureInterruptsFuture(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
 				:	PARENT{Write3Registers{GPINTEN, int_pins, DEFVAL, ref, INTCON, compare_ref}} {}
 			ConfigureInterruptsFuture(ConfigureInterruptsFuture&&) = default;
 			ConfigureInterruptsFuture& operator=(ConfigureInterruptsFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -220,9 +226,11 @@ namespace devices::mcp230xx
 		class SetValuesFuture : public WriteRegisterFuture
 		{
 		public:
+			/// @cond notdocumented
 			SetValuesFuture(uint8_t value) : WriteRegisterFuture{GPIO, value} {}
 			SetValuesFuture(SetValuesFuture&&) = default;
 			SetValuesFuture& operator=(SetValuesFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -258,9 +266,11 @@ namespace devices::mcp230xx
 		class GetValuesFuture : public ReadRegisterFuture
 		{
 		public:
+			/// @cond notdocumented
 			GetValuesFuture() : ReadRegisterFuture{GPIO} {}
 			GetValuesFuture(GetValuesFuture&&) = default;
 			GetValuesFuture& operator=(GetValuesFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -297,9 +307,11 @@ namespace devices::mcp230xx
 		class InterruptFlagsFuture : public ReadRegisterFuture
 		{
 		public:
+			/// @cond notdocumented
 			InterruptFlagsFuture() : ReadRegisterFuture{INTF} {}
 			InterruptFlagsFuture(InterruptFlagsFuture&) = default;
 			InterruptFlagsFuture& operator=(InterruptFlagsFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -337,9 +349,11 @@ namespace devices::mcp230xx
 		class CapturedValuesFuture : public ReadRegisterFuture
 		{
 		public:
+			/// @cond notdocumented
 			CapturedValuesFuture() : ReadRegisterFuture{INTCAP} {}
 			CapturedValuesFuture(CapturedValuesFuture&&) = default;
 			CapturedValuesFuture& operator=(CapturedValuesFuture&&) = default;
+			/// @endcond
 		};
 
 		/**

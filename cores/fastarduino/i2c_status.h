@@ -69,7 +69,7 @@ namespace i2c::status
 		 * To be effective, this must be attached to an I2C Manager (at construction time).
 		 * Recorded notifications can be output to a `streams::ostream` with `trace()`.
 		 * 
-		 * @param trace. the list of notifications to be recorded
+		 * @param trace the list of notifications to be recorded
 		 * 
 		 * @sa trace()
 		 * @sa reset()
@@ -133,7 +133,7 @@ namespace i2c::status
 		 * by @p trace. list. I2C notifications are output to @p out.
 		 * 
 		 * @param out the `streams::ostream` to output traces to
-		 * @param trace. the list of notifications to trace
+		 * @param trace the list of notifications to trace
 		 */
 		I2CStatusLiveLogger(streams::ostream& out, STATUS trace = STATUS::TRACE_ALL) : out_{out}, trace_{trace} {}
 

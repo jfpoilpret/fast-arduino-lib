@@ -136,6 +136,7 @@ namespace devices::mcp230xx
 		{
 			using PARENT = WriteRegisterFuture<MCP23017Port::PORT_A>;
 		public:
+			/// @cond notdocumented
 			explicit BeginFuture(
 				bool mirror_interrupts = false,
 				InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
@@ -143,6 +144,7 @@ namespace devices::mcp230xx
 						mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH)} {}
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -192,10 +194,12 @@ namespace devices::mcp230xx
 		{
 			using PARENT = FUTURE<void, Write3Registers<P_>>;
 		public:
+			/// @cond notdocumented
 			ConfigureGPIOFuture(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 				:	PARENT{Write3Registers<P_>{IODIR_A, direction, IPOL_A, polarity, GPPU_A, pullup}} {}
 			ConfigureGPIOFuture(ConfigureGPIOFuture<P_>&&) = default;
 			ConfigureGPIOFuture<P_>& operator=(ConfigureGPIOFuture<P_>&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -251,10 +255,12 @@ namespace devices::mcp230xx
 		{
 			using PARENT = FUTURE<void, Write3Registers<P_>>;
 		public:
+			/// @cond notdocumented
 			ConfigureInterruptsFuture(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 				:	PARENT{Write3Registers<P_>{GPINTEN_A, int_pins, DEFVAL_A, ref, INTCON_A, compare_ref}} {}
 			ConfigureInterruptsFuture(ConfigureInterruptsFuture<P_>&&) = default;
 			ConfigureInterruptsFuture<P_>& operator=(ConfigureInterruptsFuture<P_>&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -303,9 +309,11 @@ namespace devices::mcp230xx
 		class SetValuesFuture : public WriteRegisterFuture<P_>
 		{
 		public:
+			/// @cond notdocumented
 			SetValuesFuture(T<P_> value) : WriteRegisterFuture<P_>{GPIO_A, value} {}
 			SetValuesFuture(SetValuesFuture<P_>&&) = default;
 			SetValuesFuture<P_>& operator=(SetValuesFuture<P_>&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -350,9 +358,11 @@ namespace devices::mcp230xx
 		class GetValuesFuture : public ReadRegisterFuture<P_>
 		{
 		public:
+			/// @cond notdocumented
 			GetValuesFuture() : ReadRegisterFuture<P_>{GPIO_A} {}
 			GetValuesFuture(GetValuesFuture<P_>&&) = default;
 			GetValuesFuture<P_>& operator=(GetValuesFuture<P_>&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -397,9 +407,11 @@ namespace devices::mcp230xx
 		class InterruptFlagsFuture : public ReadRegisterFuture<P_>
 		{
 		public:
+			/// @cond notdocumented
 			InterruptFlagsFuture() : ReadRegisterFuture<P_>{INTF_A} {}
 			InterruptFlagsFuture(InterruptFlagsFuture<P_>&) = default;
 			InterruptFlagsFuture<P_>& operator=(InterruptFlagsFuture<P_>&&) = default;
+			/// @endcond
 		};
 
 		/**
@@ -446,9 +458,11 @@ namespace devices::mcp230xx
 		class CapturedValuesFuture : public ReadRegisterFuture<P_>
 		{
 		public:
+			/// @cond notdocumented
 			CapturedValuesFuture() : ReadRegisterFuture<P_>{INTCAP_A} {}
 			CapturedValuesFuture(CapturedValuesFuture<P_>&&) = default;
 			CapturedValuesFuture<P_>& operator=(CapturedValuesFuture<P_>&&) = default;
+			/// @endcond
 		};
 
 		/**
