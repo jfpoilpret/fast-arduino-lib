@@ -97,13 +97,16 @@ Note that to be accessible from `MyI2CDevice` class, these types must be redefin
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 @endcode
 
-`i2c::I2CDevice` constructor takes 3 arguments:
+`i2c::I2CDevice` constructor takes 4 arguments:
 1. `MANAGER& manager`: this should be passed as is from `MyI2CDevice` constructor
 2. `uint8_t device`: this is the default I2C address of this device (this 7-bits address must be already left-shifted
 one bit to leave the LSB available for I2C direction read or write)
 3. `Mode<MODE> mode` (`MODE` is a template argument of the constructor, `i2c::I2CMode MODE`): this should be passed one of
 2 constants `i2c::I2C_FAST` or `i2c::I2C_STANDARD`) to indicate the best I2C mode (highest frequency) supported by 
-`MyI2CDevice`: this will impact what `MANAGER` type can be used when instantiating `MyI2CDevice` template.
+`MyI2CDevice`: this will impact what `MANAGER` type can be used when instantiating `MyI2CDevice` template
+4. `bool auto_stop`: this defines whether all chains of commands of `MyI2CDevice` shall automatically be ended with
+a STOP condition on the I2C bus or not. In most cases, the default (`false`) should work, but some devices 
+(e.g. DS1307) do not work properly in 2 chains of commands are not separated by a STOP condition.
 
 Note that `device` address must be provided at construction time but can optionally be changed later.
 Regarding its I2C address, typically an I2C device falls in one of the following categories:
@@ -132,9 +135,9 @@ For devices in category 3, you would first define the fixed address as a constan
 (as a data member of `MyI2CDevice`).
 
 Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` methods:
-- `i2c::I2CDevice.read(uint8_t read_count, i2c::I2CFinish finish)`: create a command to read bytes from the 
+- `i2c::I2CDevice.read(uint8_t read_count, bool finish_future, bool stop)`: create a command to read bytes from the 
 I2C device; read bytes will be added to the related Future (passed to `launch_commands()`)
-- `i2c::I2CDevice.write(uint8_t write_count, i2c::I2CFinish finish)`:create a command to write bytes to the
+- `i2c::I2CDevice.write(uint8_t write_count, bool finish_future, bool stop)`:create a command to write bytes to the
 I2C device; written bytes are taken from the related Future (passed to `launch_commands()`)
 - `i2c::I2CDevice.launch_commands(PROXY<> proxy, initializer_list<> commands)`: prepare passed read/write 
 `commands` and send them to `MANAGER` for later asynchronous execution (commands are queued); the `Future` referenced
@@ -150,15 +153,11 @@ Note that `read()` and `write()` methods do not actually perform any I2C operati
 or write command (`i2c::I2CLightCommand` type embedding necessary information) based on their arguments:
 - `read_count`/`write_count` specify the number of bytes to read or write. When `0` (the default), this means that
 all bytes (as defined in the specific Future) will be read or written.
-- `finish`: specify what shall be done after the created I2C command will be executed; it can be one of 4 values:
-    - `i2c::I2CFinish::NONE`: nothing will be done after this command is executed
-    - `i2c::I2CFinish::FORCE_STOP`: after this command execution, an I2C STOP condition will be generated on the I2C bus;
-    this will automatically trigger a "START" condition on the next command (whether it is part of the current chain 
-    of commands or not)
-    - `i2c::I2CFinish::FUTURE_FINISH`: after this command execution, the Future assigned to the current transaction 
-    will be marked as finished
-    - `i2c::I2CFinish::FORCE_STOP | i2c::I2CFinish::FUTURE_FINISH`: after this command execution, an I2C STOP condition 
-    will be generated on the I2C bus and the Future assigned to the current transaction will be marked as finished
+- `finish_future`: specify that, after this command execution, the Future assigned to the current transaction 
+will be marked as finished
+- `stop`: specify that, after this command execution, an I2C STOP condition will be generated on the I2C bus;
+this will automatically trigger a "START" condition on the next command (whether it is part of the current chain 
+of commands or not)
 
 The `launch_commands()` method does the actual work:
 - with a synchronous I2C Manager, it blocks until all commands get executed or an error occurs; the assigned Future
@@ -175,14 +174,17 @@ Handling of the I2C bus by the I2C Manager and the `I2CDevice` follows standard 
 In usual conditions: `launch_commands()` can execute long chains of commands on one device:
 1. The first command in the chain will generate a "START" condition on the I2C bus as required by the I2C protocol
 2. By default, all following commands will be preceded by a "REPEAT START" condition on the I2C bus
-3. The last command in the chain will **not** end with a "STOP" condition on the bus; by default, FastArduino 
+3. By default, the last command in the chain will **not** end with a "STOP" condition on the bus; FastArduino 
 I2C Manager will keep the I2C bus for itself, unless required otherwise by I2C devices implementation.
 
 This default behaviour allows your I2C device API implementation to perform a sequence of calls to the I2C device, 
 where the first call will acquire the bus, and all following calls in between will not need to acquire the bus.
 
-You can change the default for each command, by setting `finish` argument to `i2c::I2CFinish::FORCE_STOP`, which will
-produce a "STOP" condition at the end of that command and a "START" condition on the next command in the chain.
+You can change the default for each command or for a whole device:
+- at command level, by setting `stop` argument to `true`, which will produce a "STOP" condition at the end 
+of that command and a "START" condition on the next command in the chain.
+- at device level, by setting `auto_stop` constructor argument to `true`; then all chains of commands for the device
+will always end with a STOP condition.
 
 **IMPORTANT:** Actually, asynchronous flavours of I2C Managers will release the I2C bus at the end of an 
 I2C transaction, in case there is no more pending command (from another I2C transaction) in the commands queue.
@@ -236,8 +238,8 @@ commands (embedded within braces)
 i.e. the `GPIO` register address (single) byte); the second command, created by `read()`, reads enough bytes (only 
 one here) from the decice to fill the output of `future`.
 - both commands are created with default calls to `read()` and `write()` i.e. `0` for bytes count (special meaning:
-use full content size of `future`), and `i2c::I2CFinish::NONE`, leading to generation of "START" condition at the
-beginning.
+use full content size of `future`), `false` for `finish_future` and `stop`, leading to generation of "START" condition at the
+beginning, and no STOP forced at the end.
 
 A similar approach is used for writing a value to a device register and will not be detailed here.
 
@@ -381,15 +383,16 @@ The second snippet shows the asynchronous API method:
 @code{.cpp}
     int get_datetime(PROXY<GetDatetimeFuture> future)
     {
-        return this->launch_commands(future, {this->write(), this->read(0, i2c::I2CFinish::FORCE_STOP)});
+        return this->launch_commands(future, {this->write(), this->read()});
     }
 @endcode
 In this code, one read and one write commands are generated and sent to the I2C Manager for execution (immediate 
 or deferred, depending on the I2C Manager associated to the device); the write command writes all bytes from 
 `GetDatetimeFuture`, i.e. one byte; the read command reads as many bytes as expected by `GetDatetimeFuture`, i.e. 
-one byte. At the end of the I2C transaction (end of read command), a "STOP" condition is generated, releasing the 
-I2C bus. This seems required by DS1307 device (from experiment) to release the bus between two consecutive 
-transactions.
+one byte. Although not directly visible in this snippet, at the end of the I2C transaction (end of read command), 
+a "STOP" condition is generated, releasing the I2C bus. This seems required by DS1307 device (from experiment) to 
+release the bus between two consecutive transactions. This is why `DS1307` device constructor sets `auto_stop`
+to `true`.
 
 The last snippet demonstrates implementation of the synchronous API method:
 @code{.cpp}

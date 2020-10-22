@@ -215,11 +215,11 @@ int main()
 	// Initialize clock date
 	//=======================
 	FUTURE<void, uint8_t> f1{0};
-	int error1 = rtc.launch_commands(f1, {rtc.write(0, i2c::I2CFinish::FUTURE_FINISH)});
+	int error1 = rtc.launch_commands(f1, {rtc.write(0, true)});
 	DEBUG(out);
 	SHOW_STATUS(out);
 	FUTURE<void, RealTime> f2{init_time};
-	int error2 = rtc.launch_commands(f2, {rtc.write(0, i2c::I2CFinish::FUTURE_FINISH)});
+	int error2 = rtc.launch_commands(f2, {rtc.write(0, true)});
 	DEBUG(out);
 	SHOW_STATUS(out);
 	out << "error1 " << error1 << endl;

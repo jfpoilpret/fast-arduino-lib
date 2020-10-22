@@ -44,51 +44,6 @@
 
 namespace i2c
 {
-	/**
-	 * Action(s) to perform at the end of an I2C read or write command.
-	 * Values can be or'ed together to combine several actions.
-	 * 
-	 * @sa I2CDevice::read()
-	 * @sa I2CDevice::write()
-	 */
-	enum class I2CFinish : uint8_t
-	{
-		/** Perform no specific action ate the end of a read or write I2C command. */
-		NONE = 0,
-		/**
-		 * Force an I2C STOP condition at the end of a read or write command, 
-		 * instead of the default REPEAT START condition.
-		 * This may be useful for some devices that do not support REEAT START well.
-		 */
-		FORCE_STOP = 0x01,
-		/**
-		 * Force finishing the Future associated with the current read or write 
-		 * I2C command. This is useful for I2C transaction with only write commands,
-		 * hence associated to a Future with no output.
-		 * @warning
-		 * In general, you would never use this value in your own implementation 
-		 * for a device, because FastArduino I2C support already ensures this is
-		 * done at the end of a complete I2C transaction (with mutiple read and 
-		 * write commands).
-		 * This could be useful in the exceptional case where your I2C transaction
-		 * is made of many commands, but you would like to finish the associated 
-		 * Future **before** the last command is executed, which should be an
-		 * extraordinarily rare situation.
-		 */
-		FUTURE_FINISH = 0x02
-	};
-	
-	/// @cond notdocumented
-	constexpr I2CFinish operator|(I2CFinish f1, I2CFinish f2)
-	{
-		return I2CFinish(uint8_t(f1) | uint8_t(f2));
-	}
-	constexpr bool operator&(I2CFinish f1, I2CFinish f2)
-	{
-		return uint8_t(f1) & uint8_t(f2);
-	}
-	/// @endcond
-
 	// Trick to support MODE as I2CDevice constructor template argument (deducible)
 	/// @cond notdocumented
 	template<I2CMode MODE> struct Mode {};
@@ -152,12 +107,16 @@ namespace i2c
 		 * changed dynamically later for devices that support address changes.
 		 * @param mode  the best I2C mode for this device; this determines the 
 		 * I2C Manager types that can manage this device.
+		 * @param auto_stop if `true`, then any chain of commands (started with 
+		 * `launch_commands()`) will end with a STOP condition generated on the I2C bus;
+		 * if `false` (the default), then STOP condition will generated only when
+		 * requested in `read()` or `write(0` calls)
 		 * 
 		 * @sa set_device()
 		 */
 		template<I2CMode MODE>
-		I2CDevice(MANAGER& manager, uint8_t device, UNUSED Mode<MODE> mode) 
-		: device_{device}, handler_{manager}
+		I2CDevice(MANAGER& manager, uint8_t device, UNUSED Mode<MODE> mode, bool auto_stop = false) 
+		: device_{device}, handler_{manager}, auto_stop_{auto_stop}
 		{
 			// Ensure that MANAGER I2C mode is compliant with the best mode for this device
 			static_assert(MODE == I2CMode::FAST || MODE == MANAGER_TRAIT::MODE,
@@ -188,18 +147,22 @@ namespace i2c
 		 * @param read_count the number of bytes to read from the device to fill
 		 * the output value in the Future associated with the I2C transaction; 
 		 * if `0`, the whole output value should be filled by this command.
-		 * @param finish specify the behavior to adopt after this command has been
-		 * fully handled through the I2C bus; it allows to ensure a STOP condition
-		 * will be sent on the bus (independently of the existence of further commands),
-		 * or force the end of the Future associated to the chain of I2C commands.
+		 * @param finish_future force finishing the Future associated with the created
+		 * read I2C command; in general, you would never use this value in your own
+		 * implementation for a device, because FastArduino I2C support already 
+		 * ensures this is done at the end of a complete I2C transaction (with 
+		 * mutiple read and write commands); this could be useful in the exceptional 
+		 * case where your I2C transaction is made of many commands, but you would 
+		 * like to finish the associated Future **before** the last command is 
+		 * executed, which should be an extraordinarily rare situation.
+		 * @param stop force a STOP condition on the I2C bus at the end of this command
 		 * 
 		 * @sa launch_commands()
 		 * @sa write()
 		 */
-		static constexpr I2CLightCommand read(uint8_t read_count = 0, I2CFinish finish = I2CFinish::NONE)
+		static constexpr I2CLightCommand read(uint8_t read_count = 0, bool finish_future = false, bool stop = false)
 		{
-			const I2CCommandType type{
-				false, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
+			const I2CCommandType type{false, stop, finish_future, false};
 			return I2CLightCommand{type, read_count};
 		}
 
@@ -213,18 +176,22 @@ namespace i2c
 		 * in the Future associated with the I2C transaction, in order to write 
 		 * them to the device; if `0`, the whole storage value should be used by 
 		 * this command.
-		 * @param finish specify the behavior to adopt after this command has been
-		 * fully handled through the I2C bus; it allows to ensure a STOP condition
-		 * will be sent on the bus (independently of the existence of further commands),
-		 * or force the end of the Future associated to the chain of I2C commands.
+		 * @param finish_future force finishing the Future associated with the created
+		 * write I2C command; in general, you would never use this value in your own
+		 * implementation for a device, because FastArduino I2C support already 
+		 * ensures this is done at the end of a complete I2C transaction (with 
+		 * mutiple read and write commands); this could be useful in the exceptional 
+		 * case where your I2C transaction is made of many commands, but you would 
+		 * like to finish the associated Future **before** the last command is 
+		 * executed, which should be an extraordinarily rare situation.
+		 * @param stop force a STOP condition on the I2C bus at the end of this command
 		 * 
 		 * @sa launch_commands()
 		 * @sa read()
 		 */
-		static constexpr I2CLightCommand write(uint8_t write_count = 0, I2CFinish finish = I2CFinish::NONE)
+		static constexpr I2CLightCommand write(uint8_t write_count = 0, bool finish_future = false, bool stop = false)
 		{
-			const I2CCommandType type{
-				true, (finish & I2CFinish::FORCE_STOP), (finish & I2CFinish::FUTURE_FINISH), false};
+			const I2CCommandType type{true, stop, finish_future, false};
 			return I2CLightCommand{type, write_count};
 		}
 
@@ -310,7 +277,7 @@ namespace i2c
 					command.update_byte_count(max_read, max_write);
 					// force future finish for last command in transaction
 					if (--num_commands == 0)
-						command.type().add_flags(I2CCommandType::flags(false, true, true));
+						command.type().add_flags(I2CCommandType::flags(auto_stop_, true, true));
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command, device_, proxy))
 					{
@@ -350,6 +317,7 @@ namespace i2c
 	private:
 		uint8_t device_ = 0;
 		MANAGER& handler_;
+		bool auto_stop_;
 	};
 }
 

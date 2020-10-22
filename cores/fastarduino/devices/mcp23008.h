@@ -548,7 +548,7 @@ namespace devices::mcp230xx
 
 		i2c::I2CLightCommand write_stop(uint8_t byte_count = 0) const
 		{
-			return this->write(byte_count, i2c::I2CFinish::FORCE_STOP);
+			return this->write(byte_count, false, true);
 		}
 
 		struct Write3Registers
