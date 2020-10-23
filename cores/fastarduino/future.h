@@ -619,8 +619,6 @@ namespace future
 		 * @sa AbstractFuture
 		 * @sa status()
 		 * @sa FutureStatus
-		 * @sa Future(Future&&)
-		 * @sa operator=(Future&&)
 		 */
 		explicit Future(const IN& input = IN{})
 			: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
