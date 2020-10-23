@@ -20,7 +20,7 @@ to successfully implement such a driver.
 FastArduino I2C driver API
 --------------------------
 
-The generic support for I2C device driver in FastArduino looks quite simple, it is entirely embedded in 1 class, 
+The generic support for I2C device driver in FastArduino looks quite simple, it is entirely embedded in one class, 
 `i2c::I2CDevice`; this is a template class which all actual I2C device drivers shall derive from.
 
 This template class has only one `MANAGER` parameter, which must be kept as is in all subclasses; this represents 
@@ -78,8 +78,8 @@ if API was performed without any error.
 
 ### I2CDevice API ###
 
-Before describing FastArduino I2C Device API, it is important to metnion that this API is heavily based
-on FastArduino `future` API, which concepts shall be first understood before starting to build
+Before describing FastArduino I2C Device API, it is important to mention that this API is heavily based
+on FastArduino [`future`](namespacefuture.html) API, which concepts shall be first understood before starting to build
 your own support for an I2C device.
 
 Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` aliases:
