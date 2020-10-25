@@ -125,7 +125,25 @@ namespace i2c::debug
 		void trace(streams::ostream& out)
 		{
 			for (uint8_t i = 0; i < index_; ++i)
-				out << status_[i] << streams::hex << data_[i] << ' ' << streams::flush;
+			{
+				const i2c::DebugStatus status = status_[i];
+				switch (status)
+				{
+					case i2c::DebugStatus::START:
+					case i2c::DebugStatus::REPEAT_START:
+					case i2c::DebugStatus::STOP:
+					case i2c::DebugStatus::RECV_ERROR:
+					case i2c::DebugStatus::RECV:
+					case i2c::DebugStatus::RECV_LAST:
+					case i2c::DebugStatus::SEND_ERROR:
+					case i2c::DebugStatus::SEND_OK:
+					out << status << streams::flush;
+					break;
+
+					default:
+					out << status << streams::hex << data_[i] << ' ' << streams::flush;
+				}
+			}
 			if (index_ >= SIZE)
 				out << F("# OVF #");
 			out << streams::endl;
