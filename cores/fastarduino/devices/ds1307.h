@@ -123,7 +123,7 @@ namespace devices::rtc
 		 * 
 		 * @param manager reference to a suitable MANAGER for this device
 		 */
-		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD} {}
+		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD, true} {}
 
 		/**
 		 * Get the size of the additional RAM size of the chip.
