@@ -530,8 +530,11 @@ namespace i2c
 		{
 			// Check if previously executed command already did a STOP (and needed one)
 			if ((!no_stop_) && (!stopped_already_) && (!clear_commands_))
+			{
 				exec_stop_();
-			no_stop_ = false;
+				no_stop_ = false;
+			}
+			// no_stop_ = false;
 			clear_commands_ = false;
 			stopped_already_ = false;
 		}
