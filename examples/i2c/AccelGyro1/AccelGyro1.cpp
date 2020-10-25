@@ -88,7 +88,7 @@ using devices::magneto::ACCEL_RANGE_G;
 using devices::magneto::GYRO_RANGE_DPS;
 
 #ifdef DEBUG_I2C
-static constexpr const uint8_t DEBUG_SIZE = 32;
+static constexpr const uint8_t DEBUG_SIZE = 64;
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
@@ -148,6 +148,7 @@ int main()
 	sei();
 	uart.begin(115200);
 	out.width(2);
+	out << streams::boolalpha;
 	out << F("Start") << endl;
 
 	// Initialize I2C async handler
@@ -202,6 +203,7 @@ int main()
 				<< F(", y = ") << accel(sensors.accel.y) 
 				<< F(", z = ") << accel(sensors.accel.z) << endl;
 			// Also check the temperature precision as per datasheet
+			out << dec << F("Raw temp = ") << sensors.temperature << endl;
 			out << dec << F("Temp = ") << mpu.convert_temp_to_centi_degrees(sensors.temperature) << F(" centi-C") << endl;
 		}
 		time::delay_ms(1000);
