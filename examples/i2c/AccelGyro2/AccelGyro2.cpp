@@ -67,7 +67,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
-// #define DEBUG_I2C
+#define DEBUG_I2C
 #define FORCE_SYNC
 
 // UART for traces
@@ -90,9 +90,10 @@ using devices::magneto::INTStatus;
 using devices::magneto::ACCEL_RANGE_G;
 using devices::magneto::GYRO_RANGE_DPS;
 using devices::magneto::DLPF;
+using devices::magneto::ClockSelect;
 
 #ifdef DEBUG_I2C
-static constexpr const uint8_t DEBUG_SIZE = 32;
+static constexpr const uint8_t DEBUG_SIZE = 64;
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
@@ -183,15 +184,16 @@ int main()
 
 	ACCELEROMETER mpu{manager};
 	
-	FIFOEnable fifo_enable{true, true, true, true, true};
-	INTStatus int_enable{true};
+	constexpr FIFOEnable fifo_enable{true, true, true, true, true};
+	constexpr INTStatus int_enable{true};
 	bool ok = mpu.begin(fifo_enable, int_enable, SAMPLE_RATE_DIVIDER, 
-						GyroRange::RANGE_250, AccelRange::RANGE_2G, DLPF::ACCEL_BW_5HZ);
+						GyroRange::RANGE_250, AccelRange::RANGE_2G, 
+						DLPF::ACCEL_BW_260HZ, ClockSelect::PLL_X_AXIS_GYRO);
 	out << dec << F("begin() ") << ok << endl;
 	DEBUG(out);
-	ok = mpu.reset_fifo();
-	out << dec << F("reset_fifo() ") << ok << endl;
-	DEBUG(out);
+	// ok = mpu.reset_fifo();
+	// out << dec << F("reset_fifo() ") << ok << endl;
+	// DEBUG(out);
 	while (true)
 	{
 		AllSensors sensors;

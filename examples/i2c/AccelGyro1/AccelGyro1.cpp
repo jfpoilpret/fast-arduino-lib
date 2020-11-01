@@ -203,7 +203,7 @@ int main()
 				<< F(", y = ") << accel(sensors.accel.y) 
 				<< F(", z = ") << accel(sensors.accel.z) << endl;
 			// Also check the temperature precision as per datasheet
-			out << dec << F("Raw temp = ") << sensors.temperature << endl;
+			out << hex << F("Raw temp = ") << sensors.temperature << endl;
 			out << dec << F("Temp = ") << mpu.convert_temp_to_centi_degrees(sensors.temperature) << F(" centi-C") << endl;
 		}
 		time::delay_ms(1000);
