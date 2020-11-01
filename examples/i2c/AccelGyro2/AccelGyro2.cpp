@@ -191,9 +191,6 @@ int main()
 						DLPF::ACCEL_BW_260HZ, ClockSelect::PLL_X_AXIS_GYRO);
 	out << dec << F("begin() ") << ok << endl;
 	DEBUG(out);
-	// ok = mpu.reset_fifo();
-	// out << dec << F("reset_fifo() ") << ok << endl;
-	// DEBUG(out);
 	while (true)
 	{
 		AllSensors sensors;
