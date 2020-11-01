@@ -296,10 +296,7 @@ namespace devices::magneto
 		 * @sa AD0
 		 */
 		explicit MPU6050(MANAGER& manager, AD0 ad0 = AD0::LOW)
-			: PARENT(manager, DEVICE_ADDRESS(ad0), i2c::I2C_FAST, true) {}
-		//TODO check, once debugged, that auto_stop false shal be OK too
-		// explicit MPU6050(MANAGER& manager, AD0 ad0 = AD0::LOW)
-		// 	: PARENT(manager, DEVICE_ADDRESS(ad0), i2c::I2C_FAST) {}
+			: PARENT{manager, DEVICE_ADDRESS(ad0), i2c::I2C_FAST} {}
 
 		// Asynchronous API
 		//==================
@@ -380,9 +377,9 @@ namespace devices::magneto
 		 * 
 		 * @sa begin(FifoBeginFuture&)
 		 */
-		class FifoBeginFuture : public FUTURE<void, containers::array<uint8_t, 14>>
+		class FifoBeginFuture : public FUTURE<void, containers::array<uint8_t, 15>>
 		{
-			using PARENT = FUTURE<void, containers::array<uint8_t, 14>>;
+			using PARENT = FUTURE<void, containers::array<uint8_t, 15>>;
 		public:
 			/// @cond notdocumented
 			explicit FifoBeginFuture(	FIFOEnable fifo_enable,
@@ -434,8 +431,14 @@ namespace devices::magneto
 		int begin(PROXY<FifoBeginFuture> future)
 		{
 			if (!PARENT::resolve(future).is_fifo_enabled()) return errors::EINVAL;
-			return this->launch_commands(future, {
-				this->write(4), this->write(2), this->write(2), this->write(3), this->write(3)});
+			// We split the transaction in 6 write commands:
+			return this->launch_commands(future, {	this->write(4), 		// CONFIG, GYRO_CONFIG, ACCEL_CONFIG
+													this->write(2),			// PWR_MGMT_1
+													this->write(2), 		// SMPRT_DIV
+													this->write(2), 		// FIFO_EN
+													this->write(3),			// INT_PIN_CFG
+													this->write(2), 		// USER_CONTROL
+												});
 		}
 
 		/**
