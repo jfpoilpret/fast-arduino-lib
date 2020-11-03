@@ -100,7 +100,7 @@ using devices::rtc::SquareWaveFrequency;
 using namespace streams;
 
 #ifdef DEBUG_I2C
-static constexpr const uint8_t DEBUG_SIZE = 32;
+static constexpr const uint8_t DEBUG_SIZE = 128;
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
