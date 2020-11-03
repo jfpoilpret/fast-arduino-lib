@@ -167,14 +167,14 @@ namespace devices::mcp230xx
 		 * transaction, and it shall be used by the caller to determine when the I2C
 		 * transaction is finished.
 		 * 
-		 * @param direction each bit sets the direction of one pin of the port;
-		 * `1` means **I**nput, `0` means **O**utput.
-		 * @param pullup each bit (only for input pins) sets if a pullup resistor
-		 * shall be internally connected to the pin; if `1`, a pullup is added,
-		 * if `0`, no pullup is added.
-		 * @param polarity each bit (only for input pins) let you invert polarity of
-		 * the matching input pin; if `1`, polarity is inverted, ie one the level
-		 * on the input pin is `0`, then it is read as `1`, and conversely.
+		 * @param int_pins each bit sets if the matching pin shall generate interrupts
+		 * @param ref contains the reference value for comparison with the actual 
+		 * input pin; if input differs, then an interrupt will be triggered for that
+		 * pin, provided that @p compare_ref for that bit is also `1`.
+		 * @param compare_ref each bit indicates the condition for which the matching 
+		 * input pin can generate interrupts; if `0`, an interrupt is generated every
+		 * time the input pin changes level, if `1`, an interrupt is generated every
+		 * time the input pin level changes to be diferent than the matching bit.
 		 * 
 		 * @sa configure_interrupts(ConfigureInterruptsFuture&)
 		 */
