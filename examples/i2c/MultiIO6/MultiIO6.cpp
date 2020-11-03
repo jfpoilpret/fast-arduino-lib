@@ -42,7 +42,6 @@
 #include <fastarduino/i2c_status.h>
 #include <fastarduino/devices/mcp23008.h>
 
-//FIXME this does not work at all!
 #define DEBUG_I2C
 #define FORCE_SYNC
 
