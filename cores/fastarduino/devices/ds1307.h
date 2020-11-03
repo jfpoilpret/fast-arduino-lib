@@ -113,7 +113,17 @@ namespace devices::rtc
 
 		struct set_tm
 		{
-			uint8_t address_;
+			set_tm(tm datetime)
+			{
+				tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
+				tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
+				tm_.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
+				tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
+				tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
+				tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
+			}
+
+			uint8_t address_ = TIME_ADDRESS;
 			tm tm_;
 		};
 
@@ -149,21 +159,11 @@ namespace devices::rtc
 		 */
 		class SetDatetimeFuture : public FUTURE<void, set_tm>
 		{
+			using PARENT = FUTURE<void, set_tm>;
+
 		public:
 			/// @cond notdocumented
-			explicit SetDatetimeFuture(const tm& datetime)
-			{
-				set_tm set;
-				// 1st convert datetime for DS1307 (BCD)
-				set.address_ = TIME_ADDRESS;
-				set.tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
-				set.tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
-				set.tm_.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
-				set.tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
-				set.tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
-				set.tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
-				this->reset_input_(set);
-			}
+			explicit SetDatetimeFuture(const tm& datetime) : PARENT{set_tm{datetime}} {}
 			SetDatetimeFuture(SetDatetimeFuture&&) = default;
 			SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
 			/// @endcond
@@ -261,16 +261,22 @@ namespace devices::rtc
 		class SetRamFuture : public FUTURE<void, containers::array<uint8_t, SIZE_ + 1>>
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, SIZE_ + 1>>;
+			using IN = typename PARENT::IN;
+
+			static IN build_array(uint8_t address, const uint8_t (&data)[SIZE_])
+			{
+				IN input;
+				input[0] = static_cast<uint8_t>(address + RAM_START);
+				input.set(1, data);
+				return input;
+			}
+
 		public:
 			/// @cond notdocumented
-			SetRamFuture() = default;
 			explicit SetRamFuture(uint8_t address, const uint8_t (&data)[SIZE_])
+			: PARENT{build_array(address, data)}
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
-				typename PARENT::IN input;
-				input[0] = static_cast<uint8_t>(address + RAM_START);
-				input.set(uint8_t(1), data);
-				this->reset_input_(input);
 			}
 			SetRamFuture(SetRamFuture<SIZE_>&&) = default;
 			SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
@@ -324,7 +330,6 @@ namespace devices::rtc
 			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
 			/// @cond notdocumented
-			SetRam1Future() = default;
 			explicit SetRam1Future(uint8_t address, uint8_t data)
 				:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}} {}
 			SetRam1Future(SetRam1Future&&) = default;
