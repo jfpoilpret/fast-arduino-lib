@@ -101,5 +101,23 @@ int main()
 		assert_array(out, F("check int[]"), expected, array<int, 10>{{0, 1, 2 , 3, 4, 5, 6, 7, 8, 9}});
 	}
 
+	{
+		// check set() API
+		uint8_t data[56];
+		for (uint8_t i = 0; i < 56; ++i) data[i] = i;
+
+		array<uint8_t, 57> actual;
+		actual[0] = 0xFF;
+		actual.set(1, data);
+
+		out << F("array.set()") << endl;
+		assert(out, F("set() [0]"), 0xFF, actual.data()[0]);
+		for (uint8_t i = 0; i < 56; ++i)
+		{
+			out << i << endl;
+			assert(out, F("set() [i]"), data[i], actual.data()[i+1]);
+		}
+	}
+
 	out << endl;
 }
