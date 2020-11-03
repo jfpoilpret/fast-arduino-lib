@@ -113,7 +113,7 @@ namespace devices::mcp230xx
 		 * @param address the address part (0-7) set by A0-3 pins of the chip
 		 */
 		MCP23017(MANAGER& manager, uint8_t address)
-			: PARENT{manager, compute_address(address), i2c::I2C_FAST} {}
+			: PARENT{manager, compute_address(address), i2c::I2C_FAST, true} {}
 
 		// Asynchronous API
 		//==================
@@ -239,14 +239,14 @@ namespace devices::mcp230xx
 		 * @tparam P_ which port to configure, may be A, B or both; if both, then
 		 * all arguments will be `uint16_t`, with low byte for port A configuration,
 		 * and high byte for port B.
-		 * @param direction each bit sets the direction of one pin of the selected
-		 * port; `1` means **I**nput, `0` means **O**utput.
-		 * @param pullup each bit (only for input pins) sets if a pullup resistor
-		 * shall be internally connected to the pin; if `1`, a pullup is added,
-		 * if `0`, no pullup is added.
-		 * @param polarity each bit (only for input pins) let you invert polarity of
-		 * the matching input pin; if `1`, polarity is inverted, ie one the level
-		 * on the input pin is `0`, then it is read as `1`, and conversely.
+		 * @param int_pins each bit sets if the matching pin shall generate interrupts
+		 * @param ref contains the reference value for comparison with the actual 
+		 * input pin; if input differs, then an interrupt will be triggered for that
+		 * pin, provided that @p compare_ref for that bit is also `1`.
+		 * @param compare_ref each bit indicates the condition for which the matching 
+		 * input pin can generate interrupts; if `0`, an interrupt is generated every
+		 * time the input pin changes level, if `1`, an interrupt is generated every
+		 * time the input pin level changes to be diferent than the matching bit.
 		 * 
 		 * @sa configure_interrupts(ConfigureInterruptsFuture<P_>&)
 		 */
