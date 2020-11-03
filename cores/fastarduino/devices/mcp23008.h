@@ -61,7 +61,7 @@ namespace devices::mcp230xx
 		 * @param address the address part (0-7) set by A0-3 pins of the chip
 		 */
 		MCP23008(MANAGER& manager, uint8_t address)
-			: PARENT{manager, compute_address(address), i2c::I2C_FAST} {}
+			: PARENT{manager, compute_address(address), i2c::I2C_FAST, true} {}
 
 		// Asynchronous API
 		//==================
