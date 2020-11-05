@@ -136,6 +136,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								uart/UartApp12							
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
+								i2c/MultiIO5					\
 								misc/IOStreams1					\
 								misc/LifeCycleCheck				\
 								analog/AnalogComparator1		\
