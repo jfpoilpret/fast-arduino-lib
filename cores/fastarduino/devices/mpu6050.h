@@ -296,7 +296,7 @@ namespace devices::magneto
 		 * @sa AD0
 		 */
 		explicit MPU6050(MANAGER& manager, AD0 ad0 = AD0::LOW)
-			: PARENT{manager, DEVICE_ADDRESS(ad0), i2c::I2C_FAST} {}
+			: PARENT{manager, DEVICE_ADDRESS(ad0), i2c::I2C_FAST, true} {}
 
 		// Asynchronous API
 		//==================
