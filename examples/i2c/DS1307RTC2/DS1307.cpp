@@ -53,6 +53,7 @@
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t DEBUG_SIZE = 128;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
@@ -61,6 +62,7 @@ REGISTER_UATX_ISR(0)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t DEBUG_SIZE = 128;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
@@ -69,6 +71,7 @@ REGISTER_UATX_ISR(0)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
+static constexpr const uint8_t DEBUG_SIZE = 128;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
@@ -76,18 +79,20 @@ REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
+static constexpr const uint8_t DEBUG_SIZE = 32;
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
 #elif defined(BREADBOARD_ATTINYX5)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
+static constexpr const uint8_t DEBUG_SIZE = 32;
 static constexpr const board::DigitalPin TX = board::DigitalPin::D3_PB3;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
 #else
 #error "Current target is not yet supported!"
 #endif
 
-// #define DEBUG_I2C
+#define DEBUG_I2C
 #define FORCE_SYNC
 
 // UART buffer for traces
@@ -100,7 +105,6 @@ using devices::rtc::SquareWaveFrequency;
 using namespace streams;
 
 #ifdef DEBUG_I2C
-static constexpr const uint8_t DEBUG_SIZE = 128;
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
