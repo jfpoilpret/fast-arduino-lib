@@ -63,6 +63,7 @@ FutureCheck	Unit Tests of future API
 QueueCheck	Unit Tests of queue container
 LinkedListCheck	Unit Tests of linked list container
 UtilsCheck	Unit Tests of conversion utilities
+AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)
 AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)
 AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)
 DS1307RTC1	Change RTC and display (UATX) date/time (i2c)

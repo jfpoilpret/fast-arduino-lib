@@ -15,7 +15,7 @@
 # Makefile defining all FastArduino examples to build in various configurations (targets)
 
 # Examples common to all targets (except ATtinyX5)
-COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
+COMMON_EXAMPLES=	i2c/AccelGyro0 i2c/AccelGyro1 i2c/AccelGyro2							\
 					analog/AnalogPin1 analog/AnalogPin2										\
 					analog/AnalogComparator4												\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\
