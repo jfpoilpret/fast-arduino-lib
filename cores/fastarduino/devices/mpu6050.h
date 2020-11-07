@@ -394,7 +394,7 @@ namespace devices::magneto
 							SMPRT_DIV, sample_rate_divider,
 							FIFO_EN, utils::as_uint8_t(fifo_enable),
 							INT_PIN_CFG, 0, utils::as_uint8_t(int_enable),
-							USER_CTRL, FIFO_ENABLE}} {}
+							USER_CTRL, FIFO_ENABLE | FIFO_RESET}} {}
 			FifoBeginFuture(FifoBeginFuture&&) = default;
 			FifoBeginFuture& operator=(FifoBeginFuture&&) = default;
 			/// @endcond
