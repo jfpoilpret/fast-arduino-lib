@@ -397,11 +397,6 @@ namespace devices::magneto
 							USER_CTRL, FIFO_ENABLE}} {}
 			FifoBeginFuture(FifoBeginFuture&&) = default;
 			FifoBeginFuture& operator=(FifoBeginFuture&&) = default;
-
-			bool is_fifo_enabled() const
-			{
-				return (this->get_input()[9] != 0);
-			}
 			/// @endcond
 		};
 
@@ -430,8 +425,6 @@ namespace devices::magneto
 		 */
 		int begin(PROXY<FifoBeginFuture> future)
 		{
-			if (!PARENT::resolve(future).is_fifo_enabled()) return errors::EINVAL;
-			// We split the transaction in 6 write commands:
 			return this->launch_commands(future, {	this->write(4), 		// CONFIG, GYRO_CONFIG, ACCEL_CONFIG
 													this->write(2),			// PWR_MGMT_1
 													this->write(2), 		// SMPRT_DIV
@@ -886,14 +879,14 @@ namespace devices::magneto
 		 * Get one sample out of the FIFO buffer (register map §4.31).
 		 * @warning You should first call `fifo_count()` to ensure the MPU6050
 		 * FIFO queue contains a sample of the right size! Otherwise this method
-		 * will not return any error but set arbitrary values to @p putput !
+		 * will not return any error but set arbitrary values to @p output !
 		 * @warning Asynchronous API!
 		 * 
 		 * @tparam T the type of sample to get from the FIFO buffer; must be one
 		 * of `Sensor3D`, `int16_t` or `AllSensors`, based on the sensor samples
 		 * selected by `FIFOEnable` in
 		 * `begin(FIFOEnable, INTEnable, uint8_t, GyroRange, AccelRange, DLPF, ClockSelect)`.
-		 * @param future an `FifoCountFuture` passed by the caller, that will be 
+		 * @param future an `FifoPopFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
@@ -909,6 +902,52 @@ namespace devices::magneto
 		template<typename T> int fifo_pop(PROXY<FifoPopFuture<T>> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
+		}
+
+		/**
+		 * Create a future to be used by asynchronous method fifo_push(FifoPushFuture&).
+		 * This is used by `fifo_push(FifoPushFuture&)` to asynchronously launch the 
+		 * I2C transaction, and it shall be used by the caller to determine when the
+		 * I2C transaction is finished.
+		 * 
+		 * @param data the byte value to be pushed
+		 * 
+		 * @sa fifo_push(FifoPushFuture&)
+		 */
+		class FifoPushFuture : public FUTURE<void, containers::array<uint8_t, 2>>
+		{
+			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
+		public:
+			/// @cond notdocumented
+			FifoPushFuture(uint8_t data) : PARENT{{FIFO_R_W, data}} {}
+			FifoPushFuture(FifoPushFuture&&) = default;
+			FifoPushFuture& operator=(FifoPushFuture&&) = default;
+			/// @endcond
+		};
+
+		/**
+		 * Push one byte to the FIFO buffer (register map §4.31).
+		 * @warning You should first call `fifo_count()` to ensure the MPU6050
+		 * FIFO queue contains a sample of the right size! Otherwise this method
+		 * will not return any error but set arbitrary values to @p output !
+		 * @warning Asynchronous API!
+		 * 
+		 * @param future an `FifoPushFuture` passed by the caller, that will be 
+		 * updated once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * is in namespace `errors`.
+		 * 
+		 * @sa fifo_count()
+		 * @sa fifo_push(uint8_t)
+		 * @sa errors
+		 */
+		int fifo_push(PROXY<FifoPushFuture> future)
+		{
+			return this->launch_commands(future, {this->write()});
 		}
 
 		// Synchronous API
@@ -975,8 +1014,6 @@ namespace devices::magneto
 					DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
 					ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 		{
-			if (utils::as_uint8_t(fifo_enable) == 0)
-				return begin(gyro_range, accel_range, low_pass_filter, clock_select);
 			FifoBeginFuture future{
 				fifo_enable, int_enable, sample_rate_divider, gyro_range, accel_range, low_pass_filter, clock_select};
 			if (begin(PARENT::make_proxy(future)) != 0) return false;
@@ -1159,7 +1196,7 @@ namespace devices::magneto
 		 * Get one sample out of the FIFO buffer (register map §4.31).
 		 * @warning You should first call `fifo_count()` to ensure the MPU6050
 		 * FIFO queue contains a sample of the right size! Otherwise this method
-		 * will not return any error but set arbitrary values to @p putput !
+		 * will not return any error but set arbitrary values to @p output !
 		 * @warning Blocking API!
 		 * 
 		 * @tparam T the type of sample to get from the FIFO buffer; must be one
@@ -1179,6 +1216,23 @@ namespace devices::magneto
 			FifoPopFuture<T> future;
 			if (fifo_pop(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(output);
+		}
+
+		/**
+		 * Push one byte to the FIFO buffer (register map §4.31).
+		 * @warning Blocking API!
+		 * 
+		 * @param data the byte value to be pushed
+		 * @retval true if @p data has been correctly pushed to the FIFO
+		 * @retval false if the operation failed
+		 * 
+		 * @sa fifo_push(FifoPushFuture&)
+		 */
+		bool fifo_push(uint8_t data)
+		{
+			FifoPushFuture future{data};
+			if (fifo_push(PARENT::make_proxy(future)) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
 		}
 
 	private:
