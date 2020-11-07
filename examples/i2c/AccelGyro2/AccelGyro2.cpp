@@ -89,7 +89,7 @@ using devices::magneto::AllSensors;
 using devices::magneto::AccelRange;
 using devices::magneto::GyroRange;
 using devices::magneto::FIFOEnable;
-using devices::magneto::INTStatus;
+using devices::magneto::INTEnable;
 using devices::magneto::ACCEL_RANGE_G;
 using devices::magneto::GYRO_RANGE_DPS;
 using devices::magneto::DLPF;
@@ -187,7 +187,7 @@ int main()
 	ACCELEROMETER mpu{manager};
 	
 	constexpr FIFOEnable fifo_enable{true, true, true, true, true};
-	constexpr INTStatus int_enable{true};
+	constexpr INTEnable int_enable{true};
 	bool ok = mpu.begin(fifo_enable, int_enable, SAMPLE_RATE_DIVIDER, 
 						GyroRange::RANGE_250, AccelRange::RANGE_2G, 
 						DLPF::ACCEL_BW_260HZ, ClockSelect::PLL_X_AXIS_GYRO);
@@ -198,15 +198,9 @@ int main()
 		AllSensors sensors;
 		uint16_t count;
 		while ((count = mpu.fifo_count()) < sizeof(sensors))
-		{
-			if (count == 0)
-				out << '.' << flush;
-			else
-				out << ' ' << dec << count << ' ' << flush;
 			time::delay_ms(10);
-		}
+		out << F("FIFO count = ") << dec << count << endl;
 		RESET_DEBUG();
-		out << endl;
 		if (mpu.fifo_pop(sensors))
 		{
 			out	<< dec 
