@@ -88,19 +88,26 @@ namespace i2c::status
 		/**
 		 * Output all recorded I2C status notifications to @p out then clear all records.
 		 * @param out the `streams::ostream` to output traces to
+		 * @param hex_status if `true` (the default), status values will be displayed in 
+		 * hexadecimal, otherwise status name will be displayed 
 		 * @sa reset()
 		 */
-		void trace(streams::ostream& out)
+		void trace(streams::ostream& out, bool hex_status = true)
 		{
-			for (uint8_t i = 0; i < index_; ++i)
-				out << streams::hex << expected_[i] << ' ' << actual_[i] << streams::endl;
+			if (hex_status)
+				for (uint8_t i = 0; i < index_; ++i)
+					out << streams::hex << uint8_t(expected_[i]) << ' ' 
+						<< streams::hex << uint8_t(actual_[i]) << streams::endl;
+			else
+				for (uint8_t i = 0; i < index_; ++i)
+					out << expected_[i] << ' ' << actual_[i] << streams::endl;
 			if (index_ >= SIZE)
 				out << F("# OVF #") << streams::endl;
 			index_ = 0;
 		}
 
 		/// @cond notdocumented
-		void operator()(uint8_t expected, uint8_t actual)
+		void operator()(Status expected, Status actual)
 		{
 			if (index_ >= SIZE) return;
 			if ((expected != actual) || trace_ == STATUS::TRACE_ALL)
@@ -112,8 +119,8 @@ namespace i2c::status
 		/// @endcond
 
 	private:
-		uint8_t expected_[SIZE];
-		uint8_t actual_[SIZE];
+		Status expected_[SIZE];
+		Status actual_[SIZE];
 		uint8_t index_ = 0;
 		STATUS trace_;
 	};
@@ -134,20 +141,30 @@ namespace i2c::status
 		 * 
 		 * @param out the `streams::ostream` to output traces to
 		 * @param trace the list of notifications to trace
+		 * @param hex_status if `true` (the default), status values will be displayed in 
+		 * hexadecimal, otherwise status name will be displayed 
 		 */
-		I2CStatusLiveLogger(streams::ostream& out, STATUS trace = STATUS::TRACE_ALL) : out_{out}, trace_{trace} {}
+		I2CStatusLiveLogger(streams::ostream& out, STATUS trace = STATUS::TRACE_ALL, bool hex_status = true)
+		: out_{out}, trace_{trace}, hex_status_{hex_status} {}
 
 		/// @cond notdocumented
-		void operator()(uint8_t expected, uint8_t actual)
+		void operator()(Status expected, Status actual)
 		{
 			if ((expected != actual) || trace_ == STATUS::TRACE_ALL)
-				out_ << streams::hex << expected << ' ' << actual << streams::endl;
+			{
+				if (hex_status_)
+					out_ << streams::hex << uint8_t(expected) << ' ' 
+						<< streams::hex << uint8_t(actual) << streams::endl;
+				else
+					out_ << expected << ' ' << actual << streams::endl;
+			}
 		}
 		/// @endcond
 
 	private:
 		streams::ostream& out_;
 		STATUS trace_;
+		bool hex_status_;
 	};
 
 	/**
@@ -166,7 +183,7 @@ namespace i2c::status
 		/**
 		 * Return the latest I2C actual status.
 		 */
-		uint8_t latest_status() const
+		Status latest_status() const
 		{
 			return actual_;
 		}
@@ -174,13 +191,13 @@ namespace i2c::status
 		/**
 		 * Return the latest I2C expected status (may be different than actual).
 		 */
-		uint8_t latest_expected_status() const
+		Status latest_expected_status() const
 		{
 			return expected_;
 		}
 
 		/// @cond notdocumented
-		void operator()(uint8_t expected, uint8_t actual)
+		void operator()(Status expected, Status actual)
 		{
 			expected_ = expected;
 			actual_ = actual;
@@ -188,8 +205,8 @@ namespace i2c::status
 		/// @endcond
 
 	private:
-		uint8_t actual_ = Status::OK;
-		uint8_t expected_ = Status::OK;
+		Status actual_ = Status::OK;
+		Status expected_ = Status::OK;
 	};
 }
 

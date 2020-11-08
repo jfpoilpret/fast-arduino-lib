@@ -256,7 +256,7 @@ namespace i2c
 		bool exec_receive_data_(bool last_byte, uint8_t& data)
 		{
 			const uint8_t twcr = (last_byte ? bits::BV8(TWEN, TWINT) : bits::BV8(TWEN, TWINT, TWEA));
-			const uint8_t expected =  (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
+			const Status expected =  (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
 			TWCR_ = twcr;
 			if (wait_twint(expected))
 			{
@@ -283,10 +283,10 @@ namespace i2c
 			TWCR_ = bits::BV8(TWEN, TWINT);
 		}
 
-		bool wait_twint(uint8_t expected_status)
+		bool wait_twint(Status expected_status)
 		{
 			TWCR_.loop_until_bit_set(TWINT);
-			const uint8_t status = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+			const Status status = Status(TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7));
 			status_hook_.call_hook(expected_status, status);
 			return (status == expected_status);
 		}
@@ -661,7 +661,7 @@ namespace i2c
 			debug_hook_.call_hook(DebugStatus::STOP);
 			TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
 			if (!error)
-				expected_status_ = 0;
+				expected_status_ = Status::OK;
 			command_ = I2CCOMMAND{};
 			current_ = State::NONE;
 			// If so then delay 4.0us + 4.7us (100KHz) or 0.6us + 1.3us (400KHz)
@@ -674,7 +674,7 @@ namespace i2c
 			return command_.type().is_end();
 		}
 
-		bool handle_no_error(ABSTRACT_FUTURE& future, uint8_t status)
+		bool handle_no_error(ABSTRACT_FUTURE& future, Status status)
 		{
 			if (check_no_error(future, status)) return true;
 			policy_.handle_error(command_, commands_);
@@ -687,7 +687,7 @@ namespace i2c
 		I2CCallback i2c_change()
 		{
 			// Check status Vs. expected status
-			const uint8_t status = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
+			const Status status = Status(TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7));
 			ABSTRACT_FUTURE& future = current_future();
 			if (!handle_no_error(future, status))
 				return I2CCallback::ERROR;
@@ -754,7 +754,7 @@ namespace i2c
 			return result;
 		}
 
-		bool check_no_error(ABSTRACT_FUTURE& future, uint8_t status)
+		bool check_no_error(ABSTRACT_FUTURE& future, Status status)
 		{
 			status_hook_.call_hook(expected_status_, status);
 			if (status == expected_status_) return true;
@@ -774,7 +774,7 @@ namespace i2c
 		I2CCOMMAND command_;
 
 		// Latest I2C status
-		uint8_t expected_status_ = Status::OK;
+		Status expected_status_ = Status::OK;
 
 		// Status of current command processing
 		State current_ = State::NONE;

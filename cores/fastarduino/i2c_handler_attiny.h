@@ -151,7 +151,7 @@ namespace i2c
 		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
 		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
 
-		bool notify_status(bool as_expected, uint8_t good, uint8_t bad)
+		bool notify_status(bool as_expected, Status good, Status bad)
 		{
 			status_hook_.call_hook(good, (as_expected ? good : bad));
 			return as_expected;

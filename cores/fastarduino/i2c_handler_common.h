@@ -93,7 +93,7 @@ namespace i2c
 	 * @sa i2c::debug::I2CDebugRecorder
 	 * @sa i2c::debug::I2CDebugLiveLogger
 	 */
-	using I2C_STATUS_HOOK = void (*)(uint8_t expected, uint8_t actual);
+	using I2C_STATUS_HOOK = void (*)(Status expected, Status actual);
 
 	/// @cond notdocumented
 	// Type of commands in queue
@@ -292,12 +292,12 @@ namespace i2c
 	template<bool IS_STATUS_ = false, typename STATUS_HOOK_ = I2C_STATUS_HOOK>  struct I2CStatusSupport
 	{
 		I2CStatusSupport(UNUSED STATUS_HOOK_ hook = nullptr) {}
-		void call_hook(UNUSED uint8_t expected, UNUSED uint8_t actual) {}
+		void call_hook(UNUSED Status expected, UNUSED Status actual) {}
 	};
 	template<typename STATUS_HOOK_> struct I2CStatusSupport<true, STATUS_HOOK_>
 	{
 		I2CStatusSupport(STATUS_HOOK_ hook) : hook_{hook} {}
-		void call_hook(uint8_t expected, uint8_t actual)
+		void call_hook(Status expected, Status actual)
 		{
 			hook_(expected, actual);
 		}
