@@ -487,7 +487,6 @@ namespace i2c
 			if (clear_commands_) return false;
 			ABSTRACT_FUTURE& future = lc_.resolve(proxy);
 			// Execute command immediately, from start to optional stop
-			//FIXME start or repeat start?
 			bool ok = (no_stop_ ? exec_repeat_start_() : exec_start_());
 			stopped_already_ = false;
 			if (!ok)
@@ -534,7 +533,6 @@ namespace i2c
 				exec_stop_();
 				no_stop_ = false;
 			}
-			// no_stop_ = false;
 			clear_commands_ = false;
 			stopped_already_ = false;
 		}
