@@ -510,6 +510,7 @@ The few examples in this section will introduce you to a few functions that may 
 2. `utils::bcd_to_binary`: this function is useful when you use a sensor device that provides values coded as *BCD* (binary-coded decimal), i.e. where each half-byte (*nibble*) contains the value of one digit (i.e. `0` to `9`), thus holding a range of values from `0` to `99`. Many RTC devices use BCD representation for time. In order to perform a calculation on BCD values, you need to first convert them to binary. The opposite function is also provided as `utils::binary_to_bcd`. The following example is an excerpt of `ds1307.h` provided by FastArduino, where each datetime field (seconds, minutes, hours...) have to be converted from BCD to binary:
 @snippet tuto_snippets.cpp utils_bcd_to_binary
 
+
 ### Conversion utilities examples
 
 Device sensors measure some physical quantity and generally provide you with some integer value that somehow maps to the physical value. hence to make use of the raw value provided by a sensor, you need to convert it to some more meaningful value that you can understand and operate upon.

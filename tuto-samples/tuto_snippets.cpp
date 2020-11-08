@@ -68,7 +68,7 @@ using devices::rtc::tm;
 //! [utils_bcd_to_binary]
 	struct set_tm
 	{
-		set_tm(tm datetime)
+		set_tm(const tm& datetime)
 		{
 			tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
 			tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
