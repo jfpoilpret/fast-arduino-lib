@@ -109,13 +109,13 @@ namespace i2c
 		 * I2C Manager types that can manage this device.
 		 * @param auto_stop if `true`, then any chain of commands (started with 
 		 * `launch_commands()`) will end with a STOP condition generated on the I2C bus;
-		 * if `false` (the default), then STOP condition will generated only when
-		 * requested in `read()` or `write(0` calls)
+		 * if `false`, then STOP condition will generated only when
+		 * requested in `read()` or `write()` calls)
 		 * 
 		 * @sa set_device()
 		 */
 		template<I2CMode MODE>
-		I2CDevice(MANAGER& manager, uint8_t device, UNUSED Mode<MODE> mode, bool auto_stop = false) 
+		I2CDevice(MANAGER& manager, uint8_t device, UNUSED Mode<MODE> mode, bool auto_stop) 
 		: device_{device}, handler_{manager}, auto_stop_{auto_stop}
 		{
 			// Ensure that MANAGER I2C mode is compliant with the best mode for this device

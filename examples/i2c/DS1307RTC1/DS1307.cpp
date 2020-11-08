@@ -124,7 +124,7 @@ template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUT
 class PublicDevice: public PARENT
 {
 public:
-	PublicDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD} {}
+	PublicDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD, true} {}
 	friend int main();
 };
 

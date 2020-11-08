@@ -212,7 +212,7 @@ namespace devices::magneto
 		 * 
 		 * @param manager reference to a suitable MANAGER for this device
 		 */
-		explicit HMC5883L(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_FAST} {}
+		explicit HMC5883L(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_FAST, false} {}
 
 		// Asynchronous API
 		//==================
